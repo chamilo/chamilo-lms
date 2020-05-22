@@ -116,12 +116,12 @@ class ResourceNodeVoter extends Voter
         $creator = $resourceNode->getCreator();
 
         // Illustrations are always visible.
-        if ($resourceNode->isIllustrationNode()) {
+        if ('illustrations' === $resourceNode->getResourceType()->getName()) {
             return true;
         }
 
         // Course access are protected using the CourseVoter.
-        if ($resourceNode->isCourseNode()) {
+        if ('courses' === $resourceNode->getResourceType()->getName()) {
             return true;
         }
 
@@ -330,7 +330,6 @@ class ResourceNodeVoter extends Voter
         // Admin can do everything
         $acl->allow($admin);
         $acl->allow($superAdmin);
-        //var_dump($user->getRoles() );
         foreach ($user->getRoles() as $role) {
             //var_dump($acl->isAllowed($role, $resource, $askedMask), $role);
             if ($acl->isAllowed($role, $resource, $askedMask)) {

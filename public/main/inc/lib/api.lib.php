@@ -1770,7 +1770,7 @@ function api_get_user_info_from_entity(
 
         switch ($user->getStatus()) {
             case STUDENT:
-                if ($result['has_certificates']) {
+                if (isset($result['has_certificates']) && $result['has_certificates']) {
                     $iconStatus = $urlImg.'icons/svg/identifier_graduated.svg';
                 } else {
                     $iconStatus = $urlImg.'icons/svg/identifier_student.svg';

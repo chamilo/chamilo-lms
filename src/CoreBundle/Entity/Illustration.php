@@ -15,7 +15,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * Illustration.
  *
  * @ApiResource(
- *      attributes={"security"="is_granted('ROLE_ADMIN')"},
  *      normalizationContext={"groups"={"illustration:read"}}
  * )
  * @ORM\Table(name="illustration")

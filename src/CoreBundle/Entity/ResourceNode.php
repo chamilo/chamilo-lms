@@ -108,7 +108,6 @@ class ResourceNode
     /**
      * @ApiSubresource()
      *
-     * @Groups({"resource_node:read", "document:read"})
      * @Gedmo\TreeParent
      * @ORM\ManyToOne(
      *     targetEntity="ResourceNode",

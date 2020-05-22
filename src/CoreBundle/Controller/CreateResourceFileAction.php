@@ -4,11 +4,11 @@
 
 namespace Chamilo\CoreBundle\Controller;
 
-use Chamilo\CoreBundle\Entity\Resource\ResourceFile;
+use Chamilo\CoreBundle\Entity\ResourceFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
-class CreateMediaObjectAction
+class CreateResourceFileAction
 {
     public function __invoke(Request $request): ResourceFile
     {

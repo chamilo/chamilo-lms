@@ -119,7 +119,7 @@ class ResourceFile
 
     /**
      * @var File
-     * @Groups({"resource_file:read", "resource_node:read", "document:read"})
+     *
      * @Assert\NotNull(groups={"media_object_create"})
      * @Vich\UploadableField(
      *     mapping="resources",

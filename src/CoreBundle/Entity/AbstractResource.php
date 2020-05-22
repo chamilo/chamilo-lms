@@ -4,6 +4,7 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiSubresource;
 use APY\DataGridBundle\Grid\Mapping as GRID;
 use Doctrine\Common\Collections\Criteria;
@@ -18,6 +19,14 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 abstract class AbstractResource
 {
+    /**
+     * @var string|null
+     *
+     * @ApiProperty(iri="http://schema.org/contentUrl")
+     * @Groups({"resource_file:read", "resource_node:read", "document:read", "media_object_read"})
+     */
+    public $contentUrl;
+
     /**
      * SerializedName("description").
      *

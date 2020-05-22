@@ -16,7 +16,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(
- *      attributes={"security"="is_granted('ROLE_ADMIN')"},
+ *      attributes={"security"="is_granted('ROLE_USER')"},
  *      normalizationContext={"groups"={"comment:read"}}
  * )
  *

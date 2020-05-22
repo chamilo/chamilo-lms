@@ -25,6 +25,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Class Course.
  *
  * @ApiResource(
+ *     attributes={"security"="is_granted('ROLE_ADMIN')"},
  *     iri="https://schema.org/Course",
  *     normalizationContext={"groups"={"course:read"}, "swagger_definition_name"="Read"},
  *     denormalizationContext={"groups"={"course:write","course_category:write"}},

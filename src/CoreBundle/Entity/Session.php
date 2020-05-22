@@ -19,6 +19,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(
+ *     attributes={"security"="is_granted('ROLE_ADMIN')"},
  *     normalizationContext={"groups"={"session:read"}, "swagger_definition_name"="Read"},
  *     denormalizationContext={"groups"={"session:write"}},
  * )

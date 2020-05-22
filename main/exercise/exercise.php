@@ -548,21 +548,24 @@ if ($is_allowedToEdit && $origin !== 'learnpath') {
     $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/upload_exercise.php?'.api_get_cidreq().'">'.
         Display::return_icon('import_excel.png', get_lang('ImportExcelQuiz'), '', ICON_SIZE_MEDIUM).'</a>';
 
-    $cleanAll = Display::url(
-        Display::return_icon(
-            'clean_all.png',
-            get_lang('CleanAllStudentsResultsForAllTests'),
-            '',
-            ICON_SIZE_MEDIUM
-        ),
-        '#',
-        [
-            'data-item-question' => addslashes(get_lang('AreYouSureToEmptyAllTestResults')),
-            'data-href' => api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq().'&action=clean_all_test&sec_token='.$token,
-            'data-toggle' => 'modal',
-            'data-target' => '#confirm-delete',
-        ]
-    );
+    $cleanAll = null;
+    if (api_is_platform_admin() || false === $limitTeacherAccess) {
+        $cleanAll = Display::url(
+            Display::return_icon(
+                'clean_all.png',
+                get_lang('CleanAllStudentsResultsForAllTests'),
+                '',
+                ICON_SIZE_MEDIUM
+            ),
+            '#',
+            [
+                'data-item-question' => addslashes(get_lang('AreYouSureToEmptyAllTestResults')),
+                'data-href' => api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq().'&action=clean_all_test&sec_token='.$token,
+                'data-toggle' => 'modal',
+                'data-target' => '#confirm-delete',
+            ]
+        );
+    }
 
     if ($limitTeacherAccess) {
         if (api_is_platform_admin()) {

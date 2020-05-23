@@ -47,14 +47,14 @@ class ch_selectivedisplay extends ch_yesno
             $(function() {
                 var hideQuestion = false;
                 $(".survey_question").each(function() {
-                     if (hideQuestion) {
+                    var questionClass = $(this).attr("class").trim();
+                    if (hideQuestion) {
                         $(this).hide();
-                        if ($(this).attr("class") === "survey_question ch_selectivedisplay") {
+                        if (questionClass === "survey_question ch_selectivedisplay") {
                             $(this).show();
                         }
                     }
-
-                    if ($( this ).attr("class") === "survey_question ch_selectivedisplay") {
+                    if (questionClass === "survey_question ch_selectivedisplay") {
                         hideQuestion = true;
                     }
                 });

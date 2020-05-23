@@ -267,7 +267,7 @@ if (Gradebook::is_active()) {
 $surveytypes[0] = get_lang('Normal');
 $surveytypes[1] = get_lang('Conditional');
 
-if ($action == 'add') {
+if ($action === 'add') {
     $form->addElement('hidden', 'survey_type', 0);
     $survey_tree = new SurveyTree();
     $list_surveys = $survey_tree->createList($survey_tree->surveylist);
@@ -281,7 +281,7 @@ $form->addElement('checkbox', 'shuffle', null, get_lang('ActivateShuffle'));
 
 $input_name_list = null;
 
-if ($action == 'edit' && !empty($survey_id)) {
+if ($action === 'edit' && !empty($survey_id)) {
     if ($survey_data['anonymous'] == 0) {
         $form->addElement(
             'checkbox',

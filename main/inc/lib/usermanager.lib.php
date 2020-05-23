@@ -7003,6 +7003,19 @@ SQL;
     }
 
     /**
+     * @param int $userInfo
+     *
+     * @throws Exception
+     */
+    public static function deleteUserFiles($userId)
+    {
+        $path = self::getUserPathById($userId, 'system');
+
+        $fs = new Filesystem();
+        $fs->remove($path);
+    }
+
+    /**
      * @return EncoderFactory
      */
     private static function getEncoderFactory()
@@ -7094,18 +7107,5 @@ SQL;
         }
 
         return $url;
-    }
-
-    /**
-     * @param int $userInfo
-     *
-     * @throws Exception
-     */
-    public static function deleteUserFiles($userId)
-    {
-        $path = self::getUserPathById($userId, 'system');
-
-        $fs = new Filesystem();
-        $fs->remove($path);
     }
 }

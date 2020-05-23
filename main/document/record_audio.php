@@ -1,14 +1,14 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
 
 /**
  * This file allows record audio files.
- *
- * @package chamilo.document
  */
 require_once __DIR__.'/../inc/global.inc.php';
+
 $this_section = SECTION_COURSES;
 $groupRights = Session::read('group_member_with_upload_rights');
 $nameTools = get_lang('VoiceRecord');
@@ -24,9 +24,7 @@ $document_data = DocumentManager::get_document_data_by_id(
 );
 if (empty($document_data)) {
     if (api_is_in_group()) {
-        $group_properties = GroupManager::get_group_properties(
-            api_get_group_id()
-        );
+        $group_properties = GroupManager::get_group_properties(api_get_group_id());
         $document_id = DocumentManager::get_document_id(
             api_get_course_info(),
             $group_properties['directory']
@@ -43,15 +41,14 @@ $dir = $document_data['path'];
 
 //make some vars
 $wamidir = $dir;
-if ($wamidir == "/") {
+if ($wamidir === "/") {
     $wamidir = '';
 }
 $wamiurlplay = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document'.$wamidir."/";
 $groupId = api_get_group_id();
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
-// Please, do not modify this dirname formatting
-
+// Please, do not modify this dirname formatting.
 if (strstr($dir, '..')) {
     $dir = '/';
 }
@@ -77,8 +74,16 @@ if (!is_dir($filepath)) {
 
 //groups //TODO: clean
 if (!empty($groupId)) {
-    $interbreadcrumb[] = ["url" => "../group/group_space.php?".api_get_cidreq(), "name" => get_lang('GroupSpace')];
     $group = GroupManager :: get_group_properties($groupId);
+    $interbreadcrumb[] = [
+        'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
+        'name' => get_lang('Groups'),
+    ];
+    $interbreadcrumb[] = [
+        "url" => api_get_path(WEB_CODE_PATH)."group/group_space.php?".api_get_cidreq(),
+        "name" => get_lang('GroupSpace'),
+    ];
+
     $path = explode('/', $dir);
     if ('/'.$path[1] != $group['directory']) {
         api_not_allowed(true);

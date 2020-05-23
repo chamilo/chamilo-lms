@@ -30,6 +30,7 @@ if (api_is_student_boss() && !empty($filter_user)) {
 }
 
 $limitTeacherAccess = api_get_configuration_value('limit_exercise_teacher_access');
+$allowClean = Exercise::allowAction('clean_results');
 
 if ($limitTeacherAccess && !api_is_platform_admin()) {
     api_not_allowed(true);
@@ -326,37 +327,40 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
             Display::return_icon('reload.png', get_lang('RecalculateResults'), [], ICON_SIZE_MEDIUM),
             api_get_path(WEB_CODE_PATH).'exercise/recalculate_all.php?'.api_get_cidreq()."&exercise=$exercise_id"
         );
+
         // clean result before a selected date icon
-        $actions .= Display::url(
-            Display::return_icon(
-                'clean_before_date.png',
-                get_lang('CleanStudentsResultsBeforeDate'),
-                '',
-                ICON_SIZE_MEDIUM
-            ),
-            '#',
-            ['onclick' => 'javascript:display_date_picker()']
-        );
-        // clean result before a selected date datepicker popup
-        $actions .= Display::span(
-            Display::input(
-                'input',
-                'datepicker_start',
-                get_lang('SelectADateOnTheCalendar'),
-                [
-                    'onmouseover' => 'datepicker_input_mouseover()',
-                    'id' => 'datepicker_start',
-                    'onchange' => 'datepicker_input_changed()',
-                    'readonly' => 'readonly',
-                ]
-            ).
-            Display::button(
-                'delete',
-                get_lang('Delete'),
-                ['onclick' => 'submit_datepicker()']
-            ),
-            ['style' => 'display:none', 'id' => 'datepicker_span']
-        );
+        if ($allowClean) {
+            $actions .= Display::url(
+                Display::return_icon(
+                    'clean_before_date.png',
+                    get_lang('CleanStudentsResultsBeforeDate'),
+                    '',
+                    ICON_SIZE_MEDIUM
+                ),
+                '#',
+                ['onclick' => 'javascript:display_date_picker()']
+            );
+            // clean result before a selected date datepicker popup
+            $actions .= Display::span(
+                Display::input(
+                    'input',
+                    'datepicker_start',
+                    get_lang('SelectADateOnTheCalendar'),
+                    [
+                        'onmouseover' => 'datepicker_input_mouseover()',
+                        'id' => 'datepicker_start',
+                        'onchange' => 'datepicker_input_changed()',
+                        'readonly' => 'readonly',
+                    ]
+                ).
+                Display::button(
+                    'delete',
+                    get_lang('Delete'),
+                    ['onclick' => 'submit_datepicker()']
+                ),
+                ['style' => 'display:none', 'id' => 'datepicker_span']
+            );
+        }
     }
 } else {
     $actions .= '<a href="exercise.php">'.
@@ -434,7 +438,7 @@ if (($is_allowedToEdit || $is_tutor || api_is_coach()) &&
 ) {
     // ask for the date
     $check = Security::check_token('get');
-    if ($check) {
+    if ($check && $allowClean) {
         $objExerciseTmp = new Exercise();
         if ($objExerciseTmp->read($exercise_id)) {
             $count = $objExerciseTmp->cleanResults(

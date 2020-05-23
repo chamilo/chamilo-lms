@@ -1096,7 +1096,6 @@ if (!empty($error)) {
                 var saveDurationUrl = "'.$saveDurationUrl.'";
                 // Logout of course just in case
                 $.ajax({
-                    async: false,
                     url: saveDurationUrl,
                     success: function (data) {
                         calledUpdateDuration = true;
@@ -1264,7 +1263,6 @@ if (!empty($error)) {
                 Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin').'\');
             $.ajax({
                 type:"post",
-                async: false,
                 url: "'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&a=save_exercise_by_now",
                 data: dataparam,
                 success: function(return_value) {
@@ -1337,7 +1335,6 @@ if (!empty($error)) {
 
             $.ajax({
                 type:"post",
-                async: false,
                 url: "'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&a=save_exercise_by_now",
                 data: requestData,
                 success: function(return_value) {

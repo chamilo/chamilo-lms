@@ -7417,7 +7417,6 @@ class Exercise
                 var params = '.$params.';
                 $.ajax({
                     type: "GET",
-                    async: false,
                     data: params,
                     url: "'.$url.'",
                     success: function(return_value) {

@@ -514,11 +514,23 @@ To solve this kind of issues, MySQL and MariaDB offer a data compression
     usage and reduce the impact of numerous and heavy data requests (and
     save you).<br />
 In 1.10.0, we have added the possibility to enable this compression very
-    easily, from the configuration.php file, uncommenting the following line:
+    easily, from the configuration.php file, defining a secret parameter called
+    db_client_flags. The database connection library changed in 1.11.0 and this
+    possibility was removed until 1.11.12. where you can now use client flags
+    by defining an array (it is very important to define it as an array) in
+    configuration.php, like this:
 <pre>
-//$_configuration['db_client_flags'] = MYSQL_CLIENT_COMPRESS;
+$_configuration['db_client_flags'] = [0x00000020];
 </pre>
-This should have an immediate effect on the load average on your server.
+The values used in the array (in this case CLIENT_COMPRESS) are the hexadecimal
+    values documented in the <a href="https://dev.mysql.com/doc/internals/en/capability-flags.html">MySQL</a>
+    documentation. There is no corresponding documentation for MariaDB, so we assume
+    most of these flags will work in MariaDB too. The PDO driver for MySQL
+    doesn't seem to understand the constants related to those flags, so you
+    have to use the hexadecimal value directly.
+Changing CLIENT_COMPRESS will only have a positive impact if the CPU
+    utilization is low and the bandwidth utilisation is high in your specific
+    use case, so make sure you analyze this properly.
 </p>
 <hr />
 <h2><a name="13.increasing-php-limits"></a>Increasing PHP limits</h2>

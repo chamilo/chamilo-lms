@@ -150,6 +150,7 @@ $dbParams = [
     'path' => isset($_configuration['db_path']) ? $_configuration['db_path'] : '',
     // Only relevant for pdo_mysql, pdo_pgsql, and pdo_oci/oci8,
     'port' => isset($_configuration['db_port']) ? $_configuration['db_port'] : '',
+    'driverOptions' => isset($_configuration['db_client_flags']) && is_array($_configuration['db_client_flags']) ? $_configuration['db_client_flags'] : [],
 ];
 
 try {

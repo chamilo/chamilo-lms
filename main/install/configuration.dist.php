@@ -1529,6 +1529,9 @@ $_configuration['auth_password_links'] = [
 // ALTER TABLE track_e_attempt_recording ADD COLUMN answer longtext default '' AFTER question_id;
 //$_configuration['quiz_answer_extra_recording'] = false;
 
+// Disable clean results for teachers
+// $_configuration['disable_clean_exercise_results_for_teachers'] = true;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

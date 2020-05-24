@@ -538,6 +538,7 @@ class survey_question
      * Get the JS for questions that can depend on a previous question
      * (and that hides those questions until something changes in the previous
      * question).
+     *
      * @return string HTML code
      */
     public static function getJs()
@@ -555,12 +556,14 @@ class survey_question
     }
 
     /**
-     * Get the question parents recursively, if any. This function depends on 
-     * the existence of a parent_id field, which depends on the 
+     * Get the question parents recursively, if any. This function depends on
+     * the existence of a parent_id field, which depends on the
      * 'survey_question_dependency' setting and its corresponding SQL
      * requirements.
-     * @param int $questionId The c_survey_question.question.id
-     * @param array $list An array of parents to be extended by this method
+     *
+     * @param int   $questionId The c_survey_question.question.id
+     * @param array $list       An array of parents to be extended by this method
+     *
      * @return array The completed array of parents
      */
     public static function getParents($questionId, $list = [])
@@ -587,7 +590,9 @@ class survey_question
     /**
      * Creates the JS code for the given parent question so that it shows
      * the children questions when a specific answer of the parent is selected.
+     *
      * @param array $question An array with the question details
+     *
      * @return string JS code to add to the HTML survey question page
      */
     public static function getQuestionJs($question)
@@ -628,8 +633,10 @@ class survey_question
     }
 
     /**
-     * Returns the (children) questions that have the given question as parent
+     * Returns the (children) questions that have the given question as parent.
+     *
      * @param array $question An array describing the parent question
+     *
      * @return array The questions that have the given question as parent
      */
     public static function getDependency($question)
@@ -651,7 +658,8 @@ class survey_question
     }
 
     /**
-     * This method is not implemented at this level (returns null)
+     * This method is not implemented at this level (returns null).
+     *
      * @param array $questionData
      * @param array $answers
      */

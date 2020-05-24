@@ -7417,7 +7417,6 @@ class Exercise
                 var params = '.$params.';
                 $.ajax({
                     type: "GET",
-                    async: false,
                     data: params,
                     url: "'.$url.'",
                     success: function(return_value) {
@@ -8443,6 +8442,9 @@ class Exercise
         $sessionId = 0,
         $returnData = false
     ) {
+        $allowDelete = Exercise::allowAction('delete');
+        $allowClean = Exercise::allowAction('clean_results');
+
         $TBL_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
         $TBL_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $TBL_EXERCISE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
@@ -8906,32 +8908,39 @@ class Exercise
                             );
 
                             // Clean exercise
-                            if ($locked == false) {
-                                $clean = Display::url(
-                                    Display::return_icon(
-                                        'clean.png',
-                                        get_lang('CleanStudentResults'),
+                            $clean = '';
+                            if (true === $allowClean) {
+                                if (false == $locked) {
+                                    $clean = Display::url(
+                                        Display::return_icon(
+                                            'clean.png',
+                                            get_lang('CleanStudentResults'),
+                                            '',
+                                            ICON_SIZE_SMALL
+                                        ),
+                                        '',
+                                        [
+                                            'onclick' => "javascript:if(!confirm('".addslashes(
+                                                    api_htmlentities(
+                                                        get_lang('AreYouSureToDeleteResults'),
+                                                        ENT_QUOTES,
+                                                        $charset
+                                                    )
+                                                )." ".addslashes($row['title'])."?"."')) return false;",
+                                            'href' => 'exercise.php?'.api_get_cidreq(
+                                                ).'&choice=clean_results&sec_token='.$token.'&exerciseId='.$row['id'],
+                                        ]
+                                    );
+                                } else {
+                                    $clean = Display::return_icon(
+                                        'clean_na.png',
+                                        get_lang('ResourceLockedByGradebook'),
                                         '',
                                         ICON_SIZE_SMALL
-                                    ),
-                                    '',
-                                    [
-                                        'onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToDeleteResults'), ENT_QUOTES, $charset))." ".addslashes($row['title'])."?"."')) return false;",
-                                        'href' => 'exercise.php?'.api_get_cidreq().'&choice=clean_results&sec_token='.$token.'&exerciseId='.$row['id'],
-                                    ]
-                                );
-                            } else {
-                                $clean = Display::return_icon(
-                                    'clean_na.png',
-                                    get_lang('ResourceLockedByGradebook'),
-                                    '',
-                                    ICON_SIZE_SMALL
-                                );
+                                    );
+                                }
                             }
 
-                            if ($limitTeacherAccess && !api_is_platform_admin()) {
-                                $clean = '';
-                            }
                             $actions .= $clean;
                             // Visible / invisible
                             // Check if this exercise was added in a LP
@@ -9925,6 +9934,44 @@ class Exercise
         $answers = $this->getUserAnswersSavedInExercise($attemptId);
 
         return count($answers);
+    }
+
+    public static function allowAction($action)
+    {
+        if (api_is_platform_admin()) {
+            return true;
+        }
+
+        $limitTeacherAccess = api_get_configuration_value('limit_exercise_teacher_access');
+        $disableClean = api_get_configuration_value('disable_clean_exercise_results_for_teachers');
+
+        switch ($action) {
+            case 'delete':
+                if (api_is_allowed_to_edit(null, true)) {
+                    if ($limitTeacherAccess) {
+                        return false;
+                    }
+
+                    return true;
+                }
+                break;
+            case 'clean_results':
+                if (api_is_allowed_to_edit(null, true)) {
+                    if ($limitTeacherAccess) {
+                        return false;
+                    }
+
+                    if ($disableClean) {
+                        return false;
+                    }
+
+                    return true;
+                }
+
+                break;
+        }
+
+        return false;
     }
 
     /**

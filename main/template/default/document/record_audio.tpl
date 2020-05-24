@@ -55,7 +55,7 @@
 </div>
 
 <script>
-    $(document).on('ready', function () {
+    $(function() {
         RecordAudio.init(
             {
                 blockId: '#record-audio-recordrtc',
@@ -65,6 +65,7 @@
                 btnStopId: '#btn-stop-record',
                 btnSaveId: '#btn-save-record',
                 plyrPreviewId: '#record-preview',
+                cidReq :'{{ _p.web_cid_query }}',
                 directory: '{{ directory }}',
                 reload_page: 1,
                 type: 'document'

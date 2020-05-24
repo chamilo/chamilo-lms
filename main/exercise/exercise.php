@@ -24,6 +24,9 @@ api_protect_course_script(true);
 
 $limitTeacherAccess = api_get_configuration_value('limit_exercise_teacher_access');
 
+$allowDelete = Exercise::allowAction('delete');
+$allowClean = Exercise::allowAction('clean_results');
+
 $check = Security::get_existing_token('get');
 
 $currentUrl = api_get_self().'?'.api_get_cidreq();
@@ -94,7 +97,7 @@ if ($is_allowedToEdit) {
     switch ($action) {
         case 'clean_all_test':
             if ($check) {
-                if ($limitTeacherAccess && !api_is_platform_admin()) {
+                if (false === $allowClean) {
                     api_not_allowed(true);
                 }
 
@@ -207,7 +210,9 @@ if (!empty($action) && $is_allowedToEdit) {
 
             switch ($action) {
                 case 'delete':
-                    $objExerciseTmp->delete();
+                    if ($allowDelete) {
+                        $objExerciseTmp->delete();
+                    }
                     break;
                 case 'visible':
                     if ($limitTeacherAccess && !api_is_platform_admin()) {
@@ -303,9 +308,11 @@ if ($is_allowedToEdit) {
                         break;
                     case 'delete':
                         // deletes an exercise
-                        $result = $objExerciseTmp->delete();
-                        if ($result) {
-                            Display::addFlash(Display::return_message(get_lang('ExerciseDeleted'), 'confirmation'));
+                        if ($allowDelete) {
+                            $result = $objExerciseTmp->delete();
+                            if ($result) {
+                                Display::addFlash(Display::return_message(get_lang('ExerciseDeleted'), 'confirmation'));
+                            }
                         }
                         break;
                     case 'enable':
@@ -375,7 +382,7 @@ if ($is_allowedToEdit) {
 
                         break;
                     case 'clean_results':
-                        if ($limitTeacherAccess && !api_is_platform_admin()) {
+                        if (false === $allowClean) {
                             // Teacher change exercise
                             break;
                         }
@@ -548,21 +555,24 @@ if ($is_allowedToEdit && $origin !== 'learnpath') {
     $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/upload_exercise.php?'.api_get_cidreq().'">'.
         Display::return_icon('import_excel.png', get_lang('ImportExcelQuiz'), '', ICON_SIZE_MEDIUM).'</a>';
 
-    $cleanAll = Display::url(
-        Display::return_icon(
-            'clean_all.png',
-            get_lang('CleanAllStudentsResultsForAllTests'),
-            '',
-            ICON_SIZE_MEDIUM
-        ),
-        '#',
-        [
-            'data-item-question' => addslashes(get_lang('AreYouSureToEmptyAllTestResults')),
-            'data-href' => api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq().'&action=clean_all_test&sec_token='.$token,
-            'data-toggle' => 'modal',
-            'data-target' => '#confirm-delete',
-        ]
-    );
+    $cleanAll = null;
+    if ($allowClean) {
+        $cleanAll = Display::url(
+            Display::return_icon(
+                'clean_all.png',
+                get_lang('CleanAllStudentsResultsForAllTests'),
+                '',
+                ICON_SIZE_MEDIUM
+            ),
+            '#',
+            [
+                'data-item-question' => addslashes(get_lang('AreYouSureToEmptyAllTestResults')),
+                'data-href' => api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq().'&action=clean_all_test&sec_token='.$token,
+                'data-toggle' => 'modal',
+                'data-target' => '#confirm-delete',
+            ]
+        );
+    }
 
     if ($limitTeacherAccess) {
         if (api_is_platform_admin()) {

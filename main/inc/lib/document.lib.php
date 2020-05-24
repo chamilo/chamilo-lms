@@ -3565,7 +3565,6 @@ class DocumentManager
                     if (tempDiv.length == 0) {
                         $.ajax({
                             type: 'GET',
-                            async: false,
                             url:  '".$url."',
                             data: 'folder_id='+numericId,
                             success: function(data) {

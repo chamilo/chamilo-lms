@@ -106,7 +106,7 @@ class Auth
         $table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
         $current_user_id = api_get_user_id();
-        $all_user_courses = $this->getCoursesOfUser($current_user_id);
+        $all_user_courses = CourseManager::getCoursesByUserCourseCategory($current_user_id);
 
         // we need only the courses of the category we are moving in
         $user_courses = [];

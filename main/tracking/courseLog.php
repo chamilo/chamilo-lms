@@ -643,54 +643,37 @@ if ($nbStudents > 0) {
     $table->set_header(
         4,
         get_lang('TrainingTime').'&nbsp;'.
-        Display::return_icon('info3.gif', get_lang('CourseTimeInfo'), ['align' => 'absmiddle', 'hspace' => '3px']),
-        false,
-        ['style' => 'width:110px;']
+        Display::return_icon('info3.gif', get_lang('CourseTimeInfo'), [], ICON_SIZE_TINY),
+        false
     );
     $headers['training_time'] = get_lang('TrainingTime');
     $table->set_header(
         5,
         get_lang('CourseProgress').'&nbsp;'.
-        Display::return_icon(
-            'info3.gif',
-            get_lang('ScormAndLPProgressTotalAverage'),
-            ['align' => 'absmiddle', 'hspace' => '3px']
-        ),
-        false,
-        ['style' => 'width:110px;']
+        Display::return_icon('info3.gif', get_lang('ScormAndLPProgressTotalAverage'), [], ICON_SIZE_TINY),
+        false
     );
     $headers['course_progress'] = get_lang('CourseProgress');
 
     $table->set_header(
         6,
         get_lang('ExerciseProgress').'&nbsp;'.
-        Display::return_icon(
-            'info3.gif',
-            get_lang('ExerciseProgressInfo'),
-            ['align' => 'absmiddle', 'hspace' => '3px']
-        ),
-        false,
-        ['style' => 'width:110px;']
+        Display::return_icon('info3.gif', get_lang('ExerciseProgressInfo'), [], ICON_SIZE_TINY),
+        false
     );
     $headers['exercise_progress'] = get_lang('ExerciseProgress');
     $table->set_header(
         7,
         get_lang('ExerciseAverage').'&nbsp;'.
-        Display::return_icon('info3.gif', get_lang('ExerciseAverageInfo'), ['align' => 'absmiddle', 'hspace' => '3px']),
-        false,
-        ['style' => 'width:110px;']
+        Display::return_icon('info3.gif', get_lang('ExerciseAverageInfo'), [], ICON_SIZE_TINY),
+        false
     );
     $headers['exercise_average'] = get_lang('ExerciseAverage');
     $table->set_header(
         8,
         get_lang('Score').'&nbsp;'.
-        Display::return_icon(
-            'info3.gif',
-            get_lang('ScormAndLPTestTotalAverage'),
-            ['align' => 'absmiddle', 'hspace' => '3px']
-        ),
-        false,
-        ['style' => 'width:110px;']
+        Display::return_icon('info3.gif', get_lang('ScormAndLPTestTotalAverage'), [], ICON_SIZE_TINY),
+        false
     );
     $headers['score'] = get_lang('Score');
     $table->set_header(9, get_lang('Student_publication'), false);
@@ -766,7 +749,7 @@ if ($nbStudents > 0) {
 $groupContent = '';
 echo Display::panel($html, $titleSession);
 
-$groupTable = new HTML_Table(['class' => 'table data_table']);
+$groupTable = new HTML_Table(['class' => 'table table-bordered data_table']);
 $column = 0;
 $groupTable->setHeaderContents(0, $column++, get_lang('Name'));
 $groupTable->setHeaderContents(0, $column++, get_lang('TrainingTime'));

@@ -373,42 +373,48 @@ class SortableTable extends HTML_Table
         $html = '';
 
         $params = $this->get_sortable_table_param_string().'&amp;'.$this->get_additional_url_paramstring();
-        if (!$empty_table) {
-            $table_id = 'form_'.$this->table_name.'_id';
-            $form = $this->get_page_select_form();
-            $nav = $this->get_navigation_html();
-            if ($this->get_total_number_of_items() > $this->default_items_per_page) {
-                $html = '<div class="table-well">';
-                $html .= '<table class="data_table_pagination">';
-                $html .= '<tr>';
-                $html .= '<td style="width:25%;">';
-                $html .= $form;
-                $html .= '</td>';
-                $html .= '<td style="text-align:center;">';
-                $html .= $this->get_table_title();
-                $html .= '</td>';
-                $html .= '<td style="text-align:right;width:25%;">';
-                $html .= $nav;
-                $html .= '</td>';
-                $html .= '</tr>';
-                $html .= '</table>';
-                $html .= '</div>';
-            }
+        if ($empty_table) {
+            return '';
+        }
+        $table_id = 'form_'.$this->table_name.'_id';
+        $form = $this->get_page_select_form();
+        $nav = $this->get_navigation_html();
+        if ($this->get_total_number_of_items() > $this->default_items_per_page) {
+            $html = '<div class="table-well">';
+            $html .= '<table class="data_table_pagination">';
+            $html .= '<tr>';
+            $html .= '<td style="width:25%;">';
+            $html .= $form;
+            $html .= '</td>';
+            $html .= '<td style="text-align:center;">';
+            $html .= $this->get_table_title();
+            $html .= '</td>';
+            $html .= '<td style="text-align:right;width:25%;">';
+            $html .= $nav;
+            $html .= '</td>';
+            $html .= '</tr>';
+            $html .= '</table>';
+            $html .= '</div>';
+        }
 
-            if (count($this->form_actions) > 0) {
-                $html .= '<form id ="'.$table_id.'" name="form_'.$this->table_name.'" class="form-search" method="post" action="'.api_get_self().'?'.$params.'" >';
-            }
+        if (count($this->form_actions) > 0) {
+            $html .= '<form id ="'.$table_id.'" name="form_'.$this->table_name.'" class="form-search" method="post" action="'.api_get_self().'?'.$params.'" >';
         }
 
         $html .= '<div class="table-responsive">'.$content.'</div>';
 
-        if (!$empty_table) {
-            if (!empty($this->additional_parameters)) {
-                foreach ($this->additional_parameters as $key => $value) {
-                    $html .= '<input type="hidden" name ="'.Security::remove_XSS($key).'" value ="'.Security::remove_XSS($value).'" />';
-                }
+        if (!empty($this->additional_parameters)) {
+            foreach ($this->additional_parameters as $key => $value) {
+                $html .= '<input type="hidden" name ="'.Security::remove_XSS($key).'" value ="'.Security::remove_XSS($value).'" />';
             }
-            $html .= '<input type="hidden" name="action">';
+        }
+        $html .= '<input type="hidden" name="action">';
+
+        $showFooter = count($this->actionButtons) > 0 ||
+            count($this->form_actions) > 0 ||
+            $this->get_total_number_of_items() > $this->default_items_per_page;
+
+        if ($showFooter) {
             $html .= '<div class="table-well">';
             $html .= '<table class="data_table_pagination">';
             $html .= '<tr>';
@@ -434,10 +440,10 @@ class SortableTable extends HTML_Table
                 $html .= '<a class="btn btn-default" href="?'.$params.'" onclick="javascript: setCheckbox(false, \''.$table_id.'\'); return false;">'.get_lang('UnSelectAll').'</a> ';
                 $html .= '</div>';
                 $html .= '<div class="btn-group">
-                            <button class="btn btn-default" onclick="javascript:return false;">'.get_lang('Actions').'</button>
-                            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                                <span class="caret"></span>
-                            </button>';
+                        <button class="btn btn-default" type="button">'.get_lang('Actions').'</button>
+                        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+                            <span class="caret"></span>
+                        </button>';
                 $html .= '<ul class="dropdown-menu">';
                 foreach ($this->form_actions as $action => &$label) {
                     $html .= '<li><a data-action ="'.$action.'" href="#" onclick="javascript:action_click(this, \''.$table_id.'\');">'.$label.'</a></li>';
@@ -450,21 +456,18 @@ class SortableTable extends HTML_Table
             $html .= '</td>';
             // Pagination
             if ($this->get_total_number_of_items() > $this->default_items_per_page) {
-                $html .= '<td style="text-align:right;">';
+                $html .= '<td class="text-right">';
                 $html .= $nav;
-                $html .= '</td>';
-            } else {
-                $html .= '<td> ';
                 $html .= '</td>';
             }
 
             $html .= '</tr>';
             $html .= '</table>';
-
             $html .= '</div>'; //toolbar
-            if (count($this->form_actions) > 0) {
-                $html .= '</form>';
-            }
+        }
+
+        if (count($this->form_actions) > 0) {
+            $html .= '</form>';
         }
 
         return $html;

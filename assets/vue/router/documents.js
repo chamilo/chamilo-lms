@@ -1,5 +1,5 @@
 export default {
-  path: '/resources/documents',
+  path: '/resources/documents/:node/',
   name: 'documents',
   component: () => import('../components/documents/Layout'),
   redirect: { name: 'DocumentsList' },

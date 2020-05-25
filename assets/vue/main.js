@@ -6,32 +6,24 @@ import courseCategoryService from './services/coursecategory';
 import documentsService from './services/documents';
 import courseService from './services/course';
 import makeCrudModule from './store/modules/crud';
-
-// import '@mdi/font/css/materialdesignicons.css'
-
-/*router.beforeEach((to, from, next) => {
-    // hack to allow for forward slashes in path ids
-    if (to.fullPath.includes('%2F')) {
-        next(to.fullPath.replace('%2F', '/'));
-    }
-    next();
-});*/
-
 import vuetify from './plugins/vuetify' // path to vuetify export
-
+require('@fancyapps/fancybox');
+require ('@fancyapps/fancybox/dist/jquery.fancybox.css');
+import VueApollo from 'vue-apollo';
+import Vuelidate from 'vuelidate';
+import i18n from './i18n';
 import ApolloClient from 'apollo-boost'
 const apolloClient = new ApolloClient({
     // You should use an absolute URL here
     uri: '/api/graphql/'
 })
 
-import VueApollo from 'vue-apollo';
-Vue.use(VueApollo);
 
-import Vuelidate from 'vuelidate';
-import i18n from './i18n';
 Vue.config.productionTip = false;
+
 Vue.use(Vuelidate);
+Vue.use(VueApollo);
+Vue.use(require('vue-moment'));
 
 const apolloProvider = new VueApollo({
     defaultClient: apolloClient,
@@ -60,7 +52,6 @@ store.registerModule(
     })
 );
 
-Vue.config.productionTip = false;
 if (document.getElementById('app')) {
     new Vue({
         vuetify,

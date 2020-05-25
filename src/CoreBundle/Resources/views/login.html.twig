@@ -21,10 +21,9 @@
                     <div class="wrap-input validate-input" data-validate="Password is required">
                         <label for="inputPassword">Password</label>
                         <input type="password" name="password" id="inputPassword" class="form-control" required>
-
                     </div>
 
-                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}"/>
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token('authenticate') }}"/>
                     <div class="form-group has-feedback">
                         <div class="checkbox control-group">
                             <label for="remember_me">

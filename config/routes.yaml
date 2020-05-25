@@ -22,19 +22,19 @@ legacy_plugin:
 
 courses_vue:
     path: /courses/{wildcard}
-    controller: Chamilo\CoreBundle\Controller\IndexController::courses
+    controller: Chamilo\CoreBundle\Controller\IndexController::resources
     requirements:
         wildcard: .*
 
 sessions_vue:
     path: /sessions/{wildcard}
-    controller: Chamilo\CoreBundle\Controller\IndexController::courses
+    controller: Chamilo\CoreBundle\Controller\IndexController::resources
     requirements:
         wildcard: .*
 
 resources_vue:
     path: /resources/{wildcard}
-    controller: Chamilo\CoreBundle\Controller\IndexController::courses
+    controller: Chamilo\CoreBundle\Controller\IndexController::resources
     requirements:
         wildcard: .*
 

@@ -150,6 +150,8 @@
                 return this.$store.getters['security/isAuthenticated']
             },
         },
+        created() {
+        },
         beforeMount() {
         }
     }

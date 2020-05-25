@@ -9,7 +9,6 @@ export default {
     return {
       options: {
         sortBy: [],
-        descending: false,
         page: 1,
         itemsPerPage: 15
       },
@@ -18,6 +17,12 @@ export default {
   },
 
   watch: {
+    $route() {
+      // react to route changes...
+      this.resetList = true;
+      this.onUpdateOptions(this.options);
+    },
+
     deletedItem(item) {
       this.showMessage(`${item['@id']} deleted.`);
     },
@@ -32,8 +37,7 @@ export default {
   },
 
   methods: {
-    onUpdateOptions(props) {
-      const { page, itemsPerPage, sortBy, sortDesc, descending, totalItems } = props;
+    onUpdateOptions({ page, itemsPerPage, sortBy, sortDesc, totalItems } = {}) {
       let params = {
         ...this.filters
       };
@@ -41,24 +45,19 @@ export default {
         params = { ...params, itemsPerPage, page };
       }
 
-      let sortDescVuetify = false;
-      let vueDescending = descending;
-      if (sortBy.length === 1 && sortDesc.length === 1) {
-        if (sortDesc[0]) {
-          sortDescVuetify = true;
-        }
-        vueDescending = sortDescVuetify;
+      if (this.$route.params.node) {
+        params[`resourceNode.parent`] = this.$route.params.node;
       }
 
-      if (!isEmpty(sortBy)) {
-        params[`order[${sortBy}]`] = vueDescending ? 'desc' : 'asc';
+      if (!isEmpty(sortBy) && !isEmpty(sortDesc)) {
+        params[`order[${sortBy[0]}]`] = sortDesc[0] ? 'desc' : 'asc'
       }
 
       this.resetList = true;
 
       this.getPage(params).then(() => {
         this.options.sortBy = sortBy;
-        this.options.descending = descending;
+        this.options.sortDesc = sortDesc;
         this.options.itemsPerPage = itemsPerPage;
         this.options.totalItems = totalItems;
       });
@@ -86,6 +85,30 @@ export default {
         name: `${this.$options.servicePrefix}Show`,
         params: { id: item['@id'] }
       });
+    },
+
+    handleClick(item) {
+      /*this.$router.push({
+        name: `${this.$options.servicePrefix}Show`,
+        params: { id: item['@id'] }
+      });*/
+
+      //console.log(item['resourceNode']['id']);
+      this.resetList = true;
+      this.$route.params.node = item['resourceNode']['id'];
+      this.$router.push({
+        name: `${this.$options.servicePrefix}List`,
+        params: {node: item['resourceNode']['id']}
+      });
+      /*this.$router.push({
+        name: `${this.$options.servicePrefix}List`,
+        params: {node: item['resourceNode']['id']}
+      });*/
+
+      /*console.log(item['resourceNode']['id']);
+      this.$route.params.node = item['resourceNode']['id'];
+      this.onUpdateOptions(this.options);*/
+
     },
 
     editHandler(item) {

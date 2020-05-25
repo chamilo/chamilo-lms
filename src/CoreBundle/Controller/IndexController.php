@@ -8,6 +8,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * Class IndexController
@@ -30,11 +32,22 @@ class IndexController extends BaseController
         );
     }
 
-    public function courses(): Response
+    public function resources(SerializerInterface $serializer): Response
     {
+        $user = $this->getUser();
+        $data = null;
+        if (!empty($user)) {
+            $userClone = clone $user;
+            $userClone->setPassword('');
+            $data = $serializer->serialize($userClone, JsonEncoder::FORMAT);
+        }
+
+
         return $this->render(
-            '@ChamiloCore/Index/courses.html.twig',
+            '@ChamiloCore/Index/vue.html.twig',
             [
+                'is_authenticated' => json_encode(!empty($this->getUser())),
+                'user' => $data ?? json_encode($data),
                 'content' => '',
             ]
         );

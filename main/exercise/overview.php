@@ -155,14 +155,11 @@ $btnCheck = '';
 $quizCheckButtonEnabled = api_get_configuration_value('quiz_check_button_enable');
 
 if ($quizCheckButtonEnabled) {
-    $btnCheck = '<span id="quiz-check-request-text"></span>'.PHP_EOL
-        .Display::toolbarButton(
-            get_lang('TestYourBrowser'),
-            '#',
-            'check',
-            'info',
-            ['role' => 'button', 'id' => 'quiz-check-request-button']
-        );
+    $btnCheck = Display::button(
+            'quiz_check_request_button',
+            Display::returnFontAwesomeIcon('check', '', true).' '.get_lang('TestYourBrowser'),
+            ['type' => 'button', 'role' => 'button', 'id' => 'quiz-check-request-button', 'class' => 'btn btn-info']
+        ).PHP_EOL.'<span id="quiz-check-request-text"></span>';
 }
 
 //3. Checking visibility of the exercise (overwrites the exercise button)
@@ -493,23 +490,51 @@ if ($quizCheckButtonEnabled) {
 
     $html .= "<script>
         $(function () {
-            $('#quiz-check-request-button').on('click', function (e) {
+            var btnStart = $('.exercise_overview_options:has(a.btn)').hide(),
+                btnTest = $('#quiz-check-request-button');
+
+            btnTest.on('click', function (e) {
                 e.preventDefault();
 
-                var textResult = $('#quiz-check-request-text').removeClass('text-success text-danger').hide();
+                btnTest.prop('disabled', true);
+                btnStart.hide();
 
-                $.ajax({
-                    url: '$quizCheckRequestUrl',
-                    type: 'post',
-                    async: false,
-                    data: '$params'
-                }).always(function (response, status, xhr) {
-                    if (!!xhr && status === 'success' && !!response && 'ok' === response) {
-                        textResult.text(\"".get_lang('QuizBrowserCheckOK')."\").addClass('text-success').show();
-                    } else {
-                        textResult.text(\"".get_lang('QuizBrowserCheckNO')."\").addClass('text-danger').show();
-                    }
-                });
+                var txtResult = $('#quiz-check-request-text').removeClass('text-success text-danger').hide();
+
+                $
+                    .when(
+                        $.ajax({
+                            url: '$quizCheckRequestUrl',
+                            type: 'post',
+                            data: '$params'
+                        }),
+                        $.ajax({
+                            url: '$quizCheckRequestUrl',
+                            type: 'post',
+                            data: '$params&sleep=1'
+                        })
+                    )
+                    .then(
+                        function (xhr1, xhr2) {
+                            var xhr1IsOk = !!xhr1 && xhr1[1] === 'success' && !!xhr1[0] && 'ok' === xhr1[0];
+                            var xhr2IsOk = !!xhr2 && xhr2[1] === 'success' && !!xhr2[0] && 'ok' === xhr2[0];
+
+                            if (xhr1IsOk && xhr2IsOk) {
+                                txtResult.text(\"".get_lang('QuizBrowserCheckOK')."\").addClass('text-success').show();
+
+                                btnStart.show();
+                            } else {
+                                txtResult.text(\"".get_lang('QuizBrowserCheckNO')."\").addClass('text-danger').show();
+                            }
+
+                            btnTest.prop('disabled', false);
+                        },
+                        function () {
+                            txtResult.text(\"".get_lang('QuizBrowserCheckNO')."\").addClass('text-danger').show();
+
+                            btnTest.prop('disabled', false);
+                        }
+                    );
             });
         });
         </script>";

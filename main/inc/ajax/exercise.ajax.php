@@ -792,6 +792,10 @@ switch ($action) {
         echo json_encode($result);
         break;
     case 'browser_test':
+        if (isset($_POST['sleep'])) {
+            sleep(2);
+        }
+
         echo 'ok';
         break;
     default:

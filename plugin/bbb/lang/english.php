@@ -77,3 +77,4 @@ $strings['disable_course_settings'] = 'Disable course settings';
 $strings['UpdateAllCourses'] = 'Update all courses';
 $strings['UpdateAllCourseSettings'] = 'Update all course settings';
 $strings['ThisWillUpdateAllSettingsInAllCourses'] = 'This will update at once all your course settings.';
+$strings['ThereIsNoVideoConferenceActive'] = 'There is no videoconference currently active';

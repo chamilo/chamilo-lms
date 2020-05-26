@@ -80,6 +80,7 @@ if ($bbb->pluginEnabled) {
                     $bbb->saveParticipant($meetingInfo['id'], api_get_user_id(), $interface);
                     $bbb->redirectToBBB($url);
                 } else {
+                    Display::addFlash(Display::return_message($plugin->get_lang('ThereIsNoVideoConferenceActive')));
                     $url = $bbb->getListingUrl();
                     header('Location: '.$url);
                     exit;

@@ -6,8 +6,8 @@
 <table class="table table-hover table-striped">
     <thead>
         <tr>
-            <th>{{ 'CreatedAt'|get_lang }}</th>
-            <th>{{ 'Finished'|get_lang }}</th>
+            <th>{{ 'DateStart'|get_lang }}</th>
+            <th>{{ 'DateEnd'|get_lang }}</th>
             <th>{{ 'Status'|get_lang }}</th>
             <th>{{ 'Records'|get_plugin_lang('BBBPlugin') }}</th>
             <th>{{ 'Course'|get_lang }}</th>

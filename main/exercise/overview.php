@@ -479,15 +479,15 @@ if ($quizCheckButtonEnabled) {
     $quizCheckRequestUrl = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&a=browser_test';
     $params = http_build_query(
         [
-            'exe_id' => 0,
+            'exe_id' => 1,
             'exerciseId' => $exercise_id,
             'learnpath_id' => $learnpath_id,
             'learnpath_item_id' => $learnpath_item_id,
             'learnpath_item_view_id' => $learnpathItemViewId,
             'reminder' => '0',
             'type' => 'simple',
-            'question_id' => 0,
-            'choice[0]' => 0,
+            'question_id' => 23,
+            'choice[23]' => 45,
         ]
     ).'&'.api_get_cidreq();
 

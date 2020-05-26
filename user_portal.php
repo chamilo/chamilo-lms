@@ -243,12 +243,13 @@ if (api_get_setting('go_to_course_after_login') == 'true') {
             if (isset($sessionInfo['courses']) &&
                 count($sessionInfo['courses']) == 1
             ) {
-                $courseCode = $sessionInfo['courses'][0]['code'];
-                $courseInfo = api_get_course_info_by_id($sessionInfo['courses'][0]['real_id']);
-                if (!empty($courseInfo)) {
-                    $courseUrl = $courseInfo['course_public_url'].'?id_session='.$sessionInfo['session_id'];
-                    header('Location:'.$courseUrl);
-                    exit;
+                foreach ($sessionInfo['courses'] as $courseItem) {
+                    $courseInfo = api_get_course_info_by_id($courseItem['real_id']);
+                    if (!empty($courseInfo)) {
+                        $courseUrl = $courseInfo['course_public_url'].'?id_session='.$sessionInfo['session_id'];
+                        header('Location:'.$courseUrl);
+                        exit;
+                    }
                 }
             }
 

@@ -245,9 +245,11 @@ if (api_get_setting('go_to_course_after_login') == 'true') {
             ) {
                 $courseCode = $sessionInfo['courses'][0]['code'];
                 $courseInfo = api_get_course_info_by_id($sessionInfo['courses'][0]['real_id']);
-                $courseUrl = $courseInfo['course_public_url'].'?id_session='.$sessionInfo['session_id'];
-                header('Location:'.$courseUrl);
-                exit;
+                if (!empty($courseInfo)) {
+                    $courseUrl = $courseInfo['course_public_url'].'?id_session='.$sessionInfo['session_id'];
+                    header('Location:'.$courseUrl);
+                    exit;
+                }
             }
 
             // Session has many courses.

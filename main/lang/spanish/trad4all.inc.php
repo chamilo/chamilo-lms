@@ -8548,4 +8548,5 @@ $ExportResults = "Exportar resultados";
 $QuizBrowserCheckOK = "Su navegador ha sido verificado. Puede proceder con seguridad.";
 $QuizBrowserCheckKO = "Su navegador no pudo ser verificado. Inténtelo de nuevo o pruebe con otro navegador o dispositivo antes de comenzar el examen.";
 $PartialCorrect = "Parcialmente correcto";
+$XAnswersSavedByUsersFromXTotal = "%d / %d respuestas guardadas en el ejercicio.";
 ?>

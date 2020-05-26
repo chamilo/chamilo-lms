@@ -8520,4 +8520,5 @@ $ExportResults = "Export results";
 $QuizBrowserCheckOK = "Your browser has been verified. You can safely proceed.";
 $QuizBrowserCheckKO = "Your browser could not be verified. Please try again, or try another browser or device before starting your test.";
 $PartialCorrect = "Partially correct";
+$XAnswersSavedByUsersFromXTotal = "%d / %d answers saved.";
 ?>

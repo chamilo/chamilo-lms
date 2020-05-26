@@ -48,7 +48,9 @@ foreach ($meetings as &$meeting) {
     foreach ($participants as $meetingParticipant) {
         /** @var User $participant */
         $participant = $meetingParticipant['participant'];
-        $meeting['participants'][] = $participant->getCompleteName().' ('.$participant->getEmail().')';
+        if ($participant) {
+            $meeting['participants'][] = $participant->getCompleteName().' ('.$participant->getEmail().')';
+        }
     }
 }
 

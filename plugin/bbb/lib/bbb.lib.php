@@ -108,7 +108,7 @@ class bbb
             }
 
             if (api_is_anonymous()) {
-                $this->userCompleteName = 'Guest'.rand(1000, 9999);
+                $this->userCompleteName = get_lang('Guest').rand(1000, 9999);
             }
 
             $this->salt = $bbb_salt;

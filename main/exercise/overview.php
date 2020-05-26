@@ -524,13 +524,13 @@ if ($quizCheckButtonEnabled) {
 
                                 btnStart.show();
                             } else {
-                                txtResult.text(\"".get_lang('QuizBrowserCheckNO')."\").addClass('text-danger').show();
+                                txtResult.text(\"".get_lang('QuizBrowserCheckKO')."\").addClass('text-danger').show();
                             }
 
                             btnTest.prop('disabled', false);
                         },
                         function () {
-                            txtResult.text(\"".get_lang('QuizBrowserCheckNO')."\").addClass('text-danger').show();
+                            txtResult.text(\"".get_lang('QuizBrowserCheckKO')."\").addClass('text-danger').show();
 
                             btnTest.prop('disabled', false);
                         }

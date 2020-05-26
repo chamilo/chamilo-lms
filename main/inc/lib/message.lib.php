@@ -188,7 +188,8 @@ class MessageManager
                     title as col1,
                     send_date as col2,
                     msg_status as col3,
-                    user_sender_id
+                    user_sender_id,
+                    user_receiver_id
                 FROM $table
                 WHERE
                     $whereConditions
@@ -207,6 +208,7 @@ class MessageManager
             $sendDate = $row['col2'];
             $status = $row['col3'];
             $senderId = $row['user_sender_id'];
+            $receiverId = $row['user_receiver_id'];
 
             $title = Security::remove_XSS($title, STUDENT, true);
             $title = cut($title, 80, true);
@@ -217,6 +219,9 @@ class MessageManager
             }
 
             $userInfo = api_get_user_info($senderId);
+            if ($type == self::MESSAGE_TYPE_OUTBOX) {
+                $userInfo = api_get_user_info($receiverId);
+            }
             $message[3] = '';
             if (!empty($senderId) && !empty($userInfo)) {
                 $message[1] = '<a '.$class.' href="'.$viewUrl.'&id='.$messageId.'">'.$title.'</a><br />';

@@ -102,9 +102,13 @@ class bbb
                 // If we are following a link to a global "per user" conference
                 // then generate a random guest name to join the conference
                 // because there is no part of the process where we give a name
-                $this->userCompleteName = 'Guest'.rand(1000, 9999);
+                //$this->userCompleteName = 'Guest'.rand(1000, 9999);
             } else {
                 $this->userCompleteName = $userInfo['complete_name'];
+            }
+
+            if (api_is_anonymous()) {
+                $this->userCompleteName = 'Guest'.rand(1000, 9999);
             }
 
             $this->salt = $bbb_salt;
@@ -173,9 +177,17 @@ class bbb
             return '';
         }
 
+        $courseCode = $this->courseCode;
+        if (!empty($courseId)) {
+            $course = api_get_course_info_by_id($courseId);
+            if ($course) {
+                $courseCode = $course['code'];
+            }
+        }
+
         return http_build_query(
             [
-                'cidReq' => $courseId ? api_get_course_entity($courseId)->getCode() : $this->courseCode,
+                'cidReq' => $courseCode,
                 'id_session' => $sessionId ?: $this->sessionId,
                 'gidReq' => $groupId ?: $this->groupId,
             ]

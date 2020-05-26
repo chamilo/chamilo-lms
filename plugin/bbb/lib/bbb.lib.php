@@ -1077,6 +1077,12 @@ class bbb
             // created_at
             $meetingDB['created_at'] = $item['created_at']; //avoid overwrite in array_merge() below
 
+            $item['closed_at'] = '';
+            if (!empty($meetingDB['closed_at'])) {
+                $item['closed_at'] = api_convert_and_format_date($meetingDB['closed_at']);
+                $meetingDB['closed_at'] = $item['closed_at'];
+            }
+
             $item['publish_url'] = $this->publishUrl($meetingDB);
             $item['unpublish_url'] = $this->unPublishUrl($meetingBBB);
 

@@ -115,9 +115,7 @@ foreach ($settings as $setting) {
     $text = $settingsForm->addText($setting, $plugin->get_lang($setting), false);
     $text->freeze();
     $defaults[$setting] = api_get_plugin_setting('bbb', $setting) === 'true' ? get_lang('Yes') : get_lang('No');
-    //api_get_plugin_setting('bbb', $setting)
 }
-//$settingsForm->addHtml()main/admin/configure_plugin.php?name=bbb
 
 $settingsForm->addButtonSave($plugin->get_lang('UpdateAllCourses'));
 

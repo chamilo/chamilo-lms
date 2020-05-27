@@ -22,11 +22,21 @@ class IndexController extends BaseController
      *
      * @Route("/", name="home", methods={"GET", "POST"}, options={"expose"=true})
      */
-    public function indexAction(): Response
+    public function indexAction(SerializerInterface $serializer): Response
     {
+        $user = $this->getUser();
+        $data = null;
+        if (!empty($user)) {
+            $userClone = clone $user;
+            $userClone->setPassword('');
+            $data = $serializer->serialize($userClone, JsonEncoder::FORMAT);
+        }
+
         return $this->render(
-            '@ChamiloCore/Index/index.html.twig',
+            '@ChamiloCore/Index/vue.html.twig',
             [
+                'is_authenticated' => json_encode(!empty($this->getUser())),
+                'user' => $data ?? json_encode($data),
                 'content' => '',
             ]
         );
@@ -41,7 +51,6 @@ class IndexController extends BaseController
             $userClone->setPassword('');
             $data = $serializer->serialize($userClone, JsonEncoder::FORMAT);
         }
-
 
         return $this->render(
             '@ChamiloCore/Index/vue.html.twig',

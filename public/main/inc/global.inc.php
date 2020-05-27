@@ -96,6 +96,7 @@ try {
         $default_quota = 100000000;
     }
     define('DEFAULT_DOCUMENT_QUOTA', $default_quota);*/
+    define('DEFAULT_DOCUMENT_QUOTA', 100000000);
 } catch (Exception $e) {
     echo $e->getMessage();
     var_dump($e->getMessage());

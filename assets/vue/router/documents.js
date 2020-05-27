@@ -1,5 +1,6 @@
 export default {
   path: '/resources/documents/:node/',
+  meta: { requiresAuth: true },
   name: 'documents',
   component: () => import('../components/documents/Layout'),
   redirect: { name: 'DocumentsList' },

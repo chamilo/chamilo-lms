@@ -35,7 +35,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
 {
     use TargetPathTrait;
 
-    private const LOGIN_ROUTE = 'login';
+    private const LOGIN_ROUTE = 'login_json';
 
     private $router;
     private $passwordEncoder;
@@ -74,11 +74,12 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
     public function getCredentials(Request $request): array
     {
         $data = null;
+        $token = null;
         if (0 === strpos($request->headers->get('Content-Type'), 'application/json')) {
             $data = json_decode($request->getContent(), true);
             $username = $data['username'];
             $password = $data['password'];
-            $token = $data['csrf_token'];
+            //$token = $data['csrf_token'];
         } else {
             $username = $request->request->get('username');
             $password = $request->request->get('password');
@@ -107,7 +108,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
     {
         $token = new CsrfToken('authenticate', $credentials['csrf_token']);
         if (!$this->csrfTokenManager->isTokenValid($token)) {
-            throw new InvalidCsrfTokenException();
+            //throw new InvalidCsrfTokenException();
         }
 
         $user = $this->entityManager->getRepository(User::class)->findOneBy(['username' => $credentials['username']]);

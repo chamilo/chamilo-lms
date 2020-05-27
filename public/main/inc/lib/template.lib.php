@@ -216,6 +216,7 @@ class Template
         if ('learnpath' === $origin) {
             $template = '@ChamiloCore/Layout/no_layout.html.twig';
         }
+        $this->setVueParams($this->params);
         $this->returnResponse($this->params, $template);
     }
 
@@ -672,6 +673,19 @@ class Template
             $extraHeaders .= $courseLogoutCode;
             $this->assign('extra_headers', $extraHeaders);
         }
+    }
+
+    public static function setVueParams(&$params)
+    {
+        $params['is_authenticated'] = !api_is_anonymous();
+        $user = api_get_user_entity(api_get_user_id());
+        $encoded = '';
+        if ($user) {
+            $encoded = json_encode($user);
+        }
+        $params['user'] = $encoded;
+
+        $params['from_vue'] = isset($_REQUEST['fromVue']) ? 1 : 0;
     }
 
     /**

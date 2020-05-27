@@ -16,8 +16,7 @@ import ApolloClient from 'apollo-boost'
 const apolloClient = new ApolloClient({
     // You should use an absolute URL here
     uri: '/api/graphql/'
-})
-
+});
 
 Vue.config.productionTip = false;
 
@@ -30,7 +29,6 @@ const apolloProvider = new VueApollo({
 });
 
 //import './quasar'
-
 store.registerModule(
     'course',
     makeCrudModule({
@@ -61,6 +59,8 @@ if (document.getElementById('app')) {
         data: {},
         store,
         router,
+        mounted() {
+        },
         render: h => h(App)
     }).$mount("#app");
 }

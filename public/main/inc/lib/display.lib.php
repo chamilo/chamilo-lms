@@ -128,6 +128,7 @@ class Display
         Display::cleanFlashMessages();
         $params['flash_messages'] = $flash;
 
+        Template::setVueParams($params);
         $content = Container::getTemplating()->render($tpl, $params);
         $response->setContent($content);
         $response->send();

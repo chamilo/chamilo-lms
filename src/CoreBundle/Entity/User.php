@@ -1662,6 +1662,39 @@ class User implements UserInterface, EquatableInterface
     }
 
     /**
+     * @return array
+     */
+    public function getGroupNames()
+    {
+        $names = [];
+        foreach ($this->getGroups() as $group) {
+            $names[] = $group->getName();
+        }
+
+        return $names;
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return bool
+     */
+    public function hasGroup($name)
+    {
+        return in_array($name, $this->getGroupNames());
+    }
+
+
+    public function removeGroup($group)
+    {
+        if ($this->getGroups()->contains($group)) {
+            $this->getGroups()->removeElement($group);
+        }
+
+        return $this;
+    }
+
+    /**
      * Returns the user roles.
      *
      * @return array The roles

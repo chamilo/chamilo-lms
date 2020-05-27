@@ -6,14 +6,13 @@ Vue.use(VueRouter);
 import courseRoutes from './course';
 import courseCategoryRoutes from './coursecategory';
 import documents from './documents';
-
 import store from "../store";
-//import Login from "../views/Login";
+import Login from "../views/Login";
 
 let router = new VueRouter({
     mode: "history",
     routes: [
-        //{ path: "/login", component: Login },
+        { path: "/login", component: Login },
         courseRoutes,
         courseCategoryRoutes,
         documents
@@ -29,7 +28,7 @@ router.beforeEach((to, from, next) => {
         } else {
             next({
                 path: "/login",
-                query: { redirect: to.fullPath }
+                query: { redirect: to.fullPath },
             });
         }
     } else {

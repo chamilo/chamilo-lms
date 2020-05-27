@@ -33,7 +33,8 @@
     <link rel="stylesheet" href="{{ url('home') ~ 'build/css/themes/'~ theme ~'/default.css' }}"/>
     {% endif %}
     <link rel="stylesheet" media="print" href="{{ url('home') ~ 'build/css/print.css' }}"/>
-    {{ encore_entry_link_tags('vue') }}
+{#    {{ encore_entry_link_tags('vue') }}#}
+    <link rel="stylesheet" href="{{ url('home') ~ 'build/vue.css' }}"/>
 {% endblock %}
 
 {# app.js is generated using the file webpack.config.js and using yarn read /assets/README.md for more info #}

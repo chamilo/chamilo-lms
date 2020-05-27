@@ -280,12 +280,9 @@ class Container
         return \Database::getManager();
     }
 
-    /**
-     * @return UserManager
-     */
     public static function getUserManager()
     {
-        return self::$userManager;
+        return self::$container->get('Chamilo\CoreBundle\Repository\UserRepository');
     }
 
     /**

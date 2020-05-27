@@ -8549,4 +8549,5 @@ $QuizBrowserCheckOK = "Su navegador ha sido verificado. Puede proceder con segur
 $QuizBrowserCheckKO = "Su navegador no pudo ser verificado. Inténtelo de nuevo o pruebe con otro navegador o dispositivo antes de comenzar el examen.";
 $PartialCorrect = "Parcialmente correcto";
 $XAnswersSavedByUsersFromXTotal = "%d / %d respuestas guardadas en el ejercicio.";
+$TestYourBrowser = "Prueba de navegador";
 ?>

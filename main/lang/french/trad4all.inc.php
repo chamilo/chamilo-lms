@@ -8453,4 +8453,5 @@ $QuizBrowserCheckOK = "Votre navigateur a été vérifié. Vous pouvez continuer
 $QuizBrowserCheckKO = "Votre navigateur n'a pas pu être vérifié. Essayez à nouveau ou essayez un autre navigateur ou dispositif avant de commencer votre test.";
 $PartialCorrect = "Partiellement correct";
 $XAnswersSavedByUsersFromXTotal = "%d / %s réponses enregistrées.";
+$TestYourBrowser = "Testez votre navigateur";
 ?>

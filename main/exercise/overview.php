@@ -157,9 +157,16 @@ $quizCheckButtonEnabled = api_get_configuration_value('quiz_check_button_enable'
 if ($quizCheckButtonEnabled) {
     $btnCheck = Display::button(
             'quiz_check_request_button',
-            Display::returnFontAwesomeIcon('check', '', true).' '.get_lang('TestYourBrowser'),
-            ['type' => 'button', 'role' => 'button', 'id' => 'quiz-check-request-button', 'class' => 'btn btn-info']
-        ).PHP_EOL.'<span id="quiz-check-request-text"></span>';
+            Display::returnFontAwesomeIcon('spinner', '', true, 'fa-spin hidden').' '.get_lang('TestYourBrowser'),
+            [
+                'type' => 'button',
+                'role' => 'button',
+                'id' => 'quiz-check-request-button',
+                'class' => 'btn btn-default',
+                'data-loading-text' => get_lang('Loading'),
+                'autocomplete' => 'off',
+            ]
+        ).PHP_EOL.'<strong id="quiz-check-request-text"></strong>';
 }
 
 //3. Checking visibility of the exercise (overwrites the exercise button)
@@ -490,14 +497,14 @@ if ($quizCheckButtonEnabled) {
 
     $html .= "<script>
         $(function () {
-            var btnStart = $('.exercise_overview_options:has(a.btn)').hide(),
-                btnTest = $('#quiz-check-request-button');
+            var btnTest = $('#quiz-check-request-button'),
+                iconBtnTest = btnTest.children('.fa.fa-spin');
 
             btnTest.on('click', function (e) {
                 e.preventDefault();
 
-                btnTest.prop('disabled', true);
-                btnStart.hide();
+                btnTest.prop('disabled', true).removeClass('btn-success btn-danger').addClass('btn-default');
+                iconBtnTest.removeClass('hidden');
 
                 var txtResult = $('#quiz-check-request-text').removeClass('text-success text-danger').hide();
 
@@ -520,21 +527,22 @@ if ($quizCheckButtonEnabled) {
                             var xhr2IsOk = !!xhr2 && xhr2[1] === 'success' && !!xhr2[0] && 'ok' === xhr2[0];
 
                             if (xhr1IsOk && xhr2IsOk) {
+                                btnTest.removeClass('btn-default btn-danger').addClass('btn-success');
                                 txtResult.text(\"".get_lang('QuizBrowserCheckOK')."\").addClass('text-success').show();
-
-                                btnStart.show();
                             } else {
+                                btnTest.removeClass('btn-default btn-success').addClass('btn-danger');
                                 txtResult.text(\"".get_lang('QuizBrowserCheckKO')."\").addClass('text-danger').show();
                             }
-
-                            btnTest.prop('disabled', false);
                         },
                         function () {
                             txtResult.text(\"".get_lang('QuizBrowserCheckKO')."\").addClass('text-danger').show();
-
-                            btnTest.prop('disabled', false);
+                            btnTest.removeClass('btn-default btn-success').addClass('btn-danger');
                         }
-                    );
+                    )
+                    .always(function () {
+                        btnTest.prop('disabled', false);
+                        iconBtnTest.addClass('hidden');
+                    });
             });
         });
         </script>";

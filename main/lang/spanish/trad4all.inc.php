@@ -8550,4 +8550,5 @@ $QuizBrowserCheckKO = "Su navegador no pudo ser verificado. Inténtelo de nuevo 
 $PartialCorrect = "Parcialmente correcto";
 $XAnswersSavedByUsersFromXTotal = "%d / %d respuestas guardadas en el ejercicio.";
 $TestYourBrowser = "Prueba de navegador";
+$DraggableQuestionIntro = "Ordene las siguientes opciones de la lista como mejor le parezca arrastrándolas a las áreas inferiores. Puede volver a colocarlas en esta área para modificar su respuesta.";
 ?>

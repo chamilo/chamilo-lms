@@ -8522,4 +8522,5 @@ $QuizBrowserCheckKO = "Your browser could not be verified. Please try again, or 
 $PartialCorrect = "Partially correct";
 $XAnswersSavedByUsersFromXTotal = "%d / %d answers saved.";
 $TestYourBrowser = "Test your browser";
+$DraggableQuestionIntro = "Sort the following options from the list as you see fit by dragging them to the lower areas. You can put them back in this area to modify your answer.";
 ?>

@@ -2,8 +2,6 @@
 /* For licensing terms, see /license.txt */
 /**
  * Index page of the admin tools.
- *
- * @package chamilo.admin
  */
 // Resetting the course id.
 $cidReset = true;

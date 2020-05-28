@@ -3,8 +3,6 @@
 
 /**
  * This tool allows platform admins to add users by uploading a CSV or XML file.
- *
- * @package chamilo.admin
  */
 
 use Ddeboer\DataImport\Reader\CsvReader;

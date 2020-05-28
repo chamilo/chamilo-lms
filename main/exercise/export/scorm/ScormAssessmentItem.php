@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -9,8 +10,6 @@
  * Every start_*() and corresponding end_*(), as well as export_*() methods return a string.
  *
  * Attached files are NOT exported.
- *
- * @package chamilo.exercise.scorm
  */
 class ScormAssessmentItem
 {

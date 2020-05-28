@@ -6,9 +6,6 @@ use Chamilo\CoreBundle\Entity\CourseCategory;
 use Chamilo\CoreBundle\Entity\Repository\CourseCategoryRepository;
 use Chamilo\UserBundle\Entity\User;
 
-/**
- * @package chamilo.admin
- */
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';

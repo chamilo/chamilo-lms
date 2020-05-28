@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -7,8 +8,6 @@ use ChamiloSession as Session;
  * Class MultipleAnswerTrueFalseDegreeCertainty
  * This class allows to instantiate an object of type MULTIPLE_ANSWER
  * (MULTIPLE CHOICE, MULTIPLE ANSWER), extending the class question.
- *
- * @package chamilo.exercise
  */
 class MultipleAnswerTrueFalseDegreeCertainty extends Question
 {

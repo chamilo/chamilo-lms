@@ -9,8 +9,6 @@ use SkillRelUser as SkillRelUserManager;
  * Show information about all issued badges with same skill by user.
  *
  * @author José Loguercio Silva <jose.loguercio@beeznest.com>
- *
- * @package chamilo.badge
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -220,7 +218,7 @@ foreach ($userSkills as $index => $skillIssue) {
         $backpack = 'https://backpack.openbadges.org/';
         $configBackpack = api_get_setting('openbadges_backpack');
 
-        if (strcmp($backpack, $configBackpack) !== 0) {
+        if (0 !== strcmp($backpack, $configBackpack)) {
             $backpack = $configBackpack;
             if (substr($backpack, -1) !== '/') {
                 $backpack .= '/';

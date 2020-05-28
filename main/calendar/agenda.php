@@ -1,10 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-/**
- * @package chamilo.calendar
- */
-
 // use anonymous mode when accessing this course tool
 $use_anonymous = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -31,10 +27,7 @@ if (empty($action)) {
 
 $logInfo = [
     'tool' => TOOL_CALENDAR_EVENT,
-    'tool_id' => 0,
-    'tool_id_detail' => 0,
     'action' => $action,
-    'info' => '',
 ];
 Event::registerLog($logInfo);
 

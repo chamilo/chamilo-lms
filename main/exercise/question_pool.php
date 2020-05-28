@@ -237,7 +237,7 @@ if (isset($_REQUEST['action'])) {
                         $objQuestionTmp = Question::read($questionId);
                         // if the question exists
                         if ($objQuestionTmp) {
-                            if ($objExercise->hasQuestion($questionId) === false) {
+                            if (false === $objExercise->hasQuestion($questionId)) {
                                 $objExercise->addToList($questionId);
                                 $objQuestionTmp->addToList($fromExercise);
                             }
@@ -308,7 +308,7 @@ if (isset($fromExercise) && $fromExercise > 0) {
 }
 echo '</div>';
 
-if ($displayMessage != '') {
+if ('' != $displayMessage) {
     echo Display::return_message($displayMessage, 'confirm');
 }
 
@@ -357,7 +357,7 @@ foreach ($course_list as $item) {
     $courseInfo = api_get_course_info_by_id($courseItemId);
     $course_select_list[$courseItemId] = '';
     if ($courseItemId == api_get_course_int_id()) {
-        $course_select_list[$courseItemId] = ">&nbsp;&nbsp;&nbsp;&nbsp;";
+        $course_select_list[$courseItemId] = '>&nbsp;&nbsp;&nbsp;&nbsp;';
     }
     $course_select_list[$courseItemId] .= $courseInfo['title'];
 }
@@ -385,7 +385,7 @@ $exercise_list = ExerciseLib::get_all_exercises_for_course_id(
     false
 );
 
-if ($exercise_id_changed == 1) {
+if (1 == $exercise_id_changed) {
     reset_menu_lvl_type();
 }
 
@@ -436,7 +436,7 @@ if (!empty($_course)) {
             }
             $new_question_list[$key] = get_lang($item[1]);
         } else {
-            if ($key == HOT_SPOT_DELINEATION) {
+            if (HOT_SPOT_DELINEATION == $key) {
                 continue;
             }
             $new_question_list[$key] = get_lang($item[1]);
@@ -642,7 +642,7 @@ function getQuestions(
                     crc.question_id = qu.id AND
                     crc.category_id = $courseCategoryId";
         }
-        if (isset($exerciseLevel) && $exerciseLevel != -1) {
+        if (isset($exerciseLevel) && -1 != $exerciseLevel) {
             $where .= ' AND level='.$exerciseLevel;
         }
         if (isset($answerType) && $answerType > 0) {
@@ -694,7 +694,7 @@ function getQuestions(
                     crc.c_id = $selected_course AND
                     crc.category_id = $courseCategoryId";
         }
-        if (isset($exerciseLevel) && $exerciseLevel != -1) {
+        if (isset($exerciseLevel) && -1 != $exerciseLevel) {
             $level_where = ' AND level='.$exerciseLevel;
         }
         $answer_where = '';
@@ -779,7 +779,7 @@ function getQuestions(
                         crc.question_id = qu.id AND
                         crc.category_id = $courseCategoryId";
         }
-        if (isset($exerciseLevel) && $exerciseLevel != -1) {
+        if (isset($exerciseLevel) && -1 != $exerciseLevel) {
             $filter .= ' AND level='.$exerciseLevel.' ';
         }
         if (isset($answerType) && $answerType > 0) {
@@ -794,7 +794,7 @@ function getQuestions(
             $filter .= " AND qu.description LIKE '%$description%'";
         }
 
-        if ($session_id == -1 || empty($session_id)) {
+        if (-1 == $session_id || empty($session_id)) {
             $session_id = 0;
         }
         $sessionCondition = api_get_session_condition($session_id, true, 'q.session_id');
@@ -1165,7 +1165,7 @@ function getLinkForQuestion(
     $result = $questionName;
     if ($in_addA) {
         $sessionIcon = '';
-        if (!empty($sessionId) && $sessionId != -1) {
+        if (!empty($sessionId) && -1 != $sessionId) {
             $sessionIcon = ' '.Display::return_icon('star.png', get_lang('Session'));
         }
         $exerciseId = (int) $exerciseId;
@@ -1244,7 +1244,7 @@ function get_action_icon_for_question(
         case 'add':
             $res = '-';
             if (!$myObjEx->hasQuestion($in_questionid)) {
-                $res = "<a href='".api_get_self()."?".
+                $res = "<a href='".api_get_self().'?'.
                     api_get_cidreq().$getParams."&recup=$in_questionid&fromExercise=$from_exercise'>";
                 $res .= Display::return_icon('view_more_stats.gif', get_lang('InsertALinkToThisQuestionInTheExercise'));
                 $res .= '</a>';

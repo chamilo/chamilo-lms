@@ -93,7 +93,7 @@ if (empty($choiceValue) && empty($hotSpot) && $loaded) {
     $links = '<a onclick="tryAgain();" href="#">'.get_lang('TryAgain').'</a>&nbsp;'.$icon.'&nbsp;';
 
     // the link to finish the test
-    if ($destinationId == -1) {
+    if (-1 == $destinationId) {
         $links .= Display::return_icon(
                 'finish.gif',
                 '',
@@ -195,7 +195,7 @@ $answerType = $objQuestionTmp->selectType();
 $showResult = false;
 
 $objAnswerTmp = new Answer($questionId, api_get_course_int_id());
-if ($objExercise->getFeedbackType() === EXERCISE_FEEDBACK_TYPE_DIRECT) {
+if (EXERCISE_FEEDBACK_TYPE_DIRECT === $objExercise->getFeedbackType()) {
     $showResult = true;
 }
 
@@ -334,9 +334,9 @@ if ($answerType === HOT_SPOT_DELINEATION) {
     $contents = $manageAnswerHtmlContent;
 }
 $links = '';
-if ($objExercise->getFeedbackType() === EXERCISE_FEEDBACK_TYPE_DIRECT) {
-    if (isset($choiceValue) && $choiceValue == -1) {
-        if ($answerType != HOT_SPOT_DELINEATION) {
+if (EXERCISE_FEEDBACK_TYPE_DIRECT === $objExercise->getFeedbackType()) {
+    if (isset($choiceValue) && -1 == $choiceValue) {
+        if (HOT_SPOT_DELINEATION != $answerType) {
             $links .= '<a href="#" onclick="tb_remove();">'.get_lang('ChooseAnAnswer').'</a><br />';
         }
     }
@@ -352,7 +352,7 @@ if (isset($result['answer_destination'])) {
 }
 
 // the link to retry the question
-if (isset($try) && $try == 1) {
+if (isset($try) && 1 == $try) {
     $num_value_array = array_keys($questionList, $questionId);
     $links .= Display:: return_icon(
         'reload.gif',
@@ -386,7 +386,7 @@ $nextQuestion = $questionNum + 1;
 $destinationId = isset($questionList[$nextQuestion]) ? $questionList[$nextQuestion] : -1;
 
 // the link to finish the test
-if ($destinationId == -1) {
+if (-1 == $destinationId) {
     $links .= Display:: return_icon(
         'finish.gif',
         '',

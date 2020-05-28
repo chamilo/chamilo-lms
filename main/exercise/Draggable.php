@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -158,7 +159,7 @@ class Draggable extends Question
         } else {
             $form->setDefaults(['orientation' => 'h']);
 
-            if ($this->isContent == 1) {
+            if (1 == $this->isContent) {
                 $form->setDefaults($defaults);
             }
         }

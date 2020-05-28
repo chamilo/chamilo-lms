@@ -1,10 +1,9 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * This class handles the SCORM export of true/false questions.
- *
- * @package chamilo.exercise.scorm
  */
 class ScormAnswerTrueFalse extends Answer
 {
@@ -41,7 +40,7 @@ class ScormAnswerTrueFalse extends Answer
             </tr></table></td></tr>';
         $js .= 'questions_answers['.$this->questionJSId.'] = new Array(\'true\',\'false\');'."\n";
         $js .= 'questions_types['.$this->questionJSId.'] = \'tf\';'."\n";
-        if ($this->response === 'TRUE') {
+        if ('TRUE' === $this->response) {
             $js .= 'questions_answers_correct['.$this->questionJSId.'] = new Array(\'true\');'."\n";
         } else {
             $js .= 'questions_answers_correct['.$this->questionJSId.'] = new Array(\'false\');'."\n";

@@ -3,7 +3,6 @@
 /**
  * This tool allows platform admins to add skills by uploading a CSV or XML file.
  *
- * @package chamilo.admin
  * @documentation Some interesting basic skills can be found in the "Skills"
  * section here: http://en.wikipedia.org/wiki/Personal_knowledge_management
  */

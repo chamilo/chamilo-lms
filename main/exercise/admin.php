@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -40,8 +41,6 @@ use ChamiloSession as Session;
  * - $modifyAnswers : ID of the question which we want to modify answers for
  * - $cancelAnswers : ask to cancel answer modifications
  * - $buttonBack : ask to go back to the previous page in answers of type "Fill in blanks"
- *
- * @package chamilo.exercise
  *
  * @author Olivier Brouckaert
  * Modified by Hubert Borderiou 21-10-2011 Question by category

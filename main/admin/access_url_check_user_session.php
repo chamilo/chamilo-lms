@@ -1,9 +1,8 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 /**
  * @author Bart Mollet, Julio Montoya lot of fixes
- *
- * @package chamilo.admin
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';

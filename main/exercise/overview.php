@@ -6,8 +6,6 @@ use ChamiloSession as Session;
 /**
  * Exercise preview.
  *
- * @package chamilo.exercise
- *
  * @author Julio Montoya <gugli100@gmail.com>
  */
 require_once __DIR__.'/../inc/global.inc.php';

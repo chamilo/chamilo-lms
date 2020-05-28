@@ -4,8 +4,6 @@
 /**
  * This tool allows platform admins to update course-user relations by uploading
  * a CSV file.
- *
- * @package chamilo.admin
  */
 
 /**
@@ -142,9 +140,7 @@ function save_data($users_courses)
  */
 function parse_csv_data($file)
 {
-    $courses = Import::csvToArray($file);
-
-    return $courses;
+    return Import::csvToArray($file);
 }
 
 $cidReset = true;

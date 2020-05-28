@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -10,8 +11,6 @@ use ChamiloSession as Session;
  *
  * @author Eric Marguin
  * @author Julio Montoya
- *
- * @package chamilo.exercise
  */
 class UniqueAnswerNoOption extends Question
 {
@@ -301,10 +300,6 @@ class UniqueAnswerNoOption extends Question
             $comment = trim($form->getSubmitValue('comment['.$i.']'));
             $weighting = trim($form->getSubmitValue('weighting['.$i.']'));
             $scenario = $form->getSubmitValue('scenario');
-
-            //$list_destination = $form -> getSubmitValue('destination'.$i);
-            //$destination_str = $form -> getSubmitValue('destination'.$i);
-
             $try = $scenario['try'.$i];
             $lp = $scenario['lp'.$i];
             $destination = $scenario['destination'.$i];
@@ -351,7 +346,7 @@ class UniqueAnswerNoOption extends Question
                 $destination = 0;
             }
 
-            if ($url == '') {
+            if ('' == $url) {
                 $url = 0;
             }
 

@@ -12,8 +12,6 @@ use Chamilo\CourseBundle\Entity\CQuizAnswer;
  * @author Patrick Cool, LaTeX support
  * @author Julio Montoya <gugli100@gmail.com> lot of bug fixes
  * @author hubert.borderiou@grenet.fr - add question categories
- *
- * @package chamilo.exercise
  */
 abstract class Question
 {
@@ -113,7 +111,7 @@ abstract class Question
     {
         $isContent = null;
         if (isset($_REQUEST['isContent'])) {
-            $isContent = intval($_REQUEST['isContent']);
+            $isContent = (int) $_REQUEST['isContent'];
         }
 
         return $this->isContent = $isContent;
@@ -138,7 +136,7 @@ abstract class Question
         }
         $course_id = $course_info['real_id'];
 
-        if (empty($course_id) || $course_id == -1) {
+        if (empty($course_id) || -1 == $course_id) {
             return false;
         }
 
@@ -1166,7 +1164,7 @@ abstract class Question
 
                 // build the chunk to index
                 $ic_slide = new IndexableChunk();
-                $ic_slide->addValue("title", $this->question);
+                $ic_slide->addValue('title', $this->question);
                 $ic_slide->addCourseId($course_id);
                 $ic_slide->addToolId(TOOL_QUIZ);
                 $xapian_data = [
@@ -1180,7 +1178,7 @@ abstract class Question
                     SE_USER => (int) api_get_user_id(),
                 ];
                 $ic_slide->xapian_data = serialize($xapian_data);
-                $ic_slide->addValue("content", $this->description);
+                $ic_slide->addValue('content', $this->description);
 
                 //TODO: index answers, see also form validation on question_admin.inc.php
 
@@ -1297,7 +1295,7 @@ abstract class Question
         $courseId = empty($courseId) ? api_get_course_int_id() : (int) $courseId;
 
         // exercise not found
-        if ($pos === false) {
+        if (false === $pos) {
             return false;
         } else {
             // deletes the position in the array containing the wanted exercise ID
@@ -1559,11 +1557,11 @@ abstract class Question
      */
     public static function getQuestionTypeList()
     {
-        if (api_get_setting('enable_record_audio') !== 'true') {
+        if ('true' !== api_get_setting('enable_record_audio')) {
             self::$questionTypes[ORAL_EXPRESSION] = null;
             unset(self::$questionTypes[ORAL_EXPRESSION]);
         }
-        if (api_get_setting('enable_quiz_scenario') !== 'true') {
+        if ('true' !== api_get_setting('enable_quiz_scenario')) {
             self::$questionTypes[HOT_SPOT_DELINEATION] = null;
             unset(self::$questionTypes[HOT_SPOT_DELINEATION]);
         }
@@ -1793,7 +1791,7 @@ abstract class Question
         $this->setFeedback($form->getSubmitValue('feedback'));
 
         //Save normal question if NOT media
-        if ($this->type != MEDIA_QUESTION) {
+        if (MEDIA_QUESTION != $this->type) {
             $this->save($exercise);
             // modify the exercise
             $exercise->addToList($this->id);
@@ -1967,13 +1965,12 @@ abstract class Question
     public static function updateQuestionOption($id, $params, $course_id)
     {
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
-        $result = Database::update(
+
+        return Database::update(
             $table,
             $params,
             ['c_id = ? AND id = ?' => [$course_id, $id]]
         );
-
-        return $result;
     }
 
     /**
@@ -1985,7 +1982,8 @@ abstract class Question
     public static function readQuestionOption($question_id, $course_id)
     {
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
-        $result = Database::select(
+
+        return Database::select(
             '*',
             $table,
             [
@@ -1998,8 +1996,6 @@ abstract class Question
                 'order' => 'id ASC',
             ]
         );
-
-        return $result;
     }
 
     /**
@@ -2062,7 +2058,7 @@ abstract class Question
                     }
 
                     $hide = api_get_configuration_value('hide_free_question_score');
-                    if ($hide === true) {
+                    if (true === $hide) {
                         $score['result'] = '-';
                     }
                 }
@@ -2249,8 +2245,8 @@ abstract class Question
         $course_id,
         $start = 0,
         $limit = 100,
-        $sidx = "question",
-        $sord = "ASC",
+        $sidx = 'question',
+        $sord = 'ASC',
         $where_condition = []
     ) {
         $table_question = Database::get_course_table(TABLE_QUIZ_QUESTION);
@@ -2260,7 +2256,8 @@ abstract class Question
                 MEDIA_QUESTION,
             ],
         ];
-        $result = Database::select(
+
+        return Database::select(
             '*',
             $table_question,
             [
@@ -2269,14 +2266,12 @@ abstract class Question
                 'order' => "$sidx $sord",
             ]
         );
-
-        return $result;
     }
 
     /**
      * Get count course medias.
      *
-     * @param int course id
+     * @param int $course_id course id
      *
      * @return int
      */
@@ -2329,15 +2324,13 @@ abstract class Question
      */
     public static function get_default_levels()
     {
-        $levels = [
+        return [
             1 => 1,
             2 => 2,
             3 => 3,
             4 => 4,
             5 => 5,
         ];
-
-        return $levels;
     }
 
     /**
@@ -2346,7 +2339,7 @@ abstract class Question
     public function show_media_content()
     {
         $html = '';
-        if ($this->parent_id != 0) {
+        if (0 != $this->parent_id) {
             $parent_question = self::read($this->parent_id);
             $html = $parent_question->show_media_content();
         } else {
@@ -2476,7 +2469,7 @@ abstract class Question
     {
         $em = Database::getManager();
 
-        $result = $em
+        return $em
             ->createQuery('
                 SELECT e
                 FROM ChamiloCourseBundle:CQuizRelQuestion qq
@@ -2485,8 +2478,6 @@ abstract class Question
             ')
             ->setParameters(['id' => (int) $this->id])
             ->getResult();
-
-        return $result;
     }
 
     /**

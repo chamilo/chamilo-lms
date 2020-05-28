@@ -1,11 +1,10 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * Class ExerciseResult
  * which allows you to export exercises results in multiple presentation forms.
- *
- * @package chamilo.exercise
  *
  * @author Yannick Warnier
  */

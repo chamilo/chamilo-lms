@@ -1,10 +1,9 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * A page for detailed preview or edition of a given course request.
- *
- * @package chamilo.admin
  *
  * @author Ivan Tcholakov <ivantcholakov@gmail.com>, 2010
  */

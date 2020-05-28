@@ -1,11 +1,7 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
-/**
- * Exercise.
- *
- * @package chamilo.exercise
- */
 require_once __DIR__.'/../inc/global.inc.php';
 
 // the section (tabs)

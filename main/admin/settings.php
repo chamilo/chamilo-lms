@@ -9,8 +9,6 @@ use ChamiloSession as Session;
  *
  * @author Patrick Cool
  * @author Julio Montoya - Multiple URL site
- *
- * @package chamilo.admin
  */
 
 // Resetting the course id.

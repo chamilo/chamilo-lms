@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -7,8 +8,6 @@
  * extending the class question.
  *
  * @author Eric Marguin
- *
- * @package chamilo.exercise
  */
 class OralExpression extends Question
 {
@@ -82,19 +81,19 @@ class OralExpression extends Question
     /**
      * initialize the attributes to generate the file path.
      *
-     * @param $sessionId integer
-     * @param $userId integer
-     * @param $exerciseId integer
-     * @param $exeId integer
+     * @param int $sessionId
+     * @param int $userId
+     * @param int $exerciseId
+     * @param int $exeId
      */
     public function initFile($sessionId, $userId, $exerciseId, $exeId)
     {
-        $this->sessionId = intval($sessionId);
-        $this->userId = intval($userId);
+        $this->sessionId = (int) $sessionId;
+        $this->userId = (int) $userId;
         $this->exerciseId = 0;
-        $this->exeId = intval($exeId);
+        $this->exeId = (int) $exeId;
         if (!empty($exerciseId)) {
-            $this->exerciseId = intval($exerciseId);
+            $this->exerciseId = (int) $exerciseId;
         }
         $this->storePath = $this->generateDirectory();
         $this->fileName = $this->generateFileName();
@@ -177,7 +176,7 @@ class OralExpression extends Question
             }
 
             // Function handle_uploaded_document() adds the session and group id by default.
-            $file = "$audioFile"."__".$this->sessionId."__0.$extension";
+            $file = "$audioFile".'__'.$this->sessionId."__0.$extension";
 
             if (is_file($file)) {
                 return $file;
@@ -214,7 +213,7 @@ class OralExpression extends Question
     /**
      * Tricky stuff to deal with the feedback = 0 in exercises (all question per page).
      *
-     * @param $exe_id integer
+     * @param int $exe_id
      */
     public function replaceWithRealExe($exe_id)
     {

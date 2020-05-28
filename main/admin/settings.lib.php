@@ -13,8 +13,6 @@ use Symfony\Component\Filesystem\Filesystem;
  * @author Guillaume Viguier <guillaume@viguierjust.com>
  *
  * @since Chamilo 1.8.7
- *
- * @package chamilo.admin
  */
 define('CSS_UPLOAD_PATH', api_get_path(SYS_APP_PATH).'Resources/public/css/themes/');
 

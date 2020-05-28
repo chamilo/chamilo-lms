@@ -41,7 +41,7 @@ if (is_dir($full_file_name)) {
     //remove last slash if present
     //$doc_url = ($doc_url{strlen($doc_url)-1}=='/')?substr($doc_url,0,strlen($doc_url)-1):$doc_url;
     //mod_rewrite can change /some/path/ to /some/path// in some cases, so clean them all off (René)
-    while ($doc_url[$dul = strlen($doc_url) - 1] == '/') {
+    while ('/' == $doc_url[$dul = strlen($doc_url) - 1]) {
         $doc_url = substr($doc_url, 0, $dul);
     }
     //create the path
@@ -71,7 +71,7 @@ if (Database::num_rows($result) > 0) {
     )
     ) {
         $result = DocumentManager::file_send_for_download($full_file_name, true, $title);
-        if ($result === false) {
+        if (false === $result) {
             api_not_allowed(true);
         }
     }

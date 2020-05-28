@@ -15,8 +15,6 @@ use ChamiloSession as Session;
  * @author Roan Embrechts, virtual course support
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University (see history version 1.3)
  *
- * @package chamilo.dropbox
- *
  * @todo complete refactoring. Currently there are about at least 3 sql queries needed for every individual dropbox document.
  *  first we find all the documents that were sent (resp. received) by the user
  *   then for every individual document the user(s)information who received (resp. sent) the document is searched
@@ -108,8 +106,6 @@ Version 1.1
  * download file / folder (download icon)
  * same action on multiple documents
  * extended feedback
- *
- * @package chamilo.dropbox
  */
 require_once __DIR__.'/../inc/global.inc.php';
 $is_allowed_in_course = api_is_allowed_in_course();
@@ -156,7 +152,7 @@ if (empty($session_id)) {
 // off all the documents that have already been sent.
 // @todo consider moving the javascripts in a function that displays the javascripts
 // only when it is needed.
-if ($action == 'add') {
+if ('add' == $action) {
     $dropbox_person = new Dropbox_Person(
         $user_id,
         $is_courseAdmin,

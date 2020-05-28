@@ -1,17 +1,13 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
-/**
- * @package chamilo.calendar
- */
 require_once __DIR__.'/../inc/global.inc.php';
 
 $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : 'calendar_list';
 
 $logInfo = [
     'tool' => TOOL_CALENDAR_EVENT,
-    'tool_id' => 0,
-    'tool_id_detail' => 0,
     'action' => $action,
 ];
 Event::registerLog($logInfo);

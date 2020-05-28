@@ -10,8 +10,6 @@ use SkillRelUser as SkillRelUserManager;
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  * @author José Loguercio Silva <jose.loguercio@beeznest.com>
- *
- * @package chamilo.badge
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -233,7 +231,7 @@ if ($allowExport) {
     $backpack = 'https://backpack.openbadges.org/';
     $configBackpack = api_get_setting('openbadges_backpack');
 
-    if (strcmp($backpack, $configBackpack) !== 0) {
+    if (0 !== strcmp($backpack, $configBackpack)) {
         $backpack = $configBackpack;
         if (substr($backpack, -1) !== '/') {
             $backpack .= '/';

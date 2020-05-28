@@ -11,8 +11,6 @@
  *             Announcements tool and also add the resource linker here. The database also needed refactoring
  *             as there was no title field (the title was merged into the content field) multiple functions
  */
-
-// use anonymous mode when accessing this course tool
 $use_anonymous = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -97,13 +95,13 @@ switch ($action) {
 
         /* Move announcement up/down */
         if (!empty($_GET['down'])) {
-            $thisAnnouncementId = intval($_GET['down']);
-            $sortDirection = "DESC";
+            $thisAnnouncementId = (int) ($_GET['down']);
+            $sortDirection = 'DESC';
         }
 
         if (!empty($_GET['up'])) {
-            $thisAnnouncementId = intval($_GET['up']);
-            $sortDirection = "ASC";
+            $thisAnnouncementId = (int) ($_GET['up']);
+            $sortDirection = 'ASC';
         }
 
         if (!empty($sortDirection)) {
@@ -327,7 +325,7 @@ switch ($action) {
     case 'delete_all':
         if (api_is_allowed_to_edit()) {
             $allow = api_get_configuration_value('disable_delete_all_announcements');
-            if ($allow === false) {
+            if (false === $allow) {
                 AnnouncementManager::delete_all_announcements($_course);
                 Display::addFlash(Display::return_message(get_lang('AnnouncementDeletedAll')));
             }
@@ -614,7 +612,7 @@ switch ($action) {
 
         $config = api_get_configuration_value('announcements_hide_send_to_hrm_users');
 
-        if ($config === false) {
+        if (false === $config) {
             $form->addCheckBox(
                 'send_to_hrm_users',
                 null,

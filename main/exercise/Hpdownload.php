@@ -1,9 +1,8 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 /**
  * This script shows the list of exercises for administrators and students.
- *
- * @package chamilo.exercise
  *
  * @author Istvan Mandak
  *
@@ -41,7 +40,7 @@ if (!Security::check_abs_path($full_file_name, $course_path.'/')) {
 }
 
 $extension = explode('.', $filename);
-$extension = strtolower($extension[sizeof($extension) - 1]);
+$extension = strtolower($extension[count($extension) - 1]);
 
 switch ($extension) {
     case 'gz':

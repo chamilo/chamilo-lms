@@ -13,8 +13,6 @@ use ChamiloSession as Session;
  *
  * @author Eric Marguin
  * @author Julio Montoya
- *
- * @package chamilo.exercise
  */
 class UniqueAnswer extends Question
 {

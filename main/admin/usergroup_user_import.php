@@ -1,8 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**
- * @package chamilo.admin
- */
+
 /**
  * Code
  * This tool allows platform admins to update class-user relations by uploading

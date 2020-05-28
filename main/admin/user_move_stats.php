@@ -3,8 +3,6 @@
 
 /**
  * User move script (to move between courses and sessions).
- *
- * @package chamilo.admin
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';

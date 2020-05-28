@@ -1,4 +1,5 @@
 <?php
+
 /* See license terms in /license.txt */
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -155,7 +156,7 @@ if (!empty($question_list)) {
                     $answers = $objExercise->fill_in_blank_answer_to_array($answer_info);
                     $counter = 0;
                     foreach ($answers as $answer_item) {
-                        if ($counter == 0) {
+                        if (0 == $counter) {
                             $data[$id]['name'] = cut($questionObj->question, 100);
                         } else {
                             $data[$id]['name'] = '-';
@@ -305,8 +306,8 @@ $interbreadcrumb[] = [
     "name" => get_lang('Exercises'),
 ];
 $interbreadcrumb[] = [
-    "url" => "admin.php?exerciseId=$exerciseId&".api_get_cidreq(),
-    "name" => $objExercise->selectTitle(true),
+    'url' => "admin.php?exerciseId=$exerciseId&".api_get_cidreq(),
+    'name' => $objExercise->selectTitle(true),
 ];
 
 $tpl = new Template(get_lang('ReportByQuestion'));

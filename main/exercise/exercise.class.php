@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\GradebookLink;
@@ -11,8 +12,6 @@ use Doctrine\DBAL\Types\Type;
  * Class Exercise.
  *
  * Allows to instantiate an object of type Exercise
- *
- * @package chamilo.exercise
  *
  * @todo use getters and setters correctly
  *
@@ -662,7 +661,7 @@ class Exercise
             $orderCondition = ' ORDER BY question_order ';
 
             if (!empty($sidx) && !empty($sord)) {
-                if ($sidx === 'question') {
+                if ('question' === $sidx) {
                     if (in_array(strtolower($sord), ['desc', 'asc'])) {
                         $orderCondition = " ORDER BY q.$sidx $sord";
                     }
@@ -972,6 +971,7 @@ class Exercise
         if (!empty($questions_by_category)) {
             $newCategoryList = [];
             $em = Database::getManager();
+            $repo = $em->getRepository('ChamiloCoreBundle:CQuizCategory');
 
             foreach ($questions_by_category as $categoryId => $questionList) {
                 $cat = new TestCategory();
@@ -991,7 +991,6 @@ class Exercise
                     } else {
                         $categoryEntity = $parentsLoaded[$cat['parent_id']];
                     }
-                    $repo = $em->getRepository('ChamiloCoreBundle:CQuizCategory');
                     $path = $repo->getPath($categoryEntity);
 
                     $index = 0;
@@ -1002,7 +1001,7 @@ class Exercise
                     /** @var \Chamilo\CourseBundle\Entity\CQuizCategory $categoryParent */
                     foreach ($path as $categoryParent) {
                         $visibility = $categoryParent->getVisibility();
-                        if ($visibility == 0) {
+                        if (0 == $visibility) {
                             $categoryParentId = $categoryId;
                             $categoryTitle = $cat['title'];
                             if (count($path) > 1) {
@@ -1131,12 +1130,12 @@ class Exercise
         $randomLimit = " ORDER BY RAND() LIMIT $random";
 
         // Random with no limit
-        if ($random == -1) {
+        if (-1 == $random) {
             $randomLimit = ' ORDER BY RAND() ';
         }
 
         // Admin see the list in default order
-        if ($adminView === true) {
+        if (true === $adminView) {
             // If viewing it as admin for edition, don't show it randomly, use title + id
             $randomLimit = 'ORDER BY e.question_order';
         }
@@ -1269,7 +1268,7 @@ class Exercise
     }
 
     /**
-     * @param $value int
+     * @param int $value
      */
     public function updateSaveCorrectAnswers($value)
     {
@@ -1681,7 +1680,7 @@ class Exercise
             ];
 
             $allow = api_get_configuration_value('allow_exercise_categories');
-            if ($allow === true) {
+            if (true === $allow) {
                 if (!empty($this->getExerciseCategoryId())) {
                     $params['exercise_category_id'] = $this->getExerciseCategoryId();
                 }
@@ -1692,12 +1691,12 @@ class Exercise
             }
 
             $allow = api_get_configuration_value('allow_quiz_show_previous_button_setting');
-            if ($allow === true) {
+            if (true === $allow) {
                 $params['show_previous_button'] = $this->showPreviousButton();
             }
 
             $allow = api_get_configuration_value('allow_notification_setting_per_exercise');
-            if ($allow === true) {
+            if (true === $allow) {
                 $notifications = $this->getNotifications();
                 $params['notifications'] = '';
                 if (!empty($notifications)) {
@@ -1828,12 +1827,12 @@ class Exercise
         // searches the position of the question ID in the list
         $pos = array_search($questionId, $this->questionList);
         // question not found
-        if ($pos === false) {
+        if (false === $pos) {
             return false;
         } else {
             // dont reduce the number of random question if we use random by category option, or if
             // random all questions
-            if ($this->isRandom() && $this->isRandomByCat() == 0) {
+            if ($this->isRandom() && 0 == $this->isRandomByCat()) {
                 if (count($this->questionList) >= $this->random && $this->random > 0) {
                     $this->random--;
                     $this->save();
@@ -2820,7 +2819,7 @@ class Exercise
                 ];
                 $ic_slide->xapian_data = serialize($xapian_data);
                 $exercise_description = $all_specific_terms.' '.$this->description;
-                $ic_slide->addValue("content", $exercise_description);
+                $ic_slide->addValue('content', $exercise_description);
 
                 $di = new ChamiloIndexer();
                 isset($_POST['language']) ? $lang = Database::escape_string($_POST['language']) : $lang = 'english';
@@ -2849,7 +2848,7 @@ class Exercise
     public function search_engine_delete()
     {
         // remove from search engine if enabled
-        if (api_get_setting('search_enabled') == 'true' && extension_loaded('xapian')) {
+        if ('true' == api_get_setting('search_enabled') && extension_loaded('xapian')) {
             $course_id = api_get_course_id();
             $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
             $sql = 'SELECT * FROM %s
@@ -3130,9 +3129,7 @@ class Exercise
             'questions_to_check' => '',
         ];
 
-        $id = Database::insert($track_exercises, $params);
-
-        return $id;
+        return Database::insert($track_exercises, $params);
     }
 
     /**
@@ -3381,7 +3378,7 @@ class Exercise
     {
         $timeLeft = (int) $timeLeft;
         $script = 'redirectExerciseToResult();';
-        if ($this->type == ALL_ON_ONE_PAGE) {
+        if (ALL_ON_ONE_PAGE == $this->type) {
             $script = "save_now_all('validate');";
         }
 
@@ -3532,7 +3529,7 @@ class Exercise
         $course_id = $this->course_id;
         $objQuestionTmp = Question::read($questionId, $this->course);
 
-        if ($objQuestionTmp === false) {
+        if (false === $objQuestionTmp) {
             return false;
         }
 
@@ -3673,7 +3670,7 @@ class Exercise
                         $result = Database::query($sql);
                         $choice = Database::result($result, 0, 'answer');
 
-                        if ($userAnsweredQuestion === false) {
+                        if (false === $userAnsweredQuestion) {
                             $userAnsweredQuestion = !empty($choice);
                         }
                         $studentChoice = $choice == $answerAutoId ? 1 : 0;
@@ -3871,7 +3868,7 @@ class Exercise
                         }
 
                         $studentChoice = isset($choice[$answerAutoId]) ? $choice[$answerAutoId] : null;
-                        if ($answerCorrect == 1) {
+                        if (1 == $answerCorrect) {
                             $real_answers[$answerId] = false;
                             if ($studentChoice) {
                                 $real_answers[$answerId] = true;
@@ -3884,7 +3881,7 @@ class Exercise
                         }
                     } else {
                         $studentChoice = isset($choice[$answerAutoId]) ? $choice[$answerAutoId] : null;
-                        if ($answerCorrect == 1) {
+                        if (1 == $answerCorrect) {
                             $real_answers[$answerId] = false;
                             if ($studentChoice) {
                                 $real_answers[$answerId] = true;
@@ -3924,7 +3921,7 @@ class Exercise
                         $last = count($pre_array) - 1;
                         $is_set_switchable = explode('@', $pre_array[$last]);
                         $switchable_answer_set = false;
-                        if (isset($is_set_switchable[1]) && $is_set_switchable[1] == 1) {
+                        if (isset($is_set_switchable[1]) && 1 == $is_set_switchable[1]) {
                             $switchable_answer_set = true;
                         }
                         $answer = '';
@@ -3991,7 +3988,7 @@ class Exercise
                         $chosen_list = [];
 
                         for ($i = 0; $i < count($real_correct_tags); $i++) {
-                            if ($i == 0) {
+                            if (0 == $i) {
                                 $answer .= $real_text[0];
                             }
                             if (!$switchable_answer_set) {
@@ -4077,7 +4074,7 @@ class Exercise
                                 if (!$from_database) {
                                     $studentAnswer = FillBlanks::clearStudentAnswer($studentAnswer);
                                     if ($debug) {
-                                        error_log("Student answer cleaned:");
+                                        error_log('Student answer cleaned:');
                                         error_log($studentAnswer);
                                     }
                                 }
@@ -4209,7 +4206,7 @@ class Exercise
                             // take the string remaining (after the last "[" we found)
                             $temp = api_substr($temp, $pos + 1);
                             // quit the loop if there are no more blanks, and update $pos to the position of next ']'
-                            if (($pos = api_strpos($temp, ']')) === false) {
+                            if (false === ($pos = api_strpos($temp, ']'))) {
                                 // adds the end of the text
                                 $answer .= $temp;
                                 break;
@@ -4256,7 +4253,7 @@ class Exercise
                         $calculatedChoice = '';
 
                         for ($i = 0; $i < count($realCorrectTags); $i++) {
-                            if ($i == 0) {
+                            if (0 == $i) {
                                 $answer .= $realText[0];
                             }
                             // Needed to parse ' and " characters
@@ -4280,7 +4277,7 @@ class Exercise
                                 $answer .= ''; // remove &nbsp; that causes issue
                             }
                             // adds the correct word, followed by ] to close the blank
-                            if ($this->results_disabled != EXERCISE_FEEDBACK_TYPE_EXAM) {
+                            if (EXERCISE_FEEDBACK_TYPE_EXAM != $this->results_disabled) {
                                 $answer .= ' / <font color="green"><b>'.$realCorrectTags[$i].'</b></font>';
                                 $calculatedStatus = Display::label(get_lang('Correct'), 'success');
                                 $expectedAnswer = $realCorrectTags[$i];
@@ -4318,12 +4315,12 @@ class Exercise
                         $choice = stripslashes($choice);
                         $questionScore = $data['marks'];
 
-                        if ($questionScore == -1) {
+                        if (-1 == $questionScore) {
                             $totalScore += 0;
                         } else {
                             $totalScore += $questionScore;
                         }
-                        if ($questionScore == '') {
+                        if ('' == $questionScore) {
                             $questionScore = 0;
                         }
                         $arrques = $questionName;
@@ -4422,7 +4419,7 @@ class Exercise
                             $status = Display::label(get_lang('Incorrect'), 'danger');
 
                             if (!empty($s_user_answer)) {
-                                if ($answerType == DRAGGABLE) {
+                                if (DRAGGABLE == $answerType) {
                                     if ($s_user_answer == $i_answer_correct_answer) {
                                         $questionScore += $i_answerWeighting;
                                         $totalScore += $i_answerWeighting;
@@ -4480,7 +4477,7 @@ class Exercise
                                         }
                                     }
                                 }
-                            } elseif ($answerType == DRAGGABLE) {
+                            } elseif (DRAGGABLE == $answerType) {
                                 $user_answer = Display::label(get_lang('Incorrect'), 'danger');
                                 if ($this->showExpectedChoice()) {
                                     $user_answer = '';
@@ -4496,8 +4493,8 @@ class Exercise
                             }
 
                             if ($show_result) {
-                                if ($this->showExpectedChoice() === false &&
-                                    $showTotalScoreAndUserChoicesInLastAttempt === false
+                                if (false === $this->showExpectedChoice() &&
+                                    false === $showTotalScoreAndUserChoicesInLastAttempt
                                 ) {
                                     $user_answer = '';
                                 }
@@ -4553,7 +4550,7 @@ class Exercise
                                         echo '</tr>';
                                         break;
                                     case DRAGGABLE:
-                                        if ($showTotalScoreAndUserChoicesInLastAttempt == false) {
+                                        if (false == $showTotalScoreAndUserChoicesInLastAttempt) {
                                             $s_answer_label = '';
                                         }
                                         echo '<tr>';
@@ -4770,7 +4767,7 @@ class Exercise
                             $newquestionList[] = $questionId;
                         }
 
-                        if ($answerId === 1) {
+                        if (1 === $answerId) {
                             $studentChoice = $choice[$answerId];
                             $questionScore += $answerWeighting;
                         }
@@ -4803,7 +4800,7 @@ class Exercise
             }
 
             if ($show_result) {
-                if ($from === 'exercise_result') {
+                if ('exercise_result' === $from) {
                     // Display answers (if not matching type, or if the answer is correct)
                     if (!in_array($answerType, [MATCHING, DRAGGABLE, MATCHING_DRAGGABLE]) ||
                         $answerCorrect
@@ -6188,9 +6185,8 @@ class Exercise
         $tpl = new Template(null, false, false, false, false, false, false);
         $tpl->assign('data', $data);
         $layoutTemplate = $tpl->get_template('exercise/partials/result_exercise.tpl');
-        $content = $tpl->fetch($layoutTemplate);
 
-        return $content;
+        return $tpl->fetch($layoutTemplate);
     }
 
     /**
@@ -7607,7 +7603,7 @@ class Exercise
         $questionList = $this->selectQuestionList(true);
 
         // test is randomQuestions - see field random of test
-        if ($this->random > 0 && $this->randomByCat == 0) {
+        if ($this->random > 0 && 0 == $this->randomByCat) {
             $numberRandomQuestions = $this->random;
             $questionScoreList = [];
             foreach ($questionList as $questionId) {
@@ -7745,7 +7741,7 @@ class Exercise
         $ids = array_map('intval', $ids);
         $ids = implode(',', $ids);
         $track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-        if ($sessionId != 0) {
+        if (0 != $sessionId) {
             $sql = "SELECT * FROM $track_exercises te
               INNER JOIN c_quiz cq ON cq.id = te.exe_exo_id AND te.c_id = cq.c_id
               WHERE
@@ -7803,7 +7799,7 @@ class Exercise
             return null;
         }
 
-        $currentQuestion = $currentQuestion - 1;
+        $currentQuestion--;
 
         if (!empty($result['question_list'])) {
             $answeredQuestions = [];
@@ -7941,7 +7937,7 @@ class Exercise
                 }
             }
 
-            if ($onlyCorrect === false) {
+            if (false === $onlyCorrect) {
                 // Only take latest attempt
                 break;
             }
@@ -7969,7 +7965,7 @@ class Exercise
     public function showPreviousButton()
     {
         $allow = api_get_configuration_value('allow_quiz_show_previous_button_setting');
-        if ($allow === false) {
+        if (false === $allow) {
             return true;
         }
 
@@ -7979,7 +7975,7 @@ class Exercise
     public function getPreventBackwards()
     {
         $allow = api_get_configuration_value('quiz_prevent_backwards_move');
-        if ($allow === false) {
+        if (false === $allow) {
             return 0;
         }
 
@@ -8053,9 +8049,8 @@ class Exercise
             ];*/
             $type = Type::getType('array');
             $platform = Database::getManager()->getConnection()->getDatabasePlatform();
-            $result = $type->convertToPHPValue($this->pageResultConfiguration, $platform);
 
-            return $result;
+            return $type->convertToPHPValue($this->pageResultConfiguration, $platform);
         }
 
         return [];
@@ -8071,9 +8066,7 @@ class Exercise
         $result = $this->getPageResultConfiguration();
 
         if (!empty($result)) {
-            $value = isset($result[$attribute]) ? $result[$attribute] : null;
-
-            return $value;
+            return isset($result[$attribute]) ? $result[$attribute] : null;
         }
 
         return null;
@@ -8125,7 +8118,7 @@ class Exercise
         ])
         ) {
             $hide = (int) $this->getPageConfigurationAttribute('hide_expected_answer');
-            if ($hide === 1) {
+            if (1 === $hide) {
                 return false;
             }
 
@@ -8146,7 +8139,7 @@ class Exercise
     public function getQuestionRibbon($class, $scoreLabel, $result, $array)
     {
         $hide = (int) $this->getPageConfigurationAttribute('hide_question_score');
-        if ($hide === 1) {
+        if (1 === $hide) {
             return '';
         }
 
@@ -8159,7 +8152,7 @@ class Exercise
             if (!empty($result)) {
                 $label .= '<h4>'.get_lang('Score').': '.$result.'</h4>';
             }
-            if ($hideLabel === true) {
+            if (true === $hideLabel) {
                 $answerUsed = (int) $array['used'];
                 $answerMissing = (int) $array['missing'] - $answerUsed;
                 for ($i = 1; $i <= $answerUsed; $i++) {
@@ -8326,7 +8319,7 @@ class Exercise
             $studentIdList = array_column($studentList, 'user_id');
         }
 
-        if ($this->exercise_was_added_in_lp == false) {
+        if (false == $this->exercise_was_added_in_lp) {
             $sql = "SELECT * FROM $tblStats
                         WHERE
                             exe_exo_id = $exerciseId AND
@@ -9574,7 +9567,7 @@ class Exercise
     public function hasResultsAccess($exerciseResultInfo)
     {
         $diff = $this->getResultAccessTimeDiff($exerciseResultInfo);
-        if ($diff === 0) {
+        if (0 === $diff) {
             return false;
         }
 
@@ -10094,7 +10087,7 @@ class Exercise
                     $count = $category_info['count_questions'];
                     // -1 means all questions
                     $categoryCountArray[$category_id] = $count;
-                    if ($count == -1) {
+                    if (-1 == $count) {
                         $categoryCountArray[$category_id] = 999;
                     }
                 }
@@ -10282,7 +10275,7 @@ class Exercise
             $question = $item['question'];
             $file = $item['generated_oral_file'];
             $answer = $item['answer'];
-            if ($answer == 0) {
+            if (0 == $answer) {
                 $answer = '';
             }
             $answer_type = $item['answer_type'];

@@ -485,7 +485,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
             alt="'.api_get_person_name($user[2], $user[3]).'"
             title="'.api_get_person_name($user[2], $user[3]).'" />';
 
-        if ($user[7] == 1 && !empty($user['exp'])) {
+        if (1 == $user[7] && !empty($user['exp'])) {
             // check expiration date
             $expiration_time = convert_sql_date($user['exp']);
             // if expiration date is passed, store a special value for active field
@@ -820,20 +820,20 @@ function active_filter($active, $params, $row)
 {
     $_user = api_get_user_info();
 
-    if ($active == '1') {
+    if ('1' == $active) {
         $action = 'Lock';
         $image = 'accept';
-    } elseif ($active == '-1') {
+    } elseif ('-1' == $active) {
         $action = 'edit';
         $image = 'warning';
-    } elseif ($active == '0') {
+    } elseif ('0' == $active) {
         $action = 'Unlock';
         $image = 'error';
     }
 
     $result = '';
 
-    if ($action === 'edit') {
+    if ('edit' === $action) {
         $result = Display::return_icon(
             $image.'.png',
             get_lang('AccountExpired'),
@@ -1170,7 +1170,7 @@ $table_result = $table->return_table();
 $extra_search_options = '';
 
 // Try to search the user everywhere
-if ($table->get_total_number_of_items() == 0) {
+if (0 == $table->get_total_number_of_items()) {
     if (api_get_multiple_access_url() && isset($_REQUEST['keyword'])) {
         $keyword = Database::escape_string($_REQUEST['keyword']);
         $conditions = ['username' => $keyword];

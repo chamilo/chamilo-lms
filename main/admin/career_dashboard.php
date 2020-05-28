@@ -1,10 +1,9 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * Careers dashboard.
- *
- * @package chamilo.admin.career
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';

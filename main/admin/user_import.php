@@ -6,8 +6,6 @@ use ChamiloSession as Session;
 
 /**
  * This tool allows platform admins to add users by uploading a CSV or XML file.
- *
- * @package chamilo.admin
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';

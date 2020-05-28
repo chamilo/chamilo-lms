@@ -653,7 +653,7 @@ if ($hrmList) {
     echo '</div>';
 }
 
-if ($user['status'] == DRH) {
+if (DRH == $user['status']) {
     $usersAssigned = UserManager::get_users_followed_by_drh($userId);
 
     if ($usersAssigned) {
@@ -700,7 +700,6 @@ echo Tracking::displayUserSkills(
 );
 if (api_get_configuration_value('allow_career_users')) {
     $careers = UserManager::getUserCareers($userId);
-
     if (!empty($careers)) {
         echo Display::page_subheader(get_lang('Careers'), null, 'h3', ['class' => 'section-title']);
         $table = new HTML_Table(['class' => 'data_table']);

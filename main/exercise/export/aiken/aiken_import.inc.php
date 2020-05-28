@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 /**
  * Library for the import of Aiken format.
@@ -6,8 +7,6 @@
  * @author claro team <cvs@claroline.net>
  * @author Guillaume Lederer <guillaume@claroline.net>
  * @author César Perales <cesar.perales@gmail.com> Parse function for Aiken format
- *
- * @package chamilo.exercise
  */
 
 /**
@@ -170,7 +169,7 @@ function aiken_import_exercise($file)
         $result = 'NoTxtFileFoundInTheZip';
     }
 
-    if ($result !== true) {
+    if (true !== $result) {
         return $result;
     }
 
@@ -371,7 +370,7 @@ function aiken_parse_file(&$exercise_info, $exercisePath, $file, $questionFile)
         }
     }
     $total_questions = count($exercise_info['question']);
-    $total_weight = (!empty($_POST['total_weight'])) ? intval($_POST['total_weight']) : 20;
+    $total_weight = !empty($_POST['total_weight']) ? (int) ($_POST['total_weight']) : 20;
     foreach ($exercise_info['question'] as $key => $question) {
         $exercise_info['question'][$key]['weighting'][current(array_keys($exercise_info['question'][$key]['weighting']))] = $total_weight / $total_questions;
     }

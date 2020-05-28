@@ -23,7 +23,7 @@ $enabled = api_get_plugin_setting('courselegal', 'tool_enable');
 $pluginExtra = null;
 $pluginLegal = false;
 
-if ($enabled == 'true') {
+if ('true' == $enabled) {
     $pluginLegal = true;
     require_once api_get_path(SYS_PLUGIN_PATH).'courselegal/config.php';
     $plugin = CourseLegalPlugin::create();

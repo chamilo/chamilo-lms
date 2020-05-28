@@ -7,8 +7,6 @@
  * it should be included inside a dispatcher file (e.g: index.php).
  *
  * @author Christian Fasanando <christian1827@gmail.com>
- *
- * @package chamilo.course_description
  */
 class CourseDescriptionController
 {

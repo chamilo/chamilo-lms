@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -6,8 +7,6 @@ use ChamiloSession as Session;
 /**
  * Exercise reminder overview
  * Then it shows the results on the screen.
- *
- * @package chamilo.exercise
  *
  * @author Julio Montoya switchable fill in blank option added
  */
@@ -22,7 +21,6 @@ $learnpath_id = isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id
 $learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? (int) $_REQUEST['learnpath_item_id'] : 0;
 $learnpath_item_view_id = isset($_REQUEST['learnpath_item_view_id']) ? (int) $_REQUEST['learnpath_item_view_id'] : 0;
 $exerciseId = isset($_REQUEST['exerciseId']) ? (int) $_REQUEST['exerciseId'] : 0;
-
 /** @var Exercise $objExercise */
 $objExercise = null;
 $exerciseInSession = Session::read('objExercise');

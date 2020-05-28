@@ -1,9 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-/**
- * @package chamilo.calendar
- */
 
 // use anonymous mode when accessing this course tool
 $use_anonymous = true;
@@ -274,7 +271,7 @@ $form->addHtmlEditor(
     ]
 );
 
-if ($agenda->type === 'course') {
+if ('course' === $agenda->type) {
     $form->addHtml('<div id="add_as_announcement_div" style="display: none">');
     $form->addElement('checkbox', 'add_as_annonuncement', null, get_lang('AddAsAnnouncement'));
     $form->addHtml('</div>');

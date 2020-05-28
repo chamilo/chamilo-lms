@@ -5496,8 +5496,8 @@ ul.exercise-draggable-answer .touch-items:hover {
 }
 
 .question_options .droppable-item {
-    background-color: #CCC;
-    color: #FFF;
+    background-color: #096EAA4A;
+    color: #333;
     display: table;
     padding: 5px;
     width: 100%;
@@ -5533,7 +5533,6 @@ ul.exercise-draggable-answer .touch-items:hover {
     border: 1px solid #DDDDDD;
     padding: 5px;
     border-radius: 5px;
-    font-size: 12px;
     cursor: pointer;
 }
 

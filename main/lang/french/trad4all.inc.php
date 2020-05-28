@@ -8449,7 +8449,9 @@ $ExportSurveyResults = "Exporter les résultats des enquêtes";
 $PointAverage = "Moyenne des scores";
 $TotalScore = "Somme des scores";
 $ExportResults = "Exporter les résultats";
-$QuizBrowserCheckOK = "Votre navigateur a été vérifié. Vous pouvez continuer en sécurité.";
-$QuizBrowserCheckKO = "Votre navigateur n'a pas pu être vérifié. Essayer à nouveau s'il vous plaît, ou essayer un autre navigateur ou support avant de commencer votre test.";
+$QuizBrowserCheckOK = "Votre navigateur a été vérifié. Vous pouvez continuer en toute sécurité.";
+$QuizBrowserCheckKO = "Votre navigateur n'a pas pu être vérifié. Essayez à nouveau ou essayez un autre navigateur ou dispositif avant de commencer votre test.";
 $PartialCorrect = "Partiellement correct";
+$XAnswersSavedByUsersFromXTotal = "%d / %s réponses enregistrées.";
+$TestYourBrowser = "Testez votre navigateur";
 ?>

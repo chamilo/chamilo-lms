@@ -9,7 +9,9 @@ var DraggableAnswer = {
         }
 
         item.fadeOut(function () {
-            var $list = $('<ul>').addClass('gallery ui-helper-reset').appendTo(insertHere);
+            var $list = $('ul', insertHere).length
+                ? $('ul', insertHere)
+                : $('<ul>').addClass('gallery list-unstyled').appendTo(insertHere);
 
             var droppedId = item.attr('id'),
                 dropedOnId = insertHere.attr('id'),
@@ -50,8 +52,7 @@ var DraggableAnswer = {
         this.gallery = gallery;
         this.trash = trash;
 
-        $("li", DraggableAnswer.gallery).draggable({
-            cancel: "a.ui-icon",
+        $("li.touch-items", DraggableAnswer.gallery).draggable({
             revert: "invalid",
             containment: "document",
             helper: "clone",
@@ -59,8 +60,7 @@ var DraggableAnswer = {
         });
 
         DraggableAnswer.trash.droppable({
-            accept: ".exercise-draggable-answer > li",
-            hoverClass: "ui-state-active",
+            accept: ".exercise-draggable-answer > li.touch-items",
             drop: function (e, ui) {
                 DraggableAnswer.deleteItem(ui.draggable, $(this));
             }

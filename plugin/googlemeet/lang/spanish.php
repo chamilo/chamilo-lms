@@ -8,7 +8,7 @@ $strings['tool_title_help'] = 'Puede cambiar el nombre de la herramienta Google 
 $strings['google_meet_enabled'] = 'Activar Herramienta Google Meet';
 $strings['google_meet_enabled_help'] = 'Escoga si desea activar el plugin en su plataforma Chamilo, esta acción activara una herramienta extra en las herramienta del curso.';
 $strings['CourseDoesNotHaveAssociatedAccountMeet'] = 'Este curso no tiene configurado una reunión Google Meet.';
-$strings['ManageMeetAccounts'] = 'Programar una reunión Google Meet';
+$strings['ManageMeetAccounts'] = 'Agregar una reunión Google Meet';
 $strings['AssociateZoomAccount'] = 'Asociar una sala Zoom';
 $strings['RemoveAndChangeRoomMeet'] = 'Modificar reunión programada';
 $strings['AddMeet'] = 'Registrar reunión Google Meet';
@@ -16,5 +16,6 @@ $strings['MeetName'] = 'Nombre de la reunión';
 $strings['MeetNameHelp'] = 'Asigna un nombre para la reunión. Ejemplo: Sala 1';
 $strings['InstantMeetURL'] = "URL del Meet";
 $strings['InstantMeetURLHelp'] = "Es la URL para iniciar una reunión instantánea conn Google Meet";
+$strings['AccessMeeting'] = "Accede a la reunión";
 
 

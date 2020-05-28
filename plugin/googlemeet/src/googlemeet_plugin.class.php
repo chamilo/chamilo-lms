@@ -142,14 +142,17 @@ class GoogleMeetPlugin extends Plugin
         }
         $table = Database::get_main_table(self::TABLE_MEET_LIST);
 
+        $idCourse = api_get_course_int_id();
+        $idUser = api_get_user_id();
+
         $params = [
             'meet_name' => $values['meet_name'],
             'meet_url' => $values['meet_url'],
             'type_meet' => $values['type_meet'],
-            'user_id' => api_get_user_id(),
-            'cd_id' => $values['cd_id'],
-            'start_time' => $values['start_time'],
-            'end_time' => $values['end_time'],
+            'user_id' => $idUser,
+            'cd_id' => $idCourse,
+            'start_time' => null,
+            'end_time' => null,
             'session_id' => null,
             'activate' => 1,
         ];
@@ -159,6 +162,66 @@ class GoogleMeetPlugin extends Plugin
         if ($id > 0) {
             return $id;
         }
+    }
+
+    public function listMeets($idCourse){
+
+        $list = [];
+        $tableMeetList = Database::get_main_table(self::TABLE_MEET_LIST);
+
+        $sql = "SELECT * FROM $tableMeetList WHERE cd_id = $idCourse AND activate = 1";
+
+        $result = Database::query($sql);
+
+        if (Database::num_rows($result) > 0) {
+            while ($row = Database::fetch_array($result)) {
+
+                $action = Display::url(
+                    Display::return_icon(
+                        'edit.png',
+                        get_lang('Edit'),
+                        [],
+                        ICON_SIZE_SMALL
+                    ),
+                    'meets.php?action=edit&id_room='.$row['id']
+                );
+
+                $action.= Display::url(
+                    Display::return_icon(
+                        'delete.png',
+                        get_lang('Delete'),
+                        [],
+                        ICON_SIZE_SMALL
+                    ),
+                    'meets.php?action=delete&id_room='.$row['id'],
+                    [
+                        'onclick' => 'javascript:if(!confirm('."'".
+                            addslashes(api_htmlentities(get_lang("ConfirmYourChoice")))
+                            ."'".')) return false;',
+                    ]
+                );
+                $active = Display::return_icon('accept.png', null, [], ICON_SIZE_TINY);
+                if (intval($row['activate']) != 1) {
+                    $active = Display::return_icon('error.png', null, [], ICON_SIZE_TINY);
+                }
+
+                $list[] = [
+                    'id' => $row['id'],
+                    'meet_name' => $row['meet_name'],
+                    'meet_url' => $row['meet_url'],
+                    'type_meet' => $row['type_meet'],
+                    'user_id' => $row['user_id'],
+                    'cd_id' => $row['cd_id'],
+                    'start_time' => $row['start_time'],
+                    'end_time' => $row['end_time'],
+                    'session_id' => $row['session_id'],
+                    'activate' => $active,
+                    'actions' => $action,
+                ];
+
+            }
+        }
+        return $list;
     }
 
 }

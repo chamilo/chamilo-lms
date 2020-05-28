@@ -10,3 +10,87 @@
     margin-bottom: 2rem;
     margin-top: 1rem;
 }
+.card{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    border: 1px solid rgba(0,0,0,.05);
+    border-radius: .375rem;
+    background-color: #fff;
+    background-clip: border-box;
+}
+.card-meet{
+    margin-bottom: 30px;
+    border: 0;
+    box-shadow: 0 0 2rem 0 rgba(136,152,170,.15);
+}
+.card-meet .card-body {
+    padding: 1rem 1.5rem;
+}
+.row-meet {
+    display: flex;
+    flex-wrap: wrap;
+}
+.row-meet .col {
+    max-width: 100%;
+    flex-basis: 0;
+    flex-grow: 1;
+}
+.row-meet .col-auto {
+    width: auto;
+    max-width: 100%;
+    flex: 0 0 auto;
+}
+.description{
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+.description .title{
+    font-size: 1.45rem;
+    font-weight: 600!important;
+    color: #32325d;
+}
+.rounded-circle {
+    border-radius: 50%!important;
+}
+.shadow {
+    box-shadow: 0 0 2rem 0 rgba(136,152,170,.15)!important;
+}
+.icon {
+    width: 4rem;
+    height: 4rem;
+}
+.icon-shape {
+    display: inline-flex;
+    padding: 12px;
+    text-align: center;
+    border-radius: 50%;
+    align-items: center;
+    justify-content: center;
+}
+.bg-gradient-green {
+    background: linear-gradient(87deg,#2dce89 0,#2dcecc 100%)!important;
+}
+.text-white {
+    color: #fff!important;
+}
+.btn-meet{
+    color: #fff;
+    border-color: #5e72e4;
+    background-color: #5e72e4;
+    box-shadow: 0 4px 6px rgba(50,50,93,.11), 0 1px 3px rgba(0,0,0,.08);
+}
+.btn-meet:hover {
+    color: #fff;
+    border-color: #5e72e4;
+    background-color: #5e72e4;
+}
+.btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 7px 14px rgba(50,50,93,.1), 0 3px 6px rgba(0,0,0,.08);
+}
+.float-right {
+    float: right;
+}

@@ -76,7 +76,10 @@ if ($enable) {
                         if ($form->validate()) {
                             $values = $form->exportValues();
                             $res = $plugin->saveMeet($values);
-
+                            if ($res) {
+                                $url = api_get_path(WEB_PLUGIN_PATH).'googlemeet/start.php?'.api_get_cidreq();
+                                header('Location: '.$url);
+                            }
                         }
                     } catch (HTML_QuickForm_Error $e) {
                         echo $e;
@@ -107,6 +110,6 @@ if ($isAdmin || $isTeacher) {
 }
 
 $tpl->assign('message', $message);
-$content = $tpl->fetch('googlemeet/view/meet.tpl');
+$content = $tpl->fetch('googlemeet/view/meets.tpl');
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

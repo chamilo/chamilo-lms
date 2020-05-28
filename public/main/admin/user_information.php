@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\UserRelUser;
@@ -606,7 +607,6 @@ if (isset($_GET['action'])) {
 }
 
 Display::display_header($tool_name);
-
 echo Display::toolbarAction('toolbar-user-information', [implode(PHP_EOL, $actions)]);
 
 $fullUrlBig = UserManager::getUserPicture(
@@ -662,7 +662,6 @@ if (DRH == $user['status']) {
     if ($usersAssigned) {
         echo Display::page_subheader(get_lang('List of users assigned to Human Resources manager'));
         echo '<div class="row">';
-
         foreach ($usersAssigned as $userAssigned) {
             $userAssigned = api_get_user_info($userAssigned['user_id']);
             $userPicture = isset($userAssigned['avatar_medium']) ? $userAssigned['avatar_medium'] : $userAssigned['avatar'];
@@ -702,7 +701,6 @@ echo Tracking::displayUserSkills(
     0,
     0
 );
-
 if (api_get_configuration_value('allow_career_users')) {
     $careers = UserManager::getUserCareers($userId);
     if (!empty($careers)) {

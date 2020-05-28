@@ -10,8 +10,6 @@
  *
  * @author Patrick Cool, main author
  * @author Roan EMbrechts, code cleaning
- *
- * @since Dokeos 1.6
  */
 
 // we are in the admin area so we do not need a course id

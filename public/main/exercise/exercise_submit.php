@@ -101,7 +101,6 @@ $currentAnswer = isset($_REQUEST['num_answer']) ? (int) $_REQUEST['num_answer'] 
 $logInfo = [
     'tool' => TOOL_QUIZ,
     'tool_id' => $exerciseId,
-    'tool_id_detail' => 0,
     'action' => $learnpath_id,
     'action_details' => $learnpath_id,
 ];
@@ -158,6 +157,8 @@ if (!isset($objExercise) && isset($exerciseInSession)) {
     }
     $objExercise = $exerciseInSession;
 }
+
+$exerciseInSession = Session::read('objExercise');
 
 //3. $objExercise is not set, then return to the exercise list
 if (!is_object($objExercise)) {
@@ -465,10 +466,6 @@ if (!isset($questionListInSession)) {
         $questionList = explode(',', $exercise_stat_info['data_tracking']);
     }
     Session::write('questionList', $questionList);
-
-    if ($debug > 0) {
-        error_log('$_SESSION[questionList] was set');
-    }
 } else {
     if (isset($objExercise) && isset($exerciseInSession)) {
         $questionList = Session::read('questionList');
@@ -624,7 +621,6 @@ if ($formSent && isset($_POST)) {
         error_log('9. $formSent was set');
     }
 
-    // Initializing
     if (!is_array($exerciseResult)) {
         $exerciseResult = [];
         $exerciseResultCoordinates = [];
@@ -684,7 +680,6 @@ if ($formSent && isset($_POST)) {
                             []
                         );
                     }
-                    //END of saving and qualifying
                 }
             }
         }
@@ -1107,7 +1102,6 @@ if (!empty($error)) {
                 var saveDurationUrl = "'.$saveDurationUrl.'";
                 // Logout of course just in case
                 $.ajax({
-                    async: false, 
                     url: saveDurationUrl,
                     success: function (data) {
                         calledUpdateDuration = true;
@@ -1216,7 +1210,7 @@ if (!empty($error)) {
 
         function save_question_list(question_list) {
             $.each(question_list, function(key, question_id) {
-                save_now(question_id, null, false);
+                save_now(question_id, null);
             });
 
             var url = "";
@@ -1235,7 +1229,7 @@ if (!empty($error)) {
             window.location = "'.$script_php.'?'.$params.'";
         }
 
-        function save_now(question_id, url_extra, validate) {
+        function save_now(question_id, url_extra) {
             // 1. Normal choice inputs
             var my_choice = $(\'*[name*="choice[\'+question_id+\']"]\').serialize();
             
@@ -1266,19 +1260,21 @@ if (!empty($error)) {
 
             // Only for the first time
             var dataparam = "'.$params.'&type=simple&question_id="+question_id;
-            dataparam += "&"+my_choice+"&"+hotspot+"&"+remind_list+"&"+my_choiceDc;
+            dataparam += "&"+my_choice;
+            dataparam += hotspot ? ("&" + hotspot) : "";
+            dataparam += remind_list ? ("&" + remind_list) : "";
+            dataparam += my_choiceDc ? ("&" + my_choiceDc) : "";
             
             $("#save_for_now_"+question_id).html(\''.
                 Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin').'\');
             $.ajax({
                 type:"post",
-                async: false,
                 url: "'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&a=save_exercise_by_now",
                 data: dataparam,
                 success: function(return_value) {
                     if (return_value == "ok") {
                         $("#save_for_now_"+question_id).html(\''.
-                        Display::return_icon('save.png', get_lang('Saved...'), [], ICON_SIZE_SMALL).'\');                                                    
+                        Display::return_icon('save.png', get_lang('Saved'), [], ICON_SIZE_SMALL).'\');
                     } else if (return_value == "error") {
                         $("#save_for_now_"+question_id).html(\''.
                             Display::return_icon('error.png', get_lang('Error'), [], ICON_SIZE_SMALL).'\');
@@ -1299,7 +1295,7 @@ if (!empty($error)) {
                         }
 
                         $("#save_for_now_"+question_id).html(\''.
-                            Display::return_icon('save.png', get_lang('Saved...'), [], ICON_SIZE_SMALL).'\');
+                            Display::return_icon('save.png', get_lang('Saved'), [], ICON_SIZE_SMALL).'\');
 
                         window.location = url;
                     }
@@ -1337,11 +1333,16 @@ if (!empty($error)) {
             free_answers = $.param(free_answers);
             $("#save_all_response").html(\''.Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin').'\');
 
+            var requestData = "'.$params.'&type=all";
+            requestData += "&" + my_choice;
+            requestData += hotspot ? ("&" + hotspot) : "";
+            requestData += free_answers ? ("&" + free_answers) : "";
+            requestData += remind_list ? ("&" + remind_list) : "";
+
             $.ajax({
                 type:"post",
-                async: false,
                 url: "'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&a=save_exercise_by_now",
-                data: "'.$params.'&type=all&"+my_choice+"&"+hotspot+"&"+free_answers+"&"+remind_list,
+                data: requestData,
                 success: function(return_value) {
                     if (return_value == "ok") {
                         if (validate == "validate") {

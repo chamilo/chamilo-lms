@@ -9,7 +9,6 @@
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
-// Access restrictions
 api_protect_admin_script();
 
 $pluginName = $_GET['name'];
@@ -82,6 +81,13 @@ if (isset($form)) {
                 1
             );
         }
+        Event::addEvent(
+            LOG_PLUGIN_CHANGE,
+            LOG_PLUGIN_SETTINGS_CHANGE,
+            $pluginName,
+            api_get_utc_datetime(),
+            $user_id
+        );
 
         /** @var \Plugin $objPlugin */
         $objPlugin = $pluginInfo['plugin_class']::create();

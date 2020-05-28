@@ -467,7 +467,6 @@ foreach ($questionList as $questionId) {
             );
             $questionScore = $questionResult['score'];
             $totalScore += $questionResult['score'];
-
             break;
         case HOT_SPOT:
             if ($show_results || $showTotalScoreAndUserChoicesInLastAttempt) {
@@ -986,6 +985,7 @@ if ($isFeedbackAllowed && 'learnpath' != $origin && 'student_progress' != $origi
             'exeid' => $id,
             'origin' => $origin,
             'details' => 'true',
+            'course' => Security::remove_XSS($_GET['cidReq']),
         ]);
 
         $emailForm = new FormValidator('form-email', 'post', $formUrl, '', ['id' => 'form-email']);

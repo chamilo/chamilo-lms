@@ -72,6 +72,14 @@ function SendEx(num) {
 }
 </script>';
 
+$header = '';
+if ($objExercise->getFeedbackType() === EXERCISE_FEEDBACK_TYPE_POPUP) {
+    $header = '
+        <div class="modal-header">
+            <h4 class="modal-title" id="global-modal-title">'.get_lang('Incorrect').'</h4>
+        </div>';
+}
+
 echo '<div id="delineation-container">';
 // Getting the options by js
 if (empty($choiceValue) && empty($hotSpot) && $loaded) {
@@ -105,6 +113,7 @@ if (empty($choiceValue) && empty($hotSpot) && $loaded) {
             $links .= $icon;
         }
     }
+    echo $header;
     echo '<div class="row"><div class="col-md-5 col-md-offset-7"><h5 class="pull-right">'.$links.'</h5></div></div>';
     exit;
 }
@@ -152,13 +161,11 @@ if (empty($choiceValue) && empty($hotSpot)) {
     $url = api_get_path(WEB_CODE_PATH).'exercise/exercise_submit_modal.php?'.api_get_cidreq().$extraUrl;
     echo ' url = "'.addslashes($url).'&hotspotcoord="+ hotspotcoord + "&"+ hotspot + "&"+ my_choice;';
     echo "$('#global-modal .modal-body').load(url);";
-
     echo '</script>';
     exit;
 }
 $choice = [];
 $choice[$questionId] = isset($choiceValue) ? $choiceValue : null;
-
 if (!is_array($exerciseResult)) {
     $exerciseResult = [];
 }
@@ -220,11 +227,6 @@ switch ($answerType) {
 
         break;
     case CALCULATED_ANSWER:
-        /*$_SESSION['calculatedAnswerId'][$questionId] = mt_rand(
-            1,
-            $nbrAnswers
-        );*/
-        //var_dump($_SESSION['calculatedAnswerId'][$questionId]);
         break;
 }
 
@@ -247,10 +249,11 @@ $result = $objExercise->manage_answer(
 $manageAnswerHtmlContent = ob_get_clean();
 $contents = '';
 $answerCorrect = false;
+$partialCorrect = false;
 if (!empty($result)) {
     switch ($answerType) {
-        case UNIQUE_ANSWER:
         case MULTIPLE_ANSWER:
+        case UNIQUE_ANSWER:
         case DRAGGABLE:
         case HOT_SPOT_DELINEATION:
         case CALCULATED_ANSWER:
@@ -258,24 +261,79 @@ if (!empty($result)) {
                 $answerCorrect = true;
             }
 
+            // Check partial correct
+            if (false === $answerCorrect) {
+                if (!empty($result['score'])) {
+                    $partialCorrect = true;
+                }
+            }
             break;
     }
 }
 
-if (EXERCISE_FEEDBACK_TYPE_DIRECT === $objExercise->getFeedbackType()) {
+$header = '';
+if ($objExercise->getFeedbackType() === EXERCISE_FEEDBACK_TYPE_DIRECT) {
     if (isset($result['correct_answer_id'])) {
+        foreach ($result['correct_answer_id'] as $answerId) {
         /** @var Answer $answer */
-        $answerId = $result['correct_answer_id'];
-        $contents = $objAnswerTmp->selectComment($answerId);
+            $contents .= $objAnswerTmp->selectComment($answerId);
+        }
     }
 } else {
-    $contents = Display::return_message(get_lang('Incorrect'), 'warning');
+    $message = get_lang('Incorrect');
+    //$contents = Display::return_message($message, 'warning');
+
     if ($answerCorrect) {
-        $contents = Display::return_message(get_lang('Correct'), 'success');
+        $message = get_lang('Correct');
+    //$contents = Display::return_message($message, 'success');
+    } else {
+        if ($partialCorrect) {
+            $message = get_lang('PartialCorrect');
     }
 }
 
-if (HOT_SPOT_DELINEATION === $answerType) {
+    $comments = '';
+    if ($answerType != HOT_SPOT_DELINEATION) {
+        if (isset($result['correct_answer_id'])) {
+            $table = new HTML_Table(['class' => 'table data_table']);
+            $row = 0;
+            $table->setCellContents($row, 0, get_lang('YourAnswer'));
+            if ($answerType != DRAGGABLE) {
+                $table->setCellContents($row, 1, get_lang('Comment'));
+            }
+
+            $data = [];
+            foreach ($result['correct_answer_id'] as $answerId) {
+                $answer = $objAnswerTmp->getAnswerByAutoId($answerId);
+                if (!empty($answer) && isset($answer['comment'])) {
+                    $data[] = [$answer['answer'], $answer['comment']];
+                } else {
+                    $answer = $objAnswerTmp->selectAnswer($answerId);
+                    $comment = $objAnswerTmp->selectComment($answerId);
+                    $data[] = [$answer, $comment];
+                }
+            }
+
+            if (!empty($data)) {
+                $row = 1;
+                foreach ($data as $dataItem) {
+                    $table->setCellContents($row, 0, $dataItem[0]);
+                    $table->setCellContents($row, 1, $dataItem[1]);
+                    $row++;
+                }
+                $comments = $table->toHtml();
+            }
+        }
+    }
+
+    $contents .= $comments;
+    $header = '
+        <div class="modal-header">
+            <h4 class="modal-title" id="global-modal-title">'.$message.'</h4>
+        </div>';
+}
+
+if ($answerType === HOT_SPOT_DELINEATION) {
     $contents = $manageAnswerHtmlContent;
 }
 $links = '';
@@ -353,6 +411,7 @@ if (-1 == $destinationId) {
 }
 
 if (!empty($links)) {
+    echo $header;
     echo '<div>'.$contents.'</div>';
     echo '<div style="padding-left: 450px"><h5>'.$links.'</h5></div>';
     echo '</div>';

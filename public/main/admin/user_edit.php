@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -10,7 +11,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script(true);
 
-$user_id = isset($_GET['user_id']) ? intval($_GET['user_id']) : intval($_POST['user_id']);
+$user_id = isset($_GET['user_id']) ? (int) $_GET['user_id'] : (int) $_POST['user_id'];
 api_protect_super_admin($user_id, null, true);
 $is_platform_admin = api_is_platform_admin() ? 1 : 0;
 $userInfo = api_get_user_info($user_id);

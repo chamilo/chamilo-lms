@@ -25,6 +25,9 @@ api_protect_course_script(true);
 
 $limitTeacherAccess = api_get_configuration_value('limit_exercise_teacher_access');
 
+$allowDelete = Exercise::allowAction('delete');
+$allowClean = Exercise::allowAction('clean_results');
+
 $check = Security::get_existing_token('get');
 
 $currentUrl = api_get_self().'?'.api_get_cidreq();
@@ -125,11 +128,13 @@ if ($is_allowedToEdit && !empty($action)) {
 
             break;
         case 'delete':
-            $result = $objExerciseTmp->delete();
-            if ($result) {
-                Display::addFlash(Display::return_message(get_lang('Deleted'), 'confirmation'));
+            // deletes an exercise
+            if ($allowDelete) {
+                $result = $objExerciseTmp->delete();
+                if ($result) {
+                    Display::addFlash(Display::return_message(get_lang('Deleted'), 'confirmation'));
+                }
             }
-
             break;
         case 'enable':
             if ($limitTeacherAccess && !api_is_platform_admin()) {
@@ -165,7 +170,7 @@ if ($is_allowedToEdit && !empty($action)) {
 
             break;
         case 'clean_results':
-            if ($limitTeacherAccess && !api_is_platform_admin()) {
+            if (false === $allowClean) {
                 // Teacher change exercise
                 break;
             }
@@ -350,21 +355,24 @@ if ($is_allowedToEdit && 'learnpath' !== $origin) {
     $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/upload_exercise.php?'.api_get_cidreq().'">'.
         Display::return_icon('import_excel.png', get_lang('Import quiz from Excel'), '', ICON_SIZE_MEDIUM).'</a>';
 
-    $cleanAll = Display::url(
-        Display::return_icon(
-            'clean_all.png',
-            get_lang('Are you sure to delete all test\'s results ?'),
-            '',
-            ICON_SIZE_MEDIUM
-        ),
-        '#',
-        [
-            'data-item-question' => addslashes(get_lang('Clear all learners results for every exercises ?')),
-            'data-href' => api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq().'&action=clean_all_test&sec_token='.$token,
-            'data-toggle' => 'modal',
-            'data-target' => '#confirm-delete',
-        ]
-    );
+    $cleanAll = null;
+    if ($allowClean) {
+        $cleanAll = Display::url(
+            Display::return_icon(
+                'clean_all.png',
+                get_lang('Are you sure to delete all test\'s results ?'),
+                '',
+                ICON_SIZE_MEDIUM
+            ),
+            '#',
+            [
+                'data-item-question' => addslashes(get_lang('Clear all learners results for every exercises ?')),
+                'data-href' => api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq().'&action=clean_all_test&sec_token='.$token,
+                'data-toggle' => 'modal',
+                'data-target' => '#confirm-delete',
+            ]
+        );
+    }
 
     if ($limitTeacherAccess) {
         if (api_is_platform_admin()) {
@@ -409,11 +417,11 @@ if (false === api_get_configuration_value('allow_exercise_categories')) {
                 }
                 $down = Display::url($downIcon, $modifyUrl.'&action=down_category&category_id_edit='.$categoryIdItem);
                 $counter++;
+
                 if ($total === $counter) {
                     $down = Display::url(Display::return_icon('down_na.png'), '#');
                 }
             }
-
             echo Display::page_subheader($category->getName().$up.$down);
             echo Exercise::exerciseGridResource($category->getId(), $keyword);
         }

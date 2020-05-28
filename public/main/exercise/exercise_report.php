@@ -28,6 +28,7 @@ if (api_is_student_boss() && !empty($filter_user)) {
 }
 
 $limitTeacherAccess = api_get_configuration_value('limit_exercise_teacher_access');
+$allowClean = Exercise::allowAction('clean_results');
 
 if ($limitTeacherAccess && !api_is_platform_admin()) {
     api_not_allowed(true);
@@ -303,23 +304,8 @@ if (isset($_REQUEST['comments']) &&
                 WHERE c_id = ".$course_id.' AND id = '.$lp_item_view_id;
         Database::query($sql);
 
-        if (empty($origin)) {
-            header('Location: '.api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?id='.$exercise_id.'&'.api_get_cidreq());
-            exit;
-        }
-
-        if ('tracking_course' === $origin) {
-            //Redirect to the course detail in lp
-            header('Location: '.api_get_path(WEB_CODE_PATH).'exercise/exercise.php?course='.Security::remove_XSS($_GET['course']));
-            exit;
-        } else {
-            // Redirect to the reporting
-            header(
-                'Location: '.api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?origin='.$origin.'&student='.$student_id.'&details=true&course='.api_get_course_id(
-                ).'&session_id='.$session_id
-            );
-            exit;
-        }
+        header('Location: '.api_get_path(WEB_CODE_PATH).'exercise/exercise_show.php?id='.$id.'&student='.$student_id.'&'.api_get_cidreq());
+        exit;
     }
 }
 
@@ -338,36 +324,39 @@ if ($is_allowedToEdit && 'learnpath' != $origin) {
         $actions .= '<a id="export_opener" href="'.api_get_self().'?export_report=1&exerciseId='.$exercise_id.'" >'.
         Display::return_icon('save.png', get_lang('Export'), '', ICON_SIZE_MEDIUM).'</a>';
         // clean result before a selected date icon
-        $actions .= Display::url(
-            Display::return_icon(
-                'clean_before_date.png',
-                get_lang('Clean all results before a selected date'),
-                '',
-                ICON_SIZE_MEDIUM
-            ),
-            '#',
-            ['onclick' => 'javascript:display_date_picker()']
-        );
-        // clean result before a selected date datepicker popup
-        $actions .= Display::span(
-            Display::input(
-                'input',
-                'datepicker_start',
-                get_lang('Select a date from the calendar'),
-                [
-                    'onmouseover' => 'datepicker_input_mouseover()',
-                    'id' => 'datepicker_start',
-                    'onchange' => 'datepicker_input_changed()',
-                    'readonly' => 'readonly',
-                ]
-            ).
-            Display::button(
-                'delete',
-                get_lang('Delete'),
-                ['onclick' => 'submit_datepicker()']
-            ),
-            ['style' => 'display:none', 'id' => 'datepicker_span']
-        );
+        // clean result before a selected date icon
+        if ($allowClean) {
+            $actions .= Display::url(
+                Display::return_icon(
+                    'clean_before_date.png',
+                    get_lang('Clean all results before a selected date'),
+                    '',
+                    ICON_SIZE_MEDIUM
+                ),
+                '#',
+                ['onclick' => 'javascript:display_date_picker()']
+            );
+            // clean result before a selected date datepicker popup
+            $actions .= Display::span(
+                Display::input(
+                    'input',
+                    'datepicker_start',
+                    get_lang('Select a date from the calendar'),
+                    [
+                        'onmouseover' => 'datepicker_input_mouseover()',
+                        'id' => 'datepicker_start',
+                        'onchange' => 'datepicker_input_changed()',
+                        'readonly' => 'readonly',
+                    ]
+                ).
+                Display::button(
+                    'delete',
+                    get_lang('Delete'),
+                    ['onclick' => 'submit_datepicker()']
+                ),
+                ['style' => 'display:none', 'id' => 'datepicker_span']
+            );
+        }
     }
 } else {
     $actions .= '<a href="exercise.php">'.
@@ -445,7 +434,7 @@ if (($is_allowedToEdit || $is_tutor || api_is_coach()) &&
 ) {
     // ask for the date
     $check = Security::check_token('get');
-    if ($check) {
+    if ($check && $allowClean) {
         $objExerciseTmp = new Exercise();
         if ($objExerciseTmp->read($exercise_id)) {
             $count = $objExerciseTmp->cleanResults(
@@ -594,7 +583,14 @@ if ($is_allowedToEdit || $is_tutor) {
     // Column config
     $column_model = [
         ['name' => 'firstname', 'index' => 'firstname', 'width' => '50', 'align' => 'left', 'search' => 'true'],
-        ['name' => 'lastname', 'index' => 'lastname', 'width' => '50', 'align' => 'left', 'formatter' => 'action_formatter', 'search' => 'true'],
+        [
+            'name' => 'lastname',
+            'index' => 'lastname',
+            'width' => '50',
+            'align' => 'left',
+            'formatter' => 'action_formatter',
+            'search' => 'true',
+        ],
         [
             'name' => 'login',
             'index' => 'username',
@@ -718,7 +714,6 @@ $gridJs = Display::grid_js(
         for (var i in data) {
             colNames[ii++] = i;
         }
-        // capture col names
         var html = "";
         for (i = 0; i < mya.length; i++) {
             data = $("#results").getRowData(mya[i]); // get each row

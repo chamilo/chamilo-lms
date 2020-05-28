@@ -2,7 +2,6 @@
 
 /* For licensing terms, see /license.txt */
 
-// resetting the course id
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';

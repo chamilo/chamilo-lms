@@ -1841,6 +1841,7 @@ class Exercise
     public function delete()
     {
         $limitTeacherAccess = api_get_configuration_value('limit_exercise_teacher_access');
+
         if ($limitTeacherAccess && !api_is_platform_admin()) {
             return false;
         }
@@ -3157,6 +3158,7 @@ class Exercise
             if (EXERCISE_FEEDBACK_TYPE_POPUP === $this->getFeedbackType()) {
                 //$params['data-block-div-after-closing'] = "question_div_$question_id";
                 $params['data-block-closing'] = 'true';
+                $params['class'] .= ' no-header ';
             }
 
             $html .= Display::url(
@@ -3405,7 +3407,7 @@ class Exercise
                 $('#exercise_clock_warning').epiclock({
                     mode: $.epiclock.modes.countdown,
                     offset: {seconds: time_left},
-                    format: 'x:i:s',
+                    format: 'x:C:s',
                     renderer: 'minute'
                 }).bind('timer', function () {
                     onExpiredTimeExercise();
@@ -3611,7 +3613,7 @@ class Exercise
 
         $answerDestination = null;
         $userAnsweredQuestion = false;
-        $correctAnswerId = null;
+        $correctAnswerId = [];
         for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
             $answer = $objAnswerTmp->selectAnswer($answerId);
             $answerComment = $objAnswerTmp->selectComment($answerId);
@@ -3649,14 +3651,14 @@ class Exercise
                         if ($studentChoice) {
                             $questionScore += $answerWeighting;
                             $answerDestination = $objAnswerTmp->selectDestination($answerId);
-                            $correctAnswerId = $answerId;
+                            $correctAnswerId[] = $answerId;
                         }
                     } else {
                         $studentChoice = $choice == $answerAutoId ? 1 : 0;
                         if ($studentChoice) {
                             $questionScore += $answerWeighting;
                             $answerDestination = $objAnswerTmp->selectDestination($answerId);
-                            $correctAnswerId = $answerId;
+                            $correctAnswerId[] = $answerId;
                         }
                     }
 
@@ -3680,6 +3682,7 @@ class Exercise
 
                     $studentChoice = isset($choice[$answerAutoId]) ? $choice[$answerAutoId] : null;
                     if (!empty($studentChoice)) {
+                        $correctAnswerId[] = $answerAutoId;
                         if ($studentChoice == $answerCorrect) {
                             $questionScore += $true_score;
                         } else {
@@ -3771,6 +3774,7 @@ class Exercise
                         $real_answers[$answerId] = (bool) $studentChoice;
 
                         if (isset($studentChoice)) {
+                            $correctAnswerId[] = $answerAutoId;
                             $questionScore += $answerWeighting;
                         }
                     }
@@ -4098,48 +4102,55 @@ class Exercise
                                 $studentAnswer = trim($listStudentAnswerTemp[$i]);
                                 $studentAnswerToShow = $studentAnswer;
 
+                                if (empty($studentAnswer)) {
+                                    continue;
+                                }
+
                                 if ($debug) {
                                     error_log("Student answer: $i");
                                     error_log($studentAnswer);
                                 }
 
+                                if (!$from_database) {
+                                    $studentAnswer = FillBlanks::clearStudentAnswer($studentAnswer);
+                                    if ($debug) {
+                                        error_log("Student answer cleaned:");
+                                        error_log($studentAnswer);
+                                    }
+                                }
+
                                 $found = false;
                                 for ($j = 0; $j < count($listTeacherAnswerTemp); $j++) {
                                     $correctAnswer = $listTeacherAnswerTemp[$j];
-                                    $type = FillBlanks::getFillTheBlankAnswerType($correctAnswer);
-                                    if (FillBlanks::FILL_THE_BLANK_MENU == $type) {
-                                        $listMenu = FillBlanks::getFillTheBlankMenuAnswers($correctAnswer, false);
-                                        if (!empty($studentAnswer)) {
-                                            foreach ($listMenu as $key => $item) {
-                                                if ($key == $correctAnswer) {
-                                                    $studentAnswerToShow = $item;
-
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                    }
 
                                     if (!$found) {
                                         if (FillBlanks::isStudentAnswerGood(
                                             $studentAnswer,
                                             $correctAnswer,
                                             $from_database
-                                        )
-                                        ) {
+                                        )) {
                                             $questionScore += $answerWeighting[$i];
                                             $totalScore += $answerWeighting[$i];
                                             $listTeacherAnswerTemp[$j] = '';
                                             $found = true;
                                         }
                                     }
+
+                                    $type = FillBlanks::getFillTheBlankAnswerType($correctAnswer);
+                                    if ($type == FillBlanks::FILL_THE_BLANK_MENU) {
+                                        $listMenu = FillBlanks::getFillTheBlankMenuAnswers($correctAnswer, false);
+                                        if (!empty($studentAnswer)) {
+                                            foreach ($listMenu as $key => $item) {
+                                                if ($key == $correctAnswer) {
+                                                    $studentAnswerToShow = $item;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
                                 $listCorrectAnswers['student_answer'][$i] = $studentAnswerToShow;
-                                if (!$found) {
-                                    $listCorrectAnswers['student_score'][$i] = 0;
-                                } else {
-                                    $listCorrectAnswers['student_score'][$i] = 1;
-                                }
+                                $listCorrectAnswers['student_score'][$i] = $found ? 1 : 0;
                             }
                         }
                         $answer = FillBlanks::getAnswerInStudentAttempt($listCorrectAnswers);
@@ -4575,6 +4586,7 @@ class Exercise
                             if (isset($choice[$answerAutoId]) &&
                                 $answerCorrect == $choice[$answerAutoId]
                             ) {
+                                $correctAnswerId[] = $answerAutoId;
                                 $questionScore += $answerWeighting;
                                 $totalScore += $answerWeighting;
                                 $user_answer = Display::span($answerMatching[$choice[$answerAutoId]]);
@@ -4749,6 +4761,7 @@ class Exercise
                         $user_array = substr($user_array, 0, -1) ?: '';
                     } else {
                         if (!empty($studentChoice)) {
+                            $correctAnswerId[] = $answerAutoId;
                             $newquestionList[] = $questionId;
                         }
 
@@ -6189,6 +6202,9 @@ class Exercise
             $data['title'] = PHP_EOL.$this->exercise.' : '.get_lang('Result');
         }
 
+        $data['number_of_answers'] = count(explode(',', $trackExerciseInfo['data_tracking']));
+        $data['number_of_answers_saved'] = $this->countUserAnswersSavedInExercise($trackExerciseInfo['exe_id']);
+
         $tpl = new Template(null, false, false, false, false, false, false);
         $tpl->assign('data', $data);
         $layoutTemplate = $tpl->get_template('exercise/partials/result_exercise.tpl');
@@ -7421,7 +7437,6 @@ class Exercise
                 var params = '.$params.';
                 $.ajax({
                     type: "GET",
-                    async: false,
                     data: params,
                     url: "'.$url.'",
                     success: function(return_value) {
@@ -8146,7 +8161,7 @@ class Exercise
      * @param string $class
      * @param string $scoreLabel
      * @param string $result
-     * @param $array
+     * @param array
      *
      * @return string
      */
@@ -8347,7 +8362,7 @@ class Exercise
             $lpId = null;
             if (!empty($this->lpList)) {
                 // Taking only the first LP
-                $lpId = current($this->lpList);
+                $lpId = $this->getLpBySession($sessionId);
                 $lpId = $lpId['lp_id'];
             }
 
@@ -8979,9 +8994,225 @@ class Exercise
     }
 
     /**
+     * Get the first LP found matching the session ID.
+     *
+     * @param int $sessionId
+     *
+     * @return array
+     */
+    public function getLpBySession($sessionId)
+    {
+        if (!empty($this->lpList)) {
+            $sessionId = (int) $sessionId;
+
+            foreach ($this->lpList as $lp) {
+                if ((int) $lp['session_id'] == $sessionId) {
+                    return $lp;
+                }
+            }
+        }
+
+        return [
+            'lp_id' => 0,
+            'max_score' => 0,
+            'session_id' => 0,
+        ];
+    }
+
+    public static function saveExerciseInLp($safe_item_id, $safe_exe_id)
+    {
+        $lp = Session::read('oLP');
+
+        $safe_exe_id = (int) $safe_exe_id;
+        $safe_item_id = (int) $safe_item_id;
+
+        if (empty($lp) || empty($safe_exe_id) || empty($safe_item_id)) {
+            return false;
+        }
+
+        $viewId = $lp->get_view_id();
+        $course_id = api_get_course_int_id();
+        $userId = (int) api_get_user_id();
+        $viewId = (int) $viewId;
+
+        $TBL_TRACK_EXERCICES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $TBL_LP_ITEM_VIEW = Database::get_course_table(TABLE_LP_ITEM_VIEW);
+        $TBL_LP_ITEM = Database::get_course_table(TABLE_LP_ITEM);
+
+        $sql = "SELECT start_date, exe_date, exe_result, exe_weighting, exe_exo_id, exe_duration
+                FROM $TBL_TRACK_EXERCICES
+                WHERE exe_id = $safe_exe_id AND exe_user_id = $userId";
+        $res = Database::query($sql);
+        $row_dates = Database::fetch_array($res);
+
+        if (empty($row_dates)) {
+            return false;
+        }
+
+        $duration = (int) $row_dates['exe_duration'];
+        $score = (float) $row_dates['exe_result'];
+        $max_score = (float) $row_dates['exe_weighting'];
+
+        $sql = "UPDATE $TBL_LP_ITEM SET
+                    max_score = '$max_score'
+                WHERE iid = $safe_item_id";
+        Database::query($sql);
+
+        $sql = "SELECT id FROM $TBL_LP_ITEM_VIEW
+                WHERE
+                    c_id = $course_id AND
+                    lp_item_id = $safe_item_id AND
+                    lp_view_id = $viewId
+                ORDER BY id DESC
+                LIMIT 1";
+        $res_last_attempt = Database::query($sql);
+
+        if (Database::num_rows($res_last_attempt) && !api_is_invitee()) {
+            $row_last_attempt = Database::fetch_row($res_last_attempt);
+            $lp_item_view_id = $row_last_attempt[0];
+
+            $exercise = new Exercise($course_id);
+            $exercise->read($row_dates['exe_exo_id']);
+            $status = 'completed';
+
+            if (!empty($exercise->pass_percentage)) {
+                $status = 'failed';
+                $success = ExerciseLib::isSuccessExerciseResult(
+                    $score,
+                    $max_score,
+                    $exercise->pass_percentage
+                );
+                if ($success) {
+                    $status = 'passed';
+                }
+            }
+
+            $sql = "UPDATE $TBL_LP_ITEM_VIEW SET
+                        status = '$status',
+                        score = $score,
+                        total_time = $duration
+                    WHERE iid = $lp_item_view_id";
+            Database::query($sql);
+
+            $sql = "UPDATE $TBL_TRACK_EXERCICES SET
+                        orig_lp_item_view_id = $lp_item_view_id
+                    WHERE exe_id = ".$safe_exe_id;
+            Database::query($sql);
+        }
+    }
+
+    /**
+     * Get the user answers saved in exercise.
+     *
+     * @param int $attemptId
+     *
+     * @return array
+     */
+    public function getUserAnswersSavedInExercise($attemptId)
+    {
+        $exerciseResult = [];
+
+        $attemptList = Event::getAllExerciseEventByExeId($attemptId);
+
+        foreach ($attemptList as $questionId => $options) {
+            foreach ($options as $option) {
+                $question = Question::read($option['question_id']);
+
+                switch ($question->type) {
+                    case FILL_IN_BLANKS:
+                        $option['answer'] = $this->fill_in_blank_answer_to_string($option['answer']);
+                        break;
+                }
+
+                if (!empty($option['answer'])) {
+                    $exerciseResult[] = $questionId;
+
+                    break;
+                }
+            }
+        }
+
+        return $exerciseResult;
+    }
+
+    /**
+     * Get the number of user answers saved in exercise.
+     *
+     * @param int $attemptId
+     *
+     * @return int
+     */
+    public function countUserAnswersSavedInExercise($attemptId)
+    {
+        $answers = $this->getUserAnswersSavedInExercise($attemptId);
+
+        return count($answers);
+    }
+
+    public static function allowAction($action)
+    {
+        if (api_is_platform_admin()) {
+            return true;
+        }
+
+        $limitTeacherAccess = api_get_configuration_value('limit_exercise_teacher_access');
+        $disableClean = api_get_configuration_value('disable_clean_exercise_results_for_teachers');
+
+        switch ($action) {
+            case 'delete':
+                if (api_is_allowed_to_edit(null, true)) {
+                    if ($limitTeacherAccess) {
+                        return false;
+                    }
+
+                    return true;
+                }
+                break;
+            case 'clean_results':
+                if (api_is_allowed_to_edit(null, true)) {
+                    if ($limitTeacherAccess) {
+                        return false;
+                    }
+
+                    if ($disableClean) {
+                        return false;
+                    }
+
+                    return true;
+                }
+
+                break;
+        }
+
+        return false;
+    }
+
+    /**
+     * Get number of questions in exercise by user attempt.
+     *
+     * @return int
+     */
+    private function countQuestionsInExercise()
+    {
+        $lpId = isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : 0;
+        $lpItemId = isset($_REQUEST['learnpath_item_id']) ? (int) $_REQUEST['learnpath_item_id'] : 0;
+        $lpItemViewId = isset($_REQUEST['learnpath_item_view_id']) ? (int) $_REQUEST['learnpath_item_view_id'] : 0;
+
+        $trackInfo = $this->get_stat_track_exercise_info($lpId, $lpItemId, $lpItemViewId);
+
+        if (!empty($trackInfo)) {
+            $questionIds = explode(',', $trackInfo['data_tracking']);
+
+            return count($questionIds);
+        }
+
+        return $this->getQuestionCount();
+    }
+
+    /**
      * Gets the question list ordered by the question_order setting (drag and drop).
      *
-     * @param bool $adminView optional
+     * @param bool $adminView Optional.
      *
      * @return array
      */

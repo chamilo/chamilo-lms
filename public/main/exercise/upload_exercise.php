@@ -149,6 +149,7 @@ function lp_upload_quiz_action_handling()
     $questionTypeList = [];
     $answerList = [];
     $quizTitle = '';
+
     $objPHPExcel = PHPExcel_IOFactory::load($_FILES['user_upload_quiz']['tmp_name']);
     $objPHPExcel->setActiveSheetIndex(0);
     $worksheet = $objPHPExcel->getActiveSheet();

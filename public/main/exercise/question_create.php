@@ -2,9 +2,6 @@
 
 /* For licensing terms, see /license.txt */
 
-/**
- * Test.
- */
 require_once __DIR__.'/../inc/global.inc.php';
 
 // the section (tabs)

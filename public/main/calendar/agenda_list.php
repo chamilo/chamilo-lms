@@ -88,21 +88,21 @@ $tpl->assign('show_action', in_array($type, ['course', 'session']));
 $tpl->assign('agenda_actions', $actions);
 $tpl->assign('is_allowed_to_edit', api_is_allowed_to_edit());
 
-if ('change_visibility' === $action && api_is_allowed_to_edit()) {
+if (api_is_allowed_to_edit()) {
+    if ($action == 'change_visibility') {
     $courseInfo = api_get_course_info();
     $courseCondition = '';
     // This happens when list agenda is not inside a course
-    if (!empty($courseInfo) && ('course' === $type || 'session' === $type)) {
+        if (($type == 'course' || $type == 'session' && !empty($courseInfo))) {
         // For course and session event types
         // Just needs course ID
-        $courseCondition = '&'.api_get_cidreq();
+            $agenda->changeVisibility($_GET['id'], $_GET['visibility'], $courseInfo);
+        } else {
+            $courseCondition = '&'.api_get_cidreq();
+        }
+        header('Location: '.api_get_self().'?type='.$agenda->type.$courseCondition);
+        exit;
     }
-
-    $agenda->changeVisibility($_GET['id'], $_GET['visibility'], $courseInfo);
-    Display::addFlash(Display::return_message(get_lang('Updated')));
-
-    header('Location: '.api_get_self().'?type='.$agenda->type.$courseCondition);
-    exit;
 }
 
 $templateName = $tpl->get_template('agenda/event_list.tpl');

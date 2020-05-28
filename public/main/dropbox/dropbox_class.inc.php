@@ -91,7 +91,7 @@ class Dropbox_Work
     public function createNewWork($uploader_id, $title, $description, $author, $filename, $filesize)
     {
         // Fill in the properties
-        $this->uploader_id = intval($uploader_id);
+        $this->uploader_id = (int) $uploader_id;
         $this->filename = $filename;
         $this->filesize = $filesize;
         $this->title = $title;
@@ -103,8 +103,8 @@ class Dropbox_Work
         // Check if object exists already. If it does, the old object is used
         // with updated information (authors, description, upload_date)
         $this->isOldWork = false;
-        $sql = "SELECT id, upload_date 
-                FROM ".Database::get_course_table(TABLE_DROPBOX_FILE)."
+        $sql = 'SELECT id, upload_date
+                FROM '.Database::get_course_table(TABLE_DROPBOX_FILE)."
                 WHERE 
                     c_id = $course_id AND
                     filename = '".Database::escape_string($this->filename)."'";
@@ -150,21 +150,21 @@ class Dropbox_Work
 
             $this->id = Database::insert(Database::get_course_table(TABLE_DROPBOX_FILE), $params);
             if ($this->id) {
-                $sql = "UPDATE ".Database::get_course_table(TABLE_DROPBOX_FILE)." SET id = iid 
+                $sql = 'UPDATE '.Database::get_course_table(TABLE_DROPBOX_FILE)." SET id = iid
                         WHERE iid = {$this->id}";
                 Database::query($sql);
             }
         }
 
-        $sql = "SELECT count(file_id) as count
-                FROM ".Database::get_course_table(TABLE_DROPBOX_PERSON)."
-                WHERE c_id = $course_id AND file_id = ".intval($this->id)." AND user_id = ".$this->uploader_id;
+        $sql = 'SELECT count(file_id) as count
+                FROM '.Database::get_course_table(TABLE_DROPBOX_PERSON)."
+                WHERE c_id = $course_id AND file_id = ".intval($this->id).' AND user_id = '.$this->uploader_id;
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
         if (0 == $row['count']) {
             // Insert entries into person table
-            $sql = "INSERT INTO ".Database::get_course_table(TABLE_DROPBOX_PERSON)." (c_id, file_id, user_id)
-                    VALUES ($course_id, ".intval($this->id)." , ".intval($this->uploader_id).")";
+            $sql = 'INSERT INTO '.Database::get_course_table(TABLE_DROPBOX_PERSON)." (c_id, file_id, user_id)
+                    VALUES ($course_id, ".intval($this->id).' , '.intval($this->uploader_id).')';
             Database::query($sql);
         }
     }
@@ -391,7 +391,7 @@ class Dropbox_SentWork extends Dropbox_Work
      */
     public function createExistingSentWork($id)
     {
-        $id = intval($id);
+        $id = (int) $id;
         $course_id = api_get_course_int_id();
 
         // Call constructor of Dropbox_Work object
@@ -464,10 +464,11 @@ class Dropbox_Person
         $sql = "SELECT DISTINCT r.file_id, r.cat_id
                 FROM $post_tbl r
                 INNER JOIN $person_tbl p
-                    ON (r.file_id = p.file_id AND r.c_id = $course_id AND p.c_id = $course_id )
+                ON (r.file_id = p.file_id AND r.c_id = p.c_id)
                 WHERE
-                     p.user_id = ".intval($this->userId)." AND
-                     r.dest_user_id = ".intval($this->userId)." $condition_session ";
+                     r.c_id = $course_id AND
+                     p.user_id = ".intval($this->userId).' AND
+                     r.dest_user_id = '.intval($this->userId)." $condition_session ";
 
         $result = Database::query($sql);
         while ($res = Database::fetch_array($result)) {
@@ -479,10 +480,11 @@ class Dropbox_Person
         $sql = "SELECT DISTINCT f.id
                 FROM $file_tbl f
                 INNER JOIN $person_tbl p
-                ON (f.id = p.file_id AND f.c_id = $course_id AND p.c_id = $course_id)
+                ON (f.id = p.file_id AND f.c_id = p.c_id)
                 WHERE
-                    f.uploader_id   = ".intval($this->userId)." AND
-                    p.user_id       = ".intval($this->userId)."
+                    f.c_id = $course_id AND
+                    f.uploader_id   = ".intval($this->userId).' AND
+                    p.user_id       = '.intval($this->userId)."
                     $condition_session
                 ";
         $result = Database::query($sql);
@@ -542,7 +544,7 @@ class Dropbox_Person
     public function deleteReceivedWork($id)
     {
         $course_id = api_get_course_int_id();
-        $id = intval($id);
+        $id = (int) $id;
 
         // index check
         $found = false;
@@ -593,7 +595,7 @@ class Dropbox_Person
     {
         $course_id = api_get_course_int_id();
 
-        $id = intval($id);
+        $id = (int) $id;
 
         // index check
         $found = false;

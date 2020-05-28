@@ -12,7 +12,6 @@ use ChamiloSession as Session;
  * @author Olivier Brouckaert, Julio Montoya
  */
 require_once __DIR__.'/../inc/global.inc.php';
-
 $this_section = SECTION_COURSES;
 
 api_protect_course_script(true);

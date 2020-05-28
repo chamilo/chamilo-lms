@@ -38,7 +38,6 @@ switch ($action) {
                 'confirm'
             );
         }
-
         break;
 }
 

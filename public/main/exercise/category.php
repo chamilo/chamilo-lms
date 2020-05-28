@@ -29,6 +29,56 @@ $obj = new ExerciseCategoryManager();
 $check = Security::check_token('request');
 $token = Security::get_token();
 
+//Add the JS needed to use the jqgrid
+$htmlHeadXtra[] = api_get_jqgrid_js();
+
+//The order is important you need to check the the $column variable in the model.ajax.php file
+$columns = [
+    get_lang('Name'),
+    get_lang('Actions'),
+];
+
+// Column config
+$column_model = [
+    [
+        'name' => 'name',
+        'index' => 'name',
+        'width' => '140',
+        'align' => 'left',
+    ],
+    [
+        'name' => 'actions',
+        'index' => 'actions',
+        'width' => '40',
+        'align' => 'left',
+        'formatter' => 'action_formatter',
+        'sortable' => 'false',
+    ],
+];
+
+// Autowidth
+$extra_params['autowidth'] = 'true';
+// height auto
+$extra_params['height'] = 'auto';
+
+$action_links = $obj->getJqgridActionLinks($token);
+
+$htmlHeadXtra[] = '<script>
+$(function() {
+    // grid definition see the $obj->display() function
+    '.Display::grid_js(
+        'categories',
+        $url,
+        $columns,
+        $column_model,
+        $extra_params,
+        [],
+        $action_links,
+        true
+    ).'
+});
+</script>';
+
 $url = api_get_self().'?'.api_get_cidreq();
 
 switch ($action) {

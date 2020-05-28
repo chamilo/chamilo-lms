@@ -25,7 +25,6 @@ if (empty($id)) {
     api_not_allowed($show_headers);
 }
 
-$is_courseTutor = api_is_course_tutor();
 $is_allowedToEdit = api_is_allowed_to_edit(null, true) || $is_courseTutor;
 
 // Getting results from the exe_id. This variable also contain all the information about the exercise

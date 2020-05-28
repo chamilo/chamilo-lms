@@ -170,27 +170,8 @@ echo '<script>
 $attempt_list = Event::getAllExerciseEventByExeId($exe_id);
 $remind_list = $exercise_stat_info['questions_to_check'];
 $remind_list = explode(',', $remind_list);
-$exercise_result = [];
+$exercise_result = $objExercise->getUserAnswersSavedInExercise($exe_id);
 
-foreach ($attempt_list as $question_id => $options) {
-    foreach ($options as $item) {
-        $question_obj = Question::read($item['question_id']);
-        switch ($question_obj->type) {
-            case FILL_IN_BLANKS:
-                $item['answer'] = $objExercise->fill_in_blank_answer_to_string($item['answer']);
-
-                break;
-            case HOT_SPOT:
-                break;
-        }
-
-        if ('0' != $item['answer'] && !empty($item['answer'])) {
-            $exercise_result[] = $question_id;
-
-            break;
-        }
-    }
-}
 echo Display::label(get_lang('Questions without answer'), 'danger');
 echo '<div class="clear"></div><br />';
 

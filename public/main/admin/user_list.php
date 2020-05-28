@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -47,7 +48,6 @@ if (isset($_GET['user_id']) && 'login_as' == $action) {
 }
 
 api_protect_admin_script(true);
-
 trimVariables();
 
 $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=get_user_courses';
@@ -55,6 +55,7 @@ $urlSession = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=get_user_sessions'
 $extraField = new ExtraField('user');
 $variables = $extraField->get_all_extra_field_by_type(ExtraField::FIELD_TYPE_TAG);
 $variablesSelect = $extraField->get_all_extra_field_by_type(ExtraField::FIELD_TYPE_SELECT);
+
 if (!empty($variablesSelect)) {
     $variables = array_merge($variables, $variablesSelect);
 }
@@ -214,6 +215,9 @@ function prepare_user_sql_query($getCount)
     $user_table = Database::get_main_table(TABLE_MAIN_USER);
     $admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);
 
+    $isMultipleUrl = (api_is_platform_admin() || api_is_session_admin()) && api_get_multiple_access_url();
+    $urlId = api_get_current_access_url_id();
+
     if ($getCount) {
         $sql .= "SELECT COUNT(u.id) AS total_number_of_items FROM $user_table u";
     } else {
@@ -238,10 +242,17 @@ function prepare_user_sql_query($getCount)
     }
 
     // adding the filter to see the user's only of the current access_url
-    if ((api_is_platform_admin() || api_is_session_admin()) && api_get_multiple_access_url()) {
+    if ($isMultipleUrl) {
         $access_url_rel_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $sql .= " INNER JOIN $access_url_rel_user_table url_rel_user
                   ON (u.id=url_rel_user.user_id)";
+    }
+
+    $classId = isset($_REQUEST['class_id']) && !empty($_REQUEST['class_id']) ? (int) $_REQUEST['class_id'] : 0;
+
+    if ($classId) {
+        $userGroupTable = Database::get_main_table(TABLE_USERGROUP_REL_USER);
+        $sql .= " INNER JOIN $userGroupTable ug ON (ug.user_id = u.id)";
     }
 
     $keywordList = [
@@ -270,13 +281,6 @@ function prepare_user_sql_query($getCount)
         $keywordListValues = [];
     }
 
-    /*
-    // This block is never executed because $keyword_extra_data never exists
-    if (isset($keyword_extra_data) && !empty($keyword_extra_data)) {
-        $extra_info = UserManager::get_extra_field_information_by_name($keyword_extra_data);
-        $field_id = $extra_info['id'];
-        $sql.= " INNER JOIN user_field_values ufv ON u.id=ufv.user_id AND ufv.field_id=$field_id ";
-    } */
     if (isset($_GET['keyword']) && !empty($_GET['keyword'])) {
         $keywordFiltered = Database::escape_string("%".$_GET['keyword']."%");
         $sql .= " WHERE (
@@ -294,37 +298,44 @@ function prepare_user_sql_query($getCount)
         $keyword_admin = '';
 
         if (isset($keywordListValues['keyword_status']) &&
-            PLATFORM_ADMIN == $keywordListValues['keyword_status']
+            $keywordListValues['keyword_status'] == PLATFORM_ADMIN
         ) {
             $query_admin_table = " , $admin_table a ";
             $keyword_admin = ' AND a.user_id = u.id ';
-            $keywordListValues['keyword_status'] = '%';
+            $keywordListValues['keyword_status'] = '';
+        }
+
+        if ($keywordListValues['keyword_status'] === '%') {
+            $keywordListValues['keyword_status'] = '';
         }
 
         $keyword_extra_value = '';
-
-        // This block is never executed because $keyword_extra_data never exists
-        /*
-        if (isset($keyword_extra_data) && !empty($keyword_extra_data) &&
-            !empty($keyword_extra_data_text)) {
-            $keyword_extra_value = " AND ufv.field_value LIKE '%".trim($keyword_extra_data_text)."%' ";
-        }
-        */
         $sql .= " $query_admin_table
-            WHERE (
-                u.firstname LIKE '".Database::escape_string("%".$keywordListValues['keyword_firstname']."%")."' AND
-                u.lastname LIKE '".Database::escape_string("%".$keywordListValues['keyword_lastname']."%")."' AND
-                u.username LIKE '".Database::escape_string("%".$keywordListValues['keyword_username']."%")."' AND
-                u.email LIKE '".Database::escape_string("%".$keywordListValues['keyword_email']."%")."' AND
-                u.status LIKE '".Database::escape_string($keywordListValues['keyword_status'])."' ";
+            WHERE ( 1 = 1 ";
+
+        if (!empty($keywordListValues['keyword_firstname'])) {
+            $sql .= "AND u.firstname LIKE '".Database::escape_string("%".$keywordListValues['keyword_firstname']."%")."'";
+        }
+        // This block is never executed because $keyword_extra_data never exists
+        if (!empty($keywordListValues['keyword_lastname'])) {
+            $sql .= "AND u.lastname LIKE '".Database::escape_string("%".$keywordListValues['keyword_lastname']."%")."'";
+        }
+        if (!empty($keywordListValues['keyword_username'])) {
+            $sql .= "AND u.username LIKE '".Database::escape_string("%".$keywordListValues['keyword_username']."%")."'";
+        }
+        if (!empty($keywordListValues['keyword_email'])) {
+            $sql .= "AND u.email LIKE '".Database::escape_string("%".$keywordListValues['keyword_email']."%")."'";
+        }
+
+        if (!empty($keywordListValues['keyword_status'])) {
+            $sql .= "AND u.status = '".Database::escape_string($keywordListValues['keyword_status'])."'";
+        }
+
         if (!empty($keywordListValues['keyword_officialcode'])) {
             $sql .= " AND u.official_code LIKE '".Database::escape_string("%".$keywordListValues['keyword_officialcode']."%")."' ";
         }
 
-        $sql .= "
-            $keyword_admin
-            $keyword_extra_value
-        ";
+        $sql .= " $keyword_admin $keyword_extra_value ";
 
         if (isset($keywordListValues['keyword_active']) &&
             !isset($keywordListValues['keyword_inactive'])
@@ -338,12 +349,36 @@ function prepare_user_sql_query($getCount)
         $sql .= ' ) ';
     }
 
-    $preventSessionAdminsToManageAllUsers = api_get_setting('prevent_session_admins_to_manage_all_users');
-    if (api_is_session_admin() && 'true' === $preventSessionAdminsToManageAllUsers) {
-        $sql .= ' AND u.creator_id = '.$currentUserId;
+    if ($classId) {
+        $sql .= " AND ug.usergroup_id = $classId";
     }
 
+    $preventSessionAdminsToManageAllUsers = api_get_setting('prevent_session_admins_to_manage_all_users');
+
+    $extraConditions = '';
+    if (api_is_session_admin() && $preventSessionAdminsToManageAllUsers === 'true') {
+        $extraConditions .= ' AND u.creator_id = '.api_get_user_id();
+    }
+
+    // adding the filter to see the user's only of the current access_url
+    if ($isMultipleUrl) {
+        $extraConditions .= ' AND url_rel_user.access_url_id = '.$urlId;
+    }
+
+    $sql .= $extraConditions;
+
     $variables = Session::read('variables_to_show', []);
+    $extraFields = api_get_configuration_value('user_search_on_extra_fields');
+
+    if (!empty($extraFields) && isset($extraFields['extra_fields']) && isset($_GET['keyword'])) {
+        $extraFieldList = $extraFields['extra_fields'];
+        if (!empty($extraFieldList)) {
+            foreach ($extraFieldList as $variable) {
+                $_GET['extra_'.$variable] = Security::remove_XSS($_GET['keyword']);
+            }
+        }
+        $variables = array_merge($extraFieldList, $variables);
+    }
     if (!empty($variables)) {
         $extraField = new ExtraField('user');
         $extraFieldResult = [];
@@ -360,9 +395,7 @@ function prepare_user_sql_query($getCount)
                     continue;
                 }
 
-                $info = $extraField->get_handler_field_info_by_field_variable(
-                    $variable
-                );
+                $info = $extraField->get_handler_field_info_by_field_variable($variable);
 
                 if (empty($info)) {
                     continue;
@@ -372,42 +405,30 @@ function prepare_user_sql_query($getCount)
                     if (empty($value)) {
                         continue;
                     }
-                    if (ExtraField::FIELD_TYPE_TAG == $info['field_type']) {
-                        $result = $extraField->getAllUserPerTag(
-                            $info['id'],
-                            $value
-                        );
-                        $result = empty($result) ? [] : array_column(
-                            $result,
-                            'user_id'
-                        );
+                    if ($info['field_type'] == ExtraField::FIELD_TYPE_TAG) {
+                        $result = $extraField->getAllUserPerTag($info['id'], $value);
+                        $result = empty($result) ? [] : array_column($result, 'user_id');
                     } else {
-                        $result = UserManager::get_extra_user_data_by_value(
-                            $variable,
-                            $value
-                        );
+                        $result = UserManager::get_extra_user_data_by_value($variable, $value, true);
                     }
+
                     $extraFieldHasData[] = true;
                     if (!empty($result)) {
-                        $extraFieldResult = array_merge(
-                            $extraFieldResult,
-                            $result
-                        );
+                        $extraFieldResult = array_merge($extraFieldResult, $result);
                     }
                 }
             }
         }
 
-        if (!empty($extraFieldHasData)) {
-            $sql .= " AND (u.id IN ('".implode("','", $extraFieldResult)."')) ";
-        }
+        $condition = '  AND ';
+        // If simple search then use "OR"
+        if (isset($_GET['keyword']) && !empty($_GET['keyword'])) {
+            $condition = ' OR ';
     }
 
-    // adding the filter to see the user's only of the current access_url
-    if ((api_is_platform_admin() || api_is_session_admin()) &&
-        api_get_multiple_access_url()
-    ) {
-        $sql .= ' AND url_rel_user.access_url_id = '.api_get_current_access_url_id();
+        if (!empty($extraFieldHasData) && !empty($extraFieldResult)) {
+            $sql .= " $condition (u.id IN ('".implode("','", $extraFieldResult)."') $extraConditions ) ";
+        }
     }
 
     return $sql;
@@ -1014,8 +1035,12 @@ if (isset($_GET['keyword'])) {
     $parameters['keyword_email'] = Security::remove_XSS($_GET['keyword_email']);
     $parameters['keyword_officialcode'] = Security::remove_XSS($_GET['keyword_officialcode']);
     $parameters['keyword_status'] = Security::remove_XSS($_GET['keyword_status']);
-    $parameters['keyword_active'] = Security::remove_XSS($_GET['keyword_active']);
-    $parameters['keyword_inactive'] = Security::remove_XSS($_GET['keyword_inactive']);
+    if (isset($_GET['keyword_active'])) {
+        $parameters['keyword_active'] = Security::remove_XSS($_GET['keyword_active']);
+    }
+    if (isset($_GET['keyword_inactive'])) {
+        $parameters['keyword_inactive'] = Security::remove_XSS($_GET['keyword_inactive']);
+    }
 }
 // Create a sortable table with user-data
 $parameters['sec_token'] = Security::get_token();

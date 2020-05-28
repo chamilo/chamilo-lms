@@ -354,6 +354,7 @@ function parseQti2($xmlData)
     $currentQuestionItemBody = '';
     $cardinality = '';
     $nonHTMLTagToAvoid = [
+        'prompt',
         'simpleChoice',
         'choiceInteraction',
         'inlineChoiceInteraction',
@@ -387,6 +388,7 @@ function parseQti2($xmlData)
                     'category' => $node->getAttribute('category'),
                     'type' => '',
                     'tempdir' => $questionTempDir,
+                    'description' => null,
                 ];
 
                 break;
@@ -633,7 +635,15 @@ function parseQti2($xmlData)
                         $exerciseInfo['description'] = $node->nodeValue;
                     }
                 }
+                break;
+            case 'prompt':
+                $description = trim($node->nodeValue);
+                $description = htmlspecialchars_decode($description);
+                $description = Security::remove_XSS($description);
 
+                if (!empty($description)) {
+                    $exerciseInfo['question'][$currentQuestionIdent]['description'] = $description;
+                }
                 break;
         }
     }

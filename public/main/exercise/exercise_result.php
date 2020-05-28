@@ -196,6 +196,12 @@ ExerciseLib::displayQuestionListByAttempt(
 );
 
 //Unset session for clock time
+if (!empty($learnpath_id) && $saveResults) {
+    // Save attempt in lp
+    Exercise::saveExerciseInLp($learnpath_item_id, $exe_id);
+}
+
+//Unset session for clock time
 ExerciseLib::exercise_time_control_delete(
     $objExercise->id,
     $learnpath_id,

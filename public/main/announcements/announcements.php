@@ -89,6 +89,8 @@ $logInfo = [
 ];
 Event::registerLog($logInfo);
 
+$announcementAttachmentIsDisabled = api_get_configuration_value('disable_announcement_attachment');
+
 switch ($action) {
     case 'move':
         if (!$allowToEdit) {
@@ -136,7 +138,6 @@ switch ($action) {
                     $sql = "UPDATE $tbl_announcement  SET display_order = '$thisAnnouncementOrder'
                             WHERE c_id = $courseId AND id =  $nextAnnouncementId";
                     Database::query($sql);
-
                     break;
                 }
                 // STEP 1 : FIND THE ORDER OF THE ANNOUNCEMENT

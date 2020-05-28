@@ -220,7 +220,7 @@ foreach ($userSkills as $index => $skillIssue) {
 
         if (0 !== strcmp($backpack, $configBackpack)) {
             $backpack = $configBackpack;
-            if (substr($backpack, -1) !== '/') {
+            if ('/' !== substr($backpack, -1)) {
                 $backpack .= '/';
             }
         }

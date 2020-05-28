@@ -4,12 +4,12 @@
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\BranchSync;
 use Chamilo\CoreBundle\Entity\ExtraField;
-use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\ToolChain;
+use Chamilo\CoreBundle\Entity\Group;
 use Chamilo\CoreBundle\Entity\TicketCategory as TicketCategory;
 use Chamilo\CoreBundle\Entity\TicketPriority as TicketPriority;
 use Chamilo\CoreBundle\Entity\TicketProject as TicketProject;
-use Chamilo\CoreBundle\Entity\Group;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\ToolChain;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\Container as SymfonyContainer;
 

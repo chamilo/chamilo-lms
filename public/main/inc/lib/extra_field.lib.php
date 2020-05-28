@@ -630,25 +630,25 @@ class ExtraField extends Model
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
             $row = Database::fetch_array($result, 'ASSOC');
-                $row['display_text'] = $this->translateDisplayName(
+            $row['display_text'] = $this->translateDisplayName(
                     $row['variable'],
                     $row['display_text']
                 );
 
-                // All the options of the field
+            // All the options of the field
             $sql = "SELECT * FROM $this->table_field_tag
                     WHERE field_id='".intval($row['id'])."'
                     ORDER BY id ASC";
-                $result = Database::query($sql);
+            $result = Database::query($sql);
             while ($option = Database::fetch_array($result, 'ASSOC')) {
-                    $row['options'][$option['id']] = $option;
-                }
+                $row['options'][$option['id']] = $option;
+            }
 
-                return $row;
+            return $row;
         } else {
             return false;
-            }
         }
+    }
 
     /**
      * Translate the display text for a extra field.
@@ -750,17 +750,17 @@ class ExtraField extends Model
         $extraData = false;
         if (!empty($itemId)) {
             $extraData = $this->get_handler_extra_data($itemId);
-                if (!empty($showOnlyTheseFields)) {
-                    $setData = [];
-                    foreach ($showOnlyTheseFields as $variable) {
-                        $extraName = 'extra_'.$variable;
-                        if (in_array($extraName, array_keys($extraData))) {
-                            $setData[$extraName] = $extraData[$extraName];
-                        }
+            if (!empty($showOnlyTheseFields)) {
+                $setData = [];
+                foreach ($showOnlyTheseFields as $variable) {
+                    $extraName = 'extra_'.$variable;
+                    if (in_array($extraName, array_keys($extraData))) {
+                        $setData[$extraName] = $extraData[$extraName];
                     }
-                    $form->setDefaults($setData);
-                } else {
-                    $form->setDefaults($extraData);
+                }
+                $form->setDefaults($setData);
+            } else {
+                $form->setDefaults($extraData);
             }
         }
 
@@ -2480,7 +2480,7 @@ JAVASCRIPT;
         // Parse params.
         $fields = [];
         foreach ($values as $key => $value) {
-            if (substr($key, 0, 6) !== 'extra_' && substr($key, 0, 7) !== '_extra_') {
+            if ('extra_' !== substr($key, 0, 6) && '_extra_' !== substr($key, 0, 7)) {
                 continue;
             }
             if (!empty($value)) {
@@ -2512,7 +2512,7 @@ JAVASCRIPT;
                 $filter->rules[] = $rule;
                 $filter->groupOp = 'AND';
 
-                if ($extraFieldsType[$variableNoExtra] == ExtraField::FIELD_TYPE_TAG) {
+                if (ExtraField::FIELD_TYPE_TAG == $extraFieldsType[$variableNoExtra]) {
                     $tagElement = $form->getElement($variable);
                     $tags = [];
                     foreach ($values[$variable] as $tag) {
@@ -2575,81 +2575,81 @@ JAVASCRIPT;
             is_array($filters->rules) &&
             !empty($filters->rules)
         ) {
-        foreach ($filters->rules as $rule) {
-            if (empty($rule)) {
-                continue;
-            }
-            if (false === strpos($rule->field, '_second')) {
-            } else {
-                $my_field = str_replace('_second', '', $rule->field);
-                $double_select[$my_field] = $rule->data;
-            }
-        }
-
-        foreach ($filters->rules as $rule) {
-            if (empty($rule)) {
-                continue;
-            }
-            if (false === strpos($rule->field, $stringToSearch)) {
-                // normal fields
-                $field = $rule->field;
-                if (isset($rule->data) && is_string($rule->data) && -1 != $rule->data) {
-                    $condition_array[] = $this->get_where_clause($field, $rule->op, $rule->data);
+            foreach ($filters->rules as $rule) {
+                if (empty($rule)) {
+                    continue;
                 }
-            } else {
-                // Extra fields
                 if (false === strpos($rule->field, '_second')) {
-                    //No _second
-                    $original_field = str_replace($stringToSearch, '', $rule->field);
-                    $field_option = $this->get_handler_field_info_by_field_variable($original_field);
+                } else {
+                    $my_field = str_replace('_second', '', $rule->field);
+                    $double_select[$my_field] = $rule->data;
+                }
+            }
 
-                    if (self::FIELD_TYPE_DOUBLE_SELECT == $field_option['field_type']) {
-                        if (isset($double_select[$rule->field])) {
-                            $data = explode('#', $rule->data);
-                            $rule->data = $data[1].'::'.$double_select[$rule->field];
-                        } else {
-                            // only was sent 1 select
-                            if (is_string($rule->data)) {
+            foreach ($filters->rules as $rule) {
+                if (empty($rule)) {
+                    continue;
+                }
+                if (false === strpos($rule->field, $stringToSearch)) {
+                    // normal fields
+                    $field = $rule->field;
+                    if (isset($rule->data) && is_string($rule->data) && -1 != $rule->data) {
+                        $condition_array[] = $this->get_where_clause($field, $rule->op, $rule->data);
+                    }
+                } else {
+                    // Extra fields
+                    if (false === strpos($rule->field, '_second')) {
+                        //No _second
+                        $original_field = str_replace($stringToSearch, '', $rule->field);
+                        $field_option = $this->get_handler_field_info_by_field_variable($original_field);
+
+                        if (self::FIELD_TYPE_DOUBLE_SELECT == $field_option['field_type']) {
+                            if (isset($double_select[$rule->field])) {
                                 $data = explode('#', $rule->data);
-                                $rule->data = $data[1];
+                                $rule->data = $data[1].'::'.$double_select[$rule->field];
+                            } else {
+                                // only was sent 1 select
+                                if (is_string($rule->data)) {
+                                    $data = explode('#', $rule->data);
+                                    $rule->data = $data[1];
+                                }
                             }
-                        }
 
-                        if (!isset($rule->data)) {
-                            $condition_array[] = ' ('
+                            if (!isset($rule->data)) {
+                                $condition_array[] = ' ('
                                 .$this->get_where_clause($rule->field, $rule->op, $rule->data)
                                 .') ';
-                            $extra_fields[] = ['field' => $rule->field, 'id' => $field_option['id']];
-                        }
-                    } else {
-                        if (isset($rule->data)) {
-                            if (isset($rule->data) && is_int($rule->data) && -1 == $rule->data) {
-                                continue;
+                                $extra_fields[] = ['field' => $rule->field, 'id' => $field_option['id']];
                             }
-                            /*var_dump($rule->data);
-                            foreach ($rule->data as $option) {
-                            }*/
-                            $where = $this->get_where_clause($rule->field, $rule->op, $rule->data, 'OR');
-                            $condition_array[] = " ( $where ) ";
+                        } else {
+                            if (isset($rule->data)) {
+                                if (isset($rule->data) && is_int($rule->data) && -1 == $rule->data) {
+                                    continue;
+                                }
+                                /*var_dump($rule->data);
+                                foreach ($rule->data as $option) {
+                                }*/
+                                $where = $this->get_where_clause($rule->field, $rule->op, $rule->data, 'OR');
+                                $condition_array[] = " ( $where ) ";
 
-                            $extra_fields[] = [
+                                $extra_fields[] = [
                                 'field' => $rule->field,
                                 'id' => $field_option['id'],
                                 'data' => $rule->data,
                             ];
+                            }
                         }
-                    }
-                } else {
-                    $my_field = str_replace('_second', '', $rule->field);
-                    $original_field = str_replace($stringToSearch, '', $my_field);
-                    $field_option = $this->get_handler_field_info_by_field_variable($original_field);
-                    $extra_fields[] = [
+                    } else {
+                        $my_field = str_replace('_second', '', $rule->field);
+                        $original_field = str_replace($stringToSearch, '', $my_field);
+                        $field_option = $this->get_handler_field_info_by_field_variable($original_field);
+                        $extra_fields[] = [
                         'field' => $rule->field,
                         'id' => $field_option['id'],
                     ];
+                    }
                 }
             }
-        }
         }
 
         /*var_dump(
@@ -2876,7 +2876,7 @@ JAVASCRIPT;
     /**
      * Get the extra fields and their formatted values.
      *
-     * @param int|string $itemId The item ID (It could be a session_id, course_id or user_id)
+     * @param int|string $itemId   The item ID (It could be a session_id, course_id or user_id)
      * @param bool       $filter
      * @param array      $onlyShow (list of extra fields variables to show)
      *
@@ -2895,7 +2895,7 @@ JAVASCRIPT;
                 continue;
             }
 
-            if ($filter && $field['filter'] != 1) {
+            if ($filter && 1 != $field['filter']) {
                 continue;
             }
 

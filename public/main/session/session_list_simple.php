@@ -249,7 +249,7 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
             original_cols = grid.jqGrid('getGridParam', 'colModel');
 
             <?php if ($allowOrder) {
-            ?>
+                ?>
             options = {
                 update: function (e, ui) {
                     var rowNum = jQuery("#sessions").getGridParam('rowNum');
@@ -283,7 +283,7 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
 
             <?php
             // Create the searching dialog.
-            if ($hideSearch !== true) {
+            if (true !== $hideSearch) {
                 echo 'grid.searchGrid(prmSearch);';
             }
             ?>
@@ -373,7 +373,7 @@ $tabs = [
 ];
 
 $default = 2;
-if ($list_type === 'complete') {
+if ('complete' === $list_type) {
     $default = 3;
 }
 

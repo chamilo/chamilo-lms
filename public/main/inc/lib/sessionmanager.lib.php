@@ -9,8 +9,8 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourse;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\SessionRelUser;
-use Chamilo\CoreBundle\Repository\SequenceRepository;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Repository\SequenceRepository;
 use ExtraField as ExtraFieldModel;
 use Monolog\Logger;
 
@@ -490,7 +490,7 @@ class SessionManager
     /**
      * Get session list for a session admin or platform admin.
      *
-     * @param int   $userId   User Id for the session admin.
+     * @param int    $userId   User Id for the session admin.
      * @param array  $options  Order and limit keys.
      * @param bool   $getCount Whether to get all the results or only the count.
      * @param array  $columns  Columns from jqGrid.
@@ -679,10 +679,10 @@ class SessionManager
     /**
      * Gets the admin session list callback of the session/session_list.php page.
      *
-     * @param array $options           order and limit keys
-     * @param bool  $getCount          Whether to get all the results or only the count
-     * @param array $columns
-     * @param array $extraFieldsToLoad
+     * @param array  $options           order and limit keys
+     * @param bool   $getCount          Whether to get all the results or only the count
+     * @param array  $columns
+     * @param array  $extraFieldsToLoad
      * @param string $listType
      *
      * @return mixed Integer for number of rows, or array of results
@@ -7642,7 +7642,7 @@ class SessionManager
         $sessionFieldValueList = [];
         foreach (array_keys($fields) as $fieldId) {
             $sessionFieldValue = $extra->get_values_by_handler_and_field_id($sessionId, $fieldId);
-            if ($sessionFieldValue != false) {
+            if (false != $sessionFieldValue) {
                 $sessionFieldValueList[$fieldId] = $sessionFieldValue;
             }
         }

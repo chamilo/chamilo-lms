@@ -2811,35 +2811,35 @@ class MySpace
         return $connections;
     }
 
-/**
- * @param int   $user_id
- * @param array $course_info
- * @param int   $sessionId
- * @param null  $start_date
- * @param null  $end_date
- *
- * @return array
- */
+    /**
+     * @param int   $user_id
+     * @param array $course_info
+     * @param int   $sessionId
+     * @param null  $start_date
+     * @param null  $end_date
+     *
+     * @return array
+     */
     public static function getStats($user_id, $course_info, $sessionId, $start_date = null, $end_date = null)
-{
-    $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-    $result = [];
-    if (!empty($course_info)) {
-        $stringStartDate = '';
-        $stringEndDate = '';
-            if ($start_date != null && $end_date != null) {
+    {
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $result = [];
+        if (!empty($course_info)) {
+            $stringStartDate = '';
+            $stringEndDate = '';
+            if (null != $start_date && null != $end_date) {
                 $end_date = self::add_day_to($end_date);
 
-            $start_date = Database::escape_string($start_date);
-            $end_date = Database::escape_string($end_date);
+                $start_date = Database::escape_string($start_date);
+                $end_date = Database::escape_string($end_date);
 
-            $stringStartDate = "AND login_course_date BETWEEN '$start_date' AND '$end_date'";
-            $stringEndDate = "AND logout_course_date BETWEEN '$start_date' AND '$end_date'";
-        }
-        $user_id = (int) $user_id;
-        $courseId = (int) $course_info['real_id'];
-        $sessionCondition = api_get_session_condition($sessionId);
-        $sql = "SELECT
+                $stringStartDate = "AND login_course_date BETWEEN '$start_date' AND '$end_date'";
+                $stringEndDate = "AND logout_course_date BETWEEN '$start_date' AND '$end_date'";
+            }
+            $user_id = (int) $user_id;
+            $courseId = (int) $course_info['real_id'];
+            $sessionCondition = api_get_session_condition($sessionId);
+            $sql = "SELECT
                 SEC_TO_TIME(AVG(time_to_sec(timediff(logout_course_date,login_course_date)))) as avrg,
                 SEC_TO_TIME(SUM(time_to_sec(timediff(logout_course_date,login_course_date)))) as total,
                 count(user_id) as times
@@ -2850,96 +2850,96 @@ class MySpace
                     $sessionCondition                    
                 ORDER BY login_course_date ASC";
 
-        $rs = Database::query($sql);
-        if ($row = Database::fetch_array($rs)) {
-            $foo_avg = $row['avrg'];
-            $foo_total = $row['total'];
-            $foo_times = $row['times'];
-            $result = [
+            $rs = Database::query($sql);
+            if ($row = Database::fetch_array($rs)) {
+                $foo_avg = $row['avrg'];
+                $foo_total = $row['total'];
+                $foo_times = $row['times'];
+                $result = [
                 'avg' => $foo_avg,
                 'total' => $foo_total,
                 'times' => $foo_times,
             ];
+            }
         }
-    }
 
-    return $result;
-}
+        return $result;
+    }
 
     public static function add_day_to($end_date)
-{
-    $foo_date = strtotime($end_date);
-    $foo_date = strtotime(' +1 day', $foo_date);
-    $foo_date = date('Y-m-d', $foo_date);
+    {
+        $foo_date = strtotime($end_date);
+        $foo_date = strtotime(' +1 day', $foo_date);
+        $foo_date = date('Y-m-d', $foo_date);
 
-    return $foo_date;
-}
+        return $foo_date;
+    }
 
-/**
- * This function draw the graphic to be displayed on the user view as an image.
- *
- * @param array  $sql_result
- * @param string $start_date
- * @param string $end_date
- * @param string $type
- *
- * @author Jorge Frisancho Jibaja
- *
- * @version OCT-22- 2010
- *
- * @return string
- */
+    /**
+     * This function draw the graphic to be displayed on the user view as an image.
+     *
+     * @param array  $sql_result
+     * @param string $start_date
+     * @param string $end_date
+     * @param string $type
+     *
+     * @author Jorge Frisancho Jibaja
+     *
+     * @version OCT-22- 2010
+     *
+     * @return string
+     */
     public static function grapher($sql_result, $start_date, $end_date, $type = '')
-{
-    if (empty($start_date)) {
-        $start_date = '';
-    }
-    if (empty($end_date)) {
-        $end_date = '';
-    }
-    if ('' == $type) {
-        $type = 'day';
-    }
-    $main_year = $main_month_year = $main_day = [];
+    {
+        if (empty($start_date)) {
+            $start_date = '';
+        }
+        if (empty($end_date)) {
+            $end_date = '';
+        }
+        if ('' == $type) {
+            $type = 'day';
+        }
+        $main_year = $main_month_year = $main_day = [];
 
-    $period = new DatePeriod(
+        $period = new DatePeriod(
         new DateTime($start_date),
         new DateInterval('P1D'),
         new DateTime($end_date)
     );
 
-    foreach ($period as $date) {
-        $main_day[$date->format('d-m-Y')] = 0;
-    }
+        foreach ($period as $date) {
+            $main_day[$date->format('d-m-Y')] = 0;
+        }
 
-    $period = new DatePeriod(
+        $period = new DatePeriod(
         new DateTime($start_date),
         new DateInterval('P1M'),
         new DateTime($end_date)
     );
 
-    foreach ($period as $date) {
-        $main_month_year[$date->format('m-Y')] = 0;
-    }
-
-    $i = 0;
-    if (is_array($sql_result) && count($sql_result) > 0) {
-        foreach ($sql_result as $key => $data) {
-            $login = api_strtotime($data['login']);
-            $logout = api_strtotime($data['logout']);
-            //creating the main array
-            if (isset($main_month_year[date('m-Y', $login)])) {
-                    $main_month_year[date('m-Y', $login)] += (float) ($logout - $login) / 60;
-            }
-            if (isset($main_day[date('d-m-Y', $login)])) {
-                    $main_day[date('d-m-Y', $login)] += (float) ($logout - $login) / 60;
-            }
-            if ($i > 500) {
-                break;
-            }
-            $i++;
+        foreach ($period as $date) {
+            $main_month_year[$date->format('m-Y')] = 0;
         }
-        switch ($type) {
+
+        $i = 0;
+        if (is_array($sql_result) && count($sql_result) > 0) {
+            foreach ($sql_result as $key => $data) {
+                $login = api_strtotime($data['login']);
+                $logout = api_strtotime($data['logout']);
+                //creating the main array
+                if (isset($main_month_year[date('m-Y', $login)])) {
+                    $main_month_year[date('m-Y', $login)] += (float) ($logout - $login) / 60;
+                }
+                if (isset($main_day[date('d-m-Y', $login)])) {
+                    $main_day[date('d-m-Y', $login)] += (float) ($logout - $login) / 60;
+                }
+                if ($i > 500) {
+                    break;
+                }
+                $i++;
+            }
+            switch ($type) {
             case 'day':
                 $main_date = $main_day;
                 break;
@@ -2951,52 +2951,52 @@ class MySpace
                 break;
         }
 
-        $labels = array_keys($main_date);
-        if (1 == count($main_date)) {
-            $labels = $labels[0];
-            $main_date = $main_date[$labels];
-        }
+            $labels = array_keys($main_date);
+            if (1 == count($main_date)) {
+                $labels = $labels[0];
+                $main_date = $main_date[$labels];
+            }
 
-        /* Create and populate the pData object */
-        $myData = new pData();
-        $myData->addPoints($main_date, 'Serie1');
-        if (1 != count($main_date)) {
-            $myData->addPoints($labels, 'Labels');
-            $myData->setSerieDescription('Labels', 'Months');
-            $myData->setAbscissa('Labels');
-        }
-        $myData->setSerieWeight('Serie1', 1);
-        $myData->setSerieDescription('Serie1', get_lang('My results'));
-        $myData->setAxisName(0, get_lang('Minutes'));
-        $myData->loadPalette(api_get_path(SYS_CODE_PATH).'palettes/pchart/default.color', true);
+            /* Create and populate the pData object */
+            $myData = new pData();
+            $myData->addPoints($main_date, 'Serie1');
+            if (1 != count($main_date)) {
+                $myData->addPoints($labels, 'Labels');
+                $myData->setSerieDescription('Labels', 'Months');
+                $myData->setAbscissa('Labels');
+            }
+            $myData->setSerieWeight('Serie1', 1);
+            $myData->setSerieDescription('Serie1', get_lang('My results'));
+            $myData->setAxisName(0, get_lang('Minutes'));
+            $myData->loadPalette(api_get_path(SYS_CODE_PATH).'palettes/pchart/default.color', true);
 
-        // Cache definition
-        $cachePath = api_get_path(SYS_ARCHIVE_PATH);
-        $myCache = new pCache(['CacheFolder' => substr($cachePath, 0, strlen($cachePath) - 1)]);
-        $chartHash = $myCache->getHash($myData);
+            // Cache definition
+            $cachePath = api_get_path(SYS_ARCHIVE_PATH);
+            $myCache = new pCache(['CacheFolder' => substr($cachePath, 0, strlen($cachePath) - 1)]);
+            $chartHash = $myCache->getHash($myData);
 
-        if ($myCache->isInCache($chartHash)) {
-            //if we already created the img
-            $imgPath = api_get_path(SYS_ARCHIVE_PATH).$chartHash;
-            $myCache->saveFromCache($chartHash, $imgPath);
-            $imgPath = api_get_path(WEB_ARCHIVE_PATH).$chartHash;
-        } else {
-            /* Define width, height and angle */
-            $mainWidth = 760;
-            $mainHeight = 230;
-            $angle = 50;
+            if ($myCache->isInCache($chartHash)) {
+                //if we already created the img
+                $imgPath = api_get_path(SYS_ARCHIVE_PATH).$chartHash;
+                $myCache->saveFromCache($chartHash, $imgPath);
+                $imgPath = api_get_path(WEB_ARCHIVE_PATH).$chartHash;
+            } else {
+                /* Define width, height and angle */
+                $mainWidth = 760;
+                $mainHeight = 230;
+                $angle = 50;
 
-            /* Create the pChart object */
-            $myPicture = new pImage($mainWidth, $mainHeight, $myData);
+                /* Create the pChart object */
+                $myPicture = new pImage($mainWidth, $mainHeight, $myData);
 
-            /* Turn of Antialiasing */
-            $myPicture->Antialias = false;
-            /* Draw the background */
-            $settings = ["R" => 255, "G" => 255, "B" => 255];
-            $myPicture->drawFilledRectangle(0, 0, $mainWidth, $mainHeight, $settings);
+                /* Turn of Antialiasing */
+                $myPicture->Antialias = false;
+                /* Draw the background */
+                $settings = ["R" => 255, "G" => 255, "B" => 255];
+                $myPicture->drawFilledRectangle(0, 0, $mainWidth, $mainHeight, $settings);
 
-            /* Add a border to the picture */
-            $myPicture->drawRectangle(
+                /* Add a border to the picture */
+                $myPicture->drawRectangle(
                 0,
                 0,
                 $mainWidth - 1,
@@ -3004,14 +3004,14 @@ class MySpace
                 ["R" => 0, "G" => 0, "B" => 0]
             );
 
-            /* Set the default font */
-            $myPicture->setFontProperties(
+                /* Set the default font */
+                $myPicture->setFontProperties(
                 [
                     "FontName" => api_get_path(SYS_FONTS_PATH).'opensans/OpenSans-Regular.ttf',
                     "FontSize" => 10, ]
             );
-            /* Write the chart title */
-            $myPicture->drawText(
+                /* Write the chart title */
+                $myPicture->drawText(
                 $mainWidth / 2,
                 30,
                 get_lang('Time spent in the course'),
@@ -3021,19 +3021,19 @@ class MySpace
                 ]
             );
 
-            /* Set the default font */
-            $myPicture->setFontProperties(
+                /* Set the default font */
+                $myPicture->setFontProperties(
                 [
                     "FontName" => api_get_path(SYS_FONTS_PATH).'opensans/OpenSans-Regular.ttf',
                     "FontSize" => 8,
                 ]
             );
 
-            /* Define the chart area */
-            $myPicture->setGraphArea(50, 40, $mainWidth - 40, $mainHeight - 80);
+                /* Define the chart area */
+                $myPicture->setGraphArea(50, 40, $mainWidth - 40, $mainHeight - 80);
 
-            /* Draw the scale */
-            $scaleSettings = [
+                /* Draw the scale */
+                $scaleSettings = [
                 'XMargin' => 10,
                 'YMargin' => 10,
                 'Floating' => true,
@@ -3045,13 +3045,13 @@ class MySpace
                 'LabelRotation' => $angle,
                 'Mode' => SCALE_MODE_ADDALL_START0,
             ];
-            $myPicture->drawScale($scaleSettings);
+                $myPicture->drawScale($scaleSettings);
 
-            /* Turn on Antialiasing */
-            $myPicture->Antialias = true;
+                /* Turn on Antialiasing */
+                $myPicture->Antialias = true;
 
-            /* Enable shadow computing */
-            $myPicture->setShadow(
+                /* Enable shadow computing */
+                $myPicture->setShadow(
                 true,
                 [
                     "X" => 1,
@@ -3063,15 +3063,15 @@ class MySpace
                 ]
             );
 
-            /* Draw the line chart */
-            $myPicture->setFontProperties(
+                /* Draw the line chart */
+                $myPicture->setFontProperties(
                 [
                     "FontName" => api_get_path(SYS_FONTS_PATH).'opensans/OpenSans-Regular.ttf',
                     "FontSize" => 10,
                 ]
             );
-            $myPicture->drawSplineChart();
-            $myPicture->drawPlotChart(
+                $myPicture->drawSplineChart();
+                $myPicture->drawPlotChart(
                 [
                     "DisplayValues" => true,
                     "PlotBorder" => true,
@@ -3081,17 +3081,17 @@ class MySpace
                 ]
             );
 
-            /* Do NOT Write the chart legend */
+                /* Do NOT Write the chart legend */
 
-            /* Write and save into cache */
-            $myCache->writeToCache($chartHash, $myPicture);
-            $imgPath = api_get_path(SYS_ARCHIVE_PATH).$chartHash;
-            $myCache->saveFromCache($chartHash, $imgPath);
-            $imgPath = api_get_path(WEB_ARCHIVE_PATH).$chartHash;
-        }
+                /* Write and save into cache */
+                $myCache->writeToCache($chartHash, $myPicture);
+                $imgPath = api_get_path(SYS_ARCHIVE_PATH).$chartHash;
+                $myCache->saveFromCache($chartHash, $imgPath);
+                $imgPath = api_get_path(WEB_ARCHIVE_PATH).$chartHash;
+            }
 
             return '<img src="'.$imgPath.'">';
-    } else {
+        } else {
             return api_convert_encoding(
                 '<div id="messages" class="warning-message">'.get_lang('GraphicNotAvailable').'</div>',
             'UTF-8'

@@ -323,7 +323,7 @@ foreach ($sessionList as $item) {
 $course_list = [];
 
 // Course list, get course list of session, or for course where user is admin
-if (!empty($session_id) && $session_id != '-1' && !empty($sessionList)) {
+if (!empty($session_id) && '-1' != $session_id && !empty($sessionList)) {
     $sessionInfo = [];
     foreach ($sessionList as $session) {
         if ($session['session_id'] == $session_id) {
@@ -362,7 +362,7 @@ foreach ($course_list as $item) {
     $course_select_list[$courseItemId] .= $courseInfo['title'];
 }
 
-if (empty($selected_course) || $selected_course == '-1') {
+if (empty($selected_course) || '-1' == $selected_course) {
     $course_info = api_get_course_info();
     // no course selected, reset menu test / difficult� / type de reponse
     reset_menu_exo_lvl_type();
@@ -569,7 +569,7 @@ function getExtraFieldConditions(array $formValues, $queryType = 'from')
             continue;
         }
 
-        if ($queryType === 'from') {
+        if ('from' === $queryType) {
             $from .= ", extra_field_values efv_$variable, extra_field ef_$variable";
             $where .= "AND (
                     qu.iid = efv_$variable.item_id
@@ -578,7 +578,7 @@ function getExtraFieldConditions(array $formValues, $queryType = 'from')
                     AND ef_$variable.variable = '$variable'
                     AND efv_$variable.value = '$value'
                 )";
-        } elseif ($queryType === 'join') {
+        } elseif ('join' === $queryType) {
             $from .= " INNER JOIN extra_field_values efv_$variable ON qu.iid = efv_$variable.item_id
                 INNER JOIN extra_field ef_$variable ON efv_$variable.field_id = ef_$variable.id";
             $where .= "AND (
@@ -690,7 +690,7 @@ function getQuestions(
                     {$efConditions['where']}
                 ORDER BY BINARY qu.question ASC
                  ";
-    } elseif ($exerciseId == -1) {
+    } elseif (-1 == $exerciseId) {
         $efConditions = getExtraFieldConditions($formValues, 'join');
         // If we have selected the option 'Orphan questions' in the list-box 'Filter'
         $level_where = '';
@@ -850,7 +850,7 @@ function getQuestions(
     $result = Database::query($sql);
     $mainQuestionList = [];
     while ($row = Database::fetch_array($result, 'ASSOC')) {
-        if ($exerciseId == -1 && isQuestionInActiveQuiz($row['iid'])) {
+        if (-1 == $exerciseId && isQuestionInActiveQuiz($row['iid'])) {
             continue;
         }
 

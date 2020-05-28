@@ -1,14 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Entity\CNotebook;
 use Chamilo\CourseBundle\Repository\CNotebookRepository;
-use Chamilo\CoreBundle\Entity\User;
 
 /**
  * Class RestApi.
@@ -115,7 +115,7 @@ class Rest extends WebService
         $this->course = $course;
     }
 
-    /** Set the current session
+    /** Set the current session.
      * @param int $id
      *
      * @throws Exception
@@ -358,11 +358,11 @@ class Rest extends WebService
 
             /** @var array $document */
             foreach ($documents as $document) {
-                if ($document['visibility'] != '1') {
+                if ('1' != $document['visibility']) {
                     continue;
                 }
 
-                $icon = $document['filetype'] == 'file'
+                $icon = 'file' == $document['filetype']
                     ? choose_image($document['path'])
                     : chooseFolderIcon($document['path']);
 
@@ -568,7 +568,7 @@ class Rest extends WebService
 
         $categoriesFullData = get_forum_categories('', $this->course->getId(), $sessionId);
         $categories = [];
-        $includeGroupsForums = api_get_setting('display_groups_forum_in_general_tool') === 'true';
+        $includeGroupsForums = 'true' === api_get_setting('display_groups_forum_in_general_tool');
         $forumsFullData = get_forums('', $this->course->getCode(), $includeGroupsForums, $sessionId);
         $forums = [];
 
@@ -776,7 +776,7 @@ class Rest extends WebService
             $listData = [];
 
             foreach ($flatLpList as $lpId => $lpDetails) {
-                if ($lpDetails['lp_visibility'] == 0) {
+                if (0 == $lpDetails['lp_visibility']) {
                     continue;
                 }
 
@@ -892,8 +892,7 @@ class Rest extends WebService
     }
 
     /**
-     * @param array $postValues
-     * @param int   $forumId
+     * @param int $forumId
      *
      * @return array
      */
@@ -967,7 +966,6 @@ class Rest extends WebService
     /**
      * @param string $subject
      * @param string $text
-     * @param array  $receivers
      *
      * @return array
      */
@@ -992,7 +990,7 @@ class Rest extends WebService
         $repo = UserManager::getRepository();
 
         $users = $repo->findUsersToSendMessage($this->user->getId(), $search);
-        $showEmail = api_get_setting('show_email_addresses') === 'true';
+        $showEmail = 'true' === api_get_setting('show_email_addresses');
         $data = [];
 
         /** @var User $user */
@@ -1036,8 +1034,7 @@ class Rest extends WebService
     }
 
     /**
-     * @param array $values
-     * @param int   $forumId
+     * @param int $forumId
      *
      * @return array
      */
@@ -1056,8 +1053,6 @@ class Rest extends WebService
     }
 
     /**
-     * @param array $params
-     *
      * @return array
      */
     public function getUsersCampus(array $params)
@@ -1082,8 +1077,6 @@ class Rest extends WebService
     }
 
     /**
-     * @param array $params
-     *
      * @return array
      */
     public function getCoursesCampus(array $params)
@@ -1105,8 +1098,6 @@ class Rest extends WebService
     }
 
     /**
-     * @param array $params
-     *
      * @return array
      */
     public function addSession(array $params)
@@ -1158,8 +1149,6 @@ class Rest extends WebService
     }
 
     /**
-     * @param array $courseParam
-     *
      * @return array
      */
     public function addCourse(array $courseParam)
@@ -1269,7 +1258,7 @@ class Rest extends WebService
 
         if ($userId) {
             if (api_is_multiple_url_enabled()) {
-                if (api_get_current_access_url_id() != -1) {
+                if (-1 != api_get_current_access_url_id()) {
                     UrlManager::add_user_to_url(
                         $userId,
                         api_get_current_access_url_id()
@@ -1364,9 +1353,9 @@ class Rest extends WebService
 
         $active = isset($params['active']) ? intval($params['active']) : 0;
         $num = UrlManager::url_exist($urlCampus);
-        if ($num == 0) {
+        if (0 == $num) {
             // checking url
-            if (substr($urlCampus, strlen($urlCampus) - 1, strlen($urlCampus)) == '/') {
+            if ('/' == substr($urlCampus, strlen($urlCampus) - 1, strlen($urlCampus))) {
                 $idCampus = UrlManager::add($urlCampus, $description, $active, true);
             } else {
                 //create
@@ -1402,11 +1391,11 @@ class Rest extends WebService
 
         if (!empty($url_id)) {
             //we can't change the status of the url with id=1
-            if ($url_id == 1) {
+            if (1 == $url_id) {
                 $active = 1;
             }
             //checking url
-            if (substr($urlCampus, strlen($urlCampus) - 1, strlen($urlCampus)) == '/') {
+            if ('/' == substr($urlCampus, strlen($urlCampus) - 1, strlen($urlCampus))) {
                 UrlManager::update($url_id, $urlCampus, $description, $active);
             } else {
                 UrlManager::update($url_id, $urlCampus.'/', $description, $active);
@@ -1444,8 +1433,6 @@ class Rest extends WebService
     }
 
     /**
-     * @param array $params
-     *
      * @throws Exception
      *
      * @return array
@@ -1476,8 +1463,6 @@ class Rest extends WebService
     }
 
     /**
-     * @param array $params
-     *
      * @return array
      */
     public function addUsersSession(array $params)

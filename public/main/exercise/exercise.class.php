@@ -7,7 +7,6 @@ use APY\DataGridBundle\Grid\Action\RowAction;
 use APY\DataGridBundle\Grid\Row;
 use APY\DataGridBundle\Grid\Source\Entity;
 use Chamilo\CoreBundle\Entity\GradebookLink;
-use Chamilo\CoreBundle\EntityLink;
 use Chamilo\CoreBundle\Entity\TrackEHotspot;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
@@ -4137,7 +4136,7 @@ class Exercise
                                     }
 
                                     $type = FillBlanks::getFillTheBlankAnswerType($correctAnswer);
-                                    if ($type == FillBlanks::FILL_THE_BLANK_MENU) {
+                                    if (FillBlanks::FILL_THE_BLANK_MENU == $type) {
                                         $listMenu = FillBlanks::getFillTheBlankMenuAnswers($correctAnswer, false);
                                         if (!empty($studentAnswer)) {
                                             foreach ($listMenu as $key => $item) {

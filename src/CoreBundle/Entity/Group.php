@@ -50,6 +50,11 @@ class Group
         $this->roles = $roles;
     }
 
+    public function __toString()
+    {
+        return $this->getName() ?: '';
+    }
+
     public function addRole($role)
     {
         if (!$this->hasRole($role)) {
@@ -134,10 +139,5 @@ class Group
         $this->code = $code;
 
         return $this;
-    }
-
-    public function __toString()
-    {
-        return $this->getName() ?: '';
     }
 }

@@ -2,8 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\UserRelUser;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\UserRelUser;
 
 /**
  * Script showing information about a user (name, e-mail, courses and sessions).

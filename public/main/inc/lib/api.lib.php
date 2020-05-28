@@ -5,9 +5,9 @@ use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Entity\SettingsCurrent;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
-use Chamilo\CoreBundle\Entity\User;
 use ChamiloSession as Session;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Finder\Finder;
@@ -6335,7 +6335,7 @@ function api_request_uri()
     return $uri;
 }
 
-/** Gets the current access_url id of the Chamilo Platform
+/** Gets the current access_url id of the Chamilo Platform.
  * @author Julio Montoya <gugli100@gmail.com>
  *
  * @return int access_url_id of the current Chamilo Installation

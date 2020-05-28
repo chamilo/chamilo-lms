@@ -3,7 +3,6 @@
 
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Hook\HookAdminBlock;
-use League\Flysystem\Filesystem;
 
 /**
  * Index page of the admin tools.

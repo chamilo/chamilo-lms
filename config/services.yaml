@@ -140,4 +140,3 @@ cocur_slugify:
 
 imports:
     - {resource: ../src/CoreBundle/Resources/config/services.yml}
-#    - {resource: ../src/PageBundle/Resources/config/services.yml}

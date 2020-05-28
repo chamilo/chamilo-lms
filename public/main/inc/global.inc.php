@@ -1,10 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Symfony\Component\ErrorHandler\Debug;
 use Chamilo\CoreBundle\Framework\Container;
 use Patchwork\Utf8\Bootup;
 use Symfony\Component\Dotenv\Dotenv;
+use Symfony\Component\ErrorHandler\Debug;
 
 /**
  * All legacy Chamilo scripts should include this important file.

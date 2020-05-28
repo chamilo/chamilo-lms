@@ -5,8 +5,8 @@
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
-use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
 use CpChart\Cache as pCache;
 use CpChart\Data as pData;
@@ -1042,7 +1042,7 @@ class Tracking
                         $list1 = learnpath::get_iv_interactions_array($row['iv_id'], $course_id);
                         foreach ($list1 as $id => $interaction) {
                             $oddclass = 'row_even';
-                            if (($counter % 2) == 0) {
+                            if (0 == ($counter % 2)) {
                                 $oddclass = 'row_odd';
                             }
                             $timeRow = '<td class="lp_time">'.$interaction['time'].'</td>';
@@ -1069,7 +1069,7 @@ class Tracking
                         $list2 = learnpath::get_iv_objectives_array($row['iv_id'], $course_id);
                         foreach ($list2 as $id => $interaction) {
                             $oddclass = 'row_even';
-                            if (($counter % 2) == 0) {
+                            if (0 == ($counter % 2)) {
                                 $oddclass = 'row_odd';
                             }
                             $output .= '<tr class="'.$oddclass.'">
@@ -1645,9 +1645,9 @@ class Tracking
      * Calculates the time spent on the platform by a user.
      *
      * @param int|array $userId
-     * @param string    $timeFilter type of time filter: 'last_week' or 'custom'
-     * @param string    $start_date start date date('Y-m-d H:i:s')
-     * @param string    $end_date   end date date('Y-m-d H:i:s')
+     * @param string    $timeFilter       type of time filter: 'last_week' or 'custom'
+     * @param string    $start_date       start date date('Y-m-d H:i:s')
+     * @param string    $end_date         end date date('Y-m-d H:i:s')
      * @param bool      $returnAllRecords
      *
      * @return int
@@ -6918,7 +6918,7 @@ class Tracking
                         }
                         $lpProgress = self::get_avg_student_progress($userId, $courseCode, [$lp_id], $sessionId);
                         $time = isset($lpTimeList[TOOL_LEARNPATH][$lp_id]) ? $lpTimeList[TOOL_LEARNPATH][$lp_id] : 0;
-                        if ($lpProgress == 100) {
+                        if (100 == $lpProgress) {
                             if (!empty($time)) {
                                 $timeInMinutes = $time / 60;
                                 $min = (int) learnpath::getAccumulateWorkTimePrerequisite($lp_id, $courseId);
@@ -7682,14 +7682,14 @@ class TrackingCourseLog
             if ($surveyList) {
                 $total_surveys = count($surveyList);
                 foreach ($surveyList as $survey) {
-                $user_list = SurveyManager::get_people_who_filled_survey(
+                    $user_list = SurveyManager::get_people_who_filled_survey(
                     $survey['survey_id'],
                     false,
                         $courseId
                 );
 
-                foreach ($user_list as $user_id) {
-                    isset($survey_user_list[$user_id]) ? $survey_user_list[$user_id]++ : $survey_user_list[$user_id] = 1;
+                    foreach ($user_list as $user_id) {
+                        isset($survey_user_list[$user_id]) ? $survey_user_list[$user_id]++ : $survey_user_list[$user_id] = 1;
                     }
                 }
             }

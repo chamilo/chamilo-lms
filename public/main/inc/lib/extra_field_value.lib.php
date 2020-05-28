@@ -119,10 +119,9 @@ class ExtraFieldValue extends Model
 
         // Parse params.
         foreach ($extraFields as $fieldDetails) {
-            if ($forceSave === false) {
-
-            // if the field is not visible to the user in the end, we need to apply special rules
-            if (1 != $fieldDetails['visible_to_self']) {
+            if (false === $forceSave) {
+                // if the field is not visible to the user in the end, we need to apply special rules
+                if (1 != $fieldDetails['visible_to_self']) {
                     //only admins should be able to add those values
                     if (!api_is_platform_admin(true, true)) {
                         // although if not admin but sent through a CLI script, we should accept it as well
@@ -757,8 +756,8 @@ class ExtraFieldValue extends Model
      *
      * @param string $variable  Field (type of data) we want to check
      * @param string $value     Data we are looking for in the given field
-     * @param bool   $transform      Whether to transform the result to a human readable strings
-     * @param bool   $last           Whether to return the last element or simply the first one we get
+     * @param bool   $transform Whether to transform the result to a human readable strings
+     * @param bool   $last      Whether to return the last element or simply the first one we get
      * @param bool   $useLike
      *
      * @return mixed Give the ID if found, or false on failure or not found
@@ -798,7 +797,7 @@ class ExtraFieldValue extends Model
             $sql .= ' DESC';
         }
         $result = Database::query($sql);
-        if ($result !== false && Database::num_rows($result)) {
+        if (false !== $result && Database::num_rows($result)) {
             if ($all) {
                 $result = Database::store_result($result, 'ASSOC');
             } else {

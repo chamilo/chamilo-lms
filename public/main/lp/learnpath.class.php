@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\CourseRepository;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
@@ -18,7 +19,6 @@ use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CShortcut;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CTool;
-use Chamilo\CoreBundle\Entity\User;
 use ChamiloSession as Session;
 use Gedmo\Sortable\Entity\Repository\SortableRepository;
 use Symfony\Component\Filesystem\Filesystem;
@@ -31,7 +31,6 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  * and SCORM learnpaths. It is used by the scorm class.
  *
  * @todo decouple class
- * *
  *
  * @author  Yannick Warnier <ywarnier@beeznest.org>
  * @author  Julio Montoya   <gugli100@gmail.com> Several improvements and fixes

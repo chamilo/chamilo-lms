@@ -931,7 +931,6 @@ class User implements UserInterface, EquatableInterface
     /**
      * Set lastname.
      *
-     *
      * @return User
      */
     public function setLastname(string $lastname): self
@@ -943,7 +942,6 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Set firstname.
-     *
      *
      * @return User
      */

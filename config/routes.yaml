@@ -68,4 +68,3 @@ chamilo_graphql:
 
 chamilo_lti:
     resource: "@ChamiloLtiBundle/Resources/config/routing.yml"
-

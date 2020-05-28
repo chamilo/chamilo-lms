@@ -218,7 +218,7 @@ class MessageManager
             }
 
             $userInfo = api_get_user_info($senderId);
-            if ($type == self::MESSAGE_TYPE_OUTBOX) {
+            if (self::MESSAGE_TYPE_OUTBOX == $type) {
                 $userInfo = api_get_user_info($receiverId);
             }
             $message[3] = '';
@@ -2493,7 +2493,7 @@ class MessageManager
         $result = Database::query($sql);
 
         $messages = [];
-        if ($result !== false) {
+        if (false !== $result) {
             while ($row = Database::fetch_assoc($result)) {
                 $pictureInfo = UserManager::get_user_picture_path_by_id($row['user_id'], 'web');
                 $row['pictureUri'] = $pictureInfo['dir'].$pictureInfo['file'];
@@ -2537,7 +2537,7 @@ class MessageManager
         $result = Database::query($sql);
 
         $messages = [];
-        if ($result !== false) {
+        if (false !== $result) {
             while ($row = Database::fetch_assoc($result)) {
                 $pictureInfo = UserManager::get_user_picture_path_by_id($row['user_id'], 'web');
                 $row['pictureUri'] = $pictureInfo['dir'].$pictureInfo['file'];
@@ -2734,7 +2734,7 @@ class MessageManager
         );
         $layoutContent = '';
         $emailbody = '';
-        if (api_get_configuration_value('mail_template_system') == true) {
+        if (true == api_get_configuration_value('mail_template_system')) {
             $mailTemplateManager = new MailTemplateManager();
             $templateText = $mailTemplateManager->getTemplateByType('new_user_mail_to_admin_approval.tpl');
             if (empty($templateText)) {

@@ -4,8 +4,8 @@
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CourseBundle\Entity\CLp;
 
 /**
  * Responses to AJAX calls.

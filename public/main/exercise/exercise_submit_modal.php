@@ -73,7 +73,7 @@ function SendEx(num) {
 </script>';
 
 $header = '';
-if ($objExercise->getFeedbackType() === EXERCISE_FEEDBACK_TYPE_POPUP) {
+if (EXERCISE_FEEDBACK_TYPE_POPUP === $objExercise->getFeedbackType()) {
     $header = '
         <div class="modal-header">
             <h4 class="modal-title" id="global-modal-title">'.get_lang('Incorrect').'</h4>
@@ -272,10 +272,10 @@ if (!empty($result)) {
 }
 
 $header = '';
-if ($objExercise->getFeedbackType() === EXERCISE_FEEDBACK_TYPE_DIRECT) {
+if (EXERCISE_FEEDBACK_TYPE_DIRECT === $objExercise->getFeedbackType()) {
     if (isset($result['correct_answer_id'])) {
         foreach ($result['correct_answer_id'] as $answerId) {
-        /** @var Answer $answer */
+            /** @var Answer $answer */
             $contents .= $objAnswerTmp->selectComment($answerId);
         }
     }
@@ -289,16 +289,16 @@ if ($objExercise->getFeedbackType() === EXERCISE_FEEDBACK_TYPE_DIRECT) {
     } else {
         if ($partialCorrect) {
             $message = get_lang('PartialCorrect');
+        }
     }
-}
 
     $comments = '';
-    if ($answerType != HOT_SPOT_DELINEATION) {
+    if (HOT_SPOT_DELINEATION != $answerType) {
         if (isset($result['correct_answer_id'])) {
             $table = new HTML_Table(['class' => 'table data_table']);
             $row = 0;
             $table->setCellContents($row, 0, get_lang('YourAnswer'));
-            if ($answerType != DRAGGABLE) {
+            if (DRAGGABLE != $answerType) {
                 $table->setCellContents($row, 1, get_lang('Comment'));
             }
 
@@ -333,7 +333,7 @@ if ($objExercise->getFeedbackType() === EXERCISE_FEEDBACK_TYPE_DIRECT) {
         </div>';
 }
 
-if ($answerType === HOT_SPOT_DELINEATION) {
+if (HOT_SPOT_DELINEATION === $answerType) {
     $contents = $manageAnswerHtmlContent;
 }
 $links = '';

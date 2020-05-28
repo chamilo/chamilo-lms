@@ -40,9 +40,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class ResourceNode
 {
-    public const PATH_SEPARATOR = '`';
     use TimestampableEntity;
     use TimestampableAgoTrait;
+    public const PATH_SEPARATOR = '`';
 
     /**
      * @Groups({"resource_node:read", "document:read"})

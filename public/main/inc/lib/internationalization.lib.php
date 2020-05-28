@@ -1956,7 +1956,7 @@ function &_api_get_day_month_names($language = null)
 
 /**
 /**
- * The following table contains two types of conventions concerning person names:
+ * The following table contains two types of conventions concerning person names:.
  *
  * "format" - determines how a full person name to be formatted, i.e. in what order the title, the first_name and the last_name to be placed.
  * You might need to correct the value for your language. The possible values are:
@@ -1964,7 +1964,8 @@ function &_api_get_day_month_names($language = null)
  * title last_name first_name  - Eastern order;
  * title last_name, first_name - Western libraries order.
  * Placing the title (Dr, Mr, Miss, etc) depends on the tradition in you country.
- * @link http://en.wikipedia.org/wiki/Personal_name#Naming_convention
+ *
+ * @see http://en.wikipedia.org/wiki/Personal_name#Naming_convention
  *
  * "sort_by" - determines you preferable way of sorting person names. The possible values are:
  * first_name                  - sorting names with priority for the first name;
@@ -1972,86 +1973,86 @@ function &_api_get_day_month_names($language = null)
  */
 function getLegacyOrderConventions()
 {
-    return array(
-        'afrikaans' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'albanian' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'alemannic' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'amharic' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'armenian' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'ar' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'asturian' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'bosnian' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'brazilian' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'breton' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'bulgarian' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'catalan' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'croatian' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'czech' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'danish' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'dari' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'dutch' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'english' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'esperanto' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'estonian' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'basque' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'finnish' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'french' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'frisian' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'friulian' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'galician' => array('format' => 'title last_name first_name', 'sort_by' => 'last_name'),
-        'georgian' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'german' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'greek' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'hawaiian' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'hebrew' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'hindi' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'hungarian' => array('format' => 'title last_name first_name', 'sort_by' => 'last_name'), // Eastern order
-        'icelandic' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'indonesian' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'irish' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'italian' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'japanese' => array('format' => 'title last_name first_name', 'sort_by' => 'last_name'), // Eastern order
-        'korean' => array('format' => 'title last_name first_name', 'sort_by' => 'last_name'), // Eastern order
-        'latin' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'latvian' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'lithuanian' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'macedonian' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'malay' => array('format' => 'title last_name first_name', 'sort_by' => 'last_name'), // Eastern order
-        'manx' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'marathi' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'middle_frisian' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'mingo' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'nepali' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'norwegian' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'occitan' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'pashto' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'persian' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'polish' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'portuguese' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'quechua_cusco' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'romanian' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'rumantsch' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'russian' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'sanskrit' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'serbian' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'serbian_cyrillic' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'simpl_chinese' => array('format' => 'title last_name first_name', 'sort_by' => 'last_name'), // Eastern order
-        'slovak' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'slovenian' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'spanish' => array('format' => 'title last_name, first_name', 'sort_by' => 'last_name'), // Library order
-        'swahili' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'swedish' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'tagalog' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'tamil' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'thai' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'trad_chinese' => array('format' => 'title last_name first_name', 'sort_by' => 'last_name'), // Eastern order
-        'turkish' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'ukrainian' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'vietnamese' => array('format' => 'title last_name first_name', 'sort_by' => 'last_name'), // Eastern order
-        'welsh' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'yiddish' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-        'yoruba' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'),
-    );
+    return [
+        'afrikaans' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'albanian' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'alemannic' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'amharic' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'armenian' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'ar' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'asturian' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'bosnian' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'brazilian' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'breton' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'bulgarian' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'catalan' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'croatian' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'czech' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'danish' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'dari' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'dutch' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'english' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'esperanto' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'estonian' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'basque' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'finnish' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'french' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'frisian' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'friulian' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'galician' => ['format' => 'title last_name first_name', 'sort_by' => 'last_name'],
+        'georgian' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'german' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'greek' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'hawaiian' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'hebrew' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'hindi' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'hungarian' => ['format' => 'title last_name first_name', 'sort_by' => 'last_name'], // Eastern order
+        'icelandic' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'indonesian' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'irish' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'italian' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'japanese' => ['format' => 'title last_name first_name', 'sort_by' => 'last_name'], // Eastern order
+        'korean' => ['format' => 'title last_name first_name', 'sort_by' => 'last_name'], // Eastern order
+        'latin' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'latvian' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'lithuanian' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'macedonian' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'malay' => ['format' => 'title last_name first_name', 'sort_by' => 'last_name'], // Eastern order
+        'manx' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'marathi' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'middle_frisian' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'mingo' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'nepali' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'norwegian' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'occitan' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'pashto' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'persian' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'polish' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'portuguese' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'quechua_cusco' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'romanian' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'rumantsch' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'russian' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'sanskrit' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'serbian' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'serbian_cyrillic' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'simpl_chinese' => ['format' => 'title last_name first_name', 'sort_by' => 'last_name'], // Eastern order
+        'slovak' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'slovenian' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'spanish' => ['format' => 'title last_name, first_name', 'sort_by' => 'last_name'], // Library order
+        'swahili' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'swedish' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'tagalog' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'tamil' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'thai' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'trad_chinese' => ['format' => 'title last_name first_name', 'sort_by' => 'last_name'], // Eastern order
+        'turkish' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'ukrainian' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'vietnamese' => ['format' => 'title last_name first_name', 'sort_by' => 'last_name'], // Eastern order
+        'welsh' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'yiddish' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+        'yoruba' => ['format' => 'title first_name last_name', 'sort_by' => 'first_name'],
+    ];
 }
 
 function getIsoToLegacy()
@@ -2140,7 +2141,7 @@ function _api_get_person_name_convention($iso, $type)
 {
     $conventions = getLegacyOrderConventions();
     $languageName = null;
-    if (isset(getIsoToLegacy()[$iso])){
+    if (isset(getIsoToLegacy()[$iso])) {
         $languageName = getIsoToLegacy()[$iso];
     }
 

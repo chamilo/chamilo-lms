@@ -70,6 +70,14 @@ class ResourceFile
     use TimestampableEntity;
 
     /**
+     * @var string|null
+     *
+     * @ApiProperty(iri="http://schema.org/contentUrl")
+     * @Groups({"resource_file:read", "resource_node:read", "document:read", "media_object_read"})
+     */
+    public $contentUrl;
+
+    /**
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue
@@ -138,14 +146,6 @@ class ResourceFile
      * @ORM\Column(name="crop", type="string", length=255, nullable=true)
      */
     protected $crop;
-
-    /**
-     * @var string|null
-     *
-     * @ApiProperty(iri="http://schema.org/contentUrl")
-     * @Groups({"resource_file:read", "resource_node:read", "document:read", "media_object_read"})
-     */
-    public $contentUrl;
 
     /**
      * @var ResourceNode

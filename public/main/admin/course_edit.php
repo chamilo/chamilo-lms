@@ -3,9 +3,9 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\CourseCategory;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\CourseCategoryRepository;
 use Chamilo\CoreBundle\Repository\CourseRepository;
-use Chamilo\CoreBundle\Entity\User;
 
 $cidReset = true;
 

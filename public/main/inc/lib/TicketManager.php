@@ -1,11 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Ticket;
 use Chamilo\CoreBundle\Entity\TicketMessageAttachment;
 use Chamilo\CoreBundle\Entity\TicketPriority;
 use Chamilo\CoreBundle\Entity\TicketProject;
 use Chamilo\CoreBundle\Entity\TicketStatus;
-use Chamilo\CoreBundle\Entity\Ticket;
 
 /**
  * Class TicketManager.

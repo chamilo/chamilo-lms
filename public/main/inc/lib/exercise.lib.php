@@ -4255,8 +4255,8 @@ EOT;
             !empty($exercise_stat_info['exe_user_id']) &&
             !empty($studentInfo)
         ) {
-                    // Shows exercise header
-                    echo $objExercise->showExerciseResultHeader(
+            // Shows exercise header
+            echo $objExercise->showExerciseResultHeader(
                         $studentInfo,
                         $exercise_stat_info
                     );
@@ -5256,7 +5256,7 @@ EOT;
         $exercise = new Exercise($courseId);
         $courseInfo = $courseId ? api_get_course_info_by_id($courseId) : [];
 
-        if ($exercise->read($exerciseId) === false) {
+        if (false === $exercise->read($exerciseId)) {
             return null;
         }
 

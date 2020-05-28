@@ -3,10 +3,10 @@
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Entity\Skill as SkillEntity;
-use Chamilo\CoreBundle\Entity\SkillRelItemRelUser;
-use Chamilo\CoreBundle\Entity\SkillRelUser as SkillRelUserEntity;
 use Chamilo\CoreBundle\Entity\SkillRelCourse;
 use Chamilo\CoreBundle\Entity\SkillRelItem;
+use Chamilo\CoreBundle\Entity\SkillRelItemRelUser;
+use Chamilo\CoreBundle\Entity\SkillRelUser as SkillRelUserEntity;
 use Chamilo\CoreBundle\Entity\User;
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;

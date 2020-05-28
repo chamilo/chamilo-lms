@@ -1,9 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Hook\HookUpdateUser;
-use Chamilo\CoreBundle\Entity\User;
 use ChamiloSession as Session;
 
 /**

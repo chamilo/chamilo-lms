@@ -26,13 +26,21 @@ $isStudent = api_is_student();
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 $enable = $plugin->get('google_meet_enabled') == 'true';
 
+$urlAddMeet = api_get_path(WEB_PLUGIN_PATH).'googlemeet/meet.php?action=add&'.api_get_cidreq();
+
+
 if ($enable) {
     if ($isAdmin || $isTeacher || $isStudent) {
+
+
 
     }
 }
 
-
+$tpl->assign('url_add_room', $urlAddMeet);
+$tpl->assign('is_admin', $isAdmin);
+$tpl->assign('is_student', $isStudent);
+$tpl->assign('is_teacher', $isTeacher);
 $content = $tpl->fetch('googlemeet/view/start.tpl');
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

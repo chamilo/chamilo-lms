@@ -1,0 +1,12 @@
+.plugin_logo{
+    text-align: center;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+.plugin_logo .img-responsive{
+    margin: auto;
+}
+.tools{
+    margin-bottom: 2rem;
+    margin-top: 1rem;
+}

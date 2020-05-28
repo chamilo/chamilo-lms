@@ -68,15 +68,11 @@ class GoogleMeetPlugin extends Plugin
             meet_url VARCHAR(250) NULL,
             type_meet INT NOT NULL,
             user_id INT NULL NOT NULL,
+            cd_id INT NULL NOT NULL,
+            start_time DATETIME NULL,
+            end_time DATETIME NULL,
+            session_id INT,
             activate INT
-        )";
-
-        Database::query($sql);
-
-        $sql = "CREATE TABLE IF NOT EXISTS ".self::TABLE_MEET_COURSES." (
-            id INT unsigned NOT NULL auto_increment PRIMARY KEY,
-            c_id INT NULL,
-            id_room INT NULL
         )";
 
         Database::query($sql);
@@ -140,5 +136,29 @@ class GoogleMeetPlugin extends Plugin
     }
 
 
+    public function saveMeet($values){
+        if (!is_array($values) || empty($values['meet_name'])) {
+            return false;
+        }
+        $table = Database::get_main_table(self::TABLE_MEET_LIST);
+
+        $params = [
+            'meet_name' => $values['meet_name'],
+            'meet_url' => $values['meet_url'],
+            'type_meet' => $values['type_meet'],
+            'user_id' => api_get_user_id(),
+            'cd_id' => $values['cd_id'],
+            'start_time' => $values['start_time'],
+            'end_time' => $values['end_time'],
+            'session_id' => null,
+            'activate' => 1,
+        ];
+
+        $id = Database::insert($table, $params);
+
+        if ($id > 0) {
+            return $id;
+        }
+    }
 
 }

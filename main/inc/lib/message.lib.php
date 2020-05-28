@@ -214,7 +214,7 @@ class MessageManager
             $title = cut($title, 80, true);
 
             $class = 'class = "read"';
-            if ($status == 1) {
+            if (1 == $status) {
                 $class = 'class = "unread"';
             }
 
@@ -487,7 +487,7 @@ class MessageManager
             $receiverUserInfo = api_get_user_info($receiver_user_id);
 
             // Disabling messages for inactive users.
-            if ($receiverUserInfo['active'] == 0) {
+            if (0 == $receiverUserInfo['active']) {
                 return false;
             }
         }
@@ -609,7 +609,7 @@ class MessageManager
             // Save attachment file for inbox messages
             if (is_array($attachmentList)) {
                 foreach ($attachmentList as $attachment) {
-                    if ($attachment['error'] == 0) {
+                    if (0 == $attachment['error']) {
                         $comment = $attachment['comment'];
                         self::saveMessageAttachmentFile(
                             $attachment,
@@ -624,7 +624,7 @@ class MessageManager
             }
 
             // Save message in the outbox for user friend or group.
-            if (empty($group_id) && $status == MESSAGE_STATUS_UNREAD) {
+            if (empty($group_id) && MESSAGE_STATUS_UNREAD == $status) {
                 $params = [
                     'user_sender_id' => $user_sender_id,
                     'user_receiver_id' => $receiver_user_id,
@@ -641,7 +641,7 @@ class MessageManager
                 // save attachment file for outbox messages
                 if (is_array($attachmentList)) {
                     foreach ($attachmentList as $attachment) {
-                        if ($attachment['error'] == 0) {
+                        if (0 == $attachment['error']) {
                             $comment = $attachment['comment'];
                             self::saveMessageAttachmentFile(
                                 $attachment,
@@ -750,7 +750,7 @@ class MessageManager
         $attachmentList = []
     ) {
         $files = $_FILES ? $_FILES : [];
-        if ($uploadFiles === false) {
+        if (false === $uploadFiles) {
             $files = [];
         }
         // $attachmentList must have: tmp_name, name, size keys
@@ -1400,7 +1400,7 @@ class MessageManager
         }
 
         $message_content .= '<tr>';
-        if (api_get_setting('allow_social_tool') === 'true') {
+        if ('true' === api_get_setting('allow_social_tool')) {
             $message_content .= '<div class="row">';
             $message_content .= '<div class="col-md-12">';
             $message_content .= '<ul class="list-message">';
@@ -1925,7 +1925,7 @@ class MessageManager
 
                 $base_padding = 20;
 
-                if ($topic['indent_cnt'] == 0) {
+                if (0 == $topic['indent_cnt']) {
                     $indent = $base_padding;
                 } else {
                     $indent = (int) $topic['indent_cnt'] * $base_padding + $base_padding;

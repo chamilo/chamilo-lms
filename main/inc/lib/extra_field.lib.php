@@ -1260,7 +1260,6 @@ class ExtraField extends Model
                                     'select',
                                     'extra_'.$field_details['variable'].'['.$i.']',
                                     $customLabelsExtraMultipleSelect[$field_details['variable']][$i],
-                                    //$field_details['display_text'],
                                     null,
                                     ['id' => 'extra_'.$field_details['variable'].'_'.$i]
                                 );
@@ -2040,8 +2039,6 @@ class ExtraField extends Model
             $breadcrumb[] = ['url' => '#', 'name' => $this->pageName];
         }
     }
-
-    //@todo move this in the display_class or somewhere else
 
     /**
      * Displays the title + grid.

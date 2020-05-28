@@ -5,8 +5,6 @@
  * Notification class
  * This class provides methods for the Notification management.
  * Include/require it in your code to use its features.
- *
- * @package chamilo.library
  */
 class Notification extends Model
 {

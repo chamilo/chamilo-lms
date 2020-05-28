@@ -490,7 +490,7 @@ class MySpace
         if (api_is_multiple_url_enabled()) {
             $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
             $access_url_id = api_get_current_access_url_id();
-            if ($access_url_id != -1) {
+            if (-1 != $access_url_id) {
                 $sqlCoachs = "SELECT DISTINCT
                                     scu.user_id as id_coach,
                                     u.id as user_id,
@@ -885,7 +885,7 @@ class MySpace
         $message = '';
         $defaults = [];
         // include the user manager and formvalidator library
-        if (isset($_GET['export']) && $_GET['export'] == 'options') {
+        if (isset($_GET['export']) && 'options' == $_GET['export']) {
             // get all the defined extra fields
             $extrafields = UserManager::get_extra_fields(
                 0,
@@ -2359,7 +2359,7 @@ class MySpace
                     $user['create'] = '1';
                 } else {
                     $is_session_avail = self::user_available_in_session($user['UserName'], $course_list, $id_session);
-                    if ($is_session_avail == 0) {
+                    if (0 == $is_session_avail) {
                         $user_name = $user['UserName'];
                         $sql_select = "SELECT user_id FROM $table_user WHERE username ='$user_name' ";
                         $rs = Database::query($sql_select);
@@ -3109,7 +3109,7 @@ class MySpace
         if (empty($end_date)) {
             $end_date = '';
         }
-        if ($type == '') {
+        if ('' == $type) {
             $type = 'day';
         }
         $main_year = $main_month_year = $main_day = [];
@@ -3164,7 +3164,7 @@ class MySpace
             }
 
             $labels = array_keys($main_date);
-            if (count($main_date) == 1) {
+            if (1 == count($main_date)) {
                 $labels = $labels[0];
                 $main_date = $main_date[$labels];
             }

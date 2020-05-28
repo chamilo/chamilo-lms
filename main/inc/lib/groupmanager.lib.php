@@ -8,8 +8,6 @@ use Chamilo\CourseBundle\Entity\CGroupRelUser;
  *
  * @author Bart Mollet
  *
- * @package chamilo.library
- *
  * @todo Add $course_code parameter to all functions. So this GroupManager can
  * be used outside a session.
  */
@@ -740,11 +738,11 @@ class GroupManager
         duplicates the table group_info.forum_state cvargas*/
         $forum_state = (int) $forum_state;
         $sql2 = "UPDATE ".$table_forum." SET ";
-        if ($forum_state === 1) {
+        if (1 === $forum_state) {
             $sql2 .= " forum_group_public_private='public' ";
-        } elseif ($forum_state === 2) {
+        } elseif (2 === $forum_state) {
             $sql2 .= " forum_group_public_private='private' ";
-        } elseif ($forum_state === 0) {
+        } elseif (0 === $forum_state) {
             $sql2 .= " forum_group_public_private='unavailable' ";
         }
         $sql2 .= " WHERE c_id = $courseId AND forum_of_group=".$group_id;
@@ -867,7 +865,7 @@ class GroupManager
         $table_group = Database::get_course_table(TABLE_GROUP);
         $table_group_cat = Database::get_course_table(TABLE_GROUP_CATEGORY);
 
-        $group_id = intval($group_id);
+        $group_id = (int) $group_id;
 
         if (empty($group_id)) {
             return [];
@@ -1132,7 +1130,7 @@ class GroupManager
 				WHERE g.c_id = '.$course_info['real_id'].'
 				AND gu.c_id = g.c_id
 				AND gu.group_id = g.iid ';
-        if ($category_id != null) {
+        if (null != $category_id) {
             $category_id = intval($category_id);
             $sql .= ' AND g.category_id = '.$category_id;
         }
@@ -1223,7 +1221,7 @@ class GroupManager
 
         if (!empty($column) && !empty($direction)) {
             $column = Database::escape_string($column, null, false);
-            $direction = ($direction == 'ASC' ? 'ASC' : 'DESC');
+            $direction = ('ASC' == $direction ? 'ASC' : 'DESC');
             $sql .= " ORDER BY $column $direction";
         }
 
@@ -1498,7 +1496,7 @@ class GroupManager
                 WHERE c_id = $course_id AND iid = $group_id";
         $db_result = Database::query($sql);
         $db_object = Database::fetch_object($db_result);
-        if ($db_object->max_student == 0) {
+        if (0 == $db_object->max_student) {
             return self::INFINITE;
         }
 
@@ -2315,7 +2313,7 @@ class GroupManager
             if (self::userHasAccessToBrowse($user_id, $this_group, $session_id)) {
                 // Group name
                 $groupNameClass = null;
-                if ($this_group['status'] == 0) {
+                if (0 == $this_group['status']) {
                     $groupNameClass = 'muted';
                 }
 
@@ -2340,7 +2338,7 @@ class GroupManager
                 $group_name .= $session_img;
                 $row[] = $group_name.$group_name2.'<br />'.stripslashes(trim($this_group['description']));
             } else {
-                if ($hideGroup === 'true') {
+                if ('true' === $hideGroup) {
                     continue;
                 }
                 $row[] = $this_group['name'].'<br />'.stripslashes(trim($this_group['description']));
@@ -2355,7 +2353,7 @@ class GroupManager
                         sprintf(get_lang('LoginX'), $tutor['username']),
                         ENT_QUOTES
                     );
-                    if (api_get_setting('show_email_addresses') === 'true') {
+                    if ('true' === api_get_setting('show_email_addresses')) {
                         $tutor_info .= Display::tag(
                             'span',
                             Display::encrypted_mailto_link(
@@ -2775,7 +2773,7 @@ class GroupManager
             $data[0][] = 'tutors';
         }
 
-        if ($loadUsers == false) {
+        if (false == $loadUsers) {
             $categories = self::get_categories();
 
             foreach ($categories as $categoryInfo) {
@@ -2920,7 +2918,7 @@ class GroupManager
         $categories = self::get_categories();
         if (!empty($categories)) {
             foreach ($categories as $category) {
-                if (api_get_setting('allow_group_categories') == 'true') {
+                if ('true' == api_get_setting('allow_group_categories')) {
                     $content .= '<h2>'.$category['title'].'</h2>';
                 }
                 if (!empty($keyword)) {

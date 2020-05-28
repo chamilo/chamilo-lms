@@ -18,8 +18,6 @@ use Chamilo\CourseBundle\Entity\CLink;
  *
  * @author Patrick Cool, complete remake (December 2003 - January 2004)
  * @author René Haentjens, CSV file import (October 2004)
- *
- * @package chamilo.link
  */
 class Link extends Model
 {

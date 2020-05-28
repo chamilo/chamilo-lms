@@ -161,7 +161,7 @@ class SortableTable extends HTML_Table
         }
 
         $cleanSessionData = Session::read('clean_sortable_table');
-        if ($cleanSessionData === true) {
+        if (true === $cleanSessionData) {
             $this->cleanUrlSessionParams();
         }
 
@@ -204,9 +204,9 @@ class SortableTable extends HTML_Table
             if (!in_array($my_session_direction, ['ASC', 'DESC'])) {
                 $this->direction = 'ASC';
             } else {
-                if ($my_session_direction === 'ASC') {
+                if ('ASC' === $my_session_direction) {
                     $this->direction = 'ASC';
-                } elseif ($my_session_direction === 'DESC') {
+                } elseif ('DESC' === $my_session_direction) {
                     $this->direction = 'DESC';
                 }
             }
@@ -217,7 +217,7 @@ class SortableTable extends HTML_Table
             if (!in_array($my_get_direction, ['ASC', 'DESC'])) {
                 $this->direction = 'ASC';
             } else {
-                if ($my_get_direction === 'ASC') {
+                if ('ASC' === $my_get_direction) {
                     $this->direction = 'ASC';
                 } elseif ($my_get_direction === 'DESC') {
                     $this->direction = 'DESC';
@@ -729,7 +729,7 @@ class SortableTable extends HTML_Table
             }
         }
 
-        if ($this->odd_even_rows_enabled == true) {
+        if (true == $this->odd_even_rows_enabled) {
             $this->altRowAttributes(
                 0,
                 ['class' => 'row_odd'],
@@ -783,7 +783,7 @@ class SortableTable extends HTML_Table
             return '';
         }
 
-        if ($this->hideItemSelector === true) {
+        if (true === $this->hideItemSelector) {
             return '';
         }
 
@@ -869,7 +869,7 @@ class SortableTable extends HTML_Table
 
             $column = $counter;
             $param['direction'] = 'ASC';
-            if ($this->column == $column && $this->direction == 'ASC') {
+            if ($this->column == $column && 'ASC' == $this->direction) {
                 $param['direction'] = 'DESC';
             }
 
@@ -885,7 +885,7 @@ class SortableTable extends HTML_Table
                 $link .= $this->get_additional_url_paramstring();
                 $link .= '">'.$label.'</a>';
                 if ($this->column == $column) {
-                    $link .= $this->direction == 'ASC' ? ' &#8595;' : ' &#8593;';
+                    $link .= 'ASC' == $this->direction ? ' &#8595;' : ' &#8593;';
                 }
             }
             $this->setHeaderContents(0, $column, $link);

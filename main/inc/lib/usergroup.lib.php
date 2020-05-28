@@ -6,8 +6,6 @@
  *
  * This class provides methods for the UserGroup management.
  * Include/require it in your code to use its features.
- *
- * @package chamilo.library
  */
 class UserGroup extends Model
 {
@@ -139,7 +137,7 @@ class UserGroup extends Model
             return 0;
         } else {
             $list = [];
-            $showCalendar = api_get_plugin_setting('learning_calendar', 'enabled') === 'true';
+            $showCalendar = 'true' === api_get_plugin_setting('learning_calendar', 'enabled');
             $calendarPlugin = null;
             if ($showCalendar) {
                 $calendarPlugin = LearningCalendarPlugin::create();
@@ -464,7 +462,7 @@ class UserGroup extends Model
                    ";
         }
 
-        if ($type != -1) {
+        if (-1 != $type) {
             $type = (int) $type;
             $options['where']['AND group_type = ? '] = $type;
         }
@@ -531,7 +529,7 @@ class UserGroup extends Model
             ";
         }
 
-        if ($type != -1) {
+        if (-1 != $type) {
             $type = (int) $type;
             $options['where']['AND group_type = ? '] = $type;
         }
@@ -756,7 +754,7 @@ class UserGroup extends Model
             $where = ['where' => ['user_id = ?' => $userId]];
         }
 
-        if ($filterByType !== null) {
+        if (null !== $filterByType) {
             $where['where'][' AND g.group_type = ?'] = (int) $filterByType;
         }
 
@@ -1098,7 +1096,7 @@ class UserGroup extends Model
 
         $res = Database::query($sql);
 
-        return Database::num_rows($res) != 0;
+        return 0 != Database::num_rows($res);
     }
 
     /**
@@ -1106,7 +1104,7 @@ class UserGroup extends Model
      */
     public function allowTeachers()
     {
-        return api_get_configuration_value('allow_teachers_to_classes') === true;
+        return true === api_get_configuration_value('allow_teachers_to_classes');
     }
 
     /**
@@ -1322,7 +1320,7 @@ class UserGroup extends Model
         $params['allow_members_leave_group'] = isset($params['allow_members_leave_group']) ? 1 : 0;
 
         $groupExists = $this->usergroup_exists(trim($params['name']));
-        if ($groupExists == false) {
+        if (false == $groupExists) {
             if ($this->allowTeachers()) {
                 $params['author_id'] = api_get_user_id();
             }
@@ -1332,7 +1330,7 @@ class UserGroup extends Model
                     $this->subscribeToUrl($id, api_get_current_access_url_id());
                 }
 
-                if ($params['group_type'] == self::SOCIAL_CLASS) {
+                if (self::SOCIAL_CLASS == $params['group_type']) {
                     $this->add_user_to_group(
                         api_get_user_id(),
                         $id,

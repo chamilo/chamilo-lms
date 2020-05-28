@@ -6,11 +6,6 @@
  *
  * @todo move this file to DocumentManager
  *
- * @package chamilo.library
- */
-
-/* FILE DISPLAY FUNCTIONS */
-/**
  * Define the image to display for each file extension.
  * This needs an existing image repository to work.
  *

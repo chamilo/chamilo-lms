@@ -132,7 +132,7 @@ class ExtraFieldOption extends Model
             $params['option_value']
         );
 
-        if ($optionInfo == false) {
+        if (false == $optionInfo) {
             $optionValue = api_replace_dangerous_char($params['option_value']);
             $order = $this->get_max_order($params['field_id']);
             $newParams = [
@@ -332,7 +332,7 @@ class ExtraFieldOption extends Model
                     $optionValue = api_replace_dangerous_char($option);
                     $option = trim($option);
 
-                    if ($option_info != false) {
+                    if (false != $option_info) {
                         continue;
                     }
 
@@ -389,7 +389,7 @@ class ExtraFieldOption extends Model
                 $field_id,
                 $params['option_value']
             );
-            if ($check == false) {
+            if (false == $check) {
                 parent::save($params, $show_query);
             }
         }
@@ -751,7 +751,7 @@ class ExtraFieldOption extends Model
         $form->addElement('hidden', 'type', $this->type);
         $form->addElement('hidden', 'field_id', $this->fieldId);
 
-        if ($action === 'edit') {
+        if ('edit' == $action) {
             $translateUrl = api_get_path(WEB_CODE_PATH).'extrafield/translate.php?'.http_build_query([
                 'extra_field_option' => $id,
             ]);

@@ -5,8 +5,6 @@
  * Class UrlManager
  * This library provides functions for the access_url management.
  * Include/require it in your code to use its functionality.
- *
- * @package chamilo.library
  */
 class UrlManager
 {
@@ -123,7 +121,7 @@ class UrlManager
     }
 
     /**
-     * @param string $urlId
+     * @param int $urlId
      *
      * @return int
      */
@@ -409,13 +407,13 @@ class UrlManager
     public static function set_url_status($status, $urlId)
     {
         $url_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
-        if ($status == 'lock') {
+        if ('lock' == $status) {
             $status_db = '0';
         }
-        if ($status == 'unlock') {
+        if ('unlock' == $status) {
             $status_db = '1';
         }
-        if (($status_db == '1' || $status_db == '0') && is_numeric($urlId)) {
+        if (('1' == $status_db || '0' == $status_db) && is_numeric($urlId)) {
             $sql = "UPDATE $url_table SET active='".intval($status_db)."'
                     WHERE id='".intval($urlId)."'";
             Database::query($sql);
@@ -534,7 +532,7 @@ class UrlManager
             foreach ($url_list as $urlId) {
                 foreach ($user_list as $user_id) {
                     $count = self::relation_url_user_exist($user_id, $urlId);
-                    if ($count == 0) {
+                    if (0 == $count) {
                         $sql = "INSERT INTO $table
                                 SET 
                                     user_id = ".intval($user_id).", 
@@ -575,7 +573,7 @@ class UrlManager
                     $courseId = $courseInfo['real_id'];
 
                     $count = self::relation_url_course_exist($courseId, $urlId);
-                    if ($count == 0) {
+                    if (0 == $count) {
                         $sql = "INSERT INTO $table
                                 SET c_id = '".$courseId."', access_url_id = ".intval($urlId);
                         $result = Database::query($sql);
@@ -612,7 +610,7 @@ class UrlManager
                         $userGroupId,
                         $urlId
                     );
-                    if ($count == 0) {
+                    if (0 == $count) {
                         $result = self::addUserGroupToUrl($userGroupId, $urlId);
                         if ($result) {
                             $resultArray[$urlId][$userGroupId] = 1;
@@ -644,7 +642,7 @@ class UrlManager
             foreach ($urlList as $urlId) {
                 foreach ($courseCategoryList as $categoryCourseId) {
                     $count = self::relationUrlCourseCategoryExist($categoryCourseId, $urlId);
-                    if ($count == 0) {
+                    if (0 == $count) {
                         $result = self::addCourseCategoryToUrl($categoryCourseId, $urlId);
                         if ($result) {
                             $resultArray[$urlId][$categoryCourseId] = 1;
@@ -745,7 +743,7 @@ class UrlManager
                 foreach ($session_list as $session_id) {
                     $count = self::relation_url_session_exist($session_id, $urlId);
 
-                    if ($count == 0) {
+                    if (0 == $count) {
                         $sql = "INSERT INTO $table
                                 SET
                                 session_id = ".intval($session_id).",

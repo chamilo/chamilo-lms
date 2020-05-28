@@ -1,4 +1,5 @@
 <?php
+
 /* See license terms in /license.txt */
 /**
  * EVENTS LIBRARY.
@@ -8,14 +9,7 @@
  * of event occur. Each event has his own types of informations then each event
  * use its own function.
  *
- * @package chamilo.library
- *
  * @todo convert queries to use Database API
- */
-/**
- * Class.
- *
- * @package chamilo.library
  */
 class ExerciseShowFunctions
 {
@@ -140,7 +134,7 @@ class ExerciseShowFunctions
             echo '</td></tr>';
         }
 
-        if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
+        if (EXERCISE_FEEDBACK_TYPE_EXAM != $feedback_type) {
             if ($questionScore > 0 || !empty($comments)) {
             } else {
                 echo '<tr>';
@@ -182,7 +176,7 @@ class ExerciseShowFunctions
                 echo Display::tag('td', Security::remove_XSS($answer), ['width' => '55%']);
             }
             echo '</tr>';
-            if (!$questionScore && $feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
+            if (!$questionScore && EXERCISE_FEEDBACK_TYPE_EXAM != $feedback_type) {
                 echo '<tr>';
                 echo Display::tag('td', ExerciseLib::getNotCorrectedYetText(), ['width' => '45%']);
                 echo '</tr>';
@@ -225,7 +219,7 @@ class ExerciseShowFunctions
         $hide_expected_answer = false;
         switch ($resultsDisabled) {
             case RESULT_DISABLE_SHOW_SCORE_ONLY:
-                if ($feedback_type == 0) {
+                if (0 == $feedback_type) {
                     $hide_expected_answer = true;
                 }
                 break;

@@ -128,10 +128,11 @@ class ExerciseLib
                     if ($answerType == DRAGGABLE) {
                         $isVertical = $objQuestionTmp->extra == 'v';
                         $s .= '
-                            <div class="col-md-12 ui-widget ui-helper-clearfix">
-                                <div class="clearfix">
-                                <ul class="exercise-draggable-answer '.($isVertical ? '' : 'list-inline').'"
-                                    id="question-'.$questionId.'" data-question="'.$questionId.'">
+                            <div class="row"><div class="col-md-12">
+                                <p class="small">'.get_lang('DraggableQuestionIntro').'</p>
+                                <ul class="exercise-draggable-answer list-unstyled '
+                            .($isVertical ? '' : 'list-inline').'" id="question-'.$questionId.'" data-question="'
+                            .$questionId.'">
                         ';
                     } else {
                         $s .= '<div id="drag'.$questionId.'_question" class="drag_question">
@@ -1354,7 +1355,7 @@ HTML;
             if ($answerType == DRAGGABLE) {
                 $isVertical = $objQuestionTmp->extra == 'v';
                 $s .= "</ul>";
-                $s .= "</div>";
+                $s .= "</div></div>"; // col-md-12
                 $counterAnswer = 1;
                 $s .= $isVertical ? '' : '<div class="row">';
                 for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
@@ -1366,7 +1367,8 @@ HTML;
                             <div class="'.($isVertical ? 'col-md-12' : 'col-xs-12 col-sm-4 col-md-3 col-lg-2').'">
                                 <div class="droppable-item">
                                     <span class="number">'.$counterAnswer.'.</span>
-                                    <div id="drop_'.$windowId.'" class="droppable">&nbsp;</div>
+                                    <div id="drop_'.$windowId.'" class="droppable">
+                                    </div>
                                  </div>
                             </div>
                         ';
@@ -1376,7 +1378,7 @@ HTML;
                 }
 
                 $s .= $isVertical ? '' : '</div>'; // row
-                $s .= '</div>'; // col-md-12 ui-widget ui-helper-clearfix
+                $s .= '</div>';
             }
 
             if (in_array($answerType, [MATCHING, MATCHING_DRAGGABLE])) {

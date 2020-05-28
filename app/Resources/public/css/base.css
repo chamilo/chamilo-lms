@@ -5437,17 +5437,22 @@ ul.holder li.bit-box {
     margin-bottom: 20px;
     min-height: 2em;
     min-width: 100%;
+    border: 3px dashed #CCC;
+    padding: 20px 20px 0 20px;
 }
 
 ul.exercise-draggable-answer.list-inline li {
-    float: left;
+    margin-right: 20px;
+    min-width: auto;
 }
 
 ul.exercise-draggable-answer li {
+    float: left;
     cursor: move;
-    margin: 0 20px 20px 0;
+    margin-bottom: 20px;
     padding: 5px 20px;
     text-align: center;
+    min-width: 100%;
 }
 
 ul.exercise-draggable-answer .touch-items {
@@ -5459,10 +5464,8 @@ ul.exercise-draggable-answer .touch-items {
     background-image: linear-gradient(to bottom, #ffffff, #cfcfcf);
     border-radius: 4px;
     color: #2e2e2e;
-    font-size: 13px;
     padding: 5px 10px;
     border: solid #b0b0b0 1px;
-    text-decoration: none;
     z-index: 100;
 }
 
@@ -5481,47 +5484,43 @@ ul.exercise-draggable-answer .touch-items:hover {
 }
 
 .question_options .droppable {
-    padding: 5px;
+    padding: 5px 10px;
     text-align: center;
     background-color: #ECF0F1;
     border: dotted #dddddd 2px;
     border-radius: 4px;
     color: #666666;
-
-    /* Extra */
-    display: inline-block;
-    width: 85%;
+    height: 2em;
+    width: 95%;
     margin-bottom: 0;
 }
 
 .question_options .droppable-item {
-    background-color: #84bd00;
+    background-color: #CCC;
     color: #FFF;
-    /* padding: 10px;*/
-    padding: 3px 0 3px 5px;
+    display: table;
+    padding: 5px;
+    width: 100%;
+}
+
+.question_options .droppable-item .number,
+.question_options .droppable-item .droppable {
+    display: table-cell;
 }
 
 .question_options .droppable-item .number {
-    font-size: 16px;
     font-weight: bold;
-    /*width: 30px;*/
-    display: inline-block;
+    text-align: right;
+    padding-right: 5px;
 }
 
-.question_options .ui-helper-reset {
-    margin-top: -25px;
+.question_options .droppable-item .droppable .gallery {
+    margin-bottom: 0;
 }
 
-.question_options .droppable .gallery .btn-default {
-    background: #D9534F;
-    color: #ffffff;
-    border-color: #D43F3A;
-}
-
-.question_options .droppable .gallery .btn-default:hover {
-    background: #C9302C;
-    color: #ffffff;
-    border-color: #AC2925;
+.question_options .droppable-item .droppable .gallery .touch-items {
+    min-width: 100%;
+    margin: 5px 0;
 }
 
 .question_options .droppable .gallery .exercise-draggable-answer-option {
@@ -5536,6 +5535,14 @@ ul.exercise-draggable-answer .touch-items:hover {
     border-radius: 5px;
     font-size: 12px;
     cursor: pointer;
+}
+
+.question_options .col-xs-12.col-sm-4.col-md-3.col-lg-2 {
+    clear: right;
+}
+
+.question_options .col-xs-12.col-sm-4.col-md-3.col-lg-2 .droppable-item {
+    margin-bottom: 20px;
 }
 
 /***    Matching Draggable answer ***/

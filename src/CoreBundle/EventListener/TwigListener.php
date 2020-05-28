@@ -14,6 +14,7 @@ use Twig\Environment;
 class TwigListener
 {
     private $twig;
+    private $tokenStorage;
 
     public function __construct(Environment $twig, SerializerInterface $serializer, TokenStorageInterface $tokenStorage)
     {
@@ -25,14 +26,20 @@ class TwigListener
     public function __invoke(RequestEvent $event): void
     {
         $request = $event->getRequest();
-        $user = $this->tokenStorage->getToken()->getUser();
+        $token = $this->tokenStorage->getToken();
+
+        $user = null;
         $data = null;
         $isAuth = false;
-        if ($user instanceof UserInterface) {
-            $userClone = clone $user;
-            $userClone->setPassword('');
-            $data = $this->serializer->serialize($userClone, JsonEncoder::FORMAT);
-            $isAuth = true;
+
+        if (null !== $token) {
+            $user = $token->getUser();
+            if ($user instanceof UserInterface) {
+                $userClone = clone $user;
+                $userClone->setPassword('');
+                $data = $this->serializer->serialize($userClone, JsonEncoder::FORMAT);
+                $isAuth = true;
+            }
         }
 
         $this->twig->addGlobal('from_vue', $request->request->get('from_vue') ? 1 : 0);

@@ -39,9 +39,9 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
 
     private $router;
     private $passwordEncoder;
-    private $formFactory;
+    //private $formFactory;
     private $hookFactory;
-    private $userRepository;
+    //private $userRepository;
     private $csrfTokenManager;
     private $urlGenerator;
     private $entityManager;
@@ -51,16 +51,16 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
         UrlGeneratorInterface $urlGenerator,
         RouterInterface $router,
         UserPasswordEncoderInterface $passwordEncoder,
-        FormFactoryInterface $formFactory,
+        //FormFactoryInterface $formFactory,
         HookFactory $hookFactory,
-        UserRepository $userRepository,
+        //UserRepository $userRepository,
         CsrfTokenManagerInterface $csrfTokenManager
     ) {
         $this->router = $router;
         $this->passwordEncoder = $passwordEncoder;
-        $this->formFactory = $formFactory;
+        //$this->formFactory = $formFactory;
         $this->hookFactory = $hookFactory;
-        $this->userRepository = $userRepository;
+        //   $this->userRepository = $userRepository;
         $this->csrfTokenManager = $csrfTokenManager;
         $this->entityManager = $entityManager;
         $this->urlGenerator = $urlGenerator;

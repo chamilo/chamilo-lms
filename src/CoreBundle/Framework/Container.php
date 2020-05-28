@@ -79,8 +79,8 @@ class Container
     /** @var string */
     public static $legacyTemplate = '@ChamiloCore/Layout/layout_one_col.html.twig';
     //private static $settingsManager;
-    private static $userManager;
-    private static $siteManager;
+    //private static $userManager;
+    //private static $siteManager;
 
     /**
      * @param ContainerInterface $container

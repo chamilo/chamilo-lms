@@ -13,16 +13,13 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Vich\UploaderBundle\Storage\StorageInterface;
 
 class ResolveResourceFileContentUrlSubscriber implements EventSubscriberInterface
 {
-    private $storage;
     private $generator;
 
-    public function __construct(StorageInterface $storage, UrlGeneratorInterface $generator)
+    public function __construct(UrlGeneratorInterface $generator)
     {
-        $this->storage = $storage;
         $this->generator = $generator;
     }
 

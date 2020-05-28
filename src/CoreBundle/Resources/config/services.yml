@@ -182,7 +182,6 @@ services:
         tags:
             - {name: kernel.event_listener, event: chamilo_course.course.session, method: onSessionAccessEvent}
 
-
     # When Course entity is loaded
     chamilo_core.listener.course:
         class: Chamilo\CoreBundle\Entity\Listener\CourseListener
@@ -219,27 +218,31 @@ services:
         tags:
             - {name: kernel.event_listener, event: sylius.settings.pre_save, method: onSettingPreSave}
 
-    # Menu listener
-    chamilo_core.listener.navbar_menu_listener:
-        class: Chamilo\CoreBundle\EventListener\MenuListener
-        arguments: ['@service_container']
+    Chamilo\CoreBundle\EventListener\TwigListener:
         tags:
-            - {name: kernel.event_listener, event: theme.sidebar_left_menu, method: onSetupMenu}
-            - {name: kernel.event_listener, event: theme.breadcrumb, method: onSetupMenu}
+            - {name: kernel.event_listener}
 
-    chamilo_core.listener.navbar_user_listener:
-        class: Chamilo\CoreBundle\EventListener\ShowUserListener
-        arguments: ['@service_container']
-        tags:
-            - {name: kernel.event_listener, event: theme.navbar_user, method: onShowUser}
-            - {name: kernel.event_listener, event: theme.sidebar_user, method: onShowUser}
+#    # Menu listener
+#    chamilo_core.listener.navbar_menu_listener:
+#        class: Chamilo\CoreBundle\EventListener\MenuListener
+#        arguments: ['@service_container']
+#        tags:
+#            - {name: kernel.event_listener, event: theme.sidebar_left_menu, method: onSetupMenu}
+#            - {name: kernel.event_listener, event: theme.breadcrumb, method: onSetupMenu}
+
+#    chamilo_core.listener.navbar_user_listener:
+#        class: Chamilo\CoreBundle\EventListener\ShowUserListener
+#        arguments: ['@service_container']
+#        tags:
+#            - {name: kernel.event_listener, event: theme.navbar_user, method: onShowUser}
+#            - {name: kernel.event_listener, event: theme.sidebar_user, method: onShowUser}
 
     # Menu
-    chamilo_core.listener.message_listener:
-        class: Chamilo\CoreBundle\EventListener\MessageListener
-        arguments: ['@service_container']
-        tags:
-            - {name: kernel.event_listener, event: theme.messages, method: onListMessages}
+#    chamilo_core.listener.message_listener:
+#        class: Chamilo\CoreBundle\EventListener\MessageListener
+#        arguments: ['@service_container']
+#        tags:
+#            - {name: kernel.event_listener, event: theme.messages, method: onListMessages}
 
     # Course upload listener
     chamilo_core.listener.resource_upload_listener:
@@ -247,10 +250,6 @@ services:
         arguments: ['@router']
         tags:
             - {name: kernel.event_listener, event: oneup_uploader.post_persist, method: onUpload}
-
-#    chamilo_core.menu.simple_menu:
-#        class: Chamilo\CoreBundle\Menu\SimpleMenuBuilder
-#        arguments: ['@service_container']
 
     chamilo_core.menu.nav_builder:
         class: Chamilo\CoreBundle\Menu\NavBuilder
@@ -286,45 +285,6 @@ services:
             - '@chamilo.settings.manager'
         tags:
             - {name: templating.helper, alias: chamilo_settings}
-
-    # Block services
-#    chamilo_core.block.course:
-#        class: Chamilo\CoreBundle\Block\CourseBlockService
-#        arguments: [chamilo_core.block.course, '@templating']
-#        tags:
-#            - {name: sonata.block}
-
-#    chamilo_core.block.skill:
-#        class: Chamilo\CoreBundle\Block\SkillBlockService
-#        arguments: [chamilo_core.block.skill, '@templating']
-#        tags:
-#            - {name: sonata.block}
-
-    # Breadcrumb
-#    chamilo_core.block.breadcrumb:
-#        class: Chamilo\CoreBundle\Block\BreadcrumbBlockService
-#        arguments: ['chamilo_core.block.breadcrumb', 'breadcrumb', '@templating', '@knp_menu.menu_provider', '@knp_menu.factory']
-#        tags:
-#            - {name: sonata.block}
-#            - {name: sonata.breadcrumb}
-
-#    Chamilo\CoreBundle\Block\BreadcrumbBlockService: '@chamilo_core.block.breadcrumb'
-
-#    Chamilo\CoreBundle\Controller\ResourceUploadController:
-#        autowire: false
-
-    # Form types
-#    chamilo_user.registration.form.type:
-#        class: Chamilo\CoreBundle\Form\Type\RegistrationFormType
-#        arguments: ['%fos_user.model.user.class%']
-#        tags:
-#            - {name: form.type, alias: chamilo_sonata_user_registration}
-
-#    chamilo_user.profile.form.type:
-#        class: Chamilo\CoreBundle\Form\ProfileType
-#        arguments: ['%fos_user.model.user.class%']
-#        tags:
-#            - {name: form.type, alias: chamilo_sonata_user_profile}
 
     Liip\ImagineBundle\Service\FilterService:
         alias: 'liip_imagine.service.filter'

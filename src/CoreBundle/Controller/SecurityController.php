@@ -44,8 +44,6 @@ class SecurityController extends AbstractController
 
         return $this->render('@ChamiloCore/Index/vue.html.twig', [
             'last_username' => $lastUsername,
-            'is_authenticated' => json_encode(!empty($this->getUser())),
-            'user' => $data ?? json_encode($data),
             'error' => $error,
         ]);
         /*return $this->render('@ChamiloCore/login.html.twig', [
@@ -82,8 +80,6 @@ class SecurityController extends AbstractController
 
         return $this->render('@ChamiloCore/login.html.twig', [
             'last_username' => $lastUsername,
-            'is_authenticated' => json_encode(!empty($this->getUser())),
-            'user' => $data ?? json_encode($data),
             'error' => $error,
         ]);
     }

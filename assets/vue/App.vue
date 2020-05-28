@@ -275,7 +275,7 @@
                     console.log('ajax');
                     axios.get(url, {
                         params: {
-                            fromVue: 1
+                            from_vue: 1
                         }
                     })
                     .then((response) => {

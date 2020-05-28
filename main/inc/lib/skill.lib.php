@@ -2480,7 +2480,7 @@ class Skill extends Model
     /**
      * @param SkillRelItem        $skillRelItem
      * @param SkillRelItemRelUser $skillRelItemRelUser
-     * @param bool                                            $addHeader
+     * @param bool                $addHeader
      *
      * @return string
      */

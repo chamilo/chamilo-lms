@@ -1,7 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-
 // use anonymous mode when accessing this course tool
 $use_anonymous = true;
 $typeList = ['personal', 'course', 'admin', 'platform'];

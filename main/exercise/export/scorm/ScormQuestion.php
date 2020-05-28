@@ -30,10 +30,10 @@ class ScormQuestion extends Question
     /**
      * Returns the HTML + JS flow corresponding to one question.
      *
-     * @param int  $questionId The question ID
-     * @param int  $jsId       The JavaScript ID for this question.
-     *                         Due to the nature of interactions, we must have a natural sequence for
-     *                         questions in the generated JavaScript.
+     * @param int $questionId The question ID
+     * @param int $jsId       The JavaScript ID for this question.
+     *                        Due to the nature of interactions, we must have a natural sequence for
+     *                        questions in the generated JavaScript.
      *
      * @return string|array
      */

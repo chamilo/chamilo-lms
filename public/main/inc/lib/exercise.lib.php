@@ -930,7 +930,12 @@ class ExerciseLib
                                     WHERE exe_id = $exe_id AND question_id= $questionId";
                             $rsLastAttempt = Database::query($sql);
                             $rowLastAttempt = Database::fetch_array($rsLastAttempt);
-                            $answer = $rowLastAttempt['answer'];
+
+                            $answer = null;
+                            if (isset($rowLastAttempt['answer'])) {
+                                $answer = $rowLastAttempt['answer'];
+                            }
+
                             if (empty($answer)) {
                                 $_SESSION['calculatedAnswerId'][$questionId] = mt_rand(
                                     1,
@@ -1277,7 +1282,7 @@ HTML;
                                     $s .= "
                                         <script>
                                             $(function() {
-                                                jsPlumb.ready(function() {
+                                                $(window).on('load', function() {
                                                     jsPlumb.connect({
                                                         source: 'window_$windowId',
                                                         target: 'window_{$questionId}_{$selectedIndex}_answer',
@@ -1349,7 +1354,7 @@ HTML;
             if (DRAGGABLE == $answerType) {
                 $isVertical = 'v' == $objQuestionTmp->extra;
                 $s .= "</ul>";
-                $s .= "</div>";
+                $s .= "</div></div>"; // col-md-12
                 $counterAnswer = 1;
                 $s .= $isVertical ? '' : '<div class="row">';
                 for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
@@ -1361,7 +1366,8 @@ HTML;
                             <div class="'.($isVertical ? 'col-md-12' : 'col-xs-12 col-sm-4 col-md-3 col-lg-2').'">
                                 <div class="droppable-item">
                                     <span class="number">'.$counterAnswer.'.</span>
-                                    <div id="drop_'.$windowId.'" class="droppable">&nbsp;</div>
+                                    <div id="drop_'.$windowId.'" class="droppable">
+                                    </div>
                                  </div>
                             </div>
                         ';
@@ -1779,6 +1785,7 @@ HOTSPOT;
      * @param array  $userExtraFieldsToAdd
      * @param bool   $useCommaAsDecimalPoint
      * @param bool   $roundValues
+     * @param bool   $getOnyIds
      *
      * @return array
      */
@@ -1795,7 +1802,8 @@ HOTSPOT;
         $showExerciseCategories = false,
         $userExtraFieldsToAdd = [],
         $useCommaAsDecimalPoint = false,
-        $roundValues = false
+        $roundValues = false,
+        $getOnyIds = false
     ) {
         //@todo replace all this globals
         global $filter;
@@ -2033,7 +2041,10 @@ HOTSPOT;
         if (!empty($column)) {
             $sql .= " ORDER BY $column $direction ";
         }
-        $sql .= " LIMIT $from, $number_of_items";
+
+        if (!$getOnyIds) {
+            $sql .= " LIMIT $from, $number_of_items";
+        }
 
         $results = [];
         $resx = Database::query($sql);
@@ -2570,6 +2581,7 @@ HOTSPOT;
         $percentage = float_format($percentage, 1);
         $score = float_format($score, 1);
         $weight = float_format($weight, 1);
+
         if ($roundValues) {
             $whole = floor($percentage); // 1
             $fraction = $percentage - $whole; // .25
@@ -4239,16 +4251,15 @@ EOT;
             }
         }
 
-        if (($show_results || $show_only_score) && 'embeddable' !== $origin) {
-            if (isset($exercise_stat_info['exe_user_id'])) {
-                if (!empty($studentInfo)) {
+        if ('embeddable' !== $origin &&
+            !empty($exercise_stat_info['exe_user_id']) &&
+            !empty($studentInfo)
+        ) {
                     // Shows exercise header
                     echo $objExercise->showExerciseResultHeader(
                         $studentInfo,
                         $exercise_stat_info
                     );
-                }
-            }
         }
 
         // Display text when test is finished #4074 and for LP #4227
@@ -4690,11 +4701,8 @@ EOT;
 
         $data = [];
 
-        /** @var TrackEExercises $item */
         foreach ($result as $item) {
-            $bestAttemp = self::get_best_attempt_by_user($item['exeUserId'], $exerciseId, $courseId, $sessionId = 0);
-
-            $data[] = $bestAttemp;
+            $data[] = self::get_best_attempt_by_user($item['exeUserId'], $exerciseId, $courseId, $sessionId);
         }
 
         usort(
@@ -4715,7 +4723,6 @@ EOT;
         // flags to display the same position in case of tie
         $lastScore = $data[0]['score'];
         $position = 1;
-
         $data = array_map(
             function ($item) use (&$lastScore, &$position) {
                 if ($item['score'] < $lastScore) {
@@ -5204,5 +5211,105 @@ EOT;
         }
 
         return Category::getDownloadCertificateBlock($certificate);
+    }
+
+    /**
+     * @param int $exeId      ID from track_e_exercises
+     * @param int $userId     User ID
+     * @param int $exerciseId Exercise ID
+     * @param int $courseId   Optional. Coure ID.
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
+     *
+     * @return TrackEExercises|null
+     */
+    public static function recalculateResult($exeId, $userId, $exerciseId, $courseId = 0)
+    {
+        if (empty($userId) || empty($exerciseId)) {
+            return null;
+        }
+
+        $em = Database::getManager();
+        /** @var TrackEExercises $trackedExercise */
+        $trackedExercise = $em->getRepository('ChamiloCoreBundle:TrackEExercises')->find($exeId);
+
+        if (empty($trackedExercise)) {
+            return null;
+        }
+
+        if ($trackedExercise->getExeUserId() != $userId ||
+            $trackedExercise->getExeExoId() != $exerciseId
+        ) {
+            return null;
+        }
+
+        $questionList = $trackedExercise->getDataTracking();
+
+        if (empty($questionList)) {
+            return null;
+        }
+
+        $questionList = explode(',', $questionList);
+
+        $exercise = new Exercise($courseId);
+        $courseInfo = $courseId ? api_get_course_info_by_id($courseId) : [];
+
+        if ($exercise->read($exerciseId) === false) {
+            return null;
+        }
+
+        $totalScore = 0;
+        $totalWeight = 0;
+
+        $pluginEvaluation = QuestionOptionsEvaluationPlugin::create();
+
+        $formula = 'true' === $pluginEvaluation->get(QuestionOptionsEvaluationPlugin::SETTING_ENABLE)
+            ? $pluginEvaluation->getFormulaForExercise($exerciseId)
+            : 0;
+
+        if (empty($formula)) {
+            foreach ($questionList as $questionId) {
+                $question = Question::read($questionId, $courseInfo);
+
+                if (false === $question) {
+                    continue;
+                }
+
+                $totalWeight += $question->selectWeighting();
+
+                // We're inside *one* question. Go through each possible answer for this question
+                $result = $exercise->manage_answer(
+                    $exeId,
+                    $questionId,
+                    [],
+                    'exercise_result',
+                    [],
+                    false,
+                    true,
+                    false,
+                    $exercise->selectPropagateNeg(),
+                    [],
+                    [],
+                    true
+                );
+
+                //  Adding the new score.
+                $totalScore += $result['score'];
+            }
+        } else {
+            $totalScore = $pluginEvaluation->getResultWithFormula($exeId, $formula);
+            $totalWeight = $pluginEvaluation->getMaxScore();
+        }
+
+        $trackedExercise
+            ->setExeResult($totalScore)
+            ->setExeWeighting($totalWeight);
+
+        $em->persist($trackedExercise);
+        $em->flush();
+
+        return $trackedExercise;
     }
 }

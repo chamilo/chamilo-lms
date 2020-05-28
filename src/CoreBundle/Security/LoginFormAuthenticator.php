@@ -79,7 +79,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
             $data = json_decode($request->getContent(), true);
             $username = $data['username'];
             $password = $data['password'];
-            //$token = $data['csrf_token'];
+        //$token = $data['csrf_token'];
         } else {
             $username = $request->request->get('username');
             $password = $request->request->get('password');

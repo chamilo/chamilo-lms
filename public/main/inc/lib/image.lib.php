@@ -139,6 +139,8 @@ class Image
 
 /**
  * Image wrapper class.
+ *
+ * @package chamilo.include.image
  */
 abstract class ImageWrapper
 {

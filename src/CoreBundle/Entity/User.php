@@ -15,7 +15,6 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -1683,7 +1682,6 @@ class User implements UserInterface, EquatableInterface
     {
         return in_array($name, $this->getGroupNames());
     }
-
 
     public function removeGroup($group)
     {

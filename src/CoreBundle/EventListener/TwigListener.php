@@ -14,6 +14,7 @@ use Twig\Environment;
 class TwigListener
 {
     private $twig;
+
     public function __construct(Environment $twig, SerializerInterface $serializer, TokenStorageInterface $tokenStorage)
     {
         $this->twig = $twig;

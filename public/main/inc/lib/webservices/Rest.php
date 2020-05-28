@@ -37,6 +37,7 @@ class Rest extends WebService
     const GET_COURSE_FORUM_THREAD = 'course_forumthread';
     const GET_COURSE_LEARNPATHS = 'course_learnpaths';
     const GET_COURSE_LEARNPATH = 'course_learnpath';
+    const GET_COURSE_LP_PROGRESS = 'course_lp_progress';
     const SAVE_FORUM_POST = 'save_forum_post';
     const GET_USER_SESSIONS = 'user_sessions';
     const SAVE_USER_MESSAGE = 'save_user_message';
@@ -45,21 +46,33 @@ class Rest extends WebService
     const SAVE_FORUM_THREAD = 'save_forum_thread';
     const SAVE_COURSE = 'save_course';
     const SAVE_USER = 'save_user';
+    const SAVE_USER_JSON = 'save_user_json';
     const SUBSCRIBE_USER_TO_COURSE = 'subscribe_user_to_course';
     const EXTRAFIELD_GCM_ID = 'gcm_registration_id';
+    const GET_USER_MESSAGES_RECEIVED = 'user_messages_received';
+    const GET_USER_MESSAGES_SENT = 'user_messages_sent';
+    const DELETE_USER_MESSAGE = 'delete_user_message';
+    const SET_MESSAGE_READ = 'set_message_read';
     const CREATE_CAMPUS = 'add_campus';
     const EDIT_CAMPUS = 'edit_campus';
     const DELETE_CAMPUS = 'delete_campus';
     const SAVE_SESSION = 'save_session';
     const GET_USERS = 'get_users';
-    const GET_COURSE = 'get_courses';
+    const GET_COURSES = 'get_courses';
     const ADD_COURSES_SESSION = 'add_courses_session';
-    const ADD_USER_SESSION = 'add_users_session';
+    const ADD_USERS_SESSION = 'add_users_session';
+    const CREATE_SESSION_FROM_MODEL = 'create_session_from_model';
+    const SUBSCRIBE_USER_TO_SESSION_FROM_USERNAME = 'subscribe_user_to_session_from_username';
+    const GET_SESSION_FROM_EXTRA_FIELD = 'get_session_from_extra_field';
+    const UPDATE_USER_FROM_USERNAME = 'update_user_from_username';
+    const USERNAME_EXIST = 'username_exist';
+    const GET_COURSE_QUIZ_MDL_COMPAT = 'get_course_quiz_mdl_compat';
 
     /**
      * @var Session
      */
     private $session;
+
     /**
      * @var Course
      */
@@ -265,7 +278,7 @@ class Rest extends WebService
             'title' => $this->course->getTitle(),
             'code' => $this->course->getCode(),
             'directory' => $this->course->getDirectory(),
-            'urlPicture' => Container::getIllustrationRepository()->getIllustrationUrl($this->course);
+            'urlPicture' => Container::getIllustrationRepository()->getIllustrationUrl($this->course),
             'teachers' => $teachers,
             'tools' => array_map(
                 function ($tool) {

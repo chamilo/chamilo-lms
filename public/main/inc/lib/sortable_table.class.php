@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -93,7 +94,7 @@ class SortableTable extends HTML_Table
     public $use_jqgrid = false;
     public $table_id = null;
     public $headers = [];
-
+    public $actionButtons = [];
     /**
      * The array containing all data for this table.
      */
@@ -123,7 +124,7 @@ class SortableTable extends HTML_Table
      * @param string $default_order_direction   The default order direction;
      *                                          either the constant 'ASC' or 'DESC'
      * @param string $table_id
-     * @param array  $parameters                They are custom attributes of the table
+     * @param array  $attributes                They are custom attributes of the table
      */
     public function __construct(
         $table_name = 'table',
@@ -133,17 +134,20 @@ class SortableTable extends HTML_Table
         $default_items_per_page = 20,
         $default_order_direction = 'ASC',
         $table_id = null,
-        $parameters = []
+        $attributes = []
     ) {
         if (empty($table_id)) {
             $table_id = $table_name.uniqid('table', true);
         }
-        if (isset($parameters) && empty($parameters)) {
-            $parameters = ['class' => 'table table-bordered data_table', 'id' => $table_id];
+
+        if (empty($attributes)) {
+            $attributes = [];
+            $attributes['class'] = 'table table-bordered data_table';
+            $attributes['id'] = $table_id;
         }
 
         $this->table_id = $table_id;
-        parent::__construct($parameters);
+        parent::__construct($attributes);
         $this->table_name = $table_name;
         $this->additional_parameters = [];
         $this->param_prefix = $table_name.'_';
@@ -160,7 +164,6 @@ class SortableTable extends HTML_Table
         if (true === $cleanSessionData) {
             $this->cleanUrlSessionParams();
         }
-
         // Allow to change paginate in multiples tabs
         //Session::erase($this->param_prefix.'per_page');
         $this->per_page = Session::read($this->param_prefix.'per_page', $default_items_per_page);
@@ -341,6 +344,13 @@ class SortableTable extends HTML_Table
         echo $this->return_table();
     }
 
+    public function toArray()
+    {
+        $headers = array_column($this->getHeaders(), 'label');
+
+        return array_merge([$headers], $this->table_data);
+    }
+
     /**
      * Displays the table, complete with navigation buttons to browse through
      * the data-pages.
@@ -482,7 +492,6 @@ class SortableTable extends HTML_Table
                     .grid_element_0 { width:100px; height: 100px; float:left; text-align:center; margin-bottom:5px;}
                     .grid_element_1 { width:100px; float:left; text-align:center;margin-bottom:5px;}
                     .grid_element_2 { width:150px; float:left;}
-
                     .grid_selectbox { width:30%; float:left;}
                     .grid_title     { width:30%; float:left;}
                     .grid_nav         { }
@@ -667,9 +676,8 @@ class SortableTable extends HTML_Table
         $pager = $this->get_pager();
         $offset = $pager->getOffsetByPageId();
         $from = $offset[0] - 1;
-        $table_data = $this->get_table_data($from);
+        $table_data = $this->get_table_data($from, $this->per_page, $this->column);
         $this->processHeaders();
-
         if (is_array($table_data)) {
             $count = 1;
             foreach ($table_data as &$row) {
@@ -755,6 +763,7 @@ class SortableTable extends HTML_Table
         if (true === $this->hideItemSelector) {
             return '';
         }
+
         $result[] = '<form method="GET" action="'.api_get_self().'" style="display:inline;">';
         $param[$this->param_prefix.'direction'] = $this->direction;
         $param[$this->param_prefix.'page_nr'] = $this->page_nr;

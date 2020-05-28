@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -320,7 +321,7 @@ class LegalManager
             // max 2000 chars
             $languages[] = $legal[1];
             if (strlen($legal[2]) > 2000) {
-                $legal[2] = substr($legal[2], 0, 2000).' ... ';
+                $legal[2] = substr(strip_tags($legal[2]), 0, 2000).' ... ';
             }
             if (0 == $legal[4]) {
                 $legal[4] = get_lang('HTML');

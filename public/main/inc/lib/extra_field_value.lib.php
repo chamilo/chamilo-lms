@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
@@ -81,6 +82,7 @@ class ExtraFieldValue extends Model
      * @param bool  $showQuery
      * @param array $saveOnlyThisFields
      * @param array $avoidFields         do not insert/modify this field
+     * @param bool  $forceSave
      *
      * @return mixed false on empty params, void otherwise
      * @assert (array()) === false
@@ -90,7 +92,8 @@ class ExtraFieldValue extends Model
         $onlySubmittedFields = false,
         $showQuery = false,
         $saveOnlyThisFields = [],
-        $avoidFields = []
+        $avoidFields = [],
+        $forceSave = false
     ) {
         foreach ($params as $key => $value) {
             $found = strpos($key, '__persist__');
@@ -116,18 +119,21 @@ class ExtraFieldValue extends Model
 
         // Parse params.
         foreach ($extraFields as $fieldDetails) {
-            $field_variable = $fieldDetails['variable'];
+            if ($forceSave === false) {
 
             // if the field is not visible to the user in the end, we need to apply special rules
             if (1 != $fieldDetails['visible_to_self']) {
-                //only admins should be able to add those values
-                if (!api_is_platform_admin(true, true)) {
-                    // although if not admin but sent through a CLI script, we should accept it as well
-                    if (PHP_SAPI != 'cli') {
-                        continue; //not a CLI script, so don't write the value to DB
+                    //only admins should be able to add those values
+                    if (!api_is_platform_admin(true, true)) {
+                        // although if not admin but sent through a CLI script, we should accept it as well
+                        if (PHP_SAPI != 'cli') {
+                            continue; //not a CLI script, so don't write the value to DB
+                        }
                     }
                 }
             }
+
+            $field_variable = $fieldDetails['variable'];
 
             if ($onlySubmittedFields && !isset($params['extra_'.$field_variable])) {
                 continue;
@@ -363,6 +369,32 @@ class ExtraFieldValue extends Model
                     $this->save($newParams);
 
                     break;
+                case ExtraField::FIELD_TYPE_DATE:
+                    $d = DateTime::createFromFormat('Y-m-d', $value);
+                    $valid = $d && $d->format('Y-m-d') === $value;
+                    if ($valid) {
+                        $newParams = [
+                            'item_id' => $params['item_id'],
+                            'field_id' => $extraFieldInfo['id'],
+                            'value' => $value,
+                            'comment' => $comment,
+                        ];
+                        $this->save($newParams, $showQuery);
+                    }
+                    break;
+                case ExtraField::FIELD_TYPE_DATETIME:
+                    $d = DateTime::createFromFormat('Y-m-d H:i', $value);
+                    $valid = $d && $d->format('Y-m-d H:i') === $value;
+                    if ($valid) {
+                        $newParams = [
+                            'item_id' => $params['item_id'],
+                            'field_id' => $extraFieldInfo['id'],
+                            'value' => $value,
+                            'comment' => $comment,
+                        ];
+                        $this->save($newParams, $showQuery);
+                    }
+                    break;
                 default:
                     $newParams = [
                         'item_id' => $params['item_id'],
@@ -408,7 +440,9 @@ class ExtraFieldValue extends Model
             $extraFieldInfo = $extra_field->get_handler_field_info_by_field_variable(
                 $params['variable']
             );
-            $params['field_id'] = $extraFieldInfo['id'];
+            if ($extraFieldInfo) {
+                $params['field_id'] = $extraFieldInfo['id'];
+            }
         }
 
         if ($extraFieldInfo) {
@@ -721,31 +755,38 @@ class ExtraFieldValue extends Model
      * Gets the ID from the item (course, session, etc) for which
      * the given field is defined with the given value.
      *
-     * @param string $field_variable Field (type of data) we want to check
-     * @param string $field_value    Data we are looking for in the given field
+     * @param string $variable  Field (type of data) we want to check
+     * @param string $value     Data we are looking for in the given field
      * @param bool   $transform      Whether to transform the result to a human readable strings
      * @param bool   $last           Whether to return the last element or simply the first one we get
+     * @param bool   $useLike
      *
      * @return mixed Give the ID if found, or false on failure or not found
      * @assert (-1,-1) === false
      */
     public function get_item_id_from_field_variable_and_field_value(
-        $field_variable,
-        $field_value,
+        $variable,
+        $value,
         $transform = false,
         $last = false,
-        $all = false
+        $all = false,
+        $useLike = false
     ) {
-        $field_value = Database::escape_string($field_value);
-        $field_variable = Database::escape_string($field_variable);
+        $value = Database::escape_string($value);
+        $variable = Database::escape_string($variable);
+
+        $valueCondition = " value  = '$value' AND ";
+        if ($useLike) {
+            $valueCondition = " value LIKE '%".$value."%' AND ";
+        }
         $extraFieldType = $this->getExtraField()->getExtraFieldType();
 
         $sql = "SELECT item_id FROM {$this->table} s
                 INNER JOIN {$this->table_handler_field} sf
                 ON (s.field_id = sf.id)
                 WHERE
-                    value  = '$field_value' AND
-                    variable = '".$field_variable."' AND
+                    $valueCondition
+                    variable = '".$variable."' AND
                     sf.extra_field_type = $extraFieldType
                 ORDER BY item_id
                 ";
@@ -757,7 +798,7 @@ class ExtraFieldValue extends Model
             $sql .= ' DESC';
         }
         $result = Database::query($sql);
-        if (false !== $result && Database::num_rows($result)) {
+        if ($result !== false && Database::num_rows($result)) {
             if ($all) {
                 $result = Database::store_result($result, 'ASSOC');
             } else {
@@ -765,9 +806,9 @@ class ExtraFieldValue extends Model
             }
 
             return $result;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**

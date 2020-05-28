@@ -399,7 +399,13 @@ class MySpace
             $is_western_name_order = api_is_western_name_order();
         }
         $sort_by_first_name = api_sort_by_first_name();
-        $tracking_column = isset($_GET['tracking_list_coaches_column']) ? $_GET['tracking_list_coaches_column'] : ($is_western_name_order xor $sort_by_first_name) ? 1 : 0;
+
+        if (isset($_GET['tracking_list_coaches_column'])) {
+            $tracking_column = (int) $_GET['tracking_list_coaches_column'];
+        } else {
+            $tracking_column = ($is_western_name_order xor $sort_by_first_name) ? 1 : 0;
+        }
+
         $tracking_direction = (isset($_GET['tracking_list_coaches_direction']) && in_array(strtoupper($_GET['tracking_list_coaches_direction']), ['ASC', 'DESC', 'ASCENDING', 'DESCENDING', '0', '1'])) ? $_GET['tracking_list_coaches_direction'] : 'DESC';
         // Prepare array for column order - when impossible, use some of user names.
         if ($is_western_name_order) {
@@ -1905,12 +1911,22 @@ class MySpace
                              '.Display::return_icon('2rightarrow.png', get_lang('Details')).'
                              </a>
                             </center>';
+
+            $scoreInCourse = null;
+            if (null !== $avg_score_in_course) {
+                if (is_numeric($avg_score_in_course)) {
+                    $scoreInCourse = $avg_score_in_course.'%';
+                } else {
+                    $scoreInCourse = $avg_score_in_course;
+                }
+            }
+
             $csv_content[] = [
                 api_html_entity_decode($row_course[1], ENT_QUOTES, $charset),
                 $nb_students_in_course,
                 $avg_time_spent_in_course,
                 is_null($avg_progress_in_course) ? null : $avg_progress_in_course.'%',
-                is_null($avg_score_in_course) ? null : is_numeric($avg_score_in_course) ? $avg_score_in_course.'%' : $avg_score_in_course,
+                $scoreInCourse,
                 is_null($avg_score_in_exercise) ? null : $avg_score_in_exercise.'%',
                 $avg_messages_in_course,
                 $avg_assignments_in_course,
@@ -2673,7 +2689,8 @@ class MySpace
         }
 
         if (isset($_GET['date']) && !empty($_GET['date'])) {
-            $dates = DateRangePicker::parseDateRange($_GET['date']);
+            $dateRangePicker = new DateRangePicker('date');
+            $dates = $dateRangePicker->parseDateRange($_GET['date']);
             if (isset($dates['start']) && !empty($dates['start'])) {
                 $dates['start'] = Database::escape_string($dates['start']);
                 $sql .= " AND login_course_date >= '".$dates['start']."'";
@@ -2736,6 +2753,7 @@ class MySpace
      * @param int    $sessionId
      * @param string $start_date
      * @param string $end_date
+     * @param bool   $addUserIp
      *
      * @author  Jorge Frisancho Jibaja
      * @author  Julio Montoya <gugli100@gmail.com> fixing the function
@@ -2749,14 +2767,15 @@ class MySpace
         $course_info,
         $sessionId,
         $start_date,
-        $end_date
+        $end_date,
+        $addUserIp = false
     ) {
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         $user_id = (int) $user_id;
         $connections = [];
         if (!empty($course_info)) {
             $courseId = (int) $course_info['real_id'];
-            $end_date = add_day_to($end_date);
+            $end_date = self::add_day_to($end_date);
 
             $start_date = Database::escape_string($start_date);
             $end_date = Database::escape_string($end_date);
@@ -2764,7 +2783,8 @@ class MySpace
             $sql = "SELECT 
                         login_course_date, 
                         logout_course_date, 
-                        TIMESTAMPDIFF(SECOND, login_course_date, logout_course_date) duration
+                        TIMESTAMPDIFF(SECOND, login_course_date, logout_course_date) duration,
+                        user_ip
                     FROM $table
                     WHERE
                         user_id = $user_id AND
@@ -2776,20 +2796,23 @@ class MySpace
             $rs = Database::query($sql);
 
             while ($row = Database::fetch_array($rs)) {
-                $connections[] = [
+                $item = [
                     'login' => $row['login_course_date'],
                     'logout' => $row['logout_course_date'],
                     'duration' => $row['duration'],
                 ];
+                if ($addUserIp) {
+                    $item['user_ip'] = $row['user_ip'];
+                }
+                $connections[] = $item;
             }
         }
 
         return $connections;
     }
-}
 
 /**
- * @param $user_id
+ * @param int   $user_id
  * @param array $course_info
  * @param int   $sessionId
  * @param null  $start_date
@@ -2797,15 +2820,15 @@ class MySpace
  *
  * @return array
  */
-function get_stats($user_id, $course_info, $sessionId, $start_date = null, $end_date = null)
+    public static function getStats($user_id, $course_info, $sessionId, $start_date = null, $end_date = null)
 {
     $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
     $result = [];
     if (!empty($course_info)) {
         $stringStartDate = '';
         $stringEndDate = '';
-        if (null != $start_date && null != $end_date) {
-            $end_date = add_day_to($end_date);
+            if ($start_date != null && $end_date != null) {
+                $end_date = self::add_day_to($end_date);
 
             $start_date = Database::escape_string($start_date);
             $end_date = Database::escape_string($end_date);
@@ -2843,43 +2866,13 @@ function get_stats($user_id, $course_info, $sessionId, $start_date = null, $end_
     return $result;
 }
 
-function add_day_to($end_date)
+    public static function add_day_to($end_date)
 {
     $foo_date = strtotime($end_date);
     $foo_date = strtotime(' +1 day', $foo_date);
     $foo_date = date('Y-m-d', $foo_date);
 
     return $foo_date;
-}
-
-/**
- * Converte an array to a table in html.
- *
- * @param array $result
- *
- * @author Jorge Frisancho Jibaja
- *
- * @version OCT-22- 2010
- *
- * @return string
- */
-function convert_to_string($result)
-{
-    $html = '<table class="table">';
-    if (!empty($result)) {
-        foreach ($result as $key => $data) {
-            $html .= '<tr><td>';
-            $html .= api_get_local_time($data['login']);
-            $html .= '</td>';
-            $html .= '<td>';
-
-            $html .= api_time_to_hms(api_strtotime($data['logout']) - api_strtotime($data['login']));
-            $html .= '</tr></td>';
-        }
-    }
-    $html .= '</table>';
-
-    return $html;
 }
 
 /**
@@ -2896,7 +2889,7 @@ function convert_to_string($result)
  *
  * @return string
  */
-function grapher($sql_result, $start_date, $end_date, $type = '')
+    public static function grapher($sql_result, $start_date, $end_date, $type = '')
 {
     if (empty($start_date)) {
         $start_date = '';
@@ -2936,10 +2929,10 @@ function grapher($sql_result, $start_date, $end_date, $type = '')
             $logout = api_strtotime($data['logout']);
             //creating the main array
             if (isset($main_month_year[date('m-Y', $login)])) {
-                $main_month_year[date('m-Y', $login)] += float_format(($logout - $login) / 60, 0);
+                    $main_month_year[date('m-Y', $login)] += (float) ($logout - $login) / 60;
             }
             if (isset($main_day[date('d-m-Y', $login)])) {
-                $main_day[date('d-m-Y', $login)] += float_format(($logout - $login) / 60, 0);
+                    $main_day[date('d-m-Y', $login)] += (float) ($logout - $login) / 60;
             }
             if ($i > 500) {
                 break;
@@ -3096,15 +3089,13 @@ function grapher($sql_result, $start_date, $end_date, $type = '')
             $myCache->saveFromCache($chartHash, $imgPath);
             $imgPath = api_get_path(WEB_ARCHIVE_PATH).$chartHash;
         }
-        $html = '<img src="'.$imgPath.'">';
 
-        return $html;
+            return '<img src="'.$imgPath.'">';
     } else {
-        $foo_img = api_convert_encoding(
-            '<div id="messages" class="warning-message">'.get_lang('Graphic not available').'</div>',
+            return api_convert_encoding(
+                '<div id="messages" class="warning-message">'.get_lang('GraphicNotAvailable').'</div>',
             'UTF-8'
         );
-
-        return $foo_img;
+        }
     }
 }

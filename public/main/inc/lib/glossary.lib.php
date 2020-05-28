@@ -73,25 +73,42 @@ class GlossaryManager
      *
      * @author Isaac Flores <florespaz_isaac@hotmail.com>
      *
-     * @param string $glossary_name The glossary term name
+     * @param string $name The glossary term name
      *
      * @return array The glossary info
      */
-    public static function get_glossary_term_by_glossary_name($glossary_name)
+    public static function get_glossary_term_by_glossary_name($name)
     {
         $table = Database::get_course_table(TABLE_GLOSSARY);
         $session_id = api_get_session_id();
         $course_id = api_get_course_int_id();
-        $sql_filter = api_get_session_condition($session_id);
-        $sql = 'SELECT * FROM '.$table.'
-		        WHERE
-		            c_id = '.$course_id.' AND
-		            name LIKE trim("'.Database::escape_string($glossary_name).'")'.$sql_filter;
-        $rs = Database::query($sql);
-        if (Database::num_rows($rs) > 0) {
-            $row = Database::fetch_array($rs, 'ASSOC');
+        $sessionCondition = api_get_session_condition($session_id);
 
-            return $row;
+        $glossaryName = Security::remove_XSS($name);
+        $glossaryName = api_convert_encoding($glossaryName, 'UTF-8', 'UTF-8');
+        $glossaryName = trim($glossaryName);
+        $parsed = $glossaryName;
+
+        if (api_get_configuration_value('save_titles_as_html')) {
+            $parsed = api_htmlentities($parsed);
+            $parsed = "%$parsed%";
+        }
+
+        $sql = "SELECT * FROM $table
+		        WHERE
+		            c_id = $course_id AND
+		            (
+		                name LIKE '".Database::escape_string($glossaryName)."'
+		                OR
+		                name LIKE '".Database::escape_string($parsed)."'
+                    )
+                    $sessionCondition
+                LIMIT 1
+                ";
+        $rs = Database::query($sql);
+
+        if (Database::num_rows($rs) > 0) {
+            return Database::fetch_array($rs, 'ASSOC');
         }
 
         return [];

@@ -188,6 +188,8 @@ class UserManager
     ) {
         $authSource = !empty($authSource) ? $authSource : PLATFORM_AUTH_SOURCE;
         $creatorId = empty($creatorId) ? api_get_user_id() : 0;
+        $creatorInfo = api_get_user_info($creatorId);
+        $creatorEmail = isset($creatorInfo['email']) ? $creatorInfo['email'] : '';
 
         $hook = Container::instantiateHook(HookCreateUser::class);
         if (!empty($hook)) {
@@ -529,7 +531,8 @@ class UserManager
                         null,
                         null,
                         null,
-                        $additionalParameters
+                        $additionalParameters,
+                        $creatorEmail
                     );
 
                     $layoutContent = $tplContent->get_template('mail/new_user_second_email_confirmation.tpl');
@@ -555,7 +558,8 @@ class UserManager
                         null,
                         null,
                         null,
-                        $additionalParameters
+                        $additionalParameters,
+                        $creatorEmail
                     );
                 } else {
                     if (!empty($emailBodyTemplate)) {
@@ -587,7 +591,8 @@ class UserManager
                             null,
                             null,
                             null,
-                            $additionalParameters
+                            $additionalParameters,
+                            $creatorEmail
                         );
                     }
                 }

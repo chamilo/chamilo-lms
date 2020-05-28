@@ -777,6 +777,8 @@ function cut($text, $maxchar, $embed = false)
  */
 function float_format($number, $flag = 1, $decimalPoint = '.', $thousandsSeparator = ',')
 {
+    $flag = (int) $flag;
+
     if (is_numeric($number)) {
         if (!$number) {
             $result = (2 == $flag ? '0.'.str_repeat('0', EXERCISE_NUMBER_OF_DECIMALS) : '0');

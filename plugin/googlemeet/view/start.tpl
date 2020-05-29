@@ -8,7 +8,7 @@
 
                 <div class="tools text-center">
                     {% if is_admin or is_teacher %}
-                        <a href="{{ url_add_room }}" class="btn btn-primary">
+                        <a href="{{ url_add_room }}" class="btn btn-success btn-add-meet">
                             <i class="fa fa-video-camera" aria-hidden="true"></i>
                             {{ 'ManageMeetAccounts'|get_plugin_lang('GoogleMeetPlugin') }}
                         </a>
@@ -20,11 +20,11 @@
                         {% for meet in meets %}
                             <div class="col-md-4">
                                 <div class="info-meet">
-                                    <div class="card card-meet">
+                                    <div class="card card-meet" style="border-left:  .25rem solid {{ meet.meet_color }};">
                                         <div class="card-body">
                                             <div class="row-meet">
                                                 <div class="col-auto">
-                                                    <div class="icon icon-shape bg-gradient-green text-white rounded-circle shadow">
+                                                    <div style="background: {{ meet.meet_color }}" class="icon icon-shape text-white rounded-circle shadow">
                                                         <i class="fa fa-video-camera" aria-hidden="true"></i>
                                                     </div>
                                                 </div>
@@ -38,17 +38,18 @@
                                                         </a>
                                                     </div>
                                                     <div class="float-right">
+                                                        {% if is_admin or is_teacher %}
                                                         <div class="btn-group btn-group-xs" role="group" aria-label="...">
                                                             <a class="btn btn-sm btn-default" href="meets.php?action=edit&id_meet={{ meet.id }}&{{ _p.web_cid_query }}">
                                                                 <i class="fa fa-pencil" aria-hidden="true"></i>
                                                             </a>
                                                             <a class="btn btn-sm btn-default"
-                                                               target="_blank"
                                                                onclick="javascript:if(!confirm('{{ 'AreYouSureToDelete' | get_lang }}')) return false;"
                                                                href="meets.php?action=delete&id_meet={{ meet.id }}&{{ _p.web_cid_query }}">
                                                                 <i class="fa fa-trash-o" aria-hidden="true"></i>
                                                             </a>
                                                         </div>
+                                                        {% endif %}
                                                     </div>
 
                                                 </div>

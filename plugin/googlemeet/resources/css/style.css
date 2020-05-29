@@ -26,6 +26,9 @@
     border: 0;
     box-shadow: 0 0 2rem 0 rgba(136,152,170,.15);
 }
+.card-meet:hover{
+    border-left: .25rem solid #cdcdcd !important;
+}
 .card-meet .card-body {
     padding: 1rem 1.5rem;
 }
@@ -72,9 +75,7 @@
     align-items: center;
     justify-content: center;
 }
-.bg-gradient-green {
-    background: linear-gradient(87deg,#2dce89 0,#2dcecc 100%)!important;
-}
+
 .text-white {
     color: #fff!important;
 }
@@ -95,4 +96,15 @@
 }
 .float-right {
     float: right;
+}
+.btn-add-meet{
+    color: #fff;
+    border-color: #1cc88a;
+    background-color: #1cc88a;
+    font-weight: bold;
+}
+.btn-add-meet:hover {
+    color: #fff;
+    border-color: #17a673;
+    background-color: #169b6b;
 }

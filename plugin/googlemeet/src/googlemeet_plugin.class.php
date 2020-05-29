@@ -9,8 +9,6 @@
 
 class GoogleMeetPlugin extends Plugin
 {
-
-    const TABLE_MEET_COURSES = 'plugin_meet_courses';
     const TABLE_MEET_LIST = 'plugin_meet_room';
     const SETTING_TITLE = 'tool_title';
     const SETTING_ENABLED = 'google_meet_enabled';
@@ -67,8 +65,8 @@ class GoogleMeetPlugin extends Plugin
             meet_name VARCHAR(250) NULL,
             meet_url VARCHAR(250) NULL,
             meet_description VARCHAR(250) NULL,
+            meet_color VARCHAR(7) NULL,
             type_meet INT NOT NULL,
-            user_id INT NULL NOT NULL,
             cd_id INT NULL NOT NULL,
             start_time DATETIME NULL,
             end_time DATETIME NULL,
@@ -95,7 +93,6 @@ class GoogleMeetPlugin extends Plugin
         $this->deleteCourseToolLinks();
 
         $tablesToBeDeleted = [
-            self::TABLE_MEET_COURSES,
             self::TABLE_MEET_LIST,
         ];
 
@@ -144,14 +141,13 @@ class GoogleMeetPlugin extends Plugin
         $table = Database::get_main_table(self::TABLE_MEET_LIST);
 
         $idCourse = api_get_course_int_id();
-        $idUser = api_get_user_id();
 
         $params = [
             'meet_name' => $values['meet_name'],
             'meet_url' => $values['meet_url'],
             'type_meet' => $values['type_meet'],
             'meet_description' => $values['meet_description'],
-            'user_id' => $idUser,
+            'meet_color' => $values['meet_color'],
             'cd_id' => $idCourse,
             'start_time' => null,
             'end_time' => null,
@@ -202,8 +198,8 @@ class GoogleMeetPlugin extends Plugin
                     'meet_name' => $row['meet_name'],
                     'meet_url' => $row['meet_url'],
                     'meet_description' => $row['meet_description'],
+                    'meet_color' => $row['meet_color'],
                     'type_meet' => $row['type_meet'],
-                    'user_id' => $row['user_id'],
                     'cd_id' => $row['cd_id'],
                     'start_time' => $row['start_time'],
                     'end_time' => $row['end_time'],
@@ -234,8 +230,8 @@ class GoogleMeetPlugin extends Plugin
                     'meet_name' => $row['meet_name'],
                     'meet_url' => $row['meet_url'],
                     'meet_description' => $row['meet_description'],
+                    'meet_color' => $row['meet_color'],
                     'type_meet' => $row['type_meet'],
-                    'user_id' => $row['user_id'],
                     'cd_id' => $row['cd_id'],
                     'start_time' => $row['start_time'],
                     'end_time' => $row['end_time'],
@@ -254,14 +250,13 @@ class GoogleMeetPlugin extends Plugin
         $table = Database::get_main_table(self::TABLE_MEET_LIST);
 
         $idCourse = api_get_course_int_id();
-        $idUser = api_get_user_id();
 
         $params = [
             'meet_name' => $values['meet_name'],
             'meet_url' => $values['meet_url'],
             'type_meet' => $values['type_meet'],
             'meet_description' => $values['meet_description'],
-            'user_id' => $idUser,
+            'meet_color' => $values['meet_color'],
             'cd_id' => $idCourse,
             'start_time' => null,
             'end_time' => null,

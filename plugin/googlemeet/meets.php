@@ -76,6 +76,22 @@ if ($enable) {
                         ]
                     );
 
+                    try {
+                        $form->addElement(
+                            'color',
+                            'meet_color',
+                            [
+                                $plugin->get_lang('MeetColor'),
+                                $plugin->get_lang('MeetColorHelp'),
+                            ],
+                            [
+                                'value' => '#1CC88A'
+                            ]
+                        );
+                    } catch (HTML_QuickForm_Error $e) {
+                        echo $e;
+                    }
+
                     $form->addHtmlEditor(
                         'meet_description',
                         [
@@ -150,7 +166,14 @@ if ($enable) {
                             'title' => $plugin->get_lang('InstantMeetURLHelp'),
                         ]
                     );
-
+                    $form->addElement(
+                        'color',
+                        'meet_color',
+                        [
+                            $plugin->get_lang('MeetColor'),
+                            $plugin->get_lang('MeetColorHelp')
+                        ]
+                    );
                     $form->addHtmlEditor(
                         'meet_description',
                         [

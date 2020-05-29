@@ -20,5 +20,7 @@ $strings['InstantMeetURLHelp'] = "Es la URL para iniciar una reunión instantán
 $strings['AccessMeeting'] = "Accede a la reunión";
 $strings['MeetingDescription'] = "Descripción";
 $strings['MeetingDescriptionHelp'] = "(Opcional) Añade una breve descripción sobre la reunión.";
+$strings['MeetColor'] = "Color Meet";
+$strings['MeetColorHelp'] = "(Opcional)";
 
 

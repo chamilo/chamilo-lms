@@ -13,7 +13,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *
  * @ApiResource(
  *      shortName="CourseSubscription",
- *      normalizationContext={"groups"={"course_rel_user:read"}}
+ *      normalizationContext={"groups"={"course_rel_user:read", "user:read"}}
  * )
  *
  * @ORM\Table(
@@ -45,6 +45,7 @@ class CourseRelUser
     protected $user;
 
     /**
+     * @Groups({"course:read", "user:read"})
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="users", cascade={"persist"})
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
      */
@@ -52,14 +53,14 @@ class CourseRelUser
 
     /**
      * @var int
-     *
+     * @Groups({"user:read", "course:read"})
      * @ORM\Column(name="relation_type", type="integer", nullable=false, unique=false)
      */
     protected $relationType;
 
     /**
      * @var bool
-     *
+     * @Groups({"user:read"})
      * @ORM\Column(name="status", type="integer", nullable=false, unique=false)
      */
     protected $status;

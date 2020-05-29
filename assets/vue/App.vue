@@ -7,7 +7,6 @@
                 v-model="drawer"
                 :clipped="$vuetify.breakpoint.lgAndUp"
                 disable-resize-watcher
-
         >
             <v-list v-if="isAuthenticated">
                 <v-list-item :to="{ name: '/' }">
@@ -21,7 +20,30 @@
                     </v-list-item-content>
                 </v-list-item>
 
+                <v-list-item :to="{ name: 'MyCourses' }">
+                    <v-list-item-action>
+                        <v-icon>mdi-home</v-icon>
+                    </v-list-item-action>
+                    <v-list-item-content>
+                        <v-list-item-title>
+                            My courses
+                        </v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+
+                <v-list-item :to="{ name: 'MySessions' }">
+                    <v-list-item-action>
+                        <v-icon>mdi-home</v-icon>
+                    </v-list-item-action>
+                    <v-list-item-content>
+                        <v-list-item-title>
+                            My sessions
+                        </v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+
                 <v-list-group
+                        v-if="isAdmin"
                         prepend-icon="mdi-plus"
                         value="true"
                 >
@@ -170,9 +192,38 @@
             </v-toolbar-title>
             <v-spacer></v-spacer>
 
-            <v-btn icon v-if="isAuthenticated">
-                <v-icon>mdi-bell</v-icon>
-            </v-btn>
+            <v-menu
+                    v-if="isAuthenticated"
+                    offset-y
+                    :nudge-width="200"
+            >
+                <template v-slot:activator="{ on }">
+                    <v-btn icon v-on="on">
+                        <v-avatar>
+                            <v-icon dark>mdi-bell</v-icon>
+                        </v-avatar>
+                    </v-btn>
+                </template>
+
+                <v-card>
+                    <v-card-text>
+                        <div>Notifications</div>
+                    </v-card-text>
+                    <v-list>
+                        <v-list-item>
+                            <v-list-item-title>
+                            Notification 1
+                            </v-list-item-title>
+                        </v-list-item>
+                        <v-list-item>
+                        <v-list-item-title>
+                            Notification 2
+                        </v-list-item-title>
+                        </v-list-item>
+                    </v-list>
+                </v-card>
+            </v-menu>
+
 
             <v-menu
                     v-if="isAuthenticated"
@@ -189,6 +240,10 @@
                     <v-list-item>
                         <v-list-item-title>Profile</v-list-item-title>
                     </v-list-item>
+                    <v-list-item>
+                        <v-list-item-title>Inbox</v-list-item-title>
+                    </v-list-item>
+
                     <v-list-item>
                         <v-list-item-title>
                             <a href="/logout">Logout</a>
@@ -257,44 +312,40 @@
             isAuthenticated() {
                 return this.$store.getters['security/isAuthenticated']
             },
+            isAdmin() {
+                return this.$store.getters['security/isAdmin']
+            },
         },
         watch: {
             $route(to, from) {
-                console.log('remove');
                 this.$data.legacy_content = '';
                 if (document.querySelector("#sectionMainContent")) {
-                    console.log('removed sectionMainContent');
                     document.querySelector("#sectionMainContent").remove();
                 }
                 let url = window.location.href;
                 console.log(url);
                 var n = url.indexOf("main/");
                 if (n > 0) {
-                    console.log('ajax');
                     axios.get(url, {
                         params: {
                             from_vue: 1
                         }
                     })
-                        .then((response) => {
-                            // handle success
-                            this.$data.legacy_content = response.data;
-                        });
+                    .then((response) => {
+                        // handle success
+                        this.$data.legacy_content = response.data;
+                    });
                 }
             },
             legacy_content: {
                 handler: function () {
-                    console.log('watch');
                     if (document.querySelector("#sectionMainContent")) {
-                        //console.log('removed sectionMainContent');
-                        //document.querySelector("#sectionMainContent").remove();
                     }
                 },
                 immediate: true
             },
         },
         mounted() {
-            console.log('mounted');
             let legacyContent = document.querySelector("#sectionMainContent");
             if (legacyContent) {
                 document.querySelector("#sectionMainContent").remove();

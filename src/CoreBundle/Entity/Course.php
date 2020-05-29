@@ -58,7 +58,7 @@ class Course extends AbstractResource implements ResourceInterface
 
     /**
      * @var int
-     * @Groups({"course:read"})
+     * @Groups({"course:read", "course_rel_user:read"})
      * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -70,7 +70,7 @@ class Course extends AbstractResource implements ResourceInterface
      *
      * @Assert\NotBlank()
      *
-     * @Groups({"course:read", "course:write"})
+     * @Groups({"course:read", "course:write", "course_rel_user:read", "session_rel_course_rel_user:read"})
      *
      * @ORM\Column(name="title", type="string", length=250, nullable=true, unique=false)
      */
@@ -80,7 +80,7 @@ class Course extends AbstractResource implements ResourceInterface
      * @var string
      * @Assert\NotBlank()
      * @ApiProperty(iri="http://schema.org/courseCode")
-     * @Groups({"course:read", "course:write"})
+     * @Groups({"course:read", "course:write", "course_rel_user:read"})
      *
      * @Gedmo\Slug(
      *      fields={"title"},
@@ -96,7 +96,7 @@ class Course extends AbstractResource implements ResourceInterface
      * @var CourseRelUser[]|ArrayCollection
      *
      * @ApiSubresource()
-     * @Groups({"course:read"})
+     * Groups({"course:read"})
      * "orphanRemoval" is needed to delete the CourseRelUser relation
      * in the CourseAdmin class. The setUsers, getUsers, removeUsers and
      * addUsers methods need to be added.
@@ -154,32 +154,32 @@ class Course extends AbstractResource implements ResourceInterface
     protected $currentUrl;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelCourse", mappedBy="course", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="SkillRelCourse", mappedBy="course", cascade={"persist", "remove"})
      */
     protected $skills;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelUser", mappedBy="course", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="SkillRelUser", mappedBy="course", cascade={"persist", "remove"})
      */
     protected $issuedSkills;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\GradebookCategory", mappedBy="course", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="GradebookCategory", mappedBy="course", cascade={"persist", "remove"})
      */
     protected $gradebookCategories;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\GradebookEvaluation", mappedBy="course", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="GradebookEvaluation", mappedBy="course", cascade={"persist", "remove"})
      */
     protected $gradebookEvaluations;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\GradebookLink", mappedBy="course", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="GradebookLink", mappedBy="course", cascade={"persist", "remove"})
      */
     protected $gradebookLinks;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\TrackEHotspot", mappedBy="course", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="TrackEHotspot", mappedBy="course", cascade={"persist", "remove"})
      */
     protected $trackEHotspots;
 

@@ -277,6 +277,7 @@ class User implements UserInterface, EquatableInterface
     protected $dropBoxSentFiles;
 
     /**
+     * @Groups({"user:read", "user:write"})
      * @ORM\Column(type="array")
      */
     protected $roles;
@@ -344,6 +345,7 @@ class User implements UserInterface, EquatableInterface
     protected $resourceNodes;
 
     /**
+     * @ApiSubresource()
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CoreBundle\Entity\SessionRelCourseRelUser",
      *     mappedBy="user",
@@ -916,16 +918,6 @@ class User implements UserInterface, EquatableInterface
         $classString = !empty($classList) ? ' ['.implode(', ', $classList).']' : null;
 
         return \UserManager::formatUserFullName($this).$classString;
-    }
-
-    /**
-     * Get userId.
-     *
-     * @return int
-     */
-    public function getUserId()
-    {
-        return $this->userId;
     }
 
     /**

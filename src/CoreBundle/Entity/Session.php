@@ -113,7 +113,7 @@ class Session
     protected $urls;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\ResourceLink", mappedBy="session", cascade={"remove"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="ResourceLink", mappedBy="session", cascade={"remove"}, orphanRemoval=true)
      */
     protected $resourceLinks;
 
@@ -125,7 +125,7 @@ class Session
     /**
      * @var string
      * @Assert\NotBlank()
-     * @Groups({"session:read", "session:write"})
+     * @Groups({"session:read", "session:write", "session_rel_course_rel_user:read"})
      * @ORM\Column(name="name", type="string", length=150, nullable=false, unique=false)
      */
     protected $name;

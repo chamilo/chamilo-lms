@@ -4,11 +4,17 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Class SessionRelCourseRelUser.
  *
+ * @ApiResource(
+ *      shortName="SessionSubscription",
+ *      normalizationContext={"groups"={"session_rel_course_rel_user:read", "user:read"}}
+ * )
  * @ORM\Table(
  *      name="session_rel_course_rel_user",
  *      indexes={
@@ -47,7 +53,7 @@ class SessionRelCourseRelUser
 
     /**
      * @var Session
-     *
+     * @Groups({"session_rel_course_rel_user:read"})
      * @ORM\ManyToOne(targetEntity="Session", inversedBy="userCourseSubscriptions", cascade={"persist"})
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=false)
      */
@@ -55,7 +61,7 @@ class SessionRelCourseRelUser
 
     /**
      * @var Course
-     *
+     * @Groups({"session_rel_course_rel_user:read"})
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="sessionUserSubscriptions", cascade={"persist"})
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false)
      */

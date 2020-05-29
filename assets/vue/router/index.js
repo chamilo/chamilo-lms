@@ -8,11 +8,15 @@ import courseCategoryRoutes from './coursecategory';
 import documents from './documents';
 import store from "../store";
 import Login from "../views/Login";
+import MyCourseList from "../views/user/courses/List";
+import MySessionList from "../views/user/sessions/List";
 
 let router = new VueRouter({
     mode: "history",
     routes: [
         { path: "/login", component: Login },
+        { path: "/courses", name: "MyCourses", component: MyCourseList },
+        { path: "/sessions", name: "MySessions", component: MySessionList },
         courseRoutes,
         courseCategoryRoutes,
         documents

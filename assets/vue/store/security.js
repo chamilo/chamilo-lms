@@ -26,9 +26,19 @@ export default {
         isAuthenticated(state) {
             return state.isAuthenticated;
         },
+        isAdmin(state, getters) {
+            return getters.hasRole('ROLE_ADMIN');
+        },
+        getUser(state) {
+            return state.user;
+        },
         hasRole(state) {
             return role => {
-                return state.user.roles.indexOf(role) !== -1;
+                if (state.user.roles) {
+                    return state.user.roles.indexOf(role) !== -1;
+                }
+
+                return false;
             }
         }
     },

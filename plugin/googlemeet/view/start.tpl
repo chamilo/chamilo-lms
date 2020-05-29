@@ -31,6 +31,7 @@
                                                 <div class="col">
                                                     <div class="description">
                                                         <h4 class="title"> {{ meet.meet_name }} </h4>
+                                                        {{ meet.meet_description }}
                                                         <a class="btn btn-sm btn-meet" target="_blank" href="{{ meet.meet_url }}">
                                                             <i class="fa fa-share" aria-hidden="true"></i>
                                                             {{ 'AccessMeeting'|get_plugin_lang('GoogleMeetPlugin') }}
@@ -38,10 +39,13 @@
                                                     </div>
                                                     <div class="float-right">
                                                         <div class="btn-group btn-group-xs" role="group" aria-label="...">
-                                                            <a class="btn btn-sm btn-default" target="_blank" href="{{ meet.meet_url }}">
+                                                            <a class="btn btn-sm btn-default" href="meets.php?action=edit&id_meet={{ meet.id }}&{{ _p.web_cid_query }}">
                                                                 <i class="fa fa-pencil" aria-hidden="true"></i>
                                                             </a>
-                                                            <a class="btn btn-sm btn-default" target="_blank" href="{{ meet.meet_url }}">
+                                                            <a class="btn btn-sm btn-default"
+                                                               target="_blank"
+                                                               onclick="javascript:if(!confirm('{{ 'AreYouSureToDelete' | get_lang }}')) return false;"
+                                                               href="meets.php?action=delete&id_meet={{ meet.id }}&{{ _p.web_cid_query }}">
                                                                 <i class="fa fa-trash-o" aria-hidden="true"></i>
                                                             </a>
                                                         </div>

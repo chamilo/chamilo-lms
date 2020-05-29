@@ -66,6 +66,7 @@ class GoogleMeetPlugin extends Plugin
             id INT unsigned NOT NULL auto_increment PRIMARY KEY,
             meet_name VARCHAR(250) NULL,
             meet_url VARCHAR(250) NULL,
+            meet_description VARCHAR(250) NULL,
             type_meet INT NOT NULL,
             user_id INT NULL NOT NULL,
             cd_id INT NULL NOT NULL,
@@ -132,7 +133,7 @@ class GoogleMeetPlugin extends Plugin
     {
         Database::getManager()
             ->createQuery('DELETE FROM ChamiloCourseBundle:CTool t WHERE t.category = :category AND t.link LIKE :link')
-            ->execute(['category' => 'plugin', 'link' => 'zoom/start.php%']);
+            ->execute(['category' => 'plugin', 'link' => 'googlemeet/start.php%']);
     }
 
 
@@ -149,6 +150,7 @@ class GoogleMeetPlugin extends Plugin
             'meet_name' => $values['meet_name'],
             'meet_url' => $values['meet_url'],
             'type_meet' => $values['type_meet'],
+            'meet_description' => $values['meet_description'],
             'user_id' => $idUser,
             'cd_id' => $idCourse,
             'start_time' => null,
@@ -176,17 +178,7 @@ class GoogleMeetPlugin extends Plugin
         if (Database::num_rows($result) > 0) {
             while ($row = Database::fetch_array($result)) {
 
-                $action = Display::url(
-                    Display::return_icon(
-                        'edit.png',
-                        get_lang('Edit'),
-                        [],
-                        ICON_SIZE_SMALL
-                    ),
-                    'meets.php?action=edit&id_room='.$row['id']
-                );
-
-                $action.= Display::url(
+               $action = Display::url(
                     Display::return_icon(
                         'delete.png',
                         get_lang('Delete'),
@@ -209,6 +201,7 @@ class GoogleMeetPlugin extends Plugin
                     'id' => $row['id'],
                     'meet_name' => $row['meet_name'],
                     'meet_url' => $row['meet_url'],
+                    'meet_description' => $row['meet_description'],
                     'type_meet' => $row['type_meet'],
                     'user_id' => $row['user_id'],
                     'cd_id' => $row['cd_id'],
@@ -224,4 +217,86 @@ class GoogleMeetPlugin extends Plugin
         return $list;
     }
 
+    public function getMeet($idMeet){
+        if (empty($idMeet)) {
+            return false;
+        }
+        $meet = [];
+        $tableMeetList = Database::get_main_table(self::TABLE_MEET_LIST);
+        $sql = "SELECT * FROM $tableMeetList
+        WHERE id = $idMeet";
+
+        $result = Database::query($sql);
+        if (Database::num_rows($result) > 0) {
+            while ($row = Database::fetch_array($result)) {
+                $meet = [
+                    'id' => $row['id'],
+                    'meet_name' => $row['meet_name'],
+                    'meet_url' => $row['meet_url'],
+                    'meet_description' => $row['meet_description'],
+                    'type_meet' => $row['type_meet'],
+                    'user_id' => $row['user_id'],
+                    'cd_id' => $row['cd_id'],
+                    'start_time' => $row['start_time'],
+                    'end_time' => $row['end_time'],
+                    'session_id' => $row['session_id'],
+                    'activate' => $row['activate'],
+                ];
+            }
+        }
+        return $meet;
+    }
+
+    public function updateMeet($values){
+        if (!is_array($values) || empty($values['meet_name'])) {
+            return false;
+        }
+        $table = Database::get_main_table(self::TABLE_MEET_LIST);
+
+        $idCourse = api_get_course_int_id();
+        $idUser = api_get_user_id();
+
+        $params = [
+            'meet_name' => $values['meet_name'],
+            'meet_url' => $values['meet_url'],
+            'type_meet' => $values['type_meet'],
+            'meet_description' => $values['meet_description'],
+            'user_id' => $idUser,
+            'cd_id' => $idCourse,
+            'start_time' => null,
+            'end_time' => null,
+            'session_id' => null,
+            'activate' => 1,
+        ];
+
+        Database::update(
+            $table,
+            $params,
+            [
+                'id = ?' => [
+                    $values['id'],
+                ],
+            ]
+        );
+
+        return true;
+    }
+
+    public function deleteMeet($idMeet)
+    {
+        if (empty($idMeet)) {
+            return false;
+        }
+
+        $tableMeetList = Database::get_main_table(self::TABLE_MEET_LIST);
+        $sql = "DELETE FROM $tableMeetList WHERE id = $idMeet";
+        $result = Database::query($sql);
+
+        if (Database::affected_rows($result) != 1) {
+            return false;
+        }
+
+        return true;
+
+    }
 }

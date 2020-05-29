@@ -12,10 +12,13 @@ $strings['ManageMeetAccounts'] = 'Agregar una reunión Google Meet';
 $strings['AssociateZoomAccount'] = 'Asociar una sala Zoom';
 $strings['RemoveAndChangeRoomMeet'] = 'Modificar reunión programada';
 $strings['AddMeet'] = 'Registrar reunión Google Meet';
+$strings['EditMeet'] = 'Editar reunión Google Meet';
 $strings['MeetName'] = 'Nombre de la reunión';
 $strings['MeetNameHelp'] = 'Asigna un nombre para la reunión. Ejemplo: Sala 1';
 $strings['InstantMeetURL'] = "URL del Meet";
 $strings['InstantMeetURLHelp'] = "Es la URL para iniciar una reunión instantánea conn Google Meet";
 $strings['AccessMeeting'] = "Accede a la reunión";
+$strings['MeetingDescription'] = "Descripción";
+$strings['MeetingDescriptionHelp'] = "(Opcional) Añade una breve descripción sobre la reunión.";
 
 

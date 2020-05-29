@@ -30,6 +30,14 @@ if ($enable) {
         if ($action) {
             switch ($action) {
                 case 'delete':
+
+                    $idMeet = isset($_GET['id_meet']) ? $_GET['id_meet'] : null;
+                    $res = $plugin->deleteMeet($idMeet);
+                    if ($res) {
+                        $url = api_get_path(WEB_PLUGIN_PATH).'googlemeet/start.php?'.api_get_cidreq();
+                        header('Location: '.$url);
+                    }
+
                     break;
                 case 'add':
                     $actionLinks .= Display::url(
@@ -68,6 +76,19 @@ if ($enable) {
                         ]
                     );
 
+                    $form->addHtmlEditor(
+                        'meet_description',
+                        [
+                            $plugin->get_lang('MeetingDescription'),
+                            $plugin->get_lang('MeetingDescriptionHelp'),
+                        ],
+                        false,
+                        false,
+                        [
+                            'ToolbarSet' => 'Minimal',
+                        ]
+                    );
+
                     $form->addHidden('type_meet', 1);
 
                     $form->addButtonSave($plugin->get_lang('Add'));
@@ -91,8 +112,76 @@ if ($enable) {
                 case 'edit':
                     $actionLinks .= Display::url(
                         Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
-                        api_get_self().'?action=list&'.api_get_cidreq()
+                        api_get_path(WEB_PLUGIN_PATH).'googlemeet/start.php?'.api_get_cidreq()
                     );
+
+                    $idMeet = isset($_GET['id_meet']) ? (int)$_GET['id_meet'] : 0;
+                    $dataMeet = $plugin->getMeet(Security::remove_XSS($idMeet));
+
+                    //create form
+                    $form = new FormValidator(
+                        'edit_meet',
+                        'post',
+                        api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&'.api_get_cidreq()
+                    );
+
+                    $form->addHeader(get_lang('EditMeet'));
+
+                    $form->addText(
+                        'meet_name',
+                        [
+                            $plugin->get_lang('MeetName'),
+                            $plugin->get_lang('MeetNameHelp'),
+                        ],
+                        true,
+                        [
+                            'title' => $plugin->get_lang('MeetNameHelp'),
+                        ]
+                    );
+
+                    $form->addText(
+                        'meet_url',
+                        [
+                            $plugin->get_lang('InstantMeetURL'),
+                            $plugin->get_lang('InstantMeetURLHelp'),
+                        ],
+                        true,
+                        [
+                            'title' => $plugin->get_lang('InstantMeetURLHelp'),
+                        ]
+                    );
+
+                    $form->addHtmlEditor(
+                        'meet_description',
+                        [
+                            $plugin->get_lang('MeetingDescription'),
+                            $plugin->get_lang('MeetingDescriptionHelp'),
+                        ],
+                        false,
+                        false,
+                        [
+                            'ToolbarSet' => 'Minimal',
+                        ]
+                    );
+
+                    $form->addHidden('id', $idMeet);
+                    $form->addButtonSave($plugin->get_lang('Save'));
+
+                    $form->setDefaults($dataMeet);
+
+                    if ($form->validate()) {
+                        $values = $form->exportValues();
+                        $res = $plugin->updateMeet($values);
+
+                        if ($res) {
+                            $url = api_get_path(WEB_PLUGIN_PATH).'googlemeet/start.php?'.api_get_cidreq();
+                            header('Location: '.$url);
+                        }
+
+                    }
+
+                    $tpl->assign('form_room', $form->returnForm());
+
 
 
                     break;

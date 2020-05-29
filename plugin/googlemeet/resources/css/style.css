@@ -46,6 +46,8 @@
 .description{
     padding-left: 1rem;
     padding-right: 1rem;
+    font-size: 12px;
+    color: #666666;
 }
 .description .title{
     font-size: 1.45rem;

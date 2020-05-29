@@ -791,6 +791,18 @@ switch ($action) {
         header('Content-Type: application/json');
         echo json_encode($result);
         break;
+    case 'browser_test':
+        $quizCheckButtonEnabled = api_get_configuration_value('quiz_check_button_enable');
+
+        if ($quizCheckButtonEnabled) {
+            if (isset($_POST['sleep'])) {
+                sleep(2);
+            }
+
+            echo 'ok';
+        }
+
+        break;
     default:
         echo '';
 }

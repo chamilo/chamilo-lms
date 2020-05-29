@@ -9,7 +9,7 @@
  *
  *  ---------------------------------------------------------------------
  *  
- *  Copyright (c) 2015-2017 The MathJax Consortium
+ *  Copyright (c) 2015-2020 The MathJax Consortium
  * 
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -25,11 +25,15 @@
  */
 
 MathJax.Hub.Register.StartupHook("CommonHTML Jax Ready",function () {
-  var VERSION = "2.7.2";
+  var VERSION = "2.7.8";
   var MML = MathJax.ElementJax.mml,
       CONFIG = MathJax.Hub.config,
       CHTML = MathJax.OutputJax.CommonHTML;
-      
+  //
+  //  Fake node used for testing end-of-line potential breakpoint
+  //
+  var MO = MML.mo().With({CHTML: CHTML.BBOX.empty()});
+  
   //
   //  Penalties for the various line breaks
   //
@@ -40,6 +44,7 @@ MathJax.Hub.Register.StartupHook("CommonHTML Jax Ready",function () {
     badbreak:    [+200],
     auto:           [0],
     
+    maxwidth:     1.33,  // stop looking for breaks after this time the line-break width
     toobig:        800,
     nestfactor:    400,
     spacefactor:  -100,
@@ -109,7 +114,7 @@ MathJax.Hub.Register.StartupHook("CommonHTML Jax Ready",function () {
           },
           broken = false;
           
-      while (this.CHTMLbetterBreak(end,state) && 
+      while (this.CHTMLbetterBreak(end,state,true) && 
              (end.scanW >= CHTML.linebreakWidth || end.penalty === PENALTY.newline)) {
         this.CHTMLaddLine(stack,start,end.index,state,end.values,broken);
         start = end.index.slice(0); broken = true;
@@ -120,7 +125,9 @@ MathJax.Hub.Register.StartupHook("CommonHTML Jax Ready",function () {
       state.isLast = true;
       this.CHTMLaddLine(stack,start,[],state,ENDVALUES,broken);
 
-      node.style.width = stack.style.width = this.CHTML.pwidth = "100%";
+      if (parent.type === "math") {
+        node.style.width = stack.style.width = this.CHTML.pwidth = "100%";
+      }
       this.CHTML.mwidth = CHTML.Em(this.CHTML.w);
       this.CHTML.isMultiline = parent.CHTML.isMultiline = true;
       stack.style.verticalAlign = CHTML.Em(state.d - this.CHTML.d);
@@ -132,7 +139,7 @@ MathJax.Hub.Register.StartupHook("CommonHTML Jax Ready",function () {
     //
     //  Locate the next linebreak that is better than the current one
     //
-    CHTMLbetterBreak: function (info,state) {
+    CHTMLbetterBreak: function (info,state,toplevel) {
       if (this.isToken) return false;  // FIXME: handle breaking of token elements
       if (this.isEmbellished()) {
         info.embellished = this;
@@ -150,7 +157,7 @@ MathJax.Hub.Register.StartupHook("CommonHTML Jax Ready",function () {
       //  Look through the line for breakpoints,
       //    (as long as we are not too far past the breaking width)
       //
-      while (i < m && info.scanW < 1.33*CHTML.linebreakWidth) {
+      while (i < m && (info.scanW < PENALTY.maxwidth*CHTML.linebreakWidth || info.w === 0)) {
         if (this.data[i]) {
           if (this.data[i].CHTMLbetterBreak(info,state)) {
             better = true; index = [i].concat(info.index); W = info.W; w = info.w;
@@ -164,6 +171,13 @@ MathJax.Hub.Register.StartupHook("CommonHTML Jax Ready",function () {
         }
         info.index = []; i++; broken = false;
       }
+      //
+      //  Check if end-of-line is a better breakpoint
+      //
+      if (toplevel && better) {
+        MO.parent = this.parent; MO.inherit = this.inherit;
+        if (MO.CHTMLbetterBreak(info,state)) {better = false; index = info.index}
+      }
       if (info.nest) {info.nest--}
       info.index = index;
       if (better) {info.W = W; info.w = w}
@@ -172,7 +186,7 @@ MathJax.Hub.Register.StartupHook("CommonHTML Jax Ready",function () {
     CHTMLaddWidth: function (i,info,scanW) {
       if (this.data[i]) {
         var bbox = this.data[i].CHTML;
-        scanW += bbox.w + (bbox.L||0) + (bbox.R||0);
+        scanW += (bbox.w + (bbox.L||0) + (bbox.R||0)) * (bbox.scale || 1);
         info.W = info.scanW = scanW; info.w = 0;
       }
       return scanW;
@@ -400,7 +414,7 @@ MathJax.Hub.Register.StartupHook("CommonHTML Jax Ready",function () {
       //  Look through the line for breakpoints, including the open, close, and separators
       //    (as long as we are not too far past the breaking width)
       //
-      while (i < m && info.scanW < 1.33*CHTML.linebreakWidth) {
+      while (i < m && (info.scanW < PENALTY.maxwidth*CHTML.linebreakWidth || info.w === 0)) {
         var k = this.dataI[i];
         if (this.data[k]) {
           if (this.data[k].CHTMLbetterBreak(info,state)) {
@@ -496,6 +510,8 @@ MathJax.Hub.Register.StartupHook("CommonHTML Jax Ready",function () {
       //
       if (this.data[this.base]) {
         var base = CHTML.addElement(node,"mjx-base");
+        var ic = this.data[this.base].CHTML.ic;
+        if (ic) base.style.marginRight = CHTML.Em(-ic);
         if (start.length > 1) {
           this.data[this.base].CHTMLmoveSlice(start.slice(1),end.slice(1),base,state,values,"marginLeft");
         } else {
@@ -546,11 +562,11 @@ MathJax.Hub.Register.StartupHook("CommonHTML Jax Ready",function () {
       //  Get the bounding boxes and the width of the scripts
       //
       var bbox = this.CHTML, base = this.data[this.base].CHTML;
-      var dw = bbox.w - base.w - bbox.X;
+      var dw = bbox.w - base.w - (bbox.X||0);
       //
       //  Add in the width of the prescripts
       //  
-      info.scanW += bbox.X; scanW = info.scanW;
+      info.scanW += bbox.X||0; scanW = info.scanW;
       //
       //  Check if the base can be broken
       //
@@ -668,10 +684,10 @@ MathJax.Hub.Register.StartupHook("CommonHTML Jax Ready",function () {
       //  Get the penalty for this type of break and
       //    use it to modify the default penalty
       //
-      var linebreak = PENALTY[values.linebreak||MML.LINEBREAK.AUTO];
+      var linebreak = PENALTY[values.linebreak||MML.LINEBREAK.AUTO]||0;
       if (!MathJax.Object.isArray(linebreak)) {
-        //  for breaks past the width, don't modify penalty
-        if (offset >= 0) {penalty = linebreak * info.nest}
+        //  for breaks past the width, keep original penalty for newline
+        if (linebreak || offset >= 0) {penalty = linebreak * info.nest}
       } else {penalty = Math.max(1,penalty + linebreak[0] * info.nest)}
       //
       //  If the penalty is no better than the current one, return false
@@ -714,13 +730,13 @@ MathJax.Hub.Register.StartupHook("CommonHTML Jax Ready",function () {
       //  Get the penalty for this type of break and
       //    use it to modify the default penalty
       //
-      var linebreak = PENALTY[linebreakValue];
+      var linebreak = PENALTY[linebreakValue]||0;
       if (linebreakValue === MML.LINEBREAK.AUTO && w >= PENALTY.spacelimit &&
           !this.mathbackground && !this.background)
         linebreak = [(w+PENALTY.spaceoffset)*PENALTY.spacefactor];
       if (!MathJax.Object.isArray(linebreak)) {
-        //  for breaks past the width, don't modify penalty
-        if (offset >= 0) {penalty = linebreak * info.nest}
+        //  for breaks past the width, keep original penalty for newline
+        if (linebreak || offset >= 0) {penalty = linebreak * info.nest}
       } else {penalty = Math.max(1,penalty + linebreak[0] * info.nest)}
       //
       //  If the penalty is no better than the current one, return false

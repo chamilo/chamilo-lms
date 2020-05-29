@@ -9,7 +9,7 @@
  *
  *  ---------------------------------------------------------------------
  *  
- *  Copyright (c) 2011-2017 The MathJax Consortium
+ *  Copyright (c) 2011-2020 The MathJax Consortium
  * 
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@
  */
 
 MathJax.Hub.Register.StartupHook("SVG Jax Ready",function () {
-  var VERSION = "2.7.2";
+  var VERSION = "2.7.8";
   var MML = MathJax.ElementJax.mml,
       SVG = MathJax.OutputJax.SVG,
       BBOX = SVG.BBOX;
@@ -226,7 +226,7 @@ MathJax.Hub.Register.StartupHook("SVG Jax Ready",function () {
         if (values.width === "auto") {
           if (WP > .98) {Wf = Wp/(Wt+Wp); WW = Wt + Wp} else {WW = Wt / (1-WP)}
         } else {
-          WW = SVG.length2em(values.width,mu);
+          WW = Math.max(Wt + Wp, SVG.length2em(values.width,mu));
           for (i = 0, m = Math.min(J,CSPACE.length); i < m; i++) {WW -= CSPACE[i]}
         }
         //  Determine the relative column widths

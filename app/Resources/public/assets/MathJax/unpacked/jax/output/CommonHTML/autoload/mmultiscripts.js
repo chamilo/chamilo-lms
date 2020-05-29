@@ -9,7 +9,7 @@
  *
  *  ---------------------------------------------------------------------
  *  
- *  Copyright (c) 2015-2017 The MathJax Consortium
+ *  Copyright (c) 2015-2020 The MathJax Consortium
  * 
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@
  */
 
 MathJax.Hub.Register.StartupHook("CommonHTML Jax Ready",function () {
-  var VERSION = "2.7.2";
+  var VERSION = "2.7.8";
   var MML = MathJax.ElementJax.mml,
       CHTML = MathJax.OutputJax.CommonHTML;
 
@@ -76,7 +76,7 @@ MathJax.Hub.Register.StartupHook("CommonHTML Jax Ready",function () {
       var u = bbox.h - q, v = bbox.d + r, delta = 0, p;
       var bmml = this.data[this.base];
       if (bmml && (bmml.type === "mi" || bmml.type === "mo")) {
-        if (bmml.data.join("").length === 1 && bbox.rscale === 1 && !bbox.sH &&
+        if (CHTML.isChar(bmml.data.join("")) && bbox.rscale === 1 && !bbox.sH &&
           !bmml.Get("largeop")) {u = v = 0}
       }
       values = this.getValues("displaystyle","subscriptshift","superscriptshift","texprimestyle");

@@ -130,7 +130,10 @@ test('multiple sets the value', function (assert) {
 
   var data = new SelectData($select, selectOptions);
 
-  assert.equal($select.val(), null);
+  assert.ok(
+    $select.val() == null || $select.val().length == 0,
+    'nothing should be selected'
+  );
 
   data.select({
     id: 'Two',
@@ -164,12 +167,14 @@ test('duplicates - single - same id on select triggers change',
   var data = new SelectData($select, data);
   var second = $('#qunit-fixture .duplicates option')[2];
 
-  var changeTriggered = false;
+  var changeTriggered = false, inputTriggered = false;
 
   assert.equal($select.val(), 'one');
 
   $select.on('change', function () {
-    changeTriggered = true;
+    changeTriggered = inputTriggered;
+  }).on('input', function() {
+    inputTriggered = true;
   });
 
   data.select({
@@ -185,8 +190,13 @@ test('duplicates - single - same id on select triggers change',
   );
 
   assert.ok(
+    inputTriggered,
+    'The input event should be triggered'
+  );
+
+  assert.ok(
     changeTriggered,
-    'The change event should be triggered'
+    'The change event should be triggered after the input event'
   );
 
   assert.ok(
@@ -202,12 +212,14 @@ test('duplicates - single - different id on select triggers change',
   var data = new SelectData($select, data);
   var second = $('#qunit-fixture .duplicates option')[2];
 
-  var changeTriggered = false;
+  var changeTriggered = false, inputTriggered = false;
 
   $select.val('two');
 
   $select.on('change', function () {
-    changeTriggered = true;
+    changeTriggered = inputTriggered;
+  }).on('input', function() {
+    inputTriggered = true;
   });
 
   data.select({
@@ -223,8 +235,13 @@ test('duplicates - single - different id on select triggers change',
   );
 
   assert.ok(
+    inputTriggered,
+    'The input event should be triggered'
+  );
+
+  assert.ok(
     changeTriggered,
-    'The change event should be triggered'
+    'The change event should be triggered after the input event'
   );
 
   assert.ok(
@@ -240,12 +257,14 @@ function (assert) {
   var data = new SelectData($select, data);
   var second = $('#qunit-fixture .duplicates-multi option')[2];
 
-  var changeTriggered = false;
+  var changeTriggered = false, inputTriggered = false;
 
   $select.val(['one']);
 
   $select.on('change', function () {
-    changeTriggered = true;
+    changeTriggered = inputTriggered;
+  }).on('input', function() {
+    inputTriggered = true;
   });
 
   data.select({
@@ -261,8 +280,13 @@ function (assert) {
   );
 
   assert.ok(
+    inputTriggered,
+    'The input event should be triggered'
+  );
+
+  assert.ok(
     changeTriggered,
-    'The change event should be triggered'
+    'The change event should be triggered after the input event'
   );
 
   assert.ok(
@@ -278,12 +302,14 @@ function (assert) {
   var data = new SelectData($select, data);
   var second = $('#qunit-fixture .duplicates-multi option')[2];
 
-  var changeTriggered = false;
+  var changeTriggered = false, inputTriggered = false;
 
   $select.val(['two']);
 
   $select.on('change', function () {
-    changeTriggered = true;
+    changeTriggered = inputTriggered;
+  }).on('input', function() {
+    inputTriggered = true;
   });
 
   data.select({
@@ -299,8 +325,13 @@ function (assert) {
   );
 
   assert.ok(
+    inputTriggered,
+    'The input event should be triggered'
+  );
+
+  assert.ok(
     changeTriggered,
-    'The change event should be triggered'
+    'The change event should be triggered after the input event'
   );
 
   assert.ok(
@@ -454,4 +485,101 @@ test('data objects use the text of the option', function (assert) {
 
   assert.equal(item.id, '&');
   assert.equal(item.text, '&');
+});
+
+test('select option construction accepts id=0 (zero) value', function (assert) {
+  var $select = $('#qunit-fixture .single');
+
+  var selectOptions = [{ id: 0, text: 'Zero Value'}];
+  var data = new SelectData($select, selectOptions);
+
+  var optionElem = data.option(selectOptions[0]);
+
+  // If was "Zero Value"", then it ignored id property
+  assert.equal(
+    optionElem[0].value,
+    '0',
+    'Built option value should be "0" (zero as a string).'
+  );
+});
+
+test('select option construction accepts id="" (empty string) value',
+  function (assert) {
+  var $select = $('#qunit-fixture .single');
+
+  var selectOptions = [{ id: '', text: 'Empty String'}];
+  var data = new SelectData($select, selectOptions);
+
+  var optionElem = data.option(selectOptions[0]);
+
+  assert.equal(
+    optionElem[0].value,
+    '',
+    'Built option value should be an empty string.'
+  );
+});
+
+test('user-defined types are normalized properly', function (assert) {
+  var $select = $('#qunit-fixture .user-defined'),
+
+  UserDefinedType = function (id, text) {
+    var self = this;
+
+    self.id = id;
+    self.text = text;
+
+    return self;
+  };
+
+  var testData = [
+    'Test',
+    {
+        id: 4,
+        text: 'item'
+    },
+    new UserDefinedType(1, 'aaaaaa')
+  ];
+
+  var data = new SelectData($select, selectOptions);
+
+  var normalizedItem = data._normalizeItem(testData[0]);
+  var normalizedItem2 = data._normalizeItem(testData[1]);
+  var normalizedItem3 = data._normalizeItem(testData[2]);
+
+  assert.equal(
+    testData[0],
+    normalizedItem.id,
+    'id property should be equal to text after normalize'
+  );
+
+  assert.equal(
+    testData[0],
+    normalizedItem.text,
+    'text property should be equal after normalize'
+  );
+
+  assert.equal(
+    testData[1].id,
+    normalizedItem2.id,
+    'id property should be equal after normalize'
+  );
+
+  assert.equal(
+    testData[1].text,
+    normalizedItem2.text,
+    'text property should be equal after normalize'
+  );
+
+  assert.equal(
+    testData[2].id,
+    normalizedItem3.id,
+    'id property should be equal after normalize'
+  );
+
+  assert.equal(
+    testData[2].text,
+    normalizedItem3.text,
+    'text property should be equal after normalize'
+  );
+
 });

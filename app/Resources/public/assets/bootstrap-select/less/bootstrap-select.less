@@ -1,5 +1,10 @@
 @import "variables";
 
+@keyframes bs-notify-fadeOut {
+  0% {opacity: 0.9;}
+  100% {opacity: 0;}
+}
+
 // Mixins
 .cursor-disabled() {
   cursor: not-allowed;
@@ -20,10 +25,17 @@ select.selectpicker {
   > .dropdown-toggle {
     position: relative;
     width: 100%;
-    z-index: 1;
     // necessary for proper positioning of caret in Bootstrap 4 (pushes caret to the right)
     text-align: right;
     white-space: nowrap;
+    // force caret to be vertically centered for Bootstrap 4 multi-line buttons
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+
+    &:after {
+      margin-top: -1px;
+    }
 
     &.bs-placeholder {
       &,
@@ -59,13 +71,14 @@ select.selectpicker {
     padding: 0 !important;
     opacity: 0 !important;
     border: none;
+    z-index: 0 !important;
 
     &.mobile-device {
       top: 0;
       left: 0;
       display: block !important;
       width: 100% !important;
-      z-index: 2;
+      z-index: 2 !important;
     }
   }
 
@@ -73,12 +86,12 @@ select.selectpicker {
   .has-error & .dropdown-toggle,
   .error & .dropdown-toggle,
   &.is-invalid .dropdown-toggle,
-  .was-validated & .selectpicker:invalid + .dropdown-toggle {
+  .was-validated & select:invalid + .dropdown-toggle {
     border-color: @color-red-error;
   }
 
   &.is-valid .dropdown-toggle,
-  .was-validated & .selectpicker:valid + .dropdown-toggle {
+  .was-validated & select:valid + .dropdown-toggle {
     border-color: @color-green-success;
   }
 
@@ -98,28 +111,29 @@ select.selectpicker {
   }
 }
 
-.bootstrap-select.form-control {
-  margin-bottom: 0;
-  padding: 0;
-  border: none;
-
-  :not(.input-group) > &:not([class*="col-"]) {
-    width: 100%;
-  }
-
-  &.input-group-btn {
-    z-index: auto;
-
-    &:not(:first-child):not(:last-child) {
-      > .btn {
-        border-radius: 0;
-      }
-    }
-  }
-}
-
 // The selectpicker components
 .bootstrap-select {
+  &.form-control {
+    margin-bottom: 0;
+    padding: 0;
+    border: none;
+    height: auto;
+
+    :not(.input-group) > &:not([class*="col-"]) {
+      width: 100%;
+    }
+
+    &.input-group-btn {
+      float: none;
+      z-index: auto;
+    }
+  }
+
+  .form-inline &,
+  .form-inline &.form-control:not([class*="col-"]) {
+    width: auto;
+  }
+
   &:not(.input-group-btn),
   &[class*="col-"] {
     float: none;
@@ -198,30 +212,43 @@ select.selectpicker {
 
   // The selectpicker button
   .dropdown-toggle {
-    // necessary to maintain proper button height with Bootstrap 3
-    &:before {
-      content: '';
-      display: inline-block;
-    }
-
     .filter-option {
-      position: absolute;
+      position: static;
       top: 0;
       left: 0;
-      padding-top: inherit;
-      padding-right: inherit;
-      padding-bottom: inherit; // needed for proper alignment of show-menu-arrow (deprecated)
-      padding-left: inherit;
+      float: left;
       height: 100%;
       width: 100%;
       text-align: left;
-    }
+      overflow: hidden;
+      flex: 0 1 auto; // for IE10
 
-    .filter-option-inner {
-      padding-right: inherit;
+      .bs3& {
+        padding-right: inherit;
+      }
+
+      .input-group .bs3-has-addon& {
+        position: absolute;
+        padding-top: inherit;
+        padding-bottom: inherit;
+        padding-left: inherit;
+        float: none;
+
+        .filter-option-inner {
+          padding-right: inherit;
+        }
+      }
     }
 
     .filter-option-inner-inner {
+      overflow: hidden;
+    }
+
+    // used to expand the height of the button when inside an input group
+    .filter-expand {
+      width: 0 !important;
+      float: left;
+      opacity: 0 !important;
       overflow: hidden;
     }
 
@@ -308,6 +335,10 @@ select.selectpicker {
       pointer-events: none;
       opacity: 0.9;
       box-sizing: border-box;
+
+      &.fadeOut {
+        animation: 300ms linear 750ms forwards bs-notify-fadeOut;
+      }
     }
   }
 
@@ -328,6 +359,10 @@ select.selectpicker {
     .filter-option-inner,
     .filter-option-inner-inner {
       display: inline;
+    }
+
+    .bs-caret:before {
+      content: '\00a0';
     }
 
     .caret {
@@ -358,6 +393,7 @@ select.selectpicker {
     height: 1em;
     border-style: solid;
     border-width: 0 0.26em 0.26em 0;
+    transform-style: preserve-3d;
     transform: rotate(45deg);
   }
 }

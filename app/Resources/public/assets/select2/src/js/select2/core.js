@@ -5,8 +5,8 @@ define([
   './keys'
 ], function ($, Options, Utils, KEYS) {
   var Select2 = function ($element, options) {
-    if ($element.data('select2') != null) {
-      $element.data('select2').destroy();
+    if (Utils.GetData($element[0], 'select2') != null) {
+      Utils.GetData($element[0], 'select2').destroy();
     }
 
     this.$element = $element;
@@ -22,7 +22,7 @@ define([
     // Set up the tabindex
 
     var tabindex = $element.attr('tabindex') || 0;
-    $element.data('old-tabindex', tabindex);
+    Utils.StoreData($element[0], 'old-tabindex', tabindex);
     $element.attr('tabindex', '-1');
 
     // Set up containers and adapters
@@ -83,6 +83,9 @@ define([
     // Synchronize any monitored attributes
     this._syncAttributes();
 
+    Utils.StoreData($element[0], 'select2', this);
+
+    // Ensure backwards compatibility with $element.data('select2').
     $element.data('select2', this);
   };
 
@@ -159,6 +162,12 @@ define([
       return null;
     }
 
+    if (method == 'computedstyle') {
+      var computedStyle = window.getComputedStyle($element[0]);
+
+      return computedStyle.width;
+    }
+
     return method;
   };
 
@@ -199,8 +208,8 @@ define([
 
     if (observer != null) {
       this._observer = new observer(function (mutations) {
-        $.each(mutations, self._syncA);
-        $.each(mutations, self._syncS);
+        self._syncA();
+        self._syncS(null, mutations);
       });
       this._observer.observe(this.$element[0], {
         attributes: true,
@@ -322,7 +331,7 @@ define([
       if (self.isOpen()) {
         if (key === KEYS.ESC || key === KEYS.TAB ||
             (key === KEYS.UP && evt.altKey)) {
-          self.close();
+          self.close(evt);
 
           evt.preventDefault();
         } else if (key === KEYS.ENTER) {
@@ -356,7 +365,7 @@ define([
   Select2.prototype._syncAttributes = function () {
     this.options.set('disabled', this.$element.prop('disabled'));
 
-    if (this.options.get('disabled')) {
+    if (this.isDisabled()) {
       if (this.isOpen()) {
         this.close();
       }
@@ -367,7 +376,7 @@ define([
     }
   };
 
-  Select2.prototype._syncSubtree = function (evt, mutations) {
+  Select2.prototype._isChangeMutation = function (evt, mutations) {
     var changed = false;
     var self = this;
 
@@ -395,7 +404,22 @@ define([
       }
     } else if (mutations.removedNodes && mutations.removedNodes.length > 0) {
       changed = true;
+    } else if ($.isArray(mutations)) {
+      $.each(mutations, function(evt, mutation) {
+        if (self._isChangeMutation(evt, mutation)) {
+          // We've found a change mutation.
+          // Let's escape from the loop and continue
+          changed = true;
+          return false;
+        }
+      });
     }
+    return changed;
+  };
+
+  Select2.prototype._syncSubtree = function (evt, mutations) {
+    var changed = this._isChangeMutation(evt, mutations);
+    var self = this;
 
     // Only re-pull the data if we think there is a change
     if (changed) {
@@ -417,7 +441,8 @@ define([
       'open': 'opening',
       'close': 'closing',
       'select': 'selecting',
-      'unselect': 'unselecting'
+      'unselect': 'unselecting',
+      'clear': 'clearing'
     };
 
     if (args === undefined) {
@@ -445,7 +470,7 @@ define([
   };
 
   Select2.prototype.toggleDropdown = function () {
-    if (this.options.get('disabled')) {
+    if (this.isDisabled()) {
       return;
     }
 
@@ -461,15 +486,40 @@ define([
       return;
     }
 
+    if (this.isDisabled()) {
+      return;
+    }
+
     this.trigger('query', {});
   };
 
-  Select2.prototype.close = function () {
+  Select2.prototype.close = function (evt) {
     if (!this.isOpen()) {
       return;
     }
 
-    this.trigger('close', {});
+    this.trigger('close', { originalEvent : evt });
+  };
+
+  /**
+   * Helper method to abstract the "enabled" (not "disabled") state of this
+   * object.
+   *
+   * @return {true} if the instance is not disabled.
+   * @return {false} if the instance is disabled.
+   */
+  Select2.prototype.isEnabled = function () {
+    return !this.isDisabled();
+  };
+
+  /**
+   * Helper method to abstract the "disabled" state of this object.
+   *
+   * @return {true} if the disabled option is true.
+   * @return {false} if the disabled option is false.
+   */
+  Select2.prototype.isDisabled = function () {
+    return this.options.get('disabled');
   };
 
   Select2.prototype.isOpen = function () {
@@ -546,7 +596,7 @@ define([
       });
     }
 
-    this.$element.val(newVal).trigger('change');
+    this.$element.val(newVal).trigger('input').trigger('change');
   };
 
   Select2.prototype.destroy = function () {
@@ -572,10 +622,12 @@ define([
     this._syncS = null;
 
     this.$element.off('.select2');
-    this.$element.attr('tabindex', this.$element.data('old-tabindex'));
+    this.$element.attr('tabindex',
+    Utils.GetData(this.$element[0], 'old-tabindex'));
 
     this.$element.removeClass('select2-hidden-accessible');
     this.$element.attr('aria-hidden', 'false');
+    Utils.RemoveData(this.$element[0]);
     this.$element.removeData('select2');
 
     this.dataAdapter.destroy();
@@ -603,7 +655,7 @@ define([
 
     this.$container.addClass('select2-container--' + this.options.get('theme'));
 
-    $container.data('element', this.$element);
+    Utils.StoreData($container[0], 'element', this.$element);
 
     return $container;
   };

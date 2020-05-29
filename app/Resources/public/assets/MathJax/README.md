@@ -1,4 +1,5 @@
-# MathJax
+# MathJax <img alt="GitHub package.json version (branch)" src="https://img.shields.io/github/package-json/v/mathjax/MathJax/legacy-v2.svg">
+
 
 ## Beautiful math in all browsers
 
@@ -32,14 +33,8 @@ See <http://www.mathjax.org/> for additional details.
 ## Installation and Usage
 
 The MathJax installation and usage documentation is available in a
-separate GitHub repository at
-
-      https://github.com/mathjax/mathjax-docs
-
-The HTML versions are now available at
-
-      http://docs.mathjax.org/
-
+separate GitHub repository at <https://github.com/mathjax/mathjax-docs>.
+The HTML versions can now be viewed at <http://docs.mathjax.org/>, 
 where it is possible for you to submit corrections and modifications
 directly to the documentation on line.
 

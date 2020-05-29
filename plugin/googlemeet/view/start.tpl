@@ -14,19 +14,17 @@
                     {% endif %}
                 </div>
                 {% if meets %}
-                    <div class="row">
+                    <div class="meet-list">
                         {% for meet in meets %}
-                            <div class="col-md-4">
+                            <div class="meet-item">
                                 <div class="info-meet">
-                                    <div class="card card-meet" style="border-left:  .25rem solid {{ meet.meet_color }};">
+                                    <div class="card card-meet" style="border-left:  .25rem solid {{ meet.meet_color }}; background: {{ meet.meet_color }}14">
                                         <div class="card-body">
                                             <div class="row-meet">
-                                                <div class="col-auto">
+                                                <div class="card-info">
                                                     <div style="background: {{ meet.meet_color }}" class="icon icon-shape text-white rounded-circle shadow">
                                                         <i class="fa fa-video-camera" aria-hidden="true"></i>
                                                     </div>
-                                                </div>
-                                                <div class="col">
                                                     <div class="description">
                                                         <h4 class="title" title="{{ meet.meet_name }}"> {{ meet.meet_name }} </h4>
                                                         <div class="text">

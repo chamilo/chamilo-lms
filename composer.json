@@ -124,6 +124,7 @@
         "sabre/vobject": "~4.2",
         "sensio/framework-extra-bundle": "~5.0",
         "sensiolabs/security-checker": "~6.0",
+        "sonata-project/exporter": "^2.2",
         "sunra/php-simple-html-dom-parser": "~1.5",
         "symfony/apache-pack": "^1.0",
         "symfony/asset": "^5.0",

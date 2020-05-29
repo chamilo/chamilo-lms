@@ -666,22 +666,22 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         // Dummy content
         $user->setDateOfBirth(null);
         //$user->setBiography($noDataLabel);
-        $user->setFacebookData($noDataLabel);
+        /*$user->setFacebookData($noDataLabel);
         $user->setFacebookName($noDataLabel);
-        $user->setFacebookUid($noDataLabel);
+        $user->setFacebookUid($noDataLabel);*/
         //$user->setImageName($noDataLabel);
         //$user->setTwoStepVerificationCode($noDataLabel);
-        $user->setGender($noDataLabel);
-        $user->setGplusData($noDataLabel);
+        //$user->setGender($noDataLabel);
+        /*$user->setGplusData($noDataLabel);
         $user->setGplusName($noDataLabel);
-        $user->setGplusUid($noDataLabel);
+        $user->setGplusUid($noDataLabel);*/
         $user->setLocale($noDataLabel);
         $user->setTimezone($noDataLabel);
-        $user->setTwitterData($noDataLabel);
+        /*$user->setTwitterData($noDataLabel);
         $user->setTwitterName($noDataLabel);
-        $user->setTwitterUid($noDataLabel);
+        $user->setTwitterUid($noDataLabel);*/
         $user->setWebsite($noDataLabel);
-        $user->setToken($noDataLabel);
+        //$user->setToken($noDataLabel);
 
         $courses = $user->getCourses();
         $list = [];

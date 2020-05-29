@@ -14,10 +14,14 @@
         <!--  <directory name="public/main/exercise"/> -->
         <ignoreFiles>
             <directory name="vendor/*" />
+            <directory name="src/CoreBundle/Admin" />
+            <directory name="src/CoreBundle/Block" />
+            <directory name="src/CoreBundle/Menu" />
             <directory name="src/CoreBundle/Migrations" />
             <directory name="src/CoreBundle/Component/Editor" />
 <!--            <directory name="src/CourseBundle" />-->
             <directory name="src/CourseBundle/Component/CourseCopy" />
+            <directory name="src/CourseBundle/Admin" />
             <directory name="src/GraphQlBundle" />
             <directory name="src/LtiBundle" />
             <file name="public/main/admin/db.php" />

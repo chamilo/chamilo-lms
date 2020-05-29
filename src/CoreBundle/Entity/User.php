@@ -53,6 +53,9 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
  */
 class User implements UserInterface, EquatableInterface
 {
+    public const ROLE_DEFAULT = 'ROLE_USER';
+    public const ROLE_SUPER_ADMIN = 'ROLE_SUPER_ADMIN';
+
     public const COURSE_MANAGER = 1;
     public const TEACHER = 1;
     public const SESSION_ADMIN = 3;
@@ -201,6 +204,13 @@ class User implements UserInterface, EquatableInterface
      * @ORM\Column(name="credentials_expire_at", type="datetime", nullable=true, unique=false)
      */
     protected $credentialsExpireAt;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="date_of_birth", type="datetime", nullable=true)
+     */
+    protected $dateOfBirth;
 
     /**
      * @var \DateTime
@@ -1683,6 +1693,25 @@ class User implements UserInterface, EquatableInterface
     }
 
     /**
+     * @param string $role
+     *
+     * @return $this
+     */
+    public function addRole($role)
+    {
+        $role = strtoupper($role);
+        if ($role === static::ROLE_DEFAULT) {
+            return $this;
+        }
+
+        if (!in_array($role, $this->roles, true)) {
+            $this->roles[] = $role;
+        }
+
+        return $this;
+    }
+
+    /**
      * Returns the user roles.
      *
      * @return array The roles
@@ -2167,6 +2196,26 @@ class User implements UserInterface, EquatableInterface
         $this->biography = $biography;
 
         return $this;
+    }
+
+    /**
+     * @param \DateTime $dateOfBirth
+     *
+     * @return User
+     */
+    public function setDateOfBirth($dateOfBirth)
+    {
+        $this->dateOfBirth = $dateOfBirth;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getDateOfBirth()
+    {
+        return $this->dateOfBirth;
     }
 
     public function getCourseGroupsAsTutorFromCourse(Course $course): ArrayCollection

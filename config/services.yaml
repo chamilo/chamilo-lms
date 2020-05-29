@@ -99,8 +99,6 @@ services:
         tags:
             - {name: security.voter}
 
-
-
 sylius_settings:
     driver: doctrine/orm
 

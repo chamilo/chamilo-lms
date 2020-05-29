@@ -304,8 +304,6 @@
         },
         created() {
             this.$data.legacy_content = '';
-
-            console.log(process.env.BASE_URL);
             // section-content
             let isAuthenticated = JSON.parse(this.$parent.$el.attributes["data-is-authenticated"].value),
                 user = JSON.parse(this.$parent.$el.attributes["data-user"].value);

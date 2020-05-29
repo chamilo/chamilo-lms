@@ -2,6 +2,7 @@ var Encore = require('@symfony/webpack-encore');
 
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const FileManagerPlugin = require('filemanager-webpack-plugin');
+var dotenv = require('dotenv');
 
 Encore
     .setOutputPath('public/build/')
@@ -82,6 +83,14 @@ Encore
             to: 'libs/mathjax/MathJax.js'
         },
     ])
+    // define the environment variables
+    .configureDefinePlugin(options => {
+        const env = dotenv.config({ path: '.env.local' });
+        if (env.error) {
+            throw env.error;
+        }
+        options['process.env'].APP_API_PLATFORM_URL = JSON.stringify(env.parsed.APP_API_PLATFORM_URL);
+    })
     // enable ESLint
     // .addLoader({
     //     enforce: 'pre',

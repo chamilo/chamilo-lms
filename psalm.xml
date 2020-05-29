@@ -18,9 +18,7 @@
             <directory name="src/CoreBundle/Component/Editor" />
 <!--            <directory name="src/CourseBundle" />-->
             <directory name="src/CourseBundle/Component/CourseCopy" />
-            <directory name="src/FaqBundle" />
             <directory name="src/GraphQlBundle" />
-
             <directory name="src/LtiBundle" />
             <file name="public/main/admin/db.php" />
 <!--            <directory name="src/MediaBundle" />-->

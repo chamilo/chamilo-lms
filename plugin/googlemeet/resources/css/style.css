@@ -63,6 +63,10 @@
     width: 100%;
     display: inline-block;
 }
+.description .text{
+    display: grid;
+    padding-bottom: 1rem;
+}
 .rounded-circle {
     border-radius: 50%!important;
 }

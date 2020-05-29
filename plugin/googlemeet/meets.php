@@ -76,6 +76,28 @@ if ($enable) {
                         ]
                     );
 
+                    /*$timeNextWeek = time() + 86400 * 2;
+                    $nextWeek = substr(api_get_local_time($timeNextWeek), 0, 10);
+                    if (!isset($defaults['star_date'])) {
+                        $date = substr($nextWeek, 0, 10);
+                        $defaults['star_date'] = $date.' 09:00';
+                    }
+
+                    if (!isset($defaults['end_date'])) {
+                        $nextDay = substr(api_get_local_time($timeNextWeek), 0, 10);
+                        $date = substr($nextDay, 0, 10);
+                        $defaults['end_date'] = $date.' 10:00';
+                    }
+
+                    $form->addDateTimePicker(
+                        'star_date',
+                        $plugin->get_lang('StartDateMeet')
+                    );
+                    $form->addDateTimePicker(
+                        'end_date',
+                        $plugin->get_lang('EndDateMeet')
+                    );*/
+
                     try {
                         $form->addElement(
                             'color',
@@ -108,6 +130,10 @@ if ($enable) {
                     $form->addHidden('type_meet', 1);
 
                     $form->addButtonSave($plugin->get_lang('Add'));
+
+                    if (!empty($defaults)) {
+                        $form->setDefaults($defaults);
+                    }
 
                     try {
                         if ($form->validate()) {

@@ -1,11 +1,10 @@
 <div class="row">
     <div class="col-md-12">
-        <div class="panel panel-default">
-            <div class="panel-body">
+        <div class="meets">
+            <div class="">
                 <div class="plugin_logo">
                     <img alt="" class="img-responsive" src="{{ _p.web }}plugin/googlemeet/resources/img/svg/meet_room.svg">
                 </div>
-
                 <div class="tools text-center">
                     {% if is_admin or is_teacher %}
                         <a href="{{ url_add_room }}" class="btn btn-success btn-add-meet">
@@ -14,7 +13,6 @@
                         </a>
                     {% endif %}
                 </div>
-
                 {% if meets %}
                     <div class="row">
                         {% for meet in meets %}
@@ -31,8 +29,10 @@
                                                 <div class="col">
                                                     <div class="description">
                                                         <h4 class="title" title="{{ meet.meet_name }}"> {{ meet.meet_name }} </h4>
-                                                        {{ meet.meet_description }}
-                                                        <a class="btn btn-sm btn-meet" target="_blank" href="{{ meet.meet_url }}">
+                                                        <div class="text">
+                                                            {{ meet.meet_description }}
+                                                        </div>
+                                                        <a class="btn btn-sm btn-block btn-meet" target="_blank" href="{{ meet.meet_url }}">
                                                             <i class="fa fa-share" aria-hidden="true"></i>
                                                             {{ 'AccessMeeting'|get_plugin_lang('GoogleMeetPlugin') }}
                                                         </a>

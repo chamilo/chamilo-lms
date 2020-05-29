@@ -22,5 +22,7 @@ $strings['MeetingDescription'] = "Descripción";
 $strings['MeetingDescriptionHelp'] = "(Opcional) Añade una breve descripción sobre la reunión.";
 $strings['MeetColor'] = "Color Meet";
 $strings['MeetColorHelp'] = "(Opcional)";
+$strings['StartDateMeet'] = "Fecha de inicio";
+$strings['EndDateMeet'] = "Fecha de fin";
 
 

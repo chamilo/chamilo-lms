@@ -1,0 +1,30 @@
+parser: babel-eslint
+extends: 
+  - airbnb
+  - prettier
+
+rules:
+  max-len: [0, 100]
+  no-constant-condition: 0
+  arrow-body-style: [1, "as-needed"]
+  comma-dangle: [2, "never"]
+  padded-blocks: [0, "never"]
+  no-unused-vars: [2, {vars: all, args: none}]
+  prefer-arrow-callback: 1
+  no-plusplus: 0
+  no-param-reassign: 0
+  no-unused-expressions: 1
+  react/prop-types:
+    - 0
+    - ignore: #coming from hoc
+      - location
+      - fields
+      - handleSubmit
+
+globals:
+  expect: true
+  describe: true
+  it: true
+  before: true
+  after: true
+  window: true

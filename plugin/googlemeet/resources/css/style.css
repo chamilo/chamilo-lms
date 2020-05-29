@@ -51,11 +51,17 @@
     padding-right: 1rem;
     font-size: 12px;
     color: #666666;
+    display: grid;
 }
 .description .title{
     font-size: 1.45rem;
     font-weight: 600!important;
     color: #32325d;
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow: ellipsis;
+    width: 100%;
+    display: inline-block;
 }
 .rounded-circle {
     border-radius: 50%!important;
@@ -96,6 +102,7 @@
 }
 .float-right {
     float: right;
+    margin-top: 1rem;
 }
 .btn-add-meet{
     color: #fff;

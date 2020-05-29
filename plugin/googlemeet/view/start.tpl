@@ -30,7 +30,7 @@
                                                 </div>
                                                 <div class="col">
                                                     <div class="description">
-                                                        <h4 class="title"> {{ meet.meet_name }} </h4>
+                                                        <h4 class="title" title="{{ meet.meet_name }}"> {{ meet.meet_name }} </h4>
                                                         {{ meet.meet_description }}
                                                         <a class="btn btn-sm btn-meet" target="_blank" href="{{ meet.meet_url }}">
                                                             <i class="fa fa-share" aria-hidden="true"></i>

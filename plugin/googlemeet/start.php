@@ -4,7 +4,7 @@
  */
 require_once __DIR__.'/../../vendor/autoload.php';
 
-$course_plugin = 'zoom'; //needed in order to load the plugin lang variables
+$course_plugin = 'googlemeet'; //needed in order to load the plugin lang variables
 require_once __DIR__.'/config.php';
 
 $htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="'.api_get_path(

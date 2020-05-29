@@ -9285,7 +9285,7 @@ class SessionManager
      */
     public static function getCountUsersInCourseSession(Course $course, Session $session)
     {
-        $urlId = api_get_current_access_url_id();
+        $url = api_get_url_entity(api_get_current_access_url_id());
 
         return Database::getManager()
             ->createQuery("
@@ -9300,13 +9300,13 @@ class SessionManager
                     scu.course = :course AND
                     su.relationType <> :relationType AND
                     scu.session = :session AND
-                    a.portal = :url
+                    a.url = :url
             ")
             ->setParameters([
                 'course' => $course->getId(),
                 'relationType' => SESSION_RELATION_TYPE_RRHH,
                 'session' => $session->getId(),
-                'url' => $urlId,
+                'url' => $url,
             ])
             ->getSingleScalarResult();
     }

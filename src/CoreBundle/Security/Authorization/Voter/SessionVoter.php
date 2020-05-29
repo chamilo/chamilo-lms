@@ -280,7 +280,7 @@ class SessionVoter extends Voter
         if ($authChecker->isGranted('ROLE_SESSION_MANAGER') &&
             'true' !== $settingsManager->getSetting('session.allow_session_admins_to_manage_all_sessions')
         ) {
-            if ($session->getSessionAdminId() !== $user->getId()) {
+            if ($session->getSessionAdmin()->getId() !== $user->getId()) {
                 return false;
             }
         }

@@ -19,10 +19,10 @@ $id_user = intval($_GET['id_user']);
 
 $em = Database::getManager();
 /** @var Session $session */
-$session = $em->find('ChamiloCoreBundle:Session', $id_session);
+$session = api_get_session_entity( $id_session);
 $user = api_get_user_entity($id_user);
 
-if (!api_is_platform_admin() && $session->getSessionAdminId() != api_get_user_id()) {
+if (!api_is_platform_admin() && $session->getSessionAdmin()->getId() != api_get_user_id()) {
     api_not_allowed(true);
 }
 

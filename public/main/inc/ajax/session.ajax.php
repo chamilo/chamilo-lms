@@ -253,13 +253,13 @@ switch ($action) {
         $em = Database::getManager();
 
         $course = $em->find('ChamiloCoreBundle:Course', $courseId);
-        $session = $em->find('ChamiloCoreBundle:Session', $sessionId);
+        $session = api_get_session_entity($sessionId);
 
         if (!$course || !$session) {
             break;
         }
 
-        if (!api_is_platform_admin(true) || $session->getSessionAdminId() != $currentUserId) {
+        if (!api_is_platform_admin(true) || $session->getSessionAdmin()->getId() != $currentUserId) {
             break;
         }
 
@@ -388,14 +388,14 @@ switch ($action) {
         $em = Database::getManager();
 
         $courseInfo = api_get_course_info_by_id($courseId);
-        $session = $em->find('ChamiloCoreBundle:Session', $sessionId);
+        $session = api_get_session_entity($sessionId);
         $currentUserId = api_get_user_id();
 
         if (empty($courseInfo) || !$session) {
             break;
         }
 
-        if (!api_is_platform_admin(true) || $session->getSessionAdminId() != $currentUserId) {
+        if (!api_is_platform_admin(true) || $session->getSessionAdmin()->getId() != $currentUserId) {
             break;
         }
 

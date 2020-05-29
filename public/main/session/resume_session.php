@@ -410,7 +410,7 @@ $tpl = new Template($tool_name);
 $tpl->assign('session_header', $sessionHeader);
 $tpl->assign('title', $sessionTitle);
 $tpl->assign('general_coach', $generalCoach);
-$tpl->assign('session_admin', api_get_user_info($session->getSessionAdminId()));
+$tpl->assign('session_admin', api_get_user_info($session->getSessionAdmin()->getId()));
 $tpl->assign('session', $sessionInfo);
 $tpl->assign('programmed_announcement', $programmedAnnouncement);
 $tpl->assign('session_category', is_null($sessionCategory) ? null : $sessionCategory->getName());

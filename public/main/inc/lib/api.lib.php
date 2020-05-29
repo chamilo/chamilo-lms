@@ -3851,12 +3851,7 @@ function api_not_allowed(
     $message = null,
     $responseCode = 0
 ) {
-    /*throw new Exception('You are not allowed');
-    $message = empty($message) ? get_lang('You are not allowed') : $message;
-    Session::write('error_message', $message);
-
-    header('Location: '.api_get_path(WEB_PUBLIC_PATH).'error');
-    exit;*/
+    throw new Exception('You are not allowed');
 }
 
 /**

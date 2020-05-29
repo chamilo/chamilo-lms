@@ -4,16 +4,6 @@
             <div class="panel-body">
 
                 {% if form_room %}
-                    {% if is_admin %}
-                        <div class="alert alert-info" role="alert">
-                            {{ 'MessageMeetingAdmin'|get_plugin_lang('ZoomPlugin') }}
-                        </div>
-                    {% endif %}
-                    {% if is_teacher %}
-                        <div class="alert alert-success" role="alert">
-                            {{ 'MessageMeetingTeacher'|get_plugin_lang('ZoomPlugin') }}
-                        </div>
-                    {% endif %}
 
                     {{ form_room }}
 

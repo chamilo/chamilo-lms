@@ -67,8 +67,8 @@ if ($enable) {
                     $form->addText(
                         'meet_url',
                         [
-                            $plugin->get_lang('InstantMeetURL'),
-                            $plugin->get_lang('InstantMeetURLHelp'),
+                            $plugin->get_lang('GoogleMeetURL'),
+                            $plugin->get_lang('GoogleMeetURLHelp'),
                         ],
                         true,
                         [

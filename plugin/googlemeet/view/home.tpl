@@ -61,7 +61,7 @@
 
                 {% else %}
                     <div class="alert alert-warning" role="alert">
-                        {{ 'CourseDoesNotHaveAssociatedAccountMeet'|get_plugin_lang('GoogleMeetPlugin') }}
+                        {{ 'CourseDoesNotHaveAccountGoogleMeet'|get_plugin_lang('GoogleMeetPlugin') }}
                     </div>
                 {% endif %}
             </div>

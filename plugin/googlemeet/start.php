@@ -13,7 +13,7 @@ $htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="'.api_get_path(
 
 $plugin = GoogleMeetPlugin::create();
 
-$tool_name = $plugin->get_lang('tool_title');
+$tool_name = $plugin->get_lang('plugin_title');
 $tpl = new Template($tool_name);
 $message = null;
 $userId = api_get_user_id();
@@ -42,6 +42,6 @@ $tpl->assign('meets', $meets);
 $tpl->assign('is_admin', $isAdmin);
 $tpl->assign('is_student', $isStudent);
 $tpl->assign('is_teacher', $isTeacher);
-$content = $tpl->fetch('googlemeet/view/start.tpl');
+$content = $tpl->fetch('googlemeet/view/home.tpl');
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

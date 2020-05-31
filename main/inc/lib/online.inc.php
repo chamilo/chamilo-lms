@@ -53,6 +53,23 @@ function LoginCheck($uid)
                       access_url_id = $access_url_id 
                       WHERE login_id = $uid";
             Database::query($query);
+        } else {
+            $query = "INSERT $online_table (
+                login_id,
+                login_date,
+                user_ip,
+                c_id,
+                session_id,
+                access_url_id
+            ) values (
+                $uid,
+                '$login_date',
+                '$user_ip',
+                $cid,
+                $session_id,
+                $access_url_id
+            )";
+            Database::query($query);
         }
     }
 }

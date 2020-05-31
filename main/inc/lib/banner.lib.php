@@ -162,6 +162,14 @@ function getCustomTabs()
     }
 
     $urlId = api_get_current_access_url_id();
+    $isStudent = api_is_student();
+    $cacheAvailable = api_get_configuration_value('apc');
+    if ($cacheAvailable === true) {
+        $apcVar = api_get_configuration_value('apc_prefix').'custom_tabs_url_'.$urlId.'_student_'.($isStudent?'1':'0');
+        if (apcu_exists($apcVar)) {
+            return apcu_fetch($apcVar);
+        }
+    }
     $tableSettingsCurrent = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
     $sql = "SELECT * FROM $tableSettingsCurrent
             WHERE
@@ -171,9 +179,9 @@ function getCustomTabs()
     $customTabs = [];
     while ($row = Database::fetch_assoc($result)) {
         $shouldAdd = true;
-        if (strpos($row['subkey'], Plugin::TAB_FILTER_NO_STUDENT) !== false && api_is_student()) {
+        if (strpos($row['subkey'], Plugin::TAB_FILTER_NO_STUDENT) !== false && $isStudent) {
             $shouldAdd = false;
-        } elseif (strpos($row['subkey'], Plugin::TAB_FILTER_ONLY_STUDENT) !== false && !api_is_student()) {
+        } elseif (strpos($row['subkey'], Plugin::TAB_FILTER_ONLY_STUDENT) !== false && !$isStudent) {
             $shouldAdd = false;
         }
 
@@ -181,7 +189,10 @@ function getCustomTabs()
             $customTabs[] = $row;
         }
     }
-
+    if ($cacheAvailable === true) {
+        $apcVar = api_get_configuration_value('apc_prefix').'custom_tabs_url_'.$urlId.'_student_'.($isStudent?'1':'0');
+        apcu_store($apcVar, $customTabs, 15);
+    }
     return $customTabs;
 }
 

@@ -793,13 +793,14 @@ class Statistics
      * Show some stats about the accesses to the different course tools.
      *
      * @param array $result If defined, this serves as data. Otherwise, will get the data from getToolsStats()
+     * @return string HTML table
      */
     public static function printToolStats($result = null)
     {
         if (empty($result)) {
             $result = self::getToolsStats();
         }
-        self::printStats(get_lang('PlatformToolAccess'), $result, true);
+        return self::printStats(get_lang('PlatformToolAccess'), $result, true);
     }
 
     /**

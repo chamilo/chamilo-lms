@@ -352,6 +352,7 @@ $tools = [
         'report=no_login_users' => get_lang('StatsUsersDidNotLoginInLastPeriods'),
         'report=zombies' => get_lang('Zombies'),
         'report=users_active' => get_lang('UserStats'),
+        'report=users_online' => get_lang('UsersOnline'),
     ],
     get_lang('System') => [
         'report=activities' => get_lang('ImportantActivities'),
@@ -1313,6 +1314,64 @@ switch ($report) {
 
         $content = $form->returnForm().$content;
 
+        break;
+    case 'users_online':
+        $content = '<div class="tracking-course-summary">
+            <div class="row">
+                <div class="col-lg-3 col-sm-3">
+                    <div class="panel panel-default tracking tracking-student">
+                        <div class="panel-body">
+                            <span class="tracking-icon">
+                                <i class="fa fa-heartbeat" aria-hidden="true"></i>
+                            </span>
+                            <div class="tracking-info">
+                                <div class="tracking-text">'.get_lang('UsersOnline').' (3\')</div>
+                                <div class="tracking-number">'.getOnlineUsersCount(3).'</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-3">
+                    <div class="panel panel-default tracking tracking-lessons">
+                        <div class="panel-body">
+                            <span class="tracking-icon">
+                                <i class="fa fa-id-card-o" aria-hidden="true"></i>
+                            </span>
+                            <div class="tracking-info">
+                                <div class="tracking-text">'.get_lang('UsersOnline').' (5\')</div>
+                                <div class="tracking-number">'.getOnlineUsersCount(5).'</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-3">
+                    <div class="panel panel-default tracking tracking-exercise">
+                        <div class="panel-body">
+                            <span class="tracking-icon">
+                                <i class="fa fa-book" aria-hidden="true"></i>
+                            </span>
+                            <div class="tracking-info">
+                                <div class="tracking-text">'.get_lang('UsersOnline').' (30\')</div>
+                                <div class="tracking-number">'.getOnlineUsersCount(30).'</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-3">
+                    <div class="panel panel-default tracking tracking-certificate">
+                        <div class="panel-body">
+                            <span class="tracking-icon">
+                                <i class="fa fa-graduation-cap" aria-hidden="true"></i>
+                            </span>
+                            <div class="tracking-info">
+                                <div class="tracking-text">'.get_lang('UsersOnline').' (120\')</div>
+                                <div class="tracking-number">'.getOnlineUsersCount(120).'</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>';
         break;
     case 'users':
         $content .= '<div class="row">';

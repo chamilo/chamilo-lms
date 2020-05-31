@@ -873,7 +873,7 @@ EOT;
 
     /**
      * @param string $name
-     * @param string $label
+     * @param mixed $label String, or array if form element with a comment
      * @param array  $options
      * @param array  $attributes
      *

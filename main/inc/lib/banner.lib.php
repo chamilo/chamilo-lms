@@ -868,23 +868,24 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
 
 /**
  * Helper function to get the number of users online, using cache if available.
- *
+ * @param integer $minutes Number of minutes (how many users were active in those last X minutes?)
  * @return int The number of users currently online
  */
-function getOnlineUsersCount()
+function getOnlineUsersCount($minutes = null)
 {
     $number = 0;
+    $limit = !empty($minutes) ? intval($minutes) : api_get_setting('time_limit_whosonline');
     $cacheAvailable = api_get_configuration_value('apc');
     if ($cacheAvailable === true) {
-        $apcVar = api_get_configuration_value('apc_prefix').'my_campus_whoisonline_count_simple';
+        $apcVar = api_get_configuration_value('apc_prefix').'my_campus_whoisonline_count_simple_'.$minutes;
         if (apcu_exists($apcVar)) {
             $number = apcu_fetch($apcVar);
         } else {
-            $number = who_is_online_count(api_get_setting('time_limit_whosonline'));
+            $number = who_is_online_count($limit);
             apcu_store($apcVar, $number, 15);
         }
     } else {
-        $number = who_is_online_count(api_get_setting('time_limit_whosonline'));
+        $number = who_is_online_count($limit);
     }
 
     return $number;

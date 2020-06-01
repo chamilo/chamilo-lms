@@ -82,7 +82,6 @@ services:
         class: APY\DataGridBundle\Grid\GridRegistry
         public: true
 
-
     League\Flysystem\MountManager: '@oneup_flysystem.mount_manager'
 
     # Voters

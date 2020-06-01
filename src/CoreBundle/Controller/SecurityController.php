@@ -5,27 +5,45 @@
 namespace Chamilo\CoreBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * Class SecurityController.
  */
 class SecurityController extends AbstractController
 {
+    private $serializer;
+
+    public function __construct(SerializerInterface $serializer)
+    {
+        $this->serializer = $serializer;
+    }
+
     /**
-     * @Route("/login", name="login")
+     * Route("/login", name="login")
      */
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
+        error_log('login');
         $error = $authenticationUtils->getLastAuthenticationError();
         $lastUsername = $authenticationUtils->getLastUsername();
 
-        return $this->render('@ChamiloCore/Index/vue.html.twig', [
-            'last_username' => $lastUsername,
-            'error' => $error,
-        ]);
+        /** @var User $user */
+
+        $user = $this->getUser();
+        $data = [];
+        if ($user) {
+            $userClone = clone $user;
+            $userClone->setPassword('');
+            $data = $this->serializer->serialize($userClone, JsonEncoder::FORMAT);
+        }
+
+        return new JsonResponse($data, Response::HTTP_OK, [], true);
     }
 
     /**
@@ -36,9 +54,12 @@ class SecurityController extends AbstractController
         $error = $authenticationUtils->getLastAuthenticationError();
         $lastUsername = $authenticationUtils->getLastUsername();
 
-        return $this->render('@ChamiloCore/login.html.twig', [
-            'last_username' => $lastUsername,
-            'error' => $error,
-        ]);
+        /** @var User $user */
+        $user = $this->getUser();
+        $userClone = clone $user;
+        $userClone->setPassword('');
+        $data = $this->serializer->serialize($userClone, JsonEncoder::FORMAT);
+
+        return new JsonResponse($data, Response::HTTP_OK, [], true);
     }
 }

@@ -27,7 +27,7 @@ export default {
             return state.isAuthenticated;
         },
         isAdmin(state, getters) {
-            return getters.hasRole('ROLE_ADMIN');
+            return getters.isAuthenticated && getters.hasRole('ROLE_ADMIN');
         },
         getUser(state) {
             return state.user;

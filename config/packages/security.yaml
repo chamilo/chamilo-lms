@@ -59,7 +59,6 @@ security:
                 login_path: /login
                 use_forward: false
                 check_path: /login
-#                success_handler: chamilo_core.listener.login_success_handler
                 failure_path: null
             guard:
                 authenticators:

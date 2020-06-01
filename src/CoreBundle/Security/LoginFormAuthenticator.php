@@ -10,8 +10,10 @@ use Chamilo\CoreBundle\Hook\HookFactory;
 use Chamilo\CoreBundle\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -24,9 +26,12 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
 use Symfony\Component\Security\Guard\Authenticator\AbstractFormLoginAuthenticator;
 use Symfony\Component\Security\Guard\PasswordAuthenticatedInterface;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * Class LoginFormAuthenticator.
@@ -41,10 +46,11 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
     private $passwordEncoder;
     //private $formFactory;
     private $hookFactory;
-    //private $userRepository;
+    private $userRepository;
     private $csrfTokenManager;
     private $urlGenerator;
     private $entityManager;
+    public $serializer;
 
     public function __construct(
         EntityManagerInterface $entityManager,
@@ -53,17 +59,19 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
         UserPasswordEncoderInterface $passwordEncoder,
         //FormFactoryInterface $formFactory,
         HookFactory $hookFactory,
-        //UserRepository $userRepository,
-        CsrfTokenManagerInterface $csrfTokenManager
+        UserRepository $userRepository,
+        CsrfTokenManagerInterface $csrfTokenManager,
+        SerializerInterface $serializer
     ) {
         $this->router = $router;
         $this->passwordEncoder = $passwordEncoder;
         //$this->formFactory = $formFactory;
         $this->hookFactory = $hookFactory;
-        //   $this->userRepository = $userRepository;
+        $this->userRepository = $userRepository;
         $this->csrfTokenManager = $csrfTokenManager;
         $this->entityManager = $entityManager;
         $this->urlGenerator = $urlGenerator;
+        $this->serializer = $serializer;
     }
 
     public function supports(Request $request): bool
@@ -79,7 +87,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
             $data = json_decode($request->getContent(), true);
             $username = $data['username'];
             $password = $data['password'];
-        //$token = $data['csrf_token'];
+            //$token = $data['csrf_token'];
         } else {
             $username = $request->request->get('username');
             $password = $request->request->get('password');
@@ -106,12 +114,12 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
      */
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
-        $token = new CsrfToken('authenticate', $credentials['csrf_token']);
+        /*$token = new CsrfToken('authenticate', $credentials['csrf_token']);
         if (!$this->csrfTokenManager->isTokenValid($token)) {
-            //throw new InvalidCsrfTokenException();
-        }
-
-        $user = $this->entityManager->getRepository(User::class)->findOneBy(['username' => $credentials['username']]);
+            throw new InvalidCsrfTokenException();
+        }*/
+        /** @var User $user */
+        $user = $this->userRepository->findOneBy(['username' => $credentials['username']]);
 
         if (!$user) {
             // fail authentication with a custom error
@@ -151,27 +159,59 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
         return $credentials['password'];
     }
 
-    public function onAuthenticationFailure(Request $request, AuthenticationException $exception): RedirectResponse
+    public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
     {
-        $request->getSession()->set(Security::AUTHENTICATION_ERROR, $exception);
+        /*$request->getSession()->set(Security::AUTHENTICATION_ERROR, $exception);
 
-        return new RedirectResponse($this->router->generate('login'));
+        return new RedirectResponse($this->router->generate('login'));*/
+
+        $data = [
+            // you may want to customize or obfuscate the message first
+            'message' => strtr($exception->getMessageKey(), $exception->getMessageData()),
+
+            // or to translate this message
+            // $this->translator->trans($exception->getMessageKey(), $exception->getMessageData())
+        ];
+
+        return new JsonResponse($data, Response::HTTP_UNAUTHORIZED);
+    }
+
+    public function start(Request $request, AuthenticationException $authException = null)
+    {
+        $data = [
+            // you might translate this message
+            'message' => 'Authentication Required',
+        ];
+
+        return new JsonResponse($data, Response::HTTP_UNAUTHORIZED);
     }
 
     /**
      * @param string $providerKey
      */
-    public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey): RedirectResponse
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
-        if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
+        /*if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
             return new RedirectResponse($targetPath);
         }
 
-        return new RedirectResponse($this->urlGenerator->generate('home'));
+        return new RedirectResponse($this->urlGenerator->generate('home'));*/
+
+        $user = $token->getUser();
+        $userClone = clone $user;
+        $userClone->setPassword('');
+        $data = $this->serializer->serialize($userClone, JsonEncoder::FORMAT);
+
+        return new JsonResponse($data, Response::HTTP_OK, [], true);
     }
 
     public function getLoginUrl(): RedirectResponse
     {
         return $this->urlGenerator->generate(self::LOGIN_ROUTE);
+    }
+
+    public function supportsRememberMe()
+    {
+        return false;
     }
 }

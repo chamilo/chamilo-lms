@@ -1409,7 +1409,7 @@ switch ($report) {
                 <div class="panel panel-default tracking tracking-student">
                     <div class="panel-body">
                         <span class="tracking-icon">
-                            <i class="fa fa-thermometer-4" aria-hidden="true"></i>
+                            <i class="fa fa-thermometer-3" aria-hidden="true"></i>
                         </span>
                         <div class="tracking-info">
                             <div class="tracking-text">(5\')</div>

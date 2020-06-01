@@ -1406,7 +1406,7 @@ switch ($report) {
                 </div>
             </div>
             <div class="col-lg-3 col-sm-3">
-                <div class="panel panel-default tracking tracking-student">
+                <div class="panel panel-default tracking tracking-lessons">
                     <div class="panel-body">
                         <span class="tracking-icon">
                             <i class="fa fa-thermometer-3" aria-hidden="true"></i>

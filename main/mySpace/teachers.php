@@ -2,8 +2,6 @@
 /* For licensing terms, see /license.txt */
 /**
  * Teacher report.
- *
- * @package chamilo.reporting
  */
 $cidReset = true;
 

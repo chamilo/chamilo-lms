@@ -3,8 +3,6 @@
 
 /**
  * Report on students subscribed to courses I am teaching.
- *
- * @package chamilo.reporting
  */
 $cidReset = true;
 
@@ -107,7 +105,7 @@ function get_users($from, $limit, $column, $direction)
         }
     }
 
-    if ($drhLoaded === false) {
+    if (false === $drhLoaded) {
         $students = UserManager::getUsersFollowedByUser(
             api_get_user_id(),
             api_is_student_boss() ? null : STUDENT,

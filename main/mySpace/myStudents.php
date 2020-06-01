@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CLpCategory;
@@ -8,11 +9,6 @@ if (!isset($_GET['course'])) {
     $cidReset = true;
 }
 
-/**
- * Implements the tracking of students in the Reporting pages.
- *
- * @package chamilo.reporting
- */
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
@@ -124,13 +120,13 @@ if (!empty($details)) {
             'name' => get_lang('Users'),
         ];
     } else {
-        if ($origin === 'tracking_course') {
+        if ('tracking_course' === $origin) {
             $interbreadcrumb[] = [
                 'url' => '../tracking/courseLog.php?cidReq='.$courseCode.'&id_session='.api_get_session_id(),
                 'name' => get_lang('Tracking'),
             ];
         } else {
-            if ($origin === 'resume_session') {
+            if ('resume_session' === $origin) {
                 $interbreadcrumb[] = [
                     'url' => "../session/session_list.php",
                     'name' => get_lang('SessionList'),
@@ -1347,7 +1343,7 @@ if (empty($details)) {
         $timeCourse = Tracking::getCalculateTime($student_id, $courseInfo['real_id'], $sessionId);
     }
 
-    if ($user_info['status'] != INVITEE) {
+    if (INVITEE != $user_info['status']) {
         $csv_content[] = [];
         $csv_content[] = [str_replace('&nbsp;', '', strip_tags($userInfo['complete_name']))];
         $trackingColumns = api_get_configuration_value('tracking_columns');

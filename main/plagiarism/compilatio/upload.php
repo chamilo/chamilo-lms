@@ -14,7 +14,7 @@ $courseInfo = api_get_course_info();
 $compilatio = new Compilatio();
 
 /* if we have to upload severals documents*/
-if (isset($_REQUEST['type']) && $_REQUEST['type'] === 'multi') {
+if (isset($_REQUEST['type']) && 'multi' === $_REQUEST['type']) {
     $docs = explode('a', $_REQUEST['doc']);
     for ($k = 0; $k < count($docs) - 1; $k++) {
         $documentId = 0;
@@ -41,7 +41,7 @@ if (isset($_REQUEST['type']) && $_REQUEST['type'] === 'multi') {
                 $WrkUrl = $currentCourseRepositoryWeb.$doc->url;
                 $LocalWrkUrl = $courseInfo['course_sys_path'].$doc->url;
                 $mime = DocumentManager::file_get_mime_type($doc->title);
-                if ($compilatio->getTransportMode() === 'wget') {
+                if ('wget' === $compilatio->getTransportMode()) {
                     /*Compilatio's server recover tjre file throught wget like this:
                     username:password@http://somedomain.com/reg/remotefilename.tar.gz */
                     if (strlen($compilatio->getWgetUri()) > 2) {
@@ -102,7 +102,7 @@ function sendDocument($documentId, $courseInfo)
     $mime = DocumentManager::file_get_mime_type($doc->title);
 
     $compilatio = new Compilatio();
-    if ($compilatio->getTransportMode() === 'wget') {
+    if ('wget' === $compilatio->getTransportMode()) {
         if (strlen($compilatio->getWgetUri()) > 2) {
             $filename = preg_replace('/$', '', $compilatio->getWgetUri()).'/'.$courseInfo['path'].'/'.$doc->title;
         } else {

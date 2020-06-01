@@ -112,7 +112,7 @@ class SurveyUtil
         $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
 
         // Make the survey anonymous
-        if ($survey_data['anonymous'] == 1) {
+        if (1 == $survey_data['anonymous']) {
             $surveyUser = Session::read('surveyuser');
             if (empty($surveyUser)) {
                 $user = md5($user.time());
@@ -640,7 +640,7 @@ class SurveyUtil
             echo strip_tags(isset($question['survey_question']) ? $question['survey_question'] : null);
             echo '</div>';
 
-            if ($question['type'] === 'score') {
+            if ('score' == $question['type']) {
                 /** @todo This function should return the options as this is needed further in the code */
                 $options = self::display_question_report_score($survey_data, $question, $offset);
             } elseif ($question['type'] === 'open' || $question['type'] === 'comment') {
@@ -1077,9 +1077,9 @@ class SurveyUtil
                 in_array($row['question_id'], $_POST['questions_filter']))
             ) {
                 // We do not show comment and pagebreak question types
-                if ($row['type'] != 'pagebreak') {
+                if ('pagebreak' != $row['type']) {
                     $content .= ' <th';
-                    if ($row['number_of_options'] > 0 && $row['type'] != 'percentage') {
+                    if ($row['number_of_options'] > 0 && 'percentage' != $row['type']) {
                         $content .= ' colspan="'.$row['number_of_options'].'"';
                     }
                     $content .= '>';
@@ -1146,7 +1146,7 @@ class SurveyUtil
                 (is_array($_POST['questions_filter']) && in_array($row['question_id'], $_POST['questions_filter']))
             ) {
                 // we do not show comment and pagebreak question types
-                if ($row['type'] === 'open' || $row['type'] === 'comment') {
+                if ('open' == $row['type'] || 'comment' == $row['type']) {
                     $content .= '<th>&nbsp;-&nbsp;</th>';
                     $possible_answers[$row['question_id']][$row['question_option_id']] = $row['question_option_id'];
                     $display_percentage_header = 1;
@@ -1203,8 +1203,8 @@ class SurveyUtil
                 $answers_of_user = [];
             }
             if (isset($questions[$row['question_id']]) &&
-                $questions[$row['question_id']]['type'] !== 'open' &&
-                $questions[$row['question_id']]['type'] !== 'comment'
+                'open' != $questions[$row['question_id']]['type'] &&
+                'comment' != $questions[$row['question_id']]['type']
             ) {
                 $answers_of_user[$row['question_id']][$row['option_id']] = $row;
             } else {
@@ -1214,7 +1214,7 @@ class SurveyUtil
         }
 
         $userParam = $old_user;
-        if ($survey_data['anonymous'] != 0) {
+        if (0 != $survey_data['anonymous']) {
             $userParam = $i;
             $i++;
         }
@@ -1328,7 +1328,7 @@ class SurveyUtil
                         } else {
                             $content .= '<td align="center">';
                             if (!empty($answers_of_user[$question_id][$option_id])) {
-                                if ($answers_of_user[$question_id][$option_id]['value'] != 0) {
+                                if (0 != $answers_of_user[$question_id][$option_id]['value']) {
                                     $content .= $answers_of_user[$question_id][$option_id]['value'];
                                 } else {
                                     $content .= 'v';
@@ -1551,8 +1551,8 @@ class SurveyUtil
                 $answers_of_user = [];
             }
 
-            if ($possible_answers_type[$row['question_id']] == 'open' ||
-                $possible_answers_type[$row['question_id']] == 'comment'
+            if ('open' == $possible_answers_type[$row['question_id']] ||
+                'comment' == $possible_answers_type[$row['question_id']]
             ) {
                 $temp_id = 'open'.$open_question_iterator;
                 $answers_of_user[$row['question_id']][$temp_id] = $row;
@@ -1601,8 +1601,8 @@ class SurveyUtil
         $compact = false
     ) {
         $return = '';
-        if ($survey_data['anonymous'] == 0) {
-            if (intval($user) !== 0) {
+        if (0 == $survey_data['anonymous']) {
+            if (0 !== intval($user)) {
                 $userInfo = api_get_user_info($user);
                 if (!empty($userInfo)) {
                     $user_displayed = $userInfo['complete_name_with_username'];
@@ -2413,7 +2413,7 @@ class SurveyUtil
 
         // Remind unanswered is a special version of remind all reminder
         $exclude_users = [];
-        if ($remindUnAnswered == 1) {
+        if (1 == $remindUnAnswered) {
             // Remind only unanswered users
             $reminder = 1;
             $exclude_users = SurveyManager::get_people_who_filled_survey($_GET['survey_id']);
@@ -2423,7 +2423,7 @@ class SurveyUtil
         $course_id = api_get_course_int_id();
         $session_id = api_get_session_id();
 
-        if ($isAdditionalEmail == false) {
+        if (false == $isAdditionalEmail) {
             $result = CourseManager::separateUsersGroups($users_array);
             $groupList = $result['groups'];
             $users_array = $result['users'];
@@ -2454,7 +2454,7 @@ class SurveyUtil
 
         $users_array = array_unique($users_array);
         foreach ($users_array as $key => $value) {
-            if (!isset($value) || $value == '') {
+            if (!isset($value) || '' == $value) {
                 continue;
             }
 
@@ -3062,7 +3062,7 @@ class SurveyUtil
         if (api_is_allowed_to_edit() || api_is_element_in_the_session(TOOL_SURVEY, $survey_id)) {
             $editUrl = $codePath.'survey/create_new_survey.php?'.
                 http_build_query($params + ['action' => 'edit', 'survey_id' => $survey_id]);
-            if ($survey->getSurveyType() == 3) {
+            if (3 == $survey->getSurveyType()) {
                 $editUrl = $codePath.'survey/edit_meeting.php?'.
                     http_build_query($params + ['action' => 'edit', 'survey_id' => $survey_id]);
             }
@@ -3115,7 +3115,7 @@ class SurveyUtil
             }
         }
 
-        if ($type != 3) {
+        if (3 != $type) {
             $actions[] = Display::url(
                 Display::return_icon('preview_view.png', get_lang('Preview')),
                 $codePath.'survey/preview.php?'.http_build_query($params + ['survey_id' => $survey_id])
@@ -3136,7 +3136,7 @@ class SurveyUtil
             );
         }
 
-        if ($type != 3) {
+        if (3 != $type) {
             $actions[] = $hideReportingButton ? null : $reportingLink;
         }
 
@@ -3228,7 +3228,7 @@ class SurveyUtil
      */
     public static function anonymous_filter($anonymous)
     {
-        if ($anonymous == 1) {
+        if (1 == $anonymous) {
             return get_lang('Yes');
         } else {
             return get_lang('No');
@@ -3391,7 +3391,7 @@ class SurveyUtil
                 $array[1] = $survey[1];
             } else {
                 // Doodle
-                if ($survey['survey_type'] == 3) {
+                if (3 == $survey['survey_type']) {
                     $array[1] = Display::url(
                         $survey[1],
                         api_get_path(WEB_CODE_PATH).'survey/meeting.php?survey_id='.$survey[0].'&'.api_get_cidreq()
@@ -3748,13 +3748,13 @@ class SurveyUtil
         $extra = UserManager::get_extra_fields(0, 50, 5, 'ASC');
 
         foreach ($extra as $id => $field_details) {
-            if ($field_details[6] == 0) {
+            if (0 == $field_details[6]) {
                 continue;
             }
             switch ($field_details[2]) {
                 case UserManager::USER_FIELD_TYPE_TEXT:
                     $field_list_array['extra_'.$field_details[1]]['name'] = $field_details[3];
-                    if ($field_details[7] == 0) {
+                    if (0 == $field_details[7]) {
                         $field_list_array['extra_'.$field_details[1]]['visibility'] = 0;
                     } else {
                         $field_list_array['extra_'.$field_details[1]]['visibility'] = 1;
@@ -3762,7 +3762,7 @@ class SurveyUtil
                     break;
                 case UserManager::USER_FIELD_TYPE_TEXTAREA:
                     $field_list_array['extra_'.$field_details[1]]['name'] = $field_details[3];
-                    if ($field_details[7] == 0) {
+                    if (0 == $field_details[7]) {
                         $field_list_array['extra_'.$field_details[1]]['visibility'] = 0;
                     } else {
                         $field_list_array['extra_'.$field_details[1]]['visibility'] = 1;
@@ -3770,7 +3770,7 @@ class SurveyUtil
                     break;
                 case UserManager::USER_FIELD_TYPE_RADIO:
                     $field_list_array['extra_'.$field_details[1]]['name'] = $field_details[3];
-                    if ($field_details[7] == 0) {
+                    if (0 == $field_details[7]) {
                         $field_list_array['extra_'.$field_details[1]]['visibility'] = 0;
                     } else {
                         $field_list_array['extra_'.$field_details[1]]['visibility'] = 1;
@@ -3792,7 +3792,7 @@ class SurveyUtil
                         $field_list_array['extra_'.$field_details[1]]['name'] = $field_details[3];
                     }
 
-                    if ($field_details[7] == 0) {
+                    if (0 == $field_details[7]) {
                         $field_list_array['extra_'.$field_details[1]]['visibility'] = 0;
                     } else {
                         $field_list_array['extra_'.$field_details[1]]['visibility'] = 1;
@@ -3800,7 +3800,7 @@ class SurveyUtil
                     break;
                 case UserManager::USER_FIELD_TYPE_SELECT_MULTIPLE:
                     $field_list_array['extra_'.$field_details[1]]['name'] = $field_details[3];
-                    if ($field_details[7] == 0) {
+                    if (0 == $field_details[7]) {
                         $field_list_array['extra_'.$field_details[1]]['visibility'] = 0;
                     } else {
                         $field_list_array['extra_'.$field_details[1]]['visibility'] = 1;
@@ -3808,7 +3808,7 @@ class SurveyUtil
                     break;
                 case UserManager::USER_FIELD_TYPE_DATE:
                     $field_list_array['extra_'.$field_details[1]]['name'] = $field_details[3];
-                    if ($field_details[7] == 0) {
+                    if (0 == $field_details[7]) {
                         $field_list_array['extra_'.$field_details[1]]['visibility'] = 0;
                     } else {
                         $field_list_array['extra_'.$field_details[1]]['visibility'] = 1;
@@ -3816,7 +3816,7 @@ class SurveyUtil
                     break;
                 case UserManager::USER_FIELD_TYPE_DATETIME:
                     $field_list_array['extra_'.$field_details[1]]['name'] = $field_details[3];
-                    if ($field_details[7] == 0) {
+                    if (0 == $field_details[7]) {
                         $field_list_array['extra_'.$field_details[1]]['visibility'] = 0;
                     } else {
                         $field_list_array['extra_'.$field_details[1]]['visibility'] = 1;
@@ -3824,7 +3824,7 @@ class SurveyUtil
                     break;
                 case UserManager::USER_FIELD_TYPE_DOUBLE_SELECT:
                     $field_list_array['extra_'.$field_details[1]]['name'] = $field_details[3];
-                    if ($field_details[7] == 0) {
+                    if (0 == $field_details[7]) {
                         $field_list_array['extra_'.$field_details[1]]['visibility'] = 0;
                     } else {
                         $field_list_array['extra_'.$field_details[1]]['visibility'] = 1;

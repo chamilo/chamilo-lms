@@ -2705,7 +2705,7 @@ function api_get_session_visibility(
 
             // If there is a session duration but there is no previous
             // access by the user, then the session is still available
-            if (count($courseAccess) == 0) {
+            if (0 == count($courseAccess)) {
                 return SESSION_AVAILABLE;
             }
 
@@ -3614,7 +3614,7 @@ function api_is_allowed_to_session_edit($tutor = false, $coach = false)
     } else {
         $sessionId = api_get_session_id();
 
-        if ($sessionId == 0) {
+        if (0 == $sessionId) {
             // I'm not in a session so i will return true to not affect the normal behaviour of Chamilo tools.
             return true;
         } else {
@@ -5553,7 +5553,7 @@ function copy_folder_course_session(
             $rs1 = Database::query($sql);
             $num_rows = Database::num_rows($rs1);
 
-            if ($num_rows == 0) {
+            if (0 == $num_rows) {
                 mkdir($new_pathname, api_get_permissions_for_new_directories());
 
                 // Insert new folder with destination session_id.

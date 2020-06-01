@@ -46,13 +46,13 @@ if (api_strlen(strip_tags($surveyData['title'])) > 40) {
     $urlname .= '...';
 }
 
-if ($surveyData['survey_type'] == 1) {
+if (1 == $surveyData['survey_type']) {
     $sql = 'SELECT id FROM '.Database::get_course_table(TABLE_SURVEY_QUESTION_GROUP).'
             WHERE
                 c_id = '.$course_id.' AND
                 survey_id = '.$surveyId.' LIMIT 1';
     $rs = Database::query($sql);
-    if (Database::num_rows($rs) === 0) {
+    if (0 === Database::num_rows($rs)) {
         Display::addFlash(
             Display::return_message(get_lang('YouNeedToCreateGroups'))
         );

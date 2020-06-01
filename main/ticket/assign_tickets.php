@@ -1,9 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-/**
- * @package chamilo.plugin.ticket
- */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 

@@ -122,7 +122,7 @@ $form = new FormValidator(
 $form->addElement('header', $tool_name);
 
 // Setting the form elements
-if ($action == 'edit' && isset($survey_id) && is_numeric($survey_id)) {
+if ('edit' == $action && isset($survey_id) && is_numeric($survey_id)) {
     $form->addElement('hidden', 'survey_id');
 }
 
@@ -133,7 +133,7 @@ $survey_code = $form->addElement(
     ['size' => '20', 'maxlength' => '20', 'autofocus' => 'autofocus']
 );
 
-if ($action == 'edit') {
+if ('edit' == $action) {
     $survey_code->freeze();
     $form->applyFilter('survey_code', 'api_strtoupper');
 }

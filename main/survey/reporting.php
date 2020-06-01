@@ -21,7 +21,7 @@ if (empty($survey_data)) {
     api_not_allowed(true);
 }
 
-if ($survey_data['anonymous'] == 0) {
+if (0 == $survey_data['anonymous']) {
     $people_filled_full_data = true;
 } else {
     $people_filled_full_data = false;
@@ -42,7 +42,7 @@ $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
 /** @todo this has to be moved to a more appropriate place (after the display_header of the code)*/
 if (!api_is_allowed_to_edit(false, true) || $isDrhOfCourse) {
     // Show error message if the survey can be seen only by tutors
-    if ($survey_data['visible_results'] == SURVEY_VISIBLE_TUTOR) {
+    if (SURVEY_VISIBLE_TUTOR == $survey_data['visible_results']) {
         api_not_allowed(true);
     }
 

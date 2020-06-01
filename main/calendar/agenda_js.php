@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 // use anonymous mode when accessing this course tool
@@ -8,7 +9,7 @@ $typeList = ['personal', 'course', 'admin', 'platform'];
 $type = isset($_REQUEST['type']) && in_array($_REQUEST['type'], $typeList) ? $_REQUEST['type'] : 'personal';
 $userId = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : null;
 
-if ($type == 'personal' || $type == 'admin') {
+if ('personal' == $type || 'admin' == $type) {
     $cidReset = true; // fixes #5162
 }
 require_once __DIR__.'/../inc/global.inc.php';
@@ -111,7 +112,7 @@ switch ($type) {
 $tpl->assign('js_format_date', 'll');
 $region_value = api_get_language_isocode();
 
-if ($region_value == 'en') {
+if ('en' == $region_value) {
     $region_value = 'en-GB';
 }
 $tpl->assign('region_value', $region_value);
@@ -221,7 +222,7 @@ if (!empty($userId)) {
     $agenda_ajax_url = api_get_path(WEB_AJAX_PATH).'agenda.ajax.php?type='.$type;
 }
 
-if ($type == 'course' && !empty($courseId)) {
+if ('course' === $type && !empty($courseId)) {
     $agenda_ajax_url .= '&'.api_get_cidreq();
 }
 

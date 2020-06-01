@@ -248,7 +248,7 @@ switch ($action) {
         break;
     case 'empty':
         $mysession = api_get_session_id();
-        if ($mysession != 0) {
+        if (0 != $mysession) {
             if (!((api_is_session_general_coach() || api_is_platform_admin()) &&
                 api_is_element_in_the_session(TOOL_SURVEY, $surveyId))) {
                 // The coach can't empty a survey not belonging to his session
@@ -274,7 +274,7 @@ Display::display_header($tool_name, 'Survey');
 Display::display_introduction_section('survey', 'left');
 
 // Action handling: searching
-if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
+if (isset($_GET['search']) && 'advanced' == $_GET['search']) {
     SurveyUtil::display_survey_search_form();
 }
 

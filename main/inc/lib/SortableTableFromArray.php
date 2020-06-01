@@ -60,7 +60,7 @@ class SortableTableFromArray extends SortableTable
             $content = TableSort::sort_table(
                 $this->table_data,
                 $this->column,
-                $this->direction === 'ASC' ? SORT_ASC : SORT_DESC
+                'ASC' === $this->direction ? SORT_ASC : SORT_DESC
             );
         } else {
             $content = $this->table_data;

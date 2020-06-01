@@ -239,7 +239,7 @@ class survey_question
             $this->addParentMenu($formData, $form, $surveyData);
         }
 
-        if ($surveyData['survey_type'] == 1) {
+        if (1 == $surveyData['survey_type']) {
             $table_survey_question_group = Database::get_course_table(TABLE_SURVEY_QUESTION_GROUP);
             $sql = 'SELECT id, name FROM '.$table_survey_question_group.'
                     WHERE survey_id = '.$surveyId.'

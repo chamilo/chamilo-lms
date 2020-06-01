@@ -91,7 +91,7 @@ if ((!isset($_GET['course']) || !isset($_GET['invitationcode'])) && !isset($_GET
 $invitationcode = $_GET['invitationcode'];
 
 // Start auto-invitation feature FS#3403 (all-users-can-do-the-survey-URL handling)
-if ($invitationcode === 'auto' && isset($_GET['scode'])) {
+if ('auto' == $invitationcode && isset($_GET['scode'])) {
     $userid = api_get_user_id();
     // Survey_code of the survey
     $surveyCode = $_GET['scode'];
@@ -131,7 +131,7 @@ if ($invitationcode === 'auto' && isset($_GET['scode'])) {
                     invitation_code = '".Database::escape_string($autoInvitationcode)."'";
         $result = Database::query($sql);
         $now = api_get_utc_datetime();
-        if (Database :: num_rows($result) == 0) {
+        if (0 == Database :: num_rows($result)) {
             $params = [
                 'c_id' => $course_id,
                 'survey_code' => $surveyCode,
@@ -285,7 +285,7 @@ if (count($_POST) > 0) {
                     );
 
                     foreach ($value as $answer_key => &$answer_value) {
-                        if ($types[$survey_question_id] === 'score') {
+                        if ('score' == $types[$survey_question_id]) {
                             $option_id = $answer_key;
                             $option_value = $answer_value;
                         } else {
@@ -305,7 +305,7 @@ if (count($_POST) > 0) {
                 } else {
                     // All the other question types (open question, multiple choice, percentage, ...)
                     if (isset($types[$survey_question_id]) &&
-                        $types[$survey_question_id] === 'percentage') {
+                        'percentage' == $types[$survey_question_id]) {
                         $sql = "SELECT * FROM $table_survey_question_option
                                 WHERE
                                     c_id = $course_id AND
@@ -316,7 +316,7 @@ if (count($_POST) > 0) {
                     } else {
                         $option_value = 0;
                         if (isset($types[$survey_question_id]) &&
-                            $types[$survey_question_id] === 'open'
+                            'open' == $types[$survey_question_id]
                         ) {
                             $option_value = $value;
                         }
@@ -363,7 +363,7 @@ if (count($_POST) > 0) {
         // Looping through all the post values
         foreach ($_POST as $key => &$value) {
             // If the post value key contains the string 'question' then it is an answer to a question
-            if (strpos($key, 'question') !== false) {
+            if (false !== strpos($key, 'question')) {
                 // Finding the question id by removing 'question'
                 $survey_question_id = str_replace('question', '', $key);
                 // If not question ID was defined, we're on the start
@@ -674,7 +674,7 @@ if (isset($_POST['finish_survey'])) {
 
 // Sets the random questions
 $shuffle = '';
-if ($survey_data['shuffle'] == 1) {
+if (1 == $survey_data['shuffle']) {
     $shuffle = ' BY RAND() ';
 }
 
@@ -813,13 +813,13 @@ if ((isset($_GET['show']) && $_GET['show'] != '') ||
                 $counter++;
             }
         }
-    } elseif ($survey_data['survey_type'] === '1') {
+    } elseif ('1' === $survey_data['survey_type']) {
         $my_survey_id = (int) $survey_invitation['survey_id'];
         $current_user = Database::escape_string($survey_invitation['user']);
 
         if (isset($_POST['personality'])) {
             // Compute the results to get the 3 groups nearest to the user's personality
-            if ($shuffle == '') {
+            if ('' == $shuffle) {
                 $order = 'BY sort ASC ';
             } else {
                 $order = $shuffle;
@@ -1079,7 +1079,7 @@ if ((isset($_GET['show']) && $_GET['show'] != '') ||
                         $questions = [];
                         while ($row = Database::fetch_array($result, 'ASSOC')) {
                             // If the type is not a pagebreak we store it in the $questions array
-                            if ($row['type'] != 'pagebreak') {
+                            if ('pagebreak' != $row['type']) {
                                 $questions[$row['sort']]['question_id'] = $row['question_id'];
                                 $questions[$row['sort']]['survey_id'] = $row['survey_id'];
                                 $questions[$row['sort']]['survey_question'] = $row['survey_question'];
@@ -1193,7 +1193,7 @@ if ((isset($_GET['show']) && $_GET['show'] != '') ||
                 $questions = [];
                 while ($row = Database :: fetch_array($result, 'ASSOC')) {
                     // If the type is not a pagebreak we store it in the $questions array
-                    if ($row['type'] !== 'pagebreak') {
+                    if ('pagebreak' != $row['type']) {
                         $questions[$row['sort']]['question_id'] = $row['question_id'];
                         $questions[$row['sort']]['survey_id'] = $row['survey_id'];
                         $questions[$row['sort']]['survey_question'] = $row['survey_question'];
@@ -1319,13 +1319,11 @@ if (isset($questions) && is_array($questions)) {
                     $finalAnswer = [];
                     foreach ($userAnswer as $userChoice) {
                         list($choiceId, $choiceValue) = explode('*', $userChoice);
-
                         $finalAnswer[$choiceId] = $choiceValue;
                     }
                     break;
                 case 'percentage':
                     list($choiceId, $choiceValue) = explode('*', current($userAnswer));
-
                     $finalAnswer = $choiceId;
                     break;
                 default:

@@ -108,7 +108,7 @@ if (isset($_GET['action'])) {
 /*	Header */
 $interbreadcrumb[] = ['url' => 'group.php?'.api_get_cidreq(), 'name' => get_lang('Groups')];
 $origin = api_get_origin();
-if ($origin !== 'learnpath') {
+if ('learnpath' != $origin) {
     // So we are not in learnpath tool
     if (!api_is_allowed_in_course()) {
         api_not_allowed(true);
@@ -155,6 +155,6 @@ Display::return_icon('user.png', get_lang('GoTo').' '.get_lang('Users'), '', ICO
 echo Display::toolbarAction('actions', [$actions, GroupManager::getSearchForm()]);
 echo GroupManager::getOverview($courseId, $keyword);
 
-if ($origin !== 'learnpath') {
+if ('learnpath' != $origin) {
     Display::display_footer();
 }

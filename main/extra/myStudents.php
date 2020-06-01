@@ -9,7 +9,7 @@ if (empty($allow)) {
 }
 
 api_block_anonymous_users();
-$export_csv = isset($_GET['export']) && $_GET['export'] === 'csv' ? true : false;
+$export_csv = isset($_GET['export']) && 'csv' === $_GET['export'] ? true : false;
 $course_code = isset($_GET['course']) ? Security::remove_XSS($_GET['course']) : null;
 $_course = api_get_course_info();
 $coment = '';
@@ -57,7 +57,7 @@ if ($export) {
 $csv_content = [];
 $from_myspace = false;
 
-if (isset($_GET['from']) && $_GET['from'] == 'myspace') {
+if (isset($_GET['from']) && 'myspace' == $_GET['from']) {
     $from_myspace = true;
     $this_section = SECTION_TRACKING;
 } else {
@@ -68,7 +68,7 @@ $nameTools = get_lang('StudentDetails');
 $em = Database::getManager();
 
 if (isset($_GET['details'])) {
-    if ($origin === 'user_course') {
+    if ('user_course' === $origin) {
         if (empty($cidReq)) {
             $interbreadcrumb[] = [
                 "url" => api_get_path(WEB_COURSE_PATH).$courseInfo['directory'],
@@ -80,7 +80,7 @@ if (isset($_GET['details'])) {
             "name" => get_lang('Users'),
         ];
     } else {
-        if ($origin === 'tracking_course') {
+        if ('tracking_course' === $origin) {
             $interbreadcrumb[] = [
                 "url" => "../tracking/courseLog.php?cidReq=".$course_code.'&id_session='.api_get_session_id(),
                 "name" => get_lang('Tracking'),

@@ -1,9 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-/**
- * @package chamilo.messages
- */
 
 /**
  * This script shows a compose area (wysiwyg editor if supported, otherwise
@@ -65,9 +62,8 @@ $tpl = new Template(get_lang('ComposeMessage'));
 function show_compose_to_any($tpl)
 {
     $default['user_list'] = 0;
-    $html = manageForm($default, null, null, $tpl);
 
-    return $html;
+    return manageForm($default, null, null, $tpl);
 }
 
 function show_compose_reply_to_message($message_id, $receiver_id, $tpl)

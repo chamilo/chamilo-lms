@@ -5,8 +5,6 @@
 /**
  * This is the tracking library for Chamilo.
  *
- * Calculates the time spent on the course
- *
  * @param int    $user_id     the user id
  * @param string $course_code the course code
  *

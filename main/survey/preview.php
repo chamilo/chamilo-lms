@@ -92,14 +92,14 @@ if (isset($_GET['show'])) {
     $questions_exists = true;
     if (Database::num_rows($result)) {
         while ($row = Database::fetch_array($result)) {
-            if ($survey_data['one_question_per_page'] == 1) {
-                if ($row['type'] !== 'pagebreak') {
+            if (1 == $survey_data['one_question_per_page']) {
+                if ('pagebreak' != $row['type']) {
                     $paged_questions[$counter][] = $row['question_id'];
                     $counter++;
                     continue;
                 }
             } else {
-                if ($row['type'] === 'pagebreak') {
+                if ('pagebreak' == $row['type']) {
                     $counter++;
                 } else {
                     $paged_questions[$counter][] = $row['question_id'];
@@ -143,7 +143,7 @@ if (isset($_GET['show'])) {
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
             // If the type is not a pagebreak we store it in the $questions array
-            if ($row['type'] !== 'pagebreak') {
+            if ('pagebreak' != $row['type']) {
                 $sort = $row['sort'];
                 $questions[$sort]['question_id'] = $row['question_id'];
                 $questions[$sort]['survey_id'] = $row['survey_id'];

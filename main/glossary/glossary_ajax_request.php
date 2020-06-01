@@ -1,11 +1,10 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /* @todo move this file in the inc/ajax/ folder */
 /**
  * Glossary ajax request code.
- *
- * @package chamilo.glossary
  */
 require_once __DIR__.'/../inc/global.inc.php';
 

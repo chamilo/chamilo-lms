@@ -4,7 +4,6 @@
  * This tool allows platform admins to add users by uploading a CSV or XML file
  * This code is inherited from admin/user_import.php.
  *
- * @package chamilo.reporting
  * Created on 26 julio 2008  by Julio Montoya gugli100@gmail.com
  */
 $cidReset = true;

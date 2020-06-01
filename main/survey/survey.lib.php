@@ -147,7 +147,7 @@ class SurveyManager
         $survey_id = (int) $survey_id;
         $table_survey = Database::get_course_table(TABLE_SURVEY);
 
-        if ($shared != 0) {
+        if (0 != $shared) {
             $table_survey = Database::get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION);
             $sql = "SELECT * FROM $table_survey
                     WHERE survey_id='".$survey_id."' ";
@@ -581,7 +581,7 @@ class SurveyManager
 
         if (!$values['survey_id'] ||
             !is_numeric($values['survey_id']) ||
-            $values['survey_share']['survey_share'] == 'true'
+            'true' == $values['survey_share']['survey_share']
         ) {
             $sql = "INSERT INTO $table_survey (code, title, subtitle, author, lang, template, intro, surveythanks, creation_date, course_code) VALUES (
                     '".Database::escape_string($values['survey_code'])."',
@@ -846,7 +846,7 @@ class SurveyManager
 
         $datas = self::get_survey($surveyId);
         $session_where = '';
-        if (api_get_session_id() != 0) {
+        if (0 != api_get_session_id()) {
             $session_where = ' AND session_id = "'.api_get_session_id().'" ';
         }
 
@@ -966,9 +966,9 @@ class SurveyManager
 
         if (in_array($type, $possible_types)) {
             return $icon_question[$type];
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -1034,7 +1034,7 @@ class SurveyManager
             ? $row['is_required']
             : false;
 
-        if ($row['survey_group_pri'] != 0) {
+        if (0 != $row['survey_group_pri']) {
             $return['assigned'] = $row['survey_group_pri'];
             $return['choose'] = 1;
         } else {
@@ -1156,7 +1156,7 @@ class SurveyManager
                 }
             }
 
-            if ($form_content['type'] === 'score') {
+            if ('score' == $form_content['type']) {
                 if (strlen($form_content['maximum_score']) < 1) {
                     $empty_answer = true;
                 }
@@ -1246,11 +1246,11 @@ class SurveyManager
                     // Updating an existing question
                     $extraParams = [];
                     if (isset($_POST['choose'])) {
-                        if ($_POST['choose'] == 1) {
+                        if (1 == $_POST['choose']) {
                             $extraParams['survey_group_pri'] = $_POST['assigned'];
                             $extraParams['survey_group_sec1'] = 0;
                             $extraParams['survey_group_sec2'] = 0;
-                        } elseif ($_POST['choose'] == 2) {
+                        } elseif (2 == $_POST['choose']) {
                             $extraParams['survey_group_pri'] = 0;
                             $extraParams['survey_group_sec1'] = $_POST['assigned1'];
                             $extraParams['survey_group_sec2'] = $_POST['assigned2'];
@@ -1351,7 +1351,7 @@ class SurveyManager
         $tbl_survey_question = Database::get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION);
 
         // Storing a new question
-        if ($form_content['shared_question_id'] == '' ||
+        if ('' == $form_content['shared_question_id'] ||
             !is_numeric($form_content['shared_question_id'])
         ) {
             // Finding the max sort order of the questions in the given survey
@@ -1410,10 +1410,10 @@ class SurveyManager
         $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
         $course_id = api_get_course_int_id();
 
-        if ($direction == 'moveup') {
+        if ('moveup' == $direction) {
             $sort = 'DESC';
         }
-        if ($direction == 'movedown') {
+        if ('movedown' == $direction) {
             $sort = 'ASC';
         }
 
@@ -1580,7 +1580,7 @@ class SurveyManager
             }
         }
 
-        if (is_numeric($survey_data['survey_share']) && $survey_data['survey_share'] != 0) {
+        if (is_numeric($survey_data['survey_share']) && 0 != $survey_data['survey_share']) {
             self::save_shared_question_options($form_content, $survey_data);
         }
 
@@ -2009,7 +2009,7 @@ class SurveyManager
      */
     public static function protectByMandatory()
     {
-        if (strpos($_SERVER['SCRIPT_NAME'], 'fillsurvey.php') !== false) {
+        if (false !== strpos($_SERVER['SCRIPT_NAME'], 'fillsurvey.php')) {
             return;
         }
 
@@ -2354,7 +2354,7 @@ class SurveyManager
 
             foreach ($newQuestionList as $question) {
                 $text = $question['question'];
-                if (strpos($text, $classTag) !== false) {
+                if (false !== strpos($text, $classTag)) {
                     $replacedText = str_replace($classTag, $className, $text);
                     $values = [
                         'c_id' => $courseId,
@@ -2375,7 +2375,8 @@ class SurveyManager
 
                 foreach ($users as $userId) {
                     $userInfo = api_get_user_info($userId);
-                    if (strpos($text, $studentTag) !== false) {
+
+                    if (false !== strpos($text, $studentTag)) {
                         $replacedText = str_replace($studentTag, $userInfo['complete_name'], $text);
                         $values = [
                             'c_id' => $courseId,

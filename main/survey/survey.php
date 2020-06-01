@@ -56,7 +56,7 @@ Session::erase('answer_list');
 // Getting the survey information
 if (!empty($_GET['survey_id'])) {
     $course_code = api_get_course_id();
-    if ($course_code != -1) {
+    if (-1 != $course_code) {
         $survey_data = SurveyManager::get_survey($survey_id);
     } else {
         api_not_allowed(true);
@@ -66,7 +66,7 @@ if (!empty($_GET['survey_id'])) {
 }
 
 $tool_name = strip_tags($survey_data['title'], '<span>');
-$is_survey_type_1 = $survey_data['survey_type'] == 1;
+$is_survey_type_1 = 1 == $survey_data['survey_type'];
 
 if (api_strlen(strip_tags($survey_data['title'])) > 40) {
     $tool_name .= '...';
@@ -74,7 +74,7 @@ if (api_strlen(strip_tags($survey_data['title'])) > 40) {
 
 if ($is_survey_type_1 && ($action === 'addgroup' || $action === 'deletegroup')) {
     $_POST['name'] = trim($_POST['name']);
-    if ($action === 'addgroup') {
+    if ('addgroup' == $action) {
         if (!empty($_POST['group_id'])) {
             Database::query('UPDATE '.$table_survey_question_group.' SET description = \''.Database::escape_string($_POST['description']).'\'
                              WHERE c_id = '.$course_id.' AND id = \''.Database::escape_string($_POST['group_id']).'\'');
@@ -87,7 +87,7 @@ if ($is_survey_type_1 && ($action === 'addgroup' || $action === 'deletegroup')) 
         }
     }
 
-    if ($action === 'deletegroup') {
+    if ('deletegroup' == $action) {
         $sql = 'DELETE FROM '.$table_survey_question_group.'
                 WHERE c_id = '.$course_id.' AND id = '.intval($_GET['gid']).' AND survey_id = '.$survey_id;
         Database::query($sql);
@@ -355,7 +355,7 @@ if ($is_survey_type_1) {
     }
     echo '<table border="0"><tr><td width="100">'.get_lang('Name').'</td><td>'.get_lang('Description').'</td></tr></table>';
     echo '<form action="'.api_get_path(WEB_CODE_PATH).'survey/survey.php?action=addgroup&survey_id='.$survey_id.'" method="post">';
-    if ($_GET['action'] == 'editgroup') {
+    if ('editgroup' == $_GET['action']) {
         $sql = 'SELECT name,description FROM '.$table_survey_question_group.'
                 WHERE id = '.intval($_GET['gid']).' AND survey_id = '.intval($survey_id).' limit 1';
         $rs = Database::query($sql);

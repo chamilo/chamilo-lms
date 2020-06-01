@@ -7,15 +7,13 @@ use Chamilo\CourseBundle\Entity\CLpItemView;
 
 /**
  * Learning paths reporting.
- *
- * @package chamilo.reporting
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
 $cidReset = true;
 $from_myspace = false;
 $from_link = '';
-if (isset($_GET['from']) && $_GET['from'] === 'myspace') {
+if (isset($_GET['from']) && 'myspace' == $_GET['from']) {
     $from_link = '&from=myspace';
     $this_section = SECTION_TRACKING;
 } else {

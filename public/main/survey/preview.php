@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -27,7 +28,6 @@ if (empty($survey_data)) {
 }
 
 $this_section = SECTION_COURSES;
-
 $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
 $table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
 
@@ -46,7 +46,8 @@ $interbreadcrumb[] = [
 ];
 
 $htmlHeadXtra[] = '<script>'.api_get_language_translate_html().'</script>';
-
+$htmlHeadXtra[] = ch_selectivedisplay::getJs();
+$htmlHeadXtra[] = survey_question::getJs();
 $show = 0;
 Display::display_header(get_lang('Survey preview'));
 
@@ -85,7 +86,7 @@ if (isset($_GET['show'])) {
             WHERE
               survey_question NOT LIKE '%{{%' AND 
               c_id = $course_id AND
-              survey_id = '".$surveyId."'
+              survey_id = $surveyId
             ORDER BY sort ASC";
     $result = Database::query($sql);
     $questions_exists = true;
@@ -110,6 +111,10 @@ if (isset($_GET['show'])) {
     }
 
     if (array_key_exists($_GET['show'], $paged_questions)) {
+        $select = '';
+        if (true === api_get_configuration_value('survey_question_dependency')) {
+            $select = ' survey_question.parent_id, survey_question.parent_option_id, ';
+        }
         $sql = "SELECT
                     survey_question.question_id,
                     survey_question.survey_id,
@@ -120,6 +125,7 @@ if (isset($_GET['show'])) {
                     survey_question.max_value,
                     survey_question_option.question_option_id,
                     survey_question_option.option_text,
+                    $select
                     survey_question_option.sort as option_sort
                     ".($allowRequiredSurveyQuestions ? ', survey_question.is_required' : '')."
                 FROM $table_survey_question survey_question
@@ -146,6 +152,8 @@ if (isset($_GET['show'])) {
                 $questions[$sort]['type'] = $row['type'];
                 $questions[$sort]['options'][$row['question_option_id']] = $row['option_text'];
                 $questions[$sort]['maximum_score'] = $row['max_value'];
+                $questions[$sort]['parent_id'] = isset($row['parent_id']) ? $row['parent_id'] : 0;
+                $questions[$sort]['parent_option_id'] = isset($row['parent_option_id']) ? $row['parent_option_id'] : 0;
                 $questions[$row['sort']]['is_required'] = $allowRequiredSurveyQuestions && $row['is_required'];
             }
         }
@@ -161,6 +169,7 @@ if (isset($_GET['show'])) {
 $originalShow = isset($_GET['show']) ? (int) $_GET['show'] : 0;
 
 $url = api_get_self().'?survey_id='.$surveyId.'&show='.$show.'&'.api_get_cidreq();
+
 $form = new FormValidator(
     'question-survey',
     'post',
@@ -181,16 +190,34 @@ if (is_array($questions) && count($questions) > 0) {
         }
         $counter = $before + 1;
     }
+
+    $js = '';
     foreach ($questions as $key => &$question) {
         $ch_type = 'ch_'.$question['type'];
         $display = survey_question::createQuestion($question['type']);
-        $form->addHtml('<div class="survey_question '.$ch_type.'">');
+        $parent = $question['parent_id'];
+        $parentClass = '';
+
+        if (!empty($parent)) {
+            $parentClass = ' with_parent with_parent_'.$question['question_id'];
+            $parents = survey_question::getParents($question['question_id']);
+            if (!empty($parents)) {
+                foreach ($parents as $parentId) {
+                    $parentClass .= ' with_parent_only_hide_'.$parentId;
+                }
+            }
+        }
+
+        $js .= survey_question::getQuestionJs($question);
+
+        $form->addHtml('<div class="survey_question '.$ch_type.' '.$parentClass.'">');
         $form->addHtml('<div style="float:left; font-weight: bold; margin-right: 5px;"> '.$counter.'. </div>');
         $form->addHtml('<div>'.Security::remove_XSS($question['survey_question']).'</div> ');
         $display->render($form, $question);
         $form->addHtml('</div>');
         $counter++;
     }
+    $form->addHtml($js);
 }
 $form->addHtml('<div class="start-survey">');
 

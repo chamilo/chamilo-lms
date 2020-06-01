@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -13,7 +14,8 @@ $(function() {
     $("button").click(function() {
         $("#is_executable").attr("value",$(this).attr("name"));
     });
-} ); </script>';
+});
+</script>';
 
 $htmlHeadXtra[] = '<script>'.api_get_language_translate_html().'</script>';
 
@@ -22,8 +24,9 @@ if (!api_is_allowed_to_edit(false, true)) {
     api_not_allowed(true);
 }
 
+$surveyId = isset($_GET['survey_id']) ? (int) $_GET['survey_id'] : 0;
 // Getting the survey information
-$surveyData = SurveyManager::get_survey($_GET['survey_id']);
+$surveyData = SurveyManager::get_survey($surveyId);
 if (empty($surveyData)) {
     api_not_allowed(true);
 }
@@ -38,13 +41,13 @@ if (1 == $surveyData['survey_type']) {
     $sql = 'SELECT id FROM '.Database::get_course_table(TABLE_SURVEY_QUESTION_GROUP).'
             WHERE
                 c_id = '.$course_id.' AND
-                survey_id = '.(int) $_GET['survey_id'].' LIMIT 1';
+                survey_id = '.$surveyId.' LIMIT 1';
     $rs = Database::query($sql);
     if (0 === Database::num_rows($rs)) {
         Display::addFlash(
             Display::return_message(get_lang('You need to create groups'))
         );
-        header('Location: '.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.(int) $_GET['survey_id']);
+        header('Location: '.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$surveyId);
         exit;
     }
 }
@@ -55,7 +58,7 @@ $interbreadcrumb[] = [
     'name' => get_lang('Survey list'),
 ];
 $interbreadcrumb[] = [
-    'url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.intval($_GET['survey_id']),
+    'url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$surveyId,
     'name' => strip_tags($urlname),
 ];
 
@@ -79,6 +82,8 @@ $possible_types = [
     'pagebreak',
     'percentage',
     'score',
+    'selectivedisplay',
+    'multiplechoiceother',
 ];
 
 // Actions
@@ -88,10 +93,7 @@ $actions .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id
 $actions .= '</div>';
 // Checking if it is a valid type
 if (!in_array($_GET['type'], $possible_types)) {
-    Display :: display_header($tool_name, 'Survey');
-    echo $actions;
-    echo Display::return_message(get_lang('This type does not exist'), 'error', false);
-    Display::display_footer();
+    api_not_allowed(true, Display::return_message(get_lang('TypeDoesNotExist'), 'error', false));
 }
 
 // Displaying the form for adding or editing the question
@@ -102,6 +104,7 @@ $formData = [];
 $formData['answers'] = ['', ''];
 
 switch ($_GET['type']) {
+    case 'selectivedisplay':
     case 'yesno':
         $formData['answers'][0] = get_lang('Yes');
         $formData['answers'][1] = get_lang('No');
@@ -119,9 +122,6 @@ switch ($_GET['type']) {
         $formData['values'][3] = 2;
         $formData['values'][4] = 3;
         break;
-    case 'open':
-        Display::addFlash(Display::return_message(get_lang('You can use the tags {{class_name}} and {{student_full_name}} in the question to be able to multiplicate questions.')));
-        break;
 }
 
 // We are editing a question
@@ -136,7 +136,7 @@ $surveyQuestion->renderForm();
 
 if ($surveyQuestion->getForm()->validate()) {
     $values = $surveyQuestion->getForm()->getSubmitValues();
-    $surveyQuestion->save($surveyData, $values);
+    $surveyQuestion->save($surveyData, $values, $formData);
 }
 
 Display::display_header($tool_name, 'Survey');

@@ -486,7 +486,7 @@ switch ($action) {
             Display::return_icon('export_to_documents.png', get_lang('Export latest version of this page to Documents'), [], ICON_SIZE_MEDIUM),
             api_get_self().'?'.api_get_cidreq().'&'.http_build_query(['action' => 'export_documents']).$url_token
         );*/
-
+        $total_average_of_advances = null;
         $tpl->assign('token', $url_token);
         $tpl->assign('is_allowed_to_edit', $isTeacher);
         $toolbar = null;
@@ -508,8 +508,8 @@ switch ($action) {
 
         if (!empty($message) && !empty($total_average_of_advances)) {
             $tpl->assign('message', $message);
-            $tpl->assign('score_progress', $total_average_of_advances);
         }
+        $tpl->assign('score_progress', $total_average_of_advances);
 
         if (isset($last_id) && $last_id) {
             $link_to_thematic_plan = '<a href="index.php?'.api_get_cidreq(
@@ -549,9 +549,9 @@ switch ($action) {
         }
 
         $list = [];
+        $listThematic = [];
         // Display thematic data
         if (!empty($thematic_data)) {
-            $listThematic = [];
             /** @var CThematic $thematic */
             foreach ($thematic_data as $thematic) {
                 $id = $thematic->getIid();
@@ -640,15 +640,13 @@ switch ($action) {
                             .Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_TINY).'</a>';
                     }
                 }
-                //$list['thematic_plan'] = $thematicManager->get_thematic_plan_data($id);
-                //$list['thematic_advance'] = $thematic_advance_data;
                 $list['last_done'] = $last_done_thematic_advance;
                 $list['toolbar'] = $toolbarThematic;
                 $listThematic[] = $thematic;
             }
-            $tpl->assign('data', $listThematic);
         }
 
+        $tpl->assign('data', $listThematic);
         $thematicLayout = $tpl->get_template('course_progress/progress.html.twig');
         $content = $tpl->fetch($thematicLayout);
         break;

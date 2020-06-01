@@ -20,19 +20,26 @@ class ch_multiplechoice extends survey_question
             'horizontal' => get_lang('Horizontal'),
             'vertical' => get_lang('Vertical'),
         ];
-        $this->getForm()->addRadio('horizontalvertical', get_lang('Display'), $options);
+        $this->getForm()->addRadio('horizontalvertical', get_lang('DisplayAnswersHorVert'), $options);
 
         $formData['horizontalvertical'] = isset($formData['horizontalvertical']) ? $formData['horizontalvertical'] : 'horizontal';
         $this->getForm()->setDefaults($formData);
 
         $config = ['ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '120'];
         $total = count($formData['answers']);
+
         if (is_array($formData['answers'])) {
             foreach ($formData['answers'] as $key => $value) {
                 $this->getForm()->addHtmlEditor('answers['.$key.']', null, false, false, $config);
                 if ($total > 2) {
                     $this->getForm()->addButton("delete_answer[$key]", get_lang('Delete'), 'trash', 'danger');
                 }
+            }
+        }
+
+        if (isset($formData['answersid']) && !empty($formData['answersid'])) {
+            foreach ($formData['answersid'] as $value) {
+                $this->getForm()->addHidden('answersid[]', $value);
             }
         }
 

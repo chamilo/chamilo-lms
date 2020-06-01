@@ -1654,6 +1654,7 @@ function api_get_user_info_from_entity(
     }
 
     $result['username'] = $user->getUsername();
+    $result['status'] = $user->getStatus();
     $result['firstname'] = $user->getFirstname();
     $result['lastname'] = $user->getLastname();
     $result['email'] = $result['mail'] = $user->getEmail();

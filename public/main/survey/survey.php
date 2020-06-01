@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -18,10 +19,7 @@ api_protect_course_script(true);
 /** @todo this has to be moved to a more appropriate place (after the display_header of the code)*/
 // Coach can't view this page
 $extend_rights_for_coachs = api_get_setting('extend_rights_for_coach_on_survey');
-$isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
-    api_get_user_id(),
-    api_get_course_info()
-);
+$isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(api_get_user_id(), api_get_course_info());
 
 if ($isDrhOfCourse) {
     header('Location: '.api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq());
@@ -48,6 +46,9 @@ $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php',
     'name' => get_lang('Survey list'),
 ];
+
+Session::erase('answer_count');
+Session::erase('answer_list');
 
 // Getting the survey information
 if (!empty($_GET['survey_id'])) {
@@ -194,10 +195,17 @@ if (0 == $survey_data['survey_type']) {
         Display::return_icon('commentquestion.png', get_lang('Comment'), null, ICON_SIZE_BIG),
         $urlQuestion.'&type=comment&survey_id='.$survey_id
     );
-
-    if (0 == $survey_data['one_question_per_page']) {
         echo Display::url(
-            Display::return_icon('page_end.png', get_lang('Page end (distinct questions)'), null, ICON_SIZE_BIG),
+        Display::return_icon('mcua.png', get_lang('SurveyMultipleAnswerWithOther'), null, ICON_SIZE_BIG),
+        $urlQuestion.'&type=multiplechoiceother&survey_id='.$survey_id
+    );
+    if ($survey_data['one_question_per_page'] == 0) {
+        echo Display::url(
+            Display::return_icon('yesno.png', get_lang('SurveyQuestionSelectiveDisplay'), null, ICON_SIZE_BIG),
+            $urlQuestion.'&type=selectivedisplay&survey_id='.$survey_id
+        );
+        echo Display::url(
+            Display::return_icon('page_end.png', get_lang('Pagebreak'), null, ICON_SIZE_BIG),
             $urlQuestion.'&type=pagebreak&survey_id='.$survey_id
         );
     }
@@ -269,10 +277,14 @@ while ($row = Database::fetch_array($result, 'ASSOC')) {
         echo api_get_local_time($parts[0]).' - '.api_get_local_time($parts[1]);
     }
 
-    if ('yesno' == $row['type']) {
-        $tool_name = get_lang('Yes / No');
-    } elseif ('multiplechoice' == $row['type']) {
-        $tool_name = get_lang('Multiple choice');
+    if ($row['type'] === 'yesno') {
+        $tool_name = get_lang('YesNo');
+    } elseif ($row['type'] === 'multiplechoice') {
+        $tool_name = get_lang('UniqueSelect');
+    } elseif ($row['type'] === 'multipleresponse') {
+        $tool_name = get_lang('MultipleChoiceMultipleAnswers');
+    } elseif ($row['type'] === 'selectivedisplay') {
+        $tool_name = get_lang('SurveyQuestionSelectiveDisplay');
     } else {
         $tool_name = get_lang(api_ucfirst(Security::remove_XSS($row['type'])));
     }

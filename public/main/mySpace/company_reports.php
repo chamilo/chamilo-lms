@@ -1,5 +1,7 @@
 <?php
+
 /* For licensing terms, see /license.txt */
+
 /**
  * Special report for corporate users.
  */
@@ -18,7 +20,7 @@ $tool_name = get_lang('Report');
 $this_section = SECTION_TRACKING;
 
 $htmlHeadXtra[] = api_get_jqgrid_js();
-$sessionId = isset($_GET['session_id']) ? intval($_GET['session_id']) : -1;
+$sessionId = isset($_GET['session_id']) ? (int) $_GET['session_id'] : -1;
 
 //jqgrid will use this URL to do the selects
 $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_user_course_report&session_id='.$sessionId;

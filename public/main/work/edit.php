@@ -87,7 +87,9 @@ if (!empty($my_folder_data)) {
     if (!empty($homework['expires_on']) || !empty($homework['ends_on'])) {
         $time_now = time();
 
-        if (!empty($homework['expires_on'])) {
+        if (!empty($homework['expires_on']) &&
+            !empty($homework['expires_on'])
+        ) {
             $time_expires = api_strtotime($homework['expires_on'], 'UTC');
             $difference = $time_expires - $time_now;
             if ($difference < 0) {
@@ -238,6 +240,7 @@ if ($form->validate()) {
                 /*$add_to_update = ', qualificator_id ='."'".api_get_user_id()."', ";
                 $add_to_update .= ' qualification = '."'".api_float_val($_POST['qualification'])."',";
                 $add_to_update .= ' date_of_qualification = '."'".api_get_utc_datetime()."'";*/
+
                 if (isset($_POST['send_email'])) {
                     $url = api_get_path(WEB_CODE_PATH).'work/view.php?'.api_get_cidreq().'&id='.$item_to_edit_id;
                     $subject = sprintf(get_lang('There\'s a new feedback in work: %s'), $studentPublication->getTitle());

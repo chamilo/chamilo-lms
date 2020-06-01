@@ -28,6 +28,50 @@ $keyword = isset($_GET['keyword']) ? $_GET['keyword'] : null;
 
 if (isset($_GET['action'])) {
     switch ($_GET['action']) {
+        case 'export_surveys':
+            $extraFieldValue = new ExtraFieldValue('survey');
+            $surveyList = $extraFieldValue->get_item_id_from_field_variable_and_field_value(
+                'group_id',
+                $groupId,
+                false,
+                false,
+                true
+            );
+
+            if (!empty($surveyList)) {
+                $exportList = [];
+                foreach ($surveyList as $data) {
+                    $surveyId = $data['item_id'];
+                    $surveyData = SurveyManager::get_survey($surveyId, 0, api_get_course_id());
+                    if (!empty($surveyData)) {
+                        $filename = $surveyData['code'].'.xlsx';
+                        $exportList[] = @SurveyUtil::export_complete_report_xls($surveyData, $filename, 0, true);
+                    }
+                }
+
+                if (!empty($exportList)) {
+                    $tempZipFile = api_get_path(SYS_ARCHIVE_PATH).api_get_unique_id().'.zip';
+                    $zip = new PclZip($tempZipFile);
+                    foreach ($exportList as $file) {
+                        $zip->add($file, PCLZIP_OPT_REMOVE_ALL_PATH);
+                    }
+
+                    DocumentManager::file_send_for_download(
+                        $tempZipFile,
+                        true,
+                        get_lang('Surveys').'-'.api_get_course_id().'-'.api_get_local_time().'.zip'
+                    );
+                    unlink($tempZipFile);
+                    exit;
+                }
+            }
+
+            Display::addFlash(Display::return_message(get_lang('NoSurveyAvailable')));
+
+            header('Location: '.api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq());
+            exit;
+
+            break;
         case 'export_all':
             $data = GroupManager::exportCategoriesAndGroupsToArray(null, true);
             Export::arrayToCsv($data);

@@ -16,6 +16,11 @@ if (empty($id)) {
 $manager = new NotificationEvent();
 
 $notification = $manager->get($id);
+
+if (empty($notification)) {
+    api_not_allowed(true);
+}
+
 $tpl = new Template($tool);
 $fields = [];
 

@@ -407,11 +407,14 @@ function getUniqueStudentAttemptsTotal($workId, $groupId, $course_id, $sessionId
 }
 
 /**
+ * @param mixed $workId
  * @param int   $groupId
  * @param int   $course_id
  * @param int   $sessionId
  * @param int   $userId       user id to filter
  * @param array $onlyUserList only parse this user list
+ *
+ * @return mixed
  */
 function getUniqueStudentAttempts(
     $workId,
@@ -1854,6 +1857,8 @@ function get_work_user_list(
         $course_info
     );
 
+    $isDrhOfSession = !empty(SessionManager::getSessionFollowedByDrh(api_get_user_id(), $session_id));
+
     $groupIid = 0;
     if ($group_id) {
         $groupInfo = GroupManager::get_group_properties($group_id);
@@ -1870,7 +1875,7 @@ function get_work_user_list(
             $extra_conditions = " (work.post_group_id = '0' OR work.post_group_id is NULL) ";
         }
 
-        if ($is_allowed_to_edit || $isDrhOfCourse) {
+        if ($is_allowed_to_edit || $isDrhOfCourse || $isDrhOfSession) {
             $extra_conditions .= ' AND work.active IN (0, 1) ';
         } else {
             if (isset($course_info['show_score']) &&
@@ -2114,6 +2119,7 @@ function get_work_user_list(
                 $work_date = api_get_local_time($work['sent_date']);
                 $date = date_to_str_ago($work['sent_date']).' '.$work_date;
                 $work['formatted_date'] = $work_date.' '.$add_string;
+                $work['expiry_note'] = $add_string;
                 $work['sent_date_from_db'] = $work['sent_date'];
                 $work['sent_date'] = '<div class="work-date" title="'.$date.'">'.
                     $add_string.' '.Display::dateToStringAgoAndLongDate($work['sent_date']).'</div>';
@@ -2165,6 +2171,12 @@ function get_work_user_list(
                                 dropZone: $(this)
                             });
                         });
+
+                        $('.getSingleCompilatio').on('click', function () {
+                            var parts = $(this).parent().attr('id').split('id_avancement');
+                            getSingleCompilatio(parts[1]);
+                        });
+
                         $('#file_upload_".$item_id."').fileupload({
                             add: function (e, data) {
                                 $('#progress_$item_id').html();
@@ -2317,7 +2329,7 @@ function get_work_user_list(
 /**
  * Send reminder to users who have not given the task.
  *
- * @param int $task_data
+ * @param int
  *
  * @return array
  *
@@ -2537,8 +2549,8 @@ function user_is_author($itemId, $userId = null, $courseId = 0, $sessionId = 0)
 /**
  * Get list of users who have not given the task.
  *
- * @param int $task_id
- * @param int $studentId
+ * @param int
+ * @param int
  *
  * @return array
  *
@@ -2644,7 +2656,7 @@ function get_list_users_without_publication($task_id, $studentId = 0)
 /**
  * Display list of users who have not given the task.
  *
- * @param int $task_id   task id
+ * @param int task id
  * @param int $studentId
  *
  * @author cvargas carlos.vargas@beeznest.com cfasanando, christian.fasanado@beeznest.com
@@ -3583,8 +3595,21 @@ function getWorkCommentForm($work, $workParent)
 
     $qualification = $workParent['qualification'];
 
-    if (api_is_allowed_to_edit()) {
-        if (!empty($qualification) && (int) $qualification > 0) {
+    $isCourseManager = api_is_platform_admin() || api_is_coach() || api_is_allowed_to_edit(false, false, true);
+    $allowEdition = false;
+    if ($isCourseManager) {
+        $allowEdition = true;
+        if (!empty($work['qualification']) && api_get_configuration_value('block_student_publication_score_edition')) {
+            $allowEdition = false;
+        }
+    }
+
+    if (api_is_platform_admin()) {
+        $allowEdition = true;
+    }
+
+    if ($allowEdition) {
+        if (!empty($qualification) && intval($qualification) > 0) {
             $model = ExerciseLib::getCourseScoreModel();
             if (empty($model)) {
                 $form->addFloat(
@@ -3768,10 +3793,10 @@ function uploadWork($my_folder_data, $_course, $isCorrection = false, $workInfo 
     $filename = add_ext_on_mime(stripslashes($file['name']), $file['type']);
 
     // Replace dangerous characters
+    $filename = api_replace_dangerous_char($filename);
     //$filename = api_replace_dangerous_char($filename);
 
-    // Transform any .php file in .phps fo security
-    //$filename = php2phps($filename);
+    $filename = php2phps($filename);
     $filesize = filesize($file['tmp_name']);
 
     if (empty($filesize)) {

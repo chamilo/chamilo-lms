@@ -1,12 +1,11 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * @author unknown, the initial survey that did not make it in 1.8 because of bad code
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
  * @author Julio Montoya Chamilo: cleanup, refactoring, security improvements
- *
- * @version $Id: survey_invite.php 10680 2007-01-11 21:26:23Z pcool $
  *
  * @todo checking if the additional emails are valid (or add a rule for this)
  * @todo check if the mailtext contains the **link** part, if not, add the link to the end

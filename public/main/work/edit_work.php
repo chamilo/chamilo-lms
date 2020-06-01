@@ -116,8 +116,14 @@ if ($form->validate()) {
     }
 
     $workId = $params['work_id'];
+    $editCheck = false;
     $workData = get_work_data_by_id($workId);
-    $editCheck = true;
+
+    if (!empty($workData)) {
+        $editCheck = true;
+    } else {
+        $editCheck = true;
+    }
 
     if ($editCheck) {
         updateWork($workData['iid'], $params, $courseInfo, $sessionId);

@@ -16,7 +16,7 @@
 </head>
 {% endblock %}
 <body
-    class="{{ section_name }} app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show"
+    class="{{ section_name }} "
 {#    {{ sonata_seo_html_attributes() }}#}
     data-in-course="{{ course ? 'true' : 'false' }}"
     data-course-code="{{ course ? course.code : '' }}"
@@ -37,7 +37,7 @@
             <!-- END SIDEBAR -->
         {% endblock %}
 
-        <main id="app-main" class="main v-content__wrap">
+        <main id="app-main" class="main">
             {% block chamilo_breadcrumb %}
                 <!-- BREADCRUMB -->
                 {% include '@ChamiloCore/Layout/breadcrumb.html.twig' %}

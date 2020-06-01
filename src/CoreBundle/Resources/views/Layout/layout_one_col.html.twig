@@ -27,21 +27,24 @@
         </div>
     {% endif %}
 
+    {% autoescape %}
     <div id="app" data-is-authenticated="{{ is_authenticated }}" data-user="{{ user }}">
     </div>
+
+    {% endautoescape %}
 
     {% set hideContent = 'display: none' %}
     {% if from_vue %}
         {% set hideContent = '' %}
     {% endif %}
 
-    <section id="sectionMainContent" class="section-content v-content" style="{{ hideContent }}">
+    <section id="sectionMainContent" class="section-content" style="{{ hideContent }}">
         {% autoescape false %}
             {% block chamilo_messages %}
                     {% include '@ChamiloCore/FlashMessage/render.html.twig' %}
             {% endblock %}
 
-            <section id="content_one_col" class="container-fluid">
+            <section class="container-fluid">
                 {% if introduction is defined %}
                     {{ introduction }}
                 {% endif %}

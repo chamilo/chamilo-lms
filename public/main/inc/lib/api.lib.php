@@ -3881,7 +3881,7 @@ function api_not_allowed(
     $message = null,
     $responseCode = 0
 ) {
-    throw new Exception('You are not allowed');
+    //throw new Exception('You are not allowed');
 }
 
 /**

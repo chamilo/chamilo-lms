@@ -2,6 +2,5 @@
 
 {% block content %}
     <div id="app" data-is-authenticated="{{ is_authenticated }}" data-user="{{ user }}"></div>
-{#    <div id="app"></div>#}
     {{ encore_entry_script_tags('vue') }}
 {% endblock %}

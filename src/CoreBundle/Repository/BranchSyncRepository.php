@@ -46,7 +46,7 @@ class BranchSyncRepository extends NestedTreeRepository
         $qb->select('DISTINCT b');
 
         $qb->from('Chamilo\CoreBundle\Entity\BranchSync', 'b');
-        $qb->where('b.parentId IS NULL');
+        $qb->where('b.parent IS NULL');
         $qb->add('orderBy', 'b.id ASC');
         $qb->setMaxResults(1);
         $q = $qb->getQuery()->getResult();

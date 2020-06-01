@@ -216,7 +216,7 @@ class Template
         if ('learnpath' === $origin) {
             $template = '@ChamiloCore/Layout/no_layout.html.twig';
         }
-        $this->setVueParams($this->params);
+        //$this->setVueParams($this->params);
         $this->returnResponse($this->params, $template);
     }
 

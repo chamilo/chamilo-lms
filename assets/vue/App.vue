@@ -9,7 +9,7 @@
                 disable-resize-watcher
         >
             <v-list v-if="isAuthenticated">
-                <v-list-item :to="{ name: '/' }">
+                <v-list-item :to="{ name: 'Home' }">
                     <v-list-item-action>
                         <v-icon>mdi-home</v-icon>
                     </v-list-item-action>
@@ -142,7 +142,7 @@
             </v-list>
 
             <v-list v-if="!isAuthenticated">
-                <v-list-item :to="{ name: '/' }">
+                <v-list-item :to="{ name: 'Home' }">
                     <v-list-item-action>
                         <v-icon>mdi-home</v-icon>
                     </v-list-item-action>
@@ -224,7 +224,6 @@
                 </v-card>
             </v-menu>
 
-
             <v-menu
                     v-if="isAuthenticated"
                     offset-y
@@ -243,7 +242,6 @@
                     <v-list-item>
                         <v-list-item-title>Inbox</v-list-item-title>
                     </v-list-item>
-
                     <v-list-item>
                         <v-list-item-title>
                             <a href="/logout">Logout</a>
@@ -270,15 +268,13 @@
 
         <v-content>
             <Breadcrumb layout-class="pl-3 py-3"/>
-
             <router-view></router-view>
-
             <div id="legacy_content" v-html="legacy_content">
             </div>
         </v-content>
 
         <v-footer color="indigo" app>
-            <span class="white--text">&copy; 2019</span>
+            <span class="white--text">&copy; 2020</span>
         </v-footer>
     </v-app>
 </template>
@@ -323,7 +319,6 @@
                     document.querySelector("#sectionMainContent").remove();
                 }
                 let url = window.location.href;
-                console.log(url);
                 var n = url.indexOf("main/");
                 if (n > 0) {
                     axios.get(url, {
@@ -339,8 +334,6 @@
             },
             legacy_content: {
                 handler: function () {
-                    if (document.querySelector("#sectionMainContent")) {
-                    }
                 },
                 immediate: true
             },

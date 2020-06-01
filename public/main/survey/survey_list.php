@@ -1,5 +1,8 @@
 <?php
+
 /* For licensing terms, see /license.txt */
+
+use ChamiloSession as Session;
 
 /**
  * @author unknown, the initial survey that did not make it in 1.8 because of bad code
@@ -19,7 +22,7 @@ $current_course_tool = TOOL_SURVEY;
 $currentUserId = api_get_user_id();
 
 api_protect_course_script(true);
-$action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : '';
+$action = isset($_REQUEST['action']) ? Security::remove_XSS($_REQUEST['action']) : '';
 
 // Tracking
 Event::event_access_tool(TOOL_SURVEY);
@@ -63,7 +66,7 @@ $extend_rights_for_coachs = api_get_setting('extend_rights_for_coach_on_survey')
 
 Session::erase('answer_count');
 Session::erase('answer_list');
-$tool_name = get_lang('SurveyList');
+$tool_name = get_lang('Survey list');
 // Database table definitions
 if (isset($_GET['search']) && 'advanced' == $_GET['search']) {
     $interbreadcrumb[] = [
@@ -71,8 +74,6 @@ if (isset($_GET['search']) && 'advanced' == $_GET['search']) {
         'name' => get_lang('Survey list'),
     ];
     $tool_name = get_lang('Search a survey');
-} else {
-    $tool_name = get_lang('Survey list');
 }
 
 $listUrl = api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq();

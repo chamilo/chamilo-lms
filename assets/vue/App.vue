@@ -9,7 +9,7 @@
                 disable-resize-watcher
         >
             <v-list v-if="isAuthenticated">
-                <v-list-item :to="{ name: 'Home' }">
+                <v-list-item :to="{ name: 'Index' }">
                     <v-list-item-action>
                         <v-icon>mdi-home</v-icon>
                     </v-list-item-action>
@@ -142,7 +142,7 @@
             </v-list>
 
             <v-list v-if="!isAuthenticated">
-                <v-list-item :to="{ name: 'Home' }">
+                <v-list-item :to="{ name: 'Index' }">
                     <v-list-item-action>
                         <v-icon>mdi-home</v-icon>
                     </v-list-item-action>
@@ -320,6 +320,9 @@
                 }
                 let url = window.location.href;
                 var n = url.indexOf("main/");
+                console.log(url);
+                console.log(n);
+
                 if (n > 0) {
                     axios.get(url, {
                         params: {

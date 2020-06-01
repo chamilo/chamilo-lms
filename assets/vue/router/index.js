@@ -16,7 +16,7 @@ import MySessionList from "../views/user/sessions/List";
 let router = new VueRouter({
     mode: "history",
     routes: [
-        { path: "/", name: "Home", component: Home },
+        { path: "/", name: "Index"},
         { path: "/login", component: Login },
         { path: "/courses", name: "MyCourses", component: MyCourseList },
         { path: "/sessions", name: "MySessions", component: MySessionList },

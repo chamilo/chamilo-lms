@@ -670,5 +670,3 @@ $template = $tpl->get_template('admin/index.html.twig');
 $content = $tpl->fetch($template);
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();
-
-//$tpl->display($template);

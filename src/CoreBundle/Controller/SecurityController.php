@@ -25,7 +25,7 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * Route("/login", name="login")
+     * Route("/login", name="login").
      */
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
@@ -34,7 +34,6 @@ class SecurityController extends AbstractController
         $lastUsername = $authenticationUtils->getLastUsername();
 
         /** @var User $user */
-
         $user = $this->getUser();
         $data = [];
         if ($user) {

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -10,6 +11,7 @@ class SortableTableFromArray extends SortableTable
      * The array containing all data for this table.
      */
     public $table_data;
+    public $handlePagination;
 
     /**
      * Constructor.
@@ -39,6 +41,7 @@ class SortableTableFromArray extends SortableTable
             $tableId
         );
         $this->table_data = $table_data;
+        $this->handlePagination = false;
     }
 
     /**

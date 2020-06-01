@@ -295,7 +295,8 @@ if ($allowToEdit) {
                     $message = Display::return_message(get_lang('This file is not in iCal format'), 'error');
                 }
                 Display::addFlash($message);
-                header("Location: $agendaUrl");
+                $url = api_get_self().'?action=importical&type='.$agenda->type;
+                header("Location: $url");
                 exit;
             }
             $content = $form->returnForm();

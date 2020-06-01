@@ -159,8 +159,8 @@ class Attendance
 
         while ($attendance = Database::fetch_row($res)) {
             $session_star = '';
-            if (api_get_session_id() == $attendance[6]) {
-                $session_star = api_get_session_image(api_get_session_id(), $user_info['status']);
+            if ($session_id == $attendance[6]) {
+                $session_star = api_get_session_image($session_id, $user_info['status']);
             }
 
             if (1 == $attendance[5]) {

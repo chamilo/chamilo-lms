@@ -189,6 +189,8 @@ define('LOG_GROUP_PORTAL_USER_UPDATE_ROLE', 'soc_gr_update_role');
 
 define('LOG_USER_DELETE', 'user_deleted');
 define('LOG_USER_CREATE', 'user_created');
+define('LOG_USER_UPDATE', 'user_updated');
+define('LOG_USER_PASSWORD_UPDATE', 'user_password_updated');
 define('LOG_USER_ENABLE', 'user_enable');
 define('LOG_USER_DISABLE', 'user_disable');
 define('LOG_USER_ANONYMIZE', 'user_anonymized');
@@ -210,6 +212,7 @@ define('LOG_PLATFORM_LANGUAGE_CHANGE', 'platform_lng_changed'); //changed in 1.9
 define('LOG_SUBSCRIBE_USER_TO_COURSE', 'user_subscribed');
 define('LOG_UNSUBSCRIBE_USER_FROM_COURSE', 'user_unsubscribed');
 define('LOG_ATTEMPTED_FORCED_LOGIN', 'attempted_forced_login');
+define('LOG_PLUGIN_CHANGE', 'plugin_changed');
 
 define('LOG_HOMEPAGE_CHANGED', 'homepage_changed');
 
@@ -250,6 +253,9 @@ define('LOG_SESSION_CATEGORY_ID', 'session_category_id');
 define('LOG_CONFIGURATION_SETTINGS_CATEGORY', 'settings_category');
 define('LOG_CONFIGURATION_SETTINGS_VARIABLE', 'settings_variable');
 define('LOG_PLATFORM_LANGUAGE', 'default_platform_language');
+define('LOG_PLUGIN_UPLOAD', 'plugin_upload');
+define('LOG_PLUGIN_ENABLE', 'plugin_enable');
+define('LOG_PLUGIN_SETTINGS_CHANGE', 'plugin_settings_change');
 define('LOG_CAREER_ID', 'career_id');
 define('LOG_PROMOTION_ID', 'promotion_id');
 define('LOG_GRADEBOOK_LOCKED', 'gradebook_locked');
@@ -1874,7 +1880,7 @@ function api_get_current_user()
  *
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
  */
-function api_get_user_info_from_username($username = '')
+function api_get_user_info_from_username($username)
 {
     if (empty($username)) {
         return false;
@@ -2028,6 +2034,27 @@ function api_get_course_setting($settingName, $courseInfo = [], $force = false)
     }
 
     return -1;
+}
+
+function api_get_course_plugin_setting($plugin, $settingName, $courseInfo = [])
+{
+    $value = api_get_course_setting($settingName, $courseInfo, true);
+
+    if (-1 === $value) {
+        // Check global settings
+        $value = api_get_plugin_setting($plugin, $settingName);
+        if ($value === 'true') {
+            return 1;
+        }
+        if ($value === 'false') {
+            return 0;
+        }
+        if (null === $value) {
+            return -1;
+        }
+    }
+
+    return $value;
 }
 
 /**
@@ -2676,7 +2703,7 @@ function api_get_session_visibility(
     }
 
     $row = Database::fetch_array($result, 'ASSOC');
-    $visibility = $original_visibility = $row['visibility'];
+    $visibility = $row['visibility'];
 
     // I don't care the session visibility.
     if (empty($row['access_start_date']) && empty($row['access_end_date'])) {
@@ -3730,6 +3757,8 @@ function api_is_allowed_to_session_edit($tutor = false, $coach = false)
             }
         }
     }
+
+    return false;
 }
 
 /**
@@ -8364,6 +8393,83 @@ function api_get_configuration_value($variable)
     }
 
     return false;
+}
+
+/**
+ * Retreives and returns a value in a hierarchical configuration array
+ * api_get_configuration_sub_value('a/b/c') returns api_get_configuration_value('a')['b']['c'].
+ *
+ * @param string $path      the successive array keys, separated by the separator
+ * @param mixed  $default   value to be returned if not found, null by default
+ * @param string $separator '/' by default
+ * @param array  $array     the active configuration array by default
+ *
+ * @return mixed the found value or $default
+ */
+function api_get_configuration_sub_value($path, $default = null, $separator = '/', $array = null)
+{
+    $pos = strpos($path, $separator);
+    if (false === $pos) {
+        if (is_null($array)) {
+            return api_get_configuration_value($path);
+        }
+        if (is_array($array) && array_key_exists($path, $array)) {
+            return $array[$path];
+        }
+
+        return $default;
+    }
+    $key = substr($path, 0, $pos);
+    if (is_null($array)) {
+        $newArray = api_get_configuration_value($key);
+    } elseif (is_array($array) && array_key_exists($key, $array)) {
+        $newArray = $array[$key];
+    } else {
+        return $default;
+    }
+    if (is_array($newArray)) {
+        $newPath = substr($path, $pos + 1);
+
+        return api_get_configuration_sub_value($newPath, $default, $separator, $newArray);
+    }
+
+    return $default;
+}
+
+/**
+ * Retrieves and returns a value in a hierarchical configuration array
+ * api_array_sub_value($array, 'a/b/c') returns $array['a']['b']['c'].
+ *
+ * @param array  $array     the recursive array that contains the value to be returned (or not)
+ * @param string $path      the successive array keys, separated by the separator
+ * @param mixed  $default   the value to be returned if not found
+ * @param string $separator the separator substring
+ *
+ * @return mixed the found value or $default
+ */
+function api_array_sub_value($array, $path, $default = null, $separator = '/')
+{
+    $pos = strpos($path, $separator);
+    if (false === $pos) {
+        if (is_array($array) && array_key_exists($path, $array)) {
+            return $array[$path];
+        }
+
+        return $default;
+    }
+    $key = substr($path, 0, $pos);
+    if (is_array($array) && array_key_exists($key, $array)) {
+        $newArray = $array[$key];
+    } else {
+        return $default;
+    }
+    if (is_array($newArray)) {
+        $newPath = substr($path, $pos + 1);
+
+        return api_array_sub_value($newArray, $newPath, $default);
+    }
+
+    return $default;
 }
 
 /**

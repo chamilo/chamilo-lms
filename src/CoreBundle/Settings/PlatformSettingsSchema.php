@@ -154,7 +154,7 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     'multiple' => true,
                     'choices' => $tabs,
                     'label' => 'ShowTabsTitle',
-                    'help_block' => 'ShowTabsComment',
+                    'help' => 'ShowTabsComment',
                 ]
             )
         ;

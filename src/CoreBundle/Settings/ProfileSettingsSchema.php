@@ -76,7 +76,7 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
             ->add(
                 'extended_profile',
                 YesNoType::class,
-                ['label' => 'ExtendedProfileTitle', 'help_block' => 'ExtendedProfileComment']
+                ['label' => 'ExtendedProfileTitle', 'help' => 'ExtendedProfileComment']
             )
             ->add('account_valid_duration')
             ->add('split_users_upload_directory', YesNoType::class)

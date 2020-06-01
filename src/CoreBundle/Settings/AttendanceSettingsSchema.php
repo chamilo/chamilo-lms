@@ -33,7 +33,7 @@ class AttendanceSettingsSchema extends AbstractSettingsSchema
             ->add(
                 'allow_delete_attendance',
                 YesNoType::class,
-                ['label' => 'AttendanceDeletionEnableTitle', 'help_block' => 'AttendanceDeletionEnableComment']
+                ['label' => 'AttendanceDeletionEnableTitle', 'help' => 'AttendanceDeletionEnableComment']
             )
         ;
     }

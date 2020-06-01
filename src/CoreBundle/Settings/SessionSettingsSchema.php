@@ -63,7 +63,7 @@ class SessionSettingsSchema extends AbstractSettingsSchema
                 YesNoType::class,
                 [
                     'label' => 'AddUsersByCoachTitle',
-                    'help_block' => 'AddUsersByCoachComment',
+                    'help' => 'AddUsersByCoachComment',
                 ]
             )
             ->add('extend_rights_for_coach', YesNoType::class)
@@ -82,7 +82,7 @@ class SessionSettingsSchema extends AbstractSettingsSchema
                 TextType::class,
                 [
                     'label' => 'SessionCourseOrderingTitle',
-                    'help_block' => 'SessionCourseOrderingComment', ]
+                    'help' => 'SessionCourseOrderingComment', ]
             )
             ->add('limit_session_admin_role', YesNoType::class)
             ->add('allow_tutors_to_assign_students_to_session', YesNoType::class)

@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Controller\Admin;
 
 use Chamilo\CoreBundle\Controller\BaseController;
 use Chamilo\CoreBundle\Manager\SettingsManager;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Chamilo\CoreBundle\Traits\ControllerTrait;
 use Sylius\Bundle\SettingsBundle\Form\Factory\SettingsFormFactory;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -14,25 +14,29 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Exception\ValidatorException;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Class SettingsController.
+ * @Route("/admin")
  */
 class SettingsController extends BaseController
 {
+    use ControllerTrait;
+
     public static function getSubscribedServices(): array
     {
         $services = parent::getSubscribedServices();
+
+        $services['translator'] = TranslatorInterface::class;
         $services['chamilo.settings.manager'] = SettingsManager::class;
         $services['chamilo_settings.form_factory.settings'] = SettingsFormFactory::class;
-        $services['translator'] = TranslatorInterface::class;
 
         return $services;
     }
 
     /**
-     * @Security("has_role('ROLE_ADMIN')")
+     * @IsGranted("ROLE_ADMIN")
      *
      * @Route("/settings", name="admin_settings")
      */
@@ -52,7 +56,7 @@ class SettingsController extends BaseController
     /**
      * Edit configuration with given namespace.
      *
-     * @Security("has_role('ROLE_ADMIN')")
+     * @IsGranted("ROLE_ADMIN")
      *
      * @Route("/settings/search_settings", name="chamilo_platform_settings_search")
      */
@@ -114,7 +118,7 @@ class SettingsController extends BaseController
     /**
      * Edit configuration with given namespace.
      *
-     * @Security("has_role('ROLE_ADMIN')")
+     * @IsGranted("ROLE_ADMIN")
      *
      * @Route("/settings/{namespace}", name="chamilo_platform_settings")
      *
@@ -171,9 +175,9 @@ class SettingsController extends BaseController
 
             try {
                 $manager->save($form->getData());
-                $message = $this->getTranslator()->trans('Settings have been successfully updated');
+                $message = $this->trans('Settings have been successfully updated');
             } catch (ValidatorException $exception) {
-                $message = $this->getTranslator()->trans($exception->getMessage(), [], 'validators');
+                $message = $this->trans($exception->getMessage(), [], 'validators');
                 $messageType = 'error';
             }
 

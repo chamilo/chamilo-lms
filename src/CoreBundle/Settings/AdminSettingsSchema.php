@@ -41,7 +41,7 @@ class AdminSettingsSchema extends AbstractSettingsSchema
         $builder
             ->add('administrator_name',
                 TextType::class,
-                ['label' => 'emailAdministratorTitle', 'help_block' => 'emailAdministratorComment'])
+                ['label' => 'emailAdministratorTitle', 'help' => 'emailAdministratorComment'])
             ->add('administrator_surname')
             ->add('administrator_email', EmailType::class)
             ->add('administrator_phone')

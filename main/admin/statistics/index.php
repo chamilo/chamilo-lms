@@ -1316,13 +1316,31 @@ switch ($report) {
 
         break;
     case 'users_online':
-        $content = '<div class="tracking-course-summary">
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $sql = "SELECT count(distinct(exe_user_id)) FROM $table WHERE DATE_ADD(exe_date, INTERVAL '-3' MINUTE) > UTC_TIMESTAMP()";
+        $query = Database::query($sql);
+        $num3 = 0;
+        if (Database::num_rows($query) > 0) {
+            $row = Database::fetch_array($query);
+            $num3 = $row[0];
+        }
+        $sql = "SELECT count(distinct(exe_user_id)) FROM $table WHERE DATE_ADD(exe_date, INTERVAL '-5' MINUTE) > UTC_TIMESTAMP()";
+        $query = Database::query($sql);
+        $num5 = 0;
+        if (Database::num_rows($query) > 0) {
+            $row = Database::fetch_array($query);
+            $num5 = $row[0];
+        }
+        $content = '<div class="pull-left">'.get_lang('UsersOnline').'</div>
+        <div class="pull-right">'.api_get_local_time().'</div>
+        <hr />
+        <div class="tracking-course-summary">
             <div class="row">
                 <div class="col-lg-3 col-sm-3">
                     <div class="panel panel-default tracking tracking-student">
                         <div class="panel-body">
                             <span class="tracking-icon">
-                                <i class="fa fa-heartbeat" aria-hidden="true"></i>
+                                <i class="fa fa-thermometer-4" aria-hidden="true"></i>
                             </span>
                             <div class="tracking-info">
                                 <div class="tracking-text">'.get_lang('UsersOnline').' (3\')</div>
@@ -1335,7 +1353,7 @@ switch ($report) {
                     <div class="panel panel-default tracking tracking-lessons">
                         <div class="panel-body">
                             <span class="tracking-icon">
-                                <i class="fa fa-id-card-o" aria-hidden="true"></i>
+                                <i class="fa fa-thermometer-3" aria-hidden="true"></i>
                             </span>
                             <div class="tracking-info">
                                 <div class="tracking-text">'.get_lang('UsersOnline').' (5\')</div>
@@ -1348,7 +1366,7 @@ switch ($report) {
                     <div class="panel panel-default tracking tracking-exercise">
                         <div class="panel-body">
                             <span class="tracking-icon">
-                                <i class="fa fa-book" aria-hidden="true"></i>
+                                <i class="fa fa-thermometer-2" aria-hidden="true"></i>
                             </span>
                             <div class="tracking-info">
                                 <div class="tracking-text">'.get_lang('UsersOnline').' (30\')</div>
@@ -1361,12 +1379,41 @@ switch ($report) {
                     <div class="panel panel-default tracking tracking-certificate">
                         <div class="panel-body">
                             <span class="tracking-icon">
-                                <i class="fa fa-graduation-cap" aria-hidden="true"></i>
+                                <i class="fa fa-thermometer-1" aria-hidden="true"></i>
                             </span>
                             <div class="tracking-info">
                                 <div class="tracking-text">'.get_lang('UsersOnline').' (120\')</div>
                                 <div class="tracking-number">'.getOnlineUsersCount(120).'</div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <div class="pull-left">'.get_lang('UsersActiveInATest').'</div>
+        <hr />
+        <div class="row">
+            <div class="col-lg-3 col-sm-3">
+                <div class="panel panel-default tracking tracking-student">
+                    <div class="panel-body">
+                        <span class="tracking-icon">
+                            <i class="fa fa-thermometer-4" aria-hidden="true"></i>
+                        </span>
+                        <div class="tracking-info">
+                            <div class="tracking-text">(3\')</div>
+                            <div class="tracking-number">'.$num3.'</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-3">
+                <div class="panel panel-default tracking tracking-student">
+                    <div class="panel-body">
+                        <span class="tracking-icon">
+                            <i class="fa fa-thermometer-4" aria-hidden="true"></i>
+                        </span>
+                        <div class="tracking-info">
+                            <div class="tracking-text">(5\')</div>
+                            <div class="tracking-number">'.$num5.'</div>
                         </div>
                     </div>
                 </div>

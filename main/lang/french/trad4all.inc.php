@@ -8456,4 +8456,5 @@ $XAnswersSavedByUsersFromXTotal = "%d / %s réponses enregistrées.";
 $TestYourBrowser = "Testez votre navigateur";
 $DraggableQuestionIntro = "Ordonnez les options suivantes dans la liste selon ce qui vous semble le plus approprié, en les glissant-déplaçant dans les cadres ci-dessous. Vous pouvez les remettre à leur place originale à tout moment pour modifier votre réponse.";
 $AverageTrainingTime = "Temps moyen dans le cours";
+$UsersActiveInATest = "Utilisateurs actifs dans un test";
 ?>

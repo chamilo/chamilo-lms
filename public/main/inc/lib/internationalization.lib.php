@@ -236,9 +236,9 @@ function api_get_timezone()
 
         // If allowed by the administrator
         $allowUserTimezones = api_get_setting('use_users_timezone', 'timezones');
+        $userId = api_get_user_id();
 
-        if ('true' === $allowUserTimezones) {
-            $userId = api_get_user_id();
+        if ('true' === $allowUserTimezones && !empty($userId)) {
             // Get the timezone based on user preference, if it exists
             $newExtraField = new ExtraFieldValue('user');
             $data = $newExtraField->get_values_by_handler_and_field_variable($userId, 'timezone');

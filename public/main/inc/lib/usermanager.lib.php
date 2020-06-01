@@ -330,6 +330,7 @@ class UserManager
             ->setHrDeptId($hr_dept_id)
             ->setActive($active)
             ->setEnabled($active)
+            ->setTimezone(api_get_timezone())
         ;
 
         if (!empty($expirationDate)) {

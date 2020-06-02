@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
@@ -123,6 +124,7 @@ function api_purify_language_id($language)
 function api_get_language_isocode()
 {
     $request = Container::getRequest();
+
     if ($request) {
         return $request->getLocale();
     }

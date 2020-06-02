@@ -3067,6 +3067,7 @@ function upgradeWithContainer($container)
 
 function fixMedia($container)
 {
+    return;
     error_log('fix medias');
     $pool = $container->get('sonata.media.pool');
     $contextManager = $container->get('sonata.classification.manager.context');

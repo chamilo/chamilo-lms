@@ -745,7 +745,7 @@ class AddCourse
         }
 
         // just in case
-        if ('http://' == $department_url) {
+        if ('http://' === $department_url) {
             $department_url = '';
         }
         $course_id = 0;
@@ -755,12 +755,7 @@ class AddCourse
             $course = new \Chamilo\CoreBundle\Entity\Course();
             /** @var \Chamilo\CoreBundle\Entity\CourseCategory $courseCategory */
             $courseCategory = Container::getCourseCategoryRepository()->find($categoryId);
-            $urlId = 1;
-            if (-1 !== api_get_current_access_url_id()) {
-                $urlId = api_get_current_access_url_id();
-            }
 
-            $url = api_get_url_entity($urlId);
             $course
                 ->setCode($code)
                 ->setDirectory($directory)
@@ -778,7 +773,6 @@ class AddCourse
                 ->setSubscribe($subscribe)
                 ->setUnsubscribe($unsubscribe)
                 ->setVisualCode($visual_code)
-                ->addUrl($url)
             ;
             $repo->getEntityManager()->persist($course);
             $repo->getEntityManager()->flush();

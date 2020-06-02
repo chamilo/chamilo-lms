@@ -310,7 +310,6 @@ class UserManager
             $expirationDate = new \DateTime($expirationDate, new DateTimeZone('UTC'));
         }
 
-        $userManager = self::getManager();
         $user = new User();
         $user
             ->setLastname($lastName)
@@ -368,22 +367,20 @@ class UserManager
             DRH => 'RRHH',
             SESSIONADMIN => 'SESSION_ADMIN',
             STUDENT_BOSS => 'STUDENT_BOSS',
-            INVITEE => 'INVITEE',
+            INVITEE => 'INVITEE'
         ];
 
-        $group = Container::$container->get('Chamilo\CoreBundle\Repository\GroupRepository')->findOneBy(['code' => $statusToGroup[$status]]);
-        if ($group) {
-            $user->addGroup($group);
-            $repo->updateUser($user);
+        if (isset($statusToGroup[$status])) {
+            $group = Container::$container->get('Chamilo\CoreBundle\Repository\GroupRepository')->findOneBy(['code' => $statusToGroup[$status]]);
+            if ($group) {
+                $user->addGroup($group);
+                $repo->updateUser($user);
+            }
         }
 
         $em->flush();
 
         if (!empty($userId)) {
-            $return = $userId;
-            $sql = "UPDATE $table_user SET user_id = $return WHERE id = $return";
-            Database::query($sql);
-
             if ($isAdmin) {
                 self::add_user_as_admin($user);
             }
@@ -489,7 +486,7 @@ class UserManager
 
                 $additionalParameters = [
                     'smsType' => SmsPlugin::WELCOME_LOGIN_PASSWORD,
-                    'userId' => $return,
+                    'userId' => $userId,
                     'mobilePhoneNumber' => $phoneNumber,
                     'password' => $original_password,
                 ];
@@ -674,7 +671,7 @@ class UserManager
             return false;
         }
 
-        return $return;
+        return $userId;
     }
 
     /**

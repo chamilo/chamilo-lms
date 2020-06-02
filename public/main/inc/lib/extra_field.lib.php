@@ -162,7 +162,7 @@ class ExtraField extends Model
 
         $this->pageUrl = 'extra_fields.php?type='.$this->type;
         // Example QuestionFields
-        $this->pageName = get_lang(ucwords($this->type).'Fields');
+        $this->pageName = ucwords($this->type).'Fields';
     }
 
     /**
@@ -1231,7 +1231,7 @@ class ExtraField extends Model
                                        </h4>
                                     </div>
                                 </div>
-                            </div>    
+                            </div>
                         ');
                         break;
                     case self::FIELD_TYPE_TAG:
@@ -1594,15 +1594,15 @@ class ExtraField extends Model
                                     $form->addHtml(
                                         "
                                         <script>
-                                            $(function() {                                     
+                                            $(function() {
                                                 $('#".$deleteId."').on('click', function() {
-                                                    $.ajax({			
+                                                    $.ajax({
                                                         type: 'GET',
-                                                        url: '".$url."',			
-                                                        success: function(result) {		    
+                                                        url: '".$url."',
+                                                        success: function(result) {
                                                             if (result == 1) {
                                                                 $('#".$divItemId."').html('".get_lang('Deleted')."');
-                                                            }			    
+                                                            }
                                                         }
                                                     });
                                                 });
@@ -2356,7 +2356,7 @@ JAVASCRIPT;
             </a>
 JAVASCRIPT;
 
-        return "function action_formatter(cellvalue, options, rowObject) {        
+        return "function action_formatter(cellvalue, options, rowObject) {
             return '$editButton $deleteButton';
         }";
     }
@@ -3016,9 +3016,9 @@ JAVASCRIPT;
         $tag = Database::escape_string($tag);
         $fieldId = (int) $fieldId;
 
-        $sql = "SELECT user_id 
-                FROM {$this->table_field_tag} f INNER JOIN $tagRelUserTable ft 
-                ON tag_id = f.id 
+        $sql = "SELECT user_id
+                FROM {$this->table_field_tag} f INNER JOIN $tagRelUserTable ft
+                ON tag_id = f.id
                 WHERE tag = '$tag' AND f.field_id = $fieldId;
         ";
 
@@ -3086,14 +3086,14 @@ JAVASCRIPT;
         $optionsTable = Database::get_main_table(TABLE_EXTRA_FIELD_OPTIONS);
 
         $sql = "SELECT DISTINCT t.*, v.value, o.display_text
-                FROM $tagRelExtraTable te 
+                FROM $tagRelExtraTable te
                 INNER JOIN $tagTable t
-                ON (t.id = te.tag_id AND te.field_id = t.field_id AND te.field_id = $tagId) 
+                ON (t.id = te.tag_id AND te.field_id = t.field_id AND te.field_id = $tagId)
                 INNER JOIN $table v
                 ON (te.item_id = v.item_id AND v.field_id = $id)
                 INNER JOIN $optionsTable o
                 ON (o.option_value = v.value)
-                WHERE v.value IN ('".implode("','", $options)."')                           
+                WHERE v.value IN ('".implode("','", $options)."')
                 ORDER BY o.option_order, t.tag
                ";
 
@@ -3218,7 +3218,7 @@ JAVASCRIPT;
 
                 if (!id) {
                     $('#$secondSelectId').empty().selectpicker('refresh');
-                    
+
                     return;
                 }
 
@@ -3390,17 +3390,17 @@ JAVASCRIPT;
                 var slctFirst = $('#$slctFirstId'),
                     slctSecond = $('#$slctSecondId'),
                     slctThird = $('#$slctThirdId');
-                    
+
                 slctFirst.on('change', function () {
                     slctSecond.empty().selectpicker('refresh');
                     slctThird.empty().selectpicker('refresh');
-    
+
                     var level = $(this).val();
-    
+
                     if (!level) {
                         return;
                     }
-    
+
                     $.getJSON(_p.web_ajax + 'extra_field.ajax.php', {
                         'a': 'get_second_select_options',
                         'type': '$this->type',
@@ -3420,19 +3420,19 @@ JAVASCRIPT;
                                     $('<option>', {value: index, text: valueParts.join(''), 'data-value': dataValue})
                                 );
                             });
-    
+
                             slctSecond.selectpicker('refresh');
                         });
                 });
                 slctSecond.on('change', function () {
                     slctThird.empty().selectpicker('refresh');
-    
+
                     var level = $(this).val();
-                    
+
                     if (!level) {
                         return;
                     }
-                    
+
                     $.getJSON(_p.web_ajax + 'extra_field.ajax.php', {
                         'a': 'get_second_select_options',
                         'type': '$this->type',
@@ -3452,7 +3452,7 @@ JAVASCRIPT;
                                     $('<option>', {value: index, text: valueParts.join(''), 'data-value': dataValue})
                                 );
                             });
-    
+
                             slctThird.selectpicker('refresh');
                         });
                 });

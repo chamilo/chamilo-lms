@@ -7,6 +7,10 @@ namespace Chamilo\CoreBundle\Entity\Listener;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceNode;
+use Chamilo\CoreBundle\Entity\ResourceToCourseInterface;
+use Chamilo\CoreBundle\Entity\ResourceToRootInterface;
+use Chamilo\CoreBundle\Entity\ResourceWithUrlInterface;
+use Chamilo\CoreBundle\Entity\UrlResourceInterface;
 use Chamilo\CoreBundle\ToolChain;
 use Cocur\Slugify\SlugifyInterface;
 use Doctrine\ORM\Event\LifecycleEventArgs;
@@ -35,16 +39,21 @@ class ResourceListener
 
     public function prePersist(AbstractResource $resource, LifecycleEventArgs $args)
     {
-        if (!$resource instanceof Course) {
-            return true;
+        $em = $args->getEntityManager();
+        $request = $this->request->getCurrentRequest();
+
+        if ($request && $resource instanceof ResourceWithUrlInterface) {
+            $sessionRequest = $request->getSession();
+            if (null !== $sessionRequest) {
+                $id = $sessionRequest->get('access_url_id');
+                $url = $em->getRepository('ChamiloCoreBundle:AccessUrl')->find($id);
+                $resource->addUrl($url);
+            }
+            throw new \Exception('A Url is needed');
         }
 
         // Add resource node
-        $em = $args->getEntityManager();
-        $id = $this->request->getCurrentRequest()->getSession()->get('access_url_id');
-        $url = $em->getRepository('ChamiloCoreBundle:AccessUrl')->find($id);
         $creator = $this->security->getUser();
-
         $resourceNode = new ResourceNode();
         $resourceName = $resource->getResourceName();
         $extension = $this->slugify->slugify(pathinfo($resourceName, PATHINFO_EXTENSION));
@@ -69,8 +78,19 @@ class ResourceListener
             ->setResourceType($resourceType)
         ;
 
-        $resourceNode->setParent($url->getResourceNode());
+        if ($resource instanceof ResourceToRootInterface) {
+            $resourceNode->setParent($url->getResourceNode());
+        }
+
+        if ($resource instanceof ResourceToCourseInterface) {
+            //$this->request->getCurrentRequest()->getSession()->get('access_url_id');
+            //$resourceNode->setParent($url->getResourceNode());
+        }
+
+
+
         $resource->setResourceNode($resourceNode);
+
         $em->persist($resourceNode);
 
         return $resourceNode;

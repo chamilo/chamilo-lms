@@ -43,9 +43,6 @@ define(function () {
     },
     searching: function () {
       return 'Sto cercando…';
-    },
-    removeAllItems: function () {
-      return 'Rimuovi tutti gli oggetti';
     }
   };
 });

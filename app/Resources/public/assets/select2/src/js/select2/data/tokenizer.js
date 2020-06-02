@@ -58,7 +58,7 @@ define([
       // Replace the search term if we have the search box
       if (this.$search.length) {
         this.$search.val(tokenData.term);
-        this.$search.trigger('focus');
+        this.$search.focus();
       }
 
       params.term = tokenData.term;

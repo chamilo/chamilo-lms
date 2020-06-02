@@ -47,9 +47,6 @@ define(function () {
     },
     searching: function () {
       return 'Ieškoma…';
-    },
-    removeAllItems: function () {
-      return 'Pašalinti visus elementus';
     }
   };
 });

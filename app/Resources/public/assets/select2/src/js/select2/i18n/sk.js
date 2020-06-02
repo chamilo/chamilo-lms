@@ -9,9 +9,6 @@ define(function () {
   };
 
   return {
-    errorLoading: function () {
-      return 'Výsledky sa nepodarilo načítať.';
-    },
     inputTooLong: function (args) {
       var overChars = args.input.length - args.maximum;
 
@@ -37,7 +34,7 @@ define(function () {
       }
     },
     loadingMore: function () {
-      return 'Načítanie ďalších výsledkov…';
+      return 'Loading more results…';
     },
     maximumSelected: function (args) {
       if (args.maximum == 1) {
@@ -54,9 +51,6 @@ define(function () {
     },
     searching: function () {
       return 'Vyhľadávanie…';
-    },
-    removeAllItems: function () {
-      return 'Odstráňte všetky položky';
     }
   };
 });

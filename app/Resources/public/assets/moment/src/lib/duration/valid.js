@@ -1,37 +1,18 @@
-import hasOwnProp from '../utils/has-own-prop';
 import toInt from '../utils/to-int';
-import indexOf from '../utils/index-of';
-import { createDuration } from './create';
+import {Duration} from './constructor';
+import {createDuration} from './create';
 
-var ordering = [
-    'year',
-    'quarter',
-    'month',
-    'week',
-    'day',
-    'hour',
-    'minute',
-    'second',
-    'millisecond',
-];
+var ordering = ['year', 'quarter', 'month', 'week', 'day', 'hour', 'minute', 'second', 'millisecond'];
 
 export default function isDurationValid(m) {
-    var key,
-        unitHasDecimal = false,
-        i;
-    for (key in m) {
-        if (
-            hasOwnProp(m, key) &&
-            !(
-                indexOf.call(ordering, key) !== -1 &&
-                (m[key] == null || !isNaN(m[key]))
-            )
-        ) {
+    for (var key in m) {
+        if (!(ordering.indexOf(key) !== -1 && (m[key] == null || !isNaN(m[key])))) {
             return false;
         }
     }
 
-    for (i = 0; i < ordering.length; ++i) {
+    var unitHasDecimal = false;
+    for (var i = 0; i < ordering.length; ++i) {
         if (m[ordering[i]]) {
             if (unitHasDecimal) {
                 return false; // only allow non-integers for smallest unit

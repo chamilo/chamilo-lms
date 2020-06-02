@@ -47,9 +47,6 @@ define(function () {
     },
     searching: function () {
       return 'Αναζήτηση…';
-    },
-    removeAllItems: function () {
-      return 'Καταργήστε όλα τα στοιχεία';
     }
   };
 });

@@ -20,7 +20,6 @@
     "package.js",
     "package.json",
     "ISSUE_TEMPLATE.md",
-    "typing-tests",
-    "min/tests.js"
+    "typing-tests"
   ]
 }

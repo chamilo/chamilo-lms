@@ -1,5 +1,5 @@
 define(function () {
-  // Ukrainian
+  // Ukranian
   function ending (count, one, couple, more) {
     if (count % 100 > 10 && count % 100 < 15) {
       return more;
@@ -38,9 +38,6 @@ define(function () {
     },
     searching: function () {
       return 'Пошук…';
-    },
-    removeAllItems: function () {     
-      return 'Видалити всі елементи';
     }
   };
 });

@@ -8,11 +8,10 @@ import extend from '../utils/extend';
 export function configFromStringAndArray(config) {
     var tempConfig,
         bestMoment,
+
         scoreToBeat,
         i,
-        currentScore,
-        validFormatFound,
-        bestFormatIsValid = false;
+        currentScore;
 
     if (config._f.length === 0) {
         getParsingFlags(config).invalidFormat = true;
@@ -22,7 +21,6 @@ export function configFromStringAndArray(config) {
 
     for (i = 0; i < config._f.length; i++) {
         currentScore = 0;
-        validFormatFound = false;
         tempConfig = copyConfig({}, config);
         if (config._useUTC != null) {
             tempConfig._useUTC = config._useUTC;
@@ -30,8 +28,8 @@ export function configFromStringAndArray(config) {
         tempConfig._f = config._f[i];
         configFromStringAndFormat(tempConfig);
 
-        if (isValid(tempConfig)) {
-            validFormatFound = true;
+        if (!isValid(tempConfig)) {
+            continue;
         }
 
         // if there is any input that was not parsed add a penalty for that format
@@ -42,23 +40,9 @@ export function configFromStringAndArray(config) {
 
         getParsingFlags(tempConfig).score = currentScore;
 
-        if (!bestFormatIsValid) {
-            if (
-                scoreToBeat == null ||
-                currentScore < scoreToBeat ||
-                validFormatFound
-            ) {
-                scoreToBeat = currentScore;
-                bestMoment = tempConfig;
-                if (validFormatFound) {
-                    bestFormatIsValid = true;
-                }
-            }
-        } else {
-            if (currentScore < scoreToBeat) {
-                scoreToBeat = currentScore;
-                bestMoment = tempConfig;
-            }
+        if (scoreToBeat == null || currentScore < scoreToBeat) {
+            scoreToBeat = currentScore;
+            bestMoment = tempConfig;
         }
     }
 

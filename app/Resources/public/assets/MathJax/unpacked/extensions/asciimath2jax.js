@@ -14,7 +14,7 @@
  *  
  *  ---------------------------------------------------------------------
  *  
- *  Copyright (c) 2012-2020 The MathJax Consortium
+ *  Copyright (c) 2012-2017 The MathJax Consortium
  * 
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@
  */
 
 MathJax.Extension.asciimath2jax = {
-  version: "2.7.8",
+  version: "2.7.2",
   config: {
     delimiters: [['`','`']],   // The star/stop delimiter pairs for asciimath code
 
@@ -128,29 +128,21 @@ MathJax.Extension.asciimath2jax = {
   
   scanText: function (element) {
     if (element.nodeValue.replace(/\s+/,'') == '') {return element}
-    var match, prev, pos = 0, rescan;
+    var match, prev;
     this.search = {start: true};
     this.pattern = this.start;
     while (element) {
-      rescan = null;
-      this.pattern.lastIndex = pos || 0; pos = 0;
+      this.pattern.lastIndex = 0;
       while (element && element.nodeName.toLowerCase() === '#text' &&
             (match = this.pattern.exec(element.nodeValue))) {
         if (this.search.start) {element = this.startMatch(match,element)}
                           else {element = this.endMatch(match,element)}
       }
-      if (this.search.matched) element = this.encloseMath(element);
-        else if (!this.search.start) rescan = this.search;
+      if (this.search.matched) {element = this.encloseMath(element)}
       if (element) {
         do {prev = element; element = element.nextSibling}
           while (element && this.ignoreTags[element.nodeName.toLowerCase()] != null);
-        if (!element || element.nodeName !== '#text') {
-          if (!rescan) return prev;
-          element = rescan.open;
-          pos = rescan.opos + rescan.olen;
-          this.search = {start: true};
-          this.pattern = this.start;
-        }
+        if (!element || element.nodeName !== '#text') {return prev}
       }
     }
     return element;

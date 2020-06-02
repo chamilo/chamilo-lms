@@ -18,7 +18,6 @@ define([
 
     if (this.showLoadingMore(data)) {
       this.$results.append(this.$loadingMore);
-      this.loadMoreIfNeeded();
     }
   };
 
@@ -37,27 +36,25 @@ define([
       self.loading = true;
     });
 
-    this.$results.on('scroll', this.loadMoreIfNeeded.bind(this));
-  };
+    this.$results.on('scroll', function () {
+      var isLoadMoreVisible = $.contains(
+        document.documentElement,
+        self.$loadingMore[0]
+      );
 
-  InfiniteScroll.prototype.loadMoreIfNeeded = function () {
-    var isLoadMoreVisible = $.contains(
-      document.documentElement,
-      this.$loadingMore[0]
-    );
+      if (self.loading || !isLoadMoreVisible) {
+        return;
+      }
 
-    if (this.loading || !isLoadMoreVisible) {
-      return;
-    }
+      var currentOffset = self.$results.offset().top +
+        self.$results.outerHeight(false);
+      var loadingMoreOffset = self.$loadingMore.offset().top +
+        self.$loadingMore.outerHeight(false);
 
-    var currentOffset = this.$results.offset().top +
-      this.$results.outerHeight(false);
-    var loadingMoreOffset = this.$loadingMore.offset().top +
-      this.$loadingMore.outerHeight(false);
-
-    if (currentOffset + 50 >= loadingMoreOffset) {
-      this.loadMore();
-    }
+      if (currentOffset + 50 >= loadingMoreOffset) {
+        self.loadMore();
+      }
+    });
   };
 
   InfiniteScroll.prototype.loadMore = function () {
@@ -78,7 +75,7 @@ define([
     var $option = $(
       '<li ' +
       'class="select2-results__option select2-results__option--load-more"' +
-      'role="option" aria-disabled="true"></li>'
+      'role="treeitem" aria-disabled="true"></li>'
     );
 
     var message = this.options.get('translations').get('loadingMore');

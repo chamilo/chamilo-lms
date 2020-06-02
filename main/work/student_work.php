@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -10,7 +11,7 @@ api_protect_course_group(GroupManager::GROUP_TOOL_WORK);
 require_once 'work.lib.php';
 $this_section = SECTION_COURSES;
 
-$studentId = isset($_GET['studentId']) ? intval($_GET['studentId']) : null;
+$studentId = isset($_GET['studentId']) ? (int) ($_GET['studentId']) : null;
 
 if (empty($studentId)) {
     api_not_allowed(true);

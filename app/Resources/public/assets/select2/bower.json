@@ -5,7 +5,6 @@
         "dist/js/select2.js",
         "src/scss/core.scss"
     ],
-    "license": "MIT",
     "repository": {
         "type": "git",
         "url": "git@github.com:select2/select2.git"

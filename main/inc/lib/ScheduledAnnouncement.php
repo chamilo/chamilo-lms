@@ -191,7 +191,7 @@ class ScheduledAnnouncement extends Model
             get_lang('Type'),
             $typeOptions,
             [
-                'onchange' => "javascript: 
+                'onchange' => "javascript:
                     if (this.options[this.selectedIndex].value == 'base_date') {
                         document.getElementById('options').style.display = 'block';
                         document.getElementById('specific_date').style.display = 'none';
@@ -323,10 +323,10 @@ class ScheduledAnnouncement extends Model
                         continue;
                     }
 
+                    $coachList = [];
                     if ($users) {
                         $sendToCoaches = $extraFieldValue->get_values_by_handler_and_field_variable($result['id'], 'send_to_coaches');
                         $courseList = SessionManager::getCoursesInSession($sessionId);
-                        $coachList = [];
                         if (!empty($sendToCoaches) && !empty($sendToCoaches['value']) && $sendToCoaches['value'] == 1) {
                             foreach ($courseList as $courseItemId) {
                                 $coaches = SessionManager::getCoachesByCourseSession(
@@ -348,6 +348,7 @@ class ScheduledAnnouncement extends Model
                             $courseInfo = api_get_course_info_by_id($courseId);
                         }
 
+                        $message = '';
                         foreach ($users as $user) {
                             // Take original message
                             $message = $result['message'];
@@ -384,8 +385,8 @@ class ScheduledAnnouncement extends Model
 
                             $generalCoach = '';
                             $generalCoachEmail = '';
-                            if (!empty($sessionInfo['id_coach'])) {
-                                $coachInfo = api_get_user_info($sessionInfo['id_coach']);
+                            if (!empty($coachId)) {
+                                $coachInfo = api_get_user_info($coachId);
                                 if (!empty($coachInfo)) {
                                     $generalCoach = $coachInfo['complete_name'];
                                     $generalCoachEmail = $coachInfo['email'];
@@ -399,6 +400,8 @@ class ScheduledAnnouncement extends Model
                                 '((general_coach_email))' => $generalCoachEmail,
                                 '((session_end_date))' => $endTime,
                                 '((user_complete_name))' => $userInfo['complete_name'],
+                                '((user_firstname))' => $userInfo['firstname'],
+                                '((user_lastname))' => $userInfo['lastname'],
                                 '((user_first_name))' => $userInfo['firstname'],
                                 '((user_last_name))' => $userInfo['lastname'],
                                 '((lp_progress))' => $progress,

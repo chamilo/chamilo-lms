@@ -38,9 +38,6 @@ define(function () {
     },
     searching: function () {
       return 'Zoeken…';
-    },
-    removeAllItems: function () {
-      return 'Verwijder alle items';
     }
   };
 });

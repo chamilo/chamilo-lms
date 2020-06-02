@@ -36,9 +36,6 @@ define(function () {
     },
     searching: function () {
       return 'Leita…';
-    },
-    removeAllItems: function () {
-      return 'Fjarlægðu öll atriði';
     }
   };
 });

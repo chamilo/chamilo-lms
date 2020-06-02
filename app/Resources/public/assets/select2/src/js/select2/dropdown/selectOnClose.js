@@ -1,6 +1,6 @@
 define([
-  '../utils'
-], function (Utils) {
+
+], function () {
   function SelectOnClose () { }
 
   SelectOnClose.prototype.bind = function (decorated, container, $container) {
@@ -31,7 +31,7 @@ define([
       return;
     }
 
-    var data = Utils.GetData($highlightedResults[0], 'data');
+    var data = $highlightedResults.data('data');
 
     // Don't re-select already selected resulte
     if (

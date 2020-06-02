@@ -51,9 +51,6 @@ define(function () {
     },
     searching: function () {
       return 'מחפש…';
-    },
-    removeAllItems: function () {
-      return 'הסר את כל הפריטים';
     }
   };
 });

@@ -39,9 +39,6 @@ define(function () {
     },
     searching: function () {
       return 'Pretraga…';
-    },
-    removeAllItems: function () {
-      return 'Ukloni sve stavke';
     }
   };
 });

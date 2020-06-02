@@ -3,16 +3,6 @@ module('Data adapters - Array');
 var ArrayData = require('select2/data/array');
 var $ = require('jquery');
 var Options = require('select2/options');
-var Utils = require('select2/utils');
-
-var UserDefinedType = function (id, text) {
-  var self = this;
-
-  self.id = id;
-  self.text = text;
-
-  return self;
-};
 
 var arrayOptions = new Options({
   data: [
@@ -27,8 +17,7 @@ var arrayOptions = new Options({
     {
       id: '2',
       text: '2'
-    },
-    new UserDefinedType(1, 'aaaaaa')
+    }
   ]
 });
 
@@ -71,9 +60,6 @@ test('current gets default for single', function (assert) {
 
   var data = new ArrayData($select, arrayOptions);
 
-  var container = new MockContainer();
-  data.bind(container, $('<div></div>'));
-
   data.current(function (val) {
     assert.equal(
       val.length,
@@ -96,9 +82,6 @@ test('current gets default for multiple', function (assert) {
 
   var data = new ArrayData($select, arrayOptions);
 
-  var container = new MockContainer();
-  data.bind(container, $('<div></div>'));
-
   data.current(function (val) {
     assert.equal(
       val.length,
@@ -112,9 +95,6 @@ test('current works with existing selections', function (assert) {
   var $select = $('#qunit-fixture .multiple');
 
   var data = new ArrayData($select, arrayOptions);
-
-  var container = new MockContainer();
-  data.bind(container, $('<div></div>'));
 
   $select.val(['One']);
 
@@ -145,9 +125,6 @@ test('current works with selected data', function (assert) {
   var $select = $('#qunit-fixture .single-empty');
 
   var data = new ArrayData($select, arrayOptions);
-
-  var container = new MockContainer();
-  data.bind(container, $('<div></div>'));
 
   data.select({
     id: '2',
@@ -182,9 +159,6 @@ test('select works for single', function (assert) {
 
   var data = new ArrayData($select, arrayOptions);
 
-  var container = new MockContainer();
-  data.bind(container, $('<div></div>'));
-
   assert.equal(
     $select.val(),
     'default',
@@ -208,13 +182,7 @@ test('multiple sets the value', function (assert) {
 
   var data = new ArrayData($select, arrayOptions);
 
-  var container = new MockContainer();
-  data.bind(container, $('<div></div>'));
-
-  assert.ok(
-    $select.val() == null || $select.val().length == 0,
-    'nothing should be selected'
-  );
+  assert.equal($select.val(), null);
 
   data.select({
     id: 'default',
@@ -228,9 +196,6 @@ test('multiple adds to the old value', function (assert) {
   var $select = $('#qunit-fixture .multiple');
 
   var data = new ArrayData($select, arrayOptions);
-
-  var container = new MockContainer();
-  data.bind(container, $('<div></div>'));
 
   $select.val(['One']);
 
@@ -249,31 +214,10 @@ test('option tags are automatically generated', function (assert) {
 
   var data = new ArrayData($select, arrayOptions);
 
-  var container = new MockContainer();
-  data.bind(container, $('<div></div>'));
-
   assert.equal(
     $select.find('option').length,
-    4,
+    3,
     'An <option> element should be created for each object'
-  );
-});
-
-test('automatically generated option tags have a result id', function (assert) {
-  var $select = $('#qunit-fixture .single-empty');
-
-  var data = new ArrayData($select, arrayOptions);
-
-  var container = new MockContainer();
-  data.bind(container, $('<div></div>'));
-
-  data.select({
-    id: 'default'
-  });
-
-  assert.ok(
-    Utils.GetData($select.find(':selected')[0], 'data')._resultId,
-    '<option> default should have a result ID assigned'
   );
 });
 
@@ -281,9 +225,6 @@ test('option tags can receive new data', function(assert) {
   var $select = $('#qunit-fixture .single');
 
   var data = new ArrayData($select, extraOptions);
-
-  var container = new MockContainer();
-  data.bind(container, $('<div></div>'));
 
   assert.equal(
     $select.find('option').length,
@@ -296,7 +237,7 @@ test('option tags can receive new data', function(assert) {
   });
 
   assert.ok(
-    Utils.GetData($select.find(':selected')[0], 'data').extra,
+    $select.find(':selected').data('data').extra,
     '<option> default should have new data'
   );
 
@@ -305,7 +246,7 @@ test('option tags can receive new data', function(assert) {
   });
 
   assert.ok(
-    Utils.GetData($select.find(':selected')[0], 'data').extra,
+    $select.find(':selected').data('data').extra,
     '<option> One should have new data'
   );
 });
@@ -314,9 +255,6 @@ test('optgroup tags can also be generated', function (assert) {
   var $select = $('#qunit-fixture .single-empty');
 
   var data = new ArrayData($select, nestedOptions);
-
-  var container = new MockContainer();
-  data.bind(container, $('<div></div>'));
 
   assert.equal(
     $select.find('option').length,
@@ -335,9 +273,6 @@ test('optgroup tags have the right properties', function (assert) {
   var $select = $('#qunit-fixture .single-empty');
 
   var data = new ArrayData($select, nestedOptions);
-
-  var container = new MockContainer();
-  data.bind(container, $('<div></div>'));
 
   var $group = $select.children('optgroup');
 
@@ -378,9 +313,6 @@ test('existing selections are respected on initialization', function (assert) {
     assert.equal($select.val(), 'Second');
 
     var data = new ArrayData($select, options);
-
-    var container = new MockContainer();
-    data.bind(container, $('<div></div>'));
 
     assert.equal($select.val(), 'Second');
 });

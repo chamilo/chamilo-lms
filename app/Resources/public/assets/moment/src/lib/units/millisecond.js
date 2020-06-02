@@ -2,14 +2,7 @@ import { makeGetSet } from '../moment/get-set';
 import { addFormatToken } from '../format/format';
 import { addUnitAlias } from './aliases';
 import { addUnitPriority } from './priorities';
-import {
-    addRegexToken,
-    match1,
-    match2,
-    match3,
-    match1to3,
-    matchUnsigned,
-} from '../parse/regex';
+import { addRegexToken, match1, match2, match3, match1to3, matchUnsigned } from '../parse/regex';
 import { addParseToken } from '../parse/token';
 import { MILLISECOND } from './constants';
 import toInt from '../utils/to-int';
@@ -44,6 +37,7 @@ addFormatToken(0, ['SSSSSSSSS', 9], 0, function () {
     return this.millisecond() * 1000000;
 });
 
+
 // ALIASES
 
 addUnitAlias('millisecond', 'ms');
@@ -54,11 +48,11 @@ addUnitPriority('millisecond', 16);
 
 // PARSING
 
-addRegexToken('S', match1to3, match1);
-addRegexToken('SS', match1to3, match2);
-addRegexToken('SSS', match1to3, match3);
+addRegexToken('S',    match1to3, match1);
+addRegexToken('SS',   match1to3, match2);
+addRegexToken('SSS',  match1to3, match3);
 
-var token, getSetMillisecond;
+var token;
 for (token = 'SSSS'; token.length <= 9; token += 'S') {
     addRegexToken(token, matchUnsigned);
 }
@@ -70,7 +64,6 @@ function parseMs(input, array) {
 for (token = 'S'; token.length <= 9; token += 'S') {
     addParseToken(token, parseMs);
 }
+// MOMENTS
 
-getSetMillisecond = makeGetSet('Milliseconds', false);
-
-export { getSetMillisecond };
+export var getSetMillisecond = makeGetSet('Milliseconds', false);

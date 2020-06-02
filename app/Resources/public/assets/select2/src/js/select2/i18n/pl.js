@@ -40,9 +40,6 @@ define(function () {
     },
     searching: function () {
       return 'Trwa wyszukiwanie…';
-    },
-    removeAllItems: function () {
-      return 'Usuń wszystkie przedmioty';
     }
   };
 });

@@ -5,12 +5,12 @@ namespace Chamilo\PluginBundle\Zoom;
 
 class Pagination
 {
-    /** @var integer */
+    /** @var int */
     public $page_count;
-    /** @var integer counting from 1 */
+    /** @var int counting from 1 */
     public $page_number;
-    /** @var integer */
+    /** @var int */
     public $page_size;
-    /** @var integer */
+    /** @var int */
     public $total_records;
 }

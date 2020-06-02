@@ -4,10 +4,10 @@
 namespace Chamilo\PluginBundle\Zoom;
 
 use Exception;
-use \Firebase\JWT\JWT;
+use Firebase\JWT\JWT;
 
 /**
- * Class JWTClient
+ * Class JWTClient.
  *
  * @see https://marketplace.zoom.us/docs/api-reference/zoom-api
  * @package Chamilo\PluginBundle\Zoom
@@ -23,9 +23,9 @@ class JWTClient
 
     /**
      * JWTClient constructor.
-     * Requires a JWT app credentials.
+     * Requires JWT app credentials.
      *
-     * @param string $apiKey JWT API Key
+     * @param string $apiKey    JWT API Key
      * @param string $apiSecret JWT API Secret
      */
     public function __construct($apiKey, $apiSecret)
@@ -45,13 +45,15 @@ class JWTClient
      * On success, returns the body of the response
      * On error, throws an exception with an detailed error message
      *
-     * @param string $httpMethod GET, POST, PUT, DELETE ...
+     * @param string $httpMethod          GET, POST, PUT, DELETE ...
      * @param string $relativeQueryString what to append to URL https://api.zoom.us/v2/
-     * @param object $requestBody json-encoded body of the request
-     * @return object json-decoded body of the response
+     * @param object $requestBody         json-encoded body of the request
+     *
      * @throws Exception describing the error (message and code)
+     *
+     * @return object json-decoded body of the response
      */
-    protected function send($httpMethod, $relativeQueryString, $requestBody = null)
+    public function send($httpMethod, $relativeQueryString, $requestBody = null)
     {
         $options = [
             CURLOPT_URL => "https://api.zoom.us/v2/$relativeQueryString",
@@ -111,8 +113,9 @@ class JWTClient
     /**
      * Returns the list of Zoom user permissions.
      *
-     * @return string[] Zoom user permissions
      * @throws Exception describing the error (message and code)
+     *
+     * @return string[] Zoom user permissions
      */
     public function userPermissions()
     {
@@ -120,27 +123,17 @@ class JWTClient
     }
 
     /**
-     * Double-encodes a string.
-     * Used for meeting UUIDs that are inserted into a URL.
-     *
-     * @param string $string the string to double-encode
-     * @return string double-encoded string
-     */
-    private function doubleEncode($string)
-    {
-        return htmlentities($string, ENT_COMPAT, 'utf-8', true);
-    }
-
-    /**
      * Retrieves a limited list of meetings.
      *
-     * @param string $type MEETING_TYPE_SCHEDULED, MEETING_TYPE_LIVE or MEETING_TYPE_UPCOMING
-     * @param int $pageNumber number of the result page to be returned, starts at 1
-     * @param int $pageSize how many meetings can fit in one page
-     * @return MeetingList|object list of meetings
+     * @param string $type       MEETING_TYPE_SCHEDULED, MEETING_TYPE_LIVE or MEETING_TYPE_UPCOMING
+     * @param int    $pageNumber number of the result page to be returned, starts at 1
+     * @param int    $pageSize   how many meetings can fit in one page
+     *
      * @throws Exception describing the error (message and code)
+     *
+     * @return MeetingList|object list of meetings
      */
-    protected function listMeetings($type, $pageNumber = 1, $pageSize = 30)
+    public function listMeetings($type, $pageNumber = 1, $pageSize = 30)
     {
         return $this->send('GET', "users/me/meetings?type=$type&page_size=$pageSize&page_number=$pageNumber");
     }
@@ -149,8 +142,10 @@ class JWTClient
      * Gets a full list of meetings.
      *
      * @param string $type MEETING_TYPE_SCHEDULED, MEETING_TYPE_LIVE or MEETING_TYPE_UPCOMING
-     * @return MeetingListItem[] meetings
+     *
      * @throws Exception describing the error (message and code)
+     *
+     * @return MeetingListItem[] meetings
      */
     public function listAllMeetings($type)
     {
@@ -158,7 +153,7 @@ class JWTClient
         $pageCount = 1;
         $pageSize = 300;
         $totalRecords = 0;
-        for ($pageNumber = 1; $pageNumber <= $pageCount; $pageNumber ++) {
+        for ($pageNumber = 1; $pageNumber <= $pageCount; $pageNumber++) {
             $response = $this->listMeetings($type, $pageNumber, $pageSize);
             if (!is_null($response)) {
                 $meetings = array_merge($meetings, $response->meetings);
@@ -172,6 +167,7 @@ class JWTClient
         if (count($meetings) !== $totalRecords) {
             error_log('Zoom announced '.$totalRecords.' records but returned '.count($meetings));
         }
+
         return $meetings;
     }
 
@@ -179,8 +175,10 @@ class JWTClient
      * Retrieves the list of ended meeting instances.
      *
      * @param int $meetingId meeting ID
-     * @return MeetingInstances|object list of meeting instances
+     *
      * @throws Exception describing the error (message and code)
+     *
+     * @return MeetingInstances|object list of meeting instances
      */
     public function listEndedMeetingInstances($meetingId)
     {
@@ -191,8 +189,10 @@ class JWTClient
      * Creates a meeting and returns it.
      *
      * @param Meeting $meeting meeting to create with at lead $topic and $type
-     * @return Meeting|object meeting
+     *
      * @throws Exception describing the error (message and code)
+     *
+     * @return Meeting|object meeting
      */
     public function createMeeting($meeting)
     {
@@ -203,8 +203,10 @@ class JWTClient
      * Retrieves a meeting.
      *
      * @param int $meetingId meeting identifier
-     * @return Meeting|object meeting
+     *
      * @throws Exception describing the error (message and code)
+     *
+     * @return Meeting|object meeting
      */
     public function getMeeting($meetingId)
     {
@@ -214,8 +216,9 @@ class JWTClient
     /**
      * Updates a meeting's attributes.
      *
-     * @param int $meetingId meeting identifier
+     * @param int     $meetingId meeting identifier
      * @param Meeting $meeting modified meeting object (only need modified properties)
+     *
      * @throws Exception describing the error (message and code)
      */
     public function updateMeeting($meetingId, $meeting)
@@ -227,6 +230,7 @@ class JWTClient
      * Ends a meeting.
      *
      * @param int $meetingId meeting identifier
+     *
      * @throws Exception describing the error (message and code)
      */
     public function endMeeting($meetingId)
@@ -238,6 +242,7 @@ class JWTClient
      * Deletes a meeting.
      *
      * @param int $meetingId meeting identifier
+     *
      * @throws Exception describing the error (message and code)
      */
     public function deleteMeeting($meetingId)
@@ -248,11 +253,13 @@ class JWTClient
     /**
      * Adds a meeting registrant.
      *
-     * @param int $meetingId meeting identifier
+     * @param int               $meetingId meeting identifier
      * @param MeetingRegistrant $registrant with at least 'email' and 'first_name'
-     * @param string $occurrenceIds separated by comma
-     * @return CreatedRegistration|object with unique join_url and registrant_id properties
+     * @param string            $occurrenceIds separated by comma
+     *
      * @throws Exception describing the error (message and code)
+     *
+     * @return CreatedRegistration|object with unique join_url and registrant_id properties
      */
     public function addMeetingRegistrant($meetingId, $registrant, $occurrenceIds = '')
     {
@@ -260,6 +267,7 @@ class JWTClient
         if (!empty($occurrenceIds)) {
             $path .= "?occurrence_ids=$occurrenceIds";
         }
+
         return $this->send('POST', $path, $registrant);
     }
 
@@ -277,8 +285,10 @@ class JWTClient
      * Retrieves a past meeting's details.
      *
      * @param string $meetingUUID the meeting UUID
-     * @return PastMeeting|object meeting
+     *
      * @throws Exception describing the error (message and code)
+     *
+     * @return PastMeeting|object meeting
      */
     public function getPastMeetingDetails($meetingUUID)
     {
@@ -290,8 +300,10 @@ class JWTClient
      * The recording files can be downloaded via the `download_url` property listed in the response.
      *
      * @param $meetingUUID
-     * @return object an object with string property 'share_url' and array property 'recording_files'
+     *
      * @throws Exception describing the error (message and code)
+     *
+     * @return object an object with string property 'share_url' and array property 'recording_files'
      */
     public function listRecordings($meetingUUID)
     {
@@ -302,10 +314,12 @@ class JWTClient
      * Retrieves information on participants from a past meeting.
      *
      * @param string $meetingUUID the meeting instance UUID
-     * @param int $pageNumber
-     * @param int $pageSize
+     * @param int    $pageNumber
+     * @param int    $pageSize
+     *
+     * @throws Exception describing the error (message and code)
+     *
      * @return ParticipantList|object
-     * @throws Exception
      */
     public function getParticipants($meetingUUID, $pageNumber = 1, $pageSize = 30)
     {
@@ -321,8 +335,10 @@ class JWTClient
      * Gets a full list of participants.
      *
      * @param string $meetingUUID the meeting instance UUID
-     * @return ParticipantListItem[] participants
+     *
      * @throws Exception describing the error (message and code)
+     *
+     * @return ParticipantListItem[] participants
      */
     public function getAllParticipants($meetingUUID)
     {
@@ -330,7 +346,7 @@ class JWTClient
         $pageCount = 1;
         $pageSize = 300;
         $totalRecords = 0;
-        for ($pageNumber = 1; $pageNumber <= $pageCount; $pageNumber ++) {
+        for ($pageNumber = 1; $pageNumber <= $pageCount; $pageNumber++) {
             $response = $this->getParticipants($meetingUUID, $pageNumber, $pageSize);
             if (!is_null($response)) {
                 $participants = array_merge($participants, $response->participants);
@@ -344,6 +360,21 @@ class JWTClient
         if (count($participants) !== $totalRecords) {
             error_log('Zoom announced '.$totalRecords.' records but returned '.count($participants));
         }
+
         return $participants;
     }
+
+    /**
+     * Double-encodes a string.
+     * Used for meeting UUIDs that are inserted into a URL.
+     *
+     * @param string $string the string to double-encode
+     *
+     * @return string double-encoded string
+     */
+    private function doubleEncode($string)
+    {
+        return htmlentities($string, ENT_COMPAT, 'utf-8', true);
+    }
+
 }

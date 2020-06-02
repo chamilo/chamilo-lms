@@ -17,7 +17,7 @@ class PastMeeting extends Meeting
     /** @var string */
     public $topic;
 
-    /** @var integer @see Meeting */
+    /** @var int @see Meeting */
     public $type;
 
     /** @var string user display name */
@@ -32,12 +32,12 @@ class PastMeeting extends Meeting
     /** @var string "yyyy-MM-dd'T'HH:mm:ss'Z'" (GMT) */
     public $end_time;
 
-    /** @var integer in minutes, for scheduled meetings only */
+    /** @var int in minutes, for scheduled meetings only */
     public $duration;
 
-    /** @var integer sum of meeting minutes from all participants in the meeting. */
+    /** @var int sum of meeting minutes from all participants in the meeting. */
     public $total_minutes;
 
-    /** @var integer number of meeting participants */
+    /** @var int number of meeting participants */
     public $participants_count;
 }

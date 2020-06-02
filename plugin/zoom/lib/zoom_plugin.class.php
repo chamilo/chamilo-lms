@@ -29,20 +29,6 @@ class ZoomPlugin extends Plugin
     }
 
     /**
-     * Caches and returns the JWT client instance, initialized with plugin settings.
-     *
-     * @return JWTClient object that provides means of communications with the Zoom servers
-     */
-    protected function jwtClient()
-    {
-        static $jwtClient = null;
-        if (is_null($jwtClient)) {
-            $jwtClient = new JWTClient($this->get('apiKey'), $this->get('apiSecret'));
-        }
-        return $jwtClient;
-    }
-
-    /**
      * Caches and returns an instance of this class.
      *
      * @return ZoomPlugin the instance to use
@@ -50,6 +36,7 @@ class ZoomPlugin extends Plugin
     public static function create()
     {
         static $instance = null;
+
         return $instance ? $instance : $instance = new self();
     }
 
@@ -70,52 +57,15 @@ class ZoomPlugin extends Plugin
     }
 
     /**
-     * @return string a tag to append to a meeting agenda so to link it to a (course, session) tuple
-     */
-    private function agendaTag()
-    {
-        $courseId = api_get_course_int_id();
-        $sessionId = api_get_session_id();
-        return "\n(course $courseId, session $sessionId)";
-    }
-
-    private function courseIdAndSessionIdFromAgenda($agenda)
-    {
-        return preg_match('/course (?P<courseId>\d+), session (?P<sessionId>\d+)/m', $agenda, $matches)
-            ? $matches
-            : [
-                'courseId' => 0,
-                'sessionId' => 0,
-            ];
-    }
-
-
-    /**
-     * Retrieves all meetings of a specific type and linked to current course and session
+     * Retrieves information about meetings having a start_time between two dates.
      *
-     * @param string $type MEETING_TYPE_LIVE, MEETING_TYPE_SCHEDULED or MEETING_TYPE_UPCOMING
-     * @return MeetingListItem[] matching meetings
-     * @throws Exception on API error
-     */
-    private function getMeetings($type)
-    {
-        $matchingMeetings = [];
-        $tag = $this->agendaTag();
-        foreach ($this->jwtClient()->listAllMeetings($type) as $meeting) {
-            if (property_exists($meeting, 'agenda') && substr($meeting->agenda, -strlen($tag)) === $tag) {
-                $matchingMeetings[] = $meeting;
-            }
-        }
-
-        return $matchingMeetings;
-    }
-
-    /**
-     * @param string $type MEETING_TYPE_LIVE, MEETING_TYPE_SCHEDULED or MEETING_TYPE_UPCOMING
+     * @param string   $type      MEETING_TYPE_LIVE, MEETING_TYPE_SCHEDULED or MEETING_TYPE_UPCOMING
      * @param DateTime $startDate
      * @param DateTime $endDate
-     * @return MeetingListItem[] matching meetings
+     *
      * @throws Exception on API error
+     *
+     * @return MeetingListItem[] matching meetings with extra_data
      */
     public function getPeriodMeetings($type, $startDate, $endDate)
     {
@@ -132,7 +82,6 @@ class ZoomPlugin extends Plugin
         return $this->computeMeetingExtraData($matchingMeetings);
     }
 
-
     public function userIsConferenceManager()
     {
         return api_is_coach()
@@ -141,11 +90,253 @@ class ZoomPlugin extends Plugin
     }
 
     /**
-     * Computes and append extra data for each listed meeting
+     * Retrieves a meeting properties and extra_data.
+     *
+     * @param int $meetingId
+     *
+     * @throws Exception
+     *
+     * @return Meeting
+     */
+    public function getMeeting($meetingId)
+    {
+        return $this->computeMeetingExtraData([$this->jwtClient()->getMeeting($meetingId)])[0];
+    }
+
+    /**
+     * Retrieves all live meetings linked to current course and session.
+     *
+     * @throws Exception on API error
+     *
+     * @return Meeting[] matching meetings
+     */
+    public function getLiveMeetings()
+    {
+        return $this->computeMeetingExtraData($this->getMeetings(JWTClient::MEETING_LIST_TYPE_LIVE));
+    }
+
+    /**
+     * Retrieves all scheduled meetings linked to current course and session.
+     *
+     * @throws Exception on API error
+     *
+     * @return Meeting[] matching meetings
+     */
+    public function getScheduledMeetings()
+    {
+        return $this->computeMeetingExtraData($this->getMeetings(JWTClient::MEETING_LIST_TYPE_SCHEDULED));
+    }
+
+    /**
+     * Retrieves all upcoming meetings linked to current course and session.
+     *
+     * @throws Exception on API error
+     *
+     * @return Meeting[] matching meetings
+     */
+    public function getUpcomingMeetings()
+    {
+        return $this->computeMeetingExtraData($this->getMeetings(JWTClient::MEETING_LIST_TYPE_UPCOMING));
+    }
+
+    /**
+     * Creates an instant meeting and returns it.
+     *
+     * @throws Exception describing the error (message and code)
+     *
+     * @return Meeting|object meeting
+     */
+    public function createInstantMeeting()
+    {
+        // default meeting topic is based on session name, course title and current date
+        $topic = '';
+        $sessionName = api_get_session_name();
+        if ($sessionName) {
+            $topic = $sessionName.', ';
+        }
+        $courseInfo = api_get_course_info();
+        $topic .= $courseInfo['title'].', '.date('yy-m-d H:i');
+
+        return $this->createMeeting(new Meeting(Meeting::TYPE_INSTANT), $topic, '', '');
+    }
+
+    /**
+     * Schedules a meeting and returns it.
+     *
+     * @param DateTime $startTime meeting local start date-time (configure local timezone on your Zoom account)
+     * @param int      $duration  in minutes
+     * @param string   $topic     short title of the meeting, required
+     * @param string   $agenda    ordre du jour
+     * @param string   $password  meeting password
+     *
+     * @throws Exception describing the error (message and code)
+     *
+     * @return Meeting|object meeting
+     */
+    public function createScheduledMeeting($startTime, $duration, $topic, $agenda = '', $password = '')
+    {
+        $meeting = new Meeting(Meeting::TYPE_SCHEDULED);
+        $meeting->duration = $duration;
+        $meeting->start_time = $startTime->format(DateTimeInterface::ISO8601);
+
+        return $this->createMeeting($meeting, $topic, $agenda, $password);
+    }
+
+    /**
+     * Updates a meeting.
+     *
+     * @param integer $meetingId
+     * @param Meeting $meeting   with updated properties
+     *
+     * @throws Exception on API error
+     */
+    public function updateMeeting($meetingId, $meeting)
+    {
+        $meeting->agenda .= $this->agendaTag();
+        $this->jwtClient()->updateMeeting($meetingId, $meeting);
+    }
+
+    /**
+     * Ends a current meeting.
+     *
+     * @param integer $meetingId
+     *
+     * @throws Exception on API error
+     */
+    public function endMeeting($meetingId)
+    {
+        $this->jwtClient()->endMeeting($meetingId);
+    }
+
+    /**
+     * Deletes a meeting.
+     *
+     * @param integer $meetingId
+     *
+     * @throws Exception on API error
+     */
+    public function deleteMeeting($meetingId)
+    {
+        $this->jwtClient()->deleteMeeting($meetingId);
+    }
+
+    /**
+     * @see JWTClient::listRecordings()
+     *
+     * @param $meetingUUID
+     *
+     * @throws Exception on API error
+     *
+     * @return object
+     */
+    public function getRecordings($meetingUUID)
+    {
+        return $this->jwtClient()->listRecordings($meetingUUID);
+    }
+
+    /**
+     * @see JWTClient::getAllParticipants()
+     *
+     * @param $meetingUUID
+     *
+     * @throws Exception
+     *
+     * @return ParticipantListItem[]
+     */
+    public function getParticipants($meetingUUID)
+    {
+        return $this->jwtClient()->getAllParticipants($meetingUUID);
+    }
+
+    /**
+     * Adds a link to a meeting's recordings.
+     *
+     * @param string $meetingUUID UUID of the meeting
+     *
+     * @throws Exception on API error
+     *
+     * @return Link the newly added link
+     */
+    public function copyRecordingToLinkTool($meetingUUID)
+    {
+        $recordings = $this->jwtClient()->listRecordings($meetingUUID);
+        $link = new Link();
+        $link->save(
+            [
+                'url' => $recordings->share_url,
+                'title' => $recordings->topic,
+            ]
+        );
+
+        return $link;
+    }
+
+    /**
+     * Caches and returns the JWT client instance, initialized with plugin settings.
+     *
+     * @return JWTClient object that provides means of communications with the Zoom servers
+     */
+    protected function jwtClient()
+    {
+        static $jwtClient = null;
+        if (is_null($jwtClient)) {
+            $jwtClient = new JWTClient($this->get('apiKey'), $this->get('apiSecret'));
+        }
+
+        return $jwtClient;
+    }
+
+    /**
+     * @return string a tag to append to a meeting agenda so to link it to a (course, session) tuple
+     */
+    private function agendaTag()
+    {
+        $courseId = api_get_course_int_id();
+        $sessionId = api_get_session_id();
+
+        return "\n(course $courseId, session $sessionId)";
+    }
+
+    private function courseIdAndSessionIdFromAgenda($agenda)
+    {
+        return preg_match('/course (?P<courseId>\d+), session (?P<sessionId>\d+)/m', $agenda, $matches)
+            ? $matches
+            : [
+                'courseId' => 0,
+                'sessionId' => 0,
+            ];
+    }
+
+    /**
+     * Retrieves all meetings of a specific type and linked to current course and session.
+     *
+     * @param string $type MEETING_TYPE_LIVE, MEETING_TYPE_SCHEDULED or MEETING_TYPE_UPCOMING
+     *
+     * @throws Exception on API error
+     *
+     * @return MeetingListItem[] matching meetings
+     */
+    private function getMeetings($type)
+    {
+        $matchingMeetings = [];
+        $tag = $this->agendaTag();
+        foreach ($this->jwtClient()->listAllMeetings($type) as $meeting) {
+            if (property_exists($meeting, 'agenda') && substr($meeting->agenda, -strlen($tag)) === $tag) {
+                $matchingMeetings[] = $meeting;
+            }
+        }
+
+        return $matchingMeetings;
+    }
+
+    /**
+     * Computes and append extra data for each listed meeting.
      *
      * @param MeetingListItem[] $meetings list of retreived meeting objects
-     * @return Meeting[]|MeetingListItem[] same meetings with extra_data added
+     *
      * @throws Exception on API error
+     *
+     * @return Meeting[]|MeetingListItem[] same meetings with extra_data added
      */
     private function computeMeetingExtraData($meetings)
     {
@@ -157,7 +348,6 @@ class ZoomPlugin extends Plugin
             Meeting::TYPE_RECURRING_WITH_NO_FIXED_TIME => get_lang('RecurringWithNoFixedTime'),
             Meeting::TYPE_RECURRING_WITH_FIXED_TIME => get_lang('RecurringWithFixedTime'),
         ];
-        $now = new DateTime();
         foreach ($meetings as $meeting) {
             $completeMeeting = $meeting;
             $startTime = new DateTime($meeting->start_time);
@@ -176,61 +366,21 @@ class ZoomPlugin extends Plugin
             ];
             $completeMeetings[] = $completeMeeting;
         }
+
         return $completeMeetings;
-    }
-
-    /**
-     * @param int $meetingId
-     * @return Meeting
-     * @throws Exception
-     */
-    public function getMeeting($meetingId)
-    {
-        return $this->computeMeetingExtraData([$this->jwtClient()->getMeeting($meetingId)])[0];
-    }
-
-    /**
-     * Retrieves all live meetings linked to current course and session
-     *
-     * @return Meeting[] matching meetings
-     * @throws Exception on API error
-     */
-    public function getLiveMeetings()
-    {
-        return $this->computeMeetingExtraData($this->getMeetings(JWTClient::MEETING_LIST_TYPE_LIVE));
-    }
-
-    /**
-     * Retrieves all scheduled meetings linked to current course and session
-     *
-     * @return Meeting[] matching meetings
-     * @throws Exception on API error
-     */
-    public function getScheduledMeetings()
-    {
-        return $this->computeMeetingExtraData($this->getMeetings(JWTClient::MEETING_LIST_TYPE_SCHEDULED));
-    }
-
-    /**
-     * Retrieves all upcoming meetings linked to current course and session
-     *
-     * @return Meeting[] matching meetings
-     * @throws Exception on API error
-     */
-    public function getUpcomingMeetings()
-    {
-        return $this->computeMeetingExtraData($this->getMeetings(JWTClient::MEETING_LIST_TYPE_UPCOMING));
     }
 
     /**
      * Creates a meeting and returns it.
      *
-     * @param Meeting $meeting a meeting with at least a type.
-     * @param string $topic short title of the meeting, required
-     * @param string $agenda ordre du jour
-     * @param string $password meeting password
-     * @return Meeting|object meeting
+     * @param Meeting $meeting  a meeting with at least a type.
+     * @param string  $topic    short title of the meeting, required
+     * @param string  $agenda   ordre du jour
+     * @param string  $password meeting password
+     *
      * @throws Exception describing the error (message and code)
+     *
+     * @return Meeting|object meeting
      */
     private function createMeeting($meeting, $topic, $agenda, $password)
     {
@@ -239,126 +389,7 @@ class ZoomPlugin extends Plugin
         $meeting->password = $password;
         $meeting->settings->auto_recording = 'cloud';
         $meeting->agenda .= $this->agendaTag();
+
         return $this->jwtClient()->createMeeting($meeting);
-    }
-
-    /**
-     * Creates an instant meeting and returns it.
-     *
-     * @param string $topic short title of the meeting, required
-     * @param string $agenda ordre du jour
-     * @param string $password meeting password
-     * @return Meeting|object meeting
-     * @throws Exception describing the error (message and code)
-     */
-    public function createInstantMeeting()
-    {
-        // default meeting topic is based on session name, course title and current date
-        $topic = '';
-        $sessionName = api_get_session_name();
-        if ($sessionName) {
-            $topic = $sessionName.', ';
-        }
-        $courseInfo = api_get_course_info();
-        $topic .= $courseInfo['title'].', '.date('yy-m-d H:i');
-        return $this->createMeeting(new Meeting(Meeting::TYPE_INSTANT), $topic, '', '');
-    }
-
-    /**
-     * Schedules a meeting and returns it.
-     *
-     * @param DateTime $startTime meeting local start date-time (configure local timezone on your Zoom account)
-     * @param int $duration in minutes
-     * @param string $topic short title of the meeting, required
-     * @param string $agenda ordre du jour
-     * @param string $password meeting password
-     * @return Meeting|object meeting
-     * @throws Exception describing the error (message and code)
-     */
-    public function createScheduledMeeting($startTime, $duration, $topic, $agenda = '', $password = '')
-    {
-        $meeting = new Meeting(Meeting::TYPE_SCHEDULED);
-        $meeting->duration = $duration;
-        $meeting->start_time = $startTime->format(DateTimeInterface::ISO8601);
-        return $this->createMeeting($meeting, $topic, $agenda, $password);
-    }
-
-    /**
-     * Updates a meeting.
-     *
-     * @param integer $meetingId
-     * @param Meeting $meeting with updated properties
-     * @throws Exception on API error
-     */
-    public function updateMeeting($meetingId, $meeting)
-    {
-        $meeting->agenda .= $this->agendaTag();
-        $this->jwtClient()->updateMeeting($meetingId, $meeting);
-    }
-
-    /**
-     * Ends a current meeting.
-     *
-     * @param integer $meetingId
-     * @throws Exception on API error
-     */
-    public function endMeeting($meetingId)
-    {
-        $this->jwtClient()->endMeeting($meetingId);
-    }
-
-    /**
-     * Deletes a meeting.
-     *
-     * @param integer $meetingId
-     * @throws Exception on API error
-     */
-    public function deleteMeeting($meetingId)
-    {
-        $this->jwtClient()->deleteMeeting($meetingId);
-    }
-
-    /**
-     * @see JWTClient::listRecordings()
-     *
-     * @param $meetingUUID
-     * @return object
-     * @throws Exception on API error
-     */
-    public function getRecordings($meetingUUID)
-    {
-        return $this->jwtClient()->listRecordings($meetingUUID);
-    }
-
-    /**
-     * @see JWTClient::getAllParticipants()
-     *
-     * @param $meetingUUID
-     * @return ParticipantListItem[]
-     * @throws Exception
-     */
-    public function getParticipants($meetingUUID)
-    {
-        return $this->jwtClient()->getAllParticipants($meetingUUID);
-    }
-
-    /**
-     * Adds a link to a meeting's recordings
-     *
-     * @param string $uuid UUID of the meeting
-     * @return Link the newly added link
-     * @throws Exception on API error
-     */
-    public function copyRecordingToLinkTool($meetingUUID)
-    {
-        $recordings = $this->jwtClient()->listRecordings($meetingUUID);
-        $link = new Link();
-        $link->save(
-            [
-                'url' => $recordings->share_url,
-                'title' => $recordings->topic,
-            ]
-        );
-        return $link;
     }
 }

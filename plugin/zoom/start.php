@@ -46,8 +46,8 @@ if ($plugin->userIsConferenceManager()) {
     $scheduleMeetingForm->setRequired($startTimeDatePicker);
     $durationNumeric = $scheduleMeetingForm->addNumeric('duration', get_lang('Duration'));
     $topicText = $scheduleMeetingForm->addText('topic', get_lang('Topic'), true);
-    $agendaTextArea = $scheduleMeetingForm->addTextarea('agenda', get_lang('Agenda'), [ 'maxlength' => 2000 ]);
-    // $passwordText = $scheduleMeetingForm->addText('password', get_lang('Password'), false, [ 'maxlength' => '10' ]);
+    $agendaTextArea = $scheduleMeetingForm->addTextarea('agenda', get_lang('Agenda'), ['maxlength' => 2000]);
+    // $passwordText = $scheduleMeetingForm->addText('password', get_lang('Password'), false, ['maxlength' => '10']);
     $scheduleMeetingForm->addButtonCreate(get_lang('ScheduleMeeting'));
 
     // meeting scheduling

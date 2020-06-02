@@ -5,7 +5,7 @@ namespace Chamilo\PluginBundle\Zoom;
 
 class CreatedRegistration
 {
-    /** @var integer meeting ID */
+    /** @var int meeting ID */
     public $id;
 
     /** @var string Unique URL for this registrant to join the meeting.

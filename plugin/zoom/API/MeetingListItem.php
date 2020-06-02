@@ -17,13 +17,13 @@ class MeetingListItem
     /** @var string */
     public $topic;
 
-    /** @var integer @see Meeting */
+    /** @var int @see Meeting */
     public $type;
 
     /** @var string */
     public $start_time;
 
-    /** @var integer in minutes */
+    /** @var int in minutes */
     public $duration;
 
     /** @var string */

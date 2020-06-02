@@ -39,8 +39,8 @@ if ($plugin->userIsConferenceManager()) {
         $durationNumeric = $editMeetingForm->addNumeric('duration', get_lang('Duration'));
     }
     $topicText = $editMeetingForm->addText('topic', get_lang('Topic'));
-    $agendaTextArea = $editMeetingForm->addTextarea('agenda', get_lang('Agenda'), [ 'maxlength' => 2000 ]);
-    // $passwordText = $editMeetingForm->addText('password', get_lang('Password'), false, [ 'maxlength' => '10' ]);
+    $agendaTextArea = $editMeetingForm->addTextarea('agenda', get_lang('Agenda'), ['maxlength' => 2000]);
+    // $passwordText = $editMeetingForm->addText('password', get_lang('Password'), false, ['maxlength' => '10']);
     $editMeetingForm->addButtonUpdate(get_lang('UpdateMeeting'));
     if ($editMeetingForm->validate()) {
         $meeting->start_time = $editMeetingForm->getSubmitValue('start_time');

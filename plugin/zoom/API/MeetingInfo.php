@@ -13,7 +13,7 @@ class MeetingInfo extends Meeting
     public $join_url;
     /** @var string H.323/SIP room system password */
     public $h323_password;
-    /** @var integer Personal Meeting Id. Only used for scheduled meetings and recurring meetings with no fixed time */
+    /** @var int Personal Meeting Id. Only used for scheduled meetings and recurring meetings with no fixed time */
     public $pmi;
     /** @var object[] */
     public $occurrences;

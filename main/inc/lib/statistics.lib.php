@@ -265,9 +265,9 @@ class Statistics
         $table_user = Database::get_main_table(TABLE_MAIN_USER);
         $access_url_rel_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $urlId = api_get_current_access_url_id();
-        $column = intval($column);
-        $from = intval($from);
-        $numberOfItems = intval($numberOfItems);
+        $column = (int) $column;
+        $from = (int) $from;
+        $numberOfItems = (int) $numberOfItems;
         $direction = strtoupper($direction);
 
         if (!in_array($direction, ['ASC', 'DESC'])) {
@@ -349,6 +349,12 @@ class Statistics
                 $row['default_date'] = api_get_local_time($row['default_date']);
             } else {
                 $row['default_date'] = '-';
+            }
+
+            if (!empty($row[7])) {
+                $row[7] = api_get_local_time($row[7]);
+            } else {
+                $row[7] = '-';
             }
 
             if (!empty($row[5])) {

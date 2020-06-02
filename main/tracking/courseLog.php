@@ -31,13 +31,13 @@ $from = isset($_GET['from']) ? $_GET['from'] : null;
 $origin = api_get_origin();
 
 // Starting the output buffering when we are exporting the information.
-$export_csv = isset($_GET['export']) && $_GET['export'] === 'csv' ? true : false;
+$export_csv = isset($_GET['export']) && 'csv' === $_GET['export'] ? true : false;
 
 $htmlHeadXtra[] = api_get_js('chartjs/Chart.min.js');
 $htmlHeadXtra[] = ' ';
 
 $this_section = SECTION_COURSES;
-if ($from === 'myspace') {
+if ('myspace' === $from) {
     $from_myspace = true;
     $this_section = 'session_my_space';
 }
@@ -140,7 +140,7 @@ $table_user = Database::get_main_table(TABLE_MAIN_USER);
 $TABLEQUIZ = Database::get_course_table(TABLE_QUIZ_TEST);
 
 // Breadcrumbs.
-if ($origin === 'resume_session') {
+if ('resume_session' === $origin) {
     $interbreadcrumb[] = [
         'url' => '../admin/index.php',
         'name' => get_lang('PlatformAdmin'),
@@ -306,7 +306,7 @@ if ($showReporting) {
             if (!$isAdmin) {
                 // Check session visibility
                 $visibility = api_get_session_visibility($session['id'], api_get_course_int_id());
-                if ($visibility == SESSION_INVISIBLE) {
+                if (SESSION_INVISIBLE == $visibility) {
                     continue;
                 }
 
@@ -478,13 +478,13 @@ if ($nbStudents > 0) {
                 continue;
             }
             $userId = $userInfo['user_id'];
-            if ($userTracking[5] === '100%') {
+            if ('100%' === $userTracking[5]) {
                 $numberStudentsCompletedLP++;
             }
             $averageStudentTestScore = substr($userTracking[7], 0, -1);
             $averageStudentsTestScore += $averageStudentTestScore;
 
-            if ($averageStudentTestScore === '100') {
+            if ('100' === $averageStudentTestScore) {
                 $reducedAverage = 9;
             } else {
                 $reducedAverage = floor($averageStudentTestScore / 10);

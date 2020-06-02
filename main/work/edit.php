@@ -12,13 +12,12 @@ if ($blockEdition && !api_is_platform_admin()) {
     api_not_allowed(true);
 }
 
-// Including files
 require_once 'work.lib.php';
 
 $this_section = SECTION_COURSES;
 
-$work_id = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : null;
-$item_id = isset($_REQUEST['item_id']) ? intval($_REQUEST['item_id']) : null;
+$work_id = isset($_REQUEST['id']) ? (int) ($_REQUEST['id']) : null;
+$item_id = isset($_REQUEST['item_id']) ? (int) ($_REQUEST['item_id']) : null;
 $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 
 $is_allowed_to_edit = api_is_allowed_to_edit();
@@ -46,7 +45,7 @@ $is_course_member = CourseManager::is_user_subscribed_in_real_or_linked_course(
 
 $is_course_member = $is_course_member || api_is_platform_admin();
 
-if ($is_course_member == false) {
+if (false == $is_course_member) {
     api_not_allowed(true);
 }
 
@@ -122,17 +121,15 @@ if (api_is_allowed_to_edit()) {
     ];
 }
 
-// form title
 $form_title = get_lang('Edit');
-
 $interbreadcrumb[] = ['url' => '#', 'name' => $form_title];
 
 $form = new FormValidator(
     'form',
     'POST',
-    api_get_self()."?".api_get_cidreq()."&id=".$work_id,
+    api_get_self().'?'.api_get_cidreq().'&id='.$work_id,
     '',
-    ['enctype' => "multipart/form-data"]
+    ['enctype' => 'multipart/form-data']
 );
 $form->addElement('header', $form_title);
 $show_progress_bar = false;
@@ -219,7 +216,7 @@ if ($form->validate()) {
          * SPECIAL CASE ! For a work edited
         */
         //Get the author ID for that document from the item_property table
-        $item_to_edit_id = intval($_POST['item_to_edit']);
+        $item_to_edit_id = (int) ($_POST['item_to_edit']);
         $is_author = user_is_author($item_to_edit_id);
 
         if ($is_author) {

@@ -5105,12 +5105,17 @@ function api_get_visual_theme()
             }
         }
 
+        $accessUrlId = api_get_current_access_url_id();
+        if ('cli' === PHP_SAPI) {
+            $accessUrlId = api_get_configuration_value('access_url');
+        }
+
         // Get style directly from DB
         $styleFromDatabase = api_get_settings_params_simple(
             [
                 'variable = ? AND access_url = ?' => [
                     'stylesheets',
-                    api_get_current_access_url_id(),
+                    $accessUrlId,
                 ],
             ]
         );

@@ -78,14 +78,18 @@ switch ($action) {
                 $courseListInString = implode(', ', $courseTitleList);
 
                 $table = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+                $urlTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
                 $sql = "SELECT
-                            count(DISTINCT user_id) count
-                            FROM $table
+                            count(DISTINCT su.user_id) count
+                            FROM $table su
+                            INNER JOIN $urlTable au
+                            ON (su.user_id = au.user_id)
                             WHERE
-                                relation_type = 0 AND
-                                registered_at >= '$start' AND  
-                                registered_at <= '$end' AND
-                                session_id = '$sessionId' ";
+                                access_url_id = $urlId AND
+                                su.relation_type = 0 AND
+                                su.registered_at >= '$start' AND
+                                su.registered_at <= '$end' AND
+                                su.session_id = '$sessionId' ";
                 $result = Database::query($sql);
                 $result = Database::fetch_array($result);
 

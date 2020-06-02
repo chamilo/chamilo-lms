@@ -52,9 +52,9 @@ $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
 
 if ((user_is_author($id) || $isDrhOfCourse || $allowEdition) ||
     (
-        $courseInfo['show_score'] == 0 &&
-        $work['active'] == 1 &&
-        $work['accepted'] == 1
+        0 == $courseInfo['show_score'] &&
+        1 == $work['active'] &&
+        1 == $work['accepted']
     )
 ) {
     if ((api_is_allowed_to_edit() || api_is_coach()) || api_is_drh()) {
@@ -69,9 +69,9 @@ if ((user_is_author($id) || $isDrhOfCourse || $allowEdition) ||
     $interbreadcrumb[] = ['url' => '#', 'name' => $work['title']];
 
     if ((
-        $courseInfo['show_score'] == 0 &&
-        $work['active'] == 1 &&
-        $work['accepted'] == 1
+        0 == $courseInfo['show_score'] &&
+        1 == $work['active'] &&
+        1 == $work['accepted']
         ) ||
         $isCourseManager || user_is_author($id) || $isDrhOfCourse
     ) {

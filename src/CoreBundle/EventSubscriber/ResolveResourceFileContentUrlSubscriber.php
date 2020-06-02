@@ -56,14 +56,15 @@ class ResolveResourceFileContentUrlSubscriber implements EventSubscriberInterfac
             if (!$mediaObject instanceof AbstractResource) {
                 continue;
             }
+            if ($mediaObject->hasResourceNode()) {
+                $params = [
+                    'id' => $mediaObject->getResourceNode()->getId(),
+                    'tool' => $mediaObject->getResourceNode()->getResourceType()->getTool()->getName(),
+                    'type' => $mediaObject->getResourceNode()->getResourceType()->getName(),
+                ];
 
-            $params = [
-                'id' => $mediaObject->getResourceNode()->getId(),
-                'tool' => $mediaObject->getResourceNode()->getResourceType()->getTool()->getName(),
-                'type' => $mediaObject->getResourceNode()->getResourceType()->getName(),
-            ];
-
-            $mediaObject->contentUrl = $this->generator->generate('chamilo_core_resource_view_file', $params);
+                $mediaObject->contentUrl = $this->generator->generate('chamilo_core_resource_view_file', $params);
+            }
         }
     }
 }

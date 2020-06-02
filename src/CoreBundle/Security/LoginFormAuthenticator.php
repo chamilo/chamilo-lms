@@ -41,20 +41,20 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
 
     private const LOGIN_ROUTE = 'login_json';
 
-    private $router;
+    //private $router;
     private $passwordEncoder;
     //private $formFactory;
     private $hookFactory;
     private $userRepository;
-    private $csrfTokenManager;
+    //private $csrfTokenManager;
     private $urlGenerator;
-    private $entityManager;
+    //private $entityManager;
     public $serializer;
 
     public function __construct(
-        EntityManagerInterface $entityManager,
+        //EntityManagerInterface $entityManager,
         UrlGeneratorInterface $urlGenerator,
-        RouterInterface $router,
+        //RouterInterface $router,
         UserPasswordEncoderInterface $passwordEncoder,
         //FormFactoryInterface $formFactory,
         HookFactory $hookFactory,
@@ -62,13 +62,13 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
         CsrfTokenManagerInterface $csrfTokenManager,
         SerializerInterface $serializer
     ) {
-        $this->router = $router;
+        //$this->router = $router;
         $this->passwordEncoder = $passwordEncoder;
         //$this->formFactory = $formFactory;
         $this->hookFactory = $hookFactory;
         $this->userRepository = $userRepository;
-        $this->csrfTokenManager = $csrfTokenManager;
-        $this->entityManager = $entityManager;
+        //$this->csrfTokenManager = $csrfTokenManager;
+        //$this->entityManager = $entityManager;
         $this->urlGenerator = $urlGenerator;
         $this->serializer = $serializer;
     }

@@ -4,19 +4,19 @@
 /*************************************************************
  *
  *  MathJax/jax/output/SVG/autoload/mglyph.js
- *  
+ *
  *  Implements the SVG output for <mglyph> elements.
  *
  *  ---------------------------------------------------------------------
- *  
- *  Copyright (c) 2011-2017 The MathJax Consortium
- * 
+ *
+ *  Copyright (c) 2011-2020 The MathJax Consortium
+ *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,23 +25,23 @@
  */
 
 MathJax.Hub.Register.StartupHook("SVG Jax Ready",function () {
-  var VERSION = "2.7.2";
+  var VERSION = "2.7.8";
   var MML = MathJax.ElementJax.mml,
       SVG = MathJax.OutputJax.SVG,
       BBOX = SVG.BBOX,
       LOCALE = MathJax.Localization;
-  
+
   var XLINKNS = "http://www.w3.org/1999/xlink";
 
   BBOX.MGLYPH = BBOX.Subclass({
     type: "image", removeable: false,
-    Init: function (img,w,h,align,mu,def) {
+    Init: function (img,w,h,align,mu,scale,def) {
       if (def == null) {def = {}}
       var W = img.width*1000/SVG.em, H = img.height*1000/SVG.em;
       var WW = W, HH = H, y = 0;
-      if (w !== "") {W = SVG.length2em(w,mu,WW); H = (WW ? W/WW * HH : 0)}
-      if (h !== "") {H = SVG.length2em(h,mu,HH); if (w === "") {W = (HH ? H/HH * WW : 0)}}
-      if (align !== "" && align.match(/\d/)) {y = SVG.length2em(align,mu); def.y = -y}
+      if (w !== "") {W = SVG.length2em(w,mu,WW) * scale; H = (WW ? W/WW * HH : 0)}
+      if (h !== "") {H = SVG.length2em(h,mu,HH) * scale; if (w === "") {W = (HH ? H/HH * WW : 0)}}
+      if (align !== "" && align.match(/\d/)) {y = SVG.length2em(align,mu) * scale; def.y = -y}
       def.height = Math.floor(H); def.width = Math.floor(W);
       def.transform = "translate(0,"+H+") matrix(1 0 0 -1 0 0)";
       def.preserveAspectRatio = "none";
@@ -51,7 +51,7 @@ MathJax.Hub.Register.StartupHook("SVG Jax Ready",function () {
       this.d = this.D = -y; this.l = 0;
     }
   });
-  
+
   MML.mglyph.Augment({
     toSVG: function (variant,scale) {
       this.SVGgetStyles(); var svg = this.SVG(), img, err;
@@ -81,8 +81,9 @@ MathJax.Hub.Register.StartupHook("SVG Jax Ready",function () {
           this.Append(err); svg = err.toSVG(); this.data.pop();
         } else {
           var mu = this.SVGgetMu(svg);
-          svg.Add(BBOX.MGLYPH(this.img.img,values.width,values.height,values.valign,mu,
-                              {alt:values.alt, title:values.alt}));
+          var SCALE = this.SVGgetScale();
+          svg.Add(BBOX.MGLYPH(this.img.img,values.width,values.height,values.valign,mu,SCALE,
+                              {'aria-label':values.alt}));
         }
       }
       svg.Clean();
@@ -98,9 +99,9 @@ MathJax.Hub.Register.StartupHook("SVG Jax Ready",function () {
   },{
     GLYPH: {}    // global list of all loaded glyphs
   });
-  
+
   MathJax.Hub.Startup.signal.Post("SVG mglyph Ready");
   MathJax.Ajax.loadComplete(SVG.autoloadDir+"/mglyph.js");
-  
+
 });
 

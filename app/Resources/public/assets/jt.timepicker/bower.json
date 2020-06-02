@@ -1,6 +1,6 @@
 {
   "name": "jt.timepicker",
-  "version": "1.11.14",
+  "version": "1.13.10",
   "description": "A jQuery timepicker plugin inspired by Google Calendar.",
   "homepage": "http://jonthornton.github.com/jquery-timepicker",
   "main": ["./jquery.timepicker.js", "./jquery.timepicker.css"],
@@ -12,5 +12,5 @@
     "name": "Jon Thornton",
     "web": "https://github.com/jonthornton"
   },
-  "license": "http://opensource.org/licenses/MIT"
+  "license": "MIT"
 }

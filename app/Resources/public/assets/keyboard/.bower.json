@@ -1,12 +1,12 @@
 {
   "name": "keyboard",
   "homepage": "https://github.com/Mottie/Keyboard",
-  "version": "1.30.1",
-  "_release": "1.30.1",
+  "version": "1.30.2",
+  "_release": "1.30.2",
   "_resolution": {
     "type": "version",
-    "tag": "v1.30.1",
-    "commit": "a6ba72bc90fb402749c3738b1c41d94fa57c3f79"
+    "tag": "v1.30.2",
+    "commit": "d2b4c4a9f3b809f152769062a7d4a202ac92b498"
   },
   "_source": "https://github.com/Mottie/Keyboard.git",
   "_target": "^1.28.7",

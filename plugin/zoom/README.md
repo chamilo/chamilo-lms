@@ -1,0 +1,1 @@
+This plugin allows teachers to launch a Zoom conference at any time and students to join it.

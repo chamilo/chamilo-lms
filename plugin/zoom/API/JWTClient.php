@@ -10,6 +10,7 @@ use Firebase\JWT\JWT;
  * Class JWTClient.
  *
  * @see https://marketplace.zoom.us/docs/api-reference/zoom-api
+ *
  * @package Chamilo\PluginBundle\Zoom
  */
 class JWTClient
@@ -56,7 +57,6 @@ class JWTClient
     public function send($httpMethod, $relativeQueryString, $requestBody = null)
     {
         $options = [
-            CURLOPT_URL => "https://api.zoom.us/v2/$relativeQueryString",
             CURLOPT_CUSTOMREQUEST => $httpMethod,
             CURLOPT_ENCODING => '',
             CURLOPT_HTTPHEADER => [
@@ -76,7 +76,10 @@ class JWTClient
             $options[CURLOPT_POSTFIELDS] = $jsonRequestBody;
         }
 
-        $curl = curl_init();
+        $curl = curl_init("https://api.zoom.us/v2/$relativeQueryString");
+        if (false === $curl) {
+            throw new Exception("curl_init returned false");
+        }
         curl_setopt_array($curl, $options);
         $responseBody = curl_exec($curl);
         $responseCode = curl_getinfo($curl, CURLINFO_RESPONSE_CODE);
@@ -87,7 +90,7 @@ class JWTClient
             throw new Exception("cURL Error: $curlError");
         }
 
-        if (false === $responseBody) {
+        if (false === $responseBody || !is_string($responseBody)) {
             throw new Exception('cURL Error');
         }
 
@@ -217,7 +220,7 @@ class JWTClient
      * Updates a meeting's attributes.
      *
      * @param int     $meetingId meeting identifier
-     * @param Meeting $meeting modified meeting object (only need modified properties)
+     * @param Meeting $meeting   modified meeting object (only need modified properties)
      *
      * @throws Exception describing the error (message and code)
      */
@@ -235,7 +238,7 @@ class JWTClient
      */
     public function endMeeting($meetingId)
     {
-        $this->send('PUT', "meetings/$meetingId/status", (object) [ 'action' => 'end' ]);
+        $this->send('PUT', "meetings/$meetingId/status", (object) ['action' => 'end']);
     }
 
     /**
@@ -253,8 +256,8 @@ class JWTClient
     /**
      * Adds a meeting registrant.
      *
-     * @param int               $meetingId meeting identifier
-     * @param MeetingRegistrant $registrant with at least 'email' and 'first_name'
+     * @param int               $meetingId     meeting identifier
+     * @param MeetingRegistrant $registrant    with at least 'email' and 'first_name'
      * @param string            $occurrenceIds separated by comma
      *
      * @throws Exception describing the error (message and code)
@@ -274,7 +277,7 @@ class JWTClient
     /**
      * List meeting registrants.
      *
-     * @param integer $meetingId
+     * @param int $meetingId
      */
     public function listMeetingRegistrants($meetingId)
     {

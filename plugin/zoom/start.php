@@ -18,7 +18,6 @@ api_protect_course_script(true);
 
 $plugin = ZoomPlugin::create();
 
-
 if ($plugin->userIsConferenceManager()) {
     // user can create a new meeting
 

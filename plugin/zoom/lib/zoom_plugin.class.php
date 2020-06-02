@@ -185,7 +185,7 @@ class ZoomPlugin extends Plugin
     /**
      * Updates a meeting.
      *
-     * @param integer $meetingId
+     * @param int     $meetingId
      * @param Meeting $meeting   with updated properties
      *
      * @throws Exception on API error
@@ -199,7 +199,7 @@ class ZoomPlugin extends Plugin
     /**
      * Ends a current meeting.
      *
-     * @param integer $meetingId
+     * @param int $meetingId
      *
      * @throws Exception on API error
      */
@@ -211,7 +211,7 @@ class ZoomPlugin extends Plugin
     /**
      * Deletes a meeting.
      *
-     * @param integer $meetingId
+     * @param int $meetingId
      *
      * @throws Exception on API error
      */

@@ -269,6 +269,10 @@ var VrRenderer = {
 		mediaElement.originalNode.parentNode.insertBefore(vrContainer, mediaElement.originalNode);
 		mediaElement.originalNode.style.display = 'none';
 
+		if (mediaElement.originalNode.getAttribute('data-360video-stereo') === 'false') {
+			options.vrIsStereo = false;
+		}
+
 		var vrSettings = {
 			path: options.vrPath,
 			is_stereo: options.vrIsStereo,
@@ -336,6 +340,10 @@ Object.assign(MediaElementPlayer.prototype, {
 		var t = this;
 
 		if (!t.isVideo || t.isVideo && t.media.rendererName !== null && !t.media.rendererName.match(/(native\_(dash|hls)|html5)/)) {
+			return;
+		}
+
+		if (player.node.getAttribute('data-360video') !== 'true') {
 			return;
 		}
 

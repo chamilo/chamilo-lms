@@ -7,30 +7,43 @@ define(function () {
     inputTooLong: function (args) {
       var overChars = args.input.length - args.maximum;
 
-      return 'Supprimez ' + overChars + ' caractère' +
-        ((overChars > 1) ? 's' : '');
+      var message = 'Supprimez ' + overChars + ' caractère';
+
+      if (overChars !== 1) {
+        message += 's';
+      }
+
+      return message;
     },
     inputTooShort: function (args) {
       var remainingChars = args.minimum - args.input.length;
 
-      return 'Saisissez au moins ' + remainingChars + ' caractère' +
-        ((remainingChars > 1) ? 's' : '');
+      var message = 'Saisissez ' + remainingChars + ' caractère';
+
+      if (remainingChars !== 1) {
+        message += 's';
+      }
+
+      return message;
     },
     loadingMore: function () {
       return 'Chargement de résultats supplémentaires…';
     },
     maximumSelected: function (args) {
-      return 'Vous pouvez seulement sélectionner ' + args.maximum +
-        ' élément' + ((args.maximum > 1) ? 's' : '');
+      var message = 'Vous pouvez seulement sélectionner ' +
+        args.maximum + ' élément';
+
+      if (args.maximum !== 1) {
+        message += 's';
+      }
+
+      return message;
     },
     noResults: function () {
       return 'Aucun résultat trouvé';
     },
     searching: function () {
       return 'Recherche en cours…';
-    },
-    removeAllItems: function () {
-      return 'Supprimer tous les éléments';
     }
   };
 });

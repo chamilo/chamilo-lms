@@ -11,7 +11,7 @@
  *  
  *  ---------------------------------------------------------------------
  *  
- *  Copyright (c) 2011-2020 The MathJax Consortium
+ *  Copyright (c) 2011-2017 The MathJax Consortium
  * 
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -87,10 +87,6 @@
           "-o-transition": "none"
         },
         
-        ".MathJax_SVG > div": {
-          display: "inline-block"
-        },
-        
         ".mjx-svg-href": {
           fill: "blue", stroke: "blue"
         },
@@ -101,48 +97,14 @@
         },
         ".MathJax_SVG_Processed": {display:"none!important"},
         
-        ".MathJax_SVG_test": {
-          "font-style":      "normal",
-          "font-weight":     "normal",
-          "font-size":       "100%",
-          "font-size-adjust":"none",
-          "text-indent":     0,
-          "text-transform":  "none",
-          "letter-spacing":  "normal",
-          "word-spacing":    "normal",
-          overflow:          "hidden",
-          height:            "1px"
-        },
-        ".MathJax_SVG_test.mjx-test-display": {
-          display: "table!important"
-        },
-        ".MathJax_SVG_test.mjx-test-inline": {
-          display:           "inline!important",
-          "margin-right":    "-1px"
-        },
-        ".MathJax_SVG_test.mjx-test-default": {
-          display: "block!important",
-          clear:   "both"
-        },
-        ".MathJax_SVG_ex_box": {
-          display: "inline-block!important",
-          position: "absolute",
-          overflow: "hidden",
+        ".MathJax_SVG_ExBox": {
+          display:"block!important", overflow:"hidden",
+          width:"1px", height:"60ex",
           "min-height": 0, "max-height":"none",
-          padding:0, border: 0, margin: 0,
-          width:"1px", height:"60ex"
+          padding:0, border: 0, margin: 0
         },
-        ".mjx-test-inline .MathJax_SVG_left_box": {
-          display: "inline-block",
-          width: 0,
-          "float":"left"
-        },
-        ".mjx-test-inline .MathJax_SVG_right_box": {
-          display: "inline-block",
-          width: 0,
-          "float":"right"
-        },
-        ".mjx-test-display .MathJax_SVG_right_box": {
+        ".MathJax_SVG_LineBox": {display: "table!important"},
+        ".MathJax_SVG_LineBox span": {
           display: "table-cell!important",
           width: "10000em!important",
           "min-width":0, "max-width":"none",
@@ -215,11 +177,13 @@
                                           "defs",{id:"MathJax_SVG_glyphs"});
 
        // Used in preTranslate to get scaling factors
-      this.TestSpan = HTML.Element("span",{className:"MathJax_SVG_test"},[
-        ["span",{className:"MathJax_SVG_left_box"}],
-        ["span",{className:"MathJax_SVG_ex_box"}],
-        ["span",{className:"MathJax_SVG_right_box"}]
-      ]);
+      this.ExSpan = HTML.Element("span",
+        {style:{position:"absolute","font-size-adjust":"none"}},
+        [["span",{className:"MathJax_SVG_ExBox"}]]
+      );
+
+      // Used in preTranslate to get linebreak width
+      this.linebreakSpan = HTML.Element("span",{className:"MathJax_SVG_LineBox"},[["span"]]);
 
       // Set up styles
       return AJAX.Styles(this.config.styles,["InitializeSVG",this]);
@@ -232,11 +196,12 @@
       //
       //  Get the default sizes (need styles in place to do this)
       //
-      var test = document.body.appendChild(this.TestSpan.cloneNode(true));
-      test.className += " mjx-test-inline mjx-test-default";
-      this.defaultEx = test.childNodes[1].offsetHeight/60;
-      this.defaultWidth = Math.max(0,test.lastChild.offsetLeft - test.firstChild.offsetLeft - 2);
-      document.body.removeChild(test);
+      document.body.appendChild(this.ExSpan);
+      document.body.appendChild(this.linebreakSpan);
+      this.defaultEx    = this.ExSpan.firstChild.offsetHeight/60;
+      this.defaultWidth = this.linebreakSpan.firstChild.offsetWidth;
+      document.body.removeChild(this.linebreakSpan);
+      document.body.removeChild(this.ExSpan);
     },
 
     preTranslate: function (state) {
@@ -292,9 +257,8 @@
         //
         //  Add the test span for determining scales and linebreak widths
         //
-        test = this.TestSpan.cloneNode(true);
-        test.className += " mjx-test-" + (jax.SVG.display ? "display" : "inline");
-        script.parentNode.insertBefore(test,script);
+        script.parentNode.insertBefore(this.ExSpan.cloneNode(true),script);
+        div.parentNode.insertBefore(this.linebreakSpan.cloneNode(true),div);
       }
       //
       //  Determine the scaling factors for each script
@@ -305,16 +269,14 @@
         script = scripts[i]; if (!script.parentNode) continue;
         test = script.previousSibling; div = test.previousSibling;
         jax = script.MathJax.elementJax; if (!jax) continue;
-        ex = test.childNodes[1].offsetHeight/60;
-        cwidth = Math.max(0, jax.SVG.display ? test.lastChild.offsetWidth - 1: 
-                  test.lastChild.offsetLeft - test.firstChild.offsetLeft - 2) / this.config.scale * 100;
+        ex = test.firstChild.offsetHeight/60;
+        cwidth = Math.max(0,(div.previousSibling.firstChild.offsetWidth-2) / this.config.scale * 100);
         if (ex === 0 || ex === "NaN") {
           // can't read width, so move to hidden div for processing
           hidden.push(div);
           jax.SVG.isHidden = true;
           ex = this.defaultEx; cwidth = this.defaultWidth;
         }
-        if (cwidth === 0 && !jax.SVG.display) cwidth = this.defaultWidth;
         if (relwidth) {maxwidth = cwidth}
         jax.SVG.ex = ex;
         jax.SVG.em = em = ex / SVG.TeX.x_height * 1000; // scale ex to x_height
@@ -330,8 +292,11 @@
       //
       for (i = 0; i < m; i++) {
         script = scripts[i]; if (!script.parentNode) continue;
-        jax = script.MathJax.elementJax; if (!jax) continue;
-        script.parentNode.removeChild(script.previousSibling);
+        test = scripts[i].previousSibling; span = test.previousSibling;
+        jax = scripts[i].MathJax.elementJax; if (!jax) continue;
+        if (!jax.SVG.isHidden) {span = span.previousSibling}
+        span.parentNode.removeChild(span);
+        test.parentNode.removeChild(test);
         if (script.MathJax.preview) script.MathJax.preview.style.display = "";
       }
       //
@@ -433,6 +398,7 @@
           //
           if (data.preview) {
             data.preview.innerHTML = "";
+            data.preview.style.display = "none";
             script.MathJax.preview = data.preview;
             delete data.preview;
           }
@@ -493,8 +459,8 @@
       //
       //  get em size (taken from this.preTranslate)
       //
-      var emex = span.appendChild(this.TestSpan.cloneNode(true));
-      var ex = emex.childNodes[1].offsetHeight/60;
+      var emex = span.appendChild(this.ExSpan.cloneNode(true));
+      var ex = emex.firstChild.offsetHeight/60;
       this.em = MML.mbase.prototype.em = ex / SVG.TeX.x_height * 1000; this.ex = ex;
       this.linebreakWidth = jax.SVG.lineWidth; this.cwidth = jax.SVG.cwidth;
       emex.parentNode.removeChild(emex);
@@ -592,12 +558,6 @@
       if (length === MML.LINETHICKNESS.THICK)  {return 1.67*thick}
       return this.length2em(length,mu,thick);
     },
-    border2em: function (length,mu) {
-      if (length === MML.LINETHICKNESS.THIN)   {length = "1px"}
-      if (length === MML.LINETHICKNESS.MEDIUM) {length = "3px"}
-      if (length === MML.LINETHICKNESS.THICK)  {length = "5px"}
-      return this.length2em(length,mu);
-    },
 
     getPadding: function (styles) {
       var padding = {top:0, right:0, bottom:0, left:0}, has = false;
@@ -614,7 +574,7 @@
         var style = styles[ID+"Style"];
         if (style && style !== "none") {
           has = true;
-          border[id] = this.border2em(styles[ID+"Width"] || MML.LINETHICKNESS.MEDIUM);
+          border[id] = this.length2em(styles[ID+"Width"]);
           border[id+"Style"] = styles[ID+"Style"];
           border[id+"Color"] = styles[ID+"Color"];
           if (border[id+"Color"] === "initial") {border[id+"Color"] = ""}
@@ -662,7 +622,6 @@
               if (RANGES[id].remap && RANGES[id].remap[n]) {
                 n = N + RANGES[id].remap[n];
               } else {
-                if (RANGES[id].remapOnly) break;
                 n = n - RANGES[id].low + N;
                 if (RANGES[id].add) {n += RANGES[id].add}
               }
@@ -709,7 +668,7 @@
           HUB.signal.Post(["SVG Jax - unknown char",n,variant]);
         }
       }
-      if (SVG.isChar(text) && font.skew && font.skew[n]) {svg.skew = font.skew[n]*1000}
+      if (text.length == 1 && font.skew && font.skew[n]) {svg.skew = font.skew[n]*1000}
       if (svg.element.childNodes.length === 1 && !svg.element.firstChild.getAttribute("x")) {
         svg.element = svg.element.firstChild;
         svg.removeable = false; svg.scale = scale;
@@ -735,13 +694,6 @@
         if (font[n]) {return font} else {this.findBlock(font,n)}
       }
       return {id:"unknown"};
-    },
-
-    isChar: function (text) {
-      if (text.length === 1) return true;
-      if (text.length !== 2) return false;
-      var n = text.charCodeAt(0);
-      return (n >= 0xD800 && n < 0xDBFF);
     },
 
     findBlock: function (font,c) {
@@ -1000,8 +952,8 @@
     Check: function (data) {
       var svg = data.toSVG(); this.svg.push(svg);
       if (data.SVGcanStretch("Vertical")) {svg.mml = data}
-      if (svg.h + svg.y > this.sh) {this.sh = svg.h + svg.y}
-      if (svg.d - svg.y > this.sd) {this.sd = svg.d - svg.y}
+      if (svg.h > this.sh) {this.sh = svg.h}
+      if (svg.d > this.sd) {this.sd = svg.d}
     },
     Stretch: function () {
       for (var i = 0, m = this.svg.length; i < m; i++)
@@ -1161,8 +1113,8 @@
           }
         }
         svg.Clean(); var text = this.data.join("");
-        if (svg.skew && !SVG.isChar(text)) {delete svg.skew}
-        if (svg.r > svg.w && SVG.isChar(text) && !variant.noIC)
+        if (svg.skew && text.length !== 1) {delete svg.skew}
+        if (svg.r > svg.w && text.length === 1 && !variant.noIC)
           {svg.ic = svg.r - svg.w; svg.w = svg.r}
 	this.SVGhandleColor(svg);
         this.SVGsaveData(svg);
@@ -1287,7 +1239,7 @@
       },
             
       SVGhandleSpace: function (svg) {
-	if (this.hasMMLspacing()) {
+	if (this.useMMLspacing) {
 	  if (this.type !== "mo") return;
 	  var values = this.getValues("scriptlevel","lspace","rspace");
 	  if (values.scriptlevel <= 0 || this.hasValue("lspace") || this.hasValue("rspace")) {
@@ -1491,19 +1443,10 @@
 	return svg;
       },
       SVGautoload: function () {
-        this.constructor.Augment({toSVG: MML.mbase.SVGautoloadFail});
 	var file = SVG.autoloadDir+"/"+this.type+".js";
 	HUB.RestartAfter(AJAX.Require(file));
       },
-      SVGautoloadFail: function () {
-        throw Error("SVG can't autoload '"+ this.type + "'");
-      },
-      SVGautoloadList: {},
       SVGautoloadFile: function (name) {
-        if (MML.mbase.SVGautoloadList.hasOwnProperty(name)) {
-          throw Error("SVG can't autoload file '"+name+"'");
-        }
-        MML.mbase.SVGautoloadList[name] = true;
 	var file = SVG.autoloadDir+"/"+name+".js";
 	HUB.RestartAfter(AJAX.Require(file));
       }
@@ -1549,8 +1492,8 @@
         var parent = this.CoreParent(),
             isScript = (parent && parent.isa(MML.msubsup) && this !== parent.data[0]),
             mapchars = (isScript?this.remapChars:null);
-        if (SVG.isChar(this.data.join("")) && parent && parent.isa(MML.munderover) &&
-            SVG.isChar(this.CoreText(parent.data[parent.base]))) {
+        if (this.data.join("").length === 1 && parent && parent.isa(MML.munderover) &&
+            this.CoreText(parent.data[parent.base]).length === 1) {
           var over = parent.data[parent.over], under = parent.data[parent.under];
           if (over && this === over.CoreMO() && parent.Get("accent")) {mapchars = SVG.FONTDATA.REMAPACCENT}
           else if (under && this === under.CoreMO() && parent.Get("accentunder")) {mapchars = SVG.FONTDATA.REMAPACCENTUNDER}
@@ -1572,7 +1515,7 @@
           }
         }
         svg.Clean();
-	if (!SVG.isChar(this.data.join(""))) {delete svg.skew}
+	if (this.data.join("").length !== 1) {delete svg.skew}
         //
         //  Handle large operator centering
         //
@@ -1593,7 +1536,7 @@
 	if (c.length > 1) {return false}
         var parent = this.CoreParent();
         if (parent && parent.isa(MML.munderover) && 
-            SVG.isChar(this.CoreText(parent.data[parent.base]))) {
+            this.CoreText(parent.data[parent.base]).length === 1) {
           var over = parent.data[parent.over], under = parent.data[parent.under];
           if (over && this === over.CoreMO() && parent.Get("accent")) {c = SVG.FONTDATA.REMAPACCENT[c]||c}
           else if (under && this === under.CoreMO() && parent.Get("accentunder")) {c = SVG.FONTDATA.REMAPACCENTUNDER[c]||c}
@@ -1660,8 +1603,8 @@
           }
         }
         svg.Clean(); var text = this.data.join("");
-        if (svg.skew && !SVG.isChar(text)) {delete svg.skew}
-        if (svg.r > svg.w && SVG.isChar(text) && !variant.noIC)
+        if (svg.skew && text.length !== 1) {delete svg.skew}
+        if (svg.r > svg.w && text.length === 1 && !variant.noIC)
           {svg.ic = svg.r - svg.w; svg.w = svg.r}
 	this.SVGhandleColor(svg);
         this.SVGsaveData(svg);
@@ -1750,10 +1693,7 @@
 	if (this.data[0] != null) {
           this.SVGhandleSpace(svg); svg.Add(this.SVGdataStretched(0,HW,D)); svg.Clean();
           while (svg.element.firstChild) {svg.element.removeChild(svg.element.firstChild)}
-          svg.D = svg.d; svg.H = svg.h;
-          svg.r = Math.max(0, Math.min(svg.w, svg.r));
-          svg.l = Math.max(0, Math.min(svg.w, svg.l));
-        }
+	}
 	this.SVGhandleColor(svg);
         this.SVGsaveData(svg);
         if (svg.removeable && !svg.element.firstChild) {delete svg.element}
@@ -1771,7 +1711,7 @@
 	  var values = this.getValues("height","depth","width","lspace","voffset"), X = 0, Y = 0;
 	  if (values.lspace)  {X = this.SVGlength2em(pad,values.lspace,mu)}
 	  if (values.voffset) {Y = this.SVGlength2em(pad,values.voffset,mu)}
-          var h = pad.h, d = pad.d, w = pad.w, y = pad.y; // these can change during the Add() 
+          var h = pad.h, d = pad.d, w = pad.w, y = pad.y; // these can change durring the Add() 
           svg.Add(pad,X,Y); svg.Clean();
           svg.h = h+y; svg.d = d-y; svg.w = w; svg.removeable = false;
 	  if (values.height !== "") {svg.h = this.SVGlength2em(svg,values.height,mu,"h",0)}
@@ -1831,17 +1771,23 @@
     });
 
     MML.mstyle.Augment({
-      toSVG: function (HW,D) {
+      toSVG: function () {
         this.SVGgetStyles();
         var svg = this.SVG();
 	if (this.data[0] != null) {
           this.SVGhandleSpace(svg);
-          var math = svg.Add(this.data[0].toSVG(HW,D)); svg.Clean();
+          var math = svg.Add(this.data[0].toSVG()); svg.Clean();
           if (math.ic) {svg.ic = math.ic}
 	  this.SVGhandleColor(svg);
 	}
         this.SVGsaveData(svg);
 	return svg;
+      },
+      SVGstretchH: function (w) {
+	return (this.data[0] != null ? this.data[0].SVGstretchH(w) : BBOX.NULL());
+      },
+      SVGstretchV: function (h,d) {
+	return (this.data[0] != null ? this.data[0].SVGstretchV(h,d) : BBOX.NULL());
       }
     });
 
@@ -1997,33 +1943,30 @@
 	    (base.movablelimits || base.CoreMO().Get("movablelimits")))
 	      {return MML.msubsup.prototype.toSVG.call(this)}
         var svg = this.SVG(), scale = this.SVGgetScale(svg); this.SVGhandleSpace(svg);
-	var boxes = [], stretch = [], box, i, m, W = -SVG.BIGDIMEN, WW = W, ww;
+	var boxes = [], stretch = [], box, i, m, W = -SVG.BIGDIMEN, WW = W;
 	for (i = 0, m = this.data.length; i < m; i++) {
 	  if (this.data[i] != null) {
 	    if (i == this.base) {
-              box = boxes[i] = this.SVGdataStretched(i,HW,D);
+              boxes[i] = this.SVGdataStretched(i,HW,D);
 	      stretch[i] = (D != null || HW == null) && this.data[i].SVGcanStretch("Horizontal");
               if (this.data[this.over] && values.accent) {
-                box.h = Math.max(box.h,scale*SVG.TeX.x_height); // min height of 1ex (#1706)
+                boxes[i].h = Math.max(boxes[i].h,SVG.TeX.x_height); // min height of 1ex (#1706)
               }
             } else {
-              box = boxes[i] = this.data[i].toSVG(); box.x = 0; delete box.X;
+              boxes[i] = this.data[i].toSVG(); boxes[i].x = 0; delete boxes[i].X;
 	      stretch[i] = this.data[i].SVGcanStretch("Horizontal");
 	    }
-            ww = box.w + box.x + (box.X || 0);
-	    if (ww > WW) {WW = ww}
+	    if (boxes[i].w > WW) {WW = boxes[i].w}
 	    if (!stretch[i] && WW > W) {W = WW}
 	  }
 	}
 	if (D == null && HW != null) {W = HW} else if (W == -SVG.BIGDIMEN) {W = WW}
         for (i = WW = 0, m = this.data.length; i < m; i++) {if (this.data[i]) {
-          box = boxes[i];
           if (stretch[i]) {
-            box = boxes[i] = this.data[i].SVGstretchH(W);
-            if (i !== this.base) {box.x = 0; delete box.X}
+            boxes[i] = this.data[i].SVGstretchH(W);
+            if (i !== this.base) {boxes[i].x = 0; delete boxes[i].X}
           }
-          ww = box.w + box.x + (box.X || 0);
-          if (ww > WW) {WW = ww}
+          if (boxes[i].w > WW) {WW = boxes[i].w}
         }}
         var t = SVG.TeX.rule_thickness * this.mscale;
 	var x, y, z1, z2, z3, dw, k, delta = 0;
@@ -2040,15 +1983,14 @@
               boxes[i].Add(box); boxes[i].Clean();
               boxes[i].w = -box.l; box = boxes[i];
             }
-            ww = box.w + box.x + (box.X || 0);
-	    dw = {left:0, center:(WW-ww)/2, right:WW-ww}[values.align];
+	    dw = {left:0, center:(WW-box.w)/2, right:WW-box.w}[values.align];
 	    x = dw; y = 0;
 	    if (i == this.over) {
 	      if (accent) {
 		k = t * scale; z3 = 0;
 		if (base.skew) {
                   x += base.skew; svg.skew = base.skew;
-                  if (x+ww > WW) {svg.skew += (WW-ww-x)/2}
+                  if (x+box.w > WW) {svg.skew += (WW-box.w-x)/2}
                 }
 	      } else {
 		z1 = SVG.TeX.big_op_spacing1 * scale;
@@ -2105,7 +2047,7 @@
         }
 	if (this.data[this.base] &&
 	   (this.data[this.base].type === "mi" || this.data[this.base].type === "mo")) {
-	  if (SVG.isChar(this.data[this.base].data.join("")) && base.scale === 1 &&
+	  if (this.data[this.base].data.join("").length === 1 && base.scale === 1 &&
 	      !base.stretched && !this.data[this.base].Get("largeop")) {u = v = 0}
 	}
 	var min = this.getValues("subscriptshift","superscriptshift");
@@ -2220,7 +2162,7 @@
           //    so if they are close to full width, make sure they aren't too big.
           //
           if (Math.abs(w-SVG.cwidth) < 10)
-            style.maxWidth = SVG.Fixed(SVG.cwidth*SVG.em/1000*SVG.config.scale) + "px";
+            style.maxWidth = SVG.Fixed(SVG.cwidth*SVG.em/1000);
           //
           //  Add it to the MathJax span
           //

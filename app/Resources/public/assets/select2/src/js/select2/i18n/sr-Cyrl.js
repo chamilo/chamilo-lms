@@ -50,9 +50,6 @@ define(function () {
     },
     searching: function () {
       return 'Претрага…';
-    },
-    removeAllItems: function () {
-      return 'Уклоните све ставке';
     }
   };
 });

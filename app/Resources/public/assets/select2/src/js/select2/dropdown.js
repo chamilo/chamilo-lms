@@ -30,7 +30,7 @@ define([
   };
 
   Dropdown.prototype.position = function ($dropdown, $container) {
-    // Should be implemented in subclasses
+    // Should be implmented in subclasses
   };
 
   Dropdown.prototype.destroy = function () {

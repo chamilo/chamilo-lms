@@ -1,6 +1,6 @@
 {
   "name": "multiselect",
-  "version": "2.5.7",
+  "version": "2.5.5",
   "homepage": "https://github.com/crlcu/multiselect",
   "authors": [
     "Adrian Crisan <adrian.crisan88@gmail.com>"
@@ -14,13 +14,13 @@
   "dependencies": {
     "jquery": ">= 1.7"
   },
-  "_release": "2.5.7",
+  "_release": "2.5.5",
   "_resolution": {
     "type": "version",
-    "tag": "v2.5.7",
-    "commit": "5518a4229ff96eec6678be954db3b3c48e1420ee"
+    "tag": "v2.5.5",
+    "commit": "8432992d543804253cc9da8a6f3c50d6b0889a59"
   },
   "_source": "https://github.com/crlcu/multiselect.git",
-  "_target": "2.5.*",
+  "_target": "2.5.5",
   "_originalSource": "multiselect-two-sides"
 }

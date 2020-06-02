@@ -21,15 +21,14 @@ define([
 
     this._tabindex = 0;
 
-    if (Utils.GetData(this.$element[0], 'old-tabindex') != null) {
-      this._tabindex = Utils.GetData(this.$element[0], 'old-tabindex');
+    if (this.$element.data('old-tabindex') != null) {
+      this._tabindex = this.$element.data('old-tabindex');
     } else if (this.$element.attr('tabindex') != null) {
       this._tabindex = this.$element.attr('tabindex');
     }
 
     $selection.attr('title', this.$element.attr('title'));
     $selection.attr('tabindex', this._tabindex);
-    $selection.attr('aria-disabled', 'false');
 
     this.$selection = $selection;
 
@@ -39,6 +38,7 @@ define([
   BaseSelection.prototype.bind = function (container, $container) {
     var self = this;
 
+    var id = container.id + '-container';
     var resultsId = container.id + '-results';
 
     this.container = container;
@@ -81,19 +81,17 @@ define([
       self.$selection.removeAttr('aria-activedescendant');
       self.$selection.removeAttr('aria-owns');
 
-      self.$selection.trigger('focus');
+      self.$selection.focus();
 
       self._detachCloseHandler(container);
     });
 
     container.on('enable', function () {
       self.$selection.attr('tabindex', self._tabindex);
-      self.$selection.attr('aria-disabled', 'false');
     });
 
     container.on('disable', function () {
       self.$selection.attr('tabindex', '-1');
-      self.$selection.attr('aria-disabled', 'true');
     });
   };
 
@@ -116,6 +114,7 @@ define([
   };
 
   BaseSelection.prototype._attachCloseHandler = function (container) {
+    var self = this;
 
     $(document.body).on('mousedown.select2.' + container.id, function (e) {
       var $target = $(e.target);
@@ -125,11 +124,13 @@ define([
       var $all = $('.select2.select2-container--open');
 
       $all.each(function () {
+        var $this = $(this);
+
         if (this == $select[0]) {
           return;
         }
 
-        var $element = Utils.GetData(this, 'element');
+        var $element = $this.data('element');
 
         $element.select2('close');
       });
@@ -151,27 +152,6 @@ define([
 
   BaseSelection.prototype.update = function (data) {
     throw new Error('The `update` method must be defined in child classes.');
-  };
-
-  /**
-   * Helper method to abstract the "enabled" (not "disabled") state of this
-   * object.
-   *
-   * @return {true} if the instance is not disabled.
-   * @return {false} if the instance is disabled.
-   */
-  BaseSelection.prototype.isEnabled = function () {
-    return !this.isDisabled();
-  };
-
-  /**
-   * Helper method to abstract the "disabled" state of this object.
-   *
-   * @return {true} if the disabled option is true.
-   * @return {false} if the disabled option is false.
-   */
-  BaseSelection.prototype.isDisabled = function () {
-    return this.options.get('disabled');
   };
 
   return BaseSelection;

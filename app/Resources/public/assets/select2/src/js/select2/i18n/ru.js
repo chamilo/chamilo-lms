@@ -31,7 +31,7 @@ define(function () {
     inputTooShort: function (args) {
       var remainingChars = args.minimum - args.input.length;
 
-      var message = 'Пожалуйста, введите ещё хотя бы ' + remainingChars +
+      var message = 'Пожалуйста, введите еще хотя бы ' + remainingChars +
         ' символ';
 
       message += ending(remainingChars, '', 'a', 'ов');
@@ -53,9 +53,6 @@ define(function () {
     },
     searching: function () {
       return 'Поиск…';
-    },
-    removeAllItems: function () {
-      return 'Удалить все элементы';
     }
   };
 });

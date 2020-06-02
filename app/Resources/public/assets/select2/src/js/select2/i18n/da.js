@@ -7,12 +7,16 @@ define(function () {
     inputTooLong: function (args) {
       var overChars = args.input.length - args.maximum;
 
-      return 'Angiv venligst ' + overChars + ' tegn mindre';
+      var message = 'Angiv venligst ' + overChars + ' tegn mindre';
+
+      return message;
     },
     inputTooShort: function (args) {
       var remainingChars = args.minimum - args.input.length;
 
-      return 'Angiv venligst ' + remainingChars + ' tegn mere';
+      var message = 'Angiv venligst ' + remainingChars + ' tegn mere';
+
+      return message;
     },
     loadingMore: function () {
       return 'Indlæser flere resultater…';
@@ -31,9 +35,6 @@ define(function () {
     },
     searching: function () {
       return 'Søger…';
-    },
-    removeAllItems: function () {
-      return 'Fjern alle elementer';
     }
   };
 });

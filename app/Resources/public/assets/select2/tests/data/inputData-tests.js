@@ -23,9 +23,6 @@ test('test that options can be selected', function (assert) {
 
   var adapter = new InputAdapter($element, options);
 
-  var container = new MockContainer();
-  adapter.bind(container, $('<div></div>'));
-
   adapter.select({
     id: 'test'
   });
@@ -50,9 +47,6 @@ test('unselect the single selected option clears the value', function (assert) {
   var $element = $('<input />');
 
   var adapter = new InputAdapter($element, options);
-
-  var container = new MockContainer();
-  adapter.bind(container, $('<div></div>'));
 
   adapter.unselect({
     id: 'test'
@@ -87,9 +81,6 @@ test('options can be unselected individually', function (assert) {
 
   var adapter = new InputAdapter($element, options);
 
-  var container = new MockContainer();
-  adapter.bind(container, $('<div></div>'));
-
   adapter.unselect({
     id: 'test2'
   });
@@ -115,9 +106,6 @@ test('default values can be set', function (assert) {
   var $element = $('<input value="test" />');
 
   var adapter = new InputAdapter($element, options);
-
-  var container = new MockContainer();
-  adapter.bind(container, $('<div></div>'));
 
   adapter.current(function (data) {
     assert.equal(
@@ -153,9 +141,6 @@ test('no default value', function (assert) {
   var $element = $('<input />');
 
   var adapter = new InputAdapter($element, options);
-
-  var container = new MockContainer();
-  adapter.bind(container, $('<div></div>'));
 
   adapter.current(function (data) {
     assert.equal(

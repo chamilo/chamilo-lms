@@ -1,31 +1,25 @@
 module.exports = function(karma) {
   karma.set({
-    frameworks: ['mocha', 'expect', 'sinon', 'browserify'],
+
+    frameworks: [ 'mocha', 'expect', 'sinon', 'browserify' ],
 
     files: [
       //'vendor/external.js',
       'test/backward/**/*.compat.js',
-      { pattern: 'test/backward/locales/**/*.json', watched: true, included: false, served: true },
+      { pattern: 'test/backward/locales/**/*.json', watched: true, included: false, served: true},
     ],
 
     proxies: {
-      '/locales': 'http://localhost:9877/base/test/backward/locales',
+      '/locales': 'http://localhost:9877/base/test/backward/locales'
     },
 
-    reporters: ['spec'],
+    reporters: [ 'spec' ],
 
     preprocessors: {
-      'test/backward/**/*.compat.js': ['browserify'],
-      'test/backward/compatibility/**/*.js': ['browserify'],
+      'test/backward/**/*.compat.js': [ 'browserify' ]
     },
 
-    browsers: ['HeadlessChrome'],
-    customLaunchers: {
-      HeadlessChrome: {
-        base: 'ChromeHeadless',
-        flags: ['—no-sandbox'],
-      },
-    },
+    browsers: [ 'PhantomJS' ],
 
     port: 9877,
 
@@ -44,7 +38,7 @@ module.exports = function(karma) {
     // browserify configuration
     browserify: {
       debug: true,
-      transform: [['babelify', { presets: ['@babel/preset-env'] }] /*, 'brfs' */],
-    },
+      transform: [ 'babelify'/*, 'brfs' */]
+    }
   });
 };

@@ -20,16 +20,15 @@
     "package.js",
     "package.json",
     "ISSUE_TEMPLATE.md",
-    "typing-tests",
-    "min/tests.js"
+    "typing-tests"
   ],
   "homepage": "https://github.com/moment/moment",
-  "version": "2.26.0",
-  "_release": "2.26.0",
+  "version": "2.18.1",
+  "_release": "2.18.1",
   "_resolution": {
     "type": "version",
-    "tag": "2.26.0",
-    "commit": "2e31fb11f55e898a39758eaae43d5183ff7b7ef4"
+    "tag": "2.18.1",
+    "commit": "0af7d4f5f25f911c2eaab2a7ccb534c17e65c536"
   },
   "_source": "https://github.com/moment/moment.git",
   "_target": ">=2.9.0",

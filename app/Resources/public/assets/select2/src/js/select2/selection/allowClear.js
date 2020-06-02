@@ -1,8 +1,7 @@
 define([
   'jquery',
-  '../keys',
-  '../utils'
-], function ($, KEYS, Utils) {
+  '../keys'
+], function ($, KEYS) {
   function AllowClear () { }
 
   AllowClear.prototype.bind = function (decorated, container, $container) {
@@ -31,7 +30,7 @@ define([
 
   AllowClear.prototype._handleClear = function (_, evt) {
     // Ignore the event if it is disabled
-    if (this.isDisabled()) {
+    if (this.options.get('disabled')) {
       return;
     }
 
@@ -44,22 +43,10 @@ define([
 
     evt.stopPropagation();
 
-    var data = Utils.GetData($clear[0], 'data');
-
-    var previousVal = this.$element.val();
-    this.$element.val(this.placeholder.id);
-
-    var unselectData = {
-      data: data
-    };
-    this.trigger('clear', unselectData);
-    if (unselectData.prevented) {
-      this.$element.val(previousVal);
-      return;
-    }
+    var data = $clear.data('data');
 
     for (var d = 0; d < data.length; d++) {
-      unselectData = {
+      var unselectData = {
         data: data[d]
       };
 
@@ -69,12 +56,11 @@ define([
 
       // If the event was prevented, don't clear it out.
       if (unselectData.prevented) {
-        this.$element.val(previousVal);
         return;
       }
     }
 
-    this.$element.trigger('input').trigger('change');
+    this.$element.val(this.placeholder.id).trigger('change');
 
     this.trigger('toggle', {});
   };
@@ -97,14 +83,12 @@ define([
       return;
     }
 
-    var removeAll = this.options.get('translations').get('removeAllItems');
-
     var $remove = $(
-      '<span class="select2-selection__clear" title="' + removeAll() +'">' +
+      '<span class="select2-selection__clear">' +
         '&times;' +
       '</span>'
     );
-    Utils.StoreData($remove[0], 'data', data);
+    $remove.data('data', data);
 
     this.$selection.find('.select2-selection__rendered').prepend($remove);
   };

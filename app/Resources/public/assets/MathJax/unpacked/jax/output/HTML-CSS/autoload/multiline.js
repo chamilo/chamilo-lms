@@ -9,7 +9,7 @@
  *
  *  ---------------------------------------------------------------------
  *  
- *  Copyright (c) 2010-2020 The MathJax Consortium
+ *  Copyright (c) 2010-2017 The MathJax Consortium
  * 
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -25,13 +25,9 @@
  */
 
 MathJax.Hub.Register.StartupHook("HTML-CSS Jax Ready",function () {
-  var VERSION = "2.7.8";
+  var VERSION = "2.7.2";
   var MML = MathJax.ElementJax.mml,
       HTMLCSS = MathJax.OutputJax["HTML-CSS"];
-  //
-  //  Fake node used for testing end-of-line potential breakpoint
-  //
-  var MO = MML.mo().With({HTMLspanElement: function () {return {bbox: {w:0}, style: {}}}});
       
   //
   //  Penalties for the various line breaks
@@ -43,7 +39,6 @@ MathJax.Hub.Register.StartupHook("HTML-CSS Jax Ready",function () {
     badbreak:    [+200],
     auto:           [0],
     
-    maxwidth:     1.33,  // stop looking for breaks after this time the line-break width
     toobig:        800,
     nestfactor:    400,
     spacefactor:  -100,
@@ -113,7 +108,7 @@ MathJax.Hub.Register.StartupHook("HTML-CSS Jax Ready",function () {
           },
           broken = false;
           
-      while (this.HTMLbetterBreak(end,state,true) && 
+      while (this.HTMLbetterBreak(end,state) && 
              (end.scanW >= HTMLCSS.linebreakWidth || end.penalty === PENALTY.newline)) {
         this.HTMLaddLine(stack,start,end.index,state,end.values,broken);
         start = end.index.slice(0); broken = true;
@@ -129,7 +124,10 @@ MathJax.Hub.Register.StartupHook("HTML-CSS Jax Ready",function () {
       //  Make top-level spans 100% wide.
       //  Finish up the space and add the color again
       //
-      if (parent.type === "math") {stack.style.width = span.bbox.width = "100%"}
+      if (isTop) {
+        stack.style.width = "100%";
+        if (parent.type === "math") {span.bbox.width = "100%"}
+      }
       this.HTMLhandleSpace(span);
       this.HTMLhandleColor(span);
       span.bbox.isMultiline = true;
@@ -141,7 +139,7 @@ MathJax.Hub.Register.StartupHook("HTML-CSS Jax Ready",function () {
     //
     //  Locate the next linebreak that is better than the current one
     //
-    HTMLbetterBreak: function (info,state,toplevel) {
+    HTMLbetterBreak: function (info,state) {
       if (this.isToken) {return false}  // FIXME: handle breaking of token elements
       if (this.isEmbellished()) {
         info.embellished = this;
@@ -159,7 +157,7 @@ MathJax.Hub.Register.StartupHook("HTML-CSS Jax Ready",function () {
       //  Look through the line for breakpoints,
       //    (as long as we are not too far past the breaking width)
       //
-      while (i < m && (info.scanW < PENALTY.maxwidth*HTMLCSS.linebreakWidth || info.w === 0)) {
+      while (i < m && info.scanW < 1.33*HTMLCSS.linebreakWidth) {
         if (this.data[i]) {
           if (this.data[i].HTMLbetterBreak(info,state)) {
             better = true; index = [i].concat(info.index); W = info.W; w = info.w;
@@ -172,13 +170,6 @@ MathJax.Hub.Register.StartupHook("HTML-CSS Jax Ready",function () {
           scanW = (broken ? info.scanW : this.HTMLaddWidth(i,info,scanW));
         }
         info.index = []; i++; broken = false;
-      }
-      //
-      //  Check if end-of-line is a better breakpoint
-      //
-      if (toplevel && better) {
-        MO.parent = this.parent; MO.inherit = this.inherit;
-        if (MO.HTMLbetterBreak(info,state)) {better = false; index = info.index}
       }
       if (info.nest) {info.nest--}
       info.index = index;
@@ -420,7 +411,7 @@ MathJax.Hub.Register.StartupHook("HTML-CSS Jax Ready",function () {
       //  Look through the line for breakpoints, including the open, close, and separators
       //    (as long as we are not too far past the breaking width)
       //
-      while (i < m && (info.scanW < PENALTY.maxwidth*HTMLCSS.linebreakWidth || info.w === 0)) {
+      while (i < m && info.scanW < 1.33*HTMLCSS.linebreakWidth) {
         var k = this.dataI[i];
         if (this.data[k]) {
           if (this.data[k].HTMLbetterBreak(info,state)) {
@@ -532,11 +523,7 @@ MathJax.Hub.Register.StartupHook("HTML-CSS Jax Ready",function () {
           var box = s.HTMLspanElement().parentNode;
           if (s.href) box = box.parentNode;
           var stack = box.parentNode;
-          if (this.data[this.base]) {
-            var ic = this.data[this.base].HTMLspanElement().bbox.ic;
-            if (ic) stack.style.marginLeft = HTMLCSS.Em(-ic);
-            stack.removeChild(stack.firstChild);
-          }
+          if (this.data[this.base]) {stack.removeChild(stack.firstChild)}
 	  for (box = stack.firstChild; box; box = box.nextSibling)
 	    {box.style.left = HTMLCSS.Em(HTMLCSS.unEm(box.style.left)-this.HTMLbaseW)}
           stack.bbox.w -= this.HTMLbaseW; stack.style.width = HTMLCSS.Em(stack.bbox.w);
@@ -698,10 +685,10 @@ MathJax.Hub.Register.StartupHook("HTML-CSS Jax Ready",function () {
       //  Get the penalty for this type of break and
       //    use it to modify the default penalty
       //
-      var linebreak = PENALTY[values.linebreak||MML.LINEBREAK.AUTO]||0;
+      var linebreak = PENALTY[values.linebreak||MML.LINEBREAK.AUTO];
       if (!MathJax.Object.isArray(linebreak)) {
-        //  for breaks past the width, keep original penalty for newline
-        if (linebreak || offset >= 0) {penalty = linebreak * info.nest}
+        //  for breaks past the width, don't modify penalty
+        if (offset >= 0) {penalty = linebreak * info.nest}
       } else {penalty = Math.max(1,penalty + linebreak[0] * info.nest)}
       //
       //  If the penalty is no better than the current one, return false
@@ -745,13 +732,13 @@ MathJax.Hub.Register.StartupHook("HTML-CSS Jax Ready",function () {
       //  Get the penalty for this type of break and
       //    use it to modify the default penalty
       //
-      var linebreak = PENALTY[linebreakValue]||0;
+      var linebreak = PENALTY[linebreakValue];
       if (linebreakValue === MML.LINEBREAK.AUTO && w >= PENALTY.spacelimit &&
           !this.mathbackground && !this.background)
         {linebreak = [(w+PENALTY.spaceoffset)*PENALTY.spacefactor]}
       if (!MathJax.Object.isArray(linebreak)) {
-        //  for breaks past the width, keep original penalty for newline
-        if (linebreak || offset >= 0) {penalty = linebreak * info.nest}
+        //  for breaks past the width, don't modify penalty
+        if (offset >= 0) {penalty = linebreak * info.nest}
       } else {penalty = Math.max(1,penalty + linebreak[0] * info.nest)}
       //
       //  If the penalty is no better than the current one, return false

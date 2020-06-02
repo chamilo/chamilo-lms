@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   height="480"
+   width="640"
+   viewBox="0 0 640 480"
+   version="1.1"
+   id="svg690"
+   sodipodi:docname="catalan.svg"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)">
+  <metadata
+     id="metadata696">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs694" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1366"
+     inkscape:window-height="713"
+     id="namedview692"
+     showgrid="false"
+     showguides="false"
+     inkscape:zoom="0.74098898"
+     inkscape:cx="468.15183"
+     inkscape:cy="276.11299"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg690" />
+  <g
+     id="g1384"
+     transform="scale(0.79012346,0.88888889)">
+    <rect
+       id="rect1370"
+       height="540"
+       width="810"
+       x="0"
+       y="0"
+       style="fill:#fcdd09" />
+    <path
+       id="path1372"
+       d="m 0,90 h 810 m 0,120 H 0 m 0,120 h 810 m 0,120 H 0"
+       inkscape:connector-curvature="0"
+       style="stroke:#da121a;stroke-width:60" />
+  </g>
+</svg>

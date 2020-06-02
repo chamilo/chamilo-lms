@@ -1,4 +1,4 @@
-/*! jQuery UI Virtual Keyboard v1.30.2 *//*
+/*! jQuery UI Virtual Keyboard v1.30.1 *//*
 Author: Jeremy Satterfield
 Maintained: Rob Garrison (Mottie on github)
 Licensed under the MIT License
@@ -42,7 +42,7 @@ http://www.opensource.org/licenses/mit-license.php
 	var $keyboard = $.keyboard = function (el, options) {
 	var o, base = this;
 
-	base.version = '1.30.2';
+	base.version = '1.30.1';
 
 	// Access to jQuery and DOM versions of element
 	base.$el = $(el);
@@ -53,23 +53,9 @@ http://www.opensource.org/licenses/mit-license.php
 
 	base.init = function () {
 		base.initialized = false;
-		base.isTextArea = base.el.nodeName.toLowerCase() === 'textarea';
-		base.isInput = base.el.nodeName.toLowerCase() === 'input';
-		// detect contenteditable
-		base.isContentEditable = !base.isTextArea &&
-			!base.isInput &&
-			base.el.isContentEditable;
-
 		var k, position, tmp,
 			kbcss = $keyboard.css,
 			kbevents = $keyboard.events;
-		if (
-			base.isInput &&
-			$.inArray((base.el.type || '').toLowerCase(), $keyboard.supportedInputTypes) < 0
-		) {
-			throw new TypeError('Input of type "' + base.el.type + '" is not supported; use type text, search, URL, tel or password');
-		}
-
 		base.settings = options || {};
 		// shallow copy position to prevent performance issues; see #357
 		if (options && options.position) {
@@ -107,6 +93,12 @@ http://www.opensource.org/licenses/mit-license.php
 		base.wheel = typeof $.fn.mousewheel === 'function';
 		// special character in regex that need to be escaped
 		base.escapeRegex = /[-\/\\^$*+?.()|[\]{}]/g;
+		base.isTextArea = base.el.nodeName.toLowerCase() === 'textarea';
+		base.isInput = base.el.nodeName.toLowerCase() === 'input';
+		// detect contenteditable
+		base.isContentEditable = !base.isTextArea &&
+			!base.isInput &&
+			base.el.isContentEditable;
 
 		// keyCode of keys always allowed to be typed
 		k = $keyboard.keyCodes;
@@ -322,7 +314,7 @@ http://www.opensource.org/licenses/mit-license.php
 	};
 
 	base.focusOn = function () {
-		if (!base || !base.el.active) {
+		if (!base && base.el.active) {
 			// keyboard was destroyed
 			return;
 		}
@@ -634,6 +626,11 @@ http://www.opensource.org/licenses/mit-license.php
 				.attr('tabindex', '-1')
 				.show(); // for hidden inputs
 			base.preview = base.$preview[0];
+
+			// Switch the number input field to text so the caret positioning will work again
+			if (base.preview.type === 'number') {
+				base.preview.type = 'text';
+			}
 
 			// remove extraneous attributes.
 			removedAttr = /^(data-|id|aria-haspopup)/i;
@@ -2687,8 +2684,7 @@ http://www.opensource.org/licenses/mit-license.php
 			base.showSet();
 		},
 		sign: function (base) {
-			var signRegex = base.decimal ? /^[+-]?\d*\.?\d*$/ : /^[+-]?\d*,?\d*$/;
-			if (signRegex.test(base.getValue())) {
+			if (/^[+-]?\d*\.?\d*$/.test(base.getValue())) {
 				var caret,
 					p = $keyboard.caret(base.$preview),
 					val = base.getValue(),
@@ -3142,14 +3138,6 @@ http://www.opensource.org/licenses/mit-license.php
 		}
 
 	};
-
-	$keyboard.supportedInputTypes = [
-		'text',
-		'search',
-		'url',
-		'tel',
-		'password'
-	];
 
 	// for checking combos
 	$keyboard.comboRegex = /([`\'~\^\"ao])([a-z])/mig;

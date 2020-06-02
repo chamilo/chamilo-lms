@@ -28,9 +28,6 @@ define(function () {
     },
     searching: function () {
       return '搜尋中…';
-    },
-    removeAllItems: function () {     
-      return '刪除所有項目';
     }
   };
 });

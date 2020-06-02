@@ -14,7 +14,7 @@ define([
 
   Results.prototype.render = function () {
     var $results = $(
-      '<ul class="select2-results__options" role="listbox"></ul>'
+      '<ul class="select2-results__options" role="tree"></ul>'
     );
 
     if (this.options.get('multiple')) {
@@ -37,7 +37,7 @@ define([
     this.hideLoading();
 
     var $message = $(
-      '<li role="alert" aria-live="assertive"' +
+      '<li role="treeitem" aria-live="assertive"' +
       ' class="select2-results__option"></li>'
     );
 
@@ -130,7 +130,7 @@ define([
       $options.each(function () {
         var $option = $(this);
 
-        var item = Utils.GetData(this, 'data');
+        var item = $.data(this, 'data');
 
         // id needs to be converted to a string when comparing
         var id = '' + item.id;
@@ -171,16 +171,11 @@ define([
     option.className = 'select2-results__option';
 
     var attrs = {
-      'role': 'option',
+      'role': 'treeitem',
       'aria-selected': 'false'
     };
 
-    var matches = window.Element.prototype.matches ||
-      window.Element.prototype.msMatchesSelector ||
-      window.Element.prototype.webkitMatchesSelector;
-
-    if ((data.element != null && matches.call(data.element, ':disabled')) ||
-        (data.element == null && data.disabled)) {
+    if (data.disabled) {
       delete attrs['aria-selected'];
       attrs['aria-disabled'] = 'true';
     }
@@ -240,7 +235,7 @@ define([
       this.template(data, option);
     }
 
-    Utils.StoreData(option, 'data', data);
+    $.data(option, 'data', data);
 
     return option;
   };
@@ -281,10 +276,7 @@ define([
       }
 
       self.setClasses();
-
-      if (self.options.get('scrollAfterSelect')) {
-        self.highlightFirstItem();
-      }
+      self.highlightFirstItem();
     });
 
     container.on('unselect', function () {
@@ -293,10 +285,7 @@ define([
       }
 
       self.setClasses();
-
-      if (self.options.get('scrollAfterSelect')) {
-        self.highlightFirstItem();
-      }
+      self.highlightFirstItem();
     });
 
     container.on('open', function () {
@@ -332,7 +321,7 @@ define([
         return;
       }
 
-      var data = Utils.GetData($highlighted[0], 'data');
+      var data = $highlighted.data('data');
 
       if ($highlighted.attr('aria-selected') == 'true') {
         self.trigger('close', {});
@@ -350,9 +339,8 @@ define([
 
       var currentIndex = $options.index($highlighted);
 
-      // If we are already at the top, don't move further
-      // If no options, currentIndex will be -1
-      if (currentIndex <= 0) {
+      // If we are already at te top, don't move further
+      if (currentIndex === 0) {
         return;
       }
 
@@ -445,7 +433,7 @@ define([
       function (evt) {
       var $this = $(this);
 
-      var data = Utils.GetData(this, 'data');
+      var data = $this.data('data');
 
       if ($this.attr('aria-selected') === 'true') {
         if (self.options.get('multiple')) {
@@ -468,7 +456,7 @@ define([
 
     this.$results.on('mouseenter', '.select2-results__option[aria-selected]',
       function (evt) {
-      var data = Utils.GetData(this, 'data');
+      var data = $(this).data('data');
 
       self.getHighlightedResults()
           .removeClass('select2-results__option--highlighted');

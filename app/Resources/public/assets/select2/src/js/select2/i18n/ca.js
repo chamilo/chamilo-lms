@@ -47,9 +47,6 @@ define(function () {
     },
     searching: function () {
       return 'Cercant…';
-    },
-    removeAllItems: function () {
-      return 'Treu tots els elements';
     }
   };
 });

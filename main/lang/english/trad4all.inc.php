@@ -8530,4 +8530,6 @@ $SurveyQuestionSelectiveDisplayComment = "This question, when located on a singl
 $SurveyQuestionMultipleChoiceWithOther = "Multiple choice with free text";
 $SurveyQuestionMultipleChoiceWithOtherComment = "Offer some pre-defined options, then let the user answer by text if no option matches.";
 $Multiplechoiceother = "Multiple choice with 'other' option";
+$SurveyOtherAnswerSpecify = "Other...";
+$SurveyOtherAnswer = "Please specify:";
 ?>

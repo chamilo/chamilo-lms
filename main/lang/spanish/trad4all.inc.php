@@ -8558,4 +8558,6 @@ $SurveyQuestionSelectiveDisplayComment = "Esta pregunta, cuando esté ubicada en
 $SurveyQuestionMultipleChoiceWithOther = "Elección múltiple con texto libre";
 $SurveyQuestionMultipleChoiceWithOtherComment = "Ofrezca unas opciones pre-definidas, pero agregue la posibilidad para el usuario de responder con un texto libre si ninguna opción corresponde.";
 $Multiplechoiceother = "Elección múltiple con opción 'Otro'";
+$SurveyOtherAnswerSpecify = "Otro/a...";
+$SurveyOtherAnswer = "Por favor especifique:";
 ?>

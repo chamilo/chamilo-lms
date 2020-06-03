@@ -19,6 +19,7 @@ $tool_name = get_lang('BulkAnonymizeUsers');
 $interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('PlatformAdmin')];
 
 set_time_limit(0);
+ini_set('memory_limit', -1);
 
 Display::display_header($tool_name);
 

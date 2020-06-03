@@ -43,7 +43,7 @@ if ($step1Form->validate() && $usernameListFile->isUploadedFile()) {
     if (!file_exists($filePath)) {
         throw new Exception(get_lang('CouldNotReadFile').' '.$filePath);
     }
-    $submittedUsernames = file($filePath, FILE_IGNORE_NEW_LINES|FILE_SKIP_EMPTY_LINES);
+    $submittedUsernames = file($filePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
     if (false === $submittedUsernames) {
         throw new Exception(get_lang('CouldNotReadFileLines').' '.$filePath);
     }
@@ -95,6 +95,9 @@ if ($step1Form->validate() && $usernameListFile->isUploadedFile()) {
     }
 } elseif ($step2Form->validate()) {
     $usernames = preg_split("/\s+/", $usernameTextarea->getValue());
+    if (false === $usernames) {
+        throw new Exception('preg_split failed');
+    }
     printf("<p>Loading %d users...</p>\n", count($usernames));
     $users = UserManager::getRepository()->matching(
         Criteria::create()->where(

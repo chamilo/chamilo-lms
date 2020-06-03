@@ -950,6 +950,18 @@ class bbb
             );
         }
 
+        $isGlobal = $this->isGlobalConference();
+        if ($isGlobal) {
+            $conditions = [
+                'where' => [
+                    'c_id = ? AND user_id = ?' => [
+                        0,
+                        $this->userId,
+                    ],
+                ],
+            ];
+        }
+
         $conditions['order'] = 'created_at ASC';
 
         $meetingList = Database::select(
@@ -957,7 +969,7 @@ class bbb
             $this->table,
             $conditions
         );
-        $isGlobal = $this->isGlobalConference();
+
         $newMeetingList = array();
         foreach ($meetingList as $meetingDB) {
             $item = array();

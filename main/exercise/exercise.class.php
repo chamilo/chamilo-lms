@@ -971,7 +971,7 @@ class Exercise
         if (!empty($questions_by_category)) {
             $newCategoryList = [];
             $em = Database::getManager();
-            $repo = $em->getRepository('ChamiloCoreBundle:CQuizCategory');
+            $repo = $em->getRepository('ChamiloCourseBundle:CQuizCategory');
 
             foreach ($questions_by_category as $categoryId => $questionList) {
                 $cat = new TestCategory();
@@ -986,7 +986,7 @@ class Exercise
                 if (isset($cat['parent_id']) && !empty($cat['parent_id'])) {
                     /** @var \Chamilo\CourseBundle\Entity\CQuizCategory $categoryEntity */
                     if (!isset($parentsLoaded[$cat['parent_id']])) {
-                        $categoryEntity = $em->find('ChamiloCoreBundle:CQuizCategory', $cat['parent_id']);
+                        $categoryEntity = $em->find('ChamiloCourseBundle:CQuizCategory', $cat['parent_id']);
                         $parentsLoaded[$cat['parent_id']] = $categoryEntity;
                     } else {
                         $categoryEntity = $parentsLoaded[$cat['parent_id']];

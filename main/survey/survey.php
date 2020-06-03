@@ -200,7 +200,7 @@ if ($survey_data['survey_type'] == 0) {
         $urlQuestion.'&type=comment&survey_id='.$survey_id
     );
     echo Display::url(
-        Display::return_icon('mcua.png', get_lang('SurveyMultipleAnswerWithOther'), null, ICON_SIZE_BIG),
+        Display::return_icon('mcua.png', get_lang('SurveyMultipleChoiceWithOther'), null, ICON_SIZE_BIG),
         $urlQuestion.'&type=multiplechoiceother&survey_id='.$survey_id
     );
     if ($survey_data['one_question_per_page'] == 0) {

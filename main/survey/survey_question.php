@@ -180,7 +180,8 @@ class survey_question
                 $allowParent = true;
                 break;
             case 'multiplechoiceother':
-                $toolName = get_lang('SurveyMultipleAnswerWithOther');
+                $toolName = get_lang('SurveyQuestionMultipleChoiceWithOther');
+                $questionComment = get_lang('SurveyQuestionMultipleChoiceWithOtherComment');
                 $allowParent = true;
                 break;
             case 'pagebreak':

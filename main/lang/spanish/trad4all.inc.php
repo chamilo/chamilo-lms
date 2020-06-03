@@ -8553,4 +8553,8 @@ $TestYourBrowser = "Prueba de navegador";
 $DraggableQuestionIntro = "Ordene las siguientes opciones de la lista como mejor le parezca arrastrándolas a las áreas inferiores. Puede volver a colocarlas en esta área para modificar su respuesta.";
 $AverageTrainingTime = "Tiempo promedio en el curso";
 $UsersActiveInATest = "Usuarios activos en una prueba";
+$SurveyQuestionSelectiveDisplay = "Aparición selectiva";
+$SurveyQuestionSelectiveDisplayComment = "Esta pregunta, cuando esté ubicada en una página individual con una primera pregunta de tipo elección única, solo se mostrará si la primera opción de la primera pregunta es seleccionada. Por ejemplo '¿Se fue de vacaciones?' -> si la respuesta es 'Sí', entonces la pregunta selectiva aparecerá con una lista de ubicaciones posibles de vacaciones.";
+$SurveyQuestionMultipleChoiceWithOther = "Elección múltiple con texto libre";
+$SurveyQuestionMultipleChoiceWithOtherComment = "Ofrezca unas opciones pre-definidas, pero agregue la posibilidad para el usuario de responder con un texto libre si ninguna opción corresponde.";
 ?>

@@ -8457,4 +8457,8 @@ $TestYourBrowser = "Testez votre navigateur";
 $DraggableQuestionIntro = "Ordonnez les options suivantes dans la liste selon ce qui vous semble le plus approprié, en les glissant-déplaçant dans les cadres ci-dessous. Vous pouvez les remettre à leur place originale à tout moment pour modifier votre réponse.";
 $AverageTrainingTime = "Temps moyen dans le cours";
 $UsersActiveInATest = "Utilisateurs actifs dans un test";
+$SurveyQuestionSelectiveDisplay = "Affichage sélectif";
+$SurveyQuestionSelectiveDisplayComment = "Cette question, lorsqu'elle est située sur une page isolée avec une première question de type oui/non, ne s'affichera que si la première option de la première question est sélectionnée. Par exemple, 'Êtes-vous parti en vacances?' -> seulement si la réponse est oui, la question sélective apparaîtra avec une liste d'endroits de vacances à sélectionner.";
+$SurveyQuestionMultipleChoiceWithOther = "Choix multiple avec texte libre";
+$SurveyQuestionMultipleChoiceWithOtherComment = "Offrez des options pré-définies, mais laissez la possibilité à l'utilisateur/trice de répondre avec un texte libre si aucune option ne lui convient.";
 ?>

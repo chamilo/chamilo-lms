@@ -8525,4 +8525,8 @@ $TestYourBrowser = "Test your browser";
 $DraggableQuestionIntro = "Sort the following options from the list as you see fit by dragging them to the lower areas. You can put them back in this area to modify your answer.";
 $AverageTrainingTime = "Average time in the course";
 $UsersActiveInATest = "Users active in a test";
+$SurveyQuestionSelectiveDisplay = "Selective display";
+$SurveyQuestionSelectiveDisplayComment = "This question, when located on a single survey page with a first multiple choice question, will only show if the first *option* of the first question is selected. For example, 'Did you go on holiday?' -> if answering the first option 'Yes', the selective display question will appear with a list of possible holiday locations to select from.";
+$SurveyQuestionMultipleChoiceWithOther = "Multiple choice with free text";
+$SurveyQuestionMultipleChoiceWithOtherComment = "Offer some pre-defined options, then let the user answer by text if no option matches.";
 ?>

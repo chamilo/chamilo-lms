@@ -1,0 +1,36 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>Jasmine Test Runner</title>
+    <link rel="stylesheet" type="text/css" href="lib/jasmine.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="lib/jasmine.js"></script>
+    <script type="text/javascript" src="lib/jasmine-html.js"></script>
+    <script type="text/javascript" src="lib/jasmine-jquery-1.1.2.js"></script>
+    <script type="text/javascript" src="lib/jquery.simulate.js"></script>
+
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+    <script type="text/javascript" src="dist/js/multiselect.min.js"></script>
+
+    <!-- include spec files here... -->
+    <script type="text/javascript" src="spec/zero-configuration.spec.js"></script>
+    <script type="text/javascript" src="spec/data-options.spec.js"></script>
+    <script type="text/javascript" src="spec/javascript-options.spec.js"></script>
+    <script type="text/javascript" src="spec/search.spec.js"></script>
+    <script type="text/javascript" src="spec/keep-rendering-sort.spec.js"></script>
+    <script type="text/javascript" src="spec/undo-redo.spec.js"></script>
+    <script type="text/javascript" src="spec/multiple-destinations.spec.js"></script>
+</head>
+<body>
+
+<script type="text/javascript">
+    jasmine.getEnv().addReporter(new jasmine.TrivialReporter());
+    jasmine.getEnv().execute();
+</script>
+
+</body>
+</html>

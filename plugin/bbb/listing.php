@@ -140,7 +140,7 @@ if ($conferenceManager) {
                         $result = $bbb->regenerateRecording($result['id']);
                         if ($result) {
                             Display::addFlash(Display::return_message(get_lang('Success')));
-                        } else {
+                        } else {	
                             Display::addFlash(Display::return_message(get_lang('Error'), 'error'));
                         }
                     }

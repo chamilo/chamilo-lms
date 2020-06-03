@@ -574,6 +574,9 @@ class Template
         global $disable_js_and_css_files;
         $css = [];
 
+        $webPublicPath = api_get_path(WEB_PUBLIC_PATH);
+        $webJsPath = api_get_path(WEB_LIBRARY_JS_PATH);
+
         // Default CSS Bootstrap
         $bowerCSSFiles = [
             'fontawesome/css/font-awesome.min.css',
@@ -586,7 +589,6 @@ class Template
             'bootstrap-daterangepicker/daterangepicker.css',
             'bootstrap-select/dist/css/bootstrap-select.min.css',
             'select2/dist/css/select2.min.css',
-            'mediaelement/plugins/vrview/vrview.css',
         ];
 
         $hide = api_get_configuration_value('hide_flag_language_switcher');
@@ -594,6 +596,12 @@ class Template
         if ($hide === false) {
             $bowerCSSFiles[] = 'flag-icon-css/css/flag-icon.min.css';
         }
+
+        foreach ($bowerCSSFiles as $file) {
+            $css[] = api_get_cdn_path($webPublicPath.'assets/'.$file);
+        }
+
+        $css[] = $webJsPath.'mediaelement/plugins/vrview/vrview.css';
 
         $features = api_get_configuration_value('video_features');
         $defaultFeatures = [
@@ -613,19 +621,15 @@ class Template
                 if ($feature === 'vrview') {
                     continue;
                 }
-                $bowerCSSFiles[] = "mediaelement/plugins/$feature/$feature.css";
+                $css[] = $webJsPath."mediaelement/plugins/$feature/$feature.min.css";
                 $defaultFeatures[] = $feature;
             }
         }
 
-        foreach ($bowerCSSFiles as $file) {
-            $css[] = api_get_cdn_path(api_get_path(WEB_PUBLIC_PATH).'assets/'.$file);
-        }
-
-        $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/chosen/chosen.css';
+        $css[] = $webJsPath.'chosen/chosen.css';
 
         if (api_is_global_chat_enabled()) {
-            $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/chat/css/chat.css';
+            $css[] = $webJsPath.'chat/css/chat.css';
         }
         $css_file_to_string = '';
         foreach ($css as $file) {
@@ -722,6 +726,8 @@ class Template
         // JS files
         $js_files = [
             'chosen/chosen.jquery.min.js',
+            'mediaelement/plugins/vrview/vrview.js',
+            'mediaelement/plugins/markersrolls/markersrolls.min.js',
         ];
 
         if (api_get_setting('accessibility_font_resize') === 'true') {
@@ -747,9 +753,7 @@ class Template
             $selectLink,
             'select2/dist/js/select2.min.js',
             "select2/dist/js/i18n/$isoCode.js",
-            'mediaelement/plugins/vrview/vrview.js',
             'js-cookie/src/js.cookie.js',
-            'mediaelement/plugins/markersrolls/markersrolls.min.js',
         ];
 
         $viewBySession = api_get_setting('my_courses_view_by_session') === 'true';
@@ -772,7 +776,7 @@ class Template
                 if ($feature === 'vrview') {
                     continue;
                 }
-                $bowerJsFiles[] = "mediaelement/plugins/$feature/$feature.js";
+                $js_files[] = "mediaelement/plugins/$feature/$feature.min.js";
             }
         }
 

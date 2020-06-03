@@ -281,7 +281,7 @@ $(function() {
     // Mediaelement
     if ( {{ show_media_element }} == 1) {
         $('video:not(.skip), audio:not(.skip)').mediaelementplayer({
-            pluginPath: _p.web + 'web/assets/mediaelement/build/',
+            pluginPath: _p.web_lib + 'javascript/mediaelement/',
             //renderers: ['html5', 'flash_video', 'native_flv'],
             features: ['{{ video_features }}'],
             success: function(mediaElement, originalNode, instance) {

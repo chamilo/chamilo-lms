@@ -2925,6 +2925,7 @@ HTML;
     public static function getFrameReadyBlock($frameName)
     {
         $webPublicPath = api_get_path(WEB_PUBLIC_PATH);
+        $webJsPath = api_get_path(WEB_LIBRARY_JS_PATH);
 
         $videoFeatures = [
             'playpause',
@@ -2946,19 +2947,19 @@ HTML;
                     continue;
                 }
                 $defaultFeatures[] = $feature;
-                $videoPluginsJS[] = "mediaelement/plugins/$feature/$feature.js";
-                $videoPluginCSS[] = "mediaelement/plugins/$feature/$feature.css";
+                $videoPluginsJS[] = "mediaelement/plugins/$feature/$feature.min.js";
+                $videoPluginCSS[] = "mediaelement/plugins/$feature/$feature.min.css";
             }
         }
 
         $videoPluginFiles = '';
         foreach ($videoPluginsJS as $file) {
-            $videoPluginFiles .= '{type: "script", src: "'.$webPublicPath.'assets/'.$file.'"},';
+            $videoPluginFiles .= '{type: "script", src: "'.$webJsPath.$file.'"},';
         }
 
         $videoPluginCssFiles = '';
         foreach ($videoPluginCSS as $file) {
-            $videoPluginCssFiles .= '{type: "stylesheet", src: "'.$webPublicPath.'assets/'.$file.'"},';
+            $videoPluginCssFiles .= '{type: "stylesheet", src: "'.$webJsPath.$file.'"},';
         }
 
         $translateHtml = '';
@@ -2978,7 +2979,7 @@ HTML;
         $.frameReady(function() {
              $(function () {
                 $("video:not(.skip), audio:not(.skip)").mediaelementplayer({
-                    pluginPath: "'.$webPublicPath.'assets/mediaelement/plugins/",
+                    pluginPath: "'.$webJsPath.'mediaelement/plugins/",
                     features: [\''.$videoFeatures.'\'],
                     success: function(mediaElement, originalNode, instance) {
                         '.ChamiloApi::getQuizMarkersRollsJS().'
@@ -2997,8 +2998,8 @@ HTML;
                 {type:"script", src:"'.$webPublicPath.'assets/jquery-ui/jquery-ui.min.js"},
                 {type:"script", src: "'.$webPublicPath.'assets/mediaelement/build/mediaelement-and-player.min.js",
                     deps: [
-                    {type:"script", src: "'.$webPublicPath.'assets/mediaelement/plugins/vrview/vrview.js"},
-                    {type:"script", src: "'.$webPublicPath.'assets/mediaelement/plugins/markersrolls/markersrolls.js"},
+                    {type:"script", src: "'.$webJsPath.'mediaelement/plugins/vrview/vrview.js"},
+                    {type:"script", src: "'.$webJsPath.'mediaelement/plugins/markersrolls/markersrolls.min.js"},
                     '.$videoPluginFiles.'
                 ]},
                 '.$translateHtml.'
@@ -3009,7 +3010,7 @@ HTML;
             {type:"stylesheet", src:"'.$webPublicPath.'assets/jquery-ui/themes/smoothness/theme.css"},
             {type:"stylesheet", src:"'.$webPublicPath.'css/dialog.css"},
             {type:"stylesheet", src: "'.$webPublicPath.'assets/mediaelement/build/mediaelementplayer.min.css"},
-            {type:"stylesheet", src: "'.$webPublicPath.'assets/mediaelement/plugins/vrview/vrview.css"},
+            {type:"stylesheet", src: "'.$webJsPath.'mediaelement/plugins/vrview/vrview.css"},
         ]);';
 
         return $frameReady;

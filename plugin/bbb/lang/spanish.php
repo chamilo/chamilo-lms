@@ -9,6 +9,7 @@ $strings['MeetingOpened'] = "Sala abierta";
 $strings['MeetingClosed'] = "Sala cerrada";
 $strings['MeetingClosedComment'] = "Si ha pedido grabar la sesión de videoconferencia en los parámetros del curso, esta grabación aparecerá en la lista siguiente una vez generada.";
 $strings['CloseMeeting'] = "Cerrar sala";
+$strings['RoomExit'] = "Ha salido de la sesión de Videoconferencia";
 
 $strings['VideoConferenceXCourseX'] = "Videoconferencia #%s, curso %s";
 $strings['VideoConferenceAddedToTheCalendar'] = "Videoconferencia añadida al calendario";
@@ -61,7 +62,7 @@ $strings['MaxXUsersWarning'] = 'Esta sala de conferencia es limitada a un máxim
 $strings['MaxXUsersReached'] = 'El límite de %s usuarios simultáneos ha sido alcanzado en esta sala de conferencia. Por favor refresque la página en unos minutos para ver si un asiento se ha liberado, o espere la apertura de una nueva sala para poder participar.';
 $strings['MaxXUsersReachedManager'] = 'El límite de %s usuarios simultáneos ha sido alcanzado en esta sala de conferencia. Para aumentar el límite, contáctese con el administrador del portal.';
 $strings['MaxUsersInConferenceRoom'] = 'Número máximo de usuarios simultáneos en una sala de conferencia';
-$strings['global_conference_allow_roles'] = 'El enlace para la videoconferencia ';
+$strings['global_conference_allow_roles'] = 'El enlace de videoconferencia global es disponible para estos perfiles';
 $strings['CreatedAt'] = 'Creado el';
 
 $strings['interface'] = 'Interfaz por defecto';
@@ -72,3 +73,4 @@ $strings['ParticipantsWillUseSameInterface'] = 'Los participantes usarán la mis
 $strings['SetByDefault'] = 'Lanzamiento con la interfaz por defecto';
 $strings['SetByTeacher'] = 'Elegido por el profesor';
 $strings['SetByStudent'] = 'Elegido por el alumno';
+$strings['ThereIsNoVideoConferenceActive'] = "No hay una videoconferencia actualmente activa";

@@ -1,4 +1,4 @@
-<style type="text/css">
+<style>
     .conference .url{
         padding: 5px;
         margin-bottom: 5px;
@@ -40,7 +40,6 @@
                                     </div>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -115,7 +114,6 @@
         <div class="page-header">
             <h2>{{ 'RecordList'| get_plugin_lang('BBBPlugin') }}</h2>
         </div>
-
         <table class="table">
             <tr>
                 <th>{{ 'CreatedAt'| get_plugin_lang('BBBPlugin') }}</th>
@@ -154,8 +152,6 @@
                         <a class="btn btn-default" href="{{ meeting.end_url }} ">
                             {{ 'CloseMeeting'|get_plugin_lang('BBBPlugin') }}
                         </a>
-                    {% else %}
-
                     {% endif %}
                         {{ meeting.action_links }}
                     </td>

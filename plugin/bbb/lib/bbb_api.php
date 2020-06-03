@@ -70,10 +70,11 @@ class BigBlueButtonBN
 			$data = curl_exec( $ch );
 			curl_close( $ch );
 
-			if($data)
+			if ($data) {
 				return (new SimpleXMLElement($data));
-			else
+            } else {
 				return false;
+            }
 		}
 		return (simplexml_load_file($url));
 	}

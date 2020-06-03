@@ -3060,16 +3060,22 @@ class SurveyUtil
 
         // Coach can see that only if the survey is in his session
         if (api_is_allowed_to_edit() || api_is_element_in_the_session(TOOL_SURVEY, $survey_id)) {
-            $editUrl = $codePath.'survey/create_new_survey.php?'.
+            $configUrl = $codePath.'survey/create_new_survey.php?'.
                 http_build_query($params + ['action' => 'edit', 'survey_id' => $survey_id]);
+            $editUrl = $codePath.'survey/survey.php?'.
+                http_build_query($params + ['survey_id' => $survey_id]);
             if (3 == $survey->getSurveyType()) {
-                $editUrl = $codePath.'survey/edit_meeting.php?'.
+                $configUrl = $codePath.'survey/edit_meeting.php?'.
                     http_build_query($params + ['action' => 'edit', 'survey_id' => $survey_id]);
             }
 
             $actions[] = Display::url(
-                Display::return_icon('edit.png', get_lang('Edit')),
+                Display::return_icon('edit.png', get_lang('EditQuestions')),
                 $editUrl
+            );
+            $actions[] = Display::url(
+                Display::return_icon('settings.png', get_lang('Configure')),
+                $configUrl
             );
 
             if (SurveyManager::survey_generation_hash_available()) {

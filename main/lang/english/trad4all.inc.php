@@ -8529,4 +8529,5 @@ $SurveyQuestionSelectiveDisplay = "Selective display";
 $SurveyQuestionSelectiveDisplayComment = "This question, when located on a single survey page with a first multiple choice question, will only show if the first *option* of the first question is selected. For example, 'Did you go on holiday?' -> if answering the first option 'Yes', the selective display question will appear with a list of possible holiday locations to select from.";
 $SurveyQuestionMultipleChoiceWithOther = "Multiple choice with free text";
 $SurveyQuestionMultipleChoiceWithOtherComment = "Offer some pre-defined options, then let the user answer by text if no option matches.";
+$Multiplechoiceother = "Multiple choice with 'other' option";
 ?>

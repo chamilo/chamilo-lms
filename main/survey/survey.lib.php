@@ -744,7 +744,7 @@ class SurveyManager
         }
 
         $sql = "SELECT * FROM $table_survey_question_group
-                WHERE c_id = $course_id AND survey_id='".$survey_id."'";
+                WHERE c_id = $course_id AND survey_id = $survey_id";
         $res = Database::query($sql);
         while ($row = Database::fetch_array($res, 'ASSOC')) {
             $params = [
@@ -764,7 +764,7 @@ class SurveyManager
 
         // Get questions
         $sql = "SELECT * FROM $table_survey_question
-                WHERE c_id = $course_id AND survey_id='".$survey_id."'";
+                WHERE c_id = $course_id AND survey_id = $survey_id";
         $res = Database::query($sql);
         while ($row = Database::fetch_array($res, 'ASSOC')) {
             $params = [
@@ -2124,8 +2124,11 @@ class SurveyManager
      *
      * @return bool|int when fails or return the new survey id
      */
-    public static function copySurveySession($surveyId, $targetCourseId, $targetSessionId)
-    {
+    public static function copySurveySession(
+        $surveyId,
+        $targetCourseId,
+        $targetSessionId
+    ) {
         // Database table definitions
         $surveyTable = Database::get_course_table(TABLE_SURVEY);
         $surveyQuestionGroupTable = Database::get_course_table(TABLE_SURVEY_QUESTION_GROUP);
@@ -2161,7 +2164,7 @@ class SurveyManager
             Database::query($sql);
 
             $sql = "SELECT * FROM $surveyQuestionGroupTable
-                    WHERE survey_id = $surveyId AND c_id = $originalCourseId ";
+                    WHERE c_id = $originalCourseId AND survey_id = $surveyId";
             $res = Database::query($sql);
             while ($row = Database::fetch_array($res, 'ASSOC')) {
                 $params = [
@@ -2180,7 +2183,7 @@ class SurveyManager
 
             // Get questions
             $sql = "SELECT * FROM $surveyQuestionTable
-                    WHERE survey_id = $surveyId AND c_id = $originalCourseId";
+                    WHERE c_id = $originalCourseId AND survey_id = $surveyId";
             $res = Database::query($sql);
             while ($row = Database::fetch_array($res, 'ASSOC')) {
                 $params = [

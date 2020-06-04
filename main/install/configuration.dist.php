@@ -1300,6 +1300,8 @@ $_configuration['userportal_session_settings']['status'] = [
     ]
 ];*/
 
+// Default items per page in main/mySpace/users.php
+// $_configuration['my_space_users_items_per_page'] = 10;
 
 // KEEP THIS AT THE END
 // -------- Custom DB changes

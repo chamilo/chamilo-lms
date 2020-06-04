@@ -1817,7 +1817,7 @@ function api_get_user_entity($userId)
  *
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
  */
-function api_get_user_info_from_username($username = '')
+function api_get_user_info_from_username($username)
 {
     if (empty($username)) {
         return false;
@@ -1947,6 +1947,27 @@ function api_get_course_setting($setting_name, $course_code = null)
     return -1;
 }
 
+function api_get_course_plugin_setting($plugin, $settingName, $courseInfo = [])
+{
+    $value = api_get_course_setting($settingName, $courseInfo['code'], true);
+
+    if (-1 === $value) {
+        // Check global settings
+        $value = api_get_plugin_setting($plugin, $settingName);
+        if ($value === 'true') {
+            return 1;
+        }
+        if ($value === 'false') {
+            return 0;
+        }
+        if (null === $value) {
+            return -1;
+        }
+    }
+
+    return $value;
+}
+
 /**
  * Gets an anonymous user ID.
  *
@@ -1983,7 +2004,8 @@ function api_get_anonymous_id()
                     break;
                 }
             }
-            $userId = UserManager::create_user(
+            // Return the user ID
+            return UserManager::create_user(
                 $login,
                 'anon',
                 ANONYMOUS,
@@ -1991,8 +2013,6 @@ function api_get_anonymous_id()
                 $login,
                 $login
             );
-
-            return $userId;
         } else {
             $row = Database::fetch_array($result, 'ASSOC');
 
@@ -2482,7 +2502,7 @@ function api_clear_anonymous($db_check = false)
  *
  * @author Noel Dieschburg
  *
- * @param the int status code
+ * @param int $status_code The integer status code (usually in the form of a constant)
  *
  * @return string
  */
@@ -2497,7 +2517,23 @@ function get_status_from_code($status_code)
             return get_lang('SessionsAdmin', '');
         case DRH:
             return get_lang('Drh', '');
+        case ANONYMOUS:
+            return get_lang('Anonymous', '');
+        case PLATFORM_ADMIN:
+            return get_lang('Administrator', '');
+        case SESSION_COURSE_COACH:
+            return get_lang('SessionCourseCoach', '');
+        case SESSION_GENERAL_COACH:
+            return get_lang('SessionGeneralCoach', '');
+        case COURSE_TUTOR:
+            return get_lang('CourseAssistant', '');
+        case STUDENT_BOSS:
+            return get_lang('StudentBoss', '');
+        case INVITEE:
+            return get_lang('Invitee', '');
     }
+
+    return '';
 }
 
 /**

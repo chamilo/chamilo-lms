@@ -352,18 +352,18 @@ class ZoomPlugin extends Plugin
             $completeMeeting = $meeting;
             $startTime = new DateTime($meeting->start_time);
             $duration = new DateInterval('PT'.$meeting->duration.'M');
-            $courseIdAndSessionId = $this->courseIdAndSessionIdFromAgenda($meeting->agenda);
-            $courseId = $courseIdAndSessionId['courseId'];
-            $sessionId = $courseIdAndSessionId['sessionId'];
             $completeMeeting->extra_data = [
-                'stripped_agenda' => substr($meeting->agenda, 0, -strlen($tag)),
                 'type_name' => $typeNames[$meeting->type],
                 'formatted_start_time' => $startTime->format(get_lang('Y-m-d H:i')),
                 'formatted_duration' => $duration->format(get_lang('%Hh%I')),
                 'meeting_details_url' => 'meeting.php?meetingId='.$meeting->id,
-                'course' => api_get_course_info_by_id($courseId),
-                'session' => api_get_session_info($sessionId),
             ];
+            if (property_exists($meeting, 'agenda')) {
+                $completeMeeting->extra_data['stripped_agenda'] = substr($meeting->agenda, 0, -strlen($tag));
+                $courseIdAndSessionId = $this->courseIdAndSessionIdFromAgenda($meeting->agenda);
+                $completeMeeting->extra_data['course'] = api_get_course_info_by_id($courseIdAndSessionId['courseId']);
+                $completeMeeting->extra_data['session'] = api_get_session_info($courseIdAndSessionId['sessionId']);
+            }
             $completeMeetings[] = $completeMeeting;
         }
 

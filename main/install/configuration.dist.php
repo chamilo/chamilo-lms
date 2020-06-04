@@ -1537,6 +1537,9 @@ $_configuration['auth_password_links'] = [
 //Allows to add increment in minutes to the date range component timepicker, example: 5,10,30 minutes
 //$_configuration['timepicker_increment'] = 5;
 
+//Allows teachers to edit survey questions after students have answered them
+//$_configuration['survey_allow_answered_question_edit'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

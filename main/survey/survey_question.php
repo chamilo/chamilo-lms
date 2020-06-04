@@ -302,12 +302,14 @@ class survey_question
     {
         if (isset($_GET['question_id']) && !empty($_GET['question_id'])) {
             /**
-             * Check if survey has answers first before update it, this is because if you update it, the question
-             * options will delete and re-insert in database loosing the iid and question_id to verify the correct answers.
+             * Prevent the edition of already-answered questions to avoid
+             * inconsistent answers. Use the configuration option
+             * survey_allow_answered_question_edit to change this behaviour.
              */
             $surveyId = isset($_GET['survey_id']) ? (int) $_GET['survey_id'] : 0;
             $answersChecker = SurveyUtil::checkIfSurveyHasAnswers($surveyId);
-            if (!$answersChecker) {
+            $allowQuestionEdit = api_get_configuration_value('survey_allow_answered_question_edit') == true;
+            if ($allowQuestionEdit or !$answersChecker) {
                 $this->buttonList[] = $this->getForm()->addButtonUpdate(get_lang('ModifyQuestionSurvey'), 'save', true);
             } else {
                 $this->getForm()->addHtml('

@@ -1,7 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-
 /**
  * This script shows a compose area (wysiwyg editor if supported, otherwise
  * a simple textarea) where the user can type a message.

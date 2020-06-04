@@ -106,17 +106,4 @@ class MeetingSettings
      * @see https://support.zoom.us/hc/en-us/articles/360037117472-Authentication-Profiles-for-Meetings-and-Webinars#h_5c0df2e1-cfd2-469f-bb4a-c77d7c0cca6f
      */
     public $authentication_name;
-
-    /**
-     * MeetingSettings constructor.
-     */
-    public function __construct()
-    {
-        $this->approval_type = self::APPROVAL_TYPE_NO_REGISTRATION_REQUIRED;
-        $this->audio = 'voip';
-        $this->auto_recording = 'none';
-        $this->registrants_confirmation_email = 1;
-        $this->waiting_room = 1;
-        $this->registrants_email_notification = 1;
-    }
 }

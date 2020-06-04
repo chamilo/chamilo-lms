@@ -300,7 +300,7 @@ class CoursesAndSessionsCatalog
                     $id_in = "$id";
                 }
             }
-            if ($id_in === null) {
+            if (null === $id_in) {
                 return [];
             }
             $sql = "SELECT *, id as real_id FROM $tbl_course WHERE id IN($id_in)";
@@ -468,7 +468,7 @@ class CoursesAndSessionsCatalog
 
         if (api_is_multiple_url_enabled()) {
             $urlId = api_get_current_access_url_id();
-            if ($urlId != -1) {
+            if (-1 != $urlId) {
                 $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
                 $urlCondition = ' access_url_id = '.$urlId.' AND';
                 $allowBaseCategories = api_get_configuration_value('allow_base_course_category');
@@ -498,7 +498,7 @@ class CoursesAndSessionsCatalog
                        ";
             }
         }
-        //var_dump($sql);
+
         $result = Database::query($sql);
         $courses = [];
         while ($row = Database::fetch_array($result)) {

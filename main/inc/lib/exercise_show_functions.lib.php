@@ -273,7 +273,7 @@ class ExerciseShowFunctions
             $content .= $status;
         }
         $content .= '</td>';
-        if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
+        if (EXERCISE_FEEDBACK_TYPE_EXAM != $feedback_type) {
             $content .= '<td class="text-left" width="60%">';
             if ($studentChoice) {
                 $content .= '<span style="font-weight: bold; color: #008000;">'.nl2br($answerComment).'</span>';
@@ -345,7 +345,7 @@ class ExerciseShowFunctions
                 }
                 break;
             case RESULT_DISABLE_SHOW_SCORE_ONLY:
-                if ($feedbackType == 0) {
+                if (0 == $feedbackType) {
                     $hide_expected_answer = true;
                 }
                 break;
@@ -385,7 +385,7 @@ class ExerciseShowFunctions
         echo Display::return_icon($icon, null, null, ICON_SIZE_TINY);
         echo '</td>';
         if ($exercise->showExpectedChoiceColumn()) {
-            if ($hide_expected_answer === false) {
+            if (false === $hide_expected_answer) {
                 echo '<td width="5%">';
                 echo Display::return_icon($iconAnswer, null, null, ICON_SIZE_TINY);
                 echo '</td>';
@@ -414,7 +414,7 @@ class ExerciseShowFunctions
             echo '</td>';
         }
 
-        if ($feedbackType != EXERCISE_FEEDBACK_TYPE_EXAM) {
+        if (EXERCISE_FEEDBACK_TYPE_EXAM != $feedbackType) {
             $showComment = true;
         }
 
@@ -475,7 +475,7 @@ class ExerciseShowFunctions
                 $hide_expected_answer = true;
                 break;
             case RESULT_DISABLE_SHOW_SCORE_ONLY:
-                if ($feedbackType == 0) {
+                if (0 == $feedbackType) {
                     $hide_expected_answer = true;
                 }
                 break;
@@ -489,7 +489,7 @@ class ExerciseShowFunctions
         }
 
         $content = '<tr>';
-        if ($hideStudentChoice === false) {
+        if (false === $hideStudentChoice) {
             $content .= '<td width="5%">';
             $course_id = api_get_course_int_id();
             $new_options = Question::readQuestionOption($questionId, $course_id);
@@ -531,7 +531,7 @@ class ExerciseShowFunctions
             $content .= '</td>';
         }
 
-        if ($feedbackType != EXERCISE_FEEDBACK_TYPE_EXAM) {
+        if (EXERCISE_FEEDBACK_TYPE_EXAM != $feedbackType) {
             $content .= '<td width="20%">';
             $color = 'black';
             if (isset($new_options[$studentChoice]) || in_array(
@@ -583,7 +583,7 @@ class ExerciseShowFunctions
         $inResultsDisabled
     ) {
         $hideExpectedAnswer = false;
-        if ($feedbackType == 0 && $inResultsDisabled == 2) {
+        if (0 == $feedbackType && 2 == $inResultsDisabled) {
             $hideExpectedAnswer = true;
         }
 
@@ -645,7 +645,7 @@ class ExerciseShowFunctions
                 '</div>
             </td>';
 
-        if ($feedbackType != EXERCISE_FEEDBACK_TYPE_EXAM) {
+        if (EXERCISE_FEEDBACK_TYPE_EXAM != $feedbackType) {
             echo '<td width="20%">';
             if (isset($newOptions[$studentChoice])) {
                 echo '<span style="font-weight: bold; color: black;">'.nl2br($answerComment).'</span>';
@@ -693,7 +693,7 @@ class ExerciseShowFunctions
                 $hide_expected_answer = true;
                 break;
             case RESULT_DISABLE_SHOW_SCORE_ONLY:
-                if ($feedbackType == 0) {
+                if (0 == $feedbackType) {
                     $hide_expected_answer = true;
                 }
                 break;
@@ -708,7 +708,7 @@ class ExerciseShowFunctions
 
         echo '<tr>';
 
-        if ($hideStudentChoice === false) {
+        if (false === $hideStudentChoice) {
             echo '<td width="5%">';
             // Your choice
             $question = new MultipleAnswerCombinationTrueFalse();
@@ -750,7 +750,7 @@ class ExerciseShowFunctions
             echo '</td>';
         }
 
-        if ($feedbackType != EXERCISE_FEEDBACK_TYPE_EXAM) {
+        if (EXERCISE_FEEDBACK_TYPE_EXAM != $feedbackType) {
             echo '<td width="20%">';
             //@todo replace this harcoded value
             if ($studentChoice || in_array($resultsDisabled, [
@@ -789,7 +789,7 @@ class ExerciseShowFunctions
         $resultsDisabled = 0
     ) {
         $comments = Event::get_comments($exeId, $questionId);
-        if ($feedbackType != EXERCISE_FEEDBACK_TYPE_EXAM) {
+        if (EXERCISE_FEEDBACK_TYPE_EXAM != $feedbackType) {
             if ($questionScore <= 0 && empty($comments)) {
                 echo '<br />'.ExerciseLib::getNotCorrectedYetText();
             }

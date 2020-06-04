@@ -175,7 +175,7 @@ services:
         arguments:
             - 'document'
             - 'authoring'
-            - '/resources/document/files'
+            - '/resources/document/'
             - '@chamilo_course.settings.document'
             -
                 files:

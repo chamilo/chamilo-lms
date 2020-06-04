@@ -3,14 +3,7 @@
     <v-container fluid>
       <v-row>
         <v-col cols="12" sm="6" md="6">
-          <v-text-field
-                  v-model="item.title"
-                  :error-messages="titleErrors"
-                  :label="$t('Title')"
-                  required
-                  @input="$v.item.title.$touch()"
-                  @blur="$v.item.title.$touch()"
-          />
+          <v-file-input v-if="typeIsFile" v-model="item.resourceFile" show-size label="File upload"></v-file-input>
           <input type="hidden" v-model="item.parentResourceNode" />
         </v-col>
       </v-row>
@@ -26,7 +19,7 @@ import { mapActions } from 'vuex';
 import { mapFields } from 'vuex-map-fields';
 
 export default {
-  name: 'DocumentsForm',
+  name: 'DocumentsFormUpload',
   mixins: [validationMixin],
   props: {
     values: {
@@ -49,8 +42,8 @@ export default {
   },
   data() {
     return {
-      title: null,
       parentResourceNode: null,
+      resourceFile: null,
     };
   },
   computed: {
@@ -60,12 +53,20 @@ export default {
     },
     titleErrors() {
       const errors = [];
+      console.log('errors');
+      if (this.typeIsFile) {
+        console.log('empty');
+        return errors;
+      }
 
       if (!this.$v.item.title.$dirty) return errors;
       has(this.violations, 'title') && errors.push(this.violations.title);
       !this.$v.item.title.required && errors.push(this.$t('Field is required'));
 
       return errors;
+    },
+    typeIsFile() {
+      return this.type === 'file';
     },
     violations() {
       return this.errors || {};
@@ -75,11 +76,10 @@ export default {
   },
   validations: {
     item: {
-      title: {
-        required,
-      },
       parentResourceNode: {
       },
+      resourceFile: {
+      }
     }
   }
 };

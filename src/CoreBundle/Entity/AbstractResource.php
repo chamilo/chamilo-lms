@@ -32,7 +32,11 @@ abstract class AbstractResource
      * @ApiSubresource()
      * @Groups({"resource_node:read", "resource_node:write"})
      * @GRID\Column(field="resourceNode.createdAt", title="Date added", type="datetime")
-     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\ResourceNode", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\OneToOne(
+     *     targetEntity="Chamilo\CoreBundle\Entity\ResourceNode",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true
+     * )
      * @ORM\JoinColumn(name="resource_node_id", referencedColumnName="id", onDelete="CASCADE")
      */
     public $resourceNode;
@@ -78,11 +82,9 @@ abstract class AbstractResource
     public function setResourceFile($file)
     {
         $this->resourceFile = $file;
+
         return $this;
     }
-
-
-
 
     public function setResourceNode(ResourceNode $resourceNode): self
     {

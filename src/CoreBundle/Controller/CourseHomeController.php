@@ -218,10 +218,14 @@ class CourseHomeController extends ToolBaseController
             throw new NotFoundHttpException($this->trans('Tool not found'));
         }
 
+        $nodeId = $this->getCourse()->getResourceNode()->getId();
+
         /** @var AbstractTool $tool */
         $tool = $toolChain->getToolFromName($tool->getTool()->getName());
 
-        $url = $tool->getLink().'?'.$this->getCourseUrlQuery();
+        $link = $tool->getLink();
+        $link = str_replace(':nodeId', $nodeId, $link);
+        $url = $link.'?'.$this->getCourseUrlQuery();
 
         return $this->redirect($url);
     }

@@ -8,7 +8,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * Class IndexController
@@ -20,8 +19,9 @@ class IndexController extends BaseController
      * The Chamilo index home page.
      *
      * @Route("/", name="home", methods={"GET", "POST"}, options={"expose"=true})
+     * @Route("/login", name="login", methods={"GET", "POST"}, options={"expose"=true})
      */
-    public function indexAction(SerializerInterface $serializer): Response
+    public function indexAction(): Response
     {
         return $this->render(
             '@ChamiloCore/Index/vue.html.twig',
@@ -31,7 +31,7 @@ class IndexController extends BaseController
         );
     }
 
-    public function resources(SerializerInterface $serializer): Response
+    public function resources(): Response
     {
         return $this->render(
             '@ChamiloCore/Index/vue.html.twig',

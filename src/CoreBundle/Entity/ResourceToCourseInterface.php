@@ -7,4 +7,3 @@ namespace Chamilo\CoreBundle\Entity;
 interface ResourceToCourseInterface
 {
 }
-

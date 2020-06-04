@@ -226,7 +226,7 @@ if ($survey_data['survey_type'] == 0) {
 }
 
 // Displaying the table header with all the questions
-echo '<table class="table table-bordered">';
+echo '<table class="table table-bordered data_table">';
 echo '<thead>';
 echo '<tr>';
 echo '		<th width="5%">'.get_lang('NumberAbbreviation').'</th>';
@@ -265,8 +265,20 @@ $sql = "SELECT survey_question.*, count(survey_question_option.question_option_i
 
 $result = Database::query($sql);
 $question_counter_max = Database::num_rows($result);
+$questionsGroupClass = '';
 while ($row = Database::fetch_array($result, 'ASSOC')) {
-    echo '<tr>';
+    $breakClass = '';
+    // Visually impact questions between page breaks by changing the bg color
+    if ($row['type'] == 'pagebreak') {
+        $breakClass = ' highlight';
+        if (empty($questionsGroupClass)) {
+            $questionsGroupClass = 'row_even';
+        } else {
+            $questionsGroupClass = '';
+        }
+    }
+
+    echo '<tr class="'.$questionsGroupClass.$breakClass.'">';
     echo '	<td>'.$question_counter.'</td>';
     echo '	<td>';
 

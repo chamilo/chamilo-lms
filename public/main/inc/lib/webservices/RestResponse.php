@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -10,10 +11,12 @@ class RestResponse
      * @var bool
      */
     private $error;
+
     /**
      * @var string
      */
     private $errorMessage;
+
     /**
      * @var array
      */

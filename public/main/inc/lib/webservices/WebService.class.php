@@ -14,6 +14,7 @@ class WebService
      * @var User
      */
     protected $user;
+
     /**
      * @var string
      */

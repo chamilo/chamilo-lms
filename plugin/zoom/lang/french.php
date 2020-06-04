@@ -16,11 +16,15 @@ les enseignants pourront <strong>démarrer</strong> une conférence et les étud
 Ce plugin requiert un compte Zoom pour gérer les conférences.
 L'API de Zoom utilise les <em>JSON Web Tokens (JWT)</em> pour autoriser l'accès à un compte.
 <strong>Une <em>clé</em> et un <em>code secret</em> d'API sont requis</strong> pour s'authentifier avec JWT.
-Pour les obtenir,
-<a href=\"https://marketplace.zoom.us/docs/guides/build/jwt-app\">créez une <em>JWT app</em></a>
-sur la <a href=\"https://marketplace.zoom.us/develop/create\"><em>Zoom Marketplace</em></a>.
-Une fois fournies quelques informations sur votre instance de Chamilo,
-vous trouverez votre clé (API Key) and votre code secret (API Secret) sur la page <em>App Credentials</em>.";
+Pour les obtenir, créez une <em>JWT app</em> :
+<br/>1. logguez vous sur <a href=\"https://zoom.us/profile\">Votre profil Zoom</a>
+<br/>2. cliquez sur <em>Avancé / Marketplace d'application</em>
+<br/>3. cliquez sur <em><a href=\"https://marketplace.zoom.us/develop/create\">Develop / build App</a></em>
+<br/>4. choisissez <em>JWT / Create</em>
+<br/>5. saisissez quelques informations sur votre \"App\"
+(noms de l'application, de l'entreprise, nom et adresse de courriel de contact)
+<br/>6. cliquez sur <em>Continue</em>
+<br/>La page <em>App Credentials</em> affiche la clé (API Key) and le code secret (API Secret) à saisir ici.";
 
 // please keep these lines alphabetically sorted
 $strings['%Hh%I'] = "%Hh%I";

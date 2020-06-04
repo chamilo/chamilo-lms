@@ -17,10 +17,16 @@ This plugin requires a Zoom account to manage meetings.
 The Zoom API uses JSON Web Tokens (JWT) to authenticate account-level access.
 <br/>
 JWT apps provide an <strong>API <em>Key</em> and <em>Secret</em></strong> required to authenticate with JWT.
-To get them,
-<a href=\"https://marketplace.zoom.us/docs/guides/build/jwt-app\">create a JWT App</a>
-on the <a href=\"https://marketplace.zoom.us/develop/create\"><em>Zoom Marketplace</em></a>.
-After providing basic information about your app, locate your API Key and Secret in the App Credentials page.";
+
+To get them, create a <em>JWT App</em> :
+<br/>1. log into <a href=\"https://zoom.us/profile\">your Zoom profile page</a>
+<br/>2. click on <em>Advanced / Application Marketplace</em>
+<br/>3. click on <em><a href=\"https://marketplace.zoom.us/develop/create\">Develop / build App</a></em>
+<br/>4. choose <em>JWT / Create</em>
+<br/>5. fill in information about your \"App\"
+(application and company names, contact name and email address)
+<br/>6. click on <em>Continue</em>
+Locate your API Key and Secret in the App Credentials page.";
 
 // please keep these lines alphabetically sorted
 $strings['%Hh%I'] = "%Hh%I";

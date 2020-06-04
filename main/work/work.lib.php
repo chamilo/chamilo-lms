@@ -4483,7 +4483,7 @@ function deleteAllWorkPerUser($userId, $courseInfo)
 }
 
 /**
- * @param int $item_id
+ * @param int   $item_id
  * @param array $courseInfo course info
  *
  * @return bool

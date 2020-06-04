@@ -5,6 +5,8 @@ namespace Chamilo\PluginBundle\Zoom;
 
 class Meeting
 {
+    use JsonDeserializable;
+
     const TYPE_INSTANT = 1;
     const TYPE_SCHEDULED = 2;
     const TYPE_RECURRING_WITH_NO_FIXED_TIME = 3;
@@ -42,15 +44,23 @@ class Meeting
 
     /**
      * Meeting constructor.
-     *
-     * @param string $topic
-     * @param int    $type
      */
-    public function __construct($topic, $type = self::TYPE_SCHEDULED)
+    protected function __construct()
     {
-        $this->topic = $topic;
-        $this->type = $type;
         $this->tracking_fields = [];
         $this->settings = new MeetingSettings();
+    }
+
+    /**
+     * @param string $topic
+     * @param int $type
+     * @return static
+     */
+    public static function fromTopicAndType($topic, $type = self::TYPE_SCHEDULED)
+    {
+        $instance = new static();
+        $instance->topic = $topic;
+        $instance->type = $type;
+        return $instance;
     }
 }

@@ -56,6 +56,12 @@ class MeetingSettings
     /** @var string either local, cloud or none */
     public $auto_recording;
 
+    /** @var boolean @deprecated only signed in users can join this meeting */
+    public $enforce_login;
+
+    /** @var string @deprecated only signed in users with specified domains can join meetings */
+    public $enforce_login_domains;
+
     /** @var string Alternative host's emails or IDs: multiple values separated by a comma. */
     public $alternative_hosts;
 
@@ -100,4 +106,17 @@ class MeetingSettings
      * @see https://support.zoom.us/hc/en-us/articles/360037117472-Authentication-Profiles-for-Meetings-and-Webinars#h_5c0df2e1-cfd2-469f-bb4a-c77d7c0cca6f
      */
     public $authentication_name;
+
+    /**
+     * MeetingSettings constructor.
+     */
+    public function __construct()
+    {
+        $this->approval_type = self::APPROVAL_TYPE_NO_REGISTRATION_REQUIRED;
+        $this->audio = 'voip';
+        $this->auto_recording = 'none';
+        $this->registrants_confirmation_email = 1;
+        $this->waiting_room = 1;
+        $this->registrants_email_notification = 1;
+    }
 }

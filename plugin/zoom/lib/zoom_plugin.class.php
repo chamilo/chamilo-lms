@@ -4,8 +4,10 @@
 
 use Chamilo\PluginBundle\Zoom\JWTClient;
 use Chamilo\PluginBundle\Zoom\Meeting;
+use Chamilo\PluginBundle\Zoom\MeetingInfoGet;
 use Chamilo\PluginBundle\Zoom\MeetingListItem;
 use Chamilo\PluginBundle\Zoom\ParticipantListItem;
+use Chamilo\PluginBundle\Zoom\RecordingMeeting;
 
 class ZoomPlugin extends Plugin
 {
@@ -70,7 +72,7 @@ class ZoomPlugin extends Plugin
     public function getPeriodMeetings($type, $startDate, $endDate)
     {
         $matchingMeetings = [];
-        foreach ($this->jwtClient()->listAllMeetings($type) as $meeting) {
+        foreach ($this->jwtClient()->getMeetings($type) as $meeting) {
             if (property_exists($meeting, 'start_time')) {
                 $startTime = new DateTime($meeting->start_time);
                 if ($startDate <= $startTime && $startTime <= $endDate) {
@@ -144,7 +146,7 @@ class ZoomPlugin extends Plugin
      *
      * @throws Exception describing the error (message and code)
      *
-     * @return Meeting|object meeting
+     * @return MeetingInfoGet meeting
      */
     public function createInstantMeeting()
     {
@@ -156,8 +158,9 @@ class ZoomPlugin extends Plugin
         }
         $courseInfo = api_get_course_info();
         $topic .= $courseInfo['title'].', '.date('yy-m-d H:i');
+        $meeting = Meeting::fromTopicAndType($topic, Meeting::TYPE_INSTANT);
 
-        return $this->createMeeting(new Meeting(Meeting::TYPE_INSTANT), $topic, '', '');
+        return $this->createMeeting($meeting);
     }
 
     /**
@@ -171,15 +174,17 @@ class ZoomPlugin extends Plugin
      *
      * @throws Exception describing the error (message and code)
      *
-     * @return Meeting|object meeting
+     * @return MeetingInfoGet meeting
      */
     public function createScheduledMeeting($startTime, $duration, $topic, $agenda = '', $password = '')
     {
-        $meeting = new Meeting(Meeting::TYPE_SCHEDULED);
+        $meeting = Meeting::fromTopicAndType($topic, Meeting::TYPE_SCHEDULED);
         $meeting->duration = $duration;
         $meeting->start_time = $startTime->format(DateTimeInterface::ISO8601);
+        $meeting->agenda = $agenda;
+        $meeting->password = $password;
 
-        return $this->createMeeting($meeting, $topic, $agenda, $password);
+        return $this->createMeeting($meeting);
     }
 
     /**
@@ -221,23 +226,23 @@ class ZoomPlugin extends Plugin
     }
 
     /**
-     * @see JWTClient::listRecordings()
+     * @see JWTClient::getRecordings()
      *
-     * @param $meetingUUID
+     * @param string $meetingUUID
+     *
+     * @return RecordingMeeting the recordings of the meeting
      *
      * @throws Exception on API error
-     *
-     * @return object
      */
     public function getRecordings($meetingUUID)
     {
-        return $this->jwtClient()->listRecordings($meetingUUID);
+        return $this->jwtClient()->getRecordings($meetingUUID);
     }
 
     /**
-     * @see JWTClient::getAllParticipants()
+     * @see JWTClient::getParticipants()
      *
-     * @param $meetingUUID
+     * @param string $meetingUUID
      *
      * @throws Exception
      *
@@ -245,7 +250,7 @@ class ZoomPlugin extends Plugin
      */
     public function getParticipants($meetingUUID)
     {
-        return $this->jwtClient()->getAllParticipants($meetingUUID);
+        return $this->jwtClient()->getParticipants($meetingUUID);
     }
 
     /**
@@ -259,7 +264,7 @@ class ZoomPlugin extends Plugin
      */
     public function copyRecordingToLinkTool($meetingUUID)
     {
-        $recordings = $this->jwtClient()->listRecordings($meetingUUID);
+        $recordings = $this->jwtClient()->getRecordings($meetingUUID);
         $link = new Link();
         $link->save(
             [
@@ -320,7 +325,7 @@ class ZoomPlugin extends Plugin
     {
         $matchingMeetings = [];
         $tag = $this->agendaTag();
-        foreach ($this->jwtClient()->listAllMeetings($type) as $meeting) {
+        foreach ($this->jwtClient()->getMeetings($type) as $meeting) {
             if (property_exists($meeting, 'agenda') && substr($meeting->agenda, -strlen($tag)) === $tag) {
                 $matchingMeetings[] = $meeting;
             }
@@ -332,7 +337,7 @@ class ZoomPlugin extends Plugin
     /**
      * Computes and append extra data for each listed meeting.
      *
-     * @param MeetingListItem[] $meetings list of retreived meeting objects
+     * @param MeetingListItem[] $meetings list of retrieved meetings
      *
      * @throws Exception on API error
      *
@@ -373,20 +378,14 @@ class ZoomPlugin extends Plugin
     /**
      * Creates a meeting and returns it.
      *
-     * @param Meeting $meeting  a meeting with at least a type.
-     * @param string  $topic    short title of the meeting, required
-     * @param string  $agenda   ordre du jour
-     * @param string  $password meeting password
+     * @param Meeting $meeting a meeting with at least a type and a topic
      *
      * @throws Exception describing the error (message and code)
      *
-     * @return Meeting|object meeting
+     * @return MeetingInfoGet meeting
      */
-    private function createMeeting($meeting, $topic, $agenda, $password)
+    private function createMeeting($meeting)
     {
-        $meeting->topic = $topic;
-        $meeting->agenda = $agenda;
-        $meeting->password = $password;
         $meeting->settings->auto_recording = 'cloud';
         $meeting->agenda .= $this->agendaTag();
 

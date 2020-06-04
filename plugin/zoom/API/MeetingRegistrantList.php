@@ -3,8 +3,10 @@
 
 namespace Chamilo\PluginBundle\Zoom;
 
-class MeetingRegistrantList extends Pagination
+class MeetingRegistrantList
 {
+    use Pagination;
+
     /** @var MeetingRegistrantListItem[] */
     public $registrants;
 }

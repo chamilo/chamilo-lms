@@ -3,8 +3,35 @@
 
 namespace Chamilo\PluginBundle\Zoom;
 
-class ParticipantList extends Pagination
+use Exception;
+
+class ParticipantList
 {
-    /** @var Participant[] */
+    use Pagination;
+
+    /** @var ParticipantListItem[] */
     public $participants;
+
+    /**
+     * ParticipantList constructor.
+     */
+    public function __construct()
+    {
+        $this->participants = [];
+    }
+
+    /**
+     * @see JsonDeserializable::itemClass()
+     *
+     * @param string $propertyName array property name
+     * @throws Exception on wrong propertyName
+     */
+    protected function itemClass($propertyName)
+    {
+        if ('participants' === $propertyName) {
+            return ParticipantListItem::class;
+        }
+        throw new Exception("No such array property $propertyName");
+    }
+
 }

@@ -5,6 +5,8 @@ namespace Chamilo\PluginBundle\Zoom;
 
 class MeetingListItem
 {
+    use JsonDeserializable;
+
     /** @var string unique meeting instance ID */
     public $uuid;
 

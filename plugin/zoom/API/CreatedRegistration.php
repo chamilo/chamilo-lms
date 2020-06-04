@@ -5,6 +5,8 @@ namespace Chamilo\PluginBundle\Zoom;
 
 class CreatedRegistration
 {
+    use JsonDeserializable;
+
     /** @var int meeting ID */
     public $id;
 

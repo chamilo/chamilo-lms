@@ -3,8 +3,34 @@
 
 namespace Chamilo\PluginBundle\Zoom;
 
-class MeetingList extends Pagination
+use Exception;
+
+class MeetingList
 {
+    use Pagination;
+
     /** @var MeetingListItem[] */
     public $meetings;
+
+    /**
+     * MeetingList constructor.
+     */
+    public function __construct()
+    {
+        $this->meetings = [];
+    }
+
+    /**
+     * @see JsonDeserializable::itemClass()
+     *
+     * @param string $propertyName array property name
+     * @throws Exception on wrong propertyName
+     */
+    protected function itemClass($propertyName)
+    {
+        if ('meetings' === $propertyName) {
+            return MeetingListItem::class;
+        }
+        throw new Exception("No such array property $propertyName");
+    }
 }

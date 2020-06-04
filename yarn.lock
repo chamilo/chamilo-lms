@@ -2730,7 +2730,7 @@ bootstrap-daterangepicker@^3.0:
     jquery ">=1.10"
     moment "^2.9.0"
 
-bootstrap-select@^1.13.6:
+bootstrap-select@^1.13.17:
   version "1.13.17"
   resolved "https://registry.yarnpkg.com/bootstrap-select/-/bootstrap-select-1.13.17.tgz#2cc8312fd88bd7900d4eb881f0a7e95e00ad71e9"
   integrity sha512-LbzSQumoZNYGuoYMpShKIHbJ2qUWFLI0qVHVeKqw5+nfhtMxz+Gre1+IuI3X74bTzQfalBqDKc8fS8tZMdciWg==
@@ -2740,7 +2740,7 @@ bootstrap@^3.3:
   resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-3.4.1.tgz#c3a347d419e289ad11f4033e3c4132b87c081d72"
   integrity sha512-yN5oZVmRCwe5aKwzRj6736nSmKDX7pLYwsXiCj/EYmo16hODaBiT4En5btW/jhBF/seV+XMx3aYwukYC3A49DA==
 
-bootstrap@^4.3.1, bootstrap@^4.4:
+bootstrap@^4.3.1, bootstrap@^4.5.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-4.5.0.tgz#97d9dbcb5a8972f8722c9962483543b907d9b9ec"
   integrity sha512-Z93QoXvodoVslA+PWNdk23Hze4RBYIkpb5h8I2HY2Tu2h7A0LpAgLcyrhrSUyo2/Oxm2l1fRZPs1e5hnxnliXA==

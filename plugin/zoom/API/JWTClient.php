@@ -120,7 +120,7 @@ class JWTClient
      */
     public function getMeetings($type)
     {
-        return $this->getFullList("users/me/meetings", MeetingList::class, 'meetings');
+        return $this->getFullList("users/me/meetings", MeetingList::class, 'meetings', ['type'=>$type]);
     }
 
     /**
@@ -303,7 +303,7 @@ class JWTClient
      *
      * @return array whose items are expected API class instances, such as MeetingListItems
      */
-    private function getFullList($relativePath, $listClassName, $arrayPropertyName)
+    private function getFullList($relativePath, $listClassName, $arrayPropertyName, $parameters = [])
     {
         $items = [];
         $pageCount = 1;
@@ -314,10 +314,7 @@ class JWTClient
                 $this->send(
                     'GET',
                     $relativePath,
-                    [
-                        'page_size' => $pageSize,
-                        'page_number' => $pageNumber,
-                    ]
+                    array_merge(['page_size' => $pageSize, 'page_number' => $pageNumber], $parameters)
                 )
             );
             $items = array_merge($items, $response->$arrayPropertyName);

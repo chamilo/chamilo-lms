@@ -1,5 +1,5 @@
 export default {
-  path: '/resources/documents/:node/',
+  path: '/resources/document/:node/',
   meta: { requiresAuth: true },
   name: 'documents',
   component: () => import('../components/documents/Layout'),
@@ -17,7 +17,7 @@ export default {
     },
     {
       name: 'DocumentsCreateFile',
-      path: 'new',
+      path: 'new_file',
       component: () => import('../views/documents/CreateFile')
     },
     {

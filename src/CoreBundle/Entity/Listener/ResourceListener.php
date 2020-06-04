@@ -6,6 +6,7 @@ namespace Chamilo\CoreBundle\Entity\Listener;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\ResourceToCourseInterface;
 use Chamilo\CoreBundle\Entity\ResourceToRootInterface;
@@ -15,6 +16,7 @@ use Chamilo\CoreBundle\ToolChain;
 use Cocur\Slugify\SlugifyInterface;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Security;
 
@@ -25,6 +27,7 @@ class ResourceListener
 {
     protected $slugify;
     protected $request;
+    protected $accessUrl;
 
     /**
      * ResourceListener constructor.
@@ -35,21 +38,59 @@ class ResourceListener
         $this->security = $security;
         $this->toolChain = $toolChain;
         $this->request = $request;
+        $this->accessUrl = null;
+    }
+
+    public function getAccessUrl($em)
+    {
+        if (null === $this->accessUrl) {
+            $request = $this->request->getCurrentRequest();
+            if (null === $request) {
+                throw new \Exception('An Request is needed');
+            }
+            $sessionRequest = $request->getSession();
+
+            if (null === $sessionRequest) {
+                throw new \Exception('An Session is needed');
+            }
+
+            $id = $sessionRequest->get('access_url_id');
+            $url = $em->getRepository('ChamiloCoreBundle:AccessUrl')->find($id);
+
+            if ($url) {
+                $this->accessUrl = $url;
+
+                return $url;
+            }
+        }
+
+        if (null === $this->accessUrl) {
+            throw new \Exception('An AccessUrl is needed');
+        }
+
+        return $this->accessUrl;
     }
 
     public function prePersist(AbstractResource $resource, LifecycleEventArgs $args)
     {
+        error_log('ResourceListener prePersist '.get_class($resource));
         $em = $args->getEntityManager();
-        $request = $this->request->getCurrentRequest();
+        $request = $this->request;
 
-        if ($request && $resource instanceof ResourceWithUrlInterface) {
-            $sessionRequest = $request->getSession();
-            if (null !== $sessionRequest) {
-                $id = $sessionRequest->get('access_url_id');
-                $url = $em->getRepository('ChamiloCoreBundle:AccessUrl')->find($id);
-                $resource->addUrl($url);
+        $url = null;
+        if ($resource instanceof ResourceWithUrlInterface) {
+            $url = $this->getAccessUrl($em);
+            $resource->addUrl($url);
+        }
+
+        if ($resource->hasResourceNode()) {
+            if ($resource instanceof ResourceToRootInterface) {
+                $url = $this->getAccessUrl($em);
+                $resource->getResourceNode()->setParent($url->getResourceNode());
             }
-            throw new \Exception('A Url is needed');
+
+            // Do not override resource node already added.
+            return true;
         }
 
         // Add resource node
@@ -79,7 +120,26 @@ class ResourceListener
         ;
 
         if ($resource instanceof ResourceToRootInterface) {
+            $url = $this->getAccessUrl($em);
             $resourceNode->setParent($url->getResourceNode());
+        }
+
+        if ($resource->hasParentResourceNode()) {
+            $nodeRepo = $em->getRepository('ChamiloCoreBundle:ResourceNode');
+            $parent = $nodeRepo->find($resource->getParentResourceNode());
+            $resourceNode->setParent($parent);
+        }
+
+        if ($resource->hasResourceFile()) {
+            /** @var File $uploadedFile */
+            $uploadedFile = $request->getCurrentRequest()->files->get('resourceFile');
+            $resourceFile = new ResourceFile();
+            $resourceFile->setName($uploadedFile->getFilename());
+            $resourceFile->setOriginalName($uploadedFile->getFilename());
+            $resourceFile->setFile($uploadedFile);
+
+            $em->persist($resourceFile);
+            $resourceNode->setResourceFile($resourceFile);
         }
 
         if ($resource instanceof ResourceToCourseInterface) {
@@ -87,10 +147,7 @@ class ResourceListener
             //$resourceNode->setParent($url->getResourceNode());
         }
 
-
-
         $resource->setResourceNode($resourceNode);
-
         $em->persist($resourceNode);
 
         return $resourceNode;

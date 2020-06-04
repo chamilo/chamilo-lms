@@ -1,7 +1,7 @@
 <template>
   <div>
     <Toolbar :handle-submit="onSendForm" :handle-reset="resetForm"></Toolbar>
-    <DocumentsForm ref="createForm" :values="item" :errors="violations" />
+    <DocumentsForm ref="createForm" :values="item" :errors="violations" :type="type" />
     <Loading :visible="isLoading" />
   </div>
 </template>
@@ -32,7 +32,8 @@ export default {
   },
   data() {
     return {
-      item: {}
+      item: {},
+      type: 'folder'
     };
   },
   computed: {

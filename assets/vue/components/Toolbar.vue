@@ -47,6 +47,7 @@
 
       <v-btn v-if="handleAdd" color="primary" rounded @click="addItem">
         <v-icon>mdi-plus-circle</v-icon>
+        Add folder
       </v-btn>
 
       <v-btn v-if="handleAddDocument" color="primary" rounded @click="addDocument">

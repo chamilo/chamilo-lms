@@ -134,7 +134,8 @@ class ToolChain
         $tools = $this->getTools();
         $manager = $this->entityManager;
         $toolVisibility = $this->settingsManager->getSetting('course.active_tools_on_create');
-        $user = $this->security->getToken()->getUser();
+        $token = $this->security->getToken();
+        $user = $token->getUser();
 
         // Hardcoded tool list order
         $toolList = [
@@ -184,7 +185,6 @@ class ToolChain
                 ->setVisibility($visibility)
                 ->setCategory($tool->getCategory())
             ;
-
             $toolRepository->addResourceToCourse($courseTool, ResourceLink::VISIBILITY_PUBLISHED, $user, $course);
             $course->addTool($courseTool);
         }

@@ -32,7 +32,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  *             "controller"=CreateResourceFileAction::class,
  *             "deserialize"=false,
  *             "security"="is_granted('ROLE_USER')",
- *             "validation_groups"={"Default", "media_object_create"},
+ *             "validation_groups"={"Default", "media_object_create", "document:write"},
  *             "openapi_context"={
  *                 "requestBody"={
  *                     "content"={
@@ -128,7 +128,7 @@ class ResourceFile
     /**
      * @var File
      *
-     * @Assert\NotNull(groups={"media_object_create"})
+     * @Assert\NotNull(groups={"media_object_create", "document:write"})
      * @Vich\UploadableField(
      *     mapping="resources",
      *     fileNameProperty="name",

@@ -48,7 +48,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity
  * @ORM\EntityListeners({"Chamilo\CoreBundle\Entity\Listener\ResourceListener", "Chamilo\CoreBundle\Entity\Listener\CourseListener"})
  */
-class Course extends AbstractResource implements ResourceInterface
+class Course extends AbstractResource implements ResourceInterface, ResourceWithUrlInterface, ResourceToRootInterface
 {
     public const CLOSED = 0;
     public const REGISTERED = 1;

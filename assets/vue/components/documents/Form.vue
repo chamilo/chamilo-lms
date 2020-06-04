@@ -11,8 +11,8 @@
                   @input="$v.item.title.$touch()"
                   @blur="$v.item.title.$touch()"
           />
-
-          <v-file-input v-model="item.resourceNode" show-size counter multiple label="File input"></v-file-input>
+          <v-file-input v-if="typeIsFile" v-model="item.resourceFile" show-size label="File input"></v-file-input>
+          <input type="hidden" v-model="item.parentResourceNode" />
         </v-col>
       </v-row>
     </v-container>
@@ -34,22 +34,25 @@ export default {
       type: Object,
       required: true
     },
-
     errors: {
       type: Object,
       default: () => {}
     },
-
     initialValues: {
       type: Object,
       default: () => {}
+    },
+    type: {
+      type: String,
     }
   },
-  mounted() {
+  created () {
   },
   data() {
     return {
       title: null,
+      parentResourceNode: null,
+      resourceFile: null
     };
   },
   computed: {
@@ -57,20 +60,18 @@ export default {
     item() {
       return this.initialValues || this.values;
     },
-
     titleErrors() {
       const errors = [];
 
       if (!this.$v.item.title.$dirty) return errors;
-
       has(this.violations, 'title') && errors.push(this.violations.title);
-
       !this.$v.item.title.required && errors.push(this.$t('Field is required'));
 
       return errors;
     },
-
-
+    typeIsFile() {
+      return this.type === 'file';
+    },
     violations() {
       return this.errors || {};
     }
@@ -81,6 +82,10 @@ export default {
     item: {
       title: {
         required,
+      },
+      parentResourceNode: {
+      },
+      resourceFile: {
       }
     }
   }

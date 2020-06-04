@@ -12,7 +12,9 @@ use APY\DataGridBundle\Grid\Mapping as GRID;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CoreBundle\Entity\ResourceToCourseInterface;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Controller\CreateResourceNodeFileAction;
 use Chamilo\CourseBundle\Traits\ShowCourseResourcesInSessionTrait;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
@@ -23,13 +25,49 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ApiResource(
  *      shortName="Documents",
  *      normalizationContext={"groups"={"document:read", "resource_node:read"}},
- *      denormalizationContext={"groups"={"document:write"}}
+ *      denormalizationContext={"groups"={"document:write"}},
+ *      collectionOperations={
+ *         "post"={
+ *             "controller"=CreateResourceNodeFileAction::class,
+ *             "deserialize"=false,
+ *             "security"="is_granted('ROLE_USER')",
+ *             "validation_groups"={"Default", "media_object_create", "document:write"},
+ *             "openapi_context"={
+ *                 "requestBody"={
+ *                     "content"={
+ *                         "multipart/form-data"={
+ *                             "schema"={
+ *                                 "type"="object",
+ *                                 "properties"={
+ *                                     "resourceFile"={
+ *                                         "type"="string",
+ *                                         "format"="binary"
+ *                                     },
+ *                                     "title"={
+ *                                         "type"="string",
+ *                                     },
+ *                                     "comment"={
+ *                                         "type"="string",
+ *                                     },
+*                                      "parentResourceNode"={
+ *                                         "type"="object",
+ *                                     },
+ *                                 }
+ *                             }
+ *                         }
+ *                     }
+ *                 }
+ *             }
+ *         },
+ *         "get"
+ *     },
  * )
  * @ApiFilter(SearchFilter::class, properties={"title": "partial", "resourceNode.parent": "exact"})
  * @ApiFilter(
  *     OrderFilter::class,
  *     properties={
  *          "id",
+ *          "filetype",
  *          "resourceNode.title",
  *          "resourceNode.createdAt",
  *          "resourceNode.resourceFile.size",
@@ -52,7 +90,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @GRID\Source(columns="iid, title", filterable=false, groups={"editor"})
  * @ORM\Entity
  */
-class CDocument extends AbstractResource implements ResourceInterface
+class CDocument extends AbstractResource implements ResourceInterface, ResourceToCourseInterface
 {
     use ShowCourseResourcesInSessionTrait;
 
@@ -81,19 +119,19 @@ class CDocument extends AbstractResource implements ResourceInterface
 
     /**
      * @var string
+     * @Groups({"document:read", "document:write"})
+     * @ORM\Column(name="title", type="string", length=255, nullable=true)
+     */
+    protected $title;
+
+    /**
+     * @var string
      *
      * @Groups({"document:read", "document:write"})
      *
      * @ORM\Column(name="comment", type="text", nullable=true)
      */
     protected $comment;
-
-    /**
-     * @var string
-     * @Groups({"document:read", "document:write"})
-     * @ORM\Column(name="title", type="string", length=255, nullable=true)
-     */
-    protected $title;
 
     /**
      * @var string File type, it can be 'folder' or 'file'

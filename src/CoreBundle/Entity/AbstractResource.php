@@ -28,16 +28,61 @@ abstract class AbstractResource
     public $contentUrl;
 
     /**
-     * SerializedName("description").
-     *
      * @Assert\Valid()
      * @ApiSubresource()
-     * @Groups({"resource_node:read", "resource_node:write", "document:read","document:write"})
+     * @Groups({"resource_node:read", "resource_node:write"})
      * @GRID\Column(field="resourceNode.createdAt", title="Date added", type="datetime")
      * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\ResourceNode", cascade={"persist", "remove"}, orphanRemoval=true)
      * @ORM\JoinColumn(name="resource_node_id", referencedColumnName="id", onDelete="CASCADE")
      */
     public $resourceNode;
+
+    /**
+     * @Groups({"resource_node:read", "resource_node:write", "document:read","document:write"})
+     */
+    public $parentResourceNode;
+
+    /**
+     * @ApiProperty(iri="http://schema.org/image")
+     * @Groups({"resource_node:read", "resource_node:write", "document:read","document:write"})
+     */
+    public $resourceFile;
+
+    public function hasParentResourceNode(): bool
+    {
+        return null !== $this->parentResourceNode;
+    }
+
+    public function setParentResourceNode($resourceNode): self
+    {
+        $this->parentResourceNode = $resourceNode;
+
+        return $this;
+    }
+
+    public function getParentResourceNode()
+    {
+        return $this->parentResourceNode;
+    }
+
+    public function hasResourceFile(): bool
+    {
+        return null !== $this->resourceFile;
+    }
+
+    public function getResourceFile()
+    {
+        return $this->resourceFile;
+    }
+
+    public function setResourceFile($file)
+    {
+        $this->resourceFile = $file;
+        return $this;
+    }
+
+
+
 
     public function setResourceNode(ResourceNode $resourceNode): self
     {

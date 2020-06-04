@@ -16,6 +16,11 @@ export default {
     onSendForm() {
       const createForm = this.$refs.createForm;
       createForm.$v.$touch();
+      if (createForm.$v.item.parentResourceNode) {
+        let nodeId = this.$route.params.node;
+        createForm.$v.item.$model.parentResourceNode = '/api/resource_nodes/' + nodeId;
+        console.log(createForm.$v.item.$model.parentResourceNode);
+      }
       if (!createForm.$v.$invalid) {
         this.create(createForm.$v.item.$model);
       }

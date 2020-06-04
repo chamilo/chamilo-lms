@@ -9,35 +9,46 @@ const makeParamArray = (key, arr) =>
   arr.map(val => `${key}[]=${val}`).join('&');
 
 export default function(id, options = {}) {
-  if ('undefined' === typeof options.headers) options.headers = new Headers();
+    if ('undefined' === typeof options.headers) options.headers = new Headers();
 
-  if (null === options.headers.get('Accept'))
-    options.headers.set('Accept', MIME_TYPE);
+    if (null === options.headers.get('Accept'))
+        options.headers.set('Accept', MIME_TYPE);
 
-  if (
-    'undefined' !== options.body &&
-    !(options.body instanceof FormData) &&
-    null === options.headers.get('Content-Type')
-  )
-    options.headers.set('Content-Type', MIME_TYPE);
+    /*if (
+      'undefined' !== options.body &&
+      !(options.body instanceof FormData) &&
+      null === options.headers.get('Content-Type')
+    )
+      options.headers.set('Content-Type', MIME_TYPE);*/
 
-  if (options.params) {
-    const params = normalize(options.params);
-    let queryString = Object.keys(params)
-      .map(key =>
-        Array.isArray(params[key])
-          ? makeParamArray(key, params[key])
-          : `${key}=${params[key]}`
-      )
-      .join('&');
-    id = `${id}?${queryString}`;
-  }
+    if (options.params) {
+        const params = normalize(options.params);
+        let queryString = Object.keys(params)
+            .map(key =>
+                Array.isArray(params[key])
+                    ? makeParamArray(key, params[key])
+                    : `${key}=${params[key]}`
+            )
+            .join('&');
+        id = `${id}?${queryString}`;
+    }
 
-  const entryPoint = ENTRYPOINT + (ENTRYPOINT.endsWith('/') ? '' : '/');
+    const entryPoint = ENTRYPOINT + (ENTRYPOINT.endsWith('/') ? '' : '/');
 
-  const payload = options.body && JSON.parse(options.body);
-  if (isObject(payload) && payload['@id'])
-    options.body = JSON.stringify(normalize(payload));
+    let formData = new FormData();
+    if (options.body) {
+        Object.keys(options.body).forEach(function (key) {
+            // key: the name of the object key
+            // index: the ordinal position of the key within the object
+            formData.append(key, options.body[key]);
+        });
+
+        options.body = formData;
+    }
+
+    /*const payload = options.body && JSON.parse(options.body);
+    if (isObject(payload) && payload['@id'])
+        options.body = JSON.stringify(normalize(payload));*/
 
   return global.fetch(new URL(id, entryPoint), options).then(response => {
     if (response.ok) return response;

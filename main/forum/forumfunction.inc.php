@@ -2289,7 +2289,7 @@ function getPosts(
         if (!empty($posterId)) {
             $user = api_get_user_entity($posterId);
             if ($user) {
-                $postInfo['user_id'] = $user->getUserId();
+                $postInfo['user_id'] = $user->getId();
                 $postInfo['username'] = $user->getUsername();
                 $postInfo['username_canonical'] = $user->getUsernameCanonical();
                 $postInfo['lastname'] = $user->getLastname();

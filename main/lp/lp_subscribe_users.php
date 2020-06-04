@@ -72,7 +72,7 @@ if (!$session) {
     if ($list) {
         /** @var SessionRelCourseRelUser $sessionCourseUser */
         foreach ($list as $sessionCourseUser) {
-            $subscribedUsers[$sessionCourseUser->getUser()->getUserId()] = $sessionCourseUser->getUser();
+            $subscribedUsers[$sessionCourseUser->getUser()->getId()] = $sessionCourseUser->getUser();
         }
     }
 }
@@ -81,7 +81,7 @@ if (!$session) {
 $choices = [];
 /** @var User $user */
 foreach ($subscribedUsers as $user) {
-    $choices[$user->getUserId()] = $user->getCompleteNameWithClasses();
+    $choices[$user->getId()] = $user->getCompleteNameWithClasses();
 }
 
 // Getting subscribed users to a LP.

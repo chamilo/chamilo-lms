@@ -73,17 +73,21 @@ export default {
     },
 
     addHandler() {
-      this.$router.push({ name: `${this.$options.servicePrefix}Create` });
+      let folderParams = this.$route.query;
+      this.$router.push({name: `${this.$options.servicePrefix}Create`, query: folderParams});
     },
 
     addDocumentHandler() {
-      this.$router.push({ name: `${this.$options.servicePrefix}CreateFile` });
+      let folderParams = this.$route.query;
+      this.$router.push({ name: `${this.$options.servicePrefix}CreateFile` , query: folderParams});
     },
 
     showHandler(item) {
+      let folderParams = this.$route.query;
       this.$router.push({
         name: `${this.$options.servicePrefix}Show`,
-        params: { id: item['@id'] }
+        params: { id: item['@id'] },
+        query: folderParams
       });
     },
 
@@ -92,13 +96,13 @@ export default {
         name: `${this.$options.servicePrefix}Show`,
         params: { id: item['@id'] }
       });*/
-
-      //console.log(item['resourceNode']['id']);
+      let folderParams = this.$route.query;
       this.resetList = true;
       this.$route.params.node = item['resourceNode']['id'];
       this.$router.push({
         name: `${this.$options.servicePrefix}List`,
-        params: {node: item['resourceNode']['id']}
+        params: {node: item['resourceNode']['id']},
+        query: folderParams,
       });
       /*this.$router.push({
         name: `${this.$options.servicePrefix}List`,
@@ -112,9 +116,11 @@ export default {
     },
 
     editHandler(item) {
+      let folderParams = this.$route.query;
       this.$router.push({
         name: `${this.$options.servicePrefix}Update`,
-        params: { id: item['@id'] }
+        params: { id: item['@id'] },
+        query: folderParams
       });
     },
 

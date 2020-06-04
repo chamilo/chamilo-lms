@@ -74,15 +74,17 @@ class CourseListener
                 if ($courseId === $courseFromSession->getId()) {
                     $course = $courseFromSession;
                     $courseInfo = $sessionHandler->get('_course');
+
+                    dump("Course loaded from Session $courseId");
                 }
             }
-
+            $course = null;
             if (null === $course) {
                 /** @var EntityManager $em */
                 $em = $container->get('doctrine')->getManager();
                 $course = $em->getRepository('ChamiloCoreBundle:Course')->find($courseId);
 
-                //dump("get course from DB $courseId");
+                dump("Course loaded from DB $courseId");
                 $courseInfo = api_get_course_info($course->getCode());
             }
 

@@ -7,10 +7,12 @@ export default {
     formatDateTime,
     onCreated(item) {
       this.showMessage(`${item['@id']} created`);
+      let folderParams = this.$route.query;
 
       this.$router.push({
         name: `${this.$options.servicePrefix}Update`,
-        params: { id: item['@id'] }
+        params: { id: item['@id'] },
+        query: folderParams
       });
     },
     onSendForm() {

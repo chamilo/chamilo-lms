@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-row justify="space-around">
-      <v-icon v-if="handleShow" small class="mr-2" @click="handleShow">mdi-eye</v-icon>
+      <v-icon v-if="handleShow" small class="mr-2" @click="handleShow">mdi-information</v-icon>
       <v-icon v-if="handleEdit" small class="mr-2" @click="handleEdit">mdi-pencil</v-icon>
       <v-icon v-if="handleDelete" small @click="confirmDelete = true">mdi-delete</v-icon>
     </v-row>

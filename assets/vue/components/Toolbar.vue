@@ -45,13 +45,15 @@
         {{ $t('Delete') }}
       </v-btn>
 
-      <v-btn v-if="handleAdd" color="primary" rounded @click="addItem">
-        <v-icon>mdi-plus-circle</v-icon>
-        New folder
+      <v-btn v-if="handleAdd"
+             color="primary"
+             rounded
+             @click="addItem">
+        <v-icon left>mdi-folder-plus-outline</v-icon> New folder
       </v-btn>
 
       <v-btn v-if="handleAddDocument" color="primary" rounded @click="addDocument">
-        File upload
+        <v-icon left>mdi-cloud-upload</v-icon>File upload
       </v-btn>
 
     </div>

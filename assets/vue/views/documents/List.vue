@@ -4,7 +4,6 @@
             :handle-add="addHandler"
             :handle-add-document="addDocumentHandler"
     />
-
     <v-container grid-list-xl fluid>
       <v-layout row wrap>
         <v-flex lg12>
@@ -35,13 +34,14 @@
 <!--                <a @click="showHandler(item)" >-->
 <!--                  {{ item['contentUrl'] }}-->
 <!--                </a>-->
-                <a data-fancybox="gallery"  :href=" item['contentUrl'] " >
-                    {{ item['resourceNode']['title'] }}
+                <a data-fancybox="gallery"
+                   :href=" item['contentUrl'] ">
+                    <v-icon left color="primary">mdi-file</v-icon> {{ item['resourceNode']['title'] }}
                 </a>
               </div>
               <div v-else>
                 <a @click="handleClick(item)">
-                  {{ item['resourceNode']['title'] }}
+                    <v-icon left>mdi-folder</v-icon>{{ item['resourceNode']['title'] }}
                 </a>
               </div>
             </template>

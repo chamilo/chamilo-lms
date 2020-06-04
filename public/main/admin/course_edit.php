@@ -188,7 +188,7 @@ $courseTeacherNames = [];
 foreach ($course_teachers as $courseTeacherId) {
     /** @var User $courseTeacher */
     $courseTeacher = UserManager::getRepository()->find($courseTeacherId);
-    $courseTeacherNames[$courseTeacher->getUserId()] = UserManager::formatUserFullName($courseTeacher, true);
+    $courseTeacherNames[$courseTeacher->getId()] = UserManager::formatUserFullName($courseTeacher, true);
 }
 
 $form->addSelectAjax(

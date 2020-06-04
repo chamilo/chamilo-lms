@@ -32,13 +32,11 @@
               <td>
                 {{ item['comment'] }}
               </td>
-
             </tr>
-
             <tr>
-              <td><strong>{{ $t('resourceNode') }}</strong></td>
+              <td><strong>{{ $t('Created at') }}</strong></td>
               <td>
-                  {{ item['resourceNode'] && item['resourceNode'].name }}
+                  {{ item['resourceNode'] && item['resourceNode'].createdAt }}
               </td>
               <td></td>
             </tr>
@@ -46,7 +44,6 @@
               <td><strong>{{ $t('file') }}</strong></td>
               <td>
                 <div v-if="item['resourceNode']['resourceFile']">
-<!--                  <img v-bind:src=" item['resourceNode']['resourceFile']['file'] " />-->
                     <img v-bind:src=" item['contentUrl'] " />
                 </div>
                 <div v-else>

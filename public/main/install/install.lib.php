@@ -671,7 +671,7 @@ function display_language_selection_box(
         'language_list',
         $language_list,
         $default_language,
-        ['class' => 'form-control selectpicker show-tick form-control'],
+        ['class' => 'selectpicker'],
         false
     );
 

@@ -1,17 +1,13 @@
 .bg-install{
-  background: #0068d8 !important;
+
   @include portrait($breakpoint-sm, $breakpoint-md){
     padding-top: 10px;
     padding-bottom: 10px;
   }
   .install-box{
-    width: 100%;
-    max-width: 65%;
     padding: 50px 40px;
-    margin: auto;
     background-color: $default-white;
     border-radius: 10px;
-    overflow: hidden;
     box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.1);
 
     .install-icon{

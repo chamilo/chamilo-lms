@@ -7,9 +7,9 @@ require('webpack-jquery-ui/css');
 
 // JS is equivalent to the normal 'bootstrap' package
 // no need to set this to a variable, just require it
-require('bootstrap');
+import 'bootstrap';
 require('@coreui/coreui/dist/js/coreui.min.js');
-require('chosen-js');
+// require('chosen-js');
 require('mediaelement');
 // require('pace-js-amd-fix');
 require('multiselect-two-sides');
@@ -24,7 +24,8 @@ require('blueimp-file-upload');
 require('select2');
 require('timeago');
 require('sweetalert2');
-require('bootstrap-select/dist/js/bootstrap-select.js');
+
+import 'bootstrap-select';
 require('bootstrap-daterangepicker');
 require('fullcalendar/dist/fullcalendar.js');
 require('fullcalendar/dist/gcal.js');

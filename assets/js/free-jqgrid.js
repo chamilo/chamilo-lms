@@ -12,6 +12,6 @@ const langs = [
 locale = langs.indexOf(locale) !== -1 ? locale : 'en';
 
 import(
-  /* webpackChunkName: "../public/build/free-jqgrid/i18n/" */
+  /* webpackChunkName: "../build/free-jqgrid/i18n/" */
   'free-jqgrid/js/i18n/grid.locale-' + locale
 );

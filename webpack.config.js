@@ -18,7 +18,6 @@ Encore
     .addEntry('exercise', './assets/js/exercise.js')
     .addEntry('free-jqgrid', './assets/js/free-jqgrid.js')
     .addStyleEntry('css/app', './assets/css/app.scss')
-    .addStyleEntry('css/bootstrap', './assets/css/bootstrap.scss')
 
     .addStyleEntry('css/chat', './assets/css/chat.css')
     .addStyleEntry('css/document', './assets/css/document.css')

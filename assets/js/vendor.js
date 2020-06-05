@@ -9,7 +9,7 @@ require('webpack-jquery-ui/css');
 // no need to set this to a variable, just require it
 import 'bootstrap';
 require('@coreui/coreui/dist/js/coreui.min.js');
-// require('chosen-js');
+import 'chosen-js';
 require('mediaelement');
 // require('pace-js-amd-fix');
 require('multiselect-two-sides');

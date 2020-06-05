@@ -1,7 +1,7 @@
 <template>
   <div>
     <Toolbar :handle-submit="onSendForm" :handle-reset="resetForm"></Toolbar>
-    <DocumentsForm ref="createForm" :values="item" :errors="violations" :type="type" />
+    <DocumentsForm ref="createForm" :values="item" :errors="violations" />
     <Loading :visible="isLoading" />
   </div>
 </template>
@@ -32,12 +32,22 @@ export default {
   },
   data() {
     return {
-      item: {},
-      type: 'file',
+      item: {
+        filetype: 'file',
+        parentResourceNodeId: null,
+        resourceLinks: null
+      },
     };
   },
   computed: {
     ...mapFields(['error', 'isLoading', 'created', 'violations'])
+  },
+  created() {
+    this.item.parentResourceNodeId = this.$route.params.node;
+    this.item.resourceLinks = JSON.stringify([{
+      c_id: this.$route.query.cid,
+      visibility: 2,
+    }]);
   },
   methods: {
     ...mapActions('documents', ['create', 'reset'])

@@ -21,6 +21,8 @@ export default function(id, options = {}) {
     )
       options.headers.set('Content-Type', MIME_TYPE);*/
 
+    console.log(options.params);
+
     if (options.params) {
         const params = normalize(options.params);
         let queryString = Object.keys(params)
@@ -36,6 +38,7 @@ export default function(id, options = {}) {
     const entryPoint = ENTRYPOINT + (ENTRYPOINT.endsWith('/') ? '' : '/');
 
     let formData = new FormData();
+    console.log(options.body);
     if (options.body) {
         Object.keys(options.body).forEach(function (key) {
             // key: the name of the object key

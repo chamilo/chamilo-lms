@@ -320,8 +320,7 @@
                 }
                 let url = window.location.href;
                 var n = url.indexOf("main/");
-                console.log(url);
-                console.log(n);
+                //console.log(url);console.log(n);
 
                 if (n > 0) {
                     axios.get(url, {

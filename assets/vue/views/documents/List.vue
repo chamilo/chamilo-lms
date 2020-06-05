@@ -16,6 +16,7 @@
           </DataFilter>
           <br />
           <v-data-table
+            dense
             v-model="selected"
             :headers="headers"
             :items="items"
@@ -45,7 +46,6 @@
                 </a>
               </div>
             </template>
-
 <!--            <template slot="item.resourceNode" slot-scope="{ item }">-->
 <!--              {{ item['@id'] }}-->
 <!--            </template>-->

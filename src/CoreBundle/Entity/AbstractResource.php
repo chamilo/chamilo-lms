@@ -61,6 +61,10 @@ abstract class AbstractResource
 
     public function getResourceLinkList(): array
     {
+        if (null === $this->resourceLinkList) {
+            return [];
+        }
+
         return $this->resourceLinkList;
     }
 

@@ -101,14 +101,13 @@ class ResourceListener
         }
 
         $resourceNode = new ResourceNode();
-        $resourceName = $resource->getResourceName();
 
+        $resourceName = $resource->getResourceName();
         if (empty($resourceName)) {
             throw new \Exception('Resource needs a name');
         }
 
         $extension = $this->slugify->slugify(pathinfo($resourceName, PATHINFO_EXTENSION));
-
         if (empty($extension)) {
             $slug = $this->slugify->slugify($resourceName);
         } else {

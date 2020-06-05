@@ -27,7 +27,8 @@ class CreateResourceNodeFileAction
         }
 
         if ($request->request->has('resourceLinks')) {
-            $links = json_decode('['.$request->get('resourceLinks').']', true);
+            //$links = json_decode('['.$request->get('resourceLinks').']', true);
+            $links = json_decode($request->get('resourceLinks'), true);
             if (empty($links)) {
                 throw new \InvalidArgumentException('sharingLinks is not a json');
             }

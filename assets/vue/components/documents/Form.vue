@@ -11,7 +11,7 @@
                   @input="$v.item.title.$touch()"
                   @blur="$v.item.title.$touch()"
           />
-          <input type="hidden" v-model="item.parentResourceNode" />
+          <input type="hidden" v-model="item.parentResourceNodeId" />
         </v-col>
       </v-row>
     </v-container>
@@ -41,16 +41,13 @@ export default {
       type: Object,
       default: () => {}
     },
-    type: {
-      type: String,
-    }
   },
   created () {
   },
   data() {
     return {
       title: null,
-      parentResourceNode: null,
+      parentResourceNodeId: null,
     };
   },
   computed: {
@@ -78,7 +75,7 @@ export default {
       title: {
         required,
       },
-      parentResourceNode: {
+      parentResourceNodeId: {
       },
     }
   }

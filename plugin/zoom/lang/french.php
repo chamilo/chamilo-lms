@@ -41,6 +41,7 @@ $strings['JoinURLToSendToParticipants'] = "URL pour assister à la conférence (
 $strings['Live'] = "En cours";
 $strings['LiveMeetings'] = "Conférences en cours";
 $strings['Meeting'] = "Conférence";
+$strings['MeetingDeleted'] = "Conférence effacée";
 $strings['NewMeetingCreated'] = "Nouvelle conférence créée";
 $strings['Participants'] = "Participants";
 $strings['Password'] = "Mot de passe";

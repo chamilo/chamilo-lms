@@ -19,8 +19,7 @@ $tpl = new Template($tool_name);
 $plugin = ZoomPlugin::create();
 
 if (!array_key_exists('meetingId', $_REQUEST)) {
-    header('Location: start.php');
-    exit;
+    throw new Exception('MeetingNotFound');
 }
 $meeting = $plugin->getMeeting($_REQUEST['meetingId']);
 
@@ -79,9 +78,11 @@ if ($plugin->userIsConferenceManager()) {
 
     if ($deleteMeetingForm->validate()) {
         try {
-            $newInstantMeeting = $plugin->deleteMeeting($meeting->id);
-            header('Location: start.php');
-            exit;
+            $plugin->deleteMeeting($meeting->id);
+            Display::addFlash(
+                Display::return_message(get_lang('MeetingDeleted'), 'confirm')
+            );
+            location(api_get_course_url() ?: (api_is_platform_admin() ? 'admin.php' : api_get_path(WEB_PATH)));
         } catch (Exception $exception) {
             Display::addFlash(
                 Display::return_message($exception->getMessage(), 'error')

@@ -43,6 +43,7 @@ $strings['JoinURLToSendToParticipants'] = "Join URL to send to participants";
 $strings['Live'] = "Live";
 $strings['LiveMeetings'] = "Live meetings";
 $strings['Meeting'] = "Meeting";
+$strings['MeetingDeleted'] = "Meeting deleted";
 $strings['NewMeetingCreated'] = "New meeting created";
 $strings['Participants'] = "Participants";
 $strings['Password'] = "Password";

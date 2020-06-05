@@ -684,7 +684,8 @@ class SurveyManager
     }
 
     /**
-     * Copy given survey to a new (optional) given survey ID
+     * Copy given survey to a new (optional) given survey ID.
+     *
      * @param int $survey_id
      * @param int $new_survey_id
      * @param int $targetCourseId
@@ -1496,7 +1497,9 @@ class SurveyManager
      * @param int  $survey_id   the id of the survey
      * @param int  $question_id the id of the question
      * @param bool $shared
+     *
      * @return mixed False on error, true if the question could be deleted
+     *
      * @todo also delete the answers to this question
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
@@ -1527,6 +1530,7 @@ class SurveyManager
         }
         // Deleting the options of the question of the survey
         self::delete_survey_question_option($survey_id, $question_id, $shared);
+
         return true;
     }
 
@@ -2252,8 +2256,10 @@ class SurveyManager
     /**
      * Copy/duplicate one question (into the same survey).
      * Note: Relies on the question iid to find all necessary info.
-     * @param   int $questionId
-     * @return  int The new question's iid, or 0 on error
+     *
+     * @param int $questionId
+     *
+     * @return int The new question's iid, or 0 on error
      */
     public static function copyQuestion($questionId)
     {
@@ -2328,6 +2334,7 @@ class SurveyManager
 
         return $insertId;
     }
+
     /**
      * @param array $surveyData
      *

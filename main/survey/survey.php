@@ -138,7 +138,6 @@ if (!empty($action)) {
     exit;
 }
 
-
 $htmlHeadXtra[] = '<script>'.api_get_language_translate_html().'</script>';
 
 // Displaying the header

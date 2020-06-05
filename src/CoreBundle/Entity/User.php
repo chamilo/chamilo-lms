@@ -79,6 +79,7 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * @var string
+     * @Assert\NotBlank()
      * @ApiProperty(iri="http://schema.org/name")
      * @Groups({"user:read", "user:write"})
      * @ORM\Column(name="firstname", type="string", length=64, nullable=true, unique=false)
@@ -179,6 +180,7 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * @var bool
+     * @Assert\NotBlank()
      * @Groups({"user:read", "user:write"})
      * @ORM\Column(name="enabled", type="boolean")
      */

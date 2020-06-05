@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * CExerciseCategory.
@@ -54,6 +55,8 @@ class CExerciseCategory extends AbstractResource implements ResourceInterface
 
     /**
      * @var string
+     *
+     * @Assert\NotBlank
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */

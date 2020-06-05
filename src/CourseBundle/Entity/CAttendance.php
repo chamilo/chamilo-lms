@@ -7,6 +7,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * CAttendance.
@@ -48,7 +49,7 @@ class CAttendance extends AbstractResource implements ResourceInterface
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank
      * @ORM\Column(name="name", type="text", nullable=false)
      */
     protected $name;

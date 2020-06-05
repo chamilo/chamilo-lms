@@ -7,6 +7,7 @@ namespace Chamilo\CoreBundle\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * SessionCategory.
@@ -44,6 +45,7 @@ class SessionCategory
 
     /**
      * @var string
+     * @Assert\NotBlank
      * @Groups({"session_category:read", "session_category:write"})
      * @ORM\Column(name="name", type="string", length=100, nullable=true, unique=false)
      */

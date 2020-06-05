@@ -6,6 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Message.
@@ -65,13 +66,14 @@ class Message
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
     protected $title;
 
     /**
      * @var string
+     * @Assert\NotBlank
      *
      * @ORM\Column(name="content", type="text", nullable=false)
      */

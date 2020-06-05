@@ -255,6 +255,7 @@ class Session
 
     /**
      * @var User
+     * @Assert\NotBlank
      * @Groups({"session:read", "session:write"})
      *
      * @ORM\ManyToOne(targetEntity="User", inversedBy="sessionAsGeneralCoach")

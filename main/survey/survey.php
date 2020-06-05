@@ -97,64 +97,64 @@ if ($is_survey_type_1 && ($action === 'addgroup' || $action === 'deletegroup')) 
     exit;
 }
 
-if ('copyquestion' == $action) {
-    $copied = SurveyManager::copyQuestion($_GET['question_id']);
-    if (false !== $copied) {
-        $sendmsg = 'QuestionAdded';
-    } else {
-        $sendmsg = 'ErrorOccurred';
+// Action handling
+$my_question_id_survey = isset($_GET['question_id']) ? (int) $_GET['question_id'] : null;
+$my_survey_id_survey = (int) $_GET['survey_id'];
+$message_information = isset($_GET['message']) ? Security::remove_XSS($_GET['message']) : null;
+
+if (!empty($action)) {
+    switch ($action) {
+        case 'copyquestion':
+            $copied = SurveyManager::copyQuestion($_GET['question_id']);
+            if (false !== $copied) {
+                $sendmsg = 'QuestionAdded';
+            } else {
+                $sendmsg = 'ErrorOccurred';
+            }
+            break;
+        case 'delete':
+            $result = SurveyManager::delete_survey_question(
+                $my_survey_id_survey,
+                $my_question_id_survey,
+                $survey_data['is_shared']
+            );
+            if (false == $result) {
+                $sendmsg = 'ErrorOccured';
+            } else {
+                $sendmsg = 'Deleted';
+            }
+            break;
+        case 'moveup':
+        case 'movedown':
+            SurveyManager::move_survey_question(
+                $action,
+                $my_question_id_survey,
+                $my_survey_id_survey
+            );
+            $sendmsg = 'SurveyQuestionMoved';
+            break;
     }
     header('Location: '.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id.'&sendmsg='.$sendmsg);
     exit;
 }
+
 
 $htmlHeadXtra[] = '<script>'.api_get_language_translate_html().'</script>';
 
 // Displaying the header
 Display::display_header($tool_name, 'Survey');
 
+// Show error/success messages, if any
 if (!$is_survey_type_1 && !empty($_GET['sendmsg'])) {
+    $messageType = 'confirmation';
+    if (in_array($_GET['sendmsg'], ['ErrorOccurred'])) {
+        $messageType = 'error';
+    }
     echo Display::return_message(
         get_lang($_GET['sendmsg']),
         'confirmation',
         false
     );
-}
-// Action handling
-$my_action_survey = Security::remove_XSS($action);
-$my_question_id_survey = isset($_GET['question_id']) ? Security::remove_XSS($_GET['question_id']) : null;
-$my_survey_id_survey = Security::remove_XSS($_GET['survey_id']);
-$message_information = isset($_GET['message']) ? Security::remove_XSS($_GET['message']) : null;
-
-if (isset($action)) {
-    if (($action === 'moveup' || $action === 'movedown') && isset($_GET['question_id'])) {
-        SurveyManager::move_survey_question(
-            $my_action_survey,
-            $my_question_id_survey,
-            $my_survey_id_survey
-        );
-        echo Display::return_message(get_lang('SurveyQuestionMoved'), 'confirmation');
-    }
-    if ($action === 'delete' && is_numeric($_GET['question_id'])) {
-        $result = SurveyManager::delete_survey_question(
-            $my_survey_id_survey,
-            $my_question_id_survey,
-            $survey_data['is_shared']
-        );
-        if (false == $result) {
-            echo Display::return_message(
-                get_lang('Error'),
-                'error',
-                false
-            );
-        } else {
-            echo Display::return_message(
-                get_lang('Deleted'),
-                'confirmation',
-                false
-            );
-        }
-    }
 }
 
 if (!empty($survey_data['survey_version'])) {

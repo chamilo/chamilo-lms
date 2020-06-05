@@ -16,7 +16,6 @@ use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceToCourseInterface;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CourseBundle\Traits\ShowCourseResourcesInSessionTrait;
-use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -39,18 +38,39 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *                             "schema"={
  *                                 "type"="object",
  *                                 "properties"={
- *                                     "resourceFile"={
- *                                         "type"="string",
- *                                         "format"="binary"
- *                                     },
  *                                     "title"={
  *                                         "type"="string",
+ *                                     },
+ *                                     "filetype"={
+ *                                         "type"="string",
+ *                                         "enum"={"folder", "file"},
  *                                     },
  *                                     "comment"={
  *                                         "type"="string",
  *                                     },
- *                                      "parentResourceNode"={
- *                                         "type"="object",
+ *                                     "uploadFile"={
+ *                                         "type"="string",
+ *                                         "format"="binary"
+ *                                     },
+ *                                     "parentResourceNodeId"={
+ *                                         "type"="integer",
+ *                                     },
+ *                                     "resourceLinks"={
+ *                                         "type"="array",
+ *                                         "items": {
+ *                                              "type": "object",
+ *                                              "properties"={
+ *                                                  "visibility"={
+ *                                                       "type"="integer",
+ *                                                   },
+ *                                                  "c_id"={
+ *                                                       "type"="integer",
+ *                                                   },
+ *                                                   "session_id"={
+ *                                                       "type"="integer",
+ *                                                   },
+ *                                              }
+ *                                         }
  *                                     },
  *                                 }
  *                             }
@@ -126,16 +146,14 @@ class CDocument extends AbstractResource implements ResourceInterface, ResourceT
 
     /**
      * @var string
-     *
      * @Groups({"document:read", "document:write"})
-     *
      * @ORM\Column(name="comment", type="text", nullable=true)
      */
     protected $comment;
 
     /**
      * @var string File type, it can be 'folder' or 'file'
-     *
+     * @Groups({"document:read", "document:write"})
      * @ORM\Column(name="filetype", type="string", length=10, nullable=false)
      */
     protected $filetype;
@@ -360,16 +378,6 @@ class CDocument extends AbstractResource implements ResourceInterface, ResourceT
         return $this;
     }
 
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
     public function getCourse(): Course
     {
         return $this->course;
@@ -415,14 +423,13 @@ class CDocument extends AbstractResource implements ResourceInterface, ResourceT
         return $this;
     }
 
-    public function postPersist(LifecycleEventArgs $args)
+    /*public function postPersist(LifecycleEventArgs $args)
     {
         // Update id with iid value
         $em = $args->getEntityManager();
-        $this->setId($this->getIid());
         $em->persist($this);
         $em->flush();
-    }
+    }*/
 
     /**
      * Resource identifier.

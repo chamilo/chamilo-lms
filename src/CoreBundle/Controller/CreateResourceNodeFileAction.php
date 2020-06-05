@@ -13,26 +13,32 @@ class CreateResourceNodeFileAction
 {
     public function __invoke(Request $request): CDocument
     {
-        $uploadedFile = null;
-        /** @var UploadedFile $uploadedFile */
-        if ($request->files->count() > 0) {
-            $uploadedFile = $request->files->get('resourceFile');
-            if (!$uploadedFile) {
-                throw new BadRequestHttpException('"resourceFile" is required');
-            }
-        }
         $document = new CDocument();
         $title = $request->get('title');
-        if (empty($title) && $uploadedFile) {
+
+        if ('file' === $request->get('filetype') && $request->files->count() > 0) {
+            /** @var UploadedFile $uploadedFile */
+            $uploadedFile = $request->files->get('uploadFile');
+            if (!$uploadedFile) {
+                throw new BadRequestHttpException('"uploadFile" is required');
+            }
             $title = $uploadedFile->getClientOriginalName();
+            $document->setUploadFile($uploadedFile);
         }
+
+        if ($request->request->has('resourceLinks')) {
+            $links = json_decode('['.$request->get('resourceLinks').']', true);
+            if (empty($links)) {
+                throw new \InvalidArgumentException('sharingLinks is not a json');
+            }
+            $document->setResourceLinkList($links);
+        }
+
         $document->setTitle($title);
         $document->setComment($request->get('comment'));
-        $nodeId = (int) str_replace('/api/resource_nodes/', '', $request->get('parentResourceNode'));
+
+        $nodeId = (int) $request->get('parentResourceNodeId');
         $document->setParentResourceNode($nodeId);
-        if ($uploadedFile) {
-            $document->setResourceFile($uploadedFile);
-        }
 
         return $document;
     }

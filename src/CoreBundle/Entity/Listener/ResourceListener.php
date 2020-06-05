@@ -6,6 +6,7 @@ namespace Chamilo\CoreBundle\Entity\Listener;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceFile;
+use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\ResourceToCourseInterface;
 use Chamilo\CoreBundle\Entity\ResourceToRootInterface;
@@ -15,6 +16,7 @@ use Cocur\Slugify\SlugifyInterface;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Security;
 
@@ -49,7 +51,7 @@ class ResourceListener
             $sessionRequest = $request->getSession();
 
             if (null === $sessionRequest) {
-                throw new \Exception('An Session is needed');
+                throw new \Exception('An Session request is needed');
             }
 
             $id = $sessionRequest->get('access_url_id');
@@ -71,7 +73,6 @@ class ResourceListener
 
     public function prePersist(AbstractResource $resource, LifecycleEventArgs $args)
     {
-        error_log('ResourceListener prePersist '.get_class($resource));
         $em = $args->getEntityManager();
         $request = $this->request;
 
@@ -82,19 +83,30 @@ class ResourceListener
         }
 
         if ($resource->hasResourceNode()) {
+            // This will attach the resource to the main resource node root (Example a course).
             if ($resource instanceof ResourceToRootInterface) {
                 $url = $this->getAccessUrl($em);
                 $resource->getResourceNode()->setParent($url->getResourceNode());
             }
 
-            // Do not override resource node already added.
+            // Do not override resource node, it's already added.
             return true;
         }
 
         // Add resource node
         $creator = $this->security->getUser();
+
+        if (null === $creator) {
+            throw new \Exception('User creator not found');
+        }
+
         $resourceNode = new ResourceNode();
         $resourceName = $resource->getResourceName();
+
+        if (empty($resourceName)) {
+            throw new \Exception('Resource needs a name');
+        }
+
         $extension = $this->slugify->slugify(pathinfo($resourceName, PATHINFO_EXTENSION));
 
         if (empty($extension)) {
@@ -110,6 +122,11 @@ class ResourceListener
         $class .= 'Repository';
         $name = $this->toolChain->getResourceTypeNameFromRepository($class);
         $resourceType = $repo->findOneBy(['name' => $name]);
+
+        if (null === $resourceType) {
+            throw new \Exception('ResourceType not found');
+        }
+
         $resourceNode
             ->setTitle($resourceName)
             ->setSlug($slug)
@@ -117,6 +134,7 @@ class ResourceListener
             ->setResourceType($resourceType)
         ;
 
+        // Add resource directly to the resource node root (Example: for a course resource).
         if ($resource instanceof ResourceToRootInterface) {
             $url = $this->getAccessUrl($em);
             $resourceNode->setParent($url->getResourceNode());
@@ -128,16 +146,38 @@ class ResourceListener
             $resourceNode->setParent($parent);
         }
 
-        if ($resource->hasResourceFile()) {
+        if ($resource->hasUploadFile()) {
             /** @var File $uploadedFile */
-            $uploadedFile = $request->getCurrentRequest()->files->get('resourceFile');
-            $resourceFile = new ResourceFile();
-            $resourceFile->setName($uploadedFile->getFilename());
-            $resourceFile->setOriginalName($uploadedFile->getFilename());
-            $resourceFile->setFile($uploadedFile);
+            $uploadedFile = $request->getCurrentRequest()->files->get('uploadFile');
+            if ($uploadedFile instanceof UploadedFile) {
+                $resourceFile = new ResourceFile();
+                $resourceFile->setName($uploadedFile->getFilename());
+                $resourceFile->setOriginalName($uploadedFile->getFilename());
+                $resourceFile->setFile($uploadedFile);
+                $em->persist($resourceFile);
+                $resourceNode->setResourceFile($resourceFile);
+            }
+        }
 
-            $em->persist($resourceFile);
-            $resourceNode->setResourceFile($resourceFile);
+        $links = $resource->getResourceLinkList();
+        if ($links) {
+            $courseRepo = $em->getRepository('ChamiloCoreBundle:Course');
+            $sessionRepo = $em->getRepository('ChamiloCoreBundle:Session');
+
+            foreach ($links as $link) {
+                $resourceLink = new ResourceLink();
+                if (isset($link['c_id'])) {
+                    $course = $courseRepo->find($link['c_id']);
+                    $resourceLink->setCourse($course);
+                }
+                if (isset($link['session_id'])) {
+                    $session = $sessionRepo->find($link['session_id']);
+                    $resourceLink->setSession($session);
+                }
+                $resourceLink->setVisibility($link['visibility']);
+                $resourceLink->setResourceNode($resourceNode);
+                $em->persist($resourceLink);
+            }
         }
 
         if ($resource instanceof ResourceToCourseInterface) {

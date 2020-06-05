@@ -54,7 +54,7 @@ class ResourceNode
 
     /**
      * @Assert\NotBlank()
-     * @Groups({"resource_node:read", "resource_node:write", "document:read"})
+     * @Groups({"resource_node:read", "resource_node:write", "document:read", "document:write"})
      * @Gedmo\TreePathSource
      *
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
@@ -76,7 +76,7 @@ class ResourceNode
     protected $resourceType;
 
     /**
-     * @Groups({"resource_node:read", "resource_node:write"})
+     * @Groups({"resource_node:read", "resource_node:write", "document:write"})
      *
      * @var ResourceLink[]
      *
@@ -87,7 +87,7 @@ class ResourceNode
     /**
      * @var ResourceFile available file for this node
      *
-     * @Groups({"resource_node:read", "resource_node:write", "document:read"})
+     * @Groups({"resource_node:read", "resource_node:write", "document:read", "document:write"})
      *
      * @ORM\OneToOne(targetEntity="ResourceFile", inversedBy="resourceNode", orphanRemoval=true)
      * @ORM\JoinColumn(name="resource_file_id", referencedColumnName="id", onDelete="CASCADE")
@@ -97,7 +97,7 @@ class ResourceNode
     /**
      * @var User the creator of this node
      * @Assert\Valid()
-     * @Groups({"resource_node:read", "resource_node:write"})
+     * @Groups({"resource_node:read", "resource_node:write", "document:write"})
      * @ORM\ManyToOne(
      *     targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="resourceNodes"
      * )

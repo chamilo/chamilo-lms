@@ -6,7 +6,6 @@ namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiSubresource;
-use APY\DataGridBundle\Grid\Mapping as GRID;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -30,8 +29,7 @@ abstract class AbstractResource
     /**
      * @Assert\Valid()
      * @ApiSubresource()
-     * @Groups({"resource_node:read", "resource_node:write"})
-     * @GRID\Column(field="resourceNode.createdAt", title="Date added", type="datetime")
+     * @Groups({"resource_node:read", "resource_node:write", "document:read", "document:write"})
      * @ORM\OneToOne(
      *     targetEntity="Chamilo\CoreBundle\Entity\ResourceNode",
      *     cascade={"persist", "remove"},
@@ -42,15 +40,29 @@ abstract class AbstractResource
     public $resourceNode;
 
     /**
-     * @Groups({"resource_node:read", "resource_node:write", "document:read","document:write"})
+     * @Groups({"resource_node:read", "resource_node:write", "document:read", "document:write"})
      */
     public $parentResourceNode;
 
     /**
      * @ApiProperty(iri="http://schema.org/image")
-     * @Groups({"resource_node:read", "resource_node:write", "document:read","document:write"})
+     * @Groups({"resource_node:read", "resource_node:write", "document:read", "document:write"})
      */
-    public $resourceFile;
+    public $uploadFile;
+
+    public $resourceLinkList;
+
+    public function setResourceLinkList(array $links)
+    {
+        $this->resourceLinkList = $links;
+
+        return $this;
+    }
+
+    public function getResourceLinkList(): array
+    {
+        return $this->resourceLinkList;
+    }
 
     public function hasParentResourceNode(): bool
     {
@@ -69,19 +81,19 @@ abstract class AbstractResource
         return $this->parentResourceNode;
     }
 
-    public function hasResourceFile(): bool
+    public function hasUploadFile(): bool
     {
-        return null !== $this->resourceFile;
+        return null !== $this->uploadFile;
     }
 
-    public function getResourceFile()
+    public function getUploadFile()
     {
-        return $this->resourceFile;
+        return $this->uploadFile;
     }
 
-    public function setResourceFile($file)
+    public function setUploadFile($file)
     {
-        $this->resourceFile = $file;
+        $this->uploadFile = $file;
 
         return $this;
     }

@@ -1147,13 +1147,22 @@ function addListeners(){
 
     if (olms.lms_item_type=='sco') {
         //window.addEventListener('beforeunload', lastCall);
+        window.addEventListener('beforeunload', function (e) {
+            var preventsBeforeUnload = <?php echo (int) api_get_configuration_value('lp_prevents_beforeunload') ?>;
 
-        $(window).on('beforeunload', function(e) {
+            if (preventsBeforeUnload) {
+                e.preventDefault();
+            }
+
             console.log('beforeunload');
             lastCall();
             logit_lms('beforeunload called', 3);
 
-            return 'true';
+            if (preventsBeforeUnload) {
+                e.returnValue = 'true';
+            } else {
+                delete e['returnValue'];
+            }
         });
 
         $(window).on('unload', function(e) {
@@ -1161,7 +1170,6 @@ function addListeners(){
             savedata(olms.lms_item_id);
             logit_lms('unload called', 3);
             lastCall();
-            return 'true';
         });
         logit_lms('Added unload savedata() on window unload', 3);
     }

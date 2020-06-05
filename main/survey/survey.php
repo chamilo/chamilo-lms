@@ -169,7 +169,7 @@ $survey_actions = '';
 if ($survey_data['survey_type'] != 3) {
     $survey_actions = '<a href="'.api_get_path(WEB_CODE_PATH).'survey/create_new_survey.php?'.api_get_cidreq(
         ).'&action=edit&survey_id='.$survey_id.'">'.
-        Display::return_icon('edit.png', get_lang('EditSurvey'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::return_icon('settings.png', get_lang('EditSurvey'), '', ICON_SIZE_MEDIUM).'</a>';
 }
 $survey_actions .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq().'&action=delete&survey_id='.$survey_id.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('DeleteSurvey').'?', ENT_QUOTES)).'\')) return false;">'.
     Display::return_icon('delete.png', get_lang('DeleteSurvey'), '', ICON_SIZE_MEDIUM).'</a>';

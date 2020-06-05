@@ -11,7 +11,6 @@
                   @input="$v.item.title.$touch()"
                   @blur="$v.item.title.$touch()"
           />
-          <input type="hidden" v-model="item.parentResourceNodeId" />
         </v-col>
       </v-row>
     </v-container>

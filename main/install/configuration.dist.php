@@ -1540,6 +1540,9 @@ $_configuration['auth_password_links'] = [
 //Allows teachers to edit survey questions after students have answered them
 //$_configuration['survey_allow_answered_question_edit'] = false;
 
+// Allows prevent to the user before leaving a learning path
+//$_configuration['lp_prevents_beforeunload'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

@@ -2660,7 +2660,7 @@ JAVASCRIPT;
             }
         }
 
-        return ['extra_fields' => $extraFields, 'condition_array' => $conditionArray,];
+        return ['extra_fields' => $extraFields, 'condition_array' => $conditionArray];
     }
 
     /**

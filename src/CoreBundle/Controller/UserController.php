@@ -6,17 +6,16 @@ namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Repository\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\UserRepository;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * Class UserController.
- *
  * @Route("/user")
  *
  * @author Julio Montoya <gugli100@gmail.com>
  */
-class UserController extends BaseController
+class UserController extends AbstractController
 {
     /**
      * Public profile.

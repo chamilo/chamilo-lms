@@ -14,7 +14,6 @@ use Symfony\Component\Form\Extension\Core\Type\TimezoneType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
  * Class ProfileType
@@ -157,14 +156,6 @@ class ProfileType extends AbstractType
             }
         );*/
     }
-
-    /**
-     * @deprecated Remove it when bumping requirements to Symfony 2.7+
-     */
-    /*public function setDefaultOptions(OptionsResolverInterface $resolver)
-    {
-        $this->configureOptions($resolver);
-    }*/
 
     public function configureOptions(OptionsResolver $resolver)
     {

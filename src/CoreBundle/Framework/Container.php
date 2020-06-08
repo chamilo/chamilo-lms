@@ -163,7 +163,7 @@ class Container
     }
 
     /**
-     * @return \Symfony\Bundle\TwigBundle\TwigEngine
+     * @return object|Environment|null
      */
     public static function getTemplating()
     {
@@ -623,8 +623,6 @@ class Container
      * Gets a sonata page.
      *
      * @param string $slug
-     *
-     * @return Page
      */
     public static function getPage($slug)
     {

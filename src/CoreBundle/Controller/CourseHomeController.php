@@ -6,7 +6,6 @@ namespace Chamilo\CoreBundle\Controller;
 
 use Career;
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\Tool;
 use Chamilo\CoreBundle\Tool\AbstractTool;
 use Chamilo\CoreBundle\ToolChain;
 use Chamilo\CourseBundle\Controller\ToolBaseController;

@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CurriculumCategoryType extends AbstractType
 {
@@ -54,7 +54,7 @@ class CurriculumCategoryType extends AbstractType
         $builder->add('submit', 'submit');
     }
 
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
             [

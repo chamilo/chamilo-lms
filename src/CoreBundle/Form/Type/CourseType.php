@@ -5,9 +5,9 @@
 namespace Chamilo\CoreBundle\Form\Type;
 
 use Chamilo\CoreBundle\Entity\Course;
-use Sonata\Form\Type\DatePickerType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\LocaleType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -41,7 +41,7 @@ class CourseType extends AbstractType
             //->add('disk_quota', 'text')
             ->add(
                 'expiration_date',
-                DatePickerType::class,
+                DateType::class,
                 ['required' => false]
             )
             /* ->add('general_coach', 'entity', array(

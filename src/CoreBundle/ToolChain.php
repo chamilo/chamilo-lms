@@ -125,8 +125,8 @@ class ToolChain
             ->setMask(ResourceNodeVoter::getReaderMask())
         ;
 
-        $tool->addToolResourceRight($toolResourceRight);
-        $tool->addToolResourceRight($toolResourceRightReader);
+        //$tool->addToolResourceRight($toolResourceRight);
+        //$tool->addToolResourceRight($toolResourceRightReader);
     }
 
     public function addToolsInCourse(CToolRepository $toolRepository, Course $course): Course

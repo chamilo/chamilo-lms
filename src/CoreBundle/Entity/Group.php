@@ -26,6 +26,7 @@ class Group
      * @ORM\Column(name="name", type="string", length=255, nullable=false, unique=true)
      */
     protected $name;
+
     /**
      * @var array
      * @ORM\Column(name="roles", type="array")
@@ -84,12 +85,12 @@ class Group
         return $this;
     }
 
-    /**
-     * @param string $name
-     *
-     * @return Group
-     */
-    public function setName($name)
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): self
     {
         $this->name = $name;
 

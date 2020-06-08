@@ -21,7 +21,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use UserManager;
 
 /**
  * Class SessionController.
@@ -76,8 +75,8 @@ class SessionController extends AbstractController
             /** @var User $courseCoach */
             foreach ($courseCoaches as $courseCoach) {
                 $coachData = [
-                    'complete_name' => UserManager::formatUserFullName($courseCoach),
-                    'image' => UserManager::getUserPicture(
+                    'complete_name' => \UserManager::formatUserFullName($courseCoach),
+                    'image' => \UserManager::getUserPicture(
                         $courseCoach->getId(),
                         USER_IMAGE_SIZE_ORIGINAL
                     ),

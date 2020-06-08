@@ -19,7 +19,6 @@
             <directory name="src/CoreBundle/Menu" />
             <directory name="src/CoreBundle/Migrations" />
             <directory name="src/CoreBundle/Component/Editor" />
-<!--            <directory name="src/CourseBundle" />-->
             <directory name="src/CourseBundle/Component/CourseCopy" />
             <directory name="src/CourseBundle/Admin" />
             <directory name="src/GraphQlBundle" />

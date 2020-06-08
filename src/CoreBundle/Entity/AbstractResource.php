@@ -52,6 +52,8 @@ abstract class AbstractResource
 
     public $resourceLinkList;
 
+    abstract public function getResourceName(): string;
+
     public function setResourceLinkList(array $links)
     {
         $this->resourceLinkList = $links;

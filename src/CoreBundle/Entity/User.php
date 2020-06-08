@@ -1787,7 +1787,7 @@ class User implements UserInterface, EquatableInterface
     /**
      * @param $boolean
      *
-     * @return $this|BaseUser
+     * @return $this
      */
     public function setEnabled($boolean)
     {

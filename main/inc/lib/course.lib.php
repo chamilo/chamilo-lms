@@ -2763,7 +2763,9 @@ class CourseManager
                 }
                 if (api_strcasecmp($course_title_precedent, $course_title) < 0) {
                     $course_found = true;
-                    $course_sort = $courses['sort'];
+                    if (!empty($courses['sort'])) {
+                        $course_sort = $courses['sort'];
+                    }
                     if ($counter == 0) {
                         $sql = "UPDATE $TABLECOURSUSER
                                 SET sort = sort+1

@@ -9,8 +9,6 @@
  * Most code here is ripped from /main/course_home/course_home.php.
  *
  * @author Bert Steppé
- *
- * @package chamilo.gradebook
  */
 require_once __DIR__.'/../inc/global.inc.php';
 api_block_anonymous_users();

@@ -1,11 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-/**
- * Script.
- *
- * @package chamilo.gradebook
- */
 require_once __DIR__.'/../inc/global.inc.php';
 require_once '../forum/forumfunction.inc.php';
 $current_course_tool = TOOL_GRADEBOOK;
@@ -24,7 +19,7 @@ $tbl_link = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 $session_id = api_get_session_id();
 $typeSelected = isset($_GET['typeselected']) ? intval($_GET['typeselected']) : null;
 
-if ($session_id == 0) {
+if (0 == $session_id) {
     $all_categories = Category::load(
         null,
         null,
@@ -60,7 +55,7 @@ if ($typeform->validate() && isset($_GET['newtypeselected'])) {
 }
 
 // link type selected, show 2nd form to retrieve the link data
-if (isset($typeSelected) && $typeSelected != '0') {
+if (isset($typeSelected) && '0' != $typeSelected) {
     $url = api_get_self().'?selectcat='.$selectCat.'&typeselected='.$typeSelected.'&course_code='.$courseCode.'&'.api_get_cidreq();
 
     $addform = new LinkAddEditForm(
@@ -101,7 +96,7 @@ if (isset($typeSelected) && $typeSelected != '0') {
         // Update view_properties
         if (isset($typeSelected) &&
             5 == $typeSelected &&
-            (isset($addvalues['select_link']) && $addvalues['select_link'] != "")
+            (isset($addvalues['select_link']) && "" != $addvalues['select_link'])
         ) {
             $sql1 = 'SELECT thread_title from '.$tbl_forum_thread.'
 					 WHERE 
@@ -117,7 +112,7 @@ if (isset($typeSelected) && $typeSelected != '0') {
                             type = 5;';
             $res_l = Database::query($sql_l);
             $row = Database::fetch_row($res_l);
-            if ($row[0] == 0) {
+            if (0 == $row[0]) {
                 $link->add();
                 $sql = 'UPDATE '.$tbl_forum_thread.' SET
                             thread_qualify_max= "'.api_float_val($addvalues['weight']).'",
@@ -142,7 +137,7 @@ if (isset($typeSelected) && $typeSelected != '0') {
         Event::registerLog($logInfo);
 
         $addvalue_result = !empty($addvalues['addresult']) ? $addvalues['addresult'] : [];
-        if ($addvalue_result == 1) {
+        if (1 == $addvalue_result) {
             header('Location: gradebook_add_result.php?selecteval='.$link->get_ref_id().'&'.api_get_cidreq());
             exit;
         } else {

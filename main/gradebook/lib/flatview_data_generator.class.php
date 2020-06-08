@@ -7,8 +7,6 @@
  * used for the teacher's flat view.
  *
  * @author Bert Steppé
- *
- * @package chamilo.gradebook
  */
 class FlatViewDataGenerator
 {
@@ -118,7 +116,7 @@ class FlatViewDataGenerator
         }
 
         $parent_id = $this->category->get_parent_id();
-        if ($parent_id == 0 ||
+        if (0 == $parent_id ||
             isset($this->params['only_subcat']) &&
             $this->params['only_subcat'] == $this->category->get_id()
         ) {
@@ -150,7 +148,7 @@ class FlatViewDataGenerator
         );
 
         $evaluationsAdded = [];
-        if ($parent_id == 0 && !empty($allcat)) {
+        if (0 == $parent_id && !empty($allcat)) {
             // Means there are any subcategory
             /** @var Category $sub_cat */
             foreach ($allcat as $sub_cat) {
@@ -162,7 +160,7 @@ class FlatViewDataGenerator
                     api_get_self().'?selectcat='.$sub_cat->get_id().'&'.api_get_cidreq()
                 ).$add_weight;
 
-                if (api_get_setting('gradebook_detailed_admin_view') === 'true') {
+                if ('true' === api_get_setting('gradebook_detailed_admin_view')) {
                     $links = $sub_cat->get_links();
                     $evaluations = $sub_cat->get_evaluations();
 
@@ -194,7 +192,7 @@ class FlatViewDataGenerator
         } else {
             if (!isset($this->params['only_total_category']) ||
                 (isset($this->params['only_total_category']) &&
-                    $this->params['only_total_category'] == false)
+                    false == $this->params['only_total_category'])
             ) {
                 for ($count = 0; ($count < $items_count) && ($items_start + $count < count($this->evals_links)); $count++) {
                     /** @var AbstractLink $item */
@@ -359,7 +357,7 @@ class FlatViewDataGenerator
 
         $parent_id = $this->category->get_parent_id();
 
-        if ($parent_id == 0 ||
+        if (0 == $parent_id ||
             (isset($this->params['only_subcat']) && $this->params['only_subcat'] == $this->category->get_id())
         ) {
             $main_weight = $this->category->get_weight();
@@ -441,12 +439,12 @@ class FlatViewDataGenerator
             );
 
             $evaluationsAdded = [];
-            if ($parent_id == 0 && !empty($allcat)) {
+            if (0 == $parent_id && !empty($allcat)) {
                 /** @var Category $sub_cat */
                 foreach ($allcat as $sub_cat) {
                     $score = $sub_cat->calc_score($user_id);
 
-                    if (api_get_setting('gradebook_detailed_admin_view') === 'true') {
+                    if ('true' === api_get_setting('gradebook_detailed_admin_view')) {
                         $links = $sub_cat->get_links();
                         /** @var ExerciseLink $link */
                         $linkScoreList = [];
@@ -471,7 +469,7 @@ class FlatViewDataGenerator
                     }
 
                     $real_score = $score;
-                    $divide = $score[1] == 0 ? 1 : $score[1];
+                    $divide = 0 == $score[1] ? 1 : $score[1];
                     $sub_cat_percentage = $sum_categories_weight_array[$sub_cat->get_id()];
                     $item_value = $score[0] / $divide * $main_weight;
 
@@ -486,7 +484,7 @@ class FlatViewDataGenerator
                         $defaultStyle = (int) $style;
                     }
 
-                    if (api_get_setting('gradebook_show_percentage_in_reports') === 'false') {
+                    if ('false' === api_get_setting('gradebook_show_percentage_in_reports')) {
                         $defaultShowPercentageValue = SCORE_SIMPLE;
                         if (!empty($style)) {
                             $defaultShowPercentageValue = $style;
@@ -518,10 +516,10 @@ class FlatViewDataGenerator
 
                     if (!isset($this->params['only_total_category']) ||
                         (isset($this->params['only_total_category']) &&
-                            $this->params['only_total_category'] == false)
+                            false == $this->params['only_total_category'])
                     ) {
                         if (!$show_all) {
-                            if (api_get_setting('gradebook_detailed_admin_view') === 'true') {
+                            if ('true' === api_get_setting('gradebook_detailed_admin_view')) {
                                 $finalList = array_merge($linkScoreList, $evalScoreList);
                                 if (empty($finalList)) {
                                     $average = 0;
@@ -660,7 +658,7 @@ class FlatViewDataGenerator
 
             // Fixing total when using one or multiple gradebooks.
             if (empty($parentCategoryIdFilter)) {
-                if ($this->category->get_parent_id() == 0) {
+                if (0 == $this->category->get_parent_id()) {
                     if (isset($score[0])) {
                         $item_value = $score[0] / $divide * $item->get_weight();
                     } else {
@@ -686,7 +684,7 @@ class FlatViewDataGenerator
                 SCORE_ONLY_SCORE
             );
 
-            if (api_get_setting('gradebook_show_percentage_in_reports') == 'false') {
+            if ('false' == api_get_setting('gradebook_show_percentage_in_reports')) {
                 $defaultShowPercentageValue = SCORE_SIMPLE;
                 if (!empty($style)) {
                     $defaultShowPercentageValue = $style;
@@ -716,7 +714,7 @@ class FlatViewDataGenerator
             }
 
             if (!isset($this->params['only_total_category']) ||
-                (isset($this->params['only_total_category']) && $this->params['only_total_category'] == false)
+                (isset($this->params['only_total_category']) && false == $this->params['only_total_category'])
             ) {
                 if (!$show_all) {
                     if (in_array(
@@ -847,11 +845,11 @@ class FlatViewDataGenerator
                 $item = $this->evals_links[$count];
                 $score = $item->calc_score($user[0]);
 
-                $divide = (($score[1]) == 0) ? 1 : $score[1];
+                $divide = (0 == ($score[1])) ? 1 : $score[1];
                 $item_value += $score[0] / $divide * $item->get_weight();
                 $item_total += $item->get_weight();
 
-                $score_denom = ($score[1] == 0) ? 1 : $score[1];
+                $score_denom = (0 == $score[1]) ? 1 : $score[1];
                 $score_final = ($score[0] / $score_denom) * 100;
                 $row[] = $score_final;
             }
@@ -901,12 +899,12 @@ class FlatViewDataGenerator
                 'ORDER BY id'
             );
             $parent_id = $this->category->get_parent_id();
-            if ($parent_id == 0 && !empty($allcat)) {
+            if (0 == $parent_id && !empty($allcat)) {
                 foreach ($allcat as $sub_cat) {
                     $score = $sub_cat->calc_score($user[0]);
                     $real_score = $score;
                     $main_weight = $this->category->get_weight();
-                    $divide = $score[1] == 0 ? 1 : $score[1];
+                    $divide = 0 == $score[1] ? 1 : $score[1];
 
                     //$sub_cat_percentage = $sum_categories_weight_array[$sub_cat->get_id()];
                     $item_value = $score[0] / $divide * $main_weight;
@@ -943,10 +941,10 @@ class FlatViewDataGenerator
                 for ($count = 0; $count < count($this->evals_links); $count++) {
                     $item = $this->evals_links[$count];
                     $score = $item->calc_score($user[0]);
-                    $divide = $score[1] == 0 ? 1 : $score[1];
+                    $divide = 0 == $score[1] ? 1 : $score[1];
                     $item_value += $score[0] / $divide * $item->get_weight();
                     $item_total += $item->get_weight();
-                    $score_denom = ($score[1] == 0) ? 1 : $score[1];
+                    $score_denom = (0 == $score[1]) ? 1 : $score[1];
                     $score_final = ($score[0] / $score_denom) * 100;
                     $row[] = [
                         $score_final,

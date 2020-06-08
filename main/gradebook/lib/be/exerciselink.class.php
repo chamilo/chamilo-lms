@@ -6,8 +6,6 @@
  * Defines a gradebook ExerciseLink object.
  *
  * @author Bert Steppé
- *
- * @package chamilo.gradebook
  */
 class ExerciseLink extends AbstractLink
 {
@@ -24,7 +22,7 @@ class ExerciseLink extends AbstractLink
         parent::__construct();
         $this->set_type(LINK_EXERCISE);
         $this->is_hp = $hp;
-        if ($this->is_hp == 1) {
+        if (1 == $this->is_hp) {
             $this->set_type(LINK_HOTPOTATOES);
         }
     }
@@ -261,7 +259,7 @@ class ExerciseLink extends AbstractLink
         $exercise->read($exerciseId);
 
         if (!$this->is_hp) {
-            if ($exercise->exercise_was_added_in_lp == false) {
+            if (false == $exercise->exercise_was_added_in_lp) {
                 $sql = "SELECT * FROM $tblStats
                         WHERE
                             exe_exo_id = $exerciseId AND
@@ -288,7 +286,7 @@ class ExerciseLink extends AbstractLink
                             c_id = $courseId ";
             }
 
-            if (!empty($stud_id) && $type != 'ranking') {
+            if (!empty($stud_id) && 'ranking' != $type) {
                 $sql .= " AND exe_user_id = $stud_id ";
             }
             $sql .= ' ORDER BY exe_id DESC';

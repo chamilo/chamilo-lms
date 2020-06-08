@@ -14,8 +14,6 @@ use CpChart\Image as pImage;
  * @author Stijn Konings
  * @author Bert Steppé  - (refactored, optimised)
  * @author Julio Montoya Armas - Gradebook Graphics
- *
- * @package chamilo.gradebook
  */
 class FlatViewTable extends SortableTable
 {
@@ -415,7 +413,7 @@ class FlatViewTable extends SortableTable
             $users_sorting = ($this->column == 0 ? FlatViewDataGenerator::FVDG_SORT_LASTNAME : FlatViewDataGenerator::FVDG_SORT_FIRSTNAME);
         }
 
-        if ($this->direction == 'DESC') {
+        if ('DESC' == $this->direction) {
             $users_sorting |= FlatViewDataGenerator::FVDG_SORT_DESC;
         } else {
             $users_sorting |= FlatViewDataGenerator::FVDG_SORT_ASC;

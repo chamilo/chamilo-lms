@@ -7,8 +7,6 @@
  *
  * @author Stijn Konings
  * @author Bert Steppé
- *
- * @package chamilo.gradebook
  */
 class ResultTable extends SortableTable
 {
@@ -51,7 +49,7 @@ class ResultTable extends SortableTable
         }
         $scoredisplay = ScoreDisplay::instance();
         $column = 0;
-        if ($this->iscourse == '1') {
+        if ('1' == $this->iscourse) {
             $this->set_header($column++, '', false);
             $this->set_form_actions([
                     'delete' => get_lang('Delete'),
@@ -142,7 +140,7 @@ class ResultTable extends SortableTable
         $sortable_data = [];
         foreach ($data_array as $item) {
             $row = [];
-            if ($this->iscourse == '1') {
+            if ('1' == $this->iscourse) {
                 $row[] = $item['result_id'];
             }
             if ($isWesternNameOrder) {

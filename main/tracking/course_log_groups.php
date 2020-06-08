@@ -11,7 +11,7 @@ $course_code = api_get_course_id();
 $sessionId = api_get_session_id();
 
 $this_section = SECTION_COURSES;
-if ($from == 'myspace') {
+if ('myspace' == $from) {
     $from_myspace = true;
     $this_section = "session_my_space";
 }

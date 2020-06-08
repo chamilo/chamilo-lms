@@ -3,8 +3,6 @@
 
 /**
  * Gradebook controller.
- *
- * @package chamilo.gradebook
  */
 
 // $cidReset : This is the main difference with gradebook.php, here we say,
@@ -231,7 +229,7 @@ if ($selectCat > 0 && $isStudentView) {
 if (isset($_GET['createallcategories'])) {
     GradebookUtils::block_students();
     $coursecat = Category::get_not_created_course_categories($stud_id);
-    if (!count($coursecat) == 0) {
+    if (0 == !count($coursecat)) {
         foreach ($coursecat as $row) {
             $cat = new Category();
             $cat->set_name($row[1]);
@@ -814,7 +812,7 @@ if (!empty($selectCat)) {
     $cat = new Category();
     $course_id = CourseManager::get_course_by_category($selectCat);
     $show_message = $cat->show_message_resource_delete($course_id);
-    if ($show_message == '') {
+    if ('' == $show_message) {
         // Student
         if (!api_is_allowed_to_edit() && !api_is_excluded_user_type()) {
             $certificate = Category::generateUserCertificate(

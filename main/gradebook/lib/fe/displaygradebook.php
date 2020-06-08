@@ -3,8 +3,6 @@
 
 /**
  * Class DisplayGradebook.
- *
- * @package chamilo.gradebook
  */
 class DisplayGradebook
 {
@@ -21,7 +19,7 @@ class DisplayGradebook
         $header = null;
         if (api_is_allowed_to_edit(null, true)) {
             $header = '<div class="actions">';
-            if ($page !== 'statistics') {
+            if ('statistics' !== $page) {
                 $header .= '<a href="'.Category::getUrl().'selectcat='.$selectcat.'">'.
                     Display::return_icon('back.png', get_lang('FolderView'), '', ICON_SIZE_MEDIUM)
                     .'</a>';
@@ -61,7 +59,7 @@ class DisplayGradebook
         if ($evalobj->has_results()) {
             // TODO this check needed ?
             $score = $evalobj->calc_score();
-            if ($score != null) {
+            if (null != $score) {
                 $model = ExerciseLib::getCourseScoreModel();
                 if (empty($model)) {
                     $average = get_lang('Average').' :<b> '.$scoredisplay->display_score($score, SCORE_AVERAGE).'</b>';
@@ -86,7 +84,7 @@ class DisplayGradebook
         }
 
         $description = '';
-        if (!$evalobj->get_description() == '') {
+        if ('' == !$evalobj->get_description()) {
             $description = get_lang('Description').' :<b> '.$evalobj->get_description().'</b><br>';
         }
 

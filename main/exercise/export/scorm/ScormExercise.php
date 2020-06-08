@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CQuiz;
@@ -89,7 +90,7 @@ class ScormExercise
     public function start_body()
     {
         return '<body>'.
-            '<h1>'.$this->exercise->selectTitle().'</h1><p>'.$this->exercise->selectDescription()."</p>".
+            '<h1>'.$this->exercise->selectTitle().'</h1><p>'.$this->exercise->selectDescription().'</p>'.
             '<form id="chamilo_scorm_form" method="post" action="">'.
             '<table width="100%">';
     }

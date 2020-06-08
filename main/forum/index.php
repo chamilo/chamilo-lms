@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CForumPost;
@@ -21,8 +22,6 @@ use ChamiloSession as Session;
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @copyright Ghent University
  * @copyright Patrick Cool
- *
- * @package chamilo.forum
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -59,11 +58,9 @@ if (api_is_in_gradebook()) {
 }
 
 $search_forum = isset($_GET['search']) ? Security::remove_XSS($_GET['search']) : '';
-
-/* ACTIONS */
 $action = isset($_GET['action']) ? $_GET['action'] : '';
 
-if ($action === 'add') {
+if ('add' === $action) {
     switch ($_GET['content']) {
         case 'forum':
             $interbreadcrumb[] = [
@@ -164,7 +161,7 @@ if (!api_is_anonymous()) {
 $actionLeft = null;
 //if is called from learning path
 if (!empty($_GET['lp_id']) || !empty($_POST['lp_id'])) {
-    $url = "../lp/lp_controller.php?".api_get_cidreq()
+    $url = '../lp/lp_controller.php?'.api_get_cidreq()
         ."&gradebook=&action=add_item&type=step&lp_id='.$lp_id.'#resource_tab-5";
     $actionLeft .= Display::url(
         Display::return_icon(
@@ -221,7 +218,6 @@ if ($value && isset($value['value']) && !empty($value['value'])) {
 
 // Create a search-box
 $searchFilter = '';
-
 $translate = api_get_configuration_value('translate_html');
 if ($translate) {
     $form = new FormValidator('search_simple', 'get', api_get_self().'?'.api_get_cidreq(), null, null, 'inline');
@@ -456,7 +452,7 @@ if (is_array($forumCategories)) {
                         $toolActions = null;
                         $forumInfo['alert'] = null;
                         // The number of topics and posts.
-                        if ($hideNotifications == false) {
+                        if (false == $hideNotifications) {
                             // The number of topics and posts.
                             if ($forum['forum_of_group'] !== '0') {
                                 if (is_array($mywhatsnew_post_info) && !empty($mywhatsnew_post_info)) {
@@ -587,7 +583,7 @@ $tpl->assign('default_user_language', $defaultUserLanguage);
 $tpl->assign('languages', $languages);
 $extraFieldValue = new ExtraFieldValue('course');
 $value = $extraFieldValue->get_values_by_handler_and_field_variable(api_get_course_int_id(), 'global_forum');
-if ($value && isset($value['value']) && $value['value'] == 1) {
+if ($value && isset($value['value']) && 1 == $value['value']) {
     $layout = $tpl->get_template('forum/global_list.tpl');
 } else {
     $layout = $tpl->get_template('forum/list.tpl');

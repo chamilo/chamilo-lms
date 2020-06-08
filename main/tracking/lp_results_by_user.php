@@ -5,8 +5,6 @@
  * Exercise results from Learning paths.
  *
  * @todo implement pagination
- *
- * @package chamilo.tracking
  */
 require_once __DIR__.'/../inc/global.inc.php';
 

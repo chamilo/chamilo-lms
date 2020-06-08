@@ -5,8 +5,6 @@
  * Defines a gradebook Result object.
  *
  * @author Bert Steppé, Stijn Konings
- *
- * @package chamilo.gradebook
  */
 class Result
 {
@@ -107,7 +105,7 @@ class Result
             $result = Database::query($sql);
             $existEvaluation = Database::result($result, 0, 0);
 
-            if ($existEvaluation != 0) {
+            if (0 != $existEvaluation) {
                 if ($sessionId) {
                     $sql = 'SELECT c_id, user_id as user_id, status
                             FROM '.$tbl_session_rel_course_user.'
@@ -134,7 +132,7 @@ class Result
                                         evaluation_id="'.intval($evaluation_id).'";';
                     $res_verified = Database::query($sql_verified);
                     $info_verified = Database::result($res_verified, 0, 0);
-                    if ($info_verified == 0) {
+                    if (0 == $info_verified) {
                         $sql_insert = 'INSERT INTO '.$tbl_grade_results.'(user_id,evaluation_id,created_at,score)
 									   VALUES ("'.intval($list_user_course_list[$i]['user_id']).'","'.intval($evaluation_id).'","'.$current_date.'",0);';
                         Database::query($sql_insert);
@@ -164,7 +162,7 @@ class Result
             $paramcount++;
         }
         if (!empty($user_id)) {
-            if ($paramcount != 0) {
+            if (0 != $paramcount) {
                 $sql .= ' AND';
             } else {
                 $sql .= ' WHERE';
@@ -173,7 +171,7 @@ class Result
             $paramcount++;
         }
         if (!empty($evaluation_id)) {
-            if ($paramcount != 0) {
+            if (0 != $paramcount) {
                 $sql .= ' AND';
             } else {
                 $sql .= ' WHERE';

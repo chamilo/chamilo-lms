@@ -4,7 +4,7 @@
 {% block content %}
     {% if 'translate_html'|api_get_configuration_value %}
         <script>
-            $(document).ready(function () {
+            $(function () {
                 // default
                 $('.category-forum ').hide();
 

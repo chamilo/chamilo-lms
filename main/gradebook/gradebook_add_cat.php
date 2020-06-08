@@ -1,11 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-/**
- * Script.
- *
- * @package chamilo.gradebook
- */
 require_once __DIR__.'/../inc/global.inc.php';
 $_in_course = true;
 $course_code = api_get_course_id();

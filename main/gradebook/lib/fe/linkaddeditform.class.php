@@ -6,8 +6,6 @@
  *
  * @author Stijn Konings
  * @author Bert Steppé
- *
- * @package chamilo.gradebook
  */
 class LinkAddEditForm extends FormValidator
 {
@@ -72,7 +70,7 @@ class LinkAddEditForm extends FormValidator
             );
         }
 
-        if (count($category_object) == 1) {
+        if (1 == count($category_object)) {
             $this->addElement('hidden', 'select_gradebook', $category_object[0]->get_id());
         } else {
             $select_gradebook = $this->addElement(
@@ -89,7 +87,7 @@ class LinkAddEditForm extends FormValidator
                     if ($my_cat->get_course_code() == api_get_course_id()) {
                         $grade_model_id = $my_cat->get_grade_model_id();
                         if (empty($grade_model_id)) {
-                            if ($my_cat->get_parent_id() == 0) {
+                            if (0 == $my_cat->get_parent_id()) {
                                 $default_weight = $my_cat->get_weight();
                                 $select_gradebook->addoption(get_lang('Default'), $my_cat->get_id());
                             } else {
@@ -123,9 +121,9 @@ class LinkAddEditForm extends FormValidator
 
         $this->addElement('hidden', 'weight');
 
-        if ($form_type == self::TYPE_EDIT) {
+        if (self::TYPE_EDIT == $form_type) {
             $parent_cat = Category::load($link->get_category_id());
-            if ($parent_cat[0]->get_parent_id() == 0) {
+            if (0 == $parent_cat[0]->get_parent_id()) {
                 $values['weight'] = $link->get_weight();
             } else {
                 $cat = Category::load($parent_cat[0]->get_parent_id());

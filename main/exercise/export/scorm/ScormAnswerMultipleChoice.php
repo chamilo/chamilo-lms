@@ -43,7 +43,7 @@ class ScormAnswerMultipleChoice extends Answer
                 if ($this->correct[$i]) {
                     $jstmpc .= $i.',';
                 }
-                $jstmpw .= 'questions_answers_ponderation['.$questionId.']['.$i.'] = '.$this->weighting[$i].";";
+                $jstmpw .= 'questions_answers_ponderation['.$questionId.']['.$i.'] = '.$this->weighting[$i].';';
                 $jstmpw .= 'questions_answers_correct['.$questionId.']['.$i.'] = '.$this->correct[$i].';';
                 $id++;
             }

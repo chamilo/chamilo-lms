@@ -2533,7 +2533,6 @@ JAVASCRIPT;
         }
 
         $result = $this->getExtraFieldRules($filter, 'extra_', $condition);
-
         $conditionArray = $result['condition_array'];
 
         $whereCondition = '';
@@ -2740,7 +2739,6 @@ JAVASCRIPT;
                             break;
                         case  self::FIELD_TYPE_TAG:
                             // If using OR
-                            //$inject_extra_fields .= " tag$counter.tag as {$extra['field']}, ";
                             // If using AND
                             $newCounter = 1;
                             $fields = [];
@@ -2810,16 +2808,11 @@ JAVASCRIPT;
                                  )
                                 ";
                             break;
-                        case  self::FIELD_TYPE_TAG:
-                            /*$options['where'] = str_replace(
-                                $extra_info['field'],
-                                'tag'.$counter.'.tag ',
-                                $options['where']
-                            );*/
+                        case self::FIELD_TYPE_TAG:
                             $newCounter = 1;
                             $whereTag = [];
-                            if (isset($extra['data']) && !empty($extra['data'])) {
-                                foreach ($extra['data'] as $data) {
+                            if (isset($extra_info['data']) && !empty($extra_info['data'])) {
+                                foreach ($extra_info['data'] as $data) {
                                     $data = Database::escape_string($data);
                                     $key = $counter.$newCounter;
                                     $whereTag[] = ' tag'.$key.'.tag LIKE "%'.$data.'%" ';

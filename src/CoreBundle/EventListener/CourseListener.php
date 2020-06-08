@@ -75,7 +75,7 @@ class CourseListener
                     $course = $courseFromSession;
                     $courseInfo = $sessionHandler->get('_course');
 
-                    dump("Course loaded from Session $courseId");
+                    //dump("Course loaded from Session $courseId");
                 }
             }
             $course = null;
@@ -84,7 +84,7 @@ class CourseListener
                 $em = $container->get('doctrine')->getManager();
                 $course = $em->getRepository('ChamiloCoreBundle:Course')->find($courseId);
 
-                dump("Course loaded from DB $courseId");
+                //dump("Course loaded from DB $courseId");
                 $courseInfo = api_get_course_info($course->getCode());
             }
 
@@ -156,7 +156,7 @@ class CourseListener
             if (empty($groupId)) {
                 $sessionHandler->remove('gid');
             } else {
-                dump('Load chamilo group from DB');
+                //dump('Load chamilo group from DB');
                 $group = $em->getRepository('ChamiloCourseBundle:CGroupInfo')->find($groupId);
 
                 if (!$group) {

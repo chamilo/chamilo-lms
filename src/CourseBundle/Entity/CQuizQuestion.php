@@ -7,6 +7,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * CQuizQuestion.
@@ -47,7 +48,7 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank()
      * @ORM\Column(name="question", type="text", nullable=false)
      */
     protected $question;

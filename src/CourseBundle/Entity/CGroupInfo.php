@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Traits\CourseTrait;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * CGroupInfo.
@@ -47,7 +48,7 @@ class CGroupInfo extends AbstractResource implements ResourceInterface
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank()
      * @ORM\Column(name="name", type="string", length=100, nullable=true)
      */
     protected $name;

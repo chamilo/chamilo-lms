@@ -1148,7 +1148,7 @@ function addListeners(){
     if (olms.lms_item_type=='sco') {
         //window.addEventListener('beforeunload', lastCall);
         window.addEventListener('beforeunload', function (e) {
-            var preventsBeforeUnload = <?php echo (int) api_get_configuration_value('lp_prevents_beforeunload') ?>;
+            var preventsBeforeUnload = <?php echo (int) api_get_configuration_value('lp_prevents_beforeunload'); ?>;
 
             if (preventsBeforeUnload) {
                 e.preventDefault();

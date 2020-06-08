@@ -671,6 +671,7 @@ class CoursesAndSessionsCatalog
             }
             unset($course);
         }
+
         // do we have $course['groupKey']['subKey'] to sort on, such as 'point_info/users' ?
         foreach ($sortKeys as $key) {
             if (false !== strpos($key, '/')) {

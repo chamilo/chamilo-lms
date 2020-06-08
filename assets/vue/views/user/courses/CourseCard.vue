@@ -8,8 +8,18 @@
               :cols="12"
         >
           <v-card>
-            <v-card-title v-text="card.course.title">
-            </v-card-title>
+            <div class="d-flex flex-no-wrap">
+              <v-avatar
+                      class="ma-3"
+                      tile
+              >
+                <v-img src="/img/icons/48/blackboard.png"></v-img>
+              </v-avatar>
+              <div >
+                <v-card-title v-text="card.course.title">
+                </v-card-title>
+              </div>
+            </div>
 
             <v-card-actions>
               <v-btn
@@ -20,7 +30,6 @@
                 Go
               </v-btn>
             </v-card-actions>
-
           </v-card>
         </v-col>
       </v-row>

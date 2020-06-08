@@ -7,6 +7,7 @@
                 v-model="drawer"
                 :clipped="$vuetify.breakpoint.lgAndUp"
                 disable-resize-watcher
+                color="primary"
         >
             <v-list v-if="isAuthenticated">
                 <v-list-item :to="{ name: 'Index' }">
@@ -184,11 +185,18 @@
                 color="white"
         >
             <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+
             <v-toolbar-title
-                    style="width: 300px"
-                    class="ml-0 pl-4"
+                    style="width: 160px"
+                    class="ml-0 pl-0"
             >
-                <span class="hidden-sm-and-down">Chamilo</span>
+                    <v-img
+                        class="mx-2"
+                        src="/build/css/themes/chamilo/images/header-logo.png"
+                        max-height="50"
+                        contain
+                ></v-img>
+
             </v-toolbar-title>
             <v-spacer></v-spacer>
 
@@ -320,7 +328,6 @@
                 }
                 let url = window.location.href;
                 var n = url.indexOf("main/");
-                //console.log(url);console.log(n);
 
                 if (n > 0) {
                     axios.get(url, {

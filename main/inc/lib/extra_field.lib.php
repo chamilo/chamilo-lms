@@ -2818,11 +2818,12 @@ JAVASCRIPT;
                             );*/
                             $newCounter = 1;
                             $whereTag = [];
-                            foreach ($extra['data'] as $data) {
-                                $data = Database::escape_string($data);
-                                $key = $counter.$newCounter;
-                                $whereTag[] = ' tag'.$key.'.tag LIKE "%'.$data.'%" ';
-                                $inject_joins .= "
+                            if (isset($extra['data']) && !empty($extra['data'])) {
+                                foreach ($extra['data'] as $data) {
+                                    $data = Database::escape_string($data);
+                                    $key = $counter.$newCounter;
+                                    $whereTag[] = ' tag'.$key.'.tag LIKE "%'.$data.'%" ';
+                                    $inject_joins .= "
                                     INNER JOIN $this->table_field_rel_tag tag_rel$key
                                     ON (
                                         tag_rel$key.field_id = ".$extra_info['id']." AND
@@ -2831,9 +2832,13 @@ JAVASCRIPT;
                                     INNER JOIN $this->table_field_tag tag$key
                                     ON (tag$key.id = tag_rel$key.tag_id)
                                 ";
-                                $newCounter++;
+                                    $newCounter++;
+                                }
                             }
-                            $options['where'] = ' ('.implode(' AND ', $whereTag).') ';
+
+                            if (!empty($whereTag)) {
+                                $options['where'] = ' ('.implode(' AND ', $whereTag).') ';
+                            }
                             break;
                         default:
                             // text, textarea, etc

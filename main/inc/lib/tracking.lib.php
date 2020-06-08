@@ -7615,7 +7615,8 @@ class TrackingCourseLog
                     user.official_code  as col0,
                     user.lastname       as col1,
                     user.firstname      as col2,
-                    user.username       as col3';
+                    user.username       as col3,
+                    user.email          as col4';
         if ($getCount) {
             $select = ' SELECT COUNT(distinct(user.id)) as count ';
         }
@@ -7869,6 +7870,7 @@ class TrackingCourseLog
                 }
             }
 
+            $user_row['email'] = $user['col4'];
             $user_row['link'] = $user['link'];
 
             if ($export_csv) {

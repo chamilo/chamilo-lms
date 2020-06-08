@@ -694,8 +694,10 @@ if ($nbStudents > 0) {
     $headers['first_login'] = get_lang('FirstLoginInCourse');
     $table->set_header(14, get_lang('LatestLoginInCourse'), false);
     $headers['latest_login'] = get_lang('LatestLoginInCourse');
+    $table->set_header(15, get_lang('Email'), false);
+    $headers['email'] = get_lang('Email');
     if (isset($_GET['additional_profile_field'])) {
-        $counter = 15;
+        $counter = 16;
         foreach ($_GET['additional_profile_field'] as $fieldId) {
             $table->set_header($counter, $extra_info[$fieldId]['display_text'], false);
             $headers[$extra_info[$fieldId]['variable']] = $extra_info[$fieldId]['display_text'];
@@ -705,7 +707,7 @@ if ($nbStudents > 0) {
         $table->set_header($counter, get_lang('Details'), false);
         $headers['details'] = get_lang('Details');
     } else {
-        $table->set_header(15, get_lang('Details'), false);
+        $table->set_header(16, get_lang('Details'), false);
         $headers['Details'] = get_lang('Details');
     }
 

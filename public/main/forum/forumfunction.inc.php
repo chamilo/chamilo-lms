@@ -1144,8 +1144,9 @@ function return_visible_invisible_icon(
 ) {
     $html = '';
     $id = (int) $id;
+    $current_visibility_status = (int) $current_visibility_status;
 
-    if ($current_visibility_status) {
+    if ($current_visibility_status == 1) {
         $html .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&';
         if (is_array($additional_url_parameters)) {
             foreach ($additional_url_parameters as $key => $value) {
@@ -1153,8 +1154,9 @@ function return_visible_invisible_icon(
             }
         }
         $html .= 'action=invisible&content='.$content.'&id='.$id.'">'.
-            Display::return_icon('visible.png', get_lang('Make invisible'), [], ICON_SIZE_SMALL).'</a>';
-    } else {
+            Display::return_icon('visible.png', get_lang('MakeInvisible'), [], ICON_SIZE_SMALL).'</a>';
+    }
+    if ($current_visibility_status == 0) {
         $html .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&';
         if (is_array($additional_url_parameters)) {
             foreach ($additional_url_parameters as $key => $value) {
@@ -1297,7 +1299,7 @@ function move_up_down($content, $direction, $id)
         $sort_column = 'forum_order';
         // We also need the forum_category of this forum.
         $sql = "SELECT forum_category FROM $table_forums
-                WHERE c_id = $course_id AND forum_id = ".(int) $id;
+                WHERE c_id = $course_id AND forum_id = ".$id;
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
         $forum_category = $row['forum_category'];

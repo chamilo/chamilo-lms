@@ -39,12 +39,15 @@
         {% for item in data %}
             {% set category_language_array = [] %}
             {% set category_language = '' %}
-            {% for extra_field in item.extra_fields %}
-                {% if extra_field.variable == 'language' %}
-                    {% set category_language_array = extra_field.value | split(';')  %}
-                    {% set category_language = extra_field.value | replace({';': ' ' })  %}
-                {% endif %}
-            {% endfor %}
+
+            {% if item.extra_fields is defined %}
+                {% for extra_field in item.extra_fields %}
+                    {% if extra_field.variable == 'language' %}
+                        {% set category_language_array = extra_field.value | split(';')  %}
+                        {% set category_language = extra_field.value | replace({';': ' ' })  %}
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
 
             {% if fold_forum_categories %}
                 {% set panel_icon %}

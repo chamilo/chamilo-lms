@@ -17,6 +17,7 @@ if (!$allowUser) {
 
 $fromUserId = isset($_GET['from_user']) ? (int) $_GET['from_user'] : 0;
 $toUserId = isset($_GET['to_user']) ? (int) $_GET['to_user'] : 0;
+
 if (empty($fromUserId) || empty($toUserId)) {
     api_not_allowed(true);
 }

@@ -762,6 +762,7 @@ if (isset($_GET['studentoverview'])) {
             $cat->set_session_id($session_id);
         } else {
             $cat->set_name($course_code);
+            $cat->setIsRequirement(1);
         }
         $cat->set_course_code($course_code);
         $cat->set_description(null);

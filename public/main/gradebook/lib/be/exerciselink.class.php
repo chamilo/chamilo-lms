@@ -223,8 +223,7 @@ class ExerciseLink extends AbstractLink
             } else {
                 $lpId = null;
                 if (!empty($exercise->lpList)) {
-                    // Taking only the first LP
-                    $lpId = current($exercise->lpList);
+                    $lpId = $exercise->getLpBySession($sessionId);
                     $lpId = $lpId['lp_id'];
                 }
 

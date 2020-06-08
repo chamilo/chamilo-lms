@@ -33,6 +33,7 @@ class LinkAddEditForm extends FormValidator
         } elseif (isset($link_type) && isset($category_object)) {
             $link = LinkFactory:: create($link_type);
             $link->set_course_code(api_get_course_id());
+            $link->set_session_id(api_get_session_id());
             $link->set_category_id($category_object[0]->get_id());
         } else {
             die('LinkAddEditForm error: define link_type/category_object or link_object');
@@ -48,9 +49,10 @@ class LinkAddEditForm extends FormValidator
             if ($link->needs_name_and_description()) {
                 $this->addText('name', get_lang('Name'), true, ['size' => '40', 'maxlength' => '40']);
             } else {
-                $select = $this->addElement('select', 'select_link', get_lang('Choose activity to assess'));
+                $select = $this->addElement('select', 'select_link', get_lang('ChooseItem'));
                 foreach ($link->get_all_links() as $newlink) {
-                    $select->addoption($newlink[1], $newlink[0]);
+                    $name = strip_tags(Exercise::get_formated_title_variable($newlink[1]));
+                    $select->addoption($name, $newlink[0]);
                 }
             }
         } else {

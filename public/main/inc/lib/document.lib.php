@@ -2634,7 +2634,7 @@ class DocumentManager
                 if ($document) {
                     if ($index_document) {
                         self::index_document(
-                            $document->getId(),
+                            $document->getIid(),
                             $course_info['code'],
                             null,
                             $_POST['language'] ?? '',
@@ -4181,7 +4181,7 @@ class DocumentManager
         if (!isset($defaultCertificateId)) {
             self::attach_gradebook_certificate(
                 $courseData['real_id'],
-                $document->getId(),
+                $document->getIid(),
                 $sessionId
             );
         }
@@ -5857,7 +5857,7 @@ This folder contains all sessions that have been opened in the chat. Although th
         if (!self::cloudLinkExists($_course, $path, $url)) {
             $doc = self::addDocument($_course, $file_path, 'link', 0, $name, $url);
 
-            return $doc->getId();
+            return $doc->getIid();
         } else {
             return 0;
         }
@@ -6231,7 +6231,7 @@ This folder contains all sessions that have been opened in the chat. Although th
                 }
 
                 $url = api_get_path(WEB_CODE_PATH).
-                    'document/showinframes.php?cidReq='.$courseInfo['code'].'&id_session='.$sessionId.'&id='.$document->getId();
+                    'document/showinframes.php?cidReq='.$courseInfo['code'].'&id_session='.$sessionId.'&id='.$document->getIid();
                 $link = Display::url(basename($title), $url, ['target' => '_blank']);
                 $userInfo = api_get_user_info($userId);
 

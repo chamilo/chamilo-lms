@@ -1,9 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-/**
- * Script.
- */
 require_once __DIR__.'/../inc/global.inc.php';
 require_once '../forum/forumfunction.inc.php';
 $current_course_tool = TOOL_GRADEBOOK;

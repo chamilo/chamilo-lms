@@ -68,7 +68,7 @@ class GradebookTable extends SortableTable
             null,
             null,
             api_is_allowed_to_edit() ? 1 : 0,
-            20,
+            1000,
             'ASC',
             'gradebook_list'
         );
@@ -265,7 +265,6 @@ class GradebookTable extends SortableTable
                                 $defaultData[$item->get_id()]['ranking'] = $rankingStudentList;
                                 $defaultData[$item->get_id()]['ranking_invalidate'] = $invalidateRanking;
                             }
-                            //exit;
                         }
                         break;
                 }

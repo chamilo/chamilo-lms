@@ -1,9 +1,7 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
-/**
- * Script.
- */
 require_once __DIR__.'/../inc/global.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/fe/exportgradebook.php';
 
@@ -272,28 +270,18 @@ if (isset($_GET['exportpdf'])) {
     Display::display_header(get_lang('List View'));
 }
 
-if (isset($_GET['isStudentView']) && 'false' == $_GET['isStudentView']) {
-    DisplayGradebook::display_header_reduce_flatview(
-        $cat[0],
-        $showeval,
-        $showlink,
-        $simple_search_form
-    );
-    $flatViewTable->display();
-} elseif (isset($_GET['selectcat']) && isset($_GET['isStudentView']) && ('teacherview' == $_SESSION['studentview'])) {
-    DisplayGradebook::display_header_reduce_flatview(
-        $cat[0],
-        $showeval,
-        $showlink,
-        $simple_search_form
-    );
+DisplayGradebook::display_header_reduce_flatview(
+    $cat[0],
+    $showeval,
+    $showlink,
+    $simple_search_form
+);
 
-    // Table
-    $flatViewTable->display();
-    //@todo load images with jquery
-    echo '<div id="contentArea" style="text-align: center;" >';
-    $flatViewTable->display_graph_by_resource();
-    echo '</div>';
-}
+// Table
+$flatViewTable->display();
+//@todo load images with jquery
+echo '<div id="contentArea" style="text-align: center;" >';
+$flatViewTable->display_graph_by_resource();
+echo '</div>';
 
 Display::display_footer();

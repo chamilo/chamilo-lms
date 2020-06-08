@@ -45,6 +45,9 @@ $backpack = 'https://backpack.openbadges.org/';
 $configBackpack = api_get_setting('openbadges_backpack');
 if (0 !== strcmp($backpack, $configBackpack)) {
     $backpack = $configBackpack;
+    if (substr($backpack, -1) !== '/') {
+        $backpack .= '/';
+    }
 }
 
 $htmlHeadXtra[] = '<script src="'.$backpack.'issuer.js"></script>';

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -300,6 +301,10 @@ class ScoreDisplay
         $disableColor = false,
         $ignoreDecimals = false
     ) {
+        if (null === $score) {
+            return '';
+        }
+
         $my_score = 0 == $score ? 1 : $score;
 
         if (SCORE_BAR == $type) {
@@ -314,9 +319,7 @@ class ScoreDisplay
         }
 
         if (SCORE_SIMPLE == $type) {
-            $simpleScore = $this->format_score($my_score[0], $ignoreDecimals);
-
-            return $simpleScore;
+            return $this->format_score($my_score[0], $ignoreDecimals);
         }
 
         if ($this->custom_enabled && isset($this->custom_display_conv)) {
@@ -412,14 +415,11 @@ class ScoreDisplay
                 }
                 $score = $this->display_simple_score($score);
 
-                //needs sudo apt-get install php5-intl
-                if (class_exists('NumberFormatter')) {
-                    $iso = api_get_language_isocode();
-                    $f = new NumberFormatter($iso, NumberFormatter::SPELLOUT);
-                    $letters = $f->format($score);
-                    $letters = api_strtoupper($letters);
-                    $letters = " ($letters) ";
-                }
+                $iso = api_get_language_isocode();
+                $f = new NumberFormatter($iso, NumberFormatter::SPELLOUT);
+                $letters = $f->format($score);
+                $letters = api_strtoupper($letters);
+                $letters = " ($letters) ";
 
                 return $score.$letters.$custom;
                 break;

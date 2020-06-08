@@ -235,7 +235,6 @@ if ($translate) {
 
 // Fixes error if there forums with no category.
 $forumsInNoCategory = get_forums_in_category(0);
-
 if (!empty($forumsInNoCategory)) {
     $forumCategories = array_merge(
         $forumCategories,
@@ -254,7 +253,6 @@ if (!empty($forumsInNoCategory)) {
 // Step 3: We display the forum_categories first.
 $listForumCategory = [];
 $forumCategoryInfo = [];
-
 if (is_array($forumCategories)) {
     foreach ($forumCategories as $forumCategory) {
         $categoryId = $forumCategory->getIid();

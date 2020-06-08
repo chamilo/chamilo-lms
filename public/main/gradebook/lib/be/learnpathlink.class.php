@@ -161,7 +161,7 @@ class LearnpathLink extends AbstractLink
         if (!api_is_allowed_to_edit() || null == $this->calc_score(api_get_user_id())) {
             $url .= '&action=view&lp_id='.$this->get_ref_id();
         } else {
-            $url .= '&action=add_item&lp_id='.$this->get_ref_id();
+            $url .= '&action=build&lp_id='.$this->get_ref_id();
         }
 
         return $url;

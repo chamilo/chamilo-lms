@@ -2365,9 +2365,8 @@ class Category implements GradebookItem
         );
 
         $minCertificateScore = $category->getCertificateMinScore();
-        $passedCourse = $currentScore >= $minCertificateScore;
 
-        return $passedCourse;
+        return $currentScore >= $minCertificateScore;
     }
 
     /**
@@ -2582,6 +2581,26 @@ class Category implements GradebookItem
     {
         return $this->documentId;
     }
+
+    /**
+     * Get the remaining weight in root category.
+     *
+     * @return int
+     */
+    public function getRemainingWeight()
+    {
+        $subCategories = $this->get_subcategories();
+
+        $subWeight = 0;
+
+        /** @var Category $subCategory */
+        foreach ($subCategories as $subCategory) {
+            $subWeight += $subCategory->get_weight();
+        }
+
+        return $this->weight - $subWeight;
+    }
+
 
     /**
      * @return int

@@ -1827,6 +1827,10 @@ abstract class Question
      */
     public static function displayTypeMenu($objExercise)
     {
+        if (empty($objExercise)) {
+            return '';
+        }
+
         $feedbackType = $objExercise->getFeedbackType();
         $exerciseId = $objExercise->id;
 

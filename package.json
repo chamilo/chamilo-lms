@@ -82,7 +82,7 @@
   "devDependencies": {
     "@coreui/coreui": "^2.1.7",
     "@fortawesome/fontawesome-free": "^5.11",
-    "@symfony/webpack-encore": "~0.28",
+    "@symfony/webpack-encore": "~0.30",
     "@vue/cli-plugin-babel": "~4.3.0",
     "@vue/cli-plugin-eslint": "~4.3.0",
     "@vue/cli-service": "~4.3.0",

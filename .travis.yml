@@ -43,8 +43,8 @@ before_install:
   - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
   # Get Chrome driver
   - wget https://chromedriver.storage.googleapis.com/2.35/chromedriver_linux64.zip && unzip chromedriver_linux64.zip
-  - mv chromedriver /usr/bin
-  - chmod +x /usr/bin/chromedriver
+  - sudo mv chromedriver /usr/bin
+  - sudo chmod +x /usr/bin/chromedriver
   - chromedriver --version
 
   # Get Selenium

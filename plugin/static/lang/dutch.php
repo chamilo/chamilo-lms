@@ -6,7 +6,7 @@
  * @translation Hans Haufe <hans@cappon.org>
  */
 $strings['plugin_title'] = "Statisch";
-$strings['plugin_comment'] = "Statische html inhoud weergeven.;
+$strings['plugin_comment'] = "Statische html inhoud weergeven.";
 $strings['block_title'] = "Blok Titel";
 
 //$strings['title'] = "Titel";

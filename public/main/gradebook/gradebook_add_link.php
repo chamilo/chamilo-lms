@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -99,16 +100,16 @@ if (isset($typeSelected) && '0' != $typeSelected) {
             (isset($addvalues['select_link']) && "" != $addvalues['select_link'])
         ) {
             $sql1 = 'SELECT thread_title from '.$tbl_forum_thread.'
-					 WHERE 
-					    c_id = '.$course_info['real_id'].' AND 
+					 WHERE
+					    c_id = '.$course_info['real_id'].' AND
 					    thread_id = '.$addvalues['select_link'];
             $res1 = Database::query($sql1);
             $rowtit = Database::fetch_row($res1);
             $course_id = api_get_course_id();
             $sql_l = 'SELECT count(*) FROM '.$tbl_link.'
-                      WHERE 
-                            ref_id='.$addvalues['select_link'].' AND 
-                            course_code="'.$course_id.'" AND 
+                      WHERE
+                            ref_id='.$addvalues['select_link'].' AND
+                            course_code="'.$course_id.'" AND
                             type = 5;';
             $res_l = Database::query($sql_l);
             $row = Database::fetch_row($res_l);
@@ -118,8 +119,8 @@ if (isset($typeSelected) && '0' != $typeSelected) {
                             thread_qualify_max= "'.api_float_val($addvalues['weight']).'",
                             thread_weight= "'.api_float_val($addvalues['weight']).'",
                             thread_title_qualify = "'.$rowtit[0].'"
-						WHERE 
-						    thread_id='.$addvalues['select_link'].' AND 
+						WHERE
+						    thread_id='.$addvalues['select_link'].' AND
 						    c_id = '.$course_info['real_id'].' ';
                 Database::query($sql);
             }
@@ -190,7 +191,12 @@ $(function() {
 
 Display::display_header(get_lang('Add online activity'));
 if (isset($typeform)) {
-    echo Display::return_message(get_lang('LearningPathAssessmentsWarning'), 'warning');
+    echo Display::return_message(
+        get_lang(
+            'Warning: It is possible to use, in the gradebook, tests that are part of learning paths. If the learning path itself is already included, this test might be part of the gradebook already. The learning paths evaluation is made on the basis of a progress percentage, while the evaluation on tests is made on the basis of a score. Survey evaluation is based on whether the user has answered (1) or not (0). Make sure you test your combinations of gradebook evaluations to avoid mind-boggling situations.'
+        ),
+        'warning'
+    );
     $typeform->display();
 }
 if (isset($addform)) {

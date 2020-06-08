@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -58,13 +59,9 @@ class ForumThreadLink extends AbstractLink
         }
 
         $sql = 'SELECT tl.thread_id, tl.thread_title, tl.thread_title_qualify
-                FROM '.$tbl_grade_links.' tl INNER JOIN '.$tbl_item_property.' ip
-                ON (tl.thread_id = ip.ref AND tl.c_id = ip.c_id)
+                FROM '.$tbl_grade_links.' tl
                 WHERE
                     tl.c_id = '.$this->course_id.' AND
-                    ip.c_id = '.$this->course_id.' AND
-                    ip.tool = "forum_thread" AND
-                    ip.visibility <> 2 AND
                     '.$session_condition.'
                 ';
 
@@ -93,7 +90,7 @@ class ForumThreadLink extends AbstractLink
         $sql = "SELECT count(*) AS number FROM $table
                 WHERE
                     c_id = ".$this->course_id." AND
-                    thread_id = '".$this->get_ref_id()."'                    
+                    thread_id = '".$this->get_ref_id()."'
                 ";
         $result = Database::query($sql);
         $number = Database::fetch_row($result);
@@ -122,8 +119,8 @@ class ForumThreadLink extends AbstractLink
 
         $sql = 'SELECT thread_qualify_max
                 FROM '.Database::get_course_table(TABLE_FORUM_THREAD)."
-                WHERE 
-                    c_id = ".$this->course_id." AND 
+                WHERE
+                    c_id = ".$this->course_id." AND
                     thread_id = '".$this->get_ref_id()."'
                     $sessionCondition
                 ";
@@ -131,8 +128,8 @@ class ForumThreadLink extends AbstractLink
         $assignment = Database::fetch_array($query);
 
         $sql = "SELECT * FROM $thread_qualify
-                WHERE 
-                    c_id = ".$this->course_id." AND 
+                WHERE
+                    c_id = ".$this->course_id." AND
                     thread_id = ".$this->get_ref_id()."
                     $sessionCondition
                 ";
@@ -265,9 +262,9 @@ class ForumThreadLink extends AbstractLink
     {
         $sessionId = $this->get_session_id();
         $sql = 'SELECT count(id) from '.$this->get_forum_thread_table().'
-                WHERE 
-                    c_id = '.$this->course_id.' AND 
-                    thread_id = '.$this->get_ref_id().' AND 
+                WHERE
+                    c_id = '.$this->course_id.' AND
+                    thread_id = '.$this->get_ref_id().' AND
                     session_id='.$sessionId;
         $result = Database::query($sql);
         $number = Database::fetch_row($result);
@@ -281,8 +278,8 @@ class ForumThreadLink extends AbstractLink
         //it was extracts the forum id
         $sql = 'SELECT * FROM '.$this->get_forum_thread_table()."
                 WHERE
-                    c_id = '.$this->course_id.' AND 
-                    thread_id = '".$this->get_ref_id()."' AND 
+                    c_id = '.$this->course_id.' AND
+                    thread_id = '".$this->get_ref_id()."' AND
                     session_id = $sessionId ";
         $result = Database::query($sql);
         $row = Database::fetch_array($result, 'ASSOC');
@@ -304,7 +301,7 @@ class ForumThreadLink extends AbstractLink
         $ref_id = $this->get_ref_id();
 
         if (!empty($ref_id)) {
-            $sql = 'UPDATE '.$this->get_forum_thread_table().' SET 
+            $sql = 'UPDATE '.$this->get_forum_thread_table().' SET
                     thread_weight='.api_float_val($weight).'
                     WHERE c_id = '.$this->course_id.' AND thread_id= '.$ref_id;
             Database::query($sql);
@@ -344,9 +341,9 @@ class ForumThreadLink extends AbstractLink
 
         if (!isset($this->exercise_data)) {
             $sql = 'SELECT * FROM '.$this->get_forum_thread_table().'
-                    WHERE 
-                        c_id = '.$this->course_id.' AND  
-                        thread_id = '.$this->get_ref_id().' AND 
+                    WHERE
+                        c_id = '.$this->course_id.' AND
+                        thread_id = '.$this->get_ref_id().' AND
                         '.$session_condition;
             $query = Database::query($sql);
             $this->exercise_data = Database::fetch_array($query);

@@ -98,6 +98,10 @@ services:
         tags:
             - {name: security.voter}
 
+    Chamilo\CoreBundle\Security\HTTPExceptionListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception }
+
 sylius_settings:
     driver: doctrine/orm
 

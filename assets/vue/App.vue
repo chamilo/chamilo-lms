@@ -368,6 +368,10 @@
                 return new Promise(() => {
                     if (err.response.status === 401) {
                         this.$router.push({path: "/login"})
+                    } else if (err.response.status === 500) {
+                        document.open();
+                        document.write(err.response.data);
+                        document.close();
                     }
                     throw err;
                 });

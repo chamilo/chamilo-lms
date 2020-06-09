@@ -106,8 +106,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *      @ORM\Index(name="idx_cdoc_sid", columns={"session_id"}),
  *  }
  * )
- * @GRID\Source(columns="iid, title, resourceNode.createdAt", filterable=false, groups={"resource"})
- * @GRID\Source(columns="iid, title", filterable=false, groups={"editor"})
+ * GRID\Source(columns="iid, title, resourceNode.createdAt", filterable=false, groups={"resource"})
+ * GRID\Source(columns="iid, title", filterable=false, groups={"editor"})
  * @ORM\Entity
  */
 class CDocument extends AbstractResource implements ResourceInterface, ResourceToCourseInterface

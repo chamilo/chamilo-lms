@@ -139,11 +139,26 @@ export default function makeCrudModule({
           .find(id)
           .then(response => response.json())
           .then(item => {
+            console.log(item);
             commit(ACTIONS.TOGGLE_LOADING);
             commit(ACTIONS.ADD, normalizeRelations(item));
           })
           .catch(e => handleError(commit, e));
       },
+      loadItem: ({ commit }, id) => {
+        if (!service) throw new Error('No service specified!');
+
+        commit(ACTIONS.TOGGLE_LOADING);
+        service
+            .find(id)
+            .then(response => response.json())
+            .then(item => {
+              console.log(item);
+              return item;
+            })
+            .catch(e => handleError(commit, e));
+      },
+
       resetCreate: ({ commit }) => {
         commit(ACTIONS.RESET_CREATE);
       },

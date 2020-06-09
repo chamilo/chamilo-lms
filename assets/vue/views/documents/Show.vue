@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Toolbar :handle-edit="editHandler"  :handle-delete="del">
+    <Toolbar :handle-edit="editHandler" :handle-delete="del">
       <template slot="left">
         <v-toolbar-title v-if="item">{{
           `${$options.servicePrefix} ${item['@id']}`
@@ -11,6 +11,25 @@
     <br />
 
     <div v-if="item" class="table-documents-show">
+      <div v-if="item['resourceNode']['resourceLinks']">
+        <ul>
+        <li
+                v-for="link in item['resourceNode']['resourceLinks']"
+        >
+
+          {{ link.id }}
+          {{ link.visibility }}
+          {{ link.course }}
+          {{ link.session }}
+          {{ link.published }}
+          {{ link.visibilityName }}
+
+
+
+        </li>
+        </ul>
+      </div>
+
       <v-simple-table>
         <template slot="default">
           <thead>
@@ -36,7 +55,7 @@
             <tr>
               <td><strong>{{ $t('Created at') }}</strong></td>
               <td>
-                  {{ item['resourceNode'] && item['resourceNode'].createdAt }}
+                  {{ item['resourceNode'] && item['resourceNode'].createdAt | moment("from", "now") }}
               </td>
               <td></td>
             </tr>
@@ -44,7 +63,9 @@
               <td><strong>{{ $t('file') }}</strong></td>
               <td>
                 <div v-if="item['resourceNode']['resourceFile']">
-                    <img v-bind:src=" item['contentUrl'] " />
+                  <v-img
+                          v-bind:src=" item['contentUrl'] "
+                  ></v-img>
                 </div>
                 <div v-else>
                   -
@@ -56,7 +77,6 @@
         </template>
       </v-simple-table>
     </div>
-
     <Loading :visible="isLoading" />
   </div>
 </template>
@@ -82,14 +102,19 @@ export default {
     ...mapFields('documents', {
       isLoading: 'isLoading'
     }),
-    ...mapGetters('documents', ['find'])
+    ...mapGetters('documents', ['find']),
   },
   methods: {
     ...mapActions('documents', {
       deleteItem: 'del',
       reset: 'resetShow',
       retrieve: 'load'
-    })
+    }),
+
+    /*...mapActions('resourcelink', {
+      resourcelinkfind: 'load',
+    }),*/
+
   }
 };
 </script>

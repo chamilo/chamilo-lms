@@ -1,15 +1,42 @@
+import isEmpty from 'lodash/isEmpty';
 import NotificationMixin from './NotificationMixin';
 import { formatDateTime } from '../utils/dates';
+import {mapActions, mapGetters} from "vuex";
 
 export default {
   mixins: [NotificationMixin],
   created() {
-    this.retrieve(decodeURIComponent(this.$route.params.id));
+    // Changed
+    let id = this.$route.params.id;
+    if (isEmpty(id)) {
+      id = this.$route.query.id;
+    }
+    this.retrieve(decodeURIComponent(id));
+    //this.retrieve(decodeURIComponent(this.$route.params.id));
   },
   computed: {
     item() {
-      return this.find(decodeURIComponent(this.$route.params.id));
-    }
+      // Changed
+      let id = this.$route.params.id;
+      if (isEmpty(id)) {
+        id = this.$route.query.id;
+      }
+
+      let item = this.find(decodeURIComponent(id));
+      if (item) {
+        item.resourceNode.resourceLinks.forEach((link) => {
+          this.resourcelinkfind('/api/resource_links/' + link.id).then( data => {
+            if (data) {
+              link = data;
+              return data;
+            }
+          });
+        });
+      }
+
+      return item;
+      //return this.find(decodeURIComponent(this.$route.params.id));
+    },
   },
   methods: {
     list() {
@@ -31,7 +58,10 @@ export default {
         name: `${this.$options.servicePrefix}Update`,
         params: { id: this.item['@id'] }
       });
-    }
+    },
+    ...mapActions({
+      resourcelinkfind: 'resourcelink/loadItem'
+    }),
   },
   watch: {
     error(message) {

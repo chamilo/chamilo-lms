@@ -84,18 +84,16 @@ export default {
 
     showHandler(item) {
       let folderParams = this.$route.query;
+      folderParams['id'] = item['@id'];
+
       this.$router.push({
         name: `${this.$options.servicePrefix}Show`,
-        params: { id: item['@id'] },
+        //params: { id: item['@id'] },
         query: folderParams
       });
     },
 
     handleClick(item) {
-      /*this.$router.push({
-        name: `${this.$options.servicePrefix}Show`,
-        params: { id: item['@id'] }
-      });*/
       let folderParams = this.$route.query;
       this.resetList = true;
       this.$route.params.node = item['resourceNode']['id'];
@@ -112,9 +110,7 @@ export default {
       /*console.log(item['resourceNode']['id']);
       this.$route.params.node = item['resourceNode']['id'];
       this.onUpdateOptions(this.options);*/
-
     },
-
     editHandler(item) {
       let folderParams = this.$route.query;
       this.$router.push({

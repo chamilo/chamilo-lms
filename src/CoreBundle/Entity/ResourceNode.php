@@ -76,8 +76,8 @@ class ResourceNode
     protected $resourceType;
 
     /**
-     * @Groups({"resource_node:read", "resource_node:write", "document:write"})
-     *
+     * @Groups({"resource_node:read", "resource_node:write", "document:write", "document:read"})
+     * @ApiSubresource()
      * @var ResourceLink[]
      *
      * @ORM\OneToMany(targetEntity="ResourceLink", mappedBy="resourceNode", cascade={"persist", "remove"})

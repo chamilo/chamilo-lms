@@ -12,8 +12,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource(
- *     shortName="ResourceLink",
- *     normalizationContext={"groups"={"resource_link:read", "course:read"}}
  * )
  * @ORM\Entity
  * @ORM\Table(name="resource_link")
@@ -26,6 +24,7 @@ class ResourceLink
     public const VISIBILITY_DELETED = 3;
 
     /**
+     * @Groups({"resource_node:read", "resource_node:write", "document:write", "document:read"})
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue
@@ -63,6 +62,8 @@ class ResourceLink
     protected $group;
 
     /**
+     * @Groups({"resource_node:read", "resource_node:write", "document:write", "document:read"})
+     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Usergroup")
      * @ORM\JoinColumn(name="usergroup_id", referencedColumnName="id", nullable=true)
      */
@@ -77,20 +78,27 @@ class ResourceLink
     protected $resourceRight;
 
     /**
-     * @var int
-     *
-     * @Groups({"resource_link:read", "resource_node:read", "course:read"})
+     * @Groups({"resource_node:read", "resource_node:write", "document:write", "document:read"})
      *
      * @ORM\Column(name="visibility", type="integer", nullable=false)
      */
     protected $visibility;
 
     /**
+     * @Groups({"resource_link:read", "resource_node:read", "course:read"})
+     */
+    protected $linkName;
+
+    /**
+     * @Groups({"resource_link:read", "resource_node:read", "document:read"})
+     *
      * @ORM\Column(name="start_visibility_at", type="datetime", nullable=true)
      */
     protected $startVisibilityAt;
 
     /**
+     * @Groups({"resource_link:read", "resource_node:read", "course:read"})
+     *
      * @ORM\Column(name="end_visibility_at", type="datetime", nullable=true)
      */
     protected $endVisibilityAt;
@@ -101,6 +109,27 @@ class ResourceLink
     public function __construct()
     {
         $this->resourceRight = new ArrayCollection();
+        $this->linkName = 'ju';
+    }
+
+    /**
+     * @return int
+     */
+    public function getLinkName()
+    {
+        return $this->linkName;
+    }
+
+    /**
+     * @param int $linkName
+     *
+     * @return ResourceLink
+     */
+    public function setLinkName(int $linkName): ResourceLink
+    {
+        $this->linkName = $linkName;
+
+        return $this;
     }
 
     /**

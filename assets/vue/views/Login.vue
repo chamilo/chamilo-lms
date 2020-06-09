@@ -1,5 +1,4 @@
 <template>
-
         <v-container
                 class="fill-height"
                 fluid
@@ -24,7 +23,6 @@
                         <v-card-text>
                             <v-form>
                                 <v-text-field
-
                                         v-model="login"
                                         label="Login"
                                         name="login"
@@ -33,7 +31,6 @@
                                 ></v-text-field>
 
                                 <v-text-field
-
                                         v-model="password"
                                         id="password"
                                         label="Password"
@@ -57,7 +54,6 @@
                             >
                                 <error-message :error="error" />
                             </div>
-
 
                             <v-spacer></v-spacer>
                             <v-btn color="primary"
@@ -100,7 +96,6 @@
             }
         },
         created() {
-            console.log('login CREATED');
             let redirect = this.$route.query.redirect;
             if (this.$store.getters["security/isAuthenticated"]) {
                 if (typeof redirect !== "undefined") {

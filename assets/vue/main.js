@@ -5,6 +5,7 @@ import store from "./store";
 import courseCategoryService from './services/coursecategory';
 import documentsService from './services/documents';
 import courseService from './services/course';
+import resourceLinkService from './services/resourcelink';
 import makeCrudModule from './store/modules/crud';
 import vuetify from './plugins/vuetify' // path to vuetify export
 require('@fancyapps/fancybox');
@@ -28,11 +29,17 @@ const apolloProvider = new VueApollo({
     defaultClient: apolloClient,
 });
 
-//import './quasar'
 store.registerModule(
     'course',
     makeCrudModule({
         service: courseService
+    })
+);
+
+store.registerModule(
+    'resourcelink',
+    makeCrudModule({
+        service: resourceLinkService
     })
 );
 

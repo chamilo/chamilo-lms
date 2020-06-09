@@ -77,6 +77,7 @@ class TestQuestionDescription extends Basic
                 'Video',
                 'Flash',
                 'Youtube',
+                'VimeoEmbed',
                 'Oembed',
                 'Audio',
                 'leaflet',
@@ -119,7 +120,7 @@ class TestQuestionDescription extends Basic
         return [
             ['Maximize', '-', 'PasteFromWord', '-', 'Undo', 'Redo'],
             ['Link', 'Unlink'],
-            ['Image', 'Video', 'Flash', 'Oembed', 'Youtube', 'Audio'],
+            ['Image', 'Video', 'Flash', 'Oembed', 'Youtube', 'VimeoEmbed', 'Audio'],
             ['Table', 'SpecialChar'],
             [
                 'NumberedList',

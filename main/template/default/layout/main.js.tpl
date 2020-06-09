@@ -589,6 +589,7 @@ if (typeof CKEDITOR !== 'undefined') {
         'flash',
         'inserthtml',
         'qmarkersrolls',
+        'ckeditor_vimeo_embed',
         'image2_chamilo'
     ];
 

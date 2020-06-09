@@ -81,6 +81,9 @@ class Basic extends Toolbar
         $config = [],
         $prefix = null
     ) {
+        $isAllowedToEdit = api_is_allowed_to_edit();
+        $isPlatformAdmin = api_is_platform_admin();
+
         // Adding plugins depending of platform conditions
         $plugins = [];
 
@@ -91,7 +94,7 @@ class Basic extends Toolbar
         if (api_get_setting('youtube_for_students') == 'true') {
             $plugins[] = 'youtube';
         } else {
-            if (api_is_allowed_to_edit() || api_is_platform_admin()) {
+            if ($isAllowedToEdit || $isPlatformAdmin) {
                 $plugins[] = 'youtube';
             }
         }
@@ -137,6 +140,10 @@ class Basic extends Toolbar
 
         if (api_get_setting('allow_spellcheck') == 'true') {
             $plugins[] = 'scayt';
+        }
+
+        if (api_get_configuration_sub_value('ckeditor_vimeo_embed/config') && ($isAllowedToEdit || $isPlatformAdmin)) {
+            $plugins[] = 'ckeditor_vimeo_embed';
         }
 
         $this->defaultPlugins = array_unique(array_merge($this->defaultPlugins, $plugins));
@@ -240,11 +247,25 @@ class Basic extends Toolbar
         return [
             $this->getNewPageBlock(),
             ['Undo', 'Redo'],
-            ['Link', 'Image', 'Video', 'Oembed', 'Flash', 'Youtube', 'Audio', 'Table', 'Asciimath', 'Asciisvg'],
+            [
+                'Link',
+                'Image',
+                'Video',
+                'Oembed',
+                'Flash',
+                'Youtube',
+                'VimeoEmbed',
+                'Audio',
+                'Table',
+                'Asciimath',
+                'Asciisvg',
+            ],
             ['BulletedList', 'NumberedList', 'HorizontalRule'],
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
             ['Styles', 'Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor'],
-            api_get_setting('enabled_wiris') == 'true' ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_formulaEditorChemistry'] : [''],
+            api_get_setting('enabled_wiris') == 'true'
+                ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_formulaEditorChemistry']
+                : [''],
             ['Toolbarswitch', 'Source'],
         ];
     }
@@ -268,6 +289,7 @@ class Basic extends Toolbar
                 'Oembed',
                 'Flash',
                 'Youtube',
+                'VimeoEmbed',
                 'Audio',
                 'leaflet',
                 'Smiley',
@@ -283,7 +305,9 @@ class Basic extends Toolbar
             [api_get_setting('allow_spellcheck') == 'true' ? 'Scayt' : ''],
             ['Styles', 'Format', 'Font', 'FontSize'],
             ['PageBreak', 'ShowBlocks'],
-            api_get_setting('enabled_wiris') == 'true' ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_formulaEditorChemistry'] : [''],
+            api_get_setting('enabled_wiris') == 'true'
+                ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_formulaEditorChemistry']
+                : [''],
             ['Toolbarswitch', 'Source'],
         ];
     }

@@ -117,7 +117,8 @@
         "zendframework/zend-config": "~2.6|^3.0",
         "zendframework/zend-feed": "~2.6|^3.0",
         "zendframework/zend-http": "~2.6|^3.0",
-        "zendframework/zend-soap": "~2.6|^3.0"
+        "zendframework/zend-soap": "~2.6|^3.0",
+        "angelfqc/vimeo-api": "2.0.6"
     },
     "require-dev": {
         "behat/behat": "3.5.0",
@@ -158,6 +159,12 @@
         "symfony-tests-dir": "tests",
         "symfony-web-dir": "web"
     },
+    "repositories": [
+        {
+            "type": "github",
+            "url": "https://github.com/AngelFQC/vimeo.php.git"
+        }
+    ],
     "config": {
         "component-dir": "web/assets"
     }

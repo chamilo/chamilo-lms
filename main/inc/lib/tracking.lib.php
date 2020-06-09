@@ -7870,7 +7870,10 @@ class TrackingCourseLog
                 }
             }
 
-            $user_row['email'] = $user['col4'];
+            if (api_get_setting('show_email_addresses') === 'true') {
+                $user_row['email'] = $user['col4'];
+            }
+
             $user_row['link'] = $user['link'];
 
             if ($export_csv) {

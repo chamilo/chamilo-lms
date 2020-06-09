@@ -694,22 +694,22 @@ if ($nbStudents > 0) {
     $headers['first_login'] = get_lang('FirstLoginInCourse');
     $table->set_header(14, get_lang('LatestLoginInCourse'), false);
     $headers['latest_login'] = get_lang('LatestLoginInCourse');
-    $table->set_header(15, get_lang('Email'), false);
-    $headers['email'] = get_lang('Email');
+    $counter = 15;
+    if (api_get_setting('show_email_addresses') === 'true') {
+        $table->set_header($counter, get_lang('Email'), false);
+        $headers['email'] = get_lang('Email');
+        $counter++;
+    }
     if (isset($_GET['additional_profile_field'])) {
-        $counter = 16;
         foreach ($_GET['additional_profile_field'] as $fieldId) {
             $table->set_header($counter, $extra_info[$fieldId]['display_text'], false);
             $headers[$extra_info[$fieldId]['variable']] = $extra_info[$fieldId]['display_text'];
             $counter++;
             $parameters['additional_profile_field'] = $fieldId;
         }
-        $table->set_header($counter, get_lang('Details'), false);
-        $headers['details'] = get_lang('Details');
-    } else {
-        $table->set_header(16, get_lang('Details'), false);
-        $headers['Details'] = get_lang('Details');
     }
+    $table->set_header($counter, get_lang('Details'), false);
+    $headers['Details'] = get_lang('Details');
 
     if (!empty($fields)) {
         foreach ($fields as $key => $value) {

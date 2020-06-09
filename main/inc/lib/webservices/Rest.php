@@ -1205,6 +1205,7 @@ class Rest extends WebService
         $displayEndDate = $endDate;
         $description = $params['description'];
         $idUrlCampus = $params['id_campus'];
+        $extraFields = isset($params['extra']) ? $params['extra'] : [];
 
         $return = SessionManager::create_session(
             $name,
@@ -1221,7 +1222,7 @@ class Rest extends WebService
             null,
             $description,
             1,
-            [],
+            $extraFields,
             null,
             false,
             $idUrlCampus

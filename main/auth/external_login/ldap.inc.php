@@ -1,5 +1,6 @@
 <?php
-// External login module : LDAP
+
+/* For licensing terms, see /license.txt */
 
 /**
  * This files is included by newUser.ldap.php and login.ldap.php

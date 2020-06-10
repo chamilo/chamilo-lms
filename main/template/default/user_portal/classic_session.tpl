@@ -97,6 +97,9 @@
                                         </a>
                                     </div>
                                     <div class="col-md-10">
+                                        <div class="pull-right">
+                                            {{ item.unregister_button }}
+                                        </div>
                                         {% if item.requirements %}
                                             <h4>{{ item.name }}</h4>
                                         {% else %}
@@ -115,6 +118,18 @@
                                                         {{ coach.firstname }}, {{ coach.lastname }}
                                                     </a>
                                                 {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                        <div class="category">
+                                            {{ item.category }}
+                                        </div>
+                                        <div class="course_extrafields">
+                                            {% if item.extrafields|length > 0 %}
+                                            {% for extrafield in item.extrafields %}
+                                            {% set counter = counter + 1 %}
+                                            {% if counter > 1 %} | {% endif %}
+                                            {{ extrafield.text }} : <strong>{{ extrafield.value }}</strong>
+                                            {% endfor %}
                                             {% endif %}
                                         </div>
                                     </div>

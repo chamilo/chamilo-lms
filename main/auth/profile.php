@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\UserBundle\Entity\User;
@@ -9,22 +10,18 @@ use ChamiloSession as Session;
  * optionally it allows users to modify their profile as well.
  *
  * See inc/conf/profile.conf.php to modify settings
- *
- * @package chamilo.auth
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_MYPROFILE;
-$allowSocialTool = api_get_setting('allow_social_tool') == 'true';
+$allowSocialTool = api_get_setting('allow_social_tool') === 'true';
 if ($allowSocialTool) {
     $this_section = SECTION_SOCIAL;
 }
 
 $logInfo = [
     'tool' => 'profile',
-    'tool_id' => 0,
-    'tool_id_detail' => 0,
     'action' => $this_section,
 ];
 Event::registerLog($logInfo);
@@ -97,7 +94,10 @@ $user_data = api_get_user_info(
 );
 $array_list_key = UserManager::get_api_keys(api_get_user_id());
 $id_temp_key = UserManager::get_api_key_id(api_get_user_id(), 'dokeos');
-$value_array = $array_list_key[$id_temp_key];
+$value_array = [];
+if (isset($array_list_key[$id_temp_key])) {
+    $value_array = $array_list_key[$id_temp_key];
+}
 $user_data['api_key_generate'] = $value_array;
 
 if ($user_data !== false) {
@@ -109,9 +109,6 @@ if ($user_data !== false) {
     }
 }
 
-/*
- * Initialize the form.
- */
 $form = new FormValidator('profile');
 
 if (api_is_western_name_order()) {
@@ -143,7 +140,8 @@ $form->addElement(
         'size' => USERNAME_MAX_LENGTH,
     ]
 );
-if (api_get_setting('profile', 'login') !== 'true' || api_get_setting('login_is_email') == 'true') {
+
+if (api_get_setting('profile', 'login') !== 'true' || api_get_setting('login_is_email') === 'true') {
     $form->freeze('username');
 }
 $form->applyFilter('username', 'stripslashes');
@@ -168,13 +166,13 @@ if (defined('CONFVAL_ASK_FOR_OFFICIAL_CODE') && CONFVAL_ASK_FOR_OFFICIAL_CODE ==
     }
 }
 
-//    EMAIL
+// EMAIL
 $form->addElement('email', 'email', get_lang('Email'), ['size' => 40]);
 if (api_get_setting('profile', 'email') !== 'true') {
     $form->freeze('email');
 }
 
-if (api_get_setting('registration', 'email') == 'true' && api_get_setting('profile', 'email') == 'true') {
+if (api_get_setting('registration', 'email') === 'true' && api_get_setting('profile', 'email') === 'true') {
     $form->applyFilter('email', 'stripslashes');
     $form->applyFilter('email', 'trim');
     $form->addRule('email', get_lang('ThisFieldIsRequired'), 'required');
@@ -182,7 +180,7 @@ if (api_get_setting('registration', 'email') == 'true' && api_get_setting('profi
 }
 
 // OPENID URL
-if (is_profile_editable() && api_get_setting('openid_authentication') == 'true') {
+if (is_profile_editable() && api_get_setting('openid_authentication') === 'true') {
     $form->addElement('text', 'openid', get_lang('OpenIDURL'), ['size' => 40]);
     if (api_get_setting('profile', 'openid') !== 'true') {
         $form->freeze('openid');
@@ -236,7 +234,7 @@ if (api_get_setting('profile', 'language') !== 'true') {
 }
 
 // THEME
-if (is_profile_editable() && api_get_setting('user_selected_theme') == 'true') {
+if (is_profile_editable() && api_get_setting('user_selected_theme') === 'true') {
     $form->addElement('SelectTheme', 'theme', get_lang('Theme'));
     if (api_get_setting('profile', 'theme') !== 'true') {
         $form->freeze('theme');
@@ -306,26 +304,41 @@ if (api_get_setting('extended_profile') === 'true') {
     $form->applyFilter(['competences', 'diplomas', 'teach'], 'trim');
 }
 
+$showPassword = is_platform_authentication();
+$links = api_get_configuration_value('auth_password_links');
+$extraLink = '';
+if (!empty($links) &&
+    isset($links['profiles']) &&
+    isset($links['profiles'][$user_data['status']]) &&
+    isset($links['profiles'][$user_data['status']][$user_data['auth_source']])
+) {
+    $extraUserConditions = $links['profiles'][$user_data['status']][$user_data['auth_source']];
+    if (isset($extraUserConditions['show_password_field'])) {
+        $showPassword = $extraUserConditions['show_password_field'];
+    }
+
+    if (isset($extraUserConditions['extra_link'])) {
+        $extraLink = $extraUserConditions['extra_link'];
+    }
+}
+
 //    PASSWORD, if auth_source is platform
-if (is_platform_authentication() &&
+if ($showPassword &&
     is_profile_editable() &&
-    api_get_setting('profile', 'password') == 'true'
+    api_get_setting('profile', 'password') === 'true'
 ) {
     $form->addElement('password', 'password0', [get_lang('Pass'), get_lang('TypeCurrentPassword')], ['size' => 40]);
     $form->addElement('password', 'password1', [get_lang('NewPass'), get_lang('EnterYourNewPassword')], ['id' => 'password1', 'size' => 40]);
-
     $form->addElement('password', 'password2', [get_lang('Confirmation'), get_lang('RepeatYourNewPassword')], ['size' => 40]);
     //    user must enter identical password twice so we can prevent some user errors
     $form->addRule(['password1', 'password2'], get_lang('PassTwo'), 'compare');
     $form->addPasswordRule('password1');
 }
 
-$extraField = new ExtraField('user');
-$return = $extraField->addElements(
-    $form,
-    api_get_user_id()
-);
+$form->addHtml($extraLink);
 
+$extraField = new ExtraField('user');
+$return = $extraField->addElements($form, api_get_user_id());
 $jquery_ready_content = $return['jquery_ready_content'];
 
 // the $jquery_ready_content variable collects all functions that

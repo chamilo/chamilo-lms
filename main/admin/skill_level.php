@@ -5,8 +5,6 @@ use Chamilo\SkillBundle\Entity\Level;
 
 /**
  * Add a skill Level.
- *
- * @package chamilo.skill
  */
 $cidReset = true;
 

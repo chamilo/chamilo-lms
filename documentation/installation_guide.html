@@ -255,48 +255,49 @@ To get the best out of Chamilo, you need to finetune your PHP settings. Consider
 </ul>
 
 <pre>
-    max_execution_time = 300; Maximum execution time of each script, in seconds
-    max_input_time = 600; Maximum amount of time each script may spend parsing request data
-    memory_limit = 256M; Maximum amount of memory a script may consume (128MB)
+    max_execution_time = 300 ;Maximum execution time of each script, in seconds
+    max_input_time = 600 ;Maximum amount of time each script may spend parsing request data
+    memory_limit = 256M ;Maximum amount of memory a script may consume (128MB)
     post_max_size = 100M
-    upload_max_filesize = 100M;
-    short_open_tag       = Off
-    safe_mode            = Off
-    magic_quotes_gpc     = Off
-    magic_quotes_runtime = Off</pre>
+    upload_max_filesize = 100M
+    short_open_tag       = 0
+    safe_mode            = 0
+    magic_quotes_gpc     = 0
+    magic_quotes_runtime = 0</pre>
 
-<p><strong>Important:</strong> You need to set
-your <em>date.timezone</em> setting to whatever your server's timezone is. For example, if your server is in the 'America/New_York' timezone,
-    set the date.timezone parameter to this value in your php.ini:</p>
+<p><strong>Important:</strong> You need to set your <em>date.timezone</em> setting to whatever your server's timezone
+    is. For example, if your server is in the 'America/New_York' timezone, set the date.timezone parameter to this
+    value in your php.ini:</p>
 
 <pre>
-date.timezone = 'America/New_York'
+date.timezone = 'America/New_York';
 </pre>
 <br />
-<p><strong>Note:</strong> <span class="text-muted">PHP 5.3.9 introduces a new setting "max_input_vars", which limits the number of elements you can send in one single form. If you are dealing with numerous users or very long learning paths (many items), make sure you set this setting higher than its default value of 1000.</span></p>
+<p><strong>Note:</strong> <span class="text-muted">PHP 5.3.9 introduced the "max_input_vars" setting, which limits the number of elements you can send in one single form. If you are dealing with numerous users or very long learning paths (many items), make sure you set this setting higher than its default value of 1000.</span></p>
 
-<p><strong>BSD and CentOS users:</strong> these php libraries have to be included during the PHP installation (php5 might have to be replaced by php in some instances):</p>
+<p><strong>BSD and CentOS users:</strong> these php libraries have to be included during the PHP installation (php might have to be replaced by php{version} in some instances):</p>
 
 <ul>
-    <li>php5-session: The session shared extension for php</li>
-    <li>php5-mysqlnd (or php5-mysqli): The mysql shared extension for php</li>
-    <li>php5-zlib: The zlib shared extension for php</li>
-    <li>php5-pcre: The pcre shared extension for php</li>
-    <li>php5-xml</li>
-    <li>php5-json</li>
-    <li>php5-mcrypt</li>
-    <li>php5-iconv or php5-mbstring (either one of them)</li>
-    <li>php5-gd The graphics-generation extension for PHP</li>
-    <li>php5-intl The international behaviours extension for PHP</li>
+    <li>php-session: The session shared extension for php</li>
+    <li>php-mysql (or php-mysqlnd): The mysql shared extension for php</li>
+    <li>php-zlib: The zlib shared extension for php</li>
+    <li>php-pcre: The pcre shared extension for php</li>
+    <li>php-xml</li>
+    <li>php-json</li>
+    <li>php-mcrypt (only for PHP 5.*)</li>
+    <li>php-iconv or php5-mbstring (either one of them)</li>
+    <li>php-gd, the graphics-generation extension for PHP</li>
+    <li>php-intl, the international behaviours extension for PHP</li>
+    <li>php-fileinfo, the extension to properly deal with file types - used in assignments tool</li>
+    <li>php-curl, the extension to deal with external calls. Used in the links tool</li>
 </ul>
 
 <p>You might also add the following php modules and packages:</p>
 <ul>
-    <li>php5-ctype</li>
-    <li>php5-ldap</li>
-    <li>php5-xapian</li>
-    <li>php5-curl</li>
-    <li>php5-xsl</li>
+    <li>php-ctype</li>
+    <li>php-ldap</li>
+    <li>php-xapian</li>
+    <li>php-xsl</li>
 </ul>
 
 
@@ -841,93 +842,110 @@ If you have issues with files taking a long time to download, make sure you reco
     </div>
     <h3>IIS</h3>
     <div>
-        User @ullfindsmit on Github was kind enough to provide this IIS configuration after testing it based on our
+        Users @ullfindsmit and @rozepeda on Github were kind enough to contribute to this IIS configuration after testing it based on our
         configurations above. This has not been tested by the Chamilo team, but the rules look legit:<br /><br />
         <pre>
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
-    &lt;configuration&gt;
+&lt;configuration&gt;
     &lt;system.webServer&gt;
+        &lt;httpRedirect enabled="false" destination="" httpResponseStatus="Permanent" /&gt;
         &lt;rewrite&gt;
             &lt;rules&gt;
                 &lt;rule name="rule 1v" stopProcessing="true"&gt;
-                    &lt;match url="^certificates/$"  /&gt;
-                    &lt;action type="Rewrite" url="/certificates/index.php?id=%1"  /&gt;
+                    &lt;match url="^certificates/$" /&gt;
+                    &lt;action type="Rewrite" url="certificates/index.php?id=%1" appendQueryString="false" /&gt;
                 &lt;/rule&gt;
-                &lt;rule name="rule 2v" stopProcessing="true"&gt;
-                    &lt;match url="^courses/([^/]+)/?$"  /&gt;
-                    &lt;action type="Rewrite" url="/main/course_home/course_home.php?cDir={R:1}"  appendQueryString="true" /&gt;
+                &lt;rule name="rule 2v" enabled="true" stopProcessing="true"&gt;
+                    &lt;match url="^courses/([^/]+)/?$" /&gt;
+                    &lt;action type="Rewrite" url="main/course_home/course_home.php?cDir={R:1}" appendQueryString="true" /&gt;
                 &lt;/rule&gt;
-                &lt;rule name="rule 3v" stopProcessing="true"&gt;
-                    &lt;match url="^courses/([^/]+)/index.php$"  /&gt;
-                    &lt;action type="Rewrite" url="/main/course_home/course_home.php?cDir={R:1}"  appendQueryString="true" /&gt;
+                &lt;rule name="rule 3v" enabled="true" stopProcessing="true"&gt;
+                    &lt;match url="^courses/([^/]+)/index.php$" /&gt;
+                    &lt;action type="Rewrite" url="main/course_home/course_home.php?cDir={R:1}" /&gt;
                 &lt;/rule&gt;
                 &lt;rule name="rule 4v" stopProcessing="true"&gt;
-                    &lt;match url="^courses/([^/]+)/scorm/(.*)$"  /&gt;
-                    &lt;action type="Rewrite" url="/main/document/download_scorm.php?doc_url=/{R:2}&amp;cDir={R:1}"  appendQueryString="true" /&gt;
+                    &lt;match url="^courses/([^/]+)/scorm/(.*([\.js|\.css|\.png|\.jpg|\.jpeg|\.gif]))$" /&gt;
+                    &lt;action type="Rewrite" url="app/courses/{R:1}/scorm/{R:2}" /&gt;
                 &lt;/rule&gt;
                 &lt;rule name="rule 5v" stopProcessing="true"&gt;
-                    &lt;match url="^courses/([^/]+)/document/certificates/(.*)$"  /&gt;
-                    &lt;action type="Rewrite" url="/app/courses/{R:1}/document/certificates/{R:2}"  appendQueryString="true" /&gt;
+                    &lt;match url="^courses/([^/]+)/scorm/(.*)$" /&gt;
+                    &lt;action type="Rewrite" url="main/document/download_scorm.php?doc_url=/{R:2}&amp;cDir={R:1}" /&gt;
                 &lt;/rule&gt;
-                &lt;rule name="rule 6v" stopProcessing="true"&gt;
-                    &lt;match url="^courses/([^/]+)/document/(.*)$"  /&gt;
-                    &lt;action type="Rewrite" url="/main/document/download.php?doc_url=/{R:2}&amp;cDir={R:1}"  appendQueryString="true" /&gt;
+                &lt;rule name="rule v6" stopProcessing="true"&gt;
+                    &lt;match url="^courses/([^/]+)/document/certificates/(.*)$" /&gt;
+                    &lt;action type="Rewrite" url="app/courses/{R:1}/document/certificates/{R:2}" /&gt;
                 &lt;/rule&gt;
-                &lt;rule name="rule 7v" stopProcessing="true"&gt;
-                    &lt;match url="^courses/([^/]+)/upload/([^/]+)/(.*)$"  /&gt;
-                    &lt;action type="Rewrite" url="/main/document/download_uploaded_files.php?code={R:1}&amp;type={R:2}&amp;file={R:3}"  appendQueryString="true" /&gt;
+                &lt;rule name="rule v7" stopProcessing="true"&gt;
+                    &lt;match url="^courses/([^/]+)/document/(.*)$" /&gt;
+                    &lt;action type="Rewrite" url="main/document/download.php?doc_url=/{R:2}&amp;cDir={R:1}" /&gt;
                 &lt;/rule&gt;
-                &lt;rule name="rule 8v" stopProcessing="true"&gt;
-                    &lt;match url="^courses/([^/]+)/work/(.*)$"  /&gt;
-                    &lt;action type="Rewrite" url="/main/work/download.php?file=work/{R:2}&amp;cDir={R:1}"  appendQueryString="true" /&gt;
+                &lt;rule name="rule v8" stopProcessing="true"&gt;
+                    &lt;match url="^courses/([^/]+)/upload/course_home_icons/(.*([\.js|\.css|\.png|\.jpg|\.jpeg|\.gif]))$" /&gt;
+                    &lt;action type="Rewrite" url="app/courses/{R:1}/upload/course_home_icons/{R:2}" /&gt;
                 &lt;/rule&gt;
-                &lt;rule name="rule 9v" stopProcessing="true"&gt;
-                    &lt;match url="^courses/([^/]+)/course-pic85x85.png$"  /&gt;
-                    &lt;action type="Rewrite" url="/main/inc/ajax/course.ajax.php?a=get_course_image&amp;code={R:1}&amp;image=course_image_source"  appendQueryString="true" /&gt;
+                &lt;rule name="rule v9" stopProcessing="true"&gt;
+                    &lt;match url="^courses/([^/]+)/upload/([^/]+)/(.*)$" /&gt;
+                    &lt;action type="Rewrite" url="main/document/download_uploaded_files.php?code={R:1}&amp;type={R:2}&amp;file={R:3}" /&gt;
                 &lt;/rule&gt;
-                &lt;rule name="rule 10v" stopProcessing="true"&gt;
-                    &lt;match url="^courses/([^/]+)/course-pic.png$"  /&gt;
-                    &lt;action type="Rewrite" url="/main/inc/ajax/course.ajax.php?a=get_course_image&amp;code={R:1}&amp;image=course_image_large_source"  appendQueryString="true" /&gt;
+                &lt;rule name="rule v10" stopProcessing="true"&gt;
+                    &lt;match url="^courses/([^/]+)/work/(.*)$" /&gt;
+                    &lt;action type="Rewrite" url="main/work/download.php?file=work/{R:2}&amp;cDir={R:1}" /&gt;
                 &lt;/rule&gt;
-                &lt;rule name="rule 11v" stopProcessing="true"&gt;
-                    &lt;match url="^courses/([^/]+)/(.*)$"  /&gt;
-                    &lt;action type="Rewrite" url="/app/courses/{R:1}/{R:2}"  appendQueryString="true" /&gt;
+                &lt;rule name="rule v11" stopProcessing="true"&gt;
+                    &lt;match url="^courses/([^/]+)/course-pic85x85.png$" /&gt;
+                    &lt;action type="Rewrite" url="main/inc/ajax/course.ajax.php?a=get_course_image&amp;code={R:1}&amp;image=course_image_source" appendQueryString="true" /&gt;
                 &lt;/rule&gt;
-                &lt;rule name="rule 12v" stopProcessing="true"&gt;
-                    &lt;match url="^session/(\d{1,})/about/?$"  /&gt;
-                    &lt;action type="Rewrite" url="/main/session/about.php?session_id={R:1}"  /&gt;
+                &lt;rule name="rule v12" stopProcessing="true"&gt;
+                    &lt;match url="^courses/([^/]+)/course-pic.png$" /&gt;
+                    &lt;action type="Rewrite" url="main/inc/ajax/course.ajax.php?a=get_course_image&amp;code={R:1}&amp;image=course_image_large_source" appendQueryString="true" /&gt;
                 &lt;/rule&gt;
-                &lt;rule name="rule 13v" stopProcessing="true"&gt;
-                    &lt;match url="^badge/(\d{1,})"  /&gt;
-                    &lt;action type="Rewrite" url="/main/badge/issued.php?issue={R:1}"  /&gt;
+                &lt;rule name="rule v13" stopProcessing="true"&gt;
+                    &lt;match url="^courses/([^/]+)/(.*)$" /&gt;
+                    &lt;action type="Rewrite" url="app/courses/{R:1}/{R:2}" appendQueryString="false" /&gt;
                 &lt;/rule&gt;
-                &lt;rule name="rule 14v" stopProcessing="true"&gt;
-                    &lt;match url="^skill/(\d{1,})/user/(\d{1,})"  /&gt;
-                    &lt;action type="Rewrite" url="/main/badge/issued_all.php?skill={R:1}&amp;user={R:2}"  /&gt;
+                &lt;rule name="rule v14" stopProcessing="true"&gt;
+                    &lt;match url="^session/(\d{1,})/about/?$" /&gt;
+                    &lt;action type="Rewrite" url="main/session/about.php?session_id={R:1}" appendQueryString="false" /&gt;
                 &lt;/rule&gt;
-                &lt;rule name="rule 15v" stopProcessing="true"&gt;
-                    &lt;match url="^badge/(\d{1,})/user/(\d{1,})"  /&gt;
-                    &lt;action type="Rewrite" url="/main/badge/issued_all.php?skill={R:1}&amp;user={R:2}"  /&gt;
+                &lt;rule name="rule v15" stopProcessing="true"&gt;
+                    &lt;match url="^course/(\d{1,})/about/?$" /&gt;
+                    &lt;action type="Rewrite" url="main/course_info/about.php?course_id={R:1}" appendQueryString="false" /&gt;
                 &lt;/rule&gt;
-                &lt;rule name="rule 16v" stopProcessing="true"&gt;
-                    &lt;match url="^main/exercice/(.*)$"  /&gt;
-                    &lt;action type="Rewrite" url="/main/exercise/{R:1}"  appendQueryString="true" /&gt;
+                &lt;rule name="rule v16" stopProcessing="true"&gt;
+                    &lt;match url="^badge/(\d{1,})" /&gt;
+                    &lt;action type="Rewrite" url="main/badge/issued.php?issue={R:1}" appendQueryString="false" /&gt;
                 &lt;/rule&gt;
-                &lt;rule name="rule 17v" stopProcessing="true"&gt;
-                    &lt;match url="^main/newscorm/(.*)$"  /&gt;
-                    &lt;action type="Rewrite" url="/main/lp/{R:1}"  appendQueryString="true" /&gt;
+                &lt;rule name="rule v17" stopProcessing="true"&gt;
+                    &lt;match url="^skill/(\d{1,})/user/(\d{1,})" /&gt;
+                    &lt;action type="Rewrite" url="main/badge/issued_all.php?skill={R:1}&amp;user={R:2}" appendQueryString="false" /&gt;
                 &lt;/rule&gt;
-                &lt;rule name="rule 18v" stopProcessing="true"&gt;
-                    &lt;match url="^service/(\d{1,})$"  /&gt;
-                    &lt;action type="Rewrite" url="/plugin/buycourses/src/service_information.php?service_id={R:1}"  /&gt;
+                &lt;rule name="rule v18" stopProcessing="true"&gt;
+                    &lt;match url="^badge/(\d{1,})/user/(\d{1,})" /&gt;
+                    &lt;action type="Rewrite" url="main/badge/issued_all.php?skill={R:1}&amp;user={R:2}" appendQueryString="false" /&gt;
                 &lt;/rule&gt;
-                &lt;rule name="rule 19v" stopProcessing="true"&gt;
-                    &lt;match url="^([^/.]+)/?$"  /&gt;
-                    &lt;action type="Rewrite" url="/user.php?{R:1}"  /&gt;
+                &lt;rule name="rule v19" stopProcessing="true"&gt;
+                    &lt;match url="^main/exercice/(.*)$" /&gt;
+                    &lt;action type="Rewrite" url="main/exercise/{R:1}" appendQueryString="true" /&gt;
                 &lt;/rule&gt;
-                &lt;rule name="rule 20v" stopProcessing="true"&gt;
-                    &lt;match url="^(tests|.git)"  ignoreCase="true" /&gt;
-                    &lt;action type="Rewrite" url="/-"  /&gt;
+                &lt;rule name="rule v20" stopProcessing="true"&gt;
+                    &lt;match url="^main/newscorm/(.*)$" /&gt;
+                    &lt;action type="Rewrite" url="main/lp/{R:1}" appendQueryString="true" /&gt;
+                &lt;/rule&gt;
+                &lt;rule name="rule v21" stopProcessing="true"&gt;
+                    &lt;match url="^service/(\d{1,})$" /&gt;
+                    &lt;action type="Rewrite" url="plugin/buycourses/src/service_information.php?service_id={R:1}" appendQueryString="false" /&gt;
+                &lt;/rule&gt;
+                &lt;rule name="rule v22" stopProcessing="true"&gt;
+                    &lt;match url="^lti/os$" /&gt;
+                    &lt;action type="Rewrite" url="plugin/ims_lti/outcome_service.php" appendQueryString="false" /&gt;
+                &lt;/rule&gt;
+                &lt;rule name="rule v23" stopProcessing="true"&gt;
+                    &lt;match url="^([^/.]+)/?$" /&gt;
+                    &lt;action type="Rewrite" url="user.php?{R:1}" appendQueryString="false" /&gt;
+                &lt;/rule&gt;
+                &lt;rule name="rule v24" stopProcessing="true"&gt;
+                    &lt;match url="^(tests|.git)" ignoreCase="false" /&gt;
+                    &lt;action type="Rewrite" url="/-" /&gt;
                 &lt;/rule&gt;
             &lt;/rules&gt;
         &lt;/rewrite&gt;

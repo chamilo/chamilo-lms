@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
@@ -8,6 +9,7 @@ use Chamilo\CoreBundle\Entity\SkillRelUserComment;
 use Chamilo\UserBundle\Entity\User;
 use Chamilo\UserBundle\Repository\UserRepository;
 use ChamiloSession as Session;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Security\Core\Encoder\EncoderFactory;
 
 /**
@@ -15,8 +17,6 @@ use Symfony\Component\Security\Core\Encoder\EncoderFactory;
  *
  * This library provides functions for user management.
  * Include/require it in your code to use its functionality.
- *
- * @package chamilo.library
  *
  * @author Julio Montoya <gugli100@gmail.com> Social network groups added 2009/12
  */
@@ -152,6 +152,7 @@ class UserManager
         $userManager = self::getManager();
         $user->setPlainPassword($password);
         $userManager->updateUser($user, true);
+        Event::addEvent(LOG_USER_PASSWORD_UPDATE, LOG_USER_ID, $userId);
     }
 
     /**
@@ -383,7 +384,7 @@ class UserManager
             Database::query($sql);
 
             if ($isAdmin) {
-                self::add_user_as_admin($user);
+                self::addUserAsAdmin($user);
             }
 
             if (api_get_multiple_access_url()) {
@@ -910,14 +911,16 @@ class UserManager
             return false;
         }
 
-        $sql = "SELECT * FROM $table_course_user
-                WHERE status = 1 AND user_id = ".$user_id;
-        $res = Database::query($sql);
-        while ($course = Database::fetch_object($res)) {
-            $sql = "SELECT id FROM $table_course_user
-                    WHERE status=1 AND c_id = ".intval($course->c_id);
-            $res2 = Database::query($sql);
-            if (Database::num_rows($res2) == 1) {
+        $res = Database::query(
+            "SELECT c_id FROM $table_course_user WHERE status = 1 AND user_id = $user_id"
+        );
+        while ($course = Database::fetch_assoc($res)) {
+            $sql = Database::query(
+                "SELECT COUNT(id) number FROM $table_course_user WHERE status = 1 AND c_id = {$course['c_id']}"
+            );
+            $res2 = Database::fetch_assoc($sql);
+
+            if ($res2['number'] == 1) {
                 return false;
             }
         }
@@ -1010,17 +1013,12 @@ class UserManager
             RedirectionPlugin::deleteUserRedirection($user_id);
         }
 
-        // Delete user picture
-        /* TODO: Logic about api_get_setting('split_users_upload_directory') == 'true'
-        a user has 4 different sized photos to be deleted. */
         $user_info = api_get_user_info($user_id);
 
-        if (strlen($user_info['picture_uri']) > 0) {
-            $path = self::getUserPathById($user_id, 'system');
-            $img_path = $path.$user_info['picture_uri'];
-            if (file_exists($img_path)) {
-                unlink($img_path);
-            }
+        try {
+            self::deleteUserFiles($user_id);
+        } catch (Exception $exception) {
+            error_log('Delete user exception: '.$exception->getMessage());
         }
 
         // Delete the personal course categories
@@ -1439,9 +1437,11 @@ class UserManager
 
         if (!is_null($password)) {
             $user->setPlainPassword($password);
+            Event::addEvent(LOG_USER_PASSWORD_UPDATE, LOG_USER_ID, $user_id);
         }
 
         $userManager->updateUser($user, true);
+        Event::addEvent(LOG_USER_UPDATE, LOG_USER_ID, $user_id);
 
         if ($change_active == 1) {
             if ($active == 1) {
@@ -3041,7 +3041,9 @@ class UserManager
         return $extra_data;
     }
 
-    /** Get extra user data by field
+    /**
+     * Get extra user data by field.
+     *
      * @param int    user ID
      * @param string the internal variable name of the field
      *
@@ -3179,13 +3181,13 @@ class UserManager
     /**
      * Get extra user data by value.
      *
-     * @param string $variable       the internal variable name of the field
-     * @param string $value          the internal value of the field
-     * @param bool   $all_visibility
+     * @param string $variable the internal variable name of the field
+     * @param string $value    the internal value of the field
+     * @param bool   $useLike
      *
      * @return array with extra data info of a user i.e array('field_variable'=>'value');
      */
-    public static function get_extra_user_data_by_value($variable, $value, $all_visibility = true)
+    public static function get_extra_user_data_by_value($variable, $value, $useLike = false)
     {
         $extraFieldValue = new ExtraFieldValue('user');
         $extraField = new ExtraField('user');
@@ -3201,7 +3203,8 @@ class UserManager
             $value,
             false,
             false,
-            true
+            true,
+            $useLike
         );
 
         $result = [];
@@ -3375,7 +3378,7 @@ class UserManager
                     break;
                 case 'end_date':
                     $order = " ORDER BY s.accessEndDate $orderSetting ";
-                    if ($orderSetting == 'asc') {
+                    if ($orderSetting === 'asc') {
                         // Put null values at the end
                         // https://stackoverflow.com/questions/12652034/how-can-i-order-by-null-in-dql
                         $order = ' ORDER BY _isFieldNull asc, s.accessEndDate asc';
@@ -3821,7 +3824,8 @@ class UserManager
                     c.visibility,
                     c.id as real_id,
                     c.code as course_code,
-                    sc.position
+                    sc.position,
+                    c.unsubscribe
                 FROM $tbl_session_course_user as scu
                 INNER JOIN $tbl_session_course sc
                 ON (scu.session_id = sc.session_id AND scu.c_id = sc.c_id)
@@ -3857,7 +3861,8 @@ class UserManager
                         c.visibility,
                         c.id as real_id,
                         c.code as course_code,
-                        sc.position
+                        sc.position,
+                        c.unsubscribe
                     FROM $tbl_session_course_user as scu
                     INNER JOIN $tbl_session as s
                     ON (scu.session_id = s.id)
@@ -5742,14 +5747,13 @@ class UserManager
         return $icon_link;
     }
 
-    public static function add_user_as_admin(User $user)
+    public static function addUserAsAdmin(User $user)
     {
-        $table_admin = Database::get_main_table(TABLE_MAIN_ADMIN);
         if ($user) {
             $userId = $user->getId();
-
             if (!self::is_admin($userId)) {
-                $sql = "INSERT INTO $table_admin SET user_id = $userId";
+                $table = Database::get_main_table(TABLE_MAIN_ADMIN);
+                $sql = "INSERT INTO $table SET user_id = $userId";
                 Database::query($sql);
             }
 
@@ -5758,16 +5762,15 @@ class UserManager
         }
     }
 
-    /**
-     * @param int $userId
-     */
-    public static function remove_user_admin($userId)
+    public static function removeUserAdmin(User $user)
     {
-        $table_admin = Database::get_main_table(TABLE_MAIN_ADMIN);
-        $userId = (int) $userId;
+        $userId = (int) $user->getId();
         if (self::is_admin($userId)) {
-            $sql = "DELETE FROM $table_admin WHERE user_id = $userId";
+            $table = Database::get_main_table(TABLE_MAIN_ADMIN);
+            $sql = "DELETE FROM $table WHERE user_id = $userId";
             Database::query($sql);
+            $user->removeRole('ROLE_SUPER_ADMIN');
+            self::getManager()->updateUser($user, true);
         }
     }
 
@@ -5867,6 +5870,14 @@ class UserManager
 
             foreach ($bossList as $bossId) {
                 $bossId = (int) $bossId;
+                $bossInfo = api_get_user_info($bossId);
+
+                if (empty($bossInfo)) {
+                    continue;
+                }
+
+                $bossLanguage = $bossInfo['language'];
+
                 $sql = "INSERT IGNORE INTO $userRelUserTable (user_id, friend_user_id, relation_type)
                         VALUES ($studentId, $bossId, ".USER_RELATION_TYPE_BOSS.")";
                 $insertId = Database::query($sql);
@@ -5876,8 +5887,15 @@ class UserManager
                         $name = $studentInfo['complete_name'];
                         $url = api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$studentId;
                         $url = Display::url($url, $url);
-                        $subject = sprintf(get_lang('UserXHasBeenAssignedToBoss'), $name);
-                        $message = sprintf(get_lang('UserXHasBeenAssignedToBossWithUrlX'), $name, $url);
+                        $subject = sprintf(
+                            get_lang('UserXHasBeenAssignedToBoss', false, $bossLanguage),
+                            $name
+                        );
+                        $message = sprintf(
+                            get_lang('UserXHasBeenAssignedToBossWithUrlX', false, $bossLanguage),
+                            $name,
+                            $url
+                        );
                         MessageManager::send_message_simple(
                             $bossId,
                             $subject,
@@ -6985,6 +7003,19 @@ SQL;
     }
 
     /**
+     * @param int $userInfo
+     *
+     * @throws Exception
+     */
+    public static function deleteUserFiles($userId)
+    {
+        $path = self::getUserPathById($userId, 'system');
+
+        $fs = new Filesystem();
+        $fs->remove($path);
+    }
+
+    /**
      * @return EncoderFactory
      */
     private static function getEncoderFactory()
@@ -6994,9 +7025,7 @@ SQL;
             'Chamilo\\UserBundle\\Entity\\User' => new \Chamilo\UserBundle\Security\Encoder($encryption),
         ];
 
-        $encoderFactory = new EncoderFactory($encoders);
-
-        return $encoderFactory;
+        return new EncoderFactory($encoders);
     }
 
     /**

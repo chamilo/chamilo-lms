@@ -1221,6 +1221,26 @@ function clean_up_files_in_zip($p_event, &$p_header)
     return 1;
 }
 
+function cleanZipFilesNoRename($p_event, &$p_header)
+{
+    $originalStoredFileName = $p_header['stored_filename'];
+    $baseName = basename($originalStoredFileName);
+    // Skip files
+    $skipFiles = [
+        '__MACOSX',
+        '.Thumbs.db',
+        'Thumbs.db',
+    ];
+
+    if (in_array($baseName, $skipFiles)) {
+        return 0;
+    }
+    $modifiedStoredFileName = clean_up_path($originalStoredFileName, false);
+    $p_header['filename'] = str_replace($originalStoredFileName, $modifiedStoredFileName, $p_header['filename']);
+
+    return 1;
+}
+
 /**
  * Allow .htaccess file.
  *
@@ -1260,13 +1280,14 @@ function cleanZipFilesAllowHtaccess($p_event, &$p_header)
  * by eliminating dangerous file names and cleaning them.
  *
  * @param string $path
+ * @param bool   $replaceName
  *
  * @return string
  *
  * @see disable_dangerous_file()
  * @see api_replace_dangerous_char()
  */
-function clean_up_path($path)
+function clean_up_path($path, $replaceName = true)
 {
     // Split the path in folders and files
     $path_array = explode('/', $path);
@@ -1274,7 +1295,10 @@ function clean_up_path($path)
     foreach ($path_array as $key => &$val) {
         // We don't want to lose the dots in ././folder/file (cfr. zipfile)
         if ($val != '.') {
-            $val = disable_dangerous_file(api_replace_dangerous_char($val));
+            if ($replaceName) {
+                $val = api_replace_dangerous_char($val);
+            }
+            $val = disable_dangerous_file($val);
         }
     }
     // Join the "cleaned" path (modified in-place as passed by reference)
@@ -1510,11 +1534,11 @@ function item_property_update_on_folder($_course, $path, $user_id)
             if ($folder_id) {
                 $sql = "UPDATE $table SET
 				        lastedit_date = '$time',
-				        lastedit_type = 'DocumentInFolderUpdated', 
+				        lastedit_type = 'DocumentInFolderUpdated',
 				        lastedit_user_id='$user_id'
-						WHERE 
-						    c_id = $course_id AND 
-						    tool='".TOOL_DOCUMENT."' AND 
+						WHERE
+						    c_id = $course_id AND
+						    tool='".TOOL_DOCUMENT."' AND
 						    ref = '$folder_id'";
                 Database::query($sql);
             }
@@ -1707,7 +1731,7 @@ function create_unexisting_directory(
     }
 
     if (!is_dir($base_work_dir.$systemFolderName)) {
-        $result = mkdir(
+        $result = @mkdir(
             $base_work_dir.$systemFolderName,
             api_get_permissions_for_new_directories(),
             true

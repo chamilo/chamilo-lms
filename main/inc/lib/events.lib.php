@@ -305,23 +305,16 @@ class Event
         $courseId = api_get_course_int_id();
         $sessionId = api_get_session_id();
 
-        $sql = "INSERT INTO $table (
-                 down_user_id,
-                 c_id,
-                 down_doc_path,
-                 down_date,
-                 down_session_id
-                )
-                VALUES (
-                 $userId,
-                 $courseId,
-                 '$documentUrl',
-                 '$reallyNow',
-                 $sessionId
-                )";
-        Database::query($sql);
-
-        return 1;
+        return Database::insert(
+            $table,
+            [
+                'down_user_id' => $userId,
+                'c_id' => $courseId,
+                'down_doc_path' => $documentUrl,
+                'down_date' => $reallyNow,
+                'down_session_id' => $sessionId,
+            ]
+        );
     }
 
     /**
@@ -550,6 +543,7 @@ class Event
         $position = Database::escape_string($position);
         $now = api_get_utc_datetime();
         $course_id = (int) $course_id;
+        $recording = api_get_configuration_value('quiz_answer_extra_recording') == true;
 
         // check user_id or get from context
         if (empty($user_id)) {
@@ -655,16 +649,16 @@ class Event
                     error_log("Insert attempt with id #$attempt_id");
                 }
 
-                if (defined('ENABLED_LIVE_EXERCISE_TRACKING')) {
+                if ($recording) {
                     if ($debug) {
                         error_log("Saving e attempt recording ");
                     }
                     $attempt_recording = [
                         'exe_id' => $attempt_id,
                         'question_id' => $question_id,
+                        'answer' => $answer,
                         'marks' => $score,
                         'insert_date' => $now,
-                        'author' => '',
                         'session_id' => $session_id,
                     ];
                     Database::insert($recording_table, $attempt_recording);
@@ -682,13 +676,13 @@ class Event
                     ]
                 );
 
-                if (defined('ENABLED_LIVE_EXERCISE_TRACKING')) {
+                if ($recording) {
                     $attempt_recording = [
                         'exe_id' => $exe_id,
                         'question_id' => $question_id,
+                        'answer' => $answer,
                         'marks' => $score,
                         'insert_date' => $now,
-                        'author' => '',
                         'session_id' => $session_id,
                     ];
 

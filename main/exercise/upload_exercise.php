@@ -5,8 +5,6 @@ use ChamiloSession as Session;
 
 /**
  * Upload quiz: This script shows the upload quiz feature.
- *
- * @package chamilo.exercise
  */
 
 // setting the help

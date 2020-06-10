@@ -1,16 +1,14 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * @author Julio Montoya <gugli100@gmail.com> BeezNest 2012
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
- *
- * @package chamilo.admin
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
-// Access restrictions
 api_protect_admin_script();
 
 $pluginName = $_GET['name'];
@@ -49,7 +47,7 @@ if (isset($form)) {
         $values = $form->getSubmitValues();
 
         // Fix only for bbb
-        if ($pluginName == 'bbb') {
+        if ($pluginName === 'bbb') {
             if (!isset($values['global_conference_allow_roles'])) {
                 $values['global_conference_allow_roles'] = [];
             }
@@ -71,7 +69,7 @@ if (isset($form)) {
         foreach ($values as $key => $value) {
             api_add_setting(
                 $value,
-                Database::escape_string($pluginName.'_'.$key),
+                $pluginName.'_'.$key,
                 $pluginName,
                 'setting',
                 'Plugins',
@@ -83,6 +81,13 @@ if (isset($form)) {
                 1
             );
         }
+        Event::addEvent(
+            LOG_PLUGIN_CHANGE,
+            LOG_PLUGIN_SETTINGS_CHANGE,
+            $pluginName,
+            api_get_utc_datetime(),
+            $user_id
+        );
 
         /** @var \Plugin $objPlugin */
         $objPlugin = $pluginInfo['plugin_class']::create();

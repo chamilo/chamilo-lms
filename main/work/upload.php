@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -69,9 +70,9 @@ $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('UploadADocument')];
 $form = new FormValidator(
     'form-work',
     'POST',
-    api_get_self()."?".api_get_cidreq()."&id=".$work_id,
+    api_get_self().'?'.api_get_cidreq().'&id='.$work_id,
     '',
-    ['enctype' => "multipart/form-data"]
+    ['enctype' => 'multipart/form-data']
 );
 
 setWorkUploadForm($form, $workInfo['allow_text_assignment']);
@@ -127,7 +128,7 @@ $htmlHeadXtra[] = to_javascript_work();
 Display::display_header(null);
 
 // Only text
-if ($workInfo['allow_text_assignment'] == 1) {
+if (1 == $workInfo['allow_text_assignment']) {
     $tabs = $form->returnForm();
 } else {
     $headers = [

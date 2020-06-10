@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 $cidReset = true; // Flag forcing the 'current course' reset
@@ -9,7 +10,7 @@ api_block_anonymous_users();
 
 $auth = new Auth();
 $user_course_categories = CourseManager::get_user_course_categories(api_get_user_id());
-$courses_in_category = $auth->get_courses_in_category();
+$courses_in_category = $auth->getCoursesInCategory();
 
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
 $currentUrl = api_get_self();
@@ -188,7 +189,7 @@ switch ($action) {
         }
 
         $table = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
-        $sql = "UPDATE $table 
+        $sql = "UPDATE $table
                 SET collapsed = $option
                 WHERE user_id = $userId AND id = $categoryId";
         Database::query($sql);

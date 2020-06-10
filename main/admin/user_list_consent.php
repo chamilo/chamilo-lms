@@ -6,8 +6,6 @@ use ChamiloSession as Session;
 /**
  * @author Bart Mollet
  * @author Julio Montoya <gugli100@gmail.com> BeezNest 2011
- *
- * @package chamilo.admin
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -100,7 +98,7 @@ function prepare_user_sql_query($getCount)
         }
     }
 
-    if ($atLeastOne == false) {
+    if (false == $atLeastOne) {
         $keywordListValues = [];
     }
 
@@ -225,7 +223,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
             alt="'.api_get_person_name($user[2], $user[3]).'" 
             title="'.api_get_person_name($user[2], $user[3]).'" />';
 
-        if ($user[7] == 1 && !empty($user[10])) {
+        if (1 == $user[7] && !empty($user[10])) {
             // check expiration date
             $expiration_time = convert_sql_date($user[10]);
             // if expiration date is passed, store a special value for active field

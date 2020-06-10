@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Repository\CourseRepository;
@@ -25,8 +26,6 @@ use Symfony\Component\Finder\Finder;
  * and SCORM learnpaths. It is used by the scorm class.
  *
  * @todo decouple class
- *
- * @package chamilo.learnpath
  *
  * @author  Yannick Warnier <ywarnier@beeznest.org>
  * @author  Julio Montoya   <gugli100@gmail.com> Several improvements and fixes
@@ -561,7 +560,7 @@ class learnpath
         $id = (int) $id;
         $typeCleaned = Database::escape_string($type);
         $max_score = 100;
-        if ($type === 'quiz') {
+        if ($type === 'quiz' && $id) {
             $sql = 'SELECT SUM(ponderation)
                     FROM '.Database::get_course_table(TABLE_QUIZ_QUESTION).' as quiz_question
                     INNER JOIN '.Database::get_course_table(TABLE_QUIZ_TEST_QUESTION).' as quiz_rel_question
@@ -2325,8 +2324,7 @@ class learnpath
             $row = Database::fetch_array($rs, 'ASSOC');
 
             if (!empty($row['category_id'])) {
-                $em = Database::getManager();
-                $category = $em->getRepository('ChamiloCourseBundle:CLpCategory')->find($row['category_id']);
+                $category = self::getCategory($row['category_id']);
                 if (self::categoryIsVisibleForStudent($category, api_get_user_entity($student_id)) === false) {
                     return false;
                 }
@@ -2564,13 +2562,16 @@ class learnpath
                 $score = $item->get_score();
                 $maxScore = $item->get_max();
                 if ($mode = '%') {
-                    $percentage = ((float) $score / (float) $maxScore) * 100;
+                    if (!empty($maxScore)) {
+                        $percentage = ((float) $score / (float) $maxScore) * 100;
+                    }
                     $percentage = number_format($percentage, 0);
                     $text = '%';
                 } else {
                     $percentage = $score;
                     $text = '/'.$maxScore;
                 }
+
                 return [$percentage, $text];
             }
         }
@@ -3662,7 +3663,7 @@ class learnpath
 
                             $type_quiz = false;
                             foreach ($list as $toc) {
-                                if ($toc['id'] == $lp_item_id && $toc['type'] == 'quiz') {
+                                if ($toc['id'] == $lp_item_id && $toc['type'] === 'quiz') {
                                     $type_quiz = true;
                                 }
                             }
@@ -3838,10 +3839,11 @@ class learnpath
      * Gets the latest usable view or generate a new one.
      *
      * @param int $attempt_num Optional attempt number. If none given, takes the highest from the lp_view table
+     * @param int $userId      The user ID, as $this->get_user_id() is not always available
      *
      * @return int DB lp_view id
      */
-    public function get_view($attempt_num = 0)
+    public function get_view($attempt_num = 0, $userId = null)
     {
         $search = '';
         // Use $attempt_num to enable multi-views management (disabled so far).
@@ -3854,11 +3856,22 @@ class learnpath
         $course_id = api_get_course_int_id();
         $sessionId = api_get_session_id();
 
+        // Check user ID.
+        if (empty($userId)) {
+            if (empty($this->get_user_id())) {
+                $this->error = 'User ID is empty in learnpath::get_view()';
+
+                return null;
+            } else {
+                $userId = $this->get_user_id();
+            }
+        }
+
         $sql = "SELECT iid, view_count FROM $lp_view_table
         		WHERE
         		    c_id = $course_id AND
         		    lp_id = ".$this->get_id()." AND
-        		    user_id = ".$this->get_user_id()." AND
+        		    user_id = ".$userId." AND
         		    session_id = $sessionId
         		    $search
                 ORDER BY view_count DESC";
@@ -4520,9 +4533,7 @@ class learnpath
         );
 
         $em = Database::getManager();
-
-        /** @var CLpCategory $category */
-        $category = $em->find('ChamiloCourseBundle:CLpCategory', $id);
+        $category = self::getCategory($id);
 
         if (!$category) {
             return false;
@@ -4704,10 +4715,8 @@ class learnpath
      *
      * @return bool
      */
-    public static function categoryIsPublished(
-        CLpCategory $category,
-        $courseId
-    ) {
+    public static function categoryIsPublished(CLpCategory $category, $courseId)
+    {
         $link = self::getCategoryLinkForTool($category->getId());
         $em = Database::getManager();
 
@@ -4894,6 +4903,13 @@ class learnpath
         );
         $table = Database::get_course_table(TABLE_LP_VIEW);
 
+        $userId = $this->get_user_id();
+        if (empty($userId)) {
+            $userId = api_get_user_id();
+            if ($debug) {
+                error_log('$this->get_user_id() was empty, used api_get_user_id() instead in '.__FILE__.' line '.__LINE__);
+            }
+        }
         if (isset($this->current) && !api_is_invitee()) {
             if ($debug) {
                 error_log('Saving current item ('.$this->current.') for later review', 0);
@@ -4903,7 +4919,7 @@ class learnpath
                     WHERE
                         c_id = $course_id AND
                         lp_id = ".$this->get_id()." AND
-                        user_id = ".$this->get_user_id()." ".$session_condition;
+                        user_id = ".$userId." ".$session_condition;
 
             if ($debug) {
                 error_log('Saving last item seen : '.$sql, 0);
@@ -4921,7 +4937,7 @@ class learnpath
                         WHERE
                             c_id = $course_id AND
                             lp_id = ".$this->get_id()." AND
-                            user_id = ".$this->get_user_id()." ".$session_condition;
+                            user_id = ".$userId." ".$session_condition;
                 // Ignore errors as some tables might not have the progress field just yet.
                 Database::query($sql);
                 $this->progress_db = $progress;
@@ -8520,16 +8536,16 @@ class learnpath
         $arrLP = isset($this->arrMenu) ? $this->arrMenu : [];
         unset($this->arrMenu);
 
-        if ($action == 'add') {
+        if ($action === 'add') {
             $return .= get_lang('CreateTheDocument');
-        } elseif ($action == 'move') {
+        } elseif ($action === 'move') {
             $return .= get_lang('MoveTheCurrentDocument');
         } else {
             $return .= get_lang('EditTheCurrentDocument');
         }
         $return .= '</legend>';
 
-        if (isset($_GET['edit']) && $_GET['edit'] == 'true') {
+        if (isset($_GET['edit']) && $_GET['edit'] === 'true') {
             $return .= Display::return_message(
                 '<strong>'.get_lang('Warning').' !</strong><br />'.get_lang('WarningEditingDocument'),
                 false
@@ -8549,9 +8565,9 @@ class learnpath
         $defaults['description'] = $item_description;
         $form->addElement('html', $return);
 
-        if ($action != 'move') {
+        if ($action !== 'move') {
             $data = $this->generate_lp_folder($_course);
-            if ($action != 'edit') {
+            if ($action !== 'edit') {
                 $folders = DocumentManager::get_all_document_folders(
                     $_course,
                     0,
@@ -8577,8 +8593,8 @@ class learnpath
         $arrHide[0]['padding'] = 20;
 
         for ($i = 0; $i < count($arrLP); $i++) {
-            if ($action != 'add') {
-                if ($arrLP[$i]['item_type'] == 'dir' &&
+            if ($action !== 'add') {
+                if ($arrLP[$i]['item_type'] === 'dir' &&
                     !in_array($arrLP[$i]['id'], $arrHide) &&
                     !in_array($arrLP[$i]['parent_item_id'], $arrHide)
                 ) {
@@ -8670,10 +8686,10 @@ class learnpath
             reset($arrLP);
         }
 
-        if ($action != 'move') {
+        if ($action !== 'move') {
             $arrHide = [];
             for ($i = 0; $i < count($arrLP); $i++) {
-                if ($arrLP[$i]['id'] != $id && $arrLP[$i]['item_type'] != 'dir' &&
+                if ($arrLP[$i]['id'] != $id && $arrLP[$i]['item_type'] !== 'dir' &&
                     $arrLP[$i]['item_type'] !== TOOL_LP_FINAL_ITEM
                 ) {
                     $arrHide[$arrLP[$i]['id']]['value'] = $arrLP[$i]['title'];
@@ -8683,8 +8699,8 @@ class learnpath
             if (!$no_display_add) {
                 $item_type = isset($extra_info['item_type']) ? $extra_info['item_type'] : null;
                 $edit = isset($_GET['edit']) ? $_GET['edit'] : null;
-                if ($extra_info == 'new' || $item_type == TOOL_DOCUMENT ||
-                    $item_type == TOOL_LP_FINAL_ITEM || $edit == 'true'
+                if ($extra_info === 'new' || $item_type == TOOL_DOCUMENT ||
+                    $item_type == TOOL_LP_FINAL_ITEM || $edit === 'true'
                 ) {
                     if (isset($_POST['content'])) {
                         $content = stripslashes($_POST['content']);
@@ -8746,11 +8762,11 @@ class learnpath
                             'BaseHref' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/'.$relative_path,
                         ];
 
-                        if ($_GET['action'] == 'add_item') {
+                        if ($_GET['action'] === 'add_item') {
                             $class = 'add';
                             $text = get_lang('LPCreateDocument');
                         } else {
-                            if ($_GET['action'] == 'edit_item') {
+                            if ($_GET['action'] === 'edit_item') {
                                 $class = 'save';
                                 $text = get_lang('SaveDocument');
                             }
@@ -8779,7 +8795,7 @@ class learnpath
             $position->freeze();
         }
 
-        if ($action == 'move') {
+        if ($action === 'move') {
             $form->addElement('hidden', 'title', $item_title);
             $form->addElement('hidden', 'description', $item_description);
         }
@@ -11999,10 +12015,19 @@ EOD;
         $em->persist($item);
         $em->flush();
 
+        $id = $item->getId();
+
+        $sessionId = api_get_session_id();
+        if (!empty($sessionId) && api_get_configuration_value('allow_session_lp_category')) {
+            $table = Database::get_course_table(TABLE_LP_CATEGORY);
+            $sql = "UPDATE $table SET session_id = $sessionId WHERE iid = $id";
+            Database::query($sql);
+        }
+
         api_item_property_update(
             api_get_course_info(),
             TOOL_LEARNPATH_CATEGORY,
-            $item->getId(),
+            $id,
             'visible',
             api_get_user_id()
         );
@@ -12012,16 +12037,12 @@ EOD;
 
     /**
      * @param array $params
-     *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
      */
     public static function updateCategory($params)
     {
         $em = Database::getManager();
-        /** @var CLpCategory $item */
-        $item = $em->find('ChamiloCourseBundle:CLpCategory', $params['id']);
+        $item = self::getCategory($params['id']);
+
         if ($item) {
             $item->setName($params['name']);
             $em->merge($item);
@@ -12031,18 +12052,12 @@ EOD;
 
     /**
      * @param int $id
-     *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
      */
     public static function moveUpCategory($id)
     {
-        $id = (int) $id;
-        $em = Database::getManager();
-        /** @var CLpCategory $item */
-        $item = $em->find('ChamiloCourseBundle:CLpCategory', $id);
+        $item = self::getCategory($id);
         if ($item) {
+            $em = Database::getManager();
             $position = $item->getPosition() - 1;
             $item->setPosition($position);
             $em->persist($item);
@@ -12059,11 +12074,9 @@ EOD;
      */
     public static function moveDownCategory($id)
     {
-        $id = (int) $id;
-        $em = Database::getManager();
-        /** @var CLpCategory $item */
-        $item = $em->find('ChamiloCourseBundle:CLpCategory', $id);
+        $item = self::getCategory($id);
         if ($item) {
+            $em = Database::getManager();
             $position = $item->getPosition() + 1;
             $item->setPosition($position);
             $em->persist($item);
@@ -12104,7 +12117,7 @@ EOD;
     /**
      * @param int $courseId
      *
-     * @return mixed
+     * @return CLpCategory[]
      */
     public static function getCategories($courseId)
     {
@@ -12113,19 +12126,32 @@ EOD;
         // Using doctrine extensions
         /** @var SortableRepository $repo */
         $repo = $em->getRepository('ChamiloCourseBundle:CLpCategory');
-        $items = $repo
-            ->getBySortableGroupsQuery(['cId' => $courseId])
-            ->getResult();
 
-        return $items;
+        return $repo->getBySortableGroupsQuery(['cId' => $courseId])->getResult();
+    }
+
+    public static function getCategorySessionId($id)
+    {
+        if (false === api_get_configuration_value('allow_session_lp_category')) {
+            return 0;
+        }
+
+        $table = Database::get_course_table(TABLE_LP_CATEGORY);
+        $id = (int) $id;
+
+        $sql = "SELECT session_id FROM $table WHERE iid = $id";
+        $result = Database::query($sql);
+        $result = Database::fetch_array($result, 'ASSOC');
+
+        if ($result) {
+            return (int) $result['session_id'];
+        }
+
+        return 0;
     }
 
     /**
      * @param int $id
-     *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
      *
      * @return CLpCategory
      */
@@ -12133,9 +12159,8 @@ EOD;
     {
         $id = (int) $id;
         $em = Database::getManager();
-        $item = $em->find('ChamiloCourseBundle:CLpCategory', $id);
 
-        return $item;
+        return $em->find('ChamiloCourseBundle:CLpCategory', $id);
     }
 
     /**
@@ -12146,11 +12171,8 @@ EOD;
     public static function getCategoryByCourse($courseId)
     {
         $em = Database::getManager();
-        $items = $em->getRepository('ChamiloCourseBundle:CLpCategory')->findBy(
-            ['cId' => $courseId]
-        );
 
-        return $items;
+        return $em->getRepository('ChamiloCourseBundle:CLpCategory')->findBy(['cId' => $courseId]);
     }
 
     /**
@@ -12165,7 +12187,7 @@ EOD;
     public static function deleteCategory($id)
     {
         $em = Database::getManager();
-        $item = $em->find('ChamiloCourseBundle:CLpCategory', $id);
+        $item = self::getCategory($id);
         if ($item) {
             $courseId = $item->getCId();
             $query = $em->createQuery('SELECT u FROM ChamiloCourseBundle:CLp u WHERE u.cId = :id AND u.categoryId = :catId');
@@ -13672,6 +13694,115 @@ EOD;
     }
 
     /**
+     * Gets whether this SCORM learning path has been marked to use the score
+     * as progress. Takes into account whether the learnpath matches (SCORM
+     * content + less than 2 items).
+     *
+     * @return bool True if the score should be used as progress, false otherwise
+     */
+    public function getUseScoreAsProgress()
+    {
+        // If not a SCORM, we don't care about the setting
+        if ($this->get_type() != 2) {
+            return false;
+        }
+        // If more than one step in the SCORM, we don't care about the setting
+        if ($this->get_total_items_count() > 1) {
+            return false;
+        }
+        $extraFieldValue = new ExtraFieldValue('lp');
+        $doUseScore = false;
+        $useScore = $extraFieldValue->get_values_by_handler_and_field_variable($this->get_id(), 'use_score_as_progress');
+        if (!empty($useScore) && isset($useScore['value'])) {
+            $doUseScore = $useScore['value'];
+        }
+
+        return $doUseScore;
+    }
+
+    /**
+     * Get the user identifier (user_id or username
+     * Depends on scorm_api_username_as_student_id in app/config/configuration.php.
+     *
+     * @return string User ID or username, depending on configuration setting
+     */
+    public static function getUserIdentifierForExternalServices()
+    {
+        if (api_get_configuration_value('scorm_api_username_as_student_id')) {
+            return api_get_user_info(api_get_user_id())['username'];
+        } elseif (api_get_configuration_value('scorm_api_extrafield_to_use_as_student_id') != null) {
+            $extraFieldValue = new ExtraFieldValue('user');
+            $extrafield = $extraFieldValue->get_values_by_handler_and_field_variable(api_get_user_id(), api_get_configuration_value('scorm_api_extrafield_to_use_as_student_id'));
+
+            return $extrafield['value'];
+        } else {
+            return api_get_user_id();
+        }
+    }
+
+    /**
+     * Save the new order for learning path items.
+     *
+     * We have to update parent_item_id, previous_item_id, next_item_id, display_order in the database.
+     *
+     * @param array $orderList A associative array with item ID as key and parent ID as value.
+     * @param int   $courseId
+     */
+    public static function sortItemByOrderList(array $orderList, $courseId = 0)
+    {
+        $courseId = $courseId ?: api_get_course_int_id();
+        $itemList = new LpItemOrderList();
+
+        foreach ($orderList as $id => $parentId) {
+            $item = new LpOrderItem($id, $parentId);
+            $itemList->add($item);
+        }
+
+        $parents = $itemList->getListOfParents();
+
+        foreach ($parents as $parentId) {
+            $sameParentLpItemList = $itemList->getItemWithSameParent($parentId);
+            $previous_item_id = 0;
+            for ($i = 0; $i < count($sameParentLpItemList->list); $i++) {
+                $item_id = $sameParentLpItemList->list[$i]->id;
+                // display_order
+                $display_order = $i + 1;
+                $itemList->setParametersForId($item_id, $display_order, 'display_order');
+                // previous_item_id
+                $itemList->setParametersForId($item_id, $previous_item_id, 'previous_item_id');
+                $previous_item_id = $item_id;
+                // next_item_id
+                $next_item_id = 0;
+                if ($i < count($sameParentLpItemList->list) - 1) {
+                    $next_item_id = $sameParentLpItemList->list[$i + 1]->id;
+                }
+                $itemList->setParametersForId($item_id, $next_item_id, 'next_item_id');
+            }
+        }
+
+        $table = Database::get_course_table(TABLE_LP_ITEM);
+
+        foreach ($itemList->list as $item) {
+            $params = [];
+            $params['display_order'] = $item->display_order;
+            $params['previous_item_id'] = $item->previous_item_id;
+            $params['next_item_id'] = $item->next_item_id;
+            $params['parent_item_id'] = $item->parent_item_id;
+
+            Database::update(
+                $table,
+                $params,
+                [
+                    'iid = ? AND c_id = ? ' => [
+                        (int) $item->id,
+                        (int) $courseId,
+                    ],
+                ]
+            );
+        }
+    }
+
+    /**
      * Get the depth level of LP item.
      *
      * @param array $items
@@ -13774,44 +13905,5 @@ EOD;
         }
 
         return '';
-    }
-    /**
-     * Gets whether this SCORM learning path has been marked to use the score
-     * as progress. Takes into account whether the learnpath matches (SCORM
-     * content + less than 2 items).
-     * @return bool True if the score should be used as progress, false otherwise
-     */
-    public function getUseScoreAsProgress()
-    {
-        // If not a SCORM, we don't care about the setting
-        if ($this->get_type() != 2) {
-            return false;
-        }
-        // If more than one step in the SCORM, we don't care about the setting
-        if ($this->get_total_items_count() > 1) {
-            return false;
-        }
-        $extraFieldValue = new ExtraFieldValue('lp');
-        $doUseScore = false;
-        $useScore = $extraFieldValue->get_values_by_handler_and_field_variable($this->get_id(), 'use_score_as_progress');
-        if (!empty($useScore) && isset($useScore['value'])) {
-            $doUseScore = $useScore['value'];
-        }
-
-        return $doUseScore;
-    }
-    /**
-     * Get the user identifier (user_id or username
-     * Depends on scorm_api_username_as_student_id in app/config/configuration.php
-     *
-     * @return string User ID or username, depending on configuration setting
-     */
-    public static function getUserIdentifierForExternalServices()
-    {
-        if (api_get_configuration_value('scorm_api_username_as_student_id')) {
-            return api_get_user_info(api_get_user_id())['username'];
-        } else {
-            return api_get_user_id();
-        }
     }
 }

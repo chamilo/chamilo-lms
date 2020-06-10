@@ -31,7 +31,7 @@ class ImsLtiPlugin extends Plugin
      */
     protected function __construct()
     {
-        $version = '1.5.1';
+        $version = '1.8.0';
         $author = 'Angel Fernando Quiroz Campos';
 
         $message = Display::return_message($this->get_lang('GenerateKeyPairInfo'));
@@ -186,6 +186,8 @@ class ImsLtiPlugin extends Plugin
                     redirect_url VARCHAR(255) DEFAULT NULL,
                     advantage_services LONGTEXT DEFAULT NULL COMMENT '(DC2Type:json)',
                     version VARCHAR(255) DEFAULT 'lti1p1' NOT NULL,
+                    launch_presentation LONGTEXT NOT NULL COMMENT '(DC2Type:json)',
+                    replacement_params LONGTEXT NOT NULL COMMENT '(DC2Type:json)',
                     INDEX IDX_C5E47F7C91D79BD3 (c_id),
                     INDEX IDX_C5E47F7C82F80D8B (gradebook_eval_id),
                     INDEX IDX_C5E47F7C727ACA70 (parent_id),
@@ -322,6 +324,12 @@ class ImsLtiPlugin extends Plugin
 
         $courseTool->setName($ltiTool->getName());
 
+        if ('iframe' !== $ltiTool->getDocumentTarget()) {
+            $courseTool->setTarget('_blank');
+        } else {
+            $courseTool->setTarget('_self');
+        }
+
         $em->persist($courseTool);
         $em->flush();
     }
@@ -337,19 +345,28 @@ class ImsLtiPlugin extends Plugin
     }
 
     /**
-     * Add the course tool
+     * Add the course tool.
      *
-     * @param Course     $course
-     * @param ImsLtiTool $tool
+     * @param Course $course
+     * @param ImsLtiTool $ltiTool
+     *
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function addCourseTool(Course $course, ImsLtiTool $tool)
+    public function addCourseTool(Course $course, ImsLtiTool $ltiTool)
     {
-        $this->createLinkToCourseTool(
-            $tool->getName(),
+        $cTool = $this->createLinkToCourseTool(
+            $ltiTool->getName(),
             $course->getId(),
             null,
-            self::generateToolLink($tool)
+            self::generateToolLink($ltiTool)
         );
+        $cTool->setTarget(
+            $ltiTool->getDocumentTarget() === 'iframe' ? '_self' : '_blank'
+        );
+
+        $em = Database::getManager();
+        $em->persist($cTool);
+        $em->flush();
     }
 
     /**
@@ -462,13 +479,45 @@ class ImsLtiPlugin extends Plugin
     }
 
     /**
-     * @param User $currentUser
+     * @param ImsLtiTool $tool
+     * @param User       $user
      *
      * @return string
      */
-    public static function getRoleScopeMentor(User $currentUser)
+    public static function getLaunchUserIdClaim(ImsLtiTool $tool, User $user)
     {
-        $scope = self::getRoleScopeMentorAsArray($currentUser, true);
+        if (null !== $tool->getParent()) {
+            $tool = $tool->getParent();
+        }
+
+        $replacement = $tool->getReplacementForUserId();
+
+        if (empty($replacement)) {
+            if ($tool->getVersion() === ImsLti::V_1P1) {
+                return self::generateToolUserId($user->getId());
+            }
+
+            return (string) $user->getId();
+        }
+
+        $replaced = str_replace(
+            ['$User.id', '$User.username'],
+            [$user->getId(), $user->getUsername()],
+            $replacement
+        );
+
+        return $replaced;
+    }
+
+    /**
+     * @param User $currentUser
+     * @param ImsLtiTool $tool
+     *
+     * @return string
+     */
+    public static function getRoleScopeMentor(User $currentUser, ImsLtiTool $tool)
+    {
+        $scope = self::getRoleScopeMentorAsArray($currentUser, $tool, true);
 
         return implode(',', $scope);
     }
@@ -476,26 +525,31 @@ class ImsLtiPlugin extends Plugin
     /**
      * Tool User IDs which the user DRH can access as a mentor.
      *
-     * @param User $user
-     * @param bool $generateIdForTool. Optional. Set TRUE for LTI 1.x.
+     * @param User       $user
+     * @param ImsLtiTool $tool
+     * @param bool       $generateIdForTool. Optional. Set TRUE for LTI 1.x.
      *
      * @return array
      */
-    public static function getRoleScopeMentorAsArray(User $user, $generateIdForTool = false)
+    public static function getRoleScopeMentorAsArray(User $user, ImsLtiTool $tool, $generateIdForTool = false)
     {
         if (DRH !== $user->getStatus()) {
             return [];
         }
 
-        $followedUsers = UserManager::get_users_followed_by_drh($user->getId());
+        $followedUsers = UserManager::get_users_followed_by_drh($user->getId(), 0, true);
 
         $scope = [];
 
         /** @var array $userInfo */
         foreach ($followedUsers as $userInfo) {
-            $scope[] = $generateIdForTool
-                ? self::generateToolUserId($userInfo['user_id'])
-                : (string) $userInfo['user_id'];
+            if ($generateIdForTool) {
+                $followedUser = api_get_user_entity($userInfo['user_id']);
+
+                $scope[] = self::getLaunchUserIdClaim($tool, $followedUser);
+            } else {
+                $scope[] = (string) $userInfo['user_id'];
+            }
         }
 
         return $scope;
@@ -750,5 +804,18 @@ class ImsLtiPlugin extends Plugin
         $webPath = api_get_path(WEB_PATH);
 
         return trim($webPath, " /");
+    }
+
+    public static function getCoursesForParentTool(ImsLtiTool $tool)
+    {
+        $coursesId = [];
+
+        if (!$tool->getParent()) {
+            $coursesId = $tool->getChildren()->map(function (ImsLtiTool $tool) {
+                return $tool->getCourse();
+            });
+        }
+
+        return $coursesId;
     }
 }

@@ -104,7 +104,7 @@ if ($is_allowedToEdit) {
             api_not_allowed(true);
         }
         // Construction of the Question object
-        $objQuestionTmp = Question::read($delete);
+        $objQuestionTmp = isQuestionInActiveQuiz($delete) ? false : Question::read($delete);
         // if the question exists
         if ($objQuestionTmp) {
             // deletes the question from all exercises
@@ -237,7 +237,7 @@ if (isset($_REQUEST['action'])) {
                         $objQuestionTmp = Question::read($questionId);
                         // if the question exists
                         if ($objQuestionTmp) {
-                            if ($objExercise->hasQuestion($questionId) === false) {
+                            if (false === $objExercise->hasQuestion($questionId)) {
                                 $objExercise->addToList($questionId);
                                 $objQuestionTmp->addToList($fromExercise);
                             }
@@ -308,7 +308,7 @@ if (isset($fromExercise) && $fromExercise > 0) {
 }
 echo '</div>';
 
-if ($displayMessage != '') {
+if ('' != $displayMessage) {
     echo Display::return_message($displayMessage, 'confirm');
 }
 
@@ -357,7 +357,7 @@ foreach ($course_list as $item) {
     $courseInfo = api_get_course_info_by_id($courseItemId);
     $course_select_list[$courseItemId] = '';
     if ($courseItemId == api_get_course_int_id()) {
-        $course_select_list[$courseItemId] = ">&nbsp;&nbsp;&nbsp;&nbsp;";
+        $course_select_list[$courseItemId] = '>&nbsp;&nbsp;&nbsp;&nbsp;';
     }
     $course_select_list[$courseItemId] .= $courseInfo['title'];
 }
@@ -385,7 +385,7 @@ $exercise_list = ExerciseLib::get_all_exercises_for_course_id(
     false
 );
 
-if ($exercise_id_changed == 1) {
+if (1 == $exercise_id_changed) {
     reset_menu_lvl_type();
 }
 
@@ -436,7 +436,7 @@ if (!empty($_course)) {
             }
             $new_question_list[$key] = get_lang($item[1]);
         } else {
-            if ($key == HOT_SPOT_DELINEATION) {
+            if (HOT_SPOT_DELINEATION == $key) {
                 continue;
             }
             $new_question_list[$key] = get_lang($item[1]);
@@ -521,8 +521,6 @@ echo '<script>$(function () {
 <?php
 
 /**
- * @param array $formValues
- *
  * @return array
  */
 function getExtraFieldConditions(array $formValues, $queryType = 'from')
@@ -644,7 +642,7 @@ function getQuestions(
                     crc.question_id = qu.id AND
                     crc.category_id = $courseCategoryId";
         }
-        if (isset($exerciseLevel) && $exerciseLevel != -1) {
+        if (isset($exerciseLevel) && -1 != $exerciseLevel) {
             $where .= ' AND level='.$exerciseLevel;
         }
         if (isset($answerType) && $answerType > 0) {
@@ -682,7 +680,8 @@ function getQuestions(
                     $where
                     $currentExerciseCondition
                     {$efConditions['where']}
-                ORDER BY question_order";
+                ORDER BY BINARY qu.question ASC
+                 ";
     } elseif ($exerciseId == -1) {
         $efConditions = getExtraFieldConditions($formValues, 'join');
         // If we have selected the option 'Orphan questions' in the list-box 'Filter'
@@ -695,7 +694,7 @@ function getQuestions(
                     crc.c_id = $selected_course AND
                     crc.category_id = $courseCategoryId";
         }
-        if (isset($exerciseLevel) && $exerciseLevel != -1) {
+        if (isset($exerciseLevel) && -1 != $exerciseLevel) {
             $level_where = ' AND level='.$exerciseLevel;
         }
         $answer_where = '';
@@ -780,7 +779,7 @@ function getQuestions(
                         crc.question_id = qu.id AND
                         crc.category_id = $courseCategoryId";
         }
-        if (isset($exerciseLevel) && $exerciseLevel != -1) {
+        if (isset($exerciseLevel) && -1 != $exerciseLevel) {
             $filter .= ' AND level='.$exerciseLevel.' ';
         }
         if (isset($answerType) && $answerType > 0) {
@@ -795,7 +794,7 @@ function getQuestions(
             $filter .= " AND qu.description LIKE '%$description%'";
         }
 
-        if ($session_id == -1 || empty($session_id)) {
+        if (-1 == $session_id || empty($session_id)) {
             $session_id = 0;
         }
         $sessionCondition = api_get_session_condition($session_id, true, 'q.session_id');
@@ -825,7 +824,7 @@ function getQuestions(
                     $currentExerciseCondition
                     {$efConditions['where']}
                 GROUP BY qu.iid
-                ORDER BY session_id ASC
+                ORDER BY BINARY qu.question ASC
                 ";
     }
 
@@ -840,11 +839,13 @@ function getQuestions(
     }
 
     $sql .= " LIMIT $start, $length";
-
     $result = Database::query($sql);
-
     $mainQuestionList = [];
     while ($row = Database::fetch_array($result, 'ASSOC')) {
+        if ($exerciseId == -1 && isQuestionInActiveQuiz($row['iid'])) {
+            continue;
+        }
+
         $mainQuestionList[] = $row;
     }
 
@@ -975,8 +976,6 @@ if (is_array($mainQuestionList)) {
             continue;
         }
         $sessionId = isset($question['session_id']) ? $question['session_id'] : null;
-        //$exerciseName = isset($question['exercise_name']) ? '<br />('.$question['exercise_id'].') ' : null;
-
         if (!$objExercise->hasQuestion($question['id'])) {
             $row[] = Display::input(
                 'checkbox',
@@ -1033,49 +1032,13 @@ if (is_array($mainQuestionList)) {
     }
 }
 
-// Display table
-$header = [
-    [
-        '',
-        false,
-        ['style' => 'text-align:center'],
-        ['style' => 'text-align:center'],
-        '',
-    ],
-    [
-        get_lang('QuestionUpperCaseFirstLetter'),
-        false,
-        ['style' => 'text-align:center'],
-        '',
-    ],
-    [
-        get_lang('Type'),
-        false,
-        ['style' => 'text-align:center'],
-        ['style' => 'text-align:center'],
-        '',
-    ],
-    [
-        get_lang('QuestionCategory'),
-        false,
-        ['style' => 'text-align:center'],
-        ['style' => 'text-align:center'],
-        '',
-    ],
-    [
-        get_lang('Difficulty'),
-        false,
-        ['style' => 'text-align:center'],
-        ['style' => 'text-align:center'],
-        '',
-    ],
-    [
-        $actionLabel,
-        false,
-        ['style' => 'text-align:center'],
-        ['style' => 'text-align:center'],
-        '',
-    ],
+$headers = [
+    '',
+    get_lang('QuestionUpperCaseFirstLetter'),
+    get_lang('Type'),
+    get_lang('QuestionCategory'),
+    get_lang('Difficulty'),
+    $actionLabel,
 ];
 
 echo $pagination;
@@ -1085,12 +1048,32 @@ echo '<input type="hidden" name="cidReq" value="'.$_course['code'].'">';
 echo '<input type="hidden" name="selected_course" value="'.$selected_course.'">';
 echo '<input type="hidden" name="course_id" value="'.$selected_course.'">';
 
-Display::display_sortable_table(
-    $header,
-    $data,
-    '',
-    ['per_page_default' => 999, 'per_page' => 999, 'page_nr' => 1]
-);
+$table = new HTML_Table(['class' => 'table table-bordered data_table'], false);
+$row = 0;
+$column = 0;
+foreach ($headers as $header) {
+    $table->setHeaderContents($row, $column, $header);
+
+    $column++;
+}
+
+$row = 1;
+foreach ($data as $rows) {
+    $column = 0;
+    foreach ($rows as $value) {
+        $table->setCellContents($row, $column, $value);
+        $table->updateCellAttributes(
+            $row,
+            $column,
+            $value
+        );
+        $column++;
+    }
+    $row++;
+}
+
+$table->display();
+
 echo '</form>';
 
 $tableId = 'question_pool_id';
@@ -1115,10 +1098,10 @@ if ($selected_course == api_get_course_int_id()) {
 
 foreach ($actions as $action => &$label) {
     $html .= '<li>
-                <a data-action ="'.$action.'" href="#" onclick="javascript:action_click(this, \''.$tableId.'\');">'.
-                    $label.'
-                </a>
-              </li>';
+            <a data-action ="'.$action.'" href="#" onclick="javascript:action_click(this, \''.$tableId.'\');">'.
+                $label.'
+            </a>
+          </li>';
 }
 $html .= '</ul>';
 $html .= '</div>'; //btn-group
@@ -1182,7 +1165,7 @@ function getLinkForQuestion(
     $result = $questionName;
     if ($in_addA) {
         $sessionIcon = '';
-        if (!empty($sessionId) && $sessionId != -1) {
+        if (!empty($sessionId) && -1 != $sessionId) {
             $sessionIcon = ' '.Display::return_icon('star.png', get_lang('Session'));
         }
         $exerciseId = (int) $exerciseId;
@@ -1236,10 +1219,16 @@ function get_action_icon_for_question(
             if ($limitTeacherAccess && !api_is_platform_admin()) {
                 break;
             }
-            $res = "<a href='".api_get_self()."?".
-                api_get_cidreq().$getParams."&delete=$in_questionid' onclick='return confirm_your_choice()'>";
-            $res .= Display::return_icon('delete.png', get_lang('Delete'));
-            $res .= "</a>";
+
+            if (isQuestionInActiveQuiz($in_questionid)) {
+                $res = Display::return_icon('delete_na.png', get_lang('ThisQuestionExistsInAnotherExercisesWarning'));
+            } else {
+                $res = "<a href='".api_get_self()."?".
+                    api_get_cidreq().$getParams."&delete=$in_questionid' onclick='return confirm_your_choice()'>";
+                $res .= Display::return_icon('delete.png', get_lang('Delete'));
+                $res .= "</a>";
+            }
+
             break;
         case 'edit':
             $res = getLinkForQuestion(
@@ -1255,7 +1244,7 @@ function get_action_icon_for_question(
         case 'add':
             $res = '-';
             if (!$myObjEx->hasQuestion($in_questionid)) {
-                $res = "<a href='".api_get_self()."?".
+                $res = "<a href='".api_get_self().'?'.
                     api_get_cidreq().$getParams."&recup=$in_questionid&fromExercise=$from_exercise'>";
                 $res .= Display::return_icon('view_more_stats.gif', get_lang('InsertALinkToThisQuestionInTheExercise'));
                 $res .= '</a>';
@@ -1275,6 +1264,28 @@ function get_action_icon_for_question(
     }
 
     return $res;
+}
+
+/**
+ * @param int $questionId
+ *
+ * @return bool
+ */
+function isQuestionInActiveQuiz($questionId)
+{
+    $tblQuizRelQuestion = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+    $tblQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
+
+    $result = Database::fetch_assoc(
+        Database::query(
+            "SELECT COUNT(qq.question_id) c FROM $tblQuizRelQuestion qq
+                INNER JOIN $tblQuiz q ON qq.exercice_id = q.iid
+                WHERE q.active = 1
+                AND qq.question_id = $questionId"
+        )
+    );
+
+    return $result['c'] > 0;
 }
 
 /**

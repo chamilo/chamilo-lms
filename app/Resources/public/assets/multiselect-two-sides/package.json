@@ -1,10 +1,14 @@
 {
   "name": "multiselect-two-sides",
-  "version": "2.5.2",
+  "version": "2.5.7",
   "description": "jQuery multiselect plugin with two sides",
   "main": "dist/js/multiselect.min.js",
+  "unpkg": "dist/js/multiselect.min.js",
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jasmine",
     "release": "standard-version"
   },
   "repository": {
@@ -21,12 +25,11 @@
   },
   "homepage": "https://github.com/crlcu/multiselect#readme",
   "devDependencies": {
-    "gulp": "^3.9.1",
-    "gulp-rename": "^1.2.2",
-    "gulp-strip-debug": "^1.1.0",
-    "gulp-uglify": "^2.0.0",
-    "jasmine": "^2.5.3",
-    "standard-version": "^4.3.0"
+    "gulp": "^4.0.2",
+    "gulp-rename": "^2.0.0",
+    "gulp-strip-debug": "^3.0.0",
+    "gulp-uglify": "^3.0.2",
+    "standard-version": "^7.1.0"
   },
   "dependencies": {
     "jquery": ">=1.7"

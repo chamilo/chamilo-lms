@@ -1,9 +1,8 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 /**
  * Special reporting page for admins.
- *
- * @package chamilo.reporting
  */
 ob_start();
 $cidReset = true;

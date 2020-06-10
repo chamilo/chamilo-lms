@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -47,7 +48,7 @@ function register_friend(element_input) {
     	name_div_id="id_"+name_button.substring(13);
     	user_id=name_div_id.split("_");
     	user_friend_id=user_id[1];
-    	
+
         $.ajax({
     		contentType: "application/x-www-form-urlencoded",
     		beforeSend: function(myObject) {

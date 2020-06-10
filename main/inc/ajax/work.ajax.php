@@ -1,5 +1,7 @@
 <?php
+
 /* For licensing terms, see /license.txt */
+
 /**
  * Responses to AJAX calls.
  */
@@ -44,8 +46,13 @@ switch ($action) {
     case 'delete_student_work':
         api_protect_course_script(true);
         if ($isAllowedToEdit) {
-            $itemId = isset($_REQUEST['id']) ? $_REQUEST['id'] : 0;
-            deleteWorkItem($itemId, $courseInfo);
+            if (empty($_REQUEST['id'])) {
+                return false;
+            }
+            $itemList = explode(',', $_REQUEST['id']);
+            foreach ($itemList as $itemId) {
+                deleteWorkItem($itemId, $courseInfo);
+            }
             echo '1';
             exit;
         }

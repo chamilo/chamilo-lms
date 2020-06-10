@@ -1,6 +1,6 @@
 {
   "name": "webcamjs",
-  "version": "1.0.22",
+  "version": "1.0.26",
   "homepage": "https://github.com/jhuckaby/webcamjs",
   "authors": [
     "Joseph Huckaby <jhuckaby@gmail.com>"
@@ -21,11 +21,11 @@
     "demos",
     "flash"
   ],
-  "_release": "1.0.22",
+  "_release": "1.0.26",
   "_resolution": {
     "type": "version",
-    "tag": "v1.0.22",
-    "commit": "c90093bda2841ce14dcd0a791adc9842876a5b4c"
+    "tag": "v1.0.26",
+    "commit": "f0dc72f58c6bf4baa4321f7f2920adbee68f3293"
   },
   "_source": "https://github.com/jhuckaby/webcamjs.git",
   "_target": "1.0.*",

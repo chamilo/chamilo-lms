@@ -12,7 +12,6 @@ use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 /**
  * @author  Bart Mollet, Julio Montoya lot of fixes
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -173,10 +172,7 @@ if ($session->getNbrCourses() === 0) {
     /** @var Course $course */
     foreach ($courses as $course) {
         // Select the number of users
-        $numberOfUsers = SessionManager::getCountUsersInCourseSession(
-            $course,
-            $session
-        );
+        $numberOfUsers = SessionManager::getCountUsersInCourseSession($course, $session);
 
         // Get coachs of the courses in session
         $namesOfCoaches = [];

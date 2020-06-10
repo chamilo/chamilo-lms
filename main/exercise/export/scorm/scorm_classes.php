@@ -1,10 +1,9 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * This class handles the SCORM export of free-answer questions.
- *
- * @package chamilo.exercise.scorm
  */
 class ScormAnswerFree extends Answer
 {
@@ -22,7 +21,7 @@ class ScormAnswerFree extends Answer
         $html = '<tr><td colspan="2">';
         $type = $this->getQuestionType();
 
-        if ($type == ORAL_EXPRESSION) {
+        if (ORAL_EXPRESSION == $type) {
             /*
             $template = new Template('');
             $template->assign('directory', '/tmp/');
@@ -50,8 +49,6 @@ class ScormAnswerFree extends Answer
 
 /**
  * This class handles the SCORM export of hotpot questions.
- *
- * @package chamilo.exercise.scorm
  */
 class ScormAnswerHotspot extends Answer
 {

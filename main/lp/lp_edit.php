@@ -6,8 +6,6 @@ use ChamiloSession as Session;
 /**
  * Script allowing simple edition of learnpath information (title, description, etc).
  *
- * @package chamilo.learnpath
- *
  * @author  Yannick Warnier <ywarnier@beeznest.org>
  */
 require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
@@ -272,7 +270,6 @@ $extra = $extraField->addElements(
 );
 
 $skillList = Skill::addSkillsToForm($form, ITEM_TYPE_LEARNPATH, $lpId);
-
 
 // Submit button
 $form->addButtonSave(get_lang('SaveLPSettings'));

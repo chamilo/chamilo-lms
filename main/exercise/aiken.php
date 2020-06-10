@@ -1,10 +1,9 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * Code for Aiken import integration.
- *
- * @package chamilo.exercise
  *
  * @author Ronny Velasquez <ronny.velasquez@beeznest.com>
  * @author César Perales <cesar.perales@gmail.com> Updated function names and import files for Aiken format support

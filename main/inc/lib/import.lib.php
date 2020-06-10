@@ -8,8 +8,6 @@ use League\Csv\Reader;
  * Class Import
  * This class provides some functions which can be used when importing data from
  * external files into Chamilo.
- *
- * @package chamilo.library
  */
 class Import
 {

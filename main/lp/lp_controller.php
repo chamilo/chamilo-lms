@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -8,8 +9,6 @@ use ChamiloSession as Session;
  * the requested action.
  *
  * @todo remove repeated if $lp_found redirect
- *
- * @package chamilo.learnpath
  *
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
@@ -277,7 +276,6 @@ $htmlHeadXtra[] = '
                             type: "GET",
                             url: "'.$ajax_url.'",
                             data: params,
-                            async: false,
                             success: function(data) {
                                 $("#lp_item_list").html(data);
                             }

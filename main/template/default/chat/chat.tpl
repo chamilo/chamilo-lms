@@ -136,67 +136,71 @@ $(function () {
             $('#chat-users').html(html);
         },
         onPreviewListener: function () {
-            $
-                .post(ChChat._ajaxUrl, {
-                    action: 'preview',
-                    'message': $('textarea#chat-writer').val()
-                })
-                .done(function (response) {
-                    if (!response.status) {
-                        return;
-                    }
+            $.post(ChChat._ajaxUrl, {
+                action: 'preview',
+                'message': $('textarea#chat-writer').val()
+            })
+            .done(function (response) {
+                if (!response.status) {
+                    return;
+                }
 
-                    $('#html-preview').html(response.data.message);
-                });
+                $('#html-preview').html(response.data.message);
+            });
         },
         onSendMessageListener: function (e) {
             e.preventDefault();
-
-            if (!$('textarea#chat-writer').val().trim().length) {
+            var textarea = $('textarea#chat-writer');
+            if (!textarea.val().trim().length) {
                 return;
             }
 
+            $(".emoji-wysiwyg-editor").prop('contenteditable', 'false');
+            textarea.prop('disabled', true);
             var self = this;
             self.disabled = true;
 
-            $
-                .post(ChChat._ajaxUrl, {
-                    action: 'write',
-                    message: $('textarea#chat-writer').val(),
-                    friend: ChChat.currentFriend
-                })
-                .done(function (response) {
-                    self.disabled = false;
+            $.post(ChChat._ajaxUrl, {
+                action: 'write',
+                message: textarea.val(),
+                friend: ChChat.currentFriend
+            })
+            .done(function (response) {
+                self.disabled = false;
 
-                    if (!response.status) {
-                        return;
-                    }
-
-                    $('textarea#chat-writer').val('');
-                    $(".emoji-wysiwyg-editor").html('');
-                });
+                if (!response.status) {
+                    return;
+                }
+                textarea.prop('disabled', false);
+                textarea.val('');
+                $(".emoji-wysiwyg-editor").prop('contenteditable', 'true');
+                $(".emoji-wysiwyg-editor").html('');
+            });
         },
         onResetListener: function (e) {
             if (!confirm("{{ 'ConfirmReset'|get_lang }}")) {
                 e.preventDefault();
                 return;
             }
-            $
-                .get(ChChat._ajaxUrl, {
-                    action: 'reset',
-                    friend: ChChat.currentFriend
-                })
-                .done(function (response) {
-                    if (!response.status) {
-                        return;
-                    }
+            $.get(ChChat._ajaxUrl, {
+                action: 'reset',
+                friend: ChChat.currentFriend
+            })
+            .done(function (response) {
+                if (!response.status) {
+                    return;
+                }
 
-                    ChChat.setHistory(response.data);
-                });
+                ChChat.setHistory(response.data);
+            });
         },
         init: function () {
             ChChat.track().done(function () {
-                ChChat.init();
+                var chatTimeout = window.setTimeout(function () {
+                    window.clearTimeout(chatTimeout);
+
+                    ChChat.init();
+                }, 4000);
             });
         }
     };
@@ -215,13 +219,13 @@ $(function () {
 
     $('body').on('click', '#chat-reset', ChChat.onResetListener);
     $('#preview').on('click', ChChat.onPreviewListener);
+
     $('#emojis').on('click', function () {
         $('[data-toggle="tab"][href="#tab1"]').show().tab('show');
     });
 
-    $('textarea#chat-writer').emojiarea({
-        button: '#emojis'
-    });
+
+    $('textarea#chat-writer').emojiarea({button: '#emojis'});
 
     $('body').delay(1500).find('.emoji-wysiwyg-editor').textcomplete([{
         match: /\B:([\-+\w]*)$/,
@@ -267,6 +271,17 @@ $(function () {
     }], {});
 
     $('button#chat-send-message').on('click', ChChat.onSendMessageListener);
+
+    if ({{ send_message_only_on_button }} == 0) {
+        $('.emoji-wysiwyg-editor').keypress(function (e) {
+            if (e.which == 13 && $(".emoji-wysiwyg-editor").prop('contenteditable') == 'true') {
+                ChChat.onSendMessageListener(e);
+
+                return false;
+            }
+        });
+    }
+
     $('#chat-users').on('click', 'div.chat-user', function (e) {
         e.preventDefault();
         var jSelf = $(this),

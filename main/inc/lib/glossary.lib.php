@@ -11,8 +11,6 @@ use ChamiloSession as Session;
  * @author Julio Montoya
  * @author Christian Fasanando
  * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University, Belgium januari 2009, dokeos 1.8.6
- *
- * @package chamilo.library
  */
 class GlossaryManager
 {
@@ -214,7 +212,7 @@ class GlossaryManager
 					    c_id = $course_id AND
 					    glossary_id = ".intval($values['glossary_id']);
             $result = Database::query($sql);
-            if ($result === false) {
+            if (false === $result) {
                 return false;
             }
 

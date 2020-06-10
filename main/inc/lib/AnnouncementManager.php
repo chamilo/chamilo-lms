@@ -167,11 +167,11 @@ class AnnouncementManager
         $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
         $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
-        $sql = "SELECT DISTINCT 
-                    announcement.id, 
-                    announcement.title, 
+        $sql = "SELECT DISTINCT
+                    announcement.id,
+                    announcement.title,
                     announcement.content
-				FROM $tbl_announcement announcement 
+				FROM $tbl_announcement announcement
 				INNER JOIN $tbl_item_property i
 				ON (announcement.id = i.ref AND announcement.c_id = i.c_id)
 				WHERE
@@ -289,11 +289,11 @@ class AnnouncementManager
         $visibility = 1
     ) {
         $dql = "SELECT a
-                FROM ChamiloCourseBundle:CAnnouncement a 
+                FROM ChamiloCourseBundle:CAnnouncement a
                 JOIN ChamiloCourseBundle:CItemProperty ip
                 WITH a.id = ip.ref AND a.cId = ip.course
                 WHERE
-                    ip.tool = 'announcement' AND                        
+                    ip.tool = 'announcement' AND
                     a.cId = :course AND
                     a.sessionId = :session AND
                     a.title like :title AND
@@ -336,12 +336,12 @@ class AnnouncementManager
             (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())
         ) {
             $dql = "SELECT a, ip
-                    FROM ChamiloCourseBundle:CAnnouncement a 
+                    FROM ChamiloCourseBundle:CAnnouncement a
                     JOIN ChamiloCourseBundle:CItemProperty ip
                     WITH a.id = ip.ref AND a.cId = ip.course
-                    WHERE                        
+                    WHERE
                         a.id = :announcement AND
-                        ip.tool = 'announcement' AND                        
+                        ip.tool = 'announcement' AND
                         a.cId = :course
                     ORDER BY a.displayOrder DESC";
         } else {
@@ -361,10 +361,10 @@ class AnnouncementManager
                 }
 
                 $dql = "SELECT a, ip
-                        FROM ChamiloCourseBundle:CAnnouncement a 
+                        FROM ChamiloCourseBundle:CAnnouncement a
                         JOIN ChamiloCourseBundle:CItemProperty ip
                         WITH a.id = ip.ref AND a.cId = ip.course
-                        WHERE                      
+                        WHERE
                             a.id = :announcement AND
                             ip.tool='announcement' AND
                             (
@@ -372,20 +372,20 @@ class AnnouncementManager
                                 ip.group IN ('0', '".$groupId."') OR
                                 ip.group IS NULL
                             ) AND
-                            ip.visibility = '1' AND                       
+                            ip.visibility = '1' AND
                             ip.course = :course
                             $extraGroupCondition
                         ORDER BY a.displayOrder DESC";
             } else {
                 $dql = "SELECT a, ip
-                        FROM ChamiloCourseBundle:CAnnouncement a 
+                        FROM ChamiloCourseBundle:CAnnouncement a
                         JOIN ChamiloCourseBundle:CItemProperty ip
-                        WITH a.id = ip.ref AND a.cId = ip.course 
-                        WHERE                            
+                        WITH a.id = ip.ref AND a.cId = ip.course
+                        WHERE
                             a.id = :announcement AND
                             ip.tool = 'announcement' AND
                             (ip.group = '0' OR ip.group IS NULL) AND
-                            ip.visibility = '1' AND                            
+                            ip.visibility = '1' AND
                             ip.course = :course";
             }
         }
@@ -755,7 +755,7 @@ class AnnouncementManager
 
         // Store the attach file
         if ($last_id) {
-            $sql = "UPDATE $table SET id = iid 
+            $sql = "UPDATE $table SET id = iid
                     WHERE iid = $last_id";
             Database::query($sql);
 
@@ -1031,13 +1031,13 @@ class AnnouncementManager
         $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
         $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
-        $sql = "SELECT DISTINCT 
+        $sql = "SELECT DISTINCT
                     announcement.c_id,
                     count(announcement.id) count
-                FROM $tbl_announcement announcement 
+                FROM $tbl_announcement announcement
                 INNER JOIN $tbl_item_property ip
                 ON (announcement.id = ip.ref AND announcement.c_id = ip.c_id)
-                WHERE			
+                WHERE
                     ip.tool='announcement' AND
                     (
                       ip.to_user_id = '$user_id' AND
@@ -1077,9 +1077,9 @@ class AnnouncementManager
         $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
         $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
-        $sql = "SELECT DISTINCT 
-                    announcement.id, 
-                    announcement.title, 
+        $sql = "SELECT DISTINCT
+                    announcement.id,
+                    announcement.title,
                     announcement.content,
                     ip.to_group_id
                FROM $tbl_announcement announcement
@@ -1354,7 +1354,7 @@ class AnnouncementManager
         $announcementId = (int) $announcementId;
         $courseId = api_get_course_int_id();
         $row = [];
-        $sql = 'SELECT id, path, filename, comment 
+        $sql = 'SELECT id, path, filename, comment
                 FROM '.$table.'
 				WHERE c_id = '.$courseId.' AND announcement_id = '.$announcementId;
         $result = Database::query($sql);
@@ -1417,7 +1417,7 @@ class AnnouncementManager
 
                 $insertId = Database::insert($table, $params);
                 if ($insertId) {
-                    $sql = "UPDATE $table SET id = iid 
+                    $sql = "UPDATE $table SET id = iid
                             WHERE iid = $insertId";
                     Database::query($sql);
                 }
@@ -1476,10 +1476,10 @@ class AnnouncementManager
                 $safe_file_name = Database::escape_string($file_name);
                 $safe_new_file_name = Database::escape_string($new_file_name);
                 $id_attach = intval($id_attach);
-                $sql = "UPDATE $table SET 
-                            filename = '$safe_file_name', 
-                            comment = '$safe_file_comment', 
-                            path = '$safe_new_file_name', 
+                $sql = "UPDATE $table SET
+                            filename = '$safe_file_name',
+                            comment = '$safe_file_comment',
+                            path = '$safe_new_file_name',
                             size ='".intval($file['size'])."'
 					 	WHERE c_id = $courseId AND id = '$id_attach'";
                 $result = Database::query($sql);
@@ -1608,12 +1608,12 @@ class AnnouncementManager
         );
         $allowUserEditSetting = api_get_course_setting('allow_user_edit_announcement');
 
-        $select = ' DISTINCT 
-                        announcement.*, 
-                        ip.visibility, 
-                        ip.to_group_id, 
-                        ip.insert_user_id, 
-                        ip.insert_date, 
+        $select = ' DISTINCT
+                        announcement.*,
+                        ip.visibility,
+                        ip.to_group_id,
+                        ip.insert_user_id,
+                        ip.insert_date,
                         ip.lastedit_date';
         $groupBy = ' GROUP BY announcement.iid';
         if ($getCount) {
@@ -1657,12 +1657,12 @@ class AnnouncementManager
                     count($group_memberships) > 0
                 ) {
                     $sql = "SELECT $select
-                            FROM $tbl_announcement announcement 
+                            FROM $tbl_announcement announcement
                             INNER JOIN $tbl_item_property ip
                             ON (announcement.id = ip.ref AND ip.c_id = announcement.c_id)
                             WHERE
                                 announcement.c_id = $courseId AND
-                                ip.c_id = $courseId AND                                
+                                ip.c_id = $courseId AND
                                 ip.tool = 'announcement' AND
                                 (
                                     ip.to_user_id = $user_id OR
@@ -1675,7 +1675,7 @@ class AnnouncementManager
                             ORDER BY display_order DESC";
                 } else {
                     $sql = "SELECT $select
-                            FROM $tbl_announcement announcement 
+                            FROM $tbl_announcement announcement
                             INNER JOIN $tbl_item_property ip
                             ON (announcement.id = ip.ref AND ip.c_id = announcement.c_id)
                             WHERE
@@ -1692,7 +1692,7 @@ class AnnouncementManager
                 // A.2. you are a course admin with a GROUP filter
                 // => see only the messages of this specific group
                 $sql = "SELECT $select
-                        FROM $tbl_announcement announcement 
+                        FROM $tbl_announcement announcement
                         INNER JOIN $tbl_item_property ip
                         ON (announcement.id = ip.ref AND announcement.c_id = ip.c_id)
                         WHERE
@@ -1712,13 +1712,13 @@ class AnnouncementManager
                 // => see all the messages of all the users and groups without editing possibilities
                 if (isset($isStudentView) && $isStudentView == 'true') {
                     $sql = "SELECT $select
-                            FROM $tbl_announcement announcement 
+                            FROM $tbl_announcement announcement
                             INNER JOIN $tbl_item_property ip
                             ON (announcement.id = ip.ref AND announcement.c_id = ip.c_id)
                             WHERE
                                 ip.tool='announcement' AND
                                 announcement.c_id = $courseId AND
-                                ip.c_id = $courseId AND                                
+                                ip.c_id = $courseId AND
                                 ip.visibility='1'
                                 $condition_session
                                 $searchCondition
@@ -1728,7 +1728,7 @@ class AnnouncementManager
                     // A.3.a you are a course admin without user or group filter and WTIHOUT studentview (= the normal course admin view)
                     // => see all the messages of all the users and groups with editing possibilities
                     $sql = "SELECT $select
-                            FROM $tbl_announcement announcement 
+                            FROM $tbl_announcement announcement
                             INNER JOIN $tbl_item_property ip
                             ON (announcement.id = ip.ref AND announcement.c_id = ip.c_id)
                             WHERE
@@ -1763,12 +1763,12 @@ class AnnouncementManager
                 } else {
                     if ($group_id == 0) {
                         $cond_user_id = " AND (
-                            (ip.to_user_id='$user_id' OR ip.to_user_id IS NULL) AND 
+                            (ip.to_user_id='$user_id' OR ip.to_user_id IS NULL) AND
                             (ip.to_group_id IS NULL OR ip.to_group_id IN (0, ".implode(", ", $group_memberships)."))
                         ) ";
                     } else {
                         $cond_user_id = " AND (
-                            (ip.to_user_id='$user_id' OR ip.to_user_id IS NULL) AND 
+                            (ip.to_user_id='$user_id' OR ip.to_user_id IS NULL) AND
                             (ip.to_group_id IS NULL OR ip.to_group_id IN (0, ".$group_id."))
                         )";
                         $cond_user_id .= $extraGroupCondition;
@@ -1781,11 +1781,11 @@ class AnnouncementManager
                         ON (announcement.id = ip.ref AND announcement.c_id = ip.c_id)
                         WHERE
                             announcement.c_id = $courseId AND
-                            ip.c_id = $courseId AND                            
-                            ip.tool='announcement' 
+                            ip.c_id = $courseId AND
+                            ip.tool='announcement'
                             $cond_user_id
                             $condition_session
-                            $searchCondition AND 
+                            $searchCondition AND
                             ip.visibility='1'
                             $groupBy
                         ORDER BY display_order DESC";
@@ -1794,22 +1794,22 @@ class AnnouncementManager
                     if ($allowUserEditSetting && !api_is_anonymous()) {
                         $cond_user_id = " AND (
                                 ip.lastedit_user_id = '".api_get_user_id()."' OR
-                                ((ip.to_user_id='$user_id' OR ip.to_user_id IS NULL) AND 
+                                ((ip.to_user_id='$user_id' OR ip.to_user_id IS NULL) AND
                                 (ip.to_group_id='0' OR ip.to_group_id IS NULL)
                             )
                         ) ";
                     } else {
-                        $cond_user_id = " AND ((ip.to_user_id='$user_id' OR ip.to_user_id IS NULL) AND 
+                        $cond_user_id = " AND ((ip.to_user_id='$user_id' OR ip.to_user_id IS NULL) AND
                         (ip.to_group_id='0' OR ip.to_group_id IS NULL) ) ";
                     }
 
                     $sql = "SELECT $select
-						FROM $tbl_announcement announcement 
+						FROM $tbl_announcement announcement
 						INNER JOIN $tbl_item_property ip
 						ON (announcement.id = ip.ref AND announcement.c_id = ip.c_id)
 						WHERE
     						announcement.c_id = $courseId AND
-							ip.c_id = $courseId AND    						
+							ip.c_id = $courseId AND
     						ip.tool='announcement'
     						$cond_user_id
     						$condition_session
@@ -1828,12 +1828,12 @@ class AnnouncementManager
                     }
 
                     $sql = "SELECT $select
-                            FROM $tbl_announcement announcement 
+                            FROM $tbl_announcement announcement
                             INNER JOIN $tbl_item_property ip
                             ON (announcement.id = ip.ref AND announcement.c_id = ip.c_id)
                             WHERE
                                 announcement.c_id = $courseId AND
-                                ip.c_id = $courseId AND                            
+                                ip.c_id = $courseId AND
                                 ip.tool='announcement'
                                 $cond_user_id
                                 $condition_session
@@ -1863,7 +1863,6 @@ class AnnouncementManager
         $bottomAnnouncement = $announcement_number;
         $displayed = [];
         $results = [];
-        $actionUrl = api_get_path(WEB_CODE_PATH).'announcements/announcements.php?'.api_get_cidreq();
         $emailIcon = '<i class="fa fa-envelope-o" title="'.get_lang('AnnounceSentByEmail').'"></i>';
         $attachmentIcon = '<i class="fa fa-paperclip" title="'.get_lang('Attachment').'"></i>';
 
@@ -1906,6 +1905,9 @@ class AnnouncementManager
 
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             if (!in_array($row['id'], $displayed)) {
+                $actionUrl = api_get_path(WEB_CODE_PATH).'announcements/announcements.php?'
+                    .api_get_cidreq_params($courseInfo['code'], $session_id, $row['to_group_id']);
+
                 $sent_to_icon = '';
                 // the email icon
                 if ($row['email_sent'] == '1') {
@@ -2081,17 +2083,17 @@ class AnnouncementManager
                     $group_condition = " AND (ip.to_group_id='".api_get_group_id()."' OR ip.to_group_id = 0 OR ip.to_group_id IS NULL)";
                 }
 
-                $sql = "SELECT 
-                            announcement.*, 
-                            ip.visibility, 
-                            ip.to_group_id, 
+                $sql = "SELECT
+                            announcement.*,
+                            ip.visibility,
+                            ip.to_group_id,
                             ip.insert_user_id
-                        FROM $tbl_announcement announcement 
+                        FROM $tbl_announcement announcement
                         INNER JOIN $tbl_item_property ip
                         ON (announcement.c_id = ip.c_id AND announcement.id = ip.ref)
                         WHERE
                             announcement.c_id = $courseId AND
-                            ip.c_id = $courseId AND                    
+                            ip.c_id = $courseId AND
                             ip.tool = 'announcement' AND
                             ip.visibility <> '2'
                             $group_condition
@@ -2147,13 +2149,13 @@ class AnnouncementManager
                 // his group announcements AND the general announcements
                 if (is_array($group_memberships) && count($group_memberships) > 0) {
                     $sql = "SELECT announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id
-                            FROM $tbl_announcement announcement 
+                            FROM $tbl_announcement announcement
                             INNER JOIN $tbl_item_property ip
                             ON (announcement.id = ip.ref AND announcement.c_id = ip.c_id)
                             WHERE
                                 announcement.c_id = $courseId AND
-                                ip.c_id = $courseId AND                                
-                                ip.tool='announcement' AND 
+                                ip.c_id = $courseId AND
+                                ip.tool='announcement' AND
                                 ip.visibility='1'
                                 $cond_user_id
                                 $condition_session
@@ -2175,13 +2177,13 @@ class AnnouncementManager
                             $cond_user_id = " AND ( ip.to_user_id='".$userId."' OR ip.to_group_id='0' OR ip.to_group_id IS NULL) ";
                         }
                         $sql = "SELECT announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id
-                                FROM $tbl_announcement announcement 
+                                FROM $tbl_announcement announcement
                                 INNER JOIN $tbl_item_property ip
                                 ON (announcement.c_id = ip.c_id AND announcement.id = ip.ref)
                                 WHERE
                                     announcement.c_id = $courseId AND
-                                    ip.c_id = $courseId AND 
-                                    ip.tool='announcement' AND 
+                                    ip.c_id = $courseId AND
+                                    ip.tool='announcement' AND
                                     ip.visibility='1'
                                     $cond_user_id
                                     $condition_session
@@ -2198,19 +2200,19 @@ class AnnouncementManager
                         }
 
                         // the user is not identiefied => show only the general announcements
-                        $sql = "SELECT 
-                                    announcement.*, 
-                                    ip.visibility, 
-                                    ip.to_group_id, 
+                        $sql = "SELECT
+                                    announcement.*,
+                                    ip.visibility,
+                                    ip.to_group_id,
                                     ip.insert_user_id
-                                FROM $tbl_announcement announcement 
+                                FROM $tbl_announcement announcement
                                 INNER JOIN $tbl_item_property ip
                                 ON (announcement.id = ip.ref AND announcement.c_id = ip.c_id)
                                 WHERE
                                     announcement.c_id = $courseId AND
-                                    ip.c_id = $courseId AND 
-                                    ip.tool='announcement' AND 
-                                    ip.visibility='1' AND 
+                                    ip.c_id = $courseId AND
+                                    ip.tool='announcement' AND
+                                    ip.visibility='1' AND
                                     ip.to_group_id='0'
                                     $condition_session
                                 GROUP BY ip.ref

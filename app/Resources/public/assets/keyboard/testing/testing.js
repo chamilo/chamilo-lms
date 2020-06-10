@@ -19,6 +19,9 @@ jQuery(function($){
 					case 'text':
 						valid = $key.find('span').html() === v;
 						break;
+					case 'html':
+						valid = $key.find('.ui-keyboard-text').html() === v;
+						break;
 					default:
 						valid = $key.attr(k) === v;
 				}
@@ -29,6 +32,31 @@ jQuery(function($){
 
 	runTests = function( kb ) {
 		QUnit.module('core');
+
+		/************************************************
+			Throws on unsupported input types
+		************************************************/
+		QUnit.test('throws on unsupported input types', function(assert) {
+			$('#test').html('<input type="number"><input type="CoLoR">');
+			assert.throws(
+				function() {
+					$('#test').find('input[type=number]').keyboard();
+				},
+				function(err) {
+					return err.message === 'Input of type "number" is not supported; use type text, search, URL, tel or password';
+				},
+				'Throw on number type input'
+			);
+			assert.throws(
+				function() {
+					$('#test').find('input[type=color]').keyboard();
+				},
+				function(err) {
+					return err.message === 'Input of type "color" is not supported; use type text, search, URL, tel or password';
+				},
+				'Throw on color type input'
+			);
+		});
 
 		/************************************************
 			processName
@@ -97,10 +125,10 @@ jQuery(function($){
 		************************************************/
 		QUnit.test( 'make preview', function( assert ) {
 			var done = assert.async();
-			assert.expect(3);
+			assert.expect(2);
 
 			$('#test')
-				.html('<input id="keyboard_test" type="number" data-test="zzz" data-this-is-a-fake="attr" aria-haspopup="true">')
+				.html('<input id="keyboard_test" type="text" data-test="zzz" data-this-is-a-fake="attr" aria-haspopup="true">')
 				.find('input')
 				.keyboard({
 					layout : 'qwerty',
@@ -110,7 +138,6 @@ jQuery(function($){
 						setTimeout(function(){
 							var el = keyboard.preview,
 								dataRemoved = typeof el['data-test'] === 'undefined' && typeof el['data-this-is-a-fake'] === 'undefined';
-							assert.equal( el.type, 'text', 'Preview type changed from number to text' );
 							assert.equal( typeof el['aria-haspopup'], 'undefined', 'Preview aria-haspopup removed' );
 							assert.equal( dataRemoved, true, 'Preview data-attributes removed' );
 							keyboard.destroy();
@@ -127,7 +154,7 @@ jQuery(function($){
 		QUnit.test( 'addKey', function(assert) {
 			var tmp,
 				k = kb.addKey;
-			assert.expect(7);
+			assert.expect(8);
 			assert.equal( true, compare( k('accept', 'accept'), {
 					'data-name': 'accept',
 					'data-value': 'accept',
@@ -200,6 +227,16 @@ jQuery(function($){
 				}),
 				'unicode testing'
 			);
+			tmp = 'keyX';
+			kb.options.display.keyX = '<span class="keyX" style="color:red">Blah</span>';
+			assert.equal( true, compare( k(tmp, tmp), {
+					'data-name': 'keyX',
+					'data-value': 'keyX',
+					'hasClass': 'ui-keyboard-keyX',
+					'html': kb.options.display.keyX
+				}),
+				'html in display testing'
+			);
 
 		});
 
@@ -222,7 +259,7 @@ jQuery(function($){
 						setTimeout(function(){
 							keyboard.destroy(function(){
 								assert.equal( el.className, 'testing-abc', 'Destory removed all added class names' );
-								assert.equal( $.isEmptyObject( $._data( el ) ), true, 'Destory removed all data & bindings' );
+								assert.equal( $.isEmptyObject( $._data( el ).events ), true, 'Destory removed all data & bindings' );
 								assert.equal( typeof $('#test input').getkeyboard(), 'undefined', 'Cleared up data' );
 								done();
 							});

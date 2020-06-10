@@ -13,8 +13,6 @@
  * url is given to avoid a new select
  *
  * @author Thomas Depraetere, Hugues Peeters, Christophe Gesch� - original versions
- *
- * @package chamilo.link
  */
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;

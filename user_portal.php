@@ -45,20 +45,29 @@ Event::registerLog($logInfo);
 
 $userId = api_get_user_id();
 
-$collapsable = api_get_configuration_value('allow_user_session_collapsable');
-if ($collapsable) {
-    $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
-    $sessionId = isset($_REQUEST['session_id']) ? $_REQUEST['session_id'] : '';
-    $value = isset($_REQUEST['value']) ? (int) $_REQUEST['value'] : '';
-    switch ($action) {
+if (array_key_exists('action', $_REQUEST)) {
+    switch ($_REQUEST['action']) {
         case 'collapse_session':
-            if (!empty($sessionId)) {
-                $userRelSession = SessionManager::getUserSession($userId, $sessionId);
+            if (api_get_configuration_value('allow_user_session_collapsable')
+                && array_key_exists('session_id', $_REQUEST)
+            ) {
+                $userRelSession = SessionManager::getUserSession($userId, $_REQUEST['session_id']);
                 if ($userRelSession) {
+                    $value = isset($_REQUEST['value']) ? (int) $_REQUEST['value'] : '';
                     $table = Database::get_main_table(TABLE_MAIN_SESSION_USER);
                     $sql = "UPDATE $table SET collapsed = $value WHERE id = ".$userRelSession['id'];
                     Database::query($sql);
                     Display::addFlash(Display::return_message(get_lang('Updated')));
+                }
+                header('Location: user_portal.php');
+                exit;
+            }
+            break;
+        case 'unsubscribe':
+            if (\Security::check_token('get')) {
+                $auth = new Auth();
+                if ($auth->remove_user_from_course($_GET['course_code'])) {
+                    Display::addFlash(Display::return_message(get_lang('YouAreNowUnsubscribed')));
                 }
                 header('Location: user_portal.php');
                 exit;
@@ -80,16 +89,16 @@ if ($loadNotificationsByAjax) {
     $(function() {
         $(".course_notification").each(function(index) {
             var div = $(this);
-            var id = $(this).attr("id");       
+            var id = $(this).attr("id");
             var idList = id.split("_");
             var courseId = idList[1];
             var sessionId = idList[2];
             var status = idList[3];
-            $.ajax({			
+            $.ajax({
                 type: "GET",
-                url: "'.api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=get_notification&course_id="+courseId+"&session_id="+sessionId+"&status="+status,			
-                success: function(data) {			    
-                    div.append(data);			    
+                url: "'.api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=get_notification&course_id="+courseId+"&session_id="+sessionId+"&status="+status,
+                success: function(data) {
+                    div.append(data);
                 }
             });
         });
@@ -139,15 +148,15 @@ if ($displayMyCourseViewBySessionLink) {
     <script>
         userId = '.$userId.'
         $(document).ready(function() {
-            changeMyCoursesView($.cookie("defaultMyCourseView" + userId));
+            changeMyCoursesView(Cookies.get("defaultMyCourseView" + userId));
         });
-    
+
         /**
         * Keep in cookie the last teacher view for the My Courses Tab. default view, or view by session
         * @param inView
         */
         function changeMyCoursesView(inView) {
-            $.cookie("defaultMyCourseView"+userId, inView, { expires: 365 });
+            Cookies.set("defaultMyCourseView" + userId, inView, 365);
             if (inView == '.IndexManager::VIEW_BY_SESSION.') {
                 $("#viewBySession").addClass("btn-primary");
                 $("#viewByDefault").removeClass("btn-primary");
@@ -234,11 +243,14 @@ if (api_get_setting('go_to_course_after_login') == 'true') {
             if (isset($sessionInfo['courses']) &&
                 count($sessionInfo['courses']) == 1
             ) {
-                $courseCode = $sessionInfo['courses'][0]['code'];
-                $courseInfo = api_get_course_info_by_id($sessionInfo['courses'][0]['real_id']);
-                $courseUrl = $courseInfo['course_public_url'].'?id_session='.$sessionInfo['session_id'];
-                header('Location:'.$courseUrl);
-                exit;
+                foreach ($sessionInfo['courses'] as $courseItem) {
+                    $courseInfo = api_get_course_info_by_id($courseItem['real_id']);
+                    if (!empty($courseInfo)) {
+                        $courseUrl = $courseInfo['course_public_url'].'?id_session='.$sessionInfo['session_id'];
+                        header('Location:'.$courseUrl);
+                        exit;
+                    }
+                }
             }
 
             // Session has many courses.

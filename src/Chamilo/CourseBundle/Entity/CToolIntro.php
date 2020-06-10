@@ -150,4 +150,14 @@ class CToolIntro
     {
         return $this->sessionId;
     }
+
+    /**
+     * Get iid.
+     *
+     * @return int
+     */
+    public function getIid()
+    {
+        return $this->iid;
+    }
 }

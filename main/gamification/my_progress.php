@@ -7,8 +7,6 @@ use Chamilo\CoreBundle\Entity\Repository\TrackECourseAccessRepository;
  * See the progress for a user when the gamification mode is active.
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
- *
- * @package chamilo.gamification
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';

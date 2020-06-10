@@ -7,8 +7,6 @@
  * Extends FormValidator with add&edit forms for evaluations
  *
  * @author Stijn Konings
- *
- * @package chamilo.gradebook
  */
 class EvalForm extends FormValidator
 {
@@ -98,12 +96,12 @@ class EvalForm extends FormValidator
         $user2 = $item2['user'];
         if (api_sort_by_first_name()) {
             $result = api_strcmp($user1['firstname'], $user2['firstname']);
-            if ($result == 0) {
+            if (0 == $result) {
                 return api_strcmp($user1['lastname'], $user2['lastname']);
             }
         } else {
             $result = api_strcmp($user1['lastname'], $user2['lastname']);
-            if ($result == 0) {
+            if (0 == $result) {
                 return api_strcmp($user1['firstname'], $user2['firstname']);
             }
         }
@@ -554,7 +552,7 @@ class EvalForm extends FormValidator
             false
         );
 
-        if (count($all_categories) == 1) {
+        if (1 == count($all_categories)) {
             $this->addElement('hidden', 'hid_category_id', $cat_id);
         } else {
             $select_gradebook = $this->addElement(
@@ -719,7 +717,7 @@ class EvalForm extends FormValidator
         if ($this->evaluation_object->get_category_id() < 0) {
             $link = LinkFactory::get_evaluation_link($this->evaluation_object->get_id());
             $doc_url = $link->get_view_url($id);
-            if ($doc_url != null) {
+            if (null != $doc_url) {
                 $opendocurl_start .= '<a href="'.$doc_url.'" target="_blank">';
                 $opendocurl_end = '</a>';
             }

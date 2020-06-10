@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
@@ -13,8 +14,6 @@ use ChamiloSession as Session;
  *
  * @author Eric Marguin
  * @author Julio Montoya
- *
- * @package chamilo.exercise
  */
 class UniqueAnswer extends Question
 {
@@ -345,13 +344,25 @@ class UniqueAnswer extends Question
             $weighting = trim($form->getSubmitValue('weighting['.$i.']'));
             $scenario = $form->getSubmitValue('scenario');
 
-            //$list_destination = $form -> getSubmitValue('destination'.$i);
-            //$destination_str = $form -> getSubmitValue('destination'.$i);
+            $try = null;
+            $lp = null;
+            $destination = null;
+            $url = null;
+            if (isset($scenario['try'.$i])) {
+                $try = !empty($scenario['try'.$i]);
+            }
 
-            $try = !empty($scenario['try'.$i]);
-            $lp = $scenario['lp'.$i];
-            $destination = $scenario['destination'.$i];
-            $url = trim($scenario['url'.$i]);
+            if (isset($scenario['lp'.$i])) {
+                $lp = $scenario['lp'.$i];
+            }
+
+            if (isset($scenario['destination'.$i])) {
+                $destination = $scenario['destination'.$i];
+            }
+
+            if (isset($scenario['url'.$i])) {
+                $url = trim($scenario['url'.$i]);
+            }
 
             /*
             How we are going to parse the destination value

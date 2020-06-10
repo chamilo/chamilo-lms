@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -12,8 +13,6 @@
  * @author  Patrick Cool <patrick.cool@UGent.be>
  * @author  Roan Embrechts, refactoring and improved course visibility|subscribe|unsubscribe options
  * @author  Julio Montoya <gugli100@gmail.com> Jquery support + lots of fixes
- *
- * @package chamilo.course_info
  */
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_COURSE_SETTING;
@@ -90,7 +89,7 @@ $course_path = api_get_path(SYS_COURSE_PATH).$currentCourseRepository; // course
 if (file_exists($course_path.'/course-pic85x85.png')) {
     $course_web_path = api_get_path(WEB_COURSE_PATH).$currentCourseRepository; // course web path
     $course_medium_image = $course_web_path.'/course-pic85x85.png?'.rand(1, 1000); // redimensioned image 85x85
-    $image = '<div class="row"><label class="col-md-2 control-label">'.get_lang('Image').'</label> 
+    $image = '<div class="row"><label class="col-md-2 control-label">'.get_lang('Image').'</label>
                     <div class="col-md-8"><img src="'.$course_medium_image.'" /></div></div>';
 }
 $form->addHtml($image);
@@ -726,9 +725,9 @@ $form->addHtml('<div class="panel panel-default">');
 $form->addHtml('
         <div class="panel-heading" role="tab" id="heading-exercise">
             <h4 class="panel-title">
-                <a class="collapsed" 
-                   role="button" data-toggle="collapse" 
-                   data-parent="#accordion" 
+                <a class="collapsed"
+                   role="button" data-toggle="collapse"
+                   data-parent="#accordion"
                    href="#collapse-exercise" aria-expanded="false" aria-controls="collapse-exercise">
     ');
 $form->addHtml(

@@ -4,8 +4,7 @@
 require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
-$exercise_id = (isset($_GET['exerciseId']) && !empty($_GET['exerciseId'])) ? intval($_GET['exerciseId']) : 0;
-
+$exercise_id = isset($_GET['exerciseId']) && !empty($_GET['exerciseId']) ? (int) ($_GET['exerciseId']) : 0;
 // Access control
 api_protect_course_script(true);
 
@@ -25,8 +24,8 @@ $interbreadcrumb[] = [
     "name" => get_lang('Exercises'),
 ];
 $interbreadcrumb[] = [
-    "url" => "admin.php?exerciseId=$exercise_id&".api_get_cidreq(),
-    "name" => $objExercise->selectTitle(true),
+    'url' => "admin.php?exerciseId=$exercise_id&".api_get_cidreq(),
+    'name' => $objExercise->selectTitle(true),
 ];
 
 //Add the JS needed to use the jqgrid

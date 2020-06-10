@@ -3,8 +3,6 @@
 
 /**
  * This is a library with some functions to sort tabular data.
- *
- * @package chamilo.library
  */
 define('SORT_DATE', 3);
 define('SORT_IMAGE', 4);
@@ -43,7 +41,7 @@ class TableSort
             return $data;
         }
 
-        if ($type == SORT_REGULAR) {
+        if (SORT_REGULAR == $type) {
             $type = SORT_STRING;
             if (self::is_image_column($data, $column)) {
                 $type = SORT_IMAGE;
@@ -70,13 +68,13 @@ class TableSort
      */
     public static function getSortFunction($type, $direction, $column)
     {
-        $compareOperator = $direction == SORT_ASC ? '>' : '<=';
+        $compareOperator = SORT_ASC == $direction ? '>' : '<=';
 
         switch ($type) {
             case SORT_NUMERIC:
                 $function = function ($a, $b) use ($column, $compareOperator) {
                     $result = strip_tags($a[$column]) <= strip_tags($b[$column]);
-                    if ($compareOperator === '>') {
+                    if ('>' === $compareOperator) {
                         $result = strip_tags($a[$column]) > strip_tags($b[$column]);
                     }
 
@@ -89,7 +87,7 @@ class TableSort
                         api_strtolower(strip_tags($a[$column], "<img>")),
                         api_strtolower(strip_tags($b[$column], "<img>"))
                     ) <= 0;
-                    if ($compareOperator === '>') {
+                    if ('>' === $compareOperator) {
                         $result = api_strnatcmp(
                             api_strtolower(strip_tags($a[$column], "<img>")),
                             api_strtolower(strip_tags($b[$column], "<img>"))
@@ -103,7 +101,7 @@ class TableSort
             case SORT_DATE:
                 $function = function ($a, $b) use ($column, $compareOperator) {
                     $result = strtotime(strip_tags($a[$column])) <= strtotime(strip_tags($b[$column]));
-                    if ($compareOperator === '>') {
+                    if ('>' === $compareOperator) {
                         $result = strtotime(strip_tags($a[$column])) > strtotime(strip_tags($b[$column]));
                     }
 
@@ -117,7 +115,7 @@ class TableSort
                         api_strtolower(strip_tags($a[$column])),
                         api_strtolower(strip_tags($b[$column]))
                     ) <= 0;
-                    if ($compareOperator === '>') {
+                    if ('>' === $compareOperator) {
                         $result = api_strnatcmp(
                             api_strtolower(strip_tags($a[$column])),
                             api_strtolower(strip_tags($b[$column]))
@@ -175,7 +173,7 @@ class TableSort
             $column = isset($column_order[$column]) ? $column_order[$column] : $column;
         }
 
-        if ($type == SORT_REGULAR) {
+        if (SORT_REGULAR == $type) {
             if (self::is_image_column($data, $column)) {
                 $type = SORT_IMAGE;
             } elseif (self::is_date_column($data, $column)) {
@@ -193,7 +191,7 @@ class TableSort
             $new_data = [];
             if (!empty($data)) {
                 foreach ($data as $document) {
-                    if ($document['type'] === 'folder') {
+                    if ('folder' === $document['type']) {
                         $docs_to_sort[$document['id']] = api_strtolower($document['name']);
                     } else {
                         $folder_to_sort[$document['id']] = api_strtolower($document['name']);
@@ -201,7 +199,7 @@ class TableSort
                     $new_data[$document['id']] = $document;
                 }
 
-                if ($direction == SORT_ASC) {
+                if (SORT_ASC == $direction) {
                     if (!empty($docs_to_sort)) {
                         api_natsort($docs_to_sort);
                     }
@@ -336,7 +334,7 @@ class TableSort
                 // at least one img-tag
                 $is_image &= strlen(trim(strip_tags($row[$column], '<img>'))) > 0;
                 // and no text outside attribute-values
-                $is_image &= strlen(trim(strip_tags($row[$column]))) == 0;
+                $is_image &= 0 == strlen(trim(strip_tags($row[$column])));
             }
             if (!$is_image) {
                 break;

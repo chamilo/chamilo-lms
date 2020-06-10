@@ -4,8 +4,6 @@
  * This script gives information about a course.
  *
  * @author Bart Mollet
- *
- * @package chamilo.admin
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';

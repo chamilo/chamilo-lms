@@ -65,13 +65,16 @@ class BigBlueButtonBN
 			curl_setopt( $ch, CURLOPT_URL, $url );
 			curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
 			curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+            // Following redirect required to use Scalelite, BBB's Load Balancer
+			curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, true);
 			$data = curl_exec( $ch );
 			curl_close( $ch );
 
-			if($data)
+			if ($data) {
 				return (new SimpleXMLElement($data));
-			else
+            } else {
 				return false;
+            }
 		}
 		return (simplexml_load_file($url));
 	}

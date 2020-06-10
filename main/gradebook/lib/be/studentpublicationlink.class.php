@@ -5,8 +5,6 @@
  * Gradebook link to student publication item.
  *
  * @author Bert Steppé
- *
- * @package chamilo.gradebook
  */
 class StudentPublicationLink extends AbstractLink
 {
@@ -139,7 +137,7 @@ class StudentPublicationLink extends AbstractLink
                 'session' => $session,
             ]);
 
-        return count($results) != 0;
+        return 0 != count($results);
     }
 
     /**
@@ -250,7 +248,7 @@ class StudentPublicationLink extends AbstractLink
 
         foreach ($scores as $data) {
             if (!(array_key_exists($data->getUserId(), $students))) {
-                if ($assignment->getQualification() != 0) {
+                if (0 != $assignment->getQualification()) {
                     $students[$data->getUserId()] = $data->getQualification();
                     $rescount++;
                     $sum += $data->getQualification() / $assignment->getQualification();
@@ -264,7 +262,7 @@ class StudentPublicationLink extends AbstractLink
             }
         }
 
-        if ($rescount == 0) {
+        if (0 == $rescount) {
             return [null, null];
         }
 
@@ -337,7 +335,7 @@ class StudentPublicationLink extends AbstractLink
         $result = Database::query($sql);
         $number = Database::fetch_row($result);
 
-        return $number[0] != 0;
+        return 0 != $number[0];
     }
 
     public function get_icon_name()

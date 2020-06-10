@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 // The file that contains all the initialisation stuff (and includes all the configuration stuff)
@@ -454,7 +455,7 @@ if ($action != 'add') {
                 if ($action == 'viewfeedback' && isset($_GET['id']) && is_numeric($_GET['id']) && $dropbox_file->id == $_GET['id']) {
                     $action_icons .= "</td></tr>"; // Ending the normal row of the sortable table
                     $url = api_get_path(WEB_CODE_PATH).'dropbox/index.php?"'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory."&view_sent_category=".$viewSentCategory."&view=".$view.'&'.$sort_params;
-                    $action_icons .= "        
+                    $action_icons .= "
                         <tr>
                         <td colspan=\"9\">".
                         feedback($dropbox_file->feedback2, $url).
@@ -627,10 +628,10 @@ if ($action != 'add') {
                 $action_icons = check_number_feedback($dropbox_file->id, $number_feedback).' '.get_lang('Feedback').'
                     <a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory.'&view_sent_category='.$viewSentCategory.'&view='.$view.'&action=viewfeedback&id='.$dropbox_file->id.'&'.$sort_params.'">'.
                         Display::return_icon('discuss.png', get_lang('Comment'), '', ICON_SIZE_SMALL).
-                    '</a>                    
+                    '</a>
                     <a href="'.api_get_path(WEB_CODE_PATH).'dropbox/update.php?'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory.'&view_sent_category='.$viewSentCategory.'&view='.$view.'&action=update&id='.$dropbox_file->id.'&'.$sort_params.'">'.
                         Display::return_icon('upload_file.png', get_lang('Update'), '', ICON_SIZE_SMALL).
-                    '</a>                    
+                    '</a>
                     <a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory.'&view_sent_category='.$viewSentCategory.'&view='.$view.'&action=movesent&move_id='.$dropbox_file->id.'&'.$sort_params.'">'.
                         Display::return_icon('move.png', get_lang('Move'), '', ICON_SIZE_SMALL).'
                     </a>

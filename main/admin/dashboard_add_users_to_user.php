@@ -3,8 +3,6 @@
 
 /**
  *  Interface for assigning users to Human Resources Manager.
- *
- *  @package chamilo.admin
  */
 
 // resetting the course id

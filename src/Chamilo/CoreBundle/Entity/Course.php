@@ -600,6 +600,11 @@ class Course
         return $this->title;
     }
 
+    public function getName()
+    {
+        return $this->getTitle();
+    }
+
     /**
      * @return string
      */

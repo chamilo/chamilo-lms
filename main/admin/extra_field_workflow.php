@@ -3,9 +3,6 @@
 
 use Chamilo\CoreBundle\Entity\ExtraFieldOptionRelFieldOption;
 
-/**
- *  @package chamilo.admin
- */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 

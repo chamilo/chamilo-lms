@@ -166,17 +166,26 @@ select {
     margin: 10px 0;
 }
 
-#form-login .input-group {
+#formLogin .input-group {
     margin-top: 10px;
     margin-bottom: 10px;
 }
 
-#form-login .form-group small,  #form-login .form-group .form_required {
+#formLogin .form-group small,  #formLogin .form-group .form_required {
     display: none;
 }
 
-#form-login label {
+#formLogin label {
     display: none;
+}
+
+#formLogin #QF_CAPTCHA_captcha_question {
+    max-width: 100%;
+    height: auto;
+}
+
+#login-block .alert {
+    margin: 15px 0 5px;
 }
 
 #login-block #formLogin .form-group {
@@ -2717,6 +2726,60 @@ div.admin_section h4 {
 .ribbon .success {
     color: green;
 }
+/* Ribbon top right (diagonal) */
+.ribbon-diagonal {
+    width: 85px;
+    height: 100px;
+    overflow: hidden;
+    position: absolute;
+}
+.ribbon-diagonal::before,
+.ribbon-diagonal::after {
+    position: absolute;
+    z-index: -1;
+    content: '';
+    display: block;
+    border: 5px solid #337ab7;
+}
+.ribbon-diagonal span {
+    position: absolute;
+    display: block;
+    width: 185px;
+    padding: 2px 0;
+    box-shadow: 0 5px 2px rgba(0,0,0,.1);
+    color: #fff;
+    text-shadow: 0 1px 1px rgba(0,0,0,.2);
+    text-align: center;
+}
+.ribbon-diagonal-top-right {
+    right: 24px;
+    margin-top: -9px;
+}
+.ribbon-diagonal-top-right::before,
+.ribbon-diagonal-top-right::after {
+    border-top-color: transparent;
+    border-right-color: transparent;
+}
+.ribbon-diagonal-top-right::before {
+    top: 0;
+    left: 0;
+}
+.ribbon-diagonal-top-right::after {
+    bottom: 0;
+    right: 0;
+}
+.ribbon-diagonal-top-right span {
+    left: -41px;
+    top: 30px;
+    transform: rotate(45deg);
+    font-size: x-small;
+}
+.ribbon-diagonal-official span {
+    background-color: #337ab7;
+}
+.ribbon-diagonal-thirdparty span {
+    background-color: #f0ad4e;;
+}
 
 .exercise_save_now_button img {
     position: relative;
@@ -3196,47 +3259,6 @@ form .formw .freeze {
 }
 
 /* header cell in data table in tools */
-.data_table {
-    margin-bottom: 18px;
-    width: 100%;
-    border: 1px solid #DDDDDD;
-}
-.data_table td {
-    font-size: 12px;
-}
-.data_table th, .data_table td {
-    border-top: 1px solid #DDDDDD;
-    line-height: 18px;
-    padding: 10px;
-}
-.data_table th {
-    padding: 8px 10px;
-    font-weight: normal;
-    background-color: #EEEEEE;
-    border-bottom: 1px solid #DDDDDD;
-    color: #333;
-}
-.data_table th a {
-    color: #333;
-}
-.data_table_no_border {
-    border-collapse: collapse;
-    border-spacing: 0;
-    font-size: 12px;
-    margin-bottom: 15px;
-    margin-top: 8px;
-    text-align: left;
-    width: 100%;
-}
-.data_table_no_border td {
-    line-height: normal;
-    padding: 6px;
-    text-align: left;
-    vertical-align: middle;
-}
-.data_table tr.row_odd {
-    background-color: #F9F9F9;
-}
 
 .attendance-users-table .data_table tr.row_odd {
     height: 64px;
@@ -3251,7 +3273,13 @@ form .formw .freeze {
 }
 
 .data_table tr.row_even {
-    background-color: #fff;
+    background-color: #fdfdfd;
+}
+
+.data_table tr.highlight {
+    font-style: italic;
+    font-weight: bolder;
+    color: #777;
 }
 
 .attendance-calendar-table .data_table tr.row_odd {
@@ -3268,20 +3296,22 @@ form .formw .freeze {
 
 .data_table_pagination {
     width: 100%;
-    margin-top: 5px;
-    margin-bottom: 5px;
+}
+
+.data_table_pagination .btn-toolbar {
+    margin-bottom: 0;
+    margin-top: 0;
 }
 
 .table-well {
     background: #ffffff;
     border: 1px solid #dddddd;
-    padding: 10px 20px;
+    padding: 10px;
     border-radius: 4px;
     -moz-border-radius: 4px;
     -webkit-border-radius: 4px;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
     margin-bottom: 20px;
-    margin-top: 10px;
 }
 
 .tabs-margin, .btn-toolbar {
@@ -5413,17 +5443,22 @@ ul.holder li.bit-box {
     margin-bottom: 20px;
     min-height: 2em;
     min-width: 100%;
+    border: 3px dashed #CCC;
+    padding: 20px 20px 0 20px;
 }
 
 ul.exercise-draggable-answer.list-inline li {
-    float: left;
+    margin-right: 20px;
+    min-width: auto;
 }
 
 ul.exercise-draggable-answer li {
+    float: left;
     cursor: move;
-    margin: 0 20px 20px 0;
+    margin-bottom: 20px;
     padding: 5px 20px;
     text-align: center;
+    min-width: 100%;
 }
 
 ul.exercise-draggable-answer .touch-items {
@@ -5435,10 +5470,8 @@ ul.exercise-draggable-answer .touch-items {
     background-image: linear-gradient(to bottom, #ffffff, #cfcfcf);
     border-radius: 4px;
     color: #2e2e2e;
-    font-size: 13px;
     padding: 5px 10px;
     border: solid #b0b0b0 1px;
-    text-decoration: none;
     z-index: 100;
 }
 
@@ -5457,47 +5490,43 @@ ul.exercise-draggable-answer .touch-items:hover {
 }
 
 .question_options .droppable {
-    padding: 5px;
+    padding: 5px 10px;
     text-align: center;
     background-color: #ECF0F1;
     border: dotted #dddddd 2px;
     border-radius: 4px;
     color: #666666;
-
-    /* Extra */
-    display: inline-block;
-    width: 85%;
+    height: 2em;
+    width: 95%;
     margin-bottom: 0;
 }
 
 .question_options .droppable-item {
-    background-color: #84bd00;
-    color: #FFF;
-    /* padding: 10px;*/
-    padding: 3px 0 3px 5px;
+    background-color: #096EAA4A;
+    color: #333;
+    display: table;
+    padding: 5px;
+    width: 100%;
+}
+
+.question_options .droppable-item .number,
+.question_options .droppable-item .droppable {
+    display: table-cell;
 }
 
 .question_options .droppable-item .number {
-    font-size: 16px;
     font-weight: bold;
-    /*width: 30px;*/
-    display: inline-block;
+    text-align: right;
+    padding-right: 5px;
 }
 
-.question_options .ui-helper-reset {
-    margin-top: -25px;
+.question_options .droppable-item .droppable .gallery {
+    margin-bottom: 0;
 }
 
-.question_options .droppable .gallery .btn-default {
-    background: #D9534F;
-    color: #ffffff;
-    border-color: #D43F3A;
-}
-
-.question_options .droppable .gallery .btn-default:hover {
-    background: #C9302C;
-    color: #ffffff;
-    border-color: #AC2925;
+.question_options .droppable-item .droppable .gallery .touch-items {
+    min-width: 100%;
+    margin: 5px 0;
 }
 
 .question_options .droppable .gallery .exercise-draggable-answer-option {
@@ -5510,8 +5539,15 @@ ul.exercise-draggable-answer .touch-items:hover {
     border: 1px solid #DDDDDD;
     padding: 5px;
     border-radius: 5px;
-    font-size: 12px;
     cursor: pointer;
+}
+
+.question_options .col-xs-12.col-sm-4.col-md-3.col-lg-2 {
+    clear: right;
+}
+
+.question_options .col-xs-12.col-sm-4.col-md-3.col-lg-2 .droppable-item {
+    margin-bottom: 20px;
 }
 
 /***    Matching Draggable answer ***/
@@ -10091,9 +10127,9 @@ ul.dropdown-menu.inner > li > a {
         width: 100%;
     }
 
-    .form-inline .survey_question .form-group label {
+    /*.form-inline .survey_question .form-group label {
         display: none;
-    }
+    }*/
 
     .form-inline .survey_question .input-group .bootstrap-select {
         width: 300px;

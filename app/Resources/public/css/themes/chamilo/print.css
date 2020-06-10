@@ -747,67 +747,6 @@ padding-top: 0px;	padding-right: 0px;	padding-bottom: 0px;	padding-left: 0px;}
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 9px
 }
-/*****************************************************
- *  DATA TABLE STYLES                                *
- *****************************************************/
-.cell_header {
-	background-color: #EEEEFF;
-	font-weight:bold;
-	text-align:left;
-	padding-left:5px;
-}   /* header cell in data table in tools */
-.data_table {
-	border-collapse: collapse;
-	width: 100%;
-	padding: 5px;
-}
-.data_table th {
-	/*padding-right: 20px;*/
-	border: 1px solid gray;
-	background-color: #E5EDF9;
-	text-align: left;
-}
-.data_table tr.row_odd {
-	background-color: #fafafa;
-}
-.data_table tr.row_odd:hover, .data_table tr.row_even:hover {
-	background-color: #f0f0f0;
-}
-.data_table tr.row_even {
-	background-color: #fff;
-}
-.data_table td .highlight {
-    font-weight: bold;
-}
-.data_table td {
-	padding: 5px;
-	border-bottom: 1px solid #b0b0b0;
-	border-right: 1px dotted #e1e1e1;
-	border-left: 1px dotted #e1e1e1;
-	text-align: left;
-}
-
-
-.data_table_no_border {
-    border-collapse: collapse;
-    border-spacing: 0;
-    font-size: 12px;
-    margin-bottom: 15px;
-    margin-top: 8px;
-    text-align: left;
-    width: 100%;
-}
-
-.data_table_no_border td {
-    line-height: normal;
-    padding: 6px;
-    text-align: left;
-    vertical-align: middle;
-}
-.data_table_no_border .highlight {
-    font-weight: bold;
-}
-
 /* admin page tool list definitions */
 .tool_list dt {
 	font-weight: bold;
@@ -939,4 +878,103 @@ div.system_announcement_content {
 /* to make it in visible in the printed version*/
 .print_invisible {
 	display:none;
+}
+
+/* print table pdf */
+.data_table{
+	width: 100%;
+	padding: 0;
+	border: 1px solid #b5cae7;
+	border-spacing: 0;
+	margin: 0 0 18px;
+}
+
+.data_table td {
+	padding: 5px;
+	border-bottom: 1px solid #b5cae7;
+	border-right: 1px solid #b5cae7;
+	border-top: 1px solid #b5cae7;
+	text-align: left;
+	font-size: 12px;
+	color: #666666;
+}
+
+.data_table th, .data_table td {
+	line-height: 18px;
+	padding: 10px;
+}
+.data_table th {
+	padding: 8px 10px;
+	font-weight: bold;
+	background-color: #eef5fa;
+	border-bottom: 2px solid #b5cae7;
+	color: #4171b5;
+}
+.data_table th a {
+	color: #333;
+}
+.data_table_no_border {
+	border-collapse: collapse;
+	border-spacing: 0;
+	font-size: 12px;
+	margin-bottom: 15px;
+	margin-top: 8px;
+	text-align: left;
+	width: 100%;
+}
+.data_table_no_border td {
+	line-height: normal;
+	padding: 6px;
+	text-align: left;
+	vertical-align: middle;
+}
+.data_table tr.row_odd {
+	background-color: #F9F9F9;
+}
+
+.data-title .page-header{
+	color: #000;
+	font-weight: bold;
+	border-bottom: 1px solid #b5cae7;
+}
+.date-calendar .page-header{
+	color: #000;
+	font-weight: bold;
+	border-bottom: 1px solid #b5cae7;
+	border-top: 1px solid #b5cae7;
+	text-align: center;
+	background-color: #EDEDED;
+	padding-top: 10px;
+	border-radis: 10px;
+}
+
+.table_print{
+	width: 100%;
+	padding: 0;
+	border: 1px solid #CEE0CC;
+	border-spacing: 0;
+	margin: 0 0 18px;
+	background-color: #F3FFE6;
+}
+
+.table_print td {
+	padding: 5px;
+	border-bottom: 1px solid #CEE0CC;
+	border-right: 1px solid #CEE0CC;
+	border-top: 1px solid #CEE0CC;
+	text-align: left;
+	font-size: 12px;
+	color: #666666;
+}
+
+.table_print th, .table_print td {
+	line-height: 18px;
+	padding: 10px;
+}
+.table_print th {
+	padding: 8px 10px;
+	font-weight: bold;
+	background-color: #CEE0CC;
+	border-bottom: 2px solid #4F7849;
+	color: #4F7849;
 }

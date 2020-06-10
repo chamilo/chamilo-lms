@@ -5,8 +5,6 @@
  * Class CatForm.
  *
  * @author Stijn Konings
- *
- * @package chamilo.gradebook
  */
 class CatForm extends FormValidator
 {
@@ -97,7 +95,7 @@ class CatForm extends FormValidator
     {
         // check if we are a root category
         // if so, you can only choose between courses
-        if ($this->category_object->get_parent_id() == '0') {
+        if ('0' == $this->category_object->get_parent_id()) {
             $this->setDefaults(
                 [
                     'select_course' => $this->category_object->get_course_code(),
@@ -154,7 +152,7 @@ class CatForm extends FormValidator
         $category_name = $this->category_object->get_name();
 
         // The main course category:
-        if (isset($this->category_object) && $this->category_object->get_parent_id() == 0) {
+        if (isset($this->category_object) && 0 == $this->category_object->get_parent_id()) {
             if (empty($category_name)) {
                 $category_name = $course_code;
             }
@@ -284,7 +282,7 @@ class CatForm extends FormValidator
         }
 
         if (isset($this->category_object) &&
-            $this->category_object->get_parent_id() == 0
+            0 == $this->category_object->get_parent_id()
         ) {
             $model = ExerciseLib::getCourseScoreModel();
             if (empty($model)) {
@@ -373,7 +371,7 @@ class CatForm extends FormValidator
             }
 
             if (count($test_cats) > 1 || !empty($links)) {
-                if (api_get_setting('gradebook_enable_grade_model') == 'true') {
+                if ('true' == api_get_setting('gradebook_enable_grade_model')) {
                     $this->freeze('grade_model_id');
                 }
             }
@@ -393,7 +391,7 @@ class CatForm extends FormValidator
         }
 
         //if (!empty($session_id)) {
-            $isRequirementCheckbox = $this->addCheckBox(
+        $isRequirementCheckbox = $this->addCheckBox(
                 'is_requirement',
                 [
                     null,

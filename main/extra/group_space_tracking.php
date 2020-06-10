@@ -38,19 +38,19 @@ $forums_of_groups = get_forums_of_group($current_group['id']);
 $forum_state_public = 0;
 if (is_array($forums_of_groups)) {
     foreach ($forums_of_groups as $key => $value) {
-        if ($value['forum_group_public_private'] == 'public') {
+        if ('public' == $value['forum_group_public_private']) {
             $forum_state_public = 1;
         }
     }
 }
 
-if ($current_group['doc_state'] != 1 &&
-    $current_group['calendar_state'] != 1 &&
-    $current_group['work_state'] != 1 &&
-    $current_group['announcements_state'] != 1 &&
-    $current_group['wiki_state'] != 1 &&
-    $current_group['chat_state'] != 1 &&
-    $forum_state_public != 1
+if (1 != $current_group['doc_state'] &&
+    1 != $current_group['calendar_state'] &&
+    1 != $current_group['work_state'] &&
+    1 != $current_group['announcements_state'] &&
+    1 != $current_group['wiki_state'] &&
+    1 != $current_group['chat_state'] &&
+    1 != $forum_state_public
 ) {
     if (!api_is_allowed_to_edit(null, true) &&
         !GroupManager::is_user_in_group($user_id, $group_id)) {
@@ -421,6 +421,6 @@ function user_name_filter($name, $url_params, $row)
 
 // Footer
 $orig = isset($origin) ? $origin : '';
-if ($orig != 'learnpath') {
+if ('learnpath' != $orig) {
     Display::display_footer();
 }

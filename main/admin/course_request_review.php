@@ -1,10 +1,9 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * A list containing the pending course requests.
- *
- * @package chamilo.admin
  *
  * @author José Manuel Abuin Mosquera <chema@cesga.es>, 2010
  * Centro de Supercomputacion de Galicia (CESGA)

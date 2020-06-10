@@ -6,8 +6,6 @@ use ChamiloSession as Session;
 /**
  * Exercise preview.
  *
- * @package chamilo.exercise
- *
  * @author Julio Montoya <gugli100@gmail.com>
  */
 require_once __DIR__.'/../inc/global.inc.php';
@@ -150,6 +148,24 @@ $exercise_url_button = Display::url(
     $exercise_url,
     ['class' => 'btn btn-success btn-large']
 );
+
+$btnCheck = '';
+$quizCheckButtonEnabled = api_get_configuration_value('quiz_check_button_enable');
+
+if ($quizCheckButtonEnabled) {
+    $btnCheck = Display::button(
+            'quiz_check_request_button',
+            Display::returnFontAwesomeIcon('spinner', '', true, 'fa-spin hidden').' '.get_lang('TestYourBrowser'),
+            [
+                'type' => 'button',
+                'role' => 'button',
+                'id' => 'quiz-check-request-button',
+                'class' => 'btn btn-default',
+                'data-loading-text' => get_lang('Loading'),
+                'autocomplete' => 'off',
+            ]
+        ).PHP_EOL.'<strong id="quiz-check-request-text"></strong>';
+}
 
 //3. Checking visibility of the exercise (overwrites the exercise button)
 $visible_return = $objExercise->is_visible(
@@ -423,6 +439,14 @@ $isLimitReached = ExerciseLib::isQuestionsLimitPerDayReached(
 );
 
 if (!empty($exercise_url_button) && !$isLimitReached) {
+    if ($quizCheckButtonEnabled) {
+        $html .= Display::div(
+            $btnCheck,
+            ['class' => 'exercise_overview_options']
+        );
+        $html .= '<br>';
+    }
+
     $html .= Display::div(
         Display::div(
             $exercise_url_button,
@@ -451,6 +475,75 @@ $html .= '</div>';
 
 if ($certificateBlock) {
     $html .= PHP_EOL.$certificateBlock;
+}
+
+if ($quizCheckButtonEnabled) {
+    $quizCheckRequestUrl = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&a=browser_test';
+    $params = http_build_query(
+        [
+            'exe_id' => 1,
+            'exerciseId' => $exercise_id,
+            'learnpath_id' => $learnpath_id,
+            'learnpath_item_id' => $learnpath_item_id,
+            'learnpath_item_view_id' => $learnpathItemViewId,
+            'reminder' => '0',
+            'type' => 'simple',
+            'question_id' => 23,
+            'choice[23]' => 45,
+        ]
+    ).'&'.api_get_cidreq();
+
+    $html .= "<script>
+        $(function () {
+            var btnTest = $('#quiz-check-request-button'),
+                iconBtnTest = btnTest.children('.fa.fa-spin');
+
+            btnTest.on('click', function (e) {
+                e.preventDefault();
+
+                btnTest.prop('disabled', true).removeClass('btn-success btn-danger').addClass('btn-default');
+                iconBtnTest.removeClass('hidden');
+
+                var txtResult = $('#quiz-check-request-text').removeClass('text-success text-danger').hide();
+
+                $
+                    .when(
+                        $.ajax({
+                            url: '$quizCheckRequestUrl',
+                            type: 'post',
+                            data: '$params'
+                        }),
+                        $.ajax({
+                            url: '$quizCheckRequestUrl',
+                            type: 'post',
+                            data: '$params&sleep=1'
+                        })
+                    )
+                    .then(
+                        function (xhr1, xhr2) {
+                            var xhr1IsOk = !!xhr1 && xhr1[1] === 'success' && !!xhr1[0] && 'ok' === xhr1[0];
+                            var xhr2IsOk = !!xhr2 && xhr2[1] === 'success' && !!xhr2[0] && 'ok' === xhr2[0];
+
+                            if (xhr1IsOk && xhr2IsOk) {
+                                btnTest.removeClass('btn-default btn-danger').addClass('btn-success');
+                                txtResult.text(\"".get_lang('QuizBrowserCheckOK')."\").addClass('text-success').show();
+                            } else {
+                                btnTest.removeClass('btn-default btn-success').addClass('btn-danger');
+                                txtResult.text(\"".get_lang('QuizBrowserCheckKO')."\").addClass('text-danger').show();
+                            }
+                        },
+                        function () {
+                            txtResult.text(\"".get_lang('QuizBrowserCheckKO')."\").addClass('text-danger').show();
+                            btnTest.removeClass('btn-default btn-success').addClass('btn-danger');
+                        }
+                    )
+                    .always(function () {
+                        btnTest.prop('disabled', false);
+                        iconBtnTest.addClass('hidden');
+                    });
+            });
+        });
+        </script>";
 }
 
 echo $html;

@@ -54,11 +54,17 @@ try {
     }
 
     foreach ($decodedJwt->{'https://purl.imsglobal.org/spec/lti-dl/claim/content_items'} as $contentItem) {
+        /** @var LtiContentItemType|null $contentItem */
+        $contentItem = null;
+
         switch ($contentItem->type) {
             case 'ltiResourceLink':
-                $resourceLink = new LtiResourceLink($contentItem);
-                $resourceLink->save($ltiTool, $course);
+                $contentItem = new LtiResourceLink($contentItem);
+            default:
+                continue;
         }
+
+        $contentItem->save($ltiTool, $course);
     }
 } catch (Exception $exception) {
     $message = Display::return_message($exception->getMessage(), 'error');

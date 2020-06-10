@@ -92,6 +92,11 @@ class FrmEdit extends FormValidator
             'custom_params',
             [$plugin->get_lang('CustomParams'), $plugin->get_lang('CustomParamsHelp')]
         );
+        $this->addSelect(
+            'document_target',
+            get_lang('LinkTarget'),
+            ['iframe' => 'iframe', 'window' => 'window']
+        );
 
         if (null === $parent ||
             (null !== $parent && !$parent->isActiveDeepLinking())
@@ -104,15 +109,40 @@ class FrmEdit extends FormValidator
         }
 
         if (null === $parent && $this->tool->getVersion() === ImsLti::V_1P3) {
-            $this->addRadio(
-                '1p3_ags',
-                $plugin->get_lang('AssigmentAndGradesService'),
-                [
-                    LtiAssignmentGradesService::AGS_NONE => $plugin->get_lang('DontUseService'),
-                    LtiAssignmentGradesService::AGS_SIMPLE => $plugin->get_lang('AGServiceSimple'),
-                    LtiAssignmentGradesService::AGS_FULL => $plugin->get_lang('AGServiceFull'),
-                ]
-            );
+            $showAGS = false;
+
+            if (api_get_course_int_id()) {
+                $caterories = Category::load(null, null, api_get_course_id());
+
+                if (!empty($caterories)) {
+                    $showAGS = true;
+                }
+            } else {
+                $showAGS = true;
+            }
+
+            if ($showAGS) {
+                $this->addRadio(
+                    '1p3_ags',
+                    $plugin->get_lang('AssigmentAndGradesService'),
+                    [
+                        LtiAssignmentGradesService::AGS_NONE => $plugin->get_lang('DontUseService'),
+                        LtiAssignmentGradesService::AGS_SIMPLE => $plugin->get_lang('AGServiceSimple'),
+                        LtiAssignmentGradesService::AGS_FULL => $plugin->get_lang('AGServiceFull'),
+                    ]
+                );
+            } else {
+                $gradebookUrl = api_get_path(WEB_CODE_PATH).'gradebook/index.php?'.api_get_cidreq();
+
+                $this->addLabel(
+                    $plugin->get_lang('AssigmentAndGradesService'),
+                    sprintf(
+                        $plugin->get_lang('YouNeedCreateTheGradebokInCourseFirst'),
+                        Display::url($gradebookUrl, $gradebookUrl)
+                    )
+                );
+            }
+
             $this->addRadio(
                 '1p3_nrps',
                 $plugin->get_lang('NamesAndRoleProvisioningService'),
@@ -121,6 +151,18 @@ class FrmEdit extends FormValidator
                     LtiNamesRoleProvisioningService::NRPS_CONTEXT_MEMBERSHIP => $plugin->get_lang('UseService'),
                 ]
             );
+        }
+
+        if (!$parent) {
+            $this->addText(
+                'replacement_user_id',
+                [
+                    $plugin->get_lang('ReplacementUserId'),
+                    $plugin->get_lang('ReplacementUserIdHelp')
+                ],
+                false
+            );
+            $this->applyFilter('replacement_user_id', 'trim');
         }
 
         $this->addHtml('</div>');
@@ -162,6 +204,8 @@ class FrmEdit extends FormValidator
                 'redirect_url' => $this->tool->getRedirectUrl(),
                 '1p3_ags' => $advServices['ags'],
                 '1p3_nrps' => $advServices['nrps'],
+                'document_target' => $this->tool->getDocumentTarget(),
+                'replacement_user_id' => $this->tool->getReplacementForUserId(),
             ]
         );
     }

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CLink;
@@ -17,8 +18,6 @@ use Chamilo\CourseBundle\Entity\CLink;
  *
  * @author Patrick Cool, complete remake (December 2003 - January 2004)
  * @author René Haentjens, CSV file import (October 2004)
- *
- * @package chamilo.link
  */
 class Link extends Model
 {
@@ -106,7 +105,7 @@ class Link extends Model
                 api_get_user_id()
             );
 
-            api_set_default_visibility($id, TOOL_LINK);
+            api_set_default_visibility($id, TOOL_LINK, 0, $course_info);
         }
 
         return $id;
@@ -140,7 +139,7 @@ class Link extends Model
         }
         $sessionId = intval($sessionId);
         if ($linkUrl != '') {
-            $sql = "UPDATE $tblLink SET 
+            $sql = "UPDATE $tblLink SET
                     url = '$linkUrl'
                     WHERE id = $linkId AND c_id = $courseId AND session_id = $sessionId";
             $resLink = Database::query($sql);
@@ -169,20 +168,20 @@ class Link extends Model
         $course_id = $_course['real_id'];
         $session_id = api_get_session_id();
 
-        if ($type == 'link') {
-            $title = Security::remove_XSS(stripslashes($_POST['title']));
-            $urllink = Security::remove_XSS($_POST['url']);
-            $description = Security::remove_XSS($_POST['description']);
-            $selectcategory = Security::remove_XSS($_POST['category_id']);
+        if ($type === 'link') {
+            $title = $_POST['title'];
+            $urllink = $_POST['url'];
+            $description = $_POST['description'];
+            $selectcategory = $_POST['category_id'];
 
             $onhomepage = 0;
             if (isset($_POST['on_homepage'])) {
-                $onhomepage = Security::remove_XSS($_POST['on_homepage']);
+                $onhomepage = $_POST['on_homepage'];
             }
 
             $target = '_self'; // Default target.
             if (!empty($_POST['target'])) {
-                $target = Security::remove_XSS($_POST['target']);
+                $target = $_POST['target'];
             }
 
             $urllink = trim($urllink);
@@ -220,7 +219,7 @@ class Link extends Model
                 ];
                 $link_id = $link->save($params);
 
-                if ((api_get_setting('search_enabled') == 'true') &&
+                if ((api_get_setting('search_enabled') === 'true') &&
                     $link_id && extension_loaded('xapian')
                 ) {
                     require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
@@ -325,7 +324,7 @@ class Link extends Model
 
                 return $link_id;
             }
-        } elseif ($type == 'category') {
+        } elseif ($type === 'category') {
             $tbl_categories = Database::get_course_table(TABLE_LINK_CATEGORY);
 
             $category_title = trim($_POST['category_title']);
@@ -500,7 +499,7 @@ class Link extends Model
         }
 
         $sql = "SELECT * FROM $tbl_link
-                WHERE c_id = $course_id AND id='".intval($id)."' ";
+                WHERE c_id = $course_id AND id='".(int) $id."' ";
         $result = Database::query($sql);
         $data = [];
         if (Database::num_rows($result)) {
@@ -519,7 +518,7 @@ class Link extends Model
         $tbl_link = Database::get_course_table(TABLE_LINK);
         $_course = api_get_course_info();
         $course_id = $_course['real_id'];
-        $id = intval($id);
+        $id = (int) $id;
 
         $values['url'] = trim($values['url']);
         $values['title'] = trim($values['title']);
@@ -561,7 +560,7 @@ class Link extends Model
 
         if ($category_id != $values['category_id']) {
             $sql = "SELECT MAX(display_order)
-                    FROM $tbl_link 
+                    FROM $tbl_link
                     WHERE
                         c_id = $course_id AND
                         category_id='".intval($values['category_id'])."'";
@@ -588,7 +587,7 @@ class Link extends Model
         );
 
         // Update search enchine and its values table if enabled.
-        if (api_get_setting('search_enabled') == 'true') {
+        if (api_get_setting('search_enabled') === 'true') {
             $course_int_id = api_get_course_int_id();
             $course_id = api_get_course_id();
             $link_title = Database:: escape_string($values['title']);
@@ -914,10 +913,10 @@ class Link extends Model
                 $withBaseContent,
                 'ip.session_id'
             );
-            $condition = " AND 
+            $condition = " AND
                 (
                     (ip.visibility = '1' $conditionBaseSession) OR
-                     
+
                     (
                         (ip.visibility = '0' OR ip.visibility = '1')
                         $condition_session
@@ -934,7 +933,7 @@ class Link extends Model
             $condition .= " AND (ip.visibility = '0' OR ip.visibility = '1') $condition ";
         }
 
-        $sql = "SELECT 
+        $sql = "SELECT
                     link.id,
                     ip.session_id,
                     link.session_id link_session_id,
@@ -990,6 +989,7 @@ class Link extends Model
             $linksAdded = [];
             foreach ($links as $myrow) {
                 $linkId = $myrow['id'];
+                $linkUrl = Security::remove_XSS($myrow['url']);
 
                 if (in_array($linkId, $linksAdded)) {
                     continue;
@@ -999,10 +999,7 @@ class Link extends Model
                 $categoryId = $myrow['category_id'];
 
                 // Validation when belongs to a session.
-                $session_img = api_get_session_image(
-                    $myrow['link_session_id'],
-                    $_user['status']
-                );
+                $session_img = api_get_session_image($myrow['link_session_id'], $_user['status']);
 
                 $toolbar = '';
                 $link_validator = '';
@@ -1013,7 +1010,7 @@ class Link extends Model
                         'check-circle-o',
                         'default btn-sm',
                         [
-                            'onclick' => "check_url('".$linkId."', '".addslashes($myrow['url'])."');",
+                            'onclick' => "check_url('".$linkId."', '".addslashes($linkUrl)."');",
                             'title' => get_lang('CheckURL'),
                         ]
                     );
@@ -1136,7 +1133,7 @@ class Link extends Model
                         null,
                         ICON_SIZE_SMALL
                     );
-                    $url = api_get_path(WEB_CODE_PATH).'link/link_goto.php?'.api_get_cidreq().'&link_id='.$linkId.'&link_url='.urlencode($myrow['url']);
+                    $url = api_get_path(WEB_CODE_PATH).'link/link_goto.php?'.api_get_cidreq().'&link_id='.$linkId;
                     $content .= '<div class="list-group-item">';
                     if ($showActionLinks) {
                         $content .= '<div class="pull-right"><div class="btn-group">'.$toolbar.'</div></div>';
@@ -1148,14 +1145,14 @@ class Link extends Model
                         Security::remove_XSS($myrow['title']),
                         [
                             'href' => $url,
-                            'target' => $myrow['target'],
+                            'target' => Security::remove_XSS($myrow['target']),
                             'class' => $titleClass,
                         ]
                     );
                     $content .= $link_validator;
                     $content .= $session_img;
                     $content .= '</h4>';
-                    $content .= '<p class="list-group-item-text">'.$myrow['description'].'</p>';
+                    $content .= '<p class="list-group-item-text">'.Security::remove_XSS($myrow['description']).'</p>';
                     $content .= '</div>';
                 }
                 $i++;
@@ -1561,8 +1558,7 @@ class Link extends Model
                 );
             }
 
-            $content .= Display::panel($myrow['description'].$childrenContent, $header);
-
+            $content .= Display::panel(Security::remove_XSS($myrow['description']).$childrenContent, $header);
             $counter++;
         }
 
@@ -1594,7 +1590,7 @@ class Link extends Model
             '&sec_token='.$token
         );
 
-        if ($action == 'addlink') {
+        if ($action === 'addlink') {
             $form->addHeader(get_lang('LinkAdd'));
         } else {
             $form->addHeader(get_lang('LinkMod'));
@@ -1605,7 +1601,6 @@ class Link extends Model
         $category = '';
         $onhomepage = '';
         $description = '';
-
         if (!empty($linkInfo)) {
             $urllink = $linkInfo['url'];
             $title = $linkInfo['title'];
@@ -1651,22 +1646,22 @@ class Link extends Model
         );
 
         $defaults = [
-            'url' => empty($urllink) ? 'http://' : Security::remove_XSS($urllink),
+            'url' => empty($urllink) ? 'http://' : str_replace('&amp;', '&', Security::remove_XSS($urllink)),
             'title' => Security::remove_XSS($title),
             'category_id' => $category,
             'on_homepage' => $onhomepage,
-            'description' => $description,
+            'description' => Security::remove_XSS($description),
             'target' => $target_link,
         ];
 
-        if (api_get_setting('search_enabled') == 'true') {
+        if (api_get_setting('search_enabled') === 'true') {
             require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
             $specific_fields = get_specific_field_list();
             $form->addCheckBox('index_document', get_lang('SearchFeatureDoIndexLink'), get_lang('Yes'));
 
             foreach ($specific_fields as $specific_field) {
                 $default_values = '';
-                if ($action == 'editlink') {
+                if ($action === 'editlink') {
                     $filter = [
                         'field_id' => $specific_field['id'],
                         'ref_id' => intval($_GET['id']),
@@ -1744,7 +1739,7 @@ class Link extends Model
         if (empty($id) || empty($courseId)) {
             return [];
         }
-        $sql = "SELECT * FROM $table 
+        $sql = "SELECT * FROM $table
                 WHERE id = $id AND c_id = $courseId";
         $result = Database::query($sql);
         $category = Database::fetch_array($result, 'ASSOC');

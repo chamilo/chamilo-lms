@@ -27,6 +27,7 @@ if ($form->validate()) {
         ->setCustomParams(
             empty($formValues['custom_params']) ? null : $formValues['custom_params']
         )
+        ->setDocumenTarget($formValues['document_target'])
         ->setCourse(null)
         ->setActiveDeepLinking(
             isset($formValues['deep_linking'])
@@ -36,6 +37,10 @@ if ($form->validate()) {
             isset($formValues['share_email']),
             isset($formValues['share_picture'])
         );
+
+    if (!empty($formValues['replacement_user_id'])) {
+        $externalTool->setReplacementForUserId($formValues['replacement_user_id']);
+    }
 
     if (ImsLti::V_1P3 === $formValues['version']) {
         $externalTool

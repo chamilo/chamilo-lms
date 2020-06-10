@@ -2,8 +2,6 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\SessionRelUser;
-
 /**
  * Class SystemAnnouncementManager.
  */
@@ -843,6 +841,7 @@ class SystemAnnouncementManager
         if (Database::num_rows($result) > 0) {
             while ($announcement = Database::fetch_object($result)) {
                 if ($checkCareers && !empty($announcement->career_id)) {
+                    $promotionList = [];
                     if (!empty($announcement->promotion_id)) {
                         $promotionList[] = $announcement->promotion_id;
                     } else {
@@ -856,20 +855,26 @@ class SystemAnnouncementManager
                     foreach ($promotionList as $promotionId) {
                         $sessionList = SessionManager::get_all_sessions_by_promotion($promotionId);
                         foreach ($sessionList as $session) {
-                            $sessionRelUser = SessionManager::getUserStatusInSession($userId, $session['id']);
-
-                            if (!($sessionRelUser instanceof SessionRelUser)) {
-                                continue;
-                            }
-
-                            $status = $sessionRelUser->getRelationType();
-
-                            if ($visible === self::VISIBLE_TEACHER && $status === 2) {
+                            $sessionId = $session['id'];
+                            // Check student
+                            if ($visible === self::VISIBLE_STUDENT &&
+                                SessionManager::isUserSubscribedAsStudent($sessionId, $userId)
+                            ) {
                                 $show = true;
                                 break 2;
                             }
 
-                            if ($visible === self::VISIBLE_STUDENT && $status === 0) {
+                            if ($visible === self::VISIBLE_TEACHER &&
+                                SessionManager::user_is_general_coach($userId, $sessionId)
+                            ) {
+                                $show = true;
+                                break 2;
+                            }
+
+                            // Check course coach
+                            $coaches = SessionManager::getCoachesBySession($sessionId);
+
+                            if ($visible === self::VISIBLE_TEACHER && in_array($userId, $coaches)) {
                                 $show = true;
                                 break 2;
                             }
@@ -880,6 +885,7 @@ class SystemAnnouncementManager
                         continue;
                     }
                 }
+
                 $announcementData = [
                     'id' => $announcement->id,
                     'title' => $announcement->title,

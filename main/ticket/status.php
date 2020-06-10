@@ -1,12 +1,11 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
 
 /**
  * This script is the Tickets plugin main entry point.
- *
- * @package chamilo.plugin.ticket
  */
 $cidReset = true;
 

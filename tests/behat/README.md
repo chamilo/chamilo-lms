@@ -8,7 +8,10 @@ http://www.seleniumhq.org/download/
 And run it with the following command:
 
 ```
+Example:
+wget https://selenium-release.storage.googleapis.com/3.141/selenium-server-standalone-3.141.59.jar
 java -jar /my-dir/selenium-server-standalone-3.1.0.jar
+
 ```
 
 - Download the Chrome driver, unzip and copy into /usr/bin
@@ -19,6 +22,8 @@ then adapt the following command to the latest version:
 ```
 cd /tmp && wget https://chromedriver.storage.googleapis.com/2.34/chromedriver_linux64.zip && unzip chromedriver_linux64.zip && sudo mv chromedriver /usr/local/bin
 ```
+
+- Install google-chrome (stable version, not beta or dev).
 
 ### Chamilo configuration
 

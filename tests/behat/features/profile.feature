@@ -11,7 +11,9 @@ Feature: Profile page
     And I press "Save settings"
     And wait for the page to be loaded
     Then I should see "Your new profile has been saved"
+    Then I am on "/main/social/home.php"
     And I should see "Andrew"
+    Then I am on "/main/auth/profile.php"
     Then I fill in the following:
       | firstname | Andrea |
     And I press "Save settings"

@@ -1,5 +1,7 @@
 <?php
+
 /* For licensing terms, see /license.txt */
+
 use GuzzleHttp\Client;
 use PHPUnit\Framework\TestCase;
 
@@ -16,14 +18,6 @@ abstract class V2TestCase extends TestCase
     const WEBSERVICE_USERNAME = 'admin';
     const WEBSERVICE_PASSWORD = 'admin';
     const RELATIVE_URI = 'webservices/api/v2.php';
-
-    /**
-     * returns the name of the webservice, to be passed as the "action" with the HTTP request
-     *
-     * @return string    name of the webservice action to call
-     */
-    abstract protected function action();
-
     /**
      * @var Client $client
      */
@@ -39,20 +33,26 @@ abstract class V2TestCase extends TestCase
     {
         parent::setUp();
 
-        $this->client = new Client([
-            'base_uri' => api_get_path(WEB_CODE_PATH),
-        ]);
+        $this->client = new Client(
+            [
+                'base_uri' => api_get_path(WEB_CODE_PATH),
+            ]
+        );
 
-        $response = $this->client->post(self::RELATIVE_URI, [
-            'form_params' => [
-                'action' => 'authenticate',
-                'username' => self::WEBSERVICE_USERNAME,
-                'password' => self::WEBSERVICE_PASSWORD,
-            ],
-        ]);
+        $response = $this->client->post(
+            self::RELATIVE_URI,
+            [
+                'form_params' => [
+                    'action' => 'authenticate',
+                    'username' => self::WEBSERVICE_USERNAME,
+                    'password' => self::WEBSERVICE_PASSWORD,
+                ],
+            ]
+        );
 
         if (200 === $response->getStatusCode()) {
             $decodedResponse = json_decode($response->getBody()->getContents(), false, 3, JSON_THROW_ON_ERROR);
+
             if (is_object($decodedResponse)) {
                 $this->apiKey = $decodedResponse->data->apiKey;
             } else {
@@ -64,32 +64,10 @@ abstract class V2TestCase extends TestCase
     }
 
     /**
-     * Posts an action request to the web server, asserts it returns a valid JSON-encoded response and decodes it
-     * supplied parameters complete or override the generated base parameters username, api_key and action
-     *
-     * @param array     $parameters     parameters to send with the request as an associative array
-     * @return mixed                    the decoded response (usually an object with properties data, error, message)
-     */
-    protected function decodedResponse($parameters = [])
-    {
-        $baseParams = [
-            'username' => self::WEBSERVICE_USERNAME,
-            'api_key' => $this->apiKey,
-            'action' => $this->action(),
-        ];
-        $response = $this->client->post(self::RELATIVE_URI, ['form_params' => array_merge($baseParams, $parameters)]);
-        $this->assertNotNull($response);
-        $this->assertSame(200, $response->getStatusCode());
-        $decodedResponse = json_decode($response->getBody()->getContents());
-        $this->assertNotNull($decodedResponse);
-
-        return $decodedResponse;
-    }
-
-    /**
      * Posts an action request and assert the server returns an error message
      *
-     * @param array     $parameters     parameters to send with the request
+     * @param array $parameters parameters to send with the request
+     *
      * @return string                   the "message" error string returned by the webservice
      */
     protected function errorMessageString($parameters = [])
@@ -108,43 +86,54 @@ abstract class V2TestCase extends TestCase
     }
 
     /**
-     * Posts an action request and assert the server returns a "data" array
+     * Posts an action request to the web server, asserts it returns a valid JSON-encoded response and decodes it
+     * supplied parameters complete or override the generated base parameters username, api_key and action
      *
-     * @param array     $parameters     parameters to send with the request
-     * @return array                    the "data" array returned by the webservice
+     * @param array $parameters parameters to send with the request as an associative array
+     *
+     * @return mixed                    the decoded response (usually an object with properties data, error, message)
      */
-    protected function dataArray($parameters = [])
+    protected function decodedResponse($parameters = [])
     {
-        $decodedResponse = $this->decodedResponse($parameters);
-        $this->assertIsObject($decodedResponse);
-        $this->assertTrue(
-            property_exists($decodedResponse, 'data'),
-            'response data property is missing: '.print_r($decodedResponse, true)
-        );
-        $data = $decodedResponse->data;
-        $this->assertIsArray($data);
+        $baseParams = [
+            'username' => self::WEBSERVICE_USERNAME,
+            'api_key' => $this->apiKey,
+            'action' => $this->action(),
+        ];
 
-        return $data;
+        $response = $this->client->post(self::RELATIVE_URI, ['form_params' => array_merge($baseParams, $parameters)]);
+
+        $this->assertNotNull($response);
+        $this->assertSame(200, $response->getStatusCode());
+
+        if ($this->action() === 'course_lp_progress') {
+            //echo($response->getBody()->getContents());exit;
+        }
+
+        $decodedResponse = json_decode($response->getBody()->getContents());
+
+        // Help debug
+        if (null === $decodedResponse) {
+            var_dump($this->action(), $response->getBody()->getContents());
+        }
+
+        $this->assertNotNull($decodedResponse);
+
+        return $decodedResponse;
     }
 
     /**
-     * Posts an action request and assert the server returns a single value in the "data" array of the returned object
+     * returns the name of the webservice, to be passed as the "action" with the HTTP request
      *
-     * @param array     $parameters     parameters to send with the request
-     * @return mixed                    the unique element of the "data" array
+     * @return string    name of the webservice action to call
      */
-    protected function singleElementValue($parameters = [])
-    {
-        $data = $this->dataArray($parameters);
-        $this->assertSame(1, count($data));
-
-        return $data[0];
-    }
+    abstract protected function action();
 
     /**
      * Posts an action request and assert it returns an integer value in the "data" property
      *
-     * @param array     $parameters     parameters to send with the request
+     * @param array $parameters parameters to send with the request
+     *
      * @return integer                  the integer value
      */
     protected function integer($parameters = [])
@@ -156,9 +145,47 @@ abstract class V2TestCase extends TestCase
     }
 
     /**
+     * Posts an action request and assert the server returns a single value in the "data" array of the returned object
+     *
+     * @param array $parameters parameters to send with the request
+     *
+     * @return mixed                    the unique element of the "data" array
+     */
+    protected function singleElementValue($parameters = [])
+    {
+        $data = $this->dataArray($parameters);
+        $this->assertSame(1, count($data));
+
+        return $data[0];
+    }
+
+    /**
+     * Posts an action request and assert the server returns a "data" array
+     *
+     * @param array $parameters parameters to send with the request
+     *
+     * @return array                    the "data" array returned by the webservice
+     */
+    protected function dataArray($parameters = [])
+    {
+        $decodedResponse = $this->decodedResponse($parameters);
+        $this->assertIsObject($decodedResponse);
+        $this->assertTrue(
+            property_exists($decodedResponse, 'data'),
+            'response data property is missing: '.print_r($decodedResponse, true)
+        );
+
+        $data = $decodedResponse->data;
+        $this->assertIsArray($data);
+
+        return $data;
+    }
+
+    /**
      * Posts an action request and assert it returns an array with a single boolean value
      *
-     * @param array     $parameters     parameters to send with the request
+     * @param array $parameters parameters to send with the request
+     *
      * @return boolean                  the boolean value
      */
     protected function boolean($parameters = [])

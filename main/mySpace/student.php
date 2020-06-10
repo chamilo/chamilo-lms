@@ -1,10 +1,9 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * Report on students subscribed to courses I am teaching.
- *
- * @package chamilo.reporting
  */
 $cidReset = true;
 
@@ -22,28 +21,28 @@ if (!$allowToTrack) {
 
 $nameTools = get_lang('Students');
 
-$export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
+$export_csv = isset($_GET['export']) && 'csv' === $_GET['export'] ? true : false;
 $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
-$active = isset($_GET['active']) ? intval($_GET['active']) : 1;
-$sleepingDays = isset($_GET['sleeping_days']) ? intval($_GET['sleeping_days']) : null;
+$active = isset($_GET['active']) ? (int) $_GET['active'] : 1;
+$sleepingDays = isset($_GET['sleeping_days']) ? (int) $_GET['sleeping_days'] : null;
 $this_section = SECTION_TRACKING;
 
 $webCodePath = api_get_path(WEB_CODE_PATH);
 
 $interbreadcrumb[] = [
-    "url" => api_is_student_boss() ? "#" : "index.php",
-    "name" => get_lang('MySpace'),
+    'url' => api_is_student_boss() ? '#' : 'index.php',
+    'name' => get_lang('MySpace'),
 ];
 
-if (isset($_GET["user_id"]) && $_GET["user_id"] != "" && !isset($_GET["type"])) {
+if (isset($_GET['user_id']) && '' != $_GET['user_id'] && !isset($_GET['type'])) {
     $interbreadcrumb[] = [
-        "url" => "teachers.php",
-        "name" => get_lang('Teachers'),
+        'url' => 'teachers.php',
+        'name' => get_lang('Teachers'),
     ];
 }
 
-if (isset($_GET["user_id"]) && $_GET["user_id"] != "" && isset($_GET["type"]) && $_GET["type"] == "coach") {
-    $interbreadcrumb[] = ["url" => "coaches.php", "name" => get_lang('Tutors')];
+if (isset($_GET['user_id']) && '' != $_GET['user_id'] && isset($_GET['type']) && 'coach' === $_GET['type']) {
+    $interbreadcrumb[] = ['url' => 'coaches.php', 'name' => get_lang('Tutors')];
 }
 
 function get_count_users()
@@ -107,7 +106,7 @@ function get_users($from, $limit, $column, $direction)
         }
     }
 
-    if ($drhLoaded === false) {
+    if (false === $drhLoaded) {
         $students = UserManager::getUsersFollowedByUser(
             api_get_user_id(),
             api_is_student_boss() ? null : STUDENT,
@@ -170,7 +169,7 @@ function get_users($from, $limit, $column, $direction)
         }
 
         $urlDetails = $url."?student=$student_id";
-        if (isset($_GET['id_coach']) && intval($_GET['id_coach']) != 0) {
+        if (isset($_GET['id_coach']) && 0 != intval($_GET['id_coach'])) {
             $urlDetails = $url."?student=$student_id&id_coach=$coach_id&id_session=$sessionId";
         }
 

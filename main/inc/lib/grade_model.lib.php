@@ -3,8 +3,6 @@
 
 /**
  * Class GradeModel.
- *
- * @package chamilo.library
  */
 class GradeModel extends Model
 {
@@ -113,7 +111,7 @@ class GradeModel extends Model
             $components = $this->get_components($defaults['id']);
         }
 
-        if ($action == 'edit') {
+        if ('edit' == $action) {
             if (!empty($components)) {
                 $nr_items = count($components);
             }

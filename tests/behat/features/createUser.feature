@@ -4,18 +4,18 @@ Feature: Users management as admin
   As an administrator
   I need to be able to create new users
 
-  Scenario: See the users list link on the admin page
+  Background:
     Given I am a platform administrator
-    And I am on "/main/admin/index.php"
+
+  Scenario: See the users list link on the admin page
+    Given I am on "/main/admin/index.php"
     Then I should see "Users list"
 
   Scenario: See the user creation link on the admin page
-    Given I am a platform administrator
     And I am on "/main/admin/index.php"
     Then I should see "Add a user"
 
   Scenario: Create a user with only basic info
-    Given I am a platform administrator
     And I am on "/main/admin/user_add.php"
     And I fill in the following:
       | firstname | Sammy                 |
@@ -23,11 +23,11 @@ Feature: Users management as admin
       | email     | smarshall@example.com |
       | username  | smarshall             |
       | password  | smarshall             |
+    And I check the "#send_mail_no" radio button selector
     And I press "submit"
     Then I should see "The user has been added"
 
   Scenario: Search and delete a user
-    Given I am a platform administrator
     And Admin top bar is disabled
     And I am on "/main/admin/user_list.php"
     And I fill in "keyword" with "smarshall"
@@ -37,7 +37,6 @@ Feature: Users management as admin
     Then I should see "The user has been deleted"
 
   Scenario: Create a HRM user
-    Given I am a platform administrator
     And I am on "/main/admin/user_add.php"
     And I fill in the following:
       | firstname | HRM firstname|
@@ -45,12 +44,12 @@ Feature: Users management as admin
       | email     | hrm@example.com |
       | username  | hrm             |
       | password  | hrm             |
+    And I check the "#send_mail_no" radio button selector
     And I fill in select bootstrap static input "#status_select" select "4"
     And I press "submit"
     Then I should see "The user has been added"
 
   Scenario: Create a teacher user
-    Given I am a platform administrator
     And I am on "/main/admin/user_add.php"
     And I fill in the following:
       | firstname | teacher firstname|
@@ -59,11 +58,11 @@ Feature: Users management as admin
       | username  | teacher             |
       | password  | teacher             |
     And I fill in select bootstrap static input "#status_select" select "1"
+    And I check the "#send_mail_no" radio button selector
     And I press "submit"
     Then I should see "The user has been added"
 
   Scenario: Create a student user
-    Given I am a platform administrator
     And I am on "/main/admin/user_add.php"
     And I fill in the following:
       | firstname | student firstname|
@@ -72,11 +71,11 @@ Feature: Users management as admin
       | username  | student             |
       | password  | student             |
     And I fill in select bootstrap static input "#status_select" select "5"
+    And I check the "#send_mail_no" radio button selector
     And I press "submit"
     Then I should see "The user has been added"
 
   Scenario: HRM follows teacher
-    Given I am a platform administrator
     And I am on "/main/admin/user_list.php?keyword=hrm&submit=&_qf__search_simple="
     And I should see "HRM lastname"
     And I should see "Human Resources Manager"
@@ -87,7 +86,6 @@ Feature: Users management as admin
     Then I should see "The assigned users have been updated"
 
   Scenario: HRM follows student
-    Given I am a platform administrator
     And I am on "/main/admin/user_list.php?keyword=hrm&submit=&_qf__search_simple="
     And I should see "HRM lastname"
     And I should see "Human Resources Manager"

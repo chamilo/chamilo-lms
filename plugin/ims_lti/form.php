@@ -32,7 +32,7 @@ $course = $em->find('ChamiloCoreBundle:Course', api_get_course_int_id());
 $user = $em->find('ChamiloUserBundle:User', api_get_user_id());
 
 $pluginPath = api_get_path(WEB_PLUGIN_PATH).'ims_lti/';
-$toolUserId = ImsLtiPlugin::generateToolUserId($user->getId());
+$toolUserId = ImsLtiPlugin::getLaunchUserIdClaim($tool, $user);
 $platformDomain = str_replace(['https://', 'http://'], '', api_get_setting('InstitutionUrl'));
 
 $params = [];
@@ -42,7 +42,7 @@ if ($tool->isActiveDeepLinking()) {
     $params['lti_message_type'] = 'ContentItemSelectionRequest';
     $params['content_item_return_url'] = $pluginPath.'item_return.php';
     $params['accept_media_types'] = '*/*';
-    $params['accept_presentation_document_targets'] = 'iframe';
+    $params['accept_presentation_document_targets'] = 'iframe,window';
     //$params['accept_unsigned'];
     //$params['accept_multiple'];
     //$params['accept_copy_advice'];
@@ -87,7 +87,7 @@ if ($tool->isSharingEmail()) {
 }
 
 if (DRH === $user->getStatus()) {
-    $scopeMentor = ImsLtiPlugin::getRoleScopeMentor($user);
+    $scopeMentor = ImsLtiPlugin::getRoleScopeMentor($user, $tool);
 
     if (!empty($scopeMentor)) {
         $params['role_scope_mentor'] = $scopeMentor;
@@ -99,7 +99,7 @@ $params['context_type'] = 'CourseSection';
 $params['context_label'] = $course->getCode();
 $params['context_title'] = $course->getTitle();
 $params['launch_presentation_locale'] = api_get_language_isocode();
-$params['launch_presentation_document_target'] = 'iframe';
+$params['launch_presentation_document_target'] = $tool->getDocumentTarget();
 $params['tool_consumer_info_product_family_code'] = 'Chamilo LMS';
 $params['tool_consumer_info_version'] = api_get_version();
 $params['tool_consumer_instance_guid'] = $platformDomain;
@@ -117,7 +117,9 @@ $params += ImsLti::substituteVariablesInCustomParams(
     $user,
     $course,
     $session,
-    $platformDomain
+    $platformDomain,
+    ImsLti::V_1P1,
+    $tool
 );
 
 $imsLtiPlugin->trimParams($params);

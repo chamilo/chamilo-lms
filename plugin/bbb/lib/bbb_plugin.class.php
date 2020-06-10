@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /* To show the plugin course icons you need to add these icons:
@@ -6,12 +7,10 @@
  * main/img/icons/64/plugin_name.png
  * main/img/icons/64/plugin_name_na.png
 */
-/**
- * Videoconference plugin with BBB
- */
 
 /**
  * Class BBBPlugin
+ * Videoconference plugin with BBB
  */
 class BBBPlugin extends Plugin
 {
@@ -37,7 +36,7 @@ class BBBPlugin extends Plugin
         [
             'name' => 'bbb_force_record_generation',
             'type' => 'checkbox',
-        ]
+        ],
     ];
 
     /**
@@ -64,16 +63,16 @@ class BBBPlugin extends Plugin
                         PLATFORM_ADMIN => get_lang('Administrator'),
                         COURSEMANAGER => get_lang('Teacher'),
                         STUDENT => get_lang('Student'),
-                        STUDENT_BOSS => get_lang('StudentBoss')
+                        STUDENT_BOSS => get_lang('StudentBoss'),
                     ],
-                    'attributes' => ['multiple' => 'multiple']
+                    'attributes' => ['multiple' => 'multiple'],
                 ],
                 'interface' => [
                     'type' => 'select',
                     'options' => [
                         self::INTERFACE_FLASH => 'Flash',
                         self::INTERFACE_HTML5 => 'HTML5',
-                    ]
+                    ],
                 ],
                 'launch_type' => [
                     'type' => 'select',
@@ -85,27 +84,15 @@ class BBBPlugin extends Plugin
                     'translate_options' => true, // variables will be translated using the plugin->get_lang
                 ],
                 'allow_regenerate_recording' => 'boolean',
+                // Default course settings, must be the same as $course_settings
+                'big_blue_button_record_and_store' => 'checkbox',
+                'bbb_enable_conference_in_groups' => 'checkbox',
+                'bbb_force_record_generation' => 'checkbox',
+                'disable_course_settings' => 'boolean',
             ]
         );
 
         $this->isAdminPlugin = true;
-    }
-
-    /**
-     * @param string $variable
-     * @return bool
-     */
-    public function validateCourseSetting($variable)
-    {
-        if ($variable === 'bbb_enable_conference_in_groups') {
-            if ($this->get('enable_conference_in_course_groups') === 'true') {
-                return true;
-            }
-
-            return false;
-        }
-
-        return true;
     }
 
     /**
@@ -114,7 +101,68 @@ class BBBPlugin extends Plugin
     public static function create()
     {
         static $result = null;
+
         return $result ? $result : $result = new self();
+    }
+
+    /**
+     * @param string $variable
+     *
+     * @return bool
+     */
+    public function validateCourseSetting($variable)
+    {
+        if ($this->get('disable_course_settings') === 'true') {
+            return false;
+        }
+
+        $result = true;
+        switch ($variable) {
+            case 'bbb_enable_conference_in_groups':
+                $result = $this->get('enable_conference_in_course_groups') === 'true';
+                break;
+            case 'bbb_force_record_generation':
+                $result = $this->get('allow_regenerate_recording') === 'true';
+                break;
+            case 'big_blue_button_record_and_store':
+        }
+
+        return $result;
+    }
+
+    /**
+     *
+     * @return array
+     */
+    public function getCourseSettings()
+    {
+        $settings = [];
+        if ($this->get('disable_course_settings') !== 'true') {
+            $settings = parent::getCourseSettings();
+        }
+
+        return $settings;
+    }
+
+    /**
+     *
+     * @return \Plugin
+     */
+    public function performActionsAfterConfigure()
+    {
+        $result = $this->get('disable_course_settings') === 'true';
+        if ($result) {
+            $valueConference = $this->get('bbb_enable_conference_in_groups') === 'true' ? 1 : 0;
+            self::update_course_field_in_all_courses('bbb_enable_conference_in_groups', $valueConference);
+
+            $valueForceRecordGeneration = $this->get('bbb_force_record_generation') === 'true' ? 1 : 0;
+            self::update_course_field_in_all_courses('bbb_force_record_generation', $valueForceRecordGeneration);
+
+            $valueForceRecordStore = $this->get('big_blue_button_record_and_store') === 'true' ? 1 : 0;
+            self::update_course_field_in_all_courses('big_blue_button_record_and_store', $valueForceRecordStore);
+        }
+
+        return $this;
     }
 
     /**
@@ -144,7 +192,7 @@ class BBBPlugin extends Plugin
                 access_url INT NOT NULL DEFAULT 1,
                 video_url TEXT NULL,
                 has_video_m4v TINYINT NOT NULL DEFAULT 0,
-                interface INT NOT NULL DEFAULT 0                                              
+                interface INT NOT NULL DEFAULT 0
                 )";
         Database::query($sql);
 
@@ -176,7 +224,7 @@ class BBBPlugin extends Plugin
                 'variable' => 'plugin_bbb_course_users_limit',
                 'changeable' => 1,
                 'visible_to_self' => 1,
-                'visible_to_others' => 0
+                'visible_to_others' => 0,
             ]
         );
         $fieldLabel = 'plugin_bbb_session_users_limit';
@@ -194,7 +242,7 @@ class BBBPlugin extends Plugin
                 'variable' => 'plugin_bbb_session_users_limit',
                 'changeable' => 1,
                 'visible_to_self' => 1,
-                'visible_to_others' => 0
+                'visible_to_others' => 0,
             ]
         );
 
@@ -287,8 +335,9 @@ class BBBPlugin extends Plugin
         $data = [
             'text' => $this->get_lang('EnterConferenceFlash'),
             'url' => $conferenceUrl.'&interface='.self::INTERFACE_FLASH,
-            'icon' => 'resources/img/64/videoconference_flash.png'
+            'icon' => 'resources/img/64/videoconference_flash.png',
         ];
+
         return $data;
     }
 
@@ -304,6 +353,29 @@ class BBBPlugin extends Plugin
             'url' => $conferenceUrl.'&interface='.self::INTERFACE_HTML5,
             'icon' => 'resources/img/64/videoconference_html5.png',
         ];
+
         return $data;
+    }
+
+    /**
+     * Set the course setting in all courses
+     *
+     * @param bool $variable Course setting to update
+     * @param bool $value New values of the course setting
+     */
+    public function update_course_field_in_all_courses($variable, $value)
+    {
+        // Update existing courses to add the new course setting value
+        $table = Database::get_main_table(TABLE_MAIN_COURSE);
+        $sql = "SELECT id FROM $table ORDER BY id";
+        $res = Database::query($sql);
+        $courseSettingTable = Database::get_course_table(TABLE_COURSE_SETTING);
+        while ($row = Database::fetch_assoc($res)) {
+            Database::update(
+                $courseSettingTable,
+                ['value' => $value],
+                ['variable = ? AND c_id = ?' => [$variable, $row['id']]]
+            );
+        }
     }
 }

@@ -1,10 +1,9 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 require_once __DIR__.'/V2TestCase.php';
-
 require_once __DIR__.'/../../../../vendor/autoload.php';
-
 
 /**
  * Class UpdateUserFromUsernameTest
@@ -34,20 +33,23 @@ class UpdateUserFromUsernameTest extends V2TestCase
             5,
             'initial.email@local',
             $loginName,
-            'xXxxXxxXX');
+            'xXxxXxxXX'
+        );
 
         // create an extra field and initialise its value for the user
         $extraFieldModel = new ExtraField('user');
         $extraFieldName = 'extraUserField'.time();
-        $extraFieldId = $extraFieldModel->save([
-            'field_type' => ExtraField::FIELD_TYPE_TEXT,
-            'variable' => $extraFieldName,
-            'display_text' => $extraFieldName,
-            'visible_to_self' => 1,
-            'visible_to_others' => 1,
-            'changeable' => 1,
-            'filter' => 1,
-        ]);
+        $extraFieldId = $extraFieldModel->save(
+            [
+                'field_type' => ExtraField::FIELD_TYPE_TEXT,
+                'variable' => $extraFieldName,
+                'display_text' => $extraFieldName,
+                'visible_to_self' => 1,
+                'visible_to_others' => 1,
+                'changeable' => 1,
+                'filter' => 1,
+            ]
+        );
         SessionManager::update_session_extra_field_value($userId, $extraFieldName, 'extra field initial value');
 
         // update user with new data and extra field data
@@ -63,7 +65,7 @@ class UpdateUserFromUsernameTest extends V2TestCase
         ];
         $extraFieldNewValue = 'extra field new value';
         $parameters['extra'] = [
-            [ 'field_name' => $extraFieldName, 'field_value' => $extraFieldNewValue ],
+            ['field_name' => $extraFieldName, 'field_value' => $extraFieldNewValue],
         ];
         $parameters['loginname'] = $loginName;
         $updated = $this->boolean($parameters);
@@ -71,7 +73,7 @@ class UpdateUserFromUsernameTest extends V2TestCase
 
         // assert the webservice reports an error with a non-existent login name
         $parameters['loginname'] = 'santaClaus';
-        $this->assertSame('UserNotFound', $this->errorMessageString($parameters));
+        $this->assertSame(get_lang('UserNotFound'), $this->errorMessageString($parameters));
 
         // compare each saved value to the original
         /** @var User $user */

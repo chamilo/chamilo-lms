@@ -299,13 +299,15 @@ echo $filterForm;
 if (count($certificate_list) == 0) {
     echo Display::return_message(get_lang('NoResultsAvailable'), 'warning');
 } else {
-    echo '<table class="data_table">';
+    echo '<table class="table data_table">';
+    echo '<tbody>';
     foreach ($certificate_list as $index => $value) {
         echo '<tr>
                 <td width="100%" class="actions">'.get_lang('Student').' : '.api_get_person_name($value['firstname'], $value['lastname']).' ('.$value['username'].')</td>';
         echo '</tr>';
         echo '<tr><td>
-            <table class="data_table">';
+            <table class="table data_table">
+                <tbody>';
 
         $list = GradebookUtils::get_list_gradebook_certificates_by_user_id(
             $value['user_id'],
@@ -322,7 +324,7 @@ if (count($certificate_list) == 0) {
                 $url,
                 ['target' => '_blank', 'class' => 'btn btn-default']
             );
-            echo $certificateUrl;
+            echo $certificateUrl.PHP_EOL;
 
             $url .= '&action=export';
             $pdf = Display::url(
@@ -330,16 +332,18 @@ if (count($certificate_list) == 0) {
                 $url,
                 ['target' => '_blank']
             );
-            echo $pdf;
+            echo $pdf.PHP_EOL;
 
             echo '<a onclick="return confirmation();" href="gradebook_display_certificate.php?sec_token='.$token.'&'.api_get_cidreq().'&action=delete&cat_id='.$categoryId.'&certificate_id='.$valueCertificate['id'].'">
                     '.Display::return_icon('delete.png', get_lang('Delete')).'
-                  </a>';
+                  </a>'.PHP_EOL;
             echo '</td></tr>';
         }
+        echo '</tbody>';
         echo '</table>';
         echo '</td></tr>';
     }
+    echo '</tbody>';
     echo '</table>';
 }
 Display::display_footer();

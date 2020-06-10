@@ -1,9 +1,7 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
-/**
- * @package chamilo.admin
- */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -169,7 +167,7 @@ if ($action == 'add' || $action == 'edit') {
     $form->display();
 } else {
     // If multiple URLs and not main URL, prevent deletion and inform user
-    if ($action == 'delete' && api_get_multiple_access_url() && $urlId != 1) {
+    if ($action === 'delete' && api_get_multiple_access_url() && $urlId != 1) {
         echo Display::return_message(get_lang('CourseCategoriesAreGlobal'), 'warning');
     }
     echo '<div class="actions">';

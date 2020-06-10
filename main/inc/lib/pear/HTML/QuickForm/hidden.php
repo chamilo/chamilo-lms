@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
  * HTML class for a hidden type element
@@ -34,8 +33,6 @@
  */
 class HTML_QuickForm_hidden extends HTML_QuickForm_input
 {
-    // {{{ constructor
-
     /**
      * Class constructor
      *
@@ -52,10 +49,7 @@ class HTML_QuickForm_hidden extends HTML_QuickForm_input
         parent::__construct($elementName, null, $attributes);
         $this->setType('hidden');
         $this->setValue($value);
-    } //end constructor
-
-    // }}}
-    // {{{ freeze()
+    }
 
     /**
      * Freeze the element so that only its value is returned
@@ -63,13 +57,10 @@ class HTML_QuickForm_hidden extends HTML_QuickForm_input
      * @access    public
      * @return    void
      */
-    function freeze()
+    public function freeze()
     {
         return false;
-    } //end func freeze
-
-    // }}}
-    // {{{ accept()
+    }
 
    /**
     * Accepts a renderer
@@ -78,13 +69,8 @@ class HTML_QuickForm_hidden extends HTML_QuickForm_input
     * @access public
     * @return void
     */
-    //function accept(&$renderer)
-    function accept(&$renderer, $required=false, $error=null)
+    public function accept(&$renderer, $required = false, $error = null)
     {
         $renderer->renderHidden($this);
-    } // end func accept
-
-    // }}}
-
-} //end class HTML_QuickForm_hidden
-?>
+    }
+}

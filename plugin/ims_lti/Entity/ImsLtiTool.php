@@ -147,6 +147,19 @@ class ImsLtiTool
      * @ORM\Column(name="version", type="string", options={"default": "lti1p1"})
      */
     private $version;
+    /**
+     * @var array
+     *
+     * @ORM\Column(name="launch_presentation", type="json")
+     */
+    private $launchPresentation;
+
+    /**
+     * @var array
+     *
+     * @ORM\Column(name="replacement_params", type="json")
+     */
+    private $replacementParams;
 
     /**
      * ImsLtiTool constructor.
@@ -164,6 +177,10 @@ class ImsLtiTool
         $this->sharedSecret = null;
         $this->lineItems = new ArrayCollection();
         $this->version = \ImsLti::V_1P1;
+        $this->launchPresentation = [
+            'document_target' => 'iframe',
+        ];
+        $this->replacementParams = [];
     }
 
     /**
@@ -793,5 +810,71 @@ class ImsLtiTool
     public function getChildren()
     {
         return $this->children;
+    }
+
+    /**
+     * @param string $target
+     *
+     * @return $this
+     */
+    public function setDocumenTarget($target)
+    {
+        $this->launchPresentation['document_target'] = in_array($target, ['iframe', 'window']) ? $target : 'iframe';
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDocumentTarget()
+    {
+        return $this->launchPresentation['document_target'] ?: 'iframe';
+    }
+
+    /**
+     * @return array
+     */
+    public function getLaunchPresentation()
+    {
+        return $this->launchPresentation;
+    }
+
+    /**
+     * @param string $replacement
+     *
+     * @return ImsLtiTool
+     */
+    public function setReplacementForUserId($replacement)
+    {
+        $this->replacementParams['user_id'] = $replacement;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getReplacementForUserId()
+    {
+        if (!empty($this->replacementParams['user_id'])) {
+            return $this->replacementParams['user_id'];
+        }
+
+        return null;
+    }
+
+    /**
+     * @param array $coursesId
+     *
+     * @return ArrayCollection
+     */
+    public function getChildrenInCourses(array $coursesId)
+    {
+        return $this->children->filter(
+            function (ImsLtiTool $child) use ($coursesId) {
+                return in_array($child->getCourse()->getId(), $coursesId);
+            }
+        );
     }
 }

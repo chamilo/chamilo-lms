@@ -2,9 +2,9 @@
   "name": "bootstrap-select",
   "description": "The jQuery plugin that brings select elements into the 21st century with intuitive multiselection, searching, and much more.",
   "main": [
-    "less/bootstrap-select.less",
-    "dist/css/bootstrap-select.css",
-    "dist/js/bootstrap-select.js"
+    "./less/bootstrap-select.less",
+    "./dist/css/bootstrap-select.css",
+    "./dist/js/bootstrap-select.js"
   ],
   "homepage": "https://developer.snapappointments.com/bootstrap-select",
   "authors": [
@@ -40,21 +40,24 @@
   },
   "license": "MIT",
   "ignore": [
+    ".eslintignore",
     ".gitignore",
     "CONTRIBUTING.md",
     "Gruntfile.js",
-    "README.md",
     "composer.json",
-    "package.json",
-    "test.html",
-    "docs"
+    ".github",
+    "docs",
+    "js",
+    "!dist/js",
+    "nuget",
+    "tests"
   ],
-  "version": "1.13.5",
-  "_release": "1.13.5",
+  "version": "1.13.17",
+  "_release": "1.13.17",
   "_resolution": {
     "type": "version",
-    "tag": "v1.13.5",
-    "commit": "6950fba020673c94dcc60f3250bee1d0a36c9ba6"
+    "tag": "v1.13.17",
+    "commit": "5cc3bf9d92cba0aeaf03d635a8a6f7bfc2a2dc7f"
   },
   "_source": "https://github.com/snapappointments/bootstrap-select.git",
   "_target": "1.13.*",

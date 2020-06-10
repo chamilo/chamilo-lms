@@ -1,4 +1,7 @@
 <?php
+
+use ChamiloSession as Session;
+
 /**
  * Create, validate and process HTML forms
  *
@@ -63,6 +66,7 @@ class HTML_QuickForm extends HTML_Common
 {
     const MAX_ELEMENT_ARGUMENT = 10;
     private $dateTimePickerLibraryAdded;
+    private $token;
 
     /**
      * Array containing the form fields
@@ -214,7 +218,8 @@ class HTML_QuickForm extends HTML_Common
      * @param    string      $action            (optional)Form's action
      * @param    string      $target            (optional)Form's target defaults to '_self'
      * @param    mixed       $attributes        (optional)Extra attributes for <form> tag
-     * @param    bool        $trackSubmit       (optional)Whether to track if the form was submitted by adding a special hidden field
+     * @param    bool        $trackSubmit       (optional)Whether to track if the form was submitted by adding a
+     *                                          special hidden field
      * @access   public
      */
     public function __construct(
@@ -225,7 +230,9 @@ class HTML_QuickForm extends HTML_Common
         $attributes = null,
         $trackSubmit = false
     ) {
+        $this->token = null;
         parent::__construct($attributes);
+
         $method = (strtoupper($method) == 'GET') ? 'get' : 'post';
         $action = ($action == '') ? api_get_self() : $action;
         $target = empty($target) ? array() : array('target' => $target);
@@ -237,7 +244,7 @@ class HTML_QuickForm extends HTML_Common
             'action' => $action,
             'method' => $method,
             'name' => $formName,
-            'id' => $form_id
+            'id' => $form_id,
         ) + $target;
         $this->updateAttributes($attributes);
         if (!$trackSubmit || isset($_REQUEST['_qf__' . $formName])) {
@@ -266,6 +273,28 @@ class HTML_QuickForm extends HTML_Common
                     $this->_maxFileSize = $matches['1'];
             }
         }
+    }
+
+    public function protect()
+    {
+        $token = $this->getSubmitValue('protect_token');
+        if (null === $token) {
+            $token = Security::get_token();
+        } else {
+            $token = Security::get_existing_token();
+        }
+        $this->addHidden('protect_token', $token);
+        $this->setToken($token);
+    }
+
+    public function setToken($token)
+    {
+        $this->token = $token;
+    }
+
+    public function getToken()
+    {
+        return $this->token;
     }
 
     /**
@@ -649,6 +678,7 @@ class HTML_QuickForm extends HTML_Common
         }
         // If not done, the elements will appear in reverse order
         ksort($this->_elements);
+
         return $element;
     }
 
@@ -682,8 +712,8 @@ class HTML_QuickForm extends HTML_Common
         if ($createElement) {
             return $this->createElement('group', $name, $groupLabel, $elements, $separator, $appendName);
         }
-        $group = & $this->addElement('group', $name, $groupLabel, $elements, $separator, $appendName);
-        return $group;
+
+        return $this->addElement('group', $name, $groupLabel, $elements, $separator, $appendName);
     }
 
     /**
@@ -987,12 +1017,13 @@ class HTML_QuickForm extends HTML_Common
      * To validate grouped elements as separated entities,
      * use addGroupRule instead of addRule.
      *
-     * @param    string $element Form element name
+     * @param    string|array $element Form element name
      * @param    string $message Message to display for invalid data
      * @param    string $type Rule type, use getRegisteredRules() to get types
      * @param    string $format (optional)Required for extra rule data
      * @param    string $validation (optional)Where to perform validation: "server", "client"
-     * @param    boolean $reset Client-side validation: reset the form element to its original value if there is an error?
+     * @param    boolean $reset Client-side validation: reset the form element to its original value if there is an
+     *                          error?
      * @param    boolean $force Force the rule to be applied, even if the target form element does not exist
      * @param array|string $dependent needed when comparing values
      * @since    1.0
@@ -1066,7 +1097,8 @@ class HTML_QuickForm extends HTML_Common
      * @param    string     $format        (optional)Required for extra rule data
      * @param    int        $howmany       (optional)How many valid elements should be in the group
      * @param    string     $validation    (optional)Where to perform validation: "server", "client"
-     * @param    bool       $reset         Client-side: whether to reset the element's value to its original state if validation failed.
+     * @param    bool       $reset         Client-side: whether to reset the element's value to its original state if
+     *                                     validation failed.
      * @since    2.5
      * @access   public
      * @throws   HTML_QuickForm_Error
@@ -1396,6 +1428,14 @@ class HTML_QuickForm extends HTML_Common
             return false;
         }
 
+        if (null !== $this->getToken()) {
+            $check = Security::check_token('form', $this);
+            Security::clear_token();
+            if (false === $check) {
+                return false;
+            }
+        }
+
         $registry =& HTML_QuickForm_RuleRegistry::singleton();
 
         foreach ($this->_rules as $target => $rules) {
@@ -1569,9 +1609,11 @@ class HTML_QuickForm extends HTML_Common
     public function accept(&$renderer)
     {
         $renderer->startForm($this);
+        /** @var HTML_QuickForm_element $element */
         foreach (array_keys($this->_elements) as $key) {
             $element =& $this->_elements[$key];
             $elementName = $element->getName();
+            $element->setLayout($this->getLayout());
             $required    = ($this->isElementRequired($elementName) && !$element->isFrozen());
             $error = $this->getElementError($elementName);
             $element->accept($renderer, $required, $error);
@@ -1638,7 +1680,7 @@ class HTML_QuickForm extends HTML_Common
             "\t"    => '\t',
             "'"     => "\\'",
             '"'     => '\"',
-            '\\'    => '\\\\'
+            '\\'    => '\\\\',
         );
 
         foreach ($this->_rules as $elementName => $rules) {

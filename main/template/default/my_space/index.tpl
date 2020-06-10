@@ -22,7 +22,6 @@
                         </div>
                         <div class="col-xs-7">
                             <div class="numbers">
-
                                 <h2>{{ students }}</h2>
                             </div>
                         </div>
@@ -42,7 +41,6 @@
                         </div>
                         <div class="col-xs-7">
                             <div class="numbers">
-
                                 <h2>{{ studentbosses }}</h2>
                             </div>
                         </div>
@@ -62,7 +60,6 @@
                         </div>
                         <div class="col-xs-7">
                             <div class="numbers">
-
                                 <h2>{{ numberTeachers }}</h2>
                             </div>
                         </div>
@@ -106,8 +103,7 @@
                             </a>
                         </div>
                     </div>
-
-                    {% if _u.status == 1 %}
+                    {% if _u.status == 1 and _u.is_admin %}
                         <a href="{{ _p.web_main }}admin/dashboard_add_users_to_user.php?user={{ _u.id }}" class="btn btn-default btn-sm">
                             <i class="fa fa-plus" aria-hidden="true"></i>
                         </a>
@@ -154,7 +150,7 @@
                             <a class="btn btn-default" href="{{ _p.web_main }}mySpace/session.php">{{ 'FollowedSessions' | get_lang }}</a>
                         </div>
                     </div>
-                    {% if _u.status == 1 %}
+                    {% if _u.status == 1 and _u.is_admin %}
                         <a href="{{ _p.web_main }}admin/dashboard_add_sessions_to_user.php?user={{ _u.id }}" class="btn btn-default btn-sm">
                             <i class="fa fa-plus" aria-hidden="true"></i>
                         </a>

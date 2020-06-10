@@ -2,8 +2,6 @@
 /* For licensing terms, see /license.txt */
 /**
  * Courses reporting.
- *
- * @package chamilo.reporting
  */
 ob_start();
 $cidReset = true;

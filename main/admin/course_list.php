@@ -1,18 +1,15 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * This script shows a list of courses and allows searching for courses codes
  * and names.
- *
- * @package chamilo.admin
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
-
 api_protect_admin_script();
-
 $sessionId = isset($_GET['session_id']) ? $_GET['session_id'] : null;
 
 /**

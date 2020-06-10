@@ -1,11 +1,10 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * This class handles the export to SCORM of a multiple choice question
  * (be it single answer or multiple answers).
- *
- * @package chamilo.exercise.scorm
  */
 class ScormAnswerMultipleChoice extends Answer
 {
@@ -24,7 +23,7 @@ class ScormAnswerMultipleChoice extends Answer
 
         //not sure if we are going to export also the MULTIPLE_ANSWER_COMBINATION to SCORM
         //if ($type == MCMA  || $type == MULTIPLE_ANSWER_COMBINATION ) {
-        if ($type == MCMA) {
+        if (MCMA == $type) {
             $id = 1;
             $jstmp = '';
             $jstmpc = '';
@@ -44,14 +43,14 @@ class ScormAnswerMultipleChoice extends Answer
                 if ($this->correct[$i]) {
                     $jstmpc .= $i.',';
                 }
-                $jstmpw .= 'questions_answers_ponderation['.$questionId.']['.$i.'] = '.$this->weighting[$i].";";
+                $jstmpw .= 'questions_answers_ponderation['.$questionId.']['.$i.'] = '.$this->weighting[$i].';';
                 $jstmpw .= 'questions_answers_correct['.$questionId.']['.$i.'] = '.$this->correct[$i].';';
                 $id++;
             }
             $js[] = 'questions_answers['.$questionId.'] = new Array('.substr($jstmp, 0, -1).');'."\n";
             $js[] = 'questions_types['.$questionId.'] = \'mcma\';'."\n";
             $js[] = $jstmpw;
-        } elseif ($type == MULTIPLE_ANSWER_COMBINATION) {
+        } elseif (MULTIPLE_ANSWER_COMBINATION == $type) {
             $js = '';
             $id = 1;
             $jstmp = '';

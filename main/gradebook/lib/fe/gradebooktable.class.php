@@ -12,8 +12,6 @@ use CpChart\Image as pImage;
  *
  * @author Stijn Konings
  * @author Bert Steppé (refactored, optimised)
- *
- * @package chamilo.gradebook
  */
 class GradebookTable extends SortableTable
 {
@@ -70,7 +68,7 @@ class GradebookTable extends SortableTable
             null,
             null,
             api_is_allowed_to_edit() ? 1 : 0,
-            20,
+            1000,
             'ASC',
             'gradebook_list'
         );
@@ -93,7 +91,7 @@ class GradebookTable extends SortableTable
 
         $column = 0;
         if ($this->teacherView) {
-            if ($this->exportToPdf == false) {
+            if (false == $this->exportToPdf) {
                 $this->set_header($column++, '', '', 'width="25px"');
             }
         }
@@ -101,7 +99,7 @@ class GradebookTable extends SortableTable
         $this->set_header($column++, get_lang('Type'), '', 'width="35px"');
         $this->set_header($column++, get_lang('Name'), false);
 
-        if ($this->exportToPdf == false) {
+        if (false == $this->exportToPdf) {
             $this->set_header($column++, get_lang('Description'), false);
         }
 
@@ -323,7 +321,7 @@ class GradebookTable extends SortableTable
                 break;
         }
 
-        if ($this->direction == 'DESC') {
+        if ('DESC' == $this->direction) {
             $sorting |= GradebookDataGenerator::GDG_SORT_DESC;
         } else {
             $sorting |= GradebookDataGenerator::GDG_SORT_ASC;
@@ -408,7 +406,7 @@ class GradebookTable extends SortableTable
 
                 // Id
                 if ($this->teacherView) {
-                    if ($this->exportToPdf == false) {
+                    if (false == $this->exportToPdf) {
                         $row[] = $this->build_id_column($item);
                     }
                 }
@@ -431,7 +429,7 @@ class GradebookTable extends SortableTable
                 $total_categories_weight += $item->get_weight();
 
                 // Description.
-                if ($this->exportToPdf == false) {
+                if (false == $this->exportToPdf) {
                     $row[] = $invisibility_span_open.$data[2].$invisibility_span_close;
                 }
 
@@ -552,8 +550,8 @@ class GradebookTable extends SortableTable
                         }
                     }
 
-                    if (get_class($item) === 'Category') {
-                        if ($this->exportToPdf == false) {
+                    if ('Category' === get_class($item)) {
+                        if (false == $this->exportToPdf) {
                             $row[] = $this->build_edit_column($item);
                         }
                     }
@@ -563,7 +561,7 @@ class GradebookTable extends SortableTable
                 $sortable_data[] = $row;
 
                 // Loading children
-                if (get_class($item) === 'Category') {
+                if ('Category' === get_class($item)) {
                     $parent_id = $item->get_id();
                     $cats = Category::load(
                         $parent_id,
@@ -608,7 +606,7 @@ class GradebookTable extends SortableTable
                             }
 
                             if ($this->teacherView) {
-                                if ($this->exportToPdf == false) {
+                                if (false == $this->exportToPdf) {
                                     $row[] = $this->build_id_column($item);
                                 }
                             }
@@ -621,7 +619,7 @@ class GradebookTable extends SortableTable
                                 $this->build_name_link($item, $type).$invisibility_span_close;
 
                             // Description.
-                            if ($this->exportToPdf == false) {
+                            if (false == $this->exportToPdf) {
                                 $row[] = $invisibility_span_open.$data[2].$invisibility_span_close;
                             }
 
@@ -677,13 +675,13 @@ class GradebookTable extends SortableTable
                                 }
 
                                 if (!empty($cats)) {
-                                    if ($this->exportToPdf == false) {
+                                    if (false == $this->exportToPdf) {
                                         $row[] = null;
                                     }
                                 }
                             }
 
-                            if ($this->exportToPdf == false) {
+                            if (false == $this->exportToPdf) {
                                 $row['child_of'] = $parent_id;
                             }
                             $sortable_data[] = $row;
@@ -729,7 +727,7 @@ class GradebookTable extends SortableTable
             /** @var Category $myCat */
             foreach ($main_cat as $myCat) {
                 $myParentId = $myCat->get_parent_id();
-                if ($myParentId == 0) {
+                if (0 == $myParentId) {
                     $main_weight = (int) $myCat->get_weight();
                 }
             }
@@ -1228,14 +1226,14 @@ class GradebookTable extends SortableTable
                 $url = $item->get_link();
 
                 $text = $item->get_name();
-                if (isset($url) && $show_message === false) {
+                if (isset($url) && false === $show_message) {
                     $text = '&nbsp;<a href="'.$item->get_link().'">'
                         .$item->get_name()
                         .'</a>';
                 }
 
                 $extra = Display::label($item->get_type_name(), 'info');
-                if ($type == 'simple') {
+                if ('simple' == $type) {
                     $extra = '';
                 }
                 $extra .= $item->getSkillsFromItem();

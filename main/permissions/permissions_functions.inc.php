@@ -122,8 +122,8 @@ function store_one_permission($content, $action, $id, $tool, $permission)
 /**
  * This function retrieves the existing permissions of a user, group or role.
  *
- * @param $content are we retrieving the rights of a user, a group or a role (the database depends on it)
- * @param $id the id of the user, group or role
+ * @param string $content are we retrieving the rights of a user, a group or a role (the database depends on it)
+ * @param int    $id      the id of the user, group or role
  *
  * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University
  *
@@ -486,9 +486,9 @@ function get_all_roles($content = 'course')
 /**
  * This function gets all the roles that are defined.
  *
- * @param $content are we finding the roles for a user or a group (the database depends on it)
- * @param $id the id of the user or group
- * @param string	Deprecated parameter allowing use of 'platform' scope - the corresponding tables don't exist anymore so the scope is always set to 'course'
+ * @param string $content are we finding the roles for a user or a group (the database depends on it)
+ * @param int    $id      the id of the user or group
+ * @param string $scope   Deprecated parameter allowing use of 'platform' scope - the corresponding tables don't exist anymore so the scope is always set to 'course'
  *
  * @return array that contains the name of the roles the user has
  *

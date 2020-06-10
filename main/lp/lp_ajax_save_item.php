@@ -95,7 +95,9 @@ function save_item(
     $prerequisitesCheck = $myLP->prerequisites_match($item_id);
 
     /** @var learnpathItem $myLPI */
-    $myLPI = $myLP->items[$item_id];
+    if ($myLP->items && isset($myLP->items[$item_id])) {
+        $myLPI = $myLP->items[$item_id];
+    }
 
     if (empty($myLPI)) {
         if ($debug > 0) {
@@ -181,7 +183,7 @@ function save_item(
 
         $my_type = $myLPI->get_type();
         // Set status to completed for hotpotatoes if score > 80%.
-        if ($my_type == 'hotpotatoes') {
+        if ($my_type === 'hotpotatoes') {
             if ((empty($status) || $status == 'undefined' || $status == 'not attempted') && $max > 0) {
                 if (($score / $max) > 0.8) {
                     $myStatus = 'completed';
@@ -205,7 +207,7 @@ function save_item(
                     error_log('Done calling set_status for hotpotatoes - now '.$myLPI->get_status(false));
                 }
             }
-        } elseif ($my_type == 'sco') {
+        } elseif ($my_type === 'sco') {
             /*
              * This is a specific implementation for SCORM 1.2, matching page 26 of SCORM 1.2's RTE
              * "Normally the SCO determines its own status and passes it to the LMS.
@@ -252,7 +254,7 @@ function save_item(
              *    the status to either passed or failed depending on the
              *    student's score compared to the mastery score.
              */
-            if ($credit == 'credit' &&
+            if ($credit === 'credit' &&
                 $masteryScore &&
                 (isset($score) && $score != -1) &&
                 !$statusIsSet && !$statusSignalReceived
@@ -324,29 +326,38 @@ function save_item(
                  */
                 if ($lmsFinish || $userNavigatesAway) {
                     $myStatus = 'completed';
-                    /**
-                     * After setting the cmi.core.lesson_status to "completed",
-                     *   the LMS should now check to see if a Mastery Score has been
-                     *   specified in the cmi.student_data.mastery_score, if supported,
-                     *   or the manifest that the SCO is a member of.
-                     *   If a Mastery Score is provided and the SCO did set the
-                     *   cmi.core.score.raw, the LMS shall compare the cmi.core.score.raw
-                     *   to the Mastery Score and set the cmi.core.lesson_status to
-                     *   either "passed" or "failed".  If no Mastery Score is provided,
-                     *   the LMS will leave the cmi.core.lesson_status as "completed”.
-                     */
-                    if ($masteryScore && (isset($score) && $score != -1)) {
-                        if ($score >= $masteryScore) {
-                            $myStatus = 'passed';
-                        } else {
-                            $myStatus = 'failed';
+                    $updateStatus = true;
+                    // Do not update status if "score as progress" and $userNavigatesAway
+                    // The progress will be saved by the scorm BT#16766.
+                    if ($userNavigatesAway && !$lmsFinish && $myLP->getUseScoreAsProgress()) {
+                        $updateStatus = false;
+                    }
+
+                    if ($updateStatus) {
+                        /**
+                         * After setting the cmi.core.lesson_status to "completed",
+                         *   the LMS should now check to see if a Mastery Score has been
+                         *   specified in the cmi.student_data.mastery_score, if supported,
+                         *   or the manifest that the SCO is a member of.
+                         *   If a Mastery Score is provided and the SCO did set the
+                         *   cmi.core.score.raw, the LMS shall compare the cmi.core.score.raw
+                         *   to the Mastery Score and set the cmi.core.lesson_status to
+                         *   either "passed" or "failed".  If no Mastery Score is provided,
+                         *   the LMS will leave the cmi.core.lesson_status as "completed”.
+                         */
+                        if ($masteryScore && (isset($score) && $score != -1)) {
+                            if ($score >= $masteryScore) {
+                                $myStatus = 'passed';
+                            } else {
+                                $myStatus = 'failed';
+                            }
                         }
+                        if ($debug) {
+                            error_log("Set status: $myStatus because lmsFinish || userNavigatesAway");
+                        }
+                        $myLPI->set_status($myStatus);
+                        $statusIsSet = true;
                     }
-                    if ($debug) {
-                        error_log("Set status: $myStatus because lmsFinish || userNavigatesAway");
-                    }
-                    $myLPI->set_status($myStatus);
-                    $statusIsSet = true;
                 }
             }
             // End of type=='sco'
@@ -460,7 +471,7 @@ function save_item(
         error_log("progress: $myComplete / $myTotal");
     }
 
-    if ($myLPI->get_type() != 'sco') {
+    if ($myLPI->get_type() !== 'sco') {
         // If this object's JS status has not been updated by the SCORM API, update now.
         $return .= "olms.lesson_status='".$myStatus."';";
     }

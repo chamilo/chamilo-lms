@@ -329,6 +329,7 @@ class Session
 
         if (!$this->hasUser($user)) {
             $this->users[] = $user;
+            $this->setNbrUsers(count($this->users));
         }
     }
 
@@ -408,6 +409,21 @@ class Session
         }
 
         return false;
+    }
+
+    /**
+     * Check for existence of a relation (SessionRelCourse) between a course and this session.
+     *
+     * @return bool whether the course is related to this session
+     */
+    public function isRelatedToCourse(Course $course)
+    {
+        return !is_null(
+            \Database::getManager()->getRepository('ChamiloCoreBundle:SessionRelCourse')->findOneBy([
+                'session' => $this,
+                'course' => $course,
+            ])
+        );
     }
 
     /**
@@ -898,11 +914,51 @@ class Session
         return $now > $this->getAccessStartDate();
     }
 
+    /**
+     * Compare the current date with start and end access dates.
+     * Either missing date is interpreted as no limit.
+     *
+     * @return bool whether now is between the session access start and end dates
+     */
+    public function isCurrentlyAccessible()
+    {
+        try {
+            $now = new \Datetime();
+        } catch (\Exception $exception) {
+            return false;
+        }
+
+        return (is_null($this->accessStartDate) || $this->accessStartDate < $now)
+            && (is_null($this->accessEndDate) || $now < $this->accessEndDate);
+    }
+
     public function addCourse(Course $course)
     {
         $entity = new SessionRelCourse();
         $entity->setCourse($course);
+        $entity->setPosition(0);
         $this->addCourses($entity);
+        $this->setNbrCourses(count($this->courses));
+    }
+
+    /**
+     * Removes a course from this session.
+     *
+     * @param Course $course the course to remove from this session
+     *
+     * @return bool whether the course was actually found in this session and removed from it
+     */
+    public function removeCourse(Course $course)
+    {
+        $relCourse = $this->getCourseSubscription($course);
+        if ($relCourse) {
+            $this->courses->removeElement($relCourse);
+            $this->setNbrCourses(count($this->courses));
+
+            return true;
+        }
+
+        return false;
     }
 
     /**

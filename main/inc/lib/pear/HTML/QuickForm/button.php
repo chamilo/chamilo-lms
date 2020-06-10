@@ -213,12 +213,9 @@ class HTML_QuickForm_button extends HTML_QuickForm_input
         $size = $this->calculateSize();
         $attributes = $this->getAttributes();
 
+        $template = ' {element} ';
+
         switch ($layout) {
-            case FormValidator::LAYOUT_INLINE:
-                return '
-                    {element}
-                ';
-                break;
             case FormValidator::LAYOUT_HORIZONTAL:
                 if (isset($attributes['custom']) && $attributes['custom'] == true) {
                     $template = '
@@ -251,14 +248,16 @@ class HTML_QuickForm_button extends HTML_QuickForm_input
                     </div>
                 </div>';
                 }
-                return $template;
+
                 break;
-            case FormValidator::LAYOUT_BOX:
+            case FormValidator::LAYOUT_INLINE:
+            case FormValidator::LAYOUT_GRID:
             case FormValidator::LAYOUT_BOX_NO_LABEL:
-                return '
-                        {element}
-                ';
+            default:
+                $template = ' {element}  ';
                 break;
         }
+
+        return $template;
     }
 }

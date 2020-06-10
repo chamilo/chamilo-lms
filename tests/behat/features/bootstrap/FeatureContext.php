@@ -21,7 +21,6 @@ class FeatureContext extends MinkContext
      */
     public function iAmAPlatformAdministrator()
     {
-        $this->visit('/index.php?logout=logout&uid=1');
         $this->iAmOnHomepage();
         $this->fillField('login', 'admin');
         $this->fillField('password', 'admin');
@@ -34,7 +33,6 @@ class FeatureContext extends MinkContext
      */
     public function iAmATeacher()
     {
-        $this->visit('/index.php?logout=logout');
         $this->iAmOnHomepage();
         $this->fillField('login', 'mmosquera');
         $this->fillField('password', 'mmosquera');
@@ -46,7 +44,6 @@ class FeatureContext extends MinkContext
      */
     public function iAmAStudent()
     {
-        $this->visit('/index.php?logout=logout');
         $this->iAmOnHomepage();
         $this->fillField('login', 'acostea');
         $this->fillField('password', 'acostea');
@@ -58,7 +55,6 @@ class FeatureContext extends MinkContext
      */
     public function iAmAnHR()
     {
-        $this->visit('/index.php?logout=logout');
         $this->iAmOnHomepage();
         $this->fillField('login', 'ptook');
         $this->fillField('password', 'ptook');
@@ -70,7 +66,6 @@ class FeatureContext extends MinkContext
      */
     public function iAmAStudentBoss()
     {
-        $this->visit('/index.php?logout=logout');
         $this->iAmOnHomepage();
         $this->fillField('login', 'abaggins');
         $this->fillField('password', 'abaggins');
@@ -82,7 +77,6 @@ class FeatureContext extends MinkContext
      */
     public function iAmAnInvitee()
     {
-        $this->visit('/index.php?logout=logout');
         $this->iAmOnHomepage();
         $this->fillField('login', 'bproudfoot');
         $this->fillField('password', 'bproudfoot');
@@ -94,19 +88,8 @@ class FeatureContext extends MinkContext
      */
     public function courseExists($argument)
     {
-        $this->iAmAPlatformAdministrator();
         $this->visit('/main/admin/course_list.php?keyword='.$argument);
         $this->assertPageContainsText($argument);
-    }
-
-    /**
-     * @Given /^course "([^"]*)" is deleted$/
-     */
-    public function courseIsDeleted($argument)
-    {
-        $this->iAmAPlatformAdministrator();
-        $this->visit('/main/admin/course_list.php?keyword='.$argument);
-        $this->clickLink('Delete');
     }
 
     /**
@@ -179,10 +162,12 @@ class FeatureContext extends MinkContext
                 ]
             );
 
+        $this->visit('/index.php?logout=logout');
         $this->iAmAPlatformAdministrator();
         $this->visit($sendInvitationURL);
         $this->iAmLoggedAs($friendUsername);
         $this->visit($acceptInvitationURL);
+        $this->visit('/index.php?logout=logout');
         $this->iAmAPlatformAdministrator();
     }
 
@@ -236,7 +221,6 @@ class FeatureContext extends MinkContext
      */
     public function adminTopBarIsDisabled()
     {
-        $this->iAmAPlatformAdministrator();
         $this->visit('/main/admin/settings.php');
         $this->fillField('search_field', 'show_admin_toolbar');
         $this->pressButton('submit_button');
@@ -249,7 +233,6 @@ class FeatureContext extends MinkContext
      */
     public function adminTopBarIsEnabled()
     {
-        $this->iAmAPlatformAdministrator();
         $this->visit('/main/admin/settings.php');
         $this->fillField('search_field', 'show_admin_toolbar');
         $this->pressButton('submit_button');
@@ -315,7 +298,7 @@ class FeatureContext extends MinkContext
         $this->getSession()->executeScript(
             "
                 var textarea = $('textarea');
-                var id = textarea.attr('id'); 
+                var id = textarea.attr('id');
                 CKEDITOR.instances[id].setData(\"$value\");
                 "
         );
@@ -409,7 +392,7 @@ class FeatureContext extends MinkContext
            $('$field > option').each(function(index, option) {
                 if (option.text == '$value') {
                     $('$field').selectpicker('val', option.value);
-                }                
+                }
             });
         ");
     }
@@ -423,7 +406,7 @@ class FeatureContext extends MinkContext
         $this->getSession()->executeScript("
             var input = $('$field').filter('$class');
             var id = input.attr('id');
-            var input = $('#'+id);            
+            var input = $('#'+id);
             input.val($value);
         ");
     }
@@ -499,6 +482,20 @@ class FeatureContext extends MinkContext
         $this->getSession()->executeScript("
             $(function() {
                 $('input[type=\"radio\"][name=".$element."][value=".$value."]').prop('checked', true);
+            });
+        ");
+
+        return true;
+    }
+
+    /**
+     * @Given /^I check the "([^"]*)" radio button selector$/
+     */
+    public function iCheckTheRadioButtonBasedInSelector($element)
+    {
+        $this->getSession()->executeScript("
+            $(function() {
+                $('$element').prop('checked', true);
             });
         ");
 

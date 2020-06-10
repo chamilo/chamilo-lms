@@ -7,8 +7,6 @@
  *
  * Container for the aiccResource class that deals with elemens from AICC Course Structure file
  *
- * @package chamilo.learnpath
- *
  * @author  Yannick Warnier <ywarnier@beeznest.org>
  * @license GNU/GPL
  */
@@ -39,7 +37,7 @@ class aiccBlock extends learnpathItem
                                 $this->identifier = strtolower($value);
                                 break;
                             case 'member':
-                                if (strstr($value, ',') !== false) {
+                                if (false !== strstr($value, ',')) {
                                     $temp = explode(',', $value);
                                     foreach ($temp as $val) {
                                         if (!empty($val)) {

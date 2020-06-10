@@ -48,19 +48,6 @@ if (api_is_cas_activated()) {
             phpCAS::setNoCasServerValidation();
         }
 
-        $proxySettings = api_get_configuration_value('proxy_settings');
-        if (false !== $proxySettings) {
-            if (is_array($proxySettings) && array_key_exists('https', $proxySettings)) {
-                $https = $proxySettings['https'];
-                if (is_array($https) && array_key_exists('proxy', $https)) {
-                    $proxy = $https['proxy'];
-                    if (is_string($proxy) && !empty($proxy)) {
-                        phpCAS::setExtraCurlOption(CURLOPT_PROXY, $proxy);
-                    }
-                }
-            }
-        }
-
         if (is_array($cas) && array_key_exists('fixedServiceURL', $cas)) {
             $fixedServiceURL = $cas['fixedServiceURL'];
             if (is_string($fixedServiceURL)) {

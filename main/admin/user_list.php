@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -6,8 +7,6 @@ use ChamiloSession as Session;
 /**
  * @author Bart Mollet
  * @author Julio Montoya <gugli100@gmail.com> BeezNest 2011
- *
- * @package chamilo.admin
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -18,7 +17,7 @@ $urlId = api_get_current_access_url_id();
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
 
 // Login as can be used by different roles
-if (isset($_GET['user_id']) && $action == 'login_as') {
+if (isset($_GET['user_id']) && $action === 'login_as') {
     $check = Security::check_token('get');
     if ($check && api_can_login_as($_GET['user_id'])) {
         $result = UserManager::loginAsUser($_GET['user_id']);
@@ -47,7 +46,6 @@ if (isset($_GET['user_id']) && $action == 'login_as') {
 }
 
 api_protect_admin_script(true);
-
 trimVariables();
 
 $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=get_user_courses';
@@ -55,6 +53,7 @@ $urlSession = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=get_user_sessions'
 $extraField = new ExtraField('user');
 $variables = $extraField->get_all_extra_field_by_type(ExtraField::FIELD_TYPE_TAG);
 $variablesSelect = $extraField->get_all_extra_field_by_type(ExtraField::FIELD_TYPE_SELECT);
+
 if (!empty($variablesSelect)) {
     $variables = array_merge($variables, $variablesSelect);
 }
@@ -214,6 +213,9 @@ function prepare_user_sql_query($getCount)
     $user_table = Database::get_main_table(TABLE_MAIN_USER);
     $admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);
 
+    $isMultipleUrl = (api_is_platform_admin() || api_is_session_admin()) && api_get_multiple_access_url();
+    $urlId = api_get_current_access_url_id();
+
     if ($getCount) {
         $sql .= "SELECT COUNT(u.id) AS total_number_of_items FROM $user_table u";
     } else {
@@ -230,18 +232,25 @@ function prepare_user_sql_query($getCount)
                     u.status AS col7,
                     u.active AS col8,
                     u.registration_date AS col9,
-                    u.last_login as col10,                    
+                    u.last_login as col10,
                     u.id AS col11,
-                    u.expiration_date AS exp,                    
+                    u.expiration_date AS exp,
                     u.password
                 FROM $user_table u";
     }
 
     // adding the filter to see the user's only of the current access_url
-    if ((api_is_platform_admin() || api_is_session_admin()) && api_get_multiple_access_url()) {
+    if ($isMultipleUrl) {
         $access_url_rel_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-        $sql .= " INNER JOIN $access_url_rel_user_table url_rel_user 
+        $sql .= " INNER JOIN $access_url_rel_user_table url_rel_user
                   ON (u.id=url_rel_user.user_id)";
+    }
+
+    $classId = isset($_REQUEST['class_id']) && !empty($_REQUEST['class_id']) ? (int) $_REQUEST['class_id'] : 0;
+
+    if ($classId) {
+        $userGroupTable = Database::get_main_table(TABLE_USERGROUP_REL_USER);
+        $sql .= " INNER JOIN $userGroupTable ug ON (ug.user_id = u.id)";
     }
 
     $keywordList = [
@@ -270,13 +279,6 @@ function prepare_user_sql_query($getCount)
         $keywordListValues = [];
     }
 
-    /*
-    // This block is never executed because $keyword_extra_data never exists
-    if (isset($keyword_extra_data) && !empty($keyword_extra_data)) {
-        $extra_info = UserManager::get_extra_field_information_by_name($keyword_extra_data);
-        $field_id = $extra_info['id'];
-        $sql.= " INNER JOIN user_field_values ufv ON u.id=ufv.user_id AND ufv.field_id=$field_id ";
-    } */
     if (isset($_GET['keyword']) && !empty($_GET['keyword'])) {
         $keywordFiltered = Database::escape_string("%".$_GET['keyword']."%");
         $sql .= " WHERE (
@@ -298,33 +300,40 @@ function prepare_user_sql_query($getCount)
         ) {
             $query_admin_table = " , $admin_table a ";
             $keyword_admin = ' AND a.user_id = u.id ';
-            $keywordListValues['keyword_status'] = '%';
+            $keywordListValues['keyword_status'] = '';
+        }
+
+        if ($keywordListValues['keyword_status'] === '%') {
+            $keywordListValues['keyword_status'] = '';
         }
 
         $keyword_extra_value = '';
-
-        // This block is never executed because $keyword_extra_data never exists
-        /*
-        if (isset($keyword_extra_data) && !empty($keyword_extra_data) &&
-            !empty($keyword_extra_data_text)) {
-            $keyword_extra_value = " AND ufv.field_value LIKE '%".trim($keyword_extra_data_text)."%' ";
-        }
-        */
         $sql .= " $query_admin_table
-            WHERE (
-                u.firstname LIKE '".Database::escape_string("%".$keywordListValues['keyword_firstname']."%")."' AND
-                u.lastname LIKE '".Database::escape_string("%".$keywordListValues['keyword_lastname']."%")."' AND
-                u.username LIKE '".Database::escape_string("%".$keywordListValues['keyword_username']."%")."' AND
-                u.email LIKE '".Database::escape_string("%".$keywordListValues['keyword_email']."%")."' AND
-                u.status LIKE '".Database::escape_string($keywordListValues['keyword_status'])."' ";
+            WHERE ( 1 = 1 ";
+
+        if (!empty($keywordListValues['keyword_firstname'])) {
+            $sql .= "AND u.firstname LIKE '".Database::escape_string("%".$keywordListValues['keyword_firstname']."%")."'";
+        }
+
+        if (!empty($keywordListValues['keyword_lastname'])) {
+            $sql .= "AND u.lastname LIKE '".Database::escape_string("%".$keywordListValues['keyword_lastname']."%")."'";
+        }
+        if (!empty($keywordListValues['keyword_username'])) {
+            $sql .= "AND u.username LIKE '".Database::escape_string("%".$keywordListValues['keyword_username']."%")."'";
+        }
+        if (!empty($keywordListValues['keyword_email'])) {
+            $sql .= "AND u.email LIKE '".Database::escape_string("%".$keywordListValues['keyword_email']."%")."'";
+        }
+
+        if (!empty($keywordListValues['keyword_status'])) {
+            $sql .= "AND u.status = '".Database::escape_string($keywordListValues['keyword_status'])."'";
+        }
+
         if (!empty($keywordListValues['keyword_officialcode'])) {
             $sql .= " AND u.official_code LIKE '".Database::escape_string("%".$keywordListValues['keyword_officialcode']."%")."' ";
         }
 
-        $sql .= "
-            $keyword_admin
-            $keyword_extra_value
-        ";
+        $sql .= " $keyword_admin $keyword_extra_value ";
 
         if (isset($keywordListValues['keyword_active']) &&
             !isset($keywordListValues['keyword_inactive'])
@@ -338,12 +347,36 @@ function prepare_user_sql_query($getCount)
         $sql .= ' ) ';
     }
 
-    $preventSessionAdminsToManageAllUsers = api_get_setting('prevent_session_admins_to_manage_all_users');
-    if (api_is_session_admin() && $preventSessionAdminsToManageAllUsers === 'true') {
-        $sql .= ' AND u.creator_id = '.api_get_user_id();
+    if ($classId) {
+        $sql .= " AND ug.usergroup_id = $classId";
     }
 
+    $preventSessionAdminsToManageAllUsers = api_get_setting('prevent_session_admins_to_manage_all_users');
+
+    $extraConditions = '';
+    if (api_is_session_admin() && $preventSessionAdminsToManageAllUsers === 'true') {
+        $extraConditions .= ' AND u.creator_id = '.api_get_user_id();
+    }
+
+    // adding the filter to see the user's only of the current access_url
+    if ($isMultipleUrl) {
+        $extraConditions .= ' AND url_rel_user.access_url_id = '.$urlId;
+    }
+
+    $sql .= $extraConditions;
+
     $variables = Session::read('variables_to_show', []);
+    $extraFields = api_get_configuration_value('user_search_on_extra_fields');
+
+    if (!empty($extraFields) && isset($extraFields['extra_fields']) && isset($_GET['keyword'])) {
+        $extraFieldList = $extraFields['extra_fields'];
+        if (!empty($extraFieldList)) {
+            foreach ($extraFieldList as $variable) {
+                $_GET['extra_'.$variable] = Security::remove_XSS($_GET['keyword']);
+            }
+        }
+        $variables = array_merge($extraFieldList, $variables);
+    }
     if (!empty($variables)) {
         $extraField = new ExtraField('user');
         $extraFieldResult = [];
@@ -360,9 +393,7 @@ function prepare_user_sql_query($getCount)
                     continue;
                 }
 
-                $info = $extraField->get_handler_field_info_by_field_variable(
-                    $variable
-                );
+                $info = $extraField->get_handler_field_info_by_field_variable($variable);
 
                 if (empty($info)) {
                     continue;
@@ -373,41 +404,29 @@ function prepare_user_sql_query($getCount)
                         continue;
                     }
                     if ($info['field_type'] == ExtraField::FIELD_TYPE_TAG) {
-                        $result = $extraField->getAllUserPerTag(
-                            $info['id'],
-                            $value
-                        );
-                        $result = empty($result) ? [] : array_column(
-                            $result,
-                            'user_id'
-                        );
+                        $result = $extraField->getAllUserPerTag($info['id'], $value);
+                        $result = empty($result) ? [] : array_column($result, 'user_id');
                     } else {
-                        $result = UserManager::get_extra_user_data_by_value(
-                            $variable,
-                            $value
-                        );
+                        $result = UserManager::get_extra_user_data_by_value($variable, $value, true);
                     }
+
                     $extraFieldHasData[] = true;
                     if (!empty($result)) {
-                        $extraFieldResult = array_merge(
-                            $extraFieldResult,
-                            $result
-                        );
+                        $extraFieldResult = array_merge($extraFieldResult, $result);
                     }
                 }
             }
         }
 
-        if (!empty($extraFieldHasData)) {
-            $sql .= " AND (u.id IN ('".implode("','", $extraFieldResult)."')) ";
+        $condition = '  AND ';
+        // If simple search then use "OR"
+        if (isset($_GET['keyword']) && !empty($_GET['keyword'])) {
+            $condition = ' OR ';
         }
-    }
 
-    // adding the filter to see the user's only of the current access_url
-    if ((api_is_platform_admin() || api_is_session_admin()) &&
-        api_get_multiple_access_url()
-    ) {
-        $sql .= ' AND url_rel_user.access_url_id = '.api_get_current_access_url_id();
+        if (!empty($extraFieldHasData) && !empty($extraFieldResult)) {
+            $sql .= " $condition (u.id IN ('".implode("','", $extraFieldResult)."') $extraConditions ) ";
+        }
     }
 
     return $sql;
@@ -461,12 +480,12 @@ function get_user_data($from, $number_of_items, $column, $direction)
             $user[0],
             USER_IMAGE_SIZE_SMALL
         );
-        $photo = '<img 
-            src="'.$userPicture.'" width="22" height="22" 
-            alt="'.api_get_person_name($user[2], $user[3]).'" 
+        $photo = '<img
+            src="'.$userPicture.'" width="22" height="22"
+            alt="'.api_get_person_name($user[2], $user[3]).'"
             title="'.api_get_person_name($user[2], $user[3]).'" />';
 
-        if ($user[7] == 1 && !empty($user['exp'])) {
+        if (1 == $user[7] && !empty($user['exp'])) {
             // check expiration date
             $expiration_time = convert_sql_date($user['exp']);
             // if expiration date is passed, store a special value for active field
@@ -801,20 +820,20 @@ function active_filter($active, $params, $row)
 {
     $_user = api_get_user_info();
 
-    if ($active == '1') {
+    if ('1' == $active) {
         $action = 'Lock';
         $image = 'accept';
-    } elseif ($active == '-1') {
+    } elseif ('-1' == $active) {
         $action = 'edit';
         $image = 'warning';
-    } elseif ($active == '0') {
+    } elseif ('0' == $active) {
         $action = 'Unlock';
         $image = 'error';
     }
 
     $result = '';
 
-    if ($action === 'edit') {
+    if ('edit' === $action) {
         $result = Display::return_icon(
             $image.'.png',
             get_lang('AccountExpired'),
@@ -986,7 +1005,7 @@ $form->addText(
 $form->addButtonSearch(get_lang('Search'));
 
 $searchAdvanced = '
-<a id="advanced_params" href="javascript://" 
+<a id="advanced_params" href="javascript://"
     class="btn btn-default advanced_options" onclick="display_advanced_search_form();">
     <span id="img_plus_and_minus">&nbsp;
     '.Display::returnFontAwesomeIcon('arrow-right').' '.get_lang('AdvancedSearch').'
@@ -1012,8 +1031,12 @@ if (isset($_GET['keyword'])) {
     $parameters['keyword_email'] = Security::remove_XSS($_GET['keyword_email']);
     $parameters['keyword_officialcode'] = Security::remove_XSS($_GET['keyword_officialcode']);
     $parameters['keyword_status'] = Security::remove_XSS($_GET['keyword_status']);
-    $parameters['keyword_active'] = Security::remove_XSS($_GET['keyword_active']);
-    $parameters['keyword_inactive'] = Security::remove_XSS($_GET['keyword_inactive']);
+    if (isset($_GET['keyword_active'])) {
+        $parameters['keyword_active'] = Security::remove_XSS($_GET['keyword_active']);
+    }
+    if (isset($_GET['keyword_inactive'])) {
+        $parameters['keyword_inactive'] = Security::remove_XSS($_GET['keyword_inactive']);
+    }
 }
 // Create a sortable table with user-data
 $parameters['sec_token'] = Security::get_token();
@@ -1037,6 +1060,22 @@ $form->addText('keyword_lastname', get_lang('LastName'), false);
 $form->addText('keyword_username', get_lang('LoginName'), false);
 $form->addText('keyword_email', get_lang('Email'), false);
 $form->addText('keyword_officialcode', get_lang('OfficialCode'), false);
+
+$classId = isset($_REQUEST['class_id']) && !empty($_REQUEST['class_id']) ? (int) $_REQUEST['class_id'] : 0;
+$options = [];
+if ($classId) {
+    $userGroup = new UserGroup();
+    $groupInfo = $userGroup->get($classId);
+    if ($groupInfo) {
+        $options = [$classId => $groupInfo['name']];
+    }
+}
+$form->addSelectAjax(
+    'class_id',
+    get_lang('SocialGroup').' / '.get_lang('Class'),
+    $options,
+    ['url' => api_get_path(WEB_AJAX_PATH).'usergroup.ajax.php?a=get_class_by_keyword']
+);
 
 $status_options = [];
 $status_options['%'] = get_lang('All');
@@ -1131,7 +1170,7 @@ $table_result = $table->return_table();
 $extra_search_options = '';
 
 // Try to search the user everywhere
-if ($table->get_total_number_of_items() == 0) {
+if (0 == $table->get_total_number_of_items()) {
     if (api_get_multiple_access_url() && isset($_REQUEST['keyword'])) {
         $keyword = Database::escape_string($_REQUEST['keyword']);
         $conditions = ['username' => $keyword];

@@ -1,11 +1,10 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * Class ExerciseResult
  * which allows you to export exercises results in multiple presentation forms.
- *
- * @package chamilo.exercise
  *
  * @author Yannick Warnier
  */
@@ -56,10 +55,10 @@ class ExerciseResult
 
         $cid = api_get_course_id();
         $course_id = api_get_course_int_id();
-        $user_id = intval($user_id);
+        $user_id = (int) $user_id;
         $sessionId = api_get_session_id();
         $session_id_and = ' AND te.session_id = '.$sessionId.' ';
-        $exercise_id = intval($exercise_id);
+        $exercise_id = (int) $exercise_id;
 
         if (!empty($exercise_id)) {
             $session_id_and .= " AND exe_exo_id = $exercise_id ";
@@ -84,11 +83,11 @@ class ExerciseResult
                     user.username,
                     te.status as exstatus
                 FROM $TBL_EXERCISES  AS ce
-                INNER JOIN $TBL_TRACK_EXERCISES AS te 
+                INNER JOIN $TBL_TRACK_EXERCISES AS te
                 ON (te.exe_exo_id = ce.id)
-                INNER JOIN $TBL_USER AS user 
+                INNER JOIN $TBL_USER AS user
                 ON (user.user_id = exe_user_id)
-                LEFT JOIN $TBL_TABLE_LP_MAIN AS tlm 
+                LEFT JOIN $TBL_TABLE_LP_MAIN AS tlm
                 ON (tlm.id = te.orig_lp_id AND tlm.c_id = ce.c_id)
                 WHERE
                     ce.c_id = $course_id AND
@@ -115,11 +114,11 @@ class ExerciseResult
                         user.username,
                         te.status as exstatus
                     FROM $TBL_EXERCISES  AS ce
-                    INNER JOIN $TBL_TRACK_EXERCISES AS te 
+                    INNER JOIN $TBL_TRACK_EXERCISES AS te
                     ON (te.exe_exo_id = ce.id)
-                    INNER JOIN $TBL_USER AS user 
+                    INNER JOIN $TBL_USER AS user
                     ON (user.user_id = exe_user_id)
-                    LEFT JOIN $TBL_TABLE_LP_MAIN AS tlm 
+                    LEFT JOIN $TBL_TABLE_LP_MAIN AS tlm
                     ON (tlm.id = te.orig_lp_id AND tlm.c_id = ce.c_id)
                     WHERE
                         ce.c_id = $course_id AND
@@ -185,10 +184,10 @@ class ExerciseResult
                     $revised = -1;
                 } else {
                     //revised or not
-                    $sql_exe = "SELECT exe_id 
+                    $sql_exe = "SELECT exe_id
                                 FROM $TBL_TRACK_ATTEMPT_RECORDING
-                                WHERE 
-                                    author != '' AND 
+                                WHERE
+                                    author != '' AND
                                     exe_id = ".intval($result['exid'])."
                                 LIMIT 1";
                     $query = Database::query($sql_exe);
@@ -371,6 +370,7 @@ class ExerciseResult
         $data .= get_lang('Status').';';
         $data .= get_lang('ToolLearnpath').';';
         $data .= get_lang('UserIsCurrentlySubscribed').';';
+        $data .= get_lang('CourseCode').';';
         $data .= "\n";
 
         //results
@@ -419,6 +419,8 @@ class ExerciseResult
             $data .= str_replace("\r\n", '  ', $row['status']).';';
             $data .= str_replace("\r\n", '  ', $row['lp_name']).';';
             $data .= str_replace("\r\n", '  ', $row['is_user_subscribed']).';';
+            $data .= str_replace("\r\n", '  ', api_get_course_id()).';';
+
             $data .= "\n";
         }
 
@@ -564,6 +566,8 @@ class ExerciseResult
         $worksheet->setCellValueByColumnAndRow($column, $line, get_lang('ToolLearnpath'));
         $column++;
         $worksheet->setCellValueByColumnAndRow($column, $line, get_lang('UserIsCurrentlySubscribed'));
+        $column++;
+        $worksheet->setCellValueByColumnAndRow($column, $line, get_lang('CourseCode'));
         $line++;
 
         foreach ($this->results as $row) {
@@ -713,6 +717,8 @@ class ExerciseResult
             $worksheet->setCellValueByColumnAndRow($column, $line, $row['lp_name']);
             $column++;
             $worksheet->setCellValueByColumnAndRow($column, $line, $row['is_user_subscribed']);
+            $column++;
+            $worksheet->setCellValueByColumnAndRow($column, $line, api_get_course_id());
             $line++;
         }
 

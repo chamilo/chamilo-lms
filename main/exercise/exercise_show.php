@@ -10,8 +10,6 @@ use ChamiloSession as Session;
  *
  * @version $Id: exercise_show.php 22256 2009-07-20 17:40:20Z ivantcholakov $
  *
- * @package chamilo.exercise
- *
  * @todo remove the debug code and use the general debug library
  * @todo small letters for table variables
  */
@@ -19,7 +17,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 $origin = api_get_origin();
 $currentUserId = api_get_user_id();
-$printHeaders = $origin === 'learnpath';
+$printHeaders = 'learnpath' === $origin;
 $id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0; //exe id
 
 if (empty($id)) {
@@ -112,7 +110,7 @@ if (!empty($sessionId) && !$is_allowedToEdit) {
     }
 }
 
-$allowCoachFeedbackExercises = api_get_setting('allow_coach_feedback_exercises') === 'true';
+$allowCoachFeedbackExercises = 'true' === api_get_setting('allow_coach_feedback_exercises');
 $maxEditors = (int) api_get_setting('exercise_max_ckeditors_in_page');
 $isCoachAllowedToEdit = api_is_allowed_to_edit(false, true);
 $isFeedbackAllowed = false;
@@ -136,8 +134,8 @@ if (!$is_allowedToEdit) {
     }
 }
 
-$allowRecordAudio = api_get_setting('enable_record_audio') === 'true';
-$allowTeacherCommentAudio = api_get_configuration_value('allow_teacher_comment_audio') === true;
+$allowRecordAudio = 'true' === api_get_setting('enable_record_audio');
+$allowTeacherCommentAudio = true === api_get_configuration_value('allow_teacher_comment_audio');
 
 $js = '<script>'.api_get_language_translate_html().'</script>';
 $htmlHeadXtra[] = $js;
@@ -939,7 +937,7 @@ if ($show_results) {
     echo $totalScoreText;
 }
 
-if ($action === 'export') {
+if ('export' === $action) {
     $content = ob_get_clean();
     // needed in order to mpdf to work
     ob_clean();

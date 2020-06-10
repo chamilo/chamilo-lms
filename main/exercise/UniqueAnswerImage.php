@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -146,12 +147,12 @@ class UniqueAnswerImage extends UniqueAnswer
                 $url = $itemList[3];
 
                 $tryResult = 0;
-                if ($try != 0) {
+                if (0 != $try) {
                     $tryResult = 1;
                 }
 
                 $urlResult = '';
-                if ($url != 0) {
+                if (0 != $url) {
                     $urlResult = $url;
                 }
 
@@ -230,7 +231,7 @@ class UniqueAnswerImage extends UniqueAnswer
         }
 
         // We check the first radio button to be sure a radio button will be check
-        if ($correct == 0) {
+        if (0 == $correct) {
             $correct = 1;
         }
 
@@ -239,7 +240,7 @@ class UniqueAnswerImage extends UniqueAnswer
         if (!empty($this->id)) {
             $form->setDefaults($defaults);
         } else {
-            if ($this->isContent == 1) {
+            if (1 == $this->isContent) {
                 // Default sample content.
                 $form->setDefaults($defaults);
             } else {

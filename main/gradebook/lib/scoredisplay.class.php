@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -7,8 +8,6 @@
  * This class works as a singleton: call instance() to retrieve an object.
  *
  * @author Bert Steppé
- *
- * @package chamilo.gradebook
  */
 class ScoreDisplay
 {

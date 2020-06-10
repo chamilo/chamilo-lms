@@ -253,6 +253,7 @@ switch ($action) {
         api_block_anonymous_users(false);
 
         $status = isset($_REQUEST['status']) ? (int) $_REQUEST['status'] : DRH;
+        $active = isset($_REQUEST['active']) ? (int) $_REQUEST['active'] : null;
 
         $criteria = new Criteria();
         $criteria
@@ -267,6 +268,9 @@ switch ($action) {
                 Criteria::expr()->eq('status', $status)
             );
 
+        if (null !== $active) {
+            $criteria->andWhere(Criteria::expr()->eq('active', $active));
+        }
         $users = UserManager::getRepository()->matching($criteria);
 
         if (!$users->count()) {

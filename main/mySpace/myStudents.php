@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CLpCategory;
@@ -8,11 +9,6 @@ if (!isset($_GET['course'])) {
     $cidReset = true;
 }
 
-/**
- * Implements the tracking of students in the Reporting pages.
- *
- * @package chamilo.reporting
- */
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
@@ -24,10 +20,14 @@ $sessionId = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
 $origin = api_get_origin();
 $course_code = isset($_GET['course']) ? Security::remove_XSS($_GET['course']) : '';
 $courseInfo = api_get_course_info($course_code);
+$courseCode = '';
+if ($courseInfo) {
+    $courseCode = $courseInfo['code'];
+}
 $student_id = isset($_GET['student']) ? (int) $_GET['student'] : 0;
 $coachId = isset($_GET['id_coach']) ? (int) $_GET['id_coach'] : 0;
 $details = isset($_GET['details']) ? Security::remove_XSS($_GET['details']) : '';
-$currentUrl = api_get_self().'?student='.$student_id.'&course='.$course_code.'&id_session='.$sessionId
+$currentUrl = api_get_self().'?student='.$student_id.'&course='.$courseCode.'&id_session='.$sessionId
     .'&origin='.$origin.'&details='.$details;
 $allowMessages = api_get_configuration_value('private_messages_about_user');
 
@@ -116,17 +116,17 @@ if (!empty($details)) {
             ];
         }
         $interbreadcrumb[] = [
-            'url' => '../user/user.php?cidReq='.$course_code,
+            'url' => '../user/user.php?cidReq='.$courseCode,
             'name' => get_lang('Users'),
         ];
     } else {
-        if ($origin === 'tracking_course') {
+        if ('tracking_course' === $origin) {
             $interbreadcrumb[] = [
-                'url' => '../tracking/courseLog.php?cidReq='.$course_code.'&id_session='.api_get_session_id(),
+                'url' => '../tracking/courseLog.php?cidReq='.$courseCode.'&id_session='.api_get_session_id(),
                 'name' => get_lang('Tracking'),
             ];
         } else {
-            if ($origin === 'resume_session') {
+            if ('resume_session' === $origin) {
                 $interbreadcrumb[] = [
                     'url' => "../session/session_list.php",
                     'name' => get_lang('SessionList'),
@@ -675,18 +675,18 @@ if (!empty($user_info['email'])) {
     $send_mail = Display::return_icon('mail_send_na.png', get_lang('SendMail'), '', ICON_SIZE_MEDIUM);
 }
 echo $send_mail;
-if (!empty($student_id) && !empty($course_code)) {
+if (!empty($student_id) && !empty($courseCode)) {
     // Only show link to connection details if course and student were defined in the URL
-    echo '<a href="access_details.php?student='.$student_id.'&course='.$course_code.'&origin='.$origin.'&cidReq='
-        .$course_code.'&id_session='.$sessionId.'">'
+    echo '<a href="access_details.php?student='.$student_id.'&course='.$courseCode.'&origin='.$origin.'&cidReq='
+        .$courseCode.'&id_session='.$sessionId.'">'
         .Display::return_icon('statistics.png', get_lang('AccessDetails'), '', ICON_SIZE_MEDIUM)
         .'</a>';
 }
 
 $notebookTeacherEnable = api_get_plugin_setting('notebookteacher', 'enable_plugin_notebookteacher') === 'true';
-if ($notebookTeacherEnable && !empty($student_id) && !empty($course_code)) {
+if ($notebookTeacherEnable && !empty($student_id) && !empty($courseCode)) {
     // link notebookteacher
-    $optionsLink = 'student_id='.$student_id.'&origin='.$origin.'&cidReq='.$course_code.'&id_session='.$sessionId;
+    $optionsLink = 'student_id='.$student_id.'&origin='.$origin.'&cidReq='.$courseCode.'&id_session='.$sessionId;
     echo '<a href="'.api_get_path(WEB_PLUGIN_PATH).'notebookteacher/src/index.php?'.$optionsLink.'">'
         .Display::return_icon('notebookteacher.png', get_lang('Notebook'), '', ICON_SIZE_MEDIUM)
         .'</a>';
@@ -739,11 +739,11 @@ if (user_is_online($student_id)) {
 $avg_student_progress = $avg_student_score = 0;
 
 if (empty($sessionId)) {
-    $isSubscribedToCourse = CourseManager::is_user_subscribed_in_course($user_info['user_id'], $course_code);
+    $isSubscribedToCourse = CourseManager::is_user_subscribed_in_course($user_info['user_id'], $courseCode);
 } else {
     $isSubscribedToCourse = CourseManager::is_user_subscribed_in_course(
         $user_info['user_id'],
-        $course_code,
+        $courseCode,
         true,
         $sessionId
     );
@@ -752,7 +752,7 @@ if (empty($sessionId)) {
 if ($isSubscribedToCourse) {
     $avg_student_progress = Tracking::get_avg_student_progress(
         $user_info['user_id'],
-        $course_code,
+        $courseCode,
         [],
         $sessionId
     );
@@ -760,7 +760,7 @@ if ($isSubscribedToCourse) {
     // the score inside the Reporting table
     $avg_student_score = Tracking::get_avg_student_score(
         $user_info['user_id'],
-        $course_code,
+        $courseCode,
         [],
         $sessionId
     );
@@ -856,16 +856,16 @@ $userInfo = [
     'online' => $online,
 ];
 
-if (!empty($course_code)) {
+if (!empty($courseCode)) {
     $userInfo['url_access'] = Display::url(
         get_lang('SeeAccesses'),
         'access_details.php?'
         .http_build_query(
             [
                 'student' => $student_id,
-                'course' => $course_code,
+                'course' => $courseCode,
                 'origin' => $origin,
-                'cidReq' => $course_code,
+                'cidReq' => $courseCode,
                 'id_session' => $sessionId,
             ]
         ),
@@ -893,8 +893,8 @@ $use_users_timezone = api_get_setting('use_users_timezone', 'timezones');
         $score = $avg_student_score;
     }
 
-$userInfo['student_score'] = $score;
-$userInfo['student_progress'] = $avg_student_progress;
+$userInfo['student_score'] = (float) $score;
+$userInfo['student_progress'] = (float) $avg_student_progress;
 $userInfo['first_connection'] = $first_connection_date;
 $userInfo['last_connection'] = $last_connection_date;
 if ($details === 'true') {
@@ -921,14 +921,14 @@ if (api_get_setting('allow_terms_conditions') === 'true') {
             $icon = Display::return_icon('accept.png');
             $btn = Display::url(
                 get_lang('DeleteLegal'),
-                api_get_self().'?action=delete_legal&student='.$student_id.'&course='.$course_code,
+                api_get_self().'?action=delete_legal&student='.$student_id.'&course='.$courseCode,
                 ['class' => 'btn btn-danger']
             );
             $timeLegalAccept = api_get_local_time($legalTime);
         } else {
             $btn = Display::url(
                 get_lang('SendLegal'),
-                api_get_self().'?action=send_legal&student='.$student_id.'&course='.$course_code,
+                api_get_self().'?action=send_legal&student='.$student_id.'&course='.$courseCode,
                 ['class' => 'btn btn-primary']
             );
             $timeLegalAccept = get_lang('NotRegistered');
@@ -953,12 +953,12 @@ $tpl = new Template(
 );
 
 if (!empty($courseInfo)) {
-    $nb_assignments = Tracking::count_student_assignments($student_id, $course_code, $sessionId);
-    $messages = Tracking::count_student_messages($student_id, $course_code, $sessionId);
+    $nb_assignments = Tracking::count_student_assignments($student_id, $courseCode, $sessionId);
+    $messages = Tracking::count_student_messages($student_id, $courseCode, $sessionId);
     $links = Tracking::count_student_visited_links($student_id, $courseInfo['real_id'], $sessionId);
     $chat_last_connection = Tracking::chat_last_connection($student_id, $courseInfo['real_id'], $sessionId);
     $documents = Tracking::count_student_downloaded_documents($student_id, $courseInfo['real_id'], $sessionId);
-    $uploaded_documents = Tracking::count_student_uploaded_documents($student_id, $course_code, $sessionId);
+    $uploaded_documents = Tracking::count_student_uploaded_documents($student_id, $courseCode, $sessionId);
     $tpl->assign('title', $courseInfo['title']);
 
     $userInfo['tools'] = [
@@ -968,6 +968,9 @@ if (!empty($courseInfo)) {
         'chat_connection' => $chat_last_connection,
         'documents' => $documents,
         'upload_documents' => $uploaded_documents,
+        'course_first_access' => Tracking::get_first_connection_date_on_the_course($student_id, $courseInfo['real_id'], $sessionId),
+        'course_last_access' => Tracking::get_last_connection_date_on_the_course($student_id, $courseInfo, $sessionId),
+        'count_access_dates' => Tracking::getNumberOfCourseAccessDates($student_id, $courseInfo['real_id'], $sessionId),
     ];
 } else {
     $details = false;
@@ -1340,7 +1343,7 @@ if (empty($details)) {
         $timeCourse = Tracking::getCalculateTime($student_id, $courseInfo['real_id'], $sessionId);
     }
 
-    if ($user_info['status'] != INVITEE) {
+    if (INVITEE != $user_info['status']) {
         $csv_content[] = [];
         $csv_content[] = [str_replace('&nbsp;', '', strip_tags($userInfo['complete_name']))];
         $trackingColumns = api_get_configuration_value('tracking_columns');
@@ -1423,7 +1426,7 @@ if (empty($details)) {
                 // Get progress in lp
                 $progress = Tracking::get_avg_student_progress(
                     $student_id,
-                    $course_code,
+                    $courseCode,
                     [$lp_id],
                     $sessionId
                 );
@@ -1441,7 +1444,7 @@ if (empty($details)) {
                 } else {
                     $total_time = Tracking::get_time_spent_in_lp(
                         $student_id,
-                        $course_code,
+                        $courseCode,
                         [$lp_id],
                         $sessionId
                     );
@@ -1454,7 +1457,7 @@ if (empty($details)) {
                 // Get last connection time in lp
                 $start_time = Tracking::get_last_connection_time_in_lp(
                     $student_id,
-                    $course_code,
+                    $courseCode,
                     $lp_id,
                     $sessionId
                 );
@@ -1472,7 +1475,7 @@ if (empty($details)) {
                 // Quiz in lp
                 $score = Tracking::get_avg_student_score(
                     $student_id,
-                    $course_code,
+                    $courseCode,
                     [$lp_id],
                     $sessionId
                 );
@@ -1480,7 +1483,7 @@ if (empty($details)) {
                 // Latest exercise results in a LP
                 $score_latest = Tracking::get_avg_student_score(
                     $student_id,
-                    $course_code,
+                    $courseCode,
                     [$lp_id],
                     $sessionId,
                     false,
@@ -1489,7 +1492,7 @@ if (empty($details)) {
 
                 $bestScore = Tracking::get_avg_student_score(
                     $student_id,
-                    $course_code,
+                    $courseCode,
                     [$lp_id],
                     $sessionId,
                     false,
@@ -1568,7 +1571,7 @@ if (empty($details)) {
                     }
                     $link = Display::url(
                         Display::return_icon('2rightarrow.png', get_lang('Details')),
-                        'lp_tracking.php?cidReq='.$course_code.'&course='.$course_code.$from.'&origin='.$origin
+                        'lp_tracking.php?cidReq='.$courseCode.'&course='.$courseCode.$from.'&origin='.$origin
                         .'&lp_id='.$lp_id.'&student_id='.$user_info['user_id'].'&id_session='.$sessionId
                     );
                     echo Display::tag('td', $link);
@@ -1577,8 +1580,8 @@ if (empty($details)) {
                 if (api_is_allowed_to_edit()) {
                     echo '<td>';
                     if ($any_result === true) {
-                        $url = 'myStudents.php?action=reset_lp&sec_token='.$token.'&cidReq='.$course_code.'&course='
-                            .$course_code.'&details='.$details.'&origin='.$origin.'&lp_id='.$lp_id.'&student='
+                        $url = 'myStudents.php?action=reset_lp&sec_token='.$token.'&cidReq='.$courseCode.'&course='
+                            .$courseCode.'&details='.$details.'&origin='.$origin.'&lp_id='.$lp_id.'&student='
                             .$user_info['user_id'].'&details=true&id_session='.$sessionId;
                         echo Display::url(
                             Display::return_icon('clean.png', get_lang('Clean')),
@@ -1634,12 +1637,12 @@ if (empty($details)) {
             'quiz.session_id'
         );
 
-        $sql = "SELECT quiz.title, id 
+        $sql = "SELECT quiz.title, id
                 FROM $t_quiz AS quiz
                 WHERE
                     quiz.c_id = ".$courseInfo['real_id']." AND
                     active IN (0, 1)
-                    $sessionCondition                    
+                    $sessionCondition
                 ORDER BY quiz.title ASC ";
 
         $result_exercices = Database::query($sql);
@@ -1658,7 +1661,7 @@ if (empty($details)) {
                 );
                 $score_percentage = Tracking::get_avg_student_exercise_score(
                     $student_id,
-                    $course_code,
+                    $courseCode,
                     $exercise_id,
                     $sessionId,
                     1,
@@ -1669,7 +1672,7 @@ if (empty($details)) {
                 if (!isset($score_percentage) && $count_attempts > 0) {
                     $scores_lp = Tracking::get_avg_student_exercise_score(
                         $student_id,
-                        $course_code,
+                        $courseCode,
                         $exercise_id,
                         $sessionId,
                         2,
@@ -1725,7 +1728,7 @@ if (empty($details)) {
                         if ($allowToQualify) {
                             $qualifyLink = '&action=qualify';
                         }
-                        $attemptLink = '../exercise/exercise_show.php?id='.$id_last_attempt.'&cidReq='.$course_code
+                        $attemptLink = '../exercise/exercise_show.php?id='.$id_last_attempt.'&cidReq='.$courseCode
                             .'&id_session='.$sessionId.'&session_id='.$sessionId.'&student='.$student_id.'&origin='
                             .(empty($origin) ? 'tracking' : $origin).$qualifyLink;
                         echo Display::url(
@@ -1739,7 +1742,7 @@ if (empty($details)) {
                 echo '<td>';
                 if ($count_attempts > 0) {
                     $all_attempt_url = "../exercise/exercise_report.php?exerciseId=$exercise_id&"
-                        ."cidReq=$course_code&filter_by_user=$student_id&id_session=$sessionId";
+                        ."cidReq=$courseCode&filter_by_user=$student_id&id_session=$sessionId";
                     echo Display::url(
                         Display::return_icon(
                             'test_results.png',
@@ -1773,7 +1776,7 @@ if (empty($details)) {
 
     // @when using sessions we do not show the survey list
     if (empty($sessionId)) {
-        $survey_list = SurveyManager::get_surveys($course_code, $sessionId);
+        $survey_list = SurveyManager::get_surveys($courseCode, $sessionId);
         if (!empty($survey_list)) {
             $survey_data = [];
             foreach ($survey_list as $survey) {
@@ -1850,7 +1853,7 @@ if (empty($details)) {
             echo '<tr>';
             echo '<td>'.$work->title.'</td>';
             $documentNumber = $key + 1;
-            $url = api_get_path(WEB_CODE_PATH).'work/view.php?cidReq='.$course_code.'&id_session='.$sessionId.'&id='
+            $url = api_get_path(WEB_CODE_PATH).'work/view.php?cidReq='.$courseCode.'&id_session='.$sessionId.'&id='
                 .$results['id'];
             echo '<td class="text-center"><a href="'.$url.'">('.$documentNumber.')</a></td>';
             $qualification = !empty($results['qualification']) ? $results['qualification'] : '-';

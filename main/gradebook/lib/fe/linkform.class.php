@@ -7,8 +7,6 @@
  *
  * @author Stijn Konings
  * @author Bert Steppé (made more generic)
- *
- * @package chamilo.gradebook
  */
 class LinkForm extends FormValidator
 {
@@ -50,9 +48,9 @@ class LinkForm extends FormValidator
         if (isset($extra)) {
             $this->extra = $extra;
         }
-        if ($form_type == self::TYPE_CREATE) {
+        if (self::TYPE_CREATE == $form_type) {
             $this->build_create();
-        } elseif ($form_type == self::TYPE_MOVE) {
+        } elseif (self::TYPE_MOVE == $form_type) {
             $this->build_move();
         }
     }

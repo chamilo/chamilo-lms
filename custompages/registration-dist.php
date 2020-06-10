@@ -12,13 +12,18 @@ require_once api_get_path(SYS_PATH).'main/inc/global.inc.php';
 require_once __DIR__.'/language.php';
 /**
  * Removes some unwanted elementend of the form object.
+ * 03-26-2020  Added check if element exist.
  */
-$content['form']->removeElement('extra_mail_notify_invitation');
-$content['form']->removeElement('extra_mail_notify_message');
-$content['form']->removeElement('extra_mail_notify_group_message');
-$content['form']->removeElement('official_code');
-$content['form']->removeElement('phone');
-$content['form']->removeElement('submit');
+if (isset($content['form']->_elementIndex['extra_mail_notify_invitation'])) {
+    $content['form']->removeElement('extra_mail_notify_invitation');
+}
+if (isset($content['form']->_elementIndex['extra_mail_notify_message'])) {
+    $content['form']->removeElement('extra_mail_notify_message');
+}
+if (isset($content['form']->_elementIndex['extra_mail_notify_group_message'])) {
+    $content['form']->removeElement('extra_mail_notify_group_message');
+}
+
 if (isset($content['form']->_elementIndex['status'])) {
     $content['form']->removeElement('status');
     $content['form']->removeElement('status');

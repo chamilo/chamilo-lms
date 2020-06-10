@@ -3,8 +3,6 @@
 
 /**
  * Interface for assigning courses to Human Resources Manager.
- *
- * @package chamilo.admin
  */
 // resetting the course id
 $cidReset = true;
@@ -30,7 +28,7 @@ $tbl_course_rel_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
 
 // initializing variables
-$user_id = intval($_GET['user']);
+$user_id = (int) ($_GET['user']);
 $user_info = api_get_user_info($user_id);
 $user_anonymous = api_get_anonymous_id();
 $current_user_id = api_get_user_id();

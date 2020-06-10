@@ -48,6 +48,27 @@ class SequenceRepository extends EntityRepository
         return $list;
     }
 
+    public function getItem($itemId, $type)
+    {
+        $resource = null;
+        switch ($type) {
+            case SequenceResource::COURSE_TYPE:
+                $repo = $this->getEntityManager()->getRepository('ChamiloCoreBundle:Course');
+
+                break;
+            case SequenceResource::SESSION_TYPE:
+                $repo = $this->getEntityManager()->getRepository('ChamiloCoreBundle:Session');
+
+                break;
+        }
+
+        if ($repo) {
+            $resource = $repo->find($itemId);
+        }
+
+        return $resource;
+    }
+
     /**
      * @param int $id
      */

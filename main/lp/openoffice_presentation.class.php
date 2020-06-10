@@ -136,15 +136,21 @@ class OpenofficePresentation extends OpenofficeDocument
             $html_file = $file_name.'.html';
             $fp = fopen($this->base_work_dir.$dir.$html_file, 'w+');
 
-            $slide_src = api_get_path(REL_COURSE_PATH).$_course['path'].'/document/'.$dir.utf8_encode($file_name);
+            if (substr($dir, 0, 1) != '/') {
+                $dir = '/'.$dir;
+            }
+            $slide_src = api_get_path(REL_COURSE_PATH).$_course['path'].'/document'.$dir.utf8_encode($file_name);
             $slide_src = str_replace('\/\/', '/', $slide_src);
             fwrite(
                 $fp,
 '<html>
     <head>
+      <title>'.$slide_name.'</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link href="'.api_get_path(WEB_PUBLIC_PATH).'assets/bootstrap/dist/css/bootstrap.min.css" media="screen" rel="stylesheet" type="text/css" />
     </head>
     <body>
-        <img src="'.$slide_src.'" />
+        <img class="img-responsive" alt="'.htmlspecialchars($slide_name.'"', ENT_QUOTES).'" src="'.$slide_src.'" />
     </body>
 </html>'
             ); // This indentation is to make the generated html files to look well.

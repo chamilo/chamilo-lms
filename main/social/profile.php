@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -10,13 +11,11 @@ use ChamiloSession as Session;
  * @author Isaac Flores Paz <florespaz_isaac@hotmail.com>
  *
  * @todo use Display::panel()
- *
- * @package chamilo.social
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
-if (api_get_setting('allow_social_tool') != 'true') {
+if (api_get_setting('allow_social_tool') !== 'true') {
     $url = api_get_path(WEB_PATH).'whoisonline.php?id='.intval($_GET['u']);
     header('Location: '.$url);
     exit;
@@ -105,25 +104,6 @@ if (isset($_GET['u']) && is_numeric($_GET['u']) && $_GET['u'] != api_get_user_id
 
 Session::write('social_user_id', (int) $user_id);
 
-// Setting some course info
-/*$course_list_code = [];
-$personal_course_list = UserManager::get_personal_session_course_list($friendId, 50);
-$i = 1;
-$list = [];
-if (is_array($personal_course_list)) {
-    foreach ($personal_course_list as $my_course) {
-        if ($i <= 10) {
-            $list[] = SocialManager::get_logged_user_course_html($my_course, $i);
-            $course_list_code[] = ['code' => $my_course['code']];
-        } else {
-            break;
-        }
-        $i++;
-    }
-    //to avoid repeted courses
-    $course_list_code = array_unique_dimensional($course_list_code);
-}*/
-
 // Social Block Menu
 $menu = SocialManager::show_social_menu(
     'shared_profile',
@@ -134,7 +114,6 @@ $menu = SocialManager::show_social_menu(
 
 //Setting some session info
 $user_info = api_get_user_info($friendId);
-//$sessionList = SessionManager::getSessionsFollowedByUser($friendId, $user_info['status']);
 $sessionList = [];
 
 // My friends
@@ -152,20 +131,6 @@ $listInvitations = '';
 
 if ($show_full_profile) {
     $social_group_info_block = SocialManager::getGroupBlock($friendId);
-    /*
-    $my_courses = null;
-    // COURSES LIST
-    if (is_array($list)) {
-        $i = 1;
-        foreach ($list as $key => $value) {
-            if (empty($value[2])) { //if out of any session
-                $my_courses .= $value[1];
-                $i++;
-            }
-        }
-        $social_course_block .= $my_courses;
-    }*/
-
     // Block Social Sessions
     if (count($sessionList) > 0) {
         $social_session_block = $sessionList;
@@ -183,17 +148,6 @@ if ($show_full_profile) {
 
     // Images uploaded by course
     $file_list = '';
-    /*
-    if (is_array($course_list_code) && count($course_list_code) > 0) {
-        foreach ($course_list_code as $course) {
-            $file_list .= UserManager::get_user_upload_files_by_course(
-                $user_id,
-                $course['code'],
-                'images'
-            );
-        }
-    }*/
-
     $count_pending_invitations = 0;
     if (!isset($_GET['u']) ||
         (isset($_GET['u']) && $_GET['u'] == api_get_user_id())
@@ -257,14 +211,6 @@ if ($show_full_profile) {
         }
 
         $images_uploaded = null;
-        // Images uploaded by course
-        /*if (!empty($file_list)) {
-            $images_uploaded .= '<div><h3>'.get_lang('ImagesUploaded').'</h3></div>';
-            $images_uploaded .= '<div class="social-content-information">';
-            $images_uploaded .= $file_list;
-            $images_uploaded .= '</div>';
-            $socialRightInformation .= SocialManager::social_wrapper_div($images_uploaded, 4);
-        }*/
     }
 
     if (!empty($user_info['competences']) || !empty($user_info['diplomas'])
@@ -324,5 +270,4 @@ $template = $formModalTpl->get_template('social/form_modals.tpl');
 $formModals = $formModalTpl->fetch($template);
 
 $tpl->assign('form_modals', $formModals);
-$social_layout = $tpl->get_template('social/profile.tpl');
-$tpl->display($social_layout);
+$tpl->display($tpl->get_template('social/profile.tpl'));

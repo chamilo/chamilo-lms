@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 $cidReset = true;
@@ -25,13 +26,13 @@ if (!$allowToTrack) {
 }
 
 if ($exportCSV) {
-    if ($display === 'user') {
+    if ('user' === $display) {
         MySpace::export_tracking_user_overview();
         exit;
-    } elseif ($display === 'session') {
+    } elseif ('session' === $display) {
         MySpace::export_tracking_session_overview();
         exit;
-    } elseif ($display === 'course') {
+    } elseif ('course' === $display) {
         MySpace::export_tracking_course_overview();
         exit;
     }

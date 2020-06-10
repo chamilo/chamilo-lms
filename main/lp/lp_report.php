@@ -2,14 +2,12 @@
 
 /* For licensing terms, see /license.txt */
 
-
 use Chamilo\CoreBundle\Entity\Repository\ItemPropertyRepository;
 use Chamilo\CourseBundle\Entity\CLpCategory;
 
 /**
  * Report from students for learning path.
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_course_script(true);

@@ -3768,15 +3768,16 @@ function uploadWork($my_folder_data, $_course, $isCorrection = false, $workInfo 
 /**
  * Send an e-mail to users related to this work.
  *
+ * @param array $workInfo
  * @param int   $workId
  * @param array $courseInfo
  * @param int   $sessionId
  */
-function sendAlertToUsers($workId, $courseInfo, $sessionId = 0)
+function sendAlertToUsers($workInfo, $workId, $courseInfo, $sessionId = 0)
 {
     $sessionId = (int) $sessionId;
 
-    if (empty($courseInfo) || empty($workId)) {
+    if (empty($workInfo) || empty($courseInfo) || empty($workId)) {
         return false;
     }
 
@@ -3832,10 +3833,12 @@ function sendAlertToUsers($workId, $courseInfo, $sessionId = 0)
                 $userInfo['complete_name'],
                 $courseInfo['name']
             );
+
             $subject = "[".api_get_setting('siteName')."] ".$userPostedADocument;
             $message = $userPostedADocument."<br />";
             $message .= get_lang('DateSent')." : ".api_format_date(api_get_local_time())."<br />";
-            $message .= get_lang('WorkName')." : ".$workData['title']."<br />";
+            $message .= get_lang('AssignmentName')." : ".$workInfo['title']."<br />";
+            $message .= get_lang('Filename')." : ".$workData['title']."<br />";
             $url = api_get_path(WEB_CODE_PATH)."work/view.php?cidReq=".$courseInfo['code']."&id_session=".$sessionId."&id=".$workData['id'];
             $message .= '<a href="'.$url.'">'.get_lang('DownloadLink')."</a><br />";
 
@@ -4026,7 +4029,7 @@ function processWorkForm(
                 $userId,
                 $groupInfo
             );
-            sendAlertToUsers($workId, $courseInfo, $sessionId);
+            sendAlertToUsers($workInfo, $workId, $courseInfo, $sessionId);
             Event::event_upload($workId);
 
             // The following feature requires the creation of a work-type

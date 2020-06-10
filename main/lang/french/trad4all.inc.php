@@ -8464,4 +8464,5 @@ $SurveyQuestionMultipleChoiceWithOtherComment = "Offrez des options pré-défini
 $Multiplechoiceother = "Question à réponse unique avec option 'Autre'";
 $SurveyOtherAnswerSpecify = "Autre...";
 $SurveyOtherAnswer = "Merci de spécifier :";
+$UserXPostedADocumentInCourseX = "%s a publié un document dans l'outil travaux dans le cours %s";
 ?>

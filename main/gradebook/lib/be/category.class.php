@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\GradebookCategory;
@@ -2275,7 +2276,7 @@ class Category implements GradebookItem
         $params['right'] = 0;
         $params['top'] = 0;
         $params['bottom'] = 0;
-        $page_format = $params['orientation'] == 'landscape' ? 'A4-L' : 'A4';
+        $page_format = $params['orientation'] === 'landscape' ? 'A4-L' : 'A4';
         $pdf = new PDF($page_format, $params['orientation'], $params);
 
         $certificate_list = GradebookUtils::get_list_users_certificates($catId, $userList);

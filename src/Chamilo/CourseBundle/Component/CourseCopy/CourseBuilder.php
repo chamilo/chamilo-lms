@@ -335,10 +335,12 @@ class CourseBuilder
         $table_doc = Database::get_course_table(TABLE_DOCUMENT);
         $table_prop = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
-        // Remove chat_files and shared_folder files
-        $avoid_paths = " path NOT LIKE '/shared_folder%' AND
-                         path NOT LIKE '/chat_files%' ";
-
+        // Remove chat_files, shared_folder, exercises files
+        $avoid_paths = "
+                         path NOT LIKE '/shared_folder%' AND
+                         path NOT LIKE '/chat_files%' AND
+                         path NOT LIKE '/../exercises/%'
+                         ";
         $documentCondition = '';
         if (!empty($idList)) {
             $idList = array_unique($idList);
@@ -366,7 +368,7 @@ class CourseBuilder
 
             if (!empty($this->course->type) && $this->course->type == 'partial') {
                 $sql = "SELECT d.iid, d.path, d.comment, d.title, d.filetype, d.size
-                        FROM $table_doc d 
+                        FROM $table_doc d
                         INNER JOIN $table_prop p
                         ON (p.ref = d.id AND d.c_id = p.c_id)
                         WHERE
@@ -381,7 +383,7 @@ class CourseBuilder
                         ORDER BY path";
             } else {
                 $sql = "SELECT d.iid, d.path, d.comment, d.title, d.filetype, d.size
-                        FROM $table_doc d 
+                        FROM $table_doc d
                         INNER JOIN $table_prop p
                         ON (p.ref = d.id AND d.c_id = p.c_id)
                         WHERE
@@ -409,7 +411,7 @@ class CourseBuilder
         } else {
             if (!empty($this->course->type) && $this->course->type == 'partial') {
                 $sql = "SELECT d.iid, d.path, d.comment, d.title, d.filetype, d.size
-                        FROM $table_doc d 
+                        FROM $table_doc d
                         INNER JOIN $table_prop p
                         ON (p.ref = d.id AND d.c_id = p.c_id)
                         WHERE
@@ -424,7 +426,7 @@ class CourseBuilder
                         ORDER BY path";
             } else {
                 $sql = "SELECT d.iid, d.path, d.comment, d.title, d.filetype, d.size
-                        FROM $table_doc d 
+                        FROM $table_doc d
                         INNER JOIN $table_prop p
                         ON (p.ref = d.id AND d.c_id = p.c_id)
                         WHERE
@@ -769,18 +771,18 @@ class CourseBuilder
 
             // Select only quizzes with active = 0 or 1 (not -1 which is for deleted quizzes)
             $sql = "SELECT * FROM $table_qui
-                    WHERE 
-                      c_id = $courseId AND 
+                    WHERE
+                      c_id = $courseId AND
                       $idCondition
-                      active >=0 
+                      active >=0
                       $sessionCondition ";
         } else {
             // Select only quizzes with active = 0 or 1 (not -1 which is for deleted quizzes)
             $sql = "SELECT * FROM $table_qui
-                    WHERE 
-                      c_id = $courseId AND 
+                    WHERE
+                      c_id = $courseId AND
                       $idCondition
-                      active >=0 AND 
+                      active >=0 AND
                       (session_id = 0 OR session_id IS NULL)";
         }
 
@@ -1849,8 +1851,8 @@ class CourseBuilder
 
         $sql = "SELECT * FROM $table_work
                 WHERE
-                    c_id = $courseId                    
-                    $sessionCondition AND                    
+                    c_id = $courseId
+                    $sessionCondition AND
                     filetype = 'folder' AND
                     parent_id = 0 AND
                     active = 1

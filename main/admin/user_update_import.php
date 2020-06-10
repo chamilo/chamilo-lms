@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -8,13 +9,10 @@
 use Ddeboer\DataImport\Reader\CsvReader;
 use Symfony\Component\DomCrawler\Crawler;
 
-/**
- * Validate the imported data.
- */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
-// Set this option to true to enforce strict purification for usenames.
+// Set this option to true to enforce strict purification for usernames.
 $purification_option_for_usernames = false;
 
 /**
@@ -27,7 +25,6 @@ function validate_data($users)
     global $defined_auth_sources;
     $errors = [];
     $usernames = [];
-
     $classExistList = [];
     $usergroup = new UserGroup();
 
@@ -108,7 +105,6 @@ function updateUsers($users, $resetPassword = false)
             }
 
             $user_id = $userInfo['user_id'];
-
             $firstName = isset($user['FirstName']) ? $user['FirstName'] : $userInfo['firstname'];
             $lastName = isset($user['LastName']) ? $user['LastName'] : $userInfo['lastname'];
             $userName = isset($user['NewUserName']) ? $user['NewUserName'] : $userInfo['username'];
@@ -141,6 +137,7 @@ function updateUsers($users, $resetPassword = false)
             $hrDeptId = $userInfo['hr_dept_id'];
             $language = isset($user['Language']) ? $user['Language'] : $userInfo['language'];
             $sendEmail = isset($user['SendEmail']) ? $user['SendEmail'] : $userInfo['language'];
+
             $userUpdated = UserManager::update_user(
                 $user_id,
                 $firstName,
@@ -260,7 +257,6 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true, null);
 
 $defined_auth_sources[] = PLATFORM_AUTH_SOURCE;
-
 if (isset($extAuthSource) && is_array($extAuthSource)) {
     $defined_auth_sources = array_merge($defined_auth_sources, array_keys($extAuthSource));
 }
@@ -276,76 +272,77 @@ $form->addElement('header', $tool_name);
 $form->addFile('import_file', get_lang('ImportFileLocation'), ['accept' => 'text/csv', 'id' => 'import_file']);
 $form->addCheckBox('reset_password', '', get_lang('AutoGeneratePassword'));
 
-if ($form->validate() && Security::check_token('post')) {
-    Security::clear_token();
+if ($form->validate()) {
+    if (Security::check_token('post')) {
+        Security::clear_token();
+        $formValues = $form->exportValues();
 
-    $formValues = $form->exportValues();
-
-    if (empty($_FILES['import_file']) || empty($_FILES['import_file']['size'])) {
-        header('Location: '.api_get_self());
-        exit;
-    }
-
-    $uploadInfo = pathinfo($_FILES['import_file']['name']);
-
-    if ($uploadInfo['extension'] !== 'csv') {
-        Display::addFlash(
-            Display::return_message(get_lang('YouMustImportAFileAccordingToSelectedOption'), 'error')
-        );
-
-        header('Location: '.api_get_self());
-        exit;
-    }
-
-    try {
-        $users = parse_csv_data($_FILES['import_file']['tmp_name']);
-    } catch (Exception $exception) {
-        Display::addFlash(
-            Display::return_message($exception->getMessage(), 'error')
-        );
-
-        header('Location: '.api_get_self());
-        exit;
-    }
-
-    $errors = validate_data($users);
-    $errorUsers = array_keys($errors);
-    $usersToUpdate = [];
-
-    foreach ($users as $user) {
-        if (!in_array($user['UserName'], $errorUsers)) {
-            $usersToUpdate[] = $user;
+        if (empty($_FILES['import_file']) || empty($_FILES['import_file']['size'])) {
+            header('Location: '.api_get_self());
+            exit;
         }
-    }
 
-    updateUsers($usersToUpdate, isset($formValues['reset_password']));
+        $uploadInfo = pathinfo($_FILES['import_file']['name']);
 
-    if (empty($errors)) {
-        Display::addFlash(
-            Display::return_message(get_lang('FileImported'), 'success')
-        );
+        if ($uploadInfo['extension'] !== 'csv') {
+            Display::addFlash(
+                Display::return_message(get_lang('YouMustImportAFileAccordingToSelectedOption'), 'error')
+            );
+
+            header('Location: '.api_get_self());
+            exit;
+        }
+
+        try {
+            $users = parse_csv_data($_FILES['import_file']['tmp_name']);
+        } catch (Exception $exception) {
+            Display::addFlash(
+                Display::return_message($exception->getMessage(), 'error')
+            );
+
+            header('Location: '.api_get_self());
+            exit;
+        }
+
+        $errors = validate_data($users);
+        $errorUsers = array_keys($errors);
+        $usersToUpdate = [];
+
+        foreach ($users as $user) {
+            if (!in_array($user['UserName'], $errorUsers)) {
+                $usersToUpdate[] = $user;
+            }
+        }
+
+        updateUsers($usersToUpdate, isset($formValues['reset_password']));
+
+        if (empty($errors)) {
+            Display::addFlash(
+                Display::return_message(get_lang('FileImported'), 'success')
+            );
+        } else {
+            $warningMessage = '';
+            foreach ($errors as $errorUsername => $errorUserMessages) {
+                $warningMessage .= "<strong>$errorUsername</strong>";
+                $warningMessage .= '<ul><li>'.implode('</li><li>', $errorUserMessages).'</li></ul>';
+            }
+
+            Display::addFlash(
+                Display::return_message(get_lang('FileImportedJustUsersThatAreNotRegistered'), 'warning')
+            );
+            Display::addFlash(Display::return_message($warningMessage, 'warning', false));
+        }
+
+        header('Location: '.api_get_self());
+        exit;
     } else {
-        $warningMessage = '';
-
-        foreach ($errors as $errorUsername => $errorUserMessages) {
-            $warningMessage .= "<strong>$errorUsername</strong>";
-            $warningMessage .= '<ul><li>'.implode('</li><li>', $errorUserMessages).'</li></ul>';
-        }
-
-        Display::addFlash(
-            Display::return_message(get_lang('FileImportedJustUsersThatAreNotRegistered'), 'warning')
-        );
-        Display::addFlash(
-            Display::return_message($warningMessage, 'warning', false)
-        );
+        Display::addFlash(Display::return_message(get_lang('LinkExpired'), 'warning', false));
+        header('Location: '.api_get_self());
+        exit;
     }
-
-    header('Location: '.api_get_self());
-    exit;
 }
 
 Display::display_header($tool_name);
-
 $token = Security::get_token();
 
 $form->addHidden('sec_token', $token);

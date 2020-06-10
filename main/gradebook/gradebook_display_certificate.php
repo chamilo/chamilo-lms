@@ -1,11 +1,7 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
-/**
- * Script.
- *
- * @package chamilo.gradebook
- */
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_GRADEBOOK;
 
@@ -58,7 +54,7 @@ if ($filter === 'true') {
 
     if ($form->validate()) {
         $officialCode = $form->getSubmitValue('filter');
-        if ($officialCode == 'all') {
+        if ($officialCode === 'all') {
             $certificate_list = GradebookUtils::get_list_users_certificates($categoryId);
         } else {
             $userList = UserManager::getUsersByOfficialCode($officialCode);
@@ -77,10 +73,8 @@ if ($filter === 'true') {
 }
 
 $content = '';
-
 $courseCode = api_get_course_id();
-
-$allowExportToZip = api_get_plugin_setting('customcertificate', 'enable_plugin_customcertificate') == 'true' &&
+$allowExportToZip = api_get_plugin_setting('customcertificate', 'enable_plugin_customcertificate') === 'true' &&
     api_get_course_setting('customcertificate_course_enable', $courseInfo) == 1;
 
 $tags = Certificate::notificationTags();
@@ -189,7 +183,7 @@ $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('GradebookListOfStudentsC
 $this_section = SECTION_COURSES;
 Display::display_header('');
 
-if (isset($_GET['action']) && $_GET['action'] == 'delete') {
+if ($action === 'delete') {
     $check = Security::check_token('get');
     if ($check) {
         $certificate = new Certificate($_GET['certificate_id']);
@@ -293,7 +287,6 @@ if (count($certificate_list) > 0 && $hideCertificateExport !== 'true') {
 }
 
 echo Display::toolbarAction('actions', [$actions]);
-
 echo $filterForm;
 
 if (count($certificate_list) == 0) {

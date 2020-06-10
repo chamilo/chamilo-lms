@@ -2377,15 +2377,16 @@ class SurveyUtil
      * and additional users in the database
      * and sends the invitations by email.
      *
-     * @param $users_array Users $array array can be both a list of course uids AND a list of additional emailaddresses
-     * @param $invitation_title Title $string of the invitation, used as the title of the mail
-     * @param $invitation_text Text $string of the invitation, used as the text of the mail.
-     *                         The text has to contain a **link** string or this will automatically be added to the end
-     * @param int  $reminder
-     * @param bool $sendmail
-     * @param int  $remindUnAnswered
-     * @param bool $isAdditionalEmail
-     * @param bool $hideLink
+     * @param int    $surveyId
+     * @param array  $users_array       Users array can be both a list of course uids AND a list of additional email addresses
+     * @param string $invitation_title  title of the mail
+     * @param string $invitation_text   text of the mail has to contain a **link** string or
+     *                                  this will automatically be added to the end
+     * @param int    $reminder
+     * @param bool   $sendmail
+     * @param int    $remindUnAnswered
+     * @param bool   $isAdditionalEmail
+     * @param bool   $hideLink
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @author Julio Montoya - Adding auto-generated link support
@@ -2393,6 +2394,7 @@ class SurveyUtil
      * @version January 2007
      */
     public static function saveInvitations(
+        $surveyId,
         $users_array,
         $invitation_title,
         $invitation_text,
@@ -2402,12 +2404,13 @@ class SurveyUtil
         $isAdditionalEmail = false,
         $hideLink = false
     ) {
+        $surveyId = (int) $surveyId;
         if (!is_array($users_array)) {
             return 0;
         }
 
         // Getting the survey information
-        $survey_data = SurveyManager::get_survey($_GET['survey_id']);
+        $survey_data = SurveyManager::get_survey($surveyId);
         $survey_invitations = self::get_invitations($survey_data['survey_code']);
         $already_invited = self::get_invited_users($survey_data['code']);
 
@@ -2416,7 +2419,7 @@ class SurveyUtil
         if (1 == $remindUnAnswered) {
             // Remind only unanswered users
             $reminder = 1;
-            $exclude_users = SurveyManager::get_people_who_filled_survey($_GET['survey_id']);
+            $exclude_users = SurveyManager::get_people_who_filled_survey($surveyId);
         }
 
         $counter = 0; // Nr of invitations "sent" (if sendmail option)

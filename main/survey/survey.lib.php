@@ -2794,6 +2794,7 @@ class SurveyManager
                         );
 
                         SurveyUtil::saveInvitations(
+                            $surveyId,
                             ['users' => $tutor['user_id']],
                             $subject,
                             $content,

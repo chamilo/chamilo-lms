@@ -1,12 +1,11 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
 /**
  * TestProposedAnswer toolbar configuration.
- *
- * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar
  */
 class TestProposedAnswer extends Basic
 {
@@ -19,11 +18,10 @@ class TestProposedAnswer extends Basic
     {
         $config['toolbarCanCollapse'] = true;
         $config['toolbarStartupExpanded'] = false;
-        if (api_get_setting('more_buttons_maximized_mode') != 'true') {
+        if (api_get_setting('more_buttons_maximized_mode') !== 'true') {
             $config['toolbar'] = $this->getNormalToolbar();
         } else {
             $config['toolbar_minToolbar'] = $this->getMinimizedToolbar();
-
             $config['toolbar_maxToolbar'] = $this->getMaximizedToolbar();
         }
 
@@ -50,8 +48,13 @@ class TestProposedAnswer extends Basic
         return [
             ['Bold', 'Subscript', 'Superscript'],
             [
-                'Image',
                 'Link',
+                'Image',
+                'Video',
+                //'Flash',
+                'Oembed',
+                //'Youtube',
+                'VimeoEmbed',
                 'Audio',
                 'Table',
                 'PasteFromWord',

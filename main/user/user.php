@@ -914,9 +914,9 @@ function get_user_data($from, $number_of_items, $column, $direction)
                             );
                             if (!empty($optionList)) {
                                 $options = implode(', ', array_column($optionList, 'display_text'));
-                                $temp[] = $options;
+                                $temp[] = Security::remove_XSS($options);
                             } else {
-                                $temp[] = $data['value'];
+                                $temp[] = Security::remove_XSS($data['value']);
                             }
                         } else {
                             $temp[] = '';

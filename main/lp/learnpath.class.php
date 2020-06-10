@@ -9939,7 +9939,7 @@ class learnpath
             $return .= '<label for="id'.$item['id'].'">';
 
             $checked = '';
-            if (!empty($prerequisiteId)) {
+            if (null !== $prerequisiteId) {
                 $checked = in_array($prerequisiteId, [$item['id'], $item['ref']]) ? ' checked="checked" ' : '';
             }
 

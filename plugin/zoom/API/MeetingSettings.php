@@ -56,7 +56,7 @@ class MeetingSettings
     /** @var string either local, cloud or none */
     public $auto_recording;
 
-    /** @var boolean @deprecated only signed in users can join this meeting */
+    /** @var bool @deprecated only signed in users can join this meeting */
     public $enforce_login;
 
     /** @var string @deprecated only signed in users with specified domains can join meetings */

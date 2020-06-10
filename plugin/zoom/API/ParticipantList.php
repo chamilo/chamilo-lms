@@ -24,7 +24,10 @@ class ParticipantList
      * @see JsonDeserializable::itemClass()
      *
      * @param string $propertyName array property name
+     *
      * @throws Exception on wrong propertyName
+     *
+     * @return string
      */
     protected function itemClass($propertyName)
     {
@@ -33,5 +36,4 @@ class ParticipantList
         }
         throw new Exception("No such array property $propertyName");
     }
-
 }

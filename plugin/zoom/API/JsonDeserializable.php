@@ -8,7 +8,7 @@ use Exception;
 trait JsonDeserializable
 {
     /**
-     * Builds a class instance from the Json description of the object
+     * Builds a class instance from the Json description of the object.
      *
      * @param string $json
      *
@@ -33,11 +33,12 @@ trait JsonDeserializable
     }
 
     /**
-     * Returns the class name of the items to be found in the named array property
+     * Returns the class name of the items to be found in the named array property.
      *
      * To override in classes that have a property of type array
      *
      * @param string $propertyName array property name
+     *
      * @throws Exception if not implemented for this propertyName
      */
     protected function itemClass($propertyName)
@@ -47,9 +48,9 @@ trait JsonDeserializable
 
 
     /**
-     * Copies values from another object properties to an instance, recursively
+     * Copies values from another object properties to an instance, recursively.
      *
-     * @param object $source source object
+     * @param object $source      source object
      * @param object $destination specific class instance, with already initialized properties
      *
      * @throws Exception when the source object has an unexpected property
@@ -68,7 +69,7 @@ trait JsonDeserializable
                     if (is_array($destination->$name)) {
                         foreach ($value as $sourceItem) {
                             $itemClass = $destination->itemClass($name);
-                            $item = new $itemClass;
+                            $item = new $itemClass();
                             self::recursivelyCopyObjectProperties($sourceItem, $item);
                             $destination->$name[] = $item;
                         }
@@ -79,9 +80,7 @@ trait JsonDeserializable
                     $destination->$name = $value;
                 }
             } else {
-                throw new Exception(
-                    "Source object has property $name, which was not expected."
-                );
+                throw new Exception("Source object has property $name, which was not expected.");
             }
         }
     }

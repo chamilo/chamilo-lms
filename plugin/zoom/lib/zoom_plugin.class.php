@@ -230,9 +230,9 @@ class ZoomPlugin extends Plugin
      *
      * @param string $meetingUUID
      *
-     * @return RecordingMeeting the recordings of the meeting
-     *
      * @throws Exception on API error
+     *
+     * @return RecordingMeeting the recordings of the meeting
      */
     public function getRecordings($meetingUUID)
     {

@@ -53,7 +53,7 @@ class Meeting
 
     /**
      * @param string $topic
-     * @param int $type
+     * @param int    $type
      * @return static
      */
     public static function fromTopicAndType($topic, $type = self::TYPE_SCHEDULED)
@@ -61,6 +61,7 @@ class Meeting
         $instance = new static();
         $instance->topic = $topic;
         $instance->type = $type;
+
         return $instance;
     }
 }

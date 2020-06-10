@@ -3827,14 +3827,17 @@ function sendAlertToUsers($workId, $courseInfo, $sessionId = 0)
                 continue;
             }
 
-            $userPostedADocument = sprintf(get_lang('UserXPostedADocumentInCourseX'), $userInfo['complete_name'], $courseInfo['name']);
+            $userPostedADocument = sprintf(
+                get_lang('UserXPostedADocumentInCourseX'),
+                $userInfo['complete_name'],
+                $courseInfo['name']
+            );
             $subject = "[".api_get_setting('siteName')."] ".$userPostedADocument;
-
-            $message = $userPostedADocument."\n";
-            $message .= get_lang('DateSent')." : ".api_format_date(api_get_local_time())."\n";
+            $message = $userPostedADocument."<br />";
+            $message .= get_lang('DateSent')." : ".api_format_date(api_get_local_time())."<br />";
+            $message .= get_lang('WorkName')." : ".$workData['title']."<br />";
             $url = api_get_path(WEB_CODE_PATH)."work/view.php?cidReq=".$courseInfo['code']."&id_session=".$sessionId."&id=".$workData['id'];
-            $message .= get_lang('WorkName')." : ".$workData['title']."\n\n";
-            $message .= '<a href="'.$url.'">'.get_lang('DownloadLink')."</a>\n";
+            $message .= '<a href="'.$url.'">'.get_lang('DownloadLink')."</a><br />";
 
             MessageManager::send_message_simple(
                 $userId,

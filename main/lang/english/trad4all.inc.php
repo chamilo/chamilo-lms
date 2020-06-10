@@ -8532,4 +8532,5 @@ $SurveyQuestionMultipleChoiceWithOtherComment = "Offer some pre-defined options,
 $Multiplechoiceother = "Multiple choice with 'other' option";
 $SurveyOtherAnswerSpecify = "Other...";
 $SurveyOtherAnswer = "Please specify:";
+$UserXPostedADocumentInCourseX = "User %s has posted a document in the Assignments tool in the course %s";
 ?>

@@ -3766,16 +3766,21 @@ function uploadWork($my_folder_data, $_course, $isCorrection = false, $workInfo 
 }
 
 /**
- * Send an e-mail to users related to this work (course teachers, usually, but
- * might include other group members).
+ * Send an e-mail to users related to this work.
  *
  * @param int   $workId
  * @param array $courseInfo
  * @param int   $sessionId
  */
-function sendAlertToUsers($workId, $courseInfo, $sessionId)
+function sendAlertToUsers($workId, $courseInfo, $sessionId = 0)
 {
     $sessionId = (int) $sessionId;
+
+    if (empty($courseInfo) || empty($workId)) {
+        return false;
+    }
+
+    $courseCode = $courseInfo['code'];
 
     $workData = get_work_data_by_id($workId, $courseInfo['real_id'], $sessionId);
     // last value is to check this is not "just" an edit
@@ -3788,7 +3793,7 @@ function sendAlertToUsers($workId, $courseInfo, $sessionId)
         if (empty($sessionId)) {
             // Teachers
             $userList = CourseManager::get_user_list_from_course_code(
-                api_get_course_id(),
+                $courseCode,
                 null,
                 null,
                 null,
@@ -3797,7 +3802,7 @@ function sendAlertToUsers($workId, $courseInfo, $sessionId)
         } else {
             // Coaches
             $userList = CourseManager::get_user_list_from_course_code(
-                api_get_course_id(),
+                $courseCode,
                 $sessionId,
                 null,
                 null,
@@ -3815,17 +3820,24 @@ function sendAlertToUsers($workId, $courseInfo, $sessionId)
     }
 
     if ($send) {
-        $subject = "[".api_get_setting('siteName')."] ".get_lang('SendMailBody')."\n ".get_lang('CourseName').": ".$courseInfo['name']."  ";
-        foreach ($userList as $user_data) {
-            $to_user_id = $user_data['user_id'];
-            $user_info = api_get_user_info($to_user_id);
-            $message = get_lang('SendMailBody')."\n".get_lang('CourseName')." : ".$courseInfo['name']."\n";
-            $message .= get_lang('UserName')." : ".$user_info['complete_name']."\n";
+        foreach ($userList as $userData) {
+            $userId = $userData['user_id'];
+            $userInfo = api_get_user_info($userId);
+            if (empty($userInfo)) {
+                continue;
+            }
+
+            $userPostedADocument = sprintf(get_lang('UserXPostedADocumentInCourseX'), $userInfo['complete_name'], $courseInfo['name']);
+            $subject = "[".api_get_setting('siteName')."] ".$userPostedADocument;
+
+            $message = $userPostedADocument."\n";
             $message .= get_lang('DateSent')." : ".api_format_date(api_get_local_time())."\n";
-            $url = api_get_path(WEB_CODE_PATH)."work/work.php?cidReq=".$courseInfo['code']."&id_session=".$sessionId."&id=".$workData['id'];
-            $message .= get_lang('WorkName')." : ".$workData['title']."\n\n".'<a href="'.$url.'">'.get_lang('DownloadLink')."</a>\n";
+            $url = api_get_path(WEB_CODE_PATH)."work/view.php?cidReq=".$courseInfo['code']."&id_session=".$sessionId."&id=".$workData['id'];
+            $message .= get_lang('WorkName')." : ".$workData['title']."\n\n";
+            $message .= '<a href="'.$url.'">'.get_lang('DownloadLink')."</a>\n";
+
             MessageManager::send_message_simple(
-                $to_user_id,
+                $userId,
                 $subject,
                 $message,
                 0,

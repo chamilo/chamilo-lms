@@ -13,7 +13,6 @@ if (!empty($course_info)) {
 
 $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : null;
 
-$this_section = SECTION_COURSES;
 $url = null;
 if (empty($action)) {
     if (!empty($course_info)) {
@@ -109,6 +108,8 @@ if ('course' === $event_type) {
     $agendaUrl = api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?&type='.$event_type;
 }
 $course_info = api_get_course_info();
+
+$this_section = $course_info ? SECTION_COURSES : SECTION_MYAGENDA;
 
 $content = null;
 if ($allowToEdit) {

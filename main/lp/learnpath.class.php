@@ -1550,14 +1550,13 @@ class learnpath
             $maxScore = 100;
         }
 
-        $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
-        $sql = " UPDATE $tbl_lp_item
+        $table = Database::get_course_table(TABLE_LP_ITEM);
+        $sql = " UPDATE $table
                  SET
                     prerequisite = $prerequisite_id ,
                     prerequisite_min_score = $minScore ,
                     prerequisite_max_score = $maxScore
                  WHERE iid = $id";
-
         Database::query($sql);
 
         return true;
@@ -9866,6 +9865,10 @@ class learnpath
         $course_id = api_get_course_int_id();
         $item_id = (int) $item_id;
 
+        if (empty($item_id)) {
+            return '';
+        }
+
         $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 
         /* Current prerequisite */
@@ -9874,6 +9877,7 @@ class learnpath
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
         $prerequisiteId = $row['prerequisite'];
+
         $return = '<legend>';
         $return .= get_lang('AddEditPrerequisites');
         $return .= '</legend>';
@@ -9933,10 +9937,17 @@ class learnpath
             $return .= '<td '.(($item['item_type'] != TOOL_QUIZ && $item['item_type'] != TOOL_HOTPOTATOES) ? ' colspan="3"' : '').'>';
             $return .= '<div style="margin-left:'.($item['depth'] * 20).'px;" class="radio learnpath">';
             $return .= '<label for="id'.$item['id'].'">';
-            $return .= '<input'.(in_array($prerequisiteId, [$item['id'], $item['ref']]) ? ' checked="checked" ' : '').($item['item_type'] == 'dir' ? ' disabled="disabled" ' : ' ').'id="id'.$item['id'].'" name="prerequisites"  type="radio" value="'.$item['id'].'" />';
+
+            $checked = '';
+            if (!empty($prerequisiteId)) {
+                $checked = in_array($prerequisiteId, [$item['id'], $item['ref']]) ? ' checked="checked" ' : '';
+            }
+
+            $disabled = $item['item_type'] === 'dir' ? ' disabled="disabled" ' : '';
+
+            $return .= '<input '.$checked.' '.$disabled.' id="id'.$item['id'].'" name="prerequisites" type="radio" value="'.$item['id'].'" />';
 
             $icon_name = str_replace(' ', '', $item['item_type']);
-
             if (file_exists('../img/lp_'.$icon_name.'.png')) {
                 $return .= Display::return_icon('lp_'.$icon_name.'.png');
             } else {

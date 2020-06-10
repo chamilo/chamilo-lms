@@ -1,12 +1,11 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
 
 /**
  * This file allows creating new html documents with an online WYSIWYG html editor.
- *
- * @package chamilo.document
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -199,8 +198,12 @@ if (!is_dir($filepath)) {
 if (!$is_certificate_mode) {
     if (api_is_in_group()) {
         $interbreadcrumb[] = [
-            "url" => "../group/group_space.php?".api_get_cidreq(),
-            "name" => get_lang('GroupSpace'),
+            'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
+            'name' => get_lang('Groups'),
+        ];
+        $interbreadcrumb[] = [
+            'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
+            'name' => get_lang('GroupSpace').' '.$group_properties['name'],
         ];
         $path = explode('/', $dir);
         if ('/'.$path[1] != $group_properties['directory']) {
@@ -631,15 +634,14 @@ if ($form->validate()) {
     }
 
     Display :: display_header($nameTools, "Doc");
-    // actions
     // link back to the documents overview
     if ($is_certificate_mode) {
-        $actionsLeft = '<a href="document.php?certificate=true&id='.$folder_id.'&selectcat='.Security::remove_XSS($_GET['selectcat']).'">'.
+        $actionsLeft = '<a href="document.php?'.api_get_cidreq().'&certificate=true&id='.$folder_id.'&selectcat='.Security::remove_XSS($_GET['selectcat']).'">'.
             Display::return_icon('back.png', get_lang('Back').' '.get_lang('To').' '.get_lang('CertificateOverview'), '', ICON_SIZE_MEDIUM).'</a>';
         $actionsLeft .= '<a id="hide_bar_template" href="#" role="button">'.
             Display::return_icon('expand.png', get_lang('Back'), ['id' => 'expand'], ICON_SIZE_MEDIUM).Display::return_icon('contract.png', get_lang('Back'), ['id' => 'contract', 'class' => 'hide'], ICON_SIZE_MEDIUM).'</a>';
     } else {
-        $actionsLeft = '<a href="document.php?curdirpath='.Security::remove_XSS($dir).'">'.
+        $actionsLeft = '<a href="document.php?'.api_get_cidreq().'&curdirpath='.Security::remove_XSS($dir).'">'.
             Display::return_icon('back.png', get_lang('Back').' '.get_lang('To').' '.get_lang('DocumentsOverview'), '', ICON_SIZE_MEDIUM).'</a>';
         $actionsLeft .= '<a id="hide_bar_template" href="#" role="button">'.
             Display::return_icon('expand.png', get_lang('Expand'), ['id' => 'expand'], ICON_SIZE_MEDIUM).

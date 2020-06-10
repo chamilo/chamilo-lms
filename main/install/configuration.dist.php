@@ -1431,7 +1431,7 @@ ALTER TABLE notification_event ADD COLUMN event_id INT NULL;
 //$_configuration['default_session_list_view'] = 'all';
 
 // Search user by extra field in the user list.
-//$_configuration['user_search_on_extra_fields'] = ['extra_fields' = > ['variable1', 'variable2']];
+//$_configuration['user_search_on_extra_fields'] = ['extra_fields' => ['variable1', 'variable2']];
 
 // user subscription to a session rather than to a base course
 // user session is created at first subscription

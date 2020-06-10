@@ -2,10 +2,17 @@
 
 /* For licensing terms, see /license.txt */
 
+
+use Chamilo\CoreBundle\Entity\Repository\ItemPropertyRepository;
+use Chamilo\CourseBundle\Entity\CLpCategory;
+
 /**
  * Report from students for learning path.
  */
+
 require_once __DIR__.'/../inc/global.inc.php';
+
+api_protect_course_script(true);
 
 $isAllowedToEdit = api_is_allowed_to_edit(null, true);
 
@@ -15,34 +22,65 @@ if (!$isAllowedToEdit) {
 
 $lpTable = Database::get_course_table(TABLE_LP_MAIN);
 
-$lpId = isset($_GET['lp_id']) ? (int) $_GET['lp_id'] : false;
-$export = isset($_GET['export']) ? true : false;
+$lpId = isset($_GET['lp_id']) ? (int) $_GET['lp_id'] : 0;
+$export = isset($_GET['export']);
 
-if (empty($lpId)) {
+$lp = new learnpath(api_get_course_id(), $lpId, api_get_user_id());
+if (empty($lp)) {
     api_not_allowed(true);
 }
+
+$em = Database::getManager();
 $sessionId = api_get_session_id();
 $courseId = api_get_course_int_id();
 $courseCode = api_get_course_id();
-
-if (empty($sessionId)) {
-    $status = STUDENT;
-    $users = CourseManager::get_user_list_from_course_code(
-        $courseCode,
-        0,
-        null,
-        null,
-        $status
+// Check LP subscribers
+if ('1' === $lp->getSubscribeUsers()) {
+    /** @var ItemPropertyRepository $itemRepo */
+    $itemRepo = $em->getRepository('ChamiloCourseBundle:CItemProperty');
+    $subscribedUsersInLp = $itemRepo->getUsersSubscribedToItem(
+        'learnpath',
+        $lpId,
+        api_get_course_entity($courseId),
+        api_get_session_entity($sessionId)
     );
+    $users = [];
+    if (!empty($subscribedUsersInLp)) {
+        foreach ($subscribedUsersInLp as $itemProperty) {
+            $users[]['user_id'] = $itemProperty->getToUser()->getId();
+        }
+    }
 } else {
-    $status = 0; // student
-    $users = CourseManager::get_user_list_from_course_code(
-        $courseCode,
-        $sessionId,
-        null,
-        null,
-        $status
-    );
+    $categoryId = $lp->getCategoryId();
+    if (!empty($categoryId)) {
+        /** @var CLpCategory $category */
+        $category = $em->getRepository('ChamiloCourseBundle:CLpCategory')->find($categoryId);
+        $subscribedUsersInCategory = $category->getUsers();
+        $users = [];
+        if (!empty($subscribedUsersInCategory)) {
+            foreach ($subscribedUsersInCategory as $item) {
+                $users[]['user_id'] = $item->getUser()->getId();
+            }
+        }
+    } else {
+        if (empty($sessionId)) {
+            $users = CourseManager::get_user_list_from_course_code(
+                $courseCode,
+                0,
+                null,
+                null,
+                STUDENT
+            );
+        } else {
+            $users = CourseManager::get_user_list_from_course_code(
+                $courseCode,
+                $sessionId,
+                null,
+                null,
+                0
+            );
+        }
+    }
 }
 
 $lpInfo = Database::select(
@@ -100,7 +138,7 @@ if (!empty($users)) {
             'id' => $user['user_id'],
             'first_name' => $userInfo['firstname'],
             'last_name' => $userInfo['lastname'],
-            'email' => $showEmail === 'true' ? $userInfo['email'] : '',
+            'email' => 'true' === $showEmail ? $userInfo['email'] : '',
             'lp_time' => api_time_to_hms($lpTime),
             'lp_score' => is_numeric($lpScore) ? "$lpScore%" : $lpScore,
             'lp_progress' => "$lpProgress%",
@@ -144,7 +182,7 @@ $template->assign('user_list', $userList);
 $template->assign('session_id', api_get_session_id());
 $template->assign('course_code', api_get_course_id());
 $template->assign('lp_id', $lpId);
-$template->assign('show_email', $showEmail === 'true');
+$template->assign('show_email', 'true' === $showEmail);
 $template->assign('export', (int) $export);
 $layout = $template->get_template('learnpath/report.tpl');
 

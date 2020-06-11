@@ -2,7 +2,7 @@
 /* For license terms, see /license.txt */
 
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
-use \League\OAuth2\Client\Provider\GenericProvider;
+use League\OAuth2\Client\Provider\GenericProvider;
 use League\OAuth2\Client\Token\AccessToken;
 use League\OAuth2\Client\Tool\ArrayAccessorTrait;
 
@@ -24,12 +24,12 @@ class OAuth2 extends Plugin
     const SETTING_CLIENT_SECRET = 'client_secret';
 
     const SETTING_AUTHORIZE_URL = 'authorize_url';
-    # const SETTING_SCOPES = 'scopes';
-    # const SETTING_SCOPE_SEPARATOR = 'scope_separator';
+    // const SETTING_SCOPES = 'scopes';
+    // const SETTING_SCOPE_SEPARATOR = 'scope_separator';
 
     const SETTING_ACCESS_TOKEN_URL = 'access_token_url';
     const SETTING_ACCESS_TOKEN_METHOD = 'access_token_method';
-    # const SETTING_ACCESS_TOKEN_RESOURCE_OWNER_ID = 'access_token_resource_owner_id';
+    // const SETTING_ACCESS_TOKEN_RESOURCE_OWNER_ID = 'access_token_resource_owner_id';
 
     const SETTING_RESOURCE_OWNER_DETAILS_URL = 'resource_owner_details_url';
 
@@ -68,8 +68,8 @@ class OAuth2 extends Plugin
                 self::SETTING_CLIENT_SECRET => 'text',
 
                 self::SETTING_AUTHORIZE_URL => 'text',
-                # self::SETTING_SCOPES => 'text',
-                # self::SETTING_SCOPE_SEPARATOR => 'text',
+                // self::SETTING_SCOPES => 'text',
+                // self::SETTING_SCOPE_SEPARATOR => 'text',
 
                 self::SETTING_ACCESS_TOKEN_URL => 'text',
                 self::SETTING_ACCESS_TOKEN_METHOD => [
@@ -77,9 +77,9 @@ class OAuth2 extends Plugin
                     'options' => [
                         GenericProvider::METHOD_POST => 'POST',
                         GenericProvider::METHOD_GET => 'GET',
-                    ]
+                    ],
                 ],
-                # self::SETTING_ACCESS_TOKEN_RESOURCE_OWNER_ID => 'text',
+                // self::SETTING_ACCESS_TOKEN_RESOURCE_OWNER_ID => 'text',
 
                 self::SETTING_RESOURCE_OWNER_DETAILS_URL => 'text',
 
@@ -133,13 +133,13 @@ class OAuth2 extends Plugin
                 'redirectUri' => api_get_path(WEB_PLUGIN_PATH).'oauth2/src/callback.php',
 
                 'urlAuthorize' => $this->get(self::SETTING_AUTHORIZE_URL),
-                # 'scopes' => $this->get(self::SETTING_SCOPES) or null,
-                # 'scopeSeparator' => $this->get(self::SETTING_SCOPE_SEPARATOR) ?: ',',
+                // 'scopes' => $this->get(self::SETTING_SCOPES) or null,
+                // 'scopeSeparator' => $this->get(self::SETTING_SCOPE_SEPARATOR) ?: ',',
 
                 'urlAccessToken' => $this->get(self::SETTING_ACCESS_TOKEN_URL),
                 'accessTokenMethod' => $this->get(self::SETTING_ACCESS_TOKEN_METHOD) ?: GenericProvider::METHOD_POST,
-                #'accessTokenResourceOwnerId' => $this->get(self::SETTING_ACCESS_TOKEN_RESOURCE_OWNER_ID)
-                #    ?: GenericProvider::ACCESS_TOKEN_RESOURCE_OWNER_ID,
+                //'accessTokenResourceOwnerId' => $this->get(self::SETTING_ACCESS_TOKEN_RESOURCE_OWNER_ID)
+                //    ?: GenericProvider::ACCESS_TOKEN_RESOURCE_OWNER_ID,
 
                 'urlResourceOwnerDetails' => $this->get(self::SETTING_RESOURCE_OWNER_DETAILS_URL),
 
@@ -151,133 +151,12 @@ class OAuth2 extends Plugin
     }
 
     /**
-     * Extends ArrayAccessorTrait::getValueByKey to return a list of values
-     * $key can contain wild card character *
-     * It will be replaced by 0, 1, 2 and so on as long as the resulting key exists in $data
-     * This is a recursive function, allowing for more than one occurrence of the wild card character
-     *
-     * @param array $data
-     * @param string $key
-     * @param array $default
-     * @return array
-     */
-    private function getValuesByKey(array $data, $key, $default = [])
-    {
-        if (!is_string($key) || empty($key) || !count($data)) {
-            return $default;
-        }
-        $pos = strpos($key, '*');
-        if ($pos === false) {
-            $value = $this->getValueByKey($data, $key, null);
-            return is_null($value) ? [] : [$value];
-        }
-        $values = [];
-        $beginning = substr($key, 0, $pos);
-        $remaining = substr($key, $pos + 1);
-        $index = 0;
-        do {
-            $newValues = $this->getValuesByKey(
-                $data,
-                $beginning . $index . $remaining
-            );
-            $values = array_merge($values, $newValues);
-            $index ++;
-        } while ($newValues);
-        return $values;
-    }
-
-    private function updateUser($userId, $response)
-    {
-        /**
-         * @var $user Chamilo\UserBundle\Entity\User
-         */
-        $user = UserManager::getRepository()->find($userId);
-        $user->setFirstname(
-            $this->getValueByKey($response, $this->get(
-                self::SETTING_RESPONSE_RESOURCE_OWNER_FIRSTNAME
-            ), $user->getFirstname())
-        );
-        $user->setLastname(
-            $this->getValueByKey($response, $this->get(
-                self::SETTING_RESPONSE_RESOURCE_OWNER_LASTNAME
-            ), $user->getLastname())
-        );
-        $user->setUserName(
-            $this->getValueByKey($response, $this->get(
-                self::SETTING_RESPONSE_RESOURCE_OWNER_USERNAME
-            ), $user->getUsername())
-        );
-        $user->setEmail(
-            $this->getValueByKey($response, $this->get(
-                self::SETTING_RESPONSE_RESOURCE_OWNER_EMAIL
-            ), $user->getEmail())
-        );
-        $user->setStatus(
-            $this->getValueByKey($response, $this->get(
-                self::SETTING_RESPONSE_RESOURCE_OWNER_STATUS
-            ), $user->getStatus())
-        );
-        $user->setAuthSource('oauth2');
-        $configFilePath = __DIR__.'/../config.php';
-        if (file_exists($configFilePath)) {
-            require_once $configFilePath;
-            $functionName = 'oauth2_update_user_from_resource_owner_details';
-            if (function_exists($functionName)) {
-                $functionName($response, $user);
-            }
-        }
-        UserManager::getManager()->updateUser($user);
-    }
-    /**
-     * Updates the Access URLs associated to a user
-     * according to the OAuth2 server response resource owner
-     * if multi-URL is enabled and SETTING_RESPONSE_RESOURCE_OWNER_URLS defined
-     *
-     * @param $userId integer
-     * @param $response array
-     */
-    private function updateUserUrls($userId, $response)
-    {
-        if (api_is_multiple_url_enabled()) {
-            $key = $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_URLS);
-            if (!empty($key)) {
-                require_once __DIR__.'/../../../main/inc/lib/urlmanager.lib.php';
-                $availableUrls = [];
-                foreach (URLManager::get_url_data() as $existingUrl) {
-                    $urlId = $existingUrl['id'];
-                    $availableUrls[strval($urlId)] = $urlId;
-                    $availableUrls[$existingUrl['url']] = $urlId;
-                }
-                $allowedUrlIds = [];
-                foreach ($this->getValuesByKey($response, $key) as $value) {
-                    if (array_key_exists($value, $availableUrls)) {
-                        $allowedUrlIds[] = $availableUrls[$value];
-                    } else {
-                        $newValue = ($value[-1] === '/') ? substr($value, 0, -1) : $value.'/';
-                        if (array_key_exists($newValue, $availableUrls)) {
-                            $allowedUrlIds[] = $availableUrls[$newValue];
-                        }
-                    }
-                }
-                $grantedUrlIds = [];
-                foreach (URLManager::get_access_url_from_user($userId) as $grantedUrl) {
-                    $grantedUrlIds[] = $grantedUrl['access_url_id'];
-                }
-                foreach (array_diff($grantedUrlIds, $allowedUrlIds) as $extraUrlId) {
-                    URLManager::delete_url_rel_user($userId, $extraUrlId);
-                }
-                foreach (array_diff($allowedUrlIds, $grantedUrlIds) as $missingUrlId) {
-                    URLManager::add_user_to_url($userId, $missingUrlId);
-                }
-            }
-        }
-    }
-
-    /**
-     * @return array user information, as returned by api_get_user_info(userId)
      * @throws IdentityProviderException
-     * @var AccessToken $accessToken
-     * @var GenericProvider $provider
+     *
+     * @return array user information, as returned by api_get_user_info(userId)
+     *
+     * @var AccessToken
+     * @var GenericProvider
      */
     public function getUserInfo($provider, $accessToken)
     {
@@ -285,18 +164,14 @@ class OAuth2 extends Plugin
         $request = $provider->getAuthenticatedRequest($provider::METHOD_GET, $url, $accessToken);
         $response = $provider->getParsedResponse($request);
         if (false === is_array($response)) {
-            throw new UnexpectedValueException(
-                get_lang('invalid_json_received_from_provider')
-            );
+            throw new UnexpectedValueException(get_lang('invalid_json_received_from_provider'));
         }
         $resourceOwnerId = $this->getValueByKey(
             $response,
             $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_ID)
         );
         if (empty($resourceOwnerId)) {
-            throw new RuntimeException(
-                get_lang('wrong_response_resource_owner_id')
-            );
+            throw new RuntimeException(get_lang('wrong_response_resource_owner_id'));
         }
         $extraFieldValue = new ExtraFieldValue('user');
         $result = $extraFieldValue->get_item_id_from_field_variable_and_field_value(
@@ -350,9 +225,7 @@ class OAuth2 extends Plugin
         }
         $userInfo = api_get_user_info($userId);
         if (empty($userInfo)) {
-            throw new LogicException(
-                get_lang('internal_error_cannot_get_user_info')
-            );
+            throw new LogicException(get_lang('internal_error_cannot_get_user_info'));
         }
 
         return $userInfo;
@@ -379,5 +252,131 @@ class OAuth2 extends Plugin
             $this->get_lang('OAuth2Id'),
             ''
         );
+    }
+
+    /**
+     * Extends ArrayAccessorTrait::getValueByKey to return a list of values
+     * $key can contain wild card character *
+     * It will be replaced by 0, 1, 2 and so on as long as the resulting key exists in $data
+     * This is a recursive function, allowing for more than one occurrence of the wild card character.
+     *
+     * @param string $key
+     * @param array  $default
+     *
+     * @return array
+     */
+    private function getValuesByKey(array $data, $key, $default = [])
+    {
+        if (!is_string($key) || empty($key) || !count($data)) {
+            return $default;
+        }
+        $pos = strpos($key, '*');
+        if ($pos === false) {
+            $value = $this->getValueByKey($data, $key, null);
+
+            return is_null($value) ? [] : [$value];
+        }
+        $values = [];
+        $beginning = substr($key, 0, $pos);
+        $remaining = substr($key, $pos + 1);
+        $index = 0;
+        do {
+            $newValues = $this->getValuesByKey(
+                $data,
+                $beginning.$index.$remaining
+            );
+            $values = array_merge($values, $newValues);
+            $index++;
+        } while ($newValues);
+
+        return $values;
+    }
+
+    private function updateUser($userId, $response)
+    {
+        /**
+         * @var $user Chamilo\UserBundle\Entity\User
+         */
+        $user = UserManager::getRepository()->find($userId);
+        $user->setFirstname(
+            $this->getValueByKey($response, $this->get(
+                self::SETTING_RESPONSE_RESOURCE_OWNER_FIRSTNAME
+            ), $user->getFirstname())
+        );
+        $user->setLastname(
+            $this->getValueByKey($response, $this->get(
+                self::SETTING_RESPONSE_RESOURCE_OWNER_LASTNAME
+            ), $user->getLastname())
+        );
+        $user->setUserName(
+            $this->getValueByKey($response, $this->get(
+                self::SETTING_RESPONSE_RESOURCE_OWNER_USERNAME
+            ), $user->getUsername())
+        );
+        $user->setEmail(
+            $this->getValueByKey($response, $this->get(
+                self::SETTING_RESPONSE_RESOURCE_OWNER_EMAIL
+            ), $user->getEmail())
+        );
+        $user->setStatus(
+            $this->getValueByKey($response, $this->get(
+                self::SETTING_RESPONSE_RESOURCE_OWNER_STATUS
+            ), $user->getStatus())
+        );
+        $user->setAuthSource('oauth2');
+        $configFilePath = __DIR__.'/../config.php';
+        if (file_exists($configFilePath)) {
+            require_once $configFilePath;
+            $functionName = 'oauth2_update_user_from_resource_owner_details';
+            if (function_exists($functionName)) {
+                $functionName($response, $user);
+            }
+        }
+        UserManager::getManager()->updateUser($user);
+    }
+
+    /**
+     * Updates the Access URLs associated to a user
+     * according to the OAuth2 server response resource owner
+     * if multi-URL is enabled and SETTING_RESPONSE_RESOURCE_OWNER_URLS defined.
+     *
+     * @param $userId integer
+     * @param $response array
+     */
+    private function updateUserUrls($userId, $response)
+    {
+        if (api_is_multiple_url_enabled()) {
+            $key = $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_URLS);
+            if (!empty($key)) {
+                require_once __DIR__.'/../../../main/inc/lib/urlmanager.lib.php';
+                $availableUrls = [];
+                foreach (URLManager::get_url_data() as $existingUrl) {
+                    $urlId = $existingUrl['id'];
+                    $availableUrls[strval($urlId)] = $urlId;
+                    $availableUrls[$existingUrl['url']] = $urlId;
+                }
+                $allowedUrlIds = [];
+                foreach ($this->getValuesByKey($response, $key) as $value) {
+                    if (array_key_exists($value, $availableUrls)) {
+                        $allowedUrlIds[] = $availableUrls[$value];
+                    } else {
+                        $newValue = ($value[-1] === '/') ? substr($value, 0, -1) : $value.'/';
+                        if (array_key_exists($newValue, $availableUrls)) {
+                            $allowedUrlIds[] = $availableUrls[$newValue];
+                        }
+                    }
+                }
+                $grantedUrlIds = [];
+                foreach (URLManager::get_access_url_from_user($userId) as $grantedUrl) {
+                    $grantedUrlIds[] = $grantedUrl['access_url_id'];
+                }
+                foreach (array_diff($grantedUrlIds, $allowedUrlIds) as $extraUrlId) {
+                    URLManager::delete_url_rel_user($userId, $extraUrlId);
+                }
+                foreach (array_diff($allowedUrlIds, $grantedUrlIds) as $missingUrlId) {
+                    URLManager::add_user_to_url($userId, $missingUrlId);
+                }
+            }
+        }
     }
 }

@@ -35,7 +35,7 @@ if ($oAuth2Plugin->get(OAuth2::SETTING_ENABLE) === 'true') {
             $provider = $oAuth2Plugin->getProvider();
             try {
                 $newAccessToken = $provider->getAccessToken('refresh_token', [
-                    'refresh_token' => $accessToken->getRefreshToken()
+                    'refresh_token' => $accessToken->getRefreshToken(),
                 ]);
                 ChamiloSession::write('oauth2AccessToken', $newAccessToken->jsonSerialize());
             } catch (\League\OAuth2\Client\Provider\Exception\IdentityProviderException $exception) {

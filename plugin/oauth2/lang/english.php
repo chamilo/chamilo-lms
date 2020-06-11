@@ -53,7 +53,6 @@ $strings['response_resource_owner_id_help'] = 'The array key to the user\'s <em>
 <br/>means the identifier is to be found at
 <code>$jsonArray["data"][0]["id"]</code>';
 
-
 $strings['update_user_info'] = 'Update user information';
 $strings['create_new_users'] = 'Create new users';
 $strings['response_resource_owner_firstname'] = 'Response Resource Owner firstname key';

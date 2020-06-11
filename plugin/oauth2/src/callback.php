@@ -36,7 +36,7 @@ try {
      * @var $accessToken AccessToken
      */
     $accessToken = $provider->getAccessToken('authorization_code', [
-        'code' => $_GET['code']
+        'code' => $_GET['code'],
     ]);
     ChamiloSession::write('oauth2AccessToken', $accessToken->jsonSerialize());
     $userInfo = $plugin->getUserInfo($provider, $accessToken);

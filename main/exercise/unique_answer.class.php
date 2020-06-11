@@ -82,6 +82,7 @@ class UniqueAnswer extends Question
         $form->addHtml($html);
 
         $defaults = [];
+
         $correct = 0;
         if (!empty($this->id)) {
             $answer = new Answer($this->id);
@@ -164,7 +165,6 @@ class UniqueAnswer extends Question
                 $defaults['weighting[1]'] = 10;
                 $defaults['answer[2]'] = get_lang('DefaultUniqueAnswer2');
                 $defaults['weighting[2]'] = 0;
-
                 $temp_scenario['destination'.$i] = ['0'];
                 $temp_scenario['lp'.$i] = ['0'];
             }
@@ -260,6 +260,10 @@ class UniqueAnswer extends Question
             $correct = 1;
         }
 
+        if (isset($_POST) && isset($_POST['correct'])) {
+            $correct = (int) $_POST['correct'];
+        }
+
         $defaults['correct'] = $correct;
 
         if (!empty($this->id)) {
@@ -269,7 +273,12 @@ class UniqueAnswer extends Question
                 // Default sample content.
                 $form->setDefaults($defaults);
             } else {
-                $form->setDefaults(['correct' => 1]);
+                $correct = 1;
+                if (isset($_POST) && isset($_POST['correct'])) {
+                    $correct = (int) $_POST['correct'];
+                }
+
+                $form->setDefaults(['correct' => $correct]);
             }
         }
         $form->setConstants(['nb_answers' => $nb_answers]);

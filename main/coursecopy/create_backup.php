@@ -11,7 +11,6 @@ use Chamilo\CourseBundle\Component\CourseCopy\CourseSelectForm;
  *
  * @author Bart Mollet <bart.mollet@hogent.be>
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_COURSE_MAINTENANCE;
 

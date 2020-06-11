@@ -2915,7 +2915,7 @@ JAVASCRIPT;
                         $tag = $em->find('ChamiloCoreBundle:Tag', $extraFieldTag->getTagId());
                         $data[] = $tag->getTag();
                     }
-                    $valueData = implode(',', $data);
+                    $valueData = implode(', ', $data);
                     $valueAsArray = $data;
                 }
             }

@@ -1,12 +1,11 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
 /**
  * TestQuestionDescription toolbar configuration.
- *
- * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar
  */
 class TestQuestionDescription extends Basic
 {
@@ -21,7 +20,6 @@ class TestQuestionDescription extends Basic
             ['name' => 'document', 'groups' => ['document', 'doctools']],
             ['name' => 'clipboard', 'groups' => ['clipboard', 'undo']],
             ['name' => 'editing', 'groups' => ['clipboard', 'undo']],
-            //array('name' => 'forms',    'groups' =>array('clipboard', 'undo', )),
             '/',
             ['name' => 'basicstyles', 'groups' => ['basicstyles', 'cleanup']],
             ['name' => 'paragraph', 'groups' => ['list', 'indent', 'blocks', 'align']],
@@ -152,7 +150,20 @@ class TestQuestionDescription extends Basic
         return [
             $this->getNewPageBlock(),
             ['Undo', 'Redo'],
-            ['Link', 'Unlink', 'Image', 'Video', 'Flash', 'Audio', 'Table', 'Asciimath', 'Asciisvg'],
+            [
+                'Link',
+                'Unlink',
+                'Image',
+                'Video',
+                'Flash',
+                'Oembed',
+                'Youtube',
+                'VimeoEmbed',
+                'Audio',
+                'Table',
+                'Asciimath',
+                'Asciisvg',
+            ],
             ['BulletedList', 'NumberedList', 'HorizontalRule'],
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
             [

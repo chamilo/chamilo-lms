@@ -2378,10 +2378,10 @@ class SurveyUtil
      * and sends the invitations by email.
      *
      * @param int    $surveyId
-     * @param array  $users_array      Users array can be both a list of course uids AND a list of additional email addresses
-     * @param string $invitation_title title of the mail
-     * @param string $invitation_text  text of the mail has to contain a **link** string or
-     *                                 this will automatically be added to the end
+     * @param array  $users_array       Users array can be both a list of course uids AND a list of additional email addresses
+     * @param string $invitation_title  title of the mail
+     * @param string $invitation_text   text of the mail has to contain a **link** string or
+     *                                  this will automatically be added to the end
      * @param int    $reminder
      * @param bool   $sendmail
      * @param int    $remindUnAnswered

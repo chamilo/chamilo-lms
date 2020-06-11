@@ -162,7 +162,8 @@
     "repositories": [
         {
             "type": "github",
-            "url": "https://github.com/AngelFQC/vimeo.php.git"
+            "url": "https://github.com/AngelFQC/vimeo.php.git",
+            "no-api": true
         }
     ],
     "config": {

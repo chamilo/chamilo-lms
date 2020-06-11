@@ -79,6 +79,12 @@ class ChamiloApi
     public static function getPlatformLogoPath($theme = '', $getSysPath = false)
     {
         static $logoPath;
+
+        // If call from CLI it should be reload.
+        if ('cli' === PHP_SAPI) {
+            $logoPath = null;
+        }
+
         if (!isset($logoPath)) {
             $theme = empty($theme) ? api_get_visual_theme() : $theme;
             $accessUrlId = api_get_current_access_url_id();
@@ -86,7 +92,7 @@ class ChamiloApi
             $customLogoPath = $themeDir."images/header-logo-custom$accessUrlId.png";
 
             $svgIcons = api_get_setting('icons_mode_svg');
-            if ($svgIcons == 'true') {
+            if ($svgIcons === 'true') {
                 $customLogoPathSVG = substr($customLogoPath, 0, -3).'svg';
                 if (file_exists(api_get_path(SYS_PUBLIC_PATH)."css/$customLogoPathSVG")) {
                     if ($getSysPath) {

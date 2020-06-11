@@ -5091,6 +5091,12 @@ function api_get_language_info($languageId)
 function api_get_visual_theme()
 {
     static $visual_theme;
+
+    // If call from CLI it should be reload.
+    if ('cli' === PHP_SAPI) {
+        $visual_theme = null;
+    }
+
     if (!isset($visual_theme)) {
         $cacheAvailable = api_get_configuration_value('apc');
         $userThemeAvailable = api_get_setting('user_selected_theme') == 'true';

@@ -48,17 +48,20 @@ if ($step1Form->validate() && $usernameListFile->isUploadedFile()) {
         throw new Exception(get_lang('CouldNotReadFileLines').' '.$filePath);
     }
     if (empty($submittedUsernames)) {
-        printf('<p>File <em>%s</em> is empty or only contains empty lines.</p>', $usernameListFile->getValue()['name']);
+        printf(
+            '<p>'.get_lang('FileXHasNoData').'</p>',
+            '<em>'.$usernameListFile->getValue()['name'].'</em>'
+        );
     } else {
         printf(
-            '<p>File <em>%s</em> has %d non-empty lines.</p>',
-            $usernameListFile->getValue()['name'],
+            '<p>'.get_lang('FileXHasYNonEmptyLines').'</p>',
+            '<em>'.$usernameListFile->getValue()['name'].'</em>',
             count($submittedUsernames)
         );
         $uniqueSubmittedUsernames = array_values(array_unique($submittedUsernames));
         if (count($uniqueSubmittedUsernames) !== count($submittedUsernames)) {
             printf(
-                "<p>There are duplicates: only %d unique user names were extracted.</p>",
+                '<p>'.get_lang('DuplicatesOnlyXUniqueUserNames').'</p>',
                 count($uniqueSubmittedUsernames)
             );
         }
@@ -73,22 +76,22 @@ if ($step1Form->validate() && $usernameListFile->isUploadedFile()) {
             }
         }
         if (empty($users)) {
-            echo "<p>No line matched any actual user name.</p>";
+            echo '<p>'.get_lang('NoLineMatchedAnyActualUserName').'</p>';
         } else {
             $foundUsernames = [];
             foreach ($users as $user) {
                 $foundUsernames[] = $user->getUsername();
             }
             if (count($users) !== count($uniqueSubmittedUsernames)) {
-                printf('<p>Only %d lines matched actual users.</p>', count($users));
+                printf('<p>'.get_lang('OnlyXLinesMatchedActualUsers').'</p>', count($users));
                 $usernamesNotFound = array_diff($uniqueSubmittedUsernames, $foundUsernames);
                 printf(
-                    "<p>The following %d line(s) do not match any actual user : <pre>%s</pre></p>",
+                    '<p>'.get_lang('TheFollowingXLinesDoNotMatchAnyActualUser').'<pre>%s</pre></p>',
                     count($usernamesNotFound),
                     join("\n", $usernamesNotFound)
                 );
             }
-            printf('<p>%d users are about to be anonymized :</p>', count($foundUsernames));
+            printf('<p>'.get_lang('XUsersAreAboutToBeAnonymized').'</p>', count($foundUsernames));
             $usernameTextarea->setValue(join("\n", $foundUsernames));
             $step2Form->display();
         }
@@ -98,14 +101,14 @@ if ($step1Form->validate() && $usernameListFile->isUploadedFile()) {
     if (false === $usernames) {
         throw new Exception('preg_split failed');
     }
-    printf("<p>Loading %d users...</p>\n", count($usernames));
+    printf('<p>'.get_lang('LoadingXUsers')."</p>\n", count($usernames));
     $users = UserManager::getRepository()->matching(
         Criteria::create()->where(
             Criteria::expr()->in('username', $usernames)
         )
     );
     if (count($users) === count($usernames)) {
-        printf("<p>Anonymizing %d users...</p>\n", count($users));
+        printf('<p>'.get_lang('AnonymizingXUsers')."</p>\n", count($users));
         $anonymized = [];
         $errors = [];
         foreach ($users as $user) {
@@ -115,10 +118,10 @@ if ($step1Form->validate() && $usernameListFile->isUploadedFile()) {
             echo "<p>$username ($name, id=$userId):\n";
             try {
                 if (UserManager::anonymize($userId)) {
-                    echo "done.";
+                    echo get_lang('Done');
                     $anonymized[] = $username;
                 } else {
-                    echo "error: UserManager::anonymize failed.";
+                    echo 'error: UserManager::anonymize failed.';
                     $errors[] = $username;
                 }
             } catch (Exception $exception) {
@@ -128,11 +131,14 @@ if ($step1Form->validate() && $usernameListFile->isUploadedFile()) {
             echo "</p>\n";
         }
         if (empty($error)) {
-            printf("<p>All %d users were anonymized.</p>", count($users));
+            printf('<p>'.get_lang('AllXUsersWereAnonymized').'</p>', count($users));
         } else {
             printf(
-                '<p>Only %d users were anonymized.'
-                .'Attempted anonymization of the following %d users failed:<pre>%s</pre></p>',
+                '<p>'
+                .get_lang('OnlyXUsersWereAnonymized')
+                .' '
+                .get_lang('AttemptedAnonymizationOfTheseXUsersFailed')
+                .'<pre>%s</pre></p>',
                 count($users),
                 count($errors),
                 join("\n", $errors)
@@ -140,13 +146,13 @@ if ($step1Form->validate() && $usernameListFile->isUploadedFile()) {
         }
     } else {
         printf(
-            '<p>Internal inconsistency found : %d users found from %d submitted usernames. Please start over.</p>',
+            '<p>'.get_lang('InternalInconsistencyXUsersFoundForYUserNames').'</p>',
             count($users),
             count($usernames)
         );
     }
 } else {
-    echo '<p>Please upload a text file listing the users to be anonymized, one username per line.</p>';
+    echo '<p>'.get_lang('PleaseUploadListOfUsers').'</p>';
     $step1Form->display();
 }
 

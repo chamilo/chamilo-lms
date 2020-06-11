@@ -308,7 +308,6 @@ function LMSInitialize() {
             url: "lp_ajax_initialize.php" + courseUrl,
             data: params,
             dataType: 'script',
-            async: false,
             success:function(data) {
                 $('video:not(.skip), audio:not(.skip)').mediaelementplayer();
             }
@@ -2079,7 +2078,6 @@ function xajax_start_timer() {
         type: "GET",
         url: "lp_ajax_start_timer.php" + courseUrl,
         dataType: "script",
-        async: false,
         success: function(time) {
             olms.asset_timer = time;
             olms.asset_timer_total = 0;

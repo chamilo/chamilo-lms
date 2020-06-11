@@ -808,18 +808,18 @@ function getQuestions(
         $sql = "SELECT DISTINCT
                     $select
                 FROM
-                $TBL_QUESTIONS as qu,
-                $TBL_EXERCISE_QUESTION as qt,
-                $TBL_EXERCISES as q
+                $TBL_QUESTIONS as qu
+                INNER JOIN $TBL_EXERCISE_QUESTION as qt
+                ON (qu.id = qt.question_id AND qu.c_id = qt.c_id)
+                INNER JOIN $TBL_EXERCISES as q
+                ON (q.c_id = qu.c_id AND q.id = qt.exercice_id)
                 {$efConditions['from']}
                 $from
                 WHERE
                     qu.c_id = $selected_course AND
                     qt.c_id = $selected_course AND
-                    q.c_id = $selected_course AND
-                    qu.id = qt.question_id
-                    $sessionCondition AND
-                    q.id = qt.exercice_id
+                    q.c_id = $selected_course
+                    $sessionCondition
                     $filter
                     $currentExerciseCondition
                     {$efConditions['where']}

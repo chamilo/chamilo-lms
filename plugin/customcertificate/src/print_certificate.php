@@ -131,8 +131,9 @@ foreach ($userList as $userInfo) {
     } else {
         $urlBackground = $path.$infoCertificate['background'];
         $htmlText .= ' <div 
-        class = "caraA"
-        style = "background-image:url('.$urlBackground.') no-repeat; background-image-resize:6; margin:0px; padding:0px;">';
+        class="caraA"
+        style="background-image:url('.$urlBackground.') no-repeat; 
+        background-image-resize:6; margin:0px; padding:0px;">';
     }
 
     if (!empty($infoCertificate['logo_left'])) {
@@ -169,7 +170,9 @@ foreach ($userList as $userInfo) {
         border="0">';
     $htmlText .= '<tr>';
     $htmlText .= '<td style="width:'.intval($workSpace / 3).'mm" class="logo">'.$logoLeft.'</td>';
-    $htmlText .= '<td style="width:'.intval($workSpace / 3).'mm; text-align:center;" class="logo">'.$logoCenter.'</td>';
+    $htmlText .= '<td style="width:'.intval($workSpace / 3).'mm; text-align:center;" class="logo">';
+    $htmlText .= $logoCenter;
+    $htmlText .= '</td>';
     $htmlText .= '<td style="width:'.intval($workSpace / 3).'mm; text-align:right;" class="logo">'.$logoRight.'</td>';
     $htmlText .= '</tr>';
     $htmlText .= '</table>';
@@ -511,7 +514,18 @@ if ($exportAllInOne) {
         $certificateContent .= $contentAllCertificate;
         $certificateContent .= '</body></html>';
 
-        $pdf->content_to_pdf($certificateContent, '', 'certificate'.date("Y_m_d_His"), null, 'D', false, null, false, false, false);
+        $pdf->content_to_pdf(
+            $certificateContent,
+            '',
+            'certificate'.date("Y_m_d_His"),
+            null,
+            'D',
+            false,
+            null,
+            false,
+            false,
+            false
+        );
     }
 } else {
     foreach ($htmlList as $fileName => $content) {

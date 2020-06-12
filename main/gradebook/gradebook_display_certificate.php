@@ -128,7 +128,8 @@ switch ($action) {
     case 'export_all_certificates':
         if ($allowCustomCertificate) {
             $params = 'course_code='.api_get_course_id().'&session_id='.api_get_session_id().'&'.api_get_cidreq();
-            $url = api_get_path(WEB_PLUGIN_PATH).'customcertificate/src/print_certificate.php?export_all_in_one=1&'.$params;
+            $url = api_get_path(WEB_PLUGIN_PATH).
+                'customcertificate/src/print_certificate.php?export_all_in_one=1&'.$params;
         } else {
             if (api_is_student_boss()) {
                 $userGroup = new UserGroup();

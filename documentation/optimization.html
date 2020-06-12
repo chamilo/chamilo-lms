@@ -247,6 +247,11 @@ ALTER TABLE c_lp_item_view ADD INDEX idx_clpiv_c_i_v (c_id, id, view_count);
         ALTER TABLE c_item_property ADD INDEX idx_item_property_visibility (visibility);
         ALTER TABLE c_dropbox_person ADD INDEX idx_file(file_id);
 
+        ALTER TABLE c_chat_connected ADD INDEX idx_user_course_session(user_id, c_id, session_id);
+        ALTER TABLE c_chat_connected ADD INDEX idx_user_course_group(user_id, c_id, to_group_id);
+
+        ALTER TABLE c_chat_connected ADD INDEX idx_course_session(c_id, session_id);
+        ALTER TABLE c_chat_connected ADD INDEX idx_course_group(c_id, to_group_id);
     </pre>
 <hr />
 <h2><a name="3.Indexes-caching"></a>3. Indexes caching</h2>

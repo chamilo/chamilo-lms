@@ -654,7 +654,7 @@ class Event
                         error_log("Saving e attempt recording ");
                     }
                     $attempt_recording = [
-                        'exe_id' => $attempt_id,
+                        'exe_id' => $exe_id,
                         'question_id' => $question_id,
                         'answer' => $answer,
                         'marks' => $score,

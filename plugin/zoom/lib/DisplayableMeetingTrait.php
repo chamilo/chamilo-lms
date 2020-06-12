@@ -28,9 +28,6 @@ trait DisplayableMeetingTrait
     /** @var string meeting formatted duration */
     public $formattedDuration;
 
-    /** @var string meeting details URL */
-    public $detailURL;
-
     /**
      * @throws Exception on unexpected start_time or duration
      */
@@ -57,9 +54,6 @@ trait DisplayableMeetingTrait
             $later->add(new DateInterval('PT' . $this->duration . 'M'));
             $this->durationInterval = $later->diff($now);
             $this->formattedDuration = $this->durationInterval->format(get_lang('%Hh%I'));
-        }
-        if (property_exists($this, 'id')) {
-            $this->detailURL = 'meeting.php?meetingId=' . $this->id;
         }
     }
 }

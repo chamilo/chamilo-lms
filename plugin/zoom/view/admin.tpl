@@ -17,7 +17,7 @@
                 <td>{{ meeting.session ? meeting.session.name : '-' }}</td>
                 <td>{{ meeting.topic }}</td>
                 <td>
-                    <a class="btn" href="{{ meeting.detailURL }} ">
+                    <a class="btn" href="meeting_from_admin.php?meetingId={{ meeting.id }}">
                         {{ 'Details'|get_lang }}
                     </a>
                 </td>

@@ -1,9 +1,11 @@
 <?php
 /* For license terms, see /license.txt */
 
-$course_plugin = 'zoom'; // needed in order to load the plugin lang variables
+if (!isset($returnURL)) {
+    exit;
+}
 
-require_once __DIR__.'/config.php';
+$course_plugin = 'zoom'; // needed in order to load the plugin lang variables
 
 $logInfo = [
     'tool' => 'Videoconference Zoom',
@@ -49,7 +51,10 @@ if ($plugin->userIsConferenceManager()) {
         $meeting->agenda = $editMeetingForm->getSubmitValue('agenda');
         try {
             $plugin->updateMeeting($meeting->id, $meeting);
-            $meeting = $plugin->getMeeting($meeting->id);
+            Display::addFlash(
+                Display::return_message(get_lang('MeetingUpdated'), 'confirm')
+            );
+            location($returnURL);
         } catch (Exception $exception) {
             Display::addFlash(
                 Display::return_message($exception->getMessage(), 'error')
@@ -83,7 +88,7 @@ if ($plugin->userIsConferenceManager()) {
             Display::addFlash(
                 Display::return_message(get_lang('MeetingDeleted'), 'confirm')
             );
-            location(api_get_course_url() ?: (api_is_platform_admin() ? 'admin.php' : api_get_path(WEB_PATH)));
+            location($returnURL);
         } catch (Exception $exception) {
             Display::addFlash(
                 Display::return_message($exception->getMessage(), 'error')

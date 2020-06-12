@@ -6,7 +6,7 @@ namespace Chamilo\PluginBundle\Zoom;
 
 /**
  * Trait CourseMeetingTrait.
- * A Zoom meeting linked to a (course, session) pair
+ * A Zoom meeting linked to a (course, session) pair.
  *
  * @package Chamilo\PluginBundle\Zoom
  */

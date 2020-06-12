@@ -29,7 +29,7 @@ class MeetingListItem
     // public $agenda;
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function itemClass($propertyName)
     {

@@ -11,13 +11,14 @@ class CourseMeetingListItem extends API\MeetingListItem
     use DisplayableMeetingTrait;
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public static function fromJson($json)
     {
         $instance = parent::fromJson($json);
         $instance->decodeAndRemoveTag();
         $instance->initializeDisplayableProperties();
+
         return $instance;
     }
 

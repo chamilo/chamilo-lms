@@ -298,7 +298,7 @@ class JWTClient
      * @param string $relativePath      @see self::send
      * @param string $listClassName     name of the API's list class, such as 'MeetingList'
      * @param string $arrayPropertyName name of the class property that contains the actual items, such as 'meetings'
-     * @param array $parameters         query string parameters associative array
+     * @param array  $parameters        query string parameters associative array
      *
      * @throws Exception on API, JSON or other error
      *

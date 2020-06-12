@@ -21,7 +21,7 @@ class MeetingList
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function itemClass($propertyName)
     {

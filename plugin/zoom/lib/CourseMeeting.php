@@ -11,13 +11,14 @@ class CourseMeeting extends API\Meeting
     use DisplayableMeetingTrait;
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public static function fromJson($json)
     {
         $instance = parent::fromJson($json);
         $instance->decodeAndRemoveTag();
         $instance->initializeDisplayableProperties();
+
         return $instance;
     }
 
@@ -38,6 +39,7 @@ class CourseMeeting extends API\Meeting
         $instance = parent::fromTopicAndType($topic, $type);
         $instance->setCourseAndSessionId($courseId, $sessionId);
         $instance->initializeDisplayableProperties();
+
         return $instance;
     }
 }

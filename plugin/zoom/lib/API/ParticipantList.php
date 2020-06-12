@@ -21,7 +21,7 @@ class ParticipantList
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function itemClass($propertyName)
     {

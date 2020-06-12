@@ -21,7 +21,7 @@ class MeetingInstances
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function itemClass($propertyName)
     {

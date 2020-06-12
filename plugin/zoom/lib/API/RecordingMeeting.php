@@ -48,7 +48,7 @@ class RecordingMeeting
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function itemClass($propertyName)
     {

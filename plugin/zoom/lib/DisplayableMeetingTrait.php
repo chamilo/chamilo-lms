@@ -51,7 +51,7 @@ trait DisplayableMeetingTrait
         if (!empty($this->duration)) {
             $now = new DateTime();
             $later = new DateTime();
-            $later->add(new DateInterval('PT' . $this->duration . 'M'));
+            $later->add(new DateInterval('PT'.$this->duration.'M'));
             $this->durationInterval = $later->diff($now);
             $this->formattedDuration = $this->durationInterval->format(get_lang('%Hh%I'));
         }

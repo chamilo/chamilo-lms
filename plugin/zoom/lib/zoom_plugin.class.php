@@ -206,7 +206,7 @@ class ZoomPlugin extends Plugin
      * Updates a meeting.
      *
      * @param int                  $meetingId
-     * @param CourseMeetingInfoGet $meeting with updated properties
+     * @param CourseMeetingInfoGet $meeting   with updated properties
      *
      * @throws Exception on API error
      */
@@ -269,29 +269,6 @@ class ZoomPlugin extends Plugin
     }
 
     /**
-     * Adds a link to a meeting's recordings.
-     *
-     * @param string $meetingUUID UUID of the meeting
-     *
-     * @throws Exception on API error
-     *
-     * @return Link the newly added link
-     */
-    public function copyRecordingToLinkTool($meetingUUID)
-    {
-        $recordings = $this->jwtClient()->getRecordings($meetingUUID);
-        $link = new Link();
-        $link->save(
-            [
-                'url' => $recordings->share_url,
-                'title' => $recordings->topic,
-            ]
-        );
-
-        return $link;
-    }
-
-    /**
      * Caches and returns the JWT client instance, initialized with plugin settings.
      *
      * @return JWTClient object that provides means of communications with the Zoom servers
@@ -343,6 +320,7 @@ class ZoomPlugin extends Plugin
     {
         $meeting->settings->auto_recording = 'cloud';
         $meeting->tagAgenda();
+
         return CourseMeetingInfoGet::fromMeetingInfoGet($this->jwtClient()->createMeeting($meeting));
     }
 }

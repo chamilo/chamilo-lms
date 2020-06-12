@@ -89,13 +89,15 @@ if (isset($form)) {
             $user_id
         );
 
-        /** @var \Plugin $objPlugin */
-        $objPlugin = $pluginInfo['plugin_class']::create();
-        $objPlugin->get_settings(true);
-        $objPlugin->performActionsAfterConfigure();
+        if (!empty($pluginInfo['plugin_class'])) {
+            /** @var \Plugin $objPlugin */
+            $objPlugin = $pluginInfo['plugin_class']::create();
+            $objPlugin->get_settings(true);
+            $objPlugin->performActionsAfterConfigure();
 
-        if (isset($values['show_main_menu_tab'])) {
-            $objPlugin->manageTab($values['show_main_menu_tab']);
+            if (isset($values['show_main_menu_tab'])) {
+                $objPlugin->manageTab($values['show_main_menu_tab']);
+            }
         }
 
         Display::addFlash(Display::return_message(get_lang('Updated'), 'success'));

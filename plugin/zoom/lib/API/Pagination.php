@@ -1,11 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\PluginBundle\Zoom;
+namespace Chamilo\PluginBundle\Zoom\API;
 
 trait Pagination
 {
-    use JsonDeserializable;
+    use JsonDeserializableTrait;
 
     /** @var int */
     public $page_count;

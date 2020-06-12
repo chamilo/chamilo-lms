@@ -1,13 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\PluginBundle\Zoom;
+namespace Chamilo\PluginBundle\Zoom\API;
 
 use Exception;
 
 class RecordingMeeting
 {
-    use JsonDeserializable;
+    use JsonDeserializableTrait;
 
     /** @var string Unique Meeting Identifier. Each instance of the meeting will have its own UUID. */
     public $uuid;
@@ -48,13 +48,7 @@ class RecordingMeeting
     }
 
     /**
-     * @see JsonDeserializable::itemClass()
-     *
-     * @param string $propertyName array property name
-     *
-     * @throws Exception on wrong propertyName
-     *
-     * @return string
+     * @inheritDoc
      */
     protected function itemClass($propertyName)
     {

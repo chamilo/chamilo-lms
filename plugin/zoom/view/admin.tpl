@@ -12,12 +12,12 @@
         <tbody>
         {% for meeting in meetings %}
             <tr>
-                <td>{{ meeting.extra_data.formatted_start_time }}</td>
-                <td>{{ meeting.extra_data.course ? meeting.extra_data.course.title : '-' }}</td>
-                <td>{{ meeting.extra_data.session ? meeting.extra_data.session.name : '-' }}</td>
+                <td>{{ meeting.formattedStartTime }}</td>
+                <td>{{ meeting.course ? meeting.course.title : '-' }}</td>
+                <td>{{ meeting.session ? meeting.session.name : '-' }}</td>
                 <td>{{ meeting.topic }}</td>
                 <td>
-                    <a class="btn" href="{{ meeting.extra_data.meeting_details_url }} ">
+                    <a class="btn" href="{{ meeting.detailURL }} ">
                         {{ 'Details'|get_lang }}
                     </a>
                 </td>

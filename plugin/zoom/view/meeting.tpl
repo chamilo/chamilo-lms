@@ -1,19 +1,25 @@
 <div class="page-header">
     <h2>{{ 'Meeting'|get_lang }}</h2>
 </div>
-<dl>
+<style>
+    dl.meeting_properties dt {
+        margin-top: 1em;
+        font-size: smaller;
+    }
+</style>
+<dl class="meeting_properties">
     <dt>{{ 'Course'|get_lang }}</dt>
     <dd>
-        {% if meeting.extra_data.course %}
-        <a href="{{ meeting.extra_data.course.course_public_url }}">
-            {{ meeting.extra_data.course.title }}
+        {% if meeting.course %}
+        <a href="{{ meeting.course.course_public_url }}">
+            {{ meeting.course.title }}
         </a>
         {% else %}
         -
         {% endif %}
     </dd>
     <dt>{{ 'Session'|get_lang }}</dt>
-    <dd>{{ meeting.extra_data.session ? meeting.extra_data.session.name : '-' }}</dd>
+    <dd>{{ meeting.session ? meeting.session.name : '-' }}</dd>
 
     <dt>{{ 'Status'|get_lang }}</dt>
     <dd>{{ meeting.status }}</dd>
@@ -22,16 +28,16 @@
     <dd>{{ meeting.topic }}</dd>
 
     <dt>{{ 'Agenda'|get_lang }}</dt>
-    <dd>{{ meeting.extra_data.stripped_agenda| nl2br }}</dd>
+    <dd>{{ meeting.agenda| nl2br }}</dd>
 
     <dt>{{ 'Type'|get_lang }}</dt>
-    <dd>{{meeting.extra_data.type_name}}</dd>
+    <dd>{{meeting.typeName}}</dd>
 
     <dt>{{ 'StartTime'|get_lang }}</dt>
-    <dd>{{ meeting.extra_data.formatted_start_time }}</dd>
+    <dd>{{ meeting.formattedStartTime }}</dd>
 
     <dt>{{ 'Duration'|get_lang }}</dt>
-    <dd>({{ meeting.extra_data.formatted_duration }})</dd>
+    <dd>{{ meeting.formattedDuration }}</dd>
 
     {% if isConferenceManager %}
 

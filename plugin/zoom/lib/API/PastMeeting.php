@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\PluginBundle\Zoom;
+namespace Chamilo\PluginBundle\Zoom\API;
 
 class PastMeeting extends Meeting
 {

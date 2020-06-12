@@ -2,7 +2,7 @@
 
 /* For license terms, see /license.txt */
 
-use Chamilo\PluginBundle\Zoom\JWTClient;
+use Chamilo\PluginBundle\Zoom\API\JWTClient;
 
 $course_plugin = 'zoom'; // needed in order to load the plugin lang variables
 $cidReset = true;

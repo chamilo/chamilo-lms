@@ -1,11 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\PluginBundle\Zoom;
+namespace Chamilo\PluginBundle\Zoom\API;
 
 class RecordingFile
 {
-    use JsonDeserializable;
+    use JsonDeserializableTrait;
 
     /** @var string The recording file ID. Included in the response of general query. */
     public $id;

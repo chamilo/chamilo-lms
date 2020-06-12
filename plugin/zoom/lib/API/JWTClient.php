@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\PluginBundle\Zoom;
+namespace Chamilo\PluginBundle\Zoom\API;
 
 use Exception;
 use Firebase\JWT\JWT;
@@ -158,7 +158,7 @@ class JWTClient
      *
      * @throws Exception describing the error (message and code)
      *
-     * @return Meeting meeting
+     * @return MeetingInfoGet meeting
      */
     public function getMeeting($meetingId)
     {

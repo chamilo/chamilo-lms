@@ -43,7 +43,8 @@ if ($plugin->userIsConferenceManager()) {
     $scheduleMeetingForm = new FormValidator('scheduleMeetingForm');
     $startTimeDatePicker = $scheduleMeetingForm->addDateTimePicker('start_time', get_lang('StartTime'));
     $scheduleMeetingForm->setRequired($startTimeDatePicker);
-    $durationNumeric = $scheduleMeetingForm->addNumeric('duration', get_lang('Duration'));
+    $durationNumeric = $scheduleMeetingForm->addNumeric('duration', get_lang('DurationInMinutes'));
+    $scheduleMeetingForm->setRequired($durationNumeric);
     $topicText = $scheduleMeetingForm->addText('topic', get_lang('Topic'), true);
     $agendaTextArea = $scheduleMeetingForm->addTextarea('agenda', get_lang('Agenda'), ['maxlength' => 2000]);
     // $passwordText = $scheduleMeetingForm->addText('password', get_lang('Password'), false, ['maxlength' => '10']);
@@ -77,14 +78,6 @@ if ($plugin->userIsConferenceManager()) {
         );
     }
     $tpl->assign('scheduleMeetingForm', $scheduleMeetingForm->returnForm());
-}
-
-try {
-    $tpl->assign('liveMeetings', $plugin->getLiveMeetings());
-} catch (Exception $exception) {
-    Display::addFlash(
-        Display::return_message('Could not retrieve live meeting list: '.$exception->getMessage(), 'error')
-    );
 }
 
 try {

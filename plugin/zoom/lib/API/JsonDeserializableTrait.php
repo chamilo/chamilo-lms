@@ -1,11 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\PluginBundle\Zoom;
+namespace Chamilo\PluginBundle\Zoom\API;
 
 use Exception;
 
-trait JsonDeserializable
+trait JsonDeserializableTrait
 {
     /**
      * Builds a class instance from the Json description of the object.
@@ -40,12 +40,10 @@ trait JsonDeserializable
      * @param string $propertyName array property name
      *
      * @throws Exception if not implemented for this propertyName
+     *
+     * @return string class name of the items to be found in the named array property
      */
-    protected function itemClass($propertyName)
-    {
-        throw new Exception(__FUNCTION__.' not implemented for property '.$propertyName.' in class '.static::class);
-    }
-
+    abstract protected function itemClass($propertyName);
 
     /**
      * Copies values from another object properties to an instance, recursively.
@@ -55,7 +53,7 @@ trait JsonDeserializable
      *
      * @throws Exception when the source object has an unexpected property
      */
-    private static function recursivelyCopyObjectProperties($source, &$destination)
+    protected static function recursivelyCopyObjectProperties($source, &$destination)
     {
         foreach (get_object_vars($source) as $name => $value) {
             if (property_exists($destination, $name)) {

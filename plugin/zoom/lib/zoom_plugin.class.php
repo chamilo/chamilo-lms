@@ -2,17 +2,15 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\PluginBundle\Zoom\JWTClient;
-use Chamilo\PluginBundle\Zoom\Meeting;
-use Chamilo\PluginBundle\Zoom\MeetingInfoGet;
-use Chamilo\PluginBundle\Zoom\MeetingListItem;
-use Chamilo\PluginBundle\Zoom\ParticipantListItem;
-use Chamilo\PluginBundle\Zoom\RecordingMeeting;
+use Chamilo\PluginBundle\Zoom\API\JWTClient;
+use Chamilo\PluginBundle\Zoom\API\ParticipantListItem;
+use Chamilo\PluginBundle\Zoom\API\RecordingMeeting;
+use Chamilo\PluginBundle\Zoom\CourseMeeting;
+use Chamilo\PluginBundle\Zoom\CourseMeetingInfoGet;
+use Chamilo\PluginBundle\Zoom\CourseMeetingListItem;
 
 class ZoomPlugin extends Plugin
 {
-    const TABLE_NAME = 'plugin_zoom_meeting';
-
     public $isCoursePlugin = true;
 
     protected function __construct()
@@ -67,7 +65,7 @@ class ZoomPlugin extends Plugin
      *
      * @throws Exception on API error
      *
-     * @return MeetingListItem[] matching meetings with extra_data
+     * @return CourseMeetingListItem[] matching meetings
      */
     public function getPeriodMeetings($type, $startDate, $endDate)
     {
@@ -76,14 +74,21 @@ class ZoomPlugin extends Plugin
             if (property_exists($meeting, 'start_time')) {
                 $startTime = new DateTime($meeting->start_time);
                 if ($startDate <= $startTime && $startTime <= $endDate) {
-                    $matchingMeetings[] = $meeting;
+                    $matchingMeeting = CourseMeetingListItem::fromMeetingListItem($meeting);
+                    $matchingMeeting->loadCourse();
+                    $matchingMeeting->loadSession();
+                    $matchingMeetings[] = $matchingMeeting;
                 }
             }
         }
 
-        return $this->computeMeetingExtraData($matchingMeetings);
+        return $matchingMeetings;
     }
 
+    /**
+     * @return bool whether the logged-in user can manage conferences in this context, that is either
+     *              the current course or session coach, the platform admin or the current course admin
+     */
     public function userIsConferenceManager()
     {
         return api_is_coach()
@@ -92,17 +97,17 @@ class ZoomPlugin extends Plugin
     }
 
     /**
-     * Retrieves a meeting properties and extra_data.
+     * Retrieves a meeting properties.
      *
      * @param int $meetingId
      *
      * @throws Exception
      *
-     * @return Meeting
+     * @return CourseMeetingInfoGet
      */
     public function getMeeting($meetingId)
     {
-        return $this->computeMeetingExtraData([$this->jwtClient()->getMeeting($meetingId)])[0];
+        return CourseMeetingInfoGet::fromMeetingInfoGet($this->jwtClient()->getMeeting($meetingId));
     }
 
     /**
@@ -110,11 +115,11 @@ class ZoomPlugin extends Plugin
      *
      * @throws Exception on API error
      *
-     * @return Meeting[] matching meetings
+     * @return CourseMeetingListItem[] matching meetings
      */
     public function getLiveMeetings()
     {
-        return $this->computeMeetingExtraData($this->getMeetings(JWTClient::MEETING_LIST_TYPE_LIVE));
+        return $this->getMeetings(JWTClient::MEETING_LIST_TYPE_LIVE);
     }
 
     /**
@@ -122,11 +127,11 @@ class ZoomPlugin extends Plugin
      *
      * @throws Exception on API error
      *
-     * @return Meeting[] matching meetings
+     * @return CourseMeetingListItem[] matching meetings
      */
     public function getScheduledMeetings()
     {
-        return $this->computeMeetingExtraData($this->getMeetings(JWTClient::MEETING_LIST_TYPE_SCHEDULED));
+        return $this->getMeetings(JWTClient::MEETING_LIST_TYPE_SCHEDULED);
     }
 
     /**
@@ -134,11 +139,11 @@ class ZoomPlugin extends Plugin
      *
      * @throws Exception on API error
      *
-     * @return Meeting[] matching meetings
+     * @return CourseMeetingListItem[] matching meetings
      */
     public function getUpcomingMeetings()
     {
-        return $this->computeMeetingExtraData($this->getMeetings(JWTClient::MEETING_LIST_TYPE_UPCOMING));
+        return $this->getMeetings(JWTClient::MEETING_LIST_TYPE_UPCOMING);
     }
 
     /**
@@ -146,7 +151,7 @@ class ZoomPlugin extends Plugin
      *
      * @throws Exception describing the error (message and code)
      *
-     * @return MeetingInfoGet meeting
+     * @return CourseMeetingInfoGet meeting
      */
     public function createInstantMeeting()
     {
@@ -158,7 +163,12 @@ class ZoomPlugin extends Plugin
         }
         $courseInfo = api_get_course_info();
         $topic .= $courseInfo['title'].', '.date('yy-m-d H:i');
-        $meeting = Meeting::fromTopicAndType($topic, Meeting::TYPE_INSTANT);
+        $meeting = CourseMeeting::fromCourseSessionTopicAndType(
+            api_get_course_int_id(),
+            api_get_session_id(),
+            $topic,
+            CourseMeeting::TYPE_INSTANT
+        );
 
         return $this->createMeeting($meeting);
     }
@@ -174,11 +184,16 @@ class ZoomPlugin extends Plugin
      *
      * @throws Exception describing the error (message and code)
      *
-     * @return MeetingInfoGet meeting
+     * @return CourseMeetingInfoGet meeting
      */
     public function createScheduledMeeting($startTime, $duration, $topic, $agenda = '', $password = '')
     {
-        $meeting = Meeting::fromTopicAndType($topic, Meeting::TYPE_SCHEDULED);
+        $meeting = CourseMeeting::fromCourseSessionTopicAndType(
+            api_get_course_int_id(),
+            api_get_session_id(),
+            $topic,
+            CourseMeeting::TYPE_SCHEDULED
+        );
         $meeting->duration = $duration;
         $meeting->start_time = $startTime->format(DateTimeInterface::ISO8601);
         $meeting->agenda = $agenda;
@@ -190,14 +205,14 @@ class ZoomPlugin extends Plugin
     /**
      * Updates a meeting.
      *
-     * @param int     $meetingId
-     * @param Meeting $meeting   with updated properties
+     * @param int                  $meetingId
+     * @param CourseMeetingInfoGet $meeting with updated properties
      *
      * @throws Exception on API error
      */
     public function updateMeeting($meetingId, $meeting)
     {
-        $meeting->agenda .= $this->agendaTag();
+        $meeting->tagAgenda();
         $this->jwtClient()->updateMeeting($meetingId, $meeting);
     }
 
@@ -292,42 +307,23 @@ class ZoomPlugin extends Plugin
     }
 
     /**
-     * @return string a tag to append to a meeting agenda so to link it to a (course, session) tuple
-     */
-    private function agendaTag()
-    {
-        $courseId = api_get_course_int_id();
-        $sessionId = api_get_session_id();
-
-        return "\n(course $courseId, session $sessionId)";
-    }
-
-    private function courseIdAndSessionIdFromAgenda($agenda)
-    {
-        return preg_match('/course (?P<courseId>\d+), session (?P<sessionId>\d+)/m', $agenda, $matches)
-            ? $matches
-            : [
-                'courseId' => 0,
-                'sessionId' => 0,
-            ];
-    }
-
-    /**
      * Retrieves all meetings of a specific type and linked to current course and session.
      *
      * @param string $type MEETING_TYPE_LIVE, MEETING_TYPE_SCHEDULED or MEETING_TYPE_UPCOMING
      *
      * @throws Exception on API error
      *
-     * @return MeetingListItem[] matching meetings
+     * @return CourseMeetingListItem[] matching meetings
      */
     private function getMeetings($type)
     {
         $matchingMeetings = [];
-        $tag = $this->agendaTag();
+        $courseId = api_get_course_int_id();
+        $sessionId = api_get_session_id();
         foreach ($this->jwtClient()->getMeetings($type) as $meeting) {
-            if (property_exists($meeting, 'agenda') && substr($meeting->agenda, -strlen($tag)) === $tag) {
-                $matchingMeetings[] = $meeting;
+            $candidateMeeting = CourseMeetingListItem::fromMeetingListItem($meeting);
+            if ($candidateMeeting->matches($courseId, $sessionId)) {
+                $matchingMeetings[] = $candidateMeeting;
             }
         }
 
@@ -335,60 +331,18 @@ class ZoomPlugin extends Plugin
     }
 
     /**
-     * Computes and append extra data for each listed meeting.
-     *
-     * @param MeetingListItem[] $meetings list of retrieved meetings
-     *
-     * @throws Exception on API error
-     *
-     * @return Meeting[]|MeetingListItem[] same meetings with extra_data added
-     */
-    private function computeMeetingExtraData($meetings)
-    {
-        $completeMeetings = [];
-        $tag = $this->agendaTag();
-        $typeNames = [
-            Meeting::TYPE_INSTANT => get_lang('Instant'),
-            Meeting::TYPE_SCHEDULED => get_lang('Scheduled'),
-            Meeting::TYPE_RECURRING_WITH_NO_FIXED_TIME => get_lang('RecurringWithNoFixedTime'),
-            Meeting::TYPE_RECURRING_WITH_FIXED_TIME => get_lang('RecurringWithFixedTime'),
-        ];
-        foreach ($meetings as $meeting) {
-            $completeMeeting = $meeting;
-            $startTime = new DateTime($meeting->start_time);
-            $duration = new DateInterval('PT'.$meeting->duration.'M');
-            $completeMeeting->extra_data = [
-                'type_name' => $typeNames[$meeting->type],
-                'formatted_start_time' => $startTime->format(get_lang('Y-m-d H:i')),
-                'formatted_duration' => $duration->format(get_lang('%Hh%I')),
-                'meeting_details_url' => 'meeting.php?meetingId='.$meeting->id,
-            ];
-            if (property_exists($meeting, 'agenda')) {
-                $completeMeeting->extra_data['stripped_agenda'] = substr($meeting->agenda, 0, -strlen($tag));
-                $courseIdAndSessionId = $this->courseIdAndSessionIdFromAgenda($meeting->agenda);
-                $completeMeeting->extra_data['course'] = api_get_course_info_by_id($courseIdAndSessionId['courseId']);
-                $completeMeeting->extra_data['session'] = api_get_session_info($courseIdAndSessionId['sessionId']);
-            }
-            $completeMeetings[] = $completeMeeting;
-        }
-
-        return $completeMeetings;
-    }
-
-    /**
      * Creates a meeting and returns it.
      *
-     * @param Meeting $meeting a meeting with at least a type and a topic
+     * @param CourseMeeting $meeting a meeting with at least a type and a topic
      *
      * @throws Exception describing the error (message and code)
      *
-     * @return MeetingInfoGet meeting
+     * @return CourseMeetingInfoGet meeting
      */
     private function createMeeting($meeting)
     {
         $meeting->settings->auto_recording = 'cloud';
-        $meeting->agenda .= $this->agendaTag();
-
-        return $this->jwtClient()->createMeeting($meeting);
+        $meeting->tagAgenda();
+        return CourseMeetingInfoGet::fromMeetingInfoGet($this->jwtClient()->createMeeting($meeting));
     }
 }

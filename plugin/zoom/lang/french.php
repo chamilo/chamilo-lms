@@ -34,6 +34,7 @@ $strings['CreatedAt'] = "Créé à";
 $strings['DeleteMeeting'] = "Effacer la conférence";
 $strings['Details'] = "Détail";
 $strings['Duration'] = "Durée";
+$strings['DurationInMinutes'] = "Durée (en minutes)";
 $strings['EndDate'] = "Date de fin";
 $strings['Instant'] = "Instantané";
 $strings['Join'] = "Rejoindre";

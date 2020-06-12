@@ -1,11 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\PluginBundle\Zoom;
+namespace Chamilo\PluginBundle\Zoom\API;
+
+use Exception;
 
 class MeetingListItem
 {
-    use JsonDeserializable;
+    use BaseMeetingTrait;
+    use JsonDeserializableTrait;
 
     /** @var string unique meeting instance ID */
     public $uuid;
@@ -17,26 +20,19 @@ class MeetingListItem
     public $host_id;
 
     /** @var string */
-    public $topic;
-
-    /** @var int @see Meeting */
-    public $type;
-
-    /** @var string */
-    public $start_time;
-
-    /** @var int in minutes */
-    public $duration;
-
-    /** @var string */
-    public $timezone;
-
-    /** @var string */
     public $created_at;
 
     /** @var string */
     public $join_url;
 
     /** @var string truncated to 250 characters */
-    public $agenda;
+    // public $agenda;
+
+    /**
+     * @inheritDoc
+     */
+    protected function itemClass($propertyName)
+    {
+        throw new Exception("no such array property $propertyName");
+    }
 }

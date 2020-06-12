@@ -1,11 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\PluginBundle\Zoom;
+namespace Chamilo\PluginBundle\Zoom\API;
 
 class CreatedRegistration
 {
-    use JsonDeserializable;
+    use JsonDeserializableTrait;
 
     /** @var int meeting ID */
     public $id;

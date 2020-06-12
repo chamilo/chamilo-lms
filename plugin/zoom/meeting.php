@@ -1,8 +1,6 @@
 <?php
 /* For license terms, see /license.txt */
 
-use Chamilo\PluginBundle\Zoom\Meeting;
-
 $course_plugin = 'zoom'; // needed in order to load the plugin lang variables
 
 require_once __DIR__.'/config.php';
@@ -30,12 +28,14 @@ if ($plugin->userIsConferenceManager()) {
     $editMeetingForm = new FormValidator('editMeetingForm');
     $editMeetingForm->addHidden('meetingId', $meeting->id);
 
-    if (Meeting::TYPE_SCHEDULED === $meeting->type
+    if ($meeting::TYPE_SCHEDULED === $meeting->type
         ||
-        Meeting::TYPE_RECURRING_WITH_FIXED_TIME === $meeting->type
+        $meeting::TYPE_RECURRING_WITH_FIXED_TIME === $meeting->type
     ) {
         $startTimeDatePicker = $editMeetingForm->addDateTimePicker('start_time', get_lang('StartTime'));
-        $durationNumeric = $editMeetingForm->addNumeric('duration', get_lang('Duration'));
+        $editMeetingForm->setRequired($startTimeDatePicker);
+        $durationNumeric = $editMeetingForm->addNumeric('duration', get_lang('DurationInMinutes'));
+        $editMeetingForm->setRequired($durationNumeric);
     }
     $topicText = $editMeetingForm->addText('topic', get_lang('Topic'));
     $agendaTextArea = $editMeetingForm->addTextarea('agenda', get_lang('Agenda'), ['maxlength' => 2000]);
@@ -43,6 +43,7 @@ if ($plugin->userIsConferenceManager()) {
     $editMeetingForm->addButtonUpdate(get_lang('UpdateMeeting'));
     if ($editMeetingForm->validate()) {
         $meeting->start_time = $editMeetingForm->getSubmitValue('start_time');
+        $meeting->timezone = date_default_timezone_get();
         $meeting->duration = $editMeetingForm->getSubmitValue('duration');
         $meeting->topic = $editMeetingForm->getSubmitValue('topic');
         $meeting->agenda = $editMeetingForm->getSubmitValue('agenda');
@@ -58,10 +59,10 @@ if ($plugin->userIsConferenceManager()) {
     try {
         $editMeetingForm->setDefaults(
             [
-                'start_time' => $meeting->start_time,
+                'start_time' => $meeting->startDateTime->format('c'),
                 'duration' => $meeting->duration,
                 'topic' => $meeting->topic,
-                'agenda' => $meeting->extra_data['stripped_agenda'],
+                'agenda' => $meeting->agenda,
             ]
         );
     } catch (Exception $exception) {

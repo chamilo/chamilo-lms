@@ -34,6 +34,7 @@ $em = Database::getManager();
 $sessionId = api_get_session_id();
 $courseId = api_get_course_int_id();
 $courseCode = api_get_course_id();
+
 // Check LP subscribers
 if ('1' === $lp->getSubscribeUsers()) {
     /** @var ItemPropertyRepository $itemRepo */
@@ -95,8 +96,7 @@ $lpInfo = Database::select(
     'first'
 );
 
-$groups = GroupManager::get_groups();
-
+$groups = GroupManager::get_group_list(null, api_get_course_info(), null, api_get_session_id());
 $groupFilter = '';
 if (!empty($groups)) {
     $form = new FormValidator('group', 'post', $url);
@@ -122,30 +122,31 @@ $showEmail = api_get_setting('show_email_addresses');
 
 if (!empty($users)) {
     foreach ($users as $user) {
-        $userInfo = api_get_user_info($user['user_id']);
+        $userId = $user['user_id'];
+        $userInfo = api_get_user_info($userId);
         $lpTime = Tracking::get_time_spent_in_lp(
-            $user['user_id'],
+            $userId,
             $courseCode,
             [$lpId],
             $sessionId
         );
 
         $lpScore = Tracking::get_avg_student_score(
-            $user['user_id'],
+            $userId,
             $courseCode,
             [$lpId],
             $sessionId
         );
 
         $lpProgress = Tracking::get_avg_student_progress(
-            $user['user_id'],
+            $userId,
             $courseCode,
             [$lpId],
             $sessionId
         );
 
         $lpLastConnection = Tracking::get_last_connection_time_in_lp(
-            $user['user_id'],
+            $userId,
             $courseCode,
             $lpId,
             $sessionId
@@ -156,11 +157,20 @@ if (!empty($users)) {
             DATE_TIME_FORMAT_LONG
         );
 
+        $userGroupList = '';
+        if (!empty($groups)) {
+            $groupsByUser = GroupManager::getAllGroupPerUserSubscription($userId, $courseId, $sessionId);
+            if (!empty($groupsByUser)) {
+                $userGroupList = implode(', ', array_column($groupsByUser, 'name'));
+            }
+        }
+
         $userList[] = [
-            'id' => $user['user_id'],
+            'id' => $userId,
             'first_name' => $userInfo['firstname'],
             'last_name' => $userInfo['lastname'],
             'email' => 'true' === $showEmail ? $userInfo['email'] : '',
+            'groups' => $userGroupList,
             'lp_time' => api_time_to_hms($lpTime),
             'lp_score' => is_numeric($lpScore) ? "$lpScore%" : $lpScore,
             'lp_progress' => "$lpProgress%",

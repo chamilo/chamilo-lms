@@ -16,6 +16,7 @@ api_block_anonymous_users();
 $plugin = CustomCertificatePlugin::create();
 $enable = $plugin->get('enable_plugin_customcertificate') == 'true';
 $tblProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
+$categoryId = isset($_GET['cat_id']) ? (int) $_GET['cat_id'] : 0;
 
 if (!$enable) {
     api_not_allowed(true, $plugin->get_lang('ToolDisabled'));
@@ -60,16 +61,9 @@ if (empty($_GET['export_all'])) {
     }
     $userList[] = api_get_user_info($studentId);
 } else {
-    $certificateTable = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
-    $categoryTable = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-    $sql = "SELECT cer.user_id AS user_id
-            FROM $certificateTable cer
-            INNER JOIN $categoryTable cat
-            ON (cer.cat_id = cat.id)
-            WHERE cat.course_code = '$courseCode' AND cat.session_id = $sessionId";
-    $rs = Database::query($sql);
-    while ($row = Database::fetch_assoc($rs)) {
-        $userList[] = api_get_user_info($row['user_id']);
+    $certificate_list = GradebookUtils::get_list_users_certificates($categoryId);
+    foreach ($certificate_list as $index => $value) {
+        $userList[] = api_get_user_info($value['user_id']);
     }
 }
 

@@ -53,7 +53,9 @@ if (empty($sessionId)) {
 $accessUrlId = api_get_current_access_url_id();
 
 $userList = [];
-if (empty($_GET['export_all'])) {
+$exportZip = false;
+$exportAllInOne = false;
+if (empty($_GET['export_all']) && empty($_GET['export_all_in_one'])) {
     if (!isset($_GET['student_id'])) {
         $studentId = api_get_user_id();
     } else {
@@ -61,6 +63,12 @@ if (empty($_GET['export_all'])) {
     }
     $userList[] = api_get_user_info($studentId);
 } else {
+    if (!empty($_GET['export_all'])) {
+        $exportZip = true;
+    }
+    if (!empty($_GET['export_all_in_one'])) {
+        $exportAllInOne = true;
+    }
     $certificate_list = GradebookUtils::get_list_users_certificates($categoryId);
     foreach ($certificate_list as $index => $value) {
         $userList[] = api_get_user_info($value['user_id']);
@@ -74,7 +82,7 @@ if ($sessionId > 0) {
 
 $table = Database::get_main_table(CustomCertificatePlugin::TABLE_CUSTOMCERTIFICATE);
 $useDefault = false;
-$path = api_get_path(SYS_UPLOAD_PATH).'certificates/';
+$path = api_get_path(WEB_UPLOAD_PATH).'certificates/';
 
 // Get info certificate
 $infoCertificate = CustomCertificatePlugin::getInfoCertificate($courseId, $sessionId, $accessUrlId);
@@ -103,16 +111,19 @@ $htmlList = [];
 $currentLocalTime = api_get_local_time();
 
 foreach ($userList as $userInfo) {
-    $htmlText = '<html>';
-    $htmlText .= '
-    <link rel="stylesheet"
-        type="text/css"
-        href="'.api_get_path(WEB_PLUGIN_PATH).'customcertificate/resources/css/certificate.css">';
-    $htmlText .= '
-    <link rel="stylesheet"
-        type="text/css"
-        href="'.api_get_path(WEB_CSS_PATH).'document.css">';
-    $htmlText .= '<body>';
+    $htmlText = '';
+    if (!$exportAllInOne) {
+        $htmlText = '<html>';
+        $htmlText .= '
+        <link rel="stylesheet"
+            type="text/css"
+            href="'.api_get_path(WEB_PLUGIN_PATH).'customcertificate/resources/css/certificate.css">';
+        $htmlText .= '
+        <link rel="stylesheet"
+            type="text/css"
+            href="'.api_get_path(WEB_CSS_PATH).'document.css">';
+        $htmlText .= '<body>';
+    }
     $studentId = $userInfo['user_id'];
 
     if (empty($infoCertificate['background'])) {
@@ -455,7 +466,10 @@ foreach ($userList as $userInfo) {
         }
         $htmlText .= '</div>';
     }
-    $htmlText .= '</body></html>';
+
+    if (!$exportAllInOne) {
+        $htmlText .= '</body></html>';
+    }
     $fileName = 'certificate_'.$courseInfo['code'].'_'.$userInfo['complete_name'].'_'.$currentLocalTime;
     $htmlList[$fileName] = $htmlText;
 }
@@ -466,10 +480,8 @@ if (!is_dir($archivePath)) {
     mkdir($archivePath, api_get_permissions_for_new_directories());
 }
 
-foreach ($htmlList as $fileName => $content) {
-    $fileName = api_replace_dangerous_char($fileName);
+if ($exportAllInOne) {
     $params = [
-        'filename' => $fileName,
         'pdf_title' => 'Certificate',
         'pdf_description' => '',
         'format' => 'A4-L',
@@ -479,25 +491,61 @@ foreach ($htmlList as $fileName => $content) {
         'bottom' => 0,
     ];
     $pdf = new PDF($params['format'], $params['orientation'], $params);
-    if (count($htmlList) == 1) {
-        $pdf->content_to_pdf($content, '', $fileName, null, 'D', false, null, false, false, false);
-        exit;
-    } else {
-        $filePath = $archivePath.$fileName.'.pdf';
-        $pdf->content_to_pdf($content, '', $fileName, null, 'F', true, $filePath, false, false, false);
-        $fileList[] = $filePath;
-    }
-}
 
-if (!empty($fileList)) {
-    $zipFile = $archivePath.'certificates_'.api_get_unique_id().'.zip';
-    $zipFolder = new PclZip($zipFile);
-    foreach ($fileList as $file) {
-        $zipFolder->add($file, PCLZIP_OPT_REMOVE_ALL_PATH);
+    $contentAllCertificate = '';
+    foreach ($htmlList as $fileName => $content) {
+        $contentAllCertificate .= $content;
     }
-    $name = 'certificates_'.$courseInfo['code'].'_'.$currentLocalTime.'.zip';
-    DocumentManager::file_send_for_download($zipFile, true, $name);
-    exit;
+
+    if (!empty($contentAllCertificate)) {
+        $certificateContent = '<html>';
+        $certificateContent .= '
+        <link rel="stylesheet"
+            type="text/css"
+            href="'.api_get_path(WEB_PLUGIN_PATH).'customcertificate/resources/css/certificate.css">';
+        $certificateContent .= '
+        <link rel="stylesheet"
+            type="text/css"
+            href="'.api_get_path(WEB_CSS_PATH).'document.css">';
+        $certificateContent .= '<body>';
+        $certificateContent .= $contentAllCertificate;
+        $certificateContent .= '</body></html>';
+
+        $pdf->content_to_pdf($certificateContent, '', 'certificate'.date("Y_m_d_His"), null, 'D', false, null, false, false, false);
+    }
+} else {
+    foreach ($htmlList as $fileName => $content) {
+        $fileName = api_replace_dangerous_char($fileName);
+        $params = [
+            'filename' => $fileName,
+            'pdf_title' => 'Certificate',
+            'pdf_description' => '',
+            'format' => 'A4-L',
+            'orientation' => 'L',
+            'left' => 15,
+            'top' => 15,
+            'bottom' => 0,
+        ];
+        $pdf = new PDF($params['format'], $params['orientation'], $params);
+        if ($exportZip) {
+            $filePath = $archivePath.$fileName.'.pdf';
+            $pdf->content_to_pdf($content, '', $fileName, null, 'F', true, $filePath, false, false, false);
+            $fileList[] = $filePath;
+        } else {
+            $pdf->content_to_pdf($content, '', $fileName, null, 'D', false, null, false, false, false);
+        }
+    }
+
+    if (!empty($fileList)) {
+        $zipFile = $archivePath.'certificates_'.api_get_unique_id().'.zip';
+        $zipFolder = new PclZip($zipFile);
+        foreach ($fileList as $file) {
+            $zipFolder->add($file, PCLZIP_OPT_REMOVE_ALL_PATH);
+        }
+        $name = 'certificates_'.$courseInfo['code'].'_'.$currentLocalTime.'.zip';
+        DocumentManager::file_send_for_download($zipFile, true, $name);
+        exit;
+    }
 }
 
 function getIndexFiltered($index)

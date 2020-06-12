@@ -2038,7 +2038,7 @@ function xajax_save_item_scorm(
             data: params,
             url: saveUrl,
             dataType: "script",
-            async: false
+            async: true
         });
 
         params = '';
@@ -2133,7 +2133,7 @@ function xajax_switch_item_details(lms_lp_id,lms_user_id,lms_view_id,lms_item_id
         data: params,
         url: "lp_ajax_switch_item.php" + courseUrl,
         dataType: "script",
-        async: false
+        async: true
     });
 }
 

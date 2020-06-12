@@ -576,6 +576,7 @@ $template->assign(
 );
 
 $frameReady = Display::getFrameReadyBlock('#content_id, #content_id_blank');
+
 $template->assign('frame_ready', $frameReady);
 $view = $template->get_template('learnpath/view.tpl');
 $content = $template->fetch($view);

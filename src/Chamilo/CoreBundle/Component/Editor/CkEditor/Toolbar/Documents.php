@@ -1,12 +1,11 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
 /**
  * Documents toolbar configuration.
- *
- * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar
  */
 class Documents extends Basic
 {
@@ -156,6 +155,7 @@ class Documents extends Basic
                 'Link',
                 'Image',
                 'Video',
+                'Oembed',
                 'Flash',
                 'Youtube',
                 'VimeoEmbed',

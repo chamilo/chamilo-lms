@@ -3821,6 +3821,9 @@ function sendAlertToUsers($workInfo, $workId, $courseInfo, $sessionId = 0)
     }
 
     if ($send) {
+        $folderUrl = api_get_path(WEB_CODE_PATH)."work/work_list_all.php?cidReq=".$courseInfo['code']."&id_session=".$sessionId."&id=".$workInfo['id'];
+        $fileUrl = api_get_path(WEB_CODE_PATH)."work/view.php?cidReq=".$courseInfo['code']."&id_session=".$sessionId."&id=".$workData['id'];
+
         foreach ($userList as $userData) {
             $userId = $userData['user_id'];
             $userInfo = api_get_user_info($userId);
@@ -3837,10 +3840,9 @@ function sendAlertToUsers($workInfo, $workId, $courseInfo, $sessionId = 0)
             $subject = "[".api_get_setting('siteName')."] ".$userPostedADocument;
             $message = $userPostedADocument."<br />";
             $message .= get_lang('DateSent')." : ".api_format_date(api_get_local_time())."<br />";
-            $message .= get_lang('AssignmentName')." : ".$workInfo['title']."<br />";
+            $message .= get_lang('AssignmentName')." : ".Display::url($workInfo['title'], $folderUrl)."<br />";
             $message .= get_lang('Filename')." : ".$workData['title']."<br />";
-            $url = api_get_path(WEB_CODE_PATH)."work/view.php?cidReq=".$courseInfo['code']."&id_session=".$sessionId."&id=".$workData['id'];
-            $message .= '<a href="'.$url.'">'.get_lang('DownloadLink')."</a><br />";
+            $message .= '<a href="'.$fileUrl.'">'.get_lang('DownloadLink')."</a><br />";
 
             MessageManager::send_message_simple(
                 $userId,

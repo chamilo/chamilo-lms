@@ -40,7 +40,6 @@ function oktaConnect()
         $u = [
             'firstname' => $user['attributes']['firstname'][0],
             'lastname' => $user['attributes']['lastname'][0],
-            'status' => STUDENT,
             'email' => $user['attributes']['email'][0],
             'username' => $user['attributes']['email'][0],
             'password' => 'okta',
@@ -53,6 +52,7 @@ function oktaConnect()
         $_user['uidReset'] = true;
 
         if ($chamiloUinfo === false) {
+            $u['status'] = STUDENT;
             $chamiloUid = external_add_user($u);
             if ($chamiloUid === false) {
                 oktaDisplayError(get_lang('UserNotRegistered'));
@@ -65,6 +65,8 @@ function oktaConnect()
             $_user['user_id'] = $chamiloUid;
             Session::write('_user', $_user);
 
+            oktaLastLoginUpdate($chamiloUid);
+            oktaRegistrationUpdate($chamiloUid);
             header('Location: ' . api_get_path(WEB_PATH));
             exit();
         }
@@ -76,9 +78,26 @@ function oktaConnect()
         $_user['user_id'] = $chamiloUid;
         Session::write('_user', $_user);
 
+        oktaLastLoginUpdate($chamiloUid);
         header('Location: ' . api_get_path(WEB_PATH));
         exit();
     }
+}
+
+function oktaRegistrationUpdate($userId)
+{
+    // Updating LastLogin Date
+    $table_user = Database::get_main_table(TABLE_MAIN_USER);
+    $sql = "UPDATE $table_user SET registration_date = NOW() WHERE user_id = " . $userId;
+    Database::query($sql);
+}
+
+function oktaLastLoginUpdate($userId)
+{
+    // Updating LastLogin Date
+    $table_user = Database::get_main_table(TABLE_MAIN_USER);
+    $sql = "UPDATE $table_user SET last_login = NOW() WHERE user_id = " . $userId;
+    Database::query($sql);
 }
 
 /**

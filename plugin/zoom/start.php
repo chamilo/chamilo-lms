@@ -22,7 +22,7 @@ if ($plugin->userIsConferenceManager()) {
     // user can create a new meeting
 
     // one form to fast and easily create and start an instant meeting
-    $createInstantMeetingForm = new FormValidator('createInstantMeetingForm');
+    $createInstantMeetingForm = new FormValidator('createInstantMeetingForm', 'post', '', '_blank');
     $createInstantMeetingForm->addButton('startButton', get_lang('StartInstantMeeting'));
     $tpl->assign('createInstantMeetingForm', $createInstantMeetingForm->returnForm());
 

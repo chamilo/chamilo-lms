@@ -26,7 +26,11 @@ To get them, create a <em>JWT App</em> :
 <br/>5. fill in information about your \"App\"
 (application and company names, contact name and email address)
 <br/>6. click on <em>Continue</em>
-Locate your API Key and Secret in the App Credentials page.";
+Locate your API Key and Secret in the App Credentials page.
+<br/>
+<strong>Attention</strong>:
+<br/>Zoom is <em>NOT</em> free software and specific rules apply to personal data protection.
+Please check with Zoom and make sure they satisfy you and learning users.";
 
 // please keep these lines alphabetically sorted
 $strings['%Hh%I'] = "%Hh%I";

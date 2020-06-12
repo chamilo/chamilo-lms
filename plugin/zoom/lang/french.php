@@ -24,7 +24,11 @@ Pour les obtenir, créez une <em>JWT app</em> :
 <br/>5. saisissez quelques informations sur votre \"App\"
 (noms de l'application, de l'entreprise, nom et adresse de courriel de contact)
 <br/>6. cliquez sur <em>Continue</em>
-<br/>La page <em>App Credentials</em> affiche la clé (API Key) and le code secret (API Secret) à saisir ici.";
+<br/>La page <em>App Credentials</em> affiche la clé (API Key) and le code secret (API Secret) à saisir ici.
+<br/>
+<strong>Attention</strong> :
+<br/>Zoom n'est <em>PAS</em> un logiciel libre et des règles spécifiques de protection des données personnelles s'y appliquent.
+Merci de vérifier auprès de Zoom qu'elles sont satisfaisantes pour vous et les apprenants qui l'utiliseront.";
 
 // please keep these lines alphabetically sorted
 $strings['%Hh%I'] = "%Hh%I";

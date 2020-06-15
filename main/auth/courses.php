@@ -349,6 +349,9 @@ switch ($action) {
         $htmlHeadXtra[] = "
         <script>
             $(function() {
+                $(\".selectpicker\").selectpicker({
+                    \"width\": \"500px\",
+                });
                 $('.star-rating li a').on('click', function(event) {
                     var id = $(this).parents('ul').attr('id');
                     $('#vote_label2_' + id).html('".get_lang('Loading')."');
@@ -377,8 +380,6 @@ switch ($action) {
             <div class="search-courses">
              ';
         if ($showCourses) {
-            //$content .= '<div class="col-md-'.($showSessions ? '4' : '6').'">';
-            //$content .= '<div class="col-md-12">';
             $htmlHeadXtra[] = '<script>
             $(function () {
                 '.$jqueryReadyContent.'
@@ -389,7 +390,6 @@ switch ($action) {
             $form->setDefaults($defaults);
 
             $content .= $form->returnForm();
-            //$content .= '</div>';
         }
 
         $content .= '</div></div></div>';

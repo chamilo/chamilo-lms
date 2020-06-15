@@ -101,6 +101,14 @@ $learnpath_id = isset($exercise_stat_info['orig_lp_id']) ? $exercise_stat_info['
 $learnpath_item_id = isset($exercise_stat_info['orig_lp_item_id']) ? $exercise_stat_info['orig_lp_item_id'] : 0;
 $learnpath_item_view_id = isset($exercise_stat_info['orig_lp_item_view_id']) ? $exercise_stat_info['orig_lp_item_view_id'] : 0;
 
+$logInfo = [
+    'tool' => TOOL_QUIZ,
+    'tool_id' => $objExercise->id,
+    'action' => $learnpath_id,
+    'action_details' => $learnpath_id,
+];
+Event::registerLog($logInfo);
+
 if ($origin === 'learnpath') {
     ?>
     <form method="GET" action="exercise.php?<?php echo api_get_cidreq(); ?>">
@@ -176,9 +184,6 @@ if ($origin === 'embeddable') {
 
 $saveResults = true;
 $feedbackType = $objExercise->getFeedbackType();
-if (!in_array($feedbackType, [EXERCISE_FEEDBACK_TYPE_DIRECT, EXERCISE_FEEDBACK_TYPE_POPUP])) {
-    //$saveResults = false;
-}
 
 // Display and save questions
 ExerciseLib::displayQuestionListByAttempt(
@@ -194,7 +199,7 @@ if (!empty($learnpath_id) && $saveResults) {
     Exercise::saveExerciseInLp($learnpath_item_id, $exe_id);
 }
 
-//Unset session for clock time
+// Unset session for clock time
 ExerciseLib::exercise_time_control_delete(
     $objExercise->id,
     $learnpath_id,
@@ -222,7 +227,6 @@ if (!in_array($origin, ['learnpath', 'embeddable'])) {
     }
 
     Session::write('attempt_remaining', $remainingMessage);
-    //showEmbeddableFinishButton();
     Display::display_reduced_footer();
 } else {
     $lp_mode = Session::read('lp_mode');

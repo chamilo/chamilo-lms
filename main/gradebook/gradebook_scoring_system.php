@@ -40,14 +40,18 @@ $interbreadcrumb[] = [
     'name' => get_lang('ToolGradebook'),
 ];
 
-$select_cat = (int) $_GET['selectcat'];
-$displayScore = ScoreDisplay::instance();
+$categoryId = (int) $_GET['selectcat'];
+if (empty($categoryId)) {
+    api_not_allowed(true);
+}
+
+$displayScore = ScoreDisplay::instance($categoryId);
 $customdisplays = $displayScore->get_custom_score_display_settings();
 
 $nr_items = count($customdisplays) != '0' ? count($customdisplays) : '1';
 $scoreform = new ScoreDisplayForm(
     'scoring_system_form',
-    api_get_self().'?selectcat='.$select_cat.'&'.api_get_cidreq()
+    api_get_self().'?selectcat='.$categoryId.'&'.api_get_cidreq()
 );
 
 if ($scoreform->validate()) {
@@ -83,7 +87,7 @@ if ($scoreform->validate()) {
                 false
             )
         );
-        header('Location: '.api_get_self().'?selectcat='.$select_cat.'&'.api_get_cidreq());
+        header('Location: '.api_get_self().'?selectcat='.$categoryId.'&'.api_get_cidreq());
         exit;
     }
 
@@ -100,7 +104,7 @@ if ($scoreform->validate()) {
         Display::return_message(get_lang('ScoringUpdated'), 'confirm', false)
     );
 
-    header('Location:'.api_get_self().'?selectcat='.$select_cat.'&'.api_get_cidreq());
+    header('Location:'.api_get_self().'?selectcat='.$categoryId.'&'.api_get_cidreq());
     exit;
 }
 

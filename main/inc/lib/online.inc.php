@@ -189,7 +189,7 @@ function online_logout($user_id = null, $logout_redirect = false)
     // After logout redirect to
     $url = api_get_path(WEB_PATH).'index.php';
 
-    if ($logout_redirect && api_get_plugin_setting('azure_active_directory', 'enable') == 'true') {
+    if ($logout_redirect && api_get_plugin_setting('azure_active_directory', 'enable') === 'true') {
         if (ChamiloSession::read('_user_auth_source') === 'azure_active_directory') {
             $activeDirectoryPlugin = AzureActiveDirectory::create();
             $azureLogout = $activeDirectoryPlugin->getUrl(AzureActiveDirectory::URL_TYPE_LOGOUT);
@@ -212,7 +212,7 @@ function online_logout($user_id = null, $logout_redirect = false)
         exit;
     }
 
-    if (api_is_cas_activated()) {
+    if ($uinfo['auth_source'] !== PLATFORM_AUTH_SOURCE && api_is_cas_activated()) {
         require_once __DIR__.'/../../auth/cas/cas_var.inc.php';
         if (phpCas::isInitialized()) {
             phpCAS::logout();

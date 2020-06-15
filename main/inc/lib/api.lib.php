@@ -176,6 +176,7 @@ define('DIR_HOTPOTATOES', '/HotPotatoes_files');
 // event logs types
 define('LOG_COURSE_DELETE', 'course_deleted');
 define('LOG_COURSE_CREATE', 'course_created');
+define('LOG_COURSE_SETTINGS_CHANGED', 'course_settings_changed');
 
 // @todo replace 'soc_gr' with social_group
 define('LOG_GROUP_PORTAL_CREATED', 'soc_gr_created');
@@ -207,7 +208,6 @@ define('LOG_SESSION_ADD_USER', 'session_add_user');
 define('LOG_SESSION_DELETE_USER', 'session_delete_user');
 define('LOG_SESSION_ADD_COURSE', 'session_add_course');
 define('LOG_SESSION_DELETE_COURSE', 'session_delete_course');
-
 define('LOG_SESSION_CATEGORY_CREATE', 'session_cat_created'); //changed in 1.9.8
 define('LOG_SESSION_CATEGORY_DELETE', 'session_cat_deleted'); //changed in 1.9.8
 define('LOG_CONFIGURATION_SETTINGS_CHANGE', 'settings_changed');
@@ -216,20 +216,15 @@ define('LOG_SUBSCRIBE_USER_TO_COURSE', 'user_subscribed');
 define('LOG_UNSUBSCRIBE_USER_FROM_COURSE', 'user_unsubscribed');
 define('LOG_ATTEMPTED_FORCED_LOGIN', 'attempted_forced_login');
 define('LOG_PLUGIN_CHANGE', 'plugin_changed');
-
 define('LOG_HOMEPAGE_CHANGED', 'homepage_changed');
-
 define('LOG_PROMOTION_CREATE', 'promotion_created');
 define('LOG_PROMOTION_DELETE', 'promotion_deleted');
 define('LOG_CAREER_CREATE', 'career_created');
 define('LOG_CAREER_DELETE', 'career_deleted');
-
 define('LOG_USER_PERSONAL_DOC_DELETED', 'user_doc_deleted');
 define('LOG_WIKI_ACCESS', 'wiki_page_view');
-
 // All results from an exercise
 define('LOG_EXERCISE_RESULT_DELETE', 'exe_result_deleted');
-
 // Logs only the one attempt
 define('LOG_EXERCISE_ATTEMPT_DELETE', 'exe_attempt_deleted');
 define('LOG_LP_ATTEMPT_DELETE', 'lp_attempt_deleted');
@@ -2295,6 +2290,7 @@ function api_format_course_array($course_data)
     $_course['extLink']['url'] = $course_data['department_url'];
     $_course['extLink']['name'] = $course_data['department_name'];
     $_course['categoryCode'] = $course_data['faCode'];
+    $_course['category_code'] = $course_data['faCode'];
     $_course['categoryName'] = $course_data['faName'];
     $_course['visibility'] = $course_data['visibility'];
     $_course['subscribe_allowed'] = $course_data['subscribe'];

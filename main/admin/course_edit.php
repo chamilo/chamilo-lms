@@ -414,6 +414,8 @@ if ($form->validate()) {
     ];
     Database::update($course_table, $params, ['id = ?' => $courseId]);
 
+    CourseManager::saveSettingChanges($courseInfo, $params);
+
     // update the extra fields
     $courseFieldValue = new ExtraFieldValue('course');
     $courseFieldValue->saveFieldValues($course);
@@ -478,10 +480,8 @@ if ($form->validate()) {
     Display::addFlash(Display::return_message(get_lang('ItemUpdated').': '.$message, 'info', false));
     if ($visual_code_is_used) {
         Display::addFlash(Display::return_message($warn));
-        header('Location: course_list.php');
-    } else {
-        header('Location: course_list.php');
     }
+    header('Location: course_list.php');
     exit;
 }
 

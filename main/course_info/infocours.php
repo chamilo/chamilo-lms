@@ -43,7 +43,7 @@ if (!$is_allowedToEdit) {
 $htmlHeadXtra[] = api_get_css_asset('cropper/dist/cropper.min.css');
 $htmlHeadXtra[] = api_get_asset('cropper/dist/cropper.min.js');
 $show_delete_watermark_text_message = false;
-if (api_get_setting('pdf_export_watermark_by_course') == 'true') {
+if (api_get_setting('pdf_export_watermark_by_course') === 'true') {
     if (isset($_GET['delete_watermark'])) {
         PDF::delete_watermark($course_code);
         $show_delete_watermark_text_message = true;
@@ -160,7 +160,7 @@ $form->addRule(
 );
 $form->addElement('checkbox', 'delete_picture', null, get_lang('DeletePicture'));
 
-if (api_get_setting('pdf_export_watermark_by_course') == 'true') {
+if (api_get_setting('pdf_export_watermark_by_course') === 'true') {
     $url = PDF::get_watermark($course_code);
     $form->addText('pdf_export_watermark_text', get_lang('PDFExportWatermarkTextTitle'), false, ['size' => '60']);
     $form->addElement('file', 'pdf_export_watermark_path', get_lang('AddWaterMark'));
@@ -179,7 +179,7 @@ if (api_get_setting('pdf_export_watermark_by_course') == 'true') {
     );
 }
 
-if (api_get_setting('allow_course_theme') == 'true') {
+if (api_get_setting('allow_course_theme') === 'true') {
     $group = [];
     $group[] = $form->createElement(
         'SelectTheme',
@@ -307,7 +307,7 @@ $form->addPanelOption(
 
 // Documents
 $globalGroup = [];
-if (api_get_setting('documents_default_visibility_defined_in_course') == 'true') {
+if (api_get_setting('documents_default_visibility_defined_in_course') === 'true') {
     $group = [
         $form->createElement('radio', 'documents_default_visibility', null, get_lang('Visible'), 'visible'),
         $form->createElement('radio', 'documents_default_visibility', null, get_lang('Invisible'), 'invisible'),
@@ -632,7 +632,7 @@ $group[] = $form->createElement(
 $group[] = $form->createElement('radio', 'enable_lp_auto_launch', null, get_lang('Deactivate'), 0);
 $form->addGroup($group, '', [get_lang('LPAutoLaunch')]);
 
-if (api_get_setting('allow_course_theme') == 'true') {
+if (api_get_setting('allow_course_theme') === 'true') {
     // Allow theme into Learning path
     $group = [];
     $group[] = $form->createElement(
@@ -677,7 +677,7 @@ if ($allowLPReturnLink === 'true') {
             2
         ),
     ];
-    $form->addGroup($group, '', [get_lang("LpReturnLink")]);
+    $form->addGroup($group, '', [get_lang('LpReturnLink')]);
 }
 
 $exerciseInvisible = api_get_setting('exercise_invisible_in_session');
@@ -965,6 +965,12 @@ if ($form->validate() && is_settings_editable()) {
             $picture['tmp_name'],
             $updateValues['picture_crop_result']
         );
+
+        Event::addEvent(
+            LOG_COURSE_SETTINGS_CHANGED,
+            'course_picture',
+            $picture['name']
+        );
     }
 
     $visibility = $updateValues['visibility'];
@@ -1015,8 +1021,6 @@ if ($form->validate() && is_settings_editable()) {
     }
 
     $activeLegal = isset($updateValues['activate_legal']) ? $updateValues['activate_legal'] : 0;
-    $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
-
     $params = [
         'title' => $updateValues['title'],
         'course_language' => $updateValues['course_language'],
@@ -1031,7 +1035,9 @@ if ($form->validate() && is_settings_editable()) {
         'registration_code' => $updateValues['course_registration_password'],
         'show_score' => $updateValues['show_score'],
     ];
-    Database::update($table_course, $params, ['id = ?' => $courseId]);
+    $table = Database::get_main_table(TABLE_MAIN_COURSE);
+    Database::update($table, $params, ['id = ?' => $courseId]);
+    CourseManager::saveSettingChanges($_course, $params);
 
     // Insert/Updates course_settings table
     foreach ($courseSettings as $setting) {
@@ -1043,6 +1049,7 @@ if ($form->validate() && is_settings_editable()) {
             api_get_course_int_id()
         );
     }
+
     // update the extra fields
     $courseFieldValue = new ExtraFieldValue('course');
     $courseFieldValue->saveFieldValues($updateValues);

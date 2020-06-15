@@ -5707,13 +5707,23 @@ class CourseManager
             $value = implode(',', $value);
         }
 
-        if (self::hasCourseSetting($variable, $courseId)) {
+        $settingFromDatabase = self::getCourseSetting($variable, $courseId);
+
+        if (!empty($settingFromDatabase)) {
             // Update
             Database::update(
                 $courseSettingTable,
                 ['value' => $value],
                 ['variable = ? AND c_id = ?' => [$variable, $courseId]]
             );
+
+            if ($settingFromDatabase['value'] != $value) {
+                Event::addEvent(
+                    LOG_COURSE_SETTINGS_CHANGED,
+                    $variable,
+                    $settingFromDatabase['value']." -> $value"
+                );
+            }
         } else {
             // Create
             Database::insert(
@@ -5725,29 +5735,67 @@ class CourseManager
                     'variable' => $variable,
                 ]
             );
+
+            Event::addEvent(
+                LOG_COURSE_SETTINGS_CHANGED,
+                $variable,
+                $value
+            );
         }
 
         return true;
     }
 
     /**
-     * Check if course setting exists.
+     * Get course setting.
      *
      * @param string $variable
      * @param int    $courseId
      *
-     * @return bool
+     * @return array
      */
-    public static function hasCourseSetting($variable, $courseId)
+    public static function getCourseSetting($variable, $courseId)
     {
         $courseSetting = Database::get_course_table(TABLE_COURSE_SETTING);
         $courseId = (int) $courseId;
         $variable = Database::escape_string($variable);
-        $sql = "SELECT variable FROM $courseSetting
+        $sql = "SELECT variable, value FROM $courseSetting
                 WHERE c_id = $courseId AND variable = '$variable'";
         $result = Database::query($sql);
 
-        return Database::num_rows($result) > 0;
+        return Database::fetch_array($result);
+    }
+
+    public static function saveSettingChanges($courseInfo, $params)
+    {
+        if (empty($courseInfo) || empty($params)) {
+            return false;
+        }
+
+        $userId = api_get_user_id();
+        $now = api_get_utc_datetime();
+
+        foreach ($params as $name => $value) {
+            $emptyValue = ' - ';
+            if (isset($courseInfo[$name]) && $courseInfo[$name] != $value) {
+                if ('' !== $courseInfo[$name]) {
+                    $emptyValue = $courseInfo[$name];
+                }
+
+                $changedTo = $emptyValue.' -> '.$value;
+
+                Event::addEvent(
+                    LOG_COURSE_SETTINGS_CHANGED,
+                    $name,
+                    $changedTo,
+                    $now,
+                    $userId,
+                    $courseInfo['real_id']
+                );
+            }
+        }
+
+        return true;
     }
 
     /**

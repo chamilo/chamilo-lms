@@ -2119,7 +2119,6 @@ abstract class Question
             $header .= $exercise->getQuestionRibbon($class, $scoreLabel, $score['result'], $scoreCurrent);
         }
 
-
         if ($this->type != READING_COMPREHENSION) {
             // Do not show the description (the text to read) if the question is of type READING_COMPREHENSION
             $header .= Display::div(

@@ -8548,4 +8548,9 @@ $OnlyXUsersWereAnonymized = "Only %d users were anonymized.";
 $AttemptedAnonymizationOfTheseXUsersFailed = "Attempted anonymization of the following %d users failed:";
 $PleaseUploadListOfUsers = "Please upload a text file listing the users to be anonymized, one username per line.";
 $InternalInconsistencyXUsersFoundForYUserNames = "Internal inconsistency found : %d users found from %d submitted usernames. Please start over.";
+$BulkAnonymizeUsers = "Anonymise users list";
+$UsernameList = "Username list";
+$UsersAboutToBeAnonymized = "Users about to be anonymized:";
+$CouldNotReadFile = "Could not read file.";
+$CouldNotReadFileLines = "Could not read file lines.";
 ?>

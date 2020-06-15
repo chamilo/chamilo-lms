@@ -8480,4 +8480,9 @@ $OnlyXUsersWereAnonymized = "Seuls %d utilisateurs ont été anonymisés.";
 $AttemptedAnonymizationOfTheseXUsersFailed = "La tentative d'anonymisation des %d utilisateurs suivants a échoué :";
 $PleaseUploadListOfUsers = "Veuillez télécharger un fichier texte répertoriant les utilisateurs à anonymiser, un nom d'utilisateur par ligne.";
 $InternalInconsistencyXUsersFoundForYUserNames = "Incohérence interne trouvée : %d utilisateurs trouvés à partir de %d noms d'utilisateur soumis. Veuillez recommencer.";
+$BulkAnonymizeUsers = "Anonymiser utilisateurs par CSV";
+$UsernameList = "Liste de nom d'utilisateur";
+$UsersAboutToBeAnonymized = "Utilisateurs sur le point d'être anonymiser :";
+$CouldNotReadFile = "Impossible de lire le fichier";
+$CouldNotReadFileLines = "Impossible de lire les lignes du fichier.";
 ?>

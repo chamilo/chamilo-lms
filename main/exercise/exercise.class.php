@@ -5692,11 +5692,9 @@ class Exercise
                 }
             }
 
-            //if ($origin != 'learnpath') {
             if ($show_result && $answerType != ANNOTATION) {
                 echo '</table>';
             }
-            //	}
         }
         unset($objAnswerTmp);
 

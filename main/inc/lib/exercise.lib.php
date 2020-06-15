@@ -2988,18 +2988,18 @@ HOTSPOT;
     /**
      * @param float  $score
      * @param float  $weight
-     * @param string $pass_percentage
+     * @param string $passPercentage
      *
      * @return bool
      */
-    public static function isSuccessExerciseResult($score, $weight, $pass_percentage)
+    public static function isSuccessExerciseResult($score, $weight, $passPercentage)
     {
         $percentage = float_format(
             ($score / (0 != $weight ? $weight : 1)) * 100,
             1
         );
-        if (isset($pass_percentage) && !empty($pass_percentage)) {
-            if ($percentage >= $pass_percentage) {
+        if (isset($passPercentage) && !empty($passPercentage)) {
+            if ($percentage >= $passPercentage) {
                 return true;
             }
         }
@@ -4424,7 +4424,6 @@ EOT;
         $counter = 1;
         $total_score = $total_weight = 0;
         $exercise_content = null;
-
         // Hide results
         $show_results = false;
         $show_only_score = false;
@@ -4479,7 +4478,7 @@ EOT;
                     api_get_user_id(),
                     $objExercise->id,
                     api_get_course_int_id(),
-                    api_get_session_id(),
+                    $sessionId,
                     $exercise_stat_info['orig_lp_id'],
                     $exercise_stat_info['orig_lp_item_id'],
                     'desc'
@@ -4520,7 +4519,7 @@ EOT;
             !empty($exercise_stat_info['exe_user_id']) &&
             !empty($studentInfo)
         ) {
-            // Shows exercise header
+            // Shows exercise header.
             echo $objExercise->showExerciseResultHeader(
                 $studentInfo,
                 $exercise_stat_info
@@ -4731,7 +4730,7 @@ EOT;
                         );
                     }
                 }
-            } // end foreach() block that loops over all questions
+            }
         }
 
         $totalScoreText = null;
@@ -4750,7 +4749,6 @@ EOT;
                 );
             } else {
                 $pluginEvaluation = QuestionOptionsEvaluationPlugin::create();
-
                 if ('true' === $pluginEvaluation->get(QuestionOptionsEvaluationPlugin::SETTING_ENABLE)) {
                     $formula = $pluginEvaluation->getFormulaForExercise($objExercise->selectId());
 
@@ -4796,10 +4794,7 @@ EOT;
                 'score' => $total_score,
                 'total' => $total_weight,
             ];
-            echo TestCategory::get_stats_table_by_attempt(
-                $objExercise->id,
-                $category_list
-            );
+            echo TestCategory::get_stats_table_by_attempt($objExercise->id, $category_list);
         }
 
         if ($show_all_but_expected_answer) {
@@ -4824,7 +4819,6 @@ EOT;
         }
 
         echo $exercise_content;
-
         if (!$show_only_score) {
             echo $totalScoreText;
         }
@@ -4842,7 +4836,7 @@ EOT;
                         $objExercise->selectId(),
                         $total_score,
                         $total_weight,
-                        api_get_session_id(),
+                        $sessionId,
                         $learnpath_id,
                         $learnpath_item_id,
                         $learnpath_item_view_id,
@@ -4855,7 +4849,7 @@ EOT;
                         $objExercise->generateStats(
                             $objExercise->selectId(),
                             api_get_course_info(),
-                            api_get_session_id()
+                            $sessionId
                         );
                     }
                 }

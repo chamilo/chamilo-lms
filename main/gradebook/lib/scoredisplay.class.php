@@ -34,7 +34,7 @@ class ScoreDisplay
         $value = $value['my_display_coloring'];
 
         // Setting coloring.
-        $this->coloring_enabled = $value == 'true' ? true : false;
+        $this->coloring_enabled = $value === 'true' ? true : false;
 
         if ($this->coloring_enabled) {
             $value = api_get_setting('gradebook_score_display_colorsplit');
@@ -46,7 +46,7 @@ class ScoreDisplay
         // Setting custom enabled
         $value = api_get_setting('gradebook_score_display_custom');
         $value = $value['my_display_custom'];
-        $this->custom_enabled = $value == 'true' ? true : false;
+        $this->custom_enabled = $value === 'true' ? true : false;
 
         if ($this->custom_enabled) {
             $params = ['category = ?' => ['Gradebook']];
@@ -69,14 +69,13 @@ class ScoreDisplay
             if (count($this->custom_display) > 0) {
                 $value = api_get_setting('gradebook_score_display_upperlimit');
                 $value = $value['my_display_upperlimit'];
-                $this->upperlimit_included = $value == 'true' ? true : false;
+                $this->upperlimit_included = $value === 'true' ? true : false;
                 $this->custom_display_conv = $this->convert_displays($this->custom_display);
             }
         }
 
-        //If teachers can override the portal parameters
-
-        if (api_get_setting('teachers_can_change_score_settings') == 'true') {
+        // If teachers can override the portal parameters
+        if (api_get_setting('teachers_can_change_score_settings') === 'true') {
             //Load course settings
             if ($this->custom_enabled) {
                 $this->custom_display = $this->get_custom_displays();
@@ -155,7 +154,7 @@ class ScoreDisplay
 
     /**
      * If custom score display is enabled, this will return the current settings.
-     * See also update_custom_score_display_settings.
+     * See also updateCustomScoreDisplaySettings.
      *
      * @return array current settings (or null if feature not enabled)
      */
@@ -181,16 +180,15 @@ class ScoreDisplay
      * @param int   score color percent (optional)
      * @param int   gradebook category id (optional)
      */
-    public function update_custom_score_display_settings(
+    public function updateCustomScoreDisplaySettings(
         $displays,
         $scorecolpercent = 0,
         $category_id = null
     ) {
         $this->custom_display = $displays;
         $this->custom_display_conv = $this->convert_displays($this->custom_display);
-
         if (isset($category_id)) {
-            $category_id = intval($category_id);
+            $category_id = (int) $category_id;
         } else {
             $category_id = $this->get_current_gradebook_category_id();
         }
@@ -201,7 +199,6 @@ class ScoreDisplay
         Database::query($sql);
 
         // add new settings
-        $count = 0;
         foreach ($displays as $display) {
             $params = [
                 'score' => $display['score'],
@@ -210,8 +207,6 @@ class ScoreDisplay
                 'score_color_percent' => $scorecolpercent,
             ];
             Database::insert($table, $params);
-
-            $count++;
         }
     }
 

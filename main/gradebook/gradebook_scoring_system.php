@@ -1,17 +1,13 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
-/**
- * Script.
- *
- * @package chamilo.gradebook
- */
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
 GradebookUtils::block_students();
 
-if (api_get_setting('teachers_can_change_score_settings') != 'true') {
+if (api_get_setting('teachers_can_change_score_settings') !== 'true') {
     api_not_allowed();
 }
 
@@ -22,8 +18,6 @@ function plusItem(item) {
     document.getElementById("min-"+(item-1)).style.display = "none";
     document.getElementById("min-"+(item)).style.display = "inline";
     document.getElementById("plus-"+(item+1)).style.display = "inline";
-    //document.getElementById("txta-"+(item)).value = "100";
-    //document.getElementById("txta-"+(item-1)).value = "";
 }
 
 function minItem(item) {
@@ -46,8 +40,8 @@ $interbreadcrumb[] = [
     'name' => get_lang('ToolGradebook'),
 ];
 
-$select_cat = intval($_GET['selectcat']);
-$displayScore = ScoreDisplay :: instance();
+$select_cat = (int) $_GET['selectcat'];
+$displayScore = ScoreDisplay::instance();
 $customdisplays = $displayScore->get_custom_score_display_settings();
 
 $nr_items = count($customdisplays) != '0' ? count($customdisplays) : '1';
@@ -99,10 +93,7 @@ if ($scoreform->validate()) {
     }
 
     if ($displayScore->is_custom() && !empty($scoringDisplay)) {
-        $displayScore->update_custom_score_display_settings(
-            $scoringDisplay,
-            $scorecolpercent
-        );
+        $displayScore->updateCustomScoreDisplaySettings($scoringDisplay, $scorecolpercent);
     }
 
     Display::addFlash(

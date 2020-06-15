@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -9,8 +10,6 @@
  * @author Roan Embrechts, refactoring and code cleaning
  * @author Yannick Warnier <ywarnier@beeznest.org> - cleaning and update for new SCORM tool
  * @author Julio Montoya <gugli100@gmail.com> Adding formvalidator support
- *
- * @package chamilo.learnpath
  */
 $this_section = SECTION_COURSES;
 api_protect_course_script();
@@ -139,7 +138,7 @@ $form->addElement(
     ['onclick' => 'activate_start_date()']
 );
 $form->addElement('html', '<div id="start_date_div" style="display:block;">');
-$form->addDatePicker('publicated_on', get_lang('PublicationDate'));
+$form->addDateTimePicker('publicated_on', get_lang('PublicationDate'));
 $form->addElement('html', '</div>');
 
 //End date
@@ -151,11 +150,20 @@ $form->addElement(
     ['onclick' => 'activate_end_date()']
 );
 $form->addElement('html', '<div id="end_date_div" style="display:none;">');
-$form->addDatePicker('expired_on', get_lang('ExpirationDate'));
+$form->addDateTimePicker('expired_on', get_lang('ExpirationDate'));
 $form->addElement('html', '</div>');
 
-$extraField = new ExtraField('lp');
+$subscriptionSettings = learnpath::getSubscriptionSettings();
+if ($subscriptionSettings['allow_add_users_to_lp']) {
+    $form->addElement(
+        'checkbox',
+        'subscribe_users',
+        null,
+        get_lang('SubscribeUsersToLp')
+    );
+}
 
+$extraField = new ExtraField('lp');
 $extra = $extraField->addElements($form, 0, ['lp_icon']);
 
 Skill::addSkillsToForm($form, ITEM_TYPE_LEARNPATH, 0);
@@ -165,12 +173,12 @@ $form->addElement('html', '</div>');
 $defaults['activate_start_date_check'] = 1;
 
 $defaults['accumulate_scorm_time'] = 0;
-if (api_get_setting('scorm_cumulative_session_time') == 'true') {
+if (api_get_setting('scorm_cumulative_session_time') === 'true') {
     $defaults['accumulate_scorm_time'] = 1;
 }
 
-$defaults['publicated_on'] = date('Y-m-d 08:00:00');
-$defaults['expired_on'] = date('Y-m-d 08:00:00', time() + 86400);
+$defaults['publicated_on'] = api_get_local_time();
+$defaults['expired_on'] = api_get_local_time(time() + 86400);
 
 $form->setDefaults($defaults);
 $form->addButtonCreate(get_lang('CreateLearningPath'));

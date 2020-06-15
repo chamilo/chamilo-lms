@@ -1542,6 +1542,9 @@ $_configuration['auth_password_links'] = [
 // Disable clean results for teachers
 // $_configuration['disable_clean_exercise_results_for_teachers'] = true;
 
+// Show certainty degree question result in Exercises
+// $_configuration['show_exercise_question_certainty_ribbon_result'] = false;
+
 //Allows to add increment in minutes to the date range component timepicker, example: 5,10,30 minutes
 //$_configuration['timepicker_increment'] = 5;
 

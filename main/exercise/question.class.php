@@ -2018,7 +2018,6 @@ abstract class Question
         }
 
         $scoreLabel = get_lang('Wrong');
-
         if (in_array($exercise->results_disabled, [
             RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
             RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING,
@@ -2099,19 +2098,27 @@ abstract class Question
         ];
         $header .= Display::page_subheader2($counterLabel.'. '.$this->question);
 
+        $showRibbon = true;
         // dont display score for certainty degree questions
-        if ($this->type != MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
-            if (isset($score['result'])) {
-                if (in_array($exercise->results_disabled, [
-                    RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
-                    RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING,
-                ])
-                ) {
-                    $score['result'] = null;
-                }
-                $header .= $exercise->getQuestionRibbon($class, $scoreLabel, $score['result'], $scoreCurrent);
+        if (MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY == $this->type) {
+            $showRibbon = false;
+            $ribbonResult = api_get_configuration_value('show_exercise_question_certainty_ribbon_result');
+            if (true === $ribbonResult) {
+                $showRibbon = true;
             }
         }
+
+        if ($showRibbon && isset($score['result'])) {
+            if (in_array($exercise->results_disabled, [
+                RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
+                RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING,
+            ])
+            ) {
+                $score['result'] = null;
+            }
+            $header .= $exercise->getQuestionRibbon($class, $scoreLabel, $score['result'], $scoreCurrent);
+        }
+
 
         if ($this->type != READING_COMPREHENSION) {
             // Do not show the description (the text to read) if the question is of type READING_COMPREHENSION

@@ -414,7 +414,8 @@ if ($form->validate()) {
     ];
     Database::update($course_table, $params, ['id = ?' => $courseId]);
 
-    CourseManager::saveSettingChanges($courseInfo, $params);
+    $courseInfoBeforeUpdate = api_get_course_info_by_id($courseId);
+    CourseManager::saveSettingChanges($courseInfoBeforeUpdate, $params);
 
     // update the extra fields
     $courseFieldValue = new ExtraFieldValue('course');

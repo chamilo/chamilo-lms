@@ -5970,22 +5970,22 @@ class Exercise
                     return false;
                     break;
                 case 1: // End
-                    if ($type == 'end') {
+                    if ($type === 'end') {
                         $sendEnd = true;
                     }
                     break;
                 case 2: // start
-                    if ($type == 'start') {
+                    if ($type === 'start') {
                         $sendStart = true;
                     }
                     break;
                 case 3: // end + open
-                    if ($type == 'end') {
+                    if ($type === 'end') {
                         $sendEndOpenQuestion = true;
                     }
                     break;
                 case 4: // end + oral
-                    if ($type == 'end') {
+                    if ($type === 'end') {
                         $sendEndOralQuestion = true;
                     }
                     break;

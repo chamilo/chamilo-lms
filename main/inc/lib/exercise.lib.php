@@ -4377,6 +4377,7 @@ EOT;
         $remainingMessage = ''
     ) {
         $origin = api_get_origin();
+        $courseId = api_get_course_int_id();
         $courseCode = api_get_course_id();
         $sessionId = api_get_session_id();
 
@@ -4477,7 +4478,7 @@ EOT;
                 $attempts = Event::getExerciseResultsByUser(
                     api_get_user_id(),
                     $objExercise->id,
-                    api_get_course_int_id(),
+                    $courseId,
                     $sessionId,
                     $exercise_stat_info['orig_lp_id'],
                     $exercise_stat_info['orig_lp_item_id'],
@@ -4878,8 +4879,8 @@ EOT;
             echo self::displayResultsInRanking(
                 $objExercise->iId,
                 api_get_user_id(),
-                api_get_course_int_id(),
-                api_get_session_id()
+                $courseId,
+                $sessionId
             );
         }
 

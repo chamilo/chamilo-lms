@@ -4083,9 +4083,6 @@ class CourseManager
             if (in_array($course_info['real_id'], $courseAdded)) {
                 continue;
             }
-
-            //$course_info['requirements'] = $courseController->getRequirements($course_info['real_id'], SequenceResource::COURSE_TYPE, true, true);
-
             $course_info['id_session'] = null;
             $course_info['status'] = $row['status'];
             // For each course, get if there is any notification icon to show

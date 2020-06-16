@@ -2788,20 +2788,20 @@ JAVASCRIPT;
         $where = null;
 
         //if (!empty($options['where'])) {
-            if (!empty($options['extra']) && !empty($extra_fields)) {
-                // Removing double 1=1
-                if (empty($options['where'])) {
-                    $options['where'] = ' 1 = 1 ';
-                }
-                $options['where'] = str_replace(' 1 = 1  AND', '', $options['where']);
-                // Always OR
-                $counter = 1;
-                foreach ($extra_fields as $extra_info) {
-                    $extra_field_info = $extra_info['extra_field_info'];
-                    $inject_joins .= " INNER JOIN $this->table_field_values fv$counter
+        if (!empty($options['extra']) && !empty($extra_fields)) {
+            // Removing double 1=1
+            if (empty($options['where'])) {
+                $options['where'] = ' 1 = 1 ';
+            }
+            $options['where'] = str_replace(' 1 = 1  AND', '', $options['where']);
+            // Always OR
+            $counter = 1;
+            foreach ($extra_fields as $extra_info) {
+                $extra_field_info = $extra_info['extra_field_info'];
+                $inject_joins .= " INNER JOIN $this->table_field_values fv$counter
                                        ON ($alias.".$this->primaryKey." = fv$counter.".$this->handler_id.') ';
-                    // Add options
-                    switch ($extra_field_info['field_type']) {
+                // Add options
+                switch ($extra_field_info['field_type']) {
                         case self::FIELD_TYPE_SELECT:
                         case self::FIELD_TYPE_DOUBLE_SELECT:
                             $options['where'] = str_replace(
@@ -2850,14 +2850,14 @@ JAVASCRIPT;
                             );
                             break;
                     }
-                    $field_value_to_join[] = " fv$counter.$this->handler_id ";
-                    $counter++;
-                }
+                $field_value_to_join[] = " fv$counter.$this->handler_id ";
+                $counter++;
             }
+        }
 
-            if (!empty($options['where'])) {
-                $where .= ' AND '.$options['where'];
-            }
+        if (!empty($options['where'])) {
+            $where .= ' AND '.$options['where'];
+        }
         //}
 
         $order = '';

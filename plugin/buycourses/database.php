@@ -10,7 +10,6 @@ use Doctrine\DBAL\Schema\Schema;
  *
  * Check if script can be called.
  */
-
 if (!function_exists('api_get_path')) {
     die('This script must be loaded through the Chamilo plugin installer sequence');
 }

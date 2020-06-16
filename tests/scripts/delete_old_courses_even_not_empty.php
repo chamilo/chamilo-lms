@@ -24,7 +24,7 @@ $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
 $sql = "SELECT
             id, code, directory, creation_date, last_visit
         FROM $tableCourse c
-        WHERE creation_date < '$creation' AND last_visit < '$access' ".
+        WHERE creation_date < '$creation' AND (last_visit < '$access' OR last_visit is NULL) ".
 // Change this line to avoid deleting specifi courses
 //        "AND c.code NOT IN ('CHAMILOTEACHER', 'CHAMILOADMIN') ".
         "ORDER by code

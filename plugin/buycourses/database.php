@@ -718,6 +718,19 @@ $currencies = [
 ];
 
 foreach ($currencies as $currency) {
+    $value = Database::select(
+        "*",
+        $currencyTable,
+        [
+            'where' => ['country_code = ?' => $currency[0]],
+        ],
+        'first'
+    );
+
+    if (!empty($value)) {
+        continue;
+    }
+
     Database::insert(
         $currencyTable,
         [

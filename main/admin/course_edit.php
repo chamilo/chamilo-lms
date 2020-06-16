@@ -399,6 +399,7 @@ if ($form->validate()) {
 
     Database::query($sql);
 
+    $courseInfoBeforeUpdate = api_get_course_info_by_id($courseId);
     $title = str_replace('&amp;', '&', $title);
     $params = [
         'course_language' => $course_language,
@@ -413,8 +414,6 @@ if ($form->validate()) {
         'unsubscribe' => $unsubscribe,
     ];
     Database::update($course_table, $params, ['id = ?' => $courseId]);
-
-    $courseInfoBeforeUpdate = api_get_course_info_by_id($courseId);
     CourseManager::saveSettingChanges($courseInfoBeforeUpdate, $params);
 
     // update the extra fields

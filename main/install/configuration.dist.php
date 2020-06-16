@@ -1557,6 +1557,9 @@ $_configuration['auth_password_links'] = [
 // Disable slideshow documents
 //$_configuration['disable_slideshow_documents'] = false;
 
+// Disable search documents
+//$_configuration['disable_search_documents'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

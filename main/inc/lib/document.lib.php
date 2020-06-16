@@ -5936,9 +5936,9 @@ class DocumentManager
      *
      * @return bool Return true when exist
      */
-    public static function search_keyword($document_name, $keyword)
+    public static function searchKeyword($name, $keyword)
     {
-        if (api_strripos($document_name, $keyword) !== false) {
+        if (api_strripos($name, $keyword) !== false) {
             return true;
         }
 

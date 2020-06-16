@@ -1560,8 +1560,9 @@ if (isset($_GET['curdirpath']) &&
     }
 }
 
+$disableSearch = api_get_configuration_value('disable_search_documents');
 /* GET ALL DOCUMENT DATA FOR CURDIRPATH */
-if (isset($_GET['keyword']) && !empty($_GET['keyword'])) {
+if (isset($_GET['keyword']) && !empty($_GET['keyword']) && false === $disableSearch) {
     $documentAndFolders = DocumentManager::getAllDocumentData(
         $courseInfo,
         $curdirpath,
@@ -1777,8 +1778,7 @@ if ($isAllowedToEdit && !$is_certificate_mode) {
     );
 }
 
-if (!$is_certificate_mode) {
-    /* BUILD SEARCH FORM */
+if (!$is_certificate_mode && false === $disableSearch) {
     $form = new FormValidator(
         'search_document',
         'get',
@@ -1975,7 +1975,7 @@ if (!empty($documentAndFolders)) {
                 $countedPaths[$document_data['path']] = true;
             }
 
-            if ((isset($_GET['keyword']) && DocumentManager::search_keyword($document_name, $_GET['keyword'])) ||
+            if ((isset($_GET['keyword']) && DocumentManager::searchKeyword($document_name, $_GET['keyword'])) ||
                 !isset($_GET['keyword']) ||
                 empty($_GET['keyword'])
             ) {

@@ -2478,7 +2478,9 @@ JAVASCRIPT;
         // Parse params.
         $fields = [];
         foreach ($values as $key => $value) {
-            if (substr($key, 0, 6) !== 'extra_' && substr($key, 0, 7) !== '_extra_') {
+            if (substr($key, 0, 6) !== 'extra_' &&
+                substr($key, 0, 7) !== '_extra_'
+            ) {
                 continue;
             }
             if (!empty($value)) {
@@ -2748,8 +2750,11 @@ JAVASCRIPT;
                                 $fields[] = "tag$counter$newCounter.tag";
                                 $newCounter++;
                             }
-                            $tags = implode(' , " ", ', $fields);
-                            $inject_extra_fields .= " CONCAT($tags) as $tagAlias, ";
+
+                            if (!empty($fields)) {
+                                $tags = implode(' , " ", ', $fields);
+                                $inject_extra_fields .= " CONCAT($tags) as $tagAlias, ";
+                            }
                             break;
                         default:
                             $inject_extra_fields .= " fv$counter.value as {$extra['field']}, ";
@@ -2781,9 +2786,13 @@ JAVASCRIPT;
         $inject_joins = null;
         $inject_where = null;
         $where = null;
-        if (!empty($options['where'])) {
-            if (!empty($options['extra'])) {
+
+        //if (!empty($options['where'])) {
+            if (!empty($options['extra']) && !empty($extra_fields)) {
                 // Removing double 1=1
+                if (empty($options['where'])) {
+                    $options['where'] = ' 1 = 1 ';
+                }
                 $options['where'] = str_replace(' 1 = 1  AND', '', $options['where']);
                 // Always OR
                 $counter = 1;
@@ -2845,8 +2854,11 @@ JAVASCRIPT;
                     $counter++;
                 }
             }
-            $where .= ' AND '.$options['where'];
-        }
+
+            if (!empty($options['where'])) {
+                $where .= ' AND '.$options['where'];
+            }
+        //}
 
         $order = '';
         if (!empty($options['order'])) {

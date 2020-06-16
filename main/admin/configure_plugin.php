@@ -81,6 +81,7 @@ if (isset($form)) {
                 1
             );
         }
+
         Event::addEvent(
             LOG_PLUGIN_CHANGE,
             LOG_PLUGIN_SETTINGS_CHANGE,

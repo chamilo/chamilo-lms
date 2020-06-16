@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -7,12 +8,14 @@ use ChamiloSession as Session;
  * @author Patrick Cool patrick.cool@UGent.be Ghent University Mai 2004
  * @author Julio Montoya Lots of improvements, cleaning, adding security
  * @author Juan Carlos Raña Trabado herodoto@telefonica.net	January 2008
- *
- * @package chamilo.document
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_course_script();
+
+if (api_get_configuration_value('disable_slideshow_documents')) {
+    api_not_allowed(true);
+}
 
 $curdirpath = $path = isset($_GET['curdirpath']) ? Security::remove_XSS($_GET['curdirpath']) : null;
 $courseInfo = api_get_course_info();
@@ -342,9 +345,9 @@ if ($slide_id == 'all') {
                     }
 
                     $doc_url = ($path && $path !== '/') ? $path.'/'.$one_image_file : $path.$one_image_file;
-                    $image_tag[] = '<img 
+                    $image_tag[] = '<img
                             src="download.php?doc_url='.$doc_url.'"
-                            border="0" 
+                            border="0"
                             width="'.$image_width.'" height="'.$image_height.'" title="'.$one_image_file.'">';
                 }
             }
@@ -404,8 +407,8 @@ if ($slide_id != 'all' && !empty($image_files_only)) {
             $pathpart = $path.'/';
         }
         $sql = "SELECT * FROM $tbl_documents
-                WHERE 
-                  c_id = $course_id AND 
+                WHERE
+                  c_id = $course_id AND
                   path = '".Database::escape_string($pathpart.$image_files_only[$slide])."'";
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
@@ -472,9 +475,9 @@ if ($slide_id != 'all' && !empty($image_files_only)) {
             </script>
     <?php
         } else {
-            echo "<img 
-                class=\"img-responsive\" 
-                src='download.php?doc_url=$path/".$image_files_only[$slide]."' alt='".$image_files_only[$slide]."' 
+            echo "<img
+                class=\"img-responsive\"
+                src='download.php?doc_url=$path/".$image_files_only[$slide]."' alt='".$image_files_only[$slide]."'
                 border='0'".$height_width_tags.'>';
         }
 

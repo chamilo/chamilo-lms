@@ -1554,6 +1554,9 @@ $_configuration['auth_password_links'] = [
 // Allows prevent to the user before leaving a learning path
 //$_configuration['lp_prevents_beforeunload'] = false;
 
+// Disable slideshow documents
+//$_configuration['disable_slideshow_documents'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

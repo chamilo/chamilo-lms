@@ -1759,11 +1759,15 @@ if ($isAllowedToEdit ||
         );
     }
 }
+
 if (!isset($_GET['keyword']) && !$is_certificate_mode) {
-    $actionsLeft .= Display::url(
-        Display::return_icon('slideshow.png', get_lang('ViewSlideshow'), '', ICON_SIZE_MEDIUM),
-        api_get_path(WEB_CODE_PATH).'document/slideshow.php?'.api_get_cidreq().'&curdirpath='.$curdirpathurl.'&id='.$document_id
-    );
+    $disable = api_get_configuration_value('disable_slideshow_documents');
+    if (false === $disable) {
+        $actionsLeft .= Display::url(
+            Display::return_icon('slideshow.png', get_lang('ViewSlideshow'), '', ICON_SIZE_MEDIUM),
+            api_get_path(WEB_CODE_PATH).'document/slideshow.php?'.api_get_cidreq().'&curdirpath='.$curdirpathurl.'&id='.$document_id
+        );
+    }
 }
 
 if ($isAllowedToEdit && !$is_certificate_mode) {

@@ -9161,10 +9161,12 @@ class SessionManager
                 $catId = $sessionInfo['session_category_id'];
                 if (!isset($listCat[$catId])) {
                     $listCatInfo = self::get_session_category($catId);
-                    $listCat[$catId] = [];
-                    $listCat[$catId]['catSessionId'] = $catId;
-                    $listCat[$catId]['catSessionName'] = $listCatInfo['name'];
-                    $listCat[$catId]['sessionList'] = [];
+                    if ($listCatInfo) {
+                        $listCat[$catId] = [];
+                        $listCat[$catId]['catSessionId'] = $catId;
+                        $listCat[$catId]['catSessionName'] = $listCatInfo['name'];
+                        $listCat[$catId]['sessionList'] = [];
+                    }
                 }
                 $listSessionInfo = self::fetch($sessionId);
                 $listSessionIdName = [

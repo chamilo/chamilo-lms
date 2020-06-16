@@ -1233,13 +1233,24 @@ class IndexManager
                         $loadDirs
                     );
                     // list of session category
-                    $htmlSessionCategory = '<div class="session-view-row" style="display:none;" id="courseblock-'.$coursesInfo['real_id'].'">';
+                    $htmlSessionCategory = '<div
+                        class="session-view-row"
+                        style="display:none;"
+                        id="courseblock-'.$coursesInfo['real_id'].'"
+                        >';
                     foreach ($listCourse['sessionCatList'] as $listCategorySession) {
+                        $catSessionId = null;
+                        if (isset($listCategorySession['catSessionId'])) {
+                            $catSessionId = $listCategorySession['catSessionId'];
+                        }
                         // add session category
-                        $htmlSessionCategory .= self::getHtmlSessionCategory(
-                            $listCategorySession['catSessionId'],
-                            $listCategorySession['catSessionName']
-                        );
+                        if ($catSessionId) {
+                            $htmlSessionCategory .= self::getHtmlSessionCategory(
+                                $listCategorySession['catSessionId'],
+                                $listCategorySession['catSessionName']
+                            );
+                        }
+
                         // list of session
                         $htmlSession = ''; // start
                         foreach ($listCategorySession['sessionList'] as $listSession) {
@@ -1248,7 +1259,7 @@ class IndexManager
                             $htmlSession .= self::getHtmlForSession(
                                 $listSession['sessionId'],
                                 $listSession['sessionName'],
-                                $listCategorySession['catSessionId'],
+                                $catSessionId,
                                 $coursesInfo
                             );
                             $htmlSession .= '</div>';

@@ -6,8 +6,6 @@ use ChamiloSession as Session;
 
 /**
  * @author  Juan Carlos Trabado herodoto@telefonica.net
- *
- * @package chamilo.social
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';

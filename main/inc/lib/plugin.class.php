@@ -626,6 +626,10 @@ class Plugin
         $settings = [];
         if (is_array($this->course_settings)) {
             foreach ($this->course_settings as $item) {
+                // Skip html type
+                if ('html' === $item['type']) {
+                    continue;
+                }
                 if (isset($item['group'])) {
                     if (!in_array($item['group'], $settings)) {
                         $settings[] = $item['group'];

@@ -52,9 +52,18 @@ $tab_default_add_shibboleth_login_button_shibboleth_image_url = api_get_setting(
     'add_shibboleth_login_button_shibboleth_image_url'
 );
 $defaults = [];
-$defaults['shibboleth_button_label'] = $tab_default_add_shibboleth_login_button_shibboleth_button_label['add_shibboleth_login_button'];
-$defaults['shibboleth_button_comment'] = $tab_default_add_shibboleth_login_button_shibboleth_button_comment['add_shibboleth_login_button'];
-$defaults['shibboleth_image_url'] = $tab_default_add_shibboleth_login_button_shibboleth_image_url['add_shibboleth_login_button'];
+if ($tab_default_add_shibboleth_login_button_shibboleth_button_label) {
+    $defaults['shibboleth_button_label'] = $tab_default_add_shibboleth_login_button_shibboleth_button_label['add_shibboleth_login_button'];
+}
+
+if ($tab_default_add_shibboleth_login_button_shibboleth_button_comment) {
+    $defaults['shibboleth_button_comment'] = $tab_default_add_shibboleth_login_button_shibboleth_button_comment['add_shibboleth_login_button'];
+}
+
+if ($tab_default_add_shibboleth_login_button_shibboleth_image_url) {
+    $defaults['shibboleth_image_url'] = $tab_default_add_shibboleth_login_button_shibboleth_image_url['add_shibboleth_login_button'];
+}
+
 $form->setDefaults($defaults);
 //display form
 $plugin_info['settings_form'] = $form;

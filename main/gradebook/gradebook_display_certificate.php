@@ -127,7 +127,10 @@ switch ($action) {
         break;
     case 'export_all_certificates':
         if ($allowCustomCertificate) {
-            $params = 'course_code='.api_get_course_id().'&session_id='.api_get_session_id().'&'.api_get_cidreq();
+            $params = 'course_code='.api_get_course_id().
+                '&session_id='.api_get_session_id().
+                '&'.api_get_cidreq().
+                '&cat_id='.$categoryId;
             $url = api_get_path(WEB_PLUGIN_PATH).
                 'customcertificate/src/print_certificate.php?export_all_in_one=1&'.$params;
         } else {
@@ -149,7 +152,10 @@ switch ($action) {
         break;
     case 'export_all_certificates_zip':
         if ($allowCustomCertificate) {
-            $params = 'course_code='.api_get_course_id().'&session_id='.api_get_session_id().'&'.api_get_cidreq();
+            $params = 'course_code='.api_get_course_id().
+                '&session_id='.api_get_session_id().
+                '&'.api_get_cidreq().
+                '&cat_id='.$categoryId;
             $url = api_get_path(WEB_PLUGIN_PATH).'customcertificate/src/print_certificate.php?export_all=1&'.$params;
 
             header('Location: '.$url);

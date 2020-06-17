@@ -38,10 +38,10 @@ if (isset($_GET['delete']) && $_GET['delete'] === 'yes') {
 } else {
     $message = '<h3>'.get_lang('Course').' : '.$current_course_name.' ('.$current_course_code.') </h3>';
     $message .= '<p>'.get_lang('ByDel').'</p>';
-    $message .= '<p><a class="btn btn-primary" 
+    $message .= '<p><a class="btn btn-primary"
         href="'.api_get_path(WEB_CODE_PATH).'course_info/maintenance.php?'.api_get_cidreq().'">'.
-        get_lang('No').'</a>&nbsp;<a class="btn btn-danger delete-course">'.
-        get_lang('Yes').'</a></p>';
+        get_lang('No').'</a>&nbsp;<buttom class="btn btn-danger delete-course">'.
+        get_lang('Yes').'</buttom></p>';
     $interbreadcrumb[] = [
         'url' => 'maintenance.php',
         'name' => get_lang('Maintenance'),
@@ -53,7 +53,7 @@ $(function(){
 	$(".delete-course").on("click",function(){
 		var course_code = prompt("'. get_lang('PleaseEnterCourseCode').'", "");
 		if(course_code == "' . $current_course_code . '") {
-			window.location ="'.api_get_self().'?delete=yes&'.api_get_cidreq().'"; 
+			window.location ="'.api_get_self().'?delete=yes&'.api_get_cidreq().'";
 		}else if(course_code !== null){
 			alert("'.get_lang('CourseRegistrationCodeIncorrect').'");
 		}

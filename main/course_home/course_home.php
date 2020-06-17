@@ -36,8 +36,89 @@ $js = '<script>'.api_get_language_translate_html().'</script>';
 $htmlHeadXtra[] = $js;
 
 $htmlHeadXtra[] = '<script>
-/* option show/hide thematic-block */
+    /* show eye for all show/hide*/
+    function buttomForAllShowHide()
+    {
+        tools_invisibles = [];
+        tools_visibles = [];
+        $.each($(".make_visible_and_invisible").parent(), function (index, item) {
+            var element = $(item).find("a");
+            image = $(element[0]).find("img")[0];
+            image_id = $(image).attr("id").replace("linktool_","");
+            if (!$(element[1]).hasClass("text-muted")) {
+                tools_invisibles.push(image_id)
+            }else{
+                tools_visibles.push(image_id)
+            }
+        });
+        if (tools_visibles.length == 0) {
+            $(".visible-all").addClass("hidden");
+            $(".invisible-all").removeClass("hidden");
+        } else {
+            $(".visible-all").removeClass("hidden");
+            $(".invisible-all").addClass("hidden");
+        }
+    };
+    /* option show/hide thematic-block */
 $(function() {
+	buttomForAllShowHide();
+	/* option show/hide all*/
+    $(".show-hide-all-tools").on("click",function(){
+        $(".show-hide-all-tools").addClass("disabled");
+        tools_invisibles = [];
+        tools_visibles = [];
+        $.each($(".make_visible_and_invisible").parent(), function (index, item) {
+            var element = $(item).find("a");
+            image = $(element[0]).find("img")[0];
+            image_id = $(image).attr("id").replace("linktool_","");
+            if (!$(element[1]).hasClass("text-muted")) {
+                tools_invisibles.push(image_id)
+            }else{
+                tools_visibles.push(image_id)
+            }
+        });
+        messaje_invisible = "'.get_lang('ToolIsNowHidden', '').'";
+        ids = tools_invisibles;
+        if (tools_invisibles.length == 0) {
+            ids = tools_visibles;
+             messaje_invisible = "'.get_lang('ToolIsNowVisible', '').'";
+
+        }
+
+        $.ajax({
+            contentType: "application/x-www-form-urlencoded",
+            beforeSend: function (myObject) {
+                $(".normal-message").show();
+                $("#id_confirmation_message").hide();
+            },
+            type: "GET",
+            url: "'.api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?'.api_get_cidreq().'&a=set_visibility_for_all",
+            data: "tools_ids=" + JSON.stringify(ids) + "&sent_http_request=1",
+            success: function (data) {
+            data = JSON.parse(data);
+            $.each(data,function(index,item){
+                 new_current_view       = "'.api_get_path(WEB_IMG_PATH).'" + item.view;
+                //eyes
+                $("#linktool_"+item.id).attr("src", new_current_view);
+                //tool
+                $("#toolimage_" + item.id).attr("src", item.image);
+                //clase
+                $("#tooldesc_" + item.id).attr("class", item.tclass);
+                $("#istooldesc_" + item.id).attr("class", item.tclass);
+            });
+            $(".show-hide-all-tools").removeClass("disabled");
+            $(".normal-message").hide();
+            $("#id_confirmation_message").html(messaje_invisible);
+            $("#id_confirmation_message").show();
+            buttomForAllShowHide();
+            },
+            error:  function( jqXHR, textStatus, errorThrown ) {
+            $(".show-hide-all-tools").removeClass("disabled");
+            $(".normal-message").hide();
+            buttomForAllShowHide();
+            }
+        });
+    });
     $("#thematic-show").click(function(){
         $(".btn-hide-thematic").hide();
         $(".btn-show-thematic").show(); //show using class

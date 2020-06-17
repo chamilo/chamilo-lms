@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Component\Editor;
@@ -8,8 +9,6 @@ use Symfony\Component\Translation\Translator;
 
 /**
  * Class Editor.
- *
- * @package Chamilo\CoreBundle\Component\Editor
  */
 class Editor
 {
@@ -133,7 +132,7 @@ class Editor
            CKEDITOR.replace('".$this->getTextareaId()."',
                $javascript
            );
-           
+
            </script>";
 
         return $html;

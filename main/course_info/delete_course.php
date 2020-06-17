@@ -40,14 +40,27 @@ if (isset($_GET['delete']) && $_GET['delete'] === 'yes') {
     $message .= '<p>'.get_lang('ByDel').'</p>';
     $message .= '<p><a class="btn btn-primary" 
         href="'.api_get_path(WEB_CODE_PATH).'course_info/maintenance.php?'.api_get_cidreq().'">'.
-        get_lang('No').'</a>&nbsp;<a class="btn btn-danger" href="'.api_get_self().'?delete=yes&'.api_get_cidreq().'">'.
+        get_lang('No').'</a>&nbsp;<a class="btn btn-danger delete-course">'.
         get_lang('Yes').'</a></p>';
     $interbreadcrumb[] = [
         'url' => 'maintenance.php',
         'name' => get_lang('Maintenance'),
     ];
 }
+    $htmlHeadXtra[]  ='<script>
+$(function(){
+	/* Asking by course code to confirm recycling*/
+	$(".delete-course").on("click",function(){
+		var course_code = prompt("'. get_lang('PleaseEnterCourseCode').'", "");
+		if(course_code == "' . $current_course_code . '") {
+			window.location ="'.api_get_self().'?delete=yes&'.api_get_cidreq().'"; 
+		}else if(course_code !== null){
+			alert("'.get_lang('CourseRegistrationCodeIncorrect').'");
+		}
+	})
+})
 
+</script>';
 $tpl = new Template($tool_name);
 $tpl->assign('content', Display::return_message($message, 'warning', false));
 $tpl->display_one_col_template();

@@ -5,6 +5,7 @@
 namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
@@ -76,7 +77,6 @@ class ResourceNode
     protected $resourceType;
 
     /**
-     * @Groups({"resource_node:read", "resource_node:write", "document:write", "document:read"})
      * @ApiSubresource()
      * @var ResourceLink[]
      *

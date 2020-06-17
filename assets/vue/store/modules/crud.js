@@ -139,7 +139,6 @@ export default function makeCrudModule({
           .find(id)
           .then(response => response.json())
           .then(item => {
-            console.log(item);
             commit(ACTIONS.TOGGLE_LOADING);
             commit(ACTIONS.ADD, normalizeRelations(item));
           })
@@ -153,7 +152,6 @@ export default function makeCrudModule({
             .find(id)
             .then(response => response.json())
             .then(item => {
-              console.log(item);
               return item;
             })
             .catch(e => handleError(commit, e));

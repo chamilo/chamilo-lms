@@ -26,11 +26,17 @@ class CreateResourceNodeFileAction
             $document->setUploadFile($uploadedFile);
         }
 
-        if ($request->request->has('resourceLinks')) {
-            //$links = json_decode('['.$request->get('resourceLinks').']', true);
-            $links = json_decode($request->get('resourceLinks'), true);
+        if ($request->request->has('resourceLinkList')) {
+            $links = $request->get('resourceLinkList');
+            if (strpos($links, '[') === false) {
+                $links = json_decode('['.$links.']', true);
+            } else {
+                $links = json_decode($links, true);
+            }
             if (empty($links)) {
-                throw new \InvalidArgumentException('sharingLinks is not a json');
+                throw new \InvalidArgumentException(
+                    'resourceLinkList is not a valid json. Example: [{"c_id":1:"visibility":1}]'
+                );
             }
             $document->setResourceLinkList($links);
         }

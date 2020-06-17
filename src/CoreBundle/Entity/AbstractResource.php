@@ -30,7 +30,7 @@ abstract class AbstractResource
     /**
      * @Assert\Valid()
      * @ApiSubresource()
-     * @Groups({"resource_node:read", "resource_node:write", "document:read", "document:write"})
+     * @Groups({"resource_node:read", "resource_node:write"})
      * @ORM\OneToOne(
      *     targetEntity="Chamilo\CoreBundle\Entity\ResourceNode",
      *     cascade={"persist", "remove"},
@@ -51,24 +51,41 @@ abstract class AbstractResource
      */
     public $uploadFile;
 
+    /**
+     * @Groups({"resource_node:read", "document:read"})
+     */
     public $resourceLinkList;
 
     abstract public function getResourceName(): string;
 
-    public function setResourceLinkList(array $links)
+    public function setResourceLinkList($links)
     {
         $this->resourceLinkList = $links;
-
-        return $this;
     }
 
-    public function getResourceLinkList(): array
+    public function getResourceLinkListFromEntity()
     {
-        if (null === $this->resourceLinkList) {
-            return [];
+        return $this->resourceLinkList;
+    }
+
+    public function getResourceLinkList()
+    {
+        $resourceNode = $this->getResourceNode();
+        $links = $resourceNode->getResourceLinks();
+        $resourceLinkList = [];
+
+        foreach ($links as $link) {
+            $resourceLinkList[] = [
+                'id' => $link->getId(),
+                'session' => $link->getSession(),
+                'course' => $link->getCourse(),
+                'visibilityName' => $link->getVisibilityName(),
+                'group' => $link->getGroup(),
+                'userGroup' => $link->getUserGroup(),
+            ];
         }
 
-        return $this->resourceLinkList;
+        return $resourceLinkList;
     }
 
     public function hasParentResourceNode(): bool

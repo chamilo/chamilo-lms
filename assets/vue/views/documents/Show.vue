@@ -11,25 +11,22 @@
     <br />
 
     <div v-if="item" class="table-documents-show">
-      <div v-if="item['resourceNode']['resourceLinks']">
+      <div v-if="item['resourceLinkList']">
         <ul>
         <li
-                v-for="link in item['resourceNode']['resourceLinks']"
+                v-for="link in item['resourceLinkList']"
         >
 
-          {{ link.id }}
-          {{ link.visibility }}
-          {{ link.course }}
-          {{ link.session }}
-          {{ link.published }}
-          {{ link.visibilityName }}
-
-
-
+          Status: {{ link.visibilityName }}
+          <div v-if="link['course']">
+          Course: {{ link.course.resourceNode.title }}
+          </div>
+          <div v-if="link['session']">
+            Session:  {{ link.session.resourceNode.title }}
+          </div>
         </li>
         </ul>
       </div>
-
       <v-simple-table>
         <template slot="default">
           <thead>
@@ -110,11 +107,6 @@ export default {
       reset: 'resetShow',
       retrieve: 'load'
     }),
-
-    /*...mapActions('resourcelink', {
-      resourcelinkfind: 'load',
-    }),*/
-
   }
 };
 </script>

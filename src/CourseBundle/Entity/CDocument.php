@@ -55,7 +55,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *                                     "parentResourceNodeId"={
  *                                         "type"="integer",
  *                                     },
- *                                     "resourceLinks"={
+ *                                     "resourceLinkList"={
  *                                         "type"="array",
  *                                         "items": {
  *                                              "type": "object",

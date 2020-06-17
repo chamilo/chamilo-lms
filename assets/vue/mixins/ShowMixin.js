@@ -23,17 +23,6 @@ export default {
       }
 
       let item = this.find(decodeURIComponent(id));
-      if (item) {
-        item.resourceNode.resourceLinks.forEach((link) => {
-          this.resourcelinkfind('/api/resource_links/' + link.id).then( data => {
-            if (data) {
-              link = data;
-              return data;
-            }
-          });
-        });
-      }
-
       return item;
       //return this.find(decodeURIComponent(this.$route.params.id));
     },

@@ -11,8 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource(
- * )
+ * @ApiResource()
  * @ORM\Entity
  * @ORM\Table(name="resource_link")
  */
@@ -24,7 +23,6 @@ class ResourceLink
     public const VISIBILITY_DELETED = 3;
 
     /**
-     * @Groups({"resource_node:read", "resource_node:write", "document:write", "document:read"})
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue
@@ -50,20 +48,20 @@ class ResourceLink
     protected $session;
 
     /**
+     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=true)
      */
     protected $user;
 
     /**
+     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CGroupInfo")
      * @ORM\JoinColumn(name="group_id", referencedColumnName="iid", nullable=true, onDelete="CASCADE")
      */
     protected $group;
 
     /**
-     * @Groups({"resource_node:read", "resource_node:write", "document:write", "document:read"})
-     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Usergroup")
      * @ORM\JoinColumn(name="usergroup_id", referencedColumnName="id", nullable=true)
      */
@@ -78,26 +76,19 @@ class ResourceLink
     protected $resourceRight;
 
     /**
-     * @Groups({"resource_node:read", "resource_node:write", "document:write", "document:read"})
-     *
      * @ORM\Column(name="visibility", type="integer", nullable=false)
      */
     protected $visibility;
 
     /**
-     * @Groups({"resource_link:read", "resource_node:read", "course:read"})
-     */
-    protected $linkName;
-
-    /**
-     * @Groups({"resource_link:read", "resource_node:read", "document:read"})
+     * @Groups({"resource_node:read", "resource_node:write", "document:write", "document:read"})
      *
      * @ORM\Column(name="start_visibility_at", type="datetime", nullable=true)
      */
     protected $startVisibilityAt;
 
     /**
-     * @Groups({"resource_link:read", "resource_node:read", "course:read"})
+     * @Groups({"resource_node:read", "resource_node:write", "document:write", "document:read"})
      *
      * @ORM\Column(name="end_visibility_at", type="datetime", nullable=true)
      */
@@ -109,27 +100,7 @@ class ResourceLink
     public function __construct()
     {
         $this->resourceRight = new ArrayCollection();
-        $this->linkName = 'ju';
-    }
-
-    /**
-     * @return int
-     */
-    public function getLinkName()
-    {
-        return $this->linkName;
-    }
-
-    /**
-     * @param int $linkName
-     *
-     * @return ResourceLink
-     */
-    public function setLinkName(int $linkName): ResourceLink
-    {
-        $this->linkName = $linkName;
-
-        return $this;
+        $this->visibility = self::VISIBILITY_DRAFT;
     }
 
     /**

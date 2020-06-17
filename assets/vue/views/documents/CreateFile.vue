@@ -35,7 +35,7 @@ export default {
       item: {
         filetype: 'file',
         parentResourceNodeId: null,
-        resourceLinks: null
+        resourceLinkList: null
       },
     };
   },
@@ -44,7 +44,7 @@ export default {
   },
   created() {
     this.item.parentResourceNodeId = this.$route.params.node;
-    this.item.resourceLinks = JSON.stringify([{
+    this.item.resourceLinkList = JSON.stringify([{
       c_id: this.$route.query.cid,
       visibility: 2,
     }]);

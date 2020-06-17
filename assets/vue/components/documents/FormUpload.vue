@@ -38,7 +38,7 @@ export default {
     return {
       parentResourceNodeId: null,
       uploadFile: null,
-      resourceLinks: null,
+      resourceLinkList: null,
       filetype: null
     };
   },
@@ -68,7 +68,7 @@ export default {
       },
       uploadFile: {
       },
-      resourceLinks:{
+      resourceLinkList:{
       },
       filetype:{
       }

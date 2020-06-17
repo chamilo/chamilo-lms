@@ -97,14 +97,14 @@ class ResourceListener
         $creator = $this->security->getUser();
 
         if (null === $creator) {
-            throw new \Exception('User creator not found');
+            throw new \InvalidArgumentException('User creator not found');
         }
 
         $resourceNode = new ResourceNode();
 
         $resourceName = $resource->getResourceName();
         if (empty($resourceName)) {
-            throw new \Exception('Resource needs a name');
+            throw new \InvalidArgumentException('Resource needs a name');
         }
 
         $extension = $this->slugify->slugify(pathinfo($resourceName, PATHINFO_EXTENSION));
@@ -123,7 +123,7 @@ class ResourceListener
         $resourceType = $repo->findOneBy(['name' => $name]);
 
         if (null === $resourceType) {
-            throw new \Exception('ResourceType not found');
+            throw new \InvalidArgumentException('ResourceType not found');
         }
 
         $resourceNode
@@ -158,22 +158,37 @@ class ResourceListener
             }
         }
 
-        $links = $resource->getResourceLinkList();
+        $links = $resource->getResourceLinkListFromEntity();
         if ($links) {
             $courseRepo = $em->getRepository('ChamiloCoreBundle:Course');
             $sessionRepo = $em->getRepository('ChamiloCoreBundle:Session');
 
             foreach ($links as $link) {
                 $resourceLink = new ResourceLink();
-                if (isset($link['c_id'])) {
+                if (isset($link['c_id']) && !empty($link['c_id'])) {
                     $course = $courseRepo->find($link['c_id']);
-                    $resourceLink->setCourse($course);
+                    if ($course) {
+                        $resourceLink->setCourse($course);
+                    } else {
+                        throw new \InvalidArgumentException('Course #'.$link['c_id'].' does not exists');
+                    }
                 }
-                if (isset($link['session_id'])) {
+
+                if (isset($link['session_id']) && !empty($link['session_id'])) {
                     $session = $sessionRepo->find($link['session_id']);
-                    $resourceLink->setSession($session);
+                    if ($session) {
+                        $resourceLink->setSession($session);
+                    } else {
+                        throw new \InvalidArgumentException('Session #'.$link['session_id'].' does not exists');
+                    }
                 }
-                $resourceLink->setVisibility($link['visibility']);
+
+                if (isset($link['visibility'])) {
+                    $resourceLink->setVisibility((int) $link['visibility']);
+                } else {
+                    throw new \InvalidArgumentException('Link needs a visibility key');
+                }
+
                 $resourceLink->setResourceNode($resourceNode);
                 $em->persist($resourceLink);
             }

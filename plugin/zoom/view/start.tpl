@@ -39,6 +39,6 @@
 <!-- p>No scheduled meeting currently</p -->
 {% endif %}
 {% if scheduleMeetingForm %}
-<h3>{{ 'ScheduleMeeting'|get_lang }}</h3>
+<h3>{{ 'ScheduleAMeeting'|get_lang }}</h3>
 {{ scheduleMeetingForm }}
 {% endif %}

@@ -4,6 +4,12 @@
 
 namespace Chamilo\PluginBundle\Zoom;
 
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
+use Chamilo\UserBundle\Entity\User;
+use Database;
+
 /**
  * Trait CourseMeetingTrait.
  * A Zoom meeting linked to a (course, session) pair.
@@ -20,23 +26,25 @@ trait CourseMeetingTrait
     /** @var int meeting course id as found in the agenda field */
     public $courseId;
 
-    /** @var array meeting course info */
+    /** @var Course meeting course */
     public $course;
 
     /** @var int meeting session id as found in the agenda field */
     public $sessionId;
 
-    /** @var array meeting session info */
+    /** @var Session meeting session */
     public $session;
 
     public function loadCourse()
     {
-        $this->course = api_get_course_info_by_id($this->courseId); // TODO cache
+        $this->course = Database::getManager()->getRepository('ChamiloCoreBundle:Course')->find($this->courseId);
     }
 
     public function loadSession()
     {
-        $this->session = api_get_session_info($this->sessionId); // TODO cache
+        $this->session = $this->sessionId
+            ? Database::getManager()->getRepository('ChamiloCoreBundle:Session')->find($this->sessionId)
+            : null;
     }
 
     public function setCourseAndSessionId($courseId, $sessionId)
@@ -53,6 +61,40 @@ trait CourseMeetingTrait
     public function untagAgenda()
     {
         $this->agenda = $this->getUntaggedAgenda();
+    }
+
+    /**
+     * Builds the list of users that can register into this meeting.
+     *
+     * @return User[] the list of users
+     */
+    public function getCourseAndSessionUsers()
+    {
+        if ($this->sessionId && is_null($this->session)) {
+            $this->loadSession();
+        }
+
+        if (is_null($this->course)) {
+            $this->loadCourse();
+        }
+
+        $users = [];
+
+        if (is_null($this->session)) {
+            $users = Database::getManager()->getRepository(
+                'ChamiloCoreBundle:Course'
+            )->getSubscribedUsers($this->course)->getQuery()->getResult();
+        } else {
+            $subscriptions = $this->session->getUserCourseSubscriptionsByStatus($this->course, Session::STUDENT);
+            if ($subscriptions) {
+                /** @var SessionRelCourseRelUser $sessionCourseUser */
+                foreach ($subscriptions as $sessionCourseUser) {
+                    $users[$sessionCourseUser->getUser()->getUserId()] = $sessionCourseUser->getUser();
+                }
+            }
+        }
+
+        return $users;
     }
 
     /**
@@ -75,8 +117,8 @@ trait CourseMeetingTrait
         } else {
             $this->setCourseAndSessionId(0, 0);
         }
-        $this->course = [];
-        $this->session = [];
+        $this->course = null;
+        $this->session = null;
     }
 
     protected function getUntaggedAgenda()

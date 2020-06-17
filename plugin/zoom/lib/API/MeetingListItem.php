@@ -31,7 +31,7 @@ class MeetingListItem
     /**
      * {@inheritdoc}
      */
-    protected function itemClass($propertyName)
+    public function itemClass($propertyName)
     {
         throw new Exception("no such array property $propertyName");
     }

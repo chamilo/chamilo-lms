@@ -5,10 +5,9 @@ namespace Chamilo\PluginBundle\Zoom;
 
 use Exception;
 
-class CourseMeetingInfoGet extends API\MeetingInfoGet
+class UserMeetingRegistrantListItem extends API\MeetingRegistrantListItem
 {
-    use CourseMeetingTrait;
-    use DisplayableMeetingTrait;
+    use UserMeetingRegistrantTrait;
 
     /**
      * {@inheritdoc}
@@ -17,26 +16,26 @@ class CourseMeetingInfoGet extends API\MeetingInfoGet
     {
         $instance = parent::fromJson($json);
         $instance->decodeAndRemoveTag();
-        $instance->initializeDisplayableProperties();
+        $instance->computeFullName();
 
         return $instance;
     }
 
     /**
-     * CourseMeetingListItem constructor.
+     * UserMeetingRegistrantListItem constructor.
      *
-     * @param API\MeetingInfoGet $meeting
+     * @param API\MeetingRegistrantListItem $meetingRegistrantListItem
      *
      * @throws Exception
      *
      * @return static
      */
-    public static function fromMeetingInfoGet($meeting)
+    public static function fromMeetingRegistrantListItem($meetingRegistrantListItem)
     {
         $instance = new static();
-        self::recursivelyCopyObjectProperties($meeting, $instance);
+        self::recursivelyCopyObjectProperties($meetingRegistrantListItem, $instance);
         $instance->decodeAndRemoveTag();
-        $instance->initializeDisplayableProperties();
+        $instance->computeFullName();
 
         return $instance;
     }

@@ -14,6 +14,9 @@ class MeetingInfo extends Meeting
     /** @var string, for participants to join the meeting - to share with users to invite */
     public $join_url;
 
+    /** @var string undocumented */
+    public $registration_url;
+
     /** @var string H.323/SIP room system password */
     public $h323_password;
 
@@ -22,4 +25,5 @@ class MeetingInfo extends Meeting
 
     /** @var object[] */
     public $occurrences;
+
 }

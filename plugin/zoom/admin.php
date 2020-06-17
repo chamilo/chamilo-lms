@@ -22,9 +22,9 @@ $typeSelect = $form->addRadio(
     'type',
     get_lang('Type'),
     [
-        JWTClient::MEETING_LIST_TYPE_SCHEDULED => get_lang('Scheduled'),
-        JWTClient::MEETING_LIST_TYPE_LIVE => get_lang('Live'),
-        JWTClient::MEETING_LIST_TYPE_UPCOMING => get_lang('Upcoming'),
+        JWTClient::MEETING_LIST_TYPE_SCHEDULED => get_lang('ScheduledMeetings'),
+        JWTClient::MEETING_LIST_TYPE_LIVE => get_lang('LiveMeetings'),
+        JWTClient::MEETING_LIST_TYPE_UPCOMING => get_lang('UpcomingMeetings'),
     ]
 );
 $form->addButtonSearch(get_lang('Search'));

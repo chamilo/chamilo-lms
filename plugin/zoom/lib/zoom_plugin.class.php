@@ -2,12 +2,18 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\PluginBundle\Zoom\API\CreatedRegistration;
 use Chamilo\PluginBundle\Zoom\API\JWTClient;
+use Chamilo\PluginBundle\Zoom\API\MeetingInstance;
+use Chamilo\PluginBundle\Zoom\API\MeetingSettings;
 use Chamilo\PluginBundle\Zoom\API\ParticipantListItem;
+use Chamilo\PluginBundle\Zoom\API\PastMeeting;
 use Chamilo\PluginBundle\Zoom\API\RecordingMeeting;
 use Chamilo\PluginBundle\Zoom\CourseMeeting;
 use Chamilo\PluginBundle\Zoom\CourseMeetingInfoGet;
 use Chamilo\PluginBundle\Zoom\CourseMeetingListItem;
+use Chamilo\PluginBundle\Zoom\UserMeetingRegistrant;
+use Chamilo\PluginBundle\Zoom\UserMeetingRegistrantListItem;
 
 class ZoomPlugin extends Plugin
 {
@@ -22,6 +28,8 @@ class ZoomPlugin extends Plugin
                 'tool_enable' => 'boolean',
                 'apiKey' => 'text',
                 'apiSecret' => 'text',
+                'enableParticipantRegistration' => 'boolean',
+                'enableCloudRecording' => 'boolean',
             ]
         );
 
@@ -108,6 +116,30 @@ class ZoomPlugin extends Plugin
     public function getMeeting($meetingId)
     {
         return CourseMeetingInfoGet::fromMeetingInfoGet($this->jwtClient()->getMeeting($meetingId));
+    }
+
+    /**
+     * @param $meetingId
+     *
+     * @return MeetingInstance[]
+     *
+     * @throws Exception
+     */
+    public function getEndedMeetingInstances($meetingId)
+    {
+        return $this->jwtClient()->getEndedMeetingInstances($meetingId);
+    }
+
+    /**
+     * @param string $instanceUUID
+     *
+     * @throws Exception
+     *
+     * @return PastMeeting
+     */
+    public function getPastMeetingInstanceDetails($instanceUUID)
+    {
+        return $this->jwtClient()->getPastMeetingInstanceDetails($instanceUUID);
     }
 
     /**
@@ -198,6 +230,9 @@ class ZoomPlugin extends Plugin
         $meeting->start_time = $startTime->format(DateTimeInterface::ISO8601);
         $meeting->agenda = $agenda;
         $meeting->password = $password;
+        $meeting->settings->approval_type = $this->get('enableParticipantRegistration')
+            ? MeetingSettings::APPROVAL_TYPE_AUTOMATICALLY_APPROVE
+            : MeetingSettings::APPROVAL_TYPE_NO_REGISTRATION_REQUIRED;
 
         return $this->createMeeting($meeting);
     }
@@ -214,6 +249,7 @@ class ZoomPlugin extends Plugin
     {
         $meeting->tagAgenda();
         $this->jwtClient()->updateMeeting($meetingId, $meeting);
+        $meeting->untagAgenda();
     }
 
     /**
@@ -243,29 +279,29 @@ class ZoomPlugin extends Plugin
     /**
      * @see JWTClient::getRecordings()
      *
-     * @param string $meetingUUID
+     * @param string $instanceUUID
      *
      * @throws Exception on API error
      *
      * @return RecordingMeeting the recordings of the meeting
      */
-    public function getRecordings($meetingUUID)
+    public function getRecordings($instanceUUID)
     {
-        return $this->jwtClient()->getRecordings($meetingUUID);
+        return $this->jwtClient()->getRecordings($instanceUUID);
     }
 
     /**
      * @see JWTClient::getParticipants()
      *
-     * @param string $meetingUUID
+     * @param string $instanceUUID
      *
      * @throws Exception
      *
      * @return ParticipantListItem[]
      */
-    public function getParticipants($meetingUUID)
+    public function getParticipants($instanceUUID)
     {
-        return $this->jwtClient()->getParticipants($meetingUUID);
+        return $this->jwtClient()->getParticipants($instanceUUID);
     }
 
     /**
@@ -318,9 +354,112 @@ class ZoomPlugin extends Plugin
      */
     private function createMeeting($meeting)
     {
-        $meeting->settings->auto_recording = 'cloud';
+        $meeting->settings->auto_recording = $this->get('enableCloudRecording')
+            ? 'cloud'
+            : 'local';
+        $meeting->settings->registrants_email_notification = false;
         $meeting->tagAgenda();
 
         return CourseMeetingInfoGet::fromMeetingInfoGet($this->jwtClient()->createMeeting($meeting));
+    }
+
+    /**
+     * @param $meetingId
+     *
+     * @throws Exception
+     *
+     * @return UserMeetingRegistrantListItem[]
+     */
+    public function getRegistrants($meetingId)
+    {
+        $registrants = [];
+        foreach ($this->jwtClient()->getRegistrants($meetingId) as $registrant) {
+            $registrants[] = UserMeetingRegistrantListItem::fromMeetingRegistrantListItem($registrant);
+        }
+        return $registrants;
+    }
+
+    /**
+     * @param int $meetingId
+     * @param \Chamilo\UserBundle\Entity\User[] $users
+     *
+     * @throws Exception
+     *
+     * @return CreatedRegistration[]
+     */
+    public function addRegistrants($meetingId, $users)
+    {
+        $createdRegistrations = [];
+        foreach ($users as $user) {
+            $registrant = UserMeetingRegistrant::fromUser($user);
+            $registrant->tagEmail();
+            $createdRegistrations[] = $this->jwtClient()->addRegistrant($meetingId, $registrant);
+        }
+
+        return $createdRegistrations;
+    }
+
+    /**
+     * @param int                     $meetingId
+     * @param UserMeetingRegistrant[] $registrants
+     *
+     * @throws Exception
+     */
+    public function removeRegistrants($meetingId, $registrants)
+    {
+        $this->jwtClient()->removeRegistrants($meetingId, $registrants);
+    }
+
+    /**
+     * Updates meeting registrants list. Adds the missing registrants and removes the extra.
+     *
+     * @param int                               $meetingId meeting identifier
+     * @param \Chamilo\UserBundle\Entity\User[] $users      list of users to be registred
+     *
+     * @throws Exception
+     */
+    public function updateRegistrantList($meetingId, $users)
+    {
+        $registrants = $this->getRegistrants($meetingId);
+        $usersToAdd = [];
+        foreach ($users as $user) {
+            $found = false;
+            foreach ($registrants as $registrant) {
+                if ($registrant->matches($user->getId())) {
+                    $found = true;
+                    break;
+                }
+            }
+            if (!$found) {
+                $usersToAdd[] = $user;
+            }
+        }
+        $registrantsToRemove = [];
+        foreach ($registrants as $registrant) {
+            $found = false;
+            foreach ($users as $user) {
+                if ($registrant->matches($user->getId())) {
+                    $found = true;
+                    break;
+                }
+            }
+            if (!$found) {
+                $registrantsToRemove[] = $registrant;
+            }
+        }
+        $this->addRegistrants($meetingId, $usersToAdd);
+        $this->removeRegistrants($meetingId, $registrantsToRemove);
+    }
+
+    /**
+     * Deletes a meeting instance's recordings.
+     *
+     * @param string $instanceUUID
+     *
+     * @throws Exception
+     */
+    public function deleteRecordings($instanceUUID)
+    {
+        $this->jwtClient()->deleteRecordings($instanceUUID);
     }
 }

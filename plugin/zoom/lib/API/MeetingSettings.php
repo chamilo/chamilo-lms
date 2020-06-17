@@ -3,8 +3,12 @@
 
 namespace Chamilo\PluginBundle\Zoom\API;
 
+use Exception;
+
 class MeetingSettings
 {
+    use JsonDeserializableTrait;
+
     const APPROVAL_TYPE_AUTOMATICALLY_APPROVE = 0;
     const APPROVAL_TYPE_MANUALLY_APPROVE = 1;
     const APPROVAL_TYPE_NO_REGISTRATION_REQUIRED = 2;
@@ -74,7 +78,7 @@ class MeetingSettings
     /** @var string[] List of global dial-in countries */
     public $global_dial_in_countries;
 
-    /** @var object[] Global Dial-in Countries/Regions */
+    /** @var GlobalDialInNumber[] Global Dial-in Countries/Regions */
     public $global_dial_in_numbers;
 
     /** @var string Contact name for registration */
@@ -106,4 +110,27 @@ class MeetingSettings
      * @see https://support.zoom.us/hc/en-us/articles/360037117472-Authentication-Profiles-for-Meetings-and-Webinars#h_5c0df2e1-cfd2-469f-bb4a-c77d7c0cca6f
      */
     public $authentication_name;
+
+    /**
+     * MeetingSettings constructor.
+     */
+    public function __construct()
+    {
+        $this->global_dial_in_countries = [];
+        $this->global_dial_in_numbers = [];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function itemClass($propertyName)
+    {
+        if ('global_dial_in_countries' === $propertyName) {
+            return 'string';
+        }
+        if ('global_dial_in_numbers' === $propertyName) {
+            return GlobalDialInNumber::class;
+        }
+        throw new Exception("No such array property $propertyName");
+    }
 }

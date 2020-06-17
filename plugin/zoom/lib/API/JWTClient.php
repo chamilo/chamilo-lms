@@ -206,7 +206,10 @@ class JWTClient
      * Adds a meeting registrant.
      *
      * @param int               $meetingId     meeting identifier
-     * @param MeetingRegistrant $registrant    with at least 'email' and 'first_name'
+     * @param MeetingRegistrant $registrant    with at least 'email' and 'first_name'.
+     *                                         'last_name' will also be recorded by Zoom.
+     *                                         Other properties remain ignored, or not returned by Zoom
+     *                                         (at least while using profile "Pro")
      * @param string            $occurrenceIds separated by comma
      *
      * @throws Exception describing the error (message and code)
@@ -215,12 +218,38 @@ class JWTClient
      */
     public function addRegistrant($meetingId, $registrant, $occurrenceIds = '')
     {
-        $path = 'meetings/'.$meetingId.'/registrants';
-        if (!empty($occurrenceIds)) {
-            $path .= "?occurrence_ids=$occurrenceIds";
-        }
+        return CreatedRegistration::fromJson(
+            $this->send(
+                'POST',
+                "meetings/$meetingId/registrants",
+                empty($occurrenceIds) ? [] : ['occurrence_ids' => $occurrenceIds],
+                $registrant
+            )
+        );
+    }
 
-        return CreatedRegistration::fromJson($this->send('POST', $path, [], $registrant));
+    /**
+     * Removes meeting registrants.
+     *
+     * @param int                 $meetingId     meeting identifier
+     * @param MeetingRegistrant[] $registrants   registrants to remove (id and email)
+     * @param string              $occurrenceIds separated by comma
+     *
+     * @throws Exception
+     */
+    public function removeRegistrants($meetingId, array $registrants, $occurrenceIds = '')
+    {
+        if (!empty($registrants)) {
+            $this->send(
+                'PUT',
+                "meetings/$meetingId/registrants/status",
+                empty($occurrenceIds) ? [] : ['occurrence_ids' => $occurrenceIds],
+                (object) [
+                    'action' => 'cancel',
+                    'registrants' => $registrants,
+                ]
+            );
+        }
     }
 
     /**
@@ -242,51 +271,64 @@ class JWTClient
     }
 
     /**
-     * Retrieves a past meeting's details.
+     * Retrieves past meeting instance details.
      *
-     * @param string $meetingUUID the meeting UUID
+     * @param string $instanceUUID the meeting instance UUID
      *
      * @throws Exception describing the error (message and code)
      *
      * @return PastMeeting meeting
      */
-    public function getPastMeetingDetails($meetingUUID)
+    public function getPastMeetingInstanceDetails($instanceUUID)
     {
-        return PastMeeting::fromJson($this->send('GET', 'past_meetings/'.$meetingUUID));
+        return PastMeeting::fromJson($this->send('GET', 'past_meetings/'.$instanceUUID));
     }
 
     /**
      * Gets the recordings from a meeting.
      *
-     * @param string $meetingUUID
+     * @param string $instanceUUID
      *
-     * @throws Exception describing the error (message and code)
+     * @throws Exception describing the error (message and code).
+     *                   Code is 404 when there is no recording for this meeting.
      *
      * @return RecordingMeeting the recordings for this meeting
      */
-    public function getRecordings($meetingUUID)
+    public function getRecordings($instanceUUID)
     {
         return RecordingMeeting::fromJson(
             $this->send(
                 'GET',
-                'meetings/'.$this->doubleEncode($meetingUUID).'/recordings'
+                'meetings/'.$this->doubleEncode($instanceUUID).'/recordings'
             )
         );
     }
 
     /**
+     * Deletes a meetings recordings.
+     *
+     * @param $instanceUUID
+     *
+     * @throws Exception
+     */
+    public function deleteRecordings($instanceUUID)
+    {
+        $this->send('DELETE', 'meetings/'.$this->doubleEncode($instanceUUID).'/recordings', ['action' => 'delete']);
+    }
+
+    /**
      * Retrieves information on participants from a past meeting.
      *
-     * @param string $meetingUUID the meeting instance UUID
+     * @param string $instanceUUID the meeting instance UUID
      *
      * @throws Exception describing the error (message and code)
      *
      * @return ParticipantListItem[] participants
      */
-    public function getParticipants($meetingUUID)
+    public function getParticipants($instanceUUID)
     {
         return $this->getFullList(
-            'past_meetings/'.$this->doubleEncode($meetingUUID).'/participants',
+            'past_meetings/'.$this->doubleEncode($instanceUUID).'/participants',
             ParticipantList::class,
             'participants'
         );

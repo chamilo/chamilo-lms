@@ -28,17 +28,27 @@ trait DisplayableMeetingTrait
     /** @var string meeting formatted duration */
     public $formattedDuration;
 
+    /** @var string */
+    public $statusName;
+
     /**
      * @throws Exception on unexpected start_time or duration
      */
     public function initializeDisplayableProperties()
     {
         $this->typeName = [
-            API\Meeting::TYPE_INSTANT => get_lang('Instant'),
-            API\Meeting::TYPE_SCHEDULED => get_lang('Scheduled'),
+            API\Meeting::TYPE_INSTANT => get_lang('InstantMeeting'),
+            API\Meeting::TYPE_SCHEDULED => get_lang('ScheduledMeeting'),
             API\Meeting::TYPE_RECURRING_WITH_NO_FIXED_TIME => get_lang('RecurringWithNoFixedTime'),
             API\Meeting::TYPE_RECURRING_WITH_FIXED_TIME => get_lang('RecurringWithFixedTime'),
         ][$this->type];
+        if (property_exists($this, 'status')) {
+            $this->statusName = [
+                'waiting' => get_lang('Waiting'),
+                'started' => get_lang('Started'),
+                'finished' => get_lang('Finished'),
+            ][$this->status];
+        }
         $this->startDateTime = null;
         $this->formattedStartTime = '';
         $this->durationInterval = null;
@@ -53,7 +63,7 @@ trait DisplayableMeetingTrait
             $later = new DateTime();
             $later->add(new DateInterval('PT'.$this->duration.'M'));
             $this->durationInterval = $later->diff($now);
-            $this->formattedDuration = $this->durationInterval->format(get_lang('%Hh%I'));
+            $this->formattedDuration = $this->durationInterval->format(get_lang('DurationFormat'));
         }
     }
 }

@@ -24,8 +24,14 @@ class RecordingMeeting
     /** @var string Meeting topic. */
     public $topic;
 
+    /** @var int undocumented */
+    public $type;
+
     /** @var string The time at which the meeting started. */
     public $start_time;
+
+    /** @var string undocumented */
+    public $timezone;
 
     /** @var int Meeting duration. */
     public $duration;
@@ -35,6 +41,9 @@ class RecordingMeeting
 
     /** @var string Number of recording files returned in the response of this API call. */
     public $recording_count;
+
+    /** @var string undocumented */
+    public $share_url;
 
     /** @var RecordingFile[] List of recording file. */
     public $recording_files;
@@ -50,7 +59,7 @@ class RecordingMeeting
     /**
      * {@inheritdoc}
      */
-    protected function itemClass($propertyName)
+    public function itemClass($propertyName)
     {
         if ('recording_files' === $propertyName) {
             return RecordingFile::class;

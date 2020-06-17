@@ -8,6 +8,8 @@ $strings['plugin_comment'] = "Intégration de conférences vidéo Zoom dans les 
 $strings['tool_enable'] = 'Outil de conférence vidéos Zoom activé';
 $strings['apiKey'] = "Clé d'API (<em>API Key</em>)";
 $strings['apiSecret'] = "Code secret d'API (<em>API Secret</em>)";
+$strings['enableParticipantRegistration'] = "Activer l'inscription des participants";
+$strings['enableCloudRecording'] = "Activer l'enregistrement sur les serveurs de Zoom";
 
 $strings['tool_enable_help'] = "Choisissez si vous voulez activer l'outil de conférence vidéo Zoom.
 Une fois activé, il apparaitra dans les pages d'accueil de tous les cours :
@@ -31,43 +33,71 @@ Pour les obtenir, créez une <em>JWT app</em> :
 et des règles spécifiques de protection des données personnelles s'y appliquent.
 Merci de vérifier auprès de Zoom qu'elles sont satisfaisantes pour vous et les apprenants qui l'utiliseront.";
 
+$strings['enableParticipantRegistration_help'] = "Nécessite un profil Zoom payant.
+Ne fonctionnera pas pour un profil <em>de base</em>.";
+
+$strings['enableCloudRecording_help'] = "Nécessite un profil Zoom payant.
+Ne fonctionnera pas pour un profil <em>de base</em>.";
+
 // please keep these lines alphabetically sorted
-$strings['%Hh%I'] = "%Hh%I";
+$strings['AllCourseUsersWereRegistered'] = "Tous les étudiants du cours sont inscrits";
+$strings['AllRecordingsWereCopiedToCourse'] = "Tous les enregistrements ont été copiés dans le cours";
 $strings['Agenda'] = "Ordre du jour";
+$strings['CopyAllRecordingsToCourse'] = "Copier tous les enregistrements dans le cours";
+$strings['CopyingJoinURL'] = "Copie de l'URL pour rejoindre en cours";
+$strings['CopyJoinURL'] = "Copier l'URL pour rejoindre";
+$strings['CopyRecordingToCourse'] = "Copier l'enregistrement dans le cours";
+$strings['CouldNotCopyJoinURL'] = "Échec de la copie de l'URL pour rejoindre";
 $strings['Course'] = "Cours";
 $strings['CreatedAt'] = "Créé à";
 $strings['DeleteMeeting'] = "Effacer la conférence";
+$strings['DeleteRecordings'] = "Supprimer l'enregistrement";
 $strings['Details'] = "Détail";
 $strings['Duration'] = "Durée";
+$strings['DurationFormat'] = "%hh%I";
 $strings['DurationInMinutes'] = "Durée (en minutes)";
 $strings['EndDate'] = "Date de fin";
-$strings['Instant'] = "Instantané";
+$strings['Finished'] = "terminée";
+$strings['InstantMeeting'] = "Conférence instantanée";
+$strings['InstanceParticipants'] = "Participants";
+$strings['InstancesAndRecordings'] = "Instances et enregistrements";
 $strings['Join'] = "Rejoindre";
+$strings['JoinMeeting'] = "Rejoindre la conférence";
+$strings['JoinURL'] = "URL pour rejoindre";
+$strings['JoinURLCopied'] = "URL pour rejoindre copiée";
 $strings['JoinURLToSendToParticipants'] = "URL pour assister à la conférence (à envoyer aux participants)";
-$strings['Live'] = "En cours";
+$strings['JoinURLToShare'] = "URL pour rejoindre, à partager";
 $strings['LiveMeetings'] = "Conférences en cours";
-$strings['Meeting'] = "Conférence";
 $strings['MeetingDeleted'] = "Conférence effacée";
+$strings['MeetingUpdated'] = "Conférence mise à jour";
 $strings['NewMeetingCreated'] = "Nouvelle conférence créée";
-$strings['Participants'] = "Participants";
 $strings['Password'] = "Mot de passe";
-$strings['Recordings'] = "Enregistrements";
+$strings['RecordingsWereDeleted'] = "Les enregistrements ont été supprimés";
+$strings['RecordingWasCopiedToCourse'] = "L'enregistrement a été copié dans le cours";
 $strings['RecurringWithFixedTime'] = "Recurrent, à heure fixe";
 $strings['RecurringWithNoFixedTime'] = "Recurrent, sans heure fixe";
-$strings['ScheduleMeeting'] = "Programmer une conférence";
-$strings['Scheduled'] = "Programmées";
+$strings['RegisterAllCourseUsers'] = "Inscrire tous les utilisateurs du cours";
+$strings['RegisteredUserListWasUpdated'] = "Liste des utilisateurs inscrits mise à jour";
+$strings['RegisteredUsers'] = "Utilisateurs inscrits";
+$strings['ScheduleAMeeting'] = "Programmer une conférence";
+$strings['ScheduledMeeting'] = "Conférence programmée";
 $strings['ScheduledMeetings'] = "Conférences programmées";
+$strings['ScheduleTheMeeting'] = "Programmer la conférence";
 $strings['Search'] = "Rechercher";
 $strings['Session'] = "Session";
 $strings['StartDate'] = "Date de début";
+$strings['Started'] = "démarrée";
 $strings['StartInstantMeeting'] = "Démarrer une conférence instantanée";
+$strings['StartMeeting'] = "démarrer la conférence";
 $strings['StartTime'] = "Heure de début";
-$strings['StartURLNotToBeShared'] = "URL de démarrage de la conférence (à ne pas partager)";
-$strings['Status'] = "Statut";
 $strings['Topic'] = "Objet";
 $strings['TopicAndAgenda'] = "Objet et ordre du jour";
+$strings['TotalSize'] = "Taille totale";
 $strings['Type'] = "Type";
-$strings['Upcoming'] = "À venir";
+$strings['UpcomingMeeting'] = "Conférences à venir";
 $strings['UpdateMeeting'] = "Mettre à jour la conférence";
+$strings['UpdateRegisteredUserList'] = "Mettre à jour la liste des utilisateurs inscrits";
 $strings['Y-m-d H:i'] = "d/m/Y à H\hi";
+$strings['Waiting'] = "en attente";
 $strings['ZoomVideoconference'] = "Conférence vidéo Zoom";
+$strings['ZoomVideoconferences'] = "Conférences vidéo Zoom";

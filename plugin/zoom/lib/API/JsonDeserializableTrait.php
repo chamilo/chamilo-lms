@@ -43,7 +43,7 @@ trait JsonDeserializableTrait
      *
      * @return string class name of the items to be found in the named array property
      */
-    abstract protected function itemClass($propertyName);
+    abstract public function itemClass($propertyName);
 
     /**
      * Copies values from another object properties to an instance, recursively.
@@ -65,11 +65,15 @@ trait JsonDeserializableTrait
                     }
                 } elseif (is_array($value)) {
                     if (is_array($destination->$name)) {
+                        $itemClass = $destination->itemClass($name);
                         foreach ($value as $sourceItem) {
-                            $itemClass = $destination->itemClass($name);
-                            $item = new $itemClass();
-                            self::recursivelyCopyObjectProperties($sourceItem, $item);
-                            $destination->$name[] = $item;
+                            if ('string' === $itemClass) {
+                                $destination->$name[] = $sourceItem;
+                            } else {
+                                $item = new $itemClass();
+                                self::recursivelyCopyObjectProperties($sourceItem, $item);
+                                $destination->$name[] = $item;
+                            }
                         }
                     } else {
                         throw new Exception("Source property $name is an array, which is not expected");

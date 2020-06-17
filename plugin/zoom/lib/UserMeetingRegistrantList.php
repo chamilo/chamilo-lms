@@ -3,7 +3,7 @@
 
 namespace Chamilo\PluginBundle\Zoom;
 
-class CourseMeetingList extends API\MeetingList
+class UserMeetingRegistrantList extends API\MeetingRegistrantList
 {
     /**
      * {@inheritdoc}
@@ -11,7 +11,7 @@ class CourseMeetingList extends API\MeetingList
     public function itemClass($propertyName)
     {
         if ('meetings' === $propertyName) {
-            return CourseMeetingListItem::class;
+            return UserMeetingRegistrantListItem::class;
         }
 
         return parent::itemClass($propertyName);

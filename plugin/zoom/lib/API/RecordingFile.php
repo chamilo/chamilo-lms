@@ -3,6 +3,8 @@
 
 namespace Chamilo\PluginBundle\Zoom\API;
 
+use Exception;
+
 class RecordingFile
 {
     use JsonDeserializableTrait;
@@ -68,4 +70,12 @@ class RecordingFile
      * `TIMELINE`
      */
     public $recording_type;
+
+    /**
+     * @inheritDoc
+     */
+    public function itemClass($propertyName)
+    {
+        throw new Exception("No such array property $propertyName");
+    }
 }

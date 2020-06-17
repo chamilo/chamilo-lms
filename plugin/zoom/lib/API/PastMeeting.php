@@ -40,4 +40,7 @@ class PastMeeting extends Meeting
 
     /** @var int number of meeting participants */
     public $participants_count;
+
+    /** @var string undocumented */
+    public $dept;
 }

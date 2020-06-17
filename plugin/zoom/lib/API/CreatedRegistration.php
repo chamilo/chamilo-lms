@@ -3,6 +3,8 @@
 
 namespace Chamilo\PluginBundle\Zoom\API;
 
+use Exception;
+
 class CreatedRegistration
 {
     use JsonDeserializableTrait;
@@ -16,7 +18,7 @@ class CreatedRegistration
      */
     public $join_url;
 
-    /** @var Unique identifier of the registrant */
+    /** @var string Unique identifier of the registrant */
     public $registrant_id;
 
     /** @var string The start time for the meeting. */
@@ -24,4 +26,12 @@ class CreatedRegistration
 
     /** @var string Topic of the meeting. */
     public $topic;
+
+    /**
+     * @inheritDoc
+     */
+    protected function itemClass($propertyName)
+    {
+        throw new Exception("no such array property $propertyName");
+    }
 }

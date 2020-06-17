@@ -8,6 +8,8 @@ $strings['plugin_comment'] = "Zoom Videoconference integration in courses and se
 $strings['tool_enable'] = 'Zoom videoconference tool enabled';
 $strings['apiKey'] = 'API Key';
 $strings['apiSecret'] = 'API Secret';
+$strings['enableParticipantRegistration'] = 'Enable participant registration';
+$strings['enableCloudRecording'] = 'Enable cloud recording';
 
 $strings['tool_enable_help'] = "Choose whether you want to enable the Zoom videoconference tool.
 Once enabled, it will show as an additional course tool in all courses' homepage :
@@ -32,43 +34,71 @@ Locate your API Key and Secret in the App Credentials page.
 <br/>Zoom is <em>NOT</em> free software and specific rules apply to personal data protection.
 Please check with Zoom and make sure they satisfy you and learning users.";
 
+$strings['enableParticipantRegistration_help'] = "Requires a paying Zoom profile.
+Will not work for a <em>basic</em> profile.";
+
+$strings['enableCloudRecording_help'] = "Requires a paying Zoom profile.
+Will not work for a <em>basic</em> profile.";
+
 // please keep these lines alphabetically sorted
-$strings['%Hh%I'] = "%Hh%I";
+$strings['AllCourseUsersWereRegistered'] = "All course students were registered";
+$strings['AllRecordingsWereCopiedToCourse'] = "All recordings were copied to the course";
 $strings['Agenda'] = "Agenda";
-$strings['Course'] = "Course";
+$strings['CopyAllRecordingsToCourse'] = "Copy all recordings to course";
+$strings['CopyingJoinURL'] = "Copying join URL";
+$strings['CopyJoinURL'] = "Copy join URL";
+$strings['CopyRecordingToCourse'] = "Copy recording to course";
+$strings['CouldNotCopyJoinURL'] = "Could not copy join URL";
+$strings['Course'] = "Cours";
 $strings['CreatedAt'] = "Created at";
 $strings['DeleteMeeting'] = "Delete meeting";
+$strings['DeleteRecordings'] = "Delete recordings";
 $strings['Details'] = "Details";
 $strings['Duration'] = "Duration";
+$strings['DurationFormat'] = "%hh%I";
 $strings['DurationInMinutes'] = "Duration (in minutes)";
 $strings['EndDate'] = "End Date";
-$strings['Instant'] = "Instant";
+$strings['Finished'] = "finished";
+$strings['InstantMeeting'] = "Instant meeting";
+$strings['InstanceParticipants'] = "Participants";
+$strings['InstancesAndRecordings'] = "Instances et enregistrements";
 $strings['Join'] = "Join";
+$strings['JoinMeeting'] = "Join meeting";
+$strings['JoinURL'] = "Join URL";
+$strings['JoinURLCopied'] = "Join URL copied";
 $strings['JoinURLToSendToParticipants'] = "Join URL to send to participants";
-$strings['Live'] = "Live";
+$strings['JoinURLToShare'] = "Join URL to share";
 $strings['LiveMeetings'] = "Live meetings";
-$strings['Meeting'] = "Meeting";
 $strings['MeetingDeleted'] = "Meeting deleted";
+$strings['MeetingUpdated'] = "Meeting updated";
 $strings['NewMeetingCreated'] = "New meeting created";
-$strings['Participants'] = "Participants";
 $strings['Password'] = "Password";
-$strings['Recordings'] = "Recordings";
+$strings['RecordingsWereDeleted'] = "Recordings were deleted";
+$strings['RecordingWasCopiedToCourse'] = "The recording was copied to the course";
 $strings['RecurringWithFixedTime'] = "Recurring with fixed time";
 $strings['RecurringWithNoFixedTime'] = "Recurring with no fixed time";
-$strings['ScheduleMeeting'] = "Schedule meeting";
-$strings['Scheduled'] = "Scheduled";
+$strings['RegisterAllCourseUsers'] = "Register all course users";
+$strings['RegisteredUserListWasUpdated'] = "Registered user list updated";
+$strings['RegisteredUsers'] = "Registered users";
+$strings['ScheduleAMeeting'] = "Schedule a meeting";
+$strings['ScheduledMeeting'] = "Scheduled meeting";
 $strings['ScheduledMeetings'] = "Scheduled Meetings";
+$strings['ScheduleTheMeeting'] = "Schedule the meeting";
 $strings['Search'] = "Search";
 $strings['Session'] = "Session";
 $strings['StartDate'] = "Start Date";
+$strings['Started'] = "started";
 $strings['StartInstantMeeting'] = "Start instant meeting";
+$strings['StartMeeting'] = "Start meeting";
 $strings['StartTime'] = "Start time";
-$strings['StartURLNotToBeShared'] = "Start URL (not to be shared)";
-$strings['Status'] = "Status";
 $strings['Topic'] = "Topic";
 $strings['TopicAndAgenda'] = "Topic and agenda";
+$strings['TotalSize'] = "Total size";
 $strings['Type'] = "Type";
-$strings['Upcoming'] = "Upcoming";
+$strings['UpcomingMeetings'] = "Upcoming meetings";
 $strings['UpdateMeeting'] = "Update meeting";
+$strings['UpdateRegisteredUserList'] = "Update registered user list";
 $strings['Y-m-d H:i'] = "Y-m-d H:i";
+$strings['Waiting'] = "waiting";
 $strings['ZoomVideoconference'] = "Zoom Videoconference";
+$strings['ZoomVideoconferences'] = "Zoom Videoconferences";

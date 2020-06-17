@@ -48,7 +48,8 @@ if ($plugin->userIsConferenceManager()) {
     $topicText = $scheduleMeetingForm->addText('topic', get_lang('Topic'), true);
     $agendaTextArea = $scheduleMeetingForm->addTextarea('agenda', get_lang('Agenda'), ['maxlength' => 2000]);
     // $passwordText = $scheduleMeetingForm->addText('password', get_lang('Password'), false, ['maxlength' => '10']);
-    $scheduleMeetingForm->addButtonCreate(get_lang('ScheduleMeeting'));
+    $registerAll = $scheduleMeetingForm->addCheckBox('registerAll', null, get_lang('RegisterAllCourseUsers'));
+    $scheduleMeetingForm->addButtonCreate(get_lang('ScheduleTheMeeting'));
 
     // meeting scheduling
     if ($scheduleMeetingForm->validate()) {
@@ -63,7 +64,13 @@ if ($plugin->userIsConferenceManager()) {
             Display::addFlash(
                 Display::return_message($plugin->get_lang('NewMeetingCreated'))
             );
-            $tpl->assign('newMeeting', $newMeeting);
+            if ($registerAll->getValue()) {
+                $plugin->addRegistrants($newMeeting->id, $newMeeting->getCourseAndSessionUsers());
+                Display::addFlash(
+                    Display::return_message($plugin->get_lang('AllCourseUsersWereRegistered'))
+                );
+            }
+            location('meeting_from_start.php?meetingId='.$newMeeting->id);
         } catch (Exception $exception) {
             Display::addFlash(
                 Display::return_message($exception->getMessage(), 'error')
@@ -74,6 +81,7 @@ if ($plugin->userIsConferenceManager()) {
             [
                 'duration' => 60,
                 'topic' => api_get_course_info()['title'],
+                'registerAll' => true,
             ]
         );
     }

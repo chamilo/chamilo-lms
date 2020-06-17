@@ -23,7 +23,7 @@ class MeetingList
     /**
      * {@inheritdoc}
      */
-    protected function itemClass($propertyName)
+    public function itemClass($propertyName)
     {
         if ('meetings' === $propertyName) {
             return MeetingListItem::class;

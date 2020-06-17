@@ -18,7 +18,7 @@ class Meeting
     /** @var string password to join. [a-z A-Z 0-9 @ - _ *]. Max of 10 characters. */
     public $password;
 
-    /** @var array field => value */
+    /** @var TrackingField[] Tracking fields */
     public $tracking_fields;
 
     /** @var object, only for a recurring meeting with fixed time (type 8) */
@@ -58,8 +58,11 @@ class Meeting
     /**
      * {@inheritdoc}
      */
-    protected function itemClass($propertyName)
+    public function itemClass($propertyName)
     {
+        if ('tracking_fields' === $propertyName) {
+            return TrackingField::class;
+        }
         throw new Exception("no such array property $propertyName");
     }
 }

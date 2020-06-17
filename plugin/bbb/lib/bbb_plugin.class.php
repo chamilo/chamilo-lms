@@ -258,7 +258,7 @@ class BBBPlugin extends Plugin
         $t_settings = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
         $t_options = Database::get_main_table(TABLE_MAIN_SETTINGS_OPTIONS);
         $t_tool = Database::get_course_table(TABLE_TOOL_LIST);
-        $urlId = api_get_current_access_url_id();
+
         $variables = [
             'bbb_salt',
             'bbb_host',
@@ -277,12 +277,16 @@ class BBBPlugin extends Plugin
             'launch_type',
         ];
 
+        $urlId = api_get_current_access_url_id();
+
         foreach ($variables as $variable) {
             $sql = "DELETE FROM $t_settings WHERE variable = '$variable' AND access_url = $urlId";
             Database::query($sql);
         }
 
-        // Only delete if it's uninstalled from main url.
+        Database::query("DELETE FROM plugin_bbb_meeting WHERE access_url = $urlId");
+
+        // Only delete tables if it's uninstalled from main url.
         if (1 == $urlId) {
             $extraField = new ExtraField('course');
             $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable(

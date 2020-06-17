@@ -284,7 +284,11 @@ class BBBPlugin extends Plugin
             Database::query($sql);
         }
 
-        Database::query("DELETE FROM plugin_bbb_meeting WHERE access_url = $urlId");
+        $em = Database::getManager();
+        $sm = $em->getConnection()->getSchemaManager();
+        if ($sm->tablesExist('plugin_bbb_meeting')) {
+            Database::query("DELETE FROM plugin_bbb_meeting WHERE access_url = $urlId");
+        }
 
         // Only delete tables if it's uninstalled from main url.
         if (1 == $urlId) {
@@ -310,8 +314,12 @@ class BBBPlugin extends Plugin
             $sql = "DELETE FROM $t_tool WHERE name = 'bbb' AND c_id != 0";
             Database::query($sql);
 
-            Database::query('DROP TABLE IF EXISTS plugin_bbb_room');
-            Database::query('DROP TABLE IF EXISTS plugin_bbb_meeting');
+            if ($sm->tablesExist('plugin_bbb_room')) {
+                Database::query('DROP TABLE IF EXISTS plugin_bbb_room');
+            }
+            if ($sm->tablesExist('plugin_bbb_meeting')) {
+                Database::query('DROP TABLE IF EXISTS plugin_bbb_meeting');
+            }
 
             // Deleting course settings
             $this->uninstall_course_fields_in_all_courses($this->course_settings);

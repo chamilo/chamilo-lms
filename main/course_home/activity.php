@@ -52,6 +52,12 @@ if ($session_id === 0 && api_is_course_admin() && api_is_allowed_to_edit(null, t
 		<div class="alert alert-success" id="id_confirmation_message" style="display:none"></div>
 	</div>';
     $content .= $pluginExtra;
+    //show/hide all tools
+    $content .= '<div class="btn-group pull-right">'.
+        '<a class="hidden invisible-all show-hide-all-tools" href="javascript:void(0);"><img  src="'.api_get_path(WEB_IMG_PATH).'invisible.png" alt="'.get_lang('Deactivate', '').'" title="'.get_lang('Deactivate', '').'"></a>'.
+        '<a class="hidden visible-all  show-hide-all-tools" href="javascript:void(0);"><img  src="'.api_get_path(WEB_IMG_PATH).'visible.png" alt="'.get_lang('Activate', '').'" title="'.get_lang('Activate', '').'"></a>'.
+        '</div>';
+
 } elseif (api_is_coach()) {
     $content .= $pluginExtra;
     if (api_get_setting('show_session_data') === 'true' && $session_id > 0) {

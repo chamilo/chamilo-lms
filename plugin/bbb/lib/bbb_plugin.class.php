@@ -258,7 +258,7 @@ class BBBPlugin extends Plugin
         $t_settings = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
         $t_options = Database::get_main_table(TABLE_MAIN_SETTINGS_OPTIONS);
         $t_tool = Database::get_course_table(TABLE_TOOL_LIST);
-
+        $urlId = api_get_current_access_url_id();
         $variables = [
             'bbb_salt',
             'bbb_host',
@@ -278,36 +278,40 @@ class BBBPlugin extends Plugin
         ];
 
         foreach ($variables as $variable) {
-            $sql = "DELETE FROM $t_settings WHERE variable = '$variable'";
+            $sql = "DELETE FROM $t_settings WHERE variable = '$variable' AND access_url = $urlId";
             Database::query($sql);
         }
-        $extraField = new ExtraField('course');
-        $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable(
-            'plugin_bbb_course_users_limit'
-        );
-        if (!empty($extraFieldInfo)) {
-            $extraField->delete($extraFieldInfo['id']);
+
+        // Only delete if it's uninstalled from main url.
+        if (1 == $urlId) {
+            $extraField = new ExtraField('course');
+            $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable(
+                'plugin_bbb_course_users_limit'
+            );
+            if (!empty($extraFieldInfo)) {
+                $extraField->delete($extraFieldInfo['id']);
+            }
+            $extraField = new ExtraField('session');
+            $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable(
+                'plugin_bbb_session_users_limit'
+            );
+            if (!empty($extraFieldInfo)) {
+                $extraField->delete($extraFieldInfo['id']);
+            }
+
+            $sql = "DELETE FROM $t_options WHERE variable = 'bbb_plugin'";
+            Database::query($sql);
+
+            // hack to get rid of Database::query warning (please add c_id...)
+            $sql = "DELETE FROM $t_tool WHERE name = 'bbb' AND c_id != 0";
+            Database::query($sql);
+
+            Database::query('DROP TABLE IF EXISTS plugin_bbb_room');
+            Database::query('DROP TABLE IF EXISTS plugin_bbb_meeting');
+
+            // Deleting course settings
+            $this->uninstall_course_fields_in_all_courses($this->course_settings);
         }
-        $extraField = new ExtraField('session');
-        $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable(
-            'plugin_bbb_session_users_limit'
-        );
-        if (!empty($extraFieldInfo)) {
-            $extraField->delete($extraFieldInfo['id']);
-        }
-
-        $sql = "DELETE FROM $t_options WHERE variable = 'bbb_plugin'";
-        Database::query($sql);
-
-        // hack to get rid of Database::query warning (please add c_id...)
-        $sql = "DELETE FROM $t_tool WHERE name = 'bbb' AND c_id != 0";
-        Database::query($sql);
-
-        Database::query('DROP TABLE IF EXISTS plugin_bbb_room');
-        Database::query('DROP TABLE IF EXISTS plugin_bbb_meeting');
-
-        // Deleting course settings
-        $this->uninstall_course_fields_in_all_courses($this->course_settings);
     }
 
     /**

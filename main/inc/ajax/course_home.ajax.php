@@ -99,6 +99,7 @@ switch ($action) {
             $requestedVisible = $visibility == 0 ? 1 : 0;
             $requested_view = $visibility == 0 ? 'visible.png' : 'invisible.png';
             $requestedVisible = $visibility == 0 ? 1 : 0;
+            $requested_fa_class = $visibility == 0 ? 'fa fa-eye '.$requested_class : 'fa fa-eye-slash '.$requested_class;
 
             // HIDE AND REACTIVATE TOOL
             if ($_GET['id'] == strval(intval($_GET['id']))) {
@@ -131,6 +132,7 @@ switch ($action) {
                 'tclass' => $requested_class,
                 'message' => $requested_message,
                 'view' => $requested_view,
+                'fclass' => $requested_fa_class,
             ];
             echo json_encode($response);
         }
@@ -229,6 +231,7 @@ switch ($action) {
                     $requested_view = $visibility == 0 ? 'visible.png' : 'invisible.png';
                     $requestedVisible = $visibility == 0 ? 1 : 0;
                     $requested_view = $visibility == 0 ? 'visible.png' : 'invisible.png';
+                    $requested_fa_class = $visibility == 0 ? 'fa fa-eye '.$requested_class : 'fa fa-eye-slash '.$requested_class;
                     $requestedVisible = $visibility == 0 ? 1 : 0;
 
                     // HIDE AND REACTIVATE TOOL
@@ -261,6 +264,7 @@ switch ($action) {
                         'tclass' => $requested_class,
                         'message' => $requested_message,
                         'view' => $requested_view,
+                        'fclass' => $requested_fa_class,
                         'id'=>$tool_id,
                     ];
                 }

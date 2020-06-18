@@ -315,9 +315,11 @@ if ($encryptPassForm == '1') {
         @import "../../web/assets/fontawesome/css/font-awesome.min.css";
         @import "../../web/css/base.css";
         @import "../../web/css/themes/chamilo/default.css";
+        @import "css/inputShowPwd.min.css";
     </style>
     <script type="text/javascript" src="../../web/assets/jquery/dist/jquery.min.js"></script>
     <script type="text/javascript" src="../../web/assets/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/inputShowPwd.min.js"></script>
     <script src="../../web/assets/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
     <script type="text/javascript">
         $(function() {
@@ -963,4 +965,9 @@ $poweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chami
     </div>
   </div>
 </body>
+<script>
+    $(function(){
+        var _input = new inputShowPwd('inputShowPwd');
+    });
+</script>
 </html>

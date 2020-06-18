@@ -1,0 +1,58 @@
+* {
+	box-sizing: border-box;
+	font-size: 16px;
+	vertical-align: middle;
+}
+
+/* 清除现代IE浏览器的输入框和密码框的默认交互按钮 */
+::-ms-clear, ::-ms-reveal {
+	display: none;
+}
+
+input {
+	box-sizing: border-box;
+}
+
+input:active, input:focus {
+	-moz-outline: none;
+	outline: none;
+}
+
+/* PC chrome文本输入框的边框焦点时候的颜色 */
+input[type="button"]::-moz-focus-inner, input[type="submit"]::-moz-focus-inner {
+	border: none;
+}
+
+/*去掉移动端firefox 按钮获得焦点显示虚线框的样式 */
+/* main style */
+.inputShowPwd {
+	display: inline-block;
+	position: relative;
+}
+
+.inputShowPwd > input {
+	/*width: auto; 
+	height: auto;*/ /*默认input的宽高可以同时结合width\height来重写input框的宽度/高度*/
+	/*line-height: 36px;*/ /*控制input框文字的高度可以同时结合height来重写input框文字的高度*/
+	padding-left: 10px;
+	padding-right: 36px;
+	padding-right: 36px !important;
+}
+
+.inputShowPwd > .showEle {
+	background: url(image/pwd.png) 50% 50% no-repeat;
+	background-size: 24px 24px;
+	cursor: pointer;
+	display: none;
+	height: 24px;
+	margin-top: -12px;
+	position: absolute;
+	right: 15px;
+	top: 50%;
+	width: 24px;
+	z-index: 1;
+}
+
+.inputShowPwd > input[type="text"] {
+	display: none;
+}

@@ -1,9 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session;
+    use ChamiloSession as Session;
 
-/**
+    /**
  * This script is about deleting a course.
  * It displays a message box ('are you sure you wish to delete this course')
  * and deletes the course if the user answers affirmatively.
@@ -38,7 +38,7 @@ if (isset($_GET['delete']) && $_GET['delete'] === 'yes') {
 } else {
     $message = '<h3>'.get_lang('Course').' : '.$current_course_name.' ('.$current_course_code.') </h3>';
     $message .= '<p>'.get_lang('ByDel').'</p>';
-    $message .= '<p><a class="btn btn-primary" 
+    $message .= '<p><a class="btn btn-primary"
         href="'.api_get_path(WEB_CODE_PATH).'course_info/maintenance.php?'.api_get_cidreq().'">'.
         get_lang('No').'</a>&nbsp;<a class="btn btn-danger" href="'.api_get_self().'?delete=yes&'.api_get_cidreq().'">'.
         get_lang('Yes').'</a></p>';

@@ -21,6 +21,11 @@ export default {
       component: () => import('../views/documents/CreateFile')
     },
     {
+      name: 'DocumentsUploadFile',
+      path: 'upload',
+      component: () => import('../views/documents/Upload')
+    },
+    {
       name: 'DocumentsUpdate',
       path: ':id/edit',
       component: () => import('../views/documents/Update')

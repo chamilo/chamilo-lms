@@ -16,14 +16,37 @@ class CreateResourceNodeFileAction
         $document = new CDocument();
         $title = $request->get('title');
 
-        if ('file' === $request->get('filetype') && $request->files->count() > 0) {
-            /** @var UploadedFile $uploadedFile */
-            $uploadedFile = $request->files->get('uploadFile');
-            if (!$uploadedFile) {
-                throw new BadRequestHttpException('"uploadFile" is required');
+        if ('file' === $request->get('filetype')) {
+            $fileParsed = false;
+            // File upload
+            if ($request->files->count() > 0) {
+                /** @var UploadedFile $uploadedFile */
+                $uploadedFile = $request->files->get('uploadFile');
+                if (!$uploadedFile) {
+                    throw new BadRequestHttpException('"uploadFile" is required');
+                }
+                $title = $uploadedFile->getClientOriginalName();
+                $document->setUploadFile($uploadedFile);
+                $fileParsed = true;
             }
-            $title = $uploadedFile->getClientOriginalName();
-            $document->setUploadFile($uploadedFile);
+
+            // Get data in content and create a HTML file
+            if (false === $fileParsed && $request->request->has('content')) {
+                $content = $request->request->get('content');
+                $title .= '.html';
+                $handle = tmpfile();
+                fwrite($handle, $content);
+                $meta = stream_get_meta_data($handle);
+                $file = new UploadedFile($meta['uri'], $title, 'text/html', null, true);
+                $document->setUploadFile($file);
+                $fileParsed = true;
+            }
+
+            if (false === $fileParsed) {
+                throw new \InvalidArgumentException(
+                    'filetype was set to "file" but not upload found'
+                );
+            }
         }
 
         if ($request->request->has('resourceLinkList')) {

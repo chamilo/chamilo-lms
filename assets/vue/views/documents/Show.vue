@@ -13,18 +13,17 @@
     <div v-if="item" class="table-documents-show">
       <div v-if="item['resourceLinkList']">
         <ul>
-        <li
-                v-for="link in item['resourceLinkList']"
-        >
-
-          Status: {{ link.visibilityName }}
-          <div v-if="link['course']">
-          Course: {{ link.course.resourceNode.title }}
-          </div>
-          <div v-if="link['session']">
-            Session:  {{ link.session.resourceNode.title }}
-          </div>
-        </li>
+          <li
+                  v-for="link in item['resourceLinkList']"
+          >
+            Status: {{ link.visibilityName }}
+            <div v-if="link['course']">
+              Course: {{ link.course.resourceNode.title }}
+            </div>
+            <div v-if="link['session']">
+              Session: {{ link.session.resourceNode.title }}
+            </div>
+          </li>
         </ul>
       </div>
       <v-simple-table>

@@ -8,7 +8,6 @@ use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
-use APY\DataGridBundle\Grid\Mapping as GRID;
 use Chamilo\CoreBundle\Controller\CreateResourceNodeFileAction;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
@@ -46,6 +45,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *                                         "enum"={"folder", "file"},
  *                                     },
  *                                     "comment"={
+ *                                         "type"="string",
+ *                                     },
+ *                                     "content"={
  *                                         "type"="string",
  *                                     },
  *                                     "uploadFile"={

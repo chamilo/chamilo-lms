@@ -9,7 +9,7 @@
 <script>
 import { mapActions } from 'vuex';
 import { createHelpers } from 'vuex-map-fields';
-import DocumentsForm from '../../components/documents/FormNewDocument';
+import DocumentsForm from '../../components/documents/FormUpload';
 import Loading from '../../components/Loading';
 import Toolbar from '../../components/Toolbar';
 import CreateMixin from '../../mixins/CreateMixin';

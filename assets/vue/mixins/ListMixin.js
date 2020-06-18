@@ -82,6 +82,11 @@ export default {
       this.$router.push({ name: `${this.$options.servicePrefix}CreateFile` , query: folderParams});
     },
 
+    uploadDocumentHandler() {
+      let folderParams = this.$route.query;
+      this.$router.push({ name: `${this.$options.servicePrefix}UploadFile` , query: folderParams});
+    },
+
     showHandler(item) {
       let folderParams = this.$route.query;
       folderParams['id'] = item['@id'];

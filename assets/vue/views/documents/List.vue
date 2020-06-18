@@ -3,6 +3,7 @@
     <Toolbar
             :handle-add="addHandler"
             :handle-add-document="addDocumentHandler"
+            :handle-upload-document="uploadDocumentHandler"
     />
     <v-container grid-list-xl fluid>
       <v-layout row wrap>

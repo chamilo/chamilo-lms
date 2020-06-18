@@ -167,6 +167,7 @@ class ResourceFile
     public function __construct()
     {
         $this->metadata = [];
+        $this->dimensions = [];
     }
 
     public function __toString(): string

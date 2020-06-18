@@ -47,7 +47,6 @@ abstract class AbstractResource
 
     /**
      * @ApiProperty(iri="http://schema.org/image")
-     * @Groups({"resource_node:read", "resource_node:write", "document:read", "document:write"})
      */
     public $uploadFile;
 

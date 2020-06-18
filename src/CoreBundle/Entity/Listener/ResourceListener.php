@@ -146,8 +146,21 @@ class ResourceListener
         }
 
         if ($resource->hasUploadFile()) {
+            // @todo check CreateResourceNodeFileAction
             /** @var File $uploadedFile */
             $uploadedFile = $request->getCurrentRequest()->files->get('uploadFile');
+
+            if (empty($uploadedFile)) {
+                $content = $request->getCurrentRequest()->get('content');
+                $title = $resourceName.'.html';
+                $handle = tmpfile();
+                fwrite($handle, $content);
+                $meta = stream_get_meta_data($handle);
+                $uploadedFile = new UploadedFile($meta['uri'], $title, 'text/html', null, true);
+
+            }
+
+            // File upload
             if ($uploadedFile instanceof UploadedFile) {
                 $resourceFile = new ResourceFile();
                 $resourceFile->setName($uploadedFile->getFilename());
@@ -170,7 +183,7 @@ class ResourceListener
                     if ($course) {
                         $resourceLink->setCourse($course);
                     } else {
-                        throw new \InvalidArgumentException('Course #'.$link['c_id'].' does not exists');
+                        throw new \InvalidArgumentException(sprintf('Course #%s does not exists', $link['c_id']));
                     }
                 }
 
@@ -179,7 +192,7 @@ class ResourceListener
                     if ($session) {
                         $resourceLink->setSession($session);
                     } else {
-                        throw new \InvalidArgumentException('Session #'.$link['session_id'].' does not exists');
+                        throw new \InvalidArgumentException(sprintf('Session #%s does not exists', $link['session_id']));
                     }
                 }
 

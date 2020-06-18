@@ -11,16 +11,26 @@
                   @input="$v.item.title.$touch()"
                   @blur="$v.item.title.$touch()"
           />
-          <v-textarea
-                  v-model="item.content"
-                  :label="$t('Text')"
-                  value=""
-          ></v-textarea>
+
+          <ckeditor :editor="editor" v-model="item.content" :config="editorConfig">
+          </ckeditor>
+
+<!--          <v-textarea-->
+<!--                  v-model="item.content"-->
+<!--                  :label="$t('Text')"-->
+<!--                  value=""-->
+<!--          ></v-textarea>-->
         </v-col>
       </v-row>
     </v-container>
   </v-form>
 </template>
+
+<style>
+  .ck-editor__editable {
+    min-height: 400px;
+   }
+</style>
 
 <script>
 import has from 'lodash/has';
@@ -28,6 +38,8 @@ import { validationMixin } from 'vuelidate';
 import { required } from 'vuelidate/lib/validators';
 import { mapActions } from 'vuex';
 import { mapFields } from 'vuex-map-fields';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import UploadAdapter from './UploadAdapter';
 
 export default {
   name: 'DocumentsForm',
@@ -53,6 +65,14 @@ export default {
       title: null,
       content: null,
       parentResourceNodeId: null,
+      editor: ClassicEditor,
+      //editor:decoupleEditor,
+      editorData: '',
+      editorConfig: {
+        allowedContent: true,
+        extraPlugins: [this.uploader],
+        // The configuration of the rich-text editor.
+      }
     };
   },
   computed: {
@@ -83,6 +103,12 @@ export default {
     }
   },
   methods: {
+    uploader(editor)
+    {
+      editor.plugins.get( 'FileRepository' ).createUploadAdapter = ( loader ) => {
+        return new UploadAdapter( loader );
+      };
+    },
   },
   validations: {
     item: {

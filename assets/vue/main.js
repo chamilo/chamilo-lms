@@ -9,7 +9,7 @@ import resourceLinkService from './services/resourcelink';
 import makeCrudModule from './store/modules/crud';
 import vuetify from './plugins/vuetify' // path to vuetify export
 require('@fancyapps/fancybox');
-require ('@fancyapps/fancybox/dist/jquery.fancybox.css');
+require('@fancyapps/fancybox/dist/jquery.fancybox.css');
 import VueApollo from 'vue-apollo';
 import Vuelidate from 'vuelidate';
 import i18n from './i18n';
@@ -24,6 +24,9 @@ Vue.config.productionTip = false;
 Vue.use(Vuelidate);
 Vue.use(VueApollo);
 Vue.use(require('vue-moment'));
+
+import CKEditor from '@ckeditor/ckeditor5-vue';
+Vue.use(CKEditor);
 
 const apolloProvider = new VueApollo({
     defaultClient: apolloClient,

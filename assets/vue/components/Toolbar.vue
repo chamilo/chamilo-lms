@@ -53,7 +53,7 @@
       </v-btn>
 
       <v-btn v-if="handleAddDocument" color="primary" rounded @click="addDocument">
-        <v-icon left>mdi-cloud-upload</v-icon>New document
+        <v-icon left>mdi-file-plus-outline</v-icon>New document
       </v-btn>
 
       <v-btn v-if="handleUploadDocument" color="primary" rounded @click="uploadDocument">

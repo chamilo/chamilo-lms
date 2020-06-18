@@ -6,6 +6,10 @@
   "dependencies": {
     "@babel/plugin-transform-runtime": "^7.9.6",
     "@babel/runtime": "^7.9.6",
+    "@ckeditor/ckeditor5-build-classic": "^19.0.2",
+    "@ckeditor/ckeditor5-build-decoupled-document": "^19.0.2",
+    "@ckeditor/ckeditor5-upload": "^19.0.1",
+    "@ckeditor/ckeditor5-vue": "^1.0.1",
     "@fancyapps/fancybox": "^3.5.7",
     "apollo-boost": "^0.4.7",
     "axios": "^0.19.2",

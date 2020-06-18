@@ -274,12 +274,12 @@
             </div>
         </v-app-bar>
 
-        <v-content>
+        <v-main>
             <Breadcrumb layout-class="pl-3 py-3"/>
             <router-view></router-view>
             <div id="legacy_content" v-html="legacy_content">
             </div>
-        </v-content>
+        </v-main>
 
         <v-footer color="indigo" app>
             <span class="white--text">&copy; 2020</span>

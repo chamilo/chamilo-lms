@@ -75,12 +75,13 @@ Encore
             from: './node_modules/js-cookie/src/',
             pattern: /(js.cookie.js)$/,
             to: 'libs/js-cookie/src/js.cookie.js'
-        },
+        }
+        /*,
         {
             from: './node_modules/mathjax/',
             pattern: /(MathJax.js)$/,
             to: 'libs/mathjax/MathJax.js'
-        },
+        },*/
     ])
     // define the environment variables
     .configureDefinePlugin(options => {

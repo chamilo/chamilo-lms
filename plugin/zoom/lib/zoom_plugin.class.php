@@ -121,9 +121,9 @@ class ZoomPlugin extends Plugin
     /**
      * @param $meetingId
      *
-     * @return MeetingInstance[]
-     *
      * @throws Exception
+     *
+     * @return MeetingInstance[]
      */
     public function getEndedMeetingInstances($meetingId)
     {
@@ -305,6 +305,107 @@ class ZoomPlugin extends Plugin
     }
 
     /**
+     * @param $meetingId
+     *
+     * @throws Exception
+     *
+     * @return UserMeetingRegistrantListItem[]
+     */
+    public function getRegistrants($meetingId)
+    {
+        $registrants = [];
+        foreach ($this->jwtClient()->getRegistrants($meetingId) as $registrant) {
+            $registrants[] = UserMeetingRegistrantListItem::fromMeetingRegistrantListItem($registrant);
+        }
+
+        return $registrants;
+    }
+
+    /**
+     * @param int                               $meetingId
+     * @param \Chamilo\UserBundle\Entity\User[] $users
+     *
+     * @throws Exception
+     *
+     * @return CreatedRegistration[]
+     */
+    public function addRegistrants($meetingId, $users)
+    {
+        $createdRegistrations = [];
+        foreach ($users as $user) {
+            $registrant = UserMeetingRegistrant::fromUser($user);
+            $registrant->tagEmail();
+            $createdRegistrations[] = $this->jwtClient()->addRegistrant($meetingId, $registrant);
+        }
+
+        return $createdRegistrations;
+    }
+
+    /**
+     * @param int                     $meetingId
+     * @param UserMeetingRegistrant[] $registrants
+     *
+     * @throws Exception
+     */
+    public function removeRegistrants($meetingId, $registrants)
+    {
+        $this->jwtClient()->removeRegistrants($meetingId, $registrants);
+    }
+
+    /**
+     * Updates meeting registrants list. Adds the missing registrants and removes the extra.
+     *
+     * @param int                               $meetingId meeting identifier
+     * @param \Chamilo\UserBundle\Entity\User[] $users     list of users to be registred
+     *
+     * @throws Exception
+     */
+    public function updateRegistrantList($meetingId, $users)
+    {
+        $registrants = $this->getRegistrants($meetingId);
+        $usersToAdd = [];
+        foreach ($users as $user) {
+            $found = false;
+            foreach ($registrants as $registrant) {
+                if ($registrant->matches($user->getId())) {
+                    $found = true;
+                    break;
+                }
+            }
+            if (!$found) {
+                $usersToAdd[] = $user;
+            }
+        }
+        $registrantsToRemove = [];
+        foreach ($registrants as $registrant) {
+            $found = false;
+            foreach ($users as $user) {
+                if ($registrant->matches($user->getId())) {
+                    $found = true;
+                    break;
+                }
+            }
+            if (!$found) {
+                $registrantsToRemove[] = $registrant;
+            }
+        }
+        $this->addRegistrants($meetingId, $usersToAdd);
+        $this->removeRegistrants($meetingId, $registrantsToRemove);
+    }
+
+    /**
+     * Deletes a meeting instance's recordings.
+     *
+     * @param string $instanceUUID
+     *
+     * @throws Exception
+     */
+    public function deleteRecordings($instanceUUID)
+    {
+        $this->jwtClient()->deleteRecordings($instanceUUID);
+    }
+
+    /**
      * Caches and returns the JWT client instance, initialized with plugin settings.
      *
      * @return JWTClient object that provides means of communications with the Zoom servers
@@ -361,105 +462,5 @@ class ZoomPlugin extends Plugin
         $meeting->tagAgenda();
 
         return CourseMeetingInfoGet::fromMeetingInfoGet($this->jwtClient()->createMeeting($meeting));
-    }
-
-    /**
-     * @param $meetingId
-     *
-     * @throws Exception
-     *
-     * @return UserMeetingRegistrantListItem[]
-     */
-    public function getRegistrants($meetingId)
-    {
-        $registrants = [];
-        foreach ($this->jwtClient()->getRegistrants($meetingId) as $registrant) {
-            $registrants[] = UserMeetingRegistrantListItem::fromMeetingRegistrantListItem($registrant);
-        }
-        return $registrants;
-    }
-
-    /**
-     * @param int $meetingId
-     * @param \Chamilo\UserBundle\Entity\User[] $users
-     *
-     * @throws Exception
-     *
-     * @return CreatedRegistration[]
-     */
-    public function addRegistrants($meetingId, $users)
-    {
-        $createdRegistrations = [];
-        foreach ($users as $user) {
-            $registrant = UserMeetingRegistrant::fromUser($user);
-            $registrant->tagEmail();
-            $createdRegistrations[] = $this->jwtClient()->addRegistrant($meetingId, $registrant);
-        }
-
-        return $createdRegistrations;
-    }
-
-    /**
-     * @param int                     $meetingId
-     * @param UserMeetingRegistrant[] $registrants
-     *
-     * @throws Exception
-     */
-    public function removeRegistrants($meetingId, $registrants)
-    {
-        $this->jwtClient()->removeRegistrants($meetingId, $registrants);
-    }
-
-    /**
-     * Updates meeting registrants list. Adds the missing registrants and removes the extra.
-     *
-     * @param int                               $meetingId meeting identifier
-     * @param \Chamilo\UserBundle\Entity\User[] $users      list of users to be registred
-     *
-     * @throws Exception
-     */
-    public function updateRegistrantList($meetingId, $users)
-    {
-        $registrants = $this->getRegistrants($meetingId);
-        $usersToAdd = [];
-        foreach ($users as $user) {
-            $found = false;
-            foreach ($registrants as $registrant) {
-                if ($registrant->matches($user->getId())) {
-                    $found = true;
-                    break;
-                }
-            }
-            if (!$found) {
-                $usersToAdd[] = $user;
-            }
-        }
-        $registrantsToRemove = [];
-        foreach ($registrants as $registrant) {
-            $found = false;
-            foreach ($users as $user) {
-                if ($registrant->matches($user->getId())) {
-                    $found = true;
-                    break;
-                }
-            }
-            if (!$found) {
-                $registrantsToRemove[] = $registrant;
-            }
-        }
-        $this->addRegistrants($meetingId, $usersToAdd);
-        $this->removeRegistrants($meetingId, $registrantsToRemove);
-    }
-
-    /**
-     * Deletes a meeting instance's recordings.
-     *
-     * @param string $instanceUUID
-     *
-     * @throws Exception
-     */
-    public function deleteRecordings($instanceUUID)
-    {
-        $this->jwtClient()->deleteRecordings($instanceUUID);
     }
 }

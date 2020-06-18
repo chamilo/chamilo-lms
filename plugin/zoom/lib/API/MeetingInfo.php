@@ -25,5 +25,4 @@ class MeetingInfo extends Meeting
 
     /** @var object[] */
     public $occurrences;
-
 }

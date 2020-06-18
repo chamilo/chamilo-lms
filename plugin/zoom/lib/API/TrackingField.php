@@ -1,5 +1,5 @@
 <?php
-
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\PluginBundle\Zoom\API;
 
@@ -16,7 +16,7 @@ class TrackingField
     public $value;
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function itemClass($propertyName)
     {

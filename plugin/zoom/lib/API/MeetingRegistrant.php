@@ -70,20 +70,21 @@ class MeetingRegistrant
 
     /**
      * @param string $email
-     * @param string $first_name
+     * @param string $firstName
      *
      * @return MeetingRegistrant
      */
-    public static function fromEmailAndFirstName($email, $first_name)
+    public static function fromEmailAndFirstName($email, $firstName)
     {
         $instance = new static();
-        $instance->first_name = $first_name;
+        $instance->first_name = $firstName;
         $instance->email = $email;
+
         return $instance;
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function itemClass($propertyName)
     {

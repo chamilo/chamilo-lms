@@ -23,9 +23,9 @@ class UserMeetingRegistrant extends API\MeetingRegistrant
     }
 
     /**
-     * Creates a UserMeetingRegistrant instance from a user
+     * Creates a UserMeetingRegistrant instance from a user.
      *
-     * @param User  $user
+     * @param User $user
      *
      * @throws Exception
      *

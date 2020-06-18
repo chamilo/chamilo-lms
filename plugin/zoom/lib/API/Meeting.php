@@ -37,6 +37,17 @@ class Meeting
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function itemClass($propertyName)
+    {
+        if ('tracking_fields' === $propertyName) {
+            return TrackingField::class;
+        }
+        throw new Exception("no such array property $propertyName");
+    }
+
+    /**
      * Creates a Meeting instance from a topic.
      *
      * @param string $topic
@@ -53,16 +64,5 @@ class Meeting
         $instance->type = $type;
 
         return $instance;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function itemClass($propertyName)
-    {
-        if ('tracking_fields' === $propertyName) {
-            return TrackingField::class;
-        }
-        throw new Exception("no such array property $propertyName");
     }
 }

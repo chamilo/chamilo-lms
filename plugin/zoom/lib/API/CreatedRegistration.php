@@ -28,7 +28,7 @@ class CreatedRegistration
     public $topic;
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function itemClass($propertyName)
     {

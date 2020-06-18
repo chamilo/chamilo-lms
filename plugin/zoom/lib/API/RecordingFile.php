@@ -72,7 +72,7 @@ class RecordingFile
     public $recording_type;
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function itemClass($propertyName)
     {

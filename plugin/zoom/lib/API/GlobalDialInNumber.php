@@ -25,7 +25,7 @@ class GlobalDialInNumber
     public $type;
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function itemClass($propertyName)
     {

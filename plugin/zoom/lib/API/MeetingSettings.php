@@ -121,7 +121,7 @@ class MeetingSettings
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function itemClass($propertyName)
     {

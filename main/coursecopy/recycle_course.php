@@ -82,6 +82,7 @@ if (Security::check_token('post') && (
             if ($current_course_code == $courseCodeConfirmation)
                 {
                     $cr->recycle($recycle_type);
+                    echo Display::return_message(get_lang('RecycleFinished'), 'confirm');
                 } else
                 {
                     $messageFailCourseCode = '<p>' . get_lang('CourseRegistrationCodeIncorrect') . '</p>';

@@ -200,8 +200,8 @@ function online_logout($user_id = null, $logout_redirect = false)
     }
 
     if ('true' === api_get_plugin_setting('oauth2', 'enable')
-        and 'oauth2' === ChamiloSession::read('_user_auth_source')
-        and ChamiloSession::has('oauth2AccessToken')
+        && 'oauth2' === ChamiloSession::read('_user_auth_source')
+        && ChamiloSession::has('oauth2AccessToken')
     ) {
         if (!isset($oAuth2Plugin)) {
             $oAuth2Plugin = OAuth2::create();

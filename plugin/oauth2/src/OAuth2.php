@@ -164,14 +164,14 @@ class OAuth2 extends Plugin
         $request = $provider->getAuthenticatedRequest($provider::METHOD_GET, $url, $accessToken);
         $response = $provider->getParsedResponse($request);
         if (false === is_array($response)) {
-            throw new UnexpectedValueException(get_lang('invalid_json_received_from_provider'));
+            throw new UnexpectedValueException($this->get_lang('InvalidJsonReceivedFromProvider'));
         }
         $resourceOwnerId = $this->getValueByKey(
             $response,
             $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_ID)
         );
         if (empty($resourceOwnerId)) {
-            throw new RuntimeException(get_lang('wrong_response_resource_owner_id'));
+            throw new RuntimeException($this->get_lang('WrongResponseResourceOwnerId'));
         }
         $extraFieldValue = new ExtraFieldValue('user');
         $result = $extraFieldValue->get_item_id_from_field_variable_and_field_value(
@@ -181,17 +181,17 @@ class OAuth2 extends Plugin
         if (false === $result) {
             // authenticated user not found in internal database
             if ('true' !== $this->get(self::SETTING_CREATE_NEW_USERS)) {
-                throw new RuntimeException(get_lang('no_user_has_this_oauth_code'));
+                throw new RuntimeException($this->get_lang('NoUserHasThisOauthCode'));
             }
             require_once __DIR__.'/../../../main/auth/external_login/functions.inc.php';
             $userId = external_add_user(
                 [
                     'firstname' => $this->getValueByKey($response, $this->get(
                         self::SETTING_RESPONSE_RESOURCE_OWNER_FIRSTNAME
-                    ), get_lang('DefaultFirstname')),
+                    ), $this->get_lang('DefaultFirstname')),
                     'lastname' => $this->getValueByKey($response, $this->get(
                         self::SETTING_RESPONSE_RESOURCE_OWNER_LASTNAME
-                    ), get_lang('DefaultLastname')),
+                    ), $this->get_lang('DefaultLastname')),
                     'status' => $this->getValueByKey($response, $this->get(
                         self::SETTING_RESPONSE_RESOURCE_OWNER_STATUS
                     ), STUDENT),
@@ -205,7 +205,7 @@ class OAuth2 extends Plugin
                 ]
             );
             if (false === $userId) {
-                throw new RuntimeException(get_lang('FailedUserCreation'));
+                throw new RuntimeException($this->get_lang('FailedUserCreation'));
             }
             $this->updateUser($userId, $response);
             // Not checking function update_extra_field_value return value because not reliable
@@ -225,7 +225,7 @@ class OAuth2 extends Plugin
         }
         $userInfo = api_get_user_info($userId);
         if (empty($userInfo)) {
-            throw new LogicException(get_lang('internal_error_cannot_get_user_info'));
+            throw new LogicException($this->get_lang('InternalErrorCannotGetUserInfo'));
         }
 
         return $userInfo;
@@ -327,7 +327,7 @@ class OAuth2 extends Plugin
         $configFilePath = __DIR__.'/../config.php';
         if (file_exists($configFilePath)) {
             require_once $configFilePath;
-            $functionName = 'oauth2_update_user_from_resource_owner_details';
+            $functionName = 'oauth2UpdateUserFromResourceOwnerDetails';
             if (function_exists($functionName)) {
                 $functionName($response, $user);
             }
@@ -348,7 +348,6 @@ class OAuth2 extends Plugin
         if (api_is_multiple_url_enabled()) {
             $key = $this->get(self::SETTING_RESPONSE_RESOURCE_OWNER_URLS);
             if (!empty($key)) {
-                require_once __DIR__.'/../../../main/inc/lib/urlmanager.lib.php';
                 $availableUrls = [];
                 foreach (URLManager::get_url_data() as $existingUrl) {
                     $urlId = $existingUrl['id'];

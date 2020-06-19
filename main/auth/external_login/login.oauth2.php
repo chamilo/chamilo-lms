@@ -4,7 +4,7 @@
 require_once __DIR__.'/functions.inc.php';
 
 /** @var array $uData */
-if ($uData['auth_source'] === 'oauth2') {
+if ('oauth2' === $uData['auth_source']) {
     $plugin = OAuth2::create();
 
     if ('true' !== $plugin->get(OAuth2::SETTING_ENABLE)) {

@@ -41,7 +41,7 @@ try {
     ChamiloSession::write('oauth2AccessToken', $accessToken->jsonSerialize());
     $userInfo = $plugin->getUserInfo($provider, $accessToken);
     if ($userInfo['active'] != '1') {
-        throw new Exception(get_lang('AccountInactive'));
+        throw new Exception($plugin->get_lang('AccountInactive'));
     }
     if (api_is_multiple_url_enabled()) {
         $userId = $userInfo['user_id'];
@@ -50,7 +50,7 @@ try {
         $userCanAccessTheCurrentURL = in_array(api_get_current_access_url_id(), $urlIdsTheUserCanAccess)
         or UserManager::is_admin($userId) and $userCanAccessTheFirstURL;
         if (!$userCanAccessTheCurrentURL) {
-            throw new Exception(get_lang('UserNotAllowedOnThisPortal'));
+            throw new Exception($plugin->get_lang('UserNotAllowedOnThisPortal'));
         }
     }
 } catch (Exception $exception) {

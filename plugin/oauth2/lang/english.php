@@ -100,16 +100,15 @@ to directory <code>/main/template/overrides/layout/</code>.';
 $strings['management_login_name'] = 'Name for the management login';
 $strings['management_login_name_help'] = 'Default value is "Management Login".';
 
-$strings['OAuth2Id'] = 'OAuth2 identifier';
-$strings['ManagementLogin'] = 'Management Login';
-
-$strings['invalid_json_received_from_provider'] = 'The OAuth2 provider did not provide a valid JSON document';
-$strings['wrong_response_resource_owner_id'] = 'OAuth2 resource owner identifier value not found at the configured key';
-$strings['no_user_has_this_oauth_code'] = 'No existing user has this OAuth2 code';
-$strings['FailedUserCreation'] = 'User account creation failed';
-$strings['internal_error_cannot_get_user_info'] = 'Internal error: could not get user information';
-$strings['InvalidId'] = 'Login failed - the OAuth2 identifier was not recognized as an existing Chamilo user\'s.';
-$strings['UserNotAllowedOnThisPortal'] = 'This user account is not enabled on this portal';
-
+// please keep these below alphabetically sorted
+$strings['AccountInactive'] = "Account inactive";
 $strings['DefaultFirstname'] = 'OAuth2 User default firstname';
 $strings['DefaultLastname'] = 'OAuth2 User default lastname';
+$strings['FailedUserCreation'] = 'User account creation failed';
+$strings['InternalErrorCannotGetUserInfo'] = 'Internal error: could not get user information';
+$strings['InvalidJsonReceivedFromProvider'] = 'The OAuth2 provider did not provide a valid JSON document';
+$strings['ManagementLogin'] = 'Management Login';
+$strings['NoUserHasThisOauthCode'] = 'No existing user has this OAuth2 code';
+$strings['OAuth2Id'] = 'OAuth2 identifier';
+$strings['UserNotAllowedOnThisPortal'] = 'This user account is not enabled on this portal';
+$strings['WrongResponseResourceOwnerId'] = 'OAuth2 resource owner identifier value not found at the configured key';

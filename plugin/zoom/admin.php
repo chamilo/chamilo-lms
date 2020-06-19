@@ -15,6 +15,9 @@ $tool_name = get_lang('ZoomVideoconference');
 
 $plugin = ZoomPlugin::create();
 
+// the section (for the tabs)
+$this_section = SECTION_PLATFORM_ADMIN;
+
 $form = new FormValidator(get_lang('Search'));
 $startDatePicker = $form->addDatePicker('search_meeting_start', get_lang('StartDate'));
 $endDatePicker = $form->addDatePicker('search_meeting_end', get_lang('EndDate'));

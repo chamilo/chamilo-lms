@@ -5,6 +5,9 @@ $course_plugin = 'zoom'; // needed in order to load the plugin lang variables
 
 require_once __DIR__.'/config.php';
 
+// the section (for the tabs)
+$this_section = SECTION_COURSES;
+
 $logInfo = [
     'tool' => 'Videoconference Zoom',
 ];

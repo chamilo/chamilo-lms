@@ -57,7 +57,7 @@ $htmlHeadXtra[] = '<script>
     }
 
     function check_per_page_one() {
-         document.getElementById(\'exerciseType_0\').checked=true;
+         //document.getElementById(\'exerciseType_0\').checked=true;
     }
 
     function check_per_page_all() {

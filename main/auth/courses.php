@@ -218,14 +218,14 @@ switch ($action) {
         $defaults = [];
         $listCategories = CoursesAndSessionsCatalog::getCourseCategoriesTree();
         foreach ($listCategories as $category) {
-            $categoryCodeItem = Security::remove_XSS($category['code']);
-            $categoryName = Security::remove_XSS($category['name']);
             $countCourse = (int) $category['number_courses'];
-            $level = $category['level'];
             if (empty($countCourse)) {
                 continue;
             }
 
+            $categoryCodeItem = Security::remove_XSS($category['code']);
+            $categoryName = Security::remove_XSS($category['name']);
+            $level = $category['level'];
             $separate = '';
             if ($level > 0) {
                 $separate = str_repeat('--', $level);
@@ -270,6 +270,9 @@ switch ($action) {
                 $conditions = $extraResult['condition'];
                 $fields = $extraResult['fields'];
                 $defaults = $extraResult['defaults'];
+
+                $defaults['search_term'] = $searchTerm;
+                $defaults['category_code'] = $categoryCode;
             }
 
             $courses = CoursesAndSessionsCatalog::searchAndSortCourses(
@@ -302,7 +305,6 @@ switch ($action) {
 
         // getting all the courses to which the user is subscribed to
         $user_courses = CourseManager::getCoursesByUserCourseCategory($userId);
-
         $user_coursecodes = [];
         // we need only the course codes as these will be used to match against the courses of the category
         if ('' != $user_courses) {
@@ -368,7 +370,6 @@ switch ($action) {
 
                     return parseInt(parts[1], 10);
                 };
-
                 $extraDate
             });
         </script>";
@@ -379,13 +380,13 @@ switch ($action) {
         <div class="col-md-12">
             <div class="search-courses">
              ';
+
         if ($showCourses) {
             $htmlHeadXtra[] = '<script>
             $(function () {
                 '.$jqueryReadyContent.'
             });
             </script>';
-
             $form->addButtonSearch(get_lang('Search'));
             $form->setDefaults($defaults);
 

@@ -118,6 +118,10 @@ if (api_is_platform_admin()) {
             'url' => 'user_update_import.php',
             'label' => get_lang('EditUserListCSV'),
         ],
+        [
+            'url' => 'user_anonymize_import.php',
+            'label' => get_lang('BulkAnonymizeUsers'),
+        ],
     ];
 
     if (isset($extAuthSource) && isset($extAuthSource['extldap']) && count($extAuthSource['extldap']) > 0) {

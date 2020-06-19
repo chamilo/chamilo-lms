@@ -233,9 +233,6 @@ switch ($action) {
             $select->addOption($separate.' '.$categoryName.' ('.$countCourse.')', $categoryCodeItem);
         }
 
-        $defaults['search_term'] = $searchTerm;
-        $defaults['category_code'] = $categoryCode;
-
         $jqueryReadyContent = '';
         if ($allowExtraFields) {
             $extraField = new ExtraField('course');
@@ -251,14 +248,13 @@ switch ($action) {
             ['multiple' => true]
         );
 
-        if (array_key_exists('sortKeys', $_GET)) {
-            $defaults['sortKeys'] = Security::remove_XSS($_GET['sortKeys']);
-            $form->setDefaults($defaults);
-        }
+        $sortKeys = isset($_REQUEST['sortKeys']) ? Security::remove_XSS($_REQUEST['sortKeys']) : '';
+        $defaults['sortKeys'] = $sortKeys;
+        $defaults['search_term'] = $searchTerm;
+        $defaults['category_code'] = $categoryCode;
 
         $conditions = [];
         $fields = [];
-
         if ('display_random_courses' === $action) {
             // Random value is used instead limit filter
             $courses = CoursesAndSessionsCatalog::getCoursesInCategory(null, 12);
@@ -272,7 +268,7 @@ switch ($action) {
                 $fields = $extraResult['fields'];
                 $defaults = $extraResult['defaults'];
 
-                $defaults['sortKeys'] = Security::remove_XSS($_GET['sortKeys']);
+                $defaults['sortKeys'] = $sortKeys;
                 $defaults['search_term'] = $searchTerm;
                 $defaults['category_code'] = $categoryCode;
             }

@@ -5,6 +5,8 @@ $course_plugin = 'zoom'; // needed in order to load the plugin lang variables
 
 require_once __DIR__.'/config.php';
 
+api_protect_course_script(true);
+
 // the section (for the tabs)
 $this_section = SECTION_COURSES;
 
@@ -16,8 +18,6 @@ Event::registerLog($logInfo);
 
 $tool_name = get_lang('ZoomVideoconference');
 $tpl = new Template($tool_name);
-
-api_protect_course_script(true);
 
 $plugin = ZoomPlugin::create();
 

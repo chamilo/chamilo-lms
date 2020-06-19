@@ -83,7 +83,33 @@ class SocialManager extends UserManager
 
             return $row['id'];
         } else {
-            return USER_UNKNOWN;
+            if(api_get_configuration_value('treat_superior_statuses_as_friends'))
+            {
+                $targetUserCoursesList = CourseManager::get_courses_list_by_user_id($user_id,true,false); //Gathering all the courses for the target user
+                $AdminList = UserManager::get_all_administrators();
+                foreach($AdminList as $admin)
+                {
+                   if(api_get_user_id() == $admin['user_id'])
+                   {
+                       return USER_RELATION_TYPE_GOODFRIEND;
+                   }
+                }
+                foreach($targetUserCoursesList as $course)
+                {
+                   $TeachersList = CourseManager::get_teacher_list_from_course_code($course['code']);
+                    foreach($TeachersList as $teacher)
+                    {
+                        if(api_get_user_id() == $teacher['user_id'])
+                        {
+                            return USER_RELATION_TYPE_GOODFRIEND;
+                        }
+                    }
+                }
+            }
+            else {
+                return USER_UNKNOWN;
+            }
+
         }
     }
 

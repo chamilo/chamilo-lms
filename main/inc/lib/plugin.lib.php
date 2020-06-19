@@ -158,7 +158,7 @@ class AppPlugin
                     ]
                 );
             } else {*/
-                $plugins = api_get_settings_params(
+            $plugins = api_get_settings_params(
                     [
                         'variable = ? AND selected_value = ? AND category = ? ' => ['status', 'installed', 'Plugins'],
                     ]

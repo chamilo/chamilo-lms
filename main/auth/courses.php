@@ -250,8 +250,9 @@ switch ($action) {
             CoursesAndSessionsCatalog::courseSortOptions(),
             ['multiple' => true]
         );
+
         if (array_key_exists('sortKeys', $_GET)) {
-            $defaults['sortKeys'] = $_GET['sortKeys'];
+            $defaults['sortKeys'] = Security::remove_XSS($_GET['sortKeys']);
             $form->setDefaults($defaults);
         }
 
@@ -271,6 +272,7 @@ switch ($action) {
                 $fields = $extraResult['fields'];
                 $defaults = $extraResult['defaults'];
 
+                $defaults['sortKeys'] = Security::remove_XSS($_GET['sortKeys']);
                 $defaults['search_term'] = $searchTerm;
                 $defaults['category_code'] = $categoryCode;
             }

@@ -199,6 +199,19 @@ function online_logout($user_id = null, $logout_redirect = false)
         }
     }
 
+    if ('true' === api_get_plugin_setting('oauth2', 'enable')
+        && 'oauth2' === ChamiloSession::read('_user_auth_source')
+        && ChamiloSession::has('oauth2AccessToken')
+    ) {
+        if (!isset($oAuth2Plugin)) {
+            $oAuth2Plugin = OAuth2::create();
+        }
+        $logoutUrl = $oAuth2Plugin->getLogoutUrl();
+        if (!empty($logoutUrl)) {
+            $url = $logoutUrl;
+        }
+    }
+
     api_delete_firstpage_parameter();
     Session::erase('last_id');
     CourseChatUtils::exitChat($user_id);

@@ -4836,19 +4836,34 @@ function languageCodeToCountryIsoCodeForFlags($languageIsoCode)
 
     // @todo save in DB
     switch ($languageIsoCode) {
+        case 'ar':
+            $country = 'ae';
+            break;
         case 'bs':
             $country = 'ba';
-            break;
-        case 'ko':
-            $country = 'kr';
-            break;
-        case 'ja':
-            $country = 'jp';
             break;
         case 'ca':
             $country = 'es';
             if ($allow) {
                 $country = 'catalan';
+            }
+            break;
+        case 'cs':
+            $country = 'cz';
+            break;
+        case 'da':
+            $country = 'dk';
+            break;
+        case 'el':
+            $country = 'ae';
+            break;
+        case 'en':
+            $country = 'gb';
+            break;
+        case 'eu': // Euskera
+            $country = 'es';
+            if ($allow) {
+                $country = 'basque';
             }
             break;
         case 'gl': // galego
@@ -4857,38 +4872,17 @@ function languageCodeToCountryIsoCodeForFlags($languageIsoCode)
                 $country = 'galician';
             }
             break;
-        case 'ka':
-            $country = 'ge';
-            break;
-        case 'sl':
-            $country = 'si';
-            break;
-        case 'eu': // Euskera
-            $country = 'es';
-            if ($allow) {
-                $country = 'basque';
-            }
-            break;
-        case 'cs':
-            $country = 'cz';
-            break;
-        case 'el':
-            $country = 'ae';
-            break;
-        case 'ar':
-            $country = 'ae';
-            break;
-        case 'en':
-            $country = 'gb';
-            break;
         case 'he':
             $country = 'il';
             break;
-        case 'uk': // Ukraine
-            $country = 'ua';
+        case 'ja':
+            $country = 'jp';
             break;
-        case 'da':
-            $country = 'dk';
+        case 'ka':
+            $country = 'ge';
+            break;
+        case 'ko':
+            $country = 'kr';
             break;
         case 'pt-BR':
             $country = 'br';
@@ -4896,8 +4890,14 @@ function languageCodeToCountryIsoCodeForFlags($languageIsoCode)
         case 'qu':
             $country = 'pe';
             break;
+        case 'sl':
+            $country = 'si';
+            break;
         case 'sv':
             $country = 'se';
+            break;
+        case 'uk': // Ukraine
+            $country = 'ua';
             break;
         case 'zh-TW':
         case 'zh':

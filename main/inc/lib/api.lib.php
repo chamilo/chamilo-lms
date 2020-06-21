@@ -4788,7 +4788,7 @@ function api_display_language_form($hide_if_no_choice = false, $showAsButton = f
 
     $currentLanguageId = api_get_language_id($user_selected_language);
     $currentLanguageInfo = api_get_language_info($currentLanguageId);
-    $countryCode = languageToCountryIsoCode($currentLanguageInfo['isocode']);
+    $countryCode = languageCodeToCountryIsoCodeForFlags($currentLanguageInfo['isocode']);
     $url = api_get_self();
     if ($showAsButton) {
         $html = '<div class="btn-group">
@@ -4811,7 +4811,7 @@ function api_display_language_form($hide_if_no_choice = false, $showAsButton = f
     $html .= '<ul class="dropdown-menu" role="menu">';
     foreach ($language_list['all'] as $key => $data) {
         $urlLink = $url.'?language='.$data['english_name'];
-        $html .= '<li><a href="'.$urlLink.'"><span class="flag-icon flag-icon-'.languageToCountryIsoCode($data['isocode']).'"></span> '.$data['original_name'].'</a></li>';
+        $html .= '<li><a href="'.$urlLink.'"><span class="flag-icon flag-icon-'.languageCodeToCountryIsoCodeForFlags($data['isocode']).'"></span> '.$data['original_name'].'</a></li>';
     }
     $html .= '</ul>';
 
@@ -4823,16 +4823,22 @@ function api_display_language_form($hide_if_no_choice = false, $showAsButton = f
 }
 
 /**
- * @param string $languageIsoCode
+ * Return a country code based on a language in order to show a country flag.
+ * Note: Showing a "language" flag is arguably a bad idea, as several countries
+ * share languages and the right flag cannot be shown for all of them.
  *
+ * @param string $languageIsoCode
  * @return string
  */
-function languageToCountryIsoCode($languageIsoCode)
+function languageCodeToCountryIsoCodeForFlags($languageIsoCode)
 {
     $allow = api_get_configuration_value('language_flags_by_country');
 
     // @todo save in DB
     switch ($languageIsoCode) {
+        case 'bs':
+            $country = 'ba';
+            break;
         case 'ko':
             $country = 'kr';
             break;

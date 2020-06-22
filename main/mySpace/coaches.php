@@ -1,10 +1,6 @@
 <?php
-/* For licensing terms, see /license.txt */
 
-/*
- * Coaches reporting
- * @package chamilo.reporting
- */
+/* For licensing terms, see /license.txt */
 
 ob_start();
 $cidReset = true;
@@ -22,11 +18,10 @@ if (isset($_GET["id_student"])) {
     $interbreadcrumb[] = ["url" => "student.php", "name" => get_lang('Students')];
 }
 
-Display :: display_header($nameTools);
+Display::display_header($nameTools);
 
 api_display_tool_title($nameTools);
 
-// Database Table Definitions
 $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
 $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $tbl_user = Database::get_main_table(TABLE_MAIN_USER);

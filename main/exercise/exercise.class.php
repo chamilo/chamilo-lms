@@ -1203,6 +1203,30 @@ class Exercise
         return Database::num_rows($result) > 0;
     }
 
+    public function hasQuestionWithTypeNotInList(array $questionTypeList)
+    {
+        if (empty($questionTypeList)) {
+            return false;
+        }
+
+        $questionTypeToString = implode("','", array_map('intval', $questionTypeList));
+
+        $table = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+        $tableQuestion = Database::get_course_table(TABLE_QUIZ_QUESTION);
+        $sql = "SELECT q.id
+                FROM $table e
+                INNER JOIN $tableQuestion q
+                ON (e.question_id = q.id AND e.c_id = q.c_id)
+                WHERE
+                    q.type NOT IN ('$questionTypeToString')  AND
+                    e.c_id = {$this->course_id} AND
+                    e.exercice_id = ".$this->id;
+
+        $result = Database::query($sql);
+
+        return Database::num_rows($result) > 0;
+    }
+
     /**
      * changes the exercise title.
      *
@@ -1633,7 +1657,7 @@ class Exercise
                 api_get_user_id()
             );
 
-            if (api_get_setting('search_enabled') == 'true') {
+            if (api_get_setting('search_enabled') === 'true') {
                 $this->search_engine_edit();
             }
         } else {
@@ -1739,7 +1763,7 @@ class Exercise
                     $this->course
                 );
 
-                if (api_get_setting('search_enabled') == 'true' && extension_loaded('xapian')) {
+                if (api_get_setting('search_enabled') === 'true' && extension_loaded('xapian')) {
                     $this->search_engine_save();
                 }
             }
@@ -1988,7 +2012,7 @@ class Exercise
         );
 
         $skillList = [];
-        if ($type === 'full') {
+        if ('full' === $type) {
             // Can't modify a DirectFeedback question.
             if (!in_array($this->getFeedbackType(), [EXERCISE_FEEDBACK_TYPE_DIRECT, EXERCISE_FEEDBACK_TYPE_POPUP])) {
                 $this->setResultFeedbackGroup($form);
@@ -2024,7 +2048,7 @@ class Exercise
                 $form->addGroup($radios, null, get_lang('QuestionsPerPage'));
             } else {
                 // if is Direct feedback but has not questions we can allow to modify the question type
-                if ($this->getQuestionCount() === 0) {
+                if (0 === $this->getQuestionCount()) {
                     $this->setResultFeedbackGroup($form);
                     $this->setResultDisabledGroup($form);
 
@@ -2040,12 +2064,13 @@ class Exercise
                     );
                     $form->addGroup($radios, null, get_lang('ExerciseType'));
                 } else {
+                    $this->setResultFeedbackGroup($form, true);
                     $group = $this->setResultDisabledGroup($form);
                     $group->freeze();
 
                     // we force the options to the DirectFeedback exercisetype
-                    $form->addElement('hidden', 'exerciseFeedbackType', $this->getFeedbackType());
-                    $form->addElement('hidden', 'exerciseType', ONE_PER_PAGE);
+                    //$form->addElement('hidden', 'exerciseFeedbackType', $this->getFeedbackType());
+                    //$form->addElement('hidden', 'exerciseType', ONE_PER_PAGE);
 
                     // Type of questions disposition on page
                     $radios[] = $form->createElement(
@@ -2545,11 +2570,10 @@ class Exercise
         }
     }
 
-    /**
-     * @param $form
-     */
-    public function setResultFeedbackGroup(FormValidator $form)
+    public function setResultFeedbackGroup(FormValidator $form, $checkFreeze = true)
     {
+        $freeze = false;
+
         // Feedback type.
         $feedback = [];
         $feedback[] = $form->createElement(
@@ -2564,23 +2588,36 @@ class Exercise
             ]
         );
 
-        if (api_get_setting('enable_quiz_scenario') === 'true') {
-            // Can't convert a question from one feedback to another
-            // if there is more than 1 question already added
-            if ($this->selectNbrQuestions() == 0) {
-                $feedback[] = $form->createElement(
-                    'radio',
-                    'exerciseFeedbackType',
-                    null,
-                    get_lang('DirectFeedback'),
-                    EXERCISE_FEEDBACK_TYPE_DIRECT,
-                    [
-                        'id' => 'exerciseType_'.EXERCISE_FEEDBACK_TYPE_DIRECT,
-                        'onclick' => 'check_direct_feedback()',
-                    ]
-                );
+        $freeze = true;
+        if ('true' === api_get_setting('enable_quiz_scenario')) {
+            if (0 === $this->getQuestionCount()) {
+                $freeze = false;
+            } else {
+                $hasDifferentQuestion = $this->hasQuestionWithTypeNotInList([UNIQUE_ANSWER, HOT_SPOT_DELINEATION]);
+                if (false === $hasDifferentQuestion) {
+                    $freeze = false;
+                }
             }
         }
+
+        $direct = $form->createElement(
+            'radio',
+            'exerciseFeedbackType',
+            null,
+            get_lang('DirectFeedback'),
+            EXERCISE_FEEDBACK_TYPE_DIRECT,
+            [
+                'id' => 'exerciseType_'.EXERCISE_FEEDBACK_TYPE_DIRECT,
+                'onclick' => 'check_direct_feedback()',
+            ]
+        );
+
+        if ($freeze) {
+            $direct->freeze();
+        }
+
+        $feedback[] = $direct;
+
 
         $feedback[] = $form->createElement(
             'radio',
@@ -2591,16 +2628,7 @@ class Exercise
             ['id' => 'exerciseType_'.EXERCISE_FEEDBACK_TYPE_POPUP, 'onclick' => 'check_direct_feedback()']
         );
 
-        $feedback[] = $form->createElement(
-            'radio',
-            'exerciseFeedbackType',
-            null,
-            get_lang('NoFeedback'),
-            EXERCISE_FEEDBACK_TYPE_EXAM,
-            ['id' => 'exerciseType_'.EXERCISE_FEEDBACK_TYPE_EXAM]
-        );
-
-        $form->addGroup(
+        $group = $form->addGroup(
             $feedback,
             null,
             [
@@ -2608,6 +2636,10 @@ class Exercise
                 get_lang('FeedbackDisplayOptions'),
             ]
         );
+
+        if ($freeze) {
+            //$group->freeze();
+        }
     }
 
     /**
@@ -2625,6 +2657,12 @@ class Exercise
         $this->updateAttempts($form->getSubmitValue('exerciseAttempts'));
         $this->updateFeedbackType($form->getSubmitValue('exerciseFeedbackType'));
         $this->updateType($form->getSubmitValue('exerciseType'));
+
+        // If direct feedback then force to One per page
+        if (EXERCISE_FEEDBACK_TYPE_DIRECT == $form->getSubmitValue('exerciseFeedbackType')) {
+            $this->updateType(ONE_PER_PAGE);
+        }
+
         $this->setRandom($form->getSubmitValue('randomQuestions'));
         $this->updateRandomAnswers($form->getSubmitValue('randomAnswers'));
         $this->updateResultsDisabled($form->getSubmitValue('results_disabled'));
@@ -10415,13 +10453,11 @@ class Exercise
         );
 
         if (in_array($this->getFeedbackType(), [EXERCISE_FEEDBACK_TYPE_DIRECT, EXERCISE_FEEDBACK_TYPE_POPUP])) {
-            $group = $form->addGroup(
+            return $form->addGroup(
                 $resultDisabledGroup,
                 null,
                 get_lang('ShowResultsToStudents')
             );
-
-            return $group;
         }
 
         $resultDisabledGroup[] = $form->createElement(

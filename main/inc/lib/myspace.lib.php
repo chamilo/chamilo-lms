@@ -2792,7 +2792,7 @@ class MySpace
                 ['MySpace', 'getUserDataAccessTrackingOverview'],
                 0
             );
-            $table->set_header(0, get_lang('FirstLogin'), false);
+            $table->set_header(0, get_lang('LoginDate'), true);
             $table->set_header(1, get_lang('Username'), true);
             if (api_is_western_name_order()) {
                 $table->set_header(2, get_lang('FirstName'), true);
@@ -2832,7 +2832,7 @@ class MySpace
         $course = Database::get_main_table(TABLE_MAIN_COURSE);
         $trackCourseAccess = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 
-        $sql = "SELECT COUNT(DISTINCT(u.id)) count
+        $sql = "SELECT COUNT(course_access_id) count
                 FROM $trackCourseAccess a
                 INNER JOIN $user u
                 ON a.user_id = u.id
@@ -2840,7 +2840,6 @@ class MySpace
                 ON a.c_id = c.id
                 ";
         $sql = self::getDataAccessTrackingFilters($sql);
-        $sql .= ' GROUP BY u.id';
 
         $result = Database::query($sql);
         $row = Database::fetch_assoc($result);
@@ -2930,10 +2929,12 @@ class MySpace
                         u.firstname AS col3,
                 "
         )."
+                a.login_course_date,
                 a.logout_course_date,
                 c.title,
                 c.code,
-                u.id as user_id
+                u.id as user_id,
+                user_ip
             FROM $trackCourseAccess a
             INNER JOIN $user u
             ON a.user_id = u.id
@@ -2943,7 +2944,6 @@ class MySpace
 
         $sql = self::getDataAccessTrackingFilters($sql);
 
-        $sql .= " GROUP BY u.id ";
         $sql .= " ORDER BY col$column $orderDirection ";
         $sql .= " LIMIT $from, $numberItems";
 
@@ -2954,62 +2954,16 @@ class MySpace
             $data[] = $user;
         }
 
-        $courseId = null;
-        if (isset($_GET['course_id']) && !empty($_GET['course_id'])) {
-            $courseId = (int) $_GET['course_id'];
-        }
-
-        $sessionId = null;
-        if (isset($_GET['session_id']) && !empty($_GET['session_id'])) {
-            $sessionId = (int) $_GET['session_id'];
-        }
-
-        $dateStart = null;
-        $dateEnd = null;
-        if (isset($_GET['date']) && !empty($_GET['date'])) {
-            $dateRangePicker = new DateRangePicker('date', '', ['timePicker' => 'true']);
-            $dates = $dateRangePicker->parseDateRange($_GET['date']);
-
-            if (isset($dates['start']) && !empty($dates['start'])) {
-                $dateStart = Database::escape_string(api_get_utc_datetime($dates['start']));
-            }
-            if (isset($dates['end']) && !empty($dates['end'])) {
-                $dateEnd = Database::escape_string(api_get_utc_datetime($dates['end']));
-            }
-        }
-
         $return = [];
         //TODO: Dont use numeric index
         foreach ($data as $key => $info) {
-            $userId = $info['user_id'];
-            $first = Tracking::get_first_connection_date_on_the_course($userId, $courseId, $sessionId);
-            $timeSpent = Tracking::get_time_spent_on_the_course($userId, $courseId, $sessionId);
-            $timeSpent = api_time_to_hms($timeSpent);
-
-            $ipResult = [];
-            if (!empty($dateStart)) {
-                $ipResult = Database::select(
-                    'DISTINCT(user_ip)',
-                    $track_e_login,
-                    ['where' => [
-                        '? BETWEEN ? AND ? AND login_user_id = ?' => [$info['logout_course_date'], $dateStart, $dateEnd, $userId],
-                    ]]
-                );
-            }
-
-            $ipList = '';
-            if (!empty($ipResult)) {
-                $ipList = implode(', ', array_column($ipResult, 'user_ip'));
-            }
-
-            $return[$info['user_id']] = [
-                $first,
+            $return[] = [
+                api_get_local_time($info['login_course_date']),
                 $info['col1'],
                 $info['col2'],
                 $info['col3'],
-                $ipList,
-                //TODO is not correct/precise, it counts the time not logged between two loggins
-                $timeSpent,
+                $info['user_ip'],
+                gmdate('H:i:s', strtotime($info['logout_course_date']) - strtotime($info['login_course_date'])),
             ];
         }
 

@@ -907,8 +907,12 @@ if (!empty($groupList)) {
         );
         $totalLpProgress += $lpProgress;
     }
-
-    $lpProgress = round($totalLpProgress / $nbStudents, 2).' %';
+    // prevent division by zero error
+    $lpProgress = 0;
+    if ((int)$nbStudents != 0)
+        {
+            $lpProgress = round($totalLpProgress / $nbStudents, 2) . ' %';
+        }
     $totalBestScoreAverageNotInLP = 0;
     $bestScoreAverageNotInLP = 0;
     if (!empty($exerciseList)) {

@@ -134,6 +134,12 @@ $allowSubscribe = false;
 if ($course->getSubscribe() || api_is_platform_admin()) {
     $allowSubscribe = true;
 }
+/* if course has OPEN_WORLD (3) visibility, show Subscribe buton to access it*/
+$publicAccess = false;
+if ($course->isPublic()) {
+    /* In main/template/default/course_home/about.tpl, into not login */
+    $publicAccess = true;
+}
 $plugin = BuyCoursesPlugin::create();
 $checker = $plugin->isEnabled();
 $courseIsPremium = null;
@@ -190,6 +196,7 @@ $essence = Essence\Essence::instance();
 $template->assign('essence', $essence);
 $template->assign('is_premium', $courseIsPremium);
 $template->assign('allow_subscribe', $allowSubscribe);
+$template->assign('public_access', $publicAccess);
 $template->assign('token', $token);
 $template->assign('url', $urlCourse);
 $template->assign(

@@ -119,6 +119,15 @@
                                             {{ 'SignUp'|get_lang }}
                                         </a>
                                     {% endif %}
+
+                                    {% if public_access == true %}
+                                        <a
+                                                href="{{ _p.web }}courses/{{ course.code }}/index.php?action=subscribe&sec_token={{ token }}"
+                                                class="btn btn-lg btn-success btn-block">
+                                            {{ 'Subscribe'|get_lang }}
+                                        </a>
+                                    {% endif %}
+
                                 {% elseif course.subscription %}
                                     <a href="{{ _p.web }}courses/{{ course.code }}/index.php?id_session=0"
                                        class="btn btn-lg btn-success btn-block">

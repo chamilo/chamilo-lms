@@ -2800,9 +2800,9 @@ class MySpace
                 $table->set_header(2, get_lang('LastName'), true);
                 $table->set_header(3, get_lang('FirstName'), true);
             }
-            $table->set_header(4, get_lang('Clicks'), false);
-            $table->set_header(5, get_lang('IP'), false);
-            $table->set_header(6, get_lang('TimeLoggedIn'), false);
+            //$table->set_header(4, get_lang('Clicks'), false);
+            $table->set_header(4, get_lang('IP'), false);
+            $table->set_header(5, get_lang('TimeLoggedIn'), false);
         }
 
         $template = new Template(
@@ -2827,12 +2827,59 @@ class MySpace
      */
     public static function getNumberOfTrackAccessOverview()
     {
-        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-        $sql = "SELECT COUNT(course_access_id) count FROM $table";
+        $user = Database::get_main_table(TABLE_MAIN_USER);
+        $course = Database::get_main_table(TABLE_MAIN_COURSE);
+        $trackCourseAccess = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+
+        $sql = "SELECT COUNT(DISTINCT(u.id)) count
+                FROM $trackCourseAccess a
+                INNER JOIN $user u
+                ON a.user_id = u.id
+                INNER JOIN $course c
+                ON a.c_id = c.id
+                ";
+        $sql = self::getDataAccessTrackingFilters($sql);
+        $sql .= ' GROUP BY u.id';
+
         $result = Database::query($sql);
         $row = Database::fetch_assoc($result);
 
         return $row['count'];
+    }
+
+    private static function getDataAccessTrackingFilters($sql)
+    {
+        if (isset($_GET['course_id']) && !empty($_GET['course_id'])) {
+            $courseId = (int) $_GET['course_id'];
+            $sql .= " AND c.id = ".$courseId;
+        }
+
+        if (isset($_GET['session_id']) && !empty($_GET['session_id'])) {
+            $sessionId = (int) $_GET['session_id'];
+            $sql .= " AND a.session_id = ".$sessionId;
+        }
+
+        if (isset($_GET['student_id']) && !empty($_GET['student_id'])) {
+            $userId = (int) $_GET['student_id'];
+            $sql .= " AND u.user_id = ".$userId;
+        }
+
+        $sql .= " AND u.status <> ".ANONYMOUS;
+
+        if (isset($_GET['date']) && !empty($_GET['date'])) {
+            $dateRangePicker = new DateRangePicker('date');
+            $dates = $dateRangePicker->parseDateRange($_GET['date']);
+            if (isset($dates['start']) && !empty($dates['start'])) {
+                $dates['start'] = Database::escape_string($dates['start']);
+                $sql .= " AND login_course_date >= '".$dates['start']."'";
+            }
+            if (isset($dates['end']) && !empty($dates['end'])) {
+                $dates['end'] = Database::escape_string($dates['end']);
+                $sql .= " AND logout_course_date <= '".$dates['end']."'";
+            }
+        }
+
+        return $sql;
     }
 
     /**
@@ -2857,7 +2904,7 @@ class MySpace
         $user = Database::get_main_table(TABLE_MAIN_USER);
         $course = Database::get_main_table(TABLE_MAIN_COURSE);
         $track_e_login = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-        $track_e_course_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $trackCourseAccess = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 
         global $export_csv;
         $is_western_name_order = api_is_western_name_order();
@@ -2882,42 +2929,18 @@ class MySpace
                 c.title,
                 c.code,
                 u.id as user_id
-            FROM $track_e_course_access a
+            FROM $trackCourseAccess a
             INNER JOIN $user u
             ON a.user_id = u.id
             INNER JOIN $course c
             ON a.c_id = c.id
             WHERE 1=1 ";
 
-        if (isset($_GET['course_id']) && !empty($_GET['course_id'])) {
-            $courseId = (int) $_GET['course_id'];
-            $sql .= " AND c.id = ".$courseId;
-        }
+        $sql = self::getDataAccessTrackingFilters($sql);
 
-        if (isset($_GET['session_id']) && !empty($_GET['session_id'])) {
-            $sessionId = (int) $_GET['session_id'];
-            $sql .= " AND a.session_id = ".$sessionId;
-        }
-
-        if (isset($_GET['student_id']) && !empty($_GET['student_id'])) {
-            $userId = (int) $_GET['student_id'];
-            $sql .= " AND u.user_id = ".$userId;
-        }
-
-        if (isset($_GET['date']) && !empty($_GET['date'])) {
-            $dateRangePicker = new DateRangePicker('date');
-            $dates = $dateRangePicker->parseDateRange($_GET['date']);
-            if (isset($dates['start']) && !empty($dates['start'])) {
-                $dates['start'] = Database::escape_string($dates['start']);
-                $sql .= " AND login_course_date >= '".$dates['start']."'";
-            }
-            if (isset($dates['end']) && !empty($dates['end'])) {
-                $dates['end'] = Database::escape_string($dates['end']);
-                $sql .= " AND logout_course_date <= '".$dates['end']."'";
-            }
-        }
-
+        $sql .= " GROUP BY u.id ";
         $sql .= " ORDER BY col$column $orderDirection ";
+
         $sql .= " LIMIT $from,$numberItems";
 
         $result = Database::query($sql);
@@ -2927,34 +2950,46 @@ class MySpace
             $data[] = $user;
         }
 
+        $courseId = null;
+        if (isset($_GET['course_id']) && !empty($_GET['course_id'])) {
+            $courseId = (int) $_GET['course_id'];
+        }
+
+        $sessionId = null;
+        if (isset($_GET['session_id']) && !empty($_GET['session_id'])) {
+            $sessionId = (int) $_GET['session_id'];
+        }
+
         $return = [];
         //TODO: Dont use numeric index
         foreach ($data as $key => $info) {
-            $start_date = $info['col0'];
-            $end_date = $info['logout_course_date'];
-            $return[$info['user_id']] = [
-                $start_date,
-                $info['col1'],
-                $info['col2'],
-                $info['col3'],
-                $info['user_id'],
-                'ip',
-                //TODO is not correct/precise, it counts the time not logged between two loggins
-                gmdate("H:i:s", strtotime($end_date) - strtotime($start_date)),
-            ];
-        }
+            $userId = $info['user_id'];
+            $first = Tracking::get_first_connection_date_on_the_course($userId, $courseId, $sessionId);
+            $timeSpent = Tracking::get_time_spent_on_the_course($userId, $courseId, $sessionId);
+            $timeSpent = api_time_to_hms($timeSpent);
 
-        foreach ($return as $key => $info) {
             $ipResult = Database::select(
                 'user_ip',
                 $track_e_login,
                 ['where' => [
-                    '? BETWEEN login_date AND logout_date' => $info[0],
-                ]],
-                'first'
+                    '? BETWEEN login_date AND logout_date AND login_user_id = ?' => [$info['logout_course_date'], $userId],
+                ]]
             );
 
-            $return[$key][5] = $ipResult['user_ip'];
+            $ipList = '';
+            if (!empty($ipResult)) {
+                $ipList = implode(',', array_column($ipResult, 'user_ip'));
+            }
+
+            $return[$info['user_id']] = [
+                $first,
+                $info['col1'],
+                $info['col2'],
+                $info['col3'],
+                $ipList,
+                //TODO is not correct/precise, it counts the time not logged between two loggins
+                $timeSpent,
+            ];
         }
 
         return $return;

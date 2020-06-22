@@ -2705,11 +2705,13 @@ class MySpace
             get_lang('SearchCourse'),
             $courseList,
             [
-                'url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?'.http_build_query([
-                    'a' => 'search_course_by_session_all',
-                    'session_id' => $sessionId,
-                    'course_id' => $courseId,
-                ]),
+                'url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?'.http_build_query(
+                    [
+                        'a' => 'search_course_by_session_all',
+                        'session_id' => $sessionId,
+                        'course_id' => $courseId,
+                    ]
+                ),
             ]
         );
 
@@ -2879,10 +2881,12 @@ class MySpace
                 a.logout_course_date,
                 c.title,
                 c.code,
-                u.user_id
+                u.id as user_id
             FROM $track_e_course_access a
-            INNER JOIN $user u ON a.user_id = u.user_id
-            INNER JOIN $course c ON a.c_id = c.id
+            INNER JOIN $user u
+            ON a.user_id = u.id
+            INNER JOIN $course c
+            ON a.c_id = c.id
             WHERE 1=1 ";
 
         if (isset($_GET['course_id']) && !empty($_GET['course_id'])) {
@@ -2928,7 +2932,6 @@ class MySpace
         foreach ($data as $key => $info) {
             $start_date = $info['col0'];
             $end_date = $info['logout_course_date'];
-
             $return[$info['user_id']] = [
                 $start_date,
                 $info['col1'],

@@ -2844,7 +2844,11 @@ class MySpace
         $result = Database::query($sql);
         $row = Database::fetch_assoc($result);
 
-        return $row['count'];
+        if ($row) {
+            return $row['count'];
+        }
+
+        return 0;
     }
 
     private static function getDataAccessTrackingFilters($sql)
@@ -2867,7 +2871,7 @@ class MySpace
         $sql .= " AND u.status <> ".ANONYMOUS;
 
         if (isset($_GET['date']) && !empty($_GET['date'])) {
-            $dateRangePicker = new DateRangePicker('date');
+            $dateRangePicker = new DateRangePicker('date', '', ['timePicker' => 'false']);
             $dates = $dateRangePicker->parseDateRange($_GET['date']);
             if (isset($dates['start']) && !empty($dates['start'])) {
                 $dates['start'] = Database::escape_string($dates['start']);
@@ -2940,8 +2944,7 @@ class MySpace
 
         $sql .= " GROUP BY u.id ";
         $sql .= " ORDER BY col$column $orderDirection ";
-
-        $sql .= " LIMIT $from,$numberItems";
+        $sql .= " LIMIT $from, $numberItems";
 
         $result = Database::query($sql);
 
@@ -2960,6 +2963,20 @@ class MySpace
             $sessionId = (int) $_GET['session_id'];
         }
 
+        $dateStart = null;
+        $dateEnd = null;
+        if (isset($_GET['date']) && !empty($_GET['date'])) {
+            $dateRangePicker = new DateRangePicker('date', '', ['timePicker' => 'false']);
+            $dates = $dateRangePicker->parseDateRange($_GET['date']);
+
+            if (isset($dates['start']) && !empty($dates['start'])) {
+                $dateStart = Database::escape_string($dates['start']);
+            }
+            if (isset($dates['end']) && !empty($dates['end'])) {
+                $dateEnd = Database::escape_string($dates['end']);
+            }
+        }
+
         $return = [];
         //TODO: Dont use numeric index
         foreach ($data as $key => $info) {
@@ -2968,17 +2985,20 @@ class MySpace
             $timeSpent = Tracking::get_time_spent_on_the_course($userId, $courseId, $sessionId);
             $timeSpent = api_time_to_hms($timeSpent);
 
-            $ipResult = Database::select(
-                'user_ip',
-                $track_e_login,
-                ['where' => [
-                    '? BETWEEN login_date AND logout_date AND login_user_id = ?' => [$info['logout_course_date'], $userId],
-                ]]
-            );
+            $ipResult = [];
+            if (!empty($dateStart)) {
+                $ipResult = Database::select(
+                    'DISTINCT(user_ip)',
+                    $track_e_login,
+                    ['where' => [
+                        '? BETWEEN ? AND ? AND login_user_id = ?' => [$info['logout_course_date'], $dateStart, $dateEnd, $userId],
+                    ]]
+                );
+            }
 
             $ipList = '';
             if (!empty($ipResult)) {
-                $ipList = implode(',', array_column($ipResult, 'user_ip'));
+                $ipList = implode(', ', array_column($ipResult, 'user_ip'));
             }
 
             $return[$info['user_id']] = [

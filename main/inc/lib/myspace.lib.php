@@ -2766,24 +2766,25 @@ class MySpace
                 ",
             ]
         );
+
         $form->addDateRangePicker(
             'date',
             get_lang('DateRange'),
             true,
             [
                 'id' => 'date_range',
-                'format' => 'YYYY-MM-DD',
-                'timePicker' => 'false',
-                'validate_format' => 'Y-m-d',
+                'format' => 'YYYY-MM-DD HH:mm',
+                'timePicker' => 'true',
+                //'validate_format' => 'Y-m-d',
             ]
         );
+
         $form->addHidden('display', 'accessoverview');
         $form->addRule('course_id', get_lang('Required'), 'required');
         $form->addRule('profile', get_lang('Required'), 'required');
         $form->addButton('submit', get_lang('Generate'), 'gear', 'primary');
 
         $table = null;
-
         if ($form->validate()) {
             $table = new SortableTable(
                 'tracking_access_overview',
@@ -2791,7 +2792,7 @@ class MySpace
                 ['MySpace', 'getUserDataAccessTrackingOverview'],
                 0
             );
-            $table->set_header(0, get_lang('LoginDate'), true);
+            $table->set_header(0, get_lang('FirstLogin'), false);
             $table->set_header(1, get_lang('Username'), true);
             if (api_is_western_name_order()) {
                 $table->set_header(2, get_lang('FirstName'), true);
@@ -2871,14 +2872,14 @@ class MySpace
         $sql .= " AND u.status <> ".ANONYMOUS;
 
         if (isset($_GET['date']) && !empty($_GET['date'])) {
-            $dateRangePicker = new DateRangePicker('date', '', ['timePicker' => 'false']);
+            $dateRangePicker = new DateRangePicker('date', '', ['timePicker' => 'true']);
             $dates = $dateRangePicker->parseDateRange($_GET['date']);
             if (isset($dates['start']) && !empty($dates['start'])) {
-                $dates['start'] = Database::escape_string($dates['start']);
+                $dates['start'] = Database::escape_string(api_get_utc_datetime($dates['start']));
                 $sql .= " AND login_course_date >= '".$dates['start']."'";
             }
             if (isset($dates['end']) && !empty($dates['end'])) {
-                $dates['end'] = Database::escape_string($dates['end']);
+                $dates['end'] = Database::escape_string(api_get_utc_datetime($dates['end']));
                 $sql .= " AND logout_course_date <= '".$dates['end']."'";
             }
         }
@@ -2966,14 +2967,14 @@ class MySpace
         $dateStart = null;
         $dateEnd = null;
         if (isset($_GET['date']) && !empty($_GET['date'])) {
-            $dateRangePicker = new DateRangePicker('date', '', ['timePicker' => 'false']);
+            $dateRangePicker = new DateRangePicker('date', '', ['timePicker' => 'true']);
             $dates = $dateRangePicker->parseDateRange($_GET['date']);
 
             if (isset($dates['start']) && !empty($dates['start'])) {
-                $dateStart = Database::escape_string($dates['start']);
+                $dateStart = Database::escape_string(api_get_utc_datetime($dates['start']));
             }
             if (isset($dates['end']) && !empty($dates['end'])) {
-                $dateEnd = Database::escape_string($dates['end']);
+                $dateEnd = Database::escape_string(api_get_utc_datetime($dates['end']));
             }
         }
 

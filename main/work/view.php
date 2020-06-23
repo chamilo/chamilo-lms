@@ -50,7 +50,9 @@ $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
     $courseInfo
 );
 
-if ((user_is_author($id) || $isDrhOfCourse || $allowEdition) ||
+$isDrhOfSession = !empty(SessionManager::getSessionFollowedByDrh(api_get_user_id(), $row['session_id']));
+
+if ((user_is_author($id) || $isDrhOfCourse || $allowEdition || $isDrhOfSession) ||
     (
         0 == $courseInfo['show_score'] &&
         1 == $work['active'] &&
@@ -73,7 +75,7 @@ if ((user_is_author($id) || $isDrhOfCourse || $allowEdition) ||
         1 == $work['active'] &&
         1 == $work['accepted']
         ) ||
-        $isCourseManager || user_is_author($id) || $isDrhOfCourse
+        $isCourseManager || user_is_author($id) || $isDrhOfCourse || $idDrhOfSession
     ) {
         if ($page === 'edit') {
             $url = api_get_path(WEB_CODE_PATH).'work/edit.php?id='.$folderData['id'].'&item_id='.$work['id'].'&'.api_get_cidreq();

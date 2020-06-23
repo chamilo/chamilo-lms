@@ -145,7 +145,7 @@ class AppPlugin
         if ($fromDatabase || $installedPlugins === null) {
             $installedPlugins = [];
 
-            if (api_is_multiple_url_enabled()) {
+            /*if (api_is_multiple_url_enabled()) {
                 $urlId = api_get_current_access_url_id();
                 $plugins = api_get_settings_params(
                     [
@@ -157,13 +157,13 @@ class AppPlugin
                         ],
                     ]
                 );
-            } else {
-                $plugins = api_get_settings_params(
+            } else {*/
+            $plugins = api_get_settings_params(
                     [
                         'variable = ? AND selected_value = ? AND category = ? ' => ['status', 'installed', 'Plugins'],
                     ]
                 );
-            }
+            //}
 
             if (!empty($plugins)) {
                 foreach ($plugins as $row) {

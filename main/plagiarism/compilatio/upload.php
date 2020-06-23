@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 require_once '../../inc/global.inc.php';
@@ -91,7 +92,7 @@ function sendDocument($documentId, $courseInfo)
 
     compilatioUpdateWorkDocument($documentId, $courseId);
     $workTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-    $query = "SELECT * FROM $workTable 
+    $query = "SELECT * FROM $workTable
               WHERE id = $documentId AND c_id= $courseId";
     $sqlResult = Database::query($query);
     $doc = Database::fetch_object($sqlResult);
@@ -161,7 +162,7 @@ function getWorkTitle($docId, $courseId)
     $courseId = (int) $courseId;
 
     $workTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-    $sql = "SELECT title FROM $workTable 
+    $sql = "SELECT title FROM $workTable
             WHERE c_id= $courseId AND id = $docId";
     $res = Database::query($sql);
     if (Database::num_rows($res) > 0) {
@@ -221,13 +222,13 @@ function compilatioUpdateWorkDocument($docId, $courseId)
     $workTitle = getWorkTitle($docId, $courseId);
 
     if ($extensionFile != '' && $urlFile_ext == '') {
-        /* Rename the files in the FS whit the extension*/
+        /* Rename the files in the FS with the extension */
         $shortFilename = $filename;
         $cleanWorkTitle = api_replace_dangerous_char($workTitle);
         $newestFilename = $shortFilename.'_'.$cleanWorkTitle;
         rename($coursePath.$urlFile, $coursePath.$work_folder.$newestFilename);
         /*rename the db's input with the extension*/
-        $sql = "UPDATE $workTable SET url='".$work_folder.$newestFilename."' 
+        $sql = "UPDATE $workTable SET url='".$work_folder.$newestFilename."'
                 WHERE c_id=$courseId AND id=$docId";
         Database::query($sql);
     }

@@ -227,7 +227,6 @@ function handlePlugins()
         storePlugins();
         // Add event to the system log.
         $user_id = api_get_user_id();
-        $category = $_GET['category'];
         $installed = $plugin_obj->getInstalledPlugins();
         Event::addEvent(
             LOG_PLUGIN_CHANGE,

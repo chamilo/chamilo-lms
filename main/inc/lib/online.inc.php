@@ -199,6 +199,19 @@ function online_logout($user_id = null, $logout_redirect = false)
         }
     }
 
+    if ('true' === api_get_plugin_setting('oauth2', 'enable')
+        && 'oauth2' === ChamiloSession::read('_user_auth_source')
+        && ChamiloSession::has('oauth2AccessToken')
+    ) {
+        if (!isset($oAuth2Plugin)) {
+            $oAuth2Plugin = OAuth2::create();
+        }
+        $logoutUrl = $oAuth2Plugin->getLogoutUrl();
+        if (!empty($logoutUrl)) {
+            $url = $logoutUrl;
+        }
+    }
+
     api_delete_firstpage_parameter();
     Session::erase('last_id');
     CourseChatUtils::exitChat($user_id);
@@ -212,7 +225,7 @@ function online_logout($user_id = null, $logout_redirect = false)
         exit;
     }
 
-    if ($uinfo['auth_source'] !== PLATFORM_AUTH_SOURCE && api_is_cas_activated()) {
+    if ($uinfo['auth_source'] === CAS_AUTH_SOURCE && api_is_cas_activated()) {
         require_once __DIR__.'/../../auth/cas/cas_var.inc.php';
         if (phpCas::isInitialized()) {
             phpCAS::logout();

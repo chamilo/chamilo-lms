@@ -4788,7 +4788,7 @@ function api_display_language_form($hide_if_no_choice = false, $showAsButton = f
 
     $currentLanguageId = api_get_language_id($user_selected_language);
     $currentLanguageInfo = api_get_language_info($currentLanguageId);
-    $countryCode = languageToCountryIsoCode($currentLanguageInfo['isocode']);
+    $countryCode = languageCodeToCountryIsoCodeForFlags($currentLanguageInfo['isocode']);
     $url = api_get_self();
     if ($showAsButton) {
         $html = '<div class="btn-group">
@@ -4811,7 +4811,7 @@ function api_display_language_form($hide_if_no_choice = false, $showAsButton = f
     $html .= '<ul class="dropdown-menu" role="menu">';
     foreach ($language_list['all'] as $key => $data) {
         $urlLink = $url.'?language='.$data['english_name'];
-        $html .= '<li><a href="'.$urlLink.'"><span class="flag-icon flag-icon-'.languageToCountryIsoCode($data['isocode']).'"></span> '.$data['original_name'].'</a></li>';
+        $html .= '<li><a href="'.$urlLink.'"><span class="flag-icon flag-icon-'.languageCodeToCountryIsoCodeForFlags($data['isocode']).'"></span> '.$data['original_name'].'</a></li>';
     }
     $html .= '</ul>';
 
@@ -4823,26 +4823,48 @@ function api_display_language_form($hide_if_no_choice = false, $showAsButton = f
 }
 
 /**
+ * Return a country code based on a language in order to show a country flag.
+ * Note: Showing a "language" flag is arguably a bad idea, as several countries
+ * share languages and the right flag cannot be shown for all of them.
+ *
  * @param string $languageIsoCode
  *
  * @return string
  */
-function languageToCountryIsoCode($languageIsoCode)
+function languageCodeToCountryIsoCodeForFlags($languageIsoCode)
 {
     $allow = api_get_configuration_value('language_flags_by_country');
 
     // @todo save in DB
     switch ($languageIsoCode) {
-        case 'ko':
-            $country = 'kr';
+        case 'ar':
+            $country = 'ae';
             break;
-        case 'ja':
-            $country = 'jp';
+        case 'bs':
+            $country = 'ba';
             break;
         case 'ca':
             $country = 'es';
             if ($allow) {
                 $country = 'catalan';
+            }
+            break;
+        case 'cs':
+            $country = 'cz';
+            break;
+        case 'da':
+            $country = 'dk';
+            break;
+        case 'el':
+            $country = 'ae';
+            break;
+        case 'en':
+            $country = 'gb';
+            break;
+        case 'eu': // Euskera
+            $country = 'es';
+            if ($allow) {
+                $country = 'basque';
             }
             break;
         case 'gl': // galego
@@ -4851,38 +4873,17 @@ function languageToCountryIsoCode($languageIsoCode)
                 $country = 'galician';
             }
             break;
-        case 'ka':
-            $country = 'ge';
-            break;
-        case 'sl':
-            $country = 'si';
-            break;
-        case 'eu': // Euskera
-            $country = 'es';
-            if ($allow) {
-                $country = 'basque';
-            }
-            break;
-        case 'cs':
-            $country = 'cz';
-            break;
-        case 'el':
-            $country = 'ae';
-            break;
-        case 'ar':
-            $country = 'ae';
-            break;
-        case 'en':
-            $country = 'gb';
-            break;
         case 'he':
             $country = 'il';
             break;
-        case 'uk': // Ukraine
-            $country = 'ua';
+        case 'ja':
+            $country = 'jp';
             break;
-        case 'da':
-            $country = 'dk';
+        case 'ka':
+            $country = 'ge';
+            break;
+        case 'ko':
+            $country = 'kr';
             break;
         case 'pt-BR':
             $country = 'br';
@@ -4890,8 +4891,14 @@ function languageToCountryIsoCode($languageIsoCode)
         case 'qu':
             $country = 'pe';
             break;
+        case 'sl':
+            $country = 'si';
+            break;
         case 'sv':
             $country = 'se';
+            break;
+        case 'uk': // Ukraine
+            $country = 'ua';
             break;
         case 'zh-TW':
         case 'zh':
@@ -6578,9 +6585,11 @@ function api_get_current_access_url_id()
 /**
  * Gets the registered urls from a given user id.
  *
- * @author Julio Montoya <gugli100@gmail.com>
+ * @param int $user_id
  *
- * @return int user id
+ * @return array
+ *
+ * @author Julio Montoya <gugli100@gmail.com>
  */
 function api_get_access_url_from_user($user_id)
 {

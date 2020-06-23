@@ -2705,11 +2705,13 @@ class MySpace
             get_lang('SearchCourse'),
             $courseList,
             [
-                'url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?'.http_build_query([
-                    'a' => 'search_course_by_session_all',
-                    'session_id' => $sessionId,
-                    'course_id' => $courseId,
-                ]),
+                'url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?'.http_build_query(
+                    [
+                        'a' => 'search_course_by_session_all',
+                        'session_id' => $sessionId,
+                        'course_id' => $courseId,
+                    ]
+                ),
             ]
         );
 
@@ -2764,24 +2766,25 @@ class MySpace
                 ",
             ]
         );
+
         $form->addDateRangePicker(
             'date',
             get_lang('DateRange'),
             true,
             [
                 'id' => 'date_range',
-                'format' => 'YYYY-MM-DD',
-                'timePicker' => 'false',
-                'validate_format' => 'Y-m-d',
+                'format' => 'YYYY-MM-DD HH:mm',
+                'timePicker' => 'true',
+                //'validate_format' => 'Y-m-d',
             ]
         );
+
         $form->addHidden('display', 'accessoverview');
         $form->addRule('course_id', get_lang('Required'), 'required');
         $form->addRule('profile', get_lang('Required'), 'required');
         $form->addButton('submit', get_lang('Generate'), 'gear', 'primary');
 
         $table = null;
-
         if ($form->validate()) {
             $table = new SortableTable(
                 'tracking_access_overview',
@@ -2798,9 +2801,9 @@ class MySpace
                 $table->set_header(2, get_lang('LastName'), true);
                 $table->set_header(3, get_lang('FirstName'), true);
             }
-            $table->set_header(4, get_lang('Clicks'), false);
-            $table->set_header(5, get_lang('IP'), false);
-            $table->set_header(6, get_lang('TimeLoggedIn'), false);
+            //$table->set_header(4, get_lang('Clicks'), false);
+            $table->set_header(4, get_lang('IP'), false);
+            $table->set_header(5, get_lang('TimeLoggedIn'), false);
         }
 
         $template = new Template(
@@ -2825,12 +2828,27 @@ class MySpace
      */
     public static function getNumberOfTrackAccessOverview()
     {
-        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-        $sql = "SELECT COUNT(course_access_id) count FROM $table";
+        $user = Database::get_main_table(TABLE_MAIN_USER);
+        $course = Database::get_main_table(TABLE_MAIN_COURSE);
+        $trackCourseAccess = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+
+        $sql = "SELECT COUNT(course_access_id) count
+                FROM $trackCourseAccess a
+                INNER JOIN $user u
+                ON a.user_id = u.id
+                INNER JOIN $course c
+                ON a.c_id = c.id
+                ";
+        $sql = self::getDataAccessTrackingFilters($sql);
+
         $result = Database::query($sql);
         $row = Database::fetch_assoc($result);
 
-        return $row['count'];
+        if ($row) {
+            return $row['count'];
+        }
+
+        return 0;
     }
 
     /**
@@ -2855,7 +2873,7 @@ class MySpace
         $user = Database::get_main_table(TABLE_MAIN_USER);
         $course = Database::get_main_table(TABLE_MAIN_COURSE);
         $track_e_login = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-        $track_e_course_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $trackCourseAccess = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 
         global $export_csv;
         $is_western_name_order = api_is_western_name_order();
@@ -2876,45 +2894,23 @@ class MySpace
                         u.firstname AS col3,
                 "
         )."
+                a.login_course_date,
                 a.logout_course_date,
                 c.title,
                 c.code,
-                u.user_id
-            FROM $track_e_course_access a
-            INNER JOIN $user u ON a.user_id = u.user_id
-            INNER JOIN $course c ON a.c_id = c.id
+                u.id as user_id,
+                user_ip
+            FROM $trackCourseAccess a
+            INNER JOIN $user u
+            ON a.user_id = u.id
+            INNER JOIN $course c
+            ON a.c_id = c.id
             WHERE 1=1 ";
 
-        if (isset($_GET['course_id']) && !empty($_GET['course_id'])) {
-            $courseId = (int) $_GET['course_id'];
-            $sql .= " AND c.id = ".$courseId;
-        }
-
-        if (isset($_GET['session_id']) && !empty($_GET['session_id'])) {
-            $sessionId = (int) $_GET['session_id'];
-            $sql .= " AND a.session_id = ".$sessionId;
-        }
-
-        if (isset($_GET['student_id']) && !empty($_GET['student_id'])) {
-            $userId = (int) $_GET['student_id'];
-            $sql .= " AND u.user_id = ".$userId;
-        }
-
-        if (isset($_GET['date']) && !empty($_GET['date'])) {
-            $dateRangePicker = new DateRangePicker('date');
-            $dates = $dateRangePicker->parseDateRange($_GET['date']);
-            if (isset($dates['start']) && !empty($dates['start'])) {
-                $dates['start'] = Database::escape_string($dates['start']);
-                $sql .= " AND login_course_date >= '".$dates['start']."'";
-            }
-            if (isset($dates['end']) && !empty($dates['end'])) {
-                $dates['end'] = Database::escape_string($dates['end']);
-                $sql .= " AND logout_course_date <= '".$dates['end']."'";
-            }
-        }
+        $sql = self::getDataAccessTrackingFilters($sql);
 
         $sql .= " ORDER BY col$column $orderDirection ";
-        $sql .= " LIMIT $from,$numberItems";
+        $sql .= " LIMIT $from, $numberItems";
 
         $result = Database::query($sql);
 
@@ -2926,32 +2922,14 @@ class MySpace
         $return = [];
         //TODO: Dont use numeric index
         foreach ($data as $key => $info) {
-            $start_date = $info['col0'];
-            $end_date = $info['logout_course_date'];
-
-            $return[$info['user_id']] = [
-                $start_date,
+            $return[] = [
+                api_get_local_time($info['login_course_date']),
                 $info['col1'],
                 $info['col2'],
                 $info['col3'],
-                $info['user_id'],
-                'ip',
-                //TODO is not correct/precise, it counts the time not logged between two loggins
-                gmdate("H:i:s", strtotime($end_date) - strtotime($start_date)),
+                $info['user_ip'],
+                gmdate('H:i:s', strtotime($info['logout_course_date']) - strtotime($info['login_course_date'])),
             ];
-        }
-
-        foreach ($return as $key => $info) {
-            $ipResult = Database::select(
-                'user_ip',
-                $track_e_login,
-                ['where' => [
-                    '? BETWEEN login_date AND logout_date' => $info[0],
-                ]],
-                'first'
-            );
-
-            $return[$key][5] = $ipResult['user_ip'];
         }
 
         return $return;
@@ -3309,5 +3287,40 @@ class MySpace
                 'UTF-8'
             );
         }
+    }
+
+    private static function getDataAccessTrackingFilters($sql)
+    {
+        if (isset($_GET['course_id']) && !empty($_GET['course_id'])) {
+            $courseId = (int) $_GET['course_id'];
+            $sql .= " AND c.id = ".$courseId;
+        }
+
+        if (isset($_GET['session_id']) && !empty($_GET['session_id'])) {
+            $sessionId = (int) $_GET['session_id'];
+            $sql .= " AND a.session_id = ".$sessionId;
+        }
+
+        if (isset($_GET['student_id']) && !empty($_GET['student_id'])) {
+            $userId = (int) $_GET['student_id'];
+            $sql .= " AND u.user_id = ".$userId;
+        }
+
+        $sql .= " AND u.status <> ".ANONYMOUS;
+
+        if (isset($_GET['date']) && !empty($_GET['date'])) {
+            $dateRangePicker = new DateRangePicker('date', '', ['timePicker' => 'true']);
+            $dates = $dateRangePicker->parseDateRange($_GET['date']);
+            if (isset($dates['start']) && !empty($dates['start'])) {
+                $dates['start'] = Database::escape_string(api_get_utc_datetime($dates['start']));
+                $sql .= " AND login_course_date >= '".$dates['start']."'";
+            }
+            if (isset($dates['end']) && !empty($dates['end'])) {
+                $dates['end'] = Database::escape_string(api_get_utc_datetime($dates['end']));
+                $sql .= " AND logout_course_date <= '".$dates['end']."'";
+            }
+        }
+
+        return $sql;
     }
 }

@@ -1286,19 +1286,19 @@ ALTER TABLE c_plagiarism_compilatio_docs CHANGE COLUMN id_doc document_id INT NO
 requires extension "php-soap"  sudo apt-get install php-soap
 */
 //$_configuration['allow_compilatio_tool'] = false;
-//$_configuration['compilatio_tool'] = [
-//    'settings' => [
-//        'key' => '',
-//        'soap_url' => '',
-//        'proxy_host' => '',
-//        'proxy_port' => '',
-//        'max_filesize' => '',
-//        'transport_mode' => '',
-//        'wget_uri' => '',
-//        'wget_login' => '',
-//        'wget_password' => '',
-//    ]
-//];
+/*$_configuration['compilatio_tool'] = [
+    'settings' => [
+        'key' => '',
+        'soap_url' => '',
+        'proxy_host' => '',
+        'proxy_port' => '',
+        'max_filesize' => '',
+        'transport_mode' => '',
+        'wget_uri' => '',
+        'wget_login' => '',
+        'wget_password' => '',
+    ]
+];*/
 
 // Allow user to enter a LP item if it was validated in another session.
 // $_configuration['validate_lp_prerequisite_from_other_session'] = false;

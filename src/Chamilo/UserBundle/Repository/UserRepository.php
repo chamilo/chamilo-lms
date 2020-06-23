@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\UserBundle\Repository;
@@ -59,8 +60,6 @@ use Symfony\Component\Serializer\Serializer;
  *
  * All functions that query the database (selects)
  * Functions should return query builders.
- *
- * @package Chamilo\UserBundle\Repository
  */
 class UserRepository extends EntityRepository
 {

@@ -25,8 +25,9 @@ Vue.use(Vuelidate);
 Vue.use(VueApollo);
 Vue.use(require('vue-moment'));
 
-import CKEditor from '@ckeditor/ckeditor5-vue';
-Vue.use(CKEditor);
+//import CKEditor from '@ckeditor/ckeditor5-vue';
+//Vue.use(CKEditor);
+
 
 const apolloProvider = new VueApollo({
     defaultClient: apolloClient,

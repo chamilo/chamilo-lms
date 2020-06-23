@@ -2,7 +2,7 @@ var Encore = require('@symfony/webpack-encore');
 
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const FileManagerPlugin = require('filemanager-webpack-plugin');
-var dotenv = require('dotenv');
+var dotEnv = require('dotenv');
 
 Encore
     .setOutputPath('public/build/')
@@ -85,7 +85,7 @@ Encore
     ])
     // define the environment variables
     .configureDefinePlugin(options => {
-        const env = dotenv.config({ path: '.env.local' });
+        const env = dotEnv.config({ path: '.env.local' });
         if (env.error) {
             throw env.error;
         }
@@ -118,6 +118,10 @@ Encore.addPlugin(new CopyWebpackPlugin([
     {
         from: './node_modules/mathjax/config',
         to: 'libs/mathjax/config'
+    },
+    {
+        from: './node_modules/tinymce/skins',
+        to: 'libs/tinymce/skins'
     },
 ]));
 

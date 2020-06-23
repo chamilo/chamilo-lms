@@ -2618,7 +2618,6 @@ class Exercise
 
         $feedback[] = $direct;
 
-
         $feedback[] = $form->createElement(
             'radio',
             'exerciseFeedbackType',

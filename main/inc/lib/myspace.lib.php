@@ -2851,41 +2851,6 @@ class MySpace
         return 0;
     }
 
-    private static function getDataAccessTrackingFilters($sql)
-    {
-        if (isset($_GET['course_id']) && !empty($_GET['course_id'])) {
-            $courseId = (int) $_GET['course_id'];
-            $sql .= " AND c.id = ".$courseId;
-        }
-
-        if (isset($_GET['session_id']) && !empty($_GET['session_id'])) {
-            $sessionId = (int) $_GET['session_id'];
-            $sql .= " AND a.session_id = ".$sessionId;
-        }
-
-        if (isset($_GET['student_id']) && !empty($_GET['student_id'])) {
-            $userId = (int) $_GET['student_id'];
-            $sql .= " AND u.user_id = ".$userId;
-        }
-
-        $sql .= " AND u.status <> ".ANONYMOUS;
-
-        if (isset($_GET['date']) && !empty($_GET['date'])) {
-            $dateRangePicker = new DateRangePicker('date', '', ['timePicker' => 'true']);
-            $dates = $dateRangePicker->parseDateRange($_GET['date']);
-            if (isset($dates['start']) && !empty($dates['start'])) {
-                $dates['start'] = Database::escape_string(api_get_utc_datetime($dates['start']));
-                $sql .= " AND login_course_date >= '".$dates['start']."'";
-            }
-            if (isset($dates['end']) && !empty($dates['end'])) {
-                $dates['end'] = Database::escape_string(api_get_utc_datetime($dates['end']));
-                $sql .= " AND logout_course_date <= '".$dates['end']."'";
-            }
-        }
-
-        return $sql;
-    }
-
     /**
      * @param $from
      * @param $numberItems
@@ -3322,5 +3287,40 @@ class MySpace
                 'UTF-8'
             );
         }
+    }
+
+    private static function getDataAccessTrackingFilters($sql)
+    {
+        if (isset($_GET['course_id']) && !empty($_GET['course_id'])) {
+            $courseId = (int) $_GET['course_id'];
+            $sql .= " AND c.id = ".$courseId;
+        }
+
+        if (isset($_GET['session_id']) && !empty($_GET['session_id'])) {
+            $sessionId = (int) $_GET['session_id'];
+            $sql .= " AND a.session_id = ".$sessionId;
+        }
+
+        if (isset($_GET['student_id']) && !empty($_GET['student_id'])) {
+            $userId = (int) $_GET['student_id'];
+            $sql .= " AND u.user_id = ".$userId;
+        }
+
+        $sql .= " AND u.status <> ".ANONYMOUS;
+
+        if (isset($_GET['date']) && !empty($_GET['date'])) {
+            $dateRangePicker = new DateRangePicker('date', '', ['timePicker' => 'true']);
+            $dates = $dateRangePicker->parseDateRange($_GET['date']);
+            if (isset($dates['start']) && !empty($dates['start'])) {
+                $dates['start'] = Database::escape_string(api_get_utc_datetime($dates['start']));
+                $sql .= " AND login_course_date >= '".$dates['start']."'";
+            }
+            if (isset($dates['end']) && !empty($dates['end'])) {
+                $dates['end'] = Database::escape_string(api_get_utc_datetime($dates['end']));
+                $sql .= " AND logout_course_date <= '".$dates['end']."'";
+            }
+        }
+
+        return $sql;
     }
 }

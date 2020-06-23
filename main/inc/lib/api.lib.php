@@ -4828,6 +4828,7 @@ function api_display_language_form($hide_if_no_choice = false, $showAsButton = f
  * share languages and the right flag cannot be shown for all of them.
  *
  * @param string $languageIsoCode
+ *
  * @return string
  */
 function languageCodeToCountryIsoCodeForFlags($languageIsoCode)

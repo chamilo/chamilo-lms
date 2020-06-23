@@ -8553,4 +8553,6 @@ $UsernameList = "Username list";
 $UsersAboutToBeAnonymized = "Users about to be anonymized:";
 $CouldNotReadFile = "Could not read file.";
 $CouldNotReadFileLines = "Could not read file lines.";
+$CertificatesSessions = "Certificates in sessions";
+$SessionFilterReport = "Filter certificates in sessions";
 ?>

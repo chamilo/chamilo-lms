@@ -8581,4 +8581,6 @@ $UsernameList = "Lista de usuarios";
 $UsersAboutToBeAnonymized = "Usuarios que van a ser anonimizados :";
 $CouldNotReadFile = "No se puede leer el archivo.";
 $CouldNotReadFileLines = "No se puede leer las lineas del archivo.";
+$CertificatesSessions = "Certificados en sesiones";
+$SessionFilterReport = "Filtro de certificados en sesiones";
 ?>

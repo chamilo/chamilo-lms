@@ -736,7 +736,7 @@ class GradebookUtils
     {
         $table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
         $table_user = Database::get_main_table(TABLE_MAIN_USER);
-        $sql = 'SELECT DISTINCT u.user_id, u.lastname, u.firstname, u.username
+        $sql = 'SELECT DISTINCT u.user_id, u.lastname, u.firstname, u.username, gc.created_at
                 FROM '.$table_user.' u
                 INNER JOIN '.$table_certificate.' gc
                 ON u.user_id=gc.user_id ';

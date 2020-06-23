@@ -14,35 +14,29 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
 
-if (isset($_REQUEST['userId']))
-    {
-        $userId = intval($_REQUEST['userId']);
-    } else
-    {
-        api_not_allowed(true);
-    }
+if (isset($_REQUEST['userId'])) {
+    $userId = intval($_REQUEST['userId']);
+} else {
+    api_not_allowed(true);
+}
 
 // Return User Info to vCard Export
 $userInfo = api_get_user_info($userId, true, false, true);
 
 /* Get the relationship between current user and vcard user */
 $currentUserId = api_get_user_id();
-$hasRelation = (int)(SocialManager::get_relation_between_contacts($currentUserId, $userId));
-if ($hasRelation == 0)
-    {
-        /* if has not relation, check if are admin */
-        api_protect_admin_script();
+$hasRelation = (int) (SocialManager::get_relation_between_contacts($currentUserId, $userId));
+if ($hasRelation == 0) {
+    /* if has not relation, check if are admin */
+    api_protect_admin_script();
+}
 
-    }
-
-if (empty($userInfo))
-    {
-        api_not_allowed(true);
-    }
-
+if (empty($userInfo)) {
+    api_not_allowed(true);
+}
 
 // Pre-Loaded User Info
-$language = get_lang('Language') . ': ' . $userInfo['language'];
+$language = get_lang('Language').': '.$userInfo['language'];
 
 // Instance the vCard Class
 $vcard = new VCard();

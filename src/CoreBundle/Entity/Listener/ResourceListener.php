@@ -157,7 +157,6 @@ class ResourceListener
                 fwrite($handle, $content);
                 $meta = stream_get_meta_data($handle);
                 $uploadedFile = new UploadedFile($meta['uri'], $title, 'text/html', null, true);
-
             }
 
             // File upload

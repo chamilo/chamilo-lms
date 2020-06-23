@@ -31,7 +31,7 @@ chmod -R 777 .
 
 Then enter the main/install/index.php and follow the UI instructions (database, admin user settings, etc).
 
-After the web install process, change the permissions back to a reasonnably safe state:
+After the web install process, change the permissions back to a reasonably safe state:
 ~~~~
 chmod -R 755 .
 chown -R www-data: public/ var/

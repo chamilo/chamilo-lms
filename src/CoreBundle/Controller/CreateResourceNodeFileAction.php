@@ -51,7 +51,7 @@ class CreateResourceNodeFileAction
 
         if ($request->request->has('resourceLinkList')) {
             $links = $request->get('resourceLinkList');
-            if (strpos($links, '[') === false) {
+            if (false === strpos($links, '[')) {
                 $links = json_decode('['.$links.']', true);
             } else {
                 $links = json_decode($links, true);

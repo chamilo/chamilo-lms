@@ -390,7 +390,7 @@ class UserRepository extends EntityRepository
             } else {
                 $dql = "SELECT DISTINCT U
                         FROM ChamiloCoreBundle:AccessUrlRelUser R, ChamiloCoreBundle:UserRelUser UF
-                        INNER JOIN ChamiloUserBundle:User AS U 
+                        INNER JOIN ChamiloUserBundle:User AS U
                         WITH UF.friendUserId = U
                         WHERE
                             U.active = 1 AND
@@ -408,7 +408,7 @@ class UserRepository extends EntityRepository
             if ($allowSendMessageToAllUsers === 'true') {
                 $dql = "SELECT DISTINCT U
                         FROM ChamiloUserBundle:User U
-                        LEFT JOIN ChamiloCoreBundle:AccessUrlRelUser R 
+                        LEFT JOIN ChamiloCoreBundle:AccessUrlRelUser R
                         WITH U = R.user
                         WHERE
                             U.active = 1 AND
@@ -427,7 +427,7 @@ class UserRepository extends EntityRepository
                         WITH U.id = T.loginUserId
 			WHERE
                           R.portal = $accessUrlId AND
-                          U.active = 1 AND 
+                          U.active = 1 AND
                           T.loginDate >= '".$limit_date."'";
             }
         }
@@ -1262,7 +1262,10 @@ class UserRepository extends EntityRepository
                 $lastLogin = $login->getLoginDate();
             }
         }
-        $user->setLastLogin($lastLogin);
+
+        if (!empty($lastLogin)) {
+            $user->setLastLogin($lastLogin);
+        }
 
         $dateNormalizer = new GetSetMethodNormalizer();
         $dateNormalizer->setCircularReferenceHandler(function ($object) {
@@ -1334,7 +1337,7 @@ class UserRepository extends EntityRepository
         $repo = $this->getEntityManager()->getRepository('ChamiloCoreBundle:TrackELogin');
         $qb = $repo->createQueryBuilder('l');
 
-        $login = $qb
+        return $qb
             ->select('l')
             ->where(
                 $qb->expr()->eq('l.loginUserId', $user->getId())
@@ -1343,7 +1346,5 @@ class UserRepository extends EntityRepository
             ->orderBy('l.loginDate', 'DESC')
             ->getQuery()
             ->getOneOrNullResult();
-
-        return $login;
     }
 }

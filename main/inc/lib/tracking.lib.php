@@ -530,7 +530,7 @@ class Tracking
 
                         $lesson_status = $row['mystatus'];
                         $score = $row['myscore'];
-                        $time_for_total = $row['mytime'];
+                        $time_for_total += $row['mytime'];
                         $attemptTime = $row['mytime'];
 
                         if ($minimumAvailable) {

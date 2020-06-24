@@ -485,7 +485,7 @@ class PDF
         $theme = api_get_visual_theme();
         $document_html = str_replace(
             api_get_path(WEB_CSS_PATH).'themes/'.$theme,
-            api_get_path(SYS_CSS_PATH).'themes/'.$theme,
+            api_get_path(SYS_PUBLIC_PATH).'css/themes/'.$theme,
             $document_html
         );
 

@@ -223,21 +223,25 @@ switch ($action) {
         $numberVisits = 0;
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         $progress = 0;
+        $timeSpentPerCourse = [];
+        $progressPerCourse = [];
         foreach ($courses as $course) {
             $courseId = $course['c_id'];
-            $timeSpent += Tracking::get_time_spent_on_the_course($student_id, $courseId, $sessionToExport);
-
-            $sql = 'SELECT DISTINCT count(course_access_id) as count
-                    FROM '.$table.'
+            $courseTimeSpent = Tracking::get_time_spent_on_the_course($student_id, $courseId, $sessionToExport);
+            $timeSpentPerCourse[$courseId] = $courseTimeSpent;
+            $timeSpent += $courseTimeSpent;
+            $sql = "SELECT DISTINCT count(course_access_id) as count
+                    FROM $table
                     WHERE
-                        user_id = '.$student_id.' AND
-                        c_id = '.$courseId.' AND
-                        session_id = '.$sessionToExport.'
-                    ORDER BY login_course_date ASC';
+                        c_id = $courseId AND
+                        session_id = $sessionToExport AND
+                        user_id = $student_id";
             $result = Database::query($sql);
             $row = Database::fetch_array($result);
             $numberVisits += $row['count'];
-            $progress += Tracking::get_avg_student_progress($student_id, $course['code'], [], $sessionToExport);
+            $courseProgress = Tracking::get_avg_student_progress($student_id, $course['code'], [], $sessionToExport);
+            $progressPerCourse[$courseId] = $courseProgress;
+            $progress += $courseProgress;
         }
 
         $average = round($progress / count($courses), 1);
@@ -304,25 +308,14 @@ switch ($action) {
                 );
 
                 if ($isSubscribed) {
-                    $timeInSeconds = Tracking::get_time_spent_on_the_course(
-                        $user_info['user_id'],
-                        $courseId,
-                        $sessionToExport
-                    );
+                    $timeInSeconds = $timeSpentPerCourse[$courseId];
                     $totalCourseTime += $timeInSeconds;
                     $time_spent_on_course = api_time_to_hms($timeInSeconds);
-
-                    $progress = Tracking::get_avg_student_progress(
-                        $user_info['user_id'],
-                        $courseCodeItem,
-                        [],
-                        $sId
-                    );
-
+                    $progress = $progressPerCourse[$courseId];
                     $totalProgress += $progress;
 
                     $bestScore = Tracking::get_avg_student_score(
-                        $user_info['user_id'],
+                        $student_id,
                         $courseCodeItem,
                         [],
                         $sId,
@@ -339,8 +332,10 @@ switch ($action) {
                     $score = empty($bestScore) ? '0%' : $bestScore.'%';
 
                     $courseTable .= '<tr>
-                        <td ><a href="'.$courseInfoItem['course_public_url'].'?id_session='.$sId.'">'.
-                            $courseInfoItem['title'].'</a></td>
+                        <td>
+                            <a href="'.$courseInfoItem['course_public_url'].'?id_session='.$sId.'">'.
+                            $courseInfoItem['title'].'</a>
+                        </td>
                         <td >'.$time_spent_on_course.'</td>
                         <td >'.$progress.'</td>
                         <td >'.$score.'</td>';
@@ -366,12 +361,10 @@ switch ($action) {
             $courseTable .= '</tbody></table>';
         }
 
-        $studentInfo = api_get_user_info($student_id);
-
         $tpl = new Template('', false, false, false, true, false, false);
         $tpl->assign('title', get_lang('AttestationOfAttendance'));
         $tpl->assign('session_title', $sessionInfo['name']);
-        $tpl->assign('student', $studentInfo['complete_name']);
+        $tpl->assign('student', $user_info['complete_name']);
         $tpl->assign('table_progress', $table->toHtml());
         $tpl->assign('subtitle', sprintf(
             get_lang('InSessionXYouHadTheFollowingResults'),
@@ -385,7 +378,7 @@ switch ($action) {
             'session_info' => $sessionInfo,
             'course_info' => '',
             'pdf_date' => '',
-            'student_info' => $studentInfo,
+            'student_info' => $user_info,
             'show_grade_generated_date' => true,
             'show_real_course_teachers' => false,
             'show_teacher_as_myself' => false,

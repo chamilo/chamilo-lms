@@ -2286,6 +2286,7 @@ function api_format_course_array($course_data)
     $_course['directory'] = $course_data['directory'];
     $_course['creation_date'] = $course_data['creation_date'];
     $_course['titular'] = $course_data['tutor_name'];
+    $_course['tutor_name'] = $course_data['tutor_name'];
     $_course['language'] = $course_data['course_language'];
     $_course['extLink']['url'] = $course_data['department_url'];
     $_course['extLink']['name'] = $course_data['department_name'];

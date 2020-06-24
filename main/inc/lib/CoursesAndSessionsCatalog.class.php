@@ -452,7 +452,8 @@ class CoursesAndSessionsCatalog
             $categoryFilter = ' AND category_code = "'.$categoryCode.'" ';
         }
 
-        $sql = "SELECT DISTINCT course.*, $injectExtraFields
+        //$sql = "SELECT DISTINCT course.*, $injectExtraFields
+        $sql = "SELECT DISTINCT(course.id)
                 FROM $courseTable course
                 $sqlInjectJoins
                 WHERE (
@@ -478,8 +479,8 @@ class CoursesAndSessionsCatalog
                 if ($allowBaseCategories) {
                     $urlCondition = ' (access_url_id = '.$urlId.' OR access_url_id = 1) AND ';
                 }
-
-                $sql = "SELECT DISTINCT course.*, $injectExtraFields
+                //SELECT DISTINCT course.*, $injectExtraFields
+                $sql = "SELECT DISTINCT(course.id)
                         FROM $courseTable as course
                         INNER JOIN $tbl_url_rel_course as url_rel_course
                         ON (url_rel_course.c_id = course.id)
@@ -505,9 +506,15 @@ class CoursesAndSessionsCatalog
         $result = Database::query($sql);
         $courses = [];
         while ($row = Database::fetch_array($result)) {
-            $row['registration_code'] = !empty($row['registration_code']);
+            $courseId = $row['id'];
+            $courseInfo = api_get_course_info_by_id($courseId);
+            if (empty($courseInfo)) {
+                continue;
+            }
+            $courseCode = $courseInfo['code'];
+
             $countUsers = CourseManager::get_user_list_from_course_code(
-                $row['code'],
+                $courseCode,
                 0,
                 null,
                 null,
@@ -515,29 +522,18 @@ class CoursesAndSessionsCatalog
                 true
             );
             $connectionsLastMonth = Tracking::get_course_connections_count(
-                $row['id'],
+                $courseId,
                 0,
                 api_get_utc_datetime(time() - (30 * 86400))
             );
 
-            $ranking = CourseManager::get_course_ranking($row['id'], 0);
-            $courses[] = [
-                'real_id' => $row['id'],
-                'point_info' => $ranking,
-                'code' => $row['code'],
-                'directory' => $row['directory'],
-                'visual_code' => $row['visual_code'],
-                'title' => $row['title'],
-                'tutor' => $row['tutor_name'],
-                'subscribe' => $row['subscribe'],
-                'unsubscribe' => $row['unsubscribe'],
-                'registration_code' => $row['registration_code'],
-                'creation_date' => $row['creation_date'],
-                'visibility' => $row['visibility'],
-                'count_users' => $countUsers,
-                'category_code' => $row['category_code'],
-                'count_connections' => $connectionsLastMonth,
-            ];
+            $courseInfo['point_info'] = CourseManager::get_course_ranking($courseId, 0);
+            $courseInfo['tutor'] = $courseInfo['tutor_name'];
+            $courseInfo['registration_code'] = !empty($courseInfo['registration_code']);
+            $courseInfo['count_users'] = $countUsers;
+            $courseInfo['count_connections'] = $connectionsLastMonth;
+
+            $courses[] = $courseInfo;
         }
 
         return $courses;

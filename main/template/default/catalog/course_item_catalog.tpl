@@ -6,7 +6,13 @@
                 {% if 'ajax' in course.image_url %}
                     {% set class= 'ajax' %}
                 {% endif %}
-                <a href="{{ course.image_url }}" title="{{ course.title }}" class="{{ class }}">
+                <a
+                    href="{{ course.image_url }}"
+                    data-size="lg"
+                    data-title="{{ course.title }}"
+                    title="{{ course.title }}"
+                    class="{{ class }}"
+                >
                     <img class="img-responsive" src="{{ course.thumbnail }}"  alt="{{ course.title }}"/>
                 </a>
             {% endblock %}
@@ -77,25 +83,7 @@
                                 {% else %}
                                     {{ field.text }} : {{ field.value }}       <br />
                                 {% endif %}
-
                             {% endfor %}
-
-{#                            {% if course.extra_data_tags %}ss#}
-{#                                {% for tags in course.extra_data_tags %}#}
-{#                                    <div class="panel-tags">#}
-{#                                        <ul class="list-inline course-tags">#}
-{#                                            <li> {{ 'Tags' | get_lang }}</li>#}
-{#                                            {% for tag in tags %}#}
-{#                                                <li class="label label-info">#}
-{#                                                    <span>#}
-{#                                                        {{ tag }}#}
-{#                                                    </span>#}
-{#                                                </li>#}
-{#                                            {% endfor %}#}
-{#                                        </ul>#}
-{#                                    </div>#}
-{#                                {% endfor %}#}
-{#                            {% endif %}#}
                         </div>
                     </div>
                 {% endif %}

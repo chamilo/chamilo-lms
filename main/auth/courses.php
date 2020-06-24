@@ -261,7 +261,6 @@ switch ($action) {
             $countCoursesInCategory = count($courses);
         } else {
             $values = $_REQUEST;
-
             if ($allowExtraFields) {
                 $extraResult = $extraField->processExtraFieldSearch($values, $form, 'course', 'AND');
                 $conditions = $extraResult['condition'];

@@ -6801,7 +6801,8 @@ class CourseManager
         $table = Database::get_main_table(TABLE_MAIN_COURSE);
         $tableExercise = Database::get_course_table(TABLE_QUIZ_TEST);
         $sql = "SELECT count(e.iid) count
-                FROM $table c INNER JOIN $tableExercise e
+                FROM $table c
+                INNER JOIN $tableExercise e
                 ON (c.id = e.c_id)
                 WHERE e.active <> -1 AND visibility IN (".implode(',', $visibility).")";
         $result = Database::query($sql);
@@ -6839,7 +6840,7 @@ class CourseManager
                     course_rel_user.status status,
                     course_rel_user.sort sort,
                     course_rel_user.user_course_cat user_course_cat
-                FROM $course course, $courseRelUser  course_rel_user
+                FROM $course course, $courseRelUser course_rel_user
                 WHERE
                     course.id = course_rel_user.c_id AND
                     course_rel_user.relation_type <> ".COURSE_RELATION_TYPE_RRHH." AND

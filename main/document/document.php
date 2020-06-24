@@ -1913,17 +1913,21 @@ if (!empty($documentAndFolders)) {
                 $displaySize = format_file_size($document_data['size']);
             }
 
-            $row[] = '<span style="display:none;">'.$size.'</span>'.
-                $invisibility_span_open.
-                $displaySize.
+            $row[] = '<span style="display:none;">' . $size . '</span>' .
+                $invisibility_span_open .
+                $displaySize .
                 $invisibility_span_close;
 
             // Last edit date
             $last_edit_date = api_get_local_time($document_data['lastedit_date']);
-            $display_date = date_to_str_ago($document_data['lastedit_date']).
-                ' <div class="muted"><small>'.$last_edit_date."</small></div>";
+            $display_date = date_to_str_ago($document_data['lastedit_date']) .
+                ' <div class="muted"><small>' . $last_edit_date . "</small></div>";
 
-            $row[] = $invisibility_span_open.$display_date.$invisibility_span_close;
+            /* add last edit date at begin to short by date*/
+            $row[] = "<span style='display: none;'>" . $last_edit_date . "</span>" .
+                $invisibility_span_open .
+                $display_date .
+                $invisibility_span_close;
 
             $groupMemberWithEditRightsCheckDocument = GroupManager::allowUploadEditDocument(
                 $userId,
@@ -2060,12 +2064,13 @@ $column_show[] = 0;
 
 $column_order = [];
 
-if (count($row) == 12) {
-    //teacher
-    $column_order[2] = 8; //name
-    $column_order[3] = 7;
-    $column_order[4] = 6;
-} elseif (count($row) == 10) {
+if (count($row) == 12)
+    {
+        //teacher
+        $column_order[2] = 8; //name
+        $column_order[3] = 7; //size
+        $column_order[4] = 6; //lastedit_date
+    } elseif (count($row) == 10) {
     //student
     $column_order[1] = 6;
     $column_order[2] = 5;
@@ -2149,7 +2154,6 @@ echo $templateForm;
 echo $moveForm;
 echo $dirForm;
 echo $selector;
-
 $table->display();
 
 if (count($documentAndFolders) > 1) {

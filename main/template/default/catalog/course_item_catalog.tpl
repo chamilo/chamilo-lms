@@ -44,7 +44,13 @@
                             {% set class= 'ajax' %}
                         {% endif %}
 
-                        <a title="{{ course.title }}" href="{{ course.title_url }}" class="{{ class }}">
+                        <a
+                            data-size="lg"
+                            data-title="{{ course.title }}"
+                            title="{{ course.title }}"
+                            href="{{ course.title_url }}"
+                            class="{{ class }}"
+                        >
                             {{ course.title }}
                         </a>
                         {% if course.admin_url %}
@@ -81,7 +87,7 @@
                                         </ul>
                                     </div>
                                 {% else %}
-                                    {{ field.text }} : {{ field.value }}       <br />
+                                    {{ field.text }} : {{ field.value }} <br />
                                 {% endif %}
                             {% endfor %}
                         </div>

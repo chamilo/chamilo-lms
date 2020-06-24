@@ -6714,7 +6714,8 @@ class CourseManager
             $title = $course['title'];
             if (empty($url)) {
                 $class = 'ajax';
-                $url = api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&code='.$course['code'];
+                $url = api_get_path(WEB_CODE_PATH).
+                    'inc/ajax/course_home.ajax.php?a=show_course_information&code='.$course['code'];
             } else {
                 if (strpos($url, 'ajax') !== false) {
                     $class = 'ajax';

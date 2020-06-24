@@ -11,15 +11,18 @@
                   @input="$v.item.title.$touch()"
                   @blur="$v.item.title.$touch()"
           />
-
           <editor
+                  :error-messages="contentErrors"
+                  required
                   v-model="item.content"
                   :init="{
                     skin_url: '/build/libs/tinymce/skins/ui/oxide',
                     content_css: '/build/libs/tinymce/skins/content/default/content.css',
                   branding:false,
                   height: 500,
-                  file_picker_callback: function(callback, value, meta) {
+                   toolbar_mode: 'sliding',
+                   file_picker_callback : browser,
+                  /*file_picker_callback: function(callback, value, meta) {
                     // Provide file and text for the link dialog
                     if (meta.filetype == 'file') {
                       callback('mypage.html', {text: 'My text'});
@@ -34,7 +37,7 @@
                     if (meta.filetype == 'media') {
                       callback('movie.mp4', {source2: 'alt.ogg', poster: 'image.jpg'});
                     }
-                  },
+                  },*/
                   images_upload_handler: (blobInfo, success, failure) => {
                     console.log(blobInfo);
                     console.log(success);
@@ -46,31 +49,19 @@
                   },
                    //menubar: true,
                    plugins: [
-                     'advlist autolink lists link image charmap print preview anchor',
+                     'fullpage advlist autolink lists link image charmap print preview anchor',
                      'searchreplace visualblocks code bbcode fullscreen',
-                     'insertdatetime media table paste code help wordcount'
+                     'insertdatetime media table paste code wordcount'
                    ],
                    toolbar: 'undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media template link anchor code codesample | ltr rtl',
-
-                   /*toolbar:
-                     'undo redo | formatselect | bold italic backcolor | \
-                     alignleft aligncenter alignright alignjustify | \
-                     bullist numlist outdent indent | removeformat'*/
                   }
               "
           />
-
         </v-col>
       </v-row>
     </v-container>
   </v-form>
 </template>
-
-<style>
-  .ck-editor__editable {
-    min-height: 400px;
-   }
-</style>
 
 <script>
 import has from 'lodash/has';
@@ -78,9 +69,7 @@ import { validationMixin } from 'vuelidate';
 import { required } from 'vuelidate/lib/validators';
 import { mapActions } from 'vuex';
 import { mapFields } from 'vuex-map-fields';
-//import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 //import UploadAdapter from './UploadAdapter';
-//import CKFinder from '@ckeditor/ckeditor5-ckfinder/src/ckfinder';
 import Editor from '@tinymce/tinymce-vue'
 import 'tinymce/tinymce'
 
@@ -159,17 +148,6 @@ export default {
       title: null,
       content: null,
       parentResourceNodeId: null,
-      // editor: ClassicEditor,
-      // editorData: '',
-      // editorConfig: {
-      //   allowedContent: true,
-      //   extraPlugins: [this.uploader],
-      //   // ckfinder: {
-      //   //   //uploadUrl: '/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files&responseType=json',
-      //   //   //openerMethod: 'popup'
-      //   // }
-      //   // The configuration of the rich-text editor.
-      // }
     };
   },
   computed: {
@@ -200,11 +178,40 @@ export default {
     }
   },
   methods: {
-    uploader(editor)
-    {
-      editor.plugins.get( 'FileRepository' ).createUploadAdapter = ( loader ) => {
-        return new UploadAdapter( loader );
-      };
+    browser (callback, value, meta) {
+      tinymce.activeEditor.windowManager.openUrl({
+        url: '/',// use an absolute path!
+        title: 'file manager',
+        /*width: 900,
+        height: 450,
+        resizable: 'yes'*/
+      }, {
+        oninsert: function (file, fm) {
+          var url, reg, info;
+
+          // URL normalization
+          url = fm.convAbsUrl(file.url);
+
+          // Make file info
+          info = file.name + ' (' + fm.formatSize(file.size) + ')';
+
+          // Provide file and text for the link dialog
+          if (meta.filetype == 'file') {
+            callback(url, {text: info, title: info});
+          }
+
+          // Provide image and alt text for the image dialog
+          if (meta.filetype == 'image') {
+            callback(url, {alt: info});
+          }
+
+          // Provide alternative source and posted for the media dialog
+          if (meta.filetype == 'media') {
+            callback(url);
+          }
+        }
+      });
+      return false;
     },
   },
   validations: {

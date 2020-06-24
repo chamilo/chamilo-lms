@@ -35,7 +35,8 @@ export default {
       item: {
         filetype: 'file',
         parentResourceNodeId: null,
-        resourceLinkList: null
+        resourceLinkList: null,
+        content: null
       },
     };
   },

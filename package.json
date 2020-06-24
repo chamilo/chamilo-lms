@@ -6,10 +6,6 @@
   "dependencies": {
     "@babel/plugin-transform-runtime": "^7.9.6",
     "@babel/runtime": "^7.9.6",
-    "@ckeditor/ckeditor5-adapter-ckfinder": "^19.0.1",
-    "@ckeditor/ckeditor5-build-classic": "^19.0.2",
-    "@ckeditor/ckeditor5-upload": "^19.0.1",
-    "@ckeditor/ckeditor5-vue": "^1.0.1",
     "@fancyapps/fancybox": "^3.5.7",
     "@tinymce/tinymce-vue": "^3.2.2",
     "@vue/cli": "^4.4.5",
@@ -24,6 +20,7 @@
     "bootstrap-select": "^1.13.17",
     "chart.js": "^2.9.3",
     "chosen-js": "^1.8.7",
+    "ckeditor": "^4.0.0",
     "core-js": "^3.0",
     "cropper": "^4.0",
     "datepair.js": "^0.4.16",

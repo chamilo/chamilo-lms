@@ -50,7 +50,8 @@ export const ACTIONS = {
   SET_UPDATED: 'SET_UPDATED',
   SET_VIEW: 'SET_VIEW',
   SET_VIOLATIONS: 'SET_VIOLATIONS',
-  TOGGLE_LOADING: 'TOGGLE_LOADING'
+  TOGGLE_LOADING: 'TOGGLE_LOADING',
+  ADD_RESOURCE_NODE: 'ADD_RESOURCE_NODE'
 };
 
 export default function makeCrudModule({
@@ -144,14 +145,17 @@ export default function makeCrudModule({
           })
           .catch(e => handleError(commit, e));
       },
-      loadItem: ({ commit }, id) => {
+      findResourceNode: ({ commit }, id) => {
         if (!service) throw new Error('No service specified!');
 
-        commit(ACTIONS.TOGGLE_LOADING);
         service
             .find(id)
             .then(response => response.json())
             .then(item => {
+              commit(ACTIONS.TOGGLE_LOADING);
+              commit(ACTIONS.ADD_RESOURCE_NODE, normalizeRelations(item));
+
+
               return item;
             })
             .catch(e => handleError(commit, e));
@@ -190,10 +194,17 @@ export default function makeCrudModule({
       getField,
       list: (state, getters) => {
         return state.allIds.map(id => getters.find(id));
-      }
+      },
+      getResourceNode: (state, getters) => {
+        return state.resourceNode;
+      },
     },
     mutations: {
       updateField,
+      [ACTIONS.ADD_RESOURCE_NODE]: (state, item) => {
+        Vue.set(state, 'resourceNode', item);
+        Vue.set(state, 'isLoading', false);
+      },
       [ACTIONS.ADD]: (state, item) => {
         Vue.set(state.byId, item['@id'], item);
         Vue.set(state, 'isLoading', false);

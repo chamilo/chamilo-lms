@@ -21,8 +21,8 @@ export default {
       if (isEmpty(id)) {
         id = this.$route.query.id;
       }
-
       let item = this.find(decodeURIComponent(id));
+
       return item;
       //return this.find(decodeURIComponent(this.$route.params.id));
     },
@@ -48,9 +48,6 @@ export default {
         params: { id: this.item['@id'] }
       });
     },
-    ...mapActions({
-      resourcelinkfind: 'resourcelink/loadItem'
-    }),
   },
   watch: {
     error(message) {

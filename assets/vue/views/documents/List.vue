@@ -50,7 +50,6 @@
 <!--            <template slot="item.resourceNode" slot-scope="{ item }">-->
 <!--              {{ item['@id'] }}-->
 <!--            </template>-->
-
             <template slot="item.resourceNode.updatedAt" slot-scope="{ item }">
               {{ item.resourceNode.updatedAt | moment("from", "now") }}
             </template>
@@ -77,46 +76,61 @@ import ActionCell from '../../components/ActionCell';
 import DocumentsFilterForm from '../../components/documents/Filter';
 import DataFilter from '../../components/DataFilter';
 import Toolbar from '../../components/Toolbar';
+import {ACTIONS} from "../../store/modules/crud";
+import Vue from "vue";
 
 export default {
-  name: 'DocumentsList',
-  servicePrefix: 'Documents',
-  mixins: [ListMixin],
-  components: {
-    Toolbar,
-    ActionCell,
-    DocumentsFilterForm,
-    DataFilter
-  },
-  data() {
-    return {
-      headers: [
-        {text: 'Title', value: 'resourceNode.title', sortable: true},
-        {text: 'Modified', value: 'resourceNode.updatedAt', sortable: true},
-        {text: 'Size', value: 'resourceNode.resourceFile.size', sortable: true},
-        {text: 'Actions', value: 'action', sortable: false}
-      ],
-      selected: []
-    };
-  },
-  computed: {
-    ...mapGetters('documents', {
-      items: 'list'
-    }),
-    ...mapFields('documents', {
-      deletedItem: 'deleted',
-      error: 'error',
-      isLoading: 'isLoading',
-      resetList: 'resetList',
-      totalItems: 'totalItems',
-      view: 'view'
-    })
-  },
-  methods: {
-    ...mapActions('documents', {
-      getPage: 'fetchAll',
-      deleteItem: 'del'
-    })
-  }
+    name: 'DocumentsList',
+    servicePrefix: 'Documents',
+    mixins: [ListMixin],
+    components: {
+        Toolbar,
+        ActionCell,
+        DocumentsFilterForm,
+        DataFilter
+    },
+    created() {
+        let nodeId = this.$route.params['node'];
+        this.findResourceNode('/api/resource_nodes/'+ nodeId);
+    },
+    data() {
+        return {
+            headers: [
+                {text: 'Title', value: 'resourceNode.title', sortable: true},
+                {text: 'Modified', value: 'resourceNode.updatedAt', sortable: true},
+                {text: 'Size', value: 'resourceNode.resourceFile.size', sortable: true},
+                {text: 'Actions', value: 'action', sortable: false}
+            ],
+            selected: [],
+        };
+    },
+    computed: {
+        // From crud.js list function
+        ...mapGetters('documents', {
+            items: 'list'
+        }),
+        ...mapGetters('resourcenode', {
+            resourceNode: 'getResourceNode'
+        }),
+        // From ListMixin
+        ...mapFields('documents', {
+            deletedItem: 'deleted',
+            error: 'error',
+            isLoading: 'isLoading',
+            resetList: 'resetList',
+            totalItems: 'totalItems',
+            view: 'view'
+        }),
+    },
+    methods: {
+        // From ListMixin
+        ...mapActions('documents', {
+            getPage: 'fetchAll',
+            deleteItem: 'del'
+        }),
+        ...mapActions('resourcenode', {
+            findResourceNode: 'findResourceNode',
+        }),
+    }
 };
 </script>

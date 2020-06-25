@@ -9,9 +9,6 @@ export default {
       this.showMessage(`${item['@id']} created`);
       let folderParams = this.$route.query;
 
-      console.log(folderParams);
-      console.log(item['parentResourceNode']);
-
       this.$router.push({
         name: `${this.$options.servicePrefix}List`,
         params: { id: item['@id'] },

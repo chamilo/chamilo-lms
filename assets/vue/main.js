@@ -6,6 +6,8 @@ import courseCategoryService from './services/coursecategory';
 import documentsService from './services/documents';
 import courseService from './services/course';
 import resourceLinkService from './services/resourcelink';
+import resourceNodeService from './services/resourcenode';
+
 import makeCrudModule from './store/modules/crud';
 import vuetify from './plugins/vuetify' // path to vuetify export
 require('@fancyapps/fancybox');
@@ -40,6 +42,13 @@ store.registerModule(
     'resourcelink',
     makeCrudModule({
         service: resourceLinkService
+    })
+);
+
+store.registerModule(
+    'resourcenode',
+    makeCrudModule({
+        service: resourceNodeService
     })
 );
 

@@ -18,10 +18,10 @@
                   :init="{
                     skin_url: '/build/libs/tinymce/skins/ui/oxide',
                     content_css: '/build/libs/tinymce/skins/content/default/content.css',
-                  branding:false,
-                  height: 500,
-                   toolbar_mode: 'sliding',
-                   file_picker_callback : browser,
+                    branding:false,
+                    height: 500,
+                    toolbar_mode: 'sliding',
+                    file_picker_callback : browser,
                   /*file_picker_callback: function(callback, value, meta) {
                     // Provide file and text for the link dialog
                     if (meta.filetype == 'file') {
@@ -123,9 +123,9 @@ import 'tinymce/plugins/wordcount'
 
 export default {
   name: 'DocumentsForm',
-   components: {
-     'editor': Editor
-   },
+  components: {
+    'editor': Editor
+  },
   mixins: [validationMixin],
   props: {
     values: {
@@ -140,8 +140,6 @@ export default {
       type: Object,
       default: () => {}
     },
-  },
-  created () {
   },
   data() {
     return {

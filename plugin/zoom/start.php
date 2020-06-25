@@ -16,7 +16,7 @@ $logInfo = [
 
 Event::registerLog($logInfo);
 
-$tool_name = get_lang('ZoomVideoconference');
+$tool_name = get_lang('ZoomVideoconferences');
 $tpl = new Template($tool_name);
 
 $plugin = ZoomPlugin::create();

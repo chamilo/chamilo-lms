@@ -8,10 +8,11 @@ use Chamilo\PluginBundle\Zoom\API\MeetingInstance;
 use Chamilo\PluginBundle\Zoom\API\MeetingSettings;
 use Chamilo\PluginBundle\Zoom\API\ParticipantListItem;
 use Chamilo\PluginBundle\Zoom\API\PastMeeting;
-use Chamilo\PluginBundle\Zoom\API\RecordingMeeting;
 use Chamilo\PluginBundle\Zoom\CourseMeeting;
 use Chamilo\PluginBundle\Zoom\CourseMeetingInfoGet;
 use Chamilo\PluginBundle\Zoom\CourseMeetingListItem;
+use Chamilo\PluginBundle\Zoom\File;
+use Chamilo\PluginBundle\Zoom\Recording;
 use Chamilo\PluginBundle\Zoom\UserMeetingRegistrant;
 use Chamilo\PluginBundle\Zoom\UserMeetingRegistrantListItem;
 
@@ -277,17 +278,62 @@ class ZoomPlugin extends Plugin
     }
 
     /**
-     * @see JWTClient::getRecordings()
+     * Retrieves an instance's recording.
      *
-     * @param string $instanceUUID
+     * @param string $instanceUUID instance UUID
      *
      * @throws Exception on API error
      *
-     * @return RecordingMeeting the recordings of the meeting
+     * @return Recording the recording of the meeting
      */
-    public function getRecordings($instanceUUID)
+    public function getInstanceRecording($instanceUUID)
     {
-        return $this->jwtClient()->getRecordings($instanceUUID);
+        return Recording::fromRecodingMeeting($this->jwtClient()->getInstanceRecordings($instanceUUID));
+    }
+
+    /**
+     * Retrieves all recordings.
+     *
+     * @param DateTime $startDate start date
+     * @param DateTime $endDate   end date
+     *
+     * @throws Exception
+     *
+     * @return Recording[] all recordings
+     */
+    public function getRecordings($startDate, $endDate)
+    {
+        $recordings = [];
+        foreach ($this->jwtClient()->getRecordings($startDate, $endDate) as $recording) {
+            $recordings[] = Recording::fromRecodingMeeting($recording);
+        }
+
+        return $recordings;
+    }
+
+    /**
+     * Retrieves a meetings instances' recordings.
+     *
+     * @param CourseMeetingInfoGet $meeting
+     *
+     * @throws Exception
+     *
+     * @return Recording[] meeting instances' recordings
+     */
+    public function getMeetingRecordings($meeting)
+    {
+        $interval = new DateInterval('P1M');
+        $startDate = clone $meeting->startDateTime;
+        $startDate->sub($interval);
+        $endDate = clone $meeting->startDateTime;
+        $endDate->add($interval);
+        $recordings = [];
+        foreach ($this->getRecordings($startDate, $endDate) as $recording) {
+            if ($recording->id == $meeting->id) {
+                $recordings[] = $recording;
+            }
+        }
+        return $recordings;
     }
 
     /**
@@ -394,15 +440,119 @@ class ZoomPlugin extends Plugin
     }
 
     /**
+     * Adds to the meeting course documents a link to a meeting instance recording file.
+     *
+     * @param CourseMeetingInfoGet $meeting
+     * @param File                 $file
+     * @param string               $name
+     *
+     * @throws Exception
+     */
+    public function createLinkToFileInCourse($meeting, $file, $name)
+    {
+        $courseInfo = api_get_course_info_by_id($meeting->courseId);
+        if (empty($courseInfo)) {
+            throw new Exception('This meeting is not linked to a valid course');
+        }
+        $path = '/zoom_meeting_recording_file_'.$file->id.'.'.$file->file_type;
+        $docId = DocumentManager::addCloudLink($courseInfo, $path, $file->play_url, $name);
+        if (!$docId) {
+            throw new Exception(
+                DocumentManager::cloudLinkExists($courseInfo, $path, $file->play_url)
+                ? get_lang('UrlAlreadyExists')
+                : get_lang('ErrorAddCloudLink')
+            );
+        }
+    }
+
+    /**
+     * Copies a recording file to a meeting's course.
+     *
+     * @param CourseMeetingInfoGet $meeting
+     * @param File                 $file
+     * @param string               $name
+     *
+     * @throws Exception
+     */
+    public function copyFileToCourse($meeting, $file, $name)
+    {
+        $courseInfo = api_get_course_info_by_id($meeting->courseId);
+        if (empty($courseInfo)) {
+            throw new Exception('This meeting is not linked to a valid course');
+        }
+        $tmpFile = tmpfile();
+        if (false === $tmpFile) {
+            throw new Exception('tmpfile() returned false');
+        }
+        $curl = curl_init($this->jwtClient()->getRecordingFileDownloadURL($file));
+        if (false === $curl) {
+            throw new Exception('Could not init curl: '.curl_error($curl));
+        }
+        if (!curl_setopt_array(
+            $curl,
+            [
+                CURLOPT_FILE => $tmpFile,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 120,
+            ]
+        )) {
+            throw new Exception("Could not set curl options: ".curl_error($curl));
+        }
+        if (false === curl_exec($curl)) {
+            throw new Exception("curl_exec failed: ".curl_error($curl));
+        }
+        $newPath = handle_uploaded_document(
+            $courseInfo,
+            [
+                'name' => $name,
+                'tmp_name' => stream_get_meta_data($tmpFile)['uri'],
+                'size' => filesize(stream_get_meta_data($tmpFile)['uri']),
+                'from_file' => true,
+                'type' => $file->file_type,
+            ],
+            '/',
+            api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document',
+            api_get_user_id(),
+            0,
+            null,
+            0,
+            '',
+            true,
+            false,
+            null,
+            $meeting->sessionId,
+            true
+        );
+        fclose($tmpFile);
+        if (false === $newPath) {
+            throw new Exception('could not handle uploaded document');
+        }
+    }
+
+    /**
      * Deletes a meeting instance's recordings.
      *
      * @param string $instanceUUID
      *
      * @throws Exception
      */
-    public function deleteRecordings($instanceUUID)
+    public function deleteInstanceRecordings($instanceUUID)
     {
         $this->jwtClient()->deleteRecordings($instanceUUID);
+    }
+
+    /**
+     * Deletes a meeting instance recording file.
+     *
+     * @param int    $meetingId
+     * @param string $fileId
+     *
+     * @throws Exception
+     */
+    public function deleteFile($meetingId, $fileId)
+    {
+        $this->jwtClient()->deleteRecordingFile($meetingId, $fileId);
     }
 
     /**

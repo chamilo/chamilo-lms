@@ -51,7 +51,7 @@ class RecordingMeeting
     /**
      * RecordingMeeting constructor.
      */
-    protected function __construct()
+    public function __construct()
     {
         $this->recording_files = [];
     }

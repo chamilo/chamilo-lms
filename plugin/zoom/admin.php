@@ -11,7 +11,7 @@ require_once __DIR__.'/config.php';
 
 api_protect_admin_script();
 
-$tool_name = get_lang('ZoomVideoconference');
+$tool_name = get_lang('ZoomVideoconferences');
 
 $plugin = ZoomPlugin::create();
 
@@ -49,6 +49,9 @@ $form->setDefaults([
 
 $tpl = new Template($tool_name);
 $tpl->assign('meetings', $plugin->getPeriodMeetings($type, $startDate, $endDate));
+if ($plugin->get('enableCloudRecording')) {
+    $tpl->assign('recordings', $plugin->getRecordings($startDate, $endDate));
+}
 $tpl->assign('search_form', $form->returnForm());
 $tpl->assign('content', $tpl->fetch('zoom/view/admin.tpl'));
 $tpl->display_one_col_template();

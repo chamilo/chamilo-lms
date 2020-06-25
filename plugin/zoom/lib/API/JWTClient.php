@@ -3,6 +3,7 @@
 
 namespace Chamilo\PluginBundle\Zoom\API;
 
+use DateTime;
 use Exception;
 use Firebase\JWT\JWT;
 
@@ -294,13 +295,36 @@ class JWTClient
      *
      * @return RecordingMeeting the recordings for this meeting
      */
-    public function getRecordings($instanceUUID)
+    public function getInstanceRecordings($instanceUUID)
     {
         return RecordingMeeting::fromJson(
             $this->send(
                 'GET',
                 'meetings/'.$this->doubleEncode($instanceUUID).'/recordings'
             )
+        );
+    }
+
+    /**
+     * Lists All Recordings.
+     *
+     * @param DateTime $startDate
+     * @param DateTime $endDate
+     *
+     * @throws Exception
+     *
+     * @return RecordingMeeting[] list of all recordings
+     */
+    public function getRecordings($startDate, $endDate)
+    {
+        return $this->getFullList(
+            '/users/me/recordings',
+            RecordingList::class,
+            'meetings',
+            [
+                'from' => $startDate->format('Y-m-d'),
+                'to' => $endDate->format('Y-m-d'),
+            ]
         );
     }
 
@@ -314,6 +338,23 @@ class JWTClient
     public function deleteRecordings($instanceUUID)
     {
         $this->send('DELETE', 'meetings/'.$this->doubleEncode($instanceUUID).'/recordings', ['action' => 'delete']);
+    }
+
+    /**
+     * Deletes a meeting instance recording file.
+     *
+     * @param int    $meetingId
+     * @param string $fileId
+     *
+     * @throws Exception
+     */
+    public function deleteRecordingFile($meetingId, $fileId)
+    {
+        $this->send(
+            'DELETE',
+            "/meetings/$meetingId/recordings/$fileId",
+            ['action' => 'delete']
+        );
     }
 
     /**
@@ -332,6 +373,19 @@ class JWTClient
             ParticipantList::class,
             'participants'
         );
+    }
+
+    /**
+     * Builds the recording file download URL with the access_token query parameter
+     * @see RecordingFile::$download_url
+     *
+     * @param $recordingFile RecordingFile
+     *
+     * @return string full URL
+     */
+    public function getRecordingFileDownloadURL($recordingFile)
+    {
+        return $recordingFile->download_url.'?access_token='.$this->token;
     }
 
     /**

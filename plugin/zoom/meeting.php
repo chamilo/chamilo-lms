@@ -101,8 +101,6 @@ if ($plugin->userIsConferenceManager()) {
 
     if ($plugin->get('enableParticipantRegistration')
         && MeetingSettings::APPROVAL_TYPE_NO_REGISTRATION_REQUIRED != $meeting->settings->approval_type) {
-        $tpl->assign('enableParticipantRegistration', true);
-
         $registerParticipantForm = new FormValidator('registerParticipantForm', 'post', $_SERVER['REQUEST_URI']);
         $userIdSelect = $registerParticipantForm->addSelect('userIds', get_lang('RegisteredUsers'));
         $userIdSelect->setMultiple(true);
@@ -155,83 +153,86 @@ if ($plugin->userIsConferenceManager()) {
         && 'cloud' === $meeting->settings->auto_recording
         // && 'finished' === $meeting->status
     ) {
-        $instances = [];
-        foreach ($plugin->getEndedMeetingInstances($meeting->id) as $instance) {
-            // $instance->instanceDetails = $plugin->getPastMeetingInstanceDetails($instance->uuid);
-            try {
-                $instance->recordings = $plugin->getRecordings($instance->uuid);
-            } catch (Exception $exception) {
-                Display::addFlash(
-                    Display::return_message($exception->getMessage(), 'error')
-                );
+        $recordings = $plugin->getMeetingRecordings($meeting);
+        $fileForm = new FormValidator('fileForm', 'post', $_SERVER['REQUEST_URI']);
+        $fileIdSelect = $fileForm->addSelect('fileIds', get_lang('Files'));
+        $fileIdSelect->setMultiple(true);
+        foreach ($recordings as &$recording) {
+            // $recording->instanceDetails = $plugin->getPastMeetingInstanceDetails($instance->uuid);
+            $options = [];
+            foreach ($recording->recording_files as $file) {
+                $options[] = [
+                    'text' => sprintf("%s.%s (%s)", $file->recording_type, $file->file_type, $file->formattedFileSize),
+                    'value' => $file->id
+                ];
             }
-            foreach ($instance->recordings->recording_files as &$file) {
-                $copyToCourseForm = new FormValidator(
-                    'copyToCourseForm'.$file->id,
-                    'post',
-                    $_SERVER['REQUEST_URI']
-                );
-                $copyToCourseForm->addButtonCopy(get_lang('CopyRecordingToCourse'));
-                if ($copyToCourseForm->validate()) {
-                    try {
-                        $plugin->copyRecordingToCourse($meeting, $file);
-                        Display::addFlash(
-                            Display::return_message(get_lang('RecordingWasCopiedToCourse'), 'confirm')
+            $fileIdSelect->addOptGroup(
+                $options,
+                sprintf("%s (%s)", $recording->formattedStartTime, $recording->formattedDuration)
+            );
+        }
+        $actionRadio = $fileForm->addRadio(
+            'action',
+            get_lang('Action'),
+            [
+                'CreateLinkInCourse' => get_lang('CreateLinkInCourse'),
+                'CopyToCourse' => get_lang('CopyToCourse'),
+                'DeleteFile' => get_lang('DeleteFile'),
+            ]
+        );
+        $fileForm->addButtonUpdate(get_lang('DoIt'));
+        if ($fileForm->validate()) {
+            foreach ($recordings as $recording) {
+                foreach ($recording->recording_files as $file) {
+                    if (in_array($file->id, $fileIdSelect->getValue())) {
+                        $name = sprintf(
+                            get_lang('XRecordingOfMeetingXFromXDurationXDotX'),
+                            $file->recording_type,
+                            $meeting->id,
+                            $recording->formattedStartTime,
+                            $recording->formattedDuration,
+                            $file->file_type
                         );
-                    } catch (Exception $exception) {
-                        Display::addFlash(
-                            Display::return_message($exception->getMessage(), 'error')
-                        );
+                        if ('CreateLinkInCourse' === $actionRadio->getValue()) {
+                            try {
+                                $plugin->createLinkToFileInCourse($meeting, $file, $name);
+                                Display::addFlash(
+                                    Display::return_message(get_lang('LinkToFileWasCreatedInCourse'), 'success')
+                                );
+                            } catch (Exception $exception) {
+                                Display::addFlash(
+                                    Display::return_message($exception->getMessage(), 'error')
+                                );
+                            }
+                        } elseif ('CopyToCourse' === $actionRadio->getValue()) {
+                            try {
+                                $plugin->copyFileToCourse($meeting, $file, $name);
+                                Display::addFlash(
+                                    Display::return_message(get_lang('FileWasCopiedToCourse'), 'confirm')
+                                );
+                            } catch (Exception $exception) {
+                                Display::addFlash(
+                                    Display::return_message($exception->getMessage(), 'error')
+                                );
+                            }
+                        } elseif ('DeleteFile' === $actionRadio->getValue()) {
+                            try {
+                                $plugin->deleteFile($meeting->id, $file->id);
+                                Display::addFlash(
+                                    Display::return_message(get_lang('FileWasDeleted'), 'confirm')
+                                );
+                            } catch (Exception $exception) {
+                                Display::addFlash(
+                                    Display::return_message($exception->getMessage(), 'error')
+                                );
+                            }
+                        }
                     }
                 }
-                $file->copyToCourseForm = $copyToCourseForm->returnForm();
             }
-
-            $copyAllRecordingsToCourseForm = new FormValidator(
-                'copyAllRecordingsToCourseForm'.$instance->uuid,
-                'post',
-                $_SERVER['REQUEST_URI']
-            );
-            $copyAllRecordingsToCourseForm->addButtonCopy(get_lang('CopyAllRecordingsToCourse'));
-            if ($copyAllRecordingsToCourseForm->validate()) {
-                try {
-                    $plugin->copyAllRecordingsToCourse($instance->uuid);
-                    Display::addFlash(
-                        Display::return_message(get_lang('AllRecordingsWereCopiedToCourse'), 'confirm')
-                    );
-                } catch (Exception $exception) {
-                    Display::addFlash(
-                        Display::return_message($exception->getMessage(), 'error')
-                    );
-                }
-            }
-            $instance->copyAllRecordingsToCourseForm = $copyAllRecordingsToCourseForm->returnForm();
-
-            $deleteRecordingsForm = new FormValidator(
-                'deleteRecordingsForm'.$instance->uuid,
-                'post',
-                $_SERVER['REQUEST_URI']
-            );
-            $deleteRecordingsForm->addButtonSend(get_lang('DeleteRecordings'));
-            if ($deleteRecordingsForm->validate()) {
-                try {
-                    $plugin->deleteRecordings($instance->uuid);
-                    Display::addFlash(
-                        Display::return_message(get_lang('RecordingsWereDeleted'), 'confirm')
-                    );
-                } catch (Exception $exception) {
-                    Display::addFlash(
-                        Display::return_message($exception->getMessage(), 'error')
-                    );
-                }
-            }
-            $instance->deleteRecordingsForm = $deleteRecordingsForm->returnForm();
-
-            // $instance->participants = $plugin->getParticipants($instance->uuid);
-
-            $instances[] = $instance;
         }
-        $tpl->assign('instances', $instances);
+        $tpl->assign('recordings', $recordings);
+        $tpl->assign('fileForm', $fileForm->returnForm());
     }
 } elseif (MeetingSettings::APPROVAL_TYPE_NO_REGISTRATION_REQUIRED != $meeting->settings->approval_type) {
     $userId = api_get_user_id();

@@ -1287,12 +1287,17 @@ function isQuestionInActiveQuiz($questionId)
     $tblQuizRelQuestion = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
     $tblQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
 
+    $questionId = (int) $questionId;
+
     $result = Database::fetch_assoc(
         Database::query(
-            "SELECT COUNT(qq.question_id) c FROM $tblQuizRelQuestion qq
-                INNER JOIN $tblQuiz q ON qq.exercice_id = q.iid
-                WHERE q.active = 1
-                AND qq.question_id = $questionId"
+            "SELECT COUNT(qq.question_id) c
+                    FROM $tblQuizRelQuestion qq
+                    INNER JOIN $tblQuiz q
+                    ON qq.exercice_id = q.iid
+                    WHERE
+                        q.active = 1 AND
+                        qq.question_id = $questionId"
         )
     );
 

@@ -21,6 +21,21 @@ class MeetingRegistrantList
     }
 
     /**
+     * Retrieves all registrant for a meeting.
+     *
+     * @param Client $client
+     * @param int $meetingId
+     *
+     * @throws Exception
+     *
+     * @return MeetingRegistrantListItem[] all registrants of the meeting
+     */
+    public static function loadMeetingRegistrants($client, $meetingId)
+    {
+        return static::loadItems('registrants', $client, "meetings/$meetingId/registrants");
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function itemClass($propertyName)

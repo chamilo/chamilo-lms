@@ -17,7 +17,7 @@ Event::registerLog($logInfo);
 
 $interbreadcrumb[] = [ // used in templates
     'url' => $returnURL,
-    'name' => get_lang('ZoomVideoconferences'),
+    'name' => get_lang('ZoomVideoConferences'),
 ];
 
 if (!array_key_exists('meetingId', $_REQUEST)) {
@@ -55,7 +55,7 @@ if ($plugin->userIsConferenceManager()) {
         $meeting->topic = $editMeetingForm->getSubmitValue('topic');
         $meeting->agenda = $editMeetingForm->getSubmitValue('agenda');
         try {
-            $plugin->updateMeeting($meeting->id, $meeting);
+            $plugin->updateMeeting($meeting);
             Display::addFlash(
                 Display::return_message(get_lang('MeetingUpdated'), 'confirm')
             );
@@ -87,7 +87,7 @@ if ($plugin->userIsConferenceManager()) {
 
     if ($deleteMeetingForm->validate()) {
         try {
-            $plugin->deleteMeeting($meeting->id);
+            $plugin->deleteMeeting($meeting);
             Display::addFlash(
                 Display::return_message(get_lang('MeetingDeleted'), 'confirm')
             );
@@ -120,7 +120,7 @@ if ($plugin->userIsConferenceManager()) {
                 }
             }
             try {
-                $plugin->updateRegistrantList($meeting->id, $selectedUsers);
+                $plugin->updateRegistrantList($meeting, $selectedUsers);
                 Display::addFlash(
                     Display::return_message(get_lang('RegisteredUserListWasUpdated'), 'confirm')
                 );
@@ -131,15 +131,8 @@ if ($plugin->userIsConferenceManager()) {
             }
         }
 
-        try {
-            $registrants = $plugin->getRegistrants($meeting->id);
-            $tpl->assign('registrants', $registrants);
-        } catch (Exception $exception) {
-            Display::addFlash(
-                Display::return_message($exception->getMessage(), 'error')
-            );
-            $registrants = [];
-        }
+        $registrants = $plugin->getRegistrants($meeting);
+        $tpl->assign('registrants', $registrants);
 
         $registeredUserIds = [];
         foreach ($registrants as $registrant) {
@@ -217,7 +210,7 @@ if ($plugin->userIsConferenceManager()) {
                             }
                         } elseif ('DeleteFile' === $actionRadio->getValue()) {
                             try {
-                                $plugin->deleteFile($meeting->id, $file->id);
+                                $plugin->deleteFile($file);
                                 Display::addFlash(
                                     Display::return_message(get_lang('FileWasDeleted'), 'confirm')
                                 );
@@ -237,7 +230,7 @@ if ($plugin->userIsConferenceManager()) {
 } elseif (MeetingSettings::APPROVAL_TYPE_NO_REGISTRATION_REQUIRED != $meeting->settings->approval_type) {
     $userId = api_get_user_id();
     try {
-        foreach ($plugin->getRegistrants($meeting->id) as $registrant) {
+        foreach ($plugin->getRegistrants($meeting) as $registrant) {
             if ($registrant->userId == $userId) {
                 $tpl->assign('currentUserJoinURL', $registrant->join_url);
                 break;

@@ -2,7 +2,7 @@
 
 /* For license terms, see /license.txt */
 
-use Chamilo\PluginBundle\Zoom\API\JWTClient;
+use Chamilo\PluginBundle\Zoom\CourseMeetingList;
 
 $course_plugin = 'zoom'; // needed in order to load the plugin lang variables
 $cidReset = true;
@@ -11,7 +11,7 @@ require_once __DIR__.'/config.php';
 
 api_protect_admin_script();
 
-$tool_name = get_lang('ZoomVideoconferences');
+$tool_name = get_lang('ZoomVideoConferences');
 
 $plugin = ZoomPlugin::create();
 
@@ -25,9 +25,9 @@ $typeSelect = $form->addRadio(
     'type',
     get_lang('Type'),
     [
-        JWTClient::MEETING_LIST_TYPE_SCHEDULED => get_lang('ScheduledMeetings'),
-        JWTClient::MEETING_LIST_TYPE_LIVE => get_lang('LiveMeetings'),
-        JWTClient::MEETING_LIST_TYPE_UPCOMING => get_lang('UpcomingMeetings'),
+        CourseMeetingList::TYPE_SCHEDULED => get_lang('ScheduledMeetings'),
+        CourseMeetingList::TYPE_LIVE => get_lang('LiveMeetings'),
+        CourseMeetingList::TYPE_UPCOMING => get_lang('UpcomingMeetings'),
     ]
 );
 $form->addButtonSearch(get_lang('Search'));
@@ -36,10 +36,12 @@ if ($form->validate()) {
     $endDate = new DateTime($endDatePicker->getValue());
     $type = $typeSelect->getValue();
 } else {
+    $oneMonth = new DateInterval('P1M');
     $startDate = new DateTime();
+    $startDate->sub($oneMonth);
     $endDate = new DateTime();
-    $endDate->add(new DateInterval('P1M'));
-    $type = JWTClient::MEETING_LIST_TYPE_SCHEDULED;
+    $endDate->add($oneMonth);
+    $type = CourseMeetingList::TYPE_SCHEDULED;
 }
 $form->setDefaults([
     'search_meeting_start' => $startDate->format('Y-m-d'),

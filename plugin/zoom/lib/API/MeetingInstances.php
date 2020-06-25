@@ -5,6 +5,11 @@ namespace Chamilo\PluginBundle\Zoom\API;
 
 use Exception;
 
+/**
+ * Class MeetingInstances
+ *
+ * @package Chamilo\PluginBundle\Zoom\API
+ */
 class MeetingInstances
 {
     use JsonDeserializableTrait;
@@ -18,6 +23,21 @@ class MeetingInstances
     public function __construct()
     {
         $this->meetings = [];
+    }
+
+    /**
+     * Retrieves a meeting's instances.
+     *
+     * @param Client $client
+     * @param int    $meetingId
+     *
+     * @throws Exception
+     *
+     * @return MeetingInstances the meeting's instances
+     */
+    public static function fromMeetingId($client, $meetingId)
+    {
+        return static::fromJson($client->send('GET', "past_meetings/$meetingId/instances"));
     }
 
     /**

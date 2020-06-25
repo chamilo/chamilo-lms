@@ -26,36 +26,23 @@ class Recording extends API\RecordingMeeting
     public $formattedDuration;
 
     /**
-     * Builds a Recording from a RecordingMeeting.
-     *
-     * @param API\RecordingMeeting $recordingMeeting
+     * @inheritDoc
      *
      * @throws Exception
-     *
-     * @return static
      */
-    public static function fromRecodingMeeting($recordingMeeting)
+    public function initializeExtraProperties()
     {
-        $instance = new static();
-        self::recursivelyCopyObjectProperties($recordingMeeting, $instance);
+        parent::initializeExtraProperties();
 
-        $newRecordingFiles = [];
-        foreach ($instance->recording_files as $file) {
-            $newRecordingFiles[] = File::fromRecordingFile($file);
-        }
-        $instance->recording_files = $newRecordingFiles;
-
-        $instance->startDateTime = new DateTime($instance->start_time);
-        $instance->startDateTime->setTimezone(new DateTimeZone(date_default_timezone_get()));
-        $instance->formattedStartTime = $instance->startDateTime->format(get_lang('Y-m-d H:i'));
+        $this->startDateTime = new DateTime($this->start_time);
+        $this->startDateTime->setTimezone(new DateTimeZone(date_default_timezone_get()));
+        $this->formattedStartTime = $this->startDateTime->format(get_lang('Y-m-d H:i'));
 
         $now = new DateTime();
         $later = new DateTime();
-        $later->add(new DateInterval('PT'.$instance->duration.'M'));
-        $instance->durationInterval = $later->diff($now);
-        $instance->formattedDuration = $instance->durationInterval->format(get_lang('DurationFormat'));
-
-        return $instance;
+        $later->add(new DateInterval('PT'.$this->duration.'M'));
+        $this->durationInterval = $later->diff($now);
+        $this->formattedDuration = $this->durationInterval->format(get_lang('DurationFormat'));
     }
 
     /**

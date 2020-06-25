@@ -57,6 +57,18 @@ class RecordingMeeting
     }
 
     /**
+     * Deletes the recording on the server.
+     *
+     * @param Client $client
+     *
+     * @throws Exception
+     */
+    public function delete($client)
+    {
+        $client->send('DELETE', 'meetings/' . htmlentities($this->uuid) . '/recordings', ['action' => 'delete']);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function itemClass($propertyName)

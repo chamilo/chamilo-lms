@@ -3,6 +3,14 @@
 
 namespace Chamilo\PluginBundle\Zoom\API;
 
+use Exception;
+
+/**
+ * Class PastMeeting
+ * A past meeting, as returned from the server.
+ *
+ * @package Chamilo\PluginBundle\Zoom\API
+ */
 class PastMeeting extends Meeting
 {
     /** @var string unique meeting instance ID */
@@ -13,12 +21,6 @@ class PastMeeting extends Meeting
 
     /** @var string host Zoom user id */
     public $host_id;
-
-    /** @var string */
-    public $topic;
-
-    /** @var int @see Meeting */
-    public $type;
 
     /** @var string user display name */
     public $user_name;
@@ -32,9 +34,6 @@ class PastMeeting extends Meeting
     /** @var string "yyyy-MM-dd'T'HH:mm:ss'Z'" (GMT) */
     public $end_time;
 
-    /** @var int in minutes, for scheduled meetings only */
-    public $duration;
-
     /** @var int sum of meeting minutes from all participants in the meeting. */
     public $total_minutes;
 
@@ -43,4 +42,34 @@ class PastMeeting extends Meeting
 
     /** @var string undocumented */
     public $dept;
+
+    /**
+     * Retrieves a past meeting instance from its identifier
+     *
+     * @param Client $client
+     * @param string $uuid
+     *
+     * @return PastMeeting the past meeting
+     *
+     * @throws Exception
+     */
+    public static function fromUUID($client, $uuid)
+    {
+        return static::fromJson($client->send('GET', 'past_meetings/'.htmlentities($uuid)));
+    }
+
+    /**
+     * Retrieves information on participants from a past meeting instance.
+     *
+     * @param Client $client
+     *
+     * @throws Exception
+     *
+     * @return ParticipantListItem[] participants
+     */
+    public function getParticipants($client)
+    {
+        return ParticipantList::loadInstanceParticipants($client, $this->uuid);
+    }
+
 }

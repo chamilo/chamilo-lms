@@ -11,15 +11,15 @@ class UserMeetingRegistrant extends API\MeetingRegistrant
     use UserMeetingRegistrantTrait;
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
+     *
+     * @throws Exception
      */
-    public static function fromJson($json)
+    public function initializeExtraProperties()
     {
-        $instance = parent::fromJson($json);
-        $instance->decodeAndRemoveTag();
-        $instance->computeFullName();
-
-        return $instance;
+        parent::initializeExtraProperties();
+        $this->decodeAndRemoveTag();
+        $this->computeFullName();
     }
 
     /**

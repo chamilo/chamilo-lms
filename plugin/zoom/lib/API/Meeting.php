@@ -5,6 +5,13 @@ namespace Chamilo\PluginBundle\Zoom\API;
 
 use Exception;
 
+/**
+ * Class Meeting, minimal meeting definition required to create one from scratch or update an existing one
+ * Also referred to as MeetingUpdate in the API documentation
+ * Does not represent an actual created meeting
+ *
+ * @package Chamilo\PluginBundle\Zoom\API
+ */
 class Meeting
 {
     use BaseMeetingTrait;
@@ -45,6 +52,20 @@ class Meeting
             return TrackingField::class;
         }
         throw new Exception("no such array property $propertyName");
+    }
+
+    /**
+     * Creates a meeting on the server and returns the resulting MeetingInfo
+     *
+     * @param Client $client an API client
+     *
+     * @throws Exception describing the error (message and code)
+     *
+     * @return MeetingInfoGet meeting
+     */
+    public function create($client)
+    {
+        return MeetingInfoGet::fromJson($client->send('POST', 'users/me/meetings', [], $this));
     }
 
     /**

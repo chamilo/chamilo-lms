@@ -27,7 +27,7 @@ trait JsonDeserializableTrait
         }
 
         $instance = new static();
-        self::recursivelyCopyObjectProperties($object, $instance);
+        static::recursivelyCopyObjectProperties($object, $instance);
 
         return $instance;
     }
@@ -46,6 +46,19 @@ trait JsonDeserializableTrait
     abstract public function itemClass($propertyName);
 
     /**
+     * Initializes properties that can be calculated from json-decoded properties.
+     *
+     * Called at the end of method recursivelyCopyObjectProperties()
+     * and indirectly at the end of static method fromJson().
+     *
+     * By default it does nothing.
+     */
+    public function initializeExtraProperties()
+    {
+        // default does nothing
+    }
+
+    /**
      * Copies values from another object properties to an instance, recursively.
      *
      * @param object $source      source object
@@ -59,7 +72,7 @@ trait JsonDeserializableTrait
             if (property_exists($destination, $name)) {
                 if (is_object($value)) {
                     if (is_object($destination->$name)) {
-                        self::recursivelyCopyObjectProperties($value, $destination->$name);
+                        static::recursivelyCopyObjectProperties($value, $destination->$name);
                     } else {
                         throw new Exception("Source property $name is an object, which is not expected");
                     }
@@ -71,7 +84,7 @@ trait JsonDeserializableTrait
                                 $destination->$name[] = $sourceItem;
                             } else {
                                 $item = new $itemClass();
-                                self::recursivelyCopyObjectProperties($sourceItem, $item);
+                                static::recursivelyCopyObjectProperties($sourceItem, $item);
                                 $destination->$name[] = $item;
                             }
                         }
@@ -85,5 +98,6 @@ trait JsonDeserializableTrait
                 throw new Exception("Source object has property $name, which was not expected.");
             }
         }
+        $destination->initializeExtraProperties();
     }
 }

@@ -68,7 +68,7 @@ if ($plugin->userIsConferenceManager()) {
                 Display::return_message($plugin->get_lang('NewMeetingCreated'))
             );
             if ($registerAll->getValue()) {
-                $plugin->addRegistrants($newMeeting->id, $newMeeting->getCourseAndSessionUsers());
+                $plugin->addRegistrants($newMeeting, $newMeeting->getCourseAndSessionUsers());
                 Display::addFlash(
                     Display::return_message($plugin->get_lang('AllCourseUsersWereRegistered'))
                 );

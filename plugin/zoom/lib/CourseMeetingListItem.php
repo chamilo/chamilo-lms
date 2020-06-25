@@ -11,33 +11,14 @@ class CourseMeetingListItem extends API\MeetingListItem
     use DisplayableMeetingTrait;
 
     /**
-     * {@inheritdoc}
-     */
-    public static function fromJson($json)
-    {
-        $instance = parent::fromJson($json);
-        $instance->decodeAndRemoveTag();
-        $instance->initializeDisplayableProperties();
-
-        return $instance;
-    }
-
-    /**
-     * CourseMeetingListItem constructor.
-     *
-     * @param API\MeetingListItem $meetingListItem
+     * @inheritDoc
      *
      * @throws Exception
-     *
-     * @return static
      */
-    public static function fromMeetingListItem($meetingListItem)
+    public function initializeExtraProperties()
     {
-        $instance = new static();
-        self::recursivelyCopyObjectProperties($meetingListItem, $instance);
-        $instance->decodeAndRemoveTag();
-        $instance->initializeDisplayableProperties();
-
-        return $instance;
+        parent::initializeExtraProperties();
+        $this->decodeAndRemoveTag();
+        $this->initializeDisplayableProperties();
     }
 }

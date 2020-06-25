@@ -11,21 +11,13 @@ class File extends API\RecordingFile
     public $formattedFileSize;
 
     /**
-     * Makes a File out of a RecordingFile.
-     *
-     * @param API\RecordingFile $source
+     * @inheritDoc
      *
      * @throws Exception
-     *
-     * @return static
      */
-    public static function fromRecordingFile($source)
+    public function initializeExtraProperties()
     {
-        $instance = new static();
-        self::recursivelyCopyObjectProperties($source, $instance);
-
-        $instance->formattedFileSize = format_file_size($instance->file_size);
-
-        return $instance;
+        parent::initializeExtraProperties();
+        $this->formattedFileSize = format_file_size($this->file_size);
     }
 }

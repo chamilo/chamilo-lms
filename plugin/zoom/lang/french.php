@@ -98,4 +98,4 @@ $strings['UpdateRegisteredUserList'] = "Mettre à jour la liste des utilisateurs
 $strings['Y-m-d H:i'] = "d/m/Y à H\hi";
 $strings['Waiting'] = "en attente";
 $strings['XRecordingOfMeetingXFromXDurationXDotX'] = "Enregistrement (%s) de la conférence %s de %s (%s).%s";
-$strings['ZoomVideoconferences'] = "Conférences vidéo Zoom";
+$strings['ZoomVideoConferences'] = "Conférences vidéo Zoom";

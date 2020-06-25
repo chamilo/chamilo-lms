@@ -72,6 +72,35 @@ class RecordingFile
     public $recording_type;
 
     /**
+     * Builds the recording file download URL with the access_token query parameter
+     * @see RecordingFile::$download_url
+     *
+     * @param string $token
+     *
+     * @return string full URL
+     */
+    public function getFullDownloadURL($token)
+    {
+        return $this->download_url.'?access_token='.$token;
+    }
+
+    /**
+     * Deletes the file.
+     *
+     * @param Client $client
+     *
+     * @throws Exception
+     */
+    public function delete($client)
+    {
+        $client->send(
+            'DELETE',
+            "/meetings/$this->meeting_id/recordings/$this->id",
+            ['action' => 'delete']
+        );
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function itemClass($propertyName)

@@ -3,6 +3,7 @@
 
 namespace Chamilo\PluginBundle\Zoom\API;
 
+use DateTime;
 use Exception;
 
 class RecordingList
@@ -21,6 +22,44 @@ class RecordingList
     public function __construct()
     {
         $this->meetings = [];
+    }
+
+    /**
+     * Retrieves all recordings.
+     *
+     * @param Client $client
+     *
+     * @throws Exception
+     *
+     * @return MeetingListItem[] all recordings
+     */
+    public static function loadAllRecordings($client)
+    {
+        return static::loadItems('recordings', $client, 'users/me/recordings');
+    }
+
+    /**
+     * Retrieves all recordings from a period of time.
+     *
+     * @param Client $client
+     * @param DateTime $startDate first day of the period
+     * @param DateTime $endDate   last day of the period
+     *
+     * @throws Exception
+     *
+     * @return RecordingMeeting[] all recordings from that period
+     */
+    public static function loadPeriodRecordings($client, $startDate, $endDate)
+    {
+        return static::loadItems(
+            'meetings',
+            $client,
+            'users/me/recordings',
+            [
+                'from' => $startDate->format('Y-m-d'),
+                'to' => $endDate->format('Y-m-d'),
+            ]
+        );
     }
 
     /**

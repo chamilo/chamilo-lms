@@ -3,6 +3,8 @@
 
 namespace Chamilo\PluginBundle\Zoom;
 
+use Exception;
+
 class UserMeetingRegistrantList extends API\MeetingRegistrantList
 {
     /**
@@ -10,10 +12,25 @@ class UserMeetingRegistrantList extends API\MeetingRegistrantList
      */
     public function itemClass($propertyName)
     {
-        if ('meetings' === $propertyName) {
+        if ('registrants' === $propertyName) {
             return UserMeetingRegistrantListItem::class;
         }
 
         return parent::itemClass($propertyName);
+    }
+
+    /**
+     * Retrieves all registrant for a meeting.
+     *
+     * @param API\Client $client
+     * @param int        $meetingId
+     *
+     * @throws Exception
+     *
+     * @return UserMeetingRegistrantListItem[] all registrants of the meeting
+     */
+    public static function loadUserMeetingRegistrants($client, $meetingId)
+    {
+        return static::loadItems('registrants', $client, "meetings/$meetingId/registrants");
     }
 }

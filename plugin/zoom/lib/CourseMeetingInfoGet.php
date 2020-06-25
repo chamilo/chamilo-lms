@@ -11,33 +11,43 @@ class CourseMeetingInfoGet extends API\MeetingInfoGet
     use DisplayableMeetingTrait;
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
+     *
+     * @throws Exception
      */
-    public static function fromJson($json)
+    public function initializeExtraProperties()
     {
-        $instance = parent::fromJson($json);
-        $instance->decodeAndRemoveTag();
-        $instance->initializeDisplayableProperties();
-
-        return $instance;
+        parent::initializeExtraProperties();
+        $this->decodeAndRemoveTag();
+        $this->initializeDisplayableProperties();
     }
 
     /**
-     * CourseMeetingListItem constructor.
+     * Updates the meeting on server, tagging it so to remember its course and session.
      *
-     * @param API\MeetingInfoGet $meeting
+     * @param API\Client $client
      *
      * @throws Exception
-     *
-     * @return static
      */
-    public static function fromMeetingInfoGet($meeting)
+    public function update($client)
     {
-        $instance = new static();
-        self::recursivelyCopyObjectProperties($meeting, $instance);
-        $instance->decodeAndRemoveTag();
-        $instance->initializeDisplayableProperties();
-
-        return $instance;
+        $this->tagAgenda();
+        parent::update($client);
+        $this->untagAgenda();
     }
+
+    /**
+     * Retrieves meeting registrants.
+     *
+     * @param API\Client $client
+     *
+     * @return UserMeetingRegistrantListItem[]
+     *
+     * @throws Exception
+     */
+    public function getUserRegistrants($client)
+    {
+        return UserMeetingRegistrantList::loadUserMeetingRegistrants($client, $this->id);
+    }
+
 }

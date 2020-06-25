@@ -11,18 +11,6 @@ class CourseMeeting extends API\Meeting
     use DisplayableMeetingTrait;
 
     /**
-     * {@inheritdoc}
-     */
-    public static function fromJson($json)
-    {
-        $instance = parent::fromJson($json);
-        $instance->decodeAndRemoveTag();
-        $instance->initializeDisplayableProperties();
-
-        return $instance;
-    }
-
-    /**
      * Creates a CourseMeeting instance from a topic.
      *
      * @param int    $courseId
@@ -36,10 +24,40 @@ class CourseMeeting extends API\Meeting
      */
     public static function fromCourseSessionTopicAndType($courseId, $sessionId, $topic, $type)
     {
-        $instance = parent::fromTopicAndType($topic, $type);
+        $instance = static::fromTopicAndType($topic, $type);
         $instance->setCourseAndSessionId($courseId, $sessionId);
         $instance->initializeDisplayableProperties();
 
         return $instance;
+    }
+
+    /**
+     * @inheritDoc
+     *
+     * @throws Exception
+     */
+    public function initializeExtraProperties()
+    {
+        parent::initializeExtraProperties();
+        $this->decodeAndRemoveTag();
+        $this->initializeDisplayableProperties();
+    }
+
+    /**
+     * @inheritDoc
+     *
+     * Creates a tagged meeting
+     *
+     * @return CourseMeetingInfoGet
+     */
+    public function create($client)
+    {
+        $new = new CourseMeetingInfoGet();
+
+        $this->tagAgenda();
+        static::recursivelyCopyObjectProperties(parent::create($client), $new);
+        $this->untagAgenda();
+
+        return $new;
     }
 }

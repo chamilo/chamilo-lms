@@ -4,15 +4,17 @@
 
 use Chamilo\PluginBundle\Zoom\API\CreatedRegistration;
 use Chamilo\PluginBundle\Zoom\API\JWTClient;
-use Chamilo\PluginBundle\Zoom\API\MeetingInstance;
 use Chamilo\PluginBundle\Zoom\API\MeetingSettings;
+use Chamilo\PluginBundle\Zoom\API\ParticipantList;
 use Chamilo\PluginBundle\Zoom\API\ParticipantListItem;
 use Chamilo\PluginBundle\Zoom\API\PastMeeting;
 use Chamilo\PluginBundle\Zoom\CourseMeeting;
 use Chamilo\PluginBundle\Zoom\CourseMeetingInfoGet;
+use Chamilo\PluginBundle\Zoom\CourseMeetingList;
 use Chamilo\PluginBundle\Zoom\CourseMeetingListItem;
 use Chamilo\PluginBundle\Zoom\File;
 use Chamilo\PluginBundle\Zoom\Recording;
+use Chamilo\PluginBundle\Zoom\RecordingList;
 use Chamilo\PluginBundle\Zoom\UserMeetingRegistrant;
 use Chamilo\PluginBundle\Zoom\UserMeetingRegistrantListItem;
 
@@ -68,7 +70,7 @@ class ZoomPlugin extends Plugin
     /**
      * Retrieves information about meetings having a start_time between two dates.
      *
-     * @param string   $type      MEETING_TYPE_LIVE, MEETING_TYPE_SCHEDULED or MEETING_TYPE_UPCOMING
+     * @param string   $type      MeetingList::TYPE_LIVE, MeetingList::TYPE_SCHEDULED or MeetingList::TYPE_UPCOMING
      * @param DateTime $startDate
      * @param DateTime $endDate
      *
@@ -79,14 +81,13 @@ class ZoomPlugin extends Plugin
     public function getPeriodMeetings($type, $startDate, $endDate)
     {
         $matchingMeetings = [];
-        foreach ($this->jwtClient()->getMeetings($type) as $meeting) {
+        /** @var CourseMeetingListItem $meeting */
+        foreach (CourseMeetingList::loadMeetings($this->jwtClient(), $type) as $meeting) {
             if (property_exists($meeting, 'start_time')) {
-                $startTime = new DateTime($meeting->start_time);
-                if ($startDate <= $startTime && $startTime <= $endDate) {
-                    $matchingMeeting = CourseMeetingListItem::fromMeetingListItem($meeting);
-                    $matchingMeeting->loadCourse();
-                    $matchingMeeting->loadSession();
-                    $matchingMeetings[] = $matchingMeeting;
+                if ($startDate <= $meeting->startDateTime && $meeting->startDateTime <= $endDate) {
+                    $meeting->loadCourse();
+                    $meeting->loadSession();
+                    $matchingMeetings[] = $meeting;
                 }
             }
         }
@@ -106,32 +107,22 @@ class ZoomPlugin extends Plugin
     }
 
     /**
-     * Retrieves a meeting properties.
+     * Retrieves a meeting.
      *
-     * @param int $meetingId
+     * @param int $id the meeting numeric identifier
      *
      * @throws Exception
      *
      * @return CourseMeetingInfoGet
      */
-    public function getMeeting($meetingId)
+    public function getMeeting($id)
     {
-        return CourseMeetingInfoGet::fromMeetingInfoGet($this->jwtClient()->getMeeting($meetingId));
+        return CourseMeetingInfoGet::fromId($this->jwtClient(), $id);
     }
 
     /**
-     * @param $meetingId
+     * Retrieves a past meeting instance details.
      *
-     * @throws Exception
-     *
-     * @return MeetingInstance[]
-     */
-    public function getEndedMeetingInstances($meetingId)
-    {
-        return $this->jwtClient()->getEndedMeetingInstances($meetingId);
-    }
-
-    /**
      * @param string $instanceUUID
      *
      * @throws Exception
@@ -140,7 +131,7 @@ class ZoomPlugin extends Plugin
      */
     public function getPastMeetingInstanceDetails($instanceUUID)
     {
-        return $this->jwtClient()->getPastMeetingInstanceDetails($instanceUUID);
+        return PastMeeting::fromUUID($this->jwtClient(), $instanceUUID);
     }
 
     /**
@@ -152,7 +143,7 @@ class ZoomPlugin extends Plugin
      */
     public function getLiveMeetings()
     {
-        return $this->getMeetings(JWTClient::MEETING_LIST_TYPE_LIVE);
+        return $this->getMeetings(CourseMeetingList::TYPE_LIVE);
     }
 
     /**
@@ -164,7 +155,7 @@ class ZoomPlugin extends Plugin
      */
     public function getScheduledMeetings()
     {
-        return $this->getMeetings(JWTClient::MEETING_LIST_TYPE_SCHEDULED);
+        return $this->getMeetings(CourseMeetingList::TYPE_SCHEDULED);
     }
 
     /**
@@ -176,7 +167,7 @@ class ZoomPlugin extends Plugin
      */
     public function getUpcomingMeetings()
     {
-        return $this->getMeetings(JWTClient::MEETING_LIST_TYPE_UPCOMING);
+        return $this->getMeetings(CourseMeetingList::TYPE_UPCOMING);
     }
 
     /**
@@ -241,58 +232,29 @@ class ZoomPlugin extends Plugin
     /**
      * Updates a meeting.
      *
-     * @param int                  $meetingId
-     * @param CourseMeetingInfoGet $meeting   with updated properties
+     * @param CourseMeetingInfoGet $meeting the meeting with updated properties
      *
      * @throws Exception on API error
      */
-    public function updateMeeting($meetingId, $meeting)
+    public function updateMeeting($meeting)
     {
-        $meeting->tagAgenda();
-        $this->jwtClient()->updateMeeting($meetingId, $meeting);
-        $meeting->untagAgenda();
-    }
-
-    /**
-     * Ends a current meeting.
-     *
-     * @param int $meetingId
-     *
-     * @throws Exception on API error
-     */
-    public function endMeeting($meetingId)
-    {
-        $this->jwtClient()->endMeeting($meetingId);
+        $meeting->update($this->jwtClient());
     }
 
     /**
      * Deletes a meeting.
      *
-     * @param int $meetingId
+     * @param CourseMeetingInfoGet $meeting
      *
      * @throws Exception on API error
      */
-    public function deleteMeeting($meetingId)
+    public function deleteMeeting($meeting)
     {
-        $this->jwtClient()->deleteMeeting($meetingId);
+        $meeting->delete($this->jwtClient());
     }
 
     /**
-     * Retrieves an instance's recording.
-     *
-     * @param string $instanceUUID instance UUID
-     *
-     * @throws Exception on API error
-     *
-     * @return Recording the recording of the meeting
-     */
-    public function getInstanceRecording($instanceUUID)
-    {
-        return Recording::fromRecodingMeeting($this->jwtClient()->getInstanceRecordings($instanceUUID));
-    }
-
-    /**
-     * Retrieves all recordings.
+     * Retrieves all recordings from a period of time.
      *
      * @param DateTime $startDate start date
      * @param DateTime $endDate   end date
@@ -303,12 +265,7 @@ class ZoomPlugin extends Plugin
      */
     public function getRecordings($startDate, $endDate)
     {
-        $recordings = [];
-        foreach ($this->jwtClient()->getRecordings($startDate, $endDate) as $recording) {
-            $recordings[] = Recording::fromRecodingMeeting($recording);
-        }
-
-        return $recordings;
+        return RecordingList::loadRecordings($this->jwtClient(), $startDate, $endDate);
     }
 
     /**
@@ -337,9 +294,9 @@ class ZoomPlugin extends Plugin
     }
 
     /**
-     * @see JWTClient::getParticipants()
+     * Retrieves a meeting instance's participants.
      *
-     * @param string $instanceUUID
+     * @param string $instanceUUID the meeting instance UUID
      *
      * @throws Exception
      *
@@ -347,68 +304,69 @@ class ZoomPlugin extends Plugin
      */
     public function getParticipants($instanceUUID)
     {
-        return $this->jwtClient()->getParticipants($instanceUUID);
+        return ParticipantList::loadInstanceParticipants($this->jwtClient(), $instanceUUID);
     }
 
     /**
-     * @param $meetingId
+     * Retrieves a meeting's registrants.
+     *
+     * @param CourseMeetingInfoGet $meeting
      *
      * @throws Exception
      *
-     * @return UserMeetingRegistrantListItem[]
+     * @return UserMeetingRegistrantListItem[] the meeting registrants
      */
-    public function getRegistrants($meetingId)
+    public function getRegistrants($meeting)
     {
-        $registrants = [];
-        foreach ($this->jwtClient()->getRegistrants($meetingId) as $registrant) {
-            $registrants[] = UserMeetingRegistrantListItem::fromMeetingRegistrantListItem($registrant);
-        }
-
-        return $registrants;
+        return $meeting->getUserRegistrants($this->jwtClient());
     }
 
     /**
-     * @param int                               $meetingId
+     * Registers users to a meeting.
+     *
+     * @param CourseMeetingInfoGet              $meeting
      * @param \Chamilo\UserBundle\Entity\User[] $users
      *
      * @throws Exception
      *
-     * @return CreatedRegistration[]
+     * @return CreatedRegistration[] the created registrations
      */
-    public function addRegistrants($meetingId, $users)
+    public function addRegistrants($meeting, $users)
     {
         $createdRegistrations = [];
         foreach ($users as $user) {
             $registrant = UserMeetingRegistrant::fromUser($user);
             $registrant->tagEmail();
-            $createdRegistrations[] = $this->jwtClient()->addRegistrant($meetingId, $registrant);
+            $createdRegistrations[] = $meeting->addRegistrant($this->jwtClient(), $registrant);
         }
 
         return $createdRegistrations;
     }
 
     /**
-     * @param int                     $meetingId
+     * Removes registrants from a meeting.
+     *
+     * @param CourseMeetingInfoGet    $meeting
      * @param UserMeetingRegistrant[] $registrants
      *
      * @throws Exception
      */
-    public function removeRegistrants($meetingId, $registrants)
+    public function removeRegistrants($meeting, $registrants)
     {
-        $this->jwtClient()->removeRegistrants($meetingId, $registrants);
+        $meeting->removeRegistrants($this->jwtClient(), $registrants);
     }
 
     /**
      * Updates meeting registrants list. Adds the missing registrants and removes the extra.
      *
-     * @param int                               $meetingId meeting identifier
+     * @param CourseMeetingInfoGet              $meeting
      * @param \Chamilo\UserBundle\Entity\User[] $users     list of users to be registred
      *
      * @throws Exception
      */
-    public function updateRegistrantList($meetingId, $users)
+    public function updateRegistrantList($meeting, $users)
     {
-        $registrants = $this->getRegistrants($meetingId);
+        $registrants = $this->getRegistrants($meeting);
         $usersToAdd = [];
         foreach ($users as $user) {
             $found = false;
@@ -435,8 +393,8 @@ class ZoomPlugin extends Plugin
                 $registrantsToRemove[] = $registrant;
             }
         }
-        $this->addRegistrants($meetingId, $usersToAdd);
-        $this->removeRegistrants($meetingId, $registrantsToRemove);
+        $this->addRegistrants($meeting, $usersToAdd);
+        $this->removeRegistrants($meeting, $registrantsToRemove);
     }
 
     /**
@@ -484,7 +442,7 @@ class ZoomPlugin extends Plugin
         if (false === $tmpFile) {
             throw new Exception('tmpfile() returned false');
         }
-        $curl = curl_init($this->jwtClient()->getRecordingFileDownloadURL($file));
+        $curl = curl_init($file->getFullDownloadURL($this->jwtClient()->token));
         if (false === $curl) {
             throw new Exception('Could not init curl: '.curl_error($curl));
         }
@@ -533,26 +491,25 @@ class ZoomPlugin extends Plugin
     /**
      * Deletes a meeting instance's recordings.
      *
-     * @param string $instanceUUID
+     * @param Recording $recording
      *
      * @throws Exception
      */
-    public function deleteInstanceRecordings($instanceUUID)
+    public function deleteRecordings($recording)
     {
-        $this->jwtClient()->deleteRecordings($instanceUUID);
+        $recording->delete($this->jwtClient());
     }
 
     /**
      * Deletes a meeting instance recording file.
      *
-     * @param int    $meetingId
-     * @param string $fileId
+     * @param File $file
      *
      * @throws Exception
      */
-    public function deleteFile($meetingId, $fileId)
+    public function deleteFile($file)
     {
-        $this->jwtClient()->deleteRecordingFile($meetingId, $fileId);
+        $file->delete($this->jwtClient());
     }
 
     /**
@@ -573,7 +530,7 @@ class ZoomPlugin extends Plugin
     /**
      * Retrieves all meetings of a specific type and linked to current course and session.
      *
-     * @param string $type MEETING_TYPE_LIVE, MEETING_TYPE_SCHEDULED or MEETING_TYPE_UPCOMING
+     * @param string $type MeetingList::TYPE_LIVE, MeetingList::TYPE_SCHEDULED or MeetingList::TYPE_UPCOMING
      *
      * @throws Exception on API error
      *
@@ -584,8 +541,8 @@ class ZoomPlugin extends Plugin
         $matchingMeetings = [];
         $courseId = api_get_course_int_id();
         $sessionId = api_get_session_id();
-        foreach ($this->jwtClient()->getMeetings($type) as $meeting) {
-            $candidateMeeting = CourseMeetingListItem::fromMeetingListItem($meeting);
+        /** @var CourseMeetingListItem $candidateMeeting */
+        foreach (CourseMeetingList::loadMeetings($this->jwtClient(), $type) as $candidateMeeting) {
             if ($candidateMeeting->matches($courseId, $sessionId)) {
                 $matchingMeetings[] = $candidateMeeting;
             }
@@ -595,13 +552,13 @@ class ZoomPlugin extends Plugin
     }
 
     /**
-     * Creates a meeting and returns it.
+     * Creates a meeting on the server and returns it.
      *
      * @param CourseMeeting $meeting a meeting with at least a type and a topic
      *
      * @throws Exception describing the error (message and code)
      *
-     * @return CourseMeetingInfoGet meeting
+     * @return CourseMeetingInfoGet the new meeting
      */
     private function createMeeting($meeting)
     {
@@ -609,8 +566,7 @@ class ZoomPlugin extends Plugin
             ? 'cloud'
             : 'local';
         $meeting->settings->registrants_email_notification = false;
-        $meeting->tagAgenda();
 
-        return CourseMeetingInfoGet::fromMeetingInfoGet($this->jwtClient()->createMeeting($meeting));
+        return $meeting->create($this->jwtClient());
     }
 }

@@ -7,7 +7,6 @@ $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_TRACKING;
 
-
 if (!api_is_allowed_to_create_course()) {
     api_not_allowed(true);
 }

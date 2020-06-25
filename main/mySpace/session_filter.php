@@ -89,8 +89,8 @@ if (isset($_POST['formSent'])) {
         "$tbl_course c INNER JOIN  $tblSessionRelCourse r ON c.id = r.c_id",
         [
             'where' => [
-                "r.session_id = ? " => [$sessionId]
-            ]
+                "r.session_id = ? " => [$sessionId],
+            ],
         ]
     );
 
@@ -219,7 +219,10 @@ if (count($certificateList) == 0) {
         $courseCode = $value['course_code'];
         $courseInfo = api_get_course_info($courseCode);
         echo '<tr>';
-        echo '<td width="50%" class="actions">'.get_lang('Student').' : '.api_get_person_name($value['firstname'], $value['lastname']).' ('.$value['username'].')</td>';
+        echo '<td width="50%" class="actions">';
+        echo get_lang('Student').' : ';
+        echo api_get_person_name($value['firstname'], $value['lastname']).' ('.$value['username'].')';
+        echo '</td>';
         echo '<td width="50%" class="actions">'.$courseInfo['title'].'</td>';
         echo '</tr>';
         echo '<tr><td colspan="2">
@@ -233,9 +236,13 @@ if (count($certificateList) == 0) {
         foreach ($list as $valueCertificate) {
             echo '<tr>';
             echo '<td width="50%">'.get_lang('Score').' : '.$valueCertificate['score_certificate'].'</td>';
-            echo '<td width="30%">'.get_lang('Date').' : '.api_convert_and_format_date($valueCertificate['created_at']).'</td>';
+            echo '<td width="30%">';
+            echo get_lang('Date').' : '.api_convert_and_format_date($valueCertificate['created_at']);
+            echo '</td>';
             echo '<td width="20%">';
-            $url = api_get_path(WEB_PATH).'certificates/index.php?id='.$valueCertificate['id'].'&user_id='.$value['user_id'];
+            $url = api_get_path(WEB_PATH).'certificates/index.php?'.
+                'id='.$valueCertificate['id'].
+                '&user_id='.$value['user_id'];
             $certificateUrl = Display::url(
                 get_lang('Certificate'),
                 $url,
@@ -251,7 +258,12 @@ if (count($certificateList) == 0) {
             );
             echo $pdf.PHP_EOL;
 
-            echo '<a onclick="return confirmation();" href="gradebook_display_certificate.php?sec_token='.$token.'&'.api_get_cidreq().'&action=delete&cat_id='.$categoryId.'&certificate_id='.$valueCertificate['id'].'">
+            echo '<a onclick="return confirmation();" href="gradebook_display_certificate.php?'.
+                'sec_token='.$token.
+                '&'.api_get_cidreq().
+                '&action=delete'.
+                '&cat_id='.$categoryId.
+                '&certificate_id='.$valueCertificate['id'].'">
                     '.Display::return_icon('delete.png', get_lang('Delete')).'
                   </a>'.PHP_EOL;
             echo '</td></tr>';

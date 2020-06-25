@@ -37,8 +37,8 @@ if (api_is_multiple_url_enabled()) {
             "$tblSessionRelAccessUrl",
             [
                 'where' => [
-                    "access_url_id = ? AND session_id = ?" => [$accessUrlId, $sessionId]
-                ]
+                    "access_url_id = ? AND session_id = ?" => [$accessUrlId, $sessionId],
+                ],
             ]
         );
 
@@ -64,8 +64,8 @@ $result = Database::select(
     "$tblCourse c INNER JOIN  $tblSessionRelCourse r ON c.id = r.c_id",
     [
         'where' => [
-            "r.session_id = ? " => [$sessionId]
-        ]
+            "r.session_id = ? " => [$sessionId],
+        ],
     ]
 );
 
@@ -99,7 +99,7 @@ foreach ($result as $value) {
     $selectCat = (int) $cats[0]->get_id();
     $certificateList = [];
     $certificateListAux = GradebookUtils::get_list_users_certificates($selectCat);
-    
+
     foreach ($certificateListAux as $value) {
         $created_at = strtotime(api_get_local_time($value['created_at']));
         $value['category_id'] = $selectCat;
@@ -159,11 +159,11 @@ foreach ($userList as $userInfo) {
 
     // Get info certificate
     $infoCertificate = CustomCertificatePlugin::getInfoCertificate($courseId, $sessionId, $accessUrlId);
-    
+
     if (!is_array($infoCertificate)) {
         $infoCertificate = [];
     }
-    
+
     if (empty($infoCertificate)) {
         $infoCertificate = CustomCertificatePlugin::getInfoCertificateDefault($accessUrlId);
 

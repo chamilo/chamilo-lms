@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CLpCategory;
@@ -8,7 +9,7 @@ require_once __DIR__.'/../config.php';
 
 api_block_anonymous_users();
 $plugin = CustomCertificatePlugin::create();
-$enable = $plugin->get('enable_plugin_customcertificate') == 'true';
+$enable = $plugin->get('enable_plugin_customcertificate') === 'true';
 $tblProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
 $tblCourse = Database::get_main_table(TABLE_MAIN_COURSE);
 $tblSessionRelCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
@@ -153,7 +154,6 @@ foreach ($userList as $userInfo) {
     $courseInfo = api_get_course_info($courseCode);
     $allowCustomCertificate = api_get_course_setting('customcertificate_course_enable', $courseInfo);
     if (!$allowCustomCertificate) {
-        // diploma de chamilo
         continue;
     }
 
@@ -197,15 +197,15 @@ foreach ($userList as $userInfo) {
         $htmlText .= '<div class="caraA" style="page-break-before:always; margin:0px; padding:0px;">';
     } else {
         $urlBackground = $path.$infoCertificate['background'];
-        $htmlText .= ' <div 
+        $htmlText .= ' <div
         class="caraA"
-        style="background-image:url('.$urlBackground.') no-repeat; 
+        style="background-image:url('.$urlBackground.') no-repeat;
         background-image-resize:6; margin:0px; padding:0px;">';
     }
 
     if (!empty($infoCertificate['logo_left'])) {
         $logoLeft = '
-            <img 
+            <img
                 style="max-height: 150px; max-width: '.(2 * $widthCell).'mm;"
                 src="'.$path.$infoCertificate['logo_left'].'" />';
     } else {
@@ -215,7 +215,7 @@ foreach ($userList as $userInfo) {
     $logoCenter = '';
     if (!empty($infoCertificate['logo_center'])) {
         $logoCenter = '
-            <img 
+            <img
                 style="max-height: 150px; max-width: '.intval($workSpace - (2 * $widthCell)).'mm;"
                 src="'.$path.$infoCertificate['logo_center'].'" />';
     }
@@ -228,7 +228,7 @@ foreach ($userList as $userInfo) {
                 src="'.$path.$infoCertificate['logo_right'].'" />';
     }
 
-    $htmlText .= '<table 
+    $htmlText .= '<table
         width="'.$workSpace.'mm"
         style="
             margin-left:'.$infoCertificate['margin_left'].'mm;
@@ -498,7 +498,7 @@ foreach ($userList as $userInfo) {
                     $lpName = $learnpath['lp_name'];
                     $items[] = $lpName.'<br>';
                 }
-                $items[] = '<br>';
+                $items[] = '<br />';
             }
 
             if (count($items) > 0) {
@@ -584,7 +584,7 @@ if ($exportAllInOne) {
         $pdf->content_to_pdf(
             $certificateContent,
             '',
-            'certificate'.date("Y_m_d_His"),
+            'certificate'.date('Y_m_d_His'),
             null,
             'D',
             false,

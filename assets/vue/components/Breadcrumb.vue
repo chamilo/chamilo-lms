@@ -18,9 +18,6 @@ export default {
       resourceNode: 'getResourceNode'
     }),
     items() {
-
-
-
       const items = [
         {
           text: 'Home',

@@ -1,10 +1,11 @@
 import isEmpty from 'lodash/isEmpty';
 import { formatDateTime } from '../utils/dates';
 import NotificationMixin from './NotificationMixin';
+import {mapFields} from "vuex-map-fields";
+import {mapGetters} from "vuex";
 
 export default {
   mixins: [NotificationMixin],
-
   data() {
     return {
       options: {
@@ -21,6 +22,8 @@ export default {
       // react to route changes...
       this.resetList = true;
       this.onUpdateOptions(this.options);
+      let nodeId = this.$route.params['node'];
+      this.findResourceNode('/api/resource_nodes/'+ nodeId);
     },
 
     deletedItem(item) {
@@ -102,11 +105,13 @@ export default {
       let folderParams = this.$route.query;
       this.resetList = true;
       this.$route.params.node = item['resourceNode']['id'];
+
       this.$router.push({
         name: `${this.$options.servicePrefix}List`,
         params: {node: item['resourceNode']['id']},
         query: folderParams,
       });
+
       /*this.$router.push({
         name: `${this.$options.servicePrefix}List`,
         params: {node: item['resourceNode']['id']}

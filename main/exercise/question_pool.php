@@ -799,7 +799,7 @@ function getQuestions(
         }
         $sessionCondition = api_get_session_condition($session_id, true, 'q.session_id');
 
-        $select = 'qu.id, question, qu.type, level, q.session_id, qt.exercice_id exerciseId  ';
+        $select = 'qu.iid, qu.id, question, qu.type, level, q.session_id, qt.exercice_id exerciseId  ';
         if ($getCount) {
             $select = 'count(qu.iid) as count';
         }
@@ -1289,9 +1289,13 @@ function isQuestionInActiveQuiz($questionId)
 
     $questionId = (int) $questionId;
 
+    if (empty($questionId)) {
+        return false;
+    }
+
     $result = Database::fetch_assoc(
         Database::query(
-            "SELECT COUNT(qq.question_id) c
+            "SELECT COUNT(qq.question_id) count
                     FROM $tblQuizRelQuestion qq
                     INNER JOIN $tblQuiz q
                     ON qq.exercice_id = q.iid
@@ -1301,7 +1305,7 @@ function isQuestionInActiveQuiz($questionId)
         )
     );
 
-    return $result['c'] > 0;
+    return $result['count'] > 0;
 }
 
 /**

@@ -84,6 +84,7 @@
         "essence/essence": "~3.0",
         "ezyang/htmlpurifier": "~4.12",
         "firebase/php-jwt": "^5.0",
+        "friendsofsymfony/ckeditor-bundle": "^2.2",
         "friendsofsymfony/jsrouting-bundle": "~2.0",
         "graphp/algorithms": "~0.8",
         "graphp/graphviz": "~0.2",
@@ -182,11 +183,6 @@
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
             "assets:install %PUBLIC_DIR%": "symfony-cmd"
-        },
-        "install-ckeditor": {
-            "ckeditor:install %PUBLIC_DIR%/libs/ckeditor --clear=keep --tag=4.13.0 --exclude=samples --exclude=adapters ": "symfony-cmd",
-            "security-checker security:check": "script",
-            "requirements-checker": "script"
         },
         "post-install-cmd": [
             "@auto-scripts",

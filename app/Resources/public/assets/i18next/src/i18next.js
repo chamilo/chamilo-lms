@@ -41,6 +41,17 @@ class I18n extends EventEmitter {
       callback = options;
       options = {};
     }
+
+    // temporal backwards compatibility WHITELIST REMOVAL
+    if (options.whitelist && !options.supportedLngs) {
+      this.logger.deprecate('whitelist', 'option "whitelist" will be renamed to "supportedLngs" in the next major - please make sure to rename this option asap.');
+    }
+    if (options.nonExplicitWhitelist && !options.nonExplicitSupportedLngs) {
+      this.logger.deprecate('whitelist', 'options "nonExplicitWhitelist" will be renamed to "nonExplicitSupportedLngs" in the next major - please make sure to rename this option asap.');
+    }
+    // end temporal backwards compatibility WHITELIST REMOVAL
+
+
     this.options = { ...getDefaults(), ...this.options, ...transformOptions(options) };
 
     this.format = this.options.interpolation.format;
@@ -108,7 +119,7 @@ class I18n extends EventEmitter {
         if (m.init) m.init(this);
       });
     }
-    
+
     if (!this.modules.languageDetector && !this.options.lng) {
       this.logger.warn('init: no languageDetector is used and no lng is defined');
     }
@@ -251,7 +262,10 @@ class I18n extends EventEmitter {
       if (callback) callback(err, (...args) => this.t(...args));
     };
 
-    const setLng = l => {
+    const setLng = lngs => {
+      // depending on API in detector lng can be a string (old) or an array of languages ordered in priority
+      const l = typeof lngs === 'string' ? lngs : this.services.languageUtils.getBestMatchFromCodes(lngs);
+
       if (l) {
         if (!this.language) {
           this.language = l;
@@ -313,7 +327,7 @@ class I18n extends EventEmitter {
     this.options.defaultNS = ns;
   }
 
-  hasLoadedNamespace(ns) {
+  hasLoadedNamespace(ns, options = {}) {
     if (!this.isInitialized) {
       this.logger.warn('hasLoadedNamespace: i18next was not initialized', this.languages);
       return false;
@@ -334,6 +348,12 @@ class I18n extends EventEmitter {
       const loadState = this.services.backendConnector.state[`${l}|${n}`];
       return loadState === -1 || loadState === 2;
     };
+
+    // optional injected check
+    if (options.precheck) {
+      const preResult = options.precheck(this, loadNotPending);
+      if (preResult !== undefined) return preResult;
+    }
 
     // loaded -> SUCCESS
     if (this.hasResourceBundle(lng, ns)) return true;
@@ -439,6 +459,7 @@ class I18n extends EventEmitter {
       'pst',
       'prp',
       'prd',
+      'ug',
       'ur',
       'ydd',
       'yds',

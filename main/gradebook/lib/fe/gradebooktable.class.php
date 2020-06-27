@@ -1016,7 +1016,7 @@ class GradebookTable extends SortableTable
             $pChart->setGraphArea(50, 30, $xSize - 50, $ySize - 70);
             $pChart->setFontProperties(
                 [
-                    'FontName' => api_get_path(SYS_FONTS_PATH) . 'Harmattan/Harmattan-Regular.ttf',
+                    'FontName' => api_get_path(SYS_FONTS_PATH).'Harmattan/Harmattan-Regular.ttf',
                     /*'FontName' => api_get_path(SYS_FONTS_PATH).'opensans/OpenSans-Regular.ttf',*/
                     'FontSize' => 12,
                 ]

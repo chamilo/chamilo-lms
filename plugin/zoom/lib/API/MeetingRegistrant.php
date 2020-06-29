@@ -5,6 +5,12 @@ namespace Chamilo\PluginBundle\Zoom\API;
 
 use Exception;
 
+/**
+ * Class MeetingRegistrant.
+ * Structure of the information to send the server in order to register someone to a meeting.
+ *
+ * @package Chamilo\PluginBundle\Zoom\API
+ */
 class MeetingRegistrant
 {
     use JsonDeserializableTrait;

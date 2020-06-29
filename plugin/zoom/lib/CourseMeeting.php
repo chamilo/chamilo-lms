@@ -5,6 +5,12 @@ namespace Chamilo\PluginBundle\Zoom;
 
 use Exception;
 
+/**
+ * Class CourseMeeting. A remote Zoom meeting linked to a local course.
+ * An instance of this class is required to create a remote meeting from scratch.
+ *
+ * @package Chamilo\PluginBundle\Zoom
+ */
 class CourseMeeting extends API\Meeting
 {
     use CourseMeetingTrait;

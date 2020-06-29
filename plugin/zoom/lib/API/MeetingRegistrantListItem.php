@@ -3,6 +3,13 @@
 
 namespace Chamilo\PluginBundle\Zoom\API;
 
+/**
+ * Class MeetingRegistrantListItem. Item in a list of meeting registrants.
+ *
+ * @see MeetingRegistrantList
+ *
+ * @package Chamilo\PluginBundle\Zoom\API
+ */
 class MeetingRegistrantListItem extends MeetingRegistrant
 {
     /** @var string Registrant ID. */

@@ -13,6 +13,7 @@ use Database;
 /**
  * Trait CourseMeetingTrait.
  * A Zoom meeting linked to a (course, session) pair.
+ * The course and session IDs are stored in the meeting agenda on write operations, read and removed on retrieval.
  *
  * @package Chamilo\PluginBundle\Zoom
  */

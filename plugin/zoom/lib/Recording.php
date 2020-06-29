@@ -8,6 +8,12 @@ use DateTime;
 use DateTimeZone;
 use Exception;
 
+/**
+ * Class Recording. A RecordingMeeting with extra help properties and a list of File instances
+ * (instead of RecordingFile instances).
+ *
+ * @package Chamilo\PluginBundle\Zoom
+ */
 class Recording extends API\RecordingMeeting
 {
     /** @var File[] List of recording file. */

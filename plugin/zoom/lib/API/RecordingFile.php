@@ -5,6 +5,13 @@ namespace Chamilo\PluginBundle\Zoom\API;
 
 use Exception;
 
+/**
+ * Class RecordingFile. A video, audio or text file, part of a past meeting instance recording.
+ *
+ * @see RecordingMeeting
+ *
+ * @package Chamilo\PluginBundle\Zoom\API
+ */
 class RecordingFile
 {
     use JsonDeserializableTrait;

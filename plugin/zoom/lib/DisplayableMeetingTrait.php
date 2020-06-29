@@ -9,6 +9,11 @@ use DateTime;
 use DateTimeZone;
 use Exception;
 
+/**
+ * Trait DisplayableMeetingTrait. Extra properties to help formatting web views and time operations.
+ *
+ * @package Chamilo\PluginBundle\Zoom
+ */
 trait DisplayableMeetingTrait
 {
     use API\BaseMeetingTrait;

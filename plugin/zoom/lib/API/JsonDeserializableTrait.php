@@ -5,6 +5,12 @@ namespace Chamilo\PluginBundle\Zoom\API;
 
 use Exception;
 
+/**
+ * Trait JsonDeserializableTrait.
+ * Utility fonctions to help convert server-generated JSON to API class instances.
+ *
+ * @package Chamilo\PluginBundle\Zoom\API
+ */
 trait JsonDeserializableTrait
 {
     /**

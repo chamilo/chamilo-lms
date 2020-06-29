@@ -3,6 +3,12 @@
 
 namespace Chamilo\PluginBundle\Zoom\API;
 
+/**
+ * Trait BaseMeetingTrait.
+ * Common meeting properties definitions.
+ *
+ * @package Chamilo\PluginBundle\Zoom\API
+ */
 trait BaseMeetingTrait
 {
     /** @var string */

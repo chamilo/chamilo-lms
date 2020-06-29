@@ -18,6 +18,9 @@ use Chamilo\PluginBundle\Zoom\RecordingList;
 use Chamilo\PluginBundle\Zoom\UserMeetingRegistrant;
 use Chamilo\PluginBundle\Zoom\UserMeetingRegistrantListItem;
 
+/**
+ * Class ZoomPlugin. Integrates Zoom meetings in courses.
+ */
 class ZoomPlugin extends Plugin
 {
     public $isCoursePlugin = true;

@@ -6,6 +6,11 @@ namespace Chamilo\PluginBundle\Zoom;
 use DateTime;
 use Exception;
 
+/**
+ * Class RecordingList. A list of past meeting instance recordings generated between two dates.
+ *
+ * @package Chamilo\PluginBundle\Zoom
+ */
 class RecordingList extends API\RecordingList
 {
     /**

@@ -9,7 +9,7 @@ use Firebase\JWT\JWT;
 /**
  * Class JWTClient.
  *
- * @see https://marketplace.zoom.us/docs/api-reference/zoom-api
+ * @see https://marketplace.zoom.us/docs/guides/auth/jwt
  *
  * @package Chamilo\PluginBundle\Zoom
  */

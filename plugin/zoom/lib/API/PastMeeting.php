@@ -6,8 +6,12 @@ namespace Chamilo\PluginBundle\Zoom\API;
 use Exception;
 
 /**
- * Class PastMeeting
- * A past meeting, as returned from the server.
+ * Class PastMeeting.
+ * A past meeting, really a past meeting instance, as returned from the server.
+ *
+ * Each past meeting instance is identified by its own UUID.
+ * Many past meeting instances can be part of the same meeting, identified by property 'id'.
+ * Each instance has its own start time, participants and recording files.
  *
  * @package Chamilo\PluginBundle\Zoom\API
  */

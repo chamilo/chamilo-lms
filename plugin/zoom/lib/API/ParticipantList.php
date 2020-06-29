@@ -7,13 +7,15 @@ use Exception;
 
 /**
  * Class ParticipantList
- * List of past meetings participants.
+ * List of past meeting instance participants.
+ *
+ * @see ParticipantListItem;
  *
  * @package Chamilo\PluginBundle\Zoom\API
  */
 class ParticipantList
 {
-    use Pagination;
+    use PaginationToken;
 
     /** @var ParticipantListItem[] */
     public $participants;

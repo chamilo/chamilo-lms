@@ -6,6 +6,11 @@ namespace Chamilo\PluginBundle\Zoom;
 use Chamilo\UserBundle\Entity\User;
 use Exception;
 
+/**
+ * Class UserMeetingRegistrant. Used to register a local user to a meeting.
+ *
+ * @package Chamilo\PluginBundle\Zoom
+ */
 class UserMeetingRegistrant extends API\MeetingRegistrant
 {
     use UserMeetingRegistrantTrait;

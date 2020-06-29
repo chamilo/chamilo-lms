@@ -5,6 +5,12 @@ namespace Chamilo\PluginBundle\Zoom\API;
 
 use Exception;
 
+/**
+ * Class GlobalDialInNumber.
+ * A list of these is included in a meeting settings.
+ *
+ * @package Chamilo\PluginBundle\Zoom\API
+ */
 class GlobalDialInNumber
 {
     use JsonDeserializableTrait;

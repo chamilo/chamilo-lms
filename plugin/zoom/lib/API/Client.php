@@ -6,8 +6,10 @@ namespace Chamilo\PluginBundle\Zoom\API;
 use Exception;
 
 /**
- * Interface Client
+ * Interface Client.
  * Two implementations are currently possible : OAuth and JWT.
+ *
+ * @see https://marketplace.zoom.us/docs/api-reference/zoom-api
  *
  * @package Chamilo\PluginBundle\Zoom\API
  */

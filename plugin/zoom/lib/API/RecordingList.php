@@ -6,9 +6,16 @@ namespace Chamilo\PluginBundle\Zoom\API;
 use DateTime;
 use Exception;
 
+/**
+ * Class RecordingList. A list of past meeting instance recordings generated between two dates.
+ *
+ * @see RecordingMeeting
+ *
+ * @package Chamilo\PluginBundle\Zoom\API
+ */
 class RecordingList
 {
-    use Pagination;
+    use PaginationToken;
 
     /** @var string Start Date */
     public $from;
@@ -22,20 +29,6 @@ class RecordingList
     public function __construct()
     {
         $this->meetings = [];
-    }
-
-    /**
-     * Retrieves all recordings.
-     *
-     * @param Client $client
-     *
-     * @throws Exception
-     *
-     * @return MeetingListItem[] all recordings
-     */
-    public static function loadAllRecordings($client)
-    {
-        return static::loadItems('recordings', $client, 'users/me/recordings');
     }
 
     /**

@@ -5,6 +5,11 @@ namespace Chamilo\PluginBundle\Zoom;
 
 use Exception;
 
+/**
+ * Class File. A RecordingFile with extra help properties for the web view.
+ *
+ * @package Chamilo\PluginBundle\Zoom
+ */
 class File extends API\RecordingFile
 {
     /** @var string */

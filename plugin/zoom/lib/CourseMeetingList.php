@@ -3,6 +3,13 @@
 
 namespace Chamilo\PluginBundle\Zoom;
 
+/**
+ * Class CourseMeetingList. A List of course meetings.
+ *
+ * @see CourseMeetingListItem
+ *
+ * @package Chamilo\PluginBundle\Zoom
+ */
 class CourseMeetingList extends API\MeetingList
 {
     /**

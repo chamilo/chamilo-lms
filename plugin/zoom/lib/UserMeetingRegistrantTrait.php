@@ -6,6 +6,13 @@ namespace Chamilo\PluginBundle\Zoom;
 use Chamilo\UserBundle\Entity\User;
 use Database;
 
+/**
+ * Trait UserMeetingRegistrantTrait.
+ * A Zoom meeting registrant linked to a local user.
+ * The user id is stored in the registrant's email address on write operations, read and removed on retrieval.
+ *
+ * @package Chamilo\PluginBundle\Zoom
+ */
 trait UserMeetingRegistrantTrait
 {
     /** @var bool whether the remote zoom record contains a local user's identifier */

@@ -5,6 +5,13 @@ namespace Chamilo\PluginBundle\Zoom\API;
 
 use Exception;
 
+/**
+ * Class MeetingRegistrantList. List of meeting registrants.
+ *
+ * @see MeetingRegistrantListItem
+ *
+ * @package Chamilo\PluginBundle\Zoom\API
+ */
 class MeetingRegistrantList
 {
     use Pagination;

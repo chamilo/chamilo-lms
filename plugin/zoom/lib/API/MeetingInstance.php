@@ -7,8 +7,11 @@ use Exception;
 
 /**
  * Class MeetingInstance
- * A meeting can have one or more instances.
+ * A meeting (numerical id) can have one or more instances (string UUID).
  * Each instance has its own start time, participants and recording files.
+ *
+ * @see MeetingInstances
+ * @see PastMeeting for the full record
  *
  * @package Chamilo\PluginBundle\Zoom\API
  */

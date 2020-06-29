@@ -5,6 +5,13 @@ namespace Chamilo\PluginBundle\Zoom\API;
 
 use Exception;
 
+/**
+ * Class MeetingListItem. Item of a list of meetings.
+ *
+ * @see MeetingList
+ *
+ * @package Chamilo\PluginBundle\Zoom\API
+ */
 class MeetingListItem
 {
     use BaseMeetingTrait;

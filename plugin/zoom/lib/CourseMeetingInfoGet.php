@@ -5,6 +5,11 @@ namespace Chamilo\PluginBundle\Zoom;
 
 use Exception;
 
+/**
+ * Class CourseMeetingInfoGet. A full Meeting as returned by the server and locally linked to a course.
+ *
+ * @package Chamilo\PluginBundle\Zoom
+ */
 class CourseMeetingInfoGet extends API\MeetingInfoGet
 {
     use CourseMeetingTrait;

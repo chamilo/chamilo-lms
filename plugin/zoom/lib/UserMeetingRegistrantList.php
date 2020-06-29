@@ -5,6 +5,13 @@ namespace Chamilo\PluginBundle\Zoom;
 
 use Exception;
 
+/**
+ * Class UserMeetingRegistrantList. A list of users registered to a meeting.
+ *
+ * @see UserMeetingRegistrantListItem
+ *
+ * @package Chamilo\PluginBundle\Zoom
+ */
 class UserMeetingRegistrantList extends API\MeetingRegistrantList
 {
     /**

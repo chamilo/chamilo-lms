@@ -5,6 +5,16 @@ namespace Chamilo\PluginBundle\Zoom\API;
 
 use Exception;
 
+/**
+ * Class RecordingMeeting.
+ * A meeting instance can be recorded, hence creating an instance of this class.
+ * Contains a list of recording files.
+ *
+ * @see PastMeeting
+ * @see RecordingFile
+ *
+ * @package Chamilo\PluginBundle\Zoom\API
+ */
 class RecordingMeeting
 {
     use JsonDeserializableTrait;

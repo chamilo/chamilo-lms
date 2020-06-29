@@ -1,6 +1,8 @@
 <?php
 /* For license terms, see /license.txt */
 
+use Doctrine\Common\Collections\Criteria;
+
 $course_plugin = 'zoom'; // needed in order to load the plugin lang variables
 
 require_once __DIR__.'/config.php';
@@ -51,7 +53,40 @@ if ($plugin->userIsConferenceManager()) {
     $topicText = $scheduleMeetingForm->addText('topic', get_lang('Topic'), true);
     $agendaTextArea = $scheduleMeetingForm->addTextarea('agenda', get_lang('Agenda'), ['maxlength' => 2000]);
     // $passwordText = $scheduleMeetingForm->addText('password', get_lang('Password'), false, ['maxlength' => '10']);
-    $registerAll = $scheduleMeetingForm->addCheckBox('registerAll', null, get_lang('RegisterAllCourseUsers'));
+    $registrationOptions = [
+        'RegisterAllCourseUsers' => get_lang('RegisterAllCourseUsers'),
+    ];
+    $groups = GroupManager::get_groups();
+    if (!empty($groups)) {
+        $registrationOptions['RegisterTheseGroupMembers'] = get_lang('RegisterTheseGroupMembers');
+    }
+    $registrationOptions['RegisterNoUser'] = get_lang('RegisterNoUser');
+    $userRegistrationRadio = $scheduleMeetingForm->addRadio(
+        'userRegistration',
+        get_lang('UserRegistration'),
+        $registrationOptions
+    );
+    $groupOptions = [];
+    foreach ($groups as $group) {
+        $groupOptions[$group['id']] = $group['name'];
+    }
+    $groupIdsSelect = $scheduleMeetingForm->addSelect(
+        'groupIds',
+        get_lang('RegisterTheseGroupMembers'),
+        $groupOptions
+    );
+    $groupIdsSelect->setMultiple(true);
+    if (!empty($groups)) {
+        $jsCode = sprintf(
+            <<<EOF
+getElementById('%s').parentNode.parentNode.parentNode.style.display = getElementById('%s').checked ? 'block' : 'none'
+EOF,
+            $groupIdsSelect->getAttribute('id'),
+            $userRegistrationRadio->getelements()[1]->getAttribute('id')
+        );
+
+        $scheduleMeetingForm->setAttribute('onchange', $jsCode);
+    }
     $scheduleMeetingForm->addButtonCreate(get_lang('ScheduleTheMeeting'));
 
     // meeting scheduling
@@ -67,11 +102,20 @@ if ($plugin->userIsConferenceManager()) {
             Display::addFlash(
                 Display::return_message($plugin->get_lang('NewMeetingCreated'))
             );
-            if ($registerAll->getValue()) {
+            if ('RegisterAllCourseUsers' == $userRegistrationRadio->getValue()) {
                 $plugin->addRegistrants($newMeeting, $newMeeting->getCourseAndSessionUsers());
                 Display::addFlash(
                     Display::return_message($plugin->get_lang('AllCourseUsersWereRegistered'))
                 );
+            } elseif ('RegisterTheseGroupMembers' == $userRegistrationRadio->getValue()) {
+                $userIds = [];
+                foreach ($groupIdsSelect->getValue() as $groupId) {
+                    $userIds = array_unique(array_merge($userIds, GroupManager::get_users($groupId)));
+                }
+                $users = Database::getManager()->getRepository(
+                    'ChamiloUserBundle:User'
+                )->matching(Criteria::create()->where(Criteria::expr()->in('id', $userIds)))->getValues();
+                $plugin->addRegistrants($newMeeting, $users);
             }
             location('meeting_from_start.php?meetingId='.$newMeeting->id);
         } catch (Exception $exception) {
@@ -84,7 +128,7 @@ if ($plugin->userIsConferenceManager()) {
             [
                 'duration' => 60,
                 'topic' => api_get_course_info()['title'],
-                'registerAll' => true,
+                'userRegistration' => 'RegisterAllCourseUsers',
             ]
         );
     }

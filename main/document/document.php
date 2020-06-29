@@ -2066,9 +2066,9 @@ $column_order = [];
 
 if (count($row) == 12) {
     //teacher
-        $column_order[2] = 8; //name
-        $column_order[3] = 7; //size
-        $column_order[4] = 6; //lastedit_date
+    $column_order[2] = 8; //name
+    $column_order[3] = 7; //size
+    $column_order[4] = 6; //lastedit_date
 } elseif (count($row) == 10) {
     //student
     $column_order[1] = 6;

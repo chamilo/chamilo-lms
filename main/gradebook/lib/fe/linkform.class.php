@@ -96,44 +96,34 @@ class LinkForm extends FormValidator
 
         $select->addoption('['.get_lang('ChooseLink').']', 0);
 
-
         $courseCode = $this->category_object->get_course_code();
 
         foreach ($linkTypes as $linkType) {
             // The hot potatoe link will be added "inside" the exercise option.
-            if ($linkType == LINK_HOTPOTATOES)
-                {
-                    continue;
-                }
+            if ($linkType == LINK_HOTPOTATOES) {
+                continue;
+            }
             $link = $this->createLink($linkType, $courseCode);
             /* configure the session id within the gradebook evaluation*/
             $link->set_session_id(api_get_session_id());
             // disable this element if the link works with a dropdownlist
             // and if there are no links left
-            if (!$link->needs_name_and_description() && count($link->get_all_links()) == '0')
-                {
-                    $select->addoption($link->get_type_name(), $linkType, 'disabled');
-                } else
-                {
-
-
-                    $select->addoption($link->get_type_name(), $linkType);
-                }
-
+            if (!$link->needs_name_and_description() && count($link->get_all_links()) == '0') {
+                $select->addoption($link->get_type_name(), $linkType, 'disabled');
+            } else {
+                $select->addoption($link->get_type_name(), $linkType);
+            }
 
             if ($link->get_type() == LINK_EXERCISE) {
                 // Adding hot potatoes
-
                 $linkHot = $this->createLink(LINK_HOTPOTATOES, $courseCode);
                 $linkHot->setHp(true);
                 if ($linkHot->get_all_links(true)) {
-
                     $select->addoption(
                         '&nbsp;&nbsp;&nbsp;'.$linkHot->get_type_name(),
                         LINK_HOTPOTATOES
                     );
                 } else {
-
                     $select->addoption(
                         '&nbsp;&nbsp;&nbsp;'.$linkHot->get_type_name(),
                         LINK_HOTPOTATOES,
@@ -157,13 +147,9 @@ class LinkForm extends FormValidator
     private function createLink($link, $courseCode)
     {
         $link = LinkFactory::create($link);
-
-
         if (!empty($courseCode)) {
-
             $link->set_course_code($courseCode);
         } elseif (!empty($_GET['course_code'])) {
-
             $link->set_course_code(Database::escape_string($_GET['course_code'], null, false));
         }
 

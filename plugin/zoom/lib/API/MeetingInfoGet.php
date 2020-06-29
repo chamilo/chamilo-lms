@@ -7,7 +7,7 @@ use Exception;
 
 /**
  * Class MeetingInfoGet
- * Full Meeting as returned by the server, with unique identifiers and current status
+ * Full Meeting as returned by the server, with unique identifiers and current status.
  *
  * @package Chamilo\PluginBundle\Zoom\API
  */
@@ -151,9 +151,9 @@ class MeetingInfoGet extends MeetingInfo
      *
      * @param Client $client
      *
-     * @return MeetingInstance[]
-     *
      * @throws Exception
+     *
+     * @return MeetingInstance[]
      */
     public function getInstances($client)
     {

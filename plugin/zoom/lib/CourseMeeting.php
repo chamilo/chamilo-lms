@@ -32,7 +32,7 @@ class CourseMeeting extends API\Meeting
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      *
      * @throws Exception
      */
@@ -44,7 +44,7 @@ class CourseMeeting extends API\Meeting
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      *
      * Creates a tagged meeting
      *

@@ -26,7 +26,7 @@ class Recording extends API\RecordingMeeting
     public $formattedDuration;
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      *
      * @throws Exception
      */
@@ -53,6 +53,7 @@ class Recording extends API\RecordingMeeting
         if ('recording_files' === $propertyName) {
             return File::class;
         }
+
         return parent::itemClass($propertyName);
     }
 }

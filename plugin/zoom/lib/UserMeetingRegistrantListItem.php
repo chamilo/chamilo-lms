@@ -10,7 +10,7 @@ class UserMeetingRegistrantListItem extends API\MeetingRegistrantListItem
     use UserMeetingRegistrantTrait;
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      *
      * @throws Exception
      */

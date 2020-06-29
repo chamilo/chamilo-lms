@@ -8,7 +8,7 @@ use Exception;
 /**
  * Class Meeting, minimal meeting definition required to create one from scratch or update an existing one
  * Also referred to as MeetingUpdate in the API documentation
- * Does not represent an actual created meeting
+ * Does not represent an actual created meeting.
  *
  * @package Chamilo\PluginBundle\Zoom\API
  */
@@ -55,7 +55,7 @@ class Meeting
     }
 
     /**
-     * Creates a meeting on the server and returns the resulting MeetingInfo
+     * Creates a meeting on the server and returns the resulting MeetingInfoGet.
      *
      * @param Client $client an API client
      *

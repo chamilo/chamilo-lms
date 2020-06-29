@@ -36,7 +36,7 @@ class JWTClient implements Client
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function send($httpMethod, $relativePath, $parameters = [], $requestBody = null)
     {

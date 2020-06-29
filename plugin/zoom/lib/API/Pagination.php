@@ -8,7 +8,7 @@ use Exception;
 /**
  * Trait Pagination
  * properties for Pagination and PaginationToken objects, which are paginated lists of items,
- * retrieved in chunks from the server over one or several API calls, one per page
+ * retrieved in chunks from the server over one or several API calls, one per page.
  *
  * @package Chamilo\PluginBundle\Zoom\API
  */
@@ -39,8 +39,8 @@ trait Pagination
      *
      * @param string $arrayPropertyName item array property name
      * @param Client $client
-     * @param string $relativePath relative path to pass to Client::send
-     * @param array $parameters parameter array to pass to Client::send
+     * @param string $relativePath      relative path to pass to Client::send
+     * @param array  $parameters        parameter array to pass to Client::send
      *
      * @throws Exception
      *
@@ -70,6 +70,7 @@ trait Pagination
         if (count($items) !== $totalRecords) {
             error_log('Zoom announced '.$totalRecords.' records but returned '.count($items));
         }
+
         return $items;
     }
 }

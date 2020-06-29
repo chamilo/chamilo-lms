@@ -290,6 +290,7 @@ class ZoomPlugin extends Plugin
                 $recordings[] = $recording;
             }
         }
+
         return $recordings;
     }
 
@@ -360,7 +361,7 @@ class ZoomPlugin extends Plugin
      * Updates meeting registrants list. Adds the missing registrants and removes the extra.
      *
      * @param CourseMeetingInfoGet              $meeting
-     * @param \Chamilo\UserBundle\Entity\User[] $users     list of users to be registred
+     * @param \Chamilo\UserBundle\Entity\User[] $users   list of users to be registred
      *
      * @throws Exception
      */
@@ -416,9 +417,13 @@ class ZoomPlugin extends Plugin
         $docId = DocumentManager::addCloudLink($courseInfo, $path, $file->play_url, $name);
         if (!$docId) {
             throw new Exception(
-                DocumentManager::cloudLinkExists($courseInfo, $path, $file->play_url)
-                ? get_lang('UrlAlreadyExists')
-                : get_lang('ErrorAddCloudLink')
+                get_lang(
+                    DocumentManager::cloudLinkExists(
+                        $courseInfo,
+                        $path,
+                        $file->play_url
+                    ) ? 'UrlAlreadyExists' : 'ErrorAddCloudLink'
+                )
             );
         }
     }

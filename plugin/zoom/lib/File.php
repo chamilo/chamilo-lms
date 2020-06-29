@@ -11,7 +11,7 @@ class File extends API\RecordingFile
     public $formattedFileSize;
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      *
      * @throws Exception
      */

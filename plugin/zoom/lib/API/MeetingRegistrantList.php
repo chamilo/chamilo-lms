@@ -24,7 +24,7 @@ class MeetingRegistrantList
      * Retrieves all registrant for a meeting.
      *
      * @param Client $client
-     * @param int $meetingId
+     * @param int    $meetingId
      *
      * @throws Exception
      *

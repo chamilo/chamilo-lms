@@ -9,13 +9,14 @@ use Exception;
 class RecordingList extends API\RecordingList
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function itemClass($propertyName)
     {
         if ('meetings' === $propertyName) {
             return Recording::class;
         }
+
         return parent::itemClass($propertyName);
     }
 
@@ -23,8 +24,8 @@ class RecordingList extends API\RecordingList
      * Retrieves all recordings from a period of time.
      *
      * @param API\Client $client
-     * @param DateTime $startDate first day of the period
-     * @param DateTime $endDate   last day of the period
+     * @param DateTime   $startDate first day of the period
+     * @param DateTime   $endDate   last day of the period
      *
      * @throws Exception
      *

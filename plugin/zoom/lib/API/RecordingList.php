@@ -41,7 +41,7 @@ class RecordingList
     /**
      * Retrieves all recordings from a period of time.
      *
-     * @param Client $client
+     * @param Client   $client
      * @param DateTime $startDate first day of the period
      * @param DateTime $endDate   last day of the period
      *
@@ -63,7 +63,7 @@ class RecordingList
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function itemClass($propertyName)
     {

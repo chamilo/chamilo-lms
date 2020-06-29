@@ -6,7 +6,7 @@ namespace Chamilo\PluginBundle\Zoom\API;
 use Exception;
 
 /**
- * Class MeetingList
+ * Class MeetingList.
  *
  * @package Chamilo\PluginBundle\Zoom\API
  */

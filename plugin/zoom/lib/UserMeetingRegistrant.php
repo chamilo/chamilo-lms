@@ -11,7 +11,7 @@ class UserMeetingRegistrant extends API\MeetingRegistrant
     use UserMeetingRegistrantTrait;
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      *
      * @throws Exception
      */

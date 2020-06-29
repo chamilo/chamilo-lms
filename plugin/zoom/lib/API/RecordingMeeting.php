@@ -65,7 +65,7 @@ class RecordingMeeting
      */
     public function delete($client)
     {
-        $client->send('DELETE', 'meetings/' . htmlentities($this->uuid) . '/recordings', ['action' => 'delete']);
+        $client->send('DELETE', 'meetings/'.htmlentities($this->uuid).'/recordings', ['action' => 'delete']);
     }
 
     /**

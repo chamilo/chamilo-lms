@@ -44,14 +44,14 @@ class PastMeeting extends Meeting
     public $dept;
 
     /**
-     * Retrieves a past meeting instance from its identifier
+     * Retrieves a past meeting instance from its identifier.
      *
      * @param Client $client
      * @param string $uuid
      *
-     * @return PastMeeting the past meeting
-     *
      * @throws Exception
+     *
+     * @return PastMeeting the past meeting
      */
     public static function fromUUID($client, $uuid)
     {
@@ -71,5 +71,4 @@ class PastMeeting extends Meeting
     {
         return ParticipantList::loadInstanceParticipants($client, $this->uuid);
     }
-
 }

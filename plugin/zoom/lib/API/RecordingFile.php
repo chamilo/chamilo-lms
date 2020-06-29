@@ -72,7 +72,8 @@ class RecordingFile
     public $recording_type;
 
     /**
-     * Builds the recording file download URL with the access_token query parameter
+     * Builds the recording file download URL with the access_token query parameter.
+     *
      * @see RecordingFile::$download_url
      *
      * @param string $token

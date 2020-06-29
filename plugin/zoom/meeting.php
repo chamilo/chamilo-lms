@@ -156,7 +156,7 @@ if ($plugin->userIsConferenceManager()) {
             foreach ($recording->recording_files as $file) {
                 $options[] = [
                     'text' => sprintf("%s.%s (%s)", $file->recording_type, $file->file_type, $file->formattedFileSize),
-                    'value' => $file->id
+                    'value' => $file->id,
                 ];
             }
             $fileIdSelect->addOptGroup(

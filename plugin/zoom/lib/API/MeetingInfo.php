@@ -6,7 +6,7 @@ namespace Chamilo\PluginBundle\Zoom\API;
 /**
  * Class MeetingInfo
  * Used to define MeetingInfoGet
- * Does not seem to be used directly
+ * Does not seem to be used directly.
  *
  * @package Chamilo\PluginBundle\Zoom\API
  */

@@ -11,7 +11,7 @@ class CourseMeetingInfoGet extends API\MeetingInfoGet
     use DisplayableMeetingTrait;
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      *
      * @throws Exception
      */
@@ -41,13 +41,12 @@ class CourseMeetingInfoGet extends API\MeetingInfoGet
      *
      * @param API\Client $client
      *
-     * @return UserMeetingRegistrantListItem[]
-     *
      * @throws Exception
+     *
+     * @return UserMeetingRegistrantListItem[]
      */
     public function getUserRegistrants($client)
     {
         return UserMeetingRegistrantList::loadUserMeetingRegistrants($client, $this->id);
     }
-
 }

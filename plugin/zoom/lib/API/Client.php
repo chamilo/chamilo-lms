@@ -7,7 +7,7 @@ use Exception;
 
 /**
  * Interface Client
- * Two implementations are currently possible : OAuth and JWT
+ * Two implementations are currently possible : OAuth and JWT.
  *
  * @package Chamilo\PluginBundle\Zoom\API
  */

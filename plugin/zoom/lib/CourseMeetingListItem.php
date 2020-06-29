@@ -11,7 +11,7 @@ class CourseMeetingListItem extends API\MeetingListItem
     use DisplayableMeetingTrait;
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      *
      * @throws Exception
      */

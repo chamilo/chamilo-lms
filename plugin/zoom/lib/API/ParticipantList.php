@@ -7,7 +7,7 @@ use Exception;
 
 /**
  * Class ParticipantList
- * List of past meetings participants
+ * List of past meetings participants.
  *
  * @package Chamilo\PluginBundle\Zoom\API
  */

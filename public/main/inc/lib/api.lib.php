@@ -1695,7 +1695,10 @@ function api_get_user_info_from_entity(
     $result['creator_id'] = $user->getCreatorId();
     $result['registration_date'] = $user->getRegistrationDate()->format('Y-m-d H:i:s');
     $result['hr_dept_id'] = $user->getHrDeptId();
-    $result['expiration_date'] = $user->getExpirationDate()->format('Y-m-d H:i:s');
+    $result['expiration_date'] = '';
+    if ($user->getExpirationDate()) {
+        $result['expiration_date'] = $user->getExpirationDate()->format('Y-m-d H:i:s');
+    }
 
     $result['last_login'] = null;
     if ($user->getLastLogin()) {
@@ -2913,38 +2916,6 @@ function api_get_setting($variable)
             return $settingsManager->getSetting($variable);
             break;
     }
-
-    global $_setting;
-    /*if ($variable == 'header_extra_content') {
-        $filename = api_get_home_path().'header_extra_content.txt';
-        if (file_exists($filename)) {
-            $value = file_get_contents($filename);
-
-            return $value;
-        } else {
-            return '';
-        }
-    }
-    if ($variable == 'footer_extra_content') {
-        $filename = api_get_home_path().'footer_extra_content.txt';
-        if (file_exists($filename)) {
-            $value = file_get_contents($filename);
-
-            return $value;
-        } else {
-            return '';
-        }
-    }*/
-    $value = null;
-    if (is_null($key)) {
-        $value = ((isset($_setting[$variable]) && '' != $_setting[$variable]) ? $_setting[$variable] : null);
-    } else {
-        if (isset($_setting[$variable][$key])) {
-            $value = $_setting[$variable][$key];
-        }
-    }
-
-    return $value;
 }
 
 /**
@@ -3881,7 +3852,7 @@ function api_not_allowed(
     $message = null,
     $responseCode = 0
 ) {
-    //throw new Exception('You are not allowed');
+    throw new Exception('You are not allowed');
 }
 
 /**

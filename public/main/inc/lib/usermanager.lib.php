@@ -183,7 +183,8 @@ class UserManager
         $creatorId = 0,
         $emailTemplate = [],
         $redirectToURLAfterLogin = '',
-        $addUserToNode = true
+        $addUserToNode = true,
+        $addUserToUrl = true
     ) {
         $authSource = !empty($authSource) ? $authSource : PLATFORM_AUTH_SOURCE;
         $creatorId = empty($creatorId) ? api_get_user_id() : 0;
@@ -278,33 +279,31 @@ class UserManager
             $password = $authSource;
         }
 
-        // database table definition
-        $table_user = Database::get_main_table(TABLE_MAIN_USER);
-
         // Checking the user language
         $languages = api_get_languages();
         $language = strtolower($language);
-        if (isset($languages)) {
-            if (!in_array($language, $languages)) {
-                $language = api_get_setting('platformLanguage');
-            }
+
+        // Default to english
+        if (!in_array($language, $languages)) {
+            $language = 'en';
         }
 
         $currentDate = api_get_utc_datetime();
         $now = new DateTime();
 
-        if (empty($expirationDate) || '0000-00-00 00:00:00' == $expirationDate) {
+        if (empty($expirationDate) || '0000-00-00 00:00:00' === $expirationDate) {
+            $expirationDate = null;
             // Default expiration date
             // if there is a default duration of a valid account then
             // we have to change the expiration_date accordingly
             // Accept 0000-00-00 00:00:00 as a null value to avoid issues with
             // third party code using this method with the previous (pre-1.10)
             // value of 0000...
-            if ('' != api_get_setting('account_valid_duration')) {
+            /*if ('' != api_get_setting('account_valid_duration')) {
                 $expirationDate = new DateTime($currentDate);
                 $days = (int) api_get_setting('account_valid_duration');
                 $expirationDate->modify('+'.$days.' day');
-            }
+            }*/
         } else {
             $expirationDate = api_get_utc_datetime($expirationDate);
             $expirationDate = new \DateTime($expirationDate, new DateTimeZone('UTC'));
@@ -319,7 +318,6 @@ class UserManager
             ->setPlainPassword($password)
             ->setEmail($email)
             ->setOfficialCode($official_code)
-            //->setPictureUri($picture_uri)
             ->setCreatorId($creatorId)
             ->setAuthSource($authSource)
             ->setPhone($phone)
@@ -339,8 +337,6 @@ class UserManager
         $em = Database::getManager();
         $repo = Container::$container->get('Chamilo\CoreBundle\Repository\UserRepository');
         $repo->updateUser($user, false);
-        /*$factory = Container::$container->get('Chamilo\CoreBundle\Repository\ResourceFactory');
-        $repo = $factory->createRepository('global', 'users');*/
 
         // Add user as a node
         if ($addUserToNode) {
@@ -349,7 +345,6 @@ class UserManager
                 ->setTitle($loginName)
                 ->setCreator(api_get_user_entity($creatorId))
                 ->setResourceType($repo->getResourceType())
-            //    ->setParent($url->getResourceNode())
             ;
             $em->persist($resourceNode);
             $user->setResourceNode($resourceNode);
@@ -367,7 +362,7 @@ class UserManager
             DRH => 'RRHH',
             SESSIONADMIN => 'SESSION_ADMIN',
             STUDENT_BOSS => 'STUDENT_BOSS',
-            INVITEE => 'INVITEE'
+            INVITEE => 'INVITEE',
         ];
 
         if (isset($statusToGroup[$status])) {
@@ -385,11 +380,13 @@ class UserManager
                 self::add_user_as_admin($user);
             }
 
-            if (api_get_multiple_access_url()) {
-                UrlManager::add_user_to_url($userId, api_get_current_access_url_id());
-            } else {
-                //we are adding by default the access_url_user table with access_url_id = 1
-                UrlManager::add_user_to_url($userId, 1);
+            if ($addUserToUrl) {
+                if (api_get_multiple_access_url()) {
+                    UrlManager::add_user_to_url($userId, api_get_current_access_url_id());
+                } else {
+                    //we are adding by default the access_url_user table with access_url_id = 1
+                    UrlManager::add_user_to_url($userId, 1);
+                }
             }
 
             if (is_array($extra) && count($extra) > 0) {

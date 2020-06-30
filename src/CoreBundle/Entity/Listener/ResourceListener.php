@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Entity\ResourceWithUrlInterface;
 use Chamilo\CoreBundle\ToolChain;
 use Cocur\Slugify\SlugifyInterface;
 use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -32,8 +33,12 @@ class ResourceListener
     /**
      * ResourceListener constructor.
      */
-    public function __construct(SlugifyInterface $slugify, ToolChain $toolChain, RequestStack $request, Security $security)
-    {
+    public function __construct(
+        SlugifyInterface $slugify,
+        ToolChain $toolChain,
+        RequestStack $request,
+        Security $security
+    ) {
         $this->slugify = $slugify;
         $this->security = $security;
         $this->toolChain = $toolChain;
@@ -71,9 +76,10 @@ class ResourceListener
         return $this->accessUrl;
     }
 
-    public function prePersist(AbstractResource $resource, LifecycleEventArgs $args)
+    public function prePersist(AbstractResource $resource, LifecycleEventArgs $event)
     {
-        $em = $args->getEntityManager();
+        error_log('resource listener  prePersist');
+        $em = $event->getEntityManager();
         $request = $this->request;
 
         $url = null;
@@ -101,23 +107,26 @@ class ResourceListener
         }
 
         $resourceNode = new ResourceNode();
-
+        $resource->setResourceNode($resourceNode);
+        $this->updateResourceName($resource);
         $resourceName = $resource->getResourceName();
+
+        /*$resourceName = $resource->getResourceName();
         if (empty($resourceName)) {
             throw new \InvalidArgumentException('Resource needs a name');
-        }
+        }*/
 
-        $extension = $this->slugify->slugify(pathinfo($resourceName, PATHINFO_EXTENSION));
+        /*$extension = $this->slugify->slugify(pathinfo($resourceName, PATHINFO_EXTENSION));
         if (empty($extension)) {
             $slug = $this->slugify->slugify($resourceName);
         } else {
             $originalExtension = pathinfo($resourceName, PATHINFO_EXTENSION);
             $originalBasename = \basename($resourceName, $originalExtension);
             $slug = sprintf('%s.%s', $this->slugify->slugify($originalBasename), $originalExtension);
-        }
+        }*/
 
         $repo = $em->getRepository('ChamiloCoreBundle:ResourceType');
-        $class = str_replace('Entity', 'Repository', get_class($args->getEntity()));
+        $class = str_replace('Entity', 'Repository', get_class($event->getEntity()));
         $class .= 'Repository';
         $name = $this->toolChain->getResourceTypeNameFromRepository($class);
         $resourceType = $repo->findOneBy(['name' => $name]);
@@ -127,8 +136,6 @@ class ResourceListener
         }
 
         $resourceNode
-            ->setTitle($resourceName)
-            ->setSlug($slug)
             ->setCreator($creator)
             ->setResourceType($resourceType)
         ;
@@ -151,7 +158,7 @@ class ResourceListener
             $uploadedFile = $request->getCurrentRequest()->files->get('uploadFile');
 
             if (empty($uploadedFile)) {
-                $content = $request->getCurrentRequest()->get('content');
+                $content = $request->getCurrentRequest()->get('contentFile');
                 $title = $resourceName.'.html';
                 $handle = tmpfile();
                 fwrite($handle, $content);
@@ -217,12 +224,32 @@ class ResourceListener
         return $resourceNode;
     }
 
+    public function onFlush(AbstractResource $resource, OnFlushEventArgs $args)
+    {
+        error_log('onFlush');
+    }
+
     /**
      * When updating a Resource.
      */
     public function preUpdate(AbstractResource $resource, PreUpdateEventArgs $event)
     {
-        /*error_log('preUpdate');
+        error_log('resource listener preUpdate');
+        $em = $event->getEntityManager();
+        error_log('updateResourceName');
+        $this->updateResourceName($resource);
+        $resourceNode = $resource->getResourceNode();
+        $resourceNode->setTitle($resource->getResourceName());
+        error_log('inside');
+        //error_log($resource->getTitle());
+        error_log($resource->getResourceNode()->getTitle());
+        error_log($resource->getResourceNode()->getId());
+
+        $resource->setResourceNode($resourceNode);
+        $em->persist($resourceNode);
+
+
+        /*
         error_log($fieldIdentifier);
         $em = $event->getEntityManager();
         if ($event->hasChangedField($fieldIdentifier)) {
@@ -235,39 +262,37 @@ class ResourceListener
         }*/
     }
 
-    public function postUpdate(AbstractResource $resource, LifecycleEventArgs $args)
+    public function postUpdate(AbstractResource $resource, LifecycleEventArgs $event)
     {
         //error_log('postUpdate');
-        //$em = $args->getEntityManager();
+        //$em = $event->getEntityManager();
         //$this->updateResourceName($resource, $resource->getResourceName(), $em);
     }
 
-    public function updateResourceName(AbstractResource $resource, $newValue, $em)
+    public function updateResourceName(AbstractResource $resource)
     {
-        // Updates resource node name with the resource name.
-        /*$resourceNode = $resource->getResourceNode();
+        $resourceName = $resource->getResourceName();
+        $resourceNode = $resource->getResourceNode();
 
-        $newName = $resource->getResourceName();
+        if (empty($resourceName)) {
+            throw new \InvalidArgumentException('Resource needs a name');
+        }
 
-        $name = $resourceNode->getSlug();
-
-        if ($resourceNode->hasResourceFile()) {
-            $originalExtension = pathinfo($name, PATHINFO_EXTENSION);
-            $originalBasename = \basename($name, $originalExtension);
-            $modified = sprintf('%s.%s', $this->slugify->slugify($originalBasename), $originalExtension);
+        $extension = $this->slugify->slugify(pathinfo($resourceName, PATHINFO_EXTENSION));
+        if (empty($extension)) {
+            $slug = $this->slugify->slugify($resourceName);
         } else {
-            $modified = $this->slugify->slugify($name);
+            $originalExtension = pathinfo($resourceName, PATHINFO_EXTENSION);
+            $originalBasename = \basename($resourceName, $originalExtension);
+            $slug = sprintf('%s.%s', $this->slugify->slugify($originalBasename), $originalExtension);
         }
+        error_log( 'aaaa');
+        error_log($resourceName);
+        error_log($slug);
 
-        error_log($name);
-        error_log($modified);
-
-        $resourceNode->setSlug($modified);
-
-        if ($resourceNode->hasResourceFile()) {
-            $resourceNode->getResourceFile()->setOriginalName($name);
-        }
-        $em->persist($resourceNode);
-        $em->flush();*/
+        $resourceNode
+            ->setTitle($resourceName)
+           // ->setSlug($slug)
+        ;
     }
 }

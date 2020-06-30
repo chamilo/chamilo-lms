@@ -5,13 +5,14 @@ use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\BranchSync;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\Group;
-use Chamilo\CoreBundle\Entity\TicketCategory as TicketCategory;
-use Chamilo\CoreBundle\Entity\TicketPriority as TicketPriority;
-use Chamilo\CoreBundle\Entity\TicketProject as TicketProject;
+use Chamilo\CoreBundle\Entity\TicketCategory;
+use Chamilo\CoreBundle\Entity\TicketPriority;
+use Chamilo\CoreBundle\Entity\TicketProject;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\ToolChain;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\Container as SymfonyContainer;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 /**
  * Chamilo LMS
@@ -22,7 +23,6 @@ use Symfony\Component\DependencyInjection\Container as SymfonyContainer;
  *   of older versions before upgrading.
  */
 
-/* CONSTANTS */
 define('SYSTEM_CONFIG_FILENAME', 'configuration.dist.php');
 
 /**
@@ -88,19 +88,18 @@ function checkExtension(
             } else {
                 if ($optional) {
                     return Display::label(get_lang('Extension installed but not enabled'), 'warning');
-                } else {
-                    return Display::label(get_lang('Extension installed but not enabled'), 'important');
                 }
+
+                return Display::label(get_lang('Extension installed but not enabled'), 'important');
             }
-        } else {
-            return Display::label($returnSuccess, 'success');
         }
+        return Display::label($returnSuccess, 'success');
     } else {
         if ($optional) {
             return Display::label($returnFailure, 'warning');
-        } else {
-            return Display::label($returnFailure, 'important');
         }
+
+        return Display::label($returnFailure, 'important');
     }
 }
 
@@ -125,10 +124,11 @@ function checkPhpSetting(
     $currentPhpValue = getPhpSetting($phpSetting);
     if ($currentPhpValue == $recommendedValue) {
         return Display::label($currentPhpValue.' '.$returnSuccess, 'success');
-    } else {
-        return Display::label($currentPhpValue.' '.$returnSuccess, 'important');
     }
+
+    return Display::label($currentPhpValue.' '.$returnSuccess, 'important');
 }
+
 
 /**
  * This function return the value of a php.ini setting if not "" or if exists,
@@ -140,7 +140,7 @@ function checkPhpSetting(
  */
 function checkPhpSettingExists($phpSetting)
 {
-    if ("" != ini_get($phpSetting)) {
+    if ('' != ini_get($phpSetting)) {
         return ini_get($phpSetting);
     }
 
@@ -1634,7 +1634,13 @@ function display_configuration_settings_form(
 
     // Parameter 2: administrator's password
     if ('update' != $installType) {
-        $html .= display_configuration_parameter($installType, get_lang('Administrator password (<font color="red">you may want to change this</font>)'), 'passForm', $passForm, false);
+        $html .= display_configuration_parameter(
+            $installType,
+            get_lang('Administrator password (<font color="red">you may want to change this</font>)'),
+            'passForm',
+            $passForm,
+            false
+        );
     }
 
     // Parameters 3 and 4: administrator's names
@@ -3035,6 +3041,7 @@ function installSchemas($container, $manager, $upgrade = false)
             ->setUrl('http://localhost/')
             ->setDescription('')
             ->setActive(1)
+            ->setCreatedBy(1)
         ;
         $em->persist($accessUrl);
         $em->flush();
@@ -3238,8 +3245,7 @@ function finishInstallationWithContainer(
     }
 
     installGroups($container, $manager);
-    installSchemas($container, $manager, false);
-    installPages($container);
+
 
     error_log('Inserting data.sql');
     // Inserting default data
@@ -3278,9 +3284,9 @@ function finishInstallationWithContainer(
         0,
         [],
         '',
+        false,
         false
     );
-
     error_log('user creation - anon');
     // Create anonymous user.
     $anonId = UserManager::create_user(
@@ -3308,12 +3314,32 @@ function finishInstallationWithContainer(
         $adminId,
         [],
         '',
+        false,
         false
     );
-
-    error_log('Adding access url as a node');
     $userManager = $container->get('Chamilo\CoreBundle\Repository\UserRepository');
     $urlRepo = $container->get('Chamilo\CoreBundle\Repository\AccessUrlRepository');
+
+    $admin = $userManager->find($adminId);
+
+    // Login as admin
+    $token = new UsernamePasswordToken(
+        $admin,
+        $admin->getPassword(),
+        "public",
+        $admin->getRoles()
+    );
+    $container->get('security.token_storage')->setToken($token);
+
+    /*$event = new \Symfony\Component\Security\Http\Event\InteractiveLoginEvent(
+        $container->get('request_stack'), $token
+    );
+    $container->get('event_dispatcher')->dispatch('security.interactive_login', $event);*/
+
+
+    installSchemas($container, $manager, false);
+
+    error_log('Adding access url as a node');
 
     $accessUrl = $urlRepo->find(1);
 
@@ -3322,12 +3348,14 @@ function finishInstallationWithContainer(
     $branch->setUrl($accessUrl);
     $manager->persist($branch);
 
-    $admin = $userManager->find($adminId);
 
     $userManager->addUserToResourceNode($adminId, $adminId);
     $userManager->addUserToResourceNode($anonId, $adminId);
 
     $urlRepo->addResourceNode($accessUrl, $admin);
+
+    UrlManager::add_user_to_url($adminId, 1);
+    UrlManager::add_user_to_url($anonId, 1);
 
     $manager->flush();
 
@@ -3354,7 +3382,7 @@ function finishInstallationWithContainer(
 
     lockSettings();
     updateDirAndFilesPermissions();
-    fixMedia($container);
+    //fixMedia($container);
 }
 
 /**

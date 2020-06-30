@@ -5363,6 +5363,7 @@ class DocumentManager
                         preg_match('/svg$/i', urldecode($checkExtension))
                     ) {
                         $url = $basePageUrl.'showinframes.php?'.$courseParams.'&id='.$document_data['id']; //without preview
+
                         return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" '.$visibility_class.' style="float:left">'.
                             self::build_document_icon_tag($filetype, $path, $isAllowedToEdit).
                             '</a>';

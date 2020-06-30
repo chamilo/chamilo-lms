@@ -874,7 +874,7 @@ class UserManager
             $userInfo['active'],
             $userInfo['creator_id'],
             $userInfo['hr_dept_id'],
-            0,
+            null,
             $userInfo['language']
         );
         if (false === $userId) {

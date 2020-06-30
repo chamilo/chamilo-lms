@@ -1927,7 +1927,11 @@ if (!empty($documentAndFolders)) {
             $display_date = date_to_str_ago($document_data['lastedit_date']).
                 ' <div class="muted"><small>'.$last_edit_date."</small></div>";
 
-            $row[] = $invisibility_span_open.$display_date.$invisibility_span_close;
+            /* add last edit date at begin to short by date*/
+            $row[] = "<span style='display: none;'>".$last_edit_date."</span>".
+                $invisibility_span_open.
+                $display_date.
+                $invisibility_span_close;
 
             $groupMemberWithEditRightsCheckDocument = GroupManager::allowUploadEditDocument(
                 $userId,
@@ -2067,8 +2071,8 @@ $column_order = [];
 if (count($row) == 12) {
     //teacher
     $column_order[2] = 8; //name
-    $column_order[3] = 7;
-    $column_order[4] = 6;
+    $column_order[3] = 7; //size
+    $column_order[4] = 6; //lastedit_date
 } elseif (count($row) == 10) {
     //student
     $column_order[1] = 6;
@@ -2152,7 +2156,6 @@ echo $templateForm;
 echo $moveForm;
 echo $dirForm;
 echo $selector;
-
 $table->display();
 
 $disableQuotaMessage = api_get_configuration_value('disable_document_quota_message_for_students');

@@ -3739,7 +3739,7 @@ $ViewResult = "Assessment details";
 $NoResultsInEvaluation = "No results in evaluation for now";
 $AddStudent = "Add learners";
 $ImportResult = "Import marks";
-$ImportFileLocation = "Import marks in an assessment";
+$ImportFileLocation = "Import file";
 $FileType = "File type";
 $ExampleCSVFile = "Example CSV file";
 $ExampleXMLFile = "Example XML file";
@@ -8555,4 +8555,5 @@ $CouldNotReadFile = "Could not read file.";
 $CouldNotReadFileLines = "Could not read file lines.";
 $CertificatesSessions = "Certificates in sessions";
 $SessionFilterReport = "Filter certificates in sessions";
+$UpdateUserListXMLCSV = "Update user list";
 ?>

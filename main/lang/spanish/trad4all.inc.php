@@ -3739,7 +3739,7 @@ $ViewResult = "Ver resultados";
 $NoResultsInEvaluation = "Por ahora no hay resultados en la evaluación";
 $AddStudent = "Añadir usuarios";
 $ImportResult = "Importar resultados";
-$ImportFileLocation = "Ubicación del fichero a importar";
+$ImportFileLocation = "Ubicación del archivo a importar";
 $FileType = "Tipo de fichero";
 $ExampleCSVFile = "Fichero CSV de ejemplo";
 $ExampleXMLFile = "Fichero XML de ejemplo";
@@ -8583,4 +8583,5 @@ $CouldNotReadFile = "No se puede leer el archivo.";
 $CouldNotReadFileLines = "No se puede leer las lineas del archivo.";
 $CertificatesSessions = "Certificados en sesiones";
 $SessionFilterReport = "Filtro de certificados en sesiones";
+$UpdateUserListXMLCSV = "Actualizar lista de usuarios";
 ?>

@@ -3729,7 +3729,7 @@ $ViewResult = "Visualisation des résultats";
 $NoResultsInEvaluation = "Aucune note actuellement pour cette activité";
 $AddStudent = "Ajout utilisateurs";
 $ImportResult = "Import résultats";
-$ImportFileLocation = "Importer une feuille de notes";
+$ImportFileLocation = "Importer un fichier";
 $FileType = "Type de fichier";
 $ExampleCSVFile = "Fichier CSV d'exemple";
 $ExampleXMLFile = "Fichier XML d'exemple";
@@ -8485,4 +8485,7 @@ $UsernameList = "Liste de nom d'utilisateur";
 $UsersAboutToBeAnonymized = "Utilisateurs sur le point d'être anonymiser :";
 $CouldNotReadFile = "Impossible de lire le fichier";
 $CouldNotReadFileLines = "Impossible de lire les lignes du fichier.";
+$CertificatesSessions = "Certificats en sessions";
+$SessionFilterReport = "Filtrer les certificats dans les sessions";
+$UpdateUserListXMLCSV = "Mise à jour d'utilisateurs";
 ?>

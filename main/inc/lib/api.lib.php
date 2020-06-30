@@ -4789,6 +4789,7 @@ function api_display_language_form($hide_if_no_choice = false, $showAsButton = f
 
     $currentLanguageId = api_get_language_id($user_selected_language);
     $currentLanguageInfo = api_get_language_info($currentLanguageId);
+
     $countryCode = languageCodeToCountryIsoCodeForFlags($currentLanguageInfo['isocode']);
     $url = api_get_self();
     if ($showAsButton) {
@@ -4885,6 +4886,9 @@ function languageCodeToCountryIsoCodeForFlags($languageIsoCode)
             break;
         case 'ko':
             $country = 'kr';
+            break;
+        case 'ms':
+            $country = 'my';
             break;
         case 'pt-BR':
             $country = 'br';

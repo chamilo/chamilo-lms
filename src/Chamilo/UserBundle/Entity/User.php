@@ -1435,9 +1435,11 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     /**
      * Set lastLogin.
      *
+     * @param \DateTime|null $lastLogin
+     *
      * @return User
      */
-    public function setLastLogin(\DateTime $lastLogin)
+    public function setLastLogin(\DateTime $lastLogin = null)
     {
         $this->lastLogin = $lastLogin;
 

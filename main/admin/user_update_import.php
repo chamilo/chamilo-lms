@@ -136,9 +136,13 @@ function updateUsers($users, $resetPassword = false)
             $creatorId = $userInfo['creator_id'];
             $hrDeptId = $userInfo['hr_dept_id'];
             $language = isset($user['Language']) ? $user['Language'] : $userInfo['language'];
-            $sendEmail = isset($user['SendEmail']) ? $user['SendEmail'] : $userInfo['language'];
+            //$sendEmail = isset($user['SendEmail']) ? $user['SendEmail'] : $userInfo['language'];
+            $sendEmail = false;
+            if ($resetPassword) {
+                $sendEmail = true;
+            }
 
-            $userUpdated = UserManager::update_user(
+            UserManager::update_user(
                 $user_id,
                 $firstName,
                 $lastName,
@@ -157,9 +161,10 @@ function updateUsers($users, $resetPassword = false)
                 null,
                 $language,
                 '',
-                false,
+                $sendEmail,
                 $changePassMethod
             );
+
             if (!empty($user['Courses']) && !is_array($user['Courses'])) {
                 $user['Courses'] = [$user['Courses']];
             }

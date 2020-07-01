@@ -899,12 +899,9 @@ class Tracking
                         $title = Security::remove_XSS($title);
                         $output .= '<tr class="'.$oddclass.'">
                                 <td>'.$extend_link.'</td>
-                                <td colspan="4">
+                                <td colspan="10">
                                 <h4>'.$title.'</h4>
                                 </td>
-                                <td colspan="2">'.learnpathitem::humanize_status($lesson_status).'</td>
-                                <td colspan="2"></td>
-                                <td colspan="2"></td>
                                 '.$action.'
                             </tr>';
                     } else {

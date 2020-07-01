@@ -104,6 +104,8 @@ class LinkForm extends FormValidator
                 continue;
             }
             $link = $this->createLink($linkType, $courseCode);
+            /* configure the session id within the gradebook evaluation*/
+            $link->set_session_id(api_get_session_id());
             // disable this element if the link works with a dropdownlist
             // and if there are no links left
             if (!$link->needs_name_and_description() && count($link->get_all_links()) == '0') {

@@ -1,8 +1,6 @@
 import isEmpty from 'lodash/isEmpty';
 import { formatDateTime } from '../utils/dates';
 import NotificationMixin from './NotificationMixin';
-import {mapFields} from "vuex-map-fields";
-import {mapGetters} from "vuex";
 
 export default {
   mixins: [NotificationMixin],
@@ -116,20 +114,30 @@ export default {
         name: `${this.$options.servicePrefix}List`,
         params: {node: item['resourceNode']['id']}
       });*/
-
       /*console.log(item['resourceNode']['id']);
       this.$route.params.node = item['resourceNode']['id'];
       this.onUpdateOptions(this.options);*/
     },
     editHandler(item) {
       let folderParams = this.$route.query;
-      this.$router.push({
-        name: `${this.$options.servicePrefix}Update`,
-        params: { id: item['@id'] },
-        query: folderParams
-      });
-    },
+      folderParams['id'] = item['@id'];
 
+      if ('folder' === item.filetype) {
+        this.$router.push({
+          name: `${this.$options.servicePrefix}Update`,
+          params: { id: item['@id'] },
+          query: folderParams
+        });
+      }
+
+      if ('file' === item.filetype) {
+        this.$router.push({
+          name: `${this.$options.servicePrefix}UpdateFile`,
+          params: { id: item['@id'] },
+          query: folderParams
+        });
+      }
+    },
     deleteHandler(item) {
       this.deleteItem(item).then(() => this.onUpdateOptions(this.options));
     },

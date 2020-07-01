@@ -8,10 +8,10 @@
           type="text"
         />
       </v-col>
-    
+
       <v-row cols="12"></v-row>
     </v-row>
-    
+
   </v-container>
 </template>
 
@@ -30,9 +30,7 @@ export default {
   },
   mounted() {
   },
-
   computed: {
-    // eslint-disable-next-line
     item() {
       return this.initialValues || this.values;
     }

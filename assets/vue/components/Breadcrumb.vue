@@ -24,7 +24,6 @@ export default {
           href: '/'
         }
       ];
-
       // Course
       /*if (this.$route.query.cid) {
         items.push({
@@ -33,9 +32,7 @@ export default {
           href: '/course/' + this.$route.query.cid + '/home'
         });
       }*/
-
       const { path, matched } = this.$route;
-
       const lastItem = matched[matched.length - 1];
       for (let i = 0, len = matched.length; i < len; i += 1) {
         const route = matched[i];

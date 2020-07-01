@@ -155,7 +155,6 @@ export default function makeCrudModule({
               commit(ACTIONS.TOGGLE_LOADING);
               commit(ACTIONS.ADD_RESOURCE_NODE, normalizeRelations(item));
 
-
               return item;
             })
             .catch(e => handleError(commit, e));
@@ -195,7 +194,7 @@ export default function makeCrudModule({
       list: (state, getters) => {
         return state.allIds.map(id => getters.find(id));
       },
-      getResourceNode: (state, getters) => {
+      getResourceNode: (state) => {
         return state.resourceNode;
       },
     },

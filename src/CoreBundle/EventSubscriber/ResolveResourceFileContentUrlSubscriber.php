@@ -7,7 +7,7 @@ namespace Chamilo\CoreBundle\EventSubscriber;
 use ApiPlatform\Core\EventListener\EventPriorities;
 use ApiPlatform\Core\Util\RequestAttributesExtractor;
 use Chamilo\CoreBundle\Entity\AbstractResource;
-use Chamilo\CoreBundle\Entity\ResourceFile;
+use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
@@ -17,10 +17,12 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 class ResolveResourceFileContentUrlSubscriber implements EventSubscriberInterface
 {
     private $generator;
+    private $nodeRepository;
 
-    public function __construct(UrlGeneratorInterface $generator)
+    public function __construct(UrlGeneratorInterface $generator, ResourceNodeRepository $nodeRepository)
     {
         $this->generator = $generator;
+        $this->nodeRepository = $nodeRepository;
     }
 
     public static function getSubscribedEvents(): array
@@ -51,7 +53,9 @@ class ResolveResourceFileContentUrlSubscriber implements EventSubscriberInterfac
         if (!is_iterable($mediaObjects)) {
             $mediaObjects = [$mediaObjects];
         }
-
+        //error_log($request->get('getFile'));
+        //$getFile = $request->get('getFile');
+        $getFile = true;
         foreach ($mediaObjects as $mediaObject) {
             if (!$mediaObject instanceof AbstractResource) {
                 continue;
@@ -64,6 +68,10 @@ class ResolveResourceFileContentUrlSubscriber implements EventSubscriberInterfac
                 ];
 
                 $mediaObject->contentUrl = $this->generator->generate('chamilo_core_resource_view_file', $params);
+
+                if ($getFile && $mediaObject->getResourceNode()->hasResourceFile()) {
+                    //$mediaObject->contentFile = $this->nodeRepository->getResourceNodeFileContent($mediaObject->getResourceNode());
+                }
             }
         }
     }

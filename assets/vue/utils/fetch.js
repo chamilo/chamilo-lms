@@ -38,7 +38,6 @@ export default function(id, options = {}) {
     const entryPoint = ENTRYPOINT + (ENTRYPOINT.endsWith('/') ? '' : '/');
 
     let formData = new FormData();
-    //console.log(options.body);
     if (options.body) {
         Object.keys(options.body).forEach(function (key) {
             // key: the name of the object key

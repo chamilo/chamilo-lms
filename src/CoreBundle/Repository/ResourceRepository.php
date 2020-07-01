@@ -810,27 +810,27 @@ class ResourceRepository extends EntityRepository
      */
     public function updateResourceFileContent(AbstractResource $resource, $content)
     {
-        try {
-            $resourceNode = $resource->getResourceNode();
-            if ($resourceNode->hasResourceFile()) {
-                $resourceFile = $resourceNode->getResourceFile();
-                if ($resourceFile) {
-                    $fileName = $this->getResourceNodeRepository()->getFilename($resourceFile);
-                    $this->getResourceNodeRepository()->getFileSystem()->update($fileName, $content);
-                    //$size = $this->getResourceNodeRepository()->getSize($resourceNode);
+        $resourceNode = $resource->getResourceNode();
+        if ($resourceNode->hasResourceFile()) {
+            $resourceFile = $resourceNode->getResourceFile();
+            if ($resourceFile) {
+                $title = $resource->getTitle();
+                $handle = tmpfile();
+                fwrite($handle, $content);
+                $meta = stream_get_meta_data($handle);
+                $file = new UploadedFile($meta['uri'], $title, 'text/html', null, true);
+                $resource->setUploadFile($file);
 
-                    if ($resource instanceof CDocument) {
-                        //$resource->setSize($size);
-                    }
-                    $this->entityManager->persist($resource);
+                /*$fileName = $this->getResourceNodeRepository()->getFilename($resourceFile);
+                $this->getResourceNodeRepository()->getFileSystem()->update($fileName, $content);
+                $resourceFile->setSize(strlen($content));*/
+                //$this->entityManager->persist($resource);
 
-                    return true;
-                }
+                return true;
             }
-
-            return false;
-        } catch (\Throwable $exception) {
         }
+
+        return false;
     }
 
     /**
@@ -854,6 +854,25 @@ class ResourceRepository extends EntityRepository
     public function setVisibilityPending(AbstractResource $resource)
     {
         $this->setLinkVisibility($resource, ResourceLink::VISIBILITY_PENDING);
+    }
+
+    public function setResourceTitle(AbstractResource $resource, $title)
+    {
+        $resource->setTitle($title);
+        $resourceNode = $resource->getResourceNode();
+        $resourceNode->setTitle($title);
+        if ($resourceNode->hasResourceFile()) {
+            //$resourceFile = $resourceNode->getResourceFile();
+            //$resourceFile->setName($title);
+
+            /*$fileName = $this->getResourceNodeRepository()->getFilename($resourceFile);
+            error_log('$fileName');
+            error_log($fileName);
+            error_log($title);
+            $this->getResourceNodeRepository()->getFileSystem()->rename($fileName, $title);
+            $resourceFile->setName($title);
+            $resourceFile->setOriginalName($title);*/
+        }
     }
 
     public function createNodeForResource(ResourceInterface $resource, User $creator, ResourceNode $parentNode = null, UploadedFile $file = null): ResourceNode

@@ -5,48 +5,72 @@
 namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CourseBundle\Entity\CDocument;
+use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class CreateResourceNodeFileAction
 {
-    public function __invoke(Request $request): CDocument
+    public function __invoke(Request $request, CDocumentRepository $repo): CDocument
     {
         $document = new CDocument();
         $title = $request->get('title');
+        $comment = $request->get('comment');
 
-        if ('file' === $request->get('filetype')) {
-            $fileParsed = false;
-            // File upload
-            if ($request->files->count() > 0) {
-                /** @var UploadedFile $uploadedFile */
-                $uploadedFile = $request->files->get('uploadFile');
-                if (!$uploadedFile) {
-                    throw new BadRequestHttpException('"uploadFile" is required');
+        if ($request->request->has('filetype')) {
+            $document->setFiletype($request->get('filetype'));
+        }
+
+        $content = '';
+        if ($request->request->has('contentFile')) {
+            $document->setFiletype('file');
+            $content = $request->request->get('contentFile');
+        }
+
+        $nodeId = (int) $request->get('parentResourceNodeId');
+        $document->setParentResourceNode($nodeId);
+
+        switch ($document->getFiletype()) {
+            case 'file':
+                $fileParsed = false;
+                // File upload
+                if ($request->files->count() > 0) {
+                    /** @var UploadedFile $uploadedFile */
+                    $uploadedFile = $request->files->get('uploadFile');
+                    if (!$uploadedFile) {
+                        throw new BadRequestHttpException('"uploadFile" is required');
+                    }
+                    $title = $uploadedFile->getClientOriginalName();
+
+                    $document->setTitle($title);
+                    $document->setUploadFile($uploadedFile);
+                    $fileParsed = true;
                 }
-                $title = $uploadedFile->getClientOriginalName();
-                $document->setUploadFile($uploadedFile);
-                $fileParsed = true;
-            }
 
-            // Get data in content and create a HTML file
-            if (false === $fileParsed && $request->request->has('content')) {
-                $content = $request->request->get('content');
-                $title .= '.html';
-                $handle = tmpfile();
-                fwrite($handle, $content);
-                $meta = stream_get_meta_data($handle);
-                $file = new UploadedFile($meta['uri'], $title, 'text/html', null, true);
-                $document->setUploadFile($file);
-                $fileParsed = true;
-            }
+                // Get data in content and create a HTML file
+                if (false === $fileParsed && $content) {
+                    $document->setTitle($title);
 
-            if (false === $fileParsed) {
-                throw new \InvalidArgumentException(
-                    'filetype was set to "file" but not upload found'
-                );
-            }
+                    $title .= '.html';
+                    $handle = tmpfile();
+                    fwrite($handle, $content);
+                    $meta = stream_get_meta_data($handle);
+                    $file = new UploadedFile($meta['uri'], $title, 'text/html', null, true);
+                    $document->setUploadFile($file);
+                    $fileParsed = true;
+                }
+
+                if (false === $fileParsed) {
+                    throw new \InvalidArgumentException(
+                        'filetype was set to "file" but not upload found'
+                    );
+                }
+                break;
+            case 'folder':
+
+                $document->setTitle($title);
+                break;
         }
 
         if ($request->request->has('resourceLinkList')) {
@@ -64,11 +88,7 @@ class CreateResourceNodeFileAction
             $document->setResourceLinkList($links);
         }
 
-        $document->setTitle($title);
-        $document->setComment($request->get('comment'));
-
-        $nodeId = (int) $request->get('parentResourceNodeId');
-        $document->setParentResourceNode($nodeId);
+        $document->setComment($comment);
 
         return $document;
     }

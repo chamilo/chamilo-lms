@@ -1,5 +1,6 @@
 import NotificationMixin from './NotificationMixin';
 import { formatDateTime } from '../utils/dates';
+import isEmpty from "lodash/isEmpty";
 
 export default {
   mixins: [NotificationMixin],
@@ -9,14 +10,30 @@ export default {
     };
   },
   created() {
-    this.retrieve(decodeURIComponent(this.$route.params.id));
+    // Changed
+    let id = this.$route.params.id;
+    if (isEmpty(id)) {
+      id = this.$route.query.id;
+    }
+    this.retrieve(decodeURIComponent(id));
+    // default
+    //this.retrieve(decodeURIComponent(this.$route.params.id));
   },
   beforeDestroy() {
     this.reset();
   },
   computed: {
     retrieved() {
-      return this.find(decodeURIComponent(this.$route.params.id));
+      let id = this.$route.params.id;
+      if (isEmpty(id)) {
+        id = this.$route.query.id;
+      }
+
+      let item = this.find(decodeURIComponent(id));
+
+      return item;
+
+      //return this.find(decodeURIComponent(this.$route.params.id));
     }
   },
   methods: {

@@ -78,6 +78,7 @@ class ResourceFile
     public $contentUrl;
 
     /**
+     * @Groups({"resource_file:read", "resource_node:read", "document:read"})
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue
@@ -104,7 +105,7 @@ class ResourceFile
 
     /**
      * @var string
-     *
+     * @Groups({"resource_file:read", "resource_node:read", "document:read"})
      * @ORM\Column(type="text", nullable=true)
      */
     protected $originalName;
@@ -128,7 +129,7 @@ class ResourceFile
     /**
      * @var File
      *
-     * @Assert\NotNull(groups={"media_object_create", "document:write"})
+     * @Assert\NotNull()
      * @Vich\UploadableField(
      *     mapping="resources",
      *     fileNameProperty="name",
@@ -172,7 +173,7 @@ class ResourceFile
 
     public function __toString(): string
     {
-        return (string) $this->getOriginalName();
+        return $this->getOriginalName();
     }
 
     /**
@@ -227,35 +228,6 @@ class ResourceFile
 
         return $this;
     }
-
-    /*public function getCopyright(): string
-    {
-        return (string) $this->copyright;
-    }*/
-
-    /*public function getContentType(): string
-    {
-        return (string) $this->contentType;
-    }
-
-    public function setContentType(string $contentType): self
-    {
-        $this->contentType = $contentType;
-
-        return $this;
-    }*/
-
-    /*public function getExtension(): string
-    {
-        return $this->extension;
-    }
-
-    public function setExtension(string $extension): self
-    {
-        $this->extension = $extension;
-
-        return $this;
-    }*/
 
     public function getResourceNode(): ResourceNode
     {
@@ -328,7 +300,7 @@ class ResourceFile
 
     public function getOriginalName(): string
     {
-        return $this->originalName;
+        return (string) $this->originalName;
     }
 
     /**

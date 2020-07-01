@@ -5,10 +5,12 @@
 namespace Chamilo\CourseBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use Chamilo\CoreBundle\Controller\CreateResourceNodeFileAction;
+use Chamilo\CoreBundle\Controller\UpdateResourceNodeFileAction;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
@@ -17,6 +19,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CourseBundle\Traits\ShowCourseResourcesInSessionTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 //*      attributes={"security"="is_granted('ROLE_ADMIN')"},
 /**
@@ -24,6 +27,17 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *      shortName="Documents",
  *      normalizationContext={"groups"={"document:read", "resource_node:read"}},
  *      denormalizationContext={"groups"={"document:write"}},
+ *     itemOperations={
+ *     "put" ={
+ *             "controller"=UpdateResourceNodeFileAction::class,
+ *             "deserialize"=false,
+ *             "security"="is_granted('ROLE_USER')",
+ *             "validation_groups"={"Default", "media_object_create", "document:write"},
+
+ *         },
+     *     "get",
+     *     "delete"
+     * },
  *      collectionOperations={
  *         "post"={
  *             "controller"=CreateResourceNodeFileAction::class,
@@ -47,7 +61,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *                                     "comment"={
  *                                         "type"="string",
  *                                     },
- *                                     "content"={
+ *                                     "contentFile"={
  *                                         "type"="string",
  *                                     },
  *                                     "uploadFile"={
@@ -81,10 +95,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *                 }
  *             }
  *         },
- *         "get"
+ *         "get",
  *     },
  * )
  * @ApiFilter(SearchFilter::class, properties={"title": "partial", "resourceNode.parent": "exact"})
+ * @ApiFilter(PropertyFilter::class)
  * @ApiFilter(
  *     OrderFilter::class,
  *     properties={
@@ -156,6 +171,7 @@ class CDocument extends AbstractResource implements ResourceInterface, ResourceT
     /**
      * @var string File type, it can be 'folder' or 'file'
      * @Groups({"document:read", "document:write"})
+     * @Assert\Choice({"folder", "file"}, message="Choose a valid filetype.")
      * @ORM\Column(name="filetype", type="string", length=10, nullable=false)
      */
     protected $filetype;
@@ -169,14 +185,12 @@ class CDocument extends AbstractResource implements ResourceInterface, ResourceT
 
     /**
      * @var bool
-     *
      * @ORM\Column(name="readonly", type="boolean", nullable=false)
      */
     protected $readonly;
 
     /**
      * @var bool
-     *
      * @ORM\Column(name="template", type="boolean", nullable=false)
      */
     protected $template;
@@ -275,11 +289,9 @@ class CDocument extends AbstractResource implements ResourceInterface, ResourceT
     /**
      * Set title.
      *
-     * @param string $title
-     *
      * @return CDocument
      */
-    public function setTitle($title)
+    public function setTitle(string $title)
     {
         $this->title = $title;
 
@@ -298,12 +310,8 @@ class CDocument extends AbstractResource implements ResourceInterface, ResourceT
 
     /**
      * Set filetype.
-     *
-     * @param string $filetype
-     *
-     * @return CDocument
      */
-    public function setFiletype($filetype)
+    public function setFiletype(string $filetype): self
     {
         $this->filetype = $filetype;
 
@@ -424,14 +432,6 @@ class CDocument extends AbstractResource implements ResourceInterface, ResourceT
 
         return $this;
     }
-
-    /*public function postPersist(LifecycleEventArgs $args)
-    {
-        // Update id with iid value
-        $em = $args->getEntityManager();
-        $em->persist($this);
-        $em->flush();
-    }*/
 
     /**
      * Resource identifier.

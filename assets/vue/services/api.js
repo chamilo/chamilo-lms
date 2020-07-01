@@ -16,9 +16,11 @@ export default function makeService(endpoint) {
       return fetch(item['@id'], { method: 'DELETE' });
     },
     update(payload) {
+      console.log(payload);
       return fetch(payload['@id'], {
         method: 'PUT',
-        body: JSON.stringify(payload)
+        body: payload
+        //body: JSON.stringify(payload)
       });
     }
   };

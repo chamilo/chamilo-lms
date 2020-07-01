@@ -942,10 +942,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
                 /** @var ResourceNode $node */
                 foreach ($children as $node) {
-                    //$resourceFile = $node->getResourceFile();
-                    //$systemName = $resourceFile->getFile()->getPathname();
                     $stream = $repo->getResourceNodeFileStream($node);
-                    //error_log($node->getPathForDisplay());
                     $fileToDisplay = str_replace($rootNodePath, '', $node->getPathForDisplay());
                     $zip->addFileFromStream($fileToDisplay, $stream);
                 }

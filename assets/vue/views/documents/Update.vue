@@ -44,7 +44,6 @@ export default {
       violations: 'violations'
     }),
     ...mapGetters('documents', ['find'])
-
   },
 
   methods: {

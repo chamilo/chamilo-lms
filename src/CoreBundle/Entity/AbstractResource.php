@@ -27,9 +27,16 @@ abstract class AbstractResource
     public $contentUrl;
 
     /**
+     * @var string|null
+     *
+     * @Groups({"resource_file:read", "resource_node:read", "document:read", "document:write", "media_object_read"})
+     */
+    public $contentFile;
+
+    /**
      * @Assert\Valid()
      * @ApiSubresource()
-     * @Groups({"resource_node:read", "resource_node:write"})
+     * @Groups({"resource_node:read", "resource_node:write", "document:write" })
      * @ORM\OneToOne(
      *     targetEntity="Chamilo\CoreBundle\Entity\ResourceNode",
      *     cascade={"persist", "remove"},

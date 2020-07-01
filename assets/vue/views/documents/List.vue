@@ -33,9 +33,6 @@
           >
             <template slot="item.resourceNode.title" slot-scope="{ item }">
               <div v-if="item['resourceNode']['resourceFile']">
-<!--                <a @click="showHandler(item)" >-->
-<!--                  {{ item['contentUrl'] }}-->
-<!--                </a>-->
                 <a data-fancybox="gallery"
                    :href=" item['contentUrl'] ">
                     <v-icon left color="primary">mdi-file</v-icon> {{ item['resourceNode']['title'] }}
@@ -47,9 +44,7 @@
                 </a>
               </div>
             </template>
-<!--            <template slot="item.resourceNode" slot-scope="{ item }">-->
-<!--              {{ item['@id'] }}-->
-<!--            </template>-->
+
             <template slot="item.resourceNode.updatedAt" slot-scope="{ item }">
               {{ item.resourceNode.updatedAt | moment("from", "now") }}
             </template>
@@ -76,8 +71,6 @@ import ActionCell from '../../components/ActionCell';
 import DocumentsFilterForm from '../../components/documents/Filter';
 import DataFilter from '../../components/DataFilter';
 import Toolbar from '../../components/Toolbar';
-import {ACTIONS} from "../../store/modules/crud";
-import Vue from "vue";
 
 export default {
     name: 'DocumentsList',

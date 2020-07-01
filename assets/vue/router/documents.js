@@ -27,8 +27,15 @@ export default {
     },
     {
       name: 'DocumentsUpdate',
-      path: ':id/edit',
+      //path: ':id/edit',
+      path: 'edit',
       component: () => import('../views/documents/Update')
+    },
+    {
+      name: 'DocumentsUpdateFile',
+      //path: ':id/edit',
+      path: 'edit_file',
+      component: () => import('../views/documents/UpdateFile')
     },
     {
       name: 'DocumentsShow',

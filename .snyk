@@ -1,0 +1,80 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.16.0
+ignore: {}
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  SNYK-JS-LODASH-567746:
+    - '@vue/cli > inquirer > lodash':
+        patched: '2020-07-01T10:56:07.380Z'
+    - '@vue/cli > @vue/cli-ui > lowdb > lodash':
+        patched: '2020-07-01T10:56:07.380Z'
+    - '@vue/cli > jscodeshift > @babel/register > lodash':
+        patched: '2020-07-01T10:56:07.380Z'
+    - '@vue/cli > vue-jscodeshift-adapter > cheerio > lodash':
+        patched: '2020-07-01T10:56:07.380Z'
+    - '@vue/cli > @babel/preset-env > @babel/plugin-transform-modules-umd > @babel/helper-module-transforms > lodash':
+        patched: '2020-07-01T10:56:07.380Z'
+    - '@vue/cli > jscodeshift > @babel/core > @babel/helper-module-transforms > lodash':
+        patched: '2020-07-01T10:56:07.380Z'
+    - '@vue/cli > @vue/cli-ui > portfinder > async > lodash':
+        patched: '2020-07-01T10:56:07.380Z'
+    - '@vue/cli > @babel/preset-env > @babel/plugin-transform-unicode-regex > @babel/helper-create-regexp-features-plugin > @babel/helper-regex > lodash':
+        patched: '2020-07-01T10:56:07.380Z'
+    - '@vue/cli > jscodeshift > @babel/core > @babel/helpers > @babel/traverse > lodash':
+        patched: '2020-07-01T10:56:07.380Z'
+    - '@vue/cli > @vue/cli-ui > vue-cli-plugin-apollo > apollo > @oclif/plugin-not-found > lodash':
+        patched: '2020-07-01T10:56:07.380Z'
+    - '@vue/cli > @vue/cli-ui > vue-cli-plugin-apollo > apollo > cli-ux > lodash':
+        patched: '2020-07-01T10:56:07.380Z'
+    - '@vue/cli > @vue/cli-ui > vue-cli-plugin-apollo > apollo > table > lodash':
+        patched: '2020-07-01T10:56:07.380Z'
+    - '@vue/cli > @babel/preset-env > @babel/preset-modules > @babel/plugin-transform-dotall-regex > @babel/helper-create-regexp-features-plugin > @babel/helper-regex > lodash':
+        patched: '2020-07-01T10:56:07.380Z'
+    - '@vue/cli > jscodeshift > @babel/core > @babel/helper-module-transforms > @babel/helper-replace-supers > @babel/traverse > lodash':
+        patched: '2020-07-01T10:56:07.380Z'
+    - '@vue/cli > @vue/cli-ui > vue-cli-plugin-apollo > apollo > @oclif/plugin-not-found > cli-ux > lodash':
+        patched: '2020-07-01T10:56:07.380Z'
+    - '@vue/cli > @vue/cli-ui > vue-cli-plugin-apollo > apollo > apollo-codegen-core > @babel/types > lodash':
+        patched: '2020-07-01T10:56:07.380Z'
+    - '@vue/cli > @vue/cli-ui > vue-cli-plugin-apollo > apollo > apollo-codegen-flow > @babel/types > lodash':
+        patched: '2020-07-01T10:56:07.380Z'
+    - '@vue/cli > @vue/cli-ui > vue-cli-plugin-apollo > apollo > apollo-codegen-typescript > @babel/types > lodash':
+        patched: '2020-07-01T10:56:07.380Z'
+    - '@vue/cli > @vue/cli-ui > vue-cli-plugin-apollo > apollo > gaze > globule > lodash':
+        patched: '2020-07-01T10:56:07.380Z'
+    - '@vue/cli > @babel/preset-env > @babel/plugin-transform-exponentiation-operator > @babel/helper-builder-binary-assignment-operator-visitor > @babel/helper-explode-assignable-expression > @babel/traverse > @babel/generator > lodash':
+        patched: '2020-07-01T10:56:07.380Z'
+    - '@vue/cli > jscodeshift > @babel/preset-typescript > @babel/plugin-transform-typescript > @babel/helper-create-class-features-plugin > @babel/helper-replace-supers > @babel/traverse > lodash':
+        patched: '2020-07-01T10:56:07.380Z'
+    - '@vue/cli > @vue/cli-ui > vue-cli-plugin-apollo > apollo > apollo-codegen-core > @babel/generator > @babel/types > lodash':
+        patched: '2020-07-01T10:56:07.380Z'
+    - '@vue/cli > @vue/cli-ui > vue-cli-plugin-apollo > apollo > apollo-codegen-flow > @babel/generator > @babel/types > lodash':
+        patched: '2020-07-01T10:56:07.380Z'
+    - '@vue/cli > @vue/cli-ui > vue-cli-plugin-apollo > apollo > apollo-codegen-typescript > @babel/generator > @babel/types > lodash':
+        patched: '2020-07-01T10:56:07.380Z'
+    - '@vue/cli > @vue/cli-ui > vue-cli-plugin-apollo > apollo > apollo-codegen-flow > apollo-codegen-core > @babel/types > lodash':
+        patched: '2020-07-01T10:56:07.380Z'
+    - '@vue/cli > @vue/cli-ui > vue-cli-plugin-apollo > apollo > apollo-codegen-scala > apollo-codegen-core > @babel/types > lodash':
+        patched: '2020-07-01T10:56:07.380Z'
+    - '@vue/cli > @vue/cli-ui > vue-cli-plugin-apollo > apollo > apollo-codegen-swift > apollo-codegen-core > @babel/types > lodash':
+        patched: '2020-07-01T10:56:07.380Z'
+    - '@vue/cli > @vue/cli-ui > vue-cli-plugin-apollo > apollo > apollo-codegen-typescript > apollo-codegen-core > @babel/types > lodash':
+        patched: '2020-07-01T10:56:07.380Z'
+    - '@vue/cli > @babel/preset-env > @babel/plugin-transform-exponentiation-operator > @babel/helper-builder-binary-assignment-operator-visitor > @babel/helper-explode-assignable-expression > @babel/traverse > @babel/helper-split-export-declaration > @babel/types > lodash':
+        patched: '2020-07-01T10:56:07.380Z'
+    - '@vue/cli > jscodeshift > @babel/preset-typescript > @babel/plugin-transform-typescript > @babel/helper-create-class-features-plugin > @babel/helper-replace-supers > @babel/traverse > @babel/generator > lodash':
+        patched: '2020-07-01T10:56:07.380Z'
+    - '@vue/cli > @vue/cli-ui > vue-cli-plugin-apollo > apollo > apollo-codegen-flow > apollo-codegen-core > @babel/generator > @babel/types > lodash':
+        patched: '2020-07-01T10:56:07.380Z'
+    - '@vue/cli > @vue/cli-ui > vue-cli-plugin-apollo > apollo > apollo-codegen-scala > apollo-codegen-core > @babel/generator > @babel/types > lodash':
+        patched: '2020-07-01T10:56:07.380Z'
+    - '@vue/cli > @vue/cli-ui > vue-cli-plugin-apollo > apollo > apollo-codegen-swift > apollo-codegen-core > @babel/generator > @babel/types > lodash':
+        patched: '2020-07-01T10:56:07.380Z'
+    - '@vue/cli > @vue/cli-ui > vue-cli-plugin-apollo > apollo > apollo-codegen-typescript > apollo-codegen-core > @babel/generator > @babel/types > lodash':
+        patched: '2020-07-01T10:56:07.380Z'
+    - '@vue/cli > @babel/preset-env > @babel/plugin-transform-exponentiation-operator > @babel/helper-builder-binary-assignment-operator-visitor > @babel/helper-explode-assignable-expression > @babel/traverse > @babel/helper-function-name > @babel/template > @babel/types > lodash':
+        patched: '2020-07-01T10:56:07.380Z'
+    - '@vue/cli > jscodeshift > @babel/preset-typescript > @babel/plugin-transform-typescript > @babel/helper-create-class-features-plugin > @babel/helper-replace-supers > @babel/traverse > @babel/helper-split-export-declaration > @babel/types > lodash':
+        patched: '2020-07-01T10:56:07.380Z'
+    - '@vue/cli > jscodeshift > @babel/preset-typescript > @babel/plugin-transform-typescript > @babel/helper-create-class-features-plugin > @babel/helper-replace-supers > @babel/traverse > @babel/helper-function-name > @babel/template > @babel/types > lodash':
+        patched: '2020-07-01T10:56:07.380Z'

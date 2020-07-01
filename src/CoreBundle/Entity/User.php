@@ -15,6 +15,8 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -44,7 +46,6 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
  * @ORM\Table(
  *  name="user",
  *  indexes={
- *      @ORM\Index(name="idx_user_uid", columns={"user_id"}),
  *      @ORM\Index(name="status", columns={"status"})
  *  }
  * )
@@ -71,6 +72,14 @@ class User implements UserInterface, EquatableInterface
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
+
+    /**
+     *
+     * @var UuidInterface|null
+     *
+     * @ORM\Column(type="uuid", unique=true)
+     */
+    protected $uuid;
 
     /**
      * @ORM\Column(type="string", unique=true, nullable=true)
@@ -132,13 +141,6 @@ class User implements UserInterface, EquatableInterface
      * @ORM\Column(name="password", type="string", length=255, nullable=false, unique=false)
      */
     protected $password;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="user_id", type="integer", nullable=true)
-     */
-    protected $userId;
 
     /**
      * @var string
@@ -581,6 +583,7 @@ class User implements UserInterface, EquatableInterface
      */
     public function __construct()
     {
+        $this->uuid = Uuid::uuid4()->toString();
         $this->status = self::STUDENT;
         $this->salt = sha1(uniqid(null, true));
         $this->active = true;
@@ -595,7 +598,6 @@ class User implements UserInterface, EquatableInterface
         $this->dropBoxReceivedFiles = new ArrayCollection();
         $this->groups = new ArrayCollection();
         //$this->extraFields = new ArrayCollection();
-        //$this->userId = 0;
         $this->createdAt = new \DateTime();
         $this->updatedAt = new \DateTime();
 
@@ -607,6 +609,27 @@ class User implements UserInterface, EquatableInterface
 
         $this->courseGroupsAsMember = new ArrayCollection();
         $this->courseGroupsAsTutor = new ArrayCollection();
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $userId
+     */
+    public function setId($userId)
+    {
+        $this->id = $userId;
+    }
+
+    public function getUuid(): UuidInterface
+    {
+        return $this->uuid;
     }
 
     /**
@@ -651,41 +674,14 @@ class User implements UserInterface, EquatableInterface
     }
 
     /**
-     * Updates the id with the user_id.
-     *
      * @ORM\PostPersist()
      */
     public function postPersist(LifecycleEventArgs $args)
     {
-        $user = $args->getEntity();
-        $this->setUserId($user->getId());
+        /*$user = $args->getEntity();
+        */
     }
 
-    /**
-     * @param int $userId
-     */
-    public function setId($userId)
-    {
-        $this->id = $userId;
-    }
-
-    /**
-     * @param int $userId
-     */
-    public function setUserId($userId)
-    {
-        if (!empty($userId)) {
-            $this->userId = $userId;
-        }
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
 
     /**
      * @return ArrayCollection
@@ -1019,11 +1015,9 @@ class User implements UserInterface, EquatableInterface
     /**
      * Set status.
      *
-     * @param int $status
-     *
      * @return User
      */
-    public function setStatus($status)
+    public function setStatus(int $status)
     {
         $this->status = $status;
 
@@ -1037,7 +1031,7 @@ class User implements UserInterface, EquatableInterface
      */
     public function getStatus()
     {
-        return $this->status;
+        return (int) $this->status;
     }
 
     /**

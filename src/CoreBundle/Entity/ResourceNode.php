@@ -16,9 +16,12 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use Ramsey\Uuid\Doctrine\UuidGenerator;
 
 //*     attributes={"security"="is_granted('ROLE_ADMIN')"},
 /**
@@ -34,6 +37,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ApiFilter(OrderFilter::class, properties={"id", "title", "resourceFile", "createdAt", "updatedAt"})
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\ResourceNodeRepository")
  *
+ * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="resource_node")
  *
  * @Gedmo\Tree(type="materializedPath")
@@ -51,6 +55,14 @@ class ResourceNode
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
+
+    /**
+     *
+     * @var UuidInterface|null
+     *
+     * @ORM\Column(type="uuid", unique=true)
+     */
+    protected $uuid;
 
     /**
      * @Assert\NotBlank()
@@ -180,6 +192,7 @@ class ResourceNode
      */
     public function __construct()
     {
+        $this->uuid = Uuid::uuid4()->toString();
         $this->children = new ArrayCollection();
         $this->resourceLinks = new ArrayCollection();
         $this->comments = new ArrayCollection();

@@ -121,6 +121,7 @@
         "php-ffmpeg/php-ffmpeg": "~0.14",
         "phpoffice/phpspreadsheet": "~1.9",
         "phpoffice/phpword": "~0.16",
+        "ramsey/uuid-doctrine": "^1.6",
         "robrichards/xmlseclibs": "3.0.*",
         "sabre/vobject": "~4.2",
         "sensio/framework-extra-bundle": "~5.0",

@@ -840,7 +840,8 @@ class CourseHome
         } else {
             $is_allowed_to_edit = api_is_allowed_to_edit(null, true) && !api_is_coach();
             if ($allowEditionInSession) {
-                $is_allowed_to_edit = api_is_allowed_to_edit(null, true) && api_is_coach($session_id, $courseId);
+                $is_allowed_to_edit = (api_is_allowed_to_edit(null, true) &&
+                    api_is_coach($session_id, $courseId)) || $is_platform_admin;
             }
         }
 

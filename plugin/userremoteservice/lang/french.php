@@ -7,8 +7,15 @@ $strings['plugin_comment'] =
 
 /* Strings for settings */
 $strings['salt'] = "Sel";
-$strings['salt_help'] =
-    "Sel ('salt') à passer à la fonction crypt() pour générer le paramètre d'URL 'hash' des liens générés.";
+$strings['salt_help'] = <<<'EOT'
+Chaine de caractère secrète, utilisée pour générer le paramètre d'URL <em>hash</em>. Plus il est long et mieux c'est.
+<br/>Les services distants peuvent vérifier la validité de l'URL générée avec l'expression PHP suivante :
+<br/><code class="php">password_verify($salt.$userId, $hash)</code>
+<br/>Où
+<br/><code>$salt</code> est la valeur saisie ici,
+<br/><code>$userId</code> est le numéro de l'utilisateur auquel fait référence le paramètre d'URL <em>username</em> et
+<br/><code>$hash</code> représente la valeur du paramètre d'URL <em>hash</em>.
+EOT;
 
 // Please keep alphabetically sorted
 $strings['CreateService'] = "Ajouter le service au menu";

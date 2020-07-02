@@ -140,8 +140,6 @@ OEQ,
      *
      * @see \return_navigation_array
      *
-     * @throws Exception on crypt() failure
-     *
      * @return array menu items
      */
     public function getNavigationMenu()
@@ -262,7 +260,7 @@ OEQ,
     /**
      * Generates the iframe HTML element to load a service URL
      *
-     * @throws Exception on crypt() failure
+     * @throws Exception on hash generation failure
      *
      * @return string the iframe HTML element
      */

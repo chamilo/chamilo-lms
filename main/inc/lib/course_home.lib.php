@@ -637,6 +637,7 @@ class CourseHome
             return true;
         });
 
+        $isAllowToEdit = api_is_allowed_to_edit(null, true);
         foreach ($tools as $temp_row) {
             $add = false;
             if ($check) {
@@ -657,7 +658,7 @@ class CourseHome
                 /** @var CTool $toolObj */
                 $toolObj = Database::getManager()->getRepository('ChamiloCourseBundle:CTool')->findOneBy($criteria);
                 if ($toolObj) {
-                    if (api_is_allowed_to_edit() == false && $toolObj->getVisibility() == false) {
+                    if ($isAllowToEdit == false && $toolObj->getVisibility() == false) {
                         continue;
                     }
                 }
@@ -673,7 +674,7 @@ class CourseHome
                     );
                     $path = $lp->get_preview_image_path(ICON_SIZE_BIG);
 
-                    if (api_is_allowed_to_edit(null, true)) {
+                    if ($isAllowToEdit) {
                         $add = true;
                     } else {
                         $add = learnpath::is_lp_visible_for_student(
@@ -835,6 +836,7 @@ class CourseHome
         $courseInfo = api_get_course_info();
 
         $allowEditionInSession = api_get_configuration_value('allow_edit_tool_visibility_in_session');
+
         if ($session_id == 0) {
             $is_allowed_to_edit = api_is_allowed_to_edit(null, true) && api_is_course_admin();
         } else {
@@ -915,12 +917,14 @@ class CourseHome
                             'name' => $tool['name'],
                             'sessionId' => $session_id,
                         ];
+
                         /** @var CTool $tool */
                         $toolObj = Database::getManager()->getRepository('ChamiloCourseBundle:CTool')->findOneBy($criteria);
                         if ($toolObj) {
                             $visibility = (int) $toolObj->getVisibility();
+
                             switch ($visibility) {
-                                case '0':
+                                case 0:
                                     $info = pathinfo($tool['image']);
                                     $basename = basename($tool['image'], '.'.$info['extension']);
                                     $tool['image'] = $basename.'_na.'.$info['extension'];
@@ -934,7 +938,7 @@ class CourseHome
                                     $link['cmd'] = 'restore=yes';
                                     $lnk[] = $link;
                                     break;
-                                case '1':
+                                case 1:
                                     $link['name'] = Display::return_icon(
                                         'visible.png',
                                         get_lang('Deactivate'),
@@ -1613,10 +1617,8 @@ class CourseHome
     public static function getCoachBlocks()
     {
         $blocks = [];
-        $my_list = self::get_tools_category(TOOL_STUDENT_VIEW);
-
         $blocks[] = [
-            'content' => self::show_tools_category($my_list),
+            'content' => self::show_tools_category(self::get_tools_category(TOOL_STUDENT_VIEW)),
         ];
 
         $sessionsCopy = api_get_setting('allow_session_course_copy_for_teachers');

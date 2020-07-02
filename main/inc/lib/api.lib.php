@@ -9091,11 +9091,9 @@ function api_mail_html(
                         return false;
                     }
                 }
-
             }
         }
     }
-
 
     $mail = new PHPMailer();
     $mail->Mailer = $platform_email['SMTP_MAILER'];

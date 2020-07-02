@@ -264,6 +264,7 @@ class AppPlugin
             'surveyexporttxt',
             'test2pdf',
             'tour',
+            'userremoteservice',
             'vchamilo',
             'whispeakauth',
         ];

@@ -4901,7 +4901,7 @@ class CourseManager
      *
      * @return array
      */
-    public static function return_popular_courses()
+    public static function returnPopularCourses()
     {
         if (api_is_invitee()) {
             return [];

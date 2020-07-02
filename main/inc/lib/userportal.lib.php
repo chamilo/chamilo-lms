@@ -1901,9 +1901,9 @@ class IndexManager
     /**
      * @return array
      */
-    public function return_popular_courses()
+    public function returnPopularCourses()
     {
-        return CourseManager::return_popular_courses();
+        return CourseManager::returnPopularCourses();
     }
 
     /**

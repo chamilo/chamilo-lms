@@ -141,7 +141,7 @@ if ($useCookieValidation === 'true') {
 if (!isset($_REQUEST['include'])) {
     if (api_get_setting('show_hot_courses') == 'true') {
         if (api_get_configuration_value('popular_courses')) {
-            $hotCourses = $controller->return_popular_courses();
+            $hotCourses = $controller->returnPopularCourses();
         } else {
             $hotCourses = $controller->return_hot_courses();
         }

@@ -782,12 +782,9 @@ class MessageManager
                         get_lang('CopyOfMessageSentToXUser'),
                         $userInfo['complete_name']
                     ).' <br />'.$message;
-                    if(!isset( $drhInfo['user_id']) and isset( $drhInfo['id'])){
-                         $drhInfo['user_id'] = $drhInfo['id'];
-                    }
 
                     self::send_message_simple(
-                        $drhInfo['user_id'],
+                        $drhInfo['id'],
                         $subject,
                         $message,
                         $sender_id,

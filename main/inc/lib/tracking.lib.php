@@ -4459,9 +4459,24 @@ class Tracking
         }
 
         $rs = Database::query($sql);
+
+        $allow = api_get_plugin_setting('pausetraining', 'tool_enable') === 'true';
+        $allowPauseFormation = api_get_plugin_setting('pausetraining', 'allow_users_to_edit_pause_formation') === 'true';
+
+        $extraFieldValue = new ExtraFieldValue('user');
         $users = [];
         while ($user = Database::fetch_array($rs)) {
-            $users[] = $user['user_id'];
+            $userId = $user['user_id'];
+
+            if ($allow && $allowPauseFormation) {
+                $pause = $extraFieldValue->get_values_by_handler_and_field_variable($userId, 'pause_formation');
+                if (!empty($pause) && isset($pause['value']) && 1 == $pause['value']) {
+                    // Skip user because he paused his formation.
+                    continue;
+                }
+            }
+
+            $users[] = $userId;
         }
 
         return $users;

@@ -67,6 +67,7 @@ class Rest extends WebService
     const UPDATE_USER_FROM_USERNAME = 'update_user_from_username';
     const USERNAME_EXIST = 'username_exist';
     const GET_COURSE_QUIZ_MDL_COMPAT = 'get_course_quiz_mdl_compat';
+    const UPDATE_USER_PAUSE_TRAINING = 'update_user_pause_training';
 
     /**
      * @var Session

@@ -268,6 +268,7 @@ OEQ,
      */
     public function getIFrame()
     {
+        $userInfo = api_get_user_info();
         return sprintf(
             <<<HTML
 <div class="embed-responsive embed-responsive-16by9">
@@ -276,7 +277,7 @@ OEQ,
 HTML,
             $this->getService(
                 $this->getActiveServiceId()
-            )->getCustomUserURL(api_get_user_info()['username'], $this->salt())
+            )->getCustomUserURL($userInfo['username'], $userInfo['id'], $this->salt())
         );
     }
 }

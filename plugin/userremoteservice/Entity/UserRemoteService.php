@@ -99,18 +99,19 @@ class UserRemoteService
 
     /**
      * Returns a user-specific URL, with two extra query string parameters : 'username' and 'hash'.
-     * 'hash' is the return value of function call crypt($username, $salt).
+     * 'hash' is the return value of function call crypt($userId, $salt).
      *
      * @param string $username the URL query parameter 'username'
+     * @param string $userId   the user identifier, to be passed to crypt() to generate the 'hash' query parameter
      * @param string $salt     the salt to be passed to crypt() in order to generate the 'hash' query parameter
      *
      * @throws Exception on crypt() failure
      *
      * @return string the custom user URL
      */
-    public function getCustomUserURL($username, $salt)
+    public function getCustomUserURL($username, $userId, $salt)
     {
-        $hash = crypt($username, $salt);
+        $hash = crypt($userId, $salt);
         if (is_null($hash)) {
             throw new Exception('crypt() failed');
         }

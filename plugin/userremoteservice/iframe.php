@@ -5,8 +5,8 @@ require_once __DIR__.'/config.php';
 
 $plugin = UserRemoteServicePlugin::create();
 
-Display::display_header($plugin->get_title());
+Display::display_header();
 
-echo $plugin->getIFrame($_REQUEST['serviceId']);
+echo $plugin->getIFrame();
 
 Display::display_footer();

@@ -3,6 +3,6 @@
 
 require_once __DIR__.'/config.php';
 
-foreach (UserRemoteServicePlugin::create()->getNavigationMenu() as $menu) {
-    $template->params['menu'][] = $menu;
+foreach (UserRemoteServicePlugin::create()->getNavigationMenu() as $key => $menu) {
+    $template->params['menu'][$key] = $menu;
 }

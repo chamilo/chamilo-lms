@@ -126,6 +126,16 @@ OEQ,
     }
 
     /**
+     * Returns the active service id.
+     *
+     * @return int|null
+     */
+    public function getActiveServiceId()
+    {
+        return array_key_exists('serviceId', $_REQUEST) ? intval($_REQUEST['serviceId']) : null;
+    }
+
+    /**
      * Generates the menu items to be appended to the navigation array
      *
      * @see \return_navigation_array
@@ -137,8 +147,13 @@ OEQ,
     public function getNavigationMenu()
     {
         $menu = [];
+        $activeServiceId = $this->getActiveServiceId();
         foreach ($this->getServices() as $service) {
-            $menu['service_'.$service->getId()] = [
+            $key = 'service_'.$service->getId();
+            $current = $service->getId() == $activeServiceId;
+            $menu[$key] = [
+                'key' => $key,
+                'current' => $current ? 'active' : '',
                 'url' => sprintf(
                     '%s%s/iframe.php?serviceId=%d',
                     api_get_path(WEB_PLUGIN_PATH),
@@ -247,13 +262,11 @@ OEQ,
     /**
      * Generates the iframe HTML element to load a service URL
      *
-     * @param int $serviceId the service identifier
-     *
      * @throws Exception on crypt() failure
      *
      * @return string the iframe HTML element
      */
-    public function getIFrame($serviceId)
+    public function getIFrame()
     {
         return sprintf(
             <<<HTML
@@ -261,7 +274,9 @@ OEQ,
  <iframe class="embed-responsive-item" src="%s"></iframe>
 </div>
 HTML,
-            $this->getService($serviceId)->getCustomUserURL(api_get_user_info()['username'], $this->salt())
+            $this->getService(
+                $this->getActiveServiceId()
+            )->getCustomUserURL(api_get_user_info()['username'], $this->salt())
         );
     }
 }

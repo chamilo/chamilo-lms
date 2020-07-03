@@ -732,7 +732,8 @@ switch ($action) {
                                 api_get_course_info(),
                                 api_get_session_id(),
                                 $insert_id,
-                                $sendToUsersInSession
+                                $sendToUsersInSession,
+                                isset($data['send_to_hrm_users'])
                             );
                         }
 

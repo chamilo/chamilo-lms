@@ -4,6 +4,7 @@
 namespace Chamilo\UserBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
+use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\Skill;
 use Chamilo\CoreBundle\Entity\UsergroupRelUser;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -547,7 +548,7 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     }
 
     /**
-     * @return ArrayCollection
+     * @return ArrayCollection|CourseRelUser[]
      */
     public function getCourses()
     {
@@ -1566,7 +1567,7 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     /**
      * Get sessionCourseSubscription.
      *
-     * @return ArrayCollection
+     * @return ArrayCollection|SessionRelCourseRelUser[]
      */
     public function getSessionCourseSubscriptions()
     {

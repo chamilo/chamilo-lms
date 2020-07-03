@@ -44,7 +44,6 @@ if (!empty($redirectToBossId)) {
     exit;
 }
 
-
 $friendId = isset($_GET['u']) ? (int) $_GET['u'] : api_get_user_id();
 $show_full_profile = true;
 //social tab

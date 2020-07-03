@@ -67,7 +67,6 @@ if (!in_array(
         'get_usergroups_users',
         'get_calendar_users',
         'get_exercise_categories',
-
     ]
 ) && !isset($_REQUEST['from_course_session'])) {
     api_protect_admin_script(true);

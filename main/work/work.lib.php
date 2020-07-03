@@ -527,7 +527,6 @@ function showStudentWorkGrid()
     return $html;
 }
 
-
 /**
  * Shows the work list (student view).
  *
@@ -541,7 +540,7 @@ function showStudentAllWorkGrid($withResults = 1)
     $columns = [
         get_lang('Type'),
         get_lang('Title'),
-        get_lang('HandOutDateLimit')
+        get_lang('HandOutDateLimit'),
     ];
 
     $id = 'workList';
@@ -1379,7 +1378,6 @@ function getWorkListStudent(
     return $works;
 }
 
-
 /**
  * @param int    $start
  * @param int    $limit
@@ -1428,7 +1426,7 @@ function getAllWorkListStudent(
         $courseList[$course_id] = $courseInfo;
     }
 
-    $courseQueryToString = implode(' OR ',$courseQuery);
+    $courseQueryToString = implode(' OR ', $courseQuery);
 
     if ($getCount) {
         if (empty($courseQuery)) {
@@ -1561,7 +1559,6 @@ function getAllWorkListStudent(
 
     return $works;
 }
-
 
 /**
  * @param int    $start

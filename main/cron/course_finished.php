@@ -8,9 +8,7 @@ use Chamilo\CoreBundle\Entity\Session;
  * Cron for send a email when the course are finished.
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
- *
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 if (php_sapi_name() !== 'cli') {

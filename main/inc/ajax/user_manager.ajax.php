@@ -171,8 +171,8 @@ switch ($action) {
 
             if (!empty($user_id)) {
                 $user_table = Database::get_main_table(TABLE_MAIN_USER);
-                $sql = "UPDATE $user_table 
-                        SET active = '".$status."' 
+                $sql = "UPDATE $user_table
+                        SET active = '".$status."'
                         WHERE user_id = '".$user_id."'";
                 $result = Database::query($sql);
 
@@ -227,18 +227,6 @@ switch ($action) {
                         false,
                         $additionalParameters
                     );
-
-                    /*$result = api_mail_html(
-                        $recipientName,
-                        $user_info['mail'],
-                        $subject,
-                        $body,
-                        $sender_name,
-                        $emailAdmin,
-                        null,
-                        null,
-                        $additionalParameters
-                    );*/
                     Event::addEvent(LOG_USER_ENABLE, LOG_USER_ID, $user_id);
                 } else {
                     Event::addEvent(LOG_USER_DISABLE, LOG_USER_ID, $user_id);

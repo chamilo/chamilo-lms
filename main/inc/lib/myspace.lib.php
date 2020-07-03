@@ -2565,12 +2565,8 @@ class MySpace
                     get_lang('Manager')." ".api_get_setting('siteName')."\nT. ".
                     api_get_setting('administratorTelephone')."\n".get_lang('Email')." : ".api_get_setting('emailAdministrator');
 
-                api_mail_html(
-                    api_get_person_name($user['FirstName'], $user['LastName'], null, PERSON_NAME_EMAIL_ADDRESS),
-                    $user['Email'],
-                    $emailsubject,
-                    $emailbody
-                );
+                MessageManager::send_message_simple($user['id'], $emailsubject, $emailbody);
+
                 $userInfo = api_get_user_info($user['id']);
 
                 if (($user['added_at_platform'] == 1 && $user['added_at_session'] == 1) || $user['added_at_session'] == 1) {

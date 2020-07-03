@@ -527,6 +527,57 @@ function showStudentWorkGrid()
     return $html;
 }
 
+
+/**
+ * Shows the work list (student view).
+ *
+ * @return string
+ */
+function showStudentAllWorkGrid($withResults = 1)
+{
+    $withResults = (int) $withResults;
+    $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_all_work_student&with_results='.$withResults;
+
+    $columns = [
+        get_lang('Type'),
+        get_lang('Title'),
+        get_lang('HandOutDateLimit')
+    ];
+
+    $id = 'workList';
+    if ($withResults) {
+        $id = 'workListWithResults';
+        $columns[] = get_lang('Feedback');
+        $columns[] = get_lang('LastUpload');
+    }
+
+    $columnModel = [
+        ['name' => 'type', 'index' => 'type', 'width' => '30', 'align' => 'center', 'sortable' => 'false'],
+        ['name' => 'title', 'index' => 'title', 'width' => '250', 'align' => 'left'],
+        ['name' => 'expires_on', 'index' => 'expires_on', 'width' => '80', 'align' => 'center', 'sortable' => 'false'],
+    ];
+
+    if ($withResults) {
+        $columnModel[] = ['name' => 'feedback', 'index' => 'feedback', 'width' => '80', 'align' => 'center', 'sortable' => 'false'];
+        $columnModel[] = ['name' => 'last_upload', 'index' => 'feedback', 'width' => '125', 'align' => 'center', 'sortable' => 'false'];
+    }
+
+    $params = [
+        'autowidth' => 'true',
+        'height' => 'auto',
+    ];
+
+    $html = '<script>
+        $(function() {
+            '.Display::grid_js($id, $url, $columns, $columnModel, $params, [], null, true).'
+        });
+    </script>';
+
+    $html .= Display::grid_html($id);
+
+    return $html;
+}
+
 /**
  * Shows the work list (teacher view).
  *
@@ -1196,7 +1247,7 @@ function getWorkListStudent(
     $userId = api_get_user_id();
 
     $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
-        api_get_user_id(),
+        $userId,
         $courseInfo
     );
 
@@ -1327,6 +1378,190 @@ function getWorkListStudent(
 
     return $works;
 }
+
+
+/**
+ * @param int    $start
+ * @param int    $limit
+ * @param string $column
+ * @param string $direction
+ * @param string $where_condition
+ * @param bool   $getCount
+ * @param int    $withResults
+ *
+ * @return array
+ */
+function getAllWorkListStudent(
+    $start,
+    $limit,
+    $column,
+    $direction,
+    $where_condition,
+    $getCount = false,
+    $withResults = 1
+) {
+    $workTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+    $workTableAssignment = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
+
+    $userId = api_get_user_id();
+    $courses = CourseManager::get_courses_list_by_user_id($userId, true);
+
+    if (!empty($where_condition)) {
+        $where_condition = ' AND '.$where_condition;
+    }
+
+    if (!in_array($direction, ['asc', 'desc'])) {
+        $direction = 'desc';
+    }
+
+    $column = !empty($column) ? Database::escape_string($column) : 'sent_date';
+    $start = (int) $start;
+    $limit = (int) $limit;
+    $courseQuery = [];
+    $courseList = [];
+    foreach ($courses as $course) {
+        $course_id = $course['real_id'];
+        $courseInfo = api_get_course_info_by_id($course_id);
+        $session_id = isset($course['session_id']) ? $course['session_id'] : 0;
+        $conditionSession = api_get_session_condition($session_id, true, false, 'w.session_id');
+        $courseQuery[] = " (w.c_id = $course_id $conditionSession )";
+        $courseList[$course_id] = $courseInfo;
+    }
+
+    $courseQueryToString = implode(' OR ',$courseQuery);
+
+    if ($getCount) {
+        if (empty($courseQuery)) {
+            return 0;
+        }
+        $select = 'SELECT count(DISTINCT(w.id)) as count ';
+    } else {
+        if (empty($courseQuery)) {
+            return [];
+        }
+        $select = 'SELECT DISTINCT
+                        w.url,
+                        w.id,
+                        w.c_id,
+                        w.session_id,
+                        a.expires_on,
+                        a.ends_on,
+                        a.enable_qualification,
+                        w.qualification,
+                        a.publication_id';
+    }
+
+    $check = " LEFT JOIN $workTable ww ON (ww.c_id = w.c_id AND ww.parent_id = w.id AND ww.user_id = $userId ) ";
+    $where = ' AND ww.url IS NULL ';
+    if ($withResults) {
+        $where = '';
+        $check = " INNER JOIN $workTable ww ON (ww.c_id = w.c_id AND ww.parent_id = w.id AND ww.user_id = $userId) ";
+    }
+
+    $sql = "$select
+            FROM $workTable w
+            LEFT JOIN $workTableAssignment a
+            ON (a.publication_id = w.id AND a.c_id = w.c_id)
+            $check
+            WHERE
+                w.parent_id = 0 AND
+                w.active IN (1, 0) AND
+                ($courseQueryToString)
+                $where_condition
+                $where
+            ";
+
+    $sql .= " ORDER BY $column $direction ";
+
+    if (!empty($start) && !empty($limit)) {
+        $sql .= " LIMIT $start, $limit";
+    }
+    $result = Database::query($sql);
+
+    if ($getCount) {
+        $row = Database::fetch_array($result);
+
+        if ($row) {
+            return (int) $row['count'];
+        }
+
+        return 0;
+    }
+
+    $works = [];
+    while ($work = Database::fetch_array($result, 'ASSOC')) {
+        $courseId = $work['c_id'];
+        $courseInfo = $courseList[$work['c_id']];
+        $courseCode = $courseInfo['code'];
+        $sessionId = $work['session_id'];
+
+        $cidReq = api_get_cidreq_params($courseCode, $sessionId);
+        $url = api_get_path(WEB_CODE_PATH).'work/work_list.php?'.$cidReq;
+        $isSubscribed = userIsSubscribedToWork($userId, $work['id'], $courseId);
+        if ($isSubscribed == false) {
+            continue;
+        }
+
+        $visibility = api_get_item_visibility($courseInfo, 'work', $work['id'], $sessionId);
+
+        if ($visibility != 1) {
+            continue;
+        }
+
+        $work['type'] = Display::return_icon('work.png');
+        $work['expires_on'] = empty($work['expires_on']) ? null : api_get_local_time($work['expires_on']);
+
+        if (empty($work['title'])) {
+            $work['title'] = basename($work['url']);
+        }
+
+        if ($withResults) {
+            $whereCondition = " AND u.user_id = $userId ";
+            $workList = get_work_user_list(
+                0,
+                1000,
+                null,
+                null,
+                $work['id'],
+                $whereCondition,
+                null,
+                false,
+                $courseId,
+                $sessionId
+            );
+
+            $count = getTotalWorkComment($workList, $courseInfo);
+            $lastWork = getLastWorkStudentFromParentByUser($userId, $work, $courseInfo);
+
+            if (!is_null($count) && !empty($count)) {
+                $urlView = api_get_path(WEB_CODE_PATH).'work/view.php?id='.$lastWork['id'].'&'.$cidReq;
+
+                $feedback = '&nbsp;'.Display::url(
+                        Display::returnFontAwesomeIcon('comments-o'),
+                        $urlView,
+                        ['title' => get_lang('View')]
+                    );
+
+                $work['feedback'] = ' '.Display::label($count.' '.get_lang('Feedback'), 'info').$feedback;
+            }
+
+            if (!empty($lastWork)) {
+                $work['last_upload'] = (!empty($lastWork['qualification'])) ? $lastWork['qualification_rounded'].' - ' : '';
+                $work['last_upload'] .= api_get_local_time($lastWork['sent_date']);
+            }
+        }
+
+        $work['title'] = Display::url($work['title'], $url.'&id='.$work['id']);
+        /*$work['others'] = Display::url(
+            Display::return_icon('group.png', get_lang('Others')),
+            $urlOthers.$work['id']
+        );*/
+        $works[] = $work;
+    }
+
+    return $works;
+}
+
 
 /**
  * @param int    $start
@@ -2100,7 +2335,9 @@ function get_work_user_list(
                         <form
                         id="file_upload_'.$item_id.'"
                         class="work_correction_file_upload file_upload_small fileinput-button"
-                        action="'.api_get_path(WEB_AJAX_PATH).'work.ajax.php?'.api_get_cidreq().'&a=upload_correction_file&item_id='.$item_id.'" method="POST" enctype="multipart/form-data"
+                        action="'.api_get_path(WEB_AJAX_PATH).'work.ajax.php?'.api_get_cidreq().'&a=upload_correction_file&item_id='.$item_id.'"
+                        method="POST"
+                        enctype="multipart/form-data"
                         >
                         <div id="progress_'.$item_id.'" class="text-center button-load">
                             '.addslashes(get_lang('ClickOrDropOneFileHere')).'

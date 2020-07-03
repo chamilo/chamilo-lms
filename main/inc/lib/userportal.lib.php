@@ -306,7 +306,7 @@ class IndexManager
                 'title' => get_lang('MyCertificates'),
             ];
         }
-        if (api_get_setting('allow_public_certificates') == 'true') {
+        if (api_get_setting('allow_public_certificates') === 'true') {
             $items[] = [
                 'icon' => Display::return_icon('search_graduation.png', get_lang('Search')),
                 'link' => api_get_path(WEB_CODE_PATH).'gradebook/search.php',
@@ -347,6 +347,17 @@ class IndexManager
                 ];
             }
         }
+
+        return $items;
+    }
+
+    public static function studentPublicationBlock()
+    {
+        $items[] = [
+            'icon' => Display::return_icon('lp_student_publication.png', get_lang('StudentPublication')),
+            'link' => api_get_path(WEB_CODE_PATH).'work/publications.php',
+            'title' => get_lang('MyStudentPublications'),
+        ];
 
         return $items;
     }

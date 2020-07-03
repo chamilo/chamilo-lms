@@ -93,6 +93,11 @@
                     {{ display.collapseMenu('skills', 'Skills'|get_lang, skills_block) }}
                 {% endif %}
 
+                <!-- BLOCK WORK -->
+                {% if student_publication_block %}
+                    {{ display.collapseMenu('student_publications', 'StudentPublications'|get_lang, student_publication_block) }}
+                {% endif %}
+
                 {% if grade_book_sidebar %}
                     <div class="panel-group" id="skill" role="tablist" aria-multiselectable="true">
                     <div class="panel panel-default" id="gradebook_block">

@@ -175,8 +175,8 @@ if ($includeFile) {
 }
 $controller->tpl->assign('navigation_links', $controller->return_navigation_links());
 $controller->tpl->assign('notice_block', $controller->return_notice());
-//$controller->tpl->assign('main_navigation_block', $controller->return_navigation_links());
 $controller->tpl->assign('help_block', $controller->return_help());
+$controller->tpl->assign('student_publication_block', $controller->studentPublicationBlock());
 if (api_is_platform_admin() || api_is_drh()) {
     $controller->tpl->assign('skills_block', $controller->returnSkillLinks());
 }

@@ -48,6 +48,12 @@ if ($bbb->pluginEnabled) {
                             $bbb->endMeeting($value['id'], $courseCode);
                             break;
                         case 'SUCCESS':
+                            Database::update(
+                                $roomTable,
+                                ['close' => BBBPlugin::ROOM_CHECK],
+                                ['meeting_id = ? AND close= ?' => [$meetingId, BBBPlugin::ROOM_OPEN]]
+                            );
+
                             $i = 0;
                             while ($i < $meetingBBB['participantCount']) {
                                 $participantId = $meetingBBB[$i]['userId'];
@@ -56,22 +62,36 @@ if ($bbb->pluginEnabled) {
                                     $roomTable,
                                     [
                                         'where' => [
-                                            'meeting_id = ? AND participant_id = ?' => [$meetingId, $participantId],
+                                            'meeting_id = ? AND participant_id = ? AND close = ?' => [
+                                                $meetingId,
+                                                $participantId,
+                                                BBBPlugin::ROOM_CHECK,
+                                            ],
                                         ],
                                         'order' => 'id DESC',
                                     ],
                                     'first'
                                 );
+
                                 if (!empty($roomData)) {
                                     $roomId = $roomData['id'];
-                                    Database::update(
-                                        $roomTable,
-                                        ['out_at' => api_get_utc_datetime()],
-                                        ['id = ? ' => $roomId]
-                                    );
+                                    if (!empty($roomId)) {
+                                        Database::update(
+                                            $roomTable,
+                                            ['out_at' => api_get_utc_datetime(), 'close' => BBBPlugin::ROOM_OPEN],
+                                            ['id = ? ' => $roomId]
+                                        );
+                                    }
                                 }
                                 $i++;
                             }
+
+                            Database::update(
+                                $roomTable,
+                                ['out_at' => api_get_utc_datetime(), 'close' => BBBPlugin::ROOM_CLOSE],
+                                ['meeting_id = ? AND close= ?' => [$meetingId, BBBPlugin::ROOM_CHECK]]
+                            );
+
                             break;
                     }
                 }

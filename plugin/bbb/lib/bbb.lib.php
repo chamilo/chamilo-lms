@@ -769,11 +769,47 @@ class bbb
      */
     public function saveParticipant($meetingId, $participantId, $interface = 0)
     {
+        $meetingData = Database::select(
+            '*',
+            'plugin_bbb_room',
+            [
+                'where' => [
+                    'meeting_id = ? AND participant_id = ? AND close = ?' => [
+                        $meetingId,
+                        $participantId,
+                        BBBPlugin::ROOM_OPEN,
+                    ],
+                ],
+            ]
+        );
+        
+        foreach ($meetingData as $roomItem) {
+            $inAt = $roomItem['in_at'];
+            $outAt = $roomItem['out_at'];
+            $roomId = $roomItem['id'];
+            if (!empty($roomId)) {
+                if ($inAt != $outAt) {
+                    Database::update(
+                        'plugin_bbb_room',
+                        ['close' => BBBPlugin::ROOM_CLOSE],
+                        ['id = ? ' => $roomId]
+                    );
+                } else {
+                    Database::update(
+                        'plugin_bbb_room',
+                        ['out_at' => api_get_utc_datetime(), 'close' => BBBPlugin::ROOM_CLOSE],
+                        ['id = ? ' => $roomId]
+                    );
+                }
+            }
+        }
+
         $params = [
             'meeting_id' => $meetingId,
             'participant_id' => $participantId,
             'in_at' => api_get_utc_datetime(),
             'out_at' => api_get_utc_datetime(),
+            'close' => BBBPlugin::ROOM_OPEN,
         ];
 
         if ($this->plugin->get('interface') !== false) {
@@ -1191,10 +1227,17 @@ class bbb
             $roomId = $roomDB['id'];
             Database::update(
                 $roomTable,
-                ['out_at' => api_get_utc_datetime()],
+                ['out_at' => api_get_utc_datetime(), 'close' => BBBPlugin::ROOM_CLOSE],
                 ['id = ? ' => $roomId]
             );
         }
+
+        // Close all meeting rooms with meeting ID
+        Database::update(
+            $roomTable,
+            ['close' => BBBPlugin::ROOM_CLOSE],
+            ['meeting_id = ? ' => $id]
+        );
     }
 
     /**

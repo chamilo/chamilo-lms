@@ -184,47 +184,44 @@ if ($conferenceManager) {
                     }
 
                     if (!empty($meetingBBB)) {
-                        $i = 0;
-                        while ($i < $meetingBBB['participantCount']) {
-                            $participantId = $meetingBBB[$i]['userId'];
-                            $roomData = Database::select(
-                                '*',
-                                $roomTable,
-                                [
-                                    'where' => [
-                                        'meeting_id = ? AND participant_id = ?' => [$meetingId, $participantId],
-                                    ],
-                                    'order' => 'id DESC',
-                                ],
-                                'first'
-                            );
-                            if (!empty($roomData)) {
-                                $roomId = $roomData['id'];
-                                Database::update(
-                                    $roomTable,
-                                    ['out_at' => api_get_utc_datetime()],
-                                    ['id = ? ' => $roomId]
-                                );
+                        if (isset($meetingBBB['returncode'])) {
+                            $status = (string) $meetingBBB['returncode'];
+                            switch ($status) {
+                                case 'FAILED':
+                                    $bbb->endMeeting($meetingId, $courseCode);
+                                    break;
+                                case 'SUCCESS':
+                                    $i = 0;
+                                    while ($i < $meetingBBB['participantCount']) {
+                                        $participantId = $meetingBBB[$i]['userId'];
+                                        $roomData = Database::select(
+                                            '*',
+                                            $roomTable,
+                                            [
+                                                'where' => [
+                                                    'meeting_id = ? AND participant_id = ? AND close = ?' => [
+                                                        $meetingId,
+                                                        $participantId,
+                                                        BBBPlugin::ROOM_OPEN,
+                                                    ],
+                                                ],
+                                                'order' => 'id DESC',
+                                            ],
+                                            'first'
+                                        );
+
+                                        if (!empty($roomData)) {
+                                            $roomId = $roomData['id'];
+                                            Database::update(
+                                                $roomTable,
+                                                ['out_at' => api_get_utc_datetime()],
+                                                ['id = ? ' => $roomId]
+                                            );
+                                        }
+                                        $i++;
+                                    }
+                                    break;
                             }
-                            $i++;
-                        }
-                    }
-
-                    $conditions['where'] = ['meeting_id=? AND in_at=out_at' => [$meetingId]];
-                    $roomList = Database::select(
-                        '*',
-                        $roomTable,
-                        $conditions
-                    );
-
-                    if (!empty($roomList)) {
-                        foreach ($roomList as $roomDB) {
-                            $roomId = $roomDB['id'];
-                            Database::update(
-                                $roomTable,
-                                ['out_at' => api_get_utc_datetime()],
-                                ['id = ? ' => $roomId]
-                            );
                         }
                     }
                 }
@@ -244,7 +241,7 @@ if ($conferenceManager) {
                     $roomId = $roomData['id'];
                     Database::update(
                         $roomTable,
-                        ['out_at' => api_get_utc_datetime()],
+                        ['out_at' => api_get_utc_datetime(), 'close' => BBBPlugin::ROOM_CLOSE],
                         ['id = ? ' => $roomId]
                     );
                 }
@@ -283,19 +280,30 @@ if ($conferenceManager) {
                 '*',
                 $roomTable,
                 [
-                    'where' => ['meeting_id = ? AND participant_id = ?' => [$meetingId, $userId]],
+                    'where' => [
+                        'meeting_id = ? AND participant_id = ? AND close = ?' => [
+                            $meetingId,
+                            $userId,
+                            BBBPlugin::ROOM_OPEN,
+                        ],
+                    ],
                     'order' => 'id DESC',
-                ],
-                'first'
+                ]
             );
 
-            if (!empty($roomData)) {
+            $i = 0;
+            foreach ($roomData as $item) {
                 $roomId = $roomData['id'];
-                Database::update(
-                    $roomTable,
-                    ['out_at' => api_get_utc_datetime()],
-                    ['id = ? ' => $roomId]
-                );
+                if ($i == 0) {
+                    Database::update(
+                        $roomTable,
+                        ['out_at' => api_get_utc_datetime()],
+                        ['id = ? ' => $roomId]
+                    );
+                } else {
+                    Database::update($roomTable, ['close' => BBBPlugin::ROOM_CLOSE], ['id = ? ' => $roomId]);
+                }
+                $i++;
             }
 
             $message = Display::return_message(

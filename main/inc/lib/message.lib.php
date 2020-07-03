@@ -480,7 +480,6 @@ class MessageManager
         $parent_id = (int) $parent_id;
         $editMessageId = (int) $editMessageId;
         $topic_id = (int) $topic_id;
-
         $status = empty($status) ? MESSAGE_STATUS_UNREAD : (int) $status;
 
         if (!empty($receiver_user_id)) {

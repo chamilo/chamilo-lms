@@ -315,27 +315,16 @@ class SessionManager
                     $sessionFieldValue = new ExtraFieldValue('session');
                     $sessionFieldValue->saveFieldValues($extraFields);
 
-                    /*
-                      Sends a message to the user_id = 1
-
-                      $user_info = api_get_user_info(1);
-                      $complete_name = $user_info['firstname'].' '.$user_info['lastname'];
-                      $subject = api_get_setting('siteName').' - '.get_lang('ANewSessionWasCreated');
-                      $message = get_lang('ANewSessionWasCreated')." <br /> ".get_lang('NameOfTheSession').' : '.$name;
-                      api_mail_html($complete_name, $user_info['email'], $subject, $message);
-                     *
-                     */
                     // Adding to the correct URL
                     UrlManager::add_session_to_url($session_id, $accessUrlId);
 
                     // add event to system log
-                    $user_id = api_get_user_id();
                     Event::addEvent(
                         LOG_SESSION_CREATE,
                         LOG_SESSION_ID,
                         $session_id,
                         api_get_utc_datetime(),
-                        $user_id
+                        api_get_user_id()
                     );
                 }
 

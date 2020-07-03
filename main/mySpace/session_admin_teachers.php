@@ -1,9 +1,9 @@
 <?php
+
 /* For licensing terms, see /license.txt */
+
 /**
  * Teacher report.
- *
- * @package chamilo.reporting
  */
 $cidReset = true;
 
@@ -17,19 +17,18 @@ if (!$allowToTrack) {
     api_not_allowed(true);
 }
 
-$export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
+$export_csv = isset($_GET['export']) && $_GET['export'] === 'csv' ? true : false;
 $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
 $nameTools = get_lang('Teachers');
 $this_section = SECTION_TRACKING;
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('MySpace')];
 
-$interbreadcrumb[] = ["url" => "index.php", "name" => get_lang('MySpace')];
-
-if (isset($_GET["user_id"]) && $_GET["user_id"] != "" && !isset($_GET["type"])) {
-    $interbreadcrumb[] = ["url" => "teachers.php", "name" => get_lang('Teachers')];
+if (isset($_GET['user_id']) && $_GET['user_id'] != '' && !isset($_GET['type'])) {
+    $interbreadcrumb[] = ['url' => 'teachers.php', 'name' => get_lang('Teachers')];
 }
 
-if (isset($_GET["user_id"]) && $_GET["user_id"] != "" && isset($_GET["type"]) && $_GET["type"] == "coach") {
-    $interbreadcrumb[] = ["url" => "coaches.php", "name" => get_lang('Tutors')];
+if (isset($_GET['user_id']) && $_GET['user_id'] != '' && isset($_GET['type']) && $_GET['type'] === 'coach') {
+    $interbreadcrumb[] = ['url' => 'coaches.php', 'name' => get_lang('Tutors')];
 }
 
 function get_count_users()
@@ -42,7 +41,6 @@ function get_count_users()
     foreach ($sessions as $session) {
         $sessionId = $session['id'];
         $courseList = SessionManager::getCoursesInSession($sessionId);
-        $courses = [];
         if (!empty($courseList)) {
             foreach ($courseList as $courseId) {
                 $coaches = CourseManager::get_coachs_from_course($sessionId, $courseId);
@@ -62,9 +60,7 @@ function get_count_users()
         }
     }
 
-    $count = count($students);
-
-    return $count;
+    return count($students);
 }
 
 function get_users($from, $limit, $column, $direction)
@@ -207,8 +203,7 @@ if (api_is_drh()) {
     }
 }
 
-$actionsRight = '';
-$actionsRight .= Display::url(
+$actionsRight = Display::url(
     Display::return_icon('printer.png', get_lang('Print'), [], ICON_SIZE_MEDIUM),
     'javascript: void(0);',
     ['onclick' => 'javascript: window.print();']
@@ -289,4 +284,4 @@ if ($export_csv) {
     $table->display();
 }
 
-Display :: display_footer();
+Display::display_footer();

@@ -21,14 +21,7 @@ if ($isEnrolledAlready) {
     );
 }
 
-try {
-    $sampleText = WhispeakAuthRequest::enrollmentSentence($plugin);
-} catch (Exception $exception) {
-    api_not_allowed(
-        true,
-        Display::return_message($exception->getMessage(), 'error')
-    );
-}
+$sampleText = 'Hola, mundo';
 
 ChamiloSession::write(WhispeakAuthPlugin::SESSION_SENTENCE_TEXT, $sampleText);
 

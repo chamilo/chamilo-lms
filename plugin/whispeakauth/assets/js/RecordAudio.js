@@ -132,5 +132,5 @@ window.RecordAudio = (function () {
 
             useRecordRTC(rtcInfo);
         }
-    }
+    };
 })();

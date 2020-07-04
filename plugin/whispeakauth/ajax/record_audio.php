@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\PluginBundle\Entity\WhispeakAuth\LogEvent;
+use Chamilo\PluginBundle\WhispeakAuth\Controller\CreateEnrollmentRequestController;
 use Chamilo\UserBundle\Entity\User;
 use FFMpeg\FFMpeg;
 use FFMpeg\Format\Audio\Wav;
@@ -17,7 +18,9 @@ $isAuthentify = 'authentify' === $action;
 $isAllowed = false;
 
 if ($isEnrollment) {
-    api_block_anonymous_users(false);
+    $enrollmentRequest = new CreateEnrollmentRequestController();
+    $enrollmentRequest->process();
+    die;
 
     $isAllowed = !empty($_FILES['audio']);
 } elseif ($isAuthentify) {
@@ -92,49 +95,6 @@ if ('wav' !== substr($fileType, -3)) {
 
         exit;
     }
-}
-
-if ($isEnrollment) {
-    $license = !empty($_POST['license']) ? true : false;
-
-    try {
-        $wsid = WhispeakAuthRequest::whispeakId($plugin);
-        $wsid = WhispeakAuthRequest::license($plugin, $wsid, $license);
-
-        $text = ChamiloSession::read(WhispeakAuthPlugin::SESSION_SENTENCE_TEXT);
-
-        $enrollmentResult = WhispeakAuthRequest::enrollment($plugin, $user, $wsid, $text, $newFullPath);
-    } catch (Exception $exception) {
-        echo Display::return_message($plugin->get_lang('EnrollmentFailed'));
-
-        exit;
-    }
-
-    $reliability = (int) $enrollmentResult['reliability'];
-    $qualityNote = !empty($enrollmentResult['quality']) ? explode('|', $enrollmentResult['quality']) : [];
-    $qualityNote = array_map('ucfirst', $qualityNote);
-
-    $message = $plugin->get_lang('EnrollmentSignature0');
-
-    if ($reliability > 0) {
-        ChamiloSession::erase(WhispeakAuthPlugin::SESSION_SENTENCE_TEXT);
-
-        $plugin->saveEnrollment($user, $enrollmentResult['wsid']);
-
-        $message = '<strong>'.$plugin->get_lang('EnrollmentSuccess').'</strong>';
-        $message .= PHP_EOL;
-        $message .= $plugin->get_lang("EnrollmentSignature$reliability");
-    }
-
-    foreach ($qualityNote as $note) {
-        $message .= PHP_EOL.'<br>'.$plugin->get_lang("AudioQuality$note");
-    }
-
-    echo Display::return_message(
-        $message,
-        $reliability <= 0 ? 'error' : 'success',
-        false
-    );
 }
 
 if ($isAuthentify) {

@@ -17,6 +17,8 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
     const SETTING_ENABLE = 'enable';
     const SETTING_MAX_ATTEMPTS = 'max_attempts';
     const SETTING_2FA = '2fa';
+    const SETTING_API_URL = 'api_url';
+    const SETTING_TOKEN = 'token';
 
     const EXTRAFIELD_AUTH_UID = 'whispeak_auth_uid';
     const EXTRAFIELD_LP_ITEM = 'whispeak_lp_item';
@@ -41,6 +43,8 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
             'Angel Fernando Quiroz',
             [
                 self::SETTING_ENABLE => 'boolean',
+                self::SETTING_API_URL => 'text',
+                self::SETTING_TOKEN => 'text',
                 self::SETTING_MAX_ATTEMPTS => 'text',
                 self::SETTING_2FA => 'boolean',
             ]
@@ -1012,5 +1016,15 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
         $table = Database::get_main_table('whispeak_log_event');
         $sql = "DROP TABLE IF EXISTS $table";
         Database::query($sql);
+    }
+
+    /**
+     * @return string
+     */
+    public function getApiUrl()
+    {
+        $url = $this->get(self::SETTING_API_URL);
+
+        return trim($url, " \t\n\r \v/");
     }
 }

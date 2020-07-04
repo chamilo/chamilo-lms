@@ -1563,6 +1563,10 @@ $_configuration['auth_password_links'] = [
 // Disable available space in the document tool
 //$_configuration['disable_document_quota_message_for_students'] = false;
 
+// Show a donation suggestion message on the course creation page
+//$_configuration['course_creation_donate_message_show'] = false;
+//$_configuration['course_creation_donate_link'] = '<some donate button html>';
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

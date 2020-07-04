@@ -8556,4 +8556,7 @@ $CouldNotReadFileLines = "Could not read file lines.";
 $CertificatesSessions = "Certificates in sessions";
 $SessionFilterReport = "Filter certificates in sessions";
 $UpdateUserListXMLCSV = "Update user list";
+$DonateToTheProject = "Chamilo is an Open Source project and this portal is provided to our community free of charge by the Chamilo Association, which pursues the goal of improving the availability of a quality education around the globe.<br /><br />
+However, developing Chamilo and providing this service are expensive and having a little bit of help from you would go a long way to ensure these services improve faster over time.<br /><br />
+Creating a course on this portal is one of the most resource-intensive operation. Please consider making a contribution to the Chamilo Association before creating this course to help keep this service free for all!";
 ?>

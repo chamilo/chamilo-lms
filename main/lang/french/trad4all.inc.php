@@ -8488,4 +8488,7 @@ $CouldNotReadFileLines = "Impossible de lire les lignes du fichier.";
 $CertificatesSessions = "Certificats en sessions";
 $SessionFilterReport = "Filtrer les certificats dans les sessions";
 $UpdateUserListXMLCSV = "Mise à jour d'utilisateurs";
+$DonateToTheProject = "Chamilo est un projet Open Source et ce portail est offert gratuitement à la communauté par l'Association Chamilo, dont l'objectif est d'améliorer la disponibilité d'une éducation de qualité partout dans le monde.<br /><br />
+Développer Chamilo et fournir ce service de portail gratuit sont néanmoins des tâches coûteuses, et un peu d'aide de votre part permettrait de soutenir nos efforts et de faire progresser le projet Chamilo plus rapidement sur le long terme.<br /><br />
+Créer un cours sur ce portail est, par ailleurs, l'un des éléments qui consomme le plus de ressources. Merci de considérer le fait de contribuer de manière symbolique au projet et nous aider à maintenir ce service gratuit pour tous en nous faisant don de quelques euros avant de créer ce cours!";
 ?>

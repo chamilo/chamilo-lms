@@ -8,6 +8,7 @@ use ChamiloSession as Session;
  */
 require_once __DIR__.'/../global.inc.php';
 $debug = false;
+// Check if the user has access to the contextual course/session
 api_protect_course_script(true);
 
 $action = $_REQUEST['a'];
@@ -388,7 +389,7 @@ switch ($action) {
         $course_info = api_get_course_info_by_id($course_id);
         $course_id = $course_info['real_id'];
 
-        // Use have permissions?
+        // Use have permissions to edit exercises results now?
         if (api_is_allowed_to_session_edit()) {
             // "all" or "simple" strings means that there's one or all questions exercise type
             $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
@@ -504,14 +505,19 @@ switch ($action) {
             }
             unset($objQuestionTmp);
 
-            // Looping the question list
+            if ($debug) {
+                error_log('Starting questions loop in save_exercise_by_now');
+            }
+            // Looping the question list from database (not from the user answer)
             foreach ($question_list as $my_question_id) {
+                if ($type === 'simple' && $question_id != $my_question_id) {
+                    if ($debug) {
+                        error_log('Skipping question '.$my_question_id.' in single-question save action');
+                    }
+                    continue;
+                }
                 if ($debug) {
                     error_log("Saving question_id = $my_question_id ");
-                }
-
-                if ($type === 'simple' && $question_id != $my_question_id) {
-                    continue;
                 }
 
                 $my_choice = isset($choice[$my_question_id]) ? $choice[$my_question_id] : null;
@@ -538,6 +544,9 @@ switch ($action) {
                 }
 
                 if ($type === 'all') {
+                    // If saving the whole exercise (not only one question),
+                    // record the sum of individual max scores (called
+                    // "exe_weighting" in track_e_exercises)
                     $total_weight += $objQuestionTmp->selectWeighting();
                 }
 
@@ -550,7 +559,7 @@ switch ($action) {
                 }
 
                 if ($type === 'simple') {
-                    // Getting old attempt in order to decrees the total score.
+                    // Getting old attempt in order to decrease the total score.
                     $old_result = $objExercise->manage_answer(
                         $exeId,
                         $my_question_id,
@@ -650,7 +659,7 @@ switch ($action) {
                 $durationTime = Session::read('duration_time');
                 if (isset($durationTime[$key]) && !empty($durationTime[$key])) {
                     if ($debug) {
-                        error_log('Session time :'.$durationTime[$key]);
+                        error_log('Session time: '.$durationTime[$key]);
                     }
                     $duration = $now - $durationTime[$key];
                     if (!empty($exercise_stat_info['exe_duration'])) {
@@ -689,6 +698,20 @@ switch ($action) {
                     error_log("---------- end question ------------");
                 }
             }
+            if ($debug) {
+                error_log('Finished questions loop in save_exercise_by_now');
+            }
+        } else {
+            if ($debug) {
+                error_log(
+                    'Exercises attempt '.$exeId.': Failed saving question(s) in course/session '.
+                    $course_id.'/'.$session_id.
+                    ': The user ('.
+                    api_get_user_id().
+                    ') does not have the permission to access this session now');
+            }
+            echo 'error';
+            exit;
         }
 
         if ($type == 'all') {

@@ -3601,7 +3601,7 @@ class Exercise
         $nbrAnswers = $objAnswerTmp->selectNbrAnswers();
 
         if ($debug) {
-            error_log('Count of answers: '.$nbrAnswers);
+            error_log('Count of possible answers: '.$nbrAnswers);
             error_log('$answerType: '.$answerType);
         }
 
@@ -3671,7 +3671,7 @@ class Exercise
         }
 
         if ($debug) {
-            error_log('Start answer loop ');
+            error_log('-- Start answer loop --');
         }
 
         $answerDestination = null;
@@ -3686,8 +3686,8 @@ class Exercise
             $answerIid = isset($objAnswerTmp->iid[$answerId]) ? (int) $objAnswerTmp->iid[$answerId] : 0;
 
             if ($debug) {
-                error_log("answer auto id: $answerAutoId ");
-                error_log("answer correct: $answerCorrect ");
+                error_log("c_quiz_answer.id_auto: $answerAutoId ");
+                error_log("Answer marked as correct in db (0/1)?: $answerCorrect ");
             }
 
             // Delineation
@@ -5521,7 +5521,7 @@ class Exercise
         } // end for that loops over all answers of the current question
 
         if ($debug) {
-            error_log('-- end answer loop --');
+            error_log('-- End answer loop --');
         }
 
         $final_answer = true;

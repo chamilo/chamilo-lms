@@ -3490,7 +3490,7 @@ class Exercise
      *                                                          'exercise_result'
      * @param array  $exerciseResultCoordinates                 the hotspot coordinates $hotspot[$question_id] =
      *                                                          coordinates
-     * @param bool   $saved_results                             save results in the DB or just show the reponse
+     * @param bool   $save_results                              save results in the DB or just show the response
      * @param bool   $from_database                             gets information from DB or from the current selection
      * @param bool   $show_result                               show results or not
      * @param int    $propagate_neg
@@ -3509,7 +3509,7 @@ class Exercise
         $choice,
         $from = 'exercise_show',
         $exerciseResultCoordinates = [],
-        $saved_results = true,
+        $save_results = true,
         $from_database = false,
         $show_result = true,
         $propagate_neg = 0,
@@ -3530,7 +3530,7 @@ class Exercise
             error_log("<------ manage_answer ------> ");
             error_log('exe_id: '.$exeId);
             error_log('$from:  '.$from);
-            error_log('$saved_results: '.intval($saved_results));
+            error_log('$save_results: '.intval($save_results));
             error_log('$from_database: '.intval($from_database));
             error_log('$show_result: '.intval($show_result));
             error_log('$propagate_neg: '.$propagate_neg);
@@ -3944,7 +3944,7 @@ class Exercise
                         $str = $answerFromDatabase = Database::result($result, 0, 'answer');
                     }
 
-                    // if ($saved_results == false && strpos($answerFromDatabase, 'font color') !== false) {
+                    // if ($save_results == false && strpos($answerFromDatabase, 'font color') !== false) {
                     if (false) {
                         // the question is encoded like this
                         // [A] B [C] D [E] F::10,10,10@1
@@ -5739,9 +5739,9 @@ class Exercise
         // Store results directly in the database
         // For all in one page exercises, the results will be
         // stored by exercise_results.php (using the session)
-        if ($saved_results) {
+        if ($save_results) {
             if ($debug) {
-                error_log("Save question results $saved_results");
+                error_log("Save question results $save_results");
                 error_log('choice: ');
                 error_log(print_r($choice, 1));
             }
@@ -5920,7 +5920,7 @@ class Exercise
             $questionScore = 0;
         }
 
-        if ($saved_results) {
+        if ($save_results) {
             $statsTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
             $sql = "UPDATE $statsTable SET
                         exe_result = exe_result + ".floatval($questionScore)."

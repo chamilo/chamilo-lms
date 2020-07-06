@@ -7,8 +7,6 @@ use Chamilo\CourseBundle\Entity\CExerciseCategory;
  * Class ExtraFieldValue
  * Declaration for the ExtraFieldValue class, managing the values in extra
  * fields for any data type.
- *
- * @package chamilo.library
  */
 class ExerciseCategoryManager extends Model
 {

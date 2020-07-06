@@ -9,7 +9,10 @@
                     </a>
                     {% if _u.is_admin == 1 %}
                         <div class="pull-right">
-                            <a class="btn btn-default btn-sm btn-social-edit" title="{{ "Edit"|get_lang }}" href="{{ _p.web }}main/admin/user_edit.php?user_id={{ user.id }}">
+                            <a class="btn btn-default btn-sm btn-social-edit"
+                               title="{{ "Edit"|get_lang }}"
+                               href="{{ _p.web }}main/admin/user_edit.php?user_id={{ user.id }}"
+                            >
                                 <i class="fa fa-pencil" aria-hidden="true"></i>
                             </a>
                         </div>
@@ -19,7 +22,7 @@
             <div id="sn-avatar-one" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading-sn">
                 <div class="panel-body">
                     <div class="area-avatar">
-                    {{ social_avatar_block }}
+                        {{ social_avatar_block }}
                         {% if user.icon_status %}
                             <!-- User icon -->
                             <div class="avatar-icon">
@@ -99,27 +102,30 @@
                             {% set linkedin_url = '' %}
                             {% for extra in user.extra %}
                                 {% if extra.value.getField().getVariable() == 'skype' %}
-                                    {% set skype_account = extra.value.getValue() %}
+                                    {% set skype_account %}
+                                    <a href="skype:{{ extra.value.getValue() }}?chat">
+                                        <span class="fa fa-skype fa-fw" aria-hidden="true"></span> {{ 'Skype'|get_lang }}
+                                    </a>
+                                    {% endset %}
                                 {% endif %}
-
                                 {% if extra.value.getField().getVariable() == 'linkedin_url' %}
-                                    {% set linkedin_url = extra.value.getValue() %}
+                                    {% set linkedin_url %}
+                                        <a href="{{ extra.value.getValue() }}" target="_blank">
+                                            <span class="fa fa-linkedin fa-fw" aria-hidden="true"></span> {{ 'LinkedIn'|get_lang }}
+                                        </a>
+                                    {% endset %}
                                 {% endif %}
                             {% endfor %}
 
                             {% if 'allow_show_skype_account'|api_get_setting == 'true' and not skype_account is empty %}
                                 <li class="item">
-                                    <a href="skype:{{ skype_account }}?chat">
-                                        <span class="fa fa-skype fa-fw" aria-hidden="true"></span> {{ 'Skype'|get_lang }}
-                                    </a>
+                                    {{ skype_account | remove_xss}}
                                 </li>
                             {% endif %}
 
                             {% if 'allow_show_linkedin_url'|api_get_setting == 'true' and not linkedin_url is empty %}
                                 <li class="item">
-                                    <a href="{{ linkedin_url }}" target="_blank">
-                                        <span class="fa fa-linkedin fa-fw" aria-hidden="true"></span> {{ 'LinkedIn'|get_lang }}
-                                    </a>
+                                    {{ linkedin_url | remove_xss}}
                                 </li>
                             {% endif %}
                         {% endif %}
@@ -127,7 +133,10 @@
                             {% if user.user_is_online_in_chat != 0 %}
                                 {% if user_relation == user_relation_type_friend %}
                                     <li class="item">
-                                        <a onclick="javascript:chatWith('{{ user.id }}', '{{ user.complete_name }}', '{{ user.user_is_online }}','{{ user.avatar_small }}')" href="javascript:void(0);">
+                                        <a
+                                            onclick="javascript:chatWith('{{ user.id }}', '{{ user.complete_name }}', '{{ user.user_is_online }}','{{ user.avatar_small }}')"
+                                            href="javascript:void(0);"
+                                        >
                                             <img src="{{ "online.png" | icon }}" alt="{{ "Online" | get_lang }}">
                                             {{ "Chat" | get_lang }} ({{ "Online" | get_lang }})
                                         </a>
@@ -139,17 +148,17 @@
                         {% for item in extra_info %}
                             {% if item.variable != 'langue_cible' %}
                             <dt>{{ item.label }}:</dt>
-                            <dd>{{ item.value }}</dd>
+                            <dd>{{ item.value | remove_xss }}</dd>
                             {% endif %}
                         {% endfor %}
                     </dl>
 
                     {% if not profile_edition_link is empty %}
-                    <li class="item">
-                        <a class="btn btn-default btn-sm btn-block" href="{{ profile_edition_link }}">
-                        <em class="fa fa-edit"></em>{{ "EditProfile" | get_lang }}
-                        </a>
-                    </li>
+                        <li class="item">
+                            <a class="btn btn-default btn-sm btn-block" href="{{ profile_edition_link }}">
+                            <em class="fa fa-edit"></em>{{ "EditProfile" | get_lang }}
+                            </a>
+                        </li>
                     {% endif %}
                     </ul>
                 </div>

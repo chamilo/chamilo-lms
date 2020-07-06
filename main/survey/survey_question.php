@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -15,13 +16,30 @@ class survey_question
     /**
      * @param array $surveyData
      */
-    public function addParentMenu(FormValidator $form, $surveyData)
+    public function addParentMenu($formData, FormValidator $form, $surveyData)
     {
         $surveyId = $surveyData['survey_id'];
+        $questionId = isset($formData['question_id']) ? $formData['question_id'] : 0;
+        $parentId = isset($formData['parent_id']) ? $formData['parent_id'] : 0;
+        $optionId = isset($formData['parent_option_id']) ? $formData['parent_option_id'] : 0;
         $questions = SurveyManager::get_questions($surveyId);
 
-        $options = [];
+        $newQuestionList = [];
+        $allowTypes = ['yesno', 'multiplechoice'];
         foreach ($questions as $question) {
+            if (in_array($question['type'], $allowTypes)) {
+                $newQuestionList[$question['sort']] = $question;
+            }
+        }
+        ksort($newQuestionList);
+
+        $options = [];
+        foreach ($newQuestionList as $question) {
+            if (!empty($questionId)) {
+                if ($question['question_id'] == $questionId) {
+                    break;
+                }
+            }
             $options[$question['question_id']] = strip_tags($question['question']);
         }
         $form->addSelect(
@@ -30,34 +48,52 @@ class survey_question
             $options,
             ['id' => 'parent_id', 'placeholder' => get_lang('SelectAnOption')]
         );
-        $url = api_get_path(WEB_AJAX_PATH).'survey.ajax.php?'.api_get_cidreq();
+        $url = api_get_path(WEB_AJAX_PATH).
+            'survey.ajax.php?'.api_get_cidreq().'&a=load_question_options&survey_id='.$surveyId;
         $form->addHtml('
             <script>
-                $(function() {                    
+                $(function() {
                     $("#parent_id").on("change", function() {
                         var questionId = $(this).val()
-                        var params = {
-                            "a": "load_question_options",
-                            "survey_id": "'.$surveyId.'",
-                            "question_id": questionId,
-                        };    
-                            
-                          $.ajax({
-                            type: "GET",
-                            url: "'.$url.'",
-                            data: params,
-                            async: false,
-                            success: function(data) {
-                                $("#parent_options").html(data);
-                            }
-                        });        
-                        console.log(); 
+                        var $select = $("#parent_option_id");
+                        $select.empty();
+
+                        if (questionId === "") {
+                              $("#option_list").hide();
+                        } else {
+                            $.getJSON({
+                                url: "'.$url.'" + "&question_id=" + questionId,
+                                success: function(data) {
+                                    $("#option_list").show();
+                                    $.each(data, function(key, value) {
+                                        $("<option>").val(key).text(value).appendTo($select);
+                                    });
+                                }
+                            });
+                        }
                     });
                 });
             </script>
         ');
-        $form->addHtml('<div id="parent_options"></div>');
-        $form->addHidden('option_id', 0);
+
+        $style = 'display:none';
+        $options = [];
+        if (!empty($optionId) && !empty($parentId)) {
+            $parentData = SurveyManager::get_question($parentId);
+            $style = '';
+            foreach ($parentData['answer_data'] as $answer) {
+                $options[$answer['iid']] = strip_tags($answer['data']);
+            }
+        }
+
+        $form->addHtml('<div id="option_list" style="'.$style.'">');
+        $form->addSelect(
+            'parent_option_id',
+            get_lang('Option'),
+            $options,
+            ['id' => 'parent_option_id', 'disable_js' => true]
+        );
+        $form->addHtml('</div>');
     }
 
     /**
@@ -88,6 +124,10 @@ class survey_question
                 return new ch_score();
             case 'yesno':
                 return new ch_yesno();
+            case 'selectivedisplay':
+                return new ch_selectivedisplay();
+            case 'multiplechoiceother':
+                return new ch_multiplechoiceother();
             default:
                 api_not_allowed(true);
                 break;
@@ -109,37 +149,70 @@ class survey_question
         $surveyId = isset($_GET['survey_id']) ? (int) $_GET['survey_id'] : null;
         $type = isset($_GET['type']) ? Security::remove_XSS($_GET['type']) : null;
 
-        $toolName = Display::return_icon(
-            SurveyManager::icon_question($type),
-            get_lang(ucfirst($type)),
-            ['align' => 'middle', 'height' => '22px']
-        ).' ';
-
-        if ($action == 'add') {
-            $toolName .= get_lang('AddQuestion').': ';
-        } elseif ($action == 'edit') {
-            $toolName .= get_lang('EditQuestion').': ';
+        $actionHeader = get_lang('EditQuestion').': ';
+        if ($action === 'add') {
+            $actionHeader = get_lang('AddQuestion').': ';
         }
 
-        switch ($_GET['type']) {
+        $questionComment = '';
+        $allowParent = false;
+        switch ($type) {
+            case 'open':
+                $toolName = get_lang('Open');
+                $questionComment = get_lang('QuestionTags');
+                $allowParent = true;
+                break;
             case 'yesno':
-                $toolName .= get_lang('YesNo');
+                $toolName = get_lang('YesNo');
+                $allowParent = true;
                 break;
             case 'multiplechoice':
-                $toolName .= get_lang('UniqueSelect');
+                $toolName = get_lang('UniqueSelect');
+                $allowParent = true;
                 break;
             case 'multipleresponse':
-                $toolName .= get_lang('MultipleResponse');
+                $toolName = get_lang('MultipleResponse');
+                $allowParent = true;
+                break;
+            case 'selectivedisplay':
+                $toolName = get_lang('SurveyQuestionSelectiveDisplay');
+                $questionComment = get_lang('SurveyQuestionSelectiveDisplayComment');
+                $allowParent = true;
+                break;
+            case 'multiplechoiceother':
+                $toolName = get_lang('SurveyQuestionMultipleChoiceWithOther');
+                $questionComment = get_lang('SurveyQuestionMultipleChoiceWithOtherComment');
+                $allowParent = true;
+                break;
+            case 'pagebreak':
+                $toolName = get_lang(api_ucfirst($type));
+                $allowParent = false;
                 break;
             default:
-                $toolName .= get_lang(api_ucfirst($type));
+                $toolName = get_lang(api_ucfirst($type));
+                $allowParent = true;
+                break;
         }
 
+        if (false === api_get_configuration_value('survey_question_dependency')) {
+            $allowParent = false;
+        }
+
+        $icon = Display::return_icon(
+                SurveyManager::icon_question($type),
+                $toolName,
+                ['align' => 'middle', 'height' => '22px']
+            ).' ';
+
+        $toolName = $icon.$actionHeader.$toolName;
         $sharedQuestionId = isset($formData['shared_question_id']) ? $formData['shared_question_id'] : null;
 
         $url = api_get_self().'?action='.$action.'&type='.$type.'&survey_id='.$surveyId.'&question_id='.$questionId.'&'.api_get_cidreq();
         $form = new FormValidator('question_form', 'post', $url);
         $form->addHeader($toolName);
+        if (!empty($questionComment)) {
+            $form->addHtml(Display::return_message($questionComment, 'info', false));
+        }
         $form->addHidden('survey_id', $surveyId);
         $form->addHidden('question_id', $questionId);
         $form->addHidden('shared_question_id', Security::remove_XSS($sharedQuestionId));
@@ -163,11 +236,14 @@ class survey_question
             $form->addCheckBox('is_required', get_lang('IsMandatory'), get_lang('Yes'));
         }
 
-        // When survey type = 1??
-        if ($surveyData['survey_type'] == 1) {
+        if ($allowParent) {
+            $this->addParentMenu($formData, $form, $surveyData);
+        }
+
+        if (1 == $surveyData['survey_type']) {
             $table_survey_question_group = Database::get_course_table(TABLE_SURVEY_QUESTION_GROUP);
-            $sql = 'SELECT id,name FROM '.$table_survey_question_group.'
-                    WHERE survey_id = '.(int) $_GET['survey_id'].'
+            $sql = 'SELECT id, name FROM '.$table_survey_question_group.'
+                    WHERE survey_id = '.$surveyId.'
                     ORDER BY name';
             $rs = Database::query($sql);
             $glist = null;
@@ -200,19 +276,18 @@ class survey_question
                 );
             }
 
-            $this->html .= '	<tr><td colspan="">
-			<fieldset style="border:1px solid black"><legend>'.get_lang('Condition').'</legend>
-
-			<b>'.get_lang('Primary').'</b><br />
-			'.'<input type="radio" name="choose" value="1" '.(($formData['choose'] == 1) ? 'checked' : '').
-                '><select name="assigned">'.$grouplist.'</select><br />';
-
+            $this->html .= '<tr><td colspan="">
+			<fieldset style="border:1px solid black">
+			    <legend>'.get_lang('Condition').'</legend>
+			    <b>'.get_lang('Primary').'</b><br />
+			    <input type="radio" name="choose" value="1" '.(($formData['choose'] == 1) ? 'checked' : '').'>
+			    <select name="assigned">'.$grouplist.'</select><br />';
             $this->html .= '
 			<b>'.get_lang('Secondary').'</b><br />
-			'.'<input type="radio" name="choose" value="2" '.(($formData['choose'] == 2) ? 'checked' : '').
-                '><select name="assigned1">'.$grouplist1.'</select> '.
-                '<select name="assigned2">'.$grouplist2.'</select>'
-                .'</fieldset><br />';
+			    <input type="radio" name="choose" value="2" '.(($formData['choose'] == 2) ? 'checked' : '').'>
+			    <select name="assigned1">'.$grouplist1.'</select>
+                <select name="assigned2">'.$grouplist2.'</select>
+            </fieldset><br />';
         }
 
         $this->setForm($form);
@@ -227,19 +302,22 @@ class survey_question
     {
         if (isset($_GET['question_id']) && !empty($_GET['question_id'])) {
             /**
-             * Check if survey has answers first before update it, this is because if you update it, the question
-             * options will delete and re-insert in database loosing the iid and question_id to verify the correct answers.
+             * Prevent the edition of already-answered questions to avoid
+             * inconsistent answers. Use the configuration option
+             * survey_allow_answered_question_edit to change this behaviour.
              */
             $surveyId = isset($_GET['survey_id']) ? (int) $_GET['survey_id'] : 0;
             $answersChecker = SurveyUtil::checkIfSurveyHasAnswers($surveyId);
-            if (!$answersChecker) {
+            $allowQuestionEdit = api_get_configuration_value('survey_allow_answered_question_edit') == true;
+            if ($allowQuestionEdit or !$answersChecker) {
                 $this->buttonList[] = $this->getForm()->addButtonUpdate(get_lang('ModifyQuestionSurvey'), 'save', true);
             } else {
                 $this->getForm()->addHtml('
                     <div class="form-group">
                         <label class="col-sm-2 control-label"></label>
                         <div class="col-sm-8">
-                            <div class="alert alert-info">'.get_lang('YouCantNotEditThisQuestionBecauseAlreadyExistAnswers').'</div>
+                            <div class="alert alert-info">'.
+                            get_lang('YouCantNotEditThisQuestionBecauseAlreadyExistAnswers').'</div>
                         </div>
                         <div class="col-sm-2"></div>
                     </div>
@@ -330,25 +408,35 @@ class survey_question
             }
 
             $newAnswers = [];
+            $newAnswersId = [];
             foreach ($formData['answers'] as $key => &$value) {
                 if ($key > $deleted) {
                     // swap with previous (deleted) option slot
                     $newAnswers[$key - 1] = $formData['answers'][$key];
+                    $newAnswersId[$key - 1] = $formData['answersid'][$key];
                     unset($formData['answers'][$key]);
+                    unset($formData['answersid'][$key]);
                 } elseif ($key === $deleted) {
                     // delete option
                     unset($formData['answers'][$deleted]);
+                    unset($formData['answersid'][$deleted]);
                 } else {
                     // keep as is
                     $newAnswers[$key] = $value;
+                    $newAnswersId[$key] = $formData['answersid'][$key];
                 }
             }
             unset($formData['answers']);
+            unset($formData['answersid']);
             $formData['answers'] = $newAnswers;
+            $formData['answersid'] = $newAnswersId;
         }
 
         // Adding an answer
         if (isset($_POST['buttons']) && isset($_POST['buttons']['add_answer'])) {
+            if (isset($_REQUEST['type']) && 'multiplechoiceother' === $_REQUEST['type']) {
+                $counter--;
+            }
             $counter++;
             Session::write('answer_count', $counter);
         }
@@ -360,6 +448,7 @@ class survey_question
             foreach ($formData['answers'] as $index => &$data) {
                 if ($index > $counter) {
                     unset($formData['answers'][$index]);
+                    unset($formData['answersid'][$index]);
                 }
             }
         }
@@ -400,19 +489,17 @@ class survey_question
      *
      * @return mixed
      */
-    public function save($surveyData, $formData)
+    public function save($surveyData, $formData, $dataFromDatabase = [])
     {
         // Saving a question
         if (isset($_POST['buttons']) && isset($_POST['buttons']['save'])) {
             Session::erase('answer_count');
             Session::erase('answer_list');
-            $message = SurveyManager::save_question(
-                $surveyData,
-                $formData
-            );
+            $message = SurveyManager::save_question($surveyData, $formData, true, $dataFromDatabase);
 
-            if ($message == 'QuestionAdded' || $message == 'QuestionUpdated') {
-                header('Location: '.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.intval($_GET['survey_id']).'&message='.$message.'&'.api_get_cidreq());
+            if ($message === 'QuestionAdded' || $message === 'QuestionUpdated') {
+                $url = api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.intval($_GET['survey_id']).'&message='.$message.'&'.api_get_cidreq();
+                header('Location: '.$url);
                 exit;
             }
         }
@@ -451,6 +538,131 @@ class survey_question
     }
 
     /**
+     * Get the JS for questions that can depend on a previous question
+     * (and that hides those questions until something changes in the previous
+     * question).
+     *
+     * @return string HTML code
+     */
+    public static function getJs()
+    {
+        return '
+            <style>
+            .with_parent {
+                display: none;
+            }
+            </style>
+            <script>
+            $(function() {
+            });
+            </script>';
+    }
+
+    /**
+     * Get the question parents recursively, if any. This function depends on
+     * the existence of a parent_id field, which depends on the
+     * 'survey_question_dependency' setting and its corresponding SQL
+     * requirements.
+     *
+     * @param int   $questionId The c_survey_question.question.id
+     * @param array $list       An array of parents to be extended by this method
+     *
+     * @return array The completed array of parents
+     */
+    public static function getParents($questionId, $list = [])
+    {
+        if (true !== api_get_configuration_value('survey_question_dependency')) {
+            return $list;
+        }
+        $courseId = api_get_course_int_id();
+        $questionId = (int) $questionId;
+
+        $table = Database::get_course_table(TABLE_SURVEY_QUESTION);
+        $sql = "SELECT parent_id FROM $table
+                WHERE c_id = $courseId AND question_id = $questionId ";
+        $result = Database::query($sql);
+        $row = Database::fetch_array($result, 'ASSOC');
+        if ($row && !empty($row['parent_id'])) {
+            $list[] = $row['parent_id'];
+            $list = self::getParents($row['parent_id'], $list);
+        }
+
+        return $list;
+    }
+
+    /**
+     * Creates the JS code for the given parent question so that it shows
+     * the children questions when a specific answer of the parent is selected.
+     *
+     * @param array $question An array with the question details
+     *
+     * @return string JS code to add to the HTML survey question page
+     */
+    public static function getQuestionJs($question)
+    {
+        $list = self::getDependency($question);
+        if (empty($list)) {
+            return '';
+        }
+
+        $js = '';
+        $questionId = $question['question_id'];
+        $newList = [];
+        foreach ($list as $child) {
+            $childQuestionId = $child['question_id'];
+            $optionId = $child['parent_option_id'];
+            $newList[$optionId] = $childQuestionId;
+        }
+
+        $js .= '
+            <script>
+            $(function() {
+                var list = '.json_encode($newList).';
+                $("input[name=question'.$questionId.']").on("click", function() {
+                    $.each(list, function(index, value) {
+                        $(".with_parent_" + value).hide();
+                        $(".with_parent_" + value).find("input").prop("checked", false);
+                        $(".with_parent_only_hide_" + value).hide();
+                    });
+
+                    var questionId = $(this).val();
+                    var questionToShow = list[questionId];
+                    $(".with_parent_" + questionToShow).show();
+                });
+            });
+            </script>';
+
+        return $js;
+    }
+
+    /**
+     * Returns the (children) questions that have the given question as parent.
+     *
+     * @param array $question An array describing the parent question
+     *
+     * @return array The questions that have the given question as parent
+     */
+    public static function getDependency($question)
+    {
+        if (true !== api_get_configuration_value('survey_question_dependency')) {
+            return [];
+        }
+        $table = Database::get_course_table(TABLE_SURVEY_QUESTION);
+        $questionId = $question['question_id'];
+        $courseId = api_get_course_int_id();
+
+        // Getting the information of the question
+        $sql = "SELECT * FROM $table
+		        WHERE c_id = $courseId AND parent_id = $questionId ";
+        $result = Database::query($sql);
+        $row = Database::store_result($result, 'ASSOC');
+
+        return $row;
+    }
+
+    /**
+     * This method is not implemented at this level (returns null).
+     *
      * @param array $questionData
      * @param array $answers
      */

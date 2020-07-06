@@ -67,31 +67,6 @@ abstract class OpenofficeDocument extends learnpath
         $dirMode = api_get_permissions_for_new_directories();
         $fileMode = api_get_permissions_for_new_files();
 
-        //var_dump($this->file_name, $this->file_path, $this->base_work_dir, $this->created_dir);
-
-        /*
-         * Original code
-        global $_course, $_user, $_configuration;
-
-        $this->file_name = (strrpos($file['name'], '.') > 0 ? substr($file['name'], 0, strrpos($file['name'], '.')) : $file['name']);
-        $this->file_name = api_replace_dangerous_char($this->file_name, 'strict');
-        $this->file_name = strtolower($this->file_name);
-
-        $visio_dir = ($action_after_conversion == 'add_docs_to_visio') ? VIDEOCONF_UPLOAD_PATH : '';
-
-        $this->file_path = $visio_dir.'/'.$this->file_name.'.'.pathinfo($file['name'], PATHINFO_EXTENSION);
-
-        $dir_name = $visio_dir.'/'.$this->file_name;
-
-
-        // Create the directory.
-        $this->base_work_dir = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
-
-        $this->created_dir = create_unexisting_directory($_course, $_user['user_id'], api_get_session_id(), 0, 0, $this->base_work_dir, $dir_name);
-
-            var_dump($this->file_name, $this->file_path, $this->base_work_dir, $this->created_dir);
-
-        */
         if (!empty($size)) {
             list($w, $h) = explode('x', $size);
             if (!empty($w) && !empty($h)) {
@@ -187,7 +162,7 @@ abstract class OpenofficeDocument extends learnpath
                     $this->add_docs_to_visio($files);
                     break;
             }
-            chmod($this->base_work_dir, api_get_permissions_for_new_directories());
+            @chmod($this->base_work_dir, api_get_permissions_for_new_directories());
         }
 
         return $this->first_item;

@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
  * A pseudo-element used for adding headers to form
@@ -32,8 +31,6 @@
  */
 class HTML_QuickForm_header extends HTML_QuickForm_static
 {
-    // {{{ constructor
-
    /**
     * Class constructor
     *
@@ -51,9 +48,6 @@ class HTML_QuickForm_header extends HTML_QuickForm_static
         $this->_type = 'header';
     }
 
-    // }}}
-    // {{{ accept()
-
    /**
     * Accepts a renderer
     *
@@ -64,9 +58,5 @@ class HTML_QuickForm_header extends HTML_QuickForm_static
     function accept(&$renderer, $required=false, $error=null)
     {
         $renderer->renderHeader($this);
-    } // end func accept
-
-    // }}}
-
-} //end class HTML_QuickForm_header
-?>
+    }
+}

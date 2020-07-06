@@ -15,8 +15,9 @@ use ChamiloSession as Session;
  */
 
 /**
- * Insert a login reference for the current user into the track_e_online stats table.
- * This table keeps trace of the last login. Nothing else matters (we don't keep traces of anything older).
+ * Insert a login reference for the current user into the track_e_online stats
+ * table. This table keeps trace of the last login. Nothing else matters (we
+ * don't keep traces of anything older).
  *
  * @param int user id
  */
@@ -37,16 +38,39 @@ function LoginCheck($uid)
             $access_url_id = api_get_current_access_url_id();
         }
         $session_id = api_get_session_id();
-        // if the $_course array exists this means we are in a course and we have to store this in the who's online table also
-        // to have the x users in this course feature working
-        if (is_array($_course) && count($_course) > 0 && !empty($_course['id'])) {
-            $query = "REPLACE INTO ".$online_table." (login_id,login_user_id,login_date,user_ip, c_id, session_id, access_url_id)
-                      VALUES ($uid,$uid,'$login_date','$user_ip', '".$_course['real_id']."' , '$session_id' , '$access_url_id' )";
-        } else {
-            $query = "REPLACE INTO ".$online_table." (login_id,login_user_id,login_date,user_ip, c_id, session_id, access_url_id)
-                      VALUES ($uid,$uid,'$login_date','$user_ip', 0, '$session_id', '$access_url_id')";
+        $cid = 0;
+        if (is_array($_course) && count($_course) > 0 && !empty($_course['real_id'])) {
+            $cid = intval($_course['real_id']);
         }
-        Database::query($query);
+        $query = "SELECT login_id FROM $online_table WHERE login_user_id = $uid";
+        $resLogin = Database::query($query);
+        if (Database::num_rows($resLogin) > 0) {
+            $query = "UPDATE $online_table SET
+                      login_date = '$login_date',
+                      user_ip = '$user_ip',
+                      c_id = $cid,
+                      session_id = $session_id,
+                      access_url_id = $access_url_id
+                      WHERE login_user_id = $uid";
+            Database::query($query);
+        } else {
+            $query = "INSERT $online_table (
+                login_user_id,
+                login_date,
+                user_ip,
+                c_id,
+                session_id,
+                access_url_id
+            ) values (
+                $uid,
+                '$login_date',
+                '$user_ip',
+                $cid,
+                $session_id,
+                $access_url_id
+            )";
+            Database::query($query);
+        }
     }
 }
 
@@ -62,7 +86,7 @@ function preventMultipleLogin($userId)
             $isFirstLogin = Session::read('first_user_login');
             if (empty($isFirstLogin)) {
                 $sql = "SELECT login_id FROM $table
-                        WHERE login_user_id = $userId 
+                        WHERE login_user_id = $userId
                         LIMIT 1";
 
                 $result = Database::query($sql);
@@ -165,13 +189,26 @@ function online_logout($user_id = null, $logout_redirect = false)
     // After logout redirect to
     $url = api_get_path(WEB_PATH).'index.php';
 
-    if ($logout_redirect && api_get_plugin_setting('azure_active_directory', 'enable') == 'true') {
+    if ($logout_redirect && api_get_plugin_setting('azure_active_directory', 'enable') === 'true') {
         if (ChamiloSession::read('_user_auth_source') === 'azure_active_directory') {
             $activeDirectoryPlugin = AzureActiveDirectory::create();
             $azureLogout = $activeDirectoryPlugin->getUrl(AzureActiveDirectory::URL_TYPE_LOGOUT);
             if (!empty($azureLogout)) {
                 $url = $azureLogout;
             }
+        }
+    }
+
+    if ('true' === api_get_plugin_setting('oauth2', 'enable')
+        && 'oauth2' === ChamiloSession::read('_user_auth_source')
+        && ChamiloSession::has('oauth2AccessToken')
+    ) {
+        if (!isset($oAuth2Plugin)) {
+            $oAuth2Plugin = OAuth2::create();
+        }
+        $logoutUrl = $oAuth2Plugin->getLogoutUrl();
+        if (!empty($logoutUrl)) {
+            $url = $logoutUrl;
         }
     }
 
@@ -188,7 +225,7 @@ function online_logout($user_id = null, $logout_redirect = false)
         exit;
     }
 
-    if (api_is_cas_activated()) {
+    if ($uinfo['auth_source'] === CAS_AUTH_SOURCE && api_is_cas_activated()) {
         require_once __DIR__.'/../../auth/cas/cas_var.inc.php';
         if (phpCas::isInitialized()) {
             phpCAS::logout();
@@ -220,7 +257,7 @@ function user_is_online($user_id)
 
     $query = " SELECT login_user_id, login_date
                FROM $track_online_table track
-               INNER JOIN $table_user u 
+               INNER JOIN $table_user u
                ON (u.id=track.login_user_id)
                WHERE
                     track.access_url_id =  $access_url_id AND
@@ -470,13 +507,13 @@ function who_is_online_in_this_course($from, $number_of_items, $uid, $time_limit
     }
 
     $query = "SELECT o.login_user_id, o.login_date
-              FROM $track_online_table o 
+              FROM $track_online_table o
               INNER JOIN $tableUser u
               ON (o.login_user_id = u.id)
               $urlJoin
               WHERE
-                u.status <> '".ANONYMOUS."' AND 
-                o.c_id = $courseId AND 
+                u.status <> '".ANONYMOUS."' AND
+                o.c_id = $courseId AND
                 o.login_date >= '$current_date'
                 $urlCondition
               LIMIT $from, $number_of_items ";
@@ -527,13 +564,13 @@ function who_is_online_in_this_course_count(
     }
 
     $query = "SELECT count(login_user_id) as count
-              FROM $track_online_table o 
-              INNER JOIN $tableUser u              
+              FROM $track_online_table o
+              INNER JOIN $tableUser u
               ON (login_user_id = u.id)
               $urlJoin
-              WHERE 
+              WHERE
                 u.status <> '".ANONYMOUS."' AND
-                c_id = $courseId AND 
+                c_id = $courseId AND
                 login_date >= '$current_date'
                 $urlCondition
                 ";
@@ -576,14 +613,14 @@ function whoIsOnlineInThisSessionCount($timeLimit, $sessionId)
     }
 
     $query = "SELECT count(login_user_id) as count
-              FROM $tblTrackOnline o 
-              INNER JOIN $tableUser u 
+              FROM $tblTrackOnline o
+              INNER JOIN $tableUser u
               ON (login_user_id = u.id)
               $urlJoin
-              WHERE 
-                    u.status <> '".ANONYMOUS."' AND 
-                    session_id = $sessionId AND 
-                    login_date >= '$current_date' 
+              WHERE
+                    u.status <> '".ANONYMOUS."' AND
+                    session_id = $sessionId AND
+                    login_date >= '$current_date'
                     $urlCondition
             ";
     $result = Database::query($query);

@@ -56,8 +56,8 @@ class AddCourse
             $keys_are_unique = true;
 
             // Check whether they are unique.
-            $query = "SELECT 1 FROM $course_table 
-                      WHERE code='".$keys_course_id."' 
+            $query = "SELECT 1 FROM $course_table
+                      WHERE code='".$keys_course_id."'
                       LIMIT 0, 1";
             $result = Database::query($query);
 
@@ -419,7 +419,7 @@ class AddCourse
         $authorId = 0
     ) {
         if (is_null($fill_with_exemplary_content)) {
-            $fill_with_exemplary_content = api_get_setting('example_material_course_creation') != 'false';
+            $fill_with_exemplary_content = api_get_setting('example_material_course_creation') !== 'false';
         }
         $course_id = (int) $course_id;
 
@@ -716,7 +716,6 @@ class AddCourse
         $sys_course_path = api_get_path(SYS_COURSE_PATH);
         $perm = api_get_permissions_for_new_directories();
         $perm_file = api_get_permissions_for_new_files();
-
         $chat_path = $sys_course_path.$course_repository.'/document/chat_files';
 
         if (!is_dir($chat_path)) {
@@ -777,7 +776,7 @@ class AddCourse
                     $path_documents = "/$media_type/";
 
                     //hack until feature #5242 is implemented
-                    if ($media_type == 'images') {
+                    if ($media_type === 'images') {
                         $media_type = 'images/gallery';
                         $images_folder = $sys_course_path.$course_repository."/document/images/";
 
@@ -945,7 +944,6 @@ class AddCourse
             );
 
             /*  Links tool */
-
             $link = new Link();
             $link->setCourse($courseInfo);
             $links = [
@@ -1058,7 +1056,6 @@ class AddCourse
             $answer->save();
 
             /* Forum tool */
-
             require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 
             $params = [
@@ -1215,13 +1212,10 @@ class AddCourse
         $course_language = isset($params['course_language']) && !empty($params['course_language']) ? $params['course_language'] : api_get_setting(
             'platformLanguage'
         );
-        $user_id = empty($params['user_id']) ? api_get_user_id() : intval($params['user_id']);
-        $department_name = isset($params['department_name']) ?
-            $params['department_name'] : null;
-        $department_url = isset($params['department_url']) ?
-            $params['department_url'] : null;
-        $disk_quota = isset($params['disk_quota']) ?
-            $params['disk_quota'] : null;
+        $user_id = empty($params['user_id']) ? api_get_user_id() : (int) $params['user_id'];
+        $department_name = isset($params['department_name']) ? $params['department_name'] : null;
+        $department_url = isset($params['department_url']) ? $params['department_url'] : null;
+        $disk_quota = isset($params['disk_quota']) ? $params['disk_quota'] : null;
 
         if (!isset($params['visibility'])) {
             $default_course_visibility = api_get_setting(
@@ -1236,8 +1230,12 @@ class AddCourse
             $visibility = $params['visibility'];
         }
 
-        $subscribe = isset($params['subscribe']) ? (int) $params['subscribe'] : $visibility == COURSE_VISIBILITY_OPEN_PLATFORM ? 1 : 0;
-        $unsubscribe = isset($params['unsubscribe']) ? intval($params['unsubscribe']) : 0;
+        if (isset($params['subscribe'])) {
+            $subscribe = (int) $params['subscribe'];
+        } else {
+            $subscribe = $visibility == COURSE_VISIBILITY_OPEN_PLATFORM ? 1 : 0;
+        }
+        $unsubscribe = isset($params['unsubscribe']) ? (int) $params['unsubscribe'] : 0;
         $expiration_date = isset($params['expiration_date']) ? $params['expiration_date'] : null;
         $teachers = isset($params['teachers']) ? $params['teachers'] : null;
         $status = isset($params['status']) ? $params['status'] : null;
@@ -1292,8 +1290,8 @@ class AddCourse
         ) {
             $department_url = 'http://'.$department_url;
         }
-        //just in case
-        if ($department_url == 'http://') {
+        // Just in case
+        if ($department_url === 'http://') {
             $department_url = '';
         }
         $course_id = 0;
@@ -1311,7 +1309,7 @@ class AddCourse
                     'category_code' => $category_code,
                     'visibility' => $visibility,
                     'show_score' => 1,
-                    'disk_quota' => intval($disk_quota),
+                    'disk_quota' => (int) $disk_quota,
                     'creation_date' => $time,
                     'expiration_date' => $expiration_date,
                     'last_edit' => $time,
@@ -1319,8 +1317,8 @@ class AddCourse
                     'tutor_name' => $tutor_name,
                     'department_name' => $department_name,
                     'department_url' => $department_url,
-                    'subscribe' => intval($subscribe),
-                    'unsubscribe' => intval($unsubscribe),
+                    'subscribe' => $subscribe,
+                    'unsubscribe' => $unsubscribe,
                     'visual_code' => $visual_code,
                 ]
             );
@@ -1335,8 +1333,8 @@ class AddCourse
                         $code
                     );
                     if (!empty($user_id)) {
-                        $sql = "INSERT INTO ".$TABLECOURSUSER." SET
-                                c_id     = '".$course_id."',
+                        $sql = "INSERT INTO $TABLECOURSUSER SET
+                                c_id = $course_id,
                                 user_id         = '".intval($user_id)."',
                                 status          = '1',
                                 is_tutor        = '0',
@@ -1352,7 +1350,7 @@ class AddCourse
                         $teachers = [$teachers];
                     }
                     foreach ($teachers as $key) {
-                        //just in case
+                        // Just in case.
                         if ($key == $user_id) {
                             continue;
                         }
@@ -1385,12 +1383,10 @@ class AddCourse
                     $course_id
                 );
 
-                $send_mail_to_admin = api_get_setting(
-                    'send_email_to_admin_when_create_course'
-                );
+                $send_mail_to_admin = api_get_setting('send_email_to_admin_when_create_course');
 
                 // @todo Improve code to send to all current portal administrators.
-                if ($send_mail_to_admin == 'true') {
+                if ($send_mail_to_admin === 'true') {
                     $siteName = api_get_setting('siteName');
                     $recipient_email = api_get_setting('emailAdministrator');
                     $recipient_name = api_get_person_name(
@@ -1414,7 +1410,6 @@ class AddCourse
                     $message .= get_lang('Language').' '.$course_language;
 
                     $userInfo = api_get_user_info($user_id);
-
                     $additionalParameters = [
                         'smsType' => SmsPlugin::NEW_COURSE_BEEN_CREATED,
                         'userId' => $user_id,

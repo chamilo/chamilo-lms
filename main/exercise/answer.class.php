@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
@@ -7,8 +8,6 @@ use Chamilo\CourseBundle\Entity\CQuizAnswer;
  * Class Answer
  * Allows to instantiate an object of type Answer
  * 5 arrays are created to receive the attributes of each answer belonging to a specified question.
- *
- * @package chamilo.exercise
  *
  * @author Olivier Brouckaert
  */
@@ -154,6 +153,33 @@ class Answer
     }
 
     /**
+     * Get answers already added to question.
+     *
+     * @return array
+     */
+    public function getAnswers()
+    {
+        $table = Database::get_course_table(TABLE_QUIZ_ANSWER);
+        $questionId = $this->questionId;
+
+        $sql = "SELECT * FROM $table
+                WHERE c_id = {$this->course_id}
+                    AND question_id = $questionId
+                ORDER BY position";
+
+        $result = Database::query($sql);
+
+        $answers = [];
+
+        // while a record is found
+        while ($answer = Database::fetch_assoc($result)) {
+            $answers[] = $answer;
+        }
+
+        return $answers;
+    }
+
+    /**
      * @param int $id
      *
      * @return array
@@ -162,13 +188,11 @@ class Answer
     {
         foreach ($this->autoId as $key => $autoId) {
             if ($autoId == $id) {
-                $result = [
+                return [
                     'answer' => $this->answer[$key],
                     'correct' => $this->correct[$key],
                     'comment' => $this->comment[$key],
                 ];
-
-                return $result;
             }
         }
 
@@ -220,7 +244,7 @@ class Answer
             $field = 'position';
         }
 
-        if ($order != 'ASC' && $order != 'DESC') {
+        if ('ASC' != $order && 'DESC' != $order) {
             $order = 'ASC';
         }
 
@@ -233,7 +257,7 @@ class Answer
         $result_question = Database::query($sql);
         $questionType = Database::fetch_array($result_question);
 
-        if ($questionType['type'] == DRAGGABLE) {
+        if (DRAGGABLE == $questionType['type']) {
             // Random is done by submit.js.tpl
             $this->read();
 
@@ -377,9 +401,7 @@ class Answer
         $rs = Database::query($sql);
 
         if (Database::num_rows($rs) > 0) {
-            $row = Database::fetch_array($rs, 'ASSOC');
-
-            return $row;
+            return Database::fetch_array($rs, 'ASSOC');
         }
 
         return false;
@@ -390,7 +412,7 @@ class Answer
      *
      * @author Yannick Warnier
      *
-     * @param - integer $id - answer ID
+     * @param - integer $pos - answer ID
      *
      * @return bool - answer title
      */
@@ -1043,7 +1065,7 @@ class Answer
     /**
      * Check if a answer is correct by an answer auto id.
      *
-     * @param $needle int The answer auto id
+     * @param int $needle The answer auto id
      *
      * @return bool
      */

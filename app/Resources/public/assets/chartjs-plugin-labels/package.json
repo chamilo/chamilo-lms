@@ -1,0 +1,23 @@
+{
+  "name": "chartjs-plugin-labels",
+  "version": "1.1.0",
+  "description": "Chart.js plugin to display labels on pie, doughnut and polar area chart.",
+  "main": "src/chartjs-plugin-labels.js",
+  "peerDependencies": {
+    "chart.js": "^2.6.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/emn178/chartjs-plugin-labels.git"
+  },
+  "keywords": [
+    "chart",
+    "label"
+  ],
+  "license": "MIT",
+  "author": "Chen, Yi-Cyuan <emn178@gmail.com>",
+  "homepage": "https://github.com/emn178/chartjs-plugin-labels",
+  "bugs": {
+    "url": "https://github.com/emn178/chartjs-plugin-labels/issues"
+  }
+}

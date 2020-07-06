@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -7,8 +8,6 @@
  * This class works as a singleton: call instance() to retrieve an object.
  *
  * @author Bert Steppé
- *
- * @package chamilo.gradebook
  */
 class ScoreDisplay
 {
@@ -35,7 +34,7 @@ class ScoreDisplay
         $value = $value['my_display_coloring'];
 
         // Setting coloring.
-        $this->coloring_enabled = $value == 'true' ? true : false;
+        $this->coloring_enabled = $value === 'true' ? true : false;
 
         if ($this->coloring_enabled) {
             $value = api_get_setting('gradebook_score_display_colorsplit');
@@ -47,7 +46,7 @@ class ScoreDisplay
         // Setting custom enabled
         $value = api_get_setting('gradebook_score_display_custom');
         $value = $value['my_display_custom'];
-        $this->custom_enabled = $value == 'true' ? true : false;
+        $this->custom_enabled = $value === 'true' ? true : false;
 
         if ($this->custom_enabled) {
             $params = ['category = ?' => ['Gradebook']];
@@ -70,14 +69,13 @@ class ScoreDisplay
             if (count($this->custom_display) > 0) {
                 $value = api_get_setting('gradebook_score_display_upperlimit');
                 $value = $value['my_display_upperlimit'];
-                $this->upperlimit_included = $value == 'true' ? true : false;
+                $this->upperlimit_included = $value === 'true' ? true : false;
                 $this->custom_display_conv = $this->convert_displays($this->custom_display);
             }
         }
 
-        //If teachers can override the portal parameters
-
-        if (api_get_setting('teachers_can_change_score_settings') == 'true') {
+        // If teachers can override the portal parameters
+        if (api_get_setting('teachers_can_change_score_settings') === 'true') {
             //Load course settings
             if ($this->custom_enabled) {
                 $this->custom_display = $this->get_custom_displays();
@@ -95,15 +93,15 @@ class ScoreDisplay
     /**
      * Get the instance of this class.
      *
-     * @param int $category_id
+     * @param int $categoryId
      *
      * @return ScoreDisplay
      */
-    public static function instance($category_id = 0)
+    public static function instance($categoryId = 0)
     {
         static $instance;
         if (!isset($instance)) {
-            $instance = new ScoreDisplay($category_id);
+            $instance = new ScoreDisplay($categoryId);
         }
 
         return $instance;
@@ -116,18 +114,20 @@ class ScoreDisplay
     {
         if (!isset($score1)) {
             return isset($score2) ? 1 : 0;
-        } elseif (!isset($score2)) {
-            return -1;
-        } else {
-            $scoreDisplay = self::instance();
-            $custom1 = $scoreDisplay->display_custom($score1);
-            $custom2 = $scoreDisplay->display_custom($score2);
-            if ($custom1 == $custom2) {
-                return 0;
-            } else {
-                return ($score1[0] / $score1[1]) < ($score2[0] / $score2[1]) ? -1 : 1;
-            }
         }
+
+        if (!isset($score2)) {
+            return -1;
+        }
+
+        $scoreDisplay = self::instance();
+        $custom1 = $scoreDisplay->display_custom($score1);
+        $custom2 = $scoreDisplay->display_custom($score2);
+        if ($custom1 == $custom2) {
+            return 0;
+        }
+
+        return ($score1[0] / $score1[1]) < ($score2[0] / $score2[1]) ? -1 : 1;
     }
 
     /**
@@ -156,7 +156,7 @@ class ScoreDisplay
 
     /**
      * If custom score display is enabled, this will return the current settings.
-     * See also update_custom_score_display_settings.
+     * See also updateCustomScoreDisplaySettings.
      *
      * @return array current settings (or null if feature not enabled)
      */
@@ -182,16 +182,15 @@ class ScoreDisplay
      * @param int   score color percent (optional)
      * @param int   gradebook category id (optional)
      */
-    public function update_custom_score_display_settings(
+    public function updateCustomScoreDisplaySettings(
         $displays,
         $scorecolpercent = 0,
         $category_id = null
     ) {
         $this->custom_display = $displays;
         $this->custom_display_conv = $this->convert_displays($this->custom_display);
-
         if (isset($category_id)) {
-            $category_id = intval($category_id);
+            $category_id = (int) $category_id;
         } else {
             $category_id = $this->get_current_gradebook_category_id();
         }
@@ -202,7 +201,6 @@ class ScoreDisplay
         Database::query($sql);
 
         // add new settings
-        $count = 0;
         foreach ($displays as $display) {
             $params = [
                 'score' => $display['score'],
@@ -211,8 +209,6 @@ class ScoreDisplay
                 'score_color_percent' => $scorecolpercent,
             ];
             Database::insert($table, $params);
-
-            $count++;
         }
     }
 
@@ -352,25 +348,20 @@ class ScoreDisplay
     private function get_current_gradebook_category_id()
     {
         $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-        $curr_course_code = api_get_course_id();
-        $curr_session_id = api_get_session_id();
+        $courseCode = api_get_course_id();
+        $sessionId = api_get_session_id();
+        $sessionCondition = api_get_session_condition($sessionId, true);
 
-        if (empty($curr_session_id)) {
-            $session_condition = ' AND session_id is null ';
-        } else {
-            $session_condition = ' AND session_id = '.$curr_session_id;
-        }
-
-        $sql = 'SELECT id FROM '.$table.'
-                WHERE course_code = "'.$curr_course_code.'" '.$session_condition;
+        $sql = "SELECT id FROM $table
+                WHERE course_code = '$courseCode'  $sessionCondition";
         $rs = Database::query($sql);
-        $category_id = 0;
+        $categoryId = 0;
         if (Database::num_rows($rs) > 0) {
             $row = Database::fetch_row($rs);
-            $category_id = $row[0];
+            $categoryId = $row[0];
         }
 
-        return $category_id;
+        return $categoryId;
     }
 
     /**
@@ -530,7 +521,7 @@ class ScoreDisplay
     {
         $tbl_display = Database::get_main_table(TABLE_MAIN_GRADEBOOK_SCORE_DISPLAY);
         if (isset($category_id)) {
-            $category_id = intval($category_id);
+            $category_id = (int) $category_id;
         } else {
             $category_id = $this->get_current_gradebook_category_id();
         }
@@ -559,7 +550,7 @@ class ScoreDisplay
     {
         $tbl_display = Database::get_main_table(TABLE_MAIN_GRADEBOOK_SCORE_DISPLAY);
         if (isset($category_id)) {
-            $category_id = intval($category_id);
+            $category_id = (int) $category_id;
         } else {
             $category_id = $this->get_current_gradebook_category_id();
         }

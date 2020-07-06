@@ -75,9 +75,12 @@ $rootWeb = api_get_path('WEB_PATH');
 		</div> <!-- #header -->
 		<div id="login-form-box" class="form-box">
             <div id="login-form-info" class="form-info">
-            <?php if (isset($content['info']) && !empty($content['info'])) {
-    echo $content['info'];
-}
+            <?php
+                echo Display::getFlashToString();
+                Display::cleanFlashMessages();
+                if (isset($content['info']) && !empty($content['info'])) {
+                    echo $content['info'];
+                }
             ?>
             </div>
             <?php if (isset($error_message)) {

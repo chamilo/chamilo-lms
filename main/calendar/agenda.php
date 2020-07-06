@@ -1,10 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-/**
- * @package chamilo.calendar
- */
-
 // use anonymous mode when accessing this course tool
 $use_anonymous = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -17,7 +13,6 @@ if (!empty($course_info)) {
 
 $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : null;
 
-$this_section = SECTION_COURSES;
 $url = null;
 if (empty($action)) {
     if (!empty($course_info)) {
@@ -31,10 +26,7 @@ if (empty($action)) {
 
 $logInfo = [
     'tool' => TOOL_CALENDAR_EVENT,
-    'tool_id' => 0,
-    'tool_id_detail' => 0,
     'action' => $action,
-    'info' => '',
 ];
 Event::registerLog($logInfo);
 
@@ -71,7 +63,7 @@ function add_image_form() {
 	}
 	var elem1 = document.createElement("div");
 	elem1.setAttribute("id","filepath_"+counter_image);
-	
+
 	filepaths.appendChild(elem1);
 	id_elem1 = "filepath_"+counter_image;
 	id_elem1 = "\'"+id_elem1+"\'";
@@ -90,7 +82,7 @@ $nameTools = get_lang('Agenda');
 
 Event::event_access_tool(TOOL_CALENDAR_EVENT);
 
-if ($type === 'fromjs') {
+if ('fromjs' === $type) {
     // split the "id" parameter only if string and there are _ separators
     if (preg_match('/_/', $eventId)) {
         $id_list = explode('_', $eventId);
@@ -99,23 +91,25 @@ if ($type === 'fromjs') {
     }
     $eventId = $id_list[1];
     $event_type = $id_list[0];
-    $event_type = $event_type === 'platform' ? 'admin' : $event_type;
+    $event_type = 'platform' === $event_type ? 'admin' : $event_type;
 }
 
 $agenda = new Agenda($event_type);
 $allowToEdit = $agenda->getIsAllowedToEdit();
 $actions = $agenda->displayActions('calendar');
 
-if (!$allowToEdit && $event_type === 'course') {
+if (!$allowToEdit && 'course' === $event_type) {
     api_not_allowed(true);
 }
 
-if ($event_type === 'course') {
+if ('course' === $event_type) {
     $agendaUrl = api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?'.api_get_cidreq().'&type=course';
 } else {
     $agendaUrl = api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?&type='.$event_type;
 }
 $course_info = api_get_course_info();
+
+$this_section = $course_info ? SECTION_COURSES : SECTION_MYAGENDA;
 
 $content = null;
 if ($allowToEdit) {
@@ -294,7 +288,7 @@ if ($allowToEdit) {
             }
             $content = $form->returnForm();
             break;
-        case "delete":
+        case 'delete':
             if (!(api_is_session_general_coach() &&
                 !api_is_element_in_the_session(TOOL_AGENDA, $eventId))
             ) {
@@ -306,7 +300,7 @@ if ($allowToEdit) {
 }
 
 if (!empty($group_id)) {
-    $group_properties = GroupManager :: get_group_properties($group_id);
+    $group_properties = GroupManager::get_group_properties($group_id);
     $interbreadcrumb[] = [
         "url" => api_get_path(WEB_CODE_PATH)."group/group.php?".api_get_cidreq(),
         "name" => get_lang('Groups'),

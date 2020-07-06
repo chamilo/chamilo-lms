@@ -58,6 +58,11 @@ $(function() {
         if ($(this).hasClass('no-close-button')) {
             globalModal.find('.close').hide();
         }
+
+        if ($(this).hasClass('no-header')) {
+            globalModal.find('.modal-header').hide();
+        }
+
         var contentUrl = this.href;
         var loadModalContent = $.get(contentUrl);
         var self = $(this);
@@ -78,8 +83,6 @@ $(function() {
                     modalTitle = self.data('title') || ' ';
 
             modalDialog.removeClass('modal-lg modal-sm').css('width', '');
-
-
             if (modalSize && modalSize.length != 0) {
                 switch (modalSize) {
                     case 'lg':
@@ -278,7 +281,7 @@ $(function() {
     // Mediaelement
     if ( {{ show_media_element }} == 1) {
         $('video:not(.skip), audio:not(.skip)').mediaelementplayer({
-            pluginPath: _p.web + 'web/assets/mediaelement/build/',
+            pluginPath: _p.web_lib + 'javascript/mediaelement/',
             //renderers: ['html5', 'flash_video', 'native_flv'],
             features: ['{{ video_features }}'],
             success: function(mediaElement, originalNode, instance) {
@@ -498,7 +501,7 @@ function setCheckbox(value, table_id) {
 }
 
 function action_click(element, table_id) {
-    d = $("#"+table_id);
+    var d = $("#"+table_id);
     if (!confirm('{{ "ConfirmYourChoice"|get_lang | escape('js')}}')) {
         return false;
     } else {
@@ -586,6 +589,7 @@ if (typeof CKEDITOR !== 'undefined') {
         'flash',
         'inserthtml',
         'qmarkersrolls',
+        'ckeditor_vimeo_embed',
         'image2_chamilo'
     ];
 

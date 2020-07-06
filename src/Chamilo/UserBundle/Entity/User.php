@@ -4,31 +4,18 @@
 namespace Chamilo\UserBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
+use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\Skill;
 use Chamilo\CoreBundle\Entity\UsergroupRelUser;
 use Doctrine\Common\Collections\ArrayCollection;
-//use Sonata\UserBundle\Entity\BaseUser as BaseUser;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
-//use Symfony\Component\Security\Core\User\UserInterface;
 use FOS\UserBundle\Model\GroupInterface;
 use FOS\UserBundle\Model\UserInterface;
-use Sonata\UserBundle\Model\User as BaseUser;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
-
-//use Chamilo\CoreBundle\Component\Auth;
-//use FOS\MessageBundle\Model\ParticipantInterface;
-//use Chamilo\ThemeBundle\Model\UserInterface as ThemeUser;
-//use Vich\UploaderBundle\Mapping\Annotation as Vich;
-//use Application\Sonata\MediaBundle\Entity\Media;
-//use Chamilo\UserBundle\Model\UserInterface as UserInterfaceModel;
-
-//use Sylius\Component\Attribute\Model\AttributeValueInterface as BaseAttributeValueInterface;
-//use Sylius\Component\Variation\Model\OptionInterface as BaseOptionInterface;
-//use Sylius\Component\Variation\Model\VariantInterface as BaseVariantInterface;
 
 /**
  * @ORM\HasLifecycleCallbacks
@@ -561,7 +548,7 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     }
 
     /**
-     * @return ArrayCollection
+     * @return ArrayCollection|CourseRelUser[]
      */
     public function getCourses()
     {
@@ -1451,7 +1438,7 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
      *
      * @return User
      */
-    public function setLastLogin(\DateTime $lastLogin)
+    public function setLastLogin(\DateTime $lastLogin = null)
     {
         $this->lastLogin = $lastLogin;
 
@@ -1580,7 +1567,7 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     /**
      * Get sessionCourseSubscription.
      *
-     * @return ArrayCollection
+     * @return ArrayCollection|SessionRelCourseRelUser[]
      */
     public function getSessionCourseSubscriptions()
     {
@@ -2584,5 +2571,65 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
         $id = $this->id;
 
         return 'users/'.substr((string) $id, 0, 1).'/'.$id.'/'.'small_'.$this->getPictureUri();
+    }
+
+    /**
+     * Retreives this user's related sessions.
+     *
+     * @param int $relationType \Chamilo\CoreBundle\Entity\SessionRelUser::relationTypeList key
+     *
+     * @return \Chamilo\CoreBundle\Entity\Session[]
+     */
+    public function getSessions($relationType)
+    {
+        $sessions = [];
+        foreach (\Database::getManager()->getRepository('ChamiloCoreBundle:SessionRelUser')->findBy([
+            'user' => $this,
+        ]) as $sessionRelUser) {
+            if ($sessionRelUser->getRelationType() == $relationType) {
+                $sessions[] = $sessionRelUser->getSession();
+            }
+        }
+
+        return $sessions;
+    }
+
+    /**
+     * Retreives this user's related student sessions.
+     *
+     * @return \Chamilo\CoreBundle\Entity\Session[]
+     */
+    public function getStudentSessions()
+    {
+        return $this->getSessions(0);
+    }
+
+    /**
+     * Retreives this user's related DRH sessions.
+     *
+     * @return \Chamilo\CoreBundle\Entity\Session[]
+     */
+    public function getDRHSessions()
+    {
+        return $this->getSessions(1);
+    }
+
+    /**
+     * Retreives this user's related accessible sessions of a type, student by default.
+     *
+     * @param int $relationType \Chamilo\CoreBundle\Entity\SessionRelUser::relationTypeList key
+     *
+     * @return \Chamilo\CoreBundle\Entity\Session[]
+     */
+    public function getCurrentlyAccessibleSessions($relationType = 0)
+    {
+        $sessions = [];
+        foreach ($this->getSessions($relationType) as $session) {
+            if ($session->isCurrentlyAccessible()) {
+                $sessions[] = $session;
+            }
+        }
+
+        return $sessions;
     }
 }

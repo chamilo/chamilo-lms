@@ -1,11 +1,10 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
 
 /**
- * @package chamilo.glossary
- *
  * @author Christian Fasanando, initial version
  * @author Bas Wijnen import/export to CSV
  */

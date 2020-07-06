@@ -1,8 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**
- * @package chamilo.admin
- */
+
 /**
  * Code
  * This tool allows platform admins to update class-user relations by uploading
@@ -33,7 +31,7 @@ function validate_data($user_classes)
 
         // 2. Check whether class code exists.
         if (isset($user_class['ClassName']) && strlen($user_class['ClassName']) != 0) {
-            // 2.1 Check whether code has been already used in this CVS-file.
+            // 2.1 Check whether code has already been used in this CSV-file.
             if (!isset($classcodes[$user_class['ClassName']])) {
                 // 2.1.1 Check whether code exists in DB
                 $exists = $usergroup->usergroup_exists($user_class['ClassName']);
@@ -41,7 +39,7 @@ function validate_data($user_classes)
                     $user_class['error'] = get_lang('CodeDoesNotExists').': '.$user_class['ClassName'];
                     $errors[] = $user_class;
                 } else {
-                    $classcodes[$user_class['CourseCode']] = 1;
+                    $classcodes[$user_class['ClassName']] = 1;
                 }
             }
         }

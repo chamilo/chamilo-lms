@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -11,8 +12,6 @@ use ChamiloSession as Session;
  *	extending the class question
  *
  *	@author Eric Marguin
- *
- *	@package chamilo.exercise
  */
 class MultipleAnswerCombination extends Question
 {

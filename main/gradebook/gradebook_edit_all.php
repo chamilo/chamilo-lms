@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -9,13 +10,13 @@
  * @author Julio Montoya - fixes in order to use gradebook models + some code cleaning
  */
 require_once __DIR__.'/../inc/global.inc.php';
+
 $this_section = SECTION_COURSES;
 $current_course_tool = TOOL_GRADEBOOK;
 
 api_protect_course_script(true);
 api_block_anonymous_users();
 GradebookUtils::block_students();
-
 $my_selectcat = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : 0;
 
 if (empty($my_selectcat)) {
@@ -29,8 +30,6 @@ if (isset($_GET['selectcat'])) {
 
 $logInfo = [
     'tool' => TOOL_GRADEBOOK,
-    'tool_id' => 0,
-    'tool_id_detail' => 0,
     'action' => 'edit-weight',
     'action_details' => $action_details,
 ];
@@ -107,7 +106,8 @@ $my_category = $cat->showAllCategoryInfo($my_selectcat);
 $original_total = $my_category['weight'];
 $masked_total = $parent_cat[0]->get_weight();
 
-$sql = 'SELECT * FROM '.$table_link.' WHERE category_id = '.$my_selectcat;
+$sql = 'SELECT * FROM '.$table_link.'
+        WHERE category_id = '.$my_selectcat;
 $result = Database::query($sql);
 $links = Database::store_result($result, 'ASSOC');
 
@@ -157,7 +157,9 @@ foreach ($links as &$row) {
                </td></tr>';
 }
 
-$sql = 'SELECT * FROM '.$table_evaluation.' WHERE category_id = '.$my_selectcat;
+$sql = "SELECT * FROM $table_evaluation
+        WHERE category_id = $my_selectcat
+        ORDER BY name";
 $result = Database::query($sql);
 $evaluations = Database::store_result($result);
 foreach ($evaluations as $evaluationRow) {
@@ -239,7 +241,7 @@ if ($form->validate()) {
 }
 
 // 	DISPLAY HEADERS AND MESSAGES
-if (!isset($_GET['exportpdf']) and !isset($_GET['export_certificate'])) {
+if (!isset($_GET['exportpdf']) && !isset($_GET['export_certificate'])) {
     if (isset($_GET['studentoverview'])) {
         $interbreadcrumb[] = [
             'url' => Category::getUrl().'selectcat='.$my_selectcat,
@@ -283,8 +285,7 @@ $formNormal = new FormValidator('normal_weight', 'post', $currentUrl);
 $formNormal->addHeader(get_lang('EditWeight'));
 $formNormal->display();
 
-$warning_message = sprintf(get_lang('TotalWeightMustBeX'), $original_total);
-echo Display::return_message($warning_message, 'warning', false);
+echo Display::return_message(sprintf(get_lang('TotalWeightMustBeX'), $original_total), 'warning', false);
 
 ?>
 <form method="post" action="<?php echo $currentUrl; ?>">

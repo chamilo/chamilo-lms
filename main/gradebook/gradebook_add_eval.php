@@ -1,11 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-/**
- * Script.
- *
- * @package chamilo.gradebook
- */
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_GRADEBOOK;
 
@@ -75,8 +70,8 @@ if ($form->validate()) {
     ];
     Event::registerLog($logInfo);
 
-    if ($eval->get_course_code() == null) {
-        if ($values['adduser'] == 1) {
+    if (null == $eval->get_course_code()) {
+        if (1 == $values['adduser']) {
             //Disabling code when course code is null see issue #2705
             //header('Location: gradebook_add_user.php?selecteval=' . $eval->get_id());
             exit;
@@ -86,7 +81,7 @@ if ($form->validate()) {
         }
     } else {
         $val_addresult = isset($values['addresult']) ? $values['addresult'] : null;
-        if ($val_addresult == 1) {
+        if (1 == $val_addresult) {
             header('Location: gradebook_add_result.php?selecteval='.$eval->get_id().'&'.api_get_cidreq());
             exit;
         } else {

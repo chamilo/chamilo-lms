@@ -1,6 +1,9 @@
 define(function () {
   // Turkish
   return {
+    errorLoading: function (){
+      return 'Sonuç yüklenemedi';
+    },
     inputTooLong: function (args) {
       var overChars = args.input.length - args.maximum;
 
@@ -28,6 +31,9 @@ define(function () {
     },
     searching: function () {
       return 'Aranıyor…';
+    },
+    removeAllItems: function () {     
+      return 'Tüm öğeleri kaldır';
     }
   };
 });

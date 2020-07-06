@@ -1,12 +1,11 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
 
 /**
  * This script displays a form for registering new users.
- *
- * @package    chamilo.auth
  */
 
 //quick hack to adapt the registration form result to the selected registration language
@@ -445,42 +444,40 @@ $content = null;
 
 $tool_name = get_lang('Registration');
 
-if (!CustomPages::enabled()) {
-    // Load terms & conditions from the current lang
-    if (api_get_setting('allow_terms_conditions') === 'true') {
-        $get = array_keys($_GET);
-        if (isset($get)) {
-            if (isset($get[0]) && $get[0] == 'legal') {
-                $language = api_get_interface_language();
+// Load terms & conditions from the current lang
+if (api_get_setting('allow_terms_conditions') === 'true') {
+    $get = array_keys($_GET);
+    if (isset($get)) {
+        if (isset($get[0]) && $get[0] == 'legal') {
+            $language = api_get_interface_language();
+            $language = api_get_language_id($language);
+            $term_preview = LegalManager::get_last_condition($language);
+            if (!$term_preview) {
+                //look for the default language
+                $language = api_get_setting('platformLanguage');
                 $language = api_get_language_id($language);
                 $term_preview = LegalManager::get_last_condition($language);
-                if (!$term_preview) {
-                    //look for the default language
-                    $language = api_get_setting('platformLanguage');
-                    $language = api_get_language_id($language);
-                    $term_preview = LegalManager::get_last_condition($language);
-                }
-                Display::display_header(get_lang('TermsAndConditions'));
-                if (!empty($term_preview['content'])) {
-                    echo $term_preview['content'];
-
-                    $termExtraFields = new ExtraFieldValue('terms_and_condition');
-                    $values = $termExtraFields->getAllValuesByItem($term_preview['id']);
-                    foreach ($values as $value) {
-                        echo '<h3>'.$value['display_text'].'</h3><br />'.$value['value'].'<br />';
-                    }
-                } else {
-                    echo get_lang('ComingSoon');
-                }
-                Display::display_footer();
-                exit;
             }
+            Display::display_header(get_lang('TermsAndConditions'));
+            if (!empty($term_preview['content'])) {
+                echo $term_preview['content'];
+
+                $termExtraFields = new ExtraFieldValue('terms_and_condition');
+                $values = $termExtraFields->getAllValuesByItem($term_preview['id']);
+                foreach ($values as $value) {
+                    echo '<h3>'.$value['display_text'].'</h3><br />'.$value['value'].'<br />';
+                }
+            } else {
+                echo get_lang('ComingSoon');
+            }
+            Display::display_footer();
+            exit;
         }
     }
+}
 
-    if (api_get_setting('allow_terms_conditions') === 'true' && $user_already_registered_show_terms) {
-        $tool_name = get_lang('TermsAndConditions');
-    }
+if (api_get_setting('allow_terms_conditions') === 'true' && $user_already_registered_show_terms) {
+    $tool_name = get_lang('TermsAndConditions');
 }
 
 $home = api_get_path(SYS_APP_PATH).'home/';

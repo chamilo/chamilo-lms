@@ -5,8 +5,6 @@
  *  This tool allows platform admins to add classes by uploading a CSV file.
  *
  * @todo Add some langvars to DLTT
- *
- * @package chamilo.admin
  */
 
 /**

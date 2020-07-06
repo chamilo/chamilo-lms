@@ -1,16 +1,14 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
-/**
- * @package chamilo.messages
- */
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
 
-if (api_get_setting('allow_message_tool') != 'true') {
+if (api_get_setting('allow_message_tool') !== 'true') {
     api_not_allowed(true);
 }
 
@@ -95,7 +93,6 @@ if ($allowSocial) {
     $tpl->display($social_layout);
 } else {
     $content = $social_right_content;
-    $tpl->assign('message', $show_message);
     $tpl->assign('content', $content);
     $tpl->display_one_col_template();
 }

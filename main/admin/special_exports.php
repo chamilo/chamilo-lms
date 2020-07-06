@@ -182,6 +182,7 @@ function create_zip()
         closedir($handle);
     }
     $temp_zip_file = $temp_zip_dir."/".md5(time()).".zip"; //create zipfile of given directory
+
     return [
         'PATH' => $path,
         'PATH_TEMP_ARCHIVE' => $temp_zip_dir,

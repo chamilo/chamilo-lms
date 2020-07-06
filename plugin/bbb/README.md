@@ -16,7 +16,8 @@ ALTER TABLE plugin_bbb_meeting ADD voice_bridge int NOT NULL DEFAULT 1;
 ALTER TABLE plugin_bbb_meeting ADD group_id int unsigned NOT NULL DEFAULT 0;
 ```
 ## Migrating to Chamilo LMS 1.11.x
-For Chamilo 1.11.x, Videoconference plugin has two new settings options: 
+For Chamilo 1.11.x, Videoconference plugin has one new setting option: 
+*Disable Course Settings*. 
 
 ##### Database changes
 You need execute this SQL query in your database after making the Chamilo migration process from 1.10.x.
@@ -60,4 +61,10 @@ ALTER TABLE plugin_bbb_room MODIFY COLUMN out_at datetime;
 
 For version 2.8
 
+```sql
 ALTER TABLE plugin_bbb_meeting ADD COLUMN internal_meeting_id VARCHAR(255) DEFAULT NULL;
+ALTER TABLE plugin_bbb_room ADD close INT NOT NULL DEFAULT 0
+```
+
+## Improve access tracking in BBB
+You need to configure the cron using the *cron_close_meeting.php* file.

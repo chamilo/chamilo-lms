@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -564,13 +565,13 @@ if ($allowAntiPlagiarism) {
             if (isWorkFolder()) {
                 searchAdvancement();
                 setInterval("searchAdvancement()", refreshDelaisAfter);
-                if (!clickTrigger) {
-                    clickTrigger = true;
+                //if (!clickTrigger) {
+                    //clickTrigger = true;
                     $('.getSingleCompilatio').on('click', function () {
                         var parts = $(this).parent().attr('id').split('id_avancement');
                         getSingleCompilatio(parts[1]);
                     });
-                }
+                //}
             }
         }
 

@@ -6468,7 +6468,6 @@ $CasMainPortComment = "Portul în care se poate conecta la serverul principal CA
 $CasMainProtocolTitle = "Protocolul serverului principal CAS";
 $CAS1Text = "CAS 1";
 $CAS2Text = "CAS 2";
-$CAS3Text = "CAS 3";
 $SAMLText = "SAML";
 $CasMainProtocolComment = "Protocolul cu care ne-am conecta la serverul de CAS";
 $CasUserAddActivateTitle = "Activați utilizatorii înregistrați prin CAS";

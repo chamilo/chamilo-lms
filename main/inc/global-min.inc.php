@@ -54,6 +54,8 @@ $libraryPath = __DIR__.'/lib/';
 // @todo convert this libs in classes
 require_once $libraryPath.'database.constants.inc.php';
 require_once $libraryPath.'text.lib.php';
+require_once $libraryPath.'array.lib.php';
+require_once $libraryPath.'online.inc.php';
 require_once $libraryPath.'banner.lib.php';
 
 // Doctrine ORM configuration
@@ -128,6 +130,15 @@ if (!empty($_configuration['multiple_access_urls'])) {
     $_configuration['access_url'] = 1;
 }
 
+// Check if APCu is available. If so, store the value in $_configuration
+if (extension_loaded('apcu')) {
+    $apcEnabled = ini_get('apc.enabled');
+    if (!empty($apcEnabled) && $apcEnabled != 'Off' && $apcEnabled != 'off') {
+        $_configuration['apc'] = true;
+        $_configuration['apc_prefix'] = $_configuration['main_database'].'_'.$_configuration['access_url'].'_';
+    }
+}
+
 $charset = 'UTF-8';
 
 // Enables the portability layer and configures PHP for UTF-8
@@ -153,6 +164,63 @@ if ($_configuration['access_url'] != 1) {
             }
             $settings_by_access_list[$row['variable']][$row['subkey']][$row['category']] = $row;
         }
+    }
+}
+
+$result = &api_get_settings(null, 'list', 1);
+foreach ($result as &$row) {
+    if ($_configuration['access_url'] != 1) {
+        if ($url_info['active'] == 1) {
+            $var = empty($row['variable']) ? 0 : $row['variable'];
+            $subkey = empty($row['subkey']) ? 0 : $row['subkey'];
+            $category = empty($row['category']) ? 0 : $row['category'];
+        }
+
+        if ($row['access_url_changeable'] == 1 && $url_info['active'] == 1) {
+            if (isset($settings_by_access_list[$var]) &&
+                isset($settings_by_access_list[$var][$subkey]) &&
+                $settings_by_access_list[$var][$subkey][$category]['selected_value'] != '') {
+                if ($row['subkey'] == null) {
+                    $_setting[$row['variable']] = $settings_by_access_list[$var][$subkey][$category]['selected_value'];
+                } else {
+                    $_setting[$row['variable']][$row['subkey']] = $settings_by_access_list[$var][$subkey][$category]['selected_value'];
+                }
+            } else {
+                if ($row['subkey'] == null) {
+                    $_setting[$row['variable']] = $row['selected_value'];
+                } else {
+                    $_setting[$row['variable']][$row['subkey']] = $row['selected_value'];
+                }
+            }
+        } else {
+            if ($row['subkey'] == null) {
+                $_setting[$row['variable']] = $row['selected_value'];
+            } else {
+                $_setting[$row['variable']][$row['subkey']] = $row['selected_value'];
+            }
+        }
+    } else {
+        if ($row['subkey'] == null) {
+            $_setting[$row['variable']] = $row['selected_value'];
+        } else {
+            $_setting[$row['variable']][$row['subkey']] = $row['selected_value'];
+        }
+    }
+}
+
+$result = &api_get_settings('Plugins', 'list', $_configuration['access_url']);
+$_plugins = [];
+foreach ($result as &$row) {
+    $key = &$row['variable'];
+    if (isset($_setting[$key]) && is_string($_setting[$key])) {
+        $_setting[$key] = [];
+    }
+    if ($row['subkey'] == null) {
+        $_setting[$key][] = $row['selected_value'];
+        $_plugins[$key][] = $row['selected_value'];
+    } else {
+        $_setting[$key][$row['subkey']] = $row['selected_value'];
+        $_plugins[$key][$row['subkey']] = $row['selected_value'];
     }
 }
 

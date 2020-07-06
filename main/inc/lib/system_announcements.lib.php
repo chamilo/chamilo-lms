@@ -184,7 +184,7 @@ class SystemAnnouncementManager
      */
     public static function count_nb_announcement($start = 0, $user_id = '')
     {
-        $start = intval($start);
+        $start = (int) $start;
         $user_selected_language = api_get_interface_language();
         $db_table = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
         $sql = 'SELECT id FROM '.$db_table.'
@@ -830,12 +830,62 @@ class SystemAnnouncementManager
             $sql .= " AND access_url_id IN ('1', '$current_url_id') ";
         }
 
+        $checkCareers = api_get_configuration_value('allow_careers_in_global_announcements') === true;
+
+        $userId = api_get_user_id();
+
+        $promotion = new Promotion();
         $sql .= ' ORDER BY date_start DESC';
         $result = Database::query($sql);
         $announcements = [];
-
         if (Database::num_rows($result) > 0) {
             while ($announcement = Database::fetch_object($result)) {
+                if ($checkCareers && !empty($announcement->career_id)) {
+                    $promotionList = [];
+                    if (!empty($announcement->promotion_id)) {
+                        $promotionList[] = $announcement->promotion_id;
+                    } else {
+                        $promotionList = $promotion->get_all_promotions_by_career_id($announcement->career_id);
+                        if (!empty($promotionList)) {
+                            $promotionList = array_column($promotionList, 'id');
+                        }
+                    }
+
+                    $show = false;
+                    foreach ($promotionList as $promotionId) {
+                        $sessionList = SessionManager::get_all_sessions_by_promotion($promotionId);
+                        foreach ($sessionList as $session) {
+                            $sessionId = $session['id'];
+                            // Check student
+                            if ($visible === self::VISIBLE_STUDENT &&
+                                SessionManager::isUserSubscribedAsStudent($sessionId, $userId)
+                            ) {
+                                $show = true;
+                                break 2;
+                            }
+
+                            if ($visible === self::VISIBLE_TEACHER &&
+                                SessionManager::user_is_general_coach($userId, $sessionId)
+                            ) {
+                                $show = true;
+                                break 2;
+                            }
+
+                            // Check course coach
+                            $coaches = SessionManager::getCoachesBySession($sessionId);
+
+                            if ($visible === self::VISIBLE_TEACHER && in_array($userId, $coaches)) {
+                                $show = true;
+                                break 2;
+                            }
+                        }
+                    }
+
+                    if (false === $show) {
+                        continue;
+                    }
+                }
+
                 $announcementData = [
                     'id' => $announcement->id,
                     'title' => $announcement->title,

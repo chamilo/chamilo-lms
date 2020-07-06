@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -7,8 +8,6 @@ use ChamiloSession as Session;
  * Class MultipleAnswerTrueFalseDegreeCertainty
  * This class allows to instantiate an object of type MULTIPLE_ANSWER
  * (MULTIPLE CHOICE, MULTIPLE ANSWER), extending the class question.
- *
- * @package chamilo.exercise
  */
 class MultipleAnswerTrueFalseDegreeCertainty extends Question
 {
@@ -66,22 +65,21 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         $renderer = &$form->defaultRenderer();
         $defaults = [];
 
-        $html = '<table class="data_table"><tr style="text-align: center;"><th>'
-            .get_lang('Number')
-            .'</th><th>'
-            .get_lang('True')
-            .'</th><th>'
-            .get_lang('False')
-            .'</th><th>'
-            .get_lang('Answer')
-            .'</th>';
+        $form->addHeader(get_lang('Answers'));
+        $html = '<table class="table table-striped table-hover">
+            <tr>
+                <th width="10px">'.get_lang('Number').'</th>
+                <th width="10px">'.get_lang('True').'</th>
+                <th width="10px">'.get_lang('False').'</th>
+                <th width="50%">'.get_lang('Answer').'</th>';
 
         // show column comment when feedback is enable
         if ($objEx->getFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
-            $html .= '<th>'.get_lang('Comment').'</th>';
+            $html .= '<th width="50%">'.get_lang('Comment').'</th>';
         }
         $html .= '</tr>';
-        $form->addElement('label', get_lang('Answers').'<br /> <img src="../img/fill_field.png">', $html);
+
+        $form->addHtml($html);
 
         $correct = 0;
         $answer = null;
@@ -216,7 +214,6 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         ) {
             $form->addElement('submit', 'lessAnswers', get_lang('LessAnswer'), 'class="btn btn-danger minus"');
             $form->addElement('submit', 'moreAnswers', get_lang('PlusAnswer'), 'class="btn btn-primary plus"');
-            //$text and $class defined in calling script
             $form->addElement('submit', 'submitQuestion', $text, 'class = "btn btn-primary"');
         }
         $renderer->setElementTemplate('{element}&nbsp;', 'lessAnswers');
@@ -832,17 +829,17 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         $colWidth = $widthTable / 5;
 
         $html .= '<tr>
-                <td class="firstLine borderRight '.$classGlobalChart.'" 
-                    colspan="2" 
+                <td class="firstLine borderRight '.$classGlobalChart.'"
+                    colspan="2"
                     style="width:'.($colWidth * 2).'px; line-height: 15px; font-size:'.$textSize.'%;">'.
             sprintf(get_lang('IncorrectAnswersX'), $nbResponsesInc).'
                 </td>
-                <td class="firstLine borderRight '.$classGlobalChart.'" 
+                <td class="firstLine borderRight '.$classGlobalChart.'"
                     style="width:'.$colWidth.'px; line-height: 15px; font-size :'.$textSize.'%;">'.
             sprintf(get_lang('IgnoranceAnswersX'), $nbResponsesIng).'
                 </td>
-                <td class="firstLine '.$classGlobalChart.'" 
-                    colspan="2" 
+                <td class="firstLine '.$classGlobalChart.'"
+                    colspan="2"
                     style="width:'.($colWidth * 2).'px; line-height: 15px; font-size:'.$textSize.'%;">'.
             sprintf(get_lang('CorrectAnswersX'), $nbResponsesCor).'
                 </td>
@@ -1148,8 +1145,8 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         $tblAnswerOption = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
         $courseId = api_get_course_int_id();
         $optionId = (int) $optionId;
-        $sql = "SELECT position 
-                FROM $tblAnswerOption 
+        $sql = "SELECT position
+                FROM $tblAnswerOption
                 WHERE c_id = $courseId AND id = $optionId";
         $res = Database::query($sql);
 
@@ -1233,7 +1230,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         $tableTrackEExercise = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $exeId = (int) $exeId;
 
-        $sql = "SELECT exe_exo_id 
+        $sql = "SELECT exe_exo_id
                 FROM $tableTrackEExercise
                 WHERE exe_id=".$exeId;
         $res = Database::query($sql);

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 define('CHAMILO_LOAD_WYSIWYG', false);
@@ -11,14 +12,11 @@ Event::event_access_tool(TOOL_CHAT);
 
 $logInfo = [
     'tool' => TOOL_CHAT,
-    'tool_id' => 0,
-    'tool_id_detail' => 0,
     'action' => 'start',
     'action_details' => 'start-chat',
 ];
 Event::registerLog($logInfo);
 
-// View
 $externalCSS = [
     'jquery-emojiarea/jquery.emojiarea.css',
     'jquery-textcomplete/jquery.textcomplete.css',
@@ -60,6 +58,7 @@ $view->assign('icons', $iconList);
 $view->assign('emoji_strategy', CourseChatUtils::getEmojiStrategy());
 $view->assign('emoji_smile', \Emojione\Emojione::toImage(':smile:'));
 $view->assign('restrict_to_coach', api_get_configuration_value('course_chat_restrict_to_coach'));
+$view->assign('send_message_only_on_button', api_get_configuration_value('course_chat_send_message_only_on_button') === true ? 1 : 0);
 
 $template = $view->get_template('chat/chat.tpl');
 $content = $view->fetch($template);

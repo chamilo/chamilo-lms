@@ -4,8 +4,6 @@
 /**
  * This tool allows platform admins to update course-user relations by uploading
  * a CSV file.
- *
- * @package chamilo.admin
  */
 
 /**
@@ -142,9 +140,7 @@ function save_data($users_courses)
  */
 function parse_csv_data($file)
 {
-    $courses = Import::csvToArray($file);
-
-    return $courses;
+    return Import::csvToArray($file);
 }
 
 $cidReset = true;
@@ -170,7 +166,7 @@ $form->addElement('file', 'import_file', get_lang('ImportFileLocation'));
 $form->addElement('checkbox', 'subscribe', get_lang('Action'), get_lang('SubscribeUserIfNotAllreadySubscribed'));
 $form->addElement('checkbox', 'unsubscribe', '', get_lang('UnsubscribeUserIfSubscriptionIsNotInFile'));
 $form->addButtonImport(get_lang('Import'));
-$form->setDefaults(['subscribe' => '1', 'unsubscribe' => 1]);
+$form->setDefaults(['subscribe' => '1', 'unsubscribe' => 0]);
 $errors = [];
 
 if ($form->validate()) {

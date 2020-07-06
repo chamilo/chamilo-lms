@@ -98,9 +98,7 @@ try {
     /** @var \Category $gradebook */
     $gradebook = $cats[0];
     /** @var \ExerciseLink $exerciseLink */
-    /** commented until we get clear understanding of how to use the dates refs BT#12404
-        $exerciseLink = $gradebook->get_links()[0];
-        $exerciseId = $exerciseLink->get_ref_id();
+    /** commented until we get clear understanding of how to use the dates refs BT#12404.
         $exerciseInfo = ExerciseLib::get_exercise_by_id($exerciseId, $course->getId());
      */
     $dateStart = new DateTime($values['range_start'].' 00:00:00', new DateTimeZone('UTC'));
@@ -124,24 +122,7 @@ try {
         if (!$userFinishedCourse) {
             continue;
         }
-        /** commented until we get clear understanding of how to use the dates refs BT#12404
-                $exerciseResult = Event::get_best_exercise_results_by_user(
-                    $exerciseId,
-                    $course->getId(),
-                    $session ? $session->getId() : 0,
-                    $student->getId()
-                );
-                $exerciseResult = current($exerciseResult);
-
-                if (!$exerciseResult) {
-                    continue;
-                }
-
-                $attemptDate = new DateTime($exerciseResult['exe_date'], new DateTimeZone('UTC'));
-                $dateIsRange = $attemptDate >= $dateStart && $attemptDate <= $dateEnd;
-
-                if (!$dateEnd) {
-                    continue;
+        /** commented until we get clear understanding of how to use the dates refs BT#12404.
                 }
          */
         $fieldStudent = $uFieldValue->get_values_by_handler_and_field_variable(
@@ -155,12 +136,7 @@ try {
             SCORE_SIMPLE
         );
 
-        /** old method to get the score
-
-                $score = Category::getCurrentScore(
-                    $student->getId(),
-                    $gradebook,
-                    true
+        /** old method to get the score.
                 );
          */
         $fileData[] = sprintf(

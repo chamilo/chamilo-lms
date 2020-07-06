@@ -2,8 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * @package chamilo.survey
- *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
  *
  * @version $Id: survey_invite.php 10680 2007-01-11 21:26:23Z pcool $

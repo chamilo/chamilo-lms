@@ -413,6 +413,8 @@ $threads = get_threads($my_forum);
 $whatsnew_post_info = isset($_SESSION['whatsnew_post_info']) ? $_SESSION['whatsnew_post_info'] : null;
 $course_id = api_get_course_int_id();
 
+$hideNotifications = api_get_course_setting('hide_forum_notifications') == 1;
+
 echo '<div class="forum_display">';
 if (is_array($threads)) {
     $html = '';
@@ -634,7 +636,10 @@ if (is_array($threads)) {
                 }
             }
             $icon_liststd = 'user.png';
-            if (!api_is_anonymous() && api_is_allowed_to_session_edit(false, true)) {
+            if (!api_is_anonymous() &&
+                api_is_allowed_to_session_edit(false, true) &&
+                !$hideNotifications
+            ) {
                 $iconsEdit .= '<a href="'.api_get_self().'?'.$cidreq.'&forum='
                     .$my_forum
                     ."&action=notify&content=thread&id={$row['thread_id']}"

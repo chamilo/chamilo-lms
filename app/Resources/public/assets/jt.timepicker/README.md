@@ -1,11 +1,11 @@
 Timepicker Plugin for jQuery
 ========================
 
-[<img src="http://jonthornton.github.com/jquery-timepicker/lib/screenshot.png" alt="timepicker screenshot" />](http://jonthornton.github.com/jquery-timepicker)
+[<img src="http://jonthornton.github.com/jquery-timepicker/lib/screenshot.png" alt="timepicker screenshot" />](https://www.jonthornton.com/jquery-timepicker)
 
-[See a demo and examples here](http://jonthornton.github.com/jquery-timepicker)
+[See a demo and examples here](https://www.jonthornton.com/jquery-timepicker)
 
-jquery.timepicker is a lightweight timepicker plugin for jQuery inspired by Google Calendar. It supports both mouse and keyboard navigation, and weighs in at 2.7kb minified and gzipped.
+jquery.timepicker is a lightweight timepicker plugin for jQuery inspired by Google Calendar. It supports both mouse and keyboard navigation, and weighs in at 5.5kb minified and gzipped.
 
 Requirements
 ------------
@@ -75,6 +75,10 @@ Language constants used in the timepicker. Can override the defaults by passing 
 	hrs: 'hrs'
 }```
 
+- **listWidth**  
+Set this to override CSS styling and set the list width to match the input element's width. Set to 1 to match input width, 2 to double input width, .5 to halve input width, etc. Set to `null` to let CSS determine the list width.  
+*default: null (CSS styling)*
+
 - **maxTime**  
 The time that should appear last in the dropdown list. Can be used to limit the range of time options.  
 *default: 24 hours after minTime*
@@ -92,7 +96,7 @@ Array: An array of strings or objects to add multiple non-time options
 *default: false*
 
 - **orientation**  
-By default the timepicker dropdown will be aligned to the bottom right of the input element, or aligned to the top left if there isn't enough room below the input. Force alignment with `l` (left), `r` (right), `t` (top), and `b` (bottom). Examples: `tl`, `rb`.
+By default the timepicker dropdown will be aligned to the bottom right of the input element, or aligned to the top left if there isn't enough room below the input. Force alignment with `l` (left), `r` (right), `c` (horizontal center), `t` (top), and `b` (bottom). Examples: `tl`, `rb`.
 *default: 'l'*
 
 - **roundingFunction**  
@@ -284,11 +288,16 @@ Submit a [GitHub Issues request](https://github.com/jonthornton/jquery-timepicke
 Development guidelines
 ----------------------
 
-1. Install dependencies (jquery + grunt) `npm install`
-2. For sanity checks and minification run `grunt`, or just `grunt lint` to have the code linted
+After cloning, install dev dependencies with `npm install`.
+
+* `npm run build`: compile timepicker and place updated output in the project root
+* `npm run watch`: rebuild every time one of the source files changes
+* `npm run format`: apply code formatting rules
+* `npm run test`: run the jest test suite
+
  
 jquery-timepicker follows [semantic versioning](http://semver.org/).
 
 - - -
 
-This software is made available under the open source MIT License. &copy; 2014 [Jon Thornton](http://www.jonthornton.com) and [contributors](https://github.com/jonthornton/jquery-timepicker/graphs/contributors)
+This software is made available under the open source MIT License. &copy; 2020 [Jon Thornton](https://www.jonthornton.com) and [contributors](https://github.com/jonthornton/jquery-timepicker/graphs/contributors)

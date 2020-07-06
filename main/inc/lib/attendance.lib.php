@@ -60,8 +60,8 @@ class Attendance
 
         $sql = "SELECT COUNT(att.id) AS total_number_of_items
                 FROM $tbl_attendance att
-                WHERE 
-                      c_id = $course_id AND 
+                WHERE
+                      c_id = $course_id AND
                       active <> 2 $active_plus $condition_session  ";
         /*$active = (int) $active;
         if ($active === 1 || $active === 0) {
@@ -172,8 +172,8 @@ class Attendance
 
         while ($attendance = Database::fetch_row($res)) {
             $session_star = '';
-            if (api_get_session_id() == $attendance[6]) {
-                $session_star = api_get_session_image(api_get_session_id(), $user_info['status']);
+            if ($session_id == $attendance[6]) {
+                $session_star = api_get_session_image($session_id, $user_info['status']);
             }
 
             if ($attendance[5] == 1) {

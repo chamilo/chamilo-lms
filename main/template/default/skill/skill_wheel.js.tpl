@@ -451,8 +451,9 @@ function load_nodes(load_skill_id, main_depth, extra_parent_id) {
     /* Append an element "svg" to the #vis section */
     var vis = div.append("svg")
     //.attr("class", "Blues")
-    .attr("width", w + padding * 2)
-    .attr("height", h + padding * 2)
+    .attr("width", '100%')
+    .attr("height", '100%')
+    .attr('viewBox', '0 0 ' + (w + padding * 2) + ' ' + (h + padding * 2))
     .append("g")
     .attr("transform", "translate(" + (r + padding) + "," + (r/reduce_top + padding) + ")");
 

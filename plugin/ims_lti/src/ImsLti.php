@@ -28,7 +28,8 @@ class ImsLti
         Course $course,
         Session $session = null,
         $domain = '',
-        $ltiVersion = self::V_1P1
+        $ltiVersion = self::V_1P1,
+        ImsLtiTool $tool
     ) {
         $isLti1p3 = $ltiVersion === self::V_1P3;
 
@@ -37,11 +38,11 @@ class ImsLti
             '$User.image' => $isLti1p3 ? ['claim' => 'sub'] : ['user_image'],
             '$User.username' => $user->getUsername(),
             '$User.org' => false,
-            'User.scope.mentor' => $isLti1p3 ? ['claim' => '/claim/role_scope_mentor'] : ['role_scope_mentor'],
+            '$User.scope.mentor' => $isLti1p3 ? ['claim' => '/claim/role_scope_mentor'] : ['role_scope_mentor'],
 
             '$Person.sourcedId' => $isLti1p3
                 ? self::getPersonSourcedId($domain, $user)
-                : "$domain:".ImsLtiPlugin::generateToolUserId($user->getId()),
+                : "$domain:".ImsLtiPlugin::getLaunchUserIdClaim($tool, $user),
             '$Person.name.full' => $user->getFullname(),
             '$Person.name.family' => $user->getLastname(),
             '$Person.name.given' => $user->getFirstname(),
@@ -99,9 +100,10 @@ class ImsLti
         Course $course,
         Session $session = null,
         $domain = '',
-        $ltiVersion = self::V_1P1
+        $ltiVersion = self::V_1P1,
+        ImsLtiTool $tool
     ) {
-        $substitutables = self::getSubstitutableVariables($user, $course, $session, $domain, $ltiVersion);
+        $substitutables = self::getSubstitutableVariables($user, $course, $session, $domain, $ltiVersion, $tool);
         $variables = array_keys($substitutables);
 
         foreach ($customParams as $customKey => $customValue) {

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -44,7 +45,7 @@ class SelectAjax extends HTML_QuickForm_select
 
         $plHolder = $this->getAttribute('placeholder');
         if (empty($plHolder)) {
-            $plHolder = get_lang('SelectAnOption');
+            $plHolder = preg_replace("/'/", "\\'", get_lang('SelectAnOption'));
         }
 
         $id = $this->getAttribute('id');
@@ -94,12 +95,12 @@ class SelectAjax extends HTML_QuickForm_select
                                 };
                             },
                             processResults: function (data, page) {
-                                // Parse the results into the format expected by Select2                                
-                                if (data.items) {                                    
+                                // Parse the results into the format expected by Select2
+                                if (data.items) {
                                     return {
                                         results: data.items
                                     };
-                                }                                
+                                }
                                 return {
                                     results: ''
                                 };

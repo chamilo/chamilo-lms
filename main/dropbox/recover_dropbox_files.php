@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 require_once 'dropbox_init.inc.php';
@@ -19,7 +20,7 @@ if (!api_is_allowed_to_session_edit(false, true)) {
 
 echo Display::page_subheader(get_lang('RecoverDropboxFiles'));
 if (isset($_GET['recover_id']) && !empty($_GET['recover_id'])) {
-    $recover_id = intval($_GET['recover_id']);
+    $recover_id = (int) $_GET['recover_id'];
 
     $sql = "INSERT INTO $person_tbl VALUES('$course_id', $recover_id, $user_id)";
     $result = Database::query($sql);

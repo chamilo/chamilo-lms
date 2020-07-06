@@ -2,8 +2,6 @@
 /* For licensing terms, see /license.txt */
 /**
  * Teacher report.
- *
- * @package chamilo.reporting
  */
 $cidReset = true;
 
@@ -73,25 +71,23 @@ function get_users($from, $limit, $column, $direction)
     $coach_id = api_get_user_id();
 
     $drhLoaded = false;
-    if (api_is_drh()) {
-        if (api_drh_can_access_all_session_content()) {
-            $students = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
-                'drh_all',
-                api_get_user_id(),
-                false,
-                $from,
-                $limit,
-                $column,
-                $direction,
-                $keyword,
-                $active,
-                $lastConnectionDate,
-                null,
-                null,
-                COURSEMANAGER
-            );
-            $drhLoaded = true;
-        }
+    if (api_is_drh() && api_drh_can_access_all_session_content()) {
+        $students = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
+            'drh_all',
+            api_get_user_id(),
+            false,
+            $from,
+            $limit,
+            $column,
+            $direction,
+            $keyword,
+            $active,
+            $lastConnectionDate,
+            null,
+            null,
+            COURSEMANAGER
+        );
+        $drhLoaded = true;
     }
 
     if ($drhLoaded == false) {

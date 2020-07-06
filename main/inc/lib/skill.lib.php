@@ -14,8 +14,6 @@ use Fhaculty\Graph\Vertex;
  * Class SkillProfile.
  *
  * @todo break the file in different classes
- *
- * @package chamilo.library
  */
 class SkillProfile extends Model
 {
@@ -2480,9 +2478,9 @@ class Skill extends Model
     }
 
     /**
-     * @param \Chamilo\SkillBundle\Entity\SkillRelItem        $skillRelItem
-     * @param \Chamilo\SkillBundle\Entity\SkillRelItemRelUser $skillRelItemRelUser
-     * @param bool                                            $addHeader
+     * @param SkillRelItem        $skillRelItem
+     * @param SkillRelItemRelUser $skillRelItemRelUser
+     * @param bool                $addHeader
      *
      * @return string
      */
@@ -2981,7 +2979,7 @@ class Skill extends Model
      */
     public function addSkillToUserBadge($user, $skill, $levelId, $argumentation, $authorId)
     {
-        $showLevels = api_get_configuration_value('hide_skill_levels') === false;
+        $showLevels = false === api_get_configuration_value('hide_skill_levels');
 
         $entityManager = Database::getManager();
 

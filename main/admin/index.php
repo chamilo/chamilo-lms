@@ -118,6 +118,10 @@ if (api_is_platform_admin()) {
             'url' => 'user_update_import.php',
             'label' => get_lang('EditUserListCSV'),
         ],
+        [
+            'url' => 'user_anonymize_import.php',
+            'label' => get_lang('BulkAnonymizeUsers'),
+        ],
     ];
 
     if (isset($extAuthSource) && isset($extAuthSource['extldap']) && count($extAuthSource['extldap']) > 0) {
@@ -414,7 +418,7 @@ if (api_is_platform_admin()) {
     if (api_get_configuration_value('mail_template_system')) {
         $items[] = [
             'url' => api_get_path(WEB_CODE_PATH).'mail_template/list.php',
-            'label' => get_lang('MailTemplate'),
+            'label' => get_lang('MailTemplates'),
         ];
     }
 
@@ -708,7 +712,10 @@ if (api_is_platform_admin()) {
                 $pluginInfo = $plugin_obj->getPluginInfo($pluginName, true);
                 /** @var \Plugin $plugin */
                 $plugin = $pluginInfo['obj'];
-                $pluginUrl = $plugin->getAdminUrl();
+                $pluginUrl = null;
+                if ($plugin) {
+                    $pluginUrl = $plugin->getAdminUrl();
+                }
 
                 if (empty($pluginUrl)) {
                     continue;

@@ -1,9 +1,8 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 /**
  * Special reporting page for admins.
- *
- * @package chamilo.reporting
  */
 ob_start();
 $cidReset = true;
@@ -39,9 +38,17 @@ $sql = "SELECT user.user_id,lastname,firstname,email
 $result_admins = Database::query($sql);
 
 if (api_is_western_name_order()) {
-    echo '<table class="data_table"><tr><th>'.get_lang('FirstName').'</th><th>'.get_lang('LastName').'</th><th>'.get_lang('Email').'</th></tr>';
+    echo '<table class="data_table">
+        <tr>
+        <th>'.get_lang('FirstName').'</th>
+        <th>'.get_lang('LastName').'</th>
+        <th>'.get_lang('Email').'</th></tr>';
 } else {
-    echo '<table class="data_table"><tr><th>'.get_lang('LastName').'</th><th>'.get_lang('FirstName').'</th><th>'.get_lang('Email').'</th></tr>';
+    echo '<table class="data_table">
+        <tr>
+            <th>'.get_lang('LastName').'</th>
+            <th>'.get_lang('FirstName').'</th>
+            <th>'.get_lang('Email').'</th></tr>';
 }
 
 if (api_is_western_name_order(PERSON_NAME_DATA_EXPORT)) {

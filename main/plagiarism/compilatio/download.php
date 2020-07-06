@@ -8,8 +8,6 @@ exit;
  *	Html files are parsed to fix a few problems with URLs,
  *	but this code will hopefully be replaced soon by an Apache URL
  *	rewrite mechanism.
- *
- *	@package chamilo.work
  */
 session_cache_limiter('public');
 require_once '../../inc/global.inc.php';

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CLpCategory;
@@ -8,8 +9,6 @@ use ChamiloSession as Session;
  * This file was originally the copy of document.php, but many modifications happened since then ;
  * the direct file view is not any more needed, if the user uploads a SCORM zip file, a directory
  * will be automatically created for it, and the files will be uncompressed there for example ;.
- *
- * @package chamilo.learnpath
  *
  * @author  Yannick Warnier <ywarnier@beeznest.org>
  */
@@ -70,6 +69,15 @@ $introduction = Display::return_introduction_section(
 
 $message = '';
 $actions = '';
+
+$allowCategory = true;
+if (!empty($sessionId)) {
+    $allowCategory = false;
+    if (api_get_configuration_value('allow_session_lp_category')) {
+        $allowCategory = true;
+    }
+}
+
 if ($is_allowed_to_edit) {
     $actionLeft = '';
     $actionLeft .= Display::url(
@@ -103,7 +111,7 @@ if ($is_allowed_to_edit) {
         );
     }
 
-    if (!$sessionId) {
+    if ($allowCategory) {
         $actionLeft .= Display::url(
             Display::return_icon(
                 'new_folder.png',
@@ -118,15 +126,28 @@ if ($is_allowed_to_edit) {
 }
 
 $token = Security::get_token();
-
 $categoriesTempList = learnpath::getCategories($courseId);
+$firstSessionCategoryId = 0;
+if ($allowCategory) {
+    $newCategoryFiltered = [];
+    foreach ($categoriesTempList as $category) {
+        $categorySessionId = (int) learnpath::getCategorySessionId($category->getId());
+        if ($categorySessionId === $sessionId || $categorySessionId === 0) {
+            $newCategoryFiltered[] = $category;
+        }
+        if (!empty($sessionId) && empty($firstSessionCategoryId) && $categorySessionId == $sessionId) {
+            $firstSessionCategoryId = $category->getId();
+        }
+    }
+
+    $categoriesTempList = $newCategoryFiltered;
+}
+
 $categoryTest = new CLpCategory();
 $categoryTest->setId(0);
 $categoryTest->setName(get_lang('WithOutCategory'));
 $categoryTest->setPosition(0);
-$categories = [
-    $categoryTest,
-];
+$categories = [$categoryTest];
 
 if (!empty($categoriesTempList)) {
     $categories = array_merge($categories, $categoriesTempList);
@@ -159,6 +180,7 @@ if ($allowMinTime) {
 
 $user = api_get_user_entity($userId);
 $ending = true;
+$allLpTimeValid = true;
 $isInvitee = api_is_invitee();
 $hideScormExportLink = api_get_setting('hide_scorm_export_link');
 $hideScormCopyLink = api_get_setting('hide_scorm_copy_link');
@@ -190,9 +212,15 @@ $enableAutoLaunch = api_get_course_setting('enable_lp_auto_launch');
 $gameMode = api_get_setting('gamification_mode');
 
 $data = [];
+$tableCategory = Database::get_course_table(TABLE_LP_CATEGORY);
 /** @var CLpCategory $item */
 foreach ($categories as $item) {
     $categoryId = $item->getId();
+    if (!empty($sessionId) && $allowCategory) {
+        $categorySessionId = learnpath::getCategorySessionId($categoryId);
+        $item->setSessionId($categorySessionId);
+    }
+
     if ($categoryId !== 0 && $subscriptionSettings['allow_add_users_to_lp_category'] == true) {
         // "Without category" has id = 0
         $categoryVisibility = api_get_item_visibility(
@@ -205,6 +233,21 @@ foreach ($categories as $item) {
         if (!$is_allowed_to_edit) {
             if ($categoryVisibility !== 1 && $categoryVisibility != -1) {
                 continue;
+            }
+        }
+
+        if ($allowCategory && !empty($sessionId)) {
+            // Check base course
+            if (0 === $item->getSessionId()) {
+                $categoryVisibility = api_get_item_visibility(
+                    $courseInfo,
+                    TOOL_LEARNPATH_CATEGORY,
+                    $categoryId,
+                    0
+                );
+                if ($categoryVisibility == 0) {
+                    continue;
+                }
             }
         }
 
@@ -316,7 +359,7 @@ foreach ($categories as $item) {
             }
 
             $url_start_lp = 'lp_controller.php?'.$cidReq.'&action=view&lp_id='.$id;
-            $name = strip_tags(Security::remove_XSS($details['lp_name']));
+            $name = trim(strip_tags(Security::remove_XSS($details['lp_name'])));
             $extra = null;
 
             if ($is_allowed_to_edit) {
@@ -412,22 +455,25 @@ foreach ($categories as $item) {
                     $accumulateWorkTime = ($pl * $accumulateWorkTimeTotal * $perc / 100);
 
                     // If the time spent is less than necessary, then we show an icon in the actions column indicating the warning
+                    $formattedLpTime = api_time_to_hms($lpTime);
+                    $formattedAccumulateWorkTime = api_time_to_hms($accumulateWorkTime * 60);
                     if ($lpTime < ($accumulateWorkTime * 60)) {
+                        $allLpTimeValid = false;
                         $linkMinTime = Display::return_icon(
                             'warning.png',
-                            get_lang('LpMinTimeWarning').' - '.api_time_to_hms($lpTime).' / '.api_time_to_hms(
-                                $accumulateWorkTime * 60
-                            )
+                            get_lang('LpMinTimeWarning').' - '.
+                            $formattedLpTime.' / '.
+                            $formattedAccumulateWorkTime
                         );
                     } else {
                         $linkMinTime = Display::return_icon(
                             'check.png',
-                            get_lang('LpMinTimeWarning').' - '.api_time_to_hms($lpTime).' / '.api_time_to_hms(
-                                $accumulateWorkTime * 60
-                            )
+                            get_lang('LpMinTimeWarning').' - '.
+                            $formattedLpTime.' / '.
+                            $formattedAccumulateWorkTime
                         );
                     }
-                    $linkMinTime .= '&nbsp;<b>'.api_time_to_hms($lpTime).' / '.api_time_to_hms($accumulateWorkTime * 60).'</b>';
+                    $linkMinTime .= '&nbsp;<b>'.$formattedLpTime.' / '.$formattedAccumulateWorkTime.'</b>';
 
                     // Calculate the percentage exceeded of the time for the "exceeding the minimum time" bar
                     if ($lpTime >= ($accumulateWorkTime * 60)) {
@@ -441,6 +487,8 @@ foreach ($categories as $item) {
                         $ending = false;
                     }
                     $dsp_time = learnpath::get_progress_bar($time_progress_value, '%');
+                } else {
+                    $allLpTimeValid = false;
                 }
             }
 
@@ -539,7 +587,7 @@ foreach ($categories as $item) {
 
                 /* PUBLISH COMMAND */
                 if ($sessionId == $details['lp_session']) {
-                    if ($details['lp_published'] == 'i') {
+                    if ($details['lp_published'] === 'i') {
                         $dsp_publish = Display::url(
                             Display::return_icon(
                                 'lp_publish_na.png',
@@ -907,7 +955,7 @@ foreach ($categories as $item) {
             $lpIsShown = true;
             // Counter for number of elements treated
             $current++;
-        } // end foreach ($flat_list)
+        }
     }
 
     $data[] = [
@@ -918,10 +966,7 @@ foreach ($categories as $item) {
             $item->getId(),
             $sessionId
         ),
-        'category_is_published' => learnpath::categoryIsPublished(
-            $item,
-            $courseInfo['real_id']
-        ),
+        'category_is_published' => learnpath::categoryIsPublished($item, $courseInfo['real_id']),
         'lp_list' => $listData,
     ];
 }
@@ -938,11 +983,43 @@ Session::erase('questionList');
 learnpath::generate_learning_path_folder($courseInfo);
 DocumentManager::removeGeneratedAudioTempFile();
 
+$downloadFileAfterFinish = '';
+if ($ending && $allLpTimeValid && api_get_configuration_value('download_files_after_all_lp_finished')) {
+    $downloadFilesSetting = api_get_configuration_value('download_files_after_all_lp_finished');
+    $courseCode = $courseInfo['code'];
+    $downloadFinishId = isset($_REQUEST['download_finished']) ? (int) $_REQUEST['download_finished'] : 0;
+    if (isset($downloadFilesSetting['courses'][$courseCode])) {
+        $files = $downloadFilesSetting['courses'][$courseCode];
+        $coursePath = $courseInfo['course_sys_path'].'/document';
+        foreach ($files as $documentId) {
+            $documentData = DocumentManager::get_document_data_by_id($documentId, $courseCode);
+            if ($documentData) {
+                $downloadFileAfterFinish .= Display::url(
+                    get_lang('Download').': '.$documentData['title'],
+                    api_get_self().'?'.api_get_cidreq().'&download_finished='.$documentId,
+                    ['class' => 'btn btn-primary']
+                );
+                if ($downloadFinishId === $documentId) {
+                    $docUrl = $documentData['path'];
+                    if (Security::check_abs_path($coursePath.$docUrl, $coursePath.'/')) {
+                        Event::event_download($docUrl);
+                        DocumentManager::file_send_for_download($coursePath.$docUrl, true);
+                        exit;
+                    }
+                }
+            }
+        }
+    }
+}
+
 $template = new Template($nameTools);
+$template->assign('first_session_category', $firstSessionCategoryId);
+$template->assign('session_star_icon', Display::return_icon('star.png', get_lang('Session')));
 $template->assign('subscription_settings', $subscriptionSettings);
 $template->assign('is_allowed_to_edit', $is_allowed_to_edit);
 $template->assign('is_invitee', $isInvitee);
 $template->assign('is_ending', $ending);
+$template->assign('download_files_after_finish', $downloadFileAfterFinish);
 $template->assign('actions', $actions);
 $template->assign('categories', $categories);
 $template->assign('message', $message);

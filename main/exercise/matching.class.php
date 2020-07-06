@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -10,8 +11,6 @@
  * extending the class question
  *
  * @author Eric Marguin
- *
- * @package chamilo.exercise
  */
 class Matching extends Question
 {
@@ -149,7 +148,6 @@ class Matching extends Question
 
             $form->addHtml('<tr>');
             $form->addHtml("<td>$i</td>");
-            //$form->addText("answer[$i]", null);
             $form->addHtmlEditor(
                 "answer[$i]",
                 null,

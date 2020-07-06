@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Component\Editor\Driver;
@@ -7,8 +8,6 @@ namespace Chamilo\CoreBundle\Component\Editor\Driver;
  * Class PersonalDriver.
  *
  * @todo add more checks in upload/rm
- *
- * @package Chamilo\CoreBundle\Component\Editor\Driver
  */
 class PersonalDriver extends Driver implements DriverInterface
 {
@@ -44,6 +43,14 @@ class PersonalDriver extends Driver implements DriverInterface
                 // Adding user personal files
                 $dir = \UserManager::getUserPathById($userId, 'system');
                 $dirWeb = \UserManager::getUserPathById($userId, 'web');
+                $mimeType = [
+                    'application',
+                    'text/html',
+                    'text/javascript',
+                    'text/ecmascript',
+                    'image/svg+xml',
+                    'image/svg',
+                ];
 
                 $driver = [
                     'driver' => 'PersonalDriver',
@@ -51,6 +58,7 @@ class PersonalDriver extends Driver implements DriverInterface
                     'path' => $dir.'my_files',
                     'URL' => $dirWeb.'my_files',
                     'accessControl' => [$this, 'access'],
+                    'uploadDeny' => $mimeType,
                     'disabled' => [
                         'duplicate',
                         //'rename',

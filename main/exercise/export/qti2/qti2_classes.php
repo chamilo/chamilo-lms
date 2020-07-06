@@ -28,8 +28,6 @@ interface ImsAnswerInterface
  * @author Claro Team <cvs@claroline.net>
  * @author Yannick Warnier <yannick.warnier@beeznest.com> -
  * updated ImsAnswerHotspot to match QTI norms
- *
- * @package chamilo.exercise
  */
 class Ims2Question extends Question
 {
@@ -83,9 +81,6 @@ class Ims2Question extends Question
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function processAnswersCreation($form, $exercise)
     {
         return true;
@@ -94,8 +89,6 @@ class Ims2Question extends Question
 
 /**
  * Class.
- *
- * @package chamilo.exercise
  */
 class ImsAnswerMultipleChoice extends Answer implements ImsAnswerInterface
 {

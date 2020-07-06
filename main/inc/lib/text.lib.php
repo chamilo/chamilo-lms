@@ -5,8 +5,6 @@
  * This is the text library for Chamilo.
  * It is loaded during the global initialization,
  * so the functions below are available everywhere.
- *
- * @package chamilo.library
  */
 define('EXERCISE_NUMBER_OF_DECIMALS', 2);
 

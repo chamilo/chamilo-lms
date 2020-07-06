@@ -6,8 +6,6 @@ use ChamiloSession as Session;
 
 /**
  * Class Evaluation.
- *
- * @package chamilo.gradebook
  */
 class Evaluation implements GradebookItem
 {
@@ -151,7 +149,7 @@ class Evaluation implements GradebookItem
 
     public function is_locked()
     {
-        return isset($this->locked) && $this->locked == 1 ? true : false;
+        return isset($this->locked) && 1 == $this->locked ? true : false;
     }
 
     public function set_id($id)
@@ -238,7 +236,7 @@ class Evaluation implements GradebookItem
         }
 
         if (isset($user_id)) {
-            if ($paramcount != 0) {
+            if (0 != $paramcount) {
                 $sql .= ' AND';
             } else {
                 $sql .= ' WHERE';
@@ -423,7 +421,7 @@ class Evaluation implements GradebookItem
     public function delete()
     {
         $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
-        $sql = 'DELETE FROM '.$table.' 
+        $sql = 'DELETE FROM '.$table.'
                 WHERE id = '.$this->get_id();
         Database::query($sql);
     }
@@ -443,8 +441,8 @@ class Evaluation implements GradebookItem
             $parent = $this->category;
         }
         $tbl_grade_evaluations = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
-        $sql = "SELECT count(id) AS number 
-                FROM $tbl_grade_evaluations 
+        $sql = "SELECT count(id) AS number
+                FROM $tbl_grade_evaluations
                 WHERE name = '".Database::escape_string($name)."'";
 
         if (api_is_allowed_to_edit()) {
@@ -494,7 +492,7 @@ class Evaluation implements GradebookItem
         $result = Database::query($sql);
         $number = Database::fetch_row($result);
 
-        return $number[0] != 0;
+        return 0 != $number[0];
     }
 
     /**
@@ -595,7 +593,7 @@ class Evaluation implements GradebookItem
             $data = Session::read('calc_score');
             $results = isset($data[$key]) ? $data[$key] : null;
 
-            if ($useSession == false) {
+            if (false == $useSession) {
                 $results = null;
             }
             $results = null;
@@ -621,7 +619,7 @@ class Evaluation implements GradebookItem
             $key = 'result_score_student_list_'.api_get_course_int_id().'_'.api_get_session_id().'_'.$this->id;
             $data = Session::read('calc_score');
             $allResults = isset($data[$key]) ? $data[$key] : null;
-            if ($useSession == false) {
+            if (false == $useSession) {
                 $allResults = null;
             }
 
@@ -634,7 +632,7 @@ class Evaluation implements GradebookItem
             /** @var Result $res */
             foreach ($allResults as $res) {
                 $score = $res->get_score();
-                if (!empty($score) || $score == '0') {
+                if (!empty($score) || '0' == $score) {
                     $count++;
                     $sum += $score / $this->get_max();
                     $sumResult += $score;
@@ -778,12 +776,12 @@ class Evaluation implements GradebookItem
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
         $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
 
-        $sql = "SELECT user_id,lastname,firstname,username 
-                FROM $tbl_user 
-                WHERE 
-                    lastname LIKE '".Database::escape_string($first_letter_user)."%' AND 
+        $sql = "SELECT user_id,lastname,firstname,username
+                FROM $tbl_user
+                WHERE
+                    lastname LIKE '".Database::escape_string($first_letter_user)."%' AND
                     status = ".STUDENT." AND user_id NOT IN (
-                        SELECT user_id FROM $table 
+                        SELECT user_id FROM $table
                         WHERE evaluation_id = ".$this->get_id()."
                     )
                 ORDER BY lastname";
@@ -838,8 +836,8 @@ class Evaluation implements GradebookItem
     public function lock($locked)
     {
         $table_evaluation = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
-        $sql = "UPDATE $table_evaluation 
-                SET locked = '".intval($locked)."' 
+        $sql = "UPDATE $table_evaluation
+                SET locked = '".intval($locked)."'
                 WHERE id='".$this->get_id()."'";
         Database::query($sql);
     }

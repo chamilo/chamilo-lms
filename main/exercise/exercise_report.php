@@ -1,10 +1,9 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * Exercise list: This script shows the list of exercises for administrators and students.
- *
- * @package chamilo.exercise
  *
  * @author Julio Montoya <gugli100@gmail.com> jqgrid integration
  * Modified by hubert.borderiou (question category)
@@ -31,6 +30,7 @@ if (api_is_student_boss() && !empty($filter_user)) {
 }
 
 $limitTeacherAccess = api_get_configuration_value('limit_exercise_teacher_access');
+$allowClean = Exercise::allowAction('clean_results');
 
 if ($limitTeacherAccess && !api_is_platform_admin()) {
     api_not_allowed(true);
@@ -304,23 +304,6 @@ if (isset($_REQUEST['comments']) &&
                 WHERE c_id = ".$course_id." AND id = ".$lp_item_view_id;
         Database::query($sql);
 
-        /*if (empty($origin)) {
-            header('Location: '.api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?exerciseId='.$exercise_id.'&'.api_get_cidreq());
-            exit;
-        }
-
-        if ($origin === 'tracking_course') {
-            //Redirect to the course detail in lp
-            header('Location: '.api_get_path(WEB_CODE_PATH).'exercise/exercise.php?course='.Security::remove_XSS($_GET['course']));
-            exit;
-        } else {
-            // Redirect to the reporting
-            header(
-                'Location: '.api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?origin='.$origin.'&student='.$student_id.'&details=true&course='.api_get_course_id(
-                ).'&session_id='.$session_id
-            );
-            exit;
-        }*/
         header('Location: '.api_get_path(WEB_CODE_PATH).'exercise/exercise_show.php?id='.$id.'&student='.$student_id.'&'.api_get_cidreq());
         exit;
     }
@@ -344,37 +327,40 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
             Display::return_icon('reload.png', get_lang('RecalculateResults'), [], ICON_SIZE_MEDIUM),
             api_get_path(WEB_CODE_PATH).'exercise/recalculate_all.php?'.api_get_cidreq()."&exercise=$exercise_id"
         );
+
         // clean result before a selected date icon
-        $actions .= Display::url(
-            Display::return_icon(
-                'clean_before_date.png',
-                get_lang('CleanStudentsResultsBeforeDate'),
-                '',
-                ICON_SIZE_MEDIUM
-            ),
-            '#',
-            ['onclick' => 'javascript:display_date_picker()']
-        );
-        // clean result before a selected date datepicker popup
-        $actions .= Display::span(
-            Display::input(
-                'input',
-                'datepicker_start',
-                get_lang('SelectADateOnTheCalendar'),
-                [
-                    'onmouseover' => 'datepicker_input_mouseover()',
-                    'id' => 'datepicker_start',
-                    'onchange' => 'datepicker_input_changed()',
-                    'readonly' => 'readonly',
-                ]
-            ).
-            Display::button(
-                'delete',
-                get_lang('Delete'),
-                ['onclick' => 'submit_datepicker()']
-            ),
-            ['style' => 'display:none', 'id' => 'datepicker_span']
-        );
+        if ($allowClean) {
+            $actions .= Display::url(
+                Display::return_icon(
+                    'clean_before_date.png',
+                    get_lang('CleanStudentsResultsBeforeDate'),
+                    '',
+                    ICON_SIZE_MEDIUM
+                ),
+                '#',
+                ['onclick' => 'javascript:display_date_picker()']
+            );
+            // clean result before a selected date datepicker popup
+            $actions .= Display::span(
+                Display::input(
+                    'input',
+                    'datepicker_start',
+                    get_lang('SelectADateOnTheCalendar'),
+                    [
+                        'onmouseover' => 'datepicker_input_mouseover()',
+                        'id' => 'datepicker_start',
+                        'onchange' => 'datepicker_input_changed()',
+                        'readonly' => 'readonly',
+                    ]
+                ).
+                Display::button(
+                    'delete',
+                    get_lang('Delete'),
+                    ['onclick' => 'submit_datepicker()']
+                ),
+                ['style' => 'display:none', 'id' => 'datepicker_span']
+            );
+        }
     }
 } else {
     $actions .= '<a href="exercise.php">'.
@@ -452,7 +438,7 @@ if (($is_allowedToEdit || $is_tutor || api_is_coach()) &&
 ) {
     // ask for the date
     $check = Security::check_token('get');
-    if ($check) {
+    if ($check && $allowClean) {
         $objExerciseTmp = new Exercise();
         if ($objExerciseTmp->read($exercise_id)) {
             $count = $objExerciseTmp->cleanResults(
@@ -601,7 +587,14 @@ if ($is_allowedToEdit || $is_tutor) {
     // Column config
     $column_model = [
         ['name' => 'firstname', 'index' => 'firstname', 'width' => '50', 'align' => 'left', 'search' => 'true'],
-        ['name' => 'lastname', 'index' => 'lastname', 'width' => '50', 'align' => 'left', 'formatter' => 'action_formatter', 'search' => 'true'],
+        [
+            'name' => 'lastname',
+            'index' => 'lastname',
+            'width' => '50',
+            'align' => 'left',
+            'formatter' => 'action_formatter',
+            'search' => 'true',
+        ],
         [
             'name' => 'login',
             'index' => 'username',

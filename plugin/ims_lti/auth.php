@@ -78,7 +78,7 @@ try {
 
     $user = api_get_user_entity(api_get_user_id());
 
-    if ($user->getId() != $loginHint) {
+    if (ImsLtiPlugin::getLaunchUserIdClaim($tool, $user) != $loginHint) {
         throw LtiAuthException::accessDenied();
     }
 
@@ -97,11 +97,15 @@ try {
 
     $jwtContent = [];
     $jwtContent['iss'] = ImsLtiPlugin::getIssuerUrl();
-    $jwtContent['sub'] = (string) $user->getId();
+    $jwtContent['sub'] = ImsLtiPlugin::getLaunchUserIdClaim($tool, $user);
     $jwtContent['aud'] = $tool->getClientId();
     $jwtContent['iat'] = time();
     $jwtContent['exp'] = time() + 60;
-    $jwtContent['nonce'] = md5(microtime().mt_rand());
+    $jwtContent['nonce'] = $nonce;
+
+    if (empty($nonce)) {
+        $jwtContent['nonce'] = md5(microtime().mt_rand());
+    }
 
     // User info
     if ($tool->isSharingName()) {
@@ -111,7 +115,7 @@ try {
     }
 
     if (DRH === $user->getStatus()) {
-        $roleScopeMentor = ImsLtiPlugin::getRoleScopeMentor($user);
+        $roleScopeMentor = ImsLtiPlugin::getRoleScopeMentor($user, $tool);
 
         $jwtContent['https://purl.imsglobal.org/spec/lti/claim/role_scope_mentor'] = $roleScopeMentor;
     }
@@ -150,7 +154,7 @@ try {
     // Launch info
     $jwtContent['https://purl.imsglobal.org/spec/lti/claim/launch_presentation'] = [
         'locale' => api_get_language_isocode($user->getLanguage()),
-        'document_target' => 'iframe',
+        'document_target' => $tool->getDocumentTarget(),
         //'height' => 320,
         //'wdith' => 240,
         //'return_url' => api_get_course_url(),
@@ -173,7 +177,7 @@ try {
                 ',',
                 ['*/*', ':::asterisk:::/:::asterisk:::']
             ),
-            'accept_presentation_document_targets' => ['iframe'],
+            'accept_presentation_document_targets' => ['iframe', 'window'],
             'accept_multiple' => true,
             'auto_create' => true,
             'title' => $tool->getName(),

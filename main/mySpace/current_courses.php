@@ -2,8 +2,6 @@
 /* For licensing terms, see /license.txt */
 /**
  * Report for current courses followed by the user.
- *
- * @package chamilo.reporting
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';

@@ -128,7 +128,7 @@ class GradebookUtils
             }
         } else {
             $isCoach = api_is_coach(api_get_session_id(), api_get_course_int_id());
-            if ($isCoach === false) {
+            if (false === $isCoach) {
                 if (!api_is_allowed_to_edit()) {
                     api_not_allowed();
                 }
@@ -555,9 +555,8 @@ class GradebookUtils
         if (Database::num_rows($res) < 1) {
             return false;
         }
-        $row = Database::fetch_array($res, 'ASSOC');
 
-        return $row;
+        return Database::fetch_array($res, 'ASSOC');
     }
 
     /**
@@ -691,7 +690,7 @@ class GradebookUtils
                 WHERE gc.cat_id = $cat_id AND user_id = $user_id ";
         $rs_exist = Database::query($sql);
         $row = Database::fetch_array($rs_exist);
-        if ($row['count'] == 0) {
+        if (0 == $row['count']) {
             $params = [
                 'cat_id' => $cat_id,
                 'user_id' => $user_id,
@@ -737,7 +736,7 @@ class GradebookUtils
     {
         $table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
         $table_user = Database::get_main_table(TABLE_MAIN_USER);
-        $sql = 'SELECT DISTINCT u.user_id, u.lastname, u.firstname, u.username
+        $sql = 'SELECT DISTINCT u.user_id, u.lastname, u.firstname, u.username, gc.created_at
                 FROM '.$table_user.' u
                 INNER JOIN '.$table_certificate.' gc
                 ON u.user_id=gc.user_id ';

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -8,8 +9,6 @@ use ChamiloSession as Session;
  * the requested action.
  *
  * @todo remove repeated if $lp_found redirect
- *
- * @package chamilo.learnpath
  *
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
@@ -277,7 +276,6 @@ $htmlHeadXtra[] = '
                             type: "GET",
                             url: "'.$ajax_url.'",
                             data: params,
-                            async: false,
                             success: function(data) {
                                 $("#lp_item_list").html(data);
                             }
@@ -538,14 +536,11 @@ switch ($action) {
             $layoutContent = $tplContent->get_template('mail/content_ending_learnpath.tpl');
             $emailBody = $tplContent->fetch($layoutContent);
 
-            api_mail_html(
-                $recipientName,
-                $email,
+            MessageManager::send_message_simple(
+                $coachInfo['user_id'],
                 sprintf(get_lang('StudentXFinishedLp'), $studentInfo['complete_name']),
                 $emailBody,
-                $studentInfo['complete_name'],
-                $studentInfo['email'],
-                true
+                $studentInfo['user_id']
             );
         }
         Display::addFlash(Display::return_message(get_lang('MessageSent')));
@@ -795,6 +790,9 @@ switch ($action) {
                         $new_lp_id,
                         api_get_user_id()
                     );
+
+                    $subscribeUsers = isset($_REQUEST['subscribe_users']) ? 1 : 0;
+                    $_SESSION['oLP']->setSubscribeUsers($subscribeUsers);
 
                     $accumulateScormTime = isset($_REQUEST['accumulate_scorm_time']) ? $_REQUEST['accumulate_scorm_time'] : 'true';
                     $_SESSION['oLP']->setAccumulateScormTime($accumulateScormTime);
@@ -1162,18 +1160,6 @@ switch ($action) {
             Session::write('refresh', 1);
             $_SESSION['oLP']->set_name($_REQUEST['lp_name']);
             $author = $_REQUEST['lp_author'];
-            // Fixing the author name (no body or html tags).
-            /*$auth_init = stripos($author, '<p>');
-            if ($auth_init === false) {
-                $auth_init = stripos($author, '<body>');
-                $auth_end = $auth_init + stripos(substr($author, $auth_init + 6), '</body>') + 7;
-                $len = $auth_end - $auth_init + 6;
-            } else {
-                $auth_end = strripos($author, '</p>');
-                $len = $auth_end - $auth_init + 4;
-            }
-
-            $author_fixed = substr($author, $auth_init, $len);*/
             $_SESSION['oLP']->set_author($author);
             // TODO (as of Chamilo 1.8.8): Check in the future whether this field is needed.
             $_SESSION['oLP']->set_encoding($_REQUEST['lp_encoding']);

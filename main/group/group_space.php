@@ -1,11 +1,10 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * This script shows the group space for one specific group, possibly displaying
  * a list of users in the group, subscribe or unsubscribe option, tutors...
- *
- * @package chamilo.group
  *
  * @todo    Display error message if no group ID specified
  */

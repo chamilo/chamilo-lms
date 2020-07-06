@@ -1,12 +1,11 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
 
 /**
  * This file allows creating new svg and png documents with an online editor.
- *
- * @package chamilo.document
  *
  * @author Juan Carlos Raña Trabado
  *

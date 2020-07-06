@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 require_once '../../inc/global.inc.php';
@@ -14,7 +15,7 @@ $courseInfo = api_get_course_info();
 $compilatio = new Compilatio();
 
 /* if we have to upload severals documents*/
-if (isset($_REQUEST['type']) && $_REQUEST['type'] === 'multi') {
+if (isset($_REQUEST['type']) && 'multi' === $_REQUEST['type']) {
     $docs = explode('a', $_REQUEST['doc']);
     for ($k = 0; $k < count($docs) - 1; $k++) {
         $documentId = 0;
@@ -41,7 +42,7 @@ if (isset($_REQUEST['type']) && $_REQUEST['type'] === 'multi') {
                 $WrkUrl = $currentCourseRepositoryWeb.$doc->url;
                 $LocalWrkUrl = $courseInfo['course_sys_path'].$doc->url;
                 $mime = DocumentManager::file_get_mime_type($doc->title);
-                if ($compilatio->getTransportMode() === 'wget') {
+                if ('wget' === $compilatio->getTransportMode()) {
                     /*Compilatio's server recover tjre file throught wget like this:
                     username:password@http://somedomain.com/reg/remotefilename.tar.gz */
                     if (strlen($compilatio->getWgetUri()) > 2) {
@@ -91,7 +92,7 @@ function sendDocument($documentId, $courseInfo)
 
     compilatioUpdateWorkDocument($documentId, $courseId);
     $workTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-    $query = "SELECT * FROM $workTable 
+    $query = "SELECT * FROM $workTable
               WHERE id = $documentId AND c_id= $courseId";
     $sqlResult = Database::query($query);
     $doc = Database::fetch_object($sqlResult);
@@ -102,7 +103,7 @@ function sendDocument($documentId, $courseInfo)
     $mime = DocumentManager::file_get_mime_type($doc->title);
 
     $compilatio = new Compilatio();
-    if ($compilatio->getTransportMode() === 'wget') {
+    if ('wget' === $compilatio->getTransportMode()) {
         if (strlen($compilatio->getWgetUri()) > 2) {
             $filename = preg_replace('/$', '', $compilatio->getWgetUri()).'/'.$courseInfo['path'].'/'.$doc->title;
         } else {
@@ -161,7 +162,7 @@ function getWorkTitle($docId, $courseId)
     $courseId = (int) $courseId;
 
     $workTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-    $sql = "SELECT title FROM $workTable 
+    $sql = "SELECT title FROM $workTable
             WHERE c_id= $courseId AND id = $docId";
     $res = Database::query($sql);
     if (Database::num_rows($res) > 0) {
@@ -221,13 +222,13 @@ function compilatioUpdateWorkDocument($docId, $courseId)
     $workTitle = getWorkTitle($docId, $courseId);
 
     if ($extensionFile != '' && $urlFile_ext == '') {
-        /* Rename the files in the FS whit the extension*/
+        /* Rename the files in the FS with the extension */
         $shortFilename = $filename;
         $cleanWorkTitle = api_replace_dangerous_char($workTitle);
         $newestFilename = $shortFilename.'_'.$cleanWorkTitle;
         rename($coursePath.$urlFile, $coursePath.$work_folder.$newestFilename);
         /*rename the db's input with the extension*/
-        $sql = "UPDATE $workTable SET url='".$work_folder.$newestFilename."' 
+        $sql = "UPDATE $workTable SET url='".$work_folder.$newestFilename."'
                 WHERE c_id=$courseId AND id=$docId";
         Database::query($sql);
     }

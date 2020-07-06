@@ -76,6 +76,23 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="row">
+                            <div class="col-md-8 col-md-offset-2">
+                                <div class="card box-widget">
+                                    <div class="card-body">
+                                        <div class="stat-widget-five">
+                                            <i class="fa fa-sign-in" aria-hidden="true"></i>
+                                            {{ user.tools.count_access_dates }}
+                                            <div class="box-name">
+                                                {{ 'CountToolAccess'|get_lang }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="row">
                             <div class="col-md-6">
 
@@ -163,13 +180,25 @@
                             </div>
                         </div>
 
+                        {% if user.tools.count_access_dates %}
+                        {% endif %}
                     </div>
                     <div class="col-md-4">
-                        {{ display.card_widget('FirstLoginInPlatform'|get_lang, user.first_connection, 'calendar') }}
-                        {{ display.card_widget('LatestLoginInPlatform'|get_lang, user.last_connection, 'calendar') }}
+                        {% if user.tools.course_first_access %}
+                            {{ display.card_widget('FirstLoginInCourse'|get_lang, user.tools.course_first_access, 'calendar-check-o', user.legal.icon) }}
+                        {% endif %}
+
+                        {% if user.tools.course_last_access %}
+                            {{ display.card_widget('LatestLoginInCourse'|get_lang, user.tools.course_last_access, 'calendar-o', user.legal.icon) }}
+                        {% endif %}
+
                         {% if(user.time_spent_course) %}
                             {{ display.card_widget('TimeSpentInTheCourse'|get_lang, user.time_spent_course, 'clock-o') }}
                         {% endif %}
+
+                        {{ display.card_widget('FirstLoginInPlatform'|get_lang, user.first_connection, 'calendar') }}
+                        {{ display.card_widget('LatestLoginInPlatform'|get_lang, user.last_connection, 'calendar') }}
+
                         {% if user.legal %}
                             {{ display.card_widget('LegalAccepted'|get_lang, user.legal.datetime, 'gavel', user.legal.icon) }}
                         {% endif %}

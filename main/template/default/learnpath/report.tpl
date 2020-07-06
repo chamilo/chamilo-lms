@@ -1,3 +1,4 @@
+{{ groups }}
 <div class="table-responsive">
     <table class="table table-hover table-striped table-bordered">
         <thead>
@@ -7,6 +8,7 @@
                 {% if show_email %}
                     <th>{{ 'Email'|get_lang }}</th>
                 {% endif %}
+                <th class="text-center">{{ 'Group'|get_lang }}</th>
                 <th class="text-center">{{ 'ScormTime'|get_lang }}</th>
                 <th class="text-right">{{ 'Progress'|get_lang }}</th>
                 <th class="text-right">{{ 'ScormScore'|get_lang }}</th>
@@ -24,6 +26,7 @@
                     {% if show_email %}
                         <td>{{ user.email }}</td>
                     {% endif %}
+                    <td>{{ user.groups }}</td>
                     <td class="text-center">{{ user.lp_time }}</td>
                     <td class="text-right">{{ user.lp_progress }}</td>
                     <td class="text-right">{{ user.lp_score }}</td>

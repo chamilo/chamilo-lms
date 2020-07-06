@@ -79,14 +79,26 @@ class ChamiloApi
     public static function getPlatformLogoPath($theme = '', $getSysPath = false)
     {
         static $logoPath;
+
+        // If call from CLI it should be reload.
+        if ('cli' === PHP_SAPI) {
+            $logoPath = null;
+        }
+
         if (!isset($logoPath)) {
             $theme = empty($theme) ? api_get_visual_theme() : $theme;
             $accessUrlId = api_get_current_access_url_id();
+            if ('cli' === PHP_SAPI) {
+                $accessUrl = api_get_configuration_value('access_url');
+                if (!empty($accessUrl)) {
+                    $accessUrlId = $accessUrl;
+                }
+            }
             $themeDir = \Template::getThemeDir($theme);
             $customLogoPath = $themeDir."images/header-logo-custom$accessUrlId.png";
 
             $svgIcons = api_get_setting('icons_mode_svg');
-            if ($svgIcons == 'true') {
+            if ($svgIcons === 'true') {
                 $customLogoPathSVG = substr($customLogoPath, 0, -3).'svg';
                 if (file_exists(api_get_path(SYS_PUBLIC_PATH)."css/$customLogoPathSVG")) {
                     if ($getSysPath) {
@@ -112,7 +124,7 @@ class ChamiloApi
             }
 
             $originalLogoPath = $themeDir."images/header-logo.png";
-            if ($svgIcons == 'true') {
+            if ($svgIcons === 'true') {
                 $originalLogoPathSVG = $themeDir."images/header-logo.svg";
                 if (file_exists(api_get_path(SYS_CSS_PATH).$originalLogoPathSVG)) {
                     if ($getSysPath) {
@@ -125,6 +137,7 @@ class ChamiloApi
                     return $logoPath;
                 }
             }
+
             if (file_exists(api_get_path(SYS_CSS_PATH).$originalLogoPath)) {
                 if ($getSysPath) {
                     $logoPath = api_get_path(SYS_CSS_PATH).$originalLogoPath;

@@ -1,9 +1,8 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
- * @package chamilo.admin
- *
  * @author Julio Montoya <gugli100@gmail.com>
  */
 $cidReset = true;
@@ -31,7 +30,7 @@ if ($form->validate()) {
         $url_to_go = 'access_urls.php';
         if (!empty($url_id)) {
             //we can't change the status of the url with id=1
-            if ($url_id == 1) {
+            if (1 == $url_id) {
                 $active = 1;
             }
 

@@ -3,8 +3,6 @@
 
 /**
  * User move script (to move between courses and sessions).
- *
- * @package chamilo.admin
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -270,7 +268,7 @@ if (isset($_REQUEST['load_ajax'])) {
                 while ($row = Database::fetch_array($res, 'ASSOC')) {
                     // Checking if the LP exist in the new session
                     //if (in_array($row['lp_id'], array_keys($flat_list))) {
-                        $list[$row['id']] = $row;
+                    $list[$row['id']] = $row;
                     //}
                 }
 
@@ -323,7 +321,7 @@ if (isset($_REQUEST['load_ajax'])) {
                     while ($row = Database::fetch_array($res, 'ASSOC')) {
                         //Checking if the LP exist in the new session
                         //if (in_array($row['lp_id'], array_keys($flat_list))) {
-                            $list[$row['id']] = $row;
+                        $list[$row['id']] = $row;
                         //}
                     }
 

@@ -2,8 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * @package chamilo.survey
- *
  * @author Arnaud Ligot <arnaud@cblue.be>
  *
  * A small peace of code to enable user to access images included into survey

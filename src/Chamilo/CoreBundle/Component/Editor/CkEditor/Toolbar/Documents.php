@@ -1,12 +1,11 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
 /**
  * Documents toolbar configuration.
- *
- * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar
  */
 class Documents extends Basic
 {
@@ -64,6 +63,7 @@ class Documents extends Basic
                 'Flash',
                 'Oembed',
                 'Youtube',
+                'VimeoEmbed',
                 'Audio',
                 'Asciimath',
                 'Asciisvg',
@@ -86,7 +86,7 @@ class Documents extends Basic
             ['Styles', 'Format', 'Font', 'FontSize'],
             ['Bold', 'Italic', 'Underline'],
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
-            api_get_setting('enabled_wiris') === 'true' ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
+            api_get_setting('enabled_wiris') === 'true' ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_formulaEditorChemistry'] : [''],
             ['Source'],
         ];
     }
@@ -97,7 +97,7 @@ class Documents extends Basic
     protected function getMaximizedToolbar()
     {
         return [
-            $this->getNewPageBlock(),
+            array_merge(['Save'], $this->getNewPageBlock()),
             ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', 'inserthtml'],
             ['Undo', 'Redo', '-', 'SelectAll', 'Find', '-', 'RemoveFormat'],
             ['Link', 'Unlink', 'Anchor', 'Glossary'],
@@ -108,6 +108,7 @@ class Documents extends Basic
                 'Oembed',
                 'Flash',
                 'Youtube',
+                'VimeoEmbed',
                 'Audio',
                 'leaflet',
                 'Smiley',
@@ -132,10 +133,10 @@ class Documents extends Basic
                 'BGColor',
                 api_get_configuration_value('translate_html') ? 'Language' : '',
             ],
-            [api_get_setting('allow_spellcheck') == 'true' ? 'Scayt' : ''],
+            [api_get_setting('allow_spellcheck') === 'true' ? 'Scayt' : ''],
             ['Styles', 'Format', 'Font', 'FontSize'],
             ['PageBreak', 'ShowBlocks'],
-            api_get_setting('enabled_wiris') == 'true' ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
+            api_get_setting('enabled_wiris') === 'true' ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_formulaEditorChemistry'] : [''],
             ['Toolbarswitch', 'Source'],
         ];
     }
@@ -148,14 +149,16 @@ class Documents extends Basic
     protected function getMinimizedToolbar()
     {
         return [
-            $this->getNewPageBlock(),
+            array_merge(['Save'], $this->getNewPageBlock()),
             ['Undo', 'Redo'],
             [
                 'Link',
                 'Image',
                 'Video',
+                'Oembed',
                 'Flash',
                 'Youtube',
+                'VimeoEmbed',
                 'Audio',
                 'Table',
                 'Asciimath',
@@ -177,7 +180,7 @@ class Documents extends Basic
                 api_get_configuration_value('translate_html') ? 'Language' : '',
                 'ShowBlocks',
             ],
-            api_get_setting('enabled_wiris') === 'true' ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
+            api_get_setting('enabled_wiris') === 'true' ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_formulaEditorChemistry'] : [''],
             ['Toolbarswitch', 'Source'],
         ];
     }

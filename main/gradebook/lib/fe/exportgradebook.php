@@ -2,8 +2,6 @@
 /* For licensing terms, see /license.txt */
 /**
  * Script.
- *
- * @package chamilo.gradebook
  */
 
 /**
@@ -205,7 +203,7 @@ function export_pdf($pdf, $newarray, $header_names, $format)
     $pdf->ezSetCmMargins(0, 0, 0, 0);
     $pdf->ezSetY(($format == 'portrait') ? '820' : '570');
     $pdf->selectFont(api_get_path(LIBRARY_PATH).'ezpdf/fonts/Courier.afm');
-    if ($format == 'portrait') {
+    if ('portrait' == $format) {
         $pdf->line(40, 790, 540, 790);
         $pdf->line(40, 40, 540, 40);
     } else {

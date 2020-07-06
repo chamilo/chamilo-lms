@@ -58,7 +58,7 @@ class Wiki extends Basic
                 'Find',
             ],
             ['Wikilink', 'Link', 'Unlink', 'Anchor'],
-            ['Image', 'Video', 'Flash', 'Oembed', 'Youtube', 'Audio', 'Asciimath'],
+            ['Image', 'Video', 'Flash', 'Oembed', 'Youtube', 'VimeoEmbed', 'Audio', 'Asciimath'],
             ['Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'leaflet'],
             ['Format', 'Font', 'FontSize'],
             ['Bold', 'Italic', 'Underline'],
@@ -81,7 +81,7 @@ class Wiki extends Basic
                 'BGColor',
                 api_get_setting('allow_spellcheck') == 'true' ? 'Scayt' : '',
             ],
-            api_get_setting('enabled_wiris') == 'true' ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
+            api_get_setting('enabled_wiris') == 'true' ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_formulaEditorChemistry'] : [''],
             ['Source'],
         ];
     }
@@ -100,7 +100,7 @@ class Wiki extends Basic
             ['BulletedList', 'NumberedList', 'HorizontalRule'],
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
             ['Styles', 'Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor', 'Source'],
-            api_get_setting('enabled_wiris') == 'true' ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
+            api_get_setting('enabled_wiris') == 'true' ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_formulaEditorChemistry'] : [''],
             ['Toolbarswitch'],
         ];
     }

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -9,8 +10,6 @@
  *
  * @author Roan Embrechts
  * @author Julio Montoya, Several fixes
- *
- * @package chamilo.user
  */
 $use_anonymous = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -37,7 +36,7 @@ $_user = api_get_user_info();
 $courseCode = $course_info['code'];
 $courseId = $course_info['real_id'];
 $type = isset($_REQUEST['type']) ? (int) $_REQUEST['type'] : STUDENT;
-$canEditUsers = api_get_setting('allow_user_course_subscription_by_course_admin') == 'true' || api_is_platform_admin();
+$canEditUsers = api_get_setting('allow_user_course_subscription_by_course_admin') === 'true' || api_is_platform_admin();
 
 // Can't auto unregister from a session
 if (!empty($sessionId)) {
@@ -659,11 +658,10 @@ if (!empty($_GET['keyword']) && !empty($_GET['submit'])) {
     echo '<br/>'.get_lang('SearchResultsFor').' <span style="font-style: italic ;"> '.$keyword_name.' </span><br>';
 }
 
-if (!isset($origin) || $origin != 'learnpath') {
+if (!isset($origin) || $origin !== 'learnpath') {
     Display::display_footer();
 }
 
-/* Helper functions for the users lists in course */
 /**
  * Get the users to display on the current page.
  */
@@ -673,7 +671,7 @@ function get_number_of_users()
     $sessionId = api_get_session_id();
     $courseCode = api_get_course_id();
     $active = isset($_GET['active']) ? $_GET['active'] : null;
-    $type = isset($_REQUEST['type']) ? intval($_REQUEST['type']) : STUDENT;
+    $type = isset($_REQUEST['type']) ? (int) $_REQUEST['type'] : STUDENT;
 
     if (empty($sessionId)) {
         $status = $type;
@@ -686,7 +684,7 @@ function get_number_of_users()
     }
 
     if (!empty($sessionId)) {
-        $a_course_users = CourseManager::get_user_list_from_course_code(
+        $users = CourseManager::get_user_list_from_course_code(
             $courseCode,
             $sessionId,
             null,
@@ -701,7 +699,7 @@ function get_number_of_users()
             $active
         );
     } else {
-        $a_course_users = CourseManager::get_user_list_from_course_code(
+        $users = CourseManager::get_user_list_from_course_code(
             $courseCode,
             0,
             null,
@@ -717,14 +715,14 @@ function get_number_of_users()
         );
     }
 
-    foreach ($a_course_users as $o_course_user) {
+    foreach ($users as $user) {
         if ((
             isset($_GET['keyword']) &&
                 searchUserKeyword(
-                    $o_course_user['firstname'],
-                    $o_course_user['lastname'],
-                    $o_course_user['username'],
-                    $o_course_user['official_code'],
+                    $user['firstname'],
+                    $user['lastname'],
+                    $user['username'],
+                    $user['official_code'],
                     $_GET['keyword']
                 )
             ) || !isset($_GET['keyword']) || empty($_GET['keyword'])
@@ -753,9 +751,9 @@ function searchUserKeyword($firstname, $lastname, $username, $official_code, $ke
         api_strripos($official_code, $keyword) !== false
     ) {
         return true;
-    } else {
-        return false;
     }
+
+    return false;
 }
 
 /**
@@ -772,7 +770,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 {
     global $is_western_name_order;
     global $extraFields;
-    $type = isset($_REQUEST['type']) ? intval($_REQUEST['type']) : STUDENT;
+    $type = isset($_REQUEST['type']) ? (int) $_REQUEST['type'] : STUDENT;
     $course_info = api_get_course_info();
     $sessionId = api_get_session_id();
     $course_code = $course_info['code'];
@@ -832,7 +830,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
         }
     }
 
-    $a_course_users = CourseManager :: get_user_list_from_course_code(
+    $users = CourseManager :: get_user_list_from_course_code(
         $course_code,
         $sessionId,
         $limit,
@@ -847,14 +845,14 @@ function get_user_data($from, $number_of_items, $column, $direction)
         $active
     );
 
-    foreach ($a_course_users as $user_id => $o_course_user) {
+    foreach ($users as $user_id => $userData) {
         if ((
             isset($_GET['keyword']) &&
                 searchUserKeyword(
-                    $o_course_user['firstname'],
-                    $o_course_user['lastname'],
-                    $o_course_user['username'],
-                    $o_course_user['official_code'],
+                    $userData['firstname'],
+                    $userData['lastname'],
+                    $userData['username'],
+                    $userData['official_code'],
                     $_GET['keyword']
                 )
             ) || !isset($_GET['keyword']) || empty($_GET['keyword'])
@@ -871,35 +869,35 @@ function get_user_data($from, $number_of_items, $column, $direction)
                 $photo = Display::img($userInfo['avatar_small'], $userInfo['complete_name'], [], false);
                 $temp[] = $user_id;
                 $temp[] = $photo;
-                $temp[] = $o_course_user['official_code'];
+                $temp[] = $userData['official_code'];
 
                 if ($is_western_name_order) {
-                    $temp[] = $o_course_user['firstname'];
-                    $temp[] = $o_course_user['lastname'];
+                    $temp[] = $userData['firstname'];
+                    $temp[] = $userData['lastname'];
                 } else {
-                    $temp[] = $o_course_user['lastname'];
-                    $temp[] = $o_course_user['firstname'];
+                    $temp[] = $userData['lastname'];
+                    $temp[] = $userData['firstname'];
                 }
 
-                $temp[] = $o_course_user['username'];
+                $temp[] = $userData['username'];
 
                 // Groups.
                 $temp[] = implode(', ', $groupsNameListParsed);
 
                 // Status
                 $default_status = get_lang('Student');
-                if ((isset($o_course_user['status_rel']) && $o_course_user['status_rel'] == 1) ||
-                    (isset($o_course_user['status_session']) && $o_course_user['status_session'] == 2)
+                if ((isset($userData['status_rel']) && $userData['status_rel'] == 1) ||
+                    (isset($userData['status_session']) && $userData['status_session'] == 2)
                 ) {
                     $default_status = get_lang('CourseManager');
-                } elseif (isset($o_course_user['is_tutor']) && $o_course_user['is_tutor'] == 1) {
+                } elseif (isset($userData['is_tutor']) && $userData['is_tutor'] == 1) {
                     $default_status = get_lang('Tutor');
                 }
 
                 $temp[] = $default_status;
 
                 // Active
-                $temp[] = $o_course_user['active'];
+                $temp[] = $userData['active'];
                 $extraFieldOption = new ExtraFieldOption('user');
                 $extraFieldValue = new ExtraFieldValue('user');
 
@@ -909,24 +907,27 @@ function get_user_data($from, $number_of_items, $column, $direction)
                             $user_id,
                             $extraField['id']
                         );
-
-                        $optionList = $extraFieldOption->get_field_option_by_field_and_option(
-                            $extraField['id'],
-                            $data['value']
-                        );
-                        if (!empty($optionList)) {
-                            $options = implode(', ', array_column($optionList, 'display_text'));
-                            $temp[] = $options;
+                        if (isset($data['value'])) {
+                            $optionList = $extraFieldOption->get_field_option_by_field_and_option(
+                                $extraField['id'],
+                                $data['value']
+                            );
+                            if (!empty($optionList)) {
+                                $options = implode(', ', array_column($optionList, 'display_text'));
+                                $temp[] = Security::remove_XSS($options);
+                            } else {
+                                $temp[] = Security::remove_XSS($data['value']);
+                            }
                         } else {
-                            $temp[] = $data['value'];
+                            $temp[] = '';
                         }
                     }
                 }
 
                 // User id for actions
                 $temp[] = $user_id;
-                $temp['is_tutor'] = isset($o_course_user['is_tutor']) ? $o_course_user['is_tutor'] : '';
-                $temp['user_status_in_course'] = isset($o_course_user['status_rel']) ? $o_course_user['status_rel'] : '';
+                $temp['is_tutor'] = isset($userData['is_tutor']) ? $userData['is_tutor'] : '';
+                $temp['user_status_in_course'] = isset($userData['status_rel']) ? $userData['status_rel'] : '';
             } else {
                 $userInfo = api_get_user_info($user_id);
                 $userPicture = $userInfo['avatar'];
@@ -935,17 +936,17 @@ function get_user_data($from, $number_of_items, $column, $direction)
 
                 $temp[] = '';
                 $temp[] = $photo;
-                $temp[] = $o_course_user['official_code'];
+                $temp[] = $userData['official_code'];
 
                 if ($is_western_name_order) {
-                    $temp[] = $o_course_user['firstname'];
-                    $temp[] = $o_course_user['lastname'];
+                    $temp[] = $userData['firstname'];
+                    $temp[] = $userData['lastname'];
                 } else {
-                    $temp[] = $o_course_user['lastname'];
-                    $temp[] = $o_course_user['firstname'];
+                    $temp[] = $userData['lastname'];
+                    $temp[] = $userData['firstname'];
                 }
 
-                $temp[] = $o_course_user['username'];
+                $temp[] = $userData['username'];
                 // Group.
                 $temp[] = implode(', ', $groupsNameListParsed);
 
@@ -1037,9 +1038,9 @@ function modify_filter($user_id, $row, $data)
             $isTutor = isset($data['is_tutor']) ? intval($data['is_tutor']) : 0;
             $isTutor = empty($isTutor) ? 1 : 0;
 
-            $text = get_lang('RemoveTutorStatus');
+            $text = get_lang('RemoveCourseAssistantStatus');
             if ($isTutor) {
-                $text = get_lang('SetTutor');
+                $text = get_lang('ConvertToCourseAssistant');
             }
 
             if ($isInvitee) {

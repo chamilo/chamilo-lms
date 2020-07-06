@@ -7,8 +7,6 @@
  *
  * @author Stijn Konings
  * @author Bert Steppé (made more generic)
- *
- * @package chamilo.gradebook
  */
 class LinkForm extends FormValidator
 {
@@ -50,9 +48,9 @@ class LinkForm extends FormValidator
         if (isset($extra)) {
             $this->extra = $extra;
         }
-        if ($form_type == self::TYPE_CREATE) {
+        if (self::TYPE_CREATE == $form_type) {
             $this->build_create();
-        } elseif ($form_type == self::TYPE_MOVE) {
+        } elseif (self::TYPE_MOVE == $form_type) {
             $this->build_move();
         }
     }
@@ -106,6 +104,8 @@ class LinkForm extends FormValidator
                 continue;
             }
             $link = $this->createLink($linkType, $courseCode);
+            /* configure the session id within the gradebook evaluation*/
+            $link->set_session_id(api_get_session_id());
             // disable this element if the link works with a dropdownlist
             // and if there are no links left
             if (!$link->needs_name_and_description() && count($link->get_all_links()) == '0') {

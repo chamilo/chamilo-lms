@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -60,7 +61,7 @@ class UniqueAnswerImage extends UniqueAnswer
         $html = '<div class="alert alert-success" role="alert">'.
                 get_lang('UniqueAnswerImagePreferredSize200x150').'</div>';
 
-        $zoomOptions = api_get_configuration_value('zoom_images_quiz');
+        $zoomOptions = api_get_configuration_value('quiz_image_zoom');
         if (isset($zoomOptions['options'])) {
             $finderFolder = api_get_path(WEB_PATH).'vendor/studio-42/elfinder/';
             $html .= '<!-- elFinder CSS (REQUIRED) -->';
@@ -213,12 +214,12 @@ class UniqueAnswerImage extends UniqueAnswer
                 $url = $itemList[3];
 
                 $tryResult = 0;
-                if ($try != 0) {
+                if (0 != $try) {
                     $tryResult = 1;
                 }
 
                 $urlResult = '';
-                if ($url != 0) {
+                if (0 != $url) {
                     $urlResult = $url;
                 }
 
@@ -276,15 +277,14 @@ class UniqueAnswerImage extends UniqueAnswer
             $answerNumber->freeze();
 
             $form->addElement('radio', 'correct', null, null, $i, 'class="checkbox"');
-
             $form->addHtmlEditor('answer['.$i.']', null, null, false, $editorConfig);
 
             $form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
 
             switch ($objExercise->getFeedbackType()) {
                 case EXERCISE_FEEDBACK_TYPE_DIRECT:
-                    //$this->setDirectOptions($i, $form, $renderer, $selectLpId, $selectQuestion);
-                    //break;
+                    $this->setDirectOptions($i, $form, $renderer, $selectLpId, $selectQuestion);
+                    break;
                 case EXERCISE_FEEDBACK_TYPE_POPUP:
                 default:
                     $form->addHtmlEditor('comment['.$i.']', null, null, false, $editorConfig);
@@ -311,7 +311,7 @@ class UniqueAnswerImage extends UniqueAnswer
         }
 
         // We check the first radio button to be sure a radio button will be check
-        if ($correct == 0) {
+        if (0 == $correct) {
             $correct = 1;
         }
 
@@ -320,7 +320,7 @@ class UniqueAnswerImage extends UniqueAnswer
         if (!empty($this->id)) {
             $form->setDefaults($defaults);
         } else {
-            if ($this->isContent == 1) {
+            if (1 == $this->isContent) {
                 // Default sample content.
                 $form->setDefaults($defaults);
             } else {

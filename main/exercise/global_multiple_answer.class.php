@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -31,27 +32,18 @@ class GlobalMultipleAnswer extends Question
 
         $obj_ex = Session::read('objExercise');
 
+        $form->addHeader(get_lang('Answers'));
         /* Mise en variable de Affichage "Reponses" et son icone, "N�", "Vrai", "Reponse" */
-        $html = '<table class="data_table">
+        $html = '<table class="table table-striped table-hover">
                 <tr>
-                    <th width="10px">
-                        '.get_lang('Number').'
-                    </th>
-                    <th width="10px">
-                        '.get_lang('True').'
-                    </th>
-                    <th width="50%">
-                        '.get_lang('Answer').'
-                    </th>';
+                    <th width="10px">'.get_lang('Number').'</th>
+                    <th width="10px">'.get_lang('True').'</th>
+                    <th width="50%">'.get_lang('Answer').'</th>
+                    <th width="50%">'.get_lang('Comment').'</th>
+                </tr>
+                ';
+        $form->addHtml($html);
 
-        $html .= '<th>'.get_lang('Comment').'</th>';
-        $html .= '</tr>';
-        $form->addElement(
-            'label',
-            get_lang('Answers').
-            '<br /> '.Display::return_icon('fill_field.png'),
-            $html
-        );
         $defaults = [];
         $correct = 0;
         $answer = false;

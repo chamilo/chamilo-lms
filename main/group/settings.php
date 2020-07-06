@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -6,8 +7,6 @@
  *
  * @author various contributors
  * @author Roan Embrechts (VUB), partial code cleanup, initial virtual course support
- *
- * @package chamilo.group
  *
  * @todo course admin functionality to create groups based on who is in which course (or class).
  */

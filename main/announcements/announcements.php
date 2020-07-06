@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -8,13 +9,8 @@
  *
  * @abstract The task of the internship was to integrate the 'send messages to specific users' with the
  *             Announcements tool and also add the resource linker here. The database also needed refactoring
- *             as there was no title field (the title was merged into the content field)
- *
- * @package chamilo.announcements
- * multiple functions
+ *             as there was no title field (the title was merged into the content field) multiple functions
  */
-
-// use anonymous mode when accessing this course tool
 $use_anonymous = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -89,6 +85,8 @@ $logInfo = [
 ];
 Event::registerLog($logInfo);
 
+$announcementAttachmentIsDisabled = api_get_configuration_value('disable_announcement_attachment');
+
 switch ($action) {
     case 'move':
         if (!$allowToEdit) {
@@ -97,13 +95,13 @@ switch ($action) {
 
         /* Move announcement up/down */
         if (!empty($_GET['down'])) {
-            $thisAnnouncementId = intval($_GET['down']);
-            $sortDirection = "DESC";
+            $thisAnnouncementId = (int) ($_GET['down']);
+            $sortDirection = 'DESC';
         }
 
         if (!empty($_GET['up'])) {
-            $thisAnnouncementId = intval($_GET['up']);
-            $sortDirection = "ASC";
+            $thisAnnouncementId = (int) ($_GET['up']);
+            $sortDirection = 'ASC';
         }
 
         if (!empty($sortDirection)) {
@@ -112,7 +110,7 @@ switch ($action) {
             }
 
             $sql = "SELECT DISTINCT announcement.id, announcement.display_order
-                    FROM $tbl_announcement announcement 
+                    FROM $tbl_announcement announcement
                     INNER JOIN $tbl_item_property itemproperty
                     ON (announcement.c_id = itemproperty.c_id)
                     WHERE
@@ -327,7 +325,7 @@ switch ($action) {
     case 'delete_all':
         if (api_is_allowed_to_edit()) {
             $allow = api_get_configuration_value('disable_delete_all_announcements');
-            if ($allow === false) {
+            if (false === $allow) {
                 AnnouncementManager::delete_all_announcements($_course);
                 Display::addFlash(Display::return_message(get_lang('AnnouncementDeletedAll')));
             }
@@ -524,22 +522,22 @@ switch ($action) {
         $form->addHtml("
             <script>
                 $(function () {
-                    $('#announcement_preview').on('click', function() {  
+                    $('#announcement_preview').on('click', function() {
                         var users = [];
                         $('#users_to option').each(function() {
-                            users.push($(this).val());                            
+                            users.push($(this).val());
                         });
-                        
+
                         var form = $('#announcement').serialize();
                         $.ajax({
                             type: 'POST',
                             dataType: 'json',
                             url: '".$ajaxUrl."',
-                            data: {users : JSON.stringify(users), form: form},  
+                            data: {users : JSON.stringify(users), form: form},
                             beforeSend: function() {
                                 $('#announcement_preview_result').html('<i class=\"fa fa-spinner\"></i>');
                                 $('#send_button').hide();
-                            },  
+                            },
                             success: function(result) {
                                 var resultToString = '';
                                 $.each(result, function(index, value) {
@@ -549,7 +547,7 @@ switch ($action) {
                                     '".addslashes(get_lang('AnnouncementWillBeSentTo'))."<br/>' + resultToString
                                 );
                                 $('#announcement_preview_result').show();
-                                $('#send_button').show();                                
+                                $('#send_button').show();
                             }
                         });
                     });
@@ -600,8 +598,12 @@ switch ($action) {
             false,
             ['ToolbarSet' => 'Announcements']
         );
-        $form->addElement('file', 'user_upload', get_lang('AddAnAttachment'));
-        $form->addElement('textarea', 'file_comment', get_lang('FileComment'));
+
+        if (!$announcementAttachmentIsDisabled) {
+            $form->addElement('file', 'user_upload', get_lang('AddAnAttachment'));
+            $form->addElement('textarea', 'file_comment', get_lang('FileComment'));
+        }
+
         $form->addHidden('sec_token', $token);
 
         if (empty($sessionId)) {
@@ -610,7 +612,7 @@ switch ($action) {
 
         $config = api_get_configuration_value('announcements_hide_send_to_hrm_users');
 
-        if ($config === false) {
+        if (false === $config) {
             $form->addCheckBox(
                 'send_to_hrm_users',
                 null,
@@ -645,8 +647,8 @@ switch ($action) {
             if (isset($id) && $id) {
                 // there is an Id => the announcement already exists => update mode
                 if (Security::check_token('post')) {
-                    $file_comment = $_POST['file_comment'];
-                    $file = $_FILES['user_upload'];
+                    $file_comment = $announcementAttachmentIsDisabled ? null : $_POST['file_comment'];
+                    $file = $announcementAttachmentIsDisabled ? [] : $_FILES['user_upload'];
 
                     AnnouncementManager::edit_announcement(
                         $id,
@@ -688,8 +690,8 @@ switch ($action) {
             } else {
                 // Insert mode
                 if (Security::check_token('post')) {
-                    $file = $_FILES['user_upload'];
-                    $file_comment = $data['file_comment'];
+                    $file = $announcementAttachmentIsDisabled ? [] : $_FILES['user_upload'];
+                    $file_comment = $announcementAttachmentIsDisabled ? null : $data['file_comment'];
 
                     if (empty($group_id)) {
                         $insert_id = AnnouncementManager::add_announcement(
@@ -730,7 +732,8 @@ switch ($action) {
                                 api_get_course_info(),
                                 api_get_session_id(),
                                 $insert_id,
-                                $sendToUsersInSession
+                                $sendToUsersInSession,
+                                isset($data['send_to_hrm_users'])
                             );
                         }
 

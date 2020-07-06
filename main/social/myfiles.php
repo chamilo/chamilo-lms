@@ -1,12 +1,11 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
 
 /**
  * @author  Juan Carlos Trabado herodoto@telefonica.net
- *
- * @package chamilo.social
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -47,7 +46,7 @@ function register_friend(element_input) {
     	name_div_id="id_"+name_button.substring(13);
     	user_id=name_div_id.split("_");
     	user_friend_id=user_id[1];
-    	
+
         $.ajax({
     		contentType: "application/x-www-form-urlencoded",
     		beforeSend: function(myObject) {

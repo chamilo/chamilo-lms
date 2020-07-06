@@ -1,13 +1,10 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
 
 /**
- *    Code library for HotPotatoes integration.
- *
- * @package chamilo.exercise
- *
  * @author Olivier Brouckaert & Julio Montoya & Hubert Borderiou 21-10-2011 (Question by category)
  *    QUESTION LIST ADMINISTRATION
  *
@@ -177,7 +174,6 @@ if (!$inATest) {
             $questionList = $objExercise->getQuestionForTeacher($start, $length);
             $paginator = new Knp\Component\Pager\Paginator();
             $pagination = $paginator->paginate([]);
-
             $pagination->setTotalItemCount($nbrQuestions);
             $pagination->setItemNumberPerPage($length);
             $pagination->setCurrentPageNumber($page);

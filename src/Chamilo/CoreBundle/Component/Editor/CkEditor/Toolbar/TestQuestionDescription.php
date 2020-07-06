@@ -1,12 +1,11 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
 /**
  * TestQuestionDescription toolbar configuration.
- *
- * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar
  */
 class TestQuestionDescription extends Basic
 {
@@ -21,7 +20,6 @@ class TestQuestionDescription extends Basic
             ['name' => 'document', 'groups' => ['document', 'doctools']],
             ['name' => 'clipboard', 'groups' => ['clipboard', 'undo']],
             ['name' => 'editing', 'groups' => ['clipboard', 'undo']],
-            //array('name' => 'forms',    'groups' =>array('clipboard', 'undo', )),
             '/',
             ['name' => 'basicstyles', 'groups' => ['basicstyles', 'cleanup']],
             ['name' => 'paragraph', 'groups' => ['list', 'indent', 'blocks', 'align']],
@@ -36,7 +34,7 @@ class TestQuestionDescription extends Basic
         ];
 
         $config['extraPlugins'] = $this->getPluginsToString();
-        if (api_get_setting('more_buttons_maximized_mode') != 'true') {
+        if (api_get_setting('more_buttons_maximized_mode') !== 'true') {
             $config['toolbar'] = $this->getNormalToolbar();
         } else {
             $config['toolbar_minToolbar'] = $this->getMinimizedToolbar();
@@ -77,6 +75,7 @@ class TestQuestionDescription extends Basic
                 'Video',
                 'Flash',
                 'Youtube',
+                'VimeoEmbed',
                 'Oembed',
                 'Audio',
                 'leaflet',
@@ -119,7 +118,7 @@ class TestQuestionDescription extends Basic
         return [
             ['Maximize', '-', 'PasteFromWord', '-', 'Undo', 'Redo'],
             ['Link', 'Unlink'],
-            ['Image', 'Video', 'Flash', 'Oembed', 'Youtube', 'Audio'],
+            ['Image', 'Video', 'Flash', 'Oembed', 'Youtube', 'VimeoEmbed', 'Audio'],
             ['Table', 'SpecialChar'],
             [
                 'NumberedList',
@@ -151,7 +150,20 @@ class TestQuestionDescription extends Basic
         return [
             $this->getNewPageBlock(),
             ['Undo', 'Redo'],
-            ['Link', 'Unlink', 'Image', 'Video', 'Flash', 'Audio', 'Table', 'Asciimath', 'Asciisvg'],
+            [
+                'Link',
+                'Unlink',
+                'Image',
+                'Video',
+                'Flash',
+                'Oembed',
+                'Youtube',
+                'VimeoEmbed',
+                'Audio',
+                'Table',
+                'Asciimath',
+                'Asciisvg',
+            ],
             ['BulletedList', 'NumberedList', 'HorizontalRule'],
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
             [

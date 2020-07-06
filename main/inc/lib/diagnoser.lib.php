@@ -51,6 +51,10 @@ class Diagnoser
                 'lang' => 'Paths',
                 'info' => 'The following paths are called by their constant throughout Chamilo\'s code using the api_get_path() function. Here is a list of these paths and what they would be translated to on this portal.',
             ],
+            'courses_space' => [
+                'lang' => 'Courses space',
+                'info' => 'Information about space used by courses on disk. The space used on disk represents the total space used, whereas the quota only limits files in the documents tool. Only 1000 courses are shown, by order of last access and alphabetical code order. For more, please go to the courses folder and use "du -sh *" to get the size of the courses.',
+            ],
         ];
         $currentSection = isset($_GET['section']) ? $_GET['section'] : '';
         if (!in_array(trim($currentSection), array_keys($sections))) {
@@ -74,20 +78,7 @@ class Diagnoser
         $data = call_user_func([$this, 'get_'.$currentSection.'_data']);
         echo $html;
 
-        if ($currentSection != 'paths') {
-            echo '<br />';
-            echo Display::return_message($sections[$currentSection]['info'], 'normal');
-
-            $table = new SortableTableFromArray($data, 1, 100);
-            $table->set_header(0, '', false);
-            $table->set_header(1, get_lang('Section'), false);
-            $table->set_header(2, get_lang('Setting'), false);
-            $table->set_header(3, get_lang('Current'), false);
-            $table->set_header(4, get_lang('Expected'), false);
-            $table->set_header(5, get_lang('Comment'), false);
-
-            $table->display();
-        } else {
+        if ($currentSection == 'paths') {
             echo '<br />';
             echo Display::return_message($sections[$currentSection]['info'], 'normal');
 
@@ -114,6 +105,34 @@ class Diagnoser
                 );
                 $row++;
             }
+
+            $table->display();
+        } elseif ($currentSection == 'courses_space') {
+            echo '<br />';
+            echo Display::return_message($sections[$currentSection]['info'], 'normal');
+
+            $table = new SortableTableFromArray($data, 1, 1000);
+            $table->set_additional_parameters(['section' => 'courses_space']);
+            $table->set_header(0, '', false);
+            $table->set_header(1, get_lang('CourseCode'), true);
+            $table->set_header(2, 'Space used on disk (MB)', true);
+            $table->set_header(3, 'Set max course space (MB)', false);
+            $table->set_header(4, get_lang('Edit'), false);
+            $table->set_header(5, get_lang('LastVisit'), true);
+            $table->set_header(6, get_lang('CurrentDirectory'), false);
+
+            $table->display();
+        } else {
+            echo '<br />';
+            echo Display::return_message($sections[$currentSection]['info'], 'normal');
+
+            $table = new SortableTableFromArray($data, 1, 100);
+            $table->set_header(0, '', false);
+            $table->set_header(1, get_lang('Section'), false);
+            $table->set_header(2, get_lang('Setting'), false);
+            $table->set_header(3, get_lang('Current'), false);
+            $table->set_header(4, get_lang('Expected'), false);
+            $table->set_header(5, get_lang('Comment'), false);
 
             $table->display();
         }
@@ -158,7 +177,7 @@ class Diagnoser
                 $status,
                 '[FILES]',
                 get_lang('IsWritable').': '.$folder,
-                'http://be2.php.net/manual/en/function.is-writable.php',
+                'https://php.net/manual/en/function.is-writable.php',
                 $writable,
                 1,
                 'yes_no',
@@ -172,7 +191,7 @@ class Diagnoser
             $status,
             '[FILES]',
             get_lang('DirectoryExists').': /install',
-            'http://be2.php.net/file_exists',
+            'https://php.net/file_exists',
             $exists,
             0,
             'yes_no',
@@ -273,7 +292,7 @@ class Diagnoser
             $status,
             '[PHP]',
             'phpversion()',
-            'http://www.php.net/manual/en/function.phpversion.php',
+            'https://php.net/manual/en/function.phpversion.php',
             phpversion(),
             '>= '.REQUIRED_PHP_VERSION,
             null,
@@ -287,7 +306,7 @@ class Diagnoser
             $status,
             '[INI]',
             'output_buffering',
-            'http://www.php.net/manual/en/outcontrol.configuration.php#ini.output-buffering',
+            'https://php.net/manual/en/outcontrol.configuration.php#ini.output-buffering',
             $setting,
             $req_setting,
             'on_off',
@@ -301,7 +320,7 @@ class Diagnoser
             $status,
             '[INI]',
             'file_uploads',
-            'http://www.php.net/manual/en/ini.core.php#ini.file-uploads',
+            'https://php.net/manual/en/ini.core.php#ini.file-uploads',
             $setting,
             $req_setting,
             'on_off',
@@ -315,7 +334,7 @@ class Diagnoser
             $status,
             '[INI]',
             'magic_quotes_runtime',
-            'http://www.php.net/manual/en/ini.core.php#ini.magic-quotes-runtime',
+            'https://php.net/manual/en/ini.core.php#ini.magic-quotes-runtime',
             $setting,
             $req_setting,
             'on_off',
@@ -329,7 +348,7 @@ class Diagnoser
             $status,
             '[INI]',
             'safe_mode',
-            'http://www.php.net/manual/en/ini.core.php#ini.safe-mode',
+            'https://php.net/manual/en/ini.core.php#ini.safe-mode',
             $setting,
             $req_setting,
             'on_off',
@@ -343,7 +362,7 @@ class Diagnoser
             $status,
             '[INI]',
             'register_globals',
-            'http://www.php.net/manual/en/ini.core.php#ini.register-globals',
+            'https://php.net/manual/en/ini.core.php#ini.register-globals',
             $setting,
             $req_setting,
             'on_off',
@@ -357,7 +376,7 @@ class Diagnoser
             $status,
             '[INI]',
             'short_open_tag',
-            'http://www.php.net/manual/en/ini.core.php#ini.short-open-tag',
+            'https://php.net/manual/en/ini.core.php#ini.short-open-tag',
             $setting,
             $req_setting,
             'on_off',
@@ -371,7 +390,7 @@ class Diagnoser
             $status,
             '[INI]',
             'magic_quotes_gpc',
-            'http://www.php.net/manual/en/ini.core.php#ini.magic_quotes_gpc',
+            'https://php.net/manual/en/ini.core.php#ini.magic_quotes_gpc',
             $setting,
             $req_setting,
             'on_off',
@@ -385,7 +404,7 @@ class Diagnoser
             $status,
             '[INI]',
             'display_errors',
-            'http://www.php.net/manual/en/ini.core.php#ini.display_errors',
+            'https://php.net/manual/en/ini.core.php#ini.display_errors',
             $setting,
             $req_setting,
             'on_off',
@@ -402,7 +421,7 @@ class Diagnoser
             $status,
             '[INI]',
             'default_charset',
-            'http://www.php.net/manual/en/ini.core.php#ini.default-charset',
+            'https://php.net/manual/en/ini.core.php#ini.default-charset',
             $setting,
             $req_setting,
             null,
@@ -416,7 +435,7 @@ class Diagnoser
             $status,
             '[INI]',
             'max_execution_time',
-            'http://www.php.net/manual/en/ini.core.php#ini.max-execution-time',
+            'https://php.net/manual/en/ini.core.php#ini.max-execution-time',
             $setting,
             $req_setting,
             null,
@@ -430,7 +449,7 @@ class Diagnoser
             $status,
             '[INI]',
             'max_input_time',
-            'http://www.php.net/manual/en/ini.core.php#ini.max-input-time',
+            'https://php.net/manual/en/ini.core.php#ini.max-input-time',
             $setting,
             $req_setting,
             null,
@@ -447,7 +466,7 @@ class Diagnoser
             $status,
             '[INI]',
             'memory_limit',
-            'http://www.php.net/manual/en/ini.core.php#ini.memory-limit',
+            'https://php.net/manual/en/ini.core.php#ini.memory-limit',
             $setting,
             $req_setting,
             null,
@@ -464,7 +483,7 @@ class Diagnoser
             $status,
             '[INI]',
             'post_max_size',
-            'http://www.php.net/manual/en/ini.core.php#ini.post-max-size',
+            'https://php.net/manual/en/ini.core.php#ini.post-max-size',
             $setting,
             $req_setting,
             null,
@@ -481,7 +500,7 @@ class Diagnoser
             $status,
             '[INI]',
             'upload_max_filesize',
-            'http://www.php.net/manual/en/ini.core.php#ini.upload_max_filesize',
+            'https://php.net/manual/en/ini.core.php#ini.upload_max_filesize',
             $setting,
             $req_setting,
             null,
@@ -494,7 +513,7 @@ class Diagnoser
             $status,
             '[INI]',
             'upload_tmp_dir',
-            'http://www.php.net/manual/en/ini.core.php#ini.upload_tmp_dir',
+            'https://php.net/manual/en/ini.core.php#ini.upload_tmp_dir',
             $setting,
             '',
             null,
@@ -508,7 +527,7 @@ class Diagnoser
             $status,
             '[INI]',
             'variables_order',
-            'http://www.php.net/manual/en/ini.core.php#ini.variables-order',
+            'https://php.net/manual/en/ini.core.php#ini.variables-order',
             $setting,
             $req_setting,
             null,
@@ -522,7 +541,7 @@ class Diagnoser
             $status,
             '[SESSION]',
             'session.gc_maxlifetime',
-            'http://www.php.net/manual/en/ini.core.php#session.gc-maxlifetime',
+            'https://php.net/manual/en/ini.core.php#session.gc-maxlifetime',
             $setting,
             $req_setting,
             null,
@@ -540,7 +559,7 @@ class Diagnoser
             $status,
             '[INI]',
             'browscap',
-            'http://www.php.net/manual/en/misc.configuration.php#ini.browscap',
+            'https://php.net/manual/en/misc.configuration.php#ini.browscap',
             $setting,
             $req_setting,
             'on_off',
@@ -550,52 +569,62 @@ class Diagnoser
         // Extensions
         $extensions = [
             'gd' => [
-                'link' => 'http://www.php.net/gd',
+                'link' => 'https://php.net/gd',
                 'expected' => 1,
                 'comment' => get_lang('ExtensionMustBeLoaded'),
             ],
             'pdo_mysql' => [
-                'link' => 'http://php.net/manual/en/ref.pdo-mysql.php',
+                'link' => 'https://php.net/manual/en/ref.pdo-mysql.php',
                 'expected' => 1,
                 'comment' => get_lang('ExtensionMustBeLoaded'),
             ],
             'pcre' => [
-                'link' => 'http://www.php.net/pcre',
+                'link' => 'https://php.net/pcre',
                 'expected' => 1,
                 'comment' => get_lang('ExtensionMustBeLoaded'),
             ],
             'session' => [
-                'link' => 'http://www.php.net/session',
+                'link' => 'https://php.net/session',
                 'expected' => 1,
                 'comment' => get_lang('ExtensionMustBeLoaded'),
             ],
             'standard' => [
-                'link' => 'http://www.php.net/spl',
+                'link' => 'https://php.net/spl',
                 'expected' => 1,
                 'comment' => get_lang('ExtensionMustBeLoaded'),
             ],
             'zlib' => [
-                'link' => 'http://www.php.net/zlib',
+                'link' => 'https://php.net/zlib',
+                'expected' => 1,
+                'comment' => get_lang('ExtensionMustBeLoaded'),
+            ],
+            'curl' => [
+                'link' => 'https://php.net/curl',
+                'expected' => 1,
+                'comment' => get_lang('ExtensionMustBeLoaded'),
+            ],
+            'fileinfo' => [
+                'link' => 'https://php.net/fileinfo',
                 'expected' => 1,
                 'comment' => get_lang('ExtensionMustBeLoaded'),
             ],
             'xsl' => [
-                'link' => 'http://be2.php.net/xsl',
-                'expected' => 2,
-                'comment' => get_lang('ExtensionShouldBeLoaded'),
-            ],
-            'curl' => [
-                'link' => 'http://www.php.net/curl',
+                'link' => 'https://php.net/xsl',
                 'expected' => 2,
                 'comment' => get_lang('ExtensionShouldBeLoaded'),
             ],
             'Zend OPcache' => [
-                'link' => 'http://www.php.net/opcache',
+                'link' => 'https://php.net/opcache',
                 'expected' => 2,
                 'comment' => get_lang('ExtensionShouldBeLoaded'),
             ],
             'apcu' => [
-                'link' => 'http://www.php.net/apcu',
+                'link' => 'https://php.net/apcu',
+                'expected' => 2,
+                'comment' => get_lang('ExtensionShouldBeLoaded'),
+            ],
+            'openssl' => [ //required only for DKIM e-mail signatures
+                'link' => 'https://php.net/openssl',
                 'expected' => 2,
                 'comment' => get_lang('ExtensionShouldBeLoaded'),
             ],
@@ -786,6 +815,78 @@ class Diagnoser
         );
 
         return $array;
+    }
+
+    /**
+     * Functions to get the data for the courses space usage.
+     *
+     * @throws Exception
+     *
+     * @return array of data
+     */
+    public function get_courses_space_data()
+    {
+        $array = [];
+
+        $em = Database::getManager();
+        $connection = $em->getConnection();
+        $res = $connection->query('SELECT id, code, directory, disk_quota, last_visit FROM course ORDER BY last_visit DESC, code LIMIT 500');
+        $systemPath = api_get_path(SYS_COURSE_PATH);
+        $webPath = api_get_path(WEB_COURSE_PATH);
+        $courseHomeIcon = Display::return_icon('home.png', get_lang('CourseHome'));
+        $courseEditIcon = Display::return_icon('edit.png', get_lang('Edit'));
+        $windows = api_is_windows_os();
+        $courseEditPath = api_get_path(WEB_CODE_PATH).'admin/course_edit.php?id=';
+        while ($row = $res->fetch()) {
+            $quota = $row['disk_quota'] / (1024 * 1024);
+            $dir = $systemPath.$row['directory'].'/';
+            $path = '<a href="'.$webPath.$row['code'].'/index.php?id_session=0">'.$courseHomeIcon.'</a>';
+            $size = '-';
+            $courseEditLink = '<a href="'.$courseEditPath.$row['id'].'">'.$courseEditIcon.'</a>';
+
+            if (!$windows) {
+                $err = [];
+                $du = exec('du -s '.$dir, $err);
+                list($size, $none) = explode("\t", $du);
+                unset($none);
+                $size = intval($size);
+                if ($size < 1024) {
+                    $size = 1;
+                } else {
+                    $size = round($size / 1024);
+                }
+            }
+            $array[] = [
+                $path,
+                $row['code'],
+                $size,
+                round($quota),
+                $courseEditLink,
+                $row['last_visit'],
+                $dir,
+            ];
+        }
+
+        return $array;
+    }
+
+    /**
+     * Functions to get the number of courses in the database.
+     *
+     * @throws Exception
+     *
+     * @return array of data
+     */
+    public function get_courses_space_count()
+    {
+        $em = Database::getManager();
+        $connection = $em->getConnection();
+        $res = $connection->query('SELECT count(id) FROM course');
+        while ($row = $res->fetch()) {
+            $count = $row[0];
+        }
+
+        return $count;
     }
 
     /**

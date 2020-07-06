@@ -1,12 +1,9 @@
 <?php
-/* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session;
+/* For licensing terms, see /license.txt */
 
 /**
  * Exercise list: This script shows the list of exercises for administrators and students.
- *
- * @package chamilo.exercise
  *
  * @author Olivier Brouckaert, original author
  * @author Denes Nagy, HotPotatoes integration
@@ -26,6 +23,9 @@ $htmlHeadXtra[] = api_get_css_asset('qtip2/jquery.qtip.min.css');
 api_protect_course_script(true);
 
 $limitTeacherAccess = api_get_configuration_value('limit_exercise_teacher_access');
+
+$allowDelete = Exercise::allowAction('delete');
+$allowClean = Exercise::allowAction('clean_results');
 
 $check = Security::get_existing_token('get');
 
@@ -97,7 +97,7 @@ if ($is_allowedToEdit) {
     switch ($action) {
         case 'clean_all_test':
             if ($check) {
-                if ($limitTeacherAccess && !api_is_platform_admin()) {
+                if (false === $allowClean) {
                     api_not_allowed(true);
                 }
 
@@ -210,7 +210,9 @@ if (!empty($action) && $is_allowedToEdit) {
 
             switch ($action) {
                 case 'delete':
-                    $objExerciseTmp->delete();
+                    if ($allowDelete) {
+                        $objExerciseTmp->delete();
+                    }
                     break;
                 case 'visible':
                     if ($limitTeacherAccess && !api_is_platform_admin()) {
@@ -306,9 +308,11 @@ if ($is_allowedToEdit) {
                         break;
                     case 'delete':
                         // deletes an exercise
-                        $result = $objExerciseTmp->delete();
-                        if ($result) {
-                            Display::addFlash(Display::return_message(get_lang('ExerciseDeleted'), 'confirmation'));
+                        if ($allowDelete) {
+                            $result = $objExerciseTmp->delete();
+                            if ($result) {
+                                Display::addFlash(Display::return_message(get_lang('ExerciseDeleted'), 'confirmation'));
+                            }
                         }
                         break;
                     case 'enable':
@@ -378,13 +382,13 @@ if ($is_allowedToEdit) {
 
                         break;
                     case 'clean_results':
-                        if ($limitTeacherAccess && !api_is_platform_admin()) {
+                        if (false === $allowClean) {
                             // Teacher change exercise
                             break;
                         }
 
                         // Clean student results
-                        if ($exercise_action_locked == false) {
+                        if (false == $exercise_action_locked) {
                             $quantity_results_deleted = $objExerciseTmp->cleanResults(true);
                             $title = $objExerciseTmp->selectTitle();
 
@@ -540,7 +544,6 @@ if ($is_allowedToEdit && $origin !== 'learnpath') {
     $actionsLeft .= Display::return_icon('database.png', get_lang('QuestionPool'), '', ICON_SIZE_MEDIUM);
     $actionsLeft .= '</a>';
 
-    //echo Display::url(Display::return_icon('looknfeel.png', get_lang('Media')), 'media.php?' . api_get_cidreq());
     // end question category
     $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/hotpotatoes.php?'.api_get_cidreq().'">'.
         Display::return_icon('import_hotpotatoes.png', get_lang('ImportHotPotatoesQuiz'), '', ICON_SIZE_MEDIUM).'</a>';
@@ -552,21 +555,24 @@ if ($is_allowedToEdit && $origin !== 'learnpath') {
     $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/upload_exercise.php?'.api_get_cidreq().'">'.
         Display::return_icon('import_excel.png', get_lang('ImportExcelQuiz'), '', ICON_SIZE_MEDIUM).'</a>';
 
-    $cleanAll = Display::url(
-        Display::return_icon(
-            'clean_all.png',
-            get_lang('CleanAllStudentsResultsForAllTests'),
-            '',
-            ICON_SIZE_MEDIUM
-        ),
-        '#',
-        [
-            'data-item-question' => addslashes(get_lang('AreYouSureToEmptyAllTestResults')),
-            'data-href' => api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq().'&action=clean_all_test&sec_token='.$token,
-            'data-toggle' => 'modal',
-            'data-target' => '#confirm-delete',
-        ]
-    );
+    $cleanAll = null;
+    if ($allowClean) {
+        $cleanAll = Display::url(
+            Display::return_icon(
+                'clean_all.png',
+                get_lang('CleanAllStudentsResultsForAllTests'),
+                '',
+                ICON_SIZE_MEDIUM
+            ),
+            '#',
+            [
+                'data-item-question' => addslashes(get_lang('AreYouSureToEmptyAllTestResults')),
+                'data-href' => api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq().'&action=clean_all_test&sec_token='.$token,
+                'data-toggle' => 'modal',
+                'data-target' => '#confirm-delete',
+            ]
+        );
+    }
 
     if ($limitTeacherAccess) {
         if (api_is_platform_admin()) {
@@ -612,6 +618,7 @@ if ($is_allowedToEdit) {
         [6, 1, 5]
     );
 }
+
 if (api_get_configuration_value('allow_exercise_categories') === false) {
     echo Exercise::exerciseGrid(0, $keyword);
 } else {
@@ -632,7 +639,7 @@ if (api_get_configuration_value('allow_exercise_categories') === false) {
             $down = '';
             if ($is_allowedToEdit) {
                 $up = Display::url($upIcon, $modifyUrl.'&action=up_category&category_id_edit='.$categoryIdItem);
-                if ($counter === 0) {
+                if (0 === $counter) {
                     $up = Display::url(Display::return_icon('up_na.png'), '#');
                 }
                 $down = Display::url($downIcon, $modifyUrl.'&action=down_category&category_id_edit='.$categoryIdItem);
@@ -653,7 +660,7 @@ if (api_get_configuration_value('allow_exercise_categories') === false) {
     }
 }
 
-if ($origin !== 'learnpath') {
+if ('learnpath' !== $origin) {
     // We are not in learnpath tool
     Display::display_footer();
 }

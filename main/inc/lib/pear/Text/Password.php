@@ -187,7 +187,7 @@ class Text_Password {
         $tmp = '';
 
         for ($i = 0; $i < strlen($login); $i++) {
-            $next = ord($login{$i}) ^ $key;
+            $next = ord($login[$i]) ^ $key;
             if ($next > 255) {
                 $next -= 255;
             } elseif ($next < 0) {
@@ -216,8 +216,8 @@ class Text_Password {
         $login = strtolower($login);
 
         for ($i = 0; $i < strlen($login); $i++) {
-            if ((ord($login{$i}) >= 97) && (ord($login{$i}) <= 122)) { // 65, 90 for uppercase
-                $next = ord($login{$i}) + $key;
+            if ((ord($login[$i]) >= 97) && (ord($login[$i]) <= 122)) { // 65, 90 for uppercase
+                $next = ord($login[$i]) + $key;
                 if ($next > 122) {
                     $next -= 26;
                 } elseif ($next < 97) {
@@ -225,7 +225,7 @@ class Text_Password {
                 }
                 $tmp .= chr($next);
             } else {
-                $tmp .= $login{$i};
+                $tmp .= $login[$i];
             }
         }
 
@@ -249,8 +249,8 @@ class Text_Password {
         $login = strtolower($login);
 
         for ($i = 0; $i < strlen($login); $i++, $key++) {
-            if ((ord($login{$i}) >= 97) && (ord($login{$i}) <= 122)) { // 65, 90 for uppercase
-                $next = ord($login{$i}) + $key;
+            if ((ord($login[$i]) >= 97) && (ord($login[$i]) <= 122)) { // 65, 90 for uppercase
+                $next = ord($login[$i]) + $key;
                 if ($next > 122) {
                     $next -= 26;
                 } elseif ($next < 97) {
@@ -258,7 +258,7 @@ class Text_Password {
                 }
                 $tmp .= chr($next);
             } else {
-                $tmp .= $login{$i};
+                $tmp .= $login[$i];
             }
         }
 
@@ -282,8 +282,8 @@ class Text_Password {
         $login = strtolower($login);
 
         for ($i = 0; $i < strlen($login); $i++, $key--) {
-            if ((ord($login{$i}) >= 97) && (ord($login{$i}) <= 122)) { // 65, 90 for uppercase
-                $next = ord($login{$i}) + $key;
+            if ((ord($login[$i]) >= 97) && (ord($login[$i]) <= 122)) { // 65, 90 for uppercase
+                $next = ord($login[$i]) + $key;
                 if ($next > 122) {
                     $next -= 26;
                 } elseif ($next < 97) {
@@ -291,7 +291,7 @@ class Text_Password {
                 }
                 $tmp .= chr($next);
             } else {
-                $tmp .= $login{$i};
+                $tmp .= $login[$i];
             }
         }
 
@@ -313,7 +313,7 @@ class Text_Password {
         $tmp = '';
 
         for ($i = 0; $i < strlen($login); $i++) {
-            $next = ord($login{$i}) + $key;
+            $next = ord($login[$i]) + $key;
             if ($next > 255) {
                 $next -= 255;
             } elseif ($next < 0) {
@@ -347,7 +347,7 @@ class Text_Password {
         $tmp = '';
 
         for ($i = 0; $i < strlen($login); $i++, $key++) {
-            $next = ord($login{$i}) + $key;
+            $next = ord($login[$i]) + $key;
             if ($next > 255) {
                 $next -= 255;
             } elseif ($next < 0) {
@@ -381,7 +381,7 @@ class Text_Password {
         $tmp = '';
 
         for ($i = 0; $i < strlen($login); $i++, $key--) {
-            $next = ord($login{$i}) + $key;
+            $next = ord($login[$i]) + $key;
             if ($next > 255) {
                 $next -= 255;
             } elseif ($next < 0) {
@@ -414,7 +414,7 @@ class Text_Password {
         $tmp = array();
 
         for ($i = 0; $i < strlen($login); $i++) {
-            $tmp[] = $login{$i};
+            $tmp[] = $login[$i];
         }
 
         shuffle($tmp);
@@ -521,7 +521,7 @@ class Text_Password {
           */
          for ($i = 0; $i < $length; $i++) {
              $num = mt_rand(0, $GLOBALS['_Text_Password_NumberOfPossibleCharacters'] - 1);
-             $password .= $chars{$num};
+             $password .= $chars[$num];
          }
 
          /**

@@ -17,7 +17,7 @@ if (!$is_allowed_to_edit) {
     api_not_allowed(true);
 }
 
-$categoryId = isset($_GET['id']) ? intval($_GET['id']) : 0;
+$categoryId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 
 if (empty($categoryId)) {
     api_not_allowed(true);
@@ -30,6 +30,7 @@ if ($subscriptionSettings['allow_add_users_to_lp_category'] == false) {
 
 $courseId = api_get_course_int_id();
 $courseCode = api_get_course_id();
+$sessionId = api_get_session_id();
 
 $em = Database::getManager();
 
@@ -58,23 +59,19 @@ $form->addLabel('', $message);
 // Group list
 $groupList = \CourseManager::get_group_list_of_course(
     api_get_course_id(),
-    api_get_session_id(),
+    $sessionId,
     1
 );
 $groupChoices = array_column($groupList, 'name', 'id');
 
-/** @var Session $session */
-$session = null;
-if (!empty($sessionId)) {
-    $session = $em->getRepository('ChamiloCoreBundle:Session')->find($sessionId);
-}
+$session = api_get_session_entity($sessionId);
 
 /** @var CourseRepository $courseRepo */
 $courseRepo = $em->getRepository('ChamiloCoreBundle:Course');
 /** @var ItemPropertyRepository $itemRepo */
 $itemRepo = $em->getRepository('ChamiloCourseBundle:CItemProperty');
 
-$course = $courseRepo->find($courseId);
+$course = api_get_course_entity($courseId);
 
 // Subscribed groups to a LP
 $subscribedGroupsInLp = $itemRepo->getGroupsSubscribedToItem(
@@ -107,19 +104,27 @@ if (!empty($selectedGroupChoices)) {
 $form->setDefaults($defaults);
 
 // Getting subscribe users to the course.
-$subscribedUsers = $courseRepo->getSubscribedStudents($course);
-$subscribedUsers = $subscribedUsers->getQuery();
-$subscribedUsers = $subscribedUsers->execute();
-
-// Getting all users in a nice format.
 $choices = [];
-/** @var User $user */
-foreach ($subscribedUsers as $user) {
-    $choices[$user->getUserId()] = $user->getCompleteNameWithClasses();
+if (empty($sessionId)) {
+    $subscribedUsers = $courseRepo->getSubscribedStudents($course);
+    $subscribedUsers = $subscribedUsers->getQuery();
+    $subscribedUsers = $subscribedUsers->execute();
+
+    // Getting all users in a nice format.
+    /** @var User $user */
+    foreach ($subscribedUsers as $user) {
+        $choices[$user->getId()] = $user->getCompleteNameWithClasses();
+    }
+} else {
+    $users = CourseManager::get_user_list_from_course_code($course->getCode(), $sessionId);
+    foreach ($users as $user) {
+        $choices[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']);
+    }
 }
 
 // Getting subscribed users to a category.
 $subscribedUsersInCategory = $category->getUsers();
+
 $selectedChoices = [];
 foreach ($subscribedUsersInCategory as $item) {
     $selectedChoices[] = $item->getUser()->getId();
@@ -172,8 +177,10 @@ if ($formUsers->validate()) {
         foreach ($users as $userId) {
             $categoryUser = new CLpCategoryUser();
             $user = UserManager::getRepository()->find($userId);
-            $categoryUser->setUser($user);
-            $category->addUser($categoryUser);
+            if ($user) {
+                $categoryUser->setUser($user);
+                $category->addUser($categoryUser);
+            }
         }
 
         $em->merge($category);

@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
  * HTML class for a textarea type field
@@ -244,7 +243,17 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
                 return '
                         <label {label-for}>{label}</label>
                         <div class="input-group">
-                            
+
+                            {icon}
+                            {element}
+                        </div>';
+                break;
+            case FormValidator::LAYOUT_GRID:
+            case FormValidator::LAYOUT_BOX:
+                return '
+                        <label {label-for}>{label}</label>
+                        <div class="input-group">
+                            {label}
                             {icon}
                             {element}
                         </div>';

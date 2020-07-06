@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -12,8 +13,6 @@
  *
  * @author Claro Team <cvs@claroline.net>
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
- *
- * @package chamilo.exercise.scorm
  */
 class ScormQuestion extends Question
 {
@@ -31,11 +30,10 @@ class ScormQuestion extends Question
     /**
      * Returns the HTML + JS flow corresponding to one question.
      *
-     * @param int  $questionId The question ID
-     * @param bool $standalone (ie including XML tag, DTD declaration, etc)
-     * @param int  $jsId       The JavaScript ID for this question.
-     *                         Due to the nature of interactions, we must have a natural sequence for
-     *                         questions in the generated JavaScript.
+     * @param int $questionId The question ID
+     * @param int $jsId       The JavaScript ID for this question.
+     *                        Due to the nature of interactions, we must have a natural sequence for
+     *                        questions in the generated JavaScript.
      *
      * @return string|array
      */
@@ -215,7 +213,7 @@ class ScormQuestion extends Question
                 $weight = 0;
                 break;
         }
-        $js .= 'questions_score_max['.$this->js_id.'] = '.$weight.";";
+        $js .= 'questions_score_max['.$this->js_id.'] = '.$weight.';';
 
         return $js;
     }

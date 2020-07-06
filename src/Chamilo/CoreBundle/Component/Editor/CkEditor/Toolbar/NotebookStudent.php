@@ -45,6 +45,7 @@ class NotebookStudent extends Basic
                 'Video',
                 'Oembed',
                 'Youtube',
+                'VimeoEmbed',
                 'Flash',
                 'Audio',
                 'leaflet',
@@ -75,7 +76,7 @@ class NotebookStudent extends Basic
         return [
             ['Save', 'Maximize', 'PasteFromWord', '-', 'Undo', 'Redo'],
             ['Link', 'Unlink', 'Anchor'],
-            ['Image', 'Video', 'Flash', 'Oembed', 'Youtube', 'Audio'],
+            ['Image', 'Video', 'Flash', 'Oembed', 'Youtube', 'VimeoEmbed', 'Audio'],
             ['Table', 'SpecialChar'],
             ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'TextColor', 'BGColor'],
             '/',

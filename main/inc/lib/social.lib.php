@@ -12,8 +12,6 @@ use Zend\Feed\Reader\Reader;
  *
  * This class provides methods for the social network management.
  * Include/require it in your code to use its features.
- *
- * @package chamilo.social
  */
 class SocialManager extends UserManager
 {
@@ -38,7 +36,7 @@ class SocialManager extends UserManager
     {
         $table = Database::get_main_table(TABLE_MAIN_USER_FRIEND_RELATION_TYPE);
         $sql = 'SELECT id, title FROM '.$table.'
-                WHERE id<>6 
+                WHERE id<>6
                 ORDER BY id ASC';
         $result = Database::query($sql);
         $friend_relation_list = [];
@@ -68,10 +66,10 @@ class SocialManager extends UserManager
     {
         $table = Database::get_main_table(TABLE_MAIN_USER_FRIEND_RELATION_TYPE);
         $userRelUserTable = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
-        $sql = 'SELECT rt.id as id 
+        $sql = 'SELECT rt.id as id
                 FROM '.$table.' rt
                 WHERE rt.id = (
-                    SELECT uf.relation_type 
+                    SELECT uf.relation_type
                     FROM '.$userRelUserTable.' uf
                     WHERE
                         user_id='.((int) $user_id).' AND
@@ -274,18 +272,18 @@ class SocialManager extends UserManager
         } else {
             // invitation already exist
             $sql = 'SELECT COUNT(*) AS count, id FROM '.$tbl_message.'
-                    WHERE 
-                        user_sender_id='.$user_id.' AND 
-                        user_receiver_id='.$friend_id.' AND 
+                    WHERE
+                        user_sender_id='.$user_id.' AND
+                        user_receiver_id='.$friend_id.' AND
                         msg_status = 7';
             $res_if_exist = Database::query($sql);
             $row_if_exist = Database::fetch_array($res_if_exist, 'ASSOC');
             if ($row_if_exist['count'] == 1) {
                 $sql = 'UPDATE '.$tbl_message.' SET
                             msg_status = 5, content = "'.$clean_message_content.'"
-                        WHERE 
-                            user_sender_id='.$user_id.' AND 
-                            user_receiver_id='.$friend_id.' AND 
+                        WHERE
+                            user_sender_id='.$user_id.' AND
+                            user_receiver_id='.$friend_id.' AND
                             msg_status = 7 ';
                 Database::query($sql);
 
@@ -379,12 +377,12 @@ class SocialManager extends UserManager
         }
 
         $table = Database::get_main_table(TABLE_MESSAGE);
-        $sql = 'SELECT COUNT(*) 
+        $sql = 'SELECT COUNT(*)
                 FROM '.$table.'
                 WHERE
                     user_sender_id='.$userId.' AND
-                    (msg_status = '.MESSAGE_STATUS_WALL.' OR 
-                    msg_status = '.MESSAGE_STATUS_WALL_POST.') AND 
+                    (msg_status = '.MESSAGE_STATUS_WALL.' OR
+                    msg_status = '.MESSAGE_STATUS_WALL_POST.') AND
                     parent_id = 0';
         $res = Database::query($sql);
         $row = Database::fetch_row($res);
@@ -570,7 +568,7 @@ class SocialManager extends UserManager
             return '';
         }
         $feeds = explode(';', $feed['rssfeeds']);
-        if (count($feeds) == 0) {
+        if (0 == count($feeds)) {
             return '';
         }
         $res = '';
@@ -851,9 +849,7 @@ class SocialManager extends UserManager
             );
         }
 
-        $skillBlock = $template->get_template('social/avatar_block.tpl');
-
-        return $template->fetch($skillBlock);
+        return $template->fetch($template->get_template('social/avatar_block.tpl'));
     }
 
     /**
@@ -1630,7 +1626,7 @@ class SocialManager extends UserManager
 
         // Get my own posts
         $userReceiverCondition = ' (
-            user_receiver_id = '.$userId.' AND 
+            user_receiver_id = '.$userId.' AND
             msg_status IN ('.MESSAGE_STATUS_WALL_POST.', '.MESSAGE_STATUS_WALL.') AND
             parent_id = '.$parentId.'
         )';
@@ -1677,7 +1673,7 @@ class SocialManager extends UserManager
             if ($getCount) {
                 $select = ' SELECT count(iid) count_items ';
             } else {
-                $select = " SELECT 
+                $select = " SELECT
                                 iid as id,
                                 poster_id as user_sender_id,
                                 '' as user_receiver_id,
@@ -1688,7 +1684,7 @@ class SocialManager extends UserManager
                                 '' as group_id,
                                 forum_id,
                                 thread_id,
-                                c_id                            
+                                c_id
                             ";
             }
 
@@ -1696,8 +1692,8 @@ class SocialManager extends UserManager
             $threadList = implode("','", $threadList);
             $condition = " thread_id IN ('$threadList') ";
             $sql[5] = "$select
-                    FROM c_forum_post  
-                    WHERE $condition                                         
+                    FROM c_forum_post
+                    WHERE $condition
                 ";
         }
 
@@ -1861,8 +1857,8 @@ class SocialManager extends UserManager
         $comment .= '<div class="col-md-2 col-xs-2 social-post-answers">';
         $comment .= '<div class="user-image pull-right">';
         $comment .= '<a href="'.$url.'">
-                        <img src="'.$users[$userIdLoop]['avatar'].'" 
-                        alt="'.$users[$userIdLoop]['complete_name'].'" 
+                        <img src="'.$users[$userIdLoop]['avatar'].'"
+                        alt="'.$users[$userIdLoop]['complete_name'].'"
                         class="avatar-thumb">
                      </a>';
         $comment .= '</div>';
@@ -1870,7 +1866,7 @@ class SocialManager extends UserManager
         $comment .= '<div class="col-md-7 col-xs-7 social-post-answers">';
         $comment .= '<div class="user-data">';
         $comment .= $iconStatus;
-        $comment .= '<div class="username"><a href="'.$url.'">'.$nameComplete.'</a> 
+        $comment .= '<div class="username"><a href="'.$url.'">'.$nameComplete.'</a>
                         <span>'.Security::remove_XSS($message['content']).'</span>
                        </div>';
         $comment .= '<div>'.$date.'</div>';
@@ -2098,7 +2094,7 @@ class SocialManager extends UserManager
         $groupId = 0,
         $show_full_profile = true
     ) {
-        if (api_get_setting('allow_social_tool') != 'true') {
+        if (api_get_setting('allow_social_tool') !== 'true') {
             return '';
         }
 
@@ -2656,8 +2652,8 @@ class SocialManager extends UserManager
                             $value_options = [];
                             // get option display text from user_field_options table
                             foreach ($id_options as $id_option) {
-                                $sql = "SELECT display_text 
-                                    FROM $t_ufo 
+                                $sql = "SELECT display_text
+                                    FROM $t_ufo
                                     WHERE id = '$id_option'";
                                 $res_options = Database::query($sql);
                                 $row_options = Database::fetch_row($res_options);
@@ -2863,15 +2859,15 @@ class SocialManager extends UserManager
                     loadingHtml: "<div class=\"well_border\">'.get_lang('Loading').' </div>",
                     nextSelector: "a.nextPage:last",
                     contentSelector: "",
-                    callback: timeAgo                    
+                    callback: timeAgo
                 });
             });
             </script>';
         }
 
         $htmlHeadXtra[] = '<script>
-            function deleteMessage(id) 
-            {                      
+            function deleteMessage(id)
+            {
                 $.ajax({
                     url: "'.$socialAjaxUrl.'?a=delete_message" + "&id=" + id,
                     success: function (result) {
@@ -2879,11 +2875,11 @@ class SocialManager extends UserManager
                             $("#message_" + id).parent().parent().parent().parent().html(result);
                         }
                     }
-                });                        
+                });
             }
-            
-            function deleteComment(id) 
-            {                      
+
+            function deleteComment(id)
+            {
                 $.ajax({
                     url: "'.$socialAjaxUrl.'?a=delete_message" + "&id=" + id,
                     success: function (result) {
@@ -2891,40 +2887,40 @@ class SocialManager extends UserManager
                             $("#message_" + id).parent().parent().parent().html(result);
                         }
                     }
-                });                     
-            }           
-            
-            function submitComment(messageId) 
+                });
+            }
+
+            function submitComment(messageId)
             {
-                var data = $("#form_comment_"+messageId).serializeArray();                                
+                var data = $("#form_comment_"+messageId).serializeArray();
                 $.ajax({
                     type : "POST",
                     url: "'.$socialAjaxUrl.'?a=send_comment" + "&id=" + messageId,
                     data: data,
-                    success: function (result) {                        
+                    success: function (result) {
                         if (result) {
                             $("#post_" + messageId + " textarea").val("");
                             $("#post_" + messageId + " .sub-mediapost").prepend(result);
                             $("#post_" + messageId + " .sub-mediapost").append(
                                 $(\'<div id=result_\' + messageId +\'>'.addslashes(get_lang('Saved')).'</div>\')
-                            ); 
-                                                        
+                            );
+
                             $("#result_" + messageId + "").fadeIn("fast", function() {
                                 $("#result_" + messageId + "").delay(1000).fadeOut("fast", function() {
                                     $(this).remove();
-                                }); 
+                                });
                             });
                         }
                     }
-                });  
-            } 
-            
+                });
+            }
+
             $(function() {
                 timeAgo();
-                
+
                 /*$(".delete_message").on("click", function() {
                     var id = $(this).attr("id");
-                    id = id.split("_")[1];          
+                    id = id.split("_")[1];
                     $.ajax({
                         url: "'.$socialAjaxUrl.'?a=delete_message" + "&id=" + id,
                         success: function (result) {
@@ -2932,13 +2928,13 @@ class SocialManager extends UserManager
                                 $("#message_" + id).parent().parent().parent().parent().html(result);
                             }
                         }
-                    });        
-                });                  
-                
-                
+                    });
+                });
+
+
                 $(".delete_comment").on("click", function() {
                     var id = $(this).attr("id");
-                    id = id.split("_")[1];                    
+                    id = id.split("_")[1];
                     $.ajax({
                         url: "'.$socialAjaxUrl.'?a=delete_message" + "&id=" + id,
                         success: function (result) {
@@ -2947,10 +2943,10 @@ class SocialManager extends UserManager
                             }
                         }
                     });
-                });          
+                });
                 */
             });
-            
+
             function timeAgo() {
                 $(".timeago").timeago();
             }

@@ -22,7 +22,7 @@ class Basic extends Toolbar
         'adobeair',
         'ajax',
         'audio',
-        'image2_chamilo',
+        'image2_chamilo', // Replace for 'image' if you want to user the Mapping plugin.
         'bidi',
         'colorbutton',
         'colordialog',
@@ -81,6 +81,9 @@ class Basic extends Toolbar
         $config = [],
         $prefix = null
     ) {
+        $isAllowedToEdit = api_is_allowed_to_edit();
+        $isPlatformAdmin = api_is_platform_admin();
+
         // Adding plugins depending of platform conditions
         $plugins = [];
 
@@ -91,7 +94,7 @@ class Basic extends Toolbar
         if (api_get_setting('youtube_for_students') == 'true') {
             $plugins[] = 'youtube';
         } else {
-            if (api_is_allowed_to_edit() || api_is_platform_admin()) {
+            if ($isAllowedToEdit || $isPlatformAdmin) {
                 $plugins[] = 'youtube';
             }
         }
@@ -115,7 +118,6 @@ class Basic extends Toolbar
 
         if (api_get_setting('enabled_wiris') == 'true') {
             // New version of wiris needs this plugins before it's loaded
-            $plugins[] = 'mapping';
             $plugins[] = 'widgetselection';
             $plugins[] = 'panelbutton';
 
@@ -123,6 +125,7 @@ class Basic extends Toolbar
             $plugins[] = 'ckeditor_wiris';
         }
 
+        // Mapping plugin requires Image plugin. But Image2 plugin is activated by default
         if (api_get_setting('enabled_imgmap') == 'true') {
             $plugins[] = 'mapping';
         }
@@ -137,6 +140,10 @@ class Basic extends Toolbar
 
         if (api_get_setting('allow_spellcheck') == 'true') {
             $plugins[] = 'scayt';
+        }
+
+        if (api_get_configuration_sub_value('ckeditor_vimeo_embed/config') && ($isAllowedToEdit || $isPlatformAdmin)) {
+            $plugins[] = 'ckeditor_vimeo_embed';
         }
 
         $this->defaultPlugins = array_unique(array_merge($this->defaultPlugins, $plugins));
@@ -217,7 +224,7 @@ class Basic extends Toolbar
      */
     public function getNewPageBlock()
     {
-        return  ['NewPage', 'Templates', '-', 'PasteFromWord', 'inserthtml'];
+        return ['NewPage', 'Templates', '-', 'PasteFromWord', 'inserthtml'];
     }
 
     /**
@@ -240,11 +247,25 @@ class Basic extends Toolbar
         return [
             $this->getNewPageBlock(),
             ['Undo', 'Redo'],
-            ['Link', 'Image', 'Video', 'Oembed', 'Flash', 'Youtube', 'Audio', 'Table', 'Asciimath', 'Asciisvg'],
+            [
+                'Link',
+                'Image',
+                'Video',
+                'Oembed',
+                'Flash',
+                'Youtube',
+                'VimeoEmbed',
+                'Audio',
+                'Table',
+                'Asciimath',
+                'Asciisvg',
+            ],
             ['BulletedList', 'NumberedList', 'HorizontalRule'],
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
             ['Styles', 'Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor'],
-            api_get_setting('enabled_wiris') == 'true' ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
+            api_get_setting('enabled_wiris') == 'true'
+                ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_formulaEditorChemistry']
+                : [''],
             ['Toolbarswitch', 'Source'],
         ];
     }
@@ -268,6 +289,7 @@ class Basic extends Toolbar
                 'Oembed',
                 'Flash',
                 'Youtube',
+                'VimeoEmbed',
                 'Audio',
                 'leaflet',
                 'Smiley',
@@ -283,7 +305,9 @@ class Basic extends Toolbar
             [api_get_setting('allow_spellcheck') == 'true' ? 'Scayt' : ''],
             ['Styles', 'Format', 'Font', 'FontSize'],
             ['PageBreak', 'ShowBlocks'],
-            api_get_setting('enabled_wiris') == 'true' ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
+            api_get_setting('enabled_wiris') == 'true'
+                ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_formulaEditorChemistry']
+                : [''],
             ['Toolbarswitch', 'Source'],
         ];
     }

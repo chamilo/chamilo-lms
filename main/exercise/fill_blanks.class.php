@@ -1,13 +1,12 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  *  Class FillBlanks.
  *
  * @author Eric Marguin
- * @author Julio Montoya multiple fill in blank option added
- *
- * @package chamilo.exercise
+ * @author Julio Montoya multiple fill in blank option added.
  */
 class FillBlanks extends Question
 {
@@ -447,7 +446,7 @@ class FillBlanks extends Question
             }
 
             // input width
-            $answer .= ":";
+            $answer .= ':';
             for ($i = 0; $i < $nb; $i++) {
                 // enter the width of input for word $i
                 $answer .= $form->getSubmitValue('sizeofinput['.$i.']');
@@ -637,9 +636,7 @@ class FillBlanks extends Question
     public static function getFillTheBlankSeveralAnswers($correctAnswer)
     {
         // is answer||Answer||response||Response , mean answer or Answer ...
-        $listSeveral = api_preg_split("/\|\|/", $correctAnswer);
-
-        return $listSeveral;
+        return api_preg_split("/\|\|/", $correctAnswer);
     }
 
     /**
@@ -810,7 +807,7 @@ class FillBlanks extends Question
         // Get all common words
         $commonWords = api_preg_replace(
             '/'.$blankCharStartForRegexp.'[^'.$blankCharEndForRegexp.']*'.$blankCharEndForRegexp.'/',
-            "::",
+            '::',
             $listDoubleColon[0]
         );
 
@@ -1208,7 +1205,7 @@ class FillBlanks extends Question
                 $hideUserSelection = true;
                 break;
             case RESULT_DISABLE_SHOW_SCORE_ONLY:
-                if ($feedbackType == 0) {
+                if (0 == $feedbackType) {
                     $hideExpectedAnswer = true;
                 }
                 break;
@@ -1378,8 +1375,7 @@ class FillBlanks extends Question
     private static function trimOption($text)
     {
         $text = trim($text);
-        $text = preg_replace("/\s+/", ' ', $text);
 
-        return $text;
+        return preg_replace("/\s+/", ' ', $text);
     }
 }

@@ -3,8 +3,6 @@
 
 /**
  * Management of legal conditions.
- *
- * @package chamilo.admin
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -12,7 +10,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
 
-if (api_get_setting('allow_terms_conditions') !== 'true') {
+if ('true' !== api_get_setting('allow_terms_conditions')) {
     api_not_allowed(true);
 }
 
@@ -70,10 +68,10 @@ if ($form->validate()) {
 
         $default['content'] = $content;
         if (isset($values['language'])) {
-            if ($submit == 'back') {
+            if ('back' == $submit) {
                 header('Location: legal_add.php');
                 exit;
-            } elseif ($submit === 'save') {
+            } elseif ('save' === $submit) {
                 $id = LegalManager::add($lang, $content, $type, $changes, $values);
                 if (!empty($id)) {
                     Display::addFlash(Display::return_message(get_lang('TermAndConditionSaved'), 'success'));

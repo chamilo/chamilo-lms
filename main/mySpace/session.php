@@ -1,11 +1,7 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
-/**
- * Sessions reporting.
- *
- * @package chamilo.reporting
- */
 ob_start();
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -56,6 +52,11 @@ if (api_is_platform_admin(true, true)) {
         $menu_items[] = Display::url(
             Display::return_icon('session_na.png', get_lang('Sessions'), [], ICON_SIZE_MEDIUM),
             '#'
+        );
+    } else {
+        $menu_items[] = Display::url(
+            Display::return_icon('teacher.png', get_lang('Trainers'), [], ICON_SIZE_MEDIUM),
+            'session_admin_teachers.php'
         );
     }
 

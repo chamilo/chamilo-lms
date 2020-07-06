@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
  * A pseudo-element used for adding raw HTML to form

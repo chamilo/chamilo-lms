@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -64,7 +65,6 @@ class DateRangePicker extends HTML_QuickForm_text
         $end = isset($dates[1]) ? $dates[1] : '';
 
         $pattern = 'yyyy-MM-dd HH:mm';
-
         if ('false' === $this->getAttribute('timePicker') &&
             false === strpos($this->getAttribute('format'), 'HH:mm')) {
             $pattern = 'yyyy-MM-dd';
@@ -182,26 +182,31 @@ class DateRangePicker extends HTML_QuickForm_text
             $timePicker = 'false';
         }
 
+        $timeIncrement = 30;
+        if (api_get_configuration_value('timepicker_increment')) {
+            $timeIncrement = api_get_configuration_value('timepicker_increment');
+        }
+
         // timeFormat: 'hh:mm'
         $js .= "<script>
             $(function() {
-                $('#$id').daterangepicker({                    
+                $('#$id').daterangepicker({
                     timePicker: $timePicker,
-                    timePickerIncrement: 30,
+                    timePickerIncrement: $timeIncrement,
                     timePicker12Hour: false,
                     $defaultDates
                     $maxDate
                     $minDate
                     ranges: {
                          '".addslashes(get_lang('Today'))."': [moment(), moment()],
-                         '".addslashes(get_lang('Yesterday'))."': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],                                                  
+                         '".addslashes(get_lang('Yesterday'))."': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
                          '".addslashes(get_lang('ThisMonth'))."': [moment().startOf('month'), moment().endOf('month')],
-                         '".addslashes(get_lang('LastMonth'))."': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],                      
+                         '".addslashes(get_lang('LastMonth'))."': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
                          '".addslashes(get_lang('ThisWeek'))."': [moment().weekday(1), moment().weekday(5)],
                          '".addslashes(get_lang('NextWeek'))."': [moment().weekday(8), moment().weekday(12)]
                     },
                     //showDropdowns : true,
-                    
+
                     locale: {
                         separator: ' / ',
                         format: '$format',
@@ -212,12 +217,12 @@ class DateRangePicker extends HTML_QuickForm_text
                         customRangeLabel: '".addslashes(get_lang('CustomRange'))."',
                     }
                 });
-                
+
                 $('#$id').on('change', function() {
                     var myPickedDates = $('#$id').val().split('/');
                     var {$id}_start = myPickedDates[0].trim();
                     var {$id}_end = myPickedDates[1].trim();
-                    
+
                     $('input[name={$id}_start]').val({$id}_start);
                     $('input[name={$id}_end]').val({$id}_end);
                 });

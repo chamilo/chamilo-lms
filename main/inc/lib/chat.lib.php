@@ -7,8 +7,6 @@ use ChamiloSession as Session;
  * Class Chat.
  *
  * @todo ChamiloSession instead of $_SESSION
- *
- * @package chamilo.library.chat
  */
 class Chat extends Model
 {
@@ -238,16 +236,16 @@ class Chat extends Model
         }
 
         $sql = "SELECT * FROM ".$this->table."
-                WHERE 
+                WHERE
                     (
-                        to_user = $toUserId AND 
+                        to_user = $toUserId AND
                         from_user = $fromUserId
                     )
                     OR
                     (
-                        from_user = $toUserId AND 
+                        from_user = $toUserId AND
                         to_user =  $fromUserId
-                    )  
+                    )
                 $orderBy
                 LIMIT $start, $end
                 ";
@@ -402,7 +400,7 @@ class Chat extends Model
             $params = [];
             $params['from_user'] = (int) $fromUserId;
             $params['to_user'] = (int) $to_user_id;
-            $params['message'] = $message;
+            $params['message'] = $messagesan;
             $params['sent'] = api_get_utc_datetime();
 
             if (!empty($fromUserId) && !empty($to_user_id)) {

@@ -1,7 +1,7 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\Repository\SequenceResourceRepository;
@@ -146,6 +146,7 @@ if ($checker) {
 
 $courseItem = [
     'code' => $course->getCode(),
+    'visibility' => $course->getVisibility(),
     'title' => $course->getTitle(),
     'description' => $courseDescription,
     'image' => CourseManager::getPicturePath($course, true),
@@ -184,9 +185,8 @@ foreach ($requirements as $sequence) {
     }
 }
 
-$courseController = new CoursesController();
-
 $template = new Template($course->getTitle(), true, true, false, true, false);
+
 $template->assign('course', $courseItem);
 $essence = Essence\Essence::instance();
 $template->assign('essence', $essence);
@@ -196,7 +196,7 @@ $template->assign('token', $token);
 $template->assign('url', $urlCourse);
 $template->assign(
     'subscribe_button',
-    $courseController->getRequirements(
+    CoursesAndSessionsCatalog::getRequirements(
         $course->getId(),
         SequenceResource::COURSE_TYPE,
         true,

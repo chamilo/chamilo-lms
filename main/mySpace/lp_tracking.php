@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
@@ -6,15 +7,13 @@ use Chamilo\CourseBundle\Entity\CLpItemView;
 
 /**
  * Learning paths reporting.
- *
- * @package chamilo.reporting
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
 $cidReset = true;
 $from_myspace = false;
 $from_link = '';
-if (isset($_GET['from']) && $_GET['from'] == 'myspace') {
+if (isset($_GET['from']) && 'myspace' == $_GET['from']) {
     $from_link = '&from=myspace';
     $this_section = SECTION_TRACKING;
 } else {
@@ -22,7 +21,7 @@ if (isset($_GET['from']) && $_GET['from'] == 'myspace') {
 }
 
 $session_id = isset($_REQUEST['id_session']) ? (int) $_REQUEST['id_session'] : api_get_session_id();
-$export_csv = isset($_GET['export']) && $_GET['export'] == 'csv';
+$export_csv = isset($_GET['export']) && $_GET['export'] === 'csv';
 $user_id = isset($_GET['student_id']) ? (int) $_GET['student_id'] : api_get_user_id();
 $courseCode = isset($_GET['course']) ? Security::remove_XSS($_GET['course']) : api_get_course_id();
 $origin = api_get_origin();

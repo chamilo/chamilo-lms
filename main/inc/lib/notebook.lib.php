@@ -8,8 +8,6 @@ use ChamiloSession as Session;
  * Include/require it in your code to use its features.
  *
  * @author Carlos Vargas <litox84@gmail.com>, move code of main/notebook up here
- *
- * @package chamilo.library
  */
 class NotebookManager
 {

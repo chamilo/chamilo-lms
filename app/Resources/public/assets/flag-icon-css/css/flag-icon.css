@@ -1512,6 +1512,18 @@
 .flag-icon-zw.flag-icon-squared {
   background-image: url(../flags/1x1/zw.svg);
 }
+.flag-icon-es-ca {
+  background-image: url(../flags/4x3/es-ca.svg);
+}
+.flag-icon-es-ca.flag-icon-squared {
+  background-image: url(../flags/1x1/es-ca.svg);
+}
+.flag-icon-es-ga {
+  background-image: url(../flags/4x3/es-ga.svg);
+}
+.flag-icon-es-ga.flag-icon-squared {
+  background-image: url(../flags/1x1/es-ga.svg);
+}
 .flag-icon-eu {
   background-image: url(../flags/4x3/eu.svg);
 }
@@ -1548,22 +1560,9 @@
 .flag-icon-un.flag-icon-squared {
   background-image: url(../flags/1x1/un.svg);
 }
-.flag-icon-basque {
-  background-image: url(../flags/4x3/basque.svg);
+.flag-icon-xk {
+  background-image: url(../flags/4x3/xk.svg);
 }
-.flag-icon-basque.flag-icon-squared {
-  background-image: url(../flags/1x1/basque.svg);
-}
-.flag-icon-galician
-{
-  background-image: url(../flags/4x3/galician.svg);
-}
-.flag-icon-galician.flag-icon-squared {
-  background-image: url(../flags/1x1/galician.svg);
-}
-.flag-icon-catalan{
-  background-image: url(../flags/4x3/catalan.svg);
-}
-.flag-icon-catalan.flag-icon-squared {
-  background-image: url(../flags/1x1/catalan.svg);
+.flag-icon-xk.flag-icon-squared {
+  background-image: url(../flags/1x1/xk.svg);
 }

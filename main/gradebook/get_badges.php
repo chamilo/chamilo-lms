@@ -5,8 +5,6 @@
  * Show the achieved badges by an user.
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
- *
- * @package chamilo.badge
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -45,7 +43,7 @@ foreach ($userSkills as $skill) {
 $backpack = 'https://backpack.openbadges.org/';
 
 $configBackpack = api_get_setting('openbadges_backpack');
-if (strcmp($backpack, $configBackpack) !== 0) {
+if (0 !== strcmp($backpack, $configBackpack)) {
     $backpack = $configBackpack;
     if (substr($backpack, -1) !== '/') {
         $backpack .= '/';

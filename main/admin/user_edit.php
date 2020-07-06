@@ -1,11 +1,9 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
 
-/**
- * @package chamilo.admin
- */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -13,7 +11,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script(true);
 
-$user_id = isset($_GET['user_id']) ? intval($_GET['user_id']) : intval($_POST['user_id']);
+$user_id = isset($_GET['user_id']) ? (int) $_GET['user_id'] : (int) $_POST['user_id'];
 api_protect_super_admin($user_id, null, true);
 $is_platform_admin = api_is_platform_admin() ? 1 : 0;
 $userInfo = api_get_user_info($user_id);
@@ -101,28 +99,29 @@ $form = new FormValidator(
     api_get_self().'?user_id='.$user_id,
     ''
 );
+$form->protect();
 $form->addElement('header', $tool_name);
 $form->addElement('hidden', 'user_id', $user_id);
 
 if (api_is_western_name_order()) {
     // Firstname
-    $form->addElement('text', 'firstname', get_lang('FirstName'));
+    $form->addElement('text', 'firstname', get_lang('FirstName'), ['autocomplete' => 'off']);
     $form->applyFilter('firstname', 'html_filter');
     $form->applyFilter('firstname', 'trim');
     $form->addRule('firstname', get_lang('ThisFieldIsRequired'), 'required');
     // Lastname
-    $form->addElement('text', 'lastname', get_lang('LastName'));
+    $form->addElement('text', 'lastname', get_lang('LastName'), ['autocomplete' => 'off']);
     $form->applyFilter('lastname', 'html_filter');
     $form->applyFilter('lastname', 'trim');
     $form->addRule('lastname', get_lang('ThisFieldIsRequired'), 'required');
 } else {
     // Lastname
-    $form->addElement('text', 'lastname', get_lang('LastName'));
+    $form->addElement('text', 'lastname', get_lang('LastName'), ['autocomplete' => 'off']);
     $form->applyFilter('lastname', 'html_filter');
     $form->applyFilter('lastname', 'trim');
     $form->addRule('lastname', get_lang('ThisFieldIsRequired'), 'required');
     // Firstname
-    $form->addElement('text', 'firstname', get_lang('FirstName'));
+    $form->addElement('text', 'firstname', get_lang('FirstName'), ['autocomplete' => 'off']);
     $form->applyFilter('firstname', 'html_filter');
     $form->applyFilter('firstname', 'trim');
     $form->addRule('firstname', get_lang('ThisFieldIsRequired'), 'required');
@@ -134,7 +133,7 @@ $form->applyFilter('official_code', 'html_filter');
 $form->applyFilter('official_code', 'trim');
 
 // Email
-$form->addElement('text', 'email', get_lang('Email'));
+$form->addElement('text', 'email', get_lang('Email'), ['autocomplete' => 'off']);
 $form->addRule('email', get_lang('EmailWrong'), 'email');
 if (api_get_setting('registration', 'email') == 'true') {
     $form->addRule('email', get_lang('EmailWrong'), 'required');
@@ -151,7 +150,7 @@ if (api_get_setting('openid_authentication') == 'true') {
 }
 
 // Phone
-$form->addElement('text', 'phone', get_lang('PhoneNumber'));
+$form->addElement('text', 'phone', get_lang('PhoneNumber'), ['autocomplete' => 'off']);
 
 // Picture
 $form->addFile(
@@ -173,7 +172,7 @@ if (strlen($user_data['picture_uri']) > 0) {
 
 // Username
 if (api_get_setting('login_is_email') != 'true') {
-    $form->addElement('text', 'username', get_lang('LoginName'), ['maxlength' => USERNAME_MAX_LENGTH]);
+    $form->addElement('text', 'username', get_lang('LoginName'), ['autocomplete' => 'off', 'maxlength' => USERNAME_MAX_LENGTH]);
     $form->addRule('username', get_lang('ThisFieldIsRequired'), 'required');
     $form->addRule('username', sprintf(get_lang('UsernameMaxXCharacters'), (string) USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
     $form->addRule('username', get_lang('OnlyLettersAndNumbersAllowed'), 'username');
@@ -217,7 +216,7 @@ $group[] = $form->createElement(
     'password',
     'password',
     null,
-    ['onkeydown' => 'javascript: password_switch_radio_button();']
+    ['onkeydown' => 'javascript: password_switch_radio_button();', 'autocomplete' => 'new-password']
 );
 
 $form->addGroup($group, 'password', null, null, false);
@@ -258,7 +257,7 @@ if (api_is_platform_admin()) {
     $form->addElement('html', '</div>');
 }
 
-//Language
+// Language
 $form->addSelectLanguage('language', get_lang('Language'));
 
 // Send email
@@ -414,10 +413,9 @@ if ($form->validate()) {
         $language = $user['language'];
         $address = isset($user['address']) ? $user['address'] : null;
 
+        $expiration_date = null;
         if (!$user_data['platform_admin'] && $user['radio_expiration_date'] == '1') {
             $expiration_date = $user['expiration_date'];
-        } else {
-            $expiration_date = null;
         }
 
         $active = $user_data['platform_admin'] ? 1 : intval($user['active']);
@@ -465,21 +463,17 @@ if ($form->validate()) {
             true
         );
 
-        if (api_get_setting('openid_authentication') == 'true' && !empty($user['openid'])) {
+        if (api_get_setting('openid_authentication') === 'true' && !empty($user['openid'])) {
             $up = UserManager::update_openid($user_id, $user['openid']);
         }
+
         $currentUserId = api_get_user_id();
-
-        $userObj = api_get_user_entity($user_id);
-
-        UserManager::add_user_as_admin($userObj);
-
         if ($user_id != $currentUserId) {
+            $userObj = api_get_user_entity($user_id);
             if ($platform_admin == 1) {
-                $userObj = api_get_user_entity($user_id);
-                UserManager::add_user_as_admin($userObj);
+                UserManager::addUserAsAdmin($userObj);
             } else {
-                UserManager::remove_user_admin($user_id);
+                UserManager::removeUserAdmin($userObj);
             }
         }
 

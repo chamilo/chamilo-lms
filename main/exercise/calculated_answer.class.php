@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Webit\Util\EvalMath\EvalMath;
@@ -8,8 +9,6 @@ use Webit\Util\EvalMath\EvalMath;
  *  This class contains calculated answer form and answer processing functions.
  *
  *  @author Imanol Losada
- *
- *  @package chamilo.exercise
  */
 class CalculatedAnswer extends Question
 {

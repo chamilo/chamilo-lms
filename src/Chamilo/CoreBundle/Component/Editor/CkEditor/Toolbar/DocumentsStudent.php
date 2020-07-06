@@ -48,6 +48,7 @@ class DocumentsStudent extends Basic
                 'Video',
                 'Oembed',
                 'Youtube',
+                'VimeoEmbed',
                 'Flash',
                 'Audio',
                 'leaflet',
@@ -83,7 +84,7 @@ class DocumentsStudent extends Basic
             [api_get_setting('allow_spellcheck') == 'true' ? 'Scayt' : ''],
             ['Styles', 'Format', 'Font', 'FontSize'],
             ['PageBreak', 'ShowBlocks'],
-            api_get_setting('enabled_wiris') == 'true' ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
+            api_get_setting('enabled_wiris') == 'true' ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_formulaEditorChemistry'] : [''],
             ['Toolbarswitch'],
         ];
     }
@@ -104,6 +105,7 @@ class DocumentsStudent extends Basic
                 'Flash',
                 'Oembed',
                 'Youtube',
+                'VimeoEmbed',
                 'Audio',
                 'Asciimath',
             ],
@@ -122,7 +124,7 @@ class DocumentsStudent extends Basic
             ['Styles', 'Format', 'Font', 'FontSize'],
             ['Bold', 'Italic', 'Underline'],
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight'],
-            api_get_setting('enabled_wiris') == 'true' ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
+            api_get_setting('enabled_wiris') == 'true' ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_formulaEditorChemistry'] : [''],
             ['ShowBlocks'],
         ];
     }
@@ -159,7 +161,7 @@ class DocumentsStudent extends Basic
                 'TextColor',
                 'BGColor',
             ],
-            api_get_setting('enabled_wiris') == 'true' ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
+            api_get_setting('enabled_wiris') == 'true' ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_formulaEditorChemistry'] : [''],
             ['Toolbarswitch'],
         ];
     }

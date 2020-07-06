@@ -4,8 +4,6 @@
 /**
  * Exercise list: This script shows the list of exercises for administrators and students.
  *
- * @package chamilo.exercise
- *
  * @author Olivier Brouckaert, original author
  * @author Denes Nagy, HotPotatoes integration
  * @author Wolfgang Schneider, code/html cleanup

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
@@ -9,8 +10,6 @@ use Chamilo\CourseBundle\Component\CourseCopy\CourseSelectForm;
  * Create a backup.
  *
  * @author Bart Mollet <bart.mollet@hogent.be>
- *
- * @package chamilo.backup
  */
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_COURSE_MAINTENANCE;
@@ -48,7 +47,6 @@ if (Security::check_token('post') &&
 ) {
     // Clear token
     Security::clear_token();
-
     if ($action === 'course_select_form') {
         $cb = new CourseBuilder('partial');
         $course = $cb->build(0, null, false, array_keys($_POST['resource']), $_POST['resource']);

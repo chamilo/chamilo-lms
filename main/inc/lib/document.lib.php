@@ -715,9 +715,9 @@ class DocumentManager
             }
 
             return $finalDocumentData;
-        } else {
-            return [];
         }
+
+        return [];
     }
 
     /**
@@ -1367,7 +1367,7 @@ class DocumentManager
      *
      * @return int id of document / false if no doc found
      */
-    public static function get_document_id($courseInfo, $path, $sessionId = null)
+    public static function get_document_id($courseInfo, $path, $sessionId = null, $forceFileTypeFolder = false)
     {
         $table = Database::get_course_table(TABLE_DOCUMENT);
         $courseId = $courseInfo['real_id'];
@@ -1380,11 +1380,16 @@ class DocumentManager
 
         $path = Database::escape_string($path);
         if (!empty($courseId) && !empty($path)) {
+            $folderCondition = '';
+            if ($forceFileTypeFolder) {
+                $folderCondition = ' AND filetype = "folder" ';
+            }
             $sql = "SELECT id FROM $table
                     WHERE
                         c_id = $courseId AND
                         path LIKE BINARY '$path' AND
                         session_id = $sessionId
+                        $folderCondition
                     LIMIT 1";
 
             $result = Database::query($sql);
@@ -1459,10 +1464,10 @@ class DocumentManager
             if (dirname($row['path']) == '.') {
                 $row['parent_id'] = '0';
             } else {
-                $row['parent_id'] = self::get_document_id($course_info, dirname($row['path']), $session_id);
+                $row['parent_id'] = self::get_document_id($course_info, dirname($row['path']), $session_id, true);
                 if (empty($row['parent_id'])) {
                     // Try one more with session id = 0
-                    $row['parent_id'] = self::get_document_id($course_info, dirname($row['path']), 0);
+                    $row['parent_id'] = self::get_document_id($course_info, dirname($row['path']), 0, true);
                 }
             }
             $parents = [];
@@ -1600,6 +1605,7 @@ class DocumentManager
         $docTable = Database::get_course_table(TABLE_DOCUMENT);
         $propTable = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
+        $userId = api_get_user_id();
         $course_id = $course['real_id'];
         // note the extra / at the end of doc_path to match every path in
         // the document table that is part of the document path
@@ -1628,7 +1634,7 @@ class DocumentManager
          */
 
         if (strpos($doc_path, 'HotPotatoes_files') && preg_match("/\.t\.html$/", $doc_path)) {
-            $doc_path = substr($doc_path, 0, strlen($doc_path) - 7 - strlen(api_get_user_id()));
+            $doc_path = substr($doc_path, 0, strlen($doc_path) - 7 - strlen($userId));
         }
 
         if (!in_array($file_type, ['file', 'folder'])) {
@@ -1653,7 +1659,11 @@ class DocumentManager
         if (Database::num_rows($result) > 0) {
             $row = Database::fetch_array($result, 'ASSOC');
             if ($row['visibility'] == 1) {
-                $is_visible = api_is_allowed_in_course() || api_is_platform_admin();
+                $drhAccessContent = api_drh_can_access_all_session_content()
+                    && $session_id
+                    && SessionManager::isSessionFollowedByDrh($session_id, $userId);
+
+                $is_visible = api_is_allowed_in_course() || api_is_platform_admin() || $drhAccessContent;
             }
         }
 
@@ -2905,12 +2915,12 @@ class DocumentManager
         $course_data = api_get_course_info($courseCode);
         $document_data = self::get_document_data_by_id($document_id, $courseCode);
         $file_path = api_get_path(SYS_COURSE_PATH).$course_data['path'].'/document'.$document_data['path'];
-        if ($orientation == 'landscape') {
+
+        $pageFormat = 'A4';
+        $pdfOrientation = 'P';
+        if ($orientation === 'landscape') {
             $pageFormat = 'A4-L';
             $pdfOrientation = 'L';
-        } else {
-            $pageFormat = 'A4';
-            $pdfOrientation = 'P';
         }
         $pdf = new PDF(
             $pageFormat,
@@ -2921,10 +2931,7 @@ class DocumentManager
         if (api_get_configuration_value('use_alternative_document_pdf_footer')) {
             $view = new Template('', false, false, false, true, false, false);
             $template = $view->get_template('export/alt_pdf_footer.tpl');
-
-            $pdf->set_custom_footer([
-                'html' => $view->fetch($template),
-            ]);
+            $pdf->set_custom_footer(['html' => $view->fetch($template)]);
         }
 
         $pdf->html_to_pdf(
@@ -2949,6 +2956,10 @@ class DocumentManager
      * @param bool   $show_output             print html messages
      * @param string $fileKey
      * @param bool   $treat_spaces_as_hyphens
+     * @param int    $userId                  Optional. User ID who upload file
+     * @param array  $courseInfo              Optional. Course info
+     * @param int    $sessionId               Optional. Session ID
+     * @param int    $groupId                 Optional. Group ID
      *
      * @return array|bool
      */
@@ -2962,13 +2973,19 @@ class DocumentManager
         $index_document = false,
         $show_output = false,
         $fileKey = 'file',
-        $treat_spaces_as_hyphens = true
+        $treat_spaces_as_hyphens = true,
+        $userId = 0,
+        array $courseInfo = [],
+        $sessionId = 0,
+        $groupId = 0
     ) {
-        $course_info = api_get_course_info();
-        $sessionId = api_get_session_id();
+        $course_info = $courseInfo ?: api_get_course_info();
+        $sessionId = $sessionId ?: api_get_session_id();
         $course_dir = $course_info['path'].'/document';
         $sys_course_path = api_get_path(SYS_COURSE_PATH);
         $base_work_dir = $sys_course_path.$course_dir;
+        $userId = $userId ?: api_get_user_id();
+        $groupId = $groupId ?: api_get_group_id();
 
         if (isset($files[$fileKey])) {
             $uploadOk = process_uploaded_file($files[$fileKey], $show_output);
@@ -2978,8 +2995,8 @@ class DocumentManager
                     $files[$fileKey],
                     $base_work_dir,
                     $path,
-                    api_get_user_id(),
-                    api_get_group_id(),
+                    $userId,
+                    $groupId,
                     null,
                     $unzip,
                     $ifExists,
@@ -3553,7 +3570,6 @@ class DocumentManager
                     if (tempDiv.length == 0) {
                         $.ajax({
                             type: 'GET',
-                            async: false,
                             url:  '".$url."',
                             data: 'folder_id='+numericId,
                             success: function(data) {
@@ -5236,8 +5252,8 @@ class DocumentManager
                     preg_match('/ogg$/i', urldecode($checkExtension))
                 ) {
                     return '<span style="float:left" '.$visibility_class.'>'.
-                    $title.
-                    '</span>'.$force_download_html.$send_to.$copyToMyFiles.$open_in_new_window_link.$pdf_icon;
+                        $title.
+                        '</span>'.$force_download_html.$send_to.$copyToMyFiles.$open_in_new_window_link.$pdf_icon;
                 } elseif (
                     // Show preview
                     preg_match('/swf$/i', urldecode($checkExtension)) ||
@@ -5256,17 +5272,17 @@ class DocumentManager
                     }
 
                     return Display::url(
-                        $title,
-                        $url,
-                        [
-                            'class' => $class,
-                            'title' => $tooltip_title_alt,
-                            'data-title' => $title,
-                            'style' => 'float:left;',
-                        ]
-                    )
-                    .$force_download_html.$send_to.$copyToMyFiles
-                    .$open_in_new_window_link.$pdf_icon;
+                            $title,
+                            $url,
+                            [
+                                'class' => $class,
+                                'title' => $tooltip_title_alt,
+                                'data-title' => $title,
+                                'style' => 'float:left;',
+                            ]
+                        )
+                        .$force_download_html.$send_to.$copyToMyFiles
+                        .$open_in_new_window_link.$pdf_icon;
                 } else {
                     // For a "PDF Download" of the file.
                     $pdfPreview = null;
@@ -5281,11 +5297,11 @@ class DocumentManager
                     }
                     // No plugin just the old and good showinframes.php page
                     return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" style="float:left" '.$visibility_class.' >'.$title.'</a>'.
-                    $pdfPreview.$force_download_html.$send_to.$copyToMyFiles.$open_in_new_window_link.$pdf_icon;
+                        $pdfPreview.$force_download_html.$send_to.$copyToMyFiles.$open_in_new_window_link.$pdf_icon;
                 }
             } else {
                 return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" '.$visibility_class.' style="float:left">'.$title.'</a>'.
-                $force_download_html.$send_to.$copyToMyFiles.$open_in_new_window_link.$pdf_icon;
+                    $force_download_html.$send_to.$copyToMyFiles.$open_in_new_window_link.$pdf_icon;
             }
             // end copy files to users myfiles
         } else {
@@ -5317,18 +5333,18 @@ class DocumentManager
                         return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" '.$visibility_class.' style="float:left">'.
                             self::build_document_icon_tag($filetype, $path, $isAllowedToEdit).
                             Display::return_icon('shared.png', get_lang('ResourceShared'), []).
-                        '</a>';
+                            '</a>';
                     } else {
                         return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" '.$visibility_class.' style="float:left">'.
                             self::build_document_icon_tag($filetype, $path, $isAllowedToEdit).
                             Display::return_icon('shared.png', get_lang('ResourceShared'), []).
-                        '</a>';
+                            '</a>';
                     }
                 } else {
                     return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" target="'.$target.'"'.$visibility_class.' style="float:left">'.
                         self::build_document_icon_tag($filetype, $path, $isAllowedToEdit).
                         Display::return_icon('shared.png', get_lang('ResourceShared'), []).
-                    '</a>';
+                        '</a>';
                 }
             } else {
                 if ($filetype === 'file') {
@@ -5352,18 +5368,19 @@ class DocumentManager
                         preg_match('/svg$/i', urldecode($checkExtension))
                     ) {
                         $url = $basePageUrl.'showinframes.php?'.$courseParams.'&id='.$document_data['id']; //without preview
+
                         return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" '.$visibility_class.' style="float:left">'.
                             self::build_document_icon_tag($filetype, $path, $isAllowedToEdit).
-                        '</a>';
+                            '</a>';
                     } else {
                         return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" '.$visibility_class.' style="float:left">'.
                             self::build_document_icon_tag($filetype, $path, $isAllowedToEdit).
-                        '</a>';
+                            '</a>';
                     }
                 } else {
                     return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" target="'.$target.'"'.$visibility_class.' style="float:left">'.
                         self::build_document_icon_tag($filetype, $path, $isAllowedToEdit).
-                    '</a>';
+                        '</a>';
                 }
             }
         }
@@ -5925,9 +5942,9 @@ class DocumentManager
      *
      * @return bool Return true when exist
      */
-    public static function search_keyword($document_name, $keyword)
+    public static function searchKeyword($name, $keyword)
     {
-        if (api_strripos($document_name, $keyword) !== false) {
+        if (api_strripos($name, $keyword) !== false) {
             return true;
         }
 
@@ -6659,10 +6676,10 @@ class DocumentManager
 
         $directUrl = $web_code_path.'document/document.php?cidReq='.$course_info['code'].'&id_session='.$session_id.'&id='.$documentId;
         $link .= '&nbsp;'.Display::url(
-            Display::return_icon('preview_view.png', get_lang('Preview')),
-            $directUrl,
-            ['target' => '_blank']
-        );
+                Display::return_icon('preview_view.png', get_lang('Preview')),
+                $directUrl,
+                ['target' => '_blank']
+            );
 
         $visibilityClass = null;
         if ($visibility == 0) {
@@ -6801,7 +6818,7 @@ class DocumentManager
 
             if (
                 in_array($extension, ['png', 'jpg', 'jpeg', 'bmp', 'gif', 'pxd']) &&
-                    api_get_setting('enabled_support_pixlr') == 'true'
+                api_get_setting('enabled_support_pixlr') == 'true'
             ) {
                 return Display::url($iconEn, "edit_paint.php?$courseParams&id=$document_id");
             }
@@ -6839,7 +6856,7 @@ class DocumentManager
 
         if (
             in_array($extension, ['png', 'jpg', 'jpeg', 'bmp', 'gif', 'pxd']) &&
-                api_get_setting('enabled_support_pixlr') == 'true'
+            api_get_setting('enabled_support_pixlr') == 'true'
         ) {
             return Display::url($iconEn, "edit_paint.php?$courseParams&id=$document_id");
         }

@@ -11,7 +11,7 @@ class ConditionalLogin
     /**
      * Check conditions based in the $login_conditions see conditional_login.php file.
      *
-     * @param type $user
+     * @param array $user
      */
     public static function check_conditions($user)
     {

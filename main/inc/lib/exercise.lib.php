@@ -128,10 +128,11 @@ class ExerciseLib
                     if ($answerType == DRAGGABLE) {
                         $isVertical = $objQuestionTmp->extra == 'v';
                         $s .= '
-                            <div class="col-md-12 ui-widget ui-helper-clearfix">
-                                <div class="clearfix">
-                                <ul class="exercise-draggable-answer '.($isVertical ? '' : 'list-inline').'"
-                                    id="question-'.$questionId.'" data-question="'.$questionId.'">
+                            <div class="row"><div class="col-md-12">
+                                <p class="small">'.get_lang('DraggableQuestionIntro').'</p>
+                                <ul class="exercise-draggable-answer list-unstyled '
+                            .($isVertical ? '' : 'list-inline').'" id="question-'.$questionId.'" data-question="'
+                            .$questionId.'">
                         ';
                     } else {
                         $s .= '<div id="drag'.$questionId.'_question" class="drag_question">
@@ -924,7 +925,7 @@ class ExerciseLib
                          * the text to find mustn't contains HTML tags
                          * the text to find mustn't contains char "
                          */
-                        if ($origin !== null) {
+                        if (null !== $origin) {
                             global $exe_id;
                             $exe_id = (int) $exe_id;
                             $trackAttempts = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
@@ -932,7 +933,12 @@ class ExerciseLib
                                     WHERE exe_id = $exe_id AND question_id= $questionId";
                             $rsLastAttempt = Database::query($sql);
                             $rowLastAttempt = Database::fetch_array($rsLastAttempt);
-                            $answer = $rowLastAttempt['answer'];
+
+                            $answer = null;
+                            if (isset($rowLastAttempt['answer'])) {
+                                $answer = $rowLastAttempt['answer'];
+                            }
+
                             if (empty($answer)) {
                                 $_SESSION['calculatedAnswerId'][$questionId] = mt_rand(
                                     1,
@@ -1038,7 +1044,7 @@ class ExerciseLib
                             foreach ($correctAnswerList[0] as $item) {
                                 $size = strlen($item);
                                 $attributes['class'] = self::detectInputAppropriateClass($size);
-                                if ($exercise->getFeedbackType() == EXERCISE_FEEDBACK_TYPE_POPUP) {
+                                if (EXERCISE_FEEDBACK_TYPE_POPUP == $exercise->getFeedbackType()) {
                                     $attributes['id'] = "question_$questionId";
                                     $attributes['class'] .= ' checkCalculatedQuestionOnEnter ';
                                 }
@@ -1055,7 +1061,7 @@ class ExerciseLib
                                 );
                             }
                         }
-                        if ($origin !== null) {
+                        if (null !== $origin) {
                             $s = $answer;
                             break;
                         } else {
@@ -1351,7 +1357,7 @@ HTML;
             if ($answerType == DRAGGABLE) {
                 $isVertical = $objQuestionTmp->extra == 'v';
                 $s .= "</ul>";
-                $s .= "</div>";
+                $s .= "</div></div>"; // col-md-12
                 $counterAnswer = 1;
                 $s .= $isVertical ? '' : '<div class="row">';
                 for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
@@ -1363,7 +1369,8 @@ HTML;
                             <div class="'.($isVertical ? 'col-md-12' : 'col-xs-12 col-sm-4 col-md-3 col-lg-2').'">
                                 <div class="droppable-item">
                                     <span class="number">'.$counterAnswer.'.</span>
-                                    <div id="drop_'.$windowId.'" class="droppable">&nbsp;</div>
+                                    <div id="drop_'.$windowId.'" class="droppable">
+                                    </div>
                                  </div>
                             </div>
                         ';
@@ -1373,7 +1380,7 @@ HTML;
                 }
 
                 $s .= $isVertical ? '' : '</div>'; // row
-                $s .= '</div>'; // col-md-12 ui-widget ui-helper-clearfix
+                $s .= '</div>';
             }
 
             if (in_array($answerType, [MATCHING, MATCHING_DRAGGABLE])) {
@@ -1386,7 +1393,7 @@ HTML;
             unset($objAnswerTmp);
             // destruction of the Question object
             unset($objQuestionTmp);
-            if ($origin == 'export') {
+            if ('export' == $origin) {
                 return $s;
             }
             echo $s;
@@ -2788,7 +2795,7 @@ HOTSPOT;
         $minNote = api_get_setting('exercise_min_score');
 
         if ($maxNote != '' && $minNote != '') {
-            if (!empty($weight) && (float) $weight !== 0) {
+            if (!empty($weight) && (float) $weight !== (float) 0) {
                 $score = $minNote + ($maxNote - $minNote) * $score / $weight;
             } else {
                 $score = $minNote;
@@ -2880,7 +2887,6 @@ HOTSPOT;
             if ($hidePercentageSign) {
                 $percentageSign = '';
             }
-
             $html = $percentage."$percentageSign ($score / $weight)";
             if ($show_only_percentage) {
                 $html = $percentage.$percentageSign;
@@ -2898,7 +2904,6 @@ HOTSPOT;
         // Ignore other formats and use the configuration['exercise_score_format'] value
         // But also keep the round values settings.
         $format = api_get_configuration_value('exercise_score_format');
-
         if (!empty($format)) {
             $html = ScoreDisplay::instance()->display_score([$score, $weight], $format);
         }
@@ -2959,7 +2964,7 @@ HOTSPOT;
         $courseInfo = api_get_course_info();
         if (!empty($courseInfo)) {
             $scoreModelId = api_get_course_setting('score_model_id');
-            if ($scoreModelId != -1) {
+            if (-1 != $scoreModelId) {
                 $modelIdList = array_column($modelList['models'], 'id');
                 if (in_array($scoreModelId, $modelIdList)) {
                     foreach ($modelList['models'] as $item) {
@@ -2985,18 +2990,18 @@ HOTSPOT;
     /**
      * @param float  $score
      * @param float  $weight
-     * @param string $pass_percentage
+     * @param string $passPercentage
      *
      * @return bool
      */
-    public static function isSuccessExerciseResult($score, $weight, $pass_percentage)
+    public static function isSuccessExerciseResult($score, $weight, $passPercentage)
     {
         $percentage = float_format(
-            ($score / ($weight != 0 ? $weight : 1)) * 100,
+            ($score / (0 != $weight ? $weight : 1)) * 100,
             1
         );
-        if (isset($pass_percentage) && !empty($pass_percentage)) {
-            if ($percentage >= $pass_percentage) {
+        if (isset($passPercentage) && !empty($passPercentage)) {
+            if ($percentage >= $passPercentage) {
                 return true;
             }
         }
@@ -4374,6 +4379,7 @@ EOT;
         $remainingMessage = ''
     ) {
         $origin = api_get_origin();
+        $courseId = api_get_course_int_id();
         $courseCode = api_get_course_id();
         $sessionId = api_get_session_id();
 
@@ -4421,7 +4427,6 @@ EOT;
         $counter = 1;
         $total_score = $total_weight = 0;
         $exercise_content = null;
-
         // Hide results
         $show_results = false;
         $show_only_score = false;
@@ -4475,8 +4480,8 @@ EOT;
                 $attempts = Event::getExerciseResultsByUser(
                     api_get_user_id(),
                     $objExercise->id,
-                    api_get_course_int_id(),
-                    api_get_session_id(),
+                    $courseId,
+                    $sessionId,
                     $exercise_stat_info['orig_lp_id'],
                     $exercise_stat_info['orig_lp_item_id'],
                     'desc'
@@ -4513,16 +4518,15 @@ EOT;
             }
         }
 
-        if (($show_results || $show_only_score) && $origin !== 'embeddable') {
-            if (isset($exercise_stat_info['exe_user_id'])) {
-                if (!empty($studentInfo)) {
-                    // Shows exercise header
-                    echo $objExercise->showExerciseResultHeader(
-                        $studentInfo,
-                        $exercise_stat_info
-                    );
-                }
-            }
+        if ('embeddable' !== $origin &&
+            !empty($exercise_stat_info['exe_user_id']) &&
+            !empty($studentInfo)
+        ) {
+            // Shows exercise header.
+            echo $objExercise->showExerciseResultHeader(
+                $studentInfo,
+                $exercise_stat_info
+            );
         }
 
         // Display text when test is finished #4074 and for LP #4227
@@ -4689,7 +4693,7 @@ EOT;
                         'comments' => Event::get_comments($exeId, $questionId),
                     ];
                     $check = $objQuestionTmp->isQuestionWaitingReview($reviewScore);
-                    if ($check === false) {
+                    if (false === $check) {
                         $countPendingQuestions++;
                     }
                 }
@@ -4698,7 +4702,7 @@ EOT;
                 $question_content = '';
                 if ($show_results) {
                     $question_content = '<div class="question_row_answer">';
-                    if ($showQuestionScore == false) {
+                    if (false == $showQuestionScore) {
                         $score = [];
                     }
 
@@ -4729,7 +4733,7 @@ EOT;
                         );
                     }
                 }
-            } // end foreach() block that loops over all questions
+            }
         }
 
         $totalScoreText = null;
@@ -4748,7 +4752,6 @@ EOT;
                 );
             } else {
                 $pluginEvaluation = QuestionOptionsEvaluationPlugin::create();
-
                 if ('true' === $pluginEvaluation->get(QuestionOptionsEvaluationPlugin::SETTING_ENABLE)) {
                     $formula = $pluginEvaluation->getFormulaForExercise($objExercise->selectId());
 
@@ -4794,10 +4797,7 @@ EOT;
                 'score' => $total_score,
                 'total' => $total_weight,
             ];
-            echo TestCategory::get_stats_table_by_attempt(
-                $objExercise->id,
-                $category_list
-            );
+            echo TestCategory::get_stats_table_by_attempt($objExercise->id, $category_list);
         }
 
         if ($show_all_but_expected_answer) {
@@ -4822,7 +4822,6 @@ EOT;
         }
 
         echo $exercise_content;
-
         if (!$show_only_score) {
             echo $totalScoreText;
         }
@@ -4840,7 +4839,7 @@ EOT;
                         $objExercise->selectId(),
                         $total_score,
                         $total_weight,
-                        api_get_session_id(),
+                        $sessionId,
                         $learnpath_id,
                         $learnpath_item_id,
                         $learnpath_item_view_id,
@@ -4853,7 +4852,7 @@ EOT;
                         $objExercise->generateStats(
                             $objExercise->selectId(),
                             api_get_course_info(),
-                            api_get_session_id()
+                            $sessionId
                         );
                     }
                 }
@@ -4882,8 +4881,8 @@ EOT;
             echo self::displayResultsInRanking(
                 $objExercise->iId,
                 api_get_user_id(),
-                api_get_course_int_id(),
-                api_get_session_id()
+                $courseId,
+                $sessionId
             );
         }
 
@@ -4965,7 +4964,7 @@ EOT;
         $data = [];
         /** @var TrackEExercises $item */
         foreach ($result as $item) {
-            $data[] = self::get_best_attempt_by_user($item['exeUserId'], $exerciseId, $courseId, $sessionId = 0);
+            $data[] = self::get_best_attempt_by_user($item['exeUserId'], $exerciseId, $courseId, $sessionId);
         }
 
         usort(

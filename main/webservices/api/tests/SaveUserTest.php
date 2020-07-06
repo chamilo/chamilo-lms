@@ -2,9 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 require_once __DIR__.'/V2TestCase.php';
-
 require_once __DIR__.'/../../../../vendor/autoload.php';
-
 
 /**
  * Class SaveUserTest
@@ -30,12 +28,18 @@ class SaveUserTest extends V2TestCase
         $loginName = 'testUser'.time();
         $email = 'testUser@local';
         $status = 5;
-        $userId = $this->integer( [
-            'loginname' => $loginName,
-            'email' => $email,
-            'status' => $status,
-            'password' => 'test',
-        ] );
+        $userId = $this->integer(
+            [
+                'loginname' => $loginName,
+                'firstname' => 'Małgorzata',
+                'lastname' => 'Summer',
+                'original_user_id_name' => 'external_user_id',
+                'original_user_id_value' => $loginName,
+                'email' => $email,
+                'status' => $status,
+                'password' => 'test',
+            ]
+        );
 
         // assert the user was saved and given the returned user id
         $user = UserManager::getManager()->find($userId);
@@ -51,8 +55,7 @@ class SaveUserTest extends V2TestCase
     }
 
     /**
-     * Creates a test user with an extra field
-     * asserts that the extra field values were saved
+     * Creates a test user with an extra field asserts that the extra field values were saved.
      *
      * @throws Exception if it cannot delete the created test user
      */
@@ -61,15 +64,22 @@ class SaveUserTest extends V2TestCase
         // call the web service
         $extraFieldName = 'age';
         $extraFieldOriginalValue = '29';
-        $userId = $this->integer( [
-            'loginname' => 'testUser'.time(),
-            'email' => 'testUser@local',
-            'status' => 5,
-            'password' => 'test',
-            'extra' => [
-                ['field_name' => $extraFieldName, 'field_value' => $extraFieldOriginalValue],
+        $loginName = 'testUser'.time();
+        $userId = $this->integer(
+            [
+                'loginname' => $loginName,
+                'email' => 'testUser@local',
+                'original_user_id_name' => 'external_user_id',
+                'original_user_id_value' => $loginName,
+                'status' => 5,
+                'password' => 'test',
+                'firstname' => 'Małgorzata',
+                'lastname' => 'Summer',
+                'extra' => [
+                    ['field_name' => $extraFieldName, 'field_value' => $extraFieldOriginalValue],
+                ],
             ]
-        ] );
+        );
 
         // assert user extra field value was saved
         $savedValue = (new ExtraFieldValue('user'))->get_values_by_handler_and_field_variable($userId, $extraFieldName);

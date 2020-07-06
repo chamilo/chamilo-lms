@@ -1,10 +1,9 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 require_once __DIR__.'/V2TestCase.php';
-
 require_once __DIR__.'/../../../../vendor/autoload.php';
-
 
 /**
  * Class UsernameExistTest
@@ -58,6 +57,6 @@ class UsernameExistTest extends V2TestCase
         $this->assertTrue($this->boolean(['loginname' => $loginName]));
 
         // clean up
-        UserManager::delete_users([ $userId ]);
+        UserManager::delete_users([$userId]);
     }
 }

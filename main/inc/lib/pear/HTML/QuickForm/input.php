@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Base class for <input /> form elements
  *
@@ -33,7 +34,6 @@
  */
 class HTML_QuickForm_input extends HTML_QuickForm_element
 {
-
     /**
      * Sets the element type
      *
@@ -109,9 +109,9 @@ class HTML_QuickForm_input extends HTML_QuickForm_element
     {
         if ($this->isFrozen()) {
             return $this->getFrozenHtml();
-        } else {
-            return $this->_getTabs() . '<input' . $this->_getAttrString($this->_attributes) . ' />';
         }
+
+        return $this->_getTabs().'<input'.$this->_getAttrString($this->_attributes).' />';
     }
 
     /**
@@ -150,10 +150,10 @@ class HTML_QuickForm_input extends HTML_QuickForm_element
     public function exportValue(&$submitValues, $assoc = false)
     {
         $type = $this->getType();
-        if ('reset' == $type || 'image' == $type || 'button' == $type || 'file' == $type) {
+        if ('reset' === $type || 'image' === $type || 'button' === $type || 'file' === $type) {
             return null;
-        } else {
-            return parent::exportValue($submitValues, $assoc);
         }
+
+        return parent::exportValue($submitValues, $assoc);
     }
 }

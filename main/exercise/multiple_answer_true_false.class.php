@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -9,8 +10,6 @@ use ChamiloSession as Session;
  * (MULTIPLE CHOICE, MULTIPLE ANSWER), extending the class question.
  *
  * @author Julio Montoya
- *
- * @package chamilo.exercise
  */
 class MultipleAnswerTrueFalse extends Question
 {
@@ -46,14 +45,14 @@ class MultipleAnswerTrueFalse extends Question
         $html = '<table class="table table-striped table-hover">';
         $html .= '<thead>';
         $html .= '<tr>';
-        $html .= '<th>'.get_lang('Number').'</th>';
-        $html .= '<th>'.get_lang('True').'</th>';
-        $html .= '<th>'.get_lang('False').'</th>';
-        $html .= '<th>'.get_lang('Answer').'</th>';
+        $html .= '<th width="10px">'.get_lang('Number').'</th>';
+        $html .= '<th width="10px">'.get_lang('True').'</th>';
+        $html .= '<th width="10px">'.get_lang('False').'</th>';
+        $html .= '<th width="50%">'.get_lang('Answer').'</th>';
 
         // show column comment when feedback is enable
         if ($obj_ex->getFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
-            $html .= '<th>'.get_lang('Comment').'</th>';
+            $html .= '<th width="50%">'.get_lang('Comment').'</th>';
         }
 
         $html .= '</tr>';

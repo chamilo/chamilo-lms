@@ -33,7 +33,10 @@ $form->addButtonSave(get_lang('Save'), 'submit_button');
 $tab_default_add_facebook_login_button_facebook_button_url = api_get_setting(
     'add_facebook_login_button_facebook_button_url'
 );
-$defaults['facebook_button_url'] = $tab_default_add_facebook_login_button_facebook_button_url['add_facebook_login_button'];
+if ($tab_default_add_facebook_login_button_facebook_button_url) {
+    $defaults['facebook_button_url'] = $tab_default_add_facebook_login_button_facebook_button_url['add_facebook_login_button'];
+}
+
 $form->setDefaults($defaults);
 //display form
 $plugin_info['settings_form'] = $form;

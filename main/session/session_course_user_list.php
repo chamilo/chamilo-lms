@@ -1,9 +1,7 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
-/**
- * @package chamilo.admin
- */
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -26,7 +24,7 @@ $course_code = Database::escape_string(trim($_GET['course_code']));
 $courseInfo = api_get_course_info($course_code);
 $courseId = $courseInfo['real_id'];
 
-$page = isset($_GET['page']) ? intval($_GET['page']) : null;
+$page = isset($_GET['page']) ? (int) $_GET['page'] : null;
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 $default_sort = api_sort_by_first_name() ? 'firstname' : 'lastname';
 $sort = isset($_GET['sort']) && in_array($_GET['sort'], ['lastname', 'firstname', 'username'])
@@ -44,7 +42,7 @@ if (is_array($idChecked)) {
     $my_temp = [];
     foreach ($idChecked as $id) {
         // forcing the intval
-        $my_temp[] = intval($id);
+        $my_temp[] = (int) $id;
     }
     $idChecked = $my_temp;
 }
@@ -85,19 +83,28 @@ switch ($action) {
 $limit = 20;
 $from = $page * $limit;
 $is_western_name_order = api_is_western_name_order();
+
+$urlTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+$urlId = api_get_current_access_url_id();
+
 $sql = "
     SELECT DISTINCT u.user_id,"
         .($is_western_name_order ? 'u.firstname, u.lastname' : 'u.lastname, u.firstname')
         .", u.username, scru.user_id as is_subscribed
     FROM $tbl_session_rel_user s
-    INNER JOIN $tbl_user u ON (u.user_id=s.user_id)
+    INNER JOIN $tbl_user u
+    ON (u.id = s.user_id)
+    INNER JOIN $urlTable url
+    ON (url.user_id = u.id)
     LEFT JOIN $tbl_session_rel_course_rel_user scru
         ON (s.session_id = scru.session_id AND s.user_id = scru.user_id AND scru.c_id = $courseId)
-    WHERE s.session_id = $id_session
+    WHERE
+        s.session_id = $id_session AND
+        url.access_url_id = $urlId
     ORDER BY $sort $direction
     LIMIT $from,".($limit + 1);
 
-if ($direction == 'desc') {
+if ($direction === 'desc') {
     $direction = 'asc';
 } else {
     $direction = 'desc';
@@ -105,9 +112,7 @@ if ($direction == 'desc') {
 
 $result = Database::query($sql);
 $users = Database::store_result($result);
-
-$nbr_results = sizeof($users);
-
+$nbr_results = count($users);
 $tool_name = get_lang('Session').': '.$session_name.' - '.get_lang('Course').': '.$course_title;
 
 $interbreadcrumb[] = ['url' => 'session_list.php', 'name' => get_lang('SessionList')];
@@ -146,7 +151,7 @@ echo Display::page_header($tool_name);
             ?>
         </div>
         <br/>
-        <table class="data_table" width="100%">
+        <table class="table table-hover">
             <tr>
                 <th>&nbsp;</th>
                 <?php if ($is_western_name_order) {

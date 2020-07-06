@@ -393,9 +393,15 @@ class Database
             $handler->handle($e);
             exit;
         } else {
-            error_log($e->getMessage());
-            api_not_allowed(false, get_lang('GeneralError'));
-            exit;
+            $msg = $e->getMessage();
+            if (preg_match('/Serialization failure:/', $msg)) {
+                //do nothing except from logging
+                error_log($msg.' - Reported but otherwise ignored');
+            } else {
+                error_log($msg);
+                api_not_allowed(false, get_lang('GeneralError'));
+                exit;
+            }
         }
     }
 

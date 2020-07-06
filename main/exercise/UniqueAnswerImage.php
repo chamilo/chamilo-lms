@@ -68,10 +68,10 @@ class UniqueAnswerImage extends UniqueAnswer
             $html .= '<link rel="stylesheet" type="text/css" media="screen" 
                 href="'.$finderFolder.'css/elfinder.full.css">';
             $html .= '<link rel="stylesheet" type="text/css" media="screen" href="'.$finderFolder.'css/theme.css">';
-            
+
             $html .= '<!-- elFinder JS (REQUIRED) -->';
             $html .= '<script type="text/javascript" src="'.$finderFolder.'js/elfinder.full.js"></script>';
-            
+
             $html .= '<!-- elFinder translation (OPTIONAL) -->';
             $language = 'en';
             $platformLanguage = api_get_interface_language();

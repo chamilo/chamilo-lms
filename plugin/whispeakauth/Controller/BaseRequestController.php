@@ -5,6 +5,7 @@ namespace Chamilo\PluginBundle\WhispeakAuth\Controller;
 
 use FFMpeg\FFMpeg;
 use FFMpeg\Format\Audio\Wav;
+use GuzzleHttp\Exception\ClientException;
 
 /**
  * Class BaseRequestController.
@@ -61,10 +62,6 @@ abstract class BaseRequestController
         }
 
         $this->plugin->protectTool(false);
-
-        if (empty($this->user)) {
-            throw new \Exception(get_lang('NoUser'));
-        }
     }
 
     /**
@@ -99,8 +96,12 @@ abstract class BaseRequestController
     public function process()
     {
         try {
-            $this->setUser();
             $this->protect();
+            $this->setUser();
+
+            if (empty($this->user)) {
+                throw new \Exception(get_lang('NoUser'));
+            }
 
             $this->uploadAudioFile();
 

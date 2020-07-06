@@ -70,27 +70,7 @@ if (!empty($lpQuestionInfo) && empty($lpItemInfo)) {
     $htmlHeadXtra[] = api_get_js_simple(api_get_path(WEB_PLUGIN_PATH).'whispeakauth/assets/js/RecordAudio.js');
 }
 
-$sampleText = '';
-
-try {
-    $sampleText = WhispeakAuthRequest::authenticateSentence($plugin);
-} catch (Exception $exception) {
-    if ($showFullPage) {
-        api_not_allowed(
-            true,
-            Display::return_message($exception->getMessage(), 'error')
-        );
-    }
-
-    if (!$showFullPage && $oLp) {
-        api_not_allowed(
-            false,
-            Display::return_message($exception->getMessage(), 'error')
-        );
-    }
-
-    WhispeakAuthPlugin::displayNotAllowedMessage($exception->getMessage());
-}
+$sampleText = 'Hola, mundo';
 
 ChamiloSession::write(WhispeakAuthPlugin::SESSION_SENTENCE_TEXT, $sampleText);
 

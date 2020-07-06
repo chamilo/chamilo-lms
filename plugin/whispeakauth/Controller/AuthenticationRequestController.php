@@ -4,8 +4,7 @@
 namespace Chamilo\PluginBundle\WhispeakAuth\Controller;
 
 use Chamilo\PluginBundle\Entity\WhispeakAuth\LogEvent;
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\RequestException;
 
 /**
  * Class AuthenticationRequestController.
@@ -222,30 +221,27 @@ class AuthenticationRequestController extends BaseRequestController
      */
     private function createSessionToken()
     {
-        $client = new Client();
-        $response = $client->get(
-            "{$this->apiEndpoint}/auth",
-            [
-                'headers' => [
-                    'Authorization' => "Bearer {$this->apiKey}",
-                ],
-                'json' => [],
-                'query' => [
-                    'lang' => \WhispeakAuthPlugin::getLanguageIsoCode($this->user->getLanguage()),
-                ],
-            ]
-        );
+        try {
+            $response = $this->httpClient->post(
+                'auth',
+                [
+                    'headers' => [
+                        'Authorization' => "Bearer {$this->apiKey}",
+                    ],
+                    'json' => [],
+                    'query' => [
+                        'lang' => api_get_language_isocode($this->user->getLanguage()),
+                    ],
+                ]
+            );
+            $json = json_decode((string) $response->getBody(), true);
 
-        $bodyContents = $response->getBody()->getContents();
-        $json = json_decode($bodyContents, true);
-
-        switch ($response->getStatusCode()) {
-            case 200:
-                return $json['token'];
-            case 400:
-            case 401:
-            case 403:
-                throw new \Exception($json['message']);
+            return $json['token'];
+        } catch (RequestException $requestException) {
+            $this->throwRequestException(
+                $requestException,
+                $this->plugin->get_lang('AuthentifyFailed')
+            );
         }
     }
 
@@ -259,37 +255,33 @@ class AuthenticationRequestController extends BaseRequestController
      */
     private function performAuthentication($token, $wsId)
     {
-        $client = new Client();
-        $response = $client->post(
-            "{$this->apiEndpoint}/auth",
-            [
-                'headers' => [
-                    'Authorization' => "Bearer $token",
-                ],
-                'multipart' => [
-                    [
-                        'name' => 'speaker',
-                        'contents' => $wsId,
+        try {
+            $this->httpClient->post(
+                'auth',
+                [
+                    'headers' => [
+                        'Authorization' => "Bearer $token",
                     ],
-                    [
-                        'name' => 'file',
-                        'contents' => fopen($this->audioFilePath, 'r'),
-                        'filename' => basename($this->audioFilePath),
+                    'multipart' => [
+                        [
+                            'name' => 'speaker',
+                            'contents' => $wsId,
+                        ],
+                        [
+                            'name' => 'file',
+                            'contents' => fopen($this->audioFilePath, 'r'),
+                            'filename' => basename($this->audioFilePath),
+                        ],
                     ],
-                ],
-            ]
-        );
+                ]
+            );
 
-        $bodyContents = $response->getBody()->getContents();
-        $json = json_decode($bodyContents, true);
-
-        switch ($response->getStatusCode()) {
-            case 200:
-                return true;
-            case 419:
-                throw new \Exception($this->plugin->get_lang('TryAgain'));
-            default:
-                throw new \Exception($json['message']);
+            return true;
+        } catch (RequestException $requestException) {
+            $this->throwRequestException(
+                $requestException,
+                $this->plugin->get_lang('AuthentifyFailed')
+            );
         }
     }
 }

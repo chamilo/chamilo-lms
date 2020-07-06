@@ -5,7 +5,9 @@ namespace Chamilo\PluginBundle\WhispeakAuth\Controller;
 
 use FFMpeg\FFMpeg;
 use FFMpeg\Format\Audio\Wav;
+use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\RequestException;
 
 /**
  * Class BaseRequestController.
@@ -19,9 +21,9 @@ abstract class BaseRequestController
      */
     protected $plugin;
     /**
-     * @var string
+     * @var \GuzzleHttp\Client
      */
-    protected $apiEndpoint;
+    protected $httpClient;
     /**
      * @var string
      */
@@ -41,7 +43,7 @@ abstract class BaseRequestController
     public function __construct()
     {
         $this->plugin = \WhispeakAuthPlugin::create();
-        $this->apiEndpoint = $this->plugin->getApiUrl();
+        $this->httpClient = new Client(['base_uri' => $this->plugin->getApiUrl(),]);
         $this->apiKey = $this->plugin->get(\WhispeakAuthPlugin::SETTING_TOKEN);
     }
 
@@ -119,4 +121,22 @@ abstract class BaseRequestController
      * @return mixed
      */
     abstract protected function doApiRequest();
+
+    /**
+     * @param \GuzzleHttp\Exception\RequestException $requestException
+     * @param string                                 $defaultMessage
+     *
+     * @throws \Exception
+     */
+    protected function throwRequestException(RequestException $requestException, $defaultMessage)
+    {
+        $message = $defaultMessage;
+
+        if ($requestException->hasResponse()) {
+            $json = json_decode((string) $requestException->getResponse()->getBody(), true);
+            $message = is_array($json['message']) ? implode("\n", $json['message']) : $json['message'];
+        }
+
+        throw new \Exception($message);
+    }
 }

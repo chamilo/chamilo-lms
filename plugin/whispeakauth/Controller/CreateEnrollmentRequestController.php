@@ -3,7 +3,7 @@
 
 namespace Chamilo\PluginBundle\WhispeakAuth\Controller;
 
-use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
 
 /**
  * Class CreateEnrollmentRequestController.
@@ -62,29 +62,27 @@ class CreateEnrollmentRequestController extends BaseRequestController
      */
     private function createSessionToken()
     {
-        $client = new Client();
-        $response = $client->get(
-            "{$this->apiEndpoint}/enroll",
-            [
-                'headers' => [
-                    'Authorization' => "Bearer {$this->apiKey}",
-                ],
-                'json' => [],
-                'query' => [
-                    'lang' => \WhispeakAuthPlugin::getLanguageIsoCode($this->user->getLanguage()),
-                ],
-            ]);
+        try {
+            $response = $this->httpClient->get(
+                'enroll',
+                [
+                    'headers' => [
+                        'Authorization' => "Bearer {$this->apiKey}",
+                    ],
+                    'json' => [],
+                    'query' => [
+                        'lang' => api_get_language_isocode($this->user->getLanguage()),
+                    ],
+                ]
+            );
+            $json = json_decode((string) $response->getBody(), true);
 
-        $bodyContents = $response->getBody()->getContents();
-        $json = json_decode($bodyContents, true);
-
-        switch ($response->getStatusCode()) {
-            case 200:
-                return $json['token'];
-            case 400:
-            case 401:
-            case 403:
-                throw new \Exception($json['message']);
+            return $json['token'];
+        } catch (RequestException $requestException) {
+            $this->throwRequestException(
+                $requestException,
+                $this->plugin->get_lang('EnrollmentFailed')
+            );
         }
     }
 
@@ -99,34 +97,30 @@ class CreateEnrollmentRequestController extends BaseRequestController
      */
     private function createEnrollment($token)
     {
-        $client = new Client();
-        $response = $client->post(
-            "{$this->apiEndpoint}/enroll",
-            [
-                'headers' => [
-                    'Authorization' => "Bearer $token",
-                ],
-                'multipart' => [
-                    [
-                        'name' => 'file',
-                        'contents' => fopen($this->audioFilePath, 'r'),
-                        'filename' => basename($this->audioFilePath),
+        try {
+            $response = $this->httpClient->post(
+                'enroll',
+                [
+                    'headers' => [
+                        'Authorization' => "Bearer $token",
                     ],
-                ],
-            ]
-        );
+                    'multipart' => [
+                        [
+                            'name' => 'file',
+                            'contents' => fopen($this->audioFilePath, 'r'),
+                            'filename' => basename($this->audioFilePath),
+                        ],
+                    ],
+                ]
+            );
+            $json = json_decode((string) $response->getBody(), true);
 
-        $bodyContents = $response->getBody()->getContents();
-        $json = json_decode($bodyContents, true);
-
-        error_log(print_r($json, true));
-
-        switch ($response->getStatusCode()) {
-            case 200:
-            case 201:
-                return $json['speaker'];
-            default:
-                throw new \Exception($json['message']);
+            return $json['speaker'];
+        } catch (RequestException $requestException) {
+            $this->throwRequestException(
+                $requestException,
+                $this->plugin->get_lang('EnrollmentFailed')
+            );
         }
     }
 }

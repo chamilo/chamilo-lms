@@ -508,6 +508,29 @@ switch ($action) {
             if ($debug) {
                 error_log('Starting questions loop in save_exercise_by_now');
             }
+
+            // Check we have at least one non-empty answer in the array
+            // provided by the user's click on the "Finish test" button
+            if ('all' === $type) {
+                $atLeastOneAnswer = false;
+                foreach ($question_list as $my_question_id) {
+                    if (!empty($choice[$my_question_id])) {
+                        $atLeastOneAnswer = true;
+                        break;
+                    }
+                }
+                if (!$atLeastOneAnswer) {
+                    error_log(
+                        'In '.__FILE__.'::action save_exercise_by_now,'.
+                        ' from user '.api_get_user_id().
+                        ' for track_e_exercises.exe_id = '.$exeId.
+                        ', we received an empty set of answers.'.
+                        'Preventing submission to avoid overwriting w/ null.');
+                    echo 'error';
+                    exit;
+                }
+            }
+
             // Looping the question list from database (not from the user answer)
             foreach ($question_list as $my_question_id) {
                 if ($type === 'simple' && $question_id != $my_question_id) {

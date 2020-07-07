@@ -3739,7 +3739,7 @@ $ViewResult = "Ver resultados";
 $NoResultsInEvaluation = "Por ahora no hay resultados en la evaluación";
 $AddStudent = "Añadir usuarios";
 $ImportResult = "Importar resultados";
-$ImportFileLocation = "Ubicación del fichero a importar";
+$ImportFileLocation = "Ubicación del archivo a importar";
 $FileType = "Tipo de fichero";
 $ExampleCSVFile = "Fichero CSV de ejemplo";
 $ExampleXMLFile = "Fichero XML de ejemplo";
@@ -8581,4 +8581,10 @@ $UsernameList = "Lista de usuarios";
 $UsersAboutToBeAnonymized = "Usuarios que van a ser anonimizados :";
 $CouldNotReadFile = "No se puede leer el archivo.";
 $CouldNotReadFileLines = "No se puede leer las lineas del archivo.";
+$CertificatesSessions = "Certificados en sesiones";
+$SessionFilterReport = "Filtro de certificados en sesiones";
+$UpdateUserListXMLCSV = "Actualizar lista de usuarios";
+$DonateToTheProject = "Chamilo es un proyecto Open Source (o \"Software Libre\") y este portal está proveído a nuestra comunidad sin costo por la Asociación Chamilo, que persigue el objetivo de mejorar la calidad de una educación de calidad en todo el mundo.<br /><br />
+Desarrollar Chamilo y proveer este servicio son, no obstante, tareas costosas, y su ayuda contribuiría de manera significativa en asegurar que estos servicios se mejoren más rápido en el tiempo.<br /><br />
+Crear un curso en este portal es una de las operaciones más exigentes en términos de recursos para nuestro servicio. Le rogamos considere contribuir simbólicamente un monto pequeño para la Asociación Chamilo antes de crear este curso, con el objetivo de ayudarnos a mantener este servicio de buena calidad y gratuito para todos!";
 ?>

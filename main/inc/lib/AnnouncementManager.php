@@ -1412,7 +1412,7 @@ class AnnouncementManager
                     'comment' => $file_comment,
                     'path' => $new_file_name,
                     'announcement_id' => $announcement_id,
-                    'size' => intval($file['size']),
+                    'size' => (int) $file['size'],
                 ];
 
                 $insertId = Database::insert($table, $params);

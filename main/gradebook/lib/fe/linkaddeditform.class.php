@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -52,7 +53,7 @@ class LinkAddEditForm extends FormValidator
                 $select = $this->addElement('select', 'select_link', get_lang('ChooseItem'));
                 foreach ($link->get_all_links() as $newlink) {
                     $name = strip_tags(Exercise::get_formated_title_variable($newlink[1]));
-                    $select->addoption($name, $newlink[0]);
+                    $select->addOption($name, $newlink[0]);
                 }
             }
         } else {
@@ -89,12 +90,12 @@ class LinkAddEditForm extends FormValidator
                         if (empty($grade_model_id)) {
                             if (0 == $my_cat->get_parent_id()) {
                                 $default_weight = $my_cat->get_weight();
-                                $select_gradebook->addoption(get_lang('Default'), $my_cat->get_id());
+                                $select_gradebook->addOption(get_lang('Default'), $my_cat->get_id());
                             } else {
-                                $select_gradebook->addoption($my_cat->get_name(), $my_cat->get_id());
+                                $select_gradebook->addOption($my_cat->get_name(), $my_cat->get_id());
                             }
                         } else {
-                            $select_gradebook->addoption(get_lang('Select'), 0);
+                            $select_gradebook->addOption(get_lang('Select'), 0);
                         }
                         if ($link->get_category_id() == $my_cat->get_id()) {
                             $default_weight = $my_cat->get_weight();
@@ -203,7 +204,7 @@ class LinkAddEditForm extends FormValidator
         if ($form_type == self::TYPE_ADD) {
             $setting = api_get_setting('tool_visible_by_default_at_creation');
             $visibility_default = 1;
-            if (isset($setting['gradebook']) && $setting['gradebook'] == 'false') {
+            if (isset($setting['gradebook']) && $setting['gradebook'] === 'false') {
                 $visibility_default = 0;
             }
             $defaults['visible'] = $visibility_default;

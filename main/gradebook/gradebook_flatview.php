@@ -1,9 +1,7 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
-/**
- * Script.
- */
 require_once __DIR__.'/../inc/global.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/fe/exportgradebook.php';
 
@@ -125,7 +123,7 @@ $parameters = ['selectcat' => $categoryId];
 $flatViewTable->set_additional_parameters($parameters);
 
 $params = [];
-if (isset($_GET['export_pdf']) && 'category' == $_GET['export_pdf']) {
+if (isset($_GET['export_pdf']) && 'category' === $_GET['export_pdf']) {
     $params['only_total_category'] = true;
     $params['join_firstname_lastname'] = true;
     $params['show_official_code'] = true;
@@ -271,7 +269,7 @@ if (isset($_GET['exportpdf'])) {
 } else {
     Display::display_header(get_lang('FlatView'));
 }
-if (isset($_GET['isStudentView']) && 'false' == $_GET['isStudentView']) {
+if (isset($_GET['isStudentView']) && 'false' === $_GET['isStudentView']) {
     DisplayGradebook::display_header_reduce_flatview(
         $cat[0],
         $showeval,
@@ -279,7 +277,7 @@ if (isset($_GET['isStudentView']) && 'false' == $_GET['isStudentView']) {
         $simple_search_form
     );
     $flatViewTable->display();
-} elseif (isset($_GET['selectcat']) && ($_SESSION['studentview'] == 'teacherview')) {
+} elseif (isset($_GET['selectcat']) && ($_SESSION['studentview'] === 'teacherview')) {
     DisplayGradebook::display_header_reduce_flatview(
         $cat[0],
         $showeval,

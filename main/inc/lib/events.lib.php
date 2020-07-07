@@ -1909,9 +1909,12 @@ class Event
     }
 
     /**
-     * @param int $exeId
+     * Get all the track_e_attempt records for a given
+     * track_e_exercises.exe_id (pk).
      *
-     * @return array
+     * @param int $exeId The exe_id from an exercise attempt record
+     *
+     * @return array The complete records from track_e_attempt that match the given exe_id
      */
     public static function getAllExerciseEventByExeId($exeId)
     {
@@ -1933,11 +1936,15 @@ class Event
     }
 
     /**
-     * @param int $exeId
-     * @param int $user_id
-     * @param int $courseId
-     * @param int $session_id
-     * @param int $question_id
+     * Delete one record from the track_e_attempt table (recorded quiz answer)
+     * and register the deletion event (LOG_QUESTION_RESULT_DELETE) in
+     * track_e_default.
+     *
+     * @param int $exeId       The track_e_exercises.exe_id (primary key)
+     * @param int $user_id     The user who answered (already contained in exe_id)
+     * @param int $courseId    The course in which it happened (already contained in exe_id)
+     * @param int $session_id  The session in which it happened (already contained in exe_id)
+     * @param int $question_id The c_quiz_question.iid
      */
     public static function delete_attempt(
         $exeId,
@@ -1975,6 +1982,9 @@ class Event
     }
 
     /**
+     * Delete one record from the track_e_hotspot table based on a given
+     * track_e_exercises.exe_id.
+     *
      * @param $exeId
      * @param $user_id
      * @param int $courseId
@@ -2366,9 +2376,9 @@ class Event
     }
 
     /**
-     * For the sake of genericity, this function is a switch.
-     * It's called by EventsDispatcher and fires the good function
-     * with the good require_once.
+     * For the sake of cohesion, this function is a switch.
+     * It's called by EventsDispatcher and fires the right function
+     * with the right require_once.
      *
      * @deprecated
      *

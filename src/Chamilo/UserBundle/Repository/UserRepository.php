@@ -52,9 +52,6 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
-//use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
-//use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
-
 /**
  * Class UserRepository.
  *
@@ -1173,7 +1170,6 @@ class UserRepository extends EntityRepository
                 'Friends' => $friendList,
                 'Events' => $eventList,
                 'GradebookCertificate' => $gradebookCertificate,
-
                 'TrackECourseAccess' => $trackECourseAccessList,
                 'TrackELogin' => $trackELoginList,
                 'TrackEAccess' => $trackEAccessList,
@@ -1212,14 +1208,12 @@ class UserRepository extends EntityRepository
 
                 'Wiki' => $cWiki,
                 // Tickets
-
                 'Ticket' => $ticket,
                 'TicketMessage' => $ticketMessage,
             ]
         );
 
         $user->setDropBoxReceivedFiles([]);
-        //$user->setGroups([]);
         $user->setCurriculumItems([]);
 
         $portals = $user->getPortals();
@@ -1300,10 +1294,9 @@ class UserRepository extends EntityRepository
         $dateNormalizer->setIgnoredAttributes($ignore);
 
         $callback = function ($dateTime) {
-            return $dateTime instanceof \DateTime
-                ? $dateTime->format(\DateTime::ISO8601)
-                : '';
+            return $dateTime instanceof \DateTime ? $dateTime->format(\DateTime::ISO8601) : '';
         };
+
         $dateNormalizer->setCallbacks(
             [
                 'createdAt' => $callback,
@@ -1313,12 +1306,9 @@ class UserRepository extends EntityRepository
             ]
         );
 
-        $normalizers = [$dateNormalizer];
-        $serializer = new Serializer($normalizers, [new JsonEncoder()]);
+        $serializer = new Serializer([$dateNormalizer], [new JsonEncoder()]);
 
-        $jsonContent = $serializer->serialize($user, 'json');
-
-        return $jsonContent;
+        return $serializer->serialize($user, 'json');
     }
 
     /**

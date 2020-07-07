@@ -1,7 +1,5 @@
 <?php
 
-use ChamiloSession as Session;
-
 /**
  * Create, validate and process HTML forms
  *

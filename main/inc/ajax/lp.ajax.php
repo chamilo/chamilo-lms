@@ -113,11 +113,11 @@ switch ($action) {
         foreach (['video', 'audio'] as $type) {
             if (isset($_FILES["${type}-blob"])) {
                 $fileName = $_POST["${type}-filename"];
-                //$file = $_FILES["${type}-blob"]["tmp_name"];
                 $file = $_FILES["${type}-blob"];
+                $title = $_POST['audio-title'];
                 $fileInfo = pathinfo($fileName);
-
-                $file['name'] = 'rec_'.date('Y-m-d_His').'_'.uniqid().'.'.$fileInfo['extension'];
+                //$file['name'] = 'rec_'.date('Y-m-d_His').'_'.uniqid().'.'.$fileInfo['extension'];
+                $file['name'] = $title.'.'.$fileInfo['extension'];
                 $file['file'] = $file;
 
                 $result = DocumentManager::upload_document(

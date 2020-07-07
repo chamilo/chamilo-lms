@@ -474,21 +474,60 @@ class MessageManager
         $forceTitleWhenSendingEmail = false,
         $status = 0
     ) {
-        $table = Database::get_main_table(TABLE_MESSAGE);
         $group_id = (int) $group_id;
         $receiver_user_id = (int) $receiver_user_id;
         $parent_id = (int) $parent_id;
         $editMessageId = (int) $editMessageId;
         $topic_id = (int) $topic_id;
-
         $status = empty($status) ? MESSAGE_STATUS_UNREAD : (int) $status;
 
         if (!empty($receiver_user_id)) {
+            // Check if receipent is allow to recieve a message
             $receiverUserInfo = api_get_user_info($receiver_user_id);
 
             // Disabling messages for inactive users.
             if (0 == $receiverUserInfo['active']) {
                 return false;
+            }
+
+            // Disabling messages depending the pausetraining plugin.
+            $allowPauseFormation = api_get_plugin_setting('pausetraining', 'tool_enable') === 'true' &&
+                api_get_plugin_setting('pausetraining', 'allow_users_to_edit_pause_formation') === 'true';
+
+            if ($allowPauseFormation) {
+                if (!empty($receiverUserInfo)) {
+                    $extraFieldValue = new ExtraFieldValue('user');
+                    $allowNotifications = $extraFieldValue->get_values_by_handler_and_field_variable(
+                        $receiverUserInfo['user_id'],
+                        'allow_notifications'
+                    );
+
+                    if (!empty($allowNotifications) &&
+                        isset($allowNotifications['value']) && 0 === (int) $allowNotifications['value']
+                    ) {
+                        $startDate = $extraFieldValue->get_values_by_handler_and_field_variable(
+                            $receiverUserInfo['user_id'],
+                            'start_pause_date'
+                        );
+                        $endDate = $extraFieldValue->get_values_by_handler_and_field_variable(
+                            $receiverUserInfo['user_id'],
+                            'end_pause_date'
+                        );
+
+                        if (
+                            !empty($startDate) && isset($startDate['value']) && !empty($startDate['value']) &&
+                            !empty($endDate) && isset($endDate['value']) && !empty($endDate['value'])
+                        ) {
+                            $now = time();
+                            $start = api_strtotime($startDate['value']);
+                            $end = api_strtotime($startDate['value']);
+
+                            if ($now > $start && $now < $end) {
+                                return false;
+                            }
+                        }
+                    }
+                }
             }
         }
 
@@ -559,9 +598,9 @@ class MessageManager
             return false;
         }
 
-        // Just in case we replace the and \n and \n\r while saving in the DB
-        // $content = str_replace(array("\n", "\n\r"), '<br />', $content);
         $now = api_get_utc_datetime();
+        $table = Database::get_main_table(TABLE_MESSAGE);
+
         if (!empty($receiver_user_id) || !empty($group_id)) {
             // message for user friend
             //@todo it's possible to edit a message? yes, only for groups
@@ -784,7 +823,7 @@ class MessageManager
                     ).' <br />'.$message;
 
                     self::send_message_simple(
-                        $drhInfo['user_id'],
+                        $drhInfo['id'],
                         $subject,
                         $message,
                         $sender_id,

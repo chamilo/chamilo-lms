@@ -1071,32 +1071,24 @@ function store_add_dropbox($file = [], $work = null)
                 'courseTitle' => $_course['title'],
                 'userUsername' => $recipent_temp['username'],
             ];
-            api_mail_html(
-                api_get_person_name(
-                    $recipent_temp['firstname'].' '.$recipent_temp['lastname'],
-                    null,
-                    PERSON_NAME_EMAIL_ADDRESS
-                ),
-                $recipent_temp['email'],
+
+            $message = get_lang('NewDropboxFileUploadedContent').
+                ' <a href="'.api_get_path(WEB_CODE_PATH).'dropbox/index.php?'.api_get_cidreq().'">'.get_lang('SeeFile').'</a>'.
+            "\n\n".
+            api_get_person_name(
+                $_user['firstName'],
+                $_user['lastName'],
+                null,
+                PERSON_NAME_EMAIL_ADDRESS
+            )."\n".get_lang('Email')." : ".$_user['mail'];
+
+            MessageManager::send_message_simple(
+                $recipient_id,
                 get_lang('NewDropboxFileUploaded'),
-                get_lang('NewDropboxFileUploadedContent').' <a href="'.api_get_path(WEB_CODE_PATH).'dropbox/index.php?'.api_get_cidreq().'">'.get_lang('SeeFile').'</a>'.
-                "\n\n".
-                api_get_person_name(
-                    $_user['firstName'],
-                    $_user['lastName'],
-                    null,
-                    PERSON_NAME_EMAIL_ADDRESS
-                )."\n".get_lang('Email')." : ".$_user['mail'],
-                api_get_person_name(
-                    $_user['firstName'],
-                    $_user['lastName'],
-                    null,
-                    PERSON_NAME_EMAIL_ADDRESS
-                ),
-                $_user['mail'],
-                null,
-                null,
-                null,
+                $message,
+                $_user['user_id'],
+                false,
+                false,
                 $additionalParameters
             );
         }

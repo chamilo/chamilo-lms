@@ -1,10 +1,9 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  *	This script displays a form for registering new users.
- *
- *	@package	 chamilo.admin
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -286,7 +285,7 @@ if ($display_all_form) {
 }
 
 // Terms and conditions
-if (api_get_setting('allow_terms_conditions') == 'true') {
+/*if (api_get_setting('allow_terms_conditions') == 'true') {
     $language = api_get_interface_language();
     $language = api_get_language_id($language);
     $term_preview = LegalManager::get_last_condition($language);
@@ -321,7 +320,7 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
             $form->addElement('label', get_lang('TermsAndConditions'), $preview);
         }
     }
-}
+}*/
 
 $form->addButtonSave(get_lang('RegisterUser'));
 

@@ -21,7 +21,29 @@ if (api_get_setting('allow_social_tool') !== 'true') {
     exit;
 }
 
+$bossId = isset($_REQUEST['sup']) ? (int) $_REQUEST['sup'] : 0;
 $user_id = api_get_user_id();
+
+$redirectToBossId = 0;
+if (!empty($bossId)) {
+    $bossList = UserManager::getStudentBossList($user_id);
+    if (!empty($bossList)) {
+        foreach ($bossList as $boss) {
+            $bossId = $boss['boss_id'];
+            $bossInfo = api_get_user_info($bossId, true);
+            if (1 === $bossInfo['user_is_online']) {
+                $redirectToBossId = $bossId;
+                break;
+            }
+        }
+    }
+}
+
+if (!empty($redirectToBossId)) {
+    header('Location: '.api_get_self().'?u='.$redirectToBossId);
+    exit;
+}
+
 $friendId = isset($_GET['u']) ? (int) $_GET['u'] : api_get_user_id();
 $show_full_profile = true;
 //social tab
@@ -102,7 +124,7 @@ if (isset($_GET['u']) && is_numeric($_GET['u']) && $_GET['u'] != api_get_user_id
     ];
 }
 
-Session::write('social_user_id', (int) $user_id);
+Session::write('social_user_id', $user_id);
 
 // Social Block Menu
 $menu = SocialManager::show_social_menu(

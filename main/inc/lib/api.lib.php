@@ -2286,6 +2286,7 @@ function api_format_course_array($course_data)
     $_course['directory'] = $course_data['directory'];
     $_course['creation_date'] = $course_data['creation_date'];
     $_course['titular'] = $course_data['tutor_name'];
+    $_course['tutor_name'] = $course_data['tutor_name'];
     $_course['language'] = $course_data['course_language'];
     $_course['extLink']['url'] = $course_data['department_url'];
     $_course['extLink']['name'] = $course_data['department_name'];
@@ -3441,14 +3442,15 @@ function api_is_allowed_to_edit(
     $check_student_view = true
 ) {
     $allowSessionAdminEdit = api_get_configuration_value('session_admins_edit_courses_content') === true;
+
     // Admins can edit anything.
     if (api_is_platform_admin($allowSessionAdminEdit)) {
         //The student preview was on
         if ($check_student_view && api_is_student_view_active()) {
             return false;
-        } else {
-            return true;
         }
+
+        return true;
     }
 
     $sessionId = api_get_session_id();
@@ -4788,6 +4790,7 @@ function api_display_language_form($hide_if_no_choice = false, $showAsButton = f
 
     $currentLanguageId = api_get_language_id($user_selected_language);
     $currentLanguageInfo = api_get_language_info($currentLanguageId);
+
     $countryCode = languageCodeToCountryIsoCodeForFlags($currentLanguageInfo['isocode']);
     $url = api_get_self();
     if ($showAsButton) {
@@ -4884,6 +4887,9 @@ function languageCodeToCountryIsoCodeForFlags($languageIsoCode)
             break;
         case 'ko':
             $country = 'kr';
+            break;
+        case 'ms':
+            $country = 'my';
             break;
         case 'pt-BR':
             $country = 'br';

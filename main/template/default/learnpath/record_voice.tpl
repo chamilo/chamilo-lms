@@ -2,7 +2,12 @@
     <p>
         <span class="fa fa-microphone fa-5x fa-fw" aria-hidden="true"></span>
         <span class="sr-only">{{ 'RecordAudio'|get_lang }}</span>
+
+        <div class="form-group">
+            <input type="text" name="audio_title" id="audio-title-rtc" class="form-control" placeholder="{{ 'InputNameHere'|get_lang }}" />
+        </div>
     </p>
+
     <button class="btn btn-primary" type="button" id="btn-start-record">
         <span class="fa fa-circle fa-fw" aria-hidden="true"></span> {{ 'StartRecordingAudio'|get_lang }}
     </button>
@@ -18,12 +23,20 @@
         function useRecordRTC(){
             $('#record-audio-recordrtc').show();
 
+            var audioTitle = $('#audio-title-rtc');
+
             var mediaConstraints = {audio: true},
                     recordRTC = null,
                     btnStart = $('#btn-start-record'),
                     btnStop = $('#btn-stop-record');
 
             btnStart.on('click', function () {
+                if ('' === audioTitle.val()) {
+                    alert('{{ 'TitleIsRequired'|get_lang | escape }} ');
+
+                    return false;
+                }
+
                 navigator.getUserMedia = navigator.getUserMedia ||
                         navigator.mozGetUserMedia ||
                         navigator.webkitGetUserMedia;
@@ -64,6 +77,7 @@
                     var formData = new FormData();
                     formData.append('audio-filename', fileName + fileExtension);
                     formData.append('audio-blob', recordedBlob, 'audio' + fileExtension);
+                    formData.append('audio-title', audioTitle.val());
 
                     $.ajax({
                         url: '{{ _p.web_ajax }}lp.ajax.php?a=record_audio&lp_item_id={{ lp_item_id }}',

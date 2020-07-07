@@ -40,6 +40,7 @@ class ExerciseLink extends AbstractLink
         $tableItemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $exerciseTable = $this->get_exercise_table();
         $lpItemTable = Database::get_course_table(TABLE_LP_ITEM);
+        $lpTable = Database::get_course_table(TABLE_LP_MAIN);
 
         $documentPath = api_get_path(SYS_COURSE_PATH).$this->course_code.'/document';
         if (empty($this->course_code)) {
@@ -47,34 +48,40 @@ class ExerciseLink extends AbstractLink
         }
         $sessionId = $this->get_session_id();
         if (empty($sessionId)) {
-            $session_condition = api_get_session_condition(0, true);
+            $session_condition = api_get_session_condition(0, true, false, 'e.session_id');
         } else {
-            $session_condition = api_get_session_condition($sessionId, true, true);
+            $session_condition = api_get_session_condition($sessionId, true, true, 'e.session_id');
         }
 
         // @todo
         $uploadPath = null;
+        $courseId = $this->course_id;
 
-        $sql = 'SELECT iid, title FROM '.$exerciseTable.'
-				WHERE c_id = '.$this->course_id.' AND active=1  '.$session_condition;
+        $sql = "SELECT iid, title FROM $exerciseTable e
+				WHERE
+				    c_id = $courseId AND
+				    active = 1
+				    $session_condition ";
 
-        $sqlLp = "SELECT e.iid, e.title
+        $sqlLp = "SELECT e.iid, e.title, lp.name lp_name
                   FROM $exerciseTable e
                   INNER JOIN $lpItemTable i
                   ON (e.c_id = i.c_id AND e.id = i.path)
+                  INNER JOIN $lpTable lp
+                  ON (lp.c_id = e.c_id AND lp.id = i.lp_id)
 				  WHERE
-				    e.c_id = $this->course_id AND
+				    e.c_id = $courseId AND
 				    active = 0 AND
 				    item_type = 'quiz'
-				  $session_condition";
+				    $session_condition";
 
         $sql2 = "SELECT d.path as path, d.comment as comment, ip.visibility as visibility, d.id
                 FROM $TBL_DOCUMENT d
                 INNER JOIN $tableItemProperty ip
                 ON (d.id = ip.ref AND d.c_id = ip.c_id)
                 WHERE
-                    d.c_id = $this->course_id AND
-                    ip.c_id = $this->course_id AND
+                    d.c_id = $courseId AND
+                    ip.c_id = $courseId AND
                     ip.tool = '".TOOL_DOCUMENT."' AND
                     (d.path LIKE '%htm%') AND
                     (d.path LIKE '%HotPotatoes_files%') AND
@@ -131,9 +138,11 @@ class ExerciseLink extends AbstractLink
 
         if (!empty($exerciseInLP)) {
             foreach ($exerciseInLP as $exercise) {
+                $lpName = strip_tags($exercise['lp_name']);
                 $cats[] = [
                     $exercise['iid'],
-                    strip_tags(Exercise::get_formated_title_variable($exercise['title'])).' ('.get_lang('ToolLearnpath').')',
+                    strip_tags(Exercise::get_formated_title_variable($exercise['title'])).
+                    ' ('.get_lang('ToolLearnpath').' - '.$lpName.')',
                 ];
             }
         }
@@ -307,7 +316,7 @@ class ExerciseLink extends AbstractLink
 
         if (isset($stud_id) && empty($type)) {
             // for 1 student
-            if ($data = Database::fetch_array($scores)) {
+            if ($data = Database::fetch_array($scores, 'ASSOC')) {
                 $attempts = Database::query($sql);
                 $counter = 0;
                 while ($attempt = Database::fetch_array($attempts)) {

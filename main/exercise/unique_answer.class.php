@@ -236,9 +236,7 @@ class UniqueAnswer extends Question
         global $text;
         $buttonGroup = [];
 
-        if ($obj_ex->edit_exercise_in_lp == true ||
-            (empty($this->exerciseList) && empty($obj_ex->id))
-        ) {
+        if (true === $obj_ex->edit_exercise_in_lp || (empty($this->exerciseList) && empty($obj_ex->id))) {
             //setting the save button here and not in the question class.php
             $buttonGroup[] = $form->addButtonDelete(get_lang('LessAnswer'), 'lessAnswers', true);
             $buttonGroup[] = $form->addButtonCreate(get_lang('PlusAnswer'), 'moreAnswers', true);

@@ -4189,13 +4189,22 @@ class learnpathItem
      */
     public function remove_audio()
     {
-        if (empty($this->db_id)) {
+        $courseInfo = api_get_course_info();
+
+        if (empty($this->db_id) || empty($courseInfo)) {
             return false;
         }
+
+        if (!empty($this->audio)) {
+            $fileName = '/audio/'.$this->audio;
+            $filepath = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document/';
+            DocumentManager::delete_document($courseInfo, $fileName, $filepath);
+        }
+
         $table = Database::get_course_table(TABLE_LP_ITEM);
         $sql = "UPDATE $table SET
                 audio = ''
-                WHERE iid IN (".$this->db_id.")";
+                WHERE iid = ".$this->db_id;
         Database::query($sql);
     }
 
@@ -4241,7 +4250,7 @@ class learnpathItem
                 break;
         }
 
-        if ($type == 'simple') {
+        if ($type === 'simple') {
             if (in_array($status, ['failed', 'passed', 'browsed'])) {
                 $myLessonStatus = get_lang('ScormIncomplete');
 
@@ -4251,9 +4260,9 @@ class learnpathItem
 
         if ($decorate) {
             return Display::label($myLessonStatus, $classStatus);
-        } else {
-            return $myLessonStatus;
         }
+
+        return $myLessonStatus;
     }
 
     /**

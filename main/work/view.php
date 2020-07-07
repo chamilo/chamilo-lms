@@ -50,7 +50,7 @@ $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
     $courseInfo
 );
 
-$isDrhOfSession = !empty(SessionManager::getSessionFollowedByDrh(api_get_user_id(), $row['session_id']));
+$isDrhOfSession = !empty(SessionManager::getSessionFollowedByDrh(api_get_user_id(), $work['session_id']));
 
 if ((user_is_author($id) || $isDrhOfCourse || $allowEdition || $isDrhOfSession) ||
     (

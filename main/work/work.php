@@ -40,7 +40,6 @@ if ($action === 'upload_form') {
     $display_upload_form = true;
 }
 
-/*	Header */
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'gradebook/index.php?'.api_get_cidreq(),

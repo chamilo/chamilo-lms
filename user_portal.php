@@ -328,6 +328,7 @@ $controller->tpl->assign('search_block', $controller->return_search_block());
 $controller->tpl->assign('notice_block', $controller->return_notice());
 $controller->tpl->assign('classes_block', $controller->returnClassesBlock());
 $controller->tpl->assign('skills_block', $controller->returnSkillLinks());
+$controller->tpl->assign('student_publication_block', $controller->studentPublicationBlock());
 
 $historyClass = '';
 if (!empty($_GET['history'])) {

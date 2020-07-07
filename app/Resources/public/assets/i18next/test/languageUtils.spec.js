@@ -17,6 +17,8 @@ describe('LanguageUtils', () => {
       { args: ['de-CH'], expected: ['de-CH', 'de', 'en'] },
       { args: ['nb-NO'], expected: ['nb-NO', 'nb', 'en'] },
       { args: ['zh-Hant-MO'], expected: ['zh-Hant-MO', 'zh-Hant', 'zh', 'en'] },
+      { args: ['de-x-custom1'], expected: ['de-x-custom1', 'de', 'en'] },
+      { args: ['de-DE-x-custom1'], expected: ['de-DE-x-custom1', 'de', 'en'] },
     ];
 
     tests.forEach(test => {
@@ -159,11 +161,11 @@ describe('LanguageUtils', () => {
     });
   });
 
-  describe('toResolveHierarchy() - whitelist', () => {
+  describe('toResolveHierarchy() - supportedLngs', () => {
     var cu;
 
     before(() => {
-      cu = new LanguageUtils({ fallbackLng: 'en', whitelist: ['nb-NO', 'de', 'en'] });
+      cu = new LanguageUtils({ fallbackLng: 'en', supportedLngs: ['nb-NO', 'de', 'en'] });
       cu.logger.setDebug(false); // silence
     });
 
@@ -184,14 +186,14 @@ describe('LanguageUtils', () => {
     });
   });
 
-  describe('toResolveHierarchy() - non explicit whitelist ', () => {
+  describe('toResolveHierarchy() - non explicit supportedLngs ', () => {
     var cu;
 
     before(() => {
       cu = new LanguageUtils({
         fallbackLng: ['en'],
-        whitelist: ['de', 'en', 'zh'],
-        nonExplicitWhitelist: true,
+        supportedLngs: ['de', 'en', 'zh'],
+        nonExplicitSupportedLngs: true,
       });
     });
 
@@ -206,6 +208,33 @@ describe('LanguageUtils', () => {
     tests.forEach(test => {
       it('correctly prepares resolver for ' + JSON.stringify(test.args) + ' args', () => {
         expect(cu.toResolveHierarchy.apply(cu, test.args)).to.eql(test.expected);
+      });
+    });
+  });
+
+  describe('getBestMatchFromCodes()', () => {
+    var cu;
+
+    before(() => {
+      cu = new LanguageUtils({
+        fallbackLng: ['en'],
+        supportedLngs: ['en-US', 'en', 'de-DE'],
+      });
+    });
+
+    var tests = [
+      { args: [['en']], expected: 'en' },
+      { args: [['ru', 'en']], expected: 'en' },
+      { args: [['en-GB']], expected: 'en' },
+      { args: [['ru', 'en-GB']], expected: 'en' },
+      { args: [['de-CH']], expected: 'de-DE' },
+      { args: [['ru']], expected: 'en' },
+      { args: [[]], expected: 'en' },
+    ];
+
+    tests.forEach(test => {
+      it('correctly get best match for ' + JSON.stringify(test.args) + ' args', () => {
+        expect(cu.getBestMatchFromCodes.apply(cu, test.args)).to.eql(test.expected);
       });
     });
   });

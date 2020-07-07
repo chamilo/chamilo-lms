@@ -565,13 +565,13 @@ if ($allowAntiPlagiarism) {
             if (isWorkFolder()) {
                 searchAdvancement();
                 setInterval("searchAdvancement()", refreshDelaisAfter);
-                if (!clickTrigger) {
-                    clickTrigger = true;
+                //if (!clickTrigger) {
+                    //clickTrigger = true;
                     $('.getSingleCompilatio').on('click', function () {
                         var parts = $(this).parent().attr('id').split('id_avancement');
                         getSingleCompilatio(parts[1]);
                     });
-                }
+                //}
             }
         }
 

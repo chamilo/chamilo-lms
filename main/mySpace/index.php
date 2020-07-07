@@ -80,6 +80,10 @@ if ($is_platform_admin) {
             Display::return_icon('statistics.png', get_lang('CurrentCoursesReport'), [], ICON_SIZE_MEDIUM),
             api_get_path(WEB_CODE_PATH).'mySpace/current_courses.php'
         );
+        $menu_items[] = Display::url(
+            Display::return_icon('session.png', get_lang('SessionFilterReport'), [], ICON_SIZE_MEDIUM),
+            api_get_path(WEB_CODE_PATH).'mySpace/session_filter.php'
+        );
     } else {
         $menu_items[] = Display::url(
             Display::return_icon(
@@ -102,6 +106,10 @@ if ($is_platform_admin) {
         $menu_items[] = Display::url(
             Display::return_icon('statistics.png', get_lang('CurrentCoursesReport'), [], ICON_SIZE_MEDIUM),
             api_get_path(WEB_CODE_PATH).'mySpace/current_courses.php'
+        );
+        $menu_items[] = Display::url(
+            Display::return_icon('session.png', get_lang('SessionFilterReport'), [], ICON_SIZE_MEDIUM),
+            api_get_path(WEB_CODE_PATH).'mySpace/session_filter.php'
         );
 
         if ($pluginCalendar) {

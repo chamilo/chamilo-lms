@@ -1,5 +1,5 @@
 <div style="position: absolute; top: 40px; right: 50px;">
-    <img src="{{ _p.web_css_theme }}images/header-logo.png" width="200">
+    {{ logo }}
 </div>
 
 {% if title %}

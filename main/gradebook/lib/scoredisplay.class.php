@@ -300,23 +300,23 @@ class ScoreDisplay
         $disableColor = false,
         $ignoreDecimals = false
     ) {
-        $my_score = $score == 0 ? 1 : $score;
+        $my_score = $score == 0 ? [] : $score;
 
-        if ($type == SCORE_BAR) {
-            $percentage = $my_score[0] / $my_score[1] * 100;
+        switch ($type) {
+            case SCORE_BAR:
+                $percentage = $my_score[0] / $my_score[1] * 100;
 
-            return Display::bar_progress($percentage);
-        }
-        if ($type == SCORE_NUMERIC) {
-            $percentage = $my_score[0] / $my_score[1] * 100;
+                return Display::bar_progress($percentage);
+                break;
+            case SCORE_NUMERIC:
 
-            return round($percentage);
-        }
+                $percentage = $my_score[0] / $my_score[1] * 100;
 
-        if ($type == SCORE_SIMPLE) {
-            $simpleScore = $this->format_score($my_score[0], $ignoreDecimals);
-
-            return $simpleScore;
+                return round($percentage);
+                break;
+            case SCORE_SIMPLE:
+                return $this->format_score($my_score[0], $ignoreDecimals);
+                break;
         }
 
         if ($this->custom_enabled && isset($this->custom_display_conv)) {
@@ -456,6 +456,9 @@ class ScoreDisplay
      */
     private function display_as_percent($score)
     {
+        if (empty($score)) {
+            return null;
+        }
         $score_denom = ($score[1] == 0) ? 1 : $score[1];
 
         return $this->format_score($score[0] / $score_denom * 100).' %';
@@ -473,12 +476,16 @@ class ScoreDisplay
     {
         if ($score == 1) {
             return '0 / 0';
-        } else {
-            $score[0] = isset($score[0]) ? $this->format_score($score[0], $ignoreDecimals) : 0;
-            $score[1] = isset($score[1]) ? $this->format_score($score[1], $ignoreDecimals) : 0;
-
-            return  $score[0].' / '.$score[1];
         }
+
+        if (empty($score)) {
+            return '0 / 0';
+        }
+
+        $score[0] = isset($score[0]) ? $this->format_score($score[0], $ignoreDecimals) : 0;
+        $score[1] = isset($score[1]) ? $this->format_score($score[1], $ignoreDecimals) : 0;
+
+        return $score[0].' / '.$score[1];
     }
 
     /**
@@ -490,6 +497,10 @@ class ScoreDisplay
      */
     private function display_custom($score)
     {
+        if (empty($score)) {
+            return null;
+        }
+
         $my_score_denom = $score[1] == 0 ? 1 : $score[1];
         $scaledscore = $score[0] / $my_score_denom;
 

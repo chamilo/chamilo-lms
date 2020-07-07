@@ -501,7 +501,7 @@ function setCheckbox(value, table_id) {
 }
 
 function action_click(element, table_id) {
-    d = $("#"+table_id);
+    var d = $("#"+table_id);
     if (!confirm('{{ "ConfirmYourChoice"|get_lang | escape('js')}}')) {
         return false;
     } else {

@@ -136,9 +136,13 @@ function updateUsers($users, $resetPassword = false)
             $creatorId = $userInfo['creator_id'];
             $hrDeptId = $userInfo['hr_dept_id'];
             $language = isset($user['Language']) ? $user['Language'] : $userInfo['language'];
-            $sendEmail = isset($user['SendEmail']) ? $user['SendEmail'] : $userInfo['language'];
+            //$sendEmail = isset($user['SendEmail']) ? $user['SendEmail'] : $userInfo['language'];
+            $sendEmail = false;
+            if ($resetPassword) {
+                $sendEmail = true;
+            }
 
-            $userUpdated = UserManager::update_user(
+            UserManager::update_user(
                 $user_id,
                 $firstName,
                 $lastName,
@@ -157,9 +161,10 @@ function updateUsers($users, $resetPassword = false)
                 null,
                 $language,
                 '',
-                false,
+                $sendEmail,
                 $changePassMethod
             );
+
             if (!empty($user['Courses']) && !is_array($user['Courses'])) {
                 $user['Courses'] = [$user['Courses']];
             }
@@ -261,14 +266,14 @@ if (isset($extAuthSource) && is_array($extAuthSource)) {
     $defined_auth_sources = array_merge($defined_auth_sources, array_keys($extAuthSource));
 }
 
-$tool_name = get_lang('ImportUserListXMLCSV');
+$tool_name = get_lang('UpdateUserListXMLCSV');
 $interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('PlatformAdmin')];
 
 set_time_limit(0);
 $extra_fields = UserManager::get_extra_fields(0, 0, 5, 'ASC', true);
 
 $form = new FormValidator('user_update_import', 'post', api_get_self());
-$form->addElement('header', $tool_name);
+$form->addHeader($tool_name);
 $form->addFile('import_file', get_lang('ImportFileLocation'), ['accept' => 'text/csv', 'id' => 'import_file']);
 $form->addCheckBox('reset_password', '', get_lang('AutoGeneratePassword'));
 

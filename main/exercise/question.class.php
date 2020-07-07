@@ -1636,14 +1636,7 @@ abstract class Question
                     e.stopPropagation();
                     var imageZoom = $("input[name=\'imageZoom\']").val();
                     var imageWidth = $("input[name=\'imageWidth\']").val();
-                    CKEDITOR.instances.questionDescription.insertHtml(\'
-                        <img 
-                            id="zoom_picture" 
-                            class="zoom_picture" 
-                            src="\'+imageZoom+\'" 
-                            data-zoom-image="\'+imageZoom+\'" 
-                            width="\'+imageWidth+\'px"
-                        />\');
+                    CKEDITOR.instances.questionDescription.insertHtml(\'<img id="zoom_picture" class="zoom_picture" src="\'+imageZoom+\'" data-zoom-image="\'+imageZoom+\'" width="\'+imageWidth+\'px" />\');
                 });
 
                 $("input[name=\'imageZoom\']").on("click", function(){
@@ -1705,10 +1698,10 @@ abstract class Question
         $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
 
         if (isset($zoomOptions['options'])) {
-            $form->addElement('text', 'imageZoom', get_lang('UrlImage'));
-            $form->addElement('text', 'imageWidth', get_lang('PxWidth'));
+            $form->addElement('text', 'imageZoom', get_lang('ImageURL'));
+            $form->addElement('text', 'imageWidth', get_lang('PixelWidth'));
 
-            $form->addButton('btn_create_img', get_lang('AddEditor'), 'plus', 'info', 'small', 'create_img_link');
+            $form->addButton('btn_create_img', get_lang('AddToEditor'), 'plus', 'info', 'small', 'create_img_link');
         }
 
         $form->addHtmlEditor(

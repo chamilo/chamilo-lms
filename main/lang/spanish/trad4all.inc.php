@@ -5362,10 +5362,6 @@ $BlockCopyPasteForStudentsComment = "Bloquear a los estudiantes la posibilidad d
 $MoreButtonsForMaximizedModeTitle = "Barras de botones extendidas";
 $MoreButtonsForMaximizedModeComment = "Habilitar las barras de botones extendidas cuando el editor WYSIWYG está maximizado";
 $Editor = "Editor HTML";
-$AddEditor = "Añadir al editor";
-$UrlImage = "URL imagen";
-$PxWidth = "Ancho en px";
-$AddZoomImage = "Agregar imagen con zoom";
 $GoToCourseAfterLoginTitle = "Ir directamente al curso tras identificarse";
 $GoToCourseAfterLoginComment = "Cuando un usuario está inscrito solamente en un curso, ir directamente al curso después de identificarse";
 $AllowStudentsDownloadFoldersTitle = "Permitir a los estudiantes descargar directorios";
@@ -8591,4 +8587,9 @@ $UpdateUserListXMLCSV = "Actualizar lista de usuarios";
 $DonateToTheProject = "Chamilo es un proyecto Open Source (o \"Software Libre\") y este portal está proveído a nuestra comunidad sin costo por la Asociación Chamilo, que persigue el objetivo de mejorar la calidad de una educación de calidad en todo el mundo.<br /><br />
 Desarrollar Chamilo y proveer este servicio son, no obstante, tareas costosas, y su ayuda contribuiría de manera significativa en asegurar que estos servicios se mejoren más rápido en el tiempo.<br /><br />
 Crear un curso en este portal es una de las operaciones más exigentes en términos de recursos para nuestro servicio. Le rogamos considere contribuir simbólicamente un monto pequeño para la Asociación Chamilo antes de crear este curso, con el objetivo de ayudarnos a mantener este servicio de buena calidad y gratuito para todos!";
+$MyStudentPublications = "Mis tareas";
+$AddToEditor = "Añadir al editor";
+$ImageURL = "URL imagen";
+$PixelWidth = "Ancho en px";
+$AddImageWithZoom = "Agregar imagen con zoom";
 ?>

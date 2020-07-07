@@ -65,7 +65,7 @@ class UniqueAnswerImage extends UniqueAnswer
         if (isset($zoomOptions['options'])) {
             $finderFolder = api_get_path(WEB_PATH).'vendor/studio-42/elfinder/';
             $html .= '<!-- elFinder CSS (REQUIRED) -->';
-            $html .= '<link rel="stylesheet" type="text/css" media="screen" 
+            $html .= '<link rel="stylesheet" type="text/css" media="screen"
                 href="'.$finderFolder.'css/elfinder.full.css">';
             $html .= '<link rel="stylesheet" type="text/css" media="screen" href="'.$finderFolder.'css/theme.css">';
 
@@ -106,13 +106,13 @@ class UniqueAnswerImage extends UniqueAnswer
                             var iname = "answer["+id+"]";
 
                             CKEDITOR.instances[iname].insertHtml(\'
-                                <img 
-                                    id="zoom_picture" 
-                                    class="zoom_picture" 
-                                    src="\'+imageZoom+\'" 
-                                    data-zoom-image="\'+imageZoom+\'" 
-                                    width="200px" 
-                                    height="150px" 
+                                <img
+                                    id="zoom_picture"
+                                    class="zoom_picture"
+                                    src="\'+imageZoom+\'"
+                                    data-zoom-image="\'+imageZoom+\'"
+                                    width="200px"
+                                    height="150px"
                                 />\');
 
                             $("#elfinder").elfinder("destroy"); //close the window after image is selected
@@ -253,11 +253,11 @@ class UniqueAnswerImage extends UniqueAnswer
                     '<br><div class="form-group ">
                         <label for="question_admin_form_btn_add_img['.$i.']" class="col-sm-2 control-label"></label>
                         <div class="col-sm-8">
-                            <button class="add_img_link btn btn-info btn-sm" 
-                                name="btn_add_img['.$i.']" 
-                                type="submit" 
+                            <button class="add_img_link btn btn-info btn-sm"
+                                name="btn_add_img['.$i.']"
+                                type="submit"
                                 id="question_admin_form_btn_add_img['.$i.']">
-                                <em class="fa fa-plus"></em> '.get_lang('AddZoomImage').'
+                                <em class="fa fa-plus"></em> '.get_lang('AddImageWithZoom').'
                             </button>
                         </div>
                         <div class="col-sm-2"></div>

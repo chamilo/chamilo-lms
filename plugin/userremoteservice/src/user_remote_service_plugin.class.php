@@ -6,7 +6,7 @@ use Doctrine\ORM\OptimisticLockException;
 
 class UserRemoteServicePlugin extends Plugin
 {
-    const TABLE = 'user_remote_service';
+    const TABLE = 'plugin_user_remote_service';
 
     /**
      * UserRemoteServicePlugin constructor.

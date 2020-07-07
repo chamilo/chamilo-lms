@@ -9,7 +9,7 @@ use Exception;
 /**
  * UserRemoteService.
  *
- * @ORM\Table(name="user_remote_service")
+ * @ORM\Table(name="plugin_user_remote_service")
  * @ORM\Entity
  */
 class UserRemoteService

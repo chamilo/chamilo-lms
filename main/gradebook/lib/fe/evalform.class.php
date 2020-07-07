@@ -147,7 +147,7 @@ class EvalForm extends FormValidator
         foreach ($this->evaluation_object->get_not_subscribed_students() as $user) {
             if ((!isset($this->extra)) || empty($this->extra) || api_strtoupper(api_substr($user[1], 0, 1)) == $this->extra
             ) {
-                $select->addoption($user[1].' '.$user[2].' ('.$user[3].')', $user[0]);
+                $select->addOption($user[1].' '.$user[2].' ('.$user[3].')', $user[0]);
             }
         }
         $this->addButtonCreate(get_lang('AddUserToEval'), 'submit_button');
@@ -295,7 +295,7 @@ class EvalForm extends FormValidator
             for ($i = 0; $i < $cat[2]; $i++) {
                 $line .= '&mdash;';
             }
-            $select->addoption($line.' '.$cat[1], $cat[0]);
+            $select->addOption($line.' '.$cat[1], $cat[0]);
             $line = '';
         }
         $this->addButtonSave(get_lang('Ok'), 'submit');
@@ -571,14 +571,14 @@ class EvalForm extends FormValidator
                         if (empty($grade_model_id)) {
                             if ($my_cat->get_parent_id() == 0) {
                                 $default_weight = $my_cat->get_weight();
-                                $select_gradebook->addoption(get_lang('Default'), $my_cat->get_id());
+                                $select_gradebook->addOption(get_lang('Default'), $my_cat->get_id());
                                 $cats_added[] = $my_cat->get_id();
                             } else {
-                                $select_gradebook->addoption($my_cat->get_name(), $my_cat->get_id());
+                                $select_gradebook->addOption($my_cat->get_name(), $my_cat->get_id());
                                 $cats_added[] = $my_cat->get_id();
                             }
                         } else {
-                            $select_gradebook->addoption(get_lang('Select'), 0);
+                            $select_gradebook->addOption(get_lang('Select'), 0);
                         }
                         if ($this->evaluation_object->get_category_id() == $my_cat->get_id()) {
                             $default_weight = $my_cat->get_weight();

@@ -316,7 +316,7 @@ class ExerciseLink extends AbstractLink
 
         if (isset($stud_id) && empty($type)) {
             // for 1 student
-            if ($data = Database::fetch_array($scores)) {
+            if ($data = Database::fetch_array($scores, 'ASSOC')) {
                 $attempts = Database::query($sql);
                 $counter = 0;
                 while ($attempt = Database::fetch_array($attempts)) {

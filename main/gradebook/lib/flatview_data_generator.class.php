@@ -735,13 +735,13 @@ class FlatViewDataGenerator
                         ]
                     )
                     ) {
-                        if (null !== $score[0]) {
+                        if (isset($score[0])) {
                             $row[] = $temp_score.' ';
                         } else {
                             $row[] = '';
                         }
                     } else {
-                        if (null !== $score[0]) {
+                        if (isset($score[0])) {
                             $row[] = $temp_score.' ';
                         } else {
                             $row[] = '';

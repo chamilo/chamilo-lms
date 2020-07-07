@@ -5324,7 +5324,6 @@ class DocumentManager
                     if (preg_match('/mp3$/i', urldecode($checkExtension)) ||
                         (preg_match('/wav$/i', urldecode($checkExtension))) ||
                         preg_match('/ogg$/i', urldecode($checkExtension))) {
-
                         return self::generateAudioPreview($documentWebPath, $document_data);
                     } elseif (
                         // Show preview
@@ -5360,7 +5359,6 @@ class DocumentManager
                     if (preg_match('/mp3$/i', urldecode($checkExtension)) ||
                         (preg_match('/wav$/i', urldecode($checkExtension))) ||
                         preg_match('/ogg$/i', urldecode($checkExtension))) {
-
                         return self::generateAudioPreview($documentWebPath, $document_data);
                     } elseif (
                         //Show preview
@@ -6724,8 +6722,6 @@ class DocumentManager
             $return .= Display::return_icon('move_everywhere.png', get_lang('Move'), [], ICON_SIZE_TINY);
             $return .= '</a> ';
         }
-
-
 
         $return .= $link;
         $sessionStar = api_get_session_image($resource['session_id'], $userInfo['status']);

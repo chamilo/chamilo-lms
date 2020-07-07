@@ -117,7 +117,7 @@ switch ($action) {
                 $title = $_POST['audio-title'];
                 $fileInfo = pathinfo($fileName);
                 //$file['name'] = 'rec_'.date('Y-m-d_His').'_'.uniqid().'.'.$fileInfo['extension'];
-                $file['name'] = $title.'.'.$fileInfo['extension'];;
+                $file['name'] = $title.'.'.$fileInfo['extension'];
                 $file['file'] = $file;
 
                 $result = DocumentManager::upload_document(

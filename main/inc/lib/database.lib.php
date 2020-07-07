@@ -21,6 +21,7 @@ class Database
     private static $connection;
 
     /**
+     * Set the DB manager instance
      * @param EntityManager $em
      */
     public function setManager($em)
@@ -28,12 +29,17 @@ class Database
         self::$em = $em;
     }
 
+    /**
+     * Set the DB connection instance
+     * @param   Connection  $connection
+     */
     public function setConnection(Connection $connection)
     {
         self::$connection = $connection;
     }
 
     /**
+     * Get the DB connection instance
      * @return Connection
      */
     public function getConnection()
@@ -42,6 +48,7 @@ class Database
     }
 
     /**
+     * Get the DB manager instance
      * @return EntityManager
      */
     public static function getManager()
@@ -225,7 +232,7 @@ class Database
     }
 
     /**
-     * Escape MySQL wildchars _ and % in LIKE search.
+     * Escape MySQL wildcards _ and % in LIKE search.
      *
      * @param string $text The string to escape
      *
@@ -332,6 +339,7 @@ class Database
     }
 
     /**
+     * Wrapper for rowCount()
      * @return int
      */
     public static function num_rows(Statement $result)
@@ -364,6 +372,7 @@ class Database
     }
 
     /**
+     * Wrapper for executeQuery()
      * @param string $query
      *
      * @return Statement
@@ -382,6 +391,7 @@ class Database
     }
 
     /**
+     * Deal with exceptions from the database extension
      * @param Exception $e
      */
     public static function handleError($e)
@@ -406,6 +416,7 @@ class Database
     }
 
     /**
+     * Transform an SQL option from Chamilo to PDO syntax
      * @param string $option
      *
      * @return int
@@ -442,7 +453,7 @@ class Database
     }
 
     /**
-     * Database insert.
+     * Build an insert query
      *
      * @param string $table_name
      * @param array  $attributes
@@ -479,6 +490,7 @@ class Database
     }
 
     /**
+     * Build an update query
      * @param string $tableName       use Database::get_main_table
      * @param array  $attributes      Values to updates
      *                                Example: $params['name'] = 'Julio'; $params['lastname'] = 'Montoya';
@@ -726,6 +738,7 @@ class Database
     }
 
     /**
+     * Build a delete query
      * @param string $table_name
      * @param array  $where_conditions
      * @param bool   $show_query
@@ -789,6 +802,7 @@ class Database
     }
 
     /**
+     * Check if a given table exists
      * @param string $table
      *
      * @return bool
@@ -799,6 +813,7 @@ class Database
     }
 
     /**
+     * List the columns of a given table
      * @param string $table
      *
      * @return \Doctrine\DBAL\Schema\Column[]

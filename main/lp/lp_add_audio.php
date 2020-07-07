@@ -43,6 +43,13 @@ $interbreadcrumb[] = [
     'name' => $lp->getNameNoTags(),
 ];
 
+$audioPreview = DocumentManager::generateAudioJavascript([]);
+$htmlHeadXtra[] = "<script>
+    $(function() {
+        $audioPreview
+     });
+</script>";
+
 switch ($type) {
     case 'dir':
         $interbreadcrumb[] = [
@@ -160,7 +167,9 @@ $documentTree = DocumentManager::get_document_preview(
     api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?action=add_audio&lp_id='.$lp->get_id().'&id='.$lp_item_id,
     false,
     true,
-    $audioFolderId
+    $audioFolderId,
+    true,
+    true
 );
 
 $page .= $recordVoiceForm;

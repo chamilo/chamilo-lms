@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -541,6 +542,13 @@ class GradebookDataGenerator
             api_get_session_id()
         );
 
+        if (empty($score)) {
+            return [
+                'display' => '',
+                'score' => '',
+            ];
+        }
+
         $scoreMode = SCORE_DIV_PERCENT_WITH_CUSTOM;
         if ($this->hidePercentage) {
             $scoreMode = SCORE_DIV;
@@ -554,7 +562,7 @@ class GradebookDataGenerator
             true
         );
         $type = $item->get_item_type();
-        if ('L' == $type && 'ExerciseLink' === get_class($item)) {
+        if ('L' === $type && 'ExerciseLink' === get_class($item)) {
             $display = ExerciseLib::show_score($score[0], $score[1], false);
         }
 
@@ -570,10 +578,17 @@ class GradebookDataGenerator
     public function buildAverageResultColumn(GradebookItem $item)
     {
         $score = $item->calc_score(null, 'average');
+
+        if (empty($score)) {
+            return [
+                'display' => '',
+                'score' => '',
+            ];
+        }
+
         $scoreDisplay = ScoreDisplay::instance();
 
         $scoreMode = SCORE_DIV_PERCENT_WITH_CUSTOM;
-
         if ($this->hidePercentage) {
             $scoreMode = SCORE_DIV;
         }

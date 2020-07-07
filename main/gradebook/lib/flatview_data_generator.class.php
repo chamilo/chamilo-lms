@@ -631,6 +631,13 @@ class FlatViewDataGenerator
         $item_value_total = 0;
         $evaluationsAdded = [];
         $model = ExerciseLib::getCourseScoreModel();
+        $style = api_get_configuration_value('gradebook_report_score_style');
+
+        $defaultStyle = SCORE_DIV_SIMPLE_WITH_CUSTOM;
+        if (!empty($style)) {
+            $defaultStyle = (int) $style;
+        }
+
         for ($count = 0; $count < $items_count && ($items_start + $count < count($this->evals_links)); $count++) {
             /** @var AbstractLink $item */
             $item = $this->evals_links[$count + $items_start];
@@ -672,19 +679,13 @@ class FlatViewDataGenerator
             }
             $item_total += $item->get_weight();
 
-            $style = api_get_configuration_value('gradebook_report_score_style');
-            $defaultStyle = SCORE_DIV_SIMPLE_WITH_CUSTOM;
-            if (!empty($style)) {
-                $defaultStyle = (int) $style;
-            }
-
             $complete_score = $scoreDisplay->display_score(
                 $score,
                 SCORE_DIV_PERCENT,
                 SCORE_ONLY_SCORE
             );
 
-            if ('false' == api_get_setting('gradebook_show_percentage_in_reports')) {
+            if ('false' === api_get_setting('gradebook_show_percentage_in_reports')) {
                 $defaultShowPercentageValue = SCORE_SIMPLE;
                 if (!empty($style)) {
                     $defaultShowPercentageValue = $style;

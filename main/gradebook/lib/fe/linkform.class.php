@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -20,11 +21,12 @@ class LinkForm extends FormValidator
     /**
      * Builds a form containing form items based on a given parameter.
      *
-     * @param int form_type 1=choose link
-     * @param obj $link_object the category object
-     * @param string $form_name name
-     * @param string $method
-     * @param string $action
+     * @param int          $form_type   1=choose link
+     * @param Category     $category_object the category object
+     * @param AbstractLink $link_object
+     * @param string       $form_name   name
+     * @param string       $method
+     * @param string       $action
      */
     public function __construct(
         $form_type,

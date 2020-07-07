@@ -551,6 +551,41 @@ if (!empty($action)) {
     } else {
         //if POST[formSent] is not set
         switch ($action) {
+            case 'delete_all':
+                foreach ($_languages['name'] as $key => $value) {
+                    $lang = $_languages['folder'][$key];
+                    $link_index = intval($_GET['link_index']);
+                    $menuf = $mtloggedin;
+                    $home_menu = @file($homep.$menuf.'_'.$lang.$ext);
+                    if (empty($home_menu)) {
+                        $home_menu = [];
+                    }
+                    foreach ($home_menu as $key => $enreg) {
+                        if ($key == $link_index) {
+                            unset($home_menu[$key]);
+                        } else {
+                            $home_menu[$key] = trim($enreg);
+                        }
+                    }
+                    $home_menu = implode("\n", $home_menu);
+                    $home_menu = api_to_system_encoding($home_menu, api_detect_encoding(strip_tags($home_menu)));
+
+                    $fp = fopen($homep.$menuf.'_'.$lang.$ext, 'w');
+                    fputs($fp, $home_menu);
+                    home_tabs($homep.$menuf.'_'.$lang.$ext);
+                    fclose($fp);
+                    if (file_exists($homep.$menuf.$ext)) {
+                        if (is_writable($homep.$menuf.$ext)) {
+                            $fpo = fopen($homep.$menuf.$ext, 'w');
+                            fputs($fpo, $home_menu);
+                            home_tabs($homep.$menuf.$ext);
+                            fclose($fpo);
+                        }
+                    }
+                    header('Location: '.$selfUrl);
+                }
+                exit();
+                break;
             case 'open_link':
                 // Previously, filtering of GET['link'] was done here but it left
                 // a security threat. Filtering has now been moved outside conditions
@@ -1207,9 +1242,13 @@ switch ($action) {
                         if (!empty($enreg)) {
                             $edit_link = ' <a href="'.$selfUrl.'?action=edit_tabs&amp;link_index='.$tab_counter.'" ><span>'.Display::return_icon('edit.png', get_lang('Edit')).'</span></a>';
                             $delete_link = ' <a href="'.$selfUrl.'?action=delete_tabs&amp;link_index='.$tab_counter.'"  onclick="javascript: if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)).'\')) return false;"><span>'.Display::return_icon('delete.png', get_lang('Delete')).'</span></a>';
+                            $delete_all = ' <a href="'.$selfUrl.'?action=delete_all&amp;link_index='.$tab_counter.'"  
+                                            onclick="javascript: if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)).'\')) 
+                                            return false;"><span>'.Display::return_icon('delete.png', get_lang('Delete All')).'</span></a>';
                             $tab_string = str_replace(
                                 ['href="'.api_get_path(WEB_PATH).'index.php?include=', '</li>'],
-                                ['href="'.api_get_path(WEB_CODE_PATH).'admin/'.basename($selfUrl).'?action=open_link&link=', $edit_link.$delete_link.'</li>'],
+                                ['href="'.api_get_path(WEB_CODE_PATH).'admin/'.basename($selfUrl).'?action=open_link&link=', 
+                                        $edit_link.$delete_link.$delete_all.'</li>'],
                                 $enreg
                             );
                             $tab_string = str_replace([' class="hide_menu"', ' class="show_menu"'], '', $tab_string);

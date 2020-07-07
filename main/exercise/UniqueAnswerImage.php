@@ -60,6 +60,73 @@ class UniqueAnswerImage extends UniqueAnswer
 
         $html = '<div class="alert alert-success" role="alert">'.
                 get_lang('UniqueAnswerImagePreferredSize200x150').'</div>';
+
+        $zoomOptions = api_get_configuration_value('quiz_image_zoom');
+        if (isset($zoomOptions['options'])) {
+            $finderFolder = api_get_path(WEB_PATH).'vendor/studio-42/elfinder/';
+            $html .= '<!-- elFinder CSS (REQUIRED) -->';
+            $html .= '<link rel="stylesheet" type="text/css" media="screen"
+                href="'.$finderFolder.'css/elfinder.full.css">';
+            $html .= '<link rel="stylesheet" type="text/css" media="screen" href="'.$finderFolder.'css/theme.css">';
+
+            $html .= '<!-- elFinder JS (REQUIRED) -->';
+            $html .= '<script type="text/javascript" src="'.$finderFolder.'js/elfinder.full.js"></script>';
+
+            $html .= '<!-- elFinder translation (OPTIONAL) -->';
+            $language = 'en';
+            $platformLanguage = api_get_interface_language();
+            $iso = api_get_language_isocode($platformLanguage);
+            $filePart = "vendor/studio-42/elfinder/js/i18n/elfinder.$iso.js";
+            $file = api_get_path(SYS_PATH).$filePart;
+            $includeFile = '';
+            if (file_exists($file)) {
+                $includeFile = '<script type="text/javascript" src="'.api_get_path(WEB_PATH).$filePart.'"></script>';
+                $language = $iso;
+            }
+            $html .= $includeFile;
+
+            $html .= '<script type="text/javascript" charset="utf-8">
+            $(document).ready(function () {
+                $(".add_img_link").on("click", function(e){
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    var name = $(this).prop("name");
+                    var id = parseInt(name.match(/[0-9]+/));
+
+                    $([document.documentElement, document.body]).animate({
+                        scrollTop: $("#elfinder").offset().top
+                    }, 1000);
+
+                    var elf = $("#elfinder").elfinder({
+                        url : "'.api_get_path(WEB_LIBRARY_PATH).'elfinder/connectorAction.php?'.api_get_cidreq().'",
+                        getFileCallback: function(file) {
+                            var filePath = file; //file contains the relative url.
+                            var imageZoom = filePath.url;
+                            var iname = "answer["+id+"]";
+
+                            CKEDITOR.instances[iname].insertHtml(\'
+                                <img
+                                    id="zoom_picture"
+                                    class="zoom_picture"
+                                    src="\'+imageZoom+\'"
+                                    data-zoom-image="\'+imageZoom+\'"
+                                    width="200px"
+                                    height="150px"
+                                />\');
+
+                            $("#elfinder").elfinder("destroy"); //close the window after image is selected
+                        },
+                        startPathHash: "l2_Lw", // Sets the course driver as default
+                        resizable: false,
+                        lang: "'.$language.'"
+                    }).elfinder("instance"+id);
+                });
+            });
+            </script>';
+            $html .= '<div id="elfinder"></div>';
+        }
+
         $html .= '<table class="table table-striped table-hover">
             <thead>
                 <tr style="text-align: center;">
@@ -181,7 +248,20 @@ class UniqueAnswerImage extends UniqueAnswer
                 'counter['.$i.']'
             );
             $renderer->setElementTemplate(
-                '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
+                '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}'.
+                    (isset($zoomOptions['options']) ?
+                    '<br><div class="form-group ">
+                        <label for="question_admin_form_btn_add_img['.$i.']" class="col-sm-2 control-label"></label>
+                        <div class="col-sm-8">
+                            <button class="add_img_link btn btn-info btn-sm"
+                                name="btn_add_img['.$i.']"
+                                type="submit"
+                                id="question_admin_form_btn_add_img['.$i.']">
+                                <em class="fa fa-plus"></em> '.get_lang('AddImageWithZoom').'
+                            </button>
+                        </div>
+                        <div class="col-sm-2"></div>
+                    </div>' : '').'</td>',
                 'answer['.$i.']'
             );
             $renderer->setElementTemplate(

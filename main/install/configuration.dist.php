@@ -1578,6 +1578,13 @@ $_configuration['auth_password_links'] = [
 // Allow my student publications page
 //$_configuration['allow_my_student_publication_page'] = false;
 
+// Show handpicked "popular" courses on the home page instead of users-chosen
+// courses.
+// Create an extra field for courses called "popular_courses" (type CHECKBOX) OR
+// INSERT extra_field (extra_field_type, field_type, variable, display_text, visible_to_self, changeable, created_at)
+// VALUES (2, 13, 'popular_courses', 'Popular course', 1, 1, NOW());
+// $_configuration['popular_courses_handpicked'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

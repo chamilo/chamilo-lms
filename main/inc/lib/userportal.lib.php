@@ -2287,6 +2287,14 @@ class IndexManager
     }
 
     /**
+     * Wrapper to CourseManager::returnPopularCoursesHandPicked()
+     * @return array
+     */
+    public function returnPopularCoursesHandPicked()
+    {
+        return CourseManager::returnPopularCoursesHandPicked();
+    }
+    /**
      * @param $listA
      * @param $listB
      *

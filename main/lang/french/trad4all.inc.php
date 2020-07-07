@@ -8496,4 +8496,5 @@ $AddToEditor = "Ajouter à l'éditeur";
 $ImageURL = "URL de l'image";
 $PixelWidth = "largeur en px";
 $AddImageWithZoom = "Ajouter image avec zoom";
+$DeleteInAllLanguages = "Supprimer dans toutes les langues";
 ?>

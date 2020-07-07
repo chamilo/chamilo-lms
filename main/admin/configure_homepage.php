@@ -61,9 +61,11 @@ api_protect_admin_script();
 $htmlHeadXtra[] = '<script>
 $(function() {
     $("#all_langs").change(function() {
-        var checkboxes = $(this).closest("form").find("#table_langs").find(":checkbox");
-
-        checkboxes.prop("checked", $(this).is(":checked"));
+        if ($("#all_langs[type=checkbox]").is(":checked")) {
+            $("#table_langs [type=checkbox]").prop("checked", true);
+        } else {
+            $("#table_langs [type=checkbox]").prop("checked", false);
+        }
     });
 });
 </script>';
@@ -1242,12 +1244,12 @@ switch ($action) {
                         if (!empty($enreg)) {
                             $edit_link = ' <a href="'.$selfUrl.'?action=edit_tabs&amp;link_index='.$tab_counter.'" ><span>'.Display::return_icon('edit.png', get_lang('Edit')).'</span></a>';
                             $delete_link = ' <a href="'.$selfUrl.'?action=delete_tabs&amp;link_index='.$tab_counter.'"  onclick="javascript: if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)).'\')) return false;"><span>'.Display::return_icon('delete.png', get_lang('Delete')).'</span></a>';
-                            $delete_all = ' <a href="'.$selfUrl.'?action=delete_all&amp;link_index='.$tab_counter.'"  
-                                            onclick="javascript: if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)).'\')) 
-                                            return false;"><span>'.Display::return_icon('delete.png', get_lang('Delete All')).'</span></a>';
+                            $delete_all = ' <a href="'.$selfUrl.'?action=delete_all&amp;link_index='.$tab_counter.'"
+                                            onclick="javascript: if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)).'\'))
+                                            return false;"><span>'.Display::return_icon('closed-circle.png', get_lang('DeleteInAllLanguages')).'</span></a>';
                             $tab_string = str_replace(
                                 ['href="'.api_get_path(WEB_PATH).'index.php?include=', '</li>'],
-                                ['href="'.api_get_path(WEB_CODE_PATH).'admin/'.basename($selfUrl).'?action=open_link&link=', 
+                                ['href="'.api_get_path(WEB_CODE_PATH).'admin/'.basename($selfUrl).'?action=open_link&link=',
                                         $edit_link.$delete_link.$delete_all.'</li>'],
                                 $enreg
                             );

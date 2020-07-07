@@ -115,6 +115,7 @@ class UserRemoteService
         if (false === $hash) {
             throw new Exception('hash generation failed');
         }
+
         return sprintf(
             '%s%s%s',
             $this->url,

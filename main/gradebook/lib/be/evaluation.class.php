@@ -536,6 +536,7 @@ class Evaluation implements GradebookItem
     public function calc_score($stud_id = null, $type = null)
     {
         $allowStats = api_get_configuration_value('allow_gradebook_stats');
+
         if ($allowStats) {
             $evaluation = $this->entity;
             if (!empty($evaluation)) {
@@ -602,10 +603,12 @@ class Evaluation implements GradebookItem
                 Session::write('calc_score', [$key => $results]);
             }
 
-            $score = 0;
-            /** @var Result $res */
-            foreach ($results as $res) {
-                $score = $res->get_score();
+            $score = null;
+            if (!empty($results)) {
+                /** @var Result $res */
+                foreach ($results as $res) {
+                    $score = $res->get_score();
+                }
             }
 
             return [$score, $this->get_max()];

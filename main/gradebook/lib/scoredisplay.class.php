@@ -302,19 +302,21 @@ class ScoreDisplay
     ) {
         $my_score = $score == 0 ? [] : $score;
 
-        if ($type == SCORE_BAR) {
-            $percentage = $my_score[0] / $my_score[1] * 100;
+        switch ($type) {
+            case SCORE_BAR:
+                $percentage = $my_score[0] / $my_score[1] * 100;
 
-            return Display::bar_progress($percentage);
-        }
-        if ($type == SCORE_NUMERIC) {
-            $percentage = $my_score[0] / $my_score[1] * 100;
+                return Display::bar_progress($percentage);
+                break;
+            case SCORE_NUMERIC:
 
-            return round($percentage);
-        }
+                $percentage = $my_score[0] / $my_score[1] * 100;
 
-        if ($type == SCORE_SIMPLE) {
-            return $this->format_score($my_score[0], $ignoreDecimals);
+                return round($percentage);
+                break;
+            case SCORE_SIMPLE:
+                return $this->format_score($my_score[0], $ignoreDecimals);
+                break;
         }
 
         if ($this->custom_enabled && isset($this->custom_display_conv)) {

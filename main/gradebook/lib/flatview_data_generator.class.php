@@ -924,7 +924,6 @@ class FlatViewDataGenerator
                     ];
                     $item_value_total += $item_value;
                     $final_score += $score[0];
-                    //$final_score = ($final_score / $item_total) * 100;
                 }
                 $total_score = [$final_score, $item_total];
                 $row[] = [
@@ -942,21 +941,29 @@ class FlatViewDataGenerator
                 for ($count = 0; $count < count($this->evals_links); $count++) {
                     $item = $this->evals_links[$count];
                     $score = $item->calc_score($user[0]);
-                    $divide = 0 == $score[1] ? 1 : $score[1];
-                    $item_value += $score[0] / $divide * $item->get_weight();
-                    $item_total += $item->get_weight();
-                    $score_denom = (0 == $score[1]) ? 1 : $score[1];
-                    $score_final = ($score[0] / $score_denom) * 100;
-                    $row[] = [
-                        $score_final,
-                        trim(
+                    $score_final = null;
+                    $displayScore = null;
+
+                    if (null !== $score) {
+                        $divide = 0 == $score[1] ? 1 : $score[1];
+                        $item_value += $score[0] / $divide * $item->get_weight();
+                        $item_total += $item->get_weight();
+                        $score_denom = (0 == $score[1]) ? 1 : $score[1];
+                        $score_final = ($score[0] / $score_denom) * 100;
+
+                        $displayScore = trim(
                             $scoreDisplay->display_score(
                                 $score,
                                 SCORE_CUSTOM,
                                 null,
                                 true
                             )
-                        ),
+                        );
+                    }
+
+                    $row[] = [
+                        $score_final,
+                        $displayScore,
                     ];
                 }
                 $total_score = [$item_value, $item_total];

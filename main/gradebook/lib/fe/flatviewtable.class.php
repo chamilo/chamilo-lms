@@ -93,7 +93,6 @@ class FlatViewTable extends SortableTable
     {
         $headerName = $this->datagen->get_header_names();
         $total_users = $this->datagen->get_total_users_count();
-
         $customdisplays = ScoreDisplay::instance()->get_custom_score_display_settings();
 
         if (empty($customdisplays)) {

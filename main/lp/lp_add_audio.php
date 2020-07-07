@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -7,8 +8,6 @@ use ChamiloSession as Session;
  * This is a learning path creation and player tool in Chamilo - previously.
  *
  * @author Julio Montoya  - Improving the list of templates
- *
- * @package chamilo.learnpath
  */
 $this_section = SECTION_COURSES;
 api_protect_course_script();
@@ -18,6 +17,7 @@ $learnpath_id = (int) $_REQUEST['lp_id'];
 $submit = isset($_POST['submit_button']) ? $_POST['submit_button'] : null;
 $type = isset($_GET['type']) ? $_GET['type'] : null;
 $action = isset($_GET['action']) ? $_GET['action'] : null;
+$courseInfo = api_get_course_info();
 
 if (!$is_allowed_to_edit || $isStudentView) {
     header('location:lp_controller.php?action=view&lp_id='.$learnpath_id);
@@ -62,19 +62,18 @@ switch ($type) {
         break;
 }
 
-if ($action == 'add_item' && $type == 'document') {
+if ($action === 'add_item' && $type === 'document') {
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('NewDocumentCreated')];
 }
 
 // Theme calls.
 $show_learn_path = true;
-$lp_item_id = isset($_GET['id']) ? intval($_GET['id']) : null;
+$lp_item_id = isset($_GET['id']) ? (int) $_GET['id'] : null;
 
 if (empty($lp_item_id)) {
     api_not_allowed();
 }
 
-$courseInfo = api_get_course_info();
 $lp_item = new learnpathItem($lp_item_id);
 $form = new FormValidator(
     'add_audio',
@@ -85,10 +84,8 @@ $form = new FormValidator(
 );
 $suredel = trim(get_lang('AreYouSureToDeleteJS'));
 
-$lpPathInfo = $lp->generate_lp_folder(api_get_course_info());
-
+$lpPathInfo = $lp->generate_lp_folder($courseInfo);
 DocumentManager::createDefaultAudioFolder($courseInfo);
-
 $audioFolderId = DocumentManager::get_document_id($courseInfo, '/audio');
 
 $file = null;
@@ -147,13 +144,12 @@ if (!empty($file)) {
             ['class' => 'btn btn-danger']
         )
     );
-} else {
-    $form->addElement('file', 'file');
-    $form->addElement('hidden', 'id', $lp_item_id);
-    $form->addButtonSave(get_lang('Save'));
 }
 
-$courseInfo = api_get_course_info();
+$form->addElement('file', 'file');
+$form->addElement('hidden', 'id', $lp_item_id);
+$form->addButtonSave(get_lang('SaveRecordedAudio'));
+
 $documentTree = DocumentManager::get_document_preview(
     $courseInfo,
     $lp->get_id(),

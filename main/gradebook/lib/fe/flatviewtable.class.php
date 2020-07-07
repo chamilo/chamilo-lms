@@ -94,8 +94,7 @@ class FlatViewTable extends SortableTable
         $headerName = $this->datagen->get_header_names();
         $total_users = $this->datagen->get_total_users_count();
 
-        $displayscore = ScoreDisplay::instance();
-        $customdisplays = $displayscore->get_custom_score_display_settings();
+        $customdisplays = ScoreDisplay::instance()->get_custom_score_display_settings();
 
         if (empty($customdisplays)) {
             echo get_lang('ToViewGraphScoreRuleMustBeEnabled');

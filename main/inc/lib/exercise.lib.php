@@ -2906,9 +2906,7 @@ HOTSPOT;
             $html = ScoreDisplay::instance()->display_score([$score, $weight], $format);
         }
 
-        $html = Display::span($html, ['class' => 'score_exercise']);
-
-        return $html;
+        return Display::span($html, ['class' => 'score_exercise']);
     }
 
     /**
@@ -2919,9 +2917,7 @@ HOTSPOT;
      */
     public static function getModelStyle($model, $percentage)
     {
-        $modelWithStyle = '<span class="'.$model['css_class'].'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>';
-
-        return $modelWithStyle;
+        return '<span class="'.$model['css_class'].'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>';
     }
 
     /**

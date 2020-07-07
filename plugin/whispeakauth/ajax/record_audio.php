@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\PluginBundle\WhispeakAuth\Controller\AuthenticationRequestController;
-use Chamilo\PluginBundle\WhispeakAuth\Controller\CreateEnrollmentRequestController;
+use Chamilo\PluginBundle\WhispeakAuth\Controller\EnrollmentController;
 
 $cidReset = true;
 
@@ -15,8 +15,17 @@ $isAuthentify = 'authentify' === $action;
 $isAllowed = false;
 
 if ($isEnrollment) {
-    $enrollmentRequest = new CreateEnrollmentRequestController();
-    $enrollmentRequest->process();
+    api_block_anonymous_users(false);
+
+    $controller = new EnrollmentController();
+
+    try {
+        $controller->ajax();
+    } catch (Exception $exception) {
+        WhispeakAuthPlugin::displayNotAllowedMessage(
+            $exception->getMessage()
+        );
+    }
     die;
 }
 

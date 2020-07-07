@@ -353,11 +353,16 @@ class IndexManager
 
     public static function studentPublicationBlock()
     {
-        $items[] = [
-            'icon' => Display::return_icon('lp_student_publication.png', get_lang('StudentPublication')),
-            'link' => api_get_path(WEB_CODE_PATH).'work/publications.php',
-            'title' => get_lang('MyStudentPublications'),
-        ];
+        $allow = api_get_configuration_value('allow_my_student_publication_page');
+        $items = [];
+
+        if ($allow) {
+            $items[] = [
+                'icon' => Display::return_icon('lp_student_publication.png', get_lang('StudentPublication')),
+                'link' => api_get_path(WEB_CODE_PATH).'work/publications.php',
+                'title' => get_lang('MyStudentPublications'),
+            ];
+        }
 
         return $items;
     }

@@ -1567,6 +1567,9 @@ $_configuration['auth_password_links'] = [
 //$_configuration['course_creation_donate_message_show'] = false;
 //$_configuration['course_creation_donate_link'] = '<some donate button html>';
 
+// Allow my student publications page
+//$_configuration['allow_my_student_publication_page'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

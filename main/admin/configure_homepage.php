@@ -1250,7 +1250,7 @@ switch ($action) {
                             $tab_string = str_replace(
                                 ['href="'.api_get_path(WEB_PATH).'index.php?include=', '</li>'],
                                 ['href="'.api_get_path(WEB_CODE_PATH).'admin/'.basename($selfUrl).'?action=open_link&link=',
-                                        $edit_link.$delete_link.$delete_all.'</li>'],
+                                        $edit_link.$delete_link.$delete_all.'</li>', ],
                                 $enreg
                             );
                             $tab_string = str_replace([' class="hide_menu"', ' class="show_menu"'], '', $tab_string);

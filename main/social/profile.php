@@ -30,8 +30,8 @@ if (!empty($bossId)) {
     if (!empty($bossList)) {
         foreach ($bossList as $boss) {
             $bossId = $boss['boss_id'];
-            $bossInfo = api_get_user_info($bossId, true);
-            if (1 === $bossInfo['user_is_online']) {
+            $bossInfo = api_get_user_info($bossId);
+            if (!empty($bossInfo)) {
                 $redirectToBossId = $bossId;
                 break;
             }

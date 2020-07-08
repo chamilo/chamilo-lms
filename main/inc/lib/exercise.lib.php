@@ -4519,15 +4519,19 @@ EOT;
             // Shows exercise header.
             echo $objExercise->showExerciseResultHeader(
                 $studentInfo,
-                $exercise_stat_info
+                $exercise_stat_info,
+                $save_user_result
             );
         }
 
         // Display text when test is finished #4074 and for LP #4227
         $endOfMessage = $objExercise->getTextWhenFinished();
         if (!empty($endOfMessage)) {
-            echo Display::return_message($endOfMessage, 'normal', false);
-            echo "<div class='clear'>&nbsp;</div>";
+            echo Display::div(
+                Display::return_message($endOfMessage, 'normal', false),
+                ['id' => 'quiz_end_message']
+            );
+            echo "<div class='clearfix'></div>";
         }
 
         $question_list_answers = [];

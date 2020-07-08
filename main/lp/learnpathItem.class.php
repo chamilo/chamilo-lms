@@ -39,7 +39,6 @@ class learnpathItem
     public $lesson_location = '';
     public $level = 0;
     public $core_exit = '';
-    //var $location; // Only set this for SCORM?
     public $lp_id;
     public $max_score;
     public $mastery_score;
@@ -98,15 +97,6 @@ class learnpathItem
         $item_content = null
     ) {
         $items_table = Database::get_course_table(TABLE_LP_ITEM);
-
-        // Get items table.
-        if (!isset($user_id)) {
-            $user_id = api_get_user_id();
-        }
-        if (self::DEBUG > 0) {
-            error_log("learnpathItem constructor: id: $id user_id: $user_id course_id: $course_id");
-            error_log("item_content: ".print_r($item_content, 1));
-        }
         $id = (int) $id;
         if (empty($item_content)) {
             if (empty($course_id)) {
@@ -289,9 +279,6 @@ class learnpathItem
      */
     public function delete()
     {
-        if (self::DEBUG > 0) {
-            error_log('learnpath_item::delete() for item '.$this->db_id, 0);
-        }
         $lp_item_view = Database::get_course_table(TABLE_LP_ITEM_VIEW);
         $lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $course_id = api_get_course_int_id();
@@ -311,7 +298,7 @@ class learnpathItem
                 WHERE iid = ".$this->db_id;
         Database::query($sql);
 
-        if (api_get_setting('search_enabled') == 'true') {
+        if (api_get_setting('search_enabled') === 'true') {
             if (!is_null($this->search_did)) {
                 $di = new ChamiloIndexer();
                 $di->remove_document($this->search_did);
@@ -463,9 +450,6 @@ class learnpathItem
     public function get_file_path($path_to_scorm_dir = '')
     {
         $course_id = api_get_course_int_id();
-        if (self::DEBUG > 0) {
-            error_log('learnpathItem::get_file_path()', 0);
-        }
         $path = $this->get_path();
         $type = $this->get_type();
 

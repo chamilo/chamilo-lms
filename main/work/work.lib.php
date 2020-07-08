@@ -642,48 +642,6 @@ function showTeacherWorkGrid()
 }
 
 /**
- * Builds the form thats enables the user to
- * select a directory to browse/upload in
- * This function has been copied from the document/document.inc.php library.
- *
- * @param array  $folders
- * @param string $curdirpath
- * @param string $group_dir
- *
- * @return string html form
- */
-// TODO: This function is a candidate for removal, it is not used anywhere.
-function build_work_directory_selector($folders, $curdirpath, $group_dir = '')
-{
-    $form = '<form name="selector" action="'.api_get_self().'?'.api_get_cidreq().'" method="POST">';
-    $form .= get_lang('CurrentDirectory').'
-             <select name="curdirpath" onchange="javascript: document.selector.submit();">';
-    //group documents cannot be uploaded in the root
-    if ($group_dir == '') {
-        $form .= '<option value="/">/ ('.get_lang('Root').')</option>';
-        if (is_array($folders)) {
-            foreach ($folders as $folder) {
-                $selected = ($curdirpath == $folder) ? ' selected="selected"' : '';
-                $form .= '<option'.$selected.' value="'.$folder.'">'.$folder.'</option>'."\n";
-            }
-        }
-    } else {
-        foreach ($folders as $folder) {
-            $selected = ($curdirpath == $folder) ? ' selected="selected"' : '';
-            $display_folder = substr($folder, strlen($group_dir));
-            $display_folder = ($display_folder == '') ? '/ ('.get_lang('Root').')' : $display_folder;
-            $form .= '<option'.$selected.' value="'.$folder.'">'.$display_folder.'</option>'."\n";
-        }
-    }
-
-    $form .= '</select>';
-    $form .= '<noscript><input type="submit" name="change_path" value="'.get_lang('Ok').'" /></noscript>';
-    $form .= '</form>';
-
-    return $form;
-}
-
-/**
  * Builds the form that enables the user to
  * move a document from one directory to another
  * This function has been copied from the document/document.inc.php library.

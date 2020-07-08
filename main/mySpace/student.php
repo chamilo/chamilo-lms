@@ -271,6 +271,12 @@ if (api_is_drh()) {
         Display::return_icon('statistics.png', get_lang('CompanyReport'), [], ICON_SIZE_MEDIUM),
         $webCodePath.'mySpace/company_reports.php'
     );
+
+    $actionsLeft .= Display::url(
+        Display::return_icon('calendar-user.png', get_lang('MyStudentsSchedule'), [], ICON_SIZE_MEDIUM),
+        $webCodePath.'mySpace/calendar_plan.php'
+    );
+
     $actionsLeft .= Display::url(
         Display::return_icon(
             'certificate_list.png',
@@ -294,12 +300,18 @@ $actionsRight .= Display::url(
 
 $toolbar = Display::toolbarAction('toolbar-student', [$actionsLeft, $actionsRight]);
 
+$itemPerPage = 10;
+$perPage = api_get_configuration_value('my_space_users_items_per_page');
+if ($perPage) {
+    $itemPerPage = (int) $perPage;
+}
+
 $table = new SortableTable(
     'tracking_student',
     'get_count_users',
     'get_users',
     ($is_western_name_order xor $sort_by_first_name) ? 1 : 0,
-    10
+    $itemPerPage
 );
 
 $params = [

@@ -1585,6 +1585,9 @@ $_configuration['auth_password_links'] = [
 // VALUES (2, 13, 'popular_courses', 'Popular course', 1, 1, NOW());
 // $_configuration['popular_courses_handpicked'] = false;
 
+// Default items per page in main/mySpace/users.php
+// $_configuration['my_space_users_items_per_page'] = 10;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

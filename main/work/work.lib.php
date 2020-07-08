@@ -551,14 +551,26 @@ function showStudentAllWorkGrid($withResults = 1)
     }
 
     $columnModel = [
-        ['name' => 'type', 'index' => 'type', 'width' => '30', 'align' => 'center', 'sortable' => 'false'],
-        ['name' => 'title', 'index' => 'title', 'width' => '250', 'align' => 'left'],
-        ['name' => 'expires_on', 'index' => 'expires_on', 'width' => '80', 'align' => 'center', 'sortable' => 'false'],
+        ['name' => 'type', 'index' => 'type', 'width' => '50', 'align' => 'center', 'sortable' => 'false'],
+        ['name' => 'title', 'index' => 'title', 'width' => '600', 'align' => 'left'],
+        ['name' => 'expires_on', 'index' => 'expires_on', 'width' => '125', 'align' => 'center', 'sortable' => 'false'],
     ];
 
     if ($withResults) {
-        $columnModel[] = ['name' => 'feedback', 'index' => 'feedback', 'width' => '80', 'align' => 'center', 'sortable' => 'false'];
-        $columnModel[] = ['name' => 'last_upload', 'index' => 'feedback', 'width' => '125', 'align' => 'center', 'sortable' => 'false'];
+        $columnModel[] = [
+            'name' => 'feedback',
+            'index' => 'feedback',
+            'width' => '150',
+            'align' => 'center',
+            'sortable' => 'false',
+        ];
+        $columnModel[] = [
+            'name' => 'last_upload',
+            'index' => 'last_upload',
+            'width' => '150',
+            'align' => 'center',
+            'sortable' => 'false',
+        ];
     }
 
     $params = [

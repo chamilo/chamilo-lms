@@ -63,43 +63,56 @@ $(function() {
             globalModal.find('.modal-header').hide();
         }
 
-        var contentUrl = this.href;
-        var loadModalContent = $.get(contentUrl);
-        var self = $(this);
-
         var blockDiv = $(this).attr('data-block-closing');
         if (blockDiv != '') {
-            /*globalModal.on('hidden.bs.modal', function () {
-                $('#' + blockDiv + ' :input').attr('disabled', 'true');
-            });*/
             globalModal.attr('data-backdrop', 'static');
             globalModal.attr('data-keyboard', 'false');
         }
+        var contentUrl = this.href;
+        var self = $(this);
 
-        $.when(loadModalContent).done(function(modalContent) {
-            var modalDialog = globalModal.find('.modal-dialog'),
-                    modalSize = self.data('size') || get_url_params(contentUrl, 'modal_size'),
-                    modalWidth = self.data('width') || get_url_params(contentUrl, 'width'),
-                    modalTitle = self.data('title') || ' ';
-
-            modalDialog.removeClass('modal-lg modal-sm').css('width', '');
-            if (modalSize && modalSize.length != 0) {
-                switch (modalSize) {
-                    case 'lg':
-                        modalDialog.addClass('modal-lg');
-                        break;
-                    case 'sm':
-                        modalDialog.addClass('modal-sm');
-                        break;
-                }
-            } else if (modalWidth) {
-                modalDialog.css('width', modalWidth + 'px');
-            }
+        if (contentUrl == 'javascript:void(0);') {
+            var
+                modalSize = self.data('size'),
+                modalWidth = self.data('width'),
+                modalTitle = self.data('title');
+                modalContent = self.data('content');
 
             globalModal.find('.modal-title').text(modalTitle);
             globalModal.find('.modal-body').html(modalContent);
             globalModal.modal('show');
-        });
+
+            return true;
+        }
+
+        if (contentUrl) {
+            var loadModalContent = $.get(contentUrl);
+
+            $.when(loadModalContent).done(function (modalContent) {
+                var modalDialog = globalModal.find('.modal-dialog'),
+                    modalSize = self.data('size') || get_url_params(contentUrl, 'modal_size'),
+                    modalWidth = self.data('width') || get_url_params(contentUrl, 'width'),
+                    modalTitle = self.data('title') || ' ';
+
+                modalDialog.removeClass('modal-lg modal-sm').css('width', '');
+                if (modalSize && modalSize.length != 0) {
+                    switch (modalSize) {
+                        case 'lg':
+                            modalDialog.addClass('modal-lg');
+                            break;
+                        case 'sm':
+                            modalDialog.addClass('modal-sm');
+                            break;
+                    }
+                } else if (modalWidth) {
+                    modalDialog.css('width', modalWidth + 'px');
+                }
+
+                globalModal.find('.modal-title').text(modalTitle);
+                globalModal.find('.modal-body').html(modalContent);
+                globalModal.modal('show');
+            });
+        }
     });
 
     // Expands an image modal

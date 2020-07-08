@@ -13,7 +13,8 @@ $htmlHeadXtra[] = api_get_jqgrid_js();
 
 $tpl = new Template(get_lang('StudentPublications'));
 
-$tpl->assign('introduction_message', Display::return_message(get_lang('StudentPublicationsIntro')));
+$tpl->assign('intro_title', get_lang('MyStudentPublicationsTitle'));
+$tpl->assign('intro_content', Display::return_message(get_lang('MyStudentPublicationsExplanation')));
 $tpl->assign('table', showStudentAllWorkGrid(0));
 $tpl->assign('table_with_results', showStudentAllWorkGrid(1));
 

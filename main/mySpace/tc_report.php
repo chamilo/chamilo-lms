@@ -82,7 +82,6 @@ $(function() {
 
 </script>';
 
-
 Display::display_header($nameTools);
 echo '<div class="actions">';
 echo MySpace::getTopMenu();

@@ -109,7 +109,7 @@ if ($form->validate()) {
             $coachList[$coachId]['week'][$week]['sessions'][] = $row;
         }
 
-        $coachList[$coachId]['session_count'] += 1;
+        $coachList[$coachId]['session_count']++;
         $coachList[$coachId]['data'] = $row;
     }
 

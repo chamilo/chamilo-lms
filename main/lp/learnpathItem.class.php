@@ -189,6 +189,12 @@ class learnpathItem
         $this->seriousgame_mode = 0;
         $this->audio = null;
         if (isset($row['audio'])) {
+            // Fix old audio format /file.wav to /audio/file.wav
+            $parts = explode('/', $row['audio']);
+            $parts = array_filter($parts);
+            if (count($parts) === 1) {
+                $row['audio'] = '/audio'.$row['audio'];
+            }
             $this->audio = $row['audio'];
         }
     }
@@ -4137,31 +4143,27 @@ class learnpathItem
     /**
      * Adds an audio file to the current item, using a file already in documents.
      *
-     * @param int $doc_id
+     * @param int $documentId
      *
      * @return string
      */
-    public function add_audio_from_documents($doc_id)
+    public function add_audio_from_documents($documentId)
     {
-        $course_info = api_get_course_info();
-        $document_data = DocumentManager::get_document_data_by_id(
-            $doc_id,
-            $course_info['code']
-        );
+        $courseInfo = api_get_course_info();
+        $documentData = DocumentManager::get_document_data_by_id($documentId, $courseInfo['code']);
 
-        $file_path = '';
-        if (!empty($document_data)) {
-            $file_path = substr($document_data['path'], 6);
-            $file_path = ltrim($file_path, "/");
+        $path = '';
+        if (!empty($documentData)) {
+            $path = $documentData['path'];
             // Store the mp3 file in the lp_item table.
             $table = Database::get_course_table(TABLE_LP_ITEM);
             $sql = "UPDATE $table SET
-                        audio = '".Database::escape_string($file_path)."'
-                    WHERE iid = ".intval($this->db_id);
+                        audio = '".Database::escape_string($path)."'
+                    WHERE iid = ".$this->db_id;
             Database::query($sql);
         }
 
-        return $file_path;
+        return $path;
     }
 
     /**

@@ -14,6 +14,7 @@ api_protect_course_script();
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 $isStudentView = api_is_student_view_active();
 $learnpath_id = (int) $_REQUEST['lp_id'];
+$lp_item_id = isset($_GET['id']) ? (int) $_GET['id'] : null;
 $submit = isset($_POST['submit_button']) ? $_POST['submit_button'] : null;
 $type = isset($_GET['type']) ? $_GET['type'] : null;
 $action = isset($_GET['action']) ? $_GET['action'] : null;
@@ -22,6 +23,10 @@ $courseInfo = api_get_course_info();
 if (!$is_allowed_to_edit || $isStudentView) {
     header('location:lp_controller.php?action=view&lp_id='.$learnpath_id);
     exit;
+}
+
+if (empty($lp_item_id)) {
+    api_not_allowed();
 }
 
 /** @var learnpath $lp */
@@ -78,12 +83,6 @@ if ($action === 'add_item' && $type === 'document') {
 
 // Theme calls.
 $show_learn_path = true;
-$lp_item_id = isset($_GET['id']) ? (int) $_GET['id'] : null;
-
-if (empty($lp_item_id)) {
-    api_not_allowed();
-}
-
 $lp_item = new learnpathItem($lp_item_id);
 $form = new FormValidator(
     'add_audio',
@@ -96,12 +95,21 @@ $suredel = trim(get_lang('AreYouSureToDeleteJS'));
 
 $lpPathInfo = $lp->generate_lp_folder($courseInfo);
 DocumentManager::createDefaultAudioFolder($courseInfo);
-$audioFolderId = DocumentManager::get_document_id($courseInfo, '/audio');
+$currentDir = '/audio';
+$audioFolderId = DocumentManager::get_document_id($courseInfo, $currentDir);
+if (isset($_REQUEST['folder_id'])) {
+    $documentData = DocumentManager::get_document_data_by_id($_REQUEST['folder_id'], $courseInfo['code']);
+    if ($documentData) {
+        $audioFolderId = (int) $_REQUEST['folder_id'];
+        $currentDir = $documentData['path'];
+    }
+}
 
 $file = null;
+//$lp_item->audio = '/aaaaa.wav';
 if (isset($lp_item->audio) && !empty($lp_item->audio)) {
-    $file = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document/audio/'.$lp_item->audio;
-    $urlFile = api_get_path(WEB_COURSE_PATH).$courseInfo['path'].'/document/audio/'.$lp_item->audio.'?'.api_get_cidreq();
+    $file = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document/'.$lp_item->audio;
+    $urlFile = api_get_path(WEB_COURSE_PATH).$courseInfo['path'].'/document/'.$lp_item->audio.'?'.api_get_cidreq();
 
     if (!file_exists($file)) {
         $file = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document'.$lpPathInfo['dir'].'/'.$lp_item->audio;
@@ -124,9 +132,7 @@ $page .= $lp->return_new_tree(null, true);
 $page .= '</div>';
 
 $recordVoiceForm = '<h3 class="page-header">'.get_lang('RecordYourVoice').'</h3>';
-
 $page .= '<div id="doc_form" class="col-md-8">';
-
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'rtc/RecordRTC.js"></script>';
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'wami-recorder/recorder.js"></script>';
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'wami-recorder/gui.js"></script>';
@@ -172,6 +178,14 @@ $form->addElement('file', 'file');
 $form->addElement('hidden', 'id', $lp_item_id);
 $form->addButtonSave(get_lang('SaveRecordedAudio'));
 
+$folders = DocumentManager::get_all_document_folders(
+    $courseInfo,
+    null,
+    true,
+    false,
+    $currentDir
+);
+
 $documentTree = DocumentManager::get_document_preview(
     $courseInfo,
     $lp->get_id(),
@@ -191,6 +205,26 @@ $page .= $recordVoiceForm;
 $page .= '<br>';
 $page .= $form->returnForm();
 $page .= '<h3 class="page-header"><small>'.get_lang('Or').'</small> '.get_lang('SelectAnAudioFileFromDocuments').'</h3>';
+
+$form = new FormValidator(
+    'selector',
+    'POST',
+    api_get_self().'?view=build&id='.$lp_item_id.'&lp_id='.$learnpath_id.'&action=add_audio&'.api_get_cidreq()
+);
+
+$attributes = ['onchange' => 'javascript: document.selector.submit();'];
+$selector = DocumentManager::build_directory_selector(
+    $folders,
+    $audioFolderId,
+    null,
+    false,
+    $form,
+    'folder_id',
+    $attributes
+);
+
+$page .= $selector;
+
 $page .= '<ul class="lp_resource">';
 $page .= '<li class="doc_folder" style="margin-left: 36px;">'.get_lang('Audio').'</li>';
 $page .= '<li class="doc_folder">';

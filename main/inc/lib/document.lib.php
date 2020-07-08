@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -9,8 +10,6 @@ use ChamiloSession as Session;
  *  It is / will be used to provide a service layer to all document-using tools.
  *  and eliminate code duplication fro group documents, scorm documents, main documents.
  *  Include/require it in your code to use its functionality.
- *
- * @package chamilo.library
  */
 class DocumentManager
 {
@@ -4973,7 +4972,8 @@ class DocumentManager
         $group_dir = '',
         $change_renderer = false,
         &$form = null,
-        $selectName = 'id'
+        $selectName = 'id',
+        $attributes = []
     ) {
         $doc_table = Database::get_course_table(TABLE_DOCUMENT);
         $course_id = api_get_course_int_id();
@@ -4999,7 +4999,6 @@ class DocumentManager
             }
         }
 
-        $attributes = [];
         if (empty($form)) {
             $form = new FormValidator('selector', 'GET', api_get_self().'?'.api_get_cidreq());
             $attributes = ['onchange' => 'javascript: document.selector.submit();'];
@@ -5056,9 +5055,7 @@ class DocumentManager
             }
         }
 
-        $html = $form->toHtml();
-
-        return $html;
+        return $form->toHtml();
     }
 
     /**

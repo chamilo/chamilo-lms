@@ -692,7 +692,7 @@ switch ($action) {
                 if (isset($_REQUEST['document_id']) && !empty($_REQUEST['document_id'])) {
                     $_SESSION['oLP']->set_modified_on();
                     $lp_item_obj->add_audio_from_documents($_REQUEST['document_id']);
-                    Display::addFlash(Display::return_message(get_lang('UplUploadSucceeded')));
+                    Display::addFlash(Display::return_message(get_lang('Updated')));
                 }
 
                 require 'lp_add_audio.php';

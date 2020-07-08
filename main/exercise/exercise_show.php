@@ -310,7 +310,8 @@ if ($show_results || $show_only_total_score || $showTotalScoreAndUserChoicesInLa
     // Shows exercise header
     echo $objExercise->showExerciseResultHeader(
         $user_info,
-        $track_exercise_info
+        $track_exercise_info,
+        false
     );
 }
 
@@ -496,7 +497,7 @@ foreach ($questionList as $questionId) {
                                     $(function() {
                                         new HotspotQuestion({
                                             questionId: $questionId,
-                                            exerciseId: {$objExercise->id},                                            
+                                            exerciseId: {$objExercise->id},
                                             exeId: $id,
                                             selector: '#hotspot-solution-$questionId-$id',
                                             for: 'solution',

@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\GradebookLink;
+use Chamilo\CoreBundle\Entity\TrackEExerciseConfirmation;
 use Chamilo\CoreBundle\Entity\TrackEHotspot;
 use Chamilo\CourseBundle\Entity\CExerciseCategory;
 use ChamiloSession as Session;
@@ -6150,12 +6151,14 @@ class Exercise
     /**
      * @param array $user_data         result of api_get_user_info()
      * @param array $trackExerciseInfo result of get_stat_track_exercise_info
+     * @param bool  $saveUserResult
      *
      * @return string
      */
     public function showExerciseResultHeader(
         $user_data,
-        $trackExerciseInfo
+        $trackExerciseInfo,
+        $saveUserResult
     ) {
         if (api_get_configuration_value('hide_user_info_in_quiz_result')) {
             return '';
@@ -6214,8 +6217,44 @@ class Exercise
             $data['title'] = PHP_EOL.$this->exercise.' : '.get_lang('Result');
         }
 
-        $data['number_of_answers'] = count(explode(',', $trackExerciseInfo['data_tracking']));
-        $data['number_of_answers_saved'] = $this->countUserAnswersSavedInExercise($trackExerciseInfo['exe_id']);
+        $questionsCount = count(explode(',', $trackExerciseInfo['data_tracking']));
+        $savedAnswersCount = $this->countUserAnswersSavedInExercise($trackExerciseInfo['exe_id']);
+
+        $data['number_of_answers'] = $questionsCount;
+        $data['number_of_answers_saved'] = $savedAnswersCount;
+
+        if (false !== api_get_configuration_value('quiz_confirm_saved_answers')) {
+            $em = Database::getManager();
+
+            if ($saveUserResult) {
+                $trackConfirmation = new TrackEExerciseConfirmation();
+                $trackConfirmation
+                    ->setUserId($trackExerciseInfo['exe_user_id'])
+                    ->setQuizId($trackExerciseInfo['exe_exo_id'])
+                    ->setAttemptId($trackExerciseInfo['exe_id'])
+                    ->setQuestionsCount($questionsCount)
+                    ->setSavedAnswersCount($savedAnswersCount)
+                    ->setCourseId($trackExerciseInfo['c_id'])
+                    ->setSessionId($trackExerciseInfo['session_id'])
+                    ->setCreatedAt(api_get_utc_datetime(null, false, true));
+
+                $em->persist($trackConfirmation);
+                $em->flush();
+            } else {
+                $trackConfirmation = $em
+                    ->getRepository('ChamiloCoreBundle:TrackEExerciseConfirmation')
+                    ->findOneBy(
+                        [
+                            'attemptId' => $trackExerciseInfo['exe_id'],
+                            'quizId' => $trackExerciseInfo['exe_exo_id'],
+                            'courseId' => $trackExerciseInfo['c_id'],
+                            'sessionId' => $trackExerciseInfo['session_id'],
+                        ]
+                    );
+            }
+
+            $data['track_confirmation'] = $trackConfirmation;
+        }
 
         $tpl = new Template(null, false, false, false, false, false, false);
         $tpl->assign('data', $data);

@@ -4195,11 +4195,11 @@ class learnpathItem
             return false;
         }
 
-        if (!empty($this->audio)) {
+        /*if (!empty($this->audio)) {
             $fileName = '/audio/'.$this->audio;
             $filepath = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document/';
             DocumentManager::delete_document($courseInfo, $fileName, $filepath);
-        }
+        }*/
 
         $table = Database::get_course_table(TABLE_LP_ITEM);
         $sql = "UPDATE $table SET

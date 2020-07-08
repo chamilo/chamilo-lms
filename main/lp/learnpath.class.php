@@ -6568,21 +6568,24 @@ class learnpath
     /**
      * This function builds the action menu.
      *
-     * @param bool $returnContent          Optional
+     * @param bool $returnString          Optional
      * @param bool $showRequirementButtons Optional. Allow show the requirements button
      * @param bool $isConfigPage           Optional. If is the config page, show the edit button
      * @param bool $allowExpand            Optional. Allow show the expand/contract button
+     * @param bool $backToBuild
      *
      * @return string
      */
     public function build_action_menu(
-        $returnContent = false,
+        $returnString = false,
         $showRequirementButtons = true,
         $isConfigPage = false,
-        $allowExpand = true
+        $allowExpand = true,
+        $backToBuild = false
     ) {
         $actionsRight = '';
-        $actionsLeft = Display::url(
+        $lpId = $this->lp_id;
+        $back = Display::url(
             Display::return_icon(
                 'back.png',
                 get_lang('ReturnToLearningPaths'),
@@ -6591,6 +6594,21 @@ class learnpath
             ),
             'lp_controller.php?'.api_get_cidreq()
         );
+
+        if ($backToBuild) {
+            $back = Display::url(
+                Display::return_icon(
+                    'back.png',
+                    get_lang('GoBack'),
+                    '',
+                    ICON_SIZE_MEDIUM
+                ),
+                "lp_controller.php?action=add_item&type=step&lp_id=$lpId&".api_get_cidreq()
+            );
+        }
+
+        $actionsLeft = $back;
+
         $actionsLeft .= Display::url(
             Display::return_icon(
                 'preview_view.png',
@@ -6600,7 +6618,7 @@ class learnpath
             ),
             'lp_controller.php?'.api_get_cidreq().'&'.http_build_query([
                 'action' => 'view',
-                'lp_id' => $this->lp_id,
+                'lp_id' => $lpId,
                 'isStudentView' => 'true',
             ])
         );
@@ -6614,7 +6632,7 @@ class learnpath
             ),
             'lp_controller.php?'.api_get_cidreq().'&'.http_build_query([
                 'action' => 'admin_view',
-                'lp_id' => $this->lp_id,
+                'lp_id' => $lpId,
                 'updateaudio' => 'true',
             ])
         );
@@ -6632,7 +6650,7 @@ class learnpath
                 ),
                 'lp_controller.php?'.api_get_cidreq().'&'.http_build_query([
                     'action' => 'edit',
-                    'lp_id' => $this->lp_id,
+                    'lp_id' => $lpId,
                 ])
             );
         }
@@ -6647,7 +6665,7 @@ class learnpath
                 ),
                 'lp_controller.php?'.http_build_query([
                     'action' => 'build',
-                    'lp_id' => $this->lp_id,
+                    'lp_id' => $lpId,
                 ]).'&'.api_get_cidreq()
             );
         }
@@ -6662,7 +6680,7 @@ class learnpath
                         '',
                         ICON_SIZE_MEDIUM
                     ),
-                    api_get_path(WEB_CODE_PATH)."lp/lp_subscribe_users.php?lp_id=".$this->lp_id."&".api_get_cidreq()
+                    api_get_path(WEB_CODE_PATH)."lp/lp_subscribe_users.php?lp_id=".$lpId."&".api_get_cidreq()
                 );
             }
         }
@@ -6692,14 +6710,14 @@ class learnpath
                     'title' => get_lang('SetPrerequisiteForEachItem'),
                     'href' => 'lp_controller.php?'.api_get_cidreq().'&'.http_build_query([
                         'action' => 'set_previous_step_as_prerequisite',
-                        'lp_id' => $this->lp_id,
+                        'lp_id' => $lpId,
                     ]),
                 ],
                 [
                     'title' => get_lang('ClearAllPrerequisites'),
                     'href' => 'lp_controller.php?'.api_get_cidreq().'&'.http_build_query([
                         'action' => 'clear_prerequisites',
-                        'lp_id' => $this->lp_id,
+                        'lp_id' => $lpId,
                     ]),
                 ],
             ];
@@ -6715,7 +6733,7 @@ class learnpath
             [$actionsLeft, $actionsRight]
         );
 
-        if ($returnContent) {
+        if ($returnString) {
             return $toolbar;
         }
 

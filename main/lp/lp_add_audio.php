@@ -65,7 +65,10 @@ switch ($type) {
         ];
         break;
     default:
-        $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('NewStep')];
+        $interbreadcrumb[] = [
+            'url' => api_get_self()."?action=add_item&type=step&lp_id=$learnpath_id&".api_get_cidreq(),
+            'name' => get_lang('NewStep'),
+        ];
         break;
 }
 
@@ -106,7 +109,13 @@ if (isset($lp_item->audio) && !empty($lp_item->audio)) {
     }
 }
 
-$page = $lp->build_action_menu(true);
+$page = $lp->build_action_menu(
+    true,
+    true,
+    false,
+    true,
+    true
+);
 $page .= '<div class="row" style="overflow:hidden">';
 $page .= '<div id="lp_sidebar" class="col-md-4">';
 $page .= $lp->return_new_tree(null, true);
@@ -123,7 +132,7 @@ $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'wami-recorder/
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'wami-recorder/gui.js"></script>';
 $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'swfobject/swfobject.js"></script>';
 
-$tpl = new Template(null);
+$tpl = new Template(get_lang('Add'));
 $tpl->assign('unique_file_id', api_get_unique_id());
 $tpl->assign('course_code', api_get_course_id());
 $tpl->assign('filename', $lp_item->get_title().'_nano.wav');
@@ -134,7 +143,13 @@ $tpl->assign('lp_dir', api_remove_trailing_slash($lpPathInfo['dir']));
 $template = $tpl->get_template('learnpath/record_voice.tpl');
 $recordVoiceForm .= $tpl->fetch($template);
 $form->addElement('header', '<small class="text-muted">'.get_lang('Or').'</small> '.get_lang('AudioFile'));
-$form->addLabel(null, sprintf(get_lang('AudioFileForItemX'), $lp_item->get_title()));
+
+$audioLabel = '';
+if (!empty($lp_item->audio)) {
+    $audioLabel = '&nbsp; '.get_lang('FileName').': <b>'.$lp_item->audio.'<b/>';
+}
+
+$form->addLabel(null, sprintf(get_lang('AudioFileForItemX'), $lp_item->get_title()).$audioLabel);
 
 if (!empty($file)) {
     $audioPlayer = '<div id="preview">'.

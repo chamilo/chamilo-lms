@@ -684,7 +684,6 @@ switch ($action) {
                 if (isset($_FILES['file']) && !empty($_FILES['file'])) {
                     // Updating the lp.modified_on
                     $_SESSION['oLP']->set_modified_on();
-                    $lp_item_obj->remove_audio();
                     $lp_item_obj->add_audio();
                     Display::addFlash(Display::return_message(get_lang('UplUploadSucceeded')));
                 }

@@ -4528,10 +4528,9 @@ EOT;
         $endOfMessage = $objExercise->getTextWhenFinished();
         if (!empty($endOfMessage)) {
             echo Display::div(
-                Display::return_message($endOfMessage, 'normal', false),
+                $endOfMessage,
                 ['id' => 'quiz_end_message']
             );
-            echo "<div class='clearfix'></div>";
         }
 
         $question_list_answers = [];

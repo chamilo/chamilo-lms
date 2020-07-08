@@ -49,13 +49,13 @@
 
                     <div id="quiz_saved_answers_container">
                     {% if data.number_of_answers_saved != data.number_of_answers %}
-                        <p class="alert alert-warning">
+                        <span class="label label-warning">
                             <strong>{{ 'XAnswersSavedByUsersFromXTotal'|get_lang|format(data.number_of_answers_saved, data.number_of_answers) }}</strong>
-                        </p>
+                        </span>
                     {% else %}
-                        <p class="lead text-success">
+                        <span class="label label-success">
                             <strong>{{ 'XAnswersSavedByUsersFromXTotal'|get_lang|format(data.number_of_answers_saved, data.number_of_answers) }}</strong>
-                        </p>
+                        </span>
                     {% endif %}
 
                         {% if 'quiz_confirm_saved_answers'|api_get_configuration_value %}

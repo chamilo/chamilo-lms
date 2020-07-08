@@ -1434,7 +1434,11 @@ function getAllWorkListStudent(
         $courseInfo = api_get_course_info_by_id($course_id);
         $session_id = isset($course['session_id']) ? $course['session_id'] : 0;
         $conditionSession = api_get_session_condition($session_id, true, false, 'w.session_id');
-        $courseQuery[] = " (w.c_id = $course_id $conditionSession )";
+        $parentCondition = '';
+        if ($withResults) {
+            $parentCondition = 'AND ww.parent_id is NOT NULL';
+        }
+        $courseQuery[] = " (w.c_id = $course_id $conditionSession $parentCondition )";
         $courseList[$course_id] = $courseInfo;
     }
 
@@ -1461,23 +1465,38 @@ function getAllWorkListStudent(
                         a.publication_id';
     }
 
-    $check = " LEFT JOIN $workTable ww ON (ww.c_id = w.c_id AND ww.parent_id = w.id AND ww.user_id = $userId ) ";
+    $checkSentWork = " LEFT JOIN $workTable ww
+                       ON (ww.c_id = w.c_id AND ww.parent_id = w.id AND ww.user_id = $userId ) ";
     $where = ' AND ww.url IS NULL ';
+    $expirationCondition = " AND (a.expires_on IS NULL OR a.expires_on > '".api_get_utc_datetime()."') ";
     if ($withResults) {
         $where = '';
-        $check = " INNER JOIN $workTable ww ON (ww.c_id = w.c_id AND ww.parent_id = w.id AND ww.user_id = $userId) ";
+        $checkSentWork = " LEFT JOIN $workTable ww
+                           ON (
+                            ww.c_id = w.c_id AND
+                            ww.parent_id = w.id AND
+                            ww.user_id = $userId AND
+                            a.expires_on IS NULL AND
+                            ww.parent_id is NOT NULL
+                        ) ";
+        $expirationCondition = " OR (
+                ww.parent_id is NULL AND
+                a.expires_on IS NOT NULL AND
+                a.expires_on < '".api_get_utc_datetime()."'
+            ) ";
     }
 
     $sql = "$select
             FROM $workTable w
             LEFT JOIN $workTableAssignment a
             ON (a.publication_id = w.id AND a.c_id = w.c_id)
-            $check
+            $checkSentWork
             WHERE
                 w.parent_id = 0 AND
                 w.active IN (1, 0) AND
                 ($courseQueryToString)
                 $where_condition
+                $expirationCondition
                 $where
             ";
 
@@ -1486,6 +1505,7 @@ function getAllWorkListStudent(
     if (!empty($start) && !empty($limit)) {
         $sql .= " LIMIT $start, $limit";
     }
+
     $result = Database::query($sql);
 
     if ($getCount) {
@@ -1562,10 +1582,6 @@ function getAllWorkListStudent(
         }
 
         $work['title'] = Display::url($work['title'], $url.'&id='.$work['id']);
-        /*$work['others'] = Display::url(
-            Display::return_icon('group.png', get_lang('Others')),
-            $urlOthers.$work['id']
-        );*/
         $works[] = $work;
     }
 

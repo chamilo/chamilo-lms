@@ -9864,6 +9864,8 @@ class Exercise
                     return $lp;
                 }
             }
+
+            return current($this->lpList);
         }
 
         return [

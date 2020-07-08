@@ -69,7 +69,9 @@
                                                 {{ 'QuizConfirmSavedAnswers'|get_lang }}
                                             </label>
                                         </div>
-                                        <span class="help-block">{{ 'QuizConfirmSavedAnswersHelp'|get_lang }}</span>
+                                        {% if enable_form %}
+                                            <span class="help-block">{{ 'QuizConfirmSavedAnswersHelp'|get_lang }}</span>
+                                        {% endif %}
                                     </div>
                                 </div>
                                 {% if enable_form %}

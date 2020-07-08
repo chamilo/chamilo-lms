@@ -1412,8 +1412,12 @@ function getAllWorkListStudent(
 ) {
     $workTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $workTableAssignment = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
-
     $userId = api_get_user_id();
+
+    if (empty($userId)) {
+        return [];
+    }
+
     $courses = CourseManager::get_courses_list_by_user_id($userId, true);
 
     if (!empty($where_condition)) {

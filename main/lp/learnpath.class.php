@@ -6568,7 +6568,7 @@ class learnpath
     /**
      * This function builds the action menu.
      *
-     * @param bool $returnString          Optional
+     * @param bool $returnString           Optional
      * @param bool $showRequirementButtons Optional. Allow show the requirements button
      * @param bool $isConfigPage           Optional. If is the config page, show the edit button
      * @param bool $allowExpand            Optional. Allow show the expand/contract button

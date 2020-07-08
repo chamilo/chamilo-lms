@@ -69,7 +69,8 @@ class CourseManager
                 $_configuration,
                 $accessUrlId,
                 'hosting_limit_active_courses',
-                'PortalActiveCoursesLimitReached'
+                'PortalActiveCoursesLimitReached',
+                true
             );
             if ($return != false) {
                 return $return;
@@ -6952,16 +6953,22 @@ class CourseManager
      *
      * @return bool|string
      */
-    private static function checkCreateCourseAccessUrlParam($_configuration, $accessUrlId, $param, $msgLabel)
+    private static function checkCreateCourseAccessUrlParam($_configuration, $accessUrlId, $param, $msgLabel, $filterHiddenCourses = false)
     {
         if (isset($_configuration[$accessUrlId][$param]) && $_configuration[$accessUrlId][$param] > 0) {
-            $num = self::count_courses($accessUrlId);
+            if ($filterHiddenCourses) {
+                $num = self::countActiveCourses($accessUrlId);
+            } else {
+                $num = self::count_courses($accessUrlId);
+            }
             if ($num >= $_configuration[$accessUrlId][$param]) {
                 api_warn_hosting_contact($param);
 
                 Display::addFlash(
                     Display::return_message($msgLabel)
                 );
+
+                return true;
             }
         }
 

@@ -43,7 +43,7 @@
     "js-cookie": "^2.2.0",
     "jsplumb": "^2.12",
     "linkifyjs": "^2.1",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.16",
     "mathjax": "^2.7",
     "mediaelement": "^4.2",
     "mediaelement-plugins": "https://github.com/chamilo/mediaelement-plugins",

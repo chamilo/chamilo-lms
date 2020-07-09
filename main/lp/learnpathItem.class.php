@@ -75,12 +75,12 @@ class learnpathItem
     public $view_id;
     public $oldTotalTime;
     public $view_max_score;
+    public $courseInfo;
+    public $courseId;
     //var used if absolute session time mode is used
     private $last_scorm_session_time = 0;
     private $prerequisiteMaxScore;
     private $prerequisiteMinScore;
-    public $courseInfo;
-    public $courseId;
 
     /**
      * Prepares the learning path item for later launch.
@@ -89,7 +89,7 @@ class learnpathItem
      *
      * @param int        $id           Learning path item ID
      * @param int        $user_id      User ID
-     * @param int        $courseId    Course int id
+     * @param int        $courseId     Course int id
      * @param array|null $item_content An array with the contents of the item
      */
     public function __construct(
@@ -206,7 +206,6 @@ class learnpathItem
         $file = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document'.$audio;
 
         if (file_exists($file)) {
-
             return $audio;
         }
 

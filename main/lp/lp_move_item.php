@@ -12,7 +12,6 @@ use ChamiloSession as Session;
  * @author Roan Embrechts, refactoring and code cleaning
  * @author Yannick Warnier <ywarnier@beeznest.org> - cleaning and update for new SCORM tool
  */
-
 $this_section = SECTION_COURSES;
 api_protect_course_script();
 

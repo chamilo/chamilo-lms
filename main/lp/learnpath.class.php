@@ -54,7 +54,7 @@ class learnpath
     public $error = '';
     public $force_commit = false; // For SCORM only- if true will send a scorm LMSCommit() request on each LMSSetValue()
     public $index; // The index of the active learnpath_item in $ordered_items array.
-    /** @var learnpathItem[]  */
+    /** @var learnpathItem[] */
     public $items = [];
     public $last; // item_id of last item viewed in the learning path.
     public $last_item_seen = 0; // In case we have already come in this lp, reuse the last item seen if authorized.
@@ -8242,7 +8242,7 @@ class learnpath
             $previousId = $extra_info['previous_item_id'];
         }
 
-        if ($extra_info instanceOf learnpathItem) {
+        if ($extra_info instanceof learnpathItem) {
             $item_title = $extra_info->get_title();
             $item_description = $extra_info->get_description();
             $path = $extra_info->get_path();

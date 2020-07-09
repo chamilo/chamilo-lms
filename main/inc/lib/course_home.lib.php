@@ -898,7 +898,7 @@ class CourseHome
                                     ICON_SIZE_SMALL,
                                     false
                                 );
-                                $link['name']='<em id="'.'linktool_'.$tool['iid'].'"class="fa fa-eye" title="'.get_lang('Deactivate').'"></em>';
+                                $link['name']='<em id="'.'linktool_'.$tool['iid'].'" class="fa fa-eye" title="'.get_lang('Deactivate').'"></em>';
                                 $link['cmd'] = 'hide=yes';
                                 $lnk[] = $link;
                             }
@@ -910,7 +910,7 @@ class CourseHome
                                     ICON_SIZE_SMALL,
                                     false
                                 );
-                                $link['name']='<em id="'.'linktool_'.$tool['iid'].'"class="fa fa-eye-slash text-muted" title="'.get_lang('Activate').'"></em>';
+                                $link['name']='<em id="'.'linktool_'.$tool['iid'].'" class="fa fa-eye-slash text-muted" title="'.get_lang('Activate').'"></em>';
                                 $link['cmd'] = 'restore=yes';
                                 $lnk[] = $link;
                             }

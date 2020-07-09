@@ -295,7 +295,7 @@ if (api_is_allowed_to_edit() && empty($session_id)) {
 /* Tool to show /hide all tools on course */
 $toolAllShowHide = '';
 if (api_is_allowed_to_edit() && empty($session_id)) {
-    $toolAllShowHide =  '<button class="btn btn-default hidden visible-all  show-hide-all-tools" title="'.get_lang('Activate', '').'"><em class="fa fa-eye "></em></button>';
+    $toolAllShowHide =  '<button class="btn btn-default hidden visible-all show-hide-all-tools" title="'.get_lang('Activate', '').'"><em class="fa fa-eye"></em></button>';
     $toolAllShowHide .=  '<button class="btn btn-default hidden invisible-all show-hide-all-tools" title="'.get_lang('Deactivate', '').'"><em class="fa fa-eye-slash"></em></button>';
 }
 

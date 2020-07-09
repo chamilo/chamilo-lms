@@ -80,6 +80,63 @@ class ApiRequest
     }
 
     /**
+     * @param \Chamilo\UserBundle\Entity\User|null $user
+     *
+     * @throws \Exception
+     *
+     * @return array
+     */
+    public function createAuthenticationSessionToken(User $user = null)
+    {
+        $apiKey = $this->plugin->get(\WhispeakAuthPlugin::SETTING_TOKEN);
+
+        $langIso = api_get_language_isocode($user ? $user->getLanguage() : null);
+
+        return $this->sendRequest(
+            'get',
+            'auth',
+            $apiKey,
+            ['lang' => $langIso]
+        );
+    }
+
+    /**
+     * @param string $token
+     * @param string $speaker
+     * @param string $audioFilePath
+     *
+     * @throws \Exception
+     *
+     * @return bool
+     */
+    public function performAuthentication($token, $speaker, $audioFilePath)
+    {
+        try {
+            $this->sendRequest(
+                'post',
+                'auth',
+                $token,
+                [],
+                [
+                    [
+                        'name' => 'speaker',
+                        'contents' => $speaker,
+                    ],
+                    [
+                        'name' => 'file',
+                        'contents' => fopen($audioFilePath, 'r'),
+                        'filename' => basename($audioFilePath),
+                    ],
+                ]
+            );
+
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
+    /**
      * @param string $method
      * @param string $uri
      * @param string $authBearer
@@ -116,6 +173,10 @@ class ApiRequest
 
             $responseBody = $requestException->getResponse()->getBody()->getContents();
             $json = json_decode($responseBody, true);
+
+            if (empty($json['message'])) {
+                throw new \Exception($requestException->getMessage());
+            }
 
             $message = is_array($json['message']) ? implode(PHP_EOL, $json['message']) : $json['message'];
 

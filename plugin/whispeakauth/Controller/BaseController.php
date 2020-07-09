@@ -30,27 +30,7 @@ abstract class BaseController
     /**
      * @param array $variables
      */
-    protected function displayPage(array $variables)
-    {
-        global $htmlHeadXtra;
-
-        $htmlHeadXtra[] = api_get_js('rtc/RecordRTC.js');
-        $htmlHeadXtra[] = api_get_js_simple(api_get_path(WEB_PLUGIN_PATH).'whispeakauth/assets/js/RecordAudio.js');
-
-        $pageTitle = $this->plugin->get_title();
-
-        $template = new \Template($pageTitle);
-
-        foreach ($variables as $key => $value) {
-            $template->assign($key, $value);
-        }
-
-        $pageContent = $template->fetch('whispeakauth/view/record_audio.html.twig');
-
-        $template->assign('header', $pageTitle);
-        $template->assign('content', $pageContent);
-        $template->display_one_col_template();
-    }
+    abstract protected function displayPage(array $variables);
 
     /**
      * @param string $message

@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\PluginBundle\WhispeakAuth\Controller\AuthenticationRequestController;
+use Chamilo\PluginBundle\WhispeakAuth\Controller\AuthenticationController;
 use Chamilo\PluginBundle\WhispeakAuth\Controller\EnrollmentController;
 
 $cidReset = true;
@@ -30,7 +30,11 @@ if ($isEnrollment) {
 }
 
 if ($isAuthentify) {
-    $authenticationRequest = new AuthenticationRequestController();
-    $authenticationRequest->process();
-    die;
+    $controller= new AuthenticationController();
+
+    try {
+        $controller->ajax();
+    } catch (Exception $exception) {
+        echo Display::return_message($exception->getMessage(), 'error', false);
+    }
 }

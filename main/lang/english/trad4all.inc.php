@@ -757,7 +757,7 @@ $Camera = "Camera";
 $Microphone = "Microphone";
 $DeleteStream = "Delete stream";
 $Record = "Record";
-$NoFileAvailable = "No File availible";
+$NoFileAvailable = "No File available";
 $RecordingOnlyForTeachers = "Recording only for trainers";
 $UsersNow = "Users at the moment:";
 $StartConference = "Start conference";
@@ -8565,4 +8565,7 @@ $ImageURL = "Image URL";
 $PixelWidth = "px width";
 $AddImageWithZoom = "Add image with zoom";
 $DeleteInAllLanguages = "Delete in all languages";
+$MyStudentsSchedule = "My students schedule";
+$QuizConfirmSavedAnswers = "I accept the number of saved responses in this section.";
+$QuizConfirmSavedAnswersHelp = "If you are not satisfied, do not check the acceptance box and consult the course manager or the platform administrator.";
 ?>

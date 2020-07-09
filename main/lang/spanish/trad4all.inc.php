@@ -8593,4 +8593,7 @@ $ImageURL = "URL imagen";
 $PixelWidth = "Ancho en px";
 $AddImageWithZoom = "Agregar imagen con zoom";
 $DeleteInAllLanguages = "Eliminar en todos los idiomas";
+$MyStudentsSchedule = "Horario de mis estudiante";
+$QuizConfirmSavedAnswers = "Acepto la cantidad de respuestas guardadas en esta sección.";
+$QuizConfirmSavedAnswersHelp = "Si no está satisfecho, no marque la casilla de aceptación y consulte con el encargado del curso o el administrador de la plataforma.";
 ?>

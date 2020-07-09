@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\TrackEExerciseConfirmation;
 use ChamiloSession as Session;
 
 /**
@@ -846,6 +847,55 @@ switch ($action) {
             }
 
             echo 'ok';
+        }
+
+        break;
+    case 'quiz_confirm_saved_answers':
+        if (false === api_get_configuration_value('quiz_confirm_saved_answers')) {
+            break;
+        }
+
+        $trackConfirmationId = isset($_POST['tc_id']) ? (int) $_POST['tc_id'] : 0;
+        $cId = api_get_course_int_id();
+        $sessionId = api_get_session_id();
+        $userId = api_get_user_id();
+        $confirmed = !empty($_POST['quiz_confirm_saved_answers_check']);
+
+        $em = Database::getManager();
+        $repo = $em->getRepository('ChamiloCoreBundle:TrackEExerciseConfirmation');
+
+        try {
+            if (!$trackConfirmationId) {
+                throw new Exception(get_lang('ErrorOccurred'));
+            }
+
+            /** @var TrackEExerciseConfirmation $trackConfirmation */
+            $trackConfirmation = $repo->findOneBy(
+                [
+                    'id' => $trackConfirmationId,
+                    'userId' => $userId,
+                    'courseId' => $cId,
+                    'sessionId' => $sessionId,
+                ],
+                ['createdAt' => 'DESC']
+            );
+
+            if (!$trackConfirmation) {
+                throw new Exception(get_lang('NotFound'));
+            }
+
+            $trackConfirmation
+                ->setConfirmed($confirmed)
+                ->setUpdatedAt(api_get_utc_datetime(null, false, true));
+
+            $em->persist($trackConfirmation);
+            $em->flush();
+
+            http_response_code(200);
+        } catch (Exception $exception) {
+            http_response_code(500);
+
+            echo Display::return_message($exception->getMessage(), 'error');
         }
 
         break;

@@ -42,13 +42,11 @@ class UserRemoteServicePlugin extends Plugin
     {
         Database::query(
             sprintf(
-                <<<OEQ
-create table if not exists %s (
+                'create table if not exists %s (
     id int unsigned not null auto_increment primary key,
     title varchar(255) not null,
     url varchar(255) not null
-)
-OEQ,
+)',
                 Database::get_main_table(self::TABLE)
             )
         );
@@ -268,11 +266,9 @@ OEQ,
     {
         $userInfo = api_get_user_info();
         return sprintf(
-            <<<HTML
-<div class="embed-responsive embed-responsive-16by9">
+            '<div class="embed-responsive embed-responsive-16by9">
  <iframe class="embed-responsive-item" src="%s"></iframe>
-</div>
-HTML,
+</div>',
             $this->getService(
                 $this->getActiveServiceId()
             )->getCustomUserURL($userInfo['username'], $userInfo['id'], $this->salt())

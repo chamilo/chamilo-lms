@@ -43,13 +43,14 @@ $htmlHeadXtra[] = '<script>
         tools_visibles = [];
         $.each($(".make_visible_and_invisible").parent(), function (index, item) {
             var element = $(item).find("a");
-            image = $(element[0]).find("img")[0];
+            image = $(element[0]).find("em")[0];
             image_id = $(image).attr("id").replace("linktool_","");
-            if (!$(element[1]).hasClass("text-muted")) {
+            if (!$(image).hasClass("fa-eye-slash")) {
                 tools_invisibles.push(image_id)
-            }else{
+            } else {
                 tools_visibles.push(image_id)
             }
+
         });
         if (tools_visibles.length == 0) {
             $(".visible-all").addClass("hidden");
@@ -63,17 +64,17 @@ $htmlHeadXtra[] = '<script>
 $(function() {
 	buttomForAllShowHide();
 	/* option show/hide all*/
-    $(".show-hide-all-tools").on("click",function(){
+    $(".show-hide-all-tools").on("click" , function() {
         $(".show-hide-all-tools").addClass("disabled");
         tools_invisibles = [];
         tools_visibles = [];
         $.each($(".make_visible_and_invisible").parent(), function (index, item) {
             var element = $(item).find("a");
-            image = $(element[0]).find("img")[0];
+            image = $(element[0]).find("em")[0];
             image_id = $(image).attr("id").replace("linktool_","");
-            if (!$(element[1]).hasClass("text-muted")) {
+            if (!$(image).hasClass("fa-eye-slash")) {
                 tools_invisibles.push(image_id)
-            }else{
+            } else {
                 tools_visibles.push(image_id)
             }
         });
@@ -81,7 +82,7 @@ $(function() {
         ids = tools_invisibles;
         if (tools_invisibles.length == 0) {
             ids = tools_visibles;
-             messaje_invisible = "'.get_lang('ToolIsNowVisible', '').'";
+            messaje_invisible = "'.get_lang('ToolIsNowVisible', '').'";
 
         }
 
@@ -95,27 +96,28 @@ $(function() {
             url: "'.api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?'.api_get_cidreq().'&a=set_visibility_for_all",
             data: "tools_ids=" + JSON.stringify(ids) + "&sent_http_request=1",
             success: function (data) {
-            data = JSON.parse(data);
-            $.each(data,function(index,item){
-                 new_current_view       = "'.api_get_path(WEB_IMG_PATH).'" + item.view;
-                //eyes
-                $("#linktool_"+item.id).attr("src", new_current_view);
-                //tool
-                $("#toolimage_" + item.id).attr("src", item.image);
-                //clase
-                $("#tooldesc_" + item.id).attr("class", item.tclass);
-                $("#istooldesc_" + item.id).attr("class", item.tclass);
-            });
-            $(".show-hide-all-tools").removeClass("disabled");
-            $(".normal-message").hide();
-            $("#id_confirmation_message").html(messaje_invisible);
-            $("#id_confirmation_message").show();
-            buttomForAllShowHide();
+                data = JSON.parse(data);
+                $.each(data,function(index,item){
+                     new_current_view       = "'.api_get_path(WEB_IMG_PATH).'" + item.view;
+                    //eyes
+                    //$("#linktool_"+item.id).attr("src", new_current_view);
+                    $("#linktool_"+item.id).attr("class", item.fclass);
+                    //tool
+                    $("#toolimage_" + item.id).attr("src", item.image);
+                    //clase
+                    $("#tooldesc_" + item.id).attr("class", item.tclass);
+                    $("#istooldesc_" + item.id).attr("class", item.tclass);
+                });
+                $(".show-hide-all-tools").removeClass("disabled");
+                $(".normal-message").hide();
+                $("#id_confirmation_message").html(messaje_invisible);
+                $("#id_confirmation_message").show();
+                buttomForAllShowHide();
             },
-            error:  function( jqXHR, textStatus, errorThrown ) {
-            $(".show-hide-all-tools").removeClass("disabled");
-            $(".normal-message").hide();
-            buttomForAllShowHide();
+            error: function( jqXHR, textStatus, errorThrown ) {
+                $(".show-hide-all-tools").removeClass("disabled");
+                $(".normal-message").hide();
+                buttomForAllShowHide();
             }
         });
     });
@@ -132,12 +134,12 @@ $(function() {
     });
 
 	$(".make_visible_and_invisible").attr("href", "javascript:void(0);");
-	$(".make_visible_and_invisible > img").click(function () {
+	$(".make_visible_and_invisible > em").click(function () {
 		make_visible = "visible.gif";
 		make_invisible = "invisible.gif";
-		path_name = $(this).attr("src");
-		list_path_name = path_name.split("/");
-		image_link = list_path_name[list_path_name.length - 1];
+		//path_name = $(this).attr("src");
+		//list_path_name = path_name.split("/");
+		//image_link = list_path_name[list_path_name.length - 1];
 		tool_id = $(this).attr("id");
 		tool_info = tool_id.split("_");
 		my_tool_id = tool_info[1];
@@ -157,7 +159,8 @@ $(function() {
 				new_current_tool_image = info.image;
 				new_current_view       = "'.api_get_path(WEB_IMG_PATH).'" + info.view;
 				//eyes
-				$("#" + tool_id).attr("src", new_current_view);
+				//$("#" + tool_id).attr("src", new_current_view);
+				 $("#linktool_"+my_tool_id).attr("class", info.fclass);
 				//tool
 				$("#toolimage_" + my_tool_id).attr("src", new_current_tool_image);
 				//clase

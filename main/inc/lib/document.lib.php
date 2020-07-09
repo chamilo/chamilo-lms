@@ -772,8 +772,6 @@ class DocumentManager
         if ($can_see_invisible) {
             // condition for the session
             $session_id = api_get_session_id();
-            //$condition_session = api_get_session_condition($session_id, true, false, 'docs.session_id');
-
             $session_id = $session_id ?: api_get_session_id();
             $condition_session = " AND (last.session_id = '$session_id' OR (last.session_id = '0' OR last.session_id IS NULL) )";
             $condition_session .= self::getSessionFolderFilters($path, $session_id);
@@ -3326,6 +3324,7 @@ class DocumentManager
      * @param int    $folderId
      * @param bool   $addCloseButton
      * @param bool   $addAudioPreview
+     * @param array  $filterByExtension
      *
      * @return string
      */
@@ -3341,7 +3340,8 @@ class DocumentManager
         $showOnlyFolders = false,
         $folderId = false,
         $addCloseButton = true,
-        $addAudioPreview = false
+        $addAudioPreview = false,
+        $filterByExtension = []
     ) {
         if (empty($course_info['real_id']) || empty($course_info['code']) || !is_array($course_info)) {
             return '';
@@ -3406,6 +3406,17 @@ class DocumentManager
             }
         }
 
+        $extensionConditionToString = '';
+        if (!empty($filterByExtension)) {
+            $extensionCondition = [];
+            foreach ($filterByExtension as $extension) {
+                $extensionCondition[] = " docs.path LIKE '%.$extension' ";
+            }
+            if (!empty($extensionCondition)) {
+                $extensionConditionToString .= " AND (".implode('OR', $extensionCondition).") ";
+            }
+        }
+
         $parentData = [];
         if ($folderId !== false) {
             $parentData = self::get_document_data_by_id(
@@ -3453,6 +3464,7 @@ class DocumentManager
                     last.c_id = {$course_info['real_id']}
                     $folderCondition
                     $levelCondition
+                    $extensionConditionToString
                     $add_folder_filter
                 ORDER BY docs.filetype DESC, docs.title ASC";
 

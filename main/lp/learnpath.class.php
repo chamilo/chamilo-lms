@@ -54,6 +54,7 @@ class learnpath
     public $error = '';
     public $force_commit = false; // For SCORM only- if true will send a scorm LMSCommit() request on each LMSSetValue()
     public $index; // The index of the active learnpath_item in $ordered_items array.
+    /** @var learnpathItem[]  */
     public $items = [];
     public $last; // item_id of last item viewed in the learning path.
     public $last_item_seen = 0; // In case we have already come in this lp, reuse the last item seen if authorized.
@@ -2103,23 +2104,24 @@ class learnpath
     public function get_mediaplayer($lpItemId, $autostart = 'true')
     {
         $course_id = api_get_course_int_id();
-        $_course = api_get_course_info();
-        if (empty($_course)) {
-            return '';
-        }
-        $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
-        $tbl_lp_item_view = Database::get_course_table(TABLE_LP_ITEM_VIEW);
+        $courseInfo = api_get_course_info();
         $lpItemId = (int) $lpItemId;
 
-        /** @var learnpathItem $item */
+        if (empty($courseInfo) || empty($lpItemId)) {
+            return '';
+        }
         $item = isset($this->items[$lpItemId]) ? $this->items[$lpItemId] : null;
-        $itemViewId = 0;
-        if ($item) {
-            $itemViewId = (int) $item->db_item_view_id;
+
+        if (empty($item)) {
+            return '';
         }
 
+        $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
+        $tbl_lp_item_view = Database::get_course_table(TABLE_LP_ITEM_VIEW);
+        $itemViewId = (int) $item->db_item_view_id;
+
         // Getting all the information about the item.
-        $sql = "SELECT lpi.audio, lpi.item_type, lp_view.status
+        $sql = "SELECT lp_view.status
                 FROM $tbl_lp_item as lpi
                 INNER JOIN $tbl_lp_item_view as lp_view
                 ON (lpi.iid = lp_view.lp_item_id)
@@ -2130,11 +2132,12 @@ class learnpath
         $result = Database::query($sql);
         $row = Database::fetch_assoc($result);
         $output = '';
+        $audio = $item->audio;
 
-        if (!empty($row['audio'])) {
+        if (!empty($audio)) {
             $list = $_SESSION['oLP']->get_toc();
 
-            switch ($row['item_type']) {
+            switch ($item->get_type()) {
                 case 'quiz':
                     $type_quiz = false;
                     foreach ($list as $toc) {
@@ -2151,24 +2154,15 @@ class learnpath
                         }
                     }
                     break;
-                case TOOL_READOUT_TEXT:;
+                case TOOL_READOUT_TEXT:
                     $autostart_audio = 'false';
                     break;
                 default:
                     $autostart_audio = 'true';
             }
 
-            $courseInfo = api_get_course_info();
-            $audio = $row['audio'];
-
-            $file = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document/audio/'.$audio;
-            $url = api_get_path(WEB_COURSE_PATH).$courseInfo['path'].'/document/audio/'.$audio.'?'.api_get_cidreq();
-
-            if (!file_exists($file)) {
-                $lpPathInfo = $_SESSION['oLP']->generate_lp_folder(api_get_course_info());
-                $file = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document'.$lpPathInfo['dir'].$audio;
-                $url = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$lpPathInfo['dir'].$audio.'?'.api_get_cidreq();
-            }
+            $file = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document'.$audio;
+            $url = api_get_path(WEB_COURSE_PATH).$courseInfo['path'].'/document'.$audio.'?'.api_get_cidreq();
 
             $player = Display::getMediaPlayer(
                 $file,
@@ -8237,15 +8231,25 @@ class learnpath
         $item_description = '';
         $item_path_fck = '';
 
+        $parent = 0;
+        $previousId = null;
         if ($id != 0 && is_array($extra_info)) {
             $item_title = $extra_info['title'];
             $item_description = $extra_info['description'];
             $item_path = api_get_path(WEB_COURSE_PATH).$_course['path'].'/scorm/'.$this->path.'/'.stripslashes($extra_info['path']);
             $item_path_fck = '/scorm/'.$this->path.'/'.stripslashes($extra_info['path']);
-        }
-        $parent = 0;
-        if ($id != 0 && is_array($extra_info)) {
             $parent = $extra_info['parent_item_id'];
+            $previousId = $extra_info['previous_item_id'];
+        }
+
+        if ($extra_info instanceOf learnpathItem) {
+            $item_title = $extra_info->get_title();
+            $item_description = $extra_info->get_description();
+            $path = $extra_info->get_path();
+            $item_path = api_get_path(WEB_COURSE_PATH).$_course['path'].'/scorm/'.$this->path.'/'.stripslashes($path);
+            $item_path_fck = '/scorm/'.$this->path.'/'.stripslashes($path);
+            $parent = $extra_info->get_parent();
+            $previousId = $extra_info->previous;
         }
 
         $id = (int) $id;
@@ -8254,7 +8258,7 @@ class learnpath
                     lp_id = ".$this->lp_id." AND
                     iid != $id";
 
-        if ($item_type == 'dir') {
+        if ($item_type === 'dir') {
             $sql .= " AND parent_item_id = 0";
         }
 
@@ -8319,7 +8323,7 @@ class learnpath
             }
         }
 
-        if ($action != 'move') {
+        if ($action !== 'move') {
             $this->setItemTitle($form);
         } else {
             $form->addElement('hidden', 'title');
@@ -8359,11 +8363,9 @@ class learnpath
             if ($arrLP[$i]['parent_item_id'] == $parent && $arrLP[$i]['id'] != $id &&
                 $arrLP[$i]['item_type'] !== TOOL_LP_FINAL_ITEM) {
                 //this is the same!
-                if (isset($extra_info['previous_item_id']) &&
-                    $extra_info['previous_item_id'] == $arrLP[$i]['id']
-                ) {
+                if (isset($previousId) && $previousId == $arrLP[$i]['id']) {
                     $s_selected_position = $arrLP[$i]['id'];
-                } elseif ($action == 'add') {
+                } elseif ($action === 'add') {
                     $s_selected_position = $arrLP[$i]['id'];
                 }
 
@@ -8414,8 +8416,8 @@ class learnpath
 
         //assets can't be modified
         //$item_type == 'asset' ||
-        if (($item_type == 'sco') && ($extension == 'html' || $extension == 'htm')) {
-            if ($item_type == 'sco') {
+        if (($item_type === 'sco') && ($extension === 'html' || $extension === 'htm')) {
+            if ($item_type === 'sco') {
                 $form->addElement(
                     'html',
                     '<script>alert("'.get_lang('WarningWhenEditingScorm').'")</script>'
@@ -9612,7 +9614,7 @@ class learnpath
     /**
      * Displays the menu for manipulating a step.
      *
-     * @param id     $item_id
+     * @param int    $item_id
      * @param string $item_type
      *
      * @return string
@@ -9633,11 +9635,11 @@ class learnpath
         $audio_player = null;
         // We display an audio player if needed.
         if (!empty($row['audio'])) {
-            $webAudioPath = '../..'.api_get_path(REL_COURSE_PATH).$_course['path'].'/document/audio/'.$row['audio'];
-
-            $audio_player .= '<div class="lp_mediaplayer" id="container">'
-                .'<audio src="'.$webAudioPath.'" controls>'
-                .'</div><br>';
+            $audio = learnpathItem::fixAudio($row['audio']);
+            $webAudioPath = '../..'.api_get_path(REL_COURSE_PATH).$_course['path'].'/document'.$audio;
+            $audio_player .= '<div class="lp_mediaplayer" id="container">
+                            <audio src="'.$webAudioPath.'" controls>
+                            </div><br />';
         }
 
         $url = api_get_self().'?'.api_get_cidreq().'&view=build&id='.$item_id.'&lp_id='.$this->lp_id;
@@ -9804,64 +9806,59 @@ class learnpath
     /**
      * Display the form to allow moving an item.
      *
-     * @param int $item_id Item ID
+     * @param learnpathItem $item Item ID
      *
      * @throws Exception
      * @throws HTML_QuickForm_Error
      *
      * @return string HTML form
      */
-    public function display_move_item($item_id)
+    public function display_move_item($item)
     {
         $return = '';
-        if (is_numeric($item_id)) {
-            $item_id = (int) $item_id;
-            $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
+        if ($item) {
+            $item_id = $item->getIid();
+            $type = $item->get_type();
 
-            $sql = "SELECT * FROM $tbl_lp_item
-                    WHERE iid = $item_id";
-            $res = Database::query($sql);
-            $row = Database::fetch_array($res);
-
-            switch ($row['item_type']) {
+            switch ($type) {
                 case 'dir':
                 case 'asset':
-                    $return .= $this->display_manipulate($item_id, $row['item_type']);
+                    $return .= $this->display_manipulate($item_id, $type);
                     $return .= $this->display_item_form(
-                        $row['item_type'],
+                        $type,
                         get_lang('MoveCurrentChapter'),
                         'move',
                         $item_id,
-                        $row
+                        $item
                     );
                     break;
                 case TOOL_DOCUMENT:
-                    $return .= $this->display_manipulate($item_id, $row['item_type']);
-                    $return .= $this->display_document_form('move', $item_id, $row);
+                    $return .= $this->display_manipulate($item_id, $type);
+                    $return .= $this->display_document_form('move', $item_id, $item);
                     break;
                 case TOOL_LINK:
-                    $return .= $this->display_manipulate($item_id, $row['item_type']);
-                    $return .= $this->display_link_form('move', $item_id, $row);
+                    $return .= $this->display_manipulate($item_id, $type);
+                    $return .= $this->display_link_form('move', $item_id, $item);
                     break;
                 case TOOL_HOTPOTATOES:
-                    $return .= $this->display_manipulate($item_id, $row['item_type']);
-                    $return .= $this->display_link_form('move', $item_id, $row);
+                    $return .= $this->display_manipulate($item_id, $type);
+                    $return .= $this->display_link_form('move', $item_id, $item);
                     break;
                 case TOOL_QUIZ:
-                    $return .= $this->display_manipulate($item_id, $row['item_type']);
-                    $return .= $this->display_quiz_form('move', $item_id, $row);
+                    $return .= $this->display_manipulate($item_id, $type);
+                    $return .= $this->display_quiz_form('move', $item_id, $item);
                     break;
                 case TOOL_STUDENTPUBLICATION:
-                    $return .= $this->display_manipulate($item_id, $row['item_type']);
-                    $return .= $this->display_student_publication_form('move', $item_id, $row);
+                    $return .= $this->display_manipulate($item_id, $type);
+                    $return .= $this->display_student_publication_form('move', $item_id, $item);
                     break;
                 case TOOL_FORUM:
-                    $return .= $this->display_manipulate($item_id, $row['item_type']);
-                    $return .= $this->display_forum_form('move', $item_id, $row);
+                    $return .= $this->display_manipulate($item_id, $type);
+                    $return .= $this->display_forum_form('move', $item_id, $item);
                     break;
                 case TOOL_THREAD:
-                    $return .= $this->display_manipulate($item_id, $row['item_type']);
-                    $return .= $this->display_forum_form('move', $item_id, $row);
+                    $return .= $this->display_manipulate($item_id, $type);
+                    $return .= $this->display_forum_form('move', $item_id, $item);
                     break;
             }
         }

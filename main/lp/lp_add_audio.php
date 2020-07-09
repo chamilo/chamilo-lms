@@ -97,24 +97,23 @@ $lpPathInfo = $lp->generate_lp_folder($courseInfo);
 DocumentManager::createDefaultAudioFolder($courseInfo);
 $currentDir = '/audio';
 $audioFolderId = DocumentManager::get_document_id($courseInfo, $currentDir);
+
 if (isset($_REQUEST['folder_id'])) {
-    $documentData = DocumentManager::get_document_data_by_id($_REQUEST['folder_id'], $courseInfo['code']);
+    $folderIdFromRequest = isset($_REQUEST['folder_id']) ? (int) $_REQUEST['folder_id'] : 0;
+    $documentData = DocumentManager::get_document_data_by_id($folderIdFromRequest, $courseInfo['code']);
     if ($documentData) {
-        $audioFolderId = (int) $_REQUEST['folder_id'];
+        $audioFolderId = $folderIdFromRequest;
         $currentDir = $documentData['path'];
+    } else {
+        $currentDir = '/';
+        $audioFolderId = false;
     }
 }
 
 $file = null;
-//$lp_item->audio = '/aaaaa.wav';
-if (isset($lp_item->audio) && !empty($lp_item->audio)) {
+if (!empty($lp_item->audio)) {
     $file = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document/'.$lp_item->audio;
     $urlFile = api_get_path(WEB_COURSE_PATH).$courseInfo['path'].'/document/'.$lp_item->audio.'?'.api_get_cidreq();
-
-    if (!file_exists($file)) {
-        $file = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document'.$lpPathInfo['dir'].'/'.$lp_item->audio;
-        $urlFile = api_get_path(WEB_COURSE_PATH).$courseInfo['path'].'/document'.$lpPathInfo['dir'].'/'.$lp_item->audio.'?'.api_get_cidreq();
-    }
 }
 
 $page = $lp->build_action_menu(
@@ -152,7 +151,7 @@ $form->addElement('header', '<small class="text-muted">'.get_lang('Or').'</small
 
 $audioLabel = '';
 if (!empty($lp_item->audio)) {
-    $audioLabel = '&nbsp; '.get_lang('FileName').': <b>'.$lp_item->audio.'<b/>';
+    $audioLabel = '<br />'.get_lang('FileName').': <b>'.$lp_item->audio.'<b/>';
 }
 
 $form->addLabel(null, sprintf(get_lang('AudioFileForItemX'), $lp_item->get_title()).$audioLabel);
@@ -178,14 +177,6 @@ $form->addElement('file', 'file');
 $form->addElement('hidden', 'id', $lp_item_id);
 $form->addButtonSave(get_lang('SaveRecordedAudio'));
 
-$folders = DocumentManager::get_all_document_folders(
-    $courseInfo,
-    null,
-    true,
-    false,
-    $currentDir
-);
-
 $documentTree = DocumentManager::get_document_preview(
     $courseInfo,
     $lp->get_id(),
@@ -198,13 +189,22 @@ $documentTree = DocumentManager::get_document_preview(
     true,
     $audioFolderId,
     true,
-    true
+    true,
+    ['mp3', 'ogg', 'wav']
 );
 
 $page .= $recordVoiceForm;
 $page .= '<br>';
 $page .= $form->returnForm();
 $page .= '<h3 class="page-header"><small>'.get_lang('Or').'</small> '.get_lang('SelectAnAudioFileFromDocuments').'</h3>';
+
+$folders = DocumentManager::get_all_document_folders(
+    $courseInfo,
+    null,
+    true,
+    false,
+    $currentDir
+);
 
 $form = new FormValidator(
     'selector',

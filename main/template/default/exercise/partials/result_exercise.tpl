@@ -78,7 +78,7 @@
                                     <div class="form-group">
                                         <div class="col-sm-12">
                                             <input type="hidden" name="tc_id" value="{{ data.track_confirmation.id }}">
-                                            <button type="submit" class="btn btn-primary">
+                                            <button type="submit" class="btn btn-primary" disabled>
                                                 <span class="fa fa-save fa-fw" aria-hidden="true"></span> {{ 'Save'|get_lang }}
                                             </button>
                                         </div>
@@ -99,13 +99,22 @@
     {% if enable_form %}
         <script>
             $(function () {
-                $('#quiz_confirm_saved_answers_form').on('submit', function (e) {
+                var form = $('#quiz_confirm_saved_answers_form');
+                var checkbox = form.find('[type="checkbox"]');
+                var button = form.find(':submit');
+
+                checkbox.on('change', function () {
+                    button.prop('disabled', !this.checked);
+                });
+
+                form.on('submit', function (e) {
                     e.preventDefault();
 
-                    var self = $(this),
-                        checkbox = self.find('[type="checkbox"]'),
-                        button = self.find(':submit'),
-                        xhrData = self.serialize();
+                    if (!checkbox.is(':checked')) {
+                        return;
+                    }
+
+                    var xhrData = form.serialize();
 
                     button.prop('disabled', true);
                     checkbox.prop('disabled', true);

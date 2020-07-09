@@ -952,7 +952,10 @@ class IndexManager
             ];
         }
 
-        if (true === api_get_configuration_value('whispeak_auth_enabled')) {
+        if (
+            true === api_get_configuration_value('whispeak_auth_enabled') &&
+            !WhispeakAuthPlugin::checkUserIsEnrolled($userId)
+        ) {
             $itemTitle = WhispeakAuthPlugin::create()->get_title();
 
             $items[] = [

@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\PluginBundle\Entity\WhispeakAuth\LogEvent;
 use Chamilo\UserBundle\Entity\User;
 use FFMpeg\FFMpeg;
 use FFMpeg\Format\Audio\Wav;
@@ -13,30 +14,48 @@ $action = isset($_POST['action']) ? $_POST['action'] : 'enrollment';
 $isEnrollment = 'enrollment' === $action;
 $isAuthentify = 'authentify' === $action;
 
-$isAllowed = true;
+$isAllowed = false;
 
 if ($isEnrollment) {
     api_block_anonymous_users(false);
 
     $isAllowed = !empty($_FILES['audio']);
 } elseif ($isAuthentify) {
-    $isAllowed = !empty($_POST['username']) && !empty($_FILES['audio']);
+    $userId = api_get_user_id();
+    $user2fa = ChamiloSession::read(WhispeakAuthPlugin::SESSION_2FA_USER, 0);
+
+    if (!empty($user2fa) || !empty($userId)) {
+        $isAllowed = !empty($_FILES['audio']);
+    } else {
+        $isAllowed = !empty($_POST['username']) && !empty($_FILES['audio']);
+    }
 }
 
 if (!$isAllowed) {
-    echo Display::return_message(get_lang('NotAllowed'), 'error');
-
-    exit;
+    WhispeakAuthPlugin::displayNotAllowedMessage();
 }
 
 $plugin = WhispeakAuthPlugin::create();
 
 $plugin->protectTool(false);
 
+$failedLogins = 0;
+$maxAttempts = 0;
+
 if ($isAuthentify) {
+    $failedLogins = ChamiloSession::read(WhispeakAuthPlugin::SESSION_FAILED_LOGINS, 0);
+    $maxAttempts = $plugin->getMaxAttempts();
+
     $em = Database::getManager();
-    /** @var User|null $user */
-    $user = $em->getRepository('ChamiloUserBundle:User')->findOneBy(['username' => $_POST['username']]);
+
+    if (!empty($user2fa)) {
+        $user = api_get_user_entity($user2fa);
+    } elseif (!empty($userId)) {
+        $user = api_get_user_entity($userId);
+    } else {
+        /** @var User|null $user */
+        $user = UserManager::getRepository()->findOneBy(['username' => $_POST['username']]);
+    }
 } else {
     /** @var User $user */
     $user = api_get_user_entity(api_get_user_id());
@@ -76,61 +95,222 @@ if ('wav' !== substr($fileType, -3)) {
 }
 
 if ($isEnrollment) {
-    $result = $plugin->requestEnrollment($user, $newFullPath);
+    $license = !empty($_POST['license']) ? true : false;
 
-    if (empty($result)) {
+    try {
+        $wsid = WhispeakAuthRequest::whispeakId($plugin);
+        $wsid = WhispeakAuthRequest::license($plugin, $wsid, $license);
+
+        $text = ChamiloSession::read(WhispeakAuthPlugin::SESSION_SENTENCE_TEXT);
+
+        $enrollmentResult = WhispeakAuthRequest::enrollment($plugin, $user, $wsid, $text, $newFullPath);
+    } catch (Exception $exception) {
         echo Display::return_message($plugin->get_lang('EnrollmentFailed'));
 
         exit;
     }
 
-    $reliability = (int) $result['reliability'];
+    $reliability = (int) $enrollmentResult['reliability'];
+    $qualityNote = !empty($enrollmentResult['quality']) ? explode('|', $enrollmentResult['quality']) : [];
+    $qualityNote = array_map('ucfirst', $qualityNote);
 
-    if ($reliability <= 0) {
-        echo Display::return_message($plugin->get_lang('EnrollmentSignature0'), 'error');
+    $message = $plugin->get_lang('EnrollmentSignature0');
 
-        exit;
+    if ($reliability > 0) {
+        ChamiloSession::erase(WhispeakAuthPlugin::SESSION_SENTENCE_TEXT);
+
+        $plugin->saveEnrollment($user, $enrollmentResult['wsid']);
+
+        $message = '<strong>'.$plugin->get_lang('EnrollmentSuccess').'</strong>';
+        $message .= PHP_EOL;
+        $message .= $plugin->get_lang("EnrollmentSignature$reliability");
     }
 
-    $plugin->saveEnrollment($user, $result['uid']);
+    foreach ($qualityNote as $note) {
+        $message .= PHP_EOL.'<br>'.$plugin->get_lang("AudioQuality$note");
+    }
 
-    $message = '<strong>'.$plugin->get_lang('EnrollmentSuccess').'</strong>';
-    $message .= PHP_EOL;
-    $message .= $plugin->get_lang("EnrollmentSignature$reliability");
-
-    echo Display::return_message($message, 'success', false);
-
-    exit;
+    echo Display::return_message(
+        $message,
+        $reliability <= 0 ? 'error' : 'success',
+        false
+    );
 }
 
 if ($isAuthentify) {
-    $result = $plugin->requestAuthentify($user, $newFullPath);
-
-    if (empty($result)) {
-        echo Display::return_message($plugin->get_lang('AuthentifyFailed'), 'error');
+    if ($maxAttempts && $failedLogins >= $maxAttempts) {
+        echo Display::return_message($plugin->get_lang('MaxAttemptsReached'), 'warning');
 
         exit;
     }
 
-    $success = (bool) $result['audio'][0]['result'];
+    $wsid = WhispeakAuthPlugin::getAuthUidValue($user->getId());
+
+    if (empty($wsid)) {
+        echo Display::return_message($plugin->get_lang('SpeechAuthNotEnrolled'), 'warning');
+
+        exit;
+    }
+
+    try {
+        $text = ChamiloSession::read(WhispeakAuthPlugin::SESSION_SENTENCE_TEXT);
+
+        $authentifyResult = WhispeakAuthRequest::authentify($plugin, $wsid->getValue(), $text, $newFullPath);
+    } catch (Exception $exception) {
+        echo Display::return_message($plugin->get_lang('TryAgain'), 'error');
+
+        exit;
+    }
+
+    $success = (bool) $authentifyResult['result'];
+    $qualityNote = !empty($authentifyResult['quality']) ? explode('|', $authentifyResult['quality']) : [];
+    $qualityNote = array_map('ucfirst', $qualityNote);
+
+    /** @var array $lpItemInfo */
+    $lpItemInfo = ChamiloSession::read(WhispeakAuthPlugin::SESSION_LP_ITEM, []);
+    /** @var array $quizQuestionInfo */
+    $quizQuestionInfo = ChamiloSession::read(WhispeakAuthPlugin::SESSION_QUIZ_QUESTION, []);
+
+    $message = $plugin->get_lang('AuthentifySuccess');
 
     if (!$success) {
-        echo Display::return_message($plugin->get_lang('TryAgain'), 'warning');
+        if (!empty($lpItemInfo)) {
+            $plugin->addAttemptInLearningPath(
+                LogEvent::STATUS_FAILED,
+                $user->getId(),
+                $lpItemInfo['lp_item'],
+                $lpItemInfo['lp']
+            );
+        }
+
+        if (!empty($quizQuestionInfo)) {
+            $plugin->addAttemptInQuiz(
+                LogEvent::STATUS_FAILED,
+                $user->getId(),
+                $quizQuestionInfo['question'],
+                $quizQuestionInfo['quiz']
+            );
+        }
+
+        $message = $plugin->get_lang('AuthentifyFailed');
+
+        ChamiloSession::write(WhispeakAuthPlugin::SESSION_FAILED_LOGINS, ++$failedLogins);
+
+        if ($maxAttempts && $failedLogins >= $maxAttempts) {
+            $message .= PHP_EOL
+                .'<span data-reach-attempts="true">'.$plugin->get_lang('MaxAttemptsReached').'</span>'
+                .PHP_EOL
+                .'<br><strong>'
+                .$plugin->get_lang('LoginWithUsernameAndPassword')
+                .'</strong>';
+
+            if (!empty($user2fa)) {
+                Display::addFlash(
+                    Display::return_message($message, 'warning', false)
+                );
+            }
+        } else {
+            $message .= PHP_EOL.$plugin->get_lang('TryAgain');
+
+            if ('true' === api_get_setting('allow_lostpassword')) {
+                $message .= '<br>'
+                    .Display::url(
+                        get_lang('LostPassword'),
+                        api_get_path(WEB_CODE_PATH).'auth/lostPassword.php',
+                        ['target' => $lpItemInfo ? '_top' : '_self']
+                    );
+            }
+        }
+    }
+
+    foreach ($qualityNote as $note) {
+        $message .= '<br>'.PHP_EOL.$plugin->get_lang("AudioQuality$note");
+    }
+
+    echo Display::return_message(
+        $message,
+        $success ? 'success' : 'warning',
+        false
+    );
+
+    if (!$success && $maxAttempts && $failedLogins >= $maxAttempts) {
+        ChamiloSession::erase(WhispeakAuthPlugin::SESSION_FAILED_LOGINS);
+
+        if (!empty($lpItemInfo)) {
+            echo '<script>window.location.href = "'
+                .api_get_path(WEB_PLUGIN_PATH)
+                .'whispeakauth/authentify_password.php";</script>';
+
+            exit;
+        }
+
+        if (!empty($quizQuestionInfo)) {
+            $url = api_get_path(WEB_CODE_PATH).'exercise/exercise_submit.php?'.$quizQuestionInfo['url_params'];
+
+            ChamiloSession::write(WhispeakAuthPlugin::SESSION_AUTH_PASSWORD, true);
+
+            echo "<script>window.location.href = '".$url."';</script>";
+
+            exit;
+        }
+
+        echo '<script>window.location.href = "'.api_get_path(WEB_PATH).'";</script>';
 
         exit;
     }
 
-    $loggedUser = [
-        'user_id' => $user->getId(),
-        'status' => $user->getStatus(),
-        'uidReset' => true,
-    ];
+    if ($success) {
+        ChamiloSession::erase(WhispeakAuthPlugin::SESSION_SENTENCE_TEXT);
+        ChamiloSession::erase(WhispeakAuthPlugin::SESSION_FAILED_LOGINS);
 
-    ChamiloSession::write('_user', $loggedUser);
-    Login::init_user($user->getId(), true);
+        if (!empty($lpItemInfo)) {
+            ChamiloSession::erase(WhispeakAuthPlugin::SESSION_LP_ITEM);
+            ChamiloSession::erase(WhispeakAuthPlugin::SESSION_2FA_USER);
 
-    echo Display::return_message($plugin->get_lang('AuthentifySuccess'), 'success');
-    echo '<script>window.location.href = "'.api_get_path(WEB_PATH).'";</script>';
+            $plugin->addAttemptInLearningPath(
+                LogEvent::STATUS_SUCCESS,
+                $user->getId(),
+                $lpItemInfo['lp_item'],
+                $lpItemInfo['lp']
+            );
 
-    exit;
+            echo '<script>window.location.href = "'.$lpItemInfo['src'].'";</script>';
+
+            exit;
+        }
+
+        if (!empty($quizQuestionInfo)) {
+            $quizQuestionInfo['passed'] = true;
+            $url = api_get_path(WEB_CODE_PATH).'exercise/exercise_submit.php?'.$quizQuestionInfo['url_params'];
+
+            ChamiloSession::write(WhispeakAuthPlugin::SESSION_QUIZ_QUESTION, $quizQuestionInfo);
+
+            $plugin->addAttemptInQuiz(
+                LogEvent::STATUS_SUCCESS,
+                $user->getId(),
+                $quizQuestionInfo['question'],
+                $quizQuestionInfo['quiz']
+            );
+
+            echo '<script>window.location.href = "'.$url.'";</script>';
+
+            exit;
+        }
+
+        $loggedUser = [
+            'user_id' => $user->getId(),
+            'status' => $user->getStatus(),
+            'uidReset' => true,
+        ];
+
+        if (empty($user2fa)) {
+            ChamiloSession::write(WhispeakAuthPlugin::SESSION_2FA_USER, $user->getId());
+        }
+
+        ChamiloSession::erase(WhispeakAuthPlugin::SESSION_FAILED_LOGINS);
+        ChamiloSession::write('_user', $loggedUser);
+        Login::init_user($user->getId(), true);
+
+        echo '<script>window.location.href = "'.api_get_path(WEB_PATH).'";</script>';
+    }
 }

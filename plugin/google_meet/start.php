@@ -4,12 +4,12 @@
  */
 require_once __DIR__.'/../../vendor/autoload.php';
 
-$course_plugin = 'googlemeet'; //needed in order to load the plugin lang variables
+$course_plugin = 'google_meet'; //needed in order to load the plugin lang variables
 require_once __DIR__.'/config.php';
 
 $htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="'.api_get_path(
         WEB_PLUGIN_PATH
-    ).'googlemeet/resources/css/style.css"/>';
+    ).'google_meet/resources/css/style.css"/>';
 
 $plugin = GoogleMeetPlugin::create();
 
@@ -26,7 +26,7 @@ $isStudent = api_is_student();
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 $enable = $plugin->get('google_meet_enabled') == 'true';
 
-$urlAddMeet = api_get_path(WEB_PLUGIN_PATH).'googlemeet/meets.php?action=add&'.api_get_cidreq();
+$urlAddMeet = api_get_path(WEB_PLUGIN_PATH).'google_meet/meets.php?action=add&'.api_get_cidreq();
 
 
 if ($enable) {
@@ -42,6 +42,6 @@ $tpl->assign('meets', $meets);
 $tpl->assign('is_admin', $isAdmin);
 $tpl->assign('is_student', $isStudent);
 $tpl->assign('is_teacher', $isTeacher);
-$content = $tpl->fetch('googlemeet/view/home.tpl');
+$content = $tpl->fetch('google_meet/view/home.tpl');
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

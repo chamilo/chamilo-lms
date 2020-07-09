@@ -233,6 +233,7 @@ class AppPlugin
             'follow_buttons',
             'formLogin_hide_unhide',
             'google_maps',
+            'google_meet',
             'grading_electronic',
             'hello_world',
             'ims_lti',

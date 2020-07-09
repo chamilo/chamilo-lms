@@ -3,7 +3,7 @@
 /**
  * Config the plugin.
  *
- * @package chamilo.plugin.googlemeet
+ * @package chamilo.plugin.google_meet
  */
 require_once __DIR__.'/config.php';
 

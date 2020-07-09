@@ -1,15 +1,15 @@
 <?php
 /**
- * This script initiates a video conference session, calling the Zoom Conector API.
+ * This script initiates a video conference session, c the Google Meet.
  */
 require_once __DIR__.'/../../vendor/autoload.php';
 
-$course_plugin = 'googlemeet'; //needed in order to load the plugin lang variables
+$course_plugin = 'google_meet'; //needed in order to load the plugin lang variables
 require_once __DIR__.'/config.php';
 
 $htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="'.api_get_path(
         WEB_PLUGIN_PATH
-    ).'googlemeet/resources/css/style.css"/>';
+    ).'google_meet/resources/css/style.css"/>';
 
 $plugin = GoogleMeetPlugin::create();
 
@@ -34,7 +34,7 @@ if ($enable) {
                     $idMeet = isset($_GET['id_meet']) ? $_GET['id_meet'] : null;
                     $res = $plugin->deleteMeet($idMeet);
                     if ($res) {
-                        $url = api_get_path(WEB_PLUGIN_PATH).'googlemeet/start.php?'.api_get_cidreq();
+                        $url = api_get_path(WEB_PLUGIN_PATH).'google_meet/start.php?'.api_get_cidreq();
                         header('Location: '.$url);
                     }
 
@@ -42,7 +42,7 @@ if ($enable) {
                 case 'add':
                     $actionLinks .= Display::url(
                         Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
-                        api_get_path(WEB_PLUGIN_PATH).'googlemeet/start.php?'.api_get_cidreq()
+                        api_get_path(WEB_PLUGIN_PATH).'google_meet/start.php?'.api_get_cidreq()
                     );
                     //create form
                     $form = new FormValidator(
@@ -68,35 +68,13 @@ if ($enable) {
                         'meet_url',
                         [
                             $plugin->get_lang('GoogleMeetURL'),
-                            $plugin->get_lang('GoogleMeetURLHelp'),
+                            sprintf($plugin->get_lang('GoogleMeetURLHelp'), GoogleMeetPlugin::GOOGLE_MEET_URL),
                         ],
                         true,
                         [
-                            'title' => $plugin->get_lang('InstantMeetURLHelp'),
+                            'title' => sprintf($plugin->get_lang('GoogleMeetURLHelp'), GoogleMeetPlugin::GOOGLE_MEET_URL),
                         ]
                     );
-
-                    /*$timeNextWeek = time() + 86400 * 2;
-                    $nextWeek = substr(api_get_local_time($timeNextWeek), 0, 10);
-                    if (!isset($defaults['star_date'])) {
-                        $date = substr($nextWeek, 0, 10);
-                        $defaults['star_date'] = $date.' 09:00';
-                    }
-
-                    if (!isset($defaults['end_date'])) {
-                        $nextDay = substr(api_get_local_time($timeNextWeek), 0, 10);
-                        $date = substr($nextDay, 0, 10);
-                        $defaults['end_date'] = $date.' 10:00';
-                    }
-
-                    $form->addDateTimePicker(
-                        'star_date',
-                        $plugin->get_lang('StartDateMeet')
-                    );
-                    $form->addDateTimePicker(
-                        'end_date',
-                        $plugin->get_lang('EndDateMeet')
-                    );*/
 
                     try {
                         $form->addElement(
@@ -140,7 +118,7 @@ if ($enable) {
                             $values = $form->exportValues();
                             $res = $plugin->saveMeet($values);
                             if ($res) {
-                                $url = api_get_path(WEB_PLUGIN_PATH).'googlemeet/start.php?'.api_get_cidreq();
+                                $url = api_get_path(WEB_PLUGIN_PATH).'google_meet/start.php?'.api_get_cidreq();
                                 header('Location: '.$url);
                             }
                         }
@@ -154,11 +132,11 @@ if ($enable) {
                 case 'edit':
                     $actionLinks .= Display::url(
                         Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
-                        api_get_path(WEB_PLUGIN_PATH).'googlemeet/start.php?'.api_get_cidreq()
+                        api_get_path(WEB_PLUGIN_PATH).'google_meet/start.php?'.api_get_cidreq()
                     );
 
                     $idMeet = isset($_GET['id_meet']) ? (int)$_GET['id_meet'] : 0;
-                    $dataMeet = $plugin->getMeet(Security::remove_XSS($idMeet));
+                    $dataMeet = $plugin->getMeet($idMeet);
 
                     //create form
                     $form = new FormValidator(
@@ -184,12 +162,12 @@ if ($enable) {
                     $form->addText(
                         'meet_url',
                         [
-                            $plugin->get_lang('InstantMeetURL'),
-                            $plugin->get_lang('InstantMeetURLHelp'),
+                            $plugin->get_lang('GoogleMeetURL'),
+                            sprintf($plugin->get_lang('GoogleMeetURLHelp'), GoogleMeetPlugin::GOOGLE_MEET_URL),
                         ],
                         true,
                         [
-                            'title' => $plugin->get_lang('InstantMeetURLHelp'),
+                            'title' => sprintf($plugin->get_lang('GoogleMeetURLHelp'), GoogleMeetPlugin::GOOGLE_MEET_URL),
                         ]
                     );
                     $form->addElement(
@@ -223,7 +201,7 @@ if ($enable) {
                         $res = $plugin->updateMeet($values);
 
                         if ($res) {
-                            $url = api_get_path(WEB_PLUGIN_PATH).'googlemeet/start.php?'.api_get_cidreq();
+                            $url = api_get_path(WEB_PLUGIN_PATH).'google_meet/start.php?'.api_get_cidreq();
                             header('Location: '.$url);
                         }
 
@@ -248,6 +226,6 @@ if ($isAdmin || $isTeacher) {
 }
 
 $tpl->assign('message', $message);
-$content = $tpl->fetch('googlemeet/view/meets.tpl');
+$content = $tpl->fetch('google_meet/view/meets.tpl');
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

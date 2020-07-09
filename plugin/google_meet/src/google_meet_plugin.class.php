@@ -2,16 +2,17 @@
 /**
  * Plugin class for the Google Meet plugin.
  *
- * @package chamilo.plugin.googlemeet
+ * @package chamilo.plugin.google_meet
  *
- * @author Alex Aragón Calixto    <alex.aragon@tunqui.pe>
+ * @author Alex Aragón Calixto <alex.aragon@tunqui.pe>
  */
 
 class GoogleMeetPlugin extends Plugin
 {
-    const TABLE_MEET_LIST = 'plugin_meet_room';
+    const TABLE_MEET_LIST = 'plugin_google_meet_room';
     const SETTING_TITLE = 'tool_title';
     const SETTING_ENABLED = 'google_meet_enabled';
+    const GOOGLE_MEET_URL = 'https://meet.google.com/';
 
     public $isCoursePlugin = true;
 
@@ -33,7 +34,7 @@ class GoogleMeetPlugin extends Plugin
     /**
      * @return string
      */
-    public function getToolTitle()
+    public function getTitle()
     {
         $title = $this->get(self::SETTING_TITLE);
 
@@ -45,6 +46,15 @@ class GoogleMeetPlugin extends Plugin
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function get_name()
+    {
+        return 'google_meet';
+    }
+
+    /**
+     * Create a plugin instance
      * @return GoogleMeetPlugin
      */
     public static function create()
@@ -56,7 +66,8 @@ class GoogleMeetPlugin extends Plugin
 
 
     /**
-     * This method creates the tables required to this plugin.
+     * This method creates the tables required to this plugin and copies icons
+     * to the right places
      */
     public function install()
     {
@@ -67,26 +78,26 @@ class GoogleMeetPlugin extends Plugin
             meet_description VARCHAR(250) NULL,
             meet_color VARCHAR(7) NULL,
             type_meet INT NOT NULL,
-            cd_id INT NULL NOT NULL,
             start_time DATETIME NULL,
             end_time DATETIME NULL,
+            c_id INT NULL NOT NULL,
             session_id INT,
             activate INT
         )";
 
         Database::query($sql);
 
-        $src1 = api_get_path(SYS_PLUGIN_PATH).'google_meet/resources/img/64/meet.png';
-        $src2 = api_get_path(SYS_PLUGIN_PATH).'google_meet/resources/img/64/meet_na.png';
-        $dest1 = api_get_path(SYS_CODE_PATH).'img/icons/64/meet.png';
-        $dest2 = api_get_path(SYS_CODE_PATH).'img/icons/64/meet_na.png';
+        $src1 = api_get_path(SYS_PLUGIN_PATH).'google_meet/resources/img/64/google_meet.png';
+        $src2 = api_get_path(SYS_PLUGIN_PATH).'google_meet/resources/img/64/google_meet_na.png';
+        $dest1 = api_get_path(SYS_CODE_PATH).'img/icons/64/google_meet.png';
+        $dest2 = api_get_path(SYS_CODE_PATH).'img/icons/64/google_meet_na.png';
 
         copy($src1, $dest1);
         copy($src2, $dest2);
     }
 
     /**
-     * This method drops the plugin tables.
+     * This method drops the plugin tables and icons
      */
     public function uninstall()
     {
@@ -101,12 +112,21 @@ class GoogleMeetPlugin extends Plugin
             $sql = "DROP TABLE IF EXISTS $table";
             Database::query($sql);
         }
+        $dest1 = api_get_path(SYS_CODE_PATH).'img/icons/64/google_meet.png';
+        $dest2 = api_get_path(SYS_CODE_PATH).'img/icons/64/google_meet_na.png';
+        if (file_exists($dest1)) {
+            @unlink($dest1);
+        }
+        if (file_exists($dest2)) {
+            @unlink($dest2);
+        }
 
         $this->manageTab(false);
 
     }
 
     /**
+     * {@inheritDoc}
      * @return GoogleMeetPlugin
      */
     public function performActionsAfterConfigure()
@@ -119,18 +139,21 @@ class GoogleMeetPlugin extends Plugin
             $courses = $em->createQuery('SELECT c.id FROM ChamiloCoreBundle:Course c')->getResult();
 
             foreach ($courses as $course) {
-                $this->createLinkToCourseTool($this->getToolTitle(), $course['id']);
+                $this->createLinkToCourseTool($this->getTitle(), $course['id']);
             }
         }
 
         return $this;
     }
 
+    /**
+     * Delete links to the tool from the c_tool table
+     */
     private function deleteCourseToolLinks()
     {
         Database::getManager()
             ->createQuery('DELETE FROM ChamiloCourseBundle:CTool t WHERE t.category = :category AND t.link LIKE :link')
-            ->execute(['category' => 'plugin', 'link' => 'googlemeet/start.php%']);
+            ->execute(['category' => 'plugin', 'link' => 'google_meet/start.php%']);
     }
 
 
@@ -141,14 +164,18 @@ class GoogleMeetPlugin extends Plugin
         $table = Database::get_main_table(self::TABLE_MEET_LIST);
 
         $idCourse = api_get_course_int_id();
+        $url = self::filterUrl($values['meet_url']);
+        if (!isset($values['type_meet'])) {
+            $values['type_meet'] = 1;
+        }
 
         $params = [
             'meet_name' => $values['meet_name'],
-            'meet_url' => $values['meet_url'],
+            'meet_url' => $url,
             'type_meet' => $values['type_meet'],
             'meet_description' => $values['meet_description'],
             'meet_color' => $values['meet_color'],
-            'cd_id' => $idCourse,
+            'c_id' => $idCourse,
             'start_time' => null,
             'end_time' => null,
             'session_id' => null,
@@ -167,7 +194,7 @@ class GoogleMeetPlugin extends Plugin
         $list = [];
         $tableMeetList = Database::get_main_table(self::TABLE_MEET_LIST);
 
-        $sql = "SELECT * FROM $tableMeetList WHERE cd_id = $idCourse AND activate = 1";
+        $sql = "SELECT * FROM $tableMeetList WHERE c_id = $idCourse AND activate = 1";
 
         $result = Database::query($sql);
 
@@ -200,7 +227,7 @@ class GoogleMeetPlugin extends Plugin
                     'meet_description' => $row['meet_description'],
                     'meet_color' => $row['meet_color'],
                     'type_meet' => $row['type_meet'],
-                    'cd_id' => $row['cd_id'],
+                    'c_id' => $row['c_id'],
                     'start_time' => $row['start_time'],
                     'end_time' => $row['end_time'],
                     'session_id' => $row['session_id'],
@@ -219,8 +246,8 @@ class GoogleMeetPlugin extends Plugin
         }
         $meet = [];
         $tableMeetList = Database::get_main_table(self::TABLE_MEET_LIST);
-        $sql = "SELECT * FROM $tableMeetList
-        WHERE id = $idMeet";
+        $idMeet = (int) $idMeet;
+        $sql = "SELECT * FROM $tableMeetList WHERE id = $idMeet";
 
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
@@ -232,7 +259,7 @@ class GoogleMeetPlugin extends Plugin
                     'meet_description' => $row['meet_description'],
                     'meet_color' => $row['meet_color'],
                     'type_meet' => $row['type_meet'],
-                    'cd_id' => $row['cd_id'],
+                    'c_id' => $row['c_id'],
                     'start_time' => $row['start_time'],
                     'end_time' => $row['end_time'],
                     'session_id' => $row['session_id'],
@@ -250,14 +277,18 @@ class GoogleMeetPlugin extends Plugin
         $table = Database::get_main_table(self::TABLE_MEET_LIST);
 
         $idCourse = api_get_course_int_id();
+        $url = self::filterUrl($values['meet_url']);
+        if (!isset($values['type_meet'])) {
+            $values['type_meet'] = 1;
+        }
 
         $params = [
             'meet_name' => $values['meet_name'],
-            'meet_url' => $values['meet_url'],
+            'meet_url' => $url,
             'type_meet' => $values['type_meet'],
             'meet_description' => $values['meet_description'],
             'meet_color' => $values['meet_color'],
-            'cd_id' => $idCourse,
+            'c_id' => $idCourse,
             'start_time' => null,
             'end_time' => null,
             'session_id' => null,
@@ -277,12 +308,17 @@ class GoogleMeetPlugin extends Plugin
         return true;
     }
 
+    /**
+     * Delete a given meeting
+     * @param int $idMeet Chamilo's internal ID of the meeting
+     * @return bool True on success, false on failure
+     */
     public function deleteMeet($idMeet)
     {
         if (empty($idMeet)) {
             return false;
         }
-
+        $idMeet = (int) $idMeet;
         $tableMeetList = Database::get_main_table(self::TABLE_MEET_LIST);
         $sql = "DELETE FROM $tableMeetList WHERE id = $idMeet";
         $result = Database::query($sql);
@@ -293,5 +329,29 @@ class GoogleMeetPlugin extends Plugin
 
         return true;
 
+    }
+
+    /**
+     * Do a bit of prevention on the meeting URL format
+     * @param string $url The URL received from the user
+     * @return string Reformatted URL
+     */
+    private function filterUrl($url) {
+        if (!empty($url)) {
+            if (preg_match('#^'.self::GOOGLE_MEET_URL.'#', $url)) {
+                // The URL starts with the right Google Meet protocol and domain, do nothing
+            } elseif (preg_match('#^'.substr(self::GOOGLE_MEET_URL, 8).'#', $url)) {
+                // The URL starts with meet.google.com without the protocol. Add it
+                $url = 'https://'.$url;
+            } else {
+                // We assume it's just the meeting code. Add the full Google Meet prefix
+                if (substr($url, 0, 1) === '/') {
+                    // Remove prefixing slash, if any
+                    $url = substr($url, 1);
+                }
+                $url = self::GOOGLE_MEET_URL.$url;
+            }
+        }
+        return $url;
     }
 }

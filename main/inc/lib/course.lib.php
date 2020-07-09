@@ -6955,13 +6955,24 @@ class CourseManager
     private static function checkCreateCourseAccessUrlParam($_configuration, $accessUrlId, $param, $msgLabel)
     {
         if (isset($_configuration[$accessUrlId][$param]) && $_configuration[$accessUrlId][$param] > 0) {
-            $num = self::count_courses($accessUrlId);
-            if ($num >= $_configuration[$accessUrlId][$param]) {
+            $num = null;
+            switch ($param) {
+                case 'hosting_limit_courses':
+                    $num = self::count_courses($accessUrlId);
+                    break;
+                case 'hosting_limit_active_courses':
+                    $num = self::countActiveCourses($accessUrlId);
+                    break;
+            }
+
+            if ($num && $num >= $_configuration[$accessUrlId][$param]) {
                 api_warn_hosting_contact($param);
 
                 Display::addFlash(
                     Display::return_message($msgLabel)
                 );
+
+                return true;
             }
         }
 

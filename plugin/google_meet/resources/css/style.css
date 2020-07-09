@@ -1,0 +1,148 @@
+.plugin_logo{
+  text-align: center;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+.plugin_logo .img-responsive{
+  margin: auto;
+}
+.tools{
+  margin-bottom: 2rem;
+  margin-top: 1rem;
+}
+.card{
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  border: 1px solid rgba(0,0,0,.05);
+  border-radius: .375rem;
+  background-color: #fff;
+  background-clip: border-box;
+}
+.card-meet{
+  margin-bottom: 30px;
+  border: 0;
+  box-shadow: 0 0 2rem 0 rgba(136,152,170,.15);
+}
+.card-meet:hover{
+  border-left: .25rem solid #cdcdcd !important;
+}
+.card-meet .card-body {
+  padding: 1rem 1.5rem;
+}
+.row-meet {
+  display: block;
+}
+
+.description{
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 2rem;
+  font-size: 12px;
+  color: #666666;
+  display: grid;
+}
+.description .title{
+  font-size: 1.45rem;
+  font-weight: 600!important;
+  color: #32325d;
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow: ellipsis;
+  width: 100%;
+  display: inline-block;
+}
+.description .text{
+  display: grid;
+  padding-bottom: 1rem;
+}
+.rounded-circle {
+  border-radius: 50%!important;
+}
+.shadow {
+  box-shadow: 0 0 2rem 0 rgba(136,152,170,.15)!important;
+}
+.icon {
+  width: 5rem;
+  height: 5rem;
+}
+.icon-shape {
+  display: inline-flex;
+  padding: 12px;
+  text-align: center;
+  border-radius: 50%;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  right: 40%;
+  top: -20px;
+}
+.icon-shape .fa{
+  font-size: 20px;
+}
+
+.text-white {
+  color: #fff!important;
+}
+.btn-meet{
+  color: #fff;
+  border-color: #5e72e4;
+  background-color: #5e72e4;
+  box-shadow: 0 4px 6px rgba(50,50,93,.11), 0 1px 3px rgba(0,0,0,.08);
+}
+.btn-meet:hover {
+  color: #fff;
+  border-color: #5e72e4;
+  background-color: #5e72e4;
+}
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 7px 14px rgba(50,50,93,.1), 0 3px 6px rgba(0,0,0,.08);
+}
+.float-right {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+.btn-add-meet{
+  color: #fff;
+  border-color: #1cc88a;
+  background-color: #1cc88a;
+  font-weight: bold;
+}
+.btn-add-meet:hover {
+  color: #fff;
+  border-color: #17a673;
+  background-color: #169b6b;
+}
+.meet-list{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+.meet-list .meet-item{
+  margin: 10px;
+}
+.meet-list .meet-item .card-meet{
+  min-height: 220px;
+}
+@media (min-width: 768px) and (max-width: 979px) {
+  .meet-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 767px) {
+  .meet-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+/* Landscape phones and down */
+@media (max-width: 480px) {
+  .meet-list {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+  }
+}

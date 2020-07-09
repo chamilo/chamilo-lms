@@ -708,13 +708,9 @@ class learnpath
                     false
                 );
 
-                // Getting the filename only.
-                $file_components = explode('/', $file_path);
-                $file = $file_components[count($file_components) - 1];
-
                 // Store the mp3 file in the lp_item table.
                 $sql = "UPDATE $tbl_lp_item SET
-                          audio = '".Database::escape_string($file)."'
+                          audio = '".Database::escape_string($file_path)."'
                         WHERE iid = '".intval($new_item_id)."'";
                 Database::query($sql);
             }
@@ -1357,7 +1353,6 @@ class learnpath
                     false,
                     0
                 );
-                $path = substr($path, 7);
                 // Update reference in lp_item - audio path is the path from inside de document/audio/ dir.
                 $audio_update_sql = ", audio = '".Database::escape_string($path)."' ";
             }

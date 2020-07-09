@@ -4083,8 +4083,7 @@ class learnpathItem
         $file_path = null;
 
         if ($result) {
-            $file_path = basename($result['path']);
-
+            $file_path = $result['path'];
             // Store the mp3 file in the lp_item table.
             $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
             $sql = "UPDATE $tbl_lp_item SET
@@ -4110,12 +4109,6 @@ class learnpathItem
         if (empty($this->db_id) || empty($courseInfo)) {
             return false;
         }
-
-        /*if (!empty($this->audio)) {
-            $fileName = '/audio/'.$this->audio;
-            $filepath = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document/';
-            DocumentManager::delete_document($courseInfo, $fileName, $filepath);
-        }*/
 
         $table = Database::get_course_table(TABLE_LP_ITEM);
         $sql = "UPDATE $table SET

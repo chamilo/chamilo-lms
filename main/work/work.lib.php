@@ -2458,7 +2458,7 @@ function get_work_user_list(
                 $work['actions'] = '<div class="work-action">'.$linkToDownload.$action.'</div>';
                 $work['correction'] = $correction;
 
-                if (!empty($compilation)) {
+                if (!empty($compilation) && $is_allowed_to_edit) {
                     $compilationId = $compilation->getCompilatioId($item_id, $course_id);
                     if ($compilationId) {
                         $actionCompilatio = "<div id='id_avancement".$item_id."' class='compilation_block'>

@@ -56,17 +56,18 @@ class SocialManager extends UserManager
      *
      * @param int user id
      * @param int user friend id
-     * @param string
+     * @param boolean include RH relationship
      *
      * @return int
      *
      * @author isaac flores paz
      */
-    public static function get_relation_between_contacts($user_id, $user_friend)
+    public static function get_relation_between_contacts($user_id, $user_friend, $includeRH = false)
     {
         $table = Database::get_main_table(TABLE_MAIN_USER_FRIEND_RELATION_TYPE);
         $userRelUserTable = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
-        $sql = 'SELECT rt.id as id
+        if($includeRH == false){
+            $sql = 'SELECT rt.id as id
                 FROM '.$table.' rt
                 WHERE rt.id = (
                     SELECT uf.relation_type
@@ -77,11 +78,23 @@ class SocialManager extends UserManager
                         uf.relation_type <> '.USER_RELATION_TYPE_RRHH.'
                     LIMIT 1
                 )';
+        }else{
+            $sql = 'SELECT rt.id as id
+                FROM '.$table.' rt
+                WHERE rt.id = (
+                    SELECT uf.relation_type
+                    FROM '.$userRelUserTable.' uf
+                    WHERE
+                        user_id='.((int) $user_id).' AND
+                        friend_user_id='.((int) $user_friend).'
+                    LIMIT 1
+                )';
+        }
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
             $row = Database::fetch_array($res, 'ASSOC');
 
-            return $row['id'];
+            return (int) $row['id'];
         } else {
             return USER_UNKNOWN;
         }

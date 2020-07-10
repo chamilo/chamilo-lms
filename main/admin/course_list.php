@@ -175,6 +175,12 @@ function get_course_data($from, $number_of_items, $column, $direction)
     }
 
     if ($addTeacherColumn) {
+        $teachers = isset($_GET['course_teachers']) ? $_GET['course_teachers'] : [];
+        if (!empty($teachers)) {
+            array_map('intval', $teachers);
+            $sql .= ' AND ( cu.user_id IN ('.implode("' , '", $teachers).')) ';
+        }
+
         $sql .= " GROUP BY course.id ";
     }
 
@@ -436,6 +442,18 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
 
     $el = $form->addSelectLanguage('keyword_language', get_lang('CourseLanguage'));
     $el->addOption(get_lang('All'), '%');
+
+    $form->addSelectAjax(
+        'course_teachers',
+        get_lang('CourseTeachers'),
+        [0 => get_lang('None')],
+        [
+            'url' => api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=teacher_to_basis_course',
+            'id' => 'course_teachers',
+            'multiple' => 'multiple',
+        ]
+    );
+
     $form->addElement('radio', 'keyword_visibility', get_lang('CourseAccess'), get_lang('OpenToTheWorld'), COURSE_VISIBILITY_OPEN_WORLD);
     $form->addElement('radio', 'keyword_visibility', null, get_lang('OpenToThePlatform'), COURSE_VISIBILITY_OPEN_PLATFORM);
     $form->addElement('radio', 'keyword_visibility', null, get_lang('Private'), COURSE_VISIBILITY_REGISTERED);
@@ -621,6 +639,17 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
     );
     $content .= $table->return_table();
 }
+
+$htmlHeadXtra[] = '
+<script>
+$(function() {
+    //$("#course_teachers").select2(\'val\', ["test1","test2"], true);
+    //$test = $("#course_teachers");
+    //$test.append(\'<option value="initial1" selected="selected">initial1</option>\');
+    //$test.trigger(\'change\');
+
+});
+</script>';
 
 $tpl = new Template($tool_name);
 $tpl->assign('actions', $actions);

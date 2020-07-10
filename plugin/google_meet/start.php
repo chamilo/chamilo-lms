@@ -28,12 +28,9 @@ $enable = $plugin->get('google_meet_enabled') == 'true';
 
 $urlAddMeet = api_get_path(WEB_PLUGIN_PATH).'google_meet/meets.php?action=add&'.api_get_cidreq();
 
-
 if ($enable) {
     if ($isAdmin || $isTeacher || $isStudent) {
-
         $meets = $plugin->listMeets($courseInfo['real_id']);
-
     }
 }
 

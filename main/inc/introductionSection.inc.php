@@ -290,13 +290,12 @@ if (api_is_allowed_to_edit() && empty($session_id)) {
         api_get_path(WEB_CODE_PATH).'course_info/tools.php?'.api_get_cidreq(),
         ['class' => 'btn btn-default', 'title' => get_lang('CustomizeIcons')]
     );
-
 }
 /* Tool to show /hide all tools on course */
 $toolAllShowHide = '';
 if (api_is_allowed_to_edit() && empty($session_id)) {
-    $toolAllShowHide =  '<button class="btn btn-default hidden visible-all show-hide-all-tools" title="'.get_lang('Activate', '').'"><em class="fa fa-eye"></em></button>';
-    $toolAllShowHide .=  '<button class="btn btn-default hidden invisible-all show-hide-all-tools" title="'.get_lang('Deactivate', '').'"><em class="fa fa-eye-slash"></em></button>';
+    $toolAllShowHide = '<button class="btn btn-default hidden visible-all show-hide-all-tools" title="'.get_lang('Activate', '').'"><em class="fa fa-eye"></em></button>';
+    $toolAllShowHide .= '<button class="btn btn-default hidden invisible-all show-hide-all-tools" title="'.get_lang('Deactivate', '').'"><em class="fa fa-eye-slash"></em></button>';
 }
 
 $toolbar = '';
@@ -310,10 +309,10 @@ if ($intro_dispCommand) {
             $textIntro = '<a class="btn btn-default" title="'.addslashes(get_lang('AddIntro')).'" href="'.api_get_self().'?'.api_get_cidreq().$blogParam.'&intro_cmdAdd=1">';
             $textIntro .= '<em class="fa fa-file-text"></em> ';
             $textIntro .= "</a>";
-            $toolbar .= $textIntro . $editIconButton.$toolAllShowHide;
+            $toolbar .= $textIntro.$editIconButton.$toolAllShowHide;
         } else {
             $toolbar .= '<a class="btn btn-default" href="'.api_get_self().'?intro_cmdAdd=1">'.get_lang('AddIntro').'</a>';
-            $toolbar .= $editIconButton . $toolAllShowHide;
+            $toolbar .= $editIconButton.$toolAllShowHide;
         }
         $toolbar .= '</div></div>';
     } else {
@@ -324,7 +323,7 @@ if ($intro_dispCommand) {
             $toolbar .=
                 '<a class="btn btn-default" href="'.api_get_self().'?'.api_get_cidreq().$blogParam.'&intro_cmdEdit=1" title="'.get_lang('Modify').'">
                 <em class="fa fa-pencil"></em></a>';
-            $toolbar .= $editIconButton . $toolAllShowHide;
+            $toolbar .= $editIconButton.$toolAllShowHide;
             $toolbar .= "<a class=\"btn btn-default\" href=\"".api_get_self()."?".api_get_cidreq().$blogParam."&intro_cmdDel=1\" onclick=\"javascript:
                 if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).
                 "')) return false;\"><em class=\"fa fa-trash-o\"></em></a>";
@@ -333,7 +332,7 @@ if ($intro_dispCommand) {
                 '<a class="btn btn-default" href="'.api_get_self().'?intro_cmdEdit=1" title="'.get_lang('Modify').'">
                 <em class="fa fa-pencil"></em>
                 </a>"';
-            $toolbar .= $editIconButton . $toolAllShowHide;
+            $toolbar .= $editIconButton.$toolAllShowHide;
             $toolbar .= "<a class=\"btn btn-default\" href=\"".api_get_self()."?".api_get_cidreq()."&intro_cmdDel=1\" onclick=\"javascript:
                 if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).
                 "')) return false;\"><em class=\"fa fa-trash-o\"></em></a>";

@@ -85,7 +85,7 @@ if ($enable) {
                                 $plugin->get_lang('MeetColorHelp'),
                             ],
                             [
-                                'value' => '#1CC88A'
+                                'value' => '#1CC88A',
                             ]
                         );
                     } catch (HTML_QuickForm_Error $e) {
@@ -135,7 +135,7 @@ if ($enable) {
                         api_get_path(WEB_PLUGIN_PATH).'google_meet/start.php?'.api_get_cidreq()
                     );
 
-                    $idMeet = isset($_GET['id_meet']) ? (int)$_GET['id_meet'] : 0;
+                    $idMeet = isset($_GET['id_meet']) ? (int) $_GET['id_meet'] : 0;
                     $dataMeet = $plugin->getMeet($idMeet);
 
                     //create form
@@ -175,7 +175,7 @@ if ($enable) {
                         'meet_color',
                         [
                             $plugin->get_lang('MeetColor'),
-                            $plugin->get_lang('MeetColorHelp')
+                            $plugin->get_lang('MeetColorHelp'),
                         ]
                     );
                     $form->addHtmlEditor(
@@ -204,12 +204,9 @@ if ($enable) {
                             $url = api_get_path(WEB_PLUGIN_PATH).'google_meet/start.php?'.api_get_cidreq();
                             header('Location: '.$url);
                         }
-
                     }
 
                     $tpl->assign('form_room', $form->returnForm());
-
-
 
                     break;
             }
@@ -218,7 +215,6 @@ if ($enable) {
 }
 
 if ($isAdmin || $isTeacher) {
-
     $tpl->assign(
         'actions',
         Display::toolbarAction('toolbar', [$actionLinks])

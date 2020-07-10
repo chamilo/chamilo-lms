@@ -1,12 +1,12 @@
 <?php
+
+/* For licensing terms, see /license.txt */
+
 /**
  * Plugin class for the Google Meet plugin.
  *
- * @package chamilo.plugin.google_meet
- *
  * @author Alex Aragón Calixto <alex.aragon@tunqui.pe>
  */
-
 class GoogleMeetPlugin extends Plugin
 {
     const TABLE_MEET_LIST = 'plugin_google_meet_room';
@@ -54,7 +54,8 @@ class GoogleMeetPlugin extends Plugin
     }
 
     /**
-     * Create a plugin instance
+     * Create a plugin instance.
+     *
      * @return GoogleMeetPlugin
      */
     public static function create()
@@ -64,10 +65,9 @@ class GoogleMeetPlugin extends Plugin
         return $result ? $result : $result = new self();
     }
 
-
     /**
      * This method creates the tables required to this plugin and copies icons
-     * to the right places
+     * to the right places.
      */
     public function install()
     {
@@ -97,7 +97,7 @@ class GoogleMeetPlugin extends Plugin
     }
 
     /**
-     * This method drops the plugin tables and icons
+     * This method drops the plugin tables and icons.
      */
     public function uninstall()
     {
@@ -122,11 +122,11 @@ class GoogleMeetPlugin extends Plugin
         }
 
         $this->manageTab(false);
-
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
+     *
      * @return GoogleMeetPlugin
      */
     public function performActionsAfterConfigure()
@@ -146,18 +146,8 @@ class GoogleMeetPlugin extends Plugin
         return $this;
     }
 
-    /**
-     * Delete links to the tool from the c_tool table
-     */
-    private function deleteCourseToolLinks()
+    public function saveMeet($values)
     {
-        Database::getManager()
-            ->createQuery('DELETE FROM ChamiloCourseBundle:CTool t WHERE t.category = :category AND t.link LIKE :link')
-            ->execute(['category' => 'plugin', 'link' => 'google_meet/start.php%']);
-    }
-
-
-    public function saveMeet($values){
         if (!is_array($values) || empty($values['meet_name'])) {
             return false;
         }
@@ -189,8 +179,8 @@ class GoogleMeetPlugin extends Plugin
         }
     }
 
-    public function listMeets($idCourse){
-
+    public function listMeets($idCourse)
+    {
         $list = [];
         $tableMeetList = Database::get_main_table(self::TABLE_MEET_LIST);
 
@@ -200,8 +190,7 @@ class GoogleMeetPlugin extends Plugin
 
         if (Database::num_rows($result) > 0) {
             while ($row = Database::fetch_array($result)) {
-
-               $action = Display::url(
+                $action = Display::url(
                     Display::return_icon(
                         'delete.png',
                         get_lang('Delete'),
@@ -234,13 +223,14 @@ class GoogleMeetPlugin extends Plugin
                     'activate' => $active,
                     'actions' => $action,
                 ];
-
             }
         }
+
         return $list;
     }
 
-    public function getMeet($idMeet){
+    public function getMeet($idMeet)
+    {
         if (empty($idMeet)) {
             return false;
         }
@@ -267,10 +257,12 @@ class GoogleMeetPlugin extends Plugin
                 ];
             }
         }
+
         return $meet;
     }
 
-    public function updateMeet($values){
+    public function updateMeet($values)
+    {
         if (!is_array($values) || empty($values['meet_name'])) {
             return false;
         }
@@ -309,8 +301,10 @@ class GoogleMeetPlugin extends Plugin
     }
 
     /**
-     * Delete a given meeting
+     * Delete a given meeting.
+     *
      * @param int $idMeet Chamilo's internal ID of the meeting
+     *
      * @return bool True on success, false on failure
      */
     public function deleteMeet($idMeet)
@@ -328,15 +322,27 @@ class GoogleMeetPlugin extends Plugin
         }
 
         return true;
-
     }
 
     /**
-     * Do a bit of prevention on the meeting URL format
+     * Delete links to the tool from the c_tool table.
+     */
+    private function deleteCourseToolLinks()
+    {
+        Database::getManager()
+            ->createQuery('DELETE FROM ChamiloCourseBundle:CTool t WHERE t.category = :category AND t.link LIKE :link')
+            ->execute(['category' => 'plugin', 'link' => 'google_meet/start.php%']);
+    }
+
+    /**
+     * Do a bit of prevention on the meeting URL format.
+     *
      * @param string $url The URL received from the user
+     *
      * @return string Reformatted URL
      */
-    private function filterUrl($url) {
+    private function filterUrl($url)
+    {
         if (!empty($url)) {
             if (preg_match('#^'.self::GOOGLE_MEET_URL.'#', $url)) {
                 // The URL starts with the right Google Meet protocol and domain, do nothing
@@ -352,6 +358,7 @@ class GoogleMeetPlugin extends Plugin
                 $url = self::GOOGLE_MEET_URL.$url;
             }
         }
+
         return $url;
     }
 }

@@ -138,7 +138,7 @@ switch ($action) {
         }
         break;
     case 'set_visibility_for_all':
-        require_once __DIR__ . '/../global.inc.php';
+        require_once __DIR__.'/../global.inc.php';
         $course_id = api_get_course_int_id();
         $sessionId = api_get_session_id();
         $allowEditionInSession = api_get_configuration_value('allow_edit_tool_visibility_in_session');
@@ -151,7 +151,7 @@ switch ($action) {
             if (is_array($tools_ids) && count($tools_ids) != 0) {
                 $total_tools = count($tools_ids);
                 for ($i = 0; $i < $total_tools; $i++) {
-                    $tool_id = (int)$tools_ids[$i];
+                    $tool_id = (int) $tools_ids[$i];
 
                     $criteria = [
                         'cId' => $course_id,
@@ -208,7 +208,7 @@ switch ($action) {
                         $inactiveImage = str_replace('.gif', '_na.gif', $toolImage);
                     } else {
                         // Display::return_icon() also checks in the app/Resources/public/css/themes/{theme}/icons folder
-                        $toolImage = (substr($toolImage, 0, strpos($toolImage, '.'))) . '.png';
+                        $toolImage = (substr($toolImage, 0, strpos($toolImage, '.'))).'.png';
                         $toolImage = Display::return_icon(
                             $toolImage,
                             get_lang(ucfirst($tool->getName())),
@@ -221,8 +221,8 @@ switch ($action) {
                     }
 
                     if (isset($customIcon) && !empty($customIcon)) {
-                        $toolImage = CourseHome::getCustomWebIconPath() . $customIcon;
-                        $inactiveImage = CourseHome::getCustomWebIconPath() . CourseHome::getDisableIcon($customIcon);
+                        $toolImage = CourseHome::getCustomWebIconPath().$customIcon;
+                        $inactiveImage = CourseHome::getCustomWebIconPath().CourseHome::getDisableIcon($customIcon);
                     }
 
                     $requested_image = $visibility == 0 ? $toolImage : $inactiveImage;
@@ -265,7 +265,7 @@ switch ($action) {
                         'message' => $requested_message,
                         'view' => $requested_view,
                         'fclass' => $requested_fa_class,
-                        'id'=>$tool_id,
+                        'id' => $tool_id,
                     ];
                 }
             }

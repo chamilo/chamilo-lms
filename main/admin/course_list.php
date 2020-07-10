@@ -11,6 +11,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
 $sessionId = isset($_GET['session_id']) ? $_GET['session_id'] : null;
+$addTeacherColumn = api_get_configuration_value('add_teachers_in_course_list');
 
 /**
  * Get the number of courses which will be displayed.
@@ -92,30 +93,46 @@ function get_number_of_courses()
  */
 function get_course_data($from, $number_of_items, $column, $direction)
 {
-    $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
+    $addTeacherColumn = api_get_configuration_value('add_teachers_in_course_list');
 
-    $sql = "SELECT
+    $table = Database::get_main_table(TABLE_MAIN_COURSE);
+
+    $teachers = '';
+    if ($addTeacherColumn) {
+        $teachers = ", GROUP_CONCAT(cu.user_id SEPARATOR ',') as col7, ";
+    }
+
+    $select = "SELECT
                 code AS col0,
                 title AS col1,
                 code AS col2,
                 course_language AS col3,
                 category_code AS col4,
                 subscribe AS col5,
-                unsubscribe AS col6,
-                code AS col7,
-                visibility AS col8,
-                directory as col9,
-                visual_code,
+                unsubscribe AS col6
+                $teachers
+                visibility,
                 directory,
-                course.id
-    		FROM $course_table course";
+                visual_code,
+                course.code,
+                course.id ";
+
+    $sql = "$select FROM $table course";
 
     if ((api_is_platform_admin() || api_is_session_admin()) &&
         api_is_multiple_url_enabled() && api_get_current_access_url_id() != -1
     ) {
         $access_url_rel_course_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $sql .= " INNER JOIN $access_url_rel_course_table url_rel_course
-                 ON (course.id = url_rel_course.c_id)";
+                  ON (course.id = url_rel_course.c_id)";
+    }
+
+    if ($addTeacherColumn) {
+        $tableCourseRelUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $sql .= "
+                LEFT JOIN $tableCourseRelUser cu
+                ON (course.id = cu.c_id AND cu.status = ".COURSEMANAGER.")
+            ";
     }
 
     if (isset($_GET['keyword'])) {
@@ -154,7 +171,11 @@ function get_course_data($from, $number_of_items, $column, $direction)
     if ((api_is_platform_admin() || api_is_session_admin()) &&
         api_is_multiple_url_enabled() && api_get_current_access_url_id() != -1
     ) {
-        $sql .= " AND url_rel_course.access_url_id=".api_get_current_access_url_id();
+        $sql .= " AND url_rel_course.access_url_id = ".api_get_current_access_url_id();
+    }
+
+    if ($addTeacherColumn) {
+        $sql .= " GROUP BY course.id ";
     }
 
     $sql .= " ORDER BY col$column $direction ";
@@ -163,22 +184,21 @@ function get_course_data($from, $number_of_items, $column, $direction)
     $res = Database::query($sql);
     $courses = [];
     $languages = api_get_languages_to_array();
-
     $path = api_get_path(WEB_CODE_PATH);
     $coursePath = api_get_path(WEB_COURSE_PATH);
 
     while ($course = Database::fetch_array($res)) {
+        $courseId = $course['id'];
+        $courseCode = $course['code'];
+
         // Place colour icons in front of courses.
-        $show_visual_code = $course['visual_code'] != $course[2] ? Display::label($course['visual_code'], 'info') : null;
-        $course[1] = get_course_visibility_icon($course[8]).PHP_EOL
-            .Display::url(Security::remove_XSS($course[1]), $coursePath.$course[9].'/index.php').PHP_EOL
-            .$show_visual_code;
+        $showVisualCode = $course['visual_code'] != $courseCode ? Display::label($course['visual_code'], 'info') : null;
+        $course[1] = get_course_visibility_icon($course['visibility']).PHP_EOL
+            .Display::url(Security::remove_XSS($course[1]), $coursePath.$course['directory'].'/index.php').PHP_EOL
+            .$showVisualCode;
         $course[5] = $course[5] == SUBSCRIBE_ALLOWED ? get_lang('Yes') : get_lang('No');
         $course[6] = $course[6] == UNSUBSCRIBE_ALLOWED ? get_lang('Yes') : get_lang('No');
         $language = isset($languages[$course[3]]) ? $languages[$course[3]] : $course[3];
-
-        $courseCode = $course[0];
-        $courseId = $course['id'];
 
         $actions = [];
         $actions[] = Display::url(
@@ -209,7 +229,6 @@ function get_course_data($from, $number_of_items, $column, $direction)
                     .addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."')) return false;",
             ]
         );
-
         $courseItem = [
             $course[0],
             $course[1],
@@ -218,8 +237,22 @@ function get_course_data($from, $number_of_items, $column, $direction)
             $course[4],
             $course[5],
             $course[6],
-            implode(PHP_EOL, $actions),
         ];
+
+        if ($addTeacherColumn) {
+            $teacherIdList = explode(',', $course[7]);
+            $teacherList = [];
+            if (!empty($teacherIdList)) {
+                foreach ($teacherIdList as $teacherId) {
+                    $userInfo = api_get_user_info($teacherId);
+                    if ($userInfo) {
+                        $teacherList[] = $userInfo['complete_name'];
+                    }
+                }
+            }
+            $courseItem[] = implode(', ', $teacherList);
+        }
+        $courseItem[] =implode(PHP_EOL, $actions);
         $courses[] = $courseItem;
     }
 
@@ -264,7 +297,7 @@ function get_course_data_by_session($from, $number_of_items, $column, $direction
             ";
 
     if (isset($_GET['session_id']) && !empty($_GET['session_id'])) {
-        $sessionId = intval($_GET['session_id']);
+        $sessionId = (int) $_GET['session_id'];
         $sql .= " WHERE s.id = ".$sessionId;
     }
 
@@ -403,7 +436,7 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
 
     $el = $form->addSelectLanguage('keyword_language', get_lang('CourseLanguage'));
     $el->addOption(get_lang('All'), '%');
-    $form->addElement('radio', 'keyword_visibility', get_lang("CourseAccess"), get_lang('OpenToTheWorld'), COURSE_VISIBILITY_OPEN_WORLD);
+    $form->addElement('radio', 'keyword_visibility', get_lang('CourseAccess'), get_lang('OpenToTheWorld'), COURSE_VISIBILITY_OPEN_WORLD);
     $form->addElement('radio', 'keyword_visibility', null, get_lang('OpenToThePlatform'), COURSE_VISIBILITY_OPEN_PLATFORM);
     $form->addElement('radio', 'keyword_visibility', null, get_lang('Private'), COURSE_VISIBILITY_REGISTERED);
     $form->addElement('radio', 'keyword_visibility', null, get_lang('CourseVisibilityClosed'), COURSE_VISIBILITY_CLOSED);
@@ -527,7 +560,7 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
         [2, 4, 3, 3]
     );
 
-    if (isset($_GET['session_id']) && !empty($_GET['session_id'])) {
+    if (!empty($sessionId)) {
         // Create a sortable table with the course data filtered by session
         $table = new SortableTable(
             'courses',
@@ -564,16 +597,19 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
     }
 
     $table->set_additional_parameters($parameters);
-
-    $table->set_header(0, '', false, 'width="8px"');
-    $table->set_header(1, get_lang('Title'), true, null, ['class' => 'title']);
-    $table->set_header(2, get_lang('Code'));
-    $table->set_header(3, get_lang('Language'), false, 'width="70px"');
-    $table->set_header(4, get_lang('Category'));
-    $table->set_header(5, get_lang('SubscriptionAllowed'), true, 'width="60px"');
-    $table->set_header(6, get_lang('UnsubscriptionAllowed'), false, 'width="50px"');
+    $column = 0;
+    $table->set_header($column++, '', false, 'width="8px"');
+    $table->set_header($column++, get_lang('Title'), true, null, ['class' => 'title']);
+    $table->set_header($column++, get_lang('Code'));
+    $table->set_header($column++, get_lang('Language'), false, 'width="70px"');
+    $table->set_header($column++, get_lang('Category'));
+    $table->set_header($column++, get_lang('SubscriptionAllowed'), true, 'width="60px"');
+    $table->set_header($column++, get_lang('UnsubscriptionAllowed'), false, 'width="50px"');
+    if ($addTeacherColumn) {
+        $table->set_header($column++, get_lang('Teachers'), true);
+    }
     $table->set_header(
-        7,
+        $column++,
         get_lang('Action'),
         false,
         null,

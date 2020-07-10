@@ -1593,6 +1593,9 @@ $_configuration['auth_password_links'] = [
 // Default items per page in main/mySpace/users.php
 // $_configuration['my_space_users_items_per_page'] = 10;
 
+// Add teachers column in course list.
+// $_configuration['add_teachers_in_course_list'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

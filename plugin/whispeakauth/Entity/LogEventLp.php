@@ -70,4 +70,15 @@ class LogEventLp extends LogEvent
 
         return $this;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function getTypeString()
+    {
+        $lpName = $this->lp->getName();
+        $itemTitle = $this->getLpItem()->getTitle();
+
+        return "$lpName > $itemTitle";
+    }
 }

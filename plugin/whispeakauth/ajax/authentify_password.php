@@ -95,6 +95,9 @@ if (!$isValidPassword || !$isActive || !$isExpired) {
         $userPass = true;
     }
 } elseif ($isValidPassword) {
+    ChamiloSession::erase(WhispeakAuthPlugin::SESSION_FAILED_LOGINS);
+    ChamiloSession::erase(WhispeakAuthPlugin::SESSION_2FA_USER);
+
     if (!empty($lpItemInfo)) {
         $plugin->addAttemptInLearningPath(
             LogEvent::STATUS_SUCCESS,

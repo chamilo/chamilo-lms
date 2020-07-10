@@ -17,12 +17,12 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
     const SETTING_ENABLE = 'enable';
     const SETTING_MAX_ATTEMPTS = 'max_attempts';
     const SETTING_2FA = '2fa';
+    const SETTING_API_URL = 'api_url';
+    const SETTING_TOKEN = 'token';
 
     const EXTRAFIELD_AUTH_UID = 'whispeak_auth_uid';
     const EXTRAFIELD_LP_ITEM = 'whispeak_lp_item';
     const EXTRAFIELD_QUIZ_QUESTION = 'whispeak_quiz_question';
-
-    const API_URL = 'http://api.whispeak.io:8080/v1.1/';
 
     const SESSION_FAILED_LOGINS = 'whispeak_failed_logins';
     const SESSION_2FA_USER = 'whispeak_user_id';
@@ -41,6 +41,8 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
             'Angel Fernando Quiroz',
             [
                 self::SETTING_ENABLE => 'boolean',
+                self::SETTING_API_URL => 'text',
+                self::SETTING_TOKEN => 'text',
                 self::SETTING_MAX_ATTEMPTS => 'text',
                 self::SETTING_2FA => 'boolean',
             ]
@@ -89,16 +91,6 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
     public function getEntityPath()
     {
         return api_get_path(SYS_PATH).'src/Chamilo/PluginBundle/Entity/'.$this->getCamelCaseName();
-    }
-
-    /**
-     * @return string
-     */
-    public function getAccessToken()
-    {
-        $token = file_get_contents(__DIR__.'/tokenTest');
-
-        return trim($token);
     }
 
     /**
@@ -340,208 +332,6 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
     }
 
     /**
-     * Convert the language name to ISO-639-2 code (3 characters).
-     *
-     * @param string $languageName
-     *
-     * @return string
-     */
-    public static function getLanguageIsoCode($languageName)
-    {
-        $listIso3 = [
-            'ab' => 'abk',
-            'aa' => 'aar',
-            'af' => 'afr',
-            'ak' => 'aka',
-            'sq' => 'sqi',
-            'am' => 'amh',
-            'ar' => 'ara',
-            'an' => 'arg',
-            'hy' => 'hye',
-            'as' => 'asm',
-            'av' => 'ava',
-            'ae' => 'ave',
-            'ay' => 'aym',
-            'az' => 'aze',
-            'bm' => 'bam',
-            'ba' => 'bak',
-            'eu' => 'eus',
-            'be' => 'bel',
-            'bn' => 'ben',
-            'bh' => 'bih',
-            'bi' => 'bis',
-            'bs' => 'bos',
-            'br' => 'bre',
-            'bg' => 'bul',
-            'my' => 'mya',
-            'ca' => 'cat',
-            'ch' => 'cha',
-            'ce' => 'che',
-            'ny' => 'nya',
-            'zh' => 'zho',
-            'cv' => 'chv',
-            'kw' => 'cor',
-            'co' => 'cos',
-            'cr' => 'cre',
-            'hr' => 'hrv',
-            'cs' => 'ces',
-            'da' => 'dan',
-            'dv' => 'div',
-            'nl' => 'nld',
-            'dz' => 'dzo',
-            'en' => 'eng',
-            'eo' => 'epo',
-            'et' => 'est',
-            'ee' => 'ewe',
-            'fo' => 'fao',
-            'fj' => 'fij',
-            'fi' => 'fin',
-            'fr' => 'fra',
-            'ff' => 'ful',
-            'gl' => 'glg',
-            'ka' => 'kat',
-            'de' => 'deu',
-            'el' => 'ell',
-            'gn' => 'grn',
-            'gu' => 'guj',
-            'ht' => 'hat',
-            'ha' => 'hau',
-            'he' => 'heb',
-            'hz' => 'her',
-            'hi' => 'hin',
-            'ho' => 'hmo',
-            'hu' => 'hun',
-            'ia' => 'ina',
-            'id' => 'ind',
-            'ie' => 'ile',
-            'ga' => 'gle',
-            'ig' => 'ibo',
-            'ik' => 'ipk',
-            'io' => 'ido',
-            'is' => 'isl',
-            'it' => 'ita',
-            'iu' => 'iku',
-            'ja' => 'jpn',
-            'jv' => 'jav',
-            'kl' => 'kal',
-            'kn' => 'kan',
-            'kr' => 'kau',
-            'ks' => 'kas',
-            'kk' => 'kaz',
-            'km' => 'khm',
-            'ki' => 'kik',
-            'rw' => 'kin',
-            'ky' => 'kir',
-            'kv' => 'kom',
-            'kg' => 'kon',
-            'ko' => 'kor',
-            'ku' => 'kur',
-            'kj' => 'kua',
-            'la' => 'lat',
-            'lb' => 'ltz',
-            'lg' => 'lug',
-            'li' => 'lim',
-            'ln' => 'lin',
-            'lo' => 'lao',
-            'lt' => 'lit',
-            'lu' => 'lub',
-            'lv' => 'lav',
-            'gv' => 'glv',
-            'mk' => 'mkd',
-            'mg' => 'mlg',
-            'ms' => 'msa',
-            'ml' => 'mal',
-            'mt' => 'mlt',
-            'mi' => 'mri',
-            'mr' => 'mar',
-            'mh' => 'mah',
-            'mn' => 'mon',
-            'na' => 'nau',
-            'nv' => 'nav',
-            'nd' => 'nde',
-            'ne' => 'nep',
-            'ng' => 'ndo',
-            'nb' => 'nob',
-            'nn' => 'nno',
-            'no' => 'nor',
-            'ii' => 'iii',
-            'nr' => 'nbl',
-            'oc' => 'oci',
-            'oj' => 'oji',
-            'cu' => 'chu',
-            'om' => 'orm',
-            'or' => 'ori',
-            'os' => 'oss',
-            'pa' => 'pan',
-            'pi' => 'pli',
-            'fa' => 'fas',
-            'pl' => 'pol',
-            'ps' => 'pus',
-            'pt' => 'por',
-            'qu' => 'que',
-            'rm' => 'roh',
-            'rn' => 'run',
-            'ro' => 'ron',
-            'ru' => 'rus',
-            'sa' => 'san',
-            'sc' => 'srd',
-            'sd' => 'snd',
-            'se' => 'sme',
-            'sm' => 'smo',
-            'sg' => 'sag',
-            'sr' => 'srp',
-            'gd' => 'gla',
-            'sn' => 'sna',
-            'si' => 'sin',
-            'sk' => 'slk',
-            'sl' => 'slv',
-            'so' => 'som',
-            'st' => 'sot',
-            'es' => 'spa',
-            'su' => 'sun',
-            'sw' => 'swa',
-            'ss' => 'ssw',
-            'sv' => 'swe',
-            'ta' => 'tam',
-            'te' => 'tel',
-            'tg' => 'tgk',
-            'th' => 'tha',
-            'ti' => 'tir',
-            'bo' => 'bod',
-            'tk' => 'tuk',
-            'tl' => 'tgl',
-            'tn' => 'tsn',
-            'to' => 'ton',
-            'tr' => 'tur',
-            'ts' => 'tso',
-            'tt' => 'tat',
-            'tw' => 'twi',
-            'ty' => 'tah',
-            'ug' => 'uig',
-            'uk' => 'ukr',
-            'ur' => 'urd',
-            'uz' => 'uzb',
-            've' => 'ven',
-            'vi' => 'vie',
-            'vo' => 'vol',
-            'wa' => 'wln',
-            'cy' => 'cym',
-            'wo' => 'wol',
-            'fy' => 'fry',
-            'xh' => 'xho',
-            'yi' => 'yid',
-            'yo' => 'yor',
-            'za' => 'zha',
-            'zu' => 'zul',
-        ];
-
-        $iso2 = api_get_language_isocode($languageName);
-        $iso3 = isset($listIso3[$iso2]) ? $listIso3[$iso2] : $listIso3['en'];
-
-        return $iso3;
-    }
-
-    /**
      * Get the max_attemtps option.
      *
      * @return int
@@ -759,6 +549,36 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
         $logEvent
             ->setQuestion($question)
             ->setQuiz($quiz)
+            ->setUser($user)
+            ->setDatetime(
+                api_get_utc_datetime(null, false, true)
+            )
+            ->setActionStatus($status);
+
+        $em->persist($logEvent);
+        $em->flush();
+
+        return $logEvent;
+    }
+
+    /**
+     * @param int $status
+     * @param int $userId
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
+     *
+     * @return LogEvent|null
+     */
+    public function addAuthenticationAttempt($status, $userId)
+    {
+        $em = Database::getManager();
+
+        $user = api_get_user_entity($userId);
+
+        $logEvent = new LogEvent();
+        $logEvent
             ->setUser($user)
             ->setDatetime(
                 api_get_utc_datetime(null, false, true)
@@ -1012,5 +832,15 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
         $table = Database::get_main_table('whispeak_log_event');
         $sql = "DROP TABLE IF EXISTS $table";
         Database::query($sql);
+    }
+
+    /**
+     * @return string
+     */
+    public function getApiUrl()
+    {
+        $url = $this->get(self::SETTING_API_URL);
+
+        return trim($url, " \t\n\r \v/").'/';
     }
 }

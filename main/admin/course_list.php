@@ -443,16 +443,18 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
     $el = $form->addSelectLanguage('keyword_language', get_lang('CourseLanguage'));
     $el->addOption(get_lang('All'), '%');
 
-    $form->addSelectAjax(
-        'course_teachers',
-        get_lang('CourseTeachers'),
-        [0 => get_lang('None')],
-        [
-            'url' => api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=teacher_to_basis_course',
-            'id' => 'course_teachers',
-            'multiple' => 'multiple',
-        ]
-    );
+    if ($addTeacherColumn) {
+        $form->addSelectAjax(
+            'course_teachers',
+            get_lang('CourseTeachers'),
+            [0 => get_lang('None')],
+            [
+                'url' => api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=teacher_to_basis_course',
+                'id' => 'course_teachers',
+                'multiple' => 'multiple',
+            ]
+        );
+    }
 
     $form->addElement('radio', 'keyword_visibility', get_lang('CourseAccess'), get_lang('OpenToTheWorld'), COURSE_VISIBILITY_OPEN_WORLD);
     $form->addElement('radio', 'keyword_visibility', null, get_lang('OpenToThePlatform'), COURSE_VISIBILITY_OPEN_PLATFORM);

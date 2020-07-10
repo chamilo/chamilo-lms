@@ -609,6 +609,9 @@ if ($allowAntiPlagiarism) {
                 url: compilationWebUrl + "upload.php?<?php echo api_get_cidreq(); ?>&doc=" + itemId,
                 type: "get",
                 dataType: "html",
+                beforeSend: function() {
+                    $('#id_avancement' + itemId + ' a').addClass('disabled');
+                },
                 success: function (message) {
                     allWorkId += itemId + "a";
                     compilatioInit();

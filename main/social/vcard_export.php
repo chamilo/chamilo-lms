@@ -25,7 +25,10 @@ $userInfo = api_get_user_info($userId, true, false, true);
 
 /* Get the relationship between current user and vcard user */
 $currentUserId = api_get_user_id();
-$hasRelation = (int) (SocialManager::get_relation_between_contacts($currentUserId, $userId));
+$hasRelation =  SocialManager::get_relation_between_contacts(
+    $currentUserId,
+    $userId,
+    true);
 if ($hasRelation == 0) {
     /* if has not relation, check if are admin */
     api_protect_admin_script();

@@ -225,7 +225,7 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
             }
             $courseItem[] = implode(', ', $teacherList);
         }
-        $courseItem[] =implode(PHP_EOL, $actions);
+        $courseItem[] = implode(PHP_EOL, $actions);
         $courses[] = $courseItem;
     }
 
@@ -587,7 +587,7 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
     if (isset($_GET['course_teachers'])) {
         $parsed = array_map('intval', $_GET['course_teachers']);
         $parameters["course_teachers"] = '';
-        foreach ($parsed as $key=>$teacherId) {
+        foreach ($parsed as $key => $teacherId) {
             $parameters["course_teachers[$key]"] = $teacherId;
         }
     }

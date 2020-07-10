@@ -33,7 +33,6 @@ class AuthenticationController extends BaseController
         if (ChamiloSession::read(WhispeakAuthPlugin::SESSION_AUTH_PASSWORD, false)) {
             ChamiloSession::erase(WhispeakAuthPlugin::SESSION_AUTH_PASSWORD);
 
-
             if (empty($lpQuestionInfo)) {
                 $message = $this->plugin->get_lang('MaxAttemptsReached')
                     .'<br><strong>'.$this->plugin->get_lang('LoginWithUsernameAndPassword').'</strong>';
@@ -58,7 +57,7 @@ class AuthenticationController extends BaseController
         $isAuthOnQuiz = !empty($lpQuestionInfo) && !empty($objExercise);
         $showFullPage = !$isAuthOnLp && !$isAuthOnQuiz;
 
-        $user = api_get_session_entity(
+        $user = api_get_user_entity(
             ChamiloSession::read(WhispeakAuthPlugin::SESSION_2FA_USER, 0) ?: api_get_user_id()
         );
 
@@ -95,18 +94,17 @@ class AuthenticationController extends BaseController
 
         ChamiloSession::write(WhispeakAuthPlugin::SESSION_SENTENCE_TEXT, $response['token']);
 
-        $template = new \Template('', $showFullPage, $showFullPage, false, true, false);
-        $content = $template->fetch('whispeakauth/view/authentify_recorder.html.twig');
-
         if (!empty($lpQuestionInfo) && empty($lpItemInfo)) {
-            echo $content;
+            $template = new \Template('', $showFullPage, $showFullPage, false, true, false);
+            $template->assign('show_form', $showForm);
+            $template->assign('sample_text', $response['text']);
 
+            echo $template->fetch('whispeakauth/view/authentify_recorder.html.twig');
             exit;
         }
 
         $this->displayPage(
             [
-                'action' => 'authentication',
                 'show_form' => $showForm,
                 'sample_text' => $response['text'],
             ]

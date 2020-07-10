@@ -68,7 +68,7 @@ class EnrollmentController extends BaseController
 
         $this->plugin->saveEnrollment($user, $response['speaker']);
 
-        $this->displayMessage($this->plugin->get_lang('EnrollmentSuccess'), 'success');
+        echo \Display::return_message($this->plugin->get_lang('EnrollmentSuccess'), 'success');
     }
 
     /**

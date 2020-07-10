@@ -33,15 +33,6 @@ abstract class BaseController
     abstract protected function displayPage(array $variables);
 
     /**
-     * @param string $message
-     * @param string $type
-     */
-    protected function displayMessage($message, $type)
-    {
-        echo \Display::return_message($message, $type);
-    }
-
-    /**
      * @param \Chamilo\UserBundle\Entity\User $user
      *
      * @throws \Exception

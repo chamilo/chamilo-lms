@@ -22,61 +22,7 @@ $addTeacherColumn = api_get_configuration_value('add_teachers_in_course_list');
  */
 function get_number_of_courses()
 {
-    $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-    $sql = "SELECT COUNT(code) AS total_number_of_items FROM $course_table c";
-
-    if ((api_is_platform_admin() || api_is_session_admin()) &&
-        api_is_multiple_url_enabled() && api_get_current_access_url_id() != -1
-    ) {
-        $access_url_rel_course_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-        $sql .= " INNER JOIN $access_url_rel_course_table url_rel_course
-                 ON (c.id = url_rel_course.c_id)";
-    }
-
-    if (isset($_GET['keyword'])) {
-        $keyword = Database::escape_string("%".$_GET['keyword']."%");
-        $sql .= " WHERE (
-                        c.title LIKE '".$keyword."' OR
-                        c.code LIKE '".$keyword."' OR
-                        c.visual_code LIKE '".$keyword."'
-                )
-        ";
-    } elseif (isset($_GET['keyword_code'])) {
-        $keyword_code = Database::escape_string("%".$_GET['keyword_code']."%");
-        $keyword_title = Database::escape_string("%".$_GET['keyword_title']."%");
-        $keyword_category = isset($_GET['keyword_category'])
-            ? Database::escape_string("%".$_GET['keyword_category']."%")
-            : null;
-        $keyword_language = Database::escape_string("%".$_GET['keyword_language']."%");
-        $keyword_visibility = Database::escape_string("%".$_GET['keyword_visibility']."%");
-        $keyword_subscribe = Database::escape_string($_GET['keyword_subscribe']);
-        $keyword_unsubscribe = Database::escape_string($_GET['keyword_unsubscribe']);
-
-        $sql .= " WHERE
-                    (c.code LIKE '".$keyword_code."' OR c.visual_code LIKE '".$keyword_code."') AND
-                    c.title LIKE '".$keyword_title."' AND
-                    c.course_language LIKE '".$keyword_language."' AND
-                    c.visibility LIKE '".$keyword_visibility."' AND
-                    c.subscribe LIKE '".$keyword_subscribe."' AND
-                    c.unsubscribe LIKE '".$keyword_unsubscribe."'
-        ";
-
-        if (!empty($keyword_category)) {
-            $sql .= " AND c.category_code LIKE '".$keyword_category."' ";
-        }
-    }
-
-    // adding the filter to see the user's only of the current access_url
-    if ((api_is_platform_admin() || api_is_session_admin()) &&
-        api_is_multiple_url_enabled() && api_get_current_access_url_id() != -1
-    ) {
-        $sql .= " AND url_rel_course.access_url_id = ".api_get_current_access_url_id();
-    }
-
-    $res = Database::query($sql);
-    $obj = Database::fetch_object($res);
-
-    return $obj->total_number_of_items;
+    return get_course_data(0, 0, 0, 0, null, true);
 }
 
 /**
@@ -91,17 +37,15 @@ function get_number_of_courses()
  *
  * @return array
  */
-function get_course_data($from, $number_of_items, $column, $direction)
+function get_course_data($from, $number_of_items, $column, $direction, $dataFunctions = [], $getCount = false)
 {
     $addTeacherColumn = api_get_configuration_value('add_teachers_in_course_list');
-
     $table = Database::get_main_table(TABLE_MAIN_COURSE);
 
     $teachers = '';
     if ($addTeacherColumn) {
-        $teachers = ", GROUP_CONCAT(cu.user_id SEPARATOR ',') as col7, ";
+        $teachers = " GROUP_CONCAT(cu.user_id SEPARATOR ',') as col7, ";
     }
-
     $select = "SELECT
                 code AS col0,
                 title AS col1,
@@ -109,13 +53,17 @@ function get_course_data($from, $number_of_items, $column, $direction)
                 course_language AS col3,
                 category_code AS col4,
                 subscribe AS col5,
-                unsubscribe AS col6
+                unsubscribe AS col6,
                 $teachers
                 visibility,
                 directory,
                 visual_code,
                 course.code,
                 course.id ";
+
+    if ($getCount) {
+        $select = 'SELECT COUNT(DISTINCT(course.id)) as count ';
+    }
 
     $sql = "$select FROM $table course";
 
@@ -177,11 +125,30 @@ function get_course_data($from, $number_of_items, $column, $direction)
     if ($addTeacherColumn) {
         $teachers = isset($_GET['course_teachers']) ? $_GET['course_teachers'] : [];
         if (!empty($teachers)) {
-            array_map('intval', $teachers);
-            $sql .= ' AND ( cu.user_id IN ('.implode("' , '", $teachers).')) ';
+            $teachers = array_map('intval', $teachers);
+            $addNull = '';
+            foreach ($teachers as $key => $teacherId) {
+                if (0 === $teacherId) {
+                    $addNull = 'OR cu.user_id IS NULL ';
+                    unset($key);
+                }
+            }
+            $sql .= ' AND ( cu.user_id IN ("'.implode('", "', $teachers).'") '.$addNull.' ) ';
         }
 
-        $sql .= " GROUP BY course.id ";
+        if (false === $getCount) {
+            $sql .= " GROUP BY course.id ";
+        }
+    }
+
+    if ($getCount) {
+        $res = Database::query($sql);
+        $row = Database::fetch_array($res);
+        if ($row) {
+            return (int) $row['count'];
+        }
+
+        return 0;
     }
 
     $sql .= " ORDER BY col$column $direction ";
@@ -246,7 +213,7 @@ function get_course_data($from, $number_of_items, $column, $direction)
         ];
 
         if ($addTeacherColumn) {
-            $teacherIdList = explode(',', $course[7]);
+            $teacherIdList = array_filter(explode(',', $course[7]));
             $teacherList = [];
             if (!empty($teacherIdList)) {
                 foreach ($teacherIdList as $teacherId) {
@@ -454,6 +421,7 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
                 'multiple' => 'multiple',
             ]
         );
+        $form->addLabel('', '<button id="set_none_teacher" class="btn ">'.get_lang('None').'</button>');
     }
 
     $form->addElement('radio', 'keyword_visibility', get_lang('CourseAccess'), get_lang('OpenToTheWorld'), COURSE_VISIBILITY_OPEN_WORLD);
@@ -616,6 +584,14 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
         $parameters['keyword_unsubscribe'] = Security::remove_XSS($_GET['keyword_unsubscribe']);
     }
 
+    if (isset($_GET['course_teachers'])) {
+        $parsed = array_map('intval', $_GET['course_teachers']);
+        $parameters["course_teachers"] = '';
+        foreach ($parsed as $key=>$teacherId) {
+            $parameters["course_teachers[$key]"] = $teacherId;
+        }
+    }
+
     $table->set_additional_parameters($parameters);
     $column = 0;
     $table->set_header($column++, '', false, 'width="8px"');
@@ -645,11 +621,11 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
 $htmlHeadXtra[] = '
 <script>
 $(function() {
-    //$("#course_teachers").select2(\'val\', ["test1","test2"], true);
-    //$test = $("#course_teachers");
-    //$test.append(\'<option value="initial1" selected="selected">initial1</option>\');
-    //$test.trigger(\'change\');
+    $("#set_none_teacher").on("click", function () {
+        $("#course_teachers").val("0").trigger("change");
 
+        return false;
+    });
 });
 </script>';
 

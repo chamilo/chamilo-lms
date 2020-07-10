@@ -90,7 +90,7 @@ class UserRemoteServicePlugin extends Plugin
      */
     public function addService($title, $url)
     {
-        $service = new UserRemoteService;
+        $service = new UserRemoteService();
         $service->setTitle($title);
         $service->setURL($url);
         Database::getManager()->persist($service);
@@ -134,7 +134,7 @@ class UserRemoteServicePlugin extends Plugin
     }
 
     /**
-     * Generates the menu items to be appended to the navigation array
+     * Generates the menu items to be appended to the navigation array.
      *
      * @see \return_navigation_array
      *
@@ -159,6 +159,7 @@ class UserRemoteServicePlugin extends Plugin
                 'title' => $service->getTitle(),
             ];
         }
+
         return $menu;
     }
 
@@ -178,6 +179,7 @@ class UserRemoteServicePlugin extends Plugin
         if ($form->validate()) {
             $this->addService($titleText->getValue(), $urlText->getValue());
         }
+
         return $form;
     }
 
@@ -208,6 +210,7 @@ class UserRemoteServicePlugin extends Plugin
                 }
             }
         }
+
         return $form;
     }
 
@@ -238,6 +241,7 @@ class UserRemoteServicePlugin extends Plugin
             }
             $html = $table->toHtml();
         }
+
         return $html;
     }
 
@@ -256,7 +260,7 @@ class UserRemoteServicePlugin extends Plugin
     }
 
     /**
-     * Generates the iframe HTML element to load a service URL
+     * Generates the iframe HTML element to load a service URL.
      *
      * @throws Exception on hash generation failure
      *
@@ -265,6 +269,7 @@ class UserRemoteServicePlugin extends Plugin
     public function getIFrame()
     {
         $userInfo = api_get_user_info();
+
         return sprintf(
             '<div class="embed-responsive embed-responsive-16by9">
  <iframe class="embed-responsive-item" src="%s"></iframe>

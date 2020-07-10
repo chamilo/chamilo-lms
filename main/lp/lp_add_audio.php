@@ -121,7 +121,7 @@ $page = $lp->build_action_menu(
     true,
     false,
     true,
-    true
+    $action
 );
 $page .= '<div class="row" style="overflow:hidden">';
 $page .= '<div id="lp_sidebar" class="col-md-4">';

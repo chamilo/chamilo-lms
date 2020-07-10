@@ -6557,11 +6557,11 @@ class learnpath
     /**
      * This function builds the action menu.
      *
-     * @param bool $returnString           Optional
-     * @param bool $showRequirementButtons Optional. Allow show the requirements button
-     * @param bool $isConfigPage           Optional. If is the config page, show the edit button
-     * @param bool $allowExpand            Optional. Allow show the expand/contract button
-     * @param bool $backToBuild
+     * @param bool   $returnString           Optional
+     * @param bool   $showRequirementButtons Optional. Allow show the requirements button
+     * @param bool   $isConfigPage           Optional. If is the config page, show the edit button
+     * @param bool   $allowExpand            Optional. Allow show the expand/contract button
+     * @param string $action
      *
      * @return string
      */
@@ -6570,7 +6570,7 @@ class learnpath
         $showRequirementButtons = true,
         $isConfigPage = false,
         $allowExpand = true,
-        $backToBuild = false
+        $action = ''
     ) {
         $actionsRight = '';
         $lpId = $this->lp_id;
@@ -6584,7 +6584,7 @@ class learnpath
             'lp_controller.php?'.api_get_cidreq()
         );
 
-        if ($backToBuild) {
+        /*if ($backToBuild) {
             $back = Display::url(
                 Display::return_icon(
                     'back.png',
@@ -6594,7 +6594,7 @@ class learnpath
                 ),
                 "lp_controller.php?action=add_item&type=step&lp_id=$lpId&".api_get_cidreq()
             );
-        }
+        }*/
 
         $actionsLeft = $back;
 
@@ -6644,7 +6644,10 @@ class learnpath
             );
         }
 
-        if (strpos($request, 'build') === false && strpos($request, 'add_item') === false) {
+        if ((strpos($request, 'build') === false &&
+            strpos($request, 'add_item') === false) ||
+            in_array($action, ['add_audio'])
+        ) {
             $actionsLeft .= Display::url(
                 Display::return_icon(
                     'edit.png',

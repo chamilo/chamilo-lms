@@ -8,6 +8,7 @@ use Chamilo\PluginBundle\WhispeakAuth\Request\ApiRequest;
 use Chamilo\UserBundle\Entity\User;
 use ChamiloSession;
 use Display;
+use Login;
 use WhispeakAuthPlugin;
 
 /**
@@ -190,6 +191,10 @@ class AuthenticationController extends BaseController
                 );
             }
 
+            if (empty($lpItemInfo) && empty($quizQuestionInfo)) {
+                $this->plugin->addAuthenticationAttempt(LogEvent::STATUS_FAILED, $user->getId());
+            }
+
             $message = $this->plugin->get_lang('AuthentifyFailed');
 
             ChamiloSession::write(WhispeakAuthPlugin::SESSION_FAILED_LOGINS, ++$failedLogins);
@@ -289,6 +294,10 @@ class AuthenticationController extends BaseController
                 echo '<script>window.location.href = "'.$url.'";</script>';
 
                 exit;
+            }
+
+            if (empty($lpItemInfo) && empty($quizQuestionInfo)) {
+                $this->plugin->addAuthenticationAttempt(LogEvent::STATUS_SUCCESS, $user->getId());
             }
 
             $loggedUser = [

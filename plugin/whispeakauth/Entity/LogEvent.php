@@ -134,4 +134,12 @@ class LogEvent
 
         return $this;
     }
+
+    /**
+     * @return string
+     */
+    public function getTypeString()
+    {
+        return  '-';
+    }
 }

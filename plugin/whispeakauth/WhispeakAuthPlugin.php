@@ -24,8 +24,6 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
     const EXTRAFIELD_LP_ITEM = 'whispeak_lp_item';
     const EXTRAFIELD_QUIZ_QUESTION = 'whispeak_quiz_question';
 
-    const API_URL = 'http://api.whispeak.io:8080/v1.1/';
-
     const SESSION_FAILED_LOGINS = 'whispeak_failed_logins';
     const SESSION_2FA_USER = 'whispeak_user_id';
     const SESSION_LP_ITEM = 'whispeak_lp_item';
@@ -93,16 +91,6 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
     public function getEntityPath()
     {
         return api_get_path(SYS_PATH).'src/Chamilo/PluginBundle/Entity/'.$this->getCamelCaseName();
-    }
-
-    /**
-     * @return string
-     */
-    public function getAccessToken()
-    {
-        $token = file_get_contents(__DIR__.'/tokenTest');
-
-        return trim($token);
     }
 
     /**
@@ -561,6 +549,36 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
         $logEvent
             ->setQuestion($question)
             ->setQuiz($quiz)
+            ->setUser($user)
+            ->setDatetime(
+                api_get_utc_datetime(null, false, true)
+            )
+            ->setActionStatus($status);
+
+        $em->persist($logEvent);
+        $em->flush();
+
+        return $logEvent;
+    }
+
+    /**
+     * @param int $status
+     * @param int $userId
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
+     *
+     * @return LogEvent|null
+     */
+    public function addAuthenticationAttempt($status, $userId)
+    {
+        $em = Database::getManager();
+
+        $user = api_get_user_entity($userId);
+
+        $logEvent = new LogEvent();
+        $logEvent
             ->setUser($user)
             ->setDatetime(
                 api_get_utc_datetime(null, false, true)

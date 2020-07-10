@@ -70,4 +70,15 @@ class LogEventQuiz extends LogEvent
 
         return $this;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function getTypeString()
+    {
+        $quiz = strip_tags($this->getQuiz()->getTitle());
+        $question = strip_tags($this->getQuestion()->getQuestion());
+
+        return "$quiz > $question";
+    }
 }

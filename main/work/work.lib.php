@@ -2004,7 +2004,7 @@ function get_work_user_list(
     $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $user_table = Database::get_main_table(TABLE_MAIN_USER);
 
-    $session_id = $sessionId ? $sessionId : api_get_session_id();
+    $session_id = $sessionId ? (int) $sessionId : api_get_session_id();
     $group_id = api_get_group_id();
     $course_info = api_get_course_info();
     $course_info = empty($course_info) ? api_get_course_info_by_id($courseId) : $course_info;
@@ -2015,8 +2015,6 @@ function get_work_user_list(
     $limit = (int) $limit;
 
     $column = !empty($column) ? Database::escape_string($column) : 'sent_date';
-
-    $compilatio_web_folder = api_get_path(WEB_CODE_PATH).'plagiarism/compilatio/';
     $compilation = null;
     if (api_get_configuration_value('allow_compilatio_tool')) {
         $compilation = new Compilatio();
@@ -2131,8 +2129,11 @@ function get_work_user_list(
 
         if ($getCount) {
             $work = Database::fetch_array($result, 'ASSOC');
+            if ($work) {
+                return (int) $work['count'];
+            }
 
-            return $work['count'];
+            return 0;
         }
 
         $url = api_get_path(WEB_CODE_PATH).'work/';
@@ -2177,6 +2178,7 @@ function get_work_user_list(
         $blockEdition = api_get_configuration_value('block_student_publication_edition');
         $blockScoreEdition = api_get_configuration_value('block_student_publication_score_edition');
         $loading = Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin');
+        $cidReq = api_get_cidreq();
         while ($work = Database::fetch_array($result, 'ASSOC')) {
             $item_id = $work['id'];
             $dbTitle = $work['title'];
@@ -2252,7 +2254,7 @@ function get_work_user_list(
                 $linkToDownload = '';
                 // If URL is present then there's a file to download keep BC.
                 if ($work['contains_file'] || !empty($work['url'])) {
-                    $linkToDownload = '<a href="'.$url.'download.php?id='.$item_id.'&'.api_get_cidreq().'">'.$saveIcon.'</a> ';
+                    $linkToDownload = '<a href="'.$url.'download.php?id='.$item_id.'&'.$cidReq.'">'.$saveIcon.'</a> ';
                 }
 
                 $feedback = '';
@@ -2272,7 +2274,7 @@ function get_work_user_list(
                 if (!empty($work['url_correction'])) {
                     $hasCorrection = Display::url(
                         $correctionIcon,
-                        api_get_path(WEB_CODE_PATH).'work/download.php?id='.$item_id.'&'.api_get_cidreq().'&correction=1'
+                        api_get_path(WEB_CODE_PATH).'work/download.php?id='.$item_id.'&'.$cidReq.'&correction=1'
                     );
                 }
 
@@ -2301,14 +2303,14 @@ function get_work_user_list(
                     if ($blockScoreEdition && !api_is_platform_admin() && !empty($work['qualification_score'])) {
                         $rateLink = '';
                     } else {
-                        $rateLink = '<a href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang('View').'">'.
+                        $rateLink = '<a href="'.$url.'view.php?'.$cidReq.'&id='.$item_id.'" title="'.get_lang('View').'">'.
                             $rateIcon.'</a> ';
                     }
                     $action .= $rateLink;
 
                     if ($unoconv && empty($work['contains_file'])) {
                         $action .= '<a
-                            href="'.$url.'work_list_all.php?'.api_get_cidreq().'&id='.$work_id.'&action=export_to_doc&item_id='.$item_id.'"
+                            href="'.$url.'work_list_all.php?'.$cidReq.'&id='.$work_id.'&action=export_to_doc&item_id='.$item_id.'"
                             title="'.get_lang('ExportToDoc').'" >'.
                             Display::return_icon('export_doc.png', get_lang('ExportToDoc'), [], ICON_SIZE_SMALL).'</a> ';
                     }
@@ -2322,7 +2324,7 @@ function get_work_user_list(
                         <form
                         id="file_upload_'.$item_id.'"
                         class="work_correction_file_upload file_upload_small fileinput-button"
-                        action="'.api_get_path(WEB_AJAX_PATH).'work.ajax.php?'.api_get_cidreq().'&a=upload_correction_file&item_id='.$item_id.'"
+                        action="'.api_get_path(WEB_AJAX_PATH).'work.ajax.php?'.$cidReq.'&a=upload_correction_file&item_id='.$item_id.'"
                         method="POST"
                         enctype="multipart/form-data"
                         >
@@ -2343,15 +2345,9 @@ function get_work_user_list(
                             });
                         });
 
-                        /*$('.getSingleCompilatio').on('click', function () {
-                            var parts = $(this).parent().attr('id').split('id_avancement');
-                            getSingleCompilatio(parts[1]);
-                        });*/
-
                         $('#file_upload_".$item_id."').fileupload({
                             add: function (e, data) {
                                 $('#progress_$item_id').html();
-                                //$('#file_$item_id').remove();
                                 data.context = $('#progress_$item_id').html('$loadingText <br /> <em class=\"fa fa-spinner fa-pulse fa-fw\"></em>');
                                 data.submit();
                                 $(this).removeClass('hover');

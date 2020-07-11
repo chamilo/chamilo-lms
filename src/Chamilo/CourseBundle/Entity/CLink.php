@@ -141,7 +141,7 @@ class CLink
      *
      * @return $this
      */
-    public function setCourse(Course $course)
+    public function setCourse($course)
     {
         $this->course = $course;
         $this->course->getLinks()->add($this);

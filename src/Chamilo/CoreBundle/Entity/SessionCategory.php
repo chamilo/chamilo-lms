@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 class SessionCategory
 {
     /**
-     * @ORM\ManyToOne(targetEntity="AccessUrl", inversedBy="sessionCategory", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="AccessUrl", inversedBy="sessionCategories", cascade={"persist"})
      * @ORM\JoinColumn(name="access_url_id", referencedColumnName="id")
      */
     protected $url;

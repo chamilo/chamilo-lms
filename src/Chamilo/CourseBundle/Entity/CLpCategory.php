@@ -121,7 +121,7 @@ class CLpCategory
      *
      * @return $this
      */
-    public function setCourse(Course $course)
+    public function setCourse($course)
     {
         $this->course = $course;
         $this->course->getLearningPathCategories()->add($this);
@@ -269,9 +269,11 @@ class CLpCategory
     }
 
     /**
+     * @param CLpCategoryUser $categoryUser
+     *
      * @return bool
      */
-    public function hasUser(CLpCategoryUser $categoryUser)
+    public function hasUser($categoryUser)
     {
         if ($this->getUsers()->count()) {
             $criteria = Criteria::create()->where(
@@ -307,9 +309,11 @@ class CLpCategory
     }
 
     /**
+     * @param CLpCategoryUser $user
+     *
      * @return $this
      */
-    public function removeUsers(CLpCategoryUser $user)
+    public function removeUsers($user)
     {
         $this->users->removeElement($user);
 

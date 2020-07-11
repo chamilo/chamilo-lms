@@ -5,6 +5,7 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Database;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -119,14 +120,14 @@ class CQuiz
     protected $maxAttempt;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="start_time", type="datetime", nullable=true)
      */
     protected $startTime;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="end_time", type="datetime", nullable=true)
      */
@@ -279,7 +280,7 @@ class CQuiz
      *
      * @return $this
      */
-    public function setCourse(Course $course)
+    public function setCourse($course)
     {
         $this->course = $course;
         $this->course->getQuizzes()->add($this);
@@ -544,7 +545,7 @@ class CQuiz
     /**
      * Set startTime.
      *
-     * @param \DateTime $startTime
+     * @param DateTime $startTime
      *
      * @return CQuiz
      */
@@ -558,7 +559,7 @@ class CQuiz
     /**
      * Get startTime.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getStartTime()
     {
@@ -568,7 +569,7 @@ class CQuiz
     /**
      * Set endTime.
      *
-     * @param \DateTime $endTime
+     * @param DateTime $endTime
      *
      * @return CQuiz
      */
@@ -582,7 +583,7 @@ class CQuiz
     /**
      * Get endTime.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getEndTime()
     {
@@ -942,6 +943,7 @@ class CQuiz
         foreach ($this->relQuestions as $relQuestion) {
             $maxScore += $relQuestion->getQuestion()->getPonderation();
         }
+
         return $maxScore;
     }
 }

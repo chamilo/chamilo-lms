@@ -144,9 +144,7 @@ class CDocument
             ->setTitle($title);
         $absolutePath = $instance->getAbsolutePath();
         if (!copy($filePath, $absolutePath)) {
-            throw new Exception(
-                sprintf('Could not copy %s to %s to create a course document', $filePath, $absolutePath)
-            );
+            throw new Exception(sprintf('Could not copy course document file %s to %s', $filePath, $absolutePath));
         }
 
         return $instance;
@@ -165,7 +163,7 @@ class CDocument
      *
      * @return $this
      */
-    public function setCourse(Course $course)
+    public function setCourse($course)
     {
         $this->course = $course;
         $this->course->getDocuments()->add($this);

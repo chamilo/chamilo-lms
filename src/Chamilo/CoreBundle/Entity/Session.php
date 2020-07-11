@@ -7,10 +7,12 @@ use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\UserBundle\Entity\User;
 use Database;
+use Datetime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Exception;
 
 //use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 //use Gedmo\Mapping\Annotation as Gedmo;
@@ -63,7 +65,12 @@ class Session
 
     /**
      * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="SessionRelCourseRelUser", mappedBy="session", cascade={"persist"}, orphanRemoval=true)
+     * @ORM\OneToMany(
+     *     targetEntity="SessionRelCourseRelUser",
+     *     mappedBy="session",
+     *     cascade={"persist"},
+     *     orphanRemoval=true
+     * )
      */
     protected $userCourseSubscriptions;
 
@@ -143,42 +150,42 @@ class Session
     protected $promotionId;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="display_start_date", type="datetime", nullable=true, unique=false)
      */
     protected $displayStartDate;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="display_end_date", type="datetime", nullable=true, unique=false)
      */
     protected $displayEndDate;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="access_start_date", type="datetime", nullable=true, unique=false)
      */
     protected $accessStartDate;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="access_end_date", type="datetime", nullable=true, unique=false)
      */
     protected $accessEndDate;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="coach_access_start_date", type="datetime", nullable=true, unique=false)
      */
     protected $coachAccessStartDate;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="coach_access_end_date", type="datetime", nullable=true, unique=false)
      */
@@ -218,7 +225,12 @@ class Session
 
     /**
      * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CStudentPublication", mappedBy="session", cascade={"persist"}, orphanRemoval=true)
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CourseBundle\Entity\CStudentPublication",
+     *     mappedBy="session",
+     *     cascade={"persist"},
+     *     orphanRemoval=true
+     * )
      */
     protected $studentPublications;
 
@@ -243,12 +255,12 @@ class Session
         $this->nbrClasses = 0;
         $this->nbrUsers = 0;
 
-        $this->displayStartDate = new \DateTime();
-        $this->displayEndDate = new \DateTime();
-        $this->accessStartDate = new \DateTime();
-        $this->accessEndDate = new \DateTime();
-        $this->coachAccessStartDate = new \DateTime();
-        $this->coachAccessEndDate = new \DateTime();
+        $this->displayStartDate = new DateTime();
+        $this->displayEndDate = new DateTime();
+        $this->accessStartDate = new DateTime();
+        $this->accessEndDate = new DateTime();
+        $this->coachAccessStartDate = new DateTime();
+        $this->coachAccessEndDate = new DateTime();
         $this->visibility = 1;
 
         $this->courses = new ArrayCollection();
@@ -258,6 +270,14 @@ class Session
         $this->category = null;
         $this->studentPublications = new ArrayCollection();
         $this->sendSubscriptionNotification = 0;
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string) $this->getName();
     }
 
     /**
@@ -277,16 +297,8 @@ class Session
         if (0 != $sessionId) {
             return self::getRepository()->find($sessionId);
         }
+
         return null;
-    }
-
-
-    /**
-     * @return string
-     */
-    public function __toString()
-    {
-        return (string) $this->getName();
     }
 
     /**
@@ -479,8 +491,11 @@ class Session
     /**
      * Remove course subscription for a user.
      * If user status in session is student, then decrease number of course users.
+     *
+     * @param User   $user
+     * @param Course $course
      */
-    public function removeUserCourseSubscription(User $user, Course $course)
+    public function removeUserCourseSubscription($user, $course)
     {
         /** @var SessionRelCourseRelUser $courseSubscription */
         foreach ($this->userCourseSubscriptions as $i => $courseSubscription) {
@@ -745,7 +760,7 @@ class Session
     /**
      * Set displayStartDate.
      *
-     * @param \DateTime $displayStartDate
+     * @param DateTime $displayStartDate
      *
      * @return Session
      */
@@ -759,7 +774,7 @@ class Session
     /**
      * Get displayStartDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getDisplayStartDate()
     {
@@ -769,7 +784,7 @@ class Session
     /**
      * Set displayEndDate.
      *
-     * @param \DateTime $displayEndDate
+     * @param DateTime $displayEndDate
      *
      * @return Session
      */
@@ -783,7 +798,7 @@ class Session
     /**
      * Get displayEndDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getDisplayEndDate()
     {
@@ -793,7 +808,7 @@ class Session
     /**
      * Set accessStartDate.
      *
-     * @param \DateTime $accessStartDate
+     * @param DateTime $accessStartDate
      *
      * @return Session
      */
@@ -807,7 +822,7 @@ class Session
     /**
      * Get accessStartDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getAccessStartDate()
     {
@@ -817,7 +832,7 @@ class Session
     /**
      * Set accessEndDate.
      *
-     * @param \DateTime $accessEndDate
+     * @param DateTime $accessEndDate
      *
      * @return Session
      */
@@ -831,7 +846,7 @@ class Session
     /**
      * Get accessEndDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getAccessEndDate()
     {
@@ -841,7 +856,7 @@ class Session
     /**
      * Set coachAccessStartDate.
      *
-     * @param \DateTime $coachAccessStartDate
+     * @param DateTime $coachAccessStartDate
      *
      * @return Session
      */
@@ -855,7 +870,7 @@ class Session
     /**
      * Get coachAccessStartDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getCoachAccessStartDate()
     {
@@ -865,7 +880,7 @@ class Session
     /**
      * Set coachAccessEndDate.
      *
-     * @param \DateTime $coachAccessEndDate
+     * @param DateTime $coachAccessEndDate
      *
      * @return Session
      */
@@ -879,7 +894,7 @@ class Session
     /**
      * Get coachAccessEndDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getCoachAccessEndDate()
     {
@@ -945,7 +960,7 @@ class Session
      */
     public function isActive()
     {
-        $now = new \Datetime('now');
+        $now = new Datetime('now');
 
         return $now > $this->getAccessStartDate();
     }
@@ -959,8 +974,8 @@ class Session
     public function isCurrentlyAccessible()
     {
         try {
-            $now = new \Datetime();
-        } catch (\Exception $exception) {
+            $now = new Datetime();
+        } catch (Exception $exception) {
             return false;
         }
 

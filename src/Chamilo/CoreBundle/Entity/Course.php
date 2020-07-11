@@ -16,6 +16,7 @@ use Chamilo\UserBundle\Entity\User;
 use CourseManager;
 use Database;
 use DateInterval;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityRepository;
@@ -200,28 +201,28 @@ class Course
     protected $diskQuota;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="last_visit", type="datetime", nullable=true, unique=false)
      */
     protected $lastVisit;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="last_edit", type="datetime", nullable=true, unique=false)
      */
     protected $lastEdit;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="creation_date", type="datetime", nullable=true, unique=false)
      */
     protected $creationDate;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="expiration_date", type="datetime", nullable=true, unique=false)
      */
@@ -385,7 +386,7 @@ class Course
      */
     public function __construct()
     {
-        $this->creationDate = new \DateTime();
+        $this->creationDate = new DateTime();
         $this->users = new ArrayCollection();
         $this->accessUrls = new ArrayCollection();
         $this->documents = new ArrayCollection();
@@ -395,6 +396,14 @@ class Course
         $this->learningPathCategories = new ArrayCollection();
         $this->learningPaths = new ArrayCollection();
         $this->learningPathItems = new ArrayCollection();
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string) $this->getTitle();
     }
 
     /**
@@ -465,9 +474,9 @@ class Course
         if (is_null($this->diskQuota)) {
             $this->diskQuota = api_get_setting('default_document_quotum');
         }
-        $this->lastEdit = new \DateTime();
+        $this->lastEdit = new DateTime();
         if (is_null($this->expirationDate)) {
-            $this->expirationDate = new \DateTime();
+            $this->expirationDate = new DateTime();
             $this->expirationDate->add(new DateInterval('P1Y'));
         }
         $absolutePath = $this->getAbsolutePath();
@@ -508,14 +517,6 @@ class Course
         }
 
         return api_get_path(SYS_COURSE_PATH).$this->directory;
-    }
-
-    /**
-     * @return string
-     */
-    public function __toString()
-    {
-        return (string) $this->getTitle();
     }
 
     /**
@@ -644,9 +645,11 @@ class Course
     }
 
     /**
+     * @param User $user
+     *
      * @return bool
      */
-    public function hasUser(User $user)
+    public function hasUser($user)
     {
         $criteria = Criteria::create()->where(
             Criteria::expr()->eq("user", $user)
@@ -656,9 +659,11 @@ class Course
     }
 
     /**
+     * @param User $user
+     *
      * @return bool
      */
-    public function hasStudent(User $user)
+    public function hasStudent($user)
     {
         $criteria = Criteria::create()->where(
             Criteria::expr()->eq("user", $user)
@@ -668,9 +673,11 @@ class Course
     }
 
     /**
+     * @param User $user
+     *
      * @return bool
      */
-    public function hasTeacher(User $user)
+    public function hasTeacher($user)
     {
         $criteria = Criteria::create()->where(
             Criteria::expr()->eq("user", $user)
@@ -681,8 +688,10 @@ class Course
 
     /**
      * Remove $user.
+     *
+     * @param CourseRelUser $user
      */
-    public function removeUsers(CourseRelUser $user)
+    public function removeUsers($user)
     {
         foreach ($this->users as $key => $value) {
             if ($value->getId() == $user->getId()) {
@@ -691,12 +700,18 @@ class Course
         }
     }
 
-    public function addTeacher(User $user)
+    /**
+     * @param User $user
+     */
+    public function addTeacher($user)
     {
         $this->addUser($user, 0, "Trainer", User::COURSE_MANAGER);
     }
 
-    public function addStudent(User $user)
+    /**
+     * @param User $user
+     */
+    public function addStudent($user)
     {
         $this->addUser($user, 0, "", User::STUDENT);
     }
@@ -1055,7 +1070,7 @@ class Course
     /**
      * Set lastVisit.
      *
-     * @param \DateTime $lastVisit
+     * @param DateTime $lastVisit
      *
      * @return Course
      */
@@ -1069,7 +1084,7 @@ class Course
     /**
      * Get lastVisit.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getLastVisit()
     {
@@ -1079,7 +1094,7 @@ class Course
     /**
      * Set lastEdit.
      *
-     * @param \DateTime $lastEdit
+     * @param DateTime $lastEdit
      *
      * @return Course
      */
@@ -1093,7 +1108,7 @@ class Course
     /**
      * Get lastEdit.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getLastEdit()
     {
@@ -1103,7 +1118,7 @@ class Course
     /**
      * Set creationDate.
      *
-     * @param \DateTime $creationDate
+     * @param DateTime $creationDate
      *
      * @return Course
      */
@@ -1117,7 +1132,7 @@ class Course
     /**
      * Get creationDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getCreationDate()
     {
@@ -1127,7 +1142,7 @@ class Course
     /**
      * Set expirationDate.
      *
-     * @param \DateTime $expirationDate
+     * @param DateTime $expirationDate
      *
      * @return Course
      */
@@ -1141,7 +1156,7 @@ class Course
     /**
      * Get expirationDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getExpirationDate()
     {
@@ -1359,9 +1374,11 @@ class Course
     }
 
     /**
+     * @param Session $session
+     *
      * @return $this
      */
-    public function setCurrentSession(Session $session)
+    public function setCurrentSession($session)
     {
         // If the session is registered in the course session list.
         if ($this->getSessions()->contains($session->getId())) {
@@ -1433,11 +1450,11 @@ class Course
     {
         $collectionsAndColumns = [
             // type          collection           column
-            'document'   => [$this->documents,   'title'],
+            'document' => [$this->documents,   'title'],
             'final_item' => [$this->documents,   'title'],
-            'forum'      => [$this->forums, 'forumTitle'],
-            'link'       => [$this->links,       'title'],
-            'quiz'       => [$this->quizzes,     'title'],
+            'forum' => [$this->forums, 'forumTitle'],
+            'link' => [$this->links,       'title'],
+            'quiz' => [$this->quizzes,     'title'],
         ];
         if (!array_key_exists($type, $collectionsAndColumns)) {
             throw new Exception(sprintf('unsupported resource type "%s"', $type));
@@ -1463,9 +1480,11 @@ class Course
     }
 
     /**
+     * @param CourseRelUser $subscription
+     *
      * @return bool
      */
-    protected function hasSubscription(CourseRelUser $subscription)
+    protected function hasSubscription($subscription)
     {
         if ($this->getUsers()->count()) {
             $criteria = Criteria::create()->where(
@@ -1485,11 +1504,12 @@ class Course
     }
 
     /**
+     * @param User   $user
      * @param string $relationType
      * @param string $role
      * @param string $status
      */
-    protected function addUser(User $user, $relationType, $role, $status)
+    protected function addUser($user, $relationType, $role, $status)
     {
         $courseRelUser = new CourseRelUser();
         $courseRelUser->setCourse($this);

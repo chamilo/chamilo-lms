@@ -6,6 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Database;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -239,28 +240,28 @@ class CLp
     protected $subscribeUsers;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="created_on", type="datetime", nullable=false)
      */
     protected $createdOn;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="modified_on", type="datetime", nullable=false)
      */
     protected $modifiedOn;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="publicated_on", type="datetime", nullable=true)
      */
     protected $publicatedOn;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="expired_on", type="datetime", nullable=true)
      */
@@ -336,8 +337,8 @@ class CLp
         $this->autolaunch = 0;
         $this->maxAttempts = 0;
         $this->subscribeUsers = 0;
-        $this->createdOn = new \DateTime();
-        $this->modifiedOn = new \DateTime();
+        $this->createdOn = new DateTime();
+        $this->modifiedOn = new DateTime();
         $this->accumulateScormTime = 1;
         $this->items = new ArrayCollection();
     }
@@ -420,7 +421,7 @@ class CLp
      *
      * @return $this
      */
-    public function setCourse(Course $course)
+    public function setCourse($course)
     {
         $this->course = $course;
         $this->course->getLearningPaths()->add($this);
@@ -1053,7 +1054,7 @@ class CLp
     /**
      * Set createdOn.
      *
-     * @param \DateTime $createdOn
+     * @param DateTime $createdOn
      *
      * @return CLp
      */
@@ -1067,7 +1068,7 @@ class CLp
     /**
      * Get createdOn.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getCreatedOn()
     {
@@ -1077,7 +1078,7 @@ class CLp
     /**
      * Set modifiedOn.
      *
-     * @param \DateTime $modifiedOn
+     * @param DateTime $modifiedOn
      *
      * @return CLp
      */
@@ -1091,7 +1092,7 @@ class CLp
     /**
      * Get modifiedOn.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getModifiedOn()
     {
@@ -1101,7 +1102,7 @@ class CLp
     /**
      * Set publicatedOn.
      *
-     * @param \DateTime $publicatedOn
+     * @param DateTime $publicatedOn
      *
      * @return CLp
      */
@@ -1115,7 +1116,7 @@ class CLp
     /**
      * Get publicatedOn.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getPublicatedOn()
     {
@@ -1125,7 +1126,7 @@ class CLp
     /**
      * Set expiredOn.
      *
-     * @param \DateTime $expiredOn
+     * @param DateTime $expiredOn
      *
      * @return CLp
      */
@@ -1139,7 +1140,7 @@ class CLp
     /**
      * Get expiredOn.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getExpiredOn()
     {
@@ -1274,6 +1275,7 @@ class CLp
                 return $item;
             }
         }
+
         return null;
     }
 
@@ -1292,6 +1294,7 @@ class CLp
                 }
             }
         }
+
         return $last;
     }
 
@@ -1308,8 +1311,8 @@ class CLp
             $last = $this->getLastItemInFirstLevel();
             if (!is_null($last)) {
                 $finalItem->setPreviousItemId($last->getId());
-                \Database::getManager()->persist($finalItem);
-                \Database::getManager()->flush($finalItem);
+                Database::getManager()->persist($finalItem);
+                Database::getManager()->flush($finalItem);
             }
         }
     }

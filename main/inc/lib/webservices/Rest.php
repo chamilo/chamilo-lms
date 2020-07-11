@@ -1917,7 +1917,13 @@ class Rest extends WebService
                                     $fieldValue = $field['field_value'];
                                     if (!isset($fieldName) || !isset($fieldValue) ||
                                         !UserManager::update_extra_field_value($userId, $fieldName, $fieldValue)) {
-                                        throw new Exception(get_lang('CouldNotUpdateExtraFieldValue').': '.print_r($field, true));
+                                        throw new Exception(
+                                            sprintf(
+                                                '%s: %s',
+                                                get_lang('CouldNotUpdateExtraFieldValue'),
+                                                print_r($field, true)
+                                            )
+                                        );
                                     }
                                 }
                             } else {
@@ -2046,24 +2052,23 @@ class Rest extends WebService
      * Creates a learning path with items.
      *
      * @param array $spec with these keys :
-     *  session_id
-     *  course_code
-     *  lp_name (learning path name)
-     *  lp_cat_id (learning path category id)
-     *  items, a list of items which are arrays with these keys :
-     *      display_order_id (the display order number AND local item identifier, used in parent_id and prerequisite_id)
-     *      parent_id (references display_order_id)
-     *      type (c_lp_item.item_type : dir, document, quiz…)
-     *      name_to_find (course resource name)
-     *      title (learning path item title)
-     *      prerequisite_id (references display_order_id)
-     *      prerequisite_min_score
-     *      prerequisite_max_score
+     *                    session_id
+     *                    course_code
+     *                    lp_name (learning path name)
+     *                    lp_cat_id (learning path category id)
+     *                    items, a list of items which are arrays with these keys :
+     *                      display_order_id (position AND local item identifier, used in parent_id and prerequisite_id)
+     *                      parent_id (references display_order_id)
+     *                      type (c_lp_item.item_type : dir, document, quiz…)
+     *                      name_to_find (course resource name)
+     *                      title (learning path item title)
+     *                      prerequisite_id (references display_order_id)
+     *                      prerequisite_min_score
+     *                      prerequisite_max_score
      *
      * @throws Exception if an item is not found by type and name or a parameter is missing
      *
      * @return CLp the new learning path
-     *
      */
     public function createLearningPath(array $spec)
     {
@@ -2185,6 +2190,7 @@ class Rest extends WebService
             }
         }
         Database::getManager()->flush();
+
         return $learningPath;
     }
 

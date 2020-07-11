@@ -204,7 +204,7 @@ class CLpItem
     protected $prerequisiteMaxScore;
 
     /**
-     * @var CLp $learningPath
+     * @var CLp
      *
      * @ORM\ManyToOne(targetEntity="CLp", inversedBy="items")
      * @ORM\JoinColumn(name="lp_id", referencedColumnName="iid")
@@ -279,7 +279,7 @@ class CLpItem
         } else {
             foreach ($this->getSiblings() as $sibling) {
                 if ($this->displayOrder === $sibling->displayOrder) {
-                    $sibling->displayOrder ++;
+                    $sibling->displayOrder++;
                     Database::getManager()->persist($sibling);
                 }
             }
@@ -940,8 +940,6 @@ class CLpItem
     }
 
     /**
-     * @param CLp $clp
-     *
      * @return CLpItem
      */
     public function setLearningPath(CLp $clp)
@@ -967,7 +965,7 @@ class CLpItem
      *
      * @return $this
      */
-    public function setCourse(Course $course)
+    public function setCourse($course)
     {
         $this->course = $course;
         $this->course->getLearningPathItems()->add($this);
@@ -976,7 +974,7 @@ class CLpItem
     }
 
     /**
-     * Retrieves the list of this instance's siblings, that is all the other children of this item's parent
+     * Retrieves the list of this instance's siblings, that is all the other children of this item's parent.
      *
      * @return static[]
      */
@@ -988,11 +986,12 @@ class CLpItem
                 $siblings[] = $candidate;
             }
         }
+
         return $siblings;
     }
 
     /**
-     * Returns the previous sibling according to displayOrders only (not looking at previousItemId)
+     * Returns the previous sibling according to displayOrders only (not looking at previousItemId).
      *
      * @return static|null
      */
@@ -1008,11 +1007,12 @@ class CLpItem
                 }
             }
         }
+
         return $previousSibling;
     }
 
     /**
-     * Returns the next sibling according to displayOrders only (not looking at nextItemId)
+     * Returns the next sibling according to displayOrders only (not looking at nextItemId).
      *
      * @return static|null
      */
@@ -1028,6 +1028,7 @@ class CLpItem
                 }
             }
         }
+
         return $nextSibling;
     }
 }

@@ -58,6 +58,22 @@ class CQuizRelQuestion
     protected $exerciceId;
 
     /**
+     * @var CQuiz
+     *
+     * @ORM\ManyToOne(targetEntity="CQuiz", inversedBy="relQuestions")
+     * @ORM\JoinColumn(name="exercice_id", referencedColumnName="iid")
+     */
+    protected $quiz;
+
+    /**
+     * @var CQuizQuestion
+     *
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CQuizQuestion", inversedBy="relQuiz")
+     * @ORM\JoinColumn(name="question_id", referencedColumnName="iid")
+     */
+    protected $question;
+
+    /**
      * Set questionOrder.
      *
      * @param int $questionOrder
@@ -151,5 +167,15 @@ class CQuizRelQuestion
     public function getExerciceId()
     {
         return $this->exerciceId;
+    }
+
+    public function getQuiz()
+    {
+        return $this->quiz;
+    }
+
+    public function getQuestion()
+    {
+        return $this->question;
     }
 }

@@ -3,7 +3,11 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\Course;
+use Database;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\OptimisticLockException;
 
 /**
  * CForumForum.
@@ -15,6 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
  *  }
  * )
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks
  */
 class CForumForum
 {
@@ -194,6 +199,66 @@ class CForumForum
      * @ORM\Column(name="moderated", type="boolean", nullable=true)
      */
     protected $moderated;
+
+    /**
+     * @var Course
+     *
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="forums")
+     * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
+     */
+    protected $course;
+
+    public function __construct()
+    {
+        $this->forumId = 0;
+        $this->locked = 0;
+        $this->sessionId = 0;
+        $this->forumImage = '';
+        $this->lpId = 0;
+    }
+
+    /**
+     * @return EntityRepository
+     */
+    public static function getRepository()
+    {
+        return Database::getManager()->getRepository('ChamiloCourseBundle:CForumForum');
+    }
+
+    /**
+     * @ORM\PostPersist
+     *
+     * @throws OptimisticLockException
+     */
+    public function postPersist()
+    {
+        if (is_null($this->forumId)) {
+            $this->forumId = $this->iid;
+            Database::getManager()->persist($this);
+            Database::getManager()->flush($this);
+        }
+    }
+
+    /**
+     * @return Course
+     */
+    public function getCourse()
+    {
+        return $this->course;
+    }
+
+    /**
+     * @param Course $course
+     *
+     * @return $this
+     */
+    public function setCourse(Course $course)
+    {
+        $this->course = $course;
+        $this->course->getForums()->add($this);
+
+        return $this;
+    }
 
     /**
      * Set forumTitle.

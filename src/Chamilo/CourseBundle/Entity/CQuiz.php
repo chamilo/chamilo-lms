@@ -3,7 +3,12 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\Course;
+use Database;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\OptimisticLockException;
 
 /**
  * CQuiz.
@@ -16,6 +21,7 @@ use Doctrine\ORM\Mapping as ORM;
  *  }
  * )
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks
  */
 class CQuiz
 {
@@ -156,7 +162,7 @@ class CQuiz
 
     /**
      * @var bool
-     * @ORm\Column(name="save_correct_answers", type="boolean", nullable=false)
+     * @ORM\Column(name="save_correct_answers", type="boolean", nullable=false)
      */
     protected $saveCorrectAnswers;
 
@@ -217,11 +223,82 @@ class CQuiz
     protected $exerciseCategoryId;
 
     /**
+     * @var Course
+     *
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="quizzes")
+     * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
+     */
+    protected $course;
+
+    /**
+     * @var CQuizRelQuestion[]|ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CQuizRelQuestion", mappedBy="quiz"))
+     */
+    protected $relQuestions;
+
+    /**
      * CQuiz constructor.
      */
     public function __construct()
     {
         $this->hideQuestionTitle = false;
+        $this->type = ONE_PER_PAGE;
+        $this->random = 0;
+        $this->randomAnswers = 0;
+        $this->active = 1;
+        $this->resultsDisabled = 0;
+        $this->maxAttempt = 1;
+        $this->feedbackType = 0;
+        $this->expiredTime = 0;
+        $this->propagateNeg = 0;
+        $this->saveCorrectAnswers = 0;
+        $this->reviewAnswers = 0;
+        $this->randomByCategory = 0;
+        $this->displayCategoryName = 0;
+    }
+
+    /**
+     * @return EntityRepository
+     */
+    public static function getRepository()
+    {
+        return Database::getManager()->getRepository('ChamiloCourseBundle:CQuiz');
+    }
+
+    /**
+     * @return Course
+     */
+    public function getCourse()
+    {
+        return $this->course;
+    }
+
+    /**
+     * @param Course $course
+     *
+     * @return $this
+     */
+    public function setCourse(Course $course)
+    {
+        $this->course = $course;
+        $this->course->getQuizzes()->add($this);
+
+        return $this;
+    }
+
+    /**
+     * @ORM\PostPersist
+     *
+     * @throws OptimisticLockException
+     */
+    public function postPersist()
+    {
+        if (is_null($this->id)) {
+            $this->id = $this->iid;
+            Database::getManager()->persist($this);
+            Database::getManager()->flush($this);
+        }
     }
 
     /**
@@ -854,5 +931,17 @@ class CQuiz
         $this->iid = $iid;
 
         return $this;
+    }
+
+    /**
+     * @return int sum of question's ponderation
+     */
+    public function getMaxScore()
+    {
+        $maxScore = 0;
+        foreach ($this->relQuestions as $relQuestion) {
+            $maxScore += $relQuestion->getQuestion()->getPonderation();
+        }
+        return $maxScore;
     }
 }

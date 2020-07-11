@@ -3,11 +3,24 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use AddCourse;
+use Chamilo\CourseBundle\Entity\CDocument;
+use Chamilo\CourseBundle\Entity\CForumForum;
+use Chamilo\CourseBundle\Entity\CLink;
+use Chamilo\CourseBundle\Entity\CLp;
+use Chamilo\CourseBundle\Entity\CLpCategory;
+use Chamilo\CourseBundle\Entity\CLpItem;
+use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\UserBundle\Entity\User;
+use CourseManager;
+use Database;
+use DateInterval;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Exception;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -27,7 +40,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @UniqueEntity("visualCode")
  * @UniqueEntity("directory")
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\CourseRepository")
- * @ORM\EntityListeners({"Chamilo\CoreBundle\Entity\Listener\CourseListener"})
  */
 class Course
 {
@@ -283,12 +295,219 @@ class Course
     protected $room;
 
     /**
+     * @ORM\ManyToMany(targetEntity="AccessUrl")
+     * @ORM\JoinTable(name="access_url_rel_course",
+     *      joinColumns={@ORM\JoinColumn(name="c_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="access_url_id", referencedColumnName="id")}
+     * )
+     */
+    protected $accessUrls;
+
+    /**
+     * @var ArrayCollection|CLpCategory[]
+     *
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CourseBundle\Entity\CLpCategory",
+     *     mappedBy="course",
+     *     cascade={"persist", "remove"}
+     * )
+     */
+    protected $learningPathCategories;
+
+    /**
+     * @var ArrayCollection|CLpItem[]
+     *
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CourseBundle\Entity\CLpItem",
+     *     mappedBy="course",
+     *     cascade={"persist", "remove"}
+     * )
+     */
+    protected $learningPathItems;
+
+    /**
+     * @var ArrayCollection|CDocument[]
+     *
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CourseBundle\Entity\CDocument",
+     *     mappedBy="course",
+     *     cascade={"persist", "remove"}
+     * )
+     */
+    protected $documents;
+
+    /**
+     * @var ArrayCollection|CForumForum[]
+     *
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CourseBundle\Entity\CForumForum",
+     *     mappedBy="course",
+     *     cascade={"persist", "remove"}
+     *     )
+     */
+    protected $forums;
+
+    /**
+     * @var ArrayCollection|CLink[]
+     *
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CourseBundle\Entity\CLink",
+     *     mappedBy="course",
+     *     cascade={"persist", "remove"}
+     *     )
+     */
+    protected $links;
+
+    /**
+     * @var ArrayCollection|CQuiz[]
+     *
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CourseBundle\Entity\CQuiz",
+     *     mappedBy="course",
+     *     cascade={"persist", "remove"}
+     *     )
+     */
+    protected $quizzes;
+
+    /**
+     * @var ArrayCollection|CLp[]
+     *
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CourseBundle\Entity\CLp",
+     *     mappedBy="course",
+     *     cascade={"persist", "remove"}
+     *     )
+     */
+    protected $learningPaths;
+
+    /**
      * Constructor.
      */
     public function __construct()
     {
         $this->creationDate = new \DateTime();
         $this->users = new ArrayCollection();
+        $this->accessUrls = new ArrayCollection();
+        $this->documents = new ArrayCollection();
+        $this->forums = new ArrayCollection();
+        $this->links = new ArrayCollection();
+        $this->quizzes = new ArrayCollection();
+        $this->learningPathCategories = new ArrayCollection();
+        $this->learningPaths = new ArrayCollection();
+        $this->learningPathItems = new ArrayCollection();
+    }
+
+    /**
+     * @return Repository\CourseRepository|EntityRepository
+     */
+    public static function getRepository()
+    {
+        return Database::getManager()->getRepository('ChamiloCoreBundle:Course');
+    }
+
+    /**
+     * @return Course|null
+     */
+    public static function getCurrentCourse()
+    {
+        return self::getRepository()->find(api_get_course_int_id());
+    }
+
+    /**
+     * Sets sane values if still unset.
+     * Makes directory if missing.
+     *
+     * @ORM\PrePersist
+     *
+     * @throws Exception
+     */
+    public function prePersist()
+    {
+        if (empty($this->title)) {
+            throw new Exception('This course is missing a title');
+        }
+        if (empty($this->code)) {
+            $this->code = substr(
+                preg_replace('/[^A-Z0-9]/', '', strtoupper(api_replace_dangerous_char($this->title))),
+                0,
+                CourseManager::MAX_COURSE_LENGTH_CODE
+            );
+        }
+        if (empty($this->directory) || empty($this->visualCode)) {
+            $keys = AddCourse::define_course_keys($this->code, '');
+            if (!count($keys)) {
+                throw new Exception('Could not define course keys');
+            }
+            if (empty($this->directory)) {
+                $this->directory = $keys['currentCourseRepository'];
+            }
+            if (empty($this->visualCode)) {
+                $this->visualCode = $keys['currentCourseCode'];
+            }
+        }
+        if (is_null($this->courseLanguage)) {
+            $this->courseLanguage = api_get_setting('platformLanguage');
+        }
+        if (is_null($this->description)) {
+            $this->description = get_lang('CourseDescription');
+        }
+        if (is_null($this->categoryCode)) {
+            $this->categoryCode = '';
+        }
+        if (is_null($this->visibility)) {
+            $this->visibility = api_get_setting(
+                'courses_default_creation_visibility'
+            ) ?: COURSE_VISIBILITY_OPEN_PLATFORM;
+        }
+        if (is_null($this->showScore)) {
+            $this->showScore = 1;
+        }
+        if (is_null($this->diskQuota)) {
+            $this->diskQuota = api_get_setting('default_document_quotum');
+        }
+        $this->lastEdit = new \DateTime();
+        if (is_null($this->expirationDate)) {
+            $this->expirationDate = new \DateTime();
+            $this->expirationDate->add(new DateInterval('P1Y'));
+        }
+        $absolutePath = $this->getAbsolutePath();
+        if (!file_exists($absolutePath)) {
+            AddCourse::prepare_course_repository($this->directory);
+        }
+        $this->accessUrls->add(AccessUrl::getRepository()->find(api_get_current_access_url_id()));
+    }
+
+    /**
+     * Removes the course's directory.
+     *
+     * @ORM\PostRemove
+     *
+     * @throws Exception
+     */
+    public function postRemove()
+    {
+        $absolutePath = $this->getAbsolutePath();
+        if (!file_exists($absolutePath)) {
+            if (!rmdir($absolutePath)) {
+                error_log('Could not remove the course directory '.$absolutePath);
+            }
+        }
+    }
+
+    /**
+     * Builds the course's directory absolute path.
+     *
+     * @throws Exception on undefined directory
+     *
+     * @return string the course's directory absolute path
+     */
+    public function getAbsolutePath()
+    {
+        if (empty($this->directory)) {
+            throw new Exception('this course does not have a directory yet');
+        }
+
+        return api_get_path(SYS_COURSE_PATH).$this->directory;
     }
 
     /**
@@ -485,11 +704,15 @@ class Course
     /**
      * Set id.
      *
-     * @return int
+     * @param int $id
+     *
+     * @return Course
      */
     public function setId($id)
     {
         $this->id = $id;
+
+        return $this;
     }
 
     /**
@@ -1146,6 +1369,97 @@ class Course
         }
 
         return $this;
+    }
+
+    /**
+     * @return CLpCategory[]|ArrayCollection
+     */
+    public function getLearningPathCategories()
+    {
+        return $this->learningPathCategories;
+    }
+
+    /**
+     * @return CDocument[]|ArrayCollection
+     */
+    public function getDocuments()
+    {
+        return $this->documents;
+    }
+
+    /**
+     * @return CForumForum[]|ArrayCollection
+     */
+    public function getForums()
+    {
+        return $this->forums;
+    }
+
+    /**
+     * @return CQuiz[]|ArrayCollection
+     */
+    public function getQuizzes()
+    {
+        return $this->quizzes;
+    }
+
+    /**
+     * @return CLink[]|ArrayCollection
+     */
+    public function getLinks()
+    {
+        return $this->links;
+    }
+
+    /**
+     * @return CLp[]|ArrayCollection
+     */
+    public function getLearningPaths()
+    {
+        return $this->learningPaths;
+    }
+
+    /**
+     * Searches and returns the resource of a specific type having a specific title.
+     *
+     * @param string $type  'dir', 'document', 'quiz'… (supported values are hardcoded in this function)
+     * @param string $title the title of the specific resource to find
+     *
+     * @throws Exception when not found or more than one found
+     *
+     * @return object the resource
+     */
+    public function findResource($type, $title)
+    {
+        $collectionsAndColumns = [
+            // type          collection           column
+            'document'   => [$this->documents,   'title'],
+            'final_item' => [$this->documents,   'title'],
+            'forum'      => [$this->forums, 'forumTitle'],
+            'link'       => [$this->links,       'title'],
+            'quiz'       => [$this->quizzes,     'title'],
+        ];
+        if (!array_key_exists($type, $collectionsAndColumns)) {
+            throw new Exception(sprintf('unsupported resource type "%s"', $type));
+        }
+        list($collection, $column) = $collectionsAndColumns[$type];
+        $resources = $collection->matching(Criteria::create()->where(Criteria::expr()->eq($column, $title)));
+        if (empty($resources)) {
+            throw new Exception(sprintf('%s "%s" not found', $type, $title));
+        }
+        if (count($resources) > 1) {
+            throw new Exception(sprintf('more than one %s "%s" found', $type, $title));
+        }
+
+        return $resources[0];
+    }
+
+    /**
+     * @return CLpItem[]|ArrayCollection
+     */
+    public function getLearningPathItems()
+    {
+        return $this->learningPathItems;
     }
 
     /**

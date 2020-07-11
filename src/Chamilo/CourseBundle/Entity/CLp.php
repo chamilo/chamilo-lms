@@ -3,7 +3,13 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Session;
+use Database;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\OptimisticLockException;
 
 /**
  * CLp.
@@ -16,6 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
  *  }
  * )
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks
  */
 class CLp
 {
@@ -267,18 +274,205 @@ class CLp
     protected $accumulateScormTime;
 
     /**
+     * @var Course
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="learningPaths")
+     * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
+     */
+    protected $course;
+
+    /**
+     * @var Session
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session", inversedBy="learningPaths")
+     * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
+     */
+    /*protected $session;*/
+
+    /**
+     * @var CLpCategory
+     *
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CLpCategory", inversedBy="learningPaths")
+     * @ORM\JoinColumn(name="category_id", referencedColumnName="iid")
+     */
+    /*protected $category;*/
+
+    /**
+     * @var ArrayCollection|CLpItem[]
+     *
+     * @ORM\OneToMany(
+     *     targetEntity="CLpItem",
+     *     mappedBy="learningPath",
+     *     orphanRemoval=true,
+     *     cascade={"persist", "remove"}
+     * )
+     */
+    protected $items;
+
+    /**
      * Constructor.
      */
     public function __construct()
     {
+        $this->sessionId = api_get_session_id();
+        $this->categoryId = 0;
         $this->defaultViewMod = 'embedded';
         $this->defaultEncoding = 'UTF-8';
         $this->displayOrder = 0;
         $this->contentLocal = 'local';
         $this->preventReinit = true;
         $this->useMaxScore = 1;
+        $this->lpType = 1;
+        $this->path = '';
+        $this->forceCommit = 0;
+        $this->contentMaker = 'Chamilo';
+        $this->contentLicense = '';
+        $this->jsLib = '';
+        $this->debug = 0;
+        $this->theme = '';
+        $this->previewImage = '';
+        $this->author = '';
+        $this->prerequisite = ''; // 0 ?
+        $this->hideTocFrame = 0;
+        $this->seriousgameMode = 0;
+        $this->autolaunch = 0;
+        $this->maxAttempts = 0;
+        $this->subscribeUsers = 0;
         $this->createdOn = new \DateTime();
+        $this->modifiedOn = new \DateTime();
+        $this->accumulateScormTime = 1;
+        $this->items = new ArrayCollection();
     }
+
+    /**
+     * @return EntityRepository
+     */
+    public static function getRepository()
+    {
+        return Database::getManager()->getRepository('ChamiloCourseBundle:CLp');
+    }
+
+    /**
+     * If course is not yet set, take the current course.
+     * Appends a number to name if it is already taken by another learning path in the same course.
+     * Computes displayOrder if still zéro.
+     *
+     * @ORM\PrePersist
+     */
+    public function prePersist()
+    {
+        if (is_null($this->course)) {
+            $this->course = Course::getCurrentCourse();
+        }
+
+        $coursesOtherLearningPaths = $this->course->getLearningPaths()->filter(function ($lp) {
+            return $this !== $lp;
+        });
+
+        $originalName = $this->name;
+        $counter = 0;
+        while ($coursesOtherLearningPaths->exists(function ($key, $lp) {
+            return $lp->name === $this->name;
+        })) {
+            $counter++;
+            $this->name = sprintf('%s - %d', $originalName, $counter);
+        }
+
+        if (0 == $this->displayOrder) {
+            $this->displayOrder = $coursesOtherLearningPaths->isEmpty()
+                ? 1
+                : (
+                    1 + max(
+                        $coursesOtherLearningPaths->map(
+                            function ($lp) {
+                                return $lp->displayOrder;
+                            }
+                        )->toArray()
+                    )
+                );
+        }
+    }
+
+    /**
+     * If id is null, copies iid to id and writes again.
+     *
+     * @throws OptimisticLockException
+     *
+     * @ORM\PostPersist
+     */
+    public function postPersist()
+    {
+        if (is_null($this->id)) {
+            $this->id = $this->iid;
+            Database::getManager()->persist($this);
+            Database::getManager()->flush($this);
+        }
+    }
+
+    /**
+     * @return Course
+     */
+    public function getCourse()
+    {
+        return $this->course;
+    }
+
+    /**
+     * @param Course $course
+     *
+     * @return $this
+     */
+    public function setCourse(Course $course)
+    {
+        $this->course = $course;
+        $this->course->getLearningPaths()->add($this);
+
+        return $this;
+    }
+
+    /**
+     * @return Session
+     */
+    /*public function getSession()
+    {
+        return $this->session;
+    }*/
+
+    /**
+     * @param Session $session
+     *
+     * @return $this
+     */
+    /*public function setSession(Session $session)
+    {
+        $this->session = $session;
+        if (!is_null($session)) {
+            $this->session->getLearningPaths()->add($this);
+        }
+
+        return $this;
+    }*/
+
+    /**
+     * @return CLpCategory
+     */
+    /*public function getCategory()
+    {
+        return $this->category;
+    }*/
+
+    /**
+     * @param CLpCategory $category
+     *
+     * @return $this
+     */
+    /*public function setCategory(CLpCategory $category)
+    {
+        $this->category = $category;
+        if (!is_null($category)) {
+            $this->category->getLearningPaths()->add($this);
+        }
+
+        return $this;
+    }*/
 
     /**
      * Set lpType.
@@ -1058,5 +1252,65 @@ class CLp
     public function getSubscribeUsers()
     {
         return $this->subscribeUsers;
+    }
+
+    /**
+     * @return ArrayCollection|CLpItem[]
+     */
+    public function getItems()
+    {
+        return $this->items;
+    }
+
+    /**
+     * Returns this learning path's final item.
+     *
+     * @return CLpItem|null the final item
+     */
+    public function getFinalItem()
+    {
+        foreach ($this->items as $item) {
+            if ($item->getItemType() == TOOL_LP_FINAL_ITEM) {
+                return $item;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Returns this learning path's last item in first level that is not the final item.
+     *
+     * @return CLpItem|null the last item
+     */
+    public function getLastItemInFirstLevel()
+    {
+        $last = null;
+        foreach ($this->items as $item) {
+            if (0 == $item->getParentItemId() && $item->getItemType() != TOOL_LP_FINAL_ITEM) {
+                if (is_null($last) || $last->getDisplayOrder() < $item->getDisplayOrder()) {
+                    $last = $item;
+                }
+            }
+        }
+        return $last;
+    }
+
+    /**
+     * Updates this learning path's final item previous item id.
+     * Sets it to the last item in first level.
+     *
+     * @throws OptimisticLockException
+     */
+    public function updateFinalItemsPreviousItemId()
+    {
+        $finalItem = $this->getFinalItem();
+        if (!is_null($finalItem)) {
+            $last = $this->getLastItemInFirstLevel();
+            if (!is_null($last)) {
+                $finalItem->setPreviousItemId($last->getId());
+                \Database::getManager()->persist($finalItem);
+                \Database::getManager()->flush($finalItem);
+            }
+        }
     }
 }

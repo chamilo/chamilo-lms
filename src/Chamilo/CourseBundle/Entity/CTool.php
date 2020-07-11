@@ -3,6 +3,7 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\Course;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -125,6 +126,14 @@ class CTool
      * @ORM\Column(name="custom_icon", type="string", length=255, nullable=true)
      */
     protected $customIcon;
+
+    /**
+     * @var Course
+     *
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="tools")
+     * @ORM\JoinColumn(name="c_id", referencedColumnName="iid")
+     */
+    protected $course;
 
     /**
      * @return int
@@ -470,6 +479,27 @@ class CTool
     public function setCustomIcon($customIcon)
     {
         $this->customIcon = $customIcon;
+
+        return $this;
+    }
+
+    /**
+     * @return Course
+     */
+    public function getCourse()
+    {
+        return $this->course;
+    }
+
+    /**
+     * @param Course $course
+     *
+     * @return $this
+     */
+    public function setCourse(Course $course)
+    {
+        $this->course = $course;
+        $this->course->getTools()->add($this);
 
         return $this;
     }

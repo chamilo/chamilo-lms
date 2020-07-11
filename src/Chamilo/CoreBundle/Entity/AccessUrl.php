@@ -25,7 +25,7 @@ class AccessUrl
     /**
      * @ORM\OneToMany(targetEntity="AccessUrlRelCourse", mappedBy="url", cascade={"persist"}, orphanRemoval=true)
      */
-    protected $course;
+    protected $courses;
 
     /**
      * @var string
@@ -86,6 +86,14 @@ class AccessUrl
     {
         $this->tms = new \DateTime();
         $this->createdBy = 1;
+    }
+
+    /**
+     * @return Repository\AccessUrlRepository|\Doctrine\ORM\EntityRepository
+     */
+    public static function getRepository()
+    {
+        return \Database::getManager()->getRepository('ChamiloCoreBundle:AccessUrl');
     }
 
     /**

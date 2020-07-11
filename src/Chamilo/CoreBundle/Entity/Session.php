@@ -3,10 +3,13 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\UserBundle\Entity\User;
+use Database;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 //use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -220,6 +223,17 @@ class Session
     protected $studentPublications;
 
     /**
+     * @var ArrayCollection|CLp[]
+     *
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CourseBundle\Entity\CLp",
+     *     mappedBy="session",
+     *     cascade={"persist", "remove"}
+     *     )
+     */
+    // protected $learningPaths;
+
+    /**
      * Constructor.
      */
     public function __construct()
@@ -243,7 +257,29 @@ class Session
         $this->showDescription = false;
         $this->category = null;
         $this->studentPublications = new ArrayCollection();
+        $this->sendSubscriptionNotification = 0;
     }
+
+    /**
+     * @return Repository\SessionRepository|EntityRepository
+     */
+    public static function getRepository()
+    {
+        return Database::getManager()->getRepository('ChamiloCoreBundle:Session');
+    }
+
+    /**
+     * @return Session|null
+     */
+    public static function getCurrentSession()
+    {
+        $sessionId = api_get_session_id();
+        if (0 != $sessionId) {
+            return self::getRepository()->find($sessionId);
+        }
+        return null;
+    }
+
 
     /**
      * @return string
@@ -419,7 +455,7 @@ class Session
     public function isRelatedToCourse(Course $course)
     {
         return !is_null(
-            \Database::getManager()->getRepository('ChamiloCoreBundle:SessionRelCourse')->findOneBy([
+            Database::getManager()->getRepository('ChamiloCoreBundle:SessionRelCourse')->findOneBy([
                 'session' => $this,
                 'course' => $course,
             ])
@@ -1181,5 +1217,13 @@ class Session
         $this->position = $position;
 
         return $this;
+    }*/
+
+    /**
+     * @return CLp[]|ArrayCollection
+     */
+    /*public function getLearningPaths()
+    {
+        return $this->learningPaths;
     }*/
 }

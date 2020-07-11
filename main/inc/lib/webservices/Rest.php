@@ -5,7 +5,9 @@
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpCategory;
+use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CNotebook;
 use Chamilo\CourseBundle\Entity\Repository\CNotebookRepository;
 use Chamilo\UserBundle\Entity\User;
@@ -68,6 +70,7 @@ class Rest extends WebService
     const USERNAME_EXIST = 'username_exist';
     const GET_COURSE_QUIZ_MDL_COMPAT = 'get_course_quiz_mdl_compat';
     const UPDATE_USER_PAUSE_TRAINING = 'update_user_pause_training';
+    const CREATE_LEARNINGPATH = 'create_learningpath';
 
     /**
      * @var Session
@@ -2037,6 +2040,152 @@ class Rest extends WebService
         );
 
         return [$json];
+    }
+
+    /**
+     * Creates a learning path with items.
+     *
+     * @param array $spec with these keys :
+     *  session_id
+     *  course_code
+     *  lp_name (learning path name)
+     *  lp_cat_id (learning path category id)
+     *  items, a list of items which are arrays with these keys :
+     *      display_order_id (the display order number AND local item identifier, used in parent_id and prerequisite_id)
+     *      parent_id (references display_order_id)
+     *      type (c_lp_item.item_type : dir, document, quiz…)
+     *      name_to_find (course resource name)
+     *      title (learning path item title)
+     *      prerequisite_id (references display_order_id)
+     *      prerequisite_min_score
+     *      prerequisite_max_score
+     *
+     * @throws Exception if an item is not found by type and name or a parameter is missing
+     *
+     * @return CLp the new learning path
+     *
+     */
+    public function createLearningPath(array $spec)
+    {
+        foreach (['course_code', 'lp_name'] as $requiredParameter) {
+            if (!array_key_exists($requiredParameter, $spec)) {
+                throw new Exception("missing parameter '$requiredParameter': ".print_r($spec, true));
+            }
+        }
+        $courseCode = $spec['course_code'];
+        $course = Course::getRepository()->findOneByCode($courseCode);
+        if (is_null($course)) {
+            throw new Exception("no course has code '$courseCode'");
+        }
+        $learningPath = (new CLp())
+            ->setCourse($course)
+            ->setName($spec['lp_name']);
+        if (array_key_exists('session_id', $spec)) {
+            $sessionId = $spec['session_id'];
+            if (0 == $sessionId) {
+                $learningPath->setSessionId(0);
+            } else {
+                $session = Session::getRepository()->find($sessionId);
+                if (is_null($session)) {
+                    throw new Exception("no session has id '$sessionId'");
+                }
+                /*$learningPath->setSession($session);*/
+                $learningPath->setSessionId($sessionId);
+            }
+        }
+        if (array_key_exists('lp_cat_id', $spec)) {
+            $categoryId = $spec['lp_cat_id'];
+            if (0 == $categoryId) {
+                $learningPath->setCategoryId(0);
+            } else {
+                $category = CLpCategory::getRepository()->find($categoryId);
+                if (is_null($category)) {
+                    throw new Exception("no category has id '$categoryId'");
+                }
+                /*$learningPath->setCategory($category);*/
+                $learningPath->setCategoryId($categoryId);
+            }
+        }
+        if (array_key_exists('items', $spec)) {
+            $itemSpecs = $spec['items'];
+            if (!is_array($itemSpecs)) {
+                throw new Exception('parameter "items" must be an array');
+            }
+            if (!empty($itemSpecs)) {
+                $parentDisplayOrders = [0 => 0];
+                $prerequisitesDisplayOrders = [];
+                foreach ($itemSpecs as $itemSpec) {
+                    if (!array_key_exists('display_order_id', $itemSpec)) {
+                        throw new Exception(
+                            sprintf('display_order_id missing from item spec: %s', print_r($itemSpec, true))
+                        );
+                    }
+                    $displayOrder = $itemSpec['display_order_id'];
+                    $type = (array_key_exists('type', $itemSpec) ? $itemSpec['type'] : 'dir');
+                    if (!array_key_exists('title', $itemSpec)) {
+                        throw new Exception(sprintf('type missing from item spec: %s', print_r($itemSpec, true)));
+                    }
+                    $title = $itemSpec['title'];
+                    $item = (new CLpItem())
+                        ->setLearningPath($learningPath)
+                        ->setDisplayOrder($displayOrder)
+                        ->setItemType($type)
+                        ->setTitle($title);
+                    if (in_array($type, ['document', 'final_item', 'forum', 'link', 'quiz'])) {
+                        if (!array_key_exists('name_to_find', $itemSpec)) {
+                            throw new Exception(
+                                sprintf('name_to_find missing from %s spec: %s', $type, print_r($itemSpec, true))
+                            );
+                        }
+                        $resource = $course->findResource($type, $itemSpec['name_to_find']);
+                        $item->setPath('forum' === $type ? $resource->getForumId() : $resource->getId());
+                    }
+                    if (array_key_exists($displayOrder, $parentDisplayOrders)) {
+                        throw new Exception(sprintf('this item display order is not unique: %s', $displayOrder));
+                    }
+                    $parentDisplayOrders[$displayOrder] = array_key_exists('parent_id', $itemSpec)
+                        ? $itemSpec['parent_id']
+                        : 0;
+                    if (array_key_exists('prerequisite_id', $itemSpec)) {
+                        $prerequisiteId = $itemSpec['prerequisite_id'];
+                        if (!empty($prerequisiteId)) {
+                            $prerequisitesDisplayOrders[$displayOrder] = $prerequisiteId;
+                            if (array_key_exists('prerequisite_min_score', $itemSpec)) {
+                                $prerequisiteMinScore = $itemSpec['prerequisite_min_score'];
+                                if (!empty($prerequisiteMinScore)) {
+                                    $item->setPrerequisiteMinScore($prerequisiteMinScore);
+                                }
+                            }
+                            if (array_key_exists('prerequisite_max_score', $itemSpec)) {
+                                $prerequisiteMaxScore = $itemSpec['prerequisite_max_score'];
+                                if (!empty($prerequisiteMaxScore)) {
+                                    $item->setPrerequisiteMaxScore($prerequisiteMaxScore);
+                                }
+                            }
+                        }
+                    }
+                }
+                Database::getManager()->persist($learningPath);
+                Database::getManager()->flush();
+                // now that items have real identifiers, set their parent, previous, next and prerequisite item ones
+                $idFromDisplayOrder = [0 => 0];
+                /** @var CLpItem $item */
+                foreach ($learningPath->getItems() as $item) {
+                    $idFromDisplayOrder[$item->getDisplayOrder()] = $item->getId();
+                }
+                $displayOrderNumbers = array_keys($idFromDisplayOrder);
+                sort($displayOrderNumbers);
+                foreach ($learningPath->getItems() as $item) {
+                    $displayOrder = $item->getDisplayOrder();
+                    $item->setParentItemId($idFromDisplayOrder[$parentDisplayOrders[$displayOrder]]);
+                    if (!empty($prerequisitesDisplayOrders[$displayOrder])) {
+                        $item->setPrerequisite($idFromDisplayOrder[$prerequisitesDisplayOrders[$displayOrder]]);
+                    }
+                }
+            }
+        }
+        Database::getManager()->flush();
+        return $learningPath;
     }
 
     /**

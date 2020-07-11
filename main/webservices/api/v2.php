@@ -217,9 +217,7 @@ try {
             $restResponse->setData($data);
             break;
         case Rest::SAVE_FORUM_POST:
-            if (
-                empty($_POST['title']) || empty($_POST['text']) || empty($_POST['thread']) || empty($_POST['forum'])
-            ) {
+            if (empty($_POST['title']) || empty($_POST['text']) || empty($_POST['thread']) || empty($_POST['forum'])) {
                 throw new Exception(get_lang('NoData'));
             }
 
@@ -310,7 +308,8 @@ try {
                 $_POST['sessionName'],
                 $_POST['startDate'],
                 $_POST['endDate'],
-                isset($_POST['extraFields']) ? $_POST['extraFields'] : []);
+                isset($_POST['extraFields']) ? $_POST['extraFields'] : []
+            );
             $restResponse->setData([$newSessionId]);
             break;
         case Rest::SUBSCRIBE_USER_TO_SESSION_FROM_USERNAME:
@@ -342,10 +341,9 @@ try {
             exit;
             break;
         case Rest::UPDATE_USER_PAUSE_TRAINING:
-            $allow = api_get_plugin_setting('pausetraining', 'tool_enable') === 'true';
-            $allowPauseFormation = api_get_plugin_setting('pausetraining', 'allow_users_to_edit_pause_formation') === 'true';
-
-            if (false === $allow || false === $allowPauseFormation) {
+            if (api_get_plugin_setting('pausetraining', 'tool_enable') !== 'true'
+                ||
+                api_get_plugin_setting('pausetraining', 'allow_users_to_edit_pause_formation') !== 'true') {
                 throw new Exception(get_lang('Plugin configured'));
             }
 
@@ -355,6 +353,10 @@ try {
             $plugin = PauseTraining::create();
             $data = $plugin->updateUserPauseTraining($_POST['user_id'], $_POST);
             $restResponse->setData([$data]);
+            break;
+        case Rest::CREATE_LEARNINGPATH:
+            $learningPath = $restApi->createLearningPath($_POST);
+            $restResponse->setData([$learningPath->getIid()]);
             break;
         default:
             throw new Exception(get_lang('InvalidAction'));

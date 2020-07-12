@@ -109,7 +109,7 @@ class CDocument
     public function __construct()
     {
         $this->size = 0;
-        $this->readonly = 0;
+        $this->readonly = false;
         $this->sessionId = 0;
     }
 

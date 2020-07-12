@@ -71,9 +71,9 @@ class CQuiz
     protected $sound;
 
     /**
-     * @var bool
+     * @var int
      *
-     * @ORM\Column(name="type", type="boolean", nullable=false)
+     * @ORM\Column(name="type", type="integer", nullable=false)
      */
     protected $type;
 
@@ -246,14 +246,14 @@ class CQuiz
         $this->hideQuestionTitle = false;
         $this->type = ONE_PER_PAGE;
         $this->random = 0;
-        $this->randomAnswers = 0;
-        $this->active = 1;
+        $this->randomAnswers = false;
+        $this->active = true;
         $this->resultsDisabled = 0;
         $this->maxAttempt = 1;
         $this->feedbackType = 0;
         $this->expiredTime = 0;
         $this->propagateNeg = 0;
-        $this->saveCorrectAnswers = 0;
+        $this->saveCorrectAnswers = false;
         $this->reviewAnswers = 0;
         $this->randomByCategory = 0;
         $this->displayCategoryName = 0;
@@ -377,7 +377,7 @@ class CQuiz
     /**
      * Set type.
      *
-     * @param bool $type
+     * @param int $type
      *
      * @return CQuiz
      */
@@ -391,7 +391,7 @@ class CQuiz
     /**
      * Get type.
      *
-     * @return bool
+     * @return int
      */
     public function getType()
     {

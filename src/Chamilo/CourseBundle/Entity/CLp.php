@@ -11,6 +11,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\OptimisticLockException;
+use Exception;
 
 /**
  * CLp.
@@ -323,17 +324,17 @@ class CLp
         $this->useMaxScore = 1;
         $this->lpType = 1;
         $this->path = '';
-        $this->forceCommit = 0;
+        $this->forceCommit = false;
         $this->contentMaker = 'Chamilo';
         $this->contentLicense = '';
         $this->jsLib = '';
-        $this->debug = 0;
+        $this->debug = false;
         $this->theme = '';
         $this->previewImage = '';
         $this->author = '';
-        $this->prerequisite = ''; // 0 ?
-        $this->hideTocFrame = 0;
-        $this->seriousgameMode = 0;
+        $this->prerequisite = 0;
+        $this->hideTocFrame = false;
+        $this->seriousgameMode = false;
         $this->autolaunch = 0;
         $this->maxAttempts = 0;
         $this->subscribeUsers = 0;
@@ -357,11 +358,15 @@ class CLp
      * Computes displayOrder if still zéro.
      *
      * @ORM\PrePersist
+     * @throws Exception
      */
     public function prePersist()
     {
         if (is_null($this->course)) {
             $this->course = Course::getCurrentCourse();
+            if (is_null($this->course)) {
+                throw new Exception('cannot persist a leaning path without course');
+            }
         }
 
         $coursesOtherLearningPaths = $this->course->getLearningPaths()->filter(function ($lp) {

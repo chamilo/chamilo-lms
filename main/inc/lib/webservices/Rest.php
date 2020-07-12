@@ -2057,14 +2057,14 @@ class Rest extends WebService
      *                    lp_name (learning path name)
      *                    lp_cat_id (learning path category id)
      *                    items, a list of items which are arrays with these keys :
-     *                      display_order_id (position AND local item identifier, used in parent_id and prerequisite_id)
-     *                      parent_id (references display_order_id)
-     *                      type (c_lp_item.item_type : dir, document, quiz…)
-     *                      name_to_find (course resource name)
-     *                      title (learning path item title)
-     *                      prerequisite_id (references display_order_id)
-     *                      prerequisite_min_score
-     *                      prerequisite_max_score
+     *                    * display_order_id (position AND local item identifier, used in parent_id and prerequisite_id)
+     *                    * parent_id (references display_order_id)
+     *                    * type (c_lp_item.item_type : dir, document, quiz…)
+     *                    * name_to_find (course resource name)
+     *                    * title (learning path item title)
+     *                    * prerequisite_id (references display_order_id)
+     *                    * prerequisite_min_score
+     *                    * prerequisite_max_score
      *
      * @throws Exception if an item is not found by type and name or a parameter is missing
      *

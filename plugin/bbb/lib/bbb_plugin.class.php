@@ -207,7 +207,8 @@ class BBBPlugin extends Plugin
                 participant_id int(11) NOT NULL,
                 in_at datetime,
                 out_at datetime,
-                interface int NOT NULL DEFAULT 0
+                interface int NOT NULL DEFAULT 0,
+                close INT NOT NULL DEFAULT 0
             );"
         );
         $fieldLabel = 'plugin_bbb_course_users_limit';

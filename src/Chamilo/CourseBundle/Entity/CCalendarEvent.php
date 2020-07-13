@@ -4,6 +4,7 @@
 namespace Chamilo\CourseBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\OptimisticLockException;
 
 /**
  * CCalendarEvent.
@@ -16,6 +17,7 @@ use Doctrine\ORM\Mapping as ORM;
  *  }
  * )
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks
  */
 class CCalendarEvent
 {
@@ -112,6 +114,22 @@ class CCalendarEvent
      * @ORM\JoinColumn(name="room_id", referencedColumnName="id")
      */
     protected $room;
+
+    /**
+     * If id is null, copies iid to id and writes again.
+     *
+     * @ORM\PostPersist
+     *
+     * @throws OptimisticLockException
+     */
+    public function postPersist()
+    {
+        if (is_null($this->id)) { // keep this test to avoid recursion
+            $this->id = $this->iid;
+            \Database::getManager()->persist($this);
+            \Database::getManager()->flush($this);
+        }
+    }
 
     /**
      * Set title.

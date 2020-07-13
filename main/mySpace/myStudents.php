@@ -708,6 +708,18 @@ if (Skill::isAllowed($student_id, false)) {
         api_get_path(WEB_CODE_PATH).'badge/assign.php?'.http_build_query(['user' => $student_id])
     );
 }
+// All Attendance
+if (Skill::isAllowed($student_id, false)) {
+    echo Display::url(
+        Display::return_icon(
+            'attendance.png',
+            get_lang('CountDoneAttendance')." ** ",
+            null,
+            ICON_SIZE_MEDIUM
+        ),
+        api_get_path(WEB_CODE_PATH).'mySpace/all_attendance_list.php?student_id='.$student_id
+    );
+}
 
 $permissions = StudentFollowUpPlugin::getPermissions(
     $student_id,

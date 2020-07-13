@@ -1216,26 +1216,38 @@ class Attendance
     }
 
     /**
-     * Get registered users' attendance sheet inside current course.
+     * Get registered users' attendance sheet inside current course or course by id.
      *
      * @param int $attendanceId
      * @param int $user_id      for showing data for only one user (optional)
      * @param int $groupId
+     * @param int $course_id      if id = 0 get the current course
+     * @param DateTime    $startDate Filter atttendance sheet with a start date
+     * @param DateTime    $endDate Filter atttendance sheet with a end date
      *
      * @return array users attendance sheet data
      */
     public function get_users_attendance_sheet(
         $attendanceId,
         $user_id = 0,
-        $groupId = 0
+        $groupId = 0,
+        $course_id=0,
+        DateTime $startDate = null,
+        DateTime $endDate = null
     ) {
+        //Get actual course or by course_id
+        $course_id = (0 == $course_id)?api_get_course_int_id():$course_id;
         $tbl_attendance_sheet = Database::get_course_table(TABLE_ATTENDANCE_SHEET);
         $tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
         $attendance_calendar = $this->get_attendance_calendar(
             $attendanceId,
             'all',
             null,
-            $groupId
+            $groupId,
+            true,
+            $course_id,
+            $startDate,
+            $endDate
         );
         $calendar_ids = [];
         // get all dates from calendar by current attendance
@@ -1243,7 +1255,16 @@ class Attendance
             $calendar_ids[] = $cal['id'];
         }
 
-        $course_id = api_get_course_int_id();
+        $whereDate = '';
+        if (!empty($startDate)) {
+            $whereDate .= " AND cal.date_time >= '" . $startDate->format('Y-m-d H:i:s') . "'";
+        }
+        if (!empty($endDate)) {
+            $whereDate .= " AND cal.date_time <= '" . $endDate->format('Y-m-d H:i:s') . "'";
+        }
+
+        // moved at start of this function
+        // $course_id = api_get_course_int_id();
 
         $data = [];
         if (empty($user_id)) {
@@ -1280,6 +1301,7 @@ class Attendance
                             cal.c_id =  $course_id AND
                             att.user_id = '$user_id' AND
                             att.attendance_calendar_id IN (".implode(',', $calendar_ids).")
+                            $whereDate
                         ORDER BY date_time";
                 $res = Database::query($sql);
                 if (Database::num_rows($res) > 0) {
@@ -1433,13 +1455,16 @@ class Attendance
     }
 
     /**
-     * Get all attendance calendar data inside current attendance.
+     * Get all attendance calendar data inside current attendance or by course id.
      *
      * @param int    $attendanceId
      * @param string $type
      * @param int    $calendar_id
      * @param int    $groupId
      * @param bool   $showAll      = false show group calendar items or not
+     * @param int    $course_id
+     * @param DateTime    $startDate Filter calendar with a start date
+     * @param DateTime    $endDate Filter calendar with a end date
      *
      * @return array attendance calendar data
      */
@@ -1448,16 +1473,27 @@ class Attendance
         $type = 'all',
         $calendar_id = null,
         $groupId = 0,
-        $showAll = false
+        $showAll = false,
+        $course_id=0,
+        DateTime $startDate = null,
+        DateTime $endDate = null
     ) {
         $tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
         $tbl_acrg = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR_REL_GROUP);
         $attendanceId = intval($attendanceId);
-        $course_id = api_get_course_int_id();
-
+        $course_id = (0==$course_id)? api_get_course_int_id():$course_id;
+        $whereDate = '';
+        if (!empty($startDate)) {
+            $whereDate .= " AND c.date_time >= '" . $startDate->format('Y-m-d H:i:s') . "'";
+        }
+        if (!empty($endDate)) {
+            $whereDate .= " AND c.date_time <= '" . $endDate->format('Y-m-d H:i:s') . "'";
+        }
         if ($showAll) {
             $sql = "SELECT * FROM $tbl_attendance_calendar c
-                    WHERE c_id = $course_id AND attendance_id = '$attendanceId'";
+                    WHERE c_id = $course_id
+                      AND attendance_id = '$attendanceId'
+                        $whereDate";
         } else {
             $sql = "SELECT * FROM $tbl_attendance_calendar c
                     WHERE
@@ -1467,6 +1503,7 @@ class Attendance
                             SELECT calendar_id FROM $tbl_acrg
                             WHERE c_id = $course_id AND group_id != 0 AND group_id IS NOT NULL
                         )
+                        $whereDate
                     ";
         }
 
@@ -2255,5 +2292,134 @@ class Attendance
         ];
         $pdf = new PDF('A4', null, $params);
         $pdf->html_to_pdf_with_template($tableToString);
+    }
+
+
+    /**
+     * Return all course for a student between dates and order by key date (Y-m-d)
+     * @param int           $student_id
+     * @param DateTime|null $startDate
+     * @param DateTime|null $endDate
+     * @param bool          $orderDesc
+     *
+     * @return array
+     */
+    public function getCoursesWithAttendance (
+        $student_id = 0,
+        DateTime $startDate = null,
+        DateTime $endDate = null,
+        $orderDesc = true
+    ) {
+
+        $courseManager = new CourseManager();
+        $attendanceLib = new Attendance();
+        $data = [];
+        // unused by now
+        /*
+         $specialCourses = $courseManager::returnSpecialCourses(
+            $student_id, false, false
+        );
+         */
+        $courses = $courseManager::returnCourses(
+            $student_id,
+            false,
+            false
+        );
+
+        /* Get course with (in_category) and without (not_category) category */
+        foreach ($courses as $coursesK => $coursesV) {
+            $coursesWithNoCategory = $coursesV;
+            $totalCoursesNoCategory = count($coursesWithNoCategory);
+            for ($i = 0; $i < $totalCoursesNoCategory; $i++) {
+                $w = $coursesWithNoCategory[$i];
+                /* Get all attendance by courses*/
+                $attenances = $attendanceLib->get_attendances_list($w['course_id']);
+                $temp = [];
+                $sheetsProccessed = [];
+                $tempDate = [];
+                foreach ($attenances as $k => $v) {
+                    $attendance_id = $v['id'];
+                    $course_id = $w['course_id'];
+                    $sheets = $attendanceLib->get_users_attendance_sheet(
+                        $attendance_id,
+                        $student_id,
+                        0,
+                        $course_id,
+                        $startDate,
+                        $endDate
+                    );
+
+                    $sheetsProccessed[] = [];
+                    foreach ($sheets as $a => $b) {
+                        $totalb = count($b);
+                        $tempDate = [];
+                        for ($ii = 0; $ii < $totalb; $ii++) {
+                            $work = $b[$ii];
+                            $dateProccess = new DateTime($work[0]);
+                            $attendancesProccess = null;
+                            if(empty($endDate) && empty($startDate)) {
+                                $attendancesProccess = $work;
+
+                            } elseif(!empty($startDate) and empty($endDate)) {
+                                if($dateProccess >= $startDate) {
+
+                                    $attendancesProccess = $work;
+                                }
+                            } elseif(!empty($endDate) and empty($startDate)) {
+                                if($dateProccess <= $endDate) {
+                                    $attendancesProccess = $work;
+
+                                }
+                            } elseif(!empty($endDate) && !empty($startDate)) {
+
+                                if($dateProccess >= $startDate && $dateProccess <= $endDate) {
+
+                                    $attendancesProccess = $work;
+                                }
+                            }
+                            if(!empty($attendancesProccess)) {
+                                $fecha = $attendancesProccess['0'];
+                                $attendancesProccess[0] = $attendancesProccess[1];
+                                $attendancesProccess[1] = $fecha;
+
+                                $attendancesProccess[2] = $w['title'];
+                                $attendancesProccess['courseTitle'] = $w['title'];
+
+                                $attendancesProccess[3] = $w['real_id'];
+                                $attendancesProccess['courseId'] = $w['real_id'];
+
+                                $attendancesProccess[4] = $v['name'];
+                                $attendancesProccess['attendanceName'] = $v['name'];
+
+                                $attendancesProccess[5] = $v['id'];
+                                $attendancesProccess['attendanceId'] = $v['id'];
+                                if($attendancesProccess['presence'] == 1) {
+                                    $attendancesProccess['presence'] = get_lang('Present');
+                                    $attendancesProccess[0] = get_lang('Present');
+                                }
+                                $tempDate[] = $attendancesProccess;
+                                $corte = new DateTime($fecha);
+                                $data [$corte->format('Y-m-d')][] = $attendancesProccess;
+                            }
+
+                        }
+
+
+                    }
+                    $sheetsProccessed[] = $tempDate;
+                    $temp[] = $sheetsProccessed;
+                }
+                $courses['not_category'][$i]['attendanceSheet'] = $temp;
+            }
+        }
+
+        /* Order desc by date,  by default */
+        if($orderDesc == true) {
+            ksort($data);
+        } else {
+            krsort($data);
+        }
+
+        return $data;
     }
 }

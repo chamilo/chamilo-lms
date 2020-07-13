@@ -434,36 +434,42 @@ switch ($action) {
         if ($allowMessages === true) {
             $subject = isset($_POST['subject']) ? $_POST['subject'] : '';
             $message = isset($_POST['message']) ? $_POST['message'] : '';
-            $currentUserInfo = api_get_user_info();
-            MessageManager::sendMessageAboutUser(
-                $user_info,
-                $currentUserInfo,
-                $subject,
-                $message
-            );
 
-            // Send also message to all student bosses
-            $bossList = UserManager::getStudentBossList($student_id);
+            if (!empty($subject) && !empty($message)) {
+                $currentUserInfo = api_get_user_info();
+                MessageManager::sendMessageAboutUser(
+                    $user_info,
+                    $currentUserInfo,
+                    $subject,
+                    $message
+                );
 
-            if (!empty($bossList)) {
-                $url = api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$student_id;
-                $link = Display::url($url, $url);
+                // Send also message to all student bosses
+                $bossList = UserManager::getStudentBossList($student_id);
 
-                foreach ($bossList as $boss) {
-                    MessageManager::send_message_simple(
-                        $boss['boss_id'],
-                        sprintf(get_lang('BossAlertMsgSentToUserXTitle'), $user_info['complete_name']),
-                        sprintf(
-                            get_lang('BossAlertUserXSentMessageToUserYWithLinkZ'),
-                            $currentUserInfo['complete_name'],
-                            $user_info['complete_name'],
-                            $link
-                        )
-                    );
+                if (!empty($bossList)) {
+                    $url = api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$student_id;
+                    $link = Display::url($url, $url);
+
+                    foreach ($bossList as $boss) {
+                        MessageManager::send_message_simple(
+                            $boss['boss_id'],
+                            sprintf(get_lang('BossAlertMsgSentToUserXTitle'), $user_info['complete_name']),
+                            sprintf(
+                                get_lang('BossAlertUserXSentMessageToUserYWithLinkZ'),
+                                $currentUserInfo['complete_name'],
+                                $user_info['complete_name'],
+                                $link
+                            )
+                        );
+                    }
                 }
+
+                Display::addFlash(Display::return_message(get_lang('MessageSent')));
+            } else {
+                Display::addFlash(Display::return_message(get_lang('AllFieldsRequired'), 'warning'));
             }
 
-            Display::addFlash(Display::return_message(get_lang('MessageSent')));
             header('Location: '.$currentUrl);
             exit;
         }

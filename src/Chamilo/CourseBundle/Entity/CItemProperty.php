@@ -158,7 +158,7 @@ class CItemProperty
         $this->setCourse($course);
         $this->insertDate = new DateTime('now', new DateTimeZone('UTC'));
         $this->lasteditDate = new DateTime('now', new DateTimeZone('UTC'));
-        $this->lasteditUserId = api_get_user_entity(api_get_user_id() ?: api_get_anonymous_id());
+        $this->lasteditUserId = api_get_user_id() ?: api_get_anonymous_id();
     }
 
     /**

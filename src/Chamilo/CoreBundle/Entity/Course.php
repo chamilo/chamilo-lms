@@ -62,7 +62,7 @@ class Course
     protected $id;
 
     /**
-     * @var CourseRelUser|ArrayCollection
+     * @var CourseRelUser[]|ArrayCollection
      *
      * "orphanRemoval" is needed to delete the CourseRelUser relation
      * in the CourseAdmin class. The setUsers, getUsers, removeUsers and
@@ -421,7 +421,7 @@ class Course
      */
     public function __construct()
     {
-        $this->activateLegal = false;
+        $this->activateLegal = 0;
         $this->addTeachersToSessionsCourses = false;
         $this->creationDate = new DateTime('now', new DateTimeZone('utc'));
         $this->lastVisit = null;
@@ -653,7 +653,7 @@ class Course
     }
 
     /**
-     * @return CourseRelUser|ArrayCollection
+     * @return CourseRelUser[]|ArrayCollection
      */
     public function getUsers()
     {
@@ -1651,7 +1651,9 @@ class Course
                 if (!fclose($indexHtmlFile)) {
                     throw new Exception(sprintf('Could not close course repository subfolder index file "%s"', $indexHtmlFilePath));
                 }
-                @chmod($indexHtmlFile, $filePermissions);
+                if (!@chmod($indexHtmlFile, $filePermissions)) {
+                    // never mind, on some platforms it is not possible anyway
+                }
             }
         }
 

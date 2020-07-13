@@ -569,21 +569,35 @@ class CourseManager
      */
     public static function autoSubscribeToCourse($courseCode, $status = STUDENT)
     {
-        $course = Database::getManager()->getRepository('ChamiloCoreBundle:Course')->findOneBy(['code' => $courseCode]);
-
-        if (is_null($course)) {
-            return false;
-        }
-
         if (api_is_anonymous()) {
             return false;
         }
 
-        if (in_array($course->getVisibility(), [
+        $course = Database::getManager()->getRepository('ChamiloCoreBundle:Course')->findOneBy(['code' => $courseCode]);
+
+        if (null === $course) {
+            return false;
+        }
+
+        $visibility = (int) $course->getVisibility();
+
+        if (in_array($visibility, [
                 COURSE_VISIBILITY_CLOSED,
-                COURSE_VISIBILITY_REGISTERED,
+                //COURSE_VISIBILITY_REGISTERED,
                 COURSE_VISIBILITY_HIDDEN,
         ])) {
+            Display::addFlash(
+                Display::return_message(
+                    get_lang('SubscribingNotAllowed'),
+                    'warning'
+                )
+            );
+
+            return false;
+        }
+
+        // Private course can allow auto subscription
+        if (COURSE_VISIBILITY_REGISTERED === $visibility && false === $course->getSubscribe()) {
             Display::addFlash(
                 Display::return_message(
                     get_lang('SubscribingNotAllowed'),
@@ -695,7 +709,7 @@ class CourseManager
             return true;
         }
 
-        return self::subscribeUser($userId, $course->getCode(), $status);
+        return self::subscribeUser($userId, $course->getCode(), $status, 0);
     }
 
     /**
@@ -747,7 +761,6 @@ class CourseManager
         $courseId = $courseInfo['real_id'];
         $courseCode = $courseInfo['code'];
         $userCourseCategoryId = (int) $userCourseCategoryId;
-
         $sessionId = empty($sessionId) ? api_get_session_id() : (int) $sessionId;
         $status = $status === STUDENT || $status === COURSEMANAGER ? $status : STUDENT;
         $courseUserTable = Database::get_main_table(TABLE_MAIN_COURSE_USER);
@@ -803,10 +816,14 @@ class CourseManager
                 }
             }
 
-            if ($status === STUDENT) {
+            if (STUDENT === $status) {
                 // Check if max students per course extra field is set
                 $extraFieldValue = new ExtraFieldValue('course');
-                $value = $extraFieldValue->get_values_by_handler_and_field_variable($courseId, 'max_subscribed_students');
+                $value = $extraFieldValue->get_values_by_handler_and_field_variable(
+                    $courseId,
+                    'max_subscribed_students'
+                );
+
                 if (!empty($value) && isset($value['value'])) {
                     $maxStudents = $value['value'];
                     if ($maxStudents !== '') {

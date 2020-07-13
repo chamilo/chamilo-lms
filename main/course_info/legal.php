@@ -82,7 +82,7 @@ if ($form->validate()) {
 
     if ($accept_legal == 1) {
         CourseManager::save_user_legal($user_id, $course_code, $session_id);
-        if (api_check_user_access_to_legal($course_info['visibility'])) {
+        if (api_check_user_access_to_legal($course_info)) {
             Session::write($variable, true);
         }
 
@@ -94,13 +94,13 @@ if ($form->validate()) {
 }
 
 $user_pass_open_course = false;
-if (api_check_user_access_to_legal($course_info['visibility']) && Session::read($variable)) {
+if (api_check_user_access_to_legal($course_info) && Session::read($variable)) {
     $user_pass_open_course = true;
 }
 
 if (empty($session_id)) {
     if (CourseManager::is_user_subscribed_in_course($user_id, $course_code) ||
-        api_check_user_access_to_legal($course_info['visibility'])
+        api_check_user_access_to_legal($course_info)
     ) {
         $user_accepted_legal = CourseManager::is_user_accepted_legal(
             $user_id,
@@ -122,7 +122,7 @@ if (empty($session_id)) {
 
     $userStatus = SessionManager::get_user_status_in_course_session($user_id, $course_info['real_id'], $session_id);
 
-    if (isset($userStatus) || api_check_user_access_to_legal($course_info['visibility'])) {
+    if (isset($userStatus) || api_check_user_access_to_legal($course_info)) {
         $user_accepted_legal = CourseManager::is_user_accepted_legal(
             $user_id,
             $course_code,

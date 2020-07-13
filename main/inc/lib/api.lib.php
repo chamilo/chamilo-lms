@@ -7845,11 +7845,19 @@ function api_check_ip_in_range($ip, $range)
     return false;
 }
 
-function api_check_user_access_to_legal($course_visibility)
+function api_check_user_access_to_legal($courseInfo)
 {
-    $course_visibility_list = [COURSE_VISIBILITY_OPEN_WORLD, COURSE_VISIBILITY_OPEN_PLATFORM];
+    if (empty($courseInfo)) {
+        return false;
+    }
 
-    return in_array($course_visibility, $course_visibility_list) || api_is_drh();
+    $visibility = (int) $courseInfo['visibility'];
+    $visibilityList = [COURSE_VISIBILITY_OPEN_WORLD, COURSE_VISIBILITY_OPEN_PLATFORM];
+
+    return
+        in_array($visibility, $visibilityList) ||
+        api_is_drh() ||
+        (COURSE_VISIBILITY_REGISTERED === $visibility && 1 === (int) $courseInfo['subscribe']);
 }
 
 /**

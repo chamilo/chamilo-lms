@@ -71,6 +71,7 @@ class Rest extends WebService
     const GET_COURSE_QUIZ_MDL_COMPAT = 'get_course_quiz_mdl_compat';
     const UPDATE_USER_PAUSE_TRAINING = 'update_user_pause_training';
     const CREATE_LEARNINGPATH = 'create_learningpath';
+    const CREATE_USER_EVENT = 'create_user_event';
 
     /**
      * @var Session
@@ -2182,6 +2183,66 @@ class Rest extends WebService
         Database::getManager()->flush();
 
         return $learningPath;
+    }
+
+    /**
+     * Creates a new event in a user's agenda.
+     *
+     * @param array $spec with these keys :
+     *                    loginname
+     *                    eventTitle
+     *                    eventText
+     *                    eventStartDate
+     *                    eventEndDate
+     *
+     * @throws Exception
+     *
+     * @return int the new event identifier
+     */
+    public function createUserEvent(array $spec)
+    {
+        foreach (['loginname', 'eventTitle', 'eventText', 'eventStartDate', 'eventEndDate'] as $param) {
+            if (!array_key_exists($param, $spec) || empty($spec[$param]) || !is_string($spec[$param])) {
+                throw new Exception(sprintf('Missing or invalid parameter "%s": %s.', $param, print_r($spec, true)));
+            }
+        }
+        $loginname = $spec['loginname'];
+        $user = User::getRepository()->findOneBy(['username' => $loginname]);
+        if (is_null($user)) {
+            throw new Exception('No user has id '.$loginname);
+        }
+        $utc = new DateTimeZone('utc');
+        $dateSpec = $spec['eventStartDate'];
+        try {
+            $date = new DateTime($dateSpec, $utc);
+        } catch (Exception $exception) {
+            try {
+                $date = new DateTime($dateSpec);
+            } catch (Exception $exception) {
+                throw new Exception(sprintf('invalid eventStartDate: "%s"', $dateSpec));
+            }
+        }
+        $endDateSpec = $spec['eventEndDate'];
+        try {
+            $endDate = new DateTime($endDateSpec, $utc);
+        } catch (Exception $exception) {
+            try {
+                $endDate = new DateTime($endDateSpec);
+            } catch (Exception $exception) {
+                throw new Exception(sprintf('invalid eventEndDate: "%s"', $endDateSpec));
+            }
+        }
+        $event = (new \Chamilo\CoreBundle\Entity\PersonalAgenda())
+            ->setUser($user->getId())
+            ->setTitle($spec['eventTitle'])
+            ->setText($spec['eventText'])
+            ->setDate($date)
+            ->setEnddate($endDate)
+            ->setAllDay(0);
+        Database::getManager()->persist($event);
+        Database::getManager()->flush($event);
+
+        return $event->getId();
     }
 
     /**

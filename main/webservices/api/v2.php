@@ -358,6 +358,10 @@ try {
             $learningPath = $restApi->createLearningPath($_POST);
             $restResponse->setData([$learningPath->getIid()]);
             break;
+        case Rest::CREATE_USER_EVENT:
+            $eventId = $restApi->createUserEvent($_POST);
+            $restResponse->setData([$eventId]);
+            break;
         default:
             throw new Exception(get_lang('InvalidAction'));
     }

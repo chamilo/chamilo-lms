@@ -473,6 +473,26 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     }
 
     /**
+     * Sets usernameCanonical from the username needed.
+     * Sets emailCanonical from email if needed.
+     * Generate a random password if needed.
+     *
+     * @ORM\PrePersist
+     */
+    public function prePersist()
+    {
+        if (empty($this->usernameCanonical)) {
+            $this->usernameCanonical = strtolower(trim($this->username));
+        }
+        if (empty($this->emailCanonical)) {
+            $this->emailCanonical = strtolower(trim($this->email));
+        }
+        if (empty($this->password)) {
+            $this->password = password_hash(mt_rand(), PASSWORD_BCRYPT);
+        }
+    }
+
+    /**
      * Updates the id with the user_id.
      *
      *  @ORM\PostPersist()

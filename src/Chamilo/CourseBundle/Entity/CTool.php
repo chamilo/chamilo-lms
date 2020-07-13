@@ -4,7 +4,9 @@
 namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Database;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\OptimisticLockException;
 
 /**
  * CTool.
@@ -17,6 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
  *  }
  * )
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks
  */
 class CTool
 {
@@ -131,9 +134,34 @@ class CTool
      * @var Course
      *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="tools")
-     * @ORM\JoinColumn(name="c_id", referencedColumnName="iid")
+     * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
      */
     protected $course;
+
+    public function __construct()
+    {
+        $this->admin = 0;
+        $this->address = 'squaregrey.gif';
+        $this->addedTool = false;
+        $this->target = '_self';
+        $this->sessionId = 0;
+    }
+
+    /**
+     * If id is null, copies iid to id and writes again.
+     *
+     * @ORM\PostPersist
+     *
+     * @throws OptimisticLockException
+     */
+    public function postPersist()
+    {
+        if (is_null($this->id)) { // keep this test to avoid recursion
+            $this->id = $this->iid;
+            Database::getManager()->persist($this);
+            Database::getManager()->flush($this);
+        }
+    }
 
     /**
      * @return int

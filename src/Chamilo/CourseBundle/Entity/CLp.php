@@ -7,6 +7,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Database;
 use DateTime;
+use DateTimeZone;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -277,7 +278,11 @@ class CLp
 
     /**
      * @var Course
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="learningPaths")
+     * @ORM\ManyToOne(
+     *     targetEntity="Chamilo\CoreBundle\Entity\Course",
+     *     inversedBy="learningPaths",
+     *     cascade={"persist", "remove"}
+     * )
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
      */
     protected $course;
@@ -303,14 +308,15 @@ class CLp
      * @ORM\OneToMany(
      *     targetEntity="CLpItem",
      *     mappedBy="learningPath",
-     *     orphanRemoval=true,
-     *     cascade={"persist", "remove"}
+     *     orphanRemoval=true
      * )
      */
     protected $items;
 
     /**
      * Constructor.
+     *
+     * @throws Exception
      */
     public function __construct()
     {
@@ -338,10 +344,15 @@ class CLp
         $this->autolaunch = 0;
         $this->maxAttempts = 0;
         $this->subscribeUsers = 0;
-        $this->createdOn = new DateTime();
-        $this->modifiedOn = new DateTime();
+        $this->createdOn = new DateTime('now', new DateTimeZone('utc'));
+        $this->modifiedOn = new DateTime('now', new DateTimeZone('utc'));
         $this->accumulateScormTime = 1;
         $this->items = new ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        return sprintf('learning path %s ("%s") of %s', $this->id, $this->name, $this->course->__toString());
     }
 
     /**
@@ -399,6 +410,7 @@ class CLp
 
     /**
      * If id is null, copies iid to id and writes again.
+     * Updates item properties.
      *
      * @throws OptimisticLockException
      *
@@ -411,6 +423,23 @@ class CLp
             Database::getManager()->persist($this);
             Database::getManager()->flush($this);
         }
+        $courseInfo = api_get_course_info_by_id($this->course->getId());
+        $userId = api_get_user_id();
+        api_item_property_update(
+            $courseInfo,
+            TOOL_LEARNPATH,
+            $this->getId(),
+            'LearnpathAdded',
+            $userId
+        );
+        api_set_default_visibility(
+            $this->getId(),
+            TOOL_LEARNPATH,
+            0,
+            $courseInfo,
+            $this->getSessionId(),
+            $userId
+        );
     }
 
     /**
@@ -1307,9 +1336,11 @@ class CLp
      * Updates this learning path's final item previous item id.
      * Sets it to the last item in first level.
      *
+     * @param bool $andFlush flush after persist
+     *
      * @throws OptimisticLockException
      */
-    public function updateFinalItemsPreviousItemId()
+    public function updateFinalItemsPreviousItemId($andFlush = true)
     {
         $finalItem = $this->getFinalItem();
         if (!is_null($finalItem)) {
@@ -1317,7 +1348,9 @@ class CLp
             if (!is_null($last)) {
                 $finalItem->setPreviousItemId($last->getId());
                 Database::getManager()->persist($finalItem);
-                Database::getManager()->flush($finalItem);
+                if ($andFlush) {
+                    Database::getManager()->flush($finalItem);
+                }
             }
         }
     }

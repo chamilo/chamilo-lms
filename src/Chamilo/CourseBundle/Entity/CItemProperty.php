@@ -4,14 +4,23 @@
 namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Repository\ItemPropertyRepository;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\UserBundle\Entity\User;
+use Database;
+use DateTime;
+use DateTimeZone;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\OptimisticLockException;
+use Exception;
 
 /**
  * CItemProperty.
  *
  * @ORM\Table(name="c_item_property", indexes={@ORM\Index(name="idx_item_property_toolref", columns={"tool", "ref"})})
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\ItemPropertyRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class CItemProperty
 {
@@ -31,13 +40,19 @@ class CItemProperty
      */
     protected $id;
 
-    /** //, inversedBy="users",.
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", cascade={"persist"})
-     * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
+    /**
+     * @var Course
+     *
+     * @ORM\ManyToOne(
+     *     targetEntity="Chamilo\CoreBundle\Entity\Course",
+     *     inversedBy="itemProperties",
+     *     cascade={"persist"}
+     * )
+     * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=true)
      */
     protected $course;
 
-    /** //, inversedBy="users",.
+    /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CGroupInfo", cascade={"persist"})
      * @ORM\JoinColumn(name="to_group_id", referencedColumnName="iid")
      */
@@ -55,9 +70,15 @@ class CItemProperty
      */
     protected $insertUser;
 
-    /** //, inversedBy="users",.
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session", cascade={"persist"})
-     * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
+    /**
+     * @var Session
+     *
+     * @ORM\ManyToOne(
+     *     targetEntity="Chamilo\CoreBundle\Entity\Session",
+     *     inversedBy="itemProperties",
+     *     cascade={"persist", "remove"}
+     * )
+     * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=true)
      */
     protected $session;
 
@@ -69,14 +90,14 @@ class CItemProperty
     protected $tool;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="insert_date", type="datetime", nullable=false)
      */
     protected $insertDate;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="lastedit_date", type="datetime", nullable=false)
      */
@@ -111,14 +132,14 @@ class CItemProperty
     protected $visibility;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="start_visible", type="datetime", nullable=true)
      */
     protected $startVisible;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="end_visible", type="datetime", nullable=true)
      */
@@ -126,13 +147,50 @@ class CItemProperty
 
     /**
      * CItemProperty constructor.
+     *
+     * @param Course $course
+     *
+     * @throws Exception
      */
-    public function __construct(Course $course)
+    public function __construct($course)
     {
         $this->visibility = 1;
-        $this->course = $course;
-        $this->insertDate = new \DateTime('now', new \DateTimeZone('UTC'));
-        $this->lasteditDate = new \DateTime('now', new \DateTimeZone('UTC'));
+        $this->setCourse($course);
+        $this->insertDate = new DateTime('now', new DateTimeZone('UTC'));
+        $this->lasteditDate = new DateTime('now', new DateTimeZone('UTC'));
+        $this->lasteditUserId = api_get_user_entity(api_get_user_id() ?: api_get_anonymous_id());
+    }
+
+    /**
+     * @return ItemPropertyRepository|EntityRepository
+     */
+    public static function getRepository()
+    {
+        return Database::getManager()->getRepository('ChamiloCourseBundle:CItemProperty');
+    }
+
+    /**
+     * @ORM\PreUpdate
+     * @throws Exception
+     */
+    public function preUpdate()
+    {
+        $this->lasteditDate = new DateTime('now', new DateTimeZone('UTC'));
+    }
+
+    /**
+     * Copies iid to id if not set yet.
+     *
+     * @ORM\PostPersist
+     * @throws OptimisticLockException
+     */
+    public function postPersist()
+    {
+        if (is_null($this->id)) {
+            $this->id = $this->iid;
+            Database::getManager()->persist($this);
+            Database::getManager()->flush();
+        }
     }
 
     /**
@@ -162,7 +220,7 @@ class CItemProperty
     /**
      * Set insertDate.
      *
-     * @param \DateTime $insertDate
+     * @param DateTime $insertDate
      *
      * @return CItemProperty
      */
@@ -176,7 +234,7 @@ class CItemProperty
     /**
      * Get insertDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getInsertDate()
     {
@@ -186,9 +244,11 @@ class CItemProperty
     /**
      * Set lasteditDate.
      *
+     * @param DateTime $lasteditDate
+     *
      * @return CItemProperty
      */
-    public function setLasteditDate(\DateTime $lasteditDate)
+    public function setLasteditDate($lasteditDate)
     {
         $this->lasteditDate = $lasteditDate;
 
@@ -198,7 +258,7 @@ class CItemProperty
     /**
      * Get lasteditDate.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getLasteditDate()
     {
@@ -304,11 +364,11 @@ class CItemProperty
     /**
      * Set startVisible.
      *
-     * @param \DateTime $startVisible
+     * @param DateTime $startVisible
      *
      * @return CItemProperty
      */
-    public function setStartVisible(\DateTime $startVisible = null)
+    public function setStartVisible(DateTime $startVisible = null)
     {
         $this->startVisible = $startVisible;
 
@@ -318,7 +378,7 @@ class CItemProperty
     /**
      * Get startVisible.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getStartVisible()
     {
@@ -328,11 +388,11 @@ class CItemProperty
     /**
      * Set endVisible.
      *
-     * @param \DateTime $endVisible
+     * @param DateTime $endVisible
      *
      * @return CItemProperty
      */
-    public function setEndVisible(\DateTime $endVisible = null)
+    public function setEndVisible(DateTime $endVisible = null)
     {
         $this->endVisible = $endVisible;
 
@@ -342,7 +402,7 @@ class CItemProperty
     /**
      * Get endVisible.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getEndVisible()
     {
@@ -389,6 +449,9 @@ class CItemProperty
     public function setSession($session)
     {
         $this->session = $session;
+        if (!is_null($session)) {
+            $session->getItemProperties()->add($this);
+        }
 
         return $this;
     }
@@ -409,6 +472,7 @@ class CItemProperty
     public function setCourse($course)
     {
         $this->course = $course;
+        $this->course->getItemProperties()->add($this);
 
         return $this;
     }
@@ -462,9 +526,11 @@ class CItemProperty
     }
 
     /**
+     * @param User $insertUser
+     *
      * @return $this
      */
-    public function setInsertUser(User $insertUser)
+    public function setInsertUser($insertUser)
     {
         $this->insertUser = $insertUser;
         $this->lasteditUserId = $insertUser->getId();

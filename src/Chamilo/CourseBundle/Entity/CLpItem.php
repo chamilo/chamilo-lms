@@ -206,8 +206,15 @@ class CLpItem
     /**
      * @var CLp
      *
-     * @ORM\ManyToOne(targetEntity="CLp", inversedBy="items")
-     * @ORM\JoinColumn(name="lp_id", referencedColumnName="iid")
+     * @ORM\ManyToOne(
+     *     targetEntity="Chamilo\CourseBundle\Entity\CLp",
+     *     inversedBy="items",
+     *     cascade={"persist", "remove"}
+     * )
+     * @ORM\JoinColumn(
+     *     name="lp_id",
+     *     referencedColumnName="iid",
+     * )
      */
     protected $learningPath;
 
@@ -233,6 +240,17 @@ class CLpItem
         $this->displayOrder = 0;
         $this->launchData = '';
         $this->path = '';
+    }
+
+    public function __toString()
+    {
+        return sprintf(
+            'item %s (%s "%s") of %s',
+            $this->id,
+            $this->itemType,
+            $this->title,
+            $this->learningPath
+        );
     }
 
     /**
@@ -313,9 +331,8 @@ class CLpItem
             }
         }
         Database::getManager()->persist($this);
+        $this->learningPath->updateFinalItemsPreviousItemId(false);
         Database::getManager()->flush();
-
-        $this->learningPath->updateFinalItemsPreviousItemId();
     }
 
     /**
@@ -940,14 +957,17 @@ class CLpItem
     }
 
     /**
+     * Sets learning path AND course (copying the learning path's)
+     *
+     * @param CLp $clp
+     *
      * @return CLpItem
      */
     public function setLearningPath(CLp $clp)
     {
         $this->learningPath = $clp;
         $clp->getItems()->add($this);
-        $this->course = $clp->getCourse();
-        $this->course->getLearningPathItems()->add($this);
+        $this->setCourse($clp->getCourse());
 
         return $this;
     }

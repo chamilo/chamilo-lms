@@ -3,6 +3,8 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Database;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -42,6 +44,14 @@ class UserCourseCategory
      * @ORM\Column(name="sort", type="integer", nullable=true)
      */
     protected $sort;
+
+    /**
+     * @return EntityRepository
+     */
+    public static function getRepository()
+    {
+        return Database::getManager()->getRepository('ChamiloCoreBundle:UserCourseCategory');
+    }
 
     /**
      * Set userId.

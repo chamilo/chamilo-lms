@@ -601,13 +601,13 @@ class learnpath
      * @param string $courseCode
      * @param string $name
      * @param string $description
-     * @param string $learnpath
-     * @param string $origin
-     * @param string $zipname       Zip file containing the learnpath or directory containing the learnpath
+     * @param string $learnpath     (unused)
+     * @param string $origin        (if 'zip', this function does nothing)
+     * @param string $zipname       (unused)
      * @param string $publicated_on
      * @param string $expired_on
      * @param int    $categoryId
-     * @param int    $userId
+     * @param int    $userId        (unused)
      *
      * @return int The new learnpath ID on success, 0 on failure
      */
@@ -625,56 +625,27 @@ class learnpath
     ) {
         global $charset;
 
-        $courseInfo = api_get_course_info($courseCode);
-        $course_id = $courseInfo['real_id'];
-
-        $session_id = api_get_session_id();
-        $userId = empty($userId) ? api_get_user_id() : $userId;
-
-        $publicated_on = api_get_utc_datetime($publicated_on, true, true);
-        $expired_on = api_get_utc_datetime($expired_on, true, true);
-
-        $description = api_htmlentities($description, ENT_QUOTES, $charset);
-
-        switch ($origin) {
-            case 'zip':
-                // Check zip name string. If empty, we are currently creating a new Chamilo learnpath.
-                break;
-            case 'manual':
-            default:
+        if ('zip' !== $origin) {
+            $course_id = api_get_course_int_id($courseCode);
+            if ($course_id) {
                 $course = \Chamilo\CoreBundle\Entity\Course::getRepository()->find($course_id);
-                $learningPath = (new CLp())
-                    ->setCourse($course)
-                    ->setName($name)
-                    ->setDescription($description)
-                    ->setPublicatedOn($publicated_on)
-                    ->setExpiredOn($expired_on)
-                    ->setCategoryId($categoryId)
-                ;
-                Database::getManager()->persist($learningPath);
-                Database::getManager()->flush();
+                if (!is_null($course)) {
+                    $learningPath = (new CLp())
+                        ->setCourse($course)
+                        ->setName($name)
+                        ->setDescription(api_htmlentities($description, ENT_QUOTES, $charset))
+                        ->setPublicatedOn(api_get_utc_datetime($publicated_on, true, true))
+                        ->setExpiredOn(api_get_utc_datetime($expired_on, true, true))
+                        ->setCategoryId($categoryId);
+                    Database::getManager()->persist($learningPath);
+                    Database::getManager()->flush();
 
-                $id = $learningPath->getId();
-
-                // Insert into item_property.
-                api_item_property_update(
-                    $courseInfo,
-                    TOOL_LEARNPATH,
-                    $id,
-                    'LearnpathAdded',
-                    $userId
-                );
-                api_set_default_visibility(
-                    $id,
-                    TOOL_LEARNPATH,
-                    0,
-                    $courseInfo,
-                    $session_id,
-                    $userId
-                );
-
-                return $id;
+                    return $learningPath->getId();
+                }
+            }
         }
+
+        return 0;
     }
 
     /**

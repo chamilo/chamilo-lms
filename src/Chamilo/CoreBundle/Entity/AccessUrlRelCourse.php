@@ -83,11 +83,16 @@ class AccessUrlRelCourse
     }
 
     /**
-     * @param $course
+     * @param Course $course
+     *
+     * @return AccessUrlRelCourse
      */
     public function setCourse($course)
     {
         $this->course = $course;
+        $this->course->getUrls()->add($this);
+
+        return $this;
     }
 
     /**

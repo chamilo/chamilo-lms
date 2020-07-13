@@ -3,9 +3,10 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
-use AddCourse;
+use Chamilo\CourseBundle\Entity\CCourseSetting;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CForumForum;
+use Chamilo\CourseBundle\Entity\CItemProperty;
 use Chamilo\CourseBundle\Entity\CLink;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpCategory;
@@ -17,6 +18,7 @@ use CourseManager;
 use Database;
 use DateInterval;
 use DateTime;
+use DateTimeZone;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityRepository;
@@ -60,16 +62,30 @@ class Course
     protected $id;
 
     /**
+     * @var CourseRelUser|ArrayCollection
+     *
      * "orphanRemoval" is needed to delete the CourseRelUser relation
      * in the CourseAdmin class. The setUsers, getUsers, removeUsers and
      * addUsers methods need to be added.
      *
-     * @ORM\OneToMany(targetEntity="CourseRelUser", mappedBy="course", cascade={"persist"}, orphanRemoval=true)
+     * @ORM\OneToMany(
+     *     targetEntity="CourseRelUser",
+     *     mappedBy="course",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true
+     * )
      */
     protected $users;
 
     /**
-     * @ORM\OneToMany(targetEntity="AccessUrlRelCourse", mappedBy="course", cascade={"persist"}, orphanRemoval=true)
+     * @var AccessUrlRelCourse[]|ArrayCollection
+     *
+     * @ORM\OneToMany(
+     *     targetEntity="AccessUrlRelCourse",
+     *     mappedBy="course",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true
+     * )
      */
     protected $urls;
 
@@ -84,9 +100,15 @@ class Course
     protected $sessionUserSubscriptions;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CItemProperty", mappedBy="course")
+     * @var ArrayCollection|CItemProperty[]
+     *
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CourseBundle\Entity\CItemProperty",
+     *     mappedBy="course",
+     *     cascade={"persist", "remove"}
+     * )
      */
-    //protected $items;
+    protected $itemProperties;
 
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CTool", mappedBy="course", cascade={"persist"})
@@ -305,6 +327,17 @@ class Course
     protected $accessUrls;
 
     /**
+     * @var ArrayCollection|CCourseSetting[]
+     *
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CourseBundle\Entity\CCourseSetting",
+     *     mappedBy="course",
+     *     cascade={"persist", "remove"}
+     * )
+     */
+    protected $settings;
+
+    /**
      * @var ArrayCollection|CLpCategory[]
      *
      * @ORM\OneToMany(
@@ -383,19 +416,30 @@ class Course
 
     /**
      * Constructor.
+     *
+     * @throws Exception
      */
     public function __construct()
     {
-        $this->creationDate = new DateTime();
-        $this->users = new ArrayCollection();
+        $this->activateLegal = false;
+        $this->addTeachersToSessionsCourses = false;
+        $this->creationDate = new DateTime('now', new DateTimeZone('utc'));
+        $this->lastVisit = null;
+        $this->showScore = 1;
+        $this->unsubscribe = false;
         $this->accessUrls = new ArrayCollection();
         $this->documents = new ArrayCollection();
         $this->forums = new ArrayCollection();
+        $this->itemProperties = new ArrayCollection();
+        $this->learningPathCategories = new ArrayCollection();
+        $this->learningPathItems = new ArrayCollection();
+        $this->learningPaths = new ArrayCollection();
         $this->links = new ArrayCollection();
         $this->quizzes = new ArrayCollection();
-        $this->learningPathCategories = new ArrayCollection();
-        $this->learningPaths = new ArrayCollection();
-        $this->learningPathItems = new ArrayCollection();
+        $this->settings = new ArrayCollection();
+        $this->tools = new ArrayCollection();
+        $this->urls = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     /**
@@ -403,7 +447,7 @@ class Course
      */
     public function __toString()
     {
-        return (string) $this->getTitle();
+        return sprintf('course %s ("%s")', $this->id, $this->getName());
     }
 
     /**
@@ -442,17 +486,27 @@ class Course
                 CourseManager::MAX_COURSE_LENGTH_CODE
             );
         }
-        if (empty($this->directory) || empty($this->visualCode)) {
-            $keys = AddCourse::define_course_keys($this->code, '');
-            if (!count($keys)) {
-                throw new Exception('Could not define course keys');
-            }
-            if (empty($this->directory)) {
-                $this->directory = $keys['currentCourseRepository'];
-            }
-            if (empty($this->visualCode)) {
-                $this->visualCode = $keys['currentCourseCode'];
-            }
+        $originalCode = $this->code;
+        $counter = 1;
+        while (self::getRepository()->matching(
+            Criteria::create()->where(
+                Criteria::expr()->eq('code', $this->code)
+            )
+        )->exists(function ($other) {
+            return $other !== $this;
+        })) {
+            $this->code = sprintf('%s_%d', $originalCode, $counter++);
+        }
+        if (empty($this->visualCode)) {
+            $this->visualCode = $this->code;
+        }
+        if (empty($this->directory)) {
+            $this->directory = $this->code;
+        }
+        $originalDirectory = $this->directory;
+        $counter = 1;
+        while (file_exists($this->getAbsolutePath())) {
+            $this->directory = sprintf('%s_%d', $originalDirectory, $counter++);
         }
         if (is_null($this->courseLanguage)) {
             $this->courseLanguage = api_get_setting('platformLanguage');
@@ -467,23 +521,30 @@ class Course
             $this->visibility = api_get_setting(
                 'courses_default_creation_visibility'
             ) ?: COURSE_VISIBILITY_OPEN_PLATFORM;
+        } elseif ($this->visibility < 0 || $this->visibility > 4) {
+            throw new Exception('This course visibility in invalid:'.$this->visibility);
         }
-        if (is_null($this->showScore)) {
-            $this->showScore = 1;
+        if (is_null($this->subscribe)) {
+            $this->subscribe = (COURSE_VISIBILITY_OPEN_PLATFORM == $this->visibility);
         }
         if (is_null($this->diskQuota)) {
             $this->diskQuota = api_get_setting('default_document_quotum');
         }
-        $this->lastEdit = new DateTime();
+        $this->lastEdit = new DateTime('now', new DateTimeZone('utc'));
         if (is_null($this->expirationDate)) {
-            $this->expirationDate = new DateTime();
-            $this->expirationDate->add(new DateInterval('P1Y'));
+            global $firstExpirationDelay;
+            $this->expirationDate = new DateTime('now', new DateTimeZone('utc'));
+            $this->expirationDate->add(new DateInterval(sprintf('PT%dS', $firstExpirationDelay)));
         }
-        $absolutePath = $this->getAbsolutePath();
-        if (!file_exists($absolutePath)) {
-            AddCourse::prepare_course_repository($this->directory);
+        if (!empty($this->departmentUrl) && !preg_match("@^https?://@", $this->departmentUrl)) {
+            $this->departmentUrl = 'https://'.$this->departmentUrl;
         }
-        $this->accessUrls->add(AccessUrl::getRepository()->find(api_get_current_access_url_id()));
+        if ($this->accessUrls->isEmpty()) {
+            $this->accessUrls->add(AccessUrl::getRepository()->find(api_get_current_access_url_id()));
+        }
+        $this->prepareRepository();
+        $this->createTools();
+        $this->createSettings();
     }
 
     /**
@@ -568,7 +629,7 @@ class Course
     }
 
     /**
-     * @return ArrayCollection
+     * @return AccessUrlRelCourse[]|ArrayCollection
      */
     public function getUrls()
     {
@@ -580,8 +641,6 @@ class Course
      */
     public function setUrls($urls)
     {
-        $this->urls = new ArrayCollection();
-
         foreach ($urls as $url) {
             $this->addUrls($url);
         }
@@ -594,7 +653,7 @@ class Course
     }
 
     /**
-     * @return ArrayCollection
+     * @return CourseRelUser|ArrayCollection
      */
     public function getUsers()
     {
@@ -1480,6 +1539,14 @@ class Course
     }
 
     /**
+     * @return CItemProperty[]|ArrayCollection
+     */
+    public function getItemProperties()
+    {
+        return $this->itemProperties;
+    }
+
+    /**
      * @param CourseRelUser $subscription
      *
      * @return bool
@@ -1518,5 +1585,233 @@ class Course
         $courseRelUser->setRole($role);
         $courseRelUser->setStatus($status);
         $this->addUsers($courseRelUser);
+    }
+
+    /**
+     * @return CCourseSetting[]|ArrayCollection
+     */
+    public function getSettings()
+    {
+        return $this->settings;
+    }
+
+    /**
+     * Initializes the course's file repository.
+     * Replaces \AddCourse::prepare_course_repository
+     *
+     * @throws Exception
+     */
+    private function prepareRepository()
+    {
+        $dirPermissions = api_get_permissions_for_new_directories();
+        $filePermissions = api_get_permissions_for_new_files();
+        $indexHtmlContents = '<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>Not authorized</title></head><body></body></html>';
+        $repositoryPath = $this->getAbsolutePath();
+        if (!file_exists($repositoryPath)) {
+            if (!mkdir($repositoryPath, $dirPermissions)) {
+                throw new Exception(sprintf('Could not create course repository "%s"', $repositoryPath));
+            }
+        }
+        foreach ([
+                     'document',
+                     'dropbox',
+                     'exercises',
+                     'group',
+                     'page',
+                     'scorm',
+                     'upload',
+                     'upload/announcements',
+                     'upload/announcements/images',
+                     'upload/blog',
+                     'upload/calendar',
+                     'upload/calendar/images',
+                     'upload/forum',
+                     'upload/forum/images',
+                     'upload/learning_path',
+                     'upload/learning_path/images',
+                     'upload/test',
+                     'work',
+                 ] as $relativePath) {
+            $subfolderPath = $repositoryPath.'/'.$relativePath;
+            if (!file_exists($subfolderPath)) {
+                if (!mkdir($subfolderPath, $dirPermissions)) {
+                    throw new Exception(sprintf('Could not create course repository subfolder "%s"', $subfolderPath));
+                }
+            }
+            $indexHtmlFilePath = $subfolderPath.'/index.html';
+            if (!file_exists($indexHtmlFilePath)) {
+                $indexHtmlFile = fopen($indexHtmlFilePath, 'w');
+                if (false === $indexHtmlFile) {
+                    throw new Exception(sprintf(
+                        'Could not create course repository subfolder index file "%s"',
+                        $indexHtmlFilePath
+                    ));
+                }
+                if (false === fwrite($indexHtmlFile, $indexHtmlContents)) {
+                    throw new Exception(sprintf(
+                        'Could not write to course repository subfolder index file "%s"',
+                        $indexHtmlFilePath
+                    ));
+                }
+                if (!fclose($indexHtmlFile)) {
+                    throw new Exception(sprintf(
+                        'Could not close course repository subfolder index file "%s"',
+                        $indexHtmlFilePath
+                    ));
+                }
+                @chmod($indexHtmlFile, $filePermissions);
+            }
+        }
+
+        // Create .htaccess in the dropbox directory.
+        $dropboxHtAccessFilePath = $repositoryPath.'/dropbox/.htaccess';
+        $dropboxHtAccessFile = fopen($dropboxHtAccessFilePath, 'w');
+        if (false === $dropboxHtAccessFile) {
+            throw new Exception(sprintf(
+                'Could not create course repository dropbox subfolder access control file "%s"',
+                $dropboxHtAccessFilePath
+            ));
+        }
+        if (!fwrite(
+            $dropboxHtAccessFile,
+            "AuthName AllowLocalAccess
+AuthType Basic
+
+order deny,allow
+deny from all
+
+php_flag zlib.output_compression off"
+        )) {
+            throw new Exception(sprintf(
+                'Could not write to course repository dropbox subfolder access control file "%s"',
+                $dropboxHtAccessFilePath
+            ));
+        }
+        if (!fclose($dropboxHtAccessFile)) {
+            throw new Exception(sprintf(
+                'Could not close course repository dropbox subfolder access control file "%s"',
+                $dropboxHtAccessFilePath
+            ));
+        }
+    }
+
+    private function createTools()
+    {
+        $toolReference = [
+            [TOOL_COURSE_DESCRIPTION, 'course_description/index.php', 'info.gif', 'course_description', 'authoring'],
+            [TOOL_CALENDAR_EVENT, 'calendar/agenda.php', 'agenda.gif', 'agenda', 'interaction'],
+            [TOOL_DOCUMENT, 'document/document.php', 'folder_document.gif', 'documents', 'authoring'],
+            [TOOL_LEARNPATH, 'lp/lp_controller.php', 'scorms.gif', 'learning_path', 'authoring'],
+            [TOOL_LINK, 'link/link.php', 'links.gif', 'links', 'authoring'],
+            [TOOL_QUIZ, 'exercise/exercise.php', 'quiz.gif', 'quiz', 'authoring'],
+            [TOOL_ANNOUNCEMENT, 'announcements/announcements.php', 'valves.gif', 'announcements', 'authoring'],
+            [TOOL_FORUM, 'forum/index.php', 'forum.gif', 'forums', 'interaction'],
+            [TOOL_DROPBOX, 'dropbox/index.php', 'dropbox.gif', 'dropbox', 'interaction'],
+            [TOOL_USER, 'user/user.php', 'members.gif', 'users', 'interaction'],
+            [TOOL_GROUP, 'group/group.php', 'group.gif', 'groups', 'interaction'],
+            [TOOL_CHAT, 'chat/chat.php', 'chat.gif', 'chat', 'interaction'],
+            [TOOL_STUDENTPUBLICATION, 'work/work.php', 'works.gif', 'student_publications', 'interaction'],
+            [TOOL_SURVEY, 'survey/survey_list.php', 'survey.gif', 'survey', 'interaction'],
+            [TOOL_WIKI, 'wiki/index.php', 'wiki.gif', 'wiki', 'interaction'],
+            [TOOL_GRADEBOOK, 'gradebook/index.php', 'gradebook.gif' , 'gradebook', 'authoring'],
+            [TOOL_GLOSSARY, 'glossary/index.php', 'glossary.gif', 'glossary', 'authoring'],
+            [TOOL_NOTEBOOK, 'notebook/index.php', 'notebook.gif', 'notebook', 'interaction'],
+        ];
+        if (api_get_configuration_value('allow_portfolio_tool')) {
+            $toolReference[] = [TOOL_PORTFOLIO, 'portfolio/index.php', 'wiki_task.png', 'portfolio', 'interaction'];
+        }
+        $toolReference[] = [TOOL_ATTENDANCE, 'attendance/index.php', 'attendance.gif', 'attendances', 'authoring'];
+        $toolReference[] =
+            [TOOL_COURSE_PROGRESS, 'course_progress/index.php', 'course_progress.gif', 'course_progress', 'authoring'];
+        $counter = 1;
+        foreach ($toolReference as list($name, $link, $image, $key, $category)) {
+            (new CTool())
+                ->setCourse($this)
+                ->setId($counter++)
+                ->setName($name)
+                ->setLink($link)
+                ->setImage($image)
+                ->setVisibility('true' === api_get_setting('course_create_active_tools', $key))
+                ->setCategory($category);
+        }
+        if (api_get_setting('search_enabled') === 'true') {
+            (new CTool())
+                ->setCourse($this)
+                ->setId($counter++)
+                ->setName(TOOL_SEARCH)
+                ->setLink('search/')
+                ->setImage('info.gif')
+                ->setVisibility('true' === api_get_setting('course_create_active_tools', 'enable_search'))
+                ->setCategory('authoring')
+                ->setAddress('search.gif');
+        }
+        (new CTool())
+            ->setCourse($this)
+            ->setId($counter++)
+            ->setName(TOOL_BLOGS)
+            ->setLink('blog/blog_admin.php')
+            ->setImage('blog_admin.gif')
+            ->setVisibility('true' === api_get_setting('course_create_active_tools', 'blogs'))
+            ->setCategory('admin')
+            ->setAdmin('1');
+        foreach ([
+                     [TOOL_TRACKING, 'tracking/courseLog.php', 'statistics.gif'],
+                     [TOOL_COURSE_SETTING, 'course_info/infocours.php', 'reference.gif'],
+                     [TOOL_COURSE_MAINTENANCE, 'course_info/maintenance.php', 'backup.gif'],
+                 ] as list($name, $link, $image)) {
+            (new CTool())
+                ->setCourse($this)
+                ->setId($counter++)
+                ->setName($name)
+                ->setLink($link)
+                ->setImage($image)
+                ->setVisibility(false)
+                ->setCategory('admin')
+                ->setAdmin('1');
+        }
+    }
+
+    private function createSettings()
+    {
+        $settings = [
+            'email_alert_manager_on_new_doc' => ['default' => 0, 'category' => 'work'],
+            'email_alert_on_new_doc_dropbox' => ['default' => 0, 'category' => 'dropbox'],
+            'allow_user_edit_agenda' => ['default' => 0, 'category' => 'agenda'],
+            'allow_user_edit_announcement' => ['default' => 0, 'category' => 'announcement'],
+            'email_alert_manager_on_new_quiz' => [
+                'default' => (api_get_setting('email_alert_manager_on_new_quiz') === 'true') ? 1 : 0,
+                'category' => 'quiz'
+            ],
+            'allow_user_image_forum' => ['default' => 1, 'category' => 'forum'],
+            'course_theme' => ['default' => '', 'category' => 'theme'],
+            'allow_learning_path_theme' => ['default' => 1, 'category' => 'theme'],
+            'allow_open_chat_window' => ['default' => 1, 'category' => 'chat'],
+            'email_alert_to_teacher_on_new_user_in_course' => ['default' => 0, 'category' => 'registration'],
+            'allow_user_view_user_list' => ['default' => 1, 'category' => 'user'],
+            'display_info_advance_inside_homecourse' => ['default' => 1, 'category' => 'thematic_advance'],
+            'email_alert_students_on_new_homework' => ['default' => 0, 'category' => 'work'],
+            'enable_lp_auto_launch' => ['default' => 0, 'category' => 'learning_path'],
+            'enable_exercise_auto_launch' => ['default' => 0, 'category' => 'exercise'],
+            'enable_document_auto_launch' => ['default' => 0, 'category' => 'document'],
+            'pdf_export_watermark_text' => ['default' => '', 'category' => 'learning_path'],
+            'allow_public_certificates' => [
+                'default' => api_get_setting('allow_public_certificates') === 'true' ? 1 : '',
+                'category' => 'certificates',
+            ],
+            'documents_default_visibility' => ['default' => 'visible', 'category' => 'document'],
+            'show_course_in_user_language' => ['default' => 2, 'category' => null],
+            'email_to_teachers_on_new_work_feedback' => ['default' => 1, 'category' => null],
+        ];
+
+        $counter = 1;
+        foreach ($settings as $variable => $setting) {
+            (new CCourseSetting())
+                ->setId($counter++)
+                ->setCourse($this)
+                ->setVariable($variable)
+                ->setValue($setting['default'])
+                ->setCategory($setting['category']);
+        }
     }
 }

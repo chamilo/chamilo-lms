@@ -202,9 +202,14 @@ class Session
     //protected $position;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CItemProperty", mappedBy="session")
+     * @var Session[]|ArrayCollection
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CourseBundle\Entity\CItemProperty",
+     *     mappedBy="session",
+     *     cascade={"persist","remove"},
+     * )
      */
-    //protected $items;
+    protected $itemProperties;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User", inversedBy="sessionAsGeneralCoach")
@@ -251,7 +256,7 @@ class Session
      */
     public function __construct()
     {
-        //$this->items = new ArrayCollection();
+        $this->itemProperties = new ArrayCollection();
 
         $this->nbrClasses = 0;
         $this->nbrUsers = 0;
@@ -1244,6 +1249,11 @@ class Session
             );
 
         return $this->userCourseSubscriptions->matching($criteria);
+    }
+
+    public function getItemProperties()
+    {
+        return $this->itemProperties;
     }
 
     /**

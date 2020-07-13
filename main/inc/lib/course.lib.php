@@ -647,7 +647,7 @@ class CourseManager
                 $endDate->add($duration);
                 $session = new \Chamilo\CoreBundle\Entity\Session();
                 $session->setName(
-                    sprintf(get_lang("FirstnameLastnameCourses"), $user->getFirstname(), $user->getLastname())
+                    sprintf(get_lang('FirstnameLastnameCourses'), $user->getFirstname(), $user->getLastname())
                 );
                 $session->setAccessEndDate($endDate);
                 $session->setCoachAccessEndDate($endDate);
@@ -4718,9 +4718,9 @@ class CourseManager
      */
     public static function is_user_accepted_legal($user_id, $course_code, $session_id = 0)
     {
-        $user_id = intval($user_id);
+        $user_id = (int) $user_id;
+        $session_id = (int) $session_id;
         $course_code = Database::escape_string($course_code);
-        $session_id = intval($session_id);
 
         $courseInfo = api_get_course_info($course_code);
         $courseId = $courseInfo['real_id'];
@@ -4728,7 +4728,7 @@ class CourseManager
         // Course legal
         $enabled = api_get_plugin_setting('courselegal', 'tool_enable');
 
-        if ($enabled == 'true') {
+        if ($enabled === 'true') {
             require_once api_get_path(SYS_PLUGIN_PATH).'courselegal/config.php';
             $plugin = CourseLegalPlugin::create();
 
@@ -4771,10 +4771,15 @@ class CourseManager
      * @param   string course code
      * @param   int session id
      *
-     * @return mixed
+     * @return bool
      */
-    public static function save_user_legal($user_id, $course_code, $session_id = null)
+    public static function save_user_legal($user_id, $courseInfo, $session_id = 0)
     {
+        if (empty($courseInfo)) {
+            return false;
+        }
+        $course_code = $courseInfo['code'];
+
         // Course plugin legal
         $enabled = api_get_plugin_setting('courselegal', 'tool_enable');
         if ($enabled == 'true') {
@@ -4784,10 +4789,8 @@ class CourseManager
             return $plugin->saveUserLegal($user_id, $course_code, $session_id);
         }
 
-        $user_id = intval($user_id);
-        $course_code = Database::escape_string($course_code);
-        $session_id = intval($session_id);
-        $courseInfo = api_get_course_info($course_code);
+        $user_id = (int) $user_id;
+        $session_id = (int) $session_id;
         $courseId = $courseInfo['real_id'];
 
         if (empty($session_id)) {
@@ -4801,6 +4804,8 @@ class CourseManager
                     WHERE user_id = $user_id AND c_id = $courseId AND session_id = $session_id";
             Database::query($sql);
         }
+
+        return true;
     }
 
     /**

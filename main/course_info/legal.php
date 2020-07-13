@@ -79,9 +79,16 @@ $url = api_get_course_url($course_code, $session_id);
 
 if ($form->validate()) {
     $accept_legal = $form->exportValue('accept_legal');
+    if (1 == $accept_legal) {
+        // Register to private course if is allowed.
+        if (empty($session_id) &&
+            COURSE_VISIBILITY_REGISTERED == $course_info['visibility'] &&
+            1 == $course_info['subscribe']
+        ) {
+            CourseManager::subscribeUser($user_id, $course_info['code'], STUDENT, 0);
+        }
 
-    if ($accept_legal == 1) {
-        CourseManager::save_user_legal($user_id, $course_code, $session_id);
+        CourseManager::save_user_legal($user_id, $course_info, $session_id);
         if (api_check_user_access_to_legal($course_info)) {
             Session::write($variable, true);
         }
@@ -108,7 +115,7 @@ if (empty($session_id)) {
         );
 
         if ($user_accepted_legal || $user_pass_open_course) {
-            //Redirect to course home
+            // Redirect to course home
             header('Location: '.$url);
             exit;
         }
@@ -138,9 +145,9 @@ if (empty($session_id)) {
     }
 }
 
-Display :: display_header();
+Display::display_header();
 echo $pluginMessage;
 if ($hideForm == false) {
     $form->display();
 }
-Display :: display_footer();
+Display::display_footer();

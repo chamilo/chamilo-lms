@@ -4,7 +4,9 @@
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
+use Chamilo\CoreBundle\Entity\PersonalAgenda;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Entity\CLpItem;
@@ -72,6 +74,7 @@ class Rest extends WebService
     const UPDATE_USER_PAUSE_TRAINING = 'update_user_pause_training';
     const CREATE_LEARNINGPATH = 'create_learningpath';
     const CREATE_USER_EVENT = 'create_user_event';
+    const CREATE_COURSE_EVENT = 'create_course_event';
 
     /**
      * @var Session
@@ -2232,7 +2235,7 @@ class Rest extends WebService
                 throw new Exception(sprintf('invalid eventEndDate: "%s"', $endDateSpec));
             }
         }
-        $event = (new \Chamilo\CoreBundle\Entity\PersonalAgenda())
+        $event = (new PersonalAgenda())
             ->setUser($user->getId())
             ->setTitle($spec['eventTitle'])
             ->setText($spec['eventText'])
@@ -2241,6 +2244,103 @@ class Rest extends WebService
             ->setAllDay(0);
         Database::getManager()->persist($event);
         Database::getManager()->flush($event);
+
+        return $event->getId();
+    }
+
+    /**
+     * Creates a new event in a course's agenda.
+     *
+     * @param array $spec with these keys :
+     *                    course_code
+     *                    session_id
+     *                    eventTitle
+     *                    eventText
+     *                    eventStartDate
+     *                    eventEndDate
+     *
+     * @throws Exception
+     *
+     * @return int the new event identifier
+     */
+    public function createCourseEvent(array $spec)
+    {
+        foreach (['course_code', 'eventTitle', 'eventText', 'eventStartDate', 'eventEndDate'] as $param) {
+            if (!array_key_exists($param, $spec) || empty($spec[$param]) || !is_string($spec[$param])) {
+                throw new Exception(sprintf('Missing or invalid parameter "%s": %s.', $param, print_r($spec, true)));
+            }
+        }
+        $courseCode = $spec['course_code'];
+        $course = Course::getRepository()->findOneBy(['code' => $courseCode]);
+        if (is_null($course)) {
+            throw new Exception(sprintf('No course has code "%s"', $courseCode));
+        }
+        $sessionId = array_key_exists('session_id', $spec) ? $spec['session_id'] : 0;
+        if (!empty($sessionId)) {
+            // make sure the session id is valid (not really necessary, just safer)
+            $session = Session::getRepository()->find($sessionId);
+            if (is_null($session)) {
+                throw new Exception(sprintf('No session has id "%s"', $sessionId));
+            }
+        }
+        $utc = new DateTimeZone('utc');
+        $startDateSpec = $spec['eventStartDate'];
+        try {
+            $startDate = new DateTime($startDateSpec, $utc);
+        } catch (Exception $exception) {
+            try {
+                $startDate = new DateTime($startDateSpec);
+            } catch (Exception $exception) {
+                throw new Exception(sprintf('invalid eventStartDate: "%s"', $startDateSpec));
+            }
+        }
+        $endDateSpec = $spec['eventEndDate'];
+        try {
+            $endDate = new DateTime($endDateSpec, $utc);
+        } catch (Exception $exception) {
+            try {
+                $endDate = new DateTime($endDateSpec);
+            } catch (Exception $exception) {
+                throw new Exception(sprintf('invalid eventEndDate: "%s"', $endDateSpec));
+            }
+        }
+        $event = (new CCalendarEvent())
+            ->setCId($course->getId())
+            ->setSessionId($sessionId)
+            ->setTitle($spec['eventTitle'])
+            ->setContent($spec['eventText'])
+            ->setStartDate($startDate)
+            ->setEnddate($endDate)
+            ->setAllDay(0);
+        Database::getManager()->persist($event);
+        Database::getManager()->flush($event);
+
+        $courseInfo = api_get_course_info_by_id($course->getId());
+        $userId = $this->getUser()->getId();
+        api_item_property_update(
+            $courseInfo,
+            TOOL_CALENDAR_EVENT,
+            $event->getId(),
+            'AgendaAdded',
+            $userId,
+            [],
+            null,
+            $startDate->format('c'),
+            $endDate->format('c'),
+            $sessionId
+        );
+        api_item_property_update(
+            $courseInfo,
+            TOOL_CALENDAR_EVENT,
+            $event->getId(),
+            'visible',
+            $userId,
+            [],
+            null,
+            $startDate->format('c'),
+            $endDate->format('c'),
+            $sessionId
+        );
 
         return $event->getId();
     }

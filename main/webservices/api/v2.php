@@ -362,6 +362,10 @@ try {
             $eventId = $restApi->createUserEvent($_POST);
             $restResponse->setData([$eventId]);
             break;
+        case Rest::CREATE_COURSE_EVENT:
+            $eventId = $restApi->createCourseEvent($_POST);
+            $restResponse->setData([$eventId]);
+            break;
         default:
             throw new Exception(get_lang('InvalidAction'));
     }

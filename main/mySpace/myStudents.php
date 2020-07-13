@@ -1,17 +1,14 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CLpCategory;
 use ChamiloSession as Session;
 
-/**
- * Implements the tracking of students in the Reporting pages.
- *
- * @package chamilo.reporting
- */
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
+
 $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH).'assets/jquery.easy-pie-chart/dist/jquery.easypiechart.js"></script>';
 
 $export = isset($_GET['export']) ? $_GET['export'] : false;
@@ -116,13 +113,13 @@ if (!empty($details)) {
             'name' => get_lang('Users'),
         ];
     } else {
-        if ($origin === 'tracking_course') {
+        if ('tracking_course' === $origin) {
             $interbreadcrumb[] = [
                 'url' => '../tracking/courseLog.php?cidReq='.$course_code.'&id_session='.api_get_session_id(),
                 'name' => get_lang('Tracking'),
             ];
         } else {
-            if ($origin === 'resume_session') {
+            if ('resume_session' === $origin) {
                 $interbreadcrumb[] = [
                     'url' => "../session/session_list.php",
                     'name' => get_lang('SessionList'),
@@ -440,36 +437,42 @@ switch ($action) {
         if ($allowMessages === true) {
             $subject = isset($_POST['subject']) ? $_POST['subject'] : '';
             $message = isset($_POST['message']) ? $_POST['message'] : '';
-            $currentUserInfo = api_get_user_info();
-            MessageManager::sendMessageAboutUser(
-                $user_info,
-                $currentUserInfo,
-                $subject,
-                $message
-            );
 
-            // Send also message to all student bosses
-            $bossList = UserManager::getStudentBossList($student_id);
+            if (!empty($subject) && !empty($message)) {
+                $currentUserInfo = api_get_user_info();
+                MessageManager::sendMessageAboutUser(
+                    $user_info,
+                    $currentUserInfo,
+                    $subject,
+                    $message
+                );
 
-            if (!empty($bossList)) {
-                $url = api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$student_id;
-                $link = Display::url($url, $url);
+                // Send also message to all student bosses
+                $bossList = UserManager::getStudentBossList($student_id);
 
-                foreach ($bossList as $boss) {
-                    MessageManager::send_message_simple(
-                        $boss['boss_id'],
-                        sprintf(get_lang('BossAlertMsgSentToUserXTitle'), $user_info['complete_name']),
-                        sprintf(
-                            get_lang('BossAlertUserXSentMessageToUserYWithLinkZ'),
-                            $currentUserInfo['complete_name'],
-                            $user_info['complete_name'],
-                            $link
-                        )
-                    );
+                if (!empty($bossList)) {
+                    $url = api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$student_id;
+                    $link = Display::url($url, $url);
+
+                    foreach ($bossList as $boss) {
+                        MessageManager::send_message_simple(
+                            $boss['boss_id'],
+                            sprintf(get_lang('BossAlertMsgSentToUserXTitle'), $user_info['complete_name']),
+                            sprintf(
+                                get_lang('BossAlertUserXSentMessageToUserYWithLinkZ'),
+                                $currentUserInfo['complete_name'],
+                                $user_info['complete_name'],
+                                $link
+                            )
+                        );
+                    }
                 }
+
+                Display::addFlash(Display::return_message(get_lang('MessageSent')));
+            } else {
+                Display::addFlash(Display::return_message(get_lang('AllFieldsRequired'), 'warning'));
             }
 
-            Display::addFlash(Display::return_message(get_lang('MessageSent')));
             header('Location: '.$currentUrl);
             exit;
         }

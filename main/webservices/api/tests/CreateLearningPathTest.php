@@ -19,7 +19,7 @@ require_once __DIR__.'/../../../../vendor/autoload.php';
 /**
  * Class CreateLearningPathTest
  *
- * SUBSCRIBE_USER_TO_SESSION_FROM_USERNAME webservice unit tests
+ * CREATE_LEARNINGPATH webservice unit tests
  */
 class CreateLearningPathTest extends V2TestCase
 {
@@ -44,9 +44,6 @@ class CreateLearningPathTest extends V2TestCase
     /** @var CQuiz */
     public static $quiz;
 
-    /** @var CLp[] */
-    public static $learningPaths;
-
     public function action()
     {
         return Rest::CREATE_LEARNINGPATH;
@@ -63,73 +60,71 @@ class CreateLearningPathTest extends V2TestCase
     {
         parent::setUpBeforeClass();
 
-        // create a test session
-        self::$session = (new Session())
-            ->setName('Test Session '.time());
-        Database::getManager()->persist(self::$session);
-
-        // create a test course
-        self::$course = (new Course())
-            ->setCode('TESTCOURSE'.time())
-            ->setTitle('Test Course '.time());
-        Database::getManager()->persist(self::$course);
-        Database::getManager()->flush(self::$course); // ensures the course directory is initialized
-
-        // create a test category
-        self::$category = (new CLpCategory())
-            ->setCourse(self::$course)
-            ->setName('Test Category '.time());
-        Database::getManager()->persist(self::$category);
-
-        // create course elements
-        self::$document = CDocument::fromFile(
-            __FILE__,
-            self::$course,
-            'test_document'.time().'.txt',
-            'Test Document'.time()
-        );
-        Database::getManager()->persist(self::$document);
-
-        self::$forum = (new CForumForum())
-            ->setCourse(self::$course)
-            ->setForumTitle('Test Forum '.time());
-        Database::getManager()->persist(self::$forum);
-
-        self::$link = (new CLink())
-            ->setCourse(self::$course)
-            ->setTitle('Test Link '.time())
-            ->setUrl('https://chamilo.org/');
-        Database::getManager()->persist(self::$link);
-
-        self::$quiz = (new CQuiz())
-            ->setCourse(self::$course)
-            ->setTitle('Test Quiz '.time());
-        Database::getManager()->persist(self::$quiz);
-
-        Database::getManager()->flush();
-
-        self::$learningPaths = [];
-    }
-
-    /**
-     * @inheritDoc
-     *
-     * @throws OptimisticLockException
-     */
-    public static function tearDownAfterClass(): void
-    {
-        parent::tearDownAfterClass();
-        foreach (self::$learningPaths as $learningPath) {
-            Database::getManager()->remove($learningPath);
+        self::$session = Session::getRepository()->findOneByName('Test Session');
+        if (is_null(self::$session)) {
+            self::$session = (new Session())
+                ->setName('Test Session');
+            Database::getManager()->persist(self::$session);
+            Database::getManager()->flush();
         }
-        Database::getManager()->remove(self::$quiz);
-        Database::getManager()->remove(self::$link);
-        Database::getManager()->remove(self::$forum);
-        Database::getManager()->remove(self::$document);
-        Database::getManager()->remove(self::$category);
-        Database::getManager()->remove(self::$course);
-        Database::getManager()->remove(self::$session);
-        Database::getManager()->flush();
+
+        self::$course = Course::getRepository()->findOneByCode('TESTCOURSE');
+        if (is_null(self::$course)) {
+            self::$course = (new Course())
+                ->setCode('TESTCOURSE')
+                ->setTitle('Test Course');
+            Database::getManager()->persist(self::$course);
+            Database::getManager()->flush();
+        }
+
+        self::$category = CLpCategory::getRepository()->findOneByName('Test Category');
+        if (is_null(self::$category)) {
+            self::$category = (new CLpCategory())
+                ->setCourse(self::$course)
+                ->setName('Test Category');
+            Database::getManager()->persist(self::$category);
+            Database::getManager()->flush();
+        }
+
+        self::$document = CDocument::getRepository()->findOneByTitle('Test Document');
+        if (is_null(self::$document)) {
+            self::$document = CDocument::fromFile(
+                __FILE__,
+                self::$course,
+                'test_document.txt',
+                'Test Document'
+            );
+            Database::getManager()->persist(self::$document);
+            Database::getManager()->flush();
+        }
+
+        self::$forum = CForumForum::getRepository()->findOneByForumTitle('Test Forum');
+        if (is_null(self::$forum)) {
+            self::$forum = (new CForumForum())
+                ->setCourse(self::$course)
+                ->setForumTitle('Test Forum');
+            Database::getManager()->persist(self::$forum);
+            Database::getManager()->flush();
+        }
+
+        self::$link = Clink::getRepository()->findOneByTitle('Test Link');
+        if (is_null(self::$link)) {
+            self::$link = (new CLink())
+                ->setCourse(self::$course)
+                ->setTitle('Test Link ')
+                ->setUrl('https://chamilo.org/');
+            Database::getManager()->persist(self::$link);
+            Database::getManager()->flush();
+        }
+
+        self::$quiz = CQuiz::getRepository()->findOneByTitle('Test Quiz');
+        if (is_null(self::$quiz)) {
+            self::$quiz = (new CQuiz())
+                ->setCourse(self::$course)
+                ->setTitle('Test Quiz ');
+            Database::getManager()->persist(self::$quiz);
+            Database::getManager()->flush();
+        }
     }
 
     /**
@@ -154,7 +149,6 @@ class CreateLearningPathTest extends V2TestCase
         // assert the learning path was created
         /** @var CLp $learningPath */
         $learningPath = CLp::getRepository()->find($learningPathId);
-        self::$learningPaths[] = $learningPath;
 
         self::assertNotNull($learningPath);
         // in the right course
@@ -190,7 +184,6 @@ class CreateLearningPathTest extends V2TestCase
         // assert the learning path was created
         /** @var CLp $learningPath */
         $learningPath = CLp::getRepository()->find($learningPathId);
-        self::$learningPaths[] = $learningPath;
 
         self::assertNotNull($learningPath);
         // in the right session, course and category
@@ -308,7 +301,6 @@ class CreateLearningPathTest extends V2TestCase
         // assert the learning path was created as specified
         /** @var CLp $learningPath */
         $learningPath = CLp::getRepository()->find($learningPathId);
-        self::$learningPaths[] = $learningPath;
 
         self::assertNotNull($learningPath);
         self::assertEquals(self::$session->getId(), $learningPath->getSessionId());

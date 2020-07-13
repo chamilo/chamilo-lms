@@ -1547,6 +1547,14 @@ class Course
     }
 
     /**
+     * @return CCourseSetting[]|ArrayCollection
+     */
+    public function getSettings()
+    {
+        return $this->settings;
+    }
+
+    /**
      * @param CourseRelUser $subscription
      *
      * @return bool
@@ -1588,16 +1596,8 @@ class Course
     }
 
     /**
-     * @return CCourseSetting[]|ArrayCollection
-     */
-    public function getSettings()
-    {
-        return $this->settings;
-    }
-
-    /**
      * Initializes the course's file repository.
-     * Replaces \AddCourse::prepare_course_repository
+     * Replaces \AddCourse::prepare_course_repository.
      *
      * @throws Exception
      */
@@ -1643,22 +1643,13 @@ class Course
             if (!file_exists($indexHtmlFilePath)) {
                 $indexHtmlFile = fopen($indexHtmlFilePath, 'w');
                 if (false === $indexHtmlFile) {
-                    throw new Exception(sprintf(
-                        'Could not create course repository subfolder index file "%s"',
-                        $indexHtmlFilePath
-                    ));
+                    throw new Exception(sprintf('Could not create course repository subfolder index file "%s"', $indexHtmlFilePath));
                 }
                 if (false === fwrite($indexHtmlFile, $indexHtmlContents)) {
-                    throw new Exception(sprintf(
-                        'Could not write to course repository subfolder index file "%s"',
-                        $indexHtmlFilePath
-                    ));
+                    throw new Exception(sprintf('Could not write to course repository subfolder index file "%s"', $indexHtmlFilePath));
                 }
                 if (!fclose($indexHtmlFile)) {
-                    throw new Exception(sprintf(
-                        'Could not close course repository subfolder index file "%s"',
-                        $indexHtmlFilePath
-                    ));
+                    throw new Exception(sprintf('Could not close course repository subfolder index file "%s"', $indexHtmlFilePath));
                 }
                 @chmod($indexHtmlFile, $filePermissions);
             }
@@ -1668,10 +1659,7 @@ class Course
         $dropboxHtAccessFilePath = $repositoryPath.'/dropbox/.htaccess';
         $dropboxHtAccessFile = fopen($dropboxHtAccessFilePath, 'w');
         if (false === $dropboxHtAccessFile) {
-            throw new Exception(sprintf(
-                'Could not create course repository dropbox subfolder access control file "%s"',
-                $dropboxHtAccessFilePath
-            ));
+            throw new Exception(sprintf('Could not create course repository dropbox subfolder access control file "%s"', $dropboxHtAccessFilePath));
         }
         if (!fwrite(
             $dropboxHtAccessFile,
@@ -1683,16 +1671,10 @@ deny from all
 
 php_flag zlib.output_compression off"
         )) {
-            throw new Exception(sprintf(
-                'Could not write to course repository dropbox subfolder access control file "%s"',
-                $dropboxHtAccessFilePath
-            ));
+            throw new Exception(sprintf('Could not write to course repository dropbox subfolder access control file "%s"', $dropboxHtAccessFilePath));
         }
         if (!fclose($dropboxHtAccessFile)) {
-            throw new Exception(sprintf(
-                'Could not close course repository dropbox subfolder access control file "%s"',
-                $dropboxHtAccessFilePath
-            ));
+            throw new Exception(sprintf('Could not close course repository dropbox subfolder access control file "%s"', $dropboxHtAccessFilePath));
         }
     }
 
@@ -1714,7 +1696,7 @@ php_flag zlib.output_compression off"
             [TOOL_STUDENTPUBLICATION, 'work/work.php', 'works.gif', 'student_publications', 'interaction'],
             [TOOL_SURVEY, 'survey/survey_list.php', 'survey.gif', 'survey', 'interaction'],
             [TOOL_WIKI, 'wiki/index.php', 'wiki.gif', 'wiki', 'interaction'],
-            [TOOL_GRADEBOOK, 'gradebook/index.php', 'gradebook.gif' , 'gradebook', 'authoring'],
+            [TOOL_GRADEBOOK, 'gradebook/index.php', 'gradebook.gif', 'gradebook', 'authoring'],
             [TOOL_GLOSSARY, 'glossary/index.php', 'glossary.gif', 'glossary', 'authoring'],
             [TOOL_NOTEBOOK, 'notebook/index.php', 'notebook.gif', 'notebook', 'interaction'],
         ];
@@ -1781,7 +1763,7 @@ php_flag zlib.output_compression off"
             'allow_user_edit_announcement' => ['default' => 0, 'category' => 'announcement'],
             'email_alert_manager_on_new_quiz' => [
                 'default' => (api_get_setting('email_alert_manager_on_new_quiz') === 'true') ? 1 : 0,
-                'category' => 'quiz'
+                'category' => 'quiz',
             ],
             'allow_user_image_forum' => ['default' => 1, 'category' => 'forum'],
             'course_theme' => ['default' => '', 'category' => 'theme'],

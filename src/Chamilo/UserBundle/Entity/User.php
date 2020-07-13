@@ -457,19 +457,19 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     }
 
     /**
-     * @return UserRepository|EntityRepository
-     */
-    public static function getRepository()
-    {
-        return Database::getManager()->getRepository('ChamiloUserBundle:User');
-    }
-
-    /**
      * @return string
      */
     public function __toString()
     {
         return $this->getUsername();
+    }
+
+    /**
+     * @return UserRepository|EntityRepository
+     */
+    public static function getRepository()
+    {
+        return Database::getManager()->getRepository('ChamiloUserBundle:User');
     }
 
     /**
@@ -2667,6 +2667,7 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
                 ->where(Criteria::expr()->neq('relationType', COURSE_RELATION_TYPE_RRHH))
                 ->andWhere(Criteria::expr()->eq('userCourseCat', $userCourseCategory))
         );
+
         return $categoryCourses->isEmpty()
             ? 0
             : max(

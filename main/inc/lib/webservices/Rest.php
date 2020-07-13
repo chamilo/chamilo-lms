@@ -1917,13 +1917,7 @@ class Rest extends WebService
                                     $fieldValue = $field['field_value'];
                                     if (!isset($fieldName) || !isset($fieldValue) ||
                                         !UserManager::update_extra_field_value($userId, $fieldName, $fieldValue)) {
-                                        throw new Exception(
-                                            sprintf(
-                                                '%s: %s',
-                                                get_lang('CouldNotUpdateExtraFieldValue'),
-                                                print_r($field, true)
-                                            )
-                                        );
+                                        throw new Exception(sprintf('%s: %s', get_lang('CouldNotUpdateExtraFieldValue'), print_r($field, true)));
                                     }
                                 }
                             } else {
@@ -2121,9 +2115,7 @@ class Rest extends WebService
                 $prerequisitesDisplayOrders = [];
                 foreach ($itemSpecs as $itemSpec) {
                     if (!array_key_exists('display_order_id', $itemSpec)) {
-                        throw new Exception(
-                            sprintf('display_order_id missing from item spec: %s', print_r($itemSpec, true))
-                        );
+                        throw new Exception(sprintf('display_order_id missing from item spec: %s', print_r($itemSpec, true)));
                     }
                     $displayOrder = $itemSpec['display_order_id'];
                     $type = (array_key_exists('type', $itemSpec) ? $itemSpec['type'] : 'dir');
@@ -2138,9 +2130,7 @@ class Rest extends WebService
                         ->setTitle($title);
                     if (in_array($type, ['document', 'final_item', 'forum', 'link', 'quiz'])) {
                         if (!array_key_exists('name_to_find', $itemSpec)) {
-                            throw new Exception(
-                                sprintf('name_to_find missing from %s spec: %s', $type, print_r($itemSpec, true))
-                            );
+                            throw new Exception(sprintf('name_to_find missing from %s spec: %s', $type, print_r($itemSpec, true)));
                         }
                         $resource = $course->findResource($type, $itemSpec['name_to_find']);
                         $item->setPath('forum' === $type ? $resource->getForumId() : $resource->getId());

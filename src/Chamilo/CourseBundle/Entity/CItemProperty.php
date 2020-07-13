@@ -171,6 +171,7 @@ class CItemProperty
 
     /**
      * @ORM\PreUpdate
+     *
      * @throws Exception
      */
     public function preUpdate()
@@ -182,6 +183,7 @@ class CItemProperty
      * Copies iid to id if not set yet.
      *
      * @ORM\PostPersist
+     *
      * @throws OptimisticLockException
      */
     public function postPersist()

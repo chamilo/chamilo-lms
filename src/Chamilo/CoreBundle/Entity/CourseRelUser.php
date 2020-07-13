@@ -98,19 +98,19 @@ class CourseRelUser
     }
 
     /**
-     * @return EntityRepository
-     */
-    public static function getRepository()
-    {
-        return Database::getManager()->getRepository('ChamiloCoreBundle:CourseRelUser');
-    }
-
-    /**
      * @return string
      */
     public function __toString()
     {
         return (string) $this->getCourse()->getCode();
+    }
+
+    /**
+     * @return EntityRepository
+     */
+    public static function getRepository()
+    {
+        return Database::getManager()->getRepository('ChamiloCoreBundle:CourseRelUser');
     }
 
     /**

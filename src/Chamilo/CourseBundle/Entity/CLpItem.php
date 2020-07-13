@@ -957,13 +957,13 @@ class CLpItem
     }
 
     /**
-     * Sets learning path AND course (copying the learning path's)
+     * Sets learning path AND course (copying the learning path's).
      *
      * @param CLp $clp
      *
      * @return CLpItem
      */
-    public function setLearningPath(CLp $clp)
+    public function setLearningPath($clp)
     {
         $this->learningPath = $clp;
         $clp->getItems()->add($this);

@@ -5043,6 +5043,7 @@ function api_max_sort_value($user_course_category, $user_id)
     /** @var User $user */
     $user = User::getRepository()->find($user_id);
     $userCourseCategory = UserCourseCategory::getRepository()->find($user_course_category);
+
     return is_null($user) ? 0 : $user->getMaxSortValue($userCourseCategory);
 }
 

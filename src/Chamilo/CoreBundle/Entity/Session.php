@@ -388,8 +388,7 @@ class Session
     }
 
     /**
-     * @param int $status
-     *
+     * @param int  $status
      * @param User $user
      */
     public function addUserInSession($status, $user)
@@ -404,6 +403,7 @@ class Session
 
     /**
      * @param SessionRelUser $subscription
+     *
      * @return bool
      */
     public function hasUser($subscription)
@@ -542,7 +542,7 @@ class Session
     }
 
     /**
-     * @param User $user
+     * @param User   $user
      * @param Course $course
      *
      * @return bool
@@ -564,7 +564,7 @@ class Session
     }
 
     /**
-     * @param User $user
+     * @param User   $user
      * @param Course $course
      * @param string $status
      *

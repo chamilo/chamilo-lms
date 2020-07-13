@@ -369,6 +369,7 @@ class CLp
      * Computes displayOrder if still zéro.
      *
      * @ORM\PrePersist
+     *
      * @throws Exception
      */
     public function prePersist()

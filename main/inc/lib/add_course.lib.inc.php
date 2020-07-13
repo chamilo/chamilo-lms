@@ -921,6 +921,7 @@ class AddCourse
                 $expirationDate = new DateTime(api_get_utc_datetime($date), new DateTimeZone('utc'));
             } catch (Exception $exception) {
                 error_log(sprintf('expiration_date "%s" is invalid', $date));
+
                 return 0;
             }
         }
@@ -928,6 +929,7 @@ class AddCourse
         $user = api_get_user_entity($userId);
         if (is_null($user)) {
             error_log(sprintf('user_id "%s" is invalid', $userId));
+
             return 0;
         }
 
@@ -1007,6 +1009,7 @@ class AddCourse
             Database::getManager()->flush();
         } catch (OptimisticLockException $exception) {
             error_log($exception);
+
             return 0;
         }
 

@@ -340,6 +340,22 @@ try {
 
             echo json_encode($data, JSON_PRETTY_PRINT);
             exit;
+            break;
+        case Rest::UPDATE_USER_PAUSE_TRAINING:
+            $allow = api_get_plugin_setting('pausetraining', 'tool_enable') === 'true';
+            $allowPauseFormation = api_get_plugin_setting('pausetraining', 'allow_users_to_edit_pause_formation') === 'true';
+
+            if (false === $allow || false === $allowPauseFormation) {
+                throw new Exception(get_lang('Plugin configured'));
+            }
+
+            if (empty($_POST['user_id'])) {
+                throw new Exception('user_id is required');
+            }
+            $plugin = PauseTraining::create();
+            $data = $plugin->updateUserPauseTraining($_POST['user_id'], $_POST);
+            $restResponse->setData([$data]);
+            break;
         default:
             throw new Exception(get_lang('InvalidAction'));
     }

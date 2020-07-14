@@ -216,7 +216,7 @@ class ExtraFieldOption extends Model
                         parent::update($new_params, $showQuery);
                     }
 
-                    if ($params['field_type'] == ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD) {
+                    if (ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD == $params['field_type']) {
                         continue;
                     }
 

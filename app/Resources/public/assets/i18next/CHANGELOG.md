@@ -1,3 +1,21 @@
+### 19.5.1
+
+- getBestMatchFromCodes: use fallbackLng if nothing found, fixes #1470 [1471](https://github.com/i18next/i18next/pull/1471)
+
+### 19.5.0
+
+- language detectors can return an array of languages and let i18next figure out best match
+
+- rename option whitelist to supportedLngs
+- rename option nonExpicitWhitelist to nonExplicitSupportedLngs
+- rename function languageUtils.isWhitelisted to languageUtils.isSupportedCode
+
+This changes are made with temporal backwards compatiblity and will warn your for deprecated usage of old terms to give users and plugin providers some time to adapt their code base.
+
+The temporal backwards compatiblity will be removed in a follow up major release.
+
+Learn more about why this change was made [here](https://github.com/i18next/i18next/issues/1466).
+
 ### 19.4.5
 
 - Add store events to typings [1451](https://github.com/i18next/i18next/pull/1451)

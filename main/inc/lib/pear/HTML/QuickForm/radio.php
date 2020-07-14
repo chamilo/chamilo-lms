@@ -33,12 +33,6 @@
  */
 class HTML_QuickForm_radio extends HTML_QuickForm_input
 {
-    /**
-     * Radio display text
-     * @var       string
-     * @since     1.1
-     * @access    private
-     */
     public $_text = '';
     public $labelClass;
     public $radioClass;
@@ -54,7 +48,6 @@ class HTML_QuickForm_radio extends HTML_QuickForm_input
      *
      * @return    void
      * @since     1.0
-     * @access    public
      */
     public function __construct(
         $elementName = null,
@@ -92,7 +85,6 @@ class HTML_QuickForm_radio extends HTML_QuickForm_input
      *
      * @return    string
      * @since     1.0
-     * @access    public
      */
     public function toHtml()
     {
@@ -120,7 +112,7 @@ class HTML_QuickForm_radio extends HTML_QuickForm_input
             return $label;
         }
 
-        return HTML_QuickForm_input::toHtml().$label;
+        return parent::toHtml().$label;
     }
 
     /**
@@ -128,7 +120,6 @@ class HTML_QuickForm_radio extends HTML_QuickForm_input
      *
      * @return    string
      * @since     1.0
-     * @access    public
      */
     public function getChecked()
     {
@@ -140,16 +131,15 @@ class HTML_QuickForm_radio extends HTML_QuickForm_input
      *
      * @return    string
      * @since     1.0
-     * @access    public
      */
     public function getFrozenHtml()
     {
         if ($this->getChecked()) {
-            return '<code>(x)</code>'.
+            return '<br /><code>(x)</code>'.
                 $this->_getPersistantData();
-        } else {
-            return '<code>( )</code>';
         }
+
+        return '<br /><code>( )</code>';
     }
 
     /**

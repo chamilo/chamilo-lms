@@ -32,9 +32,15 @@ $tab_default_add_cas_login_button_cas_button_label = api_get_setting('add_cas_lo
 $tab_default_add_cas_login_button_cas_button_comment = api_get_setting('add_cas_login_button_cas_button_comment');
 $tab_default_add_cas_login_button_cas_image_url = api_get_setting('add_cas_login_button_cas_image_url');
 $defaults = [];
-$defaults['cas_button_label'] = $tab_default_add_cas_login_button_cas_button_label['add_cas_login_button'];
-$defaults['cas_button_comment'] = $tab_default_add_cas_login_button_cas_button_comment['add_cas_login_button'];
-$defaults['cas_image_url'] = $tab_default_add_cas_login_button_cas_image_url['add_cas_login_button'];
+if ($tab_default_add_cas_login_button_cas_button_label) {
+    $defaults['cas_button_label'] = $tab_default_add_cas_login_button_cas_button_label['add_cas_login_button'];
+}
+if ($tab_default_add_cas_login_button_cas_button_comment) {
+    $defaults['cas_button_comment'] = $tab_default_add_cas_login_button_cas_button_comment['add_cas_login_button'];
+}
+if ($tab_default_add_cas_login_button_cas_image_url) {
+    $defaults['cas_image_url'] = $tab_default_add_cas_login_button_cas_image_url['add_cas_login_button'];
+}
 $form->setDefaults($defaults);
 //display form
 $plugin_info['settings_form'] = $form;

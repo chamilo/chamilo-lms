@@ -49,6 +49,7 @@ if (!in_array(
         'get_hotpotatoes_exercise_results',
         'get_work_teacher',
         'get_work_student',
+        'get_all_work_student',
         'get_work_user_list',
         'get_work_user_list_others',
         'get_work_user_list_all',
@@ -545,6 +546,11 @@ switch ($action) {
     case 'get_work_student':
         require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
         $count = getWorkListStudent(0, $limit, $sidx, $sord, $whereCondition, true);
+        break;
+    case 'get_all_work_student':
+        require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
+        $withResults = isset($_REQUEST['with_results']) ? (int) $_REQUEST['with_results'] : 0;
+        $count = getAllWorkListStudent(0, $limit, $sidx, $sord, $whereCondition, true, $withResults);
         break;
     case 'get_work_user_list_all':
         require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
@@ -1277,6 +1283,27 @@ switch ($action) {
             $sidx,
             $sord,
             $whereCondition
+        );
+        break;
+    case 'get_all_work_student':
+        $columns = [
+            'type',
+            'title',
+            'expires_on',
+        ];
+
+        if ($withResults) {
+            $columns[] = 'feedback';
+            $columns[] = 'last_upload';
+        }
+        $result = getAllWorkListStudent(
+            $start,
+            $limit,
+            $sidx,
+            $sord,
+            $whereCondition,
+            false,
+            $withResults
         );
         break;
     case 'get_work_user_list_all':
@@ -2366,6 +2393,7 @@ $allowed_actions = [
     'get_hotpotatoes_exercise_results',
     'get_work_teacher',
     'get_work_student',
+    'get_all_work_student',
     'get_work_user_list',
     'get_work_user_list_others',
     'get_work_user_list_all',

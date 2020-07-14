@@ -1731,7 +1731,7 @@ function create_unexisting_directory(
     }
 
     if (!is_dir($base_work_dir.$systemFolderName)) {
-        $result = mkdir(
+        $result = @mkdir(
             $base_work_dir.$systemFolderName,
             api_get_permissions_for_new_directories(),
             true

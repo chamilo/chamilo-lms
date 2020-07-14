@@ -53,7 +53,7 @@ class Session
     protected $courses;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection|SessionRelUser[]
      * @ORM\OneToMany(targetEntity="SessionRelUser", mappedBy="session", cascade={"persist"}, orphanRemoval=true)
      */
     protected $users;

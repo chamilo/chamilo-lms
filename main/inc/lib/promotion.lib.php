@@ -5,8 +5,6 @@
  * Class Promotion
  * This class provides methods for the promotion management.
  * Include/require it in your code to use its features.
- *
- * @package chamilo.library
  */
 class Promotion extends Model
 {

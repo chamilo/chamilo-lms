@@ -208,6 +208,7 @@ if ($form->validate()) {
 
     // Saving the invitations for the course users
     $count_course_users = SurveyUtil::saveInvitations(
+        $survey_data['survey_id'],
         $users,
         $values['mail_title'],
         $values['mail_text'],
@@ -227,6 +228,7 @@ if ($form->validate()) {
     }
 
     $counter_additional_users = SurveyUtil::saveInvitations(
+        $survey_data['survey_id'],
         $additional_users,
         $values['mail_title'],
         $values['mail_text'],

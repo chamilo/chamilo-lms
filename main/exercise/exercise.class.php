@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\GradebookLink;
+use Chamilo\CoreBundle\Entity\TrackEExerciseConfirmation;
 use Chamilo\CoreBundle\Entity\TrackEHotspot;
 use Chamilo\CourseBundle\Entity\CExerciseCategory;
 use ChamiloSession as Session;
@@ -971,7 +972,7 @@ class Exercise
         if (!empty($questions_by_category)) {
             $newCategoryList = [];
             $em = Database::getManager();
-            $repo = $em->getRepository('ChamiloCoreBundle:CQuizCategory');
+            $repo = $em->getRepository('ChamiloCourseBundle:CQuizCategory');
 
             foreach ($questions_by_category as $categoryId => $questionList) {
                 $cat = new TestCategory();
@@ -986,7 +987,7 @@ class Exercise
                 if (isset($cat['parent_id']) && !empty($cat['parent_id'])) {
                     /** @var \Chamilo\CourseBundle\Entity\CQuizCategory $categoryEntity */
                     if (!isset($parentsLoaded[$cat['parent_id']])) {
-                        $categoryEntity = $em->find('ChamiloCoreBundle:CQuizCategory', $cat['parent_id']);
+                        $categoryEntity = $em->find('ChamiloCourseBundle:CQuizCategory', $cat['parent_id']);
                         $parentsLoaded[$cat['parent_id']] = $categoryEntity;
                     } else {
                         $categoryEntity = $parentsLoaded[$cat['parent_id']];
@@ -1195,6 +1196,30 @@ class Exercise
                 ON (e.question_id = q.id AND e.c_id = q.c_id)
                 WHERE
                     q.id = $questionId AND
+                    e.c_id = {$this->course_id} AND
+                    e.exercice_id = ".$this->id;
+
+        $result = Database::query($sql);
+
+        return Database::num_rows($result) > 0;
+    }
+
+    public function hasQuestionWithTypeNotInList(array $questionTypeList)
+    {
+        if (empty($questionTypeList)) {
+            return false;
+        }
+
+        $questionTypeToString = implode("','", array_map('intval', $questionTypeList));
+
+        $table = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+        $tableQuestion = Database::get_course_table(TABLE_QUIZ_QUESTION);
+        $sql = "SELECT q.id
+                FROM $table e
+                INNER JOIN $tableQuestion q
+                ON (e.question_id = q.id AND e.c_id = q.c_id)
+                WHERE
+                    q.type NOT IN ('$questionTypeToString')  AND
                     e.c_id = {$this->course_id} AND
                     e.exercice_id = ".$this->id;
 
@@ -1633,7 +1658,7 @@ class Exercise
                 api_get_user_id()
             );
 
-            if (api_get_setting('search_enabled') == 'true') {
+            if (api_get_setting('search_enabled') === 'true') {
                 $this->search_engine_edit();
             }
         } else {
@@ -1739,7 +1764,7 @@ class Exercise
                     $this->course
                 );
 
-                if (api_get_setting('search_enabled') == 'true' && extension_loaded('xapian')) {
+                if (api_get_setting('search_enabled') === 'true' && extension_loaded('xapian')) {
                     $this->search_engine_save();
                 }
             }
@@ -1988,7 +2013,7 @@ class Exercise
         );
 
         $skillList = [];
-        if ($type === 'full') {
+        if ('full' === $type) {
             // Can't modify a DirectFeedback question.
             if (!in_array($this->getFeedbackType(), [EXERCISE_FEEDBACK_TYPE_DIRECT, EXERCISE_FEEDBACK_TYPE_POPUP])) {
                 $this->setResultFeedbackGroup($form);
@@ -2024,7 +2049,7 @@ class Exercise
                 $form->addGroup($radios, null, get_lang('QuestionsPerPage'));
             } else {
                 // if is Direct feedback but has not questions we can allow to modify the question type
-                if ($this->getQuestionCount() === 0) {
+                if (0 === $this->getQuestionCount()) {
                     $this->setResultFeedbackGroup($form);
                     $this->setResultDisabledGroup($form);
 
@@ -2040,12 +2065,13 @@ class Exercise
                     );
                     $form->addGroup($radios, null, get_lang('ExerciseType'));
                 } else {
+                    $this->setResultFeedbackGroup($form, true);
                     $group = $this->setResultDisabledGroup($form);
                     $group->freeze();
 
                     // we force the options to the DirectFeedback exercisetype
-                    $form->addElement('hidden', 'exerciseFeedbackType', $this->getFeedbackType());
-                    $form->addElement('hidden', 'exerciseType', ONE_PER_PAGE);
+                    //$form->addElement('hidden', 'exerciseFeedbackType', $this->getFeedbackType());
+                    //$form->addElement('hidden', 'exerciseType', ONE_PER_PAGE);
 
                     // Type of questions disposition on page
                     $radios[] = $form->createElement(
@@ -2545,11 +2571,10 @@ class Exercise
         }
     }
 
-    /**
-     * @param $form
-     */
-    public function setResultFeedbackGroup(FormValidator $form)
+    public function setResultFeedbackGroup(FormValidator $form, $checkFreeze = true)
     {
+        $freeze = false;
+
         // Feedback type.
         $feedback = [];
         $feedback[] = $form->createElement(
@@ -2564,23 +2589,35 @@ class Exercise
             ]
         );
 
-        if (api_get_setting('enable_quiz_scenario') === 'true') {
-            // Can't convert a question from one feedback to another
-            // if there is more than 1 question already added
-            if ($this->selectNbrQuestions() == 0) {
-                $feedback[] = $form->createElement(
-                    'radio',
-                    'exerciseFeedbackType',
-                    null,
-                    get_lang('DirectFeedback'),
-                    EXERCISE_FEEDBACK_TYPE_DIRECT,
-                    [
-                        'id' => 'exerciseType_'.EXERCISE_FEEDBACK_TYPE_DIRECT,
-                        'onclick' => 'check_direct_feedback()',
-                    ]
-                );
+        $freeze = true;
+        if ('true' === api_get_setting('enable_quiz_scenario')) {
+            if (0 === $this->getQuestionCount()) {
+                $freeze = false;
+            } else {
+                $hasDifferentQuestion = $this->hasQuestionWithTypeNotInList([UNIQUE_ANSWER, HOT_SPOT_DELINEATION]);
+                if (false === $hasDifferentQuestion) {
+                    $freeze = false;
+                }
             }
         }
+
+        $direct = $form->createElement(
+            'radio',
+            'exerciseFeedbackType',
+            null,
+            get_lang('DirectFeedback'),
+            EXERCISE_FEEDBACK_TYPE_DIRECT,
+            [
+                'id' => 'exerciseType_'.EXERCISE_FEEDBACK_TYPE_DIRECT,
+                'onclick' => 'check_direct_feedback()',
+            ]
+        );
+
+        if ($freeze) {
+            $direct->freeze();
+        }
+
+        $feedback[] = $direct;
 
         $feedback[] = $form->createElement(
             'radio',
@@ -2591,16 +2628,7 @@ class Exercise
             ['id' => 'exerciseType_'.EXERCISE_FEEDBACK_TYPE_POPUP, 'onclick' => 'check_direct_feedback()']
         );
 
-        $feedback[] = $form->createElement(
-            'radio',
-            'exerciseFeedbackType',
-            null,
-            get_lang('NoFeedback'),
-            EXERCISE_FEEDBACK_TYPE_EXAM,
-            ['id' => 'exerciseType_'.EXERCISE_FEEDBACK_TYPE_EXAM]
-        );
-
-        $form->addGroup(
+        $group = $form->addGroup(
             $feedback,
             null,
             [
@@ -2608,6 +2636,10 @@ class Exercise
                 get_lang('FeedbackDisplayOptions'),
             ]
         );
+
+        if ($freeze) {
+            //$group->freeze();
+        }
     }
 
     /**
@@ -2625,6 +2657,12 @@ class Exercise
         $this->updateAttempts($form->getSubmitValue('exerciseAttempts'));
         $this->updateFeedbackType($form->getSubmitValue('exerciseFeedbackType'));
         $this->updateType($form->getSubmitValue('exerciseType'));
+
+        // If direct feedback then force to One per page
+        if (EXERCISE_FEEDBACK_TYPE_DIRECT == $form->getSubmitValue('exerciseFeedbackType')) {
+            $this->updateType(ONE_PER_PAGE);
+        }
+
         $this->setRandom($form->getSubmitValue('randomQuestions'));
         $this->updateRandomAnswers($form->getSubmitValue('randomAnswers'));
         $this->updateResultsDisabled($form->getSubmitValue('results_disabled'));
@@ -3453,7 +3491,7 @@ class Exercise
      *                                                          'exercise_result'
      * @param array  $exerciseResultCoordinates                 the hotspot coordinates $hotspot[$question_id] =
      *                                                          coordinates
-     * @param bool   $saved_results                             save results in the DB or just show the reponse
+     * @param bool   $save_results                              save results in the DB or just show the response
      * @param bool   $from_database                             gets information from DB or from the current selection
      * @param bool   $show_result                               show results or not
      * @param int    $propagate_neg
@@ -3472,7 +3510,7 @@ class Exercise
         $choice,
         $from = 'exercise_show',
         $exerciseResultCoordinates = [],
-        $saved_results = true,
+        $save_results = true,
         $from_database = false,
         $show_result = true,
         $propagate_neg = 0,
@@ -3493,7 +3531,7 @@ class Exercise
             error_log("<------ manage_answer ------> ");
             error_log('exe_id: '.$exeId);
             error_log('$from:  '.$from);
-            error_log('$saved_results: '.intval($saved_results));
+            error_log('$save_results: '.intval($save_results));
             error_log('$from_database: '.intval($from_database));
             error_log('$show_result: '.intval($show_result));
             error_log('$propagate_neg: '.$propagate_neg);
@@ -3564,7 +3602,7 @@ class Exercise
         $nbrAnswers = $objAnswerTmp->selectNbrAnswers();
 
         if ($debug) {
-            error_log('Count of answers: '.$nbrAnswers);
+            error_log('Count of possible answers: '.$nbrAnswers);
             error_log('$answerType: '.$answerType);
         }
 
@@ -3634,7 +3672,7 @@ class Exercise
         }
 
         if ($debug) {
-            error_log('Start answer loop ');
+            error_log('-- Start answer loop --');
         }
 
         $answerDestination = null;
@@ -3649,8 +3687,8 @@ class Exercise
             $answerIid = isset($objAnswerTmp->iid[$answerId]) ? (int) $objAnswerTmp->iid[$answerId] : 0;
 
             if ($debug) {
-                error_log("answer auto id: $answerAutoId ");
-                error_log("answer correct: $answerCorrect ");
+                error_log("c_quiz_answer.id_auto: $answerAutoId ");
+                error_log("Answer marked as correct in db (0/1)?: $answerCorrect ");
             }
 
             // Delineation
@@ -3907,7 +3945,7 @@ class Exercise
                         $str = $answerFromDatabase = Database::result($result, 0, 'answer');
                     }
 
-                    // if ($saved_results == false && strpos($answerFromDatabase, 'font color') !== false) {
+                    // if ($save_results == false && strpos($answerFromDatabase, 'font color') !== false) {
                     if (false) {
                         // the question is encoded like this
                         // [A] B [C] D [E] F::10,10,10@1
@@ -5484,7 +5522,7 @@ class Exercise
         } // end for that loops over all answers of the current question
 
         if ($debug) {
-            error_log('-- end answer loop --');
+            error_log('-- End answer loop --');
         }
 
         $final_answer = true;
@@ -5692,11 +5730,9 @@ class Exercise
                 }
             }
 
-            //if ($origin != 'learnpath') {
             if ($show_result && $answerType != ANNOTATION) {
                 echo '</table>';
             }
-            //	}
         }
         unset($objAnswerTmp);
 
@@ -5704,9 +5740,9 @@ class Exercise
         // Store results directly in the database
         // For all in one page exercises, the results will be
         // stored by exercise_results.php (using the session)
-        if ($saved_results) {
+        if ($save_results) {
             if ($debug) {
-                error_log("Save question results $saved_results");
+                error_log("Save question results $save_results");
                 error_log('choice: ');
                 error_log(print_r($choice, 1));
             }
@@ -5885,7 +5921,7 @@ class Exercise
             $questionScore = 0;
         }
 
-        if ($saved_results) {
+        if ($save_results) {
             $statsTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
             $sql = "UPDATE $statsTable SET
                         exe_result = exe_result + ".floatval($questionScore)."
@@ -5972,22 +6008,22 @@ class Exercise
                     return false;
                     break;
                 case 1: // End
-                    if ($type == 'end') {
+                    if ($type === 'end') {
                         $sendEnd = true;
                     }
                     break;
                 case 2: // start
-                    if ($type == 'start') {
+                    if ($type === 'start') {
                         $sendStart = true;
                     }
                     break;
                 case 3: // end + open
-                    if ($type == 'end') {
+                    if ($type === 'end') {
                         $sendEndOpenQuestion = true;
                     }
                     break;
                 case 4: // end + oral
-                    if ($type == 'end') {
+                    if ($type === 'end') {
                         $sendEndOralQuestion = true;
                     }
                     break;
@@ -6115,12 +6151,14 @@ class Exercise
     /**
      * @param array $user_data         result of api_get_user_info()
      * @param array $trackExerciseInfo result of get_stat_track_exercise_info
+     * @param bool  $saveUserResult
      *
      * @return string
      */
     public function showExerciseResultHeader(
         $user_data,
-        $trackExerciseInfo
+        $trackExerciseInfo,
+        $saveUserResult
     ) {
         if (api_get_configuration_value('hide_user_info_in_quiz_result')) {
             return '';
@@ -6179,8 +6217,44 @@ class Exercise
             $data['title'] = PHP_EOL.$this->exercise.' : '.get_lang('Result');
         }
 
-        $data['number_of_answers'] = count(explode(',', $trackExerciseInfo['data_tracking']));
-        $data['number_of_answers_saved'] = $this->countUserAnswersSavedInExercise($trackExerciseInfo['exe_id']);
+        $questionsCount = count(explode(',', $trackExerciseInfo['data_tracking']));
+        $savedAnswersCount = $this->countUserAnswersSavedInExercise($trackExerciseInfo['exe_id']);
+
+        $data['number_of_answers'] = $questionsCount;
+        $data['number_of_answers_saved'] = $savedAnswersCount;
+
+        if (false !== api_get_configuration_value('quiz_confirm_saved_answers')) {
+            $em = Database::getManager();
+
+            if ($saveUserResult) {
+                $trackConfirmation = new TrackEExerciseConfirmation();
+                $trackConfirmation
+                    ->setUserId($trackExerciseInfo['exe_user_id'])
+                    ->setQuizId($trackExerciseInfo['exe_exo_id'])
+                    ->setAttemptId($trackExerciseInfo['exe_id'])
+                    ->setQuestionsCount($questionsCount)
+                    ->setSavedAnswersCount($savedAnswersCount)
+                    ->setCourseId($trackExerciseInfo['c_id'])
+                    ->setSessionId($trackExerciseInfo['session_id'])
+                    ->setCreatedAt(api_get_utc_datetime(null, false, true));
+
+                $em->persist($trackConfirmation);
+                $em->flush();
+            } else {
+                $trackConfirmation = $em
+                    ->getRepository('ChamiloCoreBundle:TrackEExerciseConfirmation')
+                    ->findOneBy(
+                        [
+                            'attemptId' => $trackExerciseInfo['exe_id'],
+                            'quizId' => $trackExerciseInfo['exe_exo_id'],
+                            'courseId' => $trackExerciseInfo['c_id'],
+                            'sessionId' => $trackExerciseInfo['session_id'],
+                        ]
+                    );
+            }
+
+            $data['track_confirmation'] = $trackConfirmation;
+        }
 
         $tpl = new Template(null, false, false, false, false, false, false);
         $tpl->assign('data', $data);
@@ -9790,6 +9864,8 @@ class Exercise
                     return $lp;
                 }
             }
+
+            return current($this->lpList);
         }
 
         return [
@@ -10417,13 +10493,11 @@ class Exercise
         );
 
         if (in_array($this->getFeedbackType(), [EXERCISE_FEEDBACK_TYPE_DIRECT, EXERCISE_FEEDBACK_TYPE_POPUP])) {
-            $group = $form->addGroup(
+            return $form->addGroup(
                 $resultDisabledGroup,
                 null,
                 get_lang('ShowResultsToStudents')
             );
-
-            return $group;
         }
 
         $resultDisabledGroup[] = $form->createElement(

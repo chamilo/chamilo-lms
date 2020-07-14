@@ -8,7 +8,11 @@ class LanguageUtil {
   constructor(options) {
     this.options = options;
 
-    this.whitelist = this.options.whitelist || false;
+    // temporal backwards compatibility WHITELIST REMOVAL
+    this.whitelist = this.options.supportedLngs || false;
+    // end temporal backwards compatibility WHITELIST REMOVAL
+
+    this.supportedLngs = this.options.supportedLngs || false;
     this.logger = baseLogger.create('languageUtils');
   }
 
@@ -18,6 +22,7 @@ class LanguageUtil {
     const p = code.split('-');
     if (p.length === 2) return null;
     p.pop();
+    if (p[p.length - 1].toLowerCase() === 'x') return null;
     return this.formatLanguageCode(p.join('-'));
   }
 
@@ -58,11 +63,58 @@ class LanguageUtil {
     return this.options.cleanCode || this.options.lowerCaseLng ? code.toLowerCase() : code;
   }
 
+  // temporal backwards compatibility WHITELIST REMOVAL
   isWhitelisted(code) {
-    if (this.options.load === 'languageOnly' || this.options.nonExplicitWhitelist) {
+    this.logger.deprecate(
+      'languageUtils.isWhitelisted',
+      'function "isWhitelisted" will be renamed to "isSupportedCode" in the next major - please make sure to rename it\'s usage asap.',
+    );
+
+    return this.isSupportedCode(code);
+  }
+  // end temporal backwards compatibility WHITELIST REMOVAL
+
+  isSupportedCode(code) {
+    if (this.options.load === 'languageOnly' || this.options.nonExplicitSupportedLngs) {
       code = this.getLanguagePartFromCode(code);
     }
-    return !this.whitelist || !this.whitelist.length || this.whitelist.indexOf(code) > -1;
+    return (
+      !this.supportedLngs || !this.supportedLngs.length || this.supportedLngs.indexOf(code) > -1
+    );
+  }
+
+  getBestMatchFromCodes(codes) {
+    if (!codes) return null;
+
+    let found;
+
+    // pick first supported code or if no restriction pick the first one (highest prio)
+    codes.forEach(code => {
+      if (found) return;
+      let cleanedLng = this.formatLanguageCode(code);
+      if (!this.options.supportedLngs || this.isSupportedCode(cleanedLng)) found = cleanedLng;
+    });
+
+    // if we got no match in supportedLngs yet - check for similar locales
+    // first  de-CH --> de
+    // second de-CH --> de-DE
+    if (!found && this.options.supportedLngs) {
+      codes.forEach(code => {
+        if (found) return;
+
+        let lngOnly = this.getLanguagePartFromCode(code);
+        if (this.isSupportedCode(lngOnly)) return (found = lngOnly);
+
+        found = this.options.supportedLngs.find(supportedLng => {
+          if (supportedLng.indexOf(lngOnly) === 0) return supportedLng;
+        });
+      });
+    }
+
+    // if nothing found, use fallbackLng
+    if (!found) found = this.getFallbackCodes(this.options.fallbackLng)[0];
+
+    return found;
   }
 
   getFallbackCodes(fallbacks, code) {
@@ -91,10 +143,10 @@ class LanguageUtil {
     const codes = [];
     const addCode = c => {
       if (!c) return;
-      if (this.isWhitelisted(c)) {
+      if (this.isSupportedCode(c)) {
         codes.push(c);
       } else {
-        this.logger.warn(`rejecting non-whitelisted language code: ${c}`);
+        this.logger.warn(`rejecting language code not found in supportedLngs: ${c}`);
       }
     };
 

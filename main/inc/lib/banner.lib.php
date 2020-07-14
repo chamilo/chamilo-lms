@@ -165,7 +165,7 @@ function getCustomTabs()
     $isStudent = api_is_student();
     $cacheAvailable = api_get_configuration_value('apc');
     if ($cacheAvailable === true) {
-        $apcVar = api_get_configuration_value('apc_prefix').'custom_tabs_url_'.$urlId.'_student_'.($isStudent?'1':'0');
+        $apcVar = api_get_configuration_value('apc_prefix').'custom_tabs_url_'.$urlId.'_student_'.($isStudent ? '1' : '0');
         if (apcu_exists($apcVar)) {
             return apcu_fetch($apcVar);
         }
@@ -190,9 +190,10 @@ function getCustomTabs()
         }
     }
     if ($cacheAvailable === true) {
-        $apcVar = api_get_configuration_value('apc_prefix').'custom_tabs_url_'.$urlId.'_student_'.($isStudent?'1':'0');
+        $apcVar = api_get_configuration_value('apc_prefix').'custom_tabs_url_'.$urlId.'_student_'.($isStudent ? '1' : '0');
         apcu_store($apcVar, $customTabs, 15);
     }
+
     return $customTabs;
 }
 
@@ -879,7 +880,9 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
 
 /**
  * Helper function to get the number of users online, using cache if available.
- * @param integer $minutes Number of minutes (how many users were active in those last X minutes?)
+ *
+ * @param int $minutes Number of minutes (how many users were active in those last X minutes?)
+ *
  * @return int The number of users currently online
  */
 function getOnlineUsersCount($minutes = null)

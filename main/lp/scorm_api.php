@@ -893,10 +893,6 @@ function savedata(item_id) {
         item_to_save = old_item_id;
     }
 
-    // Original behaviour
-    // xajax_save_item_scorm(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, old_item_id);
-
-    // Modified version
     xajax_save_item_scorm(
         olms.lms_lp_id,
         olms.lms_user_id,
@@ -1147,13 +1143,22 @@ function addListeners(){
 
     if (olms.lms_item_type=='sco') {
         //window.addEventListener('beforeunload', lastCall);
+        window.addEventListener('beforeunload', function (e) {
+            var preventsBeforeUnload = <?php echo (int) api_get_configuration_value('lp_prevents_beforeunload'); ?>;
 
-        $(window).on('beforeunload', function(e) {
+            if (preventsBeforeUnload) {
+                e.preventDefault();
+            }
+
             console.log('beforeunload');
             lastCall();
             logit_lms('beforeunload called', 3);
 
-            return 'true';
+            if (preventsBeforeUnload) {
+                e.returnValue = 'true';
+            } else {
+                delete e['returnValue'];
+            }
         });
 
         $(window).on('unload', function(e) {
@@ -1161,7 +1166,6 @@ function addListeners(){
             savedata(olms.lms_item_id);
             logit_lms('unload called', 3);
             lastCall();
-            return 'true';
         });
         logit_lms('Added unload savedata() on window unload', 3);
     }
@@ -1547,7 +1551,8 @@ function switch_item(current_item, next_item)
         } else {
             logit_lms('Case 2 - current != sco but next == sco');
         }
-        xajax_save_item(
+
+        var saveAjax = xajax_save_item(
             olms.lms_lp_id,
             olms.lms_user_id,
             olms.lms_view_id,
@@ -1568,21 +1573,27 @@ function switch_item(current_item, next_item)
             1,
             olms.statusSignalReceived
         );
-        xajax_switch_item_details(
-            olms.lms_lp_id,
-            olms.lms_user_id,
-            olms.lms_view_id,
-            olms.lms_item_id,
-            next_item
-        );
+
+        if (saveAjax) {
+            $.when(saveAjax).done(function(results) {
+                xajax_switch_item_details(
+                    olms.lms_lp_id,
+                    olms.lms_user_id,
+                    olms.lms_view_id,
+                    olms.lms_item_id,
+                    next_item
+                );
+            });
+        }
     } else {
         if (next_item_type != 'sco') {
             logit_lms('Case 3 - current == sco but next != sco');
         } else {
             logit_lms('Case 4 - current == sco and next == sco');
         }
+
         // Setting userNavigatesAway = 1
-        xajax_save_item_scorm(
+        var saveAjax = xajax_save_item_scorm(
             olms.lms_lp_id,
             olms.lms_user_id,
             olms.lms_view_id,
@@ -1594,24 +1605,27 @@ function switch_item(current_item, next_item)
             olms.statusSignalReceived
         );
 
-        reinit_updatable_vars_list();
+        if (saveAjax) {
+            $.when(saveAjax).done(function(result) {
+                reinit_updatable_vars_list();
+                xajax_switch_item_toc(
+                    olms.lms_lp_id,
+                    olms.lms_user_id,
+                    olms.lms_view_id,
+                    olms.lms_item_id,
+                    next_item
+                );
 
-        xajax_switch_item_toc(
-            olms.lms_lp_id,
-            olms.lms_user_id,
-            olms.lms_view_id,
-            olms.lms_item_id,
-            next_item
-        );
-
-        if (olms.item_objectives.length>0) {
-            xajax_save_objectives(
-                olms.lms_lp_id,
-                olms.lms_user_id,
-                olms.lms_view_id,
-                olms.lms_item_id,
-                olms.item_objectives
-            );
+                if (olms.item_objectives.length>0) {
+                    xajax_save_objectives(
+                        olms.lms_lp_id,
+                        olms.lms_user_id,
+                        olms.lms_view_id,
+                        olms.lms_item_id,
+                        olms.item_objectives
+                    );
+                }
+            });
         }
     }
 
@@ -1632,42 +1646,6 @@ function switch_item(current_item, next_item)
      * savedata() (and then the status cannot be "incompleted"
      * anymore)
      */
-
-    /*
-    if (olms.lms_item_type == 'sco' &&
-        olms.lesson_status != 'completed' &&
-        olms.lesson_status != 'passed' &&
-        olms.lesson_status != 'browsed' &&
-        olms.lesson_status != 'incomplete' &&
-        olms.lesson_status != 'failed'
-    ) {
-        // savedata() with olms.finishSignalReceived == 1 treats the special
-        // condition and saves the new status to the database, so
-        // switch_item_details() enjoys the new status
-        savedata(olms.lms_item_id);
-    }
-    xajax_save_item(
-        olms.lms_lp_id,
-        olms.lms_user_id,
-        olms.lms_view_id,
-        olms.lms_item_id,
-        olms.score,
-        olms.max,
-        olms.min,
-        olms.lesson_status,
-        olms.session_time,
-        olms.suspend_data,
-        olms.lesson_location,
-        olms.interactions,
-        olms.lms_item_core_exit,
-        orig_item_type,
-        olms.session_id,
-        olms.course_id,
-        olms.finishSignalReceived,
-        1,
-        olms.statusSignalReceived
-    );
-    */
 
     olms.execute_stats = false;
 
@@ -1918,7 +1896,7 @@ function xajax_save_item(
 
     if (olms.lms_lp_type == 1 || item_type == 'document' || item_type == 'asset') {
         logit_lms('xajax_save_item with params:' + params, 3);
-        $.ajax({
+        return $.ajax({
             type:"POST",
             data: params,
             url: "lp_ajax_save_item.php" + courseUrl,
@@ -1926,6 +1904,8 @@ function xajax_save_item(
             async: false
         });
     }
+
+    return false;
 }
 
 /**
@@ -2046,17 +2026,26 @@ function xajax_save_item_scorm(
 
         result = navigator.sendBeacon(saveUrl, formData);
         console.log(result);
+
+        params = '';
+        my_scorm_values = null;
+
+        return false;
     } else {
-        $.ajax({
+        logit_lms('Ajax call');
+        var ajax = $.ajax({
             type:"POST",
             data: params,
             url: saveUrl,
             dataType: "script",
-            async: false
+            async: true
         });
+
+        params = '';
+        my_scorm_values = null;
+
+        return ajax;
     }
-    params = '';
-    my_scorm_values = null;
 }
 
 /**
@@ -2139,12 +2128,12 @@ function xajax_switch_item_details(lms_lp_id,lms_user_id,lms_view_id,lms_item_id
 
     logit_lms('xajax_switch_item_details with params:' + params, 3);
 
-    $.ajax({
+    return $.ajax({
         type: "POST",
         data: params,
         url: "lp_ajax_switch_item.php" + courseUrl,
         dataType: "script",
-        async: false
+        async: true
     });
 }
 

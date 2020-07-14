@@ -21,6 +21,10 @@ class BBBPlugin extends Plugin
     const LAUNCH_TYPE_SET_BY_TEACHER = 1;
     const LAUNCH_TYPE_SET_BY_STUDENT = 2;
 
+    const ROOM_OPEN = 0;
+    const ROOM_CLOSE = 1;
+    const ROOM_CHECK = 2;
+
     public $isCoursePlugin = true;
 
     // When creating a new course this settings are added to the course
@@ -45,8 +49,8 @@ class BBBPlugin extends Plugin
     protected function __construct()
     {
         parent::__construct(
-            '2.8.1',
-            'Julio Montoya, Yannick Warnier, Angel Fernando Quiroz Campos',
+            '2.8.2',
+            'Julio Montoya, Yannick Warnier, Angel Fernando Quiroz Campos, Jose Angel Ruiz',
             [
                 'tool_enable' => 'boolean',
                 'host' => 'text',
@@ -203,7 +207,8 @@ class BBBPlugin extends Plugin
                 participant_id int(11) NOT NULL,
                 in_at datetime,
                 out_at datetime,
-                interface int NOT NULL DEFAULT 0
+                interface int NOT NULL DEFAULT 0,
+                close INT NOT NULL DEFAULT 0
             );"
         );
         $fieldLabel = 'plugin_bbb_course_users_limit';
@@ -277,37 +282,75 @@ class BBBPlugin extends Plugin
             'launch_type',
         ];
 
+        $urlId = api_get_current_access_url_id();
+
         foreach ($variables as $variable) {
-            $sql = "DELETE FROM $t_settings WHERE variable = '$variable'";
+            $sql = "DELETE FROM $t_settings WHERE variable = '$variable' AND access_url = $urlId";
             Database::query($sql);
         }
-        $extraField = new ExtraField('course');
-        $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable(
-            'plugin_bbb_course_users_limit'
-        );
-        if (!empty($extraFieldInfo)) {
-            $extraField->delete($extraFieldInfo['id']);
-        }
-        $extraField = new ExtraField('session');
-        $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable(
-            'plugin_bbb_session_users_limit'
-        );
-        if (!empty($extraFieldInfo)) {
-            $extraField->delete($extraFieldInfo['id']);
+
+        $em = Database::getManager();
+        $sm = $em->getConnection()->getSchemaManager();
+        if ($sm->tablesExist('plugin_bbb_meeting')) {
+            Database::query("DELETE FROM plugin_bbb_meeting WHERE access_url = $urlId");
         }
 
-        $sql = "DELETE FROM $t_options WHERE variable = 'bbb_plugin'";
-        Database::query($sql);
+        // Only delete tables if it's uninstalled from main url.
+        if (1 == $urlId) {
+            $extraField = new ExtraField('course');
+            $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable(
+                'plugin_bbb_course_users_limit'
+            );
+            if (!empty($extraFieldInfo)) {
+                $extraField->delete($extraFieldInfo['id']);
+            }
+            $extraField = new ExtraField('session');
+            $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable(
+                'plugin_bbb_session_users_limit'
+            );
+            if (!empty($extraFieldInfo)) {
+                $extraField->delete($extraFieldInfo['id']);
+            }
 
-        // hack to get rid of Database::query warning (please add c_id...)
-        $sql = "DELETE FROM $t_tool WHERE name = 'bbb' AND c_id != 0";
-        Database::query($sql);
+            $sql = "DELETE FROM $t_options WHERE variable = 'bbb_plugin'";
+            Database::query($sql);
 
-        Database::query('DROP TABLE IF EXISTS plugin_bbb_room');
-        Database::query('DROP TABLE IF EXISTS plugin_bbb_meeting');
+            // hack to get rid of Database::query warning (please add c_id...)
+            $sql = "DELETE FROM $t_tool WHERE name = 'bbb' AND c_id != 0";
+            Database::query($sql);
 
-        // Deleting course settings
-        $this->uninstall_course_fields_in_all_courses($this->course_settings);
+            if ($sm->tablesExist('plugin_bbb_room')) {
+                Database::query('DROP TABLE IF EXISTS plugin_bbb_room');
+            }
+            if ($sm->tablesExist('plugin_bbb_meeting')) {
+                Database::query('DROP TABLE IF EXISTS plugin_bbb_meeting');
+            }
+
+            // Deleting course settings
+            $this->uninstall_course_fields_in_all_courses($this->course_settings);
+        }
+    }
+
+    /**
+     * Update
+     */
+    public function update()
+    {
+        $sql = "SHOW COLUMNS FROM plugin_bbb_room WHERE Field = 'close'";
+        $res = Database::query($sql);
+
+        if (Database::num_rows($res) === 0) {
+            $sql = "ALTER TABLE plugin_bbb_room ADD close int unsigned NULL";
+            $res = Database::query($sql);
+            if (!$res) {
+                echo Display::return_message($this->get_lang('ErrorUpdateFieldDB'), 'warning');
+            }
+
+            Database::update(
+                'plugin_bbb_room',
+                ['close' => BBBPlugin::ROOM_CLOSE]
+            );
+        }
     }
 
     /**

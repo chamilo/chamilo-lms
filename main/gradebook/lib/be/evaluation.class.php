@@ -6,8 +6,6 @@ use ChamiloSession as Session;
 
 /**
  * Class Evaluation.
- *
- * @package chamilo.gradebook
  */
 class Evaluation implements GradebookItem
 {
@@ -151,7 +149,7 @@ class Evaluation implements GradebookItem
 
     public function is_locked()
     {
-        return isset($this->locked) && $this->locked == 1 ? true : false;
+        return isset($this->locked) && 1 == $this->locked ? true : false;
     }
 
     public function set_id($id)
@@ -238,7 +236,7 @@ class Evaluation implements GradebookItem
         }
 
         if (isset($user_id)) {
-            if ($paramcount != 0) {
+            if (0 != $paramcount) {
                 $sql .= ' AND';
             } else {
                 $sql .= ' WHERE';
@@ -494,7 +492,7 @@ class Evaluation implements GradebookItem
         $result = Database::query($sql);
         $number = Database::fetch_row($result);
 
-        return $number[0] != 0;
+        return 0 != $number[0];
     }
 
     /**
@@ -538,6 +536,7 @@ class Evaluation implements GradebookItem
     public function calc_score($stud_id = null, $type = null)
     {
         $allowStats = api_get_configuration_value('allow_gradebook_stats');
+
         if ($allowStats) {
             $evaluation = $this->entity;
             if (!empty($evaluation)) {
@@ -595,7 +594,7 @@ class Evaluation implements GradebookItem
             $data = Session::read('calc_score');
             $results = isset($data[$key]) ? $data[$key] : null;
 
-            if ($useSession == false) {
+            if (false == $useSession) {
                 $results = null;
             }
             $results = null;
@@ -604,10 +603,12 @@ class Evaluation implements GradebookItem
                 Session::write('calc_score', [$key => $results]);
             }
 
-            $score = 0;
-            /** @var Result $res */
-            foreach ($results as $res) {
-                $score = $res->get_score();
+            $score = null;
+            if (!empty($results)) {
+                /** @var Result $res */
+                foreach ($results as $res) {
+                    $score = $res->get_score();
+                }
             }
 
             return [$score, $this->get_max()];
@@ -621,7 +622,7 @@ class Evaluation implements GradebookItem
             $key = 'result_score_student_list_'.api_get_course_int_id().'_'.api_get_session_id().'_'.$this->id;
             $data = Session::read('calc_score');
             $allResults = isset($data[$key]) ? $data[$key] : null;
-            if ($useSession == false) {
+            if (false == $useSession) {
                 $allResults = null;
             }
 
@@ -634,7 +635,7 @@ class Evaluation implements GradebookItem
             /** @var Result $res */
             foreach ($allResults as $res) {
                 $score = $res->get_score();
-                if (!empty($score) || $score == '0') {
+                if (!empty($score) || '0' == $score) {
                     $count++;
                     $sum += $score / $this->get_max();
                     $sumResult += $score;

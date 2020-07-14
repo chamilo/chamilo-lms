@@ -33,10 +33,14 @@ $token = $provider->getAccessToken('authorization_code', [
 $me = null;
 
 try {
-    $me = $provider->get("me", $token);
+    $me = $provider->get('me', $token);
+
+    if (empty($me)) {
+        throw new Exception('Token not found.');
+    }
 
     if (empty($me['mail']) || empty($me['mailNickname'])) {
-        throw new Exception();
+        throw new Exception('Mail empty');
     }
 
     $extraFieldValue = new ExtraFieldValue('user');
@@ -49,17 +53,34 @@ try {
         $me['mailNickname']
     );
 
-    $emptyValues = empty($organisationValue['item_id']) || empty($azureValue['item_id']);
+    $userId = null;
+    // Check EXTRA_FIELD_ORGANISATION_EMAIL
+    if (!empty($organisationValue) && isset($organisationValue['item_id'])) {
+        $userId = $organisationValue['item_id'];
+    }
+
+    if (empty($userId)) {
+        // Check EXTRA_FIELD_AZURE_ID
+        if (!empty($azureValue) && isset($azureValue['item_id'])) {
+            $userId = $azureValue['item_id'];
+        }
+    }
+
+    /*$emptyValues = empty($organisationValue['item_id']) || empty($azureValue['item_id']);
     $differentValues = !$emptyValues && $organisationValue['item_id'] != $azureValue['item_id'];
 
     if ($emptyValues || $differentValues) {
-        throw new Exception();
+        throw new Exception('Empty values');
+    }*/
+
+    if (empty($userId)) {
+        throw new Exception('User not found when checking the extra fields.');
     }
 
-    $userInfo = api_get_user_info($organisationValue['item_id']);
+    $userInfo = api_get_user_info($userId);
 
     if (empty($userInfo)) {
-        throw new Exception();
+        throw new Exception('User not found');
     }
 
     if ($userInfo['active'] != '1') {

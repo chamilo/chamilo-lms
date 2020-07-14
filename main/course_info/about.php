@@ -146,6 +146,7 @@ if ($checker) {
 
 $courseItem = [
     'code' => $course->getCode(),
+    'visibility' => $course->getVisibility(),
     'title' => $course->getTitle(),
     'description' => $courseDescription,
     'image' => CourseManager::getPicturePath($course, true),
@@ -185,6 +186,7 @@ foreach ($requirements as $sequence) {
 }
 
 $template = new Template($course->getTitle(), true, true, false, true, false);
+
 $template->assign('course', $courseItem);
 $essence = Essence\Essence::instance();
 $template->assign('essence', $essence);

@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\TrackEExerciseConfirmation;
 use ChamiloSession as Session;
 
 /**
@@ -8,6 +9,7 @@ use ChamiloSession as Session;
  */
 require_once __DIR__.'/../global.inc.php';
 $debug = false;
+// Check if the user has access to the contextual course/session
 api_protect_course_script(true);
 
 $action = $_REQUEST['a'];
@@ -388,7 +390,7 @@ switch ($action) {
         $course_info = api_get_course_info_by_id($course_id);
         $course_id = $course_info['real_id'];
 
-        // Use have permissions?
+        // Use have permissions to edit exercises results now?
         if (api_is_allowed_to_session_edit()) {
             // "all" or "simple" strings means that there's one or all questions exercise type
             $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
@@ -504,14 +506,42 @@ switch ($action) {
             }
             unset($objQuestionTmp);
 
-            // Looping the question list
+            if ($debug) {
+                error_log('Starting questions loop in save_exercise_by_now');
+            }
+
+            // Check we have at least one non-empty answer in the array
+            // provided by the user's click on the "Finish test" button
+            if ('all' === $type) {
+                $atLeastOneAnswer = false;
+                foreach ($question_list as $my_question_id) {
+                    if (!empty($choice[$my_question_id])) {
+                        $atLeastOneAnswer = true;
+                        break;
+                    }
+                }
+                if (!$atLeastOneAnswer) {
+                    error_log(
+                        'In '.__FILE__.'::action save_exercise_by_now,'.
+                        ' from user '.api_get_user_id().
+                        ' for track_e_exercises.exe_id = '.$exeId.
+                        ', we received an empty set of answers.'.
+                        'Preventing submission to avoid overwriting w/ null.');
+                    echo 'error';
+                    exit;
+                }
+            }
+
+            // Looping the question list from database (not from the user answer)
             foreach ($question_list as $my_question_id) {
+                if ($type === 'simple' && $question_id != $my_question_id) {
+                    if ($debug) {
+                        error_log('Skipping question '.$my_question_id.' in single-question save action');
+                    }
+                    continue;
+                }
                 if ($debug) {
                     error_log("Saving question_id = $my_question_id ");
-                }
-
-                if ($type === 'simple' && $question_id != $my_question_id) {
-                    continue;
                 }
 
                 $my_choice = isset($choice[$my_question_id]) ? $choice[$my_question_id] : null;
@@ -538,6 +568,9 @@ switch ($action) {
                 }
 
                 if ($type === 'all') {
+                    // If saving the whole exercise (not only one question),
+                    // record the sum of individual max scores (called
+                    // "exe_weighting" in track_e_exercises)
                     $total_weight += $objQuestionTmp->selectWeighting();
                 }
 
@@ -550,7 +583,7 @@ switch ($action) {
                 }
 
                 if ($type === 'simple') {
-                    // Getting old attempt in order to decrees the total score.
+                    // Getting old attempt in order to decrease the total score.
                     $old_result = $objExercise->manage_answer(
                         $exeId,
                         $my_question_id,
@@ -650,7 +683,7 @@ switch ($action) {
                 $durationTime = Session::read('duration_time');
                 if (isset($durationTime[$key]) && !empty($durationTime[$key])) {
                     if ($debug) {
-                        error_log('Session time :'.$durationTime[$key]);
+                        error_log('Session time: '.$durationTime[$key]);
                     }
                     $duration = $now - $durationTime[$key];
                     if (!empty($exercise_stat_info['exe_duration'])) {
@@ -689,6 +722,20 @@ switch ($action) {
                     error_log("---------- end question ------------");
                 }
             }
+            if ($debug) {
+                error_log('Finished questions loop in save_exercise_by_now');
+            }
+        } else {
+            if ($debug) {
+                error_log(
+                    'Exercises attempt '.$exeId.': Failed saving question(s) in course/session '.
+                    $course_id.'/'.$session_id.
+                    ': The user ('.
+                    api_get_user_id().
+                    ') does not have the permission to access this session now');
+            }
+            echo 'error';
+            exit;
         }
 
         if ($type == 'all') {
@@ -800,6 +847,55 @@ switch ($action) {
             }
 
             echo 'ok';
+        }
+
+        break;
+    case 'quiz_confirm_saved_answers':
+        if (false === api_get_configuration_value('quiz_confirm_saved_answers')) {
+            break;
+        }
+
+        $trackConfirmationId = isset($_POST['tc_id']) ? (int) $_POST['tc_id'] : 0;
+        $cId = api_get_course_int_id();
+        $sessionId = api_get_session_id();
+        $userId = api_get_user_id();
+        $confirmed = !empty($_POST['quiz_confirm_saved_answers_check']);
+
+        $em = Database::getManager();
+        $repo = $em->getRepository('ChamiloCoreBundle:TrackEExerciseConfirmation');
+
+        try {
+            if (!$trackConfirmationId) {
+                throw new Exception(get_lang('ErrorOccurred'));
+            }
+
+            /** @var TrackEExerciseConfirmation $trackConfirmation */
+            $trackConfirmation = $repo->findOneBy(
+                [
+                    'id' => $trackConfirmationId,
+                    'userId' => $userId,
+                    'courseId' => $cId,
+                    'sessionId' => $sessionId,
+                ],
+                ['createdAt' => 'DESC']
+            );
+
+            if (!$trackConfirmation) {
+                throw new Exception(get_lang('NotFound'));
+            }
+
+            $trackConfirmation
+                ->setConfirmed($confirmed)
+                ->setUpdatedAt(api_get_utc_datetime(null, false, true));
+
+            $em->persist($trackConfirmation);
+            $em->flush();
+
+            http_response_code(200);
+        } catch (Exception $exception) {
+            http_response_code(500);
+
+            echo Display::return_message($exception->getMessage(), 'error');
         }
 
         break;

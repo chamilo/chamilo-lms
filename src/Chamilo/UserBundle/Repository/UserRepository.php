@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\UserBundle\Repository;
@@ -51,16 +52,11 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
-//use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
-//use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
-
 /**
  * Class UserRepository.
  *
  * All functions that query the database (selects)
  * Functions should return query builders.
- *
- * @package Chamilo\UserBundle\Repository
  */
 class UserRepository extends EntityRepository
 {
@@ -390,7 +386,7 @@ class UserRepository extends EntityRepository
             } else {
                 $dql = "SELECT DISTINCT U
                         FROM ChamiloCoreBundle:AccessUrlRelUser R, ChamiloCoreBundle:UserRelUser UF
-                        INNER JOIN ChamiloUserBundle:User AS U 
+                        INNER JOIN ChamiloUserBundle:User AS U
                         WITH UF.friendUserId = U
                         WHERE
                             U.active = 1 AND
@@ -408,7 +404,7 @@ class UserRepository extends EntityRepository
             if ($allowSendMessageToAllUsers === 'true') {
                 $dql = "SELECT DISTINCT U
                         FROM ChamiloUserBundle:User U
-                        LEFT JOIN ChamiloCoreBundle:AccessUrlRelUser R 
+                        LEFT JOIN ChamiloCoreBundle:AccessUrlRelUser R
                         WITH U = R.user
                         WHERE
                             U.active = 1 AND
@@ -427,7 +423,7 @@ class UserRepository extends EntityRepository
                         WITH U.id = T.loginUserId
 			WHERE
                           R.portal = $accessUrlId AND
-                          U.active = 1 AND 
+                          U.active = 1 AND
                           T.loginDate >= '".$limit_date."'";
             }
         }
@@ -1174,7 +1170,6 @@ class UserRepository extends EntityRepository
                 'Friends' => $friendList,
                 'Events' => $eventList,
                 'GradebookCertificate' => $gradebookCertificate,
-
                 'TrackECourseAccess' => $trackECourseAccessList,
                 'TrackELogin' => $trackELoginList,
                 'TrackEAccess' => $trackEAccessList,
@@ -1213,14 +1208,12 @@ class UserRepository extends EntityRepository
 
                 'Wiki' => $cWiki,
                 // Tickets
-
                 'Ticket' => $ticket,
                 'TicketMessage' => $ticketMessage,
             ]
         );
 
         $user->setDropBoxReceivedFiles([]);
-        //$user->setGroups([]);
         $user->setCurriculumItems([]);
 
         $portals = $user->getPortals();
@@ -1262,7 +1255,10 @@ class UserRepository extends EntityRepository
                 $lastLogin = $login->getLoginDate();
             }
         }
-        $user->setLastLogin($lastLogin);
+
+        if (!empty($lastLogin)) {
+            $user->setLastLogin($lastLogin);
+        }
 
         $dateNormalizer = new GetSetMethodNormalizer();
         $dateNormalizer->setCircularReferenceHandler(function ($object) {
@@ -1298,10 +1294,9 @@ class UserRepository extends EntityRepository
         $dateNormalizer->setIgnoredAttributes($ignore);
 
         $callback = function ($dateTime) {
-            return $dateTime instanceof \DateTime
-                ? $dateTime->format(\DateTime::ISO8601)
-                : '';
+            return $dateTime instanceof \DateTime ? $dateTime->format(\DateTime::ISO8601) : '';
         };
+
         $dateNormalizer->setCallbacks(
             [
                 'createdAt' => $callback,
@@ -1311,12 +1306,9 @@ class UserRepository extends EntityRepository
             ]
         );
 
-        $normalizers = [$dateNormalizer];
-        $serializer = new Serializer($normalizers, [new JsonEncoder()]);
+        $serializer = new Serializer([$dateNormalizer], [new JsonEncoder()]);
 
-        $jsonContent = $serializer->serialize($user, 'json');
-
-        return $jsonContent;
+        return $serializer->serialize($user, 'json');
     }
 
     /**
@@ -1334,7 +1326,7 @@ class UserRepository extends EntityRepository
         $repo = $this->getEntityManager()->getRepository('ChamiloCoreBundle:TrackELogin');
         $qb = $repo->createQueryBuilder('l');
 
-        $login = $qb
+        return $qb
             ->select('l')
             ->where(
                 $qb->expr()->eq('l.loginUserId', $user->getId())
@@ -1343,7 +1335,5 @@ class UserRepository extends EntityRepository
             ->orderBy('l.loginDate', 'DESC')
             ->getQuery()
             ->getOneOrNullResult();
-
-        return $login;
     }
 }

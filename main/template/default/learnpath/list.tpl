@@ -280,6 +280,7 @@
                                                 {{ row.action_delete }}
                                                 {{ row.action_order }}
                                                 {{ row.action_update_scorm }}
+                                                {{ row.action_export_to_course_build }}
                                             </td>
                                         </tr>
                                     {% endfor %}
@@ -477,6 +478,7 @@
                                                             {{ row.action_delete }}
                                                             {{ row.action_order }}
                                                             {{ row.action_update_scorm }}
+                                                            {{ row.action_export_to_course_build }}
                                                         </td>
                                                     </tr>
                                                 {% endfor %}

@@ -1410,7 +1410,6 @@ class AddCourse
                     $message .= get_lang('Language').' '.$course_language;
 
                     $userInfo = api_get_user_info($user_id);
-
                     $additionalParameters = [
                         'smsType' => SmsPlugin::NEW_COURSE_BEEN_CREATED,
                         'userId' => $user_id,

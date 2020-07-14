@@ -139,11 +139,9 @@ if (!empty($_GET['action']) && $_GET['action'] == 'exportqti2' && !empty($_GET['
 
 // Exercise object creation.
 if (!is_object($objExercise)) {
-    // construction of the Exercise object
-    $objExercise = new Exercise();
-
     // creation of a new exercise if wrong or not specified exercise ID
     if ($exerciseId) {
+        $objExercise = new Exercise();
         $parseQuestionList = $showPagination > 0 ? false : true;
         if ($editQuestion) {
             $parseQuestionList = false;
@@ -154,6 +152,12 @@ if (!is_object($objExercise)) {
     // saves the object into the session
     Session::write('objExercise', $objExercise);
 }
+
+if (empty($objExercise)) {
+    header('Location: '.api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq());
+    exit;
+}
+
 // Exercise can be edited in their course.
 if ($objExercise->sessionId != $sessionId) {
     api_not_allowed(true);

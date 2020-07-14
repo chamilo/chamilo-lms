@@ -140,9 +140,8 @@ switch ($sale['payment_type']) {
             );
             $messageTemplate->assign('transfer_accounts', $transferAccounts);
 
-            api_mail_html(
-                $userInfo['complete_name'],
-                $userInfo['email'],
+            MessageManager::send_message_simple(
+                $userInfo['user_id'],
                 $plugin->get_lang('bc_subject'),
                 $messageTemplate->fetch('buycourses/view/message_transfer.tpl')
             );

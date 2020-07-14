@@ -2478,7 +2478,9 @@ JAVASCRIPT;
         // Parse params.
         $fields = [];
         foreach ($values as $key => $value) {
-            if (substr($key, 0, 6) !== 'extra_' && substr($key, 0, 7) !== '_extra_') {
+            if (substr($key, 0, 6) !== 'extra_' &&
+                substr($key, 0, 7) !== '_extra_'
+            ) {
                 continue;
             }
             if (!empty($value)) {
@@ -2486,10 +2488,7 @@ JAVASCRIPT;
             }
         }
 
-        $extraFieldsAll = $this->get_all(
-            ['visible_to_self = ? AND filter = ?' => [1, 1]],
-            'option_order'
-        );
+        $extraFieldsAll = $this->get_all(['visible_to_self = ? AND filter = ?' => [1, 1]], 'option_order');
         $extraFieldsType = array_column($extraFieldsAll, 'field_type', 'variable');
         $extraFields = array_column($extraFieldsAll, 'variable');
         $filter = new stdClass();
@@ -2533,7 +2532,6 @@ JAVASCRIPT;
         }
 
         $result = $this->getExtraFieldRules($filter, 'extra_', $condition);
-
         $conditionArray = $result['condition_array'];
 
         $whereCondition = '';
@@ -2563,8 +2561,8 @@ JAVASCRIPT;
      */
     public function getExtraFieldRules($filters, $stringToSearch = 'extra_', $condition = 'OR')
     {
-        $extra_fields = [];
-        $condition_array = [];
+        $extraFields = [];
+        $conditionArray = [];
 
         // Getting double select if exists
         $double_select = [];
@@ -2592,7 +2590,7 @@ JAVASCRIPT;
                     // normal fields
                     $field = $rule->field;
                     if (isset($rule->data) && is_string($rule->data) && -1 != $rule->data) {
-                        $condition_array[] = $this->get_where_clause($field, $rule->op, $rule->data);
+                        $conditionArray[] = $this->get_where_clause($field, $rule->op, $rule->data);
                     }
                 } else {
                     // Extra fields
@@ -2601,47 +2599,61 @@ JAVASCRIPT;
                         $original_field = str_replace($stringToSearch, '', $rule->field);
                         $field_option = $this->get_handler_field_info_by_field_variable($original_field);
 
-                        if (self::FIELD_TYPE_DOUBLE_SELECT == $field_option['field_type']) {
-                            if (isset($double_select[$rule->field])) {
-                                $data = explode('#', $rule->data);
-                                $rule->data = $data[1].'::'.$double_select[$rule->field];
-                            } else {
-                                // only was sent 1 select
-                                if (is_string($rule->data)) {
+                        switch ($field_option['field_type']) {
+                            case self::FIELD_TYPE_DOUBLE_SELECT:
+                                if (isset($double_select[$rule->field])) {
                                     $data = explode('#', $rule->data);
-                                    $rule->data = $data[1];
+                                    $rule->data = $data[1].'::'.$double_select[$rule->field];
+                                } else {
+                                    // only was sent 1 select
+                                    if (is_string($rule->data)) {
+                                        $data = explode('#', $rule->data);
+                                        $rule->data = $data[1];
+                                    }
                                 }
-                            }
 
-                            if (!isset($rule->data)) {
-                                $condition_array[] = ' ('
-                                    .$this->get_where_clause($rule->field, $rule->op, $rule->data)
-                                    .') ';
-                                $extra_fields[] = ['field' => $rule->field, 'id' => $field_option['id']];
-                            }
-                        } else {
-                            if (isset($rule->data)) {
-                                if (isset($rule->data) && is_int($rule->data) && -1 == $rule->data) {
-                                    continue;
+                                if (!isset($rule->data)) {
+                                    $conditionArray[] = ' ('
+                                        .$this->get_where_clause($rule->field, $rule->op, $rule->data)
+                                        .') ';
+                                    $extraFields[] = ['field' => $rule->field, 'id' => $field_option['id']];
                                 }
-                                /*var_dump($rule->data);
-                                foreach ($rule->data as $option) {
-                                }*/
-                                $where = $this->get_where_clause($rule->field, $rule->op, $rule->data, 'OR');
-                                $condition_array[] = " ( $where ) ";
-
-                                $extra_fields[] = [
-                                    'field' => $rule->field,
-                                    'id' => $field_option['id'],
-                                    'data' => $rule->data,
-                                ];
-                            }
+                                break;
+                            case self::FIELD_TYPE_TAG:
+                                if (isset($rule->data)) {
+                                    if (is_int($rule->data) && -1 == $rule->data) {
+                                        break;
+                                    }
+                                    // Where will be injected in the parseConditions()
+                                    //$where = $this->get_where_clause($rule->field, $rule->op, $rule->data, 'OR');
+                                    //$conditionArray[] = " ( $where ) ";
+                                    $extraFields[] = [
+                                        'field' => $rule->field,
+                                        'id' => $field_option['id'],
+                                        'data' => $rule->data,
+                                    ];
+                                }
+                                break;
+                            default:
+                                if (isset($rule->data)) {
+                                    if (is_int($rule->data) && -1 == $rule->data) {
+                                        break;
+                                    }
+                                    $where = $this->get_where_clause($rule->field, $rule->op, $rule->data, 'OR');
+                                    $conditionArray[] = " ( $where ) ";
+                                    $extraFields[] = [
+                                        'field' => $rule->field,
+                                        'id' => $field_option['id'],
+                                        'data' => $rule->data,
+                                    ];
+                                }
+                                break;
                         }
                     } else {
                         $my_field = str_replace('_second', '', $rule->field);
                         $original_field = str_replace($stringToSearch, '', $my_field);
                         $field_option = $this->get_handler_field_info_by_field_variable($original_field);
-                        $extra_fields[] = [
+                        $extraFields[] = [
                             'field' => $rule->field,
                             'id' => $field_option['id'],
                         ];
@@ -2650,17 +2662,7 @@ JAVASCRIPT;
             }
         }
 
-        /*var_dump(
-            [
-                'extra_fields' => $extra_fields,
-                'condition_array' => $condition_array,
-            ]
-        );*/
-
-        return [
-            'extra_fields' => $extra_fields,
-            'condition_array' => $condition_array,
-        ];
+        return ['extra_fields' => $extraFields, 'condition_array' => $conditionArray];
     }
 
     /**
@@ -2738,9 +2740,8 @@ JAVASCRIPT;
                         case self::FIELD_TYPE_DOUBLE_SELECT:
                             $inject_extra_fields .= " fvo$counter.display_text as {$extra['field']}, ";
                             break;
-                        case  self::FIELD_TYPE_TAG:
+                        case self::FIELD_TYPE_TAG:
                             // If using OR
-                            //$inject_extra_fields .= " tag$counter.tag as {$extra['field']}, ";
                             // If using AND
                             $newCounter = 1;
                             $fields = [];
@@ -2749,8 +2750,11 @@ JAVASCRIPT;
                                 $fields[] = "tag$counter$newCounter.tag";
                                 $newCounter++;
                             }
-                            $tags = implode(' , " ", ', $fields);
-                            $inject_extra_fields .= " CONCAT($tags) as $tagAlias, ";
+
+                            if (!empty($fields)) {
+                                $tags = implode(' , " ", ', $fields);
+                                $inject_extra_fields .= " CONCAT($tags) as $tagAlias, ";
+                            }
                             break;
                         default:
                             $inject_extra_fields .= " fv$counter.value as {$extra['field']}, ";
@@ -2783,18 +2787,21 @@ JAVASCRIPT;
         $inject_where = null;
         $where = null;
 
-        if (!empty($options['where'])) {
-            if (!empty($options['extra'])) {
-                // Removing double 1=1
-                $options['where'] = str_replace(' 1 = 1  AND', '', $options['where']);
-                // Always OR
-                $counter = 1;
-                foreach ($extra_fields as $extra_info) {
-                    $extra_field_info = $extra_info['extra_field_info'];
-                    $inject_joins .= " INNER JOIN $this->table_field_values fv$counter
+        //if (!empty($options['where'])) {
+        if (!empty($options['extra']) && !empty($extra_fields)) {
+            // Removing double 1=1
+            if (empty($options['where'])) {
+                $options['where'] = ' 1 = 1 ';
+            }
+            $options['where'] = str_replace(' 1 = 1  AND', '', $options['where']);
+            // Always OR
+            $counter = 1;
+            foreach ($extra_fields as $extra_info) {
+                $extra_field_info = $extra_info['extra_field_info'];
+                $inject_joins .= " INNER JOIN $this->table_field_values fv$counter
                                        ON ($alias.".$this->primaryKey." = fv$counter.".$this->handler_id.') ';
-                    // Add options
-                    switch ($extra_field_info['field_type']) {
+                // Add options
+                switch ($extra_field_info['field_type']) {
                         case self::FIELD_TYPE_SELECT:
                         case self::FIELD_TYPE_DOUBLE_SELECT:
                             $options['where'] = str_replace(
@@ -2810,19 +2817,15 @@ JAVASCRIPT;
                                  )
                                 ";
                             break;
-                        case  self::FIELD_TYPE_TAG:
-                            /*$options['where'] = str_replace(
-                                $extra_info['field'],
-                                'tag'.$counter.'.tag ',
-                                $options['where']
-                            );*/
+                        case self::FIELD_TYPE_TAG:
                             $newCounter = 1;
-                            $whereTag = [];
-                            foreach ($extra['data'] as $data) {
-                                $data = Database::escape_string($data);
-                                $key = $counter.$newCounter;
-                                $whereTag[] = ' tag'.$key.'.tag LIKE "%'.$data.'%" ';
-                                $inject_joins .= "
+                            if (isset($extra_info['data']) && !empty($extra_info['data'])) {
+                                $whereTag = [];
+                                foreach ($extra_info['data'] as $data) {
+                                    $data = Database::escape_string($data);
+                                    $key = $counter.$newCounter;
+                                    $whereTag[] = ' tag'.$key.'.tag LIKE "%'.$data.'%" ';
+                                    $inject_joins .= "
                                     INNER JOIN $this->table_field_rel_tag tag_rel$key
                                     ON (
                                         tag_rel$key.field_id = ".$extra_info['id']." AND
@@ -2831,9 +2834,12 @@ JAVASCRIPT;
                                     INNER JOIN $this->table_field_tag tag$key
                                     ON (tag$key.id = tag_rel$key.tag_id)
                                 ";
-                                $newCounter++;
+                                    $newCounter++;
+                                }
+                                if (!empty($whereTag)) {
+                                    $options['where'] .= ' AND  ('.implode(' AND ', $whereTag).') ';
+                                }
                             }
-                            $options['where'] = ' ('.implode(' AND ', $whereTag).') ';
                             break;
                         default:
                             // text, textarea, etc
@@ -2844,18 +2850,21 @@ JAVASCRIPT;
                             );
                             break;
                     }
-                    $field_value_to_join[] = " fv$counter.$this->handler_id ";
-                    $counter++;
-                }
+                $field_value_to_join[] = " fv$counter.$this->handler_id ";
+                $counter++;
             }
-            $where .= ' AND '.$options['where'];
         }
 
-        $order = null;
+        if (!empty($options['where'])) {
+            $where .= ' AND '.$options['where'];
+        }
+        //}
+
+        $order = '';
         if (!empty($options['order'])) {
             $order = ' ORDER BY '.$options['order'];
         }
-        $limit = null;
+        $limit = '';
         if (!empty($options['limit'])) {
             $limit = ' LIMIT '.$options['limit'];
         }
@@ -2918,7 +2927,7 @@ JAVASCRIPT;
                         $tag = $em->find('ChamiloCoreBundle:Tag', $extraFieldTag->getTagId());
                         $data[] = $tag->getTag();
                     }
-                    $valueData = implode(',', $data);
+                    $valueData = implode(', ', $data);
                     $valueAsArray = $data;
                 }
             }

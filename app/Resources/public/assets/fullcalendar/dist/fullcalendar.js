@@ -5,7 +5,6 @@
  */
 
 
-
 var FC = $.fullCalendar = {
 	version: "3.1.0",
 	internalApiVersion: 7

@@ -530,7 +530,7 @@ class Tracking
 
                         $lesson_status = $row['mystatus'];
                         $score = $row['myscore'];
-                        $time_for_total = $row['mytime'];
+                        $time_for_total += $row['mytime'];
                         $attemptTime = $row['mytime'];
 
                         if ($minimumAvailable) {
@@ -899,12 +899,9 @@ class Tracking
                         $title = Security::remove_XSS($title);
                         $output .= '<tr class="'.$oddclass.'">
                                 <td>'.$extend_link.'</td>
-                                <td colspan="4">
+                                <td colspan="10">
                                 <h4>'.$title.'</h4>
                                 </td>
-                                <td colspan="2">'.learnpathitem::humanize_status($lesson_status).'</td>
-                                <td colspan="2"></td>
-                                <td colspan="2"></td>
                                 '.$action.'
                             </tr>';
                     } else {
@@ -4462,9 +4459,24 @@ class Tracking
         }
 
         $rs = Database::query($sql);
+
+        $allow = api_get_plugin_setting('pausetraining', 'tool_enable') === 'true';
+        $allowPauseFormation = api_get_plugin_setting('pausetraining', 'allow_users_to_edit_pause_formation') === 'true';
+
+        $extraFieldValue = new ExtraFieldValue('user');
         $users = [];
         while ($user = Database::fetch_array($rs)) {
-            $users[] = $user['user_id'];
+            $userId = $user['user_id'];
+
+            if ($allow && $allowPauseFormation) {
+                $pause = $extraFieldValue->get_values_by_handler_and_field_variable($userId, 'pause_formation');
+                if (!empty($pause) && isset($pause['value']) && 1 == $pause['value']) {
+                    // Skip user because he paused his formation.
+                    continue;
+                }
+            }
+
+            $users[] = $userId;
         }
 
         return $users;
@@ -7615,7 +7627,8 @@ class TrackingCourseLog
                     user.official_code  as col0,
                     user.lastname       as col1,
                     user.firstname      as col2,
-                    user.username       as col3';
+                    user.username       as col3,
+                    user.email          as col4';
         if ($getCount) {
             $select = ' SELECT COUNT(distinct(user.id)) as count ';
         }
@@ -7867,6 +7880,10 @@ class TrackingCourseLog
                         $user_row[$extraFieldInfo[$fieldId]['variable']] = '';
                     }
                 }
+            }
+
+            if (api_get_setting('show_email_addresses') === 'true') {
+                $user_row['email'] = $user['col4'];
             }
 
             $user_row['link'] = $user['link'];

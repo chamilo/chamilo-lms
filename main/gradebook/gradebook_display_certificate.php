@@ -1,11 +1,7 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
-/**
- * Script.
- *
- * @package chamilo.gradebook
- */
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_GRADEBOOK;
 
@@ -58,7 +54,7 @@ if ($filter === 'true') {
 
     if ($form->validate()) {
         $officialCode = $form->getSubmitValue('filter');
-        if ($officialCode == 'all') {
+        if ($officialCode === 'all') {
             $certificate_list = GradebookUtils::get_list_users_certificates($categoryId);
         } else {
             $userList = UserManager::getUsersByOfficialCode($officialCode);
@@ -77,10 +73,8 @@ if ($filter === 'true') {
 }
 
 $content = '';
-
 $courseCode = api_get_course_id();
-
-$allowExportToZip = api_get_plugin_setting('customcertificate', 'enable_plugin_customcertificate') == 'true' &&
+$allowCustomCertificate = api_get_plugin_setting('customcertificate', 'enable_plugin_customcertificate') === 'true' &&
     api_get_course_setting('customcertificate_course_enable', $courseInfo) == 1;
 
 $tags = Certificate::notificationTags();
@@ -132,24 +126,36 @@ switch ($action) {
         $content = $form->returnForm();
         break;
     case 'export_all_certificates':
-        if (api_is_student_boss()) {
-            $userGroup = new UserGroup();
-            $userList = $userGroup->getGroupUsersByUser(api_get_user_id());
+        if ($allowCustomCertificate) {
+            $params = 'course_code='.api_get_course_id().
+                '&session_id='.api_get_session_id().
+                '&'.api_get_cidreq().
+                '&cat_id='.$categoryId;
+            $url = api_get_path(WEB_PLUGIN_PATH).
+                'customcertificate/src/print_certificate.php?export_all_in_one=1&'.$params;
         } else {
-            $userList = [];
-            if (!empty($filterOfficialCodeGet)) {
-                $userList = UserManager::getUsersByOfficialCode($filterOfficialCodeGet);
+            if (api_is_student_boss()) {
+                $userGroup = new UserGroup();
+                $userList = $userGroup->getGroupUsersByUser(api_get_user_id());
+            } else {
+                $userList = [];
+                if (!empty($filterOfficialCodeGet)) {
+                    $userList = UserManager::getUsersByOfficialCode($filterOfficialCodeGet);
+                }
             }
-        }
 
-        Category::exportAllCertificates($categoryId, $userList);
+            Category::exportAllCertificates($categoryId, $userList);
+        }
 
         header('Location: '.$url);
         exit;
         break;
     case 'export_all_certificates_zip':
-        if ($allowExportToZip) {
-            $params = 'course_code='.api_get_course_id().'&session_id='.api_get_session_id().'&'.api_get_cidreq();
+        if ($allowCustomCertificate) {
+            $params = 'course_code='.api_get_course_id().
+                '&session_id='.api_get_session_id().
+                '&'.api_get_cidreq().
+                '&cat_id='.$categoryId;
             $url = api_get_path(WEB_PLUGIN_PATH).'customcertificate/src/print_certificate.php?export_all=1&'.$params;
 
             header('Location: '.$url);
@@ -189,7 +195,7 @@ $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('GradebookListOfStudentsC
 $this_section = SECTION_COURSES;
 Display::display_header('');
 
-if (isset($_GET['action']) && $_GET['action'] == 'delete') {
+if ($action === 'delete') {
     $check = Security::check_token('get');
     if ($check) {
         $certificate = new Certificate($_GET['certificate_id']);
@@ -279,7 +285,7 @@ if (count($certificate_list) > 0 && $hideCertificateExport !== 'true') {
         $url.'&action=export_all_certificates'
     );
 
-    if ($allowExportToZip) {
+    if ($allowCustomCertificate) {
         $actions .= Display::url(
             Display::return_icon('file_zip.png', get_lang('ExportAllCertificatesToZIP'), [], ICON_SIZE_MEDIUM),
             $url.'&action=export_all_certificates_zip'
@@ -293,7 +299,6 @@ if (count($certificate_list) > 0 && $hideCertificateExport !== 'true') {
 }
 
 echo Display::toolbarAction('actions', [$actions]);
-
 echo $filterForm;
 
 if (count($certificate_list) == 0) {

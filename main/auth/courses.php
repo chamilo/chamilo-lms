@@ -218,23 +218,20 @@ switch ($action) {
         $defaults = [];
         $listCategories = CoursesAndSessionsCatalog::getCourseCategoriesTree();
         foreach ($listCategories as $category) {
-            $categoryCodeItem = Security::remove_XSS($category['code']);
-            $categoryName = Security::remove_XSS($category['name']);
             $countCourse = (int) $category['number_courses'];
-            $level = $category['level'];
             if (empty($countCourse)) {
                 continue;
             }
 
+            $categoryCodeItem = Security::remove_XSS($category['code']);
+            $categoryName = Security::remove_XSS($category['name']);
+            $level = $category['level'];
             $separate = '';
             if ($level > 0) {
                 $separate = str_repeat('--', $level);
             }
             $select->addOption($separate.' '.$categoryName.' ('.$countCourse.')', $categoryCodeItem);
         }
-
-        $defaults['search_term'] = $searchTerm;
-        $defaults['category_code'] = $categoryCode;
 
         $jqueryReadyContent = '';
         if ($allowExtraFields) {
@@ -250,14 +247,14 @@ switch ($action) {
             CoursesAndSessionsCatalog::courseSortOptions(),
             ['multiple' => true]
         );
-        if (array_key_exists('sortKeys', $_GET)) {
-            $defaults['sortKeys'] = $_GET['sortKeys'];
-            $form->setDefaults($defaults);
-        }
+
+        $sortKeys = isset($_REQUEST['sortKeys']) ? Security::remove_XSS($_REQUEST['sortKeys']) : '';
+        $defaults['sortKeys'] = $sortKeys;
+        $defaults['search_term'] = $searchTerm;
+        $defaults['category_code'] = $categoryCode;
 
         $conditions = [];
         $fields = [];
-
         if ('display_random_courses' === $action) {
             // Random value is used instead limit filter
             $courses = CoursesAndSessionsCatalog::getCoursesInCategory(null, 12);
@@ -269,6 +266,10 @@ switch ($action) {
                 $conditions = $extraResult['condition'];
                 $fields = $extraResult['fields'];
                 $defaults = $extraResult['defaults'];
+
+                $defaults['sortKeys'] = $sortKeys;
+                $defaults['search_term'] = $searchTerm;
+                $defaults['category_code'] = $categoryCode;
             }
 
             $courses = CoursesAndSessionsCatalog::searchAndSortCourses(
@@ -301,7 +302,6 @@ switch ($action) {
 
         // getting all the courses to which the user is subscribed to
         $user_courses = CourseManager::getCoursesByUserCourseCategory($userId);
-
         $user_coursecodes = [];
         // we need only the course codes as these will be used to match against the courses of the category
         if ('' != $user_courses) {
@@ -348,6 +348,9 @@ switch ($action) {
         $htmlHeadXtra[] = "
         <script>
             $(function() {
+                $(\".selectpicker\").selectpicker({
+                    \"width\": \"500px\",
+                });
                 $('.star-rating li a').on('click', function(event) {
                     var id = $(this).parents('ul').attr('id');
                     $('#vote_label2_' + id).html('".get_lang('Loading')."');
@@ -364,7 +367,6 @@ switch ($action) {
 
                     return parseInt(parts[1], 10);
                 };
-
                 $extraDate
             });
         </script>";
@@ -375,20 +377,17 @@ switch ($action) {
         <div class="col-md-12">
             <div class="search-courses">
              ';
+
         if ($showCourses) {
-            //$content .= '<div class="col-md-'.($showSessions ? '4' : '6').'">';
-            //$content .= '<div class="col-md-12">';
             $htmlHeadXtra[] = '<script>
             $(function () {
                 '.$jqueryReadyContent.'
             });
             </script>';
-
             $form->addButtonSearch(get_lang('Search'));
             $form->setDefaults($defaults);
 
             $content .= $form->returnForm();
-            //$content .= '</div>';
         }
 
         $content .= '</div></div></div>';
@@ -504,7 +503,11 @@ switch ($action) {
                     $course['buy_course'] = $separator;
                     $course['extra_data'] = '';
                     if ($allowExtraFields) {
-                        $course['extra_data'] = $extraField->getDataAndFormattedValues($courseId, true, $extraFieldsInCourseBlock);
+                        $course['extra_data'] = $extraField->getDataAndFormattedValues(
+                            $courseId,
+                            true,
+                            $extraFieldsInCourseBlock
+                        );
                     }
 
                     // if user registered as student
@@ -564,9 +567,12 @@ switch ($action) {
         $template = new Template($toolTitle, true, true, false, false, false);
         $template->assign('content', $content);
         $template->assign('courses', $courses);
-        $template->assign('total_number_of_courses', CoursesAndSessionsCatalog::countAvailableCoursesToShowInCatalog(
-            api_get_current_access_url_id()
-        ));
+        $template->assign(
+            'total_number_of_courses',
+            CoursesAndSessionsCatalog::countAvailableCoursesToShowInCatalog(
+                api_get_current_access_url_id()
+            )
+        );
         $template->assign('total_number_of_matching_courses', $countCoursesInCategory);
         $template->assign('catalog_url_no_extra_fields', $urlNoExtraFields);
         $template->assign('pagination', $catalogPagination);

@@ -3171,6 +3171,55 @@ class SocialManager extends UserManager
     }
 
     /**
+     * @param string $selected
+     *
+     * @return string
+     */
+    public static function getHomeProfileTabs($selected = 'home')
+    {
+        $headers = [
+            [
+                'url' => api_get_path(WEB_CODE_PATH).'auth/profile.php',
+                'content' => get_lang('Profile'),
+            ],
+        ];
+        $allowJustification = api_get_plugin_setting('justification', 'tool_enable') === 'true';
+        if ($allowJustification) {
+            $plugin = Justification::create();
+            $headers[] = [
+                'url' => api_get_path(WEB_CODE_PATH).'auth/justification.php',
+                'content' => $plugin->get_lang('Justification'),
+            ];
+        }
+
+        $allowPauseTraining = api_get_plugin_setting('pausetraining', 'tool_enable') === 'true';
+        $allowEdit = api_get_plugin_setting('pausetraining', 'allow_users_to_edit_pause_formation') === 'true';
+        if ($allowPauseTraining && $allowEdit) {
+            $plugin = PauseTraining::create();
+            $headers[] = [
+                'url' => api_get_path(WEB_CODE_PATH).'auth/pausetraining.php',
+                'content' => $plugin->get_lang('PauseTraining'),
+            ];
+        }
+
+        $selectedItem = 1;
+        foreach ($headers as $header) {
+            $info = pathinfo($header['url']);
+            if ($selected === $info['filename']) {
+                break;
+            }
+            $selectedItem++;
+        }
+
+        $tabs = '';
+        if (count($headers) > 1) {
+            $tabs = Display::tabsOnlyLink($headers, $selectedItem);
+        }
+
+        return $tabs;
+    }
+
+    /**
      * Returns the formatted header message post.
      *
      * @param int   $authorInfo

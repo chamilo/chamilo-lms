@@ -113,7 +113,7 @@ if (empty($sessionId)) {
     // Getting all users in a nice format.
     /** @var User $user */
     foreach ($subscribedUsers as $user) {
-        $choices[$user->getUserId()] = $user->getCompleteNameWithClasses();
+        $choices[$user->getId()] = $user->getCompleteNameWithClasses();
     }
 } else {
     $users = CourseManager::get_user_list_from_course_code($course->getCode(), $sessionId);

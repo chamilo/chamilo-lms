@@ -144,11 +144,26 @@ class AppPlugin
 
         if ($fromDatabase || $installedPlugins === null) {
             $installedPlugins = [];
+
+            /*if (api_is_multiple_url_enabled()) {
+                $urlId = api_get_current_access_url_id();
+                $plugins = api_get_settings_params(
+                    [
+                        'variable = ? AND selected_value = ? AND category = ? AND access_url = ? ' => [
+                            'status',
+                            'installed',
+                            'Plugins',
+                            $urlId,
+                        ],
+                    ]
+                );
+            } else {*/
             $plugins = api_get_settings_params(
-                [
-                    'variable = ? AND selected_value = ? AND category = ? ' => ['status', 'installed', 'Plugins'],
-                ]
-            );
+                    [
+                        'variable = ? AND selected_value = ? AND category = ? ' => ['status', 'installed', 'Plugins'],
+                    ]
+                );
+            //}
 
             if (!empty($plugins)) {
                 foreach ($plugins as $row) {
@@ -156,6 +171,26 @@ class AppPlugin
                 }
                 $installedPlugins = array_keys($installedPlugins);
             }
+        }
+
+        return $installedPlugins;
+    }
+
+    public function getInstalledPluginsInCurrentUrl()
+    {
+        $installedPlugins = [];
+        $urlId = api_get_current_access_url_id();
+        $plugins = api_get_settings_params(
+            [
+                'variable = ? AND selected_value = ? AND category = ? AND access_url = ?' => ['status', 'installed', 'Plugins', $urlId],
+            ]
+        );
+
+        if (!empty($plugins)) {
+            foreach ($plugins as $row) {
+                $installedPlugins[$row['subkey']] = true;
+            }
+            $installedPlugins = array_keys($installedPlugins);
         }
 
         return $installedPlugins;
@@ -198,6 +233,7 @@ class AppPlugin
             'follow_buttons',
             'formLogin_hide_unhide',
             'google_maps',
+            'google_meet',
             'grading_electronic',
             'hello_world',
             'ims_lti',
@@ -229,6 +265,7 @@ class AppPlugin
             'surveyexporttxt',
             'test2pdf',
             'tour',
+            'userremoteservice',
             'vchamilo',
             'whispeakauth',
         ];

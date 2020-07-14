@@ -2918,7 +2918,7 @@ class GroupManager
         $categories = self::get_categories();
         if (!empty($categories)) {
             foreach ($categories as $category) {
-                if ('true' == api_get_setting('allow_group_categories')) {
+                if ('true' === api_get_setting('allow_group_categories')) {
                     $content .= '<h2>'.$category['title'].'</h2>';
                 }
                 if (!empty($keyword)) {
@@ -2937,20 +2937,26 @@ class GroupManager
 
                 $content .= '<ul>';
                 if (!empty($groups)) {
+                    $url = api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(true, false);
                     foreach ($groups as $group) {
+                        $groupId = $group['id'];
+
                         $content .= '<li>';
                         $content .= Display::tag(
                             'h3',
-                            Security::remove_XSS($group['name'])
+                            Display::url(
+                                Security::remove_XSS($group['name']),
+                                $url.'&gidReq='.$groupId
+                            )
                         );
                         $users = self::getTutors($group);
                         if (!empty($users)) {
                             $content .= '<ul>';
                             $content .= "<li>".Display::tag('h4', get_lang('Tutors'))."</li><ul>";
                             foreach ($users as $user) {
-                                $user_info = api_get_user_info($user['user_id']);
-                                $content .= '<li title="'.$user_info['username'].'">'.
-                                    $user_info['complete_name_with_username'].
+                                $userInfo = api_get_user_info($user['user_id']);
+                                $content .= '<li title="'.$userInfo['username'].'">'.
+                                    $userInfo['complete_name_with_username'].
                                 '</li>';
                             }
                             $content .= '</ul>';
@@ -2962,9 +2968,9 @@ class GroupManager
                             $content .= '<ul>';
                             $content .= "<li>".Display::tag('h4', get_lang('Students'))."</li><ul>";
                             foreach ($users as $user) {
-                                $user_info = api_get_user_info($user['user_id']);
-                                $content .= '<li title="'.$user_info['username'].'">'.
-                                    $user_info['complete_name_with_username'].
+                                $userInfo = api_get_user_info($user['user_id']);
+                                $content .= '<li title="'.$userInfo['username'].'">'.
+                                    $userInfo['complete_name_with_username'].
                                     '</li>';
                             }
                             $content .= '</ul>';

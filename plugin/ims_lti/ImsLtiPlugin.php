@@ -1,4 +1,5 @@
 <?php
+
 /* For license terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Course;
@@ -26,16 +27,12 @@ class ImsLtiPlugin extends Plugin
 
     public $isAdminPlugin = true;
 
-    /**
-     * Class constructor
-     */
     protected function __construct()
     {
         $version = '1.8.0';
         $author = 'Angel Fernando Quiroz Campos';
 
         $message = Display::return_message($this->get_lang('GenerateKeyPairInfo'));
-
         $settings = [
             $message => 'html',
             'enabled' => 'boolean',
@@ -261,9 +258,6 @@ class ImsLtiPlugin extends Plugin
         return true;
     }
 
-    /**
-     *
-     */
     private function removeTools()
     {
         $sql = "DELETE FROM c_tool WHERE link LIKE 'ims_lti/start.php%' AND category = 'plugin'";
@@ -282,6 +276,7 @@ class ImsLtiPlugin extends Plugin
             'primary'
         );
 
+        // This setting won't be saved in the database.
         $this->course_settings = [
             [
                 'name' => $this->get_lang('ImsLtiDescription').$button.'<hr>',
@@ -341,7 +336,7 @@ class ImsLtiPlugin extends Plugin
      */
     private static function generateToolLink(ImsLtiTool $tool)
     {
-        return  'ims_lti/start.php?id='.$tool->getId();
+        return 'ims_lti/start.php?id='.$tool->getId();
     }
 
     /**
@@ -538,9 +533,7 @@ class ImsLtiPlugin extends Plugin
         }
 
         $followedUsers = UserManager::get_users_followed_by_drh($user->getId(), 0, true);
-
         $scope = [];
-
         /** @var array $userInfo */
         foreach ($followedUsers as $userInfo) {
             if ($generateIdForTool) {
@@ -627,9 +620,7 @@ class ImsLtiPlugin extends Plugin
             return null;
         }
 
-        $xml = new SimpleXMLElement($request);
-
-        return $xml;
+        return new SimpleXMLElement($request);
     }
 
     /**
@@ -644,9 +635,8 @@ class ImsLtiPlugin extends Plugin
         }
 
         $request = ImsLtiServiceRequestFactory::create($xml);
-        $response = $request->process();
 
-        return $response;
+        return $request->process();
     }
 
     /**
@@ -713,7 +703,6 @@ class ImsLtiPlugin extends Plugin
     {
         foreach ($params as $key => $value) {
             $newValue = preg_replace('/\s+/', ' ', $value);
-
             $params[$key] = trim($newValue);
         }
     }
@@ -751,13 +740,11 @@ class ImsLtiPlugin extends Plugin
     public function doWhenDeletingCourse($courseId)
     {
         $em = Database::getManager();
-
         $q = $em
             ->createQuery(
                 'DELETE FROM ChamiloPluginBundle:ImsLti\ImsLtiTool tool
                     WHERE tool.course = :c_id and tool.parent IS NOT NULL'
             );
-        error_log($q->getSQL());
         $q->execute(['c_id' => (int) $courseId]);
 
         $em->createQuery('DELETE FROM ChamiloPluginBundle:ImsLti\ImsLtiTool tool WHERE tool.course = :c_id')
@@ -809,7 +796,6 @@ class ImsLtiPlugin extends Plugin
     public static function getCoursesForParentTool(ImsLtiTool $tool)
     {
         $coursesId = [];
-
         if (!$tool->getParent()) {
             $coursesId = $tool->getChildren()->map(function (ImsLtiTool $tool) {
                 return $tool->getCourse();

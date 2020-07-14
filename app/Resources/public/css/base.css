@@ -3273,7 +3273,13 @@ form .formw .freeze {
 }
 
 .data_table tr.row_even {
-    background-color: #fff;
+    background-color: #fdfdfd;
+}
+
+.data_table tr.highlight {
+    font-style: italic;
+    font-weight: bolder;
+    color: #777;
 }
 
 .attendance-calendar-table .data_table tr.row_odd {

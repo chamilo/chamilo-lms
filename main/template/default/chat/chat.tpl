@@ -81,14 +81,18 @@ $(function () {
                     friend: ChChat.currentFriend
                 })
                 .done(function (response) {
-                    if (response.data.history) {
-                        ChChat._historySize = response.data.oldFileSize;
-                        ChChat.setHistory(response.data.history);
-                    }
+                    try {
+                        if (response.data.history) {
+                            ChChat._historySize = response.data.oldFileSize;
+                            ChChat.setHistory(response.data.history);
+                        }
 
-                    if (response.data.userList) {
-                        ChChat.usersOnline = response.data.usersOnline;
-                        ChChat.setConnectedUsers(response.data.userList);
+                        if (response.data.userList) {
+                            ChChat.usersOnline = response.data.usersOnline;
+                            ChChat.setConnectedUsers(response.data.userList);
+                        }
+                    } catch (error) {
+                        console.error(error);
                     }
                 });
         },

@@ -227,7 +227,6 @@ function handlePlugins()
         storePlugins();
         // Add event to the system log.
         $user_id = api_get_user_id();
-        $category = $_GET['category'];
         $installed = $plugin_obj->getInstalledPlugins();
         Event::addEvent(
             LOG_PLUGIN_CHANGE,
@@ -245,7 +244,12 @@ function handlePlugins()
 
     // Plugins NOT installed
     echo Display::page_subheader(get_lang('Plugins'));
-    echo '<form class="form-horizontal" name="plugins" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).'&sec_token='.$token.'">';
+    echo '<form
+        class="form-horizontal"
+        name="plugins"
+        method="post"
+        action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).'&sec_token='.$token.'"
+    >';
     echo '<table class="table table-hover table-striped table-bordered">';
     echo '<tr>';
     echo '<th width="20px">';
@@ -255,11 +259,6 @@ function handlePlugins()
     echo '</th>';
     echo '</tr>';
 
-    /*$plugin_list = array();
-    $my_plugin_list = $plugin_obj->get_plugin_regions();
-    foreach($my_plugin_list as $plugin_item) {
-        $plugin_list[$plugin_item] = $plugin_item;
-    }*/
     $installed = '';
     $notInstalled = '';
     foreach ($all_plugins as $pluginName) {
@@ -268,22 +267,25 @@ function handlePlugins()
             $plugin_info = [];
             require $plugin_info_file;
 
-            $officialRibbon = '';
             if (in_array($pluginName, $officialPlugins)) {
-                $officialRibbon = '<div class="ribbon-diagonal ribbon-diagonal-top-right ribbon-diagonal-official"><span>'.get_lang('PluginOfficial').'</span></div>';
+                $officialRibbon = '<div class="ribbon-diagonal ribbon-diagonal-top-right ribbon-diagonal-official">
+                    <span>'.get_lang('PluginOfficial').'</span></div>';
             } else {
-                $officialRibbon = '<div class="ribbon-diagonal ribbon-diagonal-top-right ribbon-diagonal-thirdparty"><span>'.get_lang('PluginThirdParty').'</span></div>';
+                $officialRibbon = '<div class="ribbon-diagonal ribbon-diagonal-top-right ribbon-diagonal-thirdparty">
+                    <span>'.get_lang('PluginThirdParty').'</span></div>';
             }
             $pluginRow = '';
 
-            if (in_array($pluginName, $installed_plugins)) {
+            $isInstalled = in_array($pluginName, $installed_plugins);
+            if ($isInstalled) {
                 $pluginRow .= '<tr class="row_selected">';
             } else {
                 $pluginRow .= '<tr>';
             }
             $pluginRow .= '<td>';
+
             // Checkbox
-            if (in_array($pluginName, $installed_plugins)) {
+            if ($isInstalled) {
                 $pluginRow .= '<input type="checkbox" name="plugin_'.$pluginName.'[]" checked="checked">';
             } else {
                 $pluginRow .= '<input type="checkbox" name="plugin_'.$pluginName.'[]">';
@@ -295,7 +297,7 @@ function handlePlugins()
             $pluginRow .= '<p>'.get_lang('Author').': '.$plugin_info['author'].'</p>';
 
             $pluginRow .= '<div class="btn-group">';
-            if (in_array($pluginName, $installed_plugins)) {
+            if ($isInstalled) {
                 $pluginRow .= Display::url(
                     '<em class="fa fa-cogs"></em> '.get_lang('Configure'),
                     'configure_plugin.php?name='.$pluginName,
@@ -338,7 +340,7 @@ function handlePlugins()
             $pluginRow .= '</div>';
             $pluginRow .= '</td></tr>';
 
-            if (in_array($pluginName, $installed_plugins)) {
+            if ($isInstalled) {
                 $installed .= $pluginRow;
             } else {
                 $notInstalled .= $pluginRow;

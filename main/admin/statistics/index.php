@@ -1316,20 +1316,19 @@ switch ($report) {
 
         break;
     case 'users_online':
-        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-        $sql = "SELECT count(distinct(exe_user_id)) FROM $table WHERE DATE_ADD(exe_date, INTERVAL '-3' MINUTE) > UTC_TIMESTAMP()";
-        $query = Database::query($sql);
-        $num3 = 0;
-        if (Database::num_rows($query) > 0) {
-            $row = Database::fetch_array($query);
-            $num3 = $row[0];
-        }
-        $sql = "SELECT count(distinct(exe_user_id)) FROM $table WHERE DATE_ADD(exe_date, INTERVAL '-5' MINUTE) > UTC_TIMESTAMP()";
-        $query = Database::query($sql);
-        $num5 = 0;
-        if (Database::num_rows($query) > 0) {
-            $row = Database::fetch_array($query);
-            $num5 = $row[0];
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+        $intervals = [3, 5, 30, 120];
+        $counts = [];
+        foreach ($intervals as $minutes) {
+            $sql = "SELECT count(distinct(user_id)) 
+                FROM $table WHERE
+                DATE_ADD(tms, INTERVAL '$minutes' MINUTE) > UTC_TIMESTAMP()";
+            $query = Database::query($sql);
+            $counts[$minutes] = 0;
+            if (Database::num_rows($query) > 0) {
+                $row = Database::fetch_array($query);
+                $counts[$minutes] = $row[0];
+            }
         }
         $content = '<div class="pull-left">'.get_lang('UsersOnline').'</div>
         <div class="pull-right">'.api_get_local_time().'</div>
@@ -1400,7 +1399,7 @@ switch ($report) {
                         </span>
                         <div class="tracking-info">
                             <div class="tracking-text">(3\')</div>
-                            <div class="tracking-number">'.$num3.'</div>
+                            <div class="tracking-number">'.$counts[3].'</div>
                         </div>
                     </div>
                 </div>
@@ -1413,11 +1412,38 @@ switch ($report) {
                         </span>
                         <div class="tracking-info">
                             <div class="tracking-text">(5\')</div>
-                            <div class="tracking-number">'.$num5.'</div>
+                            <div class="tracking-number">'.$counts[5].'</div>
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="col-lg-3 col-sm-3">
+                <div class="panel panel-default tracking tracking-exercise">
+                    <div class="panel-body">
+                        <span class="tracking-icon">
+                            <i class="fa fa-thermometer-2" aria-hidden="true"></i>
+                        </span>
+                        <div class="tracking-info">
+                            <div class="tracking-text">(30\')</div>
+                            <div class="tracking-number">'.$counts[30].'</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+             <div class="col-lg-3 col-sm-3">
+                <div class="panel panel-default tracking tracking-certificate">
+                    <div class="panel-body">
+                        <span class="tracking-icon">
+                            <i class="fa fa-thermometer-1" aria-hidden="true"></i>
+                        </span>
+                        <div class="tracking-info">
+                            <div class="tracking-text">(120\')</div>
+                            <div class="tracking-number">'.$counts[120].'</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+ 
         </div>';
         break;
     case 'users':

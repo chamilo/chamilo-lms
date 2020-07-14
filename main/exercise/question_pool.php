@@ -799,7 +799,7 @@ function getQuestions(
         }
         $sessionCondition = api_get_session_condition($session_id, true, 'q.session_id');
 
-        $select = 'qu.id, question, qu.type, level, q.session_id, qt.exercice_id exerciseId  ';
+        $select = 'qu.iid, qu.id, question, qu.type, level, q.session_id, qt.exercice_id exerciseId  ';
         if ($getCount) {
             $select = 'count(qu.iid) as count';
         }
@@ -808,18 +808,18 @@ function getQuestions(
         $sql = "SELECT DISTINCT
                     $select
                 FROM
-                $TBL_QUESTIONS as qu,
-                $TBL_EXERCISE_QUESTION as qt,
-                $TBL_EXERCISES as q
+                $TBL_QUESTIONS as qu
+                INNER JOIN $TBL_EXERCISE_QUESTION as qt
+                ON (qu.id = qt.question_id AND qu.c_id = qt.c_id)
+                INNER JOIN $TBL_EXERCISES as q
+                ON (q.c_id = qu.c_id AND q.id = qt.exercice_id)
                 {$efConditions['from']}
                 $from
                 WHERE
                     qu.c_id = $selected_course AND
                     qt.c_id = $selected_course AND
-                    q.c_id = $selected_course AND
-                    qu.id = qt.question_id
-                    $sessionCondition AND
-                    q.id = qt.exercice_id
+                    q.c_id = $selected_course
+                    $sessionCondition
                     $filter
                     $currentExerciseCondition
                     {$efConditions['where']}
@@ -1042,18 +1042,20 @@ $headers = [
 ];
 
 echo $pagination;
-echo '<form id="question_pool_id" method="get" action="'.$url.'">';
+
+$tableId = 'question_pool_id';
+echo '<form id="'.$tableId.'" method="get" action="'.$url.'">';
 echo '<input type="hidden" name="fromExercise" value="'.$fromExercise.'">';
 echo '<input type="hidden" name="cidReq" value="'.$_course['code'].'">';
 echo '<input type="hidden" name="selected_course" value="'.$selected_course.'">';
 echo '<input type="hidden" name="course_id" value="'.$selected_course.'">';
+echo '<input type="hidden" name="action">';
 
 $table = new HTML_Table(['class' => 'table table-bordered data_table'], false);
 $row = 0;
 $column = 0;
 foreach ($headers as $header) {
     $table->setHeaderContents($row, $column, $header);
-
     $column++;
 }
 
@@ -1076,19 +1078,25 @@ $table->display();
 
 echo '</form>';
 
-$tableId = 'question_pool_id';
 $html = '<div class="btn-toolbar">';
 $html .= '<div class="btn-group">';
-$html .= '<a class="btn btn-default" href="?'.$url.'selectall=1" onclick="javascript: setCheckbox(true, \''.$tableId.'\'); return false;">'.
-    get_lang('SelectAll').'</a>';
-$html .= '<a class="btn btn-default" href="?'.$url.'" onclick="javascript: setCheckbox(false, \''.$tableId.'\'); return false;">'.get_lang('UnSelectAll').'</a> ';
+$html .= '<a
+        class="btn btn-default"
+        href="?'.$url.'selectall=1"
+        onclick="javascript: setCheckbox(true, \''.$tableId.'\'); return false;">
+        '.get_lang('SelectAll').'</a>';
+$html .= '<a
+            class="btn btn-default"
+            href="?'.$url.'"
+            onclick="javascript: setCheckbox(false, \''.$tableId.'\'); return false;">
+            '.get_lang('UnSelectAll').'</a> ';
 $html .= '</div>';
 $html .= '<div class="btn-group">
             <button class="btn btn-default" onclick="javascript:return false;">'.get_lang('Actions').'</button>
             <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                 <span class="caret"></span>
-            </button>';
-$html .= '<ul class="dropdown-menu">';
+            </button>
+            <ul class="dropdown-menu">';
 
 $actionLabel = get_lang('ReUseACopyInCurrentTest');
 $actions = ['clone' => get_lang('ReUseACopyInCurrentTest')];
@@ -1098,7 +1106,10 @@ if ($selected_course == api_get_course_int_id()) {
 
 foreach ($actions as $action => &$label) {
     $html .= '<li>
-            <a data-action ="'.$action.'" href="#" onclick="javascript:action_click(this, \''.$tableId.'\');">'.
+            <a
+                data-action ="'.$action.'"
+                href="#"
+                onclick="javascript:action_click(this, \''.$tableId.'\');">'.
                 $label.'
             </a>
           </li>';
@@ -1276,16 +1287,25 @@ function isQuestionInActiveQuiz($questionId)
     $tblQuizRelQuestion = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
     $tblQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
 
+    $questionId = (int) $questionId;
+
+    if (empty($questionId)) {
+        return false;
+    }
+
     $result = Database::fetch_assoc(
         Database::query(
-            "SELECT COUNT(qq.question_id) c FROM $tblQuizRelQuestion qq
-                INNER JOIN $tblQuiz q ON qq.exercice_id = q.iid
-                WHERE q.active = 1
-                AND qq.question_id = $questionId"
+            "SELECT COUNT(qq.question_id) count
+                    FROM $tblQuizRelQuestion qq
+                    INNER JOIN $tblQuiz q
+                    ON qq.exercice_id = q.iid
+                    WHERE
+                        q.active = 1 AND
+                        qq.question_id = $questionId"
         )
     );
 
-    return $result['c'] > 0;
+    return $result['count'] > 0;
 }
 
 /**

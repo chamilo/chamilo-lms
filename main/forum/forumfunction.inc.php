@@ -49,8 +49,8 @@ function setFocus() {
 $htmlHeadXtra[] = api_get_jquery_libraries_js(['jquery-ui', 'jquery-upload']);
 
 // Recover Thread ID, will be used to generate delete attachment URL to do ajax
-$threadId = isset($_REQUEST['thread']) ? intval($_REQUEST['thread']) : 0;
-$forumId = isset($_REQUEST['forum']) ? intval($_REQUEST['forum']) : 0;
+$threadId = isset($_REQUEST['thread']) ? (int) ($_REQUEST['thread']) : 0;
+$forumId = isset($_REQUEST['forum']) ? (int) ($_REQUEST['forum']) : 0;
 
 $ajaxUrl = api_get_path(WEB_AJAX_PATH).'forum.ajax.php?'.api_get_cidreq();
 // The next javascript script is to delete file by ajax
@@ -492,13 +492,13 @@ function delete_forum_image($forum_id)
 {
     $table_forums = Database::get_course_table(TABLE_FORUM);
     $course_id = api_get_course_int_id();
-    $forum_id = intval($forum_id);
+    $forum_id = (int) $forum_id;
 
     $sql = "SELECT forum_image FROM $table_forums
             WHERE forum_id = $forum_id AND c_id = $course_id";
     $result = Database::query($sql);
     $row = Database::fetch_array($result);
-    if ($row['forum_image'] != '') {
+    if ('' != $row['forum_image']) {
         $file = api_get_path(SYS_COURSE_PATH).api_get_course_path().'/upload/forum/images/'.$row['forum_image'];
         if (file_exists($file)) {
             unlink($file);
@@ -1256,9 +1256,9 @@ function return_visible_invisible_icon(
 function return_lock_unlock_icon($content, $id, $current_lock_status, $additional_url_parameters = '')
 {
     $html = '';
-    $id = intval($id);
+    $id = (int) $id;
     //check if the forum is blocked due
-    if ($content == 'thread') {
+    if ('thread' == $content) {
         if (api_resource_is_locked_by_gradebook($id, LINK_FORUM_THREAD)) {
             $html .= Display::return_icon(
                 'lock_na.png',
@@ -1270,7 +1270,7 @@ function return_lock_unlock_icon($content, $id, $current_lock_status, $additiona
             return $html;
         }
     }
-    if ($current_lock_status == '1') {
+    if ('1' == $current_lock_status) {
         $html .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&';
         if (is_array($additional_url_parameters)) {
             foreach ($additional_url_parameters as $key => $value) {
@@ -1280,7 +1280,7 @@ function return_lock_unlock_icon($content, $id, $current_lock_status, $additiona
         $html .= 'action=unlock&content='.$content.'&id='.$id.'">'.
             Display::return_icon('lock.png', get_lang('Unlock'), [], ICON_SIZE_SMALL).'</a>';
     }
-    if ($current_lock_status == '0') {
+    if ('0' == $current_lock_status) {
         $html .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&';
         if (is_array($additional_url_parameters)) {
             foreach ($additional_url_parameters as $key => $value) {
@@ -1460,22 +1460,22 @@ function move_up_down($content, $direction, $id)
     $table_forums = Database::get_course_table(TABLE_FORUM);
     $table_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
     $course_id = api_get_course_int_id();
-    $id = intval($id);
+    $id = (int) $id;
 
     // Determine which field holds the sort order.
-    if ($content == 'forumcategory') {
+    if ('forumcategory' == $content) {
         $table = $table_categories;
         $sort_column = 'cat_order';
         $id_column = 'cat_id';
         $sort_column = 'cat_order';
-    } elseif ($content == 'forum') {
+    } elseif ('forum' == $content) {
         $table = $table_forums;
         $sort_column = 'forum_order';
         $id_column = 'forum_id';
         $sort_column = 'forum_order';
         // We also need the forum_category of this forum.
         $sql = "SELECT forum_category FROM $table_forums
-                WHERE c_id = $course_id AND forum_id = ".intval($id);
+                WHERE c_id = $course_id AND forum_id = ".$id;
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
         $forum_category = $row['forum_category'];
@@ -1915,9 +1915,9 @@ function get_last_post_by_thread($course_id, $thread_id, $forum_id, $show_visibl
         return false;
     }
 
-    $thread_id = intval($thread_id);
-    $forum_id = intval($forum_id);
-    $course_id = intval($course_id);
+    $thread_id = (int) $thread_id;
+    $forum_id = (int) $forum_id;
+    $course_id = (int) $course_id;
 
     $table_posts = Database::get_course_table(TABLE_FORUM_POST);
     $sql = "SELECT * FROM $table_posts
@@ -2289,7 +2289,7 @@ function getPosts(
         if (!empty($posterId)) {
             $user = api_get_user_entity($posterId);
             if ($user) {
-                $postInfo['user_id'] = $user->getUserId();
+                $postInfo['user_id'] = $user->getId();
                 $postInfo['username'] = $user->getUsername();
                 $postInfo['username_canonical'] = $user->getUsernameCanonical();
                 $postInfo['lastname'] = $user->getLastname();

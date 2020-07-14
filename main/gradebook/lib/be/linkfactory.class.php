@@ -6,8 +6,6 @@
  * Factory for link objects.
  *
  * @author Bert Steppé
- *
- * @package chamilo.gradebook
  */
 class LinkFactory
 {

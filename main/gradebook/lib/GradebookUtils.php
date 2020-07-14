@@ -128,7 +128,7 @@ class GradebookUtils
             }
         } else {
             $isCoach = api_is_coach(api_get_session_id(), api_get_course_int_id());
-            if ($isCoach === false) {
+            if (false === $isCoach) {
                 if (!api_is_allowed_to_edit()) {
                     api_not_allowed();
                 }
@@ -555,9 +555,8 @@ class GradebookUtils
         if (Database::num_rows($res) < 1) {
             return false;
         }
-        $row = Database::fetch_array($res, 'ASSOC');
 
-        return $row;
+        return Database::fetch_array($res, 'ASSOC');
     }
 
     /**
@@ -691,7 +690,7 @@ class GradebookUtils
                 WHERE gc.cat_id = $cat_id AND user_id = $user_id ";
         $rs_exist = Database::query($sql);
         $row = Database::fetch_array($rs_exist);
-        if ($row['count'] == 0) {
+        if (0 == $row['count']) {
             $params = [
                 'cat_id' => $cat_id,
                 'user_id' => $user_id,
@@ -737,7 +736,7 @@ class GradebookUtils
     {
         $table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
         $table_user = Database::get_main_table(TABLE_MAIN_USER);
-        $sql = 'SELECT DISTINCT u.user_id, u.lastname, u.firstname, u.username
+        $sql = 'SELECT DISTINCT u.user_id, u.lastname, u.firstname, u.username, gc.created_at
                 FROM '.$table_user.' u
                 INNER JOIN '.$table_certificate.' gc
                 ON u.user_id=gc.user_id ';
@@ -904,7 +903,7 @@ class GradebookUtils
             $session_id = api_get_session_id();
 
             $t = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-            $sql = "SELECT * FROM $t 
+            $sql = "SELECT * FROM $t
                     WHERE course_code = '".Database::escape_string($course_code)."' ";
             if (!empty($session_id)) {
                 $sql .= " AND session_id = ".$session_id;
@@ -982,14 +981,14 @@ class GradebookUtils
                     if (empty($grade_model_id)) {
                         if ($my_cat->get_parent_id() == 0) {
                             //$default_weight = $my_cat->get_weight();
-                            $select_gradebook->addoption(get_lang('Default'), $my_cat->get_id());
+                            $select_gradebook->addOption(get_lang('Default'), $my_cat->get_id());
                             $cats_added[] = $my_cat->get_id();
                         } else {
-                            $select_gradebook->addoption($my_cat->get_name(), $my_cat->get_id());
+                            $select_gradebook->addOption($my_cat->get_name(), $my_cat->get_id());
                             $cats_added[] = $my_cat->get_id();
                         }
                     } else {
-                        $select_gradebook->addoption(get_lang('Select'), 0);
+                        $select_gradebook->addOption(get_lang('Select'), 0);
                     }
                 }
             }
@@ -1183,10 +1182,10 @@ class GradebookUtils
 
         if (!empty($current_session)) {
             $sql = "SELECT user.user_id, user.username, lastname, firstname, official_code
-                    FROM $tbl_session_course_user as scru 
+                    FROM $tbl_session_course_user as scru
                     INNER JOIN $tbl_user as user
                     ON (scru.user_id = user.user_id)
-                    WHERE                        
+                    WHERE
                         scru.status = 0 AND
                         scru.c_id='$courseId' AND
                         session_id ='$current_session'
@@ -1355,7 +1354,7 @@ class GradebookUtils
         $tbl_forum_thread = Database::get_course_table(TABLE_FORUM_THREAD);
         $tbl_attendance = Database::get_course_table(TABLE_ATTENDANCE);
 
-        $sql = 'UPDATE '.$table_link.' 
+        $sql = 'UPDATE '.$table_link.'
                 SET weight = '."'".Database::escape_string($weight)."'".'
                 WHERE id = '.$linkId;
 
@@ -1368,13 +1367,13 @@ class GradebookUtils
         $rs_attendance = Database::query($sql);
         if (Database::num_rows($rs_attendance) > 0) {
             $row_attendance = Database::fetch_array($rs_attendance);
-            $sql = 'UPDATE '.$tbl_attendance.' SET 
+            $sql = 'UPDATE '.$tbl_attendance.' SET
                     attendance_weight ='.api_float_val($weight).'
                     WHERE c_id = '.$course_id.' AND  id = '.intval($row_attendance['ref_id']);
             Database::query($sql);
         }
         // Update weight into forum thread
-        $sql = 'UPDATE '.$tbl_forum_thread.' SET 
+        $sql = 'UPDATE '.$tbl_forum_thread.' SET
                 thread_weight = '.api_float_val($weight).'
                 WHERE
                     c_id = '.$course_id.' AND

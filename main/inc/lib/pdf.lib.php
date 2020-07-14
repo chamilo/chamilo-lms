@@ -481,6 +481,14 @@ class PDF
             api_get_path(SYS_CODE_PATH).'img/',
             $document_html
         );
+
+        $theme = api_get_visual_theme();
+        $document_html = str_replace(
+            api_get_path(WEB_CSS_PATH).'themes/'.$theme,
+            api_get_path(SYS_PUBLIC_PATH).'css/themes/'.$theme,
+            $document_html
+        );
+
         $document_html = str_replace(api_get_path(WEB_ARCHIVE_PATH), api_get_path(SYS_ARCHIVE_PATH), $document_html);
 
         // The library mPDF expects UTF-8 encoded input data.
@@ -500,7 +508,7 @@ class PDF
 
         $cssBootstrap = file_get_contents(api_get_path(SYS_PATH).'web/assets/bootstrap/dist/css/bootstrap.min.css');
         if ($addDefaultCss) {
-            $css_file = api_get_path(SYS_CSS_PATH).'themes/'.api_get_visual_theme().'/print.css';
+            $css_file = api_get_path(SYS_CSS_PATH).'themes/'.$theme.'/print.css';
             if (!file_exists($css_file)) {
                 $css_file = api_get_path(SYS_CSS_PATH).'/print.css';
             }
@@ -526,13 +534,12 @@ class PDF
             $output_file = $pdf_name.'.pdf';
         }
 
-        if ($outputMode == 'F') {
+        if ($outputMode === 'F') {
             $output_file = api_get_path(SYS_ARCHIVE_PATH).$output_file;
         }
 
         if ($saveInFile) {
             $fileToSave = !empty($fileToSave) ? $fileToSave : api_get_path(SYS_ARCHIVE_PATH).uniqid();
-
             @$this->pdf->Output(
                 $fileToSave,
                 $outputMode

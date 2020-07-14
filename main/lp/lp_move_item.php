@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -10,8 +11,6 @@ use ChamiloSession as Session;
  * @author Denes Nagy
  * @author Roan Embrechts, refactoring and code cleaning
  * @author Yannick Warnier <ywarnier@beeznest.org> - cleaning and update for new SCORM tool
- *
- * @package chamilo.learnpath
  */
 $this_section = SECTION_COURSES;
 api_protect_course_script();
@@ -73,13 +72,11 @@ $interbreadcrumb[] = [
 // Theme calls
 $show_learn_path = true;
 $lp_theme_css = $learnPath->get_theme();
-
 Display::display_header(get_lang('Move'), 'Path');
 
 $suredel = trim(get_lang('AreYouSureToDeleteJS'));
 ?>
 <script>
-/* <![CDATA[ */
 function stripslashes(str) {
     str=str.replace(/\\'/g,'\'');
     str=str.replace(/\\"/g,'"');
@@ -89,12 +86,9 @@ function stripslashes(str) {
 }
 function confirmation(name) {
     name=stripslashes(name);
-    if (confirm("<?php echo $suredel; ?> " + name + " ?"))
-    {
+    if (confirm("<?php echo $suredel; ?> " + name + " ?")) {
         return true;
-    }
-    else
-    {
+    } else {
         return false;
     }
 }
@@ -108,14 +102,14 @@ echo '<div class="col-md-3">';
 echo '</div>';
 
 echo '<div class="col-md-9">';
-
 if (isset($is_success) && $is_success === true) {
     $msg = '<div class="lp_message" style="margin-bottom:10px;">';
     $msg .= 'The item has been moved.';
     $msg .= '</div>';
     echo $learnPath->display_item($_GET['id'], $msg);
 } else {
-    echo $learnPath->display_move_item($_GET['id']);
+    $item = new learnpathItem($_GET['id']);
+    echo $learnPath->display_move_item($item);
 }
 echo '</div>';
 echo '</div>';

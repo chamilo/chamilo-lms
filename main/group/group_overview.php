@@ -105,7 +105,6 @@ if (isset($_GET['action'])) {
     }
 }
 
-/*	Header */
 $interbreadcrumb[] = ['url' => 'group.php?'.api_get_cidreq(), 'name' => get_lang('Groups')];
 $origin = api_get_origin();
 if ('learnpath' != $origin) {
@@ -155,6 +154,6 @@ Display::return_icon('user.png', get_lang('GoTo').' '.get_lang('Users'), '', ICO
 echo Display::toolbarAction('actions', [$actions, GroupManager::getSearchForm()]);
 echo GroupManager::getOverview($courseId, $keyword);
 
-if ('learnpath' != $origin) {
+if ('learnpath' !== $origin) {
     Display::display_footer();
 }

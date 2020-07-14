@@ -527,7 +527,7 @@ class CourseHome
                 $conditions = ' WHERE visibility = 1 AND
                                 (category = "authoring" OR category = "interaction" OR category = "plugin") AND
                                 t.name <> "notebookteacher" ';
-                if ((api_is_coach() || api_is_course_tutor() || api_is_platform_admin()) &&
+                if ((api_is_coach() || api_is_course_tutor() || $is_platform_admin) &&
                     $_SESSION['studentview'] != 'studentview'
                 ) {
                     $conditions = ' WHERE (
@@ -617,7 +617,7 @@ class CourseHome
             if ($is_platform_admin) {
                 continue;
             }
-            if ($line['variable'] == 'course_hide_tools' && $line['selected_value'] == 'true') {
+            if ($line['variable'] === 'course_hide_tools' && $line['selected_value'] === 'true') {
                 $hide_list[] = $line['subkey'];
                 $check = true;
             }
@@ -637,6 +637,7 @@ class CourseHome
             return true;
         });
 
+        $isAllowToEdit = api_is_allowed_to_edit(null, true);
         foreach ($tools as $temp_row) {
             $add = false;
             if ($check) {
@@ -657,7 +658,7 @@ class CourseHome
                 /** @var CTool $toolObj */
                 $toolObj = Database::getManager()->getRepository('ChamiloCourseBundle:CTool')->findOneBy($criteria);
                 if ($toolObj) {
-                    if (api_is_allowed_to_edit() == false && $toolObj->getVisibility() == false) {
+                    if ($isAllowToEdit == false && $toolObj->getVisibility() == false) {
                         continue;
                     }
                 }
@@ -673,7 +674,7 @@ class CourseHome
                     );
                     $path = $lp->get_preview_image_path(ICON_SIZE_BIG);
 
-                    if (api_is_allowed_to_edit(null, true)) {
+                    if ($isAllowToEdit) {
                         $add = true;
                     } else {
                         $add = learnpath::is_lp_visible_for_student(
@@ -726,12 +727,6 @@ class CourseHome
                 break;
             case TOOL_INTERACTION:
                 $sql_links = null;
-                /*
-                  $sql_links = "SELECT tl.*, tip.visibility
-                  FROM $course_link_table tl
-                  LEFT JOIN $course_item_property_table tip ON tip.tool='link' AND tip.ref=tl.id
-                  WHERE tl.on_homepage='1' ";
-                 */
                 break;
             case TOOL_STUDENT_VIEW:
                 $sql_links = "SELECT tl.*, tip.visibility
@@ -779,7 +774,7 @@ class CourseHome
         if (isset($tmp_all_tools_list)) {
             $tbl_blogs_rel_user = Database::get_course_table(TABLE_BLOGS_REL_USER);
             foreach ($tmp_all_tools_list as $tool) {
-                if ($tool['image'] == 'blog.gif') {
+                if ($tool['image'] === 'blog.gif') {
                     // Get blog id
                     $blog_id = substr($tool['link'], strrpos($tool['link'], '=') + 1, strlen($tool['link']));
 
@@ -801,9 +796,7 @@ class CourseHome
             }
         }
 
-        $list = self::filterPluginTools($all_tools_list, $course_tool_category);
-
-        return $list;
+        return self::filterPluginTools($all_tools_list, $course_tool_category);
     }
 
     /**
@@ -838,14 +831,19 @@ class CourseHome
         }
         $web_code_path = api_get_path(WEB_CODE_PATH);
         $session_id = api_get_session_id();
+        $courseId = api_get_course_int_id();
         $is_platform_admin = api_is_platform_admin();
+        $courseInfo = api_get_course_info();
+
         $allowEditionInSession = api_get_configuration_value('allow_edit_tool_visibility_in_session');
+
         if ($session_id == 0) {
             $is_allowed_to_edit = api_is_allowed_to_edit(null, true) && api_is_course_admin();
         } else {
             $is_allowed_to_edit = api_is_allowed_to_edit(null, true) && !api_is_coach();
             if ($allowEditionInSession) {
-                $is_allowed_to_edit = api_is_allowed_to_edit(null, true) && api_is_coach($session_id, api_get_course_int_id());
+                $is_allowed_to_edit = (api_is_allowed_to_edit(null, true) &&
+                    api_is_coach($session_id, $courseId)) || $is_platform_admin;
             }
         }
 
@@ -868,8 +866,8 @@ class CourseHome
                         !learnpath::is_lp_visible_for_student(
                             $lpId,
                             api_get_user_id(),
-                            api_get_course_info(),
-                            api_get_session_id()
+                            $courseInfo,
+                            $session_id
                         )
                     ) {
                         continue;
@@ -898,6 +896,7 @@ class CourseHome
                                     ICON_SIZE_SMALL,
                                     false
                                 );
+                                $link['name'] = '<em id="'.'linktool_'.$tool['iid'].'" class="fa fa-eye" title="'.get_lang('Deactivate').'"></em>';
                                 $link['cmd'] = 'hide=yes';
                                 $lnk[] = $link;
                             }
@@ -909,22 +908,25 @@ class CourseHome
                                     ICON_SIZE_SMALL,
                                     false
                                 );
+                                $link['name'] = '<em id="'.'linktool_'.$tool['iid'].'" class="fa fa-eye-slash text-muted" title="'.get_lang('Activate').'"></em>';
                                 $link['cmd'] = 'restore=yes';
                                 $lnk[] = $link;
                             }
                         }
                     } elseif ($allowEditionInSession) {
                         $criteria = [
-                            'cId' => api_get_course_int_id(),
+                            'cId' => $courseId,
                             'name' => $tool['name'],
                             'sessionId' => $session_id,
                         ];
+
                         /** @var CTool $tool */
                         $toolObj = Database::getManager()->getRepository('ChamiloCourseBundle:CTool')->findOneBy($criteria);
                         if ($toolObj) {
                             $visibility = (int) $toolObj->getVisibility();
+
                             switch ($visibility) {
-                                case '0':
+                                case 0:
                                     $info = pathinfo($tool['image']);
                                     $basename = basename($tool['image'], '.'.$info['extension']);
                                     $tool['image'] = $basename.'_na.'.$info['extension'];
@@ -935,10 +937,11 @@ class CourseHome
                                         ICON_SIZE_SMALL,
                                         false
                                     );
+                                    $link['name'] = '<em id="'.'linktool_'.$tool['iid'].'"class="fa fa-eye" title="'.get_lang('Deactivate').'"></em>';
                                     $link['cmd'] = 'restore=yes';
                                     $lnk[] = $link;
                                     break;
-                                case '1':
+                                case 1:
                                     $link['name'] = Display::return_icon(
                                         'visible.png',
                                         get_lang('Deactivate'),
@@ -946,6 +949,7 @@ class CourseHome
                                         ICON_SIZE_SMALL,
                                         false
                                     );
+                                    $link['name'] = '<em id="'.'linktool_'.$tool['iid'].'"class="fa fa-eye-slash text-muted" title="'.get_lang('Activate').'"></em>';
                                     $link['cmd'] = 'hide=yes';
                                     $lnk[] = $link;
                                     break;
@@ -958,6 +962,7 @@ class CourseHome
                                 ICON_SIZE_SMALL,
                                 false
                             );
+                            $link['name'] = '<em id="'.'linktool_'.$tool['iid'].'"class="fa fa-eye-slash text-muted" title="'.get_lang('Activate').'"></em>';
                             $link['cmd'] = 'hide=yes';
                             $lnk[] = $link;
                         }
@@ -1046,7 +1051,7 @@ class CourseHome
 
                 // Including Courses Plugins
                 // Creating title and the link
-                if (isset($tool['category']) && $tool['category'] == 'plugin') {
+                if (isset($tool['category']) && $tool['category'] === 'plugin') {
                     $plugin_info = $app_plugin->getPluginInfo($tool['name'], true);
                     if (isset($plugin_info) && isset($plugin_info['title'])) {
                         $tool_name = $plugin_info['title'];
@@ -1616,10 +1621,8 @@ class CourseHome
     public static function getCoachBlocks()
     {
         $blocks = [];
-        $my_list = self::get_tools_category(TOOL_STUDENT_VIEW);
-
         $blocks[] = [
-            'content' => self::show_tools_category($my_list),
+            'content' => self::show_tools_category(self::get_tools_category(TOOL_STUDENT_VIEW)),
         ];
 
         $sessionsCopy = api_get_setting('allow_session_course_copy_for_teachers');

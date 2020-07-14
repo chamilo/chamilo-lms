@@ -78,6 +78,38 @@ if ('true' === api_get_setting('enable_record_audio')) {
     $htmlHeadXtra[] = api_get_js('record_audio/record_audio.js');
 }
 
+$zoomOptions = api_get_configuration_value('quiz_image_zoom');
+if (isset($zoomOptions['options']) && !in_array($origin, ['embeddable', 'noheader'])) {
+    $options = $zoomOptions['options'];
+    $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'jquery.elevatezoom.js"></script>';
+    $htmlHeadXtra[] = '<script>
+        $(document).ready(function() {
+            $("img").each(function() {
+                var attr = $(this).attr("data-zoom-image");
+                // For some browsers, `attr` is undefined; for others,
+                // `attr` is false.  Check for both.
+                if (typeof attr !== typeof undefined && attr !== false) {
+                    $(this).elevateZoom({
+                        scrollZoom : true,
+                        cursor: "crosshair",
+                        tint:true,
+                        tintColour:\'#CCC\',
+                        tintOpacity:0.5,
+                        zoomWindowWidth:'.$options['zoomWindowWidth'].',
+                        zoomWindowHeight:'.$options['zoomWindowHeight'].',
+                        zoomWindowPosition: 7
+                    });
+                }
+            });
+
+            $(document).contextmenu(function() {
+                return false;
+            })
+
+        });
+    </script>';
+}
+
 $template = new Template();
 
 // General parameters passed via POST/GET

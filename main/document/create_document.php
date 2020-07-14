@@ -1,12 +1,11 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
 
 /**
  * This file allows creating new html documents with an online WYSIWYG html editor.
- *
- * @package chamilo.document
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -17,6 +16,7 @@ $this_section = SECTION_COURSES;
 $groupRights = Session::read('group_member_with_upload_rights');
 $htmlHeadXtra[] = '
 <script>
+
 $(function() {
     $(".scrollbar-light").scrollbar();
 
@@ -30,6 +30,11 @@ $(function() {
 
     CKEDITOR.on("instanceReady", function (e) {
         showTemplates();
+        e.editor.on("beforeCommandExec", function (event) {
+            if (event.data.name == "save") {
+                $("#create_document").append("<input type=hidden name=button_ck value=1 />");
+            }
+        });
     });
 });
 
@@ -58,7 +63,6 @@ $(window).on("load", function () {
 
 //I'm in the certification module?
 $is_certificate_mode = false;
-
 if (isset($_REQUEST['certificate']) && $_REQUEST['certificate'] == 'true') {
     $is_certificate_mode = true;
 }
@@ -103,14 +107,13 @@ if (!empty($groupId)) {
 }
 
 if (empty($document_data)) {
+    $dir = '/';
+    $folder_id = 0;
     if (api_is_in_group()) {
         $document_id = DocumentManager::get_document_id($_course, $group_properties['directory']);
         $document_data = DocumentManager::get_document_data_by_id($document_id, api_get_course_id());
         $dir = $document_data['path'];
         $folder_id = $document_data['id'];
-    } else {
-        $dir = '/';
-        $folder_id = 0;
     }
 } else {
     $folder_id = $document_data['id'];
@@ -199,8 +202,12 @@ if (!is_dir($filepath)) {
 if (!$is_certificate_mode) {
     if (api_is_in_group()) {
         $interbreadcrumb[] = [
-            "url" => "../group/group_space.php?".api_get_cidreq(),
-            "name" => get_lang('GroupSpace'),
+            'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
+            'name' => get_lang('Groups'),
+        ];
+        $interbreadcrumb[] = [
+            'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
+            'name' => get_lang('GroupSpace').' '.$group_properties['name'],
         ];
         $path = explode('/', $dir);
         if ('/'.$path[1] != $group_properties['directory']) {
@@ -240,7 +247,7 @@ if (isset($group_properties)) {
     $display_dir = implode('/', $display_dir);
 }
 
-$select_cat = isset($_GET['selectcat']) ? intval($_GET['selectcat']) : null;
+$select_cat = isset($_REQUEST['selectcat']) ? (int) $_REQUEST['selectcat'] : null;
 $curDirPath = isset($_GET['curdirpath']) ? Security::remove_XSS($_GET['curdirpath']) : null;
 
 // Create a new form
@@ -254,7 +261,8 @@ $form = new FormValidator(
 // form title
 $form->addElement('header', $nameTools);
 
-if ($is_certificate_mode) {//added condition for certicate in gradebook
+if ($is_certificate_mode) {
+    //added condition for certicate in gradebook
     $form->addElement(
         'hidden',
         'certificate',
@@ -505,18 +513,9 @@ if ($form->validate()) {
 
     // Setting the title
     $title = $values['title'];
-
-    // Setting the extension
     $extension = 'html';
-
     $content = Security::remove_XSS($values['content'], COURSEMANAGERLOWSECURITY);
-
-    /*if (strpos($content, '/css/frames.css') == false) {
-        $content = str_replace('</head>', '<link rel="stylesheet" href="./css/frames.css" type="text/css" /><style> body{margin:50px;}</style></head>', $content);
-    }*/
-
     // Don't create file with the same name.
-
     if (file_exists($filepath.$filename.'.'.$extension)) {
         Display::addFlash(Display::return_message(get_lang('FileExists').' '.$title, 'error', false));
         Display:: display_header($nameTools, 'Doc');
@@ -596,17 +595,24 @@ if ($form->validate()) {
                 $certificate_condition = '&certificate=true&curdirpath=/certificates';
             }
             Display::addFlash(Display::return_message(get_lang('ItemAdded')));
-            header('Location: document.php?'.api_get_cidreq().'&id='.$folder_id.$selectcat.$certificate_condition);
+            $url = 'document.php?'.api_get_cidreq().'&id='.$folder_id.$selectcat.$certificate_condition;
+
+            $redirectToEditPage = isset($_POST['button_ck']) && 1 === (int) $_POST['button_ck'];
+            if ($redirectToEditPage) {
+                $url = 'edit_document.php?'.api_get_cidreq().'&id='.$document_id.$selectcat.$certificate_condition;
+            }
+
+            header('Location: '.$url);
             exit();
         } else {
             Display::addFlash(Display::return_message(get_lang('Impossible'), 'error'));
-            Display :: display_header($nameTools, 'Doc');
-            Display :: display_footer();
+            Display::display_header($nameTools, 'Doc');
+            Display::display_footer();
         }
     } else {
         Display::addFlash(Display::return_message(get_lang('Impossible'), 'error'));
-        Display :: display_header($nameTools, 'Doc');
-        Display :: display_footer();
+        Display::display_header($nameTools, 'Doc');
+        Display::display_footer();
     }
 } else {
     // Copied from document.php
@@ -631,15 +637,15 @@ if ($form->validate()) {
     }
 
     Display :: display_header($nameTools, "Doc");
-    // actions
     // link back to the documents overview
     if ($is_certificate_mode) {
-        $actionsLeft = '<a href="document.php?certificate=true&id='.$folder_id.'&selectcat='.Security::remove_XSS($_GET['selectcat']).'">'.
+        $actionsLeft = '<a href="document.php?'.api_get_cidreq().'&certificate=true&id='.$folder_id.'&selectcat='.$select_cat.'">'.
             Display::return_icon('back.png', get_lang('Back').' '.get_lang('To').' '.get_lang('CertificateOverview'), '', ICON_SIZE_MEDIUM).'</a>';
         $actionsLeft .= '<a id="hide_bar_template" href="#" role="button">'.
-            Display::return_icon('expand.png', get_lang('Back'), ['id' => 'expand'], ICON_SIZE_MEDIUM).Display::return_icon('contract.png', get_lang('Back'), ['id' => 'contract', 'class' => 'hide'], ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('expand.png', get_lang('Back'), ['id' => 'expand'], ICON_SIZE_MEDIUM).
+            Display::return_icon('contract.png', get_lang('Back'), ['id' => 'contract', 'class' => 'hide'], ICON_SIZE_MEDIUM).'</a>';
     } else {
-        $actionsLeft = '<a href="document.php?curdirpath='.Security::remove_XSS($dir).'">'.
+        $actionsLeft = '<a href="document.php?'.api_get_cidreq().'&curdirpath='.Security::remove_XSS($dir).'">'.
             Display::return_icon('back.png', get_lang('Back').' '.get_lang('To').' '.get_lang('DocumentsOverview'), '', ICON_SIZE_MEDIUM).'</a>';
         $actionsLeft .= '<a id="hide_bar_template" href="#" role="button">'.
             Display::return_icon('expand.png', get_lang('Expand'), ['id' => 'expand'], ICON_SIZE_MEDIUM).

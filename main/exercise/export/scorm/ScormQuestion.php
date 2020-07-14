@@ -213,7 +213,7 @@ class ScormQuestion extends Question
                 $weight = 0;
                 break;
         }
-        $js .= 'questions_score_max['.$this->js_id.'] = '.$weight.";";
+        $js .= 'questions_score_max['.$this->js_id.'] = '.$weight.';';
 
         return $js;
     }

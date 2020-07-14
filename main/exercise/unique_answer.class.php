@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
@@ -81,6 +82,7 @@ class UniqueAnswer extends Question
         $form->addHtml($html);
 
         $defaults = [];
+
         $correct = 0;
         if (!empty($this->id)) {
             $answer = new Answer($this->id);
@@ -163,7 +165,6 @@ class UniqueAnswer extends Question
                 $defaults['weighting[1]'] = 10;
                 $defaults['answer[2]'] = get_lang('DefaultUniqueAnswer2');
                 $defaults['weighting[2]'] = 0;
-
                 $temp_scenario['destination'.$i] = ['0'];
                 $temp_scenario['lp'.$i] = ['0'];
             }
@@ -235,9 +236,7 @@ class UniqueAnswer extends Question
         global $text;
         $buttonGroup = [];
 
-        if ($obj_ex->edit_exercise_in_lp == true ||
-            (empty($this->exerciseList) && empty($obj_ex->id))
-        ) {
+        if (true === $obj_ex->edit_exercise_in_lp || (empty($this->exerciseList) && empty($obj_ex->id))) {
             //setting the save button here and not in the question class.php
             $buttonGroup[] = $form->addButtonDelete(get_lang('LessAnswer'), 'lessAnswers', true);
             $buttonGroup[] = $form->addButtonCreate(get_lang('PlusAnswer'), 'moreAnswers', true);
@@ -259,6 +258,10 @@ class UniqueAnswer extends Question
             $correct = 1;
         }
 
+        if (isset($_POST) && isset($_POST['correct'])) {
+            $correct = (int) $_POST['correct'];
+        }
+
         $defaults['correct'] = $correct;
 
         if (!empty($this->id)) {
@@ -268,7 +271,12 @@ class UniqueAnswer extends Question
                 // Default sample content.
                 $form->setDefaults($defaults);
             } else {
-                $form->setDefaults(['correct' => 1]);
+                $correct = 1;
+                if (isset($_POST) && isset($_POST['correct'])) {
+                    $correct = (int) $_POST['correct'];
+                }
+
+                $form->setDefaults(['correct' => $correct]);
             }
         }
         $form->setConstants(['nb_answers' => $nb_answers]);
@@ -343,13 +351,25 @@ class UniqueAnswer extends Question
             $weighting = trim($form->getSubmitValue('weighting['.$i.']'));
             $scenario = $form->getSubmitValue('scenario');
 
-            //$list_destination = $form -> getSubmitValue('destination'.$i);
-            //$destination_str = $form -> getSubmitValue('destination'.$i);
+            $try = null;
+            $lp = null;
+            $destination = null;
+            $url = null;
+            if (isset($scenario['try'.$i])) {
+                $try = !empty($scenario['try'.$i]);
+            }
 
-            $try = !empty($scenario['try'.$i]);
-            $lp = $scenario['lp'.$i];
-            $destination = $scenario['destination'.$i];
-            $url = trim($scenario['url'.$i]);
+            if (isset($scenario['lp'.$i])) {
+                $lp = $scenario['lp'.$i];
+            }
+
+            if (isset($scenario['destination'.$i])) {
+                $destination = $scenario['destination'.$i];
+            }
+
+            if (isset($scenario['url'.$i])) {
+                $url = trim($scenario['url'.$i]);
+            }
 
             /*
             How we are going to parse the destination value

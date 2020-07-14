@@ -45,6 +45,7 @@ class Survey extends Basic
                 'Video',
                 'Oembed',
                 'Youtube',
+                'VimeoEmbed',
                 'Flash',
                 'Audio',
                 'leaflet',

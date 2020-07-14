@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Component\Editor\Driver;
@@ -7,8 +8,6 @@ namespace Chamilo\CoreBundle\Component\Editor\Driver;
  * Class PersonalDriver.
  *
  * @todo add more checks in upload/rm
- *
- * @package Chamilo\CoreBundle\Component\Editor\Driver
  */
 class PersonalDriver extends Driver implements DriverInterface
 {
@@ -49,6 +48,8 @@ class PersonalDriver extends Driver implements DriverInterface
                     'text/html',
                     'text/javascript',
                     'text/ecmascript',
+                    'image/svg+xml',
+                    'image/svg',
                 ];
 
                 $driver = [

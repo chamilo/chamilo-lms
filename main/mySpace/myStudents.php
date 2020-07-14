@@ -10,6 +10,7 @@ if (!isset($_GET['course'])) {
 }
 
 require_once __DIR__.'/../inc/global.inc.php';
+require_once '../work/work.lib.php';
 
 api_block_anonymous_users();
 
@@ -30,6 +31,8 @@ $details = isset($_GET['details']) ? Security::remove_XSS($_GET['details']) : ''
 $currentUrl = api_get_self().'?student='.$student_id.'&course='.$courseCode.'&id_session='.$sessionId
     .'&origin='.$origin.'&details='.$details;
 $allowMessages = api_get_configuration_value('private_messages_about_user');
+$workingTime = api_get_configuration_value('considered_working_time');
+$workingTimeEdit = api_get_configuration_value('allow_working_time_edition');
 
 if (empty($student_id)) {
     api_not_allowed(true);
@@ -212,6 +215,30 @@ $tbl_stats_exercices = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISE
 $action = isset($_GET['action']) ? $_GET['action'] : '';
 
 switch ($action) {
+    case 'add_work_time':
+        if (false === $workingTimeEdit) {
+            api_not_allowed(true);
+        }
+        $workingTime = isset($_GET['time']) ? $_GET['time'] : '';
+        $workId = isset($_GET['work_id']) ? $_GET['work_id'] : '';
+        Event::eventAddVirtualCourseTime($courseInfo['real_id'], $student_id, $sessionId, $workingTime, $workId);
+        Display::addFlash(Display::return_message(get_lang('Updated')));
+
+        header('Location: '.$currentUrl);
+        exit;
+    case 'remove_work_time':
+        if (false === $workingTimeEdit) {
+            api_not_allowed(true);
+        }
+        $workingTime = isset($_GET['time']) ? $_GET['time'] : '';
+        $workId = isset($_GET['work_id']) ? $_GET['work_id'] : '';
+        Event::eventRemoveVirtualCourseTime($courseInfo['real_id'], $student_id, $sessionId, $workingTime, $workId);
+
+        Display::addFlash(Display::return_message(get_lang('Updated')));
+
+        header('Location: '.$currentUrl);
+        exit;
+        break;
     case 'export_to_pdf':
         $sessionToExport = $sId = isset($_GET['session_to_export']) ? (int) $_GET['session_to_export'] : 0;
         $sessionInfo = api_get_session_info($sessionToExport);
@@ -223,21 +250,25 @@ switch ($action) {
         $numberVisits = 0;
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         $progress = 0;
+        $timeSpentPerCourse = [];
+        $progressPerCourse = [];
         foreach ($courses as $course) {
             $courseId = $course['c_id'];
-            $timeSpent += Tracking::get_time_spent_on_the_course($student_id, $courseId, $sessionToExport);
-
-            $sql = 'SELECT DISTINCT count(course_access_id) as count
-                    FROM '.$table.'
+            $courseTimeSpent = Tracking::get_time_spent_on_the_course($student_id, $courseId, $sessionToExport);
+            $timeSpentPerCourse[$courseId] = $courseTimeSpent;
+            $timeSpent += $courseTimeSpent;
+            $sql = "SELECT DISTINCT count(course_access_id) as count
+                    FROM $table
                     WHERE
-                        user_id = '.$student_id.' AND
-                        c_id = '.$courseId.' AND
-                        session_id = '.$sessionToExport.'
-                    ORDER BY login_course_date ASC';
+                        c_id = $courseId AND
+                        session_id = $sessionToExport AND
+                        user_id = $student_id";
             $result = Database::query($sql);
             $row = Database::fetch_array($result);
             $numberVisits += $row['count'];
-            $progress += Tracking::get_avg_student_progress($student_id, $course['code'], [], $sessionToExport);
+            $courseProgress = Tracking::get_avg_student_progress($student_id, $course['code'], [], $sessionToExport);
+            $progressPerCourse[$courseId] = $courseProgress;
+            $progress += $courseProgress;
         }
 
         $average = round($progress / count($courses), 1);
@@ -304,25 +335,14 @@ switch ($action) {
                 );
 
                 if ($isSubscribed) {
-                    $timeInSeconds = Tracking::get_time_spent_on_the_course(
-                        $user_info['user_id'],
-                        $courseId,
-                        $sessionToExport
-                    );
+                    $timeInSeconds = $timeSpentPerCourse[$courseId];
                     $totalCourseTime += $timeInSeconds;
                     $time_spent_on_course = api_time_to_hms($timeInSeconds);
-
-                    $progress = Tracking::get_avg_student_progress(
-                        $user_info['user_id'],
-                        $courseCodeItem,
-                        [],
-                        $sId
-                    );
-
+                    $progress = $progressPerCourse[$courseId];
                     $totalProgress += $progress;
 
                     $bestScore = Tracking::get_avg_student_score(
-                        $user_info['user_id'],
+                        $student_id,
                         $courseCodeItem,
                         [],
                         $sId,
@@ -339,8 +359,10 @@ switch ($action) {
                     $score = empty($bestScore) ? '0%' : $bestScore.'%';
 
                     $courseTable .= '<tr>
-                        <td ><a href="'.$courseInfoItem['course_public_url'].'?id_session='.$sId.'">'.
-                            $courseInfoItem['title'].'</a></td>
+                        <td>
+                            <a href="'.$courseInfoItem['course_public_url'].'?id_session='.$sId.'">'.
+                            $courseInfoItem['title'].'</a>
+                        </td>
                         <td >'.$time_spent_on_course.'</td>
                         <td >'.$progress.'</td>
                         <td >'.$score.'</td>';
@@ -366,12 +388,10 @@ switch ($action) {
             $courseTable .= '</tbody></table>';
         }
 
-        $studentInfo = api_get_user_info($student_id);
-
         $tpl = new Template('', false, false, false, true, false, false);
         $tpl->assign('title', get_lang('AttestationOfAttendance'));
         $tpl->assign('session_title', $sessionInfo['name']);
-        $tpl->assign('student', $studentInfo['complete_name']);
+        $tpl->assign('student', $user_info['complete_name']);
         $tpl->assign('table_progress', $table->toHtml());
         $tpl->assign('subtitle', sprintf(
             get_lang('InSessionXYouHadTheFollowingResults'),
@@ -385,7 +405,7 @@ switch ($action) {
             'session_info' => $sessionInfo,
             'course_info' => '',
             'pdf_date' => '',
-            'student_info' => $studentInfo,
+            'student_info' => $user_info,
             'show_grade_generated_date' => true,
             'show_real_course_teachers' => false,
             'show_teacher_as_myself' => false,
@@ -441,36 +461,42 @@ switch ($action) {
         if ($allowMessages === true) {
             $subject = isset($_POST['subject']) ? $_POST['subject'] : '';
             $message = isset($_POST['message']) ? $_POST['message'] : '';
-            $currentUserInfo = api_get_user_info();
-            MessageManager::sendMessageAboutUser(
-                $user_info,
-                $currentUserInfo,
-                $subject,
-                $message
-            );
 
-            // Send also message to all student bosses
-            $bossList = UserManager::getStudentBossList($student_id);
+            if (!empty($subject) && !empty($message)) {
+                $currentUserInfo = api_get_user_info();
+                MessageManager::sendMessageAboutUser(
+                    $user_info,
+                    $currentUserInfo,
+                    $subject,
+                    $message
+                );
 
-            if (!empty($bossList)) {
-                $url = api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$student_id;
-                $link = Display::url($url, $url);
+                // Send also message to all student bosses
+                $bossList = UserManager::getStudentBossList($student_id);
 
-                foreach ($bossList as $boss) {
-                    MessageManager::send_message_simple(
-                        $boss['boss_id'],
-                        sprintf(get_lang('BossAlertMsgSentToUserXTitle'), $user_info['complete_name']),
-                        sprintf(
-                            get_lang('BossAlertUserXSentMessageToUserYWithLinkZ'),
-                            $currentUserInfo['complete_name'],
-                            $user_info['complete_name'],
-                            $link
-                        )
-                    );
+                if (!empty($bossList)) {
+                    $url = api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$student_id;
+                    $link = Display::url($url, $url);
+
+                    foreach ($bossList as $boss) {
+                        MessageManager::send_message_simple(
+                            $boss['boss_id'],
+                            sprintf(get_lang('BossAlertMsgSentToUserXTitle'), $user_info['complete_name']),
+                            sprintf(
+                                get_lang('BossAlertUserXSentMessageToUserYWithLinkZ'),
+                                $currentUserInfo['complete_name'],
+                                $user_info['complete_name'],
+                                $link
+                            )
+                        );
+                    }
                 }
+
+                Display::addFlash(Display::return_message(get_lang('MessageSent')));
+            } else {
+                Display::addFlash(Display::return_message(get_lang('AllFieldsRequired'), 'warning'));
             }
 
-            Display::addFlash(Display::return_message(get_lang('MessageSent')));
             header('Location: '.$currentUrl);
             exit;
         }
@@ -1829,7 +1855,6 @@ if (empty($details)) {
         }
     }
 
-    require_once '../work/work.lib.php';
     $userWorks = getWorkPerUser($student_id, $courseInfo['real_id'], $sessionId);
     echo '
         <div class="table-responsive">
@@ -1846,15 +1871,17 @@ if (empty($details)) {
                 </thead>
                 <tbody>
     ';
-    $workingTime = api_get_configuration_value('considered_working_time');
+
     foreach ($userWorks as $work) {
         $work = $work['work'];
         foreach ($work->user_results as $key => $results) {
+            $resultId = $results['id'];
+
             echo '<tr>';
             echo '<td>'.$work->title.'</td>';
             $documentNumber = $key + 1;
             $url = api_get_path(WEB_CODE_PATH).'work/view.php?cidReq='.$courseCode.'&id_session='.$sessionId.'&id='
-                .$results['id'];
+                .$resultId;
             echo '<td class="text-center"><a href="'.$url.'">('.$documentNumber.')</a></td>';
             $qualification = !empty($results['qualification']) ? $results['qualification'] : '-';
             echo '<td class="text-center">'.$qualification.'</td>';
@@ -1876,7 +1903,21 @@ if (empty($details)) {
             foreach ($resultExtra as $field) {
                 $field = $field['value'];
                 if ($workingTime == $field->getField()->getVariable()) {
-                    echo '<td class="text-center">'.$field->getValue().'</td>';
+                    $time = $field->getValue();
+                    echo '<td class="text-center">';
+                    echo $time;
+                    if ($workingTimeEdit) {
+                        echo Display::url(
+                            get_lang('AddTime'),
+                            $currentUrl.'&action=add_work_time&time='.$time.'&work_id='.$resultId
+                        );
+
+                        echo Display::url(
+                            get_lang('RemoveTime'),
+                            $currentUrl.'&action=remove_work_time&time='.$time.'&work_id='.$resultId
+                        );
+                    }
+                    echo '</td>';
                 }
             }
             echo '</tr>';

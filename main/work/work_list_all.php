@@ -565,13 +565,13 @@ if ($allowAntiPlagiarism) {
             if (isWorkFolder()) {
                 searchAdvancement();
                 setInterval("searchAdvancement()", refreshDelaisAfter);
-                if (!clickTrigger) {
-                    clickTrigger = true;
+                //if (!clickTrigger) {
+                    //clickTrigger = true;
                     $('.getSingleCompilatio').on('click', function () {
                         var parts = $(this).parent().attr('id').split('id_avancement');
                         getSingleCompilatio(parts[1]);
                     });
-                }
+                //}
             }
         }
 
@@ -609,6 +609,9 @@ if ($allowAntiPlagiarism) {
                 url: compilationWebUrl + "upload.php?<?php echo api_get_cidreq(); ?>&doc=" + itemId,
                 type: "get",
                 dataType: "html",
+                beforeSend: function() {
+                    $('#id_avancement' + itemId + ' a').addClass('disabled');
+                },
                 success: function (message) {
                     allWorkId += itemId + "a";
                     compilatioInit();

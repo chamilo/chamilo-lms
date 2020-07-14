@@ -131,9 +131,9 @@ class CourseDescription
         $description_type = (int) $description_type;
 
         $sql = "SELECT * FROM $table
-		        WHERE 
-		            c_id = $courseId AND 
-		            description_type = '$description_type' 
+		        WHERE
+		            c_id = $courseId AND
+		            description_type = '$description_type'
 		            $condition_session ";
         $rs = Database::query($sql);
         $data = [];
@@ -364,7 +364,6 @@ class CourseDescription
         $default_description_title_editable[5] = true;
         $default_description_title_editable[6] = true;
         $default_description_title_editable[7] = true;
-        //$default_description_title_editable[8] = true;
 
         return $default_description_title_editable;
     }
@@ -404,7 +403,6 @@ class CourseDescription
         $question[5] = get_lang('CourseMaterialQuestions');
         $question[6] = get_lang('HumanAndTechnicalResourcesQuestions');
         $question[7] = get_lang('AssessmentQuestions');
-        //$question[8]= get_lang('ThematicAdvanceQuestions');
 
         return $question;
     }
@@ -424,7 +422,6 @@ class CourseDescription
         $information[5] = get_lang('CourseMaterialInformation');
         $information[6] = get_lang('HumanAndTechnicalResourcesInformation');
         $information[7] = get_lang('AssessmentInformation');
-        //$information[8]= get_lang('ThematicAdvanceInformation');
 
         return $information;
     }

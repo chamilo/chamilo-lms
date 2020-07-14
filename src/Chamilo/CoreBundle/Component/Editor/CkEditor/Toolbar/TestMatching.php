@@ -1,12 +1,11 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
 /**
  * TestFreeAnswer toolbar configuration.
- *
- * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar
  */
 class TestMatching extends Basic
 {
@@ -17,7 +16,7 @@ class TestMatching extends Basic
      */
     public function getConfig()
     {
-        if (api_get_setting('more_buttons_maximized_mode') != 'true') {
+        if (api_get_setting('more_buttons_maximized_mode') !== 'true') {
             $config['toolbar'] = $this->getNormalToolbar();
         } else {
             $config['toolbar_minToolbar'] = $this->getMinimizedToolbar();
@@ -25,7 +24,7 @@ class TestMatching extends Basic
         }
 
         $config['fullPage'] = false;
-        $config['extraPlugins'] = 'wordcount';
+        $config['extraPlugins'] = $this->getPluginsToString();
         $config['wordcount'] = [
             // Whether or not you want to show the Word Count
             'showWordCount' => true,
@@ -36,8 +35,6 @@ class TestMatching extends Basic
             // Option to limit the words in the Editor
             'wordLimit' => 'unlimited',
         ];
-
-        //$config['height'] = '200';
 
         return $config;
     }
@@ -54,14 +51,26 @@ class TestMatching extends Basic
             ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord'],
             ['Undo', 'Redo', '-', 'SelectAll', 'Find', '-', 'RemoveFormat'],
             ['Link', 'Unlink', 'Anchor', 'Glossary'],
-            ['Image', 'Mapping', 'Video', 'Oembed', 'Youtube', 'Flash', 'Audio', 'leaflet', 'Smiley', 'SpecialChar'],
+            [
+                'Image',
+                'Mapping',
+                'Video',
+                'Oembed',
+                'Youtube',
+                'VimeoEmbed',
+                'Flash',
+                'Audio',
+                'leaflet',
+                'Smiley',
+                'SpecialChar',
+            ],
             ['Asciimath', 'Asciisvg'],
             '/',
             ['Table', '-', 'CreateDiv'],
             ['BulletedList', 'NumberedList', 'HorizontalRule', '-', 'Outdent', 'Indent', 'Blockquote'],
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
             ['Bold', 'Italic', 'Underline', 'Strike', '-', 'Subscript', 'Superscript', '-', 'TextColor', 'BGColor'],
-            [api_get_setting('allow_spellcheck') == 'true' ? 'Scayt' : ''],
+            [api_get_setting('allow_spellcheck') === 'true' ? 'Scayt' : ''],
             ['Styles', 'Format', 'Font', 'FontSize'],
             ['PageBreak', 'ShowBlocks'],
             ['Toolbarswitch'],
@@ -80,6 +89,7 @@ class TestMatching extends Basic
                 'Maximize',
                 'Bold',
                 'Image',
+                'Video',
                 'Link',
                 'PasteFromWord',
                 'Audio',
@@ -99,9 +109,20 @@ class TestMatching extends Basic
     protected function getMinimizedToolbar()
     {
         return [
-            $this->getNewPageBlock(),
+            ['PasteFromWord'],
             ['Undo', 'Redo'],
-            ['Link', 'Image', 'Video', 'Flash', 'Audio', 'Table', 'Asciimath'],
+            [
+                'Link',
+                'Image',
+                'Video',
+                'Flash',
+                'Oembed',
+                'Youtube',
+                'VimeoEmbed',
+                'Audio',
+                'Table',
+                'Asciimath',
+            ],
             ['BulletedList', 'NumberedList', 'HorizontalRule'],
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight'],
             ['Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor'],

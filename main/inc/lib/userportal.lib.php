@@ -306,7 +306,7 @@ class IndexManager
                 'title' => get_lang('MyCertificates'),
             ];
         }
-        if (api_get_setting('allow_public_certificates') == 'true') {
+        if (api_get_setting('allow_public_certificates') === 'true') {
             $items[] = [
                 'icon' => Display::return_icon('search_graduation.png', get_lang('Search')),
                 'link' => api_get_path(WEB_CODE_PATH).'gradebook/search.php',
@@ -346,6 +346,22 @@ class IndexManager
                     'title' => get_lang('ManageSkills'),
                 ];
             }
+        }
+
+        return $items;
+    }
+
+    public static function studentPublicationBlock()
+    {
+        $allow = api_get_configuration_value('allow_my_student_publication_page');
+        $items = [];
+
+        if ($allow) {
+            $items[] = [
+                'icon' => Display::return_icon('lp_student_publication.png', get_lang('StudentPublication')),
+                'link' => api_get_path(WEB_CODE_PATH).'work/publications.php',
+                'title' => get_lang('MyStudentPublications'),
+            ];
         }
 
         return $items;
@@ -1233,13 +1249,24 @@ class IndexManager
                         $loadDirs
                     );
                     // list of session category
-                    $htmlSessionCategory = '<div class="session-view-row" style="display:none;" id="courseblock-'.$coursesInfo['real_id'].'">';
+                    $htmlSessionCategory = '<div
+                        class="session-view-row"
+                        style="display:none;"
+                        id="courseblock-'.$coursesInfo['real_id'].'"
+                        >';
                     foreach ($listCourse['sessionCatList'] as $listCategorySession) {
+                        $catSessionId = null;
+                        if (isset($listCategorySession['catSessionId'])) {
+                            $catSessionId = $listCategorySession['catSessionId'];
+                        }
                         // add session category
-                        $htmlSessionCategory .= self::getHtmlSessionCategory(
-                            $listCategorySession['catSessionId'],
-                            $listCategorySession['catSessionName']
-                        );
+                        if ($catSessionId) {
+                            $htmlSessionCategory .= self::getHtmlSessionCategory(
+                                $listCategorySession['catSessionId'],
+                                $listCategorySession['catSessionName']
+                            );
+                        }
+
                         // list of session
                         $htmlSession = ''; // start
                         foreach ($listCategorySession['sessionList'] as $listSession) {
@@ -1248,7 +1275,7 @@ class IndexManager
                             $htmlSession .= self::getHtmlForSession(
                                 $listSession['sessionId'],
                                 $listSession['sessionName'],
-                                $listCategorySession['catSessionId'],
+                                $catSessionId,
                                 $coursesInfo
                             );
                             $htmlSession .= '</div>';
@@ -2146,7 +2173,6 @@ class IndexManager
                                             isset($session_box['duration']) ? $session_box['duration'] : null
                                         );
                                     }
-
                                     $this->tpl->assign('session', $sessionParams);
                                     $this->tpl->assign('show_tutor', api_get_setting('show_session_coach') === 'true');
                                     $this->tpl->assign('gamification_mode', $gameModeIsActive);
@@ -2257,6 +2283,16 @@ class IndexManager
             'session_count' => $sessionCount,
             'course_count' => $courseCount,
         ];
+    }
+
+    /**
+     * Wrapper to CourseManager::returnPopularCoursesHandPicked().
+     *
+     * @return array
+     */
+    public function returnPopularCoursesHandPicked()
+    {
+        return CourseManager::returnPopularCoursesHandPicked();
     }
 
     /**

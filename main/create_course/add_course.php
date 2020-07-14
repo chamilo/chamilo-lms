@@ -420,6 +420,13 @@ if ($form->validate()) {
 } else {
     if (!$course_validation_feature) {
         $message = Display::return_message(get_lang('Explanation'));
+        // If the donation feature is enabled, show a message with a donate button
+        if (api_get_configuration_value('course_creation_donate_message_show') == true) {
+            $button = api_get_configuration_value('course_creation_donate_link');
+            if (!empty($button)) {
+                $message .= Display::return_message(get_lang('DonateToTheProject').'<br /><br /><div style="display:block; margin-left:42%;">'.$button.'</div>', 'warning', false);
+            }
+        }
     }
     // Display the form.
     $content = $form->returnForm();

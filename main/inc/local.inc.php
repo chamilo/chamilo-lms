@@ -948,14 +948,6 @@ if (isset($uidReset) && $uidReset) {
         $admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);
         $track_e_login = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
-        /*$sql = "SELECT user.*, a.user_id is_admin, login.login_date
-                FROM $user_table
-                LEFT JOIN $admin_table a
-                ON user.id = a.user_id
-                LEFT JOIN $track_e_login login
-                ON user.id  = login.login_user_id
-                WHERE user.id = ".$_user['user_id']."
-                ORDER BY login.login_date DESC LIMIT 1";*/
         $sql = "SELECT * FROM $user_table WHERE id = ".$_user['user_id'];
         $result = Database::query($sql);
 
@@ -1174,7 +1166,7 @@ if ((isset($uidReset) && $uidReset) || $cidReset) {
         $variable = 'accept_legal_'.$my_user_id.'_'.$_course['real_id'].'_'.$session_id;
 
         $user_pass_open_course = false;
-        if (api_check_user_access_to_legal($_course['visibility']) && Session::read($variable)) {
+        if (api_check_user_access_to_legal($_course) && Session::read($variable)) {
             $user_pass_open_course = true;
         }
 

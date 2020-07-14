@@ -187,7 +187,7 @@ $courseTeacherNames = [];
 foreach ($course_teachers as $courseTeacherId) {
     /** @var User $courseTeacher */
     $courseTeacher = UserManager::getRepository()->find($courseTeacherId);
-    $courseTeacherNames[$courseTeacher->getUserId()] = UserManager::formatUserFullName($courseTeacher, true);
+    $courseTeacherNames[$courseTeacher->getId()] = UserManager::formatUserFullName($courseTeacher, true);
 }
 
 $form->addSelectAjax(
@@ -399,6 +399,7 @@ if ($form->validate()) {
 
     Database::query($sql);
 
+    $courseInfoBeforeUpdate = api_get_course_info_by_id($courseId);
     $title = str_replace('&amp;', '&', $title);
     $params = [
         'course_language' => $course_language,
@@ -413,6 +414,7 @@ if ($form->validate()) {
         'unsubscribe' => $unsubscribe,
     ];
     Database::update($course_table, $params, ['id = ?' => $courseId]);
+    CourseManager::saveSettingChanges($courseInfoBeforeUpdate, $params);
 
     // update the extra fields
     $courseFieldValue = new ExtraFieldValue('course');
@@ -478,10 +480,8 @@ if ($form->validate()) {
     Display::addFlash(Display::return_message(get_lang('ItemUpdated').': '.$message, 'info', false));
     if ($visual_code_is_used) {
         Display::addFlash(Display::return_message($warn));
-        header('Location: course_list.php');
-    } else {
-        header('Location: course_list.php');
     }
+    header('Location: course_list.php');
     exit;
 }
 

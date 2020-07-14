@@ -38,7 +38,7 @@ class ImsLti
             '$User.image' => $isLti1p3 ? ['claim' => 'sub'] : ['user_image'],
             '$User.username' => $user->getUsername(),
             '$User.org' => false,
-            'User.scope.mentor' => $isLti1p3 ? ['claim' => '/claim/role_scope_mentor'] : ['role_scope_mentor'],
+            '$User.scope.mentor' => $isLti1p3 ? ['claim' => '/claim/role_scope_mentor'] : ['role_scope_mentor'],
 
             '$Person.sourcedId' => $isLti1p3
                 ? self::getPersonSourcedId($domain, $user)

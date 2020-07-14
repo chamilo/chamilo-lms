@@ -298,6 +298,8 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 // Set ConsideredWorkingTime work extra field variable to show in MyStudents page works report
 // (with internal id 'work_time' as below) and enable the following line to show in MyStudents page works report
 // $_configuration['considered_working_time'] = 'work_time';
+// Allow add/remove working time in reporting page
+// $_configuration['allow_working_time_edition'] = false;
 // During CSV special imports update users emails to x@example.com
 // $_configuration['update_users_email_to_dummy_except_admins'] = false;
 // Certification pdf export orientation
@@ -591,6 +593,11 @@ $_configuration['send_all_emails_to'] = [
 //$_configuration['quiz_open_question_decimal_score'] = false;
 // Add answer-saving procedure check before starting the quiz
 //$_configuration['quiz_check_button_enable'] = false;
+// Add a checkbox to allow to user confirm the number of answers saved in quiz attempt
+// - Requires to edit the src/Chamilo/CoreBundle/Entity/TrackEExerciseConfirmation.php file adding the "@" in the ORM phpdoc block
+// - Requires DB changes:
+// CREATE TABLE track_e_exercise_confirmation (id INT AUTO_INCREMENT NOT NULL, user_id INT NOT NULL, course_id INT NOT NULL, attempt_id INT NOT NULL, quiz_id INT NOT NULL, session_id INT NOT NULL, confirmed TINYINT(1) DEFAULT '0' NOT NULL, questions_count INT NOT NULL, saved_answers_count INT NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
+//$_configuration['quiz_confirm_saved_answers'] = false;
 
 // Hide search form in session list
 //$_configuration['hide_search_form_in_session_list'] = false;
@@ -1286,19 +1293,19 @@ ALTER TABLE c_plagiarism_compilatio_docs CHANGE COLUMN id_doc document_id INT NO
 requires extension "php-soap"  sudo apt-get install php-soap
 */
 //$_configuration['allow_compilatio_tool'] = false;
-//$_configuration['compilatio_tool'] = [
-//    'settings' => [
-//        'key' => '',
-//        'soap_url' => '',
-//        'proxy_host' => '',
-//        'proxy_port' => '',
-//        'max_filesize' => '',
-//        'transport_mode' => '',
-//        'wget_uri' => '',
-//        'wget_login' => '',
-//        'wget_password' => '',
-//    ]
-//];
+/*$_configuration['compilatio_tool'] = [
+    'settings' => [
+        'key' => '',
+        'soap_url' => '',
+        'proxy_host' => '',
+        'proxy_port' => '',
+        'max_filesize' => '',
+        'transport_mode' => '',
+        'wget_uri' => '',
+        'wget_login' => '',
+        'wget_password' => '',
+    ]
+];*/
 
 // Allow user to enter a LP item if it was validated in another session.
 // $_configuration['validate_lp_prerequisite_from_other_session'] = false;
@@ -1343,6 +1350,14 @@ requires extension "php-soap"  sudo apt-get install php-soap
 
 // Changes the ck editor enter mode value. Default: CKEDITOR.ENTER_P
 // $_configuration['ck_editor_enter_mode_value'] = 'CKEDITOR.ENTER_BR';
+// Set CKEDITOR config for Vimeo Embed plugin
+//$_configuration['ckeditor_vimeo_embed'] = [
+//    'config' => [
+//        'client_id' => '',
+//        'client_secret' => '',
+//        'access_token' => '',
+//    ],
+//];
 
 // CREATE TABLE user_career (id INT AUTO_INCREMENT NOT NULL, user_id INT NOT NULL, career_id INT NOT NULL, created_at DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
 // ALTER TABLE user_career ADD COLUMN extra_data LONGTEXT;
@@ -1403,6 +1418,14 @@ ALTER TABLE notification_event ADD COLUMN event_id INT NULL;
 // In Scorm comunication use the username instead of the user_id
 //$_configuration['scorm_api_username_as_student_id'] = false;
 
+// Zoom in description images quiz
+// $_configuration['quiz_image_zoom'] = [
+//    'options' => [
+//          'zoomWindowWidth' => 400,
+//          'zoomWindowHeight' => 400,
+//     ]
+// ];
+
 // In Scorm comunication use a specific extra field instead of the user_id
 //$_configuration['scorm_api_extrafield_to_use_as_student_id'] = '';
 
@@ -1423,7 +1446,7 @@ ALTER TABLE notification_event ADD COLUMN event_id INT NULL;
 //$_configuration['default_session_list_view'] = 'all';
 
 // Search user by extra field in the user list.
-//$_configuration['user_search_on_extra_fields'] = ['extra_fields' = > ['variable1', 'variable2']];
+//$_configuration['user_search_on_extra_fields'] = ['extra_fields' => ['variable1', 'variable2']];
 
 // user subscription to a session rather than to a base course
 // user session is created at first subscription
@@ -1534,6 +1557,47 @@ $_configuration['auth_password_links'] = [
 // Disable clean results for teachers
 // $_configuration['disable_clean_exercise_results_for_teachers'] = true;
 
+// Show certainty degree question result in Exercises
+// $_configuration['show_exercise_question_certainty_ribbon_result'] = false;
+
+//Allows to add increment in minutes to the date range component timepicker, example: 5,10,30 minutes
+//$_configuration['timepicker_increment'] = 5;
+
+//Allows teachers to edit survey questions after students have answered them
+//$_configuration['survey_allow_answered_question_edit'] = false;
+
+// Allows prevent to the user before leaving a learning path
+//$_configuration['lp_prevents_beforeunload'] = false;
+
+// Disable slideshow documents
+//$_configuration['disable_slideshow_documents'] = false;
+
+// Disable search documents
+//$_configuration['disable_search_documents'] = false;
+
+// Disable available space in the document tool
+//$_configuration['disable_document_quota_message_for_students'] = false;
+
+// Show a donation suggestion message on the course creation page
+//$_configuration['course_creation_donate_message_show'] = false;
+//$_configuration['course_creation_donate_link'] = '<some donate button html>';
+
+// Allow my student publications page
+//$_configuration['allow_my_student_publication_page'] = false;
+
+// Show handpicked "popular" courses on the home page instead of users-chosen
+// courses.
+// Create an extra field for courses called "popular_courses" (type CHECKBOX) OR
+// INSERT extra_field (extra_field_type, field_type, variable, display_text, visible_to_self, changeable, created_at)
+// VALUES (2, 13, 'popular_courses', 'Popular course', 1, 1, NOW());
+// $_configuration['popular_courses_handpicked'] = false;
+
+// Default items per page in main/mySpace/users.php
+// $_configuration['my_space_users_items_per_page'] = 10;
+
+// Add teachers column in course list.
+// $_configuration['add_teachers_in_course_list'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email
@@ -1541,6 +1605,3 @@ $_configuration['auth_password_links'] = [
 // You need add a new option called "confirmation" to the registration settings
 //INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_registration', 'confirmation', 'MailConfirmation');
 // ------ (End) Custom DB changes
-
-//Allows to add increment in minutes to the date range component timepicker, example: 5,10,30 minutes
-//$_configuration['timepicker_increment'] = 5;

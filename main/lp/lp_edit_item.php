@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -11,8 +12,6 @@ use ChamiloSession as Session;
  * @author Roan Embrechts, refactoring and code cleaning
  * @author Yannick Warnier <ywarnier@beeznest.org> - cleaning and update for new SCORM tool
  * @author Julio Montoya  - Improving the list of templates
- *
- * @package chamilo.learnpath
  */
 $this_section = SECTION_COURSES;
 api_protect_course_script();

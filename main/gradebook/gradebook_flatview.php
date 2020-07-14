@@ -1,11 +1,7 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
-/**
- * Script.
- *
- * @package chamilo.gradebook
- */
 require_once __DIR__.'/../inc/global.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/fe/exportgradebook.php';
 
@@ -55,7 +51,7 @@ if ($showlink) {
     $alllinks = $cat[0]->get_links($userId, true);
 }
 
-if (isset($export_flatview_form) && !$file_type === 'pdf') {
+if (isset($export_flatview_form) && 'pdf' === !$file_type) {
     Display::addFlash(
         Display::return_message(
             $export_flatview_form->toHtml(),
@@ -127,7 +123,7 @@ $parameters = ['selectcat' => $categoryId];
 $flatViewTable->set_additional_parameters($parameters);
 
 $params = [];
-if (isset($_GET['export_pdf']) && $_GET['export_pdf'] == 'category') {
+if (isset($_GET['export_pdf']) && 'category' === $_GET['export_pdf']) {
     $params['only_total_category'] = true;
     $params['join_firstname_lastname'] = true;
     $params['show_official_code'] = true;
@@ -211,7 +207,7 @@ if (isset($_GET['print'])) {
 }
 
 if (!empty($_GET['export_report']) &&
-    $_GET['export_report'] === 'export_report'
+    'export_report' === $_GET['export_report']
 ) {
     if (api_is_platform_admin() || api_is_course_admin() || api_is_session_general_coach() || $isDrhOfCourse) {
         $user_id = null;
@@ -273,8 +269,7 @@ if (isset($_GET['exportpdf'])) {
 } else {
     Display::display_header(get_lang('FlatView'));
 }
-
-if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'false') {
+if (isset($_GET['isStudentView']) && 'false' === $_GET['isStudentView']) {
     DisplayGradebook::display_header_reduce_flatview(
         $cat[0],
         $showeval,
@@ -282,7 +277,7 @@ if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'false') {
         $simple_search_form
     );
     $flatViewTable->display();
-} elseif (isset($_GET['selectcat']) && ($_SESSION['studentview'] == 'teacherview')) {
+} elseif (isset($_GET['selectcat']) && ($_SESSION['studentview'] === 'teacherview')) {
     DisplayGradebook::display_header_reduce_flatview(
         $cat[0],
         $showeval,

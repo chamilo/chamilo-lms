@@ -1770,7 +1770,7 @@ function display_configuration_settings_form(
 
     //Second parameter: Chamilo URL
     $html .= '<div class="form-group">';
-    $html .= '<label class="col-sm-6 control-label">'.get_lang('ChamiloURL').get_lang('ThisFieldIsRequired').'</label>';
+    $html .= '<label class="col-sm-6 control-label"><span class="form_required">*</span>'.get_lang('ChamiloURL').'</label>';
 
     if ($installType == 'update') {
         $html .= api_htmlentities($urlForm, ENT_QUOTES)."\n";

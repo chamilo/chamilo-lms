@@ -148,7 +148,6 @@ class Matching extends Question
 
             $form->addHtml('<tr>');
             $form->addHtml("<td>$i</td>");
-            //$form->addText("answer[$i]", null);
             $form->addHtmlEditor(
                 "answer[$i]",
                 null,

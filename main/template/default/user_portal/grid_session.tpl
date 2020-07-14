@@ -4,9 +4,16 @@
     <div class="col-xs-12 col-sm-6 col-md-4">
         <div class="items items-sessions">
             <div class="image">
-                <a title="{{ course.name }}" href="{{ course.link }}">
-                    <img src="{{ course.image }}" class="img-responsive">
-                </a>
+                {% if course.visibility == constant('COURSE_VISIBILITY_CLOSED') or course.requirements %}
+                    <span title="{{ course.name }}" >
+                        <img src="{{ course.image }}" class="img-responsive">
+                    </span>
+                {% else %}
+                    <a title="{{ course.name }}" href="{{ course.link }}">
+                        <img src="{{ course.image }}" class="img-responsive">
+                    </a>
+                {% endif %}
+
                 {% if course.category != '' and show_category %}
                     <span class="category">{{ course.category }}</span>
                     <div class="cribbon"></div>
@@ -31,8 +38,8 @@
             <div class="description">
                 <div class="block-title">
                   <h4 class="title">
-                      {% if course.visibility == constant('COURSE_VISIBILITY_CLOSED') %}
-                          {{ course.title }}
+                      {% if course.visibility == constant('COURSE_VISIBILITY_CLOSED') or course.requirements %}
+                          {{ course.name }}
                           <span class="code-title">{{ course.visual_code }}</span>
                       {% else %}
                           <a href="{{ course.link }}">{{ course.title }}</a>
@@ -40,6 +47,7 @@
                   </h4>
                 </div>
                 <div class="block-author">
+                    {{ course.requirements }}
                     {% if course.teachers | length > 2 %}
                         <a
                             id="plist"

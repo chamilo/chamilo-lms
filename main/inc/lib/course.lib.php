@@ -4364,6 +4364,7 @@ class CourseManager
             true
         );
         $params['real_id'] = $course_info['real_id'];
+        $params['visibility'] = $course_info['visibility'];
 
         // Display the "what's new" icons
         $notifications = '';
@@ -4413,7 +4414,7 @@ class CourseManager
         $showCustomIcon = api_get_setting('course_images_in_courses_list');
         $iconName = basename($course_info['course_image']);
 
-        if ($showCustomIcon === 'true' && $iconName != 'course.png') {
+        if ($showCustomIcon === 'true' && $iconName !== 'course.png') {
             $thumbnails = $course_info['course_image'];
             $image = $course_info['course_image_large'];
         } else {

@@ -83,30 +83,28 @@ class SocialManager extends UserManager
 
             return $row['id'];
         } else {
-            if(api_get_configuration_value('treat_superior_statuses_as_friends'))
-            {
-                $targetUserCoursesList = CourseManager::get_courses_list_by_user_id($user_id,true,false);
-                $AdminList = UserManager::get_all_administrators();
-                foreach($AdminList as $admin)
-                {
-                   if(api_get_user_id() == $admin['user_id'])
-                    {
+            if (api_get_configuration_value('social_make_teachers_friend_all')) {
+                $adminsList = UserManager::get_all_administrators();
+                foreach ($adminsList as $admin) {
+                    if (api_get_user_id() == $admin['user_id']) {
                         return USER_RELATION_TYPE_GOODFRIEND;
                     }
                 }
-                foreach($targetUserCoursesList as $course)
-                {
-                    $TeachersList = CourseManager::get_teacher_list_from_course_code($course['code']);
-                    foreach($TeachersList as $teacher)
-                    {
-                        if(api_get_user_id() == $teacher['user_id'])
-                         {
+                $targetUserCoursesList = CourseManager::get_courses_list_by_user_id(
+                    $user_id,
+                    true,
+                    false
+                );
+                $currentUserId = api_get_user_id();
+                foreach ($targetUserCoursesList as $course) {
+                    $teachersList = CourseManager::get_teacher_list_from_course_code($course['code']);
+                    foreach ($teachersList as $teacher) {
+                         if ($currentUserId == $teacher['user_id']) {
                              return USER_RELATION_TYPE_GOODFRIEND;
                          }
                     }
                 }
-            }
-            else {
+            } else {
                 return USER_UNKNOWN;
             }
 

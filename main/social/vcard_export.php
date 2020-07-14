@@ -13,7 +13,7 @@ use JeroenDesloovere\VCard\VCard;
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
-//api_protect_admin_script();
+api_protect_admin_script();
 
 if (isset($_REQUEST['userId'])) {
     $userId = intval($_REQUEST['userId']);
@@ -21,15 +21,13 @@ if (isset($_REQUEST['userId'])) {
     api_not_allowed(true);
 }
 
-
 // Return User Info to vCard Export
 $userInfo = api_get_user_info($userId, true, false, true);
 
 if (empty($userInfo)) {
     api_not_allowed(true);
 }
-if(api_get_user_id() != $userId && !SocialManager::get_relation_between_contacts(api_get_user_id(),$userId))
-{
+if (api_get_user_id() != $userId && !SocialManager::get_relation_between_contacts(api_get_user_id(),$userId)) {
     api_not_allowed(true);
 }
 // Pre-Loaded User Info

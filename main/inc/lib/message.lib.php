@@ -1409,6 +1409,26 @@ class MessageManager
             return '';
         }
 
+        /* get previous message */
+        $query = "SELECT id FROM $table
+                  WHERE
+                  $userCondition
+                       id < $messageId
+                     order by id DESC limit 1 ";
+        $result = Database::query($query);
+        $rowPrevMessage = Database::fetch_array($result, 'ASSOC');
+        $idPrevMessage = (int) isset($rowPrevMessage['id']) ? $rowPrevMessage['id'] : 0;
+
+        /* get next message */
+        $query = "SELECT id FROM $table
+                  WHERE
+                  $userCondition
+                       id > $messageId
+                     order by id ASC limit 1 ";
+        $result = Database::query($query);
+        $rowNextMessage = Database::fetch_array($result, 'ASSOC');
+        $idNextMessage = (int) isset($rowNextMessage['id']) ? $rowNextMessage['id'] : 0;
+
         $user_sender_id = $row['user_sender_id'];
 
         // get file attachments by message id
@@ -1505,19 +1525,29 @@ class MessageManager
 
         switch ($type) {
             case self::MESSAGE_TYPE_OUTBOX:
-                $message_content .= '<a href="outbox.php?'.$social_link.'">'.
-                    Display::return_icon('back.png', get_lang('ReturnToOutbox')).'</a> &nbsp';
-                $message_content .= '<a href="outbox.php?action=deleteone&id='.$messageId.'&'.$social_link.'" >'.
-                    Display::return_icon('delete.png', get_lang('DeleteMessage')).'</a>&nbsp';
-                break;
+                    $message_content .= '<a href="outbox.php?'.$social_link.'">'.
+                        Display::return_icon('back.png', get_lang('ReturnToOutbox')).'</a> &nbsp';
+                    $message_content .= '<a href="outbox.php?action=deleteone&id='.$messageId.'&'.$social_link.'" >'.
+                        Display::return_icon('delete.png', get_lang('DeleteMessage')).'</a>&nbsp';
+                    break;
             case self::MESSAGE_TYPE_INBOX:
-                $message_content .= '<a href="inbox.php?'.$social_link.'">'.
-                    Display::return_icon('back.png', get_lang('ReturnToInbox')).'</a> &nbsp';
-                $message_content .= '<a href="new_message.php?re_id='.$messageId.'&'.$social_link.'">'.
-                    Display::return_icon('message_reply.png', get_lang('ReplyToMessage')).'</a> &nbsp';
-                $message_content .= '<a href="inbox.php?action=deleteone&id='.$messageId.'&'.$social_link.'" >'.
-                    Display::return_icon('delete.png', get_lang('DeleteMessage')).'</a>&nbsp';
-                break;
+
+                    $message_content .= '<a href="inbox.php?'.$social_link.'">'.
+                        Display::return_icon('icons/22/arrow_up_1.png', get_lang('ReturnToInbox')).'</a> &nbsp';
+
+                    $message_content .= '<a href="new_message.php?re_id='.$messageId.'&'.$social_link.'">'.
+                        Display::return_icon('message_reply.png', get_lang('ReplyToMessage')).'</a> &nbsp';
+                    $message_content .= '<a href="inbox.php?action=deleteone&id='.$messageId.'&'.$social_link.'" >'.
+                        Display::return_icon('delete.png', get_lang('DeleteMessage')).'</a>&nbsp';
+                if($idPrevMessage != 0) {
+                    $message_content .= '<a title="' . get_lang('ScormPrevious') . '" href="view_message.php?type=' . $type . '&id=' . $idPrevMessage . '" ">' . Display::return_icon('icons/22/back.png', get_lang('ScormPrevious')) . '</a> &nbsp';
+                }
+                if($idNextMessage != 0) {
+                    //Display::return_icon('back.png', get_lang('ReturnToInbox')) . '</a> &nbsp';
+                    $message_content .= '<a title="' . get_lang('ScormNext') . '" href="view_message.php?type=' . $type . '&id=' . $idNextMessage . '">' . Display::return_icon('icons/22/move.png', get_lang('ScormNext')) . '</a> &nbsp';
+                }
+
+                    break;
         }
 
         $message_content .= '</div></td>
@@ -2203,7 +2233,6 @@ class MessageManager
             20,
             'DESC'
         );
-
         $table->setDataFunctionParams(
             ['keyword' => $keyword, 'type' => $type, 'actions' => $actions]
         );

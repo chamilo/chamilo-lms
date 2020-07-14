@@ -61,7 +61,7 @@ if (Security::check_token('post') && (
     $recycle_type = '';
     $fullDelete = 0;
     $courseCodeConfirmation ='';
-    if(isset($_POST['course_code_confirmation'])) {
+    if (isset($_POST['course_code_confirmation'])) {
         $courseCodeConfirmation = $_POST['course_code_confirmation'];
     }
     if (isset($_POST['recycle_option']) && $_POST['recycle_option'] === 'full_backup') {
@@ -72,18 +72,20 @@ if (Security::check_token('post') && (
     }
     $cr = new CourseRecycler($course);
 
-    if($recycle_type == 'full_backup') {
+    if ($recycle_type == 'full_backup') {
         /* to delete, course code confirmation must be equal that current course code */
-        if($current_course_code == $courseCodeConfirmation) {
+        if ($current_course_code == $courseCodeConfirmation) {
             $cr->recycle($recycle_type);
             echo Display::return_message(get_lang('RecycleFinished'), 'confirm');
         } else {
             $messageFailCourseCode = '<p>' . get_lang('CourseRegistrationCodeIncorrect') . '</p>';
-            $messageFailCourseCode .= '<p><a class="btn btn-primary" href="' . api_get_self() . '?' . api_get_cidreq() . '">' . get_lang('BackToPreviousPage') . '</a></p>';
+            $messageFailCourseCode .= '<p><a class="btn btn-primary" href="'.api_get_self().'?'.api_get_cidreq().'">'.
+                get_lang('BackToPreviousPage').
+                '</a></p>';
             echo Display::return_message($messageFailCourseCode, 'error', false);
         }
 
-    } elseif($recycle_type == 'select_items') {
+    } elseif ($recycle_type == 'select_items') {
         $cr->recycle($recycle_type);
         echo Display::return_message(get_lang('RecycleFinished'), 'confirm');
     }
@@ -113,8 +115,20 @@ if (Security::check_token('post') && (
         $form->addElement('radio', 'recycle_option', null, get_lang('LetMeSelectItems'), 'select_items');
 
         //Confirmation input code
-        $form->addElement('label', '', '<span class="hidden course-full-delete">'.get_lang('CourseCodeConfirmation').'</span>', null, null);
-        $form->addElement('input', 'course_code_confirmation', null, 'class="hidden course-full-delete"', 'course_code');
+        $form->addElement(
+            'label',
+            '',
+            '<span class="hidden course-full-delete">'.get_lang('CourseCodeConfirmation').'</span>',
+            null,
+            null
+        );
+        $form->addElement(
+            'input',
+            'course_code_confirmation',
+            null,
+            'class="hidden course-full-delete"',
+            'course_code'
+        );
 
         $form->addButtonSave(get_lang('RecycleCourse'));
         $form->setDefaults(['recycle_option' => 'select_items']);

@@ -27,7 +27,9 @@ $userInfo = api_get_user_info($userId, true, false, true);
 if (empty($userInfo)) {
     api_not_allowed(true);
 }
-
+if (api_get_user_id() != $userId && !SocialManager::get_relation_between_contacts(api_get_user_id(),$userId)) {
+    api_not_allowed(true);
+}
 // Pre-Loaded User Info
 $language = get_lang('Language').': '.$userInfo['language'];
 

@@ -131,15 +131,13 @@ class PauseTraining extends Plugin
                     $usersNotificationPerDay[$day][] = $userId;
                 }
             }
-            $usersNotificationPerDay[5][] = 1;
 
             if (!empty($usersNotificationPerDay)) {
                 ksort($usersNotificationPerDay);
                 $extraFieldValue = new ExtraFieldValue('user');
                 foreach ($usersNotificationPerDay as $day => $userList) {
                     $template = new Template();
-                    // @todo check email format
-                    $title = sprintf($this->get_lang('NotificationXDays'), $day);
+                    $title = sprintf($this->get_lang('InactivityXDays'), $day);
 
                     foreach ($userList as $userId) {
                         $userInfo = api_get_user_info($userId);
@@ -152,7 +150,7 @@ class PauseTraining extends Plugin
                         $template->assign('days', $day);
                         $template->assign('user', $userInfo);
                         $content = $template->fetch('pausetraining/view/notification_content.tpl');
-                        //MessageManager::send_message($userId, $title, $content);
+                        MessageManager::send_message($userId, $title, $content);
                     }
                 }
             }

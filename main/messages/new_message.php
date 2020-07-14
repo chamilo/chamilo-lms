@@ -149,6 +149,7 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
                     [],
                     [
                         'multiple' => 'multiple',
+                        'delay' => 1000,
                         'url' => api_get_path(WEB_AJAX_PATH).'message.ajax.php?a=find_users',
                     ]
                 );
@@ -242,8 +243,8 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
 
     $form->addLabel(
         '',
-        '<iframe 
-            frameborder="0" height="200" width="100%" scrolling="no" 
+        '<iframe
+            frameborder="0" height="200" width="100%" scrolling="no"
             src="'.api_get_path(WEB_CODE_PATH).'messages/record_audio.php"></iframe>'
     );
 

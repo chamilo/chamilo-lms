@@ -168,17 +168,16 @@ $htmlHeadXtra[] = '<script type="text/javascript">
                     $("#tooldesc_" + my_tool_id).attr("class", info.tclass);
                     $("#istooldesc_" + my_tool_id).attr("class", info.tclass);
 
-                    if (image_link == "visible.gif") {
-                        $("#" + tool_id).attr("alt", "'.get_lang('Activate', '').'");
-                        $("#" + tool_id).attr("title", "'.get_lang('Activate', '').'");
-                    } else {
-                        $("#" + tool_id).attr("alt", "'.get_lang('Deactivate', '').'");
-                        $("#" + tool_id).attr("title", "'.get_lang('Deactivate', '').'");
-                    }
                     if (info.message == "is_active") {
                         message = "'.get_lang('ToolIsNowVisible', '').'";
+                        $("#" + tool_id)
+                        .attr("alt", "' . get_lang('Activate', '') . '")
+                        .attr("title", "' . get_lang('Activate', '') . '");
                     } else {
                         message = "'.get_lang('ToolIsNowHidden', '').'";
+                        $("#" + tool_id)
+                        .attr("alt", "' . get_lang('Deactivate', '') . '")
+                        .attr("title", "' . get_lang('Deactivate', '') . '");
                     }
                     $(".normal-message").hide();
                     $("#id_confirmation_message").html(message);
@@ -187,6 +186,7 @@ $htmlHeadXtra[] = '<script type="text/javascript">
             });
         });
     });
+
 </script>';
 
 // The section for the tabs

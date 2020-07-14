@@ -7,8 +7,6 @@
 interface HookQuizEndObserverInterface
 {
     /**
-     * @param HookQuizEndEventInterface $hookvent
-     *
      * @return mixed
      */
     public function hookQuizEnd(HookQuizEndEventInterface $hookvent);

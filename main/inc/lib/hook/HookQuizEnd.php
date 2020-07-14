@@ -17,7 +17,7 @@ class HookQuizEnd extends HookEvent implements HookQuizEndEventInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function notifyQuizEnd()
     {

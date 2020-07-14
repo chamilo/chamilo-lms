@@ -709,41 +709,7 @@ if ($actions) {
 }
 
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'messages');
-
-$allowJustification = api_get_plugin_setting('justification', 'tool_enable') === 'true';
-$justification = '';
-if ($allowJustification) {
-    $plugin = Justification::create();
-    $headers = [
-        [
-            'url' => api_get_self(),
-            'content' => get_lang('Profile'),
-        ],
-        [
-            'url' => api_get_path(WEB_CODE_PATH).'auth/justification.php',
-            'content' => $plugin->get_lang('Justification'),
-        ],
-    ];
-    $justification = Display::tabsOnlyLink($headers, 1);
-}
-
-$allowPauseTraining = api_get_plugin_setting('pausetraining', 'tool_enable') === 'true';
-$allowEdit = api_get_plugin_setting('pausetraining', 'allow_users_to_edit_pause_formation') === 'true';
-$pauseTraining = '';
-if ($allowPauseTraining && $allowEdit) {
-    $plugin = PauseTraining::create();
-    $headers = [
-        [
-            'url' => api_get_self(),
-            'content' => get_lang('Profile'),
-        ],
-        [
-            'url' => api_get_path(WEB_CODE_PATH).'auth/pausetraining.php',
-            'content' => $plugin->get_lang('PauseTraining'),
-        ],
-    ];
-    $pauseTraining = Display::tabsOnlyLink($headers, 1);
-}
+$tabs = SocialManager::getHomeProfileTabs('profile');
 
 if ($allowSocialTool) {
     SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'home');
@@ -756,7 +722,7 @@ if ($allowSocialTool) {
     );
 
     $tpl->assign('social_menu_block', $menu);
-    $tpl->assign('social_right_content', $justification.$pauseTraining.$form->returnForm());
+    $tpl->assign('social_right_content', $tabs.$form->returnForm());
     $social_layout = $tpl->get_template('social/edit_profile.tpl');
 
     $tpl->display($social_layout);
@@ -768,7 +734,7 @@ if ($allowSocialTool) {
     $imageToShow .= '<a class="expand-image pull-right" href="'.$bigImage.'" /><img src="'.$normalImage.'"></a>';
     $imageToShow .= '</div>';
 
-    $content = $imageToShow.$form->returnForm().$justification.$pauseTraining;
+    $content = $imageToShow.$form->returnForm().$tabs;
 
     $tpl->assign('content', $content);
     $tpl->display_one_col_template();

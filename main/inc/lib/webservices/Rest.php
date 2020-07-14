@@ -6,6 +6,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\PersonalAgenda;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\SysCalendar;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpCategory;
@@ -75,6 +76,7 @@ class Rest extends WebService
     const CREATE_LEARNINGPATH = 'create_learningpath';
     const CREATE_USER_EVENT = 'create_user_event';
     const CREATE_COURSE_EVENT = 'create_course_event';
+    const CREATE_GLOBAL_EVENT = 'create_global_event';
 
     /**
      * @var Session
@@ -2341,6 +2343,59 @@ class Rest extends WebService
             $endDate->format('c'),
             $sessionId
         );
+
+        return $event->getId();
+    }
+
+    /**
+     * Creates a new event in the global agenda.
+     *
+     * @param array $spec with these keys :
+     *                    eventTitle
+     *                    eventText
+     *                    eventStartDate
+     *                    eventEndDate
+     *
+     * @throws Exception
+     *
+     * @return int the new event identifier
+     */
+    public function createGlobalEvent(array $spec)
+    {
+        foreach (['eventTitle', 'eventText', 'eventStartDate', 'eventEndDate'] as $param) {
+            if (!array_key_exists($param, $spec) || empty($spec[$param]) || !is_string($spec[$param])) {
+                throw new Exception(sprintf('Missing or invalid parameter "%s": %s.', $param, print_r($spec, true)));
+            }
+        }
+        $utc = new DateTimeZone('utc');
+        $startDateSpec = $spec['eventStartDate'];
+        try {
+            $startDate = new DateTime($startDateSpec, $utc);
+        } catch (Exception $exception) {
+            try {
+                $startDate = new DateTime($startDateSpec);
+            } catch (Exception $exception) {
+                throw new Exception(sprintf('invalid eventStartDate: "%s"', $startDateSpec));
+            }
+        }
+        $endDateSpec = $spec['eventEndDate'];
+        try {
+            $endDate = new DateTime($endDateSpec, $utc);
+        } catch (Exception $exception) {
+            try {
+                $endDate = new DateTime($endDateSpec);
+            } catch (Exception $exception) {
+                throw new Exception(sprintf('invalid eventEndDate: "%s"', $endDateSpec));
+            }
+        }
+        $event = (new SysCalendar())
+            ->setTitle($spec['eventTitle'])
+            ->setContent($spec['eventText'])
+            ->setStartDate($startDate)
+            ->setEnddate($endDate)
+            ->setAllDay(0);
+        Database::getManager()->persist($event);
+        Database::getManager()->flush($event);
 
         return $event->getId();
     }

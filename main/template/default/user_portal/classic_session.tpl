@@ -92,9 +92,15 @@
                             <div class="courses">
                                 <div class="row">
                                     <div class="col-md-2">
-                                        <a href="{{ item.link }}" class="thumbnail">
-                                            {{ item.html_image }}
-                                        </a>
+                                        {% if item.requirements %}
+                                            <span class="thumbnail">
+                                                {{ item.html_image }}
+                                            </span>
+                                        {% else %}
+                                            <a href="{{ item.link }}" class="thumbnail">
+                                                {{ item.html_image }}
+                                            </a>
+                                        {% endif %}
                                     </div>
                                     <div class="col-md-10">
                                         <div class="pull-right">

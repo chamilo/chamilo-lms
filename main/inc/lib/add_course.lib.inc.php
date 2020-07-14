@@ -321,7 +321,6 @@ class AddCourse
         $TABLEGROUPCATEGORIES = Database::get_course_table(TABLE_GROUP_CATEGORY);
         $TABLEITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $TABLETOOLDOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
-        $TABLESETTING = Database::get_course_table(TABLE_COURSE_SETTING);
         $TABLEGRADEBOOK = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
         $TABLEGRADEBOOKLINK = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 
@@ -331,46 +330,6 @@ class AddCourse
         } else {
             $defaultEmailExerciseAlert = 0;
         }
-
-        /* course_setting table (courseinfo tool)   */
-        $settings = [
-            'email_alert_manager_on_new_doc' => ['title' => '', 'default' => 0, 'category' => 'work'],
-            'email_alert_on_new_doc_dropbox' => ['default' => 0, 'category' => 'dropbox'],
-            'allow_user_edit_agenda' => ['default' => 0, 'category' => 'agenda'],
-            'allow_user_edit_announcement' => ['default' => 0, 'category' => 'announcement'],
-            'email_alert_manager_on_new_quiz' => ['default' => $defaultEmailExerciseAlert, 'category' => 'quiz'],
-            'allow_user_image_forum' => ['default' => 1, 'category' => 'forum'],
-            'course_theme' => ['default' => '', 'category' => 'theme'],
-            'allow_learning_path_theme' => ['default' => 1, 'category' => 'theme'],
-            'allow_open_chat_window' => ['default' => 1, 'category' => 'chat'],
-            'email_alert_to_teacher_on_new_user_in_course' => ['default' => 0, 'category' => 'registration'],
-            'allow_user_view_user_list' => ['default' => 1, 'category' => 'user'],
-            'display_info_advance_inside_homecourse' => ['default' => 1, 'category' => 'thematic_advance'],
-            'email_alert_students_on_new_homework' => ['default' => 0, 'category' => 'work'],
-            'enable_lp_auto_launch' => ['default' => 0, 'category' => 'learning_path'],
-            'enable_exercise_auto_launch' => ['default' => 0, 'category' => 'exercise'],
-            'enable_document_auto_launch' => ['default' => 0, 'category' => 'document'],
-            'pdf_export_watermark_text' => ['default' => '', 'category' => 'learning_path'],
-            'allow_public_certificates' => [
-                'default' => api_get_setting('allow_public_certificates') === 'true' ? 1 : '',
-                'category' => 'certificates',
-            ],
-            'documents_default_visibility' => ['default' => 'visible', 'category' => 'document'],
-            'show_course_in_user_language' => ['default' => 2, 'category' => null],
-            'email_to_teachers_on_new_work_feedback' => ['default' => 1, 'category' => null],
-        ];
-
-        $counter = 1;
-        foreach ($settings as $variable => $setting) {
-            $title = isset($setting['title']) ? $setting['title'] : '';
-            Database::query(
-                "INSERT INTO $TABLESETTING (id, c_id, title, variable, value, category)
-                 VALUES ($counter, $course_id, '".$title."', '".$variable."', '".$setting['default']."', '".$setting['category']."')"
-            );
-            $counter++;
-        }
-
-        /* Course homepage tools for platform admin only */
 
         /* Group tool */
         Database::insert(

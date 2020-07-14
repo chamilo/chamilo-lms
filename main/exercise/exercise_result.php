@@ -199,6 +199,10 @@ if (!empty($learnpath_id) && $saveResults) {
     Exercise::saveExerciseInLp($learnpath_item_id, $exe_id);
 }
 
+$hookQuizEnd = HookQuizEnd::create();
+$hookQuizEnd->setEventData(['exe_id' => $exe_id]);
+$hookQuizEnd->notifyQuizEnd();
+
 // Unset session for clock time
 ExerciseLib::exercise_time_control_delete(
     $objExercise->id,

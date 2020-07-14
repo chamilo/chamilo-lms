@@ -76,8 +76,8 @@ class SelectAjax extends HTML_QuickForm_select
         $max = !empty($max) ? "maximumSelectionLength: $max, " : '';
 
         // wait XX milliseconds before triggering the request
-        $delay = $this->getAttribute('delay');
-        $delay = !empty($delay) ? "delay: $delay, " : '';
+        $delay = (int)$this->getAttribute('delay');
+        $delay = (0 !== $delay) ? "delay: $delay, " : '';
 
         $html = <<<JS
             <script>

@@ -298,6 +298,8 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 // Set ConsideredWorkingTime work extra field variable to show in MyStudents page works report
 // (with internal id 'work_time' as below) and enable the following line to show in MyStudents page works report
 // $_configuration['considered_working_time'] = 'work_time';
+// Allow add/remove working time in reporting page
+// $_configuration['allow_working_time_edition'] = false;
 // During CSV special imports update users emails to x@example.com
 // $_configuration['update_users_email_to_dummy_except_admins'] = false;
 // Certification pdf export orientation

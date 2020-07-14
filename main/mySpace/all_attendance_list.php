@@ -1071,10 +1071,13 @@ $attendance = new Attendance();
 
 // @todo make api_get_local_time()
 $data =  $attendance->getCoursesWithAttendance($student_id,$startDate,$endDate);
-foreach ($data as $k => $v) {
+foreach ($data as $attendanceData => $attendanceSheet) {
+    /*
+     * $attendanceData  can be in_category or not_category for courses
+     * */
     $title = '';
-    if(isset($v[0])){
-        $title = new DateTime($v[0][1]);
+    if(isset($attendanceSheet[0])){
+        $title = new DateTime($attendanceSheet[0][1]);
         $title = $title->format('Y-m-d');
     }
     echo '
@@ -1089,15 +1092,15 @@ foreach ($data as $k => $v) {
             </tr>
         </thead>
     <tbody>';
-    $totalAttendance = count($v);
+    $totalAttendance = count($attendanceSheet);
     for($i = 0;$i<$totalAttendance;$i++){
-        $w = $v[$i];
-        $date = api_get_local_time($w[1]);
+        $attendanceWork = $attendanceSheet[$i];
+        $date = api_get_local_time($attendanceWork[1]);
         echo '
         <tr>
-            <td>'.$w['courseTitle'].'</td>
+            <td>'.$attendanceWork['courseTitle'].'</td>
             <td>'.$date.'</td>
-            <td>'.$w['presence'].'</td>
+            <td>'.$attendanceWork['presence'].'</td>
         </tr>';
 
     }

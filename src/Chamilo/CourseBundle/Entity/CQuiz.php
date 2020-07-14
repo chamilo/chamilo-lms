@@ -853,6 +853,8 @@ class CQuiz
     /**
      * Set cId.
      *
+     * @deprecated use setCourse wherever possible
+     *
      * @param int $cId
      *
      * @return CQuiz
@@ -860,6 +862,7 @@ class CQuiz
     public function setCId($cId)
     {
         $this->cId = $cId;
+        $this->setCourse(Course::getRepository()->find($cId));
 
         return $this;
     }

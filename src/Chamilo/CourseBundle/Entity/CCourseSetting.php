@@ -330,6 +330,8 @@ class CCourseSetting
     /**
      * Set cId.
      *
+     * @deprecated use setCourse wherever possible
+     *
      * @param int $cId
      *
      * @return CCourseSetting
@@ -337,6 +339,7 @@ class CCourseSetting
     public function setCId($cId)
     {
         $this->cId = $cId;
+        $this->setCourse(Course::getRepository()->find($cId));
 
         return $this;
     }

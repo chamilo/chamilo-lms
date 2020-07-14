@@ -13,7 +13,6 @@ use JeroenDesloovere\VCard\VCard;
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
-api_protect_admin_script();
 
 if (isset($_REQUEST['userId'])) {
     $userId = intval($_REQUEST['userId']);
@@ -23,6 +22,17 @@ if (isset($_REQUEST['userId'])) {
 
 // Return User Info to vCard Export
 $userInfo = api_get_user_info($userId, true, false, true);
+
+/* Get the relationship between current user and vcard user */
+$currentUserId = api_get_user_id();
+$hasRelation =  SocialManager::get_relation_between_contacts(
+    $currentUserId,
+    $userId,
+    true);
+if ($hasRelation == 0) {
+    /* if has not relation, check if are admin */
+    api_protect_admin_script();
+}
 
 if (empty($userInfo)) {
     api_not_allowed(true);

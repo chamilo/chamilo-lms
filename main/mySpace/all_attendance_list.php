@@ -55,9 +55,9 @@ $endDate = $endDate->setTime(23,59,0);
 // $startDate = new DateTime(api_get_local_time($startDate));
 // $endDate = new DateTime(api_get_local_time($endDate));
 if($startDate > $endDate){
-    $a = $startDate;
+    $dataTemp = $startDate;
     $startDate = $endDate;
-    $endDate = $a;
+    $endDate = $dataTemp;
 }
 
 // Varible for all attendance list
@@ -747,7 +747,7 @@ if (Skill::isAllowed($student_id, false)) {
     echo Display::url(
         Display::return_icon(
             'attendance.png',
-            get_lang('AssignSkill')." ** ",
+            get_lang('CountDoneAttendance')." ** ",
             null,
             ICON_SIZE_MEDIUM
         ),

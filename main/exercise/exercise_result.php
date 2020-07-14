@@ -10,9 +10,9 @@ use ChamiloSession as Session;
  * that exercise.
  * Then it shows the results on the screen.
  *
- * @author Olivier Brouckaert, main author
- * @author Roan Embrechts, some refactoring
- * @author Julio Montoya switchable fill in blank option added
+ * @author  Olivier Brouckaert, main author
+ * @author  Roan Embrechts, some refactoring
+ * @author  Julio Montoya switchable fill in blank option added
  *
  * @todo    split more code up in functions, move functions to library?
  */
@@ -74,7 +74,9 @@ if (api_get_configuration_value('quiz_prevent_copy_paste')) {
 }
 
 if (!empty($objExercise->getResultAccess())) {
-    $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/epiclock/renderers/minute/epiclock.minute.css');
+    $htmlHeadXtra[] = api_get_css(
+        api_get_path(WEB_LIBRARY_PATH).'javascript/epiclock/renderers/minute/epiclock.minute.css'
+    );
     $htmlHeadXtra[] = api_get_js('epiclock/javascript/jquery.dateformat.min.js');
     $htmlHeadXtra[] = api_get_js('epiclock/javascript/jquery.epiclock.min.js');
     $htmlHeadXtra[] = api_get_js('epiclock/renderers/minute/epiclock.minute.js');
@@ -99,7 +101,8 @@ if (api_is_course_admin() && !in_array($origin, ['learnpath', 'embeddable'])) {
 $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);
 $learnpath_id = isset($exercise_stat_info['orig_lp_id']) ? $exercise_stat_info['orig_lp_id'] : 0;
 $learnpath_item_id = isset($exercise_stat_info['orig_lp_item_id']) ? $exercise_stat_info['orig_lp_item_id'] : 0;
-$learnpath_item_view_id = isset($exercise_stat_info['orig_lp_item_view_id']) ? $exercise_stat_info['orig_lp_item_view_id'] : 0;
+$learnpath_item_view_id = isset($exercise_stat_info['orig_lp_item_view_id'])
+    ? $exercise_stat_info['orig_lp_item_view_id'] : 0;
 
 $logInfo = [
     'tool' => TOOL_QUIZ,
@@ -111,12 +114,12 @@ Event::registerLog($logInfo);
 
 if ($origin === 'learnpath') {
     ?>
-    <form method="GET" action="exercise.php?<?php echo api_get_cidreq(); ?>">
-    <input type="hidden" name="origin" value="<?php echo $origin; ?>" />
-    <input type="hidden" name="learnpath_id" value="<?php echo $learnpath_id; ?>" />
+<form method="GET" action="exercise.php?<?php echo api_get_cidreq(); ?>">
+    <input type="hidden" name="origin" value="<?php echo $origin; ?>"/>
+    <input type="hidden" name="learnpath_id" value="<?php echo $learnpath_id; ?>"/>
     <input type="hidden" name="learnpath_item_id" value="<?php echo $learnpath_item_id; ?>"/>
-    <input type="hidden" name="learnpath_item_view_id"  value="<?php echo $learnpath_item_view_id; ?>" />
-<?php
+    <input type="hidden" name="learnpath_item_view_id" value="<?php echo $learnpath_item_view_id; ?>"/>
+    <?php
 }
 
 $i = $total_score = $max_score = 0;
@@ -126,12 +129,14 @@ $attemptButton = '';
 if ($origin !== 'embeddable') {
     $attemptButton = Display::toolbarButton(
         get_lang('AnotherAttempt'),
-        api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.api_get_cidreq().'&'.http_build_query([
-            'exerciseId' => $objExercise->id,
-            'learnpath_id' => $learnpath_id,
-            'learnpath_item_id' => $learnpath_item_id,
-            'learnpath_item_view_id' => $learnpath_item_view_id,
-        ]),
+        api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.api_get_cidreq().'&'.http_build_query(
+            [
+                'exerciseId' => $objExercise->id,
+                'learnpath_id' => $learnpath_id,
+                'learnpath_item_id' => $learnpath_item_id,
+                'learnpath_item_view_id' => $learnpath_item_view_id,
+            ]
+        ),
         'pencil-square-o',
         'info'
     );
@@ -234,7 +239,9 @@ if (!in_array($origin, ['learnpath', 'embeddable'])) {
     Display::display_reduced_footer();
 } else {
     $lp_mode = Session::read('lp_mode');
-    $url = '../lp/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$learnpath_id.'&lp_item_id='.$learnpath_item_id.'&exeId='.$exercise_stat_info['exe_id'].'&fb_type='.$objExercise->getFeedbackType().'#atoc_'.$learnpath_item_id;
+    $url = '../lp/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$learnpath_id
+        .'&lp_item_id='.$learnpath_item_id.'&exeId='.$exercise_stat_info['exe_id']
+        .'&fb_type='.$objExercise->getFeedbackType().'#atoc_'.$learnpath_item_id;
     $href = $lp_mode === 'fullscreen' ? ' window.opener.location.href="'.$url.'" ' : ' top.location.href="'.$url.'"';
 
     if (api_is_allowed_to_session_edit()) {

@@ -23,12 +23,13 @@ if (isset($_REQUEST['userId'])) {
 // Return User Info to vCard Export
 $userInfo = api_get_user_info($userId, true, false, true);
 
-/* Get the relationship between current user and vcard user */
+/* Get the relationship between current user and vCard user */
 $currentUserId = api_get_user_id();
 $hasRelation =  SocialManager::get_relation_between_contacts(
     $currentUserId,
     $userId,
-    true);
+    true
+);
 if ($hasRelation == 0) {
     /* if has not relation, check if are admin */
     api_protect_admin_script();

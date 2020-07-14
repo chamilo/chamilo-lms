@@ -54,9 +54,9 @@ class SocialManager extends UserManager
     /**
      * Get the kind of relation between contacts.
      *
-     * @param int user id
-     * @param int user friend id
-     * @param boolean include RH relationship
+     * @param int $user_id user id
+     * @param int $user_friend user friend id
+     * @param boolean $includeRH include the RH relationship
      *
      * @return int
      *
@@ -66,7 +66,7 @@ class SocialManager extends UserManager
     {
         $table = Database::get_main_table(TABLE_MAIN_USER_FRIEND_RELATION_TYPE);
         $userRelUserTable = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
-        if($includeRH == false){
+        if ($includeRH == false) {
             $sql = 'SELECT rt.id as id
                 FROM '.$table.' rt
                 WHERE rt.id = (
@@ -78,7 +78,7 @@ class SocialManager extends UserManager
                         uf.relation_type <> '.USER_RELATION_TYPE_RRHH.'
                     LIMIT 1
                 )';
-        }else{
+        } else {
             $sql = 'SELECT rt.id as id
                 FROM '.$table.' rt
                 WHERE rt.id = (

@@ -10,6 +10,9 @@ $strings['apiKey'] = "Clé d'API (<em>API Key</em>)";
 $strings['apiSecret'] = "Code secret d'API (<em>API Secret</em>)";
 $strings['enableParticipantRegistration'] = "Activer l'inscription des participants";
 $strings['enableCloudRecording'] = "Activer l'enregistrement sur les serveurs de Zoom";
+$strings['enableGlobalConference'] = "Activer les conférences globales";
+$strings['enableGlobalConferencePerUser'] = "Activer les conférences globales par utilisateur";
+$strings['globalConferenceAllowRoles'] = "Visibilité du lien de vidéo conférence global pour les profils suivant";
 
 $strings['tool_enable_help'] = "Choisissez si vous voulez activer l'outil de conférence vidéo Zoom.
 Une fois activé, il apparaitra dans les pages d'accueil de tous les cours :

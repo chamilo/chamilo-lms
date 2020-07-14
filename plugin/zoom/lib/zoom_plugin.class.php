@@ -36,6 +36,18 @@ class ZoomPlugin extends Plugin
                 'apiSecret' => 'text',
                 'enableParticipantRegistration' => 'boolean',
                 'enableCloudRecording' => 'boolean',
+                'enableGlobalConference' => 'boolean',
+                'enableGlobalConferencePerUser' => 'boolean',
+                'globalConferenceAllowRoles' => [
+                    'type' => 'select',
+                    'options' => [
+                        PLATFORM_ADMIN => get_lang('Administrator'),
+                        COURSEMANAGER => get_lang('Teacher'),
+                        STUDENT => get_lang('Student'),
+                        STUDENT_BOSS => get_lang('StudentBoss'),
+                    ],
+                    'attributes' => ['multiple' => 'multiple'],
+                ],
             ]
         );
 

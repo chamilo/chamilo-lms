@@ -10,6 +10,9 @@ $strings['apiKey'] = 'API Key';
 $strings['apiSecret'] = 'API Secret';
 $strings['enableParticipantRegistration'] = 'Enable participant registration';
 $strings['enableCloudRecording'] = 'Enable cloud recording';
+$strings['enableGlobalConference'] = 'Enable global conference';
+$strings['enableGlobalConferencePerUser'] = 'Enable global conference per user';
+$strings['globalConferenceAllowRoles'] = "Global conference link only visible for these user roles";
 
 $strings['tool_enable_help'] = "Choose whether you want to enable the Zoom videoconference tool.
 Once enabled, it will show as an additional course tool in all courses' homepage :

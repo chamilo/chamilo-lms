@@ -1209,6 +1209,8 @@ class CLp
     /**
      * Set cId.
      *
+     * @deprecated use setCourse wherever possible
+     *
      * @param int $cId
      *
      * @return CLp
@@ -1216,6 +1218,7 @@ class CLp
     public function setCId($cId)
     {
         $this->cId = $cId;
+        $this->setCourse(Course::getRepository()->find($cId));
 
         return $this;
     }

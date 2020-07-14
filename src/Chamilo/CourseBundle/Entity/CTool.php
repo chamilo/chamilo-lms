@@ -450,6 +450,8 @@ class CTool
     /**
      * Set cId.
      *
+     * @deprecated use setCourse wherever possible
+     *
      * @param int $cId
      *
      * @return CTool
@@ -457,6 +459,7 @@ class CTool
     public function setCId($cId)
     {
         $this->cId = $cId;
+        $this->setCourse(Course::getRepository()->find($cId));
 
         return $this;
     }

@@ -935,6 +935,8 @@ class CLpItem
     /**
      * Set cId.
      *
+     * @deprecated use setCourse wherever possible
+     *
      * @param int $cId
      *
      * @return CLpItem
@@ -942,6 +944,7 @@ class CLpItem
     public function setCId($cId)
     {
         $this->cId = $cId;
+        $this->setCourse(Course::getRepository()->find($cId));
 
         return $this;
     }

@@ -764,6 +764,8 @@ class CForumForum
     /**
      * Set cId.
      *
+     * @deprecated use setCourse wherever possible
+     *
      * @param int $cId
      *
      * @return CForumForum
@@ -771,6 +773,7 @@ class CForumForum
     public function setCId($cId)
     {
         $this->cId = $cId;
+        $this->setCourse(Course::getRepository()->find($cId));
 
         return $this;
     }

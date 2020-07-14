@@ -6,7 +6,6 @@ require_once __DIR__.'/../../../../vendor/autoload.php';
 
 class CreateUserEventTest extends V2TestCase
 {
-
     /**
      * @var \Chamilo\UserBundle\Entity\User|null
      */
@@ -16,10 +15,11 @@ class CreateUserEventTest extends V2TestCase
     {
         parent::setUpBeforeClass();
 
-        self::$user = \Chamilo\UserBundle\Entity\User::getRepository()->findOneBy(['username' => 'sebastien']);
+        $username = 'sebastien';
+        self::$user = \Chamilo\UserBundle\Entity\User::getRepository()->findOneBy(['username' => $username]);
         if (is_null(self::$user)) {
             self::$user = (new \Chamilo\UserBundle\Entity\User())
-                ->setUsername('sebastien')
+                ->setUsername($username)
                 ->setEmail('test@test.com')
                 ;
             Database::getManager()->persist(self::$user);
@@ -37,7 +37,6 @@ class CreateUserEventTest extends V2TestCase
      */
     public function testCreateUserEvent()
     {
-        $loginname = self::$user->getUsername();
         $eventTitle = 'An appointment';
         $eventText = 'Do not be late';
         $timezone = new DateTimeZone('utc');
@@ -47,7 +46,7 @@ class CreateUserEventTest extends V2TestCase
 
         $eventId = $this->integer(
             [
-                'loginname' => $loginname,
+                'loginname' => self::$user->getUsername(),
                 'eventTitle' => $eventTitle,
                 'eventText' => $eventText,
                 'eventStartDate' => $eventStartDate->format('c'),

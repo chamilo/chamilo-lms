@@ -2311,35 +2311,36 @@ class Attendance
         $orderDesc = true
     ) {
 
-        $courseManager = new CourseManager();
         $attendanceLib = new Attendance();
         $data = [];
         // unused by now
         /*
-         $specialCourses = $courseManager::returnSpecialCourses(
+         $specialCourses = CourseManager::returnSpecialCourses(
             $student_id, false, false
         );
          */
-        $courses = $courseManager::returnCourses(
+        $courses = CourseManager::returnCourses(
             $student_id,
             false,
             false
         );
 
         /* Get course with (in_category) and without (not_category) category */
-        foreach ($courses as $coursesK => $coursesV) {
-            $coursesWithNoCategory = $coursesV;
-            $totalCoursesNoCategory = count($coursesWithNoCategory);
+        foreach ($courses as $coursesKey => $courseData) {
+            /*
+             * $coursesKey can be in_category or not_category for courses
+             * */
+            $totalCoursesNoCategory = count($courseData);
             for ($i = 0; $i < $totalCoursesNoCategory; $i++) {
-                $w = $coursesWithNoCategory[$i];
+                $courseItem = $courseData[$i];
                 /* Get all attendance by courses*/
-                $attenances = $attendanceLib->get_attendances_list($w['course_id']);
+                $attenances = $attendanceLib->get_attendances_list($courseItem['course_id']);
                 $temp = [];
                 $sheetsProccessed = [];
                 $tempDate = [];
-                foreach ($attenances as $k => $v) {
-                    $attendance_id = $v['id'];
-                    $course_id = $w['course_id'];
+                foreach ($attenances as $attendanceData) {
+                    $attendance_id = $attendanceData['id'];
+                    $course_id = $courseItem['course_id'];
                     $sheets = $attendanceLib->get_users_attendance_sheet(
                         $attendance_id,
                         $student_id,
@@ -2350,11 +2351,11 @@ class Attendance
                     );
 
                     $sheetsProccessed[] = [];
-                    foreach ($sheets as $a => $b) {
-                        $totalb = count($b);
+                    foreach ($sheets as $sheetData) {
+                        $totalb = count($sheetData);
                         $tempDate = [];
                         for ($ii = 0; $ii < $totalb; $ii++) {
-                            $work = $b[$ii];
+                            $work = $sheetData[$ii];
                             $dateProccess = new DateTime($work[0]);
                             $attendancesProccess = null;
                             if(empty($endDate) && empty($startDate)) {
@@ -2378,28 +2379,28 @@ class Attendance
                                 }
                             }
                             if(!empty($attendancesProccess)) {
-                                $fecha = $attendancesProccess['0'];
+                                $dateTemp = $attendancesProccess['0'];
                                 $attendancesProccess[0] = $attendancesProccess[1];
-                                $attendancesProccess[1] = $fecha;
+                                $attendancesProccess[1] = $dateTemp;
 
-                                $attendancesProccess[2] = $w['title'];
-                                $attendancesProccess['courseTitle'] = $w['title'];
+                                $attendancesProccess[2] = $courseItem['title'];
+                                $attendancesProccess['courseTitle'] = $courseItem['title'];
 
-                                $attendancesProccess[3] = $w['real_id'];
-                                $attendancesProccess['courseId'] = $w['real_id'];
+                                $attendancesProccess[3] = $courseItem['real_id'];
+                                $attendancesProccess['courseId'] = $courseItem['real_id'];
 
-                                $attendancesProccess[4] = $v['name'];
-                                $attendancesProccess['attendanceName'] = $v['name'];
+                                $attendancesProccess[4] = $attendanceData['name'];
+                                $attendancesProccess['attendanceName'] = $attendanceData['name'];
 
-                                $attendancesProccess[5] = $v['id'];
-                                $attendancesProccess['attendanceId'] = $v['id'];
+                                $attendancesProccess[5] = $attendanceData['id'];
+                                $attendancesProccess['attendanceId'] = $attendanceData['id'];
                                 if($attendancesProccess['presence'] == 1) {
                                     $attendancesProccess['presence'] = get_lang('Present');
                                     $attendancesProccess[0] = get_lang('Present');
                                 }
                                 $tempDate[] = $attendancesProccess;
-                                $corte = new DateTime($fecha);
-                                $data [$corte->format('Y-m-d')][] = $attendancesProccess;
+                                $dateKey = new DateTime($dateTemp);
+                                $data [$dateKey->format('Y-m-d')][] = $attendancesProccess;
                             }
 
                         }

@@ -589,7 +589,10 @@ class DocumentManager
                 $sharedCondition .= ' AND docs.path IN ("'.implode('","', $conditionList).'")';
             }
         }
-
+        $where = '';
+        if ($search != true) {
+            $where .= "docs.path NOT LIKE '" . Database::escape_string($path . $addedSlash . '%/%') . "' AND";
+        }
         $sql = "SELECT
                     docs.id,
                     docs.filetype,
@@ -614,7 +617,7 @@ class DocumentManager
                     docs.c_id = {$courseInfo['real_id']} AND
                     last.c_id = {$courseInfo['real_id']} AND
                     docs.path LIKE '".Database::escape_string($path.$addedSlash.'%')."' AND
-                    docs.path NOT LIKE '".Database::escape_string($path.$addedSlash.'%/%')."' AND
+                    $where
                     docs.path NOT LIKE '%_DELETED_%' AND
                     $userGroupFilter AND
                     last.visibility $visibilityBit

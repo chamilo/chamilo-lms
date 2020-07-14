@@ -18,36 +18,10 @@ $plugin = ZoomPlugin::create();
 // the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
 
-$form = new FormValidator(get_lang('Search'));
-$startDatePicker = $form->addDatePicker('search_meeting_start', get_lang('StartDate'));
-$endDatePicker = $form->addDatePicker('search_meeting_end', get_lang('EndDate'));
-$typeSelect = $form->addRadio(
-    'type',
-    get_lang('Type'),
-    [
-        CourseMeetingList::TYPE_SCHEDULED => get_lang('ScheduledMeetings'),
-        CourseMeetingList::TYPE_LIVE => get_lang('LiveMeetings'),
-        CourseMeetingList::TYPE_UPCOMING => get_lang('UpcomingMeetings'),
-    ]
-);
-$form->addButtonSearch(get_lang('Search'));
-if ($form->validate()) {
-    $startDate = new DateTime($startDatePicker->getValue());
-    $endDate = new DateTime($endDatePicker->getValue());
-    $type = $typeSelect->getValue();
-} else {
-    $oneMonth = new DateInterval('P1M');
-    $startDate = new DateTime();
-    $startDate->sub($oneMonth);
-    $endDate = new DateTime();
-    $endDate->add($oneMonth);
-    $type = CourseMeetingList::TYPE_SCHEDULED;
-}
-$form->setDefaults([
-    'search_meeting_start' => $startDate->format('Y-m-d'),
-    'search_meeting_end' => $endDate->format('Y-m-d'),
-    'type' => $type,
-]);
+$form = $plugin->getAdminSearchForm();
+$startDate = new DateTime($form->getElement('start')->getValue());
+$endDate = new DateTime($form->getElement('end')->getValue());
+$type = $form->getElement('type')->getValue();
 
 $tpl = new Template($tool_name);
 $tpl->assign('meetings', $plugin->getPeriodMeetings($type, $startDate, $endDate));

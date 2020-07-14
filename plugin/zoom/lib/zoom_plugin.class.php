@@ -17,6 +17,7 @@ use Chamilo\PluginBundle\Zoom\Recording;
 use Chamilo\PluginBundle\Zoom\RecordingList;
 use Chamilo\PluginBundle\Zoom\UserMeetingRegistrant;
 use Chamilo\PluginBundle\Zoom\UserMeetingRegistrantListItem;
+use Doctrine\Common\Collections\Criteria;
 
 /**
  * Class ZoomPlugin. Integrates Zoom meetings in courses.
@@ -80,6 +81,456 @@ class ZoomPlugin extends Plugin
     public function uninstall()
     {
         $this->uninstall_course_fields_in_all_courses();
+    }
+
+    /**
+     * Generates the search form to include in the meeting list administration page.
+     * The form has DatePickers 'start' and 'end' and a Radio 'type'.
+     *
+     * @return FormValidator
+     */
+    public function getAdminSearchForm()
+    {
+        $form = new FormValidator('search');
+        $startDatePicker = $form->addDatePicker('start', get_lang('StartDate'));
+        $endDatePicker = $form->addDatePicker('end', get_lang('EndDate'));
+        $typeSelect = $form->addRadio(
+            'type',
+            get_lang('Type'),
+            [
+                CourseMeetingList::TYPE_SCHEDULED => get_lang('ScheduledMeetings'),
+                CourseMeetingList::TYPE_LIVE => get_lang('LiveMeetings'),
+                CourseMeetingList::TYPE_UPCOMING => get_lang('UpcomingMeetings'),
+            ]
+        );
+        $form->addButtonSearch(get_lang('Search'));
+        $oneMonth = new DateInterval('P1M');
+        if ($form->validate()) {
+            try {
+                $start = new DateTime($startDatePicker->getValue());
+            } catch (Exception $exception) {
+                $start = new DateTime();
+                $start->sub($oneMonth);
+            }
+            try {
+                $end = new DateTime($endDatePicker->getValue());
+            } catch (Exception $exception) {
+                $end = new DateTime();
+                $end->add($oneMonth);
+            }
+            $type = $typeSelect->getValue();
+        } else {
+            $start = new DateTime();
+            $start->sub($oneMonth);
+            $end = new DateTime();
+            $end->add($oneMonth);
+            $type = CourseMeetingList::TYPE_SCHEDULED;
+        }
+        try {
+            $form->setDefaults([
+                'start' => $start->format('Y-m-d'),
+                'end' => $end->format('Y-m-d'),
+                'type' => $type,
+            ]);
+        } catch (Exception $exception) {
+            error_log(join(':', [__FILE__, __LINE__, $exception]));
+        }
+
+        return $form;
+    }
+
+    /**
+     * Generates a meeting edit form and updates the meeting on validation.
+     *
+     * @param CourseMeetingInfoGet $meeting the meeting
+     *
+     * @return FormValidator
+     */
+    public function getEditMeetingForm(&$meeting)
+    {
+        $form = new FormValidator('edit', 'post', $_SERVER['REQUEST_URI']);
+        $withTimeAndDuration = $meeting::TYPE_SCHEDULED === $meeting->type
+            || $meeting::TYPE_RECURRING_WITH_FIXED_TIME === $meeting->type;
+        if ($withTimeAndDuration) {
+            $startTimeDatePicker = $form->addDateTimePicker('start_time', get_lang('StartTime'));
+            $form->setRequired($startTimeDatePicker);
+            $durationNumeric = $form->addNumeric('duration', get_lang('DurationInMinutes'));
+            $form->setRequired($durationNumeric);
+        }
+        $topicText = $form->addText('topic', get_lang('Topic'));
+        $agendaTextArea = $form->addTextarea('agenda', get_lang('Agenda'), ['maxlength' => 2000]);
+        // $passwordText = $form->addText('password', get_lang('Password'), false, ['maxlength' => '10']);
+        $form->addButtonUpdate(get_lang('UpdateMeeting'));
+        if ($form->validate()) {
+            if ($withTimeAndDuration) {
+                $meeting->start_time = $startTimeDatePicker->getValue();
+                $meeting->timezone = date_default_timezone_get();
+                $meeting->duration = $durationNumeric->getValue();
+            }
+            $meeting->topic = $topicText->getValue();
+            $meeting->agenda = $agendaTextArea->getValue();
+            try {
+                $this->updateMeeting($meeting);
+                Display::addFlash(
+                    Display::return_message(get_lang('MeetingUpdated'), 'confirm')
+                );
+            } catch (Exception $exception) {
+                Display::addFlash(
+                    Display::return_message($exception->getMessage(), 'error')
+                );
+            }
+            $meeting = $this->getMeeting($meeting->id);
+        }
+        $defaults = [
+            'topic' => $meeting->topic,
+            'agenda' => $meeting->agenda,
+        ];
+        if ($withTimeAndDuration) {
+            $defaults['start_time'] = $meeting->startDateTime->format('c');
+            $defaults['duration'] = $meeting->duration;
+        }
+        $form->setDefaults($defaults);
+
+        return $form;
+    }
+
+    /**
+     * Generates a meeting delete form and deletes the meeting on validation.
+     *
+     * @param CourseMeetingInfoGet $meeting
+     * @param string               $returnURL where to redirect to on successful deletion
+     *
+     * @return FormValidator
+     */
+    public function getDeleteMeetingForm($meeting, $returnURL)
+    {
+        $form = new FormValidator('delete', 'post', $_SERVER['REQUEST_URI']);
+        $form->addButtonDelete(get_lang('DeleteMeeting'));
+        if ($form->validate()) {
+            try {
+                $this->deleteMeeting($meeting);
+                Display::addFlash(
+                    Display::return_message(get_lang('MeetingDeleted'), 'confirm')
+                );
+                location($returnURL);
+            } catch (Exception $exception) {
+                Display::addFlash(
+                    Display::return_message($exception->getMessage(), 'error')
+                );
+            }
+        }
+
+        return $form;
+    }
+
+    /**
+     * Generates a registrant list update form listing course and session users.
+     * Updates the list on validation.
+     *
+     * @param CourseMeetingInfoGet $meeting
+     *
+     * @return array a list of two elements:
+     *               FormValidator the form
+     *               UserMeetingRegistrantListItem[] the up-to-date list of registrants
+     */
+    public function getRegisterParticipantForm($meeting)
+    {
+        $form = new FormValidator('register', 'post', $_SERVER['REQUEST_URI']);
+        $userIdSelect = $form->addSelect('userIds', get_lang('RegisteredUsers'));
+        $userIdSelect->setMultiple(true);
+        $form->addButtonSend(get_lang('UpdateRegisteredUserList'));
+
+        $users = $meeting->getCourseAndSessionUsers();
+        foreach ($users as $user) {
+            $userIdSelect->addOption(api_get_person_name($user->getFirstname(), $user->getLastname()), $user->getId());
+        }
+
+        try {
+            $registrants = $this->getRegistrants($meeting);
+        } catch (Exception $exception) {
+            Display::addFlash(
+                Display::return_message($exception->getMessage(), 'error')
+            );
+            $registrants = [];
+        }
+
+        if ($form->validate()) {
+            $selectedUserIds = $userIdSelect->getValue();
+            $selectedUsers = [];
+            foreach ($users as $user) {
+                if (in_array($user->getId(), $selectedUserIds)) {
+                    $selectedUsers[] = $user;
+                }
+            }
+            try {
+                $this->updateRegistrantList($meeting, $selectedUsers);
+                Display::addFlash(
+                    Display::return_message(get_lang('RegisteredUserListWasUpdated'), 'confirm')
+                );
+            } catch (Exception $exception) {
+                Display::addFlash(
+                    Display::return_message($exception->getMessage(), 'error')
+                );
+            }
+            try {
+                $registrants = $this->getRegistrants($meeting);
+            } catch (Exception $exception) {
+                Display::addFlash(
+                    Display::return_message($exception->getMessage(), 'error')
+                );
+                $registrants = [];
+            }
+        }
+        $registeredUserIds = [];
+        foreach ($registrants as $registrant) {
+            $registeredUserIds[] = $registrant->userId;
+        }
+        $userIdSelect->setSelected($registeredUserIds);
+
+
+        return [ $form, $registrants ];
+    }
+
+    /**
+     * Generates a meeting recording files management form.
+     * Takes action on validation.
+     *
+     * @param CourseMeetingInfoGet $meeting
+     *
+     * @return array a list of two elements:
+     *               FormValidator the form
+     *               Recording[] the up-to-date list of recordings
+     */
+    public function getFileForm($meeting)
+    {
+        $form = new FormValidator('fileForm', 'post', $_SERVER['REQUEST_URI']);
+        try {
+            $recordings = $this->getMeetingRecordings($meeting);
+        } catch (Exception $exception) {
+            Display::addFlash(
+                Display::return_message($exception->getMessage(), 'error')
+            );
+            $recordings = [];
+        }
+        if (!empty($recordings)) {
+            $fileIdSelect = $form->addSelect('fileIds', get_lang('Files'));
+            $fileIdSelect->setMultiple(true);
+            foreach ($recordings as &$recording) {
+                // $recording->instanceDetails = $plugin->getPastMeetingInstanceDetails($instance->uuid);
+                $options = [];
+                foreach ($recording->recording_files as $file) {
+                    $options[] = [
+                        'text' => sprintf(
+                            '%s.%s (%s)',
+                            $file->recording_type,
+                            $file->file_type,
+                            $file->formattedFileSize
+                        ),
+                        'value' => $file->id,
+                    ];
+                }
+                $fileIdSelect->addOptGroup(
+                    $options,
+                    sprintf("%s (%s)", $recording->formattedStartTime, $recording->formattedDuration)
+                );
+            }
+            $actionRadio = $form->addRadio(
+                'action',
+                get_lang('Action'),
+                [
+                    'CreateLinkInCourse' => get_lang('CreateLinkInCourse'),
+                    'CopyToCourse' => get_lang('CopyToCourse'),
+                    'DeleteFile' => get_lang('DeleteFile'),
+                ]
+            );
+            $form->addButtonUpdate(get_lang('DoIt'));
+            if ($form->validate()) {
+                foreach ($recordings as $recording) {
+                    foreach ($recording->recording_files as $file) {
+                        if (in_array($file->id, $fileIdSelect->getValue())) {
+                            $name = sprintf(
+                                get_lang('XRecordingOfMeetingXFromXDurationXDotX'),
+                                $file->recording_type,
+                                $meeting->id,
+                                $recording->formattedStartTime,
+                                $recording->formattedDuration,
+                                $file->file_type
+                            );
+                            if ('CreateLinkInCourse' === $actionRadio->getValue()) {
+                                try {
+                                    $this->createLinkToFileInCourse($meeting, $file, $name);
+                                    Display::addFlash(
+                                        Display::return_message(get_lang('LinkToFileWasCreatedInCourse'), 'success')
+                                    );
+                                } catch (Exception $exception) {
+                                    Display::addFlash(
+                                        Display::return_message($exception->getMessage(), 'error')
+                                    );
+                                }
+                            } elseif ('CopyToCourse' === $actionRadio->getValue()) {
+                                try {
+                                    $this->copyFileToCourse($meeting, $file, $name);
+                                    Display::addFlash(
+                                        Display::return_message(get_lang('FileWasCopiedToCourse'), 'confirm')
+                                    );
+                                } catch (Exception $exception) {
+                                    Display::addFlash(
+                                        Display::return_message($exception->getMessage(), 'error')
+                                    );
+                                }
+                            } elseif ('DeleteFile' === $actionRadio->getValue()) {
+                                try {
+                                    $this->deleteFile($file);
+                                    Display::addFlash(
+                                        Display::return_message(get_lang('FileWasDeleted'), 'confirm')
+                                    );
+                                } catch (Exception $exception) {
+                                    Display::addFlash(
+                                        Display::return_message($exception->getMessage(), 'error')
+                                    );
+                                }
+                            }
+                        }
+                    }
+                }
+                try {
+                    $recordings = $this->getMeetingRecordings($meeting);
+                } catch (Exception $exception) {
+                    Display::addFlash(
+                        Display::return_message($exception->getMessage(), 'error')
+                    );
+                    $recordings = [];
+                }
+            }
+        }
+
+        return [$form, $recordings];
+    }
+
+    /**
+     * Generates a form to fast and easily create and start an instant meeting.
+     * On validation, create it then redirect to it and exit.
+     *
+     * @return FormValidator
+     */
+    public function getCreateInstantMeetingForm()
+    {
+        $form = new FormValidator('createInstantMeetingForm', 'post', '', '_blank');
+        $form->addButton('startButton', get_lang('StartInstantMeeting'));
+
+        if ($form->validate()) {
+            try {
+                $newInstantMeeting = $this->createInstantMeeting();
+                location($newInstantMeeting->start_url);
+            } catch (Exception $exception) {
+                Display::addFlash(
+                    Display::return_message($exception->getMessage(), 'error')
+                );
+            }
+        }
+
+        return $form;
+    }
+
+    /**
+     * Generates a form to schedule a meeting.
+     * On validation, creates it.
+     *
+     * @throws Exception
+     *
+     * @return FormValidator
+     */
+    public function getScheduleMeetingForm()
+    {
+        $form = new FormValidator('scheduleMeetingForm');
+        $startTimeDatePicker = $form->addDateTimePicker('start_time', get_lang('StartTime'));
+        $form->setRequired($startTimeDatePicker);
+        $durationNumeric = $form->addNumeric('duration', get_lang('DurationInMinutes'));
+        $form->setRequired($durationNumeric);
+        $topicText = $form->addText('topic', get_lang('Topic'), true);
+        $agendaTextArea = $form->addTextarea('agenda', get_lang('Agenda'), ['maxlength' => 2000]);
+        // $passwordText = $form->addText('password', get_lang('Password'), false, ['maxlength' => '10']);
+        $registrationOptions = [
+            'RegisterAllCourseUsers' => get_lang('RegisterAllCourseUsers'),
+        ];
+        $groups = GroupManager::get_groups();
+        if (!empty($groups)) {
+            $registrationOptions['RegisterTheseGroupMembers'] = get_lang('RegisterTheseGroupMembers');
+        }
+        $registrationOptions['RegisterNoUser'] = get_lang('RegisterNoUser');
+        $userRegistrationRadio = $form->addRadio(
+            'userRegistration',
+            get_lang('UserRegistration'),
+            $registrationOptions
+        );
+        $groupOptions = [];
+        foreach ($groups as $group) {
+            $groupOptions[$group['id']] = $group['name'];
+        }
+        $groupIdsSelect = $form->addSelect(
+            'groupIds',
+            get_lang('RegisterTheseGroupMembers'),
+            $groupOptions
+        );
+        $groupIdsSelect->setMultiple(true);
+        if (!empty($groups)) {
+            $jsCode = sprintf(
+                <<<EOF
+getElementById('%s').parentNode.parentNode.parentNode.style.display = getElementById('%s').checked ? 'block' : 'none'
+EOF,
+                $groupIdsSelect->getAttribute('id'),
+                $userRegistrationRadio->getelements()[1]->getAttribute('id')
+            );
+
+            $form->setAttribute('onchange', $jsCode);
+        }
+        $form->addButtonCreate(get_lang('ScheduleTheMeeting'));
+
+        // meeting scheduling
+        if ($form->validate()) {
+            try {
+                $newMeeting = $this->createScheduledMeeting(
+                    new DateTime($startTimeDatePicker->getValue()),
+                    $durationNumeric->getValue(),
+                    $topicText->getValue(),
+                    $agendaTextArea->getValue(),
+                    '' // $passwordText->getValue()
+                );
+                Display::addFlash(
+                    Display::return_message(get_lang('NewMeetingCreated'))
+                );
+                if ('RegisterAllCourseUsers' == $userRegistrationRadio->getValue()) {
+                    $this->addRegistrants($newMeeting, $newMeeting->getCourseAndSessionUsers());
+                    Display::addFlash(
+                        Display::return_message(get_lang('AllCourseUsersWereRegistered'))
+                    );
+                } elseif ('RegisterTheseGroupMembers' == $userRegistrationRadio->getValue()) {
+                    $userIds = [];
+                    foreach ($groupIdsSelect->getValue() as $groupId) {
+                        $userIds = array_unique(array_merge($userIds, GroupManager::get_users($groupId)));
+                    }
+                    $users = Database::getManager()->getRepository(
+                        'ChamiloUserBundle:User'
+                    )->matching(Criteria::create()->where(Criteria::expr()->in('id', $userIds)))->getValues();
+                    $this->addRegistrants($newMeeting, $users);
+                }
+                location('meeting_from_start.php?meetingId='.$newMeeting->id);
+            } catch (Exception $exception) {
+                Display::addFlash(
+                    Display::return_message($exception->getMessage(), 'error')
+                );
+            }
+        } else {
+            $form->setDefaults(
+                [
+                    'duration' => 60,
+                    'topic' => api_get_course_info()['title'],
+                    'userRegistration' => 'RegisterAllCourseUsers',
+                ]
+            );
+        }
+
+        return $form;
     }
 
     /**

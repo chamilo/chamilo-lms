@@ -122,10 +122,9 @@ function save_data($users_classes, $deleteUsersNotInList = false)
  */
 function parse_csv_data($file)
 {
-    $courses = Import::csvToArray($file);
-
-    return $courses;
+    return Import::csvToArray($file);
 }
+
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';

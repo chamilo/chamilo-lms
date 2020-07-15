@@ -6414,7 +6414,8 @@ function api_get_access_url_from_user($user_id)
  *
  * @return AccessUrl|null
  */
-function api_get_access_url_entity($id = 0) {
+function api_get_access_url_entity($id = 0)
+{
     return Database::getManager()->getRepository('ChamiloCoreBundle:AccessUrl')->find(
         $id ?: api_get_current_access_url_id()
     );

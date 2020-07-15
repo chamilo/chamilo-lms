@@ -4300,7 +4300,13 @@ function processWorkForm(
                     if (1 == count($userWorks)) {
                         // The student only uploaded one doc so far, so add the
                         // considered work time to his course connection time
-                        Event::eventAddVirtualCourseTime($courseId, $userId, $sessionId, $workingTime, $workId);
+                        Event::eventAddVirtualCourseTime(
+                            $courseId,
+                            $userId,
+                            $sessionId,
+                            $workingTime,
+                            $workInfo['iid']
+                        );
                     }
                 }
             }
@@ -4806,7 +4812,7 @@ function deleteWorkItem($item_id, $courseInfo)
                             $row['user_id'],
                             $sessionId,
                             $workingTime,
-                            $item_id
+                            $row['parent_id']
                         );
                     }
                 }

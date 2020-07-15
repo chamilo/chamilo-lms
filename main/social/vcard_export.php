@@ -25,7 +25,7 @@ $userInfo = api_get_user_info($userId, true, false, true);
 
 /* Get the relationship between current user and vCard user */
 $currentUserId = api_get_user_id();
-$hasRelation =  SocialManager::get_relation_between_contacts(
+$hasRelation = SocialManager::get_relation_between_contacts(
     $currentUserId,
     $userId,
     true
@@ -38,7 +38,7 @@ if ($hasRelation == 0) {
 if (empty($userInfo)) {
     api_not_allowed(true);
 }
-if (api_get_user_id() != $userId && !SocialManager::get_relation_between_contacts(api_get_user_id(),$userId)) {
+if (api_get_user_id() != $userId && !SocialManager::get_relation_between_contacts(api_get_user_id(), $userId)) {
     api_not_allowed(true);
 }
 // Pre-Loaded User Info

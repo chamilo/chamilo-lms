@@ -1,7 +1,7 @@
 <?php
+
 /* See license terms in /license.txt */
 
-//use Chamilo\UserBundle\Entity\User;
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use ChamiloSession as Session;
 
@@ -2237,12 +2237,12 @@ class Event
      * updating the current one to be just the considered_working_time and
      * end at the same second as the user connected to the course.
      *
-     * @param int    $courseId    The course in which to add the time
-     * @param int    $userId      The user for whom to add the time
-     * @param int    $sessionId   The session in which to add the time (if any)
-     * @param string $virtualTime The amount of time to be added,
-     *                            in a hh:mm:ss format. If int, we consider it is expressed in hours.
-     * @param int    $resultWorkId Student publication id result
+     * @param int    $courseId     The course in which to add the time
+     * @param int    $userId       The user for whom to add the time
+     * @param int    $sessionId    The session in which to add the time (if any)
+     * @param string $virtualTime  The amount of time to be added,
+     *                             in a hh:mm:ss format. If int, we consider it is expressed in hours.
+     * @param int    $workId       Student publication id result
      *
      * @return true on successful insertion, false otherwise
      */
@@ -2251,7 +2251,7 @@ class Event
         $userId,
         $sessionId,
         $virtualTime,
-        $resultWorkId
+        $workId
     ) {
         if (empty($virtualTime)) {
             return false;
@@ -2293,14 +2293,14 @@ class Event
         Database::insert($platformTrackingTable, $params);
 
         if (Tracking::minimumTimeAvailable($sessionId, $courseId)) {
-            $resultWorkId = (int) $resultWorkId;
+            $workId = (int) $workId;
 
             $logInfo = [
                 'c_id' => $courseId,
                 'session_id' => $sessionId,
                 'tool' => TOOL_STUDENTPUBLICATION,
                 'date_reg' => $loginDate,
-                'action' => 'add_work_start_'.$resultWorkId,
+                'action' => 'add_work_start_'.$workId,
                 'action_details' => $virtualTime,
                 'user_id' => $userId,
             ];
@@ -2311,7 +2311,7 @@ class Event
                 'session_id' => $sessionId,
                 'tool' => TOOL_STUDENTPUBLICATION,
                 'date_reg' => $logoutDate,
-                'action' => 'add_work_end_'.$resultWorkId,
+                'action' => 'add_work_end_'.$workId,
                 'action_details' => $virtualTime,
                 'user_id' => $userId,
             ];

@@ -106,7 +106,7 @@ if (api_is_course_admin() && !in_array($origin, ['learnpath', 'embeddable'])) {
             .Display::url(
                 Display::return_icon('edit.png', get_lang('ModifyExercise'), [], 32),
                 'exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id
-            )
+            ),
         ]
     );
 }

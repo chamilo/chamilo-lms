@@ -1874,6 +1874,7 @@ if (empty($details)) {
 
     foreach ($userWorks as $work) {
         $work = $work['work'];
+        $showOnce = true;
         foreach ($work->user_results as $key => $results) {
             $resultId = $results['id'];
 
@@ -1906,15 +1907,16 @@ if (empty($details)) {
                     $time = $field->getValue();
                     echo '<td class="text-center">';
                     echo $time;
-                    if ($workingTimeEdit) {
-                        echo Display::url(
+                    if ($workingTimeEdit && $showOnce) {
+                        $showOnce = false;
+                        echo '&nbsp;'.Display::url(
                             get_lang('AddTime'),
-                            $currentUrl.'&action=add_work_time&time='.$time.'&work_id='.$resultId
+                            $currentUrl.'&action=add_work_time&time='.$time.'&work_id='.$work->id
                         );
 
-                        echo Display::url(
+                        echo '&nbsp;'.Display::url(
                             get_lang('RemoveTime'),
-                            $currentUrl.'&action=remove_work_time&time='.$time.'&work_id='.$resultId
+                            $currentUrl.'&action=remove_work_time&time='.$time.'&work_id='.$work->id
                         );
                     }
                     echo '</td>';

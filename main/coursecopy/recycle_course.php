@@ -16,7 +16,6 @@ require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_COURSE_MAINTENANCE;
 api_protect_course_script(true);
 
-
 $_course = api_get_course_info();
 $current_course_code = $_course['official_code'];
 
@@ -60,7 +59,7 @@ if (Security::check_token('post') && (
     }
     $recycle_type = '';
     $fullDelete = 0;
-    $courseCodeConfirmation ='';
+    $courseCodeConfirmation = '';
     if (isset($_POST['course_code_confirmation'])) {
         $courseCodeConfirmation = $_POST['course_code_confirmation'];
     }
@@ -78,13 +77,12 @@ if (Security::check_token('post') && (
             $cr->recycle($recycle_type);
             echo Display::return_message(get_lang('RecycleFinished'), 'confirm');
         } else {
-            $messageFailCourseCode = '<p>' . get_lang('CourseRegistrationCodeIncorrect') . '</p>';
+            $messageFailCourseCode = '<p>'.get_lang('CourseRegistrationCodeIncorrect').'</p>';
             $messageFailCourseCode .= '<p><a class="btn btn-primary" href="'.api_get_self().'?'.api_get_cidreq().'">'.
                 get_lang('BackToPreviousPage').
                 '</a></p>';
             echo Display::return_message($messageFailCourseCode, 'error', false);
         }
-
     } elseif ($recycle_type == 'select_items') {
         $cr->recycle($recycle_type);
         echo Display::return_message(get_lang('RecycleFinished'), 'confirm');

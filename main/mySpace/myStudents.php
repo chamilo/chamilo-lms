@@ -685,7 +685,7 @@ if (!empty($student_id) && !empty($courseCode)) {
 $notebookTeacherEnable = api_get_plugin_setting('notebookteacher', 'enable_plugin_notebookteacher') === 'true';
 if ($notebookTeacherEnable && !empty($student_id) && !empty($courseCode)) {
     // link notebookteacher
-    $optionsLink = 'student_id='.$student_id.'&origin='.$origin.'&cidReq='.$courseCode.'&id_session='.$sessionId;
+    $optionsLink = 'student='.$student_id.'&origin='.$origin.'&cidReq='.$courseCode.'&id_session='.$sessionId;
     echo '<a href="'.api_get_path(WEB_PLUGIN_PATH).'notebookteacher/src/index.php?'.$optionsLink.'">'
         .Display::return_icon('notebookteacher.png', get_lang('Notebook'), '', ICON_SIZE_MEDIUM)
         .'</a>';
@@ -717,7 +717,7 @@ if (Skill::isAllowed($student_id, false)) {
             null,
             ICON_SIZE_MEDIUM
         ),
-        api_get_path(WEB_CODE_PATH).'mySpace/all_attendance_list.php?student_id='.$student_id
+        api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?action=all_attendance&student='.$student_id
     );
 }
 
@@ -994,6 +994,102 @@ $content = $tpl->fetch($templateName);
 
 echo $content;
 
+if (isset($_GET['action']) and $_GET['action'] == 'all_attendance') {
+    /**Display all attendances */
+    // Varible for all attendance list
+    $startDate = new DateTime();
+    $startDate = $startDate->modify('-1 week');
+    if (isset($_GET['startDate'])) {
+        $startDate = new DateTime($_GET['startDate']);
+
+    }
+    $startDate = $startDate->setTime(0, 0, 0);
+
+    $endDate = new DateTime();
+
+    if (isset($_GET['endDate'])) {
+        $endDate = new DateTime($_GET['endDate']);
+
+    }
+    $endDate = $endDate->setTime(23, 59, 0);
+    // $startDate = new DateTime(api_get_local_time($startDate));
+    // $endDate = new DateTime(api_get_local_time($endDate));
+    if ($startDate > $endDate) {
+        $dataTemp = $startDate;
+        $startDate = $endDate;
+        $endDate = $dataTemp;
+    }
+    // Varible for all attendance list
+
+    /** Start date and end date*/
+    $defaults['startDate'] = $startDate->format('Y-m-d H:i:s');
+    $defaults['endDate'] = $endDate->format('Y-m-d H:i:s');
+    $form = new FormValidator('all_attendance_list', 'GET',
+
+        'myStudents.php?action=all_attendance&student='.$_GET['student'].'&startDate='.$defaults['startDate'].'&endDate='.$defaults['endDate'].'&&'.api_get_cidreq(),
+        '');
+    $form->addElement('html', '<input type="hidden" name="student" value="'.$student_id.'" >');
+    $form->addElement('html', '<input type="hidden" name="action" value="all_attendance" >');
+
+    $form->addDateTimePicker('startDate', [
+        get_lang('ExeStartTime'),
+    ], [
+        'form_name' => 'attendance_calendar_edit',
+    ], 5);
+    $form->addDateTimePicker('endDate', [
+        get_lang('ExeEndTime'),
+    ], [
+        'form_name' => 'attendance_calendar_edit',
+    ], 5);
+
+    $form->addButtonSave(get_lang('Upload'));
+    $form->setDefaults($defaults);
+    $form->display();
+    /** Display dates */
+    $attendance = new Attendance();
+    // @todo make api_get_local_time()
+    $data = $attendance->getCoursesWithAttendance($student_id, $startDate, $endDate);
+    foreach ($data as $attendanceData => $attendanceSheet) {
+        /*
+         * $attendanceData  can be in_category or not_category for courses
+         * */
+        $title = '';
+        if (isset($attendanceSheet[0])) {
+            $title = new DateTime($attendanceSheet[0][1]);
+            $title = $title->format('Y-m-d');
+        }
+        echo '
+    <h3>'.$title.'</h3>
+    <div class="">
+    <table class="table table-striped table-hover table-responsive">
+        <thead>
+            <tr>
+                <th>'.get_lang('Training').'</th>
+                <th>'.get_lang('DateExo').'</th>
+                <th>'.get_lang('Present').'</th>
+            </tr>
+        </thead>
+    <tbody>';
+        $totalAttendance = count($attendanceSheet);
+        for ($i = 0; $i < $totalAttendance; $i++) {
+            $attendanceWork = $attendanceSheet[$i];
+            $date = api_get_local_time($attendanceWork[1]);
+            echo '
+        <tr>
+            <td>'.$attendanceWork['courseTitle'].'</td>
+            <td>'.$date.'</td>
+            <td>'.$attendanceWork['presence'].'</td>
+        </tr>';
+
+        }
+        echo '</tbody>
+    </table></div>';
+    }
+    /** Display dates */
+    /**Display all attendances */
+    Display::display_footer();
+    exit();
+}
 $allowAll = api_get_configuration_value('allow_teacher_access_student_skills');
 if ($allowAll) {
     // Show all skills

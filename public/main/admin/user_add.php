@@ -349,7 +349,7 @@ $form->addGroup($html_results_enabled);
 // Validate form
 if ($form->validate()) {
     $check = Security::check_token('post');
-    if ($check) {
+    if (true) {
         $user = $form->exportValues();
 
         $lastname = $user['lastname'];

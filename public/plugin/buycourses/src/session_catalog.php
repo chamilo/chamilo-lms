@@ -1,17 +1,18 @@
 <?php
-
 /* For license terms, see /license.txt */
 
 /**
  * List of courses.
+ *
+ * @package chamilo.plugin.buycourses
  */
 $cidReset = true;
 
 require_once __DIR__.'/../../../main/inc/global.inc.php';
 
 $plugin = BuyCoursesPlugin::create();
-$includeSessions = 'true' === $plugin->get('include_sessions');
-$includeServices = 'true' === $plugin->get('include_services');
+$includeSessions = $plugin->get('include_sessions') === 'true';
+$includeServices = $plugin->get('include_services') === 'true';
 
 if (!$includeSessions) {
     api_not_allowed(true);
@@ -38,7 +39,7 @@ if ($form->validate()) {
 }
 
 $form->addHeader($plugin->get_lang('SearchFilter'));
-$form->addText('name', get_lang('Session name'), false);
+$form->addText('name', get_lang('SessionName'), false);
 $form->addElement(
     'number',
     'min',

@@ -173,6 +173,7 @@ define('DIR_HOTPOTATOES', '/HotPotatoes_files');
 // event logs types
 define('LOG_COURSE_DELETE', 'course_deleted');
 define('LOG_COURSE_CREATE', 'course_created');
+define('LOG_COURSE_SETTINGS_CHANGED', 'course_settings_changed');
 
 // @todo replace 'soc_gr' with social_group
 define('LOG_GROUP_PORTAL_CREATED', 'soc_gr_created');
@@ -204,7 +205,6 @@ define('LOG_SESSION_ADD_USER', 'session_add_user');
 define('LOG_SESSION_DELETE_USER', 'session_delete_user');
 define('LOG_SESSION_ADD_COURSE', 'session_add_course');
 define('LOG_SESSION_DELETE_COURSE', 'session_delete_course');
-
 define('LOG_SESSION_CATEGORY_CREATE', 'session_cat_created'); //changed in 1.9.8
 define('LOG_SESSION_CATEGORY_DELETE', 'session_cat_deleted'); //changed in 1.9.8
 define('LOG_CONFIGURATION_SETTINGS_CHANGE', 'settings_changed');
@@ -213,20 +213,15 @@ define('LOG_SUBSCRIBE_USER_TO_COURSE', 'user_subscribed');
 define('LOG_UNSUBSCRIBE_USER_FROM_COURSE', 'user_unsubscribed');
 define('LOG_ATTEMPTED_FORCED_LOGIN', 'attempted_forced_login');
 define('LOG_PLUGIN_CHANGE', 'plugin_changed');
-
 define('LOG_HOMEPAGE_CHANGED', 'homepage_changed');
-
 define('LOG_PROMOTION_CREATE', 'promotion_created');
 define('LOG_PROMOTION_DELETE', 'promotion_deleted');
 define('LOG_CAREER_CREATE', 'career_created');
 define('LOG_CAREER_DELETE', 'career_deleted');
-
 define('LOG_USER_PERSONAL_DOC_DELETED', 'user_doc_deleted');
 define('LOG_WIKI_ACCESS', 'wiki_page_view');
-
 // All results from an exercise
 define('LOG_EXERCISE_RESULT_DELETE', 'exe_result_deleted');
-
 // Logs only the one attempt
 define('LOG_EXERCISE_ATTEMPT_DELETE', 'exe_attempt_deleted');
 define('LOG_LP_ATTEMPT_DELETE', 'lp_attempt_deleted');
@@ -1154,7 +1149,6 @@ function api_protect_teacher_script()
 function api_block_anonymous_users($printHeaders = true)
 {
     $user = api_get_user_info();
-
     if (!(isset($user['user_id']) && $user['user_id']) || api_is_anonymous($user['user_id'], true)) {
         api_not_allowed($printHeaders);
 
@@ -2096,7 +2090,8 @@ function api_get_anonymous_id()
                     break;
                 }
             }
-            $userId = UserManager::create_user(
+
+            return UserManager::create_user(
                 $login,
                 'anon',
                 ANONYMOUS,
@@ -2104,8 +2099,6 @@ function api_get_anonymous_id()
                 $login,
                 $login
             );
-
-            return $userId;
         } else {
             $row = Database::fetch_array($result, 'ASSOC');
 
@@ -3546,9 +3539,9 @@ function api_is_allowed_to_edit(
         //The student preview was on
         if ($check_student_view && api_is_student_view_active()) {
             return false;
-        } else {
-            return true;
         }
+
+        return true;
     }
 
     $sessionId = api_get_session_id();
@@ -3812,6 +3805,8 @@ function api_is_allowed($tool, $action, $task_id = 0)
             return false;
         }
     }
+
+    return false;
 }
 
 /**
@@ -4703,16 +4698,34 @@ function languageToCountryIsoCode($languageIsoCode)
 
     // @todo save in DB
     switch ($languageIsoCode) {
-        case 'ko':
-            $country = 'kr';
+        case 'ar':
+            $country = 'ae';
             break;
-        case 'ja':
-            $country = 'jp';
+        case 'bs':
+            $country = 'ba';
             break;
         case 'ca':
             $country = 'es';
             if ($allow) {
                 $country = 'catalan';
+            }
+            break;
+        case 'cs':
+            $country = 'cz';
+            break;
+        case 'da':
+            $country = 'dk';
+            break;
+        case 'el':
+            $country = 'ae';
+            break;
+        case 'en':
+            $country = 'gb';
+            break;
+        case 'eu': // Euskera
+            $country = 'es';
+            if ($allow) {
+                $country = 'basque';
             }
             break;
         case 'gl': // galego
@@ -4721,39 +4734,20 @@ function languageToCountryIsoCode($languageIsoCode)
                 $country = 'galician';
             }
             break;
-        case 'ka':
-            $country = 'ge';
-            break;
-        case 'sl':
-            $country = 'si';
-            break;
-        case 'eu': // Euskera
-            $country = 'es';
-            if ($allow) {
-                $country = 'basque';
-            }
-            break;
-        case 'cs':
-            $country = 'cz';
-            break;
-        case 'el':
-            $country = 'ae';
-            break;
-        case 'ar':
-            $country = 'ae';
-            break;
-        case 'en_US':
-        case 'en':
-            $country = 'gb';
-            break;
         case 'he':
             $country = 'il';
             break;
-        case 'uk': // Ukraine
-            $country = 'ua';
+        case 'ja':
+            $country = 'jp';
             break;
-        case 'da':
-            $country = 'dk';
+        case 'ka':
+            $country = 'ge';
+            break;
+        case 'ko':
+            $country = 'kr';
+            break;
+        case 'ms':
+            $country = 'my';
             break;
         case 'pt-BR':
             $country = 'br';
@@ -4761,8 +4755,14 @@ function languageToCountryIsoCode($languageIsoCode)
         case 'qu':
             $country = 'pe';
             break;
+        case 'sl':
+            $country = 'si';
+            break;
         case 'sv':
             $country = 'se';
+            break;
+        case 'uk': // Ukraine
+            $country = 'ua';
             break;
         case 'zh-TW':
         case 'zh':
@@ -8079,9 +8079,7 @@ function api_remove_tags_with_space($in_html, $in_double_quote_replace = true)
  */
 function api_drh_can_access_all_session_content()
 {
-    $value = api_get_setting('drh_can_access_all_session_content');
-
-    return 'true' === $value;
+    return api_get_setting('drh_can_access_all_session_content') === 'true';
 }
 
 /**
@@ -8296,9 +8294,7 @@ function convert_double_quote_to_single($in_text)
  */
 function api_get_origin()
 {
-    $origin = isset($_REQUEST['origin']) ? Security::remove_XSS($_REQUEST['origin']) : '';
-
-    return $origin;
+    return isset($_REQUEST['origin']) ? Security::remove_XSS($_REQUEST['origin']) : '';
 }
 
 /**
@@ -8815,6 +8811,8 @@ function api_protect_course_group($tool, $showHeader = true)
             api_not_allowed($showHeader);
         }
     }
+
+    return false;
 }
 
 /**

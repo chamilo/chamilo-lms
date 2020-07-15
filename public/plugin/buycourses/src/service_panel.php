@@ -1,14 +1,16 @@
 <?php
 /**
  * User Panel.
+ *
+ * @package chamilo.plugin.buycourses
  */
 $cidReset = true;
 
 require_once '../../../main/inc/global.inc.php';
 $plugin = BuyCoursesPlugin::create();
-$includeServices = 'true' === $plugin->get('include_services');
-$includeSessions = 'true' === $plugin->get('include_sessions');
-$servicesOnly = 'true' === $plugin->get('show_services_only');
+$includeServices = $plugin->get('include_services') === 'true';
+$includeSessions = $plugin->get('include_sessions') === 'true';
+$servicesOnly = $plugin->get('show_services_only') === 'true';
 
 $userInfo = api_get_user_info();
 
@@ -46,7 +48,7 @@ $toolbar = Display::toolbarButton(
     ['title' => $plugin->get_lang('CourseListOnSale')]
 );
 
-$templateName = $plugin->get_lang('Dashboard');
+$templateName = $plugin->get_lang('TabsDashboard');
 $tpl = new Template($templateName);
 $tpl->assign('showing_courses', true);
 $tpl->assign('services_are_included', $includeServices);

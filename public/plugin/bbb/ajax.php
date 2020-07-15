@@ -1,6 +1,8 @@
 <?php
 /**
  * This script initiates a video conference session, calling the BigBlueButton API.
+ *
+ * @package chamilo.plugin.bigbluebutton
  */
 $course_plugin = 'bbb'; //needed in order to load the plugin lang variables
 $cidReset = true;
@@ -41,6 +43,5 @@ switch ($action) {
             header('Content-Type: application/json');
             echo json_encode(['url' => $url, 'link' => $link]);
         }
-
         break;
 }

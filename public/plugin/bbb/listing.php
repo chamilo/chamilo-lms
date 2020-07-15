@@ -10,12 +10,14 @@ require_once __DIR__.'/config.php';
 
 $plugin = BBBPlugin::create();
 $tool_name = $plugin->get_lang('Videoconference');
+$roomTable = Database::get_main_table('plugin_bbb_room');
 
 $htmlHeadXtra[] = api_get_js_simple(api_get_path(WEB_PLUGIN_PATH).'bbb/resources/utils.js');
 
 $isGlobal = isset($_GET['global']) ? true : false;
 $isGlobalPerUser = isset($_GET['user_id']) ? (int) $_GET['user_id'] : false;
 $action = isset($_GET['action']) ? $_GET['action'] : '';
+$userId = api_get_user_id();
 
 $bbb = new bbb('', '', $isGlobal, $isGlobalPerUser);
 
@@ -55,7 +57,6 @@ if ($conferenceManager) {
             } else {
                 $message = Display::return_message(get_lang('Error'), 'error');
             }
-
             break;
         case 'copy_record_to_link_tool':
             $result = $bbb->copyRecordingToLinkTool($_GET['id']);
@@ -64,10 +65,9 @@ if ($conferenceManager) {
             } else {
                 $message = Display::return_message(get_lang('Error'), 'error');
             }
-
             break;
         case 'regenerate_record':
-            if ('true' !== $plugin->get('allow_regenerate_recording')) {
+            if ($plugin->get('allow_regenerate_recording') !== 'true') {
                 api_not_allowed(true);
             }
             $recordId = isset($_GET['record_id']) ? $_GET['record_id'] : '';
@@ -81,7 +81,6 @@ if ($conferenceManager) {
             Display::addFlash($message);
             header('Location: '.$bbb->getListingUrl());
             exit;
-
             break;
         case 'delete_record':
             $result = $bbb->deleteRecording($_GET['id']);
@@ -94,7 +93,6 @@ if ($conferenceManager) {
             Display::addFlash($message);
             header('Location: '.$bbb->getListingUrl());
             exit;
-
             break;
         case 'end':
             $bbb->endMeeting($_GET['id']);
@@ -119,44 +117,204 @@ if ($conferenceManager) {
             Display::addFlash($message);
             header('Location: '.$bbb->getListingUrl());
             exit;
-
             break;
         case 'publish':
             $bbb->publishMeeting($_GET['id']);
-            Display::addFlash(Display::return_message(get_lang('Update successful')));
+            Display::addFlash(Display::return_message(get_lang('Updated')));
             header('Location: '.$bbb->getListingUrl());
             exit;
-
             break;
         case 'unpublish':
             $bbb->unpublishMeeting($_GET['id']);
-            Display::addFlash(Display::return_message(get_lang('Update successful')));
+            Display::addFlash(Display::return_message(get_lang('Updated')));
             header('Location: '.$bbb->getListingUrl());
             exit;
-
             break;
         case 'logout':
-            if ('true' !== $plugin->get('allow_regenerate_recording')) {
-                api_not_allowed(true);
-            }
-            $allow = 1 == api_get_course_setting('bbb_force_record_generation', $courseInfo) ? true : false;
-            if ($allow) {
-                $result = $bbb->getMeetingByRemoteId($_GET['remote_id']);
-                if (!empty($result)) {
-                    $result = $bbb->regenerateRecording($result['id']);
-                    if ($result) {
-                        Display::addFlash(Display::return_message(get_lang('Success')));
-                    } else {
-                        Display::addFlash(Display::return_message(get_lang('Error'), 'error'));
+            if ($plugin->get('allow_regenerate_recording') === 'true') {
+                $setting = api_get_course_plugin_setting('bbb', 'bbb_force_record_generation', $courseInfo);
+                $allow = $setting == 1 ? true : false;
+                if ($allow) {
+                    $result = $bbb->getMeetingByRemoteId($_GET['remote_id']);
+                    if (!empty($result)) {
+                        $result = $bbb->regenerateRecording($result['id']);
+                        if ($result) {
+                            Display::addFlash(Display::return_message(get_lang('Success')));
+                        } else {
+                            Display::addFlash(Display::return_message(get_lang('Error'), 'error'));
+                        }
                     }
                 }
             }
+
+            $remoteId = Database::escape_string($_GET['remote_id']);
+            $meetingData = Database::select(
+                '*',
+                Database::get_main_table('plugin_bbb_meeting'),
+                ['where' => ['remote_id = ? AND access_url = ?' => [$remoteId, api_get_current_access_url_id()]]],
+                'first'
+            );
+
+            if (empty($meetingData) || !is_array($meetingData)) {
+                error_log("meeting does not exist - remote_id: $remoteId");
+            } else {
+                $meetingId = $meetingData['id'];
+
+                // If creator -> update
+                if ($meetingData['creator_id'] == api_get_user_id()) {
+                    $pass = $bbb->getModMeetingPassword($courseCode);
+
+                    $meetingBBB = $bbb->getMeetingInfo(
+                        [
+                            'meetingId' => $remoteId,
+                            'password' => $pass,
+                        ]
+                    );
+
+                    if ($meetingBBB === false) {
+                        //checking with the remote_id didn't work, so just in case and
+                        // to provide backwards support, check with the id
+                        $params = [
+                            'meetingId' => $meetingId,
+                            //  -- REQUIRED - The unique id for the meeting
+                            'password' => $pass,
+                            //  -- REQUIRED - The moderator password for the meeting
+                        ];
+                        $meetingBBB = $bbb->getMeetingInfo($params);
+                    }
+
+                    if (!empty($meetingBBB)) {
+                        if (isset($meetingBBB['returncode'])) {
+                            $status = (string) $meetingBBB['returncode'];
+                            switch ($status) {
+                                case 'FAILED':
+                                    $bbb->endMeeting($meetingId, $courseCode);
+                                    break;
+                                case 'SUCCESS':
+                                    $i = 0;
+                                    while ($i < $meetingBBB['participantCount']) {
+                                        $participantId = $meetingBBB[$i]['userId'];
+                                        $roomData = Database::select(
+                                            '*',
+                                            $roomTable,
+                                            [
+                                                'where' => [
+                                                    'meeting_id = ? AND participant_id = ? AND close = ?' => [
+                                                        $meetingId,
+                                                        $participantId,
+                                                        BBBPlugin::ROOM_OPEN,
+                                                    ],
+                                                ],
+                                                'order' => 'id DESC',
+                                            ],
+                                            'first'
+                                        );
+
+                                        if (!empty($roomData)) {
+                                            $roomId = $roomData['id'];
+                                            Database::update(
+                                                $roomTable,
+                                                ['out_at' => api_get_utc_datetime()],
+                                                ['id = ? ' => $roomId]
+                                            );
+                                        }
+                                        $i++;
+                                    }
+                                    break;
+                            }
+                        }
+                    }
+                }
+
+                // Update out_at field of user
+                $roomData = Database::select(
+                    '*',
+                    $roomTable,
+                    [
+                        'where' => ['meeting_id = ? AND participant_id = ?' => [$meetingId, $userId]],
+                        'order' => 'id DESC',
+                    ],
+                    'first'
+                );
+
+                if (!empty($roomData)) {
+                    $roomId = $roomData['id'];
+                    Database::update(
+                        $roomTable,
+                        ['out_at' => api_get_utc_datetime(), 'close' => BBBPlugin::ROOM_CLOSE],
+                        ['id = ? ' => $roomId]
+                    );
+                }
+
+                $message = Display::return_message(
+                    $plugin->get_lang('RoomClosed').'<br />'.$plugin->get_lang('RoomClosedComment'),
+                    'success',
+                    false
+                );
+                Display::addFlash($message);
+            }
+
             header('Location: '.$bbb->getListingUrl());
             exit;
-
             break;
         default:
             break;
+    }
+} else {
+    if ($action == 'logout') {
+        // Update out_at field of user
+        $remoteId = Database::escape_string($_GET['remote_id']);
+        $meetingData = Database::select(
+            '*',
+            Database::get_main_table('plugin_bbb_meeting'),
+            ['where' => ['remote_id = ? AND access_url = ?' => [$remoteId, api_get_current_access_url_id()]]],
+            'first'
+        );
+
+        if (empty($meetingData) || !is_array($meetingData)) {
+            error_log("meeting does not exist - remote_id: $remoteId");
+        } else {
+            $meetingId = $meetingData['id'];
+
+            $roomData = Database::select(
+                '*',
+                $roomTable,
+                [
+                    'where' => [
+                        'meeting_id = ? AND participant_id = ? AND close = ?' => [
+                            $meetingId,
+                            $userId,
+                            BBBPlugin::ROOM_OPEN,
+                        ],
+                    ],
+                    'order' => 'id DESC',
+                ]
+            );
+
+            $i = 0;
+            foreach ($roomData as $item) {
+                $roomId = $roomData['id'];
+                if ($i == 0) {
+                    Database::update(
+                        $roomTable,
+                        ['out_at' => api_get_utc_datetime()],
+                        ['id = ? ' => $roomId]
+                    );
+                } else {
+                    Database::update($roomTable, ['close' => BBBPlugin::ROOM_CLOSE], ['id = ? ' => $roomId]);
+                }
+                $i++;
+            }
+
+            $message = Display::return_message(
+                $plugin->get_lang('RoomExit'),
+                'success',
+                false
+            );
+            Display::addFlash($message);
+        }
+        header('Location: '.$bbb->getListingUrl());
+        exit;
     }
 }
 
@@ -182,45 +340,52 @@ if ($bbb->isGlobalConference() && $bbb->isGlobalConferencePerUserEnabled()) {
     $userCanSeeJoinButton = true;
 }
 
-if (($meetingExists || $userCanSeeJoinButton) && (0 == $maxUsers || $maxUsers > $usersOnline)) {
+if (($meetingExists || $userCanSeeJoinButton) && ($maxUsers == 0 || $maxUsers > $usersOnline)) {
     $showJoinButton = true;
 }
 $conferenceUrl = $bbb->getConferenceUrl();
 $courseInfo = api_get_course_info();
 $formToString = '';
 
-if (false === $bbb->isGlobalConference() &&
-    $conferenceManager &&
+if ($bbb->isGlobalConference() === false &&
     !empty($courseInfo) &&
-    'true' === $plugin->get('enable_conference_in_course_groups')
+    $plugin->get('enable_conference_in_course_groups') === 'true'
 ) {
     $url = api_get_self().'?'.api_get_cidreq(true, false).'&gidReq=';
-    $htmlHeadXtra[] = '<script>        
+    $htmlHeadXtra[] = '<script>
         $(document).ready(function() {
             $("#group_select").on("change", function() {
                 var groupId = $(this).find("option:selected").val();
-                var url = "'.$url.'";                
-                window.location.replace(url+groupId);                
+                var url = "'.$url.'";
+                window.location.replace(url+groupId);
             });
         });
         </script>';
 
     $form = new FormValidator(api_get_self().'?'.api_get_cidreq());
     $groupId = api_get_group_id();
-    $groups = GroupManager::get_groups();
+    if ($conferenceManager) {
+        $groups = GroupManager::get_groups();
+    } else {
+        $groups = GroupManager::getAllGroupPerUserSubscription(
+            api_get_user_id(),
+            api_get_course_int_id(),
+            api_get_session_id()
+        );
+    }
+
     if ($groups) {
         $meetingsInGroup = $bbb->getAllMeetingsInCourse(api_get_course_int_id(), api_get_session_id(), 1);
         $meetingsGroup = array_column($meetingsInGroup, 'status', 'group_id');
 
-        foreach ($groups as &$groupData) {
-            $itemGroupId = $groupData['id'];
-            if (isset($meetingsGroup[$itemGroupId]) && 1 == $meetingsGroup[$itemGroupId]) {
-                $groupData['name'] .= ' ('.get_lang('active').')';
-            }
-        }
-
         $groupList[0] = get_lang('Select');
-        $groupList = array_merge($groupList, array_column($groups, 'name', 'iid'));
+        foreach ($groups as $groupData) {
+            $itemGroupId = $groupData['iid'];
+            if (isset($meetingsGroup[$itemGroupId]) && $meetingsGroup[$itemGroupId] == 1) {
+                $groupData['name'] .= ' ('.get_lang('Active').')';
+            }
+            $groupList[$itemGroupId] = $groupData['name'];
+        }
 
         $form->addSelect('group_id', get_lang('Groups'), $groupList, ['id' => 'group_select']);
         $form->setDefaults(['group_id' => $groupId]);
@@ -247,7 +412,6 @@ switch ($type) {
             $conferenceUrl.'&interface='.$plugin->get('interface'),
             ['target' => '_blank', 'class' => 'btn btn-primary btn-large']
         );
-
         break;
     case BBBPlugin::LAUNCH_TYPE_SET_BY_TEACHER:
         if ($conferenceManager) {
@@ -259,15 +423,12 @@ switch ($type) {
             switch ($meetingInfo['interface']) {
                 case BBBPlugin::INTERFACE_FLASH:
                     $url = $plugin->getFlashUrl($conferenceUrl);
-
                     break;
                 case BBBPlugin::INTERFACE_HTML5:
                     $url = $plugin->getHtmlUrl($conferenceUrl);
-
                     break;
             }
         }
-
         break;
     case BBBPlugin::LAUNCH_TYPE_SET_BY_STUDENT:
         if ($conferenceManager) {
@@ -297,8 +458,7 @@ $tpl->assign('enter_conference_links', $urlList);
 $tpl->assign('warning_inteface_msg', $warningInterfaceMessage);
 $tpl->assign('show_client_options', $showClientOptions);
 
-$listing_tpl = 'bbb/view/listing.tpl';
-$content = $tpl->fetch($listing_tpl);
+$content = $tpl->fetch('bbb/view/listing.tpl');
 
 $actionLinks = '';
 if (api_is_platform_admin()) {

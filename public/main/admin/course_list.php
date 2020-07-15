@@ -597,7 +597,10 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
         ['delete_courses' => get_lang('Delete selected course(s)')],
         'course'
     );
-    $content .= $table->return_table();
+
+    $tab = CourseManager::getCourseListTabs('simple');
+
+    $content .= $tab.$table->return_table();
 }
 
 $tpl = new Template($tool_name);

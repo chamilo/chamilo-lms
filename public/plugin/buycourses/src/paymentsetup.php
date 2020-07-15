@@ -1,9 +1,10 @@
 <?php
-
 /* For license terms, see /license.txt */
 
 /**
  * Configuration page for payment methods for the Buy Courses plugin.
+ *
+ * @package chamilo.plugin.buycourses
  */
 $cidReset = true;
 
@@ -19,11 +20,11 @@ $commissionsEnable = $plugin->get('commissions_enable');
 $culqiEnable = $plugin->get('culqi_enable');
 
 if (isset($_GET['action'], $_GET['id'])) {
-    if ('delete_taccount' == $_GET['action']) {
+    if ($_GET['action'] == 'delete_taccount') {
         $plugin->deleteTransferAccount($_GET['id']);
 
         Display::addFlash(
-            Display::return_message(get_lang('The learning object has been removed'), 'success')
+            Display::return_message(get_lang('ItemRemoved'), 'success')
         );
 
         header('Location: '.api_get_self());
@@ -41,7 +42,7 @@ if ($globalSettingForm->validate()) {
     $plugin->saveGlobalParameters($globalSettingFormValues);
 
     Display::addFlash(
-        Display::return_message(get_lang('Saved.....'), 'success')
+        Display::return_message(get_lang('Saved'), 'success')
     );
 
     header('Location:'.api_get_self());
@@ -78,8 +79,8 @@ foreach ($currencies as $currency) {
 $globalSettingForm->addTextarea(
     'terms_and_conditions',
     [
-        get_lang('Terms and Conditions'),
-        $plugin->get_lang('WriteHereTheTerms and ConditionsOfYourECommerce'),
+        get_lang('TermsAndConditions'),
+        $plugin->get_lang('WriteHereTheTermsAndConditionsOfYourECommerce'),
     ]
 );
 
@@ -89,8 +90,8 @@ $globalSettingForm->addElement(
     $plugin->get_lang('SaleEmail')
 );
 
-$taxEnable = 'true' === $plugin->get('tax_enable');
-$invoicingEnable = 'true' === $plugin->get('invoicing_enable');
+$taxEnable = $plugin->get('tax_enable') === 'true';
+$invoicingEnable = $plugin->get('invoicing_enable') === 'true';
 
 if ($taxEnable) {
     $globalSettingForm->addHtml('<hr/>');
@@ -179,7 +180,7 @@ if ($paypalForm->validate()) {
     $plugin->savePaypalParams($paypalFormValues);
 
     Display::addFlash(
-        Display::return_message(get_lang('Saved.....'), 'success')
+        Display::return_message(get_lang('Saved'), 'success')
     );
 
     header('Location:'.api_get_self());
@@ -218,7 +219,7 @@ if ($commissionForm->validate()) {
     $plugin->updateCommission($commissionFormValues);
 
     Display::addFlash(
-        Display::return_message(get_lang('Saved.....'), 'success')
+        Display::return_message(get_lang('Saved'), 'success')
     );
 
     header('Location:'.api_get_self());
@@ -243,7 +244,7 @@ if ($transferForm->validate()) {
     $plugin->saveTransferAccount($transferFormValues);
 
     Display::addFlash(
-        Display::return_message(get_lang('Saved.....'), 'success')
+        Display::return_message(get_lang('Saved'), 'success')
     );
 
     header('Location:'.api_get_self());
@@ -282,7 +283,7 @@ if ($culqiForm->validate()) {
     $plugin->saveCulqiParameters($culqiFormValues);
 
     Display::addFlash(
-        Display::return_message(get_lang('Saved.....'), 'success')
+        Display::return_message(get_lang('Saved'), 'success')
     );
 
     header('Location:'.api_get_self());

@@ -1,17 +1,18 @@
 <?php
-
 /* For license terms, see /license.txt */
 
 /**
  * User Panel.
+ *
+ * @package chamilo.plugin.buycourses
  */
 $cidReset = true;
 
 require_once __DIR__.'/../../../main/inc/global.inc.php';
 
 $plugin = BuyCoursesPlugin::create();
-$includeSessions = 'true' === $plugin->get('include_sessions');
-$includeServices = 'true' === $plugin->get('include_services');
+$includeSessions = $plugin->get('include_sessions') === 'true';
+$includeServices = $plugin->get('include_services') === 'true';
 
 $userInfo = api_get_user_info();
 
@@ -24,7 +25,7 @@ $sales = $plugin->getSaleListByUserId($userInfo['id']);
 $saleList = [];
 
 foreach ($sales as $sale) {
-    if (1 == $sale['product_type']) {
+    if ($sale['product_type'] == 1) {
         $saleList[] = [
             'id' => $sale['id'],
             'reference' => $sale['reference'],
@@ -46,7 +47,7 @@ $toolbar = Display::toolbarButton(
     ['title' => $plugin->get_lang('CourseListOnSale')]
 );
 
-$templateName = get_lang('Dashboard');
+$templateName = get_lang('TabsDashboard');
 $tpl = new Template($templateName);
 $tpl->assign('showing_courses', true);
 $tpl->assign('sessions_are_included', $includeSessions);

@@ -1,8 +1,9 @@
 <?php
-
 /* For license terms, see /license.txt */
 /**
  * Configuration script for the Buy Courses plugin.
+ *
+ * @package chamilo.plugin.buycourses
  */
 use Doctrine\ORM\Tools\Pagination\Paginator;
 
@@ -11,19 +12,19 @@ $cidReset = true;
 require_once __DIR__.'/../../../main/inc/global.inc.php';
 
 $plugin = BuyCoursesPlugin::create();
-$includeSession = 'true' === $plugin->get('include_sessions');
+$includeSession = $plugin->get('include_sessions') === 'true';
 
 if (!$includeSession) {
     api_not_allowed(true);
 }
-$includeServices = 'true' === $plugin->get('include_services');
-$taxEnable = 'true' === $plugin->get('tax_enable');
+$includeServices = $plugin->get('include_services') === 'true';
+$taxEnable = $plugin->get('tax_enable') === 'true';
 
 api_protect_admin_script(true);
 
 Display::addFlash(
     Display::return_message(
-        get_lang('Information').' - '.$plugin->get_lang('CoursesInSessionsDoesntDisplayHere'),
+        get_lang('Info').' - '.$plugin->get_lang('CoursesInSessionsDoesntDisplayHere'),
         'info'
     )
 );
@@ -53,7 +54,7 @@ $sessions = new Paginator($query, $fetchJoinCollection = true);
 foreach ($sessions as $session) {
     $item = $plugin->getItemByProduct($session->getId(), BuyCoursesPlugin::PRODUCT_TYPE_SESSION);
     $session->buyCourseData = [];
-    if (false !== $item) {
+    if ($item !== false) {
         $session->buyCourseData = $item;
     }
 }

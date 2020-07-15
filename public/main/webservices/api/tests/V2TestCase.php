@@ -170,6 +170,7 @@ abstract class V2TestCase extends TestCase
             property_exists($decodedResponse, 'data'),
             'response data property is missing: '.print_r($decodedResponse, true)
         );
+
         $data = $decodedResponse->data;
         $this->assertIsArray($data);
 

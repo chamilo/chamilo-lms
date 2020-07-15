@@ -3,6 +3,8 @@
 /* For license terms, see /license.txt */
 /**
  * List of pending payments of the Buy Courses plugin.
+ *
+ * @package chamilo.plugin.buycourses
  */
 //Initialization
 $cidReset = true;
@@ -21,7 +23,7 @@ $commissionsEnable = $plugin->get('commissions_enable');
 $payoutStatuses = $plugin->getPayoutStatuses();
 $selectedStatus = isset($_GET['status']) ? $_GET['status'] : BuyCoursesPlugin::SALE_STATUS_COMPLETED;
 
-if ('true' !== $commissionsEnable) {
+if ($commissionsEnable !== "true") {
     api_not_allowed(true);
 }
 
@@ -30,7 +32,7 @@ $form = new FormValidator('search', 'get');
 if ($form->validate()) {
     $selectedStatus = $form->getSubmitValue('status');
 
-    if (false === $selectedStatus) {
+    if ($selectedStatus === false) {
         $selectedStatus = BuyCoursesPlugin::PAYOUT_STATUS_PENDING;
     }
 }
@@ -65,7 +67,7 @@ foreach ($payouts as $payout) {
         'sale_id' => $payout['sale_id'],
         'reference' => $payout['sale_reference'],
         'date' => api_format_date($payout['date'], DATE_TIME_FORMAT_LONG_24H),
-        'payout_date' => '0000-00-00 00:00:00' === $payout['payout_date']
+        'payout_date' => ($payout['payout_date'] === '0000-00-00 00:00:00')
             ? '-'
             : api_format_date($payout['payout_date'], DATE_TIME_FORMAT_LONG_24H),
         'currency' => $payout['iso_code'],

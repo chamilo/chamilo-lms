@@ -1,9 +1,10 @@
 <?php
-
 /* For license terms, see /license.txt */
 
 /**
  * Configuration script for the Buy Courses plugin.
+ *
+ * @package chamilo.plugin.buycourses
  */
 $cidReset = true;
 
@@ -21,15 +22,15 @@ if (empty($id) || empty($type)) {
 $plugin = BuyCoursesPlugin::create();
 $commissionsEnable = $plugin->get('commissions_enable');
 
-if ('true' == $commissionsEnable) {
+if ($commissionsEnable == 'true') {
     $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_PLUGIN_PATH)
         .'buycourses/resources/js/commissions.js"></script>';
     $commissions = '';
 }
 
-$includeSession = 'true' === $plugin->get('include_sessions');
-$editingCourse = BuyCoursesPlugin::PRODUCT_TYPE_COURSE === $type;
-$editingSession = BuyCoursesPlugin::PRODUCT_TYPE_SESSION === $type;
+$includeSession = $plugin->get('include_sessions') === 'true';
+$editingCourse = $type === BuyCoursesPlugin::PRODUCT_TYPE_COURSE;
+$editingSession = $type === BuyCoursesPlugin::PRODUCT_TYPE_SESSION;
 
 $entityManager = Database::getManager();
 $userRepo = UserManager::getRepository();
@@ -71,7 +72,7 @@ if ($editingCourse) {
     $currentBeneficiaries = $plugin->getItemBeneficiaries($courseItem['item_id']);
     if (!empty($currentBeneficiaries)) {
         $defaultBeneficiaries = array_column($currentBeneficiaries, 'user_id');
-        if ('true' === $commissionsEnable) {
+        if ($commissionsEnable === 'true') {
             $defaultCommissions = array_column($currentBeneficiaries, 'commissions');
             foreach ($defaultCommissions as $defaultCommission) {
                 $commissions .= $defaultCommission.',';
@@ -90,7 +91,7 @@ if ($editingCourse) {
         'price' => $courseItem['price'],
         'tax_perc' => $courseItem['tax_perc'],
         'beneficiaries' => $defaultBeneficiaries,
-        'true' == $commissionsEnable ? 'commissions' : '' => 'true' == $commissionsEnable ? $commissions : '',
+        $commissionsEnable == 'true' ? 'commissions' : '' => $commissionsEnable == 'true' ? $commissions : '',
     ];
 } elseif ($editingSession) {
     if (!$includeSession) {
@@ -135,7 +136,7 @@ if ($editingCourse) {
     if (!empty($currentBeneficiaries)) {
         $defaultBeneficiaries = array_column($currentBeneficiaries, 'user_id');
 
-        if ('true' == $commissionsEnable) {
+        if ($commissionsEnable == 'true') {
             $defaultCommissions = array_column($currentBeneficiaries, 'commissions');
 
             foreach ($defaultCommissions as $defaultCommission) {
@@ -156,13 +157,13 @@ if ($editingCourse) {
         'price' => $sessionItem['price'],
         'tax_perc' => $sessionItem['tax_perc'],
         'beneficiaries' => $defaultBeneficiaries,
-        'true' == $commissionsEnable ? 'commissions' : '' => 'true' == $commissionsEnable ? $commissions : '',
+        $commissionsEnable == 'true' ? 'commissions' : '' => $commissionsEnable == 'true' ? $commissions : '',
     ];
 } else {
     api_not_allowed(true);
 }
 
-if ('true' === $commissionsEnable) {
+if ($commissionsEnable === 'true') {
     $htmlHeadXtra[] = "
         <script>
             $(function() {
@@ -220,14 +221,14 @@ $beneficiariesSelect = $form->addSelect(
 
 if ($editingCourse) {
     $teachersOptions = api_unique_multidim_array($teachersOptions, 'value');
-    $beneficiariesSelect->addOptGroup($teachersOptions, get_lang('Trainers'));
+    $beneficiariesSelect->addOptGroup($teachersOptions, get_lang('Teachers'));
 } elseif ($editingSession) {
     $courseCoachesOptions = api_unique_multidim_array($courseCoachesOptions, 'value');
-    $beneficiariesSelect->addOptGroup([$generalCoachOption], get_lang('Session general coach'));
-    $beneficiariesSelect->addOptGroup($courseCoachesOptions, get_lang('Session course coach'));
+    $beneficiariesSelect->addOptGroup([$generalCoachOption], get_lang('SessionGeneralCoach'));
+    $beneficiariesSelect->addOptGroup($courseCoachesOptions, get_lang('SessionCourseCoach'));
 }
 
-if ('true' === $commissionsEnable) {
+if ($commissionsEnable === 'true') {
     $platformCommission = $plugin->getPlatformCommission();
     $form->addHtml(
         '
@@ -265,11 +266,11 @@ if ($form->validate()) {
 
     $productItem = $plugin->getItemByProduct($id, $type);
     if (isset($formValues['visible'])) {
-        $taxPerc = '' != $formValues['tax_perc'] ? (int) $formValues['tax_perc'] : null;
+        $taxPerc = $formValues['tax_perc'] != '' ? (int) $formValues['tax_perc'] : null;
         if (!empty($productItem)) {
             $plugin->updateItem(
                 [
-                    'price' => (float) ($formValues['price']),
+                    'price' => floatval($formValues['price']),
                     'tax_perc' => $taxPerc,
                 ],
                 $id,
@@ -280,7 +281,7 @@ if ($form->validate()) {
                 'currency_id' => (int) $currency['id'],
                 'product_type' => $type,
                 'product_id' => $id,
-                'price' => (float) ($_POST['price']),
+                'price' => floatval($_POST['price']),
                 'tax_perc' => $taxPerc,
             ]);
             $productItem['id'] = $itemId;
@@ -289,10 +290,10 @@ if ($form->validate()) {
         $plugin->deleteItemBeneficiaries($productItem['id']);
 
         if (isset($formValues['beneficiaries'])) {
-            if ('true' === $commissionsEnable) {
+            if ($commissionsEnable === 'true') {
                 $usersId = $formValues['beneficiaries'];
                 $commissions = explode(',', $formValues['commissions']);
-                $commissions = count($usersId) != count($commissions)
+                $commissions = (count($usersId) != count($commissions))
                     ? array_fill(0, count($usersId), 0)
                     : $commissions;
                 $beneficiaries = array_combine($usersId, $commissions);

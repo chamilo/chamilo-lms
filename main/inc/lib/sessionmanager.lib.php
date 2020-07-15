@@ -9440,7 +9440,7 @@ class SessionManager
     }
 
     /**
-     * @return array
+     * @return string
      */
     public static function getSessionListTabs($listType)
     {

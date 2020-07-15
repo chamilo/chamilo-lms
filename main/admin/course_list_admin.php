@@ -11,7 +11,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
 $sessionId = isset($_GET['session_id']) ? $_GET['session_id'] : null;
-$addTeacherColumn = api_get_configuration_value('add_teachers_in_course_list');
+$addTeacherColumn = true;
 
 /**
  * Get the number of courses which will be displayed.
@@ -39,21 +39,17 @@ function get_number_of_courses()
  */
 function get_course_data($from, $number_of_items, $column, $direction, $dataFunctions = [], $getCount = false)
 {
-    $addTeacherColumn = api_get_configuration_value('add_teachers_in_course_list');
+    $addTeacherColumn = true;
     $table = Database::get_main_table(TABLE_MAIN_COURSE);
 
     $teachers = '';
     if ($addTeacherColumn) {
-        $teachers = " GROUP_CONCAT(cu.user_id SEPARATOR ',') as col7, ";
+        $teachers = " GROUP_CONCAT(cu.user_id SEPARATOR ',') as col4, ";
     }
     $select = "SELECT
                 code AS col0,
                 title AS col1,
-                code AS col2,
-                course_language AS col3,
-                category_code AS col4,
-                subscribe AS col5,
-                unsubscribe AS col6,
+                creation_date AS col2,
                 $teachers
                 visibility,
                 directory,
@@ -75,13 +71,12 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
                   ON (course.id = url_rel_course.c_id)";
     }
 
-    if ($addTeacherColumn) {
-        $tableCourseRelUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $sql .= "
-                LEFT JOIN $tableCourseRelUser cu
-                ON (course.id = cu.c_id AND cu.status = ".COURSEMANAGER.")
-            ";
-    }
+    $tableCourseRelUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+    $sql .= "
+            LEFT JOIN $tableCourseRelUser cu
+            ON (course.id = cu.c_id AND cu.status = ".COURSEMANAGER.")
+        ";
+
 
     if (isset($_GET['keyword'])) {
         $keyword = Database::escape_string("%".trim($_GET['keyword'])."%");
@@ -156,7 +151,6 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
 
     $res = Database::query($sql);
     $courses = [];
-    $languages = api_get_languages_to_array();
     $path = api_get_path(WEB_CODE_PATH);
     $coursePath = api_get_path(WEB_COURSE_PATH);
 
@@ -171,17 +165,16 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
             .$showVisualCode;
         $course[5] = $course[5] == SUBSCRIBE_ALLOWED ? get_lang('Yes') : get_lang('No');
         $course[6] = $course[6] == UNSUBSCRIBE_ALLOWED ? get_lang('Yes') : get_lang('No');
-        $language = isset($languages[$course[3]]) ? $languages[$course[3]] : $course[3];
 
         $actions = [];
         $actions[] = Display::url(
             Display::return_icon('info2.png', get_lang('Info')),
             "course_information.php?code=$courseCode"
         );
-        $actions[] = Display::url(
+        /*$actions[] = Display::url(
             Display::return_icon('course_home.png', get_lang('CourseHomepage')),
             $coursePath.$course['directory'].'/index.php'
-        );
+        );*/
         $actions[] = Display::url(
             Display::return_icon('statistics.png', get_lang('Tracking')),
             $path.'tracking/courseLog.php?'.api_get_cidreq_params($courseCode)
@@ -196,24 +189,29 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
         );
         $actions[] = Display::url(
             Display::return_icon('delete.png', get_lang('Delete')),
-            $path.'admin/course_list.php?delete_course='.$courseCode,
+            $path.'admin/course_list_admin.php?delete_course='.$courseCode,
             [
                 'onclick' => "javascript: if (!confirm('"
                     .addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."')) return false;",
             ]
         );
+
+        $course['creation_date'] = api_get_local_time($course['col2']);
+        $lastAccessLocalTime = '';
+        $lastAccess = Tracking::getLastConnectionDateByCourse($courseId);
+        if ($lastAccess) {
+            $lastAccessLocalTime = api_get_local_time($lastAccess);
+        }
+
         $courseItem = [
             $course[0],
             $course[1],
-            $course[2],
-            $language,
-            $course[4],
-            $course[5],
-            $course[6],
+            $course['creation_date'],
+            $lastAccessLocalTime,
         ];
 
         if ($addTeacherColumn) {
-            $teacherIdList = array_filter(explode(',', $course[7]));
+            $teacherIdList = array_filter(explode(',', $course['col4']));
             $teacherList = [];
             if (!empty($teacherIdList)) {
                 foreach ($teacherIdList as $teacherId) {
@@ -227,80 +225,6 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
         }
         $courseItem[] = implode(PHP_EOL, $actions);
         $courses[] = $courseItem;
-    }
-
-    return $courses;
-}
-
-/**
- * Get course data to display filtered by session name.
- *
- * @param int    $from
- * @param int    $number_of_items
- * @param int    $column
- * @param string $direction
- *
- * @throws Exception
- *
- * @return array
- */
-function get_course_data_by_session($from, $number_of_items, $column, $direction)
-{
-    $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-    $session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-    $session = Database::get_main_table(TABLE_MAIN_SESSION);
-
-    $sql = "SELECT
-                c.code AS col0,
-                c.title AS col1,
-                c.code AS col2,
-                c.course_language AS col3,
-                c.category_code AS col4,
-                c.subscribe AS col5,
-                c.unsubscribe AS col6,
-                c.code AS col7,
-                c.visibility AS col8,
-                c.directory as col9,
-                c.visual_code
-            FROM $course_table c
-            INNER JOIN $session_rel_course r
-            ON c.id = r.c_id
-            INNER JOIN $session s
-            ON r.session_id = s.id
-            ";
-
-    if (isset($_GET['session_id']) && !empty($_GET['session_id'])) {
-        $sessionId = (int) $_GET['session_id'];
-        $sql .= " WHERE s.id = ".$sessionId;
-    }
-
-    $sql .= " ORDER BY col$column $direction ";
-    $sql .= " LIMIT $from,$number_of_items";
-    $res = Database::query($sql);
-
-    $courseUrl = api_get_path(WEB_COURSE_PATH);
-    $courses = [];
-    while ($course = Database::fetch_array($res)) {
-        // Place colour icons in front of courses.
-        $showVisualCode = $course['visual_code'] != $course[2] ? Display::label($course['visual_code'], 'info') : null;
-        $course[1] = get_course_visibility_icon($course[8]).
-            '<a href="'.$courseUrl.$course[9].'/index.php">'.
-            $course[1].
-            '</a> '.
-            $showVisualCode;
-        $course[5] = $course[5] == SUBSCRIBE_ALLOWED ? get_lang('Yes') : get_lang('No');
-        $course[6] = $course[6] == UNSUBSCRIBE_ALLOWED ? get_lang('Yes') : get_lang('No');
-        $row = [
-            $course[0],
-            $course[1],
-            $course[2],
-            $course[3],
-            $course[4],
-            $course[5],
-            $course[6],
-            $course[7],
-        ];
-        $courses[] = $row;
     }
 
     return $courses;
@@ -385,7 +309,7 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
         'name' => get_lang('PlatformAdmin'),
     ];
     $interbreadcrumb[] = [
-        'url' => 'course_list.php',
+        'url' => 'course_list_admin.php',
         'name' => get_lang('CourseList'),
     ];
     $tool_name = get_lang('SearchACourse');
@@ -471,7 +395,7 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
         ['id' => 'course-search-keyword', 'aria-label' => get_lang('SearchCourse')]
     );
     $form->addButtonSearch(get_lang('SearchCourse'));
-    $advanced = '<a class="btn btn-default" href="'.api_get_path(WEB_CODE_PATH).'admin/course_list.php?search=advanced">
+    $advanced = '<a class="btn btn-default" href="'.api_get_path(WEB_CODE_PATH).'admin/course_list_admin.php?search=advanced">
         <em class="fa fa-search"></em> '.
         get_lang('AdvancedSearch').'</a>';
 
@@ -484,23 +408,6 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
         [],
         FormValidator::LAYOUT_INLINE
     );
-    $url = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=search_session';
-    $sessionSelect = $sessionFilter->addElement(
-        'select_ajax',
-        'session_name',
-        get_lang('SearchCourseBySession'),
-        null,
-        ['id' => 'session_name', 'url' => $url]
-    );
-
-    if (!empty($sessionId)) {
-        $sessionInfo = SessionManager::fetch($sessionId);
-        $sessionSelect->addOption(
-            $sessionInfo['name'],
-            $sessionInfo['id'],
-            ['selected' => 'selected']
-        );
-    }
 
     $courseListUrl = api_get_self();
     $actions1 = Display::url(
@@ -526,48 +433,25 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
     }
 
     $actions2 = $form->returnForm();
-    $actions3 = $sessionFilter->returnForm();
+    //$actions3 = $sessionFilter->returnForm();
     $actions4 = $advanced;
-    $actions4 .= '
-    <script>
-        $(function() {
-            $("#session_name").on("change", function() {
-                var sessionId = $(this).val();
-                if (!sessionId) {
-                    return;
-                }
-
-                window.location = "'.$courseListUrl.'?session_id="+sessionId;
-            });
-        });
-    </script>';
 
     $actions = Display::toolbarAction(
         'toolbar',
-        [$actions1, $actions2, $actions3, $actions4],
+        [$actions1, $actions2, $actions4],
         [2, 4, 3, 3]
     );
 
-    if (!empty($sessionId)) {
-        // Create a sortable table with the course data filtered by session
-        $table = new SortableTable(
-            'courses',
-            'get_number_of_courses',
-            'get_course_data_by_session',
-            2
-        );
-    } else {
-        // Create a sortable table with the course data
-        $table = new SortableTable(
-            'courses',
-            'get_number_of_courses',
-            'get_course_data',
-            2,
-            20,
-            'ASC',
-            'course-list'
-        );
-    }
+    // Create a sortable table with the course data
+    $table = new SortableTable(
+        'course_list_admin',
+        'get_number_of_courses',
+        'get_course_data',
+        1,
+        20,
+        'ASC',
+        'course_list_admin'
+    );
 
     $parameters = [];
     if (isset($_GET['keyword'])) {
@@ -596,11 +480,11 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
     $column = 0;
     $table->set_header($column++, '', false, 'width="8px"');
     $table->set_header($column++, get_lang('Title'), true, null, ['class' => 'title']);
-    $table->set_header($column++, get_lang('Code'));
-    $table->set_header($column++, get_lang('Language'), false, 'width="70px"');
-    $table->set_header($column++, get_lang('Category'));
-    $table->set_header($column++, get_lang('SubscriptionAllowed'), true, 'width="60px"');
-    $table->set_header($column++, get_lang('UnsubscriptionAllowed'), false, 'width="50px"');
+    $table->set_header($column++, get_lang('CreationDate'), true, 'width="70px"');
+    $table->set_header($column++, get_lang('LatestLoginInCourse'), false, 'width="70px"');
+    //$table->set_header($column++, get_lang('Category'));
+    //$table->set_header($column++, get_lang('SubscriptionAllowed'), true, 'width="60px"');
+    //$table->set_header($column++, get_lang('UnsubscriptionAllowed'), false, 'width="50px"');
     if ($addTeacherColumn) {
         $table->set_header($column++, get_lang('Teachers'), true);
     }
@@ -615,9 +499,7 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
         ['delete_courses' => get_lang('DeleteCourse')],
         'course'
     );
-
-    $tab = CourseManager::getCourseListTabs('simple');
-
+    $tab = CourseManager::getCourseListTabs('admin');
     $content .= $tab.$table->return_table();
 }
 

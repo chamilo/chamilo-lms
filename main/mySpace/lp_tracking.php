@@ -99,7 +99,7 @@ switch ($action) {
         }
 
         $view = $em->getRepository('ChamiloCourseBundle:CLpView')->find($itemView->getLpViewId());
-        $lp = $em->getRepository('ChamiloCourseBundle:CLp')->find($view->getLpId());
+        $lp = api_get_lp_entity($view->getLpId());
 
         $duration = learnpathItem::getScormTimeFromParameter('js', $itemView->getTotalTime());
         $endTime = $itemView->getStartTime() + $itemView->getTotalTime();

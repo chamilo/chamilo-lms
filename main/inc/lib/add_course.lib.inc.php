@@ -956,7 +956,7 @@ class AddCourse
         }
 
         // Adding the course to an URL.
-        $url = AccessUrl::getRepository()->find($accessUrlId);
+        $url = api_get_access_url_entity($accessUrlId);
         if (!is_null($url)) {
             $urlRelCourse = (new AccessUrlRelCourse())
                 ->setCourse($course)

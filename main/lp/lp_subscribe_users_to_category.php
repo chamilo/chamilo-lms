@@ -176,7 +176,7 @@ if ($formUsers->validate()) {
 
         foreach ($users as $userId) {
             $categoryUser = new CLpCategoryUser();
-            $user = UserManager::getRepository()->find($userId);
+            $user = api_get_user_entity($userId);
             if ($user) {
                 $categoryUser->setUser($user);
                 $category->addUser($categoryUser);

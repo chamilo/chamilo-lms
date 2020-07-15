@@ -304,8 +304,7 @@ function WSCreateUsers($params)
             $original_user_id_name
         );
         if ($user_id > 0) {
-            /** @var User $user */
-            $user = $userRepository->find($user_id);
+            $user = api_get_user_entity($user_id);
 
             if ($user && $user->isActive() == false) {
                 if (!is_null($password)) {
@@ -532,8 +531,7 @@ function WSCreateUser($params)
     $userRepository = UserManager::getRepository();
 
     if ($user_id > 0) {
-        /** @var User $user */
-        $user = $userRepository->find($user_id);
+        $user = api_get_user_entity($user_id);
         if ($user && $user->isActive() == false) {
             if (!is_null($password)) {
                 $user->setPlainPassword($password);
@@ -867,7 +865,7 @@ function WSCreateUsersPasswordCrypted($params)
         $count_row = Database::num_rows($res);
         if ($count_row > 0) {
             // Check if user is not active.
-            $sql = "SELECT user_id FROM $table_user 
+            $sql = "SELECT user_id FROM $table_user
                     WHERE user_id ='".$row[1]."' AND active= '0'";
             $resu = Database::query($sql);
             $r_check_user = Database::fetch_row($resu);
@@ -1389,7 +1387,7 @@ function WSCreateUserPasswordCrypted($params)
                     phone='".Database::escape_string($phone)."',
                     expiration_date='".Database::escape_string($expiration_date)."',
                     active='1',
-                    hr_dept_id=".intval($hr_dept_id)." 
+                    hr_dept_id=".intval($hr_dept_id)."
                 WHERE user_id='".$r_check_user[0]."'";
 
             Database::query($sql);
@@ -1459,7 +1457,7 @@ function WSCreateUserPasswordCrypted($params)
             phone               = '".Database::escape_string($phone)."',
             language            = '".Database::escape_string($language)."',
             registration_date   = '".api_get_utc_datetime()."',
-            roles = 'a:0:{}', 
+            roles = 'a:0:{}',
             ".$queryExpirationDate."
             hr_dept_id          = '".Database::escape_string($hr_dept_id)."',
             active              = '".Database::escape_string($active)."'";
@@ -1657,8 +1655,7 @@ function WSEditUserCredentials($params)
         return 0;
     }
 
-    /** @var User $user */
-    $user = $userRepository->find($user_id);
+    $user = api_get_user_entity($user_id);
     if ($user) {
         $user->setUsername($username);
         if (!is_null($password)) {
@@ -1787,8 +1784,7 @@ function WSEditUsers($params)
         }
         // Edit lastname and firstname only if not empty
 
-        /** @var User $user */
-        $user = $userRepository->find($user_id);
+        $user = api_get_user_entity($user_id);
 
         if (!empty($lastname)) {
             $user->setLastname($lastname);
@@ -1968,8 +1964,7 @@ function WSEditUser($params)
         return 0;
     }
 
-    /** @var User $user */
-    $user = $userRepository->find($user_id);
+    $user = api_get_user_entity($user_id);
 
     if (!empty($lastname)) {
         $user->setLastname($lastname);
@@ -2139,7 +2134,7 @@ function WSEditUserWithPicture($params)
     }
 
     // Check whether username already exits.
-    $sql = "SELECT username FROM $table_user 
+    $sql = "SELECT username FROM $table_user
             WHERE username = '$username' AND id <> $user_id";
     $res_un = Database::query($sql);
     $r_username = Database::fetch_row($res_un);
@@ -2148,8 +2143,7 @@ function WSEditUserWithPicture($params)
         return 0;
     }
 
-    /** @var User $user */
-    $user = $userRepository->find($user_id);
+    $user = api_get_user_entity($user_id);
 
     if (!empty($lastname)) {
         $user->setLastname($lastname);
@@ -4768,7 +4762,7 @@ function WSSubscribeUserToCourseSimple($params)
                 error_log('Try to register: user_id= '.$user_id.' to course: '.$course_data['code']);
             }
             if (!CourseManager::subscribeUser($user_id, $course_data['code'], $status, 0, false, false)) {
-                $result = 'User was not registered possible reasons: User already registered to the course, 
+                $result = 'User was not registered possible reasons: User already registered to the course,
                            Course visibility doesnt allow user subscriptions ';
                 if ($debug) {
                     error_log($result);

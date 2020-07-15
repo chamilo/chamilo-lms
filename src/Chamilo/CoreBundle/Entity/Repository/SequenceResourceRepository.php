@@ -132,14 +132,10 @@ class SequenceResourceRepository extends EntityRepository
                 $resource = null;
                 switch ($type) {
                     case SequenceResource::SESSION_TYPE:
-                        $repo = $em->getRepository('ChamiloCoreBundle:Session');
-                        $resource = $repo->find($vertexId);
-
+                        $resource = api_get_session_entity($vertexId);
                         break;
                     case SequenceResource::COURSE_TYPE:
-                        $repo = $em->getRepository('ChamiloCoreBundle:Course');
-                        $resource = $repo->find($vertexId);
-
+                        $resource = api_get_course_entity($vertexId);
                         break;
                 }
 
@@ -389,10 +385,10 @@ class SequenceResourceRepository extends EntityRepository
             $vertexId = $supVertex->getId();
             switch ($type) {
                 case SequenceResource::SESSION_TYPE:
-                    $resource = $em->getRepository('ChamiloCoreBundle:Session')->find($vertexId);
+                    $resource = api_get_session_entity($vertexId);
                     break;
                 case SequenceResource::COURSE_TYPE:
-                    $resource = $em->getRepository('ChamiloCoreBundle:Course')->find($vertexId);
+                    $resource = api_get_course_entity($vertexId);
                     break;
             }
 

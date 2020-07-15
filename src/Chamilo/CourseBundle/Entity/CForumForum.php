@@ -773,7 +773,7 @@ class CForumForum
     public function setCId($cId)
     {
         $this->cId = $cId;
-        $this->setCourse(Course::getRepository()->find($cId));
+        $this->setCourse(api_get_course_entity($cId));
 
         return $this;
     }

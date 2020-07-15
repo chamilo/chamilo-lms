@@ -53,8 +53,7 @@ class CreateSessionFromModelTest extends V2TestCase
 
         // assert the session was created and given the returned session id
         $entityManager = Database::getManager();
-        $repository = $entityManager->getRepository('ChamiloCoreBundle:Session');
-        $newSession = $repository->find($newSessionId);
+        $newSession = api_get_session_entity($newSessionId);
         $this->assertIsObject($newSession);
 
         // assert the new session got the right data

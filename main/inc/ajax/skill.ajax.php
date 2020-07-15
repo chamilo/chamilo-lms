@@ -420,7 +420,7 @@ switch ($action) {
                 exit;
             }
 
-            $session = $em->getRepository('ChamiloCoreBundle:Session')->find($sessionId);
+            $session = api_get_session_entity($sessionId);
             /** @var \Chamilo\SkillBundle\Entity\SkillRelItem $skillRelItem */
             $skillRelItem = $em->getRepository('ChamiloSkillBundle:SkillRelItem')->findOneBy(
                 ['itemId' => $itemId, 'itemType' => $typeId, 'skill' => $skillId]
@@ -498,7 +498,7 @@ switch ($action) {
             $course = api_get_course_entity($courseId);
             $skillUser->setCourse($course);
             if (!empty($sessionId)) {
-                $session = $em->getRepository('ChamiloCoreBundle:Session')->find($sessionId);
+                $session = api_get_session_entity($sessionId);
                 $skillUser->setSession($session);
             }
 

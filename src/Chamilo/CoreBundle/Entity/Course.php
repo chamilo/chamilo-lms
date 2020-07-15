@@ -459,14 +459,6 @@ class Course
     }
 
     /**
-     * @return Course|null
-     */
-    public static function getCurrentCourse()
-    {
-        return self::getRepository()->find(api_get_course_int_id());
-    }
-
-    /**
      * Sets sane values if still unset.
      * Makes directory if missing.
      *
@@ -540,7 +532,7 @@ class Course
             $this->departmentUrl = 'https://'.$this->departmentUrl;
         }
         if ($this->accessUrls->isEmpty()) {
-            $this->accessUrls->add(AccessUrl::getRepository()->find(api_get_current_access_url_id()));
+            $this->accessUrls->add(api_get_access_url_entity());
         }
         $this->prepareRepository();
         $this->createTools();

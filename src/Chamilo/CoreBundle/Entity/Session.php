@@ -295,19 +295,6 @@ class Session
     }
 
     /**
-     * @return Session|null
-     */
-    public static function getCurrentSession()
-    {
-        $sessionId = api_get_session_id();
-        if (0 != $sessionId) {
-            return self::getRepository()->find($sessionId);
-        }
-
-        return null;
-    }
-
-    /**
      * @return int
      */
     public function getDuration()
@@ -479,12 +466,7 @@ class Session
      */
     public function isRelatedToCourse($course)
     {
-        return !is_null(
-            Database::getManager()->getRepository('ChamiloCoreBundle:SessionRelCourse')->findOneBy([
-                'session' => $this,
-                'course' => $course,
-            ])
-        );
+        return $this->courses->contains($course);
     }
 
     /**

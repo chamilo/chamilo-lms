@@ -57,10 +57,10 @@ $itemRepo = $em->getRepository('ChamiloCourseBundle:CItemProperty');
 /** @var Session $session */
 $session = null;
 if (!empty($sessionId)) {
-    $session = $em->getRepository('ChamiloCoreBundle:Session')->find($sessionId);
+    $session = api_get_session_entity($sessionId);
 }
 
-$course = $courseRepo->find($courseId);
+$course = api_get_course_entity($courseId);
 $subscribedUsers = [];
 
 // Getting subscribe users to the course.
@@ -159,7 +159,7 @@ if (!empty($selectedGroupChoices)) {
 }
 $form->setDefaults($defaults);
 
-$currentUser = api_get_user_entity(api_get_user_id());
+$currentUser = api_get_user_entity();
 
 if ($form->validate()) {
     $values = $form->getSubmitValues();

@@ -148,7 +148,7 @@ class CreateLearningPathTest extends V2TestCase
 
         // assert the learning path was created
         /** @var CLp $learningPath */
-        $learningPath = CLp::getRepository()->find($learningPathId);
+        $learningPath = api_get_lp_entity($learningPathId);
 
         self::assertNotNull($learningPath);
         // in the right course
@@ -182,8 +182,7 @@ class CreateLearningPathTest extends V2TestCase
         );
 
         // assert the learning path was created
-        /** @var CLp $learningPath */
-        $learningPath = CLp::getRepository()->find($learningPathId);
+        $learningPath = api_get_lp_entity($learningPathId);
 
         self::assertNotNull($learningPath);
         // in the right session, course and category
@@ -300,7 +299,7 @@ class CreateLearningPathTest extends V2TestCase
 
         // assert the learning path was created as specified
         /** @var CLp $learningPath */
-        $learningPath = CLp::getRepository()->find($learningPathId);
+        $learningPath = api_get_lp_entity($learningPathId);
 
         self::assertNotNull($learningPath);
         self::assertEquals(self::$session->getId(), $learningPath->getSessionId());

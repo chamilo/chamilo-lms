@@ -29,7 +29,7 @@ Pour les obtenir, créez une <em>JWT app</em> :
 <br/>5. saisissez quelques informations sur votre \"App\"
 (noms de l'application, de l'entreprise, nom et adresse de courriel de contact)
 <br/>6. cliquez sur <em>Continue</em>
-<br/>La page <em>App Credentials</em> affiche la clé (API Key) and le code secret (API Secret) à saisir ici.
+<br/>La page <em>App Credentials</em> affiche la clé (API Key) et le code secret (API Secret) à saisir ici.
 <br/>
 <strong>Attention</strong> :
 <br/>Zoom n'est <em>PAS</em> un logiciel libre
@@ -70,7 +70,7 @@ $strings['JoinMeetingAsMyself'] = "Rejoindre la conférence en tant que moi-mêm
 $strings['JoinURLCopied'] = "URL pour rejoindre copiée";
 $strings['JoinURLToSendToParticipants'] = "URL pour assister à la conférence (à envoyer aux participants)";
 $strings['LiveMeetings'] = "Conférences en cours";
-$strings['LinkToFileWasCreatedInCourse'] = "A link to the file was added to the course";
+$strings['LinkToFileWasCreatedInCourse'] = "Un lien vers le fichier a été ajouter au cours";
 $strings['MeetingDeleted'] = "Conférence effacée";
 $strings['MeetingsFound'] = "Conférences trouvées";
 $strings['MeetingUpdated'] = "Conférence mise à jour";

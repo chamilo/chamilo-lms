@@ -371,7 +371,7 @@ class bbb
         $params['moderator_pw'] = isset($params['moderator_pw']) ? $params['moderator_pw'] : $this->getModMeetingPassword();
         $moderatorPassword = $params['moderator_pw'];
 
-        $params['record'] = api_get_course_plugin_setting('bbb', 'big_blue_button_record_and_store') == 1 ? true : false;
+        $params['record'] = api_get_course_plugin_setting('bbb', 'big_blue_button_record_and_store') == 1;
         $max = api_get_course_plugin_setting('bbb', 'big_blue_button_max_students_allowed');
         $max = isset($max) ? $max : -1;
 
@@ -784,7 +784,7 @@ class bbb
                 ],
             ]
         );
-        
+
         foreach ($meetingData as $roomItem) {
             $inAt = $roomItem['in_at'];
             $outAt = $roomItem['out_at'];

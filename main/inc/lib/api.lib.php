@@ -2327,10 +2327,10 @@ function api_format_course_array($course_data)
             'course.png',
             null,
             null,
-            ICON_SIZE_BIG,
+            ICON_SIZE_LARGE,
             null,
             true,
-            false
+            true
         );
     }
     $_course['course_image'] = $url_image;

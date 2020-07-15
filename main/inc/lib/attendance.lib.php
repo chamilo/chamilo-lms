@@ -1218,9 +1218,9 @@ class Attendance
     /**
      * Get registered users' attendance sheet inside current course or course by id.
      *
-     * @param int $attendanceId
-     * @param int $user_id      for showing data for only one user (optional)
-     * @param int $groupId
+     * @param int      $attendanceId
+     * @param int      $user_id      for showing data for only one user (optional)
+     * @param int      $groupId
      * @param int      $course_id    if id = 0 get the current course
      * @param DateTime $startDate    Filter atttendance sheet with a start date
      * @param DateTime $endDate      Filter atttendance sheet with a end date
@@ -1236,7 +1236,7 @@ class Attendance
         DateTime $endDate = null
     ) {
         //Get actual course or by course_id
-        $course_id = (0 == $course_id)?api_get_course_int_id():$course_id;
+        $course_id = (0 == $course_id) ? api_get_course_int_id() : $course_id;
         $tbl_attendance_sheet = Database::get_course_table(TABLE_ATTENDANCE_SHEET);
         $tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
         $attendance_calendar = $this->get_attendance_calendar(
@@ -1474,20 +1474,20 @@ class Attendance
         $calendar_id = null,
         $groupId = 0,
         $showAll = false,
-        $course_id=0,
+        $course_id = 0,
         DateTime $startDate = null,
         DateTime $endDate = null
     ) {
         $tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
         $tbl_acrg = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR_REL_GROUP);
         $attendanceId = intval($attendanceId);
-        $course_id = (0==$course_id)? api_get_course_int_id():$course_id;
+        $course_id = (0 == $course_id) ? api_get_course_int_id() : $course_id;
         $whereDate = '';
         if (!empty($startDate)) {
-            $whereDate .= " AND c.date_time >= '" . $startDate->format('Y-m-d H:i:s') . "'";
+            $whereDate .= " AND c.date_time >= '".$startDate->format('Y-m-d H:i:s')."'";
         }
         if (!empty($endDate)) {
-            $whereDate .= " AND c.date_time <= '" . $endDate->format('Y-m-d H:i:s') . "'";
+            $whereDate .= " AND c.date_time <= '".$endDate->format('Y-m-d H:i:s')."'";
         }
         if ($showAll) {
             $sql = "SELECT * FROM $tbl_attendance_calendar c
@@ -2294,14 +2294,11 @@ class Attendance
         $pdf->html_to_pdf_with_template($tableToString);
     }
 
-
     /**
-     * Return all course for a student between dates and order by key date (Y-m-d)
+     * Return all course for a student between dates and order by key date (Y-m-d).
      *
-     * @param int           $student_id
-     * @param DateTime|null $startDate
-     * @param DateTime|null $endDate
-     * @param bool          $orderDesc
+     * @param int  $student_id
+     * @param bool $orderDesc
      *
      * @return array
      */
@@ -2311,7 +2308,6 @@ class Attendance
         DateTime $endDate = null,
         $orderDesc = true
     ) {
-
         $attendanceLib = new Attendance();
         $data = [];
         // unused by now
@@ -2368,11 +2364,9 @@ class Attendance
                             } elseif (!empty($endDate) and empty($startDate)) {
                                 if ($dateProccess <= $endDate) {
                                     $attendancesProccess = $work;
-
                                 }
                             } elseif (!empty($endDate) && !empty($startDate)) {
                                 if ($dateProccess >= $startDate && $dateProccess <= $endDate) {
-
                                     $attendancesProccess = $work;
                                 }
                             }
@@ -2400,10 +2394,7 @@ class Attendance
                                 $dateKey = new DateTime($dateTemp);
                                 $data[$dateKey->format('Y-m-d')][] = $attendancesProccess;
                             }
-
                         }
-
-
                     }
                     $sheetsProccessed[] = $tempDate;
                     $temp[] = $sheetsProccessed;
@@ -2418,6 +2409,7 @@ class Attendance
         } else {
             krsort($data);
         }
+
         return $data;
     }
 }

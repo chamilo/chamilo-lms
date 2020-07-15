@@ -995,13 +995,12 @@ $content = $tpl->fetch($templateName);
 echo $content;
 
 if (isset($_GET['action']) and $_GET['action'] == 'all_attendance') {
-    /**Display all attendances */
+    /*Display all attendances */
     // Varible for all attendance list
     $startDate = new DateTime();
     $startDate = $startDate->modify('-1 week');
     if (isset($_GET['startDate'])) {
         $startDate = new DateTime($_GET['startDate']);
-
     }
     $startDate = $startDate->setTime(0, 0, 0);
 
@@ -1009,7 +1008,6 @@ if (isset($_GET['action']) and $_GET['action'] == 'all_attendance') {
 
     if (isset($_GET['endDate'])) {
         $endDate = new DateTime($_GET['endDate']);
-
     }
     $endDate = $endDate->setTime(23, 59, 0);
     // $startDate = new DateTime(api_get_local_time($startDate));
@@ -1025,7 +1023,6 @@ if (isset($_GET['action']) and $_GET['action'] == 'all_attendance') {
     $defaults['startDate'] = $startDate->format('Y-m-d H:i:s');
     $defaults['endDate'] = $endDate->format('Y-m-d H:i:s');
     $form = new FormValidator('all_attendance_list', 'GET',
-
         'myStudents.php?action=all_attendance&student='.$_GET['student'].'&startDate='.$defaults['startDate'].'&endDate='.$defaults['endDate'].'&&'.api_get_cidreq(),
         '');
     $form->addElement('html', '<input type="hidden" name="student" value="'.$student_id.'" >');
@@ -1080,13 +1077,12 @@ if (isset($_GET['action']) and $_GET['action'] == 'all_attendance') {
             <td>'.$date.'</td>
             <td>'.$attendanceWork['presence'].'</td>
         </tr>';
-
         }
         echo '</tbody>
     </table></div>';
     }
     /** Display dates */
-    /**Display all attendances */
+    /*Display all attendances */
     Display::display_footer();
     exit();
 }

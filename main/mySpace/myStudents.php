@@ -685,7 +685,7 @@ if (!empty($student_id) && !empty($courseCode)) {
 $notebookTeacherEnable = api_get_plugin_setting('notebookteacher', 'enable_plugin_notebookteacher') === 'true';
 if ($notebookTeacherEnable && !empty($student_id) && !empty($courseCode)) {
     // link notebookteacher
-    $optionsLink = 'student='.$student_id.'&origin='.$origin.'&cidReq='.$courseCode.'&id_session='.$sessionId;
+    $optionsLink = 'student_id='.$student_id.'&origin='.$origin.'&cidReq='.$courseCode.'&id_session='.$sessionId;
     echo '<a href="'.api_get_path(WEB_PLUGIN_PATH).'notebookteacher/src/index.php?'.$optionsLink.'">'
         .Display::return_icon('notebookteacher.png', get_lang('Notebook'), '', ICON_SIZE_MEDIUM)
         .'</a>';
@@ -713,7 +713,7 @@ if (Skill::isAllowed($student_id, false)) {
     echo Display::url(
         Display::return_icon(
             'attendance.png',
-            get_lang('CountDoneAttendance')." ** ",
+            get_lang('CountDoneAttendance'),
             null,
             ICON_SIZE_MEDIUM
         ),

@@ -74,8 +74,8 @@ class BBBPlugin extends Plugin
                 'interface' => [
                     'type' => 'select',
                     'options' => [
-                        self::INTERFACE_FLASH => 'Flash',
                         self::INTERFACE_HTML5 => 'HTML5',
+                        self::INTERFACE_FLASH => 'Flash',
                     ],
                 ],
                 'launch_type' => [

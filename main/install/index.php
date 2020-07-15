@@ -972,11 +972,11 @@ $poweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chami
 <script type="text/javascript">
     $('#showPassword').on('change',function(){
         if($(this).prop('checked')){
-            $('[name="passForm"]').attr('type','text');
+            $('.form-control[name="passForm"]').attr('type','text');
             $('.showPasswordEye').removeClass('fa-eye').addClass('fa-eye-slash');
 
         }else{
-            $('[name="passForm"]').attr('type','password');
+            $('.form-control[name="passForm"]').attr('type','password');
             $('.showPasswordEye').addClass('fa-eye').removeClass('fa-eye-slash');
         }
     });

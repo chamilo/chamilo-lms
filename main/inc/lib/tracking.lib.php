@@ -2108,7 +2108,7 @@ class Tracking
     }
 
     /**
-     * Get last course access by course/session
+     * Get last course access by course/session.
      */
     public static function getLastConnectionDateByCourse($courseId, $sessionId = 0)
     {

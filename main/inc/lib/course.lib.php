@@ -6966,6 +6966,37 @@ class CourseManager
     }
 
     /**
+     * @param string $listType
+     *
+     * @return string
+     */
+    public static function getCourseListTabs($listType)
+    {
+        $tabs = [
+            [
+                'content' => get_lang('SimpleCourseList'),
+                'url' => api_get_path(WEB_CODE_PATH).'admin/course_list.php',
+            ],
+            [
+                'content' => get_lang('AdminCourseList'),
+                'url' => api_get_path(WEB_CODE_PATH).'admin/course_list_admin.php',
+            ],
+        ];
+
+        $default = 1;
+        switch ($listType) {
+            case 'simple':
+                $default = 1;
+                break;
+            case 'admin':
+                $default = 2;
+                break;
+        }
+
+        return Display::tabsOnlyLink($tabs, $default);
+    }
+
+    /**
      * Check if a specific access-url-related setting is a problem or not.
      *
      * @param array  $_configuration The $_configuration array
@@ -7042,36 +7073,5 @@ class CourseManager
 
         $courseFieldValue = new ExtraFieldValue('course');
         $courseFieldValue->saveFieldValues($params);
-    }
-
-    /**
-     * @param string $listType
-     *
-     * @return string
-     */
-    public static function getCourseListTabs($listType)
-    {
-        $tabs = [
-            [
-                'content' => get_lang('SimpleCourseList'),
-                'url' => api_get_path(WEB_CODE_PATH).'admin/course_list.php',
-            ],
-            [
-                'content' => get_lang('AdminCourseList'),
-                'url' => api_get_path(WEB_CODE_PATH).'admin/course_list_admin.php',
-            ],
-        ];
-
-        $default = 1;
-        switch ($listType) {
-            case 'simple':
-                $default = 1;
-                break;
-            case 'admin':
-                $default = 2;
-                break;
-        }
-
-        return Display::tabsOnlyLink($tabs, $default);
     }
 }

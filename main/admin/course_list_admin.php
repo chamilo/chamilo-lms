@@ -77,7 +77,6 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
             ON (course.id = cu.c_id AND cu.status = ".COURSEMANAGER.")
         ";
 
-
     if (isset($_GET['keyword'])) {
         $keyword = Database::escape_string("%".trim($_GET['keyword'])."%");
         $sql .= " WHERE (

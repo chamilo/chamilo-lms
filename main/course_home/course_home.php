@@ -241,7 +241,7 @@ if ($action === 'subscribe') {
                 /**
                  * @var Chamilo\UserBundle\Entity\User
                  */
-                $user = UserManager::getRepository()->find(api_get_user_id());
+                $user = api_get_user_entity();
                 if ($user) {
                     foreach ($user->getCurrentlyAccessibleSessions() as $session) {
                         $redirectionTarget = api_get_self().'?id_session='.$session->getId();
@@ -253,7 +253,7 @@ if ($action === 'subscribe') {
             /**
              * @var Chamilo\UserBundle\Entity\User
              */
-            $user = UserManager::getRepository()->find(api_get_user_id());
+            $user = api_get_user_entity();
             if ($user && !$user->getCurrentlyAccessibleSessions()) {
                 // subscription was probably refused because user session expired, go back to page "about"
                 $redirectionTarget = api_get_path(WEB_PATH).'course/'.$courseId.'/about';

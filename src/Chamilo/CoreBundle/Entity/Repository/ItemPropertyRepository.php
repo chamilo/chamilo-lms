@@ -213,7 +213,6 @@ class ItemPropertyRepository extends EntityRepository
         $newUserList = []
     ) {
         $em = $this->getEntityManager();
-        $user = $em->getRepository('ChamiloUserBundle:User');
 
         $usersSubscribedToItem = $this->getUsersSubscribedToItem(
             $tool,
@@ -248,7 +247,7 @@ class ItemPropertyRepository extends EntityRepository
 
         foreach ($newUserList as $userId) {
             if (!in_array($userId, $alreadyAddedUsers)) {
-                $userObj = $user->find($userId);
+                $userObj = api_get_user_entity($userId);
 
                 $item = new CItemProperty($course);
                 $item

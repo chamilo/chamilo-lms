@@ -375,7 +375,7 @@ class CLp
     public function prePersist()
     {
         if (is_null($this->course)) {
-            $this->course = Course::getCurrentCourse();
+            $this->course = api_get_course_entity();
             if (is_null($this->course)) {
                 throw new Exception('cannot persist a leaning path without course');
             }
@@ -1218,7 +1218,7 @@ class CLp
     public function setCId($cId)
     {
         $this->cId = $cId;
-        $this->setCourse(Course::getRepository()->find($cId));
+        $this->setCourse(api_get_course_entity($cId));
 
         return $this;
     }

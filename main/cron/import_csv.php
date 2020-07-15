@@ -1286,7 +1286,7 @@ class ImportCsv
                         ];
                         /** @var CItemProperty $itemProperty */
                         $itemProperty = $em->getRepository('ChamiloCourseBundle:CItemProperty')->findOneBy($criteria);
-                        $courseEntity = $em->getRepository('ChamiloCoreBundle:Course')->find($courseInfo['real_id']);
+                        $courseEntity = api_get_course_entity($courseInfo['real_id']);
                         if ($itemProperty && $courseEntity) {
                             $itemProperty->setCourse($courseEntity);
                             $em->persist($itemProperty);

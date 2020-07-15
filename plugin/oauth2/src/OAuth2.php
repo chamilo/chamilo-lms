@@ -294,10 +294,7 @@ class OAuth2 extends Plugin
 
     private function updateUser($userId, $response)
     {
-        /**
-         * @var $user Chamilo\UserBundle\Entity\User
-         */
-        $user = UserManager::getRepository()->find($userId);
+        $user = api_get_user_entity($userId);
         $user->setFirstname(
             $this->getValueByKey($response, $this->get(
                 self::SETTING_RESPONSE_RESOURCE_OWNER_FIRSTNAME

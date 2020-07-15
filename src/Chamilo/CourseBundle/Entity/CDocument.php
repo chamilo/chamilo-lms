@@ -184,7 +184,7 @@ class CDocument
     public function getAbsolutePath()
     {
         if (is_null($this->course) && $this->cId) {
-            $this->course = Database::getManager()->find('ChamiloCoreBundle:Course', $this->cId);
+            $this->course = api_get_course_entity($this->cId);
         }
         if (is_null($this->course)) {
             throw new Exception('this document does not have a course yet');
@@ -475,7 +475,7 @@ class CDocument
     public function setCId($cId)
     {
         $this->cId = $cId;
-        $this->setCourse(Course::getRepository()->find($cId));
+        $this->setCourse(api_get_course_entity($cId));
 
         return $this;
     }

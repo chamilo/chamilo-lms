@@ -1,10 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\SettingsCurrent;
 use Chamilo\CoreBundle\Entity\UserCourseCategory;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\CourseBundle\Entity\CItemProperty;
+use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\UserBundle\Entity\User;
 use ChamiloSession as Session;
 use Doctrine\Common\Collections\Criteria;
@@ -1795,9 +1797,9 @@ function api_get_user_info(
  *
  * @return User
  */
-function api_get_user_entity($userId)
+function api_get_user_entity($userId = 0)
 {
-    $userId = (int) $userId;
+    $userId = (int) $userId ?: api_get_user_id();
     $repo = UserManager::getRepository();
 
     /** @var User $user */
@@ -2215,6 +2217,16 @@ function api_get_session_entity($id = 0)
 }
 
 /**
+ * @param int $id the learning path identifier
+ *
+ * @return CLp|null
+ */
+function api_get_lp_entity($id)
+{
+    return Database::getManager()->getRepository('ChamiloCourseBundle:CLp')->find($id);
+}
+
+/**
  * Returns the current course info array.
 
  * Now if the course_code is given, the returned array gives info about that
@@ -2612,6 +2624,16 @@ function api_get_session_id()
 function api_get_group_id()
 {
     return Session::read('_gid', 0);
+}
+
+/**
+ * @param int $id the group identifier
+ *
+ * @return CGroupInfo|object|null
+ */
+function api_get_group_entity($id = 0)
+{
+    return Database::getManager()->getRepository('ChamiloCourseBundle:CGroupInfo')->find($id ?: api_get_group_id());
 }
 
 /**
@@ -4199,15 +4221,15 @@ function api_item_property_update(
     if (!array_key_exists('real_id', $_course)) {
         return false;
     }
-    $course = \Chamilo\CoreBundle\Entity\Course::getRepository()->find($_course['real_id']);
+    $course = api_get_course_entity($_course['real_id']);
     if (is_null($course)) {
         return false;
     }
 
     $toUser = api_get_user_entity($to_user_id);
-    $toGroup = array_key_exists('iid', $groupInfo) ? CGroupInfo::getRepository()->find($groupInfo['iid']) : null;
+    $toGroup = array_key_exists('iid', $groupInfo) ? api_get_group_entity($groupInfo['iid']) : null;
     $user = api_get_user_entity($user_id) ?: api_get_user_entity(api_get_anonymous_id());
-    $session = \Chamilo\CoreBundle\Entity\Session::getRepository()->find($session_id ?: api_get_session_id());
+    $session = api_get_session_entity($session_id);
 
     $startVisibleDate = empty($start_visible)
         ? null
@@ -6385,6 +6407,17 @@ function api_get_access_url_from_user($user_id)
     }
 
     return $list;
+}
+
+/**
+ * @param int $id the access url identifier
+ *
+ * @return AccessUrl|null
+ */
+function api_get_access_url_entity($id = 0) {
+    return Database::getManager()->getRepository('ChamiloCoreBundle:AccessUrl')->find(
+        $id ?: api_get_current_access_url_id()
+    );
 }
 
 /**

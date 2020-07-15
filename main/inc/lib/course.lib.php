@@ -565,10 +565,7 @@ class CourseManager
         $userId = api_get_user_id();
 
         if (api_get_configuration_value('catalog_course_subscription_in_user_s_session')) {
-            /**
-             * @var Chamilo\UserBundle\Entity\User
-             */
-            $user = UserManager::getRepository()->find($userId);
+            $user = api_get_user_entity($userId);
             $sessions = $user->getCurrentlyAccessibleSessions();
             if (empty($sessions)) {
                 // user has no accessible session
@@ -1196,10 +1193,7 @@ class CourseManager
             if (is_null($course)) {
                 return false;
             }
-            /**
-             * @var \Chamilo\UserBundle\Entity\User
-             */
-            $user = UserManager::getRepository()->find($user_id);
+            $user = api_get_user_entity($user_id);
             if (is_null($user)) {
                 return false;
             }

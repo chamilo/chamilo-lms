@@ -508,8 +508,8 @@ class learnpath
         $previous = (int) $previous;
         $id = (int) $id;
         $max_time_allowed = htmlentities($max_time_allowed);
-        $course = \Chamilo\CoreBundle\Entity\Course::getRepository()->find($course_id);
-        $learningPath = CLp::getRepository()->find($this->get_id());
+        $course = api_get_course_entity($course_id);
+        $learningPath = api_get_lp_entity($this->get_id());
         $item = (new CLpItem())
             ->setCourse($course)
             ->setLearningPath($learningPath)
@@ -628,7 +628,7 @@ class learnpath
         if ('zip' !== $origin) {
             $course_id = api_get_course_int_id($courseCode);
             if ($course_id) {
-                $course = \Chamilo\CoreBundle\Entity\Course::getRepository()->find($course_id);
+                $course = api_get_course_entity($course_id);
                 if (!is_null($course)) {
                     $learningPath = (new CLp())
                         ->setCourse($course)
@@ -4423,14 +4423,12 @@ class learnpath
         /** @var ItemPropertyRepository $itemRepo */
         $itemRepo = $em->getRepository('ChamiloCourseBundle:CItemProperty');
 
-        /** @var CourseRepository $courseRepo */
-        $courseRepo = $em->getRepository('ChamiloCoreBundle:Course');
         $session = null;
         if (!empty($sessionId)) {
-            $session = $em->getRepository('ChamiloCoreBundle:Session')->find($sessionId);
+            $session = api_get_session_entity($sessionId);
         }
 
-        $course = $courseRepo->find($courseId);
+        $course = api_get_course_entity($courseId);
 
         if ($courseId != 0) {
             // Subscribed groups to a LP

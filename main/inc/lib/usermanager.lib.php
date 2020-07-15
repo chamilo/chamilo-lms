@@ -146,9 +146,7 @@ class UserManager
      */
     public static function updatePassword($userId, $password)
     {
-        $repository = self::getRepository();
-        /** @var User $user */
-        $user = $repository->find($userId);
+        $user = api_get_user_entity($userId);
         $userManager = self::getManager();
         $user->setPlainPassword($password);
         $userManager->updateUser($user, true);
@@ -714,7 +712,7 @@ class UserManager
                 // (extra field values of a deleted user might remain)
                 foreach ($itemList as $item) {
                     $userId = intval($item['item_id']);
-                    $user = UserManager::getRepository()->find($userId);
+                    $user = api_get_user_entity($userId);
                     if (!is_null($user)) {
                         if (false === $loginName) {
                             $loginName = $user->getUsername();
@@ -1366,8 +1364,7 @@ class UserManager
         }
 
         $userManager = self::getManager();
-        /** @var User $user */
-        $user = self::getRepository()->find($user_id);
+        $user = api_get_user_entity($user_id);
 
         if (empty($user)) {
             return false;

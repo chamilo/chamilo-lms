@@ -1811,8 +1811,7 @@ class Rest extends WebService
         if (is_null($userId)) {
             throw new Exception(get_lang('NoData'));
         }
-        /** @var User $user */
-        $user = UserManager::getRepository()->find($userId);
+        $user = api_get_user_entity($userId);
         if (empty($user)) {
             throw new Exception(get_lang('CouldNotLoadUser'));
         }
@@ -2090,7 +2089,7 @@ class Rest extends WebService
             if (0 == $sessionId) {
                 $learningPath->setSessionId(0);
             } else {
-                $session = Session::getRepository()->find($sessionId);
+                $session = api_get_session_entity($sessionId);
                 if (is_null($session)) {
                     throw new Exception("no session has id '$sessionId'");
                 }

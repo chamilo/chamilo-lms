@@ -48,10 +48,7 @@ $table_access_url_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER
 
 $em = Database::getManager();
 $sessionInfo = api_get_session_info($sessionId);
-/** @var SessionRepository $sessionRepository */
-$sessionRepository = $em->getRepository('ChamiloCoreBundle:Session');
-/** @var Session $session */
-$session = $sessionRepository->find($sessionId);
+$session = api_get_session_entity($sessionId);
 $sessionCategory = $session->getCategory();
 
 $action = isset($_GET['action']) ? $_GET['action'] : null;

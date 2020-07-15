@@ -54,9 +54,9 @@ class SocialManager extends UserManager
     /**
      * Get the kind of relation between contacts.
      *
-     * @param int $user_id user id
-     * @param int $user_friend user friend id
-     * @param boolean $includeRH include the RH relationship
+     * @param int  $user_id     user id
+     * @param int  $user_friend user friend id
+     * @param bool $includeRH   include the RH relationship
      *
      * @return int
      *
@@ -112,15 +112,14 @@ class SocialManager extends UserManager
                 foreach ($targetUserCoursesList as $course) {
                     $teachersList = CourseManager::get_teacher_list_from_course_code($course['code']);
                     foreach ($teachersList as $teacher) {
-                         if ($currentUserId == $teacher['user_id']) {
-                             return USER_RELATION_TYPE_GOODFRIEND;
-                         }
+                        if ($currentUserId == $teacher['user_id']) {
+                            return USER_RELATION_TYPE_GOODFRIEND;
+                        }
                     }
                 }
             } else {
                 return USER_UNKNOWN;
             }
-
         }
     }
 

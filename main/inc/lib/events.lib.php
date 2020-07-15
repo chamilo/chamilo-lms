@@ -1,7 +1,7 @@
 <?php
+
 /* See license terms in /license.txt */
 
-//use Chamilo\UserBundle\Entity\User;
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use ChamiloSession as Session;
 
@@ -2237,11 +2237,11 @@ class Event
      * updating the current one to be just the considered_working_time and
      * end at the same second as the user connected to the course.
      *
-     * @param int    $courseId    The course in which to add the time
-     * @param int    $userId      The user for whom to add the time
-     * @param int    $sessionId   The session in which to add the time (if any)
-     * @param string $virtualTime The amount of time to be added,
-     *                            in a hh:mm:ss format. If int, we consider it is expressed in hours.
+     * @param int    $courseId     The course in which to add the time
+     * @param int    $userId       The user for whom to add the time
+     * @param int    $sessionId    The session in which to add the time (if any)
+     * @param string $virtualTime  The amount of time to be added,
+     *                             in a hh:mm:ss format. If int, we consider it is expressed in hours.
      * @param int    $resultWorkId Student publication id result
      *
      * @return true on successful insertion, false otherwise

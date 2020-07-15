@@ -171,13 +171,13 @@ $htmlHeadXtra[] = '<script type="text/javascript">
                     if (info.message == "is_active") {
                         message = "'.get_lang('ToolIsNowVisible', '').'";
                         $("#" + tool_id)
-                        .attr("alt", "' . get_lang('Activate', '') . '")
-                        .attr("title", "' . get_lang('Activate', '') . '");
+                        .attr("alt", "'.get_lang('Activate', '').'")
+                        .attr("title", "'.get_lang('Activate', '').'");
                     } else {
                         message = "'.get_lang('ToolIsNowHidden', '').'";
                         $("#" + tool_id)
-                        .attr("alt", "' . get_lang('Deactivate', '') . '")
-                        .attr("title", "' . get_lang('Deactivate', '') . '");
+                        .attr("alt", "'.get_lang('Deactivate', '').'")
+                        .attr("title", "'.get_lang('Deactivate', '').'");
                     }
                     $(".normal-message").hide();
                     $("#id_confirmation_message").html(message);

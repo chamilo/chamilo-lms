@@ -591,7 +591,7 @@ class DocumentManager
         }
         $where = '';
         if ($search != true) {
-            $where .= "docs.path NOT LIKE '" . Database::escape_string($path . $addedSlash . '%/%') . "' AND";
+            $where .= "docs.path NOT LIKE '".Database::escape_string($path.$addedSlash.'%/%')."' AND";
         }
         $sql = "SELECT
                     docs.id,

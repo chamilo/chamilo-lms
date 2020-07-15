@@ -2324,13 +2324,13 @@ function api_format_course_array($course_data)
         $_course['course_image_source'] = $courseSys.'/course-pic85x85.png';
     } else {
         $url_image = Display::return_icon(
-            'course.png',
+            'blackboard.png',
             null,
             null,
-            ICON_SIZE_BIG,
+            ICON_SIZE_LARGE,
             null,
             true,
-            false
+            true
         );
     }
     $_course['course_image'] = $url_image;

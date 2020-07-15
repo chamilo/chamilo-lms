@@ -1221,9 +1221,9 @@ class Attendance
      * @param int $attendanceId
      * @param int $user_id      for showing data for only one user (optional)
      * @param int $groupId
-     * @param int $course_id      if id = 0 get the current course
-     * @param DateTime    $startDate Filter atttendance sheet with a start date
-     * @param DateTime    $endDate Filter atttendance sheet with a end date
+     * @param int      $course_id    if id = 0 get the current course
+     * @param DateTime $startDate    Filter atttendance sheet with a start date
+     * @param DateTime $endDate      Filter atttendance sheet with a end date
      *
      * @return array users attendance sheet data
      */
@@ -1231,7 +1231,7 @@ class Attendance
         $attendanceId,
         $user_id = 0,
         $groupId = 0,
-        $course_id=0,
+        $course_id = 0,
         DateTime $startDate = null,
         DateTime $endDate = null
     ) {
@@ -1257,10 +1257,10 @@ class Attendance
 
         $whereDate = '';
         if (!empty($startDate)) {
-            $whereDate .= " AND cal.date_time >= '" . $startDate->format('Y-m-d H:i:s') . "'";
+            $whereDate .= " AND cal.date_time >= '".$startDate->format('Y-m-d H:i:s')."'";
         }
         if (!empty($endDate)) {
-            $whereDate .= " AND cal.date_time <= '" . $endDate->format('Y-m-d H:i:s') . "'";
+            $whereDate .= " AND cal.date_time <= '".$endDate->format('Y-m-d H:i:s')."'";
         }
 
         // moved at start of this function
@@ -1457,14 +1457,14 @@ class Attendance
     /**
      * Get all attendance calendar data inside current attendance or by course id.
      *
-     * @param int    $attendanceId
-     * @param string $type
-     * @param int    $calendar_id
-     * @param int    $groupId
-     * @param bool   $showAll      = false show group calendar items or not
-     * @param int    $course_id
-     * @param DateTime    $startDate Filter calendar with a start date
-     * @param DateTime    $endDate Filter calendar with a end date
+     * @param int      $attendanceId
+     * @param string   $type
+     * @param int      $calendar_id
+     * @param int      $groupId
+     * @param bool     $showAll      = false show group calendar items or not
+     * @param int      $course_id
+     * @param DateTime $startDate    Filter calendar with a start date
+     * @param DateTime $endDate      Filter calendar with a end date
      *
      * @return array attendance calendar data
      */
@@ -2297,6 +2297,7 @@ class Attendance
 
     /**
      * Return all course for a student between dates and order by key date (Y-m-d)
+     *
      * @param int           $student_id
      * @param DateTime|null $startDate
      * @param DateTime|null $endDate
@@ -2304,7 +2305,7 @@ class Attendance
      *
      * @return array
      */
-    public function getCoursesWithAttendance (
+    public function getCoursesWithAttendance(
         $student_id = 0,
         DateTime $startDate = null,
         DateTime $endDate = null,
@@ -2358,27 +2359,24 @@ class Attendance
                             $work = $sheetData[$ii];
                             $dateProccess = new DateTime($work[0]);
                             $attendancesProccess = null;
-                            if(empty($endDate) && empty($startDate)) {
+                            if (empty($endDate) && empty($startDate)) {
                                 $attendancesProccess = $work;
-
-                            } elseif(!empty($startDate) and empty($endDate)) {
-                                if($dateProccess >= $startDate) {
-
+                            } elseif (!empty($startDate) and empty($endDate)) {
+                                if ($dateProccess >= $startDate) {
                                     $attendancesProccess = $work;
                                 }
-                            } elseif(!empty($endDate) and empty($startDate)) {
-                                if($dateProccess <= $endDate) {
+                            } elseif (!empty($endDate) and empty($startDate)) {
+                                if ($dateProccess <= $endDate) {
                                     $attendancesProccess = $work;
 
                                 }
-                            } elseif(!empty($endDate) && !empty($startDate)) {
-
-                                if($dateProccess >= $startDate && $dateProccess <= $endDate) {
+                            } elseif (!empty($endDate) && !empty($startDate)) {
+                                if ($dateProccess >= $startDate && $dateProccess <= $endDate) {
 
                                     $attendancesProccess = $work;
                                 }
                             }
-                            if(!empty($attendancesProccess)) {
+                            if (!empty($attendancesProccess)) {
                                 $dateTemp = $attendancesProccess['0'];
                                 $attendancesProccess[0] = $attendancesProccess[1];
                                 $attendancesProccess[1] = $dateTemp;
@@ -2394,13 +2392,13 @@ class Attendance
 
                                 $attendancesProccess[5] = $attendanceData['id'];
                                 $attendancesProccess['attendanceId'] = $attendanceData['id'];
-                                if($attendancesProccess['presence'] == 1) {
+                                if ($attendancesProccess['presence'] == 1) {
                                     $attendancesProccess['presence'] = get_lang('Present');
                                     $attendancesProccess[0] = get_lang('Present');
                                 }
                                 $tempDate[] = $attendancesProccess;
                                 $dateKey = new DateTime($dateTemp);
-                                $data [$dateKey->format('Y-m-d')][] = $attendancesProccess;
+                                $data[$dateKey->format('Y-m-d')][] = $attendancesProccess;
                             }
 
                         }
@@ -2415,12 +2413,11 @@ class Attendance
         }
 
         /* Order desc by date,  by default */
-        if($orderDesc == true) {
+        if ($orderDesc == true) {
             ksort($data);
         } else {
             krsort($data);
         }
-
         return $data;
     }
 }

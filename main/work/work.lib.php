@@ -4806,7 +4806,7 @@ function deleteWorkItem($item_id, $courseInfo)
                             $row['user_id'],
                             $sessionId,
                             $workingTime,
-                            $item_id
+                            $row['parent_id']
                         );
                     }
                 }

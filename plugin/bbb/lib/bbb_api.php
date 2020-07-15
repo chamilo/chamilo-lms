@@ -41,6 +41,7 @@ class BigBlueButtonBN
 {
 	private $_securitySalt;
 	private $_bbbServerBaseUrl;
+	private $_bbbServerProtocol;
 
 	public function __construct()
     {
@@ -51,6 +52,7 @@ class BigBlueButtonBN
 		// simply flow in here via the constants:
 		$this->_securitySalt 		= CONFIG_SECURITY_SALT;
 		$this->_bbbServerBaseUrl 	= CONFIG_SERVER_BASE_URL;
+		$this->_bbbServerProtocol 	= CONFIG_SERVER_PROTOCOL;
 	}
 
 	private function _processXmlResponse($url)
@@ -62,7 +64,7 @@ class BigBlueButtonBN
 			$ch = curl_init() or die ( curl_error($ch) );
 			$timeout = 10;
 			curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false);
-			curl_setopt( $ch, CURLOPT_URL, $url );
+			curl_setopt( $ch, CURLOPT_URL, $this->_bbbServerProtocol.$url );
 			curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
 			curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT, $timeout);
             // Following redirect required to use Scalelite, BBB's Load Balancer

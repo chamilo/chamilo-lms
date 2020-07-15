@@ -28,7 +28,7 @@ class RestResponse
     public function __construct()
     {
         $this->error = true;
-        $this->errorMessage = null;
+        $this->errorMessage = '';
         $this->data = [];
     }
 

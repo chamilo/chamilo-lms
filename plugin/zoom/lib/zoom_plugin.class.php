@@ -1,5 +1,4 @@
 <?php
-
 /* For licensing terms, see /license.txt */
 
 use Chamilo\PluginBundle\Zoom\API\CreatedRegistration;
@@ -474,10 +473,7 @@ class ZoomPlugin extends Plugin
         );
         $groupIdsSelect->setMultiple(true);
         if (!empty($groups)) {
-            $jsCode = sprintf(
-                <<<EOF
-getElementById('%s').parentNode.parentNode.parentNode.style.display = getElementById('%s').checked ? 'block' : 'none'
-EOF,
+            $jsCode = sprintf("getElementById('%s').parentNode.parentNode.parentNode.style.display = getElementById('%s').checked ? 'block' : 'none'",
                 $groupIdsSelect->getAttribute('id'),
                 $userRegistrationRadio->getelements()[1]->getAttribute('id')
             );

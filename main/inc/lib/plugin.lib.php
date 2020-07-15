@@ -268,6 +268,7 @@ class AppPlugin
             'userremoteservice',
             'vchamilo',
             'whispeakauth',
+            'zoom',
         ];
 
         return $officialPlugins;

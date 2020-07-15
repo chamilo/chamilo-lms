@@ -320,6 +320,7 @@ if ($encryptPassForm == '1') {
             width: 90%;
             display: initial;
         }
+
     </style>
     <script type="text/javascript" src="../../web/assets/jquery/dist/jquery.min.js"></script>
     <script type="text/javascript" src="../../web/assets/bootstrap/dist/js/bootstrap.min.js"></script>

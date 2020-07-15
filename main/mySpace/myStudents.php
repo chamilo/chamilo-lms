@@ -1901,7 +1901,6 @@ if (empty($details)) {
                 true
             );
 
-
             foreach ($resultExtra as $field) {
                 $field = $field['value'];
                 if ($workingTime == $field->getField()->getVariable()) {

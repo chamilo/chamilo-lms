@@ -3,6 +3,7 @@
 
 namespace Chamilo\UserBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\Skill;
@@ -747,7 +748,7 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     }
 
     /**
-     * @return ArrayCollection
+     * @return ArrayCollection|UsergroupRelUser[]
      */
     public function getClasses()
     {

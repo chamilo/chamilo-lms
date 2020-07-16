@@ -511,7 +511,6 @@ class UserRepository extends EntityRepository
         $courses = $user->getCourses();
         $list = [];
         $chatFiles = [];
-        /** @var CourseRelUser $course */
         foreach ($courses as $course) {
             $list[] = $course->getCourse()->getCode();
             $courseDir = api_get_path(SYS_COURSE_PATH).$course->getCourse()->getDirectory();
@@ -531,7 +530,6 @@ class UserRepository extends EntityRepository
 
         $classes = $user->getClasses();
         $list = [];
-        /** @var UsergroupRelUser $class */
         foreach ($classes as $class) {
             $name = $class->getUsergroup()->getName();
             $list[$class->getUsergroup()->getGroupType()][] = $name.' - Status: '.$class->getRelationType();
@@ -540,14 +538,12 @@ class UserRepository extends EntityRepository
 
         $collection = $user->getSessionCourseSubscriptions();
         $list = [];
-        /** @var SessionRelCourseRelUser $item */
         foreach ($collection as $item) {
             $list[$item->getSession()->getName()][] = $item->getCourse()->getCode();
         }
         $user->setSessionCourseSubscriptions($list);
 
         $documents = \DocumentManager::getAllDocumentsCreatedByUser($userId);
-
         $friends = \SocialManager::get_friends($userId);
         $friendList = [];
         if (!empty($friends)) {

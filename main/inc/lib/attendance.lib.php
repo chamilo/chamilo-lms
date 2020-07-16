@@ -2308,7 +2308,7 @@ class Attendance
         $studentId = 0,
         DateTime $startDate = null,
         DateTime $endDate = null,
-        $orderDesc = true
+        $orderDesc = false
     ) {
         // Lang variables
         $presentString = get_lang('Present');

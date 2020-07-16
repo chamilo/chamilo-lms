@@ -176,6 +176,7 @@ if (api_is_multiple_url_enabled()) {
         $sql = "SELECT s.id, name FROM $tblSession s
                 INNER JOIN $tblSessionRelAccessUrl as session_rel_url
                 ON (s.id = session_rel_url.session_id)
+                $innerJoinSessionRelUser
                 WHERE access_url_id = $accessUrlId
                 $whereCondictionMultiUrl
                 ORDER BY name";

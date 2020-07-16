@@ -6,7 +6,6 @@ namespace Chamilo\UserBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\AccessUrlRelUser;
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\GradebookCertificate;
 use Chamilo\CoreBundle\Entity\GradebookResult;
 use Chamilo\CoreBundle\Entity\Message;
@@ -26,7 +25,6 @@ use Chamilo\CoreBundle\Entity\TrackEOnline;
 use Chamilo\CoreBundle\Entity\TrackEUploads;
 use Chamilo\CoreBundle\Entity\UserApiKey;
 use Chamilo\CoreBundle\Entity\UserCourseCategory;
-use Chamilo\CoreBundle\Entity\UsergroupRelUser;
 use Chamilo\CoreBundle\Entity\UserRelCourseVote;
 use Chamilo\CourseBundle\Entity\CAttendanceResult;
 use Chamilo\CourseBundle\Entity\CAttendanceSheet;

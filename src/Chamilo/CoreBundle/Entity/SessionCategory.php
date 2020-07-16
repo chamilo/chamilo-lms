@@ -23,6 +23,7 @@ class SessionCategory
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Session", mappedBy="category")
      */
     protected $session;
+
     /**
      * @var int
      *

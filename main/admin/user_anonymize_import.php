@@ -8,7 +8,6 @@ use Doctrine\Common\Collections\Criteria;
  * This tool allows platform admins to anonymize users by uploading a text file,
  * with one username per line.
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 

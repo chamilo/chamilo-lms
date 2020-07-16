@@ -1016,10 +1016,12 @@ if (isset($_GET['action']) and $_GET['action'] == 'all_attendance') {
             <tr>
                 <th>'.get_lang('DateExo').'</th>
                 <th>'.get_lang('Training').'</th>
+
                 <th>'.get_lang('Present').'</th>
             </tr>
         </thead>
     <tbody>';
+    // <th>'.get_lang('Professor').'</th>
     foreach ($data as $attendanceData => $attendanceSheet) {
         /*
          * $attendanceData  can be in_category or not_category for courses
@@ -1036,6 +1038,7 @@ if (isset($_GET['action']) and $_GET['action'] == 'all_attendance') {
                 // get session name
                 $printSession = "(".$attendanceWork['sessionName'].")";
             }
+            // $teacher = isset($attendanceWork['teacher'])?$attendanceWork['teacher']:'';
             echo '
         <tr>
             <td>'.$date.'</td>
@@ -1045,8 +1048,10 @@ if (isset($_GET['action']) and $_GET['action'] == 'all_attendance') {
                 .$student_id.'">'
                 .$attendanceWork['courseTitle']." $printSession ".'</a>
             </td>
+
             <td>'.$attendanceWork['presence'].'</td>
         </tr>';
+            //<td>'.$teacher.'</td>
         }
     }
     echo '</tbody>

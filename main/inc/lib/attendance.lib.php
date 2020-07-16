@@ -2312,7 +2312,8 @@ class Attendance
     ) {
         // Lang variables
         $presentString = get_lang('Present');
-        $absentString = get_lang('Absent');
+        //$absentString = get_lang('Absent');
+        $absentString = '-';
         // Lang variables
         $attendanceLib = new Attendance();
         $data = [];
@@ -2386,6 +2387,12 @@ class Attendance
                                 $attendancesProccess['sessionName'] = '';
                                 $tempDate[] = $attendancesProccess;
                                 $dateKey = new DateTime($dateTemp);
+                                /*
+                                $attendancesProccess['teacher'] = '';
+                                if(isset($courseItem['teachers']) and isset($courseItem['teachers'][0])){
+                                    $attendancesProccess['teacher'] = $courseItem['teachers'][0]['fullname'];
+                                }
+                                */
                                 $data[$dateKey->format('Y-m-d')][] = $attendancesProccess;
                             }
                         }
@@ -2464,6 +2471,12 @@ class Attendance
 
                             $tempDate[] = $attendancesProccess;
                             $dateKey = new DateTime($dateTemp);
+                            /*
+                            $attendancesProccess['teacher'] = '';
+                            if(isset($courseItem['tutor_name']) ){
+                                $attendancesProccess['teacher'] = $courseItem['tutor_name'];
+                            }
+                            */
                             $data[$dateKey->format('Y-m-d')][] = $attendancesProccess;
                         }
                     }

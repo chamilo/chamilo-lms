@@ -273,7 +273,7 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
 
     /**
      * @var ArrayCollection
-     * ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\UserFieldValues", mappedBy="user", orphanRemoval=true, cascade={"persist"})
+     *                      ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\UserFieldValues", mappedBy="user", orphanRemoval=true, cascade={"persist"})
      */
     protected $extraFields;
 
@@ -1496,6 +1496,8 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
     public function setExtraFields($extraFields)
     {
         $this->extraFields = $extraFields;
+
+        return $this;
     }
 
     /**
@@ -2322,6 +2324,11 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
         $this->plainPassword = $password;
 
         return $this;
+    }
+
+    public function getLocked()
+    {
+        return $this->locked;
     }
 
     public function setLocked($boolean)

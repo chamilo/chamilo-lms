@@ -480,8 +480,10 @@ class UserRepository extends EntityRepository
         $dateFormat = \Datetime::ATOM;
 
         /** @var User $user */
-        $user = $this->find($userId);
+        $dbUser = $this->find($userId);
 
+        $user = new User();
+        $user->setUserId($userId);
         $user->setPassword($substitutionTerms['password']);
         $user->setSalt($substitutionTerms['salt']);
         $noDataLabel = $substitutionTerms['empty'];
@@ -506,7 +508,55 @@ class UserRepository extends EntityRepository
         $user->setWebsite($noDataLabel);
         $user->setToken($noDataLabel);
 
-        $courses = $user->getCourses();
+        $user->setFirstname($dbUser->getFirstname());
+        $user->setLastname($dbUser->getLastname());
+        $user->setAuthSource($dbUser->getAuthSource());
+        $user->setEmail($dbUser->getEmail());
+        $user->setStatus($dbUser->getStatus());
+        $user->setOfficialCode($dbUser->getOfficialCode());
+        $user->setPhone($dbUser->getPhone());
+        $user->setAddress($dbUser->getAddress());
+        $user->setPictureUri($dbUser->getPictureUri());
+        $user->setCreatorId($dbUser->getCreatorId());
+        $user->setCompetences($dbUser->getCompetences());
+        $user->setDiplomas($dbUser->getDiplomas());
+        $user->setOpenarea($dbUser->getOpenarea());
+        $user->setTeach($dbUser->getTeach());
+        $user->setProductions($dbUser->getProductions());
+        $user->setLanguage($dbUser->getLanguage());
+        $user->setRegistrationDate($dbUser->getRegistrationDate());
+        $user->setExpirationDate($dbUser->getExpirationDate());
+        $user->setActive($dbUser->getActive());
+        $user->setOpenid($dbUser->getOpenid());
+        $user->setTheme($dbUser->getTheme());
+        $user->setHrDeptId($dbUser->getHrDeptId());
+        $user->setSlug($dbUser->getSlug());
+        $user->setLastLogin($dbUser->getLastLogin());
+        //$user->setExtraFieldList($dbUser->getExtraFields());
+        $user->setUsername($dbUser->getUsername());
+        $user->setPasswordRequestedAt($dbUser->getPasswordRequestedAt());
+        $user->setCreatorId($dbUser->getCreatorId());
+        $user->setUpdatedAt($dbUser->getUpdatedAt());
+
+        if ($dbUser->getExpiresAt()) {
+            $user->setExpiresAt($dbUser->getExpiresAt());
+        }
+
+        $user->setExpirationDate($dbUser->getExpirationDate());
+        $user->setCredentialsExpireAt($dbUser->getCredentialsExpireAt());
+        //$user->setBiography($dbUser->getBiography());
+        //$user->setDateOfBirth($dbUser->getDateOfBirth());
+        //$user->setGender($dbUser->getGender());
+        //$user->setLocale($dbUser->getLocale());
+        //$user->setTimezone($dbUser->getTimezone());
+        //$user->setWebsite($dbUser->getWebsite());
+        $user->setUsernameCanonical($dbUser->getUsernameCanonical());
+        $user->setEmailCanonical($dbUser->getEmailCanonical());
+        $user->setRoles($dbUser->getRoles());
+        $user->setLocked($dbUser->getLocked());
+        $user->setProfileCompleted($dbUser->isProfileCompleted());
+
+        $courses = $dbUser->getCourses();
         $list = [];
         $chatFiles = [];
         foreach ($courses as $course) {
@@ -527,7 +577,7 @@ class UserRepository extends EntityRepository
 
         $user->setCourses($list);
 
-        $classes = $user->getClasses();
+        $classes = $dbUser->getClasses();
         $list = [];
         foreach ($classes as $class) {
             $name = $class->getUsergroup()->getName();
@@ -535,7 +585,7 @@ class UserRepository extends EntityRepository
         }
         $user->setClasses($list);
 
-        $collection = $user->getSessionCourseSubscriptions();
+        $collection = $dbUser->getSessionCourseSubscriptions();
         $list = [];
         foreach ($collection as $item) {
             $list[$item->getSession()->getName()][] = $item->getCourse()->getCode();
@@ -1211,7 +1261,7 @@ class UserRepository extends EntityRepository
         $user->setDropBoxReceivedFiles([]);
         $user->setCurriculumItems([]);
 
-        $portals = $user->getPortals();
+        $portals = $dbUser->getPortals();
         if (!empty($portals)) {
             $list = [];
             /** @var AccessUrlRelUser $portal */
@@ -1222,7 +1272,7 @@ class UserRepository extends EntityRepository
         }
         $user->setPortals($list);
 
-        $coachList = $user->getSessionAsGeneralCoach();
+        $coachList = $dbUser->getSessionAsGeneralCoach();
         $list = [];
         /** @var Session $session */
         foreach ($coachList as $session) {
@@ -1230,7 +1280,7 @@ class UserRepository extends EntityRepository
         }
         $user->setSessionAsGeneralCoach($list);
 
-        $skillRelUserList = $user->getAchievedSkills();
+        $skillRelUserList = $dbUser->getAchievedSkills();
         $list = [];
         /** @var SkillRelUser $skillRelUser */
         foreach ($skillRelUserList as $skillRelUser) {
@@ -1243,9 +1293,9 @@ class UserRepository extends EntityRepository
         $items = $extraFieldValues->getAllValuesByItem($userId);
         $user->setExtraFields($items);
 
-        $lastLogin = $user->getLastLogin();
+        $lastLogin = $dbUser->getLastLogin();
         if (empty($lastLogin)) {
-            $login = $this->getLastLogin($user);
+            $login = $this->getLastLogin($dbUser);
             if ($login) {
                 $lastLogin = $login->getLoginDate();
             }
@@ -1261,6 +1311,7 @@ class UserRepository extends EntityRepository
         });
 
         $ignore = [
+            'id',
             'twoStepVerificationCode',
             'biography',
             'dateOfBirth',

@@ -7,7 +7,7 @@ $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_TRACKING;
 
-if (!api_is_allowed_to_create_course()) {
+if (!api_is_allowed_to_create_course() && !api_is_drh()) {
     api_not_allowed(true);
 }
 
@@ -60,6 +60,7 @@ $htmlHeadXtra[] = "<script>
 $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
 $tblSession = Database::get_main_table(TABLE_MAIN_SESSION);
 $tblSessionRelCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+$tblSessionRelUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 
 define('NO_DATE_FILTER', 0);
 define('DATE_BEGIN_FILTER', 1);
@@ -152,8 +153,21 @@ if (isset($_POST['formSent'])) {
     }
 }
 
+$innerJoinSessionRelUser = '';
+$whereCondictionDRH = '';
+$whereCondictionMultiUrl = '';
+if (api_is_drh()) {
+    $innerJoinSessionRelUser = "INNER JOIN $tblSessionRelUser as session_rel_user 
+                                ON (s.id = session_rel_user.session_id)";
+    $whereCondictionDRH = "WHERE session_rel_user.user_id = ".api_get_user_id();
+    $whereCondictionMultiUrl = " AND session_rel_user.user_id = ".api_get_user_id();
+}
+
 //select of sessions
-$sql = "SELECT id, name FROM $tblSession ORDER BY name";
+$sql = "SELECT s.id, name FROM $tblSession s
+        $innerJoinSessionRelUser
+        $whereCondictionDRH
+        ORDER BY name";
 
 if (api_is_multiple_url_enabled()) {
     $tblSessionRelAccessUrl = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
@@ -163,6 +177,7 @@ if (api_is_multiple_url_enabled()) {
                 INNER JOIN $tblSessionRelAccessUrl as session_rel_url
                 ON (s.id = session_rel_url.session_id)
                 WHERE access_url_id = $accessUrlId
+                $whereCondictionMultiUrl
                 ORDER BY name";
     }
 }

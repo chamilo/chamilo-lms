@@ -53,6 +53,8 @@ class SessionCategory
      */
     protected $dateEnd;
 
+    protected $accessUrlId;
+
     /**
      * @return string
      */

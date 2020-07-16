@@ -513,6 +513,7 @@ class UserRepository extends EntityRepository
         $chatFiles = [];
         foreach ($courses as $course) {
             $list[] = $course->getCourse()->getCode();
+            $course->getCourse()->setToolList(null);
             $courseDir = api_get_path(SYS_COURSE_PATH).$course->getCourse()->getDirectory();
             $documentDir = $courseDir.'/document/chat_files/';
             if (is_dir($documentDir)) {

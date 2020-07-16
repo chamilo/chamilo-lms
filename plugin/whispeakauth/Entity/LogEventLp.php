@@ -72,7 +72,7 @@ class LogEventLp extends LogEvent
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getTypeString()
     {

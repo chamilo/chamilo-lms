@@ -72,7 +72,7 @@ class EnrollmentController extends BaseController
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function displayPage(array $variables)
     {

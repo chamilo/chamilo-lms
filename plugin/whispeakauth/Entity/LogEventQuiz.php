@@ -72,7 +72,7 @@ class LogEventQuiz extends LogEvent
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getTypeString()
     {

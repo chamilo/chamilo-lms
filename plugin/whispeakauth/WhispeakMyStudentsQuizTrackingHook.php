@@ -26,8 +26,6 @@ class WhispeakMyStudentsQuizTrackingHook extends HookObserver implements HookMyS
      * ]
      * </code>.
      *
-     * @param HookMyStudentsQuizTrackingEventInterface $hook
-     *
      * @return array
      */
     public function trackingHeader(HookMyStudentsQuizTrackingEventInterface $hook)
@@ -48,8 +46,6 @@ class WhispeakMyStudentsQuizTrackingHook extends HookObserver implements HookMyS
      *     'attrs' => ['class' => 'text-center text-success'],
      * ]
      * </code>.
-     *
-     * @param HookMyStudentsQuizTrackingEventInterface $hook
      *
      * @throws \Doctrine\ORM\Query\QueryException
      *

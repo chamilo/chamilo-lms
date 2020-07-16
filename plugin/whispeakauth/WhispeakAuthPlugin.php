@@ -282,7 +282,6 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
     }
 
     /**
-     * @param User   $user
      * @param string $uid
      *
      * @throws \Doctrine\ORM\OptimisticLockException
@@ -454,8 +453,7 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
     }
 
     /**
-     * @param int      $questionId
-     * @param Exercise $exercise
+     * @param int $questionId
      *
      * @throws Exception
      *
@@ -680,6 +678,16 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
     }
 
     /**
+     * @return string
+     */
+    public function getApiUrl()
+    {
+        $url = $this->get(self::SETTING_API_URL);
+
+        return trim($url, " \t\n\r \v/").'/';
+    }
+
+    /**
      * Install extra fields for user, learning path and quiz question.
      */
     private function installExtraFields()
@@ -832,15 +840,5 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
         $table = Database::get_main_table('whispeak_log_event');
         $sql = "DROP TABLE IF EXISTS $table";
         Database::query($sql);
-    }
-
-    /**
-     * @return string
-     */
-    public function getApiUrl()
-    {
-        $url = $this->get(self::SETTING_API_URL);
-
-        return trim($url, " \t\n\r \v/").'/';
     }
 }

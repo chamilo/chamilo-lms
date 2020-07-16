@@ -71,7 +71,7 @@ if ($form->validate()) {
 $pageContent = '';
 
 /**
- * @var int $userId
+ * @var int              $userId
  * @var array|LogEvent[] $logEvents
  */
 foreach ($results as $userId => $logEvents) {

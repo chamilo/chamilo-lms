@@ -30,7 +30,7 @@ if ($isEnrollment) {
 }
 
 if ($isAuthentify) {
-    $controller= new AuthenticationController();
+    $controller = new AuthenticationController();
 
     try {
         $controller->ajax();

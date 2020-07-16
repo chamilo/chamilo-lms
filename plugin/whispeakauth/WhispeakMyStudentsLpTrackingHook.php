@@ -18,8 +18,6 @@ class WhispeakMyStudentsLpTrackingHook extends HookObserver implements HookMyStu
     }
 
     /**
-     * @param HookMyStudentsLpTrackingEventInterface $hook
-     *
      * @return array
      */
     public function trackingHeader(HookMyStudentsLpTrackingEventInterface $hook)
@@ -31,8 +29,6 @@ class WhispeakMyStudentsLpTrackingHook extends HookObserver implements HookMyStu
     }
 
     /**
-     * @param HookMyStudentsLpTrackingEventInterface $hook
-     *
      * @throws \Doctrine\ORM\Query\QueryException
      *
      * @return array

@@ -30,7 +30,6 @@ class AuthenticationController extends BaseController
         /** @var array $lpQuestionInfo */
         $lpQuestionInfo = ChamiloSession::read(WhispeakAuthPlugin::SESSION_QUIZ_QUESTION, []);
 
-
         if (ChamiloSession::read(WhispeakAuthPlugin::SESSION_AUTH_PASSWORD, false)) {
             ChamiloSession::erase(WhispeakAuthPlugin::SESSION_AUTH_PASSWORD);
 
@@ -319,7 +318,7 @@ class AuthenticationController extends BaseController
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function displayPage(array $variables)
     {

@@ -286,8 +286,7 @@ class ZoomPlugin extends Plugin
         }
         $userIdSelect->setSelected($registeredUserIds);
 
-
-        return [ $form, $registrants ];
+        return [$form, $registrants];
     }
 
     /**
@@ -878,15 +877,7 @@ class ZoomPlugin extends Plugin
         $path = '/zoom_meeting_recording_file_'.$file->id.'.'.$file->file_type;
         $docId = DocumentManager::addCloudLink($courseInfo, $path, $file->play_url, $name);
         if (!$docId) {
-            throw new Exception(
-                get_lang(
-                    DocumentManager::cloudLinkExists(
-                        $courseInfo,
-                        $path,
-                        $file->play_url
-                    ) ? 'UrlAlreadyExists' : 'ErrorAddCloudLink'
-                )
-            );
+            throw new Exception(get_lang(DocumentManager::cloudLinkExists($courseInfo, $path, $file->play_url) ? 'UrlAlreadyExists' : 'ErrorAddCloudLink'));
         }
     }
 

@@ -27,15 +27,11 @@ abstract class BaseController
         $this->plugin = \WhispeakAuthPlugin::create();
     }
 
-    /**
-     * @param array $variables
-     */
     abstract protected function displayPage(array $variables);
 
     /**
-     * @param \Chamilo\UserBundle\Entity\User $user
-     *
      * @throws \Exception
+     *
      * @return string
      */
     protected function uploadAudioFile(User $user)

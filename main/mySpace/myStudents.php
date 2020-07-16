@@ -1098,7 +1098,6 @@ $content = $tpl->fetch($templateName);
 
 echo $content;
 
-
 $allowAll = api_get_configuration_value('allow_teacher_access_student_skills');
 if ($allowAll) {
     // Show all skills

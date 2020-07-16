@@ -2297,10 +2297,10 @@ class Attendance
     /**
      * Return all course for a student between dates and order by key date (Y-m-d).
      *
-     * @param int        $studentId
-     * @param \DateTime  $startDate
-     * @param \DateTime  $endDate
-     * @param bool       $orderDesc
+     * @param int       $studentId
+     * @param \DateTime $startDate
+     * @param \DateTime $endDate
+     * @param bool      $orderDesc
      *
      * @return array
      */
@@ -2309,7 +2309,7 @@ class Attendance
         DateTime $startDate = null,
         DateTime $endDate = null,
         $orderDesc = true
-    ){
+    ) {
         // Lang variables
         $presentString = get_lang('Present');
         $absentString = get_lang('Absent');
@@ -2412,7 +2412,7 @@ class Attendance
         while ($row = Database::fetch_array($rs, 'ASSOC')) {
             $courseId = $row['c_id'];
             $sessionId = $row['session_id'];
-            $courseItem = api_get_course_info_by_id($courseId);;
+            $courseItem = api_get_course_info_by_id($courseId);
 
             $attenances = $attendanceLib->get_attendances_list(
                 $courseId,

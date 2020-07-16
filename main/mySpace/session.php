@@ -76,6 +76,13 @@ if (api_is_platform_admin(true, true)) {
         );
     }
 
+    if (api_is_drh()) {
+        $menu_items[] = Display::url(
+            Display::return_icon('session.png', get_lang('SessionFilterReport'), [], ICON_SIZE_MEDIUM),
+            api_get_path(WEB_CODE_PATH).'mySpace/session_filter.php'
+        );
+    }
+
     $actionsLeft = '';
     $nb_menu_items = count($menu_items);
     if ($nb_menu_items > 1) {

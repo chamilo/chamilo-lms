@@ -885,6 +885,11 @@ switch ($action) {
                 if (isset($_POST['content_lp'])) {
                     $_SESSION['oLP']->edit_document($_course);
                 }
+                $is_success = true;
+
+                $extraFieldValues = new ExtraFieldValue('lp_item');
+                $extraFieldValues->saveFieldValues($_POST);
+
                 Display::addFlash(Display::return_message(get_lang('Updated')));
                 $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id).'&'.api_get_cidreq();
                 header('Location: '.$url);

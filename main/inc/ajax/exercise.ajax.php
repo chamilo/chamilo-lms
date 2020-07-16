@@ -447,6 +447,18 @@ switch ($action) {
                 exit;
             }
 
+            if (WhispeakAuthPlugin::questionRequireAuthentify($question_id)) {
+                if ($objExercise->type == ONE_PER_PAGE) {
+                    echo 'one_per_page';
+                    break;
+                }
+
+                echo 'ok';
+                break;
+            } else {
+                ChamiloSession::erase(WhispeakAuthPlugin::SESSION_QUIZ_QUESTION);
+            }
+
             // Getting information of the current exercise.
             $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exeId);
             $exercise_id = $exercise_stat_info['exe_exo_id'];

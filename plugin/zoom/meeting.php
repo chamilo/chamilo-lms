@@ -1,7 +1,7 @@
 <?php
 /* For license terms, see /license.txt */
 
-use Chamilo\PluginBundle\Zoom\API\MeetingSettings;
+use Chamilo\PluginBundle\Zoom\MeetingEntity;
 
 if (!isset($returnURL)) {
     exit;
@@ -25,33 +25,34 @@ if (!array_key_exists('meetingId', $_REQUEST)) {
 }
 $plugin = ZoomPlugin::create();
 
-$meeting = $plugin->getMeeting($_REQUEST['meetingId']);
+/** @var MeetingEntity $meeting */
+$meeting = $plugin->getMeetingRepository()->find($_REQUEST['meetingId']);
+if (is_null($meeting)) {
+    throw new Exception('MeetingNotFound');
+}
 
-$tpl = new Template($meeting->id);
+$tpl = new Template($meeting->getId());
 
-if ($plugin->userIsConferenceManager()) {
+if ($plugin->userIsConferenceManager($meeting)) {
     // user can edit, start and delete meeting
     $tpl->assign('isConferenceManager', true);
     $tpl->assign('editMeetingForm', $plugin->getEditMeetingForm($meeting)->returnForm());
     $tpl->assign('deleteMeetingForm', $plugin->getDeleteMeetingForm($meeting, $returnURL)->returnForm());
-    if ($plugin->get('enableParticipantRegistration')
-        && MeetingSettings::APPROVAL_TYPE_NO_REGISTRATION_REQUIRED != $meeting->settings->approval_type) {
-        list($registerParticipantForm, $registrants) = $plugin->getRegisterParticipantForm($meeting);
-        $tpl->assign('registerParticipantForm', $registerParticipantForm->returnForm());
-        $tpl->assign('registrants', $registrants); // FIXME cache
+    if ($plugin->get('enableParticipantRegistration') && $meeting->requiresRegistration()) {
+        $tpl->assign('registerParticipantForm', $plugin->getRegisterParticipantForm($meeting)->returnForm());
+        $tpl->assign('registrants', $meeting->getRegistrants());
     }
     if ($plugin->get('enableCloudRecording')
-        && 'cloud' === $meeting->settings->auto_recording
+        && $meeting->hasCloudAutoRecordingEnabled()
         // && 'finished' === $meeting->status
     ) {
-        list($fileForm, $recordings) = $plugin->getFileForm($meeting);
-        $tpl->assign('fileForm', $fileForm->returnForm());
-        $tpl->assign('recordings', $recordings);
+        $tpl->assign('fileForm', $plugin->getFileForm($meeting)->returnForm());
+        $tpl->assign('recordings', $meeting->getRecordings());
     }
-} elseif (MeetingSettings::APPROVAL_TYPE_NO_REGISTRATION_REQUIRED != $meeting->settings->approval_type) {
+} elseif ($meeting->requiresRegistration()) {
     $userId = api_get_user_id();
     try {
-        foreach ($plugin->getRegistrants($meeting) as $registrant) {
+        foreach ($meeting->getRegistrants() as $registrant) {
             if ($registrant->userId == $userId) {
                 $tpl->assign('currentUserJoinURL', $registrant->join_url);
                 break;

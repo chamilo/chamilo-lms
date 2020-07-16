@@ -57,15 +57,13 @@ class Meeting
     /**
      * Creates a meeting on the server and returns the resulting MeetingInfoGet.
      *
-     * @param Client $client an API client
-     *
      * @throws Exception describing the error (message and code)
      *
      * @return MeetingInfoGet meeting
      */
-    public function create($client)
+    public function create()
     {
-        return MeetingInfoGet::fromJson($client->send('POST', 'users/me/meetings', [], $this));
+        return MeetingInfoGet::fromJson(Client::getInstance()->send('POST', 'users/me/meetings', [], $this));
     }
 
     /**
@@ -74,11 +72,9 @@ class Meeting
      * @param string $topic
      * @param int    $type
      *
-     * @throws Exception
-     *
      * @return static
      */
-    protected static function fromTopicAndType($topic, $type = self::TYPE_SCHEDULED)
+    public static function fromTopicAndType($topic, $type = self::TYPE_SCHEDULED)
     {
         $instance = new static();
         $instance->topic = $topic;

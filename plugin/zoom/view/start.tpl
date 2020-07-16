@@ -21,14 +21,14 @@
         <td>{{ meeting.formattedDuration }}</td>
         <!-- td>{{ meeting.typeName }}</td -->
         <td>
-            <strong>{{ meeting.topic }}</strong>
-            <p class="small">{{ meeting.agenda|nl2br }}</p>
+            <strong>{{ meeting.meetingInfoGet.topic }}</strong>
+            <p class="small">{{ meeting.meetingInfoGet.agenda|nl2br }}</p>
         </td>
         <td>
             <a class="btn" href="meeting_from_start.php?meetingId={{ meeting.id }}">
                 {{ 'Details'|get_lang }}
             </a>
-            <a class="btn" href="{{ meeting.join_url }}">
+            <a class="btn" href="{{ meeting.meetingInfoGet.join_url }}">
                 {{ 'Join'|get_lang }}
             </a>
         </td>

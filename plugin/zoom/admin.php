@@ -16,14 +16,17 @@ $plugin = ZoomPlugin::create();
 $this_section = SECTION_PLATFORM_ADMIN;
 
 $form = $plugin->getAdminSearchForm();
-$startDate = new DateTime($form->getElement('start')->getValue());
-$endDate = new DateTime($form->getElement('end')->getValue());
-$type = $form->getElement('type')->getValue();
+$startDate = new DateTime($form->getSubmitValue('start'));
+$endDate = new DateTime($form->getSubmitValue('end'));
+$reloadRecordingLists = $form->getSubmitValue('reloadRecordingLists');
+if ($reloadRecordingLists) {
+    $plugin->reloadPeriodRecordings($startDate, $endDate);
+}
 
 $tpl = new Template($tool_name);
-$tpl->assign('meetings', $plugin->getPeriodMeetings($type, $startDate, $endDate));
+$tpl->assign('meetings', $plugin->getMeetingRepository()->periodMeetings($startDate, $endDate));
 if ($plugin->get('enableCloudRecording')) {
-    $tpl->assign('recordings', $plugin->getRecordings($startDate, $endDate));
+    $tpl->assign('recordings', $plugin->getRecordingRepository()->getPeriodRecordings($startDate, $endDate));
 }
 $tpl->assign('search_form', $form->returnForm());
 $tpl->assign('content', $tpl->fetch('zoom/view/admin.tpl'));

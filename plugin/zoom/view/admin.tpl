@@ -4,6 +4,7 @@
     <thead>
         <tr>
             <th>{{ 'StartTime'|get_lang }}</th>
+            <th>{{ 'User'|get_lang }}</th>
             <th>{{ 'Course'|get_lang }}</th>
             <th>{{ 'Session'|get_lang }}</th>
             <th>{{ 'Topic'|get_lang }}</th>
@@ -17,13 +18,14 @@
         {% for meeting in meetings %}
             <tr>
                 <td>{{ meeting.formattedStartTime }}</td>
-                <td>{{ meeting.course ? meeting.course.title : '-' }}</td>
-                <td>{{ meeting.session ? meeting.session.name : '-' }}</td>
-                <td>{{ meeting.topic }}</td>
+                <td>{{ meeting.user ? meeting.user : '-' }}</td>
+                <td>{{ meeting.course ? meeting.course : '-' }}</td>
+                <td>{{ meeting.session ? meeting.session : '-' }}</td>
+                <td>{{ meeting.meetingInfoGet.topic }}</td>
                 {% if recordings %}
                 <td>
                     {% for recording in recordings %}
-                    {% if recording.id == meeting.id %}
+                    {% if recording.recordingMeeting.id == meeting.id %}
                     <dl>
                         <dt>
                             {{ recording.formattedStartTime }}
@@ -31,10 +33,10 @@
                         </dt>
                         <dd>
                             <ul>
-                                {% for file in recording.recording_files %}
+                                {% for file in recording.recordingMeeting.recording_files %}
                                 <li>
                                     {{ file.recording_type }}.{{ file.file_type }}
-                                    ({{ file.formattedFileSize }})
+                                    ({{ file.file_size }})
                                 </li>
                                 {% endfor %}
                             </ul>
@@ -53,3 +55,5 @@
         {% endfor %}
     </tbody>
 </table>
+
+{{ schedule_form }}

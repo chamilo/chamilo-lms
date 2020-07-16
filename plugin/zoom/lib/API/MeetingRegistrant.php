@@ -77,14 +77,19 @@ class MeetingRegistrant
     /**
      * @param string $email
      * @param string $firstName
+     * @param string $lastName
      *
      * @return MeetingRegistrant
      */
-    public static function fromEmailAndFirstName($email, $firstName)
+    public static function fromEmailAndFirstName($email, $firstName, $lastName = null)
     {
         $instance = new static();
         $instance->first_name = $firstName;
         $instance->email = $email;
+        $instance->first_name = $firstName;
+        if (!is_null($lastName)) {
+            $instance->last_name = $lastName;
+        }
 
         return $instance;
     }

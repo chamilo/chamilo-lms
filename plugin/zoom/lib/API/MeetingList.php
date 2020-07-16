@@ -35,16 +35,15 @@ class MeetingList
     /**
      * Retrieves all meetings of a type.
      *
-     * @param Client $client
      * @param int    $type   TYPE_SCHEDULED, TYPE_LIVE or TYPE_UPCOMING
      *
      * @throws Exception
      *
      * @return MeetingListItem[] all meetings
      */
-    public static function loadMeetings($client, $type)
+    public static function loadMeetings($type)
     {
-        return static::loadItems('meetings', $client, 'users/me/meetings', ['type' => $type]);
+        return static::loadItems('meetings', 'users/me/meetings', ['type' => $type]);
     }
 
     /**

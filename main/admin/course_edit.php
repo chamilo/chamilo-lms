@@ -27,6 +27,7 @@ if (empty($courseId)) {
 }
 
 $courseInfo = api_get_course_info_by_id($courseId);
+$courseCode = $courseInfo['code'];
 
 if (empty($courseInfo)) {
     api_not_allowed(true);
@@ -497,6 +498,12 @@ echo Display::url(
     $courseInfo['course_public_url'],
     ['target' => '_blank']
 );
+
+echo Display::url(
+    Display::return_icon('info2.png', get_lang('Info')),
+    api_get_path(WEB_CODE_PATH)."admin/course_information.php?code=$courseCode"
+);
+
 echo '</div>';
 
 echo "<script>

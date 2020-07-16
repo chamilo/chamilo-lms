@@ -1,14 +1,13 @@
 <?php
-/* For licensing terms, see /license.txt */
 
-/**
- * This tool allows platform admins to anonymize users by uploading a text file, with one username per line.
- *
- * @package chamilo.admin
- */
+/* For licensing terms, see /license.txt */
 
 use Doctrine\Common\Collections\Criteria;
 
+/**
+ * This tool allows platform admins to anonymize users by uploading a text file,
+ * with one username per line.
+ */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -36,6 +35,8 @@ $usernameTextarea = $step2Form->addTextarea(
         'readonly' => 1,
     ]
 );
+$anonymizedSessions = $step2Form->addCheckBox('anonymize_sessions', null, get_lang('AnonymizeUserSessions'));
+
 $step2Form->addButtonUpdate(get_lang('Anonymize'));
 
 if ($step1Form->validate() && $usernameListFile->isUploadedFile()) {
@@ -107,17 +108,42 @@ if ($step1Form->validate() && $usernameListFile->isUploadedFile()) {
             Criteria::expr()->in('username', $usernames)
         )
     );
+
+    $anonymizedSessionsValue = $anonymizedSessions->getValue();
+
     if (count($users) === count($usernames)) {
         printf('<p>'.get_lang('AnonymizingXUsers')."</p>\n", count($users));
         $anonymized = [];
         $errors = [];
+        $tableSession = Database::get_main_table(TABLE_MAIN_SESSION);
         foreach ($users as $user) {
             $username = $user->getUsername();
             $userId = $user->getId();
             $name = api_get_person_name($user->getFirstname(), $user->getLastname());
-            echo "<p>$username ($name, id=$userId):\n";
+            echo "<h4>$username ($name, id= $userId) </h4>";
             try {
                 if (UserManager::anonymize($userId)) {
+                    if ($anonymizedSessionsValue) {
+                        $sessions = SessionManager::getSessionsFollowedByUser($userId);
+                        if ($sessions) {
+                            echo '<p> '.get_lang('Sessions').' </p>';
+                            foreach ($sessions as $session) {
+                                $sessionId = $session['id'];
+                                $sessionTitle = $session['name'];
+                                $usersCount = SessionManager::get_users_by_session($sessionId, null, true);
+                                echo '<p> '.$sessionTitle.' ('.$sessionId.') - '.get_lang('Students').': '.$usersCount.'</p>';
+                                if (1 === $usersCount) {
+                                    $uniqueId = uniqid('anon_session', true);
+                                    echo '<p> '.get_lang('Rename').': '.$sessionTitle.' -> '.$uniqueId.'</p>';
+                                    $sql = "UPDATE $tableSession SET name = '$uniqueId' WHERE id = $sessionId";
+                                    Database::query($sql);
+                                } else {
+                                    echo '<p> '.sprintf(get_lang('SessionXSkipped'), $sessionTitle).'</p>';
+                                }
+                            }
+                        }
+                    }
+
                     echo get_lang('Done');
                     $anonymized[] = $username;
                 } else {
@@ -130,6 +156,7 @@ if ($step1Form->validate() && $usernameListFile->isUploadedFile()) {
             }
             echo "</p>\n";
         }
+
         if (empty($error)) {
             printf('<p>'.get_lang('AllXUsersWereAnonymized').'</p>', count($users));
         } else {
@@ -141,7 +168,7 @@ if ($step1Form->validate() && $usernameListFile->isUploadedFile()) {
                 .'<pre>%s</pre></p>',
                 count($users),
                 count($errors),
-                join("\n", $errors)
+                implode("\n", $errors)
             );
         }
     } else {

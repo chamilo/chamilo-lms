@@ -73,23 +73,32 @@ if ($show_headers) {
     ];
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Result')];
     $this_section = SECTION_COURSES;
-    Display::display_header();
 } else {
     $htmlHeadXtra[] = '<style>
         body { background: none;}
     </style>';
-    Display::display_reduced_header();
 }
 
 $message = Session::read('attempt_remaining');
 Session::erase('attempt_remaining');
 
+ob_start();
 ExerciseLib::displayQuestionListByAttempt(
     $objExercise,
     $id,
     false,
     $message
 );
+$pageContent = ob_get_contents();
+ob_end_clean();
+
+$template = new Template('', $show_headers, $show_headers);
+$template->assign('page_content', $pageContent);
+$layout = $template->fetch(
+    $template->get_template('exercise/result.tpl')
+);
+$template->assign('content', $layout);
+$template->display_one_col_template();
 
 if ($show_headers) {
     Display::display_footer();

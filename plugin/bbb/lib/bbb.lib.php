@@ -129,13 +129,15 @@ class bbb
                 $urlWithProtocol = $bbb_host;
             } else {
                 // We assume it's an http, if user wants to use https, the host *must* include the protocol.
-                $urlWithProtocol = 'http://'.$bbb_host;
+                $this->protocol = 'http://';
+                $urlWithProtocol = $this->protocol.$bbb_host;
             }
 
             // Setting BBB api
             define('CONFIG_SECURITY_SALT', $this->salt);
             define('CONFIG_SERVER_URL_WITH_PROTOCOL', $urlWithProtocol);
             define('CONFIG_SERVER_BASE_URL', $this->url);
+            define('CONFIG_SERVER_PROTOCOL', $this->protocol);
 
             $this->api = new BigBlueButtonBN();
             $this->pluginEnabled = true;
@@ -369,7 +371,7 @@ class bbb
         $params['moderator_pw'] = isset($params['moderator_pw']) ? $params['moderator_pw'] : $this->getModMeetingPassword();
         $moderatorPassword = $params['moderator_pw'];
 
-        $params['record'] = api_get_course_plugin_setting('bbb', 'big_blue_button_record_and_store') == 1 ? true : false;
+        $params['record'] = api_get_course_plugin_setting('bbb', 'big_blue_button_record_and_store') == 1;
         $max = api_get_course_plugin_setting('bbb', 'big_blue_button_max_students_allowed');
         $max = isset($max) ? $max : -1;
 
@@ -782,7 +784,7 @@ class bbb
                 ],
             ]
         );
-        
+
         foreach ($meetingData as $roomItem) {
             $inAt = $roomItem['in_at'];
             $outAt = $roomItem['out_at'];

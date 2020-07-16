@@ -1672,7 +1672,20 @@ function display_configuration_parameter(
     if ($installType == INSTALL_TYPE_UPDATE && $displayWhenUpdate) {
         $html .= '<input type="hidden" name="'.$formFieldName.'" value="'.api_htmlentities($parameterValue, ENT_QUOTES).'" />'.$parameterValue;
     } else {
-        $html .= '<div class="col-sm-6"><input class="form-control" type="text" size="'.FORM_FIELD_DISPLAY_LENGTH.'" maxlength="'.MAX_FORM_FIELD_LENGTH.'" name="'.$formFieldName.'" value="'.api_htmlentities($parameterValue, ENT_QUOTES).'" />'."</div>";
+        $hiddenPasswordClass = '';
+        $eyeForPassword = '';
+        $inputType = 'text';
+        if ($formFieldName == 'passForm') {
+            /* show/hide admin password in step 5*/
+            $hiddenPasswordClass = 'inputShowPwd';
+            $inputType = 'password';
+            $eyeForPassword =
+                '<input type="checkbox" id="showPassword" class="hidden">'.'<label for="showPassword">'.
+                Display::returnFontAwesomeIcon('eye', null, true, 'showPasswordEye').
+                '</label> ';
+        }
+        $html .= '<div class="col-sm-6 '.$hiddenPasswordClass.'"><input class="form-control" type="'.$inputType.'" size="'.FORM_FIELD_DISPLAY_LENGTH.'" maxlength="'.MAX_FORM_FIELD_LENGTH.'" name="'.$formFieldName.'" value="'.api_htmlentities($parameterValue,
+                ENT_QUOTES).'" />'.$eyeForPassword."</div>";
     }
     $html .= "</div>";
 

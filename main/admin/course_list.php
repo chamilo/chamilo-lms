@@ -615,7 +615,10 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
         ['delete_courses' => get_lang('DeleteCourse')],
         'course'
     );
-    $content .= $table->return_table();
+
+    $tab = CourseManager::getCourseListTabs('simple');
+
+    $content .= $tab.$table->return_table();
 }
 
 $htmlHeadXtra[] = '

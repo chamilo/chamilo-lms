@@ -816,12 +816,15 @@ class Display
     }
 
     /**
-     * This public function returns the htmlcode for an icon.
+     * This public function returns the HTML code for an icon.
      *
-     * @param string   The filename of the file (in the main/img/ folder
-     * @param string   The alt text (probably a language variable)
-     * @param array    Additional attributes (for instance height, width, onclick, ...)
-     * @param int  The wanted width of the icon (to be looked for in the corresponding img/icons/ folder)
+     * @param string $image                 The filename of the file (in the main/img/ folder
+     * @param string $alt_text              The alt text (probably a language variable)
+     * @param array  $additional_attributes Additional attributes (for instance height, width, onclick, ...)
+     * @param int    $size                  The wanted width of the icon (to be looked for in the corresponding img/icons/ folder)
+     * @param bool   $show_text             Whether to show the text next (usually under) the icon
+     * @param bool   $return_only_path      Whether we only want the path to the icon or the whole HTML tag
+     * @param bool   $loadThemeIcon         Whether we want to allow an overloaded theme icon, if it exists, to replace the default icon
      *
      * @return string An HTML string of the right <img> tag
      *
@@ -925,7 +928,7 @@ class Display
     }
 
     /**
-     * Returns the htmlcode for an image.
+     * Returns the HTML code for an image.
      *
      * @param string $image_path            the filename of the file (in the main/img/ folder
      * @param string $alt_text              the alt text (probably a language variable)

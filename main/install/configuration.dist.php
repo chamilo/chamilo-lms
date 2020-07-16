@@ -1598,6 +1598,9 @@ $_configuration['auth_password_links'] = [
 // Add teachers column in course list.
 // $_configuration['add_teachers_in_course_list'] = false;
 
+// Allow teachers and admins to see students as friends on social network
+// $_configuration['social_make_teachers_friend_all'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

@@ -105,6 +105,8 @@ switch ($action) {
                 );
             }
         }
+        header('Location: '.api_get_self().'?'.api_get_cidreq().'&id='.$workId);
+        exit;
         break;
     case 'delete_correction':
         $result = get_work_user_list(null, null, null, null, $workId);
@@ -121,7 +123,6 @@ switch ($action) {
         exit;
         break;
     case 'make_visible':
-        /* Visible */
         if ($is_allowed_to_edit) {
             if (!empty($itemId)) {
                 if (isset($itemId) && $itemId == 'all') {
@@ -133,9 +134,10 @@ switch ($action) {
                 }
             }
         }
+        header('Location: '.api_get_self().'?'.api_get_cidreq().'&id='.$workId);
+        exit;
         break;
     case 'make_invisible':
-        /* Invisible */
         if (!empty($itemId)) {
             if (isset($itemId) && $itemId == 'all') {
             } else {
@@ -145,6 +147,8 @@ switch ($action) {
                 );
             }
         }
+        header('Location: '.api_get_self().'?'.api_get_cidreq().'&id='.$workId);
+        exit;
         break;
     case 'export_pdf':
         exportAllStudentWorkFromPublication(

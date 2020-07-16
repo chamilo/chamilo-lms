@@ -35,6 +35,7 @@ class EnrollmentController extends BaseController
         \ChamiloSession::write(\WhispeakAuthPlugin::SESSION_SENTENCE_TEXT, $response['token']);
 
         $this->displayPage(
+            true,
             [
                 'action' => 'enrollment',
                 'sample_text' => $response['text'],
@@ -74,7 +75,7 @@ class EnrollmentController extends BaseController
     /**
      * {@inheritdoc}
      */
-    protected function displayPage(array $variables)
+    protected function displayPage($isFullPage, array $variables)
     {
         global $htmlHeadXtra;
 

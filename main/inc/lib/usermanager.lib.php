@@ -1774,10 +1774,13 @@ class UserManager
             // into ASCII letters in order they not to be totally removed.
             // 2. Applying the strict purifier.
             // 3. Length limitation.
-            $return = api_get_setting('login_is_email') === 'true' ? substr(preg_replace(USERNAME_PURIFIER_MAIL, '', $username), 0, USERNAME_MAX_LENGTH) : substr(preg_replace(USERNAME_PURIFIER, '', $username), 0, USERNAME_MAX_LENGTH);
-            $return = URLify::transliterate($return);
+            if ('true' === api_get_setting('login_is_email')) {
+                $return = substr(preg_replace(USERNAME_PURIFIER_MAIL, '', $username), 0, USERNAME_MAX_LENGTH);
+            } else {
+                $return = substr(preg_replace(USERNAME_PURIFIER, '', $username), 0, USERNAME_MAX_LENGTH);
+            }
 
-            return $return;
+            return URLify::transliterate($return);
         }
 
         // 1. Applying the shallow purifier.

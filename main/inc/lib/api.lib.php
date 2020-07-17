@@ -6558,8 +6558,9 @@ function api_get_current_access_url_id()
 {
     static $id;
     if (!empty($id)) {
-        return $id;
+        return (int) $id;
     }
+
     if (!api_get_multiple_access_url()) {
         // If the feature is not enabled, assume 1 and return before querying
         // the database

@@ -407,9 +407,10 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
     /**
      * Check if the WhispeakAuth plugin is installed and enabled.
      *
+     * @param   bool    $checkEnabled   Check if, additionnally to being installed, the plugin is enabled
      * @return bool
      */
-    public function isEnabled()
+    public function isEnabled($checkEnabled = false)
     {
         return parent::isEnabled() && 'true' === api_get_plugin_setting('whispeakauth', self::SETTING_ENABLE);
     }

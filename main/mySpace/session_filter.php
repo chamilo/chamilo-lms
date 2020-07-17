@@ -142,7 +142,7 @@ if (isset($_POST['formSent'])) {
                         break;
                     case ExtraField::FIELD_TYPE_RADIO:
                         $valueRadio = $_POST['extra_'.$field['variable']]['extra_'.$field['variable']];
-                        if ($extraFieldValueData['value'] != $resultRadio) {
+                        if ($extraFieldValueData['value'] != $valueRadio) {
                             unset($certificateList[$key]);
                         }
                         break;
@@ -155,7 +155,17 @@ if (isset($_POST['formSent'])) {
             }
         }
     }
-    $urlParam = http_build_query($_POST);
+
+    $params = [
+            'session_id' => (int) $_POST['session_id'],
+            'date_begin' => Security::remove_XSS($_POST['date_begin']),
+            'date_end' => Security::remove_XSS($_POST['date_end']),
+    ];
+
+    foreach ($filterCheckList as $field) {
+        $params['extra_'.$field['variable']] = Security::remove_XSS($_POST['extra_'.$field['variable']]);
+    }
+    $urlParam = http_build_query($params);
 }
 
 $htmlHeadXtra[] = "<script>

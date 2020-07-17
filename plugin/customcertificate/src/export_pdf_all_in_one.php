@@ -145,12 +145,12 @@ foreach ($result as $value) {
                 $value['user_id'],
                 $fieldId
             );
-            
+
             if (empty($extraFieldValueData)) {
                 unset($certificateList[$key]);
                 break;
             }
-            
+
             switch ($field['field_type']) {
                 case ExtraField::FIELD_TYPE_TEXT:
                 case ExtraField::FIELD_TYPE_ALPHANUMERIC:

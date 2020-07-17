@@ -104,6 +104,7 @@ class AuthenticationController extends BaseController
         }
 
         $this->displayPage(
+            $showFullPage,
             [
                 'show_form' => $showForm,
                 'sample_text' => $response['text'],
@@ -320,7 +321,7 @@ class AuthenticationController extends BaseController
     /**
      * {@inheritdoc}
      */
-    protected function displayPage(array $variables)
+    protected function displayPage($isFullPage, array $variables)
     {
         global $htmlHeadXtra;
 
@@ -329,7 +330,7 @@ class AuthenticationController extends BaseController
 
         $pageTitle = $this->plugin->get_title();
 
-        $template = new \Template($pageTitle);
+        $template = new \Template($pageTitle, $isFullPage, $isFullPage);
 
         foreach ($variables as $key => $value) {
             $template->assign($key, $value);

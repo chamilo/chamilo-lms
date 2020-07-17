@@ -2294,7 +2294,7 @@ class Event
 
         if (Tracking::minimumTimeAvailable($sessionId, $courseId)) {
             $workId = (int) $workId;
-
+            $uniqueId = time();
             $logInfo = [
                 'c_id' => $courseId,
                 'session_id' => $sessionId,
@@ -2303,6 +2303,7 @@ class Event
                 'action' => 'add_work_start_'.$workId,
                 'action_details' => $virtualTime,
                 'user_id' => $userId,
+                'current_id' => $uniqueId,
             ];
             self::registerLog($logInfo);
 
@@ -2314,6 +2315,7 @@ class Event
                 'action' => 'add_work_end_'.$workId,
                 'action_details' => $virtualTime,
                 'user_id' => $userId,
+                'current_id' => $uniqueId,
             ];
             self::registerLog($logInfo);
         }
@@ -2555,7 +2557,7 @@ class Event
         $logInfo['login_as'] = $loginAs;
         $logInfo['info'] = !empty($logInfo['info']) ? $logInfo['info'] : '';
         $logInfo['url'] = $_SERVER['REQUEST_URI'];
-        $logInfo['current_id'] = Session::read('last_id', 0);
+        $logInfo['current_id'] = isset($logInfo['current_id']) ? $logInfo['current_id'] : Session::read('last_id', 0);
 
         $id = Database::insert('track_e_access_complete', $logInfo);
         if ($id && empty($logInfo['current_id'])) {

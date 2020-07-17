@@ -27,7 +27,12 @@ abstract class BaseController
         $this->plugin = \WhispeakAuthPlugin::create();
     }
 
-    abstract protected function displayPage(array $variables);
+    /**
+     * @param bool $isFullPage
+     *
+     * @return mixed
+     */
+    abstract protected function displayPage($isFullPage, array $variables);
 
     /**
      * @throws \Exception

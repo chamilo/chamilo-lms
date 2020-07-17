@@ -73,6 +73,18 @@ function validate_data($users, $checkUniqueEmail = false)
                 $user['message'] .= Display::return_message(get_lang('UserNameNotAvailable'), 'warning');
                 $user['has_error'] = true;
             }
+
+            if ('true' === api_get_setting('login_is_email')) {
+                if (false === api_valid_email($username)) {
+                    $user['message'] .= Display::return_message(get_lang('PleaseEnterValidEmail'), 'warning');
+                    $user['has_error'] = true;
+                }
+            } else {
+                if (!UserManager::is_username_valid($username)) {
+                    $user['message'] .= Display::return_message(get_lang('UsernameWrong'), 'warning');
+                    $user['has_error'] = true;
+                }
+            }
         }
 
         if (isset($user['Email'])) {

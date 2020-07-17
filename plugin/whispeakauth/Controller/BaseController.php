@@ -28,8 +28,7 @@ abstract class BaseController
     }
 
     /**
-     * @param bool  $isFullPage
-     * @param array $variables
+     * @param bool $isFullPage
      *
      * @return mixed
      */

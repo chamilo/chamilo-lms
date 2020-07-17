@@ -11,7 +11,8 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityRepository;
 
 /**
- * Class RecordingEntityRepository
+ * Class RecordingEntityRepository.
+ *
  * @package Chamilo\PluginBundle\Zoom
  */
 class RecordingEntityRepository extends EntityRepository
@@ -26,6 +27,7 @@ class RecordingEntityRepository extends EntityRepository
                 $matching[] = $candidate;
             }
         }
+
         return $matching;
     }
 
@@ -33,6 +35,7 @@ class RecordingEntityRepository extends EntityRepository
      * Returns a user's meeting recordings.
      *
      * @param User $user
+     *
      * @return ArrayCollection|Collection|RecordingEntity[]
      */
     public function userRecordings($user)

@@ -34,7 +34,7 @@ class MeetingInfoGet extends MeetingInfo
     /**
      * Retrieves a meeting from its numeric identifier.
      *
-     * @param int    $id
+     * @param int $id
      *
      * @throws Exception
      *

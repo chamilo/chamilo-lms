@@ -30,7 +30,7 @@ class MeetingInstances
     /**
      * Retrieves a meeting's instances.
      *
-     * @param int    $meetingId
+     * @param int $meetingId
      *
      * @throws Exception
      *

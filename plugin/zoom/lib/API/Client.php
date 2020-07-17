@@ -29,16 +29,6 @@ abstract class Client
     }
 
     /**
-     * Registers an initialized Client.
-     *
-     * @param Client $instance
-     */
-    protected static function register($instance)
-    {
-        self::$instance = $instance;
-    }
-
-    /**
      * Sends a Zoom API-compliant HTTP request and retrieves the response.
      *
      * On success, returns the body of the response
@@ -54,4 +44,14 @@ abstract class Client
      * @return string response body (not json-decoded)
      */
     abstract public function send($httpMethod, $relativePath, $parameters = [], $requestBody = null);
+
+    /**
+     * Registers an initialized Client.
+     *
+     * @param Client $instance
+     */
+    protected static function register($instance)
+    {
+        self::$instance = $instance;
+    }
 }

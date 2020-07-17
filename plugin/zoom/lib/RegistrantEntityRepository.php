@@ -9,7 +9,8 @@ use DateTime;
 use Doctrine\ORM\EntityRepository;
 
 /**
- * Class RegistrantEntityRepository
+ * Class RegistrantEntityRepository.
+ *
  * @package Chamilo\PluginBundle\Zoom
  */
 class RegistrantEntityRepository extends EntityRepository

@@ -30,7 +30,7 @@ class MeetingRegistrantList
     /**
      * Retrieves all registrant for a meeting.
      *
-     * @param int    $meetingId
+     * @param int $meetingId
      *
      * @throws Exception
      *

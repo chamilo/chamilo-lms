@@ -31,7 +31,6 @@ if (array_key_exists('meetingId', $_REQUEST)) {
             $plugin->getUserMeetingURL($meeting),
             get_lang('JoinMeetingAsMyself')
         );
-
     } catch (Exception $exception) {
         Display::addFlash(
             Display::return_message($exception->getMessage(), 'error')

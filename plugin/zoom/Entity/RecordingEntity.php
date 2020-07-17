@@ -13,6 +13,7 @@ use Exception;
 
 /**
  * Class RecordingEntity.
+ *
  * @package Chamilo\PluginBundle\Zoom
  * @ORM\Entity(repositoryClass="Chamilo\PluginBundle\Zoom\RecordingEntityRepository")
  * @ORM\Table(
@@ -25,6 +26,18 @@ use Exception;
  */
 class RecordingEntity
 {
+    /** @var DateTime */
+    public $startDateTime;
+
+    /** @var string */
+    public $formattedStartTime;
+
+    /** @var DateInterval */
+    public $durationInterval;
+
+    /** @var string */
+    public $formattedDuration;
+
     /**
      * @var string
      * @ORM\Column(type="string")
@@ -50,18 +63,6 @@ class RecordingEntity
 
     /** @var RecordingMeeting */
     private $recordingMeeting;
-
-    /** @var DateTime */
-    public $startDateTime;
-
-    /** @var string */
-    public $formattedStartTime;
-
-    /** @var DateInterval */
-    public $durationInterval;
-
-    /** @var string */
-    public $formattedDuration;
 
     /**
      * @param $name
@@ -96,9 +97,9 @@ class RecordingEntity
     }
 
     /**
-     * @return RecordingMeeting
-     *
      * @throws Exception
+     *
+     * @return RecordingMeeting
      */
     public function getRecordingMeeting()
     {
@@ -134,7 +135,7 @@ class RecordingEntity
         }
         if (is_null($this->meeting)) {
             $this->meeting = Database::getManager()->getRepository(MeetingEntity::class)->find($recordingMeeting->id);
-            // $this->meeting remains null when the remote RecordingMeeting refers to a deleted meeting
+        // $this->meeting remains null when the remote RecordingMeeting refers to a deleted meeting
         } elseif ($this->meeting->getId() != $recordingMeeting->id) {
             throw new Exception('The RecordingEntity meeting id differs from the RecordingMeeting meeting id');
         }

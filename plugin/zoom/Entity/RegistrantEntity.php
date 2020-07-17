@@ -12,6 +12,7 @@ use Exception;
 
 /**
  * Class RegistrantEntity.
+ *
  * @package Chamilo\PluginBundle\Zoom
  * @ORM\Entity(repositoryClass="Chamilo\PluginBundle\Zoom\RegistrantEntityRepository")
  * @ORM\Table(
@@ -25,6 +26,9 @@ use Exception;
  */
 class RegistrantEntity
 {
+    /** @var string */
+    public $fullName;
+
     /**
      * @var string
      * @ORM\Column(type="string")
@@ -78,9 +82,6 @@ class RegistrantEntity
     /** @var MeetingRegistrantListItem */
     private $meetingRegistrantListItem;
 
-    /** @var string */
-    public $fullName;
-
     /**
      * @return string
      */
@@ -106,9 +107,9 @@ class RegistrantEntity
     }
 
     /**
-     * @return MeetingRegistrantListItem
-     *
      * @throws Exception
+     *
+     * @return MeetingRegistrantListItem
      */
     public function getMeetingRegistrantListItem()
     {
@@ -116,9 +117,9 @@ class RegistrantEntity
     }
 
     /**
-     * @return CreatedRegistration
-     *
      * @throws Exception
+     *
+     * @return CreatedRegistration
      */
     public function getCreatedRegistration()
     {
@@ -126,9 +127,9 @@ class RegistrantEntity
     }
 
     /**
-     * @return MeetingRegistrant
-     *
      * @throws Exception
+     *
+     * @return MeetingRegistrant
      */
     public function getMeetingRegistrant()
     {
@@ -214,6 +215,7 @@ class RegistrantEntity
 
     /**
      * @ORM\PostLoad
+     *
      * @throws Exception
      */
     public function postLoad()

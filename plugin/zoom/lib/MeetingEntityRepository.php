@@ -13,7 +13,8 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityRepository;
 
 /**
- * Class MeetingEntityRepository
+ * Class MeetingEntityRepository.
+ *
  * @package Chamilo\PluginBundle\Zoom
  */
 class MeetingEntityRepository extends EntityRepository
@@ -36,6 +37,7 @@ class MeetingEntityRepository extends EntityRepository
                 $matching[] = $candidate;
             }
         }
+
         return $matching;
     }
 
@@ -70,6 +72,7 @@ class MeetingEntityRepository extends EntityRepository
      * Returns either a user's meetings or all user meetings.
      *
      * @param User|null $user
+     *
      * @return ArrayCollection|Collection|MeetingEntity[]
      */
     public function userMeetings($user = null)
@@ -88,6 +91,7 @@ class MeetingEntityRepository extends EntityRepository
 
     /**
      * @param User|null $user
+     *
      * @return ArrayCollection|Collection|MeetingEntity[]
      */
     public function unfinishedUserMeetings($user = null)
@@ -100,9 +104,10 @@ class MeetingEntityRepository extends EntityRepository
     }
 
     /**
-     * @param DateTime $start
-     * @param DateTime $end
+     * @param DateTime  $start
+     * @param DateTime  $end
      * @param User|null $user
+     *
      * @return ArrayCollection|Collection|MeetingEntity[]
      */
     public function periodUserMeetings($start, $end, $user = null)
@@ -115,12 +120,10 @@ class MeetingEntityRepository extends EntityRepository
         );
     }
 
-
-
     /**
      * Returns either a course's meetings or all course meetings.
      *
-     * @param Course|null $course
+     * @param Course|null  $course
      * @param Session|null $session
      *
      * @return ArrayCollection|Collection|MeetingEntity[]

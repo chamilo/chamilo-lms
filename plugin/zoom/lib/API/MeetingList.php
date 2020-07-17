@@ -35,7 +35,7 @@ class MeetingList
     /**
      * Retrieves all meetings of a type.
      *
-     * @param int    $type   TYPE_SCHEDULED, TYPE_LIVE or TYPE_UPCOMING
+     * @param int $type TYPE_SCHEDULED, TYPE_LIVE or TYPE_UPCOMING
      *
      * @throws Exception
      *

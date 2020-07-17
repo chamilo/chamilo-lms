@@ -21,6 +21,7 @@ use Exception;
 
 /**
  * Class MeetingEntity.
+ *
  * @package Chamilo\PluginBundle\Zoom
  * @ORM\Entity(repositoryClass="Chamilo\PluginBundle\Zoom\MeetingEntityRepository")
  * @ORM\Table(
@@ -35,6 +36,24 @@ use Exception;
  */
 class MeetingEntity
 {
+    /** @var string meeting type name */
+    public $typeName;
+
+    /** @var DateTime meeting start time as a DateTime instance */
+    public $startDateTime;
+
+    /** @var string meeting formatted start time */
+    public $formattedStartTime;
+
+    /** @var DateInterval meeting duration as a DateInterval instance */
+    public $durationInterval;
+
+    /** @var string meeting formatted duration */
+    public $formattedDuration;
+
+    /** @var string */
+    public $statusName;
+
     /**
      * @var int the remote zoom meeting identifier
      * @ORM\Column(type="bigint")
@@ -105,27 +124,6 @@ class MeetingEntity
      * )
      */
     private $recordings;
-
-    // Displayable properties
-
-    /** @var string meeting type name */
-    public $typeName;
-
-    /** @var DateTime meeting start time as a DateTime instance */
-    public $startDateTime;
-
-    /** @var string meeting formatted start time */
-    public $formattedStartTime;
-
-    /** @var DateInterval meeting duration as a DateInterval instance */
-    public $durationInterval;
-
-    /** @var string meeting formatted duration */
-    public $formattedDuration;
-
-    /** @var string */
-    public $statusName;
-
 
     public function __construct()
     {
@@ -207,6 +205,7 @@ class MeetingEntity
 
     /**
      * @ORM\PostUpdate
+     *
      * @throws Exception
      */
     public function postUpdate()
@@ -406,7 +405,7 @@ class MeetingEntity
      *
      * @return bool
      */
-    public function hasRegisteredUser(User $user)
+    public function hasRegisteredUser($user)
     {
         return $this->getRegistrants()->exists(
             function (RegistrantEntity $registrantEntity) use (&$user) {
@@ -420,13 +419,14 @@ class MeetingEntity
      *
      * @return RegistrantEntity|null
      */
-    public function getRegistrant(User $user)
+    public function getRegistrant($user)
     {
         foreach ($this->getRegistrants() as $registrant) {
             if ($registrant->getUser() === $user) {
                 return $registrant;
             }
         }
+
         return null;
     }
 

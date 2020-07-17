@@ -2303,7 +2303,7 @@ class Event
                 'action' => 'add_work_start_'.$workId,
                 'action_details' => $virtualTime,
                 'user_id' => $userId,
-                'current_id' => $uniqueId
+                'current_id' => $uniqueId,
             ];
             self::registerLog($logInfo);
 
@@ -2315,7 +2315,7 @@ class Event
                 'action' => 'add_work_end_'.$workId,
                 'action_details' => $virtualTime,
                 'user_id' => $userId,
-                'current_id' => $uniqueId
+                'current_id' => $uniqueId,
             ];
             self::registerLog($logInfo);
         }

@@ -244,6 +244,7 @@ class AppPlugin
             'learning_calendar',
             'maintenancemode',
             'migrationmoodle',
+            'mindmap',
             'nosearchindex',
             'notebookteacher',
             'olpc_peru_filter',

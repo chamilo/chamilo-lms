@@ -33,7 +33,6 @@ define('INSTALL_TYPE_UPDATE', 'update');
 define('FORM_FIELD_DISPLAY_LENGTH', 40);
 define('DATABASE_FORM_FIELD_DISPLAY_LENGTH', 25);
 define('MAX_FORM_FIELD_LENGTH', 80);
-define('USERNAME_MAX_LENGTH', 50);
 
 // Including necessary libraries.
 require_once '../inc/lib/api.lib.php';

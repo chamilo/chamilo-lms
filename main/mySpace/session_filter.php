@@ -117,7 +117,7 @@ if (isset($_POST['formSent'])) {
                     break;
             }
         }
-        
+
         // Filter extra field
         foreach ($certificateList as $key => $value) {
             foreach ($filterCheckList as $fieldId => $field) {

@@ -3236,9 +3236,11 @@ class Exercise
             return '';
         }
 
+        $isReviewingAnswers = isset($_REQUEST['reminder']) && 2 == $_REQUEST['reminder'];
+
         // User
         $endReminderValue = false;
-        if (!empty($myRemindList)) {
+        if (!empty($myRemindList) && $isReviewingAnswers) {
             $endValue = end($myRemindList);
             if ($endValue == $question_id) {
                 $endReminderValue = true;
@@ -3262,7 +3264,7 @@ class Exercise
             if ($questionNum != 1 && $this->showPreviousButton()) {
                 $prev_question = $questionNum - 2;
                 $showPreview = true;
-                if (!empty($myRemindList)) {
+                if (!empty($myRemindList) && $isReviewingAnswers) {
                     $beforeId = null;
                     for ($i = 0; $i < count($myRemindList); $i++) {
                         if (isset($myRemindList[$i]) && $myRemindList[$i] == $question_id) {

@@ -3216,7 +3216,7 @@ function finishInstallation(
         'Joe',
         'Anonymous',
         6,
-        'anonymous@localhost',
+        'anonymous@example.com',
         'anon',
         'anon',
         'anonymous', //$official_code = '',

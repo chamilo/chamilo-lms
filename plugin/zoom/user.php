@@ -17,10 +17,6 @@ $user = api_get_user_entity(api_get_user_id());
 $form = $plugin->getAdminSearchForm();
 $startDate = new DateTime($form->getElement('start')->getValue());
 $endDate = new DateTime($form->getElement('end')->getValue());
-$reloadRecordingLists = $form->getElement('reloadRecordingLists')->getValue();
-if ($reloadRecordingLists) {
-    $plugin->reloadPeriodRecordings($startDate, $endDate);
-}
 
 $tpl = new Template();
 $tpl->assign('meetings', $plugin->getMeetingRepository()->periodUserMeetings($startDate, $endDate, $user));

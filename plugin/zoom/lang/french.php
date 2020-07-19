@@ -26,10 +26,25 @@ Pour les obtenir, créez une <em>JWT app</em> :
 <br/>2. cliquez sur <em>Avancé / Marketplace d'application</em>
 <br/>3. cliquez sur <em><a href=\"https://marketplace.zoom.us/develop/create\">Develop / build App</a></em>
 <br/>4. choisissez <em>JWT / Create</em>
-<br/>5. saisissez quelques informations sur votre \"App\"
+<br/>5. Information: remplissez quelques champs à propos de votre \"App\"
 (noms de l'application, de l'entreprise, nom et adresse de courriel de contact)
 <br/>6. cliquez sur <em>Continue</em>
-<br/>La page <em>App Credentials</em> affiche la clé (API Key) et le code secret (API Secret) à saisir ici.
+<br/>7. App Credentials :
+<strong>copiez la clé (API Key) et le code secret (API Secret) dans les champs ci-dessous.</strong>
+<br/>8. cliquez sur <em>Continue</em>
+<br/>9. Feature :
+activez <em>Event Subscriptions</em> pour en ajouter une avec comme endpoint URL
+<code>https://your.chamilo.url/plugin/zoom/endpoint.php</code>
+et ajoutez ces types d'événements :
+<br/>- Start Meeting
+<br/>- End Meeting
+<br/>- Participant/Host joined meeting
+<br/>- Participant/Host left meeting
+<br/>- All Recordings have completed
+<br/>- Recording transcript files have completed
+<br/>puis cliquez sur <em>Done</em> puis sur <em>Save</em>
+et <strong>copiez votre Verification Token dans le champ ci-dessous</strong>.
+<br/>10. cliquez sur <em>Continue</em>
 <br/>
 <strong>Attention</strong> :
 <br/>Zoom n'est <em>PAS</em> un logiciel libre
@@ -108,6 +123,7 @@ $strings['UpdateMeeting'] = "Mettre à jour la conférence";
 $strings['UpdateRegisteredUserList'] = "Mettre à jour la liste des utilisateurs inscrits";
 $strings['UserRegistration'] = "Inscription des utilisateurs";
 $strings['Y-m-d H:i'] = "d/m/Y à H\hi";
+$strings['verificationToken'] = 'Verification Token';
 $strings['Waiting'] = "en attente";
 $strings['XRecordingOfMeetingXFromXDurationXDotX'] = "Enregistrement (%s) de la conférence %s de %s (%s).%s";
 $strings['YouAreNotRegisteredToThisMeeting'] = "Vous n'êtes pas inscrit à cette conférence";

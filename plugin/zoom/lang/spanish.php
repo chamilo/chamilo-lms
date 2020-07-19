@@ -26,10 +26,26 @@ Para obtenerlos, crea una <em>app JWT</em> :
 <br/>2. de clic en <em>Avanzado / Marketplace de aplicaciones</em>
 <br/>3. de clic en <em><a href=\"https://marketplace.zoom.us/develop/create\">Develop / build App</a></em>
 <br/>4. escoja <em>JWT / Create</em>
-<br/>5. ingrese algunas informaciones sobre vuestra \"App\"
+<br/>5. Information: ingrese algunas informaciones sobre vuestra \"App\"
 (nombres de la aplicación, de la empresa, nombre y dirección de correo de contacto)
 <br/>6. de clic en <em>Continue</em>
-<br/>La página <em>App Credentials</em> muestra la clave (API Key) y el código secreto (API Secret) por ingresar aquí.
+<br/>7. App Credentials:
+muestra la clave (API Key) y el código secreto (API Secret) por ingresar aquí.
+<strong>copiez la clé (API Key) et le code secret (API Secret) dans les champs ci-dessous.</strong>
+<br/>8. de clic en <em>Continue</em>
+<br/>9. Feature :
+activez <em>Event Subscriptions</em> para agregar uno con su endpoint URL
+<code>https://your.chamilo.url/plugin/zoom/endpoint.php</code>
+y agrega este tipo de eventos:
+<br/>- Start Meeting
+<br/>- End Meeting
+<br/>- Participant/Host joined meeting
+<br/>- Participant/Host left meeting
+<br/>- All Recordings have completed
+<br/>- Recording transcript files have completed
+<br/>de clic en <em>Done</em> y luego en <em>Save</em>
+y <strong>copie su Verification Token en el campo a continuación</strong>.
+<br/>10. de clic en <em>Continue</em>
 <br/>
 <strong>Atención</strong> :
 <br/>Zoom <em>NO ES</em> un software libre, y reglas específicas de protección de datos se aplican a este.
@@ -107,6 +123,7 @@ $strings['UpdateMeeting'] = "Actualizar la conferencia";
 $strings['UpdateRegisteredUserList'] = "Actualizar la lista de usuarios inscritos";
 $strings['UserRegistration'] = "Inscripción de los usuarios";
 $strings['Y-m-d H:i'] = "d/m/Y a las H\hi";
+$strings['verificationToken'] = 'Verification Token';
 $strings['Waiting'] = "en espera";
 $strings['XRecordingOfMeetingXFromXDurationXDotX'] = "Grabación (%s) de la conferencia %s de %s (%s).%s";
 $strings['YouAreNotRegisteredToThisMeeting'] = "No estás registrado en esta reunión";

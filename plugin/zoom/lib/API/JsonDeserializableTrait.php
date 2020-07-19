@@ -32,6 +32,20 @@ trait JsonDeserializableTrait
             throw new Exception('Could not decode JSON: '.$json);
         }
 
+        return static::fromObject($object);
+    }
+
+    /**
+     * Builds a class instance from an already json-decoded object.
+     *
+     * @param object $object
+     *
+     * @throws Exception on unexpected object property
+     *
+     * @return static
+     */
+    public static function fromObject($object)
+    {
         $instance = new static();
         static::recursivelyCopyObjectProperties($object, $instance);
 
@@ -101,7 +115,7 @@ trait JsonDeserializableTrait
                     $destination->$name = $value;
                 }
             } else {
-                throw new Exception("Source object has property $name, which was not expected.");
+                error_log("Source object has property $name, which was not expected: ".json_encode($source));
             }
         }
         $destination->initializeExtraProperties();

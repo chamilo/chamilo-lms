@@ -47,6 +47,7 @@ class ZoomPlugin extends Plugin
                 'tool_enable' => 'boolean',
                 'apiKey' => 'text',
                 'apiSecret' => 'text',
+                'verificationToken' => 'text',
                 'enableParticipantRegistration' => 'boolean',
                 'enableCloudRecording' => 'boolean',
                 'enableGlobalConference' => 'boolean',
@@ -221,9 +222,6 @@ class ZoomPlugin extends Plugin
         $form = new FormValidator('search');
         $form->addDatePicker('start', get_lang('StartDate'));
         $form->addDatePicker('end', get_lang('EndDate'));
-        // TODO instead of requiring user intervention, implement Zoom API callbacks:
-        // TODO https://marketplace.zoom.us/docs/guides/build/webhook-only-app
-        $form->addCheckBox('reloadRecordingLists', '', get_lang('ReloadRecordingLists'));
         $form->addButtonSearch(get_lang('Search'));
         $oneMonth = new DateInterval('P1M');
         if ($form->validate()) {
@@ -249,7 +247,6 @@ class ZoomPlugin extends Plugin
             $form->setDefaults([
                 'start' => $start->format('Y-m-d'),
                 'end' => $end->format('Y-m-d'),
-                'reloadRecordingLists' => false,
             ]);
         } catch (Exception $exception) {
             error_log(join(':', [__FILE__, __LINE__, $exception]));
@@ -851,10 +848,16 @@ class ZoomPlugin extends Plugin
     }
 
     /**
+     * Update local recording list from remote Zoom server's version.
+     * Kept to implement a future administration button ("import existing data from zoom server")
+     *
+     * @param DateTime $startDate
+     * @param DateTime $endDate
+     *
      * @throws OptimisticLockException
      * @throws Exception
      */
-    public function reloadPeriodRecordings(DateTime $startDate, DateTime $endDate)
+    public function reloadPeriodRecordings($startDate, $endDate)
     {
         foreach (RecordingList::loadPeriodRecordings($startDate, $endDate) as $recordingMeeting) {
             $recordingEntity = $this->getRecordingRepository()->find($recordingMeeting->uuid);

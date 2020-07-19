@@ -341,6 +341,11 @@ class MeetingEntity
         return is_null($this->user) && is_null($this->course);
     }
 
+    public function setStatus($status)
+    {
+        $this->meetingInfoGet->status = $status;
+    }
+
     /**
      * Builds the list of users that can register into this meeting.
      * Zoom requires an email address, therefore users without an email address are excluded from the list.

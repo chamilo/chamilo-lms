@@ -18,10 +18,6 @@ $this_section = SECTION_PLATFORM_ADMIN;
 $form = $plugin->getAdminSearchForm();
 $startDate = new DateTime($form->getSubmitValue('start'));
 $endDate = new DateTime($form->getSubmitValue('end'));
-$reloadRecordingLists = $form->getSubmitValue('reloadRecordingLists');
-if ($reloadRecordingLists) {
-    $plugin->reloadPeriodRecordings($startDate, $endDate);
-}
 
 $tpl = new Template($tool_name);
 $tpl->assign('meetings', $plugin->getMeetingRepository()->periodMeetings($startDate, $endDate));

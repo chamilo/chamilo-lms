@@ -46,7 +46,7 @@ switch ($objectType) {
                 $entityManager->persist(
                     (
                     $meetingRepository->find($object->id)->setStatus($action)
-                        ?: (new MeetingEntity)->setMeetingInfoGet(MeetingInfoGet::fromObject($object))
+                        ?: (new MeetingEntity())->setMeetingInfoGet(MeetingInfoGet::fromObject($object))
                     )
                 );
                 $entityManager->flush();

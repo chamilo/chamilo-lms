@@ -827,7 +827,7 @@ class ZoomPlugin extends Plugin
 
     /**
      * Update local recording list from remote Zoom server's version.
-     * Kept to implement a future administration button ("import existing data from zoom server")
+     * Kept to implement a future administration button ("import existing data from zoom server").
      *
      * @param DateTime $startDate
      * @param DateTime $endDate

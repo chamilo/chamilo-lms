@@ -1,4 +1,13 @@
-<p>{{ meeting.typeName }} {{ meeting.id }} ({{ meeting.meetingInfoGet.status }})</p>
+<p>
+    {{ meeting.typeName }} {{ meeting.id }} ({{ meeting.meetingInfoGet.status }})
+</p>
+{% if meeting.meetingInfoGet.status != 'finished' %}
+<p>
+    <a href="join_meeting.php?meetingId={{ meeting.id }}">
+        {{ 'EnterMeeting'|get_lang }}
+    </a>
+</p>
+{% endif %}
 
 {% if isConferenceManager and meeting.status == 'waiting' %}
 <p>
@@ -75,4 +84,3 @@
 {% endif %}
 
 {% endif %}
-

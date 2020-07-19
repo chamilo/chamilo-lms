@@ -87,7 +87,7 @@ class ZoomPlugin extends Plugin
      */
     public static function currentUserCanJoinGlobalMeeting()
     {
-        return 'true' === api_get_plugin_setting('zoom', 'enableGlobalConference');
+        return 'true' === api_get_plugin_setting('zoom', 'enableGlobalConference') && api_user_is_login();
     }
 
     /**
@@ -764,87 +764,65 @@ class ZoomPlugin extends Plugin
     }
 
     /**
-     * @throws OptimisticLockException
+     * Return the current global meeting (create it if needed).
+     *
      * @throws Exception
      *
      * @return string
      */
-    public function getGlobalMeetingURL()
+    public function getGlobalMeeting()
     {
-        if (!self::currentUserCanJoinGlobalMeeting()) {
-            throw new Exception('global meetings are not enabled');
-        }
-        $url = null;
         foreach ($this->getMeetingRepository()->unfinishedGlobalMeetings() as $meeting) {
-            // Zoom does not allow for a new meeting to be started on first participant join.
-            // It requires the host to start the meeting first.
-            // Therefore we must make the global meeting creator the host, that is, redirect to start_url, not join_url
-            $meetingInfoGet = MeetingInfoGet::fromId($meeting->getMeetingInfoGet()->id);
-            if ($meeting->getMeetingInfoGet() != $meetingInfoGet) { // keep comparison operator (!=)
-                $meeting->setMeetingInfoGet($meetingInfoGet);
-                Database::getManager()->persist($meeting);
-                Database::getManager()->flush($meeting);
-            }
-            if ('waiting' === $meetingInfoGet->status) {
-                $url = $meeting->getMeetingInfoGet()->start_url;
-                break;
-            } elseif ('started' === $meetingInfoGet->status) {
-                if ('true' === $this->get('enableParticipantRegistration') && $meeting->requiresRegistration()) {
-                    $user = api_get_user_entity(api_get_user_id());
-                    /** @var RegistrantEntity $registrant */
-                    $registrant = $meeting->getRegistrant($user);
-                    if (is_null($registrant)) { // not registered yet
-                        $registrant = $this->registerUser($meeting, $user);
-                    }
-                    $url = $registrant->getCreatedRegistration()->join_url;
-                    break;
-                } else { // no registration possible, join anonymously
-                    $url = $meetingInfoGet->join_url;
-                    break;
-                }
-            } // else 'finished' - try next
-        }
-        if (is_null($url)) {
-            $url = $this->createGlobalMeeting()->getMeetingInfoGet()->start_url;
+            return $meeting;
         }
 
-        return $url;
+        return $this->createGlobalMeeting();
     }
 
     /**
-     * Returns the URL to enter (start or join) a user meeting.
+     * Returns the URL to enter (start or join) a meeting or null if not possible to enter the meeting,
+     * The returned URL depends on the meeting current status (waiting, started or finished) and the current user.
      *
      * @param MeetingEntity $meeting
-     * @param bool          $autoRegister
      *
      * @throws Exception
      * @throws OptimisticLockException
      *
-     * @return string
+     * @return string|null
      */
-    public function getUserMeetingURL($meeting, $autoRegister = false)
+    public function getStartOrJoinMeetingURL($meeting)
     {
-        $url = null;
-        $host = $meeting->getUser();
-        $participant = api_get_user_entity(api_get_user_id());
-        if ($host === $participant) {
-            $url = $meeting->getMeetingInfoGet()->start_url;
-        } else {
+        if ('waiting' === $meeting->getMeetingInfoGet()->status) {
+            // Zoom does not allow for a new meeting to be started on first participant join.
+            // It requires the host to start the meeting first.
+            // Therefore for global meetings we must make the first participant the host
+            // that is use start_url rather than join_url.
+            // the participant will not be registered and will appear as the Zoom user account owner.
+            // For course and user meetings, only the host can start the meeting.
+            if ($meeting->isGlobalMeeting() && $this->get('enableGlobalConference')
+                || $meeting->getUser() === api_get_user_entity(api_get_user_id())) {
+                return $meeting->getMeetingInfoGet()->start_url;
+            }
+        } elseif ('started' === $meeting->getMeetingInfoGet()->status) {
             if ('true' === $this->get('enableParticipantRegistration') && $meeting->requiresRegistration()) {
+                // the participant must be registered
+                $participant = api_get_user_entity(api_get_user_id());
                 $registrant = $meeting->getRegistrant($participant);
-                if (is_null($registrant)) { // not registered yet
-                    if (!$autoRegister) {
-                        throw new Exception(get_lang('YouAreNotRegisteredToThisMeeting'));
-                    }
-                    $registrant = $this->registerUser($meeting, $participant);
+                if (!is_null($registrant)) {
+                    // the participant is registered
+                    return $registrant->getCreatedRegistration()->join_url;
                 }
-                $url = $registrant->getCreatedRegistration()->join_url;
-            } else { // no registration possible, join anonymously
-                $url = $meeting->getMeetingInfoGet()->join_url;
+                // the participant is not registered, he can join only the global meeting (automatic registration)
+                if ($meeting->isGlobalMeeting() && $this->get('enableGlobalConference')) {
+                    return $this->registerUser($meeting, $participant)->getCreatedRegistration()->join_url;
+                }
+            } else {
+                // no registration possible, join anonymously
+                return $meeting->getMeetingInfoGet()->join_url;
             }
         }
 
-        return $url;
+        return null;
     }
 
     /**

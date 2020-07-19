@@ -23,13 +23,11 @@ if (array_key_exists('meetingId', $_REQUEST)) {
         if (is_null($meeting)) {
             throw new Exception('Meeting not found');
         }
-        // TODO introduce the meeting
         printf(
-            '<div class="embed-responsive embed-responsive-16by9">
- <a class="embed-responsive-item" href="%s" target="_blank">%s</a>
-</div>',
-            $plugin->getUserMeetingURL($meeting),
-            get_lang('JoinMeetingAsMyself')
+            '%s<p><a href="%s" target="_blank">%s</a></p>',
+            $meeting->getIntroduction(),
+            $plugin->getStartOrJoinMeetingURL($meeting),
+            get_lang('EnterMeeting')
         );
     } catch (Exception $exception) {
         Display::addFlash(

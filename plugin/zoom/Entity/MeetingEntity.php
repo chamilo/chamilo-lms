@@ -444,6 +444,34 @@ class MeetingEntity
     }
 
     /**
+     * Generates a short presentation of the meeting for the future participant.
+     * To be displayed above the "Enter meeting" link.
+     *
+     * @return string
+     */
+    public function getIntroduction()
+    {
+        $introduction = sprintf('<h1>%s</h1>', $this->meetingInfoGet->topic);
+        if (!$this->isGlobalMeeting()) {
+            $introduction .= sprintf('<p>%s (%s)</p>', $this->formattedStartTime, $this->formattedDuration);
+        }
+        if ($this->user) {
+            $introduction .= sprintf('<p>%s</p>', $this->user->getFullname());
+        } elseif ($this->isCourseMeeting()) {
+            if (is_null($this->session)) {
+                $introduction .= sprintf('<p class="main">%s</p>', $this->course);
+            } else {
+                $introduction .= sprintf('<p class="main">%s (%s)</p>', $this->course, $this->session);
+            }
+        }
+        if (!empty($this->meetingInfoGet->agenda)) {
+            $introduction .= sprintf('<p>%s</p>', $this->meetingInfoGet->agenda);
+        }
+
+        return $introduction;
+    }
+
+    /**
      * @throws Exception on unexpected start_time or duration
      */
     private function initializeDisplayableProperties()

@@ -4,6 +4,7 @@
 namespace Chamilo\PluginBundle\Zoom;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\PluginBundle\Zoom\API\MeetingInfoGet;
@@ -354,15 +355,16 @@ class MeetingEntity
      */
     public function getRegistrableUsers()
     {
+        /** @var User[] $users */
         $users = [];
         if (!$this->isCourseMeeting()) {
             $users = Database::getManager()->getRepository('ChamiloUserBundle:User')->findBy(['active' => true]);
-        }
-        if (is_null($this->session)) {
+        } elseif (is_null($this->session)) {
             if (!is_null($this->course)) {
-                $users = $this->course->getUsers()->matching(
-                    Criteria::create()->where(Criteria::expr()->isNull('email'))
-                );
+                /** @var CourseRelUser $courseRelUser */
+                foreach ($this->course->getUsers() as $courseRelUser) {
+                    $users[] = $courseRelUser->getUser();
+                }
             }
         } else {
             if (!is_null($this->course)) {
@@ -375,8 +377,14 @@ class MeetingEntity
                 }
             }
         }
+        $activeUsersWithEmail = [];
+        foreach ($users as $user) {
+            if ($user->isActive() && !empty($user->getEmail())) {
+                $activeUsersWithEmail[] = $user;
+            }
+        }
 
-        return $users;
+        return $activeUsersWithEmail;
     }
 
     /**

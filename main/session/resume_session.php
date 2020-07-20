@@ -161,6 +161,7 @@ if ($session->getNbrCourses() === 0) {
 } else {
     $count = 0;
     $courseItem = '';
+    $sessionRepository = $em->getRepository('ChamiloCoreBundle:Session');
     $courses = $sessionRepository->getCoursesOrderedByPosition($session);
 
     $allowSkills = api_get_configuration_value('allow_skill_rel_items');

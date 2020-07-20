@@ -1232,7 +1232,6 @@ class GradebookTable extends SortableTable
                         .'</a>';
                 }
 
-
                 $extra = Display::label($item->get_type_name(), 'info');
                 if ('simple' === $type) {
                     $extra = '';

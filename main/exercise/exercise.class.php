@@ -10036,6 +10036,35 @@ class Exercise
         return false;
     }
 
+    public static function getLpListFromExercise($exerciseId, $courseId)
+    {
+        $tableLpItem = Database::get_course_table(TABLE_LP_ITEM);
+        $tblLp = Database::get_course_table(TABLE_LP_MAIN);
+
+        $exerciseId = (int) $exerciseId;
+        $courseId = (int) $courseId;
+
+        $sql = "SELECT
+                    lp.name,
+                    lpi.lp_id,
+                    lpi.max_score,
+                    lp.session_id
+                FROM $tableLpItem lpi
+                INNER JOIN $tblLp lp
+                ON (lpi.lp_id = lp.iid AND lpi.c_id = lp.c_id)
+                WHERE
+                    lpi.c_id = $courseId AND
+                    lpi.item_type = '".TOOL_QUIZ."' AND
+                    lpi.path = '$exerciseId'";
+        $result = Database::query($sql);
+        $lpList = [];
+        if (Database::num_rows($result) > 0) {
+            $lpList = Database::store_result($result, 'ASSOC');
+        }
+
+        return $lpList;
+    }
+
     /**
      * Get number of questions in exercise by user attempt.
      *
@@ -10543,34 +10572,5 @@ class Exercise
             null,
             get_lang('ShowResultsToStudents')
         );
-    }
-
-    public static function getLpListFromExercise($exerciseId, $courseId)
-    {
-        $tableLpItem = Database::get_course_table(TABLE_LP_ITEM);
-        $tblLp = Database::get_course_table(TABLE_LP_MAIN);
-
-        $exerciseId = (int) $exerciseId;
-        $courseId = (int) $courseId;
-
-        $sql = "SELECT
-                    lp.name,
-                    lpi.lp_id,
-                    lpi.max_score,
-                    lp.session_id
-                FROM $tableLpItem lpi
-                INNER JOIN $tblLp lp
-                ON (lpi.lp_id = lp.iid AND lpi.c_id = lp.c_id)
-                WHERE
-                    lpi.c_id = $courseId AND
-                    lpi.item_type = '".TOOL_QUIZ."' AND
-                    lpi.path = '$exerciseId'";
-        $result = Database::query($sql);
-        $lpList = [];
-        if (Database::num_rows($result) > 0) {
-            $lpList = Database::store_result($result, 'ASSOC');
-        }
-
-        return $lpList;
     }
 }

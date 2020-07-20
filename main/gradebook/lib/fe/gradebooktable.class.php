@@ -617,7 +617,7 @@ class GradebookTable extends SortableTable
 
                             // Name.
                             $row[] = $invisibility_span_open.'&nbsp;&nbsp;&nbsp; '.
-                                $this->build_name_link($item, $type).$invisibility_span_close;
+                                $this->build_name_link($item, $type, 4).$invisibility_span_close;
 
                             // Description.
                             if (false == $this->exportToPdf) {
@@ -1160,7 +1160,7 @@ class GradebookTable extends SortableTable
      *
      * @return string
      */
-    private function build_name_link($item, $type = 'detail')
+    private function build_name_link($item, $type = 'detail', $spaces = 0)
     {
         $view = isset($_GET['view']) ? Security::remove_XSS($_GET['view']) : null;
         $categoryId = $item->getCategory()->get_id();
@@ -1232,6 +1232,7 @@ class GradebookTable extends SortableTable
                         .'</a>';
                 }
 
+
                 $extra = Display::label($item->get_type_name(), 'info');
                 if ('simple' === $type) {
                     $extra = '';
@@ -1240,7 +1241,8 @@ class GradebookTable extends SortableTable
                 $text .= "&nbsp;".$extra.$show_message;
 
                 if ($item instanceof ExerciseLink) {
-                    $text .= '<br />'.$item->getLpList();
+                    $spaces = str_repeat('&nbsp;', $spaces);
+                    $text .= '<br /><br />'.$spaces.$item->getLpList();
                 }
 
                 $cc = $this->currentcat->get_course_code();

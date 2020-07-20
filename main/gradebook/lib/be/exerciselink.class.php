@@ -300,7 +300,7 @@ class ExerciseLink extends AbstractLink
                             $lpList[] = $lpData['lp_id'];
                         }
                     }
-                    $lpCondition = ' orig_lp_id IN ("'.implode('", "', $lpList).'") AND ';
+                    $lpCondition = ' orig_lp_id = 0 OR (orig_lp_id IN ("'.implode('", "', $lpList).'")) AND ';
                 }
 
                 $sql = "SELECT *

@@ -305,7 +305,7 @@ if (count($_POST) > 0) {
                 } else {
                     // All the other question types (open question, multiple choice, percentage, ...)
                     if (isset($types[$survey_question_id]) &&
-                        'percentage' == $types[$survey_question_id]) {
+                        'percentage' === $types[$survey_question_id]) {
                         $sql = "SELECT * FROM $table_survey_question_option
                                 WHERE
                                     c_id = $course_id AND
@@ -378,7 +378,6 @@ if (count($_POST) > 0) {
                 $result = Database::query($sql);
                 $row = Database::fetch_array($result, 'ASSOC');
                 $option_value = $row['value'];
-                //$option_value = 0;
                 $survey_question_answer = $value;
 
                 // We save the answer after making sure that a possible previous attempt is deleted
@@ -406,7 +405,6 @@ if (count($_POST) > 0) {
 }
 
 $user_id = api_get_user_id();
-
 if ($user_id == 0) {
     $user_id = $survey_invitation['user'];
 }
@@ -1079,7 +1077,7 @@ if ((isset($_GET['show']) && $_GET['show'] != '') ||
                         $questions = [];
                         while ($row = Database::fetch_array($result, 'ASSOC')) {
                             // If the type is not a pagebreak we store it in the $questions array
-                            if ('pagebreak' != $row['type']) {
+                            if ('pagebreak' !== $row['type']) {
                                 $questions[$row['sort']]['question_id'] = $row['question_id'];
                                 $questions[$row['sort']]['survey_id'] = $row['survey_id'];
                                 $questions[$row['sort']]['survey_question'] = $row['survey_question'];
@@ -1193,7 +1191,7 @@ if ((isset($_GET['show']) && $_GET['show'] != '') ||
                 $questions = [];
                 while ($row = Database :: fetch_array($result, 'ASSOC')) {
                     // If the type is not a pagebreak we store it in the $questions array
-                    if ('pagebreak' != $row['type']) {
+                    if ('pagebreak' !== $row['type']) {
                         $questions[$row['sort']]['question_id'] = $row['question_id'];
                         $questions[$row['sort']]['survey_id'] = $row['survey_id'];
                         $questions[$row['sort']]['survey_question'] = $row['survey_question'];
@@ -1270,6 +1268,11 @@ $form = new FormValidator(
 );
 $form->addHidden('language', $p_l);
 
+$showNumber = true;
+if (SurveyManager::hasDependency($survey_data)) {
+    $showNumber = false;
+}
+
 if (isset($questions) && is_array($questions)) {
     $originalShow = isset($_GET['show']) ? (int) $_GET['show'] : 0;
     $questionCounter = 1;
@@ -1306,7 +1309,9 @@ if (isset($questions) && is_array($questions)) {
 
         // @todo move this in a function.
         $form->addHtml('<div class="survey_question '.$ch_type.' '.$parentClass.'">');
-        $form->addHtml('<div style="float:left; font-weight: bold; margin-right: 5px;"> '.$questionNumber.'. </div>');
+        if ($showNumber) {
+            $form->addHtml('<div style="float:left; font-weight: bold; margin-right: 5px;"> '.$questionNumber.'. </div>');
+        }
         $form->addHtml('<div>'.Security::remove_XSS($question['survey_question']).'</div> ');
 
         $userAnswerData = SurveyUtil::get_answers_of_question_by_user($question['survey_id'], $question['question_id']);

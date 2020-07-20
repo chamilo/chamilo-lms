@@ -2515,6 +2515,42 @@ class SurveyManager
         return true;
     }
 
+    public static function hasDependency($survey)
+    {
+        if (false === api_get_configuration_value('survey_question_dependency')) {
+            return false;
+        }
+
+        if (empty($survey)) {
+            return false;
+        }
+
+        if (!isset($survey['survey_id'])) {
+            return false;
+        }
+
+        $courseId = (int) $survey['c_id'];
+        $surveyId = (int) $survey['survey_id'];
+
+        $table = Database::get_course_table(TABLE_SURVEY_QUESTION);
+
+        $sql = "SELECT COUNT(iid) count FROM $table
+                WHERE
+                    c_id = $courseId AND
+                    survey_id = $surveyId AND
+                    parent_option_id <> 0
+                LIMIT 1
+                ";
+        $result = Database::query($sql);
+        $row = Database::fetch_array($result);
+
+        if ($row) {
+            return $row['count'] > 0;
+        }
+
+        return false;
+    }
+
     /**
      * @param array $survey
      *
@@ -2526,8 +2562,8 @@ class SurveyManager
             return 0;
         }
 
-        $courseId = $survey['c_id'];
-        $surveyId = $survey['survey_id'];
+        $courseId = (int) $survey['c_id'];
+        $surveyId = (int) $survey['survey_id'];
 
         $table = Database::get_course_table(TABLE_SURVEY_QUESTION);
 
@@ -2625,7 +2661,8 @@ class SurveyManager
         $groupId = 0
     ) {
         $invitationRepo = Database::getManager()->getRepository('ChamiloCourseBundle:CSurveyInvitation');
-        $invitations = $invitationRepo->findBy(
+
+        return $invitationRepo->findBy(
             [
                 'user' => $userId,
                 'cId' => $courseId,
@@ -2635,8 +2672,6 @@ class SurveyManager
             ],
             ['invitationDate' => 'DESC']
         );
-
-        return $invitations;
     }
 
     /**
@@ -2694,7 +2729,12 @@ class SurveyManager
                     if (empty($sessionId)) {
                         $subscribe = CourseManager::is_user_subscribed_in_course($userId, $courseCode);
                     } else {
-                        $subscribe = CourseManager::is_user_subscribed_in_course($userId, $courseCode, true, $sessionId);
+                        $subscribe = CourseManager::is_user_subscribed_in_course(
+                            $userId,
+                            $courseCode,
+                            true,
+                            $sessionId
+                        );
                     }
 
                     // User is not subscribe skip!

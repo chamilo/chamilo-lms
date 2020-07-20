@@ -8596,4 +8596,15 @@ $DeleteInAllLanguages = "Eliminar en todos los idiomas";
 $MyStudentsSchedule = "Horario de mis estudiante";
 $QuizConfirmSavedAnswers = "Acepto la cantidad de respuestas guardadas en esta sección.";
 $QuizConfirmSavedAnswersHelp = "Si no está satisfecho, no marque la casilla de aceptación y consulte con el encargado del curso o el administrador de la plataforma.";
+$TCReport = "Seguimiento de superiores de estudiantes";
+$TIReport = "Calendario de ocupaciones de tutores generales.";
+$StudentPublicationsSent = "Tareas enviadas o terminadas";
+$PendingStudentPublications = "Tareas en curso";
+$MyStudentPublicationsTitle = "Todas las tareas";
+$MyStudentPublicationsExplanation = "A continuación encontrará todas sus tareas de todos los cursos y sesiones en los que está registrado.";
+$RequiredCourses = "Cursos requeridos";
+$SimpleCourseList = "lista estándar";
+$AdminCourseList = "Gestión administrativa";
+$AnonymizeUserSessions = "Anonimizar las sesiones del usuario";
+$ContinueLastImport = "Continuar con el último importe";
 ?>

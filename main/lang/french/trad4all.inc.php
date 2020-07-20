@@ -6997,7 +6997,7 @@ $LdapDescriptionComment = "<div class='normal-message'> <br /><ul><li>Authentifi
 $ShibbolethMainActivateTitle = "<h3>Configuration de l'authentification Shibboleth</h3>";
 $ShibbolethMainActivateComment = "<p>Vous devez, en premier lieu, configurer Shibboleth pour votre serveur web. Pour le configurer pour Chamilo.</p><h5>éditez le fichier main/auth/shibboleth/config/aai.class.php</h5><p>Modifiez les valeurs de l'objet &#36;result avec les nom des attributs retourné par votre serveur Shibboleth.</p>Les valeurs à modifier sont<ul><li>&#36;result-&gt;unique_id = 'mail';</li><li>&#36;result-&gt;firstname = 'cn';</li><li>&#36;result-&gt;lastname = 'uid';</li><li>&#36;result-&gt;email = 'mail';</li><li>&#36;result-&gt;language = '-';</li><li>&#36;result-&gt;gender = '-';</li><li>&#36;result-&gt;address = '-';</li><li>&#36;result-&gt;staff_category = '-';</li><li>&#36;result-&gt;home_organization_type = '-'; </li><li>&#36;result-&gt;home_organization = '-';</li><li>&#36;result-&gt;affiliation = '-';</li><li>&#36;result-&gt;persistent_id = '-';</li><li>...</li></ul><br/>Vous trouverez dans les <a href='settings.php?category=Shibboleth'>Plugin</a> un bouton 'Login Shibboleth', paramétrable, qui s'ajoutera sur la page d'accueil de votre campus Chamilo.";
 $LdapDescriptionTitle = "Identification LDAP";
-$FacebookMainActivateTitle = "<h3>Configuration de l'authentification via Facebook</h3>";
+$FacebookMainActivateTitle = "Configuration de l'authentification via Facebook";
 $FacebookMainActivateComment = "<p><h5>Créez votre application Facebook</h5>Vous devez, d'abord, créer une application Facebook (cf. <a href='https://developers.facebook.com/apps'>https://developers.facebook.com/apps</a>) avec votre compte Facebook.<br/>
 <h5>Éditez le fichier app/config/configuration.php</h5>Et décommentez la ligne &#36;_configuration['facebook_auth'] = 1;<br/>
 <h5>Éditez le fichier app/config/auth.conf.php<br/></h5>Entrez les valeurs 'appId' et 'secret', fournies par Facebook, pour la variable &#36;facebook_config.<br/>
@@ -8497,4 +8497,17 @@ $ImageURL = "URL de l'image";
 $PixelWidth = "largeur en px";
 $AddImageWithZoom = "Ajouter image avec zoom";
 $DeleteInAllLanguages = "Supprimer dans toutes les langues";
+$MyStudentsSchedule = "Horaire de mes élèves";
+$QuizConfirmSavedAnswers = "J'accepte le nombre de réponses enregistrées dans cette section.";
+$QuizConfirmSavedAnswersHelp = "Si vous n'êtes pas satisfait, ne cochez pas la case d'acceptation et consultez le responsable du cours ou l'administrateur de la plateforme.";
+$TCReport = "Suivi des supérieurs d'apprenants";
+$TIReport = "Calendrier d'occupation des tuteurs généraux";
+$StudentPublicationsSent = "Travaux envoyés ou finis";
+$PendingStudentPublications = "Travaux en cours";
+$MyStudentPublicationsTitle = "Tous les travaux";
+$MyStudentPublicationsExplanation = "Vous trouverez ci-dessous tous vos travaux de tous les cours ou les sessions où vous êtes inscrits.";
+$RequiredCourses = "Cours requis";
+$SimpleCourseList = "Liste standard";
+$AdminCourseList = "Gestion administrative";
+$AnonymizeUserSessions = "Anonymiser les sessions de l'utilisateur";
 ?>

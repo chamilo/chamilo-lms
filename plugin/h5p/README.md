@@ -3,11 +3,16 @@ H5P plugin
 This plugin is only compatible with Chamilo version 1.11.10 and above.
 
 This plugin allows you to create H5P resources directly from inside Chamilo,
-using the Open Source H5P library.
+using the Open Source H5P library. Once enabled and set to the pre_footer region,
+a new H5P logo will appear in the documents creation, exclusively in the
+learning path document creation interface (don't look for it anywhere else at
+this point).
+
 However, it is still very limited at this stage: the H5P files are created in a
 common directory for all teachers. This means all teachers can re-use contents of
 others (which is good) but also that all teachers can remove contents of others
 (which is bad).
+
 We hope to be improving this in the future, but we will not be able, in future
 versions, to assign content created in this version to the correct teacher.
 

@@ -1,0 +1,8 @@
+{"taskDescription":"@descript@","overallFeedback":[
+{"from":0,"to":100,"feedback":"feddback"}],
+"checkAnswer":"V\u00e9rifier","tryAgain":"Recommencer",
+"showSolution":"Voir la correction",
+"dropZoneIndex":"Zone de d\u00e9p\u00f4t @index.",
+"empty":"La zone de d\u00e9p\u00f4t @index est vide.",
+"contains":"La zone de d\u00e9p\u00f4t @index contient un \u00e9l\u00e9ment d\u00e9pla\u00e7able @draggable.","ariaDraggableIndex":"@index sur @count \u00e9l\u00e9ments d\u00e9pla\u00e7ables.","tipLabel":"Montrer l&#039;indice","correctText":"Correct !","incorrectText":"Incorrect !","resetDropTitle":"Reparam\u00e9trer le d\u00e9placement","resetDropDescription":"Etes-vous certain de vouloir reparam\u00e9trer cet \u00e9l\u00e9ment d\u00e9pla\u00e7able ?","grabbed":"L&#039;\u00e9l\u00e9ment d\u00e9pla\u00e7able est saisi.","cancelledDragging":"Annuler le d\u00e9placement.","correctAnswer":"R\u00e9ponse correcte :","feedbackHeader":"Commentaire de retour","behaviour":{"enableRetry":true,"enableSolutionsButton":true,"enableCheckButton":true,"instantFeedback":false},"scoreBarLabel":"Vous avez obtenu :num sur un total de :points",
+"textField":"@terms_a@"}

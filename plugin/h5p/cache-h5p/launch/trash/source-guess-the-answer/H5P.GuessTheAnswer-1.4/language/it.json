@@ -1,0 +1,26 @@
+{
+  "semantics": [
+    {
+      "label": "Descrizione del compito",
+      "description": "Descrivi come l'apprendente deve risolvere il compito"
+    },
+    {
+      "label": "Media",
+      "fields": [
+        {
+          "label": "Tipo",
+          "description": "Media facoltativo da mostrare sopra la domanda"
+        }
+      ]
+    },
+    {
+      "label": "Etichetta che descrive la soluzione",
+      "default": "Clicca per vedere la risposta",
+      "description": "Area di testo cliccabile dove la soluzione sarà mostrata"
+    },
+    {
+      "label": "Testo della soluzione",
+      "description": "Soluzione per l'immagine"
+    }
+  ]
+}

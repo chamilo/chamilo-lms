@@ -1,0 +1,23 @@
+{
+  "title": "H5PEditor.RadioGroup",
+  "majorVersion": 1,
+  "minorVersion": 1,
+  "patchVersion": 4,
+  "runnable": 0,
+  "machineName": "H5PEditor.RadioGroup",
+  "coreApi": {
+    "majorVersion": 1,
+    "minorVersion": 12
+  },
+  "author": "Joubel",
+  "preloadedJs": [
+    {
+      "path": "radio-group.js"
+    }
+  ],
+  "preloadedCss": [
+    {
+      "path": "radio-group.css"
+    }
+  ]
+}

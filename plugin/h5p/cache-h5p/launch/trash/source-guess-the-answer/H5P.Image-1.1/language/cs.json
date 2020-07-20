@@ -1,0 +1,19 @@
+{
+  "semantics": [
+    {
+      "label": "Obrázek"
+    },
+    {
+      "label": "Alternativní text",
+      "description": "Povinné. Pokud prohlížeč nemůže načíst obrázek, zobrazí se místo toho tento text. Také se používá \"text-to-speech\" readers."
+    },
+    {
+      "label": "Najeďte kurzorem na text",
+      "description": "Volitelné. Tento text se zobrazí, když uživatelé umístí své polohovací zařízení na obrázek."
+    },
+    {
+      "label": "Název obsahu obrázku",
+      "default": "Obrázek"
+    }
+  ]
+}

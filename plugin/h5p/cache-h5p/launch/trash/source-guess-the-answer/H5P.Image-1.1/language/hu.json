@@ -1,0 +1,19 @@
+{
+  "semantics": [
+    {
+      "label": "Image"
+    },
+    {
+      "label": "Alternative text",
+      "description": "Required. If the browser can't load the image this text will be displayed instead. Also used by \"text-to-speech\" readers."
+    },
+    {
+      "label": "Hover text",
+      "description": "Optional. This text is displayed when the users hover their pointing device over the image."
+    },
+    {
+      "label": "Image content name",
+      "default": "Image"
+    }
+  ]
+}

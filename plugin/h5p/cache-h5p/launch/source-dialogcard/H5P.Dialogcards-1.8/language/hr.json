@@ -1,0 +1,220 @@
+{
+  "semantics": [
+    {
+      "label": "Naslov"
+    },
+    {
+      "label": "Mode",
+      "description": "Mode of presenting the dialog cards",
+      "options": [
+        {
+          "label": "Normal"
+        },
+        {
+          "label": "Repetition"
+        }
+      ]
+    },
+    {
+      "label": "Opis zadatka",
+      "default": ""
+    },
+    {
+      "widgets": [
+        {
+          "label": "Zadano"
+        }
+      ],
+      "label": "Kartice",
+      "entity": "dialog",
+      "field": {
+        "label": "Pitanje",
+        "fields": [
+          {
+            "label": "Tekst",
+            "description": "Tekst za prvu stranicu kartice"
+          },
+          {
+            "label": "Odgovor",
+            "description": "Tekst za drugu stranicu kartice"
+          },
+          {
+            "label": "Slika",
+            "description": "Opcionalna slika na kartici. (Kartica može sadržavati samo sliku, samo tekst ili oboje.)"
+          },
+          {
+            "label": "Alternativni tekst za sliku (opis)"
+          },
+          {
+            "label": "Zvučne datoteke"
+          },
+          {
+            "label": "Savjeti",
+            "fields": [
+              {
+                "label": "Savjet za tekst",
+                "description": "Savjet za prvu stranicu kartice"
+              },
+              {
+                "label": "Savjet za odgovor",
+                "description": "Savjet za drugu stranicu kartice"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "label": "Behavioural settings.",
+      "description": "Ove opcije vam omogućavaju kontrolu nad ponašanjem zadatka.",
+      "fields": [
+        {
+          "label": "Omogući gumb \"Ponovni pokušaj\""
+        },
+        {
+          "label": "Onemogući navigaciju za povratak",
+          "description": "Ovo opcija će onemogućiti prikaz navigacije za povratak na prethodne kartice, prikazujući isključivo navigaciju za sljedeće kartice"
+        },
+        {
+          "label": "Smanji veličinu teksta kako bi stala na karticu",
+          "description": "Onemogućavanje ove opcije će rezultirati povećanjem površine kartice kako bi stao sav tekst"
+        },
+        {
+          "label": "Prikaži kartice nasumičnim rasporedom",
+          "description": "Omogući nasumično raspoređivanje kartica na zaslonu."
+        },
+        {
+          "label": "Maximum proficiency level"
+        },
+        {
+          "label": "Allow quick progression",
+          "description": "If activated, learners can decide to indicate that they know a card without turning it"
+        }
+      ]
+    },
+    {
+      "label": "Tekst za gumb Okreni",
+      "default": "Okreni"
+    },
+    {
+      "label": "Tekst za gumb Sljedeća",
+      "default": "Sljedeća"
+    },
+    {
+      "label": "Tekst za gumb Prethodna",
+      "default": "Prethodna"
+    },
+    {
+      "label": "Tekst za gumb Ponovni pokušaj",
+      "default": "Ponovni pokušaj"
+    },
+    {
+      "label": "Text for the \"correct answer\" button",
+      "default": "I got it right!"
+    },
+    {
+      "label": "Text for the \"incorrect answer\" button",
+      "default": "I got it wrong"
+    },
+    {
+      "label": "Text for \"Round\" message below cards and on the summary screen",
+      "description": "@round will be replaced by the number of the current round",
+      "default": "Round @round"
+    },
+    {
+      "label": "Text for \"Cards left\" message",
+      "description": "@number will be replaced by the number of cards left in this round",
+      "default": "Cards left: @number"
+    },
+    {
+      "label": "Text for the \"next round\" button",
+      "description": "@round will be replaced by the round number",
+      "default": "Proceed to round @round"
+    },
+    {
+      "label": "Text for the \"Start over\" button",
+      "default": "Start over"
+    },
+    {
+      "label": "Text for the \"show summary\" button",
+      "default": "Next"
+    },
+    {
+      "label": "Title text for the summary page",
+      "default": "Summary"
+    },
+    {
+      "label": "Text for \"Cards you got right:\"",
+      "default": "Cards you got right:"
+    },
+    {
+      "label": "Text for \"Cards you got wrong:\"",
+      "default": "Cards you got wrong:"
+    },
+    {
+      "label": "Text for \"Cards not shown:\"",
+      "default": "Cards in pool not shown:"
+    },
+    {
+      "label": "Text for \"Overall Score\"",
+      "default": "Overall Score"
+    },
+    {
+      "label": "Text for \"Cards completed\"",
+      "default": "Cards you have completed learning:"
+    },
+    {
+      "label": "Text for \"Completed rounds:\"",
+      "default": "Completed rounds:"
+    },
+    {
+      "label": "Message when all cards have been learned proficiently",
+      "description": "@cards will be replaced by the number of all cards in the pool. @max will be replaced by the maximum proficiency level - 1.",
+      "default": "Well done! You got all @cards cards correct @max times in a row!"
+    },
+    {
+      "label": "Tekst napretka kroz sadržaj",
+      "description": "Dostupne varijable su @card i @total.",
+      "default": "Kartica @card od @total"
+    },
+    {
+      "label": "Oznaka za tekst prve strane kartice",
+      "description": "Koristi se za pristupačnost asistivnim tehnologijama",
+      "default": "Prva strana kartice"
+    },
+    {
+      "label": "Oznaka za tekst druge strane kartice",
+      "description": "Koristi se za pristupačnost asistivnim tehnologijama",
+      "default": "Druga strana kartice"
+    },
+    {
+      "label": "Oznaka za gumb za prikaz savjeta",
+      "default": "Prikaži savjet"
+    },
+    {
+      "label": "Poruka o tome da zvuk nije podržan",
+      "default": "Vaš preglednik ne podržava ovu vrstu zvučne datoteke"
+    },
+    {
+      "label": "Confirm starting over dialog",
+      "fields": [
+        {
+          "label": "Header text",
+          "default": "Start over?"
+        },
+        {
+          "label": "Body text",
+          "default": "All progress will be lost. Are you sure you want to start over?"
+        },
+        {
+          "label": "Cancel button label",
+          "default": "Cancel"
+        },
+        {
+          "label": "Confirm button label",
+          "default": "Start over"
+        }
+      ]
+    }
+  ]
+}

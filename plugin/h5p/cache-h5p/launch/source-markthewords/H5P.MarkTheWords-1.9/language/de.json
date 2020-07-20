@@ -1,0 +1,116 @@
+{
+  "semantics": [
+    {
+      "label": "Aufgabenbeschreibung",
+      "description": "Beschreibung, wie die Lernenden die Aufgabe lösen sollten. Wird über dem Medium angezeigt.",
+      "placeholder": "Klicke auf alle Verben im folgenden Text."
+    },
+    {
+      "label": "Textfeld",
+      "placeholder": "Das ist eine Antwort: *Antwort*.",
+      "description": "",
+      "important": {
+        "description": "<ul><li>Die zu findenden Wörter werden mit einem Sternchen (*) markiert.</li><li>Soll in einem zu findenden Wort ein Sternchen verwendet werden, gibt man ** ein.</li></ul>",
+        "example": "Richtige Wörter werden wie folgt markiert: *richtigeswort*. Ein Sternchen in einem richtigen Wort auf diese Weise: *richtiges**Wort*."
+      }
+    },
+    {
+      "label": "Gesamtrückmeldung",
+      "fields": [
+        {
+          "widgets": [
+            {
+              "label": "Eingabemaske"
+            }
+          ],
+          "label": "Lege Rückmeldungen für einzelne Punktebereiche fest",
+          "description": "Klicke auf den \"Bereich hinzufügen\"-Button, um so viele Bereiche hinzuzufügen, wie du brauchst. Beispiel: 0-20% Schlechte Punktzahl, 21-91% Durchschnittliche Punktzahl, 91-100% Großartige Punktzahl!",
+          "entity": "Bereich",
+          "field": {
+            "fields": [
+              {
+                "label": "Punktebereich"
+              },
+              {},
+              {
+                "label": "Rückmeldung für jeweiligen Punktebereich",
+                "placeholder": "Trage die Rückmeldung ein"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "Beschriftung des \"Überprüfen\"-Buttons",
+      "default": "Überprüfen"
+    },
+    {
+      "label": "Beschriftung des \"Wiederholen\"-Buttons",
+      "default": "Wiederholen"
+    },
+    {
+      "label": "Beschriftung des \"Lösung anzeigen\"-Buttons",
+      "default": "Lösung anzeigen"
+    },
+    {
+      "label": "Verhaltenseinstellungen",
+      "description": "Diese Optionen legen fest, wie die Aufgabe im Detail funktioniert.",
+      "fields": [
+        {
+          "label": "\"Wiederholen\" zulassen"
+        },
+        {
+          "label": "\"Lösung anzeigen\" ermöglichen"
+        },
+        {
+          "label": "\"Überprüfen\"-Button anzeigen"
+        },
+        {
+          "label": "Bepunktungsdetails anzeigen",
+          "description": "Zeigt die für jede Antwort vergebenen Punkte an."
+        }
+      ]
+    },
+    {
+      "label": "Text für richtige Antworten",
+      "default": "Richtig!",
+      "description": "Mit diesem Text wird angezeigt, dass die Antwort richtig war."
+    },
+    {
+      "label": "Text für falsche Antworten",
+      "default": "Falsch!",
+      "description": "Mit diesem Text wird angezeigt, dass die Antwort falsch war."
+    },
+    {
+      "label": "Text für übergangene Antworten",
+      "default": "Nicht gefunden!",
+      "description": "Mit diesem Text wird angezeigt, dass das Wort hätte ausgewählt werden sollen."
+    },
+    {
+      "label": "Nachricht, wenn die Lösung angezeigt wird",
+      "default": "Die Lösungen sind nun im Text markiert.",
+      "description": "Mit diesem Text wird angezeigt, dass nun die richtigen Lösungen angezeigt werden."
+    },
+    {
+      "label": "Anzeigetext für Vorlesewerkzeuge (Barrierefreiheit). :num wird durch die erreichten Punkte ersetzt. :total wird durch die maximal mögliche Punktzahl ersetzt.",
+      "default": "Du hast :num von :total Punkten erreicht."
+    },
+    {
+      "label": "Hinweis für den gesamten lesbaren Text für Vorlesewerkzeuge",
+      "default": "Gesamter lesbarer Text"
+    },
+    {
+      "label": "Hinweis auf den gesamten Text, wo Wörter markiert werden können für Vorlesewerkzeuge",
+      "default": "Gesamter Text, wo Wörter markiert werden können"
+    },
+    {
+      "label": "Überschrift des Lösungsmodus (Barrierefreiheit)",
+      "default": "Lösungsmodus"
+    },
+    {
+      "label": "Überschrift des Antworten-Überprüfen-Modus (Barrierefreiheit)",
+      "default": "Antworten überprüfen-Modus"
+    }
+  ]
+}

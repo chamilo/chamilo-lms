@@ -1,0 +1,23 @@
+{
+  "libraryStrings":{
+    "title":"Helisalvesti",
+    "recordAnswer":"Salvesta",
+    "pause":"Paus",
+    "continue":"Jätka",
+    "done":"Lõpeta",
+    "retry":"Lähtesta",
+    "microphoneNotSupported":"Mikrofon ei ole toetatud. Veendu, et kasutad brauserit, mis võimaldab mikrofoniga salvestamist.",
+    "microphoneInaccessible":"Mikrofon ei ole kasutatav. Veendu, et brauseri mikrofon on lubatud.",
+    "insecureNotAllowed":"Mikrofoni kasutamine ei ole sinu brauseris lubatud, kuna selle lehe edastamiseks ei kasuta HTTPS protokolli. Võta autoriga ühendust ja palu tal teha leht kättesaadavaks HTTPS protokolli kasutades",
+    "statusReadyToRecord":"Vajuta allolevat nuppu salvestamise alustamiseks.",
+    "statusRecording":"Salvestamine...",
+    "statusPaused":"Salvestamise paus.",
+    "statusFinishedRecording":"Kuula allolevat helisalvestust.",
+    "downloadRecording":"Selle salvestuse kasutamiseks vajuta \"Paiguta\" nuppu.",
+    "retryDialogHeaderText":"Salvestada uuesti?",
+    "retryDialogBodyText":"Vajutades \"Salvesta uuesti\" nuppu kaotad jooksva salvestuse.",
+    "retryDialogConfirmText":"Salvesta uuesti",
+    "retryDialogCancelText":"Tühista",
+    "statusCantCreateTheAudioFile":"Ei saa luua helifaili."
+  }
+}

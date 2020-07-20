@@ -1,0 +1,59 @@
+{{ tables }}
+{{ form }}
+
+<table class="data_table">
+	<thead>
+		<tr>
+			<th>
+			   Titre
+			</th>
+			<th>
+			   Date
+			</th>
+			<th></th>
+			<th>
+				{{ 'Actions' | get_lang }}
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+{% for term in terms %}
+    <tr>
+        <td style="width:20%" >
+			{{ term.title }}
+		</td>
+		<td style="width:25%" >
+            {{ term.date_create }}
+        </td>
+
+		<td style="width:15%" >
+			<a href="{{ _p.web_plugin }}chamilo_h5p/node_process.php?action=edit&{{ {'id': term.id}|url_encode() }}&{{ {'node_type': term.node_type}|url_encode() }}"
+			style="border:solid 1px #086A87;background:#086A87!important;color:white!important;" class="btn">
+            <span class="fa fa-eye fa-fw" aria-hidden="true"></span></a>
+ 		</td>
+
+        <td style="width:15%" >
+            
+			<a href="{{ _p.web_plugin }}chamilo_h5p/node_list.php?action=edit&{{ {'id': term.id}|url_encode() }}&{{ {'node_type': term.node_type}|url_encode() }}"
+			class="btn btn-success">
+            <span class="fa fa-edit fa-fw" aria-hidden="true"></span></a>
+            
+			<a onclick="return confirm('Etes-vous sur ?')" 
+			href="{{ _p.web_plugin }}chamilo_h5p/node_list.php?action=delete&{{ {'id': term.id}|url_encode() }}" 
+			class="btn btn-danger">
+            <span class="fa fa-times fa-fw" aria-hidden="true"></span></a>
+        
+		</td>
+    </tr>
+{% endfor %}
+	</tbody>
+</table>
+
+<script>
+	function installMenuInteractions(){
+		$('div.logo').parent().parent().css('display','none');
+		$('#header-section').css('display','none');
+		$('.tab-homepage').find('a').html('&#8592;');	
+	}
+	installMenuInteractions();
+</script>

@@ -1,0 +1,6 @@
+{"taskDescription":"@descript@",
+"wordList":"@terms_a@",
+"behaviour":{"orientations":{"horizontal":true,"horizontalBack":true,"vertical":true,"verticalUp":true,"diagonal":true,"diagonalBack":true,"diagonalUp":true,"diagonalUpBack":true},
+"fillPool":"abcdefghijklmnopqrstuvwxyz","preferOverlap":true,"showVocabulary":true,
+"enableShowSolution":true,"enableRetry":true},
+"l10n":{"check":"Check","tryAgain":"Retry","showSolution":"Show Solution","found":"@found of @totalWords found","timeSpent":"Time Spent","score":"You got @score of @total points","wordListHeader":"Find the words"}}

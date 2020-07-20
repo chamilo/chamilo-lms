@@ -1,0 +1,136 @@
+{
+  "semantics": [
+    {
+      "label": "Tehtävän kuvaus",
+      "description": "Kuvaile, mitä käyttäjän pitää tehdä.",
+      "default": "Raahaa sanat oikeisiin laatikoihin."
+    },
+    {
+      "label": "Teksti",
+      "placeholder": "*Helsinki* on Suomessa, *Tukholma* on Ruotsissa. Kumpikin on maansa *pääkaupunki:hallinnollinen keskus*.",
+      "description": "",
+      "important": {
+        "description": "<ul><li>Merkitse raahattavat sanat tähtien (*) väliin, esimerkiksi *Helsinki*.</li><li>Jos haluat lisätä vihjeen, kirjoita raahattavan sanan perään kaksoispiste ja vihje, esimerkiksi *pääkaupunki:hallinnollinen keskus*.</li><li>Jokaista tyhjää kohtaa vastaa yksi oikea sana.</li><li>Voit lisätä palautteen näytettäväksi kun tehtävä on suoritettu. Käytä '\\+' oikein ja '\\-' väärin palautteelle.</li></ul>",
+        "example": "H5P content may be edited using a *browser:What type of program is Chrome?*. </br> H5P content is *interactive\\+Correct! \\-Incorrect, try again!*"
+      }
+    },
+    {
+      "label": "Yleispalaute",
+      "fields": [
+        {
+          "widgets": [
+            {
+              "label": "Oletus"
+            }
+          ],
+          "label": "Määritä palaute pistealueiden mukaan.",
+          "description": "Klikkaa \"Lisää alue\" painiketta lisätäksesi niin monta pistealuetta kuin tarvit. Esimerkiksi: 0-20% Huono tulos, 21-91% Kelpo tulos, 91-100% Mahtava tulos!",
+          "entity": "alue",
+          "field": {
+            "fields": [
+              {
+                "label": "Pistealue"
+              },
+              {},
+              {
+                "label": "Palaute määritellylle pistealueelle",
+                "placeholder": "Kirjoita palaute"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "Painikkeen \"Tarkista\" nimi",
+      "default": "Tarkista"
+    },
+    {
+      "label": "Painikkeen \"Yritä uudelleen\" nimi",
+      "default": "Yritä uudelleen"
+    },
+    {
+      "label": "Painikkeen \"Katso vastaus\" nimi",
+      "default": "Katso vastaus"
+    },
+    {
+      "label": "Pudotuskohteen numerointi",
+      "default": "Pudotuskohde @index.",
+      "description": "Esteettömyystoiminto. Ruudunlukija lukee pudotuskohteen järjestysnumeron. Käytettävissä muuttuja: @index"
+    },
+    {
+      "label": "Tyhjän pudotuskohteen numerointi",
+      "default": "Pudotuskohde @index on tyhjä.",
+      "description": "Esteettömyystoiminto. Ruudunlukija lukee tyhjän pudotuskohteen järjestysnumeron."
+    },
+    {
+      "label": "Pudotuskohde sisältää raahattavan",
+      "default": "Pudotuskohde @index sisältää raahattavan @draggable.",
+      "description": "Esteettömyystoiminto. Ruudunlukija lukee, että pudotuskohteessa on jo jokin raahattava."
+    },
+    {
+      "label": "Raahattavan elementin selite",
+      "default": "@index/@count raahattavista.",
+      "description": "Esteettömyystoiminto. Ruuudunlukija lukee, että tämä on raahattava elementti. Käytettävissä muuttujat: @index, @count"
+    },
+    {
+      "label": "Vihjepainikkeen teksti",
+      "default": "Näytä vihje",
+      "description": "Esteettömyystoiminto. Ruudunlukija lukee tämän ennen vihjeen lukemista."
+    },
+    {
+      "label": "Ruudunlukijan teksti oikealle vastaukselle",
+      "default": "Oikein!"
+    },
+    {
+      "label": "Ruudunlukijan teksti väärälle vastaukselle",
+      "default": "Väärin!"
+    },
+    {
+      "label": "Varmistusdialogi kun käyttäjä haluaa palauttaa pudotuksen",
+      "default": "Palauta pudotus"
+    },
+    {
+      "label": "Selite varmistusdialogille kun käyttäjä haluaa palauttaa pudotuksen",
+      "default": "Haluatko varmasti palauttaa pudotuskohteen?"
+    },
+    {
+      "label": "Ruudunlukijan teksti raahauksen aloittamiselle",
+      "default": "Raahattavasta on otettu kiinni."
+    },
+    {
+      "label": "Ruudunlukijan teksti raahauksen keskeyttämiselle",
+      "default": "Raahaus keskeytetty."
+    },
+    {
+      "label": "Ruudunlukijan teksti ilmaisemaan mikä oli oikea vastaus",
+      "default": "Oikea vastaus:"
+    },
+    {
+      "label": "Oikeiden ja väärien vastauksien palautteen sisältävän paneelin otsikko",
+      "default": "Palaute"
+    },
+    {
+      "label": "Yleisasetukset",
+      "description": "Näillä valinnoilla voit ohjailla tehtävän toimintoja.",
+      "fields": [
+        {
+          "label": "Salli painike \"Yritä uudelleen\""
+        },
+        {
+          "label": "Salli painike \"Katso vastaus\""
+        },
+        {
+          "label": "Enable \"Check\" button"
+        },
+        {
+          "label": "Pikapalaute"
+        }
+      ]
+    },
+    {
+      "label": "Textual representation of the score bar for those using a readspeaker",
+      "default": "You got :num out of :total points"
+    }
+  ]
+}

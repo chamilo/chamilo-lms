@@ -1,0 +1,116 @@
+{
+  "semantics": [
+    {
+      "label": "Descrição da tarefa",
+      "description": "Descreve como o usuário deve resolver a tarefa.",
+      "placeholder": "Clique em todos os verbos no texto a seguir."
+    },
+    {
+      "label": "Campo de texto",
+      "placeholder": "Esta é uma resposta: *answer*.",
+      "description": "",
+      "important": {
+        "description": "<ul><li>Palavras marcadas são adicionadas com um asterisco(*).</li><li>Asteriscos podem ser adicionados junto às palavras marcadas adicionando outro asterisco, *palavracorreta*** => palavracorreta*.</li></ul>",
+        "example": "As palavras corretas são marcadas desta maneira: *palavra correta*, e um asterisco pode ser escrito da seguinte maneira: *palavracorreta***."
+      }
+    },
+    {
+      "label": "Feedback geral",
+      "fields": [
+        {
+          "widgets": [
+            {
+              "label": "Padrão"
+            }
+          ],
+          "label": "Defina feedback customizado para qualquer faixa de pontuação",
+          "description": "Clique no botão \"Adicionar faixa\" para adicionar quantas faixas de pontuação forem necessárias. Exemplo: 0-20% Pontuação ruim, 21-91% Pontuação média, 91-100% Ótima pontuação!",
+          "entity": "range",
+          "field": {
+            "fields": [
+              {
+                "label": "Faixa de pontuação"
+              },
+              {},
+              {
+                "label": "Feedback para uma faixa de pontuação determinada",
+                "placeholder": "Preencha o feedback"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "Texto para botão \"Verificar resposta\"",
+      "default": "Verificar resposta"
+    },
+    {
+      "label": "Texto para botão \"Tentar novamente\"",
+      "default": "Tentar novamente"
+    },
+    {
+      "label": "Texto para botão \"Mostrar solução\"",
+      "default": "Mostrar solução"
+    },
+    {
+      "label": "Configurações comportamentais.",
+      "description": "Estas opções permitirão que você controle como a tarefa se comporta.",
+      "fields": [
+        {
+          "label": "Habilitar o botão \"Tentar novamente\""
+        },
+        {
+          "label": "Habilitar o botão \"Mostrar solução\" "
+        },
+        {
+          "label": "Habilitar o botão \"Verificar resposta\" "
+        },
+        {
+          "label": "Mostrar pontuação",
+          "description": "Mostra pontos ganhos para cada questão.."
+        }
+      ]
+    },
+    {
+      "label": "Texto para resposta correta",
+      "default": "Correto!",
+      "description": "Texto usado para indicar que a resposta está correta"
+    },
+    {
+      "label": "Texto para resposta incorreta",
+      "default": "Incorreto!",
+      "description": "Texto usado para indicar que a resposta está incorreta"
+    },
+    {
+      "label": "Texto para questão não respondida",
+      "default": "Questão não respondida!",
+      "description": "Texto usado para indicar que a questão não foi respondida"
+    },
+    {
+      "label": "Descrição para solução exibida",
+      "default": "A tarefa foi atualizada com a solução.",
+      "description": "Este texto diz ao usuário que a tarefa foi atualizada com a solução."
+    },
+    {
+      "label": "Representação textual da barra de pontuação para aqueles que usam leitores de telas",
+      "default": "Você marcou :num de :total pontos"
+    },
+    {
+      "label": "Label for the full readable text for assistive technologies",
+      "default": "Full readable text"
+    },
+    {
+      "label": "Label for the text where words can be marked for assistive technologies",
+      "default": "Full text where words can be marked"
+    },
+    {
+      "label": "Solution mode header for assistive technologies",
+      "default": "Solution mode"
+    },
+    {
+      "label": "Checking mode header for assistive technologies",
+      "default": "Checking mode"
+    }
+  ]
+}

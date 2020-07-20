@@ -1,0 +1,68 @@
+{
+  "title": "True/False Question",
+  "description": "Test your users with 'True or False' type questions",
+  "machineName": "H5P.TrueFalse",
+  "majorVersion": 1,
+  "minorVersion": 6,
+  "patchVersion": 1,
+  "runnable": 1,
+  "license": "MIT",
+  "author": "Joubel",
+  "embedTypes": [
+    "iframe"
+  ],
+  "coreApi": {
+    "majorVersion": 1,
+    "minorVersion": 19
+  },
+  "preloadedCss": [
+    {
+      "path": "styles/h5p-true-false.css"
+    }
+  ],
+  "preloadedJs": [
+    {
+      "path": "scripts/h5p-true-false.js"
+    },
+    {
+      "path": "scripts/h5p-true-false-answer-group.js"
+    },
+    {
+      "path": "scripts/h5p-true-false-answer.js"
+    }
+  ],
+  "preloadedDependencies": [
+    {
+      "machineName": "FontAwesome",
+      "majorVersion": 4,
+      "minorVersion": 5
+    },
+    {
+      "machineName": "H5P.Question",
+      "majorVersion": 1,
+      "minorVersion": 4
+    },
+    {
+      "machineName": "H5P.JoubelUI",
+      "majorVersion": 1,
+      "minorVersion": 3
+    },
+    {
+      "machineName": "H5P.FontIcons",
+      "majorVersion": 1,
+      "minorVersion": 0
+    }
+  ],
+  "editorDependencies": [
+    {
+      "machineName": "H5PEditor.RadioGroup",
+      "majorVersion": 1,
+      "minorVersion": 1
+    },
+    {
+      "machineName": "H5PEditor.ShowWhen",
+      "majorVersion": 1,
+      "minorVersion": 0
+    }
+  ]
+}

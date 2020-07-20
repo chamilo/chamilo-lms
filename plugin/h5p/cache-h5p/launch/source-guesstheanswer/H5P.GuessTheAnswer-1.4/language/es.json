@@ -1,0 +1,26 @@
+{
+  "semantics": [
+    {
+      "label": "Descripción del trabajo",
+      "description": "Describa como debe resolver el trabajo el usuario."
+    },
+    {
+      "label": "Medio",
+      "fields": [
+        {
+          "label": "Tipo",
+          "description": "Medio opcional para mostrar arriba de la pregunta."
+        }
+      ]
+    },
+    {
+      "label": "Etiqueta descriptiva de solución",
+      "default": "Clic para ver la respuesta.",
+      "description": "Área de texto elegible en donde será mostrada la solución."
+    },
+    {
+      "label": "Texto de solución",
+      "description": "La solución para la imagen."
+    }
+  ]
+}

@@ -1,0 +1,116 @@
+{
+  "semantics": [
+    {
+      "label": "Popis úlohy",
+      "description": "Popište, jak by měl uživatel úlohu vyřešit.",
+      "placeholder": "Klikněte na všechna slovesa v následujícím textu."
+    },
+    {
+      "label": "Textové pole",
+      "placeholder": "To je odpověď: *odpověď*.",
+      "description": "",
+      "important": {
+        "description": "<ul><li>Označená slova jsou přidána s hvězdičkou (*).</li><li>Hvězdičky lze přidat do označených slov přidáním další hvězdičky, *správnéslovo*** => správnéslovo*.</li></ul>",
+        "example": "Správná slova jsou takto označena: *správnéslovo*, takto je napsána hvězdička: *správnéslovo***."
+      }
+    },
+    {
+      "label": "Celková zpětná vazba",
+      "fields": [
+        {
+          "widgets": [
+            {
+              "label": "Výchozí"
+            }
+          ],
+          "label": "Definujte vlastní zpětnou vazbu pro libovolný rozsah skóre",
+          "description": "Klikněte na tlačítko \"Přidat rozsah\"  pro přidání tolika rozsahů, kolik potřebujete. Například: 0-20% špatný výsledek, 21-91% průměrný výsledek, 91-100% výborný výsledek!",
+          "entity": "rozsah",
+          "field": {
+            "fields": [
+              {
+                "label": "Rozsah skóre"
+              },
+              {},
+              {
+                "label": "Zpětná vazba pro definovaný rozsah skóre",
+                "placeholder": "Vyplňte ve zpětné vazbě"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "Text tlačítka \"Zkontrolovat\" ",
+      "default": "Zkontrolovat"
+    },
+    {
+      "label": "Text tlačítka \"Opakovat\" ",
+      "default": "Opakovat"
+    },
+    {
+      "label": "Text tlačítka \"Zobrazit řešení\" ",
+      "default": "Zobrazit řešení"
+    },
+    {
+      "label": "Nastavení chování.",
+      "description": "Tyto možnosti vám umožní řídit, jak se bude úloha chovat.",
+      "fields": [
+        {
+          "label": "Povolit tlačítko  \"Opakovat\""
+        },
+        {
+          "label": "Povolit tlačítko  \"Zobrazit řešení\" "
+        },
+        {
+          "label": "Povolit tlačítko  \"Zkontrolovat\" "
+        },
+        {
+          "label": "Zobrazit body",
+          "description": "Zobrazit body získané za každou odpověď."
+        }
+      ]
+    },
+    {
+      "label": "Text správné odpovědi",
+      "default": "Správně!",
+      "description": "Text používaný k označení správnosti odpovědi"
+    },
+    {
+      "label": "Text nesprávné odpovědi",
+      "default": "Nesprávně!",
+      "description": "Text používaný k označení nesprávnosti odpovědi"
+    },
+    {
+      "label": "Chybějící text odpovědi",
+      "default": "Odpověď nebyla nalezena!",
+      "description": "Text používaný k označení, že chybí odpověď"
+    },
+    {
+      "label": "Popis pro zobrazení řešení",
+      "default": "Úloha je aktualizována tak, aby obsahovala řešení.",
+      "description": "Tento text říká uživateli, že úkoly byly řešením aktualizovány."
+    },
+    {
+      "label": "Textové znázornění výsledkové lišty pro ty, kteří používají čtecí zařízení",
+      "default": "Získal jste :num z :total bodů"
+    },
+    {
+      "label": "Popisek pro plně čitelný text pro pomocné technologie",
+      "default": "Plně čitelný text"
+    },
+    {
+      "label": "Popisek pro text, kde lze označit slova pro pomocné technologie",
+      "default": "Celý text, kde slova lze označit"
+    },
+    {
+      "label": "Záhlaví režimu řešení pro pomocné technologie",
+      "default": "Režim řešení"
+    },
+    {
+      "label": "Záhlaví kontrolního režimu pro pomocné technologie",
+      "default": "Kontrolní režim"
+    }
+  ]
+}

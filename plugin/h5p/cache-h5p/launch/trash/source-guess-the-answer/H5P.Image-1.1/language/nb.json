@@ -1,0 +1,19 @@
+{
+  "semantics": [
+    {
+      "label": "Bildefil"
+    },
+    {
+      "label": "Alternativ tekst",
+      "description": "Påkrevd. Hvis bildet ikke kan lastes vises denne teksten istedenfor. Denne blir også brukt ved talesyntese."
+    },
+    {
+      "label": "Sveve-tekst",
+      "description": "Valgfritt. Denne teksten vises når brukeren holder pekeenheten over bildet."
+    },
+    {
+      "label": "Innholdsnavn for bilde",
+      "default": "Image"
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "semantics": [
+    {
+      "label": "Vælg fil"
+    },
+    {
+      "label": "Indstillinger for afspilning",
+      "description": "Vælg layout for afspiller.",
+      "options": [
+        {
+          "label": "Minimalistisk"
+        },
+        {
+          "label": "Fuld"
+        },
+        {
+          "label": "Gennemsigtig"
+        }
+      ]
+    },
+    {
+      "label": "Tilpas til område"
+    },
+    {
+      "label": "Aktiver kontrolpanel",
+      "description": "Kontrolpanel giver mulighed for at pause afspilningen."
+    },
+    {
+      "label": "Aktiver automatisk afspilning",
+      "description": "Vælges automatisk afspilning startes afspilningen med det samme. Hvis antomatisk afspilning er fravalgt skal brugeren starte afspilning ved at klikke på playknappen."
+    },
+    {
+      "label": "Play audio (Readspeaker)",
+      "default": "Play audio"
+    },
+    {
+      "label": "Pause audio (Readspeaker)",
+      "default": "Pause audio"
+    },
+    {
+      "label": "Audio fil-navn",
+      "default": "Audio"
+    },
+    {
+      "label": "Audio not supported message",
+      "default": "Your browser does not support this audio"
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+.h5p-joubelui-progressbar {
+  width: 100%;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  height: .25em;
+  background: #fff;
+  -webkit-box-shadow: 0px -1px 3px 0px rgba(1,72,118,0.75);
+  -moz-box-shadow: 0px -1px 3px 0px rgba(1,72,118,0.75);
+  box-shadow: 0px -1px 3px 0px rgba(1,72,118,0.75);
+}
+
+.h5p-joubelui-progressbar-slide-status-text {
+  font-size: 0;
+  width: 0;
+  height: 0;
+}
+
+.h5p-joubelui-progressbar-background {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 0;
+  background-color: #014876;
+  -webkit-transition: width .3s ease-in-out;
+  -moz-transition: width .3s ease-in-out;
+  -o-transition: width .3s ease-in-out;
+  transition: width .3s ease-in-out;
+}
+.h5p-joubelui-drop {
+  z-index: 1;
+}
+.drop-element.h5p-joubelui-drop .drop-content {
+  padding: .2em .8em;
+  font-weight: bold;
+}

@@ -479,7 +479,7 @@ class ExerciseLink extends AbstractLink
         return strip_tags(Exercise::get_formated_title_variable($data['title']));
     }
 
-    public function getLpList()
+    public function getLpListToString()
     {
         $data = $this->get_exercise_data();
         $lpList = Exercise::getLpListFromExercise($data['id'], $this->getCourseId());
@@ -493,7 +493,6 @@ class ExerciseLink extends AbstractLink
 
         return $lpListToString;
     }
-
 
     /**
      * Get description to display: same as exercise description.

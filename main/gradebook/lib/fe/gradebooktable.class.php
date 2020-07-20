@@ -1242,7 +1242,7 @@ class GradebookTable extends SortableTable
 
                 if ($item instanceof ExerciseLink) {
                     $spaces = str_repeat('&nbsp;', $spaces);
-                    $text .= '<br /><br />'.$spaces.$item->getLpList();
+                    $text .= '<br /><br />'.$spaces.$item->getLpListToString();
                 }
 
                 $cc = $this->currentcat->get_course_code();

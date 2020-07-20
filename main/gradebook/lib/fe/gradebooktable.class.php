@@ -1239,10 +1239,10 @@ class GradebookTable extends SortableTable
                 $extra .= $item->getSkillsFromItem();
                 $text .= "&nbsp;".$extra.$show_message;
 
-                if ($item instanceof ExerciseLink) {
+                /*if ($item instanceof ExerciseLink) {
                     $spaces = str_repeat('&nbsp;', $spaces);
                     $text .= '<br /><br />'.$spaces.$item->getLpListToString();
-                }
+                }*/
 
                 $cc = $this->currentcat->get_course_code();
                 if (empty($cc)) {

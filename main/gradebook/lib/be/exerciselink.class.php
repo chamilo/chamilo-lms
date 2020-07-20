@@ -102,10 +102,12 @@ class ExerciseLink extends AbstractLink
         }
 
         $cats = [];
+        $exerciseList = [];
         if (isset($result)) {
             if (Database::num_rows($result) > 0) {
                 while ($data = Database::fetch_array($result)) {
                     $cats[] = [$data['iid'], $data['title']];
+                    $exerciseList[] = $data;
                 }
             }
         }
@@ -138,12 +140,22 @@ class ExerciseLink extends AbstractLink
         }
 
         if (!empty($exerciseInLP)) {
+            $allExercises = array_column($exerciseList, 'iid');
+
             foreach ($exerciseInLP as $exercise) {
-                $lpName = strip_tags($exercise['lp_name']);
-                $cats[] = [
+                if (in_array($exercise['iid'], $allExercises)) {
+                   continue;
+                }
+                $allExercises[] = $exercise['iid'];
+                //$lpName = strip_tags($exercise['lp_name']);
+                /*$cats[] = [
                     $exercise['iid'],
                     strip_tags(Exercise::get_formated_title_variable($exercise['title'])).
                     ' ('.get_lang('ToolLearnpath').' - '.$lpName.')',
+                ];*/
+                $cats[] = [
+                    $exercise['iid'],
+                    strip_tags(Exercise::get_formated_title_variable($exercise['title']))
                 ];
             }
         }

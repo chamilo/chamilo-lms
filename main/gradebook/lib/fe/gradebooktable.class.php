@@ -1238,6 +1238,11 @@ class GradebookTable extends SortableTable
                 }
                 $extra .= $item->getSkillsFromItem();
                 $text .= "&nbsp;".$extra.$show_message;
+
+                if ($item instanceof ExerciseLink) {
+                    $text .= '<br />'.$item->getLpList();
+                }
+
                 $cc = $this->currentcat->get_course_code();
                 if (empty($cc)) {
                     $text .= '&nbsp;[<a href="'.api_get_path(REL_COURSE_PATH).$item->get_course_code().'/">'.$item->get_course_code().'</a>]';

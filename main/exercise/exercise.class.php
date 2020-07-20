@@ -159,8 +159,6 @@ class Exercise
     public function read($id, $parseQuestionList = true)
     {
         $table = Database::get_course_table(TABLE_QUIZ_TEST);
-        $tableLpItem = Database::get_course_table(TABLE_LP_ITEM);
-        $tblLp = Database::get_course_table(TABLE_LP_MAIN);
 
         $id = (int) $id;
         if (empty($this->course_id)) {
@@ -205,7 +203,8 @@ class Exercise
             $this->autolaunch = isset($object->autolaunch) ? (int) $object->autolaunch : 0;
             $this->exerciseCategoryId = isset($object->exercise_category_id) ? (int) $object->exercise_category_id : null;
             $this->preventBackwards = isset($object->prevent_backwards) ? (int) $object->prevent_backwards : 0;
-
+            $this->exercise_was_added_in_lp = false;
+            $this->lpList = [];
             $this->notifications = [];
             if (!empty($object->notifications)) {
                 $this->notifications = explode(',', $object->notifications);
@@ -219,18 +218,10 @@ class Exercise
                 $this->showPreviousButton = $object->show_previous_button == 1 ? true : false;
             }
 
-            $sql = "SELECT lpi.lp_id, lpi.max_score, lp.session_id
-                    FROM $tableLpItem lpi
-                    INNER JOIN $tblLp lp ON (lpi.lp_id = lp.iid AND lpi.c_id = lp.c_id)
-                    WHERE
-                        lpi.c_id = {$this->course_id} AND
-                        lpi.item_type = '".TOOL_QUIZ."' AND
-                        lpi.path = '$id'";
-            $result = Database::query($sql);
-
-            if (Database::num_rows($result) > 0) {
+            $list = self::getLpListFromExercise($id, $this->course_id);
+            if (!empty($list)) {
                 $this->exercise_was_added_in_lp = true;
-                $this->lpList = Database::store_result($result, 'ASSOC');
+                $this->lpList = $list;
             }
 
             $this->force_edit_exercise_in_lp = api_get_configuration_value('force_edit_exercise_in_lp');
@@ -10547,12 +10538,39 @@ class Exercise
             ['id' => 'result_disabled_8']
         );
 
-        $group = $form->addGroup(
+        return $form->addGroup(
             $resultDisabledGroup,
             null,
             get_lang('ShowResultsToStudents')
         );
+    }
 
-        return $group;
+    public static function getLpListFromExercise($exerciseId, $courseId)
+    {
+        $tableLpItem = Database::get_course_table(TABLE_LP_ITEM);
+        $tblLp = Database::get_course_table(TABLE_LP_MAIN);
+
+        $exerciseId = (int) $exerciseId;
+        $courseId = (int) $courseId;
+
+        $sql = "SELECT
+                    lp.name,
+                    lpi.lp_id,
+                    lpi.max_score,
+                    lp.session_id
+                FROM $tableLpItem lpi
+                INNER JOIN $tblLp lp
+                ON (lpi.lp_id = lp.iid AND lpi.c_id = lp.c_id)
+                WHERE
+                    lpi.c_id = $courseId AND
+                    lpi.item_type = '".TOOL_QUIZ."' AND
+                    lpi.path = '$exerciseId'";
+        $result = Database::query($sql);
+        $lpList = [];
+        if (Database::num_rows($result) > 0) {
+            $lpList = Database::store_result($result, 'ASSOC');
+        }
+
+        return $lpList;
     }
 }

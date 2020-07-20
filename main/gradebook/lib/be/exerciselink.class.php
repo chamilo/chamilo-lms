@@ -479,6 +479,22 @@ class ExerciseLink extends AbstractLink
         return strip_tags(Exercise::get_formated_title_variable($data['title']));
     }
 
+    public function getLpList()
+    {
+        $data = $this->get_exercise_data();
+        $lpList = Exercise::getLpListFromExercise($data['id'], $this->getCourseId());
+        $lpListToString = '';
+        if (!empty($lpList)) {
+            foreach ($lpList as &$list) {
+                $list['name'] = Display::label($list['name'], 'warning');
+            }
+            $lpListToString = '&nbsp; '.implode(', ', array_column($lpList, 'name'));
+        }
+
+        return $lpListToString;
+    }
+
+
     /**
      * Get description to display: same as exercise description.
      */

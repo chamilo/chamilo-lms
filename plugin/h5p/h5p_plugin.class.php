@@ -3,6 +3,8 @@
 
 class H5PPlugin extends Plugin
 {
+    public $table = 'plugin_mindmap';
+
     protected function __construct()
     {
         parent::__construct(
@@ -22,6 +24,9 @@ class H5PPlugin extends Plugin
         return $result ? $result : $result = new self();
     }
 
+    /**
+     * Install the structure necessary for the plugin
+     */
     public function install()
     {
         $sql = "CREATE TABLE IF NOT EXISTS plugin_h5p(
@@ -31,7 +36,7 @@ class H5PPlugin extends Plugin
             url_id INT,
             title VARCHAR(255) NOT NULL,
             descript VARCHAR(255) NOT NULL,
-            date_create VARCHAR(12) NOT NULL,
+            creation_date VARCHAR(12) NOT NULL,
             terms_a VARCHAR(512) NOT NULL,
             terms_b VARCHAR(512) NOT NULL,
             terms_c VARCHAR(512) NOT NULL,
@@ -46,9 +51,12 @@ class H5PPlugin extends Plugin
 
     }
 
+    /**
+     * Uninstall the plugin structure
+     */
     public function uninstall()
     {
-        //$sql = "DROP TABLE IF EXISTS plugin_h5p";
-        //Database::query($sql);
+        $sql = "DROP TABLE IF EXISTS plugin_h5p";
+        Database::query($sql);
     }
 }

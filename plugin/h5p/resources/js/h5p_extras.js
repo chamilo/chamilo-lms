@@ -1,6 +1,9 @@
+/* For licensing terms, see /license.txt */
+console.log('h5p extras is active');
 
-console.log('chamilo_h5p extras is active');
-
+/**
+ * Find CKEditor's instance and add an H5P button to it
+ */
 function installInTinyH5p(){
 
     if (window.jQuery) { 
@@ -15,7 +18,7 @@ function installInTinyH5p(){
                 gi += ' title="H5P insert" tabindex="-1" hidefocus="true" ';
                 gi += ' role="button" aria-labelledby="cke_50_label" ';
                 gi += ' aria-describedby="cke_50_description" aria-haspopup="false" >';
-                gi += '<span class="cke_button_icon" style="background-image:url(\''+ _p['web_plugin'] +'chamilo_h5p/resources/img/h5pchami.png\');">&nbsp;&nbsp;</span>';
+                gi += '<span class="cke_button_icon" style="background-image:url(\''+ _p['web_plugin'] +'h5p/resources/img/h5pchami.png\');">&nbsp;&nbsp;</span>';
                 gi += '<span id="cke_50_label" class="cke_button_label cke_button__source_label" aria-hidden="false"></span>';
                 gi += '<span id="cke_50_description" class="cke_button_label" aria-hidden="false"></span></a>';
                 $(".cke_button__source").after(gi);
@@ -42,12 +45,18 @@ setTimeout(function(){installInTinyH5p();},600);
 
 //#H5P:1#
 
+/**
+ * Load H5P objects through CKEditor
+ */
 function loadExtrasObjectsH5p(){
     insertExtrasObjectsH5p();
     $(".cke_dialog_background_cover").css('display','block');
     $("#extrasobjectH5p").css('display','block');
 }
 
+/**
+ * Insert H5P objects in the body of the area edited through CKEditor
+ */
 function insertExtrasObjectsH5p(){
 
     if($(".cke_dialog_background_cover").length==0){
@@ -61,6 +70,10 @@ function insertExtrasObjectsH5p(){
 
 }
 
+/**
+ * Generate the HTML to insert H5P objects in an HTML document
+ * @returns {string}
+ */
 function inExtrasObjectsH5p(){
     
     var h = '';
@@ -74,12 +87,18 @@ function inExtrasObjectsH5p(){
 
 }
 
+/**
+ * Visually remove H5P objects from CKEditor
+ */
 function closeExtrasH5p(){
 
     $("#extrasobjectH5p").css('display','none');
     $(".cke_dialog_background_cover").css('display','none');
 }
 
+/**
+ * Show the H5P options
+ */
 function showEditH5pLoad(){
 
     $(".cke_dialog_background_cover").css('z-index','97');
@@ -108,17 +127,20 @@ function showEditH5pLoad(){
 
 }
 
+/**
+ * Load (AJAX) the H5P node types
+ */
 function loadDataH5Pbase(){
 
-    $('.bloch5pGrid').html('<p style="text-align:center;" ><img src="' + _p['web_plugin'] + 'chamilo_h5p/resources/img/loadtable.gif" /></p>');
+    $('.bloch5pGrid').html('<p style="text-align:center;" ><img src="' + _p['web_plugin'] + 'h5p/resources/img/loadtable.gif" /></p>');
 
-    var urlpath = _p['web_plugin'] +'chamilo_h5p/resources/ajax/getnodes.php';
+    var urlpath = _p['web_plugin'] +'h5p/resources/ajax/getnodes.php';
 
     $.ajax({
 		url : urlpath,cache : false
 	}).done(function(codeHtml){
     
-        var urlH5p = _p['web_plugin'] +'chamilo_h5p/node_list.php';
+        var urlH5p = _p['web_plugin'] +'h5p/list.php';
 
         codeHtml += '<a target="_blank" href="'+urlH5p+'" onClick="closeExtrasH5p()" class="bloch5pAdd" >&nbsp;</a>';
 
@@ -134,16 +156,24 @@ function loadDataH5Pbase(){
 
 }
 
+/**
+ * Select a type of node for the base element of an H5P object
+ * @param id
+ * @param node_type
+ */
 function selectH5Pbase(id,node_type){
 
     $(".bloch5pLine").css("background-color","white").css("color","black");
     $(".bloch5pLine" + id).css("background-color","#2575be").css("color","white");
 
-    var pgid = "chamilo_h5p/cache-h5p/launch/source-" + id + ".html?tn=" + node_type;
+    var pgid = "h5p/cache-h5p/launch/source-" + id + ".html?tn=" + node_type;
     $("#inputSelH5PUrl").val(pgid);
 
 }
 
+/**
+ * Add an H5P object in CKEditor
+ */
 function addObjectH5PInCKEDITORByBase(){
 
     var pg = $("#inputSelH5PUrl").val();
@@ -172,4 +202,3 @@ function addObjectH5PInCKEDITORByBase(){
     }
 
 }
-

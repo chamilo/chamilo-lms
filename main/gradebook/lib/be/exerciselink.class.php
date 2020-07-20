@@ -488,7 +488,7 @@ class ExerciseLink extends AbstractLink
             foreach ($lpList as &$list) {
                 $list['name'] = Display::label($list['name'], 'warning');
             }
-            $lpListToString = implode(' ', array_column($lpList, 'name'));
+            $lpListToString = implode('&nbsp;', array_column($lpList, 'name'));
         }
 
         return $lpListToString;

@@ -202,9 +202,9 @@ class FlatViewDataGenerator
                         $label = $item->get_name();
                     }
 
-                    if ($item instanceof ExerciseLink) {
+                    /*if ($item instanceof ExerciseLink) {
                         $label .= '<br /><br />'.$item->getLpListToString();
-                    }
+                    }*/
 
                     $headers[] = $label;
                     $evaluationsAdded[] = $item->get_id();
@@ -225,9 +225,9 @@ class FlatViewDataGenerator
                         $label = $item->get_name();
                     }
 
-                    if ($item instanceof ExerciseLink) {
+                    /*if ($item instanceof ExerciseLink) {
                         $label .= '<br /><br />'.$item->getLpListToString();
-                    }
+                    }*/
 
                     $headers[] = $label;
                 }

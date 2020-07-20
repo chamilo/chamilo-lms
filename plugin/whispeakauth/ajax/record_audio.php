@@ -4,8 +4,6 @@
 use Chamilo\PluginBundle\WhispeakAuth\Controller\AuthenticationController;
 use Chamilo\PluginBundle\WhispeakAuth\Controller\EnrollmentController;
 
-$cidReset = true;
-
 require_once __DIR__.'/../../../main/inc/global.inc.php';
 
 $action = isset($_POST['action']) ? $_POST['action'] : 'enrollment';

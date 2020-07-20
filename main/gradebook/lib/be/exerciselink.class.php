@@ -144,7 +144,7 @@ class ExerciseLink extends AbstractLink
 
             foreach ($exerciseInLP as $exercise) {
                 if (in_array($exercise['iid'], $allExercises)) {
-                   continue;
+                    continue;
                 }
                 $allExercises[] = $exercise['iid'];
                 //$lpName = strip_tags($exercise['lp_name']);
@@ -155,7 +155,7 @@ class ExerciseLink extends AbstractLink
                 ];*/
                 $cats[] = [
                     $exercise['iid'],
-                    strip_tags(Exercise::get_formated_title_variable($exercise['title']))
+                    strip_tags(Exercise::get_formated_title_variable($exercise['title'])),
                 ];
             }
         }

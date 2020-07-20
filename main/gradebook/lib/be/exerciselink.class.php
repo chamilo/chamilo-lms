@@ -255,7 +255,6 @@ class ExerciseLink extends AbstractLink
         $sessionId = $this->get_session_id();
         $courseId = $this->getCourseId();
         $exerciseData = $this->get_exercise_data();
-
         $exerciseId = isset($exerciseData['id']) ? (int) $exerciseData['id'] : 0;
         $stud_id = (int) $stud_id;
 
@@ -292,26 +291,32 @@ class ExerciseLink extends AbstractLink
                             c_id = $courseId
                         ";
             } else {
-                $lpId = null;
+                $lpCondition = null;
                 if (!empty($exercise->lpList)) {
-                    $lpId = $exercise->getLpBySession($sessionId);
-                    $lpId = $lpId['lp_id'];
+                    //$lpId = $exercise->getLpBySession($sessionId);
+                    $lpList = [];
+                    foreach ($exercise->lpList as $lpData) {
+                        if ((int) $lpData['session_id'] == $sessionId) {
+                            $lpList[] = $lpData['lp_id'];
+                        }
+                    }
+                    $lpCondition = ' orig_lp_id IN ("'.implode('", "', $lpList).'") AND ';
                 }
 
                 $sql = "SELECT *
                         FROM $tblStats
                         WHERE
                             exe_exo_id = $exerciseId AND
-                            orig_lp_id = $lpId AND
+                            $lpCondition
                             status <> 'incomplete' AND
                             session_id = $sessionId AND
                             c_id = $courseId ";
             }
 
-            if (!empty($stud_id) && 'ranking' != $type) {
+            if (!empty($stud_id) && 'ranking' !== $type) {
                 $sql .= " AND exe_user_id = $stud_id ";
             }
-            $sql .= ' ORDER BY exe_id DESC';
+            $sql .= ' ORDER BY exe_id DESC ';
         } else {
             $sql = "SELECT * FROM $tblHp hp
                     INNER JOIN $tblDoc doc
@@ -358,7 +363,6 @@ class ExerciseLink extends AbstractLink
             $bestResult = 0;
             $weight = 0;
             $sumResult = 0;
-
             $studentList = $this->getStudentList();
             $studentIdList = [];
             if (!empty($studentList)) {

@@ -8,7 +8,7 @@ $(document).ready(function () {
 
   if (u.indexOf('action=edit') == -1) {
     $('#dictionary').css('display', 'none')
-    var btn = '<a id="addElement" href="#" onClick="showEditFormulaire();" class="btn btn-success">'
+    var btn = '<a id="addElement" href="#" onClick="showEditForm();" class="btn btn-success">'
     btn += 'Create Page</a><br><br>'
     //$("#dictionary").parent().prepend(btn);
   }
@@ -65,7 +65,7 @@ $(document).ready(function () {
   menuBc += '<a href="list.php" ><img src="resources/img/edit.png" alt="">H5P</a>&nbsp;&nbsp;</li>'
 
   var btn = '&nbsp;&nbsp;<a id="addElement" href="#" '
-  btn += ' onClick="showEditFormulaire();" class="btn btn-success">+</a>'
+  btn += ' onClick="showEditForm();" class="btn btn-success">+</a>'
 
   var u = window.top.location.href
 
@@ -87,7 +87,7 @@ $(document).ready(function () {
 /**
  * Show the edition form
  */
-function showEditFormulaire () {
+function showEditForm() {
   $('#dictionary').css('display', '')
   $('#nodeselection').css('display', 'block')
   $('#addElement').css('display', 'none')
@@ -118,7 +118,7 @@ function showFileManger () {
  */
 var targetInputImg = ''
 
-function showFileMangerSelectImg () {
+function showFileManagerSelectImg () {
 
   $('<div \>').dialog({
     modal: true, width: '80%', title: 'Select your file', zIndex: 99999,
@@ -381,7 +381,7 @@ function interfaceCard (letterId, collTerms) {
   h += '<input id="outrecto' + letterId + '" style="display:none;" type="text" />'
   h += '<input id="outverso' + letterId + '" style="display:none;" type="text" />'
   h += '<input id="imagecard' + letterId + '" style="display:none;" type="text" />'
-  h += '<div class="imageBlockPreview imageBlockPreview' + letterId + '" onClick="targetInputImg=\'imagecard' + letterId + '\';showFileMangerSelectImg();" ></div>'
+  h += '<div class="imageBlockPreview imageBlockPreview' + letterId + '" onClick="targetInputImg=\'imagecard' + letterId + '\';showFileManagerSelectImg();" ></div>'
 
   if (letterId != 'a') {
     h += '<a onClick="deleteInterfaceCard(\'' + letterId + '\')" class="deleteBlockCard deleteBlockCard' + letterId + '" /></a>'
@@ -502,7 +502,7 @@ function compileInterfaceCard (letterId) {
   if (imagecardRef == 'img/' || imagecardRef == '' || imagecardRef == 'dialogcard.jpg') {
     imagecardRef = 'dialogcard.jpg'
     $('#imagecard' + letterId).val('dialogcard.jpg')
-    $('.imageBlockPreview' + letterId).css('background-image', 'url(img/' + imagecardRef + ')')
+    $('.imageBlockPreview' + letterId).css('background-image', 'url(resources/img/' + imagecardRef + ')')
   }
 
   var fullStr = rectoRef + '|' + versoRef + '|' + imagecardRef
@@ -620,7 +620,7 @@ function interfaceguesstheanswer () {
 
   $('#dictionary_terms_b').parent().parent().css('display', '')
   var im = '<div class="imageBlockPreviewLarge imageBlockPreviewa" '
-  im += 'onClick="targetInputImg=\'dictionary_terms_b\';showFileMangerSelectImg();" ></div>'
+  im += 'onClick="targetInputImg=\'dictionary_terms_b\';showFileManagerSelectImg();" ></div>'
   $('#dictionary_terms_b').parent().append('<div>' + im + '</div>')
 
   $('#dictionary_terms_c').parent().parent().css('display', '')
@@ -642,7 +642,7 @@ function overviewguesstheanswer () {
   var imagecardRef = $('#dictionary_terms_b').val()
 
   if (imagecardRef == 'img/' || imagecardRef == '' || imagecardRef == 'dialogcard.jpg') {
-    imagecardRef = 'img/dialogcard.jpg'
+    imagecardRef = 'resources/img/dialogcard.jpg'
   }
 
   $('.imageBlockPreviewLarge').css('background-image', 'url(' + imagecardRef + ')')

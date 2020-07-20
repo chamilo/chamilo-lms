@@ -3,7 +3,7 @@
 
 /**
  * Class MindmapPlugin
- * This class defines the course plugin "MindMap", storing its data in the plugin_mindmap table
+ * This class defines the course plugin "MindMap", storing its data in the plugin_mindmap table.
  */
 class MindmapPlugin extends Plugin
 {
@@ -22,21 +22,22 @@ class MindmapPlugin extends Plugin
                 'tool_enable' => 'boolean',
             ]
         );
-
     }
 
     /**
-     * Create instance of a Mindmap plugin object
+     * Create instance of a Mindmap plugin object.
+     *
      * @return MindmapPlugin|null
      */
     public static function create()
     {
         static $result = null;
+
         return $result ? $result : $result = new self();
     }
 
     /**
-     * Install the table structure
+     * Install the table structure.
      */
     public function install()
     {
@@ -78,7 +79,7 @@ class MindmapPlugin extends Plugin
         }
         // Deleting course settings and course home icons
         $this->uninstall_course_fields_in_all_courses();
-        error_log('dropping c_tool');
+
         $p2 = api_get_path(SYS_PATH).'main/img/icons/64/mindmap.png';
         if (file_exists($p2) && is_writable($p2)) {
             unlink($p2);

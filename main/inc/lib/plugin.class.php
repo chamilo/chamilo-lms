@@ -857,7 +857,8 @@ class Plugin
     /**
      * Returns true if the plugin is installed, false otherwise.
      *
-     * @param   bool    $checkEnabled   Also check if enabled (instead of only installed)
+     * @param bool $checkEnabled Also check if enabled (instead of only installed)
+     *
      * @return bool True if plugin is installed/enabled, false otherwise
      */
     public function isEnabled($checkEnabled = false)
@@ -880,8 +881,8 @@ class Plugin
                     [
                         "variable = ? AND subkey = ? AND category = 'Plugins' " => [
                             $this->get_name().'_tool_enable',
-                            $this->get_name()
-                        ]
+                            $this->get_name(),
+                        ],
                     ]
                 );
                 if (is_array($enabled) && isset($enabled['selected_value']) && $enabled['selected_value'] == 'false') {
@@ -890,6 +891,7 @@ class Plugin
                     return false;
                 }
             }
+
             return true;
         }
 

@@ -1,7 +1,9 @@
 <?php
+
 /* For licensing terms, see /license.txt */
+
 /**
- * Process the saving of the mindmap updates (when clicking the logo to get out)
+ * Process the saving of the mindmap updates (when clicking the logo to get out).
  */
 if (isset($_GET['id'])) {
     if (isset($_POST['datamap'])) {
@@ -23,31 +25,29 @@ if (isset($_GET['id'])) {
         }
 
         if ($dataMap != '') {
-
             $user = api_get_user_info();
 
             $table = 'plugin_mindmap';
             $params = [
-                'mindmap_data' => $dataMap
+                'mindmap_data' => $dataMap,
             ];
             $whereConditions = [
                 'id = ?' => $idMM,
                 'AND (user_id = ?' => $user['id'],
-                'OR is_shared = 1)'
+                'OR is_shared = 1)',
             ];
 
             $isAdmin = api_is_platform_admin();
 
             if ($user['status'] == SESSIONADMIN || $user['status'] == PLATFORM_ADMIN || $isAdmin) {
                 $whereConditions = [
-                    'id = ?' => $idMM
+                    'id = ?' => $idMM,
                 ];
             }
 
             $resultUp = Database::update($table, $params, $whereConditions);
 
             echo 'OK';
-
         } else {
             echo 'KO';
         }

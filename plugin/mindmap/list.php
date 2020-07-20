@@ -39,18 +39,18 @@ if (!$plugin->isEnabled(true)) {
     api_not_allowed(true);
     exit;
 } else {
-    $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+    $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
     $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : '';
     $cid = 0;
     if (!empty($_GET['cidReq'])) {
         $cid = api_get_course_int_id($_GET['cidReq']);
     } else {
-        $cid = isset($_GET['cid']) ? (int)$_GET['cid'] : 0;
+        $cid = isset($_GET['cid']) ? (int) $_GET['cid'] : 0;
     }
     if (!empty($_GET['id_session'])) {
-        $sessionId = (int)$_GET['id_session'];
+        $sessionId = (int) $_GET['id_session'];
     } else {
-        $sessionId = isset($_GET['sid']) ? (int)$_GET['sid'] : 0;
+        $sessionId = isset($_GET['sid']) ? (int) $_GET['sid'] : 0;
     }
 
     if ($cid == 0) {
@@ -90,7 +90,7 @@ if (!$plugin->isEnabled(true)) {
         }
     }
     // Show create/edit form
-    include('inc/edit.form.php');
+    include 'inc/edit.form.php';
 
     $htmlHeadXtra[] = '<script src="resources/js/jquery.dataTables.min.js?v='.$version.'" language="javascript"></script>';
 
@@ -114,7 +114,7 @@ if (!$plugin->isEnabled(true)) {
 
     // Process actions (add/edit/delete)
     // Also exit and redirect to list if action successful
-    include('inc/action.switch.php');
+    include 'inc/action.switch.php';
 }
 
 $addButton = Display::url(

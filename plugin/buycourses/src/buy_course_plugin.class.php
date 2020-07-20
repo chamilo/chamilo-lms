@@ -107,7 +107,8 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Check if plugin is enabled.
      *
-     * @param   bool    $checkEnabled   Check if, additionnally to being installed, the plugin is enabled
+     * @param bool $checkEnabled Check if, additionnally to being installed, the plugin is enabled
+     *
      * @return bool
      */
     public function isEnabled($checkEnabled = false)

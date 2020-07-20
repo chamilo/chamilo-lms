@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 $varString = api_get_self();
@@ -18,7 +19,7 @@ switch ($action) {
                 'is_shared' => (empty($values['is_shared']) ? 0 : (int) $values['is_shared']),
                 'c_id' => $cid,
                 'url_id' => $urlId,
-                'session_id' => $sessionId
+                'session_id' => $sessionId,
             ];
             $result = Database::insert($plugin->table, $params);
 
@@ -39,7 +40,7 @@ switch ($action) {
                 'title' => $values['title'],
                 'description' => $values['description'],
                 'is_public' => $values['is_public'],
-                'is_shared' => $values['is_shared']
+                'is_shared' => $values['is_shared'],
             ];
             Database::update($plugin->table, $params, ['id = ?' => $id]);
             Display::addFlash(Display::return_message(get_lang('Updated')));

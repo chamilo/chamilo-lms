@@ -2,10 +2,6 @@
 
 /* For licensing terms, see /license.txt */
 
-/**
- * Report on students subscribed to courses I am teaching.
- */
-
 require_once __DIR__.'/../inc/global.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
 
@@ -77,7 +73,6 @@ function get_users($from, $number_of_items, $column, $direction)
 
     $workList = getWorkListTeacher(0, 100, null, null, null);
 
-    $totalCourseWorkTime = 0;
     $workTimeList = [];
     foreach ($workList as $work) {
         $fieldValue = new ExtraFieldValue('work');
@@ -102,7 +97,7 @@ function get_users($from, $number_of_items, $column, $direction)
     foreach ($students as $studentData) {
         $studentId = $studentData['user_id'];
         $studentData = api_get_user_info($studentId);
-        $urlDetails = $url."?student=$studentId";
+        $urlDetails = $url."?student=$studentId&details=true&course=$courseCode&id_session=$sessionId";
         $row = [];
         if ($is_western_name_order) {
             $first = Display::url($studentData['firstname'], $urlDetails);
@@ -169,7 +164,6 @@ function get_users($from, $number_of_items, $column, $direction)
 }
 
 $is_western_name_order = api_is_western_name_order();
-
 $sort_by_first_name = api_sort_by_first_name();
 $actionsLeft = '';
 $toolbar = Display::toolbarAction('toolbar-student', [$actionsLeft]);
@@ -188,7 +182,7 @@ $table = new SortableTable(
     $itemPerPage
 );
 
-$parameters =['cidReq' => $courseCode, 'id_session' => $sessionId];
+$parameters = ['cidReq' => $courseCode, 'id_session' => $sessionId];
 $table->set_additional_parameters($parameters);
 
 if ($is_western_name_order) {

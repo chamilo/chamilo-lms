@@ -683,7 +683,6 @@ class DisplayGradebook
                 $my_score_denom = ($score[1] == 0) ? 1 : $score[1];
                 $item_value += $score[0] / $my_score_denom * $item->get_weight();
             }
-
             $item_total += $item->get_weight();
         }
         $item_value = api_number_format($item_value, 2);

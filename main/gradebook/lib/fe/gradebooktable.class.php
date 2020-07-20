@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see license.txt */
 
 use ChamiloSession as Session;
@@ -321,7 +322,7 @@ class GradebookTable extends SortableTable
                 break;
         }
 
-        if ('DESC' == $this->direction) {
+        if ('DESC' === $this->direction) {
             $sorting |= GradebookDataGenerator::GDG_SORT_DESC;
         } else {
             $sorting |= GradebookDataGenerator::GDG_SORT_ASC;
@@ -1164,24 +1165,24 @@ class GradebookTable extends SortableTable
         $view = isset($_GET['view']) ? Security::remove_XSS($_GET['view']) : null;
         $categoryId = $item->getCategory()->get_id();
 
+        $cat = new Category();
+
         switch ($item->get_item_type()) {
-            // category
             case 'C':
+                // Category
                 $prms_uri = '?selectcat='.$item->get_id().'&view='.$view;
                 $isStudentView = api_is_student_view_active();
                 if (isset($is_student) || $isStudentView) {
                     $prms_uri = $prms_uri.'&amp;isStudentView=studentview';
                 }
-                $cat = new Category();
                 $show_message = $cat->show_message_resource_delete($item->get_course_code());
 
                 return '&nbsp;<a href="'.Category::getUrl().$prms_uri.'">'
                     .$item->get_name()
                     .'</a>'
                     .($item->is_course() ? ' &nbsp;['.$item->get_course_code().']'.$show_message : '');
-                // evaluation
             case 'E':
-                $cat = new Category();
+                // Evaluation
                 $course_id = CourseManager::get_course_by_category($categoryId);
                 $show_message = $cat->show_message_resource_delete($course_id);
 
@@ -1194,7 +1195,7 @@ class GradebookTable extends SortableTable
                             .'</a>';
                     } else {
                         $extra = Display::label(get_lang('Evaluation'));
-                        if ($type == 'simple') {
+                        if ($type === 'simple') {
                             $extra = '';
                         }
 
@@ -1219,13 +1220,11 @@ class GradebookTable extends SortableTable
                 }
                 // no break because of return
             case 'L':
-                // link
-                $cat = new Category();
+                // Link
                 $course_id = CourseManager::get_course_by_category($categoryId);
                 $show_message = $cat->show_message_resource_delete($course_id);
 
                 $url = $item->get_link();
-
                 $text = $item->get_name();
                 if (isset($url) && false === $show_message) {
                     $text = '&nbsp;<a href="'.$item->get_link().'">'
@@ -1234,11 +1233,10 @@ class GradebookTable extends SortableTable
                 }
 
                 $extra = Display::label($item->get_type_name(), 'info');
-                if ('simple' == $type) {
+                if ('simple' === $type) {
                     $extra = '';
                 }
                 $extra .= $item->getSkillsFromItem();
-
                 $text .= "&nbsp;".$extra.$show_message;
                 $cc = $this->currentcat->get_course_code();
                 if (empty($cc)) {
@@ -1257,14 +1255,14 @@ class GradebookTable extends SortableTable
     private function build_edit_column($item)
     {
         switch ($item->get_item_type()) {
-            // category
             case 'C':
+                // Category
                 return GradebookUtils::build_edit_icons_cat($item, $this->currentcat);
-            // evaluation
             case 'E':
+                // Evaluation
                 return GradebookUtils::build_edit_icons_eval($item, $this->currentcat->get_id());
-            // link
             case 'L':
+                // Link
                 return GradebookUtils::build_edit_icons_link($item, $this->currentcat->get_id());
         }
     }

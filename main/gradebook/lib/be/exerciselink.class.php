@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -442,7 +443,7 @@ class ExerciseLink extends AbstractLink
         $exerciseId = $data['id'];
         $path = isset($data['path']) ? $data['path'] : '';
 
-        $url = api_get_path(WEB_CODE_PATH).'gradebook/exercise_jump.php?'
+        return api_get_path(WEB_CODE_PATH).'gradebook/exercise_jump.php?'
             .http_build_query(
                 [
                     'path' => $path,
@@ -453,8 +454,6 @@ class ExerciseLink extends AbstractLink
                     'type' => $this->get_type(),
                 ]
             );
-
-        return $url;
     }
 
     /**
@@ -477,9 +476,7 @@ class ExerciseLink extends AbstractLink
             }
         }
 
-        $title = strip_tags(Exercise::get_formated_title_variable($data['title']));
-
-        return $title;
+        return strip_tags(Exercise::get_formated_title_variable($data['title']));
     }
 
     /**
@@ -595,9 +592,9 @@ class ExerciseLink extends AbstractLink
             } else {
                 // Try with iid
                 $sql = 'SELECT * FROM '.$table.'
-                    WHERE
-                        c_id = '.$this->course_id.' AND
-                        iid = '.$exerciseId;
+                        WHERE
+                            c_id = '.$this->course_id.' AND
+                            iid = '.$exerciseId;
                 $result = Database::query($sql);
                 $rows = Database::num_rows($result);
 
@@ -606,9 +603,9 @@ class ExerciseLink extends AbstractLink
                 } else {
                     // Try wit id
                     $sql = 'SELECT * FROM '.$table.'
-                        WHERE
-                            c_id = '.$this->course_id.' AND
-                            id = '.$exerciseId;
+                            WHERE
+                                c_id = '.$this->course_id.' AND
+                                id = '.$exerciseId;
                     $result = Database::query($sql);
                     $this->exercise_data = Database::fetch_array($result);
                 }

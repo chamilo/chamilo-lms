@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Test example to user API v2.php
+ * Test example to user API v2.php.
  *
  * Using Guzzle' HTTP client to call the API endpoint and make requests.
  * Change URL on the first lines of createUser() below to suit your needs.
@@ -19,7 +19,8 @@ require_once '../../../vendor/autoload.php';
  *
  * @return string
  */
-function authenticate() {
+function authenticate()
+{
     $client = new Client([
         'base_uri' => 'https://my.chamilo.test/main/webservices/api/',
     ]);

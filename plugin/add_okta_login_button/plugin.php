@@ -7,8 +7,8 @@
 $plugin_info['title'] = 'Add a button to login using Okta account';
 
 //the comments that go with the plugin
-$plugin_info['comment'] = 'If Okta authentification is activated, this plugin add a button ' .
-    'Okta Connexion on the login page. Configure plugin to add title, comment and logo. ' .
+$plugin_info['comment'] = 'If Okta authentification is activated, this plugin add a button '.
+    'Okta Connexion on the login page. Configure plugin to add title, comment and logo. '.
     'Should be place in login_top region';
 //the plugin version
 $plugin_info['version'] = '0.1';

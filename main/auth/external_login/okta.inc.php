@@ -16,7 +16,7 @@ require_once __DIR__.'/functions.inc.php';
 function oktaConnect()
 {
     $samlSso = 'saml_sso';
-    $user = array();
+    $user = [];
     // If the user is logging in.
     if (isset($_REQUEST[$samlSso])) {
         $sp = $_REQUEST[$samlSso];
@@ -24,13 +24,13 @@ function oktaConnect()
         SimpleSAML_Session::getSessionFromRequest()->cleanup();
         $as = new SimpleSAML_Auth_Simple($sp);
         $as->requireAuth();
-        $user = array(
+        $user = [
             'sp' => $sp,
             'authed' => $as->isAuthenticated(),
             'idp' => $as->getAuthData('saml:sp:IdP'),
             'nameId' => $as->getAuthData('saml:sp:NameID')->value,
             'attributes' => $as->getAttributes(),
-        );
+        ];
         $simpleSamlSes = $_SESSION['SimpleSAMLphp_SESSION'];
         $_SESSION = $chamiloSession;
         $_SESSION['SimpleSAMLphp_SESSION'] = $simpleSamlSes;
@@ -67,7 +67,7 @@ function oktaConnect()
 
             oktaLastLoginUpdate($chamiloUid);
             oktaRegistrationUpdate($chamiloUid);
-            header('Location: ' . api_get_path(WEB_PATH));
+            header('Location: '.api_get_path(WEB_PATH));
             exit();
         }
 
@@ -79,7 +79,7 @@ function oktaConnect()
         Session::write('_user', $_user);
 
         oktaLastLoginUpdate($chamiloUid);
-        header('Location: ' . api_get_path(WEB_PATH));
+        header('Location: '.api_get_path(WEB_PATH));
         exit();
     }
 }
@@ -89,7 +89,7 @@ function oktaRegistrationUpdate($userId)
     $userId = (int) $userId;
     // Updating LastLogin Date
     $table_user = Database::get_main_table(TABLE_MAIN_USER);
-    $sql = "UPDATE $table_user SET registration_date = NOW() WHERE user_id = " . $userId;
+    $sql = "UPDATE $table_user SET registration_date = NOW() WHERE user_id = ".$userId;
     Database::query($sql);
 }
 
@@ -98,7 +98,7 @@ function oktaLastLoginUpdate($userId)
     $userId = (int) $userId;
     // Updating LastLogin Date
     $table_user = Database::get_main_table(TABLE_MAIN_USER);
-    $sql = "UPDATE $table_user SET last_login = NOW() WHERE user_id = " . $userId;
+    $sql = "UPDATE $table_user SET last_login = NOW() WHERE user_id = ".$userId;
     Database::query($sql);
 }
 
@@ -113,6 +113,6 @@ function oktaDisplayError($message)
         )
     );
 
-    header('Location:' . api_get_path(WEB_PATH));
+    header('Location:'.api_get_path(WEB_PATH));
     exit;
 }

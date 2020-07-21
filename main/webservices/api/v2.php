@@ -1,11 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Entry point for REST web services in Chamilo
- * 
+ * Entry point for REST web services in Chamilo.
+ *
  * Call it with the 'authenticate' action first, to get an api_key, then use
  * the api_key in all subsequent calls.
- * 
+ *
  * Send the REST call parameters as a 'hash' in POST or GET. The hash must be
  * JSON encoded and contain at least 'action', 'username', and either
  * 'password' for the first call or 'api_key' in subsequent calls.
@@ -302,6 +302,5 @@ try {
 
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
-
 
 echo $restResponse->format();

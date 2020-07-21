@@ -45,7 +45,7 @@ if ($nodeType == '') {
 
     $tableOfnodes .= "<td style='text-align:center;padding:5px;' >";
     $tableOfnodes .= "<img class=toolimage src='resources/img/memory.png' /></td>";
-    $tableOfnodes .= "<td style='text-align:center;' >%emory</td>";
+    $tableOfnodes .= "<td style='text-align:center;' >Memory</td>";
     $tableOfnodes .= "<td style='text-align:center;' >";
     $tableOfnodes .= "<a href='list.php?node_type=memory' class='btn btn-primary' >";
     $tableOfnodes .= "<em class='fa'></em>&nbsp;".$plugin->get_lang('Use')."&nbsp;</a>";

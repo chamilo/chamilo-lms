@@ -5,10 +5,10 @@
 	<thead>
 		<tr>
 			<th>
-			   Titre
+			   {{ 'Title'|get_lang }}
 			</th>
 			<th>
-			   Date
+			   {{ 'Date'|get_lang }}
 			</th>
 			<th></th>
 			<th>

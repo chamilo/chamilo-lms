@@ -3,9 +3,7 @@
 /* For licensing terms, see /license.txt */
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
-if (api_is_anonymous()) {
-    header('Location: '.api_get_path(WEB_PATH));
-}
+api_protect_admin_script();
 
 $version = isset($_GET['version']) ? Security::remove_XSS($_GET['version']) : '';
 

@@ -15,3 +15,4 @@ $strings['InactivityXDays'] = 'Inactivity for %s days';
 $strings['YouAreConnectedInPlatformXLinkXSinceXDays'] = '
 We have noticed that you have not connected to the platform %s (%s) for %s days.
 This is an automatic message to remind you of your activity.';
+$strings['sender_id'] = 'User that will send the cron emails';

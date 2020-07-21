@@ -295,6 +295,21 @@ class Plugin
                         $attributes
                     );
                     break;
+                case 'user':
+                    $options = [];
+                    if (!empty($value)) {
+                        $userInfo = api_get_user_info($value);
+                        if ($userInfo) {
+                            $options[$value] = $userInfo['complete_name'];
+                        }
+                    }
+                    $result->addSelectAjax(
+                        $name,
+                        [$this->get_lang($name), $help],
+                        $options,
+                        ['url' => api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_like']
+                    );
+                    break;
             }
         }
 
@@ -303,7 +318,6 @@ class Plugin
                 $checkboxGroup,
                 null,
                 ['', $help]
-                //[$this->get_lang('sms_types'), $help]
             );
         }
         $result->setDefaults($defaults);

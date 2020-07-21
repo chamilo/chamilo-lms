@@ -4,8 +4,6 @@
 
 class PauseTraining extends Plugin
 {
-    public $isCoursePlugin = false;
-
     protected function __construct()
     {
         parent::__construct(
@@ -15,6 +13,7 @@ class PauseTraining extends Plugin
                 'tool_enable' => 'boolean',
                 'allow_users_to_edit_pause_formation' => 'boolean',
                 'cron_alert_users_if_inactive_days' => 'text', // Example: "5" or "5,10,15"
+                'sender_id' => 'user',
             ]
         );
     }
@@ -94,64 +93,80 @@ class PauseTraining extends Plugin
     public function runCron()
     {
         $enable = $this->get('tool_enable');
+        $senderId = $this->get('sender_id');
         $enableDays = $this->get('cron_alert_users_if_inactive_days');
 
-        if ($enable && !empty($enableDays)) {
-            $enableDaysList = explode(',', $enableDays);
-            rsort($enableDaysList);
+        if ('true' !== $enable) {
+            echo 'Plugin not enabled';
+            return false;
+        }
 
-            $loginTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-            $userTable = Database::get_main_table(TABLE_MAIN_USER);
-            $now = api_get_utc_datetime();
-            $usersNotificationPerDay = [];
-            $users = [];
-            foreach ($enableDaysList as $day) {
-                $day = (int) $day;
+        if (empty($senderId)) {
+            echo 'Sender id not configured';
+            return false;
+        }
 
-                $sql = "SELECT
-                        stats_login.user_id,
-                        MAX(stats_login.login_course_date) max_date
-                        FROM $loginTable stats_login
-                        INNER JOIN $userTable u
-                        ON (u.id = stats_login.user_id)
-                        WHERE
-                            u.status <> ".ANONYMOUS." AND
-                            u.active = 1
-                        GROUP BY stats_login.user_id
-                        HAVING DATE_SUB('$now', INTERVAL '$day' DAY) > max_date ";
+        $senderInfo = api_get_user_info($senderId);
 
-                $rs = Database::query($sql);
-                while ($user = Database::fetch_array($rs)) {
-                    $userId = $user['user_id'];
+        if (empty($senderInfo)) {
+            echo "Sender #$senderId not found";
+            return false;
+        }
 
-                    if (in_array($userId, $users)) {
+        $enableDaysList = explode(',', $enableDays);
+        rsort($enableDaysList);
+
+        $loginTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $userTable = Database::get_main_table(TABLE_MAIN_USER);
+        $now = api_get_utc_datetime();
+        $usersNotificationPerDay = [];
+        $users = [];
+        foreach ($enableDaysList as $day) {
+            $day = (int) $day;
+
+            $sql = "SELECT
+                    stats_login.user_id,
+                    MAX(stats_login.login_course_date) max_date
+                    FROM $loginTable stats_login
+                    INNER JOIN $userTable u
+                    ON (u.id = stats_login.user_id)
+                    WHERE
+                        u.status <> ".ANONYMOUS." AND
+                        u.active = 1
+                    GROUP BY stats_login.user_id
+                    HAVING DATE_SUB('$now', INTERVAL '$day' DAY) > max_date ";
+
+            $rs = Database::query($sql);
+            while ($user = Database::fetch_array($rs)) {
+                $userId = $user['user_id'];
+
+                if (in_array($userId, $users)) {
+                    continue;
+                }
+                $users[] = $userId;
+                $usersNotificationPerDay[$day][] = $userId;
+            }
+        }
+
+        if (!empty($usersNotificationPerDay)) {
+            ksort($usersNotificationPerDay);
+            $extraFieldValue = new ExtraFieldValue('user');
+            foreach ($usersNotificationPerDay as $day => $userList) {
+                $template = new Template();
+                $title = sprintf($this->get_lang('InactivityXDays'), $day);
+
+                foreach ($userList as $userId) {
+                    $userInfo = api_get_user_info($userId);
+                    $pause = $extraFieldValue->get_values_by_handler_and_field_variable($userId, 'pause_formation');
+                    if (!empty($pause) && isset($pause['value']) && 1 == $pause['value']) {
+                        // Skip user because he paused his formation.
                         continue;
                     }
-                    $users[] = $userId;
-                    $usersNotificationPerDay[$day][] = $userId;
-                }
-            }
 
-            if (!empty($usersNotificationPerDay)) {
-                ksort($usersNotificationPerDay);
-                $extraFieldValue = new ExtraFieldValue('user');
-                foreach ($usersNotificationPerDay as $day => $userList) {
-                    $template = new Template();
-                    $title = sprintf($this->get_lang('InactivityXDays'), $day);
-
-                    foreach ($userList as $userId) {
-                        $userInfo = api_get_user_info($userId);
-                        $pause = $extraFieldValue->get_values_by_handler_and_field_variable($userId, 'pause_formation');
-                        if (!empty($pause) && isset($pause['value']) && 1 == $pause['value']) {
-                            // Skip user because he paused his formation.
-                            continue;
-                        }
-
-                        $template->assign('days', $day);
-                        $template->assign('user', $userInfo);
-                        $content = $template->fetch('pausetraining/view/notification_content.tpl');
-                        MessageManager::send_message($userId, $title, $content);
-                    }
+                    $template->assign('days', $day);
+                    $template->assign('user', $userInfo);
+                    $content = $template->fetch('pausetraining/view/notification_content.tpl');
+                    MessageManager::send_message_simple($userId, $title, $content, $senderId);
                 }
             }
         }

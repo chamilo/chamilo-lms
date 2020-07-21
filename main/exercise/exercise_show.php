@@ -467,9 +467,7 @@ foreach ($questionList as $questionId) {
             break;
         case HOT_SPOT:
             if ($show_results || $showTotalScoreAndUserChoicesInLastAttempt) {
-                echo '<table width="500" border="0"><tr>
-                        <td valign="top" align="center" style="padding-left:0px;" >
-                        <table border="1" bordercolor="#A4A4A4" style="border-collapse: collapse;" width="552">';
+//                echo '<table class="table table-bordered table-striped"><tr><td>';
             }
             $question_result = $objExercise->manage_answer(
                 $id,
@@ -487,11 +485,11 @@ foreach ($questionList as $questionId) {
             $questionScore = $question_result['score'];
             $totalScore += $question_result['score'];
 
-            if ($show_results) {
+            if ($show_results || $showTotalScoreAndUserChoicesInLastAttempt) {
                 echo '</table></td></tr>';
                 echo "
                         <tr>
-                            <td colspan=\"2\">
+                            <td>
                                 <div id=\"hotspot-solution-$questionId-$id\"></div>
                                 <script>
                                     $(function() {

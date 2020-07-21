@@ -5687,7 +5687,7 @@ class Exercise
                     echo '</table></td></tr>';
                     echo "
                         <tr>
-                            <td colspan=\"2\">
+                            <td>
                                 <p><em>".get_lang('HotSpot')."</em></p>
                                 <div id=\"hotspot-solution-$questionId\"></div>
                                 <script>

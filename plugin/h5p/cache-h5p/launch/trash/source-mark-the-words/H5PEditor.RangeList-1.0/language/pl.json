@@ -1,7 +1,0 @@
-{
-  "libraryStrings": {
-    "distributeButtonLabel": "Wyrównaj przedziały",
-    "distributeButtonWarning": "Dla wszystkich przedziałów zmienią się wartości graniczne. Kontynuować?",
-    "rangeOutOfSequenceWarning": "Przedziały nie są ustawione w kolejności"
-  }
-}

@@ -1,7 +1,0 @@
-{
-  "libraryStrings": {
-    "distributeButtonLabel": "Jaa tasaisesti",
-    "distributeButtonWarning": "Arvot muutetaan kaikille pisterajoille. Oletko varma että halut jatkaa?",
-    "rangeOutOfSequenceWarning": "Pisterajat ovat sekvenssin ulkopuolella"
-  }
-}

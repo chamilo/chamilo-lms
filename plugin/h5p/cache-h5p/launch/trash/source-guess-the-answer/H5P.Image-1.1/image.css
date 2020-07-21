@@ -1,9 +1,0 @@
-.h5p-image > img {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-.h5p-image > .h5p-placeholder {
-  background: url('placeholder.svg');
-  background-size: cover;
-}

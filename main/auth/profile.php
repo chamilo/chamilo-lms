@@ -101,7 +101,7 @@ if (isset($array_list_key[$id_temp_key])) {
 $user_data['api_key_generate'] = $value_array;
 
 if ($user_data !== false) {
-    if (api_get_setting('login_is_email') == 'true') {
+    if (api_get_setting('login_is_email') === 'true') {
         $user_data['username'] = $user_data['email'];
     }
     if (is_null($user_data['language'])) {
@@ -112,11 +112,11 @@ if ($user_data !== false) {
 $form = new FormValidator('profile');
 
 if (api_is_western_name_order()) {
-    //    FIRST NAME and LAST NAME
+    // FIRST NAME and LAST NAME
     $form->addElement('text', 'firstname', get_lang('FirstName'), ['size' => 40]);
     $form->addElement('text', 'lastname', get_lang('LastName'), ['size' => 40]);
 } else {
-    //    LAST NAME and FIRST NAME
+    // LAST NAME and FIRST NAME
     $form->addElement('text', 'lastname', get_lang('LastName'), ['size' => 40]);
     $form->addElement('text', 'firstname', get_lang('FirstName'), ['size' => 40]);
 }
@@ -328,8 +328,18 @@ if ($showPassword &&
     api_get_setting('profile', 'password') === 'true'
 ) {
     $form->addElement('password', 'password0', [get_lang('Pass'), get_lang('TypeCurrentPassword')], ['size' => 40]);
-    $form->addElement('password', 'password1', [get_lang('NewPass'), get_lang('EnterYourNewPassword')], ['id' => 'password1', 'size' => 40]);
-    $form->addElement('password', 'password2', [get_lang('Confirmation'), get_lang('RepeatYourNewPassword')], ['size' => 40]);
+    $form->addElement(
+        'password',
+        'password1',
+        [get_lang('NewPass'), get_lang('EnterYourNewPassword')],
+        ['id' => 'password1', 'size' => 40]
+    );
+    $form->addElement(
+        'password',
+        'password2',
+        [get_lang('Confirmation'), get_lang('RepeatYourNewPassword')],
+        ['size' => 40]
+    );
     //    user must enter identical password twice so we can prevent some user errors
     $form->addRule(['password1', 'password2'], get_lang('PassTwo'), 'compare');
     $form->addPasswordRule('password1');
@@ -720,7 +730,6 @@ if ($allowSocialTool) {
         false,
         $show_delete_account_button
     );
-
     $tpl->assign('social_menu_block', $menu);
     $tpl->assign('social_right_content', $tabs.$form->returnForm());
     $social_layout = $tpl->get_template('social/edit_profile.tpl');

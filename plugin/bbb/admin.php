@@ -16,7 +16,6 @@ api_protect_admin_script();
 
 $plugin = BBBPlugin::create();
 $tool_name = $plugin->get_lang('Videoconference');
-
 $isGlobal = isset($_GET['global']) ? true : false;
 
 $bbb = new bbb('', '', $isGlobal);

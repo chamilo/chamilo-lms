@@ -55,6 +55,14 @@ class MySpace
                 'url' => api_get_path(WEB_CODE_PATH).'mySpace/survey_report.php',
                 'content' => get_lang('SurveysReport'),
             ],
+            [
+                'url' => api_get_path(WEB_CODE_PATH).'mySpace/tc_report.php',
+                'content' => get_lang('TCReport'),
+            ],
+            [
+                'url' => api_get_path(WEB_CODE_PATH).'mySpace/ti_report.php',
+                'content' => get_lang('TIReport'),
+            ],
         ];
 
         return Display::actions($actions, null);
@@ -490,7 +498,7 @@ class MySpace
         if (api_is_multiple_url_enabled()) {
             $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
             $access_url_id = api_get_current_access_url_id();
-            if (-1 != $access_url_id) {
+            if ($access_url_id != -1) {
                 $sqlCoachs = "SELECT DISTINCT
                                     scu.user_id as id_coach,
                                     u.id as user_id,

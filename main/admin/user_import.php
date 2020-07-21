@@ -73,6 +73,18 @@ function validate_data($users, $checkUniqueEmail = false)
                 $user['message'] .= Display::return_message(get_lang('UserNameNotAvailable'), 'warning');
                 $user['has_error'] = true;
             }
+
+            if ('true' === api_get_setting('login_is_email')) {
+                if (false === api_valid_email($username)) {
+                    $user['message'] .= Display::return_message(get_lang('PleaseEnterValidEmail'), 'warning');
+                    $user['has_error'] = true;
+                }
+            } else {
+                if (!UserManager::is_username_valid($username)) {
+                    $user['message'] .= Display::return_message(get_lang('UsernameWrong'), 'warning');
+                    $user['has_error'] = true;
+                }
+            }
         }
 
         if (isset($user['Email'])) {
@@ -481,7 +493,7 @@ function processUsers(&$users, $sendMail)
     }
 
     // if the warning message is too long then we display the warning message trough a session
-    Display::addFlash(Display::return_message(get_lang('FileImported'), 'confirmation', false));
+    //Display::addFlash(Display::return_message(get_lang('FileImported'), 'confirmation', false));
 
     $importData = Session::read('user_import_data_'.api_get_user_id());
     if (!empty($importData)) {
@@ -567,7 +579,7 @@ if (isset($_POST['formSent']) && $_POST['formSent'] && $_FILES['import_file']['s
                 false
             )
         );
-        //header('Location: '.api_get_path(WEB_CODE_PATH).'admin/user_list.php?sec_token='.$tok);
+
         header('Location: '.api_get_self());
         exit;
     }
@@ -622,7 +634,7 @@ if (!empty($importData)) {
         }
     }
 
-    $formContinue->addHtml(get_lang('Results').'<br />'.$importData['log_messages']);
+    $formContinue->addHtml('<br />'.$importData['log_messages']);
 
     if ($formContinue->validate()) {
         $users = parse_csv_data(

@@ -1166,7 +1166,7 @@ if ((isset($uidReset) && $uidReset) || $cidReset) {
         $variable = 'accept_legal_'.$my_user_id.'_'.$_course['real_id'].'_'.$session_id;
 
         $user_pass_open_course = false;
-        if (api_check_user_access_to_legal($_course['visibility']) && Session::read($variable)) {
+        if (api_check_user_access_to_legal($_course) && Session::read($variable)) {
             $user_pass_open_course = true;
         }
 

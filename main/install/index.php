@@ -315,6 +315,12 @@ if ($encryptPassForm == '1') {
         @import "../../web/assets/fontawesome/css/font-awesome.min.css";
         @import "../../web/css/base.css";
         @import "../../web/css/themes/chamilo/default.css";
+        .inputShowPwd > input
+        {
+            width: 90%;
+            display: initial;
+        }
+
     </style>
     <script type="text/javascript" src="../../web/assets/jquery/dist/jquery.min.js"></script>
     <script type="text/javascript" src="../../web/assets/bootstrap/dist/js/bootstrap.min.js"></script>
@@ -963,4 +969,16 @@ $poweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chami
     </div>
   </div>
 </body>
+<script type="text/javascript">
+    $('#showPassword').on('change',function(){
+        if($(this).prop('checked')){
+            $('.form-control[name="passForm"]').attr('type','text');
+            $('.showPasswordEye').removeClass('fa-eye').addClass('fa-eye-slash');
+
+        }else{
+            $('.form-control[name="passForm"]').attr('type','password');
+            $('.showPasswordEye').addClass('fa-eye').removeClass('fa-eye-slash');
+        }
+    });
+</script>
 </html>

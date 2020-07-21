@@ -295,6 +295,21 @@ class Plugin
                         $attributes
                     );
                     break;
+                case 'user':
+                    $options = [];
+                    if (!empty($value)) {
+                        $userInfo = api_get_user_info($value);
+                        if ($userInfo) {
+                            $options[$value] = $userInfo['complete_name'];
+                        }
+                    }
+                    $result->addSelectAjax(
+                        $name,
+                        [$this->get_lang($name), $help],
+                        $options,
+                        ['url' => api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_like']
+                    );
+                    break;
             }
         }
 
@@ -303,7 +318,6 @@ class Plugin
                 $checkboxGroup,
                 null,
                 ['', $help]
-                //[$this->get_lang('sms_types'), $help]
             );
         }
         $result->setDefaults($defaults);
@@ -857,9 +871,11 @@ class Plugin
     /**
      * Returns true if the plugin is installed, false otherwise.
      *
+     * @param bool $checkEnabled Also check if enabled (instead of only installed)
+     *
      * @return bool True if plugin is installed/enabled, false otherwise
      */
-    public function isEnabled()
+    public function isEnabled($checkEnabled = false)
     {
         $settings = api_get_settings_params_simple(
             [
@@ -871,6 +887,25 @@ class Plugin
             ]
         );
         if (is_array($settings) && isset($settings['selected_value']) && $settings['selected_value'] == 'installed') {
+            // The plugin is installed
+            // If we need a check on whether it is enabled, also check for
+            // *plugin*_tool_enable and make sure it is *NOT* false
+            if ($checkEnabled) {
+                $enabled = api_get_settings_params_simple(
+                    [
+                        "variable = ? AND subkey = ? AND category = 'Plugins' " => [
+                            $this->get_name().'_tool_enable',
+                            $this->get_name(),
+                        ],
+                    ]
+                );
+                if (is_array($enabled) && isset($enabled['selected_value']) && $enabled['selected_value'] == 'false') {
+                    // Only return false if the setting exists and it is
+                    // *specifically* set to false
+                    return false;
+                }
+            }
+
             return true;
         }
 

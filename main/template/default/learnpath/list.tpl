@@ -221,10 +221,16 @@
                                             <th>{{ "PublicationDate"|get_lang }}</th>
                                             <th>{{ "ExpirationDate"|get_lang }}</th>
                                             <th>{{ "Progress"|get_lang }}</th>
+                                            {% if allow_min_time %}
+                                                <th>{{ "TimeSpentTimeRequired"|get_lang }}</th>
+                                            {% endif %}
                                             <th>{{ "AuthoringOptions"|get_lang }}</th>
                                         {% else %}
                                             {% if not is_invitee %}
                                                 <th>{{ "Progress"|get_lang }}</th>
+                                            {% endif %}
+                                            {% if allow_min_time %}
+                                                <th>{{ "TimeSpentTimeRequired"|get_lang }}</th>
                                             {% endif %}
 
                                             <th>{{ "Actions"|get_lang }}</th>
@@ -254,10 +260,24 @@
                                                 <td>
                                                     {{ row.dsp_progress }}
                                                 </td>
+                                                {% if allow_min_time %}
+                                                    <td>
+                                                        {% if row.info_time_prerequisite %}
+                                                            {{ row.info_time_prerequisite }}
+                                                        {% endif %}
+                                                    </td>
+                                                {% endif %}
                                             {% else %}
                                                 {% if not is_invitee %}
                                                     <td>
                                                         {{ row.dsp_progress }}
+                                                    </td>
+                                                {% endif %}
+                                                {% if allow_min_time %}
+                                                    <td>
+                                                        {% if row.info_time_prerequisite %}
+                                                            {{ row.info_time_prerequisite }}
+                                                        {% endif %}
                                                     </td>
                                                 {% endif %}
                                             {% endif %}
@@ -280,6 +300,7 @@
                                                 {{ row.action_delete }}
                                                 {{ row.action_order }}
                                                 {{ row.action_update_scorm }}
+                                                {{ row.action_export_to_course_build }}
                                             </td>
                                         </tr>
                                     {% endfor %}
@@ -293,7 +314,7 @@
                                 {% for row in lp_data.lp_list %}
                                     <div class="lp-item">
                                         <div class="row">
-                                            <div class="col-md-8">
+                                            <div class="col-md-6">
                                                 <i class="fa fa-chevron-circle-right" aria-hidden="true"></i>
                                                 <a href="{{ row.url_start }}">
                                                     {{ row.title }}
@@ -304,6 +325,13 @@
                                             <div class="col-md-3">
                                                 {{ row.dsp_progress }}
                                             </div>
+                                            {% if allow_min_time %}
+                                                <div class="col-md-2">
+                                                    {% if row.info_time_prerequisite %}
+                                                        {{ row.info_time_prerequisite }}
+                                                    {% endif %}
+                                                </div>
+                                            {% endif %}
                                             <div class="col-md-1">
                                                 {{ row.action_pdf }}
                                             </div>
@@ -419,10 +447,16 @@
                                                         <th>{{ "PublicationDate"|get_lang }}</th>
                                                         <th>{{ "ExpirationDate"|get_lang }}</th>
                                                         <th>{{ "Progress"|get_lang }}</th>
+                                                        {% if allow_min_time %}
+                                                            <th>{{ "TimeSpentTimeRequired"|get_lang }}</th>
+                                                        {% endif %}
                                                         <th>{{ "AuthoringOptions"|get_lang }}</th>
                                                     {% else %}
                                                         {% if not is_invitee %}
                                                             <th>{{ "Progress"|get_lang }}</th>
+                                                        {% endif %}
+                                                        {% if allow_min_time %}
+                                                            <th>{{ "TimeSpentTimeRequired"|get_lang }}</th>
                                                         {% endif %}
 
                                                         <th>{{ "Actions"|get_lang }}</th>
@@ -452,10 +486,24 @@
                                                             <td>
                                                                 {{ row.dsp_progress }}
                                                             </td>
+                                                            {% if allow_min_time %}
+                                                                <td>
+                                                                    {% if row.info_time_prerequisite %}
+                                                                        {{ row.info_time_prerequisite }}
+                                                                    {% endif %}
+                                                                </td>
+                                                            {% endif %}
                                                         {% else %}
                                                             {% if not is_invitee %}
                                                                 <td>
                                                                     {{ row.dsp_progress }}
+                                                                </td>
+                                                            {% endif %}
+                                                            {% if allow_min_time %}
+                                                                <td>
+                                                                    {% if row.info_time_prerequisite %}
+                                                                        {{ row.info_time_prerequisite }}
+                                                                    {% endif %}
                                                                 </td>
                                                             {% endif %}
                                                         {% endif %}
@@ -477,6 +525,7 @@
                                                             {{ row.action_delete }}
                                                             {{ row.action_order }}
                                                             {{ row.action_update_scorm }}
+                                                            {{ row.action_export_to_course_build }}
                                                         </td>
                                                     </tr>
                                                 {% endfor %}
@@ -487,7 +536,7 @@
                                         {% for row in lp_data.lp_list %}
                                             <div class="lp-item">
                                                 <div class="row">
-                                                    <div class="col-md-8">
+                                                    <div class="col-md-6">
                                                         <i class="fa fa-chevron-circle-right" aria-hidden="true"></i>
                                                         <a href="{{ row.url_start }}">
                                                             {{ row.title }}
@@ -498,6 +547,13 @@
                                                     <div class="col-md-3">
                                                         {{ row.dsp_progress }}
                                                     </div>
+                                                    {% if allow_min_time %}
+                                                        <div class="col-md-2">
+                                                            {% if row.info_time_prerequisite %}
+                                                                {{ row.info_time_prerequisite }}
+                                                            {% endif %}
+                                                        </div>
+                                                    {% endif %}
                                                     <div class="col-md-1">
                                                         {{ row.action_pdf }}
                                                     </div>

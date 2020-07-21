@@ -67,19 +67,8 @@ if ($form->validate()) {
     exit;
 }
 
-$headers = [
-    [
-        'url' => api_get_path(WEB_CODE_PATH).'auth/profile.php',
-        'content' => get_lang('Profile'),
-    ],
-    [
-        'url' => api_get_path(WEB_CODE_PATH).'auth/pausetraining.php',
-        'content' => $plugin->get_lang('PauseTraining'),
-    ],
-];
-$tab = Display::tabsOnlyLink($headers, 2);
-
-$content = $tab.$form->returnForm();
+$tabs = SocialManager::getHomeProfileTabs('pausetraining');
+$content = $tabs.$form->returnForm();
 
 $tpl = new Template(get_lang('ModifyProfile'));
 

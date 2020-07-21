@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -101,10 +102,12 @@ class ExerciseLink extends AbstractLink
         }
 
         $cats = [];
+        $exerciseList = [];
         if (isset($result)) {
             if (Database::num_rows($result) > 0) {
                 while ($data = Database::fetch_array($result)) {
                     $cats[] = [$data['iid'], $data['title']];
+                    $exerciseList[] = $data;
                 }
             }
         }
@@ -137,12 +140,22 @@ class ExerciseLink extends AbstractLink
         }
 
         if (!empty($exerciseInLP)) {
+            $allExercises = array_column($exerciseList, 'iid');
+
             foreach ($exerciseInLP as $exercise) {
-                $lpName = strip_tags($exercise['lp_name']);
-                $cats[] = [
+                if (in_array($exercise['iid'], $allExercises)) {
+                    continue;
+                }
+                $allExercises[] = $exercise['iid'];
+                //$lpName = strip_tags($exercise['lp_name']);
+                /*$cats[] = [
                     $exercise['iid'],
                     strip_tags(Exercise::get_formated_title_variable($exercise['title'])).
                     ' ('.get_lang('ToolLearnpath').' - '.$lpName.')',
+                ];*/
+                $cats[] = [
+                    $exercise['iid'],
+                    strip_tags(Exercise::get_formated_title_variable($exercise['title'])),
                 ];
             }
         }
@@ -242,7 +255,6 @@ class ExerciseLink extends AbstractLink
         $sessionId = $this->get_session_id();
         $courseId = $this->getCourseId();
         $exerciseData = $this->get_exercise_data();
-
         $exerciseId = isset($exerciseData['id']) ? (int) $exerciseData['id'] : 0;
         $stud_id = (int) $stud_id;
 
@@ -279,26 +291,32 @@ class ExerciseLink extends AbstractLink
                             c_id = $courseId
                         ";
             } else {
-                $lpId = null;
+                $lpCondition = null;
                 if (!empty($exercise->lpList)) {
-                    $lpId = $exercise->getLpBySession($sessionId);
-                    $lpId = $lpId['lp_id'];
+                    //$lpId = $exercise->getLpBySession($sessionId);
+                    $lpList = [];
+                    foreach ($exercise->lpList as $lpData) {
+                        if ((int) $lpData['session_id'] == $sessionId) {
+                            $lpList[] = $lpData['lp_id'];
+                        }
+                    }
+                    $lpCondition = ' orig_lp_id = 0 OR (orig_lp_id IN ("'.implode('", "', $lpList).'")) AND ';
                 }
 
                 $sql = "SELECT *
                         FROM $tblStats
                         WHERE
                             exe_exo_id = $exerciseId AND
-                            orig_lp_id = $lpId AND
+                            $lpCondition
                             status <> 'incomplete' AND
                             session_id = $sessionId AND
                             c_id = $courseId ";
             }
 
-            if (!empty($stud_id) && 'ranking' != $type) {
+            if (!empty($stud_id) && 'ranking' !== $type) {
                 $sql .= " AND exe_user_id = $stud_id ";
             }
-            $sql .= ' ORDER BY exe_id DESC';
+            $sql .= ' ORDER BY exe_id DESC ';
         } else {
             $sql = "SELECT * FROM $tblHp hp
                     INNER JOIN $tblDoc doc
@@ -345,7 +363,6 @@ class ExerciseLink extends AbstractLink
             $bestResult = 0;
             $weight = 0;
             $sumResult = 0;
-
             $studentList = $this->getStudentList();
             $studentIdList = [];
             if (!empty($studentList)) {
@@ -442,7 +459,7 @@ class ExerciseLink extends AbstractLink
         $exerciseId = $data['id'];
         $path = isset($data['path']) ? $data['path'] : '';
 
-        $url = api_get_path(WEB_CODE_PATH).'gradebook/exercise_jump.php?'
+        return api_get_path(WEB_CODE_PATH).'gradebook/exercise_jump.php?'
             .http_build_query(
                 [
                     'path' => $path,
@@ -453,8 +470,6 @@ class ExerciseLink extends AbstractLink
                     'type' => $this->get_type(),
                 ]
             );
-
-        return $url;
     }
 
     /**
@@ -477,9 +492,22 @@ class ExerciseLink extends AbstractLink
             }
         }
 
-        $title = strip_tags(Exercise::get_formated_title_variable($data['title']));
+        return strip_tags(Exercise::get_formated_title_variable($data['title']));
+    }
 
-        return $title;
+    public function getLpListToString()
+    {
+        $data = $this->get_exercise_data();
+        $lpList = Exercise::getLpListFromExercise($data['id'], $this->getCourseId());
+        $lpListToString = '';
+        if (!empty($lpList)) {
+            foreach ($lpList as &$list) {
+                $list['name'] = Display::label($list['name'], 'warning');
+            }
+            $lpListToString = implode('&nbsp;', array_column($lpList, 'name'));
+        }
+
+        return $lpListToString;
     }
 
     /**
@@ -595,9 +623,9 @@ class ExerciseLink extends AbstractLink
             } else {
                 // Try with iid
                 $sql = 'SELECT * FROM '.$table.'
-                    WHERE
-                        c_id = '.$this->course_id.' AND
-                        iid = '.$exerciseId;
+                        WHERE
+                            c_id = '.$this->course_id.' AND
+                            iid = '.$exerciseId;
                 $result = Database::query($sql);
                 $rows = Database::num_rows($result);
 
@@ -606,9 +634,9 @@ class ExerciseLink extends AbstractLink
                 } else {
                     // Try wit id
                     $sql = 'SELECT * FROM '.$table.'
-                        WHERE
-                            c_id = '.$this->course_id.' AND
-                            id = '.$exerciseId;
+                            WHERE
+                                c_id = '.$this->course_id.' AND
+                                id = '.$exerciseId;
                     $result = Database::query($sql);
                     $this->exercise_data = Database::fetch_array($result);
                 }

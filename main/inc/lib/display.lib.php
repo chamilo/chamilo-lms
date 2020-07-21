@@ -465,91 +465,6 @@ class Display
     }
 
     /**
-     * Displays a normal message. It is recommended to use this public function
-     * to display any normal information messages.
-     *
-     * @param string $message
-     * @param bool   $filter      (true) or not (false)
-     * @param bool   $returnValue
-     *
-     * @deprecated Use <code>Display::addFlash(Display::return_message($message, 'normal'));</code>
-     *  Or <code>echo Display::return_message($message, 'normal')</code>
-     */
-    public static function display_normal_message(
-        $message,
-        $filter = true,
-        $returnValue = false
-    ) {
-        $message = self::return_message($message, 'normal', $filter);
-        if ($returnValue) {
-            return $message;
-        } else {
-            echo $message;
-        }
-    }
-
-    /**
-     * Displays an warning message. Use this if you want to draw attention to something
-     * This can also be used for instance with the hint in the exercises.
-     *
-     * @deprecated use Display::addFlash(Display::return_message($message, 'warning'));
-     */
-    public static function display_warning_message(
-        $message,
-        $filter = true,
-        $returnValue = false
-    ) {
-        $message = self::return_message($message, 'warning', $filter);
-        if ($returnValue) {
-            return $message;
-        } else {
-            echo $message;
-        }
-    }
-
-    /**
-     * Displays an confirmation message. Use this if something has been done successfully.
-     *
-     * @param bool    Filter (true) or not (false)
-     *
-     * @deprecated use Display::addFlash(Display::return_message($message, 'confirm'));
-     */
-    public static function display_confirmation_message(
-        $message,
-        $filter = true,
-        $returnValue = false
-    ) {
-        $message = self::return_message($message, 'confirm', $filter);
-        if ($returnValue) {
-            return $message;
-        } else {
-            echo $message;
-        }
-    }
-
-    /**
-     * Displays an error message. It is recommended to use this public function if an error occurs.
-     *
-     * @param string $message - include any additional html
-     *                        tags if you need them
-     * @param bool    Filter (true) or not (false)
-     *
-     * @deprecated use Display::addFlash(Display::return_message($message, 'error'));
-     */
-    public static function display_error_message(
-        $message,
-        $filter = true,
-        $returnValue = false
-    ) {
-        $message = self::return_message($message, 'error', $filter);
-        if ($returnValue) {
-            return $message;
-        } else {
-            echo $message;
-        }
-    }
-
-    /**
      * @param string $message
      * @param string $type
      * @param bool   $filter
@@ -816,12 +731,15 @@ class Display
     }
 
     /**
-     * This public function returns the htmlcode for an icon.
+     * This public function returns the HTML code for an icon.
      *
-     * @param string   The filename of the file (in the main/img/ folder
-     * @param string   The alt text (probably a language variable)
-     * @param array    Additional attributes (for instance height, width, onclick, ...)
-     * @param int  The wanted width of the icon (to be looked for in the corresponding img/icons/ folder)
+     * @param string $image                 The filename of the file (in the main/img/ folder
+     * @param string $alt_text              The alt text (probably a language variable)
+     * @param array  $additional_attributes Additional attributes (for instance height, width, onclick, ...)
+     * @param int    $size                  The wanted width of the icon (to be looked for in the corresponding img/icons/ folder)
+     * @param bool   $show_text             Whether to show the text next (usually under) the icon
+     * @param bool   $return_only_path      Whether we only want the path to the icon or the whole HTML tag
+     * @param bool   $loadThemeIcon         Whether we want to allow an overloaded theme icon, if it exists, to replace the default icon
      *
      * @return string An HTML string of the right <img> tag
      *
@@ -925,7 +843,7 @@ class Display
     }
 
     /**
-     * Returns the htmlcode for an image.
+     * Returns the HTML code for an image.
      *
      * @param string $image_path            the filename of the file (in the main/img/ folder
      * @param string $alt_text              the alt text (probably a language variable)

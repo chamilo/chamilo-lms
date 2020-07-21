@@ -75,3 +75,4 @@ $strings['SetByTeacher'] = 'Choisi par le professeur';
 $strings['SetByStudent'] = 'Choisi par l\'apprenant';
 $strings['bbb_force_record_generation'] = 'Forcer la génération de l\'enregistrement à la fin de la session';
 $strings['ThereIsNoVideoConferenceActive'] = "Il n'y a aucune vidéoconférence actuellement active";
+$strings['meeting_duration'] = 'Durée de la conférence (en minutes)';

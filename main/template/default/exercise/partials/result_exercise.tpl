@@ -45,19 +45,94 @@
                         {% endif %}
                     </div>
 
+                    <hr>
+
+                    <div id="quiz_saved_answers_container">
                     {% if data.number_of_answers_saved != data.number_of_answers %}
-                        <p class="alert alert-warning"
-                           style="margin-bottom: 0; margin-top: 20px;">
+                        <span class="label label-warning">
                             <strong>{{ 'XAnswersSavedByUsersFromXTotal'|get_lang|format(data.number_of_answers_saved, data.number_of_answers) }}</strong>
-                        </p>
+                        </span>
                     {% else %}
-                        <p class="lead text-success"
-                           style="margin-bottom: 0; margin-top: 20px;">
+                        <span class="label label-success">
                             <strong>{{ 'XAnswersSavedByUsersFromXTotal'|get_lang|format(data.number_of_answers_saved, data.number_of_answers) }}</strong>
-                        </p>
+                        </span>
                     {% endif %}
+
+                        {% if 'quiz_confirm_saved_answers'|api_get_configuration_value %}
+                            {% set enable_form = data.track_confirmation.updatedAt is empty and data.track_confirmation.userId == _u.id %}
+                            <form class="form-horizontal" action="#" id="quiz_confirm_saved_answers_form">
+                                <div class="form-group">
+                                    <div class="col-sm-12">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox" name="quiz_confirm_saved_answers_check" {% if not enable_form %}disabled{% endif %} {% if data.track_confirmation.confirmed %}checked{% endif %}>
+                                                {{ 'QuizConfirmSavedAnswers'|get_lang }}
+                                            </label>
+                                        </div>
+                                        {% if enable_form %}
+                                            <span class="help-block">{{ 'QuizConfirmSavedAnswersHelp'|get_lang }}</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                {% if enable_form %}
+                                    <div class="form-group">
+                                        <div class="col-sm-12">
+                                            <input type="hidden" name="tc_id" value="{{ data.track_confirmation.id }}">
+                                            <button type="submit" class="btn btn-primary" disabled>
+                                                <span class="fa fa-save fa-fw" aria-hidden="true"></span> {{ 'Save'|get_lang }}
+                                            </button>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </form>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+{% if 'quiz_confirm_saved_answers'|api_get_configuration_value %}
+    {% set enable_form = data.track_confirmation.updatedAt is empty and data.track_confirmation.userId == _u.id %}
+
+    {% if enable_form %}
+        <script>
+            $(function () {
+                var form = $('#quiz_confirm_saved_answers_form');
+                var checkbox = form.find('[type="checkbox"]');
+                var button = form.find(':submit');
+
+                checkbox.on('change', function () {
+                    button.prop('disabled', !this.checked);
+                });
+
+                form.on('submit', function (e) {
+                    e.preventDefault();
+
+                    if (!checkbox.is(':checked')) {
+                        return;
+                    }
+
+                    var xhrData = form.serialize();
+
+                    button.prop('disabled', true);
+                    checkbox.prop('disabled', true);
+
+                    $.post(
+                        '{{ _p.web_ajax }}exercise.ajax.php?a=quiz_confirm_saved_answers',
+                        xhrData
+                    ).done(function () {
+                        button.parents('.form-group').remove();
+
+                        $('#quiz_end_message').show();
+                    }).fail(function (response) {
+                        button.replaceWith(response.responseText);
+                    });
+                })
+
+                $('#quiz_end_message').hide();
+            });
+        </script>
+    {% endif %}
+{% endif %}

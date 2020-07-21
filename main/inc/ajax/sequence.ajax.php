@@ -30,7 +30,6 @@ $sequenceResourceRepository = $em->getRepository('ChamiloCoreBundle:SequenceReso
 switch ($action) {
     case 'graph':
         api_block_anonymous_users();
-        api_protect_admin_script();
 
         /** @var Sequence $sequence */
         $sequence = $sequenceRepository->find($sequenceId);
@@ -46,10 +45,6 @@ switch ($action) {
             $graphImage = '';
             try {
                 $graphImage = $graphviz->createImageSrc($graph);
-
-                //echo $graphviz->createScript($graph);
-                //$graphviz->display($graph);
-
                 echo Display::img(
                     $graphImage,
                     get_lang('GraphDependencyTree'),

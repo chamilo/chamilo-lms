@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -9,8 +10,6 @@ use ChamiloSession as Session;
  *  It is / will be used to provide a service layer to all document-using tools.
  *  and eliminate code duplication fro group documents, scorm documents, main documents.
  *  Include/require it in your code to use its functionality.
- *
- * @package chamilo.library
  */
 class DocumentManager
 {
@@ -590,7 +589,10 @@ class DocumentManager
                 $sharedCondition .= ' AND docs.path IN ("'.implode('","', $conditionList).'")';
             }
         }
-
+        $where = '';
+        if ($search != true) {
+            $where .= "docs.path NOT LIKE '".Database::escape_string($path.$addedSlash.'%/%')."' AND";
+        }
         $sql = "SELECT
                     docs.id,
                     docs.filetype,
@@ -615,7 +617,7 @@ class DocumentManager
                     docs.c_id = {$courseInfo['real_id']} AND
                     last.c_id = {$courseInfo['real_id']} AND
                     docs.path LIKE '".Database::escape_string($path.$addedSlash.'%')."' AND
-                    docs.path NOT LIKE '".Database::escape_string($path.$addedSlash.'%/%')."' AND
+                    $where
                     docs.path NOT LIKE '%_DELETED_%' AND
                     $userGroupFilter AND
                     last.visibility $visibilityBit
@@ -773,8 +775,6 @@ class DocumentManager
         if ($can_see_invisible) {
             // condition for the session
             $session_id = api_get_session_id();
-            //$condition_session = api_get_session_condition($session_id, true, false, 'docs.session_id');
-
             $session_id = $session_id ?: api_get_session_id();
             $condition_session = " AND (last.session_id = '$session_id' OR (last.session_id = '0' OR last.session_id IS NULL) )";
             $condition_session .= self::getSessionFolderFilters($path, $session_id);
@@ -3327,6 +3327,7 @@ class DocumentManager
      * @param int    $folderId
      * @param bool   $addCloseButton
      * @param bool   $addAudioPreview
+     * @param array  $filterByExtension
      *
      * @return string
      */
@@ -3342,7 +3343,8 @@ class DocumentManager
         $showOnlyFolders = false,
         $folderId = false,
         $addCloseButton = true,
-        $addAudioPreview = false
+        $addAudioPreview = false,
+        $filterByExtension = []
     ) {
         if (empty($course_info['real_id']) || empty($course_info['code']) || !is_array($course_info)) {
             return '';
@@ -3407,6 +3409,17 @@ class DocumentManager
             }
         }
 
+        $extensionConditionToString = '';
+        if (!empty($filterByExtension)) {
+            $extensionCondition = [];
+            foreach ($filterByExtension as $extension) {
+                $extensionCondition[] = " docs.path LIKE '%.$extension' ";
+            }
+            if (!empty($extensionCondition)) {
+                $extensionConditionToString .= " AND (".implode('OR', $extensionCondition).") ";
+            }
+        }
+
         $parentData = [];
         if ($folderId !== false) {
             $parentData = self::get_document_data_by_id(
@@ -3454,6 +3467,7 @@ class DocumentManager
                     last.c_id = {$course_info['real_id']}
                     $folderCondition
                     $levelCondition
+                    $extensionConditionToString
                     $add_folder_filter
                 ORDER BY docs.filetype DESC, docs.title ASC";
 
@@ -4973,7 +4987,8 @@ class DocumentManager
         $group_dir = '',
         $change_renderer = false,
         &$form = null,
-        $selectName = 'id'
+        $selectName = 'id',
+        $attributes = []
     ) {
         $doc_table = Database::get_course_table(TABLE_DOCUMENT);
         $course_id = api_get_course_int_id();
@@ -4999,7 +5014,6 @@ class DocumentManager
             }
         }
 
-        $attributes = [];
         if (empty($form)) {
             $form = new FormValidator('selector', 'GET', api_get_self().'?'.api_get_cidreq());
             $attributes = ['onchange' => 'javascript: document.selector.submit();'];
@@ -5056,9 +5070,7 @@ class DocumentManager
             }
         }
 
-        $html = $form->toHtml();
-
-        return $html;
+        return $form->toHtml();
     }
 
     /**

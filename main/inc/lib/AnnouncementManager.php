@@ -72,7 +72,7 @@ class AnnouncementManager
         $courseCode,
         $sessionId = 0
     ) {
-        $readerInfo = api_get_user_info($userId, false, false, true, true);
+        $readerInfo = api_get_user_info($userId, false, false, true, true, false, true);
         $courseInfo = api_get_course_info($courseCode);
         $teacherList = CourseManager::getTeacherListFromCourseCodeToString($courseInfo['code']);
 

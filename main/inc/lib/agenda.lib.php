@@ -2985,11 +2985,18 @@ class Agenda
             }
         }
 
-        if ($this->type == 'personal' && !api_is_anonymous()) {
+        if ($this->type === 'personal' && !api_is_anonymous()) {
             $actionsLeft .= Display::url(
                 Display::return_icon('1day.png', get_lang('SessionsPlanCalendar'), [], ICON_SIZE_MEDIUM),
-                $codePath."calendar/planification.php"
+                $codePath.'calendar/planification.php'
             );
+
+            if (api_is_student_boss() || api_is_platform_admin()) {
+                $actionsLeft .= Display::url(
+                    Display::return_icon('calendar-user.png', get_lang('MyStudentsSchedule'), [], ICON_SIZE_MEDIUM),
+                    $codePath.'mySpace/calendar_plan.php'
+                );
+            }
         }
 
         if (api_is_platform_admin() ||

@@ -952,7 +952,10 @@ class IndexManager
             ];
         }
 
-        if (true === api_get_configuration_value('whispeak_auth_enabled')) {
+        if (
+            true === api_get_configuration_value('whispeak_auth_enabled') &&
+            !WhispeakAuthPlugin::checkUserIsEnrolled($userId)
+        ) {
             $itemTitle = WhispeakAuthPlugin::create()->get_title();
 
             $items[] = [
@@ -2173,7 +2176,6 @@ class IndexManager
                                             isset($session_box['duration']) ? $session_box['duration'] : null
                                         );
                                     }
-
                                     $this->tpl->assign('session', $sessionParams);
                                     $this->tpl->assign('show_tutor', api_get_setting('show_session_coach') === 'true');
                                     $this->tpl->assign('gamification_mode', $gameModeIsActive);
@@ -2284,6 +2286,16 @@ class IndexManager
             'session_count' => $sessionCount,
             'course_count' => $courseCount,
         ];
+    }
+
+    /**
+     * Wrapper to CourseManager::returnPopularCoursesHandPicked().
+     *
+     * @return array
+     */
+    public function returnPopularCoursesHandPicked()
+    {
+        return CourseManager::returnPopularCoursesHandPicked();
     }
 
     /**

@@ -107,9 +107,11 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Check if plugin is enabled.
      *
+     * @param bool $checkEnabled Check if, additionnally to being installed, the plugin is enabled
+     *
      * @return bool
      */
-    public function isEnabled()
+    public function isEnabled($checkEnabled = false)
     {
         return $this->get('paypal_enable') || $this->get('transfer_enable') || $this->get('culqi_enable');
     }

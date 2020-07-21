@@ -261,6 +261,11 @@ function handlePlugins()
 
     $installed = '';
     $notInstalled = '';
+    $isMainPortal = true;
+    if (api_is_multiple_url_enabled()) {
+        $isMainPortal = 1 === api_get_current_access_url_id();
+    }
+
     foreach ($all_plugins as $pluginName) {
         $plugin_info_file = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/plugin.php';
         if (file_exists($plugin_info_file)) {
@@ -277,19 +282,29 @@ function handlePlugins()
             $pluginRow = '';
 
             $isInstalled = in_array($pluginName, $installed_plugins);
+
             if ($isInstalled) {
                 $pluginRow .= '<tr class="row_selected">';
             } else {
                 $pluginRow .= '<tr>';
             }
+
             $pluginRow .= '<td>';
 
-            // Checkbox
-            if ($isInstalled) {
-                $pluginRow .= '<input type="checkbox" name="plugin_'.$pluginName.'[]" checked="checked">';
+            if ($isMainPortal) {
+                if ($isInstalled) {
+                    $pluginRow .= '<input type="checkbox" name="plugin_'.$pluginName.'[]" checked="checked">';
+                } else {
+                    $pluginRow .= '<input type="checkbox" name="plugin_'.$pluginName.'[]">';
+                }
             } else {
-                $pluginRow .= '<input type="checkbox" name="plugin_'.$pluginName.'[]">';
+                if ($isInstalled) {
+                    $pluginRow .= Display::return_icon('check.png');
+                } else {
+                    $pluginRow .= Display::return_icon('checkbox_off.gif');
+                }
             }
+
             $pluginRow .= '</td><td>';
             $pluginRow .= $officialRibbon;
             $pluginRow .= '<h4>'.$plugin_info['title'].' <small>v '.$plugin_info['version'].'</small></h4>';
@@ -352,11 +367,14 @@ function handlePlugins()
     echo $notInstalled;
     echo '</table>';
 
-    echo '<div class="form-actions bottom_actions">';
-    echo '<button class="btn btn-primary" type="submit" name="submit_plugins">';
-    echo '<i class="fa fa-check" aria-hidden="true"></i> ';
-    echo  get_lang('EnablePlugins').'</button>';
-    echo '</div>';
+    if ($isMainPortal) {
+        echo '<div class="form-actions bottom_actions">';
+        echo '<button class="btn btn-primary" type="submit" name="submit_plugins">';
+        echo '<i class="fa fa-check" aria-hidden="true"></i> ';
+        echo get_lang('EnablePlugins').'</button>';
+        echo '</div>';
+    }
+
     echo '</form>';
 }
 

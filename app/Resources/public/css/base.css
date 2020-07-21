@@ -9342,7 +9342,6 @@ ul.dropdown-menu.inner > li > a {
 
 #question_admin_form .bootstrap-select .dropdown-menu li a span.text,
 .exercise_reminder_item label {
-    overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     width: 100%;
@@ -9624,6 +9623,13 @@ ul.dropdown-menu.inner > li > a {
     #show_graph {
         text-align: center;
     }
+
+    #my_timeline {
+        width: 320px;
+        overflow: scroll;
+
+    }
+
 }
 
 @media (min-width: 480px) and (max-width: 767px) {
@@ -9675,7 +9681,7 @@ ul.dropdown-menu.inner > li > a {
     }
 
     .navbar-nav .open .dropdown-menu {
-        background-color: #FFF;
+        background-color: #ffffff;
     }
 
     .navbar-nav {
@@ -9684,6 +9690,12 @@ ul.dropdown-menu.inner > li > a {
 
     .grid-courses .items.my-courses {
         width: 310px;
+    }
+
+    #my_timeline {
+        width: 480px;
+        overflow: scroll;
+
     }
 }
 

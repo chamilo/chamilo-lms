@@ -140,7 +140,13 @@ if ($useCookieValidation === 'true') {
 // When loading a chamilo page do not include the hot courses and news
 if (!isset($_REQUEST['include'])) {
     if (api_get_setting('show_hot_courses') == 'true') {
-        $hotCourses = $controller->return_hot_courses();
+        if (api_get_configuration_value('popular_courses_handpicked')) {
+            // If the option has been set correctly, use the courses manually
+            // marked as popular rather than the ones marked by users
+            $hotCourses = $controller->returnPopularCoursesHandPicked();
+        } else {
+            $hotCourses = $controller->return_hot_courses();
+        }
     }
     $announcements_block = $controller->return_announcements();
 }

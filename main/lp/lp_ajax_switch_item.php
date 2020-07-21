@@ -86,6 +86,14 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
             }
             break;
     }
+
+    if (WhispeakAuthPlugin::isLpItemMarked($new_item_id)) {
+        ChamiloSession::write(
+            WhispeakAuthPlugin::SESSION_LP_ITEM,
+            ['lp' => $lp_id, 'lp_item' => $new_item_id, 'src' => '']
+        );
+    }
+
     $mylp->start_current_item(true);
     if ($mylp->force_commit) {
         $mylp->save_current();

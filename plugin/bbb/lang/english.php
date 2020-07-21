@@ -80,3 +80,4 @@ $strings['ThisWillUpdateAllSettingsInAllCourses'] = 'This will update at once al
 $strings['ThereIsNoVideoConferenceActive'] = 'There is no videoconference currently active';
 $strings['RoomClosed'] = 'Room closed';
 $strings['RoomClosedComment'] = ' ';
+$strings['meeting_duration'] = 'Meeting duration (in minutes)';

@@ -298,6 +298,8 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 // Set ConsideredWorkingTime work extra field variable to show in MyStudents page works report
 // (with internal id 'work_time' as below) and enable the following line to show in MyStudents page works report
 // $_configuration['considered_working_time'] = 'work_time';
+// Allow add/remove working time in reporting page
+// $_configuration['allow_working_time_edition'] = false;
 // During CSV special imports update users emails to x@example.com
 // $_configuration['update_users_email_to_dummy_except_admins'] = false;
 // Certification pdf export orientation
@@ -591,6 +593,11 @@ $_configuration['send_all_emails_to'] = [
 //$_configuration['quiz_open_question_decimal_score'] = false;
 // Add answer-saving procedure check before starting the quiz
 //$_configuration['quiz_check_button_enable'] = false;
+// Add a checkbox to allow to user confirm the number of answers saved in quiz attempt
+// - Requires to edit the src/Chamilo/CoreBundle/Entity/TrackEExerciseConfirmation.php file adding the "@" in the ORM phpdoc block
+// - Requires DB changes:
+// CREATE TABLE track_e_exercise_confirmation (id INT AUTO_INCREMENT NOT NULL, user_id INT NOT NULL, course_id INT NOT NULL, attempt_id INT NOT NULL, quiz_id INT NOT NULL, session_id INT NOT NULL, confirmed TINYINT(1) DEFAULT '0' NOT NULL, questions_count INT NOT NULL, saved_answers_count INT NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
+//$_configuration['quiz_confirm_saved_answers'] = false;
 
 // Hide search form in session list
 //$_configuration['hide_search_form_in_session_list'] = false;
@@ -1411,6 +1418,14 @@ ALTER TABLE notification_event ADD COLUMN event_id INT NULL;
 // In Scorm comunication use the username instead of the user_id
 //$_configuration['scorm_api_username_as_student_id'] = false;
 
+// Zoom in description images quiz
+// $_configuration['quiz_image_zoom'] = [
+//    'options' => [
+//          'zoomWindowWidth' => 400,
+//          'zoomWindowHeight' => 400,
+//     ]
+// ];
+
 // In Scorm comunication use a specific extra field instead of the user_id
 //$_configuration['scorm_api_extrafield_to_use_as_student_id'] = '';
 
@@ -1569,6 +1584,22 @@ $_configuration['auth_password_links'] = [
 
 // Allow my student publications page
 //$_configuration['allow_my_student_publication_page'] = false;
+
+// Show handpicked "popular" courses on the home page instead of users-chosen
+// courses.
+// Create an extra field for courses called "popular_courses" (type CHECKBOX) OR
+// INSERT extra_field (extra_field_type, field_type, variable, display_text, visible_to_self, changeable, created_at)
+// VALUES (2, 13, 'popular_courses', 'Popular course', 1, 1, NOW());
+// $_configuration['popular_courses_handpicked'] = false;
+
+// Default items per page in main/mySpace/users.php
+// $_configuration['my_space_users_items_per_page'] = 10;
+
+// Add teachers column in course list.
+// $_configuration['add_teachers_in_course_list'] = false;
+
+// Allow teachers and admins to see students as friends on social network
+// $_configuration['social_make_teachers_friend_all'] = false;
 
 // KEEP THIS AT THE END
 // -------- Custom DB changes

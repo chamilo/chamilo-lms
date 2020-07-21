@@ -54,19 +54,20 @@ class SocialManager extends UserManager
     /**
      * Get the kind of relation between contacts.
      *
-     * @param int user id
-     * @param int user friend id
-     * @param string
+     * @param int  $user_id     user id
+     * @param int  $user_friend user friend id
+     * @param bool $includeRH   include the RH relationship
      *
      * @return int
      *
      * @author isaac flores paz
      */
-    public static function get_relation_between_contacts($user_id, $user_friend)
+    public static function get_relation_between_contacts($user_id, $user_friend, $includeRH = false)
     {
         $table = Database::get_main_table(TABLE_MAIN_USER_FRIEND_RELATION_TYPE);
         $userRelUserTable = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
-        $sql = 'SELECT rt.id as id
+        if ($includeRH == false) {
+            $sql = 'SELECT rt.id as id
                 FROM '.$table.' rt
                 WHERE rt.id = (
                     SELECT uf.relation_type
@@ -77,13 +78,48 @@ class SocialManager extends UserManager
                         uf.relation_type <> '.USER_RELATION_TYPE_RRHH.'
                     LIMIT 1
                 )';
+        } else {
+            $sql = 'SELECT rt.id as id
+                FROM '.$table.' rt
+                WHERE rt.id = (
+                    SELECT uf.relation_type
+                    FROM '.$userRelUserTable.' uf
+                    WHERE
+                        user_id='.((int) $user_id).' AND
+                        friend_user_id='.((int) $user_friend).'
+                    LIMIT 1
+                )';
+        }
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
             $row = Database::fetch_array($res, 'ASSOC');
 
-            return $row['id'];
+            return (int) $row['id'];
         } else {
-            return USER_UNKNOWN;
+            if (api_get_configuration_value('social_make_teachers_friend_all')) {
+                $adminsList = UserManager::get_all_administrators();
+                foreach ($adminsList as $admin) {
+                    if (api_get_user_id() == $admin['user_id']) {
+                        return USER_RELATION_TYPE_GOODFRIEND;
+                    }
+                }
+                $targetUserCoursesList = CourseManager::get_courses_list_by_user_id(
+                    $user_id,
+                    true,
+                    false
+                );
+                $currentUserId = api_get_user_id();
+                foreach ($targetUserCoursesList as $course) {
+                    $teachersList = CourseManager::get_teacher_list_from_course_code($course['code']);
+                    foreach ($teachersList as $teacher) {
+                        if ($currentUserId == $teacher['user_id']) {
+                            return USER_RELATION_TYPE_GOODFRIEND;
+                        }
+                    }
+                }
+            } else {
+                return USER_UNKNOWN;
+            }
         }
     }
 
@@ -3168,6 +3204,55 @@ class SocialManager extends UserManager
         }
 
         return $social_group_block;
+    }
+
+    /**
+     * @param string $selected
+     *
+     * @return string
+     */
+    public static function getHomeProfileTabs($selected = 'home')
+    {
+        $headers = [
+            [
+                'url' => api_get_path(WEB_CODE_PATH).'auth/profile.php',
+                'content' => get_lang('Profile'),
+            ],
+        ];
+        $allowJustification = api_get_plugin_setting('justification', 'tool_enable') === 'true';
+        if ($allowJustification) {
+            $plugin = Justification::create();
+            $headers[] = [
+                'url' => api_get_path(WEB_CODE_PATH).'auth/justification.php',
+                'content' => $plugin->get_lang('Justification'),
+            ];
+        }
+
+        $allowPauseTraining = api_get_plugin_setting('pausetraining', 'tool_enable') === 'true';
+        $allowEdit = api_get_plugin_setting('pausetraining', 'allow_users_to_edit_pause_formation') === 'true';
+        if ($allowPauseTraining && $allowEdit) {
+            $plugin = PauseTraining::create();
+            $headers[] = [
+                'url' => api_get_path(WEB_CODE_PATH).'auth/pausetraining.php',
+                'content' => $plugin->get_lang('PauseTraining'),
+            ];
+        }
+
+        $selectedItem = 1;
+        foreach ($headers as $header) {
+            $info = pathinfo($header['url']);
+            if ($selected === $info['filename']) {
+                break;
+            }
+            $selectedItem++;
+        }
+
+        $tabs = '';
+        if (count($headers) > 1) {
+            $tabs = Display::tabsOnlyLink($headers, $selectedItem);
+        }
+
+        return $tabs;
     }
 
     /**

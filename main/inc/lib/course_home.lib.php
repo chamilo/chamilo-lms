@@ -896,6 +896,7 @@ class CourseHome
                                     ICON_SIZE_SMALL,
                                     false
                                 );
+                                $link['name'] = '<em id="'.'linktool_'.$tool['iid'].'" class="fa fa-eye" title="'.get_lang('Deactivate').'"></em>';
                                 $link['cmd'] = 'hide=yes';
                                 $lnk[] = $link;
                             }
@@ -907,6 +908,7 @@ class CourseHome
                                     ICON_SIZE_SMALL,
                                     false
                                 );
+                                $link['name'] = '<em id="'.'linktool_'.$tool['iid'].'" class="fa fa-eye-slash text-muted" title="'.get_lang('Activate').'"></em>';
                                 $link['cmd'] = 'restore=yes';
                                 $lnk[] = $link;
                             }
@@ -935,6 +937,7 @@ class CourseHome
                                         ICON_SIZE_SMALL,
                                         false
                                     );
+                                    $link['name'] = '<em id="'.'linktool_'.$tool['iid'].'"class="fa fa-eye" title="'.get_lang('Deactivate').'"></em>';
                                     $link['cmd'] = 'restore=yes';
                                     $lnk[] = $link;
                                     break;
@@ -946,6 +949,7 @@ class CourseHome
                                         ICON_SIZE_SMALL,
                                         false
                                     );
+                                    $link['name'] = '<em id="'.'linktool_'.$tool['iid'].'"class="fa fa-eye-slash text-muted" title="'.get_lang('Activate').'"></em>';
                                     $link['cmd'] = 'hide=yes';
                                     $lnk[] = $link;
                                     break;
@@ -958,6 +962,7 @@ class CourseHome
                                 ICON_SIZE_SMALL,
                                 false
                             );
+                            $link['name'] = '<em id="'.'linktool_'.$tool['iid'].'"class="fa fa-eye-slash text-muted" title="'.get_lang('Activate').'"></em>';
                             $link['cmd'] = 'hide=yes';
                             $lnk[] = $link;
                         }
@@ -981,8 +986,7 @@ class CourseHome
                     foreach ($lnk as $this_link) {
                         if (empty($tool['adminlink'])) {
                             $item['visibility'] .=
-                                '<a class="make_visible_and_invisible"
-                                href="'.api_get_self().'?'.api_get_cidreq().'&id='.$tool['iid'].'&'.$this_link['cmd'].'">'.
+                                '<a class="make_visible_and_invisible" href="'.api_get_self().'?'.api_get_cidreq().'&id='.$tool['iid'].'&'.$this_link['cmd'].'">'.
                                 $this_link['name'].'</a>';
                         }
                     }

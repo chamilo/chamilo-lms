@@ -10,10 +10,11 @@ if (!isset($_GET['course'])) {
 }
 
 require_once __DIR__.'/../inc/global.inc.php';
+require_once '../work/work.lib.php';
 
 api_block_anonymous_users();
-
-$htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH).'assets/jquery.easy-pie-chart/dist/jquery.easypiechart.js"></script>';
+$htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH)
+    .'assets/jquery.easy-pie-chart/dist/jquery.easypiechart.js"></script>';
 
 $export = isset($_GET['export']) ? $_GET['export'] : false;
 $sessionId = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
@@ -30,6 +31,8 @@ $details = isset($_GET['details']) ? Security::remove_XSS($_GET['details']) : ''
 $currentUrl = api_get_self().'?student='.$student_id.'&course='.$courseCode.'&id_session='.$sessionId
     .'&origin='.$origin.'&details='.$details;
 $allowMessages = api_get_configuration_value('private_messages_about_user');
+$workingTime = api_get_configuration_value('considered_working_time');
+$workingTimeEdit = api_get_configuration_value('allow_working_time_edition');
 
 if (empty($student_id)) {
     api_not_allowed(true);
@@ -212,6 +215,30 @@ $tbl_stats_exercices = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISE
 $action = isset($_GET['action']) ? $_GET['action'] : '';
 
 switch ($action) {
+    case 'add_work_time':
+        if (false === $workingTimeEdit) {
+            api_not_allowed(true);
+        }
+        $workingTime = isset($_GET['time']) ? $_GET['time'] : '';
+        $workId = isset($_GET['work_id']) ? $_GET['work_id'] : '';
+        Event::eventAddVirtualCourseTime($courseInfo['real_id'], $student_id, $sessionId, $workingTime, $workId);
+        Display::addFlash(Display::return_message(get_lang('Updated')));
+
+        header('Location: '.$currentUrl);
+        exit;
+    case 'remove_work_time':
+        if (false === $workingTimeEdit) {
+            api_not_allowed(true);
+        }
+        $workingTime = isset($_GET['time']) ? $_GET['time'] : '';
+        $workId = isset($_GET['work_id']) ? $_GET['work_id'] : '';
+        Event::eventRemoveVirtualCourseTime($courseInfo['real_id'], $student_id, $sessionId, $workingTime, $workId);
+
+        Display::addFlash(Display::return_message(get_lang('Updated')));
+
+        header('Location: '.$currentUrl);
+        exit;
+        break;
     case 'export_to_pdf':
         $sessionToExport = $sId = isset($_GET['session_to_export']) ? (int) $_GET['session_to_export'] : 0;
         $sessionInfo = api_get_session_info($sessionToExport);
@@ -366,10 +393,13 @@ switch ($action) {
         $tpl->assign('session_title', $sessionInfo['name']);
         $tpl->assign('student', $user_info['complete_name']);
         $tpl->assign('table_progress', $table->toHtml());
-        $tpl->assign('subtitle', sprintf(
-            get_lang('InSessionXYouHadTheFollowingResults'),
-            $sessionInfo['name']
-        ));
+        $tpl->assign(
+            'subtitle',
+            sprintf(
+                get_lang('InSessionXYouHadTheFollowingResults'),
+                $sessionInfo['name']
+            )
+        );
         $tpl->assign('table_course', $courseTable);
         $content = $tpl->fetch($tpl->get_template('my_space/pdf_export_student.tpl'));
 
@@ -434,36 +464,42 @@ switch ($action) {
         if ($allowMessages === true) {
             $subject = isset($_POST['subject']) ? $_POST['subject'] : '';
             $message = isset($_POST['message']) ? $_POST['message'] : '';
-            $currentUserInfo = api_get_user_info();
-            MessageManager::sendMessageAboutUser(
-                $user_info,
-                $currentUserInfo,
-                $subject,
-                $message
-            );
 
-            // Send also message to all student bosses
-            $bossList = UserManager::getStudentBossList($student_id);
+            if (!empty($subject) && !empty($message)) {
+                $currentUserInfo = api_get_user_info();
+                MessageManager::sendMessageAboutUser(
+                    $user_info,
+                    $currentUserInfo,
+                    $subject,
+                    $message
+                );
 
-            if (!empty($bossList)) {
-                $url = api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$student_id;
-                $link = Display::url($url, $url);
+                // Send also message to all student bosses
+                $bossList = UserManager::getStudentBossList($student_id);
 
-                foreach ($bossList as $boss) {
-                    MessageManager::send_message_simple(
-                        $boss['boss_id'],
-                        sprintf(get_lang('BossAlertMsgSentToUserXTitle'), $user_info['complete_name']),
-                        sprintf(
-                            get_lang('BossAlertUserXSentMessageToUserYWithLinkZ'),
-                            $currentUserInfo['complete_name'],
-                            $user_info['complete_name'],
-                            $link
-                        )
-                    );
+                if (!empty($bossList)) {
+                    $url = api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$student_id;
+                    $link = Display::url($url, $url);
+
+                    foreach ($bossList as $boss) {
+                        MessageManager::send_message_simple(
+                            $boss['boss_id'],
+                            sprintf(get_lang('BossAlertMsgSentToUserXTitle'), $user_info['complete_name']),
+                            sprintf(
+                                get_lang('BossAlertUserXSentMessageToUserYWithLinkZ'),
+                                $currentUserInfo['complete_name'],
+                                $user_info['complete_name'],
+                                $link
+                            )
+                        );
+                    }
                 }
+
+                Display::addFlash(Display::return_message(get_lang('MessageSent')));
+            } else {
+                Display::addFlash(Display::return_message(get_lang('AllFieldsRequired'), 'warning'));
             }
 
-            Display::addFlash(Display::return_message(get_lang('MessageSent')));
             header('Location: '.$currentUrl);
             exit;
         }
@@ -873,18 +909,18 @@ $timezone_user = UserManager::get_extra_user_data_by_field(
     'timezone'
 );
 $use_users_timezone = api_get_setting('use_users_timezone', 'timezones');
-    if ($timezone_user['timezone'] != null && $use_users_timezone === 'true') {
-        $timezone = $timezone_user['timezone'];
-    }
-    if ($timezone !== null) {
-        $userInfo['timezone'] = $timezone;
-    }
+if ($timezone_user['timezone'] != null && $use_users_timezone === 'true') {
+    $timezone = $timezone_user['timezone'];
+}
+if ($timezone !== null) {
+    $userInfo['timezone'] = $timezone;
+}
 
-    if (is_numeric($avg_student_score)) {
-        $score = $avg_student_score.'%';
-    } else {
-        $score = $avg_student_score;
-    }
+if (is_numeric($avg_student_score)) {
+    $score = $avg_student_score.'%';
+} else {
+    $score = $avg_student_score;
+}
 
 $userInfo['student_score'] = (float) $score;
 $userInfo['student_progress'] = (float) $avg_student_progress;
@@ -1131,11 +1167,14 @@ if (empty($details)) {
                     $attendances_faults_avg = '0/0 (0%)';
                     if (!empty($results_faults_avg['total'])) {
                         if (api_is_drh()) {
-                            $attendances_faults_avg = '<a title="'.get_lang('GoAttendance').'" href="'.api_get_path(WEB_CODE_PATH)
-                                .'attendance/index.php?cidReq='.$courseCodeItem.'&id_session='.$sId.'&student_id='
-                                .$student_id.'">'
-                                .$results_faults_avg['faults'].'/'.$results_faults_avg['total'].' ('
-                                .$results_faults_avg['porcent'].'%)</a>';
+                            $attendances_faults_avg = Display::url(
+                                $results_faults_avg['faults'].'/'.$results_faults_avg['total']
+                                    .' ('.$results_faults_avg['porcent'].'%)',
+                                api_get_path(WEB_CODE_PATH)
+                                    .'attendance/index.php?cidReq='.$courseCodeItem.'&id_session='.$sId.'&student_id='
+                                    .$student_id,
+                                ['title' => get_lang('GoAttendance')]
+                            );
                         } else {
                             $attendances_faults_avg = $results_faults_avg['faults'].'/'
                                 .$results_faults_avg['total']
@@ -1212,13 +1251,13 @@ if (empty($details)) {
                     $exportCourseList[$sId][] = $csvRow;
 
                     echo '<tr>
-                    <td ><a href="'.$courseInfoItem['course_public_url'].'?id_session='.$sId.'">'.
+                    <td><a href="'.$courseInfoItem['course_public_url'].'?id_session='.$sId.'">'.
                         $courseInfoItem['title'].'</a></td>
-                    <td >'.$time_spent_on_course.'</td>
-                    <td >'.$progress.'</td>
-                    <td >'.$score.'</td>
-                    <td >'.$attendances_faults_avg.'</td>
-                    <td >'.$scoretotal_display.'</td>';
+                    <td>'.$time_spent_on_course.'</td>
+                    <td>'.$progress.'</td>
+                    <td>'.$score.'</td>
+                    <td>'.$attendances_faults_avg.'</td>
+                    <td>'.$scoretotal_display.'</td>';
 
                     if (!empty($coachId)) {
                         echo '<td width="10"><a href="'.api_get_self().'?student='.$user_info['user_id']
@@ -1227,7 +1266,8 @@ if (empty($details)) {
                             .Display::return_icon('2rightarrow.png', get_lang('Details')).'</a></td>';
                     } else {
                         echo '<td width="10"><a href="'.api_get_self().'?student='.$user_info['user_id']
-                            .'&details=true&course='.$courseInfoItem['code'].'&origin='.$origin.'&id_session='.$sId.'#infosStudent">'
+                            .'&details=true&course='.$courseInfoItem['code'].'&origin='.$origin.'&id_session='.$sId
+                            .'#infosStudent">'
                             .Display::return_icon('2rightarrow.png', get_lang('Details')).'</a></td>';
                     }
                     echo '</tr>';
@@ -1267,29 +1307,32 @@ if (empty($details)) {
             $exportCourseList[$sId][] = $csvRow;
             $sessionAction = Display::url(
                 Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), [], ICON_SIZE_MEDIUM),
-                $currentUrl
-                    .'&'
+                $currentUrl.'&'
                     .http_build_query(
-                        ['action' => 'export_one_session_row', 'export' => 'csv', 'session_to_export' => $sId]
+                        [
+                            'action' => 'export_one_session_row',
+                            'export' => 'csv',
+                            'session_to_export' => $sId,
+                        ]
                     )
             );
             $sessionAction .= Display::url(
                 Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), [], ICON_SIZE_MEDIUM),
-                $currentUrl
-                    .'&'
+                $currentUrl.'&'
                     .http_build_query(
-                        ['action' => 'export_one_session_row', 'export' => 'xls', 'session_to_export' => $sId]
+                        [
+                            'action' => 'export_one_session_row',
+                            'export' => 'xls',
+                            'session_to_export' => $sId,
+                        ]
                     )
             );
 
             if (!empty($sId)) {
                 $sessionAction .= Display::url(
                     Display::return_icon('pdf.png', get_lang('ExportToPDF'), [], ICON_SIZE_MEDIUM),
-                    $currentUrl
-                    .'&'
-                    .http_build_query(
-                        ['action' => 'export_to_pdf', 'session_to_export' => $sId]
-                    )
+                    $currentUrl.'&'
+                        .http_build_query(['action' => 'export_to_pdf', 'session_to_export' => $sId])
                 );
             }
             echo $sessionAction;
@@ -1318,11 +1361,7 @@ if (empty($details)) {
                 ['align' => 'absmiddle', 'hspace' => '3px']
             ),
         'progress' => get_lang('Progress').
-            Display::return_icon(
-                'info3.gif',
-                get_lang('LPProgressScore'),
-                ['align' => 'absmiddle', 'hspace' => '3px']
-            ),
+            Display::return_icon('info3.gif', get_lang('LPProgressScore'), ['align' => 'absmiddle', 'hspace' => '3px']),
         'last_connection' => get_lang('LastConnexion').
             Display::return_icon(
                 'info3.gif',
@@ -1360,6 +1399,19 @@ if (empty($details)) {
                 $columnName
             );
         }
+
+        $hookLpTracking = HookMyStudentsLpTracking::create();
+
+        if ($hookLpTracking) {
+            $hookHeaders = $hookLpTracking->notifyTrackingHeader();
+
+            foreach ($hookHeaders as $hookHeader) {
+                $columnHeadersToExport[] = $hookHeader['value'];
+
+                $headers .= Display::tag('th', $hookHeader['value'], $hookHeader['attrs']);
+            }
+        }
+
         $csv_content[] = $columnHeadersToExport;
         $columnHeadersKeys = array_keys($columnHeaders);
         $categoriesTempList = learnpath::getCategories($courseInfo['real_id']);
@@ -1555,6 +1607,16 @@ if (empty($details)) {
                     echo Display::tag('td', $start_time);
                 }
 
+                if ($hookLpTracking) {
+                    $hookContents = $hookLpTracking->notifyTrackingContent($lp_id, $student_id);
+
+                    foreach ($hookContents as $hookContent) {
+                        $contentToExport[] = strip_tags($hookContent['value']);
+
+                        echo Display::tag('td', $hookContent['value'], $hookContent['attrs']);
+                    }
+                }
+
                 $csv_content[] = $contentToExport;
 
                 if ($any_result === true) {
@@ -1589,8 +1651,9 @@ if (empty($details)) {
                         );
                     }
                     echo '</td>';
-                    echo '</tr>';
                 }
+
+                echo '</tr>';
             }
             echo '</tbody></table></div>';
         }
@@ -1598,20 +1661,31 @@ if (empty($details)) {
 
     if ($user_info['status'] != INVITEE) {
         echo '<div class="table-responsive">
-        <table class="table table-striped table-hover">
-        <thead>
-        <tr>';
+            <table class="table table-striped table-hover">
+            <thead>
+            <tr>';
         echo '<th>'.get_lang('Exercises').'</th>';
         echo '<th>'.get_lang('LearningPath').'</th>';
-        echo '<th>'.get_lang('AvgCourseScore').' '.
-            Display::return_icon(
-                'info3.gif',
-                get_lang('AverageScore'),
-                ['align' => 'absmiddle', 'hspace' => '3px']
-            ).'</th>';
+        echo '<th>'.get_lang('AvgCourseScore').PHP_EOL
+            .Display::return_icon('info3.gif', get_lang('AverageScore'), ['align' => 'absmiddle', 'hspace' => '3px'])
+            .'</th>';
         echo '<th>'.get_lang('Attempts').'</th>';
         echo '<th>'.get_lang('LatestAttempt').'</th>';
         echo '<th>'.get_lang('AllAttempts').'</th>';
+
+        $hookQuizTracking = HookMyStudentsQuizTracking::create();
+
+        if ($hookQuizTracking) {
+            $hookHeaders = array_map(
+                function ($hookHeader) {
+                    return Display::tag('th', $hookHeader['value'], $hookHeader['attrs']);
+                },
+                $hookQuizTracking->notifyTrackingHeader()
+            );
+
+            echo implode(PHP_EOL, $hookHeaders);
+        }
+
         echo '</tr></thead><tbody>';
 
         $csv_content[] = [];
@@ -1621,6 +1695,18 @@ if (empty($details)) {
             get_lang('AvgCourseScore'),
             get_lang('Attempts'),
         ];
+
+        if ($hookQuizTracking) {
+            $hookHeaders = array_map(
+                function ($hookHeader) {
+                    return strip_tags($hookHeader['value']);
+                },
+                $hookQuizTracking->notifyTrackingHeader()
+            );
+
+            $csvContentIndex = count($csv_content) - 1;
+            $csv_content[$csvContentIndex] = array_merge($csv_content[$csvContentIndex], $hookHeaders);
+        }
 
         $t_quiz = Database::get_course_table(TABLE_QUIZ_TEST);
         $sessionCondition = api_get_session_condition(
@@ -1662,6 +1748,10 @@ if (empty($details)) {
                 );
 
                 $lp_name = '-';
+                $hookContents = $hookQuizTracking
+                    ? $hookQuizTracking->notifyTrackingContent($exercise_id, $student_id)
+                    : [];
+
                 if (!isset($score_percentage) && $count_attempts > 0) {
                     $scores_lp = Tracking::get_avg_student_exercise_score(
                         $student_id,
@@ -1747,6 +1837,13 @@ if (empty($details)) {
                     );
                 }
                 echo '</td>';
+
+                if (!empty($hookContents)) {
+                    foreach ($hookContents as $hookContent) {
+                        echo Display::tag('td', $hookContent['value'], $hookContent['attrs']);
+                    }
+                }
+
                 echo '</tr>';
                 $data_exercices[$i][] = $exercices['title'];
                 $data_exercices[$i][] = $score_percentage.'%';
@@ -1759,6 +1856,14 @@ if (empty($details)) {
                     $count_attempts,
                 ];
 
+                if (!empty($hookContents)) {
+                    $csvContentIndex = count($csv_content) - 1;
+
+                    foreach ($hookContents as $hookContent) {
+                        $csv_content[$csvContentIndex][] = strip_tags($hookContent['value']);
+                    }
+                }
+
                 $i++;
             }
         } else {
@@ -1769,7 +1874,6 @@ if (empty($details)) {
 
     // @when using sessions we do not show the survey list
     if (empty($sessionId)) {
-        $survey_list = SurveyManager::get_surveys($courseCode, $sessionId);
         if (!empty($survey_list)) {
             $survey_data = [];
             foreach ($survey_list as $survey) {
@@ -1822,7 +1926,6 @@ if (empty($details)) {
         }
     }
 
-    require_once '../work/work.lib.php';
     $userWorks = getWorkPerUser($student_id, $courseInfo['real_id'], $sessionId);
     echo '
         <div class="table-responsive">
@@ -1839,15 +1942,18 @@ if (empty($details)) {
                 </thead>
                 <tbody>
     ';
-    $workingTime = api_get_configuration_value('considered_working_time');
+
     foreach ($userWorks as $work) {
         $work = $work['work'];
+        $showOnce = true;
         foreach ($work->user_results as $key => $results) {
+            $resultId = $results['id'];
+
             echo '<tr>';
             echo '<td>'.$work->title.'</td>';
             $documentNumber = $key + 1;
             $url = api_get_path(WEB_CODE_PATH).'work/view.php?cidReq='.$courseCode.'&id_session='.$sessionId.'&id='
-                .$results['id'];
+                .$resultId;
             echo '<td class="text-center"><a href="'.$url.'">('.$documentNumber.')</a></td>';
             $qualification = !empty($results['qualification']) ? $results['qualification'] : '-';
             echo '<td class="text-center">'.$qualification.'</td>';
@@ -1869,7 +1975,22 @@ if (empty($details)) {
             foreach ($resultExtra as $field) {
                 $field = $field['value'];
                 if ($workingTime == $field->getField()->getVariable()) {
-                    echo '<td class="text-center">'.$field->getValue().'</td>';
+                    $time = $field->getValue();
+                    echo '<td class="text-center">';
+                    echo $time;
+                    if ($workingTimeEdit && $showOnce) {
+                        $showOnce = false;
+                        echo '&nbsp;'.Display::url(
+                            get_lang('AddTime'),
+                            $currentUrl.'&action=add_work_time&time='.$time.'&work_id='.$work->id
+                        );
+
+                        echo '&nbsp;'.Display::url(
+                            get_lang('RemoveTime'),
+                            $currentUrl.'&action=remove_work_time&time='.$time.'&work_id='.$work->id
+                        );
+                    }
+                    echo '</td>';
                 }
             }
             echo '</tr>';

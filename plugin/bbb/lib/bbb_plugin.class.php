@@ -74,8 +74,8 @@ class BBBPlugin extends Plugin
                 'interface' => [
                     'type' => 'select',
                     'options' => [
-                        self::INTERFACE_FLASH => 'Flash',
                         self::INTERFACE_HTML5 => 'HTML5',
+                        self::INTERFACE_FLASH => 'Flash',
                     ],
                 ],
                 'launch_type' => [
@@ -93,6 +93,7 @@ class BBBPlugin extends Plugin
                 'bbb_enable_conference_in_groups' => 'checkbox',
                 'bbb_force_record_generation' => 'checkbox',
                 'disable_course_settings' => 'boolean',
+                'meeting_duration' => 'text',
             ]
         );
 
@@ -207,7 +208,8 @@ class BBBPlugin extends Plugin
                 participant_id int(11) NOT NULL,
                 in_at datetime,
                 out_at datetime,
-                interface int NOT NULL DEFAULT 0
+                interface int NOT NULL DEFAULT 0,
+                close INT NOT NULL DEFAULT 0
             );"
         );
         $fieldLabel = 'plugin_bbb_course_users_limit';

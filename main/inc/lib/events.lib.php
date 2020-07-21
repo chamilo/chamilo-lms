@@ -1,7 +1,7 @@
 <?php
+
 /* See license terms in /license.txt */
 
-//use Chamilo\UserBundle\Entity\User;
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use ChamiloSession as Session;
 
@@ -2242,6 +2242,7 @@ class Event
      * @param int    $sessionId   The session in which to add the time (if any)
      * @param string $virtualTime The amount of time to be added,
      *                            in a hh:mm:ss format. If int, we consider it is expressed in hours.
+     * @param int    $workId      Student publication id result
      *
      * @return true on successful insertion, false otherwise
      */
@@ -2249,8 +2250,13 @@ class Event
         $courseId,
         $userId,
         $sessionId,
-        $virtualTime = ''
+        $virtualTime,
+        $workId
     ) {
+        if (empty($virtualTime)) {
+            return false;
+        }
+
         $courseId = (int) $courseId;
         $userId = (int) $userId;
         $sessionId = (int) $sessionId;
@@ -2262,6 +2268,7 @@ class Event
             false
         );
 
+        $ip = api_get_real_ip();
         $params = [
             'login_course_date' => $loginDate,
             'logout_course_date' => $logoutDate,
@@ -2269,7 +2276,7 @@ class Event
             'user_id' => $userId,
             'counter' => 0,
             'c_id' => $courseId,
-            'user_ip' => api_get_real_ip(),
+            'user_ip' => $ip,
         ];
         $courseTrackingTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         Database::insert($courseTrackingTable, $params);
@@ -2279,11 +2286,39 @@ class Event
         $params = [
             'login_user_id' => $userId,
             'login_date' => $loginDate,
-            'user_ip' => api_get_real_ip(),
+            'user_ip' => $ip,
             'logout_date' => $logoutDate,
         ];
         $platformTrackingTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
         Database::insert($platformTrackingTable, $params);
+
+        if (Tracking::minimumTimeAvailable($sessionId, $courseId)) {
+            $workId = (int) $workId;
+            $uniqueId = time();
+            $logInfo = [
+                'c_id' => $courseId,
+                'session_id' => $sessionId,
+                'tool' => TOOL_STUDENTPUBLICATION,
+                'date_reg' => $loginDate,
+                'action' => 'add_work_start_'.$workId,
+                'action_details' => $virtualTime,
+                'user_id' => $userId,
+                'current_id' => $uniqueId,
+            ];
+            self::registerLog($logInfo);
+
+            $logInfo = [
+                'c_id' => $courseId,
+                'session_id' => $sessionId,
+                'tool' => TOOL_STUDENTPUBLICATION,
+                'date_reg' => $logoutDate,
+                'action' => 'add_work_end_'.$workId,
+                'action_details' => $virtualTime,
+                'user_id' => $userId,
+                'current_id' => $uniqueId,
+            ];
+            self::registerLog($logInfo);
+        }
 
         return true;
     }
@@ -2311,16 +2346,21 @@ class Event
         $courseId,
         $userId,
         $sessionId = 0,
-        $virtualTime = ''
+        $virtualTime,
+        $workId
     ) {
         if (empty($virtualTime)) {
             return false;
         }
+
+        $originalVirtualTime = $virtualTime;
+
         $courseTrackingTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         $platformTrackingTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
         $courseId = (int) $courseId;
         $userId = (int) $userId;
         $sessionId = (int) $sessionId;
+
         // Change $virtualTime format from hh:mm:ss to hhmmss which is the
         // format returned by SQL for a subtraction of two datetime values
         // @todo make sure this is portable between DBMSes
@@ -2367,9 +2407,40 @@ class Event
             $loginAccessId = $row[0];
             $sql = "DELETE FROM $platformTrackingTable
                     WHERE login_id = $loginAccessId";
-            $result = Database::query($sql);
+            Database::query($sql);
+        }
 
-            return $result;
+        if (Tracking::minimumTimeAvailable($sessionId, $courseId)) {
+            $workId = (int) $workId;
+            $sql = "SELECT id FROM track_e_access_complete
+                    WHERE
+                        tool = '".TOOL_STUDENTPUBLICATION."' AND
+                        c_id = $courseId AND
+                        session_id = $sessionId AND
+                        user_id = $userId AND
+                        action_details = '$originalVirtualTime' AND
+                        action = 'add_work_start_$workId' ";
+            $result = Database::query($sql);
+            $result = Database::fetch_array($result);
+            if ($result) {
+                $sql = 'DELETE FROM track_e_access_complete WHERE id = '.$result['id'];
+                Database::query($sql);
+            }
+
+            $sql = "SELECT id FROM track_e_access_complete
+                    WHERE
+                        tool = '".TOOL_STUDENTPUBLICATION."' AND
+                        c_id = $courseId AND
+                        session_id = $sessionId AND
+                        user_id = $userId AND
+                        action_details = '$originalVirtualTime' AND
+                        action = 'add_work_end_$workId' ";
+            $result = Database::query($sql);
+            $result = Database::fetch_array($result);
+            if ($result) {
+                $sql = 'DELETE FROM track_e_access_complete WHERE id = '.$result['id'];
+                Database::query($sql);
+            }
         }
 
         return false;
@@ -2453,6 +2524,14 @@ class Event
         $sessionId = api_get_session_id();
         $courseId = api_get_course_int_id();
 
+        if (isset($logInfo['c_id']) && !empty($logInfo['c_id'])) {
+            $courseId = $logInfo['c_id'];
+        }
+
+        if (isset($logInfo['session_id']) && !empty($logInfo['session_id'])) {
+            $sessionId = $logInfo['session_id'];
+        }
+
         if (!Tracking::minimumTimeAvailable($sessionId, $courseId)) {
             return false;
         }
@@ -2463,8 +2542,8 @@ class Event
 
         $loginAs = (int) Session::read('login_as') === true;
 
-        $logInfo['user_id'] = api_get_user_id();
-        $logInfo['date_reg'] = api_get_utc_datetime();
+        $logInfo['user_id'] = isset($logInfo['user_id']) ? $logInfo['user_id'] : api_get_user_id();
+        $logInfo['date_reg'] = isset($logInfo['date_reg']) ? $logInfo['date_reg'] : api_get_utc_datetime();
         $logInfo['tool'] = !empty($logInfo['tool']) ? $logInfo['tool'] : '';
         $logInfo['tool_id'] = !empty($logInfo['tool_id']) ? (int) $logInfo['tool_id'] : 0;
         $logInfo['tool_id_detail'] = !empty($logInfo['tool_id_detail']) ? (int) $logInfo['tool_id_detail'] : 0;
@@ -2478,7 +2557,7 @@ class Event
         $logInfo['login_as'] = $loginAs;
         $logInfo['info'] = !empty($logInfo['info']) ? $logInfo['info'] : '';
         $logInfo['url'] = $_SERVER['REQUEST_URI'];
-        $logInfo['current_id'] = Session::read('last_id', 0);
+        $logInfo['current_id'] = isset($logInfo['current_id']) ? $logInfo['current_id'] : Session::read('last_id', 0);
 
         $id = Database::insert('track_e_access_complete', $logInfo);
         if ($id && empty($logInfo['current_id'])) {

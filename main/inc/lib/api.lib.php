@@ -1051,9 +1051,7 @@ function api_is_facebook_auth_activated()
  */
 function api_is_okta_auth_activated()
 {
-    global $_configuration;
-
-    return isset($_configuration['okta_auth']) && $_configuration['okta_auth'] == 1;
+    return  1 == api_get_configuration_value('okta_auth');
 }
 
 /**
@@ -1988,7 +1986,7 @@ function api_get_anonymous_id()
     $ip = Database::escape_string(api_get_real_ip());
     $max = (int) api_get_configuration_value('max_anonymous_users');
     if ($max >= 2) {
-        $sql = "SELECT * FROM $table as TEL 
+        $sql = "SELECT * FROM $table as TEL
                 JOIN $tableU as U
                 ON U.user_id = TEL.login_user_id
                 WHERE TEL.user_ip = '$ip'
@@ -2023,8 +2021,8 @@ function api_get_anonymous_id()
     }
 
     $table = Database::get_main_table(TABLE_MAIN_USER);
-    $sql = "SELECT user_id 
-            FROM $table 
+    $sql = "SELECT user_id
+            FROM $table
             WHERE status = ".ANONYMOUS." ";
     $res = Database::query($sql);
     if (Database::num_rows($res) > 0) {
@@ -4761,7 +4759,7 @@ function api_display_language_form($hide_if_no_choice = false, $showAsButton = f
     } else {
         $html = '
             <a href="'.$url.'" class="dropdown-toggle" data-toggle="dropdown" role="button">
-                <span class="flag-icon flag-icon-'.$countryCode.'"></span> 
+                <span class="flag-icon flag-icon-'.$countryCode.'"></span>
                 '.$currentLanguageInfo['original_name'].'
                 <span class="caret"></span>
             </a>
@@ -4876,7 +4874,7 @@ function languageToCountryIsoCode($languageIsoCode)
 function api_get_languages()
 {
     $tbl_language = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-    $sql = "SELECT * FROM $tbl_language WHERE available='1' 
+    $sql = "SELECT * FROM $tbl_language WHERE available='1'
             ORDER BY original_name ASC";
     $result = Database::query($sql);
     $language_list = [];
@@ -8225,8 +8223,8 @@ function api_get_password_checker_js($usernameInputId, $passwordInputId)
     };
 
     $(function() {
-        var lang = ".json_encode($translations).";     
-        var options = {        
+        var lang = ".json_encode($translations).";
+        var options = {
             onLoad : function () {
                 //$('#messages').text('Start typing password');
             },
@@ -8244,7 +8242,7 @@ function api_get_password_checker_js($usernameInputId, $passwordInputId)
         options.i18n = {
             t: function (key) {
                 var result = lang[key];
-                return result === key ? '' : result; // This assumes you return the                
+                return result === key ? '' : result; // This assumes you return the
             }
         };
         $('".$passwordInputId."').pwstrength(options);
@@ -9604,7 +9602,7 @@ function api_find_template($template)
 function api_get_language_list_for_flag()
 {
     $table = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-    $sql = "SELECT english_name, isocode FROM $table 
+    $sql = "SELECT english_name, isocode FROM $table
             ORDER BY original_name ASC";
     static $languages = [];
     if (empty($languages)) {
@@ -9635,11 +9633,11 @@ function api_get_language_translate_html()
         $hideAll .= '
         $("span:lang('.$language['isocode'].')").filter(
             function(e, val) {
-                // Only find the spans if they have set the lang                
-                if ($(this).attr("lang") == null) {                
+                // Only find the spans if they have set the lang
+                if ($(this).attr("lang") == null) {
                     return false;
                 }
-                
+
                 // Ignore ckeditor classes
                 return !this.className.match(/cke(.*)/);
         }).hide();'."\n";
@@ -9656,32 +9654,32 @@ function api_get_language_translate_html()
 
     return '
             $(function() {
-                '.$hideAll.'                 
-                var defaultLanguageFromUser = "'.$isoCode.'";   
-                                             
+                '.$hideAll.'
+                var defaultLanguageFromUser = "'.$isoCode.'";
+
                 $("span:lang('.$isoCode.')").filter(
                     function() {
                         // Ignore ckeditor classes
                         return !this.className.match(/cke(.*)/);
                 }).show();
-                
+
                 var defaultLanguage = "";
                 var langFromUserFound = false;
-                
+
                 $(this).find("span").filter(
                     function() {
                         // Ignore ckeditor classes
                         return !this.className.match(/cke(.*)/);
                 }).each(function() {
-                    defaultLanguage = $(this).attr("lang");                            
+                    defaultLanguage = $(this).attr("lang");
                     if (defaultLanguage) {
-                        $(this).before().next("br").remove();                
+                        $(this).before().next("br").remove();
                         if (defaultLanguageFromUser == defaultLanguage) {
                             langFromUserFound = true;
                         }
                     }
                 });
-                
+
                 // Show default language
                 if (langFromUserFound == false && defaultLanguage) {
                     $("span:lang("+defaultLanguage+")").filter(

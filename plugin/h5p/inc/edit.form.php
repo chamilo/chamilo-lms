@@ -23,7 +23,6 @@ if ($nodeType == '') {
     $tableOfnodes .= "<em class='fa'></em>&nbsp;".$plugin->get_lang('Use')."&nbsp;</a>";
     $tableOfnodes .= "</td>";
 
-
     $tableOfnodes .= "<td style='text-align:center;padding:5px;' >";
     $tableOfnodes .= "<img class=toolimage src='resources/img/dragthewords.png' /></td>";
     $tableOfnodes .= "<td style='text-align:center;width:20%;' >Drag the words</td>";

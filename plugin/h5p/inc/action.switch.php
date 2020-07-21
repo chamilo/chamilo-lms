@@ -27,7 +27,7 @@ switch ($action) {
                 'terms_e' => $values['terms_e'],
                 'terms_f' => $values['terms_f'],
                 'descript' => $values['descript'],
-                'url_id' => $urlId
+                'url_id' => $urlId,
             ];
             $result = Database::insert($table, $params);
 
@@ -55,7 +55,7 @@ switch ($action) {
                 'terms_d' => $values['terms_d'],
                 'terms_e' => $values['terms_e'],
                 'terms_f' => $values['terms_f'],
-                'descript' => $values['descript']
+                'descript' => $values['descript'],
             ];
             Database::update($table, $params, ['id = ?' => $id]);
             Display::addFlash(Display::return_message(get_lang('Updated')));

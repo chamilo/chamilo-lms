@@ -2,7 +2,7 @@
 
 /* For license terms, see /license.txt */
 /**
- * Return HTML list for AJAX request
+ * Return HTML list for AJAX request.
  */
 require_once __DIR__.'/../../../../main/inc/global.inc.php';
 

@@ -20,7 +20,6 @@ if ($version == '1-5') {
     Database::query($inSql);
 
     $out .= ' version 1-5';
-
 }
 
 $out .= '</p>';

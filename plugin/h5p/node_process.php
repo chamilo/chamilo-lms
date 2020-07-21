@@ -7,7 +7,6 @@ require_once __DIR__.'/h5p_plugin.class.php';
 $awp = api_get_path(WEB_PATH);
 $pathPlugH5P = api_get_path(WEB_PLUGIN_PATH).'h5p/';
 
-
 if (api_is_anonymous()) {
     header('Location: '.$awp.'index.php');
     exit;
@@ -38,7 +37,6 @@ $term = null;
 $contentForm = '<p>Error</p>';
 
 if ($id > 0) {
-
     $sql = "SELECT * FROM plugin_h5p WHERE id = $id ";
     $result = Database::query($sql);
 
@@ -73,7 +71,6 @@ if ($id > 0) {
     $contentFlx = file_get_contents($contentSource);
 
     if ($nodeType == 'dialogcard' || $nodeType == 'memory') {
-
         if (controlSourceCards($termA)) {
             $baseFlx = getSourceCards($termA, $nodeType);
         }
@@ -99,11 +96,9 @@ if ($id > 0) {
         }
 
         $contentFlx = str_replace("\"@base_cards@\"", $baseFlx, $contentFlx);
-
     }
 
     if ($nodeType == 'guesstheanswer') {
-
         $extractImgData = "images/dialogcard.jpg";
         $pathParts = pathinfo($termB);
         $fileN = $pathParts['filename'];
@@ -121,7 +116,6 @@ if ($id > 0) {
         }
 
         $contentFlx = str_replace("@image_b@", json_encode($extractImgData), $contentFlx);
-
     }
 
     $contentFlx = str_replace("@terms_a@", $termA, $contentFlx);
@@ -171,12 +165,10 @@ if ($id > 0) {
     fwrite($fp, $h5pSource);
     fclose($fp);
 
-
     $contentForm = '<iframe frameborder="0" width="100%" height="600px" ';
     $contentForm .= ' style="width:100%;height:600px;" ';
     $contentForm .= ' src="'.$pathPlugH5P.$htmlFile.'" >';
     $contentForm .= '</iframe>';
-
 }
 
 $contentForm .= '<h3 style="text-align:center;" >Embedded code</h3>';
@@ -197,7 +189,9 @@ $tpl->display_one_col_template();
 
 /**
  * Check if a source card is not empty.
+ *
  * @param string $termData A string from which we extract the first part
+ *
  * @return bool False on empty, true otherwise
  */
 function controlSourceCards($termData)
@@ -211,18 +205,20 @@ function controlSourceCards($termData)
     if ($txtWarp != '') {
         return true;
     }
+
     return false;
 }
 
 /**
  * Parse and reformat base image tags with the given terms string.
+ *
  * @param string $termData A string from which we only take the first elements (we split it on | )
  * @param string $nodeType The type of node ('memory', 'cards', etc)
+ *
  * @return string|string[]
  */
 function getSourceCards($termData, $nodeType)
 {
-
     $baseFlx = '{"tips":{},
 		"text": @text_a@ ,
 		"answer": @answer_a@ ,
@@ -265,5 +261,4 @@ function getSourceCards($termData, $nodeType)
     $baseFlx = str_replace("@image_a@", json_encode($extractImg), $baseFlx);
 
     return $baseFlx;
-
 }

@@ -9,9 +9,9 @@ class H5PPlugin extends Plugin
     {
         parent::__construct(
             '1.0', 'Damien Renou - Batisseurs Numériques',
-            array(
-                'tool_enable' => 'boolean'
-            )
+            [
+                'tool_enable' => 'boolean',
+            ]
         );
     }
 
@@ -21,11 +21,12 @@ class H5PPlugin extends Plugin
     public static function create()
     {
         static $result = null;
+
         return $result ? $result : $result = new self();
     }
 
     /**
-     * Install the structure necessary for the plugin
+     * Install the structure necessary for the plugin.
      */
     public function install()
     {
@@ -48,11 +49,10 @@ class H5PPlugin extends Plugin
             opt_3 VARCHAR(512) NOT NULL,
             PRIMARY KEY (id));";
         Database::query($sql);
-
     }
 
     /**
-     * Uninstall the plugin structure
+     * Uninstall the plugin structure.
      */
     public function uninstall()
     {

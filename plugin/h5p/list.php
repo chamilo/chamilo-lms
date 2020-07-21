@@ -16,9 +16,9 @@ if (api_is_anonymous()) {
 } else {
     $user = api_get_user_info();
     if (!api_is_platform_admin(true, true)) {
-    // Prevent non-admins to see this
-            header('Location: '.$awp.'index.php');
-            exit;
+        // Prevent non-admins to see this
+        header('Location: '.$awp.'index.php');
+        exit;
     }
 }
 

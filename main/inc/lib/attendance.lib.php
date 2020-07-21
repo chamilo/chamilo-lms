@@ -1236,7 +1236,7 @@ class Attendance
         DateTime $endDate = null
     ) {
         //Get actual course or by course_id
-        $course_id = (0 == $course_id) ? api_get_course_int_id() : $course_id;
+        $course_id = (0 == $course_id) ? api_get_course_int_id() : (int) $course_id;
         $tbl_attendance_sheet = Database::get_course_table(TABLE_ATTENDANCE_SHEET);
         $tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
         $attendance_calendar = $this->get_attendance_calendar(
@@ -1481,7 +1481,7 @@ class Attendance
         $tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
         $tbl_acrg = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR_REL_GROUP);
         $attendanceId = intval($attendanceId);
-        $course_id = (0 == $course_id) ? api_get_course_int_id() : $course_id;
+        $course_id = (0 == $course_id) ? api_get_course_int_id() : (int) $course_id;
         $whereDate = '';
         if (!empty($startDate)) {
             $whereDate .= " AND c.date_time >= '".$startDate->format('Y-m-d H:i:s')."'";
@@ -2405,6 +2405,7 @@ class Attendance
         }
 
         /* Sessions */
+        $studentId = (int) $studentId;
         $sql = "
             SELECT
                 session_id,

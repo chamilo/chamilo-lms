@@ -1,0 +1,121 @@
+{
+  "semantics": [
+    {
+      "widgets": [
+        {
+          "label": "預設"
+        }
+      ],
+      "label": "所有卡片",
+      "entity": "卡片",
+      "field": {
+        "label": "卡片",
+        "fields": [
+          {
+            "label": "圖像"
+          },
+          {
+            "label": "配對圖像（非必要項）",
+            "description": "如果遊戲中要配對的不是同一張圖像，那麼可以在這裡添加要配對的另一張圖像。"
+          },
+          {
+            "label": "Audio Track",
+            "description": "An optional sound that plays when the card is turned."
+          },
+          {
+            "label": "配對成功文字（非必要項）",
+            "description": "在找到配對時會跳出的文字訊息。"
+          },
+          {
+            "label": "配對圖像的替代文字",
+            "description": "在報讀器上用、或是配對圖像無法正常輸出時顯示的文字。"
+          },
+          {
+            "label": "Matching Audio Track",
+            "description": "An optional sound that plays when the second card is turned."
+          },
+          {
+            "label": "配對成功文字（非必要項）",
+            "description": "在找到配對時會跳出的文字訊息。"
+          }
+        ]
+      }
+    },
+    {
+      "label": "行為設置",
+      "description": "讓你控制遊戲行為的一些設置。",
+      "fields": [
+        {
+          "label": "將所有卡片顯示在方形容器",
+          "description": "在佈置卡片時，將嘗試匹配列數和行數。之後，卡片將被縮放以適合容器。"
+        },
+        {
+          "label": "卡片的使用數量",
+          "description": "遊戲中配對的卡片組合數量，設定後會從卡片集中隨機挑選指定組合數，數字必須大於 2。"
+        },
+        {
+          "label": "顯示「再試一次」按鈕"
+        }
+      ]
+    },
+    {
+      "label": "外觀",
+      "description": "控制遊戲的視覺效果。",
+      "fields": [
+        {
+          "label": "主題色調",
+          "description": "選擇遊戲環境要使用的色調。"
+        },
+        {
+          "label": "背面圖像（非必要項）",
+          "description": "允許自訂卡片背景要使用的圖片。"
+        }
+      ]
+    },
+    {
+      "label": "本地化",
+      "fields": [
+        {
+          "label": "翻牌次數的顯示文字",
+          "default": "翻牌次數"
+        },
+        {
+          "label": "花費時間的顯示文字",
+          "default": "花費時間"
+        },
+        {
+          "label": "遊戲過關的顯示文字",
+          "default": "幹得好！"
+        },
+        {
+          "label": "重試按鈕的顯示文字",
+          "default": "再試一次"
+        },
+        {
+          "label": "關閉按鈕的顯示文字",
+          "default": "關閉"
+        },
+        {
+          "label": "遊戲說明的顯示文字",
+          "default": "卡片記憶遊戲，找出配對的所有卡片吧！"
+        },
+        {
+          "label": "遊戲結束的的顯示文字",
+          "default": "已配對完所有卡片。"
+        },
+        {
+          "label": "卡片索引的顯示文字",
+          "default": "%num: 張卡片"
+        },
+        {
+          "label": "卡片未翻開的顯示文字",
+          "default": "還沒翻開。"
+        },
+        {
+          "label": "卡片已配對的顯示文字",
+          "default": "配對成功。"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,136 @@
+{
+  "semantics": [
+    {
+      "label": "Descrizione attività",
+      "description": "Descrivere come l'utente deve risolvere il compito.",
+      "default": "Trascina le parole negli spazi giusti"
+    },
+    {
+      "label": "Testo",
+      "placeholder": "*Oslo* è la capitale della Norvegia, *Stoccolma* è la capitale della Svezia e *Copenagen* è la capitale della Danimarca. Tutte queste città si trovano nella penisola della *Scandinavia:Parte a nord dell'Europa*.",
+      "description": "",
+      "important": {
+        "description": "<ul><li>Per rendere una parola - o un'intera frase - rilasciabile le si deve aggiungere un asterisco (*) all'inizio e uno alla fine.</li><li>È possibile aggiungere un suggerimento testuale usando i due punti (:) prima del suggerimento stesso.</li><li>Per ogni spazio vuoto c'è un'unica soluzione corretta.</li><li>Si può aggiungere un feedback da mostrare quando l'attività è completata. Usa '\\+' per giusto e '\\-' per sbagliato.</li></ul>",
+        "example": "I contenuti H5P possono essere modificati usando un *browser:Che tipo di software è Chrome?*.</br>Il contenuto H5P è *interattivo\\+Giusto! \\-Sbagliato. Riprova!*"
+      }
+    },
+    {
+      "label": "Feedback generale",
+      "fields": [
+        {
+          "widgets": [
+            {
+              "label": "Predefinito"
+            }
+          ],
+          "label": "Definisci un feedback personalizzato per ogni intervallo di punteggio",
+          "description": "Clicca sul pulsante \"Aggiungi punteggio\" per aggiungere quanti intervalli ti servono. Esempio: 0-20% Cattivo punteggio, 21-90% Punteggio medio, 91-100% Ottimo punteggio!",
+          "entity": "Intervallo",
+          "field": {
+            "fields": [
+              {
+                "label": "Intervallo"
+              },
+              {},
+              {
+                "label": "Feedback per un intervallo definito",
+                "placeholder": "Compila il feedback"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "Testo per il pulsante \"Verifica\"",
+      "default": "Verifica"
+    },
+    {
+      "label": "Testo per il pulsante \"Riprova\"",
+      "default": "Riprova"
+    },
+    {
+      "label": "Testo per il pulsante \"Mostra Soluzione\"",
+      "default": "Mostra soluzione"
+    },
+    {
+      "label": "Etichetta per zona di rilascio numerata",
+      "default": "Zona di rilascio @index.",
+      "description": "Etichetta usata per l'accessibilità, dove il lettore vocale legge l'indice di una zona di rilascio. Variabile disponibile: @index"
+    },
+    {
+      "label": "Etichetta per zona di rilascio vuota",
+      "default": "Zona di rilascio @index è vuota.",
+      "description": "Etichetta usata per l'accessibilità, dove il lettore vocale legge che la zona di rilascio è vuota"
+    },
+    {
+      "label": "Etichetta per contiene zona di rilascio",
+      "default": "La zona di rilascio @index contiene @draggable trascinabile.",
+      "description": "Etichetta usata per l'accessibilità, dove il lettore vocale legge che la zona di rilascio contiene un elemento trascinabile"
+    },
+    {
+      "label": "Etichetta per elementi trascinabili",
+      "default": "@index of @count draggables.",
+      "description": "Etichetta usata per l'accessibilità, dove il lettore vocale legge che questo è un elemento trascinabile. Variabili disponibili: @index, @count"
+    },
+    {
+      "label": "Etichetta per il pulsante \"Mostra suggerimento\"",
+      "default": "Mostra suggerimento",
+      "description": "Etichetta usata per l'accessibilità, che il lettore vocale legge prima del suggerimento"
+    },
+    {
+      "label": "Testo del lettore vocale per risposta corretta",
+      "default": "Giusto!"
+    },
+    {
+      "label": "Testo del lettore vocale per risposta errata",
+      "default": "Sbagliato!"
+    },
+    {
+      "label": "Titolo della finestra di dialogo per confermare all'utente il reset di un elemento trascinabile",
+      "default": "Resetta elemento trascinabile"
+    },
+    {
+      "label": "Descrizione della finestra di dialogo per confermare all'utente il reset di un elemento trascinabile",
+      "default": "Sei sicuro di voler resettare questo elemento trascinabile?"
+    },
+    {
+      "label": "Etichetta usata per l'accessibilità, dove il lettore vocale indica che il trascinamento è iniziato",
+      "default": "L'elemento trascinabile è stato afferrato."
+    },
+    {
+      "label": "Etichetta usata per l'accessibilità, dove il lettore vocale indica che il trascinamento è stato cancellato",
+      "default": "Trascinamento cancellato."
+    },
+    {
+      "label": "Etichetta usata per l'accessibilità, dove il lettore vocale indica che un testo è la risposta giusta",
+      "default": "Risposta giusta:"
+    },
+    {
+      "label": "Intestazione del pannello contenente i feedback per risposte corrette/errate",
+      "default": "Feedback"
+    },
+    {
+      "label": "Impostazioni di esecuzione",
+      "description": "Queste opzioni consentono di controllare il comportamento dell'attività.",
+      "fields": [
+        {
+          "label": "Attiva \"Riprova\""
+        },
+        {
+          "label": "Attiva pulsante \"Mostra soluzione\""
+        },
+        {
+          "label": "Attiva pulsante \"Verifica\""
+        },
+        {
+          "label": "Feedback istantaneo"
+        }
+      ]
+    },
+    {
+      "label": "Rappresentazione testuale sulla barra del punteggio per chi usa un lettore vocale",
+      "default": "Il tuo punteggio è :num su :total"
+    }
+  ]
+}

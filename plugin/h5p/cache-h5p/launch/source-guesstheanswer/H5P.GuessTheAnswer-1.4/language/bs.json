@@ -1,0 +1,26 @@
+{
+  "semantics": [
+    {
+      "label": "Opis zadatka",
+      "description": "Opišite kako će korinik riješiti zadatak."
+    },
+    {
+      "label": "Media",
+      "fields": [
+        {
+          "label": "Type",
+          "description": "Optional media to display above the question."
+        }
+      ]
+    },
+    {
+      "label": "Opisna oznaka za rješenje",
+      "default": "Kliknite da vitite odgovor",
+      "description": "Tekstualno područje za klikanje je ono područje gdje će biti prikazano rješenje."
+    },
+    {
+      "label": "Tekst rješenja",
+      "description": "Rješenje za sliku."
+    }
+  ]
+}

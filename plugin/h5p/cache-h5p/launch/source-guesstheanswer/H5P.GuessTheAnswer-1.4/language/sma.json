@@ -1,0 +1,26 @@
+{
+  "semantics": [
+    {
+      "label": "Task description",
+      "description": "Describe how the user should solve the task."
+    },
+    {
+      "label": "Media",
+      "fields": [
+        {
+          "label": "Type",
+          "description": "Optional media to display above the question."
+        }
+      ]
+    },
+    {
+      "label": "Descriptive solution label",
+      "default": "Click to see the answer.",
+      "description": "Clickable text area where the solution will be displayed."
+    },
+    {
+      "label": "Solution text",
+      "description": "The solution for the picture."
+    }
+  ]
+}

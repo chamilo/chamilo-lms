@@ -1,0 +1,40 @@
+{
+  "title": "Audio",
+  "contentType": "Media",
+  "description": "Simple library that displays an audio player.",
+  "majorVersion": 1,
+  "minorVersion": 4,
+  "patchVersion": 3,
+  "runnable": 1,
+  "machineName": "H5P.Audio",
+  "embedTypes": [
+    "iframe"
+  ],
+  "author": "Joubel",
+  "coreApi": {
+    "majorVersion": 1,
+    "minorVersion": 19
+  },
+  "preloadedJs": [
+    {
+      "path": "scripts/audio.js"
+    }
+  ],
+  "preloadedCss": [
+    {
+      "path": "styles/audio.css"
+    }
+  ],
+  "preloadedDependencies": [
+    {
+      "machineName": "flowplayer",
+      "majorVersion": 1,
+      "minorVersion": 0
+    },
+    {
+      "machineName": "FontAwesome",
+      "majorVersion": 4,
+      "minorVersion": 5
+    }
+  ]
+}

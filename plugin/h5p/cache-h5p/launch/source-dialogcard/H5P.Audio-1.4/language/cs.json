@@ -1,0 +1,49 @@
+{
+  "semantics": [
+    {
+      "label": "Zdrojové soubory"
+    },
+    {
+      "label": "Režim  přehrávače",
+      "description": "Vyberte rozložení přehrávače.",
+      "options": [
+        {
+          "label": "Minimalistický"
+        },
+        {
+          "label": "Úplný"
+        },
+        {
+          "label": "Transparentní"
+        }
+      ]
+    },
+    {
+      "label": "Přizpůsobit obalu"
+    },
+    {
+      "label": "Povolit ovládací prvky",
+      "description": "Ovládací prvky umožňují uživateli například pozastavit zvuk"
+    },
+    {
+      "label": "Povolit automatické přehrávání",
+      "description": "Při automatickém přehrávání se zvuk začne okamžitě přehrávat. Pokud je automatické přehrávání zakázáno, uživatel spustí zvuk stiskem tlačítka přehrávání."
+    },
+    {
+      "label": "Přehrát zvuk (Čtecí zařízení)",
+      "default": "Přehrát zvuk"
+    },
+    {
+      "label": "Pozastavit zvuk (Čtecí zařízení)",
+      "default": "Pozastavit zvuk"
+    },
+    {
+      "label": "Název zvukového obsahu",
+      "default": "Audio"
+    },
+    {
+      "label": "Zvuk není podporován",
+      "default": "Váš prohlížeč nepodporuje tento zvuk"
+    }
+  ]
+}

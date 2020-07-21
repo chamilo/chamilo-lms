@@ -1,0 +1,220 @@
+{
+  "semantics": [
+    {
+      "label": "Nadpis"
+    },
+    {
+      "label": "Režim",
+      "description": "Režim prezentace dialogových karet",
+      "options": [
+        {
+          "label": "Normální"
+        },
+        {
+          "label": "Opakování"
+        }
+      ]
+    },
+    {
+      "label": "Popis úlohy",
+      "default": ""
+    },
+    {
+      "widgets": [
+        {
+          "label": "Výchozí"
+        }
+      ],
+      "label": "Dialogy",
+      "entity": "dialog",
+      "field": {
+        "label": "Otázka",
+        "fields": [
+          {
+            "label": "Text",
+            "description": "Nápověda pro první část dialogu"
+          },
+          {
+            "label": "Odpověď",
+            "description": "Nápověda pro druhou část dialogu"
+          },
+          {
+            "label": "Obrázek",
+            "description": "Volitelný obrázek pro kartu. (Karta může používat pouze obrázek, pouze text nebo obojí)"
+          },
+          {
+            "label": "Alternativní text pro obrázek"
+          },
+          {
+            "label": "Zvukové soubory"
+          },
+          {
+            "label": "Nápověda",
+            "fields": [
+              {
+                "label": "Text nápovědy",
+                "description": "Nápověda pro první část dialogu"
+              },
+              {
+                "label": "Nápověda pro odpověď",
+                "description": "Nápověda pro druhou část dialogu"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "label": "Nastavení chování.",
+      "description": "Tyto možnosti vám umožní řídit, jak se bude úloha chovat.",
+      "fields": [
+        {
+          "label": "Povolit tlačítko  \"Opakovat\" "
+        },
+        {
+          "label": "Zakázat navigaci zpět",
+          "description": "Tato možnost vám umožní postupovat pomocí Dialogových karet pouze vpřed"
+        },
+        {
+          "label": "Přizpůsobit text tak, aby se vešel na kartu",
+          "description": "Pokud zrušíte zaškrtnutí této možnosti, karta přizpůsobí svou velikost velikosti textu"
+        },
+        {
+          "label": "Náhodné karty",
+          "description": "Povolit náhodný výběr pořadí zobrazovaných karet."
+        },
+        {
+          "label": "Vysoká úroveň dovednosti"
+        },
+        {
+          "label": "Povolit rychlý postup",
+          "description": "Pokud je aktivován, mohou se studenti rozhodnout, že kartu znají, aniž by ji otočili"
+        }
+      ]
+    },
+    {
+      "label": "Text tlačítka pro otočení",
+      "default": "Otočit"
+    },
+    {
+      "label": "Text tlačítka pro další",
+      "default": "Další"
+    },
+    {
+      "label": "Text tlačítka pro předchozí",
+      "default": "Předchozí"
+    },
+    {
+      "label": "Text tlačítka pro opakování",
+      "default": "Opakovat"
+    },
+    {
+      "label": "Text pro tlačítko \"správná odpověď\" ",
+      "default": "Mám to správně!"
+    },
+    {
+      "label": "Text pro tlačítko \"nesprávná odpověď\" ",
+      "default": "Mám to špatně"
+    },
+    {
+      "label": "Text pro zprávu \"Round\" pod kartami a na souhrnné obrazovce",
+      "description": "@round bude nahrazeno číslem aktuálního kola",
+      "default": "Kolo @round"
+    },
+    {
+      "label": "Text pro zprávu \"Zbývající karty\" ",
+      "description": "@number bude nahrazeno počtem karet zbývajících v tomto kole",
+      "default": "Zbývající karty: @number"
+    },
+    {
+      "label": "Text pro tlačítko  \"další kolo\" ",
+      "description": "@round bude nahrazeno číslem kola",
+      "default": "Pokračujte do kola @round"
+    },
+    {
+      "label": "Text pro tlačítko \"Začít znovu\" ",
+      "default": "Začít znovu"
+    },
+    {
+      "label": "Text pro tlačítko \"zobrazit souhrn\" ",
+      "default": "Další"
+    },
+    {
+      "label": "Text nadpisu pro souhrnnou stránku",
+      "default": "Souhrn"
+    },
+    {
+      "label": "Text pro \"Karty, které máš správně:\"",
+      "default": "Karty, které máš správně:"
+    },
+    {
+      "label": "Text pro \"Karty, které máš špatně:\"",
+      "default": "Karty, které máš špatně:"
+    },
+    {
+      "label": "Text pro \"Nezobrazené karty:\"",
+      "default": "Karty z banky, které nejsou zobrazeny:"
+    },
+    {
+      "label": "Text pro \"Celkové skóre\"",
+      "default": "Celkové skóre"
+    },
+    {
+      "label": "Text pro \"Karty dokončeny\"",
+      "default": "Kartami jste dokončili učení:"
+    },
+    {
+      "label": "Text pro \"Dokončená kola:\"",
+      "default": "Dokončená kola:"
+    },
+    {
+      "label": "Zpráva, když jste se naučili všechny karty dobře",
+      "description": "@cards bude nahrazen počtem všech karet v bance. @max bude nahrazena maximální úrovní odborné způsobilosti - 1.",
+      "default": "Výborně! Máte všechny karty @cards správně @max krát za sebou!"
+    },
+    {
+      "label": "Text pokroku",
+      "description": "Dostupné proměnné jsou @card a @total.",
+      "default": "Karet @card z @total"
+    },
+    {
+      "label": "Popisek pro text karty",
+      "description": "Používá se pro přístup pomocí asistenčních technologií",
+      "default": "Přední strana karty"
+    },
+    {
+      "label": "Popisek pro zadní stranu karty",
+      "description": "Používá se pro přístup pomocí asistenčních technologií",
+      "default": "Zadní strana karty"
+    },
+    {
+      "label": "Popisek tlačítka zobrazení nápovědy",
+      "default": "Zobrazit nápovědu"
+    },
+    {
+      "label": "Zpráva zvuk není podporován",
+      "default": "Váš prohlížeč nepodporuje tento zvuk"
+    },
+    {
+      "label": "Dialog potvrzení spuštění",
+      "fields": [
+        {
+          "label": "Text záhlaví",
+          "default": "Začít znovu?"
+        },
+        {
+          "label": "Text těla",
+          "default": "Veškerý pokrok bude ztracen. Opravdu chcete začít znovu?"
+        },
+        {
+          "label": "Popisek tlačítka zrušení",
+          "default": "Zrušit"
+        },
+        {
+          "label": "Popisek tlačítka potvrzení",
+          "default": "Začít znovu"
+        }
+      ]
+    }
+  ]
+}

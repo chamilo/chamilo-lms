@@ -1,0 +1,220 @@
+{
+  "semantics": [
+    {
+      "label": "Título"
+    },
+    {
+      "label": "Mode",
+      "description": "Mode of presenting the dialog cards",
+      "options": [
+        {
+          "label": "Normal"
+        },
+        {
+          "label": "Repetition"
+        }
+      ]
+    },
+    {
+      "label": "Descrição da tarefa",
+      "default": ""
+    },
+    {
+      "widgets": [
+        {
+          "label": "Padrão"
+        }
+      ],
+      "label": "Diálogos",
+      "entity": "dialog",
+      "field": {
+        "label": "Questão",
+        "fields": [
+          {
+            "label": "Texto",
+            "description": "Texto da primeira parte do diálogo"
+          },
+          {
+            "label": "Resposta",
+            "description": "Texto da segunda parte do diálogo"
+          },
+          {
+            "label": "Imagem",
+            "description": "Imagem opcional para o cartão. (O cartão pode conter apenas uma imagem, apenas um texto, ou ambos)"
+          },
+          {
+            "label": "Texto alternativo para a imagem"
+          },
+          {
+            "label": "Arquivos de áudio"
+          },
+          {
+            "label": "Dicas",
+            "fields": [
+              {
+                "label": "Dica para texto",
+                "description": "Dica para a primeira parte do diálogo"
+              },
+              {
+                "label": "Dica para resposta",
+                "description": "Dica para a segunda parte do diálogo"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "label": "Configurações comportamentais.",
+      "description": "stas opções permitirão que você controle como a tarefa se comporta.",
+      "fields": [
+        {
+          "label": "Habilitar botão \"Tentar novamente\""
+        },
+        {
+          "label": "Desabilitar navegação para trás",
+          "description": "Esta opção permitirá apenas que você navegue para frente nos cartões de diálogo"
+        },
+        {
+          "label": "Dimensionar o texto para ajustar-se dentro do cartão",
+          "description": "Desmarcar esta opção fará com que o cartão adapte seu tamanho ao tamanho do texto"
+        },
+        {
+          "label": "Aleatorizar cartões",
+          "description": "Habilite para aleatorizar a ordem em que os cartões são exibidos."
+        },
+        {
+          "label": "Maximum proficiency level"
+        },
+        {
+          "label": "Allow quick progression",
+          "description": "If activated, learners can decide to indicate that they know a card without turning it"
+        }
+      ]
+    },
+    {
+      "label": "Texto para o botão de virar",
+      "default": "Virar"
+    },
+    {
+      "label": "Texto para o botão de próximo",
+      "default": "Próximo"
+    },
+    {
+      "label": "Texto para o botão de anterior",
+      "default": "Anterior"
+    },
+    {
+      "label": "Texto para o botão de tentar novamente",
+      "default": "Tentar novamente"
+    },
+    {
+      "label": "Text for the \"correct answer\" button",
+      "default": "I got it right!"
+    },
+    {
+      "label": "Text for the \"incorrect answer\" button",
+      "default": "I got it wrong"
+    },
+    {
+      "label": "Text for \"Round\" message below cards and on the summary screen",
+      "description": "@round will be replaced by the number of the current round",
+      "default": "Round @round"
+    },
+    {
+      "label": "Text for \"Cards left\" message",
+      "description": "@number will be replaced by the number of cards left in this round",
+      "default": "Cards left: @number"
+    },
+    {
+      "label": "Text for the \"next round\" button",
+      "description": "@round will be replaced by the round number",
+      "default": "Proceed to round @round"
+    },
+    {
+      "label": "Text for the \"Start over\" button",
+      "default": "Start over"
+    },
+    {
+      "label": "Text for the \"show summary\" button",
+      "default": "Next"
+    },
+    {
+      "label": "Title text for the summary page",
+      "default": "Summary"
+    },
+    {
+      "label": "Text for \"Cards you got right:\"",
+      "default": "Cards you got right:"
+    },
+    {
+      "label": "Text for \"Cards you got wrong:\"",
+      "default": "Cards you got wrong:"
+    },
+    {
+      "label": "Text for \"Cards not shown:\"",
+      "default": "Cards in pool not shown:"
+    },
+    {
+      "label": "Text for \"Overall Score\"",
+      "default": "Overall Score"
+    },
+    {
+      "label": "Text for \"Cards completed\"",
+      "default": "Cards you have completed learning:"
+    },
+    {
+      "label": "Text for \"Completed rounds:\"",
+      "default": "Completed rounds:"
+    },
+    {
+      "label": "Message when all cards have been learned proficiently",
+      "description": "@cards will be replaced by the number of all cards in the pool. @max will be replaced by the maximum proficiency level - 1.",
+      "default": "Well done! You got all @cards cards correct @max times in a row!"
+    },
+    {
+      "label": "Texto de progresso",
+      "description": "Variáveis disponíveis são @card e @total.",
+      "default": "Cartão @card de @total"
+    },
+    {
+      "label": "Rótulo para o texto do cartão",
+      "description": "Usado para acessibilidade por tecnologias assistivas",
+      "default": "Frente do cartão"
+    },
+    {
+      "label": "Rótulo para verso do cartão",
+      "description": "Usado para acessibilidade por tecnologias assistivas",
+      "default": "Verso do cartão"
+    },
+    {
+      "label": "Rótulo para o botão de mostrar dica",
+      "default": "Mostrar dica"
+    },
+    {
+      "label": "Mensagem de áudio não suportado",
+      "default": "Seu navegador não suporta este áudio"
+    },
+    {
+      "label": "Confirm starting over dialog",
+      "fields": [
+        {
+          "label": "Header text",
+          "default": "Start over?"
+        },
+        {
+          "label": "Body text",
+          "default": "All progress will be lost. Are you sure you want to start over?"
+        },
+        {
+          "label": "Cancel button label",
+          "default": "Cancel"
+        },
+        {
+          "label": "Confirm button label",
+          "default": "Start over"
+        }
+      ]
+    }
+  ]
+}

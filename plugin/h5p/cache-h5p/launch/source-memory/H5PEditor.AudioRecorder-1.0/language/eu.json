@@ -1,0 +1,23 @@
+{
+  "libraryStrings":{
+    "title":"Audio Grabatzailea",
+    "recordAnswer":"Grabatu",
+    "pause":"Pausatu",
+    "continue":"Jarraitu",
+    "done":"Amaitu",
+    "retry":"Berrabiarazi",
+    "microphoneNotSupported":"Mikrofonoa ez dago onartua. Ziurtatu ezazu mikrofono bidezko grabazioak onartzen dituen nabigatzailea erabiltzen ari zarela.",
+    "microphoneInaccessible":"Microfonoa ez dago eskuragarri. Ziurtatu ezazu nabigatzailearen mikrofonoa gaituta dagoela.",
+    "insecureNotAllowed":"Zure nabigatzaileak ez du mikrofonorako sarbidea baimentzen orri hau ez delako HTTPS bidez bidaltzen. Mesedez harremanetan jarri zaitez egilearekin, orri hau HTTPS bidez eskuragarri jarri dezan eskatuz.",
+    "statusReadyToRecord":"Sakatu ezazu beheko botoia grabatzen hasteko.",
+    "statusRecording":"Grabatzen...",
+    "statusPaused":"Grabazioa pausatu da.",
+    "statusFinishedRecording":"Entzun beheko grabazioa.",
+    "downloadRecording":"Egin klik \"Txertatu\" izeneko botoian grabazio hau erabiltzeko.",
+    "retryDialogHeaderText":"Grabatzen berriz saiatu nahi duzu?",
+    "retryDialogBodyText":"\"Saiatu berriz\" botoian klik eginez gero zure oraingo grabazioa galduko duzu.",
+    "retryDialogConfirmText":"Saiatu berriz",
+    "retryDialogCancelText":"Utzi",
+    "statusCantCreateTheAudioFile":"Ezin izan da audio-fitxategia sortu."
+  }
+}

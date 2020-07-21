@@ -1,0 +1,220 @@
+{
+  "semantics": [
+    {
+      "label": "Heading"
+    },
+    {
+      "label": "Mode",
+      "description": "Mode of presenting the dialog cards",
+      "options": [
+        {
+          "label": "Normal"
+        },
+        {
+          "label": "Repetition"
+        }
+      ]
+    },
+    {
+      "label": "Etkinlik açıklaması",
+      "default": ""
+    },
+    {
+      "widgets": [
+        {
+          "label": "Varsayılan"
+        }
+      ],
+      "label": "Diyaloglar",
+      "entity": "dialog",
+      "field": {
+        "label": "Soru",
+        "fields": [
+          {
+            "label": "Metin",
+            "description": "Diyaloğun ilk bölümü için ipucu"
+          },
+          {
+            "label": "Cevap",
+            "description": "Diyaloğun ikinci bölümü için ipucu"
+          },
+          {
+            "label": "Görsel",
+            "description": "Kart için isteğe bağlı görsel. (Kart sadece bir görsel, sadece bir metin ya da ikisini birden içerebilir.)"
+          },
+          {
+            "label": "Görsel için alternatif metin"
+          },
+          {
+            "label": "Ses dosyaları"
+          },
+          {
+            "label": "İpuçları",
+            "fields": [
+              {
+                "label": "İpucu metni",
+                "description": "Diyaloğun ilk bölümü için ipucu"
+              },
+              {
+                "label": "Cevap için ipucu",
+                "description": "Diyaloğun ikinci bölümü için ipucu"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "label": "Davranış ayarları.",
+      "description": "Bu seçenekler etkinliğin nasıl gerçekleşeceğini kontrol etmenizi sağlar.",
+      "fields": [
+        {
+          "label": "Açık \"Yeniden dene\" düğmesi"
+        },
+        {
+          "label": "Geri dönüş gezinmesini kapat",
+          "description": "Bu seçenek Diyalog Kartlarında sadece ileri gidilmesini sağlar."
+        },
+        {
+          "label": "Metni karta sığacak şekilde boyutlandır",
+          "description": "Bu seçeneği kapatarak kartın boyutunun metne uygun şekilde değişmesini sağlayabilirsiniz."
+        },
+        {
+          "label": "Kartları karıştır",
+          "description": "Kartların gösterilme sırasının rasgele olmasını sağlar."
+        },
+        {
+          "label": "Maximum proficiency level"
+        },
+        {
+          "label": "Allow quick progression",
+          "description": "If activated, learners can decide to indicate that they know a card without turning it"
+        }
+      ]
+    },
+    {
+      "label": "Döndür düğmesinin metni",
+      "default": "Çevir"
+    },
+    {
+      "label": "sonraki düğmesinin metni",
+      "default": "Sonraki"
+    },
+    {
+      "label": "Önceki düğmesinin metni",
+      "default": "Önceki"
+    },
+    {
+      "label": "Yeniden dene düğmesinin metni",
+      "default": "Yeniden dene"
+    },
+    {
+      "label": "Text for the \"correct answer\" button",
+      "default": "I got it right!"
+    },
+    {
+      "label": "Text for the \"incorrect answer\" button",
+      "default": "I got it wrong"
+    },
+    {
+      "label": "Text for \"Round\" message below cards and on the summary screen",
+      "description": "@round will be replaced by the number of the current round",
+      "default": "Round @round"
+    },
+    {
+      "label": "Text for \"Cards left\" message",
+      "description": "@number will be replaced by the number of cards left in this round",
+      "default": "Cards left: @number"
+    },
+    {
+      "label": "Text for the \"next round\" button",
+      "description": "@round will be replaced by the round number",
+      "default": "Proceed to round @round"
+    },
+    {
+      "label": "Text for the \"Start over\" button",
+      "default": "Start over"
+    },
+    {
+      "label": "Text for the \"show summary\" button",
+      "default": "Next"
+    },
+    {
+      "label": "Title text for the summary page",
+      "default": "Summary"
+    },
+    {
+      "label": "Text for \"Cards you got right:\"",
+      "default": "Cards you got right:"
+    },
+    {
+      "label": "Text for \"Cards you got wrong:\"",
+      "default": "Cards you got wrong:"
+    },
+    {
+      "label": "Text for \"Cards not shown:\"",
+      "default": "Cards in pool not shown:"
+    },
+    {
+      "label": "Text for \"Overall Score\"",
+      "default": "Overall Score"
+    },
+    {
+      "label": "Text for \"Cards completed\"",
+      "default": "Cards you have completed learning:"
+    },
+    {
+      "label": "Text for \"Completed rounds:\"",
+      "default": "Completed rounds:"
+    },
+    {
+      "label": "Message when all cards have been learned proficiently",
+      "description": "@cards will be replaced by the number of all cards in the pool. @max will be replaced by the maximum proficiency level - 1.",
+      "default": "Well done! You got all @cards cards correct @max times in a row!"
+    },
+    {
+      "label": "İlerleme metni",
+      "description": "Olası değişkenler @card ve @total.",
+      "default": "Kart @card / @total"
+    },
+    {
+      "label": "Kart metni etiketi ",
+      "description": "Destek teknolojileri tarafından kullanılır",
+      "default": "Kartın önü"
+    },
+    {
+      "label": "Kartın arkası metni ",
+      "description": "Destek teknolojileri tarafından kullanılır",
+      "default": "Kartın arkası"
+    },
+    {
+      "label": "İpucu düğmesinin etiketi",
+      "default": "İpucunu göster"
+    },
+    {
+      "label": "Ses desteklenmiyor mesajı",
+      "default": "İnternet tarayıcınız bu sesi desteklemiyor"
+    },
+    {
+      "label": "Confirm starting over dialog",
+      "fields": [
+        {
+          "label": "Header text",
+          "default": "Start over?"
+        },
+        {
+          "label": "Body text",
+          "default": "All progress will be lost. Are you sure you want to start over?"
+        },
+        {
+          "label": "Cancel button label",
+          "default": "Cancel"
+        },
+        {
+          "label": "Confirm button label",
+          "default": "Start over"
+        }
+      ]
+    }
+  ]
+}

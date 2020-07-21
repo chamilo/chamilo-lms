@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 225">
+  <defs>
+    <style>
+      .cls-1 {
+        isolation: isolate;
+      }
+
+      .cls-2 {
+        fill: #589b42;
+      }
+
+      .cls-3 {
+        fill: #8ac97a;
+      }
+
+      .cls-4 {
+        opacity: 0.2;
+        mix-blend-mode: multiply;
+      }
+
+      .cls-5 {
+        fill: #f26262;
+      }
+
+      .cls-6 {
+        fill: #f7cf5c;
+      }
+
+      .cls-7 {
+        fill: none;
+      }
+    </style>
+  </defs>
+  <title>memmory game</title>
+  <g class="cls-1">
+    <g id="Layer_2" data-name="Layer 2">
+      <g id="memmory_game" data-name="memmory game">
+        <g>
+          <g>
+            <rect class="cls-2" x="131" y="42.5" width="37" height="39"/>
+            <path class="cls-3" d="M166,45.5v31H133v-31h33m6-7H127v45h45v-45Z"/>
+          </g>
+          <g>
+            <rect class="cls-2" x="184" y="42.5" width="38" height="39"/>
+            <path class="cls-3" d="M218,45.5v31H186v-31h32m6-7H181v45h43v-45Z"/>
+          </g>
+          <g>
+            <g class="cls-4">
+              <rect x="237" y="41.5" width="44" height="43"/>
+            </g>
+            <rect class="cls-5" x="235" y="38.5" width="43" height="45"/>
+          </g>
+          <g>
+            <g class="cls-4">
+              <rect x="131" y="94.5" width="43" height="44"/>
+            </g>
+            <rect class="cls-5" x="127" y="93.5" width="46" height="43"/>
+          </g>
+          <g>
+            <rect class="cls-2" x="184" y="95.5" width="38" height="39"/>
+            <path class="cls-3" d="M218,97.5v34H186v-34h32m6-4H181v43h43v-43Z"/>
+          </g>
+          <g>
+            <rect class="cls-2" x="237" y="95.5" width="38" height="39"/>
+            <path class="cls-3" d="M273,97.5v34H241v-34h32m4-4H235v43h42v-43Z"/>
+          </g>
+          <g>
+            <rect class="cls-2" x="131" y="147.5" width="37" height="38"/>
+            <path class="cls-3" d="M166,151.5v33H133v-33h33m6-6H127v44h45v-44Z"/>
+          </g>
+          <g>
+            <rect class="cls-2" x="184" y="147.5" width="38" height="38"/>
+            <path class="cls-3" d="M218,151.5v33H186v-33h32m6-6H181v44h43v-44Z"/>
+          </g>
+          <g>
+            <rect class="cls-2" x="237" y="147.5" width="38" height="38"/>
+            <path class="cls-3" d="M273,151.5v33H241v-33h32m4-6H235v44h42v-44Z"/>
+          </g>
+          <path class="cls-6" d="M162.47,111.19l-5.61,5.47,1.33,7.73a2.07,2.07,0,0,1,0,.31c0,.4-.19.77-.63.77a1.26,1.26,0,0,1-.62-.19L150,121.65l-6.94,3.65a1.31,1.31,0,0,1-.62.19c-.45,0-.65-.37-.65-.77a2.09,2.09,0,0,1,0-.31l1.33-7.73-5.63-5.47a1.2,1.2,0,0,1-.39-.74c0-.46.48-.65.87-.71l7.76-1.13,3.48-7c.14-.29.4-.63.76-.63s.62.34.76.63l3.48,7,7.76,1.13c.37.06.87.25.87.71A1.15,1.15,0,0,1,162.47,111.19Z"/>
+          <path class="cls-6" d="M269.28,57.35l-5.61,5.47L265,70.55a2.07,2.07,0,0,1,0,.31c0,.4-.19.77-.63.77a1.26,1.26,0,0,1-.62-.19l-6.94-3.65-6.94,3.65a1.31,1.31,0,0,1-.62.19c-.45,0-.65-.37-.65-.77a2.09,2.09,0,0,1,0-.31L250,62.82l-5.63-5.47a1.2,1.2,0,0,1-.39-.74c0-.46.48-.65.87-.71l7.76-1.13,3.48-7c.14-.29.4-.63.76-.63s.62.34.76.63l3.48,7,7.76,1.13c.37.06.87.25.87.71A1.15,1.15,0,0,1,269.28,57.35Z"/>
+        </g>
+        <rect class="cls-7" width="400" height="225"/>
+      </g>
+    </g>
+  </g>
+</svg>

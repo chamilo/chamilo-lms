@@ -1,0 +1,112 @@
+/* The main containers for the module, specific to this module. */
+.h5p-mark-the-words {
+  position: relative;
+  background: rgba(255, 255, 255, 0.9);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#e6FFFFFF,endColorstr=#e6FFFFFF);
+  overflow: hidden;
+}
+
+.h5p-mark-the-words-descriptions {
+  display: none;
+}
+
+/* Actual text paragraphs */
+.h5p-mark-the-words .h5p-word-inner p {
+  font-size: 1em;
+  font-weight: normal;
+  padding: 0;
+  margin: 0 0 1em;
+  line-height: inherit;
+}
+
+.h5p-mark-the-words button.h5p-button:before {
+  font-family: 'H5PFontAwesome4';
+  content: "\f06e";
+  padding-right: 0.5em;
+}
+/* Selectable words container */
+.h5p-mark-the-words .h5p-word-selectable-words {
+  line-height: 1.75em;
+  outline: none;
+}
+/* Selectable words*/
+.h5p-mark-the-words [role="option"] {
+  white-space: nowrap;
+  padding: 0.15em;
+  border-radius: 0.25em;
+  cursor: pointer;
+  position: relative;
+}
+
+.h5p-mark-the-words .h5p-word-selectable-words:not(.h5p-disable-hover) [role="option"]:hover {
+  box-shadow: inset 0px 0px 0px 2px #cee0f4;
+}
+
+/* Colors and styling for word selections */
+.h5p-mark-the-words [aria-selected="true"] {
+  background: #cee0f4;
+}
+/* Missed word*/
+.h5p-mark-the-words [aria-describedby="h5p-description-missed"] {
+  color: #255c41;
+  font-weight: bold;
+  border: 1px #255c41 dashed;
+  background-color: #d4f6e6;
+}
+
+/* Correctly answered marking */
+.h5p-mark-the-words [aria-describedby="h5p-description-correct"] {
+  background: #9dd8bb;
+  color: #255c41;
+  display: inline-block;
+  line-height: 1;
+}
+/* Wrongly answered marking */
+.h5p-mark-the-words [aria-describedby="h5p-description-incorrect"] {
+  background-color: #f7d0d0;
+  color: #b71c1c;
+  text-decoration: line-through;
+  display: inline-block;
+  line-height: 1;
+}
+/* Feedback icons */
+.h5p-mark-the-words [aria-describedby="h5p-description-correct"]:after {
+  position: relative;
+  right: 0.1em;
+  text-decoration: none;
+  content: "\f00c";
+  font-family: 'H5PFontAwesome4';
+  color: #255c41;
+  padding-left: 0.75em;
+}
+.h5p-mark-the-words [aria-describedby="h5p-description-incorrect"]:after {
+  position: relative;
+  right: 0.1em;
+  display: inline-block;
+  font-family: 'H5PFontAwesome4';
+  text-decoration: none;
+  content: "\f00d";
+  color: #b71c1c;
+  padding-left: 0.75em;
+}
+/* SPECIFIC CSS CLASSES FOR MARK THE WORDS MODULE: */
+/* Start state for button: */
+.h5p-mark-the-words button.h5p-button.h5p-check-button:before {
+  content: "\f058";
+}
+.h5p-mark-the-words button.h5p-button.h5p-retry-button:before {
+  content: "\f021";
+}
+.h5p-mark-the-words button.h5p-button.h5p-check-button {
+  display: inline-block;
+}
+button.h5p-retry-button.h5p-retry-button {
+  display: none;
+}
+
+.h5p-mark-the-words .hidden-but-read {
+  position: absolute;
+  height: 0;
+  width: 0;
+  overflow: hidden;
+}

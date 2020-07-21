@@ -1,0 +1,159 @@
+.h5p-joubelui-score-bar {
+  display: inline-flex;
+  display: -webkit-inline-flexbox;
+  display: -ms-inline-flexbox;
+  display: -webkit-inline-flex;
+  width: 15em;
+  max-width: 100%;
+  background: #fff;
+  border-radius: 1.5em;
+  padding: 0.625em;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-sizing: border-box;
+  position: relative;
+}
+.h5p-joubelui-score-bar-visuals {
+  flex: 1;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  position: relative;
+  overflow: visible;
+}
+.h5p-joubelui-score-bar-progress-wrapper {
+  position: relative;
+  margin-right: 1.7em;
+  height: 0.917em;
+  border-top-left-radius: 1.5em;
+  border-bottom-left-radius: 1.5em;
+  background: #ddd;
+}
+.h5p-joubelui-score-bar-progress {
+  overflow: hidden;
+  white-space: nowrap;
+  color: transparent;
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 0;
+  border-top-left-radius: .5em;
+  border-bottom-left-radius: .5em;
+  background: #48b57e; /* For browsers not supporting linear-gradient */
+  background: linear-gradient(to right, #52ca8d, #48b57e);
+  -webkit-transition: width 0.4s ease-in-out;
+  -moz-transition: width 0.4s ease-in-out;
+  -o-transition: width 0.4s ease-in-out;
+  transition: width 0.4s ease-in-out;
+  -webkit-backface-visibility: hidden;
+}
+/* The star */
+.h5p-joubelui-score-bar-star {
+  height: 1.8em;
+  width: 2.1em;
+  position: absolute;
+  right: 0;
+  top: -0.4em;
+  overflow: visible;
+}
+.h5p-joubelui-score-bar-full-score.h5p-joubelui-score-bar-animation-active .h5p-joubelui-score-bar-star {
+  -webkit-animation: pound 0.8s 1;
+          animation: pound 0.8s 1;
+}
+@keyframes pound {
+  from {
+    transform: scale(0);
+  }
+  20% {
+    transform: scale(1.4);
+  }
+  60% {
+    transform: scale(0.8);
+  }
+  80% {
+    transform: scale(1.2);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+@-webkit-keyframes pound {
+  from {
+    -webkit-transform: scale(0);
+  }
+  20% {
+    -webkit-transform: scale(1.4);
+  }
+  60% {
+    -webkit-transform: scale(0.8);
+  }
+  80% {
+    -webkit-transform: scale(1.2);
+  }
+  to {
+    -webkit-transform: scale(1);
+  }
+}
+/* Styling the star */
+.h5p-joubelui-score-bar-star svg {
+  overflow: visible;
+}
+.h5p-joubelui-score-bar-star-shadow {
+  fill: #fff;
+}
+.h5p-joubelui-score-bar-star-border {
+  fill: none;
+  stroke: #ddd;
+  stroke-miterlimit: 10;
+  stroke-width: 3px;
+}
+.h5p-joubelui-score-bar-star-fill {
+  fill: #ddd;
+}
+.h5p-joubelui-score-bar-full-score .h5p-joubelui-score-bar-star-border {
+  stroke: #ab741a;
+  stroke-width: 6;
+}
+.h5p-joubelui-score-bar-star-fill-full-score {
+  visibility: hidden;
+  fill: #ffc80b;
+}
+.h5p-joubelui-score-bar-full-score .h5p-joubelui-score-bar-star-fill {
+  /* This  will be a fallback for browsers not supporting the filter,
+     i.e. Safari */
+  fill: #ffc80b;
+}
+.h5p-joubelui-score-bar-full-score .h5p-joubelui-score-bar-star-fill-full-score {
+  visibility: visible;
+}
+
+/* The numeric part on the end (score / maxScore) */
+.h5p-joubelui-score-numeric {
+  margin: 0em 0.4em;
+  font-size: 1.333em;
+  line-height: 0.7;
+  font-weight: bold;
+}
+.h5p-score-bar-has-help .h5p-joubelui-score-numeric {
+  /* Need more space when icon is displayed */
+  margin-right: 0.625em;
+}
+.h5p-joubelui-score-number {
+  color: #333;
+}
+.h5p-joubelui-score-number-separator {
+  color: #999;
+  padding: 0 0.1em;
+}
+.h5p-joubelui-score-bar .joubel-tip-container {
+  position: absolute;
+  top: 0.1em;
+  right: 0.3em;
+  font-size: 1em;
+  line-height: 1;
+  color: #1a73d9;
+  margin-right: 0.2em;
+}
+.h5p-joubelui-score-bar .joubel-tip-container > .help-icon {
+  font-size: 1em;
+  line-height: 1;
+}

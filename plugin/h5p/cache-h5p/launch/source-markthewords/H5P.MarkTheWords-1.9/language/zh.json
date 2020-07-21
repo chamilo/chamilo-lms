@@ -1,0 +1,116 @@
+{
+  "semantics": [
+    {
+      "label": "任務說明",
+      "description": "說明用戶任務中要做些什麼。",
+      "placeholder": "在句子中找到動詞然後圈出來。"
+    },
+    {
+      "label": "文字",
+      "placeholder": "我 常常 在 夜深人靜 的時候 *翻譯* 一些 軟體 。",
+      "description": "",
+      "important": {
+        "description": "<ul><li>在需要被標記的字詞（答案）兩側添加星號 (*)。</li><li>如果字詞中包含星號，那麼可以再加一個就會被包含，例如 *correctword*** => correctword*。</li><li>詞與詞之間要以空白符號分隔。只有字詞能使用，英語片語不行。</li></ul>",
+        "example": "The correct words are marked like this: *correctword*, an asterisk is written like this: *correctword***."
+      }
+    },
+    {
+      "label": "結果回饋",
+      "fields": [
+        {
+          "widgets": [
+            {
+              "label": "預設"
+            }
+          ],
+          "label": "為不同分數區間的用戶分別回饋訊息",
+          "description": "點擊「添加範圍」按鈕，加入你想要的範圍，例如 0%-59% 請加油、60%-79% 再努力、80%-100% 太棒了。",
+          "entity": "範圍",
+          "field": {
+            "fields": [
+              {
+                "label": "分數區間"
+              },
+              {},
+              {
+                "label": "自訂區間回饋訊息",
+                "placeholder": "填入回饋訊息"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "核對答案按鈕文字",
+      "default": "核對答案"
+    },
+    {
+      "label": "再試一次按鈕文字",
+      "default": "再試一次"
+    },
+    {
+      "label": "顯示正解按鈕文字",
+      "default": "顯示正解"
+    },
+    {
+      "label": "行為設置",
+      "description": "這些設定可以讓你控制任務的行為。",
+      "fields": [
+        {
+          "label": "啟用「再試一次」按鈕"
+        },
+        {
+          "label": "啟用「顯示正解」按鈕"
+        },
+        {
+          "label": "啟用「核對答案」按鈕"
+        },
+        {
+          "label": "顯示計分狀態",
+          "description": "在每個項目旁顯示加分或減分情形。"
+        }
+      ]
+    },
+    {
+      "label": "答對的顯示文字",
+      "default": "答對！",
+      "description": "用於表示答案正確的文字。"
+    },
+    {
+      "label": "答錯的顯示文字",
+      "default": "答錯！",
+      "description": "用於表示答案錯誤的文字。"
+    },
+    {
+      "label": "少答的顯示文字",
+      "default": "缺少!",
+      "description": "用於表示沒有作答的文字。"
+    },
+    {
+      "label": "顯示正解的說明文字",
+      "default": "這是正確的解答。",
+      "description": "用來告訴用戶任務已更新成正確解答。"
+    },
+    {
+      "label": "報讀器得分條文本",
+      "default": "你得到 :num 分，總分 :total 分。"
+    },
+    {
+      "label": "Label for the full readable text for assistive technologies",
+      "default": "Full readable text"
+    },
+    {
+      "label": "Label for the text where words can be marked for assistive technologies",
+      "default": "Full text where words can be marked"
+    },
+    {
+      "label": "Solution mode header for assistive technologies",
+      "default": "Solution mode"
+    },
+    {
+      "label": "Checking mode header for assistive technologies",
+      "default": "Checking mode"
+    }
+  ]
+}

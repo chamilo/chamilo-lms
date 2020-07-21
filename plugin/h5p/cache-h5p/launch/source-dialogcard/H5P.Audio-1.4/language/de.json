@@ -1,0 +1,49 @@
+{
+  "semantics": [
+    {
+      "label": "Audioquellen"
+    },
+    {
+      "label": "Audioplayermodus",
+      "description": "Wähle den gewünschten Audioplayer-Modus.",
+      "options": [
+        {
+          "label": "Minimaler Funktionsumfang"
+        },
+        {
+          "label": "Voller Funktionsumfang"
+        },
+        {
+          "label": "Transparent"
+        }
+      ]
+    },
+    {
+      "label": "Verfügbaren Platz nutzen"
+    },
+    {
+      "label": "Steuerelemente aktivieren",
+      "description": "Dies gibt dem Nutzer z. B. die Möglichkeit, das Abspielen zu pausieren."
+    },
+    {
+      "label": "Automatische Wiedergabe aktivieren",
+      "description": "Bei aktivierter, automatischer Wiedergabe wird die Tondatei sofort abgespielt. Ansonsten wird die Tondatei erst abgespielt, wenn der Nutzer den Play-Button gedrückt hat."
+    },
+    {
+      "label": "Audio abspielen (Screenreader)",
+      "default": "Audio abspielen"
+    },
+    {
+      "label": "Audio pausieren (Screenreader)",
+      "default": "Audio pausieren"
+    },
+    {
+      "label": "Name des Audioinhalts",
+      "default": "Audio"
+    },
+    {
+      "label": "Hinweis, dass keine Tonaufnahmen abgespielt werden können",
+      "default": "Dein Browser unterstützt diese Tondatei nicht."
+    }
+  ]
+}

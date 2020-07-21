@@ -1,0 +1,7 @@
+{
+  "libraryStrings": {
+    "distributeButtonLabel": "Jaota ühtlaselt",
+    "distributeButtonWarning": "Kõigi vahemike väärtused muudetakse. Kas tahad jätkata?",
+    "rangeOutOfSequenceWarning": "Punktisummade vahemikud järjestusest väljas"
+  }
+}

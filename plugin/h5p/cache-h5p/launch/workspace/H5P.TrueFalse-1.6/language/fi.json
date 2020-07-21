@@ -1,0 +1,147 @@
+{
+  "semantics": [
+    {
+      "label": "Media",
+      "fields": [
+        {
+          "label": "Tyyppi",
+          "description": "Valinnainen kuva tai video, joka näkyy kysymyksen yläpuolella."
+        },
+        {
+          "label": "Älä salli kuvan suurentamista"
+        }
+      ]
+    },
+    {
+      "label": "Väittämä"
+    },
+    {
+      "label": "Oikea vastaus",
+      "options": [
+        {
+          "label": "Oikein"
+        },
+        {
+          "label": "Väärin"
+        }
+      ]
+    },
+    {
+      "label": "Oikein/väärin-tehtävän toimintojen nimet",
+      "fields": [
+        {
+          "label": "Painikkeen Oikein nimi",
+          "default": "Oikein"
+        },
+        {
+          "label": "Painikkeen Väärin nimi",
+          "default": "Väärin"
+        },
+        {
+          "label": "Palauteteksti",
+          "default": "Sait @score/@total pistettä",
+          "description": "Palauteteksti, käytettävissä on seuraavat muuttujat: @score ja @total. Esimerkki: 'Sait @score/@total pistettä'"
+        },
+        {
+          "label": "Painikkeen \"Tarkista\" nimi",
+          "default": "Tarkista"
+        },
+        {
+          "label": "Painikkeen \"Katso vastaus\" nimi",
+          "default": "Katso vastaus"
+        },
+        {
+          "label": "Painikkeen \"Yritä uudelleen\" nimi",
+          "default": "Yritä uudelleen"
+        },
+        {
+          "label": "Väärä vastaus",
+          "default": "Väärä vastaus"
+        },
+        {
+          "label": "Oikea vastaus",
+          "default": "Oikea vastaus"
+        },
+        {
+          "label": "Pistapalkin tekstimuotoinen esitys ruudunlukijoille",
+          "default": "Sait :num pistettä :total pisteestä"
+        }
+      ]
+    },
+    {
+      "label": "Yleisasetukset",
+      "description": "Näillä valinnoilla voit ohjailla tehtävän toimintoja.",
+      "fields": [
+        {
+          "label": "Salli painike \"Yritä uudelleen\""
+        },
+        {
+          "label": "Salli painike \"Katso vastaus\""
+        },
+        {
+          "label": "Enable \"Check\" button"
+        },
+        {
+          "label": "Näytä varmistusdialogi, kun käyttäjä klikkaa \"Tarkista\""
+        },
+        {
+          "label": "Näytä varmistusdialogi, kun käyttäjä klikkaa \"Yritä uudelleen\""
+        },
+        {
+          "label": "Tarkista vastaukset automaattisesti",
+          "description": "Tämä saattaa heikentää esteettömyyttä, varmista mitä olet tekemässä."
+        },
+        {
+          "label": "Palaute oikeasta vastauksesta",
+          "description": "Tämä korvaa oletuspalautteen. Käytettävissä on seuraavat muuttujat: @score ja @total."
+        },
+        {
+          "label": "Palaute väärästä vastauksesta",
+          "description": "Tämä korvaa oletuspalautteen. Käytettävissä on seuraavat muuttujat: @score ja @total."
+        }
+      ]
+    },
+    {
+      "label": "Painikkeen \"Tarkista\" varmistusdialogi",
+      "fields": [
+        {
+          "label": "Otsikkoteksti",
+          "default": "Valmis?"
+        },
+        {
+          "label": "Leipäteksti",
+          "default": "Haluatko tarkistaa?"
+        },
+        {
+          "label": "Painikkeen Ei teksti",
+          "default": "En"
+        },
+        {
+          "label": "Painikkeen Kyllä teksti",
+          "default": "Kyllä"
+        }
+      ]
+    },
+    {
+      "label": "Painikkeen \"Yritä uudelleen\" varmistusdialogi",
+      "fields": [
+        {
+          "label": "Otsikkoteksti",
+          "default": "Yritätkö uudelleen?"
+        },
+        {
+          "label": "Leipäteksti",
+          "default": "Haluatko yrittää uudelleen?"
+        },
+        {
+          "label": "Painikkeen Ei teksti",
+          "default": "En"
+        },
+        {
+          "label": "Painikkeen Kyllä teksti",
+          "default": "Kyllä"
+        }
+      ]
+    }
+  ]
+}

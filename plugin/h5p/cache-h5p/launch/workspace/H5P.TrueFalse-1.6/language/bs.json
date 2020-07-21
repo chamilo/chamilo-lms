@@ -1,0 +1,147 @@
+{
+  "semantics": [
+    {
+      "label": "Media",
+      "fields": [
+        {
+          "label": "Type",
+          "description": "Prikaz medija iznad pitanja (opcionalno)."
+        },
+        {
+          "label": "Onemogući zumiranje slike kod pitanja sa slikom"
+        }
+      ]
+    },
+    {
+      "label": "Pitanje"
+    },
+    {
+      "label": "Tačan odgovor",
+      "options": [
+        {
+          "label": "Tačno"
+        },
+        {
+          "label": "Pogrešno"
+        }
+      ]
+    },
+    {
+      "label": "Interfejs za prijevode za Pitanja Tačno/Pogrešno",
+      "fields": [
+        {
+          "label": "Tekst na dugmetu tačno",
+          "default": "Tačno"
+        },
+        {
+          "label": "Naziv na dugmetu pogrešno",
+          "default": "Pogrešno"
+        },
+        {
+          "label": "Feedback tekst",
+          "default": "Osvojili ste @score od @total bodova",
+          "description": "Feedback tekst, moguće varijable: @score i @total. Primjer: 'Osvojili ste @score od @total mogućih bodova'"
+        },
+        {
+          "label": "Tekst za \"Provjera\" dugme",
+          "default": "Provjera"
+        },
+        {
+          "label": "Tekst za \"Prikazati rješenje\" dugme",
+          "default": "Prikaži rješenje"
+        },
+        {
+          "label": "Tekst za \"Ponoviti\" dugme",
+          "default": "Ponovi"
+        },
+        {
+          "label": "Pogrešan odgovor",
+          "default": "Pogrešan odgovor"
+        },
+        {
+          "label": "Tačan odgovor",
+          "default": "Tačan odgovor"
+        },
+        {
+          "label": "Textual representation of the score bar for those using a readspeaker",
+          "default": "Osvojili ste :num od :total bodova"
+        }
+      ]
+    },
+    {
+      "label": "Podešavanje ponašanja",
+      "description": "Ove opcije će vam omogućiti da kontrolirate kako se zadatak ponaša.",
+      "fields": [
+        {
+          "label": "Omogući \"Ponoviti\" dugme"
+        },
+        {
+          "label": "Omogući \"Prikazati rješenje\" dugme"
+        },
+        {
+          "label": "Omogući \"Provjeriti\" dugme"
+        },
+        {
+          "label": "Prikaži ociju prihvatanja za \"Provjeri\""
+        },
+        {
+          "label": "Prikaži opciju prihvatanja za \"Ponovi\""
+        },
+        {
+          "label": "Automatski provjeri odgovor",
+          "description": "Note that accessibility will suffer if enabling this option"
+        },
+        {
+          "label": "Feedback za tačan odgovor",
+          "description": "This will override the default feedback text. Variables available: @score and @total"
+        },
+        {
+          "label": "Feedback za pogrešan odgovor",
+          "description": "This will override the default feedback text. Variables available: @score and @total"
+        }
+      ]
+    },
+    {
+      "label": "Provjeriti opciju prikaza",
+      "fields": [
+        {
+          "label": "Naslov zaglavlja",
+          "default": "Završi?"
+        },
+        {
+          "label": "Glavni tekst",
+          "default": "Jeste li sigurni da želite završiti ?"
+        },
+        {
+          "label": "Tekst na dugmetu orkazivanja",
+          "default": "Otkaži"
+        },
+        {
+          "label": "Tekst na dugmetu završetka",
+          "default": "Završi"
+        }
+      ]
+    },
+    {
+      "label": "Ponoviti opciju prihvatanja",
+      "fields": [
+        {
+          "label": "Tekst zaglavlja",
+          "default": "Ponovi?"
+        },
+        {
+          "label": "Glavni tekst",
+          "default": "Jeste li sigurni da želite ponoviti ?"
+        },
+        {
+          "label": "Tekst na dugmetu otkazivanja",
+          "default": "Otkaži"
+        },
+        {
+          "label": "Tekst na dugmetu prihvatanja",
+          "default": "Prihvati"
+        }
+      ]
+    }
+  ]
+}

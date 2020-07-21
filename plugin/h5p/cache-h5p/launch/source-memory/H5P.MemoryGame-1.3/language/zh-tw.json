@@ -1,0 +1,121 @@
+{
+  "semantics": [
+    {
+      "widgets": [
+        {
+          "label": "預設"
+        }
+      ],
+      "label": "記憶牌",
+      "entity": "記憶牌",
+      "field": {
+        "label": "記憶牌",
+        "fields": [
+          {
+            "label": "圖示"
+          },
+          {
+            "label": "Alternative text for Image",
+            "description": "Describe what can be seen in the photo. The text is read by text-to-speech tools needed by visually impaired users."
+          },
+          {
+            "label": "Audio Track",
+            "description": "An optional sound that plays when the card is turned."
+          },
+          {
+            "label": "相稱圖示",
+            "description": "可選用一張與主圖示相稱的圖示,並非使用兩張相同的圖示."
+          },
+          {
+            "label": "相稱圖示的替代文字",
+            "description": "請描述此張圖示中可以看到什麼. 此段文字將做為閱讀器導讀文字，對視障使用者更為友善."
+          },
+          {
+            "label": "Matching Audio Track",
+            "description": "An optional sound that plays when the second card is turned."
+          },
+          {
+            "label": "描述",
+            "description": "選填。當找到兩張相稱圖示時所顯示的文字."
+          }
+        ]
+      }
+    },
+    {
+      "label": "行為設定",
+      "description": "這些選項可以讓你控制遊戲的行為.",
+      "fields": [
+        {
+          "label": "將記憶牌顯示於正方形中",
+          "description": "當設定多組記憶牌時，將依組數平均分配顯示行列數及顯示大小."
+        },
+        {
+          "label": "使用的記憶牌組數量",
+          "description": "設定大於2的組數時，即可讓遊戲隨機顯示記憶牌."
+        },
+        {
+          "label": "遊戲結束後顯示重試功能鈕"
+        }
+      ]
+    },
+    {
+      "label": "外觀視覺",
+      "description": "控制遊戲的視覺效果.",
+      "fields": [
+        {
+          "label": "主題顏色",
+          "description": "為您的翻轉記憶牌遊戲設定一種顏色主題."
+        },
+        {
+          "label": "記憶牌背面圖示",
+          "description": "為您的卡片背面設定圖示."
+        }
+      ]
+    },
+    {
+      "label": "在地化",
+      "fields": [
+        {
+          "label": "翻轉記憶牌功能鈕名稱",
+          "default": "翻轉記憶牌"
+        },
+        {
+          "label": "花費時間",
+          "default": "實際花費時間"
+        },
+        {
+          "label": "回饋文字",
+          "default": "做得好!"
+        },
+        {
+          "label": "重試功能鈕名稱",
+          "default": "重試?"
+        },
+        {
+          "label": "關閉功能鈕名稱",
+          "default": "關閉"
+        },
+        {
+          "label": "遊戲名稱",
+          "default": "翻轉記憶牌遊戲. 請找出相稱的記憶牌."
+        },
+        {
+          "label": "遊戲完成名稱",
+          "default": "所有的記憶牌皆已找出."
+        },
+        {
+          "label": "記憶牌索引名稱",
+          "default": "記憶牌數量 %num:"
+        },
+        {
+          "label": "未翻轉記憶牌名稱",
+          "default": "未翻轉."
+        },
+        {
+          "label": "相稱記憶牌名稱",
+          "default": "已找到相稱的記憶牌."
+        }
+      ]
+    }
+  ]
+}

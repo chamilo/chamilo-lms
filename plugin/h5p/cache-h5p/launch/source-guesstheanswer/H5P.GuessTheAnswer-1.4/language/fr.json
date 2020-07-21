@@ -1,0 +1,26 @@
+{
+  "semantics": [
+    {
+      "label": "Description de l'activité",
+      "description": "Décrire comment l'utilisateur devrait réaliser l'activité."
+    },
+    {
+      "label": "Media",
+      "fields": [
+        {
+          "label": "Type",
+          "description": "Média à afficher en option au dessus de la question."
+        }
+      ]
+    },
+    {
+      "label": "Intitulé de la description de la solution",
+      "default": "Cliquer pour voir la réponse.",
+      "description": "Zone de texte cliquable pour afficher la solution."
+    },
+    {
+      "label": "Texte de la Solution",
+      "description": "Un texte utilisable comme exemple de solution pour cette activité."
+    }
+  ]
+}

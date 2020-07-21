@@ -366,7 +366,7 @@ function interfaceCard (letterId, collTerms) {
 
   var h = '<div class="dialogBlockEdit' + GlobalTypeNode + ' cardBlockEdit' + letterId + '" >'
 
-  h += '<div class="lineBlockTxt" ><span class="labelBlockEdit"><br>Recto&nbsp;:&nbsp;</span>'
+  h += '<div class="lineBlockTxt" ><span class="labelBlockEdit"><br>Front&nbsp;:&nbsp;</span>'
   h += '<div id="recto' + letterId + '" class="pell arealeft" ></div></div>'
 
   if (GlobalTypeNode == 'memory') {
@@ -375,7 +375,7 @@ function interfaceCard (letterId, collTerms) {
     h += '<div class="lineBlockTxt" >'
   }
 
-  h += '<span class="labelBlockEdit" >Verso&nbsp;:&nbsp;</span>'
+  h += '<span class="labelBlockEdit" >Back&nbsp;:&nbsp;</span>'
   h += '<div id="verso' + letterId + '" class="pell arealeft" /></div>'
 
   h += '<input id="outrecto' + letterId + '" style="display:none;" type="text" />'

@@ -1671,7 +1671,11 @@ function display_configuration_parameter(
     $html = '<div class="form-group">';
     $html .= '<label class="col-sm-6 control-label">'.$parameterName.'</label>';
     if ($installType == INSTALL_TYPE_UPDATE && $displayWhenUpdate) {
-        $html .= '<input type="hidden" name="'.$formFieldName.'" value="'.api_htmlentities($parameterValue, ENT_QUOTES).'" />'.$parameterValue;
+        $html .= Display::input(
+            'hidden',
+            $formFieldName,
+            api_htmlentities($parameterValue, ENT_QUOTES)
+        ).$parameterValue;
     } else {
         $hiddenPasswordClass = '';
         $eyeForPassword = '';
@@ -1681,12 +1685,23 @@ function display_configuration_parameter(
             $hiddenPasswordClass = 'inputShowPwd';
             $inputType = 'password';
             $eyeForPassword = PHP_EOL
-                .'<input type="checkbox" id="showPassword" class="hidden">'.'<label for="showPassword" style="cursor: pointer;">'.
-                Display::returnFontAwesomeIcon('eye', null, true, 'showPasswordEye').
-                '</label> ';
+                .'<input type="checkbox" id="showPassword" class="hidden">'
+                .'<label for="showPassword" style="cursor: pointer;">'
+                .Display::returnFontAwesomeIcon('eye', null, true, 'showPasswordEye')
+                .'</label> ';
         }
-        $html .= '<div class="col-sm-6 '.$hiddenPasswordClass.'"><input class="form-control" type="'.$inputType.'" size="'.FORM_FIELD_DISPLAY_LENGTH.'" maxlength="'.MAX_FORM_FIELD_LENGTH.'" name="'.$formFieldName.'" value="'.api_htmlentities($parameterValue,
-                ENT_QUOTES).'" />'.$eyeForPassword."</div>";
+        $html .= '<div class="col-sm-6 '.$hiddenPasswordClass.'">'
+            .Display::input(
+                $inputType,
+                $formFieldName,
+                api_htmlentities($parameterValue, ENT_QUOTES),
+                [
+                    'class' => 'form-control',
+                    'size' => FORM_FIELD_DISPLAY_LENGTH,
+                    'maxlength' => MAX_FORM_FIELD_LENGTH
+                ]
+            )
+            .$eyeForPassword."</div>";
     }
     $html .= "</div>";
 

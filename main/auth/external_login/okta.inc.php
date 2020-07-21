@@ -1,12 +1,12 @@
 <?php
 
-require_once __DIR__ . '/../../inc/global.inc.php';
-require_once __DIR__ . '/okta.init.php';
-require_once __DIR__ . '/functions.inc.php';
-require_once __DIR__ . '/../simplesamlphp/lib/_autoload.php';
+/* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
 
+require_once __DIR__.'/../../inc/global.inc.php';
+require_once __DIR__.'/okta.init.php';
+require_once __DIR__.'/functions.inc.php';
 
 /**
  * This function connect to okta and retrieves the user info
@@ -25,10 +25,10 @@ function oktaConnect()
         $as = new SimpleSAML_Auth_Simple($sp);
         $as->requireAuth();
         $user = array(
-            'sp'         => $sp,
-            'authed'     => $as->isAuthenticated(),
-            'idp'        => $as->getAuthData('saml:sp:IdP'),
-            'nameId'     => $as->getAuthData('saml:sp:NameID')->value,
+            'sp' => $sp,
+            'authed' => $as->isAuthenticated(),
+            'idp' => $as->getAuthData('saml:sp:IdP'),
+            'nameId' => $as->getAuthData('saml:sp:NameID')->value,
             'attributes' => $as->getAttributes(),
         );
         $simpleSamlSes = $_SESSION['SimpleSAMLphp_SESSION'];
@@ -86,6 +86,7 @@ function oktaConnect()
 
 function oktaRegistrationUpdate($userId)
 {
+    $userId = (int) $userId;
     // Updating LastLogin Date
     $table_user = Database::get_main_table(TABLE_MAIN_USER);
     $sql = "UPDATE $table_user SET registration_date = NOW() WHERE user_id = " . $userId;
@@ -94,6 +95,7 @@ function oktaRegistrationUpdate($userId)
 
 function oktaLastLoginUpdate($userId)
 {
+    $userId = (int) $userId;
     // Updating LastLogin Date
     $table_user = Database::get_main_table(TABLE_MAIN_USER);
     $sql = "UPDATE $table_user SET last_login = NOW() WHERE user_id = " . $userId;

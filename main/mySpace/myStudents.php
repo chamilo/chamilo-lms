@@ -1013,7 +1013,7 @@ if (isset($_GET['action']) and $_GET['action'] == 'all_attendance') {
     $defaults['startDate'] = $startDateText;
     $defaults['endDate'] = $endDateText;
     $form = new FormValidator('all_attendance_list', 'GET',
-        'myStudents.php?action=all_attendance&student='.$_GET['student'].'&startDate='.$defaults['startDate'].'&endDate='.$defaults['endDate'].'&&'.api_get_cidreq(),
+        'myStudents.php?action=all_attendance&student='.$student_id.'&startDate='.$defaults['startDate'].'&endDate='.$defaults['endDate'].'&&'.api_get_cidreq(),
         '');
     $form->addElement('html', '<input type="hidden" name="student" value="'.$student_id.'" >');
     $form->addElement('html', '<input type="hidden" name="action" value="all_attendance" >');

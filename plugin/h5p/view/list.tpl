@@ -34,12 +34,12 @@
 
         <td style="width:15%" >
             
-			<a href="{{ _p.web_plugin }}h5p/node_list.php?action=edit&{{ {'id': term.id}|url_encode() }}&{{ {'node_type': term.node_type}|url_encode() }}"
+			<a href="{{ _p.web_plugin }}h5p/list.php?action=edit&{{ {'id': term.id}|url_encode() }}&{{ {'node_type': term.node_type}|url_encode() }}"
 			class="btn btn-success">
             <span class="fa fa-edit fa-fw" aria-hidden="true"></span></a>
             
-			<a onclick="return confirm('Etes-vous sur ?')" 
-			href="{{ _p.web_plugin }}h5p/node_list.php?action=delete&{{ {'id': term.id}|url_encode() }}"
+			<a onclick="return confirm('Are you sure?')"
+			href="{{ _p.web_plugin }}h5p/list.php?action=delete&{{ {'id': term.id}|url_encode() }}"
 			class="btn btn-danger">
             <span class="fa fa-times fa-fw" aria-hidden="true"></span></a>
         

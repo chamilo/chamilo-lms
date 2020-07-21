@@ -3,7 +3,14 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\Course;
+use Database;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
+use Doctrine\ORM\TransactionRequiredException;
+use Exception;
 
 /**
  * CDocument.
@@ -15,6 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
  *  }
  * )
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks
  */
 class CDocument
 {
@@ -89,6 +97,179 @@ class CDocument
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
     protected $sessionId;
+
+    /**
+     * @var Course
+     *
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="documents")
+     * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
+     */
+    protected $course;
+
+    public function __construct()
+    {
+        $this->size = 0;
+        $this->readonly = false;
+        $this->sessionId = 0;
+    }
+
+    /**
+     * @return EntityRepository
+     */
+    public static function getRepository()
+    {
+        return Database::getManager()->getRepository('ChamiloCourseBundle:CDocument');
+    }
+
+    /**
+     * Instantiates a new CDocument by copying a file to the course.
+     *
+     * @param string $filePath     the source file to be copied to the course directory
+     * @param Course $course       the course for which the document is being created
+     * @param string $documentPath the future document's relative path
+     * @param string $title        a title for the document
+     *
+     * @throws ORMException
+     * @throws OptimisticLockException
+     * @throws TransactionRequiredException
+     * @throws Exception
+     *
+     * @return CDocument
+     */
+    public static function fromFile($filePath, $course, $documentPath, $title)
+    {
+        $instance = (new static())
+            ->setCourse($course)
+            ->setPath($documentPath)
+            ->setTitle($title);
+        $absolutePath = $instance->getAbsolutePath();
+        if (!copy($filePath, $absolutePath)) {
+            throw new Exception(sprintf('Could not copy course document file %s to %s', $filePath, $absolutePath));
+        }
+
+        return $instance;
+    }
+
+    /**
+     * @return Course
+     */
+    public function getCourse()
+    {
+        return $this->course;
+    }
+
+    /**
+     * @param Course $course
+     *
+     * @return $this
+     */
+    public function setCourse($course)
+    {
+        $this->course = $course;
+        $this->course->getDocuments()->add($this);
+
+        return $this;
+    }
+
+    /**
+     * Builds the document's absolute path from its course's own path and its (relative) path.
+     *
+     * @throws OptimisticLockException
+     * @throws TransactionRequiredException
+     * @throws ORMException
+     * @throws Exception
+     *
+     * @return string the document's absolute path
+     */
+    public function getAbsolutePath()
+    {
+        if (is_null($this->course) && $this->cId) {
+            $this->course = api_get_course_entity($this->cId);
+        }
+        if (is_null($this->course)) {
+            throw new Exception('this document does not have a course yet');
+        }
+
+        return sprintf(
+            '%s/document/%s',
+            $this->course->getAbsolutePath(),
+            $this->path
+        );
+    }
+
+    /**
+     * Makes sure the actual file exists.
+     * Records the file type.
+     * Computes document file size if needed.
+     *
+     * @ORM\PrePersist
+     *
+     * @throws Exception
+     */
+    public function prePersist()
+    {
+        $absolutePath = $this->getAbsolutePath();
+        if (!file_exists($absolutePath)) {
+            throw new Exception('Cannot persist a document without an existing file');
+        }
+        if (empty($this->filetype)) {
+            $type = filetype($absolutePath);
+            switch ($type) {
+                case 'dir':
+                    $this->filetype = 'folder';
+                    break;
+                case 'file':
+                case 'link':
+                    $this->filetype = $type;
+                    break;
+                default:
+                    throw new Exception('unsupported file type: '.$type);
+            }
+        }
+        if (0 === $this->size && 'file' == $this->filetype) {
+            $this->size = filesize($absolutePath);
+        }
+    }
+
+    /**
+     * If id is null, copies iid to id and writes again.
+     *
+     * @ORM\PostPersist
+     *
+     * @throws Exception
+     */
+    public function postPersist()
+    {
+        if (is_null($this->id)) { // keep this test to avoid recursion
+            $this->id = $this->iid;
+            Database::getManager()->persist($this);
+            Database::getManager()->flush($this);
+        }
+    }
+
+    /**
+     * Removes the actual file, folder or link.
+     *
+     * @ORM\PostRemove
+     */
+    public function postRemove()
+    {
+        $absolutePath = '';
+        try {
+            $absolutePath = $this->getAbsolutePath();
+        } catch (Exception $exception) {
+            error_log($exception->getMessage());
+        }
+        if (!empty($absolutePath) && file_exists($absolutePath)) {
+            if ('folder' === $this->filetype && is_dir($absolutePath)) {
+                rmdir($absolutePath);
+            } elseif ('file' === $this->filetype && is_file($absolutePath)) {
+                unlink($absolutePath);
+            } elseif ('link' === $this->filetype && is_link($absolutePath)) {
+                unlink($absolutePath);
+            }
+        }
+    }
 
     /**
      * Set path.
@@ -285,6 +466,8 @@ class CDocument
     /**
      * Set cId.
      *
+     * @deprecated use setCourse wherever possible
+     *
      * @param int $cId
      *
      * @return CDocument
@@ -292,6 +475,7 @@ class CDocument
     public function setCId($cId)
     {
         $this->cId = $cId;
+        $this->setCourse(api_get_course_entity($cId));
 
         return $this;
     }

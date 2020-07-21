@@ -3,6 +3,7 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\Course;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -96,6 +97,19 @@ class CCourseSetting
      * @ORM\Column(name="subkeytext", type="string", length=255, nullable=true)
      */
     protected $subkeytext;
+
+    /**
+     * @var Course
+     *
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="settings")
+     * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
+     */
+    protected $course;
+
+    public function __construct()
+    {
+        $this->title = '';
+    }
 
     /**
      * Set variable.
@@ -316,6 +330,8 @@ class CCourseSetting
     /**
      * Set cId.
      *
+     * @deprecated use setCourse wherever possible
+     *
      * @param int $cId
      *
      * @return CCourseSetting
@@ -323,6 +339,7 @@ class CCourseSetting
     public function setCId($cId)
     {
         $this->cId = $cId;
+        $this->setCourse(api_get_course_entity($cId));
 
         return $this;
     }
@@ -335,5 +352,26 @@ class CCourseSetting
     public function getCId()
     {
         return $this->cId;
+    }
+
+    /**
+     * @return Course
+     */
+    public function getCourse()
+    {
+        return $this->course;
+    }
+
+    /**
+     * @param Course $course
+     *
+     * @return $this
+     */
+    public function setCourse($course)
+    {
+        $this->course = $course;
+        $this->course->getSettings()->add($this);
+
+        return $this;
     }
 }

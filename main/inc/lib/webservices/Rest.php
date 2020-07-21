@@ -4,8 +4,13 @@
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
+use Chamilo\CoreBundle\Entity\PersonalAgenda;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\SysCalendar;
+use Chamilo\CourseBundle\Entity\CCalendarEvent;
+use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpCategory;
+use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CNotebook;
 use Chamilo\CourseBundle\Entity\Repository\CNotebookRepository;
 use Chamilo\UserBundle\Entity\User;
@@ -68,6 +73,10 @@ class Rest extends WebService
     const USERNAME_EXIST = 'username_exist';
     const GET_COURSE_QUIZ_MDL_COMPAT = 'get_course_quiz_mdl_compat';
     const UPDATE_USER_PAUSE_TRAINING = 'update_user_pause_training';
+    const CREATE_LEARNINGPATH = 'create_learningpath';
+    const CREATE_USER_EVENT = 'create_user_event';
+    const CREATE_COURSE_EVENT = 'create_course_event';
+    const CREATE_GLOBAL_EVENT = 'create_global_event';
 
     /**
      * @var Session
@@ -1802,8 +1811,7 @@ class Rest extends WebService
         if (is_null($userId)) {
             throw new Exception(get_lang('NoData'));
         }
-        /** @var User $user */
-        $user = UserManager::getRepository()->find($userId);
+        $user = api_get_user_entity($userId);
         if (empty($user)) {
             throw new Exception(get_lang('CouldNotLoadUser'));
         }
@@ -1914,7 +1922,7 @@ class Rest extends WebService
                                     $fieldValue = $field['field_value'];
                                     if (!isset($fieldName) || !isset($fieldValue) ||
                                         !UserManager::update_extra_field_value($userId, $fieldName, $fieldValue)) {
-                                        throw new Exception(get_lang('CouldNotUpdateExtraFieldValue').': '.print_r($field, true));
+                                        throw new Exception(sprintf('%s: %s', get_lang('CouldNotUpdateExtraFieldValue'), print_r($field, true)));
                                     }
                                 }
                             } else {
@@ -2037,6 +2045,358 @@ class Rest extends WebService
         );
 
         return [$json];
+    }
+
+    /**
+     * Creates a learning path with items.
+     *
+     * @param array $spec with these keys :
+     *                    session_id
+     *                    course_code
+     *                    lp_name (learning path name)
+     *                    lp_cat_id (learning path category id)
+     *                    items, a list of items which are arrays with these keys :
+     *                    * display_order_id (position AND local item identifier, used in parent_id and prerequisite_id)
+     *                    * parent_id (references display_order_id)
+     *                    * type (c_lp_item.item_type : dir, document, quiz…)
+     *                    * name_to_find (course resource name)
+     *                    * title (learning path item title)
+     *                    * prerequisite_id (references display_order_id)
+     *                    * prerequisite_min_score
+     *                    * prerequisite_max_score
+     *
+     * @throws Exception if an item is not found by type and name or a parameter is missing
+     *
+     * @return CLp the new learning path
+     */
+    public function createLearningPath(array $spec)
+    {
+        foreach (['course_code', 'lp_name'] as $requiredParameter) {
+            if (!array_key_exists($requiredParameter, $spec)) {
+                throw new Exception("missing parameter '$requiredParameter': ".print_r($spec, true));
+            }
+        }
+        $courseCode = $spec['course_code'];
+        $course = Course::getRepository()->findOneByCode($courseCode);
+        if (is_null($course)) {
+            throw new Exception("no course has code '$courseCode'");
+        }
+        $learningPath = (new CLp())
+            ->setCourse($course)
+            ->setName($spec['lp_name']);
+        if (array_key_exists('session_id', $spec)) {
+            $sessionId = $spec['session_id'];
+            if (0 == $sessionId) {
+                $learningPath->setSessionId(0);
+            } else {
+                $session = api_get_session_entity($sessionId);
+                if (is_null($session)) {
+                    throw new Exception("no session has id '$sessionId'");
+                }
+                /*$learningPath->setSession($session);*/
+                $learningPath->setSessionId($sessionId);
+            }
+        }
+        if (array_key_exists('lp_cat_id', $spec)) {
+            $categoryId = $spec['lp_cat_id'];
+            if (0 == $categoryId) {
+                $learningPath->setCategoryId(0);
+            } else {
+                $category = CLpCategory::getRepository()->find($categoryId);
+                if (is_null($category)) {
+                    throw new Exception("no category has id '$categoryId'");
+                }
+                /*$learningPath->setCategory($category);*/
+                $learningPath->setCategoryId($categoryId);
+            }
+        }
+        if (array_key_exists('items', $spec)) {
+            $itemSpecs = $spec['items'];
+            if (!is_array($itemSpecs)) {
+                throw new Exception('parameter "items" must be an array');
+            }
+            if (!empty($itemSpecs)) {
+                $parentDisplayOrders = [0 => 0];
+                $prerequisitesDisplayOrders = [];
+                foreach ($itemSpecs as $itemSpec) {
+                    if (!array_key_exists('display_order_id', $itemSpec)) {
+                        throw new Exception(sprintf('display_order_id missing from item spec: %s', print_r($itemSpec, true)));
+                    }
+                    $displayOrder = $itemSpec['display_order_id'];
+                    $type = (array_key_exists('type', $itemSpec) ? $itemSpec['type'] : 'dir');
+                    if (!array_key_exists('title', $itemSpec)) {
+                        throw new Exception(sprintf('type missing from item spec: %s', print_r($itemSpec, true)));
+                    }
+                    $title = $itemSpec['title'];
+                    $item = (new CLpItem())
+                        ->setLearningPath($learningPath)
+                        ->setDisplayOrder($displayOrder)
+                        ->setItemType($type)
+                        ->setTitle($title);
+                    if (in_array($type, ['document', 'final_item', 'forum', 'link', 'quiz'])) {
+                        if (!array_key_exists('name_to_find', $itemSpec)) {
+                            throw new Exception(sprintf('name_to_find missing from %s spec: %s', $type, print_r($itemSpec, true)));
+                        }
+                        $resource = $course->findResource($type, $itemSpec['name_to_find']);
+                        $item->setPath('forum' === $type ? $resource->getForumId() : $resource->getId());
+                    }
+                    if (array_key_exists($displayOrder, $parentDisplayOrders)) {
+                        throw new Exception(sprintf('this item display order is not unique: %s', $displayOrder));
+                    }
+                    $parentDisplayOrders[$displayOrder] = array_key_exists('parent_id', $itemSpec)
+                        ? $itemSpec['parent_id']
+                        : 0;
+                    if (array_key_exists('prerequisite_id', $itemSpec)) {
+                        $prerequisiteId = $itemSpec['prerequisite_id'];
+                        if (!empty($prerequisiteId)) {
+                            $prerequisitesDisplayOrders[$displayOrder] = $prerequisiteId;
+                            if (array_key_exists('prerequisite_min_score', $itemSpec)) {
+                                $prerequisiteMinScore = $itemSpec['prerequisite_min_score'];
+                                if (!empty($prerequisiteMinScore)) {
+                                    $item->setPrerequisiteMinScore($prerequisiteMinScore);
+                                }
+                            }
+                            if (array_key_exists('prerequisite_max_score', $itemSpec)) {
+                                $prerequisiteMaxScore = $itemSpec['prerequisite_max_score'];
+                                if (!empty($prerequisiteMaxScore)) {
+                                    $item->setPrerequisiteMaxScore($prerequisiteMaxScore);
+                                }
+                            }
+                        }
+                    }
+                }
+                Database::getManager()->persist($learningPath);
+                Database::getManager()->flush();
+                // now that items have real identifiers, set their parent, previous, next and prerequisite item ones
+                $idFromDisplayOrder = [0 => 0];
+                /** @var CLpItem $item */
+                foreach ($learningPath->getItems() as $item) {
+                    $idFromDisplayOrder[$item->getDisplayOrder()] = $item->getId();
+                }
+                $displayOrderNumbers = array_keys($idFromDisplayOrder);
+                sort($displayOrderNumbers);
+                foreach ($learningPath->getItems() as $item) {
+                    $displayOrder = $item->getDisplayOrder();
+                    $item->setParentItemId($idFromDisplayOrder[$parentDisplayOrders[$displayOrder]]);
+                    if (!empty($prerequisitesDisplayOrders[$displayOrder])) {
+                        $item->setPrerequisite($idFromDisplayOrder[$prerequisitesDisplayOrders[$displayOrder]]);
+                    }
+                }
+            }
+        }
+        Database::getManager()->flush();
+
+        return $learningPath;
+    }
+
+    /**
+     * Creates a new event in a user's agenda.
+     *
+     * @param array $spec with these keys :
+     *                    loginname
+     *                    eventTitle
+     *                    eventText
+     *                    eventStartDate
+     *                    eventEndDate
+     *
+     * @throws Exception
+     *
+     * @return int the new event identifier
+     */
+    public function createUserEvent(array $spec)
+    {
+        foreach (['loginname', 'eventTitle', 'eventText', 'eventStartDate', 'eventEndDate'] as $param) {
+            if (!array_key_exists($param, $spec) || empty($spec[$param]) || !is_string($spec[$param])) {
+                throw new Exception(sprintf('Missing or invalid parameter "%s": %s.', $param, print_r($spec, true)));
+            }
+        }
+        $loginname = $spec['loginname'];
+        $user = User::getRepository()->findOneBy(['username' => $loginname]);
+        if (is_null($user)) {
+            throw new Exception('No user has id '.$loginname);
+        }
+        $utc = new DateTimeZone('utc');
+        $dateSpec = $spec['eventStartDate'];
+        try {
+            $date = new DateTime($dateSpec, $utc);
+        } catch (Exception $exception) {
+            try {
+                $date = new DateTime($dateSpec);
+            } catch (Exception $exception) {
+                throw new Exception(sprintf('invalid eventStartDate: "%s"', $dateSpec));
+            }
+        }
+        $endDateSpec = $spec['eventEndDate'];
+        try {
+            $endDate = new DateTime($endDateSpec, $utc);
+        } catch (Exception $exception) {
+            try {
+                $endDate = new DateTime($endDateSpec);
+            } catch (Exception $exception) {
+                throw new Exception(sprintf('invalid eventEndDate: "%s"', $endDateSpec));
+            }
+        }
+        $event = (new PersonalAgenda())
+            ->setUser($user->getId())
+            ->setTitle($spec['eventTitle'])
+            ->setText($spec['eventText'])
+            ->setDate($date)
+            ->setEnddate($endDate)
+            ->setAllDay(0);
+        Database::getManager()->persist($event);
+        Database::getManager()->flush($event);
+
+        return $event->getId();
+    }
+
+    /**
+     * Creates a new event in a course's agenda.
+     *
+     * @param array $spec with these keys :
+     *                    course_code
+     *                    session_id
+     *                    eventTitle
+     *                    eventText
+     *                    eventStartDate
+     *                    eventEndDate
+     *
+     * @throws Exception
+     *
+     * @return int the new event identifier
+     */
+    public function createCourseEvent(array $spec)
+    {
+        foreach (['course_code', 'eventTitle', 'eventText', 'eventStartDate', 'eventEndDate'] as $param) {
+            if (!array_key_exists($param, $spec) || empty($spec[$param]) || !is_string($spec[$param])) {
+                throw new Exception(sprintf('Missing or invalid parameter "%s": %s.', $param, print_r($spec, true)));
+            }
+        }
+        $courseCode = $spec['course_code'];
+        $course = Course::getRepository()->findOneBy(['code' => $courseCode]);
+        if (is_null($course)) {
+            throw new Exception(sprintf('No course has code "%s"', $courseCode));
+        }
+        $sessionId = array_key_exists('session_id', $spec) ? $spec['session_id'] : 0;
+        if (!empty($sessionId)) {
+            // make sure the session id is valid (not really necessary, just safer)
+            $session = Session::getRepository()->find($sessionId);
+            if (is_null($session)) {
+                throw new Exception(sprintf('No session has id "%s"', $sessionId));
+            }
+        }
+        $utc = new DateTimeZone('utc');
+        $startDateSpec = $spec['eventStartDate'];
+        try {
+            $startDate = new DateTime($startDateSpec, $utc);
+        } catch (Exception $exception) {
+            try {
+                $startDate = new DateTime($startDateSpec);
+            } catch (Exception $exception) {
+                throw new Exception(sprintf('invalid eventStartDate: "%s"', $startDateSpec));
+            }
+        }
+        $endDateSpec = $spec['eventEndDate'];
+        try {
+            $endDate = new DateTime($endDateSpec, $utc);
+        } catch (Exception $exception) {
+            try {
+                $endDate = new DateTime($endDateSpec);
+            } catch (Exception $exception) {
+                throw new Exception(sprintf('invalid eventEndDate: "%s"', $endDateSpec));
+            }
+        }
+        $event = (new CCalendarEvent())
+            ->setCId($course->getId())
+            ->setSessionId($sessionId)
+            ->setTitle($spec['eventTitle'])
+            ->setContent($spec['eventText'])
+            ->setStartDate($startDate)
+            ->setEnddate($endDate)
+            ->setAllDay(0);
+        Database::getManager()->persist($event);
+        Database::getManager()->flush($event);
+
+        $courseInfo = api_get_course_info_by_id($course->getId());
+        $userId = $this->getUser()->getId();
+        api_item_property_update(
+            $courseInfo,
+            TOOL_CALENDAR_EVENT,
+            $event->getId(),
+            'AgendaAdded',
+            $userId,
+            [],
+            null,
+            $startDate->format('c'),
+            $endDate->format('c'),
+            $sessionId
+        );
+        api_item_property_update(
+            $courseInfo,
+            TOOL_CALENDAR_EVENT,
+            $event->getId(),
+            'visible',
+            $userId,
+            [],
+            null,
+            $startDate->format('c'),
+            $endDate->format('c'),
+            $sessionId
+        );
+
+        return $event->getId();
+    }
+
+    /**
+     * Creates a new event in the global agenda.
+     *
+     * @param array $spec with these keys :
+     *                    eventTitle
+     *                    eventText
+     *                    eventStartDate
+     *                    eventEndDate
+     *
+     * @throws Exception
+     *
+     * @return int the new event identifier
+     */
+    public function createGlobalEvent(array $spec)
+    {
+        foreach (['eventTitle', 'eventText', 'eventStartDate', 'eventEndDate'] as $param) {
+            if (!array_key_exists($param, $spec) || empty($spec[$param]) || !is_string($spec[$param])) {
+                throw new Exception(sprintf('Missing or invalid parameter "%s": %s.', $param, print_r($spec, true)));
+            }
+        }
+        $utc = new DateTimeZone('utc');
+        $startDateSpec = $spec['eventStartDate'];
+        try {
+            $startDate = new DateTime($startDateSpec, $utc);
+        } catch (Exception $exception) {
+            try {
+                $startDate = new DateTime($startDateSpec);
+            } catch (Exception $exception) {
+                throw new Exception(sprintf('invalid eventStartDate: "%s"', $startDateSpec));
+            }
+        }
+        $endDateSpec = $spec['eventEndDate'];
+        try {
+            $endDate = new DateTime($endDateSpec, $utc);
+        } catch (Exception $exception) {
+            try {
+                $endDate = new DateTime($endDateSpec);
+            } catch (Exception $exception) {
+                throw new Exception(sprintf('invalid eventEndDate: "%s"', $endDateSpec));
+            }
+        }
+        $event = (new SysCalendar())
+            ->setTitle($spec['eventTitle'])
+            ->setContent($spec['eventText'])
+            ->setStartDate($startDate)
+            ->setEnddate($endDate)
+            ->setAllDay(0);
+        Database::getManager()->persist($event);
+        Database::getManager()->flush($event);
+
+        return $event->getId();
     }
 
     /**

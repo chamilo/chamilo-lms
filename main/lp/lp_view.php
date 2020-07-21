@@ -86,7 +86,7 @@ if (!$is_allowed_to_edit) {
         $category = $em->getRepository('ChamiloCourseBundle:CLpCategory')->find($categoryId);
         $block = false;
         if ($category) {
-            $user = UserManager::getRepository()->find($user_id);
+            $user = api_get_user_entity($user_id);
             $users = $category->getUsers();
             if (!empty($users) && $users->count() > 0) {
                 if ($user && !$category->hasUserAdded($user)) {

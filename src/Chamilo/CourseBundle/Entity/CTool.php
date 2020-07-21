@@ -3,7 +3,10 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\Course;
+use Database;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\OptimisticLockException;
 
 /**
  * CTool.
@@ -16,6 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
  *  }
  * )
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks
  */
 class CTool
 {
@@ -125,6 +129,39 @@ class CTool
      * @ORM\Column(name="custom_icon", type="string", length=255, nullable=true)
      */
     protected $customIcon;
+
+    /**
+     * @var Course
+     *
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="tools")
+     * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
+     */
+    protected $course;
+
+    public function __construct()
+    {
+        $this->admin = 0;
+        $this->address = 'squaregrey.gif';
+        $this->addedTool = false;
+        $this->target = '_self';
+        $this->sessionId = 0;
+    }
+
+    /**
+     * If id is null, copies iid to id and writes again.
+     *
+     * @ORM\PostPersist
+     *
+     * @throws OptimisticLockException
+     */
+    public function postPersist()
+    {
+        if (is_null($this->id)) { // keep this test to avoid recursion
+            $this->id = $this->iid;
+            Database::getManager()->persist($this);
+            Database::getManager()->flush($this);
+        }
+    }
 
     /**
      * @return int
@@ -413,6 +450,8 @@ class CTool
     /**
      * Set cId.
      *
+     * @deprecated use setCourse wherever possible
+     *
      * @param int $cId
      *
      * @return CTool
@@ -420,6 +459,7 @@ class CTool
     public function setCId($cId)
     {
         $this->cId = $cId;
+        $this->setCourse(api_get_course_entity($cId));
 
         return $this;
     }
@@ -470,6 +510,27 @@ class CTool
     public function setCustomIcon($customIcon)
     {
         $this->customIcon = $customIcon;
+
+        return $this;
+    }
+
+    /**
+     * @return Course
+     */
+    public function getCourse()
+    {
+        return $this->course;
+    }
+
+    /**
+     * @param Course $course
+     *
+     * @return $this
+     */
+    public function setCourse($course)
+    {
+        $this->course = $course;
+        $this->course->getTools()->add($this);
 
         return $this;
     }

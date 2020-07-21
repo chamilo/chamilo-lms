@@ -4,7 +4,6 @@
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Repository\SequenceResourceRepository;
-use Chamilo\CoreBundle\Entity\Repository\SessionRepository;
 use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
@@ -48,10 +47,7 @@ $table_access_url_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER
 
 $em = Database::getManager();
 $sessionInfo = api_get_session_info($sessionId);
-/** @var SessionRepository $sessionRepository */
-$sessionRepository = $em->getRepository('ChamiloCoreBundle:Session');
-/** @var Session $session */
-$session = $sessionRepository->find($sessionId);
+$session = api_get_session_entity($sessionId);
 $sessionCategory = $session->getCategory();
 
 $action = isset($_GET['action']) ? $_GET['action'] : null;
@@ -165,6 +161,7 @@ if ($session->getNbrCourses() === 0) {
 } else {
     $count = 0;
     $courseItem = '';
+    $sessionRepository = $em->getRepository('ChamiloCoreBundle:Session');
     $courses = $sessionRepository->getCoursesOrderedByPosition($session);
 
     $allowSkills = api_get_configuration_value('allow_skill_rel_items');

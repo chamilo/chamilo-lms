@@ -410,8 +410,7 @@ if ($form->validate()) {
 
     $wrong_current_password = false;
     $user_data = $form->getSubmitValues(1);
-    /** @var User $user */
-    $user = UserManager::getRepository()->find(api_get_user_id());
+    $user = api_get_user_entity();
 
     // set password if a new one was provided
     $validPassword = false;
@@ -674,7 +673,7 @@ if ($form->validate()) {
 
     if ($hook) {
         Database::getManager()->clear(User::class); // Avoid cache issue (user entity is used before)
-        $user = api_get_user_entity(api_get_user_id()); // Get updated user info for hook event
+        $user = api_get_user_entity(); // Get updated user info for hook event
         $hook->setEventData(['user' => $user]);
         $hook->notifyUpdateUser(HOOK_EVENT_TYPE_POST);
     }

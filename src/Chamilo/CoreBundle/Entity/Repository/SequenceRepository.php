@@ -53,17 +53,11 @@ class SequenceRepository extends EntityRepository
         $resource = null;
         switch ($type) {
             case SequenceResource::COURSE_TYPE:
-                $repo = $this->getEntityManager()->getRepository('ChamiloCoreBundle:Course');
-
+                $resource = api_get_course_entity($itemId);
                 break;
             case SequenceResource::SESSION_TYPE:
-                $repo = $this->getEntityManager()->getRepository('ChamiloCoreBundle:Session');
-
+                $resource = api_get_session_entity($itemId);
                 break;
-        }
-
-        if ($repo) {
-            $resource = $repo->find($itemId);
         }
 
         return $resource;

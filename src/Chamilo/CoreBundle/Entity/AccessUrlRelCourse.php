@@ -23,13 +23,21 @@ class AccessUrlRelCourse
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Course", inversedBy="urls", cascade={"persist"})
+     * @ORM\ManyToOne(
+     *     targetEntity="Chamilo\CoreBundle\Entity\Course",
+     *     inversedBy="urls",
+     *     cascade={"persist", "remove"}
+     * )
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
      */
     protected $course;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AccessUrl", inversedBy="course", cascade={"persist"})
+     * @ORM\ManyToOne(
+     *     targetEntity="Chamilo\CoreBundle\Entity\AccessUrl",
+     *     inversedBy="courses",
+     *     cascade={"persist", "remove"}
+     * )
      * @ORM\JoinColumn(name="access_url_id", referencedColumnName="id")
      */
     protected $url;
@@ -75,11 +83,16 @@ class AccessUrlRelCourse
     }
 
     /**
-     * @param $course
+     * @param Course $course
+     *
+     * @return AccessUrlRelCourse
      */
     public function setCourse($course)
     {
         $this->course = $course;
+        $this->course->getUrls()->add($this);
+
+        return $this;
     }
 
     /**

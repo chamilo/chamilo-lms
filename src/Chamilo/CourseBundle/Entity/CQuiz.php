@@ -3,7 +3,13 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\Course;
+use Database;
+use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\OptimisticLockException;
 
 /**
  * CQuiz.
@@ -16,6 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
  *  }
  * )
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks
  */
 class CQuiz
 {
@@ -64,9 +71,9 @@ class CQuiz
     protected $sound;
 
     /**
-     * @var bool
+     * @var int
      *
-     * @ORM\Column(name="type", type="boolean", nullable=false)
+     * @ORM\Column(name="type", type="integer", nullable=false)
      */
     protected $type;
 
@@ -113,14 +120,14 @@ class CQuiz
     protected $maxAttempt;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="start_time", type="datetime", nullable=true)
      */
     protected $startTime;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="end_time", type="datetime", nullable=true)
      */
@@ -156,7 +163,7 @@ class CQuiz
 
     /**
      * @var bool
-     * @ORm\Column(name="save_correct_answers", type="boolean", nullable=false)
+     * @ORM\Column(name="save_correct_answers", type="boolean", nullable=false)
      */
     protected $saveCorrectAnswers;
 
@@ -217,11 +224,82 @@ class CQuiz
     protected $exerciseCategoryId;
 
     /**
+     * @var Course
+     *
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="quizzes")
+     * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
+     */
+    protected $course;
+
+    /**
+     * @var CQuizRelQuestion[]|ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CQuizRelQuestion", mappedBy="quiz"))
+     */
+    protected $relQuestions;
+
+    /**
      * CQuiz constructor.
      */
     public function __construct()
     {
         $this->hideQuestionTitle = false;
+        $this->type = ONE_PER_PAGE;
+        $this->random = 0;
+        $this->randomAnswers = false;
+        $this->active = true;
+        $this->resultsDisabled = 0;
+        $this->maxAttempt = 1;
+        $this->feedbackType = 0;
+        $this->expiredTime = 0;
+        $this->propagateNeg = 0;
+        $this->saveCorrectAnswers = false;
+        $this->reviewAnswers = 0;
+        $this->randomByCategory = 0;
+        $this->displayCategoryName = 0;
+    }
+
+    /**
+     * @return EntityRepository
+     */
+    public static function getRepository()
+    {
+        return Database::getManager()->getRepository('ChamiloCourseBundle:CQuiz');
+    }
+
+    /**
+     * @return Course
+     */
+    public function getCourse()
+    {
+        return $this->course;
+    }
+
+    /**
+     * @param Course $course
+     *
+     * @return $this
+     */
+    public function setCourse($course)
+    {
+        $this->course = $course;
+        $this->course->getQuizzes()->add($this);
+
+        return $this;
+    }
+
+    /**
+     * @ORM\PostPersist
+     *
+     * @throws OptimisticLockException
+     */
+    public function postPersist()
+    {
+        if (is_null($this->id)) {
+            $this->id = $this->iid;
+            Database::getManager()->persist($this);
+            Database::getManager()->flush($this);
+        }
     }
 
     /**
@@ -299,7 +377,7 @@ class CQuiz
     /**
      * Set type.
      *
-     * @param bool $type
+     * @param int $type
      *
      * @return CQuiz
      */
@@ -313,7 +391,7 @@ class CQuiz
     /**
      * Get type.
      *
-     * @return bool
+     * @return int
      */
     public function getType()
     {
@@ -467,7 +545,7 @@ class CQuiz
     /**
      * Set startTime.
      *
-     * @param \DateTime $startTime
+     * @param DateTime $startTime
      *
      * @return CQuiz
      */
@@ -481,7 +559,7 @@ class CQuiz
     /**
      * Get startTime.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getStartTime()
     {
@@ -491,7 +569,7 @@ class CQuiz
     /**
      * Set endTime.
      *
-     * @param \DateTime $endTime
+     * @param DateTime $endTime
      *
      * @return CQuiz
      */
@@ -505,7 +583,7 @@ class CQuiz
     /**
      * Get endTime.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getEndTime()
     {
@@ -775,6 +853,8 @@ class CQuiz
     /**
      * Set cId.
      *
+     * @deprecated use setCourse wherever possible
+     *
      * @param int $cId
      *
      * @return CQuiz
@@ -782,6 +862,7 @@ class CQuiz
     public function setCId($cId)
     {
         $this->cId = $cId;
+        $this->setCourse(api_get_course_entity($cId));
 
         return $this;
     }
@@ -854,5 +935,18 @@ class CQuiz
         $this->iid = $iid;
 
         return $this;
+    }
+
+    /**
+     * @return int sum of question's ponderation
+     */
+    public function getMaxScore()
+    {
+        $maxScore = 0;
+        foreach ($this->relQuestions as $relQuestion) {
+            $maxScore += $relQuestion->getQuestion()->getPonderation();
+        }
+
+        return $maxScore;
     }
 }

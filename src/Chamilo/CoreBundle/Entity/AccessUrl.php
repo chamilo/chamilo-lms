@@ -3,6 +3,9 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Database;
+use DateTime;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -25,7 +28,7 @@ class AccessUrl
     /**
      * @ORM\OneToMany(targetEntity="AccessUrlRelCourse", mappedBy="url", cascade={"persist"}, orphanRemoval=true)
      */
-    protected $course;
+    protected $courses;
 
     /**
      * @var string
@@ -56,7 +59,7 @@ class AccessUrl
     protected $createdBy;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="tms", type="datetime", nullable=true)
      */
@@ -70,21 +73,31 @@ class AccessUrl
     protected $urlType;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SettingsCurrent", mappedBy="url", cascade={"persist"}, orphanRemoval=true)
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CoreBundle\Entity\SettingsCurrent",
+     *     mappedBy="url",
+     *     cascade={"persist"},
+     *     orphanRemoval=true
+     * )
      */
     //protected $settings;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SessionCategory", mappedBy="url", cascade={"persist"}, orphanRemoval=true)
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CoreBundle\Entity\SessionCategory",
+     *     mappedBy="url",
+     *     cascade={"persist"},
+     *     orphanRemoval=true
+     * )
      */
-    protected $sessionCategory;
+    protected $sessionCategories;
 
     /**
      * AccessUrl constructor.
      */
     public function __construct()
     {
-        $this->tms = new \DateTime();
+        $this->tms = new DateTime();
         $this->createdBy = 1;
     }
 
@@ -94,6 +107,14 @@ class AccessUrl
     public function __toString()
     {
         return (string) $this->getUrl();
+    }
+
+    /**
+     * @return Repository\AccessUrlRepository|EntityRepository
+     */
+    public static function getRepository()
+    {
+        return Database::getManager()->getRepository('ChamiloCoreBundle:AccessUrl');
     }
 
     /**
@@ -205,7 +226,7 @@ class AccessUrl
     /**
      * Set tms.
      *
-     * @param \DateTime $tms
+     * @param DateTime $tms
      *
      * @return AccessUrl
      */
@@ -219,7 +240,7 @@ class AccessUrl
     /**
      * Get tms.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getTms()
     {

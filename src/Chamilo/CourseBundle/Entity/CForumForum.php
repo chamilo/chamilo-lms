@@ -3,7 +3,12 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\Course;
+use Database;
+use DateTime;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\OptimisticLockException;
 
 /**
  * CForumForum.
@@ -15,6 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
  *  }
  * )
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks
  */
 class CForumForum
 {
@@ -168,14 +174,14 @@ class CForumForum
     protected $forumImage;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="start_time", type="datetime", nullable=true)
      */
     protected $startTime;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="end_time", type="datetime", nullable=true)
      */
@@ -194,6 +200,66 @@ class CForumForum
      * @ORM\Column(name="moderated", type="boolean", nullable=true)
      */
     protected $moderated;
+
+    /**
+     * @var Course
+     *
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="forums")
+     * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
+     */
+    protected $course;
+
+    public function __construct()
+    {
+        $this->forumId = 0;
+        $this->locked = 0;
+        $this->sessionId = 0;
+        $this->forumImage = '';
+        $this->lpId = 0;
+    }
+
+    /**
+     * @return EntityRepository
+     */
+    public static function getRepository()
+    {
+        return Database::getManager()->getRepository('ChamiloCourseBundle:CForumForum');
+    }
+
+    /**
+     * @ORM\PostPersist
+     *
+     * @throws OptimisticLockException
+     */
+    public function postPersist()
+    {
+        if (is_null($this->forumId)) {
+            $this->forumId = $this->iid;
+            Database::getManager()->persist($this);
+            Database::getManager()->flush($this);
+        }
+    }
+
+    /**
+     * @return Course
+     */
+    public function getCourse()
+    {
+        return $this->course;
+    }
+
+    /**
+     * @param Course $course
+     *
+     * @return $this
+     */
+    public function setCourse($course)
+    {
+        $this->course = $course;
+        $this->course->getForums()->add($this);
+
+        return $this;
+    }
 
     /**
      * Set forumTitle.
@@ -626,7 +692,7 @@ class CForumForum
     /**
      * Set startTime.
      *
-     * @param \DateTime $startTime
+     * @param DateTime $startTime
      *
      * @return CForumForum
      */
@@ -640,7 +706,7 @@ class CForumForum
     /**
      * Get startTime.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getStartTime()
     {
@@ -650,7 +716,7 @@ class CForumForum
     /**
      * Set endTime.
      *
-     * @param \DateTime $endTime
+     * @param DateTime $endTime
      *
      * @return CForumForum
      */
@@ -664,7 +730,7 @@ class CForumForum
     /**
      * Get endTime.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getEndTime()
     {
@@ -698,6 +764,8 @@ class CForumForum
     /**
      * Set cId.
      *
+     * @deprecated use setCourse wherever possible
+     *
      * @param int $cId
      *
      * @return CForumForum
@@ -705,6 +773,7 @@ class CForumForum
     public function setCId($cId)
     {
         $this->cId = $cId;
+        $this->setCourse(api_get_course_entity($cId));
 
         return $this;
     }

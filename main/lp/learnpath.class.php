@@ -2,7 +2,6 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\Repository\CourseRepository;
 use Chamilo\CoreBundle\Entity\Repository\ItemPropertyRepository;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
@@ -508,215 +507,91 @@ class learnpath
         $previous = (int) $previous;
         $id = (int) $id;
         $max_time_allowed = htmlentities($max_time_allowed);
-        if (empty($max_time_allowed)) {
-            $max_time_allowed = 0;
-        }
-        $sql = "SELECT COUNT(iid) AS num
-                FROM $tbl_lp_item
-                WHERE
-                    c_id = $course_id AND
-                    lp_id = ".$this->get_id()." AND
-                    parent_item_id = $parent ";
+        $course = api_get_course_entity($course_id);
+        $learningPath = api_get_lp_entity($this->get_id());
+        $item = (new CLpItem())
+            ->setCourse($course)
+            ->setLearningPath($learningPath)
+            ->setItemType($type)
+            ->setTitle($title)
+            ->setDescription($description)
+            ->setPath($id)
+            ->setParentItemId($parent)
+            ->setPrerequisite($prerequisites)
+            ->setMaxTimeAllowed($max_time_allowed)
+        ;
 
-        $res_count = Database::query($sql);
-        $row = Database::fetch_array($res_count);
-        $num = $row['num'];
-
-        $tmp_previous = 0;
-        $display_order = 0;
-        $next = 0;
-        if ($num > 0) {
-            if (empty($previous)) {
-                $sql = "SELECT iid, next_item_id, display_order
-                        FROM $tbl_lp_item
-                        WHERE
-                            c_id = $course_id AND
-                            lp_id = ".$this->get_id()." AND
-                            parent_item_id = $parent AND
-                            previous_item_id = 0 OR
-                            previous_item_id = $parent";
-                $result = Database::query($sql);
-                $row = Database::fetch_array($result);
-                if ($row) {
-                    $next = $row['iid'];
-                }
-            } else {
-                $previous = (int) $previous;
-                $sql = "SELECT iid, previous_item_id, next_item_id, display_order
-						FROM $tbl_lp_item
-                        WHERE
-                            c_id = $course_id AND
-                            lp_id = ".$this->get_id()." AND
-                            id = $previous";
-                $result = Database::query($sql);
-                $row = Database::fetch_array($result);
-                if ($row) {
-                    $tmp_previous = $row['iid'];
-                    $next = $row['next_item_id'];
-                    $display_order = $row['display_order'];
-                }
-            }
-        }
-
-        $id = (int) $id;
-        $typeCleaned = Database::escape_string($type);
-        $max_score = 100;
-        if ($type === 'quiz' && $id) {
-            $sql = 'SELECT SUM(ponderation)
-                    FROM '.Database::get_course_table(TABLE_QUIZ_QUESTION).' as quiz_question
-                    INNER JOIN '.Database::get_course_table(TABLE_QUIZ_TEST_QUESTION).' as quiz_rel_question
-                    ON
-                        quiz_question.id = quiz_rel_question.question_id AND
-                        quiz_question.c_id = quiz_rel_question.c_id
-                    WHERE
-                        quiz_rel_question.exercice_id = '.$id." AND
-                        quiz_question.c_id = $course_id AND
-                        quiz_rel_question.c_id = $course_id ";
-            $rsQuiz = Database::query($sql);
-            $max_score = Database::result($rsQuiz, 0, 0);
-
-            // Disabling the exercise if we add it inside a LP
-            $exercise = new Exercise($course_id);
-            $exercise->read($id);
-            $exercise->disable();
-            $exercise->save();
-        }
-
-        $params = [
-            'c_id' => $course_id,
-            'lp_id' => $this->get_id(),
-            'item_type' => $typeCleaned,
-            'ref' => '',
-            'title' => $title,
-            'description' => $description,
-            'path' => $id,
-            'max_score' => $max_score,
-            'parent_item_id' => $parent,
-            'previous_item_id' => $previous,
-            'next_item_id' => (int) $next,
-            'display_order' => $display_order + 1,
-            'prerequisite' => $prerequisites,
-            'max_time_allowed' => $max_time_allowed,
-            'min_score' => 0,
-            'launch_data' => '',
-        ];
-
-        if ($prerequisites != 0) {
-            $params['prerequisite'] = $prerequisites;
-        }
-
-        $new_item_id = Database::insert($tbl_lp_item, $params);
-        if ($new_item_id) {
-            $sql = "UPDATE $tbl_lp_item SET id = iid WHERE iid = $new_item_id";
-            Database::query($sql);
-
-            if (!empty($next)) {
-                $sql = "UPDATE $tbl_lp_item
-                        SET previous_item_id = $new_item_id
-                        WHERE c_id = $course_id AND id = $next AND item_type != '".TOOL_LP_FINAL_ITEM."'";
-                Database::query($sql);
-            }
-
-            // Update the item that should be before the new item.
-            if (!empty($tmp_previous)) {
-                $sql = "UPDATE $tbl_lp_item
-                        SET next_item_id = $new_item_id
-                        WHERE c_id = $course_id AND id = $tmp_previous";
-                Database::query($sql);
-            }
-
-            // Update all the items after the new item.
-            $sql = "UPDATE $tbl_lp_item
-                        SET display_order = display_order + 1
-                    WHERE
-                        c_id = $course_id AND
-                        lp_id = ".$this->get_id()." AND
-                        iid <> $new_item_id AND
-                        parent_item_id = $parent AND
-                        display_order > $display_order";
-            Database::query($sql);
-
-            // Update the item that should come after the new item.
-            $sql = "UPDATE $tbl_lp_item
-                    SET ref = $new_item_id
-                    WHERE c_id = $course_id AND iid = $new_item_id";
-            Database::query($sql);
-
-            $sql = "UPDATE $tbl_lp_item
-                    SET previous_item_id = ".$this->getLastInFirstLevel()."
-                    WHERE c_id = $course_id AND lp_id = {$this->lp_id} AND item_type = '".TOOL_LP_FINAL_ITEM."'";
-            Database::query($sql);
-
-            // Upload audio.
-            if (!empty($_FILES['mp3']['name'])) {
-                // Create the audio folder if it does not exist yet.
-                $filepath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document/';
-                if (!is_dir($filepath.'audio')) {
-                    mkdir(
-                        $filepath.'audio',
-                        api_get_permissions_for_new_directories()
-                    );
-                    $audio_id = add_document(
-                        $_course,
-                        '/audio',
-                        'folder',
-                        0,
-                        'audio',
-                        '',
-                        0,
-                        true,
-                        null,
-                        $sessionId,
-                        $userId
-                    );
-                    api_item_property_update(
-                        $_course,
-                        TOOL_DOCUMENT,
-                        $audio_id,
-                        'FolderCreated',
-                        $userId,
-                        null,
-                        null,
-                        null,
-                        null,
-                        $sessionId
-                    );
-                    api_item_property_update(
-                        $_course,
-                        TOOL_DOCUMENT,
-                        $audio_id,
-                        'invisible',
-                        $userId,
-                        null,
-                        null,
-                        null,
-                        null,
-                        $sessionId
-                    );
-                }
-
-                $file_path = handle_uploaded_document(
-                    $_course,
-                    $_FILES['mp3'],
-                    api_get_path(SYS_COURSE_PATH).$_course['path'].'/document',
-                    '/audio',
-                    $userId,
-                    '',
-                    '',
-                    '',
-                    '',
-                    false
+        // Upload audio.
+        if (!empty($_FILES['mp3']['name'])) {
+            // Create the audio folder if it does not exist yet.
+            $filepath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document/';
+            if (!is_dir($filepath.'audio')) {
+                mkdir(
+                    $filepath.'audio',
+                    api_get_permissions_for_new_directories()
                 );
-
-                // Store the mp3 file in the lp_item table.
-                $sql = "UPDATE $tbl_lp_item SET
-                          audio = '".Database::escape_string($file_path)."'
-                        WHERE iid = '".intval($new_item_id)."'";
-                Database::query($sql);
+                $audio_id = add_document(
+                    $_course,
+                    '/audio',
+                    'folder',
+                    0,
+                    'audio',
+                    '',
+                    0,
+                    true,
+                    null,
+                    $sessionId,
+                    $userId
+                );
+                api_item_property_update(
+                    $_course,
+                    TOOL_DOCUMENT,
+                    $audio_id,
+                    'FolderCreated',
+                    $userId,
+                    null,
+                    null,
+                    null,
+                    null,
+                    $sessionId
+                );
+                api_item_property_update(
+                    $_course,
+                    TOOL_DOCUMENT,
+                    $audio_id,
+                    'invisible',
+                    $userId,
+                    null,
+                    null,
+                    null,
+                    null,
+                    $sessionId
+                );
             }
+
+            $file_path = handle_uploaded_document(
+                $_course,
+                $_FILES['mp3'],
+                api_get_path(SYS_COURSE_PATH).$_course['path'].'/document',
+                '/audio',
+                $userId,
+                '',
+                '',
+                '',
+                '',
+                false
+            );
+
+            // Store the mp3 file in the lp_item table.
+            $item->setAudio($file_path);
         }
 
-        return $new_item_id;
+        \Database::getManager()->persist($item);
+        \Database::getManager()->flush($item);
+
+        $learningPath->updateFinalItemsPreviousItemId();
+
+        return $item->getId();
     }
 
     /**
@@ -725,13 +600,13 @@ class learnpath
      * @param string $courseCode
      * @param string $name
      * @param string $description
-     * @param string $learnpath
-     * @param string $origin
-     * @param string $zipname       Zip file containing the learnpath or directory containing the learnpath
+     * @param string $learnpath     (unused)
+     * @param string $origin        (if 'zip', this function does nothing)
+     * @param string $zipname       (unused)
      * @param string $publicated_on
      * @param string $expired_on
      * @param int    $categoryId
-     * @param int    $userId
+     * @param int    $userId        (unused)
      *
      * @return int The new learnpath ID on success, 0 on failure
      */
@@ -749,138 +624,27 @@ class learnpath
     ) {
         global $charset;
 
-        if (!empty($courseCode)) {
-            $courseInfo = api_get_course_info($courseCode);
-            $course_id = $courseInfo['real_id'];
-        } else {
-            $course_id = api_get_course_int_id();
-            $courseInfo = api_get_course_info();
-        }
+        if ('zip' !== $origin) {
+            $course_id = api_get_course_int_id($courseCode);
+            if ($course_id) {
+                $course = api_get_course_entity($course_id);
+                if (!is_null($course)) {
+                    $learningPath = (new CLp())
+                        ->setCourse($course)
+                        ->setName($name)
+                        ->setDescription(api_htmlentities($description, ENT_QUOTES, $charset))
+                        ->setPublicatedOn(api_get_utc_datetime($publicated_on, true, true))
+                        ->setExpiredOn(api_get_utc_datetime($expired_on, true, true))
+                        ->setCategoryId($categoryId);
+                    Database::getManager()->persist($learningPath);
+                    Database::getManager()->flush();
 
-        $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-        // Check course code exists.
-        // Check lp_name doesn't exist, otherwise append something.
-        $i = 0;
-        $categoryId = (int) $categoryId;
-        // Session id.
-        $session_id = api_get_session_id();
-        $userId = empty($userId) ? api_get_user_id() : $userId;
-
-        if (empty($publicated_on)) {
-            $publicated_on = null;
-        } else {
-            $publicated_on = Database::escape_string(api_get_utc_datetime($publicated_on));
-        }
-
-        if (empty($expired_on)) {
-            $expired_on = null;
-        } else {
-            $expired_on = Database::escape_string(api_get_utc_datetime($expired_on));
-        }
-
-        $check_name = "SELECT * FROM $tbl_lp
-                       WHERE c_id = $course_id AND name = '".Database::escape_string($name)."'";
-        $res_name = Database::query($check_name);
-
-        while (Database::num_rows($res_name)) {
-            // There is already one such name, update the current one a bit.
-            $i++;
-            $name = $name.' - '.$i;
-            $check_name = "SELECT * FROM $tbl_lp
-                           WHERE c_id = $course_id AND name = '".Database::escape_string($name)."' ";
-            $res_name = Database::query($check_name);
-        }
-        // New name does not exist yet; keep it.
-        // Escape description.
-        // Kevin: added htmlentities().
-        $description = Database::escape_string(api_htmlentities($description, ENT_QUOTES, $charset));
-        $type = 1;
-        switch ($learnpath) {
-            case 'guess':
-                break;
-            case 'dokeos':
-            case 'chamilo':
-                $type = 1;
-                break;
-            case 'aicc':
-                break;
-        }
-
-        switch ($origin) {
-            case 'zip':
-                // Check zip name string. If empty, we are currently creating a new Chamilo learnpath.
-                break;
-            case 'manual':
-            default:
-                $get_max = "SELECT MAX(display_order)
-                            FROM $tbl_lp WHERE c_id = $course_id";
-                $res_max = Database::query($get_max);
-                if (Database::num_rows($res_max) < 1) {
-                    $dsp = 1;
-                } else {
-                    $row = Database::fetch_array($res_max);
-                    $dsp = $row[0] + 1;
+                    return $learningPath->getId();
                 }
-
-                $params = [
-                    'c_id' => $course_id,
-                    'lp_type' => $type,
-                    'name' => $name,
-                    'description' => $description,
-                    'path' => '',
-                    'default_view_mod' => 'embedded',
-                    'default_encoding' => 'UTF-8',
-                    'display_order' => $dsp,
-                    'content_maker' => 'Chamilo',
-                    'content_local' => 'local',
-                    'js_lib' => '',
-                    'session_id' => $session_id,
-                    'created_on' => api_get_utc_datetime(),
-                    'modified_on' => api_get_utc_datetime(),
-                    'publicated_on' => $publicated_on,
-                    'expired_on' => $expired_on,
-                    'category_id' => $categoryId,
-                    'force_commit' => 0,
-                    'content_license' => '',
-                    'debug' => 0,
-                    'theme' => '',
-                    'preview_image' => '',
-                    'author' => '',
-                    'prerequisite' => 0,
-                    'hide_toc_frame' => 0,
-                    'seriousgame_mode' => 0,
-                    'autolaunch' => 0,
-                    'max_attempts' => 0,
-                    'subscribe_users' => 0,
-                    'accumulate_scorm_time' => 1,
-                ];
-                $id = Database::insert($tbl_lp, $params);
-
-                if ($id > 0) {
-                    $sql = "UPDATE $tbl_lp SET id = iid WHERE iid = $id";
-                    Database::query($sql);
-
-                    // Insert into item_property.
-                    api_item_property_update(
-                        $courseInfo,
-                        TOOL_LEARNPATH,
-                        $id,
-                        'LearnpathAdded',
-                        $userId
-                    );
-                    api_set_default_visibility(
-                        $id,
-                        TOOL_LEARNPATH,
-                        0,
-                        $courseInfo,
-                        $session_id,
-                        $userId
-                    );
-
-                    return $id;
-                }
-                break;
+            }
         }
+
+        return 0;
     }
 
     /**
@@ -4658,14 +4422,12 @@ class learnpath
         /** @var ItemPropertyRepository $itemRepo */
         $itemRepo = $em->getRepository('ChamiloCourseBundle:CItemProperty');
 
-        /** @var CourseRepository $courseRepo */
-        $courseRepo = $em->getRepository('ChamiloCoreBundle:Course');
         $session = null;
         if (!empty($sessionId)) {
-            $session = $em->getRepository('ChamiloCoreBundle:Session')->find($sessionId);
+            $session = api_get_session_entity($sessionId);
         }
 
-        $course = $courseRepo->find($courseId);
+        $course = api_get_course_entity($courseId);
 
         if ($courseId != 0) {
             // Subscribed groups to a LP

@@ -3,7 +3,11 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\Course;
+use Database;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\OptimisticLockException;
 
 /**
  * CLink.
@@ -16,6 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
  *  }
  * )
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks
  */
 class CLink
 {
@@ -97,6 +102,66 @@ class CLink
      * @ORM\Column(name="session_id", type="integer", nullable=true)
      */
     protected $sessionId;
+
+    /**
+     * @var Course
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="links")
+     * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
+     */
+    protected $course;
+
+    public function __construct()
+    {
+        $this->description = '';
+        $this->categoryId = 0;
+        $this->displayOrder = 0;
+        $this->onHomepage = '0';
+        $this->target = '_self';
+        $this->sessionId = 0;
+    }
+
+    /**
+     * @return EntityRepository
+     */
+    public static function getRepository()
+    {
+        return Database::getManager()->getRepository('ChamiloCourseBundle:CLink');
+    }
+
+    /**
+     * @return Course
+     */
+    public function getCourse()
+    {
+        return $this->course;
+    }
+
+    /**
+     * @param Course $course
+     *
+     * @return $this
+     */
+    public function setCourse($course)
+    {
+        $this->course = $course;
+        $this->course->getLinks()->add($this);
+
+        return $this;
+    }
+
+    /**
+     * @ORM\PostPersist
+     *
+     * @throws OptimisticLockException
+     */
+    public function postPersist()
+    {
+        if (is_null($this->id)) {
+            $this->id = $this->iid;
+            Database::getManager()->persist($this);
+            Database::getManager()->flush($this);
+        }
+    }
 
     /**
      * Set url.
@@ -317,6 +382,8 @@ class CLink
     /**
      * Set cId.
      *
+     * @deprecated use setCourse wherever possible
+     *
      * @param int $cId
      *
      * @return CLink
@@ -324,6 +391,7 @@ class CLink
     public function setCId($cId)
     {
         $this->cId = $cId;
+        $this->setCourse(api_get_course_entity($cId));
 
         return $this;
     }

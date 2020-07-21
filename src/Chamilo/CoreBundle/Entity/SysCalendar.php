@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="sys_calendar")
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks
  */
 class SysCalendar
 {
@@ -216,5 +217,17 @@ class SysCalendar
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Sets accessUrlId if missing.
+     *
+     * @ORM\PrePersist
+     */
+    public function prePersist()
+    {
+        if (empty($this->accessUrlId)) {
+            $this->accessUrlId = api_get_current_access_url_id();
+        }
     }
 }

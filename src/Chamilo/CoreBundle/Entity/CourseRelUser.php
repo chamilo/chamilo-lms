@@ -4,6 +4,8 @@
 namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\UserBundle\Entity\User;
+use Database;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -104,6 +106,14 @@ class CourseRelUser
     }
 
     /**
+     * @return EntityRepository
+     */
+    public static function getRepository()
+    {
+        return Database::getManager()->getRepository('ChamiloCoreBundle:CourseRelUser');
+    }
+
+    /**
      * @return int
      */
     public function getId()
@@ -120,11 +130,14 @@ class CourseRelUser
     }
 
     /**
+     * @param Course $course
+     *
      * @return $this
      */
-    public function setCourse(Course $course)
+    public function setCourse($course)
     {
         $this->course = $course;
+        $this->course->getUsers()->add($this);
 
         return $this;
     }
@@ -147,6 +160,7 @@ class CourseRelUser
     public function setUser($user)
     {
         $this->user = $user;
+        $this->user->getCourses()->add($this);
 
         return $this;
     }
@@ -243,10 +257,14 @@ class CourseRelUser
 
     /**
      * @param bool $tutor
+     *
+     * @return CourseRelUser
      */
     public function setTutor($tutor)
     {
         $this->tutor = $tutor;
+
+        return $this;
     }
 
     /**

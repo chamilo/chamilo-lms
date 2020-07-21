@@ -3,7 +3,12 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\Course;
+use Database;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\OptimisticLockException;
+use Exception;
 
 /**
  * CLpItem.
@@ -17,6 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
  *  }
  * )
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks()
  */
 class CLpItem
 {
@@ -198,11 +204,180 @@ class CLpItem
     protected $prerequisiteMaxScore;
 
     /**
+     * @var CLp
+     *
+     * @ORM\ManyToOne(
+     *     targetEntity="Chamilo\CourseBundle\Entity\CLp",
+     *     inversedBy="items",
+     *     cascade={"persist", "remove"}
+     * )
+     * @ORM\JoinColumn(
+     *     name="lp_id",
+     *     referencedColumnName="iid",
+     * )
+     */
+    protected $learningPath;
+
+    /**
+     * @var Course
+     *
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="learningPathItems")
+     * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
+     */
+    protected $course;
+
+    /**
      * CLpItem constructor.
      */
     public function __construct()
     {
+        $this->ref = 0;
+        $this->minScore = 0;
         $this->maxScore = 100.0;
+        $this->parentItemId = 0;
+        $this->previousItemId = 0;
+        $this->nextItemId = 0;
+        $this->displayOrder = 0;
+        $this->launchData = '';
+        $this->path = '';
+    }
+
+    public function __toString()
+    {
+        return sprintf(
+            'item %s (%s "%s") of %s',
+            $this->id,
+            $this->itemType,
+            $this->title,
+            $this->learningPath
+        );
+    }
+
+    /**
+     * @return EntityRepository
+     */
+    public static function getRepository()
+    {
+        return Database::getManager()->getRepository('ChamiloCourseBundle:CLpItem');
+    }
+
+    /**
+     * If id is null, copies iid to id.
+     * If ref is empty or zero, copies iid to ref.
+     * if they still equal zero, computes displayOrder, previousItemId and nextItemId.
+     * If pointing to an enabled quiz, disables it and updates max score.
+     *
+     * @throws OptimisticLockException
+     * @throws Exception               on quiz not found
+     *
+     * @ORM\PostPersist
+     */
+    public function postPersist()
+    {
+        if (is_null($this->id)) {
+            $this->id = $this->iid;
+        }
+        if (is_null($this->ref) || empty($this->ref) || 0 == $this->ref) {
+            $this->ref = $this->iid;
+        }
+        if (empty($this->maxTimeAllowed)) {
+            $this->maxTimeAllowed = '0';
+        }
+
+        if (0 == $this->displayOrder) {
+            foreach ($this->getSiblings() as $sibling) {
+                if ($this->displayOrder < $sibling->displayOrder) {
+                    $this->displayOrder = $sibling->displayOrder;
+                    $this->previousItemId = 0;
+                }
+            }
+            if (0 == $this->displayOrder) {
+                $this->displayOrder = 1;
+            }
+        } else {
+            foreach ($this->getSiblings() as $sibling) {
+                if ($this->displayOrder === $sibling->displayOrder) {
+                    $sibling->displayOrder++;
+                    Database::getManager()->persist($sibling);
+                }
+            }
+        }
+        if (0 == $this->previousItemId) {
+            $previousSibling = $this->getPreviousSibling();
+            if (!is_null($previousSibling)) {
+                $this->previousItemId = $previousSibling->iid;
+                $previousSibling->nextItemId = $this->iid;
+                Database::getManager()->persist($previousSibling);
+            }
+        }
+        if (0 == $this->nextItemId) {
+            $nextSibling = $this->getNextSibling();
+            if (!is_null($nextSibling)) {
+                $this->nextItemId = $nextSibling->iid;
+                $nextSibling->previousItemId = $this->iid;
+                Database::getManager()->persist($nextSibling);
+            }
+        }
+        if ('quiz' === $this->itemType) {
+            /** @var CQuiz $quiz */
+            $quiz = CQuiz::getRepository()->find($this->path);
+            if (is_null($quiz)) {
+                throw new Exception('no quiz has id '.$this->path);
+            }
+            $this->setMaxScore($quiz->getMaxScore());
+            if ($quiz->getActive()) {
+                $quiz->setActive(false);
+                Database::getManager()->persist($quiz);
+            }
+        }
+        Database::getManager()->persist($this);
+        $this->learningPath->updateFinalItemsPreviousItemId(false);
+        Database::getManager()->flush();
+    }
+
+    /**
+     * Computes next sibling's previousItemId and previous sibling's nextItemId.
+     *
+     * @throws OptimisticLockException
+     *
+     * @ORM\PreRemove
+     */
+    public function preRemove()
+    {
+        $previousSibling = $this->getPreviousSibling();
+        $nextSibling = $this->getNextSibling();
+        if (is_null($previousSibling)) {
+            if (!is_null($nextSibling)) {
+                $nextSibling->previousItemId = 0;
+                Database::getManager()->persist($nextSibling);
+                Database::getManager()->flush($nextSibling);
+            }
+        } else {
+            if (is_null($nextSibling)) {
+                $previousSibling->nextItemId = 0;
+                Database::getManager()->persist($previousSibling);
+                Database::getManager()->flush($previousSibling);
+            } else {
+                $previousSibling->nextItemId = $nextSibling->iid;
+                Database::getManager()->persist($previousSibling);
+                Database::getManager()->flush($previousSibling);
+                $nextSibling->previousItemId = $previousSibling->iid;
+                Database::getManager()->persist($nextSibling);
+                Database::getManager()->flush($nextSibling);
+            }
+        }
+    }
+
+    /**
+     * Updates the final item's previous item id.
+     *
+     * @ORM\PostRemove
+     *
+     * @throws OptimisticLockException
+     */
+    public function postRemove()
+    {
+        $this->learningPath->updateFinalItemsPreviousItemId();
     }
 
     /**
@@ -760,6 +935,8 @@ class CLpItem
     /**
      * Set cId.
      *
+     * @deprecated use setCourse wherever possible
+     *
      * @param int $cId
      *
      * @return CLpItem
@@ -767,6 +944,7 @@ class CLpItem
     public function setCId($cId)
     {
         $this->cId = $cId;
+        $this->setCourse(api_get_course_entity($cId));
 
         return $this;
     }
@@ -779,5 +957,101 @@ class CLpItem
     public function getCId()
     {
         return $this->cId;
+    }
+
+    /**
+     * Sets learning path AND course (copying the learning path's).
+     *
+     * @param CLp $clp
+     *
+     * @return CLpItem
+     */
+    public function setLearningPath($clp)
+    {
+        $this->learningPath = $clp;
+        $clp->getItems()->add($this);
+        $this->setCourse($clp->getCourse());
+
+        return $this;
+    }
+
+    /**
+     * @return CLp
+     */
+    public function getLearningPath()
+    {
+        return $this->learningPath;
+    }
+
+    /**
+     * @param Course $course
+     *
+     * @return $this
+     */
+    public function setCourse($course)
+    {
+        $this->course = $course;
+        $this->course->getLearningPathItems()->add($this);
+
+        return $this;
+    }
+
+    /**
+     * Retrieves the list of this instance's siblings, that is all the other children of this item's parent.
+     *
+     * @return static[]
+     */
+    public function getSiblings()
+    {
+        $siblings = [];
+        foreach (self::getRepository()->findByParentItemId($this->parentItemId) as $candidate) {
+            if ($candidate !== $this) {
+                $siblings[] = $candidate;
+            }
+        }
+
+        return $siblings;
+    }
+
+    /**
+     * Returns the previous sibling according to displayOrders only (not looking at previousItemId).
+     *
+     * @return static|null
+     */
+    public function getPreviousSibling()
+    {
+        $previousSibling = null;
+        foreach ($this->getSiblings() as $sibling) {
+            if ($sibling->displayOrder < $this->displayOrder) {
+                if (is_null($previousSibling)) {
+                    $previousSibling = $sibling;
+                } elseif ($sibling->displayOrder > $previousSibling->displayOrder) {
+                    $previousSibling = $sibling;
+                }
+            }
+        }
+
+        return $previousSibling;
+    }
+
+    /**
+     * Returns the next sibling according to displayOrders only (not looking at nextItemId).
+     *
+     * @return static|null
+     */
+    public function getNextSibling()
+    {
+        $nextSibling = null;
+        foreach ($this->getSiblings() as $sibling) {
+            if ($sibling->displayOrder > $this->displayOrder) {
+                if (is_null($nextSibling)) {
+                    $nextSibling = $sibling;
+                } elseif ($sibling->displayOrder < $nextSibling->displayOrder) {
+                    $nextSibling = $sibling;
+                }
+            }
+        }
+
+        return $nextSibling;
     }
 }

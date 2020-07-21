@@ -1,10 +1,15 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\SettingsCurrent;
+use Chamilo\CoreBundle\Entity\UserCourseCategory;
+use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\CourseBundle\Entity\CItemProperty;
+use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\UserBundle\Entity\User;
 use ChamiloSession as Session;
+use Doctrine\Common\Collections\Criteria;
 use PHPMailer\PHPMailer\PHPMailer as PHPMailer;
 use Symfony\Component\Finder\Finder;
 
@@ -1795,9 +1800,9 @@ function api_get_user_info(
  *
  * @return User
  */
-function api_get_user_entity($userId)
+function api_get_user_entity($userId = 0)
 {
-    $userId = (int) $userId;
+    $userId = (int) $userId ?: api_get_user_id();
     $repo = UserManager::getRepository();
 
     /** @var User $user */
@@ -2215,6 +2220,16 @@ function api_get_session_entity($id = 0)
 }
 
 /**
+ * @param int $id the learning path identifier
+ *
+ * @return CLp|null
+ */
+function api_get_lp_entity($id)
+{
+    return Database::getManager()->getRepository('ChamiloCourseBundle:CLp')->find($id);
+}
+
+/**
  * Returns the current course info array.
 
  * Now if the course_code is given, the returned array gives info about that
@@ -2612,6 +2627,16 @@ function api_get_session_id()
 function api_get_group_id()
 {
     return Session::read('_gid', 0);
+}
+
+/**
+ * @param int $id the group identifier
+ *
+ * @return CGroupInfo|object|null
+ */
+function api_get_group_entity($id = 0)
+{
+    return Database::getManager()->getRepository('ChamiloCourseBundle:CGroupInfo')->find($id ?: api_get_group_id());
 }
 
 /**
@@ -4196,289 +4221,66 @@ function api_item_property_update(
     $end_visible = '',
     $session_id = 0
 ) {
-    if (empty($_course)) {
+    if (!array_key_exists('real_id', $_course)) {
+        return false;
+    }
+    $course = api_get_course_entity($_course['real_id']);
+    if (is_null($course)) {
         return false;
     }
 
-    $course_id = $_course['real_id'];
+    $toUser = api_get_user_entity($to_user_id);
+    $toGroup = array_key_exists('iid', $groupInfo) ? api_get_group_entity($groupInfo['iid']) : null;
+    $user = api_get_user_entity($user_id) ?: api_get_user_entity(api_get_anonymous_id());
+    $session = api_get_session_entity($session_id);
 
-    if (empty($course_id)) {
-        return false;
-    }
+    $startVisibleDate = empty($start_visible)
+        ? null
+        : new DateTime($start_visible, new DateTimeZone('UTC'));
+    $endVisibleDate = empty($end_visible)
+        ? null
+        : new DateTime($end_visible, new DateTimeZone('UTC'));
 
-    $to_group_id = 0;
-    if (!empty($groupInfo) && isset($groupInfo['iid'])) {
-        $to_group_id = (int) $groupInfo['iid'];
-    }
+    $visibilityReference = [
+        'delete' => 2, // only site admin
+        'visible' => 1,
+        'invisible' => 0,
+    ];
+    $visibility = array_key_exists($last_edit_type, $visibilityReference)
+        ? $visibilityReference[$last_edit_type]
+        : 1;
+    $lastEditTypeFinal = array_key_exists($last_edit_type, $visibilityReference)
+        ? sprintf('%s%s', str_replace('_', '', ucwords($tool)), ucfirst($last_edit_type))
+        : $last_edit_type;
 
-    $em = Database::getManager();
-
-    // Definition of variables.
-    $tool = Database::escape_string($tool);
-    $item_id = (int) $item_id;
-    $lastEditTypeNoFilter = $last_edit_type;
-    $last_edit_type = Database::escape_string($last_edit_type);
-    $user_id = (int) $user_id;
-
-    $startVisible = "NULL";
-    if (!empty($start_visible)) {
-        $start_visible = Database::escape_string($start_visible);
-        $startVisible = "'$start_visible'";
-    }
-
-    $endVisible = "NULL";
-    if (!empty($end_visible)) {
-        $end_visible = Database::escape_string($end_visible);
-        $endVisible = "'$end_visible'";
-    }
-
-    $to_filter = '';
-    $time = api_get_utc_datetime();
-
-    if (!empty($session_id)) {
-        $session_id = (int) $session_id;
-    } else {
-        $session_id = api_get_session_id();
-    }
-
-    // Definition of tables.
-    $tableItemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
-
-    if ($to_user_id <= 0) {
-        $to_user_id = null; // No to_user_id set
-    }
-
-    if (!is_null($to_user_id)) {
-        // $to_user_id has more priority than $to_group_id
-        $to_user_id = (int) $to_user_id;
-        $to_field = 'to_user_id';
-        $to_value = $to_user_id;
-    } else {
-        // $to_user_id is not set.
-        $to_field = 'to_group_id';
-        $to_value = $to_group_id;
-    }
-
-    $toValueCondition = empty($to_value) ? 'NULL' : "'$to_value'";
-    // Set filters for $to_user_id and $to_group_id, with priority for $to_user_id
-    $condition_session = " AND session_id = $session_id ";
-    if (empty($session_id)) {
-        $condition_session = ' AND (session_id = 0 OR session_id IS NULL) ';
-    }
-
-    $filter = " c_id = $course_id AND tool = '$tool' AND ref = $item_id $condition_session ";
-
-    // Check whether $to_user_id and $to_group_id are passed in the function call.
-    // If both are not passed (both are null) then it is a message for everybody and $to_group_id should be 0 !
-    if (is_null($to_user_id) && is_null($to_group_id)) {
-        $to_group_id = 0;
-    }
-
-    if (!is_null($to_user_id)) {
-        // Set filter to intended user.
-        $to_filter = " AND to_user_id = $to_user_id $condition_session";
-    } else {
-        // Set filter to intended group.
-        if (($to_group_id != 0) && $to_group_id == strval(intval($to_group_id))) {
-            $to_filter = " AND to_group_id = $to_group_id $condition_session";
-        }
-    }
-
-    // Adding filter if set.
-    $filter .= $to_filter;
-
-    // Update if possible
-    $set_type = '';
-
-    switch ($lastEditTypeNoFilter) {
-        case 'delete':
-            // delete = make item only visible for the platform admin.
-            $visibility = '2';
-            if (!empty($session_id)) {
-                // Check whether session id already exist into item_properties for updating visibility or add it.
-                $sql = "SELECT session_id FROM $tableItemProperty
-                        WHERE
-                            c_id = $course_id AND
-                            tool = '$tool' AND
-                            ref = $item_id AND
-                            session_id = $session_id";
-                $rs = Database::query($sql);
-                if (Database::num_rows($rs) > 0) {
-                    $sql = "UPDATE $tableItemProperty
-                            SET lastedit_type       = '".str_replace('_', '', ucwords($tool))."Deleted',
-                                lastedit_date       = '$time',
-                                lastedit_user_id    = $user_id,
-                                visibility          = $visibility,
-                                session_id          = $session_id $set_type
-                            WHERE $filter";
-                    $result = Database::query($sql);
-                } else {
-                    $sql = "INSERT INTO $tableItemProperty (c_id, tool, ref, insert_date, insert_user_id, lastedit_date, lastedit_type, lastedit_user_id, $to_field, visibility, start_visible, end_visible, session_id)
-                            VALUES ($course_id, '$tool',$item_id, '$time', $user_id, '$time', '$last_edit_type',$user_id, $toValueCondition, $visibility, $startVisible, $endVisible, $session_id)";
-                    $result = Database::query($sql);
-                    $id = Database::insert_id();
-                    if ($id) {
-                        $sql = "UPDATE $tableItemProperty SET id = iid WHERE iid = $id";
-                        Database::query($sql);
-                    }
-                }
-            } else {
-                $sql = "UPDATE $tableItemProperty
-                        SET
-                            lastedit_type='".str_replace('_', '', ucwords($tool))."Deleted',
-                            lastedit_date='$time',
-                            lastedit_user_id = $user_id,
-                            visibility = $visibility $set_type
-                        WHERE $filter";
-                $result = Database::query($sql);
-            }
-            break;
-        case 'visible': // Change item to visible.
-            $visibility = '1';
-            if (!empty($session_id)) {
-                // Check whether session id already exist into item_properties for updating visibility or add it.
-                $sql = "SELECT session_id FROM $tableItemProperty
-                        WHERE
-                            c_id = $course_id AND
-                            tool = '$tool' AND
-                            ref = $item_id AND
-                            session_id = $session_id";
-                $rs = Database::query($sql);
-                if (Database::num_rows($rs) > 0) {
-                    $sql = "UPDATE $tableItemProperty
-                            SET
-                                lastedit_type='".str_replace('_', '', ucwords($tool))."Visible',
-                                lastedit_date='$time',
-                                lastedit_user_id = $user_id,
-                                visibility = $visibility,
-                                session_id = $session_id $set_type
-                            WHERE $filter";
-                    $result = Database::query($sql);
-                } else {
-                    $sql = "INSERT INTO $tableItemProperty (c_id, tool, ref, insert_date, insert_user_id, lastedit_date, lastedit_type, lastedit_user_id, $to_field, visibility, start_visible, end_visible, session_id)
-                            VALUES ($course_id, '$tool', $item_id, '$time', $user_id, '$time', '$last_edit_type', $user_id, $toValueCondition, $visibility, $startVisible, $endVisible, $session_id)";
-                    $result = Database::query($sql);
-                    $id = Database::insert_id();
-                    if ($id) {
-                        $sql = "UPDATE $tableItemProperty SET id = iid WHERE iid = $id";
-                        Database::query($sql);
-                    }
-                }
-            } else {
-                $sql = "UPDATE $tableItemProperty
-                        SET
-                            lastedit_type='".str_replace('_', '', ucwords($tool))."Visible',
-                            lastedit_date='$time',
-                            lastedit_user_id = $user_id,
-                            visibility = $visibility $set_type
-                        WHERE $filter";
-                $result = Database::query($sql);
-            }
-            break;
-        case 'invisible': // Change item to invisible.
-            $visibility = '0';
-            if (!empty($session_id)) {
-                // Check whether session id already exist into item_properties for updating visibility or add it
-                $sql = "SELECT session_id FROM $tableItemProperty
-                        WHERE
-                            c_id = $course_id AND
-                            tool = '$tool' AND
-                            ref = $item_id AND
-                            session_id = $session_id";
-                $rs = Database::query($sql);
-                if (Database::num_rows($rs) > 0) {
-                    $sql = "UPDATE $tableItemProperty
-                            SET
-                                lastedit_type = '".str_replace('_', '', ucwords($tool))."Invisible',
-                                lastedit_date = '$time',
-                                lastedit_user_id = $user_id,
-                                visibility = $visibility,
-                                session_id = $session_id $set_type
-                            WHERE $filter";
-                    $result = Database::query($sql);
-                } else {
-                    $sql = "INSERT INTO $tableItemProperty (c_id, tool, ref, insert_date, insert_user_id, lastedit_date, lastedit_type, lastedit_user_id,$to_field, visibility, start_visible, end_visible, session_id)
-                            VALUES ($course_id, '$tool', $item_id, '$time', $user_id, '$time', '$last_edit_type', $user_id, $toValueCondition, $visibility, $startVisible, $endVisible, $session_id)";
-                    $result = Database::query($sql);
-                    $id = Database::insert_id();
-                    if ($id) {
-                        $sql = "UPDATE $tableItemProperty SET id = iid WHERE iid = $id";
-                        Database::query($sql);
-                    }
-                }
-            } else {
-                $sql = "UPDATE $tableItemProperty
-                        SET
-                            lastedit_type = '".str_replace('_', '', ucwords($tool))."Invisible',
-                            lastedit_date = '$time',
-                            lastedit_user_id = $user_id,
-                            visibility = $visibility $set_type
-                        WHERE $filter";
-                $result = Database::query($sql);
-            }
-            break;
-        default: // The item will be added or updated.
-            $set_type = ", lastedit_type = '$last_edit_type' ";
-            $visibility = '1';
-            //$filter .= $to_filter; already added
-            $sql = "UPDATE $tableItemProperty
-                    SET
-                      lastedit_date = '$time',
-                      lastedit_user_id = $user_id $set_type
-                    WHERE $filter";
-            $result = Database::query($sql);
-    }
-
-    // Insert if no entries are found (can only happen in case of $last_edit_type switch is 'default').
-    if ($result == false || Database::affected_rows($result) == 0) {
-        $objCourse = $em->find('ChamiloCoreBundle:Course', intval($course_id));
-        $objTime = new DateTime('now', new DateTimeZone('UTC'));
-        $objUser = api_get_user_entity($user_id);
-        if (empty($objUser)) {
-            // Use anonymous
-            $user_id = api_get_anonymous_id();
-            $objUser = api_get_user_entity($user_id);
-        }
-
-        $objGroup = null;
-        if (!empty($to_group_id)) {
-            $objGroup = $em->find('ChamiloCourseBundle:CGroupInfo', $to_group_id);
-        }
-
-        $objToUser = api_get_user_entity($to_user_id);
-        $objSession = $em->find('ChamiloCoreBundle:Session', intval($session_id));
-
-        $startVisibleDate = !empty($start_visible) ? new DateTime($start_visible, new DateTimeZone('UTC')) : null;
-        $endVisibleDate = !empty($endVisibleDate) ? new DateTime($endVisibleDate, new DateTimeZone('UTC')) : null;
-
-        $cItemProperty = new CItemProperty($objCourse);
-        $cItemProperty
-            ->setTool($tool)
-            ->setRef($item_id)
-            ->setInsertDate($objTime)
-            ->setInsertUser($objUser)
-            ->setLasteditDate($objTime)
-            ->setLasteditType($last_edit_type)
-            ->setGroup($objGroup)
-            ->setToUser($objToUser)
-            ->setVisibility($visibility)
-            ->setStartVisible($startVisibleDate)
-            ->setEndVisible($endVisibleDate)
-            ->setSession($objSession);
-
-        $em->persist($cItemProperty);
-        $em->flush();
-
-        $id = $cItemProperty->getIid();
-
-        if ($id) {
-            $cItemProperty->setId($id);
-            $em->merge($cItemProperty);
-            $em->flush();
-
-            return false;
-        }
-    }
+    /** @var CItemProperty|null $itemProperty */
+    $itemProperty = (
+        $course->getItemProperties()->matching(
+            Criteria::create()
+                ->where(Criteria::expr()->eq('tool', $tool))
+                ->andWhere(Criteria::expr()->eq('ref', $item_id))
+                ->andWhere(Criteria::expr()->eq('session', $session))
+                ->andWhere(
+                    is_null($toUser)
+                        ? Criteria::expr()->eq('group', $toGroup)
+                        : Criteria::expr()->eq('toUser', $toUser)
+                )
+        )->first() ?: (
+            (new CItemProperty($course))
+                ->setTool($tool)
+                ->setRef($item_id)
+                ->setToUser($toUser)
+                ->setGroup($toGroup)
+                ->setSession($session)
+        )
+    )
+        ->setLasteditType($lastEditTypeFinal)
+        ->setLasteditUserId($user->getId())
+        ->setVisibility($visibility)
+        ->setStartVisible($startVisibleDate)
+        ->setEndVisible($endVisibleDate);
+    Database::getManager()->persist($itemProperty);
+    Database::getManager()->flush($itemProperty);
 
     return true;
 }
@@ -5263,20 +5065,11 @@ function api_get_themes($getOnlyThemeFromVirtualInstance = false)
  */
 function api_max_sort_value($user_course_category, $user_id)
 {
-    $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-    $sql = "SELECT max(sort) as max_sort FROM $tbl_course_user
-            WHERE
-                user_id='".intval($user_id)."' AND
-                relation_type<>".COURSE_RELATION_TYPE_RRHH." AND
-                user_course_cat='".intval($user_course_category)."'";
-    $result_max = Database::query($sql);
-    if (Database::num_rows($result_max) == 1) {
-        $row_max = Database::fetch_array($result_max);
+    /** @var User $user */
+    $user = User::getRepository()->find($user_id);
+    $userCourseCategory = UserCourseCategory::getRepository()->find($user_course_category);
 
-        return $row_max['max_sort'];
-    }
-
-    return 0;
+    return is_null($user) ? 0 : $user->getMaxSortValue($userCourseCategory);
 }
 
 /**
@@ -6618,6 +6411,18 @@ function api_get_access_url_from_user($user_id)
     }
 
     return $list;
+}
+
+/**
+ * @param int $id the access url identifier
+ *
+ * @return AccessUrl|null
+ */
+function api_get_access_url_entity($id = 0)
+{
+    return Database::getManager()->getRepository('ChamiloCoreBundle:AccessUrl')->find(
+        $id ?: api_get_current_access_url_id()
+    );
 }
 
 /**

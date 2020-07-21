@@ -3,11 +3,15 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\UserBundle\Entity\User;
+use Database;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Sortable\Entity\Repository\SortableRepository;
 
 /**
  * CLpCategory.
@@ -53,7 +57,12 @@ class CLpCategory
     /**
      * @var CLpCategoryUser[]
      *
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CLpCategoryUser", mappedBy="category", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CourseBundle\Entity\CLpCategoryUser",
+     *     mappedBy="category",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true
+     * )
      */
     protected $users;
 
@@ -63,16 +72,67 @@ class CLpCategory
     protected $sessionId;
 
     /**
+     * @var Course
+     *
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="learningPathCategories")
+     * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
+     */
+    protected $course;
+
+    /**
+     * @var CLp[]|ArrayCollection
+     *
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CourseBundle\Entity\CLp",
+     *     mappedBy="category",
+     *     cascade={"persist", "remove"}
+     * )
+     */
+    /*protected $learningPaths;*/
+
+    /**
      * CLpCategory constructor.
      */
     public function __construct()
     {
         $this->users = new ArrayCollection();
+        /*$this->learningPaths = new ArrayCollection();*/
         $this->sessionId = 0;
     }
 
     /**
+     * @return EntityRepository|SortableRepository
+     */
+    public static function getRepository()
+    {
+        return Database::getManager()->getRepository('ChamiloCourseBundle:CLpCategory');
+    }
+
+    /**
+     * @return Course
+     */
+    public function getCourse()
+    {
+        return $this->course;
+    }
+
+    /**
+     * @param Course $course
+     *
+     * @return $this
+     */
+    public function setCourse($course)
+    {
+        $this->course = $course;
+        $this->course->getLearningPathCategories()->add($this);
+
+        return $this;
+    }
+
+    /**
      * Set cId.
+     *
+     * @deprecated use setCourse wherever possible
      *
      * @param int $cId
      *
@@ -81,6 +141,7 @@ class CLpCategory
     public function setCId($cId)
     {
         $this->cId = $cId;
+        $this->setCourse(api_get_course_entity($cId));
 
         return $this;
     }
@@ -211,9 +272,11 @@ class CLpCategory
     }
 
     /**
+     * @param CLpCategoryUser $categoryUser
+     *
      * @return bool
      */
-    public function hasUser(CLpCategoryUser $categoryUser)
+    public function hasUser($categoryUser)
     {
         if ($this->getUsers()->count()) {
             $criteria = Criteria::create()->where(
@@ -249,12 +312,22 @@ class CLpCategory
     }
 
     /**
+     * @param CLpCategoryUser $user
+     *
      * @return $this
      */
-    public function removeUsers(CLpCategoryUser $user)
+    public function removeUsers($user)
     {
         $this->users->removeElement($user);
 
         return $this;
     }
+
+    /**
+     * @return CLp[]|ArrayCollection
+     */
+    /*public function getLearningPaths()
+    {
+        return $this->learningPaths;
+    }*/
 }

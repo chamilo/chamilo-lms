@@ -3,6 +3,8 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Database;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -153,6 +155,14 @@ class CGroupInfo
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
     protected $sessionId;
+
+    /**
+     * @return EntityRepository
+     */
+    public static function getRepository()
+    {
+        return Database::getManager()->getRepository('ChamiloCourseBundle:CGroupInfo');
+    }
 
     /**
      * @var int needed for setting['group_document_access']

@@ -48,11 +48,6 @@ class CourseManager
 
         $hook = HookCreateCourse::create();
 
-        // Check portal limits
-        $accessUrlId = empty($accessUrlId)
-            ? (api_get_multiple_access_url() ? api_get_current_access_url_id() : 1)
-            : $accessUrlId;
-
         $authorId = empty($authorId) ? api_get_user_id() : (int) $authorId;
 
         if (isset($_configuration[$accessUrlId]) && is_array($_configuration[$accessUrlId])) {
@@ -76,45 +71,18 @@ class CourseManager
             }
         }
 
-        if (empty($params['title'])) {
-            return false;
-        }
-
-        if (empty($params['wanted_code'])) {
-            $params['wanted_code'] = $params['title'];
-            // Check whether the requested course code has already been occupied.
-            $substring = api_substr($params['title'], 0, self::MAX_COURSE_LENGTH_CODE);
-            if ($substring === false || empty($substring)) {
-                return false;
-            } else {
-                $params['wanted_code'] = self::generate_course_code($substring);
-            }
-        }
-
-        // Create the course keys
-        $keys = AddCourse::define_course_keys($params['wanted_code']);
         $params['exemplary_content'] = isset($params['exemplary_content']) ? $params['exemplary_content'] : false;
 
-        if (count($keys)) {
-            $params['code'] = $keys['currentCourseCode'];
-            $params['visual_code'] = $keys['currentCourseId'];
-            $params['directory'] = $keys['currentCourseRepository'];
-            $course_info = api_get_course_info($params['code']);
-            if (empty($course_info)) {
-                $course_id = AddCourse::register_course($params, $accessUrlId);
-                $course_info = api_get_course_info_by_id($course_id);
-
-                if ($hook) {
-                    $hook->setEventData(['course_info' => $course_info]);
-                    $hook->notifyCreateCourse(HOOK_EVENT_TYPE_POST);
-                }
-
-                if (!empty($course_info)) {
-                    self::fillCourse($course_info, $params, $authorId);
-
-                    return $course_info;
-                }
+        $courseId = AddCourse::register_course($params, $accessUrlId);
+        if ($courseId) {
+            $courseInfo = api_get_course_info_by_id($courseId);
+            if ($hook) {
+                $hook->setEventData(['course_info' => $courseInfo]);
+                $hook->notifyCreateCourse(HOOK_EVENT_TYPE_POST);
             }
+            self::fillCourse($courseInfo, $params, $authorId);
+
+            return $courseInfo;
         }
 
         return false;
@@ -611,10 +579,7 @@ class CourseManager
         $userId = api_get_user_id();
 
         if (api_get_configuration_value('catalog_course_subscription_in_user_s_session')) {
-            /**
-             * @var Chamilo\UserBundle\Entity\User
-             */
-            $user = UserManager::getRepository()->find($userId);
+            $user = api_get_user_entity($userId);
             $sessions = $user->getCurrentlyAccessibleSessions();
             if (empty($sessions)) {
                 // user has no accessible session
@@ -1245,10 +1210,7 @@ class CourseManager
             if (is_null($course)) {
                 return false;
             }
-            /**
-             * @var \Chamilo\UserBundle\Entity\User
-             */
-            $user = UserManager::getRepository()->find($user_id);
+            $user = api_get_user_entity($user_id);
             if (is_null($user)) {
                 return false;
             }
@@ -7044,7 +7006,6 @@ class CourseManager
     {
         $authorId = empty($authorId) ? api_get_user_id() : (int) $authorId;
 
-        AddCourse::prepare_course_repository($courseInfo['directory']);
         AddCourse::fill_db_course(
             $courseInfo['real_id'],
             $courseInfo['directory'],

@@ -50,29 +50,26 @@ class PastMeeting extends Meeting
     /**
      * Retrieves a past meeting instance from its identifier.
      *
-     * @param Client $client
      * @param string $uuid
      *
      * @throws Exception
      *
      * @return PastMeeting the past meeting
      */
-    public static function fromUUID($client, $uuid)
+    public static function fromUUID($uuid)
     {
-        return static::fromJson($client->send('GET', 'past_meetings/'.htmlentities($uuid)));
+        return static::fromJson(Client::getInstance()->send('GET', 'past_meetings/'.htmlentities($uuid)));
     }
 
     /**
      * Retrieves information on participants from a past meeting instance.
      *
-     * @param Client $client
-     *
      * @throws Exception
      *
      * @return ParticipantListItem[] participants
      */
-    public function getParticipants($client)
+    public function getParticipants()
     {
-        return ParticipantList::loadInstanceParticipants($client, $this->uuid);
+        return ParticipantList::loadInstanceParticipants($this->uuid);
     }
 }

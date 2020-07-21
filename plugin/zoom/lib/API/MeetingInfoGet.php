@@ -34,58 +34,50 @@ class MeetingInfoGet extends MeetingInfo
     /**
      * Retrieves a meeting from its numeric identifier.
      *
-     * @param Client $client
-     * @param int    $id
+     * @param int $id
      *
      * @throws Exception
      *
      * @return static the meeting
      */
-    public static function fromId($client, $id)
+    public static function fromId($id)
     {
-        return static::fromJson($client->send('GET', "meetings/$id"));
+        return static::fromJson(Client::getInstance()->send('GET', "meetings/$id"));
     }
 
     /**
      * Updates the meeting on server.
      *
-     * @param Client $client
-     *
      * @throws Exception
      */
-    public function update($client)
+    public function update()
     {
-        $client->send('PATCH', 'meetings/'.$this->id, [], $this);
+        Client::getInstance()->send('PATCH', 'meetings/'.$this->id, [], $this);
     }
 
     /**
      * Ends the meeting on server.
      *
-     * @param Client $client
-     *
      * @throws Exception
      */
-    public function endNow($client)
+    public function endNow()
     {
-        $client->send('PUT', "meetings/$this->id/status", [], (object) ['action' => 'end']);
+        Client::getInstance()->send('PUT', "meetings/$this->id/status", [], (object) ['action' => 'end']);
     }
 
     /**
      * Deletes the meeting on server.
      *
-     * @param Client $client
-     *
      * @throws Exception
      */
-    public function delete($client)
+    public function delete()
     {
-        $client->send('DELETE', "meetings/$this->id");
+        Client::getInstance()->send('DELETE', "meetings/$this->id");
     }
 
     /**
      * Adds a registrant to the meeting.
      *
-     * @param Client            $client
      * @param MeetingRegistrant $registrant    with at least 'email' and 'first_name'.
      *                                         'last_name' will also be recorded by Zoom.
      *                                         Other properties remain ignored, or not returned by Zoom
@@ -96,10 +88,10 @@ class MeetingInfoGet extends MeetingInfo
      *
      * @return CreatedRegistration with unique join_url and registrant_id properties
      */
-    public function addRegistrant($client, $registrant, $occurrenceIds = '')
+    public function addRegistrant($registrant, $occurrenceIds = '')
     {
         return CreatedRegistration::fromJson(
-            $client->send(
+            Client::getInstance()->send(
                 'POST',
                 "meetings/$this->id/registrants",
                 empty($occurrenceIds) ? [] : ['occurrence_ids' => $occurrenceIds],
@@ -111,16 +103,15 @@ class MeetingInfoGet extends MeetingInfo
     /**
      * Removes registrants from the meeting.
      *
-     * @param Client              $client
      * @param MeetingRegistrant[] $registrants   registrants to remove (id and email)
      * @param string              $occurrenceIds separated by comma
      *
      * @throws Exception
      */
-    public function removeRegistrants($client, $registrants, $occurrenceIds = '')
+    public function removeRegistrants($registrants, $occurrenceIds = '')
     {
         if (!empty($registrants)) {
-            $client->send(
+            Client::getInstance()->send(
                 'PUT',
                 "meetings/$this->id/registrants/status",
                 empty($occurrenceIds) ? [] : ['occurrence_ids' => $occurrenceIds],
@@ -135,28 +126,24 @@ class MeetingInfoGet extends MeetingInfo
     /**
      * Retrieves meeting registrants.
      *
-     * @param Client $client
-     *
      * @throws Exception
      *
      * @return MeetingRegistrantListItem[] the meeting registrants
      */
-    public function getRegistrants($client)
+    public function getRegistrants()
     {
-        return MeetingRegistrantList::loadMeetingRegistrants($client, $this->id);
+        return MeetingRegistrantList::loadMeetingRegistrants($this->id);
     }
 
     /**
      * Retrieves the meeting's instances.
      *
-     * @param Client $client
-     *
      * @throws Exception
      *
      * @return MeetingInstance[]
      */
-    public function getInstances($client)
+    public function getInstances()
     {
-        return MeetingInstances::fromMeetingId($client, $this->id)->meetings;
+        return MeetingInstances::fromMeetingId($this->id)->meetings;
     }
 }

@@ -13,7 +13,7 @@ use Firebase\JWT\JWT;
  *
  * @package Chamilo\PluginBundle\Zoom
  */
-class JWTClient implements Client
+class JWTClient extends Client
 {
     public $token;
 
@@ -33,6 +33,7 @@ class JWTClient implements Client
             ],
             $apiSecret
         );
+        self::register($this);
     }
 
     /**

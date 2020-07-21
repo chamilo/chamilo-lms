@@ -13,8 +13,21 @@ use Exception;
  *
  * @package Chamilo\PluginBundle\Zoom\API
  */
-interface Client
+abstract class Client
 {
+    /** @var Client */
+    private static $instance;
+
+    /**
+     * Returns an initialized Client.
+     *
+     * @return Client
+     */
+    public static function getInstance()
+    {
+        return self::$instance;
+    }
+
     /**
      * Sends a Zoom API-compliant HTTP request and retrieves the response.
      *
@@ -30,5 +43,15 @@ interface Client
      *
      * @return string response body (not json-decoded)
      */
-    public function send($httpMethod, $relativePath, $parameters = [], $requestBody = null);
+    abstract public function send($httpMethod, $relativePath, $parameters = [], $requestBody = null);
+
+    /**
+     * Registers an initialized Client.
+     *
+     * @param Client $instance
+     */
+    protected static function register($instance)
+    {
+        self::$instance = $instance;
+    }
 }

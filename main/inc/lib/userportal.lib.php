@@ -952,6 +952,12 @@ class IndexManager
             ];
         }
 
+        if ('true' === api_get_plugin_setting('zoom', 'tool_enable')) {
+            foreach (ZoomPlugin::getProfileBlockItems() as $item) {
+                $items[] = $item;
+            }
+        }
+
         if (
             true === api_get_configuration_value('whispeak_auth_enabled') &&
             !WhispeakAuthPlugin::checkUserIsEnrolled($userId)

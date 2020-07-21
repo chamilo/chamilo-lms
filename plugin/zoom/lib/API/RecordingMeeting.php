@@ -69,13 +69,15 @@ class RecordingMeeting
     /**
      * Deletes the recording on the server.
      *
-     * @param Client $client
-     *
      * @throws Exception
      */
-    public function delete($client)
+    public function delete()
     {
-        $client->send('DELETE', 'meetings/'.htmlentities($this->uuid).'/recordings', ['action' => 'delete']);
+        Client::getInstance()->send(
+            'DELETE',
+            'meetings/'.htmlentities($this->uuid).'/recordings',
+            ['action' => 'delete']
+        );
     }
 
     /**

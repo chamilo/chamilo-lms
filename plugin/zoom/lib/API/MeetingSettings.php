@@ -80,6 +80,9 @@ class MeetingSettings
     /** @var bool Enable waiting room */
     public $waiting_room;
 
+    /** @var bool undocumented */
+    public $request_permission_to_unmute_participants;
+
     /** @var string[] List of global dial-in countries */
     public $global_dial_in_countries;
 

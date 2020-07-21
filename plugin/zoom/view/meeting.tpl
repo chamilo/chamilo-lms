@@ -1,8 +1,17 @@
-<p>{{ meeting.typeName }} {{ meeting.id }} ({{ meeting.statusName }})</p>
+<p>
+    {{ meeting.typeName }} {{ meeting.id }} ({{ meeting.meetingInfoGet.status }})
+</p>
+{% if meeting.meetingInfoGet.status != 'finished' %}
+<p>
+    <a href="join_meeting.php?meetingId={{ meeting.id }}">
+        {{ 'EnterMeeting'|get_lang }}
+    </a>
+</p>
+{% endif %}
 
 {% if isConferenceManager and meeting.status == 'waiting' %}
 <p>
-    <a href="{{ meeting.start_url }}" target="_blank">
+    <a href="{{ meeting.meetingInfoGet.start_url }}" target="_blank">
         {{ 'StartMeeting'|get_lang }}
     </a>
 </p>
@@ -16,11 +25,11 @@
 </p>
 {% endif %}
 
-{% if meeting.settings.approval_type == 2 %}
+{% if meeting.meetingInfoGet.settings.approval_type == 2 %}
 <p>
     <label>
         {{ 'JoinURLToSendToParticipants'|get_lang }}
-        <input readonly value="{{ meeting.join_url }}">
+        <input readonly value="{{ meeting.meetingInfoGet.join_url }}">
     </label>
 </p>
 {% endif %}
@@ -32,7 +41,7 @@
 {{ deleteMeetingForm }}
 {{ registerParticipantForm }}
 {{ fileForm }}
-{% if registrants and meeting.settings.approval_type != 2 %}
+{% if registrants and meeting.meetingInfoGet.settings.approval_type != 2 %}
 <script>
     function copyJoinURL(event, url) {
         event.target.textContent = '{{ 'CopyingJoinURL'|get_lang|escape }}';
@@ -59,12 +68,12 @@
 
 {% else %}
 
-<h2>{{ meeting.topic }}</h2>
-{% if meeting.agenda %}
-<blockquote>{{ meeting.agenda| nl2br }}</blockquote>
+<h2>{{ meeting.meetingInfoGet.topic }}</h2>
+{% if meeting.meetingInfoGet.agenda %}
+<blockquote>{{ meeting.meetingInfoGet.agenda| nl2br }}</blockquote>
 {% endif %}
 
-{% if meeting.type == 2 or meeting.type == 8 %}
+{% if meeting.meetingInfoGet.type == 2 or meeting.meetingInfoGet.type == 8 %}
 <dl class="meeting_properties">
     <dt>{{ 'StartTime'|get_lang }}</dt>
     <dd>{{ meeting.formattedStartTime }}</dd>
@@ -75,4 +84,3 @@
 {% endif %}
 
 {% endif %}
-

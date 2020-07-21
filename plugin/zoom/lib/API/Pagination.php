@@ -32,7 +32,6 @@ trait Pagination
      * Retrieves all items from the server, possibly generating several API calls.
      *
      * @param string $arrayPropertyName item array property name
-     * @param Client $client
      * @param string $relativePath      relative path to pass to Client::send
      * @param array  $parameters        parameter array to pass to Client::send
      *
@@ -40,7 +39,7 @@ trait Pagination
      *
      * @return array united list of items
      */
-    protected static function loadItems($arrayPropertyName, $client, $relativePath, $parameters = [])
+    protected static function loadItems($arrayPropertyName, $relativePath, $parameters = [])
     {
         $items = [];
         $pageCount = 1;
@@ -48,7 +47,7 @@ trait Pagination
         $totalRecords = 0;
         for ($pageNumber = 1; $pageNumber <= $pageCount; $pageNumber++) {
             $response = static::fromJson(
-                $client->send(
+                Client::getInstance()->send(
                     'GET',
                     $relativePath,
                     array_merge(['page_size' => $pageSize, 'page_number' => $pageNumber], $parameters)

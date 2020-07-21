@@ -1680,8 +1680,8 @@ function display_configuration_parameter(
             /* show/hide admin password in step 5*/
             $hiddenPasswordClass = 'inputShowPwd';
             $inputType = 'password';
-            $eyeForPassword =
-                '<input type="checkbox" id="showPassword" class="hidden">'.'<label for="showPassword">'.
+            $eyeForPassword = PHP_EOL
+                .'<input type="checkbox" id="showPassword" class="hidden">'.'<label for="showPassword" style="cursor: pointer;">'.
                 Display::returnFontAwesomeIcon('eye', null, true, 'showPasswordEye').
                 '</label> ';
         }

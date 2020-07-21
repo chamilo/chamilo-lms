@@ -25,7 +25,7 @@ class survey_question
         $questions = SurveyManager::get_questions($surveyId);
 
         $newQuestionList = [];
-        $allowTypes = ['yesno', 'multiplechoice'];
+        $allowTypes = ['yesno', 'multiplechoice', 'multipleresponse'];
         foreach ($questions as $question) {
             if (in_array($question['type'], $allowTypes)) {
                 $newQuestionList[$question['sort']] = $question;
@@ -600,12 +600,17 @@ class survey_question
      */
     public static function getQuestionJs($question)
     {
+        if (empty($question)) {
+            return '';
+        }
+
         $list = self::getDependency($question);
+
         if (empty($list)) {
             return '';
         }
 
-        $js = '';
+        $type = $question['type'];
         $questionId = $question['question_id'];
         $newList = [];
         foreach ($list as $child) {
@@ -614,7 +619,48 @@ class survey_question
             $newList[$optionId] = $childQuestionId;
         }
 
-        $js .= '
+        if ('multipleresponse' === $type) {
+            $multiple = '';
+            foreach ($newList as $optionId => $child) {
+                $multiple .= '
+                    $(\'input[name="question'.$questionId.'['.$optionId.']"]\').on("change", function() {
+
+                        var isChecked= $(this).is(\':checked\');
+                        var checkedValue = $(this).val();
+                        if (isChecked) {
+                            $.each(list, function(index, value) {
+                                //$(".with_parent_" + value).hide();
+                                $(".with_parent_" + value).find("input").prop("checked", false);
+                                //$(".with_parent_only_hide_" + value).hide();
+                            });
+
+                            var questionId = $(this).val();
+                            var questionToShow = list[questionId];
+                            $(".with_parent_" + questionToShow).show();
+                        } else {
+                            var checkedValue = list[checkedValue];
+                             //$.each(list, function(index, value) {
+                                $(".with_parent_" + checkedValue).hide();
+                                $(".with_parent_" + checkedValue).find("input").prop("checked", false);
+                                $(".with_parent_only_hide_" + checkedValue).hide();
+                            //});
+                        }
+                    });
+                ';
+            }
+
+            $js = '
+            <script>
+            $(function() {
+                var list = '.json_encode($newList).';
+                '.$multiple.'
+            });
+            </script>';
+
+            return $js;
+        }
+
+        $js = '
             <script>
             $(function() {
                 var list = '.json_encode($newList).';

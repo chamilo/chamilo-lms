@@ -22,6 +22,7 @@ if (api_is_anonymous()) {
     }
 }
 
+$plugin = H5PPlugin::create();
 if (!$plugin->isEnabled(true)) {
     api_not_allowed(true);
     exit;
@@ -41,8 +42,6 @@ if ($intUpdate == 0) {
 $userId = $user['id'];
 
 $vers = 6;
-
-$plugin = H5PPlugin::create();
 
 //wordsmatch
 $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;

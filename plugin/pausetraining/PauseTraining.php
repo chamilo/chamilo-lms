@@ -98,11 +98,13 @@ class PauseTraining extends Plugin
 
         if ('true' !== $enable) {
             echo 'Plugin not enabled';
+
             return false;
         }
 
         if (empty($senderId)) {
             echo 'Sender id not configured';
+
             return false;
         }
 
@@ -110,6 +112,7 @@ class PauseTraining extends Plugin
 
         if (empty($senderInfo)) {
             echo "Sender #$senderId not found";
+
             return false;
         }
 
@@ -163,10 +166,14 @@ class PauseTraining extends Plugin
                         continue;
                     }
 
-                    $template->assign('days', $day);
-                    $template->assign('user', $userInfo);
-                    $content = $template->fetch('pausetraining/view/notification_content.tpl');
-                    MessageManager::send_message_simple($userId, $title, $content, $senderId);
+                    // Check if user wants a notification or not
+                    $notification = $extraFieldValue->get_values_by_handler_and_field_variable($userId, 'allow_notifications');
+                    if ($notification && isset($notification['value']) && 1 === (int) $notification['value']) {
+                        $template->assign('days', $day);
+                        $template->assign('user', $userInfo);
+                        $content = $template->fetch('pausetraining/view/notification_content.tpl');
+                        MessageManager::send_message_simple($userId, $title, $content, $senderId);
+                    }
                 }
             }
         }

@@ -57,9 +57,8 @@ class UserManager
     public static function getRepository()
     {
         /** @var UserRepository $userRepository */
-        $userRepository = Database::getManager()->getRepository('ChamiloUserBundle:User');
 
-        return $userRepository;
+        return Database::getManager()->getRepository('ChamiloUserBundle:User');
     }
 
     /**
@@ -119,9 +118,8 @@ class UserManager
     public static function isPasswordValid($encoded, $raw, $salt)
     {
         $encoder = new \Chamilo\UserBundle\Security\Encoder(self::getPasswordEncryption());
-        $validPassword = $encoder->isPasswordValid($encoded, $raw, $salt);
 
-        return $validPassword;
+        return $encoder->isPasswordValid($encoded, $raw, $salt);
     }
 
     /**
@@ -132,12 +130,11 @@ class UserManager
     public static function encryptPassword($raw, User $user)
     {
         $encoder = self::getEncoder($user);
-        $encodedPassword = $encoder->encodePassword(
+
+        return $encoder->encodePassword(
             $raw,
             $user->getSalt()
         );
-
-        return $encodedPassword;
     }
 
     /**
@@ -227,10 +224,36 @@ class UserManager
             $hook->notifyCreateUser(HOOK_EVENT_TYPE_PRE);
         }
 
+        if (false === api_valid_email($email)) {
+            Display::addFlash(
+                Display::return_message(get_lang('PleaseEnterValidEmail').' - '.$email, 'warning')
+            );
+
+            return false;
+        }
+
+        if ('true' === api_get_setting('login_is_email')) {
+            if (false === api_valid_email($loginName)) {
+                Display::addFlash(
+                    Display::return_message(get_lang('PleaseEnterValidEmail').' - '.$loginName, 'warning')
+                );
+
+                return false;
+            }
+        } else {
+            if (false === self::is_username_valid($loginName)) {
+                Display::addFlash(
+                    Display::return_message(get_lang('UsernameWrong').' - '.$loginName, 'warning')
+                );
+
+                return false;
+            }
+        }
+
         // First check wether the login already exists
         if (!self::is_username_available($loginName)) {
             Display::addFlash(
-                Display::return_message(get_lang('LoginAlreadyTaken'))
+                Display::return_message(get_lang('LoginAlreadyTaken').' - '.$loginName, 'warning')
             );
 
             return false;
@@ -1751,10 +1774,13 @@ class UserManager
             // into ASCII letters in order they not to be totally removed.
             // 2. Applying the strict purifier.
             // 3. Length limitation.
-            $return = api_get_setting('login_is_email') === 'true' ? substr(preg_replace(USERNAME_PURIFIER_MAIL, '', $username), 0, USERNAME_MAX_LENGTH) : substr(preg_replace(USERNAME_PURIFIER, '', $username), 0, USERNAME_MAX_LENGTH);
-            $return = URLify::transliterate($return);
+            if ('true' === api_get_setting('login_is_email')) {
+                $return = substr(preg_replace(USERNAME_PURIFIER_MAIL, '', $username), 0, USERNAME_MAX_LENGTH);
+            } else {
+                $return = substr(preg_replace(USERNAME_PURIFIER, '', $username), 0, USERNAME_MAX_LENGTH);
+            }
 
-            return $return;
+            return URLify::transliterate($return);
         }
 
         // 1. Applying the shallow purifier.

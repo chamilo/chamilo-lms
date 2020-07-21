@@ -18,6 +18,7 @@ use Doctrine\ORM\EntityManager;
 
 /* CONSTANTS */
 define('SYSTEM_CONFIG_FILENAME', 'configuration.dist.php');
+define('USERNAME_MAX_LENGTH', 50);
 
 /**
  * This function detects whether the system has been already installed.
@@ -3216,7 +3217,7 @@ function finishInstallation(
         'Joe',
         'Anonymous',
         6,
-        'anonymous@localhost',
+        'anonymous@example.com',
         'anon',
         'anon',
         'anonymous', //$official_code = '',

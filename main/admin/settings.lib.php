@@ -261,7 +261,11 @@ function handlePlugins()
 
     $installed = '';
     $notInstalled = '';
-    $isMainPortal = 1 === api_get_current_access_url_id();
+    $isMainPortal = true;
+    if (api_is_multiple_url_enabled()) {
+        $isMainPortal = 1 === api_get_current_access_url_id();
+    }
+
     foreach ($all_plugins as $pluginName) {
         $plugin_info_file = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/plugin.php';
         if (file_exists($plugin_info_file)) {

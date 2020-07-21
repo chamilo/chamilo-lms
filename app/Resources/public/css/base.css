@@ -9342,7 +9342,6 @@ ul.dropdown-menu.inner > li > a {
 
 #question_admin_form .bootstrap-select .dropdown-menu li a span.text,
 .exercise_reminder_item label {
-    overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     width: 100%;

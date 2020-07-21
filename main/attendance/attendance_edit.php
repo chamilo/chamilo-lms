@@ -7,7 +7,6 @@
  *
  * @author Christian Fasanando <christian1827@gmail.com>
  */
-
 api_protect_course_script(true);
 
 // error messages

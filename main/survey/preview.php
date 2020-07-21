@@ -93,13 +93,13 @@ if (isset($_GET['show'])) {
     if (Database::num_rows($result)) {
         while ($row = Database::fetch_array($result)) {
             if (1 == $survey_data['one_question_per_page']) {
-                if ('pagebreak' != $row['type']) {
+                if ('pagebreak' !== $row['type']) {
                     $paged_questions[$counter][] = $row['question_id'];
                     $counter++;
                     continue;
                 }
             } else {
-                if ('pagebreak' == $row['type']) {
+                if ('pagebreak' === $row['type']) {
                     $counter++;
                 } else {
                     $paged_questions[$counter][] = $row['question_id'];
@@ -143,7 +143,7 @@ if (isset($_GET['show'])) {
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
             // If the type is not a pagebreak we store it in the $questions array
-            if ('pagebreak' != $row['type']) {
+            if ('pagebreak' !== $row['type']) {
                 $sort = $row['sort'];
                 $questions[$sort]['question_id'] = $row['question_id'];
                 $questions[$sort]['survey_id'] = $row['survey_id'];
@@ -191,6 +191,11 @@ if (is_array($questions) && count($questions) > 0) {
         $counter = $before + 1;
     }
 
+    $showNumber = true;
+    if (SurveyManager::hasDependency($survey_data)) {
+        $showNumber = false;
+    }
+
     $js = '';
     foreach ($questions as $key => &$question) {
         $ch_type = 'ch_'.$question['type'];
@@ -211,7 +216,9 @@ if (is_array($questions) && count($questions) > 0) {
         $js .= survey_question::getQuestionJs($question);
 
         $form->addHtml('<div class="survey_question '.$ch_type.' '.$parentClass.'">');
-        $form->addHtml('<div style="float:left; font-weight: bold; margin-right: 5px;"> '.$counter.'. </div>');
+        if ($showNumber) {
+            $form->addHtml('<div style="float:left; font-weight: bold; margin-right: 5px;"> '.$counter.'. </div>');
+        }
         $form->addHtml('<div>'.Security::remove_XSS($question['survey_question']).'</div> ');
         $display->render($form, $question);
         $form->addHtml('</div>');

@@ -60,6 +60,15 @@ if (!empty($dateEnd)) {
     $filterDate += DATE_END_FILTER;
 }
 
+$filterCheckList = [];
+$extraField = new ExtraField('user');
+$extraFieldsAll = $extraField->get_all(['filter = ?' => 1], 'option_order');
+foreach ($extraFieldsAll as $field) {
+    if (!empty($_GET['extra_'.$field['variable']])) {
+        $filterCheckList[$field['id']] = $field;
+    }
+}
+
 $result = Database::select(
     'c.id, c.code',
     "$tblCourse c INNER JOIN  $tblSessionRelCourse r ON c.id = r.c_id",
@@ -125,6 +134,43 @@ foreach ($result as $value) {
                     $certificateList[] = $value;
                 }
                 break;
+        }
+    }
+
+    // Filter extra field
+    foreach ($certificateList as $key => $value) {
+        foreach ($filterCheckList as $fieldId => $field) {
+            $extraFieldValue = new ExtraFieldValue('user');
+            $extraFieldValueData = $extraFieldValue->get_values_by_handler_and_field_id(
+                $value['user_id'],
+                $fieldId
+            );
+
+            if (empty($extraFieldValueData)) {
+                unset($certificateList[$key]);
+                break;
+            }
+
+            switch ($field['field_type']) {
+                case ExtraField::FIELD_TYPE_TEXT:
+                case ExtraField::FIELD_TYPE_ALPHANUMERIC:
+                    $pos = stripos($extraFieldValueData['value'], $_GET['extra_'.$field['variable']]);
+                    if ($pos === false) {
+                        unset($certificateList[$key]);
+                    }
+                    break;
+                case ExtraField::FIELD_TYPE_RADIO:
+                    $valueRadio = $_GET['extra_'.$field['variable']]['extra_'.$field['variable']];
+                    if ($extraFieldValueData['value'] != $valueRadio) {
+                        unset($certificateList[$key]);
+                    }
+                    break;
+                case ExtraField::FIELD_TYPE_SELECT:
+                    if ($extraFieldValueData['value'] != $_GET['extra_'.$field['variable']]) {
+                        unset($certificateList[$key]);
+                    }
+                    break;
+            }
         }
     }
 }

@@ -7049,7 +7049,7 @@ $LdapDescriptionComment = "    <div class=\"alert alert-info\">
 $ShibbolethMainActivateTitle = "<h3>Shibboleth authentication</h3>";
 $ShibbolethMainActivateComment = "<p>First of all, you have to configure Shibboleth for your web server.</p>To configure it for Chamilo<h5>edit file main/auth/shibboleth/config/aai.class.php</h5><p>Modify object &#36;result values with the name of your Shibboleth attributes</p><ul><li>&#36;result-&gt;unique_id = 'mail';</li><li>&#36;result-&gt;firstname = 'cn';</li><li>&#36;result-&gt;lastname = 'uid';</li><li>&#36;result-&gt;email = 'mail';</li><li>&#36;result-&gt;language = '-';</li><li>&#36;result-&gt;gender = '-';</li><li>&#36;result-&gt;address = '-';</li><li>&#36;result-&gt;staff_category = '-';</li><li>&#36;result-&gt;home_organization_type = '-'; </li><li>&#36;result-&gt;home_organization = '-';</li><li>&#36;result-&gt;affiliation = '-';</li><li>&#36;result-&gt;persistent_id = '-';</li><li>...</li></ul><br/>Go to <a href='settings.php?category=Shibboleth'>Plugin</a> to add a configurable 'Shibboleth Login' button for your Chamilo campus.";
 $LdapDescriptionTitle = "<h3>LDAP autentication</h3>";
-$FacebookMainActivateTitle = "<h3>Facebook authentication</h3>";
+$FacebookMainActivateTitle = "Facebook authentication";
 $FacebookMainActivateComment = "<p><h5>Create your Facebook Application</h5>First of all, you have to create a Facebook Application (see <a href='https://developers.facebook.com/apps'>https://developers.facebook.com/apps</a>) with your Facebook account. In the Facebook Apps settings, the site URL value should be the URL of this campus. Enable the Web OAuth Login option. And add the site URL of your campus to the Valid OAuth redirect URIs field</p><p>Uncomment the line <code>&#36;_configuration['facebook_auth'] = 1;</code> to enable the Facebook Auth.</p><p>Then, edit the <code>app/config/auth.conf.php</code> file and enter '<code>appId</code>' and '<code>secret</code>' values for <code>&#36;facebook_config</code>.</p><p>Go to <a href='settings.php?category=Plugins'>Plugins</a> to add a configurable <em>Facebook Login</em> button for your Chamilo campus.</p>";
 $AnnouncementForGroup = "Announcement for a group";
 $AllGroups = "All groups";
@@ -8568,4 +8568,15 @@ $DeleteInAllLanguages = "Delete in all languages";
 $MyStudentsSchedule = "My students schedule";
 $QuizConfirmSavedAnswers = "I accept the number of saved responses in this section.";
 $QuizConfirmSavedAnswersHelp = "If you are not satisfied, do not check the acceptance box and consult the course manager or the platform administrator.";
+$TCReport = "Student's superior follow up";
+$TIReport = "General Coaches planning";
+$StudentPublicationsSent = "Sent or past assignments";
+$PendingStudentPublications = "Pending assignments";
+$MyStudentPublicationsTitle = "All Assignments";
+$MyStudentPublicationsExplanation = "You will find below all your assignment from all the courses and session in which you are registered.";
+$RequiredCourses = "Required courses";
+$SimpleCourseList = "Standard List";
+$AdminCourseList = "Management List";
+$AnonymizeUserSessions = "Anonymize user's sessions";
+$ContinueLastImport = "Continue last import";
 ?>

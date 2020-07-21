@@ -139,7 +139,6 @@ class FlatViewDataGenerator
         $course_code = api_get_course_id();
         $session_id = api_get_session_id();
         $model = ExerciseLib::getCourseScoreModel();
-
         $allcat = $this->category->get_subcategories(
             null,
             $course_code,
@@ -202,6 +201,11 @@ class FlatViewDataGenerator
                     if (!empty($model)) {
                         $label = $item->get_name();
                     }
+
+                    /*if ($item instanceof ExerciseLink) {
+                        $label .= '<br /><br />'.$item->getLpListToString();
+                    }*/
+
                     $headers[] = $label;
                     $evaluationsAdded[] = $item->get_id();
                 }
@@ -220,6 +224,11 @@ class FlatViewDataGenerator
                     if (!empty($model)) {
                         $label = $item->get_name();
                     }
+
+                    /*if ($item instanceof ExerciseLink) {
+                        $label .= '<br /><br />'.$item->getLpListToString();
+                    }*/
+
                     $headers[] = $label;
                 }
             }
@@ -676,7 +685,9 @@ class FlatViewDataGenerator
                     }
                 }
             } else {
-                $item_value = $score[0] / $divide * $item->get_weight();
+                if ($score) {
+                    $item_value = $score[0] / $divide * $item->get_weight();
+                }
             }
 
             $item_total += $item->get_weight();

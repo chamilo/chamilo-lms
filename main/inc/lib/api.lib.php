@@ -743,7 +743,10 @@ function api_get_path($path = '', $configuration = [])
 
     $course_folder = 'courses/';
     static $root_web = '';
-    $root_sys = $_configuration['root_sys'];
+    $root_sys = null;
+    if ($_configuration) {
+        $root_sys = $_configuration['root_sys'];
+    }
 
     // If no $root_web has been set so far *and* no custom config has been passed to the function
     // then re-use the previously-calculated (run-specific) $root_web and skip this complex calculation
@@ -6558,8 +6561,9 @@ function api_get_current_access_url_id()
 {
     static $id;
     if (!empty($id)) {
-        return $id;
+        return (int) $id;
     }
+
     if (!api_get_multiple_access_url()) {
         // If the feature is not enabled, assume 1 and return before querying
         // the database

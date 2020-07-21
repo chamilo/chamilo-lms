@@ -3,8 +3,6 @@
 
 use Chamilo\PluginBundle\WhispeakAuth\Controller\AuthenticationController;
 
-$cidReset = true;
-
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
 $controller = new AuthenticationController();

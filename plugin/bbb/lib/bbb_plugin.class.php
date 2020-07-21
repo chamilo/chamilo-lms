@@ -93,6 +93,7 @@ class BBBPlugin extends Plugin
                 'bbb_enable_conference_in_groups' => 'checkbox',
                 'bbb_force_record_generation' => 'checkbox',
                 'disable_course_settings' => 'boolean',
+                'meeting_duration' => 'text',
             ]
         );
 

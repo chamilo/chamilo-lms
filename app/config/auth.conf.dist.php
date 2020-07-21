@@ -1,16 +1,6 @@
 <?php
+
 /* For licensing terms, see /license.txt */
-
-/**
- * Configuration file for all authentication methods.
- * Uncomment and configure only the section(s) you need.
- * @package chamilo.conf.auth
- */
-
-/**
- * Facebook
- */
-
 
 /**
  * Uncomment those lines and put your facebook app parameters here
@@ -22,12 +12,8 @@
     'return_url' => api_get_path(WEB_PATH).'?action=fbconnect',
 );*/
 
-
 /**
  * okta
- */
-
-/**
  * Uncomment those lines and put your okta app parameters here
  *  Find them here : https://developer.okta.com/
  */

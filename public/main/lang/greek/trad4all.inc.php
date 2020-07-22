@@ -7158,7 +7158,7 @@ $BadgesManagement = "Διαχείρηση Badges";
 $CurrentBadges = "Υπάρχον badges";
 $SaveBadge = "Αποθήκευση Badge";
 $BadgeMeasuresXPixelsInPNG = "Μέγεθος Badge 200x200 pixel σε PNG";
-$SetTutor = "Ορισμός καθηγητή";
+$ConvertToCourseAssistant = "Ορισμός καθηγητή";
 $UniqueAnswerImage = "Μοναδική εικόνα απάντησης";
 $TimeSpentByStudentsInCoursesGroupedByCode = "
 Ο χρόνος που δαπανάται από τους μαθητές στα μαθήματα, ομαδοποίηση ανά κωδικό";

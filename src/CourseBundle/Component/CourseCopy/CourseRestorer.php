@@ -1902,7 +1902,8 @@ class CourseRestorer
                 if (!empty($quiz->question_ids)) {
                     foreach ($quiz->question_ids as $index => $question_id) {
                         $qid = $this->restore_quiz_question($question_id);
-                        $question_order = $quiz->question_orders[$index] ?: ++$order;
+                        $question_order = $quiz->question_orders[$index] ?: $order;
+                        $order++;
                         $sql = "INSERT IGNORE INTO $table_rel SET
                                 c_id = ".$this->destination_course_id.",
                                 question_id = $qid ,

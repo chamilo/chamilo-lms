@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 // The file that contains all the initialisation stuff (and includes all the configuration stuff)

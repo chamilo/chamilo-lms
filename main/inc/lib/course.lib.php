@@ -3369,7 +3369,7 @@ class CourseManager
 
     /**
      * Gets extra field value data and formatted values of a course
-     * for extra fields listed in configuration.php in My_course_course_extrafields_to_be_presented
+     * for extra fields listed in configuration.php in my_course_course_extrafields_to_be_presented
      * (array of variables as value of key 'fields').
      *
      * @param $courseId  int The numeric identifier of the course
@@ -3379,7 +3379,7 @@ class CourseManager
     public static function getExtraFieldsToBePresented($courseId)
     {
         $extraFields = [];
-        $fields = api_get_configuration_sub_value('My_course_course_extrafields_to_be_presented/fields');
+        $fields = api_get_configuration_sub_value('my_course_course_extrafields_to_be_presented/fields');
         if (!empty($fields) && is_array($fields)) {
             $extraFieldManager = new ExtraField('course');
             $dataAndFormattedValues = $extraFieldManager->getDataAndFormattedValues($courseId);

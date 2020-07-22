@@ -160,12 +160,6 @@ class PauseTraining extends Plugin
 
                 foreach ($userList as $userId) {
                     $userInfo = api_get_user_info($userId);
-                    $pause = $extraFieldValue->get_values_by_handler_and_field_variable($userId, 'pause_formation');
-                    if (!empty($pause) && isset($pause['value']) && 1 == $pause['value']) {
-                        // Skip user because he paused his formation.
-                        continue;
-                    }
-
                     $template->assign('days', $day);
                     $template->assign('user', $userInfo);
                     $content = $template->fetch('pausetraining/view/notification_content.tpl');

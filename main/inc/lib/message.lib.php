@@ -501,7 +501,7 @@ class MessageManager
             if ($allowPauseFormation) {
                 $extraFieldValue = new ExtraFieldValue('user');
                 $allowEmailNotifications = $extraFieldValue->get_values_by_handler_and_field_variable(
-                    $receiverUserInfo['user_id'],
+                    $receiverUserId,
                     'allow_notifications'
                 );
 
@@ -518,25 +518,29 @@ class MessageManager
                 }
 
                 if ($sendEmail) {
-                    $startDate = $extraFieldValue->get_values_by_handler_and_field_variable(
-                        $receiverUserInfo['user_id'],
-                        'start_pause_date'
-                    );
-                    $endDate = $extraFieldValue->get_values_by_handler_and_field_variable(
-                        $receiverUserInfo['user_id'],
-                        'end_pause_date'
-                    );
+                    // Check if user pause his formation.
+                    $pause = $extraFieldValue->get_values_by_handler_and_field_variable($receiverUserId, 'pause_formation');
+                    if (!empty($pause) && isset($pause['value']) && 1 === (int) $pause['value']) {
+                        $startDate = $extraFieldValue->get_values_by_handler_and_field_variable(
+                            $receiverUserInfo['user_id'],
+                            'start_pause_date'
+                        );
+                        $endDate = $extraFieldValue->get_values_by_handler_and_field_variable(
+                            $receiverUserInfo['user_id'],
+                            'end_pause_date'
+                        );
 
-                    if (
-                        !empty($startDate) && isset($startDate['value']) && !empty($startDate['value']) &&
-                        !empty($endDate) && isset($endDate['value']) && !empty($endDate['value'])
-                    ) {
-                        $now = time();
-                        $start = api_strtotime($startDate['value']);
-                        $end = api_strtotime($startDate['value']);
+                        if (
+                            !empty($startDate) && isset($startDate['value']) && !empty($startDate['value']) &&
+                            !empty($endDate) && isset($endDate['value']) && !empty($endDate['value'])
+                        ) {
+                            $now = time();
+                            $start = api_strtotime($startDate['value']);
+                            $end = api_strtotime($startDate['value']);
 
-                        if ($now > $start && $now < $end) {
-                            $sendEmail = false;
+                            if ($now > $start && $now < $end) {
+                                $sendEmail = false;
+                            }
                         }
                     }
                 }

@@ -128,7 +128,7 @@ class MessageManager
      *
      * @param int    $from
      * @param int    $numberOfItems
-     * @param string $column
+     * @param int    $column
      * @param string $direction
      * @param array  $extraParams
      *
@@ -438,7 +438,7 @@ class MessageManager
     /**
      * Sends a message to a user/group.
      *
-     * @param int    $receiver_user_id
+     * @param int    $receiverUserId
      * @param string $subject
      * @param string $content
      * @param array  $attachments                files array($_FILES) (optional)
@@ -457,7 +457,7 @@ class MessageManager
      * @return bool
      */
     public static function send_message(
-        $receiver_user_id,
+        $receiverUserId,
         $subject,
         $content,
         array $attachments = [],
@@ -475,15 +475,15 @@ class MessageManager
         $status = 0
     ) {
         $group_id = (int) $group_id;
-        $receiver_user_id = (int) $receiver_user_id;
+        $receiverUserId = (int) $receiverUserId;
         $parent_id = (int) $parent_id;
         $editMessageId = (int) $editMessageId;
         $topic_id = (int) $topic_id;
         $status = empty($status) ? MESSAGE_STATUS_UNREAD : (int) $status;
 
         $sendEmail = true;
-        if (!empty($receiver_user_id)) {
-            $receiverUserInfo = api_get_user_info($receiver_user_id);
+        if (!empty($receiverUserId)) {
+            $receiverUserInfo = api_get_user_info($receiverUserId);
             if (empty($receiverUserInfo)) {
                 return false;
             }
@@ -495,8 +495,8 @@ class MessageManager
 
             // Disabling messages depending the pausetraining plugin.
             $allowPauseFormation =
-                api_get_plugin_setting('pausetraining', 'tool_enable') === 'true' &&
-                api_get_plugin_setting('pausetraining', 'allow_users_to_edit_pause_formation') === 'true';
+                'true' === api_get_plugin_setting('pausetraining', 'tool_enable') &&
+                'true' === api_get_plugin_setting('pausetraining', 'allow_users_to_edit_pause_formation');
 
             if ($allowPauseFormation) {
                 $extraFieldValue = new ExtraFieldValue('user');
@@ -505,13 +505,19 @@ class MessageManager
                     'allow_notifications'
                 );
 
+                // User doesn't want email notifications but chamilo inbox still available (Option was not set)
                 if (empty($allowEmailNotifications)) {
                     $sendEmail = false;
                 }
 
+                // User doesn't want email notifications but chamilo inbox still available. (Option was set to "No")
                 if (!empty($allowEmailNotifications) &&
-                    isset($allowEmailNotifications['value']) && 1 === (int) $allowEmailNotifications['value']
+                    isset($allowEmailNotifications['value']) && 0 === (int) $allowEmailNotifications['value']
                 ) {
+                    $sendEmail = false;
+                }
+
+                if ($sendEmail) {
                     $startDate = $extraFieldValue->get_values_by_handler_and_field_variable(
                         $receiverUserInfo['user_id'],
                         'start_pause_date'
@@ -607,7 +613,7 @@ class MessageManager
         $now = api_get_utc_datetime();
         $table = Database::get_main_table(TABLE_MESSAGE);
 
-        if (!empty($receiver_user_id) || !empty($group_id)) {
+        if (!empty($receiverUserId) || !empty($group_id)) {
             // message for user friend
             //@todo it's possible to edit a message? yes, only for groups
             if (!empty($editMessageId)) {
@@ -620,7 +626,7 @@ class MessageManager
             } else {
                 $params = [
                     'user_sender_id' => $user_sender_id,
-                    'user_receiver_id' => $receiver_user_id,
+                    'user_receiver_id' => $receiverUserId,
                     'msg_status' => $status,
                     'send_date' => $now,
                     'title' => $subject,
@@ -661,7 +667,7 @@ class MessageManager
                             $comment,
                             $messageId,
                             null,
-                            $receiver_user_id,
+                            $receiverUserId,
                             $group_id
                         );
                     }
@@ -672,7 +678,7 @@ class MessageManager
             if (empty($group_id) && MESSAGE_STATUS_UNREAD == $status) {
                 $params = [
                     'user_sender_id' => $user_sender_id,
-                    'user_receiver_id' => $receiver_user_id,
+                    'user_receiver_id' => $receiverUserId,
                     'msg_status' => MESSAGE_STATUS_OUTBOX,
                     'send_date' => $now,
                     'title' => $subject,
@@ -720,7 +726,7 @@ class MessageManager
                     $notification->saveNotification(
                         $messageId,
                         $type,
-                        [$receiver_user_id],
+                        [$receiverUserId],
                         $subject,
                         $content,
                         $sender_info,
@@ -772,7 +778,7 @@ class MessageManager
     }
 
     /**
-     * @param int    $receiver_user_id
+     * @param int    $receiverUserId
      * @param int    $subject
      * @param string $message
      * @param int    $sender_id
@@ -785,7 +791,7 @@ class MessageManager
      * @return bool
      */
     public static function send_message_simple(
-        $receiver_user_id,
+        $receiverUserId,
         $subject,
         $message,
         $sender_id = 0,
@@ -804,7 +810,7 @@ class MessageManager
             $files = $attachmentList;
         }
         $result = self::send_message(
-            $receiver_user_id,
+            $receiverUserId,
             $subject,
             $message,
             $files,
@@ -820,8 +826,8 @@ class MessageManager
         );
 
         if ($sendCopyToDrhUsers) {
-            $userInfo = api_get_user_info($receiver_user_id);
-            $drhList = UserManager::getDrhListFromUser($receiver_user_id);
+            $userInfo = api_get_user_info($receiverUserId);
+            $drhList = UserManager::getDrhListFromUser($receiverUserId);
             if (!empty($drhList)) {
                 foreach ($drhList as $drhInfo) {
                     $message = sprintf(
@@ -842,47 +848,6 @@ class MessageManager
         }
 
         return $result;
-    }
-
-    /**
-     * Update parent ids for other receiver user from current message in groups.
-     *
-     * @author Christian Fasanando Flores
-     *
-     * @param int $parent_id
-     * @param int $receiver_user_id
-     * @param int $messageId
-     */
-    public static function update_parent_ids_from_reply(
-        $parent_id,
-        $receiver_user_id,
-        $messageId
-    ) {
-        $table = Database::get_main_table(TABLE_MESSAGE);
-        $parent_id = intval($parent_id);
-        $receiver_user_id = intval($receiver_user_id);
-        $messageId = intval($messageId);
-
-        // first get data from message id (parent)
-        $sql = "SELECT * FROM $table WHERE id = '$parent_id'";
-        $rs_message = Database::query($sql);
-        $row_message = Database::fetch_array($rs_message);
-
-        // get message id from data found early for other receiver user
-        $sql = "SELECT id FROM $table
-                WHERE
-                    user_sender_id ='{$row_message['user_sender_id']}' AND
-                    title='{$row_message['title']}' AND
-                    content='{$row_message['content']}' AND
-                    group_id='{$row_message['group_id']}' AND
-                    user_receiver_id='$receiver_user_id'";
-        $result = Database::query($sql);
-        $row = Database::fetch_array($result);
-
-        // update parent_id for other user receiver
-        $sql = "UPDATE $table SET parent_id = ".$row['id']."
-                WHERE id = $messageId";
-        Database::query($sql);
     }
 
     /**

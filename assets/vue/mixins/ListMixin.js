@@ -131,6 +131,14 @@ export default {
       }
 
       if ('file' === item.filetype) {
+        folderParams['getFile'] = false;
+
+        if (item.resourceNode.resourceFile &&
+            item.resourceNode.resourceFile.mimeType &&
+            'text/html' === item.resourceNode.resourceFile.mimeType) {
+          folderParams['getFile'] = true;
+        }
+
         this.$router.push({
           name: `${this.$options.servicePrefix}UpdateFile`,
           params: { id: item['@id'] },

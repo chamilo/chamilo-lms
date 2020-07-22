@@ -74,7 +74,6 @@ class User implements UserInterface, EquatableInterface
     protected $id;
 
     /**
-     *
      * @var UuidInterface|null
      *
      * @ORM\Column(type="uuid", unique=true)
@@ -681,7 +680,6 @@ class User implements UserInterface, EquatableInterface
         /*$user = $args->getEntity();
         */
     }
-
 
     /**
      * @return ArrayCollection

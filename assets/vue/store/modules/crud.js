@@ -132,12 +132,13 @@ export default function makeCrudModule({
           })
           .catch(e => handleError(commit, e));
       },
-      load: ({ commit }, id) => {
+
+      load: ({ commit }, id, options = {}) => {
         if (!service) throw new Error('No service specified!');
 
         commit(ACTIONS.TOGGLE_LOADING);
         service
-          .find(id)
+          .find(id, options)
           .then(response => response.json())
           .then(item => {
             commit(ACTIONS.TOGGLE_LOADING);
@@ -159,7 +160,6 @@ export default function makeCrudModule({
             })
             .catch(e => handleError(commit, e));
       },
-
       resetCreate: ({ commit }) => {
         commit(ACTIONS.RESET_CREATE);
       },

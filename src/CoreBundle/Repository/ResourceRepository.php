@@ -170,7 +170,7 @@ class ResourceRepository extends EntityRepository
      */
     public function find($id, $lockMode = null, $lockVersion = null)
     {
-        return $this->getRepository()->find($id);
+        return $this->getRepository()->find($id, $lockMode, $lockVersion);
     }
 
     public function findOneBy(array $criteria, array $orderBy = null)
@@ -611,8 +611,13 @@ class ResourceRepository extends EntityRepository
         return $qb;
     }
 
-    public function getResourcesByCourseLinkedToUser(User $user, Course $course, Session $session = null, CGroupInfo $group = null, ResourceNode $parentNode = null): QueryBuilder
-    {
+    public function getResourcesByCourseLinkedToUser(
+        User $user,
+        Course $course,
+        Session $session = null,
+        CGroupInfo $group = null,
+        ResourceNode $parentNode = null
+    ): QueryBuilder {
         $qb = $this->getResourcesByCourse($course, $session, $group, $parentNode);
 
         $qb
@@ -810,25 +815,27 @@ class ResourceRepository extends EntityRepository
      */
     public function updateResourceFileContent(AbstractResource $resource, $content)
     {
+        error_log('updateResourceFileContent');
+
         $resourceNode = $resource->getResourceNode();
         if ($resourceNode->hasResourceFile()) {
+            error_log('has file');
             $resourceFile = $resourceNode->getResourceFile();
             if ($resourceFile) {
+                error_log('$resourceFile');
                 $title = $resource->getTitle();
                 $handle = tmpfile();
                 fwrite($handle, $content);
+                error_log($title);
+                error_log($content);
                 $meta = stream_get_meta_data($handle);
                 $file = new UploadedFile($meta['uri'], $title, 'text/html', null, true);
                 $resource->setUploadFile($file);
 
-                /*$fileName = $this->getResourceNodeRepository()->getFilename($resourceFile);
-                $this->getResourceNodeRepository()->getFileSystem()->update($fileName, $content);
-                $resourceFile->setSize(strlen($content));*/
-                //$this->entityManager->persist($resource);
-
                 return true;
             }
         }
+        error_log('false');
 
         return false;
     }

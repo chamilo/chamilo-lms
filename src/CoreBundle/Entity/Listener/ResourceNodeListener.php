@@ -4,19 +4,12 @@
 
 namespace Chamilo\CoreBundle\Entity\Listener;
 
-use Chamilo\CoreBundle\Entity\AbstractResource;
-use Chamilo\CoreBundle\Entity\ResourceFile;
-use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
-use Chamilo\CoreBundle\Entity\ResourceToCourseInterface;
-use Chamilo\CoreBundle\Entity\ResourceToRootInterface;
-use Chamilo\CoreBundle\Entity\ResourceWithUrlInterface;
+use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\ToolChain;
 use Cocur\Slugify\SlugifyInterface;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
-use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Security;
 
@@ -28,6 +21,7 @@ class ResourceNodeListener
     protected $slugify;
     protected $request;
     protected $accessUrl;
+    protected $resourceNodeRepository;
 
     /**
      * ResourceListener constructor.
@@ -36,13 +30,15 @@ class ResourceNodeListener
         SlugifyInterface $slugify,
         ToolChain $toolChain,
         RequestStack $request,
-        Security $security
+        Security $security,
+        ResourceNodeRepository $resourceNodeRepository
     ) {
         $this->slugify = $slugify;
         $this->security = $security;
         $this->toolChain = $toolChain;
         $this->request = $request;
         $this->accessUrl = null;
+        $this->resourceNodeRepository = $resourceNodeRepository;
     }
 
     public function prePersist(ResourceNode $resourceNode, LifecycleEventArgs $event)
@@ -50,7 +46,6 @@ class ResourceNodeListener
         error_log('resource node prePersist');
 
         return true;
-
     }
 
     /**
@@ -59,6 +54,15 @@ class ResourceNodeListener
     public function preUpdate(ResourceNode $resourceNode, PreUpdateEventArgs $event)
     {
         error_log('resource node preUpdate');
+
+        if ($resourceNode->hasResourceFile() && $resourceNode->hasEditableContent()) {
+            $fileName = $this->resourceNodeRepository->getFilename($resourceNode->getResourceFile());
+            if ($fileName) {
+                $content = $resourceNode->getContent();
+                $this->resourceNodeRepository->getFileSystem()->update($fileName, $content);
+            }
+        }
+
         return true;
     }
 
@@ -66,5 +70,4 @@ class ResourceNodeListener
     {
         error_log('ResourceNode postUpdate');
     }
-
 }

@@ -5,12 +5,12 @@
 namespace Chamilo\CourseBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiFilter;
-use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
-use Chamilo\CoreBundle\Controller\CreateResourceNodeFileAction;
-use Chamilo\CoreBundle\Controller\UpdateResourceNodeFileAction;
+use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
+use Chamilo\CoreBundle\Controller\Api\CreateResourceNodeFileAction;
+use Chamilo\CoreBundle\Controller\Api\UpdateResourceNodeFileAction;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
@@ -33,11 +33,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  *             "deserialize"=false,
  *             "security"="is_granted('ROLE_USER')",
  *             "validation_groups"={"Default", "media_object_create", "document:write"},
-
  *         },
-     *     "get",
-     *     "delete"
-     * },
+ *     "get",
+ *     "delete"
+ *     },
  *      collectionOperations={
  *         "post"={
  *             "controller"=CreateResourceNodeFileAction::class,
@@ -125,6 +124,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * )
  * GRID\Source(columns="iid, title, resourceNode.createdAt", filterable=false, groups={"resource"})
  * GRID\Source(columns="iid, title", filterable=false, groups={"editor"})
+ * @ORM\EntityListeners({"Chamilo\CoreBundle\Entity\Listener\ResourceListener"})
  * @ORM\Entity
  */
 class CDocument extends AbstractResource implements ResourceInterface, ResourceToCourseInterface

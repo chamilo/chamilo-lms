@@ -14,14 +14,12 @@ export default function(id, options = {}) {
     if (null === options.headers.get('Accept'))
         options.headers.set('Accept', MIME_TYPE);
 
-    /*if (
+    if (
       'undefined' !== options.body &&
       !(options.body instanceof FormData) &&
       null === options.headers.get('Content-Type')
     )
-      options.headers.set('Content-Type', MIME_TYPE);*/
-
-    //console.log(options.params);
+      options.headers.set('Content-Type', MIME_TYPE);
 
     if (options.params) {
         const params = normalize(options.params);
@@ -37,20 +35,24 @@ export default function(id, options = {}) {
 
     const entryPoint = ENTRYPOINT + (ENTRYPOINT.endsWith('/') ? '' : '/');
 
-    let formData = new FormData();
-    if (options.body) {
-        Object.keys(options.body).forEach(function (key) {
-            // key: the name of the object key
-            // index: the ordinal position of the key within the object
-            formData.append(key, options.body[key]);
-        });
-
-        options.body = formData;
+    if ('POST' === options.method) {
+        let formData = new FormData();
+        if (options.body) {
+            Object.keys(options.body).forEach(function (key) {
+                // key: the name of the object key
+                // index: the ordinal position of the key within the object
+                formData.append(key, options.body[key]);
+            });
+            options.body = formData;
+        }
     }
 
-    /*const payload = options.body && JSON.parse(options.body);
-    if (isObject(payload) && payload['@id'])
-        options.body = JSON.stringify(normalize(payload));*/
+    if ('PUT' === options.method) {
+        const payload = options.body && JSON.parse(options.body);
+        if (isObject(payload) && payload['@id']) {
+            options.body = JSON.stringify(normalize(payload));
+        }
+    }
 
   return global.fetch(new URL(id, entryPoint), options).then(response => {
     if (response.ok) return response;

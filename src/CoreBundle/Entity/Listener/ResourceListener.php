@@ -14,7 +14,6 @@ use Chamilo\CoreBundle\Entity\ResourceWithUrlInterface;
 use Chamilo\CoreBundle\ToolChain;
 use Cocur\Slugify\SlugifyInterface;
 use Doctrine\ORM\Event\LifecycleEventArgs;
-use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -219,14 +218,9 @@ class ResourceListener
         }
 
         $resource->setResourceNode($resourceNode);
-        $em->persist($resourceNode);
+        //$em->persist($resourceNode);
 
         return $resourceNode;
-    }
-
-    public function onFlush(AbstractResource $resource, OnFlushEventArgs $args)
-    {
-        error_log('onFlush');
     }
 
     /**
@@ -235,18 +229,25 @@ class ResourceListener
     public function preUpdate(AbstractResource $resource, PreUpdateEventArgs $event)
     {
         error_log('resource listener preUpdate');
-        $em = $event->getEntityManager();
-        error_log('updateResourceName');
+
         $this->updateResourceName($resource);
         $resourceNode = $resource->getResourceNode();
         $resourceNode->setTitle($resource->getResourceName());
-        error_log('inside');
-        //error_log($resource->getTitle());
-        error_log($resource->getResourceNode()->getTitle());
-        error_log($resource->getResourceNode()->getId());
 
-        $resource->setResourceNode($resourceNode);
-        $em->persist($resourceNode);
+        if ($resource->hasUploadFile()) {
+            error_log('found a uploadFile');
+            $uploadedFile = $resource->getUploadFile();
+
+            // File upload
+            if ($uploadedFile instanceof UploadedFile) {
+                /*$resourceFile = new ResourceFile();
+                $resourceFile->setName($uploadedFile->getFilename());
+                $resourceFile->setOriginalName($uploadedFile->getFilename());
+                $resourceFile->setFile($uploadedFile);
+                $em->persist($resourceFile);*/
+                //$resourceNode->setResourceFile($uploadedFile);
+            }
+        }
 
 
         /*
@@ -264,7 +265,7 @@ class ResourceListener
 
     public function postUpdate(AbstractResource $resource, LifecycleEventArgs $event)
     {
-        //error_log('postUpdate');
+        error_log('resource listener postUpdate');
         //$em = $event->getEntityManager();
         //$this->updateResourceName($resource, $resource->getResourceName(), $em);
     }
@@ -286,7 +287,6 @@ class ResourceListener
             $originalBasename = \basename($resourceName, $originalExtension);
             $slug = sprintf('%s.%s', $this->slugify->slugify($originalBasename), $originalExtension);
         }
-        error_log( 'aaaa');
         error_log($resourceName);
         error_log($slug);
 

@@ -21,7 +21,6 @@ use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
-use Ramsey\Uuid\Doctrine\UuidGenerator;
 
 //*     attributes={"security"="is_granted('ROLE_ADMIN')"},
 /**
@@ -39,6 +38,7 @@ use Ramsey\Uuid\Doctrine\UuidGenerator;
  *
  * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="resource_node")
+ * @ORM\EntityListeners({"Chamilo\CoreBundle\Entity\Listener\ResourceNodeListener"})
  *
  * @Gedmo\Tree(type="materializedPath")
  */
@@ -57,7 +57,6 @@ class ResourceNode
     protected $id;
 
     /**
-     *
      * @var UuidInterface|null
      *
      * @ORM\Column(type="uuid", unique=true)
@@ -177,6 +176,8 @@ class ResourceNode
      * @ORM\Column(type="datetime")
      */
     protected $createdAt;
+
+    protected $content;
 
     /**
      * @var \DateTime
@@ -599,5 +600,25 @@ class ResourceNode
         }
 
         return '<i class="'.$class.'"></i>';
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getContent()
+    {
+        return $this->content;
+    }
+
+    /**
+     * @param mixed $content
+     *
+     * @return ResourceNode
+     */
+    public function setContent($content)
+    {
+        $this->content = $content;
+
+        return $this;
     }
 }

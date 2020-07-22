@@ -67,6 +67,7 @@ class CourseListener
 
     public function postPersist(Course $course, LifecycleEventArgs $args)
     {
+        error_log('postPersist');
         /** @var AccessUrlRelCourse $urlRelCourse */
         if ($course) {
             /*$urlRelCourse = $course->getUrls()->first();
@@ -85,6 +86,7 @@ class CourseListener
      */
     public function preUpdate(Course $course, LifecycleEventArgs $args)
     {
+        error_log('preUpdate');
         if ($course) {
             /*$url = $course->getCurrentUrl();
             $repo = $args->getEntityManager()->getRepository('ChamiloCoreBundle:Course');

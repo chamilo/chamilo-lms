@@ -2,7 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\CoreBundle\Controller;
+namespace Chamilo\CoreBundle\Controller\Api;
 
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
@@ -62,14 +62,14 @@ class CreateResourceNodeFileAction
                 }
 
                 if (false === $fileParsed) {
-                    throw new \InvalidArgumentException(
-                        'filetype was set to "file" but not upload found'
-                    );
+                    throw new \InvalidArgumentException('filetype was set to "file" but not upload found');
                 }
-                break;
-            case 'folder':
 
+                break;
+
+            case 'folder':
                 $document->setTitle($title);
+
                 break;
         }
 

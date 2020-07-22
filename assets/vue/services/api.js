@@ -3,9 +3,12 @@ import fetch from '../utils/fetch';
 export default function makeService(endpoint) {
   return {
     find(id) {
-      return fetch(`${id}`);
+      let options = {params: {getFile: true}};
+
+      return fetch(`${id}`, options);
     },
     findAll(params) {
+      //console.log('findAll');
       return fetch(endpoint, params);
     },
     create(payload) {
@@ -16,11 +19,12 @@ export default function makeService(endpoint) {
       return fetch(item['@id'], { method: 'DELETE' });
     },
     update(payload) {
-      console.log(payload);
+      console.log('update');
+      console.log(JSON.stringify(payload));
+
       return fetch(payload['@id'], {
         method: 'PUT',
-        body: payload
-        //body: JSON.stringify(payload)
+        body: JSON.stringify(payload)
       });
     }
   };

@@ -6,7 +6,12 @@ export default {
   mixins: [NotificationMixin],
   data() {
     return {
-      item: {}
+      item: {},
+      options: {
+        sortBy: [],
+        page: 1,
+        itemsPerPage: 15
+      },
     };
   },
   created() {
@@ -28,7 +33,6 @@ export default {
       if (isEmpty(id)) {
         id = this.$route.query.id;
       }
-
       let item = this.find(decodeURIComponent(id));
 
       return item;

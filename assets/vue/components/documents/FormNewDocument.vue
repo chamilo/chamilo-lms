@@ -12,6 +12,7 @@
                   @blur="$v.item.title.$touch()"
           />
           <editor
+                  v-if="item.resourceNode && item.resourceNode.fileEditableText"
                   :error-messages="contentFileErrors"
                   required
                   v-model="item.contentFile"
@@ -39,12 +40,12 @@
                     }
                   },*/
                   images_upload_handler: (blobInfo, success, failure) => {
-                    console.log(blobInfo);
+                    /*console.log(blobInfo);
                     console.log(success);
-                    console.log(failure);
+                    console.log(failure);*/
 
                     const img = 'data:image/jpeg;base64,' + blobInfo.base64();
-                    console.log(img);
+                    //console.log(img);
                     success(img);
                   },
                    //menubar: true,
@@ -96,6 +97,7 @@ export default {
       title: null,
       contentFile: null,
       parentResourceNodeId: null,
+      resourceNode: null,
     };
   },
   computed: {
@@ -104,7 +106,6 @@ export default {
     },
     titleErrors() {
       const errors = [];
-
       if (!this.$v.item.title.$dirty) return errors;
       has(this.violations, 'title') && errors.push(this.violations.title);
       !this.$v.item.title.required && errors.push(this.$t('Field is required'));
@@ -113,12 +114,24 @@ export default {
     },
     contentFileErrors() {
       const errors = [];
-      if (!this.$v.item.contentFile.$dirty) return errors;
-      has(this.violations, 'contentFile') && errors.push(this.violations.contentFile);
-      !this.$v.item.contentFile.required && errors.push(this.$t('Content is required'));
+
+      if (this.item.resourceNode && this.item.resourceNode.fileEditableText) {
+        if (!this.$v.item.contentFile.$dirty) return errors;
+        has(this.violations, 'contentFile') && errors.push(this.violations.contentFile);
+        !this.$v.item.contentFile.required && errors.push(this.$t('Content is required'));
+      }
 
       return errors;
     },
+  resourceNodeErrors() {
+    const errors = [];
+
+    if (!this.$v.item.resourceNode.$dirty) return errors;
+    has(this.violations, 'resourceNode') && errors.push(this.violations.resourceNode);
+    !this.$v.item.resourceNode.required && errors.push(this.$t('resourceNode is required'));
+
+    return errors;
+  },
     violations() {
       return this.errors || {};
     }
@@ -166,9 +179,12 @@ export default {
         required,
       },
       contentFile: {
-        required,
+        //required,
       },
       parentResourceNodeId: {
+      },
+      resourceNode:{
+        required,
       }
     }
   }

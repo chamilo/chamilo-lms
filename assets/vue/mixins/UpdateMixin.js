@@ -36,7 +36,6 @@ export default {
       let item = this.find(decodeURIComponent(id));
 
       return item;
-
       //return this.find(decodeURIComponent(this.$route.params.id));
     }
   },

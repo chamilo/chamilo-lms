@@ -218,7 +218,6 @@ class ResourceListener
         }
 
         $resource->setResourceNode($resourceNode);
-        //$em->persist($resourceNode);
 
         return $resourceNode;
     }
@@ -235,7 +234,6 @@ class ResourceListener
         $resourceNode->setTitle($resource->getResourceName());
 
         if ($resource->hasUploadFile()) {
-            error_log('found a uploadFile');
             $uploadedFile = $resource->getUploadFile();
 
             // File upload
@@ -248,7 +246,6 @@ class ResourceListener
                 //$resourceNode->setResourceFile($uploadedFile);
             }
         }
-
 
         /*
         error_log($fieldIdentifier);

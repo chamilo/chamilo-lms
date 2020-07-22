@@ -17,12 +17,12 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 class ResolveResourceFileContentUrlSubscriber implements EventSubscriberInterface
 {
     private $generator;
-    private $nodeRepository;
+    private $resourceNodeRepository;
 
-    public function __construct(UrlGeneratorInterface $generator, ResourceNodeRepository $nodeRepository)
+    public function __construct(UrlGeneratorInterface $generator, ResourceNodeRepository $resourceNodeRepository)
     {
         $this->generator = $generator;
-        $this->nodeRepository = $nodeRepository;
+        $this->resourceNodeRepository = $resourceNodeRepository;
     }
 
     public static function getSubscribedEvents(): array
@@ -54,23 +54,28 @@ class ResolveResourceFileContentUrlSubscriber implements EventSubscriberInterfac
             $mediaObjects = [$mediaObjects];
         }
         //error_log($request->get('getFile'));
-        //$getFile = $request->get('getFile');
-        $getFile = true;
+        $getFile = $request->get('getFile');
+        //$getFile = true;
         foreach ($mediaObjects as $mediaObject) {
             if (!$mediaObject instanceof AbstractResource) {
                 continue;
             }
             if ($mediaObject->hasResourceNode()) {
+                $resourceNode = $mediaObject->getResourceNode();
+
                 $params = [
-                    'id' => $mediaObject->getResourceNode()->getId(),
-                    'tool' => $mediaObject->getResourceNode()->getResourceType()->getTool()->getName(),
-                    'type' => $mediaObject->getResourceNode()->getResourceType()->getName(),
+                    'id' => $resourceNode->getId(),
+                    'tool' => $resourceNode->getResourceType()->getTool()->getName(),
+                    'type' => $resourceNode->getResourceType()->getName(),
                 ];
 
                 $mediaObject->contentUrl = $this->generator->generate('chamilo_core_resource_view_file', $params);
 
-                if ($getFile && $mediaObject->getResourceNode()->hasResourceFile()) {
-                    //$mediaObject->contentFile = $this->nodeRepository->getResourceNodeFileContent($mediaObject->getResourceNode());
+                if ($getFile &&
+                    $resourceNode->hasResourceFile() &&
+                    $resourceNode->hasEditableContent()
+                ) {
+                    $mediaObject->contentFile = $this->resourceNodeRepository->getResourceNodeFileContent($resourceNode);
                 }
             }
         }

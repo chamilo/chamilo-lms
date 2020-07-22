@@ -46,6 +46,7 @@ class ResourceNode
 {
     use TimestampableEntity;
     use TimestampableAgoTrait;
+
     public const PATH_SEPARATOR = '`';
 
     /**
@@ -177,8 +178,6 @@ class ResourceNode
      */
     protected $createdAt;
 
-    protected $content;
-
     /**
      * @var \DateTime
      *
@@ -187,6 +186,15 @@ class ResourceNode
      * @ORM\Column(type="datetime")
      */
     protected $updatedAt;
+
+    /**
+     * @var bool
+     *
+     * @Groups({"resource_node:read", "document:read"})
+     */
+    protected $fileEditableText;
+
+    protected $content;
 
     /**
      * Constructor.
@@ -198,6 +206,7 @@ class ResourceNode
         $this->resourceLinks = new ArrayCollection();
         $this->comments = new ArrayCollection();
         $this->createdAt = new \DateTime();
+        $this->editableContent = false;
     }
 
     /**
@@ -480,26 +489,17 @@ class ResourceNode
         return $links->matching($criteria);
     }
 
-    /**
-     * @return bool
-     */
-    public function hasResourceFile()
+    public function hasResourceFile(): bool
     {
         return null !== $this->resourceFile;
     }
 
-    /**
-     * @return ResourceFile
-     */
     public function getResourceFile(): ?ResourceFile
     {
         return $this->resourceFile;
     }
 
-    /**
-     * @return bool
-     */
-    public function hasEditableContent()
+    public function hasEditableContent(): bool
     {
         if ($this->hasResourceFile()) {
             $mimeType = $this->getResourceFile()->getMimeType();
@@ -511,10 +511,12 @@ class ResourceNode
         return false;
     }
 
-    /**
-     * @return bool
-     */
-    public function isResourceFileAnImage()
+    public function isFileEditableText(): bool
+    {
+        return $this->hasEditableContent();
+    }
+
+    public function isResourceFileAnImage(): bool
     {
         if ($this->hasResourceFile()) {
             $mimeType = $this->getResourceFile()->getMimeType();
@@ -526,10 +528,7 @@ class ResourceNode
         return false;
     }
 
-    /**
-     * @return bool
-     */
-    public function isResourceFileAVideo()
+    public function isResourceFileAVideo(): bool
     {
         if ($this->hasResourceFile()) {
             $mimeType = $this->getResourceFile()->getMimeType();
@@ -548,10 +547,7 @@ class ResourceNode
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getIcon()
+    public function getIcon(): string
     {
         $class = 'fa fa-folder';
         if ($this->hasResourceFile()) {
@@ -568,10 +564,7 @@ class ResourceNode
         return '<i class="'.$class.'"></i>';
     }
 
-    /**
-     * @return string
-     */
-    public function getThumbnail(RouterInterface $router)
+    public function getThumbnail(RouterInterface $router): string
     {
         $size = 'fa-3x';
         $class = "fa fa-folder $size";
@@ -602,20 +595,12 @@ class ResourceNode
         return '<i class="'.$class.'"></i>';
     }
 
-    /**
-     * @return mixed
-     */
     public function getContent()
     {
         return $this->content;
     }
 
-    /**
-     * @param mixed $content
-     *
-     * @return ResourceNode
-     */
-    public function setContent($content)
+    public function setContent(string $content): self
     {
         $this->content = $content;
 

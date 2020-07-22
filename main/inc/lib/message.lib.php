@@ -481,9 +481,12 @@ class MessageManager
         $topic_id = (int) $topic_id;
         $status = empty($status) ? MESSAGE_STATUS_UNREAD : (int) $status;
 
+        $sendEmail = true;
         if (!empty($receiver_user_id)) {
-            // Check if receipent is allow to recieve a message
             $receiverUserInfo = api_get_user_info($receiver_user_id);
+            if (empty($receiverUserInfo)) {
+                return false;
+            }
 
             // Disabling messages for inactive users.
             if (0 == $receiverUserInfo['active']) {
@@ -491,40 +494,43 @@ class MessageManager
             }
 
             // Disabling messages depending the pausetraining plugin.
-            $allowPauseFormation = api_get_plugin_setting('pausetraining', 'tool_enable') === 'true' &&
+            $allowPauseFormation =
+                api_get_plugin_setting('pausetraining', 'tool_enable') === 'true' &&
                 api_get_plugin_setting('pausetraining', 'allow_users_to_edit_pause_formation') === 'true';
 
             if ($allowPauseFormation) {
-                if (!empty($receiverUserInfo)) {
-                    $extraFieldValue = new ExtraFieldValue('user');
-                    $allowNotifications = $extraFieldValue->get_values_by_handler_and_field_variable(
+                $extraFieldValue = new ExtraFieldValue('user');
+                $allowEmailNotifications = $extraFieldValue->get_values_by_handler_and_field_variable(
+                    $receiverUserInfo['user_id'],
+                    'allow_notifications'
+                );
+
+                if (empty($allowEmailNotifications)) {
+                    $sendEmail = false;
+                }
+
+                if (!empty($allowEmailNotifications) &&
+                    isset($allowEmailNotifications['value']) && 1 === (int) $allowEmailNotifications['value']
+                ) {
+                    $startDate = $extraFieldValue->get_values_by_handler_and_field_variable(
                         $receiverUserInfo['user_id'],
-                        'allow_notifications'
+                        'start_pause_date'
+                    );
+                    $endDate = $extraFieldValue->get_values_by_handler_and_field_variable(
+                        $receiverUserInfo['user_id'],
+                        'end_pause_date'
                     );
 
-                    if (!empty($allowNotifications) &&
-                        isset($allowNotifications['value']) && 0 === (int) $allowNotifications['value']
+                    if (
+                        !empty($startDate) && isset($startDate['value']) && !empty($startDate['value']) &&
+                        !empty($endDate) && isset($endDate['value']) && !empty($endDate['value'])
                     ) {
-                        $startDate = $extraFieldValue->get_values_by_handler_and_field_variable(
-                            $receiverUserInfo['user_id'],
-                            'start_pause_date'
-                        );
-                        $endDate = $extraFieldValue->get_values_by_handler_and_field_variable(
-                            $receiverUserInfo['user_id'],
-                            'end_pause_date'
-                        );
+                        $now = time();
+                        $start = api_strtotime($startDate['value']);
+                        $end = api_strtotime($startDate['value']);
 
-                        if (
-                            !empty($startDate) && isset($startDate['value']) && !empty($startDate['value']) &&
-                            !empty($endDate) && isset($endDate['value']) && !empty($endDate['value'])
-                        ) {
-                            $now = time();
-                            $start = api_strtotime($startDate['value']);
-                            $end = api_strtotime($startDate['value']);
-
-                            if ($now > $start && $now < $end) {
-                                return false;
-                            }
+                        if ($now > $start && $now < $end) {
+                            $sendEmail = false;
                         }
                     }
                 }
@@ -587,7 +593,7 @@ class MessageManager
             );
 
             return false;
-        } elseif ($totalFileSize > intval(api_get_setting('message_max_upload_filesize'))) {
+        } elseif ($totalFileSize > (int) api_get_setting('message_max_upload_filesize')) {
             $warning = sprintf(
                 get_lang('FilesSizeExceedsX'),
                 format_file_size(api_get_setting('message_max_upload_filesize'))
@@ -693,69 +699,70 @@ class MessageManager
                 }
             }
 
-            // Load user settings.
-            $notification = new Notification();
-            $sender_info = api_get_user_info($user_sender_id);
+            if ($sendEmail) {
+                $notification = new Notification();
+                $sender_info = api_get_user_info($user_sender_id);
 
-            // add file attachment additional attributes
-            $attachmentAddedByMail = [];
-            foreach ($attachmentList as $attachment) {
-                $attachmentAddedByMail[] = [
-                    'path' => $attachment['tmp_name'],
-                    'filename' => $attachment['name'],
-                ];
-            }
-
-            if (empty($group_id)) {
-                $type = Notification::NOTIFICATION_TYPE_MESSAGE;
-                if ($directMessage) {
-                    $type = Notification::NOTIFICATION_TYPE_DIRECT_MESSAGE;
+                // add file attachment additional attributes
+                $attachmentAddedByMail = [];
+                foreach ($attachmentList as $attachment) {
+                    $attachmentAddedByMail[] = [
+                        'path' => $attachment['tmp_name'],
+                        'filename' => $attachment['name'],
+                    ];
                 }
-                $notification->saveNotification(
-                    $messageId,
-                    $type,
-                    [$receiver_user_id],
-                    $subject,
-                    $content,
-                    $sender_info,
-                    $attachmentAddedByMail,
-                    $smsParameters,
-                    $forceTitleWhenSendingEmail
-                );
-            } else {
-                $usergroup = new UserGroup();
-                $group_info = $usergroup->get($group_id);
-                $group_info['topic_id'] = $topic_id;
-                $group_info['msg_id'] = $messageId;
 
-                $user_list = $usergroup->get_users_by_group(
-                    $group_id,
-                    false,
-                    [],
-                    0,
-                    1000
-                );
+                if (empty($group_id)) {
+                    $type = Notification::NOTIFICATION_TYPE_MESSAGE;
+                    if ($directMessage) {
+                        $type = Notification::NOTIFICATION_TYPE_DIRECT_MESSAGE;
+                    }
+                    $notification->saveNotification(
+                        $messageId,
+                        $type,
+                        [$receiver_user_id],
+                        $subject,
+                        $content,
+                        $sender_info,
+                        $attachmentAddedByMail,
+                        $smsParameters,
+                        $forceTitleWhenSendingEmail
+                    );
+                } else {
+                    $usergroup = new UserGroup();
+                    $group_info = $usergroup->get($group_id);
+                    $group_info['topic_id'] = $topic_id;
+                    $group_info['msg_id'] = $messageId;
 
-                // Adding more sense to the message group
-                $subject = sprintf(get_lang('ThereIsANewMessageInTheGroupX'), $group_info['name']);
-                $new_user_list = [];
-                foreach ($user_list as $user_data) {
-                    $new_user_list[] = $user_data['id'];
+                    $user_list = $usergroup->get_users_by_group(
+                        $group_id,
+                        false,
+                        [],
+                        0,
+                        1000
+                    );
+
+                    // Adding more sense to the message group
+                    $subject = sprintf(get_lang('ThereIsANewMessageInTheGroupX'), $group_info['name']);
+                    $new_user_list = [];
+                    foreach ($user_list as $user_data) {
+                        $new_user_list[] = $user_data['id'];
+                    }
+                    $group_info = [
+                        'group_info' => $group_info,
+                        'user_info' => $sender_info,
+                    ];
+                    $notification->saveNotification(
+                        $messageId,
+                        Notification::NOTIFICATION_TYPE_GROUP,
+                        $new_user_list,
+                        $subject,
+                        $content,
+                        $group_info,
+                        $attachmentAddedByMail,
+                        $smsParameters
+                    );
                 }
-                $group_info = [
-                    'group_info' => $group_info,
-                    'user_info' => $sender_info,
-                ];
-                $notification->saveNotification(
-                    $messageId,
-                    Notification::NOTIFICATION_TYPE_GROUP,
-                    $new_user_list,
-                    $subject,
-                    $content,
-                    $group_info,
-                    $attachmentAddedByMail,
-                    $smsParameters
-                );
             }
 
             return $messageId;

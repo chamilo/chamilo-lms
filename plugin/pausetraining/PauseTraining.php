@@ -166,14 +166,10 @@ class PauseTraining extends Plugin
                         continue;
                     }
 
-                    // Check if user wants a notification or not
-                    $notification = $extraFieldValue->get_values_by_handler_and_field_variable($userId, 'allow_notifications');
-                    if ($notification && isset($notification['value']) && 1 === (int) $notification['value']) {
-                        $template->assign('days', $day);
-                        $template->assign('user', $userInfo);
-                        $content = $template->fetch('pausetraining/view/notification_content.tpl');
-                        MessageManager::send_message_simple($userId, $title, $content, $senderId);
-                    }
+                    $template->assign('days', $day);
+                    $template->assign('user', $userInfo);
+                    $content = $template->fetch('pausetraining/view/notification_content.tpl');
+                    MessageManager::send_message_simple($userId, $title, $content, $senderId);
                 }
             }
         }

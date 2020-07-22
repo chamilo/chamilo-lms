@@ -63,7 +63,7 @@ foreach ($tables as $table) {
         $sql = "INSERT INTO $tableArchive SELECT * FROM $table WHERE $pk >= $min AND $pk < $max";
         file_put_contents(
             $logFile,
-            "Moving rows $min to ".($max-1)." to $tableArchive. Starting at ".date('Y-m-d H:i:s')."\n",
+            "Moving rows $min to ".($max - 1)." to $tableArchive. Starting at ".date('Y-m-d H:i:s')."\n",
             FILE_APPEND
         );
         $res = Database::query($sql);
@@ -112,13 +112,14 @@ file_put_contents(
 );
 
 /**
- * Returns the name of the primary key column for the given table
+ * Returns the name of the primary key column for the given table.
  *
  * @param string $table The name of the table
  *
  * @return string The column name of the primary key
  */
-function getPKFromTable($table) {
+function getPKFromTable($table)
+{
     $sql = "SELECT k.column_name
         FROM information_schema.table_constraints t
         JOIN information_schema.key_column_usage k
@@ -129,20 +130,23 @@ function getPKFromTable($table) {
     $res = Database::query($sql);
     if (Database::num_rows($res) > 0) {
         $row = Database::fetch_assoc($res);
+
         return $row['column_name'];
     }
+
     return '';
 }
 
 /**
- * Check a table exists and create it if it doesn't
+ * Check a table exists and create it if it doesn't.
  *
- * @param string $table The table to check/create
+ * @param string $table         The table to check/create
  * @param string $templateTable The model from which this table should be created
  *
  * @return bool True if it exists *or* it could be created, false if there was an error at create time
  */
-function checkAndCreateTable($table, $templateTable) {
+function checkAndCreateTable($table, $templateTable)
+{
     $sqlCheck = "SHOW TABLES LIKE '$table'";
     $res = Database::query($sqlCheck);
     if (Database::num_rows($res) > 0) {
@@ -151,6 +155,7 @@ function checkAndCreateTable($table, $templateTable) {
     } else {
         $sqlCreate = "CREATE TABLE $table like $templateTable";
         $res = Database::query($sqlCreate);
+
         return $res;
     }
 }

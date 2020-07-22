@@ -1698,7 +1698,7 @@ function display_configuration_parameter(
                 [
                     'class' => 'form-control',
                     'size' => FORM_FIELD_DISPLAY_LENGTH,
-                    'maxlength' => MAX_FORM_FIELD_LENGTH
+                    'maxlength' => MAX_FORM_FIELD_LENGTH,
                 ]
             )
             .$eyeForPassword."</div>";

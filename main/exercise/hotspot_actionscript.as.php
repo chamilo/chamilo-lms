@@ -128,7 +128,7 @@ $attemptInfo = Database::select(
                 $course_id,
                 api_get_user_id(),
                 'incomplete',
-            ]
+            ],
         ],
         'order' => 'exe_id DESC',
         'limit' => 1,

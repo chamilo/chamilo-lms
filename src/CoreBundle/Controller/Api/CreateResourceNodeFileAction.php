@@ -18,7 +18,7 @@ class CreateResourceNodeFileAction
         $document = new CDocument();
 
         $contentData = $request->getContent();
-        error_log('__invoke');
+        error_log('CreateResourceNodeFileAction __invoke');
 
         if (!empty($contentData)) {
             $contentData = json_decode($contentData, true);

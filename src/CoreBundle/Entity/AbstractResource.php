@@ -84,6 +84,7 @@ abstract class AbstractResource
                 'id' => $link->getId(),
                 'session' => $link->getSession(),
                 'course' => $link->getCourse(),
+                'visibility' => $link->getVisibility(),
                 'visibilityName' => $link->getVisibilityName(),
                 'group' => $link->getGroup(),
                 'userGroup' => $link->getUserGroup(),

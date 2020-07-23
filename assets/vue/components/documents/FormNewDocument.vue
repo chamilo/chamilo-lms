@@ -39,15 +39,11 @@
                       callback('movie.mp4', {source2: 'alt.ogg', poster: 'image.jpg'});
                     }
                   },*/
-                  images_upload_handler: (blobInfo, success, failure) => {
-                    /*console.log(blobInfo);
-                    console.log(success);
-                    console.log(failure);*/
-
+                  /*images_upload_handler: (blobInfo, success, failure) => {
                     const img = 'data:image/jpeg;base64,' + blobInfo.base64();
                     //console.log(img);
                     success(img);
-                  },
+                  },*/
                    //menubar: true,
                    plugins: [
                      'fullpage advlist autolink lists link image charmap print preview anchor',

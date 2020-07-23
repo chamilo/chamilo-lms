@@ -247,17 +247,7 @@ class ResourceListener
             }
         }
 
-        /*
-        error_log($fieldIdentifier);
-        $em = $event->getEntityManager();
-        if ($event->hasChangedField($fieldIdentifier)) {
-            error_log('changed');
-            $oldValue = $event->getOldValue($fieldIdentifier);
-            error_log($oldValue);
-            $newValue = $event->getNewValue($fieldIdentifier);
-            error_log($newValue);
-            //$this->updateResourceName($resource, $newValue, $em);
-        }*/
+
     }
 
     public function postUpdate(AbstractResource $resource, LifecycleEventArgs $event)

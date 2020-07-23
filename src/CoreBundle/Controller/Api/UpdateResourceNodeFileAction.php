@@ -4,6 +4,7 @@
 
 namespace Chamilo\CoreBundle\Controller\Api;
 
+use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -15,26 +16,24 @@ class UpdateResourceNodeFileAction
     {
         $fileType = $document->getFileType();
         $contentData = $request->getContent();
-        error_log('__invoke');
+        error_log('UpdateResourceNodeFileAction __invoke');
 
         if (!empty($contentData)) {
+            error_log('contentData');
             $contentData = json_decode($contentData, true);
             $title = $contentData['title'];
             $content = $contentData['contentFile'];
             $comment = $contentData['comment'];
+            $resourceLinkList = $contentData['resourceLinkList'];
         } else {
             $title = $request->get('title');
             $content = $request->request->get('contentFile');
             $comment = $request->request->get('comment');
         }
-        //$comment = time();
+
         $document->setTitle($title);
         if ('file' === $fileType && !empty($content)) {
             $resourceNode = $document->getResourceNode();
-
-            error_log('to update');
-            //$document->setUploadFile($file);
-            //$repo->updateResourceFileContent($document, $content);
             if ($resourceNode->hasResourceFile()) {
                 $resourceNode->setContent($content);
                 $resourceNode->getResourceFile()->setSize(strlen($content));
@@ -42,6 +41,22 @@ class UpdateResourceNodeFileAction
             $resourceNode->setUpdatedAt(new \DateTime());
             $resourceNode->getResourceFile()->setUpdatedAt(new \DateTime());
             $document->setResourceNode($resourceNode);
+        }
+
+        if (!empty($resourceLinkList)) {
+            foreach ($resourceLinkList as $linkArray) {
+                $linkId = $linkArray['id'];
+                /** @var ResourceLink $link */
+                $link = $document->getResourceNode()->getResourceLinks()->filter(
+                    function ($link) use ($linkId) {
+                        return $link->getId() === $linkId;
+                    }
+                )->first();
+
+                if ($link !== null) {
+                    $link->setVisibility((int) $linkArray['visibility']);
+                }
+            }
         }
 
         /*if ($request->request->has('resourceLinkList')) {

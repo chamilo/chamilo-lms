@@ -14,12 +14,12 @@ export default function(id, options = {}) {
     if (null === options.headers.get('Accept'))
         options.headers.set('Accept', MIME_TYPE);
 
-    if (
+    /*if (
       'undefined' !== options.body &&
       !(options.body instanceof FormData) &&
       null === options.headers.get('Content-Type')
     )
-      options.headers.set('Content-Type', MIME_TYPE);
+      options.headers.set('Content-Type', MIME_TYPE);*/
 
     if (options.params) {
         const params = normalize(options.params);
@@ -36,8 +36,8 @@ export default function(id, options = {}) {
     const entryPoint = ENTRYPOINT + (ENTRYPOINT.endsWith('/') ? '' : '/');
 
     if ('POST' === options.method) {
-        let formData = new FormData();
         if (options.body) {
+            let formData = new FormData();
             Object.keys(options.body).forEach(function (key) {
                 // key: the name of the object key
                 // index: the ordinal position of the key within the object

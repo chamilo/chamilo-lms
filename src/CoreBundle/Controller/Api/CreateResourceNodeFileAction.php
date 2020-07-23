@@ -14,9 +14,23 @@ class CreateResourceNodeFileAction
 {
     public function __invoke(Request $request, CDocumentRepository $repo): CDocument
     {
+        error_log('CreateResourceNodeFileAction __invoke');
         $document = new CDocument();
-        $title = $request->get('title');
-        $comment = $request->get('comment');
+
+        $contentData = $request->getContent();
+        error_log('__invoke');
+
+        if (!empty($contentData)) {
+            $contentData = json_decode($contentData, true);
+            error_log(print_r($contentData, 1));
+            $title = $contentData['title'];
+            $content = $contentData['contentFile'];
+            $comment = $contentData['comment'];
+        } else {
+            $title = $request->get('title');
+            $content = $request->request->get('contentFile');
+            $comment = $request->request->get('comment');
+        }
 
         if ($request->request->has('filetype')) {
             $document->setFiletype($request->get('filetype'));

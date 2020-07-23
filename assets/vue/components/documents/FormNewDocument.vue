@@ -12,7 +12,7 @@
                   @blur="$v.item.title.$touch()"
           />
           <editor
-                  v-if="item.resourceNode && item.resourceNode.fileEditableText"
+                  v-if="item.resourceNode && item.resourceNode.fileEditableText || item.newDocument"
                   :error-messages="contentFileErrors"
                   required
                   v-model="item.contentFile"
@@ -123,15 +123,6 @@ export default {
 
       return errors;
     },
-  resourceNodeErrors() {
-    const errors = [];
-
-    if (!this.$v.item.resourceNode.$dirty) return errors;
-    has(this.violations, 'resourceNode') && errors.push(this.violations.resourceNode);
-    !this.$v.item.resourceNode.required && errors.push(this.$t('resourceNode is required'));
-
-    return errors;
-  },
     violations() {
       return this.errors || {};
     }
@@ -184,7 +175,6 @@ export default {
       parentResourceNodeId: {
       },
       resourceNode:{
-        required,
       }
     }
   }

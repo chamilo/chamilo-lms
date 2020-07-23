@@ -33,6 +33,7 @@ export default {
   data() {
     return {
       item: {
+        newDocument: true, // Used in FormNewDocument.vue to show the editor
         filetype: 'file',
         parentResourceNodeId: null,
         resourceLinkList: null,

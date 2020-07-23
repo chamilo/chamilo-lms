@@ -18,7 +18,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import { mapFields } from 'vuex-map-fields';
-import DocumentsForm from '../../components/documents/FormNewDocument.vue';
+import DocumentsForm from '../../components/documents/FormNewDocument';
 import Loading from '../../components/Loading';
 import Toolbar from '../../components/Toolbar';
 import UpdateMixin from '../../mixins/UpdateMixin';

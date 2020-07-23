@@ -120,6 +120,7 @@ class PauseTraining extends Plugin
         rsort($enableDaysList);
 
         $track = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $login = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
         $now = api_get_utc_datetime();
         $usersNotificationPerDay = [];
@@ -129,15 +130,21 @@ class PauseTraining extends Plugin
 
             $sql = "SELECT
                     t.user_id,
-                    MAX(t.logout_course_date) max_date
+                    MAX(t.logout_course_date) max_course_date,
+                    MAX(l.logout_date) max_login_date
                     FROM $track t
                     INNER JOIN $userTable u
                     ON (u.id = t.user_id)
+                    INNER JOIN $login l
+                    ON (u.id = l.login_user_id)
                     WHERE
                         u.status <> ".ANONYMOUS." AND
                         u.active = 1
                     GROUP BY t.user_id
-                    HAVING DATE_SUB('$now', INTERVAL '$day' DAY) > max_date ";
+                    HAVING
+                        DATE_SUB('$now', INTERVAL '$day' DAY) > max_course_date AND
+                        DATE_SUB('$now', INTERVAL '$day' DAY) > max_login_date AND
+                    ";
 
             $rs = Database::query($sql);
             while ($user = Database::fetch_array($rs)) {
@@ -163,9 +170,11 @@ class PauseTraining extends Plugin
                     $template->assign('user', $userInfo);
                     $content = $template->fetch('pausetraining/view/notification_content.tpl');
                     MessageManager::send_message_simple($userId, $title, $content, $senderId);
+                    echo 'Sending message "'.$title.'" to user #'.$userId.' '.$userInfo['complete_name'].PHP_EOL;
                 }
             }
         }
+        exit;
     }
 
     public function install()

@@ -541,27 +541,11 @@ class Container
     }
 
     /**
-     * @param UserManager $manager
-     */
-    public static function setSiteManager($manager)
-    {
-        self::$siteManager = $manager;
-    }
-
-    /**
      * @return \Sonata\UserBundle\Entity\GroupManager
      */
     public static function getGroupManager()
     {
         return self::$container->get('fos_user.group_manager');
-    }
-
-    /**
-     * @return \Symfony\Component\HttpKernel\Debug\TraceableEventDispatcher
-     */
-    public static function getEventDispatcher()
-    {
-        return self::$container->get('event_dispatcher');
     }
 
     /**

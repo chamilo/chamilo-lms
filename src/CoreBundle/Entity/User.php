@@ -1554,9 +1554,6 @@ class User implements UserInterface, EquatableInterface
         return $this->passwordRequestedAt;
     }
 
-    /**
-     * @return bool
-     */
     /*public function isPasswordRequestNonExpired($ttl)
     {
         return $this->getPasswordRequestedAt() instanceof \DateTime &&

@@ -37,6 +37,15 @@
             </tr>
           </thead>
           <tbody>
+          <tr>
+            <td><strong>{{ $t('Author') }}</strong></td>
+            <td>
+              {{ item['resourceNode'].creator.username }}
+            </td>
+            <td><strong></strong></td>
+            <td>
+            </td>
+          </tr>
             <tr>
               <td><strong>{{ $t('title') }}</strong></td>
               <td>

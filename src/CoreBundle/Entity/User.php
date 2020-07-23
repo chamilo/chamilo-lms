@@ -50,7 +50,7 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
  *  }
  * )
  * @UniqueEntity("username")
- * @ORM\Entity()
+ * @ORM\Entity
  */
 class User implements UserInterface, EquatableInterface
 {
@@ -66,7 +66,7 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * @var int
-     * @Groups({"user:read"})
+     * @Groups({"user:read", "resource_node:read"})
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -89,14 +89,14 @@ class User implements UserInterface, EquatableInterface
      * @var string
      * @Assert\NotBlank()
      * @ApiProperty(iri="http://schema.org/name")
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"user:read", "user:write", "resource_node:read"})
      * @ORM\Column(name="firstname", type="string", length=64, nullable=true, unique=false)
      */
     protected $firstname;
 
     /**
      * @var string
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"user:read", "user:write", "resource_node:read"})
      * @ORM\Column(name="lastname", type="string", length=64, nullable=true, unique=false)
      */
     protected $lastname;
@@ -124,7 +124,7 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * @var string
-     * @Groups({"user:read", "user:write", "course:read"})
+     * @Groups({"user:read", "user:write", "course:read", "resource_node:read"})
      * @Assert\NotBlank()
      * @ORM\Column(name="username", type="string", length=100, nullable=false, unique=true)
      */

@@ -110,9 +110,7 @@ class ResourceNode
      * @var User the creator of this node
      * @Assert\Valid()
      * @Groups({"resource_node:read", "resource_node:write", "document:write"})
-     * @ORM\ManyToOne(
-     *     targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="resourceNodes"
-     * )
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="resourceNodes")
      * @ORM\JoinColumn(name="creator_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
      */
     protected $creator;
@@ -269,7 +267,7 @@ class ResourceNode
     /**
      * Sets the parent resource.
      */
-    public function setParent(self $parent = null): self
+    public function setParent(ResourceNode $parent = null): self
     {
         $this->parent = $parent;
 

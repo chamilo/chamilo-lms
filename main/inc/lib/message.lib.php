@@ -505,11 +505,6 @@ class MessageManager
                     'disable_emails'
                 );
 
-                // User doesn't want email but chamilo inbox still available.
-                if (empty($disableEmails)) {
-                    $sendEmail = false;
-                }
-
                 // User doesn't want email notifications but chamilo inbox still available.
                 if (!empty($disableEmails) &&
                     isset($disableEmails['value']) && 1 === (int) $disableEmails['value']

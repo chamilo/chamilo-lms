@@ -143,7 +143,7 @@ class PauseTraining extends Plugin
                     GROUP BY t.user_id
                     HAVING
                         DATE_SUB('$now', INTERVAL '$day' DAY) > max_course_date AND
-                        DATE_SUB('$now', INTERVAL '$day' DAY) > max_login_date AND
+                        DATE_SUB('$now', INTERVAL '$day' DAY) > max_login_date
                     ";
 
             $rs = Database::query($sql);

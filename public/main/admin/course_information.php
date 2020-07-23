@@ -1,5 +1,7 @@
 <?php
+
 /* For licensing terms, see /license.txt */
+
 /**
  * This script gives information about a course.
  *
@@ -127,13 +129,13 @@ $table_user = Database::get_main_table(TABLE_MAIN_USER);
 $sql = "SELECT *, cu.status as course_status
         FROM $table_course_user cu, $table_user u";
 if (api_is_multiple_url_enabled()) {
-    $sql .= ' INNER JOIN '.Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER).' url_rel_user
+    $sql .= " INNER JOIN ".Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER)." url_rel_user
         ON 
-            u.user_id = url_rel_user.user_id AND 
-            url_rel_user.access_url_id = '.api_get_current_access_url_id();
+            u.id = url_rel_user.user_id AND
+            url_rel_user.access_url_id = ".api_get_current_access_url_id();
 }
 $sql .= " WHERE
-            cu.user_id = u.user_id AND
+            cu.user_id = u.id AND
             cu.c_id = '".$courseId."' AND
             cu.relation_type <> ".COURSE_RELATION_TYPE_RRHH;
 $res = Database::query($sql);

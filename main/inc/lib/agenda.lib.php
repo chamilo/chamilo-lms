@@ -246,7 +246,7 @@ class Agenda
     ) {
         $start = api_get_utc_datetime($start);
         $end = api_get_utc_datetime($end);
-        $allDay = isset($allDay) && ($allDay === 'true' or $allDay == 1) ? 1 : 0;
+        $allDay = isset($allDay) && ($allDay === 'true' || $allDay == 1) ? 1 : 0;
         $id = null;
 
         switch ($this->type) {

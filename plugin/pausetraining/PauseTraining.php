@@ -119,7 +119,7 @@ class PauseTraining extends Plugin
         $enableDaysList = explode(',', $enableDays);
         rsort($enableDaysList);
 
-        $loginTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $track = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
         $now = api_get_utc_datetime();
         $usersNotificationPerDay = [];
@@ -128,15 +128,15 @@ class PauseTraining extends Plugin
             $day = (int) $day;
 
             $sql = "SELECT
-                    stats_login.user_id,
-                    MAX(stats_login.login_course_date) max_date
-                    FROM $loginTable stats_login
+                    t.user_id,
+                    MAX(t.logout_course_date) max_date
+                    FROM $track t
                     INNER JOIN $userTable u
-                    ON (u.id = stats_login.user_id)
+                    ON (u.id = t.user_id)
                     WHERE
                         u.status <> ".ANONYMOUS." AND
                         u.active = 1
-                    GROUP BY stats_login.user_id
+                    GROUP BY t.user_id
                     HAVING DATE_SUB('$now', INTERVAL '$day' DAY) > max_date ";
 
             $rs = Database::query($sql);

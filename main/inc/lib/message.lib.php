@@ -539,7 +539,7 @@ class MessageManager
                         ) {
                             $now = time();
                             $start = api_strtotime($startDate['value']);
-                            $end = api_strtotime($startDate['value']);
+                            $end = api_strtotime($endDate['value']);
 
                             if ($now > $start && $now < $end) {
                                 $sendEmail = false;

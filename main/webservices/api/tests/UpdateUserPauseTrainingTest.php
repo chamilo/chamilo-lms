@@ -27,7 +27,7 @@ class UpdateUserPauseTrainingTest extends V2TestCase
             'pause_formation' => 0,
             'start_pause_date' => '2020-06-30 10:00',
             'end_pause_date' => '2020-06-30 11:00',
-            'allow_notifications' => 0,
+            'disable_emails' => 1,
         ];
         $userId = $this->integer($params);
 

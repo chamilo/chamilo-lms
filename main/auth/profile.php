@@ -348,7 +348,7 @@ if ($showPassword &&
 $form->addHtml($extraLink);
 
 $extraField = new ExtraField('user');
-$return = $extraField->addElements($form, api_get_user_id());
+$return = $extraField->addElements($form, api_get_user_id(), ['pause_formation', 'start_pause_date', 'end_pause_date']);
 $jquery_ready_content = $return['jquery_ready_content'];
 
 // the $jquery_ready_content variable collects all functions that

@@ -36,7 +36,7 @@ class PauseTraining extends Plugin
             'pause_formation',
             'start_pause_date',
             'end_pause_date',
-            'allow_notifications',
+            'disable_emails',
         ];
 
         $valuesToUpdate = [
@@ -61,12 +61,12 @@ class PauseTraining extends Plugin
             $valuesToUpdate['extra_pause_formation']['extra_pause_formation'] = $pause;
         }
 
-        $notification = (int) $valuesToUpdate['extra_allow_notifications'];
+        $notification = (int) $valuesToUpdate['extra_disable_emails'];
         if (empty($notification)) {
-            $valuesToUpdate['extra_allow_notifications'] = 0;
+            $valuesToUpdate['extra_disable_emails'] = 0;
         } else {
-            $valuesToUpdate['extra_allow_notifications'] = [];
-            $valuesToUpdate['extra_allow_notifications']['extra_allow_notifications'] = $notification;
+            $valuesToUpdate['extra_disable_emails'] = [];
+            $valuesToUpdate['extra_disable_emails']['extra_disable_emails'] = $notification;
         }
 
         $check = DateTime::createFromFormat('Y-m-d H:i', $valuesToUpdate['extra_start_pause_date']);
@@ -153,7 +153,6 @@ class PauseTraining extends Plugin
 
         if (!empty($usersNotificationPerDay)) {
             ksort($usersNotificationPerDay);
-            $extraFieldValue = new ExtraFieldValue('user');
             foreach ($usersNotificationPerDay as $day => $userList) {
                 $template = new Template();
                 $title = sprintf($this->get_lang('InactivityXDays'), $day);
@@ -193,9 +192,9 @@ class PauseTraining extends Plugin
         );
 
         UserManager::create_extra_field(
-            'allow_notifications',
+            'disable_emails',
             ExtraField::FIELD_TYPE_CHECKBOX,
-            $this->get_lang('AllowEmailNotification'),
+            $this->get_lang('DisableEmails'),
             ''
         );
     }

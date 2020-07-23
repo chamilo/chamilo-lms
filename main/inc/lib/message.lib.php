@@ -500,26 +500,29 @@ class MessageManager
 
             if ($allowPauseFormation) {
                 $extraFieldValue = new ExtraFieldValue('user');
-                $allowEmailNotifications = $extraFieldValue->get_values_by_handler_and_field_variable(
+                $disableEmails = $extraFieldValue->get_values_by_handler_and_field_variable(
                     $receiverUserId,
-                    'allow_notifications'
+                    'disable_emails'
                 );
 
-                // User doesn't want email notifications but chamilo inbox still available (Option was not set)
-                if (empty($allowEmailNotifications)) {
+                // User doesn't want email but chamilo inbox still available.
+                if (empty($disableEmails)) {
                     $sendEmail = false;
                 }
 
-                // User doesn't want email notifications but chamilo inbox still available. (Option was set to "No")
-                if (!empty($allowEmailNotifications) &&
-                    isset($allowEmailNotifications['value']) && 0 === (int) $allowEmailNotifications['value']
+                // User doesn't want email notifications but chamilo inbox still available.
+                if (!empty($disableEmails) &&
+                    isset($disableEmails['value']) && 1 === (int) $disableEmails['value']
                 ) {
                     $sendEmail = false;
                 }
 
                 if ($sendEmail) {
                     // Check if user pause his formation.
-                    $pause = $extraFieldValue->get_values_by_handler_and_field_variable($receiverUserId, 'pause_formation');
+                    $pause = $extraFieldValue->get_values_by_handler_and_field_variable(
+                        $receiverUserId,
+                        'pause_formation'
+                    );
                     if (!empty($pause) && isset($pause['value']) && 1 === (int) $pause['value']) {
                         $startDate = $extraFieldValue->get_values_by_handler_and_field_variable(
                             $receiverUserInfo['user_id'],

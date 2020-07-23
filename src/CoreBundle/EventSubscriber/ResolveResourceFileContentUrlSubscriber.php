@@ -53,9 +53,8 @@ class ResolveResourceFileContentUrlSubscriber implements EventSubscriberInterfac
         if (!is_iterable($mediaObjects)) {
             $mediaObjects = [$mediaObjects];
         }
-        //error_log($request->get('getFile'));
+
         $getFile = $request->get('getFile');
-        //$getFile = true;
         foreach ($mediaObjects as $mediaObject) {
             if (!$mediaObject instanceof AbstractResource) {
                 continue;

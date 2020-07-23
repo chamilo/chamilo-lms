@@ -10,8 +10,8 @@ use Chamilo\CoreBundle\Repository\CourseRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -25,24 +25,16 @@ class SessionVoter extends Voter
 
     private $entityManager;
     private $courseManager;
-    private $authorizationChecker;
+    private $security;
 
     public function __construct(
         EntityManagerInterface $entityManager,
         CourseRepository $courseManager,
-        AuthorizationCheckerInterface $authorizationChecker
+        Security $security
     ) {
         $this->entityManager = $entityManager;
         $this->courseManager = $courseManager;
-        $this->authorizationChecker = $authorizationChecker;
-    }
-
-    /**
-     * @return AuthorizationCheckerInterface
-     */
-    public function getAuthorizationChecker()
-    {
-        return $this->authorizationChecker;
+        $this->security = $security;
     }
 
     /**
@@ -61,7 +53,7 @@ class SessionVoter extends Voter
         return $this->courseManager;
     }
 
-    public function supports($attribute, $subject): bool
+    public function supports(string $attribute, $subject): bool
     {
         $options = [
             self::VIEW,
@@ -77,7 +69,7 @@ class SessionVoter extends Voter
      *
      * {@inheritdoc}
      */
-    protected function voteOnAttribute($attribute, $session, TokenInterface $token): bool
+    protected function voteOnAttribute(string $attribute, $session, TokenInterface $token): bool
     {
         /** @var User $user */
         $user = $token->getUser();
@@ -87,10 +79,8 @@ class SessionVoter extends Voter
             return false;
         }
 
-        $authChecker = $this->getAuthorizationChecker();
-
         // Admins have access to everything
-        if ($authChecker->isGranted('ROLE_ADMIN')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             return true;
         }
 
@@ -219,9 +209,7 @@ class SessionVoter extends Voter
             return false;
         }
 
-        $authChecker = $this->getAuthorizationChecker();
-
-        if ($authChecker->isGranted('ROLE_ADMIN') && $this->allowed($user, $session)) {
+        if ($this->security->isGranted('ROLE_ADMIN') && $this->allowed($user, $session)) {
             return true;
         }
 
@@ -242,11 +230,10 @@ class SessionVoter extends Voter
             return true;
         }
 
-        $authChecker = $this->getAuthorizationChecker();
         $settingsManager = $this->container->get('chamilo.settings.manager');
         $setting = $settingsManager->getSetting('session.allow_teachers_to_create_sessions');
 
-        if ($authChecker->isGranted('ROLE_TEACHER') && 'true' === $setting) {
+        if ($this->security->isGranted('ROLE_TEACHER') && 'true' === $setting) {
             return true;
         }
 
@@ -255,9 +242,7 @@ class SessionVoter extends Voter
 
     private function allowManageAllSessions(): bool
     {
-        $authChecker = $this->getAuthorizationChecker();
-
-        if ($authChecker->isGranted('ROLE_ADMIN') || $authChecker->isGranted('ROLE_SESSION_MANAGER')) {
+        if ($this->security->isGranted('ROLE_ADMIN') || $this->security->isGranted('ROLE_SESSION_MANAGER')) {
             return true;
         }
 
@@ -269,15 +254,13 @@ class SessionVoter extends Voter
      */
     private function allowed(User $user, Session $session)
     {
-        $authChecker = $this->getAuthorizationChecker();
-
-        if ($authChecker->isGranted('ROLE_ADMIN')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             return true;
         }
 
         $settingsManager = $this->container->get('chamilo.settings.manager');
 
-        if ($authChecker->isGranted('ROLE_SESSION_MANAGER') &&
+        if ($this->security->isGranted('ROLE_SESSION_MANAGER') &&
             'true' !== $settingsManager->getSetting('session.allow_session_admins_to_manage_all_sessions')
         ) {
             if ($session->getSessionAdmin()->getId() !== $user->getId()) {
@@ -285,7 +268,7 @@ class SessionVoter extends Voter
             }
         }
 
-        if ($authChecker->isGranted('ROLE_ADMIN') &&
+        if ($this->security->isGranted('ROLE_ADMIN') &&
             'true' === $settingsManager->getSetting('session.allow_teachers_to_create_sessions')
         ) {
             if ($session->getGeneralCoach()->getId() !== $user->getId()) {

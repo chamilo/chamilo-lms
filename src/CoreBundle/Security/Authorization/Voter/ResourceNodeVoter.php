@@ -16,6 +16,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Acl\Permission\MaskBuilder;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -34,14 +35,16 @@ class ResourceNodeVoter extends Voter
     public const ROLE_CURRENT_SESSION_COURSE_TEACHER = 'ROLE_CURRENT_SESSION_COURSE_TEACHER';
     public const ROLE_CURRENT_SESSION_COURSE_STUDENT = 'ROLE_CURRENT_SESSION_COURSE_STUDENT';
 
-    protected $container;
+    private $container;
+    private $security;
 
     /**
      * Constructor.
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(ContainerInterface $container, Security $security)
     {
         $this->container = $container;
+        $this->security = $security;
     }
 
     public static function getReaderMask(): int
@@ -65,7 +68,7 @@ class ResourceNodeVoter extends Voter
         return $builder->get();
     }
 
-    protected function supports($attribute, $subject): bool
+    protected function supports(string $attribute, $subject): bool
     {
         $options = [
             self::VIEW,
@@ -89,10 +92,9 @@ class ResourceNodeVoter extends Voter
     }
 
     /**
-     * @param string       $attribute
      * @param ResourceNode $resourceNode
      */
-    protected function voteOnAttribute($attribute, $resourceNode, TokenInterface $token): bool
+    protected function voteOnAttribute(string $attribute, $resourceNode, TokenInterface $token): bool
     {
         $user = $token->getUser();
 
@@ -105,25 +107,23 @@ class ResourceNodeVoter extends Voter
             return false;
         }
 
-        $authChecker = $this->container->get('security.authorization_checker');
-
-        // Checking admin roles.
-        if ($authChecker->isGranted('ROLE_ADMIN')) {
-            return true;
-        }
-
-        // Check if I'm the owner.
-        $creator = $resourceNode->getCreator();
-
         // Illustrations are always visible.
         if ('illustrations' === $resourceNode->getResourceType()->getName()) {
             return true;
         }
 
-        // Course access are protected using the CourseVoter.
+        // Course access are protected using the CourseVoter not by ResourceNodeVoter.
         if ('courses' === $resourceNode->getResourceType()->getName()) {
             return true;
         }
+
+        // Checking admin role.
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            return true;
+        }
+
+        // Check if I'm the owner.
+        $creator = $resourceNode->getCreator();
 
         if ($creator instanceof UserInterface &&
             $user->getUsername() === $creator->getUsername()) {
@@ -141,7 +141,6 @@ class ResourceNodeVoter extends Voter
         $linkFound = false;
         $courseManager = $this->container->get('Chamilo\CoreBundle\Repository\CourseRepository');
 
-        /** @var ResourceLink $link */
         foreach ($links as $link) {
             // Block access if visibility is deleted.
             if (ResourceLink::VISIBILITY_DELETED === $link->getVisibility()) {
@@ -163,6 +162,11 @@ class ResourceNodeVoter extends Voter
             $linkCourse = $link->getCourse();
             $linkSession = $link->getSession();
             //$linkUserGroup = $link->getUserGroup();
+
+            // Course found, but courseId not set.
+            if ($linkCourse instanceof Course && empty($courseId)) {
+                continue;
+            }
 
             // @todo Check if resource was sent to a usergroup
             // @todo Check if resource was sent to a group inside a course

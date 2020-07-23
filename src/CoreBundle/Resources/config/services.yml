@@ -51,47 +51,9 @@ services:
 #        tags:
 #            - { name: twig.extension }
 
-    # Chamilo custom password encoder (depends on the password_encryption param)
-#    chamilo_user.security.encoder:
-#        class: Chamilo\CoreBundle\Security\Encoder
-#        bind:
-#            $passwordEncrypt: '%password_encryption%'
-
     Chamilo\CoreBundle\Security\Encoder:
         arguments:
             - '%password_encryption%'
-
-    # Course voter checks if a user has permissions to do actions in a course
-    chamilo_core.security.authorization.voter.course_voter:
-        class: Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter
-        arguments:
-            - '@doctrine.orm.entity_manager'
-            - '@Chamilo\CoreBundle\Repository\CourseRepository'
-            - '@security.authorization_checker'
-        public: false
-        tags:
-            - {name: security.voter}
-
-    # group voter is inside CourseBundle
-
-    # Session voter checks if a user has permissions to do actions in a session
-    chamilo_core.security.authorization.voter.session_voter:
-        class: Chamilo\CoreBundle\Security\Authorization\Voter\SessionVoter
-        arguments:
-            - '@doctrine.orm.entity_manager'
-            - '@Chamilo\CoreBundle\Repository\CourseRepository'
-            - '@security.authorization_checker'
-        public: false
-        tags:
-            - {name: security.voter}
-
-    # Resrouce voter checks if a user has permissions to do actions in a resource
-    chamilo_core.security.authorization.voter.resource_node_voter:
-        class: Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter
-        public: false
-        arguments: ['@service_container']
-        tags:
-            - {name: security.voter}
 
     # User image naming
 #    chamilo_core.naming.user_image:

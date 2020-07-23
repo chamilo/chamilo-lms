@@ -10,8 +10,8 @@ use Chamilo\CoreBundle\Repository\CourseRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -25,24 +25,16 @@ class CourseVoter extends Voter
 
     private $entityManager;
     private $courseManager;
-    private $authorizationChecker;
+    private $security;
 
     public function __construct(
         EntityManagerInterface $entityManager,
         CourseRepository $courseManager,
-        AuthorizationCheckerInterface $authorizationChecker
+        Security $security
     ) {
         $this->entityManager = $entityManager;
         $this->courseManager = $courseManager;
-        $this->authorizationChecker = $authorizationChecker;
-    }
-
-    /**
-     * @return AuthorizationCheckerInterface
-     */
-    public function getAuthorizationChecker()
-    {
-        return $this->authorizationChecker;
+        $this->security = $security;
     }
 
     /**
@@ -61,7 +53,7 @@ class CourseVoter extends Voter
         return $this->courseManager;
     }
 
-    protected function supports($attribute, $subject): bool
+    protected function supports(string $attribute, $subject): bool
     {
         $options = [
             self::VIEW,
@@ -82,7 +74,7 @@ class CourseVoter extends Voter
         return true;
     }
 
-    protected function voteOnAttribute($attribute, $course, TokenInterface $token): bool
+    protected function voteOnAttribute(string $attribute, $course, TokenInterface $token): bool
     {
         /** @var User $user */
         $user = $token->getUser();
@@ -91,10 +83,8 @@ class CourseVoter extends Voter
             return false;
         }*/
 
-        $authChecker = $this->getAuthorizationChecker();
-
         // Admins have access to everything
-        if ($authChecker->isGranted('ROLE_ADMIN')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             return true;
         }
 

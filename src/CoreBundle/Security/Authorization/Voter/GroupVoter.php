@@ -9,8 +9,8 @@ use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\CourseBundle\Repository\CGroupInfoRepository;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -25,26 +25,18 @@ class GroupVoter extends Voter
     private $entityManager;
     private $courseManager;
     private $groupManager;
-    private $authorizationChecker;
+    private $security;
 
     public function __construct(
         EntityManager $entityManager,
         CourseRepository $courseManager,
         CGroupInfoRepository $groupManager,
-        AuthorizationCheckerInterface $authorizationChecker
+        Security $security
     ) {
         $this->entityManager = $entityManager;
         $this->courseManager = $courseManager;
         $this->groupManager = $groupManager;
-        $this->authorizationChecker = $authorizationChecker;
-    }
-
-    /**
-     * @return AuthorizationCheckerInterface
-     */
-    public function getAuthorizationChecker()
-    {
-        return $this->authorizationChecker;
+        $this->security = $security;
     }
 
     /**
@@ -85,7 +77,7 @@ class GroupVoter extends Voter
         return $this;
     }
 
-    protected function supports($attribute, $subject): bool
+    protected function supports(string $attribute, $subject): bool
     {
         $options = [
             self::VIEW,
@@ -106,7 +98,7 @@ class GroupVoter extends Voter
         return true;
     }
 
-    protected function voteOnAttribute($attribute, $group, TokenInterface $token): bool
+    protected function voteOnAttribute(string $attribute, $group, TokenInterface $token): bool
     {
         $user = $token->getUser();
 
@@ -119,10 +111,8 @@ class GroupVoter extends Voter
             return false;
         }
 
-        $authChecker = $this->getAuthorizationChecker();
-
         // Admins have access to everything
-        if ($authChecker->isGranted('ROLE_ADMIN')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             return true;
         }
 

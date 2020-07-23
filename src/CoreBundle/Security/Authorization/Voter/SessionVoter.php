@@ -6,6 +6,7 @@ namespace Chamilo\CoreBundle\Security\Authorization\Voter;
 
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Manager\SettingsManager;
 use Chamilo\CoreBundle\Repository\CourseRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -26,15 +27,18 @@ class SessionVoter extends Voter
     private $entityManager;
     private $courseManager;
     private $security;
+    private $settingsManager;
 
     public function __construct(
         EntityManagerInterface $entityManager,
         CourseRepository $courseManager,
-        Security $security
+        Security $security,
+        SettingsManager $settingsManager
     ) {
         $this->entityManager = $entityManager;
         $this->courseManager = $courseManager;
         $this->security = $security;
+        $this->settingsManager = $settingsManager;
     }
 
     /**
@@ -43,14 +47,6 @@ class SessionVoter extends Voter
     public function getEntityManager()
     {
         return $this->entityManager;
-    }
-
-    /**
-     * @return CourseRepository
-     */
-    public function getCourseManager()
-    {
-        return $this->courseManager;
     }
 
     public function supports(string $attribute, $subject): bool
@@ -230,10 +226,9 @@ class SessionVoter extends Voter
             return true;
         }
 
-        $settingsManager = $this->container->get('chamilo.settings.manager');
-        $setting = $settingsManager->getSetting('session.allow_teachers_to_create_sessions');
+        $setting = $this->settingsManager->getSetting('session.allow_teachers_to_create_sessions');
 
-        if ($this->security->isGranted('ROLE_TEACHER') && 'true' === $setting) {
+        if ('true' === $setting && $this->security->isGranted('ROLE_TEACHER')) {
             return true;
         }
 
@@ -258,10 +253,8 @@ class SessionVoter extends Voter
             return true;
         }
 
-        $settingsManager = $this->container->get('chamilo.settings.manager');
-
         if ($this->security->isGranted('ROLE_SESSION_MANAGER') &&
-            'true' !== $settingsManager->getSetting('session.allow_session_admins_to_manage_all_sessions')
+            'true' !== $this->settingsManager->getSetting('session.allow_session_admins_to_manage_all_sessions')
         ) {
             if ($session->getSessionAdmin()->getId() !== $user->getId()) {
                 return false;
@@ -269,7 +262,7 @@ class SessionVoter extends Voter
         }
 
         if ($this->security->isGranted('ROLE_ADMIN') &&
-            'true' === $settingsManager->getSetting('session.allow_teachers_to_create_sessions')
+            'true' === $this->settingsManager->getSetting('session.allow_teachers_to_create_sessions')
         ) {
             if ($session->getGeneralCoach()->getId() !== $user->getId()) {
                 return false;

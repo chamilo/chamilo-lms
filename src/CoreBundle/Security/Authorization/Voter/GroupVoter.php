@@ -39,44 +39,6 @@ class GroupVoter extends Voter
         $this->security = $security;
     }
 
-    /**
-     * @return EntityManager
-     */
-    public function getEntityManager()
-    {
-        return $this->entityManager;
-    }
-
-    public function getCourseManager(): CourseRepository
-    {
-        return $this->courseManager;
-    }
-
-    /**
-     * @return GroupVoter
-     */
-    public function setCourseManager(CourseRepository $courseManager): self
-    {
-        $this->courseManager = $courseManager;
-
-        return $this;
-    }
-
-    public function getGroupManager(): CGroupInfoRepository
-    {
-        return $this->groupManager;
-    }
-
-    /**
-     * @return GroupVoter
-     */
-    public function setGroupManager(CGroupInfoRepository $groupManager): self
-    {
-        $this->groupManager = $groupManager;
-
-        return $this;
-    }
-
     protected function supports(string $attribute, $subject): bool
     {
         $options = [

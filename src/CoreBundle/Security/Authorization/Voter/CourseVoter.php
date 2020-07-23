@@ -7,7 +7,6 @@ namespace Chamilo\CoreBundle\Security\Authorization\Voter;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\CourseRepository;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -35,22 +34,6 @@ class CourseVoter extends Voter
         $this->entityManager = $entityManager;
         $this->courseManager = $courseManager;
         $this->security = $security;
-    }
-
-    /**
-     * @return EntityManager
-     */
-    public function getEntityManager()
-    {
-        return $this->entityManager;
-    }
-
-    /**
-     * @return CourseRepository
-     */
-    public function getCourseManager()
-    {
-        return $this->courseManager;
     }
 
     protected function supports(string $attribute, $subject): bool

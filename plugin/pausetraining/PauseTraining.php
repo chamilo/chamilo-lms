@@ -36,7 +36,7 @@ class PauseTraining extends Plugin
             'pause_formation',
             'start_pause_date',
             'end_pause_date',
-            'allow_notifications',
+            'disable_emails',
         ];
 
         $valuesToUpdate = [
@@ -61,12 +61,12 @@ class PauseTraining extends Plugin
             $valuesToUpdate['extra_pause_formation']['extra_pause_formation'] = $pause;
         }
 
-        $notification = (int) $valuesToUpdate['extra_allow_notifications'];
+        $notification = (int) $valuesToUpdate['extra_disable_emails'];
         if (empty($notification)) {
-            $valuesToUpdate['extra_allow_notifications'] = 0;
+            $valuesToUpdate['extra_disable_emails'] = 0;
         } else {
-            $valuesToUpdate['extra_allow_notifications'] = [];
-            $valuesToUpdate['extra_allow_notifications']['extra_allow_notifications'] = $notification;
+            $valuesToUpdate['extra_disable_emails'] = [];
+            $valuesToUpdate['extra_disable_emails']['extra_disable_emails'] = $notification;
         }
 
         $check = DateTime::createFromFormat('Y-m-d H:i', $valuesToUpdate['extra_start_pause_date']);
@@ -119,7 +119,8 @@ class PauseTraining extends Plugin
         $enableDaysList = explode(',', $enableDays);
         rsort($enableDaysList);
 
-        $loginTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $track = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $login = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
         $now = api_get_utc_datetime();
         $usersNotificationPerDay = [];
@@ -128,16 +129,22 @@ class PauseTraining extends Plugin
             $day = (int) $day;
 
             $sql = "SELECT
-                    stats_login.user_id,
-                    MAX(stats_login.login_course_date) max_date
-                    FROM $loginTable stats_login
+                    t.user_id,
+                    MAX(t.logout_course_date) max_course_date,
+                    MAX(l.logout_date) max_login_date
+                    FROM $track t
                     INNER JOIN $userTable u
-                    ON (u.id = stats_login.user_id)
+                    ON (u.id = t.user_id)
+                    INNER JOIN $login l
+                    ON (u.id = l.login_user_id)
                     WHERE
                         u.status <> ".ANONYMOUS." AND
                         u.active = 1
-                    GROUP BY stats_login.user_id
-                    HAVING DATE_SUB('$now', INTERVAL '$day' DAY) > max_date ";
+                    GROUP BY t.user_id
+                    HAVING
+                        DATE_SUB('$now', INTERVAL '$day' DAY) > max_course_date AND
+                        DATE_SUB('$now', INTERVAL '$day' DAY) > max_login_date
+                    ";
 
             $rs = Database::query($sql);
             while ($user = Database::fetch_array($rs)) {
@@ -153,7 +160,6 @@ class PauseTraining extends Plugin
 
         if (!empty($usersNotificationPerDay)) {
             ksort($usersNotificationPerDay);
-            $extraFieldValue = new ExtraFieldValue('user');
             foreach ($usersNotificationPerDay as $day => $userList) {
                 $template = new Template();
                 $title = sprintf($this->get_lang('InactivityXDays'), $day);
@@ -164,9 +170,11 @@ class PauseTraining extends Plugin
                     $template->assign('user', $userInfo);
                     $content = $template->fetch('pausetraining/view/notification_content.tpl');
                     MessageManager::send_message_simple($userId, $title, $content, $senderId);
+                    echo 'Sending message "'.$title.'" to user #'.$userId.' '.$userInfo['complete_name'].PHP_EOL;
                 }
             }
         }
+        exit;
     }
 
     public function install()
@@ -193,9 +201,9 @@ class PauseTraining extends Plugin
         );
 
         UserManager::create_extra_field(
-            'allow_notifications',
+            'disable_emails',
             ExtraField::FIELD_TYPE_CHECKBOX,
-            $this->get_lang('AllowEmailNotification'),
+            $this->get_lang('DisableEmails'),
             ''
         );
     }

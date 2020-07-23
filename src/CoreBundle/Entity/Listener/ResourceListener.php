@@ -246,8 +246,6 @@ class ResourceListener
                 //$resourceNode->setResourceFile($uploadedFile);
             }
         }
-
-
     }
 
     public function postUpdate(AbstractResource $resource, LifecycleEventArgs $event)

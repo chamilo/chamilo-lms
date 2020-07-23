@@ -141,10 +141,7 @@ class ResourceComment
         return $this->resourceNode;
     }
 
-    /**
-     * @return ResourceComment
-     */
-    public function setResourceNode($resourceNode)
+    public function setResourceNode($resourceNode): self
     {
         $this->resourceNode = $resourceNode;
 
@@ -156,10 +153,7 @@ class ResourceComment
         return $this->author;
     }
 
-    /**
-     * @return ResourceComment
-     */
-    public function setAuthor(User $author)
+    public function setAuthor(User $author): self
     {
         $this->author = $author;
 
@@ -171,10 +165,7 @@ class ResourceComment
         return $this->parent;
     }
 
-    /**
-     * @return ResourceComment
-     */
-    public function setParent($parent)
+    public function setParent($parent): self
     {
         $this->parent = $parent;
 

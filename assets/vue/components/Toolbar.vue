@@ -28,14 +28,14 @@
         <v-icon left>mdi-content-save</v-icon>
         {{ $t('Submit') }}
       </v-btn>
-      <v-btn
-        v-if="handleReset"
-        color="primary"
-        class="ml-sm-2"
-        @click="resetItem"
-      >
-        {{ $t('Reset') }}
-      </v-btn>
+<!--      <v-btn-->
+<!--        v-if="handleReset"-->
+<!--        color="primary"-->
+<!--        class="ml-sm-2"-->
+<!--        @click="resetItem"-->
+<!--      >-->
+<!--        {{ $t('Reset') }}-->
+<!--      </v-btn>-->
       <v-btn
         v-if="handleDelete"
         color="error"

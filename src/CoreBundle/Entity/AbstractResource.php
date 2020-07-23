@@ -66,6 +66,8 @@ abstract class AbstractResource
     public function setResourceLinkList($links)
     {
         $this->resourceLinkList = $links;
+
+        return $this;
     }
 
     public function getResourceLinkListFromEntity()
@@ -73,7 +75,7 @@ abstract class AbstractResource
         return $this->resourceLinkList;
     }
 
-    public function getResourceLinkList()
+    public function getResourceLinkList(): array
     {
         $resourceNode = $this->getResourceNode();
         $links = $resourceNode->getResourceLinks();
@@ -121,7 +123,7 @@ abstract class AbstractResource
         return $this->uploadFile;
     }
 
-    public function setUploadFile($file)
+    public function setUploadFile($file): self
     {
         $this->uploadFile = $file;
 
@@ -166,10 +168,8 @@ abstract class AbstractResource
 
     /**
      * See ResourceLink to see the visibility constants. Example: ResourceLink::VISIBILITY_DELETED.
-     *
-     * @return int
      */
-    public function getLinkVisibility(Course $course, Session $session = null)
+    public function getLinkVisibility(Course $course, Session $session = null): ?ResourceLink
     {
         return $this->getCourseSessionResourceLink($course, $session)->getVisibility();
     }

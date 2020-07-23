@@ -51,7 +51,7 @@ export default {
             // See ResourceLink entity constants.
             visibilityList: [
                 {value: 2, text: 'Published'},
-                {value: 0, text: 'Invisible'},
+                {value: 0, text: 'Draft'},
             ],
         };
     },

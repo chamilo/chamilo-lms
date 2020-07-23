@@ -101,10 +101,7 @@ class ResourceLink
         $this->visibility = self::VISIBILITY_DRAFT;
     }
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString(): string
     {
         return (string) $this->getId();
     }
@@ -114,10 +111,7 @@ class ResourceLink
         return $this->startVisibilityAt;
     }
 
-    /**
-     * @return ResourceLink
-     */
-    public function setStartVisibilityAt($startVisibilityAt)
+    public function setStartVisibilityAt($startVisibilityAt): self
     {
         $this->startVisibilityAt = $startVisibilityAt;
 
@@ -129,10 +123,7 @@ class ResourceLink
         return $this->endVisibilityAt;
     }
 
-    /**
-     * @return ResourceLink
-     */
-    public function setEndVisibilityAt($endVisibilityAt)
+    public function setEndVisibilityAt($endVisibilityAt): self
     {
         $this->endVisibilityAt = $endVisibilityAt;
 
@@ -226,12 +217,7 @@ class ResourceLink
         return $this->group;
     }
 
-    /**
-     * @param CGroupInfo $group
-     *
-     * @return $this
-     */
-    public function setGroup(CGroupInfo $group = null)
+    public function setGroup(CGroupInfo $group = null): self
     {
         $this->group = $group;
 
@@ -270,38 +256,28 @@ class ResourceLink
 
     /**
      * Get course.
-     *
-     * @return Course
      */
-    public function getCourse()
+    public function getCourse(): ?Course
     {
         return $this->course;
     }
 
     /**
      * Get session.
-     *
-     * @return Session
      */
-    public function getSession()
+    public function getSession(): ?Session
     {
         return $this->session;
     }
 
-    /**
-     * @return $this
-     */
-    public function setResourceNode(ResourceNode $resourceNode)
+    public function setResourceNode(ResourceNode $resourceNode): self
     {
         $this->resourceNode = $resourceNode;
 
         return $this;
     }
 
-    /**
-     * @return ResourceNode
-     */
-    public function getResourceNode()
+    public function getResourceNode(): ResourceNode
     {
         return $this->resourceNode;
     }
@@ -313,7 +289,7 @@ class ResourceLink
 
     public function setVisibility(int $visibility): self
     {
-        if (!in_array($visibility, self::getVisibilityList())) {
+        if (!in_array($visibility, self::getVisibilityList(), true)) {
             throw new \LogicException('The visibility is not valid');
         }
 
@@ -322,26 +298,17 @@ class ResourceLink
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function isPublished()
+    public function isPublished(): bool
     {
         return self::VISIBILITY_PUBLISHED === $this->getVisibility();
     }
 
-    /**
-     * @return bool
-     */
-    public function isPending()
+    public function isPending(): bool
     {
         return self::VISIBILITY_PENDING === $this->getVisibility();
     }
 
-    /**
-     * @return bool
-     */
-    public function isDraft()
+    public function isDraft(): bool
     {
         return self::VISIBILITY_DRAFT === $this->getVisibility();
     }
@@ -356,10 +323,7 @@ class ResourceLink
         ];
     }
 
-    /**
-     * @return string
-     */
-    public function getVisibilityName()
+    public function getVisibilityName(): string
     {
         return array_flip($this->getVisibilityList())[$this->getVisibility()];
     }

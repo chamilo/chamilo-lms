@@ -249,7 +249,7 @@ class ResourceNode
         return $this->creator;
     }
 
-    public function setCreator(User $creator = null)
+    public function setCreator(User $creator = null): self
     {
         $this->creator = $creator;
 
@@ -268,12 +268,8 @@ class ResourceNode
 
     /**
      * Sets the parent resource.
-     *
-     * @param ResourceNode $parent
-     *
-     * @return $this
      */
-    public function setParent(self $parent = null)
+    public function setParent(self $parent = null): self
     {
         $this->parent = $parent;
 
@@ -362,10 +358,7 @@ class ResourceNode
         return $list;
     }
 
-    /**
-     * @return string
-     */
-    public function getPathForDisplayRemoveBase(string $base)
+    public function getPathForDisplayRemoveBase(string $base): string
     {
         $path = str_replace($base, '', $this->path);
 
@@ -389,10 +382,7 @@ class ResourceNode
         return $this;
     }
 
-    /**
-     * @return ResourceNode
-     */
-    public function setSlug(string $slug)
+    public function setSlug(string $slug): self
     {
         if (false !== strpos(self::PATH_SEPARATOR, $slug)) {
             throw new \InvalidArgumentException('Invalid character "'.self::PATH_SEPARATOR.'" in resource name.');
@@ -442,12 +432,7 @@ class ResourceNode
         return $this->resourceType;
     }
 
-    /**
-     * @param ResourceType $resourceType
-     *
-     * @return ResourceNode
-     */
-    public function setResourceType($resourceType)
+    public function setResourceType(ResourceType $resourceType): self
     {
         $this->resourceType = $resourceType;
 

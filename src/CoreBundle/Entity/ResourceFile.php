@@ -261,10 +261,7 @@ class ResourceFile
         return $this->id;
     }
 
-    /**
-     * @return ResourceFile
-     */
-    public function setId($id)
+    public function setId($id): self
     {
         $this->id = $id;
 

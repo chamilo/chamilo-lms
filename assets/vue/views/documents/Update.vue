@@ -11,6 +11,12 @@
       :values="item"
       :errors="violations"
     />
+    <ResourceLinkForm
+            ref="resourceLinkForm"
+            v-if="item"
+            :values="item"
+    />
+
     <Loading :visible="isLoading || deleteLoading" />
   </div>
 </template>
@@ -19,6 +25,7 @@
 import { mapActions, mapGetters } from 'vuex';
 import { mapFields } from 'vuex-map-fields';
 import DocumentsForm from '../../components/documents/Form.vue';
+import ResourceLinkForm from '../../components/documents/ResourceLinkForm';
 import Loading from '../../components/Loading';
 import Toolbar from '../../components/Toolbar';
 import UpdateMixin from '../../mixins/UpdateMixin';
@@ -32,7 +39,8 @@ export default {
   components: {
     Loading,
     Toolbar,
-    DocumentsForm
+    DocumentsForm,
+    ResourceLinkForm
   },
 
   computed: {

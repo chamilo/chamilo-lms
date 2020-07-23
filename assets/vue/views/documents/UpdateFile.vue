@@ -19,31 +19,6 @@
             :values="item"
     />
 
-    <div v-if="item">
-      <div v-if="item['resourceLinkList']">
-        <ul>
-          <li
-                  v-for="link in item['resourceLinkList']"
-          >
-            <div v-if="link['course']">
-              Course: {{ link.course.resourceNode.title }}
-            </div>
-
-            <div v-if="link['session']">
-              Session: {{ link.session.resourceNode.title }}
-            </div>
-
-            <v-select
-                    :items="visibilityList"
-                    v-model="link.visibility"
-                    label="Status"
-                    persistent-hint
-            ></v-select>
-          </li>
-        </ul>
-      </div>
-    </div>
-
     <Loading :visible="isLoading || deleteLoading" />
   </div>
 </template>
@@ -52,6 +27,7 @@
 import { mapActions, mapGetters } from 'vuex';
 import { mapFields } from 'vuex-map-fields';
 import DocumentsForm from '../../components/documents/FormNewDocument';
+import ResourceLinkForm from '../../components/documents/ResourceLinkForm';
 import Loading from '../../components/Loading';
 import Toolbar from '../../components/Toolbar';
 import UpdateMixin from '../../mixins/UpdateMixin';
@@ -65,17 +41,11 @@ export default {
   components: {
     Loading,
     Toolbar,
-    DocumentsForm
-  }
-
-  ,
+    DocumentsForm,
+    ResourceLinkForm
+  },
   data() {
     return {
-      // See ResourceLink entity constants.
-      visibilityList: [
-        {value:2, text: 'Published'},
-        {value:0, text: 'Invisible'},
-      ],
     };
   },
   computed: {

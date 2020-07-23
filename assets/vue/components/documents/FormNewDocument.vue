@@ -45,10 +45,11 @@
                     success(img);
                   },*/
                    //menubar: true,
+                   autosave_ask_before_unload: true,
                    plugins: [
                      'fullpage advlist autolink lists link image charmap print preview anchor',
-                     'searchreplace visualblocks code bbcode fullscreen',
-                     'insertdatetime media table paste code wordcount'
+                     'searchreplace visualblocks code fullscreen',
+                     'insertdatetime media table paste wordcount'
                    ],
                    toolbar: 'undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media template link anchor code codesample | ltr rtl',
                   }

@@ -54,18 +54,19 @@ class SocialManager extends UserManager
     /**
      * Get the kind of relation between contacts.
      *
-     * @param int user id
-     * @param int user friend id
-     * @param string
+     * @param int  $user_id     user id
+     * @param int  $user_friend user friend id
+     * @param bool $includeRH   include the RH relationship
      *
      * @return int
      *
      * @author isaac flores paz
      */
-    public static function get_relation_between_contacts($user_id, $user_friend)
+    public static function get_relation_between_contacts($user_id, $user_friend, $includeRH = false)
     {
         $table = Database::get_main_table(TABLE_MAIN_USER_FRIEND_RELATION_TYPE);
         $userRelUserTable = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
+        if ($includeRH == false) {
         $sql = 'SELECT rt.id as id
                 FROM '.$table.' rt
                 WHERE rt.id = (
@@ -77,13 +78,48 @@ class SocialManager extends UserManager
                         uf.relation_type <> '.USER_RELATION_TYPE_RRHH.'
                     LIMIT 1
                 )';
+        } else {
+            $sql = 'SELECT rt.id as id
+                FROM '.$table.' rt
+                WHERE rt.id = (
+                    SELECT uf.relation_type
+                    FROM '.$userRelUserTable.' uf
+                    WHERE
+                        user_id='.((int) $user_id).' AND
+                        friend_user_id='.((int) $user_friend).'
+                    LIMIT 1
+                )';
+        }
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
             $row = Database::fetch_array($res, 'ASSOC');
 
-            return $row['id'];
+            return (int) $row['id'];
+        } else {
+            if (api_get_configuration_value('social_make_teachers_friend_all')) {
+                $adminsList = UserManager::get_all_administrators();
+                foreach ($adminsList as $admin) {
+                    if (api_get_user_id() == $admin['user_id']) {
+                        return USER_RELATION_TYPE_GOODFRIEND;
+                    }
+                }
+                $targetUserCoursesList = CourseManager::get_courses_list_by_user_id(
+                    $user_id,
+                    true,
+                    false
+                );
+                $currentUserId = api_get_user_id();
+                foreach ($targetUserCoursesList as $course) {
+                    $teachersList = CourseManager::get_teacher_list_from_course_code($course['code']);
+                    foreach ($teachersList as $teacher) {
+                        if ($currentUserId == $teacher['user_id']) {
+                            return USER_RELATION_TYPE_GOODFRIEND;
+                        }
+                    }
+                }
         } else {
             return USER_UNKNOWN;
+            }
         }
     }
 
@@ -904,7 +940,7 @@ class SocialManager extends UserManager
             // My files
             $active = 'myfiles' === $show ? 'active' : null;
 
-            $myFiles = '
+            /*$myFiles = '
                 <li class="myfiles-icon '.$active.'">
                     <a href="'.api_get_path(WEB_CODE_PATH).'social/myfiles.php">
                         '.$filesIcon.' '.get_lang('My files').'
@@ -914,7 +950,7 @@ class SocialManager extends UserManager
             if ('false' === api_get_setting('allow_my_files')) {
                 $myFiles = '';
             }
-            $links .= $myFiles;
+            $links .= $myFiles;*/
             if (api_get_configuration_value('allow_portfolio_tool')) {
                 $links .= '
                     <li class="portoflio-icon '.('portfolio' === $show ? 'active' : '').'">
@@ -2052,7 +2088,6 @@ class SocialManager extends UserManager
         }
 
         $userInfo['is_admin'] = UserManager::is_admin($userId);
-
         $languageId = api_get_language_from_iso($userInfo['language']);
         $languageInfo = api_get_language_info($languageId);
         if ($languageInfo) {

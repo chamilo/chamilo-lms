@@ -1,6 +1,6 @@
 {% extends "@ChamiloCore/Layout/no_layout.html.twig" %}
 
 {% block content %}
-    <div id="app" data-is-authenticated="{{ is_authenticated }}" data-user="{{ user }}"></div>
+    <div id="app" data-is-authenticated="{{ is_authenticated }}" data-user-json="{{ user_json }}"></div>
     {{ encore_entry_script_tags('vue') }}
 {% endblock %}

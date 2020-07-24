@@ -678,7 +678,7 @@ define('TOOL_DRH', 'tool_drh');
 define('TOOL_STUDENT_VIEW', 'toolstudentview');
 define('TOOL_ADMIN_VISIBLE', 'tooladminvisible');
 
-// Search settings
+// Search settings (from main/inc/lib/search/IndexableChunk.class.php )
 // some constants to avoid serialize string keys on serialized data array
 define('SE_COURSE_ID', 0);
 define('SE_TOOL_ID', 1);
@@ -1222,9 +1222,8 @@ function api_get_navigator()
     if (false === strpos($version, '.')) {
         $version = number_format(doubleval($version), 1);
     }
-    $return = ['name' => $navigator, 'version' => $version];
 
-    return $return;
+    return ['name' => $navigator, 'version' => $version];
 }
 
 /**
@@ -1307,7 +1306,7 @@ function _api_format_user($user, $add_password = false, $loadAvatars = true)
 {
     $result = [];
 
-    if (!isset($user['user_id'])) {
+    if (!isset($user['id'])) {
         return [];
     }
 
@@ -1384,7 +1383,7 @@ function _api_format_user($user, $add_password = false, $loadAvatars = true)
         $result[$attribute] = isset($user[$attribute]) ? $user[$attribute] : null;
     }
 
-    $user_id = (int) $user['user_id'];
+    $user_id = (int) $user['id'];
     // Maintain the user_id index for backwards compatibility
     $result['user_id'] = $result['id'] = $user_id;
 
@@ -3762,27 +3761,6 @@ function api_is_allowed($tool, $action, $task_id = 0)
             $task_permissions = get_permissions('task', $task_id);
             /* !!! */$_SESSION['total_permissions'][$_course['code']] = $task_permissions;
         }
-        //print_r($_SESSION['total_permissions']);
-
-        // Getting the permissions of the groups of the user
-        //$groups_of_user = GroupManager::get_group_ids($_course['db_name'], $_user['user_id']);
-
-        //foreach($groups_of_user as $group)
-        //   $this_group_permissions = get_permissions('group', $group);
-
-        // Getting the permissions of the courseroles of the user
-        $user_courserole_permissions = get_roles_permissions('user', $_user['user_id']);
-
-        // Getting the permissions of the platformroles of the user
-        //$user_platformrole_permissions = get_roles_permissions('user', $_user['user_id'], ', platform');
-
-        // Getting the permissions of the roles of the groups of the user
-        //foreach($groups_of_user as $group)
-        //    $this_group_courserole_permissions = get_roles_permissions('group', $group);
-
-        // Getting the permissions of the platformroles of the groups of the user
-        //foreach($groups_of_user as $group)
-        //    $this_group_platformrole_permissions = get_roles_permissions('group', $group, 'platform');
     }
 
     // If the permissions are limited, we have to map the extended ones to the limited ones.
@@ -3820,7 +3798,7 @@ function api_is_allowed($tool, $action, $task_id = 0)
  */
 function api_is_anonymous($user_id = null, $db_check = false)
 {
-    if ($db_check) {
+    /*if ($db_check) {
         if (!isset($user_id)) {
             $user_id = api_get_user_id();
         }
@@ -3830,7 +3808,7 @@ function api_is_anonymous($user_id = null, $db_check = false)
         if (6 == $info['status'] || 0 == $user_id || empty($info)) {
             return true;
         }
-    }
+    }*/
 
     return !Container::getAuthorizationChecker()->isGranted('IS_AUTHENTICATED_FULLY');
 }

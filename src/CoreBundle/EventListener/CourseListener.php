@@ -74,7 +74,6 @@ class CourseListener
                 if ($courseId === $courseFromSession->getId()) {
                     $course = $courseFromSession;
                     $courseInfo = $sessionHandler->get('_course');
-
                     //dump("Course loaded from Session $courseId");
                 }
             }

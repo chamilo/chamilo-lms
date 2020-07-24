@@ -44,6 +44,6 @@ class TwigListener
 
         $this->twig->addGlobal('from_vue', $request->request->get('from_vue') ? 1 : 0);
         $this->twig->addGlobal('is_authenticated', json_encode($isAuth));
-        $this->twig->addGlobal('user', $data ?? json_encode($data));
+        $this->twig->addGlobal('user_json', $data ?? json_encode($data));
     }
 }

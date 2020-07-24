@@ -54,14 +54,6 @@ $social_group_block = SocialManager::getGroupBlock($user_id);
 $friend_html = SocialManager::listMyFriendsBlock($user_id);
 
 // Block Social Sessions
-$social_session_block = null;
-//$user_info = api_get_user_info($user_id);
-//$sessionList = SessionManager::getSessionsFollowedByUser($user_id, $user_info['status']);
-$sessionList = [];
-
-if (count($sessionList) > 0) {
-    $social_session_block = $sessionList;
-}
 
 $wallSocialAddPost = SocialManager::getWallForm(api_get_self());
 $socialAutoExtendLink = SocialManager::getAutoExtendLink($user_id, $countPost);
@@ -100,6 +92,8 @@ $tpl->assign('social_friend_block', $friend_html);
 $tpl->assign('social_search_block', $social_search_block);
 $tpl->assign('social_skill_block', SocialManager::getSkillBlock($user_id, 'vertical'));
 $tpl->assign('social_group_block', $social_group_block);
-$tpl->assign('session_list', $social_session_block);
+$tpl->assign('social_right_content', '');
+
+$tpl->assign('session_list', null);
 $social_layout = $tpl->get_template('social/home.tpl');
 $tpl->display($social_layout);

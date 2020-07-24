@@ -21,7 +21,7 @@
 </div>
 
 <script>
-$(document).on('ready', function() {
+$(function() {
     var $sendInvitationModal = $('#send-invitation-modal');
     var sendToUser = 0;
 

@@ -3909,7 +3909,6 @@ class SessionManager
         if ($getCount) {
             $row = Database::fetch_array($result);
             if ($row) {
-
                 return (int) $row['count'];
             }
 

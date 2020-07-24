@@ -69,7 +69,7 @@ if ($id > 0) {
     if (!file_exists('cache-h5p/launch/img/dialogcard.jpg')) {
         $installH5P = false;
     }
-    if (!file_exists( 'cache-h5p/launch/images/dialogcard.jpg')) {
+    if (!file_exists('cache-h5p/launch/images/dialogcard.jpg')) {
         $installH5P = false;
     }
     if (!file_exists($h5pSource)) {
@@ -77,7 +77,7 @@ if ($id > 0) {
     } else {
         copyr($h5pSource, $h5pDestination);
     }
-   
+
     $contentSource = 'cache-h5p/launch/'.$fieldId.'/content/content.json';
     $contentFlx = file_get_contents($contentSource);
 
@@ -285,4 +285,3 @@ function getSourceCards($termData, $nodeType)
 
     return $baseFlx;
 }
-

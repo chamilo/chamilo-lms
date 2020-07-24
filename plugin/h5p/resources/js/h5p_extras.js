@@ -62,10 +62,12 @@ function insertExtrasObjectsH5p(){
     if($(".cke_dialog_background_cover").length==0){
         $("body").append('<div tabindex="-1" style="position:fixed;z-index:10001;top:0px;left:0px;right:0px;bottom:0px;background-color:black;opacity:0.5;display:none;" class="cke_dialog_background_cover"></div>');
     }
-
+    
     if($("#extrasobjectH5p").length==0){
         $("body").append('<div id="extrasobjectH5p" >'+inExtrasObjectsH5p()+'</div>');
         showEditH5pLoad();
+    }else{
+        loadDataH5Pbase();
     }
 
 }

@@ -64,13 +64,24 @@ if ($id > 0) {
     $h5pDestination = 'cache-h5p/launch/'.$fieldId;
 
     //mkdir($dest_h5p);
+    $installH5P = true;
 
-    copyr($h5pSource, $h5pDestination);
-
+    if (!file_exists('cache-h5p/launch/img/dialogcard.jpg')) {
+        $installH5P = false;
+    }
+    if (!file_exists( 'cache-h5p/launch/images/dialogcard.jpg')) {
+        $installH5P = false;
+    }
+    if (!file_exists($h5pSource)) {
+        $installH5P = false;
+    } else {
+        copyr($h5pSource, $h5pDestination);
+    }
+   
     $contentSource = 'cache-h5p/launch/'.$fieldId.'/content/content.json';
     $contentFlx = file_get_contents($contentSource);
 
-    if ($nodeType == 'dialogcard' || $nodeType == 'memory') {
+    if (($nodeType == 'dialogcard' || $nodeType == 'memory') && $installH5P) {
         if (controlSourceCards($termA)) {
             $baseFlx = getSourceCards($termA, $nodeType);
         }
@@ -98,7 +109,7 @@ if ($id > 0) {
         $contentFlx = str_replace("\"@base_cards@\"", $baseFlx, $contentFlx);
     }
 
-    if ($nodeType == 'guesstheanswer') {
+    if ($nodeType == 'guesstheanswer' && $installH5P) {
         $extractImgData = "images/dialogcard.jpg";
         $pathParts = pathinfo($termB);
         $fileN = $pathParts['filename'];
@@ -138,6 +149,10 @@ if ($id > 0) {
         $contentFlx = str_replace("\"You got :num out of :total points\"",
             "\"Votre score :num out sur :total points\"", $contentFlx);
         $contentFlx = str_replace("\"Show solution\"", "\"Voir la solution\"", $contentFlx);
+        $contentFlx = str_replace("\"Match found.\"", "\"Correspondance trouvée.\"", $contentFlx);
+        $contentFlx = str_replace("\"Reset\"", "\"Recommencer\"", $contentFlx);
+        $contentFlx = str_replace("\"Close\"", "\"Fermer\"", $contentFlx);
+        $contentFlx = str_replace("\"Time spent\"", "\"Temps\"", $contentFlx);
     } elseif ($interfaceLanguage == 'es') {
         $contentFlx = str_replace("\"solution label\"", "\"Ver la solución\"", $contentFlx);
         $contentFlx = str_replace("\"Turn\"", "\"Girar\"", $contentFlx);
@@ -149,6 +164,10 @@ if ($id > 0) {
         $contentFlx = str_replace("\"You got :num out of :total points\"",
             "\"Su nota es de :num sobre :total puntos\"", $contentFlx);
         $contentFlx = str_replace("\"Show solution\"", "\"Ver la solución\"", $contentFlx);
+        $contentFlx = str_replace("\"Match found.\"", "\"Coincidencia encontrada.\"", $contentFlx);
+        $contentFlx = str_replace("\"Reset\"", "\"Reiniciar\"", $contentFlx);
+        $contentFlx = str_replace("\"Close\"", "\"Cerrar\"", $contentFlx);
+        $contentFlx = str_replace("\"Time spent\"", "\"El tiempo pasado\"", $contentFlx);
     }
 
     $fp = fopen($contentSource, 'w');
@@ -179,6 +198,10 @@ $contentForm .= '<p style="text-align:center;" >';
 $contentForm .= '<a href="list.php" class="btn btn-primary">';
 $contentForm .= '<em class="fa"></em>'.get_lang('Close').'</a>';
 $contentForm .= '</p>';
+
+if ($installH5P == false) {
+    $contentForm = Display::return_message(get_lang('FolderDoesntExistsInFileSystem'), 'error');
+}
 
 $tpl = new Template("H5P");
 $tpl->assign('form', $contentForm);
@@ -262,3 +285,4 @@ function getSourceCards($termData, $nodeType)
 
     return $baseFlx;
 }
+

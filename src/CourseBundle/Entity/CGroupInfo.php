@@ -4,19 +4,18 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Traits\CourseTrait;
-use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * CGroupInfo.
- *
  * @ORM\Table(
  *  name="c_group_info",
  *  indexes={
@@ -24,6 +23,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  *      @ORM\Index(name="session_id", columns={"session_id"})
  *  }
  * )
+ *
+ * @ApiResource()
  * @ORM\Entity
  */
 class CGroupInfo extends AbstractResource implements ResourceInterface
@@ -174,16 +175,16 @@ class CGroupInfo extends AbstractResource implements ResourceInterface
     protected $course;
 
     /**
-     * @var Collection
+     * @var ArrayCollection|CGroupRelUser[]
      *
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CGroupRelUser", mappedBy="group")
+     * @ORM\OneToMany(targetEntity="CGroupRelUser", mappedBy="group")
      */
     protected $members;
 
     /**
-     * @var Collection
+     * @var ArrayCollection|CGroupRelTutor[]
      *
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CGroupRelTutor", mappedBy="group")
+     * @ORM\OneToMany(targetEntity="CGroupRelTutor", mappedBy="group")
      */
     protected $tutors;
 
@@ -283,10 +284,8 @@ class CGroupInfo extends AbstractResource implements ResourceInterface
      * Set description.
      *
      * @param string $description
-     *
-     * @return CGroupInfo
      */
-    public function setDescription($description)
+    public function setDescription($description): self
     {
         $this->description = $description;
 
@@ -303,38 +302,24 @@ class CGroupInfo extends AbstractResource implements ResourceInterface
         return $this->description;
     }
 
-    /**
-     * Set maxStudent.
-     *
-     * @param int $maxStudent
-     *
-     * @return CGroupInfo
-     */
-    public function setMaxStudent($maxStudent)
+    public function setMaxStudent(int $maxStudent): self
     {
         $this->maxStudent = $maxStudent;
 
         return $this;
     }
 
-    /**
-     * Get maxStudent.
-     *
-     * @return int
-     */
-    public function getMaxStudent()
+    public function getMaxStudent(): int
     {
-        return $this->maxStudent;
+        return (int) $this->maxStudent;
     }
 
     /**
      * Set docState.
      *
      * @param bool $docState
-     *
-     * @return CGroupInfo
      */
-    public function setDocState($docState)
+    public function setDocState($docState): self
     {
         $this->docState = $docState;
 
@@ -355,10 +340,8 @@ class CGroupInfo extends AbstractResource implements ResourceInterface
      * Set calendarState.
      *
      * @param bool $calendarState
-     *
-     * @return CGroupInfo
      */
-    public function setCalendarState($calendarState)
+    public function setCalendarState($calendarState): self
     {
         $this->calendarState = $calendarState;
 
@@ -379,10 +362,8 @@ class CGroupInfo extends AbstractResource implements ResourceInterface
      * Set workState.
      *
      * @param bool $workState
-     *
-     * @return CGroupInfo
      */
-    public function setWorkState($workState)
+    public function setWorkState($workState): self
     {
         $this->workState = $workState;
 
@@ -403,10 +384,8 @@ class CGroupInfo extends AbstractResource implements ResourceInterface
      * Set announcementsState.
      *
      * @param bool $announcementsState
-     *
-     * @return CGroupInfo
      */
-    public function setAnnouncementsState($announcementsState)
+    public function setAnnouncementsState($announcementsState): self
     {
         $this->announcementsState = $announcementsState;
 
@@ -427,10 +406,8 @@ class CGroupInfo extends AbstractResource implements ResourceInterface
      * Set forumState.
      *
      * @param bool $forumState
-     *
-     * @return CGroupInfo
      */
-    public function setForumState($forumState)
+    public function setForumState($forumState): self
     {
         $this->forumState = $forumState;
 
@@ -509,12 +486,7 @@ class CGroupInfo extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get secretDirectory.
-     *
-     * @return string
-     */
-    public function getSecretDirectory()
+    public function getSecretDirectory(): string
     {
         return $this->secretDirectory;
     }
@@ -523,10 +495,8 @@ class CGroupInfo extends AbstractResource implements ResourceInterface
      * Set selfRegistrationAllowed.
      *
      * @param bool $selfRegistrationAllowed
-     *
-     * @return CGroupInfo
      */
-    public function setSelfRegistrationAllowed($selfRegistrationAllowed)
+    public function setSelfRegistrationAllowed($selfRegistrationAllowed): self
     {
         $this->selfRegistrationAllowed = $selfRegistrationAllowed;
 
@@ -547,10 +517,8 @@ class CGroupInfo extends AbstractResource implements ResourceInterface
      * Set selfUnregistrationAllowed.
      *
      * @param bool $selfUnregistrationAllowed
-     *
-     * @return CGroupInfo
      */
-    public function setSelfUnregistrationAllowed($selfUnregistrationAllowed)
+    public function setSelfUnregistrationAllowed($selfUnregistrationAllowed): self
     {
         $this->selfUnregistrationAllowed = $selfUnregistrationAllowed;
 
@@ -571,10 +539,8 @@ class CGroupInfo extends AbstractResource implements ResourceInterface
      * Set sessionId.
      *
      * @param int $sessionId
-     *
-     * @return CGroupInfo
      */
-    public function setSessionId($sessionId)
+    public function setSessionId($sessionId): self
     {
         $this->sessionId = $sessionId;
 
@@ -627,24 +593,24 @@ class CGroupInfo extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    public function getMembers(): Collection
+    public function getMembers(): ArrayCollection
     {
         return $this->members;
     }
 
-    public function setMembers(Collection $members): self
+    public function setMembers(ArrayCollection $members): self
     {
         $this->members = $members;
 
         return $this;
     }
 
-    public function getTutors(): Collection
+    public function getTutors(): ArrayCollection
     {
         return $this->tutors;
     }
 
-    public function setTutors(Collection $tutors): self
+    public function setTutors(ArrayCollection $tutors): self
     {
         $this->tutors = $tutors;
 

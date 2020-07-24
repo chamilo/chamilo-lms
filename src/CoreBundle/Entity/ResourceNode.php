@@ -267,7 +267,7 @@ class ResourceNode
     /**
      * Sets the parent resource.
      */
-    public function setParent(ResourceNode $parent = null): self
+    public function setParent(self $parent = null): self
     {
         $this->parent = $parent;
 

@@ -691,9 +691,23 @@ switch ($action) {
             $description = $keyword;
         }
 
-        if (api_is_drh() || api_is_session_admin()) {
+        if (api_is_drh()) {
             $count = SessionManager::get_sessions_followed_by_drh(
                 api_get_user_id(),
+                null,
+                null,
+                true,
+                false,
+                false,
+                null,
+                $keyword,
+                $description,
+                ['where' => $whereCondition, 'extra' => $extra_fields]
+            );
+        } elseif (api_is_session_admin()) {
+            $count = SessionManager::getSessionsFollowedByUser(
+                api_get_user_id(),
+                SESSIONADMIN,
                 null,
                 null,
                 true,
@@ -1608,12 +1622,29 @@ switch ($action) {
         );
         break;
     case 'get_sessions_tracking':
-        if (api_is_drh() || api_is_session_admin()) {
+        if (api_is_drh()) {
             $orderByName = Database::escape_string($sidx);
             $orderByName = in_array($orderByName, ['name', 'access_start_date']) ? $orderByName : 'name';
             $orderBy = " ORDER BY $orderByName $sord";
             $sessions = SessionManager::get_sessions_followed_by_drh(
                 api_get_user_id(),
+                $start,
+                $limit,
+                false,
+                false,
+                false,
+                $orderBy,
+                $keyword,
+                $description,
+                ['where' => $whereCondition, 'extra' => $extra_fields]
+            );
+        } elseif (api_is_session_admin()) {
+            $orderByName = Database::escape_string($sidx);
+            $orderByName = in_array($orderByName, ['name', 'access_start_date']) ? $orderByName : 'name';
+            $orderBy = " ORDER BY $orderByName $sord";
+            $sessions = SessionManager::getSessionsFollowedByUser(
+                api_get_user_id(),
+                SESSIONADMIN,
                 $start,
                 $limit,
                 false,

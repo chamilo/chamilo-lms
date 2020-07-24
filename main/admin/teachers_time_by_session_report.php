@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Session;
@@ -7,8 +8,6 @@ use Doctrine\Common\Collections\Criteria;
 
 /**
  * Generate a teacher time report in platform by session only.
- *
- * @package chamilo.admin
  */
 $cidReset = true;
 
@@ -22,9 +21,14 @@ if (!api_is_platform_admin(true) && !api_is_teacher()) {
 $toolName = get_lang('TeacherTimeReportBySession');
 
 $em = Database::getManager();
-$sessionsInfo = api_is_platform_admin()
-    ? SessionManager::get_sessions_list()
-    : Tracking::get_sessions_coached_by_user(api_get_user_id());
+$sessions = [];
+if (api_is_platform_admin()) {
+    $sessions = SessionManager::get_sessions_list();
+} elseif (api_is_session_admin()) {
+    $sessions = SessionManager::getSessionsFollowedByUser(api_get_user_id(), SESSIONADMIN);
+} else {
+    $sessions = Tracking::get_sessions_coached_by_user(api_get_user_id());
+}
 $session = null;
 
 $form = new FormValidator('teacher_time_report_by_session', 'GET');
@@ -35,7 +39,7 @@ $selectSession = $form->addSelect(
 );
 $form->addButtonFilter(get_lang('Filter'));
 
-foreach ($sessionsInfo as $sessionInfo) {
+foreach ($sessions as $sessionInfo) {
     $selectSession->addOption($sessionInfo['name'], $sessionInfo['id']);
 }
 
@@ -57,13 +61,10 @@ if ($session) {
         $criteria = Criteria::create()->where(
             Criteria::expr()->eq('status', Session::COACH)
         );
-        $userCourseSubscriptions = $session
-            ->getUserCourseSubscriptions()
-            ->matching($criteria);
+        $userCourseSubscriptions = $session->getUserCourseSubscriptions()->matching($criteria);
 
         foreach ($userCourseSubscriptions as $userCourseSubscription) {
             $user = $userCourseSubscription->getUser();
-
             if (!array_key_exists($user->getId(), $usersInfo)) {
                 $usersInfo[$user->getId()] = [
                     'code' => $user->getOfficialCode(),

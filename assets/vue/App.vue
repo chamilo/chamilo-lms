@@ -23,7 +23,7 @@
 
                 <v-list-item :to="{ name: 'MyCourses' }">
                     <v-list-item-action>
-                        <v-icon>mdi-home</v-icon>
+                        <v-icon>mdi-book</v-icon>
                     </v-list-item-action>
                     <v-list-item-content>
                         <v-list-item-title>
@@ -34,7 +34,7 @@
 
                 <v-list-item :to="{ name: 'MySessions' }">
                     <v-list-item-action>
-                        <v-icon>mdi-home</v-icon>
+                        <v-icon>mdi-book-multiple</v-icon>
                     </v-list-item-action>
                     <v-list-item-content>
                         <v-list-item-title>
@@ -55,7 +55,7 @@
                     <v-list-item
                             :to="'/main/admin/user_list.php'">
                         <v-list-item-action>
-                            <v-icon>mdi-home</v-icon>
+                            <v-icon>mdi-account</v-icon>
                         </v-list-item-action>
                         <v-list-item-content>
                             <v-list-item-title>User list
@@ -66,7 +66,7 @@
                     <v-list-item
                             :to="'/main/admin/course_list.php'">
                         <v-list-item-action>
-                            <v-icon>mdi-home</v-icon>
+                            <v-icon>mdi-book</v-icon>
                         </v-list-item-action>
                         <v-list-item-content>
                             <v-list-item-title>Courses
@@ -77,7 +77,7 @@
                     <v-list-item
                             :to="'/main/session/session_list.php'">
                         <v-list-item-action>
-                            <v-icon>mdi-home</v-icon>
+                            <v-icon>mdi-book-multiple</v-icon>
                         </v-list-item-action>
                         <v-list-item-content>
                             <v-list-item-title>Sessions
@@ -89,7 +89,7 @@
                             :to="'/main/admin/index.php'"
                     >
                         <v-list-item-action>
-                            <v-icon>mdi-home</v-icon>
+                            <v-icon>mdi-settings</v-icon>
                         </v-list-item-action>
                         <v-list-item-content>
                             <v-list-item-title>Settings
@@ -123,10 +123,7 @@
                     <!--                                </v-list-item-icon>-->
                     <!--                            </v-list-item>-->
                     <!--                        </v-list-group>-->
-
-
                 </v-list-group>
-
                 <!--                    <v-list-item-->
                 <!--                            :to="{ name: 'DocumentsList' }"-->
                 <!--                    >-->
@@ -244,10 +241,12 @@
                     </v-btn>
                 </template>
                 <v-list>
-                    <v-list-item>
+                    <v-list-item
+                            :to="'/main/social/home.php'">
                         <v-list-item-title>Profile</v-list-item-title>
                     </v-list-item>
-                    <v-list-item>
+                    <v-list-item
+                            :to="'/main/messages/inbox.php'">
                         <v-list-item-title>Inbox</v-list-item-title>
                     </v-list-item>
                     <v-list-item>
@@ -359,7 +358,7 @@
             this.$data.legacy_content = '';
             // section-content
             let isAuthenticated = JSON.parse(this.$parent.$el.attributes["data-is-authenticated"].value),
-                user = JSON.parse(this.$parent.$el.attributes["data-user"].value);
+                user = JSON.parse(this.$parent.$el.attributes["data-user-json"].value);
 
             let payload = {isAuthenticated: isAuthenticated, user: user};
             this.$store.dispatch("security/onRefresh", payload);

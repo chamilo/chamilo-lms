@@ -52,6 +52,4 @@ $strings['AudioQualityNoisy'] = 'Audio trop bruyant';
 $strings['AudioQualityFrequency'] = 'Certaines fréquences audio sont manquantes';
 $strings['AudioQualityPoorness'] = 'Qualité générale de l\'enregistrement trop faible';
 
-$strings['AgreeAllowResearch'] = 'J\'accepte l\'utilisation de mes données à des fins de recherche (non commerciales).';
-
 $strings['MarkForSpeechAuthentication'] = 'Cocher pour l\'authentification par la voix';

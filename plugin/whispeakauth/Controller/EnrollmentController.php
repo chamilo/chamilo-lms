@@ -63,7 +63,7 @@ class EnrollmentController extends BaseController
         }
 
         $request = new ApiRequest();
-        $response = $request->createEnrollment($token, $audioFilePath);
+        $response = $request->createEnrollment($token, $audioFilePath, $user);
 
         \ChamiloSession::erase(\WhispeakAuthPlugin::SESSION_SENTENCE_TEXT);
 

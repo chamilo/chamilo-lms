@@ -35,6 +35,8 @@ class ApiRequest
     /**
      * Create a session token to perform an enrollment.
      *
+     * @param \Chamilo\UserBundle\Entity\User $user
+     *
      * @throws \Exception
      *
      * @return array
@@ -78,6 +80,8 @@ class ApiRequest
     }
 
     /**
+     * @param \Chamilo\UserBundle\Entity\User|null $user
+     *
      * @throws \Exception
      *
      * @return array
@@ -136,6 +140,8 @@ class ApiRequest
      * @param string $method
      * @param string $uri
      * @param string $authBearer
+     * @param array  $query
+     * @param array  $multipart
      *
      * @throws \Exception
      *

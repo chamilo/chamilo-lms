@@ -514,7 +514,8 @@ class TestCategory
     public static function getQuestionsByCat(
         $exerciseId,
         $check_in_question_list = [],
-        $categoriesAddedInExercise = []
+        $categoriesAddedInExercise = [],
+        $questionSelectionType = 1
     ) {
         $tableQuestion = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
@@ -535,7 +536,10 @@ class TestCategory
                     exercice_id = $exerciseId AND
                     qrc.c_id = $courseId
                 ";
-
+        // order alphabetical by category and question  = 3
+        if($questionSelectionType == EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_ORDERED){
+            $sql .= " ORDER BY q.question ASC ";
+        }
         $res = Database::query($sql);
         $categories = [];
         while ($data = Database::fetch_array($res)) {

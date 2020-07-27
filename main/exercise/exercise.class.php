@@ -830,7 +830,8 @@ class Exercise
                 $questions_by_category = TestCategory::getQuestionsByCat(
                     $this->id,
                     $question_list,
-                    $categoriesAddedInExercise
+                    $categoriesAddedInExercise,
+                    $questionSelectionType
                 );
 
                 $question_list = $this->pickQuestionsPerCategory(
@@ -853,7 +854,8 @@ class Exercise
                 $questions_by_category = TestCategory::getQuestionsByCat(
                     $this->id,
                     $question_list,
-                    $categoriesAddedInExercise
+                    $categoriesAddedInExercise,
+                    $questionSelectionType
                 );
                 $question_list = $this->pickQuestionsPerCategory(
                     $categoriesAddedInExercise,
@@ -874,7 +876,8 @@ class Exercise
                 $questions_by_category = TestCategory::getQuestionsByCat(
                     $this->id,
                     $question_list,
-                    $categoriesAddedInExercise
+                    $categoriesAddedInExercise,
+                    $questionSelectionType
                 );
                 $question_list = $this->pickQuestionsPerCategory(
                     $categoriesAddedInExercise,
@@ -897,7 +900,8 @@ class Exercise
                 $questions_by_category = TestCategory::getQuestionsByCat(
                     $this->id,
                     $question_list,
-                    $categoriesAddedInExercise
+                    $categoriesAddedInExercise,
+                    $questionSelectionType
                 );
 
                 $question_list = $this->pickQuestionsPerCategory(
@@ -923,7 +927,8 @@ class Exercise
                 $questions_by_category = TestCategory::getQuestionsByCat(
                     $this->id,
                     $question_list,
-                    $categoriesAddedInExercise
+                    $categoriesAddedInExercise,
+                    $questionSelectionType
                 );
                 $question_list = $this->pickQuestionsPerCategory(
                     $categoriesAddedInExercise,
@@ -944,7 +949,8 @@ class Exercise
                 $questions_by_category = TestCategory::getQuestionsByCat(
                     $this->id,
                     $question_list,
-                    $categoriesAddedInExercise
+                    $categoriesAddedInExercise,
+                    $questionSelectionType
                 );
                 $question_list = $this->pickQuestionsPerCategory(
                     $categoriesAddedInExercise,
@@ -10216,6 +10222,10 @@ class Exercise
                     );
 
                     if (!empty($elements)) {
+                        $questionSelectionType = $this->getQuestionSelectionType();
+                        if($questionSelectionType == EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_ORDERED){
+                            $elements = $this->getAlfabeticalOrderQuestion($elements);
+                        }
                         $temp_question_list[$category_id] = $elements;
                         $categoryQuestionList = $elements;
                     }

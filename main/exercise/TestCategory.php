@@ -973,7 +973,8 @@ class TestCategory
             }
 
             $return .= $warning;
-            $return .= '<table class="data_table">';
+            $return .= '<div class="table-responsive">';
+            $return .= '<table class="data_table table table-hover">';
             $return .= '<tr>';
             $return .= '<th height="24">'.get_lang('Categories').'</th>';
             $return .= '<th width="70" height="24">'.get_lang('Number').'</th></tr>';
@@ -1002,6 +1003,7 @@ class TestCategory
             }
 
             $return .= '</table>';
+            $return .= '</div>';
             $return .= get_lang('ZeroMeansNoQuestionWillBeSelectedMinusOneMeansThatAllQuestionsWillBeSelected');
         }
 

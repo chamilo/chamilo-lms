@@ -15,7 +15,7 @@ if (!api_user_is_login()) {
 $plugin = ZoomPlugin::create();
 
 Display::display_header($plugin->get_title());
-
+echo $plugin->getToolbar();
 if (array_key_exists('meetingId', $_REQUEST)) {
     /** @var MeetingEntity $meeting */
     $meeting = $plugin->getMeetingRepository()->find($_REQUEST['meetingId']);
@@ -24,12 +24,14 @@ if (array_key_exists('meetingId', $_REQUEST)) {
             throw new Exception('Meeting not found');
         }
 
-        printf(
-            '%s<p><a href="%s" class="btn btn-primary" target="_blank">%s</a></p>',
-            $meeting->getIntroduction(),
-            $plugin->getStartOrJoinMeetingURL($meeting),
-            $plugin->get_lang('EnterMeeting')
-        );
+        $startJoinURL = $plugin->getStartOrJoinMeetingURL($meeting);
+        echo $meeting->getIntroduction();
+        if (!empty($startJoinURL)) {
+            echo Display::url($plugin->get_lang('EnterMeeting'), $startJoinURL, ['class' => 'btn btn-primary']);
+        } else {
+            echo Display::return_message($plugin->get_lang('ConferenceNotStarted'), 'warning');
+        }
+
     } catch (Exception $exception) {
         Display::addFlash(
             Display::return_message($exception->getMessage(), 'error')

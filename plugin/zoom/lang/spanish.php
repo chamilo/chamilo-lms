@@ -13,6 +13,7 @@ $strings['enableCloudRecording'] = "Activar la grabación en los servidores de Z
 $strings['enableGlobalConference'] = "Activar las conferencias globales";
 $strings['enableGlobalConferencePerUser'] = "Activar las conferencias globales por usuario";
 $strings['globalConferenceAllowRoles'] = "Visibilidad del enlace global de videoconferencia para los perfiles siguientes";
+$strings['globalConferencePerUserAllowRoles'] = "Visibilidad del enlace global de videoconferencia por usuario para los perfiles siguientes";
 
 $strings['tool_enable_help'] = "Escoja si desea activar la herramienta Zoom.
 Una vez activada, aparecerá en las páginas principales de todos los cursos. Los profesores podrán
@@ -79,6 +80,7 @@ $strings['DurationFormat'] = "%hh%I";
 $strings['DurationInMinutes'] = "Duración (en minutos)";
 $strings['EndDate'] = "Fecha de fin";
 $strings['EnterMeeting'] = "Ingresar la conferencia";
+$strings['ViewMeeting'] = "Ver la conferencia";
 $strings['Files'] = "Archivos";
 $strings['Finished'] = "terminada";
 $strings['FileWasCopiedToCourse'] = "El archivo ha sido copiado en el curso";

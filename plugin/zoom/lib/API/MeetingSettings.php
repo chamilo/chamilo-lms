@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\PluginBundle\Zoom\API;
@@ -7,8 +8,6 @@ use Exception;
 
 /**
  * Class MeetingSettings. An instance of this class is included in each Meeting instance.
- *
- * @package Chamilo\PluginBundle\Zoom\API
  */
 class MeetingSettings
 {

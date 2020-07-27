@@ -1,4 +1,5 @@
 <?php
+
 /* For license terms, see /license.txt */
 
 use Chamilo\PluginBundle\Zoom\API\MeetingInfoGet;

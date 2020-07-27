@@ -174,7 +174,7 @@ class RecordingEntity
     {
         $this->startDateTime = new DateTime($this->recordingMeeting->start_time);
         $this->startDateTime->setTimezone(new DateTimeZone(date_default_timezone_get()));
-        $this->formattedStartTime = $this->startDateTime->format(get_lang('Y-m-d H:i'));
+        $this->formattedStartTime = $this->startDateTime->format('Y-m-d H:i');
 
         $now = new DateTime();
         $later = new DateTime();

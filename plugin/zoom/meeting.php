@@ -38,6 +38,7 @@ if ($plugin->userIsConferenceManager($meeting)) {
     $tpl->assign('isConferenceManager', true);
     $tpl->assign('editMeetingForm', $plugin->getEditMeetingForm($meeting)->returnForm());
     $tpl->assign('deleteMeetingForm', $plugin->getDeleteMeetingForm($meeting, $returnURL)->returnForm());
+
     if ($plugin->get('enableParticipantRegistration') && $meeting->requiresRegistration()) {
         $tpl->assign('registerParticipantForm', $plugin->getRegisterParticipantForm($meeting)->returnForm());
         $tpl->assign('registrants', $meeting->getRegistrants());
@@ -64,6 +65,8 @@ if ($plugin->userIsConferenceManager($meeting)) {
         );
     }
 }
+
+$tpl->assign('actions', $plugin->getToolbar());
 $tpl->assign('meeting', $meeting);
 $tpl->assign('content', $tpl->fetch('zoom/view/meeting.tpl'));
 $tpl->display_one_col_template();

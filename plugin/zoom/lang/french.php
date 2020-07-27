@@ -13,6 +13,7 @@ $strings['enableCloudRecording'] = "Activer l'enregistrement sur les serveurs de
 $strings['enableGlobalConference'] = "Activer les conférences globales";
 $strings['enableGlobalConferencePerUser'] = "Activer les conférences globales par utilisateur";
 $strings['globalConferenceAllowRoles'] = "Visibilité du lien de vidéo conférence global pour les profils suivant";
+$strings['globalConferencePerUserAllowRoles'] = "Visibilité du lien de vidéo conférence global par utilisateur pour les profils suivant";
 
 $strings['tool_enable_help'] = "Choisissez si vous voulez activer l'outil de conférence vidéo Zoom.
 Une fois activé, il apparaitra dans les pages d'accueil de tous les cours :
@@ -79,6 +80,7 @@ $strings['DurationFormat'] = "%hh%I";
 $strings['DurationInMinutes'] = "Durée (en minutes)";
 $strings['EndDate'] = "Date de fin";
 $strings['EnterMeeting'] = "Entrer dans la conférence";
+$strings['ViewMeeting'] = "Voir la conférence";
 $strings['Files'] = "Fichiers";
 $strings['Finished'] = "terminée";
 $strings['FileWasCopiedToCourse'] = "Le fichier a été copié dans le cours";

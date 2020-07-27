@@ -27,6 +27,8 @@ if ($plugin->get('enableCloudRecording')) {
         $plugin->getRecordingRepository()->getPeriodUserRecordings($startDate, $endDate, $user)
     );
 }
+
+$tpl->assign('actions', $plugin->getToolbar());
 $tpl->assign('search_form', $form->returnForm());
 $tpl->assign('schedule_form', $plugin->getScheduleMeetingForm($user)->returnForm());
 $tpl->assign('content', $tpl->fetch('zoom/view/admin.tpl'));

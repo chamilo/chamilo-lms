@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\PluginBundle\Zoom\API;
@@ -10,8 +11,6 @@ use Exception;
  * Two implementations are currently possible : OAuth and JWT.
  *
  * @see https://marketplace.zoom.us/docs/api-reference/zoom-api
- *
- * @package Chamilo\PluginBundle\Zoom\API
  */
 abstract class Client
 {

@@ -42,8 +42,8 @@ class ZoomPlugin extends Plugin
     public function __construct()
     {
         parent::__construct(
-            '0.0.1',
-            'Sébastien Ducoulombier',
+            '0.2',
+            'Sébastien Ducoulombier, Julio Montoya',
             [
                 'tool_enable' => 'boolean',
                 'apiKey' => 'text',
@@ -54,6 +54,16 @@ class ZoomPlugin extends Plugin
                 'enableGlobalConference' => 'boolean',
                 'enableGlobalConferencePerUser' => 'boolean',
                 'globalConferenceAllowRoles' => [
+                    'type' => 'select',
+                    'options' => [
+                        PLATFORM_ADMIN => get_lang('Administrator'),
+                        COURSEMANAGER => get_lang('Teacher'),
+                        STUDENT => get_lang('Student'),
+                        STUDENT_BOSS => get_lang('StudentBoss'),
+                    ],
+                    'attributes' => ['multiple' => 'multiple'],
+                ],
+                'globalConferencePerUserAllowRoles' => [
                     'type' => 'select',
                     'options' => [
                         PLATFORM_ADMIN => get_lang('Administrator'),
@@ -87,7 +97,21 @@ class ZoomPlugin extends Plugin
      */
     public static function currentUserCanJoinGlobalMeeting()
     {
-        return 'true' === api_get_plugin_setting('zoom', 'enableGlobalConference') && api_user_is_login();
+        $user = api_get_user_entity(api_get_user_id());
+
+        if (null === $user) {
+            return false;
+        }
+
+        //return 'true' === api_get_plugin_setting('zoom', 'enableGlobalConference') && api_user_is_login();
+        return
+            'true' === api_get_plugin_setting('zoom', 'enableGlobalConference')
+            && in_array(
+                (api_is_platform_admin() ? PLATFORM_ADMIN : $user->getStatus()),
+                (array) api_get_plugin_setting('zoom', 'globalConferenceAllowRoles')
+            )
+            ;
+
     }
 
     /**
@@ -105,7 +129,7 @@ class ZoomPlugin extends Plugin
             'true' === api_get_plugin_setting('zoom', 'enableGlobalConferencePerUser')
             && in_array(
                 (api_is_platform_admin() ? PLATFORM_ADMIN : $user->getStatus()),
-                (array) api_get_plugin_setting('zoom', 'globalConferenceAllowRoles')
+                (array) api_get_plugin_setting('zoom', 'globalConferencePerUserAllowRoles')
             )
         ;
     }
@@ -123,7 +147,7 @@ class ZoomPlugin extends Plugin
             $meeting = $registrant->getMeeting();
             $items[
                 sprintf(
-                    get_lang('DateMeetingTitle'),
+                    $this->get_lang('DateMeetingTitle'),
                     $meeting->formattedStartTime,
                     $meeting->getMeetingInfoGet()->topic
                 )
@@ -301,7 +325,7 @@ class ZoomPlugin extends Plugin
                 Database::getManager()->persist($meetingEntity);
                 Database::getManager()->flush();
                 Display::addFlash(
-                    Display::return_message(get_lang('MeetingUpdated'), 'confirm')
+                    Display::return_message($this->get_lang('MeetingUpdated'), 'confirm')
                 );
             } catch (Exception $exception) {
                 Display::addFlash(
@@ -367,9 +391,9 @@ class ZoomPlugin extends Plugin
     public function getRegisterParticipantForm($meetingEntity)
     {
         $form = new FormValidator('register', 'post', $_SERVER['REQUEST_URI']);
-        $userIdSelect = $form->addSelect('userIds', get_lang('RegisteredUsers'));
+        $userIdSelect = $form->addSelect('userIds', $this->get_lang('RegisteredUsers'));
         $userIdSelect->setMultiple(true);
-        $form->addButtonSend(get_lang('UpdateRegisteredUserList'));
+        $form->addButtonSend($this->get_lang('UpdateRegisteredUserList'));
 
         $users = $meetingEntity->getRegistrableUsers();
         foreach ($users as $user) {
@@ -390,7 +414,7 @@ class ZoomPlugin extends Plugin
             try {
                 $this->updateRegistrantList($meetingEntity, $selectedUsers);
                 Display::addFlash(
-                    Display::return_message(get_lang('RegisteredUserListWasUpdated'), 'confirm')
+                    Display::return_message($this->get_lang('RegisteredUserListWasUpdated'), 'confirm')
                 );
             } catch (Exception $exception) {
                 Display::addFlash(
@@ -445,22 +469,22 @@ class ZoomPlugin extends Plugin
             }
             $actions = [];
             if ($meeting->isCourseMeeting()) {
-                $actions['CreateLinkInCourse'] = get_lang('CreateLinkInCourse');
-                $actions['CopyToCourse'] = get_lang('CopyToCourse');
+                $actions['CreateLinkInCourse'] = $this->get_lang('CreateLinkInCourse');
+                $actions['CopyToCourse'] = $this->get_lang('CopyToCourse');
             }
-            $actions['DeleteFile'] = get_lang('DeleteFile');
+            $actions['DeleteFile'] = $this->get_lang('DeleteFile');
             $form->addRadio(
                 'action',
                 get_lang('Action'),
                 $actions
             );
-            $form->addButtonUpdate(get_lang('DoIt'));
+            $form->addButtonUpdate($this->get_lang('DoIt'));
             if ($form->validate()) {
                 foreach ($meeting->getRecordings() as $recording) {
                     foreach ($recording->files as $file) {
                         if (in_array($file->id, $form->getSubmitValue('fileIds'))) {
                             $name = sprintf(
-                                get_lang('XRecordingOfMeetingXFromXDurationXDotX'),
+                                $this->get_lang('XRecordingOfMeetingXFromXDurationXDotX'),
                                 $file->recording_type,
                                 $meeting->getId(),
                                 $recording->formattedStartTime,
@@ -472,7 +496,7 @@ class ZoomPlugin extends Plugin
                                 try {
                                     $this->createLinkToFileInCourse($meeting, $file, $name);
                                     Display::addFlash(
-                                        Display::return_message(get_lang('LinkToFileWasCreatedInCourse'), 'success')
+                                        Display::return_message($this->get_lang('LinkToFileWasCreatedInCourse'), 'success')
                                     );
                                 } catch (Exception $exception) {
                                     Display::addFlash(
@@ -483,7 +507,7 @@ class ZoomPlugin extends Plugin
                                 try {
                                     $this->copyFileToCourse($meeting, $file, $name);
                                     Display::addFlash(
-                                        Display::return_message(get_lang('FileWasCopiedToCourse'), 'confirm')
+                                        Display::return_message($this->get_lang('FileWasCopiedToCourse'), 'confirm')
                                     );
                                 } catch (Exception $exception) {
                                     Display::addFlash(
@@ -494,7 +518,7 @@ class ZoomPlugin extends Plugin
                                 try {
                                     $file->delete();
                                     Display::addFlash(
-                                        Display::return_message(get_lang('FileWasDeleted'), 'confirm')
+                                        Display::return_message($this->get_lang('FileWasDeleted'), 'confirm')
                                     );
                                 } catch (Exception $exception) {
                                     Display::addFlash(
@@ -524,10 +548,10 @@ class ZoomPlugin extends Plugin
     public function getCreateInstantMeetingForm($user, $course, $session)
     {
         $form = new FormValidator('createInstantMeetingForm', 'post', '', '_blank');
-        $form->addButton('startButton', get_lang('StartInstantMeeting'));
+        $form->addButton('startButton', $this->get_lang('StartInstantMeeting'));
         if ($form->validate()) {
             try {
-                $this->startInstantMeeting(get_lang('InstantMeeting'), $user, $course, $session);
+                $this->startInstantMeeting($this->get_lang('InstantMeeting'), $user, $course, $session);
             } catch (Exception $exception) {
                 Display::addFlash(
                     Display::return_message($exception->getMessage(), 'error')
@@ -563,16 +587,16 @@ class ZoomPlugin extends Plugin
         // $passwordText = $form->addText('password', get_lang('Password'), false, ['maxlength' => '10']);
         if (!is_null($course)) {
             $registrationOptions = [
-                'RegisterAllCourseUsers' => get_lang('RegisterAllCourseUsers'),
+                'RegisterAllCourseUsers' => $this->get_lang('RegisterAllCourseUsers'),
             ];
             $groups = GroupManager::get_groups();
             if (!empty($groups)) {
                 $registrationOptions['RegisterTheseGroupMembers'] = get_lang('RegisterTheseGroupMembers');
             }
-            $registrationOptions['RegisterNoUser'] = get_lang('RegisterNoUser');
+            $registrationOptions['RegisterNoUser'] = $this->get_lang('RegisterNoUser');
             $userRegistrationRadio = $form->addRadio(
                 'userRegistration',
-                get_lang('UserRegistration'),
+                $this->get_lang('UserRegistration'),
                 $registrationOptions
             );
             $groupOptions = [];
@@ -581,7 +605,7 @@ class ZoomPlugin extends Plugin
             }
             $groupIdsSelect = $form->addSelect(
                 'groupIds',
-                get_lang('RegisterTheseGroupMembers'),
+                $this->get_lang('RegisterTheseGroupMembers'),
                 $groupOptions
             );
             $groupIdsSelect->setMultiple(true);
@@ -616,7 +640,7 @@ class ZoomPlugin extends Plugin
                     if ('RegisterAllCourseUsers' === $form->getSubmitValue('userRegistration')) {
                         $this->registerAllCourseUsers($newMeeting);
                         Display::addFlash(
-                            Display::return_message(get_lang('AllCourseUsersWereRegistered'))
+                            Display::return_message($this->get_lang('AllCourseUsersWereRegistered'))
                         );
                     } elseif ('RegisterTheseGroupMembers' === $form->getSubmitValue('userRegistration')) {
                         $userIds = [];
@@ -628,7 +652,7 @@ class ZoomPlugin extends Plugin
                         );
                         $this->registerUsers($newMeeting, $users);
                         Display::addFlash(
-                            Display::return_message(get_lang('GroupUsersWereRegistered'))
+                            Display::return_message($this->get_lang('GroupUsersWereRegistered'))
                         );
                     }
                     api_location('meeting_from_start.php?meetingId='.$newMeeting->getId());
@@ -807,34 +831,36 @@ class ZoomPlugin extends Plugin
      */
     public function getStartOrJoinMeetingURL($meeting)
     {
-        if ('waiting' === $meeting->getMeetingInfoGet()->status) {
-            // Zoom does not allow for a new meeting to be started on first participant join.
-            // It requires the host to start the meeting first.
-            // Therefore for global meetings we must make the first participant the host
-            // that is use start_url rather than join_url.
-            // the participant will not be registered and will appear as the Zoom user account owner.
-            // For course and user meetings, only the host can start the meeting.
-            if ($meeting->isGlobalMeeting() && $this->get('enableGlobalConference')
-                || $meeting->getUser() === api_get_user_entity(api_get_user_id())) {
-                return $meeting->getMeetingInfoGet()->start_url;
-            }
-        } elseif ('started' === $meeting->getMeetingInfoGet()->status) {
-            if ('true' === $this->get('enableParticipantRegistration') && $meeting->requiresRegistration()) {
-                // the participant must be registered
-                $participant = api_get_user_entity(api_get_user_id());
-                $registrant = $meeting->getRegistrant($participant);
-                if (!is_null($registrant)) {
-                    // the participant is registered
-                    return $registrant->getCreatedRegistration()->join_url;
+        $status = $meeting->getMeetingInfoGet()->status;
+
+        switch ($status) {
+            case 'waiting':
+                // Zoom does not allow for a new meeting to be started on first participant join.
+                // It requires the host to start the meeting first.
+                // Therefore for global meetings we must make the first participant the host
+                // that is use start_url rather than join_url.
+                // the participant will not be registered and will appear as the Zoom user account owner.
+                // For course and user meetings, only the host can start the meeting.
+                if ($meeting->isGlobalMeeting() && $this->get('enableGlobalConference')
+                    || $meeting->getUser() === api_get_user_entity(api_get_user_id())) {
+                    return $meeting->getMeetingInfoGet()->start_url;
                 }
-                // the participant is not registered, he can join only the global meeting (automatic registration)
-                if ($meeting->isGlobalMeeting() && $this->get('enableGlobalConference')) {
-                    return $this->registerUser($meeting, $participant)->getCreatedRegistration()->join_url;
+                break;
+            case 'started':
+                if ('true' === $this->get('enableParticipantRegistration') && $meeting->requiresRegistration()) {
+                    // the participant must be registered
+                    $participant = api_get_user_entity(api_get_user_id());
+                    $registrant = $meeting->getRegistrant($participant);
+                    if (!is_null($registrant)) {
+                        // the participant is registered
+                        return $registrant->getCreatedRegistration()->join_url;
+                    }
+                    // the participant is not registered, he can join only the global meeting (automatic registration)
+                    if ($meeting->isGlobalMeeting() && $this->get('enableGlobalConference')) {
+                        return $this->registerUser($meeting, $participant)->getCreatedRegistration()->join_url;
+                    }
                 }
-            } else {
-                // no registration possible, join anonymously
-                return $meeting->getMeetingInfoGet()->join_url;
-            }
+                break;
         }
 
         return null;
@@ -973,9 +999,11 @@ class ZoomPlugin extends Plugin
         $meetingInfoGet->start_time = $startTime->format(DateTimeInterface::ISO8601);
         $meetingInfoGet->agenda = $agenda;
         $meetingInfoGet->password = $password;
-        $meetingInfoGet->settings->approval_type = $this->get('enableParticipantRegistration')
-            ? MeetingSettings::APPROVAL_TYPE_AUTOMATICALLY_APPROVE
-            : MeetingSettings::APPROVAL_TYPE_NO_REGISTRATION_REQUIRED;
+
+        $meetingInfoGet->settings->approval_type = MeetingSettings::APPROVAL_TYPE_AUTOMATICALLY_APPROVE;
+        if ('true' === $this->get('enableParticipantRegistration')) {
+            $meetingInfoGet->settings->approval_type = MeetingSettings::APPROVAL_TYPE_NO_REGISTRATION_REQUIRED;
+        }
 
         return $this->createMeetingFromMeetingEntity(
             (new MeetingEntity())
@@ -1115,5 +1143,28 @@ class ZoomPlugin extends Plugin
         }
         $this->registerUsers($meetingEntity, $usersToAdd);
         $this->unregister($meetingEntity, $registrantsToRemove);
+    }
+
+    public function getToolbar($returnUrl = '')
+    {
+        if (!api_is_platform_admin()) {
+            return '';
+        }
+        $back = '';
+        if (!empty($returnUrl)) {
+            $back = Display::url(
+                Display::return_icon('back.png', get_lang('Back'), null, ICON_SIZE_MEDIUM),
+                $returnUrl
+            );
+        }
+
+        $actionsLeft =
+            Display::url(
+            Display::return_icon('settings.png', get_lang('Settings'), null, ICON_SIZE_MEDIUM),
+            api_get_path(WEB_CODE_PATH).'admin/configure_plugin.php?name=zoom'
+            ).$back
+        ;
+
+        return Display::toolbarAction('toolbar', [$actionsLeft]);
     }
 }

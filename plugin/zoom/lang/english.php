@@ -14,6 +14,7 @@ $strings['enableCloudRecording'] = 'Enable cloud recording';
 $strings['enableGlobalConference'] = 'Enable global conference';
 $strings['enableGlobalConferencePerUser'] = 'Enable global conference per user';
 $strings['globalConferenceAllowRoles'] = "Global conference link only visible for these user roles";
+$strings['globalConferencePerUserAllowRoles'] = "Global conference per user link only visible for these user roles";
 
 $strings['tool_enable_help'] = "Choose whether you want to enable the Zoom videoconference tool.
 Once enabled, it will show as an additional course tool in all courses' homepage :
@@ -80,6 +81,7 @@ $strings['DurationFormat'] = "%hh%I";
 $strings['DurationInMinutes'] = "Duration (in minutes)";
 $strings['EndDate'] = "End Date";
 $strings['EnterMeeting'] = "Enter meeting";
+$strings['ViewMeeting'] = "View meeting";
 $strings['Files'] = "Files";
 $strings['Finished'] = "finished";
 $strings['FileWasCopiedToCourse'] = "The file was copied to the course";
@@ -130,4 +132,4 @@ $strings['YouAreNotRegisteredToThisMeeting'] = "You are not registered to this m
 $strings['ZoomVideoConferences'] = "Zoom Video Conferences";
 $strings['Recordings'] = "Recordings";
 $strings['CreateGlobalVideoConference'] = "Create global video conference";
-
+$strings['ConferenceNotStarted'] = "Conference not started";

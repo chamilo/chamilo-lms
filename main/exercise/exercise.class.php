@@ -1054,7 +1054,7 @@ class Exercise
                     $questionList = $this->getQuestionOrderedList($adminView);
                     break;
                 case EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_ORDERED: //4
-                    //Question orderderd alfabetical and random category
+                    //Question ordered alphabetically and random category
                     $this->questionList = $this->getAlfabeticalOrderQuestion($this->questionList);
                     $questionList = $this->questionList;
                     break;
@@ -10587,20 +10587,32 @@ class Exercise
     }
 
 
-    public function getAlfabeticalOrderQuestion($questionsId = [], $orderAsc = true){
-
-        if(empty($questionsId)) return $questionsId;
-        if(!is_array($questionsId)) return $questionsId;
+    /**
+     * Sort the questions alphabetically given an array of ids.
+     * $orderAsc true = Sorted ascending / $orderAsc true = Sorted descending
+     * $questionsId = iid of questions in table question
+     *
+     * @param array $questionsId
+     * @param bool $orderAsc
+     *
+     * @return array
+     */
+    public function getAlfabeticalOrderQuestion(
+        $questionsId = [],
+        $orderAsc = true
+    ) {
+        if (empty($questionsId)) return $questionsId;
+        if (!is_array($questionsId)) return $questionsId;
 
         $tableQuiz = Database::get_course_table(TABLE_QUIZ_QUESTION);
-
         $jsonQuestionId = json_encode($questionsId);
-        $jsonQuestionId = str_replace(['[',']','"',"'"],'',$jsonQuestionId);
-        $order = 'ASC';
-        if($orderAsc != true){
-            $order = 'DESC';
+        $jsonQuestionId = str_replace(['[', ']', '"', "'"], '', $jsonQuestionId);
 
+        $order = 'ASC';
+        if ($orderAsc != true) {
+            $order = 'DESC';
         }
+
         $sql = "SELECT
                    iid
                 FROM
@@ -10608,10 +10620,7 @@ class Exercise
                 WHERE
                       iid in ($jsonQuestionId)
                 ORDER BY question $order;";
-
-
         $result = Database::query($sql);
-
         $rows = [];
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             $rows[] = $row['iid'];

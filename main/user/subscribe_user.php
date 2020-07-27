@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt*/
 
 use Chamilo\CoreBundle\Entity\ExtraField;
@@ -7,8 +8,6 @@ use ExtraField as ExtraFieldModel;
 /**
  * This script allows teachers to subscribe existing users
  * to their course.
- *
- * @package chamilo.user
  */
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_USER;
@@ -237,7 +236,7 @@ function get_number_of_users()
                     FROM $user_table u
                     LEFT JOIN $tbl_session_rel_course_user cu
                     ON
-                        u.user_id = cu.user_id AND
+                        u.id = cu.user_id AND
                         c_id = '".api_get_course_int_id()."' AND
                         session_id ='".$sessionId."'
                     WHERE
@@ -253,10 +252,10 @@ function get_number_of_users()
                             FROM $user_table u
                             LEFT JOIN $tbl_session_rel_course_user cu
                             ON
-                                u.user_id = cu.user_id AND cu.c_id = '".api_get_course_int_id()."' AND
+                                u.id = cu.user_id AND cu.c_id = '".api_get_course_int_id()."' AND
                                 session_id ='".$sessionId."'
                             INNER JOIN  $tbl_url_rel_user as url_rel_user
-                            ON (url_rel_user.user_id = u.user_id)
+                            ON (url_rel_user.user_id = u.id)
                             WHERE
                                 cu.user_id IS NULL AND
                                 access_url_id= $url_access_id AND
@@ -269,7 +268,7 @@ function get_number_of_users()
             $sql = "SELECT COUNT(u.id)
                     FROM $user_table u
                     LEFT JOIN $course_user_table cu
-                    ON u.user_id = cu.user_id and c_id='".api_get_course_int_id()."'
+                    ON u.id = cu.user_id and c_id='".api_get_course_int_id()."'
                     WHERE cu.user_id IS NULL AND u.status<>".DRH." ";
 
             if (api_is_multiple_url_enabled()) {
@@ -280,9 +279,9 @@ function get_number_of_users()
                     $sql = "SELECT COUNT(u.id)
                         FROM $user_table u
                         LEFT JOIN $course_user_table cu
-                        ON u.user_id = cu.user_id AND c_id='".api_get_course_int_id()."'
+                        ON u.id = cu.user_id AND c_id='".api_get_course_int_id()."'
                         INNER JOIN  $tbl_url_rel_user as url_rel_user
-                        ON (url_rel_user.user_id = u.user_id)
+                        ON (url_rel_user.user_id = u.id)
                         WHERE cu.user_id IS NULL AND u.status<>".DRH." AND access_url_id= $url_access_id ";
                 }
             }
@@ -294,7 +293,7 @@ function get_number_of_users()
                     FROM $user_table u
                     LEFT JOIN $tbl_session_rel_course_user cu
                     ON
-                        u.user_id = cu.user_id AND
+                        u.id = cu.user_id AND
                         c_id='".api_get_course_int_id()."' AND
                         session_id ='".$sessionId."'
                     WHERE
@@ -310,7 +309,7 @@ function get_number_of_users()
                             FROM $user_table u
                             LEFT JOIN $tbl_session_rel_course_user cu
                             ON
-                                u.user_id = cu.user_id AND
+                                u.id = cu.user_id AND
                                 c_id='".api_get_course_int_id()."' AND
                                 session_id ='".$sessionId."'
                             INNER JOIN $tbl_url_rel_user as url_rel_user
@@ -354,7 +353,7 @@ function get_number_of_users()
                     $tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
                     $sql = "SELECT COUNT(u.id)
                             FROM $user_table u
-                            LEFT JOIN $course_user_table cu 
+                            LEFT JOIN $course_user_table cu
                             ON u.user_id = cu.user_id AND c_id='".api_get_course_int_id()."'
                             INNER JOIN $tbl_url_rel_user as url_rel_user
                             ON (url_rel_user.user_id = u.id)

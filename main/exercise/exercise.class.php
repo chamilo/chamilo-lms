@@ -1047,6 +1047,12 @@ class Exercise
                 case EX_Q_SELECTION_ORDERED:
                     $questionList = $this->getQuestionOrderedList($adminView);
                     break;
+                case EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_ORDERED: //4
+                    //Question orderderd alfabetical and random category
+                    $this->questionList = $this->getAlfabeticalOrderQuestion($this->questionList);
+                    $questionList = $this->questionList;
+                    break;
+
                 case EX_Q_SELECTION_RANDOM:
                     // Not a random exercise, or if there are not at least 2 questions
                     if ($this->random == 0 || $nbQuestions < 2) {
@@ -10568,5 +10574,38 @@ class Exercise
             null,
             get_lang('ShowResultsToStudents')
         );
+    }
+
+
+    public function getAlfabeticalOrderQuestion($questionsId = [], $orderAsc = true){
+
+        if(empty($questionsId)) return $questionsId;
+        if(!is_array($questionsId)) return $questionsId;
+
+        $tableQuiz = Database::get_course_table(TABLE_QUIZ_QUESTION);
+
+        $jsonQuestionId = json_encode($questionsId);
+        $jsonQuestionId = str_replace(['[',']','"',"'"],'',$jsonQuestionId);
+        $order = 'ASC';
+        if($orderAsc != true){
+            $order = 'DESC';
+
+        }
+        $sql = "SELECT
+                   iid
+                FROM
+                    $tableQuiz
+                WHERE
+                      iid in ($jsonQuestionId)
+                ORDER BY question $order;";
+
+
+        $result = Database::query($sql);
+
+        $rows = [];
+        while ($row = Database::fetch_array($result, 'ASSOC')) {
+            $rows[] = $row['iid'];
+        }
+        return $rows;
     }
 }

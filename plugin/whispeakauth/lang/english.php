@@ -22,7 +22,7 @@ $strings['AuthentifySampleText4'] = 'Go Out On a Limb.';
 $strings['AuthentifySampleText5'] = 'Under the Water.';
 $strings['AuthentifySampleText6'] = 'Barking Up The Wrong Tree.';
 
-$strings['RepeatThisPhrase'] = 'Repeat this phrase three times after allowing audio recording:';
+$strings['RepeatThisPhrase'] = 'Allow audio recording and then read this sentence out loud:';
 $strings['EnrollmentSignature0'] = 'Unsustainable signature requires a new enrollment.';
 $strings['EnrollmentSignature1'] = 'Passable signature, advice to make a new enrollment.';
 $strings['EnrollmentSignature2'] = 'Correct signature.';
@@ -51,7 +51,5 @@ $strings['AudioQualityLoud'] = 'Too loud audio';
 $strings['AudioQualityNoisy'] = 'Too noisy audio';
 $strings['AudioQualityFrequency'] = 'Missing some audio frequencies';
 $strings['AudioQualityPoorness'] = 'Too poor general audio quality';
-
-$strings['AgreeAllowResearch'] = 'I agree to allow the use of data for research (no commercial usage).';
 
 $strings['MarkForSpeechAuthentication'] = 'Mark it for speech authentication';

@@ -1,0 +1,162 @@
+
+.styleOfPages{
+    display:none;
+}
+
+.dialogBlockEditdialogcard{
+    border:solid 1px rgb(71, 79, 90);
+    position:relative;
+    padding:10px;
+    height:260px;
+}
+
+.dialogBlockEditmemory{
+    border:solid 1px rgb(71, 79, 90);
+    position:relative;
+    padding:10px;
+    height:160px;
+}
+
+.labelBlockEdit{
+   width:60px;
+   float:left;
+   text-align: right;
+}
+.inputBlockEdit{
+    width:90px;
+    float:left;
+    text-align: right;
+ }
+
+ .arealeft{
+     float:left;
+     width:80%;
+ }
+.lineBlockTxt{
+    float:left;
+    width:70%;
+    height:120px;
+    background-color: white;
+    border:solid 1px rgb(71, 79, 90);
+    overflow: hidden;
+}
+.imageBlockPreview{
+    border:solid 1px rgb(71, 79, 90);
+    position:absolute;
+    right:10px;top:10px;
+    border-radius: 5px;
+    background-image:url("../img/dialogcard.jpg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 100px;
+    height:100px;
+    cursor:pointer;
+}
+
+.imageBlockPreviewLarge{
+    border:solid 1px rgb(71, 79, 90);
+    border-radius: 5px;
+    background-image:url("../img/dialogcard.jpg");
+    background-size: contain;
+    background-position: center center;
+    background-repeat: no-repeat;
+    width: 200px;
+    height:100px;
+    cursor:pointer;
+}
+
+.toolimage{
+    width:100%;
+    max-width:80px;
+    max-height:80px;
+}
+@media screen and (min-width: 640px) {
+    .toolimage{
+        width:80px;
+        height:80px;
+    }
+  }
+
+.addBlockCard{
+    position : relative;
+    display : inline-block;
+    background-image : url("../img/add.png");
+    background-repeat : no-repeat;
+    background-position : center center;
+    width : 50px;
+    height : 50px;
+    cursor : pointer;
+}
+.addBlockCard:hover{
+    border : solid 2px rgb(44, 102, 10);
+    border-radius : 50%;
+}
+
+.divAddBlockDialog{
+    position : relative;
+    text-align : center;
+    width : 100%;
+    height : 50px;
+}
+
+.deleteBlockCard{
+    position : absolute;
+    display : none;
+    right : 2px;
+    bottom : 2px;
+    border-radius : 5px;
+    background-image : url("../img/delete.png");
+    background-repeat : no-repeat;
+    background-position : center center;
+    width : 50px;
+    height : 50px;
+    cursor : pointer;
+}
+.deleteBlockCard:hover{
+    border : solid 2px rgb(224, 73, 35);
+    border-radius : 50%;
+}
+
+
+/* header cell in data table in tools */
+.data_table {
+    margin-bottom: 18px;
+    width: 100%;
+    border: 1px solid #DDDDDD;
+}
+.data_table td {
+    font-size: 12px;
+}
+.data_table th, .data_table td {
+    border-top: 1px solid #DDDDDD;
+    line-height: 18px;
+    padding: 10px;
+}
+.data_table th {
+    padding: 8px 10px;
+    font-weight: normal;
+    background-color: #EEEEEE;
+    border-bottom: 1px solid #DDDDDD;
+    color: #333;
+}
+.data_table th a {
+    color: #333;
+}
+.data_table_no_border {
+    border-collapse: collapse;
+    border-spacing: 0;
+    font-size: 12px;
+    margin-bottom: 15px;
+    margin-top: 8px;
+    text-align: left;
+    width: 100%;
+}
+.data_table_no_border td {
+    line-height: normal;
+    padding: 6px;
+    text-align: left;
+    vertical-align: middle;
+}
+.data_table tr.row_odd {
+    background-color: #F9F9F9;
+}

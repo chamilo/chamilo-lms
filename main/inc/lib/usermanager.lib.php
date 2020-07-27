@@ -887,18 +887,18 @@ class UserManager
             $user["lastname"],
             $login,
             null,
-            null,
+            $userInfo['auth_source'],
             $user["email"],
             $userInfo['status'],
-            '',
-            '',
-            '',
+            $userInfo['official_code'],
+            $userInfo['phone'],
+            $userInfo['picture_uri'],
+            $userInfo['expiration_date'],
+            $userInfo['active'],
+            $userInfo['creator_id'],
+            $userInfo['hr_dept_id'],
             null,
-            1,
-            null,
-            0,
-            null,
-            ''
+            $userInfo['language']
         );
         if (false === $userId) {
             throw new Exception(get_lang('CouldNotUpdateUser'));

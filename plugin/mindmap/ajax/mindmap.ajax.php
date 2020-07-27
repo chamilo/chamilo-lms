@@ -45,7 +45,7 @@ if (isset($_GET['id'])) {
                 ];
             }
 
-            $resultUp = Database::update($table, $params, $whereConditions);
+            Database::update($table, $params, $whereConditions);
 
             echo 'OK';
         } else {

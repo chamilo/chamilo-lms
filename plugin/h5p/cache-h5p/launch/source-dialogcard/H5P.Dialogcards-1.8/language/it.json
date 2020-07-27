@@ -1,0 +1,220 @@
+{
+  "semantics": [
+    {
+      "label": "Intestazione"
+    },
+    {
+      "label": "Modo",
+      "description": "Modalità di presentazione delle Dialog Cards",
+      "options": [
+        {
+          "label": "Normale"
+        },
+        {
+          "label": "Ripetizione"
+        }
+      ]
+    },
+    {
+      "label": "Descrizione attività",
+      "default": ""
+    },
+    {
+      "widgets": [
+        {
+          "label": "Predefinito"
+        }
+      ],
+      "label": "Dialoghi",
+      "entity": "dialogo",
+      "field": {
+        "label": "Domanda",
+        "fields": [
+          {
+            "label": "Testo",
+            "description": "Suggerimento per la prima parte del dialogo"
+          },
+          {
+            "label": "Risposta",
+            "description": "Suggerimento per la seconda parte del dialogo"
+          },
+          {
+            "label": "Immagine",
+            "description": "Immagine opzionale per la carta (la carta può usare solo un'immagine, solo un testo o entrambi)"
+          },
+          {
+            "label": "Testo alternativo per l'immagine"
+          },
+          {
+            "label": "File audio"
+          },
+          {
+            "label": "Suggerimenti",
+            "fields": [
+              {
+                "label": "Suggerimento per il testo",
+                "description": "Suggerimento per la prima parte del dialogo"
+              },
+              {
+                "label": "Suggerimento per la risposta",
+                "description": "Suggerimento per la seconda parte del dialogo"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "label": "Impostazioni di esecuzione",
+      "description": "Queste opzioni permettono di controllare il comportamento del compito",
+      "fields": [
+        {
+          "label": "Attiva pulsante \"Riprova\""
+        },
+        {
+          "label": "Disabilita la navigazione all'indietro",
+          "description": "Questa opzione ti permette soltanto di andare avanti con le Dialog Cards"
+        },
+        {
+          "label": "Riproporziona il testo per adattarlo alla carta",
+          "description": "Deselezionando questa opzione, la scheda si adatterà alle dimensioni del testo"
+        },
+        {
+          "label": "Ordine casuale delle carte",
+          "description": "Attiva la randomizzazione dell'ordine in cui vengono mostrate le carte."
+        },
+        {
+          "label": "Massimo livello di competenza"
+        },
+        {
+          "label": "Consenti una rapida progressione",
+          "description": "Se attivato, gli apprendenti possono decidere di indicare che conoscono una carta senza voltarla"
+        }
+      ]
+    },
+    {
+      "label": "Testo per il pulsante Gira",
+      "default": "Gira"
+    },
+    {
+      "label": "Testo per il pulsante \"avanti\"",
+      "default": "Avanti"
+    },
+    {
+      "label": "Testo per il pulsante \"indietro\"",
+      "default": "Indietro"
+    },
+    {
+      "label": "Testo per il pulsante \"riprova\"",
+      "default": "Riprova"
+    },
+    {
+      "label": "Testo per il pulsante \"risposta giusta\"",
+      "default": "Ho fatto bene!"
+    },
+    {
+      "label": "Testo per il pulsante \"risposta sbagliata\"",
+      "default": "Ho sbagliato"
+    },
+    {
+      "label": "Testo per il messaggio \"Giocata\" sotto le carte e sulla schermata di riepilogo",
+      "description": "@round sarà sostituito dal numero della giocata in corso",
+      "default": "Giocata @round"
+    },
+    {
+      "label": "Testo per il messaggio \"Carte rimanenti\"",
+      "description": "@number sarà sostituito dal numero di carte ancora a disposizione in questa giocata",
+      "default": "Carte rimanenti: @number"
+    },
+    {
+      "label": "Testo per il pulsante \"prossima giocata\"",
+      "description": "@round sarà sostituito dal numero della giocata",
+      "default": "Vai alla giocata @round"
+    },
+    {
+      "label": "Testo per il pulsante \"Ricomincia\"",
+      "default": "Ricomincia"
+    },
+    {
+      "label": "Testo per il pulsante \"prossimo\"",
+      "default": "Prossimo"
+    },
+    {
+      "label": "Testo del titolo della pagina sommario",
+      "default": "Sommario"
+    },
+    {
+      "label": "Testo per le risposte giuste:",
+      "default": "Risposte giuste:"
+    },
+    {
+      "label": "Testo per le risposte sbagliate:",
+      "default": "Risposte sbagliate:"
+    },
+    {
+      "label": "Testo per \"Carte non mostrate:\"",
+      "default": "Carte del mazzo non mostrate:"
+    },
+    {
+      "label": "Testo per \"Punteggio complessivo\"",
+      "default": "Punteggio complessivo"
+    },
+    {
+      "label": "Testo per \"Carte completate\"",
+      "default": "Carte che hai già imparato:"
+    },
+    {
+      "label": "Testo per \"Giocate completate:\"",
+      "default": "Giocate completate:"
+    },
+    {
+      "label": "Messaggio per quando tutte le carte sono state imparate per bene",
+      "description": "@cards sarà sostituito dal numero di tutte le carte nel mazzo. @max sarà sostituito dal livello massimo di competenza - 1.",
+      "default": "Ottimo! Hai fatto @cards carte giuste @max volte di seguito!"
+    },
+    {
+      "label": "Testo di avanzamento",
+      "description": "Le variabili disponibili sono @card e @total.",
+      "default": "Carta @card di @total"
+    },
+    {
+      "label": "Etichetta per il testo della carta",
+      "description": "Usato per l'accessibilità tramite tecnologie assistive",
+      "default": "Fronte della carta"
+    },
+    {
+      "label": "Etichetta per il testo della carta",
+      "description": "Usato per l'accessibilità tramite tecnologie assistive",
+      "default": "Dietro della carta"
+    },
+    {
+      "label": "Etichetta per il pulsante \"mostra suggerimento\"",
+      "default": "Mostra suggerimento"
+    },
+    {
+      "label": "Messaggio di audio non supportato",
+      "default": "Il tuo browser non supporta questo audio"
+    },
+    {
+      "label": "Finestra di dialogo per confermare nuovo inizio",
+      "fields": [
+        {
+          "label": "Testo dell'intestazione",
+          "default": "Ricominciare?"
+        },
+        {
+          "label": "Corpo del testo",
+          "default": "Tutto il lavoro andrà perduto. Sei sicuro/a di di voler ricominciare?"
+        },
+        {
+          "label": "Etichetta del pulsante di annullamento",
+          "default": "Annulla"
+        },
+        {
+          "label": "Etichetta del pulsante di conferma",
+          "default": "Ricomincia"
+        }
+      ]
+    }
+  ]
+}

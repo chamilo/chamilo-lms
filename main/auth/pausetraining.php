@@ -32,7 +32,7 @@ $return = $extraField->addElements(
     [],
     false,
     false,
-    ['pause_formation', 'start_pause_date', 'end_pause_date', 'allow_notifications'],
+    ['pause_formation', 'start_pause_date', 'end_pause_date'],
     [],
     [],
     false,
@@ -54,11 +54,6 @@ if ($form->validate()) {
     if (!isset($values['extra_pause_formation'])) {
         $values['extra_pause_formation'] = 0;
     }
-
-    if (!isset($values['extra_allow_notifications'])) {
-        $values['extra_allow_notifications'] = 0;
-    }
-
     $extraField = new ExtraFieldValue('user');
     $extraField->saveFieldValues($values, true, false, [], [], true);
 

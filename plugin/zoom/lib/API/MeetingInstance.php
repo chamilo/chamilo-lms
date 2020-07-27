@@ -26,28 +26,26 @@ class MeetingInstance
     /**
      * Retrieves the recording of the instance.
      *
-     * @param Client $client
-     *
      * @throws Exception with code 404 when there is no recording for this meeting
      *
      * @return RecordingMeeting the recording
      */
-    public function getRecordings($client)
+    public function getRecordings()
     {
-        return RecordingMeeting::fromJson($client->send('GET', 'meetings/'.htmlentities($this->uuid).'/recordings'));
+        return RecordingMeeting::fromJson(
+            Client::getInstance()->send('GET', 'meetings/'.htmlentities($this->uuid).'/recordings')
+        );
     }
 
     /**
      * Retrieves the instance's participants.
      *
-     * @param Client $client
-     *
      * @throws Exception
      *
      * @return ParticipantListItem[]
      */
-    public function getParticipants($client)
+    public function getParticipants()
     {
-        return ParticipantList::loadInstanceParticipants($client, $this->uuid);
+        return ParticipantList::loadInstanceParticipants($this->uuid);
     }
 }

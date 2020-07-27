@@ -1,0 +1,147 @@
+{
+  "semantics": [
+    {
+      "label": "Multimedia",
+      "fields": [
+        {
+          "label": "Type",
+          "description": "Eit valfritt multimediaelement som skal visast over spørsmålet."
+        },
+        {
+          "label": "Slå av bilete zooming"
+        }
+      ]
+    },
+    {
+      "label": "Spørsmål"
+    },
+    {
+      "label": "Riktig svar",
+      "options": [
+        {
+          "label": "Rett"
+        },
+        {
+          "label": "Feil"
+        }
+      ]
+    },
+    {
+      "label": "User interface translations for True/False Questions",
+      "fields": [
+        {
+          "label": "Label for true button",
+          "default": "Rett"
+        },
+        {
+          "label": "Label for false button",
+          "default": "Feil"
+        },
+        {
+          "label": "Tilbakemelding",
+          "default": "@score av @total poeng",
+          "description": "Tekstleg tilbakemelding, tilgjengelege variablar: @score og @total. Eksempel: 'Du fikk @score av @total felt rett.'"
+        },
+        {
+          "label": "Tekst for \"Sjekk\"-knapp",
+          "default": "Sjekk"
+        },
+        {
+          "label": "Tekst for \"Fasit\" knapp",
+          "default": "Fasit"
+        },
+        {
+          "label": "Tekst for \"Prøv igjen\"-knapp",
+          "default": "Prøv igjen"
+        },
+        {
+          "label": "Wrong Answer",
+          "default": "Galt svar"
+        },
+        {
+          "label": "Correct Answer",
+          "default": "Riktig svar"
+        },
+        {
+          "label": "Textual representation of the score bar for those using a readspeaker",
+          "default": "Du fikk :num av :total points"
+        }
+      ]
+    },
+    {
+      "label": "Innstillinger for oppgave-oppførsel",
+      "description": "Disse instillingene lar deg bestemme hvordan oppgavetypen skal oppføre seg.",
+      "fields": [
+        {
+          "label": "Aktiver \"Prøv igjen\""
+        },
+        {
+          "label": "Aktiver \"Fasit\" knapp"
+        },
+        {
+          "label": "Enable \"Check\" button"
+        },
+        {
+          "label": "Slå på bruker-bekreftelse før \"Sjekk svar\""
+        },
+        {
+          "label": "Slå på bruker-bekreftelse før \"Prøv igjen\""
+        },
+        {
+          "label": "Automatically check answer",
+          "description": "Note that accessibility will suffer if enabling this option"
+        },
+        {
+          "label": "Feedback on correct answer",
+          "description": "This will override the default feedback text. Variables available: @score and @total"
+        },
+        {
+          "label": "Feedback on wrong answer",
+          "description": "This will override the default feedback text. Variables available: @score and @total"
+        }
+      ]
+    },
+    {
+      "label": "Fasit bruker-bekreftelse",
+      "fields": [
+        {
+          "label": "Tittel",
+          "default": "Ferdig ?"
+        },
+        {
+          "label": "Tekst",
+          "default": "Er du sikker på at du er ferdig ?"
+        },
+        {
+          "label": "Avbryt etikett",
+          "default": "Avbryt"
+        },
+        {
+          "label": "Bekreft etikett",
+          "default": "Bekreft"
+        }
+      ]
+    },
+    {
+      "label": "Prøv igjen bruker-bekreftelse",
+      "fields": [
+        {
+          "label": "Tittel",
+          "default": "Prøv igjen?"
+        },
+        {
+          "label": "Tekst",
+          "default": "Er du sikker på at du vil prøve igjen?"
+        },
+        {
+          "label": "Avbryt etikett",
+          "default": "Avbryt"
+        },
+        {
+          "label": "Bekreft etikett",
+          "default": "Bekreft"
+        }
+      ]
+    }
+  ]
+}

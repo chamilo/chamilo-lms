@@ -1,0 +1,49 @@
+{
+  "semantics": [
+    {
+      "label": "Source files"
+    },
+    {
+      "label": "Player mode",
+      "description": "Select the layout of the player.",
+      "options": [
+        {
+          "label": "Minimalistic"
+        },
+        {
+          "label": "Full"
+        },
+        {
+          "label": "Transparent"
+        }
+      ]
+    },
+    {
+      "label": "Fit to wrapper"
+    },
+    {
+      "label": "Enable controls",
+      "description": "Controls allow the user to for instance pause the audio"
+    },
+    {
+      "label": "Enable autoplay",
+      "description": "With autoplay the audio starts to play immediately. If autoplay is disabled the user presses a play button to start the audio."
+    },
+    {
+      "label": "Play audio (Readspeaker)",
+      "default": "Play audio"
+    },
+    {
+      "label": "Pause audio (Readspeaker)",
+      "default": "Pause audio"
+    },
+    {
+      "label": "Audio content name",
+      "default": "Audio"
+    },
+    {
+      "label": "Audio not supported message",
+      "default": "Your browser does not support this audio"
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "name": "h5p-standalone",
+  "version": "2.1.0",
+  "description": "Display H5P content as standalone frontend code, no server needed.",
+  "main": "dist/main.bundle.js",
+  "dependencies": {
+    "@babel/runtime": "^7.6.3",
+    "jquery": "~3.4.1",
+    "toposort-class": "^1.0.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.6.4",
+    "@babel/plugin-proposal-class-properties": "^7.5.5",
+    "@babel/plugin-transform-runtime": "^7.6.2",
+    "@babel/preset-env": "^7.6.3",
+    "babel-loader": "^8.0.6",
+    "babel-plugin-add-module-exports": "^1.0.2",
+    "copy-webpack-plugin": "^5.0.4",
+    "cypress": "^3.6.0",
+    "exports-loader": "^0.7.0",
+    "imports-loader": "^0.8.0",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10",
+    "webpack-dev-server": "^3.9.0",
+    "webpack-merge": "^4.2.2"
+  },
+  "scripts": {
+    "watch": "webpack --watch --config webpack.dev.js",
+    "start": "webpack-dev-server --config webpack.dev.js",
+    "build": "webpack --config webpack.prod.js",
+    "test": "cypress run",
+    "cypress:open": "cypress open"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tunapanda/h5p-standalone.git"
+  },
+  "keywords": [
+    "h5p"
+  ],
+  "author": "Jake Lee Kennedy <jake@tunapanda.org>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tunapanda/h5p-standalone/issues"
+  },
+  "homepage": "https://github.com/tunapanda/h5p-standalone#readme"
+}

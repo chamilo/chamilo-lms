@@ -1,0 +1,26 @@
+{
+  "semantics": [
+    {
+      "label": "任务描述",
+      "description": "描述用户应该如何解决任务."
+    },
+    {
+      "label": "媒体",
+      "fields": [
+        {
+          "label": "类型",
+          "description": "可选媒体显示在问题上方."
+        }
+      ]
+    },
+    {
+      "label": "描述性解决方案标签",
+      "default": "点击并查看答案.",
+      "description": "可单击的文本区域将显示解决方案."
+    },
+    {
+      "label": "解决方案文本",
+      "description": "图片的解决方案."
+    }
+  ]
+}

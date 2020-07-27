@@ -1,0 +1,136 @@
+{
+  "semantics": [
+    {
+      "label": "Task description",
+      "description": "Describe how the user should solve the task.",
+      "default": "Drag the words into the correct boxes"
+    },
+    {
+      "label": "Text",
+      "placeholder": "*Oslo* is the capital of Norway, *Stockholm* is the capital of Sweden and *Copenhagen* is the capital of Denmark. All cities are located in the *Scandinavian:Northern Part of Europe* peninsula.",
+      "description": "",
+      "important": {
+        "description": "<ul><li>Droppable words are added with an asterisk (*) in front and behind the correct word/phrase.</li><li>You may add a textual tip, using a colon (:) in front of the tip.</li><li>For every empty spot there is only one correct word.</li><li>You may add feedback to be displayed when a task is completed. Use '\\+' for correct and '\\-' for incorrect feedback.</li></ul>",
+        "example": "H5P content may be edited using a *browser:What type of program is Chrome?*. </br> H5P content is *interactive\\+Correct! \\-Incorrect, try again!*"
+      }
+    },
+    {
+      "label": "Overall Feedback",
+      "fields": [
+        {
+          "widgets": [
+            {
+              "label": "Per defecte"
+            }
+          ],
+          "label": "Define custom feedback for any score range",
+          "description": "Click the \"Add range\" button to add as many ranges as you need. Example: 0-20% Bad score, 21-91% Average Score, 91-100% Great Score!",
+          "entity": "range",
+          "field": {
+            "fields": [
+              {
+                "label": "Score Range"
+              },
+              {},
+              {
+                "label": "Feedback for defined score range",
+                "placeholder": "Fill in the feedback"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "label": "Text pel botó \"Verificar\"",
+      "default": "Verificar"
+    },
+    {
+      "label": "Text pel botó \"Tornar-ho a provar\"",
+      "default": "Tornar-ho a provar"
+    },
+    {
+      "label": "Text for \"Show Solution\" button",
+      "default": "Mostrar solució"
+    },
+    {
+      "label": "Numbered Drop zone label",
+      "default": "Drop Zone @index.",
+      "description": "Label used for accessibility, where the Read speaker will read the index of a drop zone. Variable available: @index"
+    },
+    {
+      "label": "Empty Drop Zone label",
+      "default": "Drop Zone @index is empty.",
+      "description": "Label used for accessibility, where the Read speaker will read that the drop zone is empty"
+    },
+    {
+      "label": "Contains Drop Zone label",
+      "default": "Drop Zone @index contains draggable @draggable.",
+      "description": "Label used for accessibility, where the Read speaker will read that the drop zone contains a draggable"
+    },
+    {
+      "label": "Draggable elements label",
+      "default": "@index of @count draggables.",
+      "description": "Label used for accessibility, where the Read speaker reads that this is a draggable element. Variable available: @index, @count"
+    },
+    {
+      "label": "Label for show tip button",
+      "default": "Mostrar consell",
+      "description": "Label used for accessibility, where the Read speaker reads it before the tip is read out"
+    },
+    {
+      "label": "Readspeaker text for correct answer",
+      "default": "Correct!"
+    },
+    {
+      "label": "Readspeaker text for incorrect answer",
+      "default": "Incorrect!"
+    },
+    {
+      "label": "Confirmation dialog title that user wants to reset a droppable",
+      "default": "Reset drop"
+    },
+    {
+      "label": "Confirmation dialog description that user wants to reset a droppable",
+      "default": "Are you sure you want to reset this drop zone?"
+    },
+    {
+      "label": "Label used for accessibility, where the read speaker indicates that dragging is initiated",
+      "default": "Draggable is grabbed."
+    },
+    {
+      "label": "Label used for accessibility, where the read speaker indicates that dragging is canceled",
+      "default": "Cancelled dragging."
+    },
+    {
+      "label": "Label used for accessibility, where the read speaker indicates that a text is the correct answer",
+      "default": "Correct answer:"
+    },
+    {
+      "label": "Header for panel containing feedback for correct/incorrect answers",
+      "default": "Feedback"
+    },
+    {
+      "label": "Behavioural settings.",
+      "description": "Aquestes opcions et permetran controlar com es comporta la tasca.",
+      "fields": [
+        {
+          "label": "Enable \"Retry\""
+        },
+        {
+          "label": "Activa el botó \"Mostrar solució\""
+        },
+        {
+          "label": "Enable \"Check\" button"
+        },
+        {
+          "label": "Instant feedback"
+        }
+      ]
+    },
+    {
+      "label": "Textual representation of the score bar for those using a readspeaker",
+      "default": "You got :num out of :total points"
+    }
+  ]
+}

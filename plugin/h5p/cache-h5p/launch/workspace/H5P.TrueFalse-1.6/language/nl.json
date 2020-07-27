@@ -1,0 +1,147 @@
+{
+  "semantics": [
+    {
+      "label": "Media",
+      "fields": [
+        {
+          "label": "Type",
+          "description": "Optionele media, die boven de vragen worden getoond"
+        },
+        {
+          "label": "Deactiveer zoomen op een afbeelding"
+        }
+      ]
+    },
+    {
+      "label": "Vraag"
+    },
+    {
+      "label": "Juist antwoord",
+      "options": [
+        {
+          "label": "Waar"
+        },
+        {
+          "label": "Niet Waar"
+        }
+      ]
+    },
+    {
+      "label": "Vertalingen van de gebruikersinterface voor Juist/onjuist-vragen",
+      "fields": [
+        {
+          "label": "Onderschrift voor de \"Juist\"-knop",
+          "default": "Juist"
+        },
+        {
+          "label": "Onderschrift voor de \"Onjuist\"-knop",
+          "default": "Onjuist"
+        },
+        {
+          "label": "Feedback tekst",
+          "default": "Je hebt @score van @total punten",
+          "description": "Feedbacktekst, beschikbare variabelen: @score en @total. Voorbeeld: 'Je hebt @score van @total mogelijke punten.'"
+        },
+        {
+          "label": "Tekst voor de \"Controleer\"-knop",
+          "default": "Controleer"
+        },
+        {
+          "label": "Tekst voor de \"Toon oplossing\"-knop",
+          "default": "Toon oplossing"
+        },
+        {
+          "label": "Tekst voor de \"Opnieuw proberen\"-knop",
+          "default": "Opnieuw proberen"
+        },
+        {
+          "label": "Onjuist antwoord",
+          "default": "Onjuist antwoord"
+        },
+        {
+          "label": "Juist antwoord",
+          "default": "Juist antwoord"
+        },
+        {
+          "label": "Tekstuele weergave van de scorebalk voor de gebruikers van de readspeaker",
+          "default": "Je hebt :num van :total punten"
+        }
+      ]
+    },
+    {
+      "label": "Gedragsinstellingen",
+      "description": "Deze opties bepalen hoe de taak op de input reageert.",
+      "fields": [
+        {
+          "label": "\"Opnieuw proberen\"-knop inschakelen"
+        },
+        {
+          "label": "\"Toon oplossing\"-knop inschakelen"
+        },
+        {
+          "label": "\"Controleer\"-knop inschakelen"
+        },
+        {
+          "label": "Toon de bevestigingsdialoog bij \"Controleer\""
+        },
+        {
+          "label": "Toon de bevestigingsdialoog bij \"Opnieuw proberen\""
+        },
+        {
+          "label": "Het antwoord automatisch controleren",
+          "description": "Als deze optie ingeschakeld wordt, dan zal dit de toegankelijkheid verminderen"
+        },
+        {
+          "label": "Feedback bij het juiste antwoord",
+          "description": "Deze tekst overschrijft de standaard feedback tekst. Beschikbare variabelen zijn: @score en @total"
+        },
+        {
+          "label": "Feedback bij het onjuiste antwoord",
+          "description": "Deze tekst overschrijft de standaard feedback tekst. Beschikbare variabelen zijn: @score en @total"
+        }
+      ]
+    },
+    {
+      "label": "Bevestigingsdialoog bij het afronden",
+      "fields": [
+        {
+          "label": "Koptekst",
+          "default": "Afronden?"
+        },
+        {
+          "label": "Bodytekst",
+          "default": "Ben je er zeker van dat je wilt afronden?"
+        },
+        {
+          "label": "Tekst van de \"Annuleer\"-knop",
+          "default": "Annuleren"
+        },
+        {
+          "label": "Tekst van de \"Bevestig\"-knop",
+          "default": "Beëindigen"
+        }
+      ]
+    },
+    {
+      "label": "Bevestigingsdialoog bij Opnieuw proberen",
+      "fields": [
+        {
+          "label": "Koptekst",
+          "default": "Opnieuw proberen?"
+        },
+        {
+          "label": "Bodytekst",
+          "default": "Ben je er zeker van dat je opnieuw wilt proberen?"
+        },
+        {
+          "label": "Tekst van de \"Annuleer\"-knop",
+          "default": "Annuleren"
+        },
+        {
+          "label": "Tekst van de \"Bevestig\"-knop",
+          "default": "Bevestigen"
+        }
+      ]
+    }
+  ]
+}

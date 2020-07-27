@@ -31,18 +31,16 @@ class ParticipantList
     /**
      * Retrieves a meeting instance's participants.
      *
-     * @param Client $client
      * @param string $instanceUUID
      *
      * @throws Exception
      *
      * @return ParticipantListItem[] participants
      */
-    public static function loadInstanceParticipants($client, $instanceUUID)
+    public static function loadInstanceParticipants($instanceUUID)
     {
         return static::loadItems(
             'participants',
-            $client,
             'past_meetings/'.htmlentities($instanceUUID).'/participants'
         );
     }

@@ -48,7 +48,7 @@ class ApiRequest
             'get',
             'enroll',
             $apiKey,
-            ['lang' => $langIso]
+            $langIso
         );
     }
 
@@ -60,13 +60,15 @@ class ApiRequest
      *
      * @return array
      */
-    public function createEnrollment($token, $audioFilePath)
+    public function createEnrollment($token, $audioFilePath, User $user)
     {
+        $langIso = api_get_language_isocode($user->getLanguage());
+
         return $this->sendRequest(
             'post',
             'enroll',
             $token,
-            [],
+            $langIso,
             [
                 [
                     'name' => 'file',
@@ -92,31 +94,38 @@ class ApiRequest
             'get',
             'auth',
             $apiKey,
-            ['lang' => $langIso]
+            $langIso
         );
     }
 
     /**
      * @param string $token
-     * @param string $speaker
      * @param string $audioFilePath
      *
      * @throws \Exception
      *
      * @return bool
      */
-    public function performAuthentication($token, $speaker, $audioFilePath)
+    public function performAuthentication($token, User $user, $audioFilePath)
     {
+        $wsid = \WhispeakAuthPlugin::getAuthUidValue($user->getId());
+
+        if (empty($wsid)) {
+            throw new \Exception($this->plugin->get_lang('SpeechAuthNotEnrolled'));
+        }
+
+        $langIso = api_get_language_isocode($user ? $user->getLanguage() : null);
+
         try {
             $this->sendRequest(
                 'post',
                 'auth',
                 $token,
-                [],
+                $langIso,
                 [
                     [
                         'name' => 'speaker',
-                        'contents' => $speaker,
+                        'contents' => $wsid->getValue(),
                     ],
                     [
                         'name' => 'file',
@@ -136,12 +145,13 @@ class ApiRequest
      * @param string $method
      * @param string $uri
      * @param string $authBearer
+     * @param string $lang
      *
      * @throws \Exception
      *
      * @return array
      */
-    private function sendRequest($method, $uri, $authBearer, array $query = [], array $multipart = [])
+    private function sendRequest($method, $uri, $authBearer, $lang, array $multipart = [])
     {
         $httpClient = new Client(['base_uri' => $this->plugin->getApiUrl()]);
 
@@ -151,8 +161,10 @@ class ApiRequest
                     $method,
                     $uri,
                     [
-                        'headers' => ['Authorization' => "Bearer $authBearer"],
-                        'query' => $query,
+                        'headers' => [
+                            'Authorization' => "Bearer $authBearer",
+                            'Accept-Language' => $lang,
+                        ],
                         'multipart' => $multipart,
                     ]
                 )

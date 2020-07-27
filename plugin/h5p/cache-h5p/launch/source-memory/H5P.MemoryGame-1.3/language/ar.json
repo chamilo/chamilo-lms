@@ -1,0 +1,121 @@
+{
+  "semantics": [
+    {
+      "widgets": [
+        {
+          "label": "Default"
+        }
+      ],
+      "label": "البطاقات",
+      "entity": "بطاقة",
+      "field": {
+        "label": "البطاقة",
+        "fields": [
+          {
+            "label": "الصورة"
+          },
+          {
+            "label": "Alternative text for Image",
+            "description": "Describe what can be seen in the photo. The text is read by text-to-speech tools needed by visually impaired users."
+          },
+          {
+            "label": "Audio Track",
+            "description": "An optional sound that plays when the card is turned."
+          },
+          {
+            "label": "Matching Image",
+            "description": "An optional image to match against instead of using two cards with the same image."
+          },
+          {
+            "label": "Alternative text for Matching Image",
+            "description": "Describe what can be seen in the photo. The text is read by text-to-speech tools needed by visually impaired users."
+          },
+          {
+            "label": "Matching Audio Track",
+            "description": "An optional sound that plays when the second card is turned."
+          },
+          {
+            "label": "الوصف",
+            "description": "نص قصير يتم عرضه مرة واحدة علي اثنين من البطاقات متساوية"
+          }
+        ]
+      }
+    },
+    {
+      "label": "Behavioural settings",
+      "description": "These options will let you control how the game behaves.",
+      "fields": [
+        {
+          "label": "Position the cards in a square",
+          "description": "Will try to match the number of columns and rows when laying out the cards. Afterward, the cards will be scaled to fit the container."
+        },
+        {
+          "label": "Number of cards to use",
+          "description": "Setting this to a number greater than 2 will make the game pick random cards from the list of cards."
+        },
+        {
+          "label": "Add button for retrying when the game is over"
+        }
+      ]
+    },
+    {
+      "label": "Look and feel",
+      "description": "Control the visuals of the game.",
+      "fields": [
+        {
+          "label": "Theme Color",
+          "description": "Choose a color to create a theme for your card game."
+        },
+        {
+          "label": "Card Back",
+          "description": "Use a custom back for your cards."
+        }
+      ]
+    },
+    {
+      "label": "الأقلمة",
+      "fields": [
+        {
+          "label": "نص تدوير البطاقة",
+          "default": "Card turns"
+        },
+        {
+          "label": "نص التوقيت الزمني",
+          "default": "Time spent"
+        },
+        {
+          "label": "نص الملاحظات",
+          "default": "Good work!"
+        },
+        {
+          "label": "Try again button text",
+          "default": "Reset"
+        },
+        {
+          "label": "Close button label",
+          "default": "Close"
+        },
+        {
+          "label": "Game label",
+          "default": "Memory Game. Find the matching cards."
+        },
+        {
+          "label": "Game finished label",
+          "default": "All of the cards have been found."
+        },
+        {
+          "label": "Card indexing label",
+          "default": "Card %num:"
+        },
+        {
+          "label": "Card unturned label",
+          "default": "Unturned."
+        },
+        {
+          "label": "Card matched label",
+          "default": "Match found."
+        }
+      ]
+    }
+  ]
+}

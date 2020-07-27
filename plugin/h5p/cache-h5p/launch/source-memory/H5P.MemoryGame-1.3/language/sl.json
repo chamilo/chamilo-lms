@@ -1,0 +1,121 @@
+{
+  "semantics": [
+    {
+      "widgets": [
+        {
+          "label": "Privzeto"
+        }
+      ],
+      "label": "Kartice",
+      "entity": "kartica",
+      "field": {
+        "label": "Kartica",
+        "fields": [
+          {
+            "label": "Slika"
+          },
+          {
+            "label": "Nadomestno besedilo za prvo kartico v paru",
+            "description": "Besedilo opisuje videno na sliki in služi bralnikom zaslona."
+          },
+          {
+            "label": "Avdiozapis",
+            "description": "Neobvezen avdiozapis za spremljavo slike na prvi kartici para."
+          },
+          {
+            "label": "Ujemajoča slika",
+            "description": "Neobvezna slika za drugo kartico v paru. V nasprotnem primeru bosta par sestavljali kartici z enako sliko."
+          },
+          {
+            "label": "Nadomestno besedilo za drugo kartico v paru",
+            "description": "Besedilo opisuje videno na sliki in služi bralnikom zaslona."
+          },
+          {
+            "label": "Avdiozapis za drugo kartico v paru",
+            "description": "Neobvezen avdiozapis za spremljavo slike na drugi kartici para."
+          },
+          {
+            "label": "Opis rešitve",
+            "description": "Neobvezno besedilo ob uspešni povezavi kartic para."
+          }
+        ]
+      }
+    },
+    {
+      "label": "Nastavitve interakcije",
+      "description": "Nastavitve omogočajo nadzor nad interakcijo aktivnosti za udeležence.",
+      "fields": [
+        {
+          "label": "Kartice poravnaj v pravokotnik",
+          "description": "Kartice prikaže enakomerno v obliki pravokotnika in ne zgolj poravnano v eni vrsti."
+        },
+        {
+          "label": "Uporabi naslednje število parov",
+          "description": "V primeru večjega nabora pripravljenih parov kartic, lahko izvajalec tukaj omeji (najmanj 2), koliko parov se dejansko uporabi. Ob ponovitvi aktivnosti bodo pari kartic iz celotnega nabora spet izbrani naključno."
+        },
+        {
+          "label": "Prikaži gumb za ponovitev aktivnosti po zaključku"
+        }
+      ]
+    },
+    {
+      "label": "Vizualizacija",
+      "description": "Nastavitve izgleda kartic.",
+      "fields": [
+        {
+          "label": "Barvna shema",
+          "description": "Izbira barvne sheme kartic."
+        },
+        {
+          "label": "Slika hrbta kartic",
+          "description": "Izbira slike za hrbet kartic."
+        }
+      ]
+    },
+    {
+      "label": "Določitev kartic",
+      "fields": [
+        {
+          "label": "Besedilo za obrnjene kartice",
+          "default": "Obrnjenih kartic"
+        },
+        {
+          "label": "Besedilo za porabljen čas",
+          "default": "Porabljen čas"
+        },
+        {
+          "label": "Besedilo ob zaključku naloge",
+          "default": "Dobro opravljeno!"
+        },
+        {
+          "label": "Besedilo gumba za ponoven poskus",
+          "default": "Poskusi ponovno?"
+        },
+        {
+          "label": "Besedilo gumba Zapri",
+          "default": "Zapri"
+        },
+        {
+          "label": "Besedilo aktivnosti spomin",
+          "default": "Poveži pare kartic."
+        },
+        {
+          "label": "Besedilo ob zaključku naloge",
+          "default": "Povezani so vsi pari."
+        },
+        {
+          "label": "Besedilo za razlikovanje kartic",
+          "default": "Kartica %num:"
+        },
+        {
+          "label": "Besedilo za neobrnjene kartice",
+          "default": "Neobrnjeno."
+        },
+        {
+          "label": "Besedilo ob povezanem paru",
+          "default": "Najden par."
+        }
+      ]
+    }
+  ]
+}

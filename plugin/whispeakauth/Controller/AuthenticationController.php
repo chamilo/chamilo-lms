@@ -152,16 +152,10 @@ class AuthenticationController extends BaseController
             throw new \Exception($this->plugin->get_lang('MaxAttemptsReached'));
         }
 
-        $wsid = WhispeakAuthPlugin::getAuthUidValue($user->getId());
-
-        if (empty($wsid)) {
-            throw new \Exception($this->plugin->get_lang('SpeechAuthNotEnrolled'));
-        }
-
         $token = \ChamiloSession::read(\WhispeakAuthPlugin::SESSION_SENTENCE_TEXT);
 
         $request = new ApiRequest();
-        $success = $request->performAuthentication($token, $wsid->getValue(), $audioFilePath);
+        $success = $request->performAuthentication($token, $user, $audioFilePath);
 
         \ChamiloSession::erase(\WhispeakAuthPlugin::SESSION_SENTENCE_TEXT);
 

@@ -1,0 +1,49 @@
+{
+  "semantics": [
+    {
+      "label": "Bronbestanden"
+    },
+    {
+      "label": "Spelermodus",
+      "description": "Selecteer de spelermodus.",
+      "options": [
+        {
+          "label": "Minimalistisch"
+        },
+        {
+          "label": "Volledig"
+        },
+        {
+          "label": "Onzichtbaar"
+        }
+      ]
+    },
+    {
+      "label": "Past in de wrapper"
+    },
+    {
+      "label": "Activeer audiobediening",
+      "description": "De audiobediening stelt je in staat om bijvoorbeeld de audio te pauzeren."
+    },
+    {
+      "label": "Activeer automatisch afspelen",
+      "description": "Met autoplay begint de audio direct met afspelen. Als autoplay is uitgeschakeld, dan dient de gebruiker de audio te starten met de playknop ."
+    },
+    {
+      "label": "Play audio (Readspeaker)",
+      "default": "Play audio"
+    },
+    {
+      "label": "Pause audio (Readspeaker)",
+      "default": "Pause audio"
+    },
+    {
+      "label": "Audionaam",
+      "default": "Audio"
+    },
+    {
+      "label": "Statusbericht niet ondersteunde audio",
+      "default": "Je browser ondersteunt deze audio-opname niet"
+    }
+  ]
+}

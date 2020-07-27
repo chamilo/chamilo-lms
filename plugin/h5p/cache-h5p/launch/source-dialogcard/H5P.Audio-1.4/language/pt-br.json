@@ -1,0 +1,49 @@
+{
+  "semantics": [
+    {
+      "label": "Arquivos fonte"
+    },
+    {
+      "label": "Modo do reprodutor",
+      "description": "Selecione o layout do reprodutor.",
+      "options": [
+        {
+          "label": "Minimalista"
+        },
+        {
+          "label": "Completo"
+        },
+        {
+          "label": "Transparente"
+        }
+      ]
+    },
+    {
+      "label": "Preencher"
+    },
+    {
+      "label": "Habilitar controles",
+      "description": "Controles permitem que o usuário por exemplo, pause o áudio"
+    },
+    {
+      "label": "Habilitar reprodução automática",
+      "description": "O áudio é reproduzido automaticamente. Se a reprodução automática estiver desabilitada, o usuário deve pressionar o botão de reprodução para iniciar o áudio."
+    },
+    {
+      "label": "Play audio (Readspeaker)",
+      "default": "Play audio"
+    },
+    {
+      "label": "Pause audio (Readspeaker)",
+      "default": "Pause audio"
+    },
+    {
+      "label": "Nome do conteúdo de áudio",
+      "default": "Áudio"
+    },
+    {
+      "label": "Mensagem de áudio não suportado",
+      "default": "Seu navegador não suporta este áudio"
+    }
+  ]
+}

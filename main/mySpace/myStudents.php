@@ -693,7 +693,7 @@ echo '<a href="'.api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING'
     .Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), '', ICON_SIZE_MEDIUM).'</a> ';
 
 echo Display::url(
-    Display::return_icon('attendance.png', get_lang('AccessDetails'), '', ICON_SIZE_MEDIUM),
+    Display::return_icon('activity_monitor.png', get_lang('AccessDetails'), '', ICON_SIZE_MEDIUM),
     api_get_path(WEB_CODE_PATH).'mySpace/access_details_session.php?user_id='.$student_id
 );
 
@@ -736,6 +736,18 @@ if (Skill::isAllowed($student_id, false)) {
             ICON_SIZE_MEDIUM
         ),
         api_get_path(WEB_CODE_PATH).'badge/assign.php?'.http_build_query(['user' => $student_id])
+    );
+}
+// All Attendance
+if (Skill::isAllowed($student_id, false)) {
+    echo Display::url(
+        Display::return_icon(
+            'attendance.png',
+            get_lang('CountDoneAttendance'),
+            null,
+            ICON_SIZE_MEDIUM
+        ),
+        api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?action=all_attendance&student='.$student_id
     );
 }
 
@@ -970,6 +982,115 @@ if (api_get_setting('allow_terms_conditions') === 'true') {
     ];
 }
 
+if (isset($_GET['action']) and $_GET['action'] == 'all_attendance') {
+    /*Display all attendances */
+    // Varible for all attendance list
+    $startDate = new DateTime();
+    $startDate = $startDate->modify('-1 week');
+    if (isset($_GET['startDate'])) {
+        $startDate = new DateTime($_GET['startDate']);
+    }
+    $startDate = $startDate->setTime(0, 0, 0);
+
+    $endDate = new DateTime();
+    if (isset($_GET['endDate'])) {
+        $endDate = new DateTime($_GET['endDate']);
+    }
+    $endDate = $endDate->setTime(23, 59, 0);
+
+    // $startDate = new DateTime(api_get_local_time($startDate));
+    // $endDate = new DateTime(api_get_local_time($endDate));
+    if ($startDate > $endDate) {
+        $dataTemp = $startDate;
+        $startDate = $endDate;
+        $endDate = $dataTemp;
+    }
+    $startDateText = api_get_local_time($startDate);
+    $endDateText = api_get_local_time($endDate);
+    // Varible for all attendance list
+
+    /** Start date and end date*/
+    $defaults['startDate'] = $startDateText;
+    $defaults['endDate'] = $endDateText;
+    $form = new FormValidator('all_attendance_list', 'GET',
+        'myStudents.php?action=all_attendance&student='.$student_id.'&startDate='.$defaults['startDate'].'&endDate='.$defaults['endDate'].'&&'.api_get_cidreq(),
+        '');
+    $form->addElement('html', '<input type="hidden" name="student" value="'.$student_id.'" >');
+    $form->addElement('html', '<input type="hidden" name="action" value="all_attendance" >');
+
+    $form->addDateTimePicker('startDate', [
+        get_lang('ExeStartTime'),
+    ], [
+        'form_name' => 'attendance_calendar_edit',
+    ], 5);
+    $form->addDateTimePicker('endDate', [
+        get_lang('ExeEndTime'),
+    ], [
+        'form_name' => 'attendance_calendar_edit',
+    ], 5);
+
+    $form->addButtonSave(get_lang('Submit'));
+    $form->setDefaults($defaults);
+    $form->display();
+    /** Display dates */
+    $attendance = new Attendance();
+    $data = $attendance->getCoursesWithAttendance($student_id, $startDate, $endDate);
+
+    // 'attendance from %s to %s'
+    $title = sprintf(get_lang('AttendanceFromTo'), $startDateText, $endDateText);
+    echo '
+    <h3>'.$title.'</h3>
+    <div class="">
+    <table class="table table-striped table-hover table-responsive">
+        <thead>
+            <tr>
+                <th>'.get_lang('DateExo').'</th>
+                <th>'.get_lang('Training').'</th>
+
+                <th>'.get_lang('Present').'</th>
+            </tr>
+        </thead>
+    <tbody>';
+    // <th>'.get_lang('Professor').'</th>
+    foreach ($data as $attendanceData => $attendanceSheet) {
+        /*
+         * $attendanceData  can be in_category or not_category for courses
+         * */
+
+        $totalAttendance = count($attendanceSheet);
+        for ($i = 0; $i < $totalAttendance; $i++) {
+            $attendanceWork = $attendanceSheet[$i];
+            $courseInfoItem = api_get_course_info_by_id($attendanceWork['courseId']);
+            $date = api_get_local_time($attendanceWork[1]);
+            $sId = $attendanceWork['session'];
+            $printSession = '';
+            if ($sId != 0) {
+                // get session name
+                $printSession = "(".$attendanceWork['sessionName'].")";
+            }
+            // $teacher = isset($attendanceWork['teacher'])?$attendanceWork['teacher']:'';
+            echo '
+        <tr>
+            <td>'.$date.'</td>
+            <td>'
+                .'<a title="'.get_lang('GoAttendance').'" href="'.api_get_path(WEB_CODE_PATH)
+                .'attendance/index.php?cidReq='.$attendanceWork['courseCode'].'&id_session='.$sId.'&student_id='
+                .$student_id.'">'
+                .$attendanceWork['courseTitle']." $printSession ".'</a>
+            </td>
+
+            <td>'.$attendanceWork['presence'].'</td>
+        </tr>';
+            //<td>'.$teacher.'</td>
+        }
+    }
+    echo '</tbody>
+    </table></div>';
+    /** Display dates */
+    /*Display all attendances */
+    Display::display_footer();
+    exit();
+}
 $details = true;
 $tpl = new Template(
     '',

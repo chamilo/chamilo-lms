@@ -1,0 +1,121 @@
+{
+  "semantics": [
+    {
+      "widgets": [
+        {
+          "label": "Standaard"
+        }
+      ],
+      "label": "Kaarten",
+      "entity": "kaart",
+      "field": {
+        "label": "Kaart",
+        "fields": [
+          {
+            "label": "Afbeelding"
+          },
+          {
+            "label": "Bijpassende afbeelding",
+            "description": "Een optionele afbeelding die past in plaats van 2 kaarten met dezelfde afbeelding."
+          },
+          {
+            "label": "Audio Track",
+            "description": "An optional sound that plays when the card is turned."
+          },
+          {
+            "label": "Omschrijving",
+            "description": "Een optionele korte tekst die zal verschijnen zodra de 2 overeenkomende kaarten zijn gevonden."
+          },
+          {
+            "label": "De alternatieve tekst voor de bijpassende afbeelding",
+            "description": "Omschrijf wat de afbeelding voorstelt. De tekst zal worden gelezen door tekst-naar-spraak tools voor slechtzienden."
+          },
+          {
+            "label": "Matching Audio Track",
+            "description": "An optional sound that plays when the second card is turned."
+          },
+          {
+            "label": "Omschrijving",
+            "description": "Een optionele korte tekst die zal verschijnen zodra de 2 overeenkomende kaarten zijn gevonden."
+          }
+        ]
+      }
+    },
+    {
+      "label": "Gedragsinstellingen",
+      "description": "Met deze opties kun je bepalen hoe het spel zich gedraagt.",
+      "fields": [
+        {
+          "label": "Plaats de kaarten in een vierkant",
+          "description": "Bij het leggen van de kaarten zullen het aantal kolommen en rijen op elkaar worden afgestemd. Daarna zal de omvang van de kaarten worden aangepast om in de beschikbare omgeving te passen."
+        },
+        {
+          "label": "Het aantal te gebruiken kaarten",
+          "description": "Als je dit getal instelt op een aantal groter dan 2, dan zal het spel willekeurig kaarten kiezen uit de complete lijst met kaarten."
+        },
+        {
+          "label": "Voeg de knop 'Opnieuw proberen? toe als het spel is afgelopen"
+        }
+      ]
+    },
+    {
+      "label": "De vormgeving",
+      "description": "Stel de beelden van het spel in.",
+      "fields": [
+        {
+          "label": "Themakleur",
+          "description": "Kies een themakleur voor kaarten van je geheugenspel."
+        },
+        {
+          "label": "Achterkant kaart",
+          "description": "Gebruik een aangepaste achterkant voor je kaarten."
+        }
+      ]
+    },
+    {
+      "label": "Localiseer",
+      "fields": [
+        {
+          "label": "Label gedraaide kaarten",
+          "default": "Gedraaide kaarten"
+        },
+        {
+          "label": "Label verstreken tijd",
+          "default": "Verstreken tijd"
+        },
+        {
+          "label": "Label feedback",
+          "default": "Goed gedaan!"
+        },
+        {
+          "label": "Label opnieuw proberen knop",
+          "default": "Opnieuw proberen?"
+        },
+        {
+          "label": "Label sluiten knop",
+          "default": "Sluiten"
+        },
+        {
+          "label": "Label spel",
+          "default": "Geheugenspel. Vind de overeenkomende kaarten."
+        },
+        {
+          "label": ":Label einde spel",
+          "default": "Alle kaarten zijn gevonden."
+        },
+        {
+          "label": "Label kaartenindex",
+          "default": "Kaart %num:"
+        },
+        {
+          "label": "Label niet gedraaide kaarten",
+          "default": "Niet gedraaid."
+        },
+        {
+          "label": "Label overeenkomende kaarten",
+          "default": "Paar gevonden."
+        }
+      ]
+    }
+  ]
+}

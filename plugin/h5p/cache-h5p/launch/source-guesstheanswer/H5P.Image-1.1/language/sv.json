@@ -1,0 +1,19 @@
+{
+  "semantics": [
+    {
+      "label": "Bild"
+    },
+    {
+      "label": "Alternativ text",
+      "description": "Obligatorisk. Om bilden inte kan laddas i användarens webbläsare så kommer denna text visas istället. Används också av \"skärmläsare\"."
+    },
+    {
+      "label": "Text vid hovring",
+      "description": "Valfri. Denna text visas om användaren placerar sin markör (hovrar) över bilden."
+    },
+    {
+      "label": "Namn på bildinnehåll",
+      "default": "Bild"
+    }
+  ]
+}

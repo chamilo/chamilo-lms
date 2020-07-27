@@ -103,4 +103,13 @@ class HotSpot extends Question
     {
         // nothing
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function return_header(Exercise $exercise, $counter = null, $score = [])
+    {
+        return parent::return_header($exercise, $counter, $score)
+            .'<table><tr><td><table class="table">';
+    }
 }

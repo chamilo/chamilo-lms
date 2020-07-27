@@ -1,0 +1,220 @@
+{
+  "semantics": [
+    {
+      "label": "Pealkiri"
+    },
+    {
+      "label": "Esitusviis",
+      "description": "Dialoogikaartide esitamise viis",
+      "options": [
+        {
+          "label": "Tavaline"
+        },
+        {
+          "label": "Kordav"
+        }
+      ]
+    },
+    {
+      "label": "Ülesande kirjeldus",
+      "default": ""
+    },
+    {
+      "widgets": [
+        {
+          "label": "Vaikimisi"
+        }
+      ],
+      "label": "Dialoogid",
+      "entity": "dialoog",
+      "field": {
+        "label": "Küsimus",
+        "fields": [
+          {
+            "label": "Tekst",
+            "description": "Dialoogi esimese osa vihje"
+          },
+          {
+            "label": "Vastus",
+            "description": "Dialoogi teise osa vihje"
+          },
+          {
+            "label": "Pikt",
+            "description": "Mittekohustuslik pilt dialoogikaardile. (Kaardil võib olla vaid pilt, vaid tekst või mõlemad)"
+          },
+          {
+            "label": "Pildi alternatiivtekst"
+          },
+          {
+            "label": "Helifailid"
+          },
+          {
+            "label": "Vihjed",
+            "fields": [
+              {
+                "label": "Teksti vihje",
+                "description": "Dialoogi esimese osa vihje"
+              },
+              {
+                "label": "Vastuse vihje",
+                "description": "Dialoogi teise osa vihje"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "label": "Käitumisseaded.",
+      "description": "Nende valikutega määrad, kuidas ülesanne käitub.",
+      "fields": [
+        {
+          "label": "Luba \"Proovi uuesti\" nupp"
+        },
+        {
+          "label": "Keela tagasi liikumine",
+          "description": "See valik lubab kasutajal dialoogikaartidel ainult edasi liikuda"
+        },
+        {
+          "label": "Vähenda teksti, et see mahuks kaardile",
+          "description": "Lahti märkimisel muudab hoopis kaart oma suurust, et tekst ära mahutada"
+        },
+        {
+          "label": "Kaartide juhuslik järjekord",
+          "description": "Lubamise korral näidatakse kaarte juhuslikus järjekorras."
+        },
+        {
+          "label": "Suurima asjatundlikkuse tase"
+        },
+        {
+          "label": "Luba kiiret edasiliikumist",
+          "description": "Lubamise korral saavad õppijad märkida kaardi sisu tuntuks ilma kaarti pööramata"
+        }
+      ]
+    },
+    {
+      "label": "Pööra nupu tekst",
+      "default": "Pööra"
+    },
+    {
+      "label": "Järgmine nupu tekst",
+      "default": "Järgmine"
+    },
+    {
+      "label": "Eelmine nupu tekst",
+      "default": "Eelmine"
+    },
+    {
+      "label": "Proovi uuesti nupu tekst",
+      "default": "Proovi uuesti"
+    },
+    {
+      "label": "\"Õige vastus\" nupu tekst",
+      "default": "Õige!"
+    },
+    {
+      "label": "\"Vale vastus\" nupu tekst",
+      "default": "Vale"
+    },
+    {
+      "label": "\"Katse arvu\" nupu tekst kaartide alaosas ja kokkuvõtval kuval",
+      "description": "@round asendatakse jooksva katse arvuga",
+      "default": "Katse @round"
+    },
+    {
+      "label": "\"Kaarti järel\" teate tekst",
+      "description": "@number asendatakse selles katses järele jäänud kaartide arvuga",
+      "default": "Järele jäänud kaarti: @number"
+    },
+    {
+      "label": "\"Järgmine katse\" nupu tekst",
+      "description": "@round asendatakse katse arvuga",
+      "default": "Jätka katsega @round"
+    },
+    {
+      "label": "Text for the \"Start over\" button",
+      "default": "Start over"
+    },
+    {
+      "label": "\"Järgmine\" nupu tekst",
+      "default": "Järgmine"
+    },
+    {
+      "label": "Kokkuvõttelehe pealkirja tekst",
+      "default": "Kokkuvõte"
+    },
+    {
+      "label": "\"Õigesti lahendatud kaarte:\" tekst",
+      "default": "Õigesti lahendatud kaarte:"
+    },
+    {
+      "label": "\"Valesti lahendatud kaarte:\" tekst",
+      "default": "Valesti lahendatud kaarte:"
+    },
+    {
+      "label": "\"Mittenäidatud kaarte:\" tekst",
+      "default": "Mittenäidatud kaarte:"
+    },
+    {
+      "label": "\"Kogupunktisumma\" tekst",
+      "default": "Kogupunktisumma"
+    },
+    {
+      "label": "\"Kaarti täidetud\" tekst",
+      "default": "Kaarte, mille õppimise oled läbinud:"
+    },
+    {
+      "label": "\"Täidetud katseid:\" tekst",
+      "default": "Täidetud katseid:"
+    },
+    {
+      "label": "Teade, kui kõigi kaartide sisu on omandatud",
+      "description": "@cards asendatakse loetelus olevate kaartide koguarvuga. @max asendatakse suurima asjatundlikkuse tasemega - 1.",
+      "default": "Tubli! Täitsid kõik @cards kaarti õigesti @max korda järjest!"
+    },
+    {
+      "label": "Edasijõudmise tekst",
+      "description": "Kasutatavad muutujad on @card ja @total.",
+      "default": "Kaart @card / @total"
+    },
+    {
+      "label": "Kaardi teksti silt",
+      "description": "Kasutatakse assisteeriva tehnoloogia puhul",
+      "default": "Kaardi esiosa"
+    },
+    {
+      "label": "Kaardi tagaosa silt",
+      "description": "Kasutatakse assisteeriva tehnoloogia puhul",
+      "default": "Kaardi tagaosa"
+    },
+    {
+      "label": "Näita vihjet nupu silt",
+      "default": "Näita vihjet"
+    },
+    {
+      "label": "Sõnum heli ei ole toetatud",
+      "default": "Sinu brauser ei toeta seda helitüüpi"
+    },
+    {
+      "label": "Confirm starting over dialog",
+      "fields": [
+        {
+          "label": "Header text",
+          "default": "Start over?"
+        },
+        {
+          "label": "Body text",
+          "default": "All progress will be lost. Are you sure you want to start over?"
+        },
+        {
+          "label": "Cancel button label",
+          "default": "Cancel"
+        },
+        {
+          "label": "Confirm button label",
+          "default": "Start over"
+        }
+      ]
+    }
+  ]
+}

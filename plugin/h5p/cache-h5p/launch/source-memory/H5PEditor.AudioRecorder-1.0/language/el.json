@@ -1,0 +1,23 @@
+{
+  "libraryStrings":{
+    "title":"Ηχογράφηση",
+    "recordAnswer":"Εγγραφή",
+    "pause":"Παύση",
+    "continue":"Συνέχεια",
+    "done":"Λήξη",
+    "retry":"Επαναφορά",
+    "microphoneNotSupported":"Το μικρόφωνο δεν υποστηρίζεται. Σιγουρευτείτε πως χρησιμοποιείτε φυλλομετρητή που επιτρέπει ηχογράφηση.",
+    "microphoneInaccessible":"Η πρόσβαση στο μικρόφωνο είναι αδύνατη. Σιγουρευτείτε πως το μικρόφωνο του φυλλομετρητή σας είναι ενεργοποιημένο.",
+    "insecureNotAllowed":"Η πρόσβαση στο μικρόφωνο δεν επιτρέπεται στο φυλλομετρητή σας.",
+    "statusReadyToRecord":"Πατήστε το παρακάτω κουμπί για να ξεκινήσει η εγγραφή.",
+    "statusRecording":"Εγγραφή...",
+    "statusPaused":"Παύση εγγραφής.",
+    "statusFinishedRecording":"Ακούστε την ηχογράφηση παρακάτω.",
+    "downloadRecording":"Επιλέξτε \"Εισαγωγή\" για να χρησιμοποιήσετε αυτή την ηχογράφηση.",
+    "retryDialogHeaderText":"Επανάληψη ηχογράφησης;",
+    "retryDialogBodyText":"Επιλέγοντας \"Επανάληψη\" θα χάσετε την τρέχουσα ηχογράφηση.",
+    "retryDialogConfirmText":"Επανάληψη",
+    "retryDialogCancelText":"Ακύρωση",
+    "statusCantCreateTheAudioFile":"Αδύνατη η δημιουργία του αρχείου ήχου."
+  }
+}

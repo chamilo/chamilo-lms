@@ -1,0 +1,147 @@
+{
+  "semantics": [
+    {
+      "label": "Image ou vidéo",
+      "fields": [
+        {
+          "label": "Type de média",
+          "description": "Média optionnel à afficher au-dessus de la question"
+        },
+        {
+          "label": "Désactiver la possibilité d'agrandir l'image"
+        }
+      ]
+    },
+    {
+      "label": "Question"
+    },
+    {
+      "label": "Bonne réponse",
+      "options": [
+        {
+          "label": "Vrai"
+        },
+        {
+          "label": "Faux"
+        }
+      ]
+    },
+    {
+      "label": "Traduction de l'interface utilisateur pour les questions Vrai/Faux",
+      "fields": [
+        {
+          "label": "Texte du bouton Vrai",
+          "default": "Vrai"
+        },
+        {
+          "label": "Texte du bouton Faux",
+          "default": "Faux"
+        },
+        {
+          "label": "Texte de feedback",
+          "default": "Vous avez obtenu @score points sur un total de @total",
+          "description": "Texte de feedback, les variables disponibles sont: @score et @total. Exemple: 'Vous avez obtenu @score sur @total points'."
+        },
+        {
+          "label": "Texte du bouton \"Vérifier\"",
+          "default": "Vérifier"
+        },
+        {
+          "label": "Texte du bouton \"Voir la solution\"",
+          "default": "Voir la solution"
+        },
+        {
+          "label": "Texte du bouton \"Recommencer\"",
+          "default": "Recommencer"
+        },
+        {
+          "label": "Réponse incorrecte",
+          "default": "Réponse incorrecte"
+        },
+        {
+          "label": "Bonne réponse",
+          "default": "Bonne réponse"
+        },
+        {
+          "label": "Représentation textuelle de la barre de score pour ceux qui utilisent une synthèse vocale",
+          "default": "Vous avez obtenu @score points sur un total de @total"
+        }
+      ]
+    },
+    {
+      "label": "Options générales",
+      "description": "Ces options vous permettent de contrôler le déroulement de vos activités.",
+      "fields": [
+        {
+          "label": "Activer le bouton \"Recommencer\""
+        },
+        {
+          "label": "Activer le bouton \"Voir la solution\""
+        },
+        {
+          "label": "Activer le bouton \"Vérifier\""
+        },
+        {
+          "label": "Afficher la fenêtre de confirmation pour \"Vérifier\""
+        },
+        {
+          "label": "Afficher la fenêtre de confirmation pour \"Recommencer\""
+        },
+        {
+          "label": "Vérifier automatiquement la réponse cochée",
+          "description": "Noter que l'accessibilité sera pénalisée si cette option est activée."
+        },
+        {
+          "label": "Commentaire pour une réponse correcte",
+          "description": "Ceci remplacera le commentaire par défaut. Variables disponibles: @score et @total."
+        },
+        {
+          "label": "Commentaire pour une mauvaise réponse",
+          "description": "Ceci remplacera le commentaire par défaut. Variables disponibles: @score et @total."
+        }
+      ]
+    },
+    {
+      "label": "Fenêtre de confirmation pour \"Vérifier\"",
+      "fields": [
+        {
+          "label": "Texte du titre",
+          "default": "Terminer ?"
+        },
+        {
+          "label": "Texte du contenu",
+          "default": "Êtes-vous sûr de vouloir terminer ?"
+        },
+        {
+          "label": "Texte du bouton d'annulation",
+          "default": "Annuler"
+        },
+        {
+          "label": "Texte du bouton de confirmation",
+          "default": "Confirmer"
+        }
+      ]
+    },
+    {
+      "label": "Fenêtre de confirmation pour \"Recommencer\"",
+      "fields": [
+        {
+          "label": "Texte du titre",
+          "default": "Recommencer ?"
+        },
+        {
+          "label": "Texte du contenu",
+          "default": "Êtes-vous sûr de vouloir recommencer ?"
+        },
+        {
+          "label": "Texte du bouton d'annulation",
+          "default": "Annuler"
+        },
+        {
+          "label": "Texte du bouton de confirmation",
+          "default": "Confirmer"
+        }
+      ]
+    }
+  ]
+}

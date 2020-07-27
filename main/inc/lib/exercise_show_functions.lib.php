@@ -232,7 +232,14 @@ class ExerciseShowFunctions
                 break;
         }
 
-        $hotspot_colors = [
+        if (!$hide_expected_answer
+            && !$studentChoice
+            && in_array($resultsDisabled, [RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER])
+        ) {
+            return;
+        }
+
+        $hotspotColors = [
             '', // $i starts from 1 on next loop (ugly fix)
             '#4271B5',
             '#FE8E16',
@@ -249,10 +256,10 @@ class ExerciseShowFunctions
             '#F7BDE2',
         ];
 
-        $content = '<table class="data_table"><tr>';
+        $content = '<tr>';
         $content .= '<td class="text-center" width="5%">';
         $content .= '<span class="fa fa-square fa-fw fa-2x" aria-hidden="true" style="color:'.
-            $hotspot_colors[$orderColor].'"></span>';
+            $hotspotColors[$orderColor].'"></span>';
         $content .= '</td>';
         $content .= '<td class="text-left" width="25%">';
         $content .= "$answerId - $answer";
@@ -262,21 +269,18 @@ class ExerciseShowFunctions
             $status = Display::label(get_lang('Incorrect'), 'danger');
             if ($studentChoice) {
                 $status = Display::label(get_lang('Correct'), 'success');
-            } else {
-                if (in_array($resultsDisabled, [
-                    RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
-                ])
-                ) {
-                    return '';
-                }
             }
             $content .= $status;
+        } else {
+            $content .= '&nbsp;';
         }
         $content .= '</td>';
         if (EXERCISE_FEEDBACK_TYPE_EXAM != $feedback_type) {
             $content .= '<td class="text-left" width="60%">';
             if ($studentChoice) {
                 $content .= '<span style="font-weight: bold; color: #008000;">'.nl2br($answerComment).'</span>';
+            } else {
+                $content .= '&nbsp;';
             }
             $content .= '</td>';
         } else {

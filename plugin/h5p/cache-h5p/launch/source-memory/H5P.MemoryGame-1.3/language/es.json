@@ -1,0 +1,121 @@
+{
+  "semantics": [
+    {
+      "widgets": [
+        {
+          "label": "Predeterminado"
+        }
+      ],
+      "label": "Tarjetas",
+      "entity": "card",
+      "field": {
+        "label": "Tarjeta",
+        "fields": [
+          {
+            "label": "Imagen"
+          },
+          {
+            "label": "Texto alternativo para la imagen",
+            "description": "Describe lo que se puede ver en la foto. El texto es leído por una herramienta de conversion de texto a voz, a usuarios con discapacidad visual."
+          },
+          {
+            "label": "Pista de Audio",
+            "description": "Un sonido opcional que se reproduce cuando se voltea la carta."
+          },
+          {
+            "label": "Imagen coincidente",
+            "description": "Una imagen opcional para emparejar, en vez de usar dos tarjetas con la misma imagen."
+          },
+          {
+            "label": "Texto alternativo para imagenes coincidentes",
+            "description": "El texto es leído por una herramienta de conversion de texto a voz, a usuarios con discapacidad visual."
+          },
+          {
+            "label": "Pista de Audio Coincidente",
+            "description": "Un sonido opcional que se reproduce cuando se voltea la segunda carta."
+          },
+          {
+            "label": "Descripción",
+            "description": "Un breve texto opcional que aparecerá una vez se encuentren las dos cartas coincidentes."
+          }
+        ]
+      }
+    },
+    {
+      "label": "Ajustes de comportamiento",
+      "description": "Estas opciones le permitirán controlar cómo se comporta el juego.",
+      "fields": [
+        {
+          "label": "Coloca las tarjetas en un cuadrado",
+          "description": "Intentará igualar el número de columnas y filas al distribuir las tarjetas. Después, las tarjetas se escalarán para que se ajusten al contenedor."
+        },
+        {
+          "label": "Número de tarjetas a utilizar",
+          "description": "Establecer esto a un número mayor que 2 hará que el juego seleccione tarjetas aleatorias de la lista de tarjetas."
+        },
+        {
+          "label": "Añadir botón para volver a intentarlo cuando el juego ha terminado"
+        }
+      ]
+    },
+    {
+      "label": "Aspecto y comportamiento",
+      "description": "Controla los efectos visuales del juego.",
+      "fields": [
+        {
+          "label": "Color del tema",
+          "description": "Elegir un color para crear un tema para su juego de cartas."
+        },
+        {
+          "label": "Parte posterior de la tarjeta",
+          "description": "Utilice una parte posterior personalizada para sus tarjetas."
+        }
+      ]
+    },
+    {
+      "label": "Localización",
+      "fields": [
+        {
+          "label": "Texto para los giros de tarjetas",
+          "default": "Giros de tarjeta"
+        },
+        {
+          "label": "Texto de tiempo usado",
+          "default": "Tiempo usado"
+        },
+        {
+          "label": "Texto de comentarios",
+          "default": "¡Buen trabajo!"
+        },
+        {
+          "label": "Texto del botón Intente de nuevo",
+          "default": "¿Volver a intentarlo?"
+        },
+        {
+          "label": "Texto del botón Cerrar",
+          "default": "Cerrar"
+        },
+        {
+          "label": "Texto del juego",
+          "default": "Juego de memoria. Encuentra las cartas que hacen juego."
+        },
+        {
+          "label": "Texto del juego terminado",
+          "default": "Todas las cartas han sido encontradas."
+        },
+        {
+          "label": "Texto de indexación de la tarjeta",
+          "default": "Tarjeta %num:"
+        },
+        {
+          "label": "Texto de tarjetas sin voltear",
+          "default": "Sin voltear."
+        },
+        {
+          "label": "Texto de la tarjeta coincidente",
+          "default": "Coincidencia encontrada."
+        }
+      ]
+    }
+  ]
+}

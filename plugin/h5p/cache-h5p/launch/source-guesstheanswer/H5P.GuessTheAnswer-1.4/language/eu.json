@@ -1,0 +1,26 @@
+{
+  "semantics": [
+    {
+      "label": "Zereginaren deskribapena",
+      "description": "Deskribatu zereginaren irtenbidea aurkitzeko modua."
+    },
+    {
+      "label": "Multimedia",
+      "fields": [
+        {
+          "label": "Mota",
+          "description": "Galderaren azpiko aukerako multimedia."
+        }
+      ]
+    },
+    {
+      "label": "Emaitza deskriptiboa etiketa",
+      "default": "Klikatu emaitza ikusteko.",
+      "description": "Testu area klikagarria non erakutsikoda emaitza."
+    },
+    {
+      "label": "Soluzioaren testua",
+      "description": "Irudiaren emaitza."
+    }
+  ]
+}

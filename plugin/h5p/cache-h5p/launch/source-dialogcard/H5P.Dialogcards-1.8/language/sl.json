@@ -1,0 +1,220 @@
+{
+  "semantics": [
+    {
+      "label": "Naslov vsebine"
+    },
+    {
+      "label": "Način",
+      "description": "Način prikaza kartic dialogov",
+      "options": [
+        {
+          "label": "Običajen"
+        },
+        {
+          "label": "Ponavljanje"
+        }
+      ]
+    },
+    {
+      "label": "Navodilo udeležencem",
+      "default": ""
+    },
+    {
+      "widgets": [
+        {
+          "label": "Privzeto"
+        }
+      ],
+      "label": "Dialogi",
+      "entity": "dialog",
+      "field": {
+        "label": "Vprašanje dialoga",
+        "fields": [
+          {
+            "label": "Vprašanje",
+            "description": "Besedilo za sprednjo stran kartice"
+          },
+          {
+            "label": "Odgovor",
+            "description": "Besedilo za zadnjo stran kartice"
+          },
+          {
+            "label": "Slika",
+            "description": "Neobvezna slika za kartico. (Na kartici je lahko samo slika, samo besedilo ali oboje)"
+          },
+          {
+            "label": "Nadomestno besedilo za sliko"
+          },
+          {
+            "label": "Zvočni posnetek"
+          },
+          {
+            "label": "Namigi",
+            "fields": [
+              {
+                "label": "Namig za vprašanje",
+                "description": "Namig za sprednjo stran kartice"
+              },
+              {
+                "label": "Namig za odgovor",
+                "description": "Namig za zadnjo stran kartice"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "label": "Nastavitve interakcije",
+      "description": "Nastavitve omogočajo nadzor nad interakcijo aktivnosti za udeležence.",
+      "fields": [
+        {
+          "label": "Omogoči gumb \"Poskusi ponovno\""
+        },
+        {
+          "label": "Onemogoči premikanje v obe smeri",
+          "description": "Udeleženci se bodo lahko premikali le naprej."
+        },
+        {
+          "label": "Velikost besedila prilagodi kartici",
+          "description": "V primeru izbire, bodo kartice dialogov enako velike. Prilagodila se bo velikost besedila."
+        },
+        {
+          "label": "Naključna razporeditev",
+          "description": "Omogoči prikaz kartic po naključnem vrstnem redu."
+        },
+        {
+          "label": "Najvišja stopnja znanja"
+        },
+        {
+          "label": "Omogoči hitro napredovanje",
+          "description": "Udeleženci lahko kartico označijo kot poznano in je ne obrnejo."
+        }
+      ]
+    },
+    {
+      "label": "Besedilo gumba za obračanje kartic",
+      "default": "Obrni"
+    },
+    {
+      "label": "Besedilo gumba za pomikanje naprej",
+      "default": "Naslednja"
+    },
+    {
+      "label": "Besedilo gumba za pomikanje nazaj",
+      "default": "Prejšnja"
+    },
+    {
+      "label": "Besedilo gumba za ponovitev",
+      "default": "Poskusi ponovno"
+    },
+    {
+      "label": "Besedilo gumba \"Pravilen odgovor\"",
+      "default": "Pravilen odgovor"
+    },
+    {
+      "label": "Besedilo gumba \"Nepravilen odgovor\"",
+      "default": "Nepravilen odgovor"
+    },
+    {
+      "label": "Besedilo sporočila o številki niza, ki bo zapisana pod karticami in na strani s povzetkom",
+      "description": "@round bo nadomeščen s številko trenutnega niza.",
+      "default": "Niz: @round"
+    },
+    {
+      "label": "Besedilo sporočila o preostalih karticah",
+      "description": "@number bo nadomeščen s številom preostalih kartic v nizu.",
+      "default": "Preostalih kartic: @number"
+    },
+    {
+      "label": "Besedilo gumba \"Naslednji niz\"",
+      "description": "@round bo nadomeščen s številko niza.",
+      "default": "Nadaljuj na niz @round"
+    },
+    {
+      "label": "Besedilo gumba \"Začni znova\"",
+      "default": "Začni znova"
+    },
+    {
+      "label": "Besedilo gumba \"Prikaži povzetek\"",
+      "default": "Naslednja"
+    },
+    {
+      "label": "Naslov strani s povzetkom",
+      "default": "Povzetek"
+    },
+    {
+      "label": "Besedilo sporočila \"Pravilne kartice:\"",
+      "default": "Pravilne kartice:"
+    },
+    {
+      "label": "Besedilo sporočila \"Nepravilne kartice:\"",
+      "default": "Nepravilne kartice:"
+    },
+    {
+      "label": "Besedilo sporočila \"Neprikazane kartice:\"",
+      "default": "Neprikazane kartice:"
+    },
+    {
+      "label": "Besedilo sporočila \"Dosežene točke\"",
+      "default": "Dosežene točke:"
+    },
+    {
+      "label": "Besedilo sporočila \"Dokončane kartice\"",
+      "default": "Dokončane kartice:"
+    },
+    {
+      "label": "Besedilo sporočila \"Dokončani nizi:\"",
+      "default": "Dokončani nizi:"
+    },
+    {
+      "label": "Sporočilo ob doseženi najvišji stopnji znanja",
+      "description": "@cards bo nadomeščen s številom vseh kratic v bazenu. @max bo nadomeščen s številom najvišje stopnje znanja - 1.",
+      "default": "Čestitke! Pravilnih je vseh @cards kartic - število ponovitev: @max."
+    },
+    {
+      "label": "Besedilo o napredku",
+      "description": "Spremenljivki v povratni informaciji sta @card in @total.",
+      "default": "Kartica @card od @total"
+    },
+    {
+      "label": "Besedilo za sprednjo stran kartice",
+      "description": "Uporabljeno za lažjo dostopnost naprav za podporo",
+      "default": "Sprednja stran kartice"
+    },
+    {
+      "label": "Besedilo za zadnjo stran kartice",
+      "description": "Uporabljeno za lažjo dostopnost naprav za podporo",
+      "default": "Zadnja stran kartice"
+    },
+    {
+      "label": "Besedilo gumba za prikaz namiga",
+      "default": "Pokaži namig"
+    },
+    {
+      "label": "Sporočilo o nepodprtosti zvočnega posnetka",
+      "default": "Spletni brskalnik ne podpira tega zvočnega posnetka."
+    },
+    {
+      "label": "Pogovorno okno pred ponovitvijo aktivnosti",
+      "fields": [
+        {
+          "label": "Naslov",
+          "default": "Poskusi ponovno?"
+        },
+        {
+          "label": "Besedilo telesa pogovornega okna",
+          "default": "Ste prepričani, da želite poskusiti ponovno? Ves napredek bo izgubljen."
+        },
+        {
+          "label": "Besedilo gumba Prekliči",
+          "default": "Prekliči"
+        },
+        {
+          "label": "Besedilo gumba Potrdi",
+          "default": "Potrdi"
+        }
+      ]
+    }
+  ]
+}

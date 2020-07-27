@@ -1,0 +1,121 @@
+{
+  "semantics": [
+    {
+      "widgets": [
+        {
+          "label": "Standard"
+        }
+      ],
+      "label": "Kort",
+      "entity": "card",
+      "field": {
+        "label": "Kort",
+        "fields": [
+          {
+            "label": "Billede"
+          },
+          {
+            "label": "Alternative text for Image",
+            "description": "Describe what can be seen in the photo. The text is read by text-to-speech tools needed by visually impaired users."
+          },
+          {
+            "label": "Audio Track",
+            "description": "An optional sound that plays when the card is turned."
+          },
+          {
+            "label": "Matchende billede",
+            "description": "Valgfrit billede som match i stedet for at have to kort med det samme billede."
+          },
+          {
+            "label": "Alternative text for Matching Image",
+            "description": "Describe what can be seen in the photo. The text is read by text-to-speech tools needed by visually impaired users."
+          },
+          {
+            "label": "Matching Audio Track",
+            "description": "An optional sound that plays when the second card is turned."
+          },
+          {
+            "label": "Beskrivelse",
+            "description": "Valgfri tekst, som popper op, når to matchende billeder er fundet."
+          }
+        ]
+      }
+    },
+    {
+      "label": "Indstillinger",
+      "description": "Disse indstillinger giver dig mulighed for at bestemme, hvordan spillet fremstår.",
+      "fields": [
+        {
+          "label": "Placer kortene kvadratisk",
+          "description": "Vil forsøge at matche antallet af kolonner og rækker, når kortene placeres. Efterfølgende vil størrelsen på kortene blive tilpasset."
+        },
+        {
+          "label": "Antal kort i opgaven",
+          "description": "Vælges et større tal end 2, vælges kort tilfældigt fra listen af kort."
+        },
+        {
+          "label": "Tilføj knap for at prøve spillet igen, når spillet er afsluttet."
+        }
+      ]
+    },
+    {
+      "label": "Udseende",
+      "description": "Indstil spillets udseende.",
+      "fields": [
+        {
+          "label": "Farvetema",
+          "description": "Vælg en farve til bagsiden af dine kort."
+        },
+        {
+          "label": "Bagsidebillede",
+          "description": "Brug et billede som bagside på dine kort."
+        }
+      ]
+    },
+    {
+      "label": "Oversættelse",
+      "fields": [
+        {
+          "label": "Tekst når kort vendes",
+          "default": "Kort vendes"
+        },
+        {
+          "label": "Tekst for tidsforbrug",
+          "default": "Tidsforbrug"
+        },
+        {
+          "label": "Feedback tekst",
+          "default": "Godt klaret!"
+        },
+        {
+          "label": "Prøv igen knaptekst",
+          "default": "Prøv igen?"
+        },
+        {
+          "label": "Luk knaptekst",
+          "default": "Luk"
+        },
+        {
+          "label": "Game label",
+          "default": "Memory Game. Find the matching cards."
+        },
+        {
+          "label": "Game finished label",
+          "default": "All of the cards have been found."
+        },
+        {
+          "label": "Card indexing label",
+          "default": "Card %num:"
+        },
+        {
+          "label": "Card unturned label",
+          "default": "Unturned."
+        },
+        {
+          "label": "Card matched label",
+          "default": "Match found."
+        }
+      ]
+    }
+  ]
+}

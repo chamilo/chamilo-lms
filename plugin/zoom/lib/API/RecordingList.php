@@ -34,7 +34,6 @@ class RecordingList
     /**
      * Retrieves all recordings from a period of time.
      *
-     * @param Client   $client
      * @param DateTime $startDate first day of the period
      * @param DateTime $endDate   last day of the period
      *
@@ -42,11 +41,10 @@ class RecordingList
      *
      * @return RecordingMeeting[] all recordings from that period
      */
-    public static function loadPeriodRecordings($client, $startDate, $endDate)
+    public static function loadPeriodRecordings($startDate, $endDate)
     {
         return static::loadItems(
             'meetings',
-            $client,
             'users/me/recordings',
             [
                 'from' => $startDate->format('Y-m-d'),

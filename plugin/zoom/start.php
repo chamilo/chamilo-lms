@@ -16,19 +16,32 @@ $logInfo = [
 
 Event::registerLog($logInfo);
 
-$tool_name = get_lang('ZoomVideoconferences');
+$plugin = ZoomPlugin::create();
+$tool_name = $plugin->get_lang('ZoomVideoconferences');
 $tpl = new Template($tool_name);
 
-$plugin = ZoomPlugin::create();
-
-if ($plugin->userIsConferenceManager()) {
+if ($plugin->userIsCourseConferenceManager(api_get_course_entity())) {
     // user can create a new meeting
-    $tpl->assign('createInstantMeetingForm', $plugin->getCreateInstantMeetingForm()->returnForm());
-    $tpl->assign('scheduleMeetingForm', $plugin->getScheduleMeetingForm()->returnForm());
+    $tpl->assign(
+        'createInstantMeetingForm',
+        $plugin->getCreateInstantMeetingForm(
+            api_get_user_entity(api_get_user_id()),
+            api_get_course_entity(),
+            api_get_session_entity()
+        )->returnForm()
+    );
+    $tpl->assign('scheduleMeetingForm', $plugin->getScheduleMeetingForm(
+        api_get_user_entity(api_get_user_id()),
+        api_get_course_entity(),
+        api_get_session_entity()
+    )->returnForm());
 }
 
 try {
-    $tpl->assign('scheduledMeetings', $plugin->getScheduledMeetings());
+    $tpl->assign(
+        'scheduledMeetings',
+        $plugin->getMeetingRepository()->courseMeetings(api_get_course_entity(), api_get_session_entity())
+    );
 } catch (Exception $exception) {
     Display::addFlash(
         Display::return_message('Could not retrieve scheduled meeting list: '.$exception->getMessage(), 'error')

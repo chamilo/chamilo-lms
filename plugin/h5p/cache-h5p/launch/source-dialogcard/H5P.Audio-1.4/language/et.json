@@ -1,0 +1,49 @@
+{
+  "semantics": [
+    {
+      "label": "Lähtefailid"
+    },
+    {
+      "label": "Pleieri teema",
+      "description": "Vali pleieri teema.",
+      "options": [
+        {
+          "label": "Minimalistlik"
+        },
+        {
+          "label": "Täielik"
+        },
+        {
+          "label": "Läbipaistev"
+        }
+      ]
+    },
+    {
+      "label": "Täida ümbrisraam"
+    },
+    {
+      "label": "Luba juhised",
+      "description": "Juhised võimaldavad kasutajal näiteks heli mängimist peatada."
+    },
+    {
+      "label": "Luba automaatne esitus",
+      "description": "Automaatse esituse korral hakkab heli koheselt mängima. Kui automaatne esitus on keelatud, tuleb kasutajal ise nupuvajutusega heli mängimine käivitada."
+    },
+    {
+      "label": "Play audio (Readspeaker)",
+      "default": "Play audio"
+    },
+    {
+      "label": "Pause audio (Readspeaker)",
+      "default": "Pause audio"
+    },
+    {
+      "label": "Helisisu nimi",
+      "default": "Heli"
+    },
+    {
+      "label": "Heli ei ole toetatud sõnum",
+      "default": "Su brauser ei toeta heli esitamist"
+    }
+  ]
+}

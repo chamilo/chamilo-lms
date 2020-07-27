@@ -1,0 +1,49 @@
+{
+  "semantics": [
+    {
+      "label": "Izvorne datoteke"
+    },
+    {
+      "label": "Predvajalnik",
+      "description": "Nastavitev videza predvajalnika.",
+      "options": [
+        {
+          "label": "Minimalističen"
+        },
+        {
+          "label": "Celoten"
+        },
+        {
+          "label": "Prosojno"
+        }
+      ]
+    },
+    {
+      "label": "Prilagodi širini okna"
+    },
+    {
+      "label": "Onemogoči kontrolnike v predvajalniku.",
+      "description": "Kontrolniki na primer uporabniku dovoljujejo začasno prekinitev predvajanja."
+    },
+    {
+      "label": "Omogoči samodejno predvajanje",
+      "description": "Nastavitev samodejnega predvajanja. Neizbežno v primeru prosojnosti predvajalnika."
+    },
+    {
+      "label": "Predvajaj zvok",
+      "default": "Predvajaj zvok"
+    },
+    {
+      "label": "Zaustavi predvajanje",
+      "default": "Zaustavi predvajanje"
+    },
+    {
+      "label": "Naslov vsebine posnetka",
+      "default": "Zvočni posnetek"
+    },
+    {
+      "label": "Sporočilo o nepodprtosti zvočnega posnetka",
+      "default": "Spletni brskalnik ne podpira tega zvočnega posnetka."
+    }
+  ]
+}

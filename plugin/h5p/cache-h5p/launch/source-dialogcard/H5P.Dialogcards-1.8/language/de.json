@@ -1,0 +1,220 @@
+{
+  "semantics": [
+    {
+      "label": "Titel"
+    },
+    {
+      "label": "Modus",
+      "description": "Art und Weise, wie die Dialogkarten angezeigt werden",
+      "options": [
+        {
+          "label": "Normal (der Reihe nach)"
+        },
+        {
+          "label": "Nicht gewusste Karten wiederholen"
+        }
+      ]
+    },
+    {
+      "label": "Aufgabenbeschreibung",
+      "default": ""
+    },
+    {
+      "widgets": [
+        {
+          "label": "Voreinstellung"
+        }
+      ],
+      "label": "Dialoge",
+      "entity": "Dialog",
+      "field": {
+        "label": "Frage",
+        "fields": [
+          {
+            "label": "Vorderseite",
+            "description": "Hinweis für den ersten Teil des Dialogs"
+          },
+          {
+            "label": "Rückseite",
+            "description": "Hinweis für den zweiten Teil des Dialogs"
+          },
+          {
+            "label": "Bild",
+            "description": "Optionales Bild für die Karte. (Die Karte kann nur aus einem Bild bestehen, Text oder beidem.)"
+          },
+          {
+            "label": "Alternativer Text zur Bildbeschreibung (Barrierefreiheit)"
+          },
+          {
+            "label": "Audiodateien"
+          },
+          {
+            "label": "Tipps",
+            "fields": [
+              {
+                "label": "Tipp zur Vorderseite",
+                "description": "Tipp für den ersten Teil des Dialogs"
+              },
+              {
+                "label": "Tipp zur Rückseite",
+                "description": "Tipp für den zweiten Teil des Dialogs"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "label": "Verhaltenseinstellungen",
+      "description": "Diese Optionen legen fest, wie die Aufgabe im Detail funktioniert.",
+      "fields": [
+        {
+          "label": "\"Wiederholen\"-Button anzeigen"
+        },
+        {
+          "label": "Rückwärts-Navigation deaktivieren",
+          "description": "Diese Option sorgt dafür, dass man nur vorwärts durch die Dialogkarten navigieren kann"
+        },
+        {
+          "label": "Text ggf. verkleinern, damit er in die Karten passt",
+          "description": "Wenn diese Option abgewählt wird, passt sich die Größe der Karte der Textgröße an"
+        },
+        {
+          "label": "Karten mischen",
+          "description": "Anwählen, um die Karten zufällig anzuordnen."
+        },
+        {
+          "label": "Anzahl der Wiederholungen, nach denen eine Karte als beherrscht gilt"
+        },
+        {
+          "label": "Schnellantwort erlauben",
+          "description": "Wenn aktiviert, können Lernende angeben, dass sie eine Karte kennen, ohne sie umzudrehen"
+        }
+      ]
+    },
+    {
+      "label": "Beschriftung des \"Umdrehen\"-Buttons",
+      "default": "Umdrehen"
+    },
+    {
+      "label": "Beschriftung des \"Weiter\"-Buttons",
+      "default": "Weiter"
+    },
+    {
+      "label": "Beschriftung des \"Zurück\"-Buttons",
+      "default": "Zurück"
+    },
+    {
+      "label": "Beschriftung des \"Wiederholen\"-Buttons",
+      "default": "Wiederholen"
+    },
+    {
+      "label": "Beschriftung des \"Richtige Antwort\"-Buttons",
+      "default": "Ich hatte es richtig!"
+    },
+    {
+      "label": "Beschriftung des \"Falsche Antwort\"-Buttons",
+      "default": "Ich hatte es falsch!"
+    },
+    {
+      "label": "Text mit der Rundennummer unterhalb der Karten und in der Zusammenfassung",
+      "description": "@round wird mit der Nummer der aktuellen Runde ersetzt",
+      "default": "Runde @round"
+    },
+    {
+      "label": "Text mit der Anzahl der verbleibenden Karten",
+      "description": "@number wird mit der Zahl der in dieser Runde noch übrigen Karten ersetzt",
+      "default": "Verbleibende Karten: @number"
+    },
+    {
+      "label": "Beschriftung des \"Nächste Runde\"-Buttons",
+      "description": "@round wird mit der Nummer der Runde ersetzt",
+      "default": "Weiter mit Runde @round"
+    },
+    {
+      "label": "Beschriftung des \"Von vorne anfangen\"-Buttons",
+      "default": "Von vorne anfangen"
+    },
+    {
+      "label": "Beschriftung des \"Zusammenfassung anzeigen\"-Buttons",
+      "default": "Weiter"
+    },
+    {
+      "label": "Überschrift der Zusammenfassungsseite",
+      "default": "Zusammenfassung"
+    },
+    {
+      "label": "Beschriftung für \"Richtige Karten:\"",
+      "default": "Richtige Karten:"
+    },
+    {
+      "label": "Beschriftung für \"Falsche Karten:\"",
+      "default": "Falsche Karten:"
+    },
+    {
+      "label": "Beschriftung für \"Nicht angezeigt Karten:\"",
+      "default": "Nicht angezeigt Karten:"
+    },
+    {
+      "label": "Beschriftung für \"Gesamtpunkte\"",
+      "default": "Gesamtpunkte"
+    },
+    {
+      "label": "Beschriftung für \"Fertige Karten\"",
+      "default": "Karten, die du fertig gelernt hast:"
+    },
+    {
+      "label": "Beschriftung für \"Abgeschlossene Runden:\"",
+      "default": "Abgeschlossene Runden:"
+    },
+    {
+      "label": "Nachricht, wenn alle Karten beherrscht werden",
+      "description": "@cards wird mit der Gesamtzahl der Karten ersetzt. @max wird mit dem \"maximalen Beherrschungsniveau\" - 1 ersetzt.",
+      "default": "Gut gemacht! Du hattest alle @cards Karten @max -mal hintereinander richtig!"
+    },
+    {
+      "label": "Text der Fortschrittsanzeige",
+      "description": "@card wird mit der Nummer der aktuellen Karte ersetzt. @total wird mit der Gesamtzahl der Karten ersetzt.",
+      "default": "Karte @card von @total"
+    },
+    {
+      "label": "Beschriftung des Kartentexts",
+      "description": "Von Vorlesewerkzeuge genutzt (Barrierefreiheit)",
+      "default": "Kartenvorderseite"
+    },
+    {
+      "label": "Beschriftung der Kartenrückseite",
+      "description": "Von Vorlesewerkzeuge genutzt (Barrierefreiheit)",
+      "default": "Kartenrückseite"
+    },
+    {
+      "label": "Beschriftung des \"Tipp anzeigen\"-Buttons",
+      "default": "Tipp anzeigen"
+    },
+    {
+      "label": "Hinweis, dass die Tonaufnahme nicht abgespielt werden kann",
+      "default": "Dein Browser unterstützt diese Tondatei nicht"
+    },
+    {
+      "label": "Bestätigungsdialog zum Neustart",
+      "fields": [
+        {
+          "label": "Kopfzeile",
+          "default": "Von vorne anfangen?"
+        },
+        {
+          "label": "Haupttext",
+          "default": "Dein gesamter Fortschritt bisher wird gelöscht. Bist du sicher, dass du von vorne anfangen möchtest?"
+        },
+        {
+          "label": "Beschriftung des \"Abbrechen\"-Buttons",
+          "default": "Abbrechen"
+        },
+        {
+          "label": "Beschriftung des \"Bestätigen\"-Buttons",
+          "default": "Ja, von vorne anfangen"
+        }
+      ]
+    }
+  ]
+}

@@ -406,14 +406,17 @@ class bbb
                 api_get_session_id()
             );
 
-            $meetingName = isset($params['meeting_name']) ? $params['meeting_name'] : $this->getCurrentVideoConferenceName(
-            );
+            $meetingName = isset($params['meeting_name']) ? $params['meeting_name'] : $this->getCurrentVideoConferenceName();
             $welcomeMessage = isset($params['welcome_msg']) ? $params['welcome_msg'] : null;
             $record = isset($params['record']) && $params['record'] ? 'true' : 'false';
             //$duration = isset($params['duration']) ? intval($params['duration']) : 0;
             // This setting currently limits the maximum conference duration,
             // to avoid lingering sessions on the video-conference server #6261
             $duration = 300;
+            $meetingDuration = (int) $this->plugin->get('meeting_duration');
+            if (!empty($meetingDuration)) {
+                $duration = $meetingDuration;
+            }
             $bbbParams = array(
                 'meetingId' => $params['remote_id'], // REQUIRED
                 'meetingName' => $meetingName, // REQUIRED

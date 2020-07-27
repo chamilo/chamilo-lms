@@ -1,0 +1,25 @@
+@CHARSET "UTF-8";
+
+.joubel-message-dialog {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  padding: .3em;
+  z-index: 11;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  border-top: 1px solid #ffcd0d;
+  background-color: #fcffcc;
+  text-align: center;
+  font-size: 0.8em;
+}
+.joubel-message-dialog:before {
+  font-family: 'H5PFontAwesome4';
+  content: '\f05a';
+  padding-right: .5em;
+  font-size: 1.3em;
+  position: relative;
+  top: 0.1em;
+}

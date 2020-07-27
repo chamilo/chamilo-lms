@@ -1,0 +1,147 @@
+{
+  "semantics": [
+    {
+      "label": "Multimedia",
+      "fields": [
+        {
+          "label": "Type",
+          "description": "En valgfri mediakilde som vises over spørsmålet."
+        },
+        {
+          "label": "Slå av bildezooming"
+        }
+      ]
+    },
+    {
+      "label": "Spørsmål"
+    },
+    {
+      "label": "Rett svar",
+      "options": [
+        {
+          "label": "Rett"
+        },
+        {
+          "label": "Galt"
+        }
+      ]
+    },
+    {
+      "label": "Oversettelser for Rett/Galt-spørsmål",
+      "fields": [
+        {
+          "label": "Etikett for \"Rett\"-knapp",
+          "default": "Rett"
+        },
+        {
+          "label": "Etikett for \"Galt\"-knapp",
+          "default": "Galt"
+        },
+        {
+          "label": "Tilbakemeldingstekst",
+          "default": "@score av @total poeng",
+          "description": "Tekstlig tilbakemelding, tilgjengelige variabler: @score og @total. Eksempel: 'Du fikk @score av @total poeng.'"
+        },
+        {
+          "label": "Etikett for \"Sjekk\"-knapp",
+          "default": "Sjekk"
+        },
+        {
+          "label": "Etikett for \"Fasit\"-knapp",
+          "default": "Fasit"
+        },
+        {
+          "label": "Etikett for \"Prøv igjen\"-knappen.",
+          "default": "Prøv igjen"
+        },
+        {
+          "label": "Feil svar",
+          "default": "Feil svar"
+        },
+        {
+          "label": "Rett svar",
+          "default": "Rett svar"
+        },
+        {
+          "label": "Textual representation of the score bar for those using a readspeaker",
+          "default": "You got :num out of :total points"
+        }
+      ]
+    },
+    {
+      "label": "Innstillinger for oppgaveoppførsel",
+      "description": "Disse instillingene lar deg bestemme hvordan oppgavetypen skal oppføre seg.",
+      "fields": [
+        {
+          "label": "Aktiver \"Prøv igjen\" knapp"
+        },
+        {
+          "label": "Aktiver \"Fasit\" knapp"
+        },
+        {
+          "label": "Enable \"Check\" button"
+        },
+        {
+          "label": "Slå på brukerbekreftelse før \"Fasit\""
+        },
+        {
+          "label": "Slå på brukerbekreftelse før \"Prøv igjen\""
+        },
+        {
+          "label": "Umiddelbar tilbakemelding på avgitt svar",
+          "description": "Vær oppmerksom på at hjelpemiddelteknologi kan svekkes ved å bruke dette alternativet."
+        },
+        {
+          "label": "Tilbakemelding ved rett svar",
+          "description": "Dette vil overstyre standard tilbakemeldingstekst. Tilgjengelige variabler er: @score og @total"
+        },
+        {
+          "label": "Tilbakemelding ved feil svar",
+          "description": "Dette vil overstyre standard tilbakemeldingstekst. Tilgjengelige variabler er: @score og @total"
+        }
+      ]
+    },
+    {
+      "label": "Brukerbekreftelse før fasitvisning",
+      "fields": [
+        {
+          "label": "Tittel",
+          "default": "Ferdig?"
+        },
+        {
+          "label": "Tekst",
+          "default": "Er du sikker på at du er ferdig?"
+        },
+        {
+          "label": "Etikett for \"Avbryt\"-knapp",
+          "default": "Avbryt"
+        },
+        {
+          "label": "Etikett for \"Bekreft\"-knapp",
+          "default": "Bekreft"
+        }
+      ]
+    },
+    {
+      "label": "Brukerbekreftelse for Prøv igjen",
+      "fields": [
+        {
+          "label": "Tittel",
+          "default": "Prøv igjen?"
+        },
+        {
+          "label": "Tekst",
+          "default": "Er du sikker på at du vil prøve igjen?"
+        },
+        {
+          "label": "Etikett for \"Avbryt\"-knapp",
+          "default": "Avbryt"
+        },
+        {
+          "label": "Etikett for \"Bekreft\"-knapp",
+          "default": "Bekreft"
+        }
+      ]
+    }
+  ]
+}

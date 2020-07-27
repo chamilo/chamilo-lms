@@ -1,0 +1,147 @@
+{
+  "semantics": [
+    {
+      "label": "Multimedia",
+      "fields": [
+        {
+          "label": "Mota",
+          "description": "Galderaren gaineko aukerako multimedia."
+        },
+        {
+          "label": "Desgaitu irudien handitzea"
+        }
+      ]
+    },
+    {
+      "label": "Galdera"
+    },
+    {
+      "label": "Erantzun zuzena",
+      "options": [
+        {
+          "label": "Egia"
+        },
+        {
+          "label": "Gezurra"
+        }
+      ]
+    },
+    {
+      "label": "Egia/Gezurra galderetarako erabiltzailearen interfaze-itzulpena.",
+      "fields": [
+        {
+          "label": "Egia botoiaren etiketa",
+          "default": "Egia"
+        },
+        {
+          "label": "Gezurra botoiaren etiketa",
+          "default": "Gezurra"
+        },
+        {
+          "label": "Iruzkina",
+          "default": "@total puntutik @score lortu duzu",
+          "description": "Iruzkinerako aldagaiak: @score eta @total. Adibidez: 'Gehienezko @total puntutik @score lortu duzu'"
+        },
+        {
+          "label": "\"Egiaztatu\" botoiaren testua",
+          "default": "Egiaztatu"
+        },
+        {
+          "label": "\"Erakutsi soluzioa\" botoiaren testua",
+          "default": "Erakutsi soluzioa"
+        },
+        {
+          "label": "\"Saiatu berriro\" botoiaren testua",
+          "default": "Saiatu berriro"
+        },
+        {
+          "label": "Erantzun okerra",
+          "default": "Erantzun okerra"
+        },
+        {
+          "label": "Erantzun zuzena",
+          "default": "Erantzun zuzena"
+        },
+        {
+          "label": "Puntuazio barraren testu adierazpena irakurgailua erabiltzen dutenentzat",
+          "default": ":total puntutik :num daukazu"
+        }
+      ]
+    },
+    {
+      "label": "Portaera-ezarpenak",
+      "description": "Aukera hauen bidez kontrolatu ahal izango duzu zereginaren portaera.",
+      "fields": [
+        {
+          "label": "Gaitu \"Saiatu berriro\" botoia"
+        },
+        {
+          "label": "Gaitu \"Erakutsi soluzioa\" botoia"
+        },
+        {
+          "label": "Gaitu \"Egiaztatu\" botoia"
+        },
+        {
+          "label": "Erakutsi \"Egiaztatu\" botoirako baieztapen-mezua"
+        },
+        {
+          "label": "Erakutsi \"Saiatu berriro\" botoirako baieztapen-mezua"
+        },
+        {
+          "label": "Egiaztatu erantzuna automatikoki",
+          "description": "Kontuan izan aukera hau gaituz gero, irisgarritasun maila jaitsiko dela"
+        },
+        {
+          "label": "Erantzun zuzenerako iruzkina",
+          "description": "Honek lehenetsitako iruzkina gainidatziko du. Aldagai eskuragarriak: @score eta @total"
+        },
+        {
+          "label": "Erantzun okerrerako iruzkina",
+          "description": "Honek lehenetsitako iruzkina gainidatziko du. Aldagai eskuragarriak: @score eta @total"
+        }
+      ]
+    },
+    {
+      "label": "Egiaztatu baieztapen elkarrizketa",
+      "fields": [
+        {
+          "label": "Goiburuaren testua",
+          "default": "Bukatu?"
+        },
+        {
+          "label": "Gorputzaren testua",
+          "default": "Ziur zaude bukatu nahi duzula?"
+        },
+        {
+          "label": "Utzi botoiaren etiketa",
+          "default": "Utzi"
+        },
+        {
+          "label": "Berretsi botoiaren etiketa",
+          "default": "Bukatuta"
+        }
+      ]
+    },
+    {
+      "label": "Berriz saiatzeko baieztapen-testua",
+      "fields": [
+        {
+          "label": "Goiburuaren testua",
+          "default": "Saiatu berriro?"
+        },
+        {
+          "label": "Gorputzaren testua",
+          "default": "Saiatu berriro nahi duzula ziur al zaude?"
+        },
+        {
+          "label": "Utzi botoiaren etiketa",
+          "default": "Utzi"
+        },
+        {
+          "label": "Berretsi botoiaren etiketa",
+          "default": "Berretsi"
+        }
+      ]
+    }
+  ]
+}

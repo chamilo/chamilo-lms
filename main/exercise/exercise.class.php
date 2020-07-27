@@ -3408,10 +3408,6 @@ class Exercise
     public function showTimeControlJS($timeLeft)
     {
         $timeLeft = (int) $timeLeft;
-        $script = 'redirectExerciseToResult();';
-        if (ALL_ON_ONE_PAGE == $this->type) {
-            $script = "save_now_all('validate');";
-        }
 
         return "<script>
             function openClockWarning() {
@@ -3443,7 +3439,7 @@ class Exercise
 
             function send_form() {
                 if ($('#exercise_form').length) {
-                    $script
+                    save_now_all('validate');
                 } else {
                     // In exercise_reminder.php
                     final_submit();
@@ -5687,7 +5683,7 @@ class Exercise
                     echo '</table></td></tr>';
                     echo "
                         <tr>
-                            <td colspan=\"2\">
+                            <td>
                                 <p><em>".get_lang('HotSpot')."</em></p>
                                 <div id=\"hotspot-solution-$questionId\"></div>
                                 <script>

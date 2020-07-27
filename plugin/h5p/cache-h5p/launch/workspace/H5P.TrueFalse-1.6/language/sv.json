@@ -1,0 +1,147 @@
+{
+  "semantics": [
+    {
+      "label": "Media",
+      "fields": [
+        {
+          "label": "Typ",
+          "description": "Valfri media som visas ovanför frågan."
+        },
+        {
+          "label": "Stäng av bildzoomning"
+        }
+      ]
+    },
+    {
+      "label": "Fråga"
+    },
+    {
+      "label": "Rätt svar",
+      "options": [
+        {
+          "label": "Sant"
+        },
+        {
+          "label": "Falskt"
+        }
+      ]
+    },
+    {
+      "label": "Översättning i användargränssnitt för Sant/Falskt-frågor",
+      "fields": [
+        {
+          "label": "Etikett för sant-knapp",
+          "default": "Sant"
+        },
+        {
+          "label": "Etikett för falskt-knapp",
+          "default": "Falskt"
+        },
+        {
+          "label": "Feedbacktext",
+          "default": "Du fick @score av @total poäng",
+          "description": "Feedbacktext, tillgängliga variabler: @score och @total. Exempel: 'Du fick @score av @total möjliga poäng'"
+        },
+        {
+          "label": "Text för \"Rätta\"-knapp",
+          "default": "Rätta"
+        },
+        {
+          "label": "Text för \"Visa rätt svar\"-knapp",
+          "default": "Visa rätt svar"
+        },
+        {
+          "label": "Text för \"Försök igen\"-knapp",
+          "default": "Försök igen"
+        },
+        {
+          "label": "Fel svar",
+          "default": "Fel svar"
+        },
+        {
+          "label": "Rätt svar",
+          "default": "Rätt svar"
+        },
+        {
+          "label": "Text som används för att presentera poäng för användare med skärmläsare",
+          "default": "Du fick :num av :total poäng"
+        }
+      ]
+    },
+    {
+      "label": "Allmänna inställningar",
+      "description": "Dessa inställningar påverkar hur uppgiftstypen beter sig.",
+      "fields": [
+        {
+          "label": "Aktivera \"Försök igen\"-knapp"
+        },
+        {
+          "label": "Aktivera \"Visa rätt svar\"-knapp"
+        },
+        {
+          "label": "Aktivera \"Rätta\"-knapp"
+        },
+        {
+          "label": "Visa bekräftelsefönster vid \"Rätta\""
+        },
+        {
+          "label": "Visa bekräftelsefönster vid \"Försök igen\""
+        },
+        {
+          "label": "Rätt svar automatiskt",
+          "description": "Notera att tillgängligheten försämras om du aktiverar detta"
+        },
+        {
+          "label": "Feedback vid rätt svar",
+          "description": "Detta kommer att ersätta standardtexten för feedback. Tillgängliga variabler: @score och @total"
+        },
+        {
+          "label": "Feedback vid fel svar",
+          "description": "Detta kommer att ersätta standardtexten för feedback. Tillgängliga variabler: @score och @total"
+        }
+      ]
+    },
+    {
+      "label": "Bekräftelse för Visa rätt svar",
+      "fields": [
+        {
+          "label": "Titel",
+          "default": "Färdig?"
+        },
+        {
+          "label": "Text",
+          "default": "Är du säker på att du är färdig?"
+        },
+        {
+          "label": "Etikett för \"Avbryt\"-knapp",
+          "default": "Avbryt"
+        },
+        {
+          "label": "Etikett för \"Bekräfta\"-knapp",
+          "default": "Bekräfta"
+        }
+      ]
+    },
+    {
+      "label": "Bekräftelse för Försök igen",
+      "fields": [
+        {
+          "label": "Titel",
+          "default": "Försök igen?"
+        },
+        {
+          "label": "Text",
+          "default": "Är du säker på att du vill försöka igen?"
+        },
+        {
+          "label": "Etikett för \"Avbryt\"-knapp",
+          "default": "Avbryt"
+        },
+        {
+          "label": "Etikett för \"Bekräfta\"-knapp",
+          "default": "Bekräfta"
+        }
+      ]
+    }
+  ]
+}

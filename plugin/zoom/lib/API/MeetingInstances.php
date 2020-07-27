@@ -30,16 +30,15 @@ class MeetingInstances
     /**
      * Retrieves a meeting's instances.
      *
-     * @param Client $client
-     * @param int    $meetingId
+     * @param int $meetingId
      *
      * @throws Exception
      *
      * @return MeetingInstances the meeting's instances
      */
-    public static function fromMeetingId($client, $meetingId)
+    public static function fromMeetingId($meetingId)
     {
-        return static::fromJson($client->send('GET', "past_meetings/$meetingId/instances"));
+        return static::fromJson(Client::getInstance()->send('GET', "past_meetings/$meetingId/instances"));
     }
 
     /**

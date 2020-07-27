@@ -1,0 +1,23 @@
+{
+  "libraryStrings": {
+    "title": "Ton-Aufnahme",
+    "recordAnswer": "Aufnehmen",
+    "pause": "Pause",
+    "continue": "Weiter",
+    "done": "Beenden",
+    "retry": "Zurücksetzen",
+    "microphoneNotSupported": "Mikrofonzugriff wird nicht unterstützt. Stelle sicher, dass du einen Browser verwendest, der die Aufnahme von einem Mikrofon unterstützt.",
+    "microphoneInaccessible": "Es kann nicht auf das Mikrofon zugegriffen werden. Stelle sicher, dass das Mikrofon im Browser aktiviert ist.",
+    "insecureNotAllowed": "Der Zugriff auf das Mikrofon ist in deinem Browser nicht möglich, da diese Seite nicht mit HTTPS ausgeliefert wird. Bitte kontaktiere den Webseitenbetreiber und bitte darum, HTTPS zu verwenden.",
+    "statusReadyToRecord": "Drücke unten auf den Aufnahmeknopf, um  die Aufnahme zu starten.",
+    "statusRecording": "Nehme auf...",
+    "statusPaused": "Aufnahme pausiert.",
+    "statusFinishedRecording": "Höre dir die Aufnahme unten an.",
+    "downloadRecording": "Drücke den \"Einfügen\"-Button, um die Aufnahme zu verwenden.",
+    "retryDialogHeaderText": "Aufnahme wiederholen?",
+    "retryDialogBodyText": "Wenn du auf \"Wiederholen\" klickst, geht die derzeitige Aufnahme verloren.",
+    "retryDialogConfirmText": "Wiederholen",
+    "retryDialogCancelText": "Abbrechen",
+    "statusCantCreateTheAudioFile": "Tondatei kann nicht erzeugt werden."
+  }
+}

@@ -1495,7 +1495,7 @@ $_configuration['course_catalog_settings'] = [
 */
 
 // Page "My Courses" shows specific course extra fields (CourseManager::getExtraFieldsToBePresented)
-/*$_configuration['My_course_course_extrafields_to_be_presented'] = [
+/*$_configuration['my_course_course_extrafields_to_be_presented'] = [
     'fields' => ['mots_cles', 'duree_en_min', 'format'],
 ];*/
 

@@ -1,0 +1,19 @@
+{
+  "semantics": [
+    {
+      "label": "Irudia"
+    },
+    {
+      "label": "Ordezko testua",
+      "description": "Beharrezkoa da. Nabigatzaileak ezin badu irudia kargatu, bere ordez testu hau bistaratuko da. Testu-irakurleek ere erabilia."
+    },
+    {
+      "label": "Desplazamendu testua",
+      "description": "Aukerakoa. Testu hau erabiltzaileak bere gailu erakuslea irudiaren gainetik pasatzean bistaratuko da."
+    },
+    {
+      "label": "Irudiaren edukiaren izena",
+      "default": "Irudia"
+    }
+  ]
+}

@@ -1,0 +1,121 @@
+{
+  "semantics": [
+    {
+      "widgets": [
+        {
+          "label": "Default"
+        }
+      ],
+      "label": "Karte",
+      "entity": "karte",
+      "field": {
+        "label": "Karte",
+        "fields": [
+          {
+            "label": "Slika"
+          },
+          {
+            "label": "Alternative text for Image",
+            "description": "Describe what can be seen in the photo. The text is read by text-to-speech tools needed by visually impaired users."
+          },
+          {
+            "label": "Audio Track",
+            "description": "An optional sound that plays when the card is turned."
+          },
+          {
+            "label": "Ista slika",
+            "description": "Opcionalna slika koja se koristi umjestodvije iste slike."
+          },
+          {
+            "label": "Alternative text for Matching Image",
+            "description": "Describe what can be seen in the photo. The text is read by text-to-speech tools needed by visually impaired users."
+          },
+          {
+            "label": "Matching Audio Track",
+            "description": "An optional sound that plays when the second card is turned."
+          },
+          {
+            "label": "Opis",
+            "description": "Kratak tekst koji će biti prikazan čim se pronađu dvije iste karte."
+          }
+        ]
+      }
+    },
+    {
+      "label": "Podešavanje ponašanja",
+      "description": "These options will let you control how the game behaves.",
+      "fields": [
+        {
+          "label": "Poredaj karte u redove ",
+          "description": "Will try to match the number of columns and rows when laying out the cards. Afterward, the cards will be scaled to fit the container."
+        },
+        {
+          "label": "Broj karata za upotrebu",
+          "description": "Setting this to a number greater than 2 will make the game pick random cards from the list of cards."
+        },
+        {
+          "label": "Add button for retrying when the game is over"
+        }
+      ]
+    },
+    {
+      "label": "Look and feel",
+      "description": "Control the visuals of the game.",
+      "fields": [
+        {
+          "label": "Theme Color",
+          "description": "Choose a color to create a theme for your card game."
+        },
+        {
+          "label": "Card Back",
+          "description": "Use a custom back for your cards."
+        }
+      ]
+    },
+    {
+      "label": "Prijevod",
+      "fields": [
+        {
+          "label": "Tekst kad se okrene karta ",
+          "default": "Okrenuta karta"
+        },
+        {
+          "label": "Tekst za provedeno vrijeme",
+          "default": "Provedeno vrijeme"
+        },
+        {
+          "label": "Feedback tekst",
+          "default": "BRAVO!"
+        },
+        {
+          "label": "Tekst na dugmetu pokušaj ponovo",
+          "default": "Pokušaj ponovo?"
+        },
+        {
+          "label": "Close button label",
+          "default": "Close"
+        },
+        {
+          "label": "Game label",
+          "default": "Memory Game. Find the matching cards."
+        },
+        {
+          "label": "Game finished label",
+          "default": "All of the cards have been found."
+        },
+        {
+          "label": "Card indexing label",
+          "default": "Card %num:"
+        },
+        {
+          "label": "Card unturned label",
+          "default": "Unturned."
+        },
+        {
+          "label": "Card matched label",
+          "default": "Match found."
+        }
+      ]
+    }
+  ]
+}

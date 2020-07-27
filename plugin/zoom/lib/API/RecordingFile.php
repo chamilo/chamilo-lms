@@ -95,13 +95,11 @@ class RecordingFile
     /**
      * Deletes the file.
      *
-     * @param Client $client
-     *
      * @throws Exception
      */
-    public function delete($client)
+    public function delete()
     {
-        $client->send(
+        Client::getInstance()->send(
             'DELETE',
             "/meetings/$this->meeting_id/recordings/$this->id",
             ['action' => 'delete']

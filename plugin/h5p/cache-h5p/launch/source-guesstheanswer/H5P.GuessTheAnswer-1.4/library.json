@@ -1,0 +1,35 @@
+{
+  "title": "Guess the Answer",
+  "description": "Set up a task where the user will just click to see the answer. No input.",
+  "majorVersion": 1,
+  "minorVersion": 4,
+  "patchVersion": 8,
+  "runnable": 1,
+  "coreApi": {
+    "majorVersion": 1,
+    "minorVersion": 19
+  },
+  "embedTypes": [
+    "iframe"
+  ],
+  "author": "Joubel",
+  "license": "MIT",
+  "machineName": "H5P.GuessTheAnswer",
+  "preloadedCss": [
+    {
+      "path": "guess-the-answer.css"
+    }
+  ],
+  "preloadedJs": [
+    {
+      "path": "guess-the-answer.js"
+    }
+  ],
+  "preloadedDependencies": [
+    {
+      "machineName": "FontAwesome",
+      "majorVersion": 4,
+      "minorVersion": 5
+    }
+  ]
+}

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\PluginBundle\Zoom\API;
@@ -6,8 +7,6 @@ namespace Chamilo\PluginBundle\Zoom\API;
 /**
  * Trait BaseMeetingTrait.
  * Common meeting properties definitions.
- *
- * @package Chamilo\PluginBundle\Zoom\API
  */
 trait BaseMeetingTrait
 {

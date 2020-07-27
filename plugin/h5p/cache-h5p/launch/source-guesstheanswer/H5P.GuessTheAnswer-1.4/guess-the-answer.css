@@ -1,0 +1,80 @@
+.h5p-guess-answer {
+  background-color: #FFF;
+  text-align: center;
+  color: #555;
+}
+
+.h5p-guess-answer-title {
+  text-align: center;
+  margin: 1em 1em 0;
+  font-size: 1.25em;
+}
+
+.h5p-guess-answer-title p {
+  margin: 0.5em auto;
+}
+
+.h5p-guess-answer .h5p-image > img {
+  margin-bottom: 1em;
+  line-height: 0;
+  max-width: 100%;
+  height: auto;
+  width: auto;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.h5p-guess-answer .show-solution-button {
+  display: block;
+  line-height: 1em;
+  cursor: pointer;
+  font-size: 16px;
+  border: none;
+  background-color: #1a73d9;
+  color: #FFF;
+  border-radius: 2em;
+  padding: 0.5em 1em;
+  margin: 1em auto;
+  box-sizing: border-box;
+  max-width: 90%;
+}
+
+.h5p-guess-answer .show-solution-button:hover,
+.h5p-guess-answer .show-solution-button:focus {
+  background: #1356a3;
+}
+
+.h5p-guess-answer .show-solution-button:active {
+  background: #104888;
+  -webkit-box-shadow: inset 0 4px 0 #0e407a;
+  -moz-box-shadow: inset 0 4px 0 #0e407a;
+  box-shadow: inset 0 4px 0 #0e407a;
+}
+
+.h5p-guess-answer .show-solution-button:before {
+  content: "\F06E";
+  font-family: 'H5PFontAwesome4';
+  padding-right: 0.5em;
+}
+
+.h5p-guess-answer .solution-text {
+  cursor: auto;
+  padding: 0.5em 0;
+  margin: 1em;
+  line-height: 1em;
+  color: #1a73d9;
+  font-weight: bold;
+}
+
+.h5p-guess-answer .solution-text:focus {
+  outline: none;
+}
+.h5p-guess-answer .empty-text-for-nvda {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+.h5p-guess-answer .hidden {
+  display: none;
+}

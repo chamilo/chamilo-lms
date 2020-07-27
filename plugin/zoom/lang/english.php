@@ -8,11 +8,13 @@ $strings['plugin_comment'] = "Zoom Videoconference integration in courses and se
 $strings['tool_enable'] = 'Zoom videoconference tool enabled';
 $strings['apiKey'] = 'API Key';
 $strings['apiSecret'] = 'API Secret';
+$strings['verificationToken'] = 'Verification Token';
 $strings['enableParticipantRegistration'] = 'Enable participant registration';
 $strings['enableCloudRecording'] = 'Enable cloud recording';
 $strings['enableGlobalConference'] = 'Enable global conference';
 $strings['enableGlobalConferencePerUser'] = 'Enable global conference per user';
 $strings['globalConferenceAllowRoles'] = "Global conference link only visible for these user roles";
+$strings['globalConferencePerUserAllowRoles'] = "Global conference per user link only visible for these user roles";
 
 $strings['tool_enable_help'] = "Choose whether you want to enable the Zoom videoconference tool.
 Once enabled, it will show as an additional course tool in all courses' homepage :
@@ -28,10 +30,24 @@ To get them, create a <em>JWT App</em> :
 <br/>2. click on <em>Advanced / Application Marketplace</em>
 <br/>3. click on <em><a href=\"https://marketplace.zoom.us/develop/create\">Develop / build App</a></em>
 <br/>4. choose <em>JWT / Create</em>
-<br/>5. fill in information about your \"App\"
+<br/>5. Information: fill in fields about your \"App\"
 (application and company names, contact name and email address)
-<br/>6. click on <em>Continue</em>
-Locate your API Key and Secret in the App Credentials page.
+<br/>6. Click on <em>Continue</em>
+<br/>7. App Credentials: <strong>copy your API Key and Secret to these fields below</strong>
+<br/>8. click on <em>Continue</em>
+<br/>9. Feature:
+enable <em>Event Subscriptions</em> to add a new one with endpoint URL
+<code>https://your.chamilo.url/plugin/zoom/endpoint.php</code>
+and add these event types:
+<br/>- Start Meeting
+<br/>- End Meeting
+<br/>- Participant/Host joined meeting
+<br/>- Participant/Host left meeting
+<br/>- All Recordings have completed
+<br/>- Recording transcript files have completed
+<br/>then click on <em>Done</em> then on <em>Save</em>
+and <strong>copy your Verification Token to the field below</strong>.
+<br/>10. click on <em>Continue</em>
 <br/>
 <strong>Attention</strong>:
 <br/>Zoom is <em>NOT</em> free software and specific rules apply to personal data protection.
@@ -46,6 +62,7 @@ Will not work for a <em>basic</em> profile.";
 // please keep these lines alphabetically sorted
 $strings['AllCourseUsersWereRegistered'] = "All course students were registered";
 $strings['Agenda'] = "Agenda";
+$strings['CannotRegisterWithoutEmailAddress'] = "Cannot register without email address";
 $strings['CopyingJoinURL'] = "Copying join URL";
 $strings['CopyJoinAsURL'] = "Copy 'join as' URL";
 $strings['CopyToCourse'] = "Copy to course";
@@ -53,6 +70,8 @@ $strings['CouldNotCopyJoinURL'] = "Could not copy join URL";
 $strings['Course'] = "Cours";
 $strings['CreatedAt'] = "Created at";
 $strings['CreateLinkInCourse'] = "Create link(s) in course";
+$strings['CreateUserVideoConference'] = "Create user conferences";
+$strings['DateMeetingTitle'] = "%s: %s";
 $strings['DeleteMeeting'] = "Delete meeting";
 $strings['DeleteFile'] = "Delete file(s)";
 $strings['Details'] = "Details";
@@ -61,13 +80,17 @@ $strings['Duration'] = "Duration";
 $strings['DurationFormat'] = "%hh%I";
 $strings['DurationInMinutes'] = "Duration (in minutes)";
 $strings['EndDate'] = "End Date";
+$strings['EnterMeeting'] = "Enter meeting";
+$strings['ViewMeeting'] = "View meeting";
 $strings['Files'] = "Files";
 $strings['Finished'] = "finished";
 $strings['FileWasCopiedToCourse'] = "The file was copied to the course";
 $strings['FileWasDeleted'] = "The file was deleted";
+$strings['GlobalMeeting'] = "Global meeting";
+$strings['GroupUsersWereRegistered'] = "Group members were registered";
 $strings['InstantMeeting'] = "Instant meeting";
 $strings['Join'] = "Join";
-$strings['JoinMeetingAsMyself'] = "Join meeting as myself";
+$strings['JoinGlobalVideoConference'] = "Join global conference";
 $strings['JoinURLCopied'] = "Join URL copied";
 $strings['JoinURLToSendToParticipants'] = "Join URL to send to participants";
 $strings['LiveMeetings'] = "Live meetings";
@@ -88,7 +111,7 @@ $strings['ScheduleAMeeting'] = "Schedule a meeting";
 $strings['ScheduledMeeting'] = "Scheduled meeting";
 $strings['ScheduledMeetings'] = "Scheduled Meetings";
 $strings['ScheduleTheMeeting'] = "Schedule the meeting";
-$strings['Search'] = "Search";
+$strings['SearchMeeting'] = "Search meeting";
 $strings['Session'] = "Session";
 $strings['StartDate'] = "Start Date";
 $strings['Started'] = "started";
@@ -105,4 +128,9 @@ $strings['UserRegistration'] = "User registration";
 $strings['Y-m-d H:i'] = "Y-m-d H:i";
 $strings['Waiting'] = "waiting";
 $strings['XRecordingOfMeetingXFromXDurationXDotX'] = "%s recording of meeting %s from %s (%s).%s";
+$strings['YouAreNotRegisteredToThisMeeting'] = "You are not registered to this meeting";
 $strings['ZoomVideoConferences'] = "Zoom Video Conferences";
+$strings['Recordings'] = "Recordings";
+$strings['CreateGlobalVideoConference'] = "Create global video conference";
+$strings['ConferenceNotStarted'] = "Conference not started";
+$strings['MeetingNotFound'] = "Meeting not found";

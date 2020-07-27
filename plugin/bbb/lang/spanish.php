@@ -74,3 +74,4 @@ $strings['SetByDefault'] = 'Lanzamiento con la interfaz por defecto';
 $strings['SetByTeacher'] = 'Elegido por el profesor';
 $strings['SetByStudent'] = 'Elegido por el alumno';
 $strings['ThereIsNoVideoConferenceActive'] = "No hay una videoconferencia actualmente activa";
+$strings['meeting_duration'] = 'Duración de la reunión (en minutos)';

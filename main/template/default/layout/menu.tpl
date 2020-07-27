@@ -24,7 +24,7 @@
                 <span class="icon-bar"></span>
             </button>
 
-            {% if notification_event == 1 %}
+            {% if _u.logged == 1 && notification_event == 1 %}
                 <button id="user-dropdown"  type="button" class="menu-dropdown pull-right navbar-toggle collapsed"
                         data-toggle="collapse" data-target="#user-dropdown-menu" aria-expanded="false" aria-controls="navbar">
                     <img class="img-circle" src="{{ _u.avatar_small }}" alt="{{ _u.complete_name }}"/>

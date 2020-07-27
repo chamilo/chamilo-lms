@@ -39,7 +39,7 @@ class ZoomPlugin extends Plugin
      * {@inheritdoc}
      * Initializes the API JWT client and the entity repositories.
      */
-    protected function __construct()
+    public function __construct()
     {
         parent::__construct(
             '0.0.1',
@@ -67,7 +67,6 @@ class ZoomPlugin extends Plugin
         );
 
         $this->isAdminPlugin = true;
-
         $this->jwtClient = new JWTClient($this->get('apiKey'), $this->get('apiSecret'));
     }
 
@@ -98,8 +97,12 @@ class ZoomPlugin extends Plugin
     {
         $user = api_get_user_entity(api_get_user_id());
 
-        return !is_null($user)
-            && 'true' === api_get_plugin_setting('zoom', 'enableGlobalConferencePerUser')
+        if (null === $user) {
+            return false;
+        }
+
+        return
+            'true' === api_get_plugin_setting('zoom', 'enableGlobalConferencePerUser')
             && in_array(
                 (api_is_platform_admin() ? PLATFORM_ADMIN : $user->getStatus()),
                 (array) api_get_plugin_setting('zoom', 'globalConferenceAllowRoles')
@@ -110,13 +113,13 @@ class ZoomPlugin extends Plugin
     /**
      * @return array [ $title => $link ]
      */
-    public static function meetingsToWhichCurrentUserIsRegisteredComingSoon()
+    public function meetingsToWhichCurrentUserIsRegisteredComingSoon()
     {
-        $items = [];
         $linkTemplate = api_get_path(WEB_PLUGIN_PATH).'zoom/join_meeting.php?meetingId=%s';
-        foreach (self::getRegistrantRepository()->meetingsComingSoonRegistrationsForUser(
-            api_get_user_entity(api_get_user_id())
-        ) as $registrant) {
+        $user = api_get_user_entity(api_get_user_id());
+        $meetings = self::getRegistrantRepository()->meetingsComingSoonRegistrationsForUser($user);
+        $items = [];
+        foreach ($meetings as $registrant) {
             $meeting = $registrant->getMeeting();
             $items[
                 sprintf(
@@ -133,14 +136,14 @@ class ZoomPlugin extends Plugin
     /**
      * @return array
      */
-    public static function getProfileBlockItems()
+    public function getProfileBlockItems()
     {
-        $elements = self::meetingsToWhichCurrentUserIsRegisteredComingSoon();
-        if (ZoomPlugin::currentUserCanJoinGlobalMeeting()) {
-            $elements[get_lang('JoinGlobalVideoConference')] = api_get_path(WEB_PLUGIN_PATH).'zoom/global.php';
+        $elements = $this->meetingsToWhichCurrentUserIsRegisteredComingSoon();
+        if (self::currentUserCanJoinGlobalMeeting()) {
+            $elements[$this->get_lang('JoinGlobalVideoConference')] = api_get_path(WEB_PLUGIN_PATH).'zoom/global.php';
         }
-        if (ZoomPlugin::currentUserCanCreateUserMeeting()) {
-            $elements[get_lang('CreateUserVideoConference')] = api_get_path(WEB_PLUGIN_PATH).'zoom/user.php';
+        if (self::currentUserCanCreateUserMeeting()) {
+            $elements[$this->get_lang('CreateUserVideoConference')] = api_get_path(WEB_PLUGIN_PATH).'zoom/user.php';
         }
         $items = [];
         foreach ($elements as $title => $link) {
@@ -337,7 +340,7 @@ class ZoomPlugin extends Plugin
                 Display::addFlash(
                     Display::return_message(get_lang('MeetingDeleted'), 'confirm')
                 );
-                location($returnURL);
+                api_location($returnURL);
             } catch (Exception $exception) {
                 Display::addFlash(
                     Display::return_message($exception->getMessage(), 'error')
@@ -624,9 +627,9 @@ class ZoomPlugin extends Plugin
                             Display::return_message(get_lang('GroupUsersWereRegistered'))
                         );
                     }
-                    location('meeting_from_start.php?meetingId='.$newMeeting->getId());
+                    api_location('meeting_from_start.php?meetingId='.$newMeeting->getId());
                 } elseif (!is_null($user)) {
-                    location('meeting_from_user.php?meetingId='.$newMeeting->getId());
+                    api_location('meeting_from_user.php?meetingId='.$newMeeting->getId());
                 }
             } catch (Exception $exception) {
                 Display::addFlash(
@@ -694,15 +697,7 @@ class ZoomPlugin extends Plugin
         $path = '/zoom_meeting_recording_file_'.$file->id.'.'.$file->file_type;
         $docId = DocumentManager::addCloudLink($courseInfo, $path, $file->play_url, $name);
         if (!$docId) {
-            throw new Exception(
-                get_lang(
-                    DocumentManager::cloudLinkExists(
-                        $courseInfo,
-                        $path,
-                        $file->play_url
-                    ) ? 'UrlAlreadyExists' : 'ErrorAddCloudLink'
-                )
-            );
+            throw new Exception(get_lang(DocumentManager::cloudLinkExists($courseInfo, $path, $file->play_url) ? 'UrlAlreadyExists' : 'ErrorAddCloudLink'));
         }
     }
 
@@ -907,7 +902,7 @@ class ZoomPlugin extends Plugin
     private function createGlobalMeeting()
     {
         $meetingInfoGet = MeetingInfoGet::fromTopicAndType(
-            get_lang('GlobalMeeting'),
+            $this->get_lang('GlobalMeeting'),
             MeetingInfoGet::TYPE_SCHEDULED
         );
         $meetingInfoGet->start_time = (new DateTime())->format(DateTimeInterface::ISO8601);
@@ -943,7 +938,7 @@ class ZoomPlugin extends Plugin
                 ->setCourse($course)
                 ->setSession($session)
         );
-        location($meeting->getMeetingInfoGet()->start_url);
+        api_location($meeting->getMeetingInfoGet()->start_url);
     }
 
     /**

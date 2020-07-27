@@ -23,11 +23,12 @@ if (array_key_exists('meetingId', $_REQUEST)) {
         if (is_null($meeting)) {
             throw new Exception('Meeting not found');
         }
+
         printf(
-            '%s<p><a href="%s" target="_blank">%s</a></p>',
+            '%s<p><a href="%s" class="btn btn-primary" target="_blank">%s</a></p>',
             $meeting->getIntroduction(),
             $plugin->getStartOrJoinMeetingURL($meeting),
-            get_lang('EnterMeeting')
+            $plugin->get_lang('EnterMeeting')
         );
     } catch (Exception $exception) {
         Display::addFlash(

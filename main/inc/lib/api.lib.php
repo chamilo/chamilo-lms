@@ -9577,10 +9577,10 @@ function api_number_format($number, $decimals = 0, $decimalSeparator = '.', $tho
 /**
  * Set location url with a exit break by default.
  *
- * @param $url
- * @param bool $exit
+ * @param string $url
+ * @param bool   $exit
  */
-function location($url, $exit = true)
+function api_location($url, $exit = true)
 {
     header('Location: '.$url);
 

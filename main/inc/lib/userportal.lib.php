@@ -953,7 +953,9 @@ class IndexManager
         }
 
         if ('true' === api_get_plugin_setting('zoom', 'tool_enable')) {
-            foreach (ZoomPlugin::getProfileBlockItems() as $item) {
+            $zoomPlugin = new ZoomPlugin();
+            $blocks = $zoomPlugin->getProfileBlockItems();
+            foreach ($blocks as $item) {
                 $items[] = $item;
             }
         }

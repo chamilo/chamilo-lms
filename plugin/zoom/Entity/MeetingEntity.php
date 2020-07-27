@@ -475,17 +475,18 @@ class MeetingEntity
      */
     private function initializeDisplayableProperties()
     {
+        $zoomPlugin = new \ZoomPlugin();
         $this->typeName = [
-            API\Meeting::TYPE_INSTANT => get_lang('InstantMeeting'),
-            API\Meeting::TYPE_SCHEDULED => get_lang('ScheduledMeeting'),
-            API\Meeting::TYPE_RECURRING_WITH_NO_FIXED_TIME => get_lang('RecurringWithNoFixedTime'),
-            API\Meeting::TYPE_RECURRING_WITH_FIXED_TIME => get_lang('RecurringWithFixedTime'),
+            API\Meeting::TYPE_INSTANT => $zoomPlugin->get_lang('InstantMeeting'),
+            API\Meeting::TYPE_SCHEDULED => $zoomPlugin->get_lang('ScheduledMeeting'),
+            API\Meeting::TYPE_RECURRING_WITH_NO_FIXED_TIME => $zoomPlugin->get_lang('RecurringWithNoFixedTime'),
+            API\Meeting::TYPE_RECURRING_WITH_FIXED_TIME => $zoomPlugin->get_lang('RecurringWithFixedTime'),
         ][$this->meetingInfoGet->type];
         if (property_exists($this, 'status')) {
             $this->statusName = [
-                'waiting' => get_lang('Waiting'),
-                'started' => get_lang('Started'),
-                'finished' => get_lang('Finished'),
+                'waiting' => $zoomPlugin->get_lang('Waiting'),
+                'started' => $zoomPlugin->get_lang('Started'),
+                'finished' => $zoomPlugin->get_lang('Finished'),
             ][$this->meetingInfoGet->status];
         }
         $this->startDateTime = null;
@@ -502,7 +503,7 @@ class MeetingEntity
             $later = new DateTime();
             $later->add(new DateInterval('PT'.$this->meetingInfoGet->duration.'M'));
             $this->durationInterval = $later->diff($now);
-            $this->formattedDuration = $this->durationInterval->format(get_lang('DurationFormat'));
+            $this->formattedDuration = $this->durationInterval->format($zoomPlugin->get_lang('DurationFormat'));
         }
     }
 }

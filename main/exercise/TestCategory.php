@@ -508,6 +508,7 @@ class TestCategory
      * @param int   $exerciseId
      * @param array $check_in_question_list
      * @param array $categoriesAddedInExercise
+     * @param int   $questionSelectionType
      *
      * @return array
      */

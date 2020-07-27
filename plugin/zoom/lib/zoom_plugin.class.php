@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Course;
@@ -366,7 +367,10 @@ class ZoomPlugin extends Plugin
 
         $users = $meetingEntity->getRegistrableUsers();
         foreach ($users as $user) {
-            $userIdSelect->addOption(api_get_person_name($user->getFirstname(), $user->getLastname()), $user->getId());
+            $userIdSelect->addOption(
+                api_get_person_name($user->getFirstname(), $user->getLastname()),
+                $user->getId()
+            );
         }
 
         if ($form->validate()) {
@@ -690,7 +694,15 @@ class ZoomPlugin extends Plugin
         $path = '/zoom_meeting_recording_file_'.$file->id.'.'.$file->file_type;
         $docId = DocumentManager::addCloudLink($courseInfo, $path, $file->play_url, $name);
         if (!$docId) {
-            throw new Exception(get_lang(DocumentManager::cloudLinkExists($courseInfo, $path, $file->play_url) ? 'UrlAlreadyExists' : 'ErrorAddCloudLink'));
+            throw new Exception(
+                get_lang(
+                    DocumentManager::cloudLinkExists(
+                        $courseInfo,
+                        $path,
+                        $file->play_url
+                    ) ? 'UrlAlreadyExists' : 'ErrorAddCloudLink'
+                )
+            );
         }
     }
 

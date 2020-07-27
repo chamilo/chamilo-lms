@@ -14,8 +14,6 @@ use Doctrine\ORM\EntityRepository;
 
 /**
  * Class MeetingEntityRepository.
- *
- * @package Chamilo\PluginBundle\Zoom
  */
 class MeetingEntityRepository extends EntityRepository
 {

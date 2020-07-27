@@ -35,8 +35,6 @@ class ApiRequest
     /**
      * Create a session token to perform an enrollment.
      *
-     * @param \Chamilo\UserBundle\Entity\User $user
-     *
      * @throws \Exception
      *
      * @return array
@@ -55,9 +53,8 @@ class ApiRequest
     }
 
     /**
-     * @param string                          $token
-     * @param string                          $audioFilePath
-     * @param \Chamilo\UserBundle\Entity\User $user
+     * @param string $token
+     * @param string $audioFilePath
      *
      * @throws \Exception
      *
@@ -83,8 +80,6 @@ class ApiRequest
     }
 
     /**
-     * @param \Chamilo\UserBundle\Entity\User|null $user
-     *
      * @throws \Exception
      *
      * @return array
@@ -104,9 +99,8 @@ class ApiRequest
     }
 
     /**
-     * @param string                          $token
-     * @param \Chamilo\UserBundle\Entity\User $user
-     * @param string                          $audioFilePath
+     * @param string $token
+     * @param string $audioFilePath
      *
      * @throws \Exception
      *
@@ -152,7 +146,6 @@ class ApiRequest
      * @param string $uri
      * @param string $authBearer
      * @param string $lang
-     * @param array  $multipart
      *
      * @throws \Exception
      *

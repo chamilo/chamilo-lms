@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\PluginBundle\Zoom;
@@ -14,7 +15,6 @@ use Exception;
 /**
  * Class RecordingEntity.
  *
- * @package Chamilo\PluginBundle\Zoom
  * @ORM\Entity(repositoryClass="Chamilo\PluginBundle\Zoom\RecordingEntityRepository")
  * @ORM\Table(
  *     name="plugin_zoom_recording",

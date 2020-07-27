@@ -1,4 +1,5 @@
 <?php
+
 /* For license terms, see /license.txt */
 
 $course_plugin = 'zoom'; // needed in order to load the plugin lang variables

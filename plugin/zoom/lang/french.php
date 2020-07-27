@@ -129,3 +129,4 @@ $strings['XRecordingOfMeetingXFromXDurationXDotX'] = "Enregistrement (%s) de la 
 $strings['YouAreNotRegisteredToThisMeeting'] = "Vous n'êtes pas inscrit à cette conférence";
 $strings['ZoomVideoConferences'] = "Conférences vidéo Zoom";
 $strings['Recordings'] = "Enregistrements";
+$strings['CreateGlobalVideoConference'] = "Créer une conférence global";

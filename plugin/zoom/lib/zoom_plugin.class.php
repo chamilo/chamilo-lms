@@ -140,7 +140,7 @@ class ZoomPlugin extends Plugin
     {
         $elements = $this->meetingsToWhichCurrentUserIsRegisteredComingSoon();
         if (self::currentUserCanJoinGlobalMeeting()) {
-            $elements[$this->get_lang('JoinGlobalVideoConference')] = api_get_path(WEB_PLUGIN_PATH).'zoom/global.php';
+            $elements[$this->get_lang('CreateGlobalVideoConference')] = api_get_path(WEB_PLUGIN_PATH).'zoom/global.php';
         }
 
         if (self::currentUserCanCreateUserMeeting()) {

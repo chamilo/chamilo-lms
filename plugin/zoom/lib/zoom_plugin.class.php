@@ -142,6 +142,7 @@ class ZoomPlugin extends Plugin
         if (self::currentUserCanJoinGlobalMeeting()) {
             $elements[$this->get_lang('JoinGlobalVideoConference')] = api_get_path(WEB_PLUGIN_PATH).'zoom/global.php';
         }
+
         if (self::currentUserCanCreateUserMeeting()) {
             $elements[$this->get_lang('CreateUserVideoConference')] = api_get_path(WEB_PLUGIN_PATH).'zoom/user.php';
         }
@@ -224,6 +225,7 @@ class ZoomPlugin extends Plugin
     public function getAdminSearchForm()
     {
         $form = new FormValidator('search');
+        $form->addHeader($this->get_lang('SearchMeeting'));
         $form->addDatePicker('start', get_lang('StartDate'));
         $form->addDatePicker('end', get_lang('EndDate'));
         $form->addButtonSearch(get_lang('Search'));
@@ -272,16 +274,17 @@ class ZoomPlugin extends Plugin
     {
         $meetingInfoGet = $meetingEntity->getMeetingInfoGet();
         $form = new FormValidator('edit', 'post', $_SERVER['REQUEST_URI']);
+        $form->addHeader($this->get_lang('UpdateMeeting'));
         if ($meetingEntity->requiresDateAndDuration()) {
             $startTimeDatePicker = $form->addDateTimePicker('startTime', get_lang('StartTime'));
             $form->setRequired($startTimeDatePicker);
-            $durationNumeric = $form->addNumeric('duration', get_lang('DurationInMinutes'));
+            $durationNumeric = $form->addNumeric('duration', $this->get_lang('DurationInMinutes'));
             $form->setRequired($durationNumeric);
         }
-        $form->addText('topic', get_lang('Topic'));
+        $form->addText('topic', $this->get_lang('Topic'));
         $form->addTextarea('agenda', get_lang('Agenda'), ['maxlength' => 2000]);
         // $form->addText('password', get_lang('Password'), false, ['maxlength' => '10']);
-        $form->addButtonUpdate(get_lang('UpdateMeeting'));
+        $form->addButtonUpdate(get_lang('Update'));
         if ($form->validate()) {
             if ($meetingEntity->requiresDateAndDuration()) {
                 $meetingInfoGet->start_time = (new DateTime($form->getSubmitValue('startTime')))->format(
@@ -332,13 +335,13 @@ class ZoomPlugin extends Plugin
     public function getDeleteMeetingForm($meetingEntity, $returnURL)
     {
         $form = new FormValidator('delete', 'post', $_SERVER['REQUEST_URI']);
-        $form->addButtonDelete(get_lang('DeleteMeeting'));
+        $form->addButtonDelete($this->get_lang('DeleteMeeting'));
         if ($form->validate()) {
             try {
                 $meetingEntity->getMeetingInfoGet()->delete();
                 Database::getManager()->remove($meetingEntity);
                 Display::addFlash(
-                    Display::return_message(get_lang('MeetingDeleted'), 'confirm')
+                    Display::return_message($this->get_lang('MeetingDeleted'), 'confirm')
                 );
                 api_location($returnURL);
             } catch (Exception $exception) {
@@ -550,11 +553,12 @@ class ZoomPlugin extends Plugin
     public function getScheduleMeetingForm($user, $course = null, $session = null)
     {
         $form = new FormValidator('scheduleMeetingForm');
+        $form->addHeader($this->get_lang('ScheduleTheMeeting'));
         $startTimeDatePicker = $form->addDateTimePicker('startTime', get_lang('StartTime'));
         $form->setRequired($startTimeDatePicker);
-        $durationNumeric = $form->addNumeric('duration', get_lang('DurationInMinutes'));
+        $durationNumeric = $form->addNumeric('duration', $this->get_lang('DurationInMinutes'));
         $form->setRequired($durationNumeric);
-        $form->addText('topic', get_lang('Topic'), true);
+        $form->addText('topic', $this->get_lang('Topic'), true);
         $form->addTextarea('agenda', get_lang('Agenda'), ['maxlength' => 2000]);
         // $passwordText = $form->addText('password', get_lang('Password'), false, ['maxlength' => '10']);
         if (!is_null($course)) {
@@ -591,7 +595,7 @@ class ZoomPlugin extends Plugin
                 $form->setAttribute('onchange', $jsCode);
             }
         }
-        $form->addButtonCreate(get_lang('ScheduleTheMeeting'));
+        $form->addButtonCreate(get_lang('Save'));
 
         if ($form->validate()) {
             try {
@@ -606,15 +610,15 @@ class ZoomPlugin extends Plugin
                     ''
                 );
                 Display::addFlash(
-                    Display::return_message(get_lang('NewMeetingCreated'))
+                    Display::return_message($this->get_lang('NewMeetingCreated'))
                 );
                 if ($newMeeting->isCourseMeeting()) {
-                    if ('RegisterAllCourseUsers' == $form->getSubmitValue('userRegistration')) {
+                    if ('RegisterAllCourseUsers' === $form->getSubmitValue('userRegistration')) {
                         $this->registerAllCourseUsers($newMeeting);
                         Display::addFlash(
                             Display::return_message(get_lang('AllCourseUsersWereRegistered'))
                         );
-                    } elseif ('RegisterTheseGroupMembers' == $form->getSubmitValue('userRegistration')) {
+                    } elseif ('RegisterTheseGroupMembers' === $form->getSubmitValue('userRegistration')) {
                         $userIds = [];
                         foreach ($form->getSubmitValue('groupIds') as $groupId) {
                             $userIds = array_unique(array_merge($userIds, GroupManager::get_users($groupId)));
@@ -656,6 +660,10 @@ class ZoomPlugin extends Plugin
      */
     public function userIsConferenceManager($meetingEntity)
     {
+        if (null === $meetingEntity) {
+            return false;
+        }
+
         return api_is_coach()
             || api_is_platform_admin()
             || $meetingEntity->isCourseMeeting() && api_get_course_id() && api_is_course_admin()

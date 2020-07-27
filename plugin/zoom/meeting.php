@@ -14,16 +14,16 @@ $logInfo = [
 ];
 
 Event::registerLog($logInfo);
+$plugin = ZoomPlugin::create();
 
 $interbreadcrumb[] = [ // used in templates
     'url' => $returnURL,
-    'name' => get_lang('ZoomVideoConferences'),
+    'name' => $plugin->get_lang('ZoomVideoConferences'),
 ];
 
 if (!array_key_exists('meetingId', $_REQUEST)) {
     throw new Exception('MeetingNotFound');
 }
-$plugin = ZoomPlugin::create();
 
 /** @var MeetingEntity $meeting */
 $meeting = $plugin->getMeetingRepository()->find($_REQUEST['meetingId']);

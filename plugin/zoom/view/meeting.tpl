@@ -1,10 +1,11 @@
 <p>
     {{ meeting.typeName }} {{ meeting.id }} ({{ meeting.meetingInfoGet.status }})
 </p>
+
 {% if meeting.meetingInfoGet.status != 'finished' %}
 <p>
-    <a href="join_meeting.php?meetingId={{ meeting.id }}">
-        {{ 'EnterMeeting'|get_lang }}
+    <a class="btn btn-primary" href="join_meeting.php?meetingId={{ meeting.id }}">
+        {{ 'EnterMeeting'|get_plugin_lang('ZoomPlugin') }}
     </a>
 </p>
 {% endif %}
@@ -12,7 +13,7 @@
 {% if isConferenceManager and meeting.status == 'waiting' %}
 <p>
     <a href="{{ meeting.meetingInfoGet.start_url }}" target="_blank">
-        {{ 'StartMeeting'|get_lang }}
+        {{ 'StartMeeting'|get_plugin_lang('ZoomPlugin') }}
     </a>
 </p>
 {% endif %}
@@ -20,18 +21,23 @@
 {% if currentUserJoinURL %}
 <p>
     <a href="{{ currentUserJoinURL }}" target="_blank">
-        {{ 'JoinMeetingAsMyself'|get_lang }}
+        {{ 'JoinMeetingAsMyself'|get_plugin_lang('ZoomPlugin') }}
     </a>
 </p>
 {% endif %}
 
 {% if meeting.meetingInfoGet.settings.approval_type == 2 %}
-<p>
+
     <label>
-        {{ 'JoinURLToSendToParticipants'|get_lang }}
-        <input readonly value="{{ meeting.meetingInfoGet.join_url }}">
+        {{ 'JoinURLToSendToParticipants'|get_plugin_lang('ZoomPlugin') }}
     </label>
-</p>
+
+    <div class="form-inline">
+        <div class="form-group">
+            <input class="form-control" type="text"  style="width:300px" readonly value="{{ meeting.meetingInfoGet.join_url }}" />
+        </div>
+    </div>
+
 {% endif %}
 
 
@@ -44,12 +50,12 @@
 {% if registrants and meeting.meetingInfoGet.settings.approval_type != 2 %}
 <script>
     function copyJoinURL(event, url) {
-        event.target.textContent = '{{ 'CopyingJoinURL'|get_lang|escape }}';
+        event.target.textContent = '{{ 'CopyingJoinURL'|get_plugin_lang('ZoomPlugin')|escape }}';
         navigator.clipboard.writeText(url).then(
             function() {
-                event.target.textContent = '{{ 'JoinURLCopied'|get_lang|escape }}';
+                event.target.textContent = '{{ 'JoinURLCopied'|get_plugin_lang('ZoomPlugin')|escape }}';
             }, function() {
-                event.target.textContent = '{{ 'CouldNotCopyJoinURL'|get_lang|escape }}' + ' ' + url;
+                event.target.textContent = '{{ 'CouldNotCopyJoinURL'|get_plugin_lang('ZoomPlugin')|escape }}' + ' ' + url;
             }
         );
     }
@@ -58,7 +64,7 @@
     {% for registrant in registrants %}
     <li>
         <a onclick="copyJoinURL(event, '{{ registrant.join_url }}')">
-            {{ 'CopyJoinAsURL'|get_lang }}
+            {{ 'CopyJoinAsURL'|get_plugin_lang('ZoomPlugin') }}
         </a>
         {{ registrant.fullName }}
     </li>

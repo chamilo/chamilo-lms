@@ -16,10 +16,9 @@ $logInfo = [
 
 Event::registerLog($logInfo);
 
-$tool_name = get_lang('ZoomVideoconferences');
-$tpl = new Template($tool_name);
-
 $plugin = ZoomPlugin::create();
+$tool_name = $plugin->get_lang('ZoomVideoconferences');
+$tpl = new Template($tool_name);
 
 if ($plugin->userIsCourseConferenceManager(api_get_course_entity())) {
     // user can create a new meeting

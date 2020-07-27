@@ -9,11 +9,9 @@ require_once __DIR__.'/config.php';
 
 api_protect_admin_script();
 
-$tool_name = get_lang('ZoomVideoConferences');
-
 $plugin = ZoomPlugin::create();
+$tool_name = $plugin->get_lang('ZoomVideoConferences');
 
-// the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
 
 $form = $plugin->getAdminSearchForm();

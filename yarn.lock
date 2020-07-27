@@ -12329,7 +12329,7 @@ sentence-case@^3.0.3:
     tslib "^1.10.0"
     upper-case-first "^2.0.1"
 
-serialize-javascript@^2.1.0, serialize-javascript@^2.1.2:
+serialize-javascript@^2.1.2:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/serialize-javascript/-/serialize-javascript-2.1.2.tgz#ecec53b0e0317bdc95ef76ab7074b7384785fa61"
   integrity sha512-rs9OggEUF0V4jUSecXazOYsLfu7OGK2qIn3c7IPBiffz32XniEp/TX9Xmc9LQfK2nQ2QKHvZ2oygKUGU0lG4jQ==
@@ -12338,6 +12338,13 @@ serialize-javascript@^3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/serialize-javascript/-/serialize-javascript-3.1.0.tgz#8bf3a9170712664ef2561b44b691eafe399214ea"
   integrity sha512-JIJT1DGiWmIKhzRsG91aS6Ze4sFUrYbltlkg2onR5OrnNM02Kl/hnY/T4FN2omvyeBbQmMJv+K4cPOpGzOTFBg==
+  dependencies:
+    randombytes "^2.1.0"
+
+serialize-javascript@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/serialize-javascript/-/serialize-javascript-4.0.0.tgz#b525e1238489a5ecfc42afacc3fe99e666f4b1aa"
+  integrity sha512-GaNA54380uFefWghODBWEGisLZFj00nS5ACs6yHa9nLqlLpVLO8ChDGeKRjZnV4Nh4n0Qi7nhYZD/9fCPzEqkw==
   dependencies:
     randombytes "^2.1.0"
 
@@ -13940,13 +13947,13 @@ vscode-uri@^1.0.6:
   resolved "https://registry.yarnpkg.com/vscode-uri/-/vscode-uri-1.0.8.tgz#9769aaececae4026fb6e22359cb38946580ded59"
   integrity sha512-obtSWTlbJ+a+TFRYGaUumtVwb+InIUVI0Lu0VBUAPmj2cU5JutEXg3xUE0c2J5Tcy7h2DEKVJBFi+Y9ZSFzzPQ==
 
-vue-apollo@^3.0.3:
-  version "3.0.3"
-  resolved "https://registry.yarnpkg.com/vue-apollo/-/vue-apollo-3.0.3.tgz#7f29558df76eec0f03251847eef153816a261827"
-  integrity sha512-WJaQ1v/i46/oIPlKv7J0Tx6tTlbuaeCdhrAbL06h+Zca2gzr5ywjUFpl8ijMTGJsQ+Ph/U4xEpBFBOMxQmL+7g==
+vue-apollo@^3.0.4:
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/vue-apollo/-/vue-apollo-3.0.4.tgz#d48a990d02c1febb5248d097f921c74c50a22e8a"
+  integrity sha512-sthSS9E6FB7OMmSJmIG7e89QZvzwK/1PCD8A/IfGBST48pxY7sdSxRp22Gu2/s/gxQBnQPI1H1ZPZE97IG+zXA==
   dependencies:
     chalk "^2.4.2"
-    serialize-javascript "^2.1.0"
+    serialize-javascript "^4.0.0"
     throttle-debounce "^2.1.0"
 
 vue-cli-plugin-apollo@^0.21.3:

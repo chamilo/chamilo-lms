@@ -40,3 +40,4 @@ $strings['Failed'] = "Failed";
 $strings['ActivityId'] = "Activity ID";
 $strings['Success'] = "Success";
 $strings['MarkForSpeechAuthentication'] = 'Mark it for speech authentication';
+$strings['EnrollmentTitle'] = "Enrollment to generate voice print with Whispeak";

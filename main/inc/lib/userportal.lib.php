@@ -964,7 +964,7 @@ class IndexManager
             true === api_get_configuration_value('whispeak_auth_enabled') &&
             !WhispeakAuthPlugin::checkUserIsEnrolled($userId)
         ) {
-            $itemTitle = WhispeakAuthPlugin::create()->get_title();
+            $itemTitle = get_plugin_lang('EnrollmentTitle', WhispeakAuthPlugin::class);
 
             $items[] = [
                 'class' => 'whispeak-enrollment',

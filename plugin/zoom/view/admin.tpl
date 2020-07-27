@@ -7,11 +7,11 @@
     <table class="table table-hover table-striped">
         <thead>
             <tr>
+                <th>{{ 'Topic'|get_plugin_lang('ZoomPlugin') }}</th>
                 <th>{{ 'StartTime'|get_lang }}</th>
                 <th>{{ 'User'|get_lang }}</th>
                 <th>{{ 'Course'|get_lang }}</th>
                 <th>{{ 'Session'|get_lang }}</th>
-                <th>{{ 'Topic'|get_plugin_lang('ZoomPlugin') }}</th>
                 {% if recordings %}
                 <th>{{ 'Recordings'|get_plugin_lang('ZoomPlugin') }}</th>
                 {% endif %}
@@ -21,11 +21,11 @@
             <tbody>
             {% for meeting in meetings %}
                 <tr>
+                    <td>{{ meeting.meetingInfoGet.topic }}</td>
                     <td>{{ meeting.formattedStartTime }}</td>
                     <td>{{ meeting.user ? meeting.user : '-' }}</td>
                     <td>{{ meeting.course ? meeting.course : '-' }}</td>
                     <td>{{ meeting.session ? meeting.session : '-' }}</td>
-                    <td>{{ meeting.meetingInfoGet.topic }}</td>
                     {% if recordings %}
                     <td>
                         {% for recording in recordings %}

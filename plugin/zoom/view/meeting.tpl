@@ -57,17 +57,21 @@
                 );
             }
         </script>
-        <ul>
-            {% for registrant in registrants %}
 
-            <li>
+            <table>
+            {% for registrant in registrants %}
+            <tr>
+                <td>
+                {{ registrant.fullName }}
+                </td>
+               <td>
                 <a class="btn btn-primary" onclick="copyJoinURL(event, '{{ registrant.join_url }}')">
                     {{ 'CopyJoinAsURL'|get_plugin_lang('ZoomPlugin') }}
                 </a>
-                {{ registrant.fullName }}
-            </li>
+               </td>
+            </tr>
             {% endfor %}
-        </ul>
+            </table>
     {% endif %}
 {% else %}
 

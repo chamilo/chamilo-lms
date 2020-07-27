@@ -299,13 +299,13 @@ class ZoomPlugin extends Plugin
         $meetingInfoGet = $meetingEntity->getMeetingInfoGet();
         $form = new FormValidator('edit', 'post', $_SERVER['REQUEST_URI']);
         $form->addHeader($this->get_lang('UpdateMeeting'));
+        $form->addText('topic', $this->get_lang('Topic'));
         if ($meetingEntity->requiresDateAndDuration()) {
             $startTimeDatePicker = $form->addDateTimePicker('startTime', get_lang('StartTime'));
             $form->setRequired($startTimeDatePicker);
             $durationNumeric = $form->addNumeric('duration', $this->get_lang('DurationInMinutes'));
             $form->setRequired($durationNumeric);
         }
-        $form->addText('topic', $this->get_lang('Topic'));
         $form->addTextarea('agenda', get_lang('Agenda'), ['maxlength' => 2000]);
         // $form->addText('password', get_lang('Password'), false, ['maxlength' => '10']);
         $form->addButtonUpdate(get_lang('Update'));
@@ -364,6 +364,8 @@ class ZoomPlugin extends Plugin
             try {
                 $meetingEntity->getMeetingInfoGet()->delete();
                 Database::getManager()->remove($meetingEntity);
+                Database::getManager()->flush();
+
                 Display::addFlash(
                     Display::return_message($this->get_lang('MeetingDeleted'), 'confirm')
                 );
@@ -580,10 +582,13 @@ class ZoomPlugin extends Plugin
         $form->addHeader($this->get_lang('ScheduleTheMeeting'));
         $startTimeDatePicker = $form->addDateTimePicker('startTime', get_lang('StartTime'));
         $form->setRequired($startTimeDatePicker);
-        $durationNumeric = $form->addNumeric('duration', $this->get_lang('DurationInMinutes'));
-        $form->setRequired($durationNumeric);
+
         $form->addText('topic', $this->get_lang('Topic'), true);
         $form->addTextarea('agenda', get_lang('Agenda'), ['maxlength' => 2000]);
+
+        $durationNumeric = $form->addNumeric('duration', $this->get_lang('DurationInMinutes'));
+        $form->setRequired($durationNumeric);
+
         // $passwordText = $form->addText('password', get_lang('Password'), false, ['maxlength' => '10']);
         if (!is_null($course)) {
             $registrationOptions = [
@@ -917,11 +922,15 @@ class ZoomPlugin extends Plugin
      */
     private function createMeetingFromMeetingEntity($meeting)
     {
-        $meeting->getMeetingInfoGet()->settings->auto_recording = $this->get('enableCloudRecording')
+        $approvalType = $meeting->getMeetingInfoGet()->settings->approval_type;
+        $meeting->getMeetingInfoGet()->settings->auto_recording = 'true' === $this->get('enableCloudRecording')
             ? 'cloud'
             : 'local';
         $meeting->getMeetingInfoGet()->settings->registrants_email_notification = false;
         $meeting->setMeetingInfoGet($meeting->getMeetingInfoGet()->create());
+
+        $meeting->getMeetingInfoGet()->settings->approval_type = $approvalType;
+
         Database::getManager()->persist($meeting);
         Database::getManager()->flush();
 
@@ -954,28 +963,6 @@ class ZoomPlugin extends Plugin
     }
 
     /**
-     * Starts a new instant meeting and redirects to its start url.
-     *
-     * @param string       $topic
-     * @param User|null    $user
-     * @param Course|null  $course
-     * @param Session|null $session
-     *
-     * @throws Exception
-     */
-    private function startInstantMeeting($topic, $user = null, $course = null, $session = null)
-    {
-        $meeting = $this->createMeetingFromMeetingEntity(
-            (new MeetingEntity())
-                ->setMeetingInfoGet(MeetingInfoGet::fromTopicAndType($topic, MeetingInfoGet::TYPE_INSTANT))
-                ->setUser($user)
-                ->setCourse($course)
-                ->setSession($session)
-        );
-        api_location($meeting->getMeetingInfoGet()->start_url);
-    }
-
-    /**
      * Schedules a meeting and returns it.
      * set $course, $session and $user to null in order to create a global meeting.
      *
@@ -999,10 +986,9 @@ class ZoomPlugin extends Plugin
         $meetingInfoGet->start_time = $startTime->format(DateTimeInterface::ISO8601);
         $meetingInfoGet->agenda = $agenda;
         $meetingInfoGet->password = $password;
-
-        $meetingInfoGet->settings->approval_type = MeetingSettings::APPROVAL_TYPE_AUTOMATICALLY_APPROVE;
+        $meetingInfoGet->settings->approval_type = MeetingSettings::APPROVAL_TYPE_NO_REGISTRATION_REQUIRED;
         if ('true' === $this->get('enableParticipantRegistration')) {
-            $meetingInfoGet->settings->approval_type = MeetingSettings::APPROVAL_TYPE_NO_REGISTRATION_REQUIRED;
+            $meetingInfoGet->settings->approval_type = MeetingSettings::APPROVAL_TYPE_AUTOMATICALLY_APPROVE;
         }
 
         return $this->createMeetingFromMeetingEntity(
@@ -1012,6 +998,28 @@ class ZoomPlugin extends Plugin
                 ->setCourse($course)
                 ->setSession($session)
         );
+    }
+
+    /**
+     * Starts a new instant meeting and redirects to its start url.
+     *
+     * @param string       $topic
+     * @param User|null    $user
+     * @param Course|null  $course
+     * @param Session|null $session
+     *
+     * @throws Exception
+     */
+    private function startInstantMeeting($topic, $user = null, $course = null, $session = null)
+    {
+        $meeting = $this->createMeetingFromMeetingEntity(
+            (new MeetingEntity())
+                ->setMeetingInfoGet(MeetingInfoGet::fromTopicAndType($topic, MeetingInfoGet::TYPE_INSTANT))
+                ->setUser($user)
+                ->setCourse($course)
+                ->setSession($session)
+        );
+        api_location($meeting->getMeetingInfoGet()->start_url);
     }
 
     /**
@@ -1027,13 +1035,14 @@ class ZoomPlugin extends Plugin
     private function registerUser($meetingEntity, $user, $andFlush = true)
     {
         if (empty($user->getEmail())) {
-            throw new Exception('CannotRegisterWithoutEmailAddress');
+            throw new Exception($this->get_lang('CannotRegisterWithoutEmailAddress'));
         }
         $meetingRegistrant = MeetingRegistrant::fromEmailAndFirstName(
             $user->getEmail(),
             $user->getFirstname(),
             $user->getLastname()
         );
+
         $registrantEntity = (new RegistrantEntity())
             ->setMeeting($meetingEntity)
             ->setUser($user)

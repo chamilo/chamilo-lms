@@ -11,7 +11,6 @@ api_protect_admin_script();
 
 $plugin = ZoomPlugin::create();
 $tool_name = $plugin->get_lang('ZoomVideoConferences');
-
 $this_section = SECTION_PLATFORM_ADMIN;
 
 $form = $plugin->getAdminSearchForm();
@@ -20,7 +19,7 @@ $endDate = new DateTime($form->getSubmitValue('end'));
 
 $tpl = new Template($tool_name);
 $tpl->assign('meetings', $plugin->getMeetingRepository()->periodMeetings($startDate, $endDate));
-if ($plugin->get('enableCloudRecording')) {
+if ('true' === $plugin->get('enableCloudRecording')) {
     $tpl->assign('recordings', $plugin->getRecordingRepository()->getPeriodRecordings($startDate, $endDate));
 }
 $tpl->assign('search_form', $form->returnForm());

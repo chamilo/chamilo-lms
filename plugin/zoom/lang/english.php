@@ -133,3 +133,4 @@ $strings['ZoomVideoConferences'] = "Zoom Video Conferences";
 $strings['Recordings'] = "Recordings";
 $strings['CreateGlobalVideoConference'] = "Create global video conference";
 $strings['ConferenceNotStarted'] = "Conference not started";
+$strings['MeetingNotFound'] = "Meeting not found";

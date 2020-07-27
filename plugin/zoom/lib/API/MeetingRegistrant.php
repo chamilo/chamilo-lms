@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\PluginBundle\Zoom\API;
@@ -8,8 +9,6 @@ use Exception;
 /**
  * Class MeetingRegistrant.
  * Structure of the information to send the server in order to register someone to a meeting.
- *
- * @package Chamilo\PluginBundle\Zoom\API
  */
 class MeetingRegistrant
 {
@@ -86,8 +85,7 @@ class MeetingRegistrant
         $instance = new static();
         $instance->first_name = $firstName;
         $instance->email = $email;
-        $instance->first_name = $firstName;
-        if (!is_null($lastName)) {
+        if (null !== $lastName) {
             $instance->last_name = $lastName;
         }
 
@@ -99,7 +97,7 @@ class MeetingRegistrant
      */
     public function itemClass($propertyName)
     {
-        if ('custom_questions' == $propertyName) {
+        if ('custom_questions' === $propertyName) {
             return CustomQuestion::class;
         }
         throw new Exception("no such array property $propertyName");

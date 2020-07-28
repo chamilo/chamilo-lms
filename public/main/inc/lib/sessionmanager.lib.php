@@ -448,7 +448,7 @@ class SessionManager
                 LEFT JOIN $tbl_session_category sc
                 ON s.session_category_id = sc.id
                 INNER JOIN $tbl_user u
-                ON s.id_coach = u.user_id
+                ON s.id_coach = u.id
                 $courseCondition
                 $extraJoin
                 $where $where_condition ) as session_table";
@@ -471,7 +471,7 @@ class SessionManager
                 FROM $tbl_session s
                     LEFT JOIN  $tbl_session_category sc
                     ON s.session_category_id = sc.id
-                    INNER JOIN $tbl_user u ON s.id_coach = u.user_id
+                    INNER JOIN $tbl_user u ON s.id_coach = u.id
                     INNER JOIN $table_access_url_rel_session ar
                     ON ar.session_id = s.id
                     $courseCondition
@@ -856,9 +856,9 @@ class SessionManager
             $order = " ORDER BY ".$options['order'];
         }
 
-        $sql = "SELECT u.user_id, u.lastname, u.firstname, u.username, u.email, s.c_id
+        $sql = "SELECT u.id as user_id, u.lastname, u.firstname, u.username, u.email, s.c_id
                 FROM $session_course_user s
-                INNER JOIN $user u ON u.user_id = s.user_id
+                INNER JOIN $user u ON u.id = s.user_id
                 $where
                 $order
                 $limit";
@@ -978,9 +978,9 @@ class SessionManager
             $order = " ORDER BY ".$options['order'];
         }
 
-        $sql = "SELECT u.user_id, u.lastname, u.firstname, u.username, u.email, s.c_id
+        $sql = "SELECT u.id as user_id, u.lastname, u.firstname, u.username, u.email, s.c_id
                 FROM $session_course_user s
-                INNER JOIN $user u ON u.user_id = s.user_id
+                INNER JOIN $user u ON u.id = s.user_id
                 $where $order $limit";
 
         $sql_query = sprintf($sql, intval($course['real_id']), $sessionId);
@@ -8167,7 +8167,7 @@ class SessionManager
                        LEFT JOIN  $tbl_session_category sc
                        ON s.session_category_id = sc.id
                        INNER JOIN $tbl_user u
-                       ON s.id_coach = u.user_id
+                       ON s.id_coach = u.id
                        INNER JOIN $sessionCourseUserTable scu
                        ON s.id = scu.session_id
                        INNER JOIN $courseTable c
@@ -8184,7 +8184,7 @@ class SessionManager
                                LEFT JOIN  $tbl_session_category sc
                                ON s.session_category_id = sc.id
                                INNER JOIN $tbl_user u
-                               ON s.id_coach = u.user_id
+                               ON s.id_coach = u.id
                                INNER JOIN $table_access_url_rel_session ar
                                ON ar.session_id = s.id $where ";
             }
@@ -8750,7 +8750,7 @@ class SessionManager
                 access_start_date,
                 access_end_date,
                 s.visibility,
-                u.user_id,
+                u.id as user_id,
                 $injectExtraFields
                 c.title as course_title,
                 s.id ";
@@ -8799,7 +8799,7 @@ class SessionManager
                     LEFT JOIN $tbl_session_category sc
                     ON (s.session_category_id = sc.id)
                     INNER JOIN $tbl_user u
-                    ON (s.id_coach = u.user_id)
+                    ON (s.id_coach = u.id)
                     $where
                     $limit
         ";
@@ -8821,7 +8821,7 @@ class SessionManager
                     LEFT JOIN $tbl_session_category sc
                     ON (s.session_category_id = sc.id)
                     INNER JOIN $tbl_user u
-                    ON (s.id_coach = u.user_id)
+                    ON (s.id_coach = u.id)
                     INNER JOIN $table_access_url_rel_session ar
                     ON (ar.session_id = s.id AND ar.access_url_id = $access_url_id)
                     $where

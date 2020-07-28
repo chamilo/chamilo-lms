@@ -2,8 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Build the comunication with the SOAP server Compilatio.net
- * call severals methods for the file management in Compilatio.net.
+ * Build the communication with the SOAP server Compilatio.net
+ * call several methods for the file management in Compilatio.net.
  *
  * @version: 2.0
  */
@@ -261,7 +261,7 @@ class Compilatio
             if (!is_object($this->soapcli)) {
                 return "Error in constructor compilatio() $this->soapcli";
             }
-            $idDocument = $this->soapcli->__call(
+            return $this->soapcli->__call(
                 'addDocumentBase64',
                 [
                     $this->key,
@@ -273,7 +273,6 @@ class Compilatio
                 ]
             );
 
-            return $idDocument;
         } catch (SoapFault $fault) {
             return "Erreur sendDoc()".$fault->faultcode." ".$fault->faultstring;
         }
@@ -293,9 +292,8 @@ class Compilatio
                 return "Error in constructor compilatio() ".$this->soapcli;
             }
             $param = [$this->key, $compiHash];
-            $idDocument = $this->soapcli->__call('getDocument', $param);
 
-            return $idDocument;
+            return $this->soapcli->__call('getDocument', $param);
         } catch (SoapFault $fault) {
             return "Erreur getDoc()".$fault->faultcode." ".$fault->faultstring;
         }
@@ -315,9 +313,8 @@ class Compilatio
                 return "Error in constructor compilatio() ".$this->soapcli;
             }
             $param = [$this->key, $compiHash];
-            $idDocument = $this->soapcli->__call('getDocumentReportUrl', $param);
 
-            return $idDocument;
+            return $this->soapcli->__call('getDocumentReportUrl', $param);
         } catch (SoapFault $fault) {
             return "Erreur  getReportUrl()".$fault->faultcode." ".$fault->faultstring;
         }
@@ -375,9 +372,8 @@ class Compilatio
                 return "Error in constructor compilatio() ".$this->soapcli;
             }
             $param = [$this->key];
-            $resultat = $this->soapcli->__call('getAccountQuotas', $param);
 
-            return $resultat;
+            return $this->soapcli->__call('getAccountQuotas', $param);
         } catch (SoapFault $fault) {
             return "Erreur  getQuotas()".$fault->faultcode." ".$fault->faultstring;
         }
@@ -444,8 +440,6 @@ class Compilatio
         $highThreshold
     ) {
         $index = round($index);
-        $pour = round((50 * $index) / 100);
-        $return = '';
         $class = 'error';
         if ($index < $weakThreshold) {
             $class = 'success';
@@ -455,9 +449,7 @@ class Compilatio
             }
         }
 
-        $return .= Display::bar_progress($index, true, null, $class);
-
-        return $return;
+        return Display::bar_progress($index, true, null, $class);
     }
 
     /**
@@ -543,7 +535,6 @@ class Compilatio
      */
     public function giveWorkIdState($workId)
     {
-        $compilatioImgFolder = api_get_path(WEB_CODE_PATH).'plagiarism/compilatio/img/';
         $courseId = api_get_course_int_id();
         $compilatioId = $this->getCompilatioId($workId, $courseId);
 
@@ -611,8 +602,6 @@ class Compilatio
             }
         }
 
-        $result = $workId.'|'.$actionCompilatio.'|'.$status.'|';
-
-        return $result;
+        return $workId.'|'.$actionCompilatio.'|'.$status.'|';
     }
 }

@@ -321,10 +321,13 @@ class ScheduledAnnouncement extends Model
                         continue;
                     }
 
+                    $coachList = [];
                     if ($users) {
-                        $sendToCoaches = $extraFieldValue->get_values_by_handler_and_field_variable($result['id'], 'send_to_coaches');
+                        $sendToCoaches = $extraFieldValue->get_values_by_handler_and_field_variable(
+                            $result['id'],
+                            'send_to_coaches'
+                        );
                         $courseList = SessionManager::getCoursesInSession($sessionId);
-                        $coachList = [];
                         if (!empty($sendToCoaches) && !empty($sendToCoaches['value']) && 1 == $sendToCoaches['value']) {
                             foreach ($courseList as $courseItemId) {
                                 $coaches = SessionManager::getCoachesByCourseSession(
@@ -346,6 +349,7 @@ class ScheduledAnnouncement extends Model
                             $courseInfo = api_get_course_info_by_id($courseId);
                         }
 
+                        $message = '';
                         foreach ($users as $user) {
                             // Take original message
                             $message = $result['message'];
@@ -397,6 +401,8 @@ class ScheduledAnnouncement extends Model
                                 '((general_coach_email))' => $generalCoachEmail,
                                 '((session_end_date))' => $endTime,
                                 '((user_complete_name))' => $userInfo['complete_name'],
+                                '((user_firstname))' => $userInfo['firstname'],
+                                '((user_lastname))' => $userInfo['lastname'],
                                 '((user_first_name))' => $userInfo['firstname'],
                                 '((user_last_name))' => $userInfo['lastname'],
                                 '((lp_progress))' => $progress,

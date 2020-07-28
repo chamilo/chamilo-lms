@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt*/
 
 use Chamilo\CoreBundle\Entity\ExtraField;
@@ -235,7 +236,7 @@ function get_number_of_users()
                     FROM $user_table u
                     LEFT JOIN $tbl_session_rel_course_user cu
                     ON
-                        u.user_id = cu.user_id AND
+                        u.id = cu.user_id AND
                         c_id = '".api_get_course_int_id()."' AND
                         session_id ='".$sessionId."'
                     WHERE
@@ -251,10 +252,10 @@ function get_number_of_users()
                             FROM $user_table u
                             LEFT JOIN $tbl_session_rel_course_user cu
                             ON
-                                u.user_id = cu.user_id AND cu.c_id = '".api_get_course_int_id()."' AND
+                                u.id = cu.user_id AND cu.c_id = '".api_get_course_int_id()."' AND
                                 session_id ='".$sessionId."'
                             INNER JOIN  $tbl_url_rel_user as url_rel_user
-                            ON (url_rel_user.user_id = u.user_id)
+                            ON (url_rel_user.user_id = u.id)
                             WHERE
                                 cu.user_id IS NULL AND
                                 access_url_id= $url_access_id AND
@@ -267,7 +268,7 @@ function get_number_of_users()
             $sql = "SELECT COUNT(u.id)
                     FROM $user_table u
                     LEFT JOIN $course_user_table cu
-                    ON u.user_id = cu.user_id and c_id='".api_get_course_int_id()."'
+                    ON u.id = cu.user_id and c_id='".api_get_course_int_id()."'
                     WHERE cu.user_id IS NULL AND u.status<>".DRH." ";
 
             if (api_is_multiple_url_enabled()) {
@@ -278,9 +279,9 @@ function get_number_of_users()
                     $sql = "SELECT COUNT(u.id)
                         FROM $user_table u
                         LEFT JOIN $course_user_table cu
-                        ON u.user_id = cu.user_id AND c_id='".api_get_course_int_id()."'
+                        ON u.id = cu.user_id AND c_id='".api_get_course_int_id()."'
                         INNER JOIN  $tbl_url_rel_user as url_rel_user
-                        ON (url_rel_user.user_id = u.user_id)
+                        ON (url_rel_user.user_id = u.id)
                         WHERE cu.user_id IS NULL AND u.status<>".DRH." AND access_url_id= $url_access_id ";
                 }
             }
@@ -292,7 +293,7 @@ function get_number_of_users()
                     FROM $user_table u
                     LEFT JOIN $tbl_session_rel_course_user cu
                     ON
-                        u.user_id = cu.user_id AND
+                        u.id = cu.user_id AND
                         c_id='".api_get_course_int_id()."' AND
                         session_id ='".$sessionId."'
                     WHERE
@@ -308,7 +309,7 @@ function get_number_of_users()
                             FROM $user_table u
                             LEFT JOIN $tbl_session_rel_course_user cu
                             ON
-                                u.user_id = cu.user_id AND
+                                u.id = cu.user_id AND
                                 c_id='".api_get_course_int_id()."' AND
                                 session_id ='".$sessionId."'
                             INNER JOIN $tbl_url_rel_user as url_rel_user
@@ -324,7 +325,7 @@ function get_number_of_users()
             $sql = "SELECT COUNT(u.id)
                     FROM $user_table u
                     LEFT JOIN $course_user_table cu
-                    ON u.user_id = cu.user_id AND c_id='".api_get_course_int_id()."'";
+                    ON u.id = cu.user_id AND c_id='".api_get_course_int_id()."'";
 
             // we change the SQL when we have a filter
             if (isset($_GET['subscribe_user_filter_value']) &&
@@ -334,7 +335,7 @@ function get_number_of_users()
                 $field_identification = explode('*', $_GET['subscribe_user_filter_value']);
                 $sql .= "
                     LEFT JOIN $table_user_field_values field_values
-                    ON field_values.item_id = u.user_id
+                    ON field_values.item_id = u.id
                     WHERE
                         cu.user_id IS NULL AND
                         u.status <> ".DRH." AND
@@ -352,8 +353,8 @@ function get_number_of_users()
                     $tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
                     $sql = "SELECT COUNT(u.id)
                             FROM $user_table u
-                            LEFT JOIN $course_user_table cu 
-                            ON u.user_id = cu.user_id AND c_id='".api_get_course_int_id()."'
+                            LEFT JOIN $course_user_table cu
+                            ON u.id = cu.user_id AND c_id='".api_get_course_int_id()."'
                             INNER JOIN $tbl_url_rel_user as url_rel_user
                             ON (url_rel_user.user_id = u.id)
                             WHERE cu.user_id IS NULL AND access_url_id= $url_access_id AND u.status <> ".DRH." ";
@@ -435,9 +436,9 @@ function get_user_data($from, $number_of_items, $column, $direction)
                 u.firstname            AS col3,")."
                 u.email 	           AS col4,
                 u.active               AS col5,
-                u.user_id              AS col6";
+                u.id              AS col6";
     } else {
-        $select_fields = "u.user_id    AS col0,
+        $select_fields = "u.id    AS col0,
                 u.official_code        AS col1,
                 ".($is_western_name_order
                 ? "u.firstname         AS col2,
@@ -445,7 +446,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
                 : "u.lastname          AS col2,
                 u.firstname            AS col3,")."
                 u.active               AS col4,
-                u.user_id              AS col5";
+                u.id              AS col5";
     }
     if (isset($_REQUEST['type']) && COURSEMANAGER == $_REQUEST['type']) {
         // adding a teacher through a session
@@ -454,11 +455,11 @@ function get_user_data($from, $number_of_items, $column, $direction)
                     FROM $user_table u
                     LEFT JOIN $tbl_session_rel_course_user cu
                     ON
-                        u.user_id = cu.user_id AND
+                        u.id = cu.user_id AND
                         c_id ='".$courseId."' AND
                         session_id ='".$sessionId."'
                     INNER JOIN  $tbl_url_rel_user as url_rel_user
-                    ON (url_rel_user.user_id = u.user_id) ";
+                    ON (url_rel_user.user_id = u.id) ";
 
             // applying the filter of the additional user profile fields
             if (isset($_GET['subscribe_user_filter_value']) &&
@@ -468,7 +469,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
                 $field_identification = explode('*', $_GET['subscribe_user_filter_value']);
                 $sql .= "
                     LEFT JOIN $table_user_field_values field_values
-                        ON field_values.item_id = u.user_id
+                        ON field_values.item_id = u.id
                     WHERE
                         cu.user_id IS NULL AND
                         u.status = 1 AND
@@ -484,7 +485,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
             $sql = "SELECT $select_fields
                     FROM $user_table u
                     LEFT JOIN $course_user_table cu
-                    ON u.user_id = cu.user_id AND c_id = '".$courseId."'";
+                    ON u.id = cu.user_id AND c_id = '".$courseId."'";
             // applying the filter of the additional user profile fields
             if (isset($_GET['subscribe_user_filter_value']) &&
                 !empty($_GET['subscribe_user_filter_value']) &&
@@ -493,7 +494,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
                 $field_identification = explode('*', $_GET['subscribe_user_filter_value']);
                 $sql .= "
                     LEFT JOIN $table_user_field_values field_values
-                        ON field_values.item_id = u.user_id
+                        ON field_values.item_id = u.id
                     WHERE
                         cu.user_id IS NULL AND u.status<>".DRH." AND
                         field_values.field_id = '".intval($field_identification[0])."' AND
@@ -508,9 +509,9 @@ function get_user_data($from, $number_of_items, $column, $direction)
                     $sql = "SELECT $select_fields
                             FROM $user_table u
                             LEFT JOIN $course_user_table cu
-                            ON u.user_id = cu.user_id and c_id='".$courseId."'
+                            ON u.id = cu.user_id and c_id='".$courseId."'
                             INNER JOIN  $tbl_url_rel_user as url_rel_user
-                            ON (url_rel_user.user_id = u.user_id) ";
+                            ON (url_rel_user.user_id = u.id) ";
 
                     // applying the filter of the additional user profile fields
                     if (isset($_GET['subscribe_user_filter_value']) &&
@@ -520,7 +521,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
                         $field_identification = explode('*', $_GET['subscribe_user_filter_value']);
                         $sql .= "
                             LEFT JOIN $table_user_field_values field_values
-                                ON field_values.item_id = u.user_id
+                                ON field_values.item_id = u.id
                             WHERE
                                 cu.user_id IS NULL AND
                                 u.status<>".DRH." AND
@@ -539,12 +540,12 @@ function get_user_data($from, $number_of_items, $column, $direction)
                     FROM $user_table u
                     LEFT JOIN $tbl_session_rel_course_user cu
                     ON
-                        u.user_id = cu.user_id AND
+                        u.id = cu.user_id AND
                         c_id = $courseId AND
                         session_id = $sessionId ";
 
             if (api_is_multiple_url_enabled()) {
-                $sql .= " INNER JOIN $tbl_url_rel_user as url_rel_user ON (url_rel_user.user_id = u.user_id) ";
+                $sql .= " INNER JOIN $tbl_url_rel_user as url_rel_user ON (url_rel_user.user_id = u.id) ";
             }
 
             // applying the filter of the additional user profile fields
@@ -554,7 +555,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
                 $field_identification = explode('*', $_GET['subscribe_user_filter_value']);
                 $sql .= "
                     LEFT JOIN $table_user_field_values field_values
-                        ON field_values.item_id = u.user_id
+                        ON field_values.item_id = u.id
                     WHERE
                         cu.user_id IS NULL AND
                         u.status<>".DRH." AND
@@ -575,7 +576,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
                     FROM $user_table u
                     LEFT JOIN $course_user_table cu
                     ON
-                        u.user_id = cu.user_id AND
+                        u.id = cu.user_id AND
                         c_id = $courseId ";
 
             // applying the filter of the additional user profile fields
@@ -583,7 +584,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
                 $field_identification = explode('*', $_GET['subscribe_user_filter_value']);
                 $sql .= "
                     LEFT JOIN $table_user_field_values field_values
-                        ON field_values.item_id = u.user_id
+                        ON field_values.item_id = u.id
                     WHERE
                         cu.user_id IS NULL AND
                         u.status <> ".DRH." AND
@@ -599,9 +600,9 @@ function get_user_data($from, $number_of_items, $column, $direction)
                     $sql = "SELECT $select_fields
                         FROM $user_table u
                         LEFT JOIN $course_user_table cu
-                        ON u.user_id = cu.user_id AND c_id='".$courseId."'
+                        ON u.id = cu.user_id AND c_id='".$courseId."'
                         INNER JOIN  $tbl_url_rel_user as url_rel_user
-                        ON (url_rel_user.user_id = u.user_id) ";
+                        ON (url_rel_user.user_id = u.id) ";
 
                     // applying the filter of the additional user profile fields
                     if (isset($_GET['subscribe_user_filter_value']) &&
@@ -611,7 +612,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
                         $field_identification = explode('*', $_GET['subscribe_user_filter_value']);
                         $sql .= "
                             LEFT JOIN $table_user_field_values field_values
-                                ON field_values.item_id = u.user_id
+                                ON field_values.item_id = u.id
                             WHERE
                                 cu.user_id IS NULL AND
                                 u.status<>".DRH." AND

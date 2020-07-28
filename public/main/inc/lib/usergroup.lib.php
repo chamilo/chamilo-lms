@@ -295,7 +295,7 @@ class UserGroup extends Model
     /**
      * @param string $name
      *
-     * @return mixed
+     * @return int
      */
     public function getIdByName($name)
     {
@@ -306,7 +306,11 @@ class UserGroup extends Model
             'first'
         );
 
-        return $row['id'];
+        if ($row) {
+            return (int) $row['id'];
+        }
+
+        return 0;
     }
 
     /**

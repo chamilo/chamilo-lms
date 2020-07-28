@@ -21,7 +21,7 @@ if (array_key_exists('meetingId', $_REQUEST)) {
     $meeting = $plugin->getMeetingRepository()->find($_REQUEST['meetingId']);
     try {
         if (is_null($meeting)) {
-            throw new Exception('Meeting not found');
+            throw new Exception($plugin->get_lang('Meeting not found'));
         }
 
         $startJoinURL = $plugin->getStartOrJoinMeetingURL($meeting);
@@ -30,6 +30,14 @@ if (array_key_exists('meetingId', $_REQUEST)) {
             echo Display::url($plugin->get_lang('EnterMeeting'), $startJoinURL, ['class' => 'btn btn-primary']);
         } else {
             echo Display::return_message($plugin->get_lang('ConferenceNotStarted'), 'warning');
+        }
+
+        if ($plugin->userIsConferenceManager($meeting)) {
+            echo '&nbsp;'.Display::url(
+                get_lang('Details'),
+                api_get_path(WEB_PLUGIN_PATH).'zoom/meeting_from_admin.php?meetingId='.$meeting->getId(),
+                ['class' => 'btn btn-default']
+            );
         }
     } catch (Exception $exception) {
         Display::addFlash(

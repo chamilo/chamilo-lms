@@ -915,7 +915,28 @@ class ZoomPlugin extends Plugin
         if (!api_is_platform_admin()) {
             return '';
         }
+
+        $actionsLeft = '';
         $back = '';
+
+        if ('true' === api_get_plugin_setting('zoom', 'enableGlobalConference')) {
+            $actionsLeft .=
+                Display::url(
+                    Display::return_icon('links.png', $this->get_lang('GlobalMeeting'), null, ICON_SIZE_MEDIUM),
+                    api_get_path(WEB_PLUGIN_PATH).'zoom/admin.php'
+                )
+            ;
+        }
+
+        if ('true' === api_get_plugin_setting('zoom', 'enableGlobalConferencePerUser')) {
+            $actionsLeft .=
+                Display::url(
+                    Display::return_icon('user.png', $this->get_lang('GlobalMeetingPerUser'), null, ICON_SIZE_MEDIUM),
+                    api_get_path(WEB_PLUGIN_PATH).'zoom/user.php'
+                )
+            ;
+        }
+
         if (!empty($returnUrl)) {
             $back = Display::url(
                 Display::return_icon('back.png', get_lang('Back'), null, ICON_SIZE_MEDIUM),
@@ -923,7 +944,7 @@ class ZoomPlugin extends Plugin
             );
         }
 
-        $actionsLeft =
+        $actionsLeft .=
             Display::url(
             Display::return_icon('settings.png', get_lang('Settings'), null, ICON_SIZE_MEDIUM),
             api_get_path(WEB_CODE_PATH).'admin/configure_plugin.php?name=zoom'

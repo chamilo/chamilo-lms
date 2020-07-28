@@ -43,8 +43,8 @@
     {{ registerParticipantForm }}
     {{ fileForm }}
 
-{#    {% if registrants and meeting.meetingInfoGet.settings.approval_type != 2 %}#}
-    {% if registrants %}
+    {#    {% if registrants and meeting.meetingInfoGet.settings.approval_type != 2 %}#}
+    {% if registrants.count > 0 %}
         <script>
             function copyJoinURL(event, url) {
                 event.target.textContent = '{{ 'CopyingJoinURL'|get_plugin_lang('ZoomPlugin')|escape }}';
@@ -57,33 +57,30 @@
                 );
             }
         </script>
-
-        {% if registrants.count > 0 %}
-            <h4>{{ 'Users' | get_lang }}</h4>
-            <table class="table">
-                {% for registrant in registrants %}
-                <tr>
-                    <td>
-                    {{ registrant.fullName }}
-                    </td>
-                   <td>
-                   {% if registrant.join_url %}
-                    <a class="btn btn-primary" onclick="copyJoinURL(event, '{{ registrant.join_url }}')">
-                        {{ 'CopyJoinAsURL'|get_plugin_lang('ZoomPlugin') }}
-                    </a>
-                   {% else %}
-                       <a class="btn btn-primary disabled" >
-                           {{ 'JoinURLNotAvailable'|get_plugin_lang('ZoomPlugin') }}
-                       </a>
-                   {% endif %}
-                   </td>
-                </tr>
-                {% endfor %}
-            </table>
-        {% endif %}
+        <h3>{{ 'Users' | get_lang }}</h3>
+        <br />
+        <table class="table">
+            {% for registrant in registrants %}
+            <tr>
+                <td>
+                {{ registrant.fullName }}
+                </td>
+               <td>
+               {% if registrant.join_url %}
+                <a class="btn btn-primary" onclick="copyJoinURL(event, '{{ registrant.join_url }}')">
+                    {{ 'CopyJoinAsURL'|get_plugin_lang('ZoomPlugin') }}
+                </a>
+               {% else %}
+                   <a class="btn btn-primary disabled" >
+                       {{ 'JoinURLNotAvailable'|get_plugin_lang('ZoomPlugin') }}
+                   </a>
+               {% endif %}
+               </td>
+            </tr>
+            {% endfor %}
+        </table>
     {% endif %}
 {% else %}
-
     <h2>{{ meeting.meetingInfoGet.topic }}</h2>
     {% if meeting.meetingInfoGet.agenda %}
     <blockquote>{{ meeting.meetingInfoGet.agenda| nl2br }}</blockquote>
@@ -98,5 +95,4 @@
         <dd>{{ meeting.formattedDuration }}</dd>
     </dl>
     {% endif %}
-
 {% endif %}

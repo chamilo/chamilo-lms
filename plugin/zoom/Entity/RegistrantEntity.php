@@ -26,13 +26,11 @@ use Exception;
  */
 class RegistrantEntity
 {
-    /** @var string */
-    public $fullName;
-
     /**
      * @var string
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="bigint")
      * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -81,6 +79,9 @@ class RegistrantEntity
 
     /** @var MeetingRegistrantListItem */
     private $meetingRegistrantListItem;
+
+    /** @var string */
+    public $fullName;
 
     /**
      * @return string
@@ -188,7 +189,7 @@ class RegistrantEntity
      */
     public function setCreatedRegistration($createdRegistration)
     {
-        if (is_null($this->id)) {
+        if (null === $this->id) {
             $this->id = $createdRegistration->registrant_id;
         } elseif ($this->id != $createdRegistration->registrant_id) {
             throw new Exception('RegistrantEntity id differs from CreatedRegistration identifier');

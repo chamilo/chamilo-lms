@@ -36,24 +36,6 @@ use Exception;
  */
 class MeetingEntity
 {
-    /** @var string meeting type name */
-    public $typeName;
-
-    /** @var DateTime meeting start time as a DateTime instance */
-    public $startDateTime;
-
-    /** @var string meeting formatted start time */
-    public $formattedStartTime;
-
-    /** @var DateInterval meeting duration as a DateInterval instance */
-    public $durationInterval;
-
-    /** @var string meeting formatted duration */
-    public $formattedDuration;
-
-    /** @var string */
-    public $statusName;
-
     /**
      * @var int the remote zoom meeting identifier
      * @ORM\Column(type="bigint")
@@ -94,14 +76,32 @@ class MeetingEntity
      */
     private $meetingListItemJson;
 
-    /** @var MeetingListItem */
-    private $meetingListItem;
-
     /**
      * @var string
      * @ORM\Column(type="text", name="meeting_info_get_json", nullable=true)
      */
     private $meetingInfoGetJson;
+
+    /** @var MeetingListItem */
+    private $meetingListItem;
+
+    /** @var string meeting type name */
+    public $typeName;
+
+    /** @var DateTime meeting start time as a DateTime instance */
+    public $startDateTime;
+
+    /** @var string meeting formatted start time */
+    public $formattedStartTime;
+
+    /** @var DateInterval meeting duration as a DateInterval instance */
+    public $durationInterval;
+
+    /** @var string meeting formatted duration */
+    public $formattedDuration;
+
+    /** @var string */
+    public $statusName;
 
     /** @var MeetingInfoGet */
     private $meetingInfoGet;
@@ -307,7 +307,7 @@ class MeetingEntity
      */
     public function setMeetingInfoGet($meetingInfoGet)
     {
-        if (is_null($this->id)) {
+        if (null === $this->id) {
             $this->id = $meetingInfoGet->id;
         } elseif ($this->id != $meetingInfoGet->id) {
             throw new Exception('the MeetingEntity identifier differs from the MeetingInfoGet identifier');
@@ -358,7 +358,8 @@ class MeetingEntity
         /** @var User[] $users */
         $users = [];
         if (!$this->isCourseMeeting()) {
-            $users = Database::getManager()->getRepository('ChamiloUserBundle:User')->findBy(['active' => true]);
+            $criteria = ['active' => true];
+            $users = Database::getManager()->getRepository('ChamiloUserBundle:User')->findBy($criteria);
         } elseif (is_null($this->session)) {
             if (!is_null($this->course)) {
                 /** @var CourseRelUser $courseRelUser */
@@ -402,7 +403,9 @@ class MeetingEntity
     public function requiresRegistration()
     {
         return
-            MeetingSettings::APPROVAL_TYPE_NO_REGISTRATION_REQUIRED != $this->meetingInfoGet->settings->approval_type;
+            MeetingSettings::APPROVAL_TYPE_AUTOMATICALLY_APPROVE === $this->meetingInfoGet->settings->approval_type;
+        /*return
+            MeetingSettings::APPROVAL_TYPE_NO_REGISTRATION_REQUIRED != $this->meetingInfoGet->settings->approval_type;*/
     }
 
     /**
@@ -499,6 +502,7 @@ class MeetingEntity
             $this->startDateTime->setTimezone(new DateTimeZone(date_default_timezone_get()));
             $this->formattedStartTime = $this->startDateTime->format('Y-m-d H:i');
         }
+
         if (!empty($this->meetingInfoGet->duration)) {
             $now = new DateTime();
             $later = new DateTime();

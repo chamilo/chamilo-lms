@@ -3442,19 +3442,28 @@ class UserManager
 
         $sessionData = [];
         // First fill $sessionData with student sessions
-        foreach ($sessionDataStudent as $row) {
-            $sessionData[$row['id']] = $row;
+        if (!empty($sessionDataStudent)) {
+            foreach ($sessionDataStudent as $row) {
+                $sessionData[$row['id']] = $row;
+            }
         }
+
         // Overwrite session data of the user as a student with session data
         // of the user as a coach.
         // There shouldn't be such duplicate rows, but just in case...
-        foreach ($sessionDataCoach as $row) {
-            $sessionData[$row['id']] = $row;
+        if (!empty($sessionDataCoach)) {
+            foreach ($sessionDataCoach as $row) {
+                $sessionData[$row['id']] = $row;
+            }
         }
 
         $collapsable = api_get_configuration_value('allow_user_session_collapsable');
         $extraField = new ExtraFieldValue('session');
         $collapsableLink = api_get_path(WEB_PATH).'user_portal.php?action=collapse_session';
+
+        if (empty($sessionData)) {
+            return [];
+        }
 
         $categories = [];
         foreach ($sessionData as $row) {

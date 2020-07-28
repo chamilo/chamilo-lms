@@ -132,3 +132,4 @@ $strings['YouAreNotRegisteredToThisMeeting'] = "Vous n'êtes pas inscrit à cett
 $strings['ZoomVideoConferences'] = "Conférences vidéo Zoom";
 $strings['Recordings'] = "Enregistrements";
 $strings['CreateGlobalVideoConference'] = "Créer une conférence global";
+$strings['JoinURLNotAvailable'] = "URL pas disponible";

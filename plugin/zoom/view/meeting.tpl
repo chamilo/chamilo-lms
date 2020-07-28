@@ -58,20 +58,29 @@
             }
         </script>
 
-            <table>
-            {% for registrant in registrants %}
-            <tr>
-                <td>
-                {{ registrant.fullName }}
-                </td>
-               <td>
-                <a class="btn btn-primary" onclick="copyJoinURL(event, '{{ registrant.join_url }}')">
-                    {{ 'CopyJoinAsURL'|get_plugin_lang('ZoomPlugin') }}
-                </a>
-               </td>
-            </tr>
-            {% endfor %}
+        {% if registrants.count > 0 %}
+            <h4>{{ 'Users' | get_lang }}</h4>
+            <table class="table">
+                {% for registrant in registrants %}
+                <tr>
+                    <td>
+                    {{ registrant.fullName }}
+                    </td>
+                   <td>
+                   {% if registrant.join_url %}
+                    <a class="btn btn-primary" onclick="copyJoinURL(event, '{{ registrant.join_url }}')">
+                        {{ 'CopyJoinAsURL'|get_plugin_lang('ZoomPlugin') }}
+                    </a>
+                   {% else %}
+                       <a class="btn btn-primary disabled" >
+                           {{ 'JoinURLNotAvailable'|get_plugin_lang('ZoomPlugin') }}
+                       </a>
+                   {% endif %}
+                   </td>
+                </tr>
+                {% endfor %}
             </table>
+        {% endif %}
     {% endif %}
 {% else %}
 

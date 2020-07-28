@@ -134,3 +134,5 @@ $strings['Recordings'] = "Recordings";
 $strings['CreateGlobalVideoConference'] = "Create global video conference";
 $strings['ConferenceNotStarted'] = "Conference not started";
 $strings['MeetingNotFound'] = "Meeting not found";
+$strings['JoinURLNotAvailable'] = "URL not available";
+

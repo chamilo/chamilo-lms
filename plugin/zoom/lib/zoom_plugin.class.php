@@ -855,7 +855,7 @@ class ZoomPlugin extends Plugin
                     // the participant must be registered
                     $participant = api_get_user_entity(api_get_user_id());
                     $registrant = $meeting->getRegistrant($participant);
-                    if (!is_null($registrant)) {
+                    if (null != $registrant) {
                         // the participant is registered
                         return $registrant->getCreatedRegistration()->join_url;
                     }

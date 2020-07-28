@@ -67,7 +67,7 @@
     "tinymce": "^5.3.2",
     "video.js": "^7.6.6",
     "vue": "^2.6",
-    "vue-apollo": "^3.0.3",
+    "vue-apollo": "^3.0",
     "vue-i18n": "^8.17.4",
     "vue-loader": "^15.7.0",
     "vue-moment": "^4.1.0",

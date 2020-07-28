@@ -2564,8 +2564,6 @@ class Exercise
 
     public function setResultFeedbackGroup(FormValidator $form, $checkFreeze = true)
     {
-        $freeze = false;
-
         // Feedback type.
         $feedback = [];
         $feedback[] = $form->createElement(
@@ -2577,6 +2575,17 @@ class Exercise
             [
                 'id' => 'exerciseType_'.EXERCISE_FEEDBACK_TYPE_END,
                 'onclick' => 'check_feedback()',
+            ]
+        );
+
+        $noFeedBack = $form->createElement(
+            'radio',
+            'exerciseFeedbackType',
+            null,
+            get_lang('NoFeedback'),
+            EXERCISE_FEEDBACK_TYPE_EXAM,
+            [
+                'id' => 'exerciseType_'.EXERCISE_FEEDBACK_TYPE_EXAM,
             ]
         );
 
@@ -2606,8 +2615,10 @@ class Exercise
 
         if ($freeze) {
             $direct->freeze();
+            $noFeedBack->freeze();
         }
 
+        $feedback[] = $noFeedBack;
         $feedback[] = $direct;
 
         $feedback[] = $form->createElement(

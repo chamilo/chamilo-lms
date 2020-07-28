@@ -26,6 +26,8 @@ use Exception;
  */
 class RegistrantEntity
 {
+    /** @var string */
+    public $fullName;
     /**
      * @var string
      * @ORM\Column(type="bigint")
@@ -79,9 +81,6 @@ class RegistrantEntity
 
     /** @var MeetingRegistrantListItem */
     private $meetingRegistrantListItem;
-
-    /** @var string */
-    public $fullName;
 
     /**
      * @return string

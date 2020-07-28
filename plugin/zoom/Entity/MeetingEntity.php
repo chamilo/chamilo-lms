@@ -36,6 +36,23 @@ use Exception;
  */
 class MeetingEntity
 {
+    /** @var string meeting type name */
+    public $typeName;
+
+    /** @var DateTime meeting start time as a DateTime instance */
+    public $startDateTime;
+
+    /** @var string meeting formatted start time */
+    public $formattedStartTime;
+
+    /** @var DateInterval meeting duration as a DateInterval instance */
+    public $durationInterval;
+
+    /** @var string meeting formatted duration */
+    public $formattedDuration;
+
+    /** @var string */
+    public $statusName;
     /**
      * @var int the remote zoom meeting identifier
      * @ORM\Column(type="bigint")
@@ -84,24 +101,6 @@ class MeetingEntity
 
     /** @var MeetingListItem */
     private $meetingListItem;
-
-    /** @var string meeting type name */
-    public $typeName;
-
-    /** @var DateTime meeting start time as a DateTime instance */
-    public $startDateTime;
-
-    /** @var string meeting formatted start time */
-    public $formattedStartTime;
-
-    /** @var DateInterval meeting duration as a DateInterval instance */
-    public $durationInterval;
-
-    /** @var string meeting formatted duration */
-    public $formattedDuration;
-
-    /** @var string */
-    public $statusName;
 
     /** @var MeetingInfoGet */
     private $meetingInfoGet;

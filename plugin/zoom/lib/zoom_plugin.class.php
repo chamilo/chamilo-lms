@@ -111,7 +111,6 @@ class ZoomPlugin extends Plugin
                 (array) api_get_plugin_setting('zoom', 'globalConferenceAllowRoles')
             )
             ;
-
     }
 
     /**
@@ -911,6 +910,29 @@ class ZoomPlugin extends Plugin
         Database::getManager()->flush();
     }
 
+    public function getToolbar($returnUrl = '')
+    {
+        if (!api_is_platform_admin()) {
+            return '';
+        }
+        $back = '';
+        if (!empty($returnUrl)) {
+            $back = Display::url(
+                Display::return_icon('back.png', get_lang('Back'), null, ICON_SIZE_MEDIUM),
+                $returnUrl
+            );
+        }
+
+        $actionsLeft =
+            Display::url(
+            Display::return_icon('settings.png', get_lang('Settings'), null, ICON_SIZE_MEDIUM),
+            api_get_path(WEB_CODE_PATH).'admin/configure_plugin.php?name=zoom'
+            ).$back
+        ;
+
+        return Display::toolbarAction('toolbar', [$actionsLeft]);
+    }
+
     /**
      * Creates a meeting on Zoom servers and stores it in the local database.
      *
@@ -1152,28 +1174,5 @@ class ZoomPlugin extends Plugin
         }
         $this->registerUsers($meetingEntity, $usersToAdd);
         $this->unregister($meetingEntity, $registrantsToRemove);
-    }
-
-    public function getToolbar($returnUrl = '')
-    {
-        if (!api_is_platform_admin()) {
-            return '';
-        }
-        $back = '';
-        if (!empty($returnUrl)) {
-            $back = Display::url(
-                Display::return_icon('back.png', get_lang('Back'), null, ICON_SIZE_MEDIUM),
-                $returnUrl
-            );
-        }
-
-        $actionsLeft =
-            Display::url(
-            Display::return_icon('settings.png', get_lang('Settings'), null, ICON_SIZE_MEDIUM),
-            api_get_path(WEB_CODE_PATH).'admin/configure_plugin.php?name=zoom'
-            ).$back
-        ;
-
-        return Display::toolbarAction('toolbar', [$actionsLeft]);
     }
 }

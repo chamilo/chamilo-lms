@@ -31,7 +31,6 @@ if (array_key_exists('meetingId', $_REQUEST)) {
         } else {
             echo Display::return_message($plugin->get_lang('ConferenceNotStarted'), 'warning');
         }
-
     } catch (Exception $exception) {
         Display::addFlash(
             Display::return_message($exception->getMessage(), 'error')

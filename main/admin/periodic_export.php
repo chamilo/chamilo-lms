@@ -10,7 +10,7 @@ api_set_more_memory_and_time_limits();
 $this_section = SECTION_PLATFORM_ADMIN;
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
 
-$nameTools = get_lang('PeriodicExports');
+$nameTools = get_lang('PeriodicExport');
 $export = '';
 
 Display::display_header($nameTools);

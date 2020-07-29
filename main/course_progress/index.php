@@ -114,7 +114,7 @@ $(function() {
 </script>';
 
 $htmlHeadXtra[] = '<script>
-$(document).ready(function () {
+$(function() {
     if ($("#div_result").html() !== undefined && $("#div_result").html().length == 0) {
         $("#div_result").html("0");
     }

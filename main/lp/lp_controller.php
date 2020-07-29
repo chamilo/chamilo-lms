@@ -78,6 +78,11 @@ $htmlHeadXtra[] = '
         in_parent_integer_id = in_parent_integer_id.replace("UL_", "");
         return in_parent_integer_id;
     }
+    /* Dynamically adjusts the height of the iframe, iframeId must be string */
+    function AdjustIframeSize(iframeId){
+        var iframe = document.getElementById(iframeId);
+        iframe.style.height = iframe.contentWindow.document.body.scrollHeight + \'px\';
+    }
 
     $(function() {
         $(".lp_resource").sortable({
@@ -285,6 +290,9 @@ $htmlHeadXtra[] = '
             } // End receive
         });
         processReceive = false;
+        $(\'#content_id\').on(\'load change\',function(){
+            AdjustIframeSize($(this).prop(\'id\'));
+        })
     });
 </script>';
 

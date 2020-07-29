@@ -748,7 +748,9 @@ See https://support.chamilo.org/issues/6976
 #learning_path_toc .panel-collapse .panel-body{
     padding: 10px 0 10px 10px;
 }
-
+#content_id{
+    min-height: 100px;
+}
 /* END LP VIEW COLLAPSE */
 /* Small devices (tablets, 768px and up) */
 @media (min-width: 768px) {
@@ -840,6 +842,14 @@ See https://support.chamilo.org/issues/6976
         margin: 0;
     }
 
+    #learning_path_left_zone .lp-view-zone-container,
+    #learning_path_right_zone .lp-view-zone-container,
+    #learning_path_left_zone,
+    #learning_path_toc,
+    #learning_path_right_zone,
+    #learning_path_right_zone .lp-view-tabs .tab-content {
+        position: unset;
+    }
 }
 
 /* Landscape phones and down */
@@ -891,5 +901,14 @@ See https://support.chamilo.org/issues/6976
 
     #scorm-info hr {
         display: none;
+    }
+
+    #learning_path_left_zone .lp-view-zone-container,
+    #learning_path_right_zone .lp-view-zone-container,
+    #learning_path_left_zone,
+    #learning_path_toc,
+    #learning_path_right_zone,
+    #learning_path_right_zone .lp-view-tabs .tab-content {
+        position: unset;
     }
 }

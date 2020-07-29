@@ -104,7 +104,7 @@ class GradeModel extends Model
 
         // Get components
         $nr_items = 2;
-        $max = 10;
+        $max = 20;
         // Setting the defaults
         $defaults = $this->get($id);
         if ($defaults) {

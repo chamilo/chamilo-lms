@@ -1787,7 +1787,7 @@ if (!$is_certificate_mode && false === $disableSearch) {
         [],
         FormValidator::LAYOUT_INLINE
     );
-    $form->addText('keyword', '', false, ['class' => 'col-md-2']);
+    $form->addText('keyword', get_lang('SearchTerm'), false, ['class' => 'col-md-2']);
     $form->addHidden('cidReq', api_get_course_id());
     $form->addHidden('id_session', api_get_session_id());
     $form->addHidden('gidReq', $groupId);

@@ -1037,7 +1037,7 @@ if (isset($_GET['action']) and $_GET['action'] == 'all_attendance') {
     $data = $attendance->getCoursesWithAttendance($student_id, $startDate, $endDate);
 
     // 'attendance from %s to %s'
-    $title = sprintf(get_lang('AttendanceFromTo'), $startDateText, $endDateText);
+    $title = sprintf(get_lang('AttendanceFromXToY'), $startDateText, $endDateText);
     echo '
     <h3>'.$title.'</h3>
     <div class="">

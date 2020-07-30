@@ -392,7 +392,7 @@ $interbreadcrumb[] = [
     'name' => get_lang('Tracking'),
 ];
 
-$tool_name = get_lang('CourseLPsGenericStats');
+$tool_name = get_lang('CourseLearningPathsGenericStats');
 
 $headers = [];
 $headers[] = get_lang('FirstName');

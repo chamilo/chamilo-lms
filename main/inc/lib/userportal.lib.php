@@ -358,7 +358,7 @@ class IndexManager
 
         if ($allow) {
             $items[] = [
-                'icon' => Display::return_icon('lp_student_publication.png', get_lang('StudentPublication')),
+                'icon' => Display::return_icon('lp_student_publication.png', get_lang('StudentPublications')),
                 'link' => api_get_path(WEB_CODE_PATH).'work/publications.php',
                 'title' => get_lang('MyStudentPublications'),
             ];

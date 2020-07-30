@@ -8650,4 +8650,16 @@ $TimeSpentOnAssignment = "Time spent on assignment";
 $UserXSignedTheAgreementTheDateY = "User %s signed the agreement on %s";
 $Available = "Available";
 $SurveyMultipleChoiceWithOther = "Multiple choice with 'other' option";
+$CompilatioDescription = "Compilatio anti-plagiarism module";
+$CompilatioQuota = "Quotas";
+$CompilatioCreditXOnY = "Credits: %s on %s";
+$CompilatioConnectionTestSoap = "SOAP connection test...";
+$CompilatioServerConnection = "Connection to Compilatio's SOAP server";
+$CompilatioConnectionSuccessful = "Connection successful.";
+$CompilatioSendTextToServer = "Sending text to the Compilatio server";
+$CompilatioTextSendingTestKeyX = "This is a text sending test to the Compilatio server via its API.\nCompilatio key used: %s";
+$CompilatioSuccessfulTransfer = "Transfer successful.";
+$CompilatioFailedTransfer = "Transfer failed.";
+$CompilatioNoConnection = "Could not connect to Compilatio's SOAP server.";
+$CompilatioParamVerification = "Check your key, your server ports and possibly your proxy settings.";
 ?>

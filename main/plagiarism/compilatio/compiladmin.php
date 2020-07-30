@@ -39,9 +39,9 @@ if (!isset($_GET['action'])) {
         echo "1) ".get_lang('CompilatioServerConnection')."<br>";
         $compilatio = new Compilatio();
         if ($compilatio) {
-            echo get_lang('CompilatioConnectionAccomplished')."<br>";
+            echo get_lang('CompilatioConnectionSuccessful')."<br>";
             echo "2) ".get_lang('CompilatioSendTextToServer')."<br>";
-            $text = get_lang('CompilatioTestSendText').$compilatio->getKey();
+            $text = sprintf(get_lang('CompilatioTextSendingTestKeyX'), $compilatio->getKey());
             $id_compi = $compilatio->SendDoc(
             'Doc de test',
             'test',
@@ -53,9 +53,10 @@ if (!isset($_GET['action'])) {
                 echo get_lang('CompilatioSuccessfulTransfer')."<br>";
             } else {
                 echo get_lang('CompilatioFailedTransfer')."<br>";
+                echo get_lang('CompilatioParamVerification')."<br>";
             }
         } else {
-            echo get_lang('CompilatioNotConnection')."<br>";
+            echo get_lang('CompilatioNoConnection')."<br>";
             echo get_lang('CompilatioParamVerification')."<br>";
         }
     }

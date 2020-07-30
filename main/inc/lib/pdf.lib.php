@@ -706,7 +706,7 @@ class PDF
                 }
             }
 
-            $organization = ChamiloApi::getPlatformLogo('', [], true);
+            $organization = ChamiloApi::getPlatformLogo('', [], true, true);
             // Use custom logo image.
             $pdfLogo = api_get_setting('pdf_logo_header');
             if ($pdfLogo === 'true') {

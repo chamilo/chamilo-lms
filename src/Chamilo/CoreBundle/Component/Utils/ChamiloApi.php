@@ -73,10 +73,11 @@ class ChamiloApi
      *
      * @param string $theme
      * @param bool   $getSysPath
+     * @param bool   $forcedGetter
      *
      * @return string
      */
-    public static function getPlatformLogoPath($theme = '', $getSysPath = false)
+    public static function getPlatformLogoPath($theme = '', $getSysPath = false, $forcedGetter = false)
     {
         static $logoPath;
 
@@ -85,7 +86,7 @@ class ChamiloApi
             $logoPath = null;
         }
 
-        if (!isset($logoPath)) {
+        if (!isset($logoPath) || $forcedGetter) {
             $theme = empty($theme) ? api_get_visual_theme() : $theme;
             $accessUrlId = api_get_current_access_url_id();
             if ('cli' === PHP_SAPI) {
@@ -162,12 +163,13 @@ class ChamiloApi
      * @param string $theme
      * @param array  $imageAttributes optional
      * @param bool   $getSysPath
+     * @param bool   $forcedGetter
      *
      * @return string
      */
-    public static function getPlatformLogo($theme = '', $imageAttributes = [], $getSysPath = false)
+    public static function getPlatformLogo($theme = '', $imageAttributes = [], $getSysPath = false, $forcedGetter = false)
     {
-        $logoPath = self::getPlatformLogoPath($theme, $getSysPath);
+        $logoPath = self::getPlatformLogoPath($theme, $getSysPath, $forcedGetter);
         $institution = api_get_setting('Institution');
         $institutionUrl = api_get_setting('InstitutionUrl');
         $siteName = api_get_setting('siteName');

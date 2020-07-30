@@ -18,11 +18,7 @@ echo "<b>"
     .get_lang('CompilatioQuota')
     .":"
     ." </b><br>"
-    .get_lang('CompilatioCredit')
-    .": "
-    .$quotas->usedCredits
-    .get_lang('CompilatioOn')
-    .$quotas->credits;
+    .sprintf(get_lang('CompilatioCreditXOnY'), $quotas->usedCredits, $quotas->credits);
 
 ?>
 <br><br>

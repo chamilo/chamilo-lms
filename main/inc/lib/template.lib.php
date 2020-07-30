@@ -1122,7 +1122,7 @@ class Template
         $form->addHidden('logout', 1);
         $form->addButton(
             'casLogoutButton',
-            is_null($label) ? sprintf(get_lang('LogoutWithYourAccount'), api_get_setting("Institution")) : $label,
+            is_null($label) ? sprintf(get_lang('LogoutWithYourAccountFromX'), api_get_setting("Institution")) : $label,
             api_get_setting("casLogoURL"),
             'primary',
             null,

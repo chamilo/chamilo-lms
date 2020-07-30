@@ -108,7 +108,7 @@
     <div class="version" aria-label="1.11.12">
         <a id="1.11.12"></a>
 
-A        <h1>Chamilo 1.11.12 - Le Breuil-sous-Argenton,  ??/0?/2020</h1>
+        <h1>Chamilo 1.11.12 - Le Breuil-sous-Argenton,  ??/08/2020</h1>
         <h3>Release notes - summary</h3>
         <p>Chamilo 1.11.12 is a minor bugfix release on top of 1.11.10.</p>
         <p>Starting from this release, changes are registered by reversed date of addition (the latest changes first), which dramatically improves the changelog edition time. Because yes, it is reviewed manually.</p>
@@ -144,6 +144,7 @@ A        <h1>Chamilo 1.11.12 - Le Breuil-sous-Argenton,  ??/0?/2020</h1>
         <h3>Notable new Features</h3>
         <h4>For end-users, teachers and Chamilo admins</h4>
         <ul aria-live="off">
+            <li>[2020-07-30] (<a href="https://github.com/chamilo/chamilo-lms/commit/ed713e1dbf775418b582e26ea2262b33bb3b0389">ed713e1d</a> - <a href="https://support.chamilo.org/issues/17589">CT#17589</a>) UserPortal: Add new link "Latest visited course" to redirect the user to the latest visited course/course-session</li>
             <li>[2020-07-24] (<a href="https://github.com/chamilo/chamilo-lms/commit/7d102e29cd282988943c8fc864a2a81ae069e45a">7d102e29</a> - <a href="https://task.beeznest.com/issues/17576">BT#17576</a>) Session: Allow session admins to see session reports</li>
             <li>[2020-07-16] (<a href="https://github.com/chamilo/chamilo-lms/commit/d7a05c034b406d719e84a4a44e86277eeecc6f02">d7a05c03</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/3093">GH#3093</a>) Tracking: New attndances page for parents/HRM</li>
             <li>[2020-07-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/910ad1e99605da8f1b27e624f84eb9986d0a65e0">910ad1e9</a>) Plugin: H5P: Let teachers create H5P games inside learning paths (global shared storage)</li>
@@ -311,6 +312,28 @@ A        <h1>Chamilo 1.11.12 - Le Breuil-sous-Argenton,  ??/0?/2020</h1>
         </ul>
         <h3>Improvements (minor features) and debug</h3>
         <ul aria-live="off">
+            <li>[2020-07-30] (<a href="https://github.com/chamilo/chamilo-lms/commit/c623b960becf9b415faf034ebe900c4099c94a8d">c623b960</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2968">GH#2968</a>) Force generation for path of platform logo in PDF</li>
+            <li>[2020-07-30] (<a href="https://github.com/chamilo/chamilo-lms/commit/7c426d8b93c4b1071a9aa72b243ca64ee5a7764e">7c426d8b</a>) Quiz: Remove Display::display_footer in result.php</li>
+            <li>[2020-07-30] (<a href="https://github.com/chamilo/chamilo-lms/commit/9004408e16004e902b44a019611d1138998bcd79">9004408e</a>) Scripts: Update undefined language variables detector script to ignore variables called as get_lang() method of a plugin</li>
+            <li>[2020-07-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/2c1b64539fa4c07491196a20aec722489573517e">2c1b6453</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/3409">GH#3409</a>) Learning path: Show item view when selecting an item in ToC</li>
+            <li>[2020-07-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/a8f8788b8cd2761e317bbb557603ecef52422ae4">a8f8788b</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/3008">GH#3008</a>) Course Progress: Incorrect time in Thematic Advance Change .ready for function</li>
+            <li>[2020-07-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/1bbcbb44991d1dbfbd600b3cf63c13d5a6046995">1bbcbb44</a>) Documentation: Remove support for PHP 7.4 from documentation: Due to library dependencies, 7.4 is supported *but* generates a lot of NOTICE and WARNING messages, which can spook users or overload server logs.</li>
+            <li>[2020-07-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/ccde072d7edac61e65994b4dc35febb2d1246cf5">ccde072d</a>) WCAG: Add label text to search form in documents list</li>
+            <li>[2020-07-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/a50c07ad22953fd83aae6a95a3e7ece24ea59b48">a50c07ad</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/3406">GH#3406</a>) Gradebook: Grade model: Increase max elements to 20</li>
+            <li>[2020-07-28] (<a href="https://github.com/chamilo/chamilo-lms/commit/e936e64c882d1764f58126b0fef08a2bfd58096e">e936e64c</a> - <a href="https://task.beeznest.com/issues/17585">BT#17585</a>) Exercises: Fix missing NoFeedback option</li>
+            <li>[2020-07-28] (<a href="https://github.com/chamilo/chamilo-lms/commit/e1db8e0858c62b9fa5a9e1246f6acedb4958c747">e1db8e08</a>) Plugin: Zoom fix entity definition</li>
+            <li>[2020-07-27] (<a href="https://github.com/chamilo/chamilo-lms/commit/dd03905c07e087b955f2e6ff960394ea64200e76">dd03905c</a> - <a href="https://task.beeznest.com/issues/17415">BT#17415</a>) Plugin: Whispeak: Change enrollment title</li>
+            <li>[2020-07-27] (<a href="https://github.com/chamilo/chamilo-lms/commit/6b402e1cf794f908dea60d7e8767e2055416e0c8">6b402e1c</a> - <a href="https://task.beeznest.com/issues/17415">BT#17415</a>) Plugin: Whispeak: Remove unused lang variables</li>
+            <li>[2020-07-27] (<a href="https://github.com/chamilo/chamilo-lms/commit/b234316dff1291c307eb239665140d7890b89d1a">b234316d</a>) WCAG: Avoid using empty <i></i> for comments in documents list: replace by &lt;em&gt; and remove if no comment is set</li>
+            <li>[2020-07-27] (<a href="https://github.com/chamilo/chamilo-lms/commit/ef6ac7c3c4048af05f9eb936ed0536feb728ad56">ef6ac7c3</a>) WCAG: Convert &lt;i&gt; tags to &lt;em&gt; for better accessibility (WCAG AA)</li>
+            <li>[2020-07-27] (<a href="https://github.com/chamilo/chamilo-lms/commit/8cf4fc017ee1388acd38a0985745bdd2c76c7f7b">8cf4fc01</a> - <a href="https://task.beeznest.com/issues/16386">BT#16386</a>) Notification: Add check on user being logged in before showing user menu (fix previous typo)</li>
+            <li>[2020-07-27] (<a href="https://github.com/chamilo/chamilo-lms/commit/e239616ea78d20233210fbfeb96d4f78db12183e">e239616e</a> - <a href="https://task.beeznest.com/issues/16386">BT#16386</a>) Notification: Add check on user being logged in before showing user menu</li>
+            <li>[2020-07-27] (<a href="https://github.com/chamilo/chamilo-lms/commit/608c0e418798bb20613d7cd51dd95aee0a9c4e5c">608c0e41</a> - <a href="https://task.beeznest.com/issues/17288">BT#17288</a>) Plugins: fix lang vars, fix UI</li>
+            <li>[2020-07-27] (<a href="https://github.com/chamilo/chamilo-lms/commit/237c9aadff01534adb217c241bbaf568c0c50b84">237c9aad</a> - <a href="https://task.beeznest.com/issues/17288">BT#17288</a>) Plugin: Zoom add new setting globalConferencePerUserAllowRoles - fix lang vars</li>
+            <li>[2020-07-27] (<a href="https://github.com/chamilo/chamilo-lms/commit/93603fccfc3c5b69d978dc579ee35ac5e59f2d50">93603fcc</a>) Plugin: Zoom: fix translations, replace location with api_location</li>
+            <li>[2020-07-27] (<a href="https://github.com/chamilo/chamilo-lms/commit/aaa19118c4383516dbfb335380c207b41019b243">aaa19118</a>) Performance: Replace user.user_id with user.id in sessionmanager and subscribe_user.php</li>
+            <li>[2020-07-24] (<a href="https://github.com/chamilo/chamilo-lms/commit/1a39ffbb83081140c99fadb075d3002f6f6e3de4">1a39ffbb</a> - <a href="https://task.beeznest.com/issues/17415">BT#17415</a>) Plugin: Whispeak: Improve message above record audio block</li>
+            <li>[2020-07-24] (<a href="https://github.com/chamilo/chamilo-lms/commit/e6fbb35dcef7a5c88afeffd88b54328fae229905">e6fbb35d</a> - <a href="https://task.beeznest.com/issues/17415">BT#17415</a>) Plugin: Whispeak: Set accept-language in request header</li>
             <li>[2020-07-24] (<a href="https://github.com/chamilo/chamilo-lms/commit/14462c1d4e57bb4205cf8662a930ab62671a8f8a">14462c1d</a> - <a href="https://task.beeznest.com/issues/17576">BT#17576</a>) Tracking: Check session list of session admins and let them see their report, in teachers_time_by_session_report.php and works_in_session_report.php</li>
             <li>[2020-07-24] (<a href="https://github.com/chamilo/chamilo-lms/commit/a761c90ce92e1c55ef3b1891bef0fd530fa9cf7c">a761c90c</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2667">GH#2667</a>) Plugin: H5P: Add installer checks and translations</li>
             <li>[2020-07-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/0121c51c1ad47249abcad0a70f9f45dfadca8c5b">0121c51c</a> - <a href="https://task.beeznest.com/issues/16298">BT#16298</a>) Plugin: Pause training: check course and login access</li>

@@ -99,9 +99,3 @@ $layout = $template->fetch(
 );
 $template->assign('content', $layout);
 $template->display_one_col_template();
-
-if ($show_headers) {
-    Display::display_footer();
-} else {
-    Display::display_reduced_footer();
-}

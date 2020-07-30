@@ -1,0 +1,58 @@
+language: php
+sudo: false
+php:
+  - 7.0
+  - 7.1
+
+matrix:
+  fast_finish: true
+  exclude:
+    - php: 7.0
+      env: DOCTRINE_COMMON_VERSION="dev-master" DB=mysql DB_USER=root PREFER=latest
+    - php: 7.0
+      env: DOCTRINE_COMMON_VERSION="dev-master" DB=pgsql PREFER=latest
+    - php: 7.0
+      env: DOCTRINE_COMMON_VERSION="dev-master" DB=mysql DB_USER=root PREFER=lowest
+    - php: 7.0
+      env: DOCTRINE_COMMON_VERSION="dev-master" DB=pgsql PREFER=lowest
+
+env:
+  matrix:
+    - DOCTRINE_COMMON_VERSION="~2.4.0" DB=mysql DB_USER=root PREFER=latest
+    - DOCTRINE_COMMON_VERSION="~2.5.0" DB=mysql DB_USER=root PREFER=latest
+    - DOCTRINE_COMMON_VERSION="~2.6.0" DB=mysql DB_USER=root PREFER=latest
+    - DOCTRINE_COMMON_VERSION="dev-master" DB=mysql DB_USER=root PREFER=latest
+    - DOCTRINE_COMMON_VERSION="~2.4.0" DB=pgsql PREFER=latest
+    - DOCTRINE_COMMON_VERSION="~2.5.0" DB=pgsql PREFER=latest
+    - DOCTRINE_COMMON_VERSION="~2.6.0" DB=pgsql PREFER=latest
+    - DOCTRINE_COMMON_VERSION="dev-master" DB=pgsql PREFER=latest
+    - DOCTRINE_COMMON_VERSION="~2.4.0" DB=mysql DB_USER=root PREFER=lowest
+    - DOCTRINE_COMMON_VERSION="~2.5.0" DB=mysql DB_USER=root PREFER=lowest
+    - DOCTRINE_COMMON_VERSION="~2.6.0" DB=mysql DB_USER=root PREFER=lowest
+    - DOCTRINE_COMMON_VERSION="dev-master" DB=mysql DB_USER=root PREFER=lowest
+    - DOCTRINE_COMMON_VERSION="~2.4.0" DB=pgsql PREFER=lowest
+    - DOCTRINE_COMMON_VERSION="~2.5.0" DB=pgsql PREFER=lowest
+    - DOCTRINE_COMMON_VERSION="~2.6.0" DB=pgsql PREFER=lowest
+    - DOCTRINE_COMMON_VERSION="dev-master" DB=pgsql PREFER=lowest
+  global:
+    - secure: "VKbBEUu1CftMOWU+dKRmV3KWMB/2rtTYbQh3jR2cgtIZuELPc/QvCgUO2YsiG686vaOOJt9pwVW+CAmQBManRxJEGvJMD3LI3/gif8HH478DYobRO8QLgpICGZrpMx85i8y9ln69gigERdEkHo8ILtwYTRzV4nK9LqVXVTxcnjQ="
+cache:
+  directories:
+    - $HOME/.composer/cache
+
+before_script:
+  - composer self-update
+
+  - sh -c "if [ '$DB' = 'pgsql' ]; then psql -c 'create database orm_behaviors_test' -U postgres; fi"
+  - sh -c "if [ '$DB' = 'pgsql' ]; then psql orm_behaviors_test -c 'create extension cube' -U postgres; fi"
+  - sh -c "if [ '$DB' = 'pgsql' ]; then psql orm_behaviors_test -c 'create extension earthdistance' -U postgres; fi"
+
+  - sh -c "if [ '$DB' = 'mysql' ]; then mysql -e 'create database IF NOT EXISTS orm_behaviors_test' -u$DB_USER; fi"
+
+  - composer require doctrine/common:${DOCTRINE_COMMON_VERSION}
+  - sh -c "if [ '$PREFER' = 'lowest' ]; then composer update --prefer-lowest; fi"
+
+script:
+  - bin/parallel-lint -e php,phpt --exclude vendor .
+  - bin/yaml-lint config/*
+  - bin/phpunit

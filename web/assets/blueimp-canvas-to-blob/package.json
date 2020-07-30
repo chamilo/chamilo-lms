@@ -1,0 +1,68 @@
+{
+  "name": "blueimp-canvas-to-blob",
+  "version": "3.27.0",
+  "title": "JavaScript Canvas to Blob",
+  "description": "Canvas to Blob is a polyfill for the standard JavaScript canvas.toBlob method. It can be used to create Blob objects from an HTML canvas element.",
+  "keywords": [
+    "javascript",
+    "canvas",
+    "blob",
+    "convert",
+    "conversion"
+  ],
+  "homepage": "https://github.com/blueimp/JavaScript-Canvas-to-Blob",
+  "author": {
+    "name": "Sebastian Tschan",
+    "url": "https://blueimp.net"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/blueimp/JavaScript-Canvas-to-Blob.git"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "7",
+    "eslint-config-blueimp": "2",
+    "eslint-config-prettier": "6",
+    "eslint-plugin-jsdoc": "25",
+    "eslint-plugin-prettier": "3",
+    "prettier": "2",
+    "uglify-js": "3"
+  },
+  "eslintConfig": {
+    "extends": [
+      "blueimp",
+      "plugin:jsdoc/recommended",
+      "plugin:prettier/recommended"
+    ],
+    "env": {
+      "browser": true
+    }
+  },
+  "eslintIgnore": [
+    "js/*.min.js",
+    "test/vendor"
+  ],
+  "prettier": {
+    "arrowParens": "avoid",
+    "proseWrap": "always",
+    "semi": false,
+    "singleQuote": true,
+    "trailingComma": "none"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "unit": "docker-compose run --rm mocha",
+    "test": "npm run lint && npm run unit",
+    "posttest": "docker-compose down -v",
+    "build": "cd js && uglifyjs canvas-to-blob.js -c -m -o canvas-to-blob.min.js --source-map url=canvas-to-blob.min.js.map",
+    "preversion": "npm test",
+    "version": "npm run build && git add -A js",
+    "postversion": "git push --tags origin master master:gh-pages && npm publish"
+  },
+  "files": [
+    "js/*.js",
+    "js/*.js.map"
+  ],
+  "main": "./js/canvas-to-blob.js"
+}

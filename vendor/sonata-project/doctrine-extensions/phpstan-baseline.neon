@@ -1,0 +1,6 @@
+parameters:
+    ignoreErrors:
+        -
+            message: "#^Class Doctrine\\\\ODM\\\\MongoDB\\\\DocumentManager not found\\.$#"
+            count: 1
+            path: src/Document/BaseDocumentManager.php

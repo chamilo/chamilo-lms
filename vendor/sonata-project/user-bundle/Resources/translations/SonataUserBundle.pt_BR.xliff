@@ -1,0 +1,559 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+    <file source-language="en" datatype="plaintext" original="">
+        <body>
+            <trans-unit id="title_user_registration">
+                <source>title_user_registration</source>
+                <target>Registrar</target>
+            </trans-unit>
+            <trans-unit id="title_user_account">
+                <source>title_user_account</source>
+                <target>Perfil de Usuário</target>
+            </trans-unit>
+            <trans-unit id="title_user_edit_profile">
+                <source>title_user_edit_profile</source>
+                <target>Editar</target>
+            </trans-unit>
+            <trans-unit id="title_user_authentication">
+                <source>title_user_authentication</source>
+                <target>Autenticação</target>
+            </trans-unit>
+            <trans-unit id="sonata_user_submit">
+                <source>sonata_user_submit</source>
+                <target>Enviar</target>
+            </trans-unit>
+            <trans-unit id="breadcrumb.link_user_list">
+                <source>breadcrumb.link_user_list</source>
+                <target>Usuários</target>
+            </trans-unit>
+            <trans-unit id="breadcrumb.link_user_create">
+                <source>breadcrumb.link_user_create</source>
+                <target>Criar</target>
+            </trans-unit>
+            <trans-unit id="breadcrumb.link_user_edit">
+                <source>breadcrumb.link_user_edit</source>
+                <target>Editar</target>
+            </trans-unit>
+            <trans-unit id="breadcrumb.link_user_delete">
+                <source>breadcrumb.link_user_delete</source>
+                <target>Deletar</target>
+            </trans-unit>
+            <trans-unit id="breadcrumb.link_group_list">
+                <source>breadcrumb.link_group_list</source>
+                <target>Grupos</target>
+            </trans-unit>
+            <trans-unit id="breadcrumb.link_group_create">
+                <source>breadcrumb.link_group_create</source>
+                <target>Criar</target>
+            </trans-unit>
+            <trans-unit id="breadcrumb.link_group_edit">
+                <source>breadcrumb.link_group_edit</source>
+                <target>Editar</target>
+            </trans-unit>
+            <trans-unit id="users">
+                <source>users</source>
+                <target>Usuários</target>
+            </trans-unit>
+            <trans-unit id="groups">
+                <source>groups</source>
+                <target>Grupos</target>
+            </trans-unit>
+            <trans-unit id="switch_user_exit">
+                <source>switch_user_exit</source>
+                <target>Sair do modo simulação</target>
+            </trans-unit>
+            <trans-unit id="switch_user">
+                <source>switch_user</source>
+                <target>Simular Usuário</target>
+            </trans-unit>
+            <trans-unit id="user_block_logout">
+                <source>user_block_logout</source>
+                <target>Sair</target>
+            </trans-unit>
+            <trans-unit id="user_block_profile">
+                <source>user_block_profile</source>
+                <target>Perfil</target>
+            </trans-unit>
+            <trans-unit id="user_form.label_username">
+                <source>form.label_username</source>
+                <target>Nome de usuário</target>
+            </trans-unit>
+            <trans-unit id="form.label_email">
+                <source>form.label_email</source>
+                <target>Endereço de E-mail</target>
+            </trans-unit>
+            <trans-unit id="form.label_plain_password">
+                <source>form.label_plain_password</source>
+                <target>Senha</target>
+            </trans-unit>
+            <trans-unit id="form.label_groups">
+                <source>form.label_groups</source>
+                <target>Grupos</target>
+            </trans-unit>
+            <trans-unit id="form.label_roles">
+                <source>form.label_roles</source>
+                <target>Regras</target>
+            </trans-unit>
+            <trans-unit id="form.label_locked">
+                <source>form.label_locked</source>
+                <target>Bloqueado</target>
+            </trans-unit>
+            <trans-unit id="form.label_expired">
+                <source>form.label_expired</source>
+                <target>Expirado</target>
+            </trans-unit>
+            <trans-unit id="form.label_enabled">
+                <source>form.label_enabled</source>
+                <target>Habilitado</target>
+            </trans-unit>
+            <trans-unit id="form.label_credentials_expired">
+                <source>form.label_credentials_expired</source>
+                <target>Credenciais expiradas</target>
+            </trans-unit>
+            <trans-unit id="form.label_created_at">
+                <source>form.label_created_at</source>
+                <target>Criado em</target>
+            </trans-unit>
+            <trans-unit id="form.label_last_login">
+                <source>form.label_last_login</source>
+                <target>Último Login</target>
+            </trans-unit>
+            <trans-unit id="user_form.label_name">
+                <source>form.label_name</source>
+                <target>Nome</target>
+            </trans-unit>
+            <trans-unit id="filter.label_username">
+                <source>filter.label_username</source>
+                <target>Nome de usuário</target>
+            </trans-unit>
+            <trans-unit id="filter.label_name">
+                <source>filter.label_name</source>
+                <target>Nome</target>
+            </trans-unit>
+            <trans-unit id="filter.label_email">
+                <source>filter.label_email</source>
+                <target>Enderaço de E-mail</target>
+            </trans-unit>
+            <trans-unit id="filter.label_locked">
+                <source>filter.label_locked</source>
+                <target>Bloqueado</target>
+            </trans-unit>
+            <trans-unit id="filter.label_id">
+                <source>filter.label_id</source>
+                <target>ID</target>
+            </trans-unit>
+            <trans-unit id="filter.label_groups">
+                <source>filter.label_groups</source>
+                <target>Grupos</target>
+            </trans-unit>
+            <trans-unit id="filter.label_created_at">
+                <source>filter.label_created_at</source>
+                <target>Criado em</target>
+            </trans-unit>
+            <trans-unit id="filter.label_last_login">
+                <source>filter.label_last_login</source>
+                <target>Último Login</target>
+            </trans-unit>
+            <trans-unit id="filter.label_firstname">
+                <source>filter.label_firstname</source>
+                <target>Primeiro nome</target>
+            </trans-unit>
+            <trans-unit id="filter.label_lastname">
+                <source>filter.label_lastname</source>
+                <target>Sobrenome</target>
+            </trans-unit>
+            <trans-unit id="list.label_username">
+                <source>list.label_username</source>
+                <target>Nome de usuário</target>
+            </trans-unit>
+            <trans-unit id="list.label_name">
+                <source>list.label_name</source>
+                <target>Nome</target>
+            </trans-unit>
+            <trans-unit id="list.label_email">
+                <source>list.label_email</source>
+                <target>Endereço de E-mail</target>
+            </trans-unit>
+            <trans-unit id="list.label_groups">
+                <source>list.label_groups</source>
+                <target>Grupos</target>
+            </trans-unit>
+            <trans-unit id="list.label_locked">
+                <source>list.label_locked</source>
+                <target>Bloqueado</target>
+            </trans-unit>
+            <trans-unit id="list.label_enabled">
+                <source>list.label_enabled</source>
+                <target>Habilitado</target>
+            </trans-unit>
+            <trans-unit id="list.label_created_at">
+                <source>list.label_created_at</source>
+                <target>Criado em</target>
+            </trans-unit>
+            <trans-unit id="list.label_last_login">
+                <source>list.label_last_login</source>
+                <target>Último login</target>
+            </trans-unit>
+            <trans-unit id="list.label_impersonating">
+                <source>list.label_impersonating</source>
+                <target>Simular Usuário</target>
+            </trans-unit>
+            <trans-unit id="list.label_roles">
+                <source>list.label_roles</source>
+                <target>Regras</target>
+            </trans-unit>
+            <trans-unit id="list.label_firstname">
+                <source>list.label_firstname</source>
+                <target>Primeiro nome</target>
+            </trans-unit>
+            <trans-unit id="list.label_lastname">
+                <source>list.label_lastname</source>
+                <target>Sobrenome</target>
+            </trans-unit>
+            <trans-unit id="label_two_step_code">
+                <source>label_two_step_code</source>
+                <target>Verificação dupla</target>
+            </trans-unit>
+            <trans-unit id="message_two_step_code_help">
+                <source>message_two_step_code_help</source>
+                <target>Insira o código de verificação gerado pela sua aplicação mobile.</target>
+            </trans-unit>
+            <trans-unit id="label_two_step_code_error">
+                <source>label_two_step_code_error</source>
+                <target>O código de verificação não é válido</target>
+            </trans-unit>
+            <trans-unit id="sonata_user">
+                <source>sonata_user</source>
+                <target>Usuários</target>
+            </trans-unit>
+            <trans-unit id="form_general">
+                <source>General</source>
+                <target>Geral</target>
+            </trans-unit>
+            <trans-unit id="form_groups">
+                <source>Groups</source>
+                <target>Grupos</target>
+            </trans-unit>
+            <trans-unit id="form_management">
+                <source>Management</source>
+                <target>Gerenciamento</target>
+            </trans-unit>
+            <trans-unit id="field.label_roles_editable">
+                <source>field.label_roles_editable</source>
+                <target>Regras</target>
+            </trans-unit>
+            <trans-unit id="form.label_date_of_birth">
+                <source>form.label_date_of_birth</source>
+                <target>Data de aniversário</target>
+            </trans-unit>
+            <trans-unit id="form.label_firstname">
+                <source>form.label_firstname</source>
+                <target>Primeiro nome</target>
+            </trans-unit>
+            <trans-unit id="form.label_lastname">
+                <source>form.label_lastname</source>
+                <target>Sobrenome</target>
+            </trans-unit>
+            <trans-unit id="form.label_website">
+                <source>form.label_website</source>
+                <target>Website</target>
+            </trans-unit>
+            <trans-unit id="form.label_biography">
+                <source>form.label_biography</source>
+                <target>Biografia</target>
+            </trans-unit>
+            <trans-unit id="form.label_gender">
+                <source>form.label_gender</source>
+                <target>Sexo</target>
+            </trans-unit>
+            <trans-unit id="form.label_locale">
+                <source>form.label_locale</source>
+                <target>Localização</target>
+            </trans-unit>
+            <trans-unit id="form.label_timezone">
+                <source>form.label_timezone</source>
+                <target>Fuso horário</target>
+            </trans-unit>
+            <trans-unit id="form.label_phone">
+                <source>form.label_phone</source>
+                <target>Telefone</target>
+            </trans-unit>
+            <trans-unit id="form.label_facebook_uid">
+                <source>form.label_facebook_uid</source>
+                <target>ID do Facebook</target>
+            </trans-unit>
+            <trans-unit id="form.label_facebook_name">
+                <source>form.label_facebook_name</source>
+                <target>Nome no Facebook</target>
+            </trans-unit>
+            <trans-unit id="form.label_twitter_uid">
+                <source>form.label_twitter_uid</source>
+                <target>ID do Twitter</target>
+            </trans-unit>
+            <trans-unit id="form.label_twitter_name">
+                <source>form.label_twitter_name</source>
+                <target>Nome no Twitter</target>
+            </trans-unit>
+            <trans-unit id="form.label_gplus_uid">
+                <source>form.label_gplus_uid</source>
+                <target>ID do Google+</target>
+            </trans-unit>
+            <trans-unit id="form.label_gplus_name">
+                <source>form.label_gplus_name</source>
+                <target>Nome no Google+</target>
+            </trans-unit>
+            <trans-unit id="form.label_token">
+                <source>form.label_token</source>
+                <target>Token</target>
+            </trans-unit>
+            <trans-unit id="form.label_two_step_verification_code">
+                <source>form.label_two_step_verification_code</source>
+                <target>Código de verificação dupla</target>
+            </trans-unit>
+            <trans-unit id="show.label_username">
+                <source>show.label_username</source>
+                <target>Nome de usuário</target>
+            </trans-unit>
+            <trans-unit id="show.label_email">
+                <source>show.label_email</source>
+                <target>E-mail</target>
+            </trans-unit>
+            <trans-unit id="show.label_groups">
+                <source>show.label_groups</source>
+                <target>Grupos</target>
+            </trans-unit>
+            <trans-unit id="show.label_date_of_birth">
+                <source>show.label_date_of_birth</source>
+                <target>Data de aniversário</target>
+            </trans-unit>
+            <trans-unit id="show.label_firstname">
+                <source>show.label_firstname</source>
+                <target>Primeiro nome</target>
+            </trans-unit>
+            <trans-unit id="show.label_lastname">
+                <source>show.label_lastname</source>
+                <target>Sobrenome</target>
+            </trans-unit>
+            <trans-unit id="show.label_website">
+                <source>show.label_website</source>
+                <target>Website</target>
+            </trans-unit>
+            <trans-unit id="show.label_biography">
+                <source>show.label_biography</source>
+                <target>Biografia</target>
+            </trans-unit>
+            <trans-unit id="show.label_gender">
+                <source>show.label_gender</source>
+                <target>Sexo</target>
+            </trans-unit>
+            <trans-unit id="show.label_locale">
+                <source>show.label_locale</source>
+                <target>Localização</target>
+            </trans-unit>
+            <trans-unit id="show.label_timezone">
+                <source>show.label_timezone</source>
+                <target>Fuso Horário</target>
+            </trans-unit>
+            <trans-unit id="show.label_phone">
+                <source>show.label_phone</source>
+                <target>Telefone</target>
+            </trans-unit>
+            <trans-unit id="show.label_facebook_uid">
+                <source>show.label_facebook_uid</source>
+                <target>ID do Facebook</target>
+            </trans-unit>
+            <trans-unit id="show.label_facebook_name">
+                <source>show.label_facebook_name</source>
+                <target>Nome no Facebook</target>
+            </trans-unit>
+            <trans-unit id="show.label_twitter_uid">
+                <source>show.label_twitter_uid</source>
+                <target>ID do Twitter</target>
+            </trans-unit>
+            <trans-unit id="show.label_twitter_name">
+                <source>show.label_twitter_name</source>
+                <target>Nome no Twitter</target>
+            </trans-unit>
+            <trans-unit id="show.label_gplus_uid">
+                <source>show.label_gplus_uid</source>
+                <target>ID no Google+</target>
+            </trans-unit>
+            <trans-unit id="show.label_gplus_name">
+                <source>show.label_gplus_name</source>
+                <target>Nome no Google+</target>
+            </trans-unit>
+            <trans-unit id="show.label_token">
+                <source>show.label_token</source>
+                <target>Token</target>
+            </trans-unit>
+            <trans-unit id="show.label_two_step_verification_code">
+                <source>show.label_two_step_verification_code</source>
+                <target>Código de verificação dupla</target>
+            </trans-unit>
+            <trans-unit id="show.label_created_at">
+                <source>show.label_created_at</source>
+                <target>Criado em</target>
+            </trans-unit>
+            <trans-unit id="show.label_last_login">
+                <source>show.label_last_login</source>
+                <target>Último Login</target>
+            </trans-unit>
+            <trans-unit id="breadcrumb.link_user_show">
+                <source>breadcrumb.link_user_show</source>
+                <target>Mostrar</target>
+            </trans-unit>
+            <trans-unit id="gender_unknown">
+                <source>gender_unknown</source>
+                <target>Desconhecido</target>
+            </trans-unit>
+            <trans-unit id="gender_female">
+                <source>gender_female</source>
+                <target>Feminino</target>
+            </trans-unit>
+            <trans-unit id="gender_male">
+                <source>gender_male</source>
+                <target>Masculino</target>
+            </trans-unit>
+            <trans-unit id="sonata_profile_title">
+                <source>sonata_profile_title</source>
+                <target>Meu Perfil</target>
+            </trans-unit>
+            <trans-unit id="link_show_profile">
+                <source>link_show_profile</source>
+                <target>Meu Perfil</target>
+            </trans-unit>
+            <trans-unit id="link_edit_profile">
+                <source>link_edit_profile</source>
+                <target>Editar Perfil</target>
+            </trans-unit>
+            <trans-unit id="title_user_edit_authentication">
+                <source>title_user_edit_authentication</source>
+                <target>Autenticação</target>
+            </trans-unit>
+            <trans-unit id="link_edit_authentication">
+                <source>link_edit_authentication</source>
+                <target>Autenticação</target>
+            </trans-unit>
+            <trans-unit id="label_profile_gender">
+                <source>label_profile_gender</source>
+                <target>Sexo</target>
+            </trans-unit>
+            <trans-unit id="label_profile_firstname">
+                <source>label_profile_firstname</source>
+                <target>Primeiro nome</target>
+            </trans-unit>
+            <trans-unit id="label_profile_lastname">
+                <source>label_profile_lastname</source>
+                <target>Sobrenome</target>
+            </trans-unit>
+            <trans-unit id="label_profile_website">
+                <source>label_profile_website</source>
+                <target>Website</target>
+            </trans-unit>
+            <trans-unit id="label_profile_dob">
+                <source>label_profile_dob</source>
+                <target>Data de aniversário</target>
+            </trans-unit>
+            <trans-unit id="label_profile_biography">
+                <source>label_profile_biography</source>
+                <target>Biografia</target>
+            </trans-unit>
+            <trans-unit id="label_profile_locale">
+                <source>label_profile_locale</source>
+                <target>Localização</target>
+            </trans-unit>
+            <trans-unit id="label_profile_timezone">
+                <source>label_profile_timezone</source>
+                <target>Fuso Horário</target>
+            </trans-unit>
+            <trans-unit id="label_profile_phone">
+                <source>label_profile_phone</source>
+                <target>Telefone</target>
+            </trans-unit>
+            <trans-unit id="profile.flash.updated">
+                <source>profile.flash.updated</source>
+                <target>Seu perfil foi atualizado com sucesso.</target>
+            </trans-unit>
+            <trans-unit id="sonata_change_password_link">
+                <source>sonata_change_password_link</source>
+                <target>Alterar senha</target>
+            </trans-unit>
+            <trans-unit id="link_register">
+                <source>link_register</source>
+                <target>Registrar</target>
+            </trans-unit>
+            <trans-unit id="link_login">
+                <source>link_login</source>
+                <target>Entrar</target>
+            </trans-unit>
+            <trans-unit id="link_logout">
+                <source>link_logout</source>
+                <target>Sair</target>
+            </trans-unit>
+            <trans-unit id="registration.flash.user_created">
+                <source>registration.flash.user_created</source>
+                <target>Sua conta foi criada com sucesso!</target>
+            </trans-unit>
+            <trans-unit id="forgotten_password">
+                <source>forgotten_password</source>
+                <target>Esqueceu sua senha?</target>
+            </trans-unit>
+            <trans-unit id="sonata_user_profile_breadcrumb_index">
+                <source>sonata_user_profile_breadcrumb_index</source>
+                <target>Visão Geral</target>
+            </trans-unit>
+            <trans-unit id="sonata_user_profile_breadcrumb_edit">
+                <source>sonata_user_profile_breadcrumb_edit</source>
+                <target>Editar Perfil</target>
+            </trans-unit>
+            <trans-unit id="sonata_user_already_authenticated">
+                <source>sonata_user_already_authenticated</source>
+                <target>You are already logged in</target>
+            </trans-unit>
+            <trans-unit id="security.login.username">
+                <source>security.login.username</source>
+                <target>usuário</target>
+            </trans-unit>
+            <trans-unit id="security.login.password">
+                <source>security.login.password</source>
+                <target>senha</target>
+            </trans-unit>
+            <trans-unit id="form.username">
+                <source>form.username</source>
+                <target>Nome de usuário</target>
+            </trans-unit>
+            <trans-unit id="form.email">
+                <source>form.email</source>
+                <target>Email</target>
+            </trans-unit>
+            <trans-unit id="form.password">
+                <source>form.password</source>
+                <target>Senha</target>
+            </trans-unit>
+            <trans-unit id="form.password_confirmation">
+                <source>form.password_confirmation</source>
+                <target>Verificação</target>
+            </trans-unit>
+            <trans-unit id="profile_title">
+                <source>Profile</source>
+                <target>Perfil</target>
+            </trans-unit>
+            <trans-unit id="security_title">
+                <source>Security</source>
+                <target>Segurança</target>
+            </trans-unit>
+            <trans-unit id="title_user_edit_password">
+                <source>title_user_edit_password</source>
+                <target>title_user_edit_password</target>
+            </trans-unit>
+            <trans-unit id="title_user_resetting">
+                <source>title_user_resetting</source>
+                <target>title_user_resetting</target>
+            </trans-unit>
+            <trans-unit id="title_user_resetting_reset">
+                <source>title_user_resetting_reset</source>
+                <target>title_user_resetting_reset</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

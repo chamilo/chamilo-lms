@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit colors="true" bootstrap="tests/TestAutoLoad.php">
+    <testsuites>
+        <testsuite name="Culqi PHP Tests">
+            <directory suffix="Test.php">tests</directory>
+            <file>Test.php</file>
+        </testsuite>
+    </testsuites>
+    <php>
+         <ini name="display_errors" value="true"/>
+    </php>
+</phpunit>

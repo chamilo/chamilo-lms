@@ -1,0 +1,34 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Doctrine\Tests\Common\DataFixtures;
+
+use Doctrine\Common\DataFixtures\FixtureInterface;
+use Doctrine\Persistence\ObjectManager;
+
+/**
+ * Test Fixture interface.
+ */
+class FixtureTest extends BaseTest
+{
+    public function testFixtureInterface()
+    {
+        $em      = $this->createMock(ObjectManager::class);
+        $fixture = new MyFixture2();
+        $fixture->load($em);
+
+        self::assertTrue($fixture->loaded);
+    }
+}
+
+class MyFixture2 implements FixtureInterface
+{
+    /** @var bool */
+    public $loaded = false;
+
+    public function load(ObjectManager $manager)
+    {
+        $this->loaded = true;
+    }
+}

@@ -1,0 +1,57 @@
+version: '3.4'
+
+services:
+  php7.1:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+      target: php7.1
+    env_file: .env
+    volumes:
+      - './:/app'
+      - './docker/php/php.ini:/usr/local/etc/php/php.ini:ro'
+    depends_on:
+      - mongodb
+      - sftp
+      - ftp
+
+  php7.2:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+      target: php7.2
+    env_file: .env
+    volumes:
+      - './:/app'
+      - './docker/php/php.ini:/usr/local/etc/php/php.ini:ro'
+    depends_on:
+      - mongodb
+      - sftp
+      - ftp
+
+  php7.3:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+      target: php7.3
+    env_file: .env
+    volumes:
+      - './:/app'
+      - './docker/php/php.ini:/usr/local/etc/php/php.ini:ro'
+    depends_on:
+      - mongodb
+      - sftp
+      - ftp
+
+  mongodb:
+    image: mongo
+
+  sftp:
+    image: atmoz/sftp:alpine
+    command: gaufrette:gaufrette:::gaufrette
+
+  ftp:
+    build:
+      context: ./docker/ftp
+    environment:
+      PUBLICHOST: 'ftp'

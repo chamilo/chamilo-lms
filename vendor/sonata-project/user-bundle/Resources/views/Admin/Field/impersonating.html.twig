@@ -1,0 +1,22 @@
+{#
+
+This file is part of the Sonata package.
+
+(c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+
+#}
+
+{% extends 'SonataAdminBundle:CRUD:base_list_field.html.twig' %}
+
+{% block field %}
+    {% if app.user and object.username != app.user.username and sonata_user.impersonating %}
+        <a href="{{ url(sonata_user.impersonating.route, sonata_user.impersonating.parameters | merge({'_switch_user': object.username})) }}" title="{{ 'switch_user'|trans({}, 'SonataUserBundle')}}">
+            <i class="glyphicon glyphicon-user"></i><i class="glyphicon glyphicon-log-in"></i>
+        </a>
+    {% else %}
+        -
+    {% endif %}
+{% endblock %}

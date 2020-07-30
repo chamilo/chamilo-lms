@@ -1,0 +1,14 @@
+{
+  "name": "simpleWebRTC",
+  "homepage": "https://github.com/HenrikJoreteg/SimpleWebRTC",
+  "version": "2.2.3",
+  "_release": "2.2.3",
+  "_resolution": {
+    "type": "version",
+    "tag": "2.2.3",
+    "commit": "0eeba55fd186a1ee45e06665e5be7e30aab4b5dd"
+  },
+  "_source": "https://github.com/HenrikJoreteg/SimpleWebRTC.git",
+  "_target": "2.2.*",
+  "_originalSource": "simpleWebRTC"
+}

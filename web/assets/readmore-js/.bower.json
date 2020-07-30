@@ -1,0 +1,34 @@
+{
+  "name": "Readmore.js",
+  "main": "readmore.min.js",
+  "version": "2.1.0",
+  "homepage": "http://jedfoster.com/Readmore.js/",
+  "authors": [
+    "Jed Foster <jed@jedfoster.com>"
+  ],
+  "description": "A lightweight jQuery plugin for collapsing and expanding long blocks of text with \"Read more\" and \"Close\" links.",
+  "keywords": [
+    "css",
+    "jquery",
+    "readmore",
+    "expand",
+    "collapse"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "_release": "2.1.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "v2.1.0",
+    "commit": "f0c27b356dea9b54968bc2734cb9be0695d20c1a"
+  },
+  "_source": "https://github.com/jedfoster/Readmore.js.git",
+  "_target": "2.1.0",
+  "_originalSource": "readmore-js"
+}

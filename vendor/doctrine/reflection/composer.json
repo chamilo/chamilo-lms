@@ -1,0 +1,50 @@
+{
+    "name": "doctrine/reflection",
+    "type": "library",
+    "description": "The Doctrine Reflection project is a simple library used by the various Doctrine projects which adds some additional functionality on top of the reflection functionality that comes with PHP. It allows you to get the reflection information about classes, methods and properties statically.",
+    "keywords": [
+        "reflection",
+        "static"
+    ],
+    "homepage": "https://www.doctrine-project.org/projects/reflection.html",
+    "license": "MIT",
+    "authors": [
+        {"name": "Guilherme Blanco", "email": "guilhermeblanco@gmail.com"},
+        {"name": "Roman Borschel", "email": "roman@code-factory.org"},
+        {"name": "Benjamin Eberlei", "email": "kontakt@beberlei.de"},
+        {"name": "Jonathan Wage", "email": "jonwage@gmail.com"},
+        {"name": "Johannes Schmitt", "email": "schmittjoh@gmail.com"},
+        {"name": "Marco Pivetta", "email": "ocramius@gmail.com"}
+    ],
+    "require": {
+        "php": "^7.1",
+        "ext-tokenizer": "*",
+        "doctrine/annotations": "^1.0"
+    },
+    "require-dev": {
+        "phpstan/phpstan": "^0.11.0",
+        "phpstan/phpstan-phpunit": "^0.11.0",
+        "phpunit/phpunit": "^7.0",
+        "doctrine/coding-standard": "^5.0",
+        "doctrine/common": "^2.10"
+    },
+    "conflict": {
+        "doctrine/common": "<2.9"
+    },
+    "autoload": {
+        "psr-4": {
+            "Doctrine\\Common\\": "lib/Doctrine/Common"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Doctrine\\Tests\\": "tests/Doctrine/Tests",
+            "Doctrine\\Tests_PHP74\\": "tests/Doctrine/Tests_PHP74"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.2.x-dev"
+        }
+    }
+}

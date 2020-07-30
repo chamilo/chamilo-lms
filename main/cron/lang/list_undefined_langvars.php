@@ -41,7 +41,9 @@ foreach ($files as $file) {
     $lines = file($file);
     foreach ($lines as $line) {
         $myterms = [];
-        $res = preg_match_all('/get_lang\(\'(\\w*)\'\)/', $line, $myterms);
+        // Find terms but ignore those starting with ->get_lang(), which are
+        // for plugins
+        $res = preg_match_all('/(?<!-\>)get_lang\(\'(\\w*)\'\)/', $line, $myterms);
         if ($res > 0) {
             foreach ($myterms[1] as $term) {
                 if (!isset($defined_terms[$term]) && !isset($defined_terms['lang'.$term])) {

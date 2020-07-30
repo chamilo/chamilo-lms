@@ -76,7 +76,7 @@ class CItemProperty
      * @ORM\ManyToOne(
      *     targetEntity="Chamilo\CoreBundle\Entity\Session",
      *     inversedBy="itemProperties",
-     *     cascade={"persist", "remove"}
+     *     cascade={"persist"}
      * )
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=true)
      */

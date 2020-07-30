@@ -209,7 +209,7 @@ class CLpItem
      * @ORM\ManyToOne(
      *     targetEntity="Chamilo\CourseBundle\Entity\CLp",
      *     inversedBy="items",
-     *     cascade={"persist", "remove"}
+     *     cascade={"persist"}
      * )
      * @ORM\JoinColumn(
      *     name="lp_id",

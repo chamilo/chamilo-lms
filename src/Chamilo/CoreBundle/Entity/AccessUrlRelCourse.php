@@ -26,7 +26,7 @@ class AccessUrlRelCourse
      * @ORM\ManyToOne(
      *     targetEntity="Chamilo\CoreBundle\Entity\Course",
      *     inversedBy="urls",
-     *     cascade={"persist", "remove"}
+     *     cascade={"persist"}
      * )
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
      */
@@ -36,7 +36,7 @@ class AccessUrlRelCourse
      * @ORM\ManyToOne(
      *     targetEntity="Chamilo\CoreBundle\Entity\AccessUrl",
      *     inversedBy="courses",
-     *     cascade={"persist", "remove"}
+     *     cascade={"persist"}
      * )
      * @ORM\JoinColumn(name="access_url_id", referencedColumnName="id")
      */

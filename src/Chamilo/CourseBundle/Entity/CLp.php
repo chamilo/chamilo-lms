@@ -281,7 +281,7 @@ class CLp
      * @ORM\ManyToOne(
      *     targetEntity="Chamilo\CoreBundle\Entity\Course",
      *     inversedBy="learningPaths",
-     *     cascade={"persist", "remove"}
+     *     cascade={"persist"}
      * )
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
      */

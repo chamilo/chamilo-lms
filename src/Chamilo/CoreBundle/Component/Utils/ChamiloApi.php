@@ -167,8 +167,12 @@ class ChamiloApi
      *
      * @return string
      */
-    public static function getPlatformLogo($theme = '', $imageAttributes = [], $getSysPath = false, $forcedGetter = false)
-    {
+    public static function getPlatformLogo(
+        $theme = '',
+        $imageAttributes = [],
+        $getSysPath = false,
+        $forcedGetter = false
+    ) {
         $logoPath = self::getPlatformLogoPath($theme, $getSysPath, $forcedGetter);
         $institution = api_get_setting('Institution');
         $institutionUrl = api_get_setting('InstitutionUrl');

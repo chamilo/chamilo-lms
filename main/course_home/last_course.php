@@ -11,7 +11,7 @@ $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 
 $userId = api_get_user_id();
 
-$sql = "SELECT DISTINCT c_id, session_id
+$sql = "SELECT c_id, session_id
         FROM $table
         WHERE
             user_id  = $userId

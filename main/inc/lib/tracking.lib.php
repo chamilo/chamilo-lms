@@ -8118,7 +8118,7 @@ class TrackingCourseLog
         );
 
         $lpLink = Display::url(
-            Display::return_icon('scorms.png', get_lang('CourseLPsGenericStats'), [], ICON_SIZE_MEDIUM),
+            Display::return_icon('scorms.png', get_lang('CourseLearningPathsGenericStats'), [], ICON_SIZE_MEDIUM),
             api_get_path(WEB_CODE_PATH).'tracking/lp_report.php?'.api_get_cidreq()
         );
 
@@ -8187,7 +8187,7 @@ class TrackingCourseLog
                 break;
             case 'lp':
                 $lpLink = Display::url(
-                    Display::return_icon('scorms_na.png', get_lang('CourseLPsGenericStats'), [], ICON_SIZE_MEDIUM),
+                    Display::return_icon('scorms_na.png', get_lang('CourseLearningPathsGenericStats'), [], ICON_SIZE_MEDIUM),
                     '#'
                 );
                 break;

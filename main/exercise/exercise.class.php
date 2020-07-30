@@ -8304,10 +8304,14 @@ class Exercise
     }
 
     /**
-     * @param int $start
-     * @param int $length
+     * Get the question IDs from quiz_rel_question for the current quiz,
+     * using the parameters as the arguments to the SQL's LIMIT clause.
+     * Because the exercise_id is known, it also comes with a filter on
+     * the session, so sessions are not specified here.
+     * @param int $start    At which question do we want to start the list
+     * @param int $length   Up to how many results we want
      *
-     * @return array
+     * @return array    A list of question IDs
      */
     public function getQuestionForTeacher($start = 0, $length = 10)
     {

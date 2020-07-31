@@ -15,7 +15,7 @@ $id = isset($_REQUEST['id']) ? (int) $_GET['id'] : 0; // exe id
 $show_headers = isset($_REQUEST['show_headers']) ? (int) $_REQUEST['show_headers'] : null;
 $origin = api_get_origin();
 
-if (in_array($origin, ['learnpath', 'embeddable', 'noheader'])) {
+if (in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
     $show_headers = false;
 }
 
@@ -78,7 +78,7 @@ if ($show_headers) {
         body { background: none;}
     </style>';
 
-    if ($origin == 'noheader') {
+    if ($origin == 'mobileapp') {
         echo '<div class="actions">';
         echo '<a href="javascript:window.history.go(-1);">'.
             Display::return_icon('back.png', get_lang('GoBackToQuestionList'), [], 32).'</a>';

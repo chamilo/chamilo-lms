@@ -71,7 +71,7 @@ if ($time_control) {
     $htmlHeadXtra[] = $objExercise->showTimeControlJS($time_left);
 }
 
-if (!in_array($origin, ['learnpath', 'embeddable', 'noheader'])) {
+if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
     Display::display_header();
 } else {
     $htmlHeadXtra[] = "
@@ -82,7 +82,7 @@ if (!in_array($origin, ['learnpath', 'embeddable', 'noheader'])) {
     Display::display_reduced_header();
 }
 
-if ($origin == 'noheader') {
+if ($origin == 'mobileapp') {
     echo '<div class="actions">';
     echo '<a href="javascript:window.history.go(-1);">'.
         Display::return_icon('back.png', get_lang('GoBackToQuestionList'), [], 32).'</a>';

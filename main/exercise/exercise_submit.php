@@ -79,7 +79,7 @@ if ('true' === api_get_setting('enable_record_audio')) {
 }
 
 $zoomOptions = api_get_configuration_value('quiz_image_zoom');
-if (isset($zoomOptions['options']) && !in_array($origin, ['embeddable', 'noheader'])) {
+if (isset($zoomOptions['options']) && !in_array($origin, ['embeddable', 'mobileapp'])) {
     $options = $zoomOptions['options'];
     $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'jquery.elevatezoom.js"></script>';
     $htmlHeadXtra[] = '<script>
@@ -879,7 +879,7 @@ $interbreadcrumb[] = [
 ];
 $interbreadcrumb[] = ['url' => '#', 'name' => $objExercise->selectTitle(true)];
 
-if (!in_array($origin, ['learnpath', 'embeddable', 'noheader'])) { //so we are not in learnpath tool
+if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) { //so we are not in learnpath tool
     if (!api_is_allowed_to_session_edit()) {
         Display::addFlash(
             Display::return_message(get_lang('SessionIsReadOnly'), 'warning')
@@ -892,7 +892,7 @@ if (!in_array($origin, ['learnpath', 'embeddable', 'noheader'])) { //so we are n
     echo '<div style="height:10px">&nbsp;</div>';
 }
 
-if ($origin == 'noheader') {
+if ($origin == 'mobileapp') {
     echo '<div class="actions">';
     echo '<a href="javascript:window.history.go(-1);">'.
         Display::return_icon('back.png', get_lang('GoBackToQuestionList'), [], 32).'</a>';

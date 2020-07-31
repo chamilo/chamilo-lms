@@ -10605,8 +10605,7 @@ class Exercise
         if (!is_array($questionsId)) return $questionsId;
 
         $tableQuiz = Database::get_course_table(TABLE_QUIZ_QUESTION);
-        $jsonQuestionId = json_encode($questionsId);
-        $jsonQuestionId = str_replace(['[', ']', '"', "'"], '', $jsonQuestionId);
+        $QuestionsId = implode(',', $questionsId);
 
         $order = 'ASC';
         if ($orderAsc != true) {
@@ -10618,8 +10617,8 @@ class Exercise
                 FROM
                     $tableQuiz
                 WHERE
-                      iid in ($jsonQuestionId)
-                ORDER BY question $order;";
+                      iid in ($QuestionsId)
+                ORDER BY question $order";
         $result = Database::query($sql);
         $rows = [];
         while ($row = Database::fetch_array($result, 'ASSOC')) {

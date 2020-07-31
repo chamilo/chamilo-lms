@@ -433,7 +433,7 @@ function lp_upload_quiz_action_handling()
                                 );
                                 if ($correct) {
                                     //only add the item marked as correct ( x )
-                                    $total += (float)$score;
+                                    $total += (float) $score;
                                 }
                                 $id++;
                             }

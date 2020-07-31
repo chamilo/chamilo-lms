@@ -5,32 +5,32 @@ use ChamiloSession as Session;
 /**
  * This file contains the necessary elements to allow a Single Sign On
  * based on a validation of a hmac computed hash
- * 
+ *
  * To allow the SSO access /main/auth/hmac/login.php must receive as
  * query string parameters the following parameters:
- * 
- * 'N': user email.
- * 
- * 'H': time of the request, as HH:mm.
- * 
- * 'S': System name, a control value.
- * 
+ *
+ * 'email': user email.
+ *
+ * 'time': time of the request, as HH:mm.
+ *
+ * 'system': System name, a control value.
+ *
  * 'Token': a HMAC computed SHA256 algorithm based on the concatenation of
- * the 'H' and 'N' value.
- * 
+ * the 'time' and 'email' value.
+ *
  * Example:
- * 
- * https://campus.chamilo/main/auth/hmac/login.php?N=user@domain.com&H=10:48&S=SystemName&Token=0407ae5cf5f80525800eaf4276a48c5ce293dd766be4c5edb0a87ecd082f20bd
- * 
+ *
+ * https://campus.chamilo/main/auth/hmac/login.php?email=user@domain.com&time=10:48&system=SystemName&Token=0407ae5cf5f80525800eaf4276a48c5ce293dd766be4c5edb0a87ecd082f20bd
+ *
  * Also a settings.php file must be configured the set the following values:
- * 
+ *
  * 'secret': secret key used to generate a HMAC computed hash to validate the
  * received 'Token' parameter on the query string.
- * 
+ *
  * 'secret': secret key used to generate a HMAC computed hash to validate the 'Token' parameter on the query string.
- * 
+ *
  * 'expiration_time': integer value, maximum time in minutes of the request lifetime.
- * 
+ *
  */
 
 require_once '../../../main/inc/global.inc.php';
@@ -47,11 +47,11 @@ if (file_exists('settings.php')) {
 }
 
 // Check if we have all the parameters from the query string
-if (isset($_GET['N']) && isset($_GET['H']) && isset($_GET['S']) && isset($_GET['Token'])) {
-    $email = $_GET['N'];
-    $time = $_GET['H'];
-    $system = $_GET['S'];
-    $token =  $_GET['Token'];
+if (isset($_GET['email']) && isset($_GET['time']) && isset($_GET['system']) && isset($_GET['Token'])) {
+    $email = $_GET['email'];
+    $time = $_GET['time'];
+    $system = $_GET['system'];
+    $token = $_GET['Token'];
 
     // Generate the token
     $validToken = hash_hmac('sha256', $time.$email, $settingsInfo['secret'], false);
@@ -85,7 +85,7 @@ if (isset($_GET['N']) && isset($_GET['H']) && isset($_GET['S']) && isset($_GET['
     $userInfo = api_get_user_info_from_email($email);
 
     // Log-in user if exists or a show error message
-    if (!empty($userInfo)) {        
+    if (!empty($userInfo)) {
         Session::write('_user', $userInfo);
         Session::write('is_platformAdmin', false);
         Session::write('is_allowedCreateCourse', false);

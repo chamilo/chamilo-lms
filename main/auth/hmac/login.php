@@ -20,7 +20,7 @@ use ChamiloSession as Session;
  *
  * Example:
  *
- * https://campus.chamilo/main/auth/hmac/login.php?email=user@domain.com&time=10:48&system=SystemName&Token=0407ae5cf5f80525800eaf4276a48c5ce293dd766be4c5edb0a87ecd082f20bd
+ * https://campus.chamilo/main/auth/hmac/login.php?email=user@domain.com&time=10:48&system=SystemName&Token=XYZ
  *
  * Also a settings.php file must be configured the set the following values:
  *
@@ -87,17 +87,16 @@ if (isset($_GET['email']) && isset($_GET['time']) && isset($_GET['system']) && i
         Session::write('_user', $userInfo);
         Session::write('is_platformAdmin', false);
         Session::write('is_allowedCreateCourse', false);
-
-        Event::eventLogin($userId);
-
+        Event::eventLogin($userInfo['user_id']);
         Session::write('flash_messages', '');
     } else {
-        Display::addFlash(Display::return_message('User not found', 'error'));
+        Display::addFlash(Display::return_message(get_lang('UserNotFound'), 'error'));
         header('Location: '.api_get_path(WEB_PATH));
         exit;
     }
 
     header('Location: '.api_get_path(WEB_PATH).'user_portal.php');
+    exit;
 } else {
     Display::addFlash(Display::return_message('Invalid request', 'error'));
     header('Location: '.api_get_path(WEB_PATH));

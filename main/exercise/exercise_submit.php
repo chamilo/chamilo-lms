@@ -879,7 +879,7 @@ $interbreadcrumb[] = [
 ];
 $interbreadcrumb[] = ['url' => '#', 'name' => $objExercise->selectTitle(true)];
 
-if (!in_array($origin, ['learnpath', 'embeddable'])) { //so we are not in learnpath tool
+if (!in_array($origin, ['learnpath', 'embeddable', 'noheader'])) { //so we are not in learnpath tool
     if (!api_is_allowed_to_session_edit()) {
         Display::addFlash(
             Display::return_message(get_lang('SessionIsReadOnly'), 'warning')
@@ -890,6 +890,13 @@ if (!in_array($origin, ['learnpath', 'embeddable'])) { //so we are not in learnp
 } else {
     Display::display_reduced_header();
     echo '<div style="height:10px">&nbsp;</div>';
+}
+
+if ($origin == 'noheader') {
+    echo '<div class="actions">';
+    echo '<a href="javascript:window.history.go(-1);">'.
+        Display::return_icon('back.png', get_lang('GoBackToQuestionList'), [], 32).'</a>';
+    echo '</div>';
 }
 
 $show_quiz_edition = $objExercise->added_in_lp();

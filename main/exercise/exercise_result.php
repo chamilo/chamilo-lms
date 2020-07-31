@@ -89,7 +89,7 @@ $pageTop = '';
 $pageBottom = '';
 $pageContent = '';
 
-if (!in_array($origin, ['learnpath', 'embeddable'])) {
+if (!in_array($origin, ['learnpath', 'embeddable', 'noheader'])) {
     // So we are not in learnpath tool
     $showHeader = true;
 }
@@ -240,7 +240,7 @@ ExerciseLib::exercise_time_control_delete(
 
 ExerciseLib::delete_chat_exercise_session($exe_id);
 
-if (!in_array($origin, ['learnpath', 'embeddable'])) {
+if (!in_array($origin, ['learnpath', 'embeddable', 'noheader'])) {
     $pageBottom .= '<div class="question-return">';
     $pageBottom .= Display::url(
         get_lang('ReturnToCourseHomepage'),
@@ -254,7 +254,7 @@ if (!in_array($origin, ['learnpath', 'embeddable'])) {
     }
 
     $showFooter = true;
-} elseif ($origin === 'embeddable') {
+} elseif (in_array($origin, ['embeddable', 'noheader'])) {
     if (api_is_allowed_to_session_edit()) {
         Exercise::cleanSessionVariables();
     }

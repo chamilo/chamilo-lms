@@ -4,7 +4,7 @@ use ChamiloSession as Session;
 
 /**
  * This file contains the necessary elements to allow a Single Sign On
- * based on a validation of a hmac computed hash
+ * based on a validation of a hmac computed hash.
  *
  * To allow the SSO access /main/auth/hmac/login.php must receive as
  * query string parameters the following parameters:

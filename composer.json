@@ -12,12 +12,11 @@
         "issues": "https://github.com/chamilo/chamilo-lms/issues"
     },
     "replace": {
-        "paragonie/random_compat": "2.*",
         "symfony/polyfill-ctype": "*",
         "symfony/polyfill-iconv": "*",
-        "symfony/polyfill-php56": "*",
-        "symfony/polyfill-php70": "*",
-        "symfony/polyfill-php71": "*"
+        "symfony/polyfill-php72": "*",
+        "symfony/polyfill-php73": "*",
+        "symfony/polyfill-php74": "*"
     },
     "autoload": {
         "psr-4": {
@@ -48,7 +47,7 @@
         }
     ],
     "require": {
-        "php": "^7.2.5",
+        "php": "^7.2.9",
         "ext-bcmath": "*",
         "ext-curl": "*",
         "ext-dom": "*",
@@ -151,6 +150,7 @@
         "symfony/yaml": "^5.0",
         "symfonycasts/reset-password-bundle": "^1.1",
         "tgalopin/html-sanitizer-bundle": "^1.1",
+        "twig/intl-extra": "^3.0",
         "twig/extensions": "^1.5",
         "vich/uploader-bundle": "^1.13",
         "webit/eval-math": "~1.0"
@@ -173,7 +173,7 @@
         "symfony/phpunit-bridge": "^5.0",
         "symfony/profiler-pack": "*",
         "symfony/test-pack": "*",
-        "symplify/easy-coding-standard": "^7.0",
+        "symplify/easy-coding-standard": "^8.0",
         "vimeo/psalm": "^3.10"
     },
     "scripts": {

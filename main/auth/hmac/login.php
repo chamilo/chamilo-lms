@@ -30,9 +30,7 @@ use ChamiloSession as Session;
  * 'secret': secret key used to generate a HMAC computed hash to validate the 'Token' parameter on the query string.
  *
  * 'expiration_time': integer value, maximum time in minutes of the request lifetime.
- *
  */
-
 require_once '../../../main/inc/global.inc.php';
 
 // Create a settings.dist.php

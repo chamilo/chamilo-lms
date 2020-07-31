@@ -20,7 +20,7 @@ $sql = "SELECT c_id, session_id
 
 $result = Database::query($sql);
 
-if (Database::num_rows($result )) {
+if (Database::num_rows($result)) {
     $result = Database::fetch_array($result, 'ASSOC');
     $courseId = (int) $result['c_id'];
     $sessionId = (int) $result['session_id'];

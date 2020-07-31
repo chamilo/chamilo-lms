@@ -77,7 +77,7 @@ if ($show_headers) {
     $htmlHeadXtra[] = '<style>
         body { background: none;}
     </style>';
-    
+
     if ($origin == 'noheader') {
         echo '<div class="actions">';
         echo '<a href="javascript:window.history.go(-1);">'.

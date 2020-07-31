@@ -549,7 +549,7 @@ class ZoomPlugin extends Plugin
     public function getCreateInstantMeetingForm($user, $course, $session)
     {
         $form = new FormValidator('createInstantMeetingForm', 'post', '', '_blank');
-        $form->addButton('startButton', $this->get_lang('StartInstantMeeting'));
+        $form->addButton('startButton', $this->get_lang('StartInstantMeeting'), 'video-camera', 'primary');
         if ($form->validate()) {
             try {
                 $this->startInstantMeeting($this->get_lang('InstantMeeting'), $user, $course, $session);

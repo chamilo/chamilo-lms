@@ -2,35 +2,35 @@
     {{ createInstantMeetingForm }}
 {% endif %}
 
-{% if scheduledMeetings %}
+{% if scheduledMeetings.count %}
     <div class="page-header">
         <h2>{{ 'ScheduledMeetings'|get_lang }}</h2>
     </div>
     <table class="table">
         <tr>
-            <!-- th>{{ 'CreatedAt'|get_lang }}</th -->
+            <th>{{ 'Topic'|get_plugin_lang('ZoomPlugin') }}</th>
+            <th>{{ 'Agenda'|get_plugin_lang('ZoomPlugin') }}</th>
             <th>{{ 'StartTime'|get_lang }}</th>
             <th>{{ 'Duration'|get_lang }}</th>
-            <!-- th>{{ 'Type'|get_lang }}</th -->
-            <th>{{ 'TopicAndAgenda'|get_plugin_lang('ZoomPlugin') }}</th>
-            <th></th>
+            <th>{{ 'Actions'|get_lang }}</th>
         </tr>
         {% for meeting in scheduledMeetings %}
         <tr>
-            <!-- td>{{ meeting.created_at }}</td -->
-            <td>{{ meeting.formattedStartTime }}</td>
-            <td>{{ meeting.formattedDuration }}</td>
-            <!-- td>{{ meeting.typeName }}</td -->
             <td>
-                <strong>{{ meeting.meetingInfoGet.topic }}</strong>
-                <p class="small">{{ meeting.meetingInfoGet.agenda|nl2br }}</p>
+                {{ meeting.meetingInfoGet.topic }}
             </td>
             <td>
-                <a class="btn" href="meeting_from_start.php?meetingId={{ meeting.id }}">
-                    {{ 'Details'|get_lang }}
-                </a>
-                <a class="btn" href="{{ meeting.meetingInfoGet.join_url }}">
+                {{ meeting.meetingInfoGet.agenda|nl2br }}
+            </td>
+            <td>{{ meeting.formattedStartTime }}</td>
+            <td>{{ meeting.formattedDuration }}</td>
+            <td>
+                <a class="btn btn-primary" href="{{ meeting.meetingInfoGet.join_url }}">
                     {{ 'Join'|get_plugin_lang('ZoomPlugin') }}
+                </a>
+
+                <a class="btn btn-default" href="meeting_from_start.php?meetingId={{ meeting.id }}">
+                    {{ 'Details'|get_lang }}
                 </a>
             </td>
         </tr>
@@ -41,6 +41,5 @@
 {% endif %}
 
 {% if scheduleMeetingForm %}
-    <h3>{{ 'ScheduleAMeeting'|get_plugin_lang('ZoomPlugin') }}</h3>
     {{ scheduleMeetingForm }}
 {% endif %}

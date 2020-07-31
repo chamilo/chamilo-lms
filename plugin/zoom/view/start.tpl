@@ -30,7 +30,14 @@
                 </a>
 
                 <a class="btn btn-default" href="meeting_from_start.php?meetingId={{ meeting.id }}">
-                    {{ 'Details'|get_lang }}
+                    {{ 'Edit'|get_lang }}
+                </a>
+
+                <a class="btn btn-danger"
+                   href="start.php?action=delete&meetingId={{ meeting.id }}"
+                   onclick="javascript:if(!confirm('{{ 'AreYouSureToDelete' | get_lang }}')) return false;"
+                >
+                    {{ 'Delete'|get_lang }}
                 </a>
             </td>
         </tr>

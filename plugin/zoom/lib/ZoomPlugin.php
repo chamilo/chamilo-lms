@@ -357,26 +357,41 @@ class ZoomPlugin extends Plugin
      */
     public function getDeleteMeetingForm($meetingEntity, $returnURL)
     {
-        $form = new FormValidator('delete', 'post', $_SERVER['REQUEST_URI']);
+        $form = new FormValidator('delete', 'post', Security::remove_XSS($_SERVER['REQUEST_URI']));
         $form->addButtonDelete($this->get_lang('DeleteMeeting'));
         if ($form->validate()) {
-            try {
-                $meetingEntity->getMeetingInfoGet()->delete();
-                Database::getManager()->remove($meetingEntity);
-                Database::getManager()->flush();
-
-                Display::addFlash(
-                    Display::return_message($this->get_lang('MeetingDeleted'), 'confirm')
-                );
-                api_location($returnURL);
-            } catch (Exception $exception) {
-                Display::addFlash(
-                    Display::return_message($exception->getMessage(), 'error')
-                );
-            }
+            $this->deleteMeeting($meetingEntity, $returnURL);
         }
 
         return $form;
+    }
+
+    /**
+     * @param MeetingEntity $meetingEntity
+     * @param string        $returnURL
+     *
+     * @return false
+     */
+    public function deleteMeeting($meetingEntity, $returnURL)
+    {
+        if (null === $meetingEntity) {
+            return false;
+        }
+
+        try {
+            $meetingEntity->getMeetingInfoGet()->delete();
+            Database::getManager()->remove($meetingEntity);
+            Database::getManager()->flush();
+
+            Display::addFlash(
+                Display::return_message($this->get_lang('MeetingDeleted'), 'confirm')
+            );
+            api_location($returnURL);
+        } catch (Exception $exception) {
+            Display::addFlash(
+                Display::return_message($exception->getMessage(), 'error')
+            );
+        }
     }
 
     /**
@@ -589,7 +604,7 @@ class ZoomPlugin extends Plugin
         $form->setRequired($durationNumeric);
 
         // $passwordText = $form->addText('password', get_lang('Password'), false, ['maxlength' => '10']);
-        if (!is_null($course)) {
+        if (null !== $course) {
             $registrationOptions = [
                 'RegisterAllCourseUsers' => $this->get_lang('RegisterAllCourseUsers'),
             ];

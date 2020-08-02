@@ -1323,7 +1323,12 @@ if (!empty($error)) {
                         $("#save_for_now_"+question_id).html(\''.
                             Display::return_icon('save.png', get_lang('Saved'), [], ICON_SIZE_SMALL).'\');
 
-                        window.location = url;
+                        // window.quizTimeEnding will be reset in exercise.class.php  
+                        if (window.quizTimeEnding) {
+                            redirectExerciseToResult();
+                        } else {
+                            window.location = url;
+                        }
                     }
                 },
                 error: function() {
@@ -1387,6 +1392,8 @@ if (!empty($error)) {
         function validate_all() {
             save_now_all("validate");
         }
+
+        window.quizTimeEnding = false;
     </script>';
 
     echo '<form id="exercise_form" method="post" action="'.

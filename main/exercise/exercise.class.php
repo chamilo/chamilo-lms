@@ -3422,6 +3422,9 @@ class Exercise
         $script = 'redirectExerciseToResult();';
         if (ALL_ON_ONE_PAGE == $this->type) {
             $script = "save_now_all('validate');";
+        } elseif (ONE_PER_PAGE == $this->type) {
+            $script = 'window.quizTimeEnding = true;
+                $(\'[name="save_now"]\').trigger(\'click\');';
         }
 
         return "<script>

@@ -3419,6 +3419,10 @@ class Exercise
     public function showTimeControlJS($timeLeft)
     {
         $timeLeft = (int) $timeLeft;
+        $script = 'redirectExerciseToResult();';
+        if (ALL_ON_ONE_PAGE == $this->type) {
+            $script = "save_now_all('validate');";
+        }
 
         return "<script>
             function openClockWarning() {
@@ -3450,7 +3454,7 @@ class Exercise
 
             function send_form() {
                 if ($('#exercise_form').length) {
-                    save_now_all('validate');
+                    $script
                 } else {
                     // In exercise_reminder.php
                     final_submit();

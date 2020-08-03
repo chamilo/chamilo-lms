@@ -1430,7 +1430,7 @@ class SurveyUtil
                     is_array($_POST['questions_filter']) &&
                     in_array($row['question_id'], $_POST['questions_filter']))
             ) {
-                if ($row['number_of_options'] == 0 or $compact) {
+                if ($row['number_of_options'] == 0 || $compact) {
                     $return .= str_replace(
                         "\r\n",
                         '  ',
@@ -1527,7 +1527,7 @@ class SurveyUtil
 		          survey_id = $surveyId
 		          ";
         if ($user_id != 0) {
-            $user_id = intval($user_id);
+            $user_id = (int) $user_id;
             $sql .= " AND user = $user_id ";
         }
         $sql .= ' ORDER BY user ASC ';
@@ -1551,8 +1551,8 @@ class SurveyUtil
                 $answers_of_user = [];
             }
 
-            if ('open' == $possible_answers_type[$row['question_id']] ||
-                'comment' == $possible_answers_type[$row['question_id']]
+            if ('open' === $possible_answers_type[$row['question_id']] ||
+                'comment' === $possible_answers_type[$row['question_id']]
             ) {
                 $temp_id = 'open'.$open_question_iterator;
                 $answers_of_user[$row['question_id']][$temp_id] = $row;

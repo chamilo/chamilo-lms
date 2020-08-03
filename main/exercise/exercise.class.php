@@ -10223,7 +10223,7 @@ class Exercise
 
                     if (!empty($elements)) {
                         $questionSelectionType = $this->getQuestionSelectionType();
-                        if($questionSelectionType == EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_ORDERED){
+                        if ($questionSelectionType == EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_ORDERED) {
                             $elements = $this->getAlfabeticalOrderQuestion($elements);
                         }
                         $temp_question_list[$category_id] = $elements;
@@ -10605,7 +10605,7 @@ class Exercise
         if (!is_array($questionsId)) return $questionsId;
 
         $tableQuiz = Database::get_course_table(TABLE_QUIZ_QUESTION);
-        $QuestionsId = implode(',', $questionsId);
+        $questionsId = implode(',', $questionsId);
 
         $order = 'ASC';
         if ($orderAsc != true) {
@@ -10617,7 +10617,7 @@ class Exercise
                 FROM
                     $tableQuiz
                 WHERE
-                      iid in ($QuestionsId)
+                      iid in ($questionsId)
                 ORDER BY question $order";
         $result = Database::query($sql);
         $rows = [];

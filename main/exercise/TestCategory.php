@@ -225,7 +225,7 @@ class TestCategory
         $categories = [];
         if (empty($field)) {
             $sql = "SELECT id FROM $table
-                    WHERE c_id = $courseId 
+                    WHERE c_id = $courseId
                     ORDER BY title ASC";
             $res = Database::query($sql);
             while ($row = Database::fetch_array($res)) {
@@ -300,7 +300,7 @@ class TestCategory
         $courseId = (int) $courseId;
         $categoryId = self::getCategoryForQuestion($questionId, $courseId);
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
-        $sql = "SELECT title 
+        $sql = "SELECT title
                 FROM $table
                 WHERE id = $categoryId AND c_id = $courseId";
         $res = Database::query($sql);
@@ -538,7 +538,7 @@ class TestCategory
                     qrc.c_id = $courseId
                 ";
         // order alphabetical by category and question  = 3
-        if($questionSelectionType == EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_ORDERED){
+        if ($questionSelectionType == EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_ORDERED) {
             $sql .= " ORDER BY q.question ASC ";
         }
         $res = Database::query($sql);

@@ -35,16 +35,14 @@ class RegistrantEntity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var User
-     * @ORM\ManyToOne(
-     *     targetEntity="Chamilo\UserBundle\Entity\User",
-     * )
+     * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="user_id", nullable=false)
      */
-    private $user;
+    protected $user;
 
     /**
      * @var MeetingEntity
@@ -54,34 +52,34 @@ class RegistrantEntity
      * )
      * @ORM\JoinColumn(name="meeting_id")
      */
-    private $meeting;
+    protected $meeting;
 
     /**
      * @var string
      * @ORM\Column(type="text", name="created_registration_json", nullable=true)
      */
-    private $createdRegistrationJson;
+    protected $createdRegistrationJson;
 
     /**
      * @var string
      * @ORM\Column(type="text", name="meeting_registrant_list_item_json", nullable=true)
      */
-    private $meetingRegistrantListItemJson;
+    protected $meetingRegistrantListItemJson;
 
     /**
      * @var string
      * @ORM\Column(type="text", name="meeting_registrant_json", nullable=true)
      */
-    private $meetingRegistrantJson;
+    protected $meetingRegistrantJson;
 
     /** @var CreatedRegistration */
-    private $createdRegistration;
+    protected $createdRegistration;
 
     /** @var MeetingRegistrant */
-    private $meetingRegistrant;
+    protected $meetingRegistrant;
 
     /** @var MeetingRegistrantListItem */
-    private $meetingRegistrantListItem;
+    protected $meetingRegistrantListItem;
 
     /**
      * @return string

@@ -64,33 +64,27 @@ class MeetingEntity
 
     /**
      * @var int the remote zoom meeting identifier
-     * @ORM\Column(type="string")
+     * @ORM\Column(name="meeting_id", type="string")
      */
     protected $meetingId;
 
     /**
      * @var User
-     * @ORM\ManyToOne(
-     *     targetEntity="Chamilo\UserBundle\Entity\User",
-     * )
+     * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="user_id", nullable=true)
      */
     protected $user;
 
     /**
      * @var Course
-     * @ORM\ManyToOne(
-     *     targetEntity="Chamilo\CoreBundle\Entity\Course",
-     * )
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
      * @ORM\JoinColumn(name="course_id", nullable=true)
      */
     protected $course;
 
     /**
      * @var Session
-     * @ORM\ManyToOne(
-     *     targetEntity="Chamilo\CoreBundle\Entity\Session",
-     * )
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
      * @ORM\JoinColumn(name="session_id", nullable=true)
      */
     protected $session;

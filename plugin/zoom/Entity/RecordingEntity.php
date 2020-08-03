@@ -44,13 +44,13 @@ class RecordingEntity
      * @ORM\Id
      * @ORM\GeneratedValue()
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      * @ORM\Column(type="string")
      */
-    private $uuid;
+    protected $uuid;
 
     /**
      * @var MeetingEntity
@@ -60,16 +60,16 @@ class RecordingEntity
      * )
      * @ORM\JoinColumn(name="meeting_id")
      */
-    private $meeting;
+    protected $meeting;
 
     /**
      * @var string
      * @ORM\Column(type="text", name="recording_meeting_json", nullable=true)
      */
-    private $recordingMeetingJson;
+    protected $recordingMeetingJson;
 
     /** @var RecordingMeeting */
-    private $recordingMeeting;
+    protected $recordingMeeting;
 
     /**
      * @param $name
@@ -142,8 +142,8 @@ class RecordingEntity
         }
         if (null === $this->meeting) {
             $this->meeting = Database::getManager()->getRepository(MeetingEntity::class)->find($recordingMeeting->id);
-            // $this->meeting remains null when the remote RecordingMeeting refers to a deleted meeting
         } elseif ($this->meeting->getId() != $recordingMeeting->id) {
+            // $this->meeting remains null when the remote RecordingMeeting refers to a deleted meeting.
             throw new Exception('The RecordingEntity meeting id differs from the RecordingMeeting meeting id');
         }
         $this->recordingMeeting = $recordingMeeting;
@@ -169,7 +169,7 @@ class RecordingEntity
      */
     public function preFlush()
     {
-        if (!is_null($this->recordingMeeting)) {
+        if (null !== $this->recordingMeeting) {
             $this->recordingMeetingJson = json_encode($this->recordingMeeting);
         }
     }

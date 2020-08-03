@@ -738,7 +738,7 @@ class ZoomPlugin extends Plugin
     public function createLinkToFileInCourse($meeting, $file, $name)
     {
         $course = $meeting->getCourse();
-        if (is_null($course)) {
+        if (null === $course) {
             throw new Exception('This meeting is not linked to a course');
         }
         $courseInfo = api_get_course_info_by_id($course->getId());
@@ -764,7 +764,7 @@ class ZoomPlugin extends Plugin
     public function copyFileToCourse($meeting, $file, $name)
     {
         $course = $meeting->getCourse();
-        if (is_null($course)) {
+        if (null === $course) {
             throw new Exception('This meeting is not linked to a course');
         }
         $courseInfo = api_get_course_info_by_id($course->getId());
@@ -901,10 +901,10 @@ class ZoomPlugin extends Plugin
     {
         foreach (RecordingList::loadPeriodRecordings($startDate, $endDate) as $recordingMeeting) {
             $recordingEntity = $this->getRecordingRepository()->find($recordingMeeting->uuid);
-            if (is_null($recordingEntity)) {
+            if (null === $recordingEntity) {
                 $recordingEntity = new RecordingEntity();
                 $meetingEntity = $this->getMeetingRepository()->find($recordingMeeting->id);
-                if (is_null($meetingEntity)) {
+                if (null === $meetingEntity) {
                     try {
                         $meetingInfoGet = MeetingInfoGet::fromId($recordingMeeting->id);
                     } catch (Exception $exception) {

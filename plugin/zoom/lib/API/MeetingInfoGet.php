@@ -8,7 +8,7 @@ use Exception;
 
 /**
  * Class MeetingInfoGet
- * Full Meeting as returned by the server, with unique identifiers and current status. *
+ * Full Meeting as returned by the server, with unique identifiers and current status.
  */
 class MeetingInfoGet extends MeetingInfo
 {

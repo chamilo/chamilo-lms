@@ -137,8 +137,8 @@ class PauseTraining extends Plugin
                 continue;
             }
 
-            $hourEnd = $day * 24;
-            $hourStart = ($day + 1) * 24;
+            $hourStart = $day * 24;
+            $hourEnd = ($day - 1) * 24;
 
             $date = new DateTime($now);
             $date->sub(new DateInterval('PT'.$hourStart.'H'));

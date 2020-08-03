@@ -1639,7 +1639,7 @@ class SurveyUtil
                         // For each option of this question, look if it matches the user's answer
                         $my_answer_of_user = !isset($answers_of_user[$question_id]) || isset($answers_of_user[$question_id]) && $answers_of_user[$question_id] == null ? [] : $answers_of_user[$question_id];
                         $key = array_keys($my_answer_of_user);
-                        if (isset($key[0]) && substr($key[0], 0, 4) == 'open') {
+                        if (isset($key[0]) && substr($key[0], 0, 4) === 'open') {
                             // If this is an open type question (type starts by 'open'), take whatever answer is given
                             $return .= '"'.
                                 str_replace(
@@ -1678,7 +1678,7 @@ class SurveyUtil
                                 // If we don't want a compact view, show one column per possible option and mark a 'v'
                                 // or the defined value in the corresponding column if the user selected it
                                 if ($answers_of_user[$question_id][$option_id]['value'] != 0) {
-                                    $return .= $answers_of_user[$question_id][$option_id]['value'].";";
+                                    $return .= '"'.$answers_of_user[$question_id][$option_id]['value'].'";';
                                 } else {
                                     $return .= 'v;';
                                 }

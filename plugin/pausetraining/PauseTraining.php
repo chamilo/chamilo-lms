@@ -140,11 +140,11 @@ class PauseTraining extends Plugin
             $hourEnd = $day + 1 * 24;
 
             $date = new DateTime($now);
-            $date->sub(new DateInterval('P'.$hourStart.'H'));
+            $date->sub(new DateInterval('PT'.$hourStart.'H'));
             $hourStart = $date->format('Y-m-d H:i:s');
 
             $date = new DateTime($now);
-            $date->sub(new DateInterval('P'.$hourEnd.'H'));
+            $date->sub(new DateInterval('PT'.$hourEnd.'H'));
             $hourEnd = $date->format('Y-m-d H:i:s');
 
             $sql = "SELECT
@@ -219,7 +219,15 @@ class PauseTraining extends Plugin
 
             ksort($usersNotificationPerDay);
             foreach ($usersNotificationPerDay as $day => $userList) {
-                $template = new Template();
+                $template = new Template(
+                    '',
+                    true,
+                    true,
+                    false,
+                    false,
+                    true,
+                    false
+                );
                 $title = sprintf($this->get_lang('InactivityXDays'), $day);
 
                 foreach ($userList as $userId) {

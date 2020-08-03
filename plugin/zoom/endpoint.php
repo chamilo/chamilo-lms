@@ -14,7 +14,7 @@ if ('POST' !== $_SERVER['REQUEST_METHOD']) {
     exit;
 }
 
-// TODO handle non-apache installations
+// @todo handle non-apache installations
 $authorizationHeaderValue = apache_request_headers()['Authorization'];
 
 require __DIR__.'/config.php';
@@ -31,6 +31,7 @@ if (is_null($decoded) || !is_object($decoded) || !isset($decoded->event) || !iss
     http_response_code(Response::HTTP_UNPROCESSABLE_ENTITY);
     exit;
 }
+
 $object = $decoded->payload->object;
 list($objectType, $action) = explode('.', $decoded->event);
 
@@ -43,17 +44,22 @@ switch ($objectType) {
 
         $meetingEntity = null;
         if ($object->id) {
-            $meetingEntity = $meetingRepository->find($object->id);
+            /** @var MeetingEntity $meetingEntity */
+            $meetingEntity = $meetingRepository->findBy(['meetingId' => $object->id]);
         }
+
+        error_log("Meeting: $action");
 
         switch ($action) {
             case 'deleted':
                 if (null !== $meetingEntity) {
+                    error_log('Meeting deleted '.$meetingEntity->getId());
                     $em->remove($meetingEntity);
                 }
                 break;
             case 'ended':
             case 'started':
+                error_log("Meeting $action #".$meetingEntity->getId());
                 $em->persist(
                     (
                     $meetingEntity->setStatus($action)
@@ -64,6 +70,7 @@ switch ($objectType) {
                 break;
             case 'participant_joined':
             case 'participant_left':
+                // @todo check find
                 $registrant = $registrantRepository->find($object->participant->id);
                 if (null === $registrant) {
                     exit;
@@ -81,9 +88,10 @@ switch ($objectType) {
 
         $recordingEntity = null;
         if ($object->uuid) {
-            $recordingEntity = $recordingRepository->find($object->uuid);
+            $recordingEntity = $recordingRepository->findBy(['uuid' => $object->uuid]);
         }
 
+        error_log("Recording: $action");
         switch ($action) {
             case 'completed':
                 $em->persist(

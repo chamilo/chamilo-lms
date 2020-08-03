@@ -674,9 +674,9 @@ class ZoomPlugin extends Plugin
                             Display::return_message($this->get_lang('GroupUsersWereRegistered'))
                         );
                     }
-                    api_location('meeting_from_start.php?meetingId='.$newMeeting->getId());
-                } elseif (!is_null($user)) {
-                    api_location('meeting_from_user.php?meetingId='.$newMeeting->getId());
+                    api_location('meeting_from_start.php?meetingId='.$newMeeting->getMeetingId());
+                } elseif (null !== $user) {
+                    api_location('meeting_from_user.php?meetingId='.$newMeeting->getMeetingId());
                 }
             } catch (Exception $exception) {
                 Display::addFlash(
@@ -851,6 +851,7 @@ class ZoomPlugin extends Plugin
     public function getStartOrJoinMeetingURL($meeting)
     {
         $status = $meeting->getMeetingInfoGet()->status;
+        $currentUser = api_get_user_entity(api_get_user_id());
 
         switch ($status) {
             case 'waiting':
@@ -860,23 +861,24 @@ class ZoomPlugin extends Plugin
                 // that is use start_url rather than join_url.
                 // the participant will not be registered and will appear as the Zoom user account owner.
                 // For course and user meetings, only the host can start the meeting.
-                if ($meeting->isGlobalMeeting() && $this->get('enableGlobalConference')
-                    || $meeting->getUser() === api_get_user_entity(api_get_user_id())) {
+                if (
+                    ($meeting->isGlobalMeeting() && $this->get('enableGlobalConference')) ||
+                    $currentUser === $meeting->getUser()
+                ) {
                     return $meeting->getMeetingInfoGet()->start_url;
                 }
                 break;
             case 'started':
                 if ('true' === $this->get('enableParticipantRegistration') && $meeting->requiresRegistration()) {
                     // the participant must be registered
-                    $participant = api_get_user_entity(api_get_user_id());
-                    $registrant = $meeting->getRegistrant($participant);
-                    if (null != $registrant) {
+                    $registrant = $meeting->getRegistrant($currentUser);
+                    if (null !== $registrant) {
                         // the participant is registered
                         return $registrant->getCreatedRegistration()->join_url;
                     }
                     // the participant is not registered, he can join only the global meeting (automatic registration)
                     if ($meeting->isGlobalMeeting() && $this->get('enableGlobalConference')) {
-                        return $this->registerUser($meeting, $participant)->getCreatedRegistration()->join_url;
+                        return $this->registerUser($meeting, $currentUser)->getCreatedRegistration()->join_url;
                     }
                 }
                 break;
@@ -1095,6 +1097,7 @@ class ZoomPlugin extends Plugin
         if (empty($user->getEmail())) {
             throw new Exception($this->get_lang('CannotRegisterWithoutEmailAddress'));
         }
+
         $meetingRegistrant = MeetingRegistrant::fromEmailAndFirstName(
             $user->getEmail(),
             $user->getFirstname(),

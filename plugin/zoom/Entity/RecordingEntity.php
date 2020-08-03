@@ -40,8 +40,15 @@ class RecordingEntity
 
     /**
      * @var string
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="integer")
      * @ORM\Id
+     * @ORM\GeneratedValue()
+     */
+    private $id;
+
+    /**
+     * @var string
+     * @ORM\Column(type="string")
      */
     private $uuid;
 
@@ -128,14 +135,14 @@ class RecordingEntity
      */
     public function setRecordingMeeting($recordingMeeting)
     {
-        if (is_null($this->uuid)) {
+        if (null === $this->uuid) {
             $this->uuid = $recordingMeeting->uuid;
         } elseif ($this->uuid !== $recordingMeeting->uuid) {
             throw new Exception('the RecordingEntity identifier differs from the RecordingMeeting identifier');
         }
-        if (is_null($this->meeting)) {
+        if (null === $this->meeting) {
             $this->meeting = Database::getManager()->getRepository(MeetingEntity::class)->find($recordingMeeting->id);
-        // $this->meeting remains null when the remote RecordingMeeting refers to a deleted meeting
+            // $this->meeting remains null when the remote RecordingMeeting refers to a deleted meeting
         } elseif ($this->meeting->getId() != $recordingMeeting->id) {
             throw new Exception('The RecordingEntity meeting id differs from the RecordingMeeting meeting id');
         }

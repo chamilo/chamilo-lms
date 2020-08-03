@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\PluginBundle\Zoom\API;
@@ -7,9 +8,7 @@ use Exception;
 
 /**
  * Class MeetingInfoGet
- * Full Meeting as returned by the server, with unique identifiers and current status.
- *
- * @package Chamilo\PluginBundle\Zoom\API
+ * Full Meeting as returned by the server, with unique identifiers and current status. *
  */
 class MeetingInfoGet extends MeetingInfo
 {

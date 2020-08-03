@@ -1,10 +1,10 @@
 <h4>
-    {{ meeting.typeName }} {{ meeting.id }} ({{ meeting.meetingInfoGet.status }})
+    {{ meeting.typeName }} {{ meeting.meetingId }} ({{ meeting.meetingInfoGet.status }})
 </h4>
 
 {% if meeting.meetingInfoGet.status != 'finished' %}
 <p>
-    <a class="btn btn-primary" href="join_meeting.php?meetingId={{ meeting.id }}">
+    <a class="btn btn-primary" href="join_meeting.php?meetingId={{ meeting.meetingId }}">
         {{ 'ViewMeeting'|get_plugin_lang('ZoomPlugin') }}
     </a>
 </p>

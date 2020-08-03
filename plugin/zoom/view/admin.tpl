@@ -26,6 +26,7 @@
                     <td>{{ meeting.user ? meeting.user : '-' }}</td>
                     <td>{{ meeting.course ? meeting.course : '-' }}</td>
                     <td>{{ meeting.session ? meeting.session : '-' }}</td>
+
                     {% if recordings %}
                     <td>
                         {% for recording in recordings %}
@@ -51,7 +52,7 @@
                     </td>
                     {% endif %}
                     <td>
-                        <a class="btn btn-primary" href="meeting_from_admin.php?meetingId={{ meeting.id }}">
+                        <a class="btn btn-primary" href="meeting_from_admin.php?meetingId={{ meeting.meetingId }}">
                             {{ 'Details'|get_lang }}
                         </a>
                     </td>

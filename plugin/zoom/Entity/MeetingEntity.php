@@ -53,12 +53,20 @@ class MeetingEntity
 
     /** @var string */
     public $statusName;
+
     /**
      * @var int the remote zoom meeting identifier
-     * @ORM\Column(type="bigint")
+     * @ORM\Column(type="integer")
      * @ORM\Id
+     * @ORM\GeneratedValue()
      */
-    private $id;
+    protected $id;
+
+    /**
+     * @var int the remote zoom meeting identifier
+     * @ORM\Column(type="string")
+     */
+    protected $meetingId;
 
     /**
      * @var User
@@ -67,7 +75,7 @@ class MeetingEntity
      * )
      * @ORM\JoinColumn(name="user_id", nullable=true)
      */
-    private $user;
+    protected $user;
 
     /**
      * @var Course
@@ -76,7 +84,7 @@ class MeetingEntity
      * )
      * @ORM\JoinColumn(name="course_id", nullable=true)
      */
-    private $course;
+    protected $course;
 
     /**
      * @var Session
@@ -85,25 +93,25 @@ class MeetingEntity
      * )
      * @ORM\JoinColumn(name="session_id", nullable=true)
      */
-    private $session;
+    protected $session;
 
     /**
      * @var string
      * @ORM\Column(type="text", name="meeting_list_item_json", nullable=true)
      */
-    private $meetingListItemJson;
+    protected $meetingListItemJson;
 
     /**
      * @var string
      * @ORM\Column(type="text", name="meeting_info_get_json", nullable=true)
      */
-    private $meetingInfoGetJson;
+    protected $meetingInfoGetJson;
 
     /** @var MeetingListItem */
-    private $meetingListItem;
+    protected $meetingListItem;
 
     /** @var MeetingInfoGet */
-    private $meetingInfoGet;
+    protected $meetingInfoGet;
 
     /**
      * @var RegistrantEntity[]|ArrayCollection
@@ -114,7 +122,7 @@ class MeetingEntity
      *     cascade={"persist", "remove"}
      * )
      */
-    private $registrants;
+    protected $registrants;
 
     /**
      * @var RecordingEntity[]|ArrayCollection
@@ -123,7 +131,7 @@ class MeetingEntity
      *     mappedBy="meeting",
      * )
      */
-    private $recordings;
+    protected $recordings;
 
     public function __construct()
     {
@@ -145,6 +153,26 @@ class MeetingEntity
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMeetingId()
+    {
+        return $this->meetingId;
+    }
+
+    /**
+     * @param int $meetingId
+     *
+     * @return MeetingEntity
+     */
+    public function setMeetingId($meetingId)
+    {
+        $this->meetingId = $meetingId;
+
+        return $this;
     }
 
     /**
@@ -287,9 +315,9 @@ class MeetingEntity
      */
     public function setMeetingListItem($meetingListItem)
     {
-        if (is_null($this->id)) {
-            $this->id = $meetingListItem->id;
-        } elseif ($this->id != $meetingListItem->id) {
+        if (null === $this->meetingId) {
+            $this->meetingId = $meetingListItem->id;
+        } elseif ($this->meetingId != $meetingListItem->id) {
             throw new Exception('the MeetingEntity identifier differs from the MeetingListItem identifier');
         }
         $this->meetingListItem = $meetingListItem;
@@ -306,9 +334,9 @@ class MeetingEntity
      */
     public function setMeetingInfoGet($meetingInfoGet)
     {
-        if (null === $this->id) {
-            $this->id = $meetingInfoGet->id;
-        } elseif ($this->id != $meetingInfoGet->id) {
+        if (null === $this->meetingId) {
+            $this->meetingId = $meetingInfoGet->id;
+        } elseif ($this->meetingId != $meetingInfoGet->id) {
             throw new Exception('the MeetingEntity identifier differs from the MeetingInfoGet identifier');
         }
         $this->meetingInfoGet = $meetingInfoGet;
@@ -322,7 +350,7 @@ class MeetingEntity
      */
     public function isCourseMeeting()
     {
-        return !is_null($this->course);
+        return null !== $this->course;
     }
 
     /**
@@ -330,7 +358,7 @@ class MeetingEntity
      */
     public function isUserMeeting()
     {
-        return !is_null($this->user) && is_null($this->course);
+        return null !== $this->user && null === $this->course;
     }
 
     /**
@@ -338,7 +366,7 @@ class MeetingEntity
      */
     public function isGlobalMeeting()
     {
-        return is_null($this->user) && is_null($this->course);
+        return null === $this->user && null === $this->course;
     }
 
     public function setStatus($status)
@@ -354,20 +382,19 @@ class MeetingEntity
      */
     public function getRegistrableUsers()
     {
-        /** @var User[] $users */
         $users = [];
         if (!$this->isCourseMeeting()) {
             $criteria = ['active' => true];
             $users = Database::getManager()->getRepository('ChamiloUserBundle:User')->findBy($criteria);
-        } elseif (is_null($this->session)) {
-            if (!is_null($this->course)) {
+        } elseif (null === $this->session) {
+            if (null !== $this->course) {
                 /** @var CourseRelUser $courseRelUser */
                 foreach ($this->course->getUsers() as $courseRelUser) {
                     $users[] = $courseRelUser->getUser();
                 }
             }
         } else {
-            if (!is_null($this->course)) {
+            if (null !== $this->course) {
                 $subscriptions = $this->session->getUserCourseSubscriptionsByStatus($this->course, Session::STUDENT);
                 if ($subscriptions) {
                     /** @var SessionRelCourseRelUser $sessionCourseUser */
@@ -377,6 +404,7 @@ class MeetingEntity
                 }
             }
         }
+
         $activeUsersWithEmail = [];
         foreach ($users as $user) {
             if ($user->isActive() && !empty($user->getEmail())) {
@@ -460,7 +488,7 @@ class MeetingEntity
         if ($this->user) {
             $introduction .= sprintf('<p>%s</p>', $this->user->getFullname());
         } elseif ($this->isCourseMeeting()) {
-            if (is_null($this->session)) {
+            if (null === $this->session) {
                 $introduction .= sprintf('<p class="main">%s</p>', $this->course);
             } else {
                 $introduction .= sprintf('<p class="main">%s (%s)</p>', $this->course, $this->session);

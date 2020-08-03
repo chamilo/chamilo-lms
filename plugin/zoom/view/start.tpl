@@ -29,12 +29,12 @@
                     {{ 'Join'|get_plugin_lang('ZoomPlugin') }}
                 </a>
 
-                <a class="btn btn-default" href="meeting_from_start.php?meetingId={{ meeting.id }}">
+                <a class="btn btn-default" href="meeting_from_start.php?meetingId={{ meeting.meetingId }}">
                     {{ 'Edit'|get_lang }}
                 </a>
 
                 <a class="btn btn-danger"
-                   href="start.php?action=delete&meetingId={{ meeting.id }}"
+                   href="start.php?action=delete&meetingId={{ meeting.meetingId }}"
                    onclick="javascript:if(!confirm('{{ 'AreYouSureToDelete' | get_lang }}')) return false;"
                 >
                     {{ 'Delete'|get_lang }}

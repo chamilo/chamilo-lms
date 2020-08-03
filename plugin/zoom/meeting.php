@@ -27,7 +27,8 @@ if (!array_key_exists('meetingId', $_REQUEST)) {
 }
 
 /** @var MeetingEntity $meeting */
-$meeting = $plugin->getMeetingRepository()->find($_REQUEST['meetingId']);
+$meeting = $plugin->getMeetingRepository()->findOneBy(['meetingId' => $_REQUEST['meetingId']]);
+
 if (null === $meeting) {
     throw new Exception($plugin->get_lang('MeetingNotFound'));
 }

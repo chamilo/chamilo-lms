@@ -127,17 +127,18 @@ class PauseTraining extends Plugin
         $users = [];
 
         $extraFieldValue = new ExtraFieldValue('user');
-
         foreach ($enableDaysList as $day) {
             $day = (int) $day;
+
+            echo "Processing day $day".PHP_EOL.PHP_EOL;
 
             if (0 === $day) {
                 echo 'Day = 0 avoided '.PHP_EOL;
                 continue;
             }
 
-            $hourStart = $day * 24;
-            $hourEnd = $day + 1 * 24;
+            $hourEnd = $day * 24;
+            $hourStart = ($day + 1) * 24;
 
             $date = new DateTime($now);
             $date->sub(new DateInterval('PT'.$hourStart.'H'));

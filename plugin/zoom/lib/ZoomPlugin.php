@@ -928,6 +928,10 @@ class ZoomPlugin extends Plugin
                 if ($currentUser === $meeting->getUser()) {
                     return $meeting->getMeetingInfoGet()->start_url;
                 }
+
+                if ($this->userIsConferenceManager($meeting)) {
+                    return $meeting->getMeetingInfoGet()->start_url;
+                }
                 break;
             case 'waiting':
                 // Zoom does not allow for a new meeting to be started on first participant join.

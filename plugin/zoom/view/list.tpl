@@ -26,11 +26,10 @@
                     <td>{{ meeting.user ? 'No' : 'Yes' }}</td>
 {#                    <td>{{ meeting.course ? meeting.course : '-' }}</td>#}
 {#                    <td>{{ meeting.session ? meeting.session : '-' }}</td>#}
-
                     {% if recordings %}
                         <td>
                             {% for recording in recordings %}
-                                {% if recording.recordingMeeting.id == meeting.id %}
+                                {% if recording.recordingMeeting.id == meeting.meetingId %}
                                 <dl>
                                     <dt>
                                         {{ recording.formattedStartTime }}

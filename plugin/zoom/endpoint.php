@@ -36,16 +36,16 @@ list($objectType, $action) = explode('.', $decoded->event);
 
 $em = Database::getManager();
 
+$meetingRepository = $em->getRepository(MeetingEntity::class);
+$meetingEntity = null;
+if ($object->id) {
+    /** @var MeetingEntity $meetingEntity */
+    $meetingEntity = $meetingRepository->findOneBy(['meetingId' => $object->id]);
+}
+
 switch ($objectType) {
     case 'meeting':
-        $meetingRepository = $em->getRepository(MeetingEntity::class);
         $registrantRepository = $em->getRepository(RegistrantEntity::class);
-
-        $meetingEntity = null;
-        if ($object->id) {
-            /** @var MeetingEntity $meetingEntity */
-            $meetingEntity = $meetingRepository->findOneBy(['meetingId' => $object->id]);
-        }
 
         if (null === $meetingEntity) {
             exit;
@@ -85,7 +85,7 @@ switch ($objectType) {
 
         $recordingEntity = null;
         if ($object->uuid) {
-            $recordingEntity = $recordingRepository->findBy(['uuid' => $object->uuid]);
+            $recordingEntity = $recordingRepository->findBy(['uuid' => $object->uuid, 'meeting' => $meetingEntity]);
         }
 
         error_log("Recording: $action");
@@ -93,9 +93,10 @@ switch ($objectType) {
 
         switch ($action) {
             case 'completed':
-                $em->persist(
-                    (new RecordingEntity())->setRecordingMeeting(RecordingMeeting::fromObject($object))
-                );
+                $recording = new RecordingEntity();
+                $recording->setRecordingMeeting(RecordingMeeting::fromObject($object));
+                $recording->setMeeting($meetingEntity);
+                $em->persist($recording);
                 $em->flush();
                 break;
             case 'recovered':

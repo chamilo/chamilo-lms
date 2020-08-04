@@ -2423,7 +2423,8 @@ div.admin_section h4 {
 }
 
 .ui-search-table .ui-search-input input {
-    height: 25px;
+    border: 1px solid #CCC;
+    margin: 2px auto;
 }
 
 .exercise_overview_options {

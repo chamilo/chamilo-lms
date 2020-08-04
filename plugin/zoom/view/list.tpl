@@ -9,7 +9,7 @@
             <tr>
                 <th>{{ 'Topic'|get_plugin_lang('ZoomPlugin') }}</th>
                 <th>{{ 'StartTime'|get_lang }}</th>
-                <th>{{ 'ForEveryone'|get_lang }}</th>
+                <th>{{ 'ForEveryone'|get_plugin_lang('ZoomPlugin') }}</th>
 {#                <th>{{ 'Course'|get_lang }}</th>#}
 {#                <th>{{ 'Session'|get_lang }}</th>#}
                 {% if recordings %}

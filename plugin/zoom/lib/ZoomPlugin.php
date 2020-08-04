@@ -460,8 +460,12 @@ class ZoomPlugin extends Plugin
     {
         if ($exception instanceof Exception) {
             $error = json_decode($exception->getMessage());
+            $message = $exception->getMessage();
+            if ($error->message) {
+                $message = $error->message;
+            }
             Display::addFlash(
-                Display::return_message($error->message, 'error')
+                Display::return_message($message, 'error')
             );
         }
     }
@@ -930,10 +934,6 @@ class ZoomPlugin extends Plugin
 
         switch ($status) {
             case 'ended':
-                if ($currentUser === $meeting->getUser()) {
-                    return $meeting->getMeetingInfoGet()->start_url;
-                }
-
                 if ($this->userIsConferenceManager($meeting)) {
                     return $meeting->getMeetingInfoGet()->start_url;
                 }
@@ -945,16 +945,13 @@ class ZoomPlugin extends Plugin
                 // that is use start_url rather than join_url.
                 // the participant will not be registered and will appear as the Zoom user account owner.
                 // For course and user meetings, only the host can start the meeting.
-                if ($isGlobal || $currentUser === $meeting->getUser()) {
-                    return $meeting->getMeetingInfoGet()->start_url;
-                }
-
-                if ($meeting->isCourseMeeting() && $this->userIsConferenceManager($meeting)) {
+                if ($this->userIsConferenceManager($meeting)) {
                     return $meeting->getMeetingInfoGet()->start_url;
                 }
 
                 break;
             case 'started':
+                // User per conference
                 if ($currentUser === $meeting->getUser()) {
                     return $meeting->getMeetingInfoGet()->join_url;
                 }

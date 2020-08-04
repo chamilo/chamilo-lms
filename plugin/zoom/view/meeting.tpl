@@ -32,7 +32,9 @@
     </label>
     <div class="form-inline">
         <div class="form-group">
-            <input class="form-control" type="text"  style="width:300px" readonly value="{{ meeting.meetingInfoGet.join_url }}" />
+            <input
+                class="form-control" type="text" style="width:300px" readonly
+                value="{{ meeting.meetingInfoGet.join_url }}" />
         </div>
     </div>
 {% endif %}
@@ -67,7 +69,7 @@
                 </td>
                <td>
                {% if registrant.join_url %}
-                <a class="btn btn-primary" onclick="copyJoinURL(event, '{{ registrant.join_url }}')">
+                <a class="btn btn-primary" onclick="copyJoinURL(event, '{{ registrant.joinUrl }}')">
                     {{ 'CopyJoinAsURL'|get_plugin_lang('ZoomPlugin') }}
                 </a>
                {% else %}

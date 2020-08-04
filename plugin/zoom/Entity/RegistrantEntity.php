@@ -166,6 +166,11 @@ class RegistrantEntity
         );
     }
 
+    public function joinUrl()
+    {
+       return $this->meetingRegistrant->join_url;
+    }
+
     /**
      * @return CreatedRegistration
      * @throws Exception

@@ -4,6 +4,8 @@
 
 use Chamilo\PluginBundle\Zoom\MeetingEntity;
 
+require_once __DIR__.'/config.php';
+
 $meetingId = isset($_REQUEST['meetingId']) ? (int) $_REQUEST['meetingId'] : 0;
 $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : '';
 

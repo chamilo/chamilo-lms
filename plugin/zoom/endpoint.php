@@ -2,7 +2,6 @@
 
 /* For license terms, see /license.txt */
 
-use Chamilo\PluginBundle\Zoom\API\MeetingInfoGet;
 use Chamilo\PluginBundle\Zoom\API\RecordingMeeting;
 use Chamilo\PluginBundle\Zoom\MeetingEntity;
 use Chamilo\PluginBundle\Zoom\RecordingEntity;
@@ -17,7 +16,7 @@ if ('POST' !== $_SERVER['REQUEST_METHOD']) {
 // @todo handle non-apache installations
 $authorizationHeaderValue = apache_request_headers()['Authorization'];
 
-require __DIR__.'/config.php';
+require_once __DIR__.'/config.php';
 
 if (api_get_plugin_setting('zoom', 'verificationToken') !== $authorizationHeaderValue) {
     http_response_code(Response::HTTP_UNAUTHORIZED);
@@ -48,11 +47,12 @@ switch ($objectType) {
             $meetingEntity = $meetingRepository->findOneBy(['meetingId' => $object->id]);
         }
 
-        error_log('Meeting '.$action.' - '.$meetingEntity->getId());
-
-        if (null == $meetingEntity) {
+        if (null === $meetingEntity) {
             exit;
         }
+
+        error_log('Meeting '.$action.' - '.$meetingEntity->getId());
+        error_log(print_r($object, 1));
 
         switch ($action) {
             case 'deleted':
@@ -65,19 +65,14 @@ switch ($objectType) {
                 $em->persist($meetingEntity);
                 $em->flush();
                 break;
-            case 'registration_created':
-                $registrantRepository->findOneBy(['meeting' => $meetingEntity, '' => $object->participant->id]);
-                break;
             case 'participant_joined':
             case 'participant_left':
                 error_log('Participant: #'.$object->participant->id);
                 error_log(print_r($object->participant, 1));
-                $registrant = $registrantRepository->findOneBy(['meeting' => $meetingEntity, '' => $object->participant->id]);
+                /*$registrant = $registrantRepository->findOneBy(['meeting' => $meetingEntity, '' => $object->participant->id]);
                 if (null === $registrant) {
                     exit;
-                }
-
-                // TODO log attendance
+                }*/
                 break;
             default:
                 error_log(sprintf('Event "%s" on %s was unhandled: %s', $action, $objectType, $body));
@@ -94,6 +89,8 @@ switch ($objectType) {
         }
 
         error_log("Recording: $action");
+        error_log(print_r($object, 1));
+
         switch ($action) {
             case 'completed':
                 $em->persist(

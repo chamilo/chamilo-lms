@@ -12,7 +12,6 @@ if (!ZoomPlugin::currentUserCanCreateUserMeeting()) {
 }
 
 $plugin = ZoomPlugin::create();
-
 $user = api_get_user_entity(api_get_user_id());
 
 $form = $plugin->getAdminSearchForm();
@@ -31,5 +30,6 @@ if ('true' === $plugin->get('enableCloudRecording')) {
 $tpl->assign('actions', $plugin->getToolbar());
 $tpl->assign('search_form', $form->returnForm());
 $tpl->assign('schedule_form', $plugin->getScheduleMeetingForm($user)->returnForm());
-$tpl->assign('content', $tpl->fetch('zoom/view/admin.tpl'));
+$tpl->assign('type', 'user');
+$tpl->assign('content', $tpl->fetch('zoom/view/list.tpl'));
 $tpl->display_one_col_template();

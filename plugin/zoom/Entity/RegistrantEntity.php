@@ -168,7 +168,11 @@ class RegistrantEntity
 
     public function joinUrl()
     {
-       return $this->createdRegistration->join_url;
+        if (!$this->createdRegistration) {
+            return '';
+        }
+
+        return $this->createdRegistration->join_url;
     }
 
     /**

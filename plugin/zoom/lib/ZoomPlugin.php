@@ -350,14 +350,18 @@ class ZoomPlugin extends Plugin
      *
      * @param MeetingEntity $meetingEntity
      * @param string        $returnURL     where to redirect to on successful deletion
+     * @param string
      *
      * @throws Exception
      *
      * @return FormValidator
      */
-    public function getDeleteMeetingForm($meetingEntity, $returnURL)
+    public function getDeleteMeetingForm($meetingEntity, $returnURL, $type)
     {
-        $form = new FormValidator('delete', 'post', Security::remove_XSS($_SERVER['REQUEST_URI']));
+        $id = $meetingEntity->getMeetingId();
+        $type = Security::remove_XSS($type);
+
+        $form = new FormValidator('delete', 'post', api_get_self().'?type='.$type.'&meetingId='.$id);
         $form->addButtonDelete($this->get_lang('DeleteMeeting'));
         if ($form->validate()) {
             $this->deleteMeeting($meetingEntity, $returnURL);

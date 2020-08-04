@@ -25,5 +25,6 @@ if ('true' === $plugin->get('enableCloudRecording')) {
 }
 $tpl->assign('actions', $plugin->getToolbar());
 $tpl->assign('search_form', $form->returnForm());
-$tpl->assign('content', $tpl->fetch('zoom/view/admin.tpl'));
+$tpl->assign('type', 'admin');
+$tpl->assign('content', $tpl->fetch('zoom/view/list.tpl'));
 $tpl->display_one_col_template();

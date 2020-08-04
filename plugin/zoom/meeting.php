@@ -60,7 +60,7 @@ if ($plugin->userIsConferenceManager($meeting)) {
     // user can edit, start and delete meeting
     $tpl->assign('isConferenceManager', true);
     $tpl->assign('editMeetingForm', $plugin->getEditMeetingForm($meeting)->returnForm());
-    $tpl->assign('deleteMeetingForm', $plugin->getDeleteMeetingForm($meeting, $returnURL)->returnForm());
+    $tpl->assign('deleteMeetingForm', $plugin->getDeleteMeetingForm($meeting, $returnURL, $type)->returnForm());
 
     if ('true' === $plugin->get('enableParticipantRegistration') && $meeting->requiresRegistration()) {
         $tpl->assign('registerParticipantForm', $plugin->getRegisterParticipantForm($meeting)->returnForm());

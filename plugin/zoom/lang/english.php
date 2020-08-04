@@ -136,3 +136,8 @@ $strings['CreateGlobalVideoConference'] = "Create global video conference";
 $strings['ConferenceNotStarted'] = "Conference not started";
 $strings['MeetingNotFound'] = "Meeting not found";
 $strings['JoinURLNotAvailable'] = "URL not available";
+$strings['Meetings'] = "Meetings";
+$strings['ConferenceType'] = "Conference type";
+$strings['ForEveryone'] = "Everyone";
+$strings['SomeUsers'] = "Some users (Select later)";
+

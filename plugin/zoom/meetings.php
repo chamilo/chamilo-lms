@@ -8,7 +8,6 @@ require_once __DIR__.'/config.php';
 
 if (!ZoomPlugin::currentUserCanCreateUserMeeting()) {
     api_not_allowed(true);
-    exit(); // just in case
 }
 
 $plugin = ZoomPlugin::create();
@@ -19,11 +18,12 @@ $startDate = new DateTime($form->getElement('start')->getValue());
 $endDate = new DateTime($form->getElement('end')->getValue());
 
 $tpl = new Template();
+
 $tpl->assign('meetings', $plugin->getMeetingRepository()->periodUserMeetings($startDate, $endDate, $user));
 if ('true' === $plugin->get('enableCloudRecording')) {
     $tpl->assign(
         'recordings',
-        $plugin->getRecordingRepository()->getPeriodUserRecordings($startDate, $endDate, $user)
+        $plugin->getRecordingRepository()->getPeriodUserRecordings($startDate, $endDate)
     );
 }
 

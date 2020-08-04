@@ -133,3 +133,4 @@ $strings['ZoomVideoConferences'] = "Videoconferencias Zoom";
 $strings['Recordings'] = "Grabaciones";
 $strings['CreateGlobalVideoConference'] = "Crear una videoconferencia global";
 $strings['JoinURLNotAvailable'] = "URL no disponible";
+$strings['Meetings'] = "Conferencias";

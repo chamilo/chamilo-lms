@@ -30,9 +30,7 @@ class MeetingEntityRepository extends EntityRepository
         $matching = [];
         $all = $this->findAll();
         foreach ($all as $candidate) {
-            if ($candidate->startDateTime >= $startDate
-            && $candidate->startDateTime <= $endDate
-            ) {
+            if ($candidate->startDateTime >= $startDate && $candidate->startDateTime <= $endDate) {
                 $matching[] = $candidate;
             }
         }
@@ -80,9 +78,8 @@ class MeetingEntityRepository extends EntityRepository
             Criteria::create()->where(
                 Criteria::expr()->andX(
                     Criteria::expr()->eq('course', null),
-                    null === $user
-                        ? Criteria::expr()->neq('user', null)
-                        : Criteria::expr()->eq('user', $user)
+                    Criteria::expr()->orX(Criteria::expr()->eq('user', null), Criteria::expr()->eq('user', $user))
+
                 )
             )
         );
@@ -109,7 +106,7 @@ class MeetingEntityRepository extends EntityRepository
      *
      * @return ArrayCollection|Collection|MeetingEntity[]
      */
-    public function periodUserMeetings($start, $end, $user)
+    public function periodUserMeetings($start, $end, $user = null)
     {
         return $this->userMeetings($user)->filter(
             function ($meeting) use ($start, $end) {

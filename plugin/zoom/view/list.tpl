@@ -52,7 +52,7 @@
                         </td>
                     {% endif %}
                     <td>
-                        <a class="btn btn-primary" href="meeting.php?type={{ type }}&meetingId={{ meeting.meetingId }}">
+                        <a class="btn btn-primary" href="meeting.php?meetingId={{ meeting.meetingId }}">
                             {{ 'Details'|get_lang }}
                         </a>
                     </td>

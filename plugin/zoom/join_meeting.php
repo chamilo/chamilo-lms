@@ -37,7 +37,7 @@ try {
     if ($plugin->userIsConferenceManager($meeting)) {
         echo '&nbsp;'.Display::url(
             get_lang('Details'),
-            api_get_path(WEB_PLUGIN_PATH).'zoom/meeting.php?type=admin&meetingId='.$meeting->getMeetingId(),
+            api_get_path(WEB_PLUGIN_PATH).'zoom/meeting.php?meetingId='.$meeting->getMeetingId(),
             ['class' => 'btn btn-default']
         );
     }

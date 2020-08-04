@@ -56,7 +56,7 @@ class RecordingEntityRepository extends EntityRepository
      *
      * @return ArrayCollection|RecordingEntity[]
      */
-    public function getPeriodUserRecordings($start, $end, $user)
+    public function getPeriodUserRecordings($start, $end, $user = null)
     {
         return $this->userRecordings($user)->filter(
             function ($meeting) use ($start, $end) {

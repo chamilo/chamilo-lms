@@ -29,7 +29,7 @@
                     {{ 'Join'|get_plugin_lang('ZoomPlugin') }}
                 </a>
 
-                <a class="btn btn-default" href="meeting.php?type=start&meetingId={{ meeting.meetingId }}">
+                <a class="btn btn-default" href="meeting.php?meetingId={{ meeting.meetingId }}">
                     {{ 'Edit'|get_lang }}
                 </a>
 

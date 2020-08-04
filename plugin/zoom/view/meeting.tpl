@@ -68,7 +68,7 @@
                 {{ registrant.fullName }}
                 </td>
                <td>
-               {% if registrant.join_url %}
+               {% if registrant.joinUrl %}
                 <a class="btn btn-primary" onclick="copyJoinURL(event, '{{ registrant.joinUrl }}')">
                     {{ 'CopyJoinAsURL'|get_plugin_lang('ZoomPlugin') }}
                 </a>

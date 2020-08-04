@@ -8,7 +8,7 @@ use Exception;
 
 /**
  * Class CreatedRegistration.
- * An instance of this class is returned by the Zoom serveur upon recording a registrant to a meeting.
+ * An instance of this class is returned by the Zoom server upon recording a registrant to a meeting.
  */
 class CreatedRegistration
 {

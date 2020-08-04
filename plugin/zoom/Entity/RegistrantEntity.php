@@ -168,7 +168,7 @@ class RegistrantEntity
 
     public function joinUrl()
     {
-       return $this->meetingRegistrant->join_url;
+       return $this->createdRegistration->join_url;
     }
 
     /**

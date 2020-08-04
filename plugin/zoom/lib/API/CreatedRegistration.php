@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\PluginBundle\Zoom\API;
@@ -8,8 +9,6 @@ use Exception;
 /**
  * Class CreatedRegistration.
  * An instance of this class is returned by the Zoom serveur upon recording a registrant to a meeting.
- *
- * @package Chamilo\PluginBundle\Zoom\API
  */
 class CreatedRegistration
 {

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\PluginBundle\Zoom\API;
@@ -9,8 +10,6 @@ use Exception;
  * Trait PaginationToken
  * properties for PaginationToken objects, which are paginated lists of items,
  * retrieved in chunks from the server over one or several API calls, one per page.
- *
- * @package Chamilo\PluginBundle\Zoom\API
  */
 trait PaginationToken
 {

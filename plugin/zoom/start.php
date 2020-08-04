@@ -10,11 +10,9 @@ api_protect_course_script(true);
 
 // the section (for the tabs)
 $this_section = SECTION_COURSES;
-
 $logInfo = [
     'tool' => 'Videoconference Zoom',
 ];
-
 Event::registerLog($logInfo);
 
 $plugin = ZoomPlugin::create();
@@ -27,7 +25,7 @@ $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
 if ($plugin->userIsCourseConferenceManager($course)) {
     switch ($action) {
         case 'delete':
-            $meeting = $plugin->getMeetingRepository()->find($_REQUEST['meetingId']);
+            $meeting = $plugin->getMeetingRepository()->findOneBy(['meetingId' => $_REQUEST['meetingId']]);
             $plugin->deleteMeeting($meeting, api_get_self().'?'.api_get_cidreq());
 
             break;

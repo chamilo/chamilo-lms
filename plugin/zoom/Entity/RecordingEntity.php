@@ -158,7 +158,7 @@ class RecordingEntity
      */
     public function postLoad()
     {
-        if (!is_null($this->recordingMeetingJson)) {
+        if (null !== $this->recordingMeetingJson) {
             $this->recordingMeeting = RecordingMeeting::fromJson($this->recordingMeetingJson);
         }
         $this->initializeExtraProperties();

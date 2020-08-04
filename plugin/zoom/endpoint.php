@@ -45,36 +45,38 @@ switch ($objectType) {
         $meetingEntity = null;
         if ($object->id) {
             /** @var MeetingEntity $meetingEntity */
-            $meetingEntity = $meetingRepository->findBy(['meetingId' => $object->id]);
+            $meetingEntity = $meetingRepository->findOneBy(['meetingId' => $object->id]);
         }
 
-        error_log("Meeting: $action");
+        error_log('Meeting '.$action.' - '.$meetingEntity->getId());
+
+        if (null == $meetingEntity) {
+            exit;
+        }
 
         switch ($action) {
             case 'deleted':
-                if (null !== $meetingEntity) {
-                    error_log('Meeting deleted '.$meetingEntity->getId());
-                    $em->remove($meetingEntity);
-                }
+                $em->remove($meetingEntity);
+                $em->flush();
                 break;
             case 'ended':
             case 'started':
-                error_log("Meeting $action #".$meetingEntity->getId());
-                $em->persist(
-                    (
-                    $meetingEntity->setStatus($action)
-                        ?: (new MeetingEntity())->setMeetingInfoGet(MeetingInfoGet::fromObject($object))
-                    )
-                );
+                $meetingEntity->setStatus($action);
+                $em->persist($meetingEntity);
                 $em->flush();
+                break;
+            case 'registration_created':
+                $registrantRepository->findOneBy(['meeting' => $meetingEntity, '' => $object->participant->id]);
                 break;
             case 'participant_joined':
             case 'participant_left':
-                // @todo check find
-                $registrant = $registrantRepository->find($object->participant->id);
+                error_log('Participant: #'.$object->participant->id);
+                error_log(print_r($object->participant, 1));
+                $registrant = $registrantRepository->findOneBy(['meeting' => $meetingEntity, '' => $object->participant->id]);
                 if (null === $registrant) {
                     exit;
                 }
+
                 // TODO log attendance
                 break;
             default:

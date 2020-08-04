@@ -9,8 +9,6 @@ require_once __DIR__.'/config.php';
 api_block_anonymous_users();
 
 $course_plugin = 'zoom'; // needed in order to load the plugin lang variables
-
-
 $meetingId = isset($_REQUEST['meetingId']) ? (int) $_REQUEST['meetingId'] : 0;
 if (empty($meetingId)) {
     api_not_allowed(true);
@@ -21,7 +19,7 @@ $plugin = ZoomPlugin::create();
 Display::display_header($plugin->get_title());
 echo $plugin->getToolbar();
 /** @var MeetingEntity $meeting */
-$meeting = $plugin->getMeetingRepository()->findOneBy(['meetingId' => $_REQUEST['meetingId']]);
+$meeting = $plugin->getMeetingRepository()->findOneBy(['meetingId' => $meetingId]);
 try {
     if (null === $meeting) {
         throw new Exception($plugin->get_lang('Meeting not found'));
@@ -39,7 +37,7 @@ try {
     if ($plugin->userIsConferenceManager($meeting)) {
         echo '&nbsp;'.Display::url(
             get_lang('Details'),
-            api_get_path(WEB_PLUGIN_PATH).'zoom/meeting_from_admin.php?meetingId='.$meeting->getMeetingId(),
+            api_get_path(WEB_PLUGIN_PATH).'zoom/meeting.php?type=admin&meetingId='.$meeting->getMeetingId(),
             ['class' => 'btn btn-default']
         );
     }

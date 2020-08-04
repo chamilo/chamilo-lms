@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\PluginBundle\Zoom\API;
@@ -10,8 +11,6 @@ use Exception;
  * Class RecordingList. A list of past meeting instance recordings generated between two dates.
  *
  * @see RecordingMeeting
- *
- * @package Chamilo\PluginBundle\Zoom\API
  */
 class RecordingList
 {

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\PluginBundle\Zoom\API;
@@ -7,8 +8,6 @@ namespace Chamilo\PluginBundle\Zoom\API;
  * Class MeetingInfo
  * Used to define MeetingInfoGet
  * Does not seem to be used directly.
- *
- * @package Chamilo\PluginBundle\Zoom\API
  */
 class MeetingInfo extends Meeting
 {

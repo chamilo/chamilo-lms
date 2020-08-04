@@ -4,16 +4,39 @@
 
 use Chamilo\PluginBundle\Zoom\MeetingEntity;
 
-if (!isset($returnURL)) {
-    exit;
+$meetingId = isset($_REQUEST['meetingId']) ? (int) $_REQUEST['meetingId'] : 0;
+$type = isset($_REQUEST['type']) ? $_REQUEST['type'] : '';
+
+if (empty($type) || empty($meetingId)) {
+    api_not_allowed(true);
 }
 
 $course_plugin = 'zoom'; // needed in order to load the plugin lang variables
+$returnURL = null;
+
+switch ($type) {
+    case 'admin':
+        $returnURL = 'admin.php';
+        $this_section = SECTION_PLATFORM_ADMIN;
+        break;
+    case 'user':
+        $returnURL = 'user.php';
+        $this_section = SECTION_MYPROFILE;
+        break;
+    case 'start':
+        api_protect_course_script(true);
+        $returnURL = 'start.php?cId='.api_get_course_id().'&sessionId='.api_get_session_id();
+        $this_section = SECTION_COURSES;
+        break;
+}
+
+if (empty($returnURL)) {
+    api_not_allowed(true);
+}
 
 $logInfo = [
     'tool' => 'Videoconference Zoom',
 ];
-
 Event::registerLog($logInfo);
 $plugin = ZoomPlugin::create();
 
@@ -22,18 +45,14 @@ $interbreadcrumb[] = [ // used in templates
     'name' => $plugin->get_lang('ZoomVideoConferences'),
 ];
 
-if (!array_key_exists('meetingId', $_REQUEST)) {
-    throw new Exception('MeetingNotFound');
-}
-
 /** @var MeetingEntity $meeting */
-$meeting = $plugin->getMeetingRepository()->findOneBy(['meetingId' => $_REQUEST['meetingId']]);
+$meeting = $plugin->getMeetingRepository()->findOneBy(['meetingId' => $meetingId]);
 
 if (null === $meeting) {
     throw new Exception($plugin->get_lang('MeetingNotFound'));
 }
 
-$tpl = new Template($meeting->getId());
+$tpl = new Template($meeting->getMeetingId());
 
 if ($plugin->userIsConferenceManager($meeting)) {
     // user can edit, start and delete meeting
@@ -46,8 +65,8 @@ if ($plugin->userIsConferenceManager($meeting)) {
         $tpl->assign('registrants', $meeting->getRegistrants());
     }
 
-    if ('true' === $plugin->get('enableCloudRecording')
-        && $meeting->hasCloudAutoRecordingEnabled()
+    if ('true' === $plugin->get('enableCloudRecording') &&
+        $meeting->hasCloudAutoRecordingEnabled()
         // && 'finished' === $meeting->status
     ) {
         $tpl->assign('fileForm', $plugin->getFileForm($meeting)->returnForm());

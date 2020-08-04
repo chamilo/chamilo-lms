@@ -674,9 +674,9 @@ class ZoomPlugin extends Plugin
                             Display::return_message($this->get_lang('GroupUsersWereRegistered'))
                         );
                     }
-                    api_location('meeting_from_start.php?meetingId='.$newMeeting->getMeetingId());
+                    api_location('meeting.php?type=start&meetingId='.$newMeeting->getMeetingId());
                 } elseif (null !== $user) {
-                    api_location('meeting_from_user.php?meetingId='.$newMeeting->getMeetingId());
+                    api_location('meeting.php?type=user&meetingId='.$newMeeting->getMeetingId());
                 }
             } catch (Exception $exception) {
                 Display::addFlash(
@@ -899,32 +899,37 @@ class ZoomPlugin extends Plugin
      */
     public function reloadPeriodRecordings($startDate, $endDate)
     {
-        foreach (RecordingList::loadPeriodRecordings($startDate, $endDate) as $recordingMeeting) {
-            $recordingEntity = $this->getRecordingRepository()->find($recordingMeeting->uuid);
+        $em = Database::getManager();
+        $recordingRepo = $this->getRecordingRepository();
+        $meetingRepo = $this->getMeetingRepository();
+        $recordings = RecordingList::loadPeriodRecordings($startDate, $endDate);
+
+        foreach ($recordings as $recordingMeeting) {
+            $recordingEntity = $recordingRepo->findOneBy(['uuid' => $recordingMeeting->uuid]);
             if (null === $recordingEntity) {
                 $recordingEntity = new RecordingEntity();
-                $meetingEntity = $this->getMeetingRepository()->find($recordingMeeting->id);
+                $meetingEntity = $meetingRepo->findOneBy(['meetingId' => $recordingMeeting->id]);
                 if (null === $meetingEntity) {
                     try {
                         $meetingInfoGet = MeetingInfoGet::fromId($recordingMeeting->id);
                     } catch (Exception $exception) {
                         $meetingInfoGet = null; // deleted meeting with recordings
                     }
-                    if (!is_null($meetingInfoGet)) {
+                    if (null !== $meetingInfoGet) {
                         $meetingEntity = $this->createMeetingFromMeetingEntity(
                             (new MeetingEntity())->setMeetingInfoGet($meetingInfoGet)
                         );
-                        Database::getManager()->persist($meetingEntity);
+                        $em->persist($meetingEntity);
                     }
                 }
-                if (!is_null($meetingEntity)) {
+                if (null !== $meetingEntity) {
                     $recordingEntity->setMeeting($meetingEntity);
                 }
             }
             $recordingEntity->setRecordingMeeting($recordingMeeting);
-            Database::getManager()->persist($recordingEntity);
+            $em->persist($recordingEntity);
         }
-        Database::getManager()->flush();
+        $em->flush();
     }
 
     public function getToolbar($returnUrl = '')
@@ -988,7 +993,6 @@ class ZoomPlugin extends Plugin
             : 'local';
         $meeting->getMeetingInfoGet()->settings->registrants_email_notification = false;
         $meeting->setMeetingInfoGet($meeting->getMeetingInfoGet()->create());
-
         $meeting->getMeetingInfoGet()->settings->approval_type = $approvalType;
 
         Database::getManager()->persist($meeting);
@@ -1169,10 +1173,11 @@ class ZoomPlugin extends Plugin
             $meetingRegistrants[] = $registrant->getMeetingRegistrant();
         }
         $meetingEntity->getMeetingInfoGet()->removeRegistrants($meetingRegistrants);
+        $em = Database::getManager();
         foreach ($registrants as $registrant) {
-            Database::getManager()->remove($registrant);
+            $em->remove($registrant);
         }
-        Database::getManager()->flush();
+        $em->flush();
     }
 
     /**

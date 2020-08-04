@@ -30,29 +30,29 @@
                     {% if recordings %}
                     <td>
                         {% for recording in recordings %}
-                        {% if recording.recordingMeeting.id == meeting.id %}
-                        <dl>
-                            <dt>
-                                {{ recording.formattedStartTime }}
-                                ({{ recording.formattedDuration }})
-                            </dt>
-                            <dd>
-                                <ul>
-                                    {% for file in recording.recordingMeeting.recording_files %}
-                                    <li>
-                                        {{ file.recording_type }}.{{ file.file_type }}
-                                        ({{ file.file_size }})
-                                    </li>
-                                    {% endfor %}
-                                </ul>
-                            </dd>
-                        </dl>
-                        {% endif %}
+                            {% if recording.recordingMeeting.id == meeting.id %}
+                            <dl>
+                                <dt>
+                                    {{ recording.formattedStartTime }}
+                                    ({{ recording.formattedDuration }})
+                                </dt>
+                                <dd>
+                                    <ul>
+                                        {% for file in recording.recordingMeeting.recording_files %}
+                                        <li>
+                                            {{ file.recording_type }}.{{ file.file_type }}
+                                            ({{ file.file_size }})
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                </dd>
+                            </dl>
+                            {% endif %}
                         {% endfor %}
                     </td>
                     {% endif %}
                     <td>
-                        <a class="btn btn-primary" href="meeting_from_admin.php?meetingId={{ meeting.meetingId }}">
+                        <a class="btn btn-primary" href="meeting.php?type=admin&meetingId={{ meeting.meetingId }}">
                             {{ 'Details'|get_lang }}
                         </a>
                     </td>

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\PluginBundle\Zoom\API;
@@ -12,8 +13,6 @@ use Exception;
  *
  * @see PastMeeting
  * @see RecordingFile
- *
- * @package Chamilo\PluginBundle\Zoom\API
  */
 class RecordingMeeting
 {

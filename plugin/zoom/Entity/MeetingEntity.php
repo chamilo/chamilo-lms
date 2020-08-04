@@ -55,7 +55,7 @@ class MeetingEntity
     public $statusName;
 
     /**
-     * @var int the remote zoom meeting identifier
+     * @var int
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue()
@@ -216,10 +216,10 @@ class MeetingEntity
      */
     public function postLoad()
     {
-        if (!is_null($this->meetingListItemJson)) {
+        if (null !== $this->meetingListItemJson) {
             $this->meetingListItem = MeetingListItem::fromJson($this->meetingListItemJson);
         }
-        if (!is_null($this->meetingInfoGetJson)) {
+        if (null !== $this->meetingInfoGetJson) {
             $this->meetingInfoGet = MeetingInfoGet::fromJson($this->meetingInfoGetJson);
         }
         $this->initializeDisplayableProperties();
@@ -240,10 +240,10 @@ class MeetingEntity
      */
     public function preFlush()
     {
-        if (!is_null($this->meetingListItem)) {
+        if (null !== $this->meetingListItem) {
             $this->meetingListItemJson = json_encode($this->meetingListItem);
         }
-        if (!is_null($this->meetingInfoGet)) {
+        if (null !== $this->meetingInfoGet) {
             $this->meetingInfoGetJson = json_encode($this->meetingInfoGet);
         }
     }
@@ -501,18 +501,21 @@ class MeetingEntity
     private function initializeDisplayableProperties()
     {
         $zoomPlugin = new \ZoomPlugin();
-        $this->typeName = [
+        $typeList = [
             API\Meeting::TYPE_INSTANT => $zoomPlugin->get_lang('InstantMeeting'),
             API\Meeting::TYPE_SCHEDULED => $zoomPlugin->get_lang('ScheduledMeeting'),
             API\Meeting::TYPE_RECURRING_WITH_NO_FIXED_TIME => $zoomPlugin->get_lang('RecurringWithNoFixedTime'),
             API\Meeting::TYPE_RECURRING_WITH_FIXED_TIME => $zoomPlugin->get_lang('RecurringWithFixedTime'),
-        ][$this->meetingInfoGet->type];
+        ];
+        $this->typeName = $typeList[$this->meetingInfoGet->type];
+
         if (property_exists($this, 'status')) {
-            $this->statusName = [
+            $statusList = [
                 'waiting' => $zoomPlugin->get_lang('Waiting'),
                 'started' => $zoomPlugin->get_lang('Started'),
                 'finished' => $zoomPlugin->get_lang('Finished'),
-            ][$this->meetingInfoGet->status];
+            ];
+            $this->statusName = $statusList[$this->meetingInfoGet->status];
         }
         $this->startDateTime = null;
         $this->formattedStartTime = '';

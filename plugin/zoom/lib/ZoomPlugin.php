@@ -309,8 +309,7 @@ class ZoomPlugin extends Plugin
             $form->setRequired($durationNumeric);
         }
         $form->addTextarea('agenda', get_lang('Agenda'), ['maxlength' => 2000]);
-        $form->addLabel(get_lang('Password'), $meeting->getMeetingInfoGet()->password);
-
+        //$form->addLabel(get_lang('Password'), $meeting->getMeetingInfoGet()->password);
         // $form->addText('password', get_lang('Password'), false, ['maxlength' => '10']);
         $form->addButtonUpdate(get_lang('Update'));
         if ($form->validate()) {
@@ -497,7 +496,6 @@ class ZoomPlugin extends Plugin
                             '%s.%s (%s)',
                             $file->recording_type,
                             $file->file_type,
-                            //$file->formattedFileSize
                             $file->file_size
                         ),
                         'value' => $file->id,
@@ -537,7 +535,10 @@ class ZoomPlugin extends Plugin
                                 try {
                                     $this->createLinkToFileInCourse($meeting, $file, $name);
                                     Display::addFlash(
-                                        Display::return_message($this->get_lang('LinkToFileWasCreatedInCourse'), 'success')
+                                        Display::return_message(
+                                            $this->get_lang('LinkToFileWasCreatedInCourse'),
+                                            'success'
+                                        )
                                     );
                                 } catch (Exception $exception) {
                                     Display::addFlash(
@@ -720,7 +721,7 @@ class ZoomPlugin extends Plugin
                     $form->getSubmitValue('duration'),
                     $form->getSubmitValue('topic'),
                     $form->getSubmitValue('agenda'),
-                    api_get_unique_id()
+                    substr(uniqid('z', true),0, 10)
                 );
 
                 Display::addFlash(

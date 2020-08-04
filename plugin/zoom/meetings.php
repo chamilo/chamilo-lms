@@ -19,16 +19,9 @@ $endDate = new DateTime($form->getElement('end')->getValue());
 $scheduleForm = $plugin->getScheduleMeetingForm($user);
 $tpl = new Template();
 $tpl->assign('meetings', $plugin->getMeetingRepository()->periodUserMeetings($startDate, $endDate, $user));
-if ('true' === $plugin->get('enableCloudRecording')) {
-    $tpl->assign(
-        'recordings',
-        $plugin->getRecordingRepository()->getPeriodUserRecordings($startDate, $endDate)
-    );
-}
-
+$tpl->assign('allow_recording', 'true' === $plugin->get('enableCloudRecording'));
 $tpl->assign('actions', $plugin->getToolbar());
 $tpl->assign('search_form', $form->returnForm());
 $tpl->assign('schedule_form', $scheduleForm->returnForm());
-$tpl->assign('type', 'user');
 $tpl->assign('content', $tpl->fetch('zoom/view/list.tpl'));
 $tpl->display_one_col_template();

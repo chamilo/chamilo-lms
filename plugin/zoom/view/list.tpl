@@ -1,8 +1,6 @@
-
 {% import "default/document/recycle.tpl" as macro %}
 
 {{ schedule_form }}
-
 {{ search_form }}
 
 {% if meetings.count %}
@@ -15,8 +13,8 @@
                 <th>{{ 'ForEveryone'|get_plugin_lang('ZoomPlugin') }}</th>
 {#                <th>{{ 'Course'|get_lang }}</th>#}
 {#                <th>{{ 'Session'|get_lang }}</th>#}
-                {% if recordings %}
-                <th>{{ 'Recordings'|get_plugin_lang('ZoomPlugin') }}</th>
+                {% if allow_recording %}
+                    <th>{{ 'Recordings'|get_plugin_lang('ZoomPlugin') }}</th>
                 {% endif %}
                 <th></th>
             </tr>
@@ -29,32 +27,29 @@
                     <td>{{ meeting.user ? 'No' : 'Yes' }}</td>
 {#                    <td>{{ meeting.course ? meeting.course : '-' }}</td>#}
 {#                    <td>{{ meeting.session ? meeting.session : '-' }}</td>#}
-                    {% if recordings %}
-                        <td>
-                            {% for recording in recordings %}
-                                {% if recording.recordingMeeting.id == meeting.meetingId %}
-                                <dl>
-                                    <dt>
-                                        {{ recording.formattedStartTime }}
-                                        ({{ recording.formattedDuration }})
-                                    </dt>
-                                    <dd>
-                                        <ul>
-                                            {% for file in recording.recordingMeeting.recording_files %}
-                                            <li>
+                    <td>
+                    {% if allow_recording and meeting.recordings.count > 0 %}
+                        {% for recording in meeting.recordings %}
+                            <dl>
+                                <dt>
+                                    {{ recording.formattedStartTime }} ({{ recording.formattedDuration }})
+                                </dt>
+                                <dd>
+                                    <ul>
+                                        {% for file in recording.recordingMeeting.recording_files %}
+                                        <li>
                                                 <a href="{{ file.play_url }}" target="_blank">
-                                                    {{ file.recording_type }}.{{ file.file_type }}
-                                                    ({{ macro.bytesToSize(file.file_size) }})
-                                                </a>
-                                            </li>
-                                            {% endfor %}
-                                        </ul>
-                                    </dd>
-                                </dl>
-                                {% endif %}
-                            {% endfor %}
-                        </td>
+                                                {{ file.recording_type }}.{{ file.file_type }}
+                                                ({{ macro.bytesToSize(file.file_size) }})
+                                            </a>
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                </dd>
+                            </dl>
+                        {% endfor %}
                     {% endif %}
+                    </td>
                     <td>
                         <a class="btn btn-primary" href="meeting.php?meetingId={{ meeting.meetingId }}">
                             {{ 'Details'|get_lang }}

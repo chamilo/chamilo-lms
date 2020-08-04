@@ -1,3 +1,6 @@
+
+{% import "default/document/recycle.tpl" as macro %}
+
 {{ schedule_form }}
 
 {{ search_form }}
@@ -39,8 +42,10 @@
                                         <ul>
                                             {% for file in recording.recordingMeeting.recording_files %}
                                             <li>
-                                                {{ file.recording_type }}.{{ file.file_type }}
-                                                ({{ file.file_size }})
+                                                <a href="{{ file.play_url }}" target="_blank">
+                                                    {{ file.recording_type }}.{{ file.file_type }}
+                                                    ({{ macro.bytesToSize(file.file_size) }})
+                                                </a>
                                             </li>
                                             {% endfor %}
                                         </ul>

@@ -54,10 +54,7 @@ class RecordingEntity
 
     /**
      * @var MeetingEntity
-     * @ORM\ManyToOne(
-     *     targetEntity="MeetingEntity",
-     *     inversedBy="recordings",
-     * )
+     * @ORM\ManyToOne(targetEntity="MeetingEntity", inversedBy="recordings")
      * @ORM\JoinColumn(name="meeting_id")
      */
     protected $meeting;

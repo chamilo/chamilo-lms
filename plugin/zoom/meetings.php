@@ -16,9 +16,7 @@ $user = api_get_user_entity(api_get_user_id());
 $form = $plugin->getAdminSearchForm();
 $startDate = new DateTime($form->getElement('start')->getValue());
 $endDate = new DateTime($form->getElement('end')->getValue());
-
 $scheduleForm = $plugin->getScheduleMeetingForm($user);
-
 $tpl = new Template();
 $tpl->assign('meetings', $plugin->getMeetingRepository()->periodUserMeetings($startDate, $endDate, $user));
 if ('true' === $plugin->get('enableCloudRecording')) {

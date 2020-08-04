@@ -290,29 +290,31 @@ class ZoomPlugin extends Plugin
     /**
      * Generates a meeting edit form and updates the meeting on validation.
      *
-     * @param MeetingEntity $meetingEntity the meeting
+     * @param MeetingEntity $meeting the meeting
      *
      * @throws Exception
      *
      * @return FormValidator
      */
-    public function getEditMeetingForm($meetingEntity)
+    public function getEditMeetingForm($meeting)
     {
-        $meetingInfoGet = $meetingEntity->getMeetingInfoGet();
+        $meetingInfoGet = $meeting->getMeetingInfoGet();
         $form = new FormValidator('edit', 'post', $_SERVER['REQUEST_URI']);
         $form->addHeader($this->get_lang('UpdateMeeting'));
         $form->addText('topic', $this->get_lang('Topic'));
-        if ($meetingEntity->requiresDateAndDuration()) {
+        if ($meeting->requiresDateAndDuration()) {
             $startTimeDatePicker = $form->addDateTimePicker('startTime', get_lang('StartTime'));
             $form->setRequired($startTimeDatePicker);
             $durationNumeric = $form->addNumeric('duration', $this->get_lang('DurationInMinutes'));
             $form->setRequired($durationNumeric);
         }
         $form->addTextarea('agenda', get_lang('Agenda'), ['maxlength' => 2000]);
+        $form->addLabel(get_lang('Password'), $meeting->getMeetingInfoGet()->password);
+
         // $form->addText('password', get_lang('Password'), false, ['maxlength' => '10']);
         $form->addButtonUpdate(get_lang('Update'));
         if ($form->validate()) {
-            if ($meetingEntity->requiresDateAndDuration()) {
+            if ($meeting->requiresDateAndDuration()) {
                 $meetingInfoGet->start_time = (new DateTime($form->getSubmitValue('startTime')))->format(
                     DateTimeInterface::ISO8601
                 );
@@ -323,8 +325,8 @@ class ZoomPlugin extends Plugin
             $meetingInfoGet->agenda = $form->getSubmitValue('agenda');
             try {
                 $meetingInfoGet->update();
-                $meetingEntity->setMeetingInfoGet($meetingInfoGet);
-                Database::getManager()->persist($meetingEntity);
+                $meeting->setMeetingInfoGet($meetingInfoGet);
+                Database::getManager()->persist($meeting);
                 Database::getManager()->flush();
                 Display::addFlash(
                     Display::return_message($this->get_lang('MeetingUpdated'), 'confirm')
@@ -340,8 +342,8 @@ class ZoomPlugin extends Plugin
             'topic' => $meetingInfoGet->topic,
             'agenda' => $meetingInfoGet->agenda,
         ];
-        if ($meetingEntity->requiresDateAndDuration()) {
-            $defaults['startTime'] = $meetingEntity->startDateTime->format('Y-m-d H:i');
+        if ($meeting->requiresDateAndDuration()) {
+            $defaults['startTime'] = $meeting->startDateTime->format('Y-m-d H:i');
             $defaults['duration'] = $meetingInfoGet->duration;
         }
         $form->setDefaults($defaults);
@@ -718,7 +720,7 @@ class ZoomPlugin extends Plugin
                     $form->getSubmitValue('duration'),
                     $form->getSubmitValue('topic'),
                     $form->getSubmitValue('agenda'),
-                    ''
+                    api_get_unique_id()
                 );
 
                 Display::addFlash(

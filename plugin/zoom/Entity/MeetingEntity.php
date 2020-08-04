@@ -120,10 +120,7 @@ class MeetingEntity
 
     /**
      * @var RecordingEntity[]|ArrayCollection
-     * @ORM\OneToMany(
-     *     targetEntity="RecordingEntity",
-     *     mappedBy="meeting",
-     * )
+     * @ORM\OneToMany(targetEntity="RecordingEntity", mappedBy="meeting", cascade={"persist"}, orphanRemoval=true)
      */
     protected $recordings;
 

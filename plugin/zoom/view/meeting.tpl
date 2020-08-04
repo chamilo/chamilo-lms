@@ -19,11 +19,11 @@
 {% endif %}
 
 {% if currentUserJoinURL %}
-<p>
-    <a href="{{ currentUserJoinURL }}" target="_blank">
-        {{ 'JoinMeetingAsMyself'|get_plugin_lang('ZoomPlugin') }}
-    </a>
-</p>
+{#<p>#}
+{#    <a href="{{ currentUserJoinURL }}" target="_blank">#}
+{#        {{ 'JoinMeeting'|get_plugin_lang('ZoomPlugin') }}#}
+{#    </a>#}
+{#</p>#}
 {% endif %}
 
 {% if meeting.meetingInfoGet.settings.approval_type == 2 %}

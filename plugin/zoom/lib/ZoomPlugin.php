@@ -162,13 +162,16 @@ class ZoomPlugin extends Plugin
     public function getProfileBlockItems()
     {
         $elements = $this->meetingsToWhichCurrentUserIsRegisteredComingSoon();
-        if (self::currentUserCanJoinGlobalMeeting()) {
+        /*if (self::currentUserCanJoinGlobalMeeting()) {
             $elements[$this->get_lang('CreateGlobalVideoConference')] = api_get_path(WEB_PLUGIN_PATH).'zoom/global.php';
         }
 
         if (self::currentUserCanCreateUserMeeting()) {
             $elements[$this->get_lang('CreateUserVideoConference')] = api_get_path(WEB_PLUGIN_PATH).'zoom/user.php';
-        }
+        }*/
+
+        $elements[$this->get_lang('Meetings')] = api_get_path(WEB_PLUGIN_PATH).'zoom/meetings.php';
+
         $items = [];
         foreach ($elements as $title => $link) {
             $items[] = [

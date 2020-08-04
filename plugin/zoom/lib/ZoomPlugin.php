@@ -597,7 +597,7 @@ class ZoomPlugin extends Plugin
     public function getScheduleMeetingForm($user, $course = null, $session = null)
     {
         $form = new FormValidator('scheduleMeetingForm');
-        $form->addHeader($this->get_lang('ScheduleTheMeeting'));
+        $form->addHeader($this->get_lang('ScheduleAMeeting'));
         $startTimeDatePicker = $form->addDateTimePicker('startTime', get_lang('StartTime'));
         $form->setRequired($startTimeDatePicker);
 
@@ -856,8 +856,14 @@ class ZoomPlugin extends Plugin
     {
         $status = $meeting->getMeetingInfoGet()->status;
         $currentUser = api_get_user_entity(api_get_user_id());
+        $isGlobal = 'true' === $this->get('enableGlobalConference') && $meeting->isGlobalMeeting();
 
         switch ($status) {
+            case 'ended':
+                if ($currentUser === $meeting->getUser()) {
+                    return $meeting->getMeetingInfoGet()->start_url;
+                }
+                break;
             case 'waiting':
                 // Zoom does not allow for a new meeting to be started on first participant join.
                 // It requires the host to start the meeting first.
@@ -865,24 +871,27 @@ class ZoomPlugin extends Plugin
                 // that is use start_url rather than join_url.
                 // the participant will not be registered and will appear as the Zoom user account owner.
                 // For course and user meetings, only the host can start the meeting.
-                if (
-                    ($meeting->isGlobalMeeting() && $this->get('enableGlobalConference')) ||
-                    $currentUser === $meeting->getUser()
-                ) {
+                if ($isGlobal || $currentUser === $meeting->getUser()) {
                     return $meeting->getMeetingInfoGet()->start_url;
                 }
                 break;
             case 'started':
-                if ('true' === $this->get('enableParticipantRegistration') && $meeting->requiresRegistration()) {
+                if ($currentUser === $meeting->getUser()) {
+                    return $meeting->getMeetingInfoGet()->join_url;
+                }
+
+                // the participant is not registered, he can join only the global meeting (automatic registration)
+                if ($isGlobal) {
+                    return $this->registerUser($meeting, $currentUser)->getCreatedRegistration()->join_url;
+                }
+
+                if ('true' === $this->get('enableParticipantRegistration')) {
+                //if ('true' === $this->get('enableParticipantRegistration') && $meeting->requiresRegistration()) {
                     // the participant must be registered
                     $registrant = $meeting->getRegistrant($currentUser);
                     if (null !== $registrant) {
                         // the participant is registered
                         return $registrant->getCreatedRegistration()->join_url;
-                    }
-                    // the participant is not registered, he can join only the global meeting (automatic registration)
-                    if ($meeting->isGlobalMeeting() && $this->get('enableGlobalConference')) {
-                        return $this->registerUser($meeting, $currentUser)->getCreatedRegistration()->join_url;
                     }
                 }
                 break;

@@ -31,7 +31,7 @@ try {
     if (!empty($startJoinURL)) {
         echo Display::url($plugin->get_lang('EnterMeeting'), $startJoinURL, ['class' => 'btn btn-primary']);
     } else {
-        echo Display::return_message($plugin->get_lang('ConferenceNotStarted'), 'warning');
+        //echo Display::return_message($plugin->get_lang('ConferenceNotStarted'), 'warning');
     }
 
     if ($plugin->userIsConferenceManager($meeting)) {

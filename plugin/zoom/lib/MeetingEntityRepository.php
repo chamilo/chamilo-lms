@@ -80,7 +80,7 @@ class MeetingEntityRepository extends EntityRepository
             Criteria::create()->where(
                 Criteria::expr()->andX(
                     Criteria::expr()->eq('course', null),
-                    is_null($user)
+                    null === $user
                         ? Criteria::expr()->neq('user', null)
                         : Criteria::expr()->eq('user', $user)
                 )
@@ -105,16 +105,15 @@ class MeetingEntityRepository extends EntityRepository
     /**
      * @param DateTime  $start
      * @param DateTime  $end
-     * @param User|null $user
+     * @param User $user
      *
      * @return ArrayCollection|Collection|MeetingEntity[]
      */
-    public function periodUserMeetings($start, $end, $user = null)
+    public function periodUserMeetings($start, $end, $user)
     {
         return $this->userMeetings($user)->filter(
             function ($meeting) use ($start, $end) {
-                return $meeting->startDateTime >= $start
-                    && $meeting->startDateTime <= $end;
+                return $meeting->startDateTime >= $start && $meeting->startDateTime <= $end;
             }
         );
     }

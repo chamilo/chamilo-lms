@@ -166,7 +166,7 @@ class RegistrantEntity
         );
     }
 
-    public function joinUrl()
+    public function getJoinUrl()
     {
         if (!$this->createdRegistration) {
             return '';

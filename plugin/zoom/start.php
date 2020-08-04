@@ -22,12 +22,13 @@ $course = api_get_course_entity();
 $session = api_get_session_entity();
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
 
-if ($plugin->userIsCourseConferenceManager($course)) {
+if ($plugin->userIsCourseConferenceManager()) {
     switch ($action) {
         case 'delete':
             $meeting = $plugin->getMeetingRepository()->findOneBy(['meetingId' => $_REQUEST['meetingId']]);
-            $plugin->deleteMeeting($meeting, api_get_self().'?'.api_get_cidreq());
-
+            if ($meeting->isCourseMeeting()) {
+                $plugin->deleteMeeting($meeting, api_get_self().'?'.api_get_cidreq());
+            }
             break;
     }
 

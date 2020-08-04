@@ -783,16 +783,21 @@ class ZoomPlugin extends Plugin
     }
 
     /**
-     * @param Course $course
      *
      * @return bool whether the logged-in user can manage conferences in this context, that is either
      *              the current course or session coach, the platform admin or the current course admin
      */
-    public function userIsCourseConferenceManager($course)
+    public function userIsCourseConferenceManager()
     {
-        return api_is_coach()
-            || api_is_platform_admin()
-            || api_get_course_id() && api_is_course_admin();
+        if (api_is_coach() || api_is_platform_admin()) {
+            return true;
+        }
+
+        if (api_get_course_id() && api_is_course_admin()) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -957,6 +962,10 @@ class ZoomPlugin extends Plugin
                 // the participant is not registered, he can join only the global meeting (automatic registration)
                 if ($isGlobal) {
                     return $this->registerUser($meeting, $currentUser)->getCreatedRegistration()->join_url;
+                }
+
+                if ($meeting->isCourseMeeting() && $this->userIsCourseConferenceManager()) {
+                    return $meeting->getMeetingInfoGet()->start_url;
                 }
 
                 if ('true' === $this->get('enableParticipantRegistration')) {

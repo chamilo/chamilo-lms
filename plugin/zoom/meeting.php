@@ -64,8 +64,8 @@ if ($plugin->userIsConferenceManager($meeting)) {
     $userId = api_get_user_id();
     try {
         foreach ($meeting->getRegistrants() as $registrant) {
-            if ($registrant->userId == $userId) {
-                $tpl->assign('currentUserJoinURL', $registrant->join_url);
+            if ($registrant->getUser()->getId() == $userId) {
+                $tpl->assign('currentUserJoinURL', $registrant->getJoinUrl());
                 break;
             }
         }

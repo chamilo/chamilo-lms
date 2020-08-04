@@ -1320,7 +1320,7 @@ class UserGroup extends Model
     public function save($params, $show_query = false)
     {
         $params['updated_at'] = $params['created_at'] = api_get_utc_datetime();
-        $params['group_type'] = isset($params['group_type']) ? self::SOCIAL_CLASS : self::NORMAL_CLASS;
+        $params['group_type'] = !empty($params['group_type']) ? self::SOCIAL_CLASS : self::NORMAL_CLASS;
         $params['allow_members_leave_group'] = isset($params['allow_members_leave_group']) ? 1 : 0;
 
         $groupExists = $this->usergroup_exists(trim($params['name']));
@@ -1365,7 +1365,7 @@ class UserGroup extends Model
     public function update($values, $showQuery = false)
     {
         $values['updated_on'] = api_get_utc_datetime();
-        $values['group_type'] = isset($values['group_type']) ? self::SOCIAL_CLASS : self::NORMAL_CLASS;
+        $values['group_type'] = !empty($values['group_type']) ? self::SOCIAL_CLASS : self::NORMAL_CLASS;
         $values['allow_members_leave_group'] = isset($values['allow_members_leave_group']) ? 1 : 0;
 
         if (isset($values['id'])) {

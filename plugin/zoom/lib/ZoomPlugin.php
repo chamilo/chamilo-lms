@@ -326,6 +326,7 @@ class ZoomPlugin extends Plugin
                 Display::addFlash(
                     Display::return_message($this->get_lang('MeetingUpdated'), 'confirm')
                 );
+
             } catch (Exception $exception) {
                 Display::addFlash(
                     Display::return_message($exception->getMessage(), 'error')
@@ -736,10 +737,8 @@ class ZoomPlugin extends Plugin
                             Display::return_message($this->get_lang('GroupUsersWereRegistered'))
                         );
                     }
-                    api_location('meeting.php?meetingId='.$newMeeting->getMeetingId());
-                } elseif (null !== $user) {
-                    api_location('meeting.php?meetingId='.$newMeeting->getMeetingId());
                 }
+                api_location('meeting.php?meetingId='.$newMeeting->getMeetingId());
             } catch (Exception $exception) {
                 Display::addFlash(
                     Display::return_message($exception->getMessage(), 'error')
@@ -758,21 +757,26 @@ class ZoomPlugin extends Plugin
     }
 
     /**
-     * @param MeetingEntity $meetingEntity
+     * @param MeetingEntity $meeting
      *
      * @return bool whether the logged-in user can manage conferences in this context, that is either
      *              the current course or session coach, the platform admin or the current course admin
      */
-    public function userIsConferenceManager($meetingEntity)
+    public function userIsConferenceManager($meeting)
     {
-        if (null === $meetingEntity) {
+        if (null === $meeting) {
             return false;
         }
 
-        return api_is_coach()
-            || api_is_platform_admin()
-            || $meetingEntity->isCourseMeeting() && api_get_course_id() && api_is_course_admin()
-            || $meetingEntity->isUserMeeting() && $meetingEntity->getUser()->getId() == api_get_user_id();
+        if (api_is_coach() || api_is_platform_admin()) {
+            return true;
+        }
+
+        if ($meeting->isCourseMeeting() && api_get_course_id() && api_is_course_admin()) {
+            return true;
+        }
+
+        return $meeting->isUserMeeting() && $meeting->getUser()->getId() == api_get_user_id();
     }
 
     /**
@@ -932,6 +936,11 @@ class ZoomPlugin extends Plugin
                 if ($isGlobal || $currentUser === $meeting->getUser()) {
                     return $meeting->getMeetingInfoGet()->start_url;
                 }
+
+                if ($meeting->isCourseMeeting() && $this->userIsConferenceManager($meeting)) {
+                    return $meeting->getMeetingInfoGet()->start_url;
+                }
+
                 break;
             case 'started':
                 if ($currentUser === $meeting->getUser()) {

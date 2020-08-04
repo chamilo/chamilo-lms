@@ -15,7 +15,6 @@ if (empty($meetingId)) {
 }
 
 $plugin = ZoomPlugin::create();
-
 Display::display_header($plugin->get_title());
 echo $plugin->getToolbar();
 /** @var MeetingEntity $meeting */

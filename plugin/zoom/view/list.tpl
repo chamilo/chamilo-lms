@@ -9,9 +9,9 @@
             <tr>
                 <th>{{ 'Topic'|get_plugin_lang('ZoomPlugin') }}</th>
                 <th>{{ 'StartTime'|get_lang }}</th>
-                <th>{{ 'User'|get_lang }}</th>
-                <th>{{ 'Course'|get_lang }}</th>
-                <th>{{ 'Session'|get_lang }}</th>
+                <th>{{ 'ForEveryone'|get_lang }}</th>
+{#                <th>{{ 'Course'|get_lang }}</th>#}
+{#                <th>{{ 'Session'|get_lang }}</th>#}
                 {% if recordings %}
                 <th>{{ 'Recordings'|get_plugin_lang('ZoomPlugin') }}</th>
                 {% endif %}
@@ -23,9 +23,9 @@
                 <tr>
                     <td>{{ meeting.meetingInfoGet.topic }}</td>
                     <td>{{ meeting.formattedStartTime }}</td>
-                    <td>{{ meeting.user ? meeting.user : '-' }}</td>
-                    <td>{{ meeting.course ? meeting.course : '-' }}</td>
-                    <td>{{ meeting.session ? meeting.session : '-' }}</td>
+                    <td>{{ meeting.user ? 'No' : 'Yes' }}</td>
+{#                    <td>{{ meeting.course ? meeting.course : '-' }}</td>#}
+{#                    <td>{{ meeting.session ? meeting.session : '-' }}</td>#}
 
                     {% if recordings %}
                         <td>

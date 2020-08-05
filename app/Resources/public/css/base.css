@@ -10470,3 +10470,9 @@ ul.dropdown-menu.inner > li > a {
         clear: left;
     }
 }
+
+/* Only adjust class radio to student or profesor into /main/auth/inscription.php*/
+#registration > fieldset > #status-group .radio {
+    min-height: 145px;
+    min-width: 145px;
+}

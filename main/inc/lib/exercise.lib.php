@@ -1161,7 +1161,7 @@ class ExerciseLib
                             $selectedIndex = 0;
                             if ($user_choice) {
                                 foreach ($user_choice as $userChoiceKey => $chosen) {
-                                    $userChoiceKey +=1;
+                                    $userChoiceKey++;
                                     if ($lines_count != $userChoiceKey) {
                                         continue;
                                     }

@@ -864,4 +864,28 @@ $poweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chami
     </div>
 </div>
 </body>
+<script type="text/javascript">
+    function showHidePassword() {
+        if ($('#showPassword').prop('checked')) {
+            $('[name=passForm].form-control').attr('type', 'text');
+            $('.showPasswordEye').addClass('fa-eye').removeClass('fa-eye-slash');
+        } else {
+            $('[name=passForm].form-control').attr('type', 'password');
+            $('.showPasswordEye').removeClass('fa-eye').addClass('fa-eye-slash');
+        }
+    }
+
+    $(function () {
+        $('[name=passForm].form-control')
+            .css('width', '90%')
+            .css('display', 'inline-block')
+            .parent()
+            .append(`
+<input type="checkbox" id="showPassword" style="display:none" onchange="ShowHidePassword()">
+<label for="showPassword">
+<em class="fa fa-fw showPasswordEye fa-eye-slash"></em>
+</label>`);
+        ShowHidePassword()
+    });
+</script>
 </html>

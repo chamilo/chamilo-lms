@@ -3,7 +3,7 @@
 {{ schedule_form }}
 {{ search_form }}
 
-{% if meetings.count %}
+{% if meetings %}
     <h4>{{ 'MeetingsFound'|get_plugin_lang('ZoomPlugin') }}: </h4>
     <table class="table table-hover table-striped">
         <thead>

@@ -35,7 +35,7 @@ class RecordingEntityRepository extends EntityRepository
      *
      * @return ArrayCollection|Collection|RecordingEntity[]
      */
-    public function userRecordings($user)
+    /*public function userRecordings($user)
     {
         return $this->matching(
             Criteria::create()->where(
@@ -45,7 +45,7 @@ class RecordingEntityRepository extends EntityRepository
                 )
             )
         );
-    }
+    }*/
 
     /**
      * @param DateTime $start
@@ -54,12 +54,12 @@ class RecordingEntityRepository extends EntityRepository
      *
      * @return ArrayCollection|RecordingEntity[]
      */
-    public function getPeriodUserRecordings($start, $end, $user = null)
+    /*public function getPeriodUserRecordings($start, $end, $user = null)
     {
         return $this->userRecordings($user)->filter(
             function ($meeting) use ($start, $end) {
                 return $meeting->startDateTime >= $start && $meeting->startDateTime <= $end;
             }
         );
-    }
+    }*/
 }

@@ -11,6 +11,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * Class MeetingEntityRepository.
@@ -70,33 +71,85 @@ class MeetingEntityRepository extends EntityRepository
      *
      * @param User|null $user
      *
-     * @return ArrayCollection|Collection|MeetingEntity[]
+     * @return QueryBuilder
      */
     public function userMeetings($user = null)
     {
-        return $this->matching(
+        $qb = $this->createQueryBuilder('m');
+        //$qb->select('m');
+        $criteria = Criteria::create();
+
+        /*$criteria = Criteria::create()->where(
+            Criteria::expr()->andX(
+                Criteria::expr()->isNull('course'),
+                Criteria::expr()->orX(
+                    Criteria::expr()->isNull('user'),
+                    Criteria::expr()->eq('user', $user)
+                )
+            ));*/
+
+        /*$qb->where(Criteria::expr()->andX(
+            Criteria::expr()->isNull('course'),
+            Criteria::expr()->orX(
+                Criteria::expr()->isNull('user'),
+                Criteria::expr()->eq('user', $user)
+            )
+        ));*/
+        $qb
+            ->where('m.course IS NULL')
+            ->andWhere('(m.user IS NULL OR m.user = :user)');
+        $qb->setParameters(['user' => $user]);
+        //$criteria->where(Criteria::expr()->eq('status', User::COURSE_MANAGER));
+
+        return $qb;
+
+        /*return $this->matching(
+            ,
+                Criteria::expr()->andX(
+                    Criteria::expr()->eq('registrants', null),
+                    Criteria::expr()->orX(
+                        Criteria::expr()->eq('user', null),
+                        Criteria::expr()->eq('user', $user)
+                    )
+                )
+            )
+        );*/
+
+        /*return $this->matching(
             Criteria::create()->where(
                 Criteria::expr()->andX(
                     Criteria::expr()->eq('course', null),
-                    Criteria::expr()->orX(Criteria::expr()->eq('user', null), Criteria::expr()->eq('user', $user))
-
+                    Criteria::expr()->orX(
+                        Criteria::expr()->eq('user', null),
+                        Criteria::expr()->eq('user', $user)
+                    )
                 )
             )
-        );
+        );*/
     }
 
     /**
      * @param User|null $user
      *
-     * @return ArrayCollection|Collection|MeetingEntity[]
+     * @return MeetingEntity[]
      */
     public function unfinishedUserMeetings($user = null)
     {
-        return $this->userMeetings($user)->filter(
-            function ($meeting) {
-                return 'finished' !== $meeting->getMeetingInfoGet()->status;
+        /*return $this->userMeetings($user)->filter(
+           function ($meeting) {
+               return 'finished' !== $meeting->getMeetingInfoGet()->status;
+           }
+       );*/
+
+        $results = $this->userMeetings($user)->getQuery()->getResult();
+        $list = [];
+        foreach ($results as $meeting) {
+            if ('finished' === $meeting->getMeetingInfoGet()->status) {
+                $list[] = $meeting;
             }
-        );
+        }
+
+        return $list;
     }
 
     /**
@@ -108,11 +161,23 @@ class MeetingEntityRepository extends EntityRepository
      */
     public function periodUserMeetings($start, $end, $user = null)
     {
-        return $this->userMeetings($user)->filter(
+        /*return $this->userMeetings($user)->filter(
             function ($meeting) use ($start, $end) {
                 return $meeting->startDateTime >= $start && $meeting->startDateTime <= $end;
             }
-        );
+        );*/
+
+        $results = $this->userMeetings($user)->getQuery()->getResult();
+        $list = [];
+        if ($results) {
+            foreach ($results as $meeting) {
+                if ($meeting->startDateTime >= $start && $meeting->startDateTime <= $end) {
+                    $list[] = $meeting;
+                }
+            }
+        }
+
+        return $list;
     }
 
     /**
@@ -127,12 +192,12 @@ class MeetingEntityRepository extends EntityRepository
     {
         return $this->matching(
             Criteria::create()->where(
-                is_null($course)
+                null === $course
                     ? Criteria::expr()->neq('course', null)
                     : Criteria::expr()->andX(
-                        Criteria::expr()->eq('course', $course),
-                        Criteria::expr()->eq('session', $session)
-                    )
+                    Criteria::expr()->eq('course', $course),
+                    Criteria::expr()->eq('session', $session)
+                )
             )
         );
     }

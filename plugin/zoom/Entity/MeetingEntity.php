@@ -498,6 +498,7 @@ class MeetingEntity
     private function initializeDisplayableProperties()
     {
         $zoomPlugin = new \ZoomPlugin();
+
         $typeList = [
             API\Meeting::TYPE_INSTANT => $zoomPlugin->get_lang('InstantMeeting'),
             API\Meeting::TYPE_SCHEDULED => $zoomPlugin->get_lang('ScheduledMeeting'),

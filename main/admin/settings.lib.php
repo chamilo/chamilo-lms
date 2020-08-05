@@ -184,10 +184,9 @@ function handlePluginUpload()
     // Plugin upload.
     if (isset($_POST['plugin_upload'])) {
         if ($form->validate()) {
-            $values = $form->exportValues();
             $fileElement = $form->getElement('new_plugin');
             $file = $fileElement->getValue();
-            $result = uploadPlugin($values, $file);
+            $result = uploadPlugin($file);
 
             // Add event to the system log.
             $user_id = api_get_user_id();
@@ -764,13 +763,11 @@ function uploadStylesheet($values, $picture)
  * Creates the folder (if needed) and uploads the plugin in it. If the plugin
  * is already there and the folder is writeable, overwrite.
  *
- * @param array $values          the values of the form
  * @param array $file            the file passed to the upload form
- * @param array $officialPlugins A list of official plugins that cannot be uploaded
  *
  * @return bool
  */
-function uploadPlugin($values, $file, $officialPlugins)
+function uploadPlugin($file)
 {
     $result = false;
     $pluginPath = api_get_path(SYS_PLUGIN_PATH);
@@ -788,6 +785,8 @@ function uploadPlugin($values, $file, $officialPlugins)
             $allowedFiles = getAllowedFileTypes();
             $allowedFiles[] = 'php';
             $allowedFiles[] = 'js';
+            $allowedFiles[] = 'txt';
+            $allowedFiles[] = 'tpl';
             $pluginObject = new AppPlugin();
             $officialPlugins = $pluginObject->getOfficialPlugins();
 

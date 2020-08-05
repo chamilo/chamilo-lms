@@ -1034,13 +1034,23 @@ class ZoomPlugin extends Plugin
 
         $actionsLeft = '';
         $back = '';
+        $courseId = api_get_course_id();
 
-        $actionsLeft .=
-            Display::url(
-                Display::return_icon('bbb.png', $this->get_lang('Meetings'), null, ICON_SIZE_MEDIUM),
-                api_get_path(WEB_PLUGIN_PATH).'zoom/meetings.php'
-            )
-        ;
+        if (empty($courseId)) {
+            $actionsLeft .=
+                Display::url(
+                    Display::return_icon('bbb.png', $this->get_lang('Meetings'), null, ICON_SIZE_MEDIUM),
+                    api_get_path(WEB_PLUGIN_PATH).'zoom/meetings.php'
+                )
+            ;
+        } else {
+            $actionsLeft .=
+                Display::url(
+                    Display::return_icon('bbb.png', $this->get_lang('Meetings'), null, ICON_SIZE_MEDIUM),
+                    api_get_path(WEB_PLUGIN_PATH).'zoom/start.php?'.api_get_cidreq()
+                )
+            ;
+        }
 
         /*if ('true' === api_get_plugin_setting('zoom', 'enableGlobalConferencePerUser')) {
             $actionsLeft .=
@@ -1058,12 +1068,13 @@ class ZoomPlugin extends Plugin
             );
         }
 
-        $actionsLeft .=
-            Display::url(
-            Display::return_icon('settings.png', get_lang('Settings'), null, ICON_SIZE_MEDIUM),
-            api_get_path(WEB_CODE_PATH).'admin/configure_plugin.php?name=zoom'
-            ).$back
-        ;
+        if (api_is_platform_admin()) {
+            $actionsLeft .=
+                Display::url(
+                    Display::return_icon('settings.png', get_lang('Settings'), null, ICON_SIZE_MEDIUM),
+                    api_get_path(WEB_CODE_PATH).'admin/configure_plugin.php?name=zoom'
+                ).$back;
+        }
 
         return Display::toolbarAction('toolbar', [$actionsLeft]);
     }

@@ -76,7 +76,7 @@ foreach ($list as $toc) {
     if ($toc['type'] !== 'dir') {
         //just showing the src in a iframe ...
         $html .= '<h2>'.$toc['title'].'</h2>';
-        $html .= '<iframe border="0" frameborder="0" style="width:100%;height:600px" src="'.$src.'"></iframe>';
+        $html .= '<iframe border="0" frameborder="0" src="'.$src.'"></iframe>';
     } else {
         $html .= "<div class='impress-title'>";
         $html .= '<h1>'.$toc['title'].'</h1>';

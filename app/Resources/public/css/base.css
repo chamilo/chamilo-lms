@@ -10476,3 +10476,8 @@ ul.dropdown-menu.inner > li > a {
     min-height: 145px;
     min-width: 145px;
 }
+#registration input.register-profile[value='5']:after,
+#registration input.register-profile[value='1']:after
+{
+    top:-5px;
+}

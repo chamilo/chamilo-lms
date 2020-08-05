@@ -947,6 +947,10 @@ function display_requirements(
                 <td class="requirements-value">'.check_writable($basePath.'var').'</td>
             </tr>
             <tr>
+                <td class="requirements-item">'.$basePath.'.env.local</td>
+                <td class="requirements-value">'.checkCanCreateFile($basePath.'.env.local').'</td>
+            </tr>
+            <tr>
                 <td class="requirements-item">'.$basePath.'config/</td>
                 <td class="requirements-value">'.check_writable($basePath.'config').'</td>
             </tr>
@@ -3706,4 +3710,30 @@ function fixPostGroupIds($connection)
 function generateRandomToken()
 {
     return hash('sha1', uniqid(mt_rand(), true));
+}
+
+/**
+ * This function checks if the given file can be created or overwritten
+ *
+ * @param string $file     Full path to a file
+ *
+ * @return string   An HTML coloured label showing success or failure
+ */
+function checkCanCreateFile($file)
+{
+    if (file_exists($file)) {
+        if (is_writeable($file)) {
+            return Display::label(get_lang('Writable'), 'success');
+        } else {
+            return Display::label(get_lang('Not writable'), 'important');
+        }
+    } else {
+        $write = @file_put_contents($file, '');
+        if ($write) {
+            unlink($file);
+            return Display::label(get_lang('Writable'), 'success');
+        } else {
+            return Display::label(get_lang('Not writable'), 'important');
+        }
+    }
 }

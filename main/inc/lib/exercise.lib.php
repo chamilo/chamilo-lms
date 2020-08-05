@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
@@ -129,7 +130,6 @@ class ExerciseLib
             // suggestions here, for the sake of comprehensions, while the ones
             // on the right side are called answers
             $num_suggestions = 0;
-
             switch ($answerType) {
                 case MATCHING:
                 case DRAGGABLE:
@@ -148,9 +148,9 @@ class ExerciseLib
                                <table class="data_table">';
                     }
 
-                    // Iterate through answers
+                    // Iterate through answers.
                     $x = 1;
-                    //mark letters for each answer
+                    // Mark letters for each answer.
                     $letter = 'A';
                     $answer_matching = [];
                     $cpt1 = [];
@@ -161,9 +161,7 @@ class ExerciseLib
                             // options (A, B, C, ...) that will be put into the list-box
                             // have the "correct" field set to 0 because they are answer
                             $cpt1[$x] = $letter;
-                            $answer_matching[$x] = $objAnswerTmp->selectAnswerByAutoId(
-                                $numAnswer
-                            );
+                            $answer_matching[$x] = $objAnswerTmp->selectAnswerByAutoId($numAnswer);
                             $x++;
                             $letter++;
                         }
@@ -186,7 +184,6 @@ class ExerciseLib
                             $user_choice_array_position[$item['position']] = $item['answer'];
                         }
                     }
-
                     $num_suggestions = ($nbrAnswers - $x) + 1;
                     break;
                 case FREE_ANSWER:
@@ -417,7 +414,7 @@ class ExerciseLib
                 ];
                 $counter2 = 0;
                 foreach ($objQuestionTmp->options as $item) {
-                    if ($item == 'True' || $item == 'False') {
+                    if ($item === 'True' || $item === 'False') {
                         $header2 .= Display::tag('td',
                             '&nbsp;',
                             ['style' => 'background-color: #F7E1D7; color: black;border-right: solid #FFFFFF 1px;']);
@@ -1162,16 +1159,18 @@ class ExerciseLib
                             $draggableSelectOptions = [];
                             $selectedValue = 0;
                             $selectedIndex = 0;
-
                             if ($user_choice) {
-                                foreach ($user_choice as $chosen) {
-                                    if ($answerCorrect != $chosen['answer']) {
+                                foreach ($user_choice as $userChoiceKey => $chosen) {
+                                    $userChoiceKey +=1;
+                                    if ($lines_count != $userChoiceKey) {
                                         continue;
                                     }
+                                    /*if ($answerCorrect != $chosen['answer']) {
+                                        continue;
+                                    }*/
                                     $selectedValue = $chosen['answer'];
                                 }
                             }
-
                             foreach ($select_items as $key => $select_item) {
                                 $draggableSelectOptions[$select_item['id']] = $select_item['letter'];
                             }

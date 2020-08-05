@@ -71,21 +71,21 @@ class MeetingEntity
     /**
      * @var User
      * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User")
-     * @ORM\JoinColumn(name="user_id", nullable=true)
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=true)
      */
     protected $user;
 
     /**
      * @var Course
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
-     * @ORM\JoinColumn(name="course_id", nullable=true)
+     * @ORM\JoinColumn(name="course_id", referencedColumnName="id", nullable=true)
      */
     protected $course;
 
     /**
      * @var Session
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
-     * @ORM\JoinColumn(name="session_id", nullable=true)
+     * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=true)
      */
     protected $session;
 
@@ -110,10 +110,7 @@ class MeetingEntity
     /**
      * @var RegistrantEntity[]|ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="RegistrantEntity",
-     *     mappedBy="meeting",
-     *     cascade={"persist", "remove"}
+     * @ORM\OneToMany(targetEntity="RegistrantEntity", mappedBy="meeting", cascade={"persist", "remove"}
      * )
      */
     protected $registrants;

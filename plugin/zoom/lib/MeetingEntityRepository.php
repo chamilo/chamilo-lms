@@ -76,9 +76,11 @@ class MeetingEntityRepository extends EntityRepository
     public function userMeetings($user = null)
     {
         $qb = $this->createQueryBuilder('m');
-        //$qb->select('m');
-        $criteria = Criteria::create();
+        $qb
+            ->select('m')
+            ->leftJoin('m.registrants', 'r');
 
+        //$qb->select('m');
         /*$criteria = Criteria::create()->where(
             Criteria::expr()->andX(
                 Criteria::expr()->isNull('course'),
@@ -95,11 +97,12 @@ class MeetingEntityRepository extends EntityRepository
                 Criteria::expr()->eq('user', $user)
             )
         ));*/
+
         $qb
-            ->where('m.course IS NULL')
-            ->andWhere('(m.user IS NULL OR m.user = :user)');
+            ->andWhere('m.course IS NULL')
+            ->andWhere('m.user IS NULL OR m.user = :user OR r.user = :user');
+
         $qb->setParameters(['user' => $user]);
-        //$criteria->where(Criteria::expr()->eq('status', User::COURSE_MANAGER));
 
         return $qb;
 
@@ -141,7 +144,7 @@ class MeetingEntityRepository extends EntityRepository
            }
        );*/
 
-        $results = $this->userMeetings($user)->getQuery()->getResult();
+        $results = @$this->userMeetings($user)->getQuery()->getResult();
         $list = [];
         foreach ($results as $meeting) {
             if ('finished' === $meeting->getMeetingInfoGet()->status) {
@@ -153,9 +156,9 @@ class MeetingEntityRepository extends EntityRepository
     }
 
     /**
-     * @param DateTime  $start
-     * @param DateTime  $end
-     * @param User $user
+     * @param DateTime $start
+     * @param DateTime $end
+     * @param User     $user
      *
      * @return ArrayCollection|Collection|MeetingEntity[]
      */
@@ -167,7 +170,7 @@ class MeetingEntityRepository extends EntityRepository
             }
         );*/
 
-        $results = $this->userMeetings($user)->getQuery()->getResult();
+        $results = @$this->userMeetings($user)->getQuery()->getResult();
         $list = [];
         if ($results) {
             foreach ($results as $meeting) {

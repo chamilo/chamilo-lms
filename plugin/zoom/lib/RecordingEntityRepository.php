@@ -8,7 +8,6 @@ use Chamilo\ClassificationBundle\Entity\Collection;
 use Chamilo\UserBundle\Entity\User;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityRepository;
 
 /**

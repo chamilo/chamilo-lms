@@ -40,17 +40,14 @@ class RegistrantEntity
     /**
      * @var User
      * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User")
-     * @ORM\JoinColumn(name="user_id", nullable=false)
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      */
     protected $user;
 
     /**
      * @var MeetingEntity
-     * @ORM\ManyToOne(
-     *     targetEntity="MeetingEntity",
-     *     inversedBy="registrants",
-     * )
-     * @ORM\JoinColumn(name="meeting_id")
+     * @ORM\ManyToOne(targetEntity="MeetingEntity", inversedBy="registrants")
+     * @ORM\JoinColumn(name="meeting_id", referencedColumnName="id")
      */
     protected $meeting;
 

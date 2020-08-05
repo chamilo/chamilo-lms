@@ -69,14 +69,15 @@ if ($is_allowed_to_edit) {
 $html = '';
 $step = 1;
 foreach ($list as $toc) {
+    $stepId = "$step-".api_replace_dangerous_char($toc['title']);
     $x = 1000 * $step;
-    $html .= '<div id="step-'.$step.'" class="step slide" data-x="'.$x.'" data-y="-1500"  >';
+    $html .= '<div id="'.strtolower($stepId).'" title="'.$toc['title'].'" class="step slide" data-x="'.$x.'" data-y="-1500"  >';
     $html .= '<div class="impress-content">';
     $src = $lp->get_link('http', $toc['id']);
     if ($toc['type'] !== 'dir') {
         //just showing the src in a iframe ...
         $html .= '<h2>'.$toc['title'].'</h2>';
-        $html .= '<iframe border="0" frameborder="0" style="width:100%;height:600px" src="'.$src.'"></iframe>';
+        $html .= '<iframe border="0" frameborder="0" src="'.$src.'"></iframe>';
     } else {
         $html .= "<div class='impress-title'>";
         $html .= '<h1>'.$toc['title'].'</h1>';

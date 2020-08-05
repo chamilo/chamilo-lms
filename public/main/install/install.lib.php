@@ -1011,15 +1011,15 @@ function display_requirements(
             @chmod($checked_writable, $perm);
         }
 
-        if (false == $course_test_was_created) {
+        /*if (false == $course_test_was_created) {
             $error = true;
-        }
+        }*/
 
-        $checked_writable = api_get_path(CONFIGURATION_PATH).'configuration.php';
+        /*$checked_writable = api_get_path(CONFIGURATION_PATH).'configuration.php';
         if (file_exists($checked_writable) && !is_writable($checked_writable)) {
             $notWritable[] = $checked_writable;
             @chmod($checked_writable, $perm_file);
-        }
+        }*/
 
         // Second, if this fails, report an error
         //--> The user would have to adjust the permissions manually

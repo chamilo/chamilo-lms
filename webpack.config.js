@@ -91,10 +91,13 @@ Encore
     // define the environment variables
     .configureDefinePlugin(options => {
         const env = dotEnv.config({ path: '.env.local' });
-        if (env.error) {
+        /*if (env.error) {
             throw env.error;
+        }*/
+        if (env.parsed) {
+            options['process.env'].APP_API_PLATFORM_URL = JSON.stringify(env.parsed.APP_API_PLATFORM_URL);
         }
-        options['process.env'].APP_API_PLATFORM_URL = JSON.stringify(env.parsed.APP_API_PLATFORM_URL);
+
     })
     // enable ESLint
     // .addLoader({

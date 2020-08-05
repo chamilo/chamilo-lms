@@ -48,10 +48,11 @@ $course_code = api_get_course_id();
 $course_id = api_get_course_int_id();
 $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/impress/impress-demo.css');
 $list = $lp->get_toc();
+$content = '';
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true, false, false);
 if ($is_allowed_to_edit) {
-    echo '<div style="position: fixed; top: 0px; left: 0px; pointer-events: auto;width:100%">';
+    $content .= '<div style="position: fixed; top: 0px; left: 0px; pointer-events: auto;width:100%">';
     global $interbreadcrumb;
     $interbreadcrumb[] = [
         'url' => 'lp_controller.php?action=list&isStudentView=false&'.api_get_cidreq(),
@@ -62,8 +63,8 @@ if ($is_allowed_to_edit) {
         'name' => $lp->getNameNoTags(),
     ];
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Preview')];
-    echo return_breadcrumb($interbreadcrumb, null, null);
-    echo '</div>';
+    $content .= return_breadcrumb($interbreadcrumb, null, null);
+    $content .= '</div>';
 }
 
 $html = '';
@@ -93,6 +94,6 @@ $tool_name = get_lang('ViewModeImpress');
 $tpl = new Template($tool_name, false, false, true);
 $tpl->assign('html', $html);
 $templateName = $tpl->get_template('learnpath/impress.tpl');
-$content = $tpl->fetch($templateName);
+$content .= $tpl->fetch($templateName);
 $tpl->assign('content', $content);
-$tpl->display_one_col_template();
+$tpl->display_no_layout_template();

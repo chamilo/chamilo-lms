@@ -10480,4 +10480,5 @@ ul.dropdown-menu.inner > li > a {
 #registration input.register-profile[value='1']:after
 {
     top:-5px;
+    left: -2px;
 }

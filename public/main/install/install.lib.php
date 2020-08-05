@@ -939,20 +939,16 @@ function display_requirements(
             <td class="requirements-value">'.check_writable(api_get_path(SYS_CODE_PATH).'inc/conf').'</td>
         </tr>';
     }
-
+    $basePath = api_get_path(SYMFONY_SYS_PATH);
     echo '<table class="table table-bordered">
             '.$oldConf.'
             <tr>
-                <td class="requirements-item">'.api_get_path(SYMFONY_SYS_PATH).'config</td>
-                <td class="requirements-value">'.check_writable(api_get_path(SYMFONY_SYS_PATH).'config').'</td>
+                <td class="requirements-item">'.$basePath.'var/</td>
+                <td class="requirements-value">'.check_writable($basePath.'var').'</td>
             </tr>
             <tr>
-                <td class="requirements-item">'.api_get_path(SYMFONY_SYS_PATH).'vendor/</td>
-                <td class="requirements-value">'.checkReadable(api_get_path(SYMFONY_SYS_PATH).'vendor').'</td>
-            </tr>
-            <tr>
-                <td class="requirements-item">'.api_get_path(SYS_PATH).'</td>
-                <td class="requirements-value">'.check_writable(api_get_path(SYS_PATH)).'</td>
+                <td class="requirements-item">'.$basePath.'config/</td>
+                <td class="requirements-value">'.check_writable($basePath.'config').'</td>
             </tr>
             <tr>
                 <td class="requirements-item">'.get_lang('Permissions for new directories').'</td>
@@ -1012,6 +1008,7 @@ function display_requirements(
         }
 
         if (false == $course_test_was_created) {
+            error_log('Installer: Could not create test course - Make sure permissions are fine.');
             $error = true;
         }
 
@@ -1024,6 +1021,7 @@ function display_requirements(
         // Second, if this fails, report an error
         //--> The user would have to adjust the permissions manually
         if (count($notWritable) > 0) {
+            error_log('Installer: At least one needed directory or file is not writeable');
             $error = true; ?>
             <div class="text-danger">
                 <h3 class="text-center"><?php echo get_lang('Warning !'); ?></h3>

@@ -330,7 +330,6 @@ class ZoomPlugin extends Plugin
                 Display::addFlash(
                     Display::return_message($this->get_lang('MeetingUpdated'), 'confirm')
                 );
-
             } catch (Exception $exception) {
                 Display::addFlash(
                     Display::return_message($exception->getMessage(), 'error')
@@ -721,7 +720,7 @@ class ZoomPlugin extends Plugin
                     $form->getSubmitValue('duration'),
                     $form->getSubmitValue('topic'),
                     $form->getSubmitValue('agenda'),
-                    substr(uniqid('z', true),0, 10)
+                    substr(uniqid('z', true), 0, 10)
                 );
 
                 Display::addFlash(
@@ -790,7 +789,6 @@ class ZoomPlugin extends Plugin
     }
 
     /**
-     *
      * @return bool whether the logged-in user can manage conferences in this context, that is either
      *              the current course or session coach, the platform admin or the current course admin
      */
@@ -969,7 +967,7 @@ class ZoomPlugin extends Plugin
                 }
 
                 if ('true' === $this->get('enableParticipantRegistration')) {
-                //if ('true' === $this->get('enableParticipantRegistration') && $meeting->requiresRegistration()) {
+                    //if ('true' === $this->get('enableParticipantRegistration') && $meeting->requiresRegistration()) {
                     // the participant must be registered
                     $registrant = $meeting->getRegistrant($currentUser);
                     if (null !== $registrant) {

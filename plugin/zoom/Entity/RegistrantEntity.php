@@ -131,9 +131,9 @@ class RegistrantEntity
     }
 
     /**
-     * @return MeetingRegistrantListItem
      * @throws Exception
      *
+     * @return MeetingRegistrantListItem
      */
     public function getMeetingRegistrantListItem()
     {
@@ -143,9 +143,9 @@ class RegistrantEntity
     /**
      * @param MeetingRegistrantListItem $meetingRegistrantListItem
      *
-     * @return $this
      * @throws Exception
      *
+     * @return $this
      */
     public function setMeetingRegistrantListItem($meetingRegistrantListItem)
     {
@@ -176,9 +176,9 @@ class RegistrantEntity
     }
 
     /**
-     * @return CreatedRegistration
      * @throws Exception
      *
+     * @return CreatedRegistration
      */
     public function getCreatedRegistration()
     {
@@ -188,9 +188,9 @@ class RegistrantEntity
     /**
      * @param CreatedRegistration $createdRegistration
      *
-     * @return $this
      * @throws Exception
      *
+     * @return $this
      */
     public function setCreatedRegistration($createdRegistration)
     {
@@ -205,9 +205,9 @@ class RegistrantEntity
     }
 
     /**
-     * @return MeetingRegistrant
      * @throws Exception
      *
+     * @return MeetingRegistrant
      */
     public function getMeetingRegistrant()
     {
@@ -217,9 +217,9 @@ class RegistrantEntity
     /**
      * @param MeetingRegistrant $meetingRegistrant
      *
-     * @return $this
      * @throws Exception
      *
+     * @return $this
      */
     public function setMeetingRegistrant($meetingRegistrant)
     {

@@ -79,7 +79,6 @@ class MeetingEntityRepository extends EntityRepository
                 Criteria::expr()->andX(
                     Criteria::expr()->eq('course', null),
                     Criteria::expr()->orX(Criteria::expr()->eq('user', null), Criteria::expr()->eq('user', $user))
-
                 )
             )
         );
@@ -100,9 +99,9 @@ class MeetingEntityRepository extends EntityRepository
     }
 
     /**
-     * @param DateTime  $start
-     * @param DateTime  $end
-     * @param User $user
+     * @param DateTime $start
+     * @param DateTime $end
+     * @param User     $user
      *
      * @return ArrayCollection|Collection|MeetingEntity[]
      */

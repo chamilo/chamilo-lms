@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\PluginBundle\Zoom\API;
@@ -9,8 +10,6 @@ use Exception;
  * Class Meeting, minimal meeting definition required to create one from scratch or update an existing one
  * Also referred to as MeetingUpdate in the API documentation
  * Does not represent an actual created meeting.
- *
- * @package Chamilo\PluginBundle\Zoom\API
  */
 class Meeting
 {

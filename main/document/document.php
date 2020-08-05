@@ -1787,7 +1787,7 @@ if (!$is_certificate_mode && false === $disableSearch) {
         [],
         FormValidator::LAYOUT_INLINE
     );
-    $form->addText('keyword', '', false, ['class' => 'col-md-2']);
+    $form->addText('keyword', get_lang('SearchTerm'), false, ['class' => 'col-md-2']);
     $form->addHidden('cidReq', api_get_course_id());
     $form->addHidden('id_session', api_get_session_id());
     $form->addHidden('gidReq', $groupId);
@@ -1904,10 +1904,14 @@ if (!empty($documentAndFolders)) {
                 $is_certificate_mode
             );
 
-            // Document title with link
-            $row[] = $link.$session_img.'<br />'.$invisibility_span_open.'<i>'
-                .nl2br(htmlspecialchars($document_data['comment'], ENT_QUOTES, $charset))
-                .'</i>'.$invisibility_span_close.$user_link;
+            // Document title with link and comment
+            $titleWithLink = $link.$session_img.'<br />'.$invisibility_span_open;
+            $commentText = nl2br(htmlspecialchars($document_data['comment'], ENT_QUOTES, $charset));
+            if (!empty($commentText)) {
+                $titleWithLink .= '<em>'.$commentText.'</em>';
+            }
+            $titleWithLink .= $invisibility_span_close.$user_link;
+            $row[] = $titleWithLink;
 
             if ($document_data['filetype'] == 'folder') {
                 $displaySize = '<span id="document_size_'.$document_data['id']

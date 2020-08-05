@@ -165,13 +165,13 @@ in_array(
                 ';
 
             $reportName1 = get_lang('UsersCreatedInTheSelectedPeriod');
-            $reportName2 = get_lang('UserByStatus');
-            $reportName3 = get_lang('UserByLanguage');
-            $reportName4 = get_lang('UserByLanguageCible');
-            $reportName5 = get_lang('UserByCareer');
-            $reportName6 = get_lang('UserByContract');
-            $reportName7 = get_lang('UserByCertificate');
-            $reportName8 = get_lang('UserByAge');
+            $reportName2 = get_lang('UsersByStatus');
+            $reportName3 = get_lang('UsersByLanguage');
+            $reportName4 = get_lang('UsersByTargetLanguage');
+            $reportName5 = get_lang('UsersByCareer');
+            $reportName6 = get_lang('UsersByContract');
+            $reportName7 = get_lang('UsersByCertificate');
+            $reportName8 = get_lang('UsersByAge');
 
             //$url1 = $urlBase.'a=users_active&filter=active&date_start='.$dateStart.'&date_end='.$dateEnd;
             $url2 = $urlBase.'a=users_active&filter=status&date_start='.$dateStart.'&date_end='.$dateEnd;
@@ -1320,7 +1320,7 @@ switch ($report) {
         $intervals = [3, 5, 30, 120];
         $counts = [];
         foreach ($intervals as $minutes) {
-            $sql = "SELECT count(distinct(user_id)) 
+            $sql = "SELECT count(distinct(user_id))
                 FROM $table WHERE
                 DATE_ADD(tms, INTERVAL '$minutes' MINUTE) > UTC_TIMESTAMP()";
             $query = Database::query($sql);
@@ -1336,7 +1336,7 @@ switch ($report) {
         <div class="tracking-course-summary">
             <div class="row">
                 <div class="col-lg-3 col-sm-3">
-                    <div class="panel panel-default tracking tracking-student">
+                    <div class="panel panel-default tracking tracking-exercise">
                         <div class="panel-body">
                             <span class="tracking-icon">
                                 <i class="fa fa-thermometer-4" aria-hidden="true"></i>
@@ -1349,7 +1349,7 @@ switch ($report) {
                     </div>
                 </div>
                 <div class="col-lg-3 col-sm-3">
-                    <div class="panel panel-default tracking tracking-lessons">
+                    <div class="panel panel-default tracking tracking-certificate">
                         <div class="panel-body">
                             <span class="tracking-icon">
                                 <i class="fa fa-thermometer-3" aria-hidden="true"></i>
@@ -1362,7 +1362,7 @@ switch ($report) {
                     </div>
                 </div>
                 <div class="col-lg-3 col-sm-3">
-                    <div class="panel panel-default tracking tracking-exercise">
+                    <div class="panel panel-default tracking tracking-lessons">
                         <div class="panel-body">
                             <span class="tracking-icon">
                                 <i class="fa fa-thermometer-2" aria-hidden="true"></i>
@@ -1375,7 +1375,7 @@ switch ($report) {
                     </div>
                 </div>
                 <div class="col-lg-3 col-sm-3">
-                    <div class="panel panel-default tracking tracking-certificate">
+                    <div class="panel panel-default tracking tracking-student">
                         <div class="panel-body">
                             <span class="tracking-icon">
                                 <i class="fa fa-thermometer-1" aria-hidden="true"></i>
@@ -1392,7 +1392,7 @@ switch ($report) {
         <hr />
         <div class="row">
             <div class="col-lg-3 col-sm-3">
-                <div class="panel panel-default tracking tracking-student">
+                <div class="panel panel-default tracking tracking-exercise">
                     <div class="panel-body">
                         <span class="tracking-icon">
                             <i class="fa fa-thermometer-4" aria-hidden="true"></i>
@@ -1405,7 +1405,7 @@ switch ($report) {
                 </div>
             </div>
             <div class="col-lg-3 col-sm-3">
-                <div class="panel panel-default tracking tracking-lessons">
+                <div class="panel panel-default tracking tracking-certificate">
                     <div class="panel-body">
                         <span class="tracking-icon">
                             <i class="fa fa-thermometer-3" aria-hidden="true"></i>
@@ -1418,7 +1418,7 @@ switch ($report) {
                 </div>
             </div>
             <div class="col-lg-3 col-sm-3">
-                <div class="panel panel-default tracking tracking-exercise">
+                <div class="panel panel-default tracking tracking-lessons">
                     <div class="panel-body">
                         <span class="tracking-icon">
                             <i class="fa fa-thermometer-2" aria-hidden="true"></i>
@@ -1431,7 +1431,7 @@ switch ($report) {
                 </div>
             </div>
              <div class="col-lg-3 col-sm-3">
-                <div class="panel panel-default tracking tracking-certificate">
+                <div class="panel panel-default tracking tracking-student">
                     <div class="panel-body">
                         <span class="tracking-icon">
                             <i class="fa fa-thermometer-1" aria-hidden="true"></i>
@@ -1443,7 +1443,7 @@ switch ($report) {
                     </div>
                 </div>
             </div>
- 
+
         </div>';
         break;
     case 'users':

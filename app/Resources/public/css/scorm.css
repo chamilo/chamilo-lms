@@ -524,7 +524,6 @@ See https://support.chamilo.org/issues/6976
 }
 .c-menu-right {
     display: inline-flex;
-    width: 100%;
     position: relative;
     top: 0;
     left: 0;

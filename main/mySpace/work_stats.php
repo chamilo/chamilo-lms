@@ -194,7 +194,7 @@ if ($is_western_name_order) {
 }
 
 $table->set_header(2, get_lang('TimeSpentInTheCourse'), false);
-$table->set_header(3, get_lang('TimeSpentInWork'), false);
+$table->set_header(3, get_lang('TimeSpentOnAssignment'), false);
 $table->set_header(4, get_lang('Status'), false);
 
 Display::display_header($nameTools);

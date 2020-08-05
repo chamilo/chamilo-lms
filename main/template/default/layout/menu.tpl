@@ -24,7 +24,7 @@
                 <span class="icon-bar"></span>
             </button>
 
-            {% if notification_event == 1 %}
+            {% if _u.logged == 1 and notification_event == 1 %}
                 <button id="user-dropdown"  type="button" class="menu-dropdown pull-right navbar-toggle collapsed"
                         data-toggle="collapse" data-target="#user-dropdown-menu" aria-expanded="false" aria-controls="navbar">
                     <img class="img-circle" src="{{ _u.avatar_small }}" alt="{{ _u.complete_name }}"/>
@@ -37,7 +37,7 @@
                                     <img class="img-circle" src="{{ _u.avatar_medium }}" alt="{{ _u.complete_name }}"/>
                                     <p class="name">{{ _u.complete_name }}</p>
                                 </a>
-                                <p><i class="fa fa-envelope-o" aria-hidden="true"></i> {{ _u.email }}</p>
+                                <p><em class="fa fa-envelope-o" aria-hidden="true"></em> {{ _u.email }}</p>
                             </div>
                         </li>
                         <li role="separator" class="divider"></li>
@@ -77,21 +77,21 @@
                 {% if _u.logged == 1 %}
                     <button id="notifications-dropdown" type="button" class="pull-right menu-dropdown navbar-toggle collapsed"
                             data-toggle="collapse" data-target="#notification-menu" aria-expanded="false" aria-controls="navbar">
-                        <i id="notificationsIcon" class="fa fa-bell-o " aria-hidden="true"></i>
+                        <em id="notificationsIcon" class="fa fa-bell-o " aria-hidden="true"></em>
                         {# hide red button loading #}
                         <span id="notificationsBadge" class="label label-danger">
-                        <i class="fa fa-spinner fa-pulse fa-fw" aria-hidden="true"></i>
+                        <em class="fa fa-spinner fa-pulse fa-fw" aria-hidden="true"></em>
                         </span>
                         <div id="notification-menu"
                              class="dropdown-menu notification-dropdown-menu" aria-labelledby="notifications-dropdown">
                             <h5 class="dropdown-header">
-                                <i class="fa fa-bell-o" aria-hidden="true"></i> <span class="fw-600 c-grey-900">
+                                <em class="fa fa-bell-o" aria-hidden="true"></em> <span class="fw-600 c-grey-900">
                                     {{ 'Notifications' | get_lang }}
                                 </span>
                             </h5>
                             <a id="notificationsLoader" class="dropdown-item dropdown-notification" href="#">
                                 <p class="notification-solo text-center">
-                                    <i id="notificationsIcon" class="fa fa-spinner fa-pulse fa-fw" aria-hidden="true"></i>
+                                    <em id="notificationsIcon" class="fa fa-spinner fa-pulse fa-fw" aria-hidden="true"></em>
                                     {{ 'Loading' | get_lang }}
                                 </p>
                             </a>
@@ -109,7 +109,7 @@
                     </button>
                 {% endif %}
             {% endif %}
-            <a class="navbar-brand" href="{{ _p.web }}"> <i class="fa fa-home"></i> </a>
+            <a class="navbar-brand" href="{{ _p.web }}"> <em class="fa fa-home"></em> </a>
         </div>
 
         <div id="navbar" class="collapse navbar-collapse">
@@ -157,7 +157,7 @@
                                                 <img class="img-circle" src="{{ _u.avatar_medium }}" alt="{{ _u.complete_name }}"/>
                                                 <p class="name">{{ _u.complete_name }}</p>
                                             </a>
-                                            <p><i class="fa fa-envelope-o" aria-hidden="true"></i> {{ _u.email }}</p>
+                                            <p><em class="fa fa-envelope-o" aria-hidden="true"></em> {{ _u.email }}</p>
                                         </div>
                                     </li>
                                     <li role="separator" class="divider"></li>

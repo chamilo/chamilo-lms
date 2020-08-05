@@ -7,8 +7,8 @@ use ChamiloSession as Session;
  * Chamilo installation.
  *
  * As seen from the user, the installation proceeds in 6 steps.
- * The user is presented with several webpages where he/she has to make choices
- * and/or fill in data.
+ * The user is presented with several web pages where he/she has to make
+ * choices and/or fill in data.
  *
  * The aim is, as always, to have good default settings and suggestions.
  *

@@ -21,12 +21,7 @@ $strings['AuthentifySampleText3'] = 'The fox screams at midnight.';
 $strings['AuthentifySampleText4'] = 'Go Out On a Limb.';
 $strings['AuthentifySampleText5'] = 'Under the Water.';
 $strings['AuthentifySampleText6'] = 'Barking Up The Wrong Tree.';
-
-$strings['RepeatThisPhrase'] = 'Repeat this phrase three times after allowing audio recording:';
-$strings['EnrollmentSignature0'] = 'Unsustainable signature requires a new enrollment.';
-$strings['EnrollmentSignature1'] = 'Passable signature, advice to make a new enrollment.';
-$strings['EnrollmentSignature2'] = 'Correct signature.';
-$strings['EnrollmentSignature3'] = 'Good signature.';
+$strings['RepeatThisPhrase'] = 'Allow audio recording and then read this sentence out loud:';
 $strings['SpeechAuthAlreadyEnrolled'] = 'Speech authentication already enrolled previously.';
 $strings['SpeechAuthNotEnrolled'] = 'Speech authentication not enrolled previously.';
 $strings['SpeechAuthentication'] = 'Speech authentication';
@@ -44,14 +39,5 @@ $strings['Quality'] = 'Quality';
 $strings['Failed'] = "Failed";
 $strings['ActivityId'] = "Activity ID";
 $strings['Success'] = "Success";
-
-$strings['AudioQualityShort'] = 'Too short audio';
-$strings['AudioQualityQuiet'] = 'Too quiet audio';
-$strings['AudioQualityLoud'] = 'Too loud audio';
-$strings['AudioQualityNoisy'] = 'Too noisy audio';
-$strings['AudioQualityFrequency'] = 'Missing some audio frequencies';
-$strings['AudioQualityPoorness'] = 'Too poor general audio quality';
-
-$strings['AgreeAllowResearch'] = 'I agree to allow the use of data for research (no commercial usage).';
-
 $strings['MarkForSpeechAuthentication'] = 'Mark it for speech authentication';
+$strings['EnrollmentTitle'] = "Enrollment to generate voice print with Whispeak";

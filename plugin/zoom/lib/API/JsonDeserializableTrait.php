@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\PluginBundle\Zoom\API;
@@ -7,9 +8,7 @@ use Exception;
 
 /**
  * Trait JsonDeserializableTrait.
- * Utility fonctions to help convert server-generated JSON to API class instances.
- *
- * @package Chamilo\PluginBundle\Zoom\API
+ * Utility functions to help convert server-generated JSON to API class instances.
  */
 trait JsonDeserializableTrait
 {
@@ -28,7 +27,7 @@ trait JsonDeserializableTrait
             throw new Exception('Cannot JSON-decode empty string');
         }
         $object = json_decode($json);
-        if (is_null($object)) {
+        if (null === $object) {
             throw new Exception('Could not decode JSON: '.$json);
         }
 

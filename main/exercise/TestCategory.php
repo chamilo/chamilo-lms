@@ -979,7 +979,7 @@ class TestCategory
 
             $return .= $warning;
             $return .= '<div class="table-responsive">';
-            $return .= '<table class="data_table table table-hover">';
+            $return .= '<table class="table table-bordered data_table">';
             $return .= '<tr>';
             $return .= '<th height="24">'.get_lang('Categories').'</th>';
             $return .= '<th width="70" height="24">'.get_lang('Number').'</th></tr>';
@@ -1002,7 +1002,12 @@ class TestCategory
                 $return .= '</td>';
                 $return .= '<td>';
                 $value = isset($saved_categories) && isset($saved_categories[$cat_id]) ? $saved_categories[$cat_id]['count_questions'] : -1;
-                $return .= '<input name="category['.$cat_id.']" value="'.$value.'" />';
+                $return .= Display::input(
+                    'number',
+                    "category[$cat_id]",
+                    $value,
+                    ['class' => 'form-control', 'min' => -1, 'step' => 1]
+                );
                 $return .= '</td>';
                 $return .= '</tr>';
             }

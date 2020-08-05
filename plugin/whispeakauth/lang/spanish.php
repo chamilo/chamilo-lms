@@ -21,12 +21,7 @@ $strings['AuthentifySampleText3'] = 'El zorro grita a medianoche.';
 $strings['AuthentifySampleText4'] = 'Ir por las ramas.';
 $strings['AuthentifySampleText5'] = 'Debajo del agua.';
 $strings['AuthentifySampleText6'] = 'Ladrando al árbol equivocado.';
-
-$strings['RepeatThisPhrase'] = 'Repita esta frase tres veces después de permitir la grabación de audio:';
-$strings['EnrollmentSignature0'] = 'Firma insostenible, requiere una nueva inscripción.';
-$strings['EnrollmentSignature1'] = 'Firma aceptable, pero se aconseja hacer una nueva inscripción.';
-$strings['EnrollmentSignature2'] = 'Firma correcta.';
-$strings['EnrollmentSignature3'] = 'Buena firma.';
+$strings['RepeatThisPhrase'] = 'Permita la grabación de audio y luego lea esta oración en voz alta:';
 $strings['SpeechAuthAlreadyEnrolled'] = 'Autenticación de voz registrada anteriormente.';
 $strings['SpeechAuthNotEnrolled'] = 'Autenticación de voz no registrada previamente.';
 $strings['SpeechAuthentication'] = 'Atenticación con voz';
@@ -44,14 +39,5 @@ $strings['Quality'] = 'Calidad';
 $strings['Failed'] = "Fallido";
 $strings['ActivityId'] = "Identificador de actividad";
 $strings['Success'] = "Satisfactotio";
-
-$strings['AudioQualityShort'] = 'Audio demasiado corto';
-$strings['AudioQualityQuiet'] = 'Audio demasiado silencioso';
-$strings['AudioQualityLoud'] = 'Audio demasiado alto';
-$strings['AudioQualityNoisy'] = 'Audio demasiado ruidoso';
-$strings['AudioQualityFrequency'] = 'Falta algunas frecuencias de audio';
-$strings['AudioQualityPoorness'] = 'Calidad de audio general demasiado pobre';
-
-$strings['AgreeAllowResearch'] = 'Estoy de acuerdo en permitir el uso de datos para investigación (no uso comercial).';
-
 $strings['MarkForSpeechAuthentication'] = 'Marcarlo para autenticación con voz';
+$strings['EnrollmentTitle'] = "Inscripción para generar huella de voz con Whispeak";

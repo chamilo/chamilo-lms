@@ -939,8 +939,9 @@ if ($show_results) {
 if ('export' === $action) {
     $content = ob_get_clean();
     // needed in order to mpdf to work
-    ob_clean();
-
+    if (ob_get_contents()) {
+        ob_clean();
+    }
     $params = [
         'filename' => api_replace_dangerous_char(
             $objExercise->name.' '.

@@ -2314,13 +2314,13 @@ class CourseManager
         $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
         $sql = "SELECT DISTINCT
-                    u.user_id,
+                    u.id as user_id,
                     u.lastname,
                     u.firstname,
                     u.username
                 FROM $tbl_user u
                 INNER JOIN $tbl_session_course_user scu
-                ON (u.user_id = scu.user_id)
+                ON (u.id = scu.user_id)
                 WHERE
                     scu.session_id = $session_id AND
                     scu.c_id = $courseId AND

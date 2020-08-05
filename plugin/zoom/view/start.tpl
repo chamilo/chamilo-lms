@@ -1,44 +1,52 @@
 {% if createInstantMeetingForm %}
-{{ createInstantMeetingForm }}
+    {{ createInstantMeetingForm }}
 {% endif %}
-{% if scheduledMeetings %}
-<div class="page-header">
-    <h2>{{ 'ScheduledMeetings'|get_lang }}</h2>
-</div>
-<table class="table">
-    <tr>
-        <!-- th>{{ 'CreatedAt'|get_lang }}</th -->
-        <th>{{ 'StartTime'|get_lang }}</th>
-        <th>{{ 'Duration'|get_lang }}</th>
-        <!-- th>{{ 'Type'|get_lang }}</th -->
-        <th>{{ 'TopicAndAgenda'|get_lang }}</th>
-        <th></th>
-    </tr>
-    {% for meeting in scheduledMeetings %}
-    <tr>
-        <!-- td>{{ meeting.created_at }}</td -->
-        <td>{{ meeting.formattedStartTime }}</td>
-        <td>{{ meeting.formattedDuration }}</td>
-        <!-- td>{{ meeting.typeName }}</td -->
-        <td>
-            <strong>{{ meeting.meetingInfoGet.topic }}</strong>
-            <p class="small">{{ meeting.meetingInfoGet.agenda|nl2br }}</p>
-        </td>
-        <td>
-            <a class="btn" href="meeting_from_start.php?meetingId={{ meeting.id }}">
-                {{ 'Details'|get_lang }}
-            </a>
-            <a class="btn" href="{{ meeting.meetingInfoGet.join_url }}">
-                {{ 'Join'|get_lang }}
-            </a>
-        </td>
-    </tr>
-    {% endfor %}
-</table>
+
+{% if scheduledMeetings.count %}
+    <div class="page-header">
+        <h2>{{ 'ScheduledMeetings'|get_lang }}</h2>
+    </div>
+    <table class="table">
+        <tr>
+            <th>{{ 'Topic'|get_plugin_lang('ZoomPlugin') }}</th>
+            <th>{{ 'Agenda'|get_plugin_lang('ZoomPlugin') }}</th>
+            <th>{{ 'StartTime'|get_lang }}</th>
+            <th>{{ 'Duration'|get_lang }}</th>
+            <th>{{ 'Actions'|get_lang }}</th>
+        </tr>
+        {% for meeting in scheduledMeetings %}
+        <tr>
+            <td>
+                {{ meeting.meetingInfoGet.topic }}
+            </td>
+            <td>
+                {{ meeting.meetingInfoGet.agenda|nl2br }}
+            </td>
+            <td>{{ meeting.formattedStartTime }}</td>
+            <td>{{ meeting.formattedDuration }}</td>
+            <td>
+                <a class="btn btn-primary" href="{{ meeting.meetingInfoGet.join_url }}">
+                    {{ 'Join'|get_plugin_lang('ZoomPlugin') }}
+                </a>
+
+                <a class="btn btn-default" href="meeting.php?meetingId={{ meeting.meetingId }}">
+                    {{ 'Edit'|get_lang }}
+                </a>
+
+                <a class="btn btn-danger"
+                   href="start.php?action=delete&meetingId={{ meeting.meetingId }}"
+                   onclick="javascript:if(!confirm('{{ 'AreYouSureToDelete' | get_lang }}')) return false;"
+                >
+                    {{ 'Delete'|get_lang }}
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
 {% else %}
 <!-- p>No scheduled meeting currently</p -->
 {% endif %}
+
 {% if scheduleMeetingForm %}
-<h3>{{ 'ScheduleAMeeting'|get_lang }}</h3>
-{{ scheduleMeetingForm }}
+    {{ scheduleMeetingForm }}
 {% endif %}

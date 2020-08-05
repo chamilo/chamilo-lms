@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\PluginBundle\Zoom;
@@ -22,7 +23,6 @@ use Exception;
 /**
  * Class MeetingEntity.
  *
- * @package Chamilo\PluginBundle\Zoom
  * @ORM\Entity(repositoryClass="Chamilo\PluginBundle\Zoom\MeetingEntityRepository")
  * @ORM\Table(
  *     name="plugin_zoom_meeting",
@@ -55,75 +55,71 @@ class MeetingEntity
     public $statusName;
 
     /**
-     * @var int the remote zoom meeting identifier
-     * @ORM\Column(type="bigint")
+     * @var int
+     * @ORM\Column(type="integer")
      * @ORM\Id
+     * @ORM\GeneratedValue()
      */
-    private $id;
+    protected $id;
+
+    /**
+     * @var int the remote zoom meeting identifier
+     * @ORM\Column(name="meeting_id", type="string")
+     */
+    protected $meetingId;
 
     /**
      * @var User
-     * @ORM\ManyToOne(
-     *     targetEntity="Chamilo\UserBundle\Entity\User",
-     * )
-     * @ORM\JoinColumn(name="user_id", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=true)
      */
-    private $user;
+    protected $user;
 
     /**
      * @var Course
-     * @ORM\ManyToOne(
-     *     targetEntity="Chamilo\CoreBundle\Entity\Course",
-     * )
-     * @ORM\JoinColumn(name="course_id", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
+     * @ORM\JoinColumn(name="course_id", referencedColumnName="id", nullable=true)
      */
-    private $course;
+    protected $course;
 
     /**
      * @var Session
-     * @ORM\ManyToOne(
-     *     targetEntity="Chamilo\CoreBundle\Entity\Session",
-     * )
-     * @ORM\JoinColumn(name="session_id", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
+     * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=true)
      */
-    private $session;
+    protected $session;
 
     /**
      * @var string
      * @ORM\Column(type="text", name="meeting_list_item_json", nullable=true)
      */
-    private $meetingListItemJson;
-
-    /** @var MeetingListItem */
-    private $meetingListItem;
+    protected $meetingListItemJson;
 
     /**
      * @var string
      * @ORM\Column(type="text", name="meeting_info_get_json", nullable=true)
      */
-    private $meetingInfoGetJson;
+    protected $meetingInfoGetJson;
+
+    /** @var MeetingListItem */
+    protected $meetingListItem;
 
     /** @var MeetingInfoGet */
-    private $meetingInfoGet;
+    protected $meetingInfoGet;
 
     /**
      * @var RegistrantEntity[]|ArrayCollection
-     * @ORM\OneToMany(
-     *     targetEntity="RegistrantEntity",
-     *     mappedBy="meeting",
-     *     cascade={"persist", "remove"}
+     *
+     * @ORM\OneToMany(targetEntity="RegistrantEntity", mappedBy="meeting", cascade={"persist", "remove"}
      * )
      */
-    private $registrants;
+    protected $registrants;
 
     /**
      * @var RecordingEntity[]|ArrayCollection
-     * @ORM\OneToMany(
-     *     targetEntity="RecordingEntity",
-     *     mappedBy="meeting",
-     * )
+     * @ORM\OneToMany(targetEntity="RecordingEntity", mappedBy="meeting", cascade={"persist"}, orphanRemoval=true)
      */
-    private $recordings;
+    protected $recordings;
 
     public function __construct()
     {
@@ -145,6 +141,26 @@ class MeetingEntity
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMeetingId()
+    {
+        return $this->meetingId;
+    }
+
+    /**
+     * @param int $meetingId
+     *
+     * @return MeetingEntity
+     */
+    public function setMeetingId($meetingId)
+    {
+        $this->meetingId = $meetingId;
+
+        return $this;
     }
 
     /**
@@ -194,10 +210,10 @@ class MeetingEntity
      */
     public function postLoad()
     {
-        if (!is_null($this->meetingListItemJson)) {
+        if (null !== $this->meetingListItemJson) {
             $this->meetingListItem = MeetingListItem::fromJson($this->meetingListItemJson);
         }
-        if (!is_null($this->meetingInfoGetJson)) {
+        if (null !== $this->meetingInfoGetJson) {
             $this->meetingInfoGet = MeetingInfoGet::fromJson($this->meetingInfoGetJson);
         }
         $this->initializeDisplayableProperties();
@@ -218,10 +234,10 @@ class MeetingEntity
      */
     public function preFlush()
     {
-        if (!is_null($this->meetingListItem)) {
+        if (null !== $this->meetingListItem) {
             $this->meetingListItemJson = json_encode($this->meetingListItem);
         }
-        if (!is_null($this->meetingInfoGet)) {
+        if (null !== $this->meetingInfoGet) {
             $this->meetingInfoGetJson = json_encode($this->meetingInfoGet);
         }
     }
@@ -287,9 +303,9 @@ class MeetingEntity
      */
     public function setMeetingListItem($meetingListItem)
     {
-        if (is_null($this->id)) {
-            $this->id = $meetingListItem->id;
-        } elseif ($this->id != $meetingListItem->id) {
+        if (null === $this->meetingId) {
+            $this->meetingId = $meetingListItem->id;
+        } elseif ($this->meetingId != $meetingListItem->id) {
             throw new Exception('the MeetingEntity identifier differs from the MeetingListItem identifier');
         }
         $this->meetingListItem = $meetingListItem;
@@ -306,9 +322,9 @@ class MeetingEntity
      */
     public function setMeetingInfoGet($meetingInfoGet)
     {
-        if (is_null($this->id)) {
-            $this->id = $meetingInfoGet->id;
-        } elseif ($this->id != $meetingInfoGet->id) {
+        if (null === $this->meetingId) {
+            $this->meetingId = $meetingInfoGet->id;
+        } elseif ($this->meetingId != $meetingInfoGet->id) {
             throw new Exception('the MeetingEntity identifier differs from the MeetingInfoGet identifier');
         }
         $this->meetingInfoGet = $meetingInfoGet;
@@ -322,7 +338,7 @@ class MeetingEntity
      */
     public function isCourseMeeting()
     {
-        return !is_null($this->course);
+        return null !== $this->course;
     }
 
     /**
@@ -330,7 +346,7 @@ class MeetingEntity
      */
     public function isUserMeeting()
     {
-        return !is_null($this->user) && is_null($this->course);
+        return null !== $this->user && null === $this->course;
     }
 
     /**
@@ -338,7 +354,7 @@ class MeetingEntity
      */
     public function isGlobalMeeting()
     {
-        return is_null($this->user) && is_null($this->course);
+        return null === $this->user && null === $this->course;
     }
 
     public function setStatus($status)
@@ -354,19 +370,19 @@ class MeetingEntity
      */
     public function getRegistrableUsers()
     {
-        /** @var User[] $users */
         $users = [];
         if (!$this->isCourseMeeting()) {
-            $users = Database::getManager()->getRepository('ChamiloUserBundle:User')->findBy(['active' => true]);
-        } elseif (is_null($this->session)) {
-            if (!is_null($this->course)) {
+            $criteria = ['active' => true];
+            $users = Database::getManager()->getRepository('ChamiloUserBundle:User')->findBy($criteria);
+        } elseif (null === $this->session) {
+            if (null !== $this->course) {
                 /** @var CourseRelUser $courseRelUser */
                 foreach ($this->course->getUsers() as $courseRelUser) {
                     $users[] = $courseRelUser->getUser();
                 }
             }
         } else {
-            if (!is_null($this->course)) {
+            if (null !== $this->course) {
                 $subscriptions = $this->session->getUserCourseSubscriptionsByStatus($this->course, Session::STUDENT);
                 if ($subscriptions) {
                     /** @var SessionRelCourseRelUser $sessionCourseUser */
@@ -376,6 +392,7 @@ class MeetingEntity
                 }
             }
         }
+
         $activeUsersWithEmail = [];
         foreach ($users as $user) {
             if ($user->isActive() && !empty($user->getEmail())) {
@@ -401,7 +418,9 @@ class MeetingEntity
     public function requiresRegistration()
     {
         return
-            MeetingSettings::APPROVAL_TYPE_NO_REGISTRATION_REQUIRED != $this->meetingInfoGet->settings->approval_type;
+            MeetingSettings::APPROVAL_TYPE_AUTOMATICALLY_APPROVE === $this->meetingInfoGet->settings->approval_type;
+        /*return
+            MeetingSettings::APPROVAL_TYPE_NO_REGISTRATION_REQUIRED != $this->meetingInfoGet->settings->approval_type;*/
     }
 
     /**
@@ -457,7 +476,7 @@ class MeetingEntity
         if ($this->user) {
             $introduction .= sprintf('<p>%s</p>', $this->user->getFullname());
         } elseif ($this->isCourseMeeting()) {
-            if (is_null($this->session)) {
+            if (null === $this->session) {
                 $introduction .= sprintf('<p class="main">%s</p>', $this->course);
             } else {
                 $introduction .= sprintf('<p class="main">%s (%s)</p>', $this->course, $this->session);
@@ -475,18 +494,23 @@ class MeetingEntity
      */
     private function initializeDisplayableProperties()
     {
-        $this->typeName = [
-            API\Meeting::TYPE_INSTANT => get_lang('InstantMeeting'),
-            API\Meeting::TYPE_SCHEDULED => get_lang('ScheduledMeeting'),
-            API\Meeting::TYPE_RECURRING_WITH_NO_FIXED_TIME => get_lang('RecurringWithNoFixedTime'),
-            API\Meeting::TYPE_RECURRING_WITH_FIXED_TIME => get_lang('RecurringWithFixedTime'),
-        ][$this->meetingInfoGet->type];
+        $zoomPlugin = new \ZoomPlugin();
+
+        $typeList = [
+            API\Meeting::TYPE_INSTANT => $zoomPlugin->get_lang('InstantMeeting'),
+            API\Meeting::TYPE_SCHEDULED => $zoomPlugin->get_lang('ScheduledMeeting'),
+            API\Meeting::TYPE_RECURRING_WITH_NO_FIXED_TIME => $zoomPlugin->get_lang('RecurringWithNoFixedTime'),
+            API\Meeting::TYPE_RECURRING_WITH_FIXED_TIME => $zoomPlugin->get_lang('RecurringWithFixedTime'),
+        ];
+        $this->typeName = $typeList[$this->meetingInfoGet->type];
+
         if (property_exists($this, 'status')) {
-            $this->statusName = [
-                'waiting' => get_lang('Waiting'),
-                'started' => get_lang('Started'),
-                'finished' => get_lang('Finished'),
-            ][$this->meetingInfoGet->status];
+            $statusList = [
+                'waiting' => $zoomPlugin->get_lang('Waiting'),
+                'started' => $zoomPlugin->get_lang('Started'),
+                'finished' => $zoomPlugin->get_lang('Finished'),
+            ];
+            $this->statusName = $statusList[$this->meetingInfoGet->status];
         }
         $this->startDateTime = null;
         $this->formattedStartTime = '';
@@ -495,14 +519,15 @@ class MeetingEntity
         if (!empty($this->meetingInfoGet->start_time)) {
             $this->startDateTime = new DateTime($this->meetingInfoGet->start_time);
             $this->startDateTime->setTimezone(new DateTimeZone(date_default_timezone_get()));
-            $this->formattedStartTime = $this->startDateTime->format(get_lang('Y-m-d H:i'));
+            $this->formattedStartTime = $this->startDateTime->format('Y-m-d H:i');
         }
+
         if (!empty($this->meetingInfoGet->duration)) {
             $now = new DateTime();
             $later = new DateTime();
             $later->add(new DateInterval('PT'.$this->meetingInfoGet->duration.'M'));
             $this->durationInterval = $later->diff($now);
-            $this->formattedDuration = $this->durationInterval->format(get_lang('DurationFormat'));
+            $this->formattedDuration = $this->durationInterval->format($zoomPlugin->get_lang('DurationFormat'));
         }
     }
 }

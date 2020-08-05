@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\PluginBundle\Zoom\API;
@@ -12,8 +13,6 @@ use Exception;
  * Each past meeting instance is identified by its own UUID.
  * Many past meeting instances can be part of the same meeting, identified by property 'id'.
  * Each instance has its own start time, participants and recording files.
- *
- * @package Chamilo\PluginBundle\Zoom\API
  */
 class PastMeeting extends Meeting
 {

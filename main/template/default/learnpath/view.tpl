@@ -139,6 +139,8 @@
             </div>
             {# TOC layout #}
             <div id="toc_id" class="scorm-body" name="toc_name">
+                {# div#flab-mobile is to know when the user is on mobile view. Don't delete. #}
+                <div id="flag-mobile" class="visible-xs-block" aria-hidden="true"></div>
                 {% include 'learnpath/scorm_list.tpl'|get_template %}
             </div>
             {# end TOC layout #}
@@ -298,6 +300,16 @@
             $('.lp-view-tabs a[href="#lp-view-content"]').tab('show');
             $('.lp-view-tabs').animate({opacity: 1}, 500);
         });
+
+        {% if lp_mode == 'embedded' %}
+            $('.scorm_item_normal a, #scorm-previous, #scorm-next').on('click', function () {
+                $('.lp-view-tabs').animate({opacity: 0}, 500);
+
+                if ($('#flag-mobile').is(':visible') && !$('#learning_path_main').is('.lp-view-collapsed')) {
+                    $('#lp-view-expand-toggle').trigger('click');
+                }
+            });
+        {% endif %}
 
         loadForumThread({{ lp_id }}, {{ lp_current_item_id }});
         checkCurrentItemPosition({{ lp_current_item_id }});

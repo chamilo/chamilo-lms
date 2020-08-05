@@ -1,4 +1,5 @@
 <?php
+
 /* For license terms, see /license.txt */
 
 $course_plugin = 'zoom'; // needed in order to load the plugin lang variables
@@ -9,39 +10,49 @@ api_protect_course_script(true);
 
 // the section (for the tabs)
 $this_section = SECTION_COURSES;
-
 $logInfo = [
     'tool' => 'Videoconference Zoom',
 ];
-
 Event::registerLog($logInfo);
 
-$tool_name = get_lang('ZoomVideoconferences');
-$tpl = new Template($tool_name);
-
 $plugin = ZoomPlugin::create();
+$tool_name = $plugin->get_lang('ZoomVideoConferences');
+$tpl = new Template($tool_name);
+$course = api_get_course_entity();
+$session = api_get_session_entity();
+$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
 
-if ($plugin->userIsCourseConferenceManager(api_get_course_entity())) {
+if ($plugin->userIsCourseConferenceManager()) {
+    switch ($action) {
+        case 'delete':
+            $meeting = $plugin->getMeetingRepository()->findOneBy(['meetingId' => $_REQUEST['meetingId']]);
+            if ($meeting->isCourseMeeting()) {
+                $plugin->deleteMeeting($meeting, api_get_self().'?'.api_get_cidreq());
+            }
+            break;
+    }
+
+    $user = api_get_user_entity(api_get_user_id());
     // user can create a new meeting
     $tpl->assign(
         'createInstantMeetingForm',
         $plugin->getCreateInstantMeetingForm(
-            api_get_user_entity(api_get_user_id()),
-            api_get_course_entity(),
-            api_get_session_entity()
+            $user,
+            $course,
+            $session
         )->returnForm()
     );
     $tpl->assign('scheduleMeetingForm', $plugin->getScheduleMeetingForm(
-        api_get_user_entity(api_get_user_id()),
-        api_get_course_entity(),
-        api_get_session_entity()
+        $user,
+        $course,
+        $session
     )->returnForm());
 }
 
 try {
     $tpl->assign(
         'scheduledMeetings',
-        $plugin->getMeetingRepository()->courseMeetings(api_get_course_entity(), api_get_session_entity())
+        $plugin->getMeetingRepository()->courseMeetings($course, $session)
     );
 } catch (Exception $exception) {
     Display::addFlash(

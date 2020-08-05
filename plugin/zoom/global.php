@@ -1,4 +1,5 @@
 <?php
+
 /* For license terms, see /license.txt */
 
 $course_plugin = 'zoom'; // needed in order to load the plugin lang variables
@@ -9,4 +10,4 @@ if (!ZoomPlugin::currentUserCanJoinGlobalMeeting()) {
     api_not_allowed(true);
 }
 
-location('join_meeting.php?meetingId='.ZoomPlugin::create()->getGlobalMeeting()->getId());
+api_location('join_meeting.php?meetingId='.ZoomPlugin::create()->getGlobalMeeting()->getMeetingId());

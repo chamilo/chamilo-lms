@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\PluginBundle\Zoom\API;
@@ -7,8 +8,6 @@ namespace Chamilo\PluginBundle\Zoom\API;
  * Class MeetingRegistrantListItem. Item in a list of meeting registrants.
  *
  * @see MeetingRegistrantList
- *
- * @package Chamilo\PluginBundle\Zoom\API
  */
 class MeetingRegistrantListItem extends MeetingRegistrant
 {

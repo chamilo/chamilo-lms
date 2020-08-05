@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\PluginBundle\Zoom;
@@ -14,7 +15,6 @@ use Exception;
 /**
  * Class RecordingEntity.
  *
- * @package Chamilo\PluginBundle\Zoom
  * @ORM\Entity(repositoryClass="Chamilo\PluginBundle\Zoom\RecordingEntityRepository")
  * @ORM\Table(
  *     name="plugin_zoom_recording",
@@ -40,29 +40,33 @@ class RecordingEntity
 
     /**
      * @var string
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="integer")
      * @ORM\Id
+     * @ORM\GeneratedValue()
      */
-    private $uuid;
+    protected $id;
+
+    /**
+     * @var string
+     * @ORM\Column(type="string")
+     */
+    protected $uuid;
 
     /**
      * @var MeetingEntity
-     * @ORM\ManyToOne(
-     *     targetEntity="MeetingEntity",
-     *     inversedBy="recordings",
-     * )
+     * @ORM\ManyToOne(targetEntity="MeetingEntity", inversedBy="recordings")
      * @ORM\JoinColumn(name="meeting_id")
      */
-    private $meeting;
+    protected $meeting;
 
     /**
      * @var string
      * @ORM\Column(type="text", name="recording_meeting_json", nullable=true)
      */
-    private $recordingMeetingJson;
+    protected $recordingMeetingJson;
 
     /** @var RecordingMeeting */
-    private $recordingMeeting;
+    protected $recordingMeeting;
 
     /**
      * @param $name
@@ -128,15 +132,15 @@ class RecordingEntity
      */
     public function setRecordingMeeting($recordingMeeting)
     {
-        if (is_null($this->uuid)) {
+        if (null === $this->uuid) {
             $this->uuid = $recordingMeeting->uuid;
         } elseif ($this->uuid !== $recordingMeeting->uuid) {
             throw new Exception('the RecordingEntity identifier differs from the RecordingMeeting identifier');
         }
-        if (is_null($this->meeting)) {
+        if (null === $this->meeting) {
             $this->meeting = Database::getManager()->getRepository(MeetingEntity::class)->find($recordingMeeting->id);
-        // $this->meeting remains null when the remote RecordingMeeting refers to a deleted meeting
         } elseif ($this->meeting->getId() != $recordingMeeting->id) {
+            // $this->meeting remains null when the remote RecordingMeeting refers to a deleted meeting.
             throw new Exception('The RecordingEntity meeting id differs from the RecordingMeeting meeting id');
         }
         $this->recordingMeeting = $recordingMeeting;
@@ -151,7 +155,7 @@ class RecordingEntity
      */
     public function postLoad()
     {
-        if (!is_null($this->recordingMeetingJson)) {
+        if (null !== $this->recordingMeetingJson) {
             $this->recordingMeeting = RecordingMeeting::fromJson($this->recordingMeetingJson);
         }
         $this->initializeExtraProperties();
@@ -162,7 +166,7 @@ class RecordingEntity
      */
     public function preFlush()
     {
-        if (!is_null($this->recordingMeeting)) {
+        if (null !== $this->recordingMeeting) {
             $this->recordingMeetingJson = json_encode($this->recordingMeeting);
         }
     }
@@ -174,7 +178,7 @@ class RecordingEntity
     {
         $this->startDateTime = new DateTime($this->recordingMeeting->start_time);
         $this->startDateTime->setTimezone(new DateTimeZone(date_default_timezone_get()));
-        $this->formattedStartTime = $this->startDateTime->format(get_lang('Y-m-d H:i'));
+        $this->formattedStartTime = $this->startDateTime->format('Y-m-d H:i');
 
         $now = new DateTime();
         $later = new DateTime();

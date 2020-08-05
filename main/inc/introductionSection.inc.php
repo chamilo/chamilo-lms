@@ -210,11 +210,20 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
         $thematic_advance = get_lang('CourseThematicAdvance');
         $thematicScore = $thematic->get_total_average_of_thematic_advances().'%';
         $thematicUrl = api_get_path(WEB_CODE_PATH).'course_progress/index.php?action=thematic_details&'.api_get_cidreq();
-        $thematic_info = $thematic->get_thematic_list($thematic_advance_info['thematic_id']);
 
+        $thematic_advance_info['thematic_id'] = isset($thematic_advance_info['thematic_id']) ? $thematic_advance_info['thematic_id'] : 0;
+        $thematic_advance_info['start_date'] = isset($thematic_advance_info['start_date']) ? $thematic_advance_info['start_date'] : null;
+        $thematic_advance_info['content'] = isset($thematic_advance_info['content']) ? $thematic_advance_info['content'] : '';
+        $thematic_advance_info['duration'] = isset($thematic_advance_info['duration']) ? $thematic_advance_info['duration'] : 0;
+
+        $thematic_info = $thematic->get_thematic_list($thematic_advance_info['thematic_id']);
+        $thematic_info['title'] = isset($thematic_info['title']) ? $thematic_info['title'] : '';
+
+        /*
         $thematic_advance_info['start_date'] = api_get_local_time(
             $thematic_advance_info['start_date']
         );
+        */
         $thematic_advance_info['start_date'] = api_format_date(
             $thematic_advance_info['start_date'],
             DATE_TIME_FORMAT_LONG

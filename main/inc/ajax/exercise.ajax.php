@@ -396,18 +396,18 @@ switch ($action) {
             $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
 
             // Questions choices.
-            $choice = isset($_REQUEST['choice']) ? $_REQUEST['choice'] : null;
+            $choice = isset($_REQUEST['choice']) ? $_REQUEST['choice'] : [];
 
             // certainty degree choice
             $choiceDegreeCertainty = isset($_REQUEST['choiceDegreeCertainty'])
-                ? $_REQUEST['choiceDegreeCertainty'] : null;
+                ? $_REQUEST['choiceDegreeCertainty'] : [];
 
             // Hot spot coordinates from all questions.
-            $hot_spot_coordinates = isset($_REQUEST['hotspot']) ? $_REQUEST['hotspot'] : null;
+            $hot_spot_coordinates = isset($_REQUEST['hotspot']) ? $_REQUEST['hotspot'] : [];
 
             // There is a reminder?
             $remind_list = isset($_REQUEST['remind_list']) && !empty($_REQUEST['remind_list'])
-                ? array_keys($_REQUEST['remind_list']) : null;
+                ? array_keys($_REQUEST['remind_list']) : [];
 
             // Needed in manage_answer.
             $learnpath_id = isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : 0;

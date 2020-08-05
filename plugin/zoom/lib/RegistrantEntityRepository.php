@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\PluginBundle\Zoom;
@@ -10,8 +11,6 @@ use Doctrine\ORM\EntityRepository;
 
 /**
  * Class RegistrantEntityRepository.
- *
- * @package Chamilo\PluginBundle\Zoom
  */
 class RegistrantEntityRepository extends EntityRepository
 {

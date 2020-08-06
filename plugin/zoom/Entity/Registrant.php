@@ -14,7 +14,7 @@ use Exception;
 /**
  * Class RegistrantEntity.
  *
- * @ORM\Entity(repositoryClass="Chamilo\PluginBundle\Zoom\RegistrantEntityRepository")
+ * @ORM\Entity(repositoryClass="RegistrantRepository")
  * @ORM\Table(
  *     name="plugin_zoom_registrant",
  *     indexes={
@@ -24,7 +24,7 @@ use Exception;
  * )
  * @ORM\HasLifecycleCallbacks
  */
-class RegistrantEntity
+class Registrant
 {
     /** @var string */
     public $fullName;
@@ -45,8 +45,8 @@ class RegistrantEntity
     protected $user;
 
     /**
-     * @var MeetingEntity
-     * @ORM\ManyToOne(targetEntity="MeetingEntity", inversedBy="registrants")
+     * @var Meeting
+     * @ORM\ManyToOne(targetEntity="Meeting", inversedBy="registrants")
      * @ORM\JoinColumn(name="meeting_id", referencedColumnName="id")
      */
     protected $meeting;
@@ -87,7 +87,7 @@ class RegistrantEntity
     }
 
     /**
-     * @return MeetingEntity
+     * @return Meeting
      */
     public function getMeeting()
     {
@@ -95,7 +95,7 @@ class RegistrantEntity
     }
 
     /**
-     * @param MeetingEntity $meeting
+     * @param Meeting $meeting
      *
      * @return $this
      */

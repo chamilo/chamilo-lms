@@ -5,6 +5,7 @@ namespace Chamilo\PluginBundle\Zoom;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\PageBundle\Entity\User;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -14,9 +15,9 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 
 /**
- * Class MeetingEntityRepository.
+ * Class MeetingRepository.
  */
-class MeetingEntityRepository extends EntityRepository
+class MeetingRepository extends EntityRepository
 {
     /**
      * Retrieves information about meetings having a start_time between two dates.
@@ -24,7 +25,7 @@ class MeetingEntityRepository extends EntityRepository
      * @param DateTime $startDate
      * @param DateTime $endDate
      *
-     * @return MeetingEntity[]
+     * @return Meeting[]
      */
     public function periodMeetings($startDate, $endDate)
     {
@@ -40,7 +41,7 @@ class MeetingEntityRepository extends EntityRepository
     }
 
     /**
-     * @return ArrayCollection|Collection|MeetingEntity[]
+     * @return ArrayCollection|Collection|Meeting[]
      */
     public function globalMeetings()
     {
@@ -55,7 +56,7 @@ class MeetingEntityRepository extends EntityRepository
     }
 
     /**
-     * @return ArrayCollection|Collection|MeetingEntity[]
+     * @return ArrayCollection|Collection|Meeting[]
      */
     public function unfinishedGlobalMeetings()
     {
@@ -134,7 +135,7 @@ class MeetingEntityRepository extends EntityRepository
     /**
      * @param User|null $user
      *
-     * @return MeetingEntity[]
+     * @return Meeting[]
      */
     public function unfinishedUserMeetings($user = null)
     {
@@ -160,7 +161,7 @@ class MeetingEntityRepository extends EntityRepository
      * @param DateTime $end
      * @param User     $user
      *
-     * @return ArrayCollection|Collection|MeetingEntity[]
+     * @return ArrayCollection|Collection|Meeting[]
      */
     public function periodUserMeetings($start, $end, $user = null)
     {
@@ -186,18 +187,18 @@ class MeetingEntityRepository extends EntityRepository
     /**
      * Returns either a course's meetings or all course meetings.
      *
-     * @param Course|null  $course
-     * @param Session|null $session
+     * @param Course|null     $course
+     * @param Session|null    $session
+     * @param CGroupInfo|null $group
      *
-     * @return ArrayCollection|Collection|MeetingEntity[]
+     * @return ArrayCollection|Collection|Meeting[]
      */
-    public function courseMeetings($course = null, $session = null)
+    public function courseMeetings($course, $group = null, $session = null)
     {
         return $this->matching(
             Criteria::create()->where(
-                null === $course
-                    ? Criteria::expr()->neq('course', null)
-                    : Criteria::expr()->andX(
+                    Criteria::expr()->andX(
+                 Criteria::expr()->eq('group', $group),
                     Criteria::expr()->eq('course', $course),
                     Criteria::expr()->eq('session', $session)
                 )

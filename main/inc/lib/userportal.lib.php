@@ -353,6 +353,10 @@ class IndexManager
 
     public static function studentPublicationBlock()
     {
+        if (api_is_anonymous()) {
+            return [];
+        }
+
         $allow = api_get_configuration_value('allow_my_student_publication_page');
         $items = [];
 

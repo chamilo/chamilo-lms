@@ -137,9 +137,10 @@ class ExerciseLib
                     if ($answerType == DRAGGABLE) {
                         $isVertical = $objQuestionTmp->extra == 'v';
                         $s .= '
-                            <div class="row"><div class="col-md-12">
-                                <p class="small">'.get_lang('DraggableQuestionIntro').'</p>
-                                <ul class="exercise-draggable-answer list-unstyled '
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <p class="small">'.get_lang('DraggableQuestionIntro').'</p>
+                                    <ul class="exercise-draggable-answer list-unstyled '
                             .($isVertical ? '' : 'list-inline').'" id="question-'.$questionId.'" data-question="'
                             .$questionId.'">
                         ';
@@ -1364,8 +1365,11 @@ HTML;
 
             if ($answerType == DRAGGABLE) {
                 $isVertical = $objQuestionTmp->extra == 'v';
-                $s .= "</ul>";
-                $s .= "</div></div>"; // col-md-12
+                $s .= "
+                           </ul>
+                        </div><!-- .col-md-12 -->
+                    </div><!-- .row -->
+                ";
                 $counterAnswer = 1;
                 $s .= $isVertical ? '' : '<div class="row">';
                 for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
@@ -1388,7 +1392,7 @@ HTML;
                 }
 
                 $s .= $isVertical ? '' : '</div>'; // row
-                $s .= '</div>';
+//                $s .= '</div>';
             }
 
             if (in_array($answerType, [MATCHING, MATCHING_DRAGGABLE])) {

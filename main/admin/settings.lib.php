@@ -763,7 +763,7 @@ function uploadStylesheet($values, $picture)
  * Creates the folder (if needed) and uploads the plugin in it. If the plugin
  * is already there and the folder is writeable, overwrite.
  *
- * @param array $file            the file passed to the upload form
+ * @param array $file the file passed to the upload form
  *
  * @return bool
  */

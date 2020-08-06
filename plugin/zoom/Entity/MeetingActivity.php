@@ -4,22 +4,8 @@
 
 namespace Chamilo\PluginBundle\Zoom;
 
-use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\CourseRelUser;
-use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
-use Chamilo\CourseBundle\Entity\CGroupInfo;
-use Chamilo\PluginBundle\Zoom\API\MeetingInfoGet;
-use Chamilo\PluginBundle\Zoom\API\MeetingListItem;
-use Chamilo\PluginBundle\Zoom\API\MeetingSettings;
-use Chamilo\UserBundle\Entity\User;
-use Database;
-use DateInterval;
 use DateTime;
-use DateTimeZone;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Exception;
 
 /**
  * Class Meeting.
@@ -63,8 +49,16 @@ class MeetingActivity
      */
     protected $event;
 
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="created_at", type="datetime", nullable=false)
+     */
+    protected $createdAt;
+
     public function __construct()
     {
+        $this->createdAt = new \DateTime();
     }
 
     /**
@@ -144,6 +138,14 @@ class MeetingActivity
     }
 
     /**
+     * @return DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
      * @return string
      */
     public function getEvent()
@@ -171,6 +173,4 @@ class MeetingActivity
 
         return $this;
     }
-
-
 }

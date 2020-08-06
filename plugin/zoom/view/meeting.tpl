@@ -17,7 +17,7 @@
         </a>
     {% endif %}
 
-    <a class="btn btn-default"  href="activity.php?meetingId={{ meeting.meetingId }}">
+    <a class="btn btn-default" href="activity.php?meetingId={{ meeting.meetingId }}">
         {{ 'Activity'|get_plugin_lang('ZoomPlugin') }}
     </a>
 {% endif %}

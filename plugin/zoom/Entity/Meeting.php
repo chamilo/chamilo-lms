@@ -119,7 +119,6 @@ class Meeting
      * @var MeetingActivity[]|ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="MeetingActivity", mappedBy="meeting", cascade={"persist", "remove"})
-     *
      */
     protected $activities;
 
@@ -127,7 +126,6 @@ class Meeting
      * @var Registrant[]|ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Registrant", mappedBy="meeting", cascade={"persist", "remove"})
-     *
      */
     protected $registrants;
 

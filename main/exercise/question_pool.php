@@ -109,6 +109,9 @@ if ($is_allowedToEdit) {
         if ($objQuestionTmp) {
             // deletes the question from all exercises
             $objQuestionTmp->delete();
+
+            // solving the error that when deleting a question from the question pool it is not displaying all questions
+            $exerciseId = null;
         }
         // destruction of the Question object
         unset($objQuestionTmp);

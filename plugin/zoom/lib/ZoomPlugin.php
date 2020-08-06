@@ -139,15 +139,18 @@ class ZoomPlugin extends Plugin
     public function getProfileBlockItems()
     {
         $elements = $this->meetingsToWhichCurrentUserIsRegisteredComingSoon();
-        /*if (self::currentUserCanJoinGlobalMeeting()) {
-            $elements[$this->get_lang('CreateGlobalVideoConference')] = api_get_path(WEB_PLUGIN_PATH).'zoom/global.php';
+        $addMeetingLink = false;
+        if (self::currentUserCanJoinGlobalMeeting()) {
+            $addMeetingLink = true;
         }
 
         if (self::currentUserCanCreateUserMeeting()) {
-            $elements[$this->get_lang('CreateUserVideoConference')] = api_get_path(WEB_PLUGIN_PATH).'zoom/user.php';
-        }*/
+            $addMeetingLink = true;
+        }
 
-        $elements[$this->get_lang('Meetings')] = api_get_path(WEB_PLUGIN_PATH).'zoom/meetings.php';
+        if ($addMeetingLink) {
+            $elements[$this->get_lang('Meetings')] = api_get_path(WEB_PLUGIN_PATH).'zoom/meetings.php';
+        }
 
         $items = [];
         foreach ($elements as $title => $link) {
@@ -892,7 +895,7 @@ class ZoomPlugin extends Plugin
         $durationNumeric = $form->addNumeric('duration', $this->get_lang('DurationInMinutes'));
         $form->setRequired($durationNumeric);
 
-        /*if (null === $course) {
+       if (null === $course) {
             $options = [];
             if ('true' === $this->get('enableGlobalConference')) {
                 $options['everyone'] = $this->get_lang('ForEveryone');
@@ -914,41 +917,42 @@ class ZoomPlugin extends Plugin
             $form->addHidden('type', 'course');
         }
 
-        // $passwordText = $form->addText('password', get_lang('Password'), false, ['maxlength' => '10']);
-        if (null !== $course) {
-            $registrationOptions = [
-                'RegisterAllCourseUsers' => $this->get_lang('RegisterAllCourseUsers'),
-            ];
-            $groups = GroupManager::get_groups();
-            if (!empty($groups)) {
-                $registrationOptions['RegisterTheseGroupMembers'] = get_lang('RegisterTheseGroupMembers');
-            }
-            $registrationOptions['RegisterNoUser'] = $this->get_lang('RegisterNoUser');
-            $userRegistrationRadio = $form->addRadio(
-                'userRegistration',
-                $this->get_lang('UserRegistration'),
-                $registrationOptions
-            );
-            $groupOptions = [];
-            foreach ($groups as $group) {
-                $groupOptions[$group['id']] = $group['name'];
-            }
-            $groupIdsSelect = $form->addSelect(
-                'groupIds',
-                $this->get_lang('RegisterTheseGroupMembers'),
-                $groupOptions
-            );
-            $groupIdsSelect->setMultiple(true);
-            if (!empty($groups)) {
-                $jsCode = sprintf(
-                    "getElementById('%s').parentNode.parentNode.parentNode.style.display = getElementById('%s').checked ? 'block' : 'none'",
-                    $groupIdsSelect->getAttribute('id'),
-                    $userRegistrationRadio->getelements()[1]->getAttribute('id')
-                );
+        /*
+       // $passwordText = $form->addText('password', get_lang('Password'), false, ['maxlength' => '10']);
+       if (null !== $course) {
+           $registrationOptions = [
+               'RegisterAllCourseUsers' => $this->get_lang('RegisterAllCourseUsers'),
+           ];
+           $groups = GroupManager::get_groups();
+           if (!empty($groups)) {
+               $registrationOptions['RegisterTheseGroupMembers'] = get_lang('RegisterTheseGroupMembers');
+           }
+           $registrationOptions['RegisterNoUser'] = $this->get_lang('RegisterNoUser');
+           $userRegistrationRadio = $form->addRadio(
+               'userRegistration',
+               $this->get_lang('UserRegistration'),
+               $registrationOptions
+           );
+           $groupOptions = [];
+           foreach ($groups as $group) {
+               $groupOptions[$group['id']] = $group['name'];
+           }
+           $groupIdsSelect = $form->addSelect(
+               'groupIds',
+               $this->get_lang('RegisterTheseGroupMembers'),
+               $groupOptions
+           );
+           $groupIdsSelect->setMultiple(true);
+           if (!empty($groups)) {
+               $jsCode = sprintf(
+                   "getElementById('%s').parentNode.parentNode.parentNode.style.display = getElementById('%s').checked ? 'block' : 'none'",
+                   $groupIdsSelect->getAttribute('id'),
+                   $userRegistrationRadio->getelements()[1]->getAttribute('id')
+               );
 
-                $form->setAttribute('onchange', $jsCode);
-            }
-        }*/
+               $form->setAttribute('onchange', $jsCode);
+           }
+       }*/
 
         $form->addButtonCreate(get_lang('Save'));
 
@@ -1329,7 +1333,6 @@ class ZoomPlugin extends Plugin
         $actionsLeft = '';
         $back = '';
         $courseId = api_get_course_id();
-
         if (empty($courseId)) {
             $actionsLeft .=
                 Display::url(

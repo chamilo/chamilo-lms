@@ -21,11 +21,12 @@ if (null === $meeting) {
 
 $course_plugin = 'zoom'; // needed in order to load the plugin lang variables
 $returnURL = 'meetings.php';
-
+$urlExtra = '';
 if ($meeting->isCourseMeeting()) {
     api_protect_course_script(true);
     $this_section = SECTION_COURSES;
-    $returnURL = 'start.php?cId='.api_get_course_id().'&sessionId='.api_get_session_id();
+    $returnURL = 'start.php?'.api_get_cidreq();
+    $urlExtra = api_get_cidreq();
 }
 
 $logInfo = [
@@ -75,5 +76,6 @@ if ($plugin->userIsConferenceManager($meeting)) {
 
 $tpl->assign('actions', $plugin->getToolbar());
 $tpl->assign('meeting', $meeting);
+$tpl->assign('url_extra', $urlExtra);
 $tpl->assign('content', $tpl->fetch('zoom/view/meeting.tpl'));
 $tpl->display_one_col_template();

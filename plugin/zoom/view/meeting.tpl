@@ -5,7 +5,7 @@
 <div class="btn-group" role="group">
 
 {% if meeting.meetingInfoGet.status != 'finished' %}
-    <a class="btn btn-primary" href="join_meeting.php?meetingId={{ meeting.meetingId }}">
+    <a class="btn btn-primary" href="join_meeting.php?meetingId={{ meeting.meetingId }}&{{ url_extra }}">
         {{ 'ViewMeeting'|get_plugin_lang('ZoomPlugin') }}
     </a>
 {% endif %}
@@ -17,31 +17,42 @@
         </a>
     {% endif %}
 
-    <a class="btn btn-default" href="activity.php?meetingId={{ meeting.meetingId }}">
+    <a class="btn btn-default" href="activity.php?meetingId={{ meeting.meetingId }}&{{ url_extra }}">
         {{ 'Activity'|get_plugin_lang('ZoomPlugin') }}
     </a>
 {% endif %}
-
 </div>
+
+{% if isConferenceManager %}
+    <br />
+    <br />
+    <div class="panel panel-default conference">
+        <div class="panel-body">
+            <div class="share">
+                {{ 'JoinURLToSendToParticipants'| get_plugin_lang('ZoomPlugin') }}
+            </div>
+            <div class="form-inline">
+                <div class="form-group">
+                    <input id="share_button_flash" type="text"
+                           style="width:460px"
+                           class="form-control" readonly
+                           value="{{ _p.web_main }}plugin/zoom/join_meeting.php?meetingId={{ meeting.meetingId }}&{{ url_extra }}"
+                    >
+                    <button onclick="copyTextToClipBoard('share_button_flash');" class="btn btn-default">
+                        <span class="fa fa-copy"></span> {{ 'CopyTextToClipboard' | get_lang }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+
 {% if currentUserJoinURL %}
 {#<p>#}
 {#    <a href="{{ currentUserJoinURL }}" target="_blank">#}
 {#        {{ 'JoinMeeting'|get_plugin_lang('ZoomPlugin') }}#}
 {#    </a>#}
 {#</p>#}
-{% endif %}
-
-{% if meeting.meetingInfoGet.settings.approval_type == 2 %}
-    <label>
-        {{ 'JoinURLToSendToParticipants'|get_plugin_lang('ZoomPlugin') }}
-    </label>
-    <div class="form-inline">
-        <div class="form-group">
-            <input
-                class="form-control" type="text" style="width:300px" readonly
-                value="{{ meeting.meetingInfoGet.join_url }}" />
-        </div>
-    </div>
 {% endif %}
 
 {% if isConferenceManager %}
@@ -73,15 +84,15 @@
                 {{ registrant.fullName }}
                 </td>
                <td>
-               {% if registrant.joinUrl %}
-                <a class="btn btn-primary" onclick="copyJoinURL(event, '{{ registrant.joinUrl }}')">
-                    {{ 'CopyJoinAsURL'|get_plugin_lang('ZoomPlugin') }}
-                </a>
-               {% else %}
-                   <a class="btn btn-primary disabled" >
-                       {{ 'JoinURLNotAvailable'|get_plugin_lang('ZoomPlugin') }}
-                   </a>
-               {% endif %}
+{#               {% if registrant.joinUrl %}#}
+{#                <a class="btn btn-primary" onclick="copyJoinURL(event, '{{ registrant.joinUrl }}')">#}
+{#                    {{ 'CopyJoinAsURL'|get_plugin_lang('ZoomPlugin') }}#}
+{#                </a>#}
+{#               {% else %}#}
+{#                   <a class="btn btn-primary disabled" >#}
+{#                       {{ 'JoinURLNotAvailable'|get_plugin_lang('ZoomPlugin') }}#}
+{#                   </a>#}
+{#               {% endif %}#}
                </td>
             </tr>
             {% endfor %}

@@ -4,6 +4,7 @@
 
 $course_plugin = 'zoom'; // needed in order to load the plugin lang variables
 
+$cidReset = true;
 require_once __DIR__.'/config.php';
 
 if (!ZoomPlugin::currentUserCanCreateUserMeeting()) {

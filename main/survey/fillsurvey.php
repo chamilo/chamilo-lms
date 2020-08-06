@@ -676,6 +676,7 @@ if (1 == $survey_data['shuffle']) {
     $shuffle = ' BY RAND() ';
 }
 
+$pageBreakText = [];
 if ((isset($_GET['show']) && $_GET['show'] != '') ||
     isset($_POST['personality'])
 ) {
@@ -711,6 +712,7 @@ if ((isset($_GET['show']) && $_GET['show'] != '') ||
                 } else {
                     if ($row['type'] === 'pagebreak') {
                         $counter++;
+                        $pageBreakText[$counter] = $row['survey_question'];
                     } else {
                         $paged_questions[$counter][] = $row['question_id'];
                     }
@@ -1030,6 +1032,7 @@ if ((isset($_GET['show']) && $_GET['show'] != '') ||
                                 $counter++;
                             } elseif ($row['type'] == 'pagebreak') {
                                 $counter++;
+                                $pageBreakText[$counter] = $row['survey_question'];
                             } else {
                                 // ids from question of the current survey
                                 $paged_questions_sec[$counter][] = $row['question_id'];
@@ -1134,6 +1137,7 @@ if ((isset($_GET['show']) && $_GET['show'] != '') ||
                     } else {
                         if ($row['type'] == 'pagebreak') {
                             $counter++;
+                            $pageBreakText[$counter] = $row['survey_question'];
                         } else {
                             // ids from question of the current survey
                             $paged_questions[$counter][] = $row['question_id'];
@@ -1288,6 +1292,18 @@ if (isset($questions) && is_array($questions)) {
 
     $form->addHtml('<div class="start-survey">');
     $js = '';
+
+    if (isset($pageBreakText[$originalShow]) && !empty(strip_tags($pageBreakText[$originalShow]))) {
+        // Only show page-break texts if there is something there, apart from
+        // HTML tags
+        $form->addHtml(
+            '<div>'.
+            Security::remove_XSS($pageBreakText[$originalShow]).
+            '</div>'
+        );
+        $form->addHtml('<br />');
+    }
+
     foreach ($questions as $key => &$question) {
         $ch_type = 'ch_'.$question['type'];
         $questionNumber = $questionCounter;
@@ -1312,7 +1328,7 @@ if (isset($questions) && is_array($questions)) {
         if ($showNumber) {
             $form->addHtml('<div style="float:left; font-weight: bold; margin-right: 5px;"> '.$questionNumber.'. </div>');
         }
-        $form->addHtml('<div>'.Security::remove_XSS($question['survey_question']).'</div> ');
+        $form->addHtml('<div>'.Security::remove_XSS($question['survey_question']).'</div>');
 
         $userAnswerData = SurveyUtil::get_answers_of_question_by_user($question['survey_id'], $question['question_id']);
         $finalAnswer = null;

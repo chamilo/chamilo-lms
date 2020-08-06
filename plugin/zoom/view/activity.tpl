@@ -11,6 +11,7 @@
         <tr>
             <th>{{ 'Type'|get_lang }}</th>
             <th>{{ 'Action'|get_plugin_lang('ZoomPlugin') }}</th>
+            <th>{{ 'User'|get_lang }}</th>
             <th>{{ 'Date'|get_lang }}</th>
             <th>{{ 'Details'|get_lang }} </th>
         </tr>
@@ -26,6 +27,15 @@
             </td>
             <td>
                 {{ activity.createdAt | api_convert_and_format_date(3)}}
+            </td>
+            <td>
+                {% if _u.is_admin %}
+                    <a href="{{ _p.web_main }}admin/user_information.php?user_id="{{ activity.user.id }}>
+                        {{ activity.user.firstname }} {{ activity.user.lastname }} {{ activity.user.username }}
+                    </a>
+                {% else %}
+                    {{ activity.user.firstname }} {{ activity.user.lastname }} ({{ activity.user.username }})
+                {% endif %}
             </td>
             <td>
                 {% if activity.eventDecoded.registrant %}

@@ -32,6 +32,13 @@ class MeetingActivity
     protected $meeting;
 
     /**
+     * @var Meeting
+     * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     */
+    protected $user;
+
+    /**
      * @var string
      * @ORM\Column(type="string", name="name", length=255, nullable=false)
      */
@@ -151,6 +158,26 @@ class MeetingActivity
     public function getEvent()
     {
         return $this->event;
+    }
+
+    /**
+     * @return Meeting
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param Meeting $user
+     *
+     * @return MeetingActivity
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
+
+        return $this;
     }
 
     public function getEventDecoded()

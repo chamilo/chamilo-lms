@@ -126,9 +126,9 @@ class Recording
     /**
      * @param RecordingMeeting $recordingMeeting
      *
-     * @return Recording
-     *@throws Exception
+     * @throws Exception
      *
+     * @return Recording
      */
     public function setRecordingMeeting($recordingMeeting)
     {

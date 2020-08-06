@@ -16,7 +16,7 @@ $plugin = ZoomPlugin::create();
 $meeting = $plugin->getMeetingRepository()->findOneBy(['meetingId' => $meetingId]);
 
 if (null === $meeting) {
-    throw new Exception($plugin->get_lang('MeetingNotFound'));
+    api_not_allowed(true, $plugin->get_lang('MeetingNotFound'));
 }
 
 $course_plugin = 'zoom'; // needed in order to load the plugin lang variables

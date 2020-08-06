@@ -50,6 +50,7 @@ if ($meeting) {
     $activity->setName($action);
     $activity->setType($objectType);
     $activity->setEvent(json_encode($object));
+    $activity->setUser(api_get_user_entity(api_get_user_id()));
 }
 
 switch ($objectType) {

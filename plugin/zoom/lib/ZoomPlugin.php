@@ -1195,6 +1195,7 @@ class ZoomPlugin extends Plugin
 
                         return $meeting->getMeetingInfoGet()->start_url;
                     }
+
                     $sessionId = api_get_session_id();
                     if (empty($sessionId)) {
                         $isSubscribed = CourseManager::is_user_subscribed_in_course(
@@ -1214,9 +1215,11 @@ class ZoomPlugin extends Plugin
                     if ($isSubscribed) {
                         return $this->registerUser($meeting, $currentUser)->getCreatedRegistration()->join_url;
                     }
+
+                    throw new Exception($this->get_lang('YouAreNotRegisteredToThisMeeting'));
                 }
 
-                if ('true' === $this->get('enableParticipantRegistration')) {
+                //if ('true' === $this->get('enableParticipantRegistration')) {
                     //if ('true' === $this->get('enableParticipantRegistration') && $meeting->requiresRegistration()) {
                     // the participant must be registered
                     $registrant = $meeting->getRegistrant($currentUser);
@@ -1226,7 +1229,7 @@ class ZoomPlugin extends Plugin
 
                     // the participant is registered
                     return $registrant->getCreatedRegistration()->join_url;
-                }
+                //}
                 break;
         }
 

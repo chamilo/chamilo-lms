@@ -22,18 +22,18 @@ if (null === $meeting) {
     api_not_allowed(true, $plugin->get_lang('MeetingNotFound'));
 }
 
-try {
-    if ($meeting->isCourseMeeting()) {
-        api_protect_course_script(true);
-    }
+if ($meeting->isCourseMeeting()) {
+    api_protect_course_script(true);
+}
 
+try {
     $startJoinURL = $plugin->getStartOrJoinMeetingURL($meeting);
     $content .= $meeting->getIntroduction();
 
     if (!empty($startJoinURL)) {
         $content .= Display::url($plugin->get_lang('EnterMeeting'), $startJoinURL, ['class' => 'btn btn-primary']);
     } else {
-        $content .= Display::return_message($plugin->get_lang('ConferenceNotStarted'), 'warning');
+        $content .= Display::return_message($plugin->get_lang('ConferenceNotAvailable'), 'warning');
     }
 
     if ($plugin->userIsConferenceManager($meeting)) {
@@ -45,7 +45,7 @@ try {
     }
 } catch (Exception $exception) {
     Display::addFlash(
-        Display::return_message($exception->getMessage(), 'error')
+        Display::return_message($exception->getMessage(), 'warning')
     );
 }
 

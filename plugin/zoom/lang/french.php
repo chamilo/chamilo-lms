@@ -135,3 +135,4 @@ $strings['CreateGlobalVideoConference'] = "Créer une conférence global";
 $strings['JoinURLNotAvailable'] = "URL pas disponible";
 $strings['Meetings'] = "Conférences";
 $strings['Activity'] = "Activité";
+$strings['ConferenceNotAvailable'] = "Conférence non disponible";

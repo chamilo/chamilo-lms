@@ -141,3 +141,4 @@ $strings['ConferenceType'] = "Conference type";
 $strings['ForEveryone'] = "Everyone";
 $strings['SomeUsers'] = "Some users (Select later)";
 $strings['Activity'] = "Activity";
+$strings['ConferenceNotAvailable'] = "Conference not available";

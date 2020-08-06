@@ -15,7 +15,7 @@ use Exception;
 /**
  * Class RecordingEntity.
  *
- * @ORM\Entity(repositoryClass="Chamilo\PluginBundle\Zoom\RecordingEntityRepository")
+ * @ORM\Entity(repositoryClass="Chamilo\PluginBundle\Zoom\RecordingRepository")
  * @ORM\Table(
  *     name="plugin_zoom_recording",
  *     indexes={
@@ -24,7 +24,7 @@ use Exception;
  * )
  * @ORM\HasLifecycleCallbacks
  */
-class RecordingEntity
+class Recording
 {
     /** @var DateTime */
     public $startDateTime;
@@ -53,8 +53,8 @@ class RecordingEntity
     protected $uuid;
 
     /**
-     * @var MeetingEntity
-     * @ORM\ManyToOne(targetEntity="MeetingEntity", inversedBy="recordings")
+     * @var Meeting
+     * @ORM\ManyToOne(targetEntity="Meeting", inversedBy="recordings")
      * @ORM\JoinColumn(name="meeting_id")
      */
     protected $meeting;
@@ -93,7 +93,7 @@ class RecordingEntity
     }
 
     /**
-     * @return MeetingEntity
+     * @return Meeting
      */
     public function getMeeting()
     {
@@ -111,7 +111,7 @@ class RecordingEntity
     }
 
     /**
-     * @param MeetingEntity $meeting
+     * @param Meeting $meeting
      *
      * @return $this
      */
@@ -128,7 +128,7 @@ class RecordingEntity
      *
      * @throws Exception
      *
-     * @return RecordingEntity
+     * @return Recording
      */
     public function setRecordingMeeting($recordingMeeting)
     {
@@ -138,7 +138,7 @@ class RecordingEntity
             throw new Exception('the RecordingEntity identifier differs from the RecordingMeeting identifier');
         }
         if (null === $this->meeting) {
-            $this->meeting = Database::getManager()->getRepository(MeetingEntity::class)->find($recordingMeeting->id);
+            $this->meeting = Database::getManager()->getRepository(Meeting::class)->find($recordingMeeting->id);
         } elseif ($this->meeting->getId() != $recordingMeeting->id) {
             // $this->meeting remains null when the remote RecordingMeeting refers to a deleted meeting.
             throw new Exception('The RecordingEntity meeting id differs from the RecordingMeeting meeting id');

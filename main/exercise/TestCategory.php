@@ -591,15 +591,20 @@ class TestCategory
     /**
      * Returns an array of $numberElements from $array.
      *
-     * @param array
-     * @param int
+     * @param array $array
+     * @param int   $numberElements
+     * @param bool  $shuffle
      *
      * @return array
      */
-    public static function getNElementsFromArray($array, $numberElements)
+    public static function getNElementsFromArray($array, $numberElements, $shuffle = true)
     {
         $list = $array;
-        shuffle($list);
+
+        if ($shuffle) {
+            shuffle($list);
+        }
+
         if ($numberElements < count($list)) {
             $list = array_slice($list, 0, $numberElements);
         }

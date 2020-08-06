@@ -25,26 +25,26 @@
             <td>{{ meeting.formattedStartTime }}</td>
             <td>{{ meeting.formattedDuration }}</td>
             <td>
-                <a class="btn btn-primary" href="{{ meeting.meetingInfoGet.join_url }}">
+                <a class="btn btn-primary" href="join_meeting.php?meetingId={{ meeting.meetingId }}&{{ _p.web_cid_query }}">
                     {{ 'Join'|get_plugin_lang('ZoomPlugin') }}
                 </a>
 
-                <a class="btn btn-default" href="meeting.php?meetingId={{ meeting.meetingId }}">
-                    {{ 'Edit'|get_lang }}
-                </a>
+                {% if is_manager %}
+                    <a class="btn btn-default" href="meeting.php?meetingId={{ meeting.meetingId }}&{{ _p.web_cid_query }}">
+                        {{ 'Details'|get_plugin_lang('ZoomPlugin') }}
+                    </a>
 
-                <a class="btn btn-danger"
-                   href="start.php?action=delete&meetingId={{ meeting.meetingId }}"
-                   onclick="javascript:if(!confirm('{{ 'AreYouSureToDelete' | get_lang }}')) return false;"
-                >
-                    {{ 'Delete'|get_lang }}
-                </a>
+                    <a class="btn btn-danger"
+                       href="start.php?action=delete&meetingId={{ meeting.meetingId }}&{{ _p.web_cid_query }}"
+                       onclick="javascript:if(!confirm('{{ 'AreYouSureToDelete' | get_lang }}')) return false;"
+                    >
+                        {{ 'Delete'|get_lang }}
+                    </a>
+                {% endif %}
             </td>
         </tr>
         {% endfor %}
     </table>
-{% else %}
-<!-- p>No scheduled meeting currently</p -->
 {% endif %}
 
 {% if scheduleMeetingForm %}

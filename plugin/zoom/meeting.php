@@ -2,7 +2,7 @@
 
 /* For license terms, see /license.txt */
 
-use Chamilo\PluginBundle\Zoom\MeetingEntity;
+use Chamilo\PluginBundle\Zoom\Meeting;
 
 require_once __DIR__.'/config.php';
 
@@ -12,20 +12,21 @@ if (empty($meetingId)) {
 }
 
 $plugin = ZoomPlugin::create();
-/** @var MeetingEntity $meeting */
+/** @var Meeting $meeting */
 $meeting = $plugin->getMeetingRepository()->findOneBy(['meetingId' => $meetingId]);
 
 if (null === $meeting) {
-    throw new Exception($plugin->get_lang('MeetingNotFound'));
+    api_not_allowed(true, $plugin->get_lang('MeetingNotFound'));
 }
 
 $course_plugin = 'zoom'; // needed in order to load the plugin lang variables
 $returnURL = 'meetings.php';
-
+$urlExtra = '';
 if ($meeting->isCourseMeeting()) {
     api_protect_course_script(true);
     $this_section = SECTION_COURSES;
-    $returnURL = 'start.php?cId='.api_get_course_id().'&sessionId='.api_get_session_id();
+    $returnURL = 'start.php?'.api_get_cidreq();
+    $urlExtra = api_get_cidreq();
 }
 
 $logInfo = [
@@ -46,17 +47,14 @@ if ($plugin->userIsConferenceManager($meeting)) {
     $tpl->assign('editMeetingForm', $plugin->getEditMeetingForm($meeting)->returnForm());
     $tpl->assign('deleteMeetingForm', $plugin->getDeleteMeetingForm($meeting, $returnURL)->returnForm());
 
-    if (false === $meeting->isGlobalMeeting()) {
+    if (false === $meeting->isGlobalMeeting() && false == $meeting->isCourseMeeting()) {
         if ('true' === $plugin->get('enableParticipantRegistration') && $meeting->requiresRegistration()) {
             $tpl->assign('registerParticipantForm', $plugin->getRegisterParticipantForm($meeting)->returnForm());
             $tpl->assign('registrants', $meeting->getRegistrants());
         }
     }
 
-    if ('true' === $plugin->get('enableCloudRecording') &&
-        $meeting->hasCloudAutoRecordingEnabled()
-        // && 'finished' === $meeting->status
-    ) {
+    if ('true' === $plugin->get('enableCloudRecording') && $meeting->hasCloudAutoRecordingEnabled()) {
         $tpl->assign('fileForm', $plugin->getFileForm($meeting)->returnForm());
         $tpl->assign('recordings', $meeting->getRecordings());
     }
@@ -78,5 +76,6 @@ if ($plugin->userIsConferenceManager($meeting)) {
 
 $tpl->assign('actions', $plugin->getToolbar());
 $tpl->assign('meeting', $meeting);
+$tpl->assign('url_extra', $urlExtra);
 $tpl->assign('content', $tpl->fetch('zoom/view/meeting.tpl'));
 $tpl->display_one_col_template();

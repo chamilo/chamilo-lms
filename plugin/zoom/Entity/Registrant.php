@@ -14,7 +14,7 @@ use Exception;
 /**
  * Class RegistrantEntity.
  *
- * @ORM\Entity(repositoryClass="Chamilo\PluginBundle\Zoom\RegistrantEntityRepository")
+ * @ORM\Entity(repositoryClass="RegistrantRepository")
  * @ORM\Table(
  *     name="plugin_zoom_registrant",
  *     indexes={
@@ -24,7 +24,7 @@ use Exception;
  * )
  * @ORM\HasLifecycleCallbacks
  */
-class RegistrantEntity
+class Registrant
 {
     /** @var string */
     public $fullName;
@@ -40,17 +40,14 @@ class RegistrantEntity
     /**
      * @var User
      * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User")
-     * @ORM\JoinColumn(name="user_id", nullable=false)
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      */
     protected $user;
 
     /**
-     * @var MeetingEntity
-     * @ORM\ManyToOne(
-     *     targetEntity="MeetingEntity",
-     *     inversedBy="registrants",
-     * )
-     * @ORM\JoinColumn(name="meeting_id")
+     * @var Meeting
+     * @ORM\ManyToOne(targetEntity="Meeting", inversedBy="registrants")
+     * @ORM\JoinColumn(name="meeting_id", referencedColumnName="id")
      */
     protected $meeting;
 
@@ -90,7 +87,7 @@ class RegistrantEntity
     }
 
     /**
-     * @return MeetingEntity
+     * @return Meeting
      */
     public function getMeeting()
     {
@@ -98,7 +95,7 @@ class RegistrantEntity
     }
 
     /**
-     * @param MeetingEntity $meeting
+     * @param Meeting $meeting
      *
      * @return $this
      */
@@ -131,9 +128,9 @@ class RegistrantEntity
     }
 
     /**
-     * @return MeetingRegistrantListItem
      * @throws Exception
      *
+     * @return MeetingRegistrantListItem
      */
     public function getMeetingRegistrantListItem()
     {
@@ -143,9 +140,9 @@ class RegistrantEntity
     /**
      * @param MeetingRegistrantListItem $meetingRegistrantListItem
      *
-     * @return $this
      * @throws Exception
      *
+     * @return $this
      */
     public function setMeetingRegistrantListItem($meetingRegistrantListItem)
     {
@@ -176,9 +173,9 @@ class RegistrantEntity
     }
 
     /**
-     * @return CreatedRegistration
      * @throws Exception
      *
+     * @return CreatedRegistration
      */
     public function getCreatedRegistration()
     {
@@ -188,9 +185,9 @@ class RegistrantEntity
     /**
      * @param CreatedRegistration $createdRegistration
      *
-     * @return $this
      * @throws Exception
      *
+     * @return $this
      */
     public function setCreatedRegistration($createdRegistration)
     {
@@ -205,9 +202,9 @@ class RegistrantEntity
     }
 
     /**
-     * @return MeetingRegistrant
      * @throws Exception
      *
+     * @return MeetingRegistrant
      */
     public function getMeetingRegistrant()
     {
@@ -217,9 +214,9 @@ class RegistrantEntity
     /**
      * @param MeetingRegistrant $meetingRegistrant
      *
-     * @return $this
      * @throws Exception
      *
+     * @return $this
      */
     public function setMeetingRegistrant($meetingRegistrant)
     {

@@ -598,7 +598,7 @@ input[type=checkbox], input[type=radio] {
 .impress-content {
     position: relative;
     width: 100%;
-    height: 600px;
+    height: 618px;
 }
 
 .impress-title {
@@ -607,6 +607,11 @@ input[type=checkbox], input[type=radio] {
     left: 0;
     text-align: center;
     width: 100%;
+}
+
+.impress-content iframe {
+    width: 100%;
+    height: 582px;
 }
 
 .impress-title h1 {
@@ -10469,4 +10474,16 @@ ul.dropdown-menu.inner > li > a {
     .clear-rows-6-4-3 .col-sm-6:nth-child(4n+1) {
         clear: left;
     }
+}
+
+/* Only adjust class radio to student or profesor into /main/auth/inscription.php*/
+#registration > fieldset > #status-group .radio {
+    min-height: 145px;
+    min-width: 145px;
+}
+#registration input.register-profile[value='5']:after,
+#registration input.register-profile[value='1']:after
+{
+    top:-5px;
+    left: -2px;
 }

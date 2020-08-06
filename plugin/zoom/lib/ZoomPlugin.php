@@ -1266,6 +1266,8 @@ class ZoomPlugin extends Plugin
     ) {
         $meetingInfoGet = MeetingInfoGet::fromTopicAndType($topic, MeetingInfoGet::TYPE_SCHEDULED);
         $meetingInfoGet->duration = $duration;
+        $meetingInfoGet->contact_email = $user->getEmail();
+        $meetingInfoGet->contact_name = $user->getFullname();
         $meetingInfoGet->start_time = $startTime->format(DateTimeInterface::ISO8601);
         $meetingInfoGet->agenda = $agenda;
         $meetingInfoGet->password = $password;

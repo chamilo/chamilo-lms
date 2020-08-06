@@ -117,7 +117,7 @@ class Meeting
 
     /**
      * @var MeetingActivity[]|ArrayCollection
-     *
+     * @ORM\OrderBy({"createdAt" = "DESC"})
      * @ORM\OneToMany(targetEntity="MeetingActivity", mappedBy="meeting", cascade={"persist", "remove"})
      */
     protected $activities;

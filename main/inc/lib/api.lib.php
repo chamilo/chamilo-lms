@@ -2200,6 +2200,15 @@ function api_get_course_entity($courseId = 0)
     return Database::getManager()->getRepository('ChamiloCoreBundle:Course')->find($courseId);
 }
 
+function api_get_group_entity($id = 0)
+{
+    if (empty($id)) {
+        $id = api_get_group_id();
+    }
+
+    return Database::getManager()->getRepository('ChamiloCourseBundle:CGroupInfo')->find($id);
+}
+
 /**
  * @param int $id
  *

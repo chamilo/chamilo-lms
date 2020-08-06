@@ -2,22 +2,27 @@
     {{ meeting.typeName }} {{ meeting.meetingId }} ({{ meeting.meetingInfoGet.status }})
 </h4>
 
+<div class="btn-group" role="group">
+
 {% if meeting.meetingInfoGet.status != 'finished' %}
-<p>
     <a class="btn btn-primary" href="join_meeting.php?meetingId={{ meeting.meetingId }}">
         {{ 'ViewMeeting'|get_plugin_lang('ZoomPlugin') }}
     </a>
-</p>
 {% endif %}
 
-{% if isConferenceManager and meeting.status == 'waiting' %}
-<p>
-    <a href="{{ meeting.meetingInfoGet.start_url }}" target="_blank">
-        {{ 'StartMeeting'|get_plugin_lang('ZoomPlugin') }}
+{% if isConferenceManager %}
+    {% if meeting.status == 'waiting' %}
+        <a class="btn btn-primary" href="{{ meeting.meetingInfoGet.start_url }}" target="_blank">
+            {{ 'StartMeeting'|get_plugin_lang('ZoomPlugin') }}
+        </a>
+    {% endif %}
+
+    <a class="btn btn-default"  href="activity.php?meetingId={{ meeting.meetingId }}">
+        {{ 'Activity'|get_plugin_lang('ZoomPlugin') }}
     </a>
-</p>
 {% endif %}
 
+</div>
 {% if currentUserJoinURL %}
 {#<p>#}
 {#    <a href="{{ currentUserJoinURL }}" target="_blank">#}

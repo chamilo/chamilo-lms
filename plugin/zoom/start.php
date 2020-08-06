@@ -19,6 +19,7 @@ $plugin = ZoomPlugin::create();
 $tool_name = $plugin->get_lang('ZoomVideoConferences');
 $tpl = new Template($tool_name);
 $course = api_get_course_entity();
+$group = api_get_group_entity();
 $session = api_get_session_entity();
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
 
@@ -39,12 +40,14 @@ if ($plugin->userIsCourseConferenceManager()) {
         $plugin->getCreateInstantMeetingForm(
             $user,
             $course,
+                $group,
             $session
         )->returnForm()
     );
     $tpl->assign('scheduleMeetingForm', $plugin->getScheduleMeetingForm(
         $user,
         $course,
+        $group,
         $session
     )->returnForm());
 }
@@ -52,7 +55,7 @@ if ($plugin->userIsCourseConferenceManager()) {
 try {
     $tpl->assign(
         'scheduledMeetings',
-        $plugin->getMeetingRepository()->courseMeetings($course, $session)
+        $plugin->getMeetingRepository()->courseMeetings($course, $group, $session)
     );
 } catch (Exception $exception) {
     Display::addFlash(

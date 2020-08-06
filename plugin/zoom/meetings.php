@@ -23,5 +23,5 @@ $tpl->assign('allow_recording', 'true' === $plugin->get('enableCloudRecording'))
 $tpl->assign('actions', $plugin->getToolbar());
 $tpl->assign('search_form', $form->returnForm());
 $tpl->assign('schedule_form', $scheduleForm->returnForm());
-$tpl->assign('content', $tpl->fetch('zoom/view/list.tpl'));
+$tpl->assign('content', $tpl->fetch('zoom/view/meetings.tpl'));
 $tpl->display_one_col_template();

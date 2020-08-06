@@ -12,21 +12,21 @@ use Doctrine\ORM\EntityRepository;
 /**
  * Class RegistrantEntityRepository.
  */
-class RegistrantEntityRepository extends EntityRepository
+class RegistrantRepository extends EntityRepository
 {
     /**
      * Returns the upcoming meeting registrations for the given user.
      *
      * @param User $user
      *
-     * @return array|RegistrantEntity[]
+     * @return array|Registrant[]
      */
     public function meetingsComingSoonRegistrationsForUser($user)
     {
         $start = new DateTime();
         $end = new DateTime();
         $end->add(new DateInterval('P7D'));
-        $meetings = $this->getEntityManager()->getRepository(MeetingEntity::class)->periodMeetings($start, $end);
+        $meetings = $this->getEntityManager()->getRepository(Meeting::class)->periodMeetings($start, $end);
 
         return $this->findBy(['meeting' => $meetings, 'user' => $user]);
     }

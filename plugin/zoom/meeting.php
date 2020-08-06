@@ -2,7 +2,7 @@
 
 /* For license terms, see /license.txt */
 
-use Chamilo\PluginBundle\Zoom\MeetingEntity;
+use Chamilo\PluginBundle\Zoom\Meeting;
 
 require_once __DIR__.'/config.php';
 
@@ -12,7 +12,7 @@ if (empty($meetingId)) {
 }
 
 $plugin = ZoomPlugin::create();
-/** @var MeetingEntity $meeting */
+/** @var Meeting $meeting */
 $meeting = $plugin->getMeetingRepository()->findOneBy(['meetingId' => $meetingId]);
 
 if (null === $meeting) {
@@ -46,17 +46,14 @@ if ($plugin->userIsConferenceManager($meeting)) {
     $tpl->assign('editMeetingForm', $plugin->getEditMeetingForm($meeting)->returnForm());
     $tpl->assign('deleteMeetingForm', $plugin->getDeleteMeetingForm($meeting, $returnURL)->returnForm());
 
-    if (false === $meeting->isGlobalMeeting()) {
+    if (false === $meeting->isGlobalMeeting() && false == $meeting->isCourseMeeting()) {
         if ('true' === $plugin->get('enableParticipantRegistration') && $meeting->requiresRegistration()) {
             $tpl->assign('registerParticipantForm', $plugin->getRegisterParticipantForm($meeting)->returnForm());
             $tpl->assign('registrants', $meeting->getRegistrants());
         }
     }
 
-    if ('true' === $plugin->get('enableCloudRecording') &&
-        $meeting->hasCloudAutoRecordingEnabled()
-        // && 'finished' === $meeting->status
-    ) {
+    if ('true' === $plugin->get('enableCloudRecording') && $meeting->hasCloudAutoRecordingEnabled()) {
         $tpl->assign('fileForm', $plugin->getFileForm($meeting)->returnForm());
         $tpl->assign('recordings', $meeting->getRecordings());
     }

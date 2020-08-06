@@ -29,22 +29,22 @@
                     {{ 'Join'|get_plugin_lang('ZoomPlugin') }}
                 </a>
 
-                <a class="btn btn-default" href="meeting.php?meetingId={{ meeting.meetingId }}">
-                    {{ 'Edit'|get_lang }}
-                </a>
+                {% if is_manager %}
+                    <a class="btn btn-default" href="meeting.php?meetingId={{ meeting.meetingId }}">
+                        {{ 'Details'|get_plugin_lang('ZoomPlugin') }}
+                    </a>
 
-                <a class="btn btn-danger"
-                   href="start.php?action=delete&meetingId={{ meeting.meetingId }}"
-                   onclick="javascript:if(!confirm('{{ 'AreYouSureToDelete' | get_lang }}')) return false;"
-                >
-                    {{ 'Delete'|get_lang }}
-                </a>
+                    <a class="btn btn-danger"
+                       href="start.php?action=delete&meetingId={{ meeting.meetingId }}"
+                       onclick="javascript:if(!confirm('{{ 'AreYouSureToDelete' | get_lang }}')) return false;"
+                    >
+                        {{ 'Delete'|get_lang }}
+                    </a>
+                {% endif %}
             </td>
         </tr>
         {% endfor %}
     </table>
-{% else %}
-<!-- p>No scheduled meeting currently</p -->
 {% endif %}
 
 {% if scheduleMeetingForm %}

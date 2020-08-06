@@ -23,7 +23,8 @@ $group = api_get_group_entity();
 $session = api_get_session_entity();
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
 
-if ($plugin->userIsCourseConferenceManager()) {
+$isManager = $plugin->userIsCourseConferenceManager();
+if ($isManager) {
     switch ($action) {
         case 'delete':
             $meeting = $plugin->getMeetingRepository()->findOneBy(['meetingId' => $_REQUEST['meetingId']]);
@@ -63,5 +64,6 @@ try {
     );
 }
 
+$tpl->assign('is_manager', $isManager);
 $tpl->assign('content', $tpl->fetch('zoom/view/start.tpl'));
 $tpl->display_one_col_template();

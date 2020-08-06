@@ -1186,8 +1186,20 @@ class ZoomPlugin extends Plugin
                     return $this->registerUser($meeting, $currentUser)->getCreatedRegistration()->join_url;
                 }
 
-                if ($meeting->isCourseMeeting() && $this->userIsCourseConferenceManager()) {
-                    return $meeting->getMeetingInfoGet()->start_url;
+                if ($meeting->isCourseMeeting()) {
+                    if ($this->userIsCourseConferenceManager()) {
+
+                        return $meeting->getMeetingInfoGet()->start_url;
+                    }
+                    $isSubscribed = CourseManager::is_user_subscribed_in_course(
+                        $currentUser->getId(),
+                        api_get_course_id(),
+                        api_get_session_id()
+                    );
+
+                    if ($isSubscribed) {
+                        return $this->registerUser($meeting, $currentUser)->getCreatedRegistration()->join_url;
+                    }
                 }
 
                 if ('true' === $this->get('enableParticipantRegistration')) {

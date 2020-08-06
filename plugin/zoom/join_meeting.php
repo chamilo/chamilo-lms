@@ -18,12 +18,11 @@ $plugin = ZoomPlugin::create();
 $content = '';
 /** @var Meeting $meeting */
 $meeting = $plugin->getMeetingRepository()->findOneBy(['meetingId' => $meetingId]);
+if (null === $meeting) {
+    api_not_allowed(true, $plugin->get_lang('MeetingNotFound'));
+}
 
 try {
-    if (null === $meeting) {
-        throw new Exception($plugin->get_lang('Meeting not found'));
-    }
-
     if ($meeting->isCourseMeeting()) {
         api_protect_course_script(true);
     }
@@ -33,8 +32,6 @@ try {
 
     if (!empty($startJoinURL)) {
         $content .= Display::url($plugin->get_lang('EnterMeeting'), $startJoinURL, ['class' => 'btn btn-primary']);
-    } else {
-        //echo Display::return_message($plugin->get_lang('ConferenceNotStarted'), 'warning');
     }
 
     if ($plugin->userIsConferenceManager($meeting)) {

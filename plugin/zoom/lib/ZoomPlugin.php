@@ -1220,10 +1220,12 @@ class ZoomPlugin extends Plugin
                     //if ('true' === $this->get('enableParticipantRegistration') && $meeting->requiresRegistration()) {
                     // the participant must be registered
                     $registrant = $meeting->getRegistrant($currentUser);
-                    if (null !== $registrant) {
-                        // the participant is registered
-                        return $registrant->getCreatedRegistration()->join_url;
+                    if (null == $registrant) {
+                        throw new Exception($this->get_lang('YouAreNotRegisteredToThisMeeting'));
                     }
+
+                    // the participant is registered
+                    return $registrant->getCreatedRegistration()->join_url;
                 }
                 break;
         }

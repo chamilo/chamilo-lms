@@ -1230,6 +1230,10 @@ class ZoomPlugin extends Plugin
         $meeting->setMeetingInfoGet($meeting->getMeetingInfoGet()->create());
         $meeting->getMeetingInfoGet()->settings->approval_type = $approvalType;
 
+        $currentUser = api_get_user_entity(api_get_user_id());
+        $meeting->getMeetingInfoGet()->settings->contact_email = $currentUser->getEmail();
+        $meeting->getMeetingInfoGet()->settings->contact_name = $currentUser->getFullname();
+
         Database::getManager()->persist($meeting);
         Database::getManager()->flush();
 
@@ -1266,8 +1270,6 @@ class ZoomPlugin extends Plugin
     ) {
         $meetingInfoGet = MeetingInfoGet::fromTopicAndType($topic, MeetingInfoGet::TYPE_SCHEDULED);
         $meetingInfoGet->duration = $duration;
-        $meetingInfoGet->contact_email = $user->getEmail();
-        $meetingInfoGet->contact_name = $user->getFullname();
         $meetingInfoGet->start_time = $startTime->format(DateTimeInterface::ISO8601);
         $meetingInfoGet->agenda = $agenda;
         $meetingInfoGet->password = $password;

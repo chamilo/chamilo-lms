@@ -54,18 +54,7 @@ class ZoomPlugin extends Plugin
                 'enableParticipantRegistration' => 'boolean',
                 'enableCloudRecording' => 'boolean',
                 'enableGlobalConference' => 'boolean',
-                'enableGlobalConferencePerUser' => 'boolean',
                 'globalConferenceAllowRoles' => [
-                    'type' => 'select',
-                    'options' => [
-                        PLATFORM_ADMIN => get_lang('Administrator'),
-                        COURSEMANAGER => get_lang('Teacher'),
-                        STUDENT => get_lang('Student'),
-                        STUDENT_BOSS => get_lang('StudentBoss'),
-                    ],
-                    'attributes' => ['multiple' => 'multiple'],
-                ],
-                'globalConferencePerUserAllowRoles' => [
                     'type' => 'select',
                     'options' => [
                         PLATFORM_ADMIN => get_lang('Administrator'),
@@ -115,25 +104,6 @@ class ZoomPlugin extends Plugin
     }
 
     /**
-     * @return bool
-     */
-    public static function currentUserCanCreateUserMeeting()
-    {
-        $user = api_get_user_entity(api_get_user_id());
-
-        if (null === $user) {
-            return false;
-        }
-
-        return
-            'true' === api_get_plugin_setting('zoom', 'enableGlobalConferencePerUser')
-            && in_array(
-                (api_is_platform_admin() ? PLATFORM_ADMIN : $user->getStatus()),
-                (array) api_get_plugin_setting('zoom', 'globalConferencePerUserAllowRoles')
-            );
-    }
-
-    /**
      * @return array
      */
     public function getProfileBlockItems()
@@ -141,10 +111,6 @@ class ZoomPlugin extends Plugin
         $elements = $this->meetingsToWhichCurrentUserIsRegisteredComingSoon();
         $addMeetingLink = false;
         if (self::currentUserCanJoinGlobalMeeting()) {
-            $addMeetingLink = true;
-        }
-
-        if (self::currentUserCanCreateUserMeeting()) {
             $addMeetingLink = true;
         }
 
@@ -716,16 +682,10 @@ class ZoomPlugin extends Plugin
         $durationNumeric = $form->addNumeric('duration', $this->get_lang('DurationInMinutes'));
         $form->setRequired($durationNumeric);
 
-        if (null === $course) {
+        if (null === $course && 'true' === $this->get('enableGlobalConference')) {
             $options = [];
-            if ('true' === $this->get('enableGlobalConference')) {
-                $options['everyone'] = $this->get_lang('ForEveryone');
-            }
-
-            if ('true' === $this->get('enableGlobalConferencePerUser')) {
-                $options['registered_users'] = $this->get_lang('SomeUsers');
-            }
-
+            $options['everyone'] = $this->get_lang('ForEveryone');
+            $options['registered_users'] = $this->get_lang('SomeUsers');
             if (!empty($options)) {
                 if (1 === count($options)) {
                     $form->addHidden('type', key($options));
@@ -1086,15 +1046,6 @@ class ZoomPlugin extends Plugin
                     api_get_path(WEB_PLUGIN_PATH).'zoom/start.php?'.api_get_cidreq()
                 );
         }
-
-        /*if ('true' === api_get_plugin_setting('zoom', 'enableGlobalConferencePerUser')) {
-            $actionsLeft .=
-                Display::url(
-                    Display::return_icon('user.png', $this->get_lang('GlobalMeetingPerUser'), null, ICON_SIZE_MEDIUM),
-                    api_get_path(WEB_PLUGIN_PATH).'zoom/meetings.php?type=user'
-                )
-            ;
-        }*/
 
         if (!empty($returnUrl)) {
             $back = Display::url(

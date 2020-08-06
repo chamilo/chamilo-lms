@@ -24,6 +24,10 @@ if (null === $meeting) {
     api_not_allowed(true);
 }
 
+if (!$plugin->userIsConferenceManager($meeting)) {
+    api_not_allowed(true);
+}
+
 $tpl->assign('actions', $plugin->getToolbar());
 $tpl->assign('meeting', $meeting);
 $tpl->assign('content', $tpl->fetch('zoom/view/activity.tpl'));

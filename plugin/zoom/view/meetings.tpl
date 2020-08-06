@@ -32,7 +32,7 @@
                     {% for recording in meeting.recordings %}
                         <dl>
                             <dt>
-                                {{ recording.formattedStartTime }} ({{ recording.formattedDuration }})
+                                {{ recording.formattedStartTime }} ({{ recording.formattedDuration }}) {{ 'Password' | get_lang }}: {{ recording.recordingMeeting.password }}
                             </dt>
                             <dd>
                                 <ul>

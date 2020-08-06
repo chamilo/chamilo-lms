@@ -1893,7 +1893,8 @@ class DocumentManager
         $sessionId,
         $is_preview = false
     ) {
-        $user_id = intval($user_id);
+        $user_id = (int) $user_id;
+        $sessionId = (int) $sessionId;
         $course_info = api_get_course_info($course_code);
         $tbl_document = Database::get_course_table(TABLE_DOCUMENT);
         $course_id = $course_info['real_id'];
@@ -1919,6 +1920,7 @@ class DocumentManager
                 $all_user_info = self::get_all_info_to_certificate(
                     $user_id,
                     $course_code,
+                    $sessionId,
                     $is_preview
                 );
 
@@ -1949,11 +1951,12 @@ class DocumentManager
      *
      * @return array
      */
-    public static function get_all_info_to_certificate($user_id, $courseCode, $is_preview = false)
+    public static function get_all_info_to_certificate($user_id, $courseCode, $sessionId, $is_preview = false)
     {
         $info_list = [];
         $user_id = (int) $user_id;
         $course_info = api_get_course_info($courseCode);
+        $sessionId = (int) $sessionId;
 
         // Portal info
         $organization_name = api_get_setting('Institution');
@@ -1986,8 +1989,7 @@ class DocumentManager
         $teacher_last_name = $teacher_info['lastname'];
 
         // info gradebook certificate
-        $info_grade_certificate = UserManager::get_info_gradebook_certificate($courseCode, $user_id);
-
+        $info_grade_certificate = UserManager::get_info_gradebook_certificate($courseCode, $sessionId, $user_id);
         $date_long_certificate = '';
         $date_certificate = '';
         $url = '';
@@ -2011,8 +2013,6 @@ class DocumentManager
         if (is_file($externalStyleFile)) {
             $externalStyle = file_get_contents($externalStyleFile);
         }
-
-        $sessionId = api_get_session_id();
         $timeInCourse = Tracking::get_time_spent_on_the_course($user_id, $course_info['real_id'], $sessionId);
         $timeInCourse = api_time_to_hms($timeInCourse, ':', false, true);
 

@@ -316,10 +316,7 @@ if (count($certificateList) == 0) {
             <table class="table data_table">
                 <tbody>';
 
-        $list = GradebookUtils::get_list_gradebook_certificates_by_user_id(
-            $value['user_id'],
-            $categoryId
-        );
+        $list = GradebookUtils::get_list_gradebook_certificates_by_user_id($value['user_id'], $categoryId);
         foreach ($list as $valueCertificate) {
             echo '<tr>';
             echo '<td width="50%">'.get_lang('Score').' : '.$valueCertificate['score_certificate'].'</td>';

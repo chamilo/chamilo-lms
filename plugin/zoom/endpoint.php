@@ -67,26 +67,19 @@ switch ($objectType) {
             case 'deleted':
                 $em->remove($meeting);
                 $em->flush();
+                exit;
                 break;
             case 'ended':
             case 'started':
                 $meeting->setStatus($action);
                 $meeting->addActivity($activity);
-                $em->persist($meeting);
-                $em->flush();
-                break;
-            case 'participant_joined':
-            case 'participant_left':
-                $meeting->addActivity($activity);
                 break;
             default:
                 $meeting->addActivity($activity);
-                $em->persist($meeting);
-                $em->flush();
-                //error_log(sprintf('Event "%s" on %s was unhandled: %s', $action, $objectType, $body));
-                //http_response_code(Response::HTTP_NOT_IMPLEMENTED); // Not Implemented
                 break;
         }
+        $em->persist($meeting);
+        $em->flush();
         break;
     case 'recording':
         $recordingRepository = $em->getRepository(Recording::class);

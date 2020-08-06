@@ -25,7 +25,7 @@
                 {{ activity.name }}
             </td>
             <td>
-                {{ activity.createdAt }}
+                {{ activity.createdAt | api_convert_and_format_date(3)}}
             </td>
             <td>
                 {% if activity.eventDecoded.registrant %}
@@ -34,6 +34,11 @@
                     {{ activity.eventDecoded.registrant.last_name }} -
                     {{ activity.eventDecoded.registrant.email }} -
                     {{ activity.eventDecoded.registrant.status }}
+                {% endif %}
+
+                {% if activity.eventDecoded.participant %}
+                    {{ 'User' | get_lang }} :
+                    {{ activity.eventDecoded.participant.user_name }}
                 {% endif %}
             </td>
         </tr>

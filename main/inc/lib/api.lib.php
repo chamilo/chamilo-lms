@@ -3739,7 +3739,7 @@ function api_is_anonymous($user_id = null, $db_check = false)
 
     if ($db_check) {
         $info = api_get_user_info($user_id);
-        if ($info['status'] == ANONYMOUS) {
+        if (false === $info || $info['status'] == ANONYMOUS) {
             return true;
         }
     }

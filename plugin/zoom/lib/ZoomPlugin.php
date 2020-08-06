@@ -1176,12 +1176,12 @@ class ZoomPlugin extends Plugin
 
                 break;
             case 'started':
-                // User per conference
+                // User per conference.
                 if ($currentUser === $meeting->getUser()) {
                     return $meeting->getMeetingInfoGet()->join_url;
                 }
 
-                // the participant is not registered, he can join only the global meeting (automatic registration)
+                // The participant is not registered, he can join only the global meeting (automatic registration).
                 if ($isGlobal) {
                     return $this->registerUser($meeting, $currentUser)->getCreatedRegistration()->join_url;
                 }
@@ -1191,11 +1191,21 @@ class ZoomPlugin extends Plugin
 
                         return $meeting->getMeetingInfoGet()->start_url;
                     }
-                    $isSubscribed = CourseManager::is_user_subscribed_in_course(
-                        $currentUser->getId(),
-                        api_get_course_id(),
-                        api_get_session_id()
-                    );
+                    $sessionId = api_get_session_id();
+                    if (empty($sessionId)) {
+                        $isSubscribed = CourseManager::is_user_subscribed_in_course(
+                            $currentUser->getId(),
+                            api_get_course_id(),
+                            false
+                        );
+                    } else {
+                        $isSubscribed = CourseManager::is_user_subscribed_in_course(
+                            $currentUser->getId(),
+                            api_get_course_id(),
+                            true,
+                            api_get_session_id()
+                        );
+                    }
 
                     if ($isSubscribed) {
                         return $this->registerUser($meeting, $currentUser)->getCreatedRegistration()->join_url;

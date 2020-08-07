@@ -762,7 +762,7 @@ class ZoomPlugin extends Plugin
             }
 
             try {
-                $newMeeting = $this->scheduleMeeting(
+                $newMeeting = $this->createScheduleMeeting(
                     $user,
                     $course,
                     $group,
@@ -1222,22 +1222,47 @@ class ZoomPlugin extends Plugin
      */
     private function createMeetingFromMeeting($meeting)
     {
-        $approvalType = $meeting->getMeetingInfoGet()->settings->approval_type;
-        $meeting->getMeetingInfoGet()->settings->auto_recording = 'true' === $this->get('enableCloudRecording')
-            ? 'cloud'
-            : 'local';
-        $meeting->getMeetingInfoGet()->settings->registrants_email_notification = false;
-        $meeting->setMeetingInfoGet($meeting->getMeetingInfoGet()->create());
-        $meeting->getMeetingInfoGet()->settings->approval_type = $approvalType;
-
         $currentUser = api_get_user_entity(api_get_user_id());
+        $meeting->getMeetingInfoGet()->host_email = $currentUser->getEmail();
         $meeting->getMeetingInfoGet()->settings->contact_email = $currentUser->getEmail();
         $meeting->getMeetingInfoGet()->settings->contact_name = $currentUser->getFullname();
+        $recording = 'true' === $this->get('enableCloudRecording') ? 'cloud' : 'local';
+        $meeting->getMeetingInfoGet()->settings->auto_recording = $recording;
+        $meeting->getMeetingInfoGet()->settings->registrants_email_notification = false;
+        $meeting->getMeetingInfoGet()->settings->alternative_hosts = $currentUser->getEmail();
+
+        // Send create to Zoom.
+        $meeting->setMeetingInfoGet($meeting->getMeetingInfoGet()->create());
 
         Database::getManager()->persist($meeting);
         Database::getManager()->flush();
 
         return $meeting;
+    }
+
+    /**
+     * @throws Exception
+     *
+     * @return Meeting
+     */
+    private function createGlobalMeeting()
+    {
+        $meetingInfoGet = MeetingInfoGet::fromTopicAndType(
+            $this->get_lang('GlobalMeeting'),
+            MeetingInfoGet::TYPE_SCHEDULED
+        );
+        $meetingInfoGet->start_time = (new DateTime())->format(DateTimeInterface::ISO8601);
+        $meetingInfoGet->duration = 60;
+        $meetingInfoGet->settings->approval_type =
+            ('true' === $this->get('enableParticipantRegistration'))
+                ? MeetingSettings::APPROVAL_TYPE_AUTOMATICALLY_APPROVE
+                : MeetingSettings::APPROVAL_TYPE_NO_REGISTRATION_REQUIRED;
+        // $meetingInfoGet->settings->host_video = true;
+        $meetingInfoGet->settings->participant_video = true;
+        $meetingInfoGet->settings->join_before_host = true;
+        $meetingInfoGet->settings->registrants_email_notification = false;
+
+        return $this->createMeetingFromMeeting((new Meeting())->setMeetingInfoGet($meetingInfoGet));
     }
 
     /**
@@ -1257,7 +1282,7 @@ class ZoomPlugin extends Plugin
      *
      * @return Meeting meeting
      */
-    private function scheduleMeeting(
+    private function createScheduleMeeting(
         $user,
         $course,
         $group,
@@ -1298,30 +1323,5 @@ class ZoomPlugin extends Plugin
     private function registerAllCourseUsers($meeting)
     {
         $this->registerUsers($meeting, $meeting->getRegistrableUsers());
-    }
-
-    /**
-     * @throws Exception
-     *
-     * @return Meeting
-     */
-    private function createGlobalMeeting()
-    {
-        $meetingInfoGet = MeetingInfoGet::fromTopicAndType(
-            $this->get_lang('GlobalMeeting'),
-            MeetingInfoGet::TYPE_SCHEDULED
-        );
-        $meetingInfoGet->start_time = (new DateTime())->format(DateTimeInterface::ISO8601);
-        $meetingInfoGet->duration = 60;
-        $meetingInfoGet->settings->approval_type =
-            ('true' === $this->get('enableParticipantRegistration'))
-                ? MeetingSettings::APPROVAL_TYPE_AUTOMATICALLY_APPROVE
-                : MeetingSettings::APPROVAL_TYPE_NO_REGISTRATION_REQUIRED;
-        // $meetingInfoGet->settings->host_video = true;
-        $meetingInfoGet->settings->participant_video = true;
-        $meetingInfoGet->settings->join_before_host = true;
-        $meetingInfoGet->settings->registrants_email_notification = false;
-
-        return $this->createMeetingFromMeeting((new Meeting())->setMeetingInfoGet($meetingInfoGet));
     }
 }

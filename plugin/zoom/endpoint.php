@@ -44,41 +44,38 @@ if ($object->id) {
     $meeting = $meetingRepository->findOneBy(['meetingId' => $object->id]);
 }
 
-$activity = null;
-if ($meeting) {
-    $activity = new MeetingActivity();
-    $activity->setName($action);
-    $activity->setType($objectType);
-    $activity->setEvent(json_encode($object));
+if (null === $meeting) {
+    error_log("Meeting not found");
+    error_log(sprintf('Event "%s" on %s was unhandled: %s', $action, $objectType, $body));
+    http_response_code(Response::HTTP_NOT_FOUND);
+    exit;
 }
+
+$activity = new MeetingActivity();
+$activity->setName($action);
+$activity->setType($objectType);
+$activity->setEvent(json_encode($object));
 
 switch ($objectType) {
     case 'meeting':
-        $registrantRepository = $em->getRepository(Registrant::class);
-
-        if (null === $meeting) {
-            exit;
-        }
-
         error_log('Meeting '.$action.' - '.$meeting->getId());
         error_log(print_r($object, 1));
 
         switch ($action) {
             case 'deleted':
                 $em->remove($meeting);
-                $em->flush();
-                exit;
                 break;
             case 'ended':
             case 'started':
                 $meeting->setStatus($action);
                 $meeting->addActivity($activity);
+                $em->persist($meeting);
                 break;
             default:
                 $meeting->addActivity($activity);
+                $em->persist($meeting);
                 break;
         }
-        $em->persist($meeting);
         $em->flush();
         break;
     case 'recording':

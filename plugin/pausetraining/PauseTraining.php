@@ -216,9 +216,11 @@ class PauseTraining extends Plugin
                         $endDate = $endDate['value'];
 
                         // Ignore date if is between the pause formation.
-                        if ($maxDate > $startDate && $maxDate < $endDate) {
-                            echo "Message skipped for user #$userId because latest login is $maxDate and pause formation between $startDate - $endDate ".PHP_EOL;
+                        if ($now > $startDate && $now < $endDate) {
+                            echo "Message skipped for user #$userId because today is $now and user is in pause formation between $startDate - $endDate ".PHP_EOL;
                             continue;
+                        } else {
+                            echo "Message *NOT* skipped for user #$userId because today is $now and user is in pause formation between $startDate - $endDate ".PHP_EOL;
                         }
                     }
                 }

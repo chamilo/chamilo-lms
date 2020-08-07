@@ -90,7 +90,7 @@ class PauseTraining extends Plugin
         return (int) $userId;
     }
 
-    public function runCron()
+    public function runCron($date = '', $isTest = false)
     {
         $enable = $this->get('tool_enable');
         $senderId = $this->get('sender_id');
@@ -111,7 +111,7 @@ class PauseTraining extends Plugin
         $senderInfo = api_get_user_info($senderId);
 
         if (empty($senderInfo)) {
-            echo "Sender #$senderId not found";
+            echo "Sender #$senderId not found in Chamilo";
 
             return false;
         }
@@ -122,15 +122,23 @@ class PauseTraining extends Plugin
         $track = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         $login = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
-        $now = api_get_utc_datetime();
         $usersNotificationPerDay = [];
         $users = [];
+
+        $now = api_get_utc_datetime();
+        if (!empty($date)) {
+            $now = $date;
+        }
+
+        if ($isTest) {
+            echo "-------------------------------------------".PHP_EOL;
+            echo "----- Testing date $now ----".PHP_EOL;
+            echo "-------------------------------------------".PHP_EOL;
+        }
 
         $extraFieldValue = new ExtraFieldValue('user');
         foreach ($enableDaysList as $day) {
             $day = (int) $day;
-
-            echo "Processing day $day".PHP_EOL.PHP_EOL;
 
             if (0 === $day) {
                 echo 'Day = 0 avoided '.PHP_EOL;
@@ -167,6 +175,13 @@ class PauseTraining extends Plugin
                     ";
 
             $rs = Database::query($sql);
+            if (!Database::num_rows($rs)) {
+                echo "No users to process for day $day".PHP_EOL.PHP_EOL;
+                continue;
+            }
+
+            echo "Processing day $day".PHP_EOL.PHP_EOL;
+
             while ($user = Database::fetch_array($rs)) {
                 $userId = $user['user_id'];
                 if (in_array($userId, $users)) {
@@ -237,11 +252,35 @@ class PauseTraining extends Plugin
                     $template->assign('user', $userInfo);
                     $content = $template->fetch('pausetraining/view/notification_content.tpl');
                     echo 'Ready to send a message "'.$title.'" to user #'.$userId.' '.$userInfo['complete_name'].PHP_EOL;
-                    MessageManager::send_message_simple($userId, $title, $content, $senderId);
+                    if (false === $isTest) {
+                        MessageManager::send_message_simple($userId, $title, $content, $senderId);
+                    } else {
+                        echo 'Message not send because is in test mode.'.PHP_EOL;
+                    }
                 }
             }
         }
-        exit;
+    }
+
+    public function runCronTest()
+    {
+        $now = api_get_utc_datetime();
+        $days = 30;
+        $before = new DateTime($now);
+        $before->sub(new DateInterval('P'.$days.'D'));
+
+        $after = new DateTime($now);
+        $after->add(new DateInterval('P'.$days.'D'));
+
+        $period = new DatePeriod(
+            $before,
+            new DateInterval('P1D'),
+            new $after
+        );
+
+        foreach ($period as $key => $value) {
+            self::runCron($value->format('Y-m-d H:i:s'), true);
+        }
     }
 
     public function install()

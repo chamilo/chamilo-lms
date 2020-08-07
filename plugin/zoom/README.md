@@ -30,6 +30,8 @@ Recordings and user registration are only available to paying Zoom customers.
 
 For a non-paying Zoom user, this plugin still works but participants will join anonymously.
 
+The user that starts the meeting will be identified as the zoom account that is define in the plugin. Socreate a generic account that works for all the users that start meetings.
+
 # Contributing
 
 Read README.code.md for an introduction to the plugin's code.

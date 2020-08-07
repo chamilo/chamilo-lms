@@ -1,6 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
-
+use Endroid\QrCode\ErrorCorrectionLevel;
+use Endroid\QrCode\LabelAlignment;
+use Endroid\QrCode\QrCode;
+use Endroid\QrCode\Response\QrCodeResponse;
 /**
  * Certificate Class
  * Generate certificates based in the gradebook tool.
@@ -513,10 +516,42 @@ class Certificate extends Model
         // Make sure HTML certificate is generated
         if (!empty($text) && !empty($path)) {
             //L low, M - Medium, L large error correction
-            return PHPQRCode\QRcode::png($text, $path, 'M', 2, 2);
+            // return PHPQRCode\QRcode::png($text, $path, 'M', 2, 2);;
+            return   $this->makeQrBasedOnEndroid($text,$path);
         }
 
         return false;
+    }
+    /**
+     * Generates a QR code for the certificate. The QR code embeds the text given.
+     *
+     * @param string $text Text to be added in the QR code
+     * @param string $path file path of the image
+     *
+     * @return bool
+     */
+    // this name will be change
+    public function makeQrBasedOnEndroid($text, $path)
+    {
+        $qrCode = new QrCode($text);
+        $qrCode->setSize(145);
+        $qrCode->setMargin(10);
+        $qrCode->setWriterByName('png');
+        //$qrCode->setEncoding('UTF-8');
+        $qrCode->setErrorCorrectionLevel(ErrorCorrectionLevel::HIGH());
+        $qrCode->setForegroundColor(['r' => 0, 'g' => 0, 'b' => 0, 'a' => 0]);
+        $qrCode->setBackgroundColor(['r' => 255, 'g' => 255, 'b' => 255, 'a' => 0]);
+        $qrCode->setValidateResult(false);
+
+        // To prevent this error:
+        //Fatal error: Uncaught TypeError: Return value of Endroid\QrCode\Writer\AbstractWriter::writeFile() must be of the type string, none returned in C:\Work\chamilo\vendor\endroid\qr-code\src\Writer\AbstractWriter.php on line 27
+        try {
+            $qrCode->writeFile($path);
+        } catch (Error $e) {
+
+        }
+        return true;
+
     }
 
     /**

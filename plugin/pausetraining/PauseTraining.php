@@ -157,20 +157,20 @@ class PauseTraining extends Plugin
             $hourEnd = $date->format('Y-m-d H:i:s');
 
             $sql = "SELECT
-                    t.user_id,
+                    u.id as user_id,
                     MAX(t.logout_course_date) max_course_date,
                     MAX(l.logout_date) max_login_date
-                    FROM $track t
-                    INNER JOIN $userTable u
+                    FROM $userTable u
+                    INNER JOIN $track t
                     ON (u.id = t.user_id)
                     INNER JOIN $login l
                     ON (u.id = l.login_user_id)
                     WHERE
                         u.status <> ".ANONYMOUS." AND
                         u.active = 1
-                    GROUP BY t.user_id
+                    GROUP BY u.id
                     HAVING
-                        (max_course_date BETWEEN '$hourStart' AND '$hourEnd') AND
+                        (max_course_date BETWEEN '$hourStart' AND '$hourEnd') OR
                         (max_login_date BETWEEN '$hourStart' AND '$hourEnd')
                     ";
 
@@ -275,7 +275,7 @@ class PauseTraining extends Plugin
         $period = new DatePeriod(
             $before,
             new DateInterval('P1D'),
-            new $after
+            $after
         );
 
         foreach ($period as $key => $value) {

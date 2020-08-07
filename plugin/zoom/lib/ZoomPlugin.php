@@ -1223,7 +1223,7 @@ class ZoomPlugin extends Plugin
     private function createMeetingFromMeeting($meeting)
     {
         $currentUser = api_get_user_entity(api_get_user_id());
-        $meeting->getMeetingInfoGet()->host_email = $currentUser->getEmail();
+        //$meeting->getMeetingInfoGet()->host_email = $currentUser->getEmail();
         $meeting->getMeetingInfoGet()->settings->contact_email = $currentUser->getEmail();
         $meeting->getMeetingInfoGet()->settings->contact_name = $currentUser->getFullname();
         $recording = 'true' === $this->get('enableCloudRecording') ? 'cloud' : 'local';

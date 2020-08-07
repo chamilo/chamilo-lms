@@ -1229,7 +1229,7 @@ class ZoomPlugin extends Plugin
         $recording = 'true' === $this->get('enableCloudRecording') ? 'cloud' : 'local';
         $meeting->getMeetingInfoGet()->settings->auto_recording = $recording;
         $meeting->getMeetingInfoGet()->settings->registrants_email_notification = false;
-        $meeting->getMeetingInfoGet()->settings->alternative_hosts = $currentUser->getEmail();
+        //$meeting->getMeetingInfoGet()->settings->alternative_hosts = $currentUser->getEmail();
 
         // Send create to Zoom.
         $meeting->setMeetingInfoGet($meeting->getMeetingInfoGet()->create());

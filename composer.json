@@ -118,7 +118,7 @@
         "zendframework/zend-http": "~2.6|^3.0",
         "zendframework/zend-soap": "~2.6|^3.0",
         "angelfqc/vimeo-api": "2.0.6",
-        "endroid/qr-code": "3.0.0"
+        "endroid/qr-code": "2.5.*"
     },
     "require-dev": {
         "behat/behat": "3.5.0",

@@ -908,7 +908,11 @@ if (!empty($groupList)) {
         $totalLpProgress += $lpProgress;
     }
 
-    $lpProgress = round($totalLpProgress / $nbStudents, 2).' %';
+    if (empty($nbStudents)) {
+        $lpProgress = '0 %';
+    } else {
+        $lpProgress = round($totalLpProgress / $nbStudents, 2).' %';
+    }
     $totalBestScoreAverageNotInLP = 0;
     $bestScoreAverageNotInLP = 0;
     if (!empty($exerciseList)) {

@@ -215,11 +215,11 @@ class PauseTraining extends Plugin
             $date->sub(new DateInterval('PT'.$hourEnd.'H'));
             $hourEnd = $date->format('Y-m-d H:i:s');
 
-            echo PHP_EOL.PHP_EOL."Processing day $day: $hourStart - $hourEnd ".PHP_EOL.PHP_EOL;
+            echo "Processing day $day: $hourStart - $hourEnd ".PHP_EOL.PHP_EOL;
 
             foreach ($users as $userId => $maxDate) {
                 if (!($maxDate > $hourStart && $maxDate < $hourEnd)) {
-                    echo "Message skipped for user #$userId because max date found: $maxDate not in range $hourStart - $hourEnd ".PHP_EOL;
+                    //echo "Message skipped for user #$userId because max date found: $maxDate not in range $hourStart - $hourEnd ".PHP_EOL;
                     continue;
                 }
 
@@ -243,12 +243,12 @@ class PauseTraining extends Plugin
                         $endDate = $endDate['value'];
 
                         if ($startDate > $hourStart && $startDate < $hourStart) {
-                            echo "Message skipped for user #$userId because process date $hourStart is in start pause in $startDate - $endDate ".PHP_EOL;
+                            //echo "Message skipped for user #$userId because process date $hourStart is in start pause in $startDate - $endDate ".PHP_EOL;
                             continue;
                         }
 
                         if ($endDate > $hourEnd && $endDate < $hourEnd) {
-                            echo "Message skipped for user #$userId because process date $hourEnd is in start pause in $startDate - $endDate ".PHP_EOL;
+                            //echo "Message skipped for user #$userId because process date $hourEnd is in start pause in $startDate - $endDate ".PHP_EOL;
                             continue;
                         }
                     }
@@ -261,7 +261,7 @@ class PauseTraining extends Plugin
         }
 
         if (!empty($usersNotificationPerDay)) {
-            echo 'Now processing messages ...'.PHP_EOL;
+            echo PHP_EOL.'Now processing messages ...'.PHP_EOL;
 
             ksort($usersNotificationPerDay);
             foreach ($usersNotificationPerDay as $day => $userList) {

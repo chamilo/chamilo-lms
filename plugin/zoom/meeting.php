@@ -45,7 +45,7 @@ $logInfo = [
 ];
 Event::registerLog($logInfo);
 
-$interbreadcrumb[] = [ // used in templates
+$interbreadcrumb[] = [
     'url' => $returnURL,
     'name' => $plugin->get_lang('ZoomVideoConferences'),
 ];

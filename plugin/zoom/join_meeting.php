@@ -24,6 +24,16 @@ if (null === $meeting) {
 
 if ($meeting->isCourseMeeting()) {
     api_protect_course_script(true);
+    if (api_is_in_group()) {
+        $interbreadcrumb[] = [
+            'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
+            'name' => get_lang('Groups'),
+        ];
+        $interbreadcrumb[] = [
+            'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
+            'name' => get_lang('GroupSpace').' '.$meeting->getGroup()->getName(),
+        ];
+    }
 }
 
 try {

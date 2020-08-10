@@ -1282,11 +1282,11 @@ class ZoomPlugin extends Plugin
      * Schedules a meeting and returns it.
      * set $course, $session and $user to null in order to create a global meeting.
      *
-     * @param DateTime     $startTime meeting local start date-time (configure local timezone on your Zoom account)
-     * @param int          $duration  in minutes
-     * @param string       $topic     short title of the meeting, required
-     * @param string       $agenda    ordre du jour
-     * @param string       $password  meeting password
+     * @param DateTime $startTime meeting local start date-time (configure local timezone on your Zoom account)
+     * @param int      $duration  in minutes
+     * @param string   $topic     short title of the meeting, required
+     * @param string   $agenda    ordre du jour
+     * @param string   $password  meeting password
      *
      * @throws Exception
      *

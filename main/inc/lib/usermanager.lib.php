@@ -3471,10 +3471,7 @@ class UserManager
             $coachList = SessionManager::getCoachesBySession($session_id);
             $categoryStart = $row['session_category_date_start'] ? $row['session_category_date_start']->format('Y-m-d') : '';
             $categoryEnd = $row['session_category_date_end'] ? $row['session_category_date_end']->format('Y-m-d') : '';
-            $courseList = self::get_courses_list_by_session(
-                $user_id,
-                $session_id
-            );
+            $courseList = self::get_courses_list_by_session($user_id, $session_id);
             $daysLeft = SessionManager::getDayLeftInSession($row, $user_id);
 
             // User portal filters:
@@ -3856,6 +3853,7 @@ class UserManager
         session_rel_course_user table if there are courses registered
         to our user or not */
         $sql = "SELECT DISTINCT
+                    c.title,
                     c.visibility,
                     c.id as real_id,
                     c.code as course_code,
@@ -3893,6 +3891,7 @@ class UserManager
 
         if (api_is_allowed_to_create_course()) {
             $sql = "SELECT DISTINCT
+                        c.title,
                         c.visibility,
                         c.id as real_id,
                         c.code as course_code,

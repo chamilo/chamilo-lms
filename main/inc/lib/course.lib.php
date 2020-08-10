@@ -6106,7 +6106,7 @@ class CourseManager
     public static function getCourseUsers($filterByActive = null)
     {
         // This would return only the users from real courses:
-        $userList = self::get_user_list_from_course_code(
+        return self::get_user_list_from_course_code(
             api_get_course_id(),
             api_get_session_id(),
             null,
@@ -6120,8 +6120,6 @@ class CourseManager
             [],
             $filterByActive
         );
-
-        return $userList;
     }
 
     /**
@@ -6175,7 +6173,7 @@ class CourseManager
             'users',
             get_lang('Users'),
             $result,
-            ['select_all_checkbox' => true]
+            ['select_all_checkbox' => true, 'id' => 'users']
         );
     }
 

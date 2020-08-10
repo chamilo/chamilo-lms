@@ -2,10 +2,13 @@
 
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * Responses to AJAX calls.
  */
 require_once __DIR__.'/../global.inc.php';
+
 $action = $_GET['a'];
 
 // Access restrictions.
@@ -17,9 +20,78 @@ if (!$is_allowedToTrack) {
 }
 
 switch ($action) {
-    // At this date : 23/02/2017, a minor review can't determine where is used this case 'access_detail'
+    case 'lp_global_report':
+        $userId = (int) $_REQUEST['user_id'];
+        if (empty($userId)) {
+            exit;
+        }
+
+        $cacheAvailable = api_get_configuration_value('apc');
+        $table = null;
+        $variable = 'lp_global_report_'.$userId;
+        if ($cacheAvailable) {
+            if (apcu_exists($variable)) {
+                $table = apcu_fetch($variable);
+            }
+        }
+
+        if (!empty($table)) {
+            echo $table;
+            exit;
+        }
+
+        $sessionCategoryList = UserManager::get_sessions_by_category($userId, false);
+        $total = 0;
+        $totalAverage = 0;
+        $table = new HTML_Table(['class' => 'data_table']);
+        $row = 0;
+        $col = 0;
+        foreach ($sessionCategoryList as $category) {
+            $sessionList = $category['sessions'];
+            foreach ($sessionList as $session) {
+                $courses = $session['courses'];
+                $sessionId = $session['session_id'];
+                $session['session_name'];
+                $totalCourse = 0;
+                $totalSessionAverage = 0;
+                foreach ($courses as &$course) {
+                    $average = Tracking::get_avg_student_progress($userId, $course['course_code'], [], $sessionId);
+                    $course['average'] = $average;
+                    $totalSessionAverage += $average;
+                    $totalAverage += $average;
+                    $total++;
+                    $totalCourse++;
+                    $total++;
+                }
+
+                $row++;
+                $table->setCellContents($row, 0, $session['session_name']);
+                $table->setCellContents($row, 1, round($totalSessionAverage/count($courses), 2));
+                $table->setCellContents($row, 2, '');
+                $row++;
+                foreach ($courses as &$course) {
+                    $table->setCellContents($row, 0, $session['session_name'].'-'.count($courses));
+                    $table->setCellContents($row, 1, $course['title']);
+                    $table->setCellContents($row, 2, $course['average']);
+                    $row++;
+                }
+            }
+        }
+
+        $table->setCellContents(0, 0, get_lang('Global'));
+        $table->setCellContents(0, 1, round($totalAverage/$total, 2));
+        $result = $table->toHtml();
+
+        if ($cacheAvailable) {
+            apcu_store($variable, $result, 60);
+        }
+
+        echo $result;
+
+        break;
     case 'access_detail':
-        $user_id = intval($_REQUEST['student']);
+        // At this date : 23/02/2017, a minor review can't determine where is used this case 'access_detail'.
+        $user_id = (int) $_REQUEST['student'];
         $course_code = Security::remove_XSS($_REQUEST['course']);
         $type = Security::remove_XSS($_REQUEST['type']);
         $range = Security::remove_XSS($_REQUEST['range']);

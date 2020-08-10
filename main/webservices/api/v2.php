@@ -343,9 +343,8 @@ try {
             break;
         case Rest::UPDATE_USER_PAUSE_TRAINING:
             $allow = api_get_plugin_setting('pausetraining', 'tool_enable') === 'true';
-            $allowPauseFormation = api_get_plugin_setting('pausetraining', 'allow_users_to_edit_pause_formation') === 'true';
 
-            if (false === $allow || false === $allowPauseFormation) {
+            if (false === $allow) {
                 throw new Exception(get_lang('Plugin configured'));
             }
 

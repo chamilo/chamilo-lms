@@ -6152,7 +6152,7 @@ class CourseManager
      *
      * @return HTML_QuickForm_element
      */
-    public static function addUserGroupMultiSelect(&$form, $alreadySelected)
+    public static function addUserGroupMultiSelect(&$form, $alreadySelected, $addShortCut = false)
     {
         $userList = self::getCourseUsers(true);
         $groupList = self::getCourseGroups();
@@ -6168,13 +6168,50 @@ class CourseManager
             $result[$content['value']] = $content['content'];
         }
 
-        return $form->addElement(
+        $multiple =  $form->addElement(
             'advmultiselect',
             'users',
             get_lang('Users'),
             $result,
             ['select_all_checkbox' => true, 'id' => 'users']
         );
+
+        $sessionId = api_get_session_id();
+        if ($addShortCut && empty($sessionId)) {
+            $addStudents = [];
+            foreach ($userList as $user) {
+                if ($user['status_rel'] == STUDENT) {
+                    $addStudents[] = $user['user_id'];
+                }
+            }
+            if (!empty($addStudents)) {
+                $form->addHtml(
+                    '<script>
+                    $(function() {
+                        $("#add_students").on("click", function() {
+                            var addStudents = '.json_encode($addStudents).';
+                            $.each(addStudents, function( index, value ) {
+                                var option = $("#users option[value=\'USER:"+value+"\']");
+                                if (option.val()) {
+                                    $("#users_to").append(new Option(option.text(), option.val()))
+                                    option.remove();
+                                }
+                            });
+
+                            return false;
+                        });
+                    });
+                    </script>'
+                );
+
+                $form->addLabel(
+                    '',
+                    Display::url(get_lang('AddStudent'), '#', ['id' => 'add_students', 'class' => 'btn btn-primary'])
+                );
+            }
+        }
+
+        return $multiple;
     }
 
     /**

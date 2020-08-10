@@ -72,6 +72,8 @@ if ($time_control) {
 }
 
 if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
+    SessionManager::addFlashSessionReadOnly();
+
     Display::display_header();
 } else {
     $htmlHeadXtra[] = "
@@ -190,6 +192,10 @@ if ($visible_return['value'] == false) {
         $message = $visible_return['message'];
         $exercise_url_button = null;
     }
+}
+
+if (!api_is_allowed_to_session_edit()) {
+    $exercise_url_button = null;
 }
 
 $attempts = Event::getExerciseResultsByUser(

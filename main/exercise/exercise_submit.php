@@ -880,11 +880,7 @@ $interbreadcrumb[] = [
 $interbreadcrumb[] = ['url' => '#', 'name' => $objExercise->selectTitle(true)];
 
 if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) { //so we are not in learnpath tool
-    if (!api_is_allowed_to_session_edit()) {
-        Display::addFlash(
-            Display::return_message(get_lang('SessionIsReadOnly'), 'warning')
-        );
-    }
+    SessionManager::addFlashSessionReadOnly();
 
     Display::display_header(null, 'Exercises');
 } else {
@@ -922,6 +918,13 @@ $is_visible_return = $objExercise->is_visible(
 
 if ($is_visible_return['value'] == false) {
     echo $is_visible_return['message'];
+    if (!in_array($origin, ['learnpath', 'embeddable'])) {
+        Display::display_footer();
+    }
+    exit;
+}
+
+if (!api_is_allowed_to_session_edit()) {
     if (!in_array($origin, ['learnpath', 'embeddable'])) {
         Display::display_footer();
     }
@@ -1330,7 +1333,7 @@ if (!empty($error)) {
                         $("#save_for_now_"+question_id).html(\''.
                             Display::return_icon('save.png', get_lang('Saved'), [], ICON_SIZE_SMALL).'\');
 
-                        // window.quizTimeEnding will be reset in exercise.class.php  
+                        // window.quizTimeEnding will be reset in exercise.class.php
                         if (window.quizTimeEnding) {
                             redirectExerciseToResult();
                         } else {

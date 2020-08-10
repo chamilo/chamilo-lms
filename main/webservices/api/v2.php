@@ -351,6 +351,9 @@ try {
             if (empty($_POST['user_id'])) {
                 throw new Exception('user_id is required');
             }
+            if (null === $restApi) {
+                throw new Exception('Check that the username and api_key are field in the request');
+            }
             $plugin = PauseTraining::create();
             $data = $plugin->updateUserPauseTraining($_POST['user_id'], $_POST);
             $restResponse->setData([$data]);

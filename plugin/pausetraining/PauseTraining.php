@@ -203,9 +203,9 @@ class PauseTraining extends Plugin
                 echo 'Day = 0 avoided '.PHP_EOL;
                 continue;
             }
-
-            $hourStart = $day * 24;
-            $hourEnd = ($day - 1) * 24;
+            $dayToCheck = $day + 1;
+            $hourStart = $dayToCheck * 24;
+            $hourEnd = ($dayToCheck - 1) * 24;
 
             $date = new DateTime($now);
             $date->sub(new DateInterval('PT'.$hourStart.'H'));

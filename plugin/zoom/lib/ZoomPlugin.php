@@ -924,6 +924,10 @@ class ZoomPlugin extends Plugin
                             }
                         }
 
+                        if (\Chamilo\PluginBundle\Zoom\API\Meeting::TYPE_INSTANT == $meeting->getMeetingInfoGet()->type) {
+                            return $meeting->getMeetingInfoGet()->join_url;
+                        }
+
                         return $this->registerUser($meeting, $currentUser)->getCreatedRegistration()->join_url;
                     }
 

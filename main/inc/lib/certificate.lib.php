@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
-
+use Endroid\QrCode\ErrorCorrectionLevel;
+use Endroid\QrCode\QrCode;
 /**
  * Certificate Class
  * Generate certificates based in the gradebook tool.
@@ -510,12 +511,19 @@ class Certificate extends Model
      */
     public function generateQRImage($text, $path)
     {
-        // Make sure HTML certificate is generated
         if (!empty($text) && !empty($path)) {
-            //L low, M - Medium, L large error correction
-            return PHPQRCode\QRcode::png($text, $path, 'M', 2, 2);
+            $qrCode = new QrCode($text);
+            //$qrCode->setEncoding('UTF-8');
+            $qrCode->setSize(120);
+            $qrCode->setMargin(5);
+            $qrCode->setWriterByName('png');
+            $qrCode->setErrorCorrectionLevel(ErrorCorrectionLevel::HIGH());
+            $qrCode->setForegroundColor(['r' => 0, 'g' => 0, 'b' => 0, 'a' => 0]);
+            $qrCode->setBackgroundColor(['r' => 255, 'g' => 255, 'b' => 255, 'a' => 0]);
+            $qrCode->setValidateResult(false);
+            $qrCode->writeFile($path);
+            return true;
         }
-
         return false;
     }
 

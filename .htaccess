@@ -88,3 +88,18 @@ AddType application/font-woff .woff .woff2
   ExpiresActive On
   ExpiresByType application/font-woff "access plus 1 month"
 </IfModule>
+
+# Add MOD Security exceptions against XSS Attack confusion in main/lp/*.php
+# See https://github.com/chamilo/chamilo-lms/issues/3163
+<IfModule mod_security.c>
+	<If "%{REQUEST_URI} =~ m#main/lp#">
+		SecRuleRemoveById 212000-212999
+	</If>
+</IfModule>
+
+<IfModule mod_security2.c>
+	<If "%{REQUEST_URI} =~ m#main/lp#">
+		SecRuleRemoveById 212000-212999
+	</If>
+</IfModule>
+

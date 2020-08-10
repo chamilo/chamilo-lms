@@ -514,8 +514,8 @@ class Certificate extends Model
         if (!empty($text) && !empty($path)) {
             $qrCode = new QrCode($text);
             //$qrCode->setEncoding('UTF-8');
-            $qrCode->setSize(106);
-            $qrCode->setMargin(4);
+            $qrCode->setSize(120);
+            $qrCode->setMargin(5);
             $qrCode->setWriterByName('png');
             $qrCode->setErrorCorrectionLevel(ErrorCorrectionLevel::HIGH());
             $qrCode->setForegroundColor(['r' => 0, 'g' => 0, 'b' => 0, 'a' => 0]);

@@ -2,8 +2,6 @@
 
 /* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session;
-
 /**
  * Responses to AJAX calls.
  */
@@ -65,7 +63,7 @@ switch ($action) {
                 }
 
                 $total++;
-                $totalSessionAverage = round($totalSessionAverage/count($courses), 2);
+                $totalSessionAverage = round($totalSessionAverage / count($courses), 2);
                 $totalAverage += $totalSessionAverage;
 
                 $row++;
@@ -83,7 +81,7 @@ switch ($action) {
         }
 
         $table->setCellContents(0, 0, get_lang('Global'));
-        $table->setCellContents(0, 1, round($totalAverage/$total, 2).' %');
+        $table->setCellContents(0, 1, round($totalAverage / $total, 2).' %');
         $result = $table->toHtml();
 
         if ($cacheAvailable) {

@@ -6,7 +6,6 @@ use Chamilo\PluginBundle\Zoom\API\RecordingMeeting;
 use Chamilo\PluginBundle\Zoom\Meeting;
 use Chamilo\PluginBundle\Zoom\MeetingActivity;
 use Chamilo\PluginBundle\Zoom\Recording;
-use Chamilo\PluginBundle\Zoom\Registrant;
 use Symfony\Component\HttpFoundation\Response;
 
 if ('POST' !== $_SERVER['REQUEST_METHOD']) {

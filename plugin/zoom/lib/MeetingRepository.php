@@ -187,13 +187,9 @@ class MeetingRepository extends EntityRepository
     /**
      * Returns either a course's meetings or all course meetings.
      *
-     * @param Course|null     $course
-     * @param Session|null    $session
-     * @param CGroupInfo|null $group
-     *
      * @return ArrayCollection|Collection|Meeting[]
      */
-    public function courseMeetings($course, $group = null, $session = null)
+    public function courseMeetings(Course $course, CGroupInfo $group = null, Session $session = null)
     {
         return $this->matching(
             Criteria::create()->where(

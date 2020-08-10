@@ -1569,9 +1569,9 @@ class GroupManager
             }
 
             return self::canUserSubscribe($user_id, $groupInfo);
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -1619,8 +1619,8 @@ class GroupManager
             return false;
         }
         $table = Database::get_course_table(TABLE_GROUP_USER);
-        $group_id = intval($groupInfo['id']);
-        $user_id = intval($user_id);
+        $group_id = (int) $groupInfo['id'];
+        $user_id = (int) $user_id;
 
         $sql = "SELECT 1 FROM $table
                 WHERE

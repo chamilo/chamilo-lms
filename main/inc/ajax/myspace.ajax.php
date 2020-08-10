@@ -56,21 +56,25 @@ switch ($action) {
                 $totalSessionAverage = 0;
                 foreach ($courses as &$course) {
                     $average = Tracking::get_avg_student_progress($userId, $course['course_code'], [], $sessionId);
-                    $course['average'] = $average;
                     $totalSessionAverage += $average;
-                    $totalAverage += $average;
-                    $total++;
                     $totalCourse++;
-                    $total++;
+                    if (false !== $average) {
+                        $average = $average.' %';
+                    }
+                    $course['average'] = $average;
                 }
+
+                $total++;
+                $totalSessionAverage = round($totalSessionAverage/count($courses), 2);
+                $totalAverage += $totalSessionAverage;
 
                 $row++;
                 $table->setCellContents($row, 0, $session['session_name']);
-                $table->setCellContents($row, 1, round($totalSessionAverage/count($courses), 2));
+                $table->setCellContents($row, 1, $totalSessionAverage.' %');
                 $table->setCellContents($row, 2, '');
                 $row++;
                 foreach ($courses as &$course) {
-                    $table->setCellContents($row, 0, $session['session_name'].'-'.count($courses));
+                    $table->setCellContents($row, 0, $session['session_name']);
                     $table->setCellContents($row, 1, $course['title']);
                     $table->setCellContents($row, 2, $course['average']);
                     $row++;
@@ -79,7 +83,7 @@ switch ($action) {
         }
 
         $table->setCellContents(0, 0, get_lang('Global'));
-        $table->setCellContents(0, 1, round($totalAverage/$total, 2));
+        $table->setCellContents(0, 1, round($totalAverage/$total, 2).' %');
         $result = $table->toHtml();
 
         if ($cacheAvailable) {

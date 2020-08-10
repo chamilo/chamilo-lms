@@ -33,10 +33,10 @@ $columns = [
 //Column config
 $column_model = [
     ['name' => 'name', 'index' => 'name', 'width' => '35', 'align' => 'left'],
-    ['name' => 'users', 'index' => 'users', 'width' => '15', 'align' => 'left'],
-    ['name' => 'courses', 'index' => 'courses', 'width' => '15', 'align' => 'left'],
-    ['name' => 'sessions', 'index' => 'sessions', 'width' => '15', 'align' => 'left'],
-    ['name' => 'group_type', 'index' => 'group_type', 'width' => '15', 'align' => 'center'],
+    ['name' => 'users', 'index' => 'users', 'width' => '15', 'align' => 'left', 'search' => 'false'],
+    ['name' => 'courses', 'index' => 'courses', 'width' => '15', 'align' => 'left', 'search' => 'false'],
+    ['name' => 'sessions', 'index' => 'sessions', 'width' => '15', 'align' => 'left', 'search' => 'false'],
+    ['name' => 'group_type', 'index' => 'group_type', 'width' => '15', 'align' => 'center', 'search' => 'false'],
     [
         'name' => 'actions',
         'index' => 'actions',
@@ -44,6 +44,7 @@ $column_model = [
         'align' => 'center',
         'sortable' => 'false',
         'formatter' => 'action_formatter',
+        'search' => 'false',
     ],
 ];
 
@@ -194,6 +195,11 @@ Display::display_header();
                 true
             );
             ?>
+
+            $('#usergroups').jqGrid(
+                'filterToolbar',
+                {stringResult: true, searchOnEnter: false, defaultSearch : "cn"}
+            );
         });
     </script>
 <?php

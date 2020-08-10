@@ -863,7 +863,7 @@ switch ($action) {
     case 'get_usergroups':
         $obj = new UserGroup();
         $obj->protectScript();
-        $count = $obj->get_count();
+        $count = $obj->get_count($whereCondition);
         break;
     case 'get_usergroups_teacher':
         $obj = new UserGroup();
@@ -2177,7 +2177,7 @@ switch ($action) {
     case 'get_usergroups':
         $obj->protectScript();
         $columns = ['name', 'users', 'courses', 'sessions', 'group_type', 'actions'];
-        $result = $obj->getUsergroupsPagination($sidx, $sord, $start, $limit);
+        $result = $obj->getUsergroupsPagination($sidx, $sord, $start, $limit, $whereCondition);
         break;
     case 'get_extra_fields':
         $obj = new ExtraField($type);

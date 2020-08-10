@@ -15,12 +15,29 @@ $logInfo = [
 ];
 Event::registerLog($logInfo);
 
-$plugin = ZoomPlugin::create();
-$tool_name = $plugin->get_lang('ZoomVideoConferences');
-$tpl = new Template($tool_name);
 $course = api_get_course_entity();
+if (null === $course) {
+    api_not_allowed(true);
+}
+
 $group = api_get_group_entity();
 $session = api_get_session_entity();
+$plugin = ZoomPlugin::create();
+
+if (api_is_in_group()) {
+    $interbreadcrumb[] = [
+        'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
+        'name' => get_lang('Groups'),
+    ];
+    $interbreadcrumb[] = [
+        'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
+        'name' => get_lang('GroupSpace').' '.$group->getName(),
+    ];
+}
+
+$tool_name = $plugin->get_lang('ZoomVideoConferences');
+$tpl = new Template($tool_name);
+
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
 
 $isManager = $plugin->userIsCourseConferenceManager();
@@ -28,7 +45,7 @@ if ($isManager) {
     switch ($action) {
         case 'delete':
             $meeting = $plugin->getMeetingRepository()->findOneBy(['meetingId' => $_REQUEST['meetingId']]);
-            if ($meeting->isCourseMeeting()) {
+            if ($meeting && $meeting->isCourseMeeting()) {
                 $plugin->deleteMeeting($meeting, api_get_self().'?'.api_get_cidreq());
             }
             break;
@@ -41,16 +58,19 @@ if ($isManager) {
         $plugin->getCreateInstantMeetingForm(
             $user,
             $course,
-                $group,
+            $group,
             $session
         )->returnForm()
     );
-    $tpl->assign('scheduleMeetingForm', $plugin->getScheduleMeetingForm(
-        $user,
-        $course,
-        $group,
-        $session
-    )->returnForm());
+    $tpl->assign(
+        'scheduleMeetingForm',
+        $plugin->getScheduleMeetingForm(
+            $user,
+            $course,
+            $group,
+            $session
+        )->returnForm()
+    );
 }
 
 try {

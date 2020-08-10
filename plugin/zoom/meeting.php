@@ -25,8 +25,19 @@ $urlExtra = '';
 if ($meeting->isCourseMeeting()) {
     api_protect_course_script(true);
     $this_section = SECTION_COURSES;
-    $returnURL = 'start.php?'.api_get_cidreq();
     $urlExtra = api_get_cidreq();
+    $returnURL = 'start.php?'.$urlExtra;
+
+    if (api_is_in_group()) {
+        $interbreadcrumb[] = [
+            'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.$urlExtra,
+            'name' => get_lang('Groups'),
+        ];
+        $interbreadcrumb[] = [
+            'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.$urlExtra,
+            'name' => get_lang('GroupSpace').' '.$meeting->getGroup()->getName(),
+        ];
+    }
 }
 
 $logInfo = [
@@ -34,7 +45,7 @@ $logInfo = [
 ];
 Event::registerLog($logInfo);
 
-$interbreadcrumb[] = [ // used in templates
+$interbreadcrumb[] = [
     'url' => $returnURL,
     'name' => $plugin->get_lang('ZoomVideoConferences'),
 ];

@@ -86,7 +86,7 @@ class Meeting
     /**
      * @var CGroupInfo
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CGroupInfo")
-     * @ORM\JoinColumn(name="group_id", referencedColumnName="id", nullable=true)
+     * @ORM\JoinColumn(name="group_id", referencedColumnName="iid", nullable=true)
      */
     protected $group;
 
@@ -400,6 +400,14 @@ class Meeting
     public function isCourseMeeting()
     {
         return null !== $this->course;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCourseGroupMeeting()
+    {
+        return null !== $this->course && null !== $this->group;
     }
 
     /**

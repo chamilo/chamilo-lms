@@ -1,0 +1,25 @@
+{
+  "name": "culqi/culqi-php",
+  "description": "Cliente Culqi API para PHP",
+  "keywords": ["culqi", "client", "api", "peru", "php", "payments", "pagos"],
+  "homepage": "https://culqi.com",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Culqi and contributors",
+      "homepage": "https://github.com/culqi/culqi-php/contributors"
+    }
+  ],
+
+  "require": {
+    "php": ">=5.3.3",
+    "rmccue/requests": ">=1.0"
+  },
+  "require-dev": {
+      "phpunit/phpunit": "4.4.*"
+  },
+  "autoload": {
+    "classmap": ["lib/Culqi/"]
+  }
+}

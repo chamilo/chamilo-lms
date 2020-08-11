@@ -1,0 +1,52 @@
+{
+    "name": "ddeboer/data-import",
+    "description": "Import data from, and export data to, a range of file formats and media",
+    "keywords": [ "data", "import", "export", "csv", "excel", "doctrine" ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "David de Boer",
+            "email": "david@ddeboer.nl"
+        },
+        {
+            "name": "The community",
+            "homepage": "https://github.com/ddeboer/data-import/graphs/contributors"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/ddeboer/data-import/issues",
+        "source": "https://github.com/ddeboer/data-import"
+    },
+    "require": {
+        "php": ">=5.4.0",
+        "psr/log": "~1.0"
+    },
+    "require-dev": {
+        "ext-iconv": "*",
+        "ext-mbstring": "*",
+        "ext-sqlite3": "*",
+        "symfony/property-access": "~2.5",
+        "phpoffice/phpexcel": "*",
+        "doctrine/dbal": "~2.4",
+        "doctrine/orm": "~2.4",
+        "symfony/console": "~2.8|~3.0",
+        "symfony/validator": "~2.8|~3.0",
+        "phpspec/phpspec": "~2.1",
+        "henrikbjorn/phpspec-code-coverage" : "~1.0"
+    },
+    "suggest": {
+        "ext-iconv": "For the CharsetValueConverter",
+        "ext-mbstring": "For the CharsetValueConverter",
+        "symfony/validator": "to use the ValidatorFilter",
+        "doctrine/dbal": "If you want to use the DbalReader",
+        "phpoffice/phpexcel": "If you want to use the ExcelReader",
+        "symfony/console": "If you want to use the ConsoleProgressWriter",
+        "symfony/property-access": "If you want to use the ObjectConverter"
+    },
+    "autoload": {
+        "psr-4": {
+            "Ddeboer\\DataImport\\": "src/",
+            "Ddeboer\\DataImport\\Tests\\": "tests/"
+        }
+    }
+}

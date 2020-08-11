@@ -1,0 +1,25 @@
+version: 2
+jobs:
+  build:
+    shell: /bin/bash --login
+    docker:
+      - image: circleci/php:7.0-fpm-stretch
+    steps:
+      - checkout
+      - save_cache:
+          key: dependency-cache
+          paths:
+            - ~/.composer
+      - run: sudo apt-get update
+      - run: sudo apt-get install -y zlib1g-dev ghostscript gpac imagemagick libav-tools libfreetype6-dev libicu-dev libmagickwand-dev libmcrypt-dev librabbitmq-dev libssl-dev libxslt-dev libzmq3-dev ufraw mcrypt swftools unoconv unzip xpdf
+      - run: sudo apt-get clean
+      - run: wget http://www.swftools.org/swftools-0.9.1.tar.gz
+      - run: sh -c "tar xzvf swftools-0.9.1.tar.gz && cd swftools-0.9.1 && ./configure && make && sudo make install"
+      - run: yes '' | sudo pecl install imagick
+      - run: sudo docker-php-ext-enable imagick
+      - run: sudo docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/
+      - run: sudo docker-php-ext-install -j$(nproc) gd
+      - run: composer install --prefer-source --no-interaction
+      - run:
+          name: unit test
+          command: ./vendor/bin/phpunit

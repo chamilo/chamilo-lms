@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit backupGlobals="false"
+         backupStaticAttributes="false"
+         colors="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         processIsolation="false"
+         stopOnFailure="false"
+         verbose="false"
+         bootstrap="tests/bootstrap.php"
+>
+    <logging>
+      <log type="coverage-html"
+           target="tests/phpunit_report/report"
+           lowUpperBound="35" highLowerBound="70"/>
+    </logging>
+
+    <php>
+      <ini name="display_errors" value="on"/>
+      <env name="SYMFONY_PHPUNIT_REMOVE_RETURN_TYPEHINT" value="true"/>
+    </php>
+
+    <testsuites>
+        <testsuite name="TemporaryFilesystem tests Suite">
+            <directory>tests</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+      <whitelist processUncoveredFilesFromWhitelist="true">
+        <directory suffix=".php">src/</directory>
+      </whitelist>
+    </filter>
+</phpunit>
+

@@ -1,0 +1,34 @@
+{
+    "name": "clue/graph",
+    "type": "library",
+    "description": "GraPHP is the mathematical graph/network library written in PHP.",
+    "keywords": [
+        "graph",
+        "network",
+        "mathematical",
+        "vertex",
+        "edge"
+    ],
+    "homepage": "https://github.com/graphp/graph",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Fhaculty\\Graph\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Fhaculty\\Graph\\Tests\\": "tests/"
+        }
+    },
+    "require": {
+        "php": "^7.0 || ^5.3"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^6.4 || ^5.7 || ^4.8.35"
+    },
+    "suggest": {
+        "graphp/graphviz": "GraphViz graph drawing / DOT output",
+        "graphp/algorithms": "Common graph algorithms, such as Dijkstra and Moore-Bellman-Ford (shortest path), minimum spanning tree (MST), Kruskal, Prim and many more.."
+    }
+}

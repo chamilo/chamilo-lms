@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="description" lang="en" content="jQuery multiselect plugin with two sides. The user can select one or more items and send them to the other side."/>
+    <meta name="keywords" lang="en" content="jQuery multiselect plugin" />
+
+    <base href="//crlcu.github.io/multiselect/" />
+
+    <title>jQuery multiselect plugin with two sides</title>
+    
+    <link rel="icon" type="image/x-icon" href="https://github.com/favicon.ico" />
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="lib/google-code-prettify/prettify.css" />
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+    <a href="https://github.com/crlcu/multiselect" class="github ribbon">
+        <img src="https://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png" alt="Fork me on GitHub">
+    </a>
+    
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand scroll" href="#">Multiselect</a>
+                </div>
+                
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a href="#" class="scroll">Home</a></li>
+                        <li><a href="#documentation" class="scroll">Documentation</a></li>
+                        <li><a href="#browser-support" class="scroll">Browser Support</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Examples <span  class="caret"></span ></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="examples/zero-configuration.html">Zero configuration</a></li>
+                                <li><a href="examples/data-options.html">With <code>data</code> options</a></li>
+                                <li><a href="examples/javascript-options.html">With <code>javascript</code> options</a></li>
+                                <li><a href="examples/search.html">With search</a></li>
+                                <li><a href="examples/keep-rendering-sort.html">Keep rendering sort</a></li>
+                                <li><a href="examples/undo-redo.html">Undo / Redo</a></li>
+                                <li><a href="examples/multiple-destinations.html">Multiple destinations</a></li>
+                                <li><a href="examples/optgroup.html">With <code>optgroup</code></a></li>
+                                <li><a href="examples/move-up-down.html">With move <code>up</code>/<code>down</code> buttons</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#download" class="scroll">Download</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="wrap" class="container">
+        <div id="home">
+            <div class="jumbotron">
+                <h1>Multiselect</h1>
+                <p>This is a small  <a href="http://jquery.com/" target="_blank">jQuery</a> plugin that helps you improve the
+                    <strong>user experience</strong> regarding the use of multiple cross selects.
+                </p>
+                <p>It is very <strong>easy to install</strong> and can be <strong>easily customized</strong> because it has <strong>callbacks</strong> for many events, such as :
+                    <div class="row">
+                        <div  class="col-xs-6">
+                            <ul>
+                                <li><a href="#beforeMoveToRight">beforeMoveToRight</a></li>
+                                <li><a href="#beforeMoveToLeft">beforeMoveToLeft</a></li>
+                            </ul>
+                        </div>
+                        
+                        <div  class="col-xs-6">
+                            <ul>
+                                <li><a href="#afterMoveToRight">afterMoveToRight</a></li>
+                                <li><a href="#afterMoveToLeft">afterMoveToLeft</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </p>
+                <p>It also has a <a href="#sort">sort</a> function that can be defined in order of your needs for each multiple select.</p>
+                <p>You can <strong>fully customize</strong> it via <strong>CSS</strong>, you can extend it and have as <strong>many multi selects</strong> as you want on the page.</p>
+    
+                <p><a href="#documentation" class="btn btn-primary btn-lg">Documentation</a></p>
+            </div>
+        </div>
+        
+        <div id="documentation">
+            <div class="page-header"><h3>Documentation</h3></div>
+            
+            <h4>Options:</h4>
+            
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>type</th>
+                        <th>default</th>
+                        <th>description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>right</td>
+                        <td><code>string</code> jQuery selector</td>
+                        <td><code>multiselect_id</code>_to</td>
+                        <td>The <code>select</code> where the options are moved to</td>
+                    </tr>
+                    <tr>
+                        <td>rightSelected</td>
+                        <td><code>string</code> jQuery selector</td>
+                        <td><code>multiselect_id</code>_rightSelected</td>
+                        <td>The <code>button</code> that moves selected options from left to right</td>
+                    </tr>
+                    <tr>
+                        <td>rightAll</td>
+                        <td><code>string</code> jQuery selector</td>
+                        <td><code>multiselect_id</code>_rightAll</td>
+                        <td>The <code>button</code> that moves all options from left to right</td>
+                    </tr>
+                    <tr>
+                        <td>leftSelected</td>
+                        <td><code>string</code> jQuery selector</td>
+                        <td><code>multiselect_id</code>_leftSelected</td>
+                        <td>The <code>button</code> that moves selected options from right to left</td>
+                    </tr>
+                    <tr>
+                        <td>leftAll</td>
+                        <td><code>string</code> jQuery selector</td>
+                        <td><code>multiselect_id</code>_leftAll</td>
+                        <td>The <code>button</code> that moves all options from right to left</td>
+                    </tr>
+                    <tr>
+                        <td>undo</td>
+                        <td><code>string</code> jQuery selector</td>
+                        <td><code>multiselect_id</code>_undo</td>
+                        <td>The <code>button</code> that triggers the undo action</td>
+                    </tr>
+                    <tr>
+                        <td>redo</td>
+                        <td><code>string</code> jQuery selector</td>
+                        <td><code>multiselect_id</code>_redo</td>
+                        <td>The <code>button</code> that triggers the redo action</td>
+                    </tr>
+                    <tr>
+                        <td>moveUp</td>
+                        <td><code>string</code> jQuery selector</td>
+                        <td><code>multiselect_id</code>_move_up</td>
+                        <td>The <code>button</code> that move options from right side to the top</td>
+                    </tr>
+                    <tr>
+                        <td>moveDown</td>
+                        <td><code>string</code> jQuery selector</td>
+                        <td><code>multiselect_id</code>_move_down</td>
+                        <td>The <code>button</code> that move options from right side to the bottom</td>
+                    </tr>
+                    <tr>
+                        <td>startUp</td>
+                        <td><code>function</code> or <code>false</code></td>
+                        <td><code>remove</code> from left all options that are present in right</td>
+                        <td>Whatever you want to do with <code>$left</code> and <code>$right</code> elements when the <code>multiselect</code> plugin is initialised</td>
+                    </tr>
+                    <tr id="sort">
+                        <td>sort</td>
+                        <td><code>function</code> or <code>false</code></td>
+                        <td><code>sort</code> options alphabetically</td>
+                        <td>Will sort options when an action happend into right or left elements.</td>
+                    </tr>
+                    <tr id="beforeMoveToRight">
+                        <td>beforeMoveToRight</td>
+                        <td><code>function</code></td>
+                        <td>return <code>true</code></td>
+                        <td>
+                            Whatever you want to do with <code>$left</code>, <code>$right</code> and <code>$options</code> elements before they are moved to right.<br/><br/>
+
+                            <code>beforeMoveToRight: function($left, $right, $options) { ...; return Boolean; }</code>.<br/><br/>
+                            
+                            <ul>
+                                <li><code>$left</code> - jQuery element pointing to left side <code>select</code> element</li>
+                                <li><code>$right</code> - jQuery element pointing to right side <code>select</code> element</li>
+                                <li><code>$options</code> - jQuery element containing all selected options</li>
+                            </ul>
+
+                            Keep in mind that this function must return a boolean value.<br/>
+                            <ul>
+                                <li><code>true</code> will let the action to be performed</li>
+                                <li><code>false</code> will stop the action</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr id="moveToRight">
+                        <td>moveToRight</td>
+                        <td><code>function</code></td>
+                        <td>return <code>this</code></td>
+                        <td>
+                            If you want to define your own <code>moveToRight</code> functionality you can do this by defining<br/><br/>
+
+                            <code>moveToRight: function(Multiselect, $options, event, silent, skipStack) { ... }</code><br/><br/>
+                            
+                            <ul>
+                                <li><code>Multiselect</code> - current instance of multiselect</li>
+                                <li><code>$options</code> - jQuery element containing all selected options</li>
+                                <li><code>event</code> - the event that initialised the action</li>
+                                <li><code>silent</code> - <code>boolean</code> that tells if you have to trigger <code>beforeMoveToRight</code> and <code>afterMoveToRight</code></li>
+                                <li><code>skipStack</code> - <code>boolean</code> that tells if you have to handle <code>undo/redo</code> stack</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr id="afterMoveToRight">
+                        <td>afterMoveToRight</td>
+                        <td><code>function</code></td>
+                        <td>no action</td>
+                        <td>
+                            Whatever you want to do with <code>$left</code>, <code>$right</code> and <code>$options</code> elements after they are moved to right.<br/><br/>
+
+                            <code>afterMoveToRight: function($left, $right, $options) { ...; }</code><br/><br/>
+
+                            <ul>
+                                <li><code>$left</code> - jQuery element pointing to left side <code>select</code> element</li>
+                                <li><code>$right</code> - jQuery element pointing to right side <code>select</code> element</li>
+                                <li><code>$options</code> - jQuery element containing all selected options</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr id="beforeMoveToLeft">
+                        <td>beforeMoveToLeft</td>
+                        <td><code>function</code></td>
+                        <td>return <code>true</code></td>
+                        <td>
+                            Whatever you want to do with <code>$left</code>, <code>$right</code> and <code>$options</code> elements before they are moved to left.<br/><br/>
+
+                            <code>beforeMoveToLeft: function($left, $right, $options) { ...; return Boolean; }</code>.<br/><br/>
+                            
+                            <ul>
+                                <li><code>$left</code> - jQuery element pointing to left side <code>select</code> element</li>
+                                <li><code>$right</code> - jQuery element pointing to right side <code>select</code> element</li>
+                                <li><code>$options</code> - jQuery element containing all selected options</li>
+                            </ul>
+
+                            Keep in mind that this function must return a boolean value.<br/>
+                            <ul>
+                                <li><code>true</code> will let the action to be performed</li>
+                                <li><code>false</code> will stop the action</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr id="moveToLeft">
+                        <td>moveToLeft</td>
+                        <td><code>function</code></td>
+                        <td>return <code>this</code></td>
+                        <td>
+                            If you want to define your own <code>moveToLeft</code> functionality you can do this by defining<br/><br/>
+
+                            <code>moveToLeft: function(Multiselect, $options, event, silent, skipStack) { ... }</code><br/><br/>
+                            
+                            <ul>
+                                <li><code>Multiselect</code> - current instance of multiselect</li>
+                                <li><code>$options</code> - jQuery element containing all selected options</li>
+                                <li><code>event</code> - the event that initialised the action</li>
+                                <li><code>silent</code> - <code>boolean</code> that tells if you have to trigger <code>beforeMoveToRight</code> and <code>afterMoveToRight</code></li>
+                                <li><code>skipStack</code> - <code>boolean</code> that tells if you have to handle <code>undo/redo</code> stack</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr id="afterMoveToLeft">
+                        <td>afterMoveToLeft</td>
+                        <td><code>function</code></td>
+                        <td>no action</td>
+                        <td>
+                            Whatever you want to do with <code>$left</code>, <code>$right</code> and <code>$options</code> elements after they are moved to right.<br/><br/>
+
+                            <code>afterMoveToLeft: function($left, $right, $options) { ...; }</code><br/><br/>
+
+                            <ul>
+                                <li><code>$left</code> - jQuery element pointing to left side <code>select</code> element</li>
+                                <li><code>$right</code> - jQuery element pointing to right side <code>select</code> element</li>
+                                <li><code>$options</code> - jQuery element containing all selected options</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr id="beforeMoveUp">
+                        <td>beforeMoveUp</td>
+                        <td><code>function</code></td>
+                        <td>return <code>true</code></td>
+                        <td>
+                            Whatever you want to do with <code>$options</code> elements before they are moved up.<br/><br/>
+
+                            <code>beforeMoveUp: function( $options) { ...; return Boolean; }</code>.<br/><br/>
+                            
+                            <ul>
+                                <li><code>$options</code> - jQuery element containing all selected options</li>
+                            </ul>
+
+                            Keep in mind that this function must return a boolean value.<br/>
+                            <ul>
+                                <li><code>true</code> will let the action to be performed</li>
+                                <li><code>false</code> will stop the action</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr id="afterMoveUp">
+                        <td>afterMoveUp</td>
+                        <td><code>function</code></td>
+                        <td>no action</td>
+                        <td>
+                            Whatever you want to do with <code>$options</code> elements after they are moved up.<br/><br/>
+
+                            <code>afterMoveUp: function($options) { ...; }</code><br/><br/>
+
+                            <ul>
+                                <li><code>$options</code> - jQuery element containing all selected options</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr id="beforeMoveDown">
+                        <td>beforeMoveDown</td>
+                        <td><code>function</code></td>
+                        <td>return <code>true</code></td>
+                        <td>
+                            Whatever you want to do with <code>$options</code> elements before they are moved down.<br/><br/>
+
+                            <code>beforeMoveDown: function( $options) { ...; return Boolean; }</code>.<br/><br/>
+                            
+                            <ul>
+                                <li><code>$options</code> - jQuery element containing all selected options</li>
+                            </ul>
+
+                            Keep in mind that this function must return a boolean value.<br/>
+                            <ul>
+                                <li><code>true</code> will let the action to be performed</li>
+                                <li><code>false</code> will stop the action</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr id="afterMoveDown">
+                        <td>afterMoveDown</td>
+                        <td><code>function</code></td>
+                        <td>no action</td>
+                        <td>
+                            Whatever you want to do with <code>$options</code> elements after they are moved down.<br/><br/>
+
+                            <code>afterMoveDown: function($options) { ...; }</code><br/><br/>
+
+                            <ul>
+                                <li><code>$options</code> - jQuery element containing all selected options</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>keepRenderingSort</td>
+                        <td><code>boolean</code></td>
+                        <td><code>false</code></td>
+                        <td>
+                            When you want to keep options sorted as they was rendered, <code>keepRenderingSort</code> must be <code>true</code>.<br/>
+                            When <code>keepRenderingSort</code> is <code>true</code>, <code>sort</code> function will be ignored.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>submitAllLeft</td>
+                        <td><code>boolean</code></td>
+                        <td><code>true</code></td>
+                        <td>
+                            When you don&rsquo;t want to send all options from the left side to server, <code>submitAllLeft</code> must be <code>false</code>.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>submitAllRight</td>
+                        <td><code>boolean</code></td>
+                        <td><code>true</code></td>
+                        <td>
+                            When you don&rsquo;t want to send all options from the right side to server, <code>submitAllRight</code> must be <code>false</code>.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>search</td>
+                        <td><code>Object</code></td>
+                        <td><code>null</code></td>
+                        <td>
+                            When you want to have search fields for <code>left</code> and <code>right</code> elements you can do this by providing following value:<br/>
+                            <pre class="prettyprint linenums">
+search: {
+    left: &#39;&lt;input type=&quot;text&quot; name=&quot;q&quot; class=&quot;form-control&quot; placeholder=&quot;Search...&quot; /&gt;&#39;,
+    right: &#39;&lt;input type=&quot;text&quot; name=&quot;q&quot; class=&quot;form-control&quot; placeholder=&quot;Search...&quot; /&gt;&#39;,
+}
+</pre>
+                            When you want to have search field only for <code>left</code> element you can do this by providing following value:<br/>
+                            <pre class="prettyprint linenums">
+search: {
+    left: &#39;&lt;input type=&quot;text&quot; name=&quot;q&quot; class=&quot;form-control&quot; placeholder=&quot;Search...&quot; /&gt;&#39;,
+}
+</pre>
+                        </td>
+                    </tr>
+                    <tr id="fireSearch">
+                        <td>fireSearch</td>
+                        <td><code>function</code></td>
+                        <td>return <code>true</code> if search length is great than 1</td>
+                        <td>
+                            Tell to multiselect when to start applying the search.<br/><br/>
+                            <code>fireSearch: function(value) { ...; return Boolean; }</code><br/><br/>
+
+                            <ul>
+                                <li><code>value</code> - String search entered by the user</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div id="browser-support">
+            <div class="page-header"><h3>Browser Support</h3></div>
+            
+            <h4>The following browsers are supported:</h4>
+            
+            <ul>
+                <li>Internet Explorer 7+</li>
+                <li>Google Chrome</li>
+                <li>Mozilla Firefox</li>
+                <li>Safari</li>
+                <li>Opera</li>
+            </ul>
+        </div>
+        
+        <div id="download">
+            <div class="page-header"><h3>Download</h3></div>
+            
+            <div class="row">
+                <div class="col-xs-4">              
+                    <p><a class="btn btn-lg btn-primary" href="https://raw.github.com/crlcu/multiselect/master/dist/js/multiselect.js">Download multiselect.js</a></p>
+                </div>
+                
+                <div class="col-xs-4">              
+                    <p><a class="btn btn-lg btn-success" href="https://raw.github.com/crlcu/multiselect/master/dist/js/multiselect.min.js">Download multiselect.min.js</a></p>
+                </div>
+                
+                <div class="col-xs-4">              
+                    <p><a class="btn btn-lg btn-info" href="https://github.com/crlcu/multiselect/archive/master.zip">Download multiselect.zip</a></p>
+                </div>
+            </div>  
+        </div>
+    </div>
+    
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    
+    ga('create', 'UA-39934286-1', 'github.com');
+    ga('send', 'pageview');
+</script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    // make code pretty
+    window.prettyPrint && prettyPrint();
+    
+    if ( window.location.hash ) {
+        scrollTo(window.location.hash);
+    }
+    
+    $('.nav').on('click', 'a.scroll', function(e) {
+        scrollTo($(this).attr('href'));
+    });
+});
+
+function scrollTo( id ) {
+    if ( $(id).length ) {
+        $('html,body').animate({scrollTop: $(id).offset().top - 60},'slow');
+    }
+}
+</script>
+</body>
+</html>

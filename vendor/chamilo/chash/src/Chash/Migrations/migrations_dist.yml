@@ -1,0 +1,4 @@
+name: Chamilo Migrations
+migrations_namespace: Chash\Migrations
+table_name: chamilo_migration_versions
+migrations_directory: src/Chash/Migrations/

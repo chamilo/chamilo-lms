@@ -1,0 +1,25 @@
+.ui-dialog .ui-dialog-content{
+    font-size: 12px;
+    line-height: 22px;
+}
+.ui-draggable .ui-dialog-titlebar {
+    cursor: move;
+    background: #e5e5e5;
+    border: none;
+    padding: 2px 10px;
+}
+.ui-dialog .ui-dialog-title{
+    margin: 0;
+    font-size: 14px;
+    padding-left: 8px;
+}
+.ui-dialog{
+    padding: 0;
+}
+.ui-widget-content {
+    border: 1px solid #ddd;
+}
+.ui-dialog .ui-dialog-titlebar {
+    padding: 0 5px;
+    position: relative;
+}

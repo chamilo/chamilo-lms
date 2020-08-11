@@ -1,0 +1,6 @@
+composer.phar
+composer.lock
+cache/*
+!cache/.gitkeep
+bin/
+vendor

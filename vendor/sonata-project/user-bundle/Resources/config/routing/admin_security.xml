@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<routes xmlns="http://symfony.com/schema/routing" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
+    <route id="sonata_user_admin_security_login" path="/login">
+        <default key="_controller">SonataUserBundle:AdminSecurity:login</default>
+    </route>
+    <route id="sonata_user_admin_security_check" path="/login_check" methods="POST">
+        <default key="_controller">SonataUserBundle:AdminSecurity:check</default>
+    </route>
+    <route id="sonata_user_admin_security_logout" path="/logout">
+        <default key="_controller">SonataUserBundle:AdminSecurity:logout</default>
+    </route>
+</routes>

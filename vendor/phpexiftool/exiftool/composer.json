@@ -1,0 +1,15 @@
+{
+    "name": "phpexiftool/exiftool",
+    "type": "library",
+    "description": "Exiftool is a library for reading, writing and editing meta information. This package is not PHP, but required for the main PHP driver : PHP Exiftool",
+    "keywords": ["exiftool", "metadatas"],
+    "license": "Perl Licensing",
+    "authors": [
+        {
+	    "name": "Phil Harvey",
+	    "email": "phil@owl.phy.queensu.ca",
+	    "homepage": "http://www.sno.phy.queensu.ca/~phil/exiftool/"
+        }
+    ],
+    "require": {}
+}

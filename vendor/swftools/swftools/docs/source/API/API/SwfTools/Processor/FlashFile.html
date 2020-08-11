@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="robots" content="index, follow, all" />
+        <title>SwfTools\Processor\FlashFile | PHP-SwfTools API</title>
+                    <link rel="stylesheet" type="text/css" href="../../stylesheet.css">
+                            </head>
+        <body id="class">
+            <div class="header">
+        <ul>
+            <li><a href="../../classes.html">Classes</a></li>
+                            <li><a href="../../namespaces.html">Namespaces</a></li>
+                        <li><a href="../../interfaces.html">Interfaces</a></li>
+            <li><a href="../../doc-index.html">Index</a></li>
+            
+        </ul>
+
+        <div id="title">PHP-SwfTools API</div>
+
+            <div class="type">Class</div>
+    <h1><a href="../../SwfTools/Processor.html">SwfTools\Processor</a>\FlashFile</h1>
+    </div>
+        <div class="content">
+                <p>class    <strong>FlashFile</strong>        extends <a href="../../SwfTools/Processor/File.html"><abbr title="SwfTools\Processor\File">File</abbr></a></p>
+
+    
+    
+    
+            <h2>Methods</h2>
+
+            <table>
+                    <tr>
+                <td class="type">
+                    
+                </td>
+                <td class="last">
+                    <a href="#method___construct">__construct</a>(<a href="../../SwfTools/Configuration.html"><abbr title="SwfTools\Configuration">Configuration</abbr></a> $configuration = null, <abbr title="Monolog\Logger">Logger</abbr> $logger = null)
+                    <p>Build the File processor given the configuration</p>
+                </td>
+                <td><small>from&nbsp;<a href="../../SwfTools/Processor/File.html#method___construct"><abbr title="SwfTools\Processor\File">File</abbr></a></small></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    
+                </td>
+                <td class="last">
+                    <a href="#method___destruct">__destruct</a>()
+                    <p></p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    
+                </td>
+                <td class="last">
+                    <a href="#method_open">open</a>($pathfile)
+                    <p></p>
+                </td>
+                <td><small>from&nbsp;<a href="../../SwfTools/Processor/File.html#method_open"><abbr title="SwfTools\Processor\File">File</abbr></a></small></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    
+                </td>
+                <td class="last">
+                    <a href="#method_close">close</a>()
+                    <p></p>
+                </td>
+                <td><small>from&nbsp;<a href="../../SwfTools/Processor/File.html#method_close"><abbr title="SwfTools\Processor\File">File</abbr></a></small></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    Boolean
+                </td>
+                <td class="last">
+                    <a href="#method_render">render</a>(string $outputFile, Boolean $legacy_rendering = false)
+                    <p>Render the flash to PNG file</p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    <abbr title="SwfTools\Processor\type">type</abbr>
+                </td>
+                <td class="last">
+                    <a href="#method_listEmbeddedObjects">listEmbeddedObjects</a>(Boolean $useCache = false)
+                    <p>List all embedded object of the current flash file</p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    string
+                </td>
+                <td class="last">
+                    <a href="#method_extractEmbedded">extractEmbedded</a>(integer $id, string $outputFile)
+                    <p>Extract the specified Embedded file</p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    
+                </td>
+                <td class="last">
+                    <a href="#method_extractFirstImage">extractFirstImage</a>(string $outputFile)
+                    <p>Extract the first embedded image found</p>
+                </td>
+                <td></td>
+            </tr>
+            </table>
+
+
+        <h2>Details</h2>
+
+                        <h3 id="method___construct">
+        <div class="location">in <a href="../../SwfTools/Processor/File.html#method___construct"><abbr title="SwfTools\Processor\File">File</abbr></a> at line 33</div>
+        <code>            public            
+    <strong>__construct</strong>(<a href="../../SwfTools/Configuration.html"><abbr title="SwfTools\Configuration">Configuration</abbr></a> $configuration = null, <abbr title="Monolog\Logger">Logger</abbr> $logger = null)</code>
+    </h3>
+    <div class="details">
+        <p>Build the File processor given the configuration</p>
+        <p></p>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table>
+                    <tr>
+                <td><a href="../../SwfTools/Configuration.html"><abbr title="SwfTools\Configuration">Configuration</abbr></a></td>
+                <td>$configuration</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td><abbr title="Monolog\Logger">Logger</abbr></td>
+                <td>$logger</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+                <h3 id="method___destruct">
+        <div class="location">at line 24</div>
+        <code>            public            
+    <strong>__destruct</strong>()</code>
+    </h3>
+    <div class="details">
+        <p></p>
+        <p></p>
+        <div class="tags">
+            
+            
+            
+                    </div>
+    </div>
+
+                <h3 id="method_open">
+        <div class="location">in <a href="../../SwfTools/Processor/File.html#method_open"><abbr title="SwfTools\Processor\File">File</abbr></a> at line 52</div>
+        <code>            public            
+    <strong>open</strong>($pathfile)</code>
+    </h3>
+    <div class="details">
+        <p></p>
+        <p></p>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table>
+                    <tr>
+                <td></td>
+                <td>$pathfile</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+                <h3 id="method_close">
+        <div class="location">in <a href="../../SwfTools/Processor/File.html#method_close"><abbr title="SwfTools\Processor\File">File</abbr></a> at line 63</div>
+        <code>            public            
+    <strong>close</strong>()</code>
+    </h3>
+    <div class="details">
+        <p></p>
+        <p></p>
+        <div class="tags">
+            
+            
+            
+                    </div>
+    </div>
+
+                <h3 id="method_render">
+        <div class="location">at line 38</div>
+        <code>            public            Boolean
+    <strong>render</strong>(string $outputFile, Boolean $legacy_rendering = false)</code>
+    </h3>
+    <div class="details">
+        <p>Render the flash to PNG file</p>
+        <p></p>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table>
+                    <tr>
+                <td>string</td>
+                <td>$outputFile</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td>Boolean</td>
+                <td>$legacy_rendering</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table>
+        <tr>
+            <td>Boolean</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+                            <h4>Exceptions</h4>
+
+                    <table>
+                    <tr>
+                <td><a href="http://php.net/InvalidArgumentException"><abbr title="InvalidArgumentException">InvalidArgumentException</abbr></a></td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                    </div>
+    </div>
+
+                <h3 id="method_listEmbeddedObjects">
+        <div class="location">at line 70</div>
+        <code>            public            <abbr title="SwfTools\Processor\type">type</abbr>
+    <strong>listEmbeddedObjects</strong>(Boolean $useCache = false)</code>
+    </h3>
+    <div class="details">
+        <p>List all embedded object of the current flash file</p>
+        <p></p>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table>
+                    <tr>
+                <td>Boolean</td>
+                <td>$useCache</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table>
+        <tr>
+            <td><abbr title="SwfTools\Processor\type">type</abbr></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+                            <h4>Exceptions</h4>
+
+                    <table>
+                    <tr>
+                <td><a href="http://php.net/RuntimeException"><abbr title="RuntimeException">RuntimeException</abbr></a></td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                    </div>
+    </div>
+
+                <h3 id="method_extractEmbedded">
+        <div class="location">at line 132</div>
+        <code>            public            string
+    <strong>extractEmbedded</strong>(integer $id, string $outputFile)</code>
+    </h3>
+    <div class="details">
+        <p>Extract the specified Embedded file</p>
+        <p></p>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table>
+                    <tr>
+                <td>integer</td>
+                <td>$id</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td>string</td>
+                <td>$outputFile</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table>
+        <tr>
+            <td>string</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+                            <h4>Exceptions</h4>
+
+                    <table>
+                    <tr>
+                <td><a href="http://php.net/RuntimeException"><abbr title="RuntimeException">RuntimeException</abbr></a></td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                    </div>
+    </div>
+
+                <h3 id="method_extractFirstImage">
+        <div class="location">at line 169</div>
+        <code>            public            
+    <strong>extractFirstImage</strong>(string $outputFile)</code>
+    </h3>
+    <div class="details">
+        <p>Extract the first embedded image found</p>
+        <p></p>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table>
+                    <tr>
+                <td>string</td>
+                <td>$outputFile</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+            
+                            <h4>Exceptions</h4>
+
+                    <table>
+                    <tr>
+                <td><a href="http://php.net/InvalidArgumentException"><abbr title="InvalidArgumentException">InvalidArgumentException</abbr></a></td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td><a href="http://php.net/RuntimeException"><abbr title="RuntimeException">RuntimeException</abbr></a></td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                    </div>
+    </div>
+
+    
+            </div>
+            <div id="footer">
+        Generated by <a href="http://sami.sensiolabs.org/" target="_top">Sami, the API Documentation Generator</a>.
+    </div>
+    </body>
+</html>

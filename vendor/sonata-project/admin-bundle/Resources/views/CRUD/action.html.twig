@@ -1,0 +1,28 @@
+{#
+
+This file is part of the Sonata package.
+
+(c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+
+#}
+
+{% extends base_template %}
+
+{%- block actions -%}
+    {% include 'SonataAdminBundle:CRUD:action_buttons.html.twig' %}
+{%- endblock -%}
+
+{% block tab_menu %}
+    {% if action is defined %}
+        {{ knp_menu_render(admin.sidemenu(action), {'currentClass' : 'active', 'template': sonata_admin.adminPool.getTemplate('tab_menu_template')}, 'twig') }}
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+
+    Redefine the content block in your action template
+
+{% endblock %}

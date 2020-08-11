@@ -465,7 +465,9 @@ if (api_get_setting('allow_terms_conditions') === 'true') {
                 $termExtraFields = new ExtraFieldValue('terms_and_condition');
                 $values = $termExtraFields->getAllValuesByItem($term_preview['id']);
                 foreach ($values as $value) {
-                    echo '<h3>'.$value['display_text'].'</h3><br />'.$value['value'].'<br />';
+                    if (!empty($value['value'])) {
+                        echo '<h3>'.$value['display_text'].'</h3><br />'.$value['value'].'<br />';
+                    }
                 }
             } else {
                 echo get_lang('ComingSoon');

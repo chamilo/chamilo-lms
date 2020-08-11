@@ -9538,6 +9538,18 @@ class SessionManager
     }
 
     /**
+     * Add a warning message when session is read-only mode.
+     */
+    public static function addFlashSessionReadOnly()
+    {
+        if (api_get_session_id() && !api_is_allowed_to_session_edit()) {
+            Display::addFlash(
+                Display::return_message(get_lang('SessionIsReadOnly'), 'warning')
+            );
+        }
+    }
+
+    /**
      * @param int $id
      *
      * @return bool
@@ -9672,18 +9684,6 @@ class SessionManager
             return 1;
         } else {
             return -1;
-        }
-    }
-
-    /**
-     * Add a warning message when session is read-only mode.
-     */
-    public static function addFlashSessionReadOnly()
-    {
-        if (api_get_session_id() && !api_is_allowed_to_session_edit()) {
-            Display::addFlash(
-                Display::return_message(get_lang('SessionIsReadOnly'), 'warning')
-            );
         }
     }
 }

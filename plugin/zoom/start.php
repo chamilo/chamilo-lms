@@ -55,7 +55,6 @@ if ($isManager) {
     $groupId = api_get_group_id();
     $groups = GroupManager::get_groups();
     if (!empty($groups)) {
-
         $form = new FormValidator('group_filter');
         $groupList[0] = get_lang('Select');
         foreach ($groups as $groupData) {

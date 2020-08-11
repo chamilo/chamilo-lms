@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 use Endroid\QrCode\ErrorCorrectionLevel;
 use Endroid\QrCode\QrCode;
+
 /**
  * Certificate Class
  * Generate certificates based in the gradebook tool.
@@ -522,8 +523,10 @@ class Certificate extends Model
             $qrCode->setBackgroundColor(['r' => 255, 'g' => 255, 'b' => 255, 'a' => 0]);
             $qrCode->setValidateResult(false);
             $qrCode->writeFile($path);
+
             return true;
         }
+
         return false;
     }
 

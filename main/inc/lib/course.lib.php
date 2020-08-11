@@ -6168,7 +6168,7 @@ class CourseManager
             $result[$content['value']] = $content['content'];
         }
 
-        $multiple =  $form->addElement(
+        $multiple = $form->addElement(
             'advmultiselect',
             'users',
             get_lang('Users'),

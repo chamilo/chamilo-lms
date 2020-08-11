@@ -7355,7 +7355,7 @@ function api_check_browscap()
  */
 function api_get_js($file)
 {
-    return '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/'.$file.'"></script>'."\n";
+    return '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/'.$file.'"></script>'."\n";
 }
 
 /**
@@ -7365,7 +7365,7 @@ function api_get_js($file)
  */
 function api_get_asset($file)
 {
-    return '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH).'assets/'.$file.'"></script>'."\n";
+    return '<script src="'.api_get_path(WEB_PUBLIC_PATH).'assets/'.$file.'"></script>'."\n";
 }
 
 /**
@@ -8107,7 +8107,7 @@ function api_coach_can_edit_view_results($courseId = null, $session_id = null)
  */
 function api_get_js_simple($file)
 {
-    return '<script type="text/javascript" src="'.$file.'"></script>'."\n";
+    return '<script src="'.$file.'"></script>'."\n";
 }
 
 function api_set_settings_and_plugins()

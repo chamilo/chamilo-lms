@@ -1,8 +1,12 @@
-{% if createInstantMeetingForm %}
-    {{ createInstantMeetingForm }}
+{% if instant_meeting_form %}
+    {{ instant_meeting_form }}
 {% endif %}
 
-{% if scheduledMeetings.count %}
+{% if group_form %}
+    {{ group_form }}
+{% endif %}
+
+{% if meetings.count %}
     <div class="page-header">
         <h2>{{ 'ScheduledMeetings'|get_lang }}</h2>
     </div>
@@ -14,7 +18,7 @@
             <th>{{ 'Duration'|get_lang }}</th>
             <th>{{ 'Actions'|get_lang }}</th>
         </tr>
-        {% for meeting in scheduledMeetings %}
+        {% for meeting in meetings %}
         <tr>
             <td>
                 {{ meeting.meetingInfoGet.topic }}
@@ -47,6 +51,6 @@
     </table>
 {% endif %}
 
-{% if scheduleMeetingForm %}
-    {{ scheduleMeetingForm }}
+{% if schedule_meeting_form %}
+    {{ schedule_meeting_form }}
 {% endif %}

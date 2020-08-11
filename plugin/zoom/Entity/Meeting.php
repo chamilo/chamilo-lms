@@ -540,7 +540,12 @@ class Meeting
     {
         $introduction = sprintf('<h1>%s</h1>', $this->meetingInfoGet->topic);
         if (!$this->isGlobalMeeting()) {
-            $introduction .= sprintf('<p>%s (%s)</p>', $this->formattedStartTime, $this->formattedDuration);
+            if (!empty($this->formattedStartTime)) {
+                $introduction .= $this->formattedStartTime;
+                if (!empty($this->formattedDuration)) {
+                    $introduction .= '( '.$this->formattedDuration.')';
+                }
+            }
         }
         if ($this->user) {
             $introduction .= sprintf('<p>%s</p>', $this->user->getFullname());

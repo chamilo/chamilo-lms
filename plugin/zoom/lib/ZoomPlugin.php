@@ -341,9 +341,14 @@ class ZoomPlugin extends Plugin
         if (null === $meeting) {
             return false;
         }
+
         $em = Database::getManager();
         try {
-            $meeting->getMeetingInfoGet()->delete();
+            // No need to delete a instant meeting.
+            if (\Chamilo\PluginBundle\Zoom\API\Meeting::TYPE_INSTANT != $meeting->getMeetingInfoGet()->type) {
+                $meeting->getMeetingInfoGet()->delete();
+            }
+
             $em->remove($meeting);
             $em->flush();
 
@@ -925,6 +930,7 @@ class ZoomPlugin extends Plugin
                         }
 
                         if (\Chamilo\PluginBundle\Zoom\API\Meeting::TYPE_INSTANT == $meeting->getMeetingInfoGet()->type) {
+
                             return $meeting->getMeetingInfoGet()->join_url;
                         }
 
@@ -1217,9 +1223,11 @@ class ZoomPlugin extends Plugin
      */
     private function startInstantMeeting($topic, $user = null, $course = null, $group = null, $session = null)
     {
+        $meetingInfoGet = MeetingInfoGet::fromTopicAndType($topic, MeetingInfoGet::TYPE_INSTANT);
+        $meetingInfoGet->settings->approval_type = MeetingSettings::APPROVAL_TYPE_AUTOMATICALLY_APPROVE;
         $meeting = $this->createMeetingFromMeeting(
             (new Meeting())
-                ->setMeetingInfoGet(MeetingInfoGet::fromTopicAndType($topic, MeetingInfoGet::TYPE_INSTANT))
+                ->setMeetingInfoGet($meetingInfoGet)
                 ->setUser($user)
                 ->setGroup($group)
                 ->setCourse($course)
@@ -1240,12 +1248,14 @@ class ZoomPlugin extends Plugin
     private function createMeetingFromMeeting($meeting)
     {
         $currentUser = api_get_user_entity(api_get_user_id());
-        //$meeting->getMeetingInfoGet()->host_email = $currentUser->getEmail();
+
         $meeting->getMeetingInfoGet()->settings->contact_email = $currentUser->getEmail();
         $meeting->getMeetingInfoGet()->settings->contact_name = $currentUser->getFullname();
         $recording = 'true' === $this->get('enableCloudRecording') ? 'cloud' : 'local';
         $meeting->getMeetingInfoGet()->settings->auto_recording = $recording;
         $meeting->getMeetingInfoGet()->settings->registrants_email_notification = false;
+
+        //$meeting->getMeetingInfoGet()->host_email = $currentUser->getEmail();
         //$meeting->getMeetingInfoGet()->settings->alternative_hosts = $currentUser->getEmail();
 
         // Send create to Zoom.

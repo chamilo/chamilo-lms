@@ -466,7 +466,7 @@ if (api_get_setting('allow_terms_conditions') === 'true') {
                 $values = $termExtraFields->getAllValuesByItem($term_preview['id']);
                 foreach ($values as $value) {
                     if (!empty($value['value'])) {
-                        echo '<h3>'.$value['display_text'].'</h3><br />'.$value['value'].'<br />';
+                        echo '<h3>'.get_lang($value['display_text']).'</h3><br />'.$value['value'].'<br />';
                     }
                 }
             } else {

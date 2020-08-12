@@ -968,17 +968,17 @@ $poweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chami
         </div>
     </div>
   </div>
-</body>
-<script type="text/javascript">
-    $('#showPassword').on('change',function(){
-        if($(this).prop('checked')){
-            $('.form-control[name="passForm"]').attr('type','text');
-            $('.showPasswordEye').removeClass('fa-eye').addClass('fa-eye-slash');
+    <script type="text/javascript">
+        $('#showPassword').on('change',function(){
+            if($(this).prop('checked')){
+                $('.form-control[name="passForm"]').attr('type','text');
+                $('.showPasswordEye').removeClass('fa-eye').addClass('fa-eye-slash');
 
-        }else{
-            $('.form-control[name="passForm"]').attr('type','password');
-            $('.showPasswordEye').addClass('fa-eye').removeClass('fa-eye-slash');
-        }
-    });
-</script>
+            }else{
+                $('.form-control[name="passForm"]').attr('type','password');
+                $('.showPasswordEye').addClass('fa-eye').removeClass('fa-eye-slash');
+            }
+        });
+    </script>
+</body>
 </html>

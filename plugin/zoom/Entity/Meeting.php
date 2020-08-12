@@ -544,7 +544,7 @@ class Meeting
             if (!empty($this->formattedStartTime)) {
                 $introduction .= $this->formattedStartTime;
                 if (!empty($this->formattedDuration)) {
-                    $introduction .= '( '.$this->formattedDuration.')';
+                    $introduction .= ' ('.$this->formattedDuration.')';
                 }
             }
         }

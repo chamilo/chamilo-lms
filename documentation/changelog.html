@@ -314,6 +314,21 @@
         </ul>
         <h3>Improvements (minor features) and debug</h3>
         <ul aria-live="off">
+            <li>[2020-08-12] (<a href="https://github.com/chamilo/chamilo-lms/commit/f15a0dd85c47b9e4b0731b1dbd0252ea05ea8c5c">f15a0dd8</a>) Install: Fix double slash in paths for web fonts</li>
+            <li>[2020-08-12] (<a href="https://github.com/chamilo/chamilo-lms/commit/615f2c7ea327fe43cebbede209c7e6d904289984">615f2c7e</a>) Install: Fix paths for web fonts in chamilo theme</li>
+            <li>[2020-08-12] (<a href="https://github.com/chamilo/chamilo-lms/commit/5399c69f99f1614f2b6ec96c438251541fe9cc49">5399c69f</a>) Documentation: Removing official support for PHP 7.1. It still works, but we lack the infrastructure to do tests thoroughly enough.</li>
+            <li>[2020-08-12] (<a href="https://github.com/chamilo/chamilo-lms/commit/5bf9cd1fa2ceda073dd4b0f2482df3c0e0425169">5bf9cd1f</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/3444">GH#3444</a>) Admin: Fix course management list to only show the courses of the current access-url</li>
+            <li>[2020-08-12] (<a href="https://github.com/chamilo/chamilo-lms/commit/011db4c5dfdbac6cd1a4e4c95e703956b8f46461">011db4c5</a>) Plugin: Zoom: Add zoom icons</li>
+            <li>[2020-08-12] (<a href="https://github.com/chamilo/chamilo-lms/commit/bbaea439e6adbae350cf27e7cdf0af6b972de5ae">bbaea439</a>) Documentation: Add note about PHP 7.3 warnings in installation guide</li>
+            <li>[2020-08-12] (<a href="https://github.com/chamilo/chamilo-lms/commit/d1a52c3d9be0be0e2f313b45435588fe309f9c88">d1a52c3d</a>) Documentation: Update installation guide notes for WIRIS plugin</li>
+            <li>[2020-08-12] (<a href="https://github.com/chamilo/chamilo-lms/commit/ad1a95383b92b7ca1c0b455ac9f11349c07fc16c">ad1a9538</a>) Plugins: Add H5P in official plugins list</li>
+            <li>[2020-08-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/ff50a99627aa42603eca0326c0f7a51386b51aff">ff50a996</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/3428">GH#3428</a>) Exercise: Exercise result per question, incoherent data. Missing filter on ExerciseLib::get_student_stats_by_question</li>
+            <li>[2020-08-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/671f348ecbe0cf57c5fc0e9f5fbfca56c8406a9a">671f348e</a>) Internal: Remove text/javascript type attribute for JavaScript files - See https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script</li>
+            <li>[2020-08-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/60d09f6f7a54d2e7a99ec9d352746c5e0b68907f">60d09f6f</a>) Internal: Remove text/javascript type attribute for JavaScript files - See https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script</li>
+            <li>[2020-08-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/0a6aa753ebc0c2b2c8e4b3ded0423d8d8a9e4355">0a6aa753</a>) Internal: Remove text/javascript type attribute for JavaScript files - See https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script</li>
+            <li>[2020-08-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/84b59b97c56a6dd0af56f770cbdd94b3c0bdab79">84b59b97</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/3008">GH#3008</a>) Thematic advance: Show correct time into Temporalization of the didactic unit</li>
+            <li>[2020-08-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/16f291e42b5cac668433f8a48e659fd881545e91">16f291e4</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/3008">GH#3008</a>) Course description: Show correct time about the last thematic advance made and the next one to do.</li>
+
             <li>[2020-08-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/ca2c3db7726a590eb3ff884aa3e42e36e6c7afd9">ca2c3db7</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/3061">GH#3061</a>) Gradebook: Set new QR code generator's error correction level to MEDIUM to match previous QR codes</li>
             <li>[2020-08-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/318c6ef16575bc9d93adda6b0bbe4815219bc867">318c6ef1</a>) Internal: Sort composer dependencies</li>
             <li>[2020-08-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/5af68014ecd925e80a79a0e3c61791a3290e88b4">5af68014</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/3392">GH#3392</a>) Exercise: Extend attempts limit (was not configurable over 10)</li>
@@ -1881,6 +1896,8 @@
         </ul>
         <h3>Stylesheets and theming</h3>
         <ul aria-live="off">
+            <li>[2020-08-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/320f16abee25ea882c38e4e47d8fe3bbe2bd83fa">320f16ab</a>) Display: Update modals.tpl to fix HTML compliance by renaming modal element id attribute</li>
+            <li>[2020-08-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/b7d6660e4c4e17498a0367ede6c0d404128b22de">b7d6660e</a>) Display: Fix unvalidated CSS - linear-gradient(top -> to-top) + max-device-width -> max-width - see https://www.w3.org/TR/mediaqueries-4/#mf-deprecated</li>
             <li>[2020-07-21] (<a href="https://github.com/chamilo/chamilo-lms/commit/b6a6d2d9a6e7b5b76a7a962152b41b570a0f6132">b6a6d2d9</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2992">GH#2992</a>) Display: Add SVG version of tuning, plugin and cas icons</li>
             <li>[2020-07-15] (<a href="https://github.com/chamilo/chamilo-lms/commit/4eb0de5ce987070a74af257705062cf9bcdf3c08">4eb0de5c</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/3345">GH#3345</a>) Display: Allow course default icon to use the one defined in the CSS theme and resize to fit courses-list size</li>
             <li>[2020-06-30] (<a href="https://github.com/chamilo/chamilo-lms/commit/42e422aedfde8eeb094a72628db388b0e3464323">42e422ae</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/3339">GH#3339</a>) Display: Fix Malaysian flag</li>

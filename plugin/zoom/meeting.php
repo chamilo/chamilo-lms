@@ -66,7 +66,7 @@ if ($plugin->userIsConferenceManager($meeting)) {
     }
 
     if ('true' === $plugin->get('enableCloudRecording') && $meeting->hasCloudAutoRecordingEnabled()) {
-        $tpl->assign('fileForm', $plugin->getFileForm($meeting)->returnForm(), $returnURL);
+        $tpl->assign('fileForm', $plugin->getFileForm($meeting, $returnURL)->returnForm());
         $tpl->assign('recordings', $meeting->getRecordings());
     }
 } elseif ($meeting->requiresRegistration()) {

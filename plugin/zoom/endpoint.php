@@ -82,7 +82,8 @@ switch ($objectType) {
 
         $recordingEntity = null;
         if ($object->uuid) {
-            $recordingEntity = $recordingRepository->findBy(['uuid' => $object->uuid, 'meeting' => $meeting]);
+            /** @var Recording $recordingEntity */
+            $recordingEntity = $recordingRepository->findOneBy(['uuid' => $object->uuid, 'meeting' => $meeting]);
         }
 
         error_log("Recording: $action");
@@ -109,10 +110,29 @@ switch ($objectType) {
             case 'trashed':
             case 'deleted':
                 $meeting->addActivity($activity);
-                $em->persist($meeting);
                 if (null !== $recordingEntity) {
-                    $em->remove($recordingEntity);
+                    $recordMeeting = $recordingEntity->getRecordingMeeting();
+                    $recordingToDelete = RecordingMeeting::fromObject($object);
+                    $files = [];
+                    if ($recordingToDelete->recording_files) {
+                        foreach($recordingToDelete->recording_files as $fileToDelete) {
+                            foreach ($recordMeeting->recording_files as $file) {
+                                if ($fileToDelete->id != $file->id) {
+                                    $files[] = $file;
+                                }
+                            }
+                        }
+                    }
+
+                    if (empty($files)) {
+                        $em->remove($recordingEntity);
+                    } else {
+                        $recordMeeting->recording_files = $files;
+                        $recordingEntity->setRecordingMeeting($recordMeeting);
+                        $em->persist($recordingEntity);
+                    }
                 }
+                $em->persist($meeting);
                 $em->flush();
                 break;
             default:

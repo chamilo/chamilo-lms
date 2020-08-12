@@ -444,7 +444,7 @@ class ZoomPlugin extends Plugin
      *
      * @return FormValidator
      */
-    public function getFileForm($meeting)
+    public function getFileForm($meeting, $returnURL)
     {
         $form = new FormValidator('fileForm', 'post', $_SERVER['REQUEST_URI']);
         if (!$meeting->getRecordings()->isEmpty()) {
@@ -484,10 +484,14 @@ class ZoomPlugin extends Plugin
             );
             $form->addButtonUpdate($this->get_lang('DoIt'));
             if ($form->validate()) {
+                $action = $form->getSubmitValue('action');
+                $idList = $form->getSubmitValue('fileIds');
+
                 foreach ($recordingList as $recording) {
                     $recordings = $recording->getRecordingMeeting()->recording_files;
+
                     foreach ($recordings as $file) {
-                        if (in_array($file->id, $form->getSubmitValue('fileIds'))) {
+                        if (in_array($file->id, $idList)) {
                             $name = sprintf(
                                 $this->get_lang('XRecordingOfMeetingXFromXDurationXDotX'),
                                 $file->recording_type,
@@ -496,7 +500,6 @@ class ZoomPlugin extends Plugin
                                 $recording->formattedDuration,
                                 $file->file_type
                             );
-                            $action = $form->getSubmitValue('action');
                             if ('CreateLinkInCourse' === $action && $meeting->isCourseMeeting()) {
                                 try {
                                     $this->createLinkToFileInCourse($meeting, $file, $name);
@@ -524,9 +527,10 @@ class ZoomPlugin extends Plugin
                                 }
                             } elseif ('DeleteFile' === $action) {
                                 try {
+                                    $name = $file->recording_type;
                                     $file->delete();
                                     Display::addFlash(
-                                        Display::return_message($this->get_lang('FileWasDeleted'), 'confirm')
+                                        Display::return_message($this->get_lang('FileWasDeleted').': '.$name, 'confirm')
                                     );
                                 } catch (Exception $exception) {
                                     Display::addFlash(
@@ -537,6 +541,7 @@ class ZoomPlugin extends Plugin
                         }
                     }
                 }
+                api_location($returnURL);
             }
         }
 
@@ -630,15 +635,16 @@ class ZoomPlugin extends Plugin
                 'tmp_name' => stream_get_meta_data($tmpFile)['uri'],
                 'size' => filesize(stream_get_meta_data($tmpFile)['uri']),
                 'from_file' => true,
+                'move_file' => true,
                 'type' => $file->file_type,
             ],
-            '/',
             api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document',
+            '/',
             api_get_user_id(),
             $groupId,
             null,
             0,
-            '',
+            'overwrite',
             true,
             false,
             null,

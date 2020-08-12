@@ -123,7 +123,7 @@ class ZoomPlugin extends Plugin
             $items[] = [
                 'class' => 'video-conference',
                 'icon' => Display::return_icon(
-                    'zoom.png',
+                    'bbb.png',
                     get_lang('VideoConference')
                 ),
                 'link' => $link,
@@ -450,10 +450,12 @@ class ZoomPlugin extends Plugin
         if (!$meeting->getRecordings()->isEmpty()) {
             $fileIdSelect = $form->addSelect('fileIds', get_lang('Files'));
             $fileIdSelect->setMultiple(true);
-            foreach ($meeting->getRecordings() as &$recording) {
+            $recordingList = $meeting->getRecordings();
+            foreach ($recordingList as &$recording) {
                 // $recording->instanceDetails = $plugin->getPastMeetingInstanceDetails($instance->uuid);
                 $options = [];
-                foreach ($recording->getRecordingMeeting()->recording_files as $file) {
+                $recordings = $recording->getRecordingMeeting()->recording_files;
+                foreach ($recordings as $file) {
                     $options[] = [
                         'text' => sprintf(
                             '%s.%s (%s)',
@@ -482,8 +484,9 @@ class ZoomPlugin extends Plugin
             );
             $form->addButtonUpdate($this->get_lang('DoIt'));
             if ($form->validate()) {
-                foreach ($meeting->getRecordings() as $recording) {
-                    foreach ($recording->files as $file) {
+                foreach ($recordingList as $recording) {
+                    $recordings = $recording->getRecordingMeeting()->recording_files;
+                    foreach ($recordings as $file) {
                         if (in_array($file->id, $form->getSubmitValue('fileIds'))) {
                             $name = sprintf(
                                 $this->get_lang('XRecordingOfMeetingXFromXDurationXDotX'),

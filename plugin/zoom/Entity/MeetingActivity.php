@@ -26,6 +26,7 @@ class MeetingActivity
 
     /**
      * @var Meeting
+     *
      * @ORM\ManyToOne(targetEntity="Meeting", inversedBy="activities")
      * @ORM\JoinColumn(name="meeting_id")
      */
@@ -33,6 +34,7 @@ class MeetingActivity
 
     /**
      * @var Meeting
+     *
      * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
@@ -40,18 +42,21 @@ class MeetingActivity
 
     /**
      * @var string
+     *
      * @ORM\Column(type="string", name="name", length=255, nullable=false)
      */
     protected $name;
 
     /**
      * @var string
+     *
      * @ORM\Column(type="string", name="type", length=255, nullable=false)
      */
     protected $type;
 
     /**
      * @var string
+     *
      * @ORM\Column(type="text", name="event", nullable=true)
      */
     protected $event;

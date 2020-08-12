@@ -610,6 +610,19 @@ class ZoomPlugin extends Plugin
         if (false === curl_exec($curl)) {
             throw new Exception("curl_exec failed: ".curl_error($curl));
         }
+
+        $sessionId = 0;
+        $session = $meeting->getSession();
+        if (null !== $session) {
+            $sessionId = $session->getId();
+        }
+
+        $groupId = 0;
+        $group = $meeting->getGroup();
+        if (null !== $group) {
+            $groupId = $group->getIid();
+        }
+
         $newPath = handle_uploaded_document(
             $courseInfo,
             [
@@ -622,19 +635,20 @@ class ZoomPlugin extends Plugin
             '/',
             api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document',
             api_get_user_id(),
-            0,
+            $groupId,
             null,
             0,
             '',
             true,
             false,
             null,
-            $meeting->getSession()->getId(),
+            $sessionId,
             true
         );
+
         fclose($tmpFile);
         if (false === $newPath) {
-            throw new Exception('could not handle uploaded document');
+            throw new Exception('Could not handle uploaded document');
         }
     }
 

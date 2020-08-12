@@ -115,7 +115,7 @@ switch ($objectType) {
                     $recordingToDelete = RecordingMeeting::fromObject($object);
                     $files = [];
                     if ($recordingToDelete->recording_files) {
-                        foreach($recordingToDelete->recording_files as $fileToDelete) {
+                        foreach ($recordingToDelete->recording_files as $fileToDelete) {
                             foreach ($recordMeeting->recording_files as $file) {
                                 if ($fileToDelete->id != $file->id) {
                                     $files[] = $file;

@@ -366,7 +366,7 @@ class ThematicController
             $thematic_plan_data = $thematic->get_thematic_plan_data();
 
             // Third column
-            $thematic_advance_data = $thematic->get_thematic_advance_list(null, null, true);
+            $thematic_advance_data = $thematic->get_thematic_advance_list(null, null, true, true);
 
             $data['thematic_plan_div'] = $thematic->get_thematic_plan_array($thematic_plan_data);
             $data['thematic_advance_div'] = $thematic->get_thematic_advance_div($thematic_advance_data);

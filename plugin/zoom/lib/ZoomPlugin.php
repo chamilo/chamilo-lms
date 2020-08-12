@@ -123,7 +123,7 @@ class ZoomPlugin extends Plugin
             $items[] = [
                 'class' => 'video-conference',
                 'icon' => Display::return_icon(
-                    'zoom.png',
+                    'bbb.png',
                     get_lang('VideoConference')
                 ),
                 'link' => $link,
@@ -450,10 +450,12 @@ class ZoomPlugin extends Plugin
         if (!$meeting->getRecordings()->isEmpty()) {
             $fileIdSelect = $form->addSelect('fileIds', get_lang('Files'));
             $fileIdSelect->setMultiple(true);
-            foreach ($meeting->getRecordings() as &$recording) {
+            $recordingList = $meeting->getRecordings();
+            foreach ($recordingList as &$recording) {
                 // $recording->instanceDetails = $plugin->getPastMeetingInstanceDetails($instance->uuid);
                 $options = [];
-                foreach ($recording->getRecordingMeeting()->recording_files as $file) {
+                $recordings = $recording->getRecordingMeeting()->recording_files;
+                foreach ($recordings as $file) {
                     $options[] = [
                         'text' => sprintf(
                             '%s.%s (%s)',
@@ -482,8 +484,9 @@ class ZoomPlugin extends Plugin
             );
             $form->addButtonUpdate($this->get_lang('DoIt'));
             if ($form->validate()) {
-                foreach ($meeting->getRecordings() as $recording) {
-                    foreach ($recording->files as $file) {
+                foreach ($recordingList as $recording) {
+                    $recordings = $recording->getRecordingMeeting()->recording_files;
+                    foreach ($recordings as $file) {
                         if (in_array($file->id, $form->getSubmitValue('fileIds'))) {
                             $name = sprintf(
                                 $this->get_lang('XRecordingOfMeetingXFromXDurationXDotX'),
@@ -607,6 +610,19 @@ class ZoomPlugin extends Plugin
         if (false === curl_exec($curl)) {
             throw new Exception("curl_exec failed: ".curl_error($curl));
         }
+
+        $sessionId = 0;
+        $session = $meeting->getSession();
+        if (null !== $session) {
+            $sessionId = $session->getId();
+        }
+
+        $groupId = 0;
+        $group = $meeting->getGroup();
+        if (null !== $group) {
+            $groupId = $group->getIid();
+        }
+
         $newPath = handle_uploaded_document(
             $courseInfo,
             [
@@ -619,19 +635,20 @@ class ZoomPlugin extends Plugin
             '/',
             api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document',
             api_get_user_id(),
-            0,
+            $groupId,
             null,
             0,
             '',
             true,
             false,
             null,
-            $meeting->getSession()->getId(),
+            $sessionId,
             true
         );
+
         fclose($tmpFile);
         if (false === $newPath) {
-            throw new Exception('could not handle uploaded document');
+            throw new Exception('Could not handle uploaded document');
         }
     }
 
@@ -1223,7 +1240,7 @@ class ZoomPlugin extends Plugin
     private function startInstantMeeting($topic, $user = null, $course = null, $group = null, $session = null)
     {
         $meetingInfoGet = MeetingInfoGet::fromTopicAndType($topic, MeetingInfoGet::TYPE_INSTANT);
-        $meetingInfoGet->settings->approval_type = MeetingSettings::APPROVAL_TYPE_AUTOMATICALLY_APPROVE;
+        //$meetingInfoGet->settings->approval_type = MeetingSettings::APPROVAL_TYPE_AUTOMATICALLY_APPROVE;
         $meeting = $this->createMeetingFromMeeting(
             (new Meeting())
                 ->setMeetingInfoGet($meetingInfoGet)

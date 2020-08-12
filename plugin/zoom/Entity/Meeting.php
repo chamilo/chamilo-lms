@@ -131,6 +131,7 @@ class Meeting
 
     /**
      * @var Recording[]|ArrayCollection
+     *
      * @ORM\OneToMany(targetEntity="Recording", mappedBy="meeting", cascade={"persist"}, orphanRemoval=true)
      */
     protected $recordings;

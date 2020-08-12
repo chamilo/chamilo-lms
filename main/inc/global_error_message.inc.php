@@ -78,7 +78,7 @@ if (is_int($global_error_code) && $global_error_code > 0) {
         }
     }
 
-    $css_def = str_replace("themes/$theme/", "$css_web_path/themes/$theme/", $css_def);
+    $css_def = str_replace("themes/$theme/", $css_web_path."themes/$theme/", $css_def);
 
     $global_error_message = [];
 

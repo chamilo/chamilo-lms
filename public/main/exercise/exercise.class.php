@@ -974,7 +974,7 @@ class Exercise
         if (!empty($questions_by_category)) {
             $newCategoryList = [];
             $em = Database::getManager();
-            $repo = $em->getRepository('ChamiloCoreBundle:CQuizCategory');
+            $repo = $em->getRepository('ChamiloCourseBundle:CQuizCategory');
 
             foreach ($questions_by_category as $categoryId => $questionList) {
                 $cat = new TestCategory();
@@ -989,7 +989,7 @@ class Exercise
                 if (isset($cat['parent_id']) && !empty($cat['parent_id'])) {
                     /** @var CQuizCategory $categoryEntity */
                     if (!isset($parentsLoaded[$cat['parent_id']])) {
-                        $categoryEntity = $em->find('ChamiloCoreBundle:CQuizCategory', $cat['parent_id']);
+                        $categoryEntity = $em->find('ChamiloCourseBundle:CQuizCategory', $cat['parent_id']);
                         $parentsLoaded[$cat['parent_id']] = $categoryEntity;
                     } else {
                         $categoryEntity = $parentsLoaded[$cat['parent_id']];
@@ -3270,7 +3270,6 @@ class Exercise
                                 );
                             }
                         }
-                    }
 
                     // Next question
                     if (!empty($questions_in_media)) {
@@ -3297,20 +3296,20 @@ class Exercise
             return $html;
         }
 
-                    if ($this->review_answers) {
-                        $all_label = get_lang('Review selected questions');
-                        $class = 'btn btn-success';
-                    } else {
-                        $all_label = get_lang('End test');
-                        $class = 'btn btn-warning';
-                    }
-                    // used to select it with jquery
-                    $class .= ' question-validate-btn';
-                    $buttonList[] = Display::button(
-                        'validate_all',
-                        $all_label,
-                        ['type' => 'button', 'class' => $class]
-                    );
+        if ($this->review_answers) {
+            $all_label = get_lang('Review selected questions');
+            $class = 'btn btn-success';
+        } else {
+            $all_label = get_lang('End test');
+            $class = 'btn btn-warning';
+        }
+        // used to select it with jquery
+        $class .= ' question-validate-btn';
+        $buttonList[] = Display::button(
+            'validate_all',
+            $all_label,
+            ['type' => 'button', 'class' => $class]
+        );
         $buttonList[] = Display::span(null, ['id' => 'save_all_response']);
         $html .= implode(PHP_EOL, $buttonList).PHP_EOL;
 

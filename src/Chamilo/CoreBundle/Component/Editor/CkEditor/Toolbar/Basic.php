@@ -24,6 +24,7 @@ class Basic extends Toolbar
         'audio',
         'image2_chamilo', // Replace for 'image' if you want to user the Mapping plugin.
         'bidi',
+        'blockimagepaste',
         'colorbutton',
         'colordialog',
         'dialogui',

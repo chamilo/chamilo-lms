@@ -82,6 +82,14 @@
                 <source>form.label_menu_template</source>
                 <target>Menu Template</target>
             </trans-unit>
+            <trans-unit id="form.label_translation_domain">
+                <source>form.label_translation_domain</source>
+                <target>Translation domain</target>
+            </trans-unit>
+            <trans-unit id="form.label_icon">
+                <source>form.label_icon</source>
+                <target>Icon</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

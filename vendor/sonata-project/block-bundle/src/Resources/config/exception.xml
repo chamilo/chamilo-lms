@@ -23,12 +23,12 @@
         </service>
         <!-- exception renderers -->
         <service id="sonata.block.exception.renderer.inline" class="Sonata\BlockBundle\Exception\Renderer\InlineRenderer" public="true">
-            <argument type="service" id="templating"/>
-            <argument>SonataBlockBundle:Block:block_exception.html.twig</argument>
+            <argument type="service" id="sonata.templating"/>
+            <argument>@SonataBlock/Block/block_exception.html.twig</argument>
         </service>
         <service id="sonata.block.exception.renderer.inline_debug" class="Sonata\BlockBundle\Exception\Renderer\InlineDebugRenderer" public="true">
-            <argument type="service" id="templating"/>
-            <argument>SonataBlockBundle:Block:block_exception_debug.html.twig</argument>
+            <argument type="service" id="sonata.templating"/>
+            <argument>@SonataBlock/Block/block_exception_debug.html.twig</argument>
             <argument>%kernel.debug%</argument>
             <argument>true</argument>
         </service>

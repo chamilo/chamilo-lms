@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -20,10 +22,7 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 final class ExporterCompilerPass implements CompilerPassInterface
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         if (!$container->has('sonata.exporter.exporter')) {
             return;
@@ -37,5 +36,3 @@ final class ExporterCompilerPass implements CompilerPassInterface
         }
     }
 }
-
-class_exists(\Exporter\Bridge\Symfony\DependencyInjection\Compiler\ExporterCompilerPass::class);

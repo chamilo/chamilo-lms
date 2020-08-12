@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -14,29 +16,25 @@ namespace Sonata\Exporter;
 use Sonata\Exporter\Source\SourceIteratorInterface;
 use Sonata\Exporter\Writer\WriterInterface;
 
-class Handler
+final class Handler
 {
     /**
      * @var SourceIteratorInterface
      */
-    protected $source;
+    private $source;
 
     /**
      * @var WriterInterface
      */
-    protected $writer;
+    private $writer;
 
-    /**
-     * @param SourceIteratorInterface $source
-     * @param WriterInterface         $writer
-     */
     public function __construct(SourceIteratorInterface $source, WriterInterface $writer)
     {
         $this->source = $source;
         $this->writer = $writer;
     }
 
-    public function export()
+    public function export(): void
     {
         $this->writer->open();
 
@@ -47,16 +45,8 @@ class Handler
         $this->writer->close();
     }
 
-    /**
-     * @param SourceIteratorInterface $source
-     * @param WriterInterface         $writer
-     *
-     * @return Handler
-     */
-    public static function create(SourceIteratorInterface $source, WriterInterface $writer)
+    public static function create(SourceIteratorInterface $source, WriterInterface $writer): self
     {
         return new self($source, $writer);
     }
 }
-
-class_exists(\Exporter\Handler::class);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -14,81 +16,63 @@ namespace Sonata\Exporter\Writer;
 /**
  * @author Thomas Rabaix <thomas.rabaix@sonata-project.org>
  */
-class JsonWriter implements TypedWriterInterface
+final class JsonWriter implements TypedWriterInterface
 {
     /**
      * @var string
      */
-    protected $filename;
+    private $filename;
 
     /**
      * @var resource
      */
-    protected $file;
+    private $file;
 
     /**
      * @var int
      */
-    protected $position;
+    private $position = 0;
 
     /**
-     * @param string $filename
+     * @throws \RuntimeException
      */
-    public function __construct($filename)
+    public function __construct(string $filename)
     {
         $this->filename = $filename;
-        $this->position = 0;
 
         if (is_file($filename)) {
             throw new \RuntimeException(sprintf('The file %s already exist', $filename));
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    final public function getDefaultMimeType()
+    public function getDefaultMimeType(): string
     {
         return 'application/json';
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    final public function getFormat()
+    public function getFormat(): string
     {
         return 'json';
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function open()
+    public function open(): void
     {
         $this->file = fopen($this->filename, 'w', false);
 
         fwrite($this->file, '[');
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function close()
+    public function close(): void
     {
         fwrite($this->file, ']');
 
         fclose($this->file);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function write(array $data)
+    public function write(array $data): void
     {
         fwrite($this->file, ($this->position > 0 ? ',' : '').json_encode($data));
 
         ++$this->position;
     }
 }
-
-class_exists(\Exporter\Writer\JsonWriter::class);

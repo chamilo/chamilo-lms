@@ -24,7 +24,7 @@ class GetAttrNode extends Node
     const METHOD_CALL = 2;
     const ARRAY_CALL = 3;
 
-    public function __construct(Node $node, Node $attribute, ArrayNode $arguments, $type)
+    public function __construct(Node $node, Node $attribute, ArrayNode $arguments, int $type)
     {
         parent::__construct(
             ['node' => $node, 'attribute' => $attribute, 'arguments' => $arguments],
@@ -86,7 +86,7 @@ class GetAttrNode extends Node
                     throw new \RuntimeException(sprintf('Unable to call method "%s" of object "%s".', $this->nodes['attribute']->attributes['value'], \get_class($obj)));
                 }
 
-                return \call_user_func_array($toCall, $this->nodes['arguments']->evaluate($functions, $values));
+                return $toCall(...array_values($this->nodes['arguments']->evaluate($functions, $values)));
 
             case self::ARRAY_CALL:
                 $array = $this->nodes['node']->evaluate($functions, $values);

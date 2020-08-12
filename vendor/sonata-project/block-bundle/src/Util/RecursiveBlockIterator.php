@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -11,36 +13,34 @@
 
 namespace Sonata\BlockBundle\Util;
 
+use Doctrine\Common\Collections\Collection;
+
 /**
  * RecursiveBlockIterator.
+ *
+ * @final since sonata-project/block-bundle 3.0
  *
  * @author Thomas Rabaix <thomas.rabaix@sonata-project.org>
  */
 class RecursiveBlockIterator extends \RecursiveArrayIterator implements \RecursiveIterator
 {
     /**
-     * @param array $array
+     * @param Collection|array $array
      */
     public function __construct($array)
     {
-        if (is_object($array)) {
+        if (\is_object($array)) {
             $array = $array->toArray();
         }
 
         parent::__construct($array);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getChildren()
     {
         return new self($this->current()->getChildren());
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function hasChildren()
     {
         return $this->current()->hasChildren();

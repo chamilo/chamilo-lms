@@ -52,7 +52,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Sonata\\Doctrine\\": "src/"
+            "Sonata\\Doctrine\\": "src/",
+            "Sonata\\Doctrine\\Bridge\\Symfony\\": "src/Bridge/Symfony/"
         }
     },
     "autoload-dev": {

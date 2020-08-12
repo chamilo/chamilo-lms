@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -20,19 +22,18 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
  *
  * NEXT_MAJOR: remove this interface.
  *
- * @deprecated since 3.2, to be removed with 4.0
+ * @deprecated since sonata-project/block-bundle 3.2, to be removed with 4.0
  */
 interface BlockServiceInterface
 {
     /**
-     * @param BlockContextInterface $blockContext
-     * @param Response              $response
-     *
      * @return Response
      */
     public function execute(BlockContextInterface $blockContext, Response $response = null);
 
     /**
+     * @deprecated since sonata-project/block-bundle 3.16, to be removed in 4.0
+     *
      * @return string
      */
     public function getName();
@@ -42,36 +43,33 @@ interface BlockServiceInterface
      *
      * NEXT_MAJOR: rename this method.
      *
-     * @param OptionsResolverInterface $resolver
-     *
-     * @deprecated since version 2.3, to be renamed in 4.0.
+     * @deprecated since sonata-project/block-bundle 2.3, to be renamed in 4.0.
      *             Use the method configureSettings instead.
      *             This method will be added to the BlockServiceInterface with SonataBlockBundle 4.0
      */
     public function setDefaultSettings(OptionsResolverInterface $resolver);
 
-    /**
-     * @param BlockInterface $block
-     */
     public function load(BlockInterface $block);
 
     /**
-     * @param $media
+     * @deprecated since sonata-project/block-bundle 3.13.0, to be removed in 4.0
+     *
+     * @param string $media
      *
      * @return array
      */
     public function getJavascripts($media);
 
     /**
-     * @param $media
+     * @deprecated since sonata-project/block-bundle 3.13.0, to be removed in 4.0
+     *
+     * @param string $media
      *
      * @return array
      */
     public function getStylesheets($media);
 
     /**
-     * @param BlockInterface $block
-     *
      * @return array
      */
     public function getCacheKeys(BlockInterface $block);

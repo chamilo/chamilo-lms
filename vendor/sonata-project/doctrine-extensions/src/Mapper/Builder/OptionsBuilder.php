@@ -49,7 +49,7 @@ final class OptionsBuilder
     /**
      * NEXT_MAJOR: Remove this method.
      *
-     * @deprecated since sonata-project/doctrine-extensions 1.x, to be removed in 2.0.
+     * @deprecated since sonata-project/doctrine-extensions 1.6, to be removed in 2.0.
      */
     public static function create(): self
     {

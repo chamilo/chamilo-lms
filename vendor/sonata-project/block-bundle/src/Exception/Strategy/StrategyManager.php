@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -20,6 +22,8 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * The strategy manager handles exceptions thrown by a block. It uses an exception filter to identify which exceptions
  * it should handle or ignore. It then uses an exception renderer to "somehow" display the exception.
+ *
+ * @final since sonata-project/block-bundle 3.0
  *
  * @author Olivier Paradis <paradis.olivier@gmail.com>
  */
@@ -85,7 +89,7 @@ class StrategyManager implements StrategyManagerInterface
      */
     public function setDefaultFilter($name)
     {
-        if (!array_key_exists($name, $this->filters)) {
+        if (!\array_key_exists($name, $this->filters)) {
             throw new \InvalidArgumentException(sprintf('Cannot set default exception filter "%s". It does not exist.', $name));
         }
 
@@ -101,16 +105,13 @@ class StrategyManager implements StrategyManagerInterface
      */
     public function setDefaultRenderer($name)
     {
-        if (!array_key_exists($name, $this->renderers)) {
+        if (!\array_key_exists($name, $this->renderers)) {
             throw new \InvalidArgumentException(sprintf('Cannot set default exception renderer "%s". It does not exist.', $name));
         }
 
         $this->defaultRenderer = $name;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function handleException(\Exception $exception, BlockInterface $block, Response $response = null)
     {
         $response = $response ?: new Response();
@@ -128,8 +129,6 @@ class StrategyManager implements StrategyManagerInterface
 
     /**
      * Returns the exception renderer for given block.
-     *
-     * @param BlockInterface $block
      *
      * @throws \RuntimeException
      *
@@ -151,8 +150,6 @@ class StrategyManager implements StrategyManagerInterface
 
     /**
      * Returns the exception filter for given block.
-     *
-     * @param BlockInterface $block
      *
      * @throws \RuntimeException
      *

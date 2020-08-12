@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -14,5 +16,3 @@ namespace Sonata\Exporter\Source;
 interface SourceIteratorInterface extends \Iterator
 {
 }
-
-interface_exists(\Exporter\Source\SourceIteratorInterface::class);

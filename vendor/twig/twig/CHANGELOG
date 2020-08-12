@@ -1,3 +1,10 @@
+# 1.43.1 (2020-08-05)
+
+ * Fix sandbox not disabled if syntax error occurs within {% sandbox %} tag
+ * Fix a regression when not using a space before an operator
+ * Restrict callables to closures in filters
+ * Allow trailing commas in argument lists (in calls as well as definitions)
+
 # 1.43.0 (2020-07-05)
 
  * Throw exception in case non-Traversable data is passed to "filter"
@@ -5,6 +12,7 @@
  * Fix PHP 8 compatibility
  * Drop PHP 5.5 5.6, and 7.0 support
  * Fix ambiguous syntax parsing
+ * In sandbox, the `filter`, `map` and `reduce` filters require Closures in `arrow` parameter
 
 # 1.42.5 (2020-02-11)
 

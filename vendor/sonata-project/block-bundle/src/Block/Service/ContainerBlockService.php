@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -14,9 +16,10 @@ namespace Sonata\BlockBundle\Block\Service;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\BlockBundle\Block\BlockContextInterface;
 use Sonata\BlockBundle\Form\Type\ContainerTemplateType;
+use Sonata\BlockBundle\Meta\Metadata;
 use Sonata\BlockBundle\Model\BlockInterface;
-use Sonata\CoreBundle\Form\Type\ImmutableArrayType;
-use Sonata\CoreBundle\Model\Metadata;
+use Sonata\Form\Type\CollectionType;
+use Sonata\Form\Type\ImmutableArrayType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,13 +28,12 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * Render children pages.
  *
+ * @final since sonata-project/block-bundle 3.0
+ *
  * @author Thomas Rabaix <thomas.rabaix@sonata-project.org>
  */
 class ContainerBlockService extends AbstractAdminBlockService
 {
-    /**
-     * {@inheritdoc}
-     */
     public function buildEditForm(FormMapper $formMapper, BlockInterface $block)
     {
         $formMapper->add('enabled');
@@ -56,7 +58,7 @@ class ContainerBlockService extends AbstractAdminBlockService
             'translation_domain' => 'SonataBlockBundle',
         ]);
 
-        $formMapper->add('children', 'sonata_type_collection', [], [
+        $formMapper->add('children', CollectionType::class, [], [
             'admin_code' => 'sonata.page.admin.block',
             'edit' => 'inline',
             'inline' => 'table',
@@ -64,9 +66,6 @@ class ContainerBlockService extends AbstractAdminBlockService
         ]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function execute(BlockContextInterface $blockContext, Response $response = null)
     {
         return $this->renderResponse($blockContext->getTemplate(), [
@@ -76,22 +75,16 @@ class ContainerBlockService extends AbstractAdminBlockService
         ], $response);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configureSettings(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             'code' => '',
             'layout' => '{{ CONTENT }}',
             'class' => '',
-            'template' => 'SonataBlockBundle:Block:block_container.html.twig',
+            'template' => '@SonataBlock/Block/block_container.html.twig',
         ]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getBlockMetadata($code = null)
     {
         return new Metadata($this->getName(), (null !== $code ? $code : $this->getName()), false, 'SonataBlockBundle', [
@@ -115,8 +108,8 @@ class ContainerBlockService extends AbstractAdminBlockService
 
         $segments = explode($key, $layout);
         $decorator = [
-            'pre' => isset($segments[0]) ? $segments[0] : '',
-            'post' => isset($segments[1]) ? $segments[1] : '',
+            'pre' => $segments[0] ?? '',
+            'post' => $segments[1] ?? '',
         ];
 
         return $decorator;

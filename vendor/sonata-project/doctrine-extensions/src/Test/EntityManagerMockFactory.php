@@ -23,13 +23,13 @@ use PHPUnit\Framework\TestCase;
 
 @trigger_error(
     'The '.__NAMESPACE__.'\EntityManagerMockFactory class is deprecated since '.
-    'sonata-project/doctrine-extensions 1.x in favor of '.
+    'sonata-project/doctrine-extensions 1.5 in favor of '.
     __NAMESPACE__.'\EntityManagerMockFactoryTrait, and will be removed in 2.0.',
     E_USER_DEPRECATED
 );
 
 /**
- * @deprecated since sonata-project/doctrine-extensions 1.x, to be removed in 2.0.
+ * @deprecated since sonata-project/doctrine-extensions 1.5, to be removed in 2.0.
  */
 class EntityManagerMockFactory
 {

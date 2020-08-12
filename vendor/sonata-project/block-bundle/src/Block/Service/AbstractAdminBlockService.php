@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -12,93 +14,60 @@
 namespace Sonata\BlockBundle\Block\Service;
 
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\BlockBundle\Meta\Metadata;
 use Sonata\BlockBundle\Model\BlockInterface;
-use Sonata\CoreBundle\Model\Metadata;
 use Sonata\CoreBundle\Validator\ErrorElement;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
+
+@trigger_error(
+    'The '.__NAMESPACE__.'\AbstractAdminBlockService class is deprecated since sonata-project/block-bundle 3.16 '.
+    'and will be removed with the 4.0 release.',
+    E_USER_DEPRECATED
+);
 
 /**
  * @author Christian Gripp <mail@core23.de>
+ *
+ * @deprecated since sonata-project/block-bundle 3.16 without any replacement
  */
 abstract class AbstractAdminBlockService extends AbstractBlockService implements AdminBlockServiceInterface
 {
-    /**
-     * @param string          $name
-     * @param EngineInterface $templating
-     */
-    public function __construct($name, EngineInterface $templating)
-    {
-        parent::__construct($name, $templating);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function buildCreateForm(FormMapper $formMapper, BlockInterface $block)
     {
         $this->buildEditForm($formMapper, $block);
     }
 
-    /**
-     * @param BlockInterface $block
-     */
     public function prePersist(BlockInterface $block)
     {
     }
 
-    /**
-     * @param BlockInterface $block
-     */
     public function postPersist(BlockInterface $block)
     {
     }
 
-    /**
-     * @param BlockInterface $block
-     */
     public function preUpdate(BlockInterface $block)
     {
     }
 
-    /**
-     * @param BlockInterface $block
-     */
     public function postUpdate(BlockInterface $block)
     {
     }
 
-    /**
-     * @param BlockInterface $block
-     */
     public function preRemove(BlockInterface $block)
     {
     }
 
-    /**
-     * @param BlockInterface $block
-     */
     public function postRemove(BlockInterface $block)
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function buildEditForm(FormMapper $form, BlockInterface $block)
     {
     }
 
-    /**
-     * @param ErrorElement   $errorElement
-     * @param BlockInterface $block
-     */
     public function validateBlock(ErrorElement $errorElement, BlockInterface $block)
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getBlockMetadata($code = null)
     {
         return new Metadata($this->getName(), (null !== $code ? $code : $this->getName()), false, 'SonataBlockBundle', ['class' => 'fa fa-file']);

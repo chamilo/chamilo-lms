@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -13,6 +15,9 @@ namespace Sonata\BlockBundle\Block;
 
 use Sonata\BlockBundle\Exception\BlockNotFoundException;
 
+/**
+ * @final since sonata-project/block-bundle 3.0
+ */
 class BlockLoaderChain implements BlockLoaderInterface
 {
     /**
@@ -46,9 +51,6 @@ class BlockLoaderChain implements BlockLoaderInterface
         return false;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function load($block)
     {
         foreach ($this->loaders as $loader) {
@@ -60,9 +62,6 @@ class BlockLoaderChain implements BlockLoaderInterface
         throw new BlockNotFoundException();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function support($name)
     {
         return true;

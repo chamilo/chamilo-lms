@@ -11,11 +11,11 @@
 
 namespace Symfony\Component\Templating;
 
-use Symfony\Component\Templating\Storage\Storage;
-use Symfony\Component\Templating\Storage\FileStorage;
-use Symfony\Component\Templating\Storage\StringStorage;
 use Symfony\Component\Templating\Helper\HelperInterface;
 use Symfony\Component\Templating\Loader\LoaderInterface;
+use Symfony\Component\Templating\Storage\FileStorage;
+use Symfony\Component\Templating\Storage\Storage;
+use Symfony\Component\Templating\Storage\StringStorage;
 
 /**
  * PhpEngine is an engine able to render PHP templates.
@@ -43,8 +43,6 @@ class PhpEngine implements EngineInterface, \ArrayAccess
     private $evalParameters;
 
     /**
-     * Constructor.
-     *
      * @param TemplateNameParserInterface $parser  A TemplateNameParserInterface instance
      * @param LoaderInterface             $loader  A loader instance
      * @param HelperInterface[]           $helpers An array of helper instances
@@ -142,6 +140,7 @@ class PhpEngine implements EngineInterface, \ArrayAccess
             throw new \InvalidArgumentException('Invalid parameter (view)');
         }
 
+        // the view variable is exposed to the require file below
         $view = $this;
         if ($this->evalTemplate instanceof FileStorage) {
             extract($this->evalParameters, EXTR_SKIP);
@@ -225,7 +224,7 @@ class PhpEngine implements EngineInterface, \ArrayAccess
     public function addHelpers(array $helpers)
     {
         foreach ($helpers as $alias => $helper) {
-            $this->set($helper, is_int($alias) ? null : $alias);
+            $this->set($helper, \is_int($alias) ? null : $alias);
         }
     }
 
@@ -314,13 +313,13 @@ class PhpEngine implements EngineInterface, \ArrayAccess
         // the performance when the same value is escaped multiple times (e.g. loops)
         if (is_scalar($value)) {
             if (!isset(self::$escaperCache[$context][$value])) {
-                self::$escaperCache[$context][$value] = call_user_func($this->getEscaper($context), $value);
+                self::$escaperCache[$context][$value] = \call_user_func($this->getEscaper($context), $value);
             }
 
             return self::$escaperCache[$context][$value];
         }
 
-        return call_user_func($this->getEscaper($context), $value);
+        return \call_user_func($this->getEscaper($context), $value);
     }
 
     /**
@@ -356,7 +355,7 @@ class PhpEngine implements EngineInterface, \ArrayAccess
      * @param string   $context The escaper context (html, js, ...)
      * @param callable $escaper A PHP callable
      */
-    public function setEscaper($context, callable $escaper)
+    public function setEscaper($context, $escaper)
     {
         $this->escapers[$context] = $escaper;
         self::$escaperCache[$context] = array();
@@ -367,7 +366,7 @@ class PhpEngine implements EngineInterface, \ArrayAccess
      *
      * @param string $context The context name
      *
-     * @return callable $escaper A PHP callable
+     * @return callable A PHP callable
      *
      * @throws \InvalidArgumentException
      */
@@ -418,21 +417,26 @@ class PhpEngine implements EngineInterface, \ArrayAccess
      */
     protected function initializeEscapers()
     {
-        $flags = ENT_QUOTES | ENT_SUBSTITUTE;
+        $that = $this;
+        if (\PHP_VERSION_ID >= 50400) {
+            $flags = ENT_QUOTES | ENT_SUBSTITUTE;
+        } else {
+            $flags = ENT_QUOTES;
+        }
 
         $this->escapers = array(
             'html' =>
                 /**
                  * Runs the PHP function htmlspecialchars on the value passed.
                  *
-                 * @param string $value the value to escape
+                 * @param string $value The value to escape
                  *
                  * @return string the escaped value
                  */
-                function ($value) use ($flags) {
+                function ($value) use ($that, $flags) {
                     // Numbers and Boolean values get turned into strings which can cause problems
                     // with type comparisons (e.g. === or is_int() etc).
-                    return is_string($value) ? htmlspecialchars($value, $flags, $this->getCharset(), false) : $value;
+                    return \is_string($value) ? htmlspecialchars($value, $flags, $that->getCharset(), false) : $value;
                 },
 
             'js' =>
@@ -440,13 +444,13 @@ class PhpEngine implements EngineInterface, \ArrayAccess
                  * A function that escape all non-alphanumeric characters
                  * into their \xHH or \uHHHH representations.
                  *
-                 * @param string $value the value to escape
+                 * @param string $value The value to escape
                  *
                  * @return string the escaped value
                  */
-                function ($value) {
-                    if ('UTF-8' != $this->getCharset()) {
-                        $value = iconv($this->getCharset(), 'UTF-8', $value);
+                function ($value) use ($that) {
+                    if ('UTF-8' != $that->getCharset()) {
+                        $value = iconv($that->getCharset(), 'UTF-8', $value);
                     }
 
                     $callback = function ($matches) {
@@ -467,8 +471,8 @@ class PhpEngine implements EngineInterface, \ArrayAccess
                         throw new \InvalidArgumentException('The string to escape is not a valid UTF-8 string.');
                     }
 
-                    if ('UTF-8' != $this->getCharset()) {
-                        $value = iconv('UTF-8', $this->getCharset(), $value);
+                    if ('UTF-8' != $that->getCharset()) {
+                        $value = iconv('UTF-8', $that->getCharset(), $value);
                     }
 
                     return $value;
@@ -476,6 +480,24 @@ class PhpEngine implements EngineInterface, \ArrayAccess
         );
 
         self::$escaperCache = array();
+    }
+
+    /**
+     * Convert a string from one encoding to another.
+     *
+     * @param string $string The string to convert
+     * @param string $to     The input encoding
+     * @param string $from   The output encoding
+     *
+     * @return string The string with the new encoding
+     *
+     * @deprecated since 2.8, to be removed in 3.0. Use iconv() instead.
+     */
+    public function convertEncoding($string, $to, $from)
+    {
+        @trigger_error('The '.__METHOD__.' method is deprecated since Symfony 2.8 and will be removed in 3.0. Use iconv() instead.', E_USER_DEPRECATED);
+
+        return iconv($from, $to, $string);
     }
 
     /**

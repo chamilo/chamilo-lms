@@ -22,6 +22,74 @@
                 <source>sonata.block.template</source>
                 <target>Template</target>
             </trans-unit>
+            <trans-unit id="form.label_template">
+                <source>form.label_template</source>
+                <target>Template</target>
+            </trans-unit>
+            <trans-unit id="form.label_content">
+                <source>form.label_content</source>
+                <target>Contenuto</target>
+            </trans-unit>
+            <trans-unit id="form.label_url">
+                <source>form.label_url</source>
+                <target>URL</target>
+            </trans-unit>
+            <trans-unit id="form.label_title">
+                <source>form.label_title</source>
+                <target>Titolo</target>
+            </trans-unit>
+            <trans-unit id="form.label_code">
+                <source>form.label_code</source>
+                <target>Codice</target>
+            </trans-unit>
+            <trans-unit id="form.label_layout">
+                <source>form.label_layout</source>
+                <target>Layout</target>
+            </trans-unit>
+            <trans-unit id="form.label_class">
+                <source>form.label_class</source>
+                <target>Classe CSS</target>
+            </trans-unit>
+            <trans-unit id="form.label_cache_policy">
+                <source>form.label_cache_policy</source>
+                <target>Politica cache</target>
+            </trans-unit>
+            <trans-unit id="form.label_safe_labels">
+                <source>form.label_safe_labels</source>
+                <target>Label sicure</target>
+            </trans-unit>
+            <trans-unit id="form.label_current_class">
+                <source>form.label_current_class</source>
+                <target>Classe CSS corrente</target>
+            </trans-unit>
+            <trans-unit id="form.label_first_class">
+                <source>form.label_first_class</source>
+                <target>Classe CSS primo el.</target>
+            </trans-unit>
+            <trans-unit id="form.label_last_class">
+                <source>form.label_last_class</source>
+                <target>Classe CSS ultimo el.</target>
+            </trans-unit>
+            <trans-unit id="form.label_menu_class">
+                <source>form.label_menu_class</source>
+                <target>Classe CSS menu</target>
+            </trans-unit>
+            <trans-unit id="form.label_children_class">
+                <source>form.label_children_class</source>
+                <target>Classe CSS figli</target>
+            </trans-unit>
+            <trans-unit id="form.label_menu_template">
+                <source>form.label_menu_template</source>
+                <target>Template menu</target>
+            </trans-unit>
+            <trans-unit id="form.label_translation_domain">
+                <source>form.label_translation_domain</source>
+                <target>Dominio traduzioni</target>
+            </trans-unit>
+            <trans-unit id="form.label_icon">
+                <source>form.label_icon</source>
+                <target>Icona</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

@@ -26,7 +26,7 @@ use Cocur\Slugify\RuleProvider\RuleProviderInterface;
  */
 class Slugify implements SlugifyInterface
 {
-    const LOWERCASE_NUMBERS_DASHES = '/([^A-Za-z0-9]|-)+/';
+    const LOWERCASE_NUMBERS_DASHES = '/[^A-Za-z0-9]+/';
 
     /**
      * @var array<string,string>
@@ -45,11 +45,15 @@ class Slugify implements SlugifyInterface
         'regexp'    => self::LOWERCASE_NUMBERS_DASHES,
         'separator' => '-',
         'lowercase' => true,
+        'lowercase_after_regexp' => false,
+        'trim' => true,
+        'strip_tags' => false,
         'rulesets'  => [
             'default',
             // Languages are preferred if they appear later, list is ordered by number of
             // websites in that language
             // https://en.wikipedia.org/wiki/Languages_used_on_the_Internet#Content_languages_for_websites
+            'armenian',
             'azerbaijani',
             'burmese',
             'hindi',
@@ -110,16 +114,26 @@ class Slugify implements SlugifyInterface
             $rules = $this->rules;
         }
 
+        $string = ($options['strip_tags'])
+            ? strip_tags($string)
+            : $string;
+
         $string = strtr($string, $rules);
         unset($rules);
 
-        if ($options['lowercase']) {
+        if ($options['lowercase'] && !$options['lowercase_after_regexp']) {
             $string = mb_strtolower($string);
         }
 
         $string = preg_replace($options['regexp'], $options['separator'], $string);
 
-        return trim($string, $options['separator']);
+        if ($options['lowercase'] && $options['lowercase_after_regexp']) {
+            $string = mb_strtolower($string);
+        }
+
+        return ($options['trim'])
+            ? trim($string, $options['separator'])
+            : $string;
     }
 
     /**

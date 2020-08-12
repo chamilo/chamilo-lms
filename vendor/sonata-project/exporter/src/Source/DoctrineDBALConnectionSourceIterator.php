@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -15,89 +17,67 @@ use Doctrine\DBAL\Driver\Connection;
 use Doctrine\DBAL\Driver\Statement;
 use Sonata\Exporter\Exception\InvalidMethodCallException;
 
-class DoctrineDBALConnectionSourceIterator implements SourceIteratorInterface
+final class DoctrineDBALConnectionSourceIterator implements SourceIteratorInterface
 {
     /**
      * @var Connection
      */
-    protected $connection;
+    private $connection;
 
     /**
      * @var string
      */
-    protected $query;
+    private $query;
 
     /**
      * @var array
      */
-    protected $parameters;
+    private $parameters;
 
     /**
      * @var mixed
      */
-    protected $current;
+    private $current;
 
     /**
      * @var int
      */
-    protected $position;
+    private $position = 0;
 
     /**
      * @var Statement
      */
-    protected $statement;
+    private $statement;
 
-    /**
-     * @param Connection $connection
-     * @param            $query
-     * @param array      $parameters
-     */
-    public function __construct(Connection $connection, $query, array $parameters = [])
+    public function __construct(Connection $connection, string $query, array $parameters = [])
     {
         $this->connection = $connection;
         $this->query = $query;
         $this->parameters = $parameters;
-
-        $this->position = 0;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function current()
     {
         return $this->current;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function next()
+    public function next(): void
     {
         $this->current = $this->statement->fetch(\PDO::FETCH_ASSOC);
         ++$this->position;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function key()
     {
         return $this->position;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function valid()
+    public function valid(): bool
     {
         return \is_array($this->current);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function rewind()
+    public function rewind(): void
     {
         if ($this->statement) {
             throw new InvalidMethodCallException('Cannot rewind a PDOStatement');
@@ -109,5 +89,3 @@ class DoctrineDBALConnectionSourceIterator implements SourceIteratorInterface
         $this->next();
     }
 }
-
-class_exists(\Exporter\Source\DoctrineDBALConnectionSourceIterator::class);

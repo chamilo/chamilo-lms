@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -11,16 +13,19 @@
 
 namespace Sonata\Exporter\Writer;
 
+use Sonata\Exporter\Exception\SonataExporterException;
+
 interface WriterInterface
 {
+    /**
+     * @throws SonataExporterException
+     */
     public function open();
 
     /**
-     * @param array $data
+     * @throws SonataExporterException
      */
     public function write(array $data);
 
     public function close();
 }
-
-interface_exists(\Exporter\Writer\WriterInterface::class);

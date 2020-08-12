@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -16,34 +18,26 @@ namespace Sonata\Exporter\Source;
  *
  * @author Vincent Touzet <vincent.touzet@gmail.com>
  */
-class XmlSourceIterator extends AbstractXmlSourceIterator
+final class XmlSourceIterator extends AbstractXmlSourceIterator
 {
     /**
      * @var string
      */
-    protected $mainTag;
+    private $mainTag;
 
     /**
      * @var string
      */
-    protected $dataTag;
+    private $dataTag;
 
-    /**
-     * @param string $filename
-     * @param string $mainTag
-     * @param string $dataTag
-     */
-    public function __construct($filename, $mainTag = 'datas', $dataTag = 'data')
+    public function __construct(string $filename, string $mainTag = 'datas', string $dataTag = 'data')
     {
         parent::__construct($filename, false);
         $this->mainTag = $mainTag;
         $this->dataTag = $dataTag;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function tagStart($parser, $name, $attributes = [])
+    public function tagStart($parser, string $name, array $attributes = []): void
     {
         switch ($name) {
             case $this->mainTag:
@@ -63,10 +57,7 @@ class XmlSourceIterator extends AbstractXmlSourceIterator
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function tagEnd($parser, $name)
+    public function tagEnd($parser, string $name): void
     {
         switch ($name) {
             case $this->mainTag:
@@ -84,21 +75,17 @@ class XmlSourceIterator extends AbstractXmlSourceIterator
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function tagContent($parser, $data)
+    public function tagContent($parser, string $data): void
     {
-        if (isset($this->bufferedRow['i_'.$this->currentRowIndex], $this->bufferedRow['i_'.$this->currentRowIndex][$this->currentColumnIndex])
-        ) {
+        if (isset(
+            $this->bufferedRow['i_'.$this->currentRowIndex],
+            $this->bufferedRow['i_'.$this->currentRowIndex][$this->currentColumnIndex]
+        )) {
             $this->bufferedRow['i_'.$this->currentRowIndex][$this->currentColumnIndex] .= $data;
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function prepareCurrentRow()
+    protected function prepareCurrentRow(): void
     {
         $this->currentRow = array_shift($this->bufferedRow);
         if (\is_array($this->currentRow)) {
@@ -110,5 +97,3 @@ class XmlSourceIterator extends AbstractXmlSourceIterator
         }
     }
 }
-
-class_exists(\Exporter\Source\XmlSourceIterator::class);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -29,53 +31,33 @@ class IteratorSourceIterator implements SourceIteratorInterface
         $this->iterator = $iterator;
     }
 
-    /**
-     * @return \Iterator
-     */
-    public function getIterator()
+    final public function getIterator(): \Iterator
     {
         return $this->iterator;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function current()
     {
         return $this->iterator->current();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function next()
+    final public function next(): void
     {
         $this->iterator->next();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function key()
+    final public function key()
     {
         return $this->iterator->key();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function valid()
+    final public function valid(): bool
     {
         return $this->iterator->valid();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function rewind()
+    final public function rewind(): void
     {
         $this->iterator->rewind();
     }
 }
-
-class_exists(\Exporter\Source\IteratorSourceIterator::class);

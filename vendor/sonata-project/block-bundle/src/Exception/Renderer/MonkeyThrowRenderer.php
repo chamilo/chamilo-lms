@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -17,13 +19,12 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * This renderer re-throws the exception and lets the framework handle the exception.
  *
+ * @final since sonata-project/block-bundle 3.0
+ *
  * @author Olivier Paradis <paradis.olivier@gmail.com>
  */
 class MonkeyThrowRenderer implements RendererInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function render(\Exception $banana, BlockInterface $block, Response $response = null)
     {
         throw $banana;

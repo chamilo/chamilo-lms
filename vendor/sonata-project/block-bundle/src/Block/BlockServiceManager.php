@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -11,11 +13,14 @@
 
 namespace Sonata\BlockBundle\Block;
 
-use Psr\Log\LoggerInterface;
+use Sonata\BlockBundle\Block\Service\EditableBlockService;
 use Sonata\BlockBundle\Model\BlockInterface;
 use Sonata\CoreBundle\Validator\ErrorElement;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+/**
+ * @final since sonata-project/block-bundle 3.0
+ */
 class BlockServiceManager implements BlockServiceManagerInterface
 {
     /**
@@ -38,21 +43,13 @@ class BlockServiceManager implements BlockServiceManagerInterface
      */
     protected $contexts;
 
-    /**
-     * @param ContainerInterface $container
-     * @param $debug
-     * @param null|LoggerInterface $logger
-     */
-    public function __construct(ContainerInterface $container, $debug, LoggerInterface $logger = null)
+    public function __construct(ContainerInterface $container)
     {
         $this->services = [];
         $this->contexts = [];
         $this->container = $container;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function get(BlockInterface $block)
     {
         $this->load($block->getType());
@@ -60,31 +57,22 @@ class BlockServiceManager implements BlockServiceManagerInterface
         return $this->services[$block->getType()];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getService($id)
     {
         return $this->load($id);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function has($id)
     {
         return isset($this->services[$id]) ? true : false;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function add($name, $service, $contexts = [])
     {
         $this->services[$name] = $service;
 
         foreach ($contexts as $context) {
-            if (!array_key_exists($context, $this->contexts)) {
+            if (!\array_key_exists($context, $this->contexts)) {
                 $this->contexts[$context] = [];
             }
 
@@ -92,9 +80,6 @@ class BlockServiceManager implements BlockServiceManagerInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setServices(array $blockServices)
     {
         foreach ($blockServices as $name => $service) {
@@ -102,13 +87,10 @@ class BlockServiceManager implements BlockServiceManagerInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getServices()
     {
         foreach ($this->services as $name => $id) {
-            if (is_string($id)) {
+            if (\is_string($id)) {
                 $this->load($id);
             }
         }
@@ -116,12 +98,9 @@ class BlockServiceManager implements BlockServiceManagerInterface
         return $this->sortServices($this->services);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getServicesByContext($context, $includeContainers = true)
     {
-        if (!array_key_exists($context, $this->contexts)) {
+        if (!\array_key_exists($context, $this->contexts)) {
             return [];
         }
 
@@ -130,7 +109,7 @@ class BlockServiceManager implements BlockServiceManagerInterface
         $containers = $this->container->getParameter('sonata.block.container.types');
 
         foreach ($this->contexts[$context] as $name) {
-            if (!$includeContainers && in_array($name, $containers)) {
+            if (!$includeContainers && \in_array($name, $containers, true)) {
                 continue;
             }
 
@@ -140,9 +119,6 @@ class BlockServiceManager implements BlockServiceManagerInterface
         return $this->sortServices($services);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getLoadedServices()
     {
         $services = [];
@@ -176,7 +152,16 @@ class BlockServiceManager implements BlockServiceManagerInterface
         // As block can be nested, we only need to validate the main block, no the children
         try {
             $this->inValidate = true;
-            $this->get($block)->validateBlock($errorElement, $block);
+
+            $blockService = $this->get($block);
+
+            if ($blockService instanceof EditableBlockService) {
+                $blockService->validate($errorElement, $block);
+            } else {
+                // NEXT_MAJOR: Remove this case
+                $this->get($block)->validateBlock($errorElement, $block);
+            }
+
             $this->inValidate = false;
         } catch (\Exception $e) {
             $this->inValidate = false;
@@ -184,7 +169,7 @@ class BlockServiceManager implements BlockServiceManagerInterface
     }
 
     /**
-     * @param $type
+     * @param string $type
      *
      * @throws \RuntimeException
      *
@@ -216,8 +201,8 @@ class BlockServiceManager implements BlockServiceManagerInterface
      */
     private function sortServices($services)
     {
-        uasort($services, function ($a, $b) {
-            if ($a->getName() == $b->getName()) {
+        uasort($services, static function ($a, $b) {
+            if ($a->getName() === $b->getName()) {
                 return 0;
             }
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -11,38 +13,33 @@
 
 namespace Sonata\Exporter\Test;
 
+use PHPUnit\Framework\TestCase;
+use Sonata\Exporter\Writer\TypedWriterInterface;
+
 /**
  * @author Grégoire Paris <postmaster@greg0ire.fr>
  */
-abstract class AbstractTypedWriterTestCase extends \PHPUnit\Framework\TestCase
+abstract class AbstractTypedWriterTestCase extends TestCase
 {
     /**
-     * @var WriterInterface
+     * @var TypedWriterInterface
      */
     private $writer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->writer = $this->getWriter();
     }
 
-    public function testFormatIsString()
+    final public function testFormatIsString(): void
     {
-        $this->assertInternalType('string', $this->writer->getFormat());
+        $this->assertIsString($this->writer->getFormat());
     }
 
-    public function testDefaultMimeTypeIsString()
+    final public function testDefaultMimeTypeIsString(): void
     {
-        $this->assertInternalType('string', $this->writer->getDefaultMimeType());
+        $this->assertIsString($this->writer->getDefaultMimeType());
     }
 
-    /**
-     * Should return a very simple instance of the writer (no need for complex
-     * configuration).
-     *
-     * @return WriterInterface
-     */
-    abstract protected function getWriter();
+    abstract protected function getWriter(): TypedWriterInterface;
 }
-
-class_exists(\Exporter\Test\AbstractTypedWriterTestCase::class);

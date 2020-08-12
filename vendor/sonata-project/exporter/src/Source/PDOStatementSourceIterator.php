@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -13,75 +15,55 @@ namespace Sonata\Exporter\Source;
 
 use Sonata\Exporter\Exception\InvalidMethodCallException;
 
-class PDOStatementSourceIterator implements SourceIteratorInterface
+final class PDOStatementSourceIterator implements SourceIteratorInterface
 {
     /**
      * @var \PDOStatement
      */
-    protected $statement;
+    private $statement;
 
     /**
      * @var mixed
      */
-    protected $current;
+    private $current;
 
     /**
      * @var int
      */
-    protected $position;
+    private $position = 0;
 
     /**
      * @var bool
      */
-    protected $rewinded;
+    private $rewinded = false;
 
-    /**
-     * @param \PDOStatement $statement
-     */
     public function __construct(\PDOStatement $statement)
     {
         $this->statement = $statement;
-        $this->position = 0;
-        $this->rewinded = false;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function current()
     {
         return $this->current;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function next()
+    public function next(): void
     {
         $this->current = $this->statement->fetch(\PDO::FETCH_ASSOC);
         ++$this->position;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function key()
     {
         return $this->position;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function valid()
+    public function valid(): bool
     {
         return \is_array($this->current);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function rewind()
+    public function rewind(): void
     {
         if ($this->rewinded) {
             throw new InvalidMethodCallException('Cannot rewind a PDOStatement');
@@ -91,5 +73,3 @@ class PDOStatementSourceIterator implements SourceIteratorInterface
         $this->rewinded = true;
     }
 }
-
-class_exists(\Exporter\Source\PDOStatementSourceIterator::class);

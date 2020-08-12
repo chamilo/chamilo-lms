@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -11,11 +13,21 @@
 
 namespace Sonata\BlockBundle\Test;
 
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
+use Sonata\BlockBundle\Templating\EngineInterface;
 use Symfony\Component\HttpFoundation\Response;
+
+@trigger_error(
+    'The '.__NAMESPACE__.'\FakeTemplating class is deprecated since 3.17 '.
+    'and will be removed in version 4.0.',
+    E_USER_DEPRECATED
+);
 
 /**
  * Mocking class for template usage.
+ *
+ * NEXT_MAJOR: Remove this class.
+ *
+ * @deprecated since sonata-project/block-bundle 3.17, will be removed in version 4.0.
  *
  * @author Thomas Rabaix <thomas.rabaix@sonata-project.org>
  */
@@ -32,7 +44,7 @@ class FakeTemplating implements EngineInterface
     public $parameters;
 
     /**
-     * @var Response
+     * @var Response|null
      */
     public $response;
 
@@ -41,18 +53,12 @@ class FakeTemplating implements EngineInterface
      */
     public $name;
 
-    /**
-     * {@inheritdoc}
-     */
     public function render($name, array $parameters = [])
     {
         $this->name = $name;
         $this->parameters = $parameters;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function renderResponse($view, array $parameters = [], Response $response = null)
     {
         $this->view = $view;
@@ -66,17 +72,11 @@ class FakeTemplating implements EngineInterface
         return new Response();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supports($name)
     {
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function exists($name)
     {
         return true;

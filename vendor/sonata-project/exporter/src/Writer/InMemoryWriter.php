@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -11,44 +13,30 @@
 
 namespace Sonata\Exporter\Writer;
 
-class InMemoryWriter implements WriterInterface
+final class InMemoryWriter implements WriterInterface
 {
     /**
      * @var array
      */
-    protected $elements;
+    private $elements;
 
-    /**
-     * {@inheritdoc}
-     */
-    public function open()
+    public function open(): void
     {
         $this->elements = [];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function close()
     {
         return $this->elements;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function write(array $data)
+    public function write(array $data): void
     {
         $this->elements[] = $data;
     }
 
-    /**
-     * @return array
-     */
-    public function getElements()
+    public function getElements(): array
     {
         return $this->elements;
     }
 }
-
-class_exists(\Exporter\Writer\InMemoryWriter::class);

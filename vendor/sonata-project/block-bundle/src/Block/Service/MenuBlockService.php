@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -17,19 +19,21 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\BlockBundle\Block\BlockContextInterface;
 use Sonata\BlockBundle\Menu\MenuRegistry;
 use Sonata\BlockBundle\Menu\MenuRegistryInterface;
+use Sonata\BlockBundle\Meta\Metadata;
 use Sonata\BlockBundle\Model\BlockInterface;
-use Sonata\CoreBundle\Form\Type\ImmutableArrayType;
-use Sonata\CoreBundle\Model\Metadata;
 use Sonata\CoreBundle\Validator\ErrorElement;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
+use Sonata\Form\Type\ImmutableArrayType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Templating\EngineInterface;
 
 /**
+ * @final since sonata-project/block-bundle 3.0
+ *
  * @author Hugo Briand <briand@ekino.com>
  */
 class MenuBlockService extends AbstractAdminBlockService
@@ -44,7 +48,7 @@ class MenuBlockService extends AbstractAdminBlockService
      *
      * @var array
      *
-     * @deprecated since 3.3, to be removed in 4.0
+     * @deprecated since sonata-project/block-bundle 3.3, to be removed in 4.0
      */
     protected $menus;
 
@@ -55,8 +59,6 @@ class MenuBlockService extends AbstractAdminBlockService
 
     /**
      * @param string                     $name
-     * @param EngineInterface            $templating
-     * @param MenuProviderInterface      $menuProvider
      * @param MenuRegistryInterface|null $menuRegistry
      */
     public function __construct($name, EngineInterface $templating, MenuProviderInterface $menuProvider, $menuRegistry = null)
@@ -69,7 +71,7 @@ class MenuBlockService extends AbstractAdminBlockService
             $this->menuRegistry = $menuRegistry;
         } elseif (null === $menuRegistry) {
             $this->menuRegistry = new MenuRegistry();
-        } elseif (is_array($menuRegistry)) { //NEXT_MAJOR: Remove this case
+        } elseif (\is_array($menuRegistry)) { //NEXT_MAJOR: Remove this case
             @trigger_error(
                 'Initializing '.__CLASS__.' with an array parameter is deprecated since 3.3 and will be removed in 4.0.',
                 E_USER_DEPRECATED
@@ -86,9 +88,6 @@ class MenuBlockService extends AbstractAdminBlockService
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function execute(BlockContextInterface $blockContext, Response $response = null)
     {
         $responseSettings = [
@@ -105,9 +104,6 @@ class MenuBlockService extends AbstractAdminBlockService
         return $this->renderResponse($blockContext->getTemplate(), $responseSettings, $response);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function buildEditForm(FormMapper $form, BlockInterface $block)
     {
         $form->add('settings', ImmutableArrayType::class, [
@@ -116,9 +112,6 @@ class MenuBlockService extends AbstractAdminBlockService
         ]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function validateBlock(ErrorElement $errorElement, BlockInterface $block)
     {
         if (($name = $block->getSetting('menu_name')) && '' !== $name && !$this->menuProvider->has($name)) {
@@ -129,15 +122,12 @@ class MenuBlockService extends AbstractAdminBlockService
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configureSettings(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             'title' => $this->getName(),
             'cache_policy' => 'public',
-            'template' => 'SonataBlockBundle:Block:block_core_menu.html.twig',
+            'template' => '@SonataBlock/Block/block_core_menu.html.twig',
             'menu_name' => '',
             'safe_labels' => false,
             'current_class' => 'active',
@@ -150,9 +140,6 @@ class MenuBlockService extends AbstractAdminBlockService
         ]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getBlockMetadata($code = null)
     {
         return new Metadata($this->getName(), (null !== $code ? $code : $this->getName()), false, 'SonataBlockBundle', [
@@ -222,8 +209,6 @@ class MenuBlockService extends AbstractAdminBlockService
     /**
      * Gets the menu to render.
      *
-     * @param BlockContextInterface $blockContext
-     *
      * @return ItemInterface|string
      */
     protected function getMenu(BlockContextInterface $blockContext)
@@ -235,8 +220,6 @@ class MenuBlockService extends AbstractAdminBlockService
 
     /**
      * Replaces setting keys with knp menu item options keys.
-     *
-     * @param array $settings
      *
      * @return array
      */
@@ -253,7 +236,7 @@ class MenuBlockService extends AbstractAdminBlockService
         $options = [];
 
         foreach ($settings as $key => $value) {
-            if (array_key_exists($key, $mapping) && null !== $value) {
+            if (\array_key_exists($key, $mapping) && null !== $value) {
                 $options[$mapping[$key]] = $value;
             }
         }

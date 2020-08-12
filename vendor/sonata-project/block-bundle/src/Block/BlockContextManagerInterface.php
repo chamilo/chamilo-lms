@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -12,39 +14,37 @@
 namespace Sonata\BlockBundle\Block;
 
 use Sonata\BlockBundle\Exception\BlockOptionsException;
+use Sonata\BlockBundle\Model\BlockInterface;
 
 /**
  * Interface BlockContextManagerInterface.
  */
 interface BlockContextManagerInterface
 {
-    const CACHE_KEY = 'context';
+    public const CACHE_KEY = 'context';
 
     /**
      * Add settings for a block service.
      *
-     * @param string $type     block service
-     * @param array  $settings
-     * @param bool   $replace  replace existing settings
+     * @param string $type    block service
+     * @param bool   $replace replace existing settings
      */
     public function addSettingsByType($type, array $settings, $replace = false);
 
     /**
      * Add settings for a block class.
      *
-     * @param string $class    block class
-     * @param array  $settings
-     * @param bool   $replace  replace existing settings
+     * @param string $class   block class
+     * @param bool   $replace replace existing settings
      */
     public function addSettingsByClass($class, array $settings, $replace = false);
 
     /**
-     * @param mixed $meta     Data send to the loader to load a block, can be anything...
-     * @param array $settings
+     * @param BlockInterface|array $meta Data send to the loader to load a block, can be anything...
      *
      * @throws BlockOptionsException
      *
-     * @return BlockContextInterface
+     * @return BlockContextInterface|false
      */
     public function get($meta, array $settings = []);
 }

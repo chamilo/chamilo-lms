@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -16,12 +18,12 @@ namespace Sonata\Exporter\Source;
  *
  * @author Florent Denis <fdenis@ekino.com>
  */
-class IteratorCallbackSourceIterator extends IteratorSourceIterator
+final class IteratorCallbackSourceIterator extends IteratorSourceIterator
 {
     /**
      * @var \Closure
      */
-    protected $transformer;
+    private $transformer;
 
     /**
      * @param \Iterator $iterator    Iterator with string array elements
@@ -34,13 +36,8 @@ class IteratorCallbackSourceIterator extends IteratorSourceIterator
         $this->transformer = $transformer;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function current()
     {
         return \call_user_func($this->transformer, $this->iterator->current());
     }
 }
-
-class_exists(\Exporter\Source\IteratorCallbackSourceIterator::class);

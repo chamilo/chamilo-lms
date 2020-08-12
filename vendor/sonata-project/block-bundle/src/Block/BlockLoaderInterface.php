@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -12,6 +14,7 @@
 namespace Sonata\BlockBundle\Block;
 
 use Sonata\BlockBundle\Exception\BlockNotFoundException;
+use Sonata\BlockBundle\Model\BlockInterface;
 
 interface BlockLoaderInterface
 {
@@ -20,7 +23,7 @@ interface BlockLoaderInterface
      *
      * @throws BlockNotFoundException if no block with that name is found
      *
-     * @return BlockLoaderInterface
+     * @return BlockInterface
      */
     public function load($name);
 

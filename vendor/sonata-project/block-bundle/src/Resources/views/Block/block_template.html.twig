@@ -17,7 +17,7 @@ file that was distributed with this source code.
 
     <pre>
         {%- verbatim -%}
-{# file: 'MyBundle:Block:my_block_feature_1.html.twig' #}
+{# file: '@My/Block/my_block_feature_1.html.twig' #}
 {% extends sonata_block.templates.block_base %}
 
 {% block block %}
@@ -37,7 +37,7 @@ file that was distributed with this source code.
     <pre>
 {%- verbatim -%}
 {{ sonata_block_render({ 'type': 'sonata.block.service.template' }, {
-    'template': 'MyBundle:Block:my_block_feature_1.html.twig',
+    'template': '@My/Block/my_block_feature_1.html.twig',
 }) }}
 {%- endverbatim -%}
     </pre>

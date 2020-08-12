@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -11,15 +13,10 @@
 
 namespace Sonata\Exporter\Source;
 
-class ArraySourceIterator extends IteratorSourceIterator
+final class ArraySourceIterator extends IteratorSourceIterator
 {
-    /**
-     * @param array $data
-     */
     public function __construct(array $data)
     {
         parent::__construct(new \ArrayIterator($data));
     }
 }
-
-class_exists(\Exporter\Source\ArraySourceIterator::class);

@@ -11,17 +11,15 @@
 
 namespace Symfony\Component\PropertyAccess\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\PropertyAccess\PropertyPath;
 use Symfony\Component\PropertyAccess\PropertyPathBuilder;
 
 /**
  * @author Bernhard Schussek <bschussek@gmail.com>
  */
-class PropertyPathBuilderTest extends \PHPUnit_Framework_TestCase
+class PropertyPathBuilderTest extends TestCase
 {
-    /**
-     * @var string
-     */
     const PREFIX = 'old1[old2].old3[old4][old5].old6';
 
     /**

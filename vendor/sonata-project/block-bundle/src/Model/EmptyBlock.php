@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -13,6 +15,8 @@ namespace Sonata\BlockBundle\Model;
 
 /**
  * EmptyBlock model to be used to return an empty result if a block is not found or not valid.
+ *
+ * @final since sonata-project/block-bundle 3.0
  */
 class EmptyBlock extends Block
 {

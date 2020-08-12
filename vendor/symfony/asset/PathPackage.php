@@ -56,7 +56,14 @@ class PathPackage extends Package
             return $path;
         }
 
-        return $this->getBasePath().ltrim($this->getVersionStrategy()->applyVersion($path), '/');
+        $versionedPath = $this->getVersionStrategy()->applyVersion($path);
+
+        // if absolute or begins with /, we're done
+        if ($this->isAbsoluteUrl($versionedPath) || ($versionedPath && '/' === $versionedPath[0])) {
+            return $versionedPath;
+        }
+
+        return $this->getBasePath().ltrim($versionedPath, '/');
     }
 
     /**

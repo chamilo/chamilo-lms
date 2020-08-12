@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -13,16 +15,13 @@ namespace Sonata\Exporter\Source;
 
 use ArrayIterator;
 
-class ChainSourceIterator implements SourceIteratorInterface
+final class ChainSourceIterator implements SourceIteratorInterface
 {
     /**
      * @var ArrayIterator
      */
-    protected $sources;
+    private $sources;
 
-    /**
-     * @param array $sources
-     */
     public function __construct(array $sources = [])
     {
         $this->sources = new ArrayIterator();
@@ -32,42 +31,27 @@ class ChainSourceIterator implements SourceIteratorInterface
         }
     }
 
-    /**
-     * @param SourceIteratorInterface $source
-     */
-    public function addSource(SourceIteratorInterface $source)
+    public function addSource(SourceIteratorInterface $source): void
     {
         $this->sources->append($source);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function current()
     {
         return $this->sources->current()->current();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function next()
+    public function next(): void
     {
         $this->sources->current()->next();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function key()
     {
         return $this->sources->current()->key();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function valid()
+    public function valid(): bool
     {
         while (!$this->sources->current()->valid()) {
             $this->sources->next();
@@ -82,15 +66,10 @@ class ChainSourceIterator implements SourceIteratorInterface
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function rewind()
+    public function rewind(): void
     {
         if ($this->sources->current()) {
             $this->sources->current()->rewind();
         }
     }
 }
-
-class_exists(\Exporter\Source\ChainSourceIterator::class);

@@ -48,11 +48,9 @@ This is especially useful when you want to generate assets/code/artifacts that a
 the current version of a certain dependency. Doing so at runtime by checking the installed
 version of a package would be too expensive, and this package mitigates that.
 
-## ocramius/package-versions for enterprise
+## Professional Support
 
-Available as part of the Tidelift Subscription.
-
-The maintainer of ocramius/package-versions and thousands of other packages are working with Tidelift to deliver commercial support and maintenance for the open source dependencies you use to build your applications. Save time, reduce risk, and improve code health, while paying the maintainers of the exact dependencies you use. [Learn more.](https://tidelift.com/subscription/pkg/packagist-ocramius-package-versions?utm_source=packagist-ocramius-package-versions&utm_medium=referral&utm_campaign=enterprise&utm_term=repo).
+[Professionally supported `ocramius/package-versions` is available through Tidelift](https://tidelift.com/subscription/pkg/packagist-ocramius-package-versions?utm_source=packagist-ocramius-package-versions&utm_medium=referral&utm_campaign=readme).
 
 You can also contact the maintainer at ocramius@gmail.com for looking into issues related to this package
 in your private projects.

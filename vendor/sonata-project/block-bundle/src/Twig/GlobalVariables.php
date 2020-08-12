@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -13,6 +15,8 @@ namespace Sonata\BlockBundle\Twig;
 
 /**
  * GlobalVariables.
+ *
+ * @final since sonata-project/block-bundle 3.0
  *
  * @author Thomas Rabaix <thomas.rabaix@sonata-project.org>
  */

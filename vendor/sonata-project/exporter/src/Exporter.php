@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -38,15 +40,9 @@ final class Exporter
     }
 
     /**
-     * @param string                  $format
-     * @param string                  $filename
-     * @param SourceIteratorInterface $source
-     *
      * @throws \RuntimeException
-     *
-     * @return StreamedResponse
      */
-    public function getResponse($format, $filename, SourceIteratorInterface $source)
+    public function getResponse(string $format, string $filename, SourceIteratorInterface $source): StreamedResponse
     {
         if (!\array_key_exists($format, $this->writers)) {
             throw new \RuntimeException(sprintf(
@@ -57,8 +53,8 @@ final class Exporter
         }
         $writer = $this->writers[$format];
 
-        $callback = function () use ($source, $writer) {
-            $handler = \Exporter\Handler::create($source, $writer);
+        $callback = static function () use ($source, $writer): void {
+            $handler = Handler::create($source, $writer);
             $handler->export();
         };
 
@@ -76,7 +72,7 @@ final class Exporter
      *
      * @return string[] writer formats as returned by the TypedWriterInterface::getFormat() method
      */
-    public function getAvailableFormats()
+    public function getAvailableFormats(): array
     {
         return array_keys($this->writers);
     }
@@ -86,10 +82,8 @@ final class Exporter
      *
      * @param TypedWriterInterface $writer a possible writer for exporting data
      */
-    public function addWriter(TypedWriterInterface $writer)
+    public function addWriter(TypedWriterInterface $writer): void
     {
         $this->writers[$writer->getFormat()] = $writer;
     }
 }
-
-class_exists(\Exporter\Exporter::class);

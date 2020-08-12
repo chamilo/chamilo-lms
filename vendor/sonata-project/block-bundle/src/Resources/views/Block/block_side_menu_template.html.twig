@@ -11,8 +11,9 @@ file that was distributed with this source code.
 
 {% extends 'knp_menu.html.twig' %}
 
-{% block list %}
 {% import 'knp_menu.html.twig' as macros %}
+
+{% block list %}
     {% if item.hasChildren and options.depth is not same as(0) and item.displayChildren %}
         <div{{ macros.attributes(listAttributes) }}>
             {{ block('children') }}
@@ -21,7 +22,6 @@ file that was distributed with this source code.
 {% endblock %}
 
 {% block item %}
-{% import 'knp_menu.html.twig' as macros %}
     {% if item.displayed %}
         {# building the class of the item #}
         {%- set classes = item.attribute('class') is not empty ? [item.attribute('class')] : [] %}

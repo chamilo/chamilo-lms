@@ -8,6 +8,7 @@ parameters:
         - src
 
     excludes_analyse:
+        - src/Bridge/Symfony/Bundle/SonataDoctrineBundle.php
         - src/Test/EntityManagerMockFactory.php
         - tests/bootstrap.php
 

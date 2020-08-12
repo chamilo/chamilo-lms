@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -16,48 +18,48 @@ namespace Sonata\Exporter\Writer;
  *
  * @author Vincent Touzet <vincent.touzet@gmail.com>
  */
-class XmlExcelWriter implements WriterInterface
+final class XmlExcelWriter implements WriterInterface
 {
     /**
-     * @var string|null
+     * @var string
      */
-    protected $filename = null;
+    private $filename;
 
     /**
      * @var resource|null
      */
-    protected $file = null;
+    private $file;
 
     /**
      * @var bool
      */
-    protected $showHeaders;
+    private $showHeaders;
 
     /**
      * @var mixed|null
      */
-    protected $columnsType = null;
+    private $columnsType;
 
     /**
      * @var int
      */
-    protected $position = 0;
+    private $position = 0;
 
     /**
      * @var string
      */
-    protected $header = '<?xml version="1.0"?><?mso-application progid="Excel.Sheet"?><Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns:x2="http://schemas.microsoft.com/office/excel/2003/xml" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:html="http://www.w3.org/TR/REC-html40" xmlns:c="urn:schemas-microsoft-com:office:component:spreadsheet"><OfficeDocumentSettings xmlns="urn:schemas-microsoft-com:office:office"></OfficeDocumentSettings><ExcelWorkbook xmlns="urn:schemas-microsoft-com:office:excel"></ExcelWorkbook><Worksheet ss:Name="Sheet 1"><Table>';
-    protected $footer = '</Table></Worksheet></Workbook>';
+    private $header = '<?xml version="1.0"?><?mso-application progid="Excel.Sheet"?><Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns:x2="http://schemas.microsoft.com/office/excel/2003/xml" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:html="http://www.w3.org/TR/REC-html40" xmlns:c="urn:schemas-microsoft-com:office:component:spreadsheet"><OfficeDocumentSettings xmlns="urn:schemas-microsoft-com:office:office"></OfficeDocumentSettings><ExcelWorkbook xmlns="urn:schemas-microsoft-com:office:excel"></ExcelWorkbook><Worksheet ss:Name="Sheet 1"><Table>';
+    private $footer = '</Table></Worksheet></Workbook>';
 
     /**
-     * @param string $filename
-     * @param bool   $showHeaders
-     * @param mixed  $columnsType Define cells type to use
-     *                            If string: force all cells to the given type. e.g: 'Number'
-     *                            If array: force only given cells. e.g: array('ean'=>'String', 'price'=>'Number')
-     *                            If null: will guess the type. 'Number' if value is numeric, 'String' otherwise
+     * @param mixed $columnsType Define cells type to use
+     *                           If string: force all cells to the given type. e.g: 'Number'
+     *                           If array: force only given cells. e.g: array('ean'=>'String', 'price'=>'Number')
+     *                           If null: will guess the type. 'Number' if value is numeric, 'String' otherwise
+     *
+     * @throws \RuntimeException
      */
-    public function __construct($filename, $showHeaders = true, $columnsType = null)
+    public function __construct(string $filename, bool $showHeaders = true, $columnsType = null)
     {
         $this->filename = $filename;
         $this->showHeaders = $showHeaders;
@@ -68,18 +70,15 @@ class XmlExcelWriter implements WriterInterface
         }
     }
 
-    public function open()
+    public function open(): void
     {
         $this->file = fopen($this->filename, 'w');
         fwrite($this->file, $this->header);
     }
 
-    /**
-     * @param array $data
-     */
-    public function write(array $data)
+    public function write(array $data): void
     {
-        if (0 == $this->position && $this->showHeaders) {
+        if (0 === $this->position && $this->showHeaders) {
             $header = array_keys($data);
             fwrite($this->file, $this->getXmlString($header));
             ++$this->position;
@@ -89,7 +88,7 @@ class XmlExcelWriter implements WriterInterface
         ++$this->position;
     }
 
-    public function close()
+    public function close(): void
     {
         fwrite($this->file, $this->footer);
         fclose($this->file);
@@ -97,12 +96,8 @@ class XmlExcelWriter implements WriterInterface
 
     /**
      * Prepare and return XML string for MS Excel XML from array.
-     *
-     * @param array $fields
-     *
-     * @return string
      */
-    private function getXmlString(array $fields = [])
+    private function getXmlString(array $fields = []): string
     {
         $xmlData = [];
         $xmlData[] = '<Row>';
@@ -111,8 +106,8 @@ class XmlExcelWriter implements WriterInterface
 
             $value = str_replace(["\r\n", "\r", "\n"], '&#10;', $value);
             $dataType = 'String';
-            if (0 != $this->position || !$this->showHeaders) {
-                $dataType = $this->getDataType($key, $value);
+            if (0 !== $this->position || !$this->showHeaders) {
+                $dataType = $this->getDataType((string) $key, $value);
             }
             $xmlData[] = '<Cell><Data ss:Type="'.$dataType.'">'.$value.'</Data></Cell>';
         }
@@ -121,13 +116,7 @@ class XmlExcelWriter implements WriterInterface
         return implode('', $xmlData);
     }
 
-    /**
-     * @param string $key
-     * @param string $value
-     *
-     * @return string
-     */
-    private function getDataType($key, $value)
+    private function getDataType(string $key, string $value): string
     {
         $dataType = null;
         if (null !== $this->columnsType) {
@@ -151,5 +140,3 @@ class XmlExcelWriter implements WriterInterface
         return $dataType;
     }
 }
-
-class_exists(\Exporter\Writer\XmlExcelWriter::class);

@@ -9,15 +9,14 @@
  */
 namespace SebastianBergmann\CodeCoverage;
 
-/**
- * Exception that is raised when code is unintentionally covered.
- */
-final class UnintentionallyCoveredCodeException extends RuntimeException
+use RuntimeException;
+
+final class UnintentionallyCoveredCodeException extends RuntimeException implements Exception
 {
     /**
      * @var array
      */
-    private $unintentionallyCoveredUnits = [];
+    private $unintentionallyCoveredUnits;
 
     public function __construct(array $unintentionallyCoveredUnits)
     {

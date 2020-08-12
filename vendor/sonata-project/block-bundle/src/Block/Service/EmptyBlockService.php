@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -17,31 +19,23 @@ use Sonata\BlockBundle\Model\BlockInterface;
 use Sonata\CoreBundle\Validator\ErrorElement;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * @final since sonata-project/block-bundle 3.0
+ */
 class EmptyBlockService extends AbstractBlockService
 {
     // NEXT_MAJOR: Remove this method
-
-    /**
-     * {@inheritdoc}
-     */
     public function buildEditForm(FormMapper $form, BlockInterface $block)
     {
         throw new \RuntimeException('Not used, this block renders an empty result if no block document can be found');
     }
 
     // NEXT_MAJOR: Remove this method
-
-    /**
-     * {@inheritdoc}
-     */
     public function validateBlock(ErrorElement $errorElement, BlockInterface $block)
     {
         throw new \RuntimeException('Not used, this block renders an empty result if no block document can be found');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function execute(BlockContextInterface $blockContext, Response $response = null)
     {
         return new Response();

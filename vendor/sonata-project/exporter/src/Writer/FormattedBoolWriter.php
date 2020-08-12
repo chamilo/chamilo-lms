@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -16,55 +18,41 @@ namespace Sonata\Exporter\Writer;
  *
  * @author Robin Chalas <robin.chalas@gmail.com>
  */
-class FormattedBoolWriter implements WriterInterface
+final class FormattedBoolWriter implements WriterInterface
 {
     /**
      * @var WriterInterface
      */
-    protected $writer;
+    private $writer;
 
     /**
      * @var string
      */
-    protected $trueLabel;
+    private $trueLabel;
 
     /**
      * @var string
      */
-    protected $falseLabel;
+    private $falseLabel;
 
-    /**
-     * @param WriterInterface $writer
-     * @param string          $falseLabel
-     * @param string          $trueLabel
-     */
-    public function __construct(WriterInterface $writer, $trueLabel = 'yes', $falseLabel = 'no')
+    public function __construct(WriterInterface $writer, string $trueLabel = 'yes', string $falseLabel = 'no')
     {
         $this->writer = $writer;
         $this->trueLabel = $trueLabel;
         $this->falseLabel = $falseLabel;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function open()
+    public function open(): void
     {
         $this->writer->open();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function close()
+    public function close(): void
     {
         $this->writer->close();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function write(array $data)
+    public function write(array $data): void
     {
         foreach ($data as $key => $value) {
             if (\is_bool($data[$key])) {
@@ -74,5 +62,3 @@ class FormattedBoolWriter implements WriterInterface
         $this->writer->write($data);
     }
 }
-
-class_exists(\Exporter\Writer\FormattedBoolWriter::class);

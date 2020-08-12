@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -16,67 +18,65 @@ namespace Sonata\Exporter\Source;
  *
  * @author Vincent Touzet <vincent.touzet@gmail.com>
  */
-class CsvSourceIterator implements SourceIteratorInterface
+final class CsvSourceIterator implements SourceIteratorInterface
 {
     /**
      * @var string
      */
-    protected $filename = null;
+    private $filename;
 
     /**
-     * @var resource
+     * @var resource|null
      */
-    protected $file = null;
+    private $file;
 
     /**
-     * @var string|null
+     * @var string
      */
-    protected $delimiter = null;
+    private $delimiter;
 
     /**
-     * @var string|null
+     * @var string
      */
-    protected $enclosure = null;
+    private $enclosure;
 
     /**
-     * @var string|null
+     * @var string
      */
-    protected $escape = null;
+    private $escape;
 
     /**
-     * @var bool|null
+     * @var bool
      */
-    protected $hasHeaders = null;
-
-    /**
-     * @var array
-     */
-    protected $lines = [];
+    private $hasHeaders;
 
     /**
      * @var array
      */
-    protected $columns = [];
+    private $lines = [];
+
+    /**
+     * @var array
+     */
+    private $columns = [];
 
     /**
      * @var int
      */
-    protected $position = 0;
+    private $position = 0;
 
     /**
      * @var array
      */
-    protected $currentLine = [];
+    private $currentLine = [];
 
-    /**
-     * @param string $filename
-     * @param string $delimiter
-     * @param string $enclosure
-     * @param string $escape
-     * @param bool   $hasHeaders
-     */
-    public function __construct($filename, $delimiter = ',', $enclosure = '"', $escape = '\\', $hasHeaders = true)
-    {
+    public function __construct(
+        string $filename,
+        string $delimiter = ',',
+        string $enclosure = '"',
+        string $escape = '\\',
+        bool $hasHeaders = true
+    ) {
         $this->filename = $filename;
         $this->delimiter = $delimiter;
         $this->enclosure = $enclosure;
@@ -103,7 +103,7 @@ class CsvSourceIterator implements SourceIteratorInterface
     /**
      * {@inheritdoc}
      */
-    public function next()
+    public function next(): void
     {
         $line = fgetcsv($this->file, 0, $this->delimiter, $this->enclosure, $this->escape);
         $this->currentLine = $line;
@@ -120,7 +120,7 @@ class CsvSourceIterator implements SourceIteratorInterface
     /**
      * {@inheritdoc}
      */
-    public function rewind()
+    public function rewind(): void
     {
         $this->file = fopen($this->filename, 'r');
         $this->position = 0;
@@ -142,7 +142,7 @@ class CsvSourceIterator implements SourceIteratorInterface
     /**
      * {@inheritdoc}
      */
-    public function valid()
+    public function valid(): bool
     {
         if (!\is_array($this->currentLine)) {
             if (\is_resource($this->file)) {
@@ -155,5 +155,3 @@ class CsvSourceIterator implements SourceIteratorInterface
         return true;
     }
 }
-
-class_exists(\Exporter\Source\CsvSourceIterator::class);

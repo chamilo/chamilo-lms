@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -12,108 +14,30 @@
 namespace Sonata\Exporter\Source;
 
 use PropelCollection;
-use Symfony\Component\PropertyAccess\PropertyAccess;
-use Symfony\Component\PropertyAccess\PropertyAccessor;
-use Symfony\Component\PropertyAccess\PropertyPath;
 
 /**
  * Read data from a PropelCollection.
  *
  * @author Kévin Gomez <contact@kevingomez.fr>
  */
-class PropelCollectionSourceIterator implements SourceIteratorInterface
+final class PropelCollectionSourceIterator extends AbstractPropertySourceIterator implements SourceIteratorInterface
 {
     /**
      * @var \PropelCollection
      */
-    protected $collection;
+    private $collection;
 
     /**
-     * @var \ArrayIterator
+     * @param array<string> $fields Fields to export
      */
-    protected $iterator;
-
-    /**
-     * @var array
-     */
-    protected $propertyPaths;
-
-    /**
-     * @var PropertyAccessor
-     */
-    protected $propertyAccessor;
-
-    /**
-     * @var string default DateTime format
-     */
-    protected $dateTimeFormat;
-
-    /**
-     * @param PropelCollection $collection
-     * @param array            $fields         Fields to export
-     * @param string           $dateTimeFormat
-     */
-    public function __construct(PropelCollection $collection, array $fields, $dateTimeFormat = 'r')
+    public function __construct(PropelCollection $collection, array $fields, string $dateTimeFormat = 'r')
     {
         $this->collection = clone $collection;
 
-        $this->propertyAccessor = PropertyAccess::createPropertyAccessor();
-
-        $this->propertyPaths = [];
-        foreach ($fields as $name => $field) {
-            if (\is_string($name) && \is_string($field)) {
-                $this->propertyPaths[$name] = new PropertyPath($field);
-            } else {
-                $this->propertyPaths[$field] = new PropertyPath($field);
-            }
-        }
-        $this->dateTimeFormat = $dateTimeFormat;
+        parent::__construct($fields, $dateTimeFormat);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function current()
-    {
-        $current = $this->iterator->current();
-
-        $data = [];
-
-        foreach ($this->propertyPaths as $name => $propertyPath) {
-            $data[$name] = $this->getValue($this->propertyAccessor->getValue($current, $propertyPath));
-        }
-
-        return $data;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function next()
-    {
-        $this->iterator->next();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function key()
-    {
-        return $this->iterator->key();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function valid()
-    {
-        return $this->iterator->valid();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function rewind()
+    public function rewind(): void
     {
         if ($this->iterator) {
             $this->iterator->rewind();
@@ -124,40 +48,4 @@ class PropelCollectionSourceIterator implements SourceIteratorInterface
         $this->iterator = $this->collection->getIterator();
         $this->iterator->rewind();
     }
-
-    /**
-     * @param string $dateTimeFormat
-     */
-    public function setDateTimeFormat($dateTimeFormat)
-    {
-        $this->dateTimeFormat = $dateTimeFormat;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDateTimeFormat()
-    {
-        return $this->dateTimeFormat;
-    }
-
-    /**
-     * @param $value
-     *
-     * @return string|null
-     */
-    protected function getValue($value)
-    {
-        if (\is_array($value) || $value instanceof \Traversable) {
-            $value = null;
-        } elseif ($value instanceof \DateTimeInterface) {
-            $value = $value->format($this->dateTimeFormat);
-        } elseif (\is_object($value)) {
-            $value = (string) $value;
-        }
-
-        return $value;
-    }
 }
-
-class_exists(\Exporter\Source\PropelCollectionSourceIterator::class);

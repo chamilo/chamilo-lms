@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -15,6 +17,9 @@ use Sonata\BlockBundle\Templating\Helper\BlockHelper;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
+/**
+ * @final since sonata-project/block-bundle 3.0
+ */
 class BlockExtension extends AbstractExtension
 {
     /**
@@ -24,17 +29,12 @@ class BlockExtension extends AbstractExtension
 
     /**
      * BlockExtension constructor.
-     *
-     * @param BlockHelper $blockHelper
      */
     public function __construct(BlockHelper $blockHelper)
     {
         $this->blockHelper = $blockHelper;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getFunctions()
     {
         return [
@@ -65,9 +65,6 @@ class BlockExtension extends AbstractExtension
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName()
     {
         return 'sonata_block';

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -20,34 +22,30 @@ use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 /**
+ * @final since sonata-project/block-bundle 3.0
+ *
  * @author Thomas Rabaix <thomas.rabaix@sonata-project.org>
  */
 class SonataBlockExtension extends Extension
 {
-    /**
-     * {@inheritdoc}
-     */
     final public function getConfiguration(array $config, ContainerBuilder $container)
     {
         $bundles = $container->getParameter('kernel.bundles');
 
         $defaultTemplates = [];
         if (isset($bundles['SonataPageBundle'])) {
-            $defaultTemplates['SonataPageBundle:Block:block_container.html.twig'] = 'SonataPageBundle default template';
+            $defaultTemplates['@SonataPage/Block/block_container.html.twig'] = 'SonataPageBundle default template';
         } else {
-            $defaultTemplates['SonataBlockBundle:Block:block_container.html.twig'] = 'SonataBlockBundle default template';
+            $defaultTemplates['@SonataBlock/Block/block_container.html.twig'] = 'SonataBlockBundle default template';
         }
 
         if (isset($bundles['SonataSeoBundle'])) {
-            $defaultTemplates['SonataSeoBundle:Block:block_social_container.html.twig'] = 'SonataSeoBundle (to contain social buttons)';
+            $defaultTemplates['@SonataSeo/Block/block_social_container.html.twig'] = 'SonataSeoBundle (to contain social buttons)';
         }
 
         return new Configuration($defaultTemplates);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function load(array $configs, ContainerBuilder $container)
     {
         $bundles = $container->getParameter('kernel.bundles');
@@ -77,23 +75,19 @@ class SonataBlockExtension extends Extension
             $this->configureClassesToCompile();
         }
 
-        if ($config['templates']['block_base'] === null) {
+        if (null === $config['templates']['block_base']) {
             if (isset($bundles['SonataPageBundle'])) {
-                $config['templates']['block_base'] = 'SonataPageBundle:Block:block_base.html.twig';
-                $config['templates']['block_container'] = 'SonataPageBundle:Block:block_container.html.twig';
+                $config['templates']['block_base'] = '@SonataPage/Block/block_base.html.twig';
+                $config['templates']['block_container'] = '@SonataPage/Block/block_container.html.twig';
             } else {
-                $config['templates']['block_base'] = 'SonataBlockBundle:Block:block_base.html.twig';
-                $config['templates']['block_container'] = 'SonataBlockBundle:Block:block_container.html.twig';
+                $config['templates']['block_base'] = '@SonataBlock/Block/block_base.html.twig';
+                $config['templates']['block_container'] = '@SonataBlock/Block/block_container.html.twig';
             }
         }
 
         $container->getDefinition('sonata.block.twig.global')->replaceArgument(0, $config['templates']);
     }
 
-    /**
-     * @param ContainerBuilder $container
-     * @param array            $config
-     */
     public function configureBlockContainers(ContainerBuilder $container, array $config)
     {
         $container->setParameter('sonata.block.container.types', $config['container']['types']);
@@ -101,20 +95,13 @@ class SonataBlockExtension extends Extension
         $container->getDefinition('sonata.block.form.type.container_template')->replaceArgument(0, $config['container']['templates']);
     }
 
-    /**
-     * @param array $config
-     */
     public function fixConfigurationDeprecation(array &$config)
     {
-        if (count(array_diff($config['profiler']['container_types'], $config['container']['types']))) {
+        if (\count(array_diff($config['profiler']['container_types'], $config['container']['types']))) {
             $config['container']['types'] = array_merge($config['profiler']['container_types'], $config['container']['types']);
         }
     }
 
-    /**
-     * @param ContainerBuilder $container
-     * @param array            $config
-     */
     public function configureMenus(ContainerBuilder $container, array $config)
     {
         $bundles = $container->getParameter('kernel.bundles');
@@ -127,10 +114,6 @@ class SonataBlockExtension extends Extension
         $container->getDefinition('sonata.block.menu.registry')->replaceArgument(0, $config['menus']);
     }
 
-    /**
-     * @param ContainerBuilder $container
-     * @param array            $config
-     */
     public function configureContext(ContainerBuilder $container, array $config)
     {
         $container->setParameter($this->getAlias().'.blocks', $config['blocks']);
@@ -139,10 +122,6 @@ class SonataBlockExtension extends Extension
         $container->setAlias('sonata.block.context_manager', $config['context_manager']);
     }
 
-    /**
-     * @param ContainerBuilder $container
-     * @param array            $config
-     */
     public function configureCache(ContainerBuilder $container, array $config)
     {
         $container->setAlias('sonata.block.cache.handler', $config['http_cache']['handler']);
@@ -163,10 +142,6 @@ class SonataBlockExtension extends Extension
         $container->setParameter($this->getAlias().'.cache_blocks', $cacheBlocks);
     }
 
-    /**
-     * @param ContainerBuilder $container
-     * @param array            $config
-     */
     public function configureLoaderChain(ContainerBuilder $container, array $config)
     {
         $types = [];
@@ -174,13 +149,9 @@ class SonataBlockExtension extends Extension
             $types[] = $service;
         }
 
-        $container->getDefinition('sonata.block.loader.service')->replaceArgument(0, $types);
+        $container->setParameter('sonata_blocks.block_types', $types);
     }
 
-    /**
-     * @param ContainerBuilder $container
-     * @param array            $config
-     */
     public function configureForm(ContainerBuilder $container, array $config)
     {
         $defaults = $config['default_contexts'];
@@ -188,7 +159,7 @@ class SonataBlockExtension extends Extension
         $contexts = [];
 
         foreach ($config['blocks'] as $service => $settings) {
-            if (0 == count($settings['contexts'])) {
+            if (0 === \count($settings['contexts'])) {
                 $settings['contexts'] = $defaults;
             }
 
@@ -200,6 +171,8 @@ class SonataBlockExtension extends Extension
                 $contexts[$context][] = $service;
             }
         }
+
+        $container->setParameter('sonata_blocks.default_contexts', $defaults);
     }
 
     /**
@@ -276,6 +249,10 @@ class SonataBlockExtension extends Extension
      */
     public function configureClassesToCompile()
     {
+        if (!\is_callable([$this, 'addClassesToCompile'])) {
+            return;
+        }
+
         $this->addClassesToCompile([
             'Sonata\\BlockBundle\\Block\\BlockLoaderChain',
             'Sonata\\BlockBundle\\Block\\BlockLoaderInterface',
@@ -313,9 +290,6 @@ class SonataBlockExtension extends Extension
         ]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getNamespace()
     {
         return 'http://sonata-project.com/schema/dic/block';

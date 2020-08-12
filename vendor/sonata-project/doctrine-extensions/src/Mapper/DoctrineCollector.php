@@ -107,7 +107,7 @@ final class DoctrineCollector
         // NEXT_MAJOR: Move int check to method signature
         if (!\is_int($type)) {
             @trigger_error(sprintf(
-                'Passing other type than int as argument 2 for method %s() is deprecated since sonata-project/doctrine-extensions 1.x. It will accept only int in version 2.0.',
+                'Passing other type than int as argument 2 for method %s() is deprecated since sonata-project/doctrine-extensions 1.8. It will accept only int in version 2.0.',
                 __METHOD__
             ), E_USER_DEPRECATED);
         }

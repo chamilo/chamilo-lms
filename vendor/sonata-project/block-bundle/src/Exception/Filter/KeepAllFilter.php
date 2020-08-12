@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -16,13 +18,12 @@ use Sonata\BlockBundle\Model\BlockInterface;
 /**
  * This filter will handle all exceptions.
  *
+ * @final since sonata-project/block-bundle 3.0
+ *
  * @author Olivier Paradis <paradis.olivier@gmail.com>
  */
 class KeepAllFilter implements FilterInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function handle(\Exception $exception, BlockInterface $block)
     {
         return true;

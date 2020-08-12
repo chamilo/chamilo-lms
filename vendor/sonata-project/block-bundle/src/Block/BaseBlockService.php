@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -27,7 +29,7 @@ use Sonata\BlockBundle\Block\Service\AbstractAdminBlockService;
  *
  * @author Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
- * @deprecated since 3.2, to be removed with 4.0
+ * @deprecated since sonata-project/block-bundle 3.2, to be removed with 4.0
  */
 abstract class BaseBlockService extends AbstractAdminBlockService implements BlockAdminServiceInterface
 {

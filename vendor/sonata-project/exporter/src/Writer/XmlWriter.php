@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -12,46 +14,44 @@
 namespace Sonata\Exporter\Writer;
 
 use Sonata\Exporter\Exception\InvalidDataFormatException;
+use Sonata\Exporter\Exception\RuntimeException;
 
 /**
  * @author Thomas Rabaix <thomas.rabaix@sonata-project.org>
  */
-class XmlWriter implements TypedWriterInterface
+final class XmlWriter implements TypedWriterInterface
 {
     /**
      * @var string
      */
-    protected $filename;
+    private $filename;
 
     /**
      * @var resource
      */
-    protected $file;
+    private $file;
 
     /**
      * @var int
      */
-    protected $position;
+    private $position = 0;
 
     /**
      * @var string
      */
-    protected $mainElement;
+    private $mainElement;
 
     /**
      * @var string
      */
-    protected $childElement;
+    private $childElement;
 
     /**
-     * @param string $filename
-     * @param string $mainElement
-     * @param string $childElement
+     * @throws \RuntimeException
      */
-    public function __construct($filename, $mainElement = 'datas', $childElement = 'data')
+    public function __construct(string $filename, string $mainElement = 'datas', string $childElement = 'data')
     {
         $this->filename = $filename;
-        $this->position = 0;
         $this->mainElement = $mainElement;
         $this->childElement = $childElement;
 
@@ -60,46 +60,31 @@ class XmlWriter implements TypedWriterInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    final public function getDefaultMimeType()
+    public function getDefaultMimeType(): string
     {
         return 'text/xml';
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    final public function getFormat()
+    public function getFormat(): string
     {
         return 'xml';
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function open()
+    public function open(): void
     {
         $this->file = fopen($this->filename, 'w', false);
 
         fwrite($this->file, sprintf("<?xml version=\"1.0\" ?>\n<%s>\n", $this->mainElement));
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function close()
+    public function close(): void
     {
         fwrite($this->file, sprintf('</%s>', $this->mainElement));
 
         fclose($this->file);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function write(array $data)
+    public function write(array $data): void
     {
         fwrite($this->file, sprintf("<%s>\n", $this->childElement));
 
@@ -111,13 +96,14 @@ class XmlWriter implements TypedWriterInterface
     }
 
     /**
-     * @param string $name
-     * @param string $value
+     * @param mixed $value
+     *
+     * @throws \RuntimeException
      */
-    protected function generateNode($name, $value)
+    private function generateNode(string $name, $value): void
     {
         if (\is_array($value)) {
-            throw new \RuntimeException('Not implemented');
+            throw new RuntimeException('Not implemented');
         } elseif (is_scalar($value) || null === $value) {
             fwrite($this->file, sprintf("<%s><![CDATA[%s]]></%s>\n", $name, $value, $name));
         } else {
@@ -125,5 +111,3 @@ class XmlWriter implements TypedWriterInterface
         }
     }
 }
-
-class_exists(\Exporter\Writer\XmlWriter::class);

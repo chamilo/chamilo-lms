@@ -12,34 +12,34 @@
         <service id="sonata.block.service.container" class="%sonata.block.service.container.class%">
             <tag name="sonata.block"/>
             <argument>sonata.block.container</argument>
-            <argument type="service" id="templating"/>
+            <argument type="service" id="sonata.templating"/>
         </service>
         <service id="sonata.block.service.empty" class="%sonata.block.service.empty.class%">
             <tag name="sonata.block"/>
             <argument>sonata.block.empty</argument>
-            <argument type="service" id="templating"/>
+            <argument type="service" id="sonata.templating"/>
         </service>
         <service id="sonata.block.service.text" class="%sonata.block.service.text.class%">
             <tag name="sonata.block"/>
             <argument>sonata.block.text</argument>
-            <argument type="service" id="templating"/>
+            <argument type="service" id="sonata.templating"/>
         </service>
         <service id="sonata.block.service.rss" class="%sonata.block.service.rss.class%">
             <tag name="sonata.block"/>
             <argument>sonata.block.rss</argument>
-            <argument type="service" id="templating"/>
+            <argument type="service" id="sonata.templating"/>
         </service>
         <service id="sonata.block.service.menu" class="%sonata.block.service.menu.class%">
             <tag name="sonata.block"/>
             <argument>sonata.block.menu</argument>
-            <argument type="service" id="templating"/>
+            <argument type="service" id="sonata.templating"/>
             <argument type="service" id="knp_menu.menu_provider"/>
             <argument type="service" id="sonata.block.menu.registry"/>
         </service>
         <service id="sonata.block.service.template" class="%sonata.block.service.template.class%">
             <tag name="sonata.block"/>
             <argument>sonata.block.template</argument>
-            <argument type="service" id="templating"/>
+            <argument type="service" id="sonata.templating"/>
         </service>
     </services>
 </container>

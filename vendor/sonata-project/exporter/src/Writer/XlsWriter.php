@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -14,83 +16,64 @@ namespace Sonata\Exporter\Writer;
 /**
  * @author Thomas Rabaix <thomas.rabaix@sonata-project.org>
  */
-class XlsWriter implements TypedWriterInterface
+final class XlsWriter implements TypedWriterInterface
 {
     /**
      * @var string
      */
-    protected $filename;
+    private $filename;
 
     /**
      * @var resource
      */
-    protected $file;
+    private $file;
 
     /**
      * @var bool
      */
-    protected $showHeaders;
+    private $showHeaders;
 
     /**
      * @var int
      */
-    protected $position;
+    private $position = 0;
 
     /**
-     * @param      $filename
-     * @param bool $showHeaders
-     *
      * @throws \RuntimeException
      */
-    public function __construct($filename, $showHeaders = true)
+    public function __construct(string $filename, bool $showHeaders = true)
     {
         $this->filename = $filename;
         $this->showHeaders = $showHeaders;
-        $this->position = 0;
 
         if (is_file($filename)) {
-            throw new \RuntimeException(sprintf('The file %s already exist', $filename));
+            throw new \RuntimeException(sprintf('The file %s already exists', $filename));
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    final public function getDefaultMimeType()
+    public function getDefaultMimeType(): string
     {
         return 'application/vnd.ms-excel';
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    final public function getFormat()
+    public function getFormat(): string
     {
         return 'xls';
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function open()
+    public function open(): void
     {
         $this->file = fopen($this->filename, 'w', false);
         fwrite($this->file, '<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><meta name=ProgId content=Excel.Sheet><meta name=Generator content="https://github.com/sonata-project/exporter"></head><body><table>');
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function close()
+    public function close(): void
     {
         fwrite($this->file, '</table></body></html>');
         fclose($this->file);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function write(array $data)
+    public function write(array $data): void
     {
         $this->init($data);
 
@@ -103,10 +86,7 @@ class XlsWriter implements TypedWriterInterface
         ++$this->position;
     }
 
-    /**
-     * @param $data
-     */
-    protected function init($data)
+    private function init(array $data): void
     {
         if ($this->position > 0) {
             return;
@@ -122,5 +102,3 @@ class XlsWriter implements TypedWriterInterface
         }
     }
 }
-
-class_exists(\Exporter\Writer\XlsWriter::class);

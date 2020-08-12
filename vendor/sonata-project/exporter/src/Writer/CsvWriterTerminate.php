@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -17,14 +19,12 @@ namespace Sonata\Exporter\Writer;
 final class CsvWriterTerminate extends \php_user_filter
 {
     /**
-     * @param $in
-     * @param $out
-     * @param $consumed
-     * @param $closing
-     *
-     * @return int
+     * @param resource $in
+     * @param resource $out
+     * @param int      $consumed
+     * @param bool     $closing
      */
-    public function filter($in, $out, &$consumed, $closing)
+    public function filter($in, $out, &$consumed, $closing): int
     {
         while ($bucket = stream_bucket_make_writeable($in)) {
             if (isset($this->params['terminate'])) {
@@ -37,5 +37,3 @@ final class CsvWriterTerminate extends \php_user_filter
         return PSFS_PASS_ON;
     }
 }
-
-class_exists(\Exporter\Writer\CsvWriterTerminate::class);

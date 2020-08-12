@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -11,8 +13,6 @@
 
 namespace Sonata\Exporter\Exception;
 
-class InvalidDataFormatException extends \RuntimeException
+final class InvalidDataFormatException extends RuntimeException implements SonataExporterException
 {
 }
-
-class_exists(\Exporter\Exception\InvalidDataFormatException::class);

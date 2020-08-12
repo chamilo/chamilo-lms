@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -23,7 +25,7 @@ namespace Sonata\BlockBundle\Block;
  *
  * @author Sullivan Senechal <soullivaneuh@gmail.com>
  *
- * @deprecated since 3.2, to be removed with 4.0
+ * @deprecated since sonata-project/block-bundle 3.2, to be removed with 4.0
  */
 abstract class AbstractBlockService extends \Sonata\BlockBundle\Block\Service\AbstractBlockService
 {

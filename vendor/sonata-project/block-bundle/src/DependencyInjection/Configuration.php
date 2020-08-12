@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -19,6 +21,8 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  * This is the class that validates and merges configuration from your app/config files.
  *
  * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html#cookbook-bundles-extension-config-class}
+ *
+ * @final since sonata-project/block-bundle 3.0
  */
 class Configuration implements ConfigurationInterface
 {
@@ -27,21 +31,21 @@ class Configuration implements ConfigurationInterface
      */
     protected $defaultContainerTemplates;
 
-    /**
-     * @param array $defaultContainerTemplates
-     */
     public function __construct(array $defaultContainerTemplates)
     {
         $this->defaultContainerTemplates = $defaultContainerTemplates;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $node = $treeBuilder->root('sonata_block');
+        $treeBuilder = new TreeBuilder('sonata_block');
+
+        // Keep compatibility with symfony/config < 4.2
+        if (!method_exists($treeBuilder, 'getRootNode')) {
+            $node = $treeBuilder->root('sonata_block');
+        } else {
+            $node = $treeBuilder->getRootNode();
+        }
 
         $node
             ->fixXmlConfig('default_context')
@@ -49,16 +53,16 @@ class Configuration implements ConfigurationInterface
             ->fixXmlConfig('block')
             ->fixXmlConfig('block_by_class')
             ->validate()
-                ->always(function ($value) {
+                ->always(static function ($value) {
                     foreach ($value['blocks'] as $name => &$block) {
-                        if (0 == count($block['contexts'])) {
+                        if (0 === \count($block['contexts'])) {
                             $block['contexts'] = $value['default_contexts'];
                         }
                     }
 
                     if (isset($value['profiler']['container_types']) && !empty($value['profiler']['container_types'])
                         && isset($value['container']['types']) && !empty($value['container']['types'])
-                        && 0 !== count(array_diff($value['profiler']['container_types'], $value['container']['types']))) {
+                        && 0 !== \count(array_diff($value['profiler']['container_types'], $value['container']['types']))) {
                         throw new \RuntimeException('You cannot have different config options for sonata_block.profiler.container_types and sonata_block.container.types; the first one is deprecated, in case of doubt use the latter');
                     }
 
@@ -71,7 +75,7 @@ class Configuration implements ConfigurationInterface
                     ->fixXmlConfig('container_type', 'container_types')
                     ->children()
                         ->scalarNode('enabled')->defaultValue('%kernel.debug%')->end()
-                        ->scalarNode('template')->defaultValue('SonataBlockBundle:Profiler:block.html.twig')->end()
+                        ->scalarNode('template')->defaultValue('@SonataBlock/Profiler/block.html.twig')->end()
                         ->arrayNode('container_types')
                             ->isRequired()
                             // add default value to well know users of BlockBundle
@@ -164,8 +168,8 @@ class Configuration implements ConfigurationInterface
                     ->useAttributeAsKey('id')
                     ->prototype('scalar')->end()
                     ->validate()
-                        ->always(function ($value) {
-                            if (count($value) > 0) {
+                        ->always(static function ($value) {
+                            if (\count($value) > 0) {
                                 @trigger_error(
                                     'The menus configuration key is deprecated since 3.3 and will be removed in 4.0.',
                                     E_USER_DEPRECATED
@@ -234,9 +238,6 @@ class Configuration implements ConfigurationInterface
     }
 
     /**
-     * @param array            $config
-     * @param ContainerBuilder $container
-     *
      * @return Configuration
      */
     public function getConfiguration(array $config, ContainerBuilder $container)

@@ -6,7 +6,7 @@ all:
 	@echo "Please choose a task."
 .PHONY: all
 
-lint: lint-composer lint-yaml lint-composer lint-xml lint-php
+lint: lint-composer lint-yaml lint-xml lint-php
 .PHONY: lint
 
 lint-composer:
@@ -51,8 +51,15 @@ cs-fix-xml:
 	done
 .PHONY: cs-fix-xml
 
+build:
+	mkdir $@
+
 test:
-	phpunit -c phpunit.xml.dist --coverage-clover build/logs/clover.xml
+ifeq ($(shell php --modules|grep --quiet pcov;echo $$?), 0)
+	vendor/bin/simple-phpunit -c phpunit.xml.dist --coverage-clover build/logs/clover.xml
+else
+	vendor/bin/simple-phpunit -c phpunit.xml.dist
+endif
 .PHONY: test
 
 docs:

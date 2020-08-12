@@ -19,13 +19,13 @@
         "sort-packages": true
     },
     "require": {
-        "php": "^7.3",
+        "php": "^7.3 || ^8.0",
         "sebastian/object-reflector": "^2.0",
         "sebastian/recursion-context": "^4.0"
     },
     "require-dev": {
         "ext-dom": "*",
-        "phpunit/phpunit": "^9.0"
+        "phpunit/phpunit": "^9.3"
     },
     "suggest": {
         "ext-uopz": "*"
@@ -45,7 +45,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "4.0-dev"
+            "dev-master": "5.0-dev"
         }
     }
 }

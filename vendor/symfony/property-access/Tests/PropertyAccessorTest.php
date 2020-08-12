@@ -11,17 +11,19 @@
 
 namespace Symfony\Component\PropertyAccess\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\PropertyAccess\Exception\NoSuchIndexException;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
+use Symfony\Component\PropertyAccess\Tests\Fixtures\ReturnTyped;
 use Symfony\Component\PropertyAccess\Tests\Fixtures\TestClass;
+use Symfony\Component\PropertyAccess\Tests\Fixtures\TestClassIsWritable;
 use Symfony\Component\PropertyAccess\Tests\Fixtures\TestClassMagicCall;
 use Symfony\Component\PropertyAccess\Tests\Fixtures\TestClassMagicGet;
-use Symfony\Component\PropertyAccess\Tests\Fixtures\Ticket5775Object;
 use Symfony\Component\PropertyAccess\Tests\Fixtures\TestClassSetValue;
-use Symfony\Component\PropertyAccess\Tests\Fixtures\TestClassIsWritable;
+use Symfony\Component\PropertyAccess\Tests\Fixtures\Ticket5775Object;
 use Symfony\Component\PropertyAccess\Tests\Fixtures\TypeHinted;
 
-class PropertyAccessorTest extends \PHPUnit_Framework_TestCase
+class PropertyAccessorTest extends TestCase
 {
     /**
      * @var PropertyAccessor
@@ -536,6 +538,17 @@ class PropertyAccessorTest extends \PHPUnit_Framework_TestCase
         $this->propertyAccessor->setValue($object, 'date', 'This is a string, \DateTime expected.');
     }
 
+    /**
+     * @expectedException \Symfony\Component\PropertyAccess\Exception\InvalidArgumentException
+     * @expectedExceptionMessage Expected argument of type "DateTime", "NULL" given
+     */
+    public function testThrowTypeErrorWithNullArgument()
+    {
+        $object = new TypeHinted();
+
+        $this->propertyAccessor->setValue($object, 'date', null);
+    }
+
     public function testSetTypeHint()
     {
         $date = new \DateTime();
@@ -553,5 +566,40 @@ class PropertyAccessorTest extends \PHPUnit_Framework_TestCase
         $this->propertyAccessor->setValue($object, 'publicAccessor[value2]', 'baz');
         $this->assertSame('baz', $this->propertyAccessor->getValue($object, 'publicAccessor[value2]'));
         $this->assertSame(array('value1' => 'foo', 'value2' => 'baz'), $object->getPublicAccessor());
+    }
+
+    /**
+     * @expectedException \Symfony\Component\PropertyAccess\Exception\InvalidArgumentException
+     * @expectedExceptionMessage Expected argument of type "Countable", "string" given
+     */
+    public function testThrowTypeErrorWithInterface()
+    {
+        $object = new TypeHinted();
+
+        $this->propertyAccessor->setValue($object, 'countable', 'This is a string, \Countable expected.');
+    }
+
+    /**
+     * @requires PHP 7
+     *
+     * @expectedException \TypeError
+     */
+    public function testDoNotDiscardReturnTypeError()
+    {
+        $object = new ReturnTyped();
+
+        $this->propertyAccessor->setValue($object, 'foos', array(new \DateTime()));
+    }
+
+    /**
+     * @requires PHP 7
+     *
+     * @expectedException \TypeError
+     */
+    public function testDoNotDiscardReturnTypeErrorWhenWriterMethodIsMisconfigured()
+    {
+        $object = new ReturnTyped();
+
+        $this->propertyAccessor->setValue($object, 'name', 'foo');
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -14,6 +16,9 @@ namespace Sonata\BlockBundle\Event;
 use Sonata\BlockBundle\Model\BlockInterface;
 use Symfony\Component\EventDispatcher\Event;
 
+/**
+ * @final since sonata-project/block-bundle 3.0
+ */
 class BlockEvent extends Event
 {
     /**
@@ -26,17 +31,11 @@ class BlockEvent extends Event
      */
     protected $blocks = [];
 
-    /**
-     * @param array $settings
-     */
     public function __construct(array $settings = [])
     {
         $this->settings = $settings;
     }
 
-    /**
-     * @param BlockInterface $block
-     */
     public function addBlock(BlockInterface $block)
     {
         $this->blocks[] = $block;
@@ -51,7 +50,7 @@ class BlockEvent extends Event
     }
 
     /**
-     * @return mixed
+     * @return BlockInterface[]
      */
     public function getBlocks()
     {

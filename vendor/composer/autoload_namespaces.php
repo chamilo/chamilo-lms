@@ -19,7 +19,6 @@ return array(
     'RandomLib' => array($vendorDir . '/paragonie/random-lib/lib'),
     'ProxyManager\\' => array($vendorDir . '/ocramius/proxy-manager/src'),
     'Pimple' => array($vendorDir . '/pimple/pimple/lib'),
-    'PHPQRCode' => array($vendorDir . '/aferrandini/phpqrcode/lib'),
     'PHPExiftool\\' => array($vendorDir . '/alchemy/phpexiftool/lib'),
     'PHPExcel' => array($vendorDir . '/phpoffice/phpexcel/Classes'),
     'Neutron' => array($vendorDir . '/neutron/temporary-filesystem/src'),
@@ -42,5 +41,6 @@ return array(
     'Behat\\MinkExtension' => array($vendorDir . '/behat/mink-extension/src'),
     'Behat\\Gherkin' => array($vendorDir . '/behat/gherkin/src'),
     'Behat\\Behat' => array($vendorDir . '/behat/behat/src'),
+    'BaconQrCode' => array($vendorDir . '/bacon/bacon-qr-code/src'),
     'Alchemy' => array($vendorDir . '/alchemy/binary-driver/src'),
 );

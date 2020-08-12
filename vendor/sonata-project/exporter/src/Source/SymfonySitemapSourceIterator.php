@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -14,45 +16,40 @@ namespace Sonata\Exporter\Source;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 
-class SymfonySitemapSourceIterator implements SourceIteratorInterface
+final class SymfonySitemapSourceIterator implements SourceIteratorInterface
 {
     /**
      * @var RouterInterface
      */
-    protected $router;
+    private $router;
 
     /**
      * @var SourceIteratorInterface
      */
-    protected $source;
+    private $source;
 
     /**
      * @var string
      */
-    protected $routeName;
+    private $routeName;
 
     /**
      * @var array
      */
-    protected $parameters;
+    private $parameters;
 
-    /**
-     * @param SourceIteratorInterface $source
-     * @param RouterInterface         $router
-     * @param string                  $routeName
-     * @param array                   $parameters
-     */
-    public function __construct(SourceIteratorInterface $source, RouterInterface $router, $routeName, array $parameters = [])
-    {
+    public function __construct(
+        SourceIteratorInterface $source,
+        RouterInterface $router,
+        string $routeName,
+        array $parameters = []
+    ) {
         $this->source = $source;
         $this->router = $router;
         $this->routeName = $routeName;
         $this->parameters = $parameters;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function current()
     {
         $data = $this->source->current();
@@ -66,37 +63,23 @@ class SymfonySitemapSourceIterator implements SourceIteratorInterface
         return $data;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function next()
+    public function next(): void
     {
         $this->source->next();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function key()
     {
         return $this->source->key();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function valid()
+    public function valid(): bool
     {
         return $this->source->valid();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function rewind()
+    public function rewind(): void
     {
         $this->source->rewind();
     }
 }
-
-class_exists(\Exporter\Source\SymfonySitemapSourceIterator::class);

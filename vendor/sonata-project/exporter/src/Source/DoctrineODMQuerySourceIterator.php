@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -12,107 +14,33 @@
 namespace Sonata\Exporter\Source;
 
 use Doctrine\ODM\MongoDB\Query\Query;
-use Doctrine\ORM\Internal\Hydration\IterableResult;
 use Sonata\Exporter\Exception\InvalidMethodCallException;
-use Symfony\Component\PropertyAccess\PropertyAccess;
-use Symfony\Component\PropertyAccess\PropertyPath;
 
-class DoctrineODMQuerySourceIterator implements SourceIteratorInterface
+final class DoctrineODMQuerySourceIterator extends AbstractPropertySourceIterator implements SourceIteratorInterface
 {
     /**
      * @var Query
      */
-    protected $query;
+    private $query;
 
     /**
-     * @var IterableResult
+     * @param array<string> $fields Fields to export
      */
-    protected $iterator;
-
-    /**
-     * @var array
-     */
-    protected $propertyPaths;
-
-    /**
-     * @var PropertyAccess
-     */
-    protected $propertyAccessor;
-
-    /**
-     * @var string default DateTime format
-     */
-    protected $dateTimeFormat;
-
-    /**
-     * @param Query  $query          The Doctrine Query
-     * @param array  $fields         Fields to export
-     * @param string $dateTimeFormat
-     */
-    public function __construct(Query $query, array $fields, $dateTimeFormat = 'r')
+    public function __construct(Query $query, array $fields, string $dateTimeFormat = 'r')
     {
         $this->query = clone $query;
 
-        $this->propertyAccessor = PropertyAccess::createPropertyAccessor();
-
-        $this->propertyPaths = [];
-        foreach ($fields as $name => $field) {
-            if (\is_string($name) && \is_string($field)) {
-                $this->propertyPaths[$name] = new PropertyPath($field);
-            } else {
-                $this->propertyPaths[$field] = new PropertyPath($field);
-            }
-        }
-
-        $this->dateTimeFormat = $dateTimeFormat;
+        parent::__construct($fields, $dateTimeFormat);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function current()
     {
         $current = $this->iterator->current();
 
-        $data = [];
-
-        foreach ($this->propertyPaths as $name => $propertyPath) {
-            $data[$name] = $this->getValue($this->propertyAccessor->getValue($current, $propertyPath));
-        }
-
-        $this->query->getDocumentManager()->getUnitOfWork()->detach($current);
-
-        return $data;
+        return $this->getCurrentData($current[0]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function next()
-    {
-        $this->iterator->next();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function key()
-    {
-        return $this->iterator->key();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function valid()
-    {
-        return $this->iterator->valid();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function rewind()
+    public function rewind(): void
     {
         if ($this->iterator) {
             throw new InvalidMethodCallException('Cannot rewind a Doctrine\ODM\Query');
@@ -121,40 +49,4 @@ class DoctrineODMQuerySourceIterator implements SourceIteratorInterface
         $this->iterator = $this->query->iterate();
         $this->iterator->rewind();
     }
-
-    /**
-     * @param string $dateTimeFormat
-     */
-    public function setDateTimeFormat($dateTimeFormat)
-    {
-        $this->dateTimeFormat = $dateTimeFormat;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDateTimeFormat()
-    {
-        return $this->dateTimeFormat;
-    }
-
-    /**
-     * @param $value
-     *
-     * @return string|null
-     */
-    protected function getValue($value)
-    {
-        if (\is_array($value) || $value instanceof \Traversable) {
-            $value = null;
-        } elseif ($value instanceof \DateTimeInterface) {
-            $value = $value->format($this->dateTimeFormat);
-        } elseif (\is_object($value)) {
-            $value = (string) $value;
-        }
-
-        return $value;
-    }
 }
-
-class_exists(\Exporter\Source\DoctrineODMQuerySourceIterator::class);

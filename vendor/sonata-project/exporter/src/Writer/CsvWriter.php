@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -16,47 +18,47 @@ use Sonata\Exporter\Exception\InvalidDataFormatException;
 /**
  * @author Thomas Rabaix <thomas.rabaix@sonata-project.org>
  */
-class CsvWriter implements TypedWriterInterface
+final class CsvWriter implements TypedWriterInterface
 {
     /**
      * @var string
      */
-    protected $filename;
+    private $filename;
 
     /**
      * @var string
      */
-    protected $delimiter;
+    private $delimiter;
 
     /**
      * @var string
      */
-    protected $enclosure;
+    private $enclosure;
 
     /**
      * @var string
      */
-    protected $escape;
+    private $escape;
 
     /**
      * @var resource
      */
-    protected $file;
+    private $file;
 
     /**
      * @var bool
      */
-    protected $showHeaders;
+    private $showHeaders;
 
     /**
      * @var int
      */
-    protected $position;
+    private $position;
 
     /**
      * @var bool
      */
-    protected $withBom;
+    private $withBom;
 
     /**
      * @var string
@@ -64,22 +66,16 @@ class CsvWriter implements TypedWriterInterface
     private $terminate;
 
     /**
-     * @param string $filename
-     * @param string $delimiter
-     * @param string $enclosure
-     * @param string $escape
-     * @param bool   $showHeaders
-     * @param bool   $withBom
-     * @param string $terminate
+     * @throws \RuntimeException
      */
     public function __construct(
-        $filename,
-        $delimiter = ',',
-        $enclosure = '"',
-        $escape = '\\',
-        $showHeaders = true,
-        $withBom = false,
-        $terminate = "\n"
+        string $filename,
+        string $delimiter = ',',
+        string $enclosure = '"',
+        string $escape = '\\',
+        bool $showHeaders = true,
+        bool $withBom = false,
+        string $terminate = "\n"
     ) {
         $this->filename = $filename;
         $this->delimiter = $delimiter;
@@ -95,26 +91,17 @@ class CsvWriter implements TypedWriterInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    final public function getDefaultMimeType()
+    public function getDefaultMimeType(): string
     {
         return 'text/csv';
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    final public function getFormat()
+    public function getFormat(): string
     {
         return 'csv';
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function open()
+    public function open(): void
     {
         $this->file = fopen($this->filename, 'w', false);
         if ("\n" !== $this->terminate) {
@@ -126,20 +113,14 @@ class CsvWriter implements TypedWriterInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function close()
+    public function close(): void
     {
         fclose($this->file);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function write(array $data)
+    public function write(array $data): void
     {
-        if (0 == $this->position && $this->showHeaders) {
+        if (0 === $this->position && $this->showHeaders) {
             $this->addHeaders($data);
 
             ++$this->position;
@@ -154,10 +135,7 @@ class CsvWriter implements TypedWriterInterface
         ++$this->position;
     }
 
-    /**
-     * @param array $data
-     */
-    protected function addHeaders(array $data)
+    private function addHeaders(array $data): void
     {
         $headers = [];
         foreach ($data as $header => $value) {
@@ -167,5 +145,3 @@ class CsvWriter implements TypedWriterInterface
         fputcsv($this->file, $headers, $this->delimiter, $this->enclosure, $this->escape);
     }
 }
-
-class_exists(\Exporter\Writer\CsvWriter::class);

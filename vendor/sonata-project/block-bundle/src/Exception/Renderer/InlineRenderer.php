@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -17,6 +19,8 @@ use Symfony\Component\Templating\EngineInterface;
 
 /**
  * This renderer uses a template to display an error message at the block position.
+ *
+ * @final since sonata-project/block-bundle 3.0
  *
  * @author Olivier Paradis <paradis.olivier@gmail.com>
  */
@@ -42,9 +46,6 @@ class InlineRenderer implements RendererInterface
         $this->template = $template;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function render(\Exception $exception, BlockInterface $block, Response $response = null)
     {
         $parameters = [

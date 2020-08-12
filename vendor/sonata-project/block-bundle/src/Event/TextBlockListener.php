@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -28,20 +30,17 @@ use Symfony\Component\EventDispatcher\Event;
  */
 class TextBlockListener
 {
-    /**
-     * @param BlockEvent $event
-     */
     public function onBlock(BlockEvent $event)
     {
         $content = 'This block is coming from inline event from the template';
-        if ($event->getSetting('admin') instanceof AdminInterface && 'edit' == $event->getSetting('action')) {
+        if ($event->getSetting('admin') instanceof AdminInterface && 'edit' === $event->getSetting('action')) {
             $admin = $event->getSetting('admin');
 
             $content = sprintf("<p class='well'>The admin subject is <strong>%s</strong></p>", $admin->toString($admin->getSubject()));
         }
 
         $block = new Block();
-        $block->setId(uniqid());
+        $block->setId(uniqid('', true));
         $block->setSettings([
             'content' => $event->getSetting('content', $content),
         ]);

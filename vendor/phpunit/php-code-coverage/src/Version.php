@@ -9,6 +9,7 @@
  */
 namespace SebastianBergmann\CodeCoverage;
 
+use function dirname;
 use SebastianBergmann\Version as VersionId;
 
 final class Version
@@ -21,8 +22,7 @@ final class Version
     public static function id(): string
     {
         if (self::$version === null) {
-            $version       = new VersionId('8.0.2', \dirname(__DIR__));
-            self::$version = $version->getVersion();
+            self::$version = (new VersionId('9.1.3', dirname(__DIR__)))->getVersion();
         }
 
         return self::$version;

@@ -11,17 +11,29 @@
 
 namespace Symfony\Component\Templating\Tests\Loader;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Templating\Loader\Loader;
 use Symfony\Component\Templating\TemplateReferenceInterface;
 
-class LoaderTest extends \PHPUnit_Framework_TestCase
+class LoaderTest extends TestCase
 {
     public function testGetSetLogger()
     {
         $loader = new ProjectTemplateLoader4();
-        $logger = $this->getMock('Psr\Log\LoggerInterface');
+        $logger = $this->getMockBuilder('Psr\Log\LoggerInterface')->getMock();
         $loader->setLogger($logger);
         $this->assertSame($logger, $loader->getLogger(), '->setLogger() sets the logger instance');
+    }
+
+    /**
+     * @group legacy
+     */
+    public function testLegacyGetSetDebugger()
+    {
+        $loader = new ProjectTemplateLoader4();
+        $debugger = $this->getMockBuilder('Symfony\Component\Templating\DebuggerInterface')->getMock();
+        $loader->setDebugger($debugger);
+        $this->assertSame($debugger, $loader->getDebugger(), '->setDebugger() sets the debugger instance');
     }
 }
 

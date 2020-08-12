@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -12,26 +14,19 @@
 namespace Sonata\Exporter\Bridge\Symfony\Bundle;
 
 use Sonata\Exporter\Bridge\Symfony\DependencyInjection\Compiler\ExporterCompilerPass;
+use Sonata\Exporter\Bridge\Symfony\DependencyInjection\SonataExporterExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 final class SonataExporterBundle extends Bundle
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function build(ContainerBuilder $container)
+    public function build(ContainerBuilder $container): void
     {
         $container->addCompilerPass(new ExporterCompilerPass());
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function getContainerExtensionClass()
+    protected function getContainerExtensionClass(): string
     {
-        return 'Exporter\Bridge\Symfony\DependencyInjection\SonataExporterExtension';
+        return SonataExporterExtension::class;
     }
 }
-
-class_exists(\Exporter\Bridge\Symfony\Bundle\SonataExporterBundle::class);

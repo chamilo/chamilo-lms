@@ -13,30 +13,24 @@ declare(strict_types=1);
 
 namespace Sonata\Doctrine\Bridge\Symfony\Bundle;
 
-use Sonata\Doctrine\Bridge\Symfony\DependencyInjection\Compiler\AdapterCompilerPass;
-use Sonata\Doctrine\Bridge\Symfony\DependencyInjection\Compiler\MapperCompilerPass;
-use Sonata\Doctrine\Bridge\Symfony\DependencyInjection\SonataDoctrineExtension;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Sonata\Doctrine\Bridge\Symfony\SonataDoctrineBundle as ForwardCompatibleSonataDoctrineBundle;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-/**
- * @deprecated Since sonata-project/doctrine-extensions 1.x, to be removed in 2.0. Use Sonata\Doctrine\Bridge\Symfony\SonataDoctrineBundle instead.
- */
-final class SonataDoctrineBundle extends Bundle
-{
-    public function build(ContainerBuilder $container)
-    {
-        $container->addCompilerPass(new AdapterCompilerPass());
-        $container->addCompilerPass(new MapperCompilerPass());
-    }
+@trigger_error(sprintf(
+    'The %s\SonataDoctrineBundle class is deprecated since sonata-project/doctrine-extensions 1.9, to be removed in version 2.0. Use %s instead.',
+    __NAMESPACE__,
+    ForwardCompatibleSonataDoctrineBundle::class
+), E_USER_DEPRECATED);
 
-    public function getPath()
+if (false) {
+    /**
+     * NEXT_MAJOR: remove this class.
+     *
+     * @deprecated Since sonata-project/doctrine-extensions 1.9, to be removed in 2.0. Use Sonata\Doctrine\Bridge\Symfony\SonataDoctrineBundle instead.
+     */
+    final class SonataDoctrineBundle extends Bundle
     {
-        return __DIR__.'/..';
-    }
-
-    protected function getContainerExtensionClass()
-    {
-        return SonataDoctrineExtension::class;
     }
 }
+
+class_alias(ForwardCompatibleSonataDoctrineBundle::class, __NAMESPACE__.'\SonataDoctrineBundle');

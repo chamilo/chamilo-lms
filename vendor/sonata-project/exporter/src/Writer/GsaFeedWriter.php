@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -16,9 +18,9 @@ namespace Sonata\Exporter\Writer;
  *
  * @author Rémi Marseille <marseille@ekino.com>
  */
-class GsaFeedWriter implements WriterInterface
+final class GsaFeedWriter implements WriterInterface
 {
-    const LIMIT_SIZE = 31457280; // 30MB
+    public const LIMIT_SIZE = 31457280; // 30MB
 
     /**
      * @var \SplFileInfo
@@ -61,7 +63,7 @@ class GsaFeedWriter implements WriterInterface
      * @param string       $datasource A datasouce
      * @param string       $feedtype   A feedtype (full|incremental|metadata-and-url)
      */
-    public function __construct(\SplFileInfo $folder, $dtd, $datasource, $feedtype)
+    public function __construct(\SplFileInfo $folder, string $dtd, string $datasource, string $feedtype)
     {
         $this->folder = $folder;
         $this->dtd = $dtd;
@@ -71,20 +73,15 @@ class GsaFeedWriter implements WriterInterface
         $this->bufferSize = 0;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function open()
+    public function open(): void
     {
         $this->generateNewPart();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function write(array $data)
+    public function write(array $data): void
     {
-        $line = sprintf("        <record url=\"%s\" mimetype=\"%s\" action=\"%s\"/>\n",
+        $line = sprintf(
+            "        <record url=\"%s\" mimetype=\"%s\" action=\"%s\"/>\n",
             $data['url'],
             $data['mime_type'],
             $data['action']
@@ -98,10 +95,7 @@ class GsaFeedWriter implements WriterInterface
         $this->bufferSize += fwrite($this->buffer, $line);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function close()
+    public function close(): void
     {
         if ($this->buffer) {
             $this->closeFeed();
@@ -113,7 +107,7 @@ class GsaFeedWriter implements WriterInterface
      *
      * @throws \RuntimeException
      */
-    private function generateNewPart()
+    private function generateNewPart(): void
     {
         if ($this->buffer) {
             $this->closeFeed();
@@ -122,13 +116,15 @@ class GsaFeedWriter implements WriterInterface
         $this->bufferSize = 0;
         ++$this->bufferPart;
 
-        if (!is_writable($this->folder)) {
+        if (!$this->folder->isWritable()) {
             throw new \RuntimeException(sprintf('Unable to write to folder: %s', $this->folder));
         }
 
         $this->buffer = fopen(sprintf('%s/feed_%05d.xml', $this->folder, $this->bufferPart), 'w');
 
-        $this->bufferSize += fwrite($this->buffer, <<<XML
+        $this->bufferSize += fwrite(
+            $this->buffer,
+            <<<XML
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE gsafeed PUBLIC "-//Google//DTD GSA Feeds//EN" "$this->dtd">
 <gsafeed>
@@ -143,12 +139,11 @@ XML
         );
     }
 
-    /**
-     * Closes the current feed.
-     */
-    private function closeFeed()
+    private function closeFeed(): void
     {
-        fwrite($this->buffer, <<<'EOF'
+        fwrite(
+            $this->buffer,
+            <<<'EOF'
     </group>
 </gsafeed>
 EOF
@@ -157,5 +152,3 @@ EOF
         fclose($this->buffer);
     }
 }
-
-class_exists(\Exporter\Writer\GsaFeedWriter::class);

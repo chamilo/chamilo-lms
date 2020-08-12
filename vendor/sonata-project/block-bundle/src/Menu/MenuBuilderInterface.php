@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -17,15 +19,12 @@ use Knp\Menu\ItemInterface;
 /**
  * @author Christian Gripp <mail@core23.de>
  *
- * @deprecated since 3.9, to be removed with 4.0.
+ * @deprecated since sonata-project/block-bundle 3.9, to be removed with 4.0.
  */
 interface MenuBuilderInterface
 {
     /**
      * Create a knp menu.
-     *
-     * @param FactoryInterface $factory
-     * @param array            $options
      *
      * @return ItemInterface
      */

@@ -72,7 +72,7 @@ final class DoctrineORMMapper implements EventSubscriber
         // NEXT_MAJOR: Move array check to method signature
         if (!\is_array($options)) {
             @trigger_error(sprintf(
-                'Passing other type than array as argument 3 for method %s() is deprecated since sonata-project/doctrine-extensions 1.x. It will accept only array in version 2.0.',
+                'Passing other type than array as argument 3 for method %s() is deprecated since sonata-project/doctrine-extensions 1.8. It will accept only array in version 2.0.',
                 __METHOD__
             ), E_USER_DEPRECATED);
         }
@@ -109,7 +109,7 @@ final class DoctrineORMMapper implements EventSubscriber
         // NEXT_MAJOR: Move array check to method signature
         if (!\is_array($columnDef)) {
             @trigger_error(sprintf(
-                'Passing other type than array as argument 2 for method %s() is deprecated since sonata-project/doctrine-extensions 1.x. It will accept only array in version 2.0.',
+                'Passing other type than array as argument 2 for method %s() is deprecated since sonata-project/doctrine-extensions 1.8. It will accept only array in version 2.0.',
                 __METHOD__
             ), E_USER_DEPRECATED);
         }
@@ -173,7 +173,7 @@ final class DoctrineORMMapper implements EventSubscriber
         // NEXT_MAJOR: Move array check to method signature
         if (!\is_array($options)) {
             @trigger_error(sprintf(
-                'Passing other type than array as argument 3 for method %s() is deprecated since sonata-project/doctrine-extensions 1.x. It will accept only array in version 2.0.',
+                'Passing other type than array as argument 3 for method %s() is deprecated since sonata-project/doctrine-extensions 1.8. It will accept only array in version 2.0.',
                 __METHOD__
             ), E_USER_DEPRECATED);
         }

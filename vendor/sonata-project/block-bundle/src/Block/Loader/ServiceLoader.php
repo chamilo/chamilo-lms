@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -14,6 +16,9 @@ namespace Sonata\BlockBundle\Block\Loader;
 use Sonata\BlockBundle\Block\BlockLoaderInterface;
 use Sonata\BlockBundle\Model\Block;
 
+/**
+ * @final since sonata-project/block-bundle 3.0
+ */
 class ServiceLoader implements BlockLoaderInterface
 {
     /**
@@ -38,15 +43,12 @@ class ServiceLoader implements BlockLoaderInterface
      */
     public function exists($type)
     {
-        return in_array($type, $this->types, true);
+        return \in_array($type, $this->types, true);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function load($configuration)
     {
-        if (!in_array($configuration['type'], $this->types)) {
+        if (!\in_array($configuration['type'], $this->types, true)) {
             throw new \RuntimeException(sprintf(
                 'The block type "%s" does not exist',
                 $configuration['type']
@@ -54,22 +56,19 @@ class ServiceLoader implements BlockLoaderInterface
         }
 
         $block = new Block();
-        $block->setId(uniqid());
+        $block->setId(uniqid('', true));
         $block->setType($configuration['type']);
         $block->setEnabled(true);
         $block->setCreatedAt(new \DateTime());
         $block->setUpdatedAt(new \DateTime());
-        $block->setSettings(isset($configuration['settings']) ? $configuration['settings'] : []);
+        $block->setSettings($configuration['settings'] ?? []);
 
         return $block;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function support($configuration)
     {
-        if (!is_array($configuration)) {
+        if (!\is_array($configuration)) {
             return false;
         }
 

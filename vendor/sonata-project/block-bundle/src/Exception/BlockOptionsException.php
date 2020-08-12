@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -13,6 +15,9 @@ namespace Sonata\BlockBundle\Exception;
 
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+/**
+ * @final since sonata-project/block-bundle 3.0
+ */
 class BlockOptionsException extends NotFoundHttpException
 {
 }

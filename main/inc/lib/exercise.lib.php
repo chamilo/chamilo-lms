@@ -3816,31 +3816,29 @@ EOT;
         $session_id = (int) $session_id;
         $courseId = api_get_course_int_id($course_code);
 
-        if (empty($session_id)) {
-            $courseCondition = "
+        $sql = "SELECT MAX(marks) as max, MIN(marks) as min, AVG(marks) as average
+    		FROM $track_exercises e
+    		";
+        if (true == $onlyStudent) {
+            $courseCondition = '';
+            if (empty($session_id)) {
+                $courseCondition = "
             INNER JOIN $courseUser c
             ON (
                         e.exe_user_id = c.user_id AND
                         e.c_id = c.c_id AND
                         c.status = ".STUDENT."
                         AND relation_type <> 2
-                )
-            ";
-        } else {
-            $courseCondition = "
+                )";
+            } else {
+                $courseCondition = "
             INNER JOIN $courseUser c
             ON (
                         e.exe_user_id = c.user_id AND
                         e.c_id = c.c_id AND
                         c.status = 0
-                )
-            ";
-        }
-
-        $sql = "SELECT MAX(marks) as max, MIN(marks) as min, AVG(marks) as average
-    		FROM $track_exercises e
-    		";
-        if ($onlyStudent == true) {
+                )";
+            }
             $sql .= $courseCondition;
         }
         $sql .= "

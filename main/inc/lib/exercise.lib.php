@@ -3795,7 +3795,7 @@ EOT;
      * @param int    $exercise_id
      * @param string $course_code
      * @param int    $session_id
-     * @param bool   $onlyStudent   Filter only enrolled students
+     * @param bool   $onlyStudent Filter only enrolled students
      *
      * @return array
      */
@@ -3841,9 +3841,9 @@ EOT;
     		FROM $track_exercises e
     		";
         if ($onlyStudent == true) {
-            $sql.= $courseCondition;
+            $sql .= $courseCondition;
         }
-        $sql.= "
+        $sql .= "
             INNER JOIN $track_attempt a
     		ON (
     		    a.exe_id = e.exe_id AND

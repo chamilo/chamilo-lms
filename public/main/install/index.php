@@ -650,9 +650,11 @@ if (isset($_POST['step2'])) {
 
         // No errors
         if (0 == $result) {
+            error_log('Delete session');
             session_unset();
             $_SESSION = [];
             session_destroy();
+            error_log('Boot kernel');
 
             // Boot kernel and get the doctrine from Symfony container
             $kernel->boot();

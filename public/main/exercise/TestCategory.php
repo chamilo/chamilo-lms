@@ -2,14 +2,6 @@
 
 /* For licensing terms, see /license.txt */
 
-use APY\DataGridBundle\Grid\Action\MassAction;
-use APY\DataGridBundle\Grid\Action\RowAction;
-use APY\DataGridBundle\Grid\Row;
-use APY\DataGridBundle\Grid\Source\Entity;
-use Chamilo\CoreBundle\Entity\ResourceLink;
-use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
-use Chamilo\CourseBundle\Entity\CQuizQuestionCategory;
 use ChamiloSession as Session;
 
 /**
@@ -208,6 +200,62 @@ class TestCategory
         }
 
         return false;
+    }
+
+    /**
+     * Gets the number of question of category id=in_id.
+     */
+    public function getCategoryQuestionsNumber()
+    {
+        $table = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
+        $id = (int) $this->id;
+        $sql = "SELECT count(*) AS nb
+                FROM $table
+                WHERE category_id = $id AND c_id=".api_get_course_int_id();
+        $res = Database::query($sql);
+        $row = Database::fetch_array($res);
+
+        return $row['nb'];
+    }
+
+    /**
+     * Return an array of all Category objects in the database
+     * If $field=="" Return an array of all category objects in the database
+     * Otherwise, return an array of all in_field value
+     * in the database (in_field = id or name or description).
+     *
+     * @param string $field
+     * @param int    $courseId
+     *
+     * @return array
+     */
+    public static function getCategoryListInfo($field = '', $courseId = 0)
+    {
+        $courseId = empty($courseId) ? api_get_course_int_id() : (int) $courseId;
+
+        $table = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
+        $categories = [];
+        if (empty($field)) {
+            $sql = "SELECT id FROM $table
+                    WHERE c_id = $courseId
+                    ORDER BY title ASC";
+            $res = Database::query($sql);
+            while ($row = Database::fetch_array($res)) {
+                $category = new TestCategory();
+                $categories[] = $category->getCategory($row['id'], $courseId);
+            }
+        } else {
+            $field = Database::escape_string($field);
+            $sql = "SELECT $field FROM $table
+                    WHERE c_id = $courseId
+                    ORDER BY $field ASC";
+            $res = Database::query($sql);
+            while ($row = Database::fetch_array($res)) {
+                $categories[] = $row[$field];
+            }
+        }
+
+        return $categories;
     }
 
     /**
@@ -443,17 +491,22 @@ class TestCategory
     }
 
     /**
+     * Return an array (id=>name)
+     * array[0] = get_lang('NoCategory');.
+     *
+     * @param int $courseId
+     *
      * @return array
      */
-    public static function getCategoriesForSelect()
+    public static function getCategoriesIdAndName($courseId = 0)
     {
+        if (empty($courseId)) {
         $courseId = api_get_course_int_id();
-        $categories = self::getCategories($courseId);
-
-        $result = ['0' => get_lang('GeneralSelected')];
-        /** @var CQuizQuestionCategory $category */
-        foreach ($categories as $category) {
-            $result[$category->getId()] = $category->getTitle();
+        }
+        $categories = self::getCategoryListInfo('', $courseId);
+        $result = ['0' => get_lang('NoCategorySelected')];
+        for ($i = 0; $i < count($categories); $i++) {
+            $result[$categories[$i]->id] = $categories[$i]->name;
         }
 
         return $result;
@@ -551,15 +604,20 @@ class TestCategory
     /**
      * Returns an array of $numberElements from $array.
      *
-     * @param array
-     * @param int
+     * @param array $array
+     * @param int   $numberElements
+     * @param bool  $shuffle
      *
      * @return array
      */
-    public static function getNElementsFromArray($array, $numberElements)
+    public static function getNElementsFromArray($array, $numberElements, $shuffle = true)
     {
         $list = $array;
-        shuffle($list);
+
+        if ($shuffle) {
+          shuffle($list);
+        }
+
         if ($numberElements < count($list)) {
             $list = array_slice($list, 0, $numberElements);
         }
@@ -958,7 +1016,12 @@ class TestCategory
                 $return .= '</td>';
                 $return .= '<td>';
                 $value = isset($saved_categories) && isset($saved_categories[$cat_id]) ? $saved_categories[$cat_id]['count_questions'] : -1;
-                $return .= '<input name="category['.$cat_id.']" value="'.$value.'" />';
+                $return .= Display::input(
+                    'number',
+                    "category[$cat_id]",
+                    $value,
+                    ['class' => 'form-control', 'min' => -1, 'step' => 1]
+                );
                 $return .= '</td>';
                 $return .= '</tr>';
             }
@@ -1078,124 +1141,50 @@ class TestCategory
      */
     public function displayCategories($courseId, $sessionId = 0)
     {
-        $course = api_get_course_entity($courseId);
-        $session = api_get_session_entity($sessionId);
+        $sessionId = (int) $sessionId;
+        $categories = $this->getCategories($courseId, $sessionId);
+        $html = '';
+        foreach ($categories as $category) {
+            $tmpobj = new TestCategory();
+            $tmpobj = $tmpobj->getCategory($category['id']);
+            $nb_question = $tmpobj->getCategoryQuestionsNumber();
+            $rowname = self::protectJSDialogQuote($category['title']);
+            $nb_question_label = $nb_question == 1 ? $nb_question.' '.get_lang('Question') : $nb_question.' '.get_lang('Questions');
+            $content = "<span style='float:right'>".$nb_question_label."</span>";
+            $content .= '<div class="sectioncomment">';
+            $content .= $category['description'];
+            $content .= '</div>';
+            $links = '';
 
-        // 1. Set entity
-        $source = new Entity('ChamiloCourseBundle:CQuizQuestionCategory');
-        $repo = Container::getQuestionCategoryRepository();
-
-        // 2. Get query builder from repo.
-        $qb = $repo->getResourcesByCourse($course, $session);
-
-        // 3. Set QueryBuilder to the source.
-        $source->initQueryBuilder($qb);
-
-        // 4. Get the grid builder.
-        $builder = Container::$container->get('apy_grid.factory');
-
-        // 5. Set parameters and properties.
-        $grid = $builder->createBuilder(
-            'grid',
-            $source,
-            [
-                'persistence' => false,
-                'route' => 'home',
-                'filterable' => false,
-                'sortable' => true,
-                'max_per_page' => 10,
-            ]
-        )->add(
-            'id',
-            'number',
-            [
-                'title' => '#',
-                'primary' => true,
-                'visible' => false,
-            ]
-        )->add(
-            'title',
-            'text',
-            [
-                'title' => get_lang('Name'),
-            ]
-        );
-
-        $grid = $grid->getGrid();
-
-        // 7. Add actions
-        if (Container::getAuthorizationChecker()->isGranted(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)) {
-            // Add row actions
-            $myRowAction = new RowAction(
-                get_lang('Edit'),
-                'legacy_main',
-                false,
-                '_self',
-                ['class' => 'btn btn-secondary']
-            );
-            $myRowAction->setRouteParameters(
-                [
-                    'id',
-                    'name' => 'exercise/tests_category.php',
-                    'cid' => $course->getId(),
-                    'action' => 'editcategory',
-                ]
-            );
-
-            $myRowAction->addManipulateRender(
-                function (RowAction $action, Row $row) use ($session, $repo) {
-                    return $repo->rowCanBeEdited($action, $row, $session);
+            if (!$sessionId) {
+                $links .= '<a href="'.api_get_self().'?action=editcategory&category_id='.$category['id'].'&'.api_get_cidreq().'">'.
+                    Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL).'</a>';
+                $links .= ' <a href="'.api_get_self().'?'.api_get_cidreq().'&action=deletecategory&category_id='.$category['id'].'" ';
+                $links .= 'onclick="return confirmDelete(\''.self::protectJSDialogQuote(get_lang('DeleteCategoryAreYouSure').'['.$rowname).'] ?\', \'id_cat'.$category['id'].'\');">';
+                $links .= Display::return_icon('delete.png', get_lang('Delete'), [], ICON_SIZE_SMALL).'</a>';
                 }
-            );
 
-            $grid->addRowAction($myRowAction);
-
-            $myRowAction = new RowAction(
-                get_lang('Delete'),
-                'legacy_main',
-                true,
-                '_self',
-                ['class' => 'btn btn-danger', 'form_delete' => true]
-            );
-            $myRowAction->setRouteParameters(
-                [
-                    'id',
-                    'name' => 'exercise/tests_category.php',
-                    'cid' => $course->getId(),
-                    'action' => 'deletecategory',
-                ]
-            );
-
-            $myRowAction->addManipulateRender(
-                function (RowAction $action, Row $row) use ($session, $repo) {
-                    return $repo->rowCanBeEdited($action, $row, $session);
+            $html .= Display::panel($content, $category['title'].$links);
                 }
-            );
 
-            $grid->addRowAction($myRowAction);
-
-            if (empty($session)) {
-                // Add mass actions
-                $deleteMassAction = new MassAction(
-                    'Delete',
-                    ['TestCategory', 'deleteResource'],
-                    true,
-                    [],
-                    ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER
-                );
-                $grid->addMassAction($deleteMassAction);
-            }
+        return $html;
         }
 
+    /**
+     * To allowed " in javascript dialog box without bad surprises
+     * replace " with two '.
+     *
+     * @param string $text
+     *
+     * @return mixed
+     */
+    public function protectJSDialogQuote($text)
+    {
+        $res = $text;
+        $res = str_replace("'", "\'", $res);
         // 8. Set route and request
-        $grid
-            ->setRouteUrl(api_get_self().'?'.api_get_cidreq())
-            ->handleRequest(Container::getRequest())
-        ;
+        $res = str_replace('"', "\'\'", $res);
 
-        return Container::$container->get('twig')->render(
-            '@ChamiloCore/Resource/grid.html.twig',
-            ['grid' => $grid]
-        );
+        return $res;
     }
 }

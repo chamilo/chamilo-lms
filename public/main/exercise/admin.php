@@ -147,6 +147,12 @@ if (!is_object($objExercise)) {
     Session::write('objExercise', $objExercise);
 }
 // Exercise can be edited in their course.
+if (empty($objExercise)) {
+    header('Location: '.api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq());
+    exit;
+}
+
+// Exercise can be edited in their course.
 if ($objExercise->sessionId != $sessionId) {
     api_not_allowed(true);
 }
@@ -211,7 +217,7 @@ if ($cancelQuestion) {
 
 if (!empty($clone_question) && !empty($objExercise->id)) {
     $old_question_obj = Question::read($clone_question);
-    $old_question_obj->question .= ' - '.get_lang('Copy');
+    $old_question_obj->question = $old_question_obj->question.' - '.get_lang('Copy');
 
     $new_id = $old_question_obj->duplicate(api_get_course_info());
     $new_question_obj = Question::read($new_id);

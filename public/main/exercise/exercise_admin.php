@@ -57,7 +57,7 @@ $htmlHeadXtra[] = '<script>
     }
 
     function check_per_page_one() {
-         document.getElementById(\'exerciseType_0\').checked=true;
+         //document.getElementById(\'exerciseType_0\').checked=true;
     }
 
     function check_per_page_all() {
@@ -112,13 +112,12 @@ $htmlHeadXtra[] = '<script>
                 break;
         }
     }
-</script>';
 
-// to correct #4029 Random and number of attempt menu empty added window.onload=advanced_parameters;
-$htmlHeadXtra[] = '<script>
 function setFocus(){
     $("#exercise_title").focus();
 }
+
+// to correct #4029 Random and number of attempt menu empty added window.onload=advanced_parameters;
 $(function() {
     setFocus();
 });

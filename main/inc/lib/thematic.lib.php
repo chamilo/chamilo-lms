@@ -702,7 +702,7 @@ class Thematic
      * @param int    $thematic_advance_id Thematic advance id (optional), get data by thematic advance list
      * @param string $course_code         Course code (optional)
      * @param bool   $force_session_id    Force to have a session id
-     * @param bool   $withLocalTime    Force start_date to local time
+     * @param bool   $withLocalTime       Force start_date to local time
      *
      * @return array $data
      */
@@ -748,7 +748,7 @@ class Thematic
                 // group all data group by thematic id
                 $tmp = [];
                 while ($row = Database::fetch_array($res, 'ASSOC')) {
-                    if($withLocalTime == true) {
+                    if ($withLocalTime == true) {
                         $row['start_date'] = api_get_local_time($row['start_date']);
                     }
                     $tmp[] = $row['thematic_id'];

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -261,6 +262,7 @@ class Compilatio
             if (!is_object($this->soapcli)) {
                 return "Error in constructor compilatio() $this->soapcli";
             }
+
             return $this->soapcli->__call(
                 'addDocumentBase64',
                 [
@@ -272,7 +274,6 @@ class Compilatio
                     base64_encode($content),
                 ]
             );
-
         } catch (SoapFault $fault) {
             return "Erreur sendDoc()".$fault->faultcode." ".$fault->faultstring;
         }
@@ -409,7 +410,6 @@ class Compilatio
         $loading = Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin');
         $loading .= '&nbsp;';
         //$refreshReturn = Display::url('javascript:window.location.reload(false);', $loading);
-
         switch ($status) {
             case 'ANALYSE_IN_QUEUE':
                 $content = $loading.$text['analysisinqueue'];

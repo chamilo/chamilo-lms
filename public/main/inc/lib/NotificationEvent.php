@@ -57,6 +57,7 @@ class NotificationEvent extends Model
                 $list = array_column($list, 'name', 'id');
                 $form->addSelect('event_id', get_lang('JustificationType'), $list);
                 $form->freeze('event_id');
+
                 break;
             default:
                 break;

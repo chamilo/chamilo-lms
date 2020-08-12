@@ -3795,6 +3795,7 @@ EOT;
      * @param int    $exercise_id
      * @param string $course_code
      * @param int    $session_id
+     * @param bool   $onlyStudent Filter only enrolled students
      *
      * @return array
      */
@@ -3802,10 +3803,12 @@ EOT;
         $question_id,
         $exercise_id,
         $course_code,
-        $session_id
+        $session_id,
+        $onlyStudent = false
     ) {
         $track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+        $courseUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
         $question_id = (int) $question_id;
         $exercise_id = (int) $exercise_id;
@@ -3813,9 +3816,35 @@ EOT;
         $session_id = (int) $session_id;
         $courseId = api_get_course_int_id($course_code);
 
+        if (empty($session_id)) {
+            $courseCondition = "
+            INNER JOIN $courseUser c
+            ON (
+                        e.exe_user_id = c.user_id AND
+                        e.c_id = c.c_id AND
+                        c.status = ".STUDENT."
+                        AND relation_type <> 2
+                )
+            ";
+        } else {
+            $courseCondition = "
+            INNER JOIN $courseUser c
+            ON (
+                        e.exe_user_id = c.user_id AND
+                        e.c_id = c.c_id AND
+                        c.status = 0
+                )
+            ";
+        }
+
         $sql = "SELECT MAX(marks) as max, MIN(marks) as min, AVG(marks) as average
     		FROM $track_exercises e
-    		INNER JOIN $track_attempt a
+    		";
+        if ($onlyStudent == true) {
+            $sql .= $courseCondition;
+        }
+        $sql .= "
+            INNER JOIN $track_attempt a
     		ON (
     		    a.exe_id = e.exe_id AND
     		    e.c_id = a.c_id AND
@@ -3826,7 +3855,7 @@ EOT;
                 a.c_id = $courseId AND
                 e.session_id = $session_id AND
                 question_id = $question_id AND
-                status = ''
+                e.status = ''
             LIMIT 1";
         $result = Database::query($sql);
         $return = [];

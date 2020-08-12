@@ -1223,7 +1223,7 @@ class ZoomPlugin extends Plugin
     private function startInstantMeeting($topic, $user = null, $course = null, $group = null, $session = null)
     {
         $meetingInfoGet = MeetingInfoGet::fromTopicAndType($topic, MeetingInfoGet::TYPE_INSTANT);
-        $meetingInfoGet->settings->approval_type = MeetingSettings::APPROVAL_TYPE_AUTOMATICALLY_APPROVE;
+        //$meetingInfoGet->settings->approval_type = MeetingSettings::APPROVAL_TYPE_AUTOMATICALLY_APPROVE;
         $meeting = $this->createMeetingFromMeeting(
             (new Meeting())
                 ->setMeetingInfoGet($meetingInfoGet)

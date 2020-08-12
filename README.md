@@ -71,13 +71,18 @@ Go back to the beginning of this section and try again.
 * main/inc/lib/javascript moved to public/js
 * main/img/ moved to public/img
 * main/template/default moved to src/Chamilo/CoreBundle/Resources/views
+* src/Chamilo/XXXBundle moved to src/CoreBundle or src/CourseBundle
 * bin/doctrine.php removed use bin/console doctrine:xyz options
-* PHPMailer replaced with Swift Mailer
 * Plugin images, css and js libs are loaded inside the public/plugins folder
   (composer update copies the content inside plugin_name/public inside web/plugins/plugin_name
 * Plugins templates use asset() function instead of using "_p.web_plugin"
-* bower replaced by [yarn](https://yarnpkg.com)
+* Remove main/inc/local.inc.php
 
+Libraries 
+
+* Integration with Symfony 5 
+* PHPMailer replaced with Swift Mailer
+* bower replaced by [yarn](https://yarnpkg.com)
 
 ## Todo
 

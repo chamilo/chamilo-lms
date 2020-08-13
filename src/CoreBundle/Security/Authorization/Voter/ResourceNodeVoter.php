@@ -122,7 +122,7 @@ class ResourceNodeVoter extends Voter
 
         // Checking admin role.
         if ($this->security->isGranted('ROLE_ADMIN')) {
-           // return true;
+            return true;
         }
 
         // Check if I'm the owner.

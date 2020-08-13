@@ -56,7 +56,7 @@ abstract class HookEvent implements HookEventInterface
      */
     public function loadAttachments()
     {
-        if (isset(self::$hook[$this->eventName]) && is_array(self::$hook[$this->eventName])) {
+        /*if (isset(self::$hook[$this->eventName]) && is_array(self::$hook[$this->eventName])) {
             foreach (self::$hook[$this->eventName] as $hookObserver => $val) {
                 $hookObserverInstance = $hookObserver::create();
                 $this->observers->attach($hookObserverInstance);
@@ -70,7 +70,7 @@ abstract class HookEvent implements HookEventInterface
                     $this->observers->attach($hookObserverInstance);
                 }
             }
-        }
+        }*/
 
         return $this;
     }

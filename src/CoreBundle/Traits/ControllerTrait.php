@@ -4,7 +4,7 @@
 
 namespace Chamilo\CoreBundle\Traits;
 
-use Chamilo\CoreBundle\Block\BreadcrumbBlockService;
+//use Chamilo\CoreBundle\Block\BreadcrumbBlockService;
 use Chamilo\CoreBundle\Component\Utils\Glide;
 use Chamilo\CoreBundle\Repository\ResourceFactory;
 use Knp\Menu\FactoryInterface as MenuFactoryInterface;
@@ -33,10 +33,10 @@ trait ControllerTrait
         return $this->container->get('request_stack')->getCurrentRequest();
     }
 
-    public function getBreadCrumb(): BreadcrumbBlockService
+    /*public function getBreadCrumb(): BreadcrumbBlockService
     {
         return $this->container->get('breadcrumb');
-    }
+    }*/
 
     /**
      * @return MenuFactoryInterface

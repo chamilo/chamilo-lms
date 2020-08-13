@@ -17,7 +17,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters->set(Option::SETS, [
         SetList::CLEAN_CODE,
         SetList::SYMFONY,
-        SetList::SYMFONY_RISKY,
+        //SetList::SYMFONY_RISKY,
     ]);
 
     // use $a++ instead of ++$a

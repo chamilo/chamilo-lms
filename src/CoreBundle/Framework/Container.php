@@ -533,22 +533,6 @@ class Container
     }
 
     /**
-     * @param UserManager $manager
-     */
-    public static function setUserManager($manager)
-    {
-        self::$userManager = $manager;
-    }
-
-    /**
-     * @return \Sonata\UserBundle\Entity\GroupManager
-     */
-    public static function getGroupManager()
-    {
-        return self::$container->get('fos_user.group_manager');
-    }
-
-    /**
      * @return \Symfony\Component\Form\FormFactory
      */
     public static function getFormFactory()

@@ -156,7 +156,7 @@ abstract class AbstractResource
     {
         $resourceNode = $this->getResourceNode();
 
-        if ($resourceNode && $resourceNode->getResourceLinks()) {
+        if ($resourceNode && $resourceNode->getResourceLinks()->count()) {
             $result = $resourceNode->getResourceLinks()->first();
             if ($result) {
                 return $result;

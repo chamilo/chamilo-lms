@@ -2133,9 +2133,9 @@ function api_get_cidreq_params($courseCode, $sessionId = 0, $groupId = 0)
     $sessionId = !empty($sessionId) ? (int) $sessionId : 0;
     $groupId = !empty($groupId) ? (int) $groupId : 0;
 
-    $url = 'cidReq='.$courseCode;
-    $url .= '&id_session='.$sessionId;
-    $url .= '&gidReq='.$groupId;
+    $url = 'cid='.$courseCode;
+    $url .= '&sid='.$sessionId;
+    $url .= '&gid='.$groupId;
 
     return $url;
 }

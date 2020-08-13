@@ -1,7 +1,7 @@
 <template>
   <div class="course-list">
-      {{ status }}
-      <CourseCard :courses="courses"></CourseCard>
+    {{ status }}
+    <CourseCard :courses="courses" />
   </div>
 </template>
 
@@ -14,14 +14,14 @@ import axios from "axios";
 export default {
   name: 'CourseList',
   servicePrefix: 'Course',
-  mixins: [ListMixin],
   components: {
     CourseCard
   },
+  mixins: [ListMixin],
   data() {
     return {
       status: null,
-      courses:null
+      courses: []
     };
   },
   created: function () {
@@ -31,15 +31,13 @@ export default {
     load: function() {
       this.status = 'Loading';
       let user = this.$store.getters['security/getUser'];
-
       axios.get(ENTRYPOINT + 'users/'+ user.id +'/courses.json').then(response => {
         this.status = '';
         this.courses = response.data;
       }).catch(function(error) {
-        this.status = error;
+        console.log(error);
       });
     }
-
   }
 };
 </script>

@@ -1,11 +1,10 @@
 <?php
-
 /* For licensing terms, see /license.txt */
 
 $useDefault = false;
 $isDefault = isset($_GET['default']) ? (int) $_GET['default'] : null;
 
-if (1 === $isDefault) {
+if ($isDefault === 1) {
     $cidReset = true;
 }
 
@@ -17,11 +16,11 @@ $_setting['student_view_enabled'] = 'false';
 $userId = api_get_user_id();
 $plugin = CustomCertificatePlugin::create();
 $nameTools = $plugin->get_lang('CertificateSetting');
-$enable = 'true' == $plugin->get('enable_plugin_customcertificate');
+$enable = $plugin->get('enable_plugin_customcertificate') == 'true';
 $accessUrlId = api_get_current_access_url_id();
 $course_info = api_get_course_info();
 
-if (1 === $isDefault) {
+if ($isDefault === 1) {
     $courseId = 0;
     $courseCode = '';
     $sessionId = 0;
@@ -34,8 +33,8 @@ if (1 === $isDefault) {
     $courseId = api_get_course_int_id();
     $courseCode = api_get_course_id();
     $sessionId = api_get_session_id();
-    $enableCourse = 1 == api_get_course_setting('customcertificate_course_enable', $course_info) ? true : false;
-    $useDefault = 1 == api_get_course_setting('use_certificate_default', $course_info) ? true : false;
+    $enableCourse = api_get_course_setting('customcertificate_course_enable', $course_info) == 1 ? true : false;
+    $useDefault = api_get_course_setting('use_certificate_default', $course_info) == 1 ? true : false;
     $defaultCertificate = 0;
     $urlParams = '?'.api_get_cidreq();
 }
@@ -72,7 +71,7 @@ $htmlHeadXtra[] = '<script>
             e.preventDefault();
             e.stopPropagation();
 
-            if (confirm("'.$plugin->get_lang('QuestionDelete').'")) {
+            if (confirm("'.$plugin->get_lang("QuestionDelete").'")) {
                 var courseId = '.$courseId.';
                 var sessionId = '.$sessionId.';
                 var accessUrlId = '.$accessUrlId.';
@@ -121,9 +120,9 @@ if ($form->validate()) {
             'content_course' => $formValues['content_course'],
             'contents_type' => (int) $formValues['contents_type'],
             'contents' => $contents,
-            'date_change' => (int) ($formValues['date_change']),
-            'date_start' => date('Y-m-d', strtotime($date_start)),
-            'date_end' => date('Y-m-d', strtotime($date_end)),
+            'date_change' => intval($formValues['date_change']),
+            'date_start' => date("Y-m-d", strtotime($date_start)),
+            'date_end' => date("Y-m-d", strtotime($date_end)),
             'place' => $formValues['place'],
             'type_date_expediction' => (int) $formValues['type_date_expediction'],
             'day' => $formValues['day'],
@@ -138,7 +137,7 @@ if ($form->validate()) {
             'certificate_default' => 0,
         ];
 
-        if ((int) (1 == $formValues['default_certificate'])) {
+        if (intval($formValues['default_certificate'] == 1)) {
             $params['certificate_default'] = 1;
         }
 
@@ -191,7 +190,7 @@ if ($form->validate()) {
         }
 
         // Certificate Default
-        if ((int) (1 == $formValues['use_default'])) {
+        if (intval($formValues['use_default'] == 1)) {
             $infoCertificateDefault = CustomCertificatePlugin::getInfoCertificateDefault($accessUrlId);
             if (!empty($infoCertificateDefault)) {
                 foreach ($fieldList as $field) {
@@ -205,7 +204,7 @@ if ($form->validate()) {
             }
         }
 
-        Display::addFlash(Display::return_message(get_lang('Saved.')));
+        Display::addFlash(Display::return_message(get_lang('Saved')));
 
         Security::clear_token();
         header('Location: '.api_get_self().$urlParams);
@@ -295,7 +294,7 @@ $strInfo .= '((start_date))<br />';
 $strInfo .= '((end_date))<br />';
 $strInfo .= '((date_expediction))';
 
-$createCertificate = get_lang('Create your certificate copy-pasting the following tags. They will be replaced in the document by their student-specific value:');
+$createCertificate = get_lang('CreateCertificateWithTags');
 $form->addElement(
     'html',
     Display::return_message($createCertificate.': <br />'.$strInfo, 'normal', false)
@@ -387,7 +386,7 @@ $form->addHtmlEditor(
 $form->addHtml('</div>');
 
 // Dates section
-$form->addHtml('<fieldset><legend>'.strtoupper(get_lang('Dates')).'</legend>');
+$form->addHtml('<fieldset><legend>'.strtoupper(get_lang("Dates")).'</legend>');
 
 $group = [];
 $option1 = &$form->createElement(
@@ -404,7 +403,7 @@ $option2 = &$form->createElement(
     'radio',
     'date_change',
     '',
-    get_lang('none'),
+    get_lang('None'),
     2,
     ['id' => 'date_change_2', 'onclick' => 'javascript: dateCertificateSwitchRadioButton2();']
 );
@@ -439,10 +438,10 @@ $form->addHtml('<div class="form-group" style="padding-top: 10px;">
                 name="date_start"
                 id="date_start"
                 type="text"
-                value="'.('1' == $infoCertificate['date_change']
-                        ? date('d/m/Y', strtotime($infoCertificate['date_start']))
+                value="'.(($infoCertificate['date_change'] == '1')
+                        ? date("d/m/Y", strtotime($infoCertificate['date_start']))
                         : '').'"
-                '.('' == $infoCertificate['date_change'] ? 'disabled' : '').'
+                '.(($infoCertificate['date_change'] == '') ? 'disabled' : '').'
             >
             <span style="margin: 0 10px; font-style: italic;">'.get_lang('Until').'</span>
             <input
@@ -451,10 +450,10 @@ $form->addHtml('<div class="form-group" style="padding-top: 10px;">
                 name="date_end"
                 id="date_end"
                 type="text"
-                value="'.('1' == $infoCertificate['date_change']
-                        ? date('d/m/Y', strtotime($infoCertificate['date_end']))
+                value="'.(($infoCertificate['date_change'] == '1')
+                        ? date("d/m/Y", strtotime($infoCertificate['date_end']))
                         : '').'"
-                '.('0' == $infoCertificate['date_change'] ? 'disabled' : '').'
+                '.(($infoCertificate['date_change'] == "0") ? 'disabled' : '').'
             >
         </div>
         </div>
@@ -477,7 +476,7 @@ $option = &$form->createElement(
     [
         'id' => 'type_date_expediction_0',
         'onclick' => 'javascript: dateCertificateSwitchRadioButton0();',
-        (0 == $sessionId ? 'disabled' : ''),
+        (($sessionId == 0) ? 'disabled' : ''),
     ]
 );
 $group[] = $option;
@@ -512,7 +511,7 @@ $option = &$form->createElement(
     'radio',
     'type_date_expediction',
     '',
-    get_lang('none'),
+    get_lang('None'),
     3,
     [
         'id' => 'type_date_expediction_3',
@@ -556,7 +555,7 @@ $form->addHtml(
                 id="day"
                 type="text"
                 value="'.$infoCertificate['day'].'"
-                '.('2' != $infoCertificate['type_date_expediction'] ? 'disabled' : '').'
+                '.(($infoCertificate['type_date_expediction'] != '2') ? 'disabled' : '').'
             >
             <span class="certificado-text-label">de</span>
             <input
@@ -567,7 +566,7 @@ $form->addHtml(
                 id="month"
                 type="text"
                 value="'.$infoCertificate['month'].'"
-                '.('2' != $infoCertificate['type_date_expediction'] ? 'disabled' : '').'
+                '.(($infoCertificate['type_date_expediction'] != '2') ? 'disabled' : '').'
             >
             <span class="certificado-text-label">de</span>
             <input
@@ -578,7 +577,7 @@ $form->addHtml(
                 id="year"
                 type="text"
                 value="'.$infoCertificate['year'].'"
-                '.('2' != $infoCertificate['type_date_expediction'] ? 'disabled' : '').'
+                '.(($infoCertificate['type_date_expediction'] != '2') ? 'disabled' : '').'
             >
         </div>
         </div>
@@ -604,7 +603,7 @@ $form->addFile(
 );
 $form->addProgress();
 if (!empty($infoCertificate['logo_left'])) {
-    $form->addElement('checkbox', 'remove_logo_left', null, get_lang('Remove picture'));
+    $form->addElement('checkbox', 'remove_logo_left', null, get_lang('DelImage'));
     $form->addElement(
         'html',
         '<label class="col-sm-2">&nbsp;</label>
@@ -615,7 +614,7 @@ if (!empty($infoCertificate['logo_left'])) {
 $allowedPictureTypes = api_get_supported_image_extensions(false);
 $form->addRule(
     'logo_left',
-    get_lang('Only PNG, JPG or GIF images allowed').' ('.implode(', ', $allowedPictureTypes).')',
+    get_lang('OnlyImagesAllowed').' ('.implode(', ', $allowedPictureTypes).')',
     'filetype',
     $allowedPictureTypes
 );
@@ -634,7 +633,7 @@ $form->addFile(
 );
 $form->addProgress();
 if (!empty($infoCertificate['logo_center'])) {
-    $form->addElement('checkbox', 'remove_logo_center', null, get_lang('Remove picture'));
+    $form->addElement('checkbox', 'remove_logo_center', null, get_lang('DelImage'));
     $form->addElement(
         'html',
         '<label class="col-sm-2">&nbsp;</label>
@@ -645,7 +644,7 @@ if (!empty($infoCertificate['logo_center'])) {
 $allowedPictureTypes = api_get_supported_image_extensions(false);
 $form->addRule(
     'logo_center',
-    get_lang('Only PNG, JPG or GIF images allowed').' ('.implode(', ', $allowedPictureTypes).')',
+    get_lang('OnlyImagesAllowed').' ('.implode(', ', $allowedPictureTypes).')',
     'filetype',
     $allowedPictureTypes
 );
@@ -664,7 +663,7 @@ $form->addFile(
 );
 $form->addProgress();
 if (!empty($infoCertificate['logo_right'])) {
-    $form->addElement('checkbox', 'remove_logo_right', null, get_lang('Remove picture'));
+    $form->addElement('checkbox', 'remove_logo_right', null, get_lang('DelImage'));
     $form->addElement(
         'html',
         '<label class="col-sm-2">&nbsp;</label>
@@ -675,7 +674,7 @@ if (!empty($infoCertificate['logo_right'])) {
 $tblProperty = api_get_supported_image_extensions(false);
 $form->addRule(
     'logo_right',
-    get_lang('Only PNG, JPG or GIF images allowed').' ('.implode(', ', $allowedPictureTypes).')',
+    get_lang('OnlyImagesAllowed').' ('.implode(', ', $allowedPictureTypes).')',
     'filetype',
     $allowedPictureTypes
 );
@@ -693,7 +692,7 @@ $form->addFile(
 );
 $form->addProgress();
 if (!empty($infoCertificate['seal'])) {
-    $form->addElement('checkbox', 'remove_seal', null, get_lang('Remove picture'));
+    $form->addElement('checkbox', 'remove_seal', null, get_lang('DelImage'));
     $form->addElement(
         'html',
         '<label class="col-sm-2">&nbsp;</label>
@@ -704,7 +703,7 @@ if (!empty($infoCertificate['seal'])) {
 $allowedPictureTypes = api_get_supported_image_extensions(false);
 $form->addRule(
     'seal',
-    get_lang('Only PNG, JPG or GIF images allowed').' ('.implode(', ', $allowedPictureTypes).')',
+    get_lang('OnlyImagesAllowed').' ('.implode(', ', $allowedPictureTypes).')',
     'filetype',
     $allowedPictureTypes
 );
@@ -731,7 +730,7 @@ $form->addFile(
 );
 $form->addProgress();
 if (!empty($infoCertificate['signature1'])) {
-    $form->addElement('checkbox', 'remove_signature1', null, get_lang('Remove picture'));
+    $form->addElement('checkbox', 'remove_signature1', null, get_lang('DelImage'));
     $form->addElement(
         'html',
         '<label class="col-sm-2">&nbsp;</label>
@@ -742,7 +741,7 @@ if (!empty($infoCertificate['signature1'])) {
 $allowedPictureTypes = api_get_supported_image_extensions(false);
 $form->addRule(
     'signature1',
-    get_lang('Only PNG, JPG or GIF images allowed').' ('.implode(', ', $allowedPictureTypes).')',
+    get_lang('OnlyImagesAllowed').' ('.implode(', ', $allowedPictureTypes).')',
     'filetype',
     $allowedPictureTypes
 );
@@ -767,7 +766,7 @@ $form->addFile(
 );
 $form->addProgress();
 if (!empty($infoCertificate['signature2'])) {
-    $form->addElement('checkbox', 'remove_signature2', null, get_lang('Remove picture'));
+    $form->addElement('checkbox', 'remove_signature2', null, get_lang('DelImage'));
     $form->addElement(
         'html',
         '<label class="col-sm-2">&nbsp;</label>
@@ -778,7 +777,7 @@ if (!empty($infoCertificate['signature2'])) {
 $allowedPictureTypes = api_get_supported_image_extensions(false);
 $form->addRule(
     'signature2',
-    get_lang('Only PNG, JPG or GIF images allowed').' ('.implode(', ', $allowedPictureTypes).')',
+    get_lang('OnlyImagesAllowed').' ('.implode(', ', $allowedPictureTypes).')',
     'filetype',
     $allowedPictureTypes
 );
@@ -803,7 +802,7 @@ $form->addFile(
 );
 $form->addProgress();
 if (!empty($infoCertificate['signature3'])) {
-    $form->addElement('checkbox', 'remove_signature3', null, get_lang('Remove picture'));
+    $form->addElement('checkbox', 'remove_signature3', null, get_lang('DelImage'));
     $form->addElement(
         'html',
         '<label class="col-sm-2">&nbsp;</label>
@@ -814,7 +813,7 @@ if (!empty($infoCertificate['signature3'])) {
 $allowedPictureTypes = api_get_supported_image_extensions(false);
 $form->addRule(
     'signature3',
-    get_lang('Only PNG, JPG or GIF images allowed').' ('.implode(', ', $allowedPictureTypes).')',
+    get_lang('OnlyImagesAllowed').' ('.implode(', ', $allowedPictureTypes).')',
     'filetype',
     $allowedPictureTypes
 );
@@ -839,7 +838,7 @@ $form->addFile(
 );
 $form->addProgress();
 if (!empty($infoCertificate['signature4'])) {
-    $form->addElement('checkbox', 'remove_signature4', null, get_lang('Remove picture'));
+    $form->addElement('checkbox', 'remove_signature4', null, get_lang('DelImage'));
     $form->addElement(
         'html',
         '<label class="col-sm-2">&nbsp;</label>
@@ -850,7 +849,7 @@ if (!empty($infoCertificate['signature4'])) {
 $allowedPictureTypes = api_get_supported_image_extensions(false);
 $form->addRule(
     'signature4',
-    get_lang('Only PNG, JPG or GIF images allowed').' ('.implode(', ', $allowedPictureTypes).')',
+    get_lang('OnlyImagesAllowed').' ('.implode(', ', $allowedPictureTypes).')',
     'filetype',
     $allowedPictureTypes
 );
@@ -871,7 +870,7 @@ $form->addFile(
 );
 $form->addProgress();
 if (!empty($infoCertificate['background'])) {
-    $form->addElement('checkbox', 'remove_background', null, get_lang('Remove picture'));
+    $form->addElement('checkbox', 'remove_background', null, get_lang('DelImage'));
     $form->addElement(
         'html',
         '<label class="col-sm-2">&nbsp;</label>
@@ -882,7 +881,7 @@ if (!empty($infoCertificate['background'])) {
 $allowedPictureTypes = api_get_supported_image_extensions(false);
 $form->addRule(
     'background',
-    get_lang('Only PNG, JPG or GIF images allowed').' ('.implode(', ', $allowedPictureTypes).')',
+    get_lang('OnlyImagesAllowed').' ('.implode(', ', $allowedPictureTypes).')',
     'filetype',
     $allowedPictureTypes
 );
@@ -916,7 +915,7 @@ $form->addHtml('<div class="clearfix"></div>');
 
 $form->addButton(
     'submit',
-    get_lang('Save certificate'),
+    get_lang('SaveCertificate'),
     'check',
     'primary',
     null,
@@ -969,7 +968,7 @@ function checkInstanceImage($certificateId, $imagePath, $field, $type = 'certifi
 
     $sql = "SELECT * FROM $table WHERE $field = '$imagePath'";
     $res = Database::query($sql);
-    if (1 == Database::num_rows($res)) {
+    if (Database::num_rows($res) == 1) {
         api_remove_uploaded_file($type, $imagePath);
     }
 

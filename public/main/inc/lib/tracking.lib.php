@@ -2113,6 +2113,34 @@ class Tracking
     }
 
     /**
+     * Get last course access by course/session.
+     */
+    public static function getLastConnectionDateByCourse($courseId, $sessionId = 0)
+    {
+        $courseId = (int) $courseId;
+        $sessionId = (int) $sessionId;
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+
+        $sql = "SELECT logout_course_date
+                FROM $table
+                WHERE
+                        c_id = $courseId AND
+                        session_id = $sessionId
+                ORDER BY logout_course_date DESC
+                LIMIT 0,1";
+
+        $result = Database::query($sql);
+        if (Database::num_rows($result)) {
+            $row = Database::fetch_array($result);
+            if ($row) {
+                return $row['logout_course_date'];
+            }
+        }
+
+        return '';
+    }
+
+    /**
      * Get count of the connections to the course during a specified period.
      *
      * @param int $courseId
@@ -4452,9 +4480,24 @@ class Tracking
         }
 
         $rs = Database::query($sql);
+
+        $allow = api_get_plugin_setting('pausetraining', 'tool_enable') === 'true';
+        $allowPauseFormation = api_get_plugin_setting('pausetraining', 'allow_users_to_edit_pause_formation') === 'true';
+
+        $extraFieldValue = new ExtraFieldValue('user');
         $users = [];
         while ($user = Database::fetch_array($rs)) {
-            $users[] = $user['user_id'];
+            $userId = $user['user_id'];
+
+            if ($allow && $allowPauseFormation) {
+                $pause = $extraFieldValue->get_values_by_handler_and_field_variable($userId, 'pause_formation');
+                if (!empty($pause) && isset($pause['value']) && 1 == $pause['value']) {
+                    // Skip user because he paused his formation.
+                    continue;
+                }
+            }
+
+            $users[] = $userId;
         }
 
         return $users;

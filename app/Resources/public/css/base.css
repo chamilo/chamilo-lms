@@ -1340,15 +1340,6 @@ a.personal_agenda:hover, a.personal_agenda:hover {
     border: none;
 }
 
-/** BUTTONS **/
-.left {
-    float: left !important;
-}
-
-.right {
-    text-align: right;
-}
-
 /* Breadcrumb */
 .breadcrumb{
     margin-bottom: 10px;

@@ -388,10 +388,10 @@ function getUniqueStudentAttemptsTotal($workId, $groupId, $course_id, $sessionId
         $groupIid = $groupInfo['iid'];
     }
 
-    $sql = "SELECT count(DISTINCT u.user_id)
+    $sql = "SELECT count(DISTINCT u.id)
             FROM $work_table w
             INNER JOIN $user_table u
-            ON w.user_id = u.user_id
+            ON w.user_id = u.id
             WHERE
                 w.c_id = $course_id
                 $sessionCondition AND
@@ -444,7 +444,7 @@ function getUniqueStudentAttempts(
 
     if (!empty($onlyUserList)) {
         $onlyUserList = array_map('intval', $onlyUserList);
-        $studentCondition = "AND u.user_id IN ('".implode("', '", $onlyUserList)."') ";
+        $studentCondition = "AND u.id IN ('".implode("', '", $onlyUserList)."') ";
     } else {
         if (empty($userId)) {
             return 0;
@@ -468,7 +468,7 @@ function getUniqueStudentAttempts(
                 SELECT count(*), w.parent_id
                 FROM $work_table w
                 INNER JOIN $user_table u
-                ON w.user_id = u.user_id
+                ON w.user_id = u.id
                 WHERE
                     w.filetype = 'file' AND
                     w.c_id = $course_id
@@ -479,9 +479,9 @@ function getUniqueStudentAttempts(
                 ";
     if (!empty($userId)) {
         $userId = (int) $userId;
-        $sql .= ' AND u.user_id = '.$userId;
+        $sql .= ' AND u.id = '.$userId;
     }
-    $sql .= ' GROUP BY u.user_id, w.parent_id) as t';
+    $sql .= ' GROUP BY u.id, w.parent_id) as t';
     $result = Database::query($sql);
     $row = Database::fetch_row($result);
 
@@ -1174,11 +1174,11 @@ function get_count_work($work_id, $onlyMeUserId = null, $notMeUserId = null)
     $extra_conditions .= ' AND work.parent_id  = '.$work_id.'  ';
     $where_condition = null;
     if (!empty($notMeUserId)) {
-        $where_condition .= ' AND u.user_id <> '.(int) $notMeUserId;
+        $where_condition .= ' AND u.id <> '.(int) $notMeUserId;
     }
 
     if (!empty($onlyMeUserId)) {
-        $where_condition .= ' AND u.user_id =  '.(int) $onlyMeUserId;
+        $where_condition .= ' AND u.id =  '.(int) $onlyMeUserId;
     }
 
     $repo = Container::getStudentPublicationRepository();
@@ -1192,7 +1192,7 @@ function get_count_work($work_id, $onlyMeUserId = null, $notMeUserId = null)
             INNER JOIN $work_table work
             ON (node.id = work.resource_node_id)
             INNER JOIN $user_table u
-            ON (work.user_id = u.user_id)
+            ON (work.user_id = u.id)
             WHERE
                 link.c_id = $course_id AND
                 resource_type_id = $typeId AND
@@ -1327,7 +1327,7 @@ function getWorkListStudent(
             $work['title'] = basename($work['url']);
         }
 
-        $whereCondition = " AND u.user_id = $userId ";
+        $whereCondition = " AND u.id = $userId ";
 
         $workList = get_work_user_list(
             0,
@@ -1574,13 +1574,13 @@ function get_work_user_list_from_documents(
     $getCount = false
 ) {
     if ($getCount) {
-        $select1 = ' SELECT count(u.user_id) as count ';
-        $select2 = ' SELECT count(u.user_id) as count ';
+        $select1 = ' SELECT count(u.id) as count ';
+        $select2 = ' SELECT count(u.id) as count ';
     } else {
         $select1 = ' SELECT DISTINCT
                         u.firstname,
                         u.lastname,
-                        u.user_id,
+                        u.id as user_id,
                         w.title,
                         w.parent_id,
                         w.document_id document_id,
@@ -1592,7 +1592,7 @@ function get_work_user_list_from_documents(
                     ';
         $select2 = ' SELECT DISTINCT
                         u.firstname, u.lastname,
-                        u.user_id,
+                        u.id as user_id,
                         d.title,
                         w.parent_id,
                         d.id document_id,
@@ -1620,7 +1620,7 @@ function get_work_user_list_from_documents(
     $studentId = (int) $studentId;
     $workId = (int) $workId;
 
-    $userCondition = " AND u.user_id = $studentId ";
+    $userCondition = " AND u.id = $studentId ";
     $sessionCondition = api_get_session_condition($sessionId, true, false, 'w.session_id');
     $workCondition = " AND w_rel.work_id = $workId";
     $workParentCondition = " AND w.parent_id = $workId";
@@ -1628,7 +1628,7 @@ function get_work_user_list_from_documents(
     $sql = "(
                 $select1 FROM $userTable u
                 INNER JOIN $workTable w
-                ON (u.user_id = w.user_id AND w.active IN (0, 1) AND w.filetype = 'file')
+                ON (u.id = w.user_id AND w.active IN (0, 1) AND w.filetype = 'file')
                 WHERE
                     w.c_id = $courseId
                     $userCondition
@@ -1641,7 +1641,7 @@ function get_work_user_list_from_documents(
                 ON (w_rel.work_id = w.id AND w.active IN (0, 1) AND w_rel.c_id = w.c_id)
                 INNER JOIN $documentTable d
                 ON (w_rel.document_id = d.id AND d.c_id = w.c_id)
-                INNER JOIN $userTable u ON (u.user_id = $studentId)
+                INNER JOIN $userTable u ON (u.id = $studentId)
                 WHERE
                     w.c_id = $courseId
                     $workCondition
@@ -1881,7 +1881,7 @@ function get_work_user_list(
             if (isset($course_info['show_score']) &&
                 1 == $course_info['show_score']
             ) {
-                $extra_conditions .= ' AND (u.user_id = '.api_get_user_id().' AND work.active IN (0, 1)) ';
+                $extra_conditions .= ' AND (u.id = '.api_get_user_id().' AND work.active IN (0, 1)) ';
             } else {
                 $extra_conditions .= ' AND work.active IN (0, 1) ';
             }
@@ -1890,7 +1890,7 @@ function get_work_user_list(
         $extra_conditions .= " AND parent_id  = $work_id ";
 
         $select = 'SELECT DISTINCT
-                        u.user_id,
+                        u.id as user_id,
                         work.id as id,
                         title as title,
                         description,
@@ -1912,20 +1912,20 @@ function get_work_user_list(
                         title_correction
                         ';
         if ($getCount) {
-            $select = 'SELECT DISTINCT count(u.user_id) as count ';
+            $select = 'SELECT DISTINCT count(u.id) as count ';
         }
 
         $work_assignment = get_work_assignment_by_id($work_id, $courseId);
 
         if (!empty($studentId)) {
             $studentId = (int) $studentId;
-            $whereCondition .= " AND u.user_id = $studentId ";
+            $whereCondition .= " AND u.id = $studentId ";
         }
 
         $sql = " $select
                 FROM $work_table work
                 INNER JOIN $user_table u
-                ON (work.user_id = u.user_id)
+                ON (work.user_id = u.id)
                 WHERE
                     work.c_id = $course_id AND
                     $extra_conditions
@@ -2596,19 +2596,19 @@ function get_list_users_without_publication($task_id, $studentId = 0)
     if (0 == $session_id) {
         $sql_users = "SELECT cu.user_id, u.lastname, u.firstname, u.email
                       FROM $table_course_user AS cu, $table_user AS u
-                      WHERE u.status != 1 and cu.c_id='".$course_id."' AND u.user_id = cu.user_id";
+                      WHERE u.status != 1 and cu.c_id='".$course_id."' AND u.id = cu.user_id";
     } else {
         $sql_users = "SELECT cu.user_id, u.lastname, u.firstname, u.email
                       FROM $session_course_rel_user AS cu, $table_user AS u
                       WHERE
                         u.status != 1 AND
                         cu.c_id='".$course_id."' AND
-                        u.user_id = cu.user_id AND
+                        u.id = cu.user_id AND
                         cu.session_id = '".$session_id."'";
     }
 
     if (!empty($studentId)) {
-        $sql_users .= ' AND u.user_id = '.(int) $studentId;
+        $sql_users .= ' AND u.id = '.(int) $studentId;
     }
 
     $group_id = api_get_group_id();

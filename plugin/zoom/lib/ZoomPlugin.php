@@ -29,16 +29,15 @@ use Doctrine\ORM\Tools\ToolsException;
  */
 class ZoomPlugin extends Plugin
 {
+    const RECORDING_TYPE_CLOUD = 'cloud';
+    const RECORDING_TYPE_LOCAL = 'local';
+    const RECORDING_TYPE_NONE = 'none';
     public $isCoursePlugin = true;
 
     /**
      * @var JWTClient
      */
     private $jwtClient;
-
-    const RECORDING_TYPE_CLOUD = 'cloud';
-    const RECORDING_TYPE_LOCAL = 'local';
-    const RECORDING_TYPE_NONE = 'none';
 
     /**
      * ZoomPlugin constructor.
@@ -1124,6 +1123,24 @@ class ZoomPlugin extends Plugin
         return Display::toolbarAction('toolbar', [$actionsLeft]);
     }
 
+    public function getRecordingSetting()
+    {
+        $recording = (string) $this->get('enableCloudRecording');
+
+        if (in_array($recording, [self::RECORDING_TYPE_LOCAL, self::RECORDING_TYPE_CLOUD], true)) {
+            return $recording;
+        }
+
+        return self::RECORDING_TYPE_NONE;
+    }
+
+    public function hasRecordingAvailable()
+    {
+        $recording = $this->getRecordingSetting();
+
+        return self::RECORDING_TYPE_NONE !== $recording;
+    }
+
     /**
      * Updates meeting registrants list. Adds the missing registrants and removes the extra.
      *
@@ -1297,25 +1314,6 @@ class ZoomPlugin extends Plugin
         Database::getManager()->flush();
 
         return $meeting;
-    }
-
-    public function getRecordingSetting()
-    {
-        $recording = (string) $this->get('enableCloudRecording');
-
-        if (in_array($recording, [self::RECORDING_TYPE_LOCAL, self::RECORDING_TYPE_CLOUD], true)) {
-
-            return $recording;
-        }
-
-        return self::RECORDING_TYPE_NONE;
-    }
-
-    public function hasRecordingAvailable()
-    {
-        $recording = $this->getRecordingSetting();
-
-        return self::RECORDING_TYPE_NONE !== $recording;
     }
 
     /**

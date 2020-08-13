@@ -36,6 +36,10 @@ class ZoomPlugin extends Plugin
      */
     private $jwtClient;
 
+    const RECORDING_TYPE_CLOUD = 'cloud';
+    const RECORDING_TYPE_LOCAL = 'local';
+    const RECORDING_TYPE_NONE = 'none';
+
     /**
      * ZoomPlugin constructor.
      * {@inheritdoc}
@@ -44,7 +48,7 @@ class ZoomPlugin extends Plugin
     public function __construct()
     {
         parent::__construct(
-            '0.2',
+            '0.3',
             'Sébastien Ducoulombier, Julio Montoya',
             [
                 'tool_enable' => 'boolean',
@@ -52,7 +56,14 @@ class ZoomPlugin extends Plugin
                 'apiSecret' => 'text',
                 'verificationToken' => 'text',
                 'enableParticipantRegistration' => 'boolean',
-                'enableCloudRecording' => 'boolean',
+                'enableCloudRecording' => [
+                    'type' => 'select',
+                    'options' => [
+                        self::RECORDING_TYPE_CLOUD => 'Cloud',
+                        self::RECORDING_TYPE_LOCAL => 'Local',
+                        self::RECORDING_TYPE_NONE => get_lang('None'),
+                    ],
+                ],
                 'enableGlobalConference' => 'boolean',
                 'globalConferenceAllowRoles' => [
                     'type' => 'select',
@@ -1273,8 +1284,7 @@ class ZoomPlugin extends Plugin
 
         $meeting->getMeetingInfoGet()->settings->contact_email = $currentUser->getEmail();
         $meeting->getMeetingInfoGet()->settings->contact_name = $currentUser->getFullname();
-        $recording = 'true' === $this->get('enableCloudRecording') ? 'cloud' : 'local';
-        $meeting->getMeetingInfoGet()->settings->auto_recording = $recording;
+        $meeting->getMeetingInfoGet()->settings->auto_recording = $this->getRecordingSetting();
         $meeting->getMeetingInfoGet()->settings->registrants_email_notification = false;
 
         //$meeting->getMeetingInfoGet()->host_email = $currentUser->getEmail();
@@ -1287,6 +1297,25 @@ class ZoomPlugin extends Plugin
         Database::getManager()->flush();
 
         return $meeting;
+    }
+
+    public function getRecordingSetting()
+    {
+        $recording = (string) $this->get('enableCloudRecording');
+
+        if (in_array($recording, [self::RECORDING_TYPE_LOCAL, self::RECORDING_TYPE_CLOUD], true)) {
+
+            return $recording;
+        }
+
+        return self::RECORDING_TYPE_NONE;
+    }
+
+    public function hasRecordingAvailable()
+    {
+        $recording = $this->getRecordingSetting();
+
+        return self::RECORDING_TYPE_NONE !== $recording;
     }
 
     /**

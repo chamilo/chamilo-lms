@@ -9,10 +9,11 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\ResourceRight;
 use Chamilo\CoreBundle\Entity\Session;
+use Doctrine\ORM\EntityManagerInterface;
 use Laminas\Permissions\Acl\Acl;
 use Laminas\Permissions\Acl\Resource\GenericResource as SecurityResource;
 use Laminas\Permissions\Acl\Role\GenericRole as Role;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Acl\Permission\MaskBuilder;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -35,16 +36,18 @@ class ResourceNodeVoter extends Voter
     public const ROLE_CURRENT_SESSION_COURSE_TEACHER = 'ROLE_CURRENT_SESSION_COURSE_TEACHER';
     public const ROLE_CURRENT_SESSION_COURSE_STUDENT = 'ROLE_CURRENT_SESSION_COURSE_STUDENT';
 
-    private $container;
+    private $requestStack;
     private $security;
+    private $entityManager;
 
     /**
      * Constructor.
      */
-    public function __construct(ContainerInterface $container, Security $security)
+    public function __construct(Security $security, RequestStack $requestStack, EntityManagerInterface $entityManager)
     {
-        $this->container = $container;
         $this->security = $security;
+        $this->entityManager = $entityManager;
+        $this->requestStack = $requestStack;
     }
 
     public static function getReaderMask(): int
@@ -112,14 +115,14 @@ class ResourceNodeVoter extends Voter
             return true;
         }
 
-        // Course access are protected using the CourseVoter not by ResourceNodeVoter.
+        // Courses are also a ResourceNode. Courses are protected using the CourseVoter not by ResourceNodeVoter.
         if ('courses' === $resourceNode->getResourceType()->getName()) {
             return true;
         }
 
         // Checking admin role.
         if ($this->security->isGranted('ROLE_ADMIN')) {
-            return true;
+           // return true;
         }
 
         // Check if I'm the owner.
@@ -127,11 +130,11 @@ class ResourceNodeVoter extends Voter
 
         if ($creator instanceof UserInterface &&
             $user->getUsername() === $creator->getUsername()) {
-            return true;
+            //return true;
         }
 
         // Checking links connected to this resource.
-        $request = $this->container->get('request_stack')->getCurrentRequest();
+        $request = $this->requestStack->getCurrentRequest();
 
         // @todo fix parameters.
         $courseId = $request->get('cid');
@@ -139,7 +142,8 @@ class ResourceNodeVoter extends Voter
 
         $links = $resourceNode->getResourceLinks();
         $linkFound = false;
-        $courseManager = $this->container->get('Chamilo\CoreBundle\Repository\CourseRepository');
+        $courseManager = $this->entityManager->getRepository(Course::class);
+        $sessionManager = $this->entityManager->getRepository(Session::class);
 
         foreach ($links as $link) {
             // Block access if visibility is deleted.
@@ -174,7 +178,7 @@ class ResourceNodeVoter extends Voter
             if ($linkSession instanceof Session && !empty($sessionId) &&
                 $linkCourse instanceof Course && !empty($courseId)
             ) {
-                $session = $this->container->get('chamilo_core.entity.manager.session_manager')->find($sessionId);
+                $session = $sessionManager->find($sessionId);
                 $course = $courseManager->find($courseId);
                 if ($session instanceof Session &&
                     $course instanceof Course &&

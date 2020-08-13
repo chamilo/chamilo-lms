@@ -11,7 +11,6 @@ use League\Flysystem\MountManager;
 use Symfony\Component\DependencyInjection\ContainerInterface as Container;
 use Symfony\Component\PropertyAccess\Exception\InvalidArgumentException;
 use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class ResourceFactory

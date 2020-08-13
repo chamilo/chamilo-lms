@@ -61,7 +61,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 $order_clause = 'ORDER BY ';
 $order_clause .= api_sort_by_first_name() ? 'firstname, lastname, username' : 'lastname, firstname, username';
 
-$sql = "SELECT user_id,lastname,firstname,username
+$sql = "SELECT id as user_id,lastname,firstname,username
         FROM $tbl_user
         WHERE status='1'".$order_clause;
 
@@ -167,6 +167,8 @@ if ($form->validate()) {
         $extraFields['extra_image']['crop_parameters'] = $params['picture_crop_result'];
     }
 
+    $status = isset($params['status']) ? $params['status'] : 0;
+
     $return = SessionManager::edit_session(
         $id,
         $name,
@@ -184,7 +186,8 @@ if ($form->validate()) {
         $duration,
         $extraFields,
         null,
-        $sendSubscriptionNotification
+        $sendSubscriptionNotification,
+        $status
     );
 
     if ($return) {

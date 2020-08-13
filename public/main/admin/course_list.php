@@ -21,64 +21,7 @@ $sessionId = isset($_GET['session_id']) ? $_GET['session_id'] : null;
  */
 function get_number_of_courses()
 {
-    $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-    $tblCourseCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
-    $sql = "SELECT COUNT(c.id) AS total_number_of_items FROM $course_table c";
-
-    if ((api_is_platform_admin() || api_is_session_admin()) &&
-        api_is_multiple_url_enabled() && -1 != api_get_current_access_url_id()
-    ) {
-        $access_url_rel_course_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-        $sql .= " INNER JOIN $access_url_rel_course_table url_rel_course
-                 ON (c.id = url_rel_course.c_id)";
-    }
-
-    $sql .= " LEFT JOIN $tblCourseCategory ON c.category_id = course_category.id ";
-
-    if (isset($_GET['keyword'])) {
-        $keyword = Database::escape_string('%'.$_GET['keyword'].'%');
-        $sql .= " WHERE (
-                        c.title LIKE '".$keyword."' OR
-                        c.code LIKE '".$keyword."' OR
-                        c.visual_code LIKE '".$keyword."'
-                )
-        ";
-    } elseif (isset($_GET['keyword_code'])) {
-        $keyword_code = Database::escape_string('%'.$_GET['keyword_code'].'%');
-        $keyword_title = Database::escape_string('%'.$_GET['keyword_title'].'%');
-        $keyword_category = isset($_GET['keyword_category'])
-            ? Database::escape_string('%'.$_GET['keyword_category'].'%')
-            : null;
-        $keyword_language = Database::escape_string('%'.$_GET['keyword_language'].'%');
-        $keyword_visibility = Database::escape_string('%'.$_GET['keyword_visibility'].'%');
-        $keyword_subscribe = Database::escape_string($_GET['keyword_subscribe']);
-        $keyword_unsubscribe = Database::escape_string($_GET['keyword_unsubscribe']);
-
-        $sql .= " WHERE
-                    (c.code LIKE '".$keyword_code."' OR c.visual_code LIKE '".$keyword_code."') AND
-                    c.title LIKE '".$keyword_title."' AND
-                    c.course_language LIKE '".$keyword_language."' AND
-                    c.visibility LIKE '".$keyword_visibility."' AND
-                    c.subscribe LIKE '".$keyword_subscribe."' AND
-                    c.unsubscribe LIKE '".$keyword_unsubscribe."'
-        ";
-
-        if (!empty($keyword_category)) {
-            $sql .= " AND course_category.code LIKE '".$keyword_category."' ";
-        }
-    }
-
-    // adding the filter to see the user's only of the current access_url
-    if ((api_is_platform_admin() || api_is_session_admin()) &&
-        api_is_multiple_url_enabled() && -1 != api_get_current_access_url_id()
-    ) {
-        $sql .= ' AND url_rel_course.access_url_id = '.api_get_current_access_url_id();
-    }
-
-    $res = Database::query($sql);
-    $obj = Database::fetch_object($res);
-
-    return $obj->total_number_of_items;
+    return get_course_data(0, 0, 0, 0, null, true);
 }
 
 /**
@@ -93,12 +36,12 @@ function get_number_of_courses()
  *
  * @return array
  */
-function get_course_data($from, $number_of_items, $column, $direction)
+function get_course_data($from, $number_of_items, $column, $direction, $dataFunctions = [], $getCount = false)
 {
     $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
     $tblCourseCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
 
-    $sql = "SELECT
+    $select = "SELECT
                 course.code AS col0,
                 title AS col1,
                 course.code AS col2,
@@ -111,8 +54,13 @@ function get_course_data($from, $number_of_items, $column, $direction)
                 directory as col9,
                 visual_code,
                 directory,
-                course.id
-    		FROM $course_table course
+                course.id";
+
+    if ($getCount) {
+        $select = 'SELECT COUNT(DISTINCT(course.id)) as count ';
+    }
+
+    $sql = "$select FROM $course_table course
     		LEFT JOIN $tblCourseCategory category ON course.category_id = category.id ";
 
     if ((api_is_platform_admin() || api_is_session_admin()) &&
@@ -160,6 +108,16 @@ function get_course_data($from, $number_of_items, $column, $direction)
         api_is_multiple_url_enabled() && -1 != api_get_current_access_url_id()
     ) {
         $sql .= ' AND url_rel_course.access_url_id='.api_get_current_access_url_id();
+    }
+
+    if ($getCount) {
+        $res = Database::query($sql);
+        $row = Database::fetch_array($res);
+        if ($row) {
+            return (int) $row['count'];
+        }
+
+        return 0;
     }
 
     $sql .= " ORDER BY col$column $direction ";

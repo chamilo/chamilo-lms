@@ -6,6 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CoreBundle\Entity\ResourceToCourseInterface;
 use Chamilo\CoreBundle\Entity\Room;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -22,7 +23,7 @@ use Doctrine\ORM\Mapping as ORM;
  * )
  * @ORM\Entity
  */
-class CCalendarEvent extends AbstractResource implements ResourceInterface
+class CCalendarEvent extends AbstractResource implements ResourceInterface, ResourceToCourseInterface
 {
     /**
      * @var int

@@ -7,7 +7,7 @@ use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Entity\SettingsCurrent;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CourseBundle\Entity\CGroupInfo;
+use Chamilo\CourseBundle\Entity\CGroup;
 use ChamiloSession as Session;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Finder\Finder;
@@ -2291,7 +2291,7 @@ function api_get_session_entity($id = 0)
 /**
  * @param int $id
  *
- * @return CGroupInfo
+ * @return CGroup
  */
 function api_get_group_entity($id = 0)
 {
@@ -2299,7 +2299,7 @@ function api_get_group_entity($id = 0)
         $id = api_get_group_id();
     }
 
-    return Database::getManager()->getRepository('ChamiloCourseBundle:CGroupInfo')->find($id);
+    return Database::getManager()->getRepository('ChamiloCourseBundle:CGroup')->find($id);
 }
 
 /**
@@ -4278,7 +4278,7 @@ function api_item_property_update(
 
         $objGroup = null;
         if (!empty($to_group_id)) {
-            $objGroup = $em->find('ChamiloCourseBundle:CGroupInfo', $to_group_id);
+            $objGroup = $em->find('CGroup', $to_group_id);
         }
 
         $objToUser = api_get_user_entity($to_user_id);

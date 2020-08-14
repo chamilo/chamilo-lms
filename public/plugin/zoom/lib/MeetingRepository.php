@@ -5,7 +5,7 @@ namespace Chamilo\PluginBundle\Zoom;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\CourseBundle\Entity\CGroupInfo;
+use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\PageBundle\Entity\User;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -189,7 +189,7 @@ class MeetingRepository extends EntityRepository
      *
      * @return ArrayCollection|Collection|Meeting[]
      */
-    public function courseMeetings(Course $course, CGroupInfo $group = null, Session $session = null)
+    public function courseMeetings(Course $course, CGroup $group = null, Session $session = null)
     {
         return $this->matching(
             Criteria::create()->where(

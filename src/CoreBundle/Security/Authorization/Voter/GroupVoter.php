@@ -5,8 +5,8 @@
 namespace Chamilo\CoreBundle\Security\Authorization\Voter;
 
 use Chamilo\CoreBundle\Repository\CourseRepository;
-use Chamilo\CourseBundle\Entity\CGroupInfo;
-use Chamilo\CourseBundle\Repository\CGroupInfoRepository;
+use Chamilo\CourseBundle\Entity\CGroup;
+use Chamilo\CourseBundle\Repository\CGroupRepository;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -30,7 +30,7 @@ class GroupVoter extends Voter
     public function __construct(
         EntityManager $entityManager,
         CourseRepository $courseManager,
-        CGroupInfoRepository $groupManager,
+        CGroupRepository $groupManager,
         Security $security
     ) {
         $this->entityManager = $entityManager;
@@ -53,7 +53,7 @@ class GroupVoter extends Voter
         }
 
         // only vote on Post objects inside this voter
-        if (!$subject instanceof CGroupInfo) {
+        if (!$subject instanceof CGroup) {
             return false;
         }
 

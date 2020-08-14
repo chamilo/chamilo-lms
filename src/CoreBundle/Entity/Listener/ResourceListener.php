@@ -8,9 +8,11 @@ use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
+use Chamilo\CoreBundle\Entity\ResourceRight;
 use Chamilo\CoreBundle\Entity\ResourceToCourseInterface;
 use Chamilo\CoreBundle\Entity\ResourceToRootInterface;
 use Chamilo\CoreBundle\Entity\ResourceWithUrlInterface;
+use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CoreBundle\ToolChain;
 use Cocur\Slugify\SlugifyInterface;
 use Doctrine\ORM\Event\LifecycleEventArgs;
@@ -77,7 +79,7 @@ class ResourceListener
 
     public function prePersist(AbstractResource $resource, LifecycleEventArgs $event)
     {
-        error_log('resource listener  prePersist');
+        error_log('resource listener prePersist');
         $em = $event->getEntityManager();
         $request = $this->request;
 
@@ -88,7 +90,7 @@ class ResourceListener
         }
 
         if ($resource->hasResourceNode()) {
-            // This will attach the resource to the main resource node root (Example a course).
+            // This will attach the resource to the main resource node root (For example a Course).
             if ($resource instanceof ResourceToRootInterface) {
                 $url = $this->getAccessUrl($em);
                 $resource->getResourceNode()->setParent($url->getResourceNode());
@@ -176,6 +178,7 @@ class ResourceListener
             }
         }
 
+        // Use by api platform
         $links = $resource->getResourceLinkListFromEntity();
         if ($links) {
             $courseRepo = $em->getRepository('ChamiloCoreBundle:Course');
@@ -212,9 +215,40 @@ class ResourceListener
             }
         }
 
+        // Use by Chamilo.
+        $links = $resource->getLinks();
+        if ($links) {
+            foreach ($links as $link) {
+                $link->setResourceNode($resourceNode);
+
+                $rights = [];
+                switch ($link->getVisibility()) {
+                    case ResourceLink::VISIBILITY_PENDING:
+                    case ResourceLink::VISIBILITY_DRAFT:
+                        $editorMask = ResourceNodeVoter::getEditorMask();
+                        $resourceRight = new ResourceRight();
+                        $resourceRight
+                            ->setMask($editorMask)
+                            ->setRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)
+                        ;
+                        $rights[] = $resourceRight;
+
+                        break;
+                }
+
+                if (!empty($rights)) {
+                    foreach ($rights as $right) {
+                        $link->addResourceRight($right);
+                    }
+                }
+                $em->persist($link);
+            }
+        }
+
         if ($resource instanceof ResourceToCourseInterface) {
-            //$this->request->getCurrentRequest()->getSession()->get('access_url_id');
-            //$resourceNode->setParent($url->getResourceNode());
+            if (null !== $resource->getParent()) {
+                $resourceNode->setParent($resource->getParent()->getResourceNode());
+            }
         }
 
         $resource->setResourceNode($resourceNode);

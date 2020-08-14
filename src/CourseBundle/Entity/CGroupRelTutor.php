@@ -52,9 +52,9 @@ class CGroupRelTutor
     protected $user;
 
     /**
-     * @var CGroupInfo
+     * @var CGroup
      *
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CGroupInfo", inversedBy="tutors")
+     * @ORM\ManyToOne(targetEntity="CGroup", inversedBy="tutors")
      * @ORM\JoinColumn(name="group_id", referencedColumnName="iid", nullable=false)
      */
     protected $group;
@@ -86,7 +86,7 @@ class CGroupRelTutor
      *
      * @return CGroupRelTutor
      */
-    public function setGroup(CGroupInfo $group)
+    public function setGroup(CGroup $group)
     {
         $this->group = $group;
 
@@ -96,7 +96,7 @@ class CGroupRelTutor
     /**
      * Get group.
      *
-     * @return CGroupInfo
+     * @return CGroup
      */
     public function getGroup()
     {

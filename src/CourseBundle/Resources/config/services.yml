@@ -97,9 +97,9 @@ services:
         arguments:
             $className: 'Chamilo\CourseBundle\Entity\CGlossary'
 
-    Chamilo\CourseBundle\Repository\CGroupInfoRepository:
+    Chamilo\CourseBundle\Repository\CGroupRepository:
         arguments:
-            $className: 'Chamilo\CourseBundle\Entity\CGroupInfo'
+            $className: 'Chamilo\CourseBundle\Entity\CGroup'
 
     Chamilo\CourseBundle\Repository\CQuizRepository:
         arguments:

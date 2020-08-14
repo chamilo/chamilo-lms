@@ -81,7 +81,7 @@ trait CourseControllerTrait
             return null;
         }
 
-        return $this->getDoctrine()->getManager()->find('ChamiloCourseBundle:CGroupInfo', $groupId);
+        return $this->getDoctrine()->getManager()->find('ChamiloCourseBundle:CGroup', $groupId);
     }
 
     public function getCourseUrlQuery(): string

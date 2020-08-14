@@ -155,7 +155,7 @@ class CourseListener
                 $sessionHandler->remove('gid');
             } else {
                 //dump('Load chamilo group from DB');
-                $group = $em->getRepository('ChamiloCourseBundle:CGroupInfo')->find($groupId);
+                $group = $em->getRepository('CGroup')->find($groupId);
 
                 if (!$group) {
                     throw new NotFoundHttpException($translator->trans('Group not found'));

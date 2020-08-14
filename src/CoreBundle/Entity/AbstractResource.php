@@ -6,6 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiSubresource;
+use Chamilo\CourseBundle\Entity\CGroup;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -61,7 +62,118 @@ abstract class AbstractResource
      */
     public $resourceLinkList;
 
+    /** @var ResourceLink[] */
+    public $linkEntityList;
+
+    /** @var AbstractResource */
+    public $parentResource;
+
     abstract public function getResourceName(): string;
+
+    public function addLink(ResourceLink $link)
+    {
+        $this->linkEntityList[] = $link;
+
+        return $this;
+    }
+
+    public function addCourseLink(Course $course, Session $session = null, CGroup $group = null)
+    {
+        $resourceLink = new ResourceLink();
+        $resourceLink
+            ->setVisibility(ResourceLink::VISIBILITY_PUBLISHED)
+            ->setCourse($course)
+            ->setSession($session)
+            ->setGroup($group)
+        ;
+        $this->addLink($resourceLink);
+
+        return $this;
+    }
+
+    public function addGroupLink(Course $course, Session $session = null, CGroup $group = null)
+    {
+        $resourceNode = $this->getResourceNode();
+        $exists = $resourceNode->getResourceLinks()->exists(
+            function ($key, $element) use ($group) {
+                if ($element->getGroup()) {
+                    return $group->getIid() == $element->getGroup()->getIid();
+                }
+            }
+        );
+
+        if (false === $exists) {
+            $resourceLink = new ResourceLink();
+            $resourceLink
+                ->setResourceNode($resourceNode)
+                ->setCourse($course)
+                ->setSession($session)
+                ->setGroup($group)
+                ->setVisibility(ResourceLink::VISIBILITY_PUBLISHED)
+            ;
+            $this->addLink($resourceLink);
+        }
+
+        return $this;
+    }
+
+    public function addUserLink(User $user, Course $course = null, Session $session = null, CGroup $group = null)
+    {
+        $resourceLink = new ResourceLink();
+        $resourceLink
+            ->setVisibility(ResourceLink::VISIBILITY_PUBLISHED)
+            ->setUser($user)
+            ->setCourse($course)
+            ->setSession($session)
+            ->setGroup($group)
+        ;
+
+        $this->addLink($resourceLink);
+
+        return $this;
+    }
+
+    public function addParent(AbstractResource $parent)
+    {
+        $this->parentResource = $parent;
+
+        return $this;
+    }
+
+    public function getParent()
+    {
+        return $this->parentResource;
+    }
+
+    /**
+     * @param array $userList User id list
+     */
+    public function addResourceToUserList(
+        array $userList,
+        Course $course = null,
+        Session $session = null,
+        CGroup $group = null
+    ) {
+        if (!empty($userList)) {
+            foreach ($userList as $user) {
+                $this->addUserLink($user, $course, $session, $group);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getLinks()
+    {
+        return $this->linkEntityList;
+    }
+
+    public function addResourceLink($link)
+    {
+        $this->resourceLinkList[] = $link;
+
+        return $this;
+    }
 
     public function setResourceLinkList($links)
     {
@@ -75,7 +187,7 @@ abstract class AbstractResource
         return $this->resourceLinkList;
     }
 
-    public function getResourceLinkList(): array
+    /*public function getResourceLinkList(): array
     {
         $resourceNode = $this->getResourceNode();
         $links = $resourceNode->getResourceLinks();
@@ -94,7 +206,7 @@ abstract class AbstractResource
         }
 
         return $resourceLinkList;
-    }
+    }*/
 
     public function hasParentResourceNode(): bool
     {

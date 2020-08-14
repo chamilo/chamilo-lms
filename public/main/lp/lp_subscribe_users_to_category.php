@@ -193,8 +193,10 @@ if ($formUsers->validate()) {
 
         foreach ($groups as $groupId) {
             $group = api_get_group_entity($groupId);
-            $repo->addResourceToCourseGroup($category->getResourceNode(), $group);
+            $category->addGroupLink($group);
         }
+
+        $repo->getEntityManager()->persist($category);
         $repo->getEntityManager()->flush();
 
         Display::addFlash(Display::return_message(get_lang('Update successful')));

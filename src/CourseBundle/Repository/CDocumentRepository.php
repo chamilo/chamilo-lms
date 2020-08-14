@@ -17,7 +17,7 @@ use Chamilo\CoreBundle\Repository\GridInterface;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CoreBundle\Repository\UploadInterface;
 use Chamilo\CourseBundle\Entity\CDocument;
-use Chamilo\CourseBundle\Entity\CGroupInfo;
+use Chamilo\CourseBundle\Entity\CGroup;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -27,7 +27,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  */
 final class CDocumentRepository extends ResourceRepository implements GridInterface, UploadInterface
 {
-    public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroupInfo $group = null): QueryBuilder
+    public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroup $group = null): QueryBuilder
     {
         return $this->getResourcesByCourse($course, $session, $group, $parentNode);
     }

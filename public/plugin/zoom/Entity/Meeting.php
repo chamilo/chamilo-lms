@@ -8,7 +8,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
-use Chamilo\CourseBundle\Entity\CGroupInfo;
+use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\PluginBundle\Zoom\API\MeetingInfoGet;
 use Chamilo\PluginBundle\Zoom\API\MeetingListItem;
 use Chamilo\PluginBundle\Zoom\API\MeetingSettings;
@@ -84,8 +84,8 @@ class Meeting
     protected $course;
 
     /**
-     * @var CGroupInfo
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CGroupInfo")
+     * @var CGroup
+     * @ORM\ManyToOne(targetEntity="CGroup")
      * @ORM\JoinColumn(name="group_id", referencedColumnName="iid", nullable=true)
      */
     protected $group;
@@ -337,7 +337,7 @@ class Meeting
     }
 
     /**
-     * @return CGroupInfo
+     * @return CGroup
      */
     public function getGroup()
     {
@@ -345,7 +345,7 @@ class Meeting
     }
 
     /**
-     * @param CGroupInfo $group
+     * @param CGroup $group
      *
      * @return Meeting
      */

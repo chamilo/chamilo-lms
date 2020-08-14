@@ -27,7 +27,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ApiResource()
  * @ORM\Entity
  */
-class CGroupInfo extends AbstractResource implements ResourceInterface
+class CGroup extends AbstractResource implements ResourceInterface
 {
     use CourseTrait;
 
@@ -213,7 +213,7 @@ class CGroupInfo extends AbstractResource implements ResourceInterface
      *
      * @param string $name
      *
-     * @return CGroupInfo
+     * @return CGroup
      */
     public function setName($name)
     {
@@ -237,7 +237,7 @@ class CGroupInfo extends AbstractResource implements ResourceInterface
      *
      * @param bool $status
      *
-     * @return CGroupInfo
+     * @return CGroup
      */
     public function setStatus($status)
     {
@@ -261,7 +261,7 @@ class CGroupInfo extends AbstractResource implements ResourceInterface
      *
      * @param int $categoryId
      *
-     * @return CGroupInfo
+     * @return CGroup
      */
     public function setCategoryId($categoryId)
     {
@@ -429,7 +429,7 @@ class CGroupInfo extends AbstractResource implements ResourceInterface
      *
      * @param bool $wikiState
      *
-     * @return CGroupInfo
+     * @return CGroup
      */
     public function setWikiState($wikiState)
     {
@@ -453,7 +453,7 @@ class CGroupInfo extends AbstractResource implements ResourceInterface
      *
      * @param bool $chatState
      *
-     * @return CGroupInfo
+     * @return CGroup
      */
     public function setChatState($chatState)
     {
@@ -477,7 +477,7 @@ class CGroupInfo extends AbstractResource implements ResourceInterface
      *
      * @param string $secretDirectory
      *
-     * @return CGroupInfo
+     * @return CGroup
      */
     public function setSecretDirectory($secretDirectory)
     {
@@ -562,7 +562,7 @@ class CGroupInfo extends AbstractResource implements ResourceInterface
      *
      * @param int $id
      *
-     * @return CGroupInfo
+     * @return CGroup
      */
     public function setId($id)
     {

@@ -52,9 +52,9 @@ class CGroupRelUser
     protected $user;
 
     /**
-     * @var CGroupInfo
+     * @var CGroup
      *
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CGroupInfo", inversedBy="members")
+     * @ORM\ManyToOne(targetEntity="CGroup", inversedBy="members")
      * @ORM\JoinColumn(name="group_id", referencedColumnName="iid", nullable=false)
      */
     protected $group;
@@ -102,7 +102,7 @@ class CGroupRelUser
      *
      * @return CGroupRelUser
      */
-    public function setGroup(CGroupInfo $group)
+    public function setGroup(CGroup $group)
     {
         $this->group = $group;
 
@@ -112,7 +112,7 @@ class CGroupRelUser
     /**
      * Get group.
      *
-     * @return CGroupInfo
+     * @return CGroup
      */
     public function getGroup()
     {

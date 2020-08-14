@@ -6,7 +6,7 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CDocument;
-use Chamilo\CourseBundle\Entity\CGroupInfo;
+use Chamilo\CourseBundle\Entity\CGroup;
 use ChamiloSession as Session;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -6046,7 +6046,7 @@ This folder contains all sessions that have been opened in the chat. Although th
      * @param string              $realPath
      * @param string|UploadedFile $content
      * @param int                 $visibility
-     * @param CGroupInfo          $group
+     * @param CGroup              $group
      *
      * @return CDocument
      */

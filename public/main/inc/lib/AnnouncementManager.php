@@ -269,8 +269,10 @@ class AnnouncementManager
             'id' => $id,
         ];
         $announcement = $repo->findOneBy($criteria);
-        $repo->getEntityManager()->remove($announcement);
-        $repo->getEntityManager()->flush();
+        if ($announcement) {
+            $repo->getEntityManager()->remove($announcement);
+            $repo->getEntityManager()->flush();
+        }
 
         /*
         api_item_property_update(
@@ -647,6 +649,10 @@ class AnnouncementManager
 
         $order = self::getLastAnnouncementOrder($courseInfo);
 
+        $course = api_get_course_entity($courseId);
+        $session = api_get_session_entity($sessionId);
+        $group = api_get_group_entity();
+
         $announcement = new CAnnouncement();
         $announcement
             ->setCId($courseId)
@@ -657,16 +663,20 @@ class AnnouncementManager
             ->setSessionId($sessionId)
         ;
 
+        $announcement
+            ->addCourseLink(
+                $course,
+                $session,
+                $group
+            )
+            ->addParent($course)
+        ;
+
         $repo = Container::getAnnouncementRepository();
-        $repo->addResourceToCourse(
-            $announcement,
-            ResourceLink::VISIBILITY_PUBLISHED,
-            api_get_user_entity($authorId),
-            api_get_course_entity($courseId),
-            api_get_session_entity($sessionId),
-            api_get_group_entity()
-        );
-        $repo->getEntityManager()->flush();
+        $em = Database::getManager();
+
+        $em->persist($announcement);
+        $em->flush();
         $last_id = $announcement->getIid();
 
         if (empty($last_id)) {
@@ -688,7 +698,7 @@ class AnnouncementManager
 
         // store in item_property (first the groups, then the users
         if (empty($sentTo) ||
-            (!empty($sentTo) && isset($sentTo[0]) && 'everyone' == $sentTo[0])
+            (!empty($sentTo) && isset($sentTo[0]) && 'everyone' === $sentTo[0])
         ) {
             // The message is sent to EVERYONE, so we set the group to 0
             /*api_item_property_update(
@@ -711,7 +721,9 @@ class AnnouncementManager
             ) {
                 foreach ($send_to['groups'] as $group) {
                     $group = api_get_group_entity($group);
-                    $repo->addResourceToCourseGroup($resourceNode, $group);
+                    if ($group) {
+                        $announcement->addGroupLink($course, $session, $group);
+                    }
 
                     /*api_item_property_update(
                         $courseInfo,
@@ -728,7 +740,7 @@ class AnnouncementManager
             if (is_array($send_to['users'])) {
                 foreach ($send_to['users'] as $user) {
                     $user = api_get_user_entity($user);
-                    $repo->addResourceToUser($resourceNode, $user);
+                    $announcement->addUserLink($user, $course, $session, $group);
                     /*api_item_property_update(
                         $courseInfo,
                         TOOL_ANNOUNCEMENT,
@@ -746,6 +758,7 @@ class AnnouncementManager
             self::addAnnouncementToAllUsersInSessions($announcement);
         }
 
+        $repo->getEntityManager()->persist($announcement);
         $repo->getEntityManager()->persist($resourceNode);
         $repo->getEntityManager()->flush();
 
@@ -896,12 +909,14 @@ class AnnouncementManager
         $file_comment = '',
         $sendToUsersInSession = false
     ) {
-        $courseInfo = api_get_course_info();
         $id = (int) $id;
 
         $repo = Container::getAnnouncementRepository();
         /** @var CAnnouncement $announcement */
         $announcement = $repo->find($id);
+        $course = api_get_course_entity();
+        $group = api_get_group_entity();
+        $session = api_get_session_entity();
 
         $announcement
             ->setTitle($title)
@@ -953,7 +968,7 @@ class AnnouncementManager
             if (is_array($send_to['groups'])) {
                 foreach ($send_to['groups'] as $group) {
                     $groupInfo = api_get_group_entity($group);
-                    $repo->addResourceToCourseGroup($resourceNode, $groupInfo);
+                    $announcement->addGroupLink( $course, $session, $groupInfo);
                     /*
                     if ($groupInfo) {
                         api_item_property_update(
@@ -972,7 +987,7 @@ class AnnouncementManager
             if (is_array($send_to['users'])) {
                 foreach ($send_to['users'] as $user) {
                     $user = api_get_user_entity($user);
-                    $repo->addResourceToUser($resourceNode, $user);
+                    $announcement->addUserLink( $user, $course, $session, $group);
                     /*api_item_property_update(
                         $courseInfo,
                         TOOL_ANNOUNCEMENT,
@@ -1008,6 +1023,7 @@ class AnnouncementManager
             );*/
         }
 
+        $repo->getEntityManager()->persist($announcement);
         $repo->getEntityManager()->flush();
 
         return $announcement;
@@ -1021,8 +1037,11 @@ class AnnouncementManager
         $courseCode = api_get_course_id();
         $sessionList = SessionManager::get_session_by_course(api_get_course_int_id());
 
+        $courseEntity = api_get_course_entity();
+        $sessionEntity = api_get_session_entity();
+        $groupEntity = api_get_group_entity();
+
         $repo = Container::getAnnouncementRepository();
-        $resourceNode = $announcement->getResourceNode();
 
         if (!empty($sessionList)) {
             foreach ($sessionList as $sessionInfo) {
@@ -1035,7 +1054,7 @@ class AnnouncementManager
                 if (!empty($userList)) {
                     foreach ($userList as $user) {
                         $user = api_get_user_entity($user);
-                        $repo->addResourceToUser($resourceNode, $user);
+                        $announcement->addUserLink($user, $courseEntity, $sessionEntity, $groupEntity);
                         /*api_item_property_update(
                             $courseInfo,
                             TOOL_ANNOUNCEMENT,
@@ -1053,7 +1072,7 @@ class AnnouncementManager
             }
         }
 
-        $repo->getEntityManager()->persist($resourceNode);
+        $repo->getEntityManager()->persist($announcement);
         $repo->getEntityManager()->flush();
     }
 

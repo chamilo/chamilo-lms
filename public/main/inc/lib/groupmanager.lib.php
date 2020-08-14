@@ -3,7 +3,7 @@
 
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CourseBundle\Entity\CGroupInfo;
+use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CGroupRelUser;
 
 /**
@@ -231,7 +231,7 @@ class GroupManager
         $course = api_get_course_entity($course_id);
         $session = api_get_session_entity($session_id);
 
-        $group = new CGroupInfo();
+        $group = new CGroup();
         $group
             ->setName($name)
             ->setCourse($course)
@@ -250,7 +250,7 @@ class GroupManager
             ->setDocumentAccess($documentAccess)
         ;
 
-        $repo = Container::getGroupInfoRepository();
+        $repo = Container::getGroupRepository();
 
         $repo->addResourceToCourse(
             $group,
@@ -493,7 +493,7 @@ class GroupManager
             // delete the groups
             $em
                 ->createQuery(
-                    'DELETE FROM ChamiloCourseBundle:CGroupInfo g WHERE g.course = :course AND g.iid = :id'
+                    'DELETE FROM ChamiloCourseBundle:CGroup g WHERE g.course = :course AND g.iid = :id'
                 )
                 ->execute(['course' => $course_id, 'id' => $groupIid]);
         }
@@ -1337,7 +1337,7 @@ class GroupManager
                 SELECT u.id FROM ChamiloCoreBundle:User u
                 INNER JOIN ChamiloCourseBundle:CGroupRelUser gu
                     WITH u.id = gu.userId
-                INNER JOIN ChamiloCourseBundle:CGroupInfo g
+                INNER JOIN ChamiloCourseBundle:CGroup g
                 WITH gu.groupId = g.id AND g.cId = gu.cId
                 WHERE gu.cId = :course AND g.id = :group
                     $activeCondition

@@ -592,6 +592,14 @@ abstract class Question
                 ->setFeedback($this->feedback)
             ;
 
+            $exerciseEntity = $exerciseRepo->find($exerciseId);
+            $question->addParent($exerciseEntity);
+            $question->addCourseLink(
+                api_get_course_entity(),
+                api_get_session_entity(),
+                api_get_group_entity()
+            );
+
             $em->persist($question);
             $em->flush();
 
@@ -606,20 +614,6 @@ abstract class Question
                     LOG_QUESTION_ID,
                     $this->id
                 );
-                $exerciseEntity = $exerciseRepo->find($exerciseId);
-                $node = $questionRepo->addResourceNode(
-                    $question,
-                    api_get_user_entity(api_get_user_id()),
-                    $exerciseEntity
-                );
-                $questionRepo->addResourceNodeToCourse(
-                    $node,
-                    ResourceLink::VISIBILITY_PUBLISHED,
-                    $courseEntity,
-                    api_get_session_entity(),
-                    api_get_group_entity()
-                );
-
                 $request = Container::getRequest();
                 if ($request->files->has('imageUpload')) {
                     $file = $request->files->get('imageUpload');

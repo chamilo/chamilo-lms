@@ -11,7 +11,7 @@ use ApiPlatform\Core\Annotation\ApiSubresource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
-use Chamilo\CourseBundle\Entity\CGroupInfo;
+use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CTool;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
@@ -108,11 +108,11 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * @var ArrayCollection|ResourceLink[]
      *
-     * @ApiSubresource()
-     * @Groups({"course:read"})
-     * @ORM\OneToMany(targetEntity="ResourceLink", mappedBy="course", cascade={"persist"}, orphanRemoval=true)
+     * ApiSubresource()
+     * Groups({"course:read"})
+     * ORM\OneToMany(targetEntity="ResourceLink", mappedBy="course", cascade={"persist"}, orphanRemoval=true)
      */
-    protected $resourceLinks;
+    //protected $resourceLinks;
 
     /**
      * @ORM\OneToMany(targetEntity="AccessUrlRelCourse", mappedBy="course", cascade={"persist", "remove"}, orphanRemoval=true)
@@ -132,7 +132,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     protected $sessionUserSubscriptions;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CGroupInfo", mappedBy="course", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CGroup", mappedBy="course", cascade={"persist", "remove"})
      */
     protected $groups;
 
@@ -481,7 +481,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     }
 
     /**
-     * @return CGroupInfo[]|ArrayCollection
+     * @return CGroup[]|ArrayCollection
      */
     public function getGroups()
     {
@@ -570,7 +570,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * @return bool
      */
-    public function hasGroup(CGroupInfo $group)
+    public function hasGroup(CGroup $group)
     {
         /*$criteria = Criteria::create()->where(
             Criteria::expr()->eq('groups', $group)

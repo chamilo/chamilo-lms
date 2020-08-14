@@ -16,7 +16,7 @@ use Chamilo\CoreBundle\Form\Resource\CGlossaryType;
 use Chamilo\CoreBundle\Repository\GridInterface;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CGlossary;
-use Chamilo\CourseBundle\Entity\CGroupInfo;
+use Chamilo\CourseBundle\Entity\CGroup;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Form\FormInterface;
 
@@ -42,7 +42,7 @@ final class CGlossaryRepository extends ResourceRepository implements GridInterf
         return $templates;
     }
 
-    public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroupInfo $group = null): QueryBuilder
+    public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroup $group = null): QueryBuilder
     {
         return $this->getResourcesByCourse($course, $session, $group, $parentNode);
     }

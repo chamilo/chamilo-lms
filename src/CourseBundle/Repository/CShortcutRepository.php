@@ -10,7 +10,7 @@ use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
-use Chamilo\CourseBundle\Entity\CGroupInfo;
+use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CShortcut;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Form\FormInterface;
@@ -28,7 +28,7 @@ final class CShortcutRepository extends ResourceRepository
         return $repo->findOneBy($criteria);
     }
 
-    public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroupInfo $group = null): QueryBuilder
+    public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroup $group = null): QueryBuilder
     {
         $repo = $this->getRepository();
         $className = $repo->getClassName();

@@ -4,7 +4,7 @@
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\CourseBundle\Entity\CGroupInfo;
+use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\PluginBundle\Zoom\API\JWTClient;
 use Chamilo\PluginBundle\Zoom\API\MeetingInfoGet;
 use Chamilo\PluginBundle\Zoom\API\MeetingRegistrant;
@@ -677,7 +677,7 @@ class ZoomPlugin extends Plugin
     public function getCreateInstantMeetingForm(
         User $user,
         Course $course,
-        CGroupInfo $group = null,
+        CGroup $group = null,
         Session $session = null
     ) {
         $extraUrl = '';
@@ -707,7 +707,7 @@ class ZoomPlugin extends Plugin
      *
      * @return FormValidator
      */
-    public function getScheduleMeetingForm(User $user, Course $course = null, CGroupInfo $group = null, Session $session = null)
+    public function getScheduleMeetingForm(User $user, Course $course = null, CGroup $group = null, Session $session = null)
     {
         $extraUrl = '';
         if (!empty($course)) {
@@ -1263,11 +1263,11 @@ class ZoomPlugin extends Plugin
     /**
      * Starts a new instant meeting and redirects to its start url.
      *
-     * @param string          $topic
-     * @param User|null       $user
-     * @param Course|null     $course
-     * @param CGroupInfo|null $group
-     * @param Session|null    $session
+     * @param string       $topic
+     * @param User|null    $user
+     * @param Course|null  $course
+     * @param CGroup|null  $group
+     * @param Session|null $session
      *
      * @throws Exception
      */
@@ -1358,7 +1358,7 @@ class ZoomPlugin extends Plugin
     private function createScheduleMeeting(
         User $user = null,
         Course $course = null,
-        CGroupInfo $group = null,
+        CGroup $group = null,
         Session $session = null,
         $startTime,
         $duration,

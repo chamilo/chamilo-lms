@@ -5,7 +5,7 @@
 namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use Chamilo\CourseBundle\Entity\CGroupInfo;
+use Chamilo\CourseBundle\Entity\CGroup;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -54,7 +54,7 @@ class ResourceLink
     protected $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CGroupInfo")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CGroup")
      * @ORM\JoinColumn(name="group_id", referencedColumnName="iid", nullable=true, onDelete="CASCADE")
      */
     protected $group;
@@ -210,14 +210,14 @@ class ResourceLink
     }
 
     /**
-     * @return CGroupInfo
+     * @return CGroup
      */
     public function getGroup()
     {
         return $this->group;
     }
 
-    public function setGroup(CGroupInfo $group = null): self
+    public function setGroup(CGroup $group = null): self
     {
         $this->group = $group;
 

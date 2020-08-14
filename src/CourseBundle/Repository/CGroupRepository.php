@@ -5,17 +5,17 @@
 namespace Chamilo\CourseBundle\Repository;
 
 use Chamilo\CoreBundle\Repository\ResourceRepository;
-use Chamilo\CourseBundle\Entity\CGroupInfo;
+use Chamilo\CourseBundle\Entity\CGroup;
 
 /**
- * Class CGroupInfoRepository.
+ * Class CGroupRepository.
  */
-final class CGroupInfoRepository extends ResourceRepository
+final class CGroupRepository extends ResourceRepository
 {
     /**
      * @param string $code
      */
-    public function findOneByCode($code): ?CGroupInfo
+    public function findOneByCode($code): ?CGroup
     {
         return $this->getRepository()->findOneByCode($code);
     }
@@ -23,7 +23,7 @@ final class CGroupInfoRepository extends ResourceRepository
     /**
      * @param string $name
      */
-    public function findOneByTitle($name): ?CGroupInfo
+    public function findOneByTitle($name): ?CGroup
     {
         return $this->getRepository()->findOneByTitle($name);
     }

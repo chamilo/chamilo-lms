@@ -10,7 +10,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
-use Chamilo\CourseBundle\Entity\CGroupInfo;
+use Chamilo\CourseBundle\Entity\CGroup;
 
 /**
  * Class CForumPostRepository.
@@ -28,7 +28,7 @@ class CForumPostRepository extends ResourceRepository
         CForumThread $thread,
         Course $course,
         User $currentUser = null,
-        CGroupInfo $group = null,
+        CGroup $group = null,
         $orderDirection = 'ASC'
     ): array {
         $conditionVisibility = $onlyVisibles ? 'p.visible = 1' : 'p.visible != 2';

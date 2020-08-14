@@ -639,9 +639,6 @@ class User implements UserInterface, EquatableInterface
         return $this->username;
     }
 
-    /**
-     * @return $this
-     */
     public function setResourceNode(ResourceNode $resourceNode): self
     {
         $this->resourceNode = $resourceNode;
@@ -2059,10 +2056,12 @@ class User implements UserInterface, EquatableInterface
 
     public function getFirstname()
     {
+        return $this->firstname;
     }
 
     public function getLastname()
     {
+        return $this->lastname;
     }
 
     public function eraseCredentials()

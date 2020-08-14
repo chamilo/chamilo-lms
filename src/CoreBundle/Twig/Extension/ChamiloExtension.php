@@ -4,6 +4,7 @@
 
 namespace Chamilo\CoreBundle\Twig\Extension;
 
+use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Repository\IllustrationRepository;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
@@ -47,12 +48,12 @@ class ChamiloExtension extends AbstractExtension
         return [];
     }
 
-    public function getIllustration($node): string
+    public function getIllustration(ResourceNode $node): string
     {
         return $this->illustrationRepository->getIllustrationUrlFromNode($node);
     }
 
-    public function getUserIllustration($node): string
+    public function getUserIllustration(ResourceNode $node): string
     {
         $url = $this->getIllustration($node);
 

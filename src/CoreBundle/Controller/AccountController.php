@@ -45,7 +45,6 @@ class AccountController extends BaseController
     {
         $user = $this->getUser();
 
-        //UserManagerInterface $userManager,
         if (!is_object($user) || !$user instanceof UserInterface) {
             throw $this->createAccessDeniedException('This user does not have access to this section');
         }

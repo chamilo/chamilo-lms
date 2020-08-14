@@ -6,6 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CoreBundle\Entity\ResourceToCourseInterface;
 use Chamilo\CoreBundle\Entity\Session;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -23,7 +24,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * )
  * @ORM\Entity()
  */
-class CStudentPublication extends AbstractResource implements ResourceInterface
+class CStudentPublication extends AbstractResource implements ResourceInterface, ResourceToCourseInterface
 {
     /**
      * @var int
@@ -734,14 +735,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
         return $this->id;
     }
 
-    /**
-     * Set cId.
-     *
-     * @param int $cId
-     *
-     * @return CStudentPublication
-     */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 
@@ -772,6 +766,8 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     public function setUrlCorrection($urlCorrection)
     {
         $this->urlCorrection = $urlCorrection;
+
+        return $this;
     }
 
     /**
@@ -788,6 +784,8 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     public function setTitleCorrection($titleCorrection)
     {
         $this->titleCorrection = $titleCorrection;
+
+        return $this;
     }
 
     /**
@@ -804,6 +802,8 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     public function setDocumentId($documentId)
     {
         $this->documentId = $documentId;
+
+        return $this;
     }
 
     /**

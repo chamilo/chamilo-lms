@@ -1891,7 +1891,7 @@ function get_work_user_list(
 
         $select = 'SELECT DISTINCT
                         u.id as user_id,
-                        work.id as id,
+                        work.iid as id,
                         title as title,
                         description,
                         url,
@@ -4073,6 +4073,12 @@ function processWorkForm(
             }
         }
 
+        $session = api_get_session_entity($sessionId);
+        $courseEntity = api_get_course_entity($courseId);
+
+        $repo = Container::getStudentPublicationRepository();
+        $parentResource = $repo->find($workInfo['id']);
+
         $studentPublication = new CStudentPublication();
         $studentPublication
             ->setCId($courseId)
@@ -4092,36 +4098,20 @@ function processWorkForm(
             ->setFilesize($filesize)
             ->setUserId($userId)
             ->setDocumentId($documentId)
+            ->setParent($parentResource)
+            ->addCourseLink($courseEntity, $session, api_get_group_entity())
         ;
 
-        $repo = Container::getStudentPublicationRepository();
-        $parentResource = $repo->find($workInfo['id']);
-
         $em = $repo->getEntityManager();
-        $courseEntity = api_get_course_entity($courseId);
-        $userEntity = api_get_user_entity(api_get_user_id());
-
-        $resourceNode = $repo->addResourceNode($studentPublication, $userEntity, $parentResource);
-
-        $repo->addResourceNodeToCourse(
-            $resourceNode,
-            ResourceLink::VISIBILITY_PUBLISHED,
-            $courseEntity,
-            api_get_session_entity(),
-            api_get_group_entity()
-        );
-        $em->flush();
-
-        $studentPublication->setId($studentPublication->getIid());
         $em->persist($studentPublication);
-        $em->flush();
-
         $repo->addFile($studentPublication, $content);
         $em->flush();
 
         $workId = $studentPublication->getIid();
 
         if ($workId) {
+            $studentPublication->setId($studentPublication->getIid());
+
             /*if (array_key_exists('filename', $workInfo) && !empty($filename)) {
                 $filename = Database::escape_string($filename);
                 $sql = "UPDATE $work_table SET
@@ -4253,6 +4243,7 @@ function addDir($formValues, $user_id, $courseInfo, $groupId, $sessionId = 0)
 
     $today = new DateTime(api_get_utc_datetime(), new DateTimeZone('UTC'));
     $title = isset($formValues['work_title']) ? $formValues['work_title'] : $formValues['new_dir'];
+    $courseEntity = api_get_course_entity($course_id);
 
     $studentPublication = new CStudentPublication();
     $studentPublication
@@ -4269,21 +4260,17 @@ function addDir($formValues, $user_id, $courseInfo, $groupId, $sessionId = 0)
         ->setSession($session)
         ->setAllowTextAssignment($formValues['allow_text_assignment'])
         ->setUserId($user_id)
+        ->setParent($courseEntity)
+        ->addCourseLink(
+            $courseEntity,
+            api_get_session_entity(),
+            api_get_group_entity()
+        )
     ;
 
     $repo = Container::getStudentPublicationRepository();
     $em = $repo->getEntityManager();
     $em->persist($studentPublication);
-    $courseEntity = api_get_course_entity($course_id);
-
-    $repo->addResourceToCourse(
-        $studentPublication,
-        ResourceLink::VISIBILITY_PUBLISHED,
-        api_get_user_entity(api_get_user_id()),
-        $courseEntity,
-        api_get_session_entity(),
-        api_get_group_entity()
-    );
     $em->flush();
 
     $studentPublication->setId($studentPublication->getIid());

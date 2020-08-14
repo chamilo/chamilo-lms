@@ -6052,7 +6052,6 @@ This folder contains all sessions that have been opened in the chat. Although th
      */
     public static function addFileToDocument(CDocument $document, $realPath, $content, $visibility, $group)
     {
-        $repo = Container::getDocumentRepository();
         $fileType = $document->getFiletype();
         $resourceNode = $document->getResourceNode();
 
@@ -6095,22 +6094,7 @@ This folder contains all sessions that have been opened in the chat. Although th
             $resourceNode->setResourceFile($resourceFile);
             $em->persist($resourceNode);
         }
-
-        // By default visibility is published
-        // @todo change default visibility
-        //$newVisibility = ResourceLink::VISIBILITY_PUBLISHED;
-        $visibility = (int) $visibility;
-        if (empty($visibility)) {
-            $visibility = ResourceLink::VISIBILITY_PUBLISHED;
-        }
-
-        $repo->addResourceNodeToCourse(
-            $resourceNode,
-            $visibility,
-            $document->getCourse(),
-            $document->getSession(),
-            $group
-        );
+        $em->persist($document);
         $em->flush();
 
         $documentId = $document->getIid();
@@ -6213,12 +6197,13 @@ This folder contains all sessions that have been opened in the chat. Although th
             ->setComment($comment)
             ->setReadonly($readonly)
             ->setSession($session)
+            ->setParent($courseEntity)
+            ->addCourseLink($courseEntity, $session, $group)
         ;
 
         $em = $documentRepo->getEntityManager();
         $em->persist($document);
 
-        $documentRepo->addResourceNode($document, $userEntity, $parentNode);
         $document = self::addFileToDocument($document, $realPath, $content, $visibility, $group);
 
         if ($document) {

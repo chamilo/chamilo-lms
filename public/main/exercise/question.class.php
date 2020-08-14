@@ -593,7 +593,7 @@ abstract class Question
             ;
 
             $exerciseEntity = $exerciseRepo->find($exerciseId);
-            $question->addParent($exerciseEntity);
+            $question->setParent($exerciseEntity);
             $question->addCourseLink(
                 api_get_course_entity(),
                 api_get_session_entity(),

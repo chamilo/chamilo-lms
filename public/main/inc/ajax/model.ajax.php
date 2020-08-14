@@ -572,7 +572,7 @@ switch ($action) {
         }
 
         if (empty($documents)) {
-            $whereCondition .= " AND u.user_id = ".api_get_user_id();
+            $whereCondition .= " AND u.id = ".api_get_user_id();
             $count = get_work_user_list(
                 0,
                 $limit,
@@ -1372,7 +1372,7 @@ switch ($action) {
             $whereCondition = '';
         }
 
-        $whereCondition .= " AND u.user_id <> ".api_get_user_id();
+        $whereCondition .= " AND u.id <> ".api_get_user_id();
         $result = get_work_user_list(
             $start,
             $limit,
@@ -1405,7 +1405,7 @@ switch ($action) {
         }
 
         if (empty($documents)) {
-            $whereCondition .= ' AND u.user_id = '.api_get_user_id();
+            $whereCondition .= ' AND u.id = '.api_get_user_id();
             $result = get_work_user_list(
                 $start,
                 $limit,

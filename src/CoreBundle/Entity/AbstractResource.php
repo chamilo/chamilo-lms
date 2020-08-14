@@ -133,7 +133,7 @@ abstract class AbstractResource
         return $this;
     }
 
-    public function addParent(AbstractResource $parent)
+    public function setParent(AbstractResource $parent)
     {
         $this->parentResource = $parent;
 

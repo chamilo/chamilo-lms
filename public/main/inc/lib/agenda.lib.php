@@ -302,7 +302,7 @@ class Agenda
 
                 $event
 //                    ->addCourseLink($courseEntity, $groupEntity, $sessionEntity)
-                    ->addParent($courseEntity)
+                    ->setParent($courseEntity)
                     ;
 
                 if (!empty($usersToSend)) {

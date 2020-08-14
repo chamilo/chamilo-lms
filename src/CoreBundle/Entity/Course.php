@@ -112,7 +112,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      * Groups({"course:read"})
      * ORM\OneToMany(targetEntity="ResourceLink", mappedBy="course", cascade={"persist"}, orphanRemoval=true)
      */
-    //protected $resourceLinks;
+    protected $resourceLinks;
 
     /**
      * @ORM\OneToMany(targetEntity="AccessUrlRelCourse", mappedBy="course", cascade={"persist", "remove"}, orphanRemoval=true)

@@ -669,7 +669,7 @@ class AnnouncementManager
                 $session,
                 $group
             )
-            ->addParent($course)
+            ->setParent($course)
         ;
 
         $repo = Container::getAnnouncementRepository();

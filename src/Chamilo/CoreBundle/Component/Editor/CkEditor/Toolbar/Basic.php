@@ -24,7 +24,6 @@ class Basic extends Toolbar
         'audio',
         'image2_chamilo', // Replace for 'image' if you want to user the Mapping plugin.
         'bidi',
-        'blockimagepaste',
         'colorbutton',
         'colordialog',
         'dialogui',
@@ -145,6 +144,10 @@ class Basic extends Toolbar
 
         if (api_get_configuration_sub_value('ckeditor_vimeo_embed/config') && ($isAllowedToEdit || $isPlatformAdmin)) {
             $plugins[] = 'ckeditor_vimeo_embed';
+        }
+
+        if (api_get_configuration_value('ck_editor_allowed_copy_paste_image')){
+            $plugins[] = 'blockimagepaste';
         }
 
         $this->defaultPlugins = array_unique(array_merge($this->defaultPlugins, $plugins));

@@ -1544,6 +1544,7 @@ $_configuration['auth_password_links'] = [
     ]
 ];
 */
+//$_configuration['ck_editor_allowed_copy_paste_image'] = false;
 
 // Show unsubscribe buttons on page "My courses"
 //$_configuration['enable_unsubscribe_button_on_my_course_page'] = false;

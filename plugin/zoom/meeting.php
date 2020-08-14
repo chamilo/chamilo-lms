@@ -65,7 +65,9 @@ if ($plugin->userIsConferenceManager($meeting)) {
         }
     }
 
-    if ('true' === $plugin->get('enableCloudRecording') && $meeting->hasCloudAutoRecordingEnabled()) {
+    if (ZoomPlugin::RECORDING_TYPE_NONE !== $plugin->getRecordingSetting() &&
+        $meeting->hasCloudAutoRecordingEnabled()
+    ) {
         $tpl->assign('fileForm', $plugin->getFileForm($meeting, $returnURL)->returnForm());
         $tpl->assign('recordings', $meeting->getRecordings());
     }

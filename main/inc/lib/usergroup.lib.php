@@ -217,7 +217,7 @@ class UserGroup extends Model
                     INNER JOIN $this->access_url_rel_usergroup a
                     ON (u.id = a.usergroup_id)
                     WHERE access_url_id = $urlId $authorCondition
-                    $extraWhereCondition
+                    AND $extraWhereCondition
             ";
 
             $result = Database::query($sql);

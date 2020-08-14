@@ -498,7 +498,7 @@ class Meeting
      */
     public function hasCloudAutoRecordingEnabled()
     {
-        return 'cloud' === $this->meetingInfoGet->settings->auto_recording;
+        return \ZoomPlugin::RECORDING_TYPE_NONE !== $this->meetingInfoGet->settings->auto_recording;
     }
 
     /**

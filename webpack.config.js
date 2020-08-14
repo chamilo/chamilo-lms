@@ -1,8 +1,8 @@
 var Encore = require('@symfony/webpack-encore');
 
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-const FileManagerPlugin = require('filemanager-webpack-plugin');
-var dotEnv = require('dotenv');
+const CopyPlugin = require('copy-webpack-plugin');
+//const FileManagerPlugin = require('filemanager-webpack-plugin');
+//var dotEnv = require('dotenv');
 
 Encore
     .setOutputPath('public/build/')
@@ -90,14 +90,10 @@ Encore
     ])
     // define the environment variables
     .configureDefinePlugin(options => {
-        const env = dotEnv.config({ path: '.env.local' });
-        /*if (env.error) {
-            throw env.error;
-        }*/
+        /*const env = dotEnv.config({ path: '.env.local' });
         if (env.parsed) {
             options['process.env'].APP_API_PLATFORM_URL = JSON.stringify(env.parsed.APP_API_PLATFORM_URL);
-        }
-
+        }*/
     })
     // enable ESLint
     // .addLoader({
@@ -114,26 +110,29 @@ Encore
     // })
 ;
 
-Encore.addPlugin(new CopyWebpackPlugin([
-    {
-        from: './node_modules/mediaelement/build',
-        to: 'libs/mediaelement'
-    },
-    {
-        from: './node_modules/mediaelement-plugins/dist',
-        to: 'libs/mediaelement/plugins'
-    },
-    {
-        from: './node_modules/mathjax/config',
-        to: 'libs/mathjax/config'
-    },
-    {
-        from: './node_modules/tinymce/skins',
-        to: 'libs/tinymce/skins'
-    },
-]));
+Encore.addPlugin(new CopyPlugin({
+        patterns: [
+            {
+                from: './node_modules/mediaelement/build',
+                to: 'libs/mediaelement'
+            },
+            {
+                from: './node_modules/mediaelement-plugins/dist',
+                to: 'libs/mediaelement/plugins'
+            },
+            {
+                from: './node_modules/mathjax/config',
+                to: 'libs/mathjax/config'
+            },
+            {
+                from: './node_modules/tinymce/skins',
+                to: 'libs/tinymce/skins'
+            },
+        ]
+    }
+));
 
-// Encore.addPlugin(new copyWebpackPlugin([{
+// Encore.addPlugin(new CopyPlugin([{
 //     from: 'assets/css/themes/' + theme + '/images',
 //     to: 'css/themes/' + theme + '/images'
 // };
@@ -147,11 +146,13 @@ themes.forEach(function (theme) {
     Encore.addStyleEntry('css/themes/' + theme + '/default', './assets/css/themes/' + theme + '/default.css');
 
     // Copy images from themes into public/build
-    Encore.addPlugin(new CopyWebpackPlugin([{
-        from: 'assets/css/themes/' + theme + '/images',
-        to: 'css/themes/' + theme + '/images'
+    Encore.addPlugin(new CopyPlugin({
+        patterns: [{
+            from: 'assets/css/themes/' + theme + '/images',
+            to: 'css/themes/' + theme + '/images'
+        }]
     },
-    ]));
+    ));
 });
 
 // Fix free-jqgrid languages files

@@ -40,7 +40,6 @@ class SettingsManager extends ChamiloSettingsManager
     {
         $schemaAliasNoPrefix = $schemaAlias;
         $schemaAlias = 'chamilo_course.settings.'.$schemaAlias;
-
         if ($this->schemaRegistry->has($schemaAlias)) {
             /** @var SchemaInterface $schema */
             $schema = $this->schemaRegistry->get($schemaAlias);

@@ -5,17 +5,14 @@
 namespace Chamilo\CoreBundle\Controller\Admin;
 
 use Chamilo\CoreBundle\Controller\BaseController;
-use Chamilo\CoreBundle\Manager\SettingsManager;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Sylius\Bundle\SettingsBundle\Form\Factory\SettingsFormFactory;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Exception\ValidatorException;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @Route("/admin")
@@ -23,17 +20,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class SettingsController extends BaseController
 {
     use ControllerTrait;
-
-    public static function getSubscribedServices(): array
-    {
-        $services = parent::getSubscribedServices();
-
-        $services['translator'] = TranslatorInterface::class;
-        $services['chamilo.settings.manager'] = SettingsManager::class;
-        $services['chamilo_settings.form_factory.settings'] = SettingsFormFactory::class;
-
-        return $services;
-    }
 
     /**
      * @IsGranted("ROLE_ADMIN")
@@ -211,19 +197,6 @@ class SettingsController extends BaseController
         $url = $this->getDoctrine()->getRepository('ChamiloCoreBundle:AccessUrl')->find($urlId);
         $manager->setUrl($url);
         $manager->installSchemas($url);
-    }
-
-    /**
-     * @return SettingsManager
-     */
-    protected function getSettingsManager()
-    {
-        return $this->get('chamilo.settings.manager');
-    }
-
-    protected function getSettingsFormFactory()
-    {
-        return $this->get('chamilo_settings.form_factory.settings');
     }
 
     /**

@@ -21,7 +21,7 @@ use ExtraFieldValue;
 use Fhaculty\Graph\Graph;
 use Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
-use Sylius\Bundle\SettingsBundle\Form\Factory\SettingsFormFactory;
+use Chamilo\CourseBundle\Manager\SettingsFormFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -242,8 +242,8 @@ class CourseHomeController extends ToolBaseController
     public function updateAction(Request $request, Course $course, $namespace, SettingsManager $manager, SettingsFormFactory $formFactory)
     {
         $schemaAlias = $manager->convertNameSpaceToService($namespace);
-
         $settings = $manager->load($namespace);
+
         $form = $formFactory->create($schemaAlias);
 
         $form->setData($settings);
@@ -273,6 +273,7 @@ class CourseHomeController extends ToolBaseController
                 return $this->redirect($request->headers->get('referer'));
             }
         }
+
         $schemas = $manager->getSchemas();
 
         return $this->render(

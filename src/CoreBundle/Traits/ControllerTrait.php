@@ -6,8 +6,10 @@ namespace Chamilo\CoreBundle\Traits;
 
 //use Chamilo\CoreBundle\Block\BreadcrumbBlockService;
 use Chamilo\CoreBundle\Component\Utils\Glide;
+use Chamilo\CoreBundle\Manager\SettingsManager;
 use Chamilo\CoreBundle\Repository\ResourceFactory;
 use Knp\Menu\FactoryInterface as MenuFactoryInterface;
+use Sylius\Bundle\SettingsBundle\Form\Factory\SettingsFormFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -21,6 +23,8 @@ trait ControllerTrait
         //$services['breadcrumb'] = BreadcrumbBlockService::class;
         $services['resource_factory'] = ResourceFactory::class;
         $services['glide'] = Glide::class;
+        $services['chamilo.settings.manager'] = SettingsManager::class;
+        $services['chamilo_settings.form_factory.settings'] = SettingsFormFactory::class;
 
         return $services;
     }
@@ -69,5 +73,18 @@ trait ControllerTrait
         $translator = $this->container->get('translator');
 
         return $translator->trans($variable);
+    }
+
+    /**
+     * @return SettingsManager
+     */
+    protected function getSettingsManager()
+    {
+        return $this->get('chamilo.settings.manager');
+    }
+
+    protected function getSettingsFormFactory()
+    {
+        return $this->get('chamilo_settings.form_factory.settings');
     }
 }

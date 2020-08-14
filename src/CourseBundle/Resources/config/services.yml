@@ -7,7 +7,7 @@ services:
         class: Sylius\Component\Registry\ServiceRegistry
         arguments:
             - Sylius\Bundle\SettingsBundle\Schema\SchemaInterface
-            - 'Course settings'
+            - 'CourseSettings'
 
     Chamilo\CourseBundle\Manager\SettingsManager:
         arguments:

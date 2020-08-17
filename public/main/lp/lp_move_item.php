@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -60,7 +61,7 @@ $interbreadcrumb[] = [
     'name' => get_lang('Learning paths'),
 ];
 $interbreadcrumb[] = [
-    'url' => api_get_self()."?action=add_item&lp_id=$learnpath_id&".api_get_cidreq(),
+    'url' => api_get_self()."?action=build&lp_id=$learnpath_id&".api_get_cidreq(),
     'name' => $learnPath->getNameNoTags(),
 ];
 $interbreadcrumb[] = [
@@ -71,13 +72,11 @@ $interbreadcrumb[] = [
 // Theme calls
 $show_learn_path = true;
 $lp_theme_css = $learnPath->get_theme();
-
 Display::display_header(get_lang('Move'), 'Path');
 
 $suredel = trim(get_lang('Are you sure to delete'));
 ?>
 <script>
-/* <![CDATA[ */
 function stripslashes(str) {
     str=str.replace(/\\'/g,'\'');
     str=str.replace(/\\"/g,'"');
@@ -87,12 +86,9 @@ function stripslashes(str) {
 }
 function confirmation(name) {
     name=stripslashes(name);
-    if (confirm("<?php echo $suredel; ?> " + name + " ?"))
-    {
+    if (confirm("<?php echo $suredel; ?> " + name + " ?")) {
         return true;
-    }
-    else
-    {
+    } else {
         return false;
     }
 }

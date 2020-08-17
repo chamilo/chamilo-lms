@@ -311,7 +311,7 @@ switch ($action) {
             $documentAndFolders = array_map(
                 function (array $documentData) use ($course, $session, $courseInfo, $currentUserId, $http_www, $folderName, $id) {
                     $downloadUrl = api_get_path(WEB_CODE_PATH).'document/document.php?'
-                        .api_get_cidreq_params($course->getCode(), $session->getId()).'&'
+                        .api_get_cidreq_params($course->getId(), $session->getId()).'&'
                         .http_build_query(['action' => 'download', 'id' => $documentData['id']]);
                     $deleteUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?'
                         .http_build_query(
@@ -366,7 +366,7 @@ switch ($action) {
             $form = new FormValidator('get_basic_course_documents_form_'.$session->getId());
             $form->addMultipleUpload(
                 api_get_path(WEB_AJAX_PATH).'document.ajax.php?'
-                    .api_get_cidreq_params($course->getCode(), $session->getId())
+                    .api_get_cidreq_params($course->getId(), $session->getId())
                     .'&a=upload_file&curdirpath='.$folderName,
                 ''
             );

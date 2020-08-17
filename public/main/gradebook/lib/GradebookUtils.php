@@ -357,10 +357,9 @@ class GradebookUtils
     public static function build_edit_icons_eval($eval, $selectcat)
     {
         $is_locked = $eval->is_locked();
-        $eval->get_course_code();
         $cat = new Category();
         $message_eval = $cat->show_message_resource_delete($eval->get_course_code());
-        $courseParams = api_get_cidreq_params($eval->get_course_code(), $eval->getSessionId());
+        $courseParams = api_get_cidreq_params($eval->getCourseId(), $eval->getSessionId());
 
         if (false === $message_eval && api_is_allowed_to_edit(null, true)) {
             $visibility_icon = 0 == $eval->is_visible() ? 'invisible' : 'visible';
@@ -454,7 +453,7 @@ class GradebookUtils
         }
 
         $courseParams = api_get_cidreq_params(
-            $link->get_course_code(),
+            $link->getCourseId(),
             $link->get_session_id()
         );
 

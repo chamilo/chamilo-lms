@@ -29,6 +29,7 @@ if (false == $subscriptionSettings['allow_add_users_to_lp_category']) {
 
 $courseId = api_get_course_int_id();
 $courseCode = api_get_course_id();
+$sessionId = api_get_session_id();
 
 $em = Database::getManager();
 
@@ -62,11 +63,8 @@ $groupList = \CourseManager::get_group_list_of_course(
     1
 );
 $groupChoices = array_column($groupList, 'name', 'id');
+$session = api_get_session_entity($sessionId);
 
-$session = null;
-if (!empty($sessionId)) {
-    $session = api_get_session_entity($sessionId);
-}
 $courseRepo = Container::getCourseRepository();
 $course = api_get_course_entity($courseId);
 
@@ -97,19 +95,27 @@ if (!empty($selectedGroupChoices)) {
 $form->setDefaults($defaults);
 
 // Getting subscribe users to the course.
-$subscribedUsers = $courseRepo->getSubscribedStudents($course);
-$subscribedUsers = $subscribedUsers->getQuery();
-$subscribedUsers = $subscribedUsers->execute();
-
-// Getting all users in a nice format.
 $choices = [];
-/** @var User $user */
-foreach ($subscribedUsers as $user) {
-    $choices[$user->getUserId()] = $user->getCompleteNameWithClasses();
+if (empty($sessionId)) {
+    $subscribedUsers = $courseRepo->getSubscribedStudents($course);
+    $subscribedUsers = $subscribedUsers->getQuery();
+    $subscribedUsers = $subscribedUsers->execute();
+
+    // Getting all users in a nice format.
+    /** @var User $user */
+    foreach ($subscribedUsers as $user) {
+        $choices[$user->getId()] = $user->getCompleteNameWithClasses();
+    }
+} else {
+    $users = CourseManager::get_user_list_from_course_code($course->getCode(), $sessionId);
+    foreach ($users as $user) {
+        $choices[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']);
+    }
 }
 
 // Getting subscribed users to a category.
 $subscribedUsersInCategory = $category->getUsers();
+
 $selectedChoices = [];
 foreach ($subscribedUsersInCategory as $item) {
     $selectedChoices[] = $item->getUser()->getId();

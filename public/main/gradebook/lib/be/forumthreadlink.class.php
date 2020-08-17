@@ -285,7 +285,7 @@ class ForumThreadLink extends AbstractLink
         $row = Database::fetch_array($result, 'ASSOC');
         $forum_id = $row['forum_id'];
 
-        $url = api_get_path(WEB_PATH).'main/forum/viewthread.php?'.api_get_cidreq_params($this->get_course_code(), $sessionId).'&thread='.$this->get_ref_id().'&gradebook=view&forum='.$forum_id;
+        $url = api_get_path(WEB_PATH).'main/forum/viewthread.php?'.api_get_cidreq_params($this->getCourseId(), $sessionId).'&thread='.$this->get_ref_id().'&gradebook=view&forum='.$forum_id;
 
         return $url;
     }

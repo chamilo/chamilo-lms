@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -48,3 +49,4 @@ return Tracking::getLpStats(
     $type,
     $allowExtend
 );
+

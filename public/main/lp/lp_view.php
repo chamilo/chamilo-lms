@@ -118,7 +118,33 @@ $(function() {
 var chamilo_xajax_handler = window.oxajax;
 </script>';
 
-$allowLpItemTip = false === api_get_configuration_value('hide_accessibility_label_on_lp_item');
+$zoomOptions = api_get_configuration_value('quiz_image_zoom');
+if (isset($zoomOptions['options']) && !in_array($origin, ['embeddable', 'noheader'])) {
+    $options = $zoomOptions['options'];
+    $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'jquery.elevatezoom.js"></script>';
+    $htmlHeadXtra[] = '<script>
+        $(document).ready(function() {
+            $("img").each(function() {
+                var attr = $(this).attr("data-zoom-image");
+                // For some browsers, `attr` is undefined; for others,
+                // `attr` is false.  Check for both.
+                if (typeof attr !== typeof undefined && attr !== false) {
+                    $(this).elevateZoom({
+                        scrollZoom : true,
+                        cursor: "crosshair",
+                        tint:true,
+                        tintColour:\'#CCC\',
+                        tintOpacity:0.5,
+                        zoomWindowWidth:'.$options['zoomWindowWidth'].',
+                        zoomWindowHeight:'.$options['zoomWindowHeight'].'
+                    });
+                }
+            });
+        });
+    </script>';
+}
+
+$allowLpItemTip = api_get_configuration_value('hide_accessibility_label_on_lp_item') === false;
 if ($allowLpItemTip) {
     $htmlHeadXtra[] = '<script>
     $(function() {
@@ -225,6 +251,17 @@ if (!isset($src)) {
                 }
 
                 $src = $lp->fixBlockedLinks($src);
+
+                if (WhispeakAuthPlugin::isLpItemMarked($lp_item_id)) {
+                    ChamiloSession::write(
+                        WhispeakAuthPlugin::SESSION_LP_ITEM,
+                        ['lp' => $lp->lp_id, 'lp_item' => $lp_item_id, 'src' => $src]
+                    );
+
+                    $src = api_get_path(WEB_PLUGIN_PATH).'whispeakauth/authentify.php';
+                    break;
+                }
+
                 $lp->start_current_item(); // starts time counter manually if asset
             } else {
                 $src = 'blank.php?error=prerequisites';
@@ -270,12 +307,12 @@ if ($debug) {
     error_log('$type_quiz: '.$type_quiz);
     error_log('$_REQUEST[exeId]: '.intval($_REQUEST['exeId']));
     error_log('$lp_id: '.$lp_id);
-    error_log('$_GET[lp_item_id]: '.intval($_GET['lp_item_id']));
+    error_log('$_REQUEST[lp_item_id]: '.intval($_REQUEST['lp_item_id']));
 }
 
 if (!empty($_REQUEST['exeId']) &&
     isset($lp_id) &&
-    isset($_GET['lp_item_id'])
+    isset($_REQUEST['lp_item_id'])
 ) {
     global $src;
     $lp->items[$lp->current]->write_to_db();
@@ -283,73 +320,15 @@ if (!empty($_REQUEST['exeId']) &&
     $TBL_TRACK_EXERCICES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
     $TBL_LP_ITEM_VIEW = Database::get_course_table(TABLE_LP_ITEM_VIEW);
     $TBL_LP_ITEM = Database::get_course_table(TABLE_LP_ITEM);
-    $safe_item_id = (int) $_GET['lp_item_id'];
+    $safe_item_id = (int) $_REQUEST['lp_item_id'];
     $safe_id = $lp_id;
     $safe_exe_id = (int) $_REQUEST['exeId'];
 
     if (!empty($safe_id) && !empty($safe_item_id)) {
-        $sql = 'SELECT start_date, exe_date, score, max_score, exe_exo_id, exe_duration
-                FROM '.$TBL_TRACK_EXERCICES.'
-                WHERE exe_id = '.$safe_exe_id;
-        $res = Database::query($sql);
-        $row_dates = Database::fetch_array($res);
-
-        $duration = (int) $row_dates['exe_duration'];
-        $score = (float) $row_dates['score'];
-        $max_score = (float) $row_dates['max_score'];
-
-        $sql = "UPDATE $TBL_LP_ITEM SET
-                    max_score = '$max_score'
-                WHERE iid = $safe_item_id";
-        Database::query($sql);
-
-        $sql = "SELECT id FROM $TBL_LP_ITEM_VIEW
-                WHERE
-                    c_id = $course_id AND
-                    lp_item_id = $safe_item_id AND
-                    lp_view_id = ".$lp->get_view_id()."
-                ORDER BY id DESC
-                LIMIT 1";
-        $res_last_attempt = Database::query($sql);
-
-        if (Database::num_rows($res_last_attempt) && !api_is_invitee()) {
-            $row_last_attempt = Database::fetch_row($res_last_attempt);
-            $lp_item_view_id = $row_last_attempt[0];
-
-            $exercise = new Exercise(api_get_course_int_id());
-            $exercise->read($row_dates['exe_exo_id']);
-            $status = 'completed';
-
-            if (!empty($exercise->pass_percentage)) {
-                $status = 'failed';
-                $success = ExerciseLib::isSuccessExerciseResult(
-                    $score,
-                    $max_score,
-                    $exercise->pass_percentage
-                );
-                if ($success) {
-                    $status = 'passed';
+        Exercise::saveExerciseInLp($safe_item_id, $safe_exe_id);
                 }
-            }
-
-            $sql = "UPDATE $TBL_LP_ITEM_VIEW SET
-                        status = '$status',
-                        score = $score,
-                        total_time = $duration
-                    WHERE iid = $lp_item_view_id";
-            if ($debug) {
-                error_log($sql);
-            }
-            Database::query($sql);
-
-            $sql = "UPDATE $TBL_TRACK_EXERCICES SET
-                        orig_lp_item_view_id = $lp_item_view_id
-                    WHERE exe_id = ".$safe_exe_id;
-            Database::query($sql);
-        }
-    }
-    if (EXERCISE_FEEDBACK_TYPE_END != intval($_GET['fb_type'])) {
-        $src = 'blank.php?msg=exerciseFinished';
+    if (intval($_GET['fb_type']) != EXERCISE_FEEDBACK_TYPE_END) {
+        $src = 'blank.php?msg=exerciseFinished&'.api_get_cidreq(true, true, 'learnpath');
     } else {
         $src = api_get_path(WEB_CODE_PATH).'exercise/result.php?id='.$safe_exe_id.'&'.api_get_cidreq(true, true, 'learnpath');
         if ($debug) {
@@ -525,11 +504,14 @@ $template->assign('show_left_column', 0 == $lp->getHideTableOfContents());
 $showMenu = 0;
 $settings = api_get_configuration_value('lp_view_settings');
 $display = isset($settings['display']) ? $settings['display'] : false;
+$navigationInTheMiddle = false;
 if (!empty($display)) {
     $showMenu = isset($display['show_toolbar_by_default']) && $display['show_toolbar_by_default'] ? 1 : 0;
+    $navigationInTheMiddle = isset($display['navigation_in_the_middle']) && $display['navigation_in_the_middle'] ? 1 : 0;
 }
 
 $template->assign('show_toolbar_by_default', $showMenu);
+$template->assign('navigation_in_the_middle', $navigationInTheMiddle);
 
 if (1 == $gamificationMode) {
     $template->assign('gamification_stars', $lp->getCalculateStars($sessionId));
@@ -554,7 +536,7 @@ if (Tracking::minimumTimeAvailable(api_get_session_id(), api_get_course_int_id()
     }
 
     // Minimum time for each learning path
-    $time_min = intval($pl * $tc * $perc / 100);
+    $time_min = (int) ($pl * $tc * $perc / 100);
 
     if ($_SESSION['oLP']->getAccumulateWorkTime() > 0) {
         $lpMinTime = '('.$time_min.' min)';
@@ -584,8 +566,8 @@ if (Tracking::minimumTimeAvailable(api_get_session_id(), api_get_course_int_id()
 $template->assign('lp_accumulate_work_time', $lpMinTime);
 $template->assign('lp_mode', $lp->mode);
 $template->assign('lp_title_scorm', $lp->get_name());
-if (true === api_get_configuration_value('lp_view_accordion') && 1 == $lpType) {
-    $template->assign('data_panel', $lp->getParentToc($get_toc_list));
+if (api_get_configuration_value('lp_view_accordion') === true && $lpType == 1) {
+    $template->assign('data_panel', $lp->getTOCTree());
 } else {
     $template->assign('data_list', $lp->getListArrayToc($get_toc_list));
 }
@@ -609,6 +591,7 @@ $template->assign(
 );
 
 $frameReady = Display::getFrameReadyBlock('#content_id, #content_id_blank');
+
 $template->assign('frame_ready', $frameReady);
 $template->displayTemplate('@ChamiloCore/LearnPath/view.html.twig');
 

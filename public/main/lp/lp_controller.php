@@ -255,13 +255,6 @@ $htmlHeadXtra[] = '
                 var title = $(ui.item).attr("title");
                 processReceive = true;
 
-                // Fix to use resource nodes.
-                var itemWithId = $(ui.item).find(".link_with_id")
-                if (itemWithId.length > 0) {
-                    id = $(itemWithId).attr("data_id");
-                    type = "document";
-                }
-
                 if (ui.item.parent()[0]) {
                     var parent_id = $(ui.item.parent()[0]).attr("id");
                     var previous_id = $(ui.item.prev()).attr("id");
@@ -277,13 +270,10 @@ $htmlHeadXtra[] = '
                             "title" : title
                         };
 
-                        console.log(params);
-
                         $.ajax({
                             type: "GET",
                             url: "'.$ajax_url.'",
                             data: params,
-                            async: false,
                             success: function(data) {
                                 $("#lp_item_list").html(data);
                             }
@@ -297,6 +287,7 @@ $htmlHeadXtra[] = '
 </script>';
 
 $session_id = api_get_session_id();
+
 $lpfound = false;
 $myrefresh = 0;
 $myrefresh_id = 0;
@@ -345,12 +336,6 @@ if (!empty($lpObject)) {
 }
 
 $course_id = api_get_course_int_id();
-$lpItemId = $_REQUEST['id'] ?? 0;
-$lpItem = null;
-if (!empty($lpItemId)) {
-    $lpItemRepo = Database::getManager()->getRepository('ChamiloCourseBundle:CLpItem');
-    $lpItem = $lpItemRepo->find($lpItemId);
-}
 
 if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $_REQUEST['lp_id'])) {
     if ($debug > 0) {
@@ -525,14 +510,11 @@ switch ($action) {
             $layoutContent = $tplContent->get_template('mail/content_ending_learnpath.tpl');
             $emailBody = $tplContent->fetch($layoutContent);
 
-            api_mail_html(
-                $recipientName,
-                $email,
-                sprintf(get_lang('Student %s has completed his/her learning paths.'), $studentInfo['complete_name']),
+            MessageManager::send_message_simple(
+                $coachInfo['user_id'],
+                sprintf(get_lang('StudentXFinishedLp'), $studentInfo['complete_name']),
                 $emailBody,
-                $studentInfo['complete_name'],
-                $studentInfo['email'],
-                true
+                $studentInfo['user_id']
             );
         }
         Display::addFlash(Display::return_message(get_lang('Message Sent')));
@@ -574,7 +556,7 @@ switch ($action) {
                     $prerequisites = isset($_POST['prerequisites']) ? $_POST['prerequisites'] : '';
                     $maxTimeAllowed = isset($_POST['maxTimeAllowed']) ? $_POST['maxTimeAllowed'] : '';
 
-                    if (TOOL_DOCUMENT === $_POST['type']) {
+	                    if (TOOL_DOCUMENT === $_POST['type']) {
                         if (isset($_POST['path']) && isset($_GET['id']) && !empty($_GET['id'])) {
                             $document_id = $_POST['path'];
                         } else {
@@ -664,8 +646,9 @@ switch ($action) {
                 $lp_item_obj = new learnpathItem($_REQUEST['id']);
 
                 // Remove audio
-                if (isset($_GET['delete_file']) && 1 == $_GET['delete_file']) {
-                    $lp_item_obj->remove_audio();
+                if (isset($_GET['delete_file']) && $_GET['delete_file'] == 1) {
+                    $lp_item_obj->removeAudio();
+                    Display::addFlash(Display::return_message(get_lang('FileDeleted')));
 
                     $url = api_get_self().'?action=add_audio&lp_id='.intval($_SESSION['oLP']->lp_id).'&id='.$lp_item_obj->get_id().'&'.api_get_cidreq();
                     header('Location: '.$url);
@@ -676,16 +659,21 @@ switch ($action) {
                 if (isset($_FILES['file']) && !empty($_FILES['file'])) {
                     // Updating the lp.modified_on
                     $_SESSION['oLP']->set_modified_on();
-                    $lp_item_obj->add_audio();
+                    $lp_item_obj->addAudio();
+                    Display::addFlash(Display::return_message(get_lang('UplUploadSucceeded')));
                 }
 
                 //Add audio file from documents
                 if (isset($_REQUEST['document_id']) && !empty($_REQUEST['document_id'])) {
                     $_SESSION['oLP']->set_modified_on();
                     $lp_item_obj->add_audio_from_documents($_REQUEST['document_id']);
+                    Display::addFlash(Display::return_message(get_lang('Updated')));
                 }
+
+                require 'lp_add_audio.php';
+            } else {
+                require 'lp_add_audio.php';
             }
-            require 'lp_add_audio.php';
         }
         break;
     case 'add_lp_category':
@@ -780,6 +768,9 @@ switch ($action) {
                         api_get_user_id()
                     );
 
+                    $subscribeUsers = isset($_REQUEST['subscribe_users']) ? 1 : 0;
+                    $_SESSION['oLP']->setSubscribeUsers($subscribeUsers);
+
                     $accumulateScormTime = isset($_REQUEST['accumulate_scorm_time']) ? $_REQUEST['accumulate_scorm_time'] : 'true';
                     $_SESSION['oLP']->setAccumulateScormTime($accumulateScormTime);
 
@@ -816,6 +807,19 @@ switch ($action) {
                 require 'lp_list.php';
                 exit;
             }
+        }
+        break;
+    case 'build':
+        if (!$is_allowed_to_edit) {
+            api_not_allowed(true);
+        }
+        if (!$lp_found) {
+            require 'lp_list.php';
+        } else {
+            Session::write('refresh', 1);
+            $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id).'&'.api_get_cidreq();
+            header('Location: '.$url);
+            exit;
         }
         break;
     case 'edit_item':
@@ -856,12 +860,17 @@ switch ($action) {
                 if (isset($_POST['content_lp'])) {
                     $_SESSION['oLP']->edit_document($_course);
                 }
-                Display::addFlash(Display::return_message(get_lang('Update successful')));
+                $is_success = true;
+
+                $extraFieldValues = new ExtraFieldValue('lp_item');
+                $extraFieldValues->saveFieldValues($_POST);
+
+                Display::addFlash(Display::return_message(get_lang('Updated')));
                 $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id).'&'.api_get_cidreq();
                 header('Location: '.$url);
                 exit;
             }
-            if (isset($_GET['view']) && 'build' === $_GET['view']) {
+            if (isset($_GET['view']) && $_GET['view'] === 'build') {
                 require 'lp_edit_item.php';
             } else {
                 require 'lp_admin_view.php';
@@ -1137,19 +1146,7 @@ switch ($action) {
             Session::write('refresh', 1);
             $_SESSION['oLP']->set_name($_REQUEST['lp_name']);
             $author = $_REQUEST['lp_author'];
-            // Fixing the author name (no body or html tags).
-            $auth_init = stripos($author, '<p>');
-            if (false === $auth_init) {
-                $auth_init = stripos($author, '<body>');
-                $auth_end = $auth_init + stripos(substr($author, $auth_init + 6), '</body>') + 7;
-                $len = $auth_end - $auth_init + 6;
-            } else {
-                $auth_end = strripos($author, '</p>');
-                $len = $auth_end - $auth_init + 4;
-            }
-
-            $author_fixed = substr($author, $auth_init, $len);
-            $_SESSION['oLP']->set_author($author_fixed);
+            $_SESSION['oLP']->set_author($author);
             // TODO (as of Chamilo 1.8.8): Check in the future whether this field is needed.
             $_SESSION['oLP']->set_encoding($_REQUEST['lp_encoding']);
 

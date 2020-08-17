@@ -18,7 +18,7 @@ api_protect_course_script();
 $isStudentView = isset($_REQUEST['isStudentView']) ? $_REQUEST['isStudentView'] : null;
 $lpId = isset($_REQUEST['lp_id']) ? (int) $_REQUEST['lp_id'] : 0;
 $submit = isset($_POST['submit_button']) ? $_POST['submit_button'] : null;
-$type = isset($_GET['type']) ? $_GET['type'] : 'step';
+$type = isset($_GET['type']) ? $_GET['type'] : null;
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 $is_allowed_to_edit = api_is_allowed_to_edit(null, false);
 
@@ -94,7 +94,7 @@ $interbreadcrumb[] = [
     'name' => get_lang('Learning paths'),
 ];
 $interbreadcrumb[] = [
-    'url' => api_get_self()."?action=add_item&lp_id=$lpId&".api_get_cidreq(),
+    'url' => api_get_self()."?action=build&lp_id=$lpId&".api_get_cidreq(),
     'name' => $learnPath->getNameNoTags(),
 ];
 

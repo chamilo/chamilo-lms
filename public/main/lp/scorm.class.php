@@ -752,6 +752,10 @@ class scorm extends learnpath
                 $callBack = 'cleanZipFilesAllowHtaccess';
             }
 
+            if (api_get_configuration_value('skip_scorm_package_clean_up')) {
+                $callBack = 'cleanZipFilesNoRename';
+            }
+
             $zipFile->extract(
                 PCLZIP_CB_PRE_EXTRACT,
                 $callBack

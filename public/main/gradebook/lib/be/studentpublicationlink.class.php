@@ -38,15 +38,15 @@ class StudentPublicationLink extends AbstractLink
         $courseId = $this->course_id;
 
         $sql = "SELECT pub.url
-                FROM $itemProperty prop 
+                FROM $itemProperty prop
                 INNER JOIN $workTable pub
                 ON (prop.c_id = pub.c_id AND prop.ref = pub.id)
                 WHERE
                     prop.c_id = $courseId AND
                     pub.c_id = $courseId AND
-                    prop.tool = 'work' AND 
-                    prop.insert_user_id = $stud_id AND                     
-                    pub.title = '".Database::escape_string($eval->get_name())."' AND 
+                    prop.tool = 'work' AND
+                    prop.insert_user_id = $stud_id AND
+                    pub.title = '".Database::escape_string($eval->get_name())."' AND
                     pub.session_id=".api_get_session_id();
 
         $result = Database::query($sql);
@@ -305,7 +305,7 @@ class StudentPublicationLink extends AbstractLink
     public function get_link()
     {
         $sessionId = $this->get_session_id();
-        $url = api_get_path(WEB_PATH).'main/work/work.php?'.api_get_cidreq_params($this->get_course_code(), $sessionId).'&id='.$this->exercise_data['id'].'&gradebook=view';
+        $url = api_get_path(WEB_PATH).'main/work/work.php?'.api_get_cidreq_params($this->getCourseId(), $sessionId).'&id='.$this->exercise_data['id'].'&gradebook=view';
 
         return $url;
     }
@@ -329,8 +329,8 @@ class StudentPublicationLink extends AbstractLink
         }
         $id = $data['id'];
         $sql = 'SELECT count(id) FROM '.$this->get_studpub_table().'
-                WHERE 
-                    c_id = "'.$this->course_id.'" AND 
+                WHERE
+                    c_id = "'.$this->course_id.'" AND
                     id = '.$id;
         $result = Database::query($sql);
         $number = Database::fetch_row($result);
@@ -355,7 +355,7 @@ class StudentPublicationLink extends AbstractLink
         $weight = api_float_val($this->get_weight());
         if (!empty($id)) {
             //Cleans works
-            $sql = 'UPDATE '.$this->get_studpub_table().' 
+            $sql = 'UPDATE '.$this->get_studpub_table().'
                     SET weight= '.$weight.'
                     WHERE c_id = '.$this->course_id.' AND id ='.$id;
             Database::query($sql);
@@ -374,7 +374,7 @@ class StudentPublicationLink extends AbstractLink
 
         if (!empty($id)) {
             //Cleans works
-            $sql = 'UPDATE '.$this->get_studpub_table().' 
+            $sql = 'UPDATE '.$this->get_studpub_table().'
                     SET weight = 0
                     WHERE c_id = '.$this->course_id.' AND id ='.$id;
             Database::query($sql);

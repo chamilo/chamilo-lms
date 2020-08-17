@@ -154,7 +154,7 @@ class LearnpathLink extends AbstractLink
     {
         $session_id = $this->get_session_id();
         $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq_params(
-            $this->get_course_code(),
+            $this->getCourseId(),
                 $session_id
         ).'&gradebook=view';
 

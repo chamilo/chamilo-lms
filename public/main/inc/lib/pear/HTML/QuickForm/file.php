@@ -272,7 +272,7 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
 
             function isValidType(file) {
                 var fileTypes = [\'image/jpg\', \'image/jpeg\', \'image/gif\', \'image/png\'];
-        
+
                 for(var i = 0; i < fileTypes.length; i++) {
                     if(file.type === fileTypes[i]) {
                         return true;
@@ -281,7 +281,7 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
 
                 return false;
             }
-            
+
             function imageCropper() {
                 $formGroup.show();
                 $cropButton.show();
@@ -300,10 +300,10 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
                         scalable: '.$scalable.',
                         crop: function(e) {
                             // Output the result data for cropping image.
-                            $input.val(event.detail.x + \',\' + event.detail.y + \',\' + event.detail.width + \',\' + event.detail.height);                            
+                            $input.val(event.detail.x + \',\' + event.detail.y + \',\' + event.detail.width + \',\' + event.detail.height);
                             $inputForResource.val(
                                 parseInt(event.detail.width) + \',\' + parseInt(event.detail.height) + \',\' +  parseInt(event.detail.x) + \',\' + parseInt(event.detail.y)
-                            );                            
+                            );
                         }
                     });
             }
@@ -311,7 +311,7 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
             $inputFile.on(\'change\', function () {
                 var inputFile = this,
                     file = inputFile.files[0],
-                    fileReader = new FileReader();                    
+                    fileReader = new FileReader();
                     $(".img-box").hide();
                     $(".img-preview").show();
                 if (!isValidType(file)) {
@@ -343,10 +343,10 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
                 var $imageLarge = $("#image-cut-lg");
                 var canvas = $image.cropper(\'getCroppedCanvas\'),
                     dataUrl = canvas.toDataURL();
-                
+
                 $(".img-box").show();
                 $(".img-preview").hide();
-                
+
                 $image.attr(\'src\', dataUrl).cropper(\'destroy\').off(\'load\', imageCropper);
                 $imageLarge.attr(\'src\', dataUrl).cropper(\'destroy\').off(\'load\', imageCropper);
                 $(\'[name="'.$id.'_crop_image_base_64"]\').val(dataUrl);
@@ -412,42 +412,42 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
             case FormValidator::LAYOUT_HORIZONTAL:
                 if (isset($attributes['custom']) && $attributes['custom']) {
                     $template = '
-                        <div class="input-file-container">  
+                        <div class="input-file-container">
                             {element}
                             <label tabindex="0" {label-for} class="input-file-trigger">
                                 <i class="fa fa-picture-o fa-lg" aria-hidden="true"></i> {label}
                             </label>
                         </div>
-                        <p class="file-return"></p>                        
+                        <p class="file-return"></p>
                         <script>
                             document.querySelector("html").classList.add(\'js\');
-                            var fileInput  = document.querySelector( ".input-file" ),  
+                            var fileInput  = document.querySelector( ".input-file" ),
                                 button     = document.querySelector( ".input-file-trigger" ),
                                 the_return = document.querySelector(".file-return");
-                                  
-                            button.addEventListener("keydown", function(event) {  
-                                if ( event.keyCode == 13 || event.keyCode == 32 ) {  
-                                    fileInput.focus();  
-                                }  
+
+                            button.addEventListener("keydown", function(event) {
+                                if ( event.keyCode == 13 || event.keyCode == 32 ) {
+                                    fileInput.focus();
+                                }
                             });
                             button.addEventListener("click", function(event) {
                                fileInput.focus();
                                return false;
-                            });  
+                            });
                             fileInput.addEventListener("change", function(event) {
                                 fileName = this.value;
                                 if (this.files[0]) {
                                     fileName = this.files[0].name;
                                 }
-                                the_return.innerHTML = fileName;  
-                            });                            
+                                the_return.innerHTML = fileName;
+                            });
                         </script>
                     ';
                 } else {
                     $template = '
-                    <div id="file_'.$name.'" class="form-group row {error_class}">
-                        
-                        <label {label-for} class="col-sm-'.$size[0].' control-label" >
+                    <div id="file_'.$name.'" class="row mb-3  {error_class}">
+
+                        <label {label-for} class="col-sm-'.$size[0].' col-form-label" >
                             <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
                             {label}
                         </label>
@@ -474,7 +474,7 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
                 return '
                         <label {label-for}>{label}</label>
                         <div class="input-group">
-                            
+
                             {icon}
                             {element}
                         </div>';

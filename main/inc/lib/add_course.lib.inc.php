@@ -957,10 +957,10 @@ class AddCourse
         // Adding the course to an URL.
         $url = api_get_access_url_entity($accessUrlId);
         if (!is_null($url)) {
-            $urlRelCourse = (new AccessUrlRelCourse())
+            /*$urlRelCourse = (new AccessUrlRelCourse())
                 ->setCourse($course)
                 ->setUrl($url);
-            Database::getManager()->persist($urlRelCourse);
+	    Database::getManager()->persist($urlRelCourse);*/
         }
 
         try {

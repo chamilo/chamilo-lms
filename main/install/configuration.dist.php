@@ -1544,7 +1544,6 @@ $_configuration['auth_password_links'] = [
     ]
 ];
 */
-//$_configuration['ck_editor_allowed_copy_paste_image'] = false;
 
 // Show unsubscribe buttons on page "My courses"
 //$_configuration['enable_unsubscribe_button_on_my_course_page'] = false;
@@ -1604,6 +1603,10 @@ $_configuration['auth_password_links'] = [
 
 // Allow teachers and admins to see students as friends on social network
 // $_configuration['social_make_teachers_friend_all'] = false;
+
+// Prevent the use of images copy-paste as base64 in the editor to avoid 
+// filling the database with images
+//$_configuration['ck_editor_block_image_copy_paste'] = false;
 
 // KEEP THIS AT THE END
 // -------- Custom DB changes

@@ -957,10 +957,13 @@ class AddCourse
         // Adding the course to an URL.
         $url = api_get_access_url_entity($accessUrlId);
         if (!is_null($url)) {
-            $urlRelCourse = (new AccessUrlRelCourse())
-                ->setCourse($course)
-                ->setUrl($url);
-            Database::getManager()->persist($urlRelCourse);
+            // Course::PrePersist() has already created the AccessUrlRelCourse, but with the default AccessUrl
+            foreach ($course->getUrls() as $urlRelCourse) {
+                if ($urlRelCourse->getUrl() != $url) {
+                    $urlRelCourse->setUrl($url);
+                    Database::getManager()->persist($urlRelCourse);
+                }
+            }
         }
 
         try {

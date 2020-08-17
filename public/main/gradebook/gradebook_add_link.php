@@ -18,7 +18,7 @@ $tbl_forum_thread = Database::get_course_table(TABLE_FORUM_THREAD);
 $tbl_link = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 
 $session_id = api_get_session_id();
-$typeSelected = isset($_GET['typeselected']) ? intval($_GET['typeselected']) : null;
+$typeSelected = isset($_GET['typeselected']) ? (int) $_GET['typeselected'] : null;
 
 if (0 == $session_id) {
     $all_categories = Category::load(
@@ -127,11 +127,8 @@ if (isset($typeSelected) && '0' != $typeSelected) {
         }
 
         $link->add();
-
         $logInfo = [
             'tool' => TOOL_GRADEBOOK,
-            'tool_id' => 0,
-            'tool_id_detail' => 0,
             'action' => 'new-link',
             'action_details' => 'selectcat='.$selectCat,
         ];
@@ -157,8 +154,6 @@ if (isset($_GET['selectcat'])) {
 
 $logInfo = [
     'tool' => TOOL_GRADEBOOK,
-    'tool_id' => 0,
-    'tool_id_detail' => 0,
     'action' => 'add-link',
     'action_details' => 'selectcat='.$selectCat,
 ];

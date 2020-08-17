@@ -131,11 +131,9 @@ if (!empty($_GET['action']) && 'exportqti2' == $_GET['action'] && !empty($_GET['
 
 // Exercise object creation.
 if (!is_object($objExercise)) {
-    // construction of the Exercise object
-    $objExercise = new Exercise();
-
     // creation of a new exercise if wrong or not specified exercise ID
     if ($exerciseId) {
+        $objExercise = new Exercise();
         $parseQuestionList = $showPagination > 0 ? false : true;
         if ($editQuestion) {
             $parseQuestionList = false;

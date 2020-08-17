@@ -3156,7 +3156,7 @@ class Exercise
         $myRemindList = []
     ) {
         global $safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id;
-        $nbrQuestions = $this->getQuestionCount();
+        $nbrQuestions = $this->countQuestionsInExercise();
         $buttonList = [];
         $html = $label = '';
         $hotspotGet = isset($_POST['hotspot']) ? Security::remove_XSS($_POST['hotspot']) : null;
@@ -3466,7 +3466,7 @@ class Exercise
      *                                                          'exercise_result'
      * @param array  $exerciseResultCoordinates                 the hotspot coordinates $hotspot[$question_id] =
      *                                                          coordinates
-     * @param bool   $saved_results                             save results in the DB or just show the reponse
+     * @param bool   $save_results                              save results in the DB or just show the response
      * @param bool   $from_database                             gets information from DB or from the current selection
      * @param bool   $show_result                               show results or not
      * @param int    $propagate_neg
@@ -5749,11 +5749,9 @@ class Exercise
                 }
             }
 
-            //if ($origin != 'learnpath') {
-            if ($show_result && ANNOTATION != $answerType) {
+            if ($show_result && $answerType != ANNOTATION) {
                 echo '</table>';
             }
-            //	}
         }
         unset($objAnswerTmp);
 
@@ -6177,6 +6175,7 @@ class Exercise
     /**
      * @param array $user_data         result of api_get_user_info()
      * @param array $trackExerciseInfo result of get_stat_track_exercise_info
+     * @param bool  $saveUserResult
      *
      * @return string
      */
@@ -6361,7 +6360,7 @@ class Exercise
 
         // 1.1 Admins and teachers can access to the exercise
         if ($filterByAdmin) {
-            if (api_is_platform_admin() || api_is_course_admin()) {
+            if (api_is_platform_admin() || api_is_course_admin() || api_is_course_tutor()) {
                 return ['value' => true, 'message' => ''];
             }
         }

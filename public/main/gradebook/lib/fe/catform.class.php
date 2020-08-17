@@ -198,7 +198,7 @@ class CatForm extends FormValidator
         $courses = Category::get_all_courses(api_get_user_id());
         //only return courses that are not yet created by the teacher
         foreach ($courses as $row) {
-            $select->addoption($row[1], $row[0]);
+            $select->addOption($row[1], $row[0]);
         }
         $this->setDefaults([
             'hid_user_id' => $this->category_object->get_user_id(),

@@ -385,7 +385,7 @@ class TestCategory
      * Return the list of different categories NAME for a test.
      *
      * @param int  $exerciseId
-     * @param bool $grouped_by_category
+     * @param bool
      *
      * @return array
      *
@@ -1162,13 +1162,13 @@ class TestCategory
                 $links .= ' <a href="'.api_get_self().'?'.api_get_cidreq().'&action=deletecategory&category_id='.$category['id'].'" ';
                 $links .= 'onclick="return confirmDelete(\''.self::protectJSDialogQuote(get_lang('DeleteCategoryAreYouSure').'['.$rowname).'] ?\', \'id_cat'.$category['id'].'\');">';
                 $links .= Display::return_icon('delete.png', get_lang('Delete'), [], ICON_SIZE_SMALL).'</a>';
-                }
+            }
 
             $html .= Display::panel($content, $category['title'].$links);
-                }
+        }
 
         return $html;
-        }
+    }
 
     /**
      * To allowed " in javascript dialog box without bad surprises

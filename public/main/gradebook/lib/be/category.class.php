@@ -804,9 +804,9 @@ class Category implements GradebookItem
         $option = Database::fetch_array($res, 'ASSOC');
         if ($option['num'] >= 1) {
             return '&nbsp;&nbsp;<span class="resource-deleted">(&nbsp;'.get_lang('The resource has been deleted').'&nbsp;)</span>';
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**

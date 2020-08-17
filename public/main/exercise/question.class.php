@@ -1201,6 +1201,60 @@ abstract class Question
                 .media { display:none;}
             </style>';
 
+        $zoomOptions = api_get_configuration_value('quiz_image_zoom');
+        if (isset($zoomOptions['options'])) {
+            $finderFolder = api_get_path(WEB_PATH).'vendor/studio-42/elfinder/';
+            echo '<!-- elFinder CSS (REQUIRED) -->';
+            echo '<link rel="stylesheet" type="text/css" media="screen" href="'.$finderFolder.'css/elfinder.full.css">';
+            echo '<link rel="stylesheet" type="text/css" media="screen" href="'.$finderFolder.'css/theme.css">';
+
+            echo '<!-- elFinder JS (REQUIRED) -->';
+            echo '<script type="text/javascript" src="'.$finderFolder.'js/elfinder.full.js"></script>';
+
+            echo '<!-- elFinder translation (OPTIONAL) -->';
+            $language = 'en';
+            $platformLanguage = api_get_interface_language();
+            $iso = api_get_language_isocode($platformLanguage);
+            $filePart = "vendor/studio-42/elfinder/js/i18n/elfinder.$iso.js";
+            $file = api_get_path(SYS_PATH).$filePart;
+            $includeFile = '';
+            if (file_exists($file)) {
+                $includeFile = '<script type="text/javascript" src="'.api_get_path(WEB_PATH).$filePart.'"></script>';
+                $language = $iso;
+            }
+            echo $includeFile;
+
+            echo '<script type="text/javascript" charset="utf-8">
+            $(document).ready(function () {
+                $(".create_img_link").click(function(e){
+                    e.preventDefault();
+                    e.stopPropagation();
+                    var imageZoom = $("input[name=\'imageZoom\']").val();
+                    var imageWidth = $("input[name=\'imageWidth\']").val();
+                    CKEDITOR.instances.questionDescription.insertHtml(\'<img id="zoom_picture" class="zoom_picture" src="\'+imageZoom+\'" data-zoom-image="\'+imageZoom+\'" width="\'+imageWidth+\'px" />\');
+                });
+
+                $("input[name=\'imageZoom\']").on("click", function(){
+                    console.log("click en campo");
+                    var elf = $("#elfinder").elfinder({
+                        url : "'.api_get_path(WEB_LIBRARY_PATH).'elfinder/connectorAction.php?'.api_get_cidreq().'",
+                        getFileCallback: function(file) {
+                            var filePath = file; //file contains the relative url.
+                            console.log(filePath);
+                            var imgPath = "<img src = \'"+filePath+"\'/>";
+                            $("input[name=\'imageZoom\']").val(filePath.url);
+                            $("#elfinder").remove(); //close the window after image is selected
+                        },
+                        startPathHash: "l2_Lw", // Sets the course driver as default
+                        resizable: false,
+                        lang: "'.$language.'"
+                    }).elfinder("instance");
+                });
+            });
+            </script>';
+            echo '<div id="elfinder"></div>';
+        }
+
         // question name
         if (api_get_configuration_value('save_titles_as_html')) {
             $editorConfig = ['ToolbarSet' => 'TitleAsHtml'];
@@ -1237,6 +1291,14 @@ abstract class Question
 
         $form->addButtonAdvancedSettings('advanced_params');
         $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
+
+        if (isset($zoomOptions['options'])) {
+            $form->addElement('text', 'imageZoom', get_lang('ImageURL'));
+            $form->addElement('text', 'imageWidth', get_lang('PixelWidth'));
+
+            $form->addButton('btn_create_img', get_lang('AddToEditor'), 'plus', 'info', 'small', 'create_img_link');
+        }
+
         $form->addHtmlEditor(
             'questionDescription',
             get_lang('Enrich question'),
@@ -1426,6 +1488,10 @@ abstract class Question
      */
     public static function displayTypeMenu($objExercise)
     {
+        if (empty($objExercise)) {
+            return '';
+        }
+
         $feedbackType = $objExercise->getFeedbackType();
         $exerciseId = $objExercise->id;
 
@@ -1616,7 +1682,6 @@ abstract class Question
         }
 
         $scoreLabel = get_lang('Wrong');
-
         if (in_array($exercise->results_disabled, [
             RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
             RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING,
@@ -1699,18 +1764,25 @@ abstract class Question
         ];
         $header .= Display::page_subheader2($counterLabel.'. '.$this->question);
 
+        $showRibbon = true;
         // dont display score for certainty degree questions
-        if (MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY != $this->type) {
-            if (isset($score['result'])) {
-                if (in_array($exercise->results_disabled, [
-                    RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
-                    RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING,
-                ])
-                ) {
-                    $score['result'] = null;
-                }
-                $header .= $exercise->getQuestionRibbon($class, $scoreLabel, $score['result'], $scoreCurrent);
+        if (MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY == $this->type) {
+            $showRibbon = false;
+            $ribbonResult = api_get_configuration_value('show_exercise_question_certainty_ribbon_result');
+            if (true === $ribbonResult) {
+                $showRibbon = true;
             }
+        }
+
+        if ($showRibbon && isset($score['result'])) {
+            if (in_array($exercise->results_disabled, [
+                RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
+                RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING,
+            ])
+            ) {
+                $score['result'] = null;
+            }
+            $header .= $exercise->getQuestionRibbon($class, $scoreLabel, $score['result'], $scoreCurrent);
         }
 
         if (READING_COMPREHENSION != $this->type) {
@@ -2081,8 +2153,20 @@ abstract class Question
             ->setParameters(['id' => (int) $this->id])
             ->getResult();
     }
-
-    public function getHotSpotData()
+  
+    /**
+     * @return int
+     */
+    public function countAnswers()
     {
+        $result = Database::select(
+            'COUNT(1) AS c',
+            Database::get_course_table(TABLE_QUIZ_ANSWER),
+            ['where' => ['question_id = ?' => [$this->id]]],
+            'first'
+        );
+
+        return (int) $result['c'];
     }
+
 }

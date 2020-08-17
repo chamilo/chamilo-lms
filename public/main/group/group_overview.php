@@ -24,7 +24,8 @@ $nameTools = get_lang('Groups overview');
 $courseId = api_get_course_int_id();
 $courseInfo = api_get_course_info();
 
-$keyword = isset($_GET['keyword']) ? $_GET['keyword'] : null;
+$groupId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+$keyword = isset($_GET['keyword']) ? $_GET['keyword'] : '';
 
 if (isset($_GET['action'])) {
     switch ($_GET['action']) {
@@ -89,7 +90,6 @@ if (isset($_GET['action'])) {
 
             break;
         case 'export':
-            $groupId = isset($_GET['id']) ? (int) ($_GET['id']) : null;
             $data = GroupManager::exportCategoriesAndGroupsToArray($groupId, true);
             switch ($_GET['type']) {
                 case 'csv':
@@ -110,7 +110,6 @@ if (isset($_GET['action'])) {
     }
 }
 
-/*	Header */
 $interbreadcrumb[] = ['url' => 'group.php?'.api_get_cidreq(), 'name' => get_lang('Groups')];
 $origin = api_get_origin();
 if ('learnpath' != $origin) {
@@ -122,7 +121,6 @@ if ('learnpath' != $origin) {
         api_not_allowed(true);
     } else {
         Display::display_header($nameTools, 'Group');
-        // Tool introduction
         Display::display_introduction_section(TOOL_GROUP);
     }
 } else {

@@ -323,7 +323,11 @@ if ($is_allowedToEdit && 'learnpath' != $origin) {
             Display::return_icon('statistics.png', get_lang('Report by question'), '', ICON_SIZE_MEDIUM).'</a>';
         $actions .= '<a id="export_opener" href="'.api_get_self().'?export_report=1&exerciseId='.$exercise_id.'" >'.
         Display::return_icon('save.png', get_lang('Export'), '', ICON_SIZE_MEDIUM).'</a>';
-        // clean result before a selected date icon
+        $actions .= Display::url(
+            Display::return_icon('reload.png', get_lang('RecalculateResults'), [], ICON_SIZE_MEDIUM),
+            api_get_path(WEB_CODE_PATH).'exercise/recalculate_all.php?'.api_get_cidreq()."&exercise=$exercise_id"
+        );
+
         // clean result before a selected date icon
         if ($allowClean) {
             $actions .= Display::url(

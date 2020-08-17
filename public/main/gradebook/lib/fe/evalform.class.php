@@ -163,8 +163,9 @@ class EvalForm extends FormValidator
         $renderer = &$this->defaultRenderer();
         // set new form template
         $form_template = '<form{attributes}>
-                    <table class="data_table" border="0" cellpadding="5" cellspacing="5">{content}
-                    </table>
+                <div class="table-responsive">
+                    <table class="data_table" border="0" cellpadding="5" cellspacing="5">{content}</table>
+                </div>
                 </form>';
         $renderer->setFormTemplate($form_template);
 
@@ -309,9 +310,11 @@ class EvalForm extends FormValidator
         $renderer = &$this->defaultRenderer();
         $renderer->setFormTemplate(
             '<form{attributes}>
+            <div class="table-responsive">
 		      <table class="data_table">
               {content}
 		      </table>
+            </div>
 		   </form>'
         );
 

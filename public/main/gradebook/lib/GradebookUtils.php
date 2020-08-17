@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -446,7 +447,6 @@ class GradebookUtils
         $cat = new Category();
         $message_link = $cat->show_message_resource_delete($link->get_course_code());
         $is_locked = $link->is_locked();
-
         $modify_icons = null;
 
         if (!api_is_allowed_to_edit(null, true)) {
@@ -515,7 +515,10 @@ class GradebookUtils
                         ICON_SIZE_SMALL
                     );
             } else {
-                $modify_icons .= '&nbsp;<a href="'.api_get_self().'?deletelink='.$link->get_id().'&selectcat='.$selectcat.' &'.$courseParams.'" onclick="return confirmation();">'.
+                $modify_icons .= '&nbsp;
+                <a
+                    href="'.api_get_self().'?deletelink='.$link->get_id().'&selectcat='.$selectcat.' &'.$courseParams.'"
+                    onclick="return confirmation();">'.
                     Display::return_icon(
                         'delete.png',
                         get_lang('Delete'),
@@ -742,35 +745,7 @@ class GradebookUtils
     {
         $table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
         $table_user = Database::get_main_table(TABLE_MAIN_USER);
-        $sql = 'SELECT DISTINCT u.user_id, u.lastname, u.firstname, u.username
-                FROM '.$table_user.' u
-                INNER JOIN '.$table_certificate.' gc
-                ON u.user_id=gc.user_id ';
-        if (!is_null($cat_id) && $cat_id > 0) {
-            $sql .= ' WHERE cat_id='.intval($cat_id);
-        }
-        if (!empty($userList)) {
-            $userList = array_map('intval', $userList);
-            $userListCondition = implode("','", $userList);
-            $sql .= " AND u.user_id IN ('$userListCondition')";
-        }
-        $sql .= ' ORDER BY '.(api_sort_by_first_name() ? 'u.firstname' : 'u.lastname');
-        $rs = Database::query($sql);
-
-        $list_users = [];
-        while ($row = Database::fetch_array($rs)) {
-            $list_users[] = $row;
-        }
-
-        return $list_users;
-    }
-
-    public static function getTotalCertificates($urlId)
-    {
-        $urlId = (int) $urlId;
-        $table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
-        $table_user = Database::get_main_table(TABLE_MAIN_USER);
-        $sql = 'SELECT DISTINCT u.user_id, u.lastname, u.firstname, u.username
+        $sql = 'SELECT DISTINCT u.user_id, u.lastname, u.firstname, u.username, gc.created_at
                 FROM '.$table_user.' u
                 INNER JOIN '.$table_certificate.' gc
                 ON u.user_id=gc.user_id ';
@@ -939,7 +914,6 @@ class GradebookUtils
                 $cat->set_weight($default_weight);
                 $cat->set_grade_model_id($gradebook_model_id);
                 $cat->set_certificate_min_score(75);
-
                 $cat->set_visible(0);
                 $cat->add();
                 $category_id = $cat->get_id();
@@ -986,16 +960,15 @@ class GradebookUtils
                 if ($my_cat->get_course_code() == api_get_course_id()) {
                     $grade_model_id = $my_cat->get_grade_model_id();
                     if (empty($grade_model_id)) {
-                        if (0 == $my_cat->get_parent_id()) {
-                            //$default_weight = $my_cat->get_weight();
-                            $select_gradebook->addoption(get_lang('Default'), $my_cat->get_id());
+                        if ($my_cat->get_parent_id() == 0) {
+                            $select_gradebook->addOption(get_lang('Default'), $my_cat->get_id());
                             $cats_added[] = $my_cat->get_id();
                         } else {
-                            $select_gradebook->addoption($my_cat->get_name(), $my_cat->get_id());
+                            $select_gradebook->addOption($my_cat->get_name(), $my_cat->get_id());
                             $cats_added[] = $my_cat->get_id();
                         }
                     } else {
-                        $select_gradebook->addoption(get_lang('Select'), 0);
+                        $select_gradebook->addOption(get_lang('Select'), 0);
                     }
                 }
             }
@@ -1339,9 +1312,8 @@ class GradebookUtils
         }
 
         $result = Database::query($sql);
-        $users = Database::store_result($result);
 
-        return $users;
+        return Database::store_result($result);
     }
 
     /**
@@ -1679,9 +1651,6 @@ class GradebookUtils
 
         if ($saveToHtmlFile) {
             return $result;
-            file_put_contents($file, $result);
-
-            return $file;
         }
 
         return $file;

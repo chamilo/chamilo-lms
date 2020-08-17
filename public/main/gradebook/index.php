@@ -1,13 +1,10 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
-/**
- * Gradebook controller.
- */
 
 // $cidReset : This is the main difference with gradebook.php, here we say,
 // basically, that we are inside a course, and many things depend from that
-//$cidReset = false;
 $_in_course = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_GRADEBOOK;
@@ -848,7 +845,6 @@ if (!api_is_allowed_to_edit(null, true)) {
 if (isset($first_time) && 1 == $first_time && api_is_allowed_to_edit(null, true)) {
     echo '<meta http-equiv="refresh" content="0;url='.api_get_self().'?'.api_get_cidreq().'" />';
 } else {
-    // Tool introduction
     Display::display_introduction_section(
         TOOL_GRADEBOOK,
         ['ToolbarSet' => 'AssessmentsIntroduction']

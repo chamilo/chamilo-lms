@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -674,8 +675,10 @@ class DisplayGradebook
         for ($count = 0; $count < count($evals_links); $count++) {
             $item = $evals_links[$count];
             $score = $item->calc_score($userId);
-            $my_score_denom = (0 == $score[1]) ? 1 : $score[1];
-            $item_value += $score[0] / $my_score_denom * $item->get_weight();
+            if ($score) {
+                $my_score_denom = ($score[1] == 0) ? 1 : $score[1];
+                $item_value += $score[0] / $my_score_denom * $item->get_weight();
+            }
             $item_total += $item->get_weight();
         }
         $item_value = api_number_format($item_value, 2);

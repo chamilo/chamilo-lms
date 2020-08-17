@@ -417,6 +417,8 @@ class ExerciseResult
             $data .= str_replace("\r\n", '  ', $row['status']).';';
             $data .= str_replace("\r\n", '  ', $row['lp_name']).';';
             $data .= str_replace("\r\n", '  ', $row['is_user_subscribed']).';';
+            $data .= str_replace("\r\n", '  ', api_get_course_id()).';';
+
             $data .= "\n";
         }
 

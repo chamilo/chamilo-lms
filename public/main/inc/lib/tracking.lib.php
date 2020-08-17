@@ -531,7 +531,7 @@ class Tracking
 
                         $lesson_status = $row['mystatus'];
                         $score = $row['myscore'];
-                        $time_for_total = $row['mytime'];
+                        $time_for_total += $row['mytime'];
                         $attemptTime = $row['mytime'];
 
                         if ($minimumAvailable) {
@@ -901,12 +901,9 @@ class Tracking
                         $title = Security::remove_XSS($title);
                         $output .= '<tr class="'.$oddclass.'">
                                 <td>'.$extend_link.'</td>
-                                <td colspan="4">
+                                <td colspan="10">
                                 <h4>'.$title.'</h4>
                                 </td>
-                                <td colspan="2">'.learnpathitem::humanize_status($lesson_status).'</td>
-                                <td colspan="2"></td>
-                                <td colspan="2"></td>
                                 '.$action.'
                             </tr>';
                     } else {
@@ -2562,7 +2559,7 @@ class Tracking
      *                                   [sum_of_progresses, number] if it is set to true
      * @param bool      $onlySeriousGame Optional. Limit average to lp on seriousgame mode
      *
-     * @return float Average progress of the user in this course
+     * @return float Average progress of the user in this course from 0 to 100
      */
     public static function get_avg_student_progress(
         $studentId,
@@ -7648,7 +7645,8 @@ class TrackingCourseLog
                     user.official_code  as col0,
                     user.lastname       as col1,
                     user.firstname      as col2,
-                    user.username       as col3';
+                    user.username       as col3,
+                    user.email          as col4';
         if ($getCount) {
             $select = ' SELECT COUNT(distinct(user.id)) as count ';
         }
@@ -7900,6 +7898,10 @@ class TrackingCourseLog
                         $user_row[$extraFieldInfo[$fieldId]['variable']] = '';
                     }
                 }
+            }
+
+            if (api_get_setting('show_email_addresses') === 'true') {
+                $user_row['email'] = $user['col4'];
             }
 
             $user_row['link'] = $user['link'];

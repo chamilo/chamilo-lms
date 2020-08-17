@@ -787,9 +787,7 @@ class SocialManager extends UserManager
             );
         }
 
-        $skillBlock = $template->get_template('social/avatar_block.tpl');
-
-        return $template->fetch($skillBlock);
+        return $template->fetch($template->get_template('social/avatar_block.tpl'));
     }
 
     /**

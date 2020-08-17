@@ -195,11 +195,11 @@ class UserGroup extends Model
     }
 
     /**
-     * @param int $type
+     * @param string $extraWhereCondition
      *
      * @return int
      */
-    public function get_count()
+    public function get_count($extraWhereCondition = '')
     {
         $authorCondition = '';
 
@@ -217,6 +217,7 @@ class UserGroup extends Model
                     INNER JOIN $this->access_url_rel_usergroup a
                     ON (u.id = a.usergroup_id)
                     WHERE access_url_id = $urlId $authorCondition
+                    $extraWhereCondition
             ";
 
             $result = Database::query($sql);
@@ -230,6 +231,7 @@ class UserGroup extends Model
                     FROM {$this->table} a
                     WHERE 1 = 1
                     $authorCondition
+                    AND $extraWhereCondition
             ";
             $result = Database::query($sql);
             if (Database::num_rows($result)) {
@@ -1116,41 +1118,39 @@ class UserGroup extends Model
      * @param int $sord
      * @param int $start
      * @param int $limit
+     * @param string $extraWhereCondition
      *
      * @return array
      */
-    public function getUsergroupsPagination($sidx, $sord, $start, $limit)
+    public function getUsergroupsPagination($sidx, $sord, $start, $limit, $extraWhereCondition = '')
     {
         $sord = in_array(strtolower($sord), ['asc', 'desc']) ? $sord : 'desc';
 
         $start = (int) $start;
         $limit = (int) $limit;
+
+        $sqlFrom = "{$this->table} u ";
+        $sqlWhere = '1 = 1 ';
+
         if ($this->getUseMultipleUrl()) {
             $urlId = api_get_current_access_url_id();
-            $from = $this->table." u 
-                    INNER JOIN {$this->access_url_rel_usergroup} a 
-                    ON (u.id = a.usergroup_id)";
-            $where = [' access_url_id = ?' => $urlId];
-        } else {
-            $from = $this->table.' u ';
-            $where = [];
+            $sqlFrom .= " INNER JOIN {$this->access_url_rel_usergroup} a ON (u.id = a.usergroup_id) ";
+            $sqlWhere .= " AND a.access_url_id = $urlId ";
         }
 
         if ($this->allowTeachers()) {
             if (!api_is_platform_admin()) {
                 $userId = api_get_user_id();
-                $where = [' author_id = ?' => $userId];
+                $sqlWhere .= " AND author_id = $userId ";
             }
         }
 
-        $result = Database::select(
-            'u.*',
-            $from,
-            [
-                'where' => $where,
-                'order' => "name $sord",
-                'LIMIT' => "$start , $limit",
-            ]
+        if ($extraWhereCondition) {
+            $sqlWhere .= " AND $extraWhereCondition ";
+        }
+
+        $result = Database::store_result(
+            Database::query("SELECT u.* FROM $sqlFrom WHERE $sqlWhere ORDER BY name $sord LIMIT $start, $limit")
         );
 
         $new_result = [];
@@ -1439,9 +1439,8 @@ class UserGroup extends Model
      * @param string $cropParameters
      *
      * @return mixed Returns the resulting common file name of created images which usually should be stored in database.
-     *               When an image is removed the function returns an empty string. In case of internal error or negative validation it returns FALSE.
-     *
-     * @see UserManager::delete_user_picture() as the prefered way for deletion.
+     *               When an image is removed the function returns an empty string.
+     *               In case of internal error or negative validation it returns FALSE.
      */
     public function update_group_picture($group_id, $file = null, $source_file = null, $cropParameters = null)
     {
@@ -2387,7 +2386,11 @@ class UserGroup extends Model
             }
         }
 
-        $sql = "SELECT picture_uri as image, u.id, CONCAT (u.firstname,' ', u.lastname) as fullname, relation_type
+        $sql = "SELECT
+                    picture_uri as image,
+                    u.id,
+                    CONCAT (u.firstname,' ', u.lastname) as fullname,
+                    relation_type
     		    FROM $tbl_user u
     		    INNER JOIN $table_group_rel_user gu
     			ON (gu.user_id = u.id)
@@ -2406,6 +2409,8 @@ class UserGroup extends Model
                 $row['image'] = '<img src="'.$userPicture.'"  />';
                 $row['user_info'] = $userInfo;
             }
+
+            $row['user_id'] = $row['id'];
             $array[$row['id']] = $row;
         }
 

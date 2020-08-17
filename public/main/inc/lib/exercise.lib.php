@@ -65,7 +65,9 @@ class ExerciseLib
             return false;
         }
 
-        if (EXERCISE_FEEDBACK_TYPE_END != $exercise->getFeedbackType()) {
+        $questionRequireAuth = WhispeakAuthPlugin::questionRequireAuthentify($questionId);
+
+        if ($exercise->getFeedbackType() != EXERCISE_FEEDBACK_TYPE_END) {
             $show_comment = false;
         }
 
@@ -94,7 +96,14 @@ class ExerciseLib
                     }
                     echo $titleToDisplay;
                 }
-                if (!empty($questionDescription) && READING_COMPREHENSION != $answerType) {
+
+                if ($questionRequireAuth) {
+                    WhispeakAuthPlugin::quizQuestionAuthentify($questionId, $exercise);
+
+                    return false;
+                }
+
+                if (!empty($questionDescription) && $answerType != READING_COMPREHENSION) {
                     echo Display::div(
                         $questionDescription,
                         ['class' => 'question_description']
@@ -128,10 +137,12 @@ class ExerciseLib
                     if (DRAGGABLE == $answerType) {
                         $isVertical = 'v' == $objQuestionTmp->extra;
                         $s .= '
-                            <div class="col-md-12 ui-widget ui-helper-clearfix">
-                                <div class="clearfix">
-                                <ul class="exercise-draggable-answer '.($isVertical ? '' : 'list-inline').'"
-                                    id="question-'.$questionId.'" data-question="'.$questionId.'">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <p class="small">'.get_lang('DraggableQuestionIntro').'</p>
+                                    <ul class="exercise-draggable-answer list-unstyled '
+                            .($isVertical ? '' : 'list-inline').'" id="question-'.$questionId.'" data-question="'
+                            .$questionId.'">
                         ';
                     } else {
                         $s .= '<div id="drag'.$questionId.'_question" class="drag_question">
@@ -1352,10 +1363,13 @@ HTML;
                 $s .= '</table>';
             }
 
-            if (DRAGGABLE == $answerType) {
-                $isVertical = 'v' == $objQuestionTmp->extra;
-                $s .= "</ul>";
-                $s .= "</div></div>"; // col-md-12
+            if ($answerType == DRAGGABLE) {
+                $isVertical = $objQuestionTmp->extra == 'v';
+                $s .= "
+                           </ul>
+                        </div><!-- .col-md-12 -->
+                    </div><!-- .row -->
+                ";
                 $counterAnswer = 1;
                 $s .= $isVertical ? '' : '<div class="row">';
                 for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
@@ -1378,7 +1392,7 @@ HTML;
                 }
 
                 $s .= $isVertical ? '' : '</div>'; // row
-                $s .= '</div>'; // col-md-12 ui-widget ui-helper-clearfix
+//                $s .= '</div>';
             }
 
             if (in_array($answerType, [MATCHING, MATCHING_DRAGGABLE])) {
@@ -1475,6 +1489,13 @@ HTML;
                     echo $objQuestionTmp->getTitleToDisplay($current_item);
                 }
                 //@todo I need to the get the feedback type
+                if ($questionRequireAuth) {
+                    WhispeakAuthPlugin::quizQuestionAuthentify($questionId, $exercise);
+
+                    return false;
+                }
+
+                //@todo I need to the get the feedback type
                 echo <<<HOTSPOT
                     <input type="hidden" name="hidden_hotspot_id" value="$questionId" />
                     <div class="exercise_questions">
@@ -1532,6 +1553,13 @@ HOTSPOT;
                     }
                     echo $objQuestionTmp->getTitleToDisplay($current_item);
                 }
+
+                if ($questionRequireAuth) {
+                    WhispeakAuthPlugin::quizQuestionAuthentify($questionId, $exercise);
+
+                    return false;
+                }
+
                 echo '
                     <input type="hidden" name="hidden_hotspot_id" value="'.$questionId.'" />
                     <div class="exercise_questions">
@@ -4512,7 +4540,6 @@ EOT;
                 );
             } else {
                 $pluginEvaluation = QuestionOptionsEvaluationPlugin::create();
-
                 if ('true' === $pluginEvaluation->get(QuestionOptionsEvaluationPlugin::SETTING_ENABLE)) {
                     $formula = $pluginEvaluation->getFormulaForExercise($objExercise->selectId());
 

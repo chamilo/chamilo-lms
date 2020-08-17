@@ -123,8 +123,8 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
                 break;
             case FormValidator::LAYOUT_HORIZONTAL:
                 $template = '
-                <div class="form-group {error_class}">
-                    <label {label-for} class="col-sm-'.$size[0].' control-label" >
+                <div class="row mb-3 {error_class}">
+                    <label {label-for} class="col-sm-'.$size[0].' col-form-label" >
                         <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
                         {label}
                     </label>

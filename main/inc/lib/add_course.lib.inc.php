@@ -907,6 +907,12 @@ class AddCourse
             ->setUnsubscribe($unsubscribe)
             ->setVisualCode($visualCode)
         ;
+
+        $url = api_get_access_url_entity($accessUrlId);
+        if (!is_null($url)) {
+            $course->getAccessUrls()->add($url);
+        }
+
         Database::getManager()->persist($course);
 
         $addTeacher = isset($params['add_user_as_teacher']) ? $params['add_user_as_teacher'] : true;
@@ -951,18 +957,6 @@ class AddCourse
                     ->setUserCourseCat(0)
                 ;
                 Database::getManager()->persist($courseRelTeacher);
-            }
-        }
-
-        // Adding the course to an URL.
-        $url = api_get_access_url_entity($accessUrlId);
-        if (!is_null($url)) {
-            // Course::PrePersist() has already created the AccessUrlRelCourse, but with the default AccessUrl
-            foreach ($course->getUrls() as $urlRelCourse) {
-                if ($urlRelCourse->getUrl() != $url) {
-                    $urlRelCourse->setUrl($url);
-                    Database::getManager()->persist($urlRelCourse);
-                }
             }
         }
 

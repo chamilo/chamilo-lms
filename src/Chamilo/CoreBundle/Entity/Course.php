@@ -1547,6 +1547,14 @@ class Course
     }
 
     /**
+     * @return AccessUrl[]|ArrayCollection
+     */
+    public function getAccessUrls()
+    {
+        return $this->accessUrls;
+    }
+
+    /**
      * @param CourseRelUser $subscription
      *
      * @return bool

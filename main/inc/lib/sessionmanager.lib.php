@@ -3284,9 +3284,8 @@ class SessionManager
             foreach ($conditions as $field => $options) {
                 $operator = strtolower($options['operator']);
                 $value = Database::escape_string($options['value']);
-                $sql_query .= ' AND ';
                 if (in_array($field, $availableFields) && in_array($operator, $availableOperator)) {
-                    $sql_query .= $field." $operator '".$value."'";
+                    $sql_query .= ' AND '.$field." $operator '".$value."'";
                 }
             }
         }

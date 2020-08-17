@@ -161,7 +161,7 @@ require_once __DIR__.'/version.php';
 if (isAlreadyInstalledSystem()) {
     // The system has already been installed, so block re-installation.
     $global_error_code = 6;
-    require '../inc/global_error_message.inc.php';
+    echo 'Portal already installed';
     exit;
 }
 

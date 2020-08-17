@@ -2357,13 +2357,13 @@ class CourseManager
         $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
         $sql = "SELECT DISTINCT
-                    u.user_id,
+                    u.id as user_id,
                     u.lastname,
                     u.firstname,
                     u.username
                 FROM $tbl_user u
                 INNER JOIN $tbl_session_course_user scu
-                ON (u.user_id = scu.user_id)
+                ON (u.id = scu.user_id)
                 WHERE
                     scu.session_id = $session_id AND
                     scu.c_id = $courseId AND
@@ -2821,8 +2821,10 @@ class CourseManager
                 }
                 if (api_strcasecmp($course_title_precedent, $course_title) < 0) {
                     $course_found = true;
-                    $course_sort = $courses['sort'];
-                    if (0 == $counter) {
+                    if (!empty($courses['sort'])) {
+                        $course_sort = $courses['sort'];
+                    }
+                    if ($counter == 0) {
                         $sql = "UPDATE $TABLECOURSUSER
                                 SET sort = sort+1
                                 WHERE
@@ -2970,39 +2972,52 @@ class CourseManager
         $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_course_field = Database::get_main_table(TABLE_EXTRA_FIELD);
         $tbl_course_field_value = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
-
-        //we filter the courses from the URL
-        $join_access_url = $where_access_url = '';
-        if (api_get_multiple_access_url()) {
-            $access_url_id = api_get_current_access_url_id();
-            if (-1 != $access_url_id) {
                 $tbl_url_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-                $join_access_url = "LEFT JOIN $tbl_url_course url_rel_course
-                                    ON url_rel_course.c_id = tcfv.item_id ";
-                $where_access_url = " AND access_url_id = $access_url_id ";
-            }
-        }
 
         $extraFieldType = EntityExtraField::COURSE_FIELD_TYPE;
 
+        $courseList = [];
         // get course list auto-register
-        $sql = "SELECT DISTINCT(c.id)
-                FROM $tbl_course_field_value tcfv
-                INNER JOIN $tbl_course_field tcf
-                ON tcfv.field_id =  tcf.id $join_access_url
-                INNER JOIN $courseTable c
-                ON (c.id = tcfv.item_id)
-                WHERE
-                    tcf.extra_field_type = $extraFieldType AND
-                    tcf.variable = 'special_course' AND
-                    tcfv.value = 1 $where_access_url";
 
+        $sql = "SELECT id FROM $tbl_course_field
+                WHERE extra_field_type = $extraFieldType AND
+                variable = 'special_course'";
         $result = Database::query($sql);
         $courseList = [];
 
         if (Database::num_rows($result) > 0) {
-            while ($row = Database::fetch_array($result)) {
-                $courseList[] = $row['id'];
+            $row = Database::fetch_assoc($result);
+            // Get list of special courses (appear to all)
+            // Note: The value is better indexed as string, so
+            // using '1' instead of integer is more efficient
+            $sql = "SELECT DISTINCT(item_id) as cid
+                FROM $tbl_course_field_value
+                WHERE field_id = ".$row['id']." AND value = '1'";
+            $result = Database::query($sql);
+            while ($row = Database::fetch_assoc($result)) {
+                $courseList[] = $row['cid'];
+            }
+            if (count($courseList) < 1) {
+                return $courseList;
+            }
+            if (api_get_multiple_access_url()) {
+                //we filter the courses by the active URL
+                $coursesSelect = '';
+                if (count($courseList) == 1) {
+                    $coursesSelect = $courseList[0];
+                } else {
+                    $coursesSelect = implode(',', $courseList);
+                }
+                $access_url_id = api_get_current_access_url_id();
+                if ($access_url_id != -1) {
+                    $sql = "SELECT c_id FROM $tbl_url_course
+                            WHERE access_url_id = $access_url_id
+                            AND c_id IN ($coursesSelect)";
+                    $result = Database::query($sql);
+                    while ($row = Database::fetch_assoc($result)) {
+                        $courseList[] = $row['c_id'];
+                    }
+                }
             }
         }
 
@@ -3305,14 +3320,6 @@ class CourseManager
      */
     public static function update_attributes($id, $attributes)
     {
-        $courseCategory = CourseCategory::getCategory($attributes['category_code']);
-
-        unset($attributes['category_code']);
-
-        if (!empty($courseCategory)) {
-            $attributes['category_id'] = $courseCategory['id'];
-        }
-
         $id = (int) $id;
         $table = Database::get_main_table(TABLE_MAIN_COURSE);
         $sql = "UPDATE $table SET ";
@@ -3403,7 +3410,7 @@ class CourseManager
 
     /**
      * Gets extra field value data and formatted values of a course
-     * for extra fields listed in configuration.php in My_course_course_extrafields_to_be_presented
+     * for extra fields listed in configuration.php in my_course_course_extrafields_to_be_presented
      * (array of variables as value of key 'fields').
      *
      * @param $courseId  int The numeric identifier of the course
@@ -3413,7 +3420,7 @@ class CourseManager
     public static function getExtraFieldsToBePresented($courseId)
     {
         $extraFields = [];
-        $fields = api_get_configuration_sub_value('My_course_course_extrafields_to_be_presented/fields');
+        $fields = api_get_configuration_sub_value('my_course_course_extrafields_to_be_presented/fields');
         if (!empty($fields) && is_array($fields)) {
             $extraFieldManager = new ExtraField('course');
             $dataAndFormattedValues = $extraFieldManager->getDataAndFormattedValues($courseId);
@@ -3909,7 +3916,7 @@ class CourseManager
             'not_category' => [],
         ];
         $collapsable = api_get_configuration_value('allow_user_course_category_collapsable');
-        $stok = Security::get_token();
+        $stok = Security::get_existing_token();
         while ($row = Database::fetch_array($result)) {
             // We simply display the title of the category.
             $courseInCategory = self::returnCoursesCategories(
@@ -4302,11 +4309,7 @@ class CourseManager
             return '';
         }
 
-        $userInCourseStatus = self::getUserInCourseStatus(
-            $user_id,
-            $course_info['real_id']
-        );
-
+        $userInCourseStatus = self::getUserInCourseStatus($user_id, $course_info['real_id']);
         $course_info['status'] = empty($session_id) ? $userInCourseStatus : STUDENT;
         $course_info['id_session'] = $session_id;
 
@@ -6067,7 +6070,7 @@ class CourseManager
     public static function getCourseUsers($filterByActive = null)
     {
         // This would return only the users from real courses:
-        $userList = self::get_user_list_from_course_code(
+        return self::get_user_list_from_course_code(
             api_get_course_id(),
             api_get_session_id(),
             null,
@@ -6081,8 +6084,6 @@ class CourseManager
             [],
             $filterByActive
         );
-
-        return $userList;
     }
 
     /**
@@ -6115,7 +6116,7 @@ class CourseManager
      *
      * @return HTML_QuickForm_element
      */
-    public static function addUserGroupMultiSelect(&$form, $alreadySelected)
+    public static function addUserGroupMultiSelect(&$form, $alreadySelected, $addShortCut = false)
     {
         $userList = self::getCourseUsers(true);
         $groupList = self::getCourseGroups();
@@ -6131,13 +6132,50 @@ class CourseManager
             $result[$content['value']] = $content['content'];
         }
 
-        return $form->addElement(
+        $multiple = $form->addElement(
             'advmultiselect',
             'users',
             get_lang('Users'),
             $result,
-            ['select_all_checkbox' => true]
+            ['select_all_checkbox' => true, 'id' => 'users']
         );
+
+        $sessionId = api_get_session_id();
+        if ($addShortCut && empty($sessionId)) {
+            $addStudents = [];
+            foreach ($userList as $user) {
+                if ($user['status_rel'] == STUDENT) {
+                    $addStudents[] = $user['user_id'];
+                }
+            }
+            if (!empty($addStudents)) {
+                $form->addHtml(
+                    '<script>
+                    $(function() {
+                        $("#add_students").on("click", function() {
+                            var addStudents = '.json_encode($addStudents).';
+                            $.each(addStudents, function( index, value ) {
+                                var option = $("#users option[value=\'USER:"+value+"\']");
+                                if (option.val()) {
+                                    $("#users_to").append(new Option(option.text(), option.val()))
+                                    option.remove();
+                                }
+                            });
+
+                            return false;
+                        });
+                    });
+                    </script>'
+                );
+
+                $form->addLabel(
+                    '',
+                    Display::url(get_lang('AddStudent'), '#', ['id' => 'add_students', 'class' => 'btn btn-primary'])
+                );
+            }
+        }
+
+        return $multiple;
     }
 
     /**
@@ -6955,13 +6993,24 @@ class CourseManager
     private static function checkCreateCourseAccessUrlParam($_configuration, $accessUrlId, $param, $msgLabel)
     {
         if (isset($_configuration[$accessUrlId][$param]) && $_configuration[$accessUrlId][$param] > 0) {
+            $num = null;
+            switch ($param) {
+                case 'hosting_limit_courses':
             $num = self::count_courses($accessUrlId);
-            if ($num >= $_configuration[$accessUrlId][$param]) {
+                    break;
+                case 'hosting_limit_active_courses':
+                    $num = self::countActiveCourses($accessUrlId);
+                    break;
+            }
+
+            if ($num && $num >= $_configuration[$accessUrlId][$param]) {
                 api_warn_hosting_contact($param);
 
                 Display::addFlash(
                     Display::return_message($msgLabel)
                 );
+
+                return true;
             }
         }
 

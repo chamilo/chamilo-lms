@@ -213,12 +213,9 @@ class HTML_QuickForm_button extends HTML_QuickForm_input
         $size = $this->calculateSize();
         $attributes = $this->getAttributes();
 
+        $template = ' {element} ';
+
         switch ($layout) {
-            case FormValidator::LAYOUT_INLINE:
-                return '
-                    {element}
-                ';
-                break;
             case FormValidator::LAYOUT_HORIZONTAL:
                 if (isset($attributes['custom']) && $attributes['custom'] == true) {
                     $template = '
@@ -226,14 +223,6 @@ class HTML_QuickForm_button extends HTML_QuickForm_input
                         {element}
                     ';
                 } else {
-                    if(isset($attributes['data-block']) && $attributes['data-block'] == true){
-                        $template = '
-                        <div class="form-group text-center">
-                            {icon}
-                            {element}
-                        </div>
-                        ';
-                    } else {
                         $template = '
                             <div class="form-group {error_class}">
                                 <label {label-for} class="col-sm-'.$size[0].' control-label" >
@@ -243,9 +232,11 @@ class HTML_QuickForm_button extends HTML_QuickForm_input
                                 <div class="col-sm-'.$size[1].'">
                                     {icon}
                                     {element}
+
                                     <!-- BEGIN label_2 -->
                                         <p class="help-block">{label_2}</p>
                                     <!-- END label_2 -->
+
                                     <!-- BEGIN error -->
                                         <span class="help-inline help-block">{error}</span>
                                     <!-- END error -->
@@ -258,18 +249,15 @@ class HTML_QuickForm_button extends HTML_QuickForm_input
                             </div>';
                     }
 
-                }
-                return $template;
                 break;
-            case FormValidator::LAYOUT_BOX:
-                return '{element}';
-                break;
+            case FormValidator::LAYOUT_INLINE:
+            case FormValidator::LAYOUT_GRID:
             case FormValidator::LAYOUT_BOX_NO_LABEL:
-                return '<div class="input-group mt-3">
-                        {element}
-                        </div>
-                ';
+            default:
+                $template = ' {element}  ';
                 break;
         }
+
+        return $template;
     }
 }

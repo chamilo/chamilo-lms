@@ -1,9 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-/**
- * Responses to AJAX calls.
- */
+
 use Chamilo\CoreBundle\Framework\Container;
 
 require_once __DIR__.'/../global.inc.php';

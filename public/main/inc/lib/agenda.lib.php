@@ -1075,21 +1075,7 @@ class Agenda
                 break;
             case 'course':
                 $courseId = api_get_course_int_id();
-                $sessionId = api_get_session_id();
-                $isAllowToEdit = api_is_allowed_to_edit(null, true);
-
-                if (false == $isAllowToEdit && !empty($sessionId)) {
-                    $allowDhrToEdit = api_get_configuration_value('allow_agenda_edit_for_hrm');
-                    if ($allowDhrToEdit) {
-                        $isHrm = SessionManager::isUserSubscribedAsHRM(
-                            $sessionId,
-                            api_get_user_id()
-                        );
-                        if ($isHrm) {
-                            $isAllowToEdit = true;
-                        }
-                    }
-                }
+                $isAllowToEdit = $this->getIsAllowedToEdit();
 
                 if (!empty($courseId) && $isAllowToEdit) {
                     // Delete
@@ -3146,6 +3132,13 @@ class Agenda
                 Display::return_icon('1day.png', get_lang('Sessions plan calendar'), [], ICON_SIZE_MEDIUM),
                 $codePath."calendar/planification.php"
             );
+
+            if (api_is_student_boss() || api_is_platform_admin()) {
+                $actionsLeft .= Display::url(
+                    Display::return_icon('calendar-user.png', get_lang('MyStudentsSchedule'), [], ICON_SIZE_MEDIUM),
+                    $codePath.'mySpace/calendar_plan.php'
+                );
+            }
         }
 
         if (api_is_platform_admin() ||

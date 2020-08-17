@@ -267,7 +267,6 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
             var $inputFile = $(\'#'.$id.'\'),
                 $image = $(\'#'.$id.'_preview_image\'),
                 $input = $(\'[name="'.$id.'_crop_result"]\'),
-                $inputForResource = $(\'[name="'.$id.'_crop_result_for_resource"]\'),
                 $cropButton = $(\'#'.$id.'_crop_button\'),
                 $formGroup = $(\'#'.$id.'-form-group\');
 

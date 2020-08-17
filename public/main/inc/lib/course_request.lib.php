@@ -611,11 +611,20 @@ class CourseRequestManager
         $email_body .= get_lang('Email', null, $email_language).': '.api_get_setting('emailAdministrator', null, $email_language)."\n";
         $email_body .= "\n".get_lang('CourseRequestLegalNote', null, $email_language)."\n";
 
-        $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
+        $sender_name = api_get_person_name(
+            api_get_setting('administratorName'),
+            api_get_setting('administratorSurname'),
+            null,
+            PERSON_NAME_EMAIL_ADDRESS
+        );
         $sender_email = api_get_setting('emailAdministrator');
-        $recipient_name = api_get_person_name($user_info['firstname'], $user_info['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
+        $recipient_name = api_get_person_name(
+            $user_info['firstname'],
+            $user_info['lastname'],
+            null,
+            PERSON_NAME_EMAIL_ADDRESS
+        );
         $recipient_email = $user_info['mail'];
-        $extra_headers = 'Bcc: '.$sender_email;
 
         $additionalParameters = [
             'smsType' => SmsPlugin::COURSE_OPENING_REQUEST_CODE_REJECTED,
@@ -697,9 +706,13 @@ class CourseRequestManager
             PERSON_NAME_EMAIL_ADDRESS
         );
         $sender_email = api_get_setting('emailAdministrator');
-        $recipient_name = api_get_person_name($user_info['firstname'], $user_info['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
+        $recipient_name = api_get_person_name(
+            $user_info['firstname'],
+            $user_info['lastname'],
+            null,
+            PERSON_NAME_EMAIL_ADDRESS
+        );
         $recipient_email = $user_info['mail'];
-        $extra_headers = 'Bcc: '.$sender_email;
 
         $additionalParameters = [
             'smsType' => SmsPlugin::COURSE_OPENING_REQUEST_CODE,

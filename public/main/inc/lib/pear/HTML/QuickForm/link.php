@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
  * HTML class for a link type field
@@ -34,18 +33,13 @@
  */
 class HTML_QuickForm_link extends HTML_QuickForm_static
 {
-    // {{{ properties
-
     /**
      * Link display text
      * @var       string
      * @since     1.0
      * @access    private
      */
-    var $_text = "";
-
-    // }}}
-    // {{{ constructor
+    var $_text = '';
 
     /**
      * Class constructor
@@ -67,10 +61,7 @@ class HTML_QuickForm_link extends HTML_QuickForm_static
         $this->_type = 'link';
         $this->setHref($href);
         $this->_text = $text;
-    } //end constructor
-
-    // }}}
-    // {{{ setName()
+    }
 
     /**
      * Sets the input field name
@@ -84,10 +75,7 @@ class HTML_QuickForm_link extends HTML_QuickForm_static
     function setName($name)
     {
         $this->updateAttributes(array('name'=>$name));
-    } //end func setName
-
-    // }}}
-    // {{{ getName()
+    }
 
     /**
      * Returns the element name
@@ -100,10 +88,7 @@ class HTML_QuickForm_link extends HTML_QuickForm_static
     function getName()
     {
         return $this->getAttribute('name');
-    } //end func getName
-
-    // }}}
-    // {{{ setValue()
+    }
 
     /**
      * Sets value for textarea element
@@ -117,10 +102,7 @@ class HTML_QuickForm_link extends HTML_QuickForm_static
     function setValue($value)
     {
         return;
-    } //end func setValue
-
-    // }}}
-    // {{{ getValue()
+    }
 
     /**
      * Returns the value of the form element
@@ -133,11 +115,7 @@ class HTML_QuickForm_link extends HTML_QuickForm_static
     function getValue()
     {
         return;
-    } // end func getValue
-
-
-    // }}}
-    // {{{ setHref()
+    }
 
     /**
      * Sets the links href
@@ -151,10 +129,7 @@ class HTML_QuickForm_link extends HTML_QuickForm_static
     function setHref($href)
     {
         $this->updateAttributes(array('href'=>$href));
-    } // end func setHref
-
-    // }}}
-    // {{{ toHtml()
+    }
 
     /**
      * Returns the textarea element in HTML
@@ -171,10 +146,7 @@ class HTML_QuickForm_link extends HTML_QuickForm_static
         $html .= $this->_text;
         $html .= "</a>";
         return $html;
-    } //end func toHtml
-
-    // }}}
-    // {{{ getFrozenHtml()
+    }
 
     /**
      * Returns the value of field without HTML tags (in this case, value is changed to a mask)

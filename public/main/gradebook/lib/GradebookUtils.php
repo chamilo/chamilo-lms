@@ -257,7 +257,7 @@ class GradebookUtils
             }
 
             $courseParams = api_get_cidreq_params(
-                $cat->get_course_code(),
+                $cat->getCourseId(),
                 $cat->get_session_id()
             );
 

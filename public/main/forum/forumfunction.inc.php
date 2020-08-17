@@ -5822,10 +5822,10 @@ function get_name_thread_by_id($thread_id)
  *
  * @return string
  */
-function get_all_post_from_user($user_id, $course_code)
+function get_all_post_from_user($user_id, $courseId)
 {
     $j = 0;
-    $forums = get_forums('', $course_code);
+    $forums = get_forums($courseId);
     krsort($forums);
     $forum_results = '';
 
@@ -5846,7 +5846,7 @@ function get_all_post_from_user($user_id, $course_code)
                     }
                     if ($i <= 4) {
                         $post_list = get_thread_user_post_limit(
-                            $course_code,
+                            $courseId,
                             $thread['thread_id'],
                             $user_id,
                             1
@@ -5880,7 +5880,7 @@ function get_all_post_from_user($user_id, $course_code)
                 $forum_results .= '<div id="social-forum-title">'.
                     Display::return_icon('forum.gif', get_lang('Forum')).'&nbsp;'.Security::remove_XSS($forum['forum_title'], STUDENT).
                     '<div style="float:right;margin-top:-35px">
-                        <a href="../forum/viewforum.php?'.api_get_cidreq_params($course_code).'&forum='.$forum['forum_id'].' " >'.
+                        <a href="../forum/viewforum.php?'.api_get_cidreq_params($courseId).'&forum='.$forum['forum_id'].' " >'.
                     get_lang('See forum').'
                         </a>
                      </div></div>';
@@ -5905,19 +5905,18 @@ function get_all_post_from_user($user_id, $course_code)
  *
  * @return array
  */
-function get_thread_user_post_limit($course_code, $thread_id, $user_id, $limit = 10)
+function get_thread_user_post_limit($courseId, $thread_id, $user_id, $limit = 10)
 {
     $table_posts = Database::get_course_table(TABLE_FORUM_POST);
     $table_users = Database::get_main_table(TABLE_MAIN_USER);
 
-    $course_info = api_get_course_info($course_code);
-    $course_id = $course_info['real_id'];
+    $courseId = (int) $courseId;
 
     $sql = "SELECT * FROM $table_posts posts
-            LEFT JOIN  $table_users users
+            LEFT JOIN $table_users users
                 ON posts.poster_id=users.user_id
             WHERE
-                posts.c_id = $course_id AND
+                posts.c_id = $courseId AND
                 posts.thread_id='".Database::escape_string($thread_id)."' AND
                 posts.poster_id='".Database::escape_string($user_id)."'
             ORDER BY posts.post_id DESC LIMIT $limit ";

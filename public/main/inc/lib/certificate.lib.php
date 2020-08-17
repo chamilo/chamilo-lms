@@ -1,6 +1,8 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
+use Endroid\QrCode\ErrorCorrectionLevel;
 use Endroid\QrCode\QrCode;
 
 /**
@@ -513,13 +515,17 @@ class Certificate extends Model
         // Make sure HTML certificate is generated
         if (!empty($text) && !empty($path)) {
             $qrCode = new QrCode($text);
+            //$qrCode->setEncoding('UTF-8');
+            $qrCode->setSize(120);
+            $qrCode->setMargin(5);
             $qrCode->setWriterByName('png');
+            $qrCode->setErrorCorrectionLevel(ErrorCorrectionLevel::MEDIUM());
+            $qrCode->setForegroundColor(['r' => 0, 'g' => 0, 'b' => 0, 'a' => 0]);
+            $qrCode->setBackgroundColor(['r' => 255, 'g' => 255, 'b' => 255, 'a' => 0]);
+            $qrCode->setValidateResult(false);
             $qrCode->writeFile($path);
 
-            //L low, M - Medium, L large error correction
-            //return QrCode::png($text, $path, 'M', 2, 2);
-
-            return file_exists($path);
+            return true;
         }
 
         return false;

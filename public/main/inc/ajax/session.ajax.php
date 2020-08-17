@@ -267,9 +267,7 @@ switch ($action) {
 
         if ('get_basic_course_documents_list' === $action) {
             $courseInfo = api_get_course_info_by_id($course->getId());
-
             $exists = DocumentManager::folderExists('/basic-course-documents', $courseInfo, $session->getId(), 0);
-
             if (!$exists) {
                 $courseDir = $courseInfo['directory'].'/document';
                 $sysCoursePath = api_get_path(SYS_COURSE_PATH);
@@ -303,6 +301,7 @@ switch ($action) {
                 false,
                 $session->getId()
             );
+
             $documentAndFolders = array_filter(
                 $documentAndFolders,
                 function (array $documentData) {

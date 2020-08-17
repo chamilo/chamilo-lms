@@ -2121,19 +2121,19 @@ function api_get_anonymous_id()
 }
 
 /**
- * @param string $courseCode
+ * @param int    $courseId
  * @param int    $sessionId
  * @param int    $groupId
  *
  * @return string
  */
-function api_get_cidreq_params($courseCode, $sessionId = 0, $groupId = 0)
+function api_get_cidreq_params($courseId, $sessionId = 0, $groupId = 0)
 {
-    $courseCode = !empty($courseCode) ? htmlspecialchars($courseCode) : '';
+    $courseId = !empty($courseId) ? (int) $courseId :0;
     $sessionId = !empty($sessionId) ? (int) $sessionId : 0;
     $groupId = !empty($groupId) ? (int) $groupId : 0;
 
-    $url = 'cid='.$courseCode;
+    $url = 'cid='.$courseId;
     $url .= '&sid='.$sessionId;
     $url .= '&gid='.$groupId;
 
@@ -3401,6 +3401,7 @@ function api_display_tool_title($title_element)
     if (is_string($title_element)) {
         $tit = $title_element;
         unset($title_element);
+        $title_element = [];
         $title_element['mainTitle'] = $tit;
     }
     echo '<h3>';

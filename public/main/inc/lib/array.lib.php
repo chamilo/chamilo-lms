@@ -52,11 +52,11 @@ function msort($array, $id = 'id', $order = 'desc')
         $index = 0;
         foreach ($array as $item) {
             if ('desc' == $order) {
-                if ($item[$id] < $array[$lowest_id][$id]) {
+                if (strip_tags($item[$id]) < strip_tags($array[$lowest_id][$id])) {
                     $lowest_id = $index;
                 }
             } else {
-                if (isset($item[$id]) && $item[$id] > $array[$lowest_id][$id]) {
+                if (isset($item[$id]) && strip_tags($item[$id]) > strip_tags($array[$lowest_id][$id])) {
                     $lowest_id = $index;
                 }
             }

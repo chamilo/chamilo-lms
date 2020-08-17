@@ -454,9 +454,7 @@ switch ($action) {
                 $sessionIdList = array_column($sessionList, 'id');
                 $courseCodeList = [];
                 foreach ($sessionList as $session) {
-                    $courses = SessionManager::get_course_list_by_session_id(
-                        $session['id']
-                    );
+                    $courses = SessionManager::get_course_list_by_session_id($session['id']);
                     $courseCodeList = array_merge(
                         $courseCodeList,
                         array_column($courses, 'code')
@@ -515,7 +513,8 @@ switch ($action) {
                 null,
                 $courseCodeList,
                 $userIdList,
-                $sessionIdList
+                $sessionIdList,
+                ['where' => $whereCondition, 'extra' => $extra_fields]
             );
         } else {
             $count = CourseManager::get_count_user_list_from_course_code(
@@ -523,7 +522,8 @@ switch ($action) {
                 ['ruc'],
                 $courseCodeList,
                 $userIdList,
-                $sessionIdList
+                $sessionIdList,
+                ['where' => $whereCondition, 'extra' => $extra_fields]
             );
         }
         break;

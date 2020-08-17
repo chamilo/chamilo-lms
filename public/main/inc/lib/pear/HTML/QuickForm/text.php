@@ -83,21 +83,13 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
     public function getIconToHtml()
     {
         $icon = $this->getIcon();
-        $isButton = $this->getButton();
 
         if (empty($icon)) {
             return '';
         }
-        $element = '<span class="input-group-text"><em class="fa fa-' . $icon . '"></em></span>';
 
-        if ($isButton) {
-            $element = '<button class="btn btn-outline-secondary" type="submit">
-                            <em class="fa fa-' . $icon . '"></em>
-                        </button>';
-        }
-
-        return '<div class="input-group-append">
-                    ' . $element . '
+        return '<div class="input-group-addon">
+                <em class="fa fa-'.$icon.'"></em>
                 </div>';
     }
 
@@ -111,20 +103,28 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
         $size = $this->calculateSize();
         $attributes = $this->getAttributes();
 
+        $template = '<label {label-for}>{label}</label>
+                        <div class="input-group">
+                            {icon}
+                            {element}
+                        </div>';
+
         switch ($layout) {
+            case FormValidator::LAYOUT_GRID:
             case FormValidator::LAYOUT_INLINE:
-                return '                
-                    <label class="sr-only"  {label-for} >
+                $template = '
+                <div class="form-group {error_class}">
+                    <label {label-for} >
                         <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
                         {label}
-                    </label>                    
+                    </label>
                     {element}
-                ';
+                </div>';
                 break;
             case FormValidator::LAYOUT_HORIZONTAL:
-                return '
-                <div class="form-group row {error_class}">
-                    <label {label-for} class="col-sm-'.$size[0].' col-form-label" >
+                $template = '
+                <div class="form-group {error_class}">
+                    <label {label-for} class="col-sm-'.$size[0].' control-label" >
                         <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
                         {label}
                     </label>
@@ -148,27 +148,23 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
                 </div>';
                 break;
             case FormValidator::LAYOUT_BOX_NO_LABEL:
-                return '
-                        <label {label-for}>{label}</label>
-                        <div class="input-group mb-3">
+                if (isset($attributes['custom']) && $attributes['custom'] == true) {
+                    $template = '
+                        <div class="input-group">
                             {icon}
                             {element}
-                        </div>';
-                break;
-            case FormValidator::LAYOUT_BOX_SEARCH:
-                return '
-                        <div class="form-group row">
-                            <label class="col-sm-2 col-form-label" {label-for}>{label}</label>
-                            <div class="col-sm-8">
-                                <div class="input-group mb-3">
-                                    {element}
-                                    {icon}
-                                </div>
+                            <div class="input-group-btn">
+                                <button class="btn btn-default" type="submit">
+                                    <em class="fa fa-search"></em>
+                                </button>
                             </div>
-                            <div class="col-sm-2"></div>
-                        </div>';
+                        </div>
+                    ';
+                }
                 break;
         }
+
+        return $template;
     }
 
     /**
@@ -204,8 +200,8 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
     {
         if ($this->isFrozen()) {
             return $this->getFrozenHtml();
-        } else {
-            return '<input '.$this->_getAttrString($this->_attributes).' />';
         }
+
+        return '<input '.$this->_getAttrString($this->_attributes).' />';
     }
 }

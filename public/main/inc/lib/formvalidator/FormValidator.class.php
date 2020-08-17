@@ -12,6 +12,7 @@ class FormValidator extends HTML_QuickForm
     public const LAYOUT_BOX = 'box';
     public const LAYOUT_BOX_NO_LABEL = 'box-no-label';
     public const LAYOUT_BOX_SEARCH = 'box-search';
+    public const LAYOUT_GRID = 'grid';
 
     public $with_progress_bar = false;
     private $layout;
@@ -48,13 +49,22 @@ class FormValidator extends HTML_QuickForm
 
         $this->setLayout($layout);
 
+        // Form template
+        $formTemplate = $this->getFormTemplate();
+
         switch ($layout) {
             case self::LAYOUT_HORIZONTAL:
                 $attributes['class'] = 'form-horizontal';
                 break;
             case self::LAYOUT_INLINE:
-            case self::LAYOUT_BOX:
                 $attributes['class'] = 'form-inline';
+                break;
+            case self::LAYOUT_BOX:
+                $attributes['class'] = 'form-inline-box';
+                break;
+            case self::LAYOUT_GRID:
+                $attributes['class'] = 'form-grid';
+                $formTemplate = $this->getGridFormTemplate();
                 break;
         }
 
@@ -63,15 +73,13 @@ class FormValidator extends HTML_QuickForm
         // Modify the default templates
         $renderer = &$this->defaultRenderer();
 
-        // Form template
-        $formTemplate = $this->getFormTemplate();
         $renderer->setFormTemplate($formTemplate);
 
         // Element template
-        if (isset($attributes['class']) && 'form-inline' == $attributes['class']) {
+        if (isset($attributes['class']) && $attributes['class'] == 'form-inline') {
             $elementTemplate = ' {label}  {element} ';
             $renderer->setElementTemplate($elementTemplate);
-        } elseif (isset($attributes['class']) && 'form-search' == $attributes['class']) {
+        } elseif (isset($attributes['class']) && $attributes['class'] == 'form-search') {
             $elementTemplate = ' {label}  {element} ';
             $renderer->setElementTemplate($elementTemplate);
         } else {
@@ -84,13 +92,6 @@ class FormValidator extends HTML_QuickForm
             //Display a gray div in the buttons + makes the button available when scrolling
             $templateBottom = '<div class="form-actions bottom_actions bg-form">{label} {element}</div>';
             $renderer->setElementTemplate($templateBottom, 'submit_fixed_in_bottom');
-
-            //When you want to group buttons use something like this
-            /* $group = array();
-              $group[] = $form->createElement('button', 'mark_all', get_lang('Select all'));
-              $group[] = $form->createElement('button', 'unmark_all', get_lang('Unselect all'));
-              $form->addGroup($group, 'buttons_in_action');
-             */
             $renderer->setElementTemplate($templateSimple, 'buttons_in_action');
 
             $templateSimpleRight = '<div class="form-actions"> <div class="pull-right">{label} {element}</div></div>';
@@ -122,6 +123,31 @@ EOT;
         <fieldset>
             {content}
         </fieldset>
+        {hidden}
+        </form>';
+    }
+
+    /**
+     * @return string
+     */
+    public function getGridFormTemplate()
+    {
+        return '
+        <style>
+            .form_list {
+                display: grid;
+                grid-template-columns:  repeat(auto-fill, minmax(300px, 1fr));;
+                grid-gap: 10px 30px;
+                gap: 10px 30px;
+            }
+            .form_list .input-group {
+                display:block;
+            }
+        </style>
+        <form{attributes}>
+            <div class="form_list">
+                {content}
+            </div>
         {hidden}
         </form>';
     }
@@ -973,7 +999,12 @@ EOT;
      */
     public function addHtml($snippet)
     {
+        if (empty($snippet)) {
+            return false;
+        }
         $this->addElement('html', $snippet);
+
+        return true;
     }
 
     /**
@@ -1176,7 +1207,8 @@ EOT;
         $returnValue = '';
 
         /** @var HTML_QuickForm_element $element */
-        foreach ($this->_elements as $element) {
+        foreach ($this->_elements as &$element) {
+            $element->setLayout($this->getLayout());
             $elementError = parent::getElementError($element->getName());
             if (!is_null($elementError)) {
                 $returnValue .= Display::return_message($elementError, 'warning').'<br />';
@@ -1188,12 +1220,8 @@ EOT;
         // Add div-element which is to hold the progress bar
         $id = $this->getAttribute('id');
         if (isset($this->with_progress_bar) && $this->with_progress_bar) {
-            // Deprecated
-            // $icon = Display::return_icon('progress_bar.gif');
-
             // @todo improve UI
             $returnValue .= '<br />
-
             <div id="loading_div_'.$id.'" class="loading_div" style="display:none;margin-left:40%; margin-top:10px; height:50px;">
                 <div class="wobblebar-loader"></div>
             </div>
@@ -1294,6 +1322,25 @@ EOT;
             'regex',
             '/^[a-zA-ZñÑ]+$/'
         );
+    }
+
+    /**
+     * @param string $name
+     * @param string $label
+     * @param array  $attributes
+     * @param bool   $required
+     *
+     * @return HTML_QuickForm_element
+     */
+    public function addNumeric($name, $label, $attributes = [], $required = false)
+    {
+        $element = $this->addElement('Number', $name, $label, $attributes);
+
+        if ($required) {
+            $this->addRule($name, get_lang('ThisFieldIsRequired'), 'required');
+        }
+
+        return $element;
     }
 
     /**

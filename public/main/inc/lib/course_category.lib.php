@@ -158,9 +158,8 @@ class CourseCategory
                 ORDER BY t1.parent_id, t1.tree_pos";
 
         $result = Database::query($sql);
-        $categories = Database::store_result($result, 'ASSOC');
 
-        return $categories;
+        return Database::store_result($result, 'ASSOC');
     }
 
     /**
@@ -469,9 +468,8 @@ class CourseCategory
             foreach ($parents as $category) {
                 $categories[] = $category['code'];
             }
-            $categoriesInString = implode(' > ', $categories).' > ';
 
-            return $categoriesInString;
+            return implode(' > ', $categories).' > ';
         }
 
         return null;
@@ -709,6 +707,11 @@ class CourseCategory
         $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
         $conditions = " INNER JOIN $table a ON (c.id = a.course_category_id)";
         $whereCondition = " AND a.access_url_id = ".api_get_current_access_url_id();
+
+        $allowBaseCategories = api_get_configuration_value('allow_base_course_category');
+        if ($allowBaseCategories) {
+            $whereCondition = " AND (a.access_url_id = ".api_get_current_access_url_id()." OR a.access_url_id = 1) ";
+        }
 
         $keyword = Database::escape_string($keyword);
 

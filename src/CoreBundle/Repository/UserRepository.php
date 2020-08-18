@@ -124,7 +124,8 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         // this code is only an example; the exact code will depend on
         // your own application needs
         $user->setPassword($newEncodedPassword);
-        $this->getEntityManager()->flush($user);
+        $this->getEntityManager()->persist($user);
+        $this->getEntityManager()->flush();
     }
 
     public function getRootUser(): User
@@ -183,10 +184,12 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
             ->setTitle($user->getUsername())
             ->setCreator($creator)
             ->setResourceType($this->getResourceType())
-        //    ->setParent($url->getResourceNode())
+            //->setParent($resourceNode)
         ;
-        $this->getEntityManager()->persist($resourceNode);
+
         $user->setResourceNode($resourceNode);
+
+        $this->getEntityManager()->persist($resourceNode);
         $this->getEntityManager()->persist($user);
 
         return $resourceNode;

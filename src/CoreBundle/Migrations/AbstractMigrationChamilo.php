@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Migrations;
 
 use Chamilo\CoreBundle\Entity\SettingsCurrent;
 use Chamilo\CoreBundle\Entity\SettingsOptions;
-use Doctrine\DBAL\Migrations\AbstractMigration;
+use Doctrine\Migrations\AbstractMigration;
 use Doctrine\ORM\EntityManager;
 
 /**

@@ -79,7 +79,7 @@ class ResourceListener
 
     public function prePersist(AbstractResource $resource, LifecycleEventArgs $event)
     {
-        error_log('resource listener prePersist');
+        error_log('resource listener prePersist for obj: '.get_class($resource));
         $em = $event->getEntityManager();
         $request = $this->request;
 
@@ -95,7 +95,7 @@ class ResourceListener
                 $url = $this->getAccessUrl($em);
                 $resource->getResourceNode()->setParent($url->getResourceNode());
             }
-
+            error_log('resource has already a resource node. Do nothing');
             // Do not override resource node, it's already added.
             return true;
         }
@@ -251,6 +251,7 @@ class ResourceListener
             }
         }
 
+        error_log('Listener end, adding resource node');
         $resource->setResourceNode($resourceNode);
 
         return $resourceNode;
@@ -306,8 +307,7 @@ class ResourceListener
             $originalBasename = \basename($resourceName, $originalExtension);
             $slug = sprintf('%s.%s', $this->slugify->slugify($originalBasename), $originalExtension);
         }
-        error_log($resourceName);
-        error_log($slug);
+        //error_log($resourceName); error_log($slug);
 
         $resourceNode
             ->setTitle($resourceName)

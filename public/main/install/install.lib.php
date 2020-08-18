@@ -8,6 +8,7 @@ use Chamilo\CoreBundle\Entity\Group;
 use Chamilo\CoreBundle\Entity\TicketCategory;
 use Chamilo\CoreBundle\Entity\TicketPriority;
 use Chamilo\CoreBundle\Entity\TicketProject;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\ToolChain;
 use Doctrine\ORM\EntityManager;
@@ -287,8 +288,6 @@ function detect_browser_language()
     return 'english';
 }
 
-/*      FILESYSTEM RELATED FUNCTIONS */
-
 /**
  * This function checks if the given folder is writable.
  *
@@ -372,8 +371,6 @@ function write_system_config_file($path)
     global $dbUsernameForm;
     global $dbPassForm;
     global $dbNameForm;
-    global $urlForm;
-    global $pathForm;
     global $urlAppendPath;
     global $languageForm;
     global $encryptPassForm;
@@ -552,8 +549,6 @@ function get_config_param($param, $updatePath = '')
     return null;
 }
 
-/*      DATABASE RELATED FUNCTIONS */
-
 /**
  * Gets a configuration parameter from the database. Returns returns null on failure.
  *
@@ -608,8 +603,6 @@ function connectToDatabase(
 
     return $database;
 }
-
-/*      DISPLAY FUNCTIONS */
 
 /**
  * This function prints class=active_step $current_step=$param.
@@ -667,7 +660,6 @@ function display_language_selection_box(
     }
 
     // Displaying the box.
-
     $html = Display::select(
         'language_list',
         $language_list,
@@ -1295,17 +1287,32 @@ function displayDatabaseParameter(
     echo "<label class='col-sm-4'>$parameterName</label>";
 
     if (INSTALL_TYPE_UPDATE == $installType && $displayWhenUpdate) {
-        echo '<input type="hidden" name="'.$formFieldName.'" id="'.$formFieldName.'" value="'.api_htmlentities($parameterValue).'" />'.$parameterValue;
+        echo '<input
+                type="hidden"
+                name="'.$formFieldName.'"
+                id="'.$formFieldName.'"
+                value="'.api_htmlentities($parameterValue).'" />'.$parameterValue;
     } else {
-        $inputType = 'dbPassForm' == $formFieldName ? 'password' : 'text';
+        $inputType = 'dbPassForm' === $formFieldName ? 'password' : 'text';
 
         //Slightly limit the length of the database prefix to avoid having to cut down the databases names later on
-        $maxLength = 'dbPrefixForm' == $formFieldName ? '15' : MAX_FORM_FIELD_LENGTH;
+        $maxLength = 'dbPrefixForm' === $formFieldName ? '15' : MAX_FORM_FIELD_LENGTH;
         if (INSTALL_TYPE_UPDATE == $installType) {
-            echo '<input type="hidden" name="'.$formFieldName.'" id="'.$formFieldName.'" value="'.api_htmlentities($parameterValue).'" />';
+            echo '<input
+                type="hidden" name="'.$formFieldName.'" id="'.$formFieldName.'"
+                value="'.api_htmlentities($parameterValue).'" />';
             echo api_htmlentities($parameterValue);
         } else {
-            echo '<div class="col-sm-5"><input type="'.$inputType.'" class="form-control" size="'.DATABASE_FORM_FIELD_DISPLAY_LENGTH.'" maxlength="'.$maxLength.'" name="'.$formFieldName.'" id="'.$formFieldName.'" value="'.api_htmlentities($parameterValue).'" />'."</div>";
+            echo '<div class="col-sm-5">
+                    <input
+                        type="'.$inputType.'"
+                        class="form-control"
+                        size="'.DATABASE_FORM_FIELD_DISPLAY_LENGTH.'"
+                        maxlength="'.$maxLength.'"
+                        name="'.$formFieldName.'"
+                        id="'.$formFieldName.'"
+                        value="'.api_htmlentities($parameterValue).'" />
+                  </div>';
             echo '<div class="col-sm-3">'.$extra_notice.'</div>';
         }
     }
@@ -1333,7 +1340,7 @@ function display_database_settings_form(
     $dbPortForm = 3306,
     $installationProfile = ''
 ) {
-    if ('update' == $installType) {
+    if ('update' === $installType) {
         global $_configuration;
         $dbHostForm = $_configuration['db_host'];
         $dbUsernameForm = $_configuration['db_user'];
@@ -1355,7 +1362,7 @@ function display_database_settings_form(
         <div class="panel-body">
         <div class="form-group row">
             <label class="col-sm-4"><?php echo get_lang('Database Host'); ?> </label>
-            <?php if ('update' == $installType) {
+            <?php if ('update' === $installType) {
         ?>
             <div class="col-sm-5">
                 <input type="hidden" name="dbHostForm" value="<?php echo htmlentities($dbHostForm); ?>" /><?php echo $dbHostForm; ?>
@@ -1373,7 +1380,7 @@ function display_database_settings_form(
         </div>
         <div class="form-group row">
             <label class="col-sm-4"><?php echo get_lang('Port'); ?> </label>
-            <?php if ('update' == $installType) {
+            <?php if ('update' === $installType) {
         ?>
             <div class="col-sm-5">
                 <input type="hidden" name="dbPortForm" value="<?php echo htmlentities($dbPortForm); ?>" /><?php echo $dbPortForm; ?>
@@ -1387,28 +1394,27 @@ function display_database_settings_form(
             </div>
             <div class="col-sm-3"><?php echo get_lang('ex.').' 3306'; ?></div>
             <?php
-    } ?>
-        </div>
-        <div class="form-group row">
-            <?php
-                //database user username
-                $example_login = get_lang('ex.').' root';
-    displayDatabaseParameter($installType, get_lang('Database Login'), 'dbUsernameForm', $dbUsernameForm, $example_login); ?>
-        </div>
-        <div class="form-group row">
-            <?php
+    }
+            echo '</div><div class="form-group row">';
+            //database user username
+            $example_login = get_lang('ex.').' root';
+            displayDatabaseParameter(
+                $installType,
+                get_lang('Database Login'),
+                'dbUsernameForm',
+                $dbUsernameForm,
+                $example_login
+            );
+            echo '</div><div class="form-group row">';
             //database user password
             $example_password = get_lang('ex.').' '.api_generate_password();
-    displayDatabaseParameter($installType, get_lang('Database Password'), 'dbPassForm', $dbPassForm, $example_password); ?>
-        </div>
-        <div class="form-group row">
-            <?php
-            //Database Name fix replace weird chars
+            displayDatabaseParameter($installType, get_lang('Database Password'), 'dbPassForm', $dbPassForm, $example_password);
+            echo '</div><div class="form-group row">';
+            // Database Name fix replace weird chars
             if (INSTALL_TYPE_UPDATE != $installType) {
                 $dbNameForm = str_replace(['-', '*', '$', ' ', '.'], '', $dbNameForm);
             }
-
-    displayDatabaseParameter(
+            displayDatabaseParameter(
                 $installType,
                 get_lang('Main Chamilo database (DB)'),
                 'dbNameForm',
@@ -1416,10 +1422,9 @@ function display_database_settings_form(
                 '&nbsp;',
                 null,
                 'id="optional_param1"'
-                ); ?>
-        </div>
-       <?php if (INSTALL_TYPE_UPDATE != $installType) {
-                    ?>
+                );
+        echo '</div>';
+        if (INSTALL_TYPE_UPDATE != $installType) {                    ?>
         <div class="form-group row">
             <div class="col-sm-4"></div>
             <div class="col-sm-8">
@@ -1459,7 +1464,6 @@ function display_database_settings_form(
             $tableCreationWorks = false;
             $tableDropWorks = false;
             if ($schemaManager->tablesExist($table)) {
-                $tableCreationWorks = true;
                 $sql = "ALTER TABLE $table ADD COLUMN name2 varchar(140) ";
                 $connection->query($sql);
                 $schemaManager->dropTable($table);
@@ -1477,7 +1481,8 @@ function display_database_settings_form(
             $schemaManager = $manager->getConnection()->getSchemaManager();
             $databases = $schemaManager->listDatabases();
             if (in_array($dbNameForm, $databases)) {
-                $database_exists_text = '<div class="alert alert-warning">'.get_lang('A database with the same name <b>already exists</b>.').'</div>';
+                $database_exists_text = '<div class="alert alert-warning">'.
+                get_lang('A database with the same name <b>already exists</b>.').'</div>';
             }
         }
     } catch (Exception $e) {
@@ -1618,7 +1623,7 @@ function display_configuration_settings_form(
     $loginForm,
     $passForm
 ) {
-    if ('update' != $installType && empty($languageForm)) {
+    if ('update' !== $installType && empty($languageForm)) {
         $languageForm = $_SESSION['install_language'];
     }
     echo '<div class="RequirementHeading">';
@@ -1636,7 +1641,7 @@ function display_configuration_settings_form(
     );
 
     // Parameter 2: administrator's password
-    if ('update' != $installType) {
+    if ('update' !== $installType) {
         $html .= display_configuration_parameter(
             $installType,
             get_lang('Administrator password (<font color="red">you may want to change this</font>)'),
@@ -1647,7 +1652,6 @@ function display_configuration_settings_form(
     }
 
     // Parameters 3 and 4: administrator's names
-
     $html .= display_configuration_parameter(
         $installType,
         get_lang('Administrator first name'),
@@ -1656,30 +1660,30 @@ function display_configuration_settings_form(
     );
     $html .= display_configuration_parameter($installType, get_lang('Administrator last name'), 'adminLastName', $adminLastName);
 
-    //Parameter 3: administrator's email
-    $html .= display_configuration_parameter($installType, get_lang('Admine-mail'), 'emailForm', $emailForm);
+    // Parameter 3: administrator's email
+    $html .= display_configuration_parameter($installType, get_lang('Admin-mail'), 'emailForm', $emailForm);
 
-    //Parameter 6: administrator's telephone
+    // Parameter 6: administrator's telephone
     $html .= display_configuration_parameter($installType, get_lang('Administrator telephone'), 'adminPhoneForm', $adminPhoneForm);
     echo panel($html, get_lang('Administrator'), 'administrator');
 
     //First parameter: language
     $html = '<div class="form-group row">';
     $html .= '<label class="col-sm-6 control-label">'.get_lang('Main language')."</label>";
-    if ('update' == $installType) {
+    if ('update' === $installType) {
         $html .= '<input type="hidden" name="languageForm" value="'.api_htmlentities($languageForm, ENT_QUOTES).'" />'.$languageForm;
-    } else { // new installation
+    } else {
         $html .= '<div class="col-sm-6">';
         $html .= display_language_selection_box('languageForm', $languageForm);
         $html .= '</div>';
     }
     $html .= "</div>";
 
-    //Second parameter: Chamilo URL
+    // Second parameter: Chamilo URL
     $html .= '<div class="form-group row">';
     $html .= '<label class="col-sm-6 control-label">'.get_lang('Chamilo URL').get_lang('Required field').'</label>';
 
-    if ('update' == $installType) {
+    if ('update' === $installType) {
         $html .= api_htmlentities($urlForm, ENT_QUOTES)."\n";
     } else {
         $html .= '<div class="col-sm-6">';
@@ -1688,7 +1692,7 @@ function display_configuration_settings_form(
     }
     $html .= '</div>';
 
-    //Parameter 9: campus name
+    // Parameter 9: campus name
     $html .= display_configuration_parameter(
         $installType,
         get_lang('Your portal name'),
@@ -1696,7 +1700,7 @@ function display_configuration_settings_form(
         $campusForm
     );
 
-    //Parameter 10: institute (short) name
+    // Parameter 10: institute (short) name
     $html .= display_configuration_parameter(
         $installType,
         get_lang('Your company short name'),
@@ -1704,7 +1708,7 @@ function display_configuration_settings_form(
         $institutionForm
     );
 
-    //Parameter 11: institute (short) name
+    // Parameter 11: institute (short) name
     $html .= display_configuration_parameter(
         $installType,
         get_lang('URL of this company'),
@@ -1715,7 +1719,7 @@ function display_configuration_settings_form(
     $html .= '<div class="form-group row">
             <label class="col-sm-6 control-label">'.get_lang("Encryption method").'</label>
         <div class="col-sm-6">';
-    if ('update' == $installType) {
+    if ('update' === $installType) {
         $html .= '<input type="hidden" name="encryptPassForm" value="'.$encryptPassForm.'" />'.$encryptPassForm;
     } else {
         $html .= '<div class="checkbox">
@@ -1741,7 +1745,7 @@ function display_configuration_settings_form(
     $html .= '<div class="form-group row">
             <label class="col-sm-6 control-label">'.get_lang('Allow self-registration').'</label>
             <div class="col-sm-6">';
-    if ('update' == $installType) {
+    if ('update' === $installType) {
         if ('true' == $allowSelfReg) {
             $label = get_lang('Yes');
         } elseif ('false' == $allowSelfReg) {
@@ -1769,8 +1773,8 @@ function display_configuration_settings_form(
     $html .= '<div class="form-group row">';
     $html .= '<label class="col-sm-6 control-label">'.get_lang('Allow self-registrationProf').'</label>
         <div class="col-sm-6">';
-    if ('update' == $installType) {
-        if ('true' == $allowSelfRegProf) {
+    if ('update' === $installType) {
+        if ('true' === $allowSelfRegProf) {
             $label = get_lang('Yes');
         } else {
             $label = get_lang('No');
@@ -1808,7 +1812,6 @@ function display_configuration_settings_form(
 function display_after_install_message()
 {
     $container = Container::$container;
-
     $trans = $container->get('translator');
     $html = '<div class="RequirementContent">'.
         $trans->trans(
@@ -1933,9 +1936,9 @@ function compare_setting_values($current_value, $wanted_value)
 
     if ($current_value >= $wanted_value) {
         return Display::label($current_value_string, 'success');
-    } else {
-        return Display::label($current_value_string, 'important');
     }
+
+    return Display::label($current_value_string, 'important');
 }
 
 /**
@@ -2002,9 +2005,7 @@ function migrate($chamiloVersion, EntityManager $manager)
 {
     $debug = true;
     $connection = $manager->getConnection();
-
-    $config = new \Doctrine\DBAL\Migrations\Configuration\Configuration($connection);
-
+    $config = new Doctrine\Migrations\Configuration\Configuration($connection);
     // Table name that will store migrations log (will be created automatically,
     // default name is: doctrine_migration_versions)
     $config->setMigrationsTableName('version');
@@ -2016,11 +2017,8 @@ function migrate($chamiloVersion, EntityManager $manager)
     $config->setMigrationsDirectory($versionPath);
     // Load your migrations
     $config->registerMigrationsFromDirectory($config->getMigrationsDirectory());
-
-    $migration = new \Doctrine\DBAL\Migrations\Migration($config);
     $versions = $config->getMigrations();
 
-    /** @var Doctrine\DBAL\Migrations\Version $migrationItem */
     foreach ($versions as $version) {
         $version->getMigration()->setEntityManager($manager);
     }
@@ -2028,6 +2026,7 @@ function migrate($chamiloVersion, EntityManager $manager)
     $to = null; // if $to == null then schema will be migrated to latest version
     echo '<pre>';
     try {
+        $migration = new Doctrine\Migrations\Migrator($config);
         // Execute migration!
         $migratedSQL = $migration->migrate($to);
 
@@ -2920,104 +2919,12 @@ function installGroups($container, $manager)
     $manager->flush();
 }
 
-/**
- * @param SymfonyContainer $container
- */
-function installPages($container)
+function installTools($container, $manager, $upgrade = false)
 {
-    error_log('installPages');
-
-    //$siteManager = Container::getSiteManager();
-
-    // Create site
-    /** @var Chamilo\PageBundle\Entity\Site $site */
-    /*$site = $siteManager->create();
-    $site->setHost('localhost');
-    $site->setEnabled(true);
-    $site->setName('localhost');
-    $site->setEnabledFrom(new \DateTime('now'));
-    $site->setEnabledTo(new \DateTime('+20 years'));
-    $site->setRelativePath('');
-    $site->setIsDefault(true);
-    $site->setLocale('en');
-    $siteManager->save($site);*/
-
-    // Create home page
-    /** @var PageManager $pageManager */
-    /*$pageManager = $container->get('sonata.page.manager.page');
-    $page = $pageManager->create();
-    $page->setSlug('homepage');
-    $page->setUrl('/');
-    $page->setName('homepage');
-    $page->setTitle('home');
-    $page->setEnabled(true);
-    $page->setDecorate(1);
-    $page->setRequestMethod('GET|POST|HEAD|DELETE|PUT');
-    $page->setTemplateCode('default');
-    $page->setRouteName('homepage');
-    //$page->setParent($this->getReference('page-homepage'));
-    $page->setSite($site);
-    $pageManager->save($page);
-
-    // Create welcome page
-    $pageWelcome = $pageManager->create();
-    $pageWelcome->setSlug('welcome');
-    $pageWelcome->setUrl('/welcome');
-    $pageWelcome->setName('welcome');
-    $pageWelcome->setTitle('welcome');
-    $pageWelcome->setEnabled(true);
-    $pageWelcome->setDecorate(1);
-    $pageWelcome->setRequestMethod('GET');
-    $pageWelcome->setTemplateCode('default');
-    $pageWelcome->setRouteName('welcome');
-    $pageWelcome->setParent($page);
-    $pageWelcome->setSite($site);
-    $pageManager->save($pageWelcome);
-
-    // Creating page blocks
-    $templateManager = $container->get('sonata.page.template_manager');
-    $template = $templateManager->get('default');
-    $templateContainers = $template->getContainers();
-
-    $containers = [];
-    foreach ($templateContainers as $id => $area) {
-        $containers[$id] = [
-            'area' => $area,
-            'block' => false,
-        ];
-    }
-
-    // Create blocks for this page
-    $blockInteractor = $container->get('sonata.page.block_interactor');
-    $parentBlock = null;
-    foreach ($containers as $id => $area) {
-        if (false === $area['block'] && false === $templateContainers[$id]['shared']) {
-            $block = $blockInteractor->createNewContainer(
-                [
-                    'page' => $pageWelcome,
-                    'name' => $templateContainers[$id]['name'],
-                    'code' => $id,
-                ]
-            );
-
-            if ('content' === $id && 'Main content' == $templateContainers[$id]['name']) {
-                $parentBlock = $block;
-            }
-        }
-    }*/
-
-    // Create block in main content
-    //$block = $container->get('sonata.page.manager.block');
-    /** @var \Sonata\BlockBundle\Model\Block $myBlock */
-    /*$myBlock = $block->create();
-    $myBlock->setType('sonata.formatter.block.formatter');
-    $myBlock->setSetting('format', 'richhtml');
-    $myBlock->setSetting('content', '');
-    $myBlock->setSetting('rawContent', '');
-    $myBlock->setSetting('template', '@SonataFormatter/Block/block_formatter.html.twig');
-    $myBlock->setParent($parentBlock);
-    $pageWelcome->addBlocks($myBlock);
-    $pageManager->save($pageWelcome);*/
+    error_log('installTools');
+    // Install course tools (table "tool")
+    $toolChain = $container->get(ToolChain::class);
+    $toolChain->createTools($manager);
 }
 
 /**
@@ -3027,11 +2934,8 @@ function installPages($container)
  */
 function installSchemas($container, $manager, $upgrade = false)
 {
+    error_log('installSchemas');
     $settingsManager = $container->get('chamilo.settings.manager');
-
-    // Install course tools (table "tool")
-    $toolChain = $container->get(ToolChain::class);
-    $toolChain->createTools($manager);
 
     $urlRepo = $container->get('Chamilo\CoreBundle\Repository\AccessUrlRepository');
     $accessUrl = $urlRepo->find(1);
@@ -3070,46 +2974,8 @@ function upgradeWithContainer($container)
     installGroups($container, $manager);
     error_log('installGroups');
     // @todo check if adminId = 1
-    installSchemas($container, $manager, 1, true);
-    installPages($container);
-    fixMedia($container);
-}
-
-function fixMedia($container)
-{
-    return;
-    error_log('fix medias');
-    $pool = $container->get('sonata.media.pool');
-    $contextManager = $container->get('sonata.classification.manager.context');
-    $categoryManager = $container->get('sonata.media.manager.category');
-
-    foreach ($pool->getContexts() as $context => $contextAttrs) {
-        /** @var ContextInterface $defaultContext */
-        $defaultContext = $contextManager->findOneBy([
-            'id' => $context,
-        ]);
-
-        if (!$defaultContext) {
-            $defaultContext = $contextManager->create();
-            $defaultContext->setId($context);
-            $defaultContext->setName(ucfirst($context));
-            $defaultContext->setEnabled(true);
-
-            $contextManager->save($defaultContext);
-        }
-
-        $defaultCategory = $categoryManager->getRootCategory($defaultContext);
-
-        if (!$defaultCategory) {
-            $defaultCategory = $categoryManager->create();
-            $defaultCategory->setContext($defaultContext);
-            $defaultCategory->setName(ucfirst($context));
-            $defaultCategory->setEnabled(true);
-            $defaultCategory->setPosition(0);
-
-            $categoryManager->save($defaultCategory);
-        }
-    }
+    installTools($container, $manager, true);
+    installSchemas($container, $manager, true);
 }
 
 /**
@@ -3249,7 +3115,6 @@ function finishInstallationWithContainer(
 
     installGroups($container, $manager);
 
-
     error_log('Inserting data.sql');
     // Inserting default data
     $data = file_get_contents($sysPath.'public/main/install/data.sql');
@@ -3323,43 +3188,34 @@ function finishInstallationWithContainer(
     $userManager = $container->get('Chamilo\CoreBundle\Repository\UserRepository');
     $urlRepo = $container->get('Chamilo\CoreBundle\Repository\AccessUrlRepository');
 
+    installTools($container, $manager, false);
+
+    /** @var User $admin */
     $admin = $userManager->find($adminId);
 
     // Login as admin
     $token = new UsernamePasswordToken(
         $admin,
         $admin->getPassword(),
-        "public",
+        'public',
         $admin->getRoles()
     );
     $container->get('security.token_storage')->setToken($token);
 
-    /*$event = new \Symfony\Component\Security\Http\Event\InteractiveLoginEvent(
-        $container->get('request_stack'), $token
-    );
-    $container->get('event_dispatcher')->dispatch('security.interactive_login', $event);*/
-
+    $userManager->addUserToResourceNode($adminId, $adminId);
+    $userManager->addUserToResourceNode($anonId, $adminId);
+    $manager->flush();
 
     installSchemas($container, $manager, false);
-
-    error_log('Adding access url as a node');
-
     $accessUrl = $urlRepo->find(1);
+
+    UrlManager::add_user_to_url($adminId, $adminId);
+    UrlManager::add_user_to_url($anonId, $adminId);
 
     $branch = new BranchSync();
     $branch->setBranchName('localhost');
     $branch->setUrl($accessUrl);
     $manager->persist($branch);
-
-
-    $userManager->addUserToResourceNode($adminId, $adminId);
-    $userManager->addUserToResourceNode($anonId, $adminId);
-
-    $urlRepo->addResourceNode($accessUrl, $admin);
-
-    UrlManager::add_user_to_url($adminId, 1);
-    UrlManager::add_user_to_url($anonId, 1);
-
     $manager->flush();
 
     // Set default language
@@ -3385,7 +3241,6 @@ function finishInstallationWithContainer(
 
     lockSettings();
     updateDirAndFilesPermissions();
-    //fixMedia($container);
 }
 
 /**

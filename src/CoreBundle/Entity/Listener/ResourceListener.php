@@ -5,11 +5,11 @@
 namespace Chamilo\CoreBundle\Entity\Listener;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
+use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\ResourceRight;
-use Chamilo\CoreBundle\Entity\ResourceToCourseInterface;
 use Chamilo\CoreBundle\Entity\ResourceToRootInterface;
 use Chamilo\CoreBundle\Entity\ResourceWithUrlInterface;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
@@ -245,14 +245,19 @@ class ResourceListener
             }
         }
 
-        if ($resource instanceof ResourceToCourseInterface) {
-            if (null !== $resource->getParent()) {
-                $resourceNode->setParent($resource->getParent()->getResourceNode());
-            }
+        if (null !== $resource->getParent()) {
+            $resourceNode->setParent($resource->getParent()->getResourceNode());
         }
 
         error_log('Listener end, adding resource node');
         $resource->setResourceNode($resourceNode);
+
+        // All resources should have a parent, except AccessUrl.
+        if (!($resource instanceof AccessUrl)) {
+            if (null == $resourceNode->getParent()) {
+                throw new \InvalidArgumentException('Resource Node should have a parent');
+            }
+        }
 
         return $resourceNode;
     }
@@ -262,7 +267,7 @@ class ResourceListener
      */
     public function preUpdate(AbstractResource $resource, PreUpdateEventArgs $event)
     {
-        error_log('resource listener preUpdate');
+        //error_log('resource listener preUpdate');
 
         $this->updateResourceName($resource);
         $resourceNode = $resource->getResourceNode();
@@ -285,7 +290,7 @@ class ResourceListener
 
     public function postUpdate(AbstractResource $resource, LifecycleEventArgs $event)
     {
-        error_log('resource listener postUpdate');
+        //error_log('resource listener postUpdate');
         //$em = $event->getEntityManager();
         //$this->updateResourceName($resource, $resource->getResourceName(), $em);
     }

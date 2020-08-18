@@ -6,7 +6,6 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
-use Chamilo\CoreBundle\Entity\ResourceToCourseInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -15,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="c_announcement")
  * @ORM\Entity
  */
-class CAnnouncement extends AbstractResource implements ResourceInterface, ResourceToCourseInterface
+class CAnnouncement extends AbstractResource implements ResourceInterface
 {
     /**
      * @var int

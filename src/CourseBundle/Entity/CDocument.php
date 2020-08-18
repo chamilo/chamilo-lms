@@ -14,7 +14,6 @@ use Chamilo\CoreBundle\Controller\Api\UpdateResourceNodeFileAction;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
-use Chamilo\CoreBundle\Entity\ResourceToCourseInterface;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CourseBundle\Traits\ShowCourseResourcesInSessionTrait;
 use Doctrine\ORM\Mapping as ORM;
@@ -127,7 +126,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\EntityListeners({"Chamilo\CoreBundle\Entity\Listener\ResourceListener"})
  * @ORM\Entity
  */
-class CDocument extends AbstractResource implements ResourceInterface, ResourceToCourseInterface
+class CDocument extends AbstractResource implements ResourceInterface
 {
     use ShowCourseResourcesInSessionTrait;
 

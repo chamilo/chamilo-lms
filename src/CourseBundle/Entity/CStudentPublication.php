@@ -6,7 +6,6 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
-use Chamilo\CoreBundle\Entity\ResourceToCourseInterface;
 use Chamilo\CoreBundle\Entity\Session;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -24,7 +23,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * )
  * @ORM\Entity()
  */
-class CStudentPublication extends AbstractResource implements ResourceInterface, ResourceToCourseInterface
+class CStudentPublication extends AbstractResource implements ResourceInterface
 {
     /**
      * @var int

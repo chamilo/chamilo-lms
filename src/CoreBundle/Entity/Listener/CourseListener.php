@@ -34,11 +34,10 @@ class CourseListener
     /**
      * CourseListener constructor.
      */
-    public function __construct(CToolRepository $toolRepository, ToolChain $toolChain, SettingsManager $settingsManager)
+    public function __construct(ToolChain $toolChain, SettingsManager $settingsManager)
     {
         $this->toolChain = $toolChain;
         $this->settingsManager = $settingsManager;
-        $this->toolRepository = $toolRepository;
     }
 
     /**
@@ -56,26 +55,25 @@ class CourseListener
     {
         error_log('Course listener prePersist');
         if ($course) {
-            /*$urlRelCourse = $course->getUrls()->first();
-            $url = $urlRelCourse->getUrl();*/
-            //$url = $course->getCurrentUrl();
-            //$repo = $args->getEntityManager()->getRepository('ChamiloCoreBundle:Course');
-            ///$this->checkLimit($repo, $course, $url);
-            $this->toolChain->addToolsInCourse($this->toolRepository, $course);
+            // $this->checkLimit($repo, $course, $url);
+            //$this->toolChain->addToolsInCourse($this->toolRepository, $course);
         }
     }
 
     public function postPersist(Course $course, LifecycleEventArgs $args)
     {
-        error_log('postPersist');
+        error_log('Course listener postPersist');
         /** @var AccessUrlRelCourse $urlRelCourse */
         if ($course) {
+            error_log('add tools');
+            //$this->toolChain->addToolsInCourse($this->toolRepository, $course);
             /*$urlRelCourse = $course->getUrls()->first();
             $url = $urlRelCourse->getUrl();*/
             //$url = $course->getCurrentUrl();
             //$repo = $args->getEntityManager()->getRepository('ChamiloCoreBundle:Course');
             ///$this->checkLimit($repo, $course, $url);
             //$this->toolChain->addToolsInCourse($course);
+            $this->toolChain->addToolsInCourse($course);
         }
     }
 

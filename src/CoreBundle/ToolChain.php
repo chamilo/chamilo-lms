@@ -129,13 +129,11 @@ class ToolChain
         //$tool->addToolResourceRight($toolResourceRightReader);
     }
 
-    public function addToolsInCourse(CToolRepository $toolRepository, Course $course): Course
+    public function addToolsInCourse(Course $course): Course
     {
         $tools = $this->getTools();
         $manager = $this->entityManager;
         $toolVisibility = $this->settingsManager->getSetting('course.active_tools_on_create');
-        $token = $this->security->getToken();
-        $user = $token->getUser();
 
         // Hardcoded tool list order
         $toolList = [
@@ -184,8 +182,9 @@ class ToolChain
                 ->setPosition($position)
                 ->setVisibility($visibility)
                 ->setCategory($tool->getCategory())
+                ->setParent($course)
+                ->addCourseLink($course)
             ;
-            $toolRepository->addResourceToCourse($courseTool, ResourceLink::VISIBILITY_PUBLISHED, $user, $course);
             $course->addTool($courseTool);
         }
 

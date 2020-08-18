@@ -9018,11 +9018,6 @@ jquery-ui@^1.12.1:
   resolved "https://registry.yarnpkg.com/jquery-ui/-/jquery-ui-1.12.1.tgz#bcb4045c8dd0539c134bc1488cdd3e768a7a9e51"
   integrity sha1-vLQEXI3QU5wTS8FIjN0+dop6nlE=
 
-jquery.scrollbar@^0.2.11:
-  version "0.2.11"
-  resolved "https://registry.yarnpkg.com/jquery.scrollbar/-/jquery.scrollbar-0.2.11.tgz#e91bd4a97d83859463024d26e730dc36676ab59d"
-  integrity sha1-6RvUqX2DhZRjAk0m5zDcNmdqtZ0=
-
 jquery@>2.1.4, jquery@>=1.10, "jquery@>=1.5.0 <4.0", jquery@>=1.6.0, jquery@>=1.7, "jquery@^1.8.3 || ^2.0 || ^3.0", jquery@^3.3.1, jquery@^3.5, jquery@^3.5.0:
   version "3.5.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.5.1.tgz#d7b4d08e1bfdb86ad2f1a3d039ea17304717abb5"

@@ -44,16 +44,7 @@ Encore
     })
 
     .enableSassLoader()
-    .enableVueLoader(function(options) {
-        options.pluginOptions = {
-            quasar: {
-                importStrategy: 'manual',
-                rtlSupport: false
-            }
-        }
-
-        options.transpileDependencies = ['quasar'];
-    })
+    .enableVueLoader(function (options) {}, {runtimeCompilerBuild: false})
     .autoProvidejQuery()
     .copyFiles([
         {
@@ -127,6 +118,11 @@ Encore.addPlugin(new CopyPlugin({
             {
                 from: './node_modules/tinymce/skins',
                 to: 'libs/tinymce/skins'
+            },
+            {
+                context: 'node_modules/moment/locale',
+                from: '**/*',
+                to: 'libs/locale/'
             },
         ]
     }

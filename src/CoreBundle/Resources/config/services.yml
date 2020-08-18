@@ -23,12 +23,6 @@ services:
         resource: '../../Controller'
         tags: ['controller.service_arguments']
 
-    apy_grid.factory:
-        class: APY\DataGridBundle\Grid\GridFactory
-        arguments: ['@service_container', '@apy_grid.registry']
-
-    APY\DataGridBundle\Grid\Grid: '@grid'
-
     menu.voter.regex:
         class: Chamilo\CoreBundle\Menu\MenuVoter
         arguments: ['@request_stack']

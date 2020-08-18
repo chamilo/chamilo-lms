@@ -5,7 +5,6 @@
 namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use APY\DataGridBundle\Grid\Mapping as GRID;
 use Chamilo\CourseBundle\Traits\PersonalResourceTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
@@ -19,7 +18,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * )
  * @ORM\Table(name="illustration")
  * @ORM\Entity
- * @GRID\Source(columns="id, name, resourceNode.createdAt", filterable=false, groups={"resource"})
  */
 class Illustration extends AbstractResource implements ResourceInterface
 {

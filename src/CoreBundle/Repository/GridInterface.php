@@ -4,8 +4,6 @@
 
 namespace Chamilo\CoreBundle\Repository;
 
-use APY\DataGridBundle\Grid\Column\Column;
-use APY\DataGridBundle\Grid\Grid;
 use Chamilo\CoreBundle\Component\Resource\Settings;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceNode;
@@ -19,8 +17,6 @@ interface GridInterface
     public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroup $group = null);
 
     public function setResourceProperties(FormInterface $form, Course $course, Session $session, $fileType);
-
-    public function getTitleColumn(Grid $grid): Column;
 
     public function getResourceFormType(): string;
 

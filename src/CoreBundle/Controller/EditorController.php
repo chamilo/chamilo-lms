@@ -4,9 +4,6 @@
 
 namespace Chamilo\CoreBundle\Controller;
 
-use APY\DataGridBundle\Grid\Grid;
-use APY\DataGridBundle\Grid\Row;
-use APY\DataGridBundle\Grid\Source\Entity;
 use Chamilo\CoreBundle\Component\Editor\CkEditor\CkEditor;
 use Chamilo\CoreBundle\Component\Editor\Connector;
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;

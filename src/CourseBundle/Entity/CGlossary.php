@@ -4,7 +4,6 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
-use APY\DataGridBundle\Grid\Mapping as GRID;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Doctrine\ORM\Mapping as ORM;
@@ -13,7 +12,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * CGlossary.
  *
- * @GRID\Source(columns="iid, name, description", filterable=false, groups={"resource"})
  * @ORM\Table(
  *  name="c_glossary",
  *  indexes={

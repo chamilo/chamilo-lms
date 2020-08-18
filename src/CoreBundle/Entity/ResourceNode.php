@@ -58,13 +58,6 @@ class ResourceNode
     protected $id;
 
     /**
-     * @var UuidInterface|null
-     *
-     * @ORM\Column(type="uuid", unique=true)
-     */
-    protected $uuid;
-
-    /**
      * @Assert\NotBlank()
      * @Groups({"resource_node:read", "resource_node:write", "document:read", "document:write"})
      * @Gedmo\TreePathSource
@@ -80,6 +73,13 @@ class ResourceNode
      * @ORM\Column(name="slug", type="string", length=255, nullable=false)
      */
     protected $slug;
+
+    /**
+     * @var UuidInterface|null
+     *
+     * @ORM\Column(type="uuid", unique=true)
+     */
+    protected $uuid;
 
     /**
      * @ORM\ManyToOne(targetEntity="ResourceType")
@@ -223,18 +223,6 @@ class ResourceNode
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * @param int $id
-     *
-     * @return $this
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
     }
 
     /**

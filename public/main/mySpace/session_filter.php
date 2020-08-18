@@ -1,5 +1,7 @@
 <?php
+
 /* For licensing terms, see /license.txt */
+
 /**
  * Report for current courses followed by the user.
  */
@@ -7,59 +9,17 @@ $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_TRACKING;
 
-if (!api_is_allowed_to_create_course()) {
+if (!api_is_allowed_to_create_course() && !api_is_drh()) {
     api_not_allowed(true);
 }
 
 $allowCustomCertificate = api_get_plugin_setting('customcertificate', 'enable_plugin_customcertificate') === 'true';
 $plugin = CustomCertificatePlugin::create();
 
-$htmlHeadXtra[] = "<script>
-    $(function () {
-        $('#export_pdf').click(function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-
-            var session_id = $('#session-id').val();
-            var date_begin = $('#date-begin').val();
-            var date_end = $('#date-end').val();
-
-            if (confirm('".$plugin->get_lang('OnlyCustomCertificates')."')) {
-                var url = '".api_get_path(WEB_PLUGIN_PATH)."' +
-                    'customcertificate/src/export_pdf_all_in_one.php?' +
-                    'session_id=' + session_id + '&'+ 
-                    'date_begin=' + date_begin + '&' +
-                    'date_end=' + date_end + '&' +
-                    'export_pdf=1';
-    
-                $(location).attr('href',url);
-            }
-        });
-
-        $('#export_zip').click(function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-
-            var session_id = $('#session-id').val();
-            var date_begin = $('#date-begin').val();
-            var date_end = $('#date-end').val();
-            if (confirm('".$plugin->get_lang('OnlyCustomCertificates')."')) {
-                var url = '".api_get_path(WEB_PLUGIN_PATH)."' +
-                    'customcertificate/src/export_pdf_all_in_one.php?' +
-                    'session_id=' + session_id + '&'+ 
-                    'date_begin=' + date_begin + '&' +
-                    'date_end=' + date_end + '&' +
-                    'export_zip=1';
-    
-                $(location).attr('href',url);
-            }
-        });
-    });
-</script>";
-
 $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
 $tblSession = Database::get_main_table(TABLE_MAIN_SESSION);
 $tblSessionRelCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+$tblSessionRelUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 
 define('NO_DATE_FILTER', 0);
 define('DATE_BEGIN_FILTER', 1);
@@ -68,6 +28,7 @@ define('ALL_DATE_FILTER', 3);
 
 $certificateList = [];
 $formSent = 0;
+$urlParam = '';
 
 if (isset($_POST['formSent'])) {
     $formSent = $_POST['formSent'];
@@ -81,6 +42,15 @@ if (isset($_POST['formSent'])) {
     }
     if (!empty($dateEnd)) {
         $filterDate += DATE_END_FILTER;
+    }
+
+    $filterCheckList = [];
+    $extraField = new ExtraField('user');
+    $extraFieldsAll = $extraField->get_all(['filter = ?' => 1], 'option_order');
+    foreach ($extraFieldsAll as $field) {
+        if (!empty($_POST['extra_'.$field['variable']])) {
+            $filterCheckList[$field['id']] = $field;
+        }
     }
 
     $result = Database::select(
@@ -149,11 +119,111 @@ if (isset($_POST['formSent'])) {
                     break;
             }
         }
+
+        // Filter extra field
+        foreach ($certificateList as $key => $value) {
+            foreach ($filterCheckList as $fieldId => $field) {
+                $extraFieldValue = new ExtraFieldValue('user');
+                $extraFieldValueData = $extraFieldValue->get_values_by_handler_and_field_id(
+                    $value['user_id'],
+                    $fieldId
+                );
+
+                if (empty($extraFieldValueData)) {
+                    unset($certificateList[$key]);
+                    break;
+                }
+
+                switch ($field['field_type']) {
+                    case ExtraField::FIELD_TYPE_TEXT:
+                    case ExtraField::FIELD_TYPE_ALPHANUMERIC:
+                        $pos = stripos($extraFieldValueData['value'], $_POST['extra_'.$field['variable']]);
+                        if ($pos === false) {
+                            unset($certificateList[$key]);
+                        }
+                        break;
+                    case ExtraField::FIELD_TYPE_RADIO:
+                        $valueRadio = $_POST['extra_'.$field['variable']]['extra_'.$field['variable']];
+                        if ($extraFieldValueData['value'] != $valueRadio) {
+                            unset($certificateList[$key]);
+                        }
+                        break;
+                    case ExtraField::FIELD_TYPE_SELECT:
+                        if ($extraFieldValueData['value'] != $_POST['extra_'.$field['variable']]) {
+                            unset($certificateList[$key]);
+                        }
+                        break;
+                 }
+            }
     }
 }
 
+    $params = [
+            'session_id' => (int) $_POST['session_id'],
+            'date_begin' => Security::remove_XSS($_POST['date_begin']),
+            'date_end' => Security::remove_XSS($_POST['date_end']),
+    ];
 //select of sessions
-$sql = "SELECT id, name FROM $tblSession ORDER BY name";
+    foreach ($filterCheckList as $field) {
+        $params['extra_'.$field['variable']] = Security::remove_XSS($_POST['extra_'.$field['variable']]);
+    }
+    $urlParam = http_build_query($params);
+}
+
+$htmlHeadXtra[] = "<script>
+    $(function () {
+        $('#export_pdf').click(function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            var session_id = $('#session-id').val();
+            var date_begin = $('#date-begin').val();
+            var date_end = $('#date-end').val();
+
+            if (confirm('".$plugin->get_lang('OnlyCustomCertificates')."')) {
+                var url = '".api_get_path(WEB_PLUGIN_PATH)."' +
+                    'customcertificate/src/export_pdf_all_in_one.php?' +
+                    '".$urlParam."&' +
+                    'export_pdf=1';
+
+                $(location).attr('href',url);
+            }
+        });
+
+        $('#export_zip').click(function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            var session_id = $('#session-id').val();
+            var date_begin = $('#date-begin').val();
+            var date_end = $('#date-end').val();
+            if (confirm('".$plugin->get_lang('OnlyCustomCertificates')."')) {
+                var url = '".api_get_path(WEB_PLUGIN_PATH)."' +
+                    'customcertificate/src/export_pdf_all_in_one.php?' +
+                    '".$urlParam."&' +
+                    'export_zip=1';
+
+                $(location).attr('href',url);
+            }
+        });
+    });
+</script>";
+
+$innerJoinSessionRelUser = '';
+$whereCondictionDRH = '';
+$whereCondictionMultiUrl = '';
+if (api_is_drh()) {
+    $innerJoinSessionRelUser = "INNER JOIN $tblSessionRelUser as session_rel_user
+                                ON (s.id = session_rel_user.session_id)";
+    $whereCondictionDRH = "WHERE session_rel_user.user_id = ".api_get_user_id();
+    $whereCondictionMultiUrl = " AND session_rel_user.user_id = ".api_get_user_id();
+}
+
+//select of sessions
+$sql = "SELECT s.id, name FROM $tblSession s
+        $innerJoinSessionRelUser
+        $whereCondictionDRH
+        ORDER BY name";
 
 if (api_is_multiple_url_enabled()) {
     $tblSessionRelAccessUrl = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
@@ -162,7 +232,9 @@ if (api_is_multiple_url_enabled()) {
         $sql = "SELECT s.id, name FROM $tblSession s
                 INNER JOIN $tblSessionRelAccessUrl as session_rel_url
                 ON (s.id = session_rel_url.session_id)
+                $innerJoinSessionRelUser
                 WHERE access_url_id = $accessUrlId
+                $whereCondictionMultiUrl
                 ORDER BY name";
     }
 }
@@ -178,6 +250,22 @@ $form = new FormValidator('search_user', 'post', api_get_self());
 $form->addElement('select', 'session_id', get_lang('SessionList'), $options, ['id' => 'session-id']);
 $form->addDatePicker('date_begin', get_lang('DateStart'), ['id' => 'date-begin']);
 $form->addDatePicker('date_end', get_lang('DateEnd'), ['id' => 'date-end']);
+
+// EXTRA FIELDS
+$extraField = new ExtraField('user');
+$returnParams = $extraField->addElements(
+    $form,
+    0,
+    [],
+    true,
+    false,
+    [],
+    [],
+    [],
+    false,
+    true
+);
+
 $form->addElement('hidden', 'formSent', 1);
 $form->addButtonSearch(get_lang('Search'));
 
@@ -228,10 +316,7 @@ if (count($certificateList) == 0) {
             <table class="table data_table">
                 <tbody>';
 
-        $list = GradebookUtils::get_list_gradebook_certificates_by_user_id(
-            $value['user_id'],
-            $categoryId
-        );
+        $list = GradebookUtils::get_list_gradebook_certificates_by_user_id($value['user_id'], $categoryId);
         foreach ($list as $valueCertificate) {
             echo '<tr>';
             echo '<td width="50%">'.get_lang('Score').' : '.$valueCertificate['score_certificate'].'</td>';

@@ -1,13 +1,11 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 
-/**
- * Courses reporting.
- */
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users(true);
@@ -25,6 +23,8 @@ if (api_is_platform_admin()) {
     $sessionList = SessionManager::get_sessions_list();
 } elseif (api_is_drh()) {
     $sessionList = SessionManager::get_sessions_followed_by_drh(api_get_user_id());
+} elseif (api_is_session_admin()) {
+    $sessionList = SessionManager::getSessionsFollowedByUser(api_get_user_id(), SESSIONADMIN);
 } else {
     $sessionList = Tracking::get_sessions_coached_by_user(api_get_user_id());
 }
@@ -40,8 +40,7 @@ $sessionId = isset($_GET['session']) ? (int) $_GET['session'] : 0;
 $session = null;
 if (!empty($sessionId)) {
     $form->setDefaults(['session' => $sessionId]);
-    /** @var Session $session */
-    $session = $em->find('ChamiloCoreBundle:Session', $sessionId);
+    $session = api_get_session_entity($sessionId);
 }
 
 $coursesInfo = [];

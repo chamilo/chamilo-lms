@@ -1,9 +1,7 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
-/**
- * Coaches reporting.
- */
 ob_start();
 $cidReset = true;
 
@@ -24,7 +22,6 @@ Display :: display_header($nameTools);
 
 api_display_tool_title($nameTools);
 
-// Database Table Definitions
 $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
 $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $tbl_user = Database::get_main_table(TABLE_MAIN_USER);

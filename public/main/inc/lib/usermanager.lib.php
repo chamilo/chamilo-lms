@@ -351,7 +351,7 @@ class UserManager
         }
 
         $em->persist($user);
-        $em->flush($user);
+        $em->flush();
 
         $userId = $user->getId();
 
@@ -6138,7 +6138,7 @@ SQL;
             }
         }
         $em->persist($user);
-        $em->flush($user);
+        $em->flush();
         Event::addEvent(LOG_USER_ANONYMIZE, LOG_USER_ID, $userId);
 
         return true;

@@ -17,7 +17,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Table(name="c_exercise_category")
  * @ORM\Entity(repositoryClass="Gedmo\Sortable\Entity\Repository\SortableRepository")
- *
  */
 class CExerciseCategory extends AbstractResource implements ResourceInterface
 {

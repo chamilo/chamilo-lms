@@ -679,9 +679,6 @@ class AnnouncementManager
             return false;
         }
 
-        $sql = "UPDATE $tbl_announcement SET id = iid WHERE iid = $last_id";
-        Database::query($sql);
-
         if (!empty($file)) {
             self::add_announcement_attachment_file(
                 $announcement,

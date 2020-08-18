@@ -11,12 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * CAnnouncementAttachment.
  *
- * @ORM\Table(
- *  name="c_announcement_attachment",
- *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"})
- *  }
- * )
+ * @ORM\Table(name="c_announcement_attachment")
  * @ORM\Entity
  */
 class CAnnouncementAttachment extends AbstractResource implements ResourceInterface
@@ -29,20 +24,6 @@ class CAnnouncementAttachment extends AbstractResource implements ResourceInterf
      * @ORM\GeneratedValue
      */
     protected $iid;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=true)
-     */
-    protected $id;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="c_id", type="integer")
-     */
-    protected $cId;
 
     /**
      * @var string
@@ -186,54 +167,6 @@ class CAnnouncementAttachment extends AbstractResource implements ResourceInterf
         return $this->filename;
     }
 
-    /**
-     * Set id.
-     *
-     * @param int $id
-     *
-     * @return CAnnouncementAttachment
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set cId.
-     *
-     * @param int $cId
-     *
-     * @return CAnnouncementAttachment
-     */
-    public function setCId($cId)
-    {
-        $this->cId = $cId;
-
-        return $this;
-    }
-
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
-    {
-        return $this->cId;
-    }
-
     public function getAnnouncement(): CAnnouncement
     {
         return $this->announcement;
@@ -251,7 +184,7 @@ class CAnnouncementAttachment extends AbstractResource implements ResourceInterf
      */
     public function getResourceIdentifier(): int
     {
-        return $this->getId();
+        return $this->getIid();
     }
 
     public function getResourceName(): string

@@ -264,11 +264,7 @@ class AnnouncementManager
     public static function delete_announcement($courseInfo, $id)
     {
         $repo = Container::getAnnouncementRepository();
-        $criteria = [
-            'cId' => $courseInfo['real_id'],
-            'id' => $id,
-        ];
-        $announcement = $repo->findOneBy($criteria);
+        $announcement = $repo->find($id);
         if ($announcement) {
             $repo->getEntityManager()->remove($announcement);
             $repo->getEntityManager()->flush();
@@ -586,6 +582,7 @@ class AnnouncementManager
         if (!isset($courseInfo['real_id'])) {
             return false;
         }
+        return false;
 
         $courseId = $courseInfo['real_id'];
         $table = Database::get_course_table(TABLE_ANNOUNCEMENT);
@@ -1065,14 +1062,10 @@ class AnnouncementManager
     public static function update_mail_sent($insert_id)
     {
         $table = Database::get_course_table(TABLE_ANNOUNCEMENT);
-        if ($insert_id != strval(intval($insert_id))) {
-            return false;
-        }
         $insert_id = intval($insert_id);
-        $courseId = api_get_course_int_id();
         // store the modifications in the table tbl_annoucement
         $sql = "UPDATE $table SET email_sent='1'
-                WHERE c_id = $courseId AND id = $insert_id";
+                WHERE iid = $insert_id";
         Database::query($sql);
     }
 
@@ -1368,11 +1361,10 @@ class AnnouncementManager
     {
         $table = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
         $announcementId = (int) $announcementId;
-        $courseId = api_get_course_int_id();
         $row = [];
-        $sql = 'SELECT id, path, filename, comment
+        $sql = 'SELECT iid, path, filename, comment
                 FROM '.$table.'
-				WHERE c_id = '.$courseId.' AND announcement_id = '.$announcementId;
+				WHERE announcement_id = '.$announcementId;
         $result = Database::query($sql);
         $repo = Container::getAnnouncementAttachmentRepository();
         if (0 != Database::num_rows($result)) {
@@ -1507,7 +1499,7 @@ class AnnouncementManager
                             comment = '$safe_file_comment',
                             path = '$safe_new_file_name',
                             size ='".intval($file['size'])."'
-					 	WHERE c_id = $courseId AND id = '$id_attach'";
+					 	WHERE iid = '$id_attach'";
                 $result = Database::query($sql);
                 if (false === $result) {
                     $return = -1;

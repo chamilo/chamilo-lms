@@ -1961,25 +1961,25 @@ class Display
      *
      * @return string|null
      */
-    public static function badge($count, $type = "warning")
+    public static function badge($count, $type = 'warning')
     {
         $class = '';
 
         switch ($type) {
             case 'success':
-                $class = 'badge-success';
+                $class = 'bg-success';
                 break;
             case 'warning':
-                $class = 'badge-warning';
+                $class = 'bg-warning text-dark';
                 break;
             case 'important':
-                $class = 'badge-important';
+                $class = 'bg-important';
                 break;
             case 'info':
-                $class = 'badge-info';
+                $class = 'bg-info';
                 break;
             case 'inverse':
-                $class = 'badge-inverse';
+                $class = 'bg-inverse';
                 break;
         }
 
@@ -2019,7 +2019,7 @@ class Display
                 $class = 'success';
                 break;
             case 'warning':
-                $class = 'warning';
+                $class = 'warning text-dark';
                 break;
             case 'important':
             case 'danger':
@@ -2038,7 +2038,7 @@ class Display
 
         $html = '';
         if (!empty($content)) {
-            $html = '<span class="badge badge-'.$class.'">';
+            $html = '<span class="badge bg-'.$class.'">';
             $html .= $content;
             $html .= '</span>';
         }

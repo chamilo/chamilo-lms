@@ -359,14 +359,11 @@ class AnnouncementEmail
     public function logMailSent()
     {
         $id = $this->announcement->getIid();
-        $courseId = $this->course['real_id'];
         $table = Database::get_course_table(TABLE_ANNOUNCEMENT);
         $sql = "UPDATE $table SET
                 email_sent = 1
                 WHERE
-                    c_id = $courseId AND
-                    id = $id AND
-                    session_id = {$this->session_id}
+                    iid = $id
                 ";
         Database::query($sql);
     }

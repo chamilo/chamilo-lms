@@ -798,6 +798,7 @@ if (($allowToEdit || $allowStudentInGroupToSend) && (empty($_GET['origin']) || '
     }
 }
 
+/*
 if ($allowToEdit && 0 == api_get_group_id()) {
     $allow = api_get_configuration_value('disable_delete_all_announcements');
     if (false === $allow && api_is_allowed_to_edit()) {
@@ -813,7 +814,7 @@ if ($allowToEdit && 0 == api_get_group_id()) {
                 ).'</a>';
         }
     }
-}
+}*/
 
 if ($show_actions) {
     echo Display::toolbarAction('toolbar', [$actionsLeft, $searchFormToString]);

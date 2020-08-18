@@ -641,7 +641,6 @@ class AnnouncementManager
 
         $courseId = $courseInfo['real_id'];
         $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
-        $authorId = empty($authorId) ? api_get_user_id() : $authorId;
 
         if (empty($end_date)) {
             $end_date = api_get_utc_datetime();
@@ -655,12 +654,10 @@ class AnnouncementManager
 
         $announcement = new CAnnouncement();
         $announcement
-            ->setCId($courseId)
             ->setContent($newContent)
             ->setTitle($title)
             ->setEndDate(new DateTime($end_date))
             ->setDisplayOrder($order)
-            ->setSessionId($sessionId)
         ;
 
         $announcement
@@ -672,7 +669,6 @@ class AnnouncementManager
             ->setParent($course)
         ;
 
-        $repo = Container::getAnnouncementRepository();
         $em = Database::getManager();
 
         $em->persist($announcement);
@@ -758,9 +754,9 @@ class AnnouncementManager
             self::addAnnouncementToAllUsersInSessions($announcement);
         }
 
-        $repo->getEntityManager()->persist($announcement);
-        $repo->getEntityManager()->persist($resourceNode);
-        $repo->getEntityManager()->flush();
+        $em->persist($resourceNode);
+        $em->persist($announcement);
+        $em->flush();
 
         return $announcement;
     }

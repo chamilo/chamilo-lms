@@ -12,13 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * CAnnouncement.
  *
- * @ORM\Table(
- *  name="c_announcement",
- *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"}),
- *      @ORM\Index(name="session_id", columns={"session_id"})
- *  }
- * )
+ * @ORM\Table(name="c_announcement")
  * @ORM\Entity
  */
 class CAnnouncement extends AbstractResource implements ResourceInterface, ResourceToCourseInterface
@@ -31,20 +25,6 @@ class CAnnouncement extends AbstractResource implements ResourceInterface, Resou
      * @ORM\GeneratedValue
      */
     protected $iid;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=true)
-     */
-    protected $id;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="c_id", type="integer")
-     */
-    protected $cId;
 
     /**
      * @var string
@@ -80,13 +60,6 @@ class CAnnouncement extends AbstractResource implements ResourceInterface, Resou
      * @ORM\Column(name="email_sent", type="boolean", nullable=true)
      */
     protected $emailSent;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="session_id", type="integer", nullable=true)
-     */
-    protected $sessionId;
 
     /**
      * @var CAnnouncementAttachment[]
@@ -236,78 +209,6 @@ class CAnnouncement extends AbstractResource implements ResourceInterface, Resou
     public function getEmailSent()
     {
         return $this->emailSent;
-    }
-
-    /**
-     * Set sessionId.
-     *
-     * @param int $sessionId
-     *
-     * @return CAnnouncement
-     */
-    public function setSessionId($sessionId)
-    {
-        $this->sessionId = $sessionId;
-
-        return $this;
-    }
-
-    /**
-     * Get sessionId.
-     *
-     * @return int
-     */
-    public function getSessionId()
-    {
-        return $this->sessionId;
-    }
-
-    /**
-     * Set id.
-     *
-     * @param int $id
-     *
-     * @return CAnnouncement
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set cId.
-     *
-     * @param int $cId
-     *
-     * @return CAnnouncement
-     */
-    public function setCId($cId)
-    {
-        $this->cId = $cId;
-
-        return $this;
-    }
-
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
-    {
-        return $this->cId;
     }
 
     public function getIid(): int

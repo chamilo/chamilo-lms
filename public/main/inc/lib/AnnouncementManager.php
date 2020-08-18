@@ -780,43 +780,31 @@ class AnnouncementManager
     ) {
         $courseInfo = api_get_course_info();
 
-        // Database definitions
-        $table = Database::get_course_table(TABLE_ANNOUNCEMENT);
         $order = self::getLastAnnouncementOrder($courseInfo);
 
         $now = api_get_utc_datetime();
         $courseId = api_get_course_int_id();
         $sessionId = api_get_session_id();
-        $authorId = api_get_user_id();
-
+        $course = api_get_course_entity($courseId);
         $announcement = new CAnnouncement();
         $announcement
-            ->setCId($courseId)
             ->setContent($newContent)
             ->setTitle($title)
             ->setEndDate(new DateTime($now))
             ->setDisplayOrder($order)
-            ->setSessionId($sessionId)
-        ;
+            ->setParent($course)
+            ->addCourseLink(
+                $course,
+                api_get_session_entity($sessionId),
+                api_get_group_entity()
+            );
 
         $repo = Container::getAnnouncementRepository();
-        $repo->addResourceToCourse(
-            $announcement,
-            ResourceLink::VISIBILITY_PUBLISHED,
-            api_get_user_entity($authorId),
-            api_get_course_entity($courseId),
-            api_get_session_entity($sessionId),
-            api_get_group_entity()
-        );
         $repo->getEntityManager()->flush();
         $last_id = $announcement->getIid();
 
         // Store the attach file
         if ($last_id) {
-            $sql = "UPDATE $table SET id = iid
-                    WHERE iid = $last_id";
-            Database::query($sql);
-
             if (!empty($file)) {
                 self::add_announcement_attachment_file(
                     $announcement,

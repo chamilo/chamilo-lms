@@ -40,7 +40,7 @@ final class CShortcutRepository extends ResourceRepository
                 'resource.resourceNode',
                 'node'
             )
-            ->innerJoin('node.resourceFile', 'file')
+            ->leftJoin('node.resourceFile', 'file')
             //->innerJoin('node.resourceLinks', 'links')
             //->where('node.resourceType = :type')
             //->setParameter('type',$type)

@@ -755,6 +755,9 @@ class learnpath
         }
 
         $id = null;
+        $sessionEntity = api_get_session_entity();
+        $courseEntity = api_get_course_entity($courseInfo['real_id']);
+
         switch ($origin) {
             case 'zip':
                 // Check zip name string. If empty, we are currently creating a new Chamilo learnpath.
@@ -782,23 +785,15 @@ class learnpath
                     ->setCategoryId($categoryId)
                     ->setPublicatedOn($publicated_on)
                     ->setExpiredOn($expired_on)
+                    ->setParent($courseEntity)
+                    ->addCourseLink($courseEntity, $sessionEntity)
                 ;
 
                 $repo = Container::getLpRepository();
                 $em = $repo->getEntityManager();
                 $em->persist($lp);
-                $courseEntity = api_get_course_entity($courseInfo['real_id']);
-
-                $repo->addResourceToCourse(
-                    $lp,
-                    ResourceLink::VISIBILITY_PUBLISHED,
-                    api_get_user_entity(api_get_user_id()),
-                    $courseEntity,
-                    api_get_session_entity(),
-                    api_get_group_entity()
-                );
-
                 $em->flush();
+
                 if ($lp->getIid()) {
                     $id = $lp->getIid();
                     $sql = "UPDATE $tbl_lp SET id = iid WHERE iid = $id";
@@ -4369,19 +4364,24 @@ class learnpath
         /** @var CLp $lp */
         $lp = $repo->find($id);
         $repoShortcut = Container::getShortcutRepository();
+        $em = $repoShortcut->getEntityManager();
+        $courseEntity = api_get_course_entity();
+
         if ($addShortcut) {
             $shortcut = new CShortcut();
-            $shortcut->setName($lp->getName());
-            $shortcut->setShortCutNode($lp->getResourceNode());
-
-            $courseEntity = api_get_course_entity(api_get_course_int_id());
-            $repoShortcut->addResourceNode($shortcut, api_get_user_entity(api_get_user_id()), $courseEntity);
-            $repoShortcut->getEntityManager()->flush();
+            $shortcut
+                ->setName($lp->getName())
+                ->setShortCutNode($lp->getResourceNode())
+                ->setParent($courseEntity)
+                ->addCourseLink($courseEntity, api_get_session_entity())
+            ;
+            $em->persist($shortcut);
+            $em->flush();
         } else {
             $shortcut = $repoShortcut->getShortcutFromResource($lp);
             if (null !== $shortcut) {
-                $repoShortcut->getEntityManager()->remove($shortcut);
-                $repoShortcut->getEntityManager()->flush();
+                $em->remove($shortcut);
+                $em->flush();
             }
         }
 

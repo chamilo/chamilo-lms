@@ -45,7 +45,7 @@ class CkEditor extends Editor
             $style .= api_get_css(ChamiloApi::getEditorDocStylePath());
         }
 
-        $html = '<textarea id="'.$this->getTextareaId().'" name="'.$this->getName().'" class="ckeditor">
+        $html = '<textarea id="'.$this->getTextareaId().'" name="'.$this->getName().'" >
                  '.$style.$value.'
                  </textarea>';
         $html .= $this->editorReplace();

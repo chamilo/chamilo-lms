@@ -147,7 +147,7 @@ function confirmation(name) {
 }
 
 $(function() {
-    $('.scrollbar-inner').scrollbar();
+    //$('.scrollbar-inner').scrollbar();
 
     $('#subtab ').on('click', 'a:first', function() {
         window.location.reload();

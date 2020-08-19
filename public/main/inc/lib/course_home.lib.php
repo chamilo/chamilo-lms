@@ -740,10 +740,8 @@ class CourseHome
     public static function getCoachBlocks(ToolChain $toolChain)
     {
         $blocks = [];
-        $my_list = self::get_tools_category(TOOL_STUDENT_VIEW);
-
         $blocks[] = [
-            'content' => self::show_tools_category($my_list, $toolChain),
+            'content' => self::show_tools_category(self::get_tools_category(TOOL_STUDENT_VIEW), $toolChain),
         ];
 
         $sessionsCopy = api_get_setting('allow_session_course_copy_for_teachers');
@@ -839,6 +837,37 @@ class CourseHome
     }
 
     /**
+     * @param string $toolName
+     * @param int    $courseId
+     * @param int    $sessionId Optional.
+     *
+     * @return bool
+     */
+    public static function getToolVisibility($toolName, $courseId, $sessionId = 0)
+    {
+        $allowEditionInSession = api_get_configuration_value('allow_edit_tool_visibility_in_session');
+
+        $em = Database::getManager();
+        $toolRepo = $em->getRepository('ChamiloCourseBundle:CTool');
+
+        /** @var CTool $tool */
+        $tool = $toolRepo->findOneBy(['cId' => $courseId, 'sessionId' => 0, 'name' => $toolName]);
+        $visibility = $tool->getVisibility();
+
+        if ($allowEditionInSession && $sessionId) {
+            $tool = $toolRepo->findOneBy(
+                ['cId' => $courseId, 'sessionId' => $sessionId, 'name' => $toolName]
+            );
+
+            if ($tool) {
+                $visibility = $tool->getVisibility();
+            }
+        }
+
+        return $visibility;
+    }
+
+    /**
      * Filter tool icons. Only show if $patronKey is = :teacher
      * Example dataIcons[i]['name']: parameter titleIcons1:teacher || titleIcons2 || titleIcons3:teacher.
      *
@@ -893,5 +922,54 @@ class CourseHome
         }
 
         return $dataIcons;
+    }
+
+    /**
+     * Find the tool icon when homepage_view is activity_big.
+     *
+     * @param int  $iconSize
+     * @param bool $generateId
+     *
+     * @return string
+     */
+    private static function getToolIcon(array $item, $iconSize, $generateId = true)
+    {
+        $image = str_replace('.gif', '.png', $item['tool']['image']);
+        $toolIid = isset($item['tool']['iid']) ? $item['tool']['iid'] : null;
+
+        if (isset($item['tool']['custom_image'])) {
+            return Display::img(
+                $item['tool']['custom_image'],
+                $item['name'],
+                ['id' => 'toolimage_'.$toolIid]
+            );
+        }
+
+        if (isset($item['tool']['custom_icon']) && !empty($item['tool']['custom_icon'])) {
+            $customIcon = $item['tool']['custom_icon'];
+
+            if ($item['tool']['visibility'] == '0') {
+                $customIcon = self::getDisableIcon($item['tool']['custom_icon']);
+            }
+
+            return Display::img(
+                self::getCustomWebIconPath().$customIcon,
+                $item['name'],
+                ['id' => 'toolimage_'.$toolIid]
+            );
+        }
+
+        $id = '';
+        if ($generateId) {
+            $id = 'toolimage_'.$toolIid;
+        }
+
+        return Display::return_icon(
+            $image,
+            $item['name'],
+            ['id' => $id],
+            $iconSize,
+            false
+        );
     }
 }

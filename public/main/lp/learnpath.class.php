@@ -7199,8 +7199,6 @@ class learnpath
      */
     public function displayResources()
     {
-        $course_code = api_get_course_id();
-
         // Get all the docs.
         $documents = $this->get_documents(true);
 
@@ -7229,9 +7227,11 @@ class learnpath
             Display::return_icon('certificate.png', get_lang('Certificate'), [], ICON_SIZE_BIG),
         ];
 
-        echo Display::return_message(get_lang('Click on the [Learner view] button to see your learning path'), 'normal');
+        echo Display::return_message(
+            get_lang('Click on the [Learner view] button to see your learning path'),
+            'normal'
+        );
         $section = $this->displayNewSectionForm();
-
         $selected = isset($_REQUEST['lp_build_selected']) ? (int) $_REQUEST['lp_build_selected'] : 0;
 
         echo Display::tabs(

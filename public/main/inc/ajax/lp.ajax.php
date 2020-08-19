@@ -1,13 +1,11 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CDocument;
 use ChamiloSession as Session;
 
-/**
- * Responses to AJAX calls.
- */
 require_once __DIR__.'/../global.inc.php';
 api_protect_course_script(true);
 
@@ -16,10 +14,6 @@ $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : '';
 
 $courseId = api_get_course_int_id();
 $sessionId = api_get_session_id();
-
-if ($debug) {
-    error_log('----------lp.ajax-------------- action '.$action);
-}
 
 switch ($action) {
     case 'get_documents':
@@ -47,45 +41,50 @@ switch ($action) {
         );
         break;
     case 'add_lp_item':
-        if (api_is_allowed_to_edit(null, true)) {
+        if (!api_is_allowed_to_edit(null, true)) {
+            exit;
+        }
+
+        /** @var learnpath $learningPath */
+        $learningPath = Session::read('oLP');
+        if ($learningPath) {
+            $learningPath->set_modified_on();
+            $title = isset($_REQUEST['title']) ? $_REQUEST['title'] : '';
+            $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : '';
+            $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : 0;
+            error_log($id);
+            error_log($type);
+            switch ($type) {
+                case TOOL_QUIZ:
+                    $title = Exercise::format_title_variable($title);
+                    break;
+                case TOOL_DOCUMENT:
+                    $repo = Container::getDocumentRepository();
+                    /** @var CDocument $document */
+                    $document = $repo->getResourceFromResourceNode($id);
+                    $id = $document->getIid();
+                    $title = $document->getTitle();
+                    break;
+            }
+            error_log($id);
+            error_log($title);
+            exit;
+            $parentId = isset($_REQUEST['parent_id']) ? $_REQUEST['parent_id'] : '';
+            $previousId = isset($_REQUEST['previous_id']) ? $_REQUEST['previous_id'] : '';
+
+            $itemId = $learningPath->add_item(
+                $parentId,
+                $previousId,
+                $type,
+                $id,
+                $title,
+                null
+            );
+
             /** @var learnpath $learningPath */
             $learningPath = Session::read('oLP');
             if ($learningPath) {
-                $learningPath->set_modified_on();
-                $title = isset($_REQUEST['title']) ? $_REQUEST['title'] : '';
-                $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : '';
-                $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : 0;
-
-                switch ($type) {
-                    case TOOL_QUIZ:
-                        $title = Exercise::format_title_variable($title);
-                        break;
-                    case TOOL_DOCUMENT:
-                        $repo = Container::getDocumentRepository();
-                        /** @var CDocument $document */
-                        $document = $repo->getResourceFromResourceNode($id);
-                        $id = $document->getIid();
-                        $title = $document->getTitle();
-                        break;
-                }
-
-                $parentId = isset($_REQUEST['parent_id']) ? $_REQUEST['parent_id'] : '';
-                $previousId = isset($_REQUEST['previous_id']) ? $_REQUEST['previous_id'] : '';
-
-                $itemId = $learningPath->add_item(
-                    $parentId,
-                    $previousId,
-                    $type,
-                    $id,
-                    $title,
-                    null
-                );
-
-                /** @var learnpath $learningPath */
-                $learningPath = Session::read('oLP');
-                if ($learningPath) {
-                    echo $learningPath->returnLpItemList(null);
-                }
+                echo $learningPath->returnLpItemList(null);
             }
         }
         break;

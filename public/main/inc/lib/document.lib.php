@@ -352,7 +352,7 @@ class DocumentManager
      * This function streams a file to the client.
      *
      * @param string $full_file_name
-     * @param bool   $forced              Wether to force the browser to download the file
+     * @param bool   $forced              Whether to force the browser to download the file
      * @param string $name
      * @param bool   $fixLinksHttpToHttps change file content from http to https
      * @param array  $extraHeaders        Additional headers to be sent
@@ -363,7 +363,8 @@ class DocumentManager
         $full_file_name,
         $forced = false,
         $name = '',
-        $fixLinksHttpToHttps = false
+        $fixLinksHttpToHttps = false,
+        $extraHeaders = []
     ) {
         session_write_close(); //we do not need write access to session anymore
         if (!is_file($full_file_name)) {
@@ -1350,8 +1351,7 @@ class DocumentManager
         $course_id = $course['real_id'];
         // note the extra / at the end of doc_path to match every path in
         // the document table that is part of the document path
-
-        $session_id = intval($session_id);
+        $session_id = (int) $session_id;
         $condition = " AND d.session_id IN  ('$session_id', '0') ";
         // The " d.filetype='file' " let the user see a file even if the folder is hidden see #2198
 
@@ -1652,11 +1652,12 @@ class DocumentManager
      *
      * @return array
      */
-    public static function get_all_info_to_certificate($user_id, $course_id, $is_preview = false)
+    public static function get_all_info_to_certificate($user_id, $course_id, $sessionId, $is_preview = false)
     {
         $info_list = [];
-        $user_id = intval($user_id);
+        $user_id = (int) $user_id;
         $course_info = api_get_course_info($course_id);
+        $sessionId = (int) $sessionId;
 
         // Portal info
         $organization_name = api_get_setting('Institution');
@@ -1689,10 +1690,14 @@ class DocumentManager
         $teacher_last_name = $teacher_info['lastname'];
 
         // info gradebook certificate
-        $info_grade_certificate = UserManager::get_info_gradebook_certificate($course_id, $user_id);
-        $date_certificate = $info_grade_certificate['created_at'];
+        $info_grade_certificate = UserManager::get_info_gradebook_certificate($courseCode, $sessionId, $user_id);
         $date_long_certificate = '';
-
+        $date_certificate = '';
+        $url = '';
+        if ($info_grade_certificate) {
+            $date_certificate = $info_grade_certificate['created_at'];
+            $url = api_get_path(WEB_PATH).'certificates/index.php?id='.$info_grade_certificate['id'];
+        }
         $date_no_time = api_convert_and_format_date(api_get_utc_datetime(), DATE_FORMAT_LONG_NO_DAY);
         if (!empty($date_certificate)) {
             $date_long_certificate = api_convert_and_format_date($date_certificate);
@@ -1704,11 +1709,43 @@ class DocumentManager
             $date_no_time = api_convert_and_format_date(api_get_utc_datetime(), DATE_FORMAT_LONG_NO_DAY);
         }
 
-        $url = api_get_path(WEB_PATH).'certificates/index.php?id='.$info_grade_certificate['id'];
         $externalStyleFile = api_get_path(SYS_CSS_PATH).'themes/'.api_get_visual_theme().'/certificate.css';
         $externalStyle = '';
         if (is_file($externalStyleFile)) {
             $externalStyle = file_get_contents($externalStyleFile);
+        }
+        $timeInCourse = Tracking::get_time_spent_on_the_course($user_id, $course_info['real_id'], $sessionId);
+        $timeInCourse = api_time_to_hms($timeInCourse, ':', false, true);
+
+        $timeInCourseInAllSessions = 0;
+        $sessions = SessionManager::get_session_by_course($course_info['real_id']);
+
+        if (!empty($sessions)) {
+            foreach ($sessions as $session) {
+                $timeInCourseInAllSessions += Tracking::get_time_spent_on_the_course($user_id, $course_info['real_id'], $session['id']);
+            }
+        }
+        $timeInCourseInAllSessions = api_time_to_hms($timeInCourseInAllSessions, ':', false, true);
+
+        $first = Tracking::get_first_connection_date_on_the_course($user_id, $course_info['real_id'], $sessionId, false);
+        $first = substr($first, 0, 10);
+        $last = Tracking::get_last_connection_date_on_the_course($user_id, $course_info, $sessionId, false);
+        $last = substr($last, 0, 10);
+
+        if ($first === $last) {
+            $startDateAndEndDate = get_lang('From').' '.$first;
+        } else {
+            $startDateAndEndDate = sprintf(
+                get_lang('FromDateXToDateY'),
+                $first,
+                $last
+            );
+        }
+        $courseDescription = new CourseDescription();
+        $description = $courseDescription->get_data_by_description_type(2, $course_info['real_id'], $sessionId);
+        $courseObjectives = '';
+        if ($description) {
+            $courseObjectives = $description['description_content'];
         }
 
         // Replace content
@@ -1723,13 +1760,17 @@ class DocumentManager
             $official_code,
             $date_long_certificate,
             $date_no_time,
-            $course_id,
+            $course_info['code'],
             $course_info['name'],
-            $info_grade_certificate['grade'],
+            isset($info_grade_certificate['grade']) ? $info_grade_certificate['grade'] : '',
             $url,
             '<a href="'.$url.'" target="_blank">'.get_lang('Online link to certificate').'</a>',
             '((certificate_barcode))',
             $externalStyle,
+            $timeInCourse,
+            $timeInCourseInAllSessions,
+            $startDateAndEndDate,
+            $courseObjectives,
         ];
 
         $tags = [
@@ -1750,6 +1791,10 @@ class DocumentManager
             '((certificate_link_html))',
             '((certificate_barcode))',
             '((external_style))',
+            '((time_in_course))',
+            '((time_in_course_in_all_sessions))',
+            '((start_date_and_end_date))',
+            '((course_objectives))',
         ];
 
         if (!empty($extraFields)) {
@@ -2845,6 +2890,8 @@ class DocumentManager
      * @param bool   $showOnlyFolders
      * @param int    $folderId
      * @param bool   $addCloseButton
+     * @param bool   $addAudioPreview
+     * @param array  $filterByExtension
      *
      * @return string
      */
@@ -2859,7 +2906,9 @@ class DocumentManager
         $showInvisibleFiles = false,
         $showOnlyFolders = false,
         $folderId = false,
-        $addCloseButton = true
+        $addCloseButton = true,
+        $addAudioPreview = false,
+        $filterByExtension = []
     ) {
         if (empty($course_info['real_id']) || empty($course_info['code']) || !is_array($course_info)) {
             return '';
@@ -2889,7 +2938,7 @@ class DocumentManager
                     $folder = '';
                 }
 
-                $link .= '<a data_id="'.$node['id'].'" class="moved ui-sortable-handle link_with_id">';
+                $link .= '<a data_id="'.$node['id'].'" data_type="document" class="moved ui-sortable-handle link_with_id">';
                 $link .= $folder.'&nbsp;'.$node['slug'];
                 $link .= '</a>';
 
@@ -3196,7 +3245,8 @@ class DocumentManager
         $target = '',
         $add_move_button = false,
         $overwrite_url = '',
-        $folderId = false
+        $folderId = false,
+        $addAudioPreview = false
     ) {
         $return = '';
         if (!empty($documents)) {
@@ -3220,7 +3270,9 @@ class DocumentManager
                             $lp_id,
                             $target,
                             $add_move_button,
-                            $overwrite_url
+                            $overwrite_url,
+                            null,
+                            $addAudioPreview
                         );
                     }
                     $return .= '</div>';
@@ -3237,7 +3289,8 @@ class DocumentManager
                             $lp_id,
                             $add_move_button,
                             $target,
-                            $overwrite_url
+                            $overwrite_url,
+                            $addAudioPreview
                         );
                     }
                 }

@@ -31,6 +31,7 @@ $startDate = isset($_GET['startDate']) ? $_GET['startDate'] : null;
 $endDate = isset($_GET['endDate']) ? $_GET['endDate'] : null;
 
 $tblItemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
+$tblLp = Database::get_course_table(TABLE_LP_MAIN);
 
 $whereCondition = '';
 
@@ -44,11 +45,8 @@ if (!empty($endDate)) {
 
 // get id of company
 
-
-$query = "
-SELECT
-	*,
-       (
+$selectToNameLp = "(select name from $tblLp where $tblLp.iid =c_item_property.ref) as name_lp";
+$selectToCompany = "(
 		SELECT
 			item_id
 		FROM
@@ -64,7 +62,12 @@ SELECT
 			)
 		AND item_id = $tblItemProperty.to_user_id
 		LIMIT 1
-	) AS company
+	) AS company";
+$query = "
+SELECT
+    * ,
+    $selectToCompany ,
+    $selectToNameLp
 FROM
 	$tblItemProperty
 WHERE
@@ -74,82 +77,94 @@ WHERE
 		FROM
 			".TABLE_MAIN_COURSE_USER."
 		WHERE
-		/*
-			user_id IN (
-				SELECT
-					item_id
-				FROM
-					".TABLE_EXTRA_FIELD_VALUES."
-				WHERE
-					field_id IN (
-						SELECT
-							id
-						FROM
-							".TABLE_EXTRA_FIELD."
-						WHERE
-							variable = 'company'
-					)
-			)
-		AND
-		*/
-		STATUS = 5
+		    STATUS = 5
 	)
-AND lastedit_type = 'LearnpathSubscription'";
+    AND
+    lastedit_type = 'LearnpathSubscription'";
 
-if(strlen($whereCondition) > 2){
+if (strlen($whereCondition) > 2) {
     $query .= $whereCondition;
 }
-$queryResult =  Database::query($query);
+$queryResult = Database::query($query);
 
 
 $cursos = [];
 $estudiantes = [];
 $estudiantesCompany = [];
 $estudiantesPorCurso = [];
-$estudiantesCompanyPorCurso = [];
+// $estudiantesCompanyPorCurso = [];
 $NumeroEstudiantesCompany = 0;
-$detalleCurso = [];
-$studentInfo = [];
+// $detalleCurso = [];
+//$studentInfo = [];
+//$print = [];
 
 $elementos = [];
-if(!empty($startDate) and !empty($endDate)){
-    while ($row = Database::fetch_array($queryResult,'ASSOC')) {
+if (!empty($startDate) and !empty($endDate)) {
+    while ($row = Database::fetch_array($queryResult, 'ASSOC')) {
         $courseId = (int)$row['c_id'];
         $studentId = (int)$row['to_user_id'];
         $studentCompanyId = (int)$row['company'];
-        $cursos[] = $courseId;
-        $estudiantes[]= $studentId;
-        if($studentCompanyId != 0){
+        $lpId = $row['ref'];
+
+        $studiantein = api_get_user_info($studentId);
+        $courseInfo = api_get_course_info_by_id($courseId);
+
+        $lpName = $row['name_lp'];
+
+        $tempPrint['courseName'] = $courseInfo['name'];
+        $tempPrint['insert_date'] = $row['insert_date'];
+        $tempPrint['lastedit_date'] = $row['lastedit_date'];
+        $tempPrint['lpId'] = $lpId;
+        $tempPrint['lpName'] = $lpName;
+        $tempPrint['studentName'] = $studiantein['complete_name'];
+        $tempPrint['studentCompany'] = ($studentCompanyId != 0) ? true : false;
+
+        // $studentInfo[$studentId] = $studiantein;
+
+
+        //$cursos[] = $courseId;
+        $cursos[$courseId][$lpId][] = $tempPrint;
+        $estudiantes[] = $studentId;
+        if ($studentCompanyId != 0) {
             $estudiantesCompany[] = $studentCompanyId;
-            $estudiantesCompanyPorCurso[$courseId][] = $studentCompanyId;
-            $estudiantesCompanyPorCurso[$courseId] =  array_unique($estudiantesCompanyPorCurso[$courseId]);
-        }else{
-            $estudiantesPorCurso[$courseId][] = $studentId;
-            $estudiantesPorCurso[$courseId] =  array_unique($estudiantesPorCurso[$courseId]);
+            //$estudiantesCompanyPorCurso[$courseId][] = $studentCompanyId;
+            //$estudiantesCompanyPorCurso[$courseId] = array_unique($estudiantesCompanyPorCurso[$courseId]);
         }
-        $row = array_merge($row,api_get_course_info_by_id($courseId));
-        $elementos[] = $row;
-        $detalleCurso[$courseId] = api_get_course_info_by_id($courseId);
+        /* else {
+            $estudiantesPorCurso[$courseId][] = $studentId;
+            $estudiantesPorCurso[$courseId] = array_unique($estudiantesPorCurso[$courseId]);
+        }
+
+        $print[] = $tempPrint;
+        */
     }
 }
-$cursos=  array_unique($cursos);
-$estudiantes=  array_unique($estudiantes);
-$estudiantesCompany=  array_unique($estudiantesCompany);
-$NumeroEstudiantes  = count($estudiantes);
+$estudiantes = array_unique($estudiantes);
+$estudiantesCompany = array_unique($estudiantesCompany);
+$NumeroEstudiantes = count($estudiantes);
 $NumeroEstudiantesCompany = count($estudiantesCompany);
-for($i = 0;$i<count($estudiantes);$i++){
-    $studentInfo[$estudiantes[$i]] = api_get_user_info($estudiantes[$i]);
-}
 $cursoText = "Cantidad de alumnos inscritos $NumeroEstudiantes <br> <br> Cantidad de estudiantes con company $NumeroEstudiantesCompany";
-$cursoText .= 'Listado de cursos<br><br>';
-for($i = 0;$i<count($cursos);$i++){
-    $studentsInCourse=$estudiantesCompanyPorCurso[$cursos[$i]];
-    $courseDetailled = $detalleCurso[$cursos[$i]];
-    $cursoText.= "<br>".$cursos[$i]." - ".var_export($courseDetailled,true)."<strong>".var_export($studentsInCourse,true)."</strong><br>";
-    foreach($studentInfo as $k=>$v){
-        //$nombreCompleto = $v['dependietne rh, dpr'];
-        $cursoText.=" <br><strong>".var_export($v,true)."</strong>";
+$cursoText .= '<br>Listado de cursos<br><br>';
 
+
+$fileName = 'works_in_session_'.api_get_local_time();
+switch ($_GET['export']) {
+    case 'xls':
+        Export::export_table_xls_html($cursos, $fileName);
+        break;
+    case 'csv':
+        Export::arrayToCsv($cursos, $fileName);
+        break;
+}
+
+
+foreach ($cursos as $courseId => $Course) {
+    $cursoText .= "Curso id = $courseId<br>";
+    foreach ($Course as $lpIndex => $lpData) {
+        $cursoText .= "\t Lp id = $lpIndex<br>";
+        foreach($lpData as $row) {
+            $cursoText .= "<br> <strong>".var_export($row, true)."</strong><br>";
+        }
     }
 }
 $htmlHeadXtra[] = '<script>
@@ -166,19 +181,19 @@ echo '</div>';
 echo MySpace::getAdminActions();
 echo $cursoText;
 // if (!empty($startDate)) {
-    $form = new FormValidator('searchExtra','get');
-    $form->addHidden('a', 'searchExtra');
-    $form->addDatePicker(
-        'startDate',
-        'startDate',
-        []);
-    $form->addDatePicker(
-        'endDate',
-        'endDate',
-        []);
-    $form->addButtonSearch(get_lang('Search'));
+$form = new FormValidator('searchExtra', 'get');
+$form->addHidden('a', 'searchExtra');
+$form->addDatePicker(
+    'startDate',
+    'startDate',
+    []);
+$form->addDatePicker(
+    'endDate',
+    'endDate',
+    []);
+$form->addButtonSearch(get_lang('Search'));
 
-    echo $form->returnForm();
+echo $form->returnForm();
 // }
 
 echo $content;

@@ -1,5 +1,5 @@
 var Encore = require('@symfony/webpack-encore');
-
+const prefixer = require('postcss-prefix-selector')
 const CopyPlugin = require('copy-webpack-plugin');
 //const FileManagerPlugin = require('filemanager-webpack-plugin');
 //var dotEnv = require('dotenv');
@@ -46,6 +46,11 @@ Encore
     .enableSassLoader()
     .enableVueLoader(function (options) {}, {runtimeCompilerBuild: false})
     .autoProvidejQuery()
+    /*.enablePostCssLoader(function (options) {
+        options.config = {
+            path: 'postcss.config.js'
+        }
+    })*/
     .copyFiles([
         {
             from: './node_modules/multiselect-two-sides/dist/js',
@@ -67,11 +72,11 @@ Encore
             pattern: /(js.cookie.js)$/,
             to: 'libs/js-cookie/src/js.cookie.js'
         },
-        {from: './node_modules/ckeditor/', to: 'ckeditor/[path][name].[ext]', pattern: /\.(js|css)$/, includeSubdirectories: false},
-        {from: './node_modules/ckeditor/adapters', to: 'ckeditor/adapters/[path][name].[ext]'},
-        {from: './node_modules/ckeditor/lang', to: 'ckeditor/lang/[path][name].[ext]'},
-        {from: './node_modules/ckeditor/plugins', to: 'ckeditor/plugins/[path][name].[ext]'},
-        {from: './node_modules/ckeditor/skins', to: 'ckeditor/skins/[path][name].[ext]'},
+        {from: './node_modules/ckeditor/', to: 'libs/ckeditor/[path][name].[ext]', pattern: /\.(js|css)$/, includeSubdirectories: false},
+        {from: './node_modules/ckeditor/adapters', to: 'libs/ckeditor/adapters/[path][name].[ext]'},
+        {from: './node_modules/ckeditor/lang', to: 'libs/ckeditor/lang/[path][name].[ext]'},
+        {from: './node_modules/ckeditor/plugins', to: 'libs/ckeditor/plugins/[path][name].[ext]'},
+        {from: './node_modules/ckeditor/skins', to: 'libs/ckeditor/skins/[path][name].[ext]'},
         /*,
         {
             from: './node_modules/mathjax/',
@@ -127,6 +132,7 @@ Encore.addPlugin(new CopyPlugin({
         ]
     }
 ));
+
 
 // Encore.addPlugin(new CopyPlugin([{
 //     from: 'assets/css/themes/' + theme + '/images',

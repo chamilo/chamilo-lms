@@ -173,7 +173,7 @@
         "symfony/profiler-pack": "*",
         "symfony/test-pack": "*",
         "symplify/easy-coding-standard": "^8.0",
-        "vimeo/psalm": "^3.10"
+        "vimeo/psalm": "^3.14"
     },
     "scripts": {
         "analyse": [
@@ -185,8 +185,7 @@
             "assets:install %PUBLIC_DIR%": "symfony-cmd"
         },
         "post-install-cmd": [
-            "@auto-scripts",
-            "@install-ckeditor"
+            "@auto-scripts"
         ],
         "post-update-cmd": [
             "@auto-scripts"

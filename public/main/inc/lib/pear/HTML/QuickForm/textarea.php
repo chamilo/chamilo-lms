@@ -215,7 +215,7 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
             case FormValidator::LAYOUT_HORIZONTAL:
                 return '
                 <div class="row mb-3 {error_class}">
-                    <label {label-for} class="col-sm-'.$size[0].' col-form-label" >
+                    <label class="col-sm-'.$size[0].' col-form-label" >
                         <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
                         {label}
                     </label>

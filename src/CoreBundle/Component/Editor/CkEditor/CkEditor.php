@@ -21,7 +21,7 @@ class CkEditor extends Editor
      */
     public function createHtml($value)
     {
-        $html = '<textarea id="'.$this->getTextareaId().'" name="'.$this->getName().'" class="ckeditor">
+        $html = '<textarea id="'.$this->getTextareaId().'" name="'.$this->getName().'" >
                  '.$value.'
                  </textarea>';
         $html .= $this->editorReplace();
@@ -70,9 +70,12 @@ class CkEditor extends Editor
         $javascript = $this->toJavascript($config);
 
         return "<script>
-           CKEDITOR.replace('".$this->getTextareaId()."',
-               $javascript
-           );
+            $(function () {
+               CKEDITOR.replace('".$this->getTextareaId()."',
+                   $javascript
+               );
+           });
+
            </script>";
     }
 

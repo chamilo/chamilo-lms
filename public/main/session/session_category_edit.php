@@ -1,15 +1,14 @@
 <?php
+
 /* For licensing terms, see /license.txt */
-/**
- * Edition script for sessions categories.
- */
+
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true);
-$id = intval($_GET['id']);
+$id = (int) $_GET['id'];
 $formSent = 0;
 $errorMsg = '';
 
@@ -31,9 +30,16 @@ if (!$infos = Database::fetch_array($result)) {
     header('Location: session_list.php');
     exit();
 }
+$year_start = $month_start = $day_start = null;
+$year_end = $month_end = $day_end = null;
 
-list($year_start, $month_start, $day_start) = explode('-', $infos['date_start']);
-list($year_end, $month_end, $day_end) = explode('-', $infos['date_end']);
+if ($infos['date_start']) {
+    list($year_start, $month_start, $day_start) = explode('-', $infos['date_start']);
+}
+
+if ($infos['date_end']) {
+    list($year_end, $month_end, $day_end) = explode('-', $infos['date_end']);
+}
 
 if (!api_is_platform_admin() && $infos['session_admin_id'] != $_user['user_id'] && !api_is_session_admin()) {
     api_not_allowed(true);
@@ -94,7 +100,8 @@ if (!empty($return)) {
         <div class="form-group">
             <div class="col-sm-offset-3 col-sm-6">
                 <?php echo get_lang('The time limit of a category is referential, will not affect the boundaries of a training session'); ?>
-                <a href="javascript://" onclick="if(document.getElementById('options').style.display == 'none'){document.getElementById('options').style.display = 'block';}else{document.getElementById('options').style.display = 'none';}"><?php echo get_lang('Edit time limit'); ?></a>
+                <a href="javascript://" onclick="if(document.getElementById('options').style.display == 'none'){document.getElementById('options').style.display = 'block';}else{document.getElementById('options').style.display = 'none';}">
+                    <?php echo get_lang('Edit time limit'); ?></a>
             </div>
         </div>
         <div style="display: <?php echo $formSent ? 'display' : 'none'; ?>;" id="options">

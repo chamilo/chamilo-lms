@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -54,7 +55,6 @@ $social_group_block = SocialManager::getGroupBlock($user_id);
 $friend_html = SocialManager::listMyFriendsBlock($user_id);
 
 // Block Social Sessions
-
 $wallSocialAddPost = SocialManager::getWallForm(api_get_self());
 $socialAutoExtendLink = SocialManager::getAutoExtendLink($user_id, $countPost);
 

@@ -230,7 +230,7 @@ class AnnouncementEmail
         $id = $this->announcement->getIid();
         $course_id = $this->course['real_id'];
         $sql = "SELECT * FROM $table
-                WHERE c_id = $course_id AND announcement_id = $id ";
+                WHERE announcement_id = $id ";
         $rs = Database::query($sql);
         while ($row = Database::fetch_array($rs)) {
             $result[] = $row;

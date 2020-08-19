@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -81,12 +82,11 @@ class Wiki
         $result = Database::query($sql);
         $num = Database::num_rows($result);
         // the value has not been found and is this available
-        if (0 == $num) {
+        if ($num == 0) {
             return true;
-        } else {
-            // the value has been found
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -128,9 +128,8 @@ class Wiki
                 ).' ';
             }
         }
-        $output = implode($all_links);
 
-        return $output;
+        return implode($all_links);
     }
 
     /**
@@ -142,9 +141,8 @@ class Wiki
     {
         $exlink = 'href=';
         $exlinkStyle = 'class="wiki_link_ext" href=';
-        $output = str_replace($exlink, $exlinkStyle, $input);
 
-        return $output;
+        return str_replace($exlink, $exlinkStyle, $input);
     }
 
     /**
@@ -1038,7 +1036,10 @@ class Wiki
         $result = Database::query($sql);
         $row = Database::fetch_array($result, 'ASSOC');
 
-        $KeyVisibility = $row['visibility'];
+        $KeyVisibility = null;
+        if ($KeyVisibility) {
+            $KeyVisibility = $row['visibility'];
+        }
 
         // second, show the last version
         $sql = 'SELECT * FROM '.$tbl_wiki.' w
@@ -1060,7 +1061,7 @@ class Wiki
             Event::addEvent(LOG_WIKI_ACCESS, LOG_WIKI_PAGE_ID, $row['page_id']);
         }
         //update visits
-        if ($row['id']) {
+        if ($row && $row['id']) {
             $sql = 'UPDATE '.$tbl_wiki.' SET hits=(hits+1)
                     WHERE c_id = '.$course_id.' AND id='.$row['id'].'';
             Database::query($sql);
@@ -1508,7 +1509,10 @@ class Wiki
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
 
-        $status_addlock = $row['addlock'];
+        $status_addlock = null;
+        if ($row) {
+            $status_addlock = $row['addlock'];
+        }
 
         // Change status
         if (api_is_allowed_to_edit(false, true) ||
@@ -1533,9 +1537,12 @@ class Wiki
                     ORDER BY id ASC';
             $result = Database::query($sql);
             $row = Database::fetch_array($result);
+            if ($row) {
+                return $row['addlock'];
+            }
         }
 
-        return $row['addlock'];
+        return null;
     }
 
     /**

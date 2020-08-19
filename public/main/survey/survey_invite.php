@@ -61,8 +61,6 @@ if (api_is_course_admin()) {
     ];
 }
 $tool_name = get_lang('Publication of the survey');
-
-// Displaying the header
 Display::display_header($tool_name, 'Survey');
 
 echo '<script>
@@ -102,24 +100,10 @@ $form = new FormValidator(
     'post',
     api_get_self().'?survey_id='.$survey_id.'&'.api_get_cidreq()
 );
-$form->addElement('header', '', $tool_name);
+$form->addHeader($tool_name);
+$sessionId = api_get_session_id();
 
-// Course users
-$complete_user_list = CourseManager::get_user_list_from_course_code(
-    api_get_course_id(),
-    api_get_session_id(),
-    '',
-    api_sort_by_first_name() ? 'ORDER BY firstname' : 'ORDER BY lastname'
-);
-$possible_users = [];
-foreach ($complete_user_list as &$user) {
-    $possible_users[$user['user_id']] = api_get_person_name(
-        $user['firstname'],
-        $user['lastname']
-    );
-}
-
-CourseManager::addUserGroupMultiSelect($form, []);
+CourseManager::addUserGroupMultiSelect($form, [], true);
 
 // Additional users
 $form->addElement(
@@ -196,8 +180,11 @@ if ($form->validate()) {
         }
     }
 
+    $survey = Database::getManager()->getRepository('ChamiloCourseBundle:CSurvey')->find($survey_data['survey_id']);
+
     // Save the invitation mail
-    SurveyUtil::save_invite_mail(
+    SurveyUtil::saveInviteMail(
+        $survey,
         $values['mail_text'],
         $values['mail_title'],
         !empty($survey_data['invite_mail'])
@@ -205,6 +192,7 @@ if ($form->validate()) {
 
     // Saving the invitations for the course users
     $count_course_users = SurveyUtil::saveInvitations(
+        $survey_data['survey_id'],
         $users,
         $values['mail_title'],
         $values['mail_text'],
@@ -224,6 +212,7 @@ if ($form->validate()) {
     }
 
     $counter_additional_users = SurveyUtil::saveInvitations(
+        $survey_data['survey_id'],
         $additional_users,
         $values['mail_title'],
         $values['mail_text'],

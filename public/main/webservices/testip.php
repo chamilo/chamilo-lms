@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 $ip = trim($_SERVER['REMOTE_ADDR']);

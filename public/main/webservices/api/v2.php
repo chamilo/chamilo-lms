@@ -343,14 +343,16 @@ try {
             break;
         case Rest::UPDATE_USER_PAUSE_TRAINING:
             $allow = api_get_plugin_setting('pausetraining', 'tool_enable') === 'true';
-            $allowPauseFormation = api_get_plugin_setting('pausetraining', 'allow_users_to_edit_pause_formation') === 'true';
 
-            if (false === $allow || false === $allowPauseFormation) {
+            if (false === $allow) {
                 throw new Exception(get_lang('Plugin configured'));
             }
 
             if (empty($_POST['user_id'])) {
                 throw new Exception('user_id is required');
+            }
+            if (null === $restApi) {
+                throw new Exception('Check that the username and api_key are field in the request');
             }
             $plugin = PauseTraining::create();
             $data = $plugin->updateUserPauseTraining($_POST['user_id'], $_POST);

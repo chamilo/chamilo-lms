@@ -28,7 +28,6 @@ class SaveUserTest extends V2TestCase
         $loginName = 'testUser'.time();
         $email = 'testUser@local';
         $status = 5;
-
         $userId = $this->integer(
             [
                 'loginname' => $loginName,
@@ -56,8 +55,7 @@ class SaveUserTest extends V2TestCase
     }
 
     /**
-     * Creates a test user with an extra field
-     * asserts that the extra field values were saved
+     * Creates a test user with an extra field asserts that the extra field values were saved.
      *
      * @throws Exception if it cannot delete the created test user
      */

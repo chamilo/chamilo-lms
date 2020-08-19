@@ -24,7 +24,6 @@ if (empty($sessionId)) {
 }
 
 SessionManager::protectSession($sessionId);
-
 $codePath = api_get_path(WEB_CODE_PATH);
 
 $tool_name = get_lang('Session overview');
@@ -173,10 +172,7 @@ if (0 === $session->getNbrCourses()) {
     foreach ($courses as $sessionRelCourse) {
         $course = $sessionRelCourse->getCourse();
         // Select the number of users
-        $numberOfUsers = SessionManager::getCountUsersInCourseSession(
-            $course,
-            $session
-        );
+        $numberOfUsers = SessionManager::getCountUsersInCourseSession($course, $session);
 
         // Get coachs of the courses in session
         $namesOfCoaches = [];

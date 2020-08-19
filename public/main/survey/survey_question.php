@@ -180,7 +180,8 @@ class survey_question
                 $allowParent = true;
                 break;
             case 'multiplechoiceother':
-                $toolName = get_lang('SurveyMultipleAnswerWithOther');
+                $toolName = get_lang('SurveyQuestionMultipleChoiceWithOther');
+                $questionComment = get_lang('SurveyQuestionMultipleChoiceWithOtherComment');
                 $allowParent = true;
                 break;
             case 'pagebreak':
@@ -276,18 +277,17 @@ class survey_question
             }
 
             $this->html .= '	<tr><td colspan="">
-			<fieldset style="border:1px solid black"><legend>'.get_lang('Condition').'</legend>
-
+			<fieldset style="border:1px solid black">
+			    <legend>'.get_lang('Condition').'</legend>
 			<b>'.get_lang('Primary').'</b><br />
-			'.'<input type="radio" name="choose" value="1" '.((1 == $formData['choose']) ? 'checked' : '').
-                '><select name="assigned">'.$grouplist.'</select><br />';
-
+			    <input type="radio" name="choose" value="1" '.(($formData['choose'] == 1) ? 'checked' : '').'>
+			    <select name="assigned">'.$grouplist.'</select><br />';
             $this->html .= '
 			<b>'.get_lang('Secondary').'</b><br />
-			'.'<input type="radio" name="choose" value="2" '.((2 == $formData['choose']) ? 'checked' : '').
-                '><select name="assigned1">'.$grouplist1.'</select> '.
-                '<select name="assigned2">'.$grouplist2.'</select>'
-                .'</fieldset><br />';
+			    <input type="radio" name="choose" value="2" '.(($formData['choose'] == 2) ? 'checked' : '').'>
+			    <select name="assigned1">'.$grouplist1.'</select>
+                <select name="assigned2">'.$grouplist2.'</select>
+            </fieldset><br />';
         }
 
         $this->setForm($form);
@@ -302,19 +302,22 @@ class survey_question
     {
         if (isset($_GET['question_id']) && !empty($_GET['question_id'])) {
             /**
-             * Check if survey has answers first before update it, this is because if you update it, the question
-             * options will delete and re-insert in database loosing the iid and question_id to verify the correct answers.
+             * Prevent the edition of already-answered questions to avoid
+             * inconsistent answers. Use the configuration option
+             * survey_allow_answered_question_edit to change this behaviour.
              */
             $surveyId = isset($_GET['survey_id']) ? (int) $_GET['survey_id'] : 0;
             $answersChecker = SurveyUtil::checkIfSurveyHasAnswers($surveyId);
-            if (!$answersChecker) {
-                $this->buttonList[] = $this->getForm()->addButtonUpdate(get_lang('Edit question'), 'save', true);
+            $allowQuestionEdit = api_get_configuration_value('survey_allow_answered_question_edit') == true;
+            if ($allowQuestionEdit or !$answersChecker) {
+                $this->buttonList[] = $this->getForm()->addButtonUpdate(get_lang('ModifyQuestionSurvey'), 'save', true);
             } else {
                 $this->getForm()->addHtml('
                     <div class="form-group">
                         <label class="col-sm-2 control-label"></label>
                         <div class="col-sm-8">
-                            <div class="alert alert-info">'.get_lang('You can\'t edit this question because answers by students have already been registered').'</div>
+                            <div class="alert alert-info">'.
+                            get_lang('YouCantNotEditThisQuestionBecauseAlreadyExistAnswers').'</div>
                         </div>
                         <div class="col-sm-2"></div>
                     </div>
@@ -486,7 +489,7 @@ class survey_question
      *
      * @return mixed
      */
-    public function save($surveyData, $formData)
+    public function save($surveyData, $formData, $dataFromDatabase = [])
     {
         // Saving a question
         if (isset($_POST['buttons']) && isset($_POST['buttons']['save'])) {
@@ -597,34 +600,76 @@ class survey_question
      */
     public static function getQuestionJs($question)
     {
+        if (empty($question)) {
+            return '';
+        }
+
         $list = self::getDependency($question);
+
         if (empty($list)) {
             return '';
         }
 
-        $js = '';
+        $type = $question['type'];
         $questionId = $question['question_id'];
         $newList = [];
         foreach ($list as $child) {
             $childQuestionId = $child['question_id'];
             $optionId = $child['parent_option_id'];
-            $newList[$optionId] = $childQuestionId;
+            $newList[$optionId][] = $childQuestionId;
         }
 
-        $js .= '
+        if ('multipleresponse' === $type) {
+            $multiple = '';
+            foreach ($newList as $optionId => $child) {
+                $multiple .= '
+                    $(\'input[name="question'.$questionId.'['.$optionId.']"]\').on("change", function() {
+                        var isChecked= $(this).is(\':checked\');
+                        var checkedValue = $(this).val();
+                        if (isChecked) {
+                            $.each(list, function(index, value) {
+                                $(".with_parent_" + value).find("input").prop("checked", false);
+                            });
+
+                            var questionId = $(this).val();
+                            var questionToShow = list[questionId];
+                            $(".with_parent_" + questionToShow).show();
+                        } else {
+                            var checkedValue = list[checkedValue];
+                        }
+                    });
+                ';
+            }
+
+            $js = '
+            <script>
+            $(function() {
+                var list = '.json_encode($newList).';
+                '.$multiple.'
+            });
+            </script>';
+
+            return $js;
+        }
+
+        $js = '
             <script>
             $(function() {
                 var list = '.json_encode($newList).';
                 $("input[name=question'.$questionId.']").on("click", function() {
                     $.each(list, function(index, value) {
-                        $(".with_parent_" + value).hide();
-                        $(".with_parent_" + value).find("input").prop("checked", false);
-                        $(".with_parent_only_hide_" + value).hide();
+                         $.each(value, function(index, itemValue) {
+                            $(".with_parent_" + itemValue).hide();
+                            $(".with_parent_" + itemValue).find("input").prop("checked", false);
+                            $(".with_parent_only_hide_" + itemValue).hide();
+                        });
                     });
 
                     var questionId = $(this).val();
-                    var questionToShow = list[questionId];
-                    $(".with_parent_" + questionToShow).show();
+                    var questionToShowList = list[questionId];
+                    $.each(questionToShowList, function(index, value) {
+                        $(".with_parent_" + value).show();
+                    });
                 });
             });
             </script>';

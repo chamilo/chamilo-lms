@@ -276,9 +276,7 @@ class Agenda
                 $id = $event->getId();
                 break;
             case 'course':
-                $senderId = $this->getSenderId();
                 $sessionId = $this->getSessionId();
-                $userEntity = api_get_user_entity(api_get_user_id());
                 $sessionEntity = api_get_session_entity($sessionId);
                 $courseEntity = api_get_course_entity($this->course['real_id']);
                 $groupEntity = api_get_group_entity(api_get_group_id());
@@ -300,10 +298,7 @@ class Agenda
                     $event->setParentEventId($parentEventId);
                 }
 
-                $event
-//                    ->addCourseLink($courseEntity, $groupEntity, $sessionEntity)
-                    ->setParent($courseEntity)
-                    ;
+                $event->setParent($courseEntity);
 
                 if (!empty($usersToSend)) {
                     $sendTo = $this->parseSendToArray($usersToSend);

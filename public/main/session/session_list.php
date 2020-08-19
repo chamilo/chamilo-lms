@@ -1,11 +1,11 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * List sessions in an efficient and usable way.
  */
 $cidReset = true;
-
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
@@ -16,7 +16,40 @@ $htmlHeadXtra[] = api_get_jqgrid_js();
 
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 $idChecked = isset($_REQUEST['idChecked']) ? $_REQUEST['idChecked'] : null;
-$list_type = isset($_REQUEST['list_type']) ? $_REQUEST['list_type'] : 'custom';
+$listType = isset($_REQUEST['list_type']) ? Security::remove_XSS($_REQUEST['list_type']) : SessionManager::getDefaultSessionTab();
+
+switch ($action) {
+    case 'delete':
+        $sessionInfo = api_get_session_info($idChecked);
+        if ($sessionInfo) {
+            $response = SessionManager::delete($idChecked);
+            if ($response) {
+                Display::addFlash(
+                    Display::return_message(get_lang('Deleted').': '.Security::remove_XSS($sessionInfo['name']))
+                );
+            }
+        }
+        $url = 'session_list.php';
+        if ('custom' !== $listType) {
+            $url = 'session_list.php?list_type='.$listType;
+        }
+        header('Location: '.$url);
+        exit();
+        break;
+    case 'copy':
+        $result = SessionManager::copy($idChecked);
+        if ($result) {
+            Display::addFlash(Display::return_message(get_lang('ItemCopied')));
+        } else {
+            Display::addFlash(Display::return_message(get_lang('ThereWasAnError'), 'error'));
+        }
+        $url = 'session_list.php';
+        if ('custom' !== $listType) {
+            $url = 'session_list.php?list_type='.$listType;
+        }
+        header('Location: '.$url);
+        break;
+}
 
 $tool_name = get_lang('SessionList');
 Display::display_header($tool_name);
@@ -92,22 +125,19 @@ if (isset($_REQUEST['id_category'])) {
     }
 }
 
-$url .= '&list_type='.$list_type;
-
-$result = SessionManager::getGridColumns($list_type);
-
+$url .= '&list_type='.$listType;
+$result = SessionManager::getGridColumns($listType);
 $columns = $result['columns'];
 $column_model = $result['column_model'];
-
-// Autowidth
 $extra_params['autowidth'] = 'true';
-
-// height auto
 $extra_params['height'] = 'auto';
 
-// Custom params
-$extra_params['sortname'] = 'display_end_date';
-$extra_params['sortorder'] = 'desc';
+switch ($listType) {
+    case 'custom':
+        $extra_params['sortname'] = 'display_end_date';
+        $extra_params['sortorder'] = 'desc';
+        break;
+}
 
 if (!isset($_GET['keyword'])) {
     $extra_params['postData'] = [
@@ -157,7 +187,7 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
             grid.showCol('name').trigger('reloadGrid');
             for (key in added_cols) {
                 grid.showCol(key);
-            };
+            }
         }
 
         var second_filters = [];
@@ -216,9 +246,8 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
             ?>
 
             setSearchSelect("status");
-
             var grid = $("#sessions"),
-                prmSearch = {
+            var prmSearch = {
                     multipleSearch : true,
                     overlay : false,
                     width: 'auto',
@@ -295,7 +324,15 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
             searchDialogAll.addClass("table");
             var searchDialog = $("#searchmodfbox_"+grid[0].id);
             searchDialog.addClass("ui-jqgrid ui-widget ui-widget-content ui-corner-all");
-            searchDialog.css({position:"absolute", "z-index":"100", "float":"left", "top":"55%", "left" : "25%", "padding" : "5px", "border": "1px solid #CCC"})
+            searchDialog.css({
+                position: "absolute",
+                "z-index": "100",
+                "float": "left",
+                "top": "55%",
+                "left": "25%",
+                "padding": "5px",
+                "border": "1px solid #CCC"
+            })
             var gbox = $("#gbox_"+grid[0].id);
             gbox.before(searchDialog);
             gbox.css({clear:"left"});
@@ -326,14 +363,6 @@ if (api_is_platform_admin()) {
         Display::return_icon('folder.png', get_lang('Sessions categories list'), '', ICON_SIZE_MEDIUM).'</a>';
 }
 
-/*if ($list_type == 'complete') {
-    echo '<a href="'.api_get_self().'?list_type=simple">'.
-        Display::return_icon('view_remove.png', get_lang('Simple'), '', ICON_SIZE_MEDIUM).'</a>';
-} else {
-    echo '<a href="'.api_get_self().'?list_type=complete">'.
-        Display::return_icon('view_text.png', get_lang('Complete'), '', ICON_SIZE_MEDIUM).'</a>';
-}*/
-
 echo $actions;
 if (api_is_platform_admin()) {
     echo '<div class="pull-right">';
@@ -341,14 +370,13 @@ if (api_is_platform_admin()) {
     $form = new FormValidator(
         'search_simple',
         'get',
-        '',
+        api_get_self().'?list_type='.$listType,
         '',
         [],
         FormValidator::LAYOUT_INLINE
     );
-    $form->addElement('text', 'keyword', null, [
-        'aria-label' => get_lang('Search'),
-    ]);
+    $form->addElement('text', 'keyword', null, ['aria-label' => get_lang('Search')]);
+    $form->addHidden('list_type', $listType);
     $form->addButtonSearch(get_lang('Search'));
     $form->display();
     echo '</div>';
@@ -359,22 +387,8 @@ if (api_is_platform_admin()) {
 }
 echo '</div>';
 
-$tabs = [
-    [
-        'content' => get_lang('SessionListCustom'),
-        'url' => api_get_path(WEB_CODE_PATH).'session/session_list.php',
-    ],
-    [
-        'content' => get_lang('SessionList'),
-        'url' => api_get_path(WEB_CODE_PATH).'session/session_list_simple.php',
-    ],
-    [
-        'content' => get_lang('Complete'),
-        'url' => api_get_path(WEB_CODE_PATH).'session/session_list_simple.php?list_type=complete',
-    ],
-];
+echo SessionManager::getSessionListTabs($listType);
 
-echo Display::tabsOnlyLink($tabs, 1);
 echo '<div id="session-table" class="table-responsive">';
 echo Display::grid_html('sessions');
 echo '</div>';

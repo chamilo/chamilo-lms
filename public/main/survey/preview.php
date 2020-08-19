@@ -76,6 +76,7 @@ if (isset($_POST['finish_survey'])) {
 }
 
 $questions = [];
+$pageBreakText = [];
 if (isset($_GET['show'])) {
     // Getting all the questions for this page and add them to a
     // multidimensional array where the first index is the page.
@@ -101,6 +102,7 @@ if (isset($_GET['show'])) {
             } else {
                 if ('pagebreak' == $row['type']) {
                     $counter++;
+                    $pageBreakText[$counter] = $row['survey_question'];
                 } else {
                     $paged_questions[$counter][] = $row['question_id'];
                 }
@@ -191,7 +193,24 @@ if (is_array($questions) && count($questions) > 0) {
         $counter = $before + 1;
     }
 
+    $showNumber = true;
+    if (SurveyManager::hasDependency($survey_data)) {
+        $showNumber = false;
+    }
+
     $js = '';
+
+    if (isset($pageBreakText[$originalShow]) && !empty(strip_tags($pageBreakText[$originalShow]))) {
+        // Only show page-break texts if there is something there, apart from
+        // HTML tags
+        $form->addHtml(
+            '<div>'.
+            Security::remove_XSS($pageBreakText[$originalShow]).
+            '</div>'
+        );
+        $form->addHtml('<br />');
+    }
+
     foreach ($questions as $key => &$question) {
         $ch_type = 'ch_'.$question['type'];
         $display = survey_question::createQuestion($question['type']);
@@ -211,7 +230,9 @@ if (is_array($questions) && count($questions) > 0) {
         $js .= survey_question::getQuestionJs($question);
 
         $form->addHtml('<div class="survey_question '.$ch_type.' '.$parentClass.'">');
-        $form->addHtml('<div style="float:left; font-weight: bold; margin-right: 5px;"> '.$counter.'. </div>');
+        if ($showNumber) {
+            $form->addHtml('<div style="float:left; font-weight: bold; margin-right: 5px;"> '.$counter.'. </div>');
+        }
         $form->addHtml('<div>'.Security::remove_XSS($question['survey_question']).'</div> ');
         $display->render($form, $question);
         $form->addHtml('</div>');

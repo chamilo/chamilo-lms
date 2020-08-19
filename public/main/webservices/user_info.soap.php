@@ -1,5 +1,7 @@
 <?php
+
 /* For licensing terms, see /license.txt */
+
 /**
  * This script provides the caller service with user details.
  * It is set to work with the Chamilo module for Drupal:

@@ -10,10 +10,10 @@ $from = isset($_GET['from']) ? $_GET['from'] : null;
 // Starting the output buffering when we are exporting the information.
 $export_csv = isset($_GET['export']) && 'csv' == $_GET['export'] ? true : false;
 $exportXls = isset($_GET['export']) && 'xls' == $_GET['export'] ? true : false;
-$session_id = intval($_REQUEST['id_session']);
+$session_id = api_get_session_id();
 
 $this_section = SECTION_COURSES;
-if ('myspace' == $from) {
+if ('myspace' === $from) {
     $from_myspace = true;
     $this_section = 'session_my_space';
 }

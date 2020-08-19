@@ -526,10 +526,7 @@ if ($nbStudents > 0) {
         $tpl->assign('number_students', $nbStudents);
         $tpl->assign('top_students', $userScoreList);
 
-        $trackingSummaryLayout = $tpl->get_template('tracking/tracking_course_log.tpl');
-        $content = $tpl->fetch($trackingSummaryLayout);
-
-        echo $content;
+        echo $tpl->fetch($tpl->get_template('tracking/tracking_course_log.tpl'));
     }
 }
 
@@ -894,6 +891,7 @@ if (!empty($groupList)) {
         $sessionId
     );
     $averageTime = null;
+    $time = null;
     if (!empty($timeInSeconds)) {
         $time = api_time_to_hms($timeInSeconds);
         $averageTime = $timeInSeconds / $nbStudents;

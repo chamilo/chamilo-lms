@@ -54,7 +54,7 @@ if (isset($_GET["id_student"])) {
 			 	srcru.user_id=user_id AND
 			 	srcru.status=2 ".$order_clause;
     } else {
-        $sql_coachs = "SELECT DISTINCT user_id as id_coach, user.user_id, lastname, firstname
+        $sql_coachs = "SELECT DISTINCT user_id as id_coach, user.id as user_id, lastname, firstname
 			FROM
 			$tbl_user as user,
 			$tbl_session_rel_course_user as srcu,
@@ -65,7 +65,7 @@ if (isset($_GET["id_student"])) {
 				c.id = srcu.c_id AND
 				course_rel_user.status='1' AND
 				course_rel_user.user_id='".api_get_user_id()."' AND
-				srcu.user_id = user.user_id AND
+				srcu.user_id = user.id AND
 				srcu.status = 2
 				".$order_clause;
     }

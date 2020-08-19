@@ -6769,7 +6769,7 @@ function WSCertificatesList($startingDate = '', $endingDate = '')
                     certificate.path_certificate
                 FROM $certificateTable AS certificate
                 JOIN $userTable AS user
-                ON certificate.user_id = user.user_id
+                ON certificate.user_id = user.id
                 JOIN $categoryTable AS category
                 ON certificate.cat_id = category.id";
 

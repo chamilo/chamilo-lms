@@ -10191,6 +10191,17 @@ EOD;
         }
     }
 
+    public static function getLpList($courseId)
+    {
+        $table = Database::get_course_table(TABLE_LP_MAIN);
+        $courseId = (int) $courseId;
+
+        $sql = "SELECT * FROM $table WHERE c_id = $courseId";
+        $result = Database::query($sql);
+
+        return Database::store_result($result, 'ASSOC');
+    }
+
     /**
      * @param int $courseId
      *

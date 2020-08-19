@@ -17,7 +17,6 @@
 {% endblock %}
 <body
     class="{{ section_name }} "
-{#    {{ sonata_seo_html_attributes() }}#}
     data-in-course="{{ course ? 'true' : 'false' }}"
     data-course-code="{{ course ? course.code : '' }}"
     data-session-id="{{ session ? session.id : '' }}"

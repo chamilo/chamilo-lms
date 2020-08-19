@@ -80,12 +80,12 @@ class ExerciseResult
                     tlm.name as lp_name,
                     user.username,
                     te.status as exstatus
-                FROM $TBL_EXERCISES  AS ce
-                INNER JOIN $TBL_TRACK_EXERCISES AS te 
+                FROM $TBL_EXERCISES AS ce
+                INNER JOIN $TBL_TRACK_EXERCISES AS te
                 ON (te.exe_exo_id = ce.id)
-                INNER JOIN $TBL_USER AS user 
-                ON (user.user_id = exe_user_id)
-                LEFT JOIN $TBL_TABLE_LP_MAIN AS tlm 
+                INNER JOIN $TBL_USER AS user
+                ON (user.id = exe_user_id)
+                LEFT JOIN $TBL_TABLE_LP_MAIN AS tlm
                 ON (tlm.id = te.orig_lp_id AND tlm.c_id = ce.c_id)
                 WHERE
                     ce.c_id = $course_id AND
@@ -112,11 +112,11 @@ class ExerciseResult
                         user.username,
                         te.status as exstatus
                     FROM $TBL_EXERCISES  AS ce
-                    INNER JOIN $TBL_TRACK_EXERCISES AS te 
+                    INNER JOIN $TBL_TRACK_EXERCISES AS te
                     ON (te.exe_exo_id = ce.id)
-                    INNER JOIN $TBL_USER AS user 
-                    ON (user.user_id = exe_user_id)
-                    LEFT JOIN $TBL_TABLE_LP_MAIN AS tlm 
+                    INNER JOIN $TBL_USER AS user
+                    ON (user.id = exe_user_id)
+                    LEFT JOIN $TBL_TABLE_LP_MAIN AS tlm
                     ON (tlm.id = te.orig_lp_id AND tlm.c_id = ce.c_id)
                     WHERE
                         ce.c_id = $course_id AND
@@ -184,10 +184,10 @@ class ExerciseResult
                     $revised = -1;
                 } else {
                     //revised or not
-                    $sql_exe = "SELECT exe_id 
+                    $sql_exe = "SELECT exe_id
                                 FROM $TBL_TRACK_ATTEMPT_RECORDING
-                                WHERE 
-                                    author != '' AND 
+                                WHERE
+                                    author != '' AND
                                     exe_id = ".(int) ($result['exid']).'
                                 LIMIT 1';
                     $query = Database::query($sql_exe);

@@ -784,16 +784,16 @@ function search_additional_profile_fields($keyword)
     // getting all the user ids of the users who have chosen on of the predefined fields that contain the keyword
     // or all the users who have entered the keyword in a free-form field
     $sql = "SELECT
-                user.user_id as col0,
+                user.id as col0,
                 user.official_code as col1,
                 user.lastname as col2,
                 user.firstname as col3,
                 user.email as col4,
                 user.active as col5,
-                user.user_id as col6
+                user.id as col6
             FROM $table_user user, $table_user_field_values user_values, $tableExtraField e
             WHERE
-                user.user_id = user_values.item_id AND
+                user.id = user_values.item_id AND
                 user_values.field_id = e.id AND
                 e.extra_field_type = $extraFieldType AND
                 (value LIKE '%".$keyword."%'".$profiling_field_options_exact_values_sql.")";

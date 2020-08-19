@@ -1314,8 +1314,8 @@ class SessionManager
                 $wiki_progress = 0;
             }
 
-            //Surveys
-            $surveys_done = (isset($survey_user_list[$user['user_id']]) ? $survey_user_list[$user['user_id']] : 0);
+            // Surveys
+            $surveys_done = isset($survey_user_list[$user['user_id']]) ? $survey_user_list[$user['user_id']] : 0;
             $surveys_left = $surveys_total - $surveys_done;
             if (!empty($surveys_total)) {
                 $surveys_progress = round((($surveys_done * 100) / $surveys_total), 2);
@@ -3501,7 +3501,7 @@ class SessionManager
 
         // check if user is a teacher
         $sql = "SELECT * FROM $tblUser
-                WHERE status = 1 AND user_id = $userId";
+                WHERE status = 1 AND id = $userId";
 
         $rsCheckUser = Database::query($sql);
 
@@ -6163,11 +6163,11 @@ class SessionManager
         }
 
         $select = 'SELECT DISTINCT u.* ';
-        $masterSelect = 'SELECT DISTINCT user_id FROM ';
+        $masterSelect = 'SELECT DISTINCT id FROM ';
 
         if ($getCount) {
             $select = 'SELECT DISTINCT u.id as user_id ';
-            $masterSelect = 'SELECT COUNT(DISTINCT(user_id)) as count FROM ';
+            $masterSelect = 'SELECT COUNT(DISTINCT(id)) as count FROM ';
         }
 
         if (!empty($filterByStatus)) {
@@ -6201,7 +6201,8 @@ class SessionManager
             UNION (
                 $select
                 FROM $tbl_user u
-                INNER JOIN $tbl_user_rel_access_url url ON (url.user_id = u.id)
+                INNER JOIN $tbl_user_rel_access_url url
+                ON (url.user_id = u.id)
                 $where
                 $userConditionsFromDrh
             )";
@@ -6210,18 +6211,24 @@ class SessionManager
         $sql = "$masterSelect (
                 ($select
                 FROM $tbl_session s
-                    INNER JOIN $tbl_session_rel_access_url url ON (url.session_id = s.id)
-                    INNER JOIN $tbl_session_rel_course_rel_user su ON (s.id = su.session_id)
-                    INNER JOIN $tbl_user u ON (u.id = su.user_id)
+                    INNER JOIN $tbl_session_rel_access_url url
+                    ON (url.session_id = s.id)
+                    INNER JOIN $tbl_session_rel_course_rel_user su
+                    ON (s.id = su.session_id)
+                    INNER JOIN $tbl_user u
+                    ON (u.id = su.user_id)
                     $where
                     $sessionConditions
                     $userConditionsFromDrh
                 ) UNION (
                     $select
                     FROM $tbl_course c
-                    INNER JOIN $tbl_course_rel_access_url url ON (url.c_id = c.id)
-                    INNER JOIN $tbl_course_user cu ON (cu.c_id = c.id)
-                    INNER JOIN $tbl_user u ON (u.id = cu.user_id)
+                    INNER JOIN $tbl_course_rel_access_url url
+                    ON (url.c_id = c.id)
+                    INNER JOIN $tbl_course_user cu
+                    ON (cu.c_id = c.id)
+                    INNER JOIN $tbl_user u
+                    ON (u.id = cu.user_id)
                     $where
                     $courseConditions
                     $userConditionsFromDrh

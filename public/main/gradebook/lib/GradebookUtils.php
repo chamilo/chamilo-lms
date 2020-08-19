@@ -1160,10 +1160,10 @@ class GradebookUtils
         $courseId = $courseInfo['real_id'];
 
         if (!empty($current_session)) {
-            $sql = "SELECT user.user_id, user.username, lastname, firstname, official_code
+            $sql = "SELECT user.id as user_id, user.username, lastname, firstname, official_code
                     FROM $tbl_session_course_user as scru
                     INNER JOIN $tbl_user as user
-                    ON (scru.user_id = user.user_id)
+                    ON (scru.user_id = user.id)
                     WHERE
                         scru.status = 0 AND
                         scru.c_id='$courseId' AND
@@ -1171,7 +1171,7 @@ class GradebookUtils
                     $order_clause
                     ";
         } else {
-            $sql = 'SELECT user.user_id, user.username, lastname, firstname, official_code
+            $sql = 'SELECT user.id as user_id, user.username, lastname, firstname, official_code
                     FROM '.$tbl_course_user.' as course_rel_user
                     INNER JOIN '.$tbl_user.' as user
                     ON (course_rel_user.user_id = user.id)
@@ -1235,11 +1235,11 @@ class GradebookUtils
                 $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
                 $tbl_res = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
 
-                $sql = 'SELECT user.user_id, lastname, firstname, user.official_code
+                $sql = 'SELECT user.id as user_id, lastname, firstname, user.official_code
                         FROM '.$tbl_res.' as res, '.$tbl_user.' as user
                         WHERE
                             res.evaluation_id = '.intval($eval->get_id()).' AND
-                            res.user_id = user.user_id
+                            res.user_id = user.id
                         ';
                 $sql .= ' ORDER BY lastname, firstname';
                 if (api_is_western_name_order()) {
@@ -1283,7 +1283,7 @@ class GradebookUtils
         $mask = Database::escape_string($mask);
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
         $tbl_cru = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $sql = 'SELECT DISTINCT user.user_id, user.lastname, user.firstname, user.email, user.official_code
+        $sql = 'SELECT DISTINCT user.id as user_id, user.lastname, user.firstname, user.email, user.official_code
                 FROM '.$tbl_user.' user';
         if (!api_is_platform_admin()) {
             $sql .= ', '.$tbl_cru.' cru';
@@ -1294,7 +1294,7 @@ class GradebookUtils
         $sql .= ' OR user.firstname LIKE '."'%".$mask."%')";
 
         if (!api_is_platform_admin()) {
-            $sql .= ' AND user.user_id = cru.user_id AND
+            $sql .= ' AND user.id = cru.user_id AND
                       cru.relation_type <> '.COURSE_RELATION_TYPE_RRHH.' AND
                       cru.c_id in (
                             SELECT c_id FROM '.$tbl_cru.'

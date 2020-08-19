@@ -1904,9 +1904,9 @@ class SurveyManager
 			            answered_user.user as invited_user,
 			            user.firstname,
 			            user.lastname,
-			            user.user_id
+			            user.id as user_id
                     FROM $table_survey_answer answered_user
-                    LEFT JOIN $table_user as user ON answered_user.user = user.user_id
+                    LEFT JOIN $table_user as user ON answered_user.user = user.id
                     WHERE
                         answered_user.c_id = $course_id AND
                         survey_id= '".$survey_id."' ".

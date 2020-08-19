@@ -441,16 +441,20 @@
             {% endif %}
 
             <dt>{{ 'OfficialCode'|trans }}</dt>
-            <dd>{{ user.code == '' ? 'NoOfficialCode'|trans : user.code }}</dd>
+            {% if user.official_code is defined %}
+                <dd>{{ user.official_code }}</dd>
+            {% else %}
+                <dd>{{ 'NoOfficialCode'|trans }}</dd>
+            {% endif %}
             <dt>{{ 'OnLine'|trans }}</dt>
             <dd>
                 {{ user.user_is_online }}
-                {{ user.online }}
+{#                {{ user.online }}#}
             </dd>
             <dt>{{ 'Tel'|trans }}</dt>
             <dd>{{ user.phone == '' ? 'NoTel'|trans : user.phone }}</dd>
 
-            {% if user.timezone %}
+            {% if user.timezone is defined %}
                 <dt>{{ 'Timezone'|trans }}</dt>
                 <dd>{{ user.timezone }}</dd>
             {% endif %}
@@ -460,12 +464,12 @@
             <div class="create">{{ user.created }}</div>
         {% endif %}
 
-        {% if user.url_access or user.legal.url_send %}
-            <div class="access">
-                {{ user.url_access }}
-                {{ user.legal.url_send }}
-            </div>
-        {% endif %}
+{#        {% if user.url_access or user.legal.url_send %}#}
+{#            <div class="access">#}
+{#                {{ user.url_access }}#}
+{#                {{ user.legal.url_send }}#}
+{#            </div>#}
+{#        {% endif %}#}
     </div>
     {% endautoescape %}
 {% endmacro %}
@@ -479,7 +483,7 @@
         </div>
         <div class="name">
             <h3>
-                {% if user.complete_name_link %}
+                {% if user.complete_name_link is defined %}
                     {{ user.complete_name_link }}
                 {% else %}
                     {{ user.complete_name }}

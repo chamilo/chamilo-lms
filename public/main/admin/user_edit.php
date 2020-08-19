@@ -282,7 +282,7 @@ if (!$user_data['platform_admin']) {
     $form->addElement('radio', 'active', get_lang('Account'), get_lang('active'), 1);
     $form->addElement('radio', 'active', '', get_lang('inactive'), 0);
 }
-$studentBossList = UserManager::getStudentBossList($user_data['user_id']);
+$studentBossList = UserManager::getStudentBossList($user_id);
 
 $conditions = ['status' => STUDENT_BOSS];
 $studentBoss = UserManager::get_user_list($conditions);
@@ -306,7 +306,7 @@ $form->addElement('advmultiselect', 'student_boss', get_lang('Superior (n+1)'), 
 $extraField = new ExtraField('user');
 $returnParams = $extraField->addElements(
     $form,
-    $user_data['user_id'],
+    $user_id,
     [],
     false,
     false,

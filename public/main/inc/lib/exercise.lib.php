@@ -1987,7 +1987,7 @@ HOTSPOT;
             }
 
             $sqlFromOption = " , $TBL_GROUP_REL_USER AS gru ";
-            $sqlWhereOption = "  AND gru.c_id = $course_id AND gru.user_id = user.user_id ";
+            $sqlWhereOption = "  AND gru.c_id = $course_id AND gru.user_id = user.id ";
             $first_and_last_name = api_is_western_name_order() ? "firstname, lastname" : "lastname, firstname";
 
             if ($get_count) {
@@ -2024,7 +2024,7 @@ HOTSPOT;
                 INNER JOIN $sql_inner_join_tbl_track_exercices AS te
                 ON (te.exe_exo_id = ce.id)
                 INNER JOIN $sql_inner_join_tbl_user AS user
-                ON (user.user_id = exe_user_id)
+                ON (user.id = exe_user_id)
                 WHERE
                     te.c_id = $course_id $session_id_and AND
                     ce.active <> -1 AND

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\GradebookCategory;
@@ -179,9 +180,9 @@ switch ($action) {
             $form->addText('weight', get_lang('Weight'));
             $form->addLabel(get_lang('Course'), $category->getCourseCode());
 
-            $sql = "SELECT 
-                        depends, 
-                        minimum_to_validate, 
+            $sql = "SELECT
+                        depends,
+                        minimum_to_validate,
                         gradebooks_to_validate_in_dependence
                     FROM $table WHERE id = ".$categoryId;
             $result = Database::query($sql);

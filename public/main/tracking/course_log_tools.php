@@ -8,12 +8,13 @@ require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_TRACKING;
 
 $course_info = api_get_course_info();
-$groupId = isset($_REQUEST['gidReq']) ? intval($_REQUEST['gidReq']) : 0;
+$groupId = api_get_group_id();
+$session_id = api_get_session_id();
 $from_myspace = false;
 $from = isset($_GET['from']) ? $_GET['from'] : null;
 
 $this_section = SECTION_COURSES;
-if ('myspace' == $from) {
+if ('myspace' === $from) {
     $from_myspace = true;
     $this_section = 'session_my_space';
 }
@@ -46,7 +47,6 @@ $TABLEQUIZ = Database::get_course_table(TABLE_QUIZ_TEST);
 
 // Starting the output buffering when we are exporting the information.
 $export_csv = isset($_GET['export']) && 'csv' == $_GET['export'] ? true : false;
-$session_id = intval($_REQUEST['id_session']);
 
 if ($export_csv) {
     if (!empty($session_id)) {

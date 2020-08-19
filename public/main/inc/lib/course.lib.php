@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt*/
 
 use Chamilo\CoreBundle\Entity\Course;
@@ -360,9 +361,8 @@ class CourseManager
                 WHERE
                     c_id  = ".intval($courseId)." AND
                     user_id = ".intval($userId);
-        $result = Database::fetch_array(Database::query($sql));
 
-        return $result;
+        return Database::fetch_array(Database::query($sql));
     }
 
     /**
@@ -376,8 +376,8 @@ class CourseManager
     {
         $table = Database::escape_string(TABLE_MAIN_COURSE_USER);
 
-        $courseId = intval($courseId);
-        $isTutor = intval($isTutor);
+        $courseId = (int) $courseId;
+        $isTutor = (int) $isTutor;
 
         $sql = "UPDATE $table SET is_tutor = '".$isTutor."'
 			    WHERE
@@ -388,9 +388,9 @@ class CourseManager
 
         if (Database::affected_rows($result) > 0) {
             return true;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -1553,7 +1553,7 @@ class CourseManager
 
         if (!empty($sessionId) || !empty($sessionIdList)) {
             $sql = 'SELECT DISTINCT
-                        user.user_id,
+                        user.id as user_id,
                         user.email,
                         session_course_user.status as status_session,
                         session_id,
@@ -1564,7 +1564,7 @@ class CourseManager
                         session.name as session_name
                     ';
             if ($return_count) {
-                $sql = ' SELECT COUNT(user.user_id) as count';
+                $sql = ' SELECT COUNT(user.id) as count';
             }
 
             $sessionCondition = " session_course_user.session_id = $sessionId";
@@ -1959,7 +1959,7 @@ class CourseManager
         if (!empty($session_id)) {
             $sql .= "
                 LEFT JOIN $tblSessionCourseUser as session_course_user
-                    ON user.user_id = session_course_user.user_id
+                ON user.id = session_course_user.user_id
                     AND session_course_user.c_id = $courseId
                     AND session_course_user.session_id = $session_id
             ";
@@ -1968,7 +1968,7 @@ class CourseManager
         } else {
             $sql .= "
                 LEFT JOIN $tblCourseUser as course_rel_user
-                    ON user.user_id = course_rel_user.user_id
+                    ON user.id = course_rel_user.user_id
                     AND course_rel_user.relation_type <> ".COURSE_RELATION_TYPE_RRHH."
                     AND course_rel_user.c_id = $courseId
             ";
@@ -1977,7 +1977,7 @@ class CourseManager
 
         $multiple_access_url = api_get_multiple_access_url();
         if ($multiple_access_url) {
-            $sql .= " LEFT JOIN $tblUrlUser au ON (au.user_id = user.user_id) ";
+            $sql .= " LEFT JOIN $tblUrlUser au ON (au.user_id = user.id) ";
         }
 
         $sql .= ' WHERE '.implode(' OR ', $where);
@@ -2104,7 +2104,7 @@ class CourseManager
                 $sql = "SELECT $select
                         FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)." cu
                         INNER JOIN $userTable u
-                        ON cu.user_id = u.user_id
+                        ON cu.user_id = u.id
                         WHERE c_id = $courseId AND cu.status = ".STUDENT;
 
                 if (!$includeInvitedUsers) {
@@ -2147,8 +2147,8 @@ class CourseManager
                       FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." scu
                       $joinSession
                       INNER JOIN $userTable u
-                      ON scu.user_id = u.user_id
-                          WHERE scu.c_id = $courseId AND scu.status <> 2";
+                      ON scu.user_id = u.id
+                      WHERE scu.c_id = $courseId AND scu.status <> 2";
 
             if (!empty($date_from) && !empty($date_to)) {
                 $date_from = Database::escape_string($date_from);

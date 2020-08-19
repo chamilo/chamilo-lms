@@ -39,7 +39,7 @@ class SurveyTree
 				WHERE
 					survey.c_id =  $course_id AND
 					survey_question.c_id = $course_id AND
-					survey.author = user.user_id
+					survey.author = user.id
 				GROUP BY survey.survey_id";
 
         $res = Database::query($sql);

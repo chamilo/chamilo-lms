@@ -5541,11 +5541,11 @@ function get_notifications($content, $id)
 
     $id = (int) $id;
 
-    $sql = "SELECT user.user_id, user.firstname, user.lastname, user.email, user.user_id user
+    $sql = "SELECT user.id as user_id, user.firstname, user.lastname, user.email, user.user_id user
             FROM $table_users user, $table_notification notification
             WHERE
                 notification.c_id = $course_id AND user.active = 1 AND
-                user.user_id = notification.user_id AND
+                user.id = notification.user_id AND
                 notification.$field = $id ";
 
     $result = Database::query($sql);

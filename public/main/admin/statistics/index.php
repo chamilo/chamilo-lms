@@ -13,21 +13,23 @@ api_protect_admin_script();
 $interbreadcrumb[] = ['url' => '../index.php', 'name' => get_lang('Administration')];
 
 $report = isset($_REQUEST['report']) ? $_REQUEST['report'] : '';
-$sessionDuration = isset($_GET['session_duration']) ? (int) $_GET['session_duration'] : '';
+$sessionDuration = isset($_GET['session_duration']) ? (int)$_GET['session_duration'] : '';
 $validated = false;
 
 if (
-    in_array(
-        $report,
-        ['recentlogins', 'tools', 'courses', 'coursebylanguage', 'users', 'users_active', 'session_by_date']
-    )
-   ) {
+in_array(
+    $report,
+    ['recentlogins', 'tools', 'courses', 'coursebylanguage', 'users', 'users_active', 'session_by_date']
+)
+) {
     $htmlHeadXtra[] = api_get_js('chartjs/Chart.min.js');
     // Prepare variables for the JS charts
     $url = $reportName = $reportType = $reportOptions = '';
     switch ($report) {
         case 'recentlogins':
-            $url = api_get_path(WEB_CODE_PATH).'inc/ajax/statistics.ajax.php?a=recent_logins&session_duration='.$sessionDuration;
+            $url = api_get_path(
+                    WEB_CODE_PATH
+                ).'inc/ajax/statistics.ajax.php?a=recent_logins&session_duration='.$sessionDuration;
             $reportName = '';
             $reportType = 'line';
             $reportOptions = '';
@@ -223,7 +225,7 @@ if (
                     $dateEnd = Security::remove_XSS($_REQUEST['range_end']);
                 }
 
-                $statusId = (int) $_REQUEST['status_id'];
+                $statusId = (int)$_REQUEST['status_id'];
 
                 $conditions = "&date_start=$dateStart&date_end=$dateEnd&status=$statusId";
 
@@ -270,7 +272,7 @@ if (
                     $reportType,
                     $reportOptions3,
                     'canvas3'
-                );            
+                );
 
                 $reportOptions = '
                     legend: {
@@ -480,10 +482,7 @@ switch ($report) {
             $content .= '<div class="row">';
             $content .= '<div class="col-md-4"><h4 class="page-header" id="canvas1_title"></h4><div id="canvas1_table"></div></div>';
             $content .= '<div class="col-md-4"><h4 class="page-header" id="canvas2_title"></h4><div id="canvas2_table"></div></div>';
-
-            if ($sessionStatusAllowed) {
-                $content .= '<div class="col-md-4"><h4 class="page-header" id="canvas3_title"></h4><div id="canvas3_table"></div></div>';
-            }
+            $content .= '<div class="col-md-4"><h4 class="page-header" id="canvas3_title"></h4><div id="canvas3_table"></div></div>';
             $content .= '</div>';
 
             $tableCourse = new HTML_Table(['class' => 'table table-responsive']);
@@ -506,7 +505,7 @@ switch ($report) {
                     $courseInfo = api_get_course_info_by_id($courseId);
                     $tableCourse->setCellContents($row, 0, $courseInfo['name']);
                     $tableCourse->setCellContents($row, 1, $count);
-                $row++;
+                    $row++;
                 }
             }
 
@@ -515,10 +514,8 @@ switch ($report) {
             $content .= '<div class="row">';
             $content .= '<div class="col-md-4"><canvas id="canvas1" style="margin-bottom: 20px"></canvas></div>';
             $content .= '<div class="col-md-4"><canvas id="canvas2" style="margin-bottom: 20px"></canvas></div>';
+            $content .= '<div class="col-md-4"><canvas id="canvas3" style="margin-bottom: 20px"></canvas></div>';
 
-            if ($sessionStatusAllowed) {
-                $content .= '<div class="col-md-4"><canvas id="canvas3" style="margin-bottom: 20px"></canvas></div>';
-            }
             $content .= '</div>';
 
             $content .= '<div class="row">';
@@ -526,51 +523,46 @@ switch ($report) {
             $content .= '</div>';
         }
 
-            $table = new HTML_Table(['class' => 'table table-responsive']);
-            $headers = [
-                get_lang('Name'),
-                get_lang('StartDate'),
-                get_lang('EndDate'),
-                get_lang('Language'),
-            ];
-            if ($sessionStatusAllowed) {
-                $headers[] = get_lang('Status');
-            }
+        $table = new HTML_Table(['class' => 'table table-responsive']);
+        $headers = [
+            get_lang('Name'),
+            get_lang('StartDate'),
+            get_lang('EndDate'),
+            get_lang('Language'),
+            get_lang('Status')
+        ];
         $headers[] = get_lang('NumberOfStudents');
-            $row = 0;
-            $column = 0;
-            foreach ($headers as $header) {
-                $table->setHeaderContents($row, $column, $header);
-                $column++;
-            }
-            $row++;
+        $row = 0;
+        $column = 0;
+        foreach ($headers as $header) {
+            $table->setHeaderContents($row, $column, $header);
+            $column++;
+        }
+        $row++;
 
-            foreach ($sessions as $session) {
+        foreach ($sessions as $session) {
             $courseList = SessionManager::getCoursesInSession($session['id']);
-                $table->setCellContents($row, 0, $session['name']);
-                $table->setCellContents($row, 1, api_get_local_time($session['display_start_date']));
-                $table->setCellContents($row, 2, api_get_local_time($session['display_end_date']));
+            $table->setCellContents($row, 0, $session['name']);
+            $table->setCellContents($row, 1, api_get_local_time($session['display_start_date']));
+            $table->setCellContents($row, 2, api_get_local_time($session['display_end_date']));
 
-                // Get first language.
-                $language = '';
-                $courses = SessionManager::getCoursesInSession($session['id']);
-                if (!empty($courses)) {
-                    $courseId = $courses[0];
-                    $courseInfo = api_get_course_info_by_id($courseId);
-                    $language = $courseInfo['language'];
+            // Get first language.
+            $language = '';
+            $courses = SessionManager::getCoursesInSession($session['id']);
+            if (!empty($courses)) {
+                $courseId = $courses[0];
+                $courseInfo = api_get_course_info_by_id($courseId);
+                $language = $courseInfo['language'];
                 $language = get_lang(ucfirst(str_replace(2, '', $language)));
-                }
-                $table->setCellContents($row, 3, $language);
-
-                if ($sessionStatusAllowed) {
-                    $table->setCellContents($row, 4, SessionManager::getStatusLabel($session['status']));
-                }
+            }
+            $table->setCellContents($row, 3, $language);
+            $table->setCellContents($row, 4, SessionManager::getStatusLabel($session['status']));
             $studentsCount = SessionManager::get_users_by_session($session['id'], 0, true);
             $table->setCellContents($row, 5, $studentsCount);
-                $row++;
-            }
+            $row++;
+        }
 
-            $content .= $table->toHtml();
+        $content .= $table->toHtml();
 
         if (isset($_REQUEST['action']) && 'export' === $_REQUEST['action']) {
             $data = $table->toArray();
@@ -602,7 +594,7 @@ switch ($report) {
         $form->addHidden('report', 'user_session');
         $form->addButtonSearch(get_lang('Search'));
 
-        $date = new DateTime($now);
+        $date = new DateTime();
         $startDate = $date->format('Y-m-d').' 00:00:00';
         $endDate = $date->format('Y-m-d').' 23:59:59';
         $start = $startDate;
@@ -660,14 +652,14 @@ switch ($report) {
         <script>
             $(function() {
                 '.Display::grid_js(
-                    'user_session_grid',
-                    $url,
-                    $columns,
-                    $columnModel,
-                    $extraParams,
-                    [],
-                    $actionLinks,
-                    true
+                'user_session_grid',
+                $url,
+                $columns,
+                $columnModel,
+                $extraParams,
+                [],
+                $actionLinks,
+                true
             ).';
 
                 jQuery("#user_session_grid").jqGrid("navGrid","#user_session_grid_pager",{
@@ -798,7 +790,7 @@ switch ($report) {
             }
 
             if (isset($_REQUEST['table_users_active_per_page'])) {
-                $limit = (int) $_REQUEST['table_users_active_per_page'];
+                $limit = (int)$_REQUEST['table_users_active_per_page'];
             }
 
             $users = UserManager::getUserListExtraConditions(
@@ -861,7 +853,6 @@ switch ($report) {
                 $item[] = $certificate ? get_lang('Yes') : get_lang('No');
                 $item[] = $birthDate;
                 $data[] = $item;
-                $row++;
             }
 
             if (isset($_REQUEST['action_table']) && 'export' === $_REQUEST['action_table']) {
@@ -1016,7 +1007,7 @@ switch ($report) {
             // graph 3
             $languages = api_get_languages();
             $all = [];
-            foreach ($languages['folder'] as $language) {
+            foreach ($languages as $language) {
                 $conditions = ['language' => $language];
                 $key = $language;
                 if ('2' === substr($language, -1)) {
@@ -1139,7 +1130,7 @@ switch ($report) {
                         if ($validDate) {
                             $date1 = new DateTime($row['value']);
                             $interval = $now->diff($date1);
-                            $years = (int) $interval->y;
+                            $years = (int)$interval->y;
 
                             if ($years >= 16 && $years <= 17) {
                                 $all['16-17']++;
@@ -1465,7 +1456,11 @@ switch ($report) {
         break;
     case 'recentlogins':
         $content .= '<h2>'.sprintf(get_lang('Last %s days'), '15').'</h2>';
-        $form = new FormValidator('session_time', 'get', api_get_self().'?report=recentlogins&session_duration='.$sessionDuration);
+        $form = new FormValidator(
+            'session_time',
+            'get',
+            api_get_self().'?report=recentlogins&session_duration='.$sessionDuration
+        );
         $sessionTimeList = ['', 5 => 5, 15 => 15, 30 => 30, 60 => 60];
         $form->addSelect('session_duration', [get_lang('Session min duration'), get_lang('Minutes')], $sessionTimeList);
         $form->addButtonSend(get_lang('Filter'));

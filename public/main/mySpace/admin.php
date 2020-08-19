@@ -32,9 +32,9 @@ if (isset($_POST['export'])) {
 } else {
     $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';
 }
-$sql = "SELECT user.user_id,lastname,firstname,email
+$sql = "SELECT user.id as user_id,lastname,firstname,email
         FROM $tbl_user as user, $tbl_admin as admin
-        WHERE admin.user_id=user.user_id".$order_clause;
+        WHERE admin.user_id=user.id".$order_clause;
 $result_admins = Database::query($sql);
 
 if (api_is_western_name_order()) {

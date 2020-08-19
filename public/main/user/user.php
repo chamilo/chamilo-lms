@@ -208,7 +208,7 @@ if (isset($_GET['action'])) {
             if (api_get_session_id()) {
                 $table_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
                 $sql = "SELECT DISTINCT
-                            user.user_id, ".($is_western_name_order ? "user.firstname, user.lastname" : "user.lastname, user.firstname").",
+                            user.id as user_id, ".($is_western_name_order ? "user.firstname, user.lastname" : "user.lastname, user.firstname").",
                             user.username,
                             $select_email_condition
                             phone,
@@ -222,12 +222,12 @@ if (isset($_GET['action'])) {
                 }
                 $sql .= "
                     WHERE c_id = $courseId
-                        AND session_course_user.user_id = user.user_id
+                        AND session_course_user.user_id = user.id
                         AND session_id = $sessionId
                 ";
 
                 if (api_is_multiple_url_enabled()) {
-                    $sql .= " AND user.user_id = au.user_id AND access_url_id =  $current_access_url_id  ";
+                    $sql .= " AND user.id = au.user_id AND access_url_id =  $current_access_url_id  ";
                 }
 
                 // only users no coaches/teachers
@@ -298,7 +298,7 @@ if (isset($_GET['action'])) {
                 // users directly subscribed to the course
                 $table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
                 $sql = "SELECT DISTINCT
-                            user.user_id, ".($is_western_name_order ? "user.firstname, user.lastname" : "user.lastname, user.firstname").",
+                            user.id as user_id, ".($is_western_name_order ? "user.firstname, user.lastname" : "user.lastname, user.firstname").",
                             user.username,
                             $select_email_condition
                             phone,
@@ -311,10 +311,10 @@ if (isset($_GET['action'])) {
                 $sql .= " WHERE
                         c_id = '$courseId' AND
                         course_user.relation_type <> ".COURSE_RELATION_TYPE_RRHH." AND
-                        course_user.user_id = user.user_id ";
+                        course_user.user_id = user.id ";
 
                 if (api_is_multiple_url_enabled()) {
-                    $sql .= " AND user.user_id = au.user_id  AND access_url_id =  $current_access_url_id  ";
+                    $sql .= " AND user.id = au.user_id  AND access_url_id =  $current_access_url_id  ";
                 }
 
                 // only users no teachers/coaches

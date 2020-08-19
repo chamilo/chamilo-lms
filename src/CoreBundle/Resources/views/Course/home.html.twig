@@ -99,7 +99,7 @@
                         url('chamilo_core_resource_view_file', {
                             'id': shortcut.shortCutNode.id,
                             'cid': course.id,
-                            'sid': session.id,
+                            'sid': session ? session.id : 0,
                             'type' : shortcut.shortCutNode.resourceType,
                             'tool' : shortcut.shortCutNode.resourceType.tool,
                         })

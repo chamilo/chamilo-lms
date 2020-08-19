@@ -388,6 +388,21 @@ class HTML_QuickForm extends HTML_Common
     }
 
     /**
+     * @param string $elementName
+     * @param string $defaultValue
+     */
+    public function setDefault($elementName, $defaultValue)
+    {
+        if (!$this->elementExists($elementName)) {
+            throw new \Exception('Element does not exists');
+        }
+
+        $element = $this->getElement($elementName);
+        $this->_defaultValues[$elementName] = $defaultValue;
+        $element->onQuickFormEvent('updateValue', null, $this);
+    }
+
+    /**
      * Initializes constant form values.
      * These values won't get overridden by POST or GET vars
      *

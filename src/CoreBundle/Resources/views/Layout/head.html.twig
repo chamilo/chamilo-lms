@@ -29,7 +29,7 @@
     {# Files app.css is generated from "assets/css/app.scss" file using the file webpack.config.js #}
     <link rel="stylesheet" href="{{ url('home') ~ 'build/css/app.css' }}"/>
 {#    {{ encore_entry_link_tags('app') }}#}
-    {% if theme %}
+    {% if theme is defined %}
     <link rel="stylesheet" href="{{ url('home') ~ 'build/css/themes/'~ theme ~'/default.css' }}"/>
     {% endif %}
     <link rel="stylesheet" media="print" href="{{ url('home') ~ 'build/css/print.css' }}"/>

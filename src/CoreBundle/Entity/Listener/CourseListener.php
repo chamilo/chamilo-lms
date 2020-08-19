@@ -10,7 +10,6 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Manager\SettingsManager;
 use Chamilo\CoreBundle\Repository\CourseRepository;
 use Chamilo\CoreBundle\ToolChain;
-use Chamilo\CourseBundle\Repository\CToolRepository;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 
 /**

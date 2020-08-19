@@ -568,7 +568,9 @@ $template->assign('lp_mode', $lp->mode);
 $template->assign('lp_title_scorm', $lp->get_name());
 if (api_get_configuration_value('lp_view_accordion') === true && $lpType == 1) {
     $template->assign('data_panel', $lp->getTOCTree());
+    $template->assign('data_list', null);
 } else {
+    $template->assign('data_panel', null);
     $template->assign('data_list', $lp->getListArrayToc($get_toc_list));
 }
 $template->assign('lp_id', $lp->lp_id);

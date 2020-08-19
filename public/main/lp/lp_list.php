@@ -68,6 +68,15 @@ $introduction = Display::return_introduction_section(
 
 $message = '';
 $actions = '';
+
+$allowCategory = true;
+if (!empty($sessionId)) {
+    $allowCategory = false;
+    if (api_get_configuration_value('allow_session_lp_category')) {
+        $allowCategory = true;
+    }
+}
+
 if ($is_allowed_to_edit) {
     $actionLeft = '';
     $actionLeft .= Display::url(
@@ -101,7 +110,7 @@ if ($is_allowed_to_edit) {
         );
     }
 
-    if (!$sessionId) {
+    if ($allowCategory) {
         $actionLeft .= Display::url(
             Display::return_icon(
                 'new_folder.png',
@@ -130,14 +139,14 @@ if ($allowCategory) {
         }
     }
 
-$categoriesTempList = learnpath::getCategories($courseId);
+    $categoriesTempList = $newCategoryFiltered;
+}
+
 $categoryTest = new CLpCategory();
 $categoryTest->setId(0);
-$categoryTest->setName(get_lang('Without category'));
+$categoryTest->setName(get_lang('WithOutCategory'));
 $categoryTest->setPosition(0);
-$categories = [
-    $categoryTest,
-];
+$categories = [$categoryTest];
 
 if (!empty($categoriesTempList)) {
     $categories = array_merge($categories, $categoriesTempList);

@@ -47,7 +47,7 @@ class ResourceNode
     use TimestampableEntity;
     use TimestampableAgoTrait;
 
-    public const PATH_SEPARATOR = '`';
+    public const PATH_SEPARATOR = '/';
 
     /**
      * @Groups({"resource_node:read", "document:read"})
@@ -147,7 +147,7 @@ class ResourceNode
 
     /**
      * @Groups({"resource_node:read", "document:read"})
-     * @Gedmo\TreePath(appendId=true,separator="`")
+     * @Gedmo\TreePath(appendId=true,separator="/")
      *
      * @ORM\Column(name="path", type="text", nullable=true)
      */

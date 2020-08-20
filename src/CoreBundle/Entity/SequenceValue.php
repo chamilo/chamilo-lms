@@ -23,12 +23,36 @@ class SequenceValue
      */
     protected $id;
 
+//    /**
+//     * @var int
+//     *
+//     * @ORM\Column(name="user_id", type="integer")
+//     */
+//    protected $userId;
     /**
-     * @var int
-     *
-     * @ORM\Column(name="user_id", type="integer")
+     * @ORM\OneToOne (targetEntity="Chamilo\CoreBundle\Entity\User",
+     *      inversedBy="gradebook_result_log")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $userId;
+    protected $user;
+
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param User $user
+     *
+     * @return $this
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
 
     /**
      * @ORM\ManyToOne(targetEntity="SequenceRowEntity")
@@ -102,25 +126,25 @@ class SequenceValue
         return $this->id;
     }
 
-    /**
-     * @return int
-     */
-    public function getUserId()
-    {
-        return $this->userId;
-    }
-
-    /**
-     * @param int $userId
-     *
-     * @return SequenceValue
-     */
-    public function setUserId($userId)
-    {
-        $this->userId = $userId;
-
-        return $this;
-    }
+//    /**
+//     * @return int
+//     */
+//    public function getUserId()
+//    {
+//        return $this->userId;
+//    }
+//
+//    /**
+//     * @param int $userId
+//     *
+//     * @return SequenceValue
+//     */
+//    public function setUserId($userId)
+//    {
+//        $this->userId = $userId;
+//
+//        return $this;
+//    }
 
     public function getEntity()
     {

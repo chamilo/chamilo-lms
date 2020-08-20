@@ -35,13 +35,35 @@ class GradebookScoreLog
      */
     protected $categoryId;
 
+//    /**
+//     * @var int
+//     *
+//     * @ORM\Column(name="user_id", type="integer", nullable=false)
+//     */
+//    protected $userId;
     /**
-     * @var int
-     *
-     * @ORM\Column(name="user_id", type="integer", nullable=false)
+     * @ORM\OneToOne (targetEntity="Chamilo\CoreBundle\Entity\User",
+     *      inversedBy="gradebook_result_log")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $userId;
+    protected $user;
 
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param User $user
+     *
+     * @return $this
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
     /**
      * @var float
      *
@@ -66,15 +88,15 @@ class GradebookScoreLog
         return $this->categoryId;
     }
 
-    /**
-     * Get the user id.
-     *
-     * @return int
-     */
-    public function getUserId()
-    {
-        return $this->userId;
-    }
+//    /**
+//     * Get the user id.
+//     *
+//     * @return int
+//     */
+//    public function getUserId()
+//    {
+//        return $this->userId;
+//    }
 
     /**
      * Get the achieved score.
@@ -120,19 +142,19 @@ class GradebookScoreLog
         return $this;
     }
 
-    /**
-     * Set the user id.
-     *
-     * @param int $userId
-     *
-     * @return $this
-     */
-    public function setUserId($userId)
-    {
-        $this->userId = $userId;
-
-        return $this;
-    }
+//    /**
+//     * Set the user id.
+//     *
+//     * @param int $userId
+//     *
+//     * @return $this
+//     */
+//    public function setUserId($userId)
+//    {
+//        $this->userId = $userId;
+//
+//        return $this;
+//    }
 
     /**
      * Set the achieved score.

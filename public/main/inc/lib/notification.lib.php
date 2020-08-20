@@ -151,15 +151,6 @@ class Notification extends Model
      */
     public function formatTitle($title, $senderInfo, $forceTitleWhenSendingEmail = false)
     {
-        $hook = Container::instantiateHook(HookNotificationTitle::class);
-        if (!empty($hook)) {
-            $hook->setEventData(['title' => $title]);
-            $data = $hook->notifyNotificationTitle(HOOK_EVENT_TYPE_PRE);
-            if (isset($data['title'])) {
-                $title = $data['title'];
-            }
-        }
-
         $newTitle = $this->getTitlePrefix();
 
         switch ($this->type) {
@@ -370,15 +361,6 @@ class Notification extends Model
      * */
     public function formatContent($messageId, $content, $senderInfo)
     {
-        $hook = Container::instantiateHook(HookNotificationContent::class);
-        if (!empty($hook)) {
-            $hook->setEventData(['content' => $content]);
-            $data = $hook->notifyNotificationContent(HOOK_EVENT_TYPE_PRE);
-            if (isset($data['content'])) {
-                $content = $data['content'];
-            }
-        }
-
         $newMessageText = $linkToNewMessage = '';
         $showEmail = api_get_configuration_value('show_user_email_in_notification');
         $senderInfoName = '';

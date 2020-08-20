@@ -578,51 +578,11 @@ class Container
         \CourseManager::setEntityManager($em);
         //self::setSettingsManager($container->get('chamilo.settings.manager'));
         //self::setUserManager($container->get('fos_user.user_manager'));
-        //self::setSiteManager($container->get('sonata.page.manager.site'));
         \CourseManager::setCourseSettingsManager($container->get('Chamilo\CourseBundle\Manager\SettingsManager'));
         // Setting course tool chain (in order to create tools to a course)
         \CourseManager::setToolList($container->get(ToolChain::class));
         if ($setSession) {
             self::$session = $container->get('session');
         }
-    }
-
-    /**
-     * Gets a sonata page.
-     *
-     * @param string $slug
-     */
-    public static function getPage($slug)
-    {
-        $container = self::$container;
-        /*$siteSelector = $container->get('sonata.page.site.selector');
-        $site = $siteSelector->retrieve();*/
-        $siteManager = $container->get('sonata.page.manager.site');
-        $request = self::getRequest();
-        $page = null;
-        if ($request) {
-            $host = $request->getHost();
-            $criteria = [
-                'locale' => $request->getLocale(),
-                'host' => $host,
-            ];
-            $site = $siteManager->findOneBy($criteria);
-
-            $pageManager = $container->get('sonata.page.manager.page');
-            // Parents only of homepage
-            $criteria = ['site' => $site, 'enabled' => true, 'slug' => $slug];
-            /** @var Page $page */
-            return $pageManager->findOneBy($criteria);
-        }
-
-        return $page;
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public static function instantiateHook(string $class): HookEventInterface
-    {
-        return self::$container->get('chamilo_core.hook_factory')->build($class);
     }
 }

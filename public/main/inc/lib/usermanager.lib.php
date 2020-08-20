@@ -7,8 +7,6 @@ use Chamilo\CoreBundle\Entity\SkillRelUser;
 use Chamilo\CoreBundle\Entity\SkillRelUserComment;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\Hook\HookCreateUser;
-use Chamilo\CoreBundle\Hook\HookUpdateUser;
 use Chamilo\CoreBundle\Repository\UserRepository;
 use ChamiloSession as Session;
 
@@ -191,10 +189,6 @@ class UserManager
         $creatorInfo = api_get_user_info($creatorId);
         $creatorEmail = isset($creatorInfo['email']) ? $creatorInfo['email'] : '';
 
-        $hook = Container::instantiateHook(HookCreateUser::class);
-        if (!empty($hook)) {
-            $hook->notifyCreateUser(HOOK_EVENT_TYPE_PRE);
-        }
         // First check wether the login already exists
         if (!self::is_username_available($loginName)) {
             Display::addFlash(
@@ -651,14 +645,6 @@ class UserManager
                 }
                 /* ENDS MANAGE EVENT WITH MAIL */
             }
-
-            if (!empty($hook)) {
-                $hook->setEventData([
-                    'return' => $userId,
-                    'originalPassword' => $original_password,
-                ]);
-                $hook->notifyCreateUser(HOOK_EVENT_TYPE_POST);
-            }
             Event::addEvent(LOG_USER_CREATE, LOG_USER_ID, $userId, null, $creatorId);
         } else {
             Display::addFlash(
@@ -1096,10 +1082,6 @@ class UserManager
         $address = null,
         $emailTemplate = []
     ) {
-        $hook = Container::instantiateHook(HookUpdateUser::class);
-        if (!empty($hook)) {
-            $hook->notifyUpdateUser(HOOK_EVENT_TYPE_PRE);
-        }
         $original_password = $password;
         $user_id = (int) $user_id;
         $creator_id = (int) $creator_id;
@@ -1286,11 +1268,6 @@ class UserManager
                 null,
                 $creatorEmail
             );
-        }
-
-        if (!empty($hook)) {
-            $hook->setEventData(['user' => $user]);
-            $hook->notifyUpdateUser(HOOK_EVENT_TYPE_POST);
         }
 
         $cacheAvailable = api_get_configuration_value('apc');

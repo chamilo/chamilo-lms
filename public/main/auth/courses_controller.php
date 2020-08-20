@@ -277,18 +277,6 @@ class CoursesController
             );
         }
 
-        $hook = Container::instantiateHook(HookResubscribe::class);
-        if (!empty($hook)) {
-            $hook->setEventData([
-                'session_id' => $sessionId,
-            ]);
-            try {
-                $hook->notifyResubscribe(HOOK_EVENT_TYPE_PRE);
-            } catch (Exception $exception) {
-                $result = $exception->getMessage();
-            }
-        }
-
         return $result;
     }
 

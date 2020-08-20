@@ -6,7 +6,6 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\Hook\HookCreateCourse;
 use Chamilo\CoreBundle\Repository\CourseRepository;
 use Chamilo\CoreBundle\Repository\SequenceResourceRepository;
 use Chamilo\CoreBundle\ToolChain;
@@ -92,8 +91,6 @@ class CourseManager
     {
         global $_configuration;
 
-        $hook = Container::instantiateHook(HookCreateCourse::class);
-
         // Check portal limits
         $accessUrlId = !empty($accessUrlId) ? (int) $accessUrlId : api_get_current_access_url_id();
         $authorId = empty($authorId) ? api_get_user_id() : (int) $authorId;
@@ -146,12 +143,6 @@ class CourseManager
             if (empty($courseInfo)) {
                 $courseId = AddCourse::register_course($params, $accessUrlId);
                 $courseInfo = api_get_course_info_by_id($courseId);
-
-                if ($hook) {
-                    $hook->setEventData(['course_info' => $courseInfo]);
-                    $hook->notifyCreateCourse(HOOK_EVENT_TYPE_POST);
-                }
-
                 if (!empty($courseInfo)) {
                     self::fillCourse($courseInfo, $params, $authorId);
 

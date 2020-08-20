@@ -371,12 +371,6 @@ $form->setDefaults($user_data);
 $filtered_extension = false;
 
 if ($form->validate()) {
-    $hook = Container::instantiateHook(HookUpdateUser::class);
-
-    if ($hook) {
-        $hook->notifyUpdateUser(HOOK_EVENT_TYPE_PRE);
-    }
-
     $wrong_current_password = false;
     $user_data = $form->getSubmitValues(1);
     /** @var User $user */

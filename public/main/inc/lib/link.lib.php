@@ -1953,8 +1953,8 @@ Do you really want to delete this category and its links ?')."')) return false;\
             $link->setDisplayOrder($newLinkDisplayOrder);
             $prevLink->setDisplayOrder($newPrevLinkDisplayOrder);
 
-            $em->merge($prevLink);
-            $em->merge($link);
+            $em->persist($prevLink);
+            $em->persist($link);
             break;
         }
 

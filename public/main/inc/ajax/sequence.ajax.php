@@ -240,7 +240,7 @@ switch ($action) {
                 }
 
                 $sequence->setGraphAndSerialize($graph);
-                $em->merge($sequence);
+                $em->persist($sequence);
                 $em->flush();
             }
         }

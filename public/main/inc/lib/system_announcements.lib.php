@@ -674,7 +674,7 @@ class SystemAnnouncementManager
             ->setDateEnd($dateEnd)
             ->setAccessUrlId(api_get_current_access_url_id());
 
-        $em->merge($announcement);
+        $em->persist($announcement);
         $em->flush();
 
         // Update visibility

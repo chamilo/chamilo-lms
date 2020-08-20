@@ -232,7 +232,7 @@ switch ($action) {
                 $values = $form->getSubmitValues();
                 $category->setName($values['name']);
                 $category->setWeight($values['weight']);
-                $em->merge($category);
+                $em->persist($category);
                 $em->flush();
 
                 if (!empty($values['depends'])) {

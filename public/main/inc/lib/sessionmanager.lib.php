@@ -1748,7 +1748,7 @@ class SessionManager
                     $sessionEntity->setStatus($status);
                 }
 
-                $em->merge($sessionEntity);
+                $em->persist($sessionEntity);
                 $em->flush();
 
                 if (!empty($extraFields)) {

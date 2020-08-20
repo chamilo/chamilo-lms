@@ -8334,10 +8334,15 @@ class Exercise
     }
 
     /**
-     * @param int $start
-     * @param int $length
+     * Get the question IDs from quiz_rel_question for the current quiz,
+     * using the parameters as the arguments to the SQL's LIMIT clause.
+     * Because the exercise_id is known, it also comes with a filter on
+     * the session, so sessions are not specified here.
      *
-     * @return array
+     * @param int $start  At which question do we want to start the list
+     * @param int $length Up to how many results we want
+     *
+     * @return array A list of question IDs
      */
     public function getQuestionForTeacher($start = 0, $length = 10)
     {
@@ -8518,8 +8523,16 @@ class Exercise
     }
 
     /**
+     * Return an HTML table of exercises for on-screen printing, including
+     * action icons. If no exercise is present and the user can edit the
+     * course, show a "create test" button.
+     *
      * @param int    $categoryId
      * @param string $keyword
+     * @param int    $userId     Optional.
+     * @param int    $courseId   Optional.
+     * @param int    $sessionId  Optional.
+     * @param bool   $returnData Optional.
      *
      * @return string
      */

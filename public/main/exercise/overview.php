@@ -365,6 +365,7 @@ if (!empty($attempts)) {
         case RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING:
         case RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES:
         case RESULT_DISABLE_RANKING:
+        case RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER:
             $header_names = [
                 get_lang('Attempt'),
                 get_lang('Start Date'),

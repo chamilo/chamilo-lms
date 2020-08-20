@@ -213,7 +213,6 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         ) {
             $form->addElement('submit', 'lessAnswers', get_lang('Remove answer option'), 'class="btn btn-danger minus"');
             $form->addElement('submit', 'moreAnswers', get_lang('Add answer option'), 'class="btn btn-primary plus"');
-            //$text and $class defined in calling script
             $form->addElement('submit', 'submitQuestion', $text, 'class = "btn btn-primary"');
         }
         $renderer->setElementTemplate('{element}&nbsp;', 'lessAnswers');

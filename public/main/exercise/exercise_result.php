@@ -80,49 +80,63 @@ if (!empty($objExercise->getResultAccess())) {
     $htmlHeadXtra[] = api_get_js('epiclock/renderers/minute/epiclock.minute.js');*/
 }
 
-$htmlHeadXtra[] = api_get_build_js('exercise.js');
+$showHeader = false;
+$showFooter = false;
+$pageActions = '';
+$pageTop = '';
+$pageBottom = '';
+$pageContent = '';
 
-if (!in_array($origin, ['learnpath', 'embeddable'])) {
+if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
     // So we are not in learnpath tool
-    Display::display_header($nameTools, get_lang('Test'));
-} else {
-    $htmlHeadXtra[] = '
-    <style>
-    body { background: none;}
-    </style>
-    ';
-    Display::display_reduced_header();
+    $showHeader = true;
 }
 
 // I'm in a preview mode as course admin. Display the action menu.
 if (api_is_course_admin() && !in_array($origin, ['learnpath', 'embeddable'])) {
-    echo '<div class="actions">';
-    echo '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">'.
-        Display::return_icon('back.png', get_lang('Go back to the questions list'), [], 32).'</a>';
-    echo '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyTest=yes&exerciseId='.$objExercise->id.'">'.
-        Display::return_icon('edit.png', get_lang('ModifyTest'), [], 32).'</a>';
-    echo '</div>';
+    $pageActions = Display::toolbarAction(
+        'exercise_result_actions',
+        [
+            Display::url(
+                Display::return_icon('back.png', get_lang('GoBackToQuestionList'), [], 32),
+                'admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id
+            )
+            .Display::url(
+                Display::return_icon('edit.png', get_lang('ModifyExercise'), [], 32),
+                'exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id
+            ),
+        ]
+    );
 }
 $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);
 $learnpath_id = isset($exercise_stat_info['orig_lp_id']) ? $exercise_stat_info['orig_lp_id'] : 0;
 $learnpath_item_id = isset($exercise_stat_info['orig_lp_item_id']) ? $exercise_stat_info['orig_lp_item_id'] : 0;
-$learnpath_item_view_id = isset($exercise_stat_info['orig_lp_item_view_id']) ? $exercise_stat_info['orig_lp_item_view_id'] : 0;
+$learnpath_item_view_id = isset($exercise_stat_info['orig_lp_item_view_id'])
+    ? $exercise_stat_info['orig_lp_item_view_id'] : 0;
 
-if ('learnpath' === $origin) {
-    ?>
-    <form method="GET" action="exercise.php?<?php echo api_get_cidreq(); ?>">
-    <input type="hidden" name="origin" value="<?php echo $origin; ?>" />
-    <input type="hidden" name="learnpath_id" value="<?php echo $learnpath_id; ?>" />
-    <input type="hidden" name="learnpath_item_id" value="<?php echo $learnpath_item_id; ?>"/>
-    <input type="hidden" name="learnpath_item_view_id"  value="<?php echo $learnpath_item_view_id; ?>" />
-<?php
+$logInfo = [
+    'tool' => TOOL_QUIZ,
+    'tool_id' => $objExercise->id,
+    'action' => $learnpath_id,
+    'action_details' => $learnpath_id,
+];
+Event::registerLog($logInfo);
+
+if ($origin === 'learnpath') {
+    $pageTop .= '
+        <form method="GET" action="exercise.php?'.api_get_cidreq().'">
+            <input type="hidden" name="origin" value='.$origin.'/>
+            <input type="hidden" name="learnpath_id" value="'.$learnpath_id.'"/>
+            <input type="hidden" name="learnpath_item_id" value="'.$learnpath_item_id.'"/>
+            <input type="hidden" name="learnpath_item_view_id" value="'.$learnpath_item_view_id.'"/>
+    ';
 }
 
 $i = $total_score = $max_score = 0;
 $remainingMessage = '';
 $attemptButton = '';
 
-if ('embeddable' !== $origin) {
+if ($origin !== 'embeddable') {
     $attemptButton = Display::toolbarButton(
         get_lang('Another attempt'),
         api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.api_get_cidreq().'&'.http_build_query([
@@ -146,15 +160,21 @@ if ($objExercise->selectAttempts() > 0) {
         $learnpath_item_view_id
     );
     if ($attempt_count >= $objExercise->selectAttempts()) {
-        echo Display::return_message(
-            sprintf(get_lang('You cannot take test <b>%s</b> because you have already reached the maximum of %s attempts.'), $objExercise->selectTitle(), $objExercise->selectAttempts()),
+        Display::addFlash(
+            Display::return_message(
+                sprintf(get_lang('ReachedMaxAttempts'), $objExercise->selectTitle(), $objExercise->selectAttempts()),
             'warning',
             false
+            )
         );
+
         if (!in_array($origin, ['learnpath', 'embeddable'])) {
-            //we are not in learnpath tool
-            Display::display_footer();
+            $showFooter = true;
         }
+
+        $template = new Template($nameTools, $showHeader, $showFooter);
+        $template->assign('actions', $pageActions);
+        $template->display_one_col_template();
         exit;
     } else {
         $attempt_count++;
@@ -175,18 +195,18 @@ if (!empty($exercise_stat_info)) {
 
 $max_score = $objExercise->get_max_score();
 
-if ('embeddable' === $origin) {
-    showEmbeddableFinishButton();
+if ($origin === 'embeddable') {
+    $pageTop .= showEmbeddableFinishButton();
 } else {
-    echo Display::return_message(get_lang('Saved.').'<br />', 'normal', false);
+    Display::addFlash(
+        Display::return_message(get_lang('Saved'), 'normal', false)
+    );
 }
 
 $saveResults = true;
 $feedbackType = $objExercise->getFeedbackType();
-if (!in_array($feedbackType, [EXERCISE_FEEDBACK_TYPE_DIRECT, EXERCISE_FEEDBACK_TYPE_POPUP])) {
-    //$saveResults = false;
-}
 
+ob_start();
 // Display and save questions
 ExerciseLib::displayQuestionListByAttempt(
     $objExercise,
@@ -194,6 +214,8 @@ ExerciseLib::displayQuestionListByAttempt(
     $saveResults,
     $remainingMessage
 );
+$pageContent .= ob_get_contents();
+ob_end_clean();
 
 //Unset session for clock time
 if (!empty($learnpath_id) && $saveResults) {
@@ -210,31 +232,33 @@ ExerciseLib::exercise_time_control_delete(
 
 ExerciseLib::delete_chat_exercise_session($exe_id);
 
-if (!in_array($origin, ['learnpath', 'embeddable'])) {
-    echo '<div class="question-return">';
-    echo Display::url(
-        get_lang('Return to Course Homepage'),
+if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
+    $pageBottom .= '<div class="question-return">';
+    $pageBottom .= Display::url(
+        get_lang('ReturnToCourseHomepage'),
         api_get_course_url(),
         ['class' => 'btn btn-primary']
     );
-    echo '</div>';
+    $pageBottom .= '</div>';
 
     if (api_is_allowed_to_session_edit()) {
         Exercise::cleanSessionVariables();
     }
-    Display::display_footer();
-} elseif ('embeddable' === $origin) {
+
+    $showFooter = true;
+} elseif (in_array($origin, ['embeddable', 'mobileapp'])) {
     if (api_is_allowed_to_session_edit()) {
         Exercise::cleanSessionVariables();
     }
 
     Session::write('attempt_remaining', $remainingMessage);
-    showEmbeddableFinishButton();
-    Display::display_reduced_footer();
+    $showFooter = false;
 } else {
     $lp_mode = Session::read('lp_mode');
-    $url = '../lp/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$learnpath_id.'&lp_item_id='.$learnpath_item_id.'&exeId='.$exercise_stat_info['exe_id'].'&fb_type='.$objExercise->getFeedbackType().'#atoc_'.$learnpath_item_id;
-    $href = 'fullscreen' === $lp_mode ? ' window.opener.location.href="'.$url.'" ' : ' top.location.href="'.$url.'"';
+    $url = '../lp/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$learnpath_id
+        .'&lp_item_id='.$learnpath_item_id.'&exeId='.$exercise_stat_info['exe_id']
+        .'&fb_type='.$objExercise->getFeedbackType().'#atoc_'.$learnpath_item_id;
+    $href = $lp_mode === 'fullscreen' ? ' window.opener.location.href="'.$url.'" ' : ' top.location.href="'.$url.'"';
 
     if (api_is_allowed_to_session_edit()) {
         Exercise::cleanSessionVariables();
@@ -242,14 +266,26 @@ if (!in_array($origin, ['learnpath', 'embeddable'])) {
     Session::write('attempt_remaining', $remainingMessage);
 
     // Record the results in the learning path, using the SCORM interface (API)
-    echo "<script>window.parent.API.void_save_asset('$total_score', '$max_score', 0, 'completed');</script>";
-    echo '<script type="text/javascript">'.$href.'</script>';
-    Display::display_reduced_footer();
+    $pageBottom .= "<script>window.parent.API.void_save_asset('$total_score', '$max_score', 0, 'completed');</script>";
+    $pageBottom .= '<script type="text/javascript">'.$href.'</script>';
+
+    $showFooter = false;
 }
+
+$template = new Template($nameTools, $showHeader, $showFooter);
+$template->assign('page_top', $pageTop);
+$template->assign('page_content', $pageContent);
+$template->assign('page_bottom', $pageBottom);
+$layout = $template->fetch(
+    $template->get_template('exercise/result.tpl')
+);
+$template->assign('actions', $pageActions);
+$template->assign('content', $layout);
+$template->display_one_col_template();
 
 function showEmbeddableFinishButton()
 {
-    echo '<script>
+    $js = '<script>
         $(function () {
             $(\'.btn-close-quiz\').on(\'click\', function () {    
                 window.parent.$(\'video:not(.skip), audio:not(.skip)\').get(0).play();
@@ -257,15 +293,17 @@ function showEmbeddableFinishButton()
         });
     </script>';
 
-    echo Display::tag(
+    $html = Display::tag(
         'p',
         Display::toolbarButton(
-            get_lang('End test'),
+            get_lang('GoBackToVideo'),
             '#',
-            'times',
+            'undo',
             'warning',
             ['role' => 'button', 'class' => 'btn-close-quiz']
         ),
-        ['class' => 'text-right']
+        ['class' => 'text-center']
     );
+
+    return $js.PHP_EOL.$html;
 }

@@ -75,26 +75,36 @@ if ($show_headers) {
     ];
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Result')];
     $this_section = SECTION_COURSES;
-    Display::display_header();
 } else {
     $htmlHeadXtra[] = '<style>
         body { background: none;}
     </style>';
-    Display::display_reduced_header();
+
+    if ($origin == 'mobileapp') {
+        echo '<div class="actions">';
+        echo '<a href="javascript:window.history.go(-1);">'.
+            Display::return_icon('back.png', get_lang('GoBackToQuestionList'), [], 32).'</a>';
+        echo '</div>';
+    }
 }
 
 $message = Session::read('attempt_remaining');
 Session::erase('attempt_remaining');
 
+ob_start();
 ExerciseLib::displayQuestionListByAttempt(
     $objExercise,
     $id,
     false,
     $message
 );
+$pageContent = ob_get_contents();
+ob_end_clean();
 
-if ($show_headers) {
-    Display::display_footer();
-} else {
-    Display::display_reduced_footer();
-}
+$template = new Template('', $show_headers, $show_headers);
+$template->assign('page_content', $pageContent);
+$layout = $template->fetch(
+    $template->get_template('exercise/result.tpl')
+);
+$template->assign('content', $layout);
+$template->display_one_col_template();

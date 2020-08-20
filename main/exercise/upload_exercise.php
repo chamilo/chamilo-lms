@@ -23,9 +23,13 @@ if (!$is_allowed_to_edit) {
 
 $this_section = SECTION_COURSES;
 $htmlHeadXtra[] = "<script>
-$(function(){
-    $('#user_custom_score').click(function() {
-        $('#options').toggle();
+$(function () {
+    $('#user_custom_score').on('change', function () {
+        if ($('#user_custom_score[type=\"checkbox\"]').prop('checked')) {
+            $('#options').removeClass('hidden')
+        } else {
+            $('#options').addClass('hidden')
+        }
     });
 });
 </script>";
@@ -110,7 +114,7 @@ function lp_upload_quiz_main()
         get_lang('UseCustomScoreForAllQuestions'),
         ['id' => 'user_custom_score']
     );
-    $form->addElement('html', '<div id="options" style="display:none">');
+    $form->addElement('html', '<div id="options" class="hidden">');
     $form->addElement('text', 'correct_score', get_lang('CorrectScore'));
     $form->addElement('text', 'incorrect_score', get_lang('IncorrectScore'));
     $form->addElement('html', '</div>');
@@ -427,8 +431,10 @@ function lp_upload_quiz_action_handling()
                                     $score,
                                     $id
                                 );
-
-                                $total += (float) $score;
+                                if ($correct) {
+                                    //only add the item marked as correct ( x )
+                                    $total += (float) $score;
+                                }
                                 $id++;
                             }
 

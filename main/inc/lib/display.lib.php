@@ -64,7 +64,11 @@ class Display
     ) {
         $origin = api_get_origin();
         $showHeader = true;
-        if (isset($origin) && $origin == 'learnpath') {
+        if (isset($origin) && ($origin == 'learnpath' || $origin == 'mobileapp')) {
+            $showHeader = false;
+        }
+
+        if (Session::read('origin') == 'mobileapp') {
             $showHeader = false;
         }
 

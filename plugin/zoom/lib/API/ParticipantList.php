@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\PluginBundle\Zoom\API;
@@ -10,8 +11,6 @@ use Exception;
  * List of past meeting instance participants.
  *
  * @see ParticipantListItem;
- *
- * @package Chamilo\PluginBundle\Zoom\API
  */
 class ParticipantList
 {

@@ -27,4 +27,6 @@ trait BaseMeetingTrait
 
     /** @var string description */
     public $agenda;
+    /** @var string description */
+    public $host_email;
 }

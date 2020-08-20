@@ -293,6 +293,7 @@ foreach ($userList as $userInfo) {
     $allUserInfo = DocumentManager::get_all_info_to_certificate(
         $studentId,
         $courseCode,
+        $sessionId,
         false
     );
 

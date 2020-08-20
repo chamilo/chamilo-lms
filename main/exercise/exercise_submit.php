@@ -79,7 +79,7 @@ if ('true' === api_get_setting('enable_record_audio')) {
 }
 
 $zoomOptions = api_get_configuration_value('quiz_image_zoom');
-if (isset($zoomOptions['options']) && !in_array($origin, ['embeddable', 'noheader'])) {
+if (isset($zoomOptions['options']) && !in_array($origin, ['embeddable', 'mobileapp'])) {
     $options = $zoomOptions['options'];
     $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'jquery.elevatezoom.js"></script>';
     $htmlHeadXtra[] = '<script>
@@ -879,17 +879,20 @@ $interbreadcrumb[] = [
 ];
 $interbreadcrumb[] = ['url' => '#', 'name' => $objExercise->selectTitle(true)];
 
-if (!in_array($origin, ['learnpath', 'embeddable'])) { //so we are not in learnpath tool
-    if (!api_is_allowed_to_session_edit()) {
-        Display::addFlash(
-            Display::return_message(get_lang('SessionIsReadOnly'), 'warning')
-        );
-    }
+if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) { //so we are not in learnpath tool
+    SessionManager::addFlashSessionReadOnly();
 
     Display::display_header(null, 'Exercises');
 } else {
     Display::display_reduced_header();
     echo '<div style="height:10px">&nbsp;</div>';
+}
+
+if ($origin == 'mobileapp') {
+    echo '<div class="actions">';
+    echo '<a href="javascript:window.history.go(-1);">'.
+        Display::return_icon('back.png', get_lang('GoBackToQuestionList'), [], 32).'</a>';
+    echo '</div>';
 }
 
 $show_quiz_edition = $objExercise->added_in_lp();
@@ -915,6 +918,13 @@ $is_visible_return = $objExercise->is_visible(
 
 if ($is_visible_return['value'] == false) {
     echo $is_visible_return['message'];
+    if (!in_array($origin, ['learnpath', 'embeddable'])) {
+        Display::display_footer();
+    }
+    exit;
+}
+
+if (!api_is_allowed_to_session_edit()) {
     if (!in_array($origin, ['learnpath', 'embeddable'])) {
         Display::display_footer();
     }
@@ -1323,7 +1333,12 @@ if (!empty($error)) {
                         $("#save_for_now_"+question_id).html(\''.
                             Display::return_icon('save.png', get_lang('Saved'), [], ICON_SIZE_SMALL).'\');
 
-                        window.location = url;
+                        // window.quizTimeEnding will be reset in exercise.class.php
+                        if (window.quizTimeEnding) {
+                            redirectExerciseToResult();
+                        } else {
+                            window.location = url;
+                        }
                     }
                 },
                 error: function() {
@@ -1387,6 +1402,8 @@ if (!empty($error)) {
         function validate_all() {
             save_now_all("validate");
         }
+
+        window.quizTimeEnding = false;
     </script>';
 
     echo '<form id="exercise_form" method="post" action="'.

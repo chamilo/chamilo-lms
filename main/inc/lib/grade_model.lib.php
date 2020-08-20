@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -79,10 +80,10 @@ class GradeModel extends Model
         // Setting the form elements
         $header = get_lang('Add');
 
-        if ($action == 'edit') {
+        if ($action === 'edit') {
             $header = get_lang('Modify');
         }
-        $id = isset($_GET['id']) ? intval($_GET['id']) : '';
+        $id = isset($_GET['id']) ? (int) $_GET['id'] : '';
 
         $form->addHeader($header);
         $form->addHidden('id', $id);
@@ -103,15 +104,14 @@ class GradeModel extends Model
 
         // Get components
         $nr_items = 2;
-        $max = 10;
-
+        $max = 20;
         // Setting the defaults
         $defaults = $this->get($id);
         if ($defaults) {
             $components = $this->get_components($defaults['id']);
         }
 
-        if ('edit' == $action) {
+        if ('edit' === $action) {
             if (!empty($components)) {
                 $nr_items = count($components);
             }
@@ -122,7 +122,6 @@ class GradeModel extends Model
         $renderer = &$form->defaultRenderer();
 
         $component_array = [];
-
         for ($i = 0; $i <= $max; $i++) {
             $counter = $i;
             $form->addElement('text', 'components['.$i.'][percentage]', null);
@@ -131,7 +130,7 @@ class GradeModel extends Model
             $form->addElement('hidden', 'components['.$i.'][id]', null);
 
             $template_percentage =
-            '<div id='.$i.' style="display: '.(($i <= $nr_items) ? 'inline' : 'none').';" class="form-group">                
+            '<div id='.$i.' style="display: '.(($i <= $nr_items) ? 'inline' : 'none').';" class="form-group">
                 <label for="" class="col-sm-2 control-label">
                     {label}
                 </label>
@@ -168,11 +167,11 @@ class GradeModel extends Model
             $component_array[] = 'components['.$i.'][percentage]';
         }
 
-        //New rule added in the formvalidator compare_fields that filters a group of fields in order to compare with the wanted value
+        // New rule added in the formvalidator compare_fields that filters a group of fields in order to compare with the wanted value
         $form->addRule($component_array, get_lang('AllMustWeight100'), 'compare_fields', '==@100');
         $form->addElement('label', '', get_lang('AllMustWeight100'));
 
-        if ($action == 'edit') {
+        if ($action === 'edit') {
             $form->addButtonUpdate(get_lang('Modify'));
         } else {
             $form->addButtonCreate(get_lang('Add'));
@@ -326,8 +325,6 @@ class GradeModelComponents extends Model
      */
     public function save($params, $showQuery = false)
     {
-        $id = parent::save($params, $showQuery);
-
-        return $id;
+        return parent::save($params, $showQuery);
     }
 }

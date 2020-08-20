@@ -3442,19 +3442,28 @@ class UserManager
 
         $sessionData = [];
         // First fill $sessionData with student sessions
-        foreach ($sessionDataStudent as $row) {
-            $sessionData[$row['id']] = $row;
+        if (!empty($sessionDataStudent)) {
+            foreach ($sessionDataStudent as $row) {
+                $sessionData[$row['id']] = $row;
+            }
         }
+
         // Overwrite session data of the user as a student with session data
         // of the user as a coach.
         // There shouldn't be such duplicate rows, but just in case...
-        foreach ($sessionDataCoach as $row) {
-            $sessionData[$row['id']] = $row;
+        if (!empty($sessionDataCoach)) {
+            foreach ($sessionDataCoach as $row) {
+                $sessionData[$row['id']] = $row;
+            }
         }
 
         $collapsable = api_get_configuration_value('allow_user_session_collapsable');
         $extraField = new ExtraFieldValue('session');
         $collapsableLink = api_get_path(WEB_PATH).'user_portal.php?action=collapse_session';
+
+        if (empty($sessionData)) {
+            return [];
+        }
 
         $categories = [];
         foreach ($sessionData as $row) {
@@ -3462,10 +3471,7 @@ class UserManager
             $coachList = SessionManager::getCoachesBySession($session_id);
             $categoryStart = $row['session_category_date_start'] ? $row['session_category_date_start']->format('Y-m-d') : '';
             $categoryEnd = $row['session_category_date_end'] ? $row['session_category_date_end']->format('Y-m-d') : '';
-            $courseList = self::get_courses_list_by_session(
-                $user_id,
-                $session_id
-            );
+            $courseList = self::get_courses_list_by_session($user_id, $session_id);
             $daysLeft = SessionManager::getDayLeftInSession($row, $user_id);
 
             // User portal filters:
@@ -3847,6 +3853,7 @@ class UserManager
         session_rel_course_user table if there are courses registered
         to our user or not */
         $sql = "SELECT DISTINCT
+                    c.title,
                     c.visibility,
                     c.id as real_id,
                     c.code as course_code,
@@ -3884,6 +3891,7 @@ class UserManager
 
         if (api_is_allowed_to_create_course()) {
             $sql = "SELECT DISTINCT
+                        c.title,
                         c.visibility,
                         c.id as real_id,
                         c.code as course_code,
@@ -5663,15 +5671,17 @@ class UserManager
      * Gets the info about a gradebook certificate for a user by course.
      *
      * @param string $course_code The course code
+     * @param int    $session_id
      * @param int    $user_id     The user id
      *
      * @return array if there is not information return false
      */
-    public static function get_info_gradebook_certificate($course_code, $user_id)
+    public static function get_info_gradebook_certificate($course_code, $session_id, $user_id)
     {
         $tbl_grade_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
         $tbl_grade_category = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-        $session_id = api_get_session_id();
+        $session_id = (int) $session_id;
+        $user_id = (int) $user_id;
 
         if (empty($session_id)) {
             $session_condition = ' AND (session_id = "" OR session_id = 0 OR session_id IS NULL )';
@@ -5685,7 +5695,7 @@ class UserManager
                     WHERE
                         course_code = "'.Database::escape_string($course_code).'" '.$session_condition.'
                     LIMIT 1
-                ) AND user_id='.intval($user_id);
+                ) AND user_id='.$user_id;
 
         $rs = Database::query($sql);
         if (Database::num_rows($rs) > 0) {

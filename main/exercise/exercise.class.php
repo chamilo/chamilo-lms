@@ -2252,15 +2252,11 @@ class Exercise
                 $form->addGroup($group, null, get_lang('ShowPreviousButton'));
             }
 
-            // Attempts
-            $attempt_option = range(0, 10);
-            $attempt_option[0] = get_lang('Infinite');
-
             $form->addElement(
-                'select',
+                'number',
                 'exerciseAttempts',
                 get_lang('ExerciseAttempts'),
-                $attempt_option,
+                null,
                 ['id' => 'exerciseAttempts']
             );
 
@@ -2564,8 +2560,6 @@ class Exercise
 
     public function setResultFeedbackGroup(FormValidator $form, $checkFreeze = true)
     {
-        $freeze = false;
-
         // Feedback type.
         $feedback = [];
         $feedback[] = $form->createElement(
@@ -2577,6 +2571,17 @@ class Exercise
             [
                 'id' => 'exerciseType_'.EXERCISE_FEEDBACK_TYPE_END,
                 'onclick' => 'check_feedback()',
+            ]
+        );
+
+        $noFeedBack = $form->createElement(
+            'radio',
+            'exerciseFeedbackType',
+            null,
+            get_lang('NoFeedback'),
+            EXERCISE_FEEDBACK_TYPE_EXAM,
+            [
+                'id' => 'exerciseType_'.EXERCISE_FEEDBACK_TYPE_EXAM,
             ]
         );
 
@@ -2606,8 +2611,10 @@ class Exercise
 
         if ($freeze) {
             $direct->freeze();
+            $noFeedBack->freeze();
         }
 
+        $feedback[] = $noFeedBack;
         $feedback[] = $direct;
 
         $feedback[] = $form->createElement(
@@ -3408,6 +3415,13 @@ class Exercise
     public function showTimeControlJS($timeLeft)
     {
         $timeLeft = (int) $timeLeft;
+        $script = 'redirectExerciseToResult();';
+        if (ALL_ON_ONE_PAGE == $this->type) {
+            $script = "save_now_all('validate');";
+        } elseif (ONE_PER_PAGE == $this->type) {
+            $script = 'window.quizTimeEnding = true;
+                $(\'[name="save_now"]\').trigger(\'click\');';
+        }
 
         return "<script>
             function openClockWarning() {
@@ -3439,7 +3453,7 @@ class Exercise
 
             function send_form() {
                 if ($('#exercise_form').length) {
-                    save_now_all('validate');
+                    $script
                 } else {
                     // In exercise_reminder.php
                     final_submit();
@@ -8293,10 +8307,15 @@ class Exercise
     }
 
     /**
-     * @param int $start
-     * @param int $length
+     * Get the question IDs from quiz_rel_question for the current quiz,
+     * using the parameters as the arguments to the SQL's LIMIT clause.
+     * Because the exercise_id is known, it also comes with a filter on
+     * the session, so sessions are not specified here.
      *
-     * @return array
+     * @param int $start  At which question do we want to start the list
+     * @param int $length Up to how many results we want
+     *
+     * @return array A list of question IDs
      */
     public function getQuestionForTeacher($start = 0, $length = 10)
     {

@@ -60,7 +60,7 @@ if (isset($_GET['action'])) {
                     DocumentManager::file_send_for_download(
                         $tempZipFile,
                         true,
-                        get_lang('Surveys').'-'.api_get_course_id().'-'.api_get_local_time().'.zip'
+                        get_lang('SurveysWordInASCII').'-'.api_get_course_id().'-'.api_get_local_time().'.zip'
                     );
                     unlink($tempZipFile);
                     exit;

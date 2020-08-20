@@ -15,7 +15,7 @@ use Exception;
 /**
  * Class RecordingEntity.
  *
- * @ORM\Entity(repositoryClass="Chamilo\PluginBundle\Zoom\RecordingEntityRepository")
+ * @ORM\Entity(repositoryClass="Chamilo\PluginBundle\Zoom\RecordingRepository")
  * @ORM\Table(
  *     name="plugin_zoom_recording",
  *     indexes={
@@ -24,7 +24,7 @@ use Exception;
  * )
  * @ORM\HasLifecycleCallbacks
  */
-class RecordingEntity
+class Recording
 {
     /** @var DateTime */
     public $startDateTime;
@@ -40,29 +40,37 @@ class RecordingEntity
 
     /**
      * @var string
-     * @ORM\Column(type="string")
+     *
+     * @ORM\Column(type="integer")
      * @ORM\Id
+     * @ORM\GeneratedValue()
      */
-    private $uuid;
-
-    /**
-     * @var MeetingEntity
-     * @ORM\ManyToOne(
-     *     targetEntity="MeetingEntity",
-     *     inversedBy="recordings",
-     * )
-     * @ORM\JoinColumn(name="meeting_id")
-     */
-    private $meeting;
+    protected $id;
 
     /**
      * @var string
+     *
+     * @ORM\Column(type="string")
+     */
+    protected $uuid;
+
+    /**
+     * @var Meeting
+     *
+     * @ORM\ManyToOne(targetEntity="Meeting", inversedBy="recordings")
+     * @ORM\JoinColumn(name="meeting_id")
+     */
+    protected $meeting;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(type="text", name="recording_meeting_json", nullable=true)
      */
-    private $recordingMeetingJson;
+    protected $recordingMeetingJson;
 
     /** @var RecordingMeeting */
-    private $recordingMeeting;
+    protected $recordingMeeting;
 
     /**
      * @param $name
@@ -89,7 +97,7 @@ class RecordingEntity
     }
 
     /**
-     * @return MeetingEntity
+     * @return Meeting
      */
     public function getMeeting()
     {
@@ -107,7 +115,7 @@ class RecordingEntity
     }
 
     /**
-     * @param MeetingEntity $meeting
+     * @param Meeting $meeting
      *
      * @return $this
      */
@@ -124,19 +132,19 @@ class RecordingEntity
      *
      * @throws Exception
      *
-     * @return RecordingEntity
+     * @return Recording
      */
     public function setRecordingMeeting($recordingMeeting)
     {
-        if (is_null($this->uuid)) {
+        if (null === $this->uuid) {
             $this->uuid = $recordingMeeting->uuid;
         } elseif ($this->uuid !== $recordingMeeting->uuid) {
             throw new Exception('the RecordingEntity identifier differs from the RecordingMeeting identifier');
         }
-        if (is_null($this->meeting)) {
-            $this->meeting = Database::getManager()->getRepository(MeetingEntity::class)->find($recordingMeeting->id);
-        // $this->meeting remains null when the remote RecordingMeeting refers to a deleted meeting
-        } elseif ($this->meeting->getId() != $recordingMeeting->id) {
+        if (null === $this->meeting) {
+            $this->meeting = Database::getManager()->getRepository(Meeting::class)->find($recordingMeeting->id);
+        } elseif ($this->meeting->getMeetingId() != $recordingMeeting->id) {
+            // $this->meeting remains null when the remote RecordingMeeting refers to a deleted meeting.
             throw new Exception('The RecordingEntity meeting id differs from the RecordingMeeting meeting id');
         }
         $this->recordingMeeting = $recordingMeeting;
@@ -151,7 +159,7 @@ class RecordingEntity
      */
     public function postLoad()
     {
-        if (!is_null($this->recordingMeetingJson)) {
+        if (null !== $this->recordingMeetingJson) {
             $this->recordingMeeting = RecordingMeeting::fromJson($this->recordingMeetingJson);
         }
         $this->initializeExtraProperties();
@@ -162,7 +170,7 @@ class RecordingEntity
      */
     public function preFlush()
     {
-        if (!is_null($this->recordingMeeting)) {
+        if (null !== $this->recordingMeeting) {
             $this->recordingMeetingJson = json_encode($this->recordingMeeting);
         }
     }

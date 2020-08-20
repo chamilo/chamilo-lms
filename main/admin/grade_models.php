@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 $cidReset = true;
@@ -8,11 +9,11 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
 
-if (api_get_setting('gradebook_enable_grade_model') != 'true') {
+if (api_get_setting('gradebook_enable_grade_model') !== 'true') {
     api_not_allowed(true);
 }
 
-//Add the JS needed to use the jqgrid
+// Add the JS needed to use the jqgrid
 $htmlHeadXtra[] = api_get_jqgrid_js();
 
 // setting breadcrumbs
@@ -26,7 +27,7 @@ $token = Security::get_token();
 if ($action === 'add') {
     $interbreadcrumb[] = ['url' => 'grade_models.php', 'name' => get_lang('GradeModel')];
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Add')];
-} elseif ($action == 'edit') {
+} elseif ($action === 'edit') {
     $interbreadcrumb[] = ['url' => 'grade_models.php', 'name' => get_lang('GradeModel')];
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Edit')];
 } else {
@@ -50,11 +51,8 @@ function plusItem(item) {
 function minItem(item) {
     if (item != 1) {
         document.getElementById(item).style.display = "none";
-        //document.getElementById("txta-"+item).value = "";
-        //document.getElementById("txtb-"+item).value = "";
         document.getElementById("plus-"+item).style.display = "inline";
         document.getElementById("min-"+(item-1)).style.display = "inline";
-        //document.getElementById("txta-"+(item-1)).value = "100";
         $("input").removeClass("form-control");
 	}
 	if (item = 1) {
@@ -66,7 +64,7 @@ function minItem(item) {
 
 Display::display_header();
 
-//jqgrid will use this URL to do the selects
+// jqgrid will use this URL to do the selects
 $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_grade_models';
 
 //The order is important you need to check the the $column variable in the model.ajax.php file
@@ -201,9 +199,9 @@ switch ($action) {
         $obj->display();
         break;
 }
-echo '<script> 
-$(function () { 
-    $("input").removeClass("form-control"); 
-}); 
+echo '<script>
+$(function () {
+    $("input").removeClass("form-control");
+});
 </script>';
 Display::display_footer();

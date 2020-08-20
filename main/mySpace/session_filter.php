@@ -1,5 +1,7 @@
 <?php
+
 /* For licensing terms, see /license.txt */
+
 /**
  * Report for current courses followed by the user.
  */
@@ -173,25 +175,25 @@ $htmlHeadXtra[] = "<script>
         $('#export_pdf').click(function(e) {
             e.preventDefault();
             e.stopPropagation();
-        
+
             var session_id = $('#session-id').val();
             var date_begin = $('#date-begin').val();
             var date_end = $('#date-end').val();
-        
+
             if (confirm('".$plugin->get_lang('OnlyCustomCertificates')."')) {
                 var url = '".api_get_path(WEB_PLUGIN_PATH)."' +
                     'customcertificate/src/export_pdf_all_in_one.php?' +
                     '".$urlParam."&' +
                     'export_pdf=1';
-                        
+
                 $(location).attr('href',url);
             }
         });
-                        
+
         $('#export_zip').click(function(e) {
             e.preventDefault();
             e.stopPropagation();
-                        
+
             var session_id = $('#session-id').val();
             var date_begin = $('#date-begin').val();
             var date_end = $('#date-end').val();
@@ -200,7 +202,7 @@ $htmlHeadXtra[] = "<script>
                     'customcertificate/src/export_pdf_all_in_one.php?' +
                     '".$urlParam."&' +
                     'export_zip=1';
-                        
+
                 $(location).attr('href',url);
             }
         });
@@ -211,7 +213,7 @@ $innerJoinSessionRelUser = '';
 $whereCondictionDRH = '';
 $whereCondictionMultiUrl = '';
 if (api_is_drh()) {
-    $innerJoinSessionRelUser = "INNER JOIN $tblSessionRelUser as session_rel_user 
+    $innerJoinSessionRelUser = "INNER JOIN $tblSessionRelUser as session_rel_user
                                 ON (s.id = session_rel_user.session_id)";
     $whereCondictionDRH = "WHERE session_rel_user.user_id = ".api_get_user_id();
     $whereCondictionMultiUrl = " AND session_rel_user.user_id = ".api_get_user_id();
@@ -314,10 +316,7 @@ if (count($certificateList) == 0) {
             <table class="table data_table">
                 <tbody>';
 
-        $list = GradebookUtils::get_list_gradebook_certificates_by_user_id(
-            $value['user_id'],
-            $categoryId
-        );
+        $list = GradebookUtils::get_list_gradebook_certificates_by_user_id($value['user_id'], $categoryId);
         foreach ($list as $valueCertificate) {
             echo '<tr>';
             echo '<td width="50%">'.get_lang('Score').' : '.$valueCertificate['score_certificate'].'</td>';

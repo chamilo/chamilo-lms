@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\PluginBundle\Zoom\API;
@@ -10,8 +11,6 @@ use Firebase\JWT\JWT;
  * Class JWTClient.
  *
  * @see https://marketplace.zoom.us/docs/guides/auth/jwt
- *
- * @package Chamilo\PluginBundle\Zoom
  */
 class JWTClient extends Client
 {

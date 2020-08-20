@@ -88,3 +88,4 @@ AddType application/font-woff .woff .woff2
   ExpiresActive On
   ExpiresByType application/font-woff "access plus 1 month"
 </IfModule>
+

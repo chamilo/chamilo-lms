@@ -2200,6 +2200,15 @@ function api_get_course_entity($courseId = 0)
     return Database::getManager()->getRepository('ChamiloCoreBundle:Course')->find($courseId);
 }
 
+function api_get_group_entity($id = 0)
+{
+    if (empty($id)) {
+        $id = api_get_group_id();
+    }
+
+    return Database::getManager()->getRepository('ChamiloCourseBundle:CGroupInfo')->find($id);
+}
+
 /**
  * @param int $id
  *
@@ -3739,7 +3748,7 @@ function api_is_anonymous($user_id = null, $db_check = false)
 
     if ($db_check) {
         $info = api_get_user_info($user_id);
-        if ($info['status'] == ANONYMOUS) {
+        if (false === $info || $info['status'] == ANONYMOUS) {
             return true;
         }
     }
@@ -7346,7 +7355,7 @@ function api_check_browscap()
  */
 function api_get_js($file)
 {
-    return '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/'.$file.'"></script>'."\n";
+    return '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/'.$file.'"></script>'."\n";
 }
 
 /**
@@ -7356,7 +7365,7 @@ function api_get_js($file)
  */
 function api_get_asset($file)
 {
-    return '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH).'assets/'.$file.'"></script>'."\n";
+    return '<script src="'.api_get_path(WEB_PUBLIC_PATH).'assets/'.$file.'"></script>'."\n";
 }
 
 /**
@@ -8098,7 +8107,7 @@ function api_coach_can_edit_view_results($courseId = null, $session_id = null)
  */
 function api_get_js_simple($file)
 {
-    return '<script type="text/javascript" src="'.$file.'"></script>'."\n";
+    return '<script src="'.$file.'"></script>'."\n";
 }
 
 function api_set_settings_and_plugins()

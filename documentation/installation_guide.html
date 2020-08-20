@@ -42,7 +42,7 @@
 <p>This guide explains how to install Chamilo FREE. Please read this fully before proceeding with the installation.</p>
 <p>Spanish: También puede leer <a href="installation_guide_es_ES.html">esta guía de instalación en español</a>.</p>
 <p>French: Vous pouvez aussi lire <a href="installation_guide_fr_FR.html">ce guide d'installation en français</a>.</p>
-<p>Italian: You can also read <a href="installation_guide_it_IT.html">this guide in Italian</a>.</p>
+<p>Italiano: puoi leggere <a href="installation_guide_it_IT.html">questa guida anche in italiano</a>.</p>
 
 <h2><b>Contents</b></h2>
 <ol>
@@ -52,7 +52,7 @@
   <li><a href="#4._Troubleshooting">Troubleshooting</a></li>
   <li><a href="#5._Administration_section">Administration section</a></li>
   <li><a href="#6._LDAP">LDAP&nbsp;</a></li>
-  <li><a href="#9._WIRIS_mathematical_formulas">Mathematical formulas with WIRIS</a></li>
+  <li><a href="#9._WIRIS_mathematical_formulas">Mathematical formulas with WIRIS MathType</a></li>
   <li><a href="#10._Xapian_fulltext_indexing">Full-text indexation with Xapian</a></li>
   <li><a href="#11._Chamilo_rapid_ppt_conversion">Chamilo Rapid - PPT conversion system</a></li>
   <li><a href="#12._Setting_cron_up">Setting chronological tasks</a></li>
@@ -78,9 +78,10 @@ Chamilo is mainly a LMS running (the so called <span style="font-weight: bold;">
 <ul>
 <li><span style="font-weight: bold;">Apache 2.2+</span></li>
 <li><span style="font-weight: bold;">MySQL 5.6+ or MariaDB 5+</span></li>
-<li><span style="font-weight: bold;">PHP 5.6, 7.1, 7.2 or 7.3</span></li>
+<li><span style="font-weight: bold;">PHP 5.6 (not recommended), 7.2 (recommended) or 7.3</span></li>
 </ul>
-<br />
+    Note: with PHP 7.3, you need to disable PHP warnings or the display_errors setting, as otherwise one of the libraries we use will send warning messages pretty much constantly. This will be fixed in our next versions, which will remove compatibility with PHP 5.6.
+<br /><br />
 All these pieces of software are free software and freely available. <br /><br />
 To run Chamilo <span style="font-weight: bold;">LMS</span> on your server, you need to install WAMP, LAMP or MAMP:
 <ul>
@@ -330,7 +331,7 @@ As this is only a minor version change from previous 1.11.* versions of Chamilo,
     older version's directory).</li>
   <li> clean your app/cache/twig directory: delete all the contents *in* this directory (do NOT remove the directory itself, only its contents!).
        It will all be re-generated.
-      You can also delete the contents of this directory through the "Archive directory cleanup" option in the "System" box of the Administration page.</li>
+      You can also delete the contents of this directory through the "Cleanup of cache and temporary files " option in the "System" box of the Administration page.</li>
   <li> you're done! No other upgrade procedure is required</li>
 </ul>
 <h3>3.2 Upgrading from Chamilo 1.10.x</h3>
@@ -562,9 +563,15 @@ that criteria</li>
 </ul>
 
 <hr style="width: 100%; height: 2px;" />
-<h2><a name="9._WIRIS_mathematical_formulas"></a>7. Mathematical formulas with WIRIS</h2>
-<p>Installing this plugin you get WIRIS editor and WIRIS CAS. <br/>
-This activation will not be completed unless you have previously downloaded the <a href="http://www.wiris.com/plugins/ckeditor/download" target="_blank">PHP plugin for CKeditor WIRIS</a> and unzipped its contents into the main/inc/lib/ckeditor/editor/plugins/ckeditor_wiris/ directory. <br/>This is necessary because Wiris is proprietary software and its services are <a href="http://www.wiris.com/store/who-pays" target="_blank">commercial</a>. To make adjustments to the plugin, edit configuration.ini file or replace his content by configuration.ini.default Chamilo file.</p>
+<h2><a name="9._WIRIS_mathematical_formulas"></a>7. Mathematical formulas with WIRIS MathType</h2>
+<p>Installing this plugin you get WIRIS MathType. <br/>
+This activation will not be completed unless you have previously downloaded
+    the <a href="http://www.wiris.com/plugins/ckeditor/download" target="_blank">PHP plugin for CKeditor WIRIS</a>
+    and unzipped its contents into the main/inc/lib/ckeditor/editor/plugins/ckeditor_wiris/ directory.<br/><br />
+    This is necessary because Wiris is proprietary software and its services are
+    <a href="http://www.wiris.com/store/who-pays" target="_blank">commercial</a>.
+    To make adjustments to the plugin, edit configuration.ini file or replace his content by
+    configuration.ini.default Chamilo file.</p>
 
 <hr style="width: 100%; height: 2px;" />
 <h2><a name="10._Xapian_fulltext_indexing"></a>8. Full-text indexation with Xapian</h2>

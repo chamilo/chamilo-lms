@@ -657,7 +657,8 @@ if ($form->validate()) {
     if ($is_certificate_mode) {
         $all_information_by_create_certificate = DocumentManager::get_all_info_to_certificate(
             api_get_user_id(),
-            api_get_course_id()
+            api_get_course_id(),
+            api_get_session_id()
         );
 
         $str_info = '';

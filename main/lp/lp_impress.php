@@ -48,10 +48,11 @@ $course_code = api_get_course_id();
 $course_id = api_get_course_int_id();
 $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/impress/impress-demo.css');
 $list = $lp->get_toc();
+$content = '';
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true, false, false);
 if ($is_allowed_to_edit) {
-    echo '<div style="position: fixed; top: 0px; left: 0px; pointer-events: auto;width:100%">';
+    $content .= '<div style="position: fixed; top: 0px; left: 0px; pointer-events: auto;width:100%">';
     global $interbreadcrumb;
     $interbreadcrumb[] = [
         'url' => 'lp_controller.php?action=list&isStudentView=false&'.api_get_cidreq(),
@@ -62,21 +63,22 @@ if ($is_allowed_to_edit) {
         'name' => $lp->getNameNoTags(),
     ];
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Preview')];
-    echo return_breadcrumb($interbreadcrumb, null, null);
-    echo '</div>';
+    $content .= return_breadcrumb($interbreadcrumb, null, null);
+    $content .= '</div>';
 }
 
 $html = '';
 $step = 1;
 foreach ($list as $toc) {
+    $stepId = "$step-".api_replace_dangerous_char($toc['title']);
     $x = 1000 * $step;
-    $html .= '<div id="step-'.$step.'" class="step slide" data-x="'.$x.'" data-y="-1500"  >';
+    $html .= '<div id="'.strtolower($stepId).'" title="'.$toc['title'].'" class="step slide" data-x="'.$x.'" data-y="-1500"  >';
     $html .= '<div class="impress-content">';
     $src = $lp->get_link('http', $toc['id']);
     if ($toc['type'] !== 'dir') {
         //just showing the src in a iframe ...
         $html .= '<h2>'.$toc['title'].'</h2>';
-        $html .= '<iframe border="0" frameborder="0" style="width:100%;height:600px" src="'.$src.'"></iframe>';
+        $html .= '<iframe border="0" frameborder="0" src="'.$src.'"></iframe>';
     } else {
         $html .= "<div class='impress-title'>";
         $html .= '<h1>'.$toc['title'].'</h1>';
@@ -92,6 +94,6 @@ $tool_name = get_lang('ViewModeImpress');
 $tpl = new Template($tool_name, false, false, true);
 $tpl->assign('html', $html);
 $templateName = $tpl->get_template('learnpath/impress.tpl');
-$content = $tpl->fetch($templateName);
+$content .= $tpl->fetch($templateName);
 $tpl->assign('content', $content);
-$tpl->display_one_col_template();
+$tpl->display_no_layout_template();

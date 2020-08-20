@@ -453,6 +453,7 @@ class MessageManager
      * @param array  $smsParameters
      * @param bool   $checkCurrentAudioId
      * @param bool   $forceTitleWhenSendingEmail force the use of $title as subject instead of "You have a new message"
+     * @param int    $status                     Message status
      *
      * @return bool
      */

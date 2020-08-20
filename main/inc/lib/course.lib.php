@@ -2314,13 +2314,13 @@ class CourseManager
         $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
         $sql = "SELECT DISTINCT
-                    u.user_id,
+                    u.id as user_id,
                     u.lastname,
                     u.firstname,
                     u.username
                 FROM $tbl_user u
                 INNER JOIN $tbl_session_course_user scu
-                ON (u.user_id = scu.user_id)
+                ON (u.id = scu.user_id)
                 WHERE
                     scu.session_id = $session_id AND
                     scu.c_id = $courseId AND
@@ -6106,7 +6106,7 @@ class CourseManager
     public static function getCourseUsers($filterByActive = null)
     {
         // This would return only the users from real courses:
-        $userList = self::get_user_list_from_course_code(
+        return self::get_user_list_from_course_code(
             api_get_course_id(),
             api_get_session_id(),
             null,
@@ -6120,8 +6120,6 @@ class CourseManager
             [],
             $filterByActive
         );
-
-        return $userList;
     }
 
     /**
@@ -6154,7 +6152,7 @@ class CourseManager
      *
      * @return HTML_QuickForm_element
      */
-    public static function addUserGroupMultiSelect(&$form, $alreadySelected)
+    public static function addUserGroupMultiSelect(&$form, $alreadySelected, $addShortCut = false)
     {
         $userList = self::getCourseUsers(true);
         $groupList = self::getCourseGroups();
@@ -6170,13 +6168,50 @@ class CourseManager
             $result[$content['value']] = $content['content'];
         }
 
-        return $form->addElement(
+        $multiple = $form->addElement(
             'advmultiselect',
             'users',
             get_lang('Users'),
             $result,
-            ['select_all_checkbox' => true]
+            ['select_all_checkbox' => true, 'id' => 'users']
         );
+
+        $sessionId = api_get_session_id();
+        if ($addShortCut && empty($sessionId)) {
+            $addStudents = [];
+            foreach ($userList as $user) {
+                if ($user['status_rel'] == STUDENT) {
+                    $addStudents[] = $user['user_id'];
+                }
+            }
+            if (!empty($addStudents)) {
+                $form->addHtml(
+                    '<script>
+                    $(function() {
+                        $("#add_students").on("click", function() {
+                            var addStudents = '.json_encode($addStudents).';
+                            $.each(addStudents, function( index, value ) {
+                                var option = $("#users option[value=\'USER:"+value+"\']");
+                                if (option.val()) {
+                                    $("#users_to").append(new Option(option.text(), option.val()))
+                                    option.remove();
+                                }
+                            });
+
+                            return false;
+                        });
+                    });
+                    </script>'
+                );
+
+                $form->addLabel(
+                    '',
+                    Display::url(get_lang('AddStudent'), '#', ['id' => 'add_students', 'class' => 'btn btn-primary'])
+                );
+            }
+        }
+
+        return $multiple;
     }
 
     /**

@@ -2,23 +2,24 @@
 
 /* For license terms, see /license.txt */
 
-use Chamilo\PluginBundle\Zoom\API\MeetingInfoGet;
 use Chamilo\PluginBundle\Zoom\API\RecordingMeeting;
-use Chamilo\PluginBundle\Zoom\MeetingEntity;
-use Chamilo\PluginBundle\Zoom\RecordingEntity;
-use Chamilo\PluginBundle\Zoom\RegistrantEntity;
+use Chamilo\PluginBundle\Zoom\Meeting;
+use Chamilo\PluginBundle\Zoom\MeetingActivity;
+use Chamilo\PluginBundle\Zoom\Recording;
+use Symfony\Component\HttpFoundation\Response;
 
 if ('POST' !== $_SERVER['REQUEST_METHOD']) {
-    http_response_code(404); // Not found
+    http_response_code(Response::HTTP_NOT_FOUND); // Not found
     exit;
 }
 
-$authorizationHeaderValue = apache_request_headers()['authorization']; // TODO handle non-apache installations
+// @todo handle non-apache installations
+$authorizationHeaderValue = apache_request_headers()['Authorization'];
 
-require __DIR__.'/config.php';
+require_once __DIR__.'/config.php';
 
 if (api_get_plugin_setting('zoom', 'verificationToken') !== $authorizationHeaderValue) {
-    http_response_code(401); // Unauthorized
+    http_response_code(Response::HTTP_UNAUTHORIZED);
     exit;
 }
 
@@ -26,76 +27,125 @@ $body = file_get_contents('php://input');
 $decoded = json_decode($body);
 if (is_null($decoded) || !is_object($decoded) || !isset($decoded->event) || !isset($decoded->payload->object)) {
     error_log(sprintf('Did not recognize event notification: %s', $body));
-    http_response_code(422); // Unprocessable Entity
+    http_response_code(Response::HTTP_UNPROCESSABLE_ENTITY);
     exit;
 }
+
 $object = $decoded->payload->object;
 list($objectType, $action) = explode('.', $decoded->event);
+
+$em = Database::getManager();
+
+$meetingRepository = $em->getRepository(Meeting::class);
+$meeting = null;
+if ($object->id) {
+    /** @var Meeting $meeting */
+    $meeting = $meetingRepository->findOneBy(['meetingId' => $object->id]);
+}
+
+if (null === $meeting) {
+    error_log("Meeting not found");
+    error_log(sprintf('Event "%s" on %s was unhandled: %s', $action, $objectType, $body));
+    http_response_code(Response::HTTP_NOT_FOUND);
+    exit;
+}
+
+$activity = new MeetingActivity();
+$activity->setName($action);
+$activity->setType($objectType);
+$activity->setEvent(json_encode($object));
+
 switch ($objectType) {
     case 'meeting':
-        $meetingRepository = $entityManager->getRepository(MeetingEntity::class);
-        $registrantRepository = $entityManager->getRepository(RegistrantEntity::class);
+        error_log('Meeting '.$action.' - '.$meeting->getId());
+        error_log(print_r($object, 1));
+
         switch ($action) {
             case 'deleted':
-                $meetingEntity = $meetingRepository->find($object->id);
-                if (!is_null($meetingEntity)) {
-                    $entityManager->remove($meetingEntity);
-                }
+                $em->remove($meeting);
                 break;
             case 'ended':
             case 'started':
-                $entityManager->persist(
-                    (
-                    $meetingRepository->find($object->id)->setStatus($action)
-                        ?: (new MeetingEntity())->setMeetingInfoGet(MeetingInfoGet::fromObject($object))
-                    )
-                );
-                $entityManager->flush();
+                $meeting->setStatus($action);
+                $meeting->addActivity($activity);
+                $em->persist($meeting);
                 break;
-            case 'participant_joined':
-            case 'participant_left':
-                $registrant = $registrantRepository->find($object->participant->id);
-                if (!is_null($registrant)) {
-                    // TODO log attendance
-                }
-                break;
-            case 'alert':
             default:
-                error_log(sprintf('Event "%s" on %s was unhandled: %s', $action, $objectType, $body));
-                http_response_code(501); // Not Implemented
+                $meeting->addActivity($activity);
+                $em->persist($meeting);
+                break;
         }
+        $em->flush();
         break;
     case 'recording':
-        $recordingRepository = $entityManager->getRepository(RecordingEntity::class);
+        $recordingRepository = $em->getRepository(Recording::class);
+
+        $recordingEntity = null;
+        if ($object->uuid) {
+            /** @var Recording $recordingEntity */
+            $recordingEntity = $recordingRepository->findOneBy(['uuid' => $object->uuid, 'meeting' => $meeting]);
+        }
+
+        error_log("Recording: $action");
+        error_log(print_r($object, 1));
+
         switch ($action) {
             case 'completed':
-                $entityManager->persist(
-                    (new RecordingEntity())->setRecordingMeeting(RecordingMeeting::fromObject($object))
-                );
-                $entityManager->flush();
+                $recording = new Recording();
+                $recording->setRecordingMeeting(RecordingMeeting::fromObject($object));
+                $recording->setMeeting($meeting);
+                $meeting->addActivity($activity);
+                $em->persist($meeting);
+                $em->persist($recording);
+                $em->flush();
                 break;
             case 'recovered':
-                if (is_null($recordingRepository->find($object->uuid))) {
-                    $entityManager->persist(
-                        (new RecordingEntity())->setRecordingMeeting(RecordingMeeting::fromObject($object))
+                /*if (null === $recordingEntity) {
+                    $em->persist(
+                        (new Recording())->setRecordingMeeting(RecordingMeeting::fromObject($object))
                     );
-                    $entityManager->flush();
-                }
+                    $em->flush();
+                }*/
                 break;
             case 'trashed':
             case 'deleted':
-                $recordingEntity = $recordingRepository->find($object->uuid);
-                if (!is_null($recordingEntity)) {
-                    $entityManager->remove($recordingEntity);
-                    $entityManager->flush();
+                $meeting->addActivity($activity);
+                if (null !== $recordingEntity) {
+                    $recordMeeting = $recordingEntity->getRecordingMeeting();
+                    $recordingToDelete = RecordingMeeting::fromObject($object);
+                    $files = [];
+                    if ($recordingToDelete->recording_files) {
+                        foreach ($recordingToDelete->recording_files as $fileToDelete) {
+                            foreach ($recordMeeting->recording_files as $file) {
+                                if ($fileToDelete->id != $file->id) {
+                                    $files[] = $file;
+                                }
+                            }
+                        }
+                    }
+
+                    if (empty($files)) {
+                        $em->remove($recordingEntity);
+                    } else {
+                        $recordMeeting->recording_files = $files;
+                        $recordingEntity->setRecordingMeeting($recordMeeting);
+                        $em->persist($recordingEntity);
+                    }
                 }
+                $em->persist($meeting);
+                $em->flush();
                 break;
             default:
-                error_log(sprintf('Event "%s" on %s was unhandled: %s', $action, $objectType, $body));
-                http_response_code(501); // Not Implemented
+                $meeting->addActivity($activity);
+                $em->persist($meeting);
+                $em->flush();
+                //error_log(sprintf('Event "%s" on %s was unhandled: %s', $action, $objectType, $body));
+                //http_response_code(501); // Not Implemented
+                break;
         }
         break;
     default:
         error_log(sprintf('Event "%s" on %s was unhandled: %s', $action, $objectType, $body));
         http_response_code(501); // Not Implemented
+        break;
 }

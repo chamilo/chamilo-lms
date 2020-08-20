@@ -799,7 +799,7 @@ class Template
         }
 
         foreach ($bowerJsFiles as $file) {
-            $js_file_to_string .= '<script type="text/javascript" src="'.api_get_cdn_path(api_get_path(WEB_PUBLIC_PATH).'assets/'.$file).'"></script>'."\n";
+            $js_file_to_string .= '<script src="'.api_get_cdn_path(api_get_path(WEB_PUBLIC_PATH).'assets/'.$file).'"></script>'."\n";
         }
 
         foreach ($js_files as $file) {
@@ -869,8 +869,8 @@ class Template
             //Do not include the global chat in LP
             if ($this->show_learnpath == false && $this->show_footer == true && $this->hide_global_chat == false) {
                 $js_files[] = 'chat/js/chat.js';
-                $bower .= '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH).'assets/linkifyjs/linkify.js"></script>';
-                $bower .= '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH).'assets/linkifyjs/linkify-jquery.js"></script>';
+                $bower .= '<script src="'.api_get_path(WEB_PUBLIC_PATH).'assets/linkifyjs/linkify.js"></script>';
+                $bower .= '<script src="'.api_get_path(WEB_PUBLIC_PATH).'assets/linkifyjs/linkify-jquery.js"></script>';
             }
         }
         $js_file_to_string = '';
@@ -1122,7 +1122,7 @@ class Template
         $form->addHidden('logout', 1);
         $form->addButton(
             'casLogoutButton',
-            is_null($label) ? sprintf(get_lang('LogoutWithYourAccount'), api_get_setting("Institution")) : $label,
+            is_null($label) ? sprintf(get_lang('LogoutWithYourAccountFromX'), api_get_setting("Institution")) : $label,
             api_get_setting("casLogoURL"),
             'primary',
             null,

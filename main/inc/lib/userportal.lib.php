@@ -353,12 +353,16 @@ class IndexManager
 
     public static function studentPublicationBlock()
     {
+        if (api_is_anonymous()) {
+            return [];
+        }
+
         $allow = api_get_configuration_value('allow_my_student_publication_page');
         $items = [];
 
         if ($allow) {
             $items[] = [
-                'icon' => Display::return_icon('lp_student_publication.png', get_lang('StudentPublication')),
+                'icon' => Display::return_icon('lp_student_publication.png', get_lang('StudentPublications')),
                 'link' => api_get_path(WEB_CODE_PATH).'work/publications.php',
                 'title' => get_lang('MyStudentPublications'),
             ];
@@ -964,7 +968,7 @@ class IndexManager
             true === api_get_configuration_value('whispeak_auth_enabled') &&
             !WhispeakAuthPlugin::checkUserIsEnrolled($userId)
         ) {
-            $itemTitle = WhispeakAuthPlugin::create()->get_title();
+            $itemTitle = get_plugin_lang('EnrollmentTitle', WhispeakAuthPlugin::class);
 
             $items[] = [
                 'class' => 'whispeak-enrollment',
@@ -1031,7 +1035,7 @@ class IndexManager
 
         // My account section
         if ($show_create_link) {
-            if (api_get_setting('course_validation') == 'true' && !api_is_platform_admin()) {
+            if (api_get_setting('course_validation') === 'true' && !api_is_platform_admin()) {
                 $items[] = [
                     'class' => 'add-course',
                     'icon' => Display::return_icon('new-course.png', get_lang('CreateCourseRequest')),
@@ -1106,6 +1110,14 @@ class IndexManager
                     'title' => get_lang('Dashboard'),
                 ];
             }
+        }
+
+        if (!api_is_anonymous()) {
+            $items[] = [
+                'icon' => Display::return_icon('clock.png', get_lang('LastVisitedCourse')),
+                'link' => api_get_path(WEB_CODE_PATH).'course_home/last_course.php',
+                'title' => get_lang('LastVisitedCourse'),
+            ];
         }
 
         return $items;

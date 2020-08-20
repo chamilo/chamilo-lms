@@ -15,7 +15,7 @@ $id = isset($_REQUEST['id']) ? (int) $_GET['id'] : 0; // exe id
 $show_headers = isset($_REQUEST['show_headers']) ? (int) $_REQUEST['show_headers'] : null;
 $origin = api_get_origin();
 
-if (in_array($origin, ['learnpath', 'embeddable'])) {
+if (in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
     $show_headers = false;
 }
 
@@ -77,6 +77,13 @@ if ($show_headers) {
     $htmlHeadXtra[] = '<style>
         body { background: none;}
     </style>';
+
+    if ($origin == 'mobileapp') {
+        echo '<div class="actions">';
+        echo '<a href="javascript:window.history.go(-1);">'.
+            Display::return_icon('back.png', get_lang('GoBackToQuestionList'), [], 32).'</a>';
+        echo '</div>';
+    }
 }
 
 $message = Session::read('attempt_remaining');
@@ -99,9 +106,3 @@ $layout = $template->fetch(
 );
 $template->assign('content', $layout);
 $template->display_one_col_template();
-
-if ($show_headers) {
-    Display::display_footer();
-} else {
-    Display::display_reduced_footer();
-}

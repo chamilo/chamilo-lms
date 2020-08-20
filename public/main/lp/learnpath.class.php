@@ -10085,30 +10085,23 @@ EOD;
     /**
      * @param array $params
      *
-     * @throws \Doctrine\ORM\OptimisticLockException
-     *
      * @return int
      */
     public static function createCategory($params)
     {
+        $courseEntity = api_get_course_entity(api_get_course_int_id());
+
         $item = new CLpCategory();
-        $item->setName($params['name']);
-        $item->setCId($params['c_id']);
+        $item
+            ->setName($params['name'])
+            ->setCId($params['c_id'])
+            ->setParent($courseEntity)
+            ->addCourseLink($courseEntity, api_get_session_entity())
+        ;
 
         $repo = Container::getLpCategoryRepository();
         $em = $repo->getEntityManager();
         $em->persist($item);
-        $courseEntity = api_get_course_entity(api_get_course_int_id());
-
-        $repo->addResourceToCourse(
-            $item,
-            ResourceLink::VISIBILITY_PUBLISHED,
-            api_get_user_entity(api_get_user_id()),
-            $courseEntity,
-            api_get_session_entity(),
-            api_get_group_entity()
-        );
-
         $em->flush();
 
         /*api_item_property_update(
@@ -10124,10 +10117,6 @@ EOD;
 
     /**
      * @param array $params
-     *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
      */
     public static function updateCategory($params)
     {
@@ -10136,7 +10125,7 @@ EOD;
         $item = $em->find('ChamiloCourseBundle:CLpCategory', $params['id']);
         if ($item) {
             $item->setName($params['name']);
-            $em->merge($item);
+            $em->persist($item);
             $em->flush();
         }
     }

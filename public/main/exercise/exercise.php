@@ -5,7 +5,6 @@
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CExerciseCategory;
 use Chamilo\CourseBundle\Entity\CQuiz;
-use Chamilo\CourseBundle\Entity\CShortcut;
 
 /**
  * Exercise list: This script shows the list of exercises for administrators and students.

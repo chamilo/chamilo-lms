@@ -5,6 +5,7 @@
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Entity\TrackEExercises;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CQuiz;
 use ChamiloSession as Session;
 
 /**
@@ -5155,18 +5156,16 @@ EOT;
      * By making sure it is set on one question per page and it only contains unique-answer or multiple-answer questions
      * or unique-answer image. And that the exam does not have immediate feedback.
      *
-     * @param array $exercise Exercise info
-     *
-     * @throws \Doctrine\ORM\Query\QueryException
+     * @param CQuiz $exercise
      *
      * @return bool
      */
-    public static function isQuizEmbeddable(array $exercise)
+    public static function isQuizEmbeddable(CQuiz $exercise)
     {
         $em = Database::getManager();
 
-        if (ONE_PER_PAGE != $exercise['type'] ||
-            in_array($exercise['feedback_type'], [EXERCISE_FEEDBACK_TYPE_DIRECT, EXERCISE_FEEDBACK_TYPE_POPUP])
+        if (ONE_PER_PAGE != $exercise->getType() ||
+            in_array($exercise->getFeedbackType(), [EXERCISE_FEEDBACK_TYPE_DIRECT, EXERCISE_FEEDBACK_TYPE_POPUP])
         ) {
             return false;
         }
@@ -5178,7 +5177,7 @@ EOT;
                    WITH qq.iid = qrq.questionId
                 WHERE qrq.exerciceId = :id'
             )
-            ->setParameter('id', $exercise['iid'])
+            ->setParameter('id', $exercise->getIid())
             ->getSingleScalarResult();
 
         $countOfAllowed = $em
@@ -5190,7 +5189,7 @@ EOT;
             )
             ->setParameters(
                 [
-                    'id' => $exercise['iid'],
+                    'id' => $exercise->getIid(),
                     'types' => [UNIQUE_ANSWER, MULTIPLE_ANSWER, UNIQUE_ANSWER_IMAGE],
                 ]
             )

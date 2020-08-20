@@ -116,6 +116,10 @@ if ($form->validate()) {
         exit;
     }
 
+    if ('true' === api_get_plugin_setting('whispeakauth', WhispeakAuthPlugin::SETTING_ENABLE)) {
+        WhispeakAuthPlugin::deleteEnrollment($user['uid']);
+    }
+
     $passwordEncryption = api_get_configuration_value('password_encryption');
 
     if ('none' === $passwordEncryption) {

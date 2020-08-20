@@ -23,8 +23,6 @@ if ($allowSocialTool) {
 
 $logInfo = [
     'tool' => 'profile',
-    'tool_id' => 0,
-    'tool_id_detail' => 0,
     'action' => $this_section,
 ];
 Event::registerLog($logInfo);
@@ -100,7 +98,10 @@ $user_data = api_get_user_info(
 );
 $array_list_key = UserManager::get_api_keys(api_get_user_id());
 $id_temp_key = UserManager::get_api_key_id(api_get_user_id(), 'dokeos');
-$value_array = $array_list_key[$id_temp_key];
+$value_array = [];
+if (isset($array_list_key[$id_temp_key])) {
+    $value_array = $array_list_key[$id_temp_key];
+}
 $user_data['api_key_generate'] = $value_array;
 
 if (false !== $user_data) {
@@ -112,9 +113,6 @@ if (false !== $user_data) {
     }
 }
 
-/*
- * Initialize the form.
- */
 $form = new FormValidator('profile');
 
 if (api_is_western_name_order()) {
@@ -691,23 +689,7 @@ if ($actions) {
 }
 
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'messages');
-
-$allowJustification = 'true' === api_get_plugin_setting('justification', 'tool_enable');
-$justification = '';
-if ($allowJustification) {
-    $plugin = Justification::create();
-    $headers = [
-        [
-            'url' => api_get_self(),
-            'content' => get_lang('Profile'),
-        ],
-        [
-            'url' => api_get_path(WEB_CODE_PATH).'auth/justification.php',
-            'content' => $plugin->get_lang('Justification'),
-        ],
-    ];
-    $justification = Display::tabsOnlyLink($headers, 1);
-}
+$tabs = SocialManager::getHomeProfileTabs('profile');
 
 if ($allowSocialTool) {
     SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'home');

@@ -19,7 +19,7 @@ $htmlHeadXtra[] = $js;
 api_protect_course_script(true);
 $sessionId = api_get_session_id();
 $courseCode = api_get_course_id();
-$exercise_id = isset($_REQUEST['exerciseId']) ? (int) $_REQUEST['exerciseId'] : 0;
+$exercise_id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
 
 $objExercise = new Exercise();
 $result = $objExercise->read($exercise_id, true);

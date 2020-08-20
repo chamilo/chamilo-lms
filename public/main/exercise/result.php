@@ -18,6 +18,7 @@ $origin = api_get_origin();
 if (in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
     $show_headers = false;
 }
+$is_courseTutor = api_is_course_tutor();
 
 api_protect_course_script($show_headers);
 
@@ -102,9 +103,9 @@ $pageContent = ob_get_contents();
 ob_end_clean();
 
 $template = new Template('', $show_headers, $show_headers);
+$template->assign('page_top', '');
+$template->assign('page_bottom', '');
 $template->assign('page_content', $pageContent);
-$layout = $template->fetch(
-    $template->get_template('exercise/result.tpl')
-);
+$layout = $template->fetch($template->get_template('exercise/result.tpl'));
 $template->assign('content', $layout);
 $template->display_one_col_template();

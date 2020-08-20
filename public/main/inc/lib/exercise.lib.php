@@ -1629,11 +1629,11 @@ HOTSPOT;
             $sql = " SELECT q.*, tee.*
                 FROM $quizTable as q
                 INNER JOIN $trackExerciseTable as tee
-                ON q.id = tee.exe_exo_id
+                ON q.iid = tee.exe_exo_id
                 INNER JOIN $courseTable c
                 ON c.id = tee.c_id
-                WHERE tee.exe_id = $exeId
-                AND q.c_id = c.id";
+                WHERE
+                    tee.exe_id = $exeId AND q.c_id = c.id";
 
             $sqlResult = Database::query($sql);
             if (Database::num_rows($sqlResult)) {

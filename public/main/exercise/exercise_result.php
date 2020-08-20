@@ -235,7 +235,7 @@ ExerciseLib::delete_chat_exercise_session($exe_id);
 if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
     $pageBottom .= '<div class="question-return">';
     $pageBottom .= Display::url(
-        get_lang('ReturnToCourseHomepage'),
+        get_lang('Return to Course Homepage'),
         api_get_course_url(),
         ['class' => 'btn btn-primary']
     );
@@ -287,7 +287,7 @@ function showEmbeddableFinishButton()
 {
     $js = '<script>
         $(function () {
-            $(\'.btn-close-quiz\').on(\'click\', function () {    
+            $(\'.btn-close-quiz\').on(\'click\', function () {
                 window.parent.$(\'video:not(.skip), audio:not(.skip)\').get(0).play();
             });
         });

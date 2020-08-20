@@ -8566,8 +8566,10 @@ class Exercise
                 $session_img = null;
                 //$session_img = api_get_session_image($row['session_id'], $userInfo['status']);
 
+                $startTime = $exerciseEntity->getStartTime();
+                $endTime = $exerciseEntity->getEndTime();
                 $time_limits = false;
-                if (!empty($row['start_time']) || !empty($row['end_time'])) {
+                if (!empty($startTime) || !empty($endTime)) {
                     $time_limits = true;
                 }
 
@@ -8575,15 +8577,14 @@ class Exercise
                 if ($time_limits) {
                     // check if start time
                     $start_time = false;
-                    if (!empty($row['start_time'])) {
-                        $start_time = api_strtotime($row['start_time'], 'UTC');
+                    if (!empty($startTime)) {
+                        $start_time = api_strtotime($startTime->format('Y-m-d H:i:s'), 'UTC');
                     }
                     $end_time = false;
-                    if (!empty($row['end_time'])) {
-                        $end_time = api_strtotime($row['end_time'], 'UTC');
+                    if (!empty($endTime)) {
+                        $end_time = api_strtotime($endTime->format('Y-m-d H:i:s'), 'UTC');
                     }
                     $now = time();
-
                     //If both "clocks" are enable
                     if ($start_time && $end_time) {
                         if ($now > $start_time && $end_time > $now) {
@@ -8609,7 +8610,7 @@ class Exercise
                 if (isset($_custom['exercises_hidden_when_no_start_date']) &&
                     $_custom['exercises_hidden_when_no_start_date']
                 ) {
-                    if (empty($row['start_time'])) {
+                    if (empty($startTime)) {
                         $time_limits = true;
                         $is_actived_time = false;
                     }
@@ -8966,14 +8967,9 @@ class Exercise
                     $currentRow['count_questions'] = $number_of_questions;
                 } else {
                     // Student only.
-                    $visibility = api_get_item_visibility(
-                        $courseInfo,
-                        TOOL_QUIZ,
-                        $exerciseId,
-                        $sessionId
-                    );
+                    $visibility = $exerciseEntity->isVisible($course, null);
 
-                    if ($visibility == 0) {
+                    if (false === $visibility) {
                         continue;
                     }
 
@@ -8982,8 +8978,6 @@ class Exercise
 
                     // Link of the exercise.
                     $currentRow['title'] = $url.' '.$session_img;
-
-
                     // This query might be improved later on by ordering by the new "tms" field rather than by exe_id
                     // Don't remove this marker: note-query-exe-results
                     $sql = "SELECT * FROM $TBL_TRACK_EXERCISES
@@ -9001,8 +8995,7 @@ class Exercise
                     $num = Database :: num_rows($qryres);
 
                     // Hide the results.
-                    $my_result_disabled = $row['results_disabled'];
-
+                    $my_result_disabled = $exerciseEntity->getResultsDisabled();
                     $attempt_text = '-';
                     // Time limits are on
                     if ($time_limits) {
@@ -9023,14 +9016,14 @@ class Exercise
                                 // More than one attempt
                                 if ($num > 0) {
                                     $row_track = Database :: fetch_array($qryres);
-                                    $attempt_text = get_lang('LatestAttempt').' : ';
+                                    $attempt_text = get_lang('Latest attempt').' : ';
                                     $attempt_text .= ExerciseLib::show_score(
                                         $row_track['exe_result'],
                                         $row_track['exe_weighting']
                                     );
                                 } else {
                                     //No attempts
-                                    $attempt_text = get_lang('NotAttempted');
+                                    $attempt_text = get_lang('Not attempted');
                                 }
                             } else {
                                 $attempt_text = '-';
@@ -9038,37 +9031,34 @@ class Exercise
                         } else {
                             // Quiz not ready due to time limits
                             //@todo use the is_visible function
-                            if (!empty($row['start_time']) && !empty($row['end_time'])) {
+                            if (!empty($startTime) && !empty($endTime)) {
                                 $today = time();
-                                $start_time = api_strtotime($row['start_time'], 'UTC');
-                                $end_time = api_strtotime($row['end_time'], 'UTC');
                                 if ($today < $start_time) {
                                     $attempt_text = sprintf(
                                         get_lang('ExerciseWillBeActivatedFromXToY'),
-                                        api_convert_and_format_date($row['start_time']),
-                                        api_convert_and_format_date($row['end_time'])
+                                        api_convert_and_format_date($start_time),
+                                        api_convert_and_format_date($end_time)
                                     );
                                 } else {
                                     if ($today > $end_time) {
                                         $attempt_text = sprintf(
                                             get_lang('ExerciseWasActivatedFromXToY'),
-                                            api_convert_and_format_date($row['start_time']),
-                                            api_convert_and_format_date($row['end_time'])
+                                            api_convert_and_format_date($start_time),
+                                            api_convert_and_format_date($end_time)
                                         );
                                     }
                                 }
                             } else {
-                                //$attempt_text = get_lang('ExamNotAvailableAtThisTime');
-                                if (!empty($row['start_time'])) {
+                                if (!empty($startTime)) {
                                     $attempt_text = sprintf(
                                         get_lang('ExerciseAvailableFromX'),
-                                        api_convert_and_format_date($row['start_time'])
+                                        api_convert_and_format_date($start_time)
                                     );
                                 }
-                                if (!empty($row['end_time'])) {
+                                if (!empty($endTime)) {
                                     $attempt_text = sprintf(
                                         get_lang('ExerciseAvailableUntilX'),
-                                        api_convert_and_format_date($row['end_time'])
+                                        api_convert_and_format_date($end_time)
                                     );
                                 }
                             }
@@ -9095,13 +9085,9 @@ class Exercise
                                     $row_track['exe_weighting']
                                 );
                             } else {
-                                $attempt_text = get_lang('NotAttempted');
+                                $attempt_text = get_lang('Not attempted');
                             }
                         }
-                    }
-
-                    if ($returnData) {
-                        $attempt_text = $num;
                     }
                 }
 
@@ -9130,14 +9116,6 @@ class Exercise
                         $currentRow[] = '<a href="exercise_report.php?'.api_get_cidreq().'&id='.$exerciseId.'">'.
                             Display::return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).'</a>';
                     }
-
-                    if ($returnData) {
-                        $currentRow['id'] = $exercise->id;
-                        $currentRow['url'] = $webPath.'exercise/overview.php?'
-                            .api_get_cidreq_params($courseInfo['code'], $sessionId).'&'
-                            ."$mylpid$mylpitemid&id={$exerciseId}";
-                        $currentRow['name'] = $currentRow[0];
-                    }
                 }
                 $tableRows[] = $currentRow;
             }
@@ -9164,8 +9142,8 @@ class Exercise
             $table->setTableData($tableRows);
             $table->setTotalNumberOfItems($total);
             $table->set_additional_parameters([
-                'cidReq' => api_get_course_id(),
-                'id_session' => api_get_session_id(),
+                'cid' => api_get_course_int_id(),
+                'sid' => api_get_session_id(),
                 'category_id' => $categoryId,
             ]);
 
@@ -9181,10 +9159,10 @@ class Exercise
             if ($is_allowedToEdit) {
                 $table->set_header($i++, '', false, 'width="18px"');
             }
-            $table->set_header($i++, get_lang('ExerciseName'), false);
+            $table->set_header($i++, get_lang('Test name'), false);
 
             if ($is_allowedToEdit) {
-                $table->set_header($i++, get_lang('QuantityQuestions'), false);
+                $table->set_header($i++, get_lang('Questions'), false);
                 $table->set_header($i++, get_lang('Actions'), false);
             } else {
                 $table->set_header($i++, get_lang('Status'), false);

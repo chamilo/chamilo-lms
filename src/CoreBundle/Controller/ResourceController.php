@@ -58,7 +58,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
      * For the tool value check the Tool entity.
      * For the type value check the ResourceType entity.
      */
-    public function indexAction(Request $request, Grid $grid): Response
+    public function indexAction(Request $request): Response
     {
         $tool = $request->get('tool');
         $type = $request->get('type');
@@ -408,7 +408,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
      *
      * If node has children show it
      */
-    public function listAction(Request $request, Grid $grid): Response
+    public function listAction(Request $request): Response
     {
         $tool = $request->get('tool');
         $type = $request->get('type');

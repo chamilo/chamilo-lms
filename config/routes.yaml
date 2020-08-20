@@ -8,48 +8,23 @@ oneup_uploader:
     resource: .
     type: uploader
 
-legacy_main:
-    path: /main/{name}
-    defaults: {_controller: 'ChamiloCoreBundle:Legacy:classic'}
-    requirements:
-        name: .+
+#courses_vue:
+#    path: /courses/{wildcard}
+#    controller: Chamilo\CoreBundle\Controller\IndexController::resources
+#    requirements:
+#        wildcard: .*
 
-legacy_plugin:
-    path: /plugin/{name}
-    defaults: {_controller: 'ChamiloCoreBundle:Legacy:plugin'}
-    requirements:
-        name: .+
-
-courses_vue:
-    path: /courses/{wildcard}
-    controller: Chamilo\CoreBundle\Controller\IndexController::resources
-    requirements:
-        wildcard: .*
-
-sessions_vue:
-    path: /sessions/{wildcard}
-    controller: Chamilo\CoreBundle\Controller\IndexController::resources
-    requirements:
-        wildcard: .*
+#sessions_vue:
+#    path: /sessions/{wildcard}
+#    controller: Chamilo\CoreBundle\Controller\IndexController::resources
+#    requirements:
+#        wildcard: .*
 
 resources_vue:
     path: /resources/{wildcard}
-    controller: Chamilo\CoreBundle\Controller\IndexController::resources
+    controller: Chamilo\CoreBundle\Controller\IndexController::indexAction
     requirements:
         wildcard: .*
-
-vue:
-    path: /vue/{wildcard}
-    controller: Chamilo\CoreBundle\Controller\IndexController::resources
-    requirements:
-        wildcard: .*
-
-# web url shortcuts for legacy templates
-web.ajax:
-    path: main/inc/ajax/
-
-web.main:
-    path: main/
 
 #liip_theme:
 #    resource: "@LiipThemeBundle/Resources/config/routing.xml"
@@ -63,8 +38,12 @@ web.main:
 #        url: .*/$
 #        _method: GET
 
-chamilo_graphql:
-    resource: "@ChamiloGraphQlBundle/Resources/config/routing.yaml"
+# web url shortcuts for legacy templates
+web.ajax:
+    path: main/inc/ajax/
+
+web.main:
+    path: main/
 
 chamilo_lti:
     resource: "@ChamiloLtiBundle/Resources/config/routing.yml"

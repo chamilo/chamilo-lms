@@ -4,10 +4,6 @@ login_check:
 logout:
     path: /logout
 
-oneup_uploader:
-    resource: .
-    type: uploader
-
 #courses_vue:
 #    path: /courses/{wildcard}
 #    controller: Chamilo\CoreBundle\Controller\IndexController::resources
@@ -39,10 +35,10 @@ resources_vue:
 #        _method: GET
 
 # web url shortcuts for legacy templates
-web.ajax:
+web_ajax:
     path: main/inc/ajax/
 
-web.main:
+web_main:
     path: main/
 
 chamilo_lti:

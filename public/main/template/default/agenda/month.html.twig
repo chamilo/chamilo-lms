@@ -276,10 +276,10 @@
                     var url = '{{ web_agenda_ajax_url }}&a=edit_event&id='+calEvent.id+'&view='+view.name;
                     var delete_url = '{{ web_agenda_ajax_url }}&a=delete_event&id='+calEvent.id;
 
-                    var urlOne = "{{ url('web.main') }}calendar/ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=confidential";
-                    var urlTwo = "{{ url('web.main') }}calendar/ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=private";
-                    var urlThree = "{{ url('web.main') }}calendar/ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=public";
-                    var urlEdit = "{{ url('web.main') }}calendar/agenda.php?action=edit&type=fromjs&id="+calEvent.id+'&course_id='+calEvent.course_id+"";
+                    var urlOne = "{{ url('web_main') }}calendar/ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=confidential";
+                    var urlTwo = "{{ url('web_main') }}calendar/ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=private";
+                    var urlThree = "{{ url('web_main') }}calendar/ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=public";
+                    var urlEdit = "{{ url('web_main') }}calendar/agenda.php?action=edit&type=fromjs&id="+calEvent.id+'&course_id='+calEvent.course_id+"";
 
                     var exportCalConfidential = '<a href="'+urlOne+'" class="btn btn-light">{{"Export in iCal format as confidential event"|trans}}</a>';
                     var exportCalPrivate = '<a href="'+urlTwo+'" class="btn btn-light">{{"Export in iCal format as private event"|trans}}</a>';

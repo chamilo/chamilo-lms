@@ -1,9 +1,0 @@
-#fos_comment:
-#    db_driver: orm
-#    class:
-#        model:
-#            comment: ~
-#            thread: ~
-#    form:
-#        comment:
-#            type: sonata_comment_comment

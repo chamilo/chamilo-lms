@@ -17,18 +17,3 @@ liip_imagine:
             quality: 75
             filters:
                 relative_resize: {widen: 800} # keep aspect ratio to width
-        # Sonata thumbnails
-        default_small:
-            quality: 75
-            filters:
-                thumbnail: {size: [100, 100], mode: outbound}
-
-        default_medium:
-            quality: 75
-            filters:
-                thumbnail: {size: [500, 200], mode: outbound}
-
-        default_big:
-            quality: 75
-            filters:
-                thumbnail: {size: [820, 70], mode: outbound}

@@ -7,11 +7,6 @@ twig:
         - '%kernel.project_dir%/public/plugin'
     form_themes:
         - 'bootstrap_4_layout.html.twig'
-#        - '@SonataFormatter/Form/formatter.html.twig'
-#        - '@SonataCore/Form/datepicker.html.twig'
-#        - '@SonataCore/Form/color.html.twig'
-#
-#    exception_controller: Chamilo\CoreBundle\Controller\ExceptionController::showAction
 
     globals:
         show_toolbar: true

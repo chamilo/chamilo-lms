@@ -94,10 +94,7 @@ class ResourceNodeVoter extends Voter
         return true;
     }
 
-    /**
-     * @param ResourceNode $resourceNode
-     */
-    protected function voteOnAttribute(string $attribute, $resourceNode, TokenInterface $token): bool
+    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
     {
         $user = $token->getUser();
 
@@ -105,6 +102,9 @@ class ResourceNodeVoter extends Voter
         if (!$user instanceof UserInterface) {
             return false;
         }
+
+        /** @var ResourceNode $group */
+        $resourceNode = $subject;
 
         if (!$resourceNode instanceof ResourceNode) {
             return false;

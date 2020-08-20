@@ -134,7 +134,7 @@ class HookManagement implements HookManagementInterface
      */
     public function orderHook($eventName, $type, $hookOrders)
     {
-        foreach ($this->hookCalls[$eventName] as $observerClassName => $types) {
+        /*foreach ($this->hookCalls[$eventName] as $observerClassName => $types) {
             foreach ($hookOrders as $oldOrder => $newOrder) {
                 $res = Database::update(
                     $this->tables[TABLE_HOOK_CALL],
@@ -151,7 +151,7 @@ class HookManagement implements HookManagementInterface
                     break;
                 }
             }
-        }
+        }*/
     }
 
     /**

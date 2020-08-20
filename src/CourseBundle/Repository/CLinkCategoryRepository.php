@@ -49,11 +49,6 @@ final class CLinkCategoryRepository extends ResourceRepository implements GridIn
         return $newResource;
     }
 
-    public function getTitleColumn(Grid $grid): Column
-    {
-        return $grid->getColumn('title');
-    }
-
     public function getResourceFormType(): string
     {
         return CLinkType::class;

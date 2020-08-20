@@ -39,11 +39,6 @@ final class CLinkRepository extends ResourceRepository implements GridInterface
         return $newResource;
     }
 
-    public function getTitleColumn(Grid $grid): Column
-    {
-        return $grid->getColumn('title');
-    }
-
     public function getResourceFormType(): string
     {
         return CLinkType::class;

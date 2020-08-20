@@ -60,7 +60,7 @@ class GroupVoter extends Voter
         return true;
     }
 
-    protected function voteOnAttribute(string $attribute, $group, TokenInterface $token): bool
+    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
     {
         $user = $token->getUser();
 
@@ -69,7 +69,7 @@ class GroupVoter extends Voter
             return false;
         }
 
-        if (false == $group) {
+        if (false == $subject) {
             return false;
         }
 
@@ -77,7 +77,8 @@ class GroupVoter extends Voter
         if ($this->security->isGranted('ROLE_ADMIN')) {
             return true;
         }
-
+        /** @var CGroup $group */
+        $group = $subject;
         $groupInfo = [
             'id' => $group->getId(),
             'session_id' => 0,

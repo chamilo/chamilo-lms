@@ -48,11 +48,6 @@ final class PersonalFileRepository extends ResourceRepository implements GridInt
         return $newResource;
     }
 
-    public function getTitleColumn(Grid $grid): Column
-    {
-        return $grid->getColumn('name');
-    }
-
     public function getResourceFormType(): string
     {
         return PersonalFileType::class;

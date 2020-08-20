@@ -82,7 +82,7 @@ abstract class HookEvent implements HookEventInterface
      */
     public static function create(EntityManager $entityManager)
     {
-        static $result = null;
+        /*static $result = null;
 
         if ($result) {
             return $result;
@@ -94,7 +94,7 @@ abstract class HookEvent implements HookEventInterface
             return new $class($entityManager);
         } catch (\Exception $e) {
             return null;
-        }
+        }*/
     }
 
     /**

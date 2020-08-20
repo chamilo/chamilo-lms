@@ -579,22 +579,6 @@ class ResourceRepository extends EntityRepository
         return $qb->getQuery()->getOneOrNullResult();
     }
 
-    public function rowCanBeEdited(RowAction $action, Row $row, Session $session = null): ?RowAction
-    {
-        if (null !== $session) {
-            /** @var AbstractResource $entity */
-            $entity = $row->getEntity();
-            $hasSession = $entity->getResourceNode()->hasSession($session);
-            if ($hasSession->count() > 0) {
-                return $action;
-            }
-
-            return null;
-        }
-
-        return $action;
-    }
-
     public function delete(AbstractResource $resource)
     {
         $children = $resource->getResourceNode()->getChildren();

@@ -6,6 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CoreBundle\Entity\ResourceNode;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -56,9 +57,6 @@ class CShortcut extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Resource identifier.
-     */
     public function getResourceIdentifier(): int
     {
         return $this->id;
@@ -74,10 +72,7 @@ class CShortcut extends AbstractResource implements ResourceInterface
         return $this->shortCutNode;
     }
 
-    /**
-     * @return CShortcut
-     */
-    public function setShortCutNode($shortCutNode)
+    public function setShortCutNode(ResourceNode $shortCutNode): self
     {
         $this->shortCutNode = $shortCutNode;
 

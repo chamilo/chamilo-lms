@@ -56,7 +56,7 @@ class SessionVoter extends Voter
      *
      * {@inheritdoc}
      */
-    protected function voteOnAttribute(string $attribute, $session, TokenInterface $token): bool
+    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
     {
         /** @var User $user */
         $user = $token->getUser();
@@ -74,6 +74,8 @@ class SessionVoter extends Voter
         // Checks if the current course was set up
         // $session->getCurrentCourse() is set in the class CourseListener
         /** @var Session $session */
+        $session = $subject;
+
         $currentCourse = $session->getCurrentCourse();
 
         switch ($attribute) {

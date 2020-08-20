@@ -168,11 +168,6 @@ final class IllustrationRepository extends ResourceRepository implements GridInt
         return '';
     }
 
-    public function getTitleColumn(Grid $grid): Column
-    {
-        return $grid->getColumn('name');
-    }
-
     public function getResourceFormType(): string
     {
         return IllustrationType::class;

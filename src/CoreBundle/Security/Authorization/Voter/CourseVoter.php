@@ -57,7 +57,7 @@ class CourseVoter extends Voter
         return true;
     }
 
-    protected function voteOnAttribute(string $attribute, $course, TokenInterface $token): bool
+    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
     {
         /** @var User $user */
         $user = $token->getUser();
@@ -73,6 +73,8 @@ class CourseVoter extends Voter
 
         // Course is active?
         /** @var Course $course */
+        $course = $subject;
+
         switch ($attribute) {
             case self::VIEW:
                 // Course is hidden then is not visible for nobody expect admins.

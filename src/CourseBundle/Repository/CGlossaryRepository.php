@@ -45,11 +45,6 @@ final class CGlossaryRepository extends ResourceRepository implements GridInterf
         return $this->getResourcesByCourse($course, $session, $group, $parentNode);
     }
 
-    public function getTitleColumn(Grid $grid): Column
-    {
-        return $grid->getColumn('name');
-    }
-
     public function setResourceProperties(FormInterface $form, $course, $session, $fileType)
     {
         /** @var CGlossary $newResource */

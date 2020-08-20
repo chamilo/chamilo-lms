@@ -4347,7 +4347,6 @@ class learnpath
     /**
      * Publishes a learnpath. This basically means show or hide the learnpath
      * on the course homepage
-     * Can be used as abstract.
      *
      * @param int    $id            Learnpath id
      * @param string $setVisibility New visibility (v/i - visible/invisible)
@@ -4367,7 +4366,6 @@ class learnpath
             return false;
         }
         $repoShortcut = Container::getShortcutRepository();
-        $em = $repoShortcut->getEntityManager();
         $courseEntity = api_get_course_entity();
 
         if ($addShortcut) {

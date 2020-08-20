@@ -45,11 +45,6 @@ final class CCourseDescriptionRepository extends ResourceRepository implements G
         return $this->getResourcesByCourse($course, $session, $group, $parentNode);
     }
 
-    public function getTitleColumn(Grid $grid): Column
-    {
-        return $grid->getColumn('title');
-    }
-
     public function setResourceProperties(FormInterface $form, $course, $session, $fileType)
     {
         /** @var CCourseDescription $newResource */

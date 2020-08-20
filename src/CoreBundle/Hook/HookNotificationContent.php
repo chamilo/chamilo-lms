@@ -26,9 +26,8 @@ class HookNotificationContent extends HookEvent implements HookNotificationConte
      */
     public function notifyNotificationContent($type): array
     {
-        /** @var \HookNotificationContentObserverInterface $observer */
         // Check if exists data content
-        if (isset($this->eventData['content'])) {
+        /*if (isset($this->eventData['content'])) {
             // Save data type
             $this->eventData['type'] = $type;
             // Check for hook all registered observers
@@ -44,6 +43,6 @@ class HookNotificationContent extends HookEvent implements HookNotificationConte
             return $this->eventData;
         }
 
-        return [];
+        return [];*/
     }
 }

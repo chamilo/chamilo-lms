@@ -210,11 +210,6 @@ final class CDocumentRepository extends ResourceRepository implements GridInterf
         return $query->getResult();
     }
 
-    public function getTitleColumn(Grid $grid): Column
-    {
-        return $grid->getColumn('title');
-    }
-
     public function getResourceFormType(): string
     {
         return CDocumentType::class;

@@ -20,7 +20,7 @@ use Symfony\Component\Form\FormInterface;
  */
 final class CShortcutRepository extends ResourceRepository
 {
-    private function getShortcutFromResource(AbstractResource $resource): ?CShortcut
+    public function getShortcutFromResource(AbstractResource $resource): ?CShortcut
     {
         $repo = $this->getRepository();
         $criteria = ['shortCutNode' => $resource->getResourceNode()];

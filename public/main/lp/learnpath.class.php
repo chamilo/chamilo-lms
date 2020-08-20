@@ -4460,7 +4460,6 @@ class learnpath
     }
 
     /**
-     * Publishes a learnpath.
      * Show or hide the learnpath category on the course homepage.
      *
      * @param int $id
@@ -4471,7 +4470,6 @@ class learnpath
     public static function toggleCategoryPublish($id, $setVisibility = 1)
     {
         $setVisibility = (int) $setVisibility;
-        $sessionId = api_get_session_id();
         $addShortcut = false;
         if (1 === $setVisibility) {
             $addShortcut = true;
@@ -4480,21 +4478,17 @@ class learnpath
         $repo = Container::getLpCategoryRepository();
         /** @var CLpCategory $lp */
         $category = $repo->find($id);
+
+        if (null === $category) {
+            return false;
+        }
+
         $repoShortcut = Container::getShortcutRepository();
         if ($addShortcut) {
-            $shortcut = new CShortcut();
-            $shortcut->setName($category->getName());
-            $shortcut->setShortCutNode($category->getResourceNode());
-
             $courseEntity = api_get_course_entity(api_get_course_int_id());
-            $repoShortcut->addResourceNode($shortcut, api_get_user_entity(api_get_user_id()), $courseEntity);
-            $repoShortcut->getEntityManager()->flush();
+            $repoShortcut->addShortCut($category, $courseEntity, $courseEntity, api_get_session_entity());
         } else {
-            $shortcut = $repoShortcut->getShortcutFromResource($category);
-            if (null !== $shortcut) {
-                $repoShortcut->getEntityManager()->remove($shortcut);
-                $repoShortcut->getEntityManager()->flush();
-            }
+            $repoShortcut->removeShortCut($category);
         }
 
         return true;

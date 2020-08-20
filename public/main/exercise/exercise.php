@@ -95,24 +95,15 @@ if ($is_allowedToEdit && !empty($action)) {
     switch ($action) {
         case 'add_shortcut':
             $repo = Container::getShortcutRepository();
-            $shortcut = new CShortcut();
-            $shortcut->setName($objExerciseTmp->get_formated_title());
-            $shortcut->setShortCutNode($exerciseEntity->getResourceNode());
-
             $courseEntity = api_get_course_entity(api_get_course_int_id());
-            $repo->addResourceNode($shortcut, api_get_user_entity(api_get_user_id()), $courseEntity);
-            $repo->getEntityManager()->flush();
+            $repo->addShortCut($exerciseEntity, $courseEntity, $courseEntity, api_get_session_entity());
 
             Display::addFlash(Display::return_message(get_lang('Updated')));
 
             break;
         case 'remove_shortcut':
             $repo = Container::getShortcutRepository();
-            $shortcut = $repo->getShortcutFromResource($exerciseEntity);
-            if (null !== $shortcut) {
-                $repo->getEntityManager()->remove($shortcut);
-                $repo->getEntityManager()->flush();
-            }
+            $repo->removeShortCut($exerciseEntity);
 
             Display::addFlash(Display::return_message(get_lang('Deleted')));
 

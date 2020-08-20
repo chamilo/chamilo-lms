@@ -8,6 +8,7 @@ use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CourseBundle\Traits\ShowCourseResourcesInSessionTrait;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -36,13 +37,6 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
     protected $iid;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=true)
-     */
-    protected $id;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
@@ -68,6 +62,37 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
      */
     protected $session;
 
+    /**
+     *
+     * @ORM\ManyToMany(targetEntity="Chamilo\CourseBundle\Entity\CQuizQuestion")
+     * @ORM\JoinTable(name="c_quiz_question_rel_category",
+     *      joinColumns={@ORM\JoinColumn(name="category_id", referencedColumnName="iid")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="question_id", referencedColumnName="iid")}
+     * )
+     */
+    protected $questions;
+
+    public function __construct()
+    {
+        $this->questions = new ArrayCollection();
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getQuestions()
+    {
+        return $this->questions;
+    }
+
+    public function setQuestions($questions): self
+    {
+        $this->questions = $questions;
+
+        return $this;
+    }
+
+
     public function __toString(): string
     {
         return $this->getTitle();
@@ -81,14 +106,7 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
         return $this->iid;
     }
 
-    /**
-     * Set title.
-     *
-     * @param string $title
-     *
-     * @return CQuizQuestionCategory
-     */
-    public function setTitle($title)
+    public function setTitle(string $title): self
     {
         $this->title = $title;
 
@@ -127,30 +145,6 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
     public function getDescription()
     {
         return $this->description;
-    }
-
-    /**
-     * Set id.
-     *
-     * @param int $id
-     *
-     * @return CQuizQuestionCategory
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     public function getCourse()
@@ -199,10 +193,9 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
     public function postPersist(LifecycleEventArgs $args)
     {
         // Update id with iid value
-        $em = $args->getEntityManager();
-        $this->setId($this->iid);
+        /*$em = $args->getEntityManager();
         $em->persist($this);
-        $em->flush();
+        $em->flush();*/
     }
 
     /**

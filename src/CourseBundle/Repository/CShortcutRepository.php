@@ -20,12 +20,39 @@ use Symfony\Component\Form\FormInterface;
  */
 final class CShortcutRepository extends ResourceRepository
 {
-    public function getShortcutFromResource(AbstractResource $resource): ?CShortcut
+    private function getShortcutFromResource(AbstractResource $resource): ?CShortcut
     {
         $repo = $this->getRepository();
         $criteria = ['shortCutNode' => $resource->getResourceNode()];
 
         return $repo->findOneBy($criteria);
+    }
+
+    public function addShortCut(AbstractResource $resource, $parent, Course $course, Session $session = null)
+    {
+        $em = $this->getRepository()->getEntityManager();
+        $shortcut = $this->getShortcutFromResource($resource);
+
+        if (null === $shortcut) {
+            $shortcut = new CShortcut();
+            $shortcut
+                ->setName($resource->getName())
+                ->setShortCutNode($resource->getResourceNode())
+                ->setParent($parent)
+                ->addCourseLink($course, $session);
+            $em->persist($shortcut);
+            $em->flush();
+        }
+    }
+
+    public function removeShortCut(AbstractResource $resource)
+    {
+        $em = $this->getRepository()->getEntityManager();
+        $shortcut = $this->getShortcutFromResource($resource);
+        if (null !== $shortcut) {
+            $em->remove($shortcut);
+            $em->flush();
+        }
     }
 
     public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroup $group = null): QueryBuilder

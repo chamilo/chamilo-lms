@@ -4363,29 +4363,21 @@ class learnpath
         $repo = Container::getLpRepository();
         /** @var CLp $lp */
         $lp = $repo->find($id);
+        if (null === $lp) {
+            return false;
+        }
         $repoShortcut = Container::getShortcutRepository();
         $em = $repoShortcut->getEntityManager();
         $courseEntity = api_get_course_entity();
 
         if ($addShortcut) {
-            $shortcut = new CShortcut();
-            $shortcut
-                ->setName($lp->getName())
-                ->setShortCutNode($lp->getResourceNode())
-                ->setParent($courseEntity)
-                ->addCourseLink($courseEntity, api_get_session_entity())
-            ;
-            $em->persist($shortcut);
-            $em->flush();
+            $repoShortcut->addShortCut($lp, $courseEntity, $courseEntity, api_get_session_entity());
         } else {
-            $shortcut = $repoShortcut->getShortcutFromResource($lp);
-            if (null !== $shortcut) {
-                $em->remove($shortcut);
-                $em->flush();
-            }
+            $repoShortcut->removeShortCut($lp);
         }
 
         return true;
+
         /*
         $course_id = api_get_course_int_id();
         $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);

@@ -7434,20 +7434,6 @@ function api_get_locked_settings()
 }
 
 /**
- * Checks if the user is corrently logged in. Returns the user ID if he is, or
- * false if he isn't. If the user ID is given and is an integer, then the same
- * ID is simply returned.
- *
- * @param  int User ID
- *
- * @return bool Integer User ID is logged in, or false otherwise
- */
-function api_user_is_login($user_id = null)
-{
-    return Container::getAuthorizationChecker()->isGranted('IS_AUTHENTICATED_FULLY');
-}
-
-/**
  * Guess the real ip for register in the database, even in reverse proxy cases.
  * To be recognized, the IP has to be found in either $_SERVER['REMOTE_ADDR'] or
  * in $_SERVER['HTTP_X_FORWARDED_FOR'], which is in common use with rproxies.

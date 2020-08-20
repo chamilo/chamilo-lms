@@ -104,7 +104,6 @@ class ZoomPlugin extends Plugin
             return false;
         }
 
-        //return 'true' === api_get_plugin_setting('zoom', 'enableGlobalConference') && api_user_is_login();
         return
             'true' === api_get_plugin_setting('zoom', 'enableGlobalConference')
             && in_array(

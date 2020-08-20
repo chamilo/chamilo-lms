@@ -5216,7 +5216,7 @@ class CourseManager
             $my_course['register_button'] = '';
 
             $access_link = self::get_access_link_by_user(
-                api_get_user_id(),
+                $user_id,
                 $course_info,
                 $codeList
             );
@@ -5485,10 +5485,12 @@ class CourseManager
             $options[] = 'register';
         }
 
+        $isLogin = !api_is_anonymous();
+
         // Go To Course button (only if admin, if course public or if student already subscribed)
         if ($is_admin ||
             COURSE_VISIBILITY_OPEN_WORLD == $course['visibility'] && empty($course['registration_code']) ||
-            (api_user_is_login($uid) && COURSE_VISIBILITY_OPEN_PLATFORM == $course['visibility'] && empty($course['registration_code'])) ||
+            ($isLogin && COURSE_VISIBILITY_OPEN_PLATFORM == $course['visibility'] && empty($course['registration_code'])) ||
             (in_array($course['real_id'], $user_courses) && COURSE_VISIBILITY_CLOSED != $course['visibility'])
         ) {
             $options[] = 'enter';
@@ -5496,7 +5498,7 @@ class CourseManager
 
         if ($is_admin ||
             COURSE_VISIBILITY_OPEN_WORLD == $course['visibility'] && empty($course['registration_code']) ||
-            (api_user_is_login($uid) && COURSE_VISIBILITY_OPEN_PLATFORM == $course['visibility'] && empty($course['registration_code'])) ||
+            ($isLogin && COURSE_VISIBILITY_OPEN_PLATFORM == $course['visibility'] && empty($course['registration_code'])) ||
             (in_array($course['real_id'], $user_courses) && COURSE_VISIBILITY_CLOSED != $course['visibility'])
         ) {
             $options[] = 'enter';
@@ -5505,7 +5507,7 @@ class CourseManager
         if (COURSE_VISIBILITY_HIDDEN != $course['visibility'] &&
             empty($course['registration_code']) &&
             UNSUBSCRIBE_ALLOWED == $course['unsubscribe'] &&
-            api_user_is_login($uid) &&
+            $isLogin &&
             in_array($course['real_id'], $user_courses)
         ) {
             $options[] = 'unsubscribe';

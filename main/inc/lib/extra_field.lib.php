@@ -3537,4 +3537,33 @@ JAVASCRIPT;
             }
         );
     }
+
+    /**
+     *  Gets the display name of an extra field
+     *
+     * @param string $variableName
+     */
+
+    public static function getDisplayNameByVariable($variableName = null)
+    {
+        if($variableName == null ) {
+            return null;
+        }
+        $variableName = Security::remove_XSS($variableName);
+        $variableName = Database::escape_string($variableName);
+        $tblExtraField =  Database::get_main_table(TABLE_EXTRA_FIELD);
+        $query = "SELECT
+			display_text
+		FROM
+			$tblExtraField
+		WHERE
+			variable = '$variableName'";
+        $companyField = Database::fetch_assoc(Database::query($query));
+
+        if ($companyField == false or !isset($companyField['display_text'])) {
+
+            return null;
+        }
+        return $companyField['display_text'];
+    }
 }

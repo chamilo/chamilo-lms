@@ -26,47 +26,76 @@ $languageFilter = isset($_REQUEST['language']) ? $_REQUEST['language'] : '';
 $content = '';
 
 
-// fechas
-$startDate = isset($_GET['startDate']) ? $_GET['startDate'] : null;
-$endDate = isset($_GET['endDate']) ? $_GET['endDate'] : null;
+
 
 $tblItemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
 $tblLp = Database::get_course_table(TABLE_LP_MAIN);
 
 $whereCondition = '';
 
+// Getting dates
+$startDate = isset($_GET['startDate']) ? $_GET['startDate'] : null;
+$endDate = isset($_GET['endDate']) ? $_GET['endDate'] : null;
+//Validating dates
 if (!empty($startDate)) {
+    $startDate = new DateTime($startDate);
+}
+if (!empty($endDate)) {
+    $endDate = new DateTime($endDate);
+}
+if (!empty($startDate) and !empty($endDate)) {
+    if ($startDate > $endDate) {
+        $dateTemp = $endDate;
+        $endDate = $startDate;
+        $startDate = $dateTemp;
+        unset($dateTemp);
+    }
+}
+// Settings condition and parametter GET to right date
+if (!empty($startDate)) {
+    $startDate = $startDate->format('Y-m-d');
+    $_GET['startDate'] = $startDate;
     $whereCondition .= " AND $tblItemProperty.lastedit_date >= '$startDate' ";
 }
 if (!empty($endDate)) {
+    $endDate = $endDate->format('Y-m-d');
+    $_GET['endDate'] = $endDate;
     $whereCondition .= " AND $tblItemProperty.lastedit_date <= '$endDate' ";
 
 }
 
-// get id of company
-
-$selectToNameLp = "(select name from $tblLp where $tblLp.iid =c_item_property.ref) as name_lp";
-$selectToCompany = "(
+// Get lp name
+$selectToNameLp = "(
+SELECT
+	name
+FROM
+	$tblLp
+WHERE
+	$tblLp.iid = c_item_property.ref
+) as name_lp";
+// get Compnay data
+$selectToCompany = " (
+SELECT
+    value
+FROM
+	extra_field_values
+WHERE
+	field_id IN (
 		SELECT
-			item_id
+			id
 		FROM
-			extra_field_values
+			extra_field
 		WHERE
-			field_id IN (
-				SELECT
-					id
-				FROM
-					extra_field
-				WHERE
-					variable = 'company'
-			)
-		AND item_id = $tblItemProperty.to_user_id
-		LIMIT 1
-	) AS company";
+			variable = 'company'
+	)
+AND item_id = $tblItemProperty.to_user_id
+) ";
+
+
 $query = "
 SELECT
     * ,
-    $selectToCompany ,
+     $selectToCompany  as company,
     $selectToNameLp
 FROM
 	$tblItemProperty
@@ -80,93 +109,68 @@ WHERE
 		    STATUS = 5
 	)
     AND
-    lastedit_type = 'LearnpathSubscription'";
+    lastedit_type = 'LearnpathSubscription'
+    and $selectToCompany is not null ";
 
 if (strlen($whereCondition) > 2) {
     $query .= $whereCondition;
 }
 $queryResult = Database::query($query);
-
-
-$cursos = [];
-$estudiantes = [];
-$estudiantesCompany = [];
-$estudiantesPorCurso = [];
-// $estudiantesCompanyPorCurso = [];
-$NumeroEstudiantesCompany = 0;
-// $detalleCurso = [];
-//$studentInfo = [];
-//$print = [];
-
-$elementos = [];
+$companys =[];
 if (!empty($startDate) and !empty($endDate)) {
     while ($row = Database::fetch_array($queryResult, 'ASSOC')) {
         $courseId = (int)$row['c_id'];
         $studentId = (int)$row['to_user_id'];
-        $studentCompanyId = (int)$row['company'];
+        $company = isset($row['company']) ? $row['company'] : '';
         $lpId = $row['ref'];
-
-        $studiantein = api_get_user_info($studentId);
-        $courseInfo = api_get_course_info_by_id($courseId);
-
-        $lpName = $row['name_lp'];
-
-        $tempPrint['courseName'] = $courseInfo['name'];
-        $tempPrint['insert_date'] = $row['insert_date'];
-        $tempPrint['lastedit_date'] = $row['lastedit_date'];
-        $tempPrint['lpId'] = $lpId;
-        $tempPrint['lpName'] = $lpName;
-        $tempPrint['studentName'] = $studiantein['complete_name'];
-        $tempPrint['studentCompany'] = ($studentCompanyId != 0) ? true : false;
-
-        // $studentInfo[$studentId] = $studiantein;
-
-
-        //$cursos[] = $courseId;
-        $cursos[$courseId][$lpId][] = $tempPrint;
-        $estudiantes[] = $studentId;
-        if ($studentCompanyId != 0) {
-            $estudiantesCompany[] = $studentCompanyId;
-            //$estudiantesCompanyPorCurso[$courseId][] = $studentCompanyId;
-            //$estudiantesCompanyPorCurso[$courseId] = array_unique($estudiantesCompanyPorCurso[$courseId]);
-        }
-        /* else {
-            $estudiantesPorCurso[$courseId][] = $studentId;
-            $estudiantesPorCurso[$courseId] = array_unique($estudiantesPorCurso[$courseId]);
-        }
-
-        $print[] = $tempPrint;
-        */
+        $companys[$company][] = $studentId;
+        $companys[$company] = array_unique($companys[$company]);
     }
 }
-$estudiantes = array_unique($estudiantes);
-$estudiantesCompany = array_unique($estudiantesCompany);
-$NumeroEstudiantes = count($estudiantes);
-$NumeroEstudiantesCompany = count($estudiantesCompany);
-$cursoText = "Cantidad de alumnos inscritos $NumeroEstudiantes <br> <br> Cantidad de estudiantes con company $NumeroEstudiantesCompany";
-$cursoText .= '<br>Listado de cursos<br><br>';
 
 
+// Printing table
+$total = 0;
+$table = '<div class="table-responsive"><table class="table table-bordered">';
+$query = "SELECT
+			display_text
+		FROM
+			extra_field
+		WHERE
+			variable = 'company'";
+$displayText = Database::fetch_assoc(Database::query($query));
+$displayText = $displayText['display_text'];
+$table.="<thead><tr><td>$displayText</td><td> numero de inscription en leccion </td></tr></thead><tbody>";
+
+foreach($companys as $entity => $student) {
+    $table.="<tr><td>$entity</td><td>".count($student)."</td></tr>";
+    $total += count($student);
+}
+$table.="<tr><td>Total nscritos</td><td>$total</td></tr>";
+$table .= '</tbody></table></div>';
+
+
+$cursoText = $table;
+
+
+
+//bloque exportar
 $fileName = 'works_in_session_'.api_get_local_time();
-switch ($_GET['export']) {
-    case 'xls':
-        Export::export_table_xls_html($cursos, $fileName);
-        break;
+$exportTo = strtolower(isset($_GET['export'])?$_GET['export']:null);
+switch (!empty($exportTo)) {
     case 'csv':
-        Export::arrayToCsv($cursos, $fileName);
+        Export::arrayToCsv($companys, $fileName);
         break;
+    case 'xls':
+        Export::export_table_xls_html($companys, $fileName);
+        break;
+    default:
+        //do nothing
+        continue;
 }
+//bloque exportar
 
 
-foreach ($cursos as $courseId => $Course) {
-    $cursoText .= "Curso id = $courseId<br>";
-    foreach ($Course as $lpIndex => $lpData) {
-        $cursoText .= "\t Lp id = $lpIndex<br>";
-        foreach($lpData as $row) {
-            $cursoText .= "<br> <strong>".var_export($row, true)."</strong><br>";
-        }
-    }
-}
 $htmlHeadXtra[] = '<script>
 $(function() {
 
@@ -179,22 +183,23 @@ echo '<div class="actions">';
 echo MySpace::getTopMenu();
 echo '</div>';
 echo MySpace::getAdminActions();
-echo $cursoText;
-// if (!empty($startDate)) {
-$form = new FormValidator('searchExtra', 'get');
-$form->addHidden('a', 'searchExtra');
-$form->addDatePicker(
-    'startDate',
-    'startDate',
-    []);
-$form->addDatePicker(
-    'endDate',
-    'endDate',
-    []);
-$form->addButtonSearch(get_lang('Search'));
+if (!empty($startDate)) {
+    $form = new FormValidator('searchDate', 'get');
+    $form->addHidden('a', 'searchDate');
+    $form->addDatePicker(
+        'startDate',
+        'startDate',
+        []);
+    $form->addDatePicker(
+        'endDate',
+        'endDate',
+        []);
+    $form->addButtonSearch(get_lang('Search'));
 
-echo $form->returnForm();
-// }
+    echo $form->returnForm();
+    echo $cursoText;
+
+}
 
 echo $content;
 $style = '<style>
@@ -226,60 +231,5 @@ $style = '<style>
 </style>';
 echo $style;
 
-$tableContent = '';
-if (!empty($startDate)) {
-    $tableContent .= "<br><pre>".var_export($startDate, true)."</pre>";
-
-}
-if (!empty($endDate)) {
-    $tableContent .= "<br><pre>".var_export($endDate, true)."</pre>";
-
-}
-if ($action !== 'add_user') {
-    $conditions = ['status' => STUDENT_BOSS, 'active' => 1];
-    if (!empty($languageFilter) && $languageFilter !== 'placeholder') {
-        $conditions['language'] = $languageFilter;
-    }
-    $bossList = UserManager::get_user_list($conditions, ['firstname']);
-    $tableContent .= '<div class="container-fluid"><div class="row flex-row flex-nowrap">';
-    foreach ($bossList as $boss) {
-        $bossId = $boss['id'];
-        $tableContent .= '<div class="col-md-1">';
-        $tableContent .= '<div class="boss_column">';
-        $tableContent .= '<h5><strong>'.api_get_person_name($boss['firstname'], $boss['lastname']).'</strong></h5>';
-        $tableContent .= Statistics::getBossTable($bossId);
-
-        $url = api_get_self().'?a=add_user&boss_id='.$bossId;
-
-        $tableContent .= '<div class="add_user">';
-        $tableContent .= '<strong>'.get_lang('AddStudent').'</strong>';
-        $addUserForm = new FormValidator(
-            'add_user_to_'.$bossId,
-            'post',
-            '',
-            '',
-            [],
-            FormValidator::LAYOUT_BOX_NO_LABEL
-        );
-        $addUserForm->addSelectAjax(
-            'user_id',
-            '',
-            [],
-            [
-                'width' => '200px',
-                'url' => api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=user_by_role&active=1&status='.STUDENT,
-            ]
-        );
-        $addUserForm->addButtonSave(get_lang('Add'));
-        $tableContent .= $addUserForm->returnForm();
-        $tableContent .= '</div>';
-
-        $tableContent .= '</div>';
-        $tableContent .= '</div>';
-    }
-    $tableContent .= '</div></div>';
-}
-
-echo $tableContent;
 
 Display::display_footer();

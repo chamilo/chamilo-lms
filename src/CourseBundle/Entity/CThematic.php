@@ -78,7 +78,7 @@ class CThematic extends AbstractResource implements ResourceInterface
     /**
      * @var CThematicPlan[]
      *
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CThematicPlan", mappedBy="thematic", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="CThematicPlan", mappedBy="thematic", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     protected $plans;
 
@@ -87,7 +87,7 @@ class CThematic extends AbstractResource implements ResourceInterface
      *
      * @ORM\OrderBy({"startDate" = "ASC"})
      *
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CThematicAdvance", mappedBy="thematic", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="CThematicAdvance", mappedBy="thematic", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     protected $advances;
 

@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  *  indexes={
  *      @ORM\Index(name="course", columns={"c_id"}),
  *      @ORM\Index(name="user", columns={"user_id"}),
- *      @ORM\Index(name="c_id", columns={"c_id", "id"})
+ *      @ORM\Index(name="c_id", columns={"c_id", "iid"})
  *  }
  * )
  * @ORM\Entity
@@ -36,13 +36,6 @@ class CWikiMailcue
      * @ORM\Column(name="c_id", type="integer")
      */
     protected $cId;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=true)
-     */
-    protected $id;
 
     /**
      * @var string
@@ -166,30 +159,6 @@ class CWikiMailcue
     public function getCId()
     {
         return $this->cId;
-    }
-
-    /**
-     * Set id.
-     *
-     * @param int $id
-     *
-     * @return CWikiMailcue
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**

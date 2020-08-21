@@ -39,13 +39,6 @@ class CTool extends AbstractResource implements ResourceInterface
     protected $iid;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=true)
-     */
-    protected $id;
-
-    /**
      * @Assert\NotBlank
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
@@ -58,13 +51,6 @@ class CTool extends AbstractResource implements ResourceInterface
      * @ORM\Column(name="visibility", type="boolean", nullable=true)
      */
     protected $visibility;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="category", type="string", length=20, nullable=false, options={"default" = "authoring"})
-     */
-    protected $category;
 
     /**
      * @var Course
@@ -199,54 +185,6 @@ class CTool extends AbstractResource implements ResourceInterface
         return $this->visibility;
     }
 
-    /**
-     * Set category.
-     *
-     * @param string $category
-     *
-     * @return CTool
-     */
-    public function setCategory($category)
-    {
-        $this->category = $category;
-
-        return $this;
-    }
-
-    /**
-     * Get category.
-     *
-     * @return string
-     */
-    public function getCategory()
-    {
-        return $this->category;
-    }
-
-    /**
-     * Set id.
-     *
-     * @param int $id
-     *
-     * @return CTool
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
     public function getTool(): Tool
     {
         return $this->tool;
@@ -265,10 +203,9 @@ class CTool extends AbstractResource implements ResourceInterface
     public function postPersist(LifecycleEventArgs $args)
     {
         // Update id with iid value
-        $em = $args->getEntityManager();
-        $this->setId($this->iid);
+        /*$em = $args->getEntityManager();
         $em->persist($this);
-        $em->flush();
+        $em->flush();*/
     }
 
     public function getPosition()

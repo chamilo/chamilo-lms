@@ -38,13 +38,6 @@ class CCourseDescription extends AbstractResource implements ResourceInterface
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer", nullable=true)
-     */
-    protected $id;
-
-    /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
     protected $cId;
@@ -218,30 +211,6 @@ class CCourseDescription extends AbstractResource implements ResourceInterface
     public function getProgress()
     {
         return $this->progress;
-    }
-
-    /**
-     * Set id.
-     *
-     * @param int $id
-     *
-     * @return CCourseDescription
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**

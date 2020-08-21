@@ -907,9 +907,6 @@ class CQuiz extends AbstractResource implements ResourceInterface
         return $this->iid;
     }
 
-    /**
-     * @return int
-     */
     public function getPreventBackwards(): int
     {
         return $this->preventBackwards;
@@ -922,9 +919,6 @@ class CQuiz extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isAutoLaunch(): bool
     {
         return $this->autoLaunch;

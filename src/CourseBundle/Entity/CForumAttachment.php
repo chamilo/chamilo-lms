@@ -33,13 +33,6 @@ class CForumAttachment extends AbstractResource implements ResourceInterface
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer", nullable=true)
-     */
-    protected $id;
-
-    /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
     protected $cId;
@@ -193,30 +186,6 @@ class CForumAttachment extends AbstractResource implements ResourceInterface
     public function getFilename()
     {
         return $this->filename;
-    }
-
-    /**
-     * Set id.
-     *
-     * @param int $id
-     *
-     * @return CForumAttachment
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**

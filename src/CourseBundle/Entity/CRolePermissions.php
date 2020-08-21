@@ -37,13 +37,6 @@ class CRolePermissions
     protected $cId;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=true)
-     */
-    protected $id;
-
-    /**
      * @var bool
      *
      * @ORM\Column(name="default_perm", type="boolean", nullable=false)

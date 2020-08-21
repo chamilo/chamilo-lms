@@ -9,6 +9,7 @@ use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CourseBundle\Traits\ShowCourseResourcesInSessionTrait;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -63,15 +64,35 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
     protected $session;
 
     /**
-     * @var CQuizQuestionCategory[] $questionCategories
+     * @var Collection|CQuizQuestion[]
      *
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CQuizQuestionCategory", mappedBy="event")
+     * @ORM\ManyToMany(targetEntity="Chamilo\CourseBundle\Entity\CQuizQuestion", mappedBy="categories")
      */
-    protected $questionCategories;
+    protected $questions;
 
     public function __construct()
     {
-        $this->questionCategories = new ArrayCollection();
+        $this->questions = new ArrayCollection();
+    }
+
+    public function addQuestion(CQuizQuestion $question)
+    {
+        if ($this->questions->contains($question)) {
+            return;
+        }
+
+        $this->questions->add($question);
+        $question->addCategory($this);
+    }
+
+    public function removeQuestion(CQuizQuestion $question)
+    {
+        if (!$this->questions->contains($question)) {
+            return;
+        }
+
+        $this->questions->removeElement($question);
+        $question->removeCategory($this);
     }
 
     public function __toString(): string

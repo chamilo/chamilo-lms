@@ -47,13 +47,6 @@ class CQuizAnswer
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer", nullable=true)
-     */
-    protected $id;
-
-    /**
-     * @var int
-     *
      * @ORM\Column(name="question_id", type="integer", nullable=false)
      */
     protected $questionId;
@@ -123,7 +116,6 @@ class CQuizAnswer
 
     public function __construct()
     {
-        $this->id = null;
         $this->idAuto = 0;
         $this->correct = null;
         $this->comment = null;
@@ -132,30 +124,6 @@ class CQuizAnswer
         $this->hotspotType = null;
         $this->destination = null;
         $this->answerCode = null;
-    }
-
-    /**
-     * Set id.
-     *
-     * @param int $id
-     *
-     * @return CQuizAnswer
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**

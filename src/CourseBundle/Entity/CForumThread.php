@@ -41,13 +41,6 @@ class CForumThread extends AbstractResource implements ResourceInterface
     protected $cId;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="thread_id", type="integer")
-     */
-    protected $threadId;
-
-    /**
      * @var string
      * @Assert\NotBlank()
      * @ORM\Column(name="thread_title", type="string", length=255, nullable=true)
@@ -180,7 +173,6 @@ class CForumThread extends AbstractResource implements ResourceInterface
         $this->threadReplies = 0;
         $this->threadViews = 0;
         $this->locked = 0;
-        $this->threadId = 0;
         $this->threadQualifyMax = 0;
         $this->threadWeight = 0;
         $this->lpItemId = 0;
@@ -569,30 +561,6 @@ class CForumThread extends AbstractResource implements ResourceInterface
     public function getThreadWeight()
     {
         return $this->threadWeight;
-    }
-
-    /**
-     * Set threadId.
-     *
-     * @param int $threadId
-     *
-     * @return CForumThread
-     */
-    public function setThreadId($threadId)
-    {
-        $this->threadId = $threadId;
-
-        return $this;
-    }
-
-    /**
-     * Get threadId.
-     *
-     * @return int
-     */
-    public function getThreadId()
-    {
-        return $this->threadId;
     }
 
     /**

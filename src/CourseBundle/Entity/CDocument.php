@@ -113,12 +113,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(
  *  name="c_document",
  *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"}),
- *      @ORM\Index(name="idx_cdoc_path", columns={"path"}),
  *      @ORM\Index(name="idx_cdoc_size", columns={"size"}),
- *      @ORM\Index(name="idx_cdoc_id", columns={"id"}),
  *      @ORM\Index(name="idx_cdoc_type", columns={"filetype"}),
- *      @ORM\Index(name="idx_cdoc_sid", columns={"session_id"}),
  *  }
  * )
  * GRID\Source(columns="iid, title, resourceNode.createdAt", filterable=false, groups={"resource"})
@@ -138,13 +134,6 @@ class CDocument extends AbstractResource implements ResourceInterface
      * @ORM\GeneratedValue
      */
     protected $iid;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=true)
-     */
-    protected $id;
 
     /**
      * @var string
@@ -371,20 +360,6 @@ class CDocument extends AbstractResource implements ResourceInterface
     public function getReadonly()
     {
         return $this->readonly;
-    }
-
-    /**
-     * Set id.
-     *
-     * @param int $id
-     *
-     * @return CDocument
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
     }
 
     public function getCourse(): Course

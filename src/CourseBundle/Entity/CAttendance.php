@@ -41,13 +41,6 @@ class CAttendance extends AbstractResource implements ResourceInterface
     protected $cId;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=true)
-     */
-    protected $id;
-
-    /**
      * @var string
      * @Assert\NotBlank
      * @ORM\Column(name="name", type="text", nullable=false)
@@ -305,30 +298,6 @@ class CAttendance extends AbstractResource implements ResourceInterface
     public function getLocked()
     {
         return $this->locked;
-    }
-
-    /**
-     * Set id.
-     *
-     * @param int $id
-     *
-     * @return CAttendance
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**

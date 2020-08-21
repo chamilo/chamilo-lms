@@ -2211,7 +2211,7 @@ HOTSPOT;
                     te.c_id = $course_id $session_id_and AND
                     ce.active <> -1 AND
                     ce.c_id = $course_id
-                    $exercise_where
+                    $exercise_where AND
                     $extra_where_conditions
                 ";
 

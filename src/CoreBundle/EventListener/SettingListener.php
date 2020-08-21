@@ -5,7 +5,6 @@
 namespace Chamilo\CoreBundle\EventListener;
 
 use Sylius\Bundle\SettingsBundle\Event\SettingsEvent;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -13,12 +12,8 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class SettingListener
 {
-    /** @var ContainerInterface */
-    protected $container;
-
-    public function __construct(ContainerInterface $container)
+    public function __construct()
     {
-        $this->container = $container;
     }
 
     public function onSettingPreSave(SettingsEvent $event)

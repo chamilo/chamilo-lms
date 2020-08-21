@@ -420,9 +420,6 @@ class Agenda
                 $id = $event->getIid();
 
                 if ($id) {
-                    $sql = "UPDATE ".$this->tbl_course_agenda." SET id = iid WHERE iid = $id";
-                    Database::query($sql);
-
                     // Add announcement.
                     if ($addAsAnnouncement) {
                         $this->storeAgendaEventAsAnnouncement($id, $usersToSend);
@@ -1675,7 +1672,7 @@ class Agenda
                 FROM $tbl_property ip
                 INNER JOIN $tlb_course_agenda agenda
                 ON (
-                  ip.ref = agenda.id AND
+                  ip.ref = agenda.iid AND
                   ip.c_id = agenda.c_id AND
                   ip.tool = '".TOOL_CALENDAR_EVENT."'
                 )
@@ -2918,11 +2915,6 @@ class Agenda
 
             $id = $attachment->getIid();
             if ($id) {
-                $table = Database::get_course_table(TABLE_AGENDA_ATTACHMENT);
-                $sql = "UPDATE $table
-                        SET id = iid WHERE iid = $id";
-                Database::query($sql);
-
                 /*api_item_property_update(
                     $courseInfo,
                     'calendar_event_attachment',
@@ -3041,7 +3033,7 @@ class Agenda
         $eventId = (int) $eventId;
         $courseId = (int) $courseId;
 
-        $sql = "SELECT count(DISTINCT(id)) as count
+        $sql = "SELECT count(DISTINCT(iid)) as count
                 FROM ".$this->tbl_course_agenda."
                 WHERE
                     c_id = $courseId AND

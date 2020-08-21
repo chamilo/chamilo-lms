@@ -213,7 +213,7 @@ if ($cancelQuestion) {
     }
 }
 
-if (!empty($clone_question) && !empty($objExercise->id)) {
+if (!empty($clone_question) && !empty($objExercise->getId())) {
     $old_question_obj = Question::read($clone_question);
     $old_question_obj->question = $old_question_obj->question.' - '.get_lang('Copy');
 
@@ -232,11 +232,11 @@ if (!empty($clone_question) && !empty($objExercise->id)) {
     $new_answer_obj->duplicate($new_question_obj);
 
     // Reloading tne $objExercise obj
-    $objExercise->read($objExercise->id, false);
+    $objExercise->read($objExercise->getId(), false);
 
     Display::addFlash(Display::return_message(get_lang('Item copied')));
 
-    header('Location: admin.php?'.api_get_cidreq().'&id='.$objExercise->id.'&page='.$page);
+    header('Location: admin.php?'.api_get_cidreq().'&id='.$objExercise->getId().'&page='.$page);
     exit;
 }
 
@@ -263,7 +263,7 @@ if (api_is_in_gradebook()) {
 $interbreadcrumb[] = ['url' => 'exercise.php?'.api_get_cidreq(), 'name' => get_lang('Tests')];
 if (isset($_GET['newQuestion']) || isset($_GET['editQuestion'])) {
     $interbreadcrumb[] = [
-        'url' => 'admin.php?id='.$objExercise->id.'&'.api_get_cidreq(),
+        'url' => 'admin.php?id='.$objExercise->getId().'&'.api_get_cidreq(),
         'name' => $objExercise->selectTitle(true),
     ];
 } else {
@@ -321,15 +321,15 @@ if ($inATest) {
         echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq().'">'.
             Display::return_icon('back.png', get_lang('BackToTestsList'), '', ICON_SIZE_MEDIUM).'</a>';
     }
-    echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'&preview=1">'.
+    echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.api_get_cidreq().'&id='.$objExercise->getId().'&preview=1">'.
         Display::return_icon('preview_view.png', get_lang('Preview'), '', ICON_SIZE_MEDIUM).'</a>';
 
     echo Display::url(
         Display::return_icon('test_results.png', get_lang('Results and feedback'), '', ICON_SIZE_MEDIUM),
-        api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?'.api_get_cidreq().'&id='.$objExercise->id
+        api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?'.api_get_cidreq().'&id='.$objExercise->getId()
     );
 
-    echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&id='.$objExercise->id.'">'.
+    echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&id='.$objExercise->getId().'">'.
         Display::return_icon('settings.png', get_lang('Edit test name and settings'), '', ICON_SIZE_MEDIUM).'</a>';
 
     $maxScoreAllQuestions = 0;

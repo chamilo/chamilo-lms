@@ -236,11 +236,6 @@ class learnpath
                     $this->last_item_seen = 0;
                     $this->lp_view_session_id = $session_id;
                     $this->lp_view_id = Database::insert($lp_table, $params);
-                    if (!empty($this->lp_view_id)) {
-                        $sql = "UPDATE $lp_table SET id = iid
-                                WHERE iid = ".$this->lp_view_id;
-                        Database::query($sql);
-                    }
                 }
 
                 // Initialise items.
@@ -362,12 +357,6 @@ class learnpath
                                             'score' => 0,
                                         ];
                                         $insertId = Database::insert($itemViewTable, $params);
-
-                                        if ($insertId) {
-                                            $sql = "UPDATE $itemViewTable SET id = iid
-                                                    WHERE iid = $insertId";
-                                            Database::query($sql);
-                                        }
 
                                         $this->items[$item_id]->set_lp_view(
                                             $this->lp_view_id,
@@ -576,9 +565,6 @@ class learnpath
 
         $new_item_id = Database::insert($tbl_lp_item, $params);
         if ($new_item_id) {
-            $sql = "UPDATE $tbl_lp_item SET id = iid WHERE iid = $new_item_id";
-            Database::query($sql);
-
             if (!empty($next)) {
                 $sql = "UPDATE $tbl_lp_item
                         SET previous_item_id = $new_item_id
@@ -796,8 +782,6 @@ class learnpath
 
                 if ($lp->getIid()) {
                     $id = $lp->getIid();
-                    $sql = "UPDATE $tbl_lp SET id = iid WHERE iid = $id";
-                    Database::query($sql);
                 }
 
                 // Insert into item_property.
@@ -3786,9 +3770,6 @@ class learnpath
             Database::query($sql);
             $id = Database::insert_id();
             $this->lp_view_id = $id;
-
-            $sql = "UPDATE $lp_view_table SET id = iid WHERE iid = $id";
-            Database::query($sql);
         }
 
         return $this->lp_view_id;
@@ -4735,8 +4716,6 @@ class learnpath
         $view_id = Database::insert_id();
 
         if ($view_id) {
-            $sql = "UPDATE $lp_view_table SET id = iid WHERE iid = $view_id";
-            Database::query($sql);
             $this->lp_view_id = $view_id;
             $this->attempt = $this->attempt + 1;
         } else {
@@ -10208,6 +10187,26 @@ EOD;
         $repo = $em->getRepository('ChamiloCourseBundle:CLpCategory');
 
         return $repo->getBySortableGroupsQuery(['cId' => $courseId])->getResult();
+    }
+
+    public static function getCategorySessionId($id)
+    {
+        if (false === api_get_configuration_value('allow_session_lp_category')) {
+            return 0;
+        }
+
+        $table = Database::get_course_table(TABLE_LP_CATEGORY);
+        $id = (int) $id;
+
+        $sql = "SELECT session_id FROM $table WHERE iid = $id";
+        $result = Database::query($sql);
+        $result = Database::fetch_array($result, 'ASSOC');
+
+        if ($result) {
+            return (int) $result['session_id'];
+        }
+
+        return 0;
     }
 
     /**

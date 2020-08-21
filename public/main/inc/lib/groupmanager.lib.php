@@ -109,8 +109,7 @@ class GroupManager
         $course_id = $course_info['real_id'];
         $table_group = Database::get_course_table(TABLE_GROUP);
 
-        $select = ' g.id,
-                    g.iid,
+        $select = ' g.iid,
                     g.name,
                     g.description,
                     g.category_id,

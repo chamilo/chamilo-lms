@@ -158,7 +158,7 @@ if ($form->validate()) {
             Display::return_message(get_lang('Test added'), 'success')
         );
     }
-    $exercise_id = $objExercise->id;
+    $exercise_id = $objExercise->getId();
     Session::erase('objExercise');
     header('Location:admin.php?id='.$exercise_id.'&'.api_get_cidreq());
     exit;
@@ -175,15 +175,15 @@ if ($form->validate()) {
         'name' => get_lang('Tests'),
     ];
     $interbreadcrumb[] = [
-        'url' => 'admin.php?id='.$objExercise->id.'&'.api_get_cidreq(),
+        'url' => 'admin.php?id='.$objExercise->getId().'&'.api_get_cidreq(),
         'name' => $objExercise->selectTitle(true),
     ];
 
     Display::display_header($nameTools, get_lang('Test'));
 
     echo '<div class="actions">';
-    if (0 != $objExercise->id) {
-        echo '<a href="admin.php?'.api_get_cidreq().'&id='.$objExercise->id.'">'.
+    if (0 != $objExercise->getId()) {
+        echo '<a href="admin.php?'.api_get_cidreq().'&id='.$objExercise->getId().'">'.
             Display::return_icon('back.png', get_lang('Go back to the questions list'), '', ICON_SIZE_MEDIUM).'</a>';
     } else {
         if (!empty($_GET['lp_id']) || !empty($_POST['lp_id'])) {

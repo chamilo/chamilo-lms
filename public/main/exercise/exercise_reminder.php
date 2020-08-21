@@ -37,7 +37,7 @@ if (!$objExercise) {
 
 $time_control = false;
 $clock_expired_time = ExerciseLib::get_session_time_control_key(
-    $objExercise->id,
+    $objExercise->getId(),
     $learnpath_id,
     $learnpath_item_id
 );
@@ -94,9 +94,9 @@ if (!$hideHeaderAndFooter) {
 // I'm in a preview mode as course admin. Display the action menu.
 if (api_is_course_admin() && !$hideHeaderAndFooter) {
     echo '<div class="actions">';
-    echo '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">'.
+    echo '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->getId().'">'.
         Display::return_icon('back.png', get_lang('Go back to the questions list'), [], 32).'</a>';
-    echo '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyTest=yes&exerciseId='.$objExercise->id.'">'.
+    echo '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyTest=yes&exerciseId='.$objExercise->getId().'">'.
         Display::return_icon('edit.png', get_lang('ModifyTest'), [], 32).'</a>';
     echo '</div>';
 }
@@ -114,24 +114,24 @@ echo '<script>
         // Normal inputs
         window.location = "'.api_get_path(WEB_CODE_PATH).'exercise/exercise_result.php?'.api_get_cidreq().'&exe_id='.$exe_id.'&" + lp_data;
     }
-    
-    function changeOptionStatus(status) 
-    {    
-        $("input[type=checkbox]").each(function () {                 
-            $(this).prop("checked", status);                                                
-        });    
-        
-        var action = ""; 
-        var extraOption = "remove_all";       
+
+    function changeOptionStatus(status)
+    {
+        $("input[type=checkbox]").each(function () {
+            $(this).prop("checked", status);
+        });
+
+        var action = "";
+        var extraOption = "remove_all";
         if (status == 1) {
             extraOption = "add_all";
-        }     
+        }
         $.ajax({
             url: "'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&a=add_question_to_reminder",
             data: "option="+extraOption+"&exe_id='.$exe_id.'&action="+action,
             success: function(returnValue) {
             }
-        });  
+        });
     }
 
     function review_questions() {
@@ -147,7 +147,7 @@ echo '<script>
             $("#message").addClass("warning-message");
             $("#message").html("'.addslashes(get_lang('Select a question to revise')).'");
         } else {
-            window.location = "exercise_submit.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'&reminder=2&" + lp_data;
+            window.location = "exercise_submit.php?'.api_get_cidreq().'&exerciseId='.$objExercise->getId().'&reminder=2&" + lp_data;
         }
     }
 

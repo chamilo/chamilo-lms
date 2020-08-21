@@ -130,23 +130,22 @@ $firstSessionCategoryId = 0;
 if ($allowCategory) {
     $newCategoryFiltered = [];
     foreach ($categoriesTempList as $category) {
-        $categorySessionId = (int) learnpath::getCategorySessionId($category->getId());
+        $categorySessionId = (int) learnpath::getCategorySessionId($category->getIid());
         if ($categorySessionId === $sessionId || $categorySessionId === 0) {
             $newCategoryFiltered[] = $category;
         }
         if (!empty($sessionId) && empty($firstSessionCategoryId) && $categorySessionId == $sessionId) {
-            $firstSessionCategoryId = $category->getId();
+            $firstSessionCategoryId = $category->getIid();
         }
     }
 
     $categoriesTempList = $newCategoryFiltered;
 }
 
-$categoryTest = new CLpCategory();
-$categoryTest->setId(0);
+/*$categoryTest = new CLpCategory();
 $categoryTest->setName(get_lang('WithOutCategory'));
-$categoryTest->setPosition(0);
-$categories = [$categoryTest];
+$categoryTest->setPosition(0);*/
+$categories = [];
 
 if (!empty($categoriesTempList)) {
     $categories = array_merge($categories, $categoriesTempList);
@@ -159,7 +158,7 @@ $filteredCategoryId = ('view_category' === $action && !empty($_GET['id'])) ? int
 if ($filteredCategoryId) {
     /** @var CLpCategory $category */
     foreach ($categories as $category) {
-        if ($category->getId() != $filteredCategoryId) {
+        if ($category->getIid() != $filteredCategoryId) {
             continue;
         }
 
@@ -215,7 +214,7 @@ $shortcutRepository = Container::getShortcutRepository();
 
 /** @var CLpCategory $category */
 foreach ($categories as $category) {
-    $categoryId = $category->getId();
+    $categoryId = $category->getIid();
     $visibility = true;
     if (0 !== $categoryId) {
         $visibility = $category->isVisible($courseEntity, $sessionEntity);

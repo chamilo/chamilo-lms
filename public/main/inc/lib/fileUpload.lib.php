@@ -1509,7 +1509,7 @@ function create_unexisting_directory(
 
     // Check if pathname already exists inside document table
     $table = Database::get_course_table(TABLE_DOCUMENT);
-    $sql = "SELECT id, path FROM $table
+    $sql = "SELECT iid, path FROM $table
             WHERE
                 c_id = $course_id AND
                 path = '".Database::escape_string($systemFolderName)."'";
@@ -1544,7 +1544,7 @@ function create_unexisting_directory(
     } else {
         $document = Database::fetch_array($rs);
         $documentData = DocumentManager::get_document_data_by_id(
-            $document['id'],
+            $document['iid'],
             $_course['code'],
             false,
             $session_id

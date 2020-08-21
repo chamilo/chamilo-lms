@@ -145,7 +145,7 @@ class TestCategory
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
         $sql = "SELECT category_id
                 FROM $table
-                WHERE question_id = $questionId AND c_id = $courseId";
+                WHERE question_id = $questionId ";
         $res = Database::query($sql);
         $result = 0;
         if (Database::num_rows($res) > 0) {
@@ -503,7 +503,6 @@ class TestCategory
     public static function getNumberMaxQuestionByCat($exerciseId)
     {
         $res_num_max = 0;
-        // foreach question
         $categories = self::getListOfCategoriesIDForTest($exerciseId);
         foreach ($categories as $category) {
             if (empty($category['id'])) {
@@ -721,7 +720,7 @@ class TestCategory
      * @param int $categoryId
      * @param int $questionId
      * @param int $courseId
-     *
+     * @deprecated use entities
      * @return string|false
      */
     public static function addCategoryToQuestion($categoryId, $questionId, $courseId)
@@ -733,6 +732,7 @@ class TestCategory
             $questionId > 0 &&
             $courseId > 0
         ) {
+
             $sql = "INSERT INTO $table (c_id, question_id, category_id)
                     VALUES (".(int) $courseId.', '.(int) $questionId.', '.(int) $categoryId.')';
             Database::query($sql);

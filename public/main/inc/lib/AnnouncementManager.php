@@ -1433,11 +1433,8 @@ class AnnouncementManager
                         $file
                     );
                     $repo->getEntityManager()->flush();
-                    $insertId = $attachment->getIid();
-                    if ($insertId) {
-                        $sql = "UPDATE $table SET id = iid WHERE iid = $insertId";
-                        Database::query($sql);
-                    }
+
+                    return 1;
                 }
 
                 $return = 1;

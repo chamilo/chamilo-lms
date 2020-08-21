@@ -1182,7 +1182,7 @@ class DocumentManager
         $sessionCondition = api_get_session_condition($session_id, true, true);
 
         $sql = "SELECT * FROM $TABLE_DOCUMENT
-                WHERE c_id = $course_id $sessionCondition AND id = $id";
+                WHERE c_id = $course_id $sessionCondition AND iid = $id";
 
         if ($ignoreDeleted) {
             $sql .= " AND path NOT LIKE '%_DELETED_%' ";
@@ -4378,7 +4378,7 @@ class DocumentManager
 
         // Check if pathname already exists inside document table
         $tbl_document = Database::get_course_table(TABLE_DOCUMENT);
-        $sql = "SELECT id, path FROM $tbl_document
+        $sql = "SELECT iid, path FROM $tbl_document
                 WHERE
                     filetype = 'folder' AND
                     c_id = $courseId AND
@@ -6153,9 +6153,6 @@ This folder contains all sessions that have been opened in the chat. Although th
         $documentId = $document->getIid();
 
         if ($documentId) {
-            $table = Database::get_course_table(TABLE_DOCUMENT);
-            $sql = "UPDATE $table SET id = iid WHERE iid = $documentId";
-            Database::query($sql);
 
             return $document;
         }

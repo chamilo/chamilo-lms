@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 
 /**
  * Class Version20
@@ -263,7 +263,7 @@ class Version20 extends AbstractMigrationChamilo
         $survey = $schema->getTable('c_survey');
 
         if (!$survey->hasColumn('is_mandatory')) {
-            $survey->addColumn('is_mandatory', Type::BOOLEAN)->setDefault(false);
+            $survey->addColumn('is_mandatory', Types::BOOLEAN)->setDefault(false);
         }
 
         $this->addSql('ALTER TABLE c_student_publication ADD filesize INT DEFAULT NULL');

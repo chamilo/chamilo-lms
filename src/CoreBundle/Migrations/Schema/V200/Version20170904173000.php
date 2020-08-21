@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 
 /**
  * Class Version20170904173000.
@@ -27,7 +27,7 @@ class Version20170904173000 extends AbstractMigrationChamilo
 
         if (!$tblQuestion->hasColumn('is_required')) {
             $tblQuestion
-                ->addColumn('is_required', Type::BOOLEAN)
+                ->addColumn('is_required', Types::BOOLEAN)
                 ->setDefault(false);
         }
     }

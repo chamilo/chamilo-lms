@@ -163,6 +163,8 @@ class ToolChain
         ];
         $toolList = array_flip($toolList);
 
+        // @todo handle plugin
+
         /** @var AbstractTool $tool */
         foreach ($tools as $tool) {
             $visibility = in_array($tool->getName(), $toolVisibility, true);

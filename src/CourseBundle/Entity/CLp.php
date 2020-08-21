@@ -42,13 +42,6 @@ class CLp extends AbstractResource implements ResourceInterface
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer", nullable=true)
-     */
-    protected $id;
-
-    /**
-     * @var int
-     *
      * @ORM\Column(name="lp_type", type="integer", nullable=false)
      */
     protected $lpType;
@@ -986,30 +979,6 @@ class CLp extends AbstractResource implements ResourceInterface
     public function getExpiredOn()
     {
         return $this->expiredOn;
-    }
-
-    /**
-     * Set id.
-     *
-     * @param int $id
-     *
-     * @return CLp
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**

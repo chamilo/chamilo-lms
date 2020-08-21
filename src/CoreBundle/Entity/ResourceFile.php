@@ -86,10 +86,10 @@ class ResourceFile
     protected $id;
 
     /**
+     * @var string
+     *
      * @Assert\NotBlank()
      * @Groups({"resource_file:read", "resource_node:read", "document:read"})
-     *
-     * @var string
      *
      * @ORM\Column(type="string", length=255)
      */
@@ -105,6 +105,7 @@ class ResourceFile
 
     /**
      * @var string
+     *
      * @Groups({"resource_file:read", "resource_node:read", "document:read"})
      * @ORM\Column(type="text", nullable=true)
      */
@@ -120,6 +121,7 @@ class ResourceFile
 
     /**
      * @var int
+     *
      * @Groups({"resource_file:read", "resource_node:read", "document:read"})
      *
      * @ORM\Column(type="integer", nullable=true)

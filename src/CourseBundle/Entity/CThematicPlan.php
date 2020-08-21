@@ -39,13 +39,6 @@ class CThematicPlan extends AbstractResource implements ResourceInterface
     protected $cId;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=true)
-     */
-    protected $id;
-
-    /**
      * @var CThematic
      *
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CThematic", inversedBy="plans")
@@ -173,30 +166,6 @@ class CThematicPlan extends AbstractResource implements ResourceInterface
     public function getDescriptionType()
     {
         return $this->descriptionType;
-    }
-
-    /**
-     * Set id.
-     *
-     * @param int $id
-     *
-     * @return CThematicPlan
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**

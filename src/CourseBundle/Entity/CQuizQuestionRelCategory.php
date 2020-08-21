@@ -9,13 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * CQuizQuestionRelCategory.
  *
- * @ORM\Table(
- *  name="c_quiz_question_rel_category",
- *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"}),
- *      @ORM\Index(name="idx_qqrc_qid", columns={"question_id"})
- *  }
- * )
+ * @ORM\Table(name="c_quiz_question_rel_category")
  * @ORM\Entity
  */
 class CQuizQuestionRelCategory
@@ -30,95 +24,58 @@ class CQuizQuestionRelCategory
     protected $iid;
 
     /**
-     * @var int
+     * @var CQuizQuestion $question
      *
-     * @ORM\Column(name="c_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CQuizQuestion", inversedBy="questionCategories")
+     * @ORM\JoinColumn(name="question_id", referencedColumnName="iid", nullable=false)
      */
-    protected $cId;
+    private $question;
 
     /**
-     * @var int
+     * @var CQuizQuestionCategory $category
      *
-     * @ORM\Column(name="category_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CQuizQuestionCategory", inversedBy="questionCategories")
+     * @ORM\JoinColumn(name="category_id", referencedColumnName="iid", nullable=false)
      */
-    protected $categoryId;
+    private $category;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="question_id", type="integer")
+     * @return CQuizQuestion
      */
-    protected $questionId;
+    public function getQuestion(): self
+    {
+        return $this->question;
+    }
 
     /**
-     * Set categoryId.
-     *
-     * @param int $categoryId
+     * @param CQuizQuestion $question
      *
      * @return CQuizQuestionRelCategory
      */
-    public function setCategoryId($categoryId)
+    public function setQuestion(CQuizQuestion $question): self
     {
-        $this->categoryId = $categoryId;
+        $this->question = $question;
 
         return $this;
     }
 
     /**
-     * Get categoryId.
-     *
-     * @return int
+     * @return CQuizQuestionCategory
      */
-    public function getCategoryId()
+    public function getCategory(): self
     {
-        return $this->categoryId;
+        return $this->category;
     }
 
     /**
-     * Set cId.
-     *
-     * @param int $cId
+     * @param CQuizQuestionCategory $category
      *
      * @return CQuizQuestionRelCategory
      */
-    public function setCId($cId)
+    public function setCategory(CQuizQuestionCategory $category): self
     {
-        $this->cId = $cId;
+        $this->category = $category;
 
         return $this;
-    }
-
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
-    {
-        return $this->cId;
-    }
-
-    /**
-     * Set questionId.
-     *
-     * @param int $questionId
-     *
-     * @return CQuizQuestionRelCategory
-     */
-    public function setQuestionId($questionId)
-    {
-        $this->questionId = $questionId;
-
-        return $this;
-    }
-
-    /**
-     * Get questionId.
-     *
-     * @return int
-     */
-    public function getQuestionId()
-    {
-        return $this->questionId;
     }
 }

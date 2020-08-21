@@ -63,45 +63,23 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
     protected $session;
 
     /**
+     * @var CQuizQuestionCategory[] $questionCategories
      *
-     * @ORM\ManyToMany(targetEntity="Chamilo\CourseBundle\Entity\CQuizQuestion")
-     * @ORM\JoinTable(name="c_quiz_question_rel_category",
-     *      joinColumns={@ORM\JoinColumn(name="category_id", referencedColumnName="iid")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="question_id", referencedColumnName="iid")}
-     * )
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CQuizQuestionCategory", mappedBy="event")
      */
-    protected $questions;
+    protected $questionCategories;
 
     public function __construct()
     {
-        $this->questions = new ArrayCollection();
+        $this->questionCategories = new ArrayCollection();
     }
-
-    /**
-     * @return ArrayCollection
-     */
-    public function getQuestions()
-    {
-        return $this->questions;
-    }
-
-    public function setQuestions($questions): self
-    {
-        $this->questions = $questions;
-
-        return $this;
-    }
-
 
     public function __toString(): string
     {
         return $this->getTitle();
     }
 
-    /**
-     * @return int
-     */
-    public function getIid()
+    public function getIid(): int
     {
         return $this->iid;
     }
@@ -123,14 +101,7 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
         return (string) $this->title;
     }
 
-    /**
-     * Set description.
-     *
-     * @param string $description
-     *
-     * @return CQuizQuestionCategory
-     */
-    public function setDescription($description)
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -196,6 +167,26 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
         /*$em = $args->getEntityManager();
         $em->persist($this);
         $em->flush();*/
+    }
+
+    /**
+     * @return CQuizQuestionCategory[]
+     */
+    public function getQuestionCategories()
+    {
+        return $this->questionCategories;
+    }
+
+    /**
+     * @param CQuizQuestionCategory[] $questionCategories
+     *
+     * @return CQuizQuestionCategory
+     */
+    public function setQuestionCategories($questionCategories): self
+    {
+        $this->questionCategories = $questionCategories;
+
+        return $this;
     }
 
     /**

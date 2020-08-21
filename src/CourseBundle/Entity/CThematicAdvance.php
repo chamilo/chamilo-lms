@@ -40,13 +40,6 @@ class CThematicAdvance extends AbstractResource implements ResourceInterface
     protected $cId;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=true)
-     */
-    protected $id;
-
-    /**
      * @var CThematic
      *
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CThematic")
@@ -101,7 +94,6 @@ class CThematicAdvance extends AbstractResource implements ResourceInterface
     public function __construct()
     {
         $this->doneAdvance = 0;
-        $this->id = 0;
         $this->duration = 1;
     }
 
@@ -204,30 +196,6 @@ class CThematicAdvance extends AbstractResource implements ResourceInterface
     public function getDoneAdvance()
     {
         return $this->doneAdvance;
-    }
-
-    /**
-     * Set id.
-     *
-     * @param int $id
-     *
-     * @return CThematicAdvance
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**

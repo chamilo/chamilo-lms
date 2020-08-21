@@ -165,6 +165,7 @@
         "behat/mink-selenium2-driver": "@stable",
         "php-translation/symfony-bundle": "^0.12",
         "phpstan/phpstan": "^0.12",
+        "psalm/plugin-symfony": "^1.4",
         "symfony/browser-kit": "^4.0|^5.0",
         "symfony/css-selector": "^5.0",
         "symfony/debug-pack": "*",
@@ -173,7 +174,8 @@
         "symfony/profiler-pack": "*",
         "symfony/test-pack": "*",
         "symplify/easy-coding-standard": "^8.0",
-        "vimeo/psalm": "^3.14"
+        "vimeo/psalm": "^3.14",
+        "weirdan/doctrine-psalm-plugin": "^0.11.3"
     },
     "scripts": {
         "analyse": [

@@ -23,7 +23,7 @@ class Version20170627122900 extends AbstractMigrationChamilo
         }*/
 
         /** @var ExtraField $extraField */
-        $extraField = $em->getRepository('ChamiloCoreBundle:ExtraField')
+        $extraField = $em->getRepository(ExtraField::class)
             ->findOneBy([
                 'variable' => 'is_mandatory',
                 'extraFieldType' => ExtraField::SURVEY_FIELD_TYPE,

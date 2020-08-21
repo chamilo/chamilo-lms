@@ -5,11 +5,13 @@
 namespace Chamilo\CoreBundle\EventListener;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\CoreBundle\Security\Authorization\Voter\GroupVoter;
 use Chamilo\CoreBundle\Security\Authorization\Voter\SessionVoter;
 use Chamilo\CourseBundle\Controller\CourseControllerInterface;
+use Chamilo\CourseBundle\Entity\CGroup;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -80,7 +82,7 @@ class CourseListener
             if (null === $course) {
                 /** @var EntityManager $em */
                 $em = $container->get('doctrine')->getManager();
-                $course = $em->getRepository('ChamiloCoreBundle:Course')->find($courseId);
+                $course = $em->getRepository(Course::class)->find($courseId);
 
                 //dump("Course loaded from DB $courseId");
                 $courseInfo = api_get_course_info($course->getCode());
@@ -124,7 +126,7 @@ class CourseListener
                 }
             } else {
                 //dump("Load chamilo session from DB");
-                $session = $em->getRepository('ChamiloCoreBundle:Session')->find($sessionId);
+                $session = $em->getRepository(Session::class)->find($sessionId);
                 if ($session) {
                     if (false === $session->hasCourse($course)) {
                         throw new AccessDeniedException($translator->trans('Course is not registered in the Session'));
@@ -155,7 +157,7 @@ class CourseListener
                 $sessionHandler->remove('gid');
             } else {
                 //dump('Load chamilo group from DB');
-                $group = $em->getRepository('CGroup')->find($groupId);
+                $group = $em->getRepository(CGroup::class)->find($groupId);
 
                 if (!$group) {
                     throw new NotFoundHttpException($translator->trans('Group not found'));

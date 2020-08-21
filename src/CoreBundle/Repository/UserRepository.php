@@ -17,6 +17,7 @@ use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\SkillRelUser;
 use Chamilo\CoreBundle\Entity\SkillRelUserComment;
 use Chamilo\CoreBundle\Entity\Ticket;
+use Chamilo\CoreBundle\Entity\TicketMessage;
 use Chamilo\CoreBundle\Entity\TrackEAccess;
 use Chamilo\CoreBundle\Entity\TrackEAttempt;
 use Chamilo\CoreBundle\Entity\TrackECourseAccess;
@@ -736,7 +737,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         $criteria = [
             'userId' => $userId,
         ];
-        $result = $em->getRepository('ChamiloCoreBundle:GradebookCertificate')->findBy($criteria);
+        $result = $em->getRepository(GradebookCertificate::class)->findBy($criteria);
         $gradebookCertificate = [];
         /** @var GradebookCertificate $item */
         foreach ($result as $item) {
@@ -753,7 +754,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         $criteria = [
             'exeUserId' => $userId,
         ];
-        $result = $em->getRepository('ChamiloCoreBundle:TrackEExercises')->findBy($criteria);
+        $result = $em->getRepository(TrackEExercises::class)->findBy($criteria);
         $trackEExercises = [];
         /** @var TrackEExercises $item */
         foreach ($result as $item) {
@@ -772,7 +773,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         $criteria = [
             'userId' => $userId,
         ];
-        $result = $em->getRepository('ChamiloCoreBundle:TrackEAttempt')->findBy($criteria);
+        $result = $em->getRepository(TrackEAttempt::class)->findBy($criteria);
         $trackEAttempt = [];
         /** @var TrackEAttempt $item */
         foreach ($result as $item) {
@@ -793,7 +794,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         $criteria = [
             'userId' => $userId,
         ];
-        $result = $em->getRepository('ChamiloCoreBundle:TrackECourseAccess')->findBy($criteria);
+        $result = $em->getRepository(TrackECourseAccess::class)->findBy($criteria);
         $trackECourseAccessList = [];
         /** @var TrackECourseAccess $item */
         foreach ($result as $item) {
@@ -959,7 +960,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         $criteria = [
             'userId' => $userId,
         ];
-        $result = $em->getRepository('ChamiloCoreBundle:UserCourseCategory')->findBy($criteria);
+        $result = $em->getRepository(UserCourseCategory::class)->findBy($criteria);
         $userCourseCategory = [];
         /** @var UserCourseCategory $item */
         foreach ($result as $item) {
@@ -973,7 +974,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         $criteria = [
             'posterId' => $userId,
         ];
-        $result = $em->getRepository('ChamiloCourseBundle:CForumPost')->findBy($criteria);
+        $result = $em->getRepository(CForumPost::class)->findBy($criteria);
         $cForumPostList = [];
         /** @var CForumPost $item */
         foreach ($result as $item) {
@@ -989,7 +990,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         $criteria = [
             'threadPosterId' => $userId,
         ];
-        $result = $em->getRepository('ChamiloCourseBundle:CForumThread')->findBy($criteria);
+        $result = $em->getRepository(CForumThread::class)->findBy($criteria);
         $cForumThreadList = [];
         /** @var CForumThread $item */
         foreach ($result as $item) {
@@ -1020,13 +1021,13 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         $criteria = [
             'user' => $userId,
         ];
-        $result = $em->getRepository('ChamiloCourseBundle:CGroupRelUser')->findBy($criteria);
+        $result = $em->getRepository(CGroupRelUser::class)->findBy($criteria);
         $cGroupRelUser = [];
         /** @var CGroupRelUser $item */
         foreach ($result as $item) {
             $list = [
                 'Course # '.$item->getCId(),
-                'Group #'.$item->getGroup()->getId(),
+                'Group #'.$item->getGroup()->getIid(),
                 'Role: '.$item->getStatus(),
             ];
             $cGroupRelUser[] = implode(', ', $list);
@@ -1036,7 +1037,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         $criteria = [
             'userId' => $userId,
         ];
-        $result = $em->getRepository('ChamiloCourseBundle:CAttendanceSheet')->findBy($criteria);
+        $result = $em->getRepository(CAttendanceSheet::class)->findBy($criteria);
         $cAttendanceSheetList = [];
         /** @var CAttendanceSheet $item */
         foreach ($result as $item) {
@@ -1051,7 +1052,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         $criteria = [
             'authorId' => $userId,
         ];
-        $result = $em->getRepository('ChamiloCourseBundle:CBlogPost')->findBy($criteria);
+        $result = $em->getRepository(CBlogPost::class)->findBy($criteria);
         $cBlog = [];
         /** @var CBlogPost $item */
         foreach ($result as $item) {
@@ -1067,7 +1068,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         $criteria = [
             'userId' => $userId,
         ];
-        $result = $em->getRepository('ChamiloCourseBundle:CAttendanceResult')->findBy($criteria);
+        $result = $em->getRepository(CAttendanceResult::class)->findBy($criteria);
         $cAttendanceResult = [];
         /** @var CAttendanceResult $item */
         foreach ($result as $item) {
@@ -1082,7 +1083,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         $criteria = [
             'userSender' => $userId,
         ];
-        $result = $em->getRepository('ChamiloCoreBundle:Message')->findBy($criteria);
+        $result = $em->getRepository(Message::class)->findBy($criteria);
         $messageList = [];
         /** @var Message $item */
         foreach ($result as $item) {
@@ -1104,7 +1105,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         $criteria = [
             'user' => $userId,
         ];
-        $result = $em->getRepository('ChamiloCourseBundle:CSurveyAnswer')->findBy($criteria);
+        $result = $em->getRepository(CSurveyAnswer::class)->findBy($criteria);
         $cSurveyAnswer = [];
         /** @var CSurveyAnswer $item */
         foreach ($result as $item) {
@@ -1119,7 +1120,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         $criteria = [
             'uploaderId' => $userId,
         ];
-        $result = $em->getRepository('ChamiloCourseBundle:CDropboxFile')->findBy($criteria);
+        $result = $em->getRepository(CDropboxFile::class)->findBy($criteria);
         $cDropboxFile = [];
         /** @var CDropboxFile $item */
         foreach ($result as $item) {
@@ -1136,7 +1137,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         $criteria = [
             'userId' => $userId,
         ];
-        $result = $em->getRepository('ChamiloCourseBundle:CDropboxPerson')->findBy($criteria);
+        $result = $em->getRepository(CDropboxPerson::class)->findBy($criteria);
         $cDropboxPerson = [];
         /** @var CDropboxPerson $item */
         foreach ($result as $item) {
@@ -1151,7 +1152,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         $criteria = [
             'authorUserId' => $userId,
         ];
-        $result = $em->getRepository('ChamiloCourseBundle:CDropboxFeedback')->findBy($criteria);
+        $result = $em->getRepository(CDropboxFeedback::class)->findBy($criteria);
         $cDropboxFeedback = [];
         /** @var CDropboxFeedback $item */
         foreach ($result as $item) {
@@ -1168,7 +1169,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         $criteria = [
             'userId' => $userId,
         ];
-        $result = $em->getRepository('ChamiloCourseBundle:CNotebook')->findBy($criteria);
+        $result = $em->getRepository(CNotebook::class)->findBy($criteria);
         $cNotebook = [];
         /** @var CNotebook $item */
         foreach ($result as $item) {
@@ -1184,7 +1185,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         $criteria = [
             'userId' => $userId,
         ];
-        $result = $em->getRepository('ChamiloCourseBundle:CLpView')->findBy($criteria);
+        $result = $em->getRepository(CLpView::class)->findBy($criteria);
         $cLpView = [];
         /** @var CLpView $item */
         foreach ($result as $item) {
@@ -1202,7 +1203,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         $criteria = [
             'userId' => $userId,
         ];
-        $result = $em->getRepository('ChamiloCourseBundle:CStudentPublication')->findBy($criteria);
+        $result = $em->getRepository(CStudentPublication::class)->findBy($criteria);
         $cStudentPublication = [];
         /** @var CStudentPublication $item */
         foreach ($result as $item) {
@@ -1217,7 +1218,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         $criteria = [
             'userId' => $userId,
         ];
-        $result = $em->getRepository('ChamiloCourseBundle:CStudentPublicationComment')->findBy($criteria);
+        $result = $em->getRepository(CStudentPublicationComment::class)->findBy($criteria);
         $cStudentPublicationComment = [];
         /** @var CStudentPublicationComment $item */
         foreach ($result as $item) {
@@ -1235,7 +1236,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         $criteria = [
             'userId' => $userId,
         ];
-        $result = $em->getRepository('ChamiloCourseBundle:CWiki')->findBy($criteria);
+        $result = $em->getRepository(CWiki::class)->findBy($criteria);
         $cWiki = [];
         /** @var CWiki $item */
         foreach ($result as $item) {
@@ -1251,7 +1252,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         $criteria = [
             'insertUserId' => $userId,
         ];
-        $result = $em->getRepository('ChamiloCoreBundle:Ticket')->findBy($criteria);
+        $result = $em->getRepository(Ticket::class)->findBy($criteria);
         $ticket = [];
         /** @var Ticket $item */
         foreach ($result as $item) {
@@ -1266,7 +1267,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         $criteria = [
             'insertUserId' => $userId,
         ];
-        $result = $em->getRepository('TicketMessage')->findBy($criteria);
+        $result = $em->getRepository(TicketMessage::class)->findBy($criteria);
         $ticketMessage = [];
         /** @var \Chamilo\CoreBundle\Entity\TicketMessage $item */
         foreach ($result as $item) {
@@ -1284,7 +1285,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         $criteria = [
             'feedbackGiver' => $userId,
         ];
-        $result = $em->getRepository('ChamiloCoreBundle:SkillRelUserComment')->findBy($criteria);
+        $result = $em->getRepository(SkillRelUserComment::class)->findBy($criteria);
         $skillRelUserComment = [];
         /** @var SkillRelUserComment $item */
         foreach ($result as $item) {
@@ -1301,7 +1302,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         $criteria = [
             'userId' => $userId,
         ];
-        $result = $em->getRepository('ChamiloCoreBundle:UserRelCourseVote')->findBy($criteria);
+        $result = $em->getRepository(UserRelCourseVote::class)->findBy($criteria);
         $userRelCourseVote = [];
         /** @var UserRelCourseVote $item */
         foreach ($result as $item) {
@@ -1474,7 +1475,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
      */
     public function getLastLogin(User $user)
     {
-        $repo = $this->getEntityManager()->getRepository('ChamiloCoreBundle:TrackELogin');
+        $repo = $this->getEntityManager()->getRepository(TrackELogin::class);
         $qb = $repo->createQueryBuilder('l');
 
         return $qb

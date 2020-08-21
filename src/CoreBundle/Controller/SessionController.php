@@ -5,6 +5,7 @@
 namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Entity\ExtraField;
+use Chamilo\CoreBundle\Entity\ExtraFieldRelTag;
 use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourse;
@@ -12,7 +13,6 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\SequenceRepository;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
-use CoursesController;
 use Essence\Essence;
 use ExtraFieldValue;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
@@ -45,12 +45,12 @@ class SessionController extends AbstractController
 
         $courses = [];
         $sessionCourses = $session->getCourses();
-        $fieldsRepo = $em->getRepository('ChamiloCoreBundle:ExtraField');
-        $fieldTagsRepo = $em->getRepository('ChamiloCoreBundle:ExtraFieldRelTag');
+        $fieldsRepo = $em->getRepository(ExtraField::class);
+        $fieldTagsRepo = $em->getRepository(ExtraFieldRelTag::class);
         $userRepo = \UserManager::getRepository();
 
         /** @var SequenceRepository $sequenceResourceRepo */
-        $sequenceResourceRepo = $em->getRepository('ChamiloCoreBundle:SequenceResource');
+        $sequenceResourceRepo = $em->getRepository(SequenceResource::class);
 
         $tagField = $fieldsRepo->findOneBy([
             'extraFieldType' => ExtraField::COURSE_FIELD_TYPE,

@@ -309,7 +309,7 @@ class ResourceRepository extends EntityRepository
     public function getResourceType()
     {
         $name = $this->getResourceTypeName();
-        $repo = $this->getEntityManager()->getRepository('ChamiloCoreBundle:ResourceType');
+        $repo = $this->getEntityManager()->getRepository(ResourceType::class);
         $this->resourceType = $repo->findOneBy(['name' => $name]);
 
         return $this->resourceType;
@@ -702,6 +702,25 @@ class ResourceRepository extends EntityRepository
         return false;
     }
 
+    public function setResourceTitle(AbstractResource $resource, $title)
+    {
+        $resource->setTitle($title);
+        $resourceNode = $resource->getResourceNode();
+        $resourceNode->setTitle($title);
+        if ($resourceNode->hasResourceFile()) {
+            //$resourceFile = $resourceNode->getResourceFile();
+            //$resourceFile->setName($title);
+
+            /*$fileName = $this->getResourceNodeRepository()->getFilename($resourceFile);
+            error_log('$fileName');
+            error_log($fileName);
+            error_log($title);
+            $this->getResourceNodeRepository()->getFileSystem()->rename($fileName, $title);
+            $resourceFile->setName($title);
+            $resourceFile->setOriginalName($title);*/
+        }
+    }
+
     /**
      * Change all links visibility to DELETED.
      */
@@ -723,25 +742,6 @@ class ResourceRepository extends EntityRepository
     public function setVisibilityPending(AbstractResource $resource)
     {
         $this->setLinkVisibility($resource, ResourceLink::VISIBILITY_PENDING);
-    }
-
-    public function setResourceTitle(AbstractResource $resource, $title)
-    {
-        $resource->setTitle($title);
-        $resourceNode = $resource->getResourceNode();
-        $resourceNode->setTitle($title);
-        if ($resourceNode->hasResourceFile()) {
-            //$resourceFile = $resourceNode->getResourceFile();
-            //$resourceFile->setName($title);
-
-            /*$fileName = $this->getResourceNodeRepository()->getFilename($resourceFile);
-            error_log('$fileName');
-            error_log($fileName);
-            error_log($title);
-            $this->getResourceNodeRepository()->getFileSystem()->rename($fileName, $title);
-            $resourceFile->setName($title);
-            $resourceFile->setOriginalName($title);*/
-        }
     }
 
     public function createNodeForResource(ResourceInterface $resource, User $creator, ResourceNode $parentNode = null, UploadedFile $file = null): ResourceNode

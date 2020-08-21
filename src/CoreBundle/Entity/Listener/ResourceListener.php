@@ -6,12 +6,15 @@ namespace Chamilo\CoreBundle\Entity\Listener;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\AccessUrl;
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\ResourceRight;
 use Chamilo\CoreBundle\Entity\ResourceToRootInterface;
+use Chamilo\CoreBundle\Entity\ResourceType;
 use Chamilo\CoreBundle\Entity\ResourceWithUrlInterface;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CoreBundle\ToolChain;
 use Cocur\Slugify\SlugifyInterface;
@@ -126,7 +129,7 @@ class ResourceListener
             $slug = sprintf('%s.%s', $this->slugify->slugify($originalBasename), $originalExtension);
         }*/
 
-        $repo = $em->getRepository('ChamiloCoreBundle:ResourceType');
+        $repo = $em->getRepository(ResourceType::class);
         $class = str_replace('Entity', 'Repository', get_class($event->getEntity()));
         $class .= 'Repository';
         $name = $this->toolChain->getResourceTypeNameFromRepository($class);
@@ -148,7 +151,7 @@ class ResourceListener
         }
 
         if ($resource->hasParentResourceNode()) {
-            $nodeRepo = $em->getRepository('ChamiloCoreBundle:ResourceNode');
+            $nodeRepo = $em->getRepository(ResourceNode::class);
             $parent = $nodeRepo->find($resource->getParentResourceNode());
             $resourceNode->setParent($parent);
         }
@@ -181,8 +184,8 @@ class ResourceListener
         // Use by api platform
         $links = $resource->getResourceLinkListFromEntity();
         if ($links) {
-            $courseRepo = $em->getRepository('ChamiloCoreBundle:Course');
-            $sessionRepo = $em->getRepository('ChamiloCoreBundle:Session');
+            $courseRepo = $em->getRepository(Course::class);
+            $sessionRepo = $em->getRepository(Session::class);
 
             foreach ($links as $link) {
                 $resourceLink = new ResourceLink();

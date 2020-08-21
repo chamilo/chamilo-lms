@@ -685,6 +685,9 @@ function store_forumcategory($values, $courseInfo = [], $showMessage = true)
 
         $values['item_id'] = $values['forum_category_id'];
     } else {
+        $course = api_get_course_entity($course_id);
+        $session = api_get_session_entity($session_id);
+
         $category = new CForumCategory();
         $category
             ->setCatTitle($clean_cat_title)
@@ -692,12 +695,9 @@ function store_forumcategory($values, $courseInfo = [], $showMessage = true)
             ->setCatOrder($new_max)
             ->setCId($course_id)
             ->setSessionId($session_id)
+            ->setParent($course)
+            ->addCourseLink($course, $session)
         ;
-        $user = api_get_user_entity(api_get_user_id());
-        $course = api_get_course_entity($course_id);
-        $session = api_get_session_entity($session_id);
-
-        $repo->addResourceToCourse($category, ResourceLink::VISIBILITY_PUBLISHED, $user, $course, $session);
         $repo->getEntityManager()->persist($category);
         $repo->getEntityManager()->flush();
 
@@ -952,8 +952,8 @@ function store_forum($values, $courseInfo = [], $returnId = false)
         if ($image_moved) {
             $new_file_name = isset($new_file_name) ? $new_file_name : '';
         }
-
-        $repo->addResourceToCourse($forum, ResourceLink::VISIBILITY_PUBLISHED, $user, $course, $session);
+        $forum->setParent($course);
+        $forum->addCourseLink($course, $session);
         $repo->getEntityManager()->persist($forum);
         $repo->getEntityManager()->flush();
 

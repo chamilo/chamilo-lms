@@ -248,25 +248,14 @@ class GroupManager
             ->setSelfUnregistrationAllowed($selfUnregAllwoed)
             ->setSessionId($session_id)
             ->setDocumentAccess($documentAccess)
+            ->setParent($course)
+            ->addCourseLink($course, $session)
         ;
 
         $repo = Container::getGroupRepository();
-
-        $repo->addResourceToCourse(
-            $group,
-            ResourceLink::VISIBILITY_PUBLISHED,
-            $user,
-            $course,
-            $session
-        );
         $repo->getEntityManager()->flush();
-
         $lastId = $group->getIid();
-
         if ($lastId) {
-            $sql = "UPDATE $table_group SET id = iid WHERE iid = $lastId";
-            Database::query($sql);
-
             /*$desired_dir_name = '/'.api_replace_dangerous_char($name).'_groupdocs';
 
             $newFolderData = create_unexisting_directory(

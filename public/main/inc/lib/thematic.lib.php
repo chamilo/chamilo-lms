@@ -336,6 +336,7 @@ class Thematic
 
         if (empty($id)) {
             $thematic = new CThematic();
+            $courseEntity = api_get_course_entity();
             $thematic
                 ->setTitle($title)
                 ->setContent($content)
@@ -343,19 +344,11 @@ class Thematic
                 ->setCId($this->course_int_id)
                 ->setDisplayOrder($max_thematic_item + 1)
                 ->setSessionId($session_id)
+                ->setParent($courseEntity)
+                ->addCourseLink($courseEntity, api_get_session_entity())
             ;
 
             $em->persist($thematic);
-
-            $repo->addResourceToCourse(
-                $thematic,
-                ResourceLink::VISIBILITY_PUBLISHED,
-                api_get_user_entity(api_get_user_id()),
-                api_get_course_entity(),
-                api_get_session_entity(),
-                api_get_group_entity()
-            );
-
             $em->flush();
 
             // insert
@@ -367,8 +360,6 @@ class Thematic
             ];*/
             $last_id = $thematic->getIid();
             if ($last_id) {
-                $sql = "UPDATE $tbl_thematic SET id = iid WHERE iid = $last_id";
-                Database::query($sql);
                 /*api_item_property_update(
                     $_course,
                     'thematic',
@@ -817,24 +808,17 @@ class Thematic
                 $advance->setAttendance($attendance);
             }
 
+            $courseEntity = api_get_course_entity();
+            $advance
+                ->setParent($courseEntity)
+                ->addCourseLink($courseEntity, api_get_session_entity())
+            ;
             $em->persist($advance);
-
-            $repo->addResourceToCourse(
-                $advance,
-                ResourceLink::VISIBILITY_PUBLISHED,
-                api_get_user_entity(api_get_user_id()),
-                api_get_course_entity(),
-                api_get_session_entity(),
-                api_get_group_entity()
-            );
             $em->flush();
 
             $last_id = $advance->getIid();
 
             if ($last_id) {
-                $sql = "UPDATE $table SET id = iid WHERE iid = $last_id";
-                Database::query($sql);
-
                 /*api_item_property_update(
                     $_course,
                     'thematic_advance',
@@ -1114,6 +1098,7 @@ class Thematic
             );*/
         } else {
             $thematic = Container::getThematicRepository()->find($thematic_id);
+            $course = api_get_course_entity();
             $plan = new CThematicPlan();
             $plan
                 ->setTitle($title)
@@ -1121,25 +1106,14 @@ class Thematic
                 ->setCId($this->course_int_id)
                 ->setThematic($thematic)
                 ->setDescriptionType($description_type)
+                ->setParent($course)
+                ->addCourseLink($course, api_get_session_entity())
             ;
 
             $em->persist($plan);
-
-            $repo->addResourceToCourse(
-                $plan,
-                ResourceLink::VISIBILITY_PUBLISHED,
-                api_get_user_entity(api_get_user_id()),
-                api_get_course_entity(),
-                api_get_session_entity(),
-                api_get_group_entity()
-            );
-
             $em->flush();
 
             if ($plan && $plan->getIid()) {
-                $id = $plan->getIid();
-                $sql = "UPDATE $tbl_thematic_plan SET id = iid WHERE iid = $id";
-                Database::query($sql);
                 /*
                 api_item_property_update(
                     $_course,

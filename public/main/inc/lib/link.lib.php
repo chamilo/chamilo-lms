@@ -138,34 +138,23 @@ class Link extends Model
             ;
 
             $repo = Container::getLinkRepository();
-
             $courseEntity = api_get_course_entity($course_id);
-
             if (empty($category)) {
-                $repo->addResourceToCourse(
-                    $link,
-                    ResourceLink::VISIBILITY_PUBLISHED,
-                    api_get_user_entity(api_get_user_id()),
-                    $courseEntity,
-                    api_get_session_entity($session_id),
-                    api_get_group_entity()
-                );
+                $link
+                    ->setParent($courseEntity)
+                    ->addCourseLink($courseEntity, api_get_session_entity($session_id))
+                ;
             } else {
-                $repo->addResourceToCourseWithParent(
-                    $link,
-                    $category->getResourceNode(),
-                    ResourceLink::VISIBILITY_PUBLISHED,
-                    api_get_user_entity(api_get_user_id()),
-                    $courseEntity,
-                    api_get_session_entity($session_id),
-                    api_get_group_entity()
-                );
+                $link
+                    ->setParent($category)
+                    ->addCourseLink($courseEntity, api_get_session_entity($session_id))
+                ;
             }
 
             $repo->getEntityManager()->flush();
             $link_id = $link->getIid();
 
-            if (('true' == api_get_setting('search_enabled')) &&
+            if (('true' === api_get_setting('search_enabled')) &&
                 $link_id && extension_loaded('xapian')
             ) {
                 require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
@@ -347,25 +336,14 @@ class Link extends Model
             ->setCategoryTitle($category_title)
             ->setDescription($description)
             ->setDisplayOrder($order)
+            ->setParent($courseEntity)
+            ->addCourseLink($courseEntity, $sessionEntity)
         ;
-
-        $repo->addResourceToCourse(
-            $category,
-            ResourceLink::VISIBILITY_PUBLISHED,
-            api_get_user_entity(api_get_user_id()),
-            $courseEntity,
-            $sessionEntity,
-            api_get_group_entity()
-        );
 
         $repo->getEntityManager()->flush();
         $linkId = $category->getIid();
 
         if ($linkId) {
-            // iid
-            $sql = "UPDATE $tbl_categories SET id = iid WHERE iid = $linkId";
-            Database:: query($sql);
-
             // add link_category visibility
             // course ID is taken from context in api_set_default_visibility
             //api_set_default_visibility($linkId, TOOL_LINK_CATEGORY);

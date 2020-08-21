@@ -364,6 +364,8 @@ class scorm extends learnpath
                 $row = Database::fetch_array($res_max);
                 $dsp = $row[0] + 1;
             }
+
+            $courseEntity = api_get_course_entity($courseInfo['real_id']);
             $myname = api_utf8_decode($oOrganization->get_name());
             $lp = new CLp();
             $lp
@@ -377,28 +379,14 @@ class scorm extends learnpath
                 ->setDisplayOrder($dsp)
                 ->setUseMaxScore($userMaxScore)
                 ->setSessionId($sessionId)
+                ->setParent($courseEntity)
+                ->addCourseLink($courseEntity, api_get_session_entity())
             ;
 
             $repo = Container::getLpRepository();
             $em = $repo->getEntityManager();
             $em->persist($lp);
-            $courseEntity = api_get_course_entity($courseInfo['real_id']);
-
-            $repo->addResourceToCourse(
-                $lp,
-                ResourceLink::VISIBILITY_PUBLISHED,
-                api_get_user_entity(api_get_user_id()),
-                $courseEntity,
-                api_get_session_entity(),
-                api_get_group_entity()
-            );
-
             $em->flush();
-            if ($lp->getIid()) {
-                $lp_id = $lp->getIid();
-                $sql = "UPDATE $new_lp SET id = iid WHERE iid = $lp_id";
-                Database::query($sql);
-            }
 
             /*if ($lp_id) {
                 $sql = "UPDATE $new_lp SET id = iid WHERE iid = $lp_id";

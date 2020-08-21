@@ -21,7 +21,7 @@ class Version20170904173000 extends AbstractMigrationChamilo
     /**
      * @throws \Doctrine\DBAL\Schema\SchemaException
      */
-    public function up(Schema $schema)
+    public function up(Schema $schema): void
     {
         $tblQuestion = $schema->getTable('c_survey_question');
 
@@ -32,7 +32,7 @@ class Version20170904173000 extends AbstractMigrationChamilo
         }
     }
 
-    public function down(Schema $schema)
+    public function down(Schema $schema): void
     {
     }
 }

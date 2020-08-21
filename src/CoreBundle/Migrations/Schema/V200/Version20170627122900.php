@@ -14,7 +14,7 @@ use Doctrine\DBAL\Schema\Schema;
  */
 class Version20170627122900 extends AbstractMigrationChamilo
 {
-    public function up(Schema $schema)
+    public function up(Schema $schema): void
     {
         $em = $this->getEntityManager();
 
@@ -62,7 +62,7 @@ class Version20170627122900 extends AbstractMigrationChamilo
         $em->flush();
     }
 
-    public function down(Schema $schema)
+    public function down(Schema $schema): void
     {
     }
 }

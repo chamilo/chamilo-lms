@@ -14,7 +14,7 @@ use Doctrine\DBAL\Types\Type;
  */
 class Version20 extends AbstractMigrationChamilo
 {
-    public function up(Schema $schema)
+    public function up(Schema $schema): void
     {
         // Use $schema->createTable
         $this->addSql('set sql_mode=""');
@@ -966,7 +966,7 @@ class Version20 extends AbstractMigrationChamilo
                 $this->addSql("");*/
     }
 
-    public function down(Schema $schema)
+    public function down(Schema $schema): void
     {
     }
 }

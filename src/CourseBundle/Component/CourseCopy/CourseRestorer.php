@@ -2618,6 +2618,17 @@ class CourseRestorer
      */
     public function restore_learnpath_category($sessionId = 0, $baseContent = false)
     {
+        $reuseExisting = false;
+
+        if (isset($this->tool_copy_settings['learnpath_category']) &&
+            isset($this->tool_copy_settings['learnpath_category']['reuse_existing']) &&
+            true === $this->tool_copy_settings['learnpath_category']['reuse_existing']
+        ) {
+            $reuseExisting = true;
+        }
+
+        $tblLpCategory = Database::get_course_table(TABLE_LP_CATEGORY);
+
         if ($this->course->has_resources(RESOURCE_LEARNPATH_CATEGORY)) {
             $resources = $this->course->resources;
             /** @var LearnPathCategory $item */
@@ -2626,11 +2637,29 @@ class CourseRestorer
                 $lpCategory = $item->object;
 
                 if ($lpCategory) {
-                    $values = [
-                        'c_id' => $this->destination_course_id,
-                        'name' => $lpCategory->getName(),
-                    ];
-                    $categoryId = \learnpath::createCategory($values);
+                    $categoryId = 0;
+
+                    $existingLpCategory = Database::select(
+                        'iid',
+                        $tblLpCategory,
+                        [
+                            'WHERE' => [
+                                'c_id = ? AND name = ?' => [$this->destination_course_id, $lpCategory->getName()],
+                            ],
+                        ],
+                        'first'
+                    );
+
+                    if ($reuseExisting && !empty($existingLpCategory)) {
+                        $categoryId = $existingLpCategory['iid'];
+                    } else {
+                        $values = [
+                            'c_id' => $this->destination_course_id,
+                            'name' => $lpCategory->getName(),
+                        ];
+                        $categoryId = \learnpath::createCategory($values);
+                    }
+
                     if ($categoryId) {
                         $this->course->resources[RESOURCE_LEARNPATH_CATEGORY][$id]->destination_id = $categoryId;
                     }
@@ -2920,7 +2949,8 @@ class CourseRestorer
                     // Updating prerequisites
                     foreach ($old_prerequisite as $key => $my_old_prerequisite) {
                         if ('' != $my_old_prerequisite) {
-                            $sql = "UPDATE $table_item SET prerequisite = '".$my_old_prerequisite."'
+                            $my_old_prerequisite = Database::escape_string($my_old_prerequisite);
+                            $sql = "UPDATE $table_item SET prerequisite = '$my_old_prerequisite'
                                     WHERE c_id = ".$this->destination_course_id." AND id = '".$key."'  ";
                             Database::query($sql);
                         }
@@ -2929,8 +2959,9 @@ class CourseRestorer
                     // Updating refs
                     foreach ($old_refs as $key => $my_old_ref) {
                         if ('' != $my_old_ref) {
-                            $sql = "UPDATE $table_item SET ref = '".$my_old_ref."'
-                                    WHERE c_id = ".$this->destination_course_id." AND id = '".$key."'  ";
+                            $my_old_ref = Database::escape_string($my_old_ref);
+                            $sql = "UPDATE $table_item SET ref = '$my_old_ref'
+                                    WHERE c_id = ".$this->destination_course_id." AND id = $key";
                             Database::query($sql);
                         }
                     }
@@ -2941,6 +2972,8 @@ class CourseRestorer
                         if (0 != $parent_item_old_id) {
                             $parent_new_id = isset($new_item_ids[$parent_item_old_id]) ? $new_item_ids[$parent_item_old_id] : 0;
                         }
+
+                        $parent_new_id = Database::escape_string($parent_new_id);
                         $sql = "UPDATE $table_item SET parent_item_id = '$parent_new_id'
                                 WHERE c_id = ".$this->destination_course_id." AND id = $new_item_id";
                         Database::query($sql);
@@ -2952,7 +2985,8 @@ class CourseRestorer
                         if (0 != $previous_item_old_id) {
                             $previous_new_id = isset($new_item_ids[$previous_item_old_id]) ? $new_item_ids[$previous_item_old_id] : 0;
                         }
-                        $sql = "UPDATE $table_item SET previous_item_id = $previous_new_id
+                        $previous_new_id = Database::escape_string($previous_new_id);
+                        $sql = "UPDATE $table_item SET previous_item_id = '$previous_new_id'
                                 WHERE c_id = ".$this->destination_course_id." AND id = '".$new_item_id."'";
                         Database::query($sql);
                     }
@@ -2963,7 +2997,8 @@ class CourseRestorer
                         if (0 != $next_item_old_id) {
                             $next_new_id = isset($new_item_ids[$next_item_old_id]) ? $new_item_ids[$next_item_old_id] : 0;
                         }
-                        $sql = "UPDATE $table_item SET next_item_id = $next_new_id
+                        $next_new_id = Database::escape_string($next_new_id);
+                        $sql = "UPDATE $table_item SET next_item_id = '$next_new_id'
                                 WHERE c_id = ".$this->destination_course_id." AND id = '".$new_item_id."'";
                         Database::query($sql);
                     }

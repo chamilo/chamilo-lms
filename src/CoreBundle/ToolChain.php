@@ -181,7 +181,6 @@ class ToolChain
                 ->setName($tool->getName())
                 ->setPosition($position)
                 ->setVisibility($visibility)
-                ->setCategory($tool->getCategory())
                 ->setParent($course)
                 ->addCourseLink($course)
             ;

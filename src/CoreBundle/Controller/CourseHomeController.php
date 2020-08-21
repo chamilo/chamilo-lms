@@ -130,7 +130,7 @@ class CourseHomeController extends ToolBaseController
             if ('admin' === $toolModel->getCategory() && !$this->isGranted('ROLE_CURRENT_COURSE_TEACHER')) {
                 continue;
             }
-            $tools[$item->getCategory()][] = $item;
+            $tools[$toolModel->getCategory()][] = $item;
         }
 
         // Get session-career diagram
@@ -209,7 +209,7 @@ class CourseHomeController extends ToolBaseController
      */
     public function redirectTool($toolId, ToolChain $toolChain)
     {
-        $criteria = ['id' => $toolId];
+        $criteria = ['iid' => $toolId];
         /** @var CTool $tool */
         $tool = $this->getDoctrine()->getRepository('Chamilo\CourseBundle\Entity\CTool')->findOneBy($criteria);
 
@@ -330,20 +330,20 @@ class CourseHomeController extends ToolBaseController
                     }
                 }
 
-                $sql = "SELECT id FROM $lp_table
+                $sql = "SELECT iid FROM $lp_table
                         WHERE c_id = $course_id AND autolaunch = 1 $condition
                         LIMIT 1";
                 $result = Database::query($sql);
                 if (Database::num_rows($result) > 0) {
                     $lp_data = Database::fetch_array($result, 'ASSOC');
-                    if (!empty($lp_data['id'])) {
+                    if (!empty($lp_data['iid'])) {
                         if ($allowAutoLaunchForCourseAdmins) {
                             $showAutoLaunchLpWarning = true;
                         } else {
                             $session_key = 'lp_autolaunch_'.$session_id.'_'.api_get_course_int_id().'_'.api_get_user_id();
                             if (!isset($_SESSION[$session_key])) {
                                 // Redirecting to the LP
-                                $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$lp_data['id'];
+                                $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$lp_data['iid'];
 
                                 $_SESSION[$session_key] = true;
                                 header("Location: $url");

@@ -80,7 +80,7 @@ class GroupVoter extends Voter
         /** @var CGroup $group */
         $group = $subject;
         $groupInfo = [
-            'id' => $group->getId(),
+            'id' => $group->getIid(),
             'session_id' => 0,
             'status' => $group->getStatus(),
         ];

@@ -233,8 +233,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      * @var CourseCategory
      * @ApiSubresource()
      * @Groups({"course:read", "course:write"})
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\CourseCategory", inversedBy="courses")
-     * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
+     * @ORM\ManyToMany(targetEntity="Chamilo\CoreBundle\Entity\CourseCategory", inversedBy="courses")
      */
     protected $category;
 

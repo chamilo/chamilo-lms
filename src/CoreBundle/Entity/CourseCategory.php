@@ -125,7 +125,7 @@ class CourseCategory
     /**
      * @var ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Course", mappedBy="category")
+     * @ORM\ManyToMany(targetEntity="Chamilo\CoreBundle\Entity\Course", mappedBy="category")
      */
     protected $courses;
 

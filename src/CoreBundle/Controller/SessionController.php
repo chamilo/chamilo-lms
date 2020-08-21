@@ -192,8 +192,6 @@ class SessionController extends AbstractController
             }
         }
 
-        $courseController = new CoursesController();
-
         $plugin = \BuyCoursesPlugin::create();
         $checker = $plugin->isEnabled();
         $sessionIsPremium = null;
@@ -235,7 +233,7 @@ class SessionController extends AbstractController
                 $session->getId(),
                 api_get_user_id()
             ),
-            'subscribe_button' => $courseController->getRegisteredInSessionButton(
+            'subscribe_button' => \CoursesAndSessionsCatalog::getRegisteredInSessionButton(
                 $session->getId(),
                 $session->getName(),
                 $hasRequirements,

@@ -12,7 +12,7 @@ use Doctrine\ORM\EntityManager;
 /**
  * @TODO: Improve description
  */
-class HookManagement implements HookManagementInterface
+class HookManagement
 {
     private $entityManager;
 
@@ -132,8 +132,8 @@ class HookManagement implements HookManagementInterface
      *
      * @return int
      */
-    public function orderHook($eventName, $type, $hookOrders)
-    {
+    //public function orderHook($eventName, $type, $hookOrders)
+    //{
         /*foreach ($this->hookCalls[$eventName] as $observerClassName => $types) {
             foreach ($hookOrders as $oldOrder => $newOrder) {
                 $res = Database::update(
@@ -152,7 +152,7 @@ class HookManagement implements HookManagementInterface
                 }
             }
         }*/
-    }
+    //}
 
     /**
      * Return a list an associative array where keys are the active hook observer class name.

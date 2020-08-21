@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 // resetting the course id
@@ -263,7 +264,6 @@ echo Display::select(
     ['style' => 'width:360px', 'multiple' => 'multiple', 'id' => 'elements_in', 'size' => '15px'],
     false
 );
-    unset($sessionUsersList);
 ?>
  </td>
 </tr>

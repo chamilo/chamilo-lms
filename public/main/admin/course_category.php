@@ -23,13 +23,13 @@ $action = isset($_GET['action']) ? $_GET['action'] : null;
 $myCourseListAsCategory = api_get_configuration_value('my_courses_list_as_category');
 
 if (!empty($action)) {
-    if ('delete' == $action) {
+    if ('delete' === $action) {
         CourseCategory::deleteNode($categoryId);
         Display::addFlash(Display::return_message(get_lang('Deleted')));
         header('Location: '.api_get_self().'?category='.Security::remove_XSS($category));
         exit();
-    } elseif (('add' == $action || 'edit' == $action) && isset($_POST['formSent']) && $_POST['formSent']) {
-        if ('add' == $action) {
+    } elseif (('add' == $action || 'edit' === $action) && isset($_POST['formSent']) && $_POST['formSent']) {
+        if ('add' === $action) {
             $ret = CourseCategory::addNode(
                 $_POST['code'],
                 $_POST['name'],

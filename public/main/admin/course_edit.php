@@ -154,8 +154,7 @@ if ($countCategories >= 100) {
     // Category code
     $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_category';
 
-    $categorySelect = $form->addElement(
-        'select_ajax',
+    $categorySelect = $form->addSelectAjax(
         'category_id',
         get_lang('Category'),
         null,

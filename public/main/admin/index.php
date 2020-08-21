@@ -541,42 +541,6 @@ if (api_is_platform_admin()) {
     $blocks['version_check']['search_form'] = null;
     $blocks['version_check']['items'] = '<div class="block-admin-version_check"></div>';
     $blocks['version_check']['class'] = '';
-
-    // Check Hook Event for Admin Block Object
-    if (!empty($hook)) {
-        // If not empty, then notify Post process to Hook Observers for Admin Block
-        $hook->setEventData(['blocks' => $blocks]);
-        $data = $hook->notifyAdminBlock(HOOK_EVENT_TYPE_POST);
-        // Check if blocks data is not null
-        if (isset($data['blocks'])) {
-            // Get modified blocks
-            $blocks = $data['blocks'];
-        }
-    }
-
-    //Hack for fix migration on session_rel_user
-    $tableColumns = Database::getManager()
-        ->getConnection()
-        ->getSchemaManager()
-        ->listTableColumns(
-            Database::get_main_table(TABLE_MAIN_SESSION_USER)
-        );
-
-    if (!array_key_exists('duration', $tableColumns)) {
-        try {
-            $dbSchema = Database::getManager()->getConnection()->getSchemaManager();
-            $durationColumn = new \Doctrine\DBAL\Schema\Column(
-                'duration',
-                Doctrine\DBAL\Types\Type::getType(\Doctrine\DBAL\Types\Type::INTEGER),
-                ['notnull' => false]
-            );
-            $tableDiff = new \Doctrine\DBAL\Schema\TableDiff('session_rel_user', [$durationColumn]);
-            $dbSchema->alterTable($tableDiff);
-        } catch (Exception $e) {
-            error_log($e->getMessage());
-        }
-    }
-    //end hack
 }
 $admin_ajax_url = api_get_path(WEB_AJAX_PATH).'admin.ajax.php';
 

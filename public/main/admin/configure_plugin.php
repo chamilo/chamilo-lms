@@ -69,7 +69,7 @@ if (isset($form)) {
         foreach ($values as $key => $value) {
             api_add_setting(
                 $value,
-                Database::escape_string($pluginName.'_'.$key),
+                $pluginName.'_'.$key,
                 $pluginName,
                 'setting',
                 'Plugins',
@@ -81,12 +81,13 @@ if (isset($form)) {
                 1
             );
         }
+
         Event::addEvent(
             LOG_PLUGIN_CHANGE,
             LOG_PLUGIN_SETTINGS_CHANGE,
             $pluginName,
             api_get_utc_datetime(),
-            $user_id
+            api_get_user_id()
         );
 
         if (!empty($pluginInfo['plugin_class'])) {

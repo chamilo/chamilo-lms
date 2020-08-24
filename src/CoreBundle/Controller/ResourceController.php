@@ -813,7 +813,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
     public function viewAction(Request $request, RouterInterface $router): Response
     {
         $id = $request->get('id');
-        $filter = $request->get('filter');
+        $filter = $request->get('filter'); // See filters definitions in /config/services.yml
         $mode = $request->get('mode');
         $em = $this->getDoctrine();
         /** @var ResourceNode $resourceNode */
@@ -1178,7 +1178,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
                     $server = $glide->getServer();
                     $params = $request->query->all();
 
-                    // The filter overwrites the params from get
+                    // The filter overwrites the params from GET.
                     if (!empty($filter)) {
                         $params = $glide->getFilters()[$filter] ?? [];
                     }

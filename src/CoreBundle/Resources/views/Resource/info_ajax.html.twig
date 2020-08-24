@@ -27,7 +27,7 @@
                 <img
                     src="{{ url('chamilo_core_resource_view_file', {
                         'id': resource.resourceNode.id,
-                        'cid': course.id,
+                        'cid': course ? course.id : 0,
                         'sid': session ? session.id : 0,
                         'type' : type,
                         'tool' : tool

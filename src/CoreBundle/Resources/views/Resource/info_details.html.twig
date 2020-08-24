@@ -41,7 +41,7 @@
     <a class="btn btn-success"
        href="{{ url('chamilo_core_resource_view_file', {
            'id': resource.resourceNode.id,
-           'cid': course.id,
+           'cid': course ? course.id : 0,
            'sid': session ? session.id : 0,
            'type' : type,
            'tool' : tool,
@@ -55,7 +55,7 @@
 {% if is_granted('EDIT', resource.resourceNode) %}
     <a class="btn btn-secondary" href="{{ url('chamilo_core_resource_edit', {
         'id': resource.resourceNode.id,
-        'cid': course.id,
+        'cid': course ? course.id : 0,
         'sid': session ? session.id : 0,
         'type' : type,
         'tool' : tool,
@@ -68,7 +68,7 @@
 {% if is_granted('DELETE', resource.resourceNode) %}
     <a class="btn btn-danger" href="{{ url('chamilo_core_resource_delete', {
         'id': resource.resourceNode.id,
-        'cid': course.id,
+        'cid': course ? course.id : 0,
         'sid': session ? session.id : 0,
         'type' : type,
         'tool' : tool,

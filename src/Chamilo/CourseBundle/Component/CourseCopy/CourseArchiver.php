@@ -172,7 +172,6 @@ class CourseArchiver
             @mkdir($doc_dir, $perm_dirs, true);
             copyDirWithoutFilesTo($course->path.'work/', $doc_dir);
         }
-
         if (isset($course->resources[RESOURCE_ASSET]) && is_array($course->resources[RESOURCE_ASSET])) {
             /** @var Asset $asset */
             foreach ($course->resources[RESOURCE_ASSET] as $asset) {

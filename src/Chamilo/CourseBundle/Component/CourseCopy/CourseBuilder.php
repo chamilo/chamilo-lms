@@ -336,9 +336,11 @@ class CourseBuilder
         $table_prop = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
         // Remove chat_files and shared_folder files
-        $avoid_paths = " path NOT LIKE '/shared_folder%' AND
-                         path NOT LIKE '/chat_files%' ";
-
+        $avoid_paths = "
+                         path NOT LIKE '/shared_folder%' AND
+                         path NOT LIKE '/chat_files%' AND
+                         path NOT LIKE '/../exercises/%'
+                         ";
         $documentCondition = '';
         if (!empty($idList)) {
             $idList = array_unique($idList);
@@ -1429,7 +1431,7 @@ class CourseBuilder
         $courseId = (int) $courseId;
 
         if (!empty($session_id) && !empty($courseId)) {
-            $session_id = intval($session_id);
+            $session_id = (int) $session_id;
             if ($withBaseContent) {
                 $sessionCondition = api_get_session_condition(
                     $session_id,

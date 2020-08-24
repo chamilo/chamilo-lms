@@ -100,9 +100,6 @@ class QuizQuestion extends Resource
         $this->picture = $picture;
     }
 
-    /**
-     * @param CourseBuilder $courseBuilder
-     */
     public function addPicture(CourseBuilder $courseBuilder)
     {
         if (!empty($this->picture)) {

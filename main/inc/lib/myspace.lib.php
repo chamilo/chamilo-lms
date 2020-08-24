@@ -73,6 +73,14 @@ class MySpace
                     'content' => get_lang('UserByEntityReport'),
                 ];
         }
+        $authorsField =  ExtraField::getDisplayNameByVariable('authors');
+        if (!empty($authorsField)) {
+            $actions [] =
+                [
+                    'url' => api_get_path(WEB_CODE_PATH).'mySpace/admin_view.php?display=learningPath',
+                    'content' => get_lang('LpByAuthor'),
+                ];
+        }
         return Display::actions($actions, null);
     }
 
@@ -1003,11 +1011,13 @@ class MySpace
      * Gets a list of users who were enrolled in the lessons.
      * It is necessary that in the extra field, a company is defined
      *
+     *  if lpId is different to 0, this search by lp id too
      * @param null $startDate
      * @param null $endDate
+     * @param int $lpId
      * @return array
      */
-    protected static function getCompanyLearnpathSubscription($startDate = null, $endDate = null )
+    protected static function getCompanyLearnpathSubscription($startDate = null, $endDate = null , $lpId = 0)
     {
 
         $tblItemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
@@ -1037,13 +1047,19 @@ class MySpace
         if (!empty($startDate)) {
             $startDate = $startDate->format('Y-m-d');
             $_GET['startDate'] = $startDate;
-            $whereCondition .= " AND $tblItemProperty.lastedit_date >= '$startDate' ";
+            $whereCondition .= "
+            AND $tblItemProperty.lastedit_date >= '$startDate' ";
         }
         if (!empty($endDate)) {
             $endDate = $endDate->format('Y-m-d');
             $_GET['endDate'] = $endDate;
-            $whereCondition .= " AND $tblItemProperty.lastedit_date <= '$endDate' ";
+            $whereCondition .= "
+            AND $tblItemProperty.lastedit_date <= '$endDate' ";
 
+        }
+        if( $lpId != 0){
+            $whereCondition .= "
+            AND c_item_property.ref = $lpId ";
         }
 
         $companys = [];
@@ -1100,10 +1116,15 @@ class MySpace
                 $studentId = (int)$row['to_user_id'];
                 $company = isset($row['company']) ? $row['company'] : '';
                 // $lpId = $row['ref'];
-                $companys[$company][] = $studentId;
-                $companys[$company] = array_unique($companys[$company]);
+                if( $lpId != 0) {
+                    $companys[] = $studentId;
+                }else{
+                    $companys[$company][] = $studentId;
+                    $companys[$company] = array_unique($companys[$company]);
 
-            }
+                }
+
+                }
         }
         return $companys;
     }
@@ -1218,6 +1239,174 @@ class MySpace
         $tpl->assign('table', $tableContent);
         $templateName = $tpl->get_template('my_space/course_summary.tpl');
         $tpl->display($templateName);
+
+
+    }
+
+    /**
+     * @TODO make a definition
+     * @param null $startDate
+     * @param null $endDate
+     */
+    public static function displayResumeLP($startDate= null, $endDate=null, $csv = false) {
+
+        $tableHtml = '';
+        $query = "
+        SELECT
+            item_id AS lp_id,
+            REPLACE (s.value, ';', ',') AS users_id
+        FROM
+            extra_field_values s
+        INNER JOIN extra_field sf ON (s.field_id = sf.id)
+        WHERE
+            field_id IN (
+                SELECT
+                    id
+                FROM
+                    extra_field
+                WHERE
+                    variable = 'authors'
+            )
+        AND sf.extra_field_type = 6
+        AND (s.value != '' OR s.value IS NOT NULL)
+";
+        $queryResult = Database::query($query);
+        $tblCourse = TABLE_MAIN_COURSE;
+        $data = [];
+        while ($row = Database::fetch_array($queryResult, 'ASSOC')) {
+            $lp_id = (int)$row['lp_id'];
+            // get  data when lastedit_type is  LearnpathSubscription
+            $registeredUsers = self::getCompanyLearnpathSubscription($startDate, $endDate ,$lp_id);
+            if(!empty($registeredUsers)) {
+                $lp_info = [];
+                $teacherList = [];
+                $teachersId = trim($row['users_id'], ",");
+                $lp_table = Database::get_course_table(TABLE_LP_MAIN);
+                $query = "
+            SELECT *,
+                   (select title from $tblCourse where course.id = c_lp.c_id) as courseTitle
+            FROM
+                $lp_table
+            WHERE
+                id = $lp_id
+                ";
+                $res = Database::query($query);
+                if (Database::num_rows($res)) {
+                    $lp_info = Database::fetch_array($res);
+                }
+                $user_table = Database::get_main_table(TABLE_MAIN_USER);
+                $query1 = "SELECT * FROM $user_table WHERE id in ($teachersId)";
+                $res = Database::query($query1);
+                if (Database::num_rows($res)) {
+                    while ($rowTeacher = Database::fetch_array($res, 'ASSOC')) {
+                        $teacherList[] = $rowTeacher;
+                    }
+                }
+
+                $data[] = [
+                    'lp' => $lp_info,
+                    'teachers' => $teacherList,
+                    'students' => $registeredUsers
+                ];
+            }
+
+        }
+
+        if($csv == false) {
+            $table = '<div class="table-responsive"><table class="table table-bordered">';
+            $table .= "<thead><tr><td>".get_lang('LearningPathList')."</td>
+<td>".get_lang('CourseTeachers')."</td><td>".get_lang('AllStudents')."</td></tr></thead><tbody>";
+
+            foreach ($data as $listLp) {
+                $lpName = $listLp['lp']['name'];
+                $teachers = $listLp['teachers'];
+                $students = $listLp['students'];
+                $teachersName = '';
+                for ($i = 0; $i < count($teachers); $i++) {
+                    $teachersName .= $teachers[$i]['firstname']."<br>";
+                }
+                $table .= "<tr>
+                        <td>$lpName</td>
+                        <td>$teachersName</td>
+                        <td>".count($students)."</td>
+                     </tr>";
+            }
+
+            $table .= '</tbody></table></div>';
+
+
+            if (!empty($startDate) or !empty($endDate)) {
+                $tableHtml = $table;
+
+            }
+
+
+            $form = new FormValidator('searchDate', 'get');
+            $form->addHidden('display', 'learningPath');
+            $form->addDatePicker(
+                'startDate',
+                get_lang('DateStart'),
+                []);
+            $form->addDatePicker(
+                'endDate',
+                get_lang('DateEnd'),
+                []);
+            $form->addButtonSearch(get_lang('Search'));
+            if (count($data) != 0) {
+                //$form->addButtonSave(get_lang('Ok'), 'export');
+                $form
+                    ->addButton(
+                        'export_csv',
+                        get_lang('ExportAsCSV'),
+                        'check',
+                        'primary',
+                        null,
+                        null,
+                        [
+
+                        ]
+                    );
+            }
+
+
+            $tableContent = $form->returnForm();
+            $tableContent .= $tableHtml;
+            // $tableContent .= $table->return_table();
+
+            $tpl = new Template('', false, false, false, false, false, false);
+            $tpl->assign('table', $tableContent);
+            $templateName = $tpl->get_template('my_space/course_summary.tpl');
+            $tpl->display($templateName);
+        }else{
+            $csv_row = [];
+            $csv_content = [];
+            $csv_row[] = get_lang('LearningPathList');
+            $csv_row[] = get_lang('CourseTeachers');
+            $csv_row[] = get_lang('AllStudents');
+            $csv_content[] = $csv_row;
+            $csv_row = [];
+
+
+
+            foreach ($data as $listLp) {
+                $lpName = $listLp['lp']['name'];
+                $teachers = $listLp['teachers'];
+                $students = $listLp['students'];
+                $teachersName = '';
+                for ($i = 0; $i < count($teachers); $i++) {
+                    $teachersName .= $teachers[$i]['firstname']."<br>";
+                }
+                $csv_row[] = $lpName;
+                $csv_row[] = $teachersName;
+                $csv_row[] = count($students);
+
+                $csv_content[] = $csv_row;
+                $csv_row = [];
+                Export::arrayToCsv($csv_content, 'reporting_lp_by_authors');
+
+            }
+
+        }
 
 
     }

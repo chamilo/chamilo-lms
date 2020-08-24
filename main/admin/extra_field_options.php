@@ -29,12 +29,7 @@ if (!in_array($type, ExtraField::getValidExtraFieldTypes())) {
 
 $extra_field = new ExtraField($type);
 $extra_field_info = $extra_field->get($field_id);
-// Get info about extra field
-$extraFieldType = (int)$extra_field_info['field_type'];
-if($extra_field_info['variable'] != 'authors'){
-    //Only aviable to field variable autors BT##17648
-    $extraFieldType = 0;
-}
+
 $check = Security::check_token('request');
 $token = Security::get_token();
 
@@ -165,7 +160,7 @@ switch ($action) {
                     echo Display::return_message(get_lang('ItemAdded'), 'confirmation');
                 }
             }
-            $obj->display($extraFieldType);
+            $obj->display();
         } else {
             $form->addElement('hidden', 'sec_token');
             $form->setConstants(['sec_token' => $token]);
@@ -188,7 +183,7 @@ switch ($action) {
                     false
                 );
             }
-            $obj->display($extraFieldType);
+            $obj->display();
         } else {
             $form->addElement('hidden', 'sec_token');
             $form->setConstants(['sec_token' => $token]);
@@ -203,67 +198,10 @@ switch ($action) {
                 echo Display::return_message(get_lang('ItemDeleted'), 'confirmation');
             }
         }
-        $obj->display($extraFieldType);
-        break;
-    case 'addTeachers':
-        if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
-            api_not_allowed();
-        }
-        $id = isset($_GET['id']) ? (int) $_GET['id'] : '';
-        $url = api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&'.$params;
-
-        $form_name = $type.'_field';
-        $checkAllTeachers = (int)isset($_POST['choiseAllTeachers']  )?$_POST['choiseAllTeachers']:0;
-        $form = new FormValidator($form_name, 'post', $url);
-        if ($form->validate()) {
-            if ($check) {
-                if ($checkAllTeachers == 1) {
-                    $conditions = [
-                        'enabled' => 1,
-                        'status' => COURSEMANAGER,
-                    ];
-                    $res = false;
-                    $teachers = UserManager::get_user_list($conditions);
-                    foreach ($teachers as $teacher) {
-                        $value = [
-                            'type' => $type,
-                            'field_id' =>$field_id,
-                            'display_text' => $teacher['complete_name'],
-                            'option_value' => $teacher['id'],
-                        ];
-                        $res = $obj->save_one_item($value);
-
-                    }
-                    if ($res) {
-                        echo Display::return_message(get_lang('ItemDeleted'), 'confirmation');
-                    }
-
-                }
-            }
-            $obj->display($extraFieldType);
-        } else {
-            $form = new FormValidator($form_name, 'post', $url);
-            // Setting the form elements
-            $header = get_lang('SubscribeUserToCourseAsTeacher');
-            //$form->addElement('header', $header);
-            $form->addElement('hidden', 'id', $id);
-            $form->addElement('hidden', 'type', $type);
-            $form->addElement('hidden', 'field_id', $field_id);
-            $form->addElement('select', 'choiseAllTeachers', $header,
-                [
-                    0 => get_lang('SelectAnOption'),
-                    1 => get_lang('Yes'),
-                    2 => get_lang('No'),
-                ]);
-
-            $form->addButtonCreate(get_lang('Add'));
-            $form->addElement('hidden', 'sec_token');
-            $form->setConstants(['sec_token' => $token]);
-            $form->display();
-        }
+        $obj->display();
         break;
     default:
-        $obj->display($extraFieldType);
+        $obj->display();
         break;
 }
 Display::display_footer();

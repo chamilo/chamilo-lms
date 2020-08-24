@@ -1174,8 +1174,23 @@ class ExtraField extends Model
                         if (empty($defaultValueId)) {
                             $options[''] = get_lang('SelectAnOption');
                         }
-                        foreach ($field_details['options'] as $optionDetails) {
-                            $options[$optionDetails['option_value']] = $optionDetails['display_text'];
+                        // for task BT#17648
+                        //When a varible is 'authors', this will be a select of  teachers
+                        $variable = $field_details['variable'];
+                        if($variable != 'authors'){
+                            foreach ($field_details['options'] as $optionDetails) {
+                                $options[$optionDetails['option_value']] = $optionDetails['display_text'];
+                            }
+                        }else{
+                            $conditions = [
+                                'enabled' => 1,
+                                'status' => COURSEMANAGER,
+                            ];
+                            $teachers = UserManager::get_user_list($conditions);
+                            foreach ($teachers as $teacher) {
+                                $options[$teacher['id']] =  $teacher['complete_name'];
+
+                            }
                         }
                         $form->addElement(
                             'select',

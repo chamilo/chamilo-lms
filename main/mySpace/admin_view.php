@@ -45,6 +45,12 @@ if ($exportCSV) {
         $endDate = isset($_GET['endDate']) ? $_GET['endDate'] : null;
         MySpace::export_company_resume_csv($startDate, $endDate);
         exit;
+    }elseif ('learningPath' === $display) {
+        // Getting dates
+        $startDate = isset($_GET['startDate']) ? $_GET['startDate'] : null;
+        $endDate = isset($_GET['endDate']) ? $_GET['endDate'] : null;
+        MySpace::displayResumeLP($startDate, $endDate,true);
+        exit;
     }
 }
 
@@ -72,6 +78,12 @@ switch ($display) {
         $startDate = isset($_GET['startDate']) ? $_GET['startDate'] : null;
         $endDate = isset($_GET['endDate']) ? $_GET['endDate'] : null;
         MySpace::displayResumeCompany($startDate, $endDate);
+        break;
+    case 'learningPath':
+        // Getting dates
+        $startDate = isset($_GET['startDate']) ? $_GET['startDate'] : null;
+        $endDate = isset($_GET['endDate']) ? $_GET['endDate'] : null;
+        MySpace::displayResumeLP($startDate, $endDate);
         break;
     case 'accessoverview':
         $courseId = isset($_GET['course_id']) ? (int) $_GET['course_id'] : 0;

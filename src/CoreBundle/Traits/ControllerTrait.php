@@ -7,7 +7,10 @@ namespace Chamilo\CoreBundle\Traits;
 //use Chamilo\CoreBundle\Block\BreadcrumbBlockService;
 use Chamilo\CoreBundle\Component\Utils\Glide;
 use Chamilo\CoreBundle\Manager\SettingsManager;
+use Chamilo\CoreBundle\Repository\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\ResourceFactory;
+use Chamilo\CourseBundle\Repository\CAttendanceRepository;
+use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Knp\Menu\FactoryInterface as MenuFactoryInterface;
 use Sylius\Bundle\SettingsBundle\Form\Factory\SettingsFormFactory;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,6 +28,18 @@ trait ControllerTrait
         $services['glide'] = Glide::class;
         $services['chamilo.settings.manager'] = SettingsManager::class;
         $services['chamilo_settings.form_factory.settings'] = SettingsFormFactory::class;
+
+        $services[] = IllustrationRepository::class;
+        $services[] = CDocumentRepository::class;
+
+        /*$services[] = CAttendanceRepository::class;
+        $services[] = CDocumentRepository::class;
+        $services[] = CDocumentRepository::class;
+        $services[] = CDocumentRepository::class;
+        $services[] = CDocumentRepository::class;
+        $services[] = CDocumentRepository::class;
+        $services[] = CDocumentRepository::class;
+        $services[] = CDocumentRepository::class;*/
 
         return $services;
     }
@@ -73,6 +88,14 @@ trait ControllerTrait
         $translator = $this->container->get('translator');
 
         return $translator->trans($variable);
+    }
+
+    /**
+     * @return Glide
+     */
+    public function getGlide()
+    {
+        return $this->container->get('glide');
     }
 
     /**

@@ -15,25 +15,23 @@ services:
         tags: ['doctrine.repository_service']
 
     # Resource repositories
-    Chamilo\CoreBundle\Repository\AccessUrlRepository:
-        arguments:
-            $className: 'Chamilo\CoreBundle\Entity\AccessUrl'
+#    Chamilo\CoreBundle\Repository\AccessUrlRepository:
+#        arguments:
+#            $className: 'Chamilo\CoreBundle\Entity\AccessUrl'
 
-    Chamilo\CoreBundle\Repository\CourseRepository:
-        arguments:
-            $className: 'Chamilo\CoreBundle\Entity\Course'
-
-    Chamilo\CoreBundle\Repository\IllustrationRepository:
-        arguments:
-            $className: 'Chamilo\CoreBundle\Entity\Illustration'
-
-    Chamilo\CoreBundle\Repository\PersonalFileRepository:
-        arguments:
-            $className: 'Chamilo\CoreBundle\Entity\PersonalFile'
+#    Chamilo\CoreBundle\Repository\CourseRepository:
+#        arguments:
+#            $className: 'Chamilo\CoreBundle\Entity\Course'
+#
+#    Chamilo\CoreBundle\Repository\IllustrationRepository:
+#        arguments:
+#            $className: 'Chamilo\CoreBundle\Entity\Illustration'
+#
+#    Chamilo\CoreBundle\Repository\PersonalFileRepository:
+#        arguments:
+#            $className: 'Chamilo\CoreBundle\Entity\PersonalFile'
 
     Chamilo\CoreBundle\Repository\UserRepository:
-        arguments:
-            $className: 'Chamilo\CoreBundle\Entity\User'
         calls:
             - [setEncoder, ['@security.user_password_encoder.generic']]
 

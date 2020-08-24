@@ -642,6 +642,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         $params = [
             'resource' => $resource,
+            'course' => $this->getCourse(),
          //   'illustration' => $illustration,
             'tool' => $tool,
             'type' => $type,

@@ -4,7 +4,6 @@
 
 namespace Chamilo\CoreBundle\Traits;
 
-use Chamilo\CoreBundle\Component\Utils\Glide;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceNode;
@@ -30,17 +29,11 @@ trait ResourceControllerTrait
         return $this->container->get('resource_factory');
     }
 
-    /**
-     * @return Glide
-     */
-    public function getGlide()
-    {
-        return $this->container->get('glide');
-    }
-
     public function getRepository($tool, $type): ResourceRepository
     {
-        return $this->getResourceRepositoryFactory()->createRepository($tool, $type);
+        $name = $this->getResourceRepositoryFactory()->getRepository($tool, $type);
+
+        return $this->container->get($name);
     }
 
     public function denyAccessUnlessValidResource(AbstractResource $resource)

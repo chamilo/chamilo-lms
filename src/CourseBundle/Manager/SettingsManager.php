@@ -99,6 +99,7 @@ class SettingsManager extends ChamiloSettingsManager
         }
 
         $repo = $this->manager->getRepository(SettingsCurrent::class);
+        /** @var CCourseSetting[] $persistedParameters */
         $persistedParameters = $repo->findBy(['category' => $settings->getSchemaAlias()]);
 
         $persistedParametersMap = [];

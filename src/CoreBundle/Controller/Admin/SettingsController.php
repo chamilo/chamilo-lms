@@ -5,6 +5,7 @@
 namespace Chamilo\CoreBundle\Controller\Admin;
 
 use Chamilo\CoreBundle\Controller\BaseController;
+use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -115,7 +116,7 @@ class SettingsController extends BaseController
         $manager = $this->getSettingsManager();
         // @todo improve get the current url entity
         $urlId = $request->getSession()->get('access_url_id');
-        $url = $this->getDoctrine()->getRepository('ChamiloCoreBundle:AccessUrl')->find($urlId);
+        $url = $this->getDoctrine()->getRepository(AccessUrl::class)->find($urlId);
         $manager->setUrl($url);
         $schemaAlias = $manager->convertNameSpaceToService($namespace);
         $searchForm = $this->getSearchForm();
@@ -194,7 +195,7 @@ class SettingsController extends BaseController
         $manager = $this->getSettingsManager();
         // @todo improve get the current url entity
         $urlId = $request->getSession()->get('access_url_id');
-        $url = $this->getDoctrine()->getRepository('ChamiloCoreBundle:AccessUrl')->find($urlId);
+        $url = $this->getDoctrine()->getRepository(AccessUrl::class)->find($urlId);
         $manager->setUrl($url);
         $manager->installSchemas($url);
     }

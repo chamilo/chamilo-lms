@@ -740,7 +740,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $em = $this->getDoctrine()->getManager();
 
         $id = $request->get('id');
-        $resourceNode = $this->getDoctrine()->getRepository('ChamiloCoreBundle:ResourceNode')->find($id);
+        $resourceNode = $this->getDoctrine()->getRepository(ResourceNode::class)->find($id);
         $parentId = $resourceNode->getParent()->getId();
 
         $this->denyAccessUnlessGranted(

@@ -22,7 +22,7 @@ use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Exception\ValidatorException;
 
 /**
- * Class SettingsManager.
+ * Handles the platform settings.
  */
 class SettingsManager implements SettingsManagerInterface
 {

@@ -104,7 +104,6 @@
         "laminas/laminas-soap": "~2.8",
         "league/csv": "^9.1",
         "league/glide-symfony": "^1.0",
-        "liip/imagine-bundle": "^2.1",
         "maennchen/zipstream-php": "^2.0",
         "masterminds/html5": "^2.0",
         "michelf/php-markdown": "~1.8",

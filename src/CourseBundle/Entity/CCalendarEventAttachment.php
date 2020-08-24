@@ -233,4 +233,9 @@ class CCalendarEventAttachment extends AbstractResource implements ResourceInter
     {
         return $this->getFilename();
     }
+
+    public function setResourceName(string $name): self
+    {
+        return $this->setFilename($name);
+    }
 }

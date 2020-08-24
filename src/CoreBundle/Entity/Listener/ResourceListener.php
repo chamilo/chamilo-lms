@@ -115,20 +115,7 @@ class ResourceListener
         $this->updateResourceName($resource);
         $resourceName = $resource->getResourceName();
 
-        /*$resourceName = $resource->getResourceName();
-        if (empty($resourceName)) {
-            throw new \InvalidArgumentException('Resource needs a name');
-        }*/
-
-        /*$extension = $this->slugify->slugify(pathinfo($resourceName, PATHINFO_EXTENSION));
-        if (empty($extension)) {
-            $slug = $this->slugify->slugify($resourceName);
-        } else {
-            $originalExtension = pathinfo($resourceName, PATHINFO_EXTENSION);
-            $originalBasename = \basename($resourceName, $originalExtension);
-            $slug = sprintf('%s.%s', $this->slugify->slugify($originalBasename), $originalExtension);
-        }*/
-
+        // @todo use static table instead of Doctrine
         $repo = $em->getRepository(ResourceType::class);
         $class = str_replace('Entity', 'Repository', get_class($event->getEntity()));
         $class .= 'Repository';
@@ -301,11 +288,12 @@ class ResourceListener
     public function updateResourceName(AbstractResource $resource)
     {
         $resourceName = $resource->getResourceName();
-        $resourceNode = $resource->getResourceNode();
 
         if (empty($resourceName)) {
             throw new \InvalidArgumentException('Resource needs a name');
         }
+
+        $resourceNode = $resource->getResourceNode();
 
         $extension = $this->slugify->slugify(pathinfo($resourceName, PATHINFO_EXTENSION));
         if (empty($extension)) {
@@ -316,7 +304,6 @@ class ResourceListener
             $slug = sprintf('%s.%s', $this->slugify->slugify($originalBasename), $originalExtension);
         }
         //error_log($resourceName); error_log($slug);
-
         $resourceNode
             ->setTitle($resourceName)
            // ->setSlug($slug)

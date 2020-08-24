@@ -236,4 +236,9 @@ class CForumAttachment extends AbstractResource implements ResourceInterface
     {
         return $this->getFilename();
     }
+
+    public function setResourceName(string $name): self
+    {
+        return $this->setFilename($name);
+    }
 }

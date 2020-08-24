@@ -7,12 +7,11 @@ namespace Chamilo\CoreBundle\Controller\Api;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 class UpdateResourceNodeFileAction
 {
-    public function __invoke(CDocument $document, Request $request, CDocumentRepository $repo, EntityManagerInterface $em): CDocument
+    public function __invoke(CDocument $document, Request $request, CDocumentRepository $repo): CDocument
     {
         $fileType = $document->getFileType();
         $contentData = $request->getContent();
@@ -31,7 +30,8 @@ class UpdateResourceNodeFileAction
             $comment = $request->request->get('comment');
         }
 
-        $document->setTitle($title);
+        $repo->setResourceName($document, $title);
+
         if ('file' === $fileType && !empty($content)) {
             $resourceNode = $document->getResourceNode();
             if ($resourceNode->hasResourceFile()) {
@@ -74,7 +74,6 @@ class UpdateResourceNodeFileAction
             $document->setResourceLinkList($links);
         }*/
 
-        $repo->setResourceTitle($document, $title);
         $document->setComment($comment);
 
         error_log('Finish update resource node file action');

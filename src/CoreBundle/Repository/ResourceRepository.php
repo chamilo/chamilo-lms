@@ -702,7 +702,7 @@ class ResourceRepository extends EntityRepository
             $resourceFile = $resourceNode->getResourceFile();
             if ($resourceFile) {
                 error_log('$resourceFile');
-                $title = $resource->getTitle();
+                $title = $resource->getResourceName();
                 $handle = tmpfile();
                 fwrite($handle, $content);
                 error_log($title);
@@ -719,13 +719,13 @@ class ResourceRepository extends EntityRepository
         return false;
     }
 
-    public function setResourceTitle(AbstractResource $resource, $title)
+    public function setResourceName(AbstractResource $resource, $title)
     {
-        $resource->setTitle($title);
+        $resource->setResourceName($title);
         $resourceNode = $resource->getResourceNode();
         $resourceNode->setTitle($title);
         if ($resourceNode->hasResourceFile()) {
-            //$resourceFile = $resourceNode->getResourceFile();
+            //$resourceNode->getResourceFile()->setName($title);
             //$resourceFile->setName($title);
 
             /*$fileName = $this->getResourceNodeRepository()->getFilename($resourceFile);

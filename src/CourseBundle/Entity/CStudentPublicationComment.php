@@ -255,4 +255,9 @@ class CStudentPublicationComment extends AbstractResource implements ResourceInt
     {
         return (string) substr($this->getComment(), 0, 80);
     }
+
+    public function setResourceName(string $name): self
+    {
+        return $this->setComment($name);
+    }
 }

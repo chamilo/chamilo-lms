@@ -5,14 +5,13 @@
 namespace Chamilo\CoreBundle\Controller\Api;
 
 use Chamilo\CourseBundle\Entity\CDocument;
-use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class CreateResourceNodeFileAction
 {
-    public function __invoke(Request $request, CDocumentRepository $repo): CDocument
+    public function __invoke(Request $request): CDocument
     {
         error_log('CreateResourceNodeFileAction __invoke');
         $document = new CDocument();
@@ -24,11 +23,9 @@ class CreateResourceNodeFileAction
             $contentData = json_decode($contentData, true);
             error_log(print_r($contentData, 1));
             $title = $contentData['title'];
-            $content = $contentData['contentFile'];
             $comment = $contentData['comment'];
         } else {
             $title = $request->get('title');
-            $content = $request->request->get('contentFile');
             $comment = $request->request->get('comment');
         }
 
@@ -56,21 +53,16 @@ class CreateResourceNodeFileAction
                         throw new BadRequestHttpException('"uploadFile" is required');
                     }
                     $title = $uploadedFile->getClientOriginalName();
-
-                    $document->setTitle($title);
                     $document->setUploadFile($uploadedFile);
                     $fileParsed = true;
                 }
 
                 // Get data in content and create a HTML file
                 if (false === $fileParsed && $content) {
-                    $document->setTitle($title);
-
-                    $title .= '.html';
                     $handle = tmpfile();
                     fwrite($handle, $content);
                     $meta = stream_get_meta_data($handle);
-                    $file = new UploadedFile($meta['uri'], $title, 'text/html', null, true);
+                    $file = new UploadedFile($meta['uri'], $title.'.html', 'text/html', null, true);
                     $document->setUploadFile($file);
                     $fileParsed = true;
                 }
@@ -82,10 +74,14 @@ class CreateResourceNodeFileAction
                 break;
 
             case 'folder':
-                $document->setTitle($title);
-
                 break;
         }
+
+        if (empty($title)) {
+            throw new \InvalidArgumentException('title required');
+        }
+
+        $document->setTitle($title);
 
         if ($request->request->has('resourceLinkList')) {
             $links = $request->get('resourceLinkList');

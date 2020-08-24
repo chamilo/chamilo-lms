@@ -799,4 +799,9 @@ class CForumForum extends AbstractResource implements ResourceInterface
     {
         return $this->getForumTitle();
     }
+
+    public function setResourceName(string $name): self
+    {
+        return $this->setForumTitle($name);
+    }
 }

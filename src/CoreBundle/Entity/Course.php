@@ -110,7 +110,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      *
      * ApiSubresource()
      * Groups({"course:read"})
-     * ORM\OneToMany(targetEntity="ResourceLink", mappedBy="course", cascade={"persist"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="ResourceLink", mappedBy="course", cascade={"persist"}, orphanRemoval=true)
      */
     protected $resourceLinks;
 
@@ -1378,5 +1378,10 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     public function getResourceName(): string
     {
         return $this->getCode();
+    }
+
+    public function setResourceName(string $name): self
+    {
+        return $this->setCode($name);
     }
 }

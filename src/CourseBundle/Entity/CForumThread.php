@@ -641,4 +641,9 @@ class CForumThread extends AbstractResource implements ResourceInterface
     {
         return $this->getThreadTitle();
     }
+
+    public function setResourceName(string $name): self
+    {
+        return $this->setThreadTitle($name);
+    }
 }

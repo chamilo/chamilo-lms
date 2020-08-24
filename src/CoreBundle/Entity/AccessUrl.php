@@ -559,4 +559,9 @@ class AccessUrl extends AbstractResource implements ResourceInterface
 
         return $url['host'];
     }
+
+    public function setResourceName(string $name): self
+    {
+        return $this->setUrl($name);
+    }
 }

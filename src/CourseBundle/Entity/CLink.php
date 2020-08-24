@@ -326,4 +326,9 @@ class CLink extends AbstractResource implements ResourceInterface
     {
         return $this->getTitle();
     }
+
+    public function setResourceName($name): self
+    {
+        return $this->setTitle($name);
+    }
 }

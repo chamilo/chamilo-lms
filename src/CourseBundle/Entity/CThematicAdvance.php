@@ -284,4 +284,9 @@ class CThematicAdvance extends AbstractResource implements ResourceInterface
     {
         return (string) $this->getContent();
     }
+
+    public function setResourceName(string $name): self
+    {
+        return $this->setContent($name);
+    }
 }

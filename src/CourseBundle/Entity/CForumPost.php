@@ -480,4 +480,9 @@ class CForumPost extends AbstractResource implements ResourceInterface
     {
         return $this->getPostTitle();
     }
+
+    public function setResourceName(string $name): self
+    {
+        return $this->setPostTitle($name);
+    }
 }

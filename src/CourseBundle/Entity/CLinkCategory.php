@@ -221,4 +221,9 @@ class CLinkCategory extends AbstractResource implements ResourceInterface
     {
         return $this->getCategoryTitle();
     }
+
+    public function setResourceName(string $name): self
+    {
+        return $this->setCategoryTitle($name);
+    }
 }

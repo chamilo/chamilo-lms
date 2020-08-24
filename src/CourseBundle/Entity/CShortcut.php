@@ -62,11 +62,6 @@ class CShortcut extends AbstractResource implements ResourceInterface
         return $this->id;
     }
 
-    public function getResourceName(): string
-    {
-        return $this->getName();
-    }
-
     public function getShortCutNode()
     {
         return $this->shortCutNode;
@@ -77,5 +72,15 @@ class CShortcut extends AbstractResource implements ResourceInterface
         $this->shortCutNode = $shortCutNode;
 
         return $this;
+    }
+
+    public function getResourceName(): string
+    {
+        return $this->getName();
+    }
+
+    public function setResourceName(string $name): self
+    {
+        return $this->setName($name);
     }
 }

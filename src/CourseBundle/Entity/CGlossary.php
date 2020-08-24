@@ -233,4 +233,9 @@ class CGlossary extends AbstractResource implements ResourceInterface
     {
         return $this->getName();
     }
+
+    public function setResourceName(string $name): self
+    {
+        return $this->setName($name);
+    }
 }

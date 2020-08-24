@@ -438,4 +438,9 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
     {
         return $this->getTitle();
     }
+
+    public function setResourceName(string $name): self
+    {
+        return $this->setTitle($name);
+    }
 }

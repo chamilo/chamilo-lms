@@ -191,4 +191,9 @@ class CAnnouncementAttachment extends AbstractResource implements ResourceInterf
     {
         return $this->getFilename();
     }
+
+    public function setResourceName(string $name): self
+    {
+        return $this->setFilename($name);
+    }
 }

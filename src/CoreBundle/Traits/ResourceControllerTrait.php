@@ -36,7 +36,7 @@ trait ResourceControllerTrait
         return $this->container->get($name);
     }
 
-    public function denyAccessUnlessValidResource(AbstractResource $resource)
+    public function denyAccessUnlessValidResource(AbstractResource $resource = null)
     {
         if (null === $resource) {
             throw new EntityNotFoundException($this->trans('Resource doesn\'t exists.'));

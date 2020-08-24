@@ -623,9 +623,9 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         /** @var AbstractResource $resource */
         $resource = $repository->getResourceFromResourceNode($nodeId);
-        $resourceNode = $resource->getResourceNode();
-
         $this->denyAccessUnlessValidResource($resource);
+
+        $resourceNode = $resource->getResourceNode();
         $this->setBreadCrumb($request, $resourceNode);
 
         $this->denyAccessUnlessGranted(
@@ -701,7 +701,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         /** @var AbstractResource $resource */
         $resource = $repository->getResourceFromResourceNode($id);
-
         $this->denyAccessUnlessValidResource($resource);
 
         $resourceNode = $resource->getResourceNode();

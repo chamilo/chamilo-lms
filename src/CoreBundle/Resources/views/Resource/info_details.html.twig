@@ -14,7 +14,9 @@
     {% endif %}
     <dt class="col-sm-3">{{ 'Created at' | trans }}</dt>
     <dd class="col-sm-9">
-        moment('{{ resource.resourceNode.createdAt | date("Y-m-d H:i:s")  }}').fromNow();
+        <script>
+            moment('{{ resource.resourceNode.createdAt | date("Y-m-d H:i:s")  }}').fromNow();
+        </script>
         {{ resource.resourceNode.createdAt | date_to_time_ago }}
     </dd>
 
@@ -22,7 +24,7 @@
     <dd class="col-sm-9">{{ resource.resourceNode.updatedAt | date_to_time_ago }}</dd>
 
     <dt class="col-sm-3">{{ 'Author' | trans }}</dt>
-{#    <dd class="col-sm-9">{{ resource.resourceNode.creator }}</dd>#}
+    <dd class="col-sm-9">{{ resource.resourceNode.creator }}</dd>
 
     {# Show where the file was added#}
 {#    {% if resource.resourceNode.resourceLinks %}#}

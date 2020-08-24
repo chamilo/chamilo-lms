@@ -4,12 +4,11 @@
 
 namespace Chamilo\CoreBundle\Traits;
 
-//use Chamilo\CoreBundle\Block\BreadcrumbBlockService;
 use Chamilo\CoreBundle\Component\Utils\Glide;
 use Chamilo\CoreBundle\Manager\SettingsManager;
 use Chamilo\CoreBundle\Repository\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\ResourceFactory;
-use Chamilo\CourseBundle\Repository\CAttendanceRepository;
+use Chamilo\CourseBundle\Repository\CAnnouncementRepository;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Knp\Menu\FactoryInterface as MenuFactoryInterface;
 use Sylius\Bundle\SettingsBundle\Form\Factory\SettingsFormFactory;
@@ -31,6 +30,7 @@ trait ControllerTrait
 
         $services[] = IllustrationRepository::class;
         $services[] = CDocumentRepository::class;
+        $services[] = CAnnouncementRepository::class;
 
         /*$services[] = CAttendanceRepository::class;
         $services[] = CDocumentRepository::class;

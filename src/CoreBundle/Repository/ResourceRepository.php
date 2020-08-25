@@ -92,10 +92,6 @@ class ResourceRepository extends EntityRepository
         ResourceNodeRepository $resourceNodeRepository
     ) {
         $className = $this->getClassName();
-        /*$path = explode('\\', get_class($this));
-        $class = array_pop($path);
-        error_log($class);
-        error_log(basename(get_class($this)));*/
         $this->repository = $entityManager->getRepository($className);
         $this->authorizationChecker = $authorizationChecker;
         $this->router = $router;
@@ -725,6 +721,7 @@ class ResourceRepository extends EntityRepository
         $resourceNode = $resource->getResourceNode();
         $resourceNode->setTitle($title);
         if ($resourceNode->hasResourceFile()) {
+            //$resourceNode->getResourceFile()->getFile()->
             //$resourceNode->getResourceFile()->setName($title);
             //$resourceFile->setName($title);
 

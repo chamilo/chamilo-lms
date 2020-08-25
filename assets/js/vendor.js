@@ -13,7 +13,7 @@ require('blueimp-file-upload');
 import('select2');
 require('timeago');
 require('sweetalert2');
-require('bootstrap-select');
+import('bootstrap-select');
 import('bootstrap-daterangepicker');
 require('fullcalendar/dist/fullcalendar.js');
 require('fullcalendar/dist/gcal.js');

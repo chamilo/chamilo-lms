@@ -90,6 +90,33 @@ $(function () {
     });
   }
 
+  // MODAL DELETE CONFIRM
+  $('.delete-swal').click(function (e) {
+    e.preventDefault(); // Prevent the href from redirecting directly
+    var url = $(this).attr("href");
+    var title = $(this).attr("title");
+
+    Swal.fire({
+      title: title,
+      text: '',
+      icon: 'warning',
+      showCancelButton: true,
+      cancelButtonText: 'Cancel',
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes',
+    }).then((result) => {
+      if (result.value) {
+        /*Swal.fire(
+            'Deleted!',
+            'Your file has been deleted.',
+            'success'
+        )*/
+        window.location.href = url;
+      }
+    });
+  });
+
   // Start modals
   // class='ajax' loads a page in a modal
   $('body').on('click', 'a.ajax', function (e) {

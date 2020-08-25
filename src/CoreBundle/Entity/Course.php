@@ -58,6 +58,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
 
     /**
      * @var int
+     *
      * @Groups({"course:read", "course_rel_user:read"})
      * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
      * @ORM\Id
@@ -240,6 +241,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
 
     /**
      * @var int Course visibility
+     *
      * @Groups({"course:read", "course:write"})
      * @Assert\NotBlank()
      *
@@ -1240,12 +1242,15 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
 
     /**
      * Anybody can see this course.
-     *
-     * @return bool
      */
-    public function isPublic()
+    public function isPublic(): bool
     {
-        return self::OPEN_WORLD == $this->visibility;
+        return self::OPEN_WORLD === $this->visibility;
+    }
+
+    public function isHidden(): bool
+    {
+        return self::HIDDEN === $this->visibility;
     }
 
     /**

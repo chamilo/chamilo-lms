@@ -39,7 +39,7 @@ use ZipStream\ZipStream;
 /**
  * Class ResourceController.
  *
- * @Route("/resources2")
+ * @Route("/r")
  *
  * @author Julio Montoya <gugli100@gmail.com>.
  */
@@ -624,9 +624,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         /** @var AbstractResource $resource */
         $resource = $repository->getResourceFromResourceNode($nodeId);
         $this->denyAccessUnlessValidResource($resource);
-
         $resourceNode = $resource->getResourceNode();
-        $this->setBreadCrumb($request, $resourceNode);
 
         $this->denyAccessUnlessGranted(
             ResourceNodeVoter::VIEW,
@@ -634,10 +632,11 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $this->trans('Unauthorised access to resource')
         );
 
+        $this->setBreadCrumb($request, $resourceNode);
+
         $tool = $request->get('tool');
         $type = $request->get('type');
 
-        //$illustration = $illustrationRepository->getIllustrationUrlFromNode($resourceNode);
         $form = $this->createForm(ResourceCommentType::class, null);
 
         $params = [
@@ -1150,7 +1149,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $this->denyAccessUnlessGranted(
             ResourceNodeVoter::VIEW,
             $resourceNode,
-            $this->trans('Unauthorised access to resource')
+            $this->trans('Unauthorised view access to resource')
         );
 
         $repo = $this->getRepositoryFromRequest($request);

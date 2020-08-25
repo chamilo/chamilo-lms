@@ -78,7 +78,7 @@ class CourseVoter extends Voter
         switch ($attribute) {
             case self::VIEW:
                 // Course is hidden then is not visible for nobody expect admins.
-                if (Course::HIDDEN === $course->getVisibility()) {
+                if ($course->isHidden()) {
                     return false;
                 }
 

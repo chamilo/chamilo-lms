@@ -211,7 +211,7 @@ class CourseHomeController extends ToolBaseController
     {
         $criteria = ['iid' => $toolId];
         /** @var CTool $tool */
-        $tool = $this->getDoctrine()->getRepository('Chamilo\CourseBundle\Entity\CTool')->findOneBy($criteria);
+        $tool = $this->getDoctrine()->getRepository(CTool::class)->findOneBy($criteria);
 
         if (null === $tool) {
             throw new NotFoundHttpException($this->trans('Tool not found'));

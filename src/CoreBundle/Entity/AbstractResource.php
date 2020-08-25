@@ -70,6 +70,8 @@ abstract class AbstractResource
 
     abstract public function getResourceName(): string;
 
+    abstract public function setResourceName(string $name);
+
     public function addLink(ResourceLink $link)
     {
         $this->linkEntityList[] = $link;

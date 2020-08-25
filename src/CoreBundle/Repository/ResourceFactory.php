@@ -5,13 +5,7 @@
 namespace Chamilo\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\ToolChain;
-use Cocur\Slugify\SlugifyInterface;
-use Doctrine\ORM\EntityManagerInterface;
-use League\Flysystem\MountManager;
-use Symfony\Component\DependencyInjection\ContainerInterface as Container;
 use Symfony\Component\PropertyAccess\Exception\InvalidArgumentException;
-use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class ResourceFactory
 {
@@ -21,25 +15,12 @@ class ResourceFactory
     protected $entityManager;
     protected $authorizationChecker;
 
-    public function __construct(
-        MountManager $mountManager,
-        ToolChain $toolChain,
-        SlugifyInterface $slugify,
-        AuthorizationCheckerInterface $authorizationChecker,
-        EntityManagerInterface $entityManager,
-        RouterInterface $router,
-        Container $container
-    ) {
-        $this->mountManager = $mountManager;
+    public function __construct(ToolChain $toolChain)
+    {
         $this->toolChain = $toolChain;
-        $this->slugify = $slugify;
-        $this->entityManager = $entityManager;
-        $this->router = $router;
-        $this->authorizationChecker = $authorizationChecker;
-        $this->container = $container;
     }
 
-    public function createRepository(string $tool, string $type): ResourceRepository
+    public function getRepository(string $tool, string $type)
     {
         $tool = $this->toolChain->getToolFromName($tool);
 
@@ -55,15 +36,6 @@ class ResourceFactory
             throw new InvalidArgumentException("Check that this classes exists: $repo");
         }
 
-        return $this->container->get($repo);
-
-        /*return new $repo(
-            $this->authorizationChecker,
-            $this->entityManager,
-            $this->mountManager,
-            $this->router,
-            $this->slugify,
-            $entity
-        );*/
+        return $repo;
     }
 }

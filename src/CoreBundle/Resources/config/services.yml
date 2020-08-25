@@ -234,6 +234,3 @@ services:
             - '@chamilo.settings.manager'
         tags:
             - {name: templating.helper, alias: chamilo_settings}
-
-    Liip\ImagineBundle\Service\FilterService:
-        alias: 'liip_imagine.service.filter'

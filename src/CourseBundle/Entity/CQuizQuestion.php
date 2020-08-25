@@ -455,4 +455,9 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
     {
         return $this->getQuestion();
     }
+
+    public function setResourceName(string $name): self
+    {
+        return $this->setQuestion($name);
+    }
 }

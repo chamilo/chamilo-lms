@@ -17,6 +17,8 @@ interface ResourceInterface
     /** Returns the resource name. Example for CDocument it will be the field "title".  */
     public function getResourceName(): string;
 
+    public function setResourceName(string $name);
+
     public function getResourceNode(): ResourceNode;
 
     public function setResourceNode(ResourceNode $resourceNode): AbstractResource;

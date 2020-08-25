@@ -89,17 +89,30 @@ class ResourceRepository extends EntityRepository
         RouterInterface $router,
         SlugifyInterface $slugify,
         ToolChain $toolChain,
-        ResourceNodeRepository $resourceNodeRepository,
-        string $className
+        ResourceNodeRepository $resourceNodeRepository
     ) {
-        $this->authorizationChecker = $authorizationChecker;
+        $className = $this->getClassName();
         $this->repository = $entityManager->getRepository($className);
+        $this->authorizationChecker = $authorizationChecker;
         $this->router = $router;
         $this->resourceNodeRepository = $resourceNodeRepository;
         $this->slugify = $slugify;
         $this->toolChain = $toolChain;
         $this->settings = new Settings();
         $this->templates = new Template();
+    }
+
+    public function getClassName()
+    {
+        $class = get_class($this);
+        //Chamilo\CoreBundle\Repository\IllustrationRepository
+        $class = str_replace('\\Repository\\', '\\Entity\\', $class);
+        $class = str_replace('Repository', '', $class);
+        if (false === class_exists($class)) {
+            throw new \Exception("Repo: $class not found ");
+        }
+
+        return $class;
     }
 
     public function getAuthorizationChecker(): AuthorizationCheckerInterface
@@ -685,7 +698,7 @@ class ResourceRepository extends EntityRepository
             $resourceFile = $resourceNode->getResourceFile();
             if ($resourceFile) {
                 error_log('$resourceFile');
-                $title = $resource->getTitle();
+                $title = $resource->getResourceName();
                 $handle = tmpfile();
                 fwrite($handle, $content);
                 error_log($title);
@@ -702,13 +715,14 @@ class ResourceRepository extends EntityRepository
         return false;
     }
 
-    public function setResourceTitle(AbstractResource $resource, $title)
+    public function setResourceName(AbstractResource $resource, $title)
     {
-        $resource->setTitle($title);
+        $resource->setResourceName($title);
         $resourceNode = $resource->getResourceNode();
         $resourceNode->setTitle($title);
         if ($resourceNode->hasResourceFile()) {
-            //$resourceFile = $resourceNode->getResourceFile();
+            //$resourceNode->getResourceFile()->getFile()->
+            //$resourceNode->getResourceFile()->setName($title);
             //$resourceFile->setName($title);
 
             /*$fileName = $this->getResourceNodeRepository()->getFilename($resourceFile);

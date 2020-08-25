@@ -39,7 +39,7 @@ use ZipStream\ZipStream;
 /**
  * Class ResourceController.
  *
- * @Route("/resources2")
+ * @Route("/r")
  *
  * @author Julio Montoya <gugli100@gmail.com>.
  */
@@ -623,10 +623,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         /** @var AbstractResource $resource */
         $resource = $repository->getResourceFromResourceNode($nodeId);
-        $resourceNode = $resource->getResourceNode();
-
         $this->denyAccessUnlessValidResource($resource);
-        $this->setBreadCrumb($request, $resourceNode);
+        $resourceNode = $resource->getResourceNode();
 
         $this->denyAccessUnlessGranted(
             ResourceNodeVoter::VIEW,
@@ -634,14 +632,16 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $this->trans('Unauthorised access to resource')
         );
 
+        $this->setBreadCrumb($request, $resourceNode);
+
         $tool = $request->get('tool');
         $type = $request->get('type');
 
-        //$illustration = $illustrationRepository->getIllustrationUrlFromNode($resourceNode);
         $form = $this->createForm(ResourceCommentType::class, null);
 
         $params = [
             'resource' => $resource,
+            'course' => $this->getCourse(),
          //   'illustration' => $illustration,
             'tool' => $tool,
             'type' => $type,
@@ -700,7 +700,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         /** @var AbstractResource $resource */
         $resource = $repository->getResourceFromResourceNode($id);
-
         $this->denyAccessUnlessValidResource($resource);
 
         $resourceNode = $resource->getResourceNode();
@@ -740,7 +739,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $em = $this->getDoctrine()->getManager();
 
         $id = $request->get('id');
-        $resourceNode = $this->getDoctrine()->getRepository('ChamiloCoreBundle:ResourceNode')->find($id);
+        $resourceNode = $this->getDoctrine()->getRepository(ResourceNode::class)->find($id);
         $parentId = $resourceNode->getParent()->getId();
 
         $this->denyAccessUnlessGranted(
@@ -812,7 +811,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
     public function viewAction(Request $request, RouterInterface $router): Response
     {
         $id = $request->get('id');
-        $filter = $request->get('filter');
+        $filter = $request->get('filter'); // See filters definitions in /config/services.yml
         $mode = $request->get('mode');
         $em = $this->getDoctrine();
         /** @var ResourceNode $resourceNode */
@@ -1150,7 +1149,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $this->denyAccessUnlessGranted(
             ResourceNodeVoter::VIEW,
             $resourceNode,
-            $this->trans('Unauthorised access to resource')
+            $this->trans('Unauthorised view access to resource')
         );
 
         $repo = $this->getRepositoryFromRequest($request);
@@ -1177,7 +1176,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
                     $server = $glide->getServer();
                     $params = $request->query->all();
 
-                    // The filter overwrites the params from get
+                    // The filter overwrites the params from GET.
                     if (!empty($filter)) {
                         $params = $glide->getFilters()[$filter] ?? [];
                     }

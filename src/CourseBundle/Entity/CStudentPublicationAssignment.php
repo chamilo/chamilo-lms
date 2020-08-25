@@ -238,4 +238,9 @@ class CStudentPublicationAssignment extends AbstractResource implements Resource
     {
         return (string) $this->getIid();
     }
+
+    public function setResourceName(string $name): self
+    {
+        //return $this->setTitle($name);
+    }
 }

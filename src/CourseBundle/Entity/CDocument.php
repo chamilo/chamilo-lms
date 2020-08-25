@@ -254,10 +254,8 @@ class CDocument extends AbstractResource implements ResourceInterface
      * Set comment.
      *
      * @param string $comment
-     *
-     * @return CDocument
      */
-    public function setComment($comment)
+    public function setComment($comment): self
     {
         $this->comment = $comment;
 
@@ -274,12 +272,7 @@ class CDocument extends AbstractResource implements ResourceInterface
         return $this->comment;
     }
 
-    /**
-     * Set title.
-     *
-     * @return CDocument
-     */
-    public function setTitle(string $title)
+    public function setTitle(string $title): self
     {
         $this->title = $title;
 
@@ -287,11 +280,9 @@ class CDocument extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Get title.
-     *
-     * @return string
+     * Document title.
      */
-    public function getTitle()
+    public function getTitle(): string
     {
         return (string) $this->title;
     }
@@ -318,10 +309,8 @@ class CDocument extends AbstractResource implements ResourceInterface
 
     /**
      * Set size.
-     *
-     * @return CDocument
      */
-    public function setSize(int $size)
+    public function setSize(int $size): self
     {
         $this->size = $size ?: 0;
 
@@ -418,5 +407,10 @@ class CDocument extends AbstractResource implements ResourceInterface
     public function getResourceName(): string
     {
         return $this->getTitle();
+    }
+
+    public function setResourceName(string $name): self
+    {
+        return $this->setTitle($name);
     }
 }

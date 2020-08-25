@@ -155,6 +155,7 @@ final class IllustrationRepository extends ResourceRepository implements GridInt
                 'tool' => $node->getResourceType()->getTool(),
                 'type' => $node->getResourceType()->getName(),
             ];
+
             if (!empty($filter)) {
                 $params['filter'] = $filter;
             }

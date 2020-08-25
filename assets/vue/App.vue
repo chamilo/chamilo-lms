@@ -321,6 +321,7 @@
 </template>
 
 <script>
+    import NotificationMixin from './mixins/NotificationMixin';
     import Breadcrumb from './components/Breadcrumb';
     import Snackbar from './components/Snackbar';
     import axios from "axios";
@@ -331,6 +332,8 @@
             Breadcrumb,
             Snackbar
         },
+
+        mixins: [NotificationMixin],
         data: () => ({
             drawer: true,
             courses: [
@@ -396,6 +399,13 @@
 
             let payload = {isAuthenticated: isAuthenticated, user: user};
             this.$store.dispatch("security/onRefresh", payload);
+
+            let messages = JSON.parse(this.$parent.$el.attributes["data-messages"].value);
+            if (messages) {
+              Array.from(messages).forEach(element =>
+                  this.showMessage(element)
+              );
+            }
 
             axios.interceptors.response.use(undefined, (err) => {
                 return new Promise(() => {

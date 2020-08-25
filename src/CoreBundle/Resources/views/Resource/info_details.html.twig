@@ -14,7 +14,9 @@
     {% endif %}
     <dt class="col-sm-3">{{ 'Created at' | trans }}</dt>
     <dd class="col-sm-9">
-        moment('{{ resource.resourceNode.createdAt | date("Y-m-d H:i:s")  }}').fromNow();
+        <script>
+            moment('{{ resource.resourceNode.createdAt | date("Y-m-d H:i:s")  }}').fromNow();
+        </script>
         {{ resource.resourceNode.createdAt | date_to_time_ago }}
     </dd>
 
@@ -22,7 +24,7 @@
     <dd class="col-sm-9">{{ resource.resourceNode.updatedAt | date_to_time_ago }}</dd>
 
     <dt class="col-sm-3">{{ 'Author' | trans }}</dt>
-{#    <dd class="col-sm-9">{{ resource.resourceNode.creator }}</dd>#}
+    <dd class="col-sm-9">{{ resource.resourceNode.creator }}</dd>
 
     {# Show where the file was added#}
 {#    {% if resource.resourceNode.resourceLinks %}#}
@@ -41,8 +43,8 @@
     <a class="btn btn-success"
        href="{{ url('chamilo_core_resource_view_file', {
            'id': resource.resourceNode.id,
-           'cid': course.id,
-           'sid': session.id,
+           'cid': course ? course.id : 0,
+           'sid': session ? session.id : 0,
            'type' : type,
            'tool' : tool,
            'mode' : 'download'
@@ -55,8 +57,8 @@
 {% if is_granted('EDIT', resource.resourceNode) %}
     <a class="btn btn-secondary" href="{{ url('chamilo_core_resource_edit', {
         'id': resource.resourceNode.id,
-        'cid': course.id,
-        'sid': session.id,
+        'cid': course ? course.id : 0,
+        'sid': session ? session.id : 0,
         'type' : type,
         'tool' : tool,
     })
@@ -68,8 +70,8 @@
 {% if is_granted('DELETE', resource.resourceNode) %}
     <a class="btn btn-danger" href="{{ url('chamilo_core_resource_delete', {
         'id': resource.resourceNode.id,
-        'cid': course.id,
-        'sid': session.id,
+        'cid': course ? course.id : 0,
+        'sid': session ? session.id : 0,
         'type' : type,
         'tool' : tool,
     })

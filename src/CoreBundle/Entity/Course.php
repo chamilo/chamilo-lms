@@ -58,6 +58,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
 
     /**
      * @var int
+     *
      * @Groups({"course:read", "course_rel_user:read"})
      * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
      * @ORM\Id
@@ -110,7 +111,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      *
      * ApiSubresource()
      * Groups({"course:read"})
-     * ORM\OneToMany(targetEntity="ResourceLink", mappedBy="course", cascade={"persist"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="ResourceLink", mappedBy="course", cascade={"persist"}, orphanRemoval=true)
      */
     protected $resourceLinks;
 
@@ -234,11 +235,17 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      * @ApiSubresource()
      * @Groups({"course:read", "course:write"})
      * @ORM\ManyToMany(targetEntity="Chamilo\CoreBundle\Entity\CourseCategory", inversedBy="courses")
+     * @ORM\JoinTable(
+     *      name="course_rel_category",
+     *      joinColumns={@ORM\JoinColumn(name="course_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="course_category_id", referencedColumnName="id", unique=true)}
+     * )
      */
-    protected $category;
+    protected $categories;
 
     /**
      * @var int Course visibility
+     *
      * @Groups({"course:read", "course:write"})
      * @Assert\NotBlank()
      *
@@ -758,11 +765,13 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * Set category.
      *
-     * @param CourseCategory $category
+     * @param ArrayCollection $categories
+     *
+     * @return Course
      */
-    public function setCategory(CourseCategory $category = null): self
+    public function setCategories(ArrayCollection $categories): self
     {
-        $this->category = $category;
+        $this->categories = $categories;
 
         return $this;
     }
@@ -770,11 +779,11 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * Get category.
      *
-     * @return CourseCategory
+     * @return ArrayCollection
      */
-    public function getCategory(): ?CourseCategory
+    public function getCategories(): ?ArrayCollection
     {
-        return $this->category;
+        return $this->categories;
     }
 
     /**
@@ -1239,12 +1248,15 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
 
     /**
      * Anybody can see this course.
-     *
-     * @return bool
      */
-    public function isPublic()
+    public function isPublic(): bool
     {
-        return self::OPEN_WORLD == $this->visibility;
+        return self::OPEN_WORLD === $this->visibility;
+    }
+
+    public function isHidden(): bool
+    {
+        return self::HIDDEN === $this->visibility;
     }
 
     /**
@@ -1377,5 +1389,10 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     public function getResourceName(): string
     {
         return $this->getCode();
+    }
+
+    public function setResourceName(string $name): self
+    {
+        return $this->setCode($name);
     }
 }

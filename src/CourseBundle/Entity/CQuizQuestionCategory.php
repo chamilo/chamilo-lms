@@ -222,4 +222,9 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
     {
         return $this->getTitle();
     }
+
+    public function setResourceName(string $name): self
+    {
+        return $this->setTitle($name);
+    }
 }

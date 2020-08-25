@@ -191,11 +191,9 @@ class ToolChain
     }
 
     /**
-     * @param string $name
-     *
      * @return AbstractTool
      */
-    public function getToolFromName($name)
+    public function getToolFromName(string $name)
     {
         $tools = $this->getTools();
 

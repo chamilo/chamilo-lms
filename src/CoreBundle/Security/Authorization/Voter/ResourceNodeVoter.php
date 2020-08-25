@@ -15,6 +15,7 @@ use Laminas\Permissions\Acl\Resource\GenericResource as SecurityResource;
 use Laminas\Permissions\Acl\Role\GenericRole as Role;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Acl\Permission\MaskBuilder;
+use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Security;
@@ -86,7 +87,7 @@ class ResourceNodeVoter extends Voter
             return false;
         }
 
-        // only vote on Post objects inside this voter
+        // only vote on ResourceNode objects inside this voter
         if (!$subject instanceof ResourceNode) {
             return false;
         }
@@ -99,16 +100,13 @@ class ResourceNodeVoter extends Voter
         $user = $token->getUser();
 
         // Make sure there is a user object (i.e. that the user is logged in)
-        if (!$user instanceof UserInterface) {
+        // Update. No, anons can enter a node depending in the visibility.
+        /*if (!$user instanceof UserInterface) {
             return false;
-        }
+        }*/
 
-        /** @var ResourceNode $group */
+        /** @var ResourceNode $resourceNode */
         $resourceNode = $subject;
-
-        if (!$resourceNode instanceof ResourceNode) {
-            return false;
-        }
 
         // Illustrations are always visible.
         if ('illustrations' === $resourceNode->getResourceType()->getName()) {
@@ -127,10 +125,10 @@ class ResourceNodeVoter extends Voter
 
         // Check if I'm the owner.
         $creator = $resourceNode->getCreator();
-
         if ($creator instanceof UserInterface &&
+            $user instanceof UserInterface &&
             $user->getUsername() === $creator->getUsername()) {
-            //return true;
+            return true;
         }
 
         // Checking links connected to this resource.
@@ -145,19 +143,18 @@ class ResourceNodeVoter extends Voter
         $courseManager = $this->entityManager->getRepository(Course::class);
         $sessionManager = $this->entityManager->getRepository(Session::class);
 
+        // @todo implement view, edit, delete.
         foreach ($links as $link) {
-            // Block access if visibility is deleted.
+            // Block access if visibility is deleted. Creator and admin already can access before.
             if (ResourceLink::VISIBILITY_DELETED === $link->getVisibility()) {
                 $linkFound = false;
 
                 break;
             }
 
-            $linkUser = $link->getUser();
             // Check if resource was sent to the current user.
-            if ($linkUser instanceof UserInterface &&
-                $linkUser->getUsername() === $creator->getUsername()
-            ) {
+            $linkUser = $link->getUser();
+            if ($linkUser instanceof UserInterface && $linkUser->getUsername() === $creator->getUsername()) {
                 $linkFound = true;
 
                 break;
@@ -167,7 +164,7 @@ class ResourceNodeVoter extends Voter
             $linkSession = $link->getSession();
             //$linkUserGroup = $link->getUserGroup();
 
-            // Course found, but courseId not set.
+            // Course found, but courseId not set, skip course checking.
             if ($linkCourse instanceof Course && empty($courseId)) {
                 continue;
             }
@@ -211,7 +208,7 @@ class ResourceNodeVoter extends Voter
             }
         }
 
-        // No link was found or not available
+        // No link was found or not available.
         if (false === $linkFound) {
             return false;
         }
@@ -227,9 +224,11 @@ class ResourceNodeVoter extends Voter
             // Taken the rights from the default tool
             //$rights = $link->getResourceNode()->getTool()->getToolResourceRight();
             //$rights = $link->getResourceNode()->getResourceType()->getTool()->getToolResourceRight();
+
             // By default the rights are:
-            // teacher: CRUD
-            // student: read
+            // Teachers: CRUD.
+            // Students: Only read.
+            // Anons: Only read.
             $readerMask = self::getReaderMask();
             $editorMask = self::getEditorMask();
 
@@ -245,6 +244,14 @@ class ResourceNodeVoter extends Voter
                     ->setMask($readerMask)
                     ->setRole(self::ROLE_CURRENT_COURSE_STUDENT);
                 $rights[] = $resourceRight;
+
+                if ($course->isPublic() && ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility()) {
+                    $resourceRight = new ResourceRight();
+                    $resourceRight
+                        ->setMask($readerMask)
+                        ->setRole('IS_AUTHENTICATED_ANONYMOUSLY');
+                    $rights[] = $resourceRight;
+                }
             }
 
             if (!empty($sessionId)) {
@@ -262,6 +269,7 @@ class ResourceNodeVoter extends Voter
                 ;
                 $rights[] = $resourceRight;
             }
+
             if (empty($rights) && ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility()) {
                 // Give just read access
                 $resourceRight = new ResourceRight();
@@ -278,11 +286,12 @@ class ResourceNodeVoter extends Voter
         $mask->add($attribute);
         $askedMask = $mask->get();
 
-        // Setting zend simple ACL
+        // Setting Laminas simple ACL
         $acl = new Acl();
 
         // Creating roles
         // @todo move this in a service
+        $anon = new Role('IS_AUTHENTICATED_ANONYMOUSLY');
         $userRole = new Role('ROLE_USER');
         $teacher = new Role('ROLE_TEACHER');
         $student = new Role('ROLE_STUDENT');
@@ -295,8 +304,9 @@ class ResourceNodeVoter extends Voter
         $superAdmin = new Role('ROLE_SUPER_ADMIN');
         $admin = new Role('ROLE_ADMIN');
 
-        // Adding roles to the ACL
+        // Adding roles to the ACL.
         $acl
+            ->addRole($anon)
             ->addRole($userRole)
             ->addRole($student)
             ->addRole($teacher)
@@ -308,22 +318,23 @@ class ResourceNodeVoter extends Voter
             ->addRole($admin)
         ;
 
-        // Adds a resource
+        // Add a resource.
         $resource = new SecurityResource($link);
         $acl->addResource($resource);
 
         // Check all the right this link has.
-        // $roles = [];
-        // Set rights from the ResourceRight
+        // Set rights from the ResourceRight.
         foreach ($rights as $right) {
-            //$roles[$right->getMask()] = $right->getRole();
             $acl->allow($right->getRole(), null, $right->getMask());
         }
 
         // var_dump($askedMask, $roles);
         // Role and permissions settings
         // Student can just view (read)
-        //$acl->allow($student, null, self::getReaderMask());
+        $acl->allow($student, null, self::getReaderMask());
+
+        // Anons can see.
+        $acl->allow($anon, null, self::getReaderMask());
 
         // Teacher can view/edit
         $acl->allow(
@@ -338,8 +349,16 @@ class ResourceNodeVoter extends Voter
         // Admin can do everything
         $acl->allow($admin);
         $acl->allow($superAdmin);
+
+        if ($token instanceof AnonymousToken) {
+            if ($acl->isAllowed('IS_AUTHENTICATED_ANONYMOUSLY', $resource, $askedMask)) {
+                return true;
+            }
+
+            return false;
+        }
+
         foreach ($user->getRoles() as $role) {
-            //var_dump($acl->isAllowed($role, $resource, $askedMask), $role);
             if ($acl->isAllowed($role, $resource, $askedMask)) {
                 return true;
             }

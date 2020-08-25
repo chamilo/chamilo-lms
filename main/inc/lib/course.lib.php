@@ -5439,23 +5439,27 @@ class CourseManager
      *
      * @param string $courseTableAlias Alias of the course table
      * @param bool   $hideClosed       Whether to hide closed and hidden courses
+     * @param bool   $checkHidePrivate
      *
      * @return string SQL conditions
      */
-    public static function getCourseVisibilitySQLCondition(
-        $courseTableAlias,
-        $hideClosed = false
-    ) {
+    public static function getCourseVisibilitySQLCondition($courseTableAlias, $hideClosed = false, $checkHidePrivate = true)
+    {
         $visibilityCondition = '';
-        $hidePrivate = api_get_setting('course_catalog_hide_private');
-        if ($hidePrivate === 'true') {
-            $visibilityCondition .= " AND $courseTableAlias.visibility <> ".COURSE_VISIBILITY_REGISTERED;
+
+        if ($checkHidePrivate) {
+            $hidePrivateSetting = api_get_setting('course_catalog_hide_private');
+            if ('true' === $hidePrivateSetting) {
+                $visibilityCondition .= " AND $courseTableAlias.visibility <> ".COURSE_VISIBILITY_REGISTERED;
+            }
         }
+
         if ($hideClosed) {
             $visibilityCondition .= " AND $courseTableAlias.visibility NOT IN (".COURSE_VISIBILITY_CLOSED.','.COURSE_VISIBILITY_HIDDEN.')';
         }
 
-        // Check if course have users allowed to see it in the catalogue, then show only if current user is allowed to see it
+        // Check if course have users allowed to see it in the catalogue,
+        // then show only if current user is allowed to see it
         $currentUserId = api_get_user_id();
         $restrictedCourses = self::getCatalogCourseList(true);
         $allowedCoursesToCurrentUser = self::getCatalogCourseList(true, $currentUserId);

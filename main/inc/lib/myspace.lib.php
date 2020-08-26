@@ -1341,17 +1341,20 @@ class MySpace
             //icons for show and hode
             $iconAdd = Display::return_icon('add.png', get_lang('ShowOrHide'), '', ICON_SIZE_SMALL);
             $iconRemove = Display::return_icon('error.png', get_lang('howOrHide'), '', ICON_SIZE_SMALL);
+            $teacherNameTemp = '';
             foreach ($data as $teacherName => $reportData) {
-
-                $listLp = $reportData;
-                $table .= "<tr>".
-                    "<td>$teacherName</td>";
-                foreach ($listLp as $lpName => $row) {
+                foreach ($reportData as $lpName => $row) {
                     $hiddenField = 'student_show_'.$index;
-                    $hiddenFieldS = 'student_show_'.$index.'_';
-                    $table .= "<td>$lpName</td>".
-                        "<td>".$row['students']."</td><td>".
-                        "<a href='#$hiddenField' id='$hiddenFieldS' onclick='showHideStudent(\"$hiddenField\")'>".
+                    $hiddenFieldLink = 'student_show_'.$index.'_';
+                    $printTeacherName = ($teacherName == $teacherNameTemp) ? '' : $teacherName;
+                    $teacherNameTemp = $teacherName;
+                    $table .=
+                        "<tr>".
+                        "<td>$printTeacherName</td>".
+                        "<td>$lpName</td>".
+                        "<td>".$row['students']."</td>".
+                        "<td>".
+                        "<a href='#!' id='$hiddenFieldLink' onclick='showHideStudent(\"$hiddenField\")'>".
                         "<div class='icon_add'>$iconAdd</div>".
                         "<div class='icon_remove hidden'>$iconRemove</div>".
                         "</a>".
@@ -1360,10 +1363,11 @@ class MySpace
                         $table .= $student['complete_name']."<br>";
                     }
                     $index += 1;
-                    $table .= "</div>";
+                    $table .= "</div>".
+                        "</td>".
+                        "</tr>";
                 }
-                $table .= "</td>".
-                    "</tr>";
+                $table .= "";
             }
             $table .= "</tbody>".
                 "</table>".

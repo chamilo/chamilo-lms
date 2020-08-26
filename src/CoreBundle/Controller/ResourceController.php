@@ -463,13 +463,13 @@ class ResourceController extends AbstractResourceController implements CourseCon
         /** @var ResourceNode $resourceNode */
         $resourceNode = $repository->getResourceNodeRepository()->find($nodeId);
 
-        $this->setBreadCrumb($request, $resourceNode);
-
         $this->denyAccessUnlessGranted(
             ResourceNodeVoter::VIEW,
             $resourceNode,
             $this->trans('Unauthorised access to resource')
         );
+
+        $this->setBreadCrumb($request, $resourceNode);
 
         $course = $this->getCourse();
         $totalSize = 0;
@@ -540,14 +540,13 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $settings = $repository->getResourceSettings();
         $resourceNode = $resource->getResourceNode();
 
-        $this->setBreadCrumb($request, $resourceNode);
-
         $this->denyAccessUnlessGranted(
             ResourceNodeVoter::EDIT,
             $resourceNode,
             $this->trans('Unauthorised access to resource')
         );
 
+        $this->setBreadCrumb($request, $resourceNode);
         $resourceNodeParentId = $resourceNode->getId();
 
         $routeParams = $this->getResourceParams($request);
@@ -629,7 +628,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $this->denyAccessUnlessGranted(
             ResourceNodeVoter::VIEW,
             $resourceNode,
-            $this->trans('Unauthorised access to resource')
+            $this->trans(sprintf("Unauthorised access to resource #%s", $nodeId))
         );
 
         $this->setBreadCrumb($request, $resourceNode);
@@ -669,13 +668,13 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $this->denyAccessUnlessValidResource($resource);
 
         $resourceNode = $resource->getResourceNode();
-        $this->setBreadCrumb($request, $resourceNode);
-
         $this->denyAccessUnlessGranted(
             ResourceNodeVoter::VIEW,
             $resourceNode,
             $this->trans('Unauthorised access to resource')
         );
+
+        $this->setBreadCrumb($request, $resourceNode);
 
         $tool = $request->get('tool');
         $type = $request->get('type');
@@ -845,6 +844,10 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         /** @var ResourceNode $resourceNode */
         $resourceNode = $em->getRepository('ChamiloCoreBundle:ResourceNode')->find($id);
+
+        if (null === $resourceNode) {
+            throw new FileNotFoundException('Resource not found');
+        }
 
         $this->denyAccessUnlessGranted(
             ResourceNodeVoter::VIEW,

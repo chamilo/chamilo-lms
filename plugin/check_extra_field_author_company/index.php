@@ -5,7 +5,6 @@ require_once __DIR__.'/../../main/inc/lib/extra_field.lib.php';
 // public $isAdminPlugin = true;
 $_template['show_message'] = false;
 
-
 /*
 if (api_is_anonymous()) {
     $_template['cas_activated'] = api_is_cas_activated();

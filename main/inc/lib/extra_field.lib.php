@@ -1177,19 +1177,18 @@ class ExtraField extends Model
                         // for task BT#17648
                         //When a varible is 'authors', this will be a select of  teachers
                         $variable = $field_details['variable'];
-                        if($variable != 'authors'){
+                        if ($variable != 'authors') {
                             foreach ($field_details['options'] as $optionDetails) {
                                 $options[$optionDetails['option_value']] = $optionDetails['display_text'];
                             }
-                        }else{
+                        } else {
                             $conditions = [
                                 'enabled' => 1,
                                 'status' => COURSEMANAGER,
                             ];
                             $teachers = UserManager::get_user_list($conditions);
                             foreach ($teachers as $teacher) {
-                                $options[$teacher['id']] =  $teacher['complete_name'];
-
+                                $options[$teacher['id']] = $teacher['complete_name'];
                             }
                         }
                         $form->addElement(
@@ -3126,6 +3125,62 @@ JAVASCRIPT;
     }
 
     /**
+     *  Gets the display name of an extra field.
+     *
+     * @param string $variableName
+     */
+    public static function getDisplayNameByVariable($variableName = null)
+    {
+        if ($variableName == null) {
+            return null;
+        }
+        $variableName = Security::remove_XSS($variableName);
+        $variableName = Database::escape_string($variableName);
+        $tblExtraField = Database::get_main_table(TABLE_EXTRA_FIELD);
+        $query = "SELECT
+			display_text
+		FROM
+			$tblExtraField
+		WHERE
+			variable = '$variableName'";
+        $companyField = Database::fetch_assoc(Database::query($query));
+
+        if ($companyField == false or !isset($companyField['display_text'])) {
+            return null;
+        }
+
+        return $companyField['display_text'];
+    }
+
+    /**
+     *  Gets the display name of an extra field.
+     *
+     * @param string $variableName
+     */
+    public static function getDisplayNameByVariable($variableName = null)
+    {
+        if ($variableName == null) {
+            return null;
+        }
+        $variableName = Security::remove_XSS($variableName);
+        $variableName = Database::escape_string($variableName);
+        $tblExtraField = Database::get_main_table(TABLE_EXTRA_FIELD);
+        $query = "SELECT
+			display_text
+		FROM
+			$tblExtraField
+		WHERE
+			variable = '$variableName'";
+        $companyField = Database::fetch_assoc(Database::query($query));
+
+        if ($companyField == false or !isset($companyField['display_text'])) {
+            return null;
+        }
+
+        return $companyField['display_text'];
+    }
+
+    /**
      * @param \FormValidator $form
      * @param int            $defaultValueId
      * @param bool           $freezeElement
@@ -3551,34 +3606,5 @@ JAVASCRIPT;
                 return $option['option_value'] == $parentId;
             }
         );
-    }
-
-    /**
-     *  Gets the display name of an extra field
-     *
-     * @param string $variableName
-     */
-
-    public static function getDisplayNameByVariable($variableName = null)
-    {
-        if($variableName == null ) {
-            return null;
-        }
-        $variableName = Security::remove_XSS($variableName);
-        $variableName = Database::escape_string($variableName);
-        $tblExtraField =  Database::get_main_table(TABLE_EXTRA_FIELD);
-        $query = "SELECT
-			display_text
-		FROM
-			$tblExtraField
-		WHERE
-			variable = '$variableName'";
-        $companyField = Database::fetch_assoc(Database::query($query));
-
-        if ($companyField == false or !isset($companyField['display_text'])) {
-
-            return null;
-        }
-        return $companyField['display_text'];
     }
 }

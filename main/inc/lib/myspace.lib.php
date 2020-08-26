@@ -65,22 +65,23 @@ class MySpace
             ],
         ];
 
-        $companyField =  ExtraField::getDisplayNameByVariable('company');
+        $companyField = ExtraField::getDisplayNameByVariable('company');
         if (!empty($companyField)) {
-            $actions [] =
+            $actions[] =
                 [
                     'url' => api_get_path(WEB_CODE_PATH).'mySpace/admin_view.php?display=company',
                     'content' => get_lang('UserByEntityReport'),
                 ];
         }
-        $authorsField =  ExtraField::getDisplayNameByVariable('authors');
+        $authorsField = ExtraField::getDisplayNameByVariable('authors');
         if (!empty($authorsField)) {
-            $actions [] =
+            $actions[] =
                 [
                     'url' => api_get_path(WEB_CODE_PATH).'mySpace/admin_view.php?display=learningPath',
                     'content' => get_lang('LpByAuthor'),
                 ];
         }
+
         return Display::actions($actions, null);
     }
 
@@ -1006,139 +1007,13 @@ class MySpace
         }
     }
 
-
-    /**
-     * Gets a list of users who were enrolled in the lessons.
-     * It is necessary that in the extra field, a company is defined
-     *
-     *  if lpId is different to 0, this search by lp id too
-     * @param null $startDate
-     * @param null $endDate
-     * @param int $lpId
-     * @return array
-     */
-    protected static function getCompanyLearnpathSubscription($startDate = null, $endDate = null , $lpId = 0)
-    {
-
-        $tblItemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
-        $tblLp = Database::get_course_table(TABLE_LP_MAIN);
-        $tblExtraField = Database::get_main_table(TABLE_EXTRA_FIELD);
-        $tblExtraFieldValue = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
-
-        $whereCondition = '';
-
-        //Validating dates
-        if (!empty($startDate)) {
-            $startDate = new DateTime($startDate);
-        }
-        if (!empty($endDate)) {
-            $endDate = new DateTime($endDate);
-        }
-        if (!empty($startDate) and !empty($endDate)) {
-            if ($startDate > $endDate) {
-                $dateTemp = $endDate;
-                $endDate = $startDate;
-                $startDate = $dateTemp;
-                unset($dateTemp);
-            }
-        }
-
-        // Settings condition and parametter GET to right date
-        if (!empty($startDate)) {
-            $startDate = $startDate->format('Y-m-d');
-            $_GET['startDate'] = $startDate;
-            $whereCondition .= "
-            AND $tblItemProperty.lastedit_date >= '$startDate' ";
-        }
-        if (!empty($endDate)) {
-            $endDate = $endDate->format('Y-m-d');
-            $_GET['endDate'] = $endDate;
-            $whereCondition .= "
-            AND $tblItemProperty.lastedit_date <= '$endDate' ";
-
-        }
-        if( $lpId != 0){
-            $whereCondition .= "
-            AND c_item_property.ref = $lpId ";
-        }
-
-        $companys = [];
-        if (!empty($startDate) or !empty($endDate)) {
-            // get Compnay data
-            $selectToCompany = " (
-            SELECT
-                value
-            FROM
-                $tblExtraFieldValue
-            WHERE
-                field_id IN (
-                    SELECT
-                        id
-                    FROM
-                        $tblExtraField
-                    WHERE
-                        variable = 'company'
-                )
-            AND item_id = $tblItemProperty.to_user_id
-            ) ";
-            $query = "
-            SELECT
-                * ,
-                 $selectToCompany  as company,
-                    (
-                    SELECT
-                        name
-                    FROM
-                        $tblLp
-                    WHERE
-                    $tblLp.iid = c_item_property.ref
-                 ) as name_lp
-            FROM
-                $tblItemProperty
-            WHERE
-                c_id IN (
-                    SELECT
-                        c_id
-                    FROM
-                        ".TABLE_MAIN_COURSE_USER."
-                    WHERE
-                        STATUS = 5
-                )
-                AND lastedit_type = 'LearnpathSubscription'
-
-                ";
-// -- AND $selectToCompany IS NOT NULL
-            if (strlen($whereCondition) > 2) {
-                $query .= $whereCondition;
-            }
-            $queryResult = Database::query($query);
-            while ($row = Database::fetch_array($queryResult, 'ASSOC')) {
-                // $courseId = (int)$row['c_id'];
-                $studentId = (int)$row['to_user_id'];
-                $company = isset($row['company']) ? $row['company'] : '';
-                if( $company == ''){
-                    $company = get_lang('NoEntity');
-                }
-                // $lpId = $row['ref'];
-                if( $lpId != 0 && $studentId != 0) {
-                    $companys[] = $studentId;
-                }else{
-                    $companys[$company][] = $studentId;
-                    $companys[$company] = array_unique($companys[$company]);
-
-                }
-
-                }
-        }
-        return $companys;
-    }
-
     /**
      * Export to cvs a list of users who were enrolled in the lessons.
-     * It is necessary that in the extra field, a company is defined
+     * It is necessary that in the extra field, a company is defined.
      *
      * @param null $startDate
      * @param null $endDate
+     *
      * @return array
      */
     public static function export_company_resume_csv($startDate, $endDate)
@@ -1147,7 +1022,7 @@ class MySpace
         $csv_content = [];
         // Printing table
         $total = 0;
-        $displayText =  ExtraField::getDisplayNameByVariable('company');
+        $displayText = ExtraField::getDisplayNameByVariable('company');
         // the first line of the csv file with the column headers
         $csv_row = [];
         $csv_row[] = $displayText;
@@ -1155,15 +1030,13 @@ class MySpace
         $csv_row[] = get_lang('CountOfSubscribedUsers');
         $csv_content[] = $csv_row;
 
-
-        foreach($companys as $entity => $student) {
+        foreach ($companys as $entity => $student) {
             $csv_row = [];
             // user official code
             $csv_row[] = $entity;
             $csv_row[] = count($student);
             $total += count($student);
             $csv_content[] = $csv_row;
-
         }
 
         $csv_row = [];
@@ -1175,10 +1048,10 @@ class MySpace
         exit;
     }
 
-
     /**
      * Displays a list as a table of users who were enrolled in the lessons.
-     * It is necessary that in the extra field, a company is defined
+     * It is necessary that in the extra field, a company is defined.
+     *
      * @param null $startDate
      * @param null $endDate
      */
@@ -1186,7 +1059,6 @@ class MySpace
         $startDate = null,
         $endDate = null
     ) {
-
         $companys = self::getCompanyLearnpathSubscription($startDate, $endDate);
         $tableHtml = '';
         // Printing table
@@ -1203,12 +1075,9 @@ class MySpace
         $table .= "<tr><td>".get_lang('GeneralTotal')."</td><td>$total</td></tr>";
         $table .= '</tbody></table></div>';
 
-
         if (!empty($startDate) or !empty($endDate)) {
             $tableHtml = $table;
-
         }
-
 
         $form = new FormValidator('searchDate', 'get');
         $form->addHidden('display', 'company');
@@ -1232,11 +1101,9 @@ class MySpace
                     null,
                     null,
                     [
-
                     ]
                 );
         }
-
 
         $tableContent = $form->returnForm();
         $tableContent .= $tableHtml;
@@ -1246,8 +1113,6 @@ class MySpace
         $tpl->assign('table', $tableContent);
         $templateName = $tpl->get_template('my_space/course_summary.tpl');
         $tpl->display($templateName);
-
-
     }
 
     /**
@@ -1255,14 +1120,13 @@ class MySpace
      *
      * @param null $startDate
      * @param null $endDate
-     * @param boolean $csv
+     * @param bool $csv
      */
     public static function displayResumeLP(
         $startDate = null,
         $endDate = null,
         $csv = false
     ) {
-
         $tableHtml = '';
         $tblExtraField = Database::get_main_table(TABLE_EXTRA_FIELD);
         $tblExtraFieldValue = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
@@ -1289,7 +1153,7 @@ class MySpace
         $tblCourse = TABLE_MAIN_COURSE;
         $data = [];
         while ($row = Database::fetch_array($queryResult, 'ASSOC')) {
-            $lp_id = (int)$row['lp_id'];
+            $lp_id = (int) $row['lp_id'];
             $registeredUsers = self::getCompanyLearnpathSubscription($startDate, $endDate, $lp_id);
             if (!empty($registeredUsers)) {
                 $lp_info = [];
@@ -1321,7 +1185,6 @@ class MySpace
                         'studentList' => $studentUsers,
                     ];
                     $teacherList[] = $teacher;
-
                 }
             }
         }
@@ -1343,7 +1206,7 @@ class MySpace
             $iconRemove = Display::return_icon('error.png', get_lang('howOrHide'), '', ICON_SIZE_SMALL);
             $teacherNameTemp = '';
             foreach ($data as $teacherName => $reportData) {
-                $lpCount=0;
+                $lpCount = 0;
                 foreach ($reportData as $lpName => $row) {
                     $hiddenField = 'student_show_'.$index;
                     $hiddenFieldLink = 'student_show_'.$index.'_';
@@ -1363,8 +1226,8 @@ class MySpace
                     foreach ($row['studentList'] as $student) {
                         $table .= $student['complete_name']."<br>";
                     }
-                    $index += 1;
-                    $lpCount += 1;
+                    $index++;
+                    $lpCount++;
                     $table .= "</div>".
                         "</td>".
                         "</tr>";
@@ -1376,8 +1239,6 @@ class MySpace
                     "<td></td>".
                     "<td></td>".
                     "</tr>";
-
-
             }
             $table .= "</tbody>".
                 "</table>".
@@ -1408,7 +1269,6 @@ class MySpace
                         null,
                         null,
                         [
-
                         ]
                     );
             }
@@ -1436,15 +1296,13 @@ class MySpace
                         $csv_row[] = $row['students'];
                         $csv_row[] = $student['complete_name'];
                         $csv_content[] = $csv_row;
-
                     }
                 }
             }
             Export::arrayToCsv($csv_content, 'reporting_lp_by_authors');
         }
-
-
     }
+
     /**
      * Display a sortable table that contains an overview of all the reporting progress of all courses.
      */
@@ -3746,6 +3604,131 @@ class MySpace
                 'UTF-8'
             );
         }
+    }
+
+    /**
+     * Gets a list of users who were enrolled in the lessons.
+     * It is necessary that in the extra field, a company is defined.
+     *
+     *  if lpId is different to 0, this search by lp id too
+     *
+     * @param null $startDate
+     * @param null $endDate
+     * @param int  $lpId
+     *
+     * @return array
+     */
+    protected static function getCompanyLearnpathSubscription($startDate = null, $endDate = null, $lpId = 0)
+    {
+        $tblItemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
+        $tblLp = Database::get_course_table(TABLE_LP_MAIN);
+        $tblExtraField = Database::get_main_table(TABLE_EXTRA_FIELD);
+        $tblExtraFieldValue = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+
+        $whereCondition = '';
+
+        //Validating dates
+        if (!empty($startDate)) {
+            $startDate = new DateTime($startDate);
+        }
+        if (!empty($endDate)) {
+            $endDate = new DateTime($endDate);
+        }
+        if (!empty($startDate) and !empty($endDate)) {
+            if ($startDate > $endDate) {
+                $dateTemp = $endDate;
+                $endDate = $startDate;
+                $startDate = $dateTemp;
+                unset($dateTemp);
+            }
+        }
+
+        // Settings condition and parametter GET to right date
+        if (!empty($startDate)) {
+            $startDate = $startDate->format('Y-m-d');
+            $_GET['startDate'] = $startDate;
+            $whereCondition .= "
+            AND $tblItemProperty.lastedit_date >= '$startDate' ";
+        }
+        if (!empty($endDate)) {
+            $endDate = $endDate->format('Y-m-d');
+            $_GET['endDate'] = $endDate;
+            $whereCondition .= "
+            AND $tblItemProperty.lastedit_date <= '$endDate' ";
+        }
+        if ($lpId != 0) {
+            $whereCondition .= "
+            AND c_item_property.ref = $lpId ";
+        }
+
+        $companys = [];
+        if (!empty($startDate) or !empty($endDate)) {
+            // get Compnay data
+            $selectToCompany = " (
+            SELECT
+                value
+            FROM
+                $tblExtraFieldValue
+            WHERE
+                field_id IN (
+                    SELECT
+                        id
+                    FROM
+                        $tblExtraField
+                    WHERE
+                        variable = 'company'
+                )
+            AND item_id = $tblItemProperty.to_user_id
+            ) ";
+            $query = "
+            SELECT
+                * ,
+                 $selectToCompany  as company,
+                    (
+                    SELECT
+                        name
+                    FROM
+                        $tblLp
+                    WHERE
+                    $tblLp.iid = c_item_property.ref
+                 ) as name_lp
+            FROM
+                $tblItemProperty
+            WHERE
+                c_id IN (
+                    SELECT
+                        c_id
+                    FROM
+                        ".TABLE_MAIN_COURSE_USER."
+                    WHERE
+                        STATUS = 5
+                )
+                AND lastedit_type = 'LearnpathSubscription'
+
+                ";
+            // -- AND $selectToCompany IS NOT NULL
+            if (strlen($whereCondition) > 2) {
+                $query .= $whereCondition;
+            }
+            $queryResult = Database::query($query);
+            while ($row = Database::fetch_array($queryResult, 'ASSOC')) {
+                // $courseId = (int)$row['c_id'];
+                $studentId = (int) $row['to_user_id'];
+                $company = isset($row['company']) ? $row['company'] : '';
+                if ($company == '') {
+                    $company = get_lang('NoEntity');
+                }
+                // $lpId = $row['ref'];
+                if ($lpId != 0 && $studentId != 0) {
+                    $companys[] = $studentId;
+                } else {
+                    $companys[$company][] = $studentId;
+                    $companys[$company] = array_unique($companys[$company]);
+                }
+            }
+        }
+
+        return $companys;
     }
 
     private static function getDataAccessTrackingFilters($sql)

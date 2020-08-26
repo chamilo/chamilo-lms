@@ -11,7 +11,6 @@
 /**
  * Plugin details (must be present).
  */
-
 $plugin_info['title'] = 'Informes more';
 $plugin_info['comment'] = "Comentario breve de lo que hace el plugin";
 $plugin_info['version'] = '1.0'; // o la versión que corresponda

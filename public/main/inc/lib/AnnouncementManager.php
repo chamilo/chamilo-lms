@@ -637,8 +637,6 @@ class AnnouncementManager
         }
 
         $courseId = $courseInfo['real_id'];
-        $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
-
         if (empty($end_date)) {
             $end_date = api_get_utc_datetime();
         }
@@ -1387,7 +1385,6 @@ class AnnouncementManager
         $file_comment,
         $file
     ) {
-        $table = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
         $return = 0;
         $courseId = api_get_course_int_id();
 
@@ -1410,28 +1407,27 @@ class AnnouncementManager
                 $new_file_name = uniqid('');
                 $attachment = new CAnnouncementAttachment();
                 $attachment
-                    ->setCId($courseId)
                     ->setFilename($file_name)
                     ->setPath($new_file_name)
                     ->setComment($file_comment)
                     ->setAnnouncement($announcement)
                     ->setSize((int) $file['size'])
+                    ->setParent($announcement)
+                    ->addCourseLink(
+                        api_get_course_entity($courseId),
+                        api_get_session_entity(api_get_session_id()),
+                        api_get_group_entity()
+                    )
                 ;
-                $userId = api_get_user_id();
+                $repo->getEntityManager()->persist($attachment);
+                $repo->getEntityManager()->flush();
+
                 $request = Container::getRequest();
                 $file = $request->files->get('user_upload');
 
                 if (!empty($file)) {
-                    $repo->addResourceToCourseWithParent(
-                        $attachment,
-                        $announcement->getResourceNode(),
-                        ResourceLink::VISIBILITY_PUBLISHED,
-                        api_get_user_entity($userId),
-                        api_get_course_entity($courseId),
-                        api_get_session_entity(api_get_session_id()),
-                        api_get_group_entity(),
-                        $file
-                    );
+                    $repo->addFile($attachment, $file);
+                    $repo->getEntityManager()->persist($attachment);
                     $repo->getEntityManager()->flush();
 
                     return 1;

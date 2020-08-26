@@ -8,6 +8,8 @@ use Chamilo\CoreBundle\Component\Utils\Glide;
 use Chamilo\CoreBundle\Manager\SettingsManager;
 use Chamilo\CoreBundle\Repository\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\ResourceFactory;
+use Chamilo\CourseBundle\Entity\CAnnouncementAttachment;
+use Chamilo\CourseBundle\Repository\CAnnouncementAttachmentRepository;
 use Chamilo\CourseBundle\Repository\CAnnouncementRepository;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Knp\Menu\FactoryInterface as MenuFactoryInterface;
@@ -31,6 +33,7 @@ trait ControllerTrait
         $services[] = IllustrationRepository::class;
         $services[] = CDocumentRepository::class;
         $services[] = CAnnouncementRepository::class;
+        $services[] = CAnnouncementAttachmentRepository::class;
 
         /*$services[] = CAttendanceRepository::class;
         $services[] = CDocumentRepository::class;

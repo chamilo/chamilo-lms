@@ -53,8 +53,10 @@ class ResourceUploadController extends BlueimpController
 
         // Create repository from tool and type.
         $factory = $container->get('Chamilo\CoreBundle\Repository\ResourceFactory');
+        $repoService = $factory->getRepositoryService($tool, $type);
+
         /** @var ResourceRepository $repo */
-        $repo = $factory->createRepository($tool, $type);
+        $repo = $container->get($repoService);
 
         /** @var ResourceNode $parent */
         $parent = $repo->getResourceNodeRepository()->find($id);

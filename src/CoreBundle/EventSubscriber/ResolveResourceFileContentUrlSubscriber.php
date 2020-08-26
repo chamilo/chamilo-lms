@@ -55,6 +55,10 @@ class ResolveResourceFileContentUrlSubscriber implements EventSubscriberInterfac
         }
 
         $getFile = $request->get('getFile');
+
+        /*$courseId = (int) $request->get('cid');
+        $sessionId = (int) $request->get('sid');*/
+
         foreach ($mediaObjects as $mediaObject) {
             if (!$mediaObject instanceof AbstractResource) {
                 continue;
@@ -64,6 +68,8 @@ class ResolveResourceFileContentUrlSubscriber implements EventSubscriberInterfac
 
                 $params = [
                     'id' => $resourceNode->getId(),
+                   // 'cid' => $courseId,
+                    //'sid' => $sessionId,
                     'tool' => $resourceNode->getResourceType()->getTool()->getName(),
                     'type' => $resourceNode->getResourceType()->getName(),
                 ];

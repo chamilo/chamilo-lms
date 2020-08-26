@@ -102,8 +102,7 @@ services:
         tags:
             - {name: doctrine.orm.entity_listener, entity_manager: default, lazy: true}
 
-    chamilo_course.listener.course:
-        class: Chamilo\CoreBundle\EventListener\CourseListener
+    Chamilo\CoreBundle\EventListener\CourseListener:
         calls:
             - [setContainer, ['@service_container']]
         tags:
@@ -112,8 +111,7 @@ services:
             - {name: kernel.event_listener, event: kernel.controller, method: onKernelController}
 
     # Sets the user access in a course listener
-    chamilo_course.listener.course_access:
-        class: Chamilo\CoreBundle\EventListener\CourseAccessListener
+    Chamilo\CoreBundle\EventListener\CourseAccessListener:
         arguments:
             - '@doctrine.orm.entity_manager'
         calls:
@@ -122,8 +120,7 @@ services:
             - {name: kernel.event_listener, event: chamilo_course.course.access, method: onCourseAccessEvent}
 
     # Sets the user access in a course session listener
-    chamilo_course.listener.session_access:
-        class: Chamilo\CoreBundle\EventListener\SessionAccessListener
+    Chamilo\CoreBundle\EventListener\SessionAccessListener:
         arguments:
             - '@doctrine.orm.entity_manager'
         calls:
@@ -132,15 +129,13 @@ services:
             - {name: kernel.event_listener, event: chamilo_course.course.session, method: onSessionAccessEvent}
 
     # When Course entity is loaded
-    chamilo_core.listener.course:
-        class: Chamilo\CoreBundle\Entity\Listener\CourseListener
+    Chamilo\CoreBundle\Entity\Listener\CourseListener:
         arguments: ['@Chamilo\CoreBundle\ToolChain', '@chamilo.settings.manager']
         tags:
             - {name: doctrine.orm.entity_listener, entity_manager: default, lazy: true}
 
     # Setting user
-    chamilo_core.listener.legacy:
-        class: Chamilo\CoreBundle\EventListener\LegacyListener
+    Chamilo\CoreBundle\EventListener\LegacyListener:
         calls:
             - [setContainer, ['@service_container']]
         tags:
@@ -160,8 +155,7 @@ services:
             - {name: kernel.event_listener, event: security.interactive_login, method: onInteractiveLogin, priority: 15}
 
     # Settings listener
-    chamilo_core.listener.settings:
-        class: Chamilo\CoreBundle\EventListener\SettingListener
+    Chamilo\CoreBundle\EventListener\SettingListener:
         arguments: ['@service_container']
         tags:
             - {name: kernel.event_listener, event: sylius.settings.pre_save, method: onSettingPreSave}
@@ -193,22 +187,21 @@ services:
 #            - {name: kernel.event_listener, event: theme.messages, method: onListMessages}
 
     # Course upload listener
-    chamilo_core.listener.resource_upload_listener:
-        class: Chamilo\CoreBundle\EventListener\ResourceUploadListener
+    Chamilo\CoreBundle\EventListener\ResourceUploadListener:
         arguments: ['@router']
         tags:
             - {name: kernel.event_listener, event: oneup_uploader.post_persist, method: onUpload}
 
-    chamilo_core.menu.nav_builder:
-        class: Chamilo\CoreBundle\Menu\NavBuilder
-        arguments:
-            - '@knp_menu.factory'
-            - '@security.authorization_checker'
-        calls:
-            - [setContainer, ['@service_container']]
-        tags:
-#            - {name: mopa_bootstrap.menu, alias: chamilo_core.menu.nav}
-            - {name: knp_menu.menu_builder, method: menuApp, alias: menuApp}
+#    chamilo_core.menu.nav_builder:
+#        class: Chamilo\CoreBundle\Menu\NavBuilder
+#        arguments:
+#            - '@knp_menu.factory'
+#            - '@security.authorization_checker'
+#        calls:
+#            - [setContainer, ['@service_container']]
+#        tags:
+##            - {name: mopa_bootstrap.menu, alias: chamilo_core.menu.nav}
+#            - {name: knp_menu.menu_builder, method: menuApp, alias: menuApp}
 
 #    chamilo_core.menu.course_menu_builder:
 #        class: Chamilo\CoreBundle\Menu\LeftMenuBuilder

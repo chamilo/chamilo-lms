@@ -75,27 +75,10 @@ services:
 
     Chamilo\CoreBundle\Security\HTTPExceptionListener:
         tags:
-            - { name: kernel.event_listener, event: kernel.exception }
+            - {name: kernel.event_listener, event: kernel.exception}
 
 sylius_settings:
     driver: doctrine/orm
-
-## Grid default template
-#apy_data_grid:
-#    theme: '@ChamiloCore/Resource/grid_theme.html.twig'
-#    limits: [20, 50, 100]
-#    persistence: false
-##    no_data_message: "No data"
-##    no_result_message: "No result"
-##    actions_columns_size: -1
-##    actions_columns_title: "Actions"
-##    actions_columns_separator: "<br />"
-#    pagerfanta:
-#        enable: true
-#        view_class: 'Pagerfanta\View\TwitterBootstrap4View'
-#        options:
-#            prev_message: "«"
-#            next_message: "»"
 
 # Course settings
 chamilo_course:

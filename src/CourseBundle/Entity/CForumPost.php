@@ -48,13 +48,6 @@ class CForumPost extends AbstractResource implements ResourceInterface
     protected $cId;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="post_id", type="integer")
-     */
-    protected $postId;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="post_title", type="string", length=250, nullable=true)
@@ -142,7 +135,6 @@ class CForumPost extends AbstractResource implements ResourceInterface
 
     public function __construct()
     {
-        $this->postId = 0;
         $this->postParentId = null;
     }
 
@@ -363,30 +355,6 @@ class CForumPost extends AbstractResource implements ResourceInterface
     public function getVisible()
     {
         return $this->visible;
-    }
-
-    /**
-     * Set postId.
-     *
-     * @param int $postId
-     *
-     * @return CForumPost
-     */
-    public function setPostId($postId)
-    {
-        $this->postId = $postId;
-
-        return $this;
-    }
-
-    /**
-     * Get postId.
-     *
-     * @return int
-     */
-    public function getPostId()
-    {
-        return $this->postId;
     }
 
     /**

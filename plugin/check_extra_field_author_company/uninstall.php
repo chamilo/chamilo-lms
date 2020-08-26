@@ -6,4 +6,4 @@ require_once 'CheckExtraFieldAuthorsCompanyPlugin.php';
 if (!api_is_platform_admin()) {
     die('You must have admin permissions to uninstall plugins');
 }
-CardGame::create()->uninstall();
+CheckExtraFieldAuthorsCompanyPlugin::create()->uninstall();

@@ -1,9 +1,6 @@
 <?php
 
-require_once __DIR__.'/../../main/inc/global.inc.php';
-require_once __DIR__.'/../../main/inc/lib/extra_field.lib.php';
-
-class CheckExtraFieldAuthorsCompanyPlugin
+class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
 {
     protected $tblExtraField;
     protected $authorsExist;
@@ -13,6 +10,10 @@ class CheckExtraFieldAuthorsCompanyPlugin
 
     public function __construct()
     {
+        parent::__construct(
+            '1.1',
+            'Damien Renou'
+        );
         $this->tblExtraField = Database::get_main_table(TABLE_EXTRA_FIELD);
 
         $companyField = ExtraField::getDisplayNameByVariable('company');
@@ -31,7 +32,7 @@ class CheckExtraFieldAuthorsCompanyPlugin
             'field_type' => 5,
             'variable' => 'authors',
             'display_text' => 'Authors',
-            'default_value' => null,
+            'default_value' => '',
             'field_order' => 0,
             'visible_to_self' => 0,
             'visible_to_others' => 0,
@@ -43,7 +44,7 @@ class CheckExtraFieldAuthorsCompanyPlugin
             'field_type' => 3,
             'variable' => 'company',
             'display_text' => 'Company',
-            'default_value' => null,
+            'default_value' => '',
             'field_order' => 0,
             'visible_to_self' => 0,
             'visible_to_others' => 0,
@@ -95,104 +96,19 @@ class CheckExtraFieldAuthorsCompanyPlugin
 
     public function getDbCompanyField()
     {
-        $companyField = $this->getInfoExtrafield('authors');
-        $this->companyField = $companyField;
+        $companyField = $this->getInfoExtrafield('company');
+        if (count($companyField) > 1) {
+            $this->companyField = $companyField;
+        } else {
+            $companyField = $this->companyField;
+        }
 
         return $companyField;
     }
 
-    public function SaveCompanyField()
-    {
-        $data = $this->companyField;
-        $data['extra_field_type'] = (int) $data['extra_field_type'];
-        $data['field_type'] = (int) $data['field_type'];
-        $data['field_order'] = (int) $data['field_order'];
-        $data['visible_to_self'] = (int) $data['visible_to_self'];
-        $data['visible_to_others'] = (int) $data['visible_to_others'];
-        $data['changeable'] = (int) $data['changeable'];
-        $data['filter'] = (int) $data['filter'];
-        $data['default_value'] = null;
-        $data['variable'] = 'company';
-        $data['display_text'] = strtolower(Database::escape_string(Security::remove_XSS($data['display_text'])));
-
-        $this->queryInsertUpdate($data);
-    }
-
-    public function AuthorsFieldExist()
-    {
-        $this->getAuthorsField();
-        $this->authorsExist = (isset($this->authorsField['id'])) ? true : false;
-
-        return $this->authorsExist;
-    }
-
-    public function getAuthorsField()
-    {
-        $this->authorsField = $this->getDbAuthorsField();
-
-        return $this->authorsField;
-    }
-
-    public function setAuthorsField($authorsField)
-    {
-        $this->authorsField = $authorsField;
-
-        return $this;
-    }
-
-    public function getDbAuthorsField()
-    {
-        $authorsField = $this->getInfoExtrafield('authors');
-
-        $this->authorsField = $authorsField;
-
-        return $authorsField;
-    }
-
-    public function SaveAuthorsField()
-    {
-        $data = $this->authorsField;
-
-        $data['extra_field_type'] = (int) $data['extra_field_type'];
-        $data['field_type'] = (int) $data['field_type'];
-        $data['field_order'] = (int) $data['field_order'];
-        $data['visible_to_self'] = (int) $data['visible_to_self'];
-        $data['visible_to_others'] = (int) $data['visible_to_others'];
-        $data['changeable'] = (int) $data['changeable'];
-        $data['filter'] = (int) $data['filter'];
-        $data['default_value'] = null;
-        $data['variable'] = 'authors';
-        $data['display_text'] = strtolower(Database::escape_string(Security::remove_XSS($data['display_text'])));
-
-        $this->queryInsertUpdate($data);
-    }
-
-    public function uninstall()
-    {
-        $companyExist = $this->CompanyFieldExist();
-        if ($companyExist == true) {
-            $this->removeCompanyField();
-        }
-        $authorsExist = $this->AuthorsFieldExist();
-        if ($authorsExist == true) {
-            $this->removeAuthorsField();
-        }
-    }
-
-    public function removeCompanyField()
-    {
-        $data = $this->getCompanyField();
-        $this->deleteQuery($data);
-    }
-
-    public function removeAuthorsField()
-    {
-        $data = $this->getAuthorsField();
-        $this->deleteQuery($data);
-    }
-
     protected function getInfoExtrafield($variableName = null)
     {
+
         if ($variableName == null) {
             return [];
         }
@@ -212,16 +128,33 @@ class CheckExtraFieldAuthorsCompanyPlugin
         return $data;
     }
 
+    public function SaveCompanyField()
+    {
+        $data = $this->companyField;
+        $data['extra_field_type'] = (int)$data['extra_field_type'];
+        $data['field_type'] = (int)$data['field_type'];
+        $data['field_order'] = (int)$data['field_order'];
+        $data['visible_to_self'] = (int)$data['visible_to_self'];
+        $data['visible_to_others'] = (int)$data['visible_to_others'];
+        $data['changeable'] = (int)$data['changeable'];
+        $data['filter'] = (int)$data['filter'];
+        $data['default_value'] = '';
+        $data['variable'] = 'company';
+        $data['display_text'] = strtolower(Database::escape_string(Security::remove_XSS($data['display_text'])));
+
+        $this->queryInsertUpdate($data);
+    }
+
     protected function queryInsertUpdate($data)
     {
-        $data['extra_field_type'] = (int) $data['extra_field_type'];
-        $data['field_type'] = (int) $data['field_type'];
-        $data['field_order'] = (int) $data['field_order'];
-        $data['visible_to_self'] = (int) $data['visible_to_self'];
-        $data['visible_to_others'] = (int) $data['visible_to_others'];
-        $data['changeable'] = (int) $data['changeable'];
-        $data['filter'] = (int) $data['filter'];
-        $data['default_value'] = null;
+        $data['extra_field_type'] = (int)$data['extra_field_type'];
+        $data['field_type'] = (int)$data['field_type'];
+        $data['field_order'] = (int)$data['field_order'];
+        $data['visible_to_self'] = (int)$data['visible_to_self'];
+        $data['visible_to_others'] = (int)$data['visible_to_others'];
+        $data['changeable'] = (int)$data['changeable'];
+        $data['filter'] = (int)$data['filter'];
+        $data['default_value'] = '';
         // $data['variable'] = $variable;
         $data['display_text'] = strtolower(Database::escape_string(Security::remove_XSS($data['display_text'])));
         $exist = null;
@@ -241,7 +174,7 @@ UPDATE ".$this->tblExtraField."
      `extra_field_type` = ".$data['extra_field_type'].",
      `field_type` =  ".$data['field_type'].",
      `variable` = '".$data['variable']."',
-     `default_value` = ".$data['default_value'].",
+     `default_value` = '".$data['default_value']."',
      `field_order` = ".$data['field_order'].",
      `visible_to_self` = ".$data['visible_to_self'].",
      `visible_to_others` = ".$data['visible_to_others'].",
@@ -270,7 +203,7 @@ VALUES
 		".$data['field_type'].",
 		'".$data['variable']."',
 		'".$data['display_text']."',
-		".$data['default_value'].",
+		'".$data['default_value']."',
 		".$data['field_order'].",
 		".$data['visible_to_self'].",
 		".$data['visible_to_others'].",
@@ -284,14 +217,85 @@ VALUES
         }
     }
 
+    public function AuthorsFieldExist()
+    {
+        $this->getAuthorsField();
+        $this->authorsExist = (isset($this->authorsField['id'])) ? true : false;
+
+        return $this->authorsExist;
+    }
+
+    public function getAuthorsField()
+    {
+        $this->authorsField = $this->getDbAuthorsField();
+
+        return $this->authorsField;
+    }
+
+    public function setAuthorsField($authorsField)
+    {
+        $this->authorsField = $authorsField;
+
+        return $this;
+    }
+
+    public function getDbAuthorsField()
+    {
+        $authorsField = $this->getInfoExtrafield('authors');
+
+        if (count($authorsField) > 1) {
+            $this->authorsField = $authorsField;
+        } else {
+            $authorsField = $this->authorsField;
+        }
+
+        return $authorsField;
+    }
+
+    public function SaveAuthorsField()
+    {
+        $data = $this->authorsField;
+
+        $data['extra_field_type'] = (int)$data['extra_field_type'];
+        $data['field_type'] = (int)$data['field_type'];
+        $data['field_order'] = (int)$data['field_order'];
+        $data['visible_to_self'] = (int)$data['visible_to_self'];
+        $data['visible_to_others'] = (int)$data['visible_to_others'];
+        $data['changeable'] = (int)$data['changeable'];
+        $data['filter'] = (int)$data['filter'];
+        $data['default_value'] = null;
+        $data['variable'] = 'authors';
+        $data['display_text'] = strtolower(Database::escape_string(Security::remove_XSS($data['display_text'])));
+
+        $this->queryInsertUpdate($data);
+    }
+
+    public function uninstall()
+    {
+        $companyExist = $this->CompanyFieldExist();
+        if ($companyExist == true) {
+            // $this->removeCompanyField();
+        }
+        $authorsExist = $this->AuthorsFieldExist();
+        if ($authorsExist == true) {
+            // $this->removeAuthorsField();
+        }
+    }
+
+    public function removeCompanyField()
+    {
+        $data = $this->getCompanyField();
+        $this->deleteQuery($data);
+    }
+
     protected function deleteQuery($data)
     {
         $exist = null;
         $validVariable = false;
         $variable = $data['variable'];
-        $extraFieldType = (int) $data['extra_field_type'];
-        $FieldType = (int) $data['field_type'];
-        $id = (int) $data['id'];
+        $extraFieldType = (int)$data['extra_field_type'];
+        $FieldType = (int)$data['field_type'];
+        $id = (int)$data['id'];
 
         if ($variable == 'company') {
             $exist = $this->CompanyFieldExist();
@@ -313,5 +317,11 @@ VALUES
             ";
             Database::query($query);
         }
+    }
+
+    public function removeAuthorsField()
+    {
+        $data = $this->getAuthorsField();
+        $this->deleteQuery($data);
     }
 }

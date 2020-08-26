@@ -1,24 +1,43 @@
 <?php
 
+/**
+ * Class CheckExtraFieldAuthorsCompanyPlugin
+ */
 class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
 {
+    /**
+     * @var string
+     */
     protected $tblExtraField;
+    /**
+     * @var bool
+     */
     protected $authorsExist;
+    /**
+     * @var bool
+     */
     protected $companyExist;
+    /**
+     * @var array
+     */
     protected $authorsField;
+    /**
+     * @var array
+     */
     protected $companyField;
 
+    /**
+     * CheckExtraFieldAuthorsCompanyPlugin constructor.
+     */
     public function __construct()
     {
         parent::__construct(
-            '1.1',
-            'Damien Renou'
+            '1.0',
+            'Carlos Alvarado'
         );
         $this->tblExtraField = Database::get_main_table(TABLE_EXTRA_FIELD);
-
         $companyField = ExtraField::getDisplayNameByVariable('company');
         $this->companyExist = false;
-
         if (!empty($companyField)) {
             $this->companyExist = true;
         }
@@ -34,10 +53,10 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
             'display_text' => 'Authors',
             'default_value' => '',
             'field_order' => 0,
-            'visible_to_self' => 0,
+            'visible_to_self' => 1,
             'visible_to_others' => 0,
-            'changeable' => 0,
-            'filter' => 0,
+            'changeable' => 1,
+            'filter' => 1,
         ];
         $this->companyField = [
             'extra_field_type' => 1,
@@ -48,18 +67,26 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
             'field_order' => 0,
             'visible_to_self' => 0,
             'visible_to_others' => 0,
-            'changeable' => 0,
-            'filter' => 0,
+            'changeable' => 1,
+            'filter' => 1,
         ];
     }
 
+    /**
+     * Create a new instance of CheckExtraFieldAuthorsCompanyPlugin
+     *
+     * @return CheckExtraFieldAuthorsCompanyPlugin
+     */
     public static function create()
     {
         static $result = null;
-
         return $result ? $result : $result = new self();
     }
 
+    /**
+     * Perform the plugin installation
+     *
+     */
     public function install()
     {
         $companyExist = $this->CompanyFieldExist();
@@ -72,29 +99,25 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
         }
     }
 
+    /**
+     * Verify that the "company" field exists in the database
+     *
+     * @return bool
+     */
     public function CompanyFieldExist()
     {
         $this->getCompanyField();
         $this->companyExist = (isset($this->companyField['id'])) ? true : false;
-
         return $this->companyExist;
     }
 
+    /**
+     * Returns the content of the extra field "company" if it exists in the database, if not, it returns an arrangement
+     * with the basic elements for its operation
+     *
+     * @return array
+     */
     public function getCompanyField()
-    {
-        $this->companyField = $this->getDbCompanyField();
-
-        return $this->companyField;
-    }
-
-    public function setCompanyField($companyField)
-    {
-        $this->companyField = $companyField;
-
-        return $this;
-    }
-
-    public function getDbCompanyField()
     {
         $companyField = $this->getInfoExtrafield('company');
         if (count($companyField) > 1) {
@@ -102,13 +125,17 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
         } else {
             $companyField = $this->companyField;
         }
-
         return $companyField;
     }
 
+    /**
+     * Returns the array of an element in the database that matches the variable
+     *
+     * @param string $variableName
+     * @return array
+     */
     protected function getInfoExtrafield($variableName = null)
     {
-
         if ($variableName == null) {
             return [];
         }
@@ -124,10 +151,13 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
         if ($data == false or !isset($data['display_text'])) {
             return [];
         }
-
         return $data;
     }
 
+    /**
+     * Save the arrangement for company, it is adjusted internally so that the values match the necessary ones
+     *
+     */
     public function SaveCompanyField()
     {
         $data = $this->companyField;
@@ -141,10 +171,14 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
         $data['default_value'] = '';
         $data['variable'] = 'company';
         $data['display_text'] = strtolower(Database::escape_string(Security::remove_XSS($data['display_text'])));
-
         $this->queryInsertUpdate($data);
     }
 
+    /**
+     * Executes the insertion or update of the queries in the database for the extra_field table
+     *
+     * @param $data
+     */
     protected function queryInsertUpdate($data)
     {
         $data['extra_field_type'] = (int)$data['extra_field_type'];
@@ -184,32 +218,31 @@ UPDATE ".$this->tblExtraField."
         (`id` = ".$data['id'].");
 	";
         } else {
-            $query = "
-INSERT INTO ".$this->tblExtraField." (
-	`extra_field_type`,
-	`field_type`,
-	`variable`,
-	`display_text`,
-	`default_value`,
-	`field_order`,
-	`visible_to_self`,
-	`visible_to_others`,
-	`changeable`,
-	`filter`
-)
-VALUES
-	(
-		".$data['extra_field_type'].",
-		".$data['field_type'].",
-		'".$data['variable']."',
-		'".$data['display_text']."',
-		'".$data['default_value']."',
-		".$data['field_order'].",
-		".$data['visible_to_self'].",
-		".$data['visible_to_others'].",
-		".$data['changeable'].",
-		".$data['filter']."
-	);
+            $query = " INSERT INTO ".$this->tblExtraField." (
+            `extra_field_type`,
+            `field_type`,
+            `variable`,
+            `display_text`,
+            `default_value`,
+            `field_order`,
+            `visible_to_self`,
+            `visible_to_others`,
+            `changeable`,
+            `filter`
+         )
+    VALUES
+        (
+            ".$data['extra_field_type'].",
+            ".$data['field_type'].",
+            '".$data['variable']."',
+            '".$data['display_text']."',
+            '".$data['default_value']."',
+            ".$data['field_order'].",
+            ".$data['visible_to_self'].",
+            ".$data['visible_to_others'].",
+            ".$data['changeable'].",
+            ".$data['filter']."
+	    );
 	";
         }
         if ($validVariable == true) {
@@ -217,45 +250,42 @@ VALUES
         }
     }
 
+    /**
+     * Verify that the "authors" field exists in the database
+     *
+     * @return bool
+     */
     public function AuthorsFieldExist()
     {
         $this->getAuthorsField();
         $this->authorsExist = (isset($this->authorsField['id'])) ? true : false;
-
         return $this->authorsExist;
     }
 
+    /**
+     * Returns the content of the extra field "authors" if it exists in the database, if not, it returns an arrangement
+     * with the basic elements for its operation
+     *
+     * @return array
+     */
     public function getAuthorsField()
     {
-        $this->authorsField = $this->getDbAuthorsField();
-
-        return $this->authorsField;
-    }
-
-    public function setAuthorsField($authorsField)
-    {
-        $this->authorsField = $authorsField;
-
-        return $this;
-    }
-
-    public function getDbAuthorsField()
-    {
         $authorsField = $this->getInfoExtrafield('authors');
-
         if (count($authorsField) > 1) {
             $this->authorsField = $authorsField;
         } else {
             $authorsField = $this->authorsField;
         }
-
         return $authorsField;
     }
 
+    /**
+     * Save the arrangement for authors, it is adjusted internally so that the values match the necessary ones
+     *
+     */
     public function SaveAuthorsField()
     {
         $data = $this->authorsField;
-
         $data['extra_field_type'] = (int)$data['extra_field_type'];
         $data['field_type'] = (int)$data['field_type'];
         $data['field_order'] = (int)$data['field_order'];
@@ -266,59 +296,81 @@ VALUES
         $data['default_value'] = null;
         $data['variable'] = 'authors';
         $data['display_text'] = strtolower(Database::escape_string(Security::remove_XSS($data['display_text'])));
-
         $this->queryInsertUpdate($data);
     }
 
+    /**
+     * Remove the extra fields set by the plugin
+     *
+     */
     public function uninstall()
     {
         $companyExist = $this->CompanyFieldExist();
         if ($companyExist == true) {
-            // $this->removeCompanyField();
+            $this->removeCompanyField();
         }
         $authorsExist = $this->AuthorsFieldExist();
         if ($authorsExist == true) {
-            // $this->removeAuthorsField();
+            $this->removeAuthorsField();
         }
     }
 
+    /**
+     * Remove the extra fields "company"
+     */
     public function removeCompanyField()
     {
         $data = $this->getCompanyField();
         $this->deleteQuery($data);
     }
 
+    /**
+     * Executes fix removal for authors or company
+     *
+     * @param $data
+     */
     protected function deleteQuery($data)
     {
         $exist = null;
         $validVariable = false;
         $variable = $data['variable'];
-        $extraFieldType = (int)$data['extra_field_type'];
+        $extraFieldTypeInt = (int)$data['extra_field_type'];
         $FieldType = (int)$data['field_type'];
         $id = (int)$data['id'];
-
+        $extraFieldType = null;
         if ($variable == 'company') {
-            $exist = $this->CompanyFieldExist();
             $validVariable = true;
+            $extraFieldType = 'user';
         } elseif ($variable == 'authors') {
-            $exist = $this->AuthorsFieldExist();
             $validVariable = true;
+            $extraFieldType = 'lp';
         }
-        if ($validVariable == true && $id != 0) {
-            $query = "DELETE FROM ".$this->tblExtraField."
-            WHERE
-            id = $id
+        if ($validVariable == true && $id != 0 && !empty($extraFieldType)) {
+            $query = "SELECT
+			id
+		FROM
+			".$this->tblExtraField."
+		WHERE
+		    id = $id
             AND
             variable = '$variable'
             AND
-            extra_field_type = $extraFieldType
+            extra_field_type = $extraFieldTypeInt
             AND
             field_type = $FieldType
             ";
-            Database::query($query);
+            $data = Database::fetch_assoc(Database::query($query));
+            if (isset($data['id'])) {
+                $obj = new ExtraField($extraFieldType);
+                $res = $obj->delete($data['id']);
+            }
         }
     }
 
+    /**
+     * Remove the extra fields "authors"
+     *
+     */
     public function removeAuthorsField()
     {
         $data = $this->getAuthorsField();

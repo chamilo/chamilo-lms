@@ -1,13 +1,7 @@
-Add authors and company funcionabily
+Adjust the variables to display the "Distribution by entity" and "Distribution by author" reports.
 ======
-
-bla bla bla
-This plugin adds a button to allow users to login to Chamilo through CAS authentication.
-
-In order for the plugin to work, you'll have to:
-
-* enable your CAS connection to display this button
-* configure your CAS connection to have the button work
-* go to Administration > Configuration settings > CAS and follow the instructions
-
-This plugin has been made to be added in the login_top region, but you can put it wherever you want.
+This plugin adds the extra fields necessary to display "Distribution by entity" and "Distribution by author" reports.
+* For the "Distribution by entity" report to be displayed, it is necessary to have the type of extra user field, with a multiple selector.
+The name of this field must be "company".
+* For the "" Distribution by author "report to be displayed, it is necessary to have the field type extra learning path, with a multiple selector drop-down.
+The name of this field must be "authors".

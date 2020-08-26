@@ -2482,6 +2482,10 @@ function store_thread(
     }
     $clean_post_title = $values['post_title'];
 
+    $user = api_get_user_entity(api_get_user_id());
+    $course = api_get_course_entity($course_id);
+    $session = api_get_session_entity($sessionId);
+
     // We first store an entry in the forum_thread table because the thread_id is used in the forum_post table.
     $thread = new CForumThread();
     $thread
@@ -2500,22 +2504,16 @@ function store_thread(
         ->setThreadPeerQualify(isset($values['thread_peer_qualify']) ? (bool) $values['thread_peer_qualify'] : false)
         ->setSessionId($sessionId)
         ->setLpItemId(isset($values['lp_item_id']) ? (int) $values['lp_item_id'] : 0)
+        ->setParent($forum)
+        ->addCourseLink(
+            $course,
+            $session
+        )
     ;
-    $user = api_get_user_entity(api_get_user_id());
-    $course = api_get_course_entity($course_id);
-    $session = api_get_session_entity($sessionId);
 
     $repo = Container::getForumThreadRepository();
     $em = $repo->getEntityManager();
-    $repo->addResourceToCourseWithParent(
-        $thread,
-        $forum->getResourceNode(),
-        ResourceLink::VISIBILITY_PUBLISHED,
-        $user,
-        $course,
-        $session,
-        null
-    );
+    $em->persist($thread);
     $em->flush();
 
     if (!$thread->getIid()) {
@@ -2610,7 +2608,13 @@ function store_thread(
         ->setPostDate($post_date)
         ->setPostNotification(isset($values['post_notification']) ? (int) $values['post_notification'] : null)
         ->setVisible($visible)
-        ->setStatus(CForumPost::STATUS_VALIDATED);
+        ->setStatus(CForumPost::STATUS_VALIDATED)
+        ->setParent($thread)
+        ->addCourseLink(
+            $course,
+            $session
+        )
+    ;
 
     if ($forum->isModerated()) {
         $post->setStatus(
@@ -2620,15 +2624,7 @@ function store_thread(
 
     $repo = Container::getForumPostRepository();
     $em = $repo->getEntityManager();
-    $repo->addResourceToCourseWithParent(
-        $post,
-        $thread->getResourceNode(),
-        ResourceLink::VISIBILITY_PUBLISHED,
-        $user,
-        $course,
-        $session,
-        null
-    );
+    $em->persist($post);
     $em->flush();
 
     $postId = $post->getIid();
@@ -3574,6 +3570,9 @@ function store_reply(CForumForum $forum, CForumThread $thread, $values, $courseI
     $new_post_id = 0;
 
     if ($upload_ok) {
+        $course = api_get_course_entity($courseId);
+        $session = api_get_session_entity();
+
         $post = new CForumPost();
         $post
             ->setCId($courseId)
@@ -3586,33 +3585,19 @@ function store_reply(CForumForum $forum, CForumThread $thread, $values, $courseI
             ->setPostParentId(isset($values['post_parent_id']) ? $values['post_parent_id'] : null)
             ->setVisible($visible)
             ->setPostDate(api_get_utc_datetime(null, false, true))
-        ;
+            ->setParent($thread)
+            ->addCourseLink(
+                $course,
+                $session
+            );
 
         $repo = Container::getForumPostRepository();
-
-        $user = api_get_user_entity(api_get_user_id());
-        $course = api_get_course_entity($courseId);
-        $session = api_get_session_entity();
-
         $em = $repo->getEntityManager();
-
-        $repo->addResourceToCourseWithParent(
-            $post,
-            $thread->getResourceNode(),
-            ResourceLink::VISIBILITY_PUBLISHED,
-            $user,
-            $course,
-            $session,
-            null
-        );
+        $em->persist($post);
         $em->flush();
 
         $new_post_id = $post->getIid();
-
         if ($new_post_id) {
-            $sql = "UPDATE $table_posts SET post_id = iid WHERE iid = $new_post_id";
-            Database::query($sql);
-
             $values['new_post_id'] = $new_post_id;
             $message = get_lang('The reply has been added');
 
@@ -4549,19 +4534,16 @@ function store_move_post($values)
             ->setThreadPosterName($post->getPosterName())
             ->setThreadLastPost($post->getIid())
             ->setThreadDate($post->getPostDate())
-        ;
+            ->setParent($post->getForum())
+            ->addCourseLink(
+                $user,
+                $course,
+                $session
+            );
 
         $repo = Container::getForumThreadRepository();
         $em = $repo->getEntityManager();
-        $repo->addResourceToCourseWithParent(
-            $thread,
-            $post->getForum()->getResourceNode(),
-            ResourceLink::VISIBILITY_PUBLISHED,
-            $user,
-            $course,
-            $session,
-            null
-        );
+        $em->persist($thread);
         $em->flush();
 
         $new_thread_id = $thread->getIid();
@@ -4588,8 +4570,8 @@ function store_move_post($values)
         );*/
 
         // Moving the post to the newly created thread.
-        $sql = "UPDATE $table_posts SET thread_id='".(int) $new_thread_id."', post_parent_id = NULL
-                WHERE c_id = $course_id AND post_id='".(int) ($values['post_id'])."'";
+        $sql = "UPDATE $table_posts SET thread_id='".$new_thread_id."', post_parent_id = NULL
+                WHERE c_id = $course_id AND iid ='".(int) ($values['post_id'])."'";
         Database::query($sql);
 
         // Resetting the parent_id of the thread to 0 for all those who had this moved post as parent.
@@ -4599,7 +4581,7 @@ function store_move_post($values)
 
         // Updating updating the number of threads in the forum.
         $sql = "UPDATE $table_forums SET forum_threads=forum_threads+1
-                WHERE c_id = $course_id AND forum_id='".$forumId."'";
+                WHERE c_id = $course_id AND iid ='".$forumId."'";
         Database::query($sql);
 
         // Resetting the last post of the old thread and decreasing the number of replies and the thread.
@@ -4613,19 +4595,18 @@ function store_move_post($values)
                     thread_replies=thread_replies-1
                 WHERE
                     c_id = $course_id AND
-                    thread_id='".$threadId."'";
+                    iid ='".$threadId."'";
         Database::query($sql);
     } else {
         // Moving to the chosen thread.
         $sql = 'SELECT thread_id FROM '.$table_posts."
-                WHERE c_id = $course_id AND post_id = '".$values['post_id']."' ";
+                WHERE c_id = $course_id AND iid = '".$values['post_id']."' ";
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
 
         $original_thread_id = $row['thread_id'];
-
         $sql = 'SELECT thread_last_post FROM '.$table_threads."
-                WHERE c_id = $course_id AND thread_id = '".$original_thread_id."' ";
+                WHERE c_id = $course_id AND iid = '".$original_thread_id."' ";
 
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
@@ -4633,26 +4614,30 @@ function store_move_post($values)
         // If is this thread, update the thread_last_post with the last one.
 
         if ($thread_is_last_post == $values['post_id']) {
-            $sql = 'SELECT post_id FROM '.$table_posts."
-                    WHERE c_id = $course_id AND thread_id = '".$original_thread_id."' AND post_id <> '".$values['post_id']."'
+            $sql = 'SELECT iid as post_id FROM '.$table_posts."
+                    WHERE
+                        c_id = $course_id AND
+                        thread_id = '".$original_thread_id."' AND
+                        iid <> '".$values['post_id']."'
                     ORDER BY post_date DESC LIMIT 1";
             $result = Database::query($sql);
 
             $row = Database::fetch_array($result);
             $thread_new_last_post = $row['post_id'];
 
-            $sql = 'UPDATE '.$table_threads." SET thread_last_post = '".$thread_new_last_post."'
-                    WHERE c_id = $course_id AND thread_id = '".$original_thread_id."' ";
+            $sql = 'UPDATE '.$table_threads."
+                    SET thread_last_post = '".$thread_new_last_post."'
+                    WHERE c_id = $course_id AND iid = '".$original_thread_id."' ";
             Database::query($sql);
         }
 
         $sql = "UPDATE $table_threads SET thread_replies=thread_replies-1
-                WHERE c_id = $course_id AND thread_id='".$original_thread_id."'";
+                WHERE c_id = $course_id AND iid ='".$original_thread_id."'";
         Database::query($sql);
 
         // moving to the chosen thread
         $sql = "UPDATE $table_posts SET thread_id='".(int) ($_POST['thread'])."', post_parent_id = NULL
-                WHERE c_id = $course_id AND post_id='".(int) ($values['post_id'])."'";
+                WHERE c_id = $course_id AND iid ='".(int) ($values['post_id'])."'";
         Database::query($sql);
 
         // resetting the parent_id of the thread to 0 for all those who had this moved post as parent
@@ -4661,7 +4646,7 @@ function store_move_post($values)
         Database::query($sql);
 
         $sql = "UPDATE $table_threads SET thread_replies=thread_replies+1
-                WHERE c_id = $course_id AND thread_id='".(int) ($_POST['thread'])."'";
+                WHERE c_id = $course_id AND iid ='".(int) ($_POST['thread'])."'";
         Database::query($sql);
     }
 
@@ -5036,6 +5021,11 @@ function add_forum_attachment_file($file_comment, CForumPost $post)
 
         $new_file_name = uniqid('');
         $safe_file_comment = Database::escape_string($file_comment);
+
+        $user = api_get_user_entity(api_get_user_id());
+        $course = api_get_course_entity(api_get_course_int_id());
+        $session = api_get_session_entity(api_get_session_id());
+
         $attachment = new CForumAttachment();
         $attachment
             ->setCId(api_get_course_int_id())
@@ -5044,24 +5034,15 @@ function add_forum_attachment_file($file_comment, CForumPost $post)
             ->setPath($file_name)
             ->setPost($post)
             ->setSize($file->getSize())
-        ;
-
-        $user = api_get_user_entity(api_get_user_id());
-        $course = api_get_course_entity(api_get_course_int_id());
-        $session = api_get_session_entity(api_get_session_id());
+            ->setParent($post)
+            ->addCourseLink(
+                $course,
+                $session
+            );
 
         $repo = Container::getForumAttachmentRepository();
         $em = $repo->getEntityManager();
-        $repo->addResourceToCourseWithParent(
-            $attachment,
-            $post->getResourceNode(),
-            ResourceLink::VISIBILITY_PUBLISHED,
-            $user,
-            $course,
-            $session,
-            null,
-            $file
-        );
+        $em->persist($attachment);
         $em->flush();
 
         /*$last_id_file = Database::insert(

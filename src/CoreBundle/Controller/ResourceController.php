@@ -1026,7 +1026,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $course = $this->getDoctrine()->getRepository('ChamiloCoreBundle:Course')->find($course);
             $session = $this->getSession();
 
-            /** @var ResourceInterface $newResource */
+            /** @var AbstractResource $newResource */
             $newResource = $repository->setResourceProperties($form, $course, $session, $fileType);
 
             $file = null;
@@ -1041,17 +1041,17 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 $file = new UploadedFile($meta['uri'], $fileName, 'text/html', null, true);
             }
 
-            $repository->addResourceToCourseWithParent(
-                $newResource,
-                $parentNode,
-                ResourceLink::VISIBILITY_PUBLISHED,
-                $this->getUser(),
+            //$parent = $repository->getResourceNodeRepository()->getResourceByNode($parentNode);
+            // @todo fix correct parent
+            $newResource->setParent($parent);
+            $newResource->addCourseLink(
                 $course,
-                $session,
-                null,
-                $file
+                $session
             );
+            $em->persist($newResource);
+            $em->flush();
 
+            $repository->addFile($newResource, $file);
             $em->flush();
 
             // Loops all sharing options

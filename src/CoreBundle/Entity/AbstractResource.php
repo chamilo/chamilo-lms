@@ -6,6 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiSubresource;
+use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
@@ -79,7 +80,7 @@ abstract class AbstractResource
         return $this;
     }
 
-    public function addCourseLink(Course $course, Session $session = null, CGroup $group = null)
+    public function addCourseLink(Course $course, Session $session = null, CGroup $group = null, int $visibility = ResourceLink::VISIBILITY_PUBLISHED)
     {
         if (null === $this->getParent()) {
             throw new \Exception('addCourseLink requires to set the parent.');
@@ -87,12 +88,33 @@ abstract class AbstractResource
 
         $resourceLink = new ResourceLink();
         $resourceLink
-            ->setVisibility(ResourceLink::VISIBILITY_PUBLISHED)
+            ->setVisibility($visibility)
             ->setCourse($course)
             ->setSession($session)
             ->setGroup($group)
         ;
         $this->addLink($resourceLink);
+
+        $rights = [];
+        switch ($visibility) {
+            case ResourceLink::VISIBILITY_PENDING:
+            case ResourceLink::VISIBILITY_DRAFT:
+                $editorMask = ResourceNodeVoter::getEditorMask();
+                $resourceRight = new ResourceRight();
+                $resourceRight
+                    ->setMask($editorMask)
+                    ->setRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)
+                ;
+                $rights[] = $resourceRight;
+
+                break;
+        }
+
+        if (!empty($rights)) {
+            foreach ($rights as $right) {
+                $resourceLink->addResourceRight($right);
+            }
+        }
 
         return $this;
     }

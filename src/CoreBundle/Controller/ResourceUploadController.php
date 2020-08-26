@@ -4,7 +4,6 @@
 
 namespace Chamilo\CoreBundle\Controller;
 
-use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CDocument;
@@ -23,7 +22,7 @@ class ResourceUploadController extends BlueimpController
 {
     /**
      * This will upload an image to the selected node id.
-     * This action is listend by the ResourceUploadListener.
+     * This action is listen by the ResourceUploadListener.
      */
     public function upload(): JsonResponse
     {
@@ -88,15 +87,17 @@ class ResourceUploadController extends BlueimpController
                             ->setSession($session)
                         ;
                     }
-
-                    $repo->addResourceToCourseWithParent(
-                        $resource,
-                        $parent,
-                        ResourceLink::VISIBILITY_PUBLISHED,
-                        $user,
+                    // @todo fix correct $parent
+                    $resource->setParent($parent);
+                    $resource->addCourseLink(
                         $course,
-                        $session,
-                        null,
+                        $session
+                    );
+                    $em->persist($resource);
+                    $em->flush();
+
+                    $repo->addFile(
+                        $resource,
                         $file
                     );
                     $em->flush();

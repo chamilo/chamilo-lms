@@ -8,7 +8,6 @@ use Chamilo\CoreBundle\Component\Utils\Glide;
 use Chamilo\CoreBundle\Manager\SettingsManager;
 use Chamilo\CoreBundle\Repository\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\ResourceFactory;
-use Chamilo\CourseBundle\Entity\CAnnouncementAttachment;
 use Chamilo\CourseBundle\Repository\CAnnouncementAttachmentRepository;
 use Chamilo\CourseBundle\Repository\CAnnouncementRepository;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;

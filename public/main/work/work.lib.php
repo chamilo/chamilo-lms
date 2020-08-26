@@ -3701,21 +3701,15 @@ function addWorkComment($courseInfo, $userId, $parentWork, $work, $data)
         ->setComment($data['comment'])
         ->setUserId($userId)
         ->setWorkId($work['iid'])
-    ;
+        ->setParent($studentPublication)
+        ->addCourseLink(
+            $courseEntity,
+            api_get_session_entity(),
+            api_get_group_entity()
+        );
 
-    $userEntity = api_get_user_entity(api_get_user_id());
     $repo = Container::getStudentPublicationCommentRepository();
     $em = $repo->getEntityManager();
-    $em->persist($comment);
-
-    $resourceNode = $repo->addResourceNode($comment, $userEntity, $studentPublication);
-    $repo->addResourceNodeToCourse(
-        $resourceNode,
-        ResourceLink::VISIBILITY_PUBLISHED,
-        $courseEntity,
-        api_get_session_entity(),
-        api_get_group_entity()
-    );
     $em->persist($comment);
     $em->flush();
 

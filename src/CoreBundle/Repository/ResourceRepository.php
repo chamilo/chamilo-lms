@@ -299,7 +299,6 @@ class ResourceRepository extends EntityRepository
             ->innerJoin('resource.resourceNode', 'node')
             ->innerJoin('node.resourceLinks', 'links')
             ->innerJoin('node.resourceType', 'type')
-            //->innerJoin('links.course', 'course')
             ->leftJoin('node.resourceFile', 'file')
 
             ->where('type.name = :type')
@@ -313,10 +312,11 @@ class ResourceRepository extends EntityRepository
             ->addSelect('file')
         ;
 
-        $isAdmin = $checker->isGranted('ROLE_ADMIN') ||
+        $isAdmin =
+            $checker->isGranted('ROLE_ADMIN') ||
             $checker->isGranted('ROLE_CURRENT_COURSE_TEACHER');
 
-        // Do not show deleted resources
+        // Do not show deleted resources.
         $qb
             ->andWhere('links.visibility != :visibilityDeleted')
             ->setParameter('visibilityDeleted', ResourceLink::VISIBILITY_DELETED)

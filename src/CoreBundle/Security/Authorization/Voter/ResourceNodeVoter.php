@@ -123,6 +123,14 @@ class ResourceNodeVoter extends Voter
             return true;
         }
 
+        // @todo
+        switch ($attribute) {
+            case self::VIEW:
+                break;
+            case self::EDIT:
+                break;
+        }
+
         // Check if I'm the owner.
         $creator = $resourceNode->getCreator();
         if ($creator instanceof UserInterface &&

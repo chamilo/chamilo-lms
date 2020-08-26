@@ -1343,6 +1343,7 @@ class MySpace
             $iconRemove = Display::return_icon('error.png', get_lang('howOrHide'), '', ICON_SIZE_SMALL);
             $teacherNameTemp = '';
             foreach ($data as $teacherName => $reportData) {
+                $lpCount=0;
                 foreach ($reportData as $lpName => $row) {
                     $hiddenField = 'student_show_'.$index;
                     $hiddenFieldLink = 'student_show_'.$index.'_';
@@ -1363,11 +1364,20 @@ class MySpace
                         $table .= $student['complete_name']."<br>";
                     }
                     $index += 1;
+                    $lpCount += 1;
                     $table .= "</div>".
                         "</td>".
                         "</tr>";
                 }
-                $table .= "";
+                $table .=
+                    "<tr>".
+                    "<td></td>".
+                    "<td><strong>".get_lang('LearnpathsTotal')." $lpCount</strong></td>".
+                    "<td></td>".
+                    "<td></td>".
+                    "</tr>";
+
+
             }
             $table .= "</tbody>".
                 "</table>".

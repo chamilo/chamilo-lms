@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ResourceFile;
@@ -1609,16 +1610,17 @@ class DocumentManager
         $my_content_html = null;
         if ($document_id) {
             $sql = "SELECT path FROM $tbl_document
-                    WHERE c_id = $course_id AND id = $document_id";
+                    WHERE c_id = $course_id AND iid = $document_id";
             $rs = Database::query($sql);
             $new_content = '';
             $all_user_info = [];
             if (Database::num_rows($rs)) {
                 $row = Database::fetch_array($rs);
-                $filepath = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document'.$row['path'];
+                /*$filepath = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document'.$row['path'];
                 if (is_file($filepath)) {
                     $my_content_html = file_get_contents($filepath);
-                }
+                }*/
+                $my_content_html = '';
                 $all_user_info = self::get_all_info_to_certificate(
                     $user_id,
                     $courseInfo,
@@ -1652,12 +1654,12 @@ class DocumentManager
      *
      * @return array
      */
-    public static function get_all_info_to_certificate($user_id, $course_id, $sessionId, $is_preview = false)
+    public static function get_all_info_to_certificate($user_id, $course_info, $sessionId, $is_preview = false)
     {
         $info_list = [];
         $user_id = (int) $user_id;
-        $course_info = api_get_course_info($course_id);
         $sessionId = (int) $sessionId;
+        $courseCode = $course_info['code'];
 
         // Portal info
         $organization_name = api_get_setting('Institution');
@@ -1690,7 +1692,7 @@ class DocumentManager
         $teacher_last_name = $teacher_info['lastname'];
 
         // info gradebook certificate
-        $info_grade_certificate = UserManager::get_info_gradebook_certificate($courseCode, $sessionId, $user_id);
+        $info_grade_certificate = UserManager::get_info_gradebook_certificate($course_info, $sessionId, $user_id);
         $date_long_certificate = '';
         $date_certificate = '';
         $url = '';

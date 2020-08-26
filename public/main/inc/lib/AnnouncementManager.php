@@ -483,6 +483,8 @@ class AnnouncementManager
         $html .= "<table height=\"100\" width=\"100%\" cellpadding=\"5\" cellspacing=\"0\" class=\"data_table\">";
         $html .= "<tr><td><h2>".$title."</h2></td></tr>";
 
+        $isVisible = $announcement->isVisible($course, $session);
+
         if (api_is_allowed_to_edit(false, true) ||
             (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())
         ) {
@@ -492,7 +494,7 @@ class AnnouncementManager
             $image_visibility = 'invisible';
             $alt_visibility = get_lang('Visible');
             $setNewStatus = 'visible';
-            if ($announcement->isVisible($course, $session)) {
+            if ($isVisible) {
                 $image_visibility = 'visible';
                 $alt_visibility = get_lang('Hide');
                 $setNewStatus = 'invisible';
@@ -507,6 +509,10 @@ class AnnouncementManager
                     "</a>";
             }
             $html .= "<tr><th style='text-align:right'>$modify_icons</th></tr>";
+        } else {
+            if (false === $isVisible) {
+                api_not_allowed(true);
+            }
         }
 
         // The user id is always the current one.
@@ -647,24 +653,21 @@ class AnnouncementManager
         $session = api_get_session_entity($sessionId);
         $group = api_get_group_entity();
 
+        $em = Database::getManager();
+
         $announcement = new CAnnouncement();
         $announcement
             ->setContent($newContent)
             ->setTitle($title)
             ->setEndDate(new DateTime($end_date))
             ->setDisplayOrder($order)
-        ;
-
-        $announcement
+            ->setParent($course)
             ->addCourseLink(
                 $course,
                 $session,
                 $group
             )
-            ->setParent($course)
         ;
-
-        $em = Database::getManager();
 
         $em->persist($announcement);
         $em->flush();
@@ -2074,9 +2077,6 @@ class AnnouncementManager
     {
         // Maximum title messages to display
         $maximum = '12';
-        // Database Table Definitions
-        $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
-        $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
         $session_id = api_get_session_id();
         $courseInfo = api_get_course_info();
@@ -2124,18 +2124,19 @@ class AnnouncementManager
 
                 $qb = $repo->getResourcesByCourse($course, $session, $group);
                 $qb->select('count(resource)');
-                $count = $qb->getQuery()->getSingleScalarResult();
-
-                return $count;
+                return $qb->getQuery()->getSingleScalarResult();
             }
         } else {
             $user = api_get_user_entity($userId);
 
+            if (null === $user) {
+                return 0;
+            }
+
             $qb = $repo->getResourcesByCourseLinkedToUser($user, $course, $session, $group);
             $qb->select('count(resource)');
-            $count = $qb->getQuery()->getSingleScalarResult();
 
-            return $count;
+            return $qb->getQuery()->getSingleScalarResult();
 
             // students only get to see the visible announcements
             if (empty($_GET['origin']) || 'learnpath' !== $_GET['origin']) {

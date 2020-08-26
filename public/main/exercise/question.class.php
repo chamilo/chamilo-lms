@@ -581,6 +581,7 @@ abstract class Question
             $current_position = Database::result($result, 0, 0);
             $this->updatePosition($current_position + 1);
             $position = $this->position;
+            $exerciseEntity = $exerciseRepo->find($exerciseId);
 
             $question = new CQuizQuestion();
             $question
@@ -593,15 +594,13 @@ abstract class Question
                 ->setExtra($this->extra)
                 ->setLevel($this->level)
                 ->setFeedback($this->feedback)
-            ;
-
-            $exerciseEntity = $exerciseRepo->find($exerciseId);
-            $question->setParent($exerciseEntity);
-            $question->addCourseLink(
+                ->setParent($exerciseEntity)
+                ->addCourseLink(
                 api_get_course_entity(),
                 api_get_session_entity(),
                 api_get_group_entity()
-            );
+                )
+            ;
 
             $em->persist($question);
             $em->flush();

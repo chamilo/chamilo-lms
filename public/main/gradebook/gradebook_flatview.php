@@ -269,24 +269,17 @@ if (isset($_GET['exportpdf'])) {
 } else {
     Display::display_header(get_lang('List View'));
 }
-if (isset($_GET['isStudentView']) && 'false' === $_GET['isStudentView']) {
-    DisplayGradebook::display_header_reduce_flatview(
-        $cat[0],
-        $showeval,
-        $showlink,
-        $simple_search_form
-    );
-    $flatViewTable->display();
-} elseif (isset($_GET['selectcat']) && ($_SESSION['studentview'] === 'teacherview')) {
-    DisplayGradebook::display_header_reduce_flatview(
-        $cat[0],
-        $showeval,
-        $showlink,
-        $simple_search_form
-    );
+$studentView = api_is_student_view_active();
 
-    // Table
-    $flatViewTable->display();
+DisplayGradebook::display_header_reduce_flatview(
+    $cat[0],
+    $showeval,
+    $showlink,
+    $simple_search_form
+);
+$flatViewTable->display();
+
+if (false === $studentView) {
     //@todo load images with jquery
     echo '<div id="contentArea" style="text-align: center;" >';
     $flatViewTable->display_graph_by_resource();

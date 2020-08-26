@@ -457,7 +457,7 @@ if (isset($_GET['deletelink'])) {
                         thread_qualify_max = 0,
                         thread_weight = 0,
                         thread_title_qualify = ""
-					WHERE c_id = '.$course_id.' AND thread_id = (
+					WHERE c_id = '.$course_id.' AND iid = (
 					    SELECT ref_id FROM '.$tbl_grade_links.'
 					    WHERE id='.$get_delete_link.' AND type = '.LINK_FORUM_THREAD.'
                     )';

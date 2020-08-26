@@ -60,7 +60,7 @@ class ExerciseLink extends AbstractLink
         $sqlLp = "SELECT e.iid, e.title
                   FROM $exerciseTable e
                   INNER JOIN $lpItemTable i
-                  ON (e.c_id = i.c_id AND e.id = i.path)
+                  ON (e.c_id = i.c_id AND e.iid = i.path)
 				  WHERE
 				    e.c_id = $this->course_id AND
 				    active = 0 AND
@@ -253,7 +253,7 @@ class ExerciseLink extends AbstractLink
                     ON (hp.exe_name = doc.path AND doc.c_id = hp.c_id)
                     WHERE
                         hp.c_id = $courseId AND
-                        doc.id = $exerciseId";
+                        doc.iid = $exerciseId";
 
             if (!empty($stud_id)) {
                 $sql .= " AND hp.exe_user_id = $stud_id ";

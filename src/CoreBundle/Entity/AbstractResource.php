@@ -81,6 +81,10 @@ abstract class AbstractResource
 
     public function addCourseLink(Course $course, Session $session = null, CGroup $group = null)
     {
+        if (null === $this->getParent()) {
+            throw new \Exception('addCourseLink requires to set the parent.');
+        }
+
         $resourceLink = new ResourceLink();
         $resourceLink
             ->setVisibility(ResourceLink::VISIBILITY_PUBLISHED)

@@ -2,7 +2,6 @@
 
 /* For licensing terms, see /license.txt */
 
-
 require_once __DIR__.'/../inc/global.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/fe/exportgradebook.php';
 

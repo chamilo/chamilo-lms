@@ -952,8 +952,9 @@ function store_forum($values, $courseInfo = [], $returnId = false)
         if ($image_moved) {
             $new_file_name = isset($new_file_name) ? $new_file_name : '';
         }
-        $forum->setParent($course);
-        $forum->addCourseLink($course, $session);
+        $forum
+            ->setParent($course)
+            ->addCourseLink($course, $session);
         $repo->getEntityManager()->persist($forum);
         $repo->getEntityManager()->flush();
 

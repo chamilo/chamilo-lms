@@ -58,7 +58,7 @@ class ForumThreadLink extends AbstractLink
             $session_condition = '(tl.session_id = 0 OR tl.session_id IS NULL)';
         }
 
-        $sql = 'SELECT tl.thread_id, tl.thread_title, tl.thread_title_qualify
+        $sql = 'SELECT tl.iid as thread_id, tl.thread_title, tl.thread_title_qualify
                 FROM '.$tbl_grade_links.' tl
                 WHERE
                     tl.c_id = '.$this->course_id.' AND
@@ -90,7 +90,7 @@ class ForumThreadLink extends AbstractLink
         $sql = "SELECT count(*) AS number FROM $table
                 WHERE
                     c_id = ".$this->course_id." AND
-                    thread_id = '".$this->get_ref_id()."'
+                    iid = '".$this->get_ref_id()."'
                 ";
         $result = Database::query($sql);
         $number = Database::fetch_row($result);
@@ -121,7 +121,7 @@ class ForumThreadLink extends AbstractLink
                 FROM '.Database::get_course_table(TABLE_FORUM_THREAD)."
                 WHERE
                     c_id = ".$this->course_id." AND
-                    thread_id = '".$this->get_ref_id()."'
+                    iid = '".$this->get_ref_id()."'
                     $sessionCondition
                 ";
         $query = Database::query($sql);
@@ -130,7 +130,7 @@ class ForumThreadLink extends AbstractLink
         $sql = "SELECT * FROM $thread_qualify
                 WHERE
                     c_id = ".$this->course_id." AND
-                    thread_id = ".$this->get_ref_id()."
+                    iid = ".$this->get_ref_id()."
                     $sessionCondition
                 ";
         if (isset($stud_id)) {
@@ -264,7 +264,7 @@ class ForumThreadLink extends AbstractLink
         $sql = 'SELECT count(id) from '.$this->get_forum_thread_table().'
                 WHERE
                     c_id = '.$this->course_id.' AND
-                    thread_id = '.$this->get_ref_id().' AND
+                    iid = '.$this->get_ref_id().' AND
                     session_id='.$sessionId;
         $result = Database::query($sql);
         $number = Database::fetch_row($result);
@@ -279,7 +279,7 @@ class ForumThreadLink extends AbstractLink
         $sql = 'SELECT * FROM '.$this->get_forum_thread_table()."
                 WHERE
                     c_id = '.$this->course_id.' AND
-                    thread_id = '".$this->get_ref_id()."' AND
+                    iid = '".$this->get_ref_id()."' AND
                     session_id = $sessionId ";
         $result = Database::query($sql);
         $row = Database::fetch_array($result, 'ASSOC');
@@ -303,7 +303,7 @@ class ForumThreadLink extends AbstractLink
         if (!empty($ref_id)) {
             $sql = 'UPDATE '.$this->get_forum_thread_table().' SET
                     thread_weight='.api_float_val($weight).'
-                    WHERE c_id = '.$this->course_id.' AND thread_id= '.$ref_id;
+                    WHERE c_id = '.$this->course_id.' AND iid = '.$ref_id;
             Database::query($sql);
         }
     }
@@ -317,7 +317,7 @@ class ForumThreadLink extends AbstractLink
                     thread_qualify_max = 0,
                     thread_weight = 0,
                     thread_title_qualify = ""
-                    WHERE c_id = '.$this->course_id.' AND thread_id= '.$ref_id;
+                    WHERE c_id = '.$this->course_id.' AND iid = '.$ref_id;
             Database::query($sql);
         }
     }
@@ -343,7 +343,7 @@ class ForumThreadLink extends AbstractLink
             $sql = 'SELECT * FROM '.$this->get_forum_thread_table().'
                     WHERE
                         c_id = '.$this->course_id.' AND
-                        thread_id = '.$this->get_ref_id().' AND
+                        iid = '.$this->get_ref_id().' AND
                         '.$session_condition;
             $query = Database::query($sql);
             $this->exercise_data = Database::fetch_array($query);

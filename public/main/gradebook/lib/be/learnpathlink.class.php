@@ -40,7 +40,7 @@ class LearnpathLink extends AbstractLink
             $session_condition = api_get_session_condition($session_id, true, true);
         }
 
-        $sql = 'SELECT id, name FROM '.$this->get_learnpath_table().'
+        $sql = 'SELECT iid, name FROM '.$this->get_learnpath_table().'
                 WHERE c_id = '.$this->course_id.' '.$session_condition.' ';
         $result = Database::query($sql);
 
@@ -192,7 +192,7 @@ class LearnpathLink extends AbstractLink
      */
     public function is_valid_link()
     {
-        $sql = 'SELECT count(id) FROM '.$this->get_learnpath_table().'
+        $sql = 'SELECT count(iid) FROM '.$this->get_learnpath_table().'
                 WHERE c_id = '.$this->course_id.' AND id = '.$this->get_ref_id().' ';
         $result = Database::query($sql);
         $number = Database::fetch_row($result, 'NUM');
@@ -247,7 +247,7 @@ class LearnpathLink extends AbstractLink
     {
         if (!isset($this->learnpath_data)) {
             $sql = 'SELECT * FROM '.$this->get_learnpath_table().'
-                    WHERE c_id = '.$this->course_id.' AND id = '.$this->get_ref_id().' ';
+                    WHERE c_id = '.$this->course_id.' AND iid = '.$this->get_ref_id().' ';
             $result = Database::query($sql);
             $this->learnpath_data = Database::fetch_array($result);
         }

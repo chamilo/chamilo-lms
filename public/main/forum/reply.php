@@ -71,7 +71,8 @@ if (!api_is_allowed_to_edit(false, true) &&
 ) {
     api_not_allowed(true);
 }
-if (!$_user['user_id'] && 0 == $forum->getAllowAnonymous()) {
+if (!$_user['user_id'] &&
+    0 == $forum->getAllowAnonymous()) {
     api_not_allowed(true);
 }
 

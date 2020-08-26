@@ -276,11 +276,8 @@ class aicc extends learnpath
         $lp_id = Database::insert_id();
 
         if ($lp_id) {
-            $sql = "UPDATE $new_lp SET id = iid  WHERE iid = $lp_id";
-            Database::query($sql);
-
             $this->lp_id = $lp_id;
-
+            /*
             api_item_property_update(
                 $courseInfo,
                 TOOL_LEARNPATH,
@@ -295,7 +292,7 @@ class aicc extends learnpath
                 $this->lp_id,
                 'visible',
                 api_get_user_id()
-            );
+            );*/
         }
 
         $previous = 0;
@@ -330,12 +327,6 @@ class aicc extends learnpath
                 error_log('New LP - In aicc::import_aicc() - inserting item : '.$sql_item.' : ', 0);
             }
             $item_id = Database::insert_id();
-
-            if ($item_id) {
-                $sql = "UPDATE $new_lp_item SET id = iid WHERE iid = $lp_id";
-                Database::query($sql);
-            }
-
             // Now update previous item to change next_item_id.
             if (0 != $previous) {
                 $upd = "UPDATE $new_lp_item SET next_item_id = $item_id WHERE c_id = $course_id AND id = $previous";
@@ -647,7 +638,7 @@ class aicc extends learnpath
         $lp = $this->get_id();
         if (0 != $lp) {
             $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-            $sql = "UPDATE $tbl_lp SET preview_image = '$preview_image' 
+            $sql = "UPDATE $tbl_lp SET preview_image = '$preview_image'
                     WHERE c_id = ".$course_id." id = ".$lp;
             Database::query($sql);
 
@@ -670,7 +661,7 @@ class aicc extends learnpath
         $lp = $this->get_id();
         if (0 != $lp) {
             $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-            $sql = "UPDATE $tbl_lp SET author = '$author' 
+            $sql = "UPDATE $tbl_lp SET author = '$author'
                     WHERE c_id = ".$course_id." id = ".$lp;
             Database::query($sql);
 
@@ -696,7 +687,7 @@ class aicc extends learnpath
         $lp = $this->get_id();
         if (0 != $lp) {
             $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-            $sql = "UPDATE $tbl_lp SET content_maker = '$maker' 
+            $sql = "UPDATE $tbl_lp SET content_maker = '$maker'
                     WHERE c_id = ".$course_id." id = ".$lp;
             Database::query($sql);
 

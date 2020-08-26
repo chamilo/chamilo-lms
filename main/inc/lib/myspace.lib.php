@@ -1326,39 +1326,51 @@ class MySpace
             }
         }
         if ($csv == false) {
-            $table = '<div class="table-responsive"><table class="table table-bordered">';
-            $table .= "<thead><tr>
-<td>".get_lang('CourseTeachers')."</td>
-<td>".get_lang('LearningPathList')."</td>
-<td>".get_lang('CountOfSubscribedUsers')."</td>
-<td>".get_lang('StudentList')."</td>
-</tr></thead><tbody>";
-
+            $table = "<div class='table-responsive'>".
+                "<table class='table table-bordered'>".
+                "<thead>".
+                "<tr>".
+                "<td>".get_lang('CourseTeachers')."</td>".
+                "<td>".get_lang('LearningPathList')."</td>".
+                "<td>".get_lang('CountOfSubscribedUsers')."</td>".
+                "<td>".get_lang('StudentList')."</td>".
+                "</tr>".
+                "</thead>".
+                "<tbody>";
+            $index = 0;
+            //icons for show and hode
+            $iconAdd = Display::return_icon('add.png', get_lang('ShowOrHide'), '', ICON_SIZE_SMALL);
+            $iconRemove = Display::return_icon('error.png', get_lang('howOrHide'), '', ICON_SIZE_SMALL);
             foreach ($data as $teacherName => $reportData) {
 
                 $listLp = $reportData;
-                $table .= "<tr>
-                        <td>$teacherName</td>";
+                $table .= "<tr>".
+                    "<td>$teacherName</td>";
                 foreach ($listLp as $lpName => $row) {
-                    $table .= "<td>$lpName</td>";
-                    $table .= "<td>".$row['students']."</td><td>";
+                    $hiddenField = 'student_show_'.$index;
+                    $hiddenFieldS = 'student_show_'.$index.'_';
+                    $table .= "<td>$lpName</td>".
+                        "<td>".$row['students']."</td><td>".
+                        "<a href='#$hiddenField' id='$hiddenFieldS' onclick='showHideStudent(\"$hiddenField\")'>".
+                        "<div class='icon_add'>$iconAdd</div>".
+                        "<div class='icon_remove hidden'>$iconRemove</div>".
+                        "</a>".
+                        "<div id='$hiddenField' class='hidden'>";
                     foreach ($row['studentList'] as $student) {
                         $table .= $student['complete_name']."<br>";
-
                     }
+                    $index += 1;
+                    $table .= "</div>";
                 }
-                $table .= "</td></tr>";
-
-
+                $table .= "</td>".
+                    "</tr>";
             }
-            $table .= '</tbody></table></div>';
-
-
+            $table .= "</tbody>".
+                "</table>".
+                "</div>";
             if (!empty($startDate) or !empty($endDate)) {
                 $tableHtml = $table;
-
             }
-
 
             $form = new FormValidator('searchDate', 'get');
             $form->addHidden('display', 'learningPath');

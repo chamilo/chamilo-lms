@@ -16,7 +16,21 @@ $display = isset($_GET['display']) ? Security::remove_XSS($_GET['display']) : nu
 $htmlHeadXtra[] = api_get_jqgrid_js();
 $htmlHeadXtra[] = '<script
 type="text/javascript"
-src="'.api_get_path(WEB_PUBLIC_PATH).'assets/jquery.easy-pie-chart/dist/jquery.easypiechart.js"></script>';
+src="'.api_get_path(WEB_PUBLIC_PATH).'assets/jquery.easy-pie-chart/dist/jquery.easypiechart.js"></script>
+<script type="text/javascript">
+// how hide a student based on BT#17648
+function showHideStudent(el){
+    if($("#"+el).hasClass("hidden")){
+        $("#"+el).removeClass("hidden");
+        $("#"+el+"_").find(".icon_add").addClass("hidden");
+        $("#"+el+"_").find(".icon_remove").removeClass("hidden");
+    }else{
+        $("#"+el).addClass("hidden")
+        $("#"+el+"_").find(".icon_add").removeClass("hidden");
+        $("#"+el+"_").find(".icon_remove").addClass("hidden");
+    }
+}
+</script>';
 
 // the section (for the tabs)
 $this_section = SECTION_TRACKING;

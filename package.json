@@ -16,6 +16,7 @@
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "blueimp-file-upload": "^10.0",
+    "blueimp-load-image": "^5.14.0",
     "bootstrap-daterangepicker": "^3.0",
     "bootstrap-select": "^1.13.17",
     "chart.js": "^2.9.3",

@@ -14,7 +14,7 @@
               type: '{{ type }}',
               tool: '{{ tool }}',
               cid: '{{ course.id }}',
-              sid: '{{ session.id }}',
+              sid: '{{ session ? session.id : 0 }}',
               id: '{{ id }}'
           },
           // dataType: 'json',

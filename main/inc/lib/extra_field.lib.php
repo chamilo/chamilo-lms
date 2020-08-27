@@ -3334,7 +3334,7 @@ JAVASCRIPT;
         if (!empty($options)) {
             foreach ($options as $option) {
                 foreach ($option as $sub_option) {
-                    if ('0' != $sub_option['option_value']) {
+                    if ('0' == $sub_option['option_value']) {
                         continue;
                     }
 

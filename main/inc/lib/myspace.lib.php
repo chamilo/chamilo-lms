@@ -1063,10 +1063,10 @@ class MySpace
         $tableHtml = '';
         // Printing table
         $total = 0;
-        $table = '<div class="table-responsive"><table class="table table-bordered">';
+        $table = '<div class="table-responsive"><table class="table table-bordered data_table">';
 
         $displayText = ExtraField::getDisplayNameByVariable('company');
-        $table .= "<thead><tr><td>$displayText</td><td> ".get_lang('CountOfSubscribedUsers')." </td></tr></thead><tbody>";
+        $table .= "<thead><tr><th class=\"th-header\">$displayText</th><th class=\"th-header\"> ".get_lang('CountOfSubscribedUsers')." </th></tr></thead><tbody>";
 
         foreach ($companys as $entity => $student) {
             $table .= "<tr><td>$entity</td><td>".count($student)."</td></tr>";
@@ -1190,13 +1190,13 @@ class MySpace
         }
         if ($csv == false) {
             $table = "<div class='table-responsive'>".
-                "<table class='table table-bordered'>".
+                "<table class='table table-bordered data_table'>".
                 "<thead>".
                 "<tr>".
-                "<td>".get_lang('CourseTeachers')."</td>".
-                "<td>".get_lang('LearningPathList')."</td>".
-                "<td>".get_lang('CountOfSubscribedUsers')."</td>".
-                "<td>".get_lang('StudentList')."</td>".
+                "<th class=\"th-header\">".get_lang('CourseTeachers')."</th>".
+                "<th class=\"th-header\">".get_lang('LearningPathList')."</th>".
+                "<th class=\"th-header\">".get_lang('CountOfSubscribedUsers')."</th>".
+                "<th class=\"th-header\">".get_lang('StudentList')."</th>".
                 "</tr>".
                 "</thead>".
                 "<tbody>";
@@ -1288,15 +1288,16 @@ class MySpace
             $csv_content[] = $csv_row;
             foreach ($data as $teacherName => $reportData) {
                 foreach ($reportData as $lpName => $row) {
+                    $csv_row = [];
+                    $csv_row[] = $teacherName;
+                    $csv_row[] = $lpName;
+                    $csv_row[] = $row['students'];
+                    $studentsName = '';
                     foreach ($row['studentList'] as $student) {
-                        $table .= $student['complete_name']."<br>";
-                        $csv_row = [];
-                        $csv_row[] = $teacherName;
-                        $csv_row[] = $lpName;
-                        $csv_row[] = $row['students'];
-                        $csv_row[] = $student['complete_name'];
-                        $csv_content[] = $csv_row;
+                        $studentsName .= $student['complete_name'] . " / ";
                     }
+                    $csv_row[] = trim($studentsName, " / ");
+                    $csv_content[] = $csv_row;
                 }
             }
             Export::arrayToCsv($csv_content, 'reporting_lp_by_authors');

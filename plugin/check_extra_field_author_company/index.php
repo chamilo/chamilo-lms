@@ -5,5 +5,4 @@ require_once __DIR__.'/../../main/inc/global.inc.php';
 // $_template['show_message'] = false;
 
 if (api_is_anonymous()) {
-
 }

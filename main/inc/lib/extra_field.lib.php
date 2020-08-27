@@ -3151,6 +3151,7 @@ JAVASCRIPT;
 
         return $companyField['display_text'];
     }
+
     /**
      * @param \FormValidator $form
      * @param int            $defaultValueId

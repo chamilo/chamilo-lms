@@ -239,6 +239,46 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
     }
 
     /**
+     *Insert the option fields for company with the generic values Company 1, company 2 and company 3.
+     */
+    public function setCompanyExtrafieldData()
+    {
+        $companys = [
+            0 => 'Company 1',
+            1 => 'Company 2',
+            2 => 'Company 3',
+        ];
+        $order = 0;
+        $query = "SELECT
+					id
+				FROM
+					".$this->tblExtraField."
+				WHERE
+					variable = 'company'";
+        $companyId = Database::fetch_assoc(Database::query($query));
+        $companyId = isset($companyId['id']) ? $companyId['id'] : null;
+        for ($i = 0; $i < count($companys); $i++) {
+            $order = $i + 1;
+            $extraFieldOptionValue = $companys[$i];
+            if ($companyId != null) {
+                $query = "SELECT * from ".$this->tblExtraFieldOption." where option_value = '$extraFieldOptionValue'";
+                $extraFieldOption = Database::fetch_assoc(Database::query($query));
+
+                if (isset($extraFieldOption['id']) && $extraFieldOption['id'] && $extraFieldOption['field_id'] == $companyId) {
+                    // Update?
+                } else {
+                    $query = "
+                    INSERT INTO ".$this->tblExtraFieldOption."
+                        (`field_id`, `option_value`, `display_text`, `priority`, `priority_message`, `option_order`) VALUES
+                        ( '$companyId', '$extraFieldOptionValue', '$extraFieldOptionValue', NULL, NULL, '$order');
+                    ";
+                    $data = Database::query($query);
+                }
+            }
+        }
+    }
+
+    /**
      * Returns the array of an element in the database that matches the variable.
      *
      * @param string $variableName
@@ -382,48 +422,6 @@ UPDATE ".$this->tblExtraField."
                 $obj = new ExtraField($extraFieldType);
                 $res = $obj->delete($data['id']);
             }
-        }
-    }
-
-
-    /**
-     *Insert the option fields for company with the generic values Company 1, company 2 and company 3
-     */
-    public function setCompanyExtrafieldData(){
-
-        $companys = [
-            0 => 'Company 1',
-            1 => 'Company 2',
-            2 => 'Company 3',
-        ];
-        $order = 0;
-        $query = "SELECT
-					id
-				FROM
-					".$this->tblExtraField."
-				WHERE
-					variable = 'company'";
-        $companyId = Database::fetch_assoc(Database::query($query));
-        $companyId = isset($companyId['id']) ? $companyId['id'] : null;
-        for ($i = 0; $i < count($companys); $i++) {
-            $order =$i+1;
-            $extraFieldOptionValue = $companys[$i];
-            if($companyId != null) {
-                $query = "SELECT * from ".$this->tblExtraFieldOption." where option_value = '$extraFieldOptionValue'";
-                $extraFieldOption = Database::fetch_assoc(Database::query($query));
-
-                if (isset($extraFieldOption['id']) && $extraFieldOption['id'] && $extraFieldOption['field_id'] == $companyId) {
-                    // Update?
-                } else {
-                    $query = "
-                    INSERT INTO ".$this->tblExtraFieldOption."
-                        (`field_id`, `option_value`, `display_text`, `priority`, `priority_message`, `option_order`) VALUES
-                        ( '$companyId', '$extraFieldOptionValue', '$extraFieldOptionValue', NULL, NULL, '$order');
-                    ";
-                    $data =Database::query($query);
-                }
-            }
-
         }
     }
 }

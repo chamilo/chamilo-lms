@@ -18,7 +18,7 @@ $htmlHeadXtra[] = '<script
 type="text/javascript"
 src="'.api_get_path(WEB_PUBLIC_PATH).'assets/jquery.easy-pie-chart/dist/jquery.easypiechart.js"></script>
 <script type="text/javascript">
-// how hide a student based on BT#17648
+// show hide a student based on BT#17648
 function showHideStudent(el){
     if($("#"+el).hasClass("hidden")){
         $("#"+el).removeClass("hidden");

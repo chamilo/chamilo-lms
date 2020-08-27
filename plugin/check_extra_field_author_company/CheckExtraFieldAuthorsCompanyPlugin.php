@@ -400,7 +400,7 @@ UPDATE ".$this->tblExtraField."
         $query = "SELECT
 					id
 				FROM
-					extra_field
+					".$this->tblExtraField."
 				WHERE
 					variable = 'company'";
         $companyId = Database::fetch_assoc(Database::query($query));

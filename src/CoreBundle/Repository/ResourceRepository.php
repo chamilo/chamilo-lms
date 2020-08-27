@@ -697,6 +697,11 @@ class ResourceRepository extends EntityRepository
         $this->setLinkVisibility($resource, ResourceLink::VISIBILITY_PUBLISHED);
     }
 
+    public function setVisibilityDeleted(AbstractResource $resource)
+    {
+        $this->setLinkVisibility($resource, ResourceLink::VISIBILITY_DELETED);
+    }
+
     public function setVisibilityDraft(AbstractResource $resource)
     {
         $this->setLinkVisibility($resource, ResourceLink::VISIBILITY_DRAFT);

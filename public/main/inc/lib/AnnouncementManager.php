@@ -893,6 +893,11 @@ class AnnouncementManager
         $repo = Container::getAnnouncementRepository();
         /** @var CAnnouncement $announcement */
         $announcement = $repo->find($id);
+
+        if (null === $announcement) {
+            return false;
+        }
+
         $course = api_get_course_entity();
         $group = api_get_group_entity();
         $session = api_get_session_entity();
@@ -1607,7 +1612,6 @@ class AnnouncementManager
         $group = api_get_group_entity(api_get_group_id());
 
         $qb = $repo->getResourcesByCourse($course, $session, $group);
-
         $announcements = $qb->getQuery()->getResult();
 
         /*$condition_session = api_get_session_condition(

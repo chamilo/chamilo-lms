@@ -1338,7 +1338,7 @@ class UserGroup extends Model
                     $this->add_user_to_group(
                         api_get_user_id(),
                         $id,
-                        $params['group_type']
+                        GROUP_USER_PERMISSION_ADMIN
                     );
                 }
                 $picture = isset($_FILES['picture']) ? $_FILES['picture'] : null;

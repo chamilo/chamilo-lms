@@ -1130,6 +1130,7 @@ class MySpace
         $tableHtml = '';
         $tblExtraField = Database::get_main_table(TABLE_EXTRA_FIELD);
         $tblExtraFieldValue = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+        $tblCourse = Database::get_main_table(TABLE_MAIN_COURSE);
         $query = "
         SELECT
             item_id AS lp_id,
@@ -1150,7 +1151,6 @@ class MySpace
         AND (s.value != '' OR s.value IS NOT NULL)
 ";
         $queryResult = Database::query($query);
-        $tblCourse = TABLE_MAIN_COURSE;
         $data = [];
         while ($row = Database::fetch_array($queryResult, 'ASSOC')) {
             $lp_id = (int) $row['lp_id'];
@@ -1207,6 +1207,7 @@ class MySpace
             $teacherNameTemp = '';
             foreach ($data as $teacherName => $reportData) {
                 $lpCount = 0;
+                $totalStudent = 0;
                 foreach ($reportData as $lpName => $row) {
                     $hiddenField = 'student_show_'.$index;
                     $hiddenFieldLink = 'student_show_'.$index.'_';
@@ -1225,6 +1226,7 @@ class MySpace
                         "<div id='$hiddenField' class='hidden'>";
                     foreach ($row['studentList'] as $student) {
                         $table .= $student['complete_name']."<br>";
+                        $totalStudent += 1;
                     }
                     $index++;
                     $lpCount++;
@@ -1236,7 +1238,7 @@ class MySpace
                     "<tr>".
                     "<td></td>".
                     "<td><strong>".get_lang('LearnpathsTotal')." $lpCount</strong></td>".
-                    "<td></td>".
+                    "<td><strong>$totalStudent</strong></td>".
                     "<td></td>".
                     "</tr>";
             }

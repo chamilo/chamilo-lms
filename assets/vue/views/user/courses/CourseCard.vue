@@ -22,10 +22,8 @@
           <b-col md="6">
             <b-card-body :title="card.course.title">
               <b-card-text>
-                This is a wider card with supporting text as a natural lead-in to additional content.
-                This content is a little bit longer.
+                Course description
               </b-card-text>
-
               <b-button
                 :href=" '/course/' + card.course.id + '/home'"
                 variant="primary"

@@ -11,11 +11,11 @@
             </div>
         {% endif %}
 
-        <div id="settings">
-            <div class="list-settings">
+        <div id="settings" >
+            <div class="row">
             {% for block_item in blocks_admin %}
-                <div id="tabs-{{ loop.index }}" class="item-setting">
-                    <div class="card mb-3">
+                <div id="tabs-{{ loop.index }}" class="col">
+                    <div class="card mb-4">
                         <div class="card-header">
                             <h5 class="card-title">{{ block_item.icon }} {{ block_item.label }}</h5>
                         </div>

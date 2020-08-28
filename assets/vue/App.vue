@@ -36,13 +36,13 @@
 <script>
 
 import NotificationMixin from './mixins/NotificationMixin';
-    import Breadcrumb from './components/Breadcrumb';
-    import Snackbar from './components/Snackbar';
-    import axios from "axios";
+import Breadcrumb from './components/Breadcrumb';
+import Snackbar from './components/Snackbar';
+import axios from "axios";
 
-  import Header from "./components/Layout/Header";
-  import Sidebar from "./components/Layout/Sidebar";
-  import Footer from "./components/Layout/Footer";
+import Header from "./components/layout/Header";
+import Sidebar from "./components/layout/Sidebar";
+import Footer from "./components/layout/Footer";
 
     export default {
         name: "App",

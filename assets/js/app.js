@@ -23,6 +23,8 @@ import('./vendor');
 import('./main');
 require('webpack-jquery-ui');
 require('webpack-jquery-ui/css');
+require('blueimp-file-upload');
+require('blueimp-load-image');
 
 import Swal from 'sweetalert2';
 window.Swal = Swal;

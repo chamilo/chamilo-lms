@@ -182,6 +182,11 @@ class ResourceRepository extends EntityRepository
         return $this->getRepository()->find($id, $lockMode, $lockVersion);
     }
 
+    public function getResourceByResourceNode(ResourceNode $resourceNode)
+    {
+        return $this->getRepository()->findOneBy(['resourceNode' => $resourceNode]);
+    }
+
     public function findOneBy(array $criteria, array $orderBy = null)
     {
         return $this->getRepository()->findOneBy($criteria, $orderBy);
@@ -260,62 +265,6 @@ class ResourceRepository extends EntityRepository
         return $this->createNodeForResource($resource, $creator, $parent);
     }
 
-    public function addResourceToCourse(AbstractResource $resource, int $visibility, User $creator, Course $course, Session $session = null, CGroup $group = null, UploadedFile $file = null)
-    {
-        $resourceNode = $this->createNodeForResource($resource, $creator, $course->getResourceNode(), $file);
-
-        $this->addResourceNodeToCourse($resourceNode, $visibility, $course, $session, $group);
-    }
-
-    public function addResourceToCourseWithParent(AbstractResource $resource, ResourceNode $parentNode, int $visibility, User $creator, Course $course, Session $session = null, CGroup $group = null, UploadedFile $file = null)
-    {
-        $resourceNode = $this->createNodeForResource($resource, $creator, $parentNode, $file);
-
-        $this->addResourceNodeToCourse($resourceNode, $visibility, $course, $session, $group);
-    }
-
-    public function addResourceNodeToCourse(ResourceNode $resourceNode, int $visibility, Course $course, Session $session = null, CGroup $group = null, User $toUser = null): void
-    {
-        if (0 === $visibility) {
-            $visibility = ResourceLink::VISIBILITY_PUBLISHED;
-        }
-
-        $link = new ResourceLink();
-        $link
-            ->setCourse($course)
-            ->setSession($session)
-            ->setGroup($group)
-            ->setUser($toUser)
-            ->setResourceNode($resourceNode)
-            ->setVisibility($visibility)
-        ;
-
-        $rights = [];
-        switch ($visibility) {
-            case ResourceLink::VISIBILITY_PENDING:
-            case ResourceLink::VISIBILITY_DRAFT:
-                $editorMask = ResourceNodeVoter::getEditorMask();
-                $resourceRight = new ResourceRight();
-                $resourceRight
-                    ->setMask($editorMask)
-                    ->setRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)
-                ;
-                $rights[] = $resourceRight;
-
-                break;
-        }
-
-        if (!empty($rights)) {
-            foreach ($rights as $right) {
-                $link->addResourceRight($right);
-            }
-        }
-
-        $em = $this->getEntityManager();
-        $em->persist($resourceNode);
-        $em->persist($link);
-    }
-
     /**
      * @return ResourceType
      */
@@ -350,7 +299,6 @@ class ResourceRepository extends EntityRepository
             ->innerJoin('resource.resourceNode', 'node')
             ->innerJoin('node.resourceLinks', 'links')
             ->innerJoin('node.resourceType', 'type')
-            //->innerJoin('links.course', 'course')
             ->leftJoin('node.resourceFile', 'file')
 
             ->where('type.name = :type')
@@ -364,10 +312,11 @@ class ResourceRepository extends EntityRepository
             ->addSelect('file')
         ;
 
-        $isAdmin = $checker->isGranted('ROLE_ADMIN') ||
+        $isAdmin =
+            $checker->isGranted('ROLE_ADMIN') ||
             $checker->isGranted('ROLE_CURRENT_COURSE_TEACHER');
 
-        // Do not show deleted resources
+        // Do not show deleted resources.
         $qb
             ->andWhere('links.visibility != :visibilityDeleted')
             ->setParameter('visibilityDeleted', ResourceLink::VISIBILITY_DELETED)
@@ -746,6 +695,11 @@ class ResourceRepository extends EntityRepository
     public function setVisibilityPublished(AbstractResource $resource)
     {
         $this->setLinkVisibility($resource, ResourceLink::VISIBILITY_PUBLISHED);
+    }
+
+    public function setVisibilityDeleted(AbstractResource $resource)
+    {
+        $this->setLinkVisibility($resource, ResourceLink::VISIBILITY_DELETED);
     }
 
     public function setVisibilityDraft(AbstractResource $resource)

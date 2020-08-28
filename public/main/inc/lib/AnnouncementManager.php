@@ -483,6 +483,8 @@ class AnnouncementManager
         $html .= "<table height=\"100\" width=\"100%\" cellpadding=\"5\" cellspacing=\"0\" class=\"data_table\">";
         $html .= "<tr><td><h2>".$title."</h2></td></tr>";
 
+        $isVisible = $announcement->isVisible($course, $session);
+
         if (api_is_allowed_to_edit(false, true) ||
             (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())
         ) {
@@ -492,7 +494,7 @@ class AnnouncementManager
             $image_visibility = 'invisible';
             $alt_visibility = get_lang('Visible');
             $setNewStatus = 'visible';
-            if ($announcement->isVisible($course, $session)) {
+            if ($isVisible) {
                 $image_visibility = 'visible';
                 $alt_visibility = get_lang('Hide');
                 $setNewStatus = 'invisible';
@@ -507,6 +509,10 @@ class AnnouncementManager
                     "</a>";
             }
             $html .= "<tr><th style='text-align:right'>$modify_icons</th></tr>";
+        } else {
+            if (false === $isVisible) {
+                api_not_allowed(true);
+            }
         }
 
         // The user id is always the current one.
@@ -637,8 +643,6 @@ class AnnouncementManager
         }
 
         $courseId = $courseInfo['real_id'];
-        $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
-
         if (empty($end_date)) {
             $end_date = api_get_utc_datetime();
         }
@@ -649,24 +653,21 @@ class AnnouncementManager
         $session = api_get_session_entity($sessionId);
         $group = api_get_group_entity();
 
+        $em = Database::getManager();
+
         $announcement = new CAnnouncement();
         $announcement
             ->setContent($newContent)
             ->setTitle($title)
             ->setEndDate(new DateTime($end_date))
             ->setDisplayOrder($order)
-        ;
-
-        $announcement
+            ->setParent($course)
             ->addCourseLink(
                 $course,
                 $session,
                 $group
             )
-            ->setParent($course)
         ;
-
-        $em = Database::getManager();
 
         $em->persist($announcement);
         $em->flush();
@@ -892,6 +893,11 @@ class AnnouncementManager
         $repo = Container::getAnnouncementRepository();
         /** @var CAnnouncement $announcement */
         $announcement = $repo->find($id);
+
+        if (null === $announcement) {
+            return false;
+        }
+
         $course = api_get_course_entity();
         $group = api_get_group_entity();
         $session = api_get_session_entity();
@@ -1387,7 +1393,6 @@ class AnnouncementManager
         $file_comment,
         $file
     ) {
-        $table = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
         $return = 0;
         $courseId = api_get_course_int_id();
 
@@ -1410,28 +1415,27 @@ class AnnouncementManager
                 $new_file_name = uniqid('');
                 $attachment = new CAnnouncementAttachment();
                 $attachment
-                    ->setCId($courseId)
                     ->setFilename($file_name)
                     ->setPath($new_file_name)
                     ->setComment($file_comment)
                     ->setAnnouncement($announcement)
                     ->setSize((int) $file['size'])
+                    ->setParent($announcement)
+                    ->addCourseLink(
+                        api_get_course_entity($courseId),
+                        api_get_session_entity(api_get_session_id()),
+                        api_get_group_entity()
+                    )
                 ;
-                $userId = api_get_user_id();
+                $repo->getEntityManager()->persist($attachment);
+                $repo->getEntityManager()->flush();
+
                 $request = Container::getRequest();
                 $file = $request->files->get('user_upload');
 
                 if (!empty($file)) {
-                    $repo->addResourceToCourseWithParent(
-                        $attachment,
-                        $announcement->getResourceNode(),
-                        ResourceLink::VISIBILITY_PUBLISHED,
-                        api_get_user_entity($userId),
-                        api_get_course_entity($courseId),
-                        api_get_session_entity(api_get_session_id()),
-                        api_get_group_entity(),
-                        $file
-                    );
+                    $repo->addFile($attachment, $file);
+                    $repo->getEntityManager()->persist($attachment);
                     $repo->getEntityManager()->flush();
 
                     return 1;
@@ -1608,7 +1612,6 @@ class AnnouncementManager
         $group = api_get_group_entity(api_get_group_id());
 
         $qb = $repo->getResourcesByCourse($course, $session, $group);
-
         $announcements = $qb->getQuery()->getResult();
 
         /*$condition_session = api_get_session_condition(
@@ -2078,9 +2081,6 @@ class AnnouncementManager
     {
         // Maximum title messages to display
         $maximum = '12';
-        // Database Table Definitions
-        $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
-        $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
         $session_id = api_get_session_id();
         $courseInfo = api_get_course_info();
@@ -2128,18 +2128,19 @@ class AnnouncementManager
 
                 $qb = $repo->getResourcesByCourse($course, $session, $group);
                 $qb->select('count(resource)');
-                $count = $qb->getQuery()->getSingleScalarResult();
-
-                return $count;
+                return $qb->getQuery()->getSingleScalarResult();
             }
         } else {
             $user = api_get_user_entity($userId);
 
+            if (null === $user) {
+                return 0;
+            }
+
             $qb = $repo->getResourcesByCourseLinkedToUser($user, $course, $session, $group);
             $qb->select('count(resource)');
-            $count = $qb->getQuery()->getSingleScalarResult();
 
-            return $count;
+            return $qb->getQuery()->getSingleScalarResult();
 
             // students only get to see the visible announcements
             if (empty($_GET['origin']) || 'learnpath' !== $_GET['origin']) {

@@ -376,15 +376,6 @@ class Agenda
                                     $groupEntity
                                 );
 
-                                /*$repo->addResourceNodeToCourse(
-                                    $resourceNode,
-                                    ResourceLink::VISIBILITY_PUBLISHED,
-                                    $courseEntity,
-                                    $sessionEntity,
-                                    $groupEntity,
-                                    api_get_user_entity($userId)
-                                );*/
-
                                 /*api_item_property_update(
                                     $this->course,
                                     TOOL_CALENDAR_EVENT,
@@ -2896,21 +2887,15 @@ class Agenda
                 ->setPath($fileName)
                 ->setEvent($event)
                 ->setSize($file->getSize())
-            ;
+                ->setParent($event)
+                ->addCourseLink(
+                    api_get_course_entity(),
+                    api_get_session_entity(),
+                    api_get_group_entity()
+                );
 
             $repo = Container::getCalendarEventAttachmentRepository();
-
-            $repo->addResourceToCourseWithParent(
-                $attachment,
-                $event->getResourceNode(),
-                ResourceLink::VISIBILITY_PUBLISHED,
-                api_get_user_entity(api_get_user_id()),
-                api_get_course_entity(),
-                api_get_session_entity(),
-                api_get_group_entity(),
-                $file
-            );
-
+            $repo->getEntityManager()->persist($attachment);
             $repo->getEntityManager()->flush();
 
             $id = $attachment->getIid();

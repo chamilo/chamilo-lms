@@ -545,8 +545,9 @@ class Category implements GradebookItem
         $category->set_id($gradebookCategory->getId());
         $category->set_name($gradebookCategory->getName());
         $category->set_description($gradebookCategory->getDescription());
-        $category->set_user_id($gradebookCategory->getUserId());
-        $category->set_course_code($gradebookCategory->getCourseCode());
+        $category->set_user_id($gradebookCategory->getId());
+        //$category->set_course_code($gradebookCategory->getCourseCode());
+        $category->setCourseId($gradebookCategory->getCourse()->getId());
         $category->set_parent_id($gradebookCategory->getParentId());
         $category->set_weight($gradebookCategory->getWeight());
         $category->set_visible($gradebookCategory->getVisible());

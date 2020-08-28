@@ -1004,10 +1004,6 @@ class GroupManager
 
         $categoryId = Database::insert($table, $params);
         if ($categoryId) {
-            $sql = "UPDATE $table SET id = iid
-                    WHERE iid = $categoryId";
-            Database::query($sql);
-
             return $categoryId;
         }
 

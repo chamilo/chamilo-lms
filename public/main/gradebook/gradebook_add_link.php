@@ -102,7 +102,7 @@ if (isset($typeSelected) && '0' != $typeSelected) {
             $sql1 = 'SELECT thread_title from '.$tbl_forum_thread.'
 					 WHERE
 					    c_id = '.$course_info['real_id'].' AND
-					    thread_id = '.$addvalues['select_link'];
+					    iid  = '.$addvalues['select_link'];
             $res1 = Database::query($sql1);
             $rowtit = Database::fetch_row($res1);
             $course_id = api_get_course_id();
@@ -120,7 +120,7 @@ if (isset($typeSelected) && '0' != $typeSelected) {
                             thread_weight= "'.api_float_val($addvalues['weight']).'",
                             thread_title_qualify = "'.$rowtit[0].'"
 						WHERE
-						    thread_id='.$addvalues['select_link'].' AND
+						    iid ='.$addvalues['select_link'].' AND
 						    c_id = '.$course_info['real_id'].' ';
                 Database::query($sql);
             }

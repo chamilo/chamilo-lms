@@ -375,10 +375,8 @@ class CForumThread extends AbstractResource implements ResourceInterface
      * Set threadDate.
      *
      * @param \DateTime $threadDate
-     *
-     * @return CForumThread
      */
-    public function setThreadDate($threadDate)
+    public function setThreadDate($threadDate): self
     {
         $this->threadDate = $threadDate;
 

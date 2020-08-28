@@ -73,11 +73,11 @@ if ($form->validate()) {
     }
 
     //Update weight into forum thread
-    $sql = 'UPDATE '.$tbl_forum_thread.' SET 
+    $sql = 'UPDATE '.$tbl_forum_thread.' SET
                 thread_weight = '.api_float_val($final_weight).'
-            WHERE 
-			    c_id = '.$course_id.' AND 
-			    thread_id = (
+            WHERE
+			    c_id = '.$course_id.' AND
+			    iid = (
                     SELECT ref_id FROM '.$tbl_grade_links.'
 			        WHERE id='.intval($_GET['editlink']).' AND type = 5
             )';
@@ -89,7 +89,7 @@ if ($form->validate()) {
             UPDATE ChamiloCourseBundle:CStudentPublication w
             SET w.weight = :final_weight
             WHERE w.cId = :course
-                AND w.id = (
+                AND w.iid = (
                     SELECT l.refId FROM ChamiloCoreBundle:GradebookLink l
                     WHERE l.id = :link AND l.type = :type
                 )

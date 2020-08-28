@@ -24,7 +24,12 @@ class AuthenticationEntryPoint implements AuthenticationEntryPointInterface
 
     public function start(Request $request, AuthenticationException $authException = null): RedirectResponse
     {
-        $this->session->getFlashBag()->add('warning', $authException->getMessage());
+        $message = $authException->getMessage();
+        if ($authException->getPrevious()) {
+            $message = $authException->getPrevious()->getMessage();
+        }
+
+        $this->session->getFlashBag()->add('warning', $message);
 
         return new RedirectResponse($this->urlGenerator->generate('login'));
     }

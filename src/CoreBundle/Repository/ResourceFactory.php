@@ -20,7 +20,7 @@ class ResourceFactory
         $this->toolChain = $toolChain;
     }
 
-    public function getRepository(string $tool, string $type)
+    public function getRepositoryService(string $tool, string $type): string
     {
         $tool = $this->toolChain->getToolFromName($tool);
 

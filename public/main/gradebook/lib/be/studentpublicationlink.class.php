@@ -216,7 +216,7 @@ class StudentPublicationLink extends AbstractLink
             case 'first':
             default:
                 // first attempt
-                $dql .= ' ORDER BY a.id';
+                $dql .= ' ORDER BY a.iid';
                 break;
         }
 

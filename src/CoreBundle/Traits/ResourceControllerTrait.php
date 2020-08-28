@@ -31,7 +31,7 @@ trait ResourceControllerTrait
 
     public function getRepository($tool, $type): ResourceRepository
     {
-        $name = $this->getResourceRepositoryFactory()->getRepository($tool, $type);
+        $name = $this->getResourceRepositoryFactory()->getRepositoryService($tool, $type);
 
         return $this->container->get($name);
     }

@@ -49,7 +49,7 @@ class AttendanceLink extends AbstractLink
         $tbl_attendance = $this->get_attendance_table();
         $sessionId = $this->get_session_id();
 
-        $sql = 'SELECT att.id, att.name, att.attendance_qualify_title
+        $sql = 'SELECT att.iid, att.name, att.attendance_qualify_title
                 FROM '.$tbl_attendance.' att
                 WHERE
                     att.c_id = '.$this->course_id.' AND
@@ -60,14 +60,13 @@ class AttendanceLink extends AbstractLink
 
         while ($data = Database::fetch_array($result)) {
             if (isset($data['attendance_qualify_title']) && '' != $data['attendance_qualify_title']) {
-                $cats[] = [$data['id'], $data['attendance_qualify_title']];
+                $cats[] = [$data['iid'], $data['attendance_qualify_title']];
             } else {
-                $cats[] = [$data['id'], $data['name']];
+                $cats[] = [$data['iid'], $data['name']];
             }
         }
-        $my_cats = isset($cats) ? $cats : [];
 
-        return $my_cats;
+        return isset($cats) ? $cats : [];
     }
 
     /**
@@ -104,7 +103,7 @@ class AttendanceLink extends AbstractLink
                 FROM '.$this->get_attendance_table().' att
                 WHERE
                     att.c_id = '.$this->course_id.' AND
-                    att.id = '.$this->get_ref_id().' AND
+                    att.iid = '.$this->get_ref_id().' AND
                     att.session_id = '.$sessionId;
         $query = Database::query($sql);
         $attendance = Database::fetch_array($query, 'ASSOC');
@@ -216,8 +215,8 @@ class AttendanceLink extends AbstractLink
      */
     public function is_valid_link()
     {
-        $sql = 'SELECT count(att.id) FROM '.$this->get_attendance_table().' att
-                 WHERE att.c_id = '.$this->course_id.' AND att.id = '.$this->get_ref_id();
+        $sql = 'SELECT count(att.iid) FROM '.$this->get_attendance_table().' att
+                 WHERE att.c_id = '.$this->course_id.' AND att.iid = '.$this->get_ref_id();
         $result = Database::query($sql);
         $number = Database::fetch_row($result);
 
@@ -229,7 +228,7 @@ class AttendanceLink extends AbstractLink
         // it was extracts the attendance id
         $sessionId = $this->get_session_id();
         $sql = 'SELECT * FROM '.$this->get_attendance_table().' att
-                WHERE att.c_id = '.$this->course_id.' AND att.id = '.$this->get_ref_id();
+                WHERE att.c_id = '.$this->course_id.' AND att.iid = '.$this->get_ref_id();
         $result = Database::query($sql);
         $row = Database::fetch_array($result, 'ASSOC');
         $attendance_id = $row['id'];
@@ -266,7 +265,7 @@ class AttendanceLink extends AbstractLink
             return false;
         } elseif (!isset($this->attendance_data)) {
             $sql = 'SELECT * FROM '.$this->get_attendance_table().' att
-                    WHERE att.c_id = '.$this->course_id.' AND att.id = '.$this->get_ref_id();
+                    WHERE att.c_id = '.$this->course_id.' AND att.iid = '.$this->get_ref_id();
             $query = Database::query($sql);
             $this->attendance_data = Database::fetch_array($query);
         }

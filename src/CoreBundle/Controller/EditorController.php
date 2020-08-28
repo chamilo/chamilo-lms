@@ -78,7 +78,7 @@ class EditorController extends BaseController
         $session = $this->getCourseSession();
         $parent = $course->getResourceNode();
 
-        $repository = $resourceFactory->createRepository($tool, $type);
+        $repository = $resourceFactory->getRepositoryService($tool, $type);
         $class = $repository->getRepository()->getClassName();
 
         if (!empty($parentId)) {

@@ -744,17 +744,17 @@ class GradebookUtils
     {
         $table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
         $table_user = Database::get_main_table(TABLE_MAIN_USER);
-        $sql = 'SELECT DISTINCT u.user_id, u.lastname, u.firstname, u.username, gc.created_at
+        $sql = 'SELECT DISTINCT u.id as user_id, u.lastname, u.firstname, u.username, gc.created_at
                 FROM '.$table_user.' u
                 INNER JOIN '.$table_certificate.' gc
-                ON u.user_id=gc.user_id ';
+                ON u.id = gc.user_id ';
         if (!is_null($cat_id) && $cat_id > 0) {
             $sql .= ' WHERE cat_id='.intval($cat_id);
         }
         if (!empty($userList)) {
             $userList = array_map('intval', $userList);
             $userListCondition = implode("','", $userList);
-            $sql .= " AND u.user_id IN ('$userListCondition')";
+            $sql .= " AND u.id IN ('$userListCondition')";
         }
         $sql .= ' ORDER BY '.(api_sort_by_first_name() ? 'u.firstname' : 'u.lastname');
         $rs = Database::query($sql);
@@ -1355,7 +1355,7 @@ class GradebookUtils
                 thread_weight = '.api_float_val($weight).'
                 WHERE
                     c_id = '.$course_id.' AND
-                    thread_id = (
+                    iid = (
                         SELECT ref_id FROM '.$table_link.'
                         WHERE id='.$linkId.' AND type='.LINK_FORUM_THREAD.'
                     )
@@ -1367,7 +1367,7 @@ class GradebookUtils
                 UPDATE ChamiloCourseBundle:CStudentPublication w
                 SET w.weight = :final_weight
                 WHERE w.cId = :course
-                    AND w.id = (
+                    AND w.iid = (
                         SELECT l.refId FROM ChamiloCoreBundle:GradebookLink l
                         WHERE l.id = :link AND l.type = :type
                     )

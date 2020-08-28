@@ -2221,13 +2221,8 @@ function api_get_course_info($course_code = null)
 {
     if (!empty($course_code)) {
         $course = Container::getCourseRepository()->findOneByCode($course_code);
-        if (empty($course)) {
-            return [];
-        }
 
-        $courseInfo = api_format_course_array($course);
-
-        return $courseInfo;
+        return api_format_course_array($course);
     }
 
     /*$course_code = Database::escape_string($course_code);
@@ -2358,7 +2353,7 @@ function api_get_course_info_by_id($id = 0)
  *
  * @todo eradicate the false "id"=code field of the $_course array and use the int id
  */
-function api_format_course_array(Course $course)
+function api_format_course_array(Course $course = null)
 {
     if (empty($course)) {
         return [];

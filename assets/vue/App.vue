@@ -21,8 +21,9 @@
         </b-col>
 
         <b-col cols="10">
-
           <Breadcrumb layout-class="pl-3 py-3" />
+
+          <snackbar />
           <router-view />
           <div
             id="legacy_content"

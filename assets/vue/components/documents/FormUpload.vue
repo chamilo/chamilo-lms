@@ -1,21 +1,19 @@
 <template>
   <v-form>
-    <b-container fluid>
-      <b-row>
-        <b-col
-          cols="12"
-          sm="6"
-          md="6"
-        >
-          <b-form-file
-            v-model="item.uploadFile"
-            show-size
-            placeholder="File upload"
-            drop-placeholder="Drop file here..."
-          />
-        </b-col>
-      </b-row>
-    </b-container>
+    <b-row>
+      <b-col
+        cols="12"
+        sm="6"
+        md="6"
+      >
+        <b-form-file
+          v-model="item.uploadFile"
+          show-size
+          placeholder="File upload"
+          drop-placeholder="Drop file here..."
+        />
+      </b-col>
+    </b-row>
   </v-form>
 </template>
 

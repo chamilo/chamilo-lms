@@ -5,6 +5,33 @@
       :handle-add-document="addDocumentHandler"
       :handle-upload-document="uploadDocumentHandler"
     />
+
+    <b-row class="text-center">
+      <b-col>
+        <form class="form-inline">
+          <div class="form-group mb-2">
+            <b-form-select
+              id="perPageSelect"
+              v-model="options.itemsPerPage"
+              size="sm"
+              :options="pageOptions"
+              @input="onUpdateOptions(options)"
+            />
+          </div>
+        </form>
+      </b-col>
+      <b-col />
+      <b-col>
+        <b-pagination
+          v-model="options.page"
+          align="right"
+          :total-rows="totalItems"
+          :per-page="options.itemsPerPage"
+          aria-controls="documents"
+          @input="onUpdateOptions(options)"
+        />
+      </b-col>
+    </b-row>
     <b-row>
       <b-col>
         <DataFilter
@@ -20,6 +47,7 @@
         <br>
         <b-table
           id="documents"
+          class="table table-bordered data_table"
           striped
           hover
           selectable
@@ -72,39 +100,6 @@
             />
           </template>
         </b-table>
-
-        <b-pagination
-          v-model="options.page"
-          :total-rows="totalItems"
-          :per-page="options.itemsPerPage"
-          aria-controls="documents"
-          @input="onUpdateOptions(options)"
-        />
-
-        <b-col
-          sm="5"
-          md="6"
-          class="my-1"
-        >
-          <b-form-group
-            label="Per page"
-            label-cols-sm="6"
-            label-cols-md="4"
-            label-cols-lg="3"
-            label-align-sm="right"
-            label-size="sm"
-            label-for="perPageSelect"
-            class="mb-0"
-          >
-            <b-form-select
-              id="perPageSelect"
-              v-model="options.itemsPerPage"
-              size="sm"
-              :options="pageOptions"
-              @input="onUpdateOptions(options)"
-            />
-          </b-form-group>
-        </b-col>
       </b-col>
     </b-row>
   </div>

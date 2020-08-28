@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-row>
+    <b-button-toolbar>
       <b-button
         v-if="handleShow"
         variant="info"
@@ -26,7 +26,7 @@
       >
         Delete
       </b-button>
-    </b-row>
+    </b-button-toolbar>
 
     <ConfirmDelete
       v-if="handleDelete"

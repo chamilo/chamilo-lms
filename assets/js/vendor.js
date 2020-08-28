@@ -1,15 +1,11 @@
 
-//require('@coreui/coreui/dist/js/coreui.min.js');
-//require('chosen-js');
 require('mediaelement');
-// require('pace-js-amd-fix');
 require('multiselect-two-sides');
 require('@fortawesome/fontawesome-free');
 require('qtip2');
 require('image-map-resizer/js/imageMapResizer.js');
 require('cropper');
 require('jquery-ui-timepicker-addon/dist/jquery-ui-timepicker-addon');
-//import('blueimp-file-upload');
 import('select2');
 require('timeago');
 require('sweetalert2');

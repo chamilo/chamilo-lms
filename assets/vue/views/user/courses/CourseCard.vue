@@ -1,45 +1,42 @@
 <template>
-  <v-container
-    grid-list-xl
-    fluid
-  >
-    <v-layout
-      row
-      wrap
+  <span>
+    <b-card-group
+      v-for="card in courses"
+      :key="card.course.id"
+      deck
+      :cols="12"
     >
-      <v-row dense>
-        <v-col
-          v-for="card in courses"
-          :key="card.course.id"
-          :cols="12"
-        >
-          <v-card>
-            <div class="d-flex flex-no-wrap">
-              <v-avatar
-                class="ma-3"
-                tile
-              >
-                <v-img src="/img/icons/48/blackboard.png" />
-              </v-avatar>
-              <div>
-                <v-card-title v-text="card.course.title" />
-              </div>
-            </div>
+      <b-card
+        no-body
+        class="overflow-hidden"
+        style="max-width: 540px;"
+      >
+        <b-row no-gutters>
+          <b-col md="6">
+            <b-card-img
+              src="/img/icons/64/course.png"
+              alt="Image"
+              class="rounded-0"
+            />
+          </b-col>
+          <b-col md="6">
+            <b-card-body :title="card.course.title">
+              <b-card-text>
+                This is a wider card with supporting text as a natural lead-in to additional content.
+                This content is a little bit longer.
+              </b-card-text>
 
-            <v-card-actions>
-              <v-btn
+              <b-button
                 :href=" '/course/' + card.course.id + '/home'"
-                text
-                color="deep-purple accent-4"
-              >
-                Go
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-col>
-      </v-row>
-    </v-layout>
-  </v-container>
+                variant="primary"
+              >Go
+              </b-button>
+            </b-card-body>
+          </b-col>
+        </b-row>
+      </b-card>
+    </b-card-group>
+  </span>
 </template>
 
 <script>

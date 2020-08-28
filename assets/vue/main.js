@@ -21,8 +21,14 @@ const apolloClient = new ApolloClient({
     uri: '/api/graphql/'
 });
 
-Vue.config.productionTip = false;
+import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 
+// Install BootstrapVue
+Vue.use(BootstrapVue)
+// Optionally install the BootstrapVue icon components plugin
+Vue.use(IconsPlugin)
+
+Vue.config.productionTip = false;
 Vue.use(Vuelidate);
 Vue.use(VueApollo);
 Vue.use(require('vue-moment'));

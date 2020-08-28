@@ -30,7 +30,7 @@
     <link rel="stylesheet" href="{{ url('home') ~ 'build/css/app.css' }}"/>
 {#    {{ encore_entry_link_tags('app') }}#}
     {% if theme is defined %}
-    <link rel="stylesheet" href="{{ url('home') ~ 'build/css/themes/'~ theme ~'/default.css' }}"/>
+{#    <link rel="stylesheet" href="{{ url('home') ~ 'build/css/themes/'~ theme ~'/default.css' }}"/>#}
     {% endif %}
     <link rel="stylesheet" media="print" href="{{ url('home') ~ 'build/css/print.css' }}"/>
 {#    {{ encore_entry_link_tags('vue') }}#}
@@ -46,10 +46,7 @@
 {# Add third party js libraries that can't be loaded using webpack #}
 {#<script src="{{ asset('libs/readmore-js/readmore.js') }}"></script>#}
 <script src="{{ url('home') ~ 'build/libs/js-cookie/src/js.cookie.js' }}"></script>
-
-<link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 {# Check chamilo_js key in assetic.yml #}
 {% block javascripts %}

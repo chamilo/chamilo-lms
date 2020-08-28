@@ -231,7 +231,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     protected $description;
 
     /**
-     * @var CourseCategory
+     * @var ArrayCollection
      * @ApiSubresource()
      * @Groups({"course:read", "course:write"})
      * @ORM\ManyToMany(targetEntity="Chamilo\CoreBundle\Entity\CourseCategory", inversedBy="courses")
@@ -400,6 +400,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         $this->users = new ArrayCollection();
         $this->urls = new ArrayCollection();
         $this->tools = new ArrayCollection();
+        $this->categories = new ArrayCollection();
         $this->gradebookCategories = new ArrayCollection();
         $this->gradebookEvaluations = new ArrayCollection();
         $this->gradebookLinks = new ArrayCollection();

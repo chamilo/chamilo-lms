@@ -5,14 +5,28 @@
         {{ $t('Filters') }}
 
         <template slot="actions">
-          <v-icon large>mdi-filter-variant</v-icon>
+          <v-icon large>
+            mdi-filter-variant
+          </v-icon>
         </template>
       </v-expansion-panel-header>
       <v-expansion-panel-content>
-        <slot name="filter"></slot>
+        <slot name="filter" />
 
-        <v-btn color="primary" @click="handleFilter">{{ $t('Filter')}}</v-btn>
-        <v-btn color="primary" class="ml-2" text @click="handleReset">{{ $t('Reset') }}</v-btn>
+        <b-button
+          variant="primary"
+          @click="handleFilter"
+        >
+          {{ $t('Filter') }}
+        </b-button>
+        <b-button
+          variant="primary"
+          class="ml-2"
+          text
+          @click="handleReset"
+        >
+          {{ $t('Reset') }}
+        </b-button>
       </v-expansion-panel-content>
     </v-expansion-panel>
   </v-expansion-panels>

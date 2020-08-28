@@ -1,65 +1,85 @@
 <template>
   <div class="documents-list">
     <Toolbar
-            :handle-add="addHandler"
-            :handle-add-document="addDocumentHandler"
-            :handle-upload-document="uploadDocumentHandler"
+      :handle-add="addHandler"
+      :handle-add-document="addDocumentHandler"
+      :handle-upload-document="uploadDocumentHandler"
     />
-    <v-container grid-list-xl fluid>
-      <v-layout row wrap>
-        <v-flex lg12>
-          <DataFilter :handle-filter="onSendFilter" :handle-reset="resetFilter">
+    <b-container fluid>
+      <b-row>
+        <b-col>
+          <DataFilter
+            :handle-filter="onSendFilter"
+            :handle-reset="resetFilter"
+          >
             <DocumentsFilterForm
               ref="filterForm"
-              :values="filters"
               slot="filter"
+              :values="filters"
             />
           </DataFilter>
-          <br />
-          <v-data-table
-            dense
-            v-model="selected"
-            :headers="headers"
+          <br>
+          <b-table
+            id="documents"
+            striped
+            hover
+
+            :fields="fields"
             :items="items"
-            :items-per-page.sync="options.itemsPerPage"
-            :loading="isLoading"
-            :loading-text="$t('Loading...')"
-            :options.sync="options"
-            :server-items-length="totalItems"
-            class="elevation-1"
-            item-key="@id"
-            show-select
-            @update:options="onUpdateOptions"
+            :per-page="0"
+            :current-page="options.page"
+            :sort-desc.sync="options.sortDesc"
+            :busy.sync="isLoading"
+            :filters="filters"
+            primary-key="iid"
+            @input="onUpdateOptions()"
           >
-            <template slot="item.resourceNode.title" slot-scope="{ item }">
-              <div v-if="item['resourceNode']['resourceFile']">
-                <a data-fancybox="gallery"
-                   :href=" item['contentUrl'] ">
-                    <v-icon left color="primary">mdi-file</v-icon> {{ item['resourceNode']['title'] }}
+            <template
+              v-slot:cell(resourceNode.title)="row"
+            >
+              <div v-if="row.item['resourceNode']['resourceFile']">
+                <a
+                  data-fancybox="gallery"
+                  :href="row.item['contentUrl'] "
+                >
+                  <v-icon
+                    left
+                    color="primary"
+                  >mdi-file</v-icon> {{ row.item['resourceNode']['title'] }}
                 </a>
               </div>
               <div v-else>
-                <a @click="handleClick(item)">
-                    <v-icon left>mdi-folder</v-icon>{{ item['resourceNode']['title'] }}
+                <a @click="handleClick(row.item)">
+                  <v-icon left>mdi-folder</v-icon>{{ row.item['resourceNode']['title'] }}
                 </a>
               </div>
             </template>
 
-            <template slot="item.resourceNode.updatedAt" slot-scope="{ item }">
-              {{ item.resourceNode.updatedAt | moment("from", "now") }}
+            <template
+              v-slot:cell(resourceNode.updatedAt)="row"
+            >
+              {{ row.item.resourceNode.updatedAt | moment("from", "now") }}
             </template>
 
             <ActionCell
-              slot="item.action"
+              slot="action"
               slot-scope="props"
               :handle-show="() => showHandler(props.item)"
               :handle-edit="() => editHandler(props.item)"
               :handle-delete="() => deleteHandler(props.item)"
-            ></ActionCell>
-          </v-data-table>
-        </v-flex>
-      </v-layout>
-    </v-container>
+            />
+          </b-table>
+
+          <b-pagination
+            :v-model="options.page"
+            :total-rows="totalItems"
+            :per-page="options.itemsPerPage"
+            aria-controls="documents"
+            @input="onUpdateOptions()"
+          />
+        </b-col>
+      </b-row>
+    </b-container>
   </div>
 </template>
 
@@ -75,27 +95,28 @@ import Toolbar from '../../components/Toolbar';
 export default {
     name: 'DocumentsList',
     servicePrefix: 'Documents',
-    mixins: [ListMixin],
     components: {
         Toolbar,
         ActionCell,
         DocumentsFilterForm,
         DataFilter
     },
-    created() {
-        let nodeId = this.$route.params['node'];
-        this.findResourceNode('/api/resource_nodes/'+ nodeId);
-    },
+    mixins: [ListMixin],
     data() {
         return {
-            headers: [
-                {text: 'Title', value: 'resourceNode.title', sortable: true},
-                {text: 'Modified', value: 'resourceNode.updatedAt', sortable: true},
-                {text: 'Size', value: 'resourceNode.resourceFile.size', sortable: true},
-                {text: 'Actions', value: 'action', sortable: false}
+          fields: [
+                {label: 'Title', key: 'resourceNode.title', sortable: true},
+                {label: 'Modified', key: 'resourceNode.updatedAt', sortable: true},
+                {label: 'Size', key: 'resourceNode.resourceFile.size', sortable: true},
+                {label: 'Actions', key: 'action', sortable: false}
             ],
             selected: [],
         };
+    },
+    created() {
+        let nodeId = this.$route.params['node'];
+        this.findResourceNode('/api/resource_nodes/'+ nodeId);
+        this.onUpdateOptions();
     },
     computed: {
         // From crud.js list function

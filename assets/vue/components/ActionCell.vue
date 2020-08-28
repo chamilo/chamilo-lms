@@ -1,10 +1,30 @@
 <template>
   <div>
-    <v-row justify="space-around">
-      <v-icon v-if="handleShow" small class="mr-2" @click="handleShow">mdi-information</v-icon>
-      <v-icon v-if="handleEdit" small class="mr-2" @click="handleEdit">mdi-pencil</v-icon>
-      <v-icon v-if="handleDelete" small @click="confirmDelete = true">mdi-delete</v-icon>
-    </v-row>
+    <b-row>
+      <b-button
+        v-if="handleShow"
+        size="sm"
+        class="mr-2"
+        @click="handleShow"
+      >
+        Info
+      </b-button>
+      <b-button
+        v-if="handleEdit"
+        size="sm"
+        class="mr-2"
+        @click="handleEdit"
+      >
+        Edit
+      </b-button>
+      <b-button
+        v-if="handleDelete"
+        size="sm"
+        @click="confirmDelete = true"
+      >
+        Delete
+      </b-button>
+    </b-row>
     <ConfirmDelete
       v-if="handleDelete"
       :visible="confirmDelete"
@@ -22,11 +42,6 @@ export default {
   components: {
     ConfirmDelete
   },
-  data() {
-    return {
-      confirmDelete: false
-    };
-  },
   props: {
     handleShow: {
       type: Function,
@@ -40,6 +55,11 @@ export default {
       type: Function,
       required: false
     }
+  },
+  data() {
+    return {
+      confirmDelete: false
+    };
   }
 };
 </script>

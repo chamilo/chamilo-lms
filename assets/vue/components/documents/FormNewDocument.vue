@@ -1,29 +1,33 @@
 <template>
   <v-form>
-    <v-container fluid>
-      <v-row>
-        <v-col cols="12" sm="6" md="6">
-          <v-text-field
-                  v-model="item.title"
-                  :error-messages="titleErrors"
-                  :label="$t('Title')"
-                  required
-                  @input="$v.item.title.$touch()"
-                  @blur="$v.item.title.$touch()"
+    <b-container fluid>
+      <b-row>
+        <b-col
+          cols="12"
+          sm="6"
+          md="6"
+        >
+          <b-form-input
+            v-model="item.title"
+            :error-messages="titleErrors"
+            :placeholder="$t('Title')"
+            required
+            @input="$v.item.title.$touch()"
+            @blur="$v.item.title.$touch()"
           />
           <editor
-                  v-if="item.resourceNode && item.resourceNode.fileEditableText || item.newDocument"
-                  :error-messages="contentFileErrors"
-                  required
-                  v-model="item.contentFile"
-                  :init="{
-                    skin_url: '/build/libs/tinymce/skins/ui/oxide',
-                    content_css: '/build/libs/tinymce/skins/content/default/content.css',
-                    branding:false,
-                    height: 500,
-                    toolbar_mode: 'sliding',
-                    file_picker_callback : browser,
-                  /*file_picker_callback: function(callback, value, meta) {
+            v-if="item.resourceNode && item.resourceNode.fileEditableText || item.newDocument"
+            v-model="item.contentFile"
+            :error-messages="contentFileErrors"
+            required
+            :init="{
+              skin_url: '/build/libs/tinymce/skins/ui/oxide',
+              content_css: '/build/libs/tinymce/skins/content/default/content.css',
+              branding:false,
+              height: 500,
+              toolbar_mode: 'sliding',
+              file_picker_callback : browser,
+              /*file_picker_callback: function(callback, value, meta) {
                     // Provide file and text for the link dialog
                     if (meta.filetype == 'file') {
                       callback('mypage.html', {text: 'My text'});
@@ -39,25 +43,25 @@
                       callback('movie.mp4', {source2: 'alt.ogg', poster: 'image.jpg'});
                     }
                   },*/
-                  /*images_upload_handler: (blobInfo, success, failure) => {
+              /*images_upload_handler: (blobInfo, success, failure) => {
                     const img = 'data:image/jpeg;base64,' + blobInfo.base64();
                     //console.log(img);
                     success(img);
                   },*/
-                   //menubar: true,
-                   autosave_ask_before_unload: true,
-                   plugins: [
-                     'fullpage advlist autolink lists link image charmap print preview anchor',
-                     'searchreplace visualblocks code fullscreen',
-                     'insertdatetime media table paste wordcount'
-                   ],
-                   toolbar: 'undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media template link anchor code codesample | ltr rtl',
-                  }
-              "
+              //menubar: true,
+              autosave_ask_before_unload: true,
+              plugins: [
+                'fullpage advlist autolink lists link image charmap print preview anchor',
+                'searchreplace visualblocks code fullscreen',
+                'insertdatetime media table paste wordcount'
+              ],
+              toolbar: 'undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media template link anchor code codesample | ltr rtl',
+            }
+            "
           />
-        </v-col>
-      </v-row>
-    </v-container>
+        </b-col>
+      </b-row>
+    </b-container>
   </v-form>
 </template>
 

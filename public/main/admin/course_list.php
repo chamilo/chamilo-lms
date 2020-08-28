@@ -40,6 +40,7 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
 {
     $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
     $tblCourseCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
+    $tblCourseRelCategory = Database::get_main_table(TABLE_MAIN_COURSE_REL_CATEGORY);
 
     $select = "SELECT
                 course.code AS col0,
@@ -61,7 +62,8 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
     }
 
     $sql = "$select FROM $course_table course
-    		LEFT JOIN $tblCourseCategory category ON course.category_id = category.id ";
+        LEFT JOIN $tblCourseRelCategory course_rel_category ON course.id = course_rel_category.course_id
+        LEFT JOIN $tblCourseCategory category ON course_rel_category.course_category_id = category.id ";
 
     if ((api_is_platform_admin() || api_is_session_admin()) &&
         api_is_multiple_url_enabled() && -1 != api_get_current_access_url_id()

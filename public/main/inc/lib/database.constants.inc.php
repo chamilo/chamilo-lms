@@ -23,6 +23,7 @@ define('TABLE_MAIN_COURSE_USER', 'course_rel_user');
 define('TABLE_MAIN_COURSE_CATALOGUE_USER', 'course_rel_user_catalogue');
 define('TABLE_MAIN_CLASS_USER', 'class_user');
 define('TABLE_MAIN_CATEGORY', 'course_category');
+define('TABLE_MAIN_COURSE_REL_CATEGORY', 'course_rel_category');
 define('TABLE_MAIN_SYSTEM_ANNOUNCEMENTS', 'sys_announcement');
 define('TABLE_MAIN_SYSTEM_ANNOUNCEMENTS_GROUPS', 'announcement_rel_group');
 define('TABLE_MAIN_LANGUAGE', 'language');

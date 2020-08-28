@@ -80,6 +80,31 @@
           aria-controls="documents"
           @input="onUpdateOptions(options)"
         />
+
+        <b-col
+          sm="5"
+          md="6"
+          class="my-1"
+        >
+          <b-form-group
+            label="Per page"
+            label-cols-sm="6"
+            label-cols-md="4"
+            label-cols-lg="3"
+            label-align-sm="right"
+            label-size="sm"
+            label-for="perPageSelect"
+            class="mb-0"
+          >
+            <b-form-select
+              id="perPageSelect"
+              v-model="options.itemsPerPage"
+              size="sm"
+              :options="pageOptions"
+              @input="onUpdateOptions(options)"
+            />
+          </b-form-group>
+        </b-col>
       </b-col>
     </b-row>
   </div>
@@ -113,6 +138,7 @@ export default {
                 {label: 'Actions', key: 'action', sortable: false}
             ],
             selected: [],
+            pageOptions: [5, 10, 15, 20],
         };
     },
     created() {

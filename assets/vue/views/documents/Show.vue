@@ -1,20 +1,28 @@
 <template>
   <div>
-    <Toolbar :handle-edit="editHandler" :handle-delete="del">
+    <Toolbar
+      :handle-edit="editHandler"
+      :handle-delete="del"
+    >
       <template slot="left">
-        <v-toolbar-title v-if="item">{{
-          `${$options.servicePrefix} ${item['@id']}`
-        }}</v-toolbar-title>
+        <v-toolbar-title v-if="item">
+          {{
+            `${$options.servicePrefix} ${item['@id']}`
+          }}
+        </v-toolbar-title>
       </template>
     </Toolbar>
 
-    <br />
+    <br>
 
-    <div v-if="item" class="table-documents-show">
+    <div
+      v-if="item"
+      class="table-documents-show"
+    >
       <div v-if="item['resourceLinkList']">
         <ul>
           <li
-                  v-for="link in item['resourceLinkList']"
+            v-for="link in item['resourceLinkList']"
           >
             Status: {{ link.visibilityName }}
             <div v-if="link['course']">
@@ -26,7 +34,7 @@
           </li>
         </ul>
       </div>
-      <v-simple-table>
+      <b-table-simple>
         <template slot="default">
           <thead>
             <tr>
@@ -37,15 +45,14 @@
             </tr>
           </thead>
           <tbody>
-          <tr>
-            <td><strong>{{ $t('Author') }}</strong></td>
-            <td>
-              {{ item['resourceNode'].creator.username }}
-            </td>
-            <td><strong></strong></td>
-            <td>
-            </td>
-          </tr>
+            <tr>
+              <td><strong>{{ $t('Author') }}</strong></td>
+              <td>
+                {{ item['resourceNode'].creator.username }}
+              </td>
+              <td><strong /></td>
+              <td />
+            </tr>
             <tr>
               <td><strong>{{ $t('title') }}</strong></td>
               <td>
@@ -60,27 +67,27 @@
             <tr>
               <td><strong>{{ $t('Created at') }}</strong></td>
               <td>
-                  {{ item['resourceNode'] && item['resourceNode'].createdAt | moment("from", "now") }}
+                {{ item['resourceNode'] && item['resourceNode'].createdAt | moment("from", "now") }}
               </td>
-              <td></td>
+              <td />
             </tr>
             <tr>
               <td><strong>{{ $t('file') }}</strong></td>
               <td>
                 <div v-if="item['resourceNode']['resourceFile']">
-                  <v-img
-                          v-bind:src=" item['contentUrl'] "
-                  ></v-img>
+                  <b-img
+                    :src=" item['contentUrl'] "
+                  />
                 </div>
                 <div v-else>
                   -
                 </div>
               </td>
-              <td></td>
+              <td />
             </tr>
           </tbody>
         </template>
-      </v-simple-table>
+      </b-table-simple>
     </div>
     <Loading :visible="isLoading" />
   </div>

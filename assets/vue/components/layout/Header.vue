@@ -5,7 +5,7 @@
     variant="info"
     sticky
   >
-    <b-navbar-brand href="#">
+    <b-navbar-brand href="/">
       Chamilo
     </b-navbar-brand>
 

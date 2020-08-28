@@ -3,6 +3,7 @@
     <b-row>
       <b-button
         v-if="handleShow"
+        variant="info"
         size="sm"
         class="mr-2"
         @click="handleShow"
@@ -19,12 +20,14 @@
       </b-button>
       <b-button
         v-if="handleDelete"
+        variant="danger"
         size="sm"
         @click="confirmDelete = true"
       >
         Delete
       </b-button>
     </b-row>
+
     <ConfirmDelete
       v-if="handleDelete"
       :visible="confirmDelete"

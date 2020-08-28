@@ -56,9 +56,7 @@
         rounded
         @click="addItem"
       >
-        <v-icon left>
-          mdi-folder-plus-outline
-        </v-icon> New folder
+        <font-awesome-icon icon="folder-plus" /> New folder
       </b-button>
 
       <b-button
@@ -67,9 +65,7 @@
         rounded
         @click="addDocument"
       >
-        <v-icon left>
-          mdi-file-plus-outline
-        </v-icon>New document
+        <font-awesome-icon icon="file-alt" /> New document
       </b-button>
 
       <b-button
@@ -78,9 +74,7 @@
         rounded
         @click="uploadDocument"
       >
-        <v-icon left>
-          mdi-cloud-upload
-        </v-icon>File upload
+        <font-awesome-icon icon="cloud-upload-alt" /> File upload
       </b-button>
     </div>
 

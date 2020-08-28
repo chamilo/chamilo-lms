@@ -5,81 +5,83 @@
       :handle-add-document="addDocumentHandler"
       :handle-upload-document="uploadDocumentHandler"
     />
-    <b-container fluid>
-      <b-row>
-        <b-col>
-          <DataFilter
-            :handle-filter="onSendFilter"
-            :handle-reset="resetFilter"
+    <b-row>
+      <b-col>
+        <DataFilter
+          :handle-filter="onSendFilter"
+          :handle-reset="resetFilter"
+        >
+          <DocumentsFilterForm
+            ref="filterForm"
+            slot="filter"
+            :values="filters"
+          />
+        </DataFilter>
+        <br>
+        <b-table
+          id="documents"
+          striped
+          hover
+          selectable
+          select-mode="single"
+
+          :fields="fields"
+          :items="items"
+          :per-page.sync="options.itemsPerPage"
+          :current-page="options.page"
+          :sort-desc.sync="options.sortDesc"
+          :busy.sync="isLoading"
+          :filters="filters"
+          primary-key="iid"
+        >
+          <template
+            v-slot:cell(resourceNode.title)="row"
           >
-            <DocumentsFilterForm
-              ref="filterForm"
-              slot="filter"
-              :values="filters"
-            />
-          </DataFilter>
-          <br>
-          <b-table
-            id="documents"
-            striped
-            hover
+            <div v-if="row.item['resourceNode']['resourceFile']">
+              <a
+                data-fancybox="gallery"
+                :href="row.item['contentUrl'] "
+              >
+                <font-awesome-icon icon="file" />
+                {{ row.item['resourceNode']['title'] }}
+              </a>
+            </div>
+            <div v-else>
+              <a @click="handleClick(row.item)">
+                <font-awesome-icon icon="folder" />
+                {{ row.item['resourceNode']['title'] }}
+              </a>
+            </div>
+          </template>
 
-            :fields="fields"
-            :items="items"
-            :per-page="0"
-            :current-page="options.page"
-            :sort-desc.sync="options.sortDesc"
-            :busy.sync="isLoading"
-            :filters="filters"
-            primary-key="iid"
-            @input="onUpdateOptions()"
+          <template
+            v-slot:cell(resourceNode.updatedAt)="row"
           >
-            <template
-              v-slot:cell(resourceNode.title)="row"
-            >
-              <div v-if="row.item['resourceNode']['resourceFile']">
-                <a
-                  data-fancybox="gallery"
-                  :href="row.item['contentUrl'] "
-                >
-                  <v-icon
-                    left
-                    color="primary"
-                  >mdi-file</v-icon> {{ row.item['resourceNode']['title'] }}
-                </a>
-              </div>
-              <div v-else>
-                <a @click="handleClick(row.item)">
-                  <v-icon left>mdi-folder</v-icon>{{ row.item['resourceNode']['title'] }}
-                </a>
-              </div>
-            </template>
+            {{ row.item.resourceNode.updatedAt | moment("from", "now") }}
+          </template>
 
-            <template
-              v-slot:cell(resourceNode.updatedAt)="row"
-            >
-              {{ row.item.resourceNode.updatedAt | moment("from", "now") }}
-            </template>
-
+          <template
+            v-slot:cell(action)="row"
+          >
             <ActionCell
               slot="action"
-              slot-scope="props"
-              :handle-show="() => showHandler(props.item)"
-              :handle-edit="() => editHandler(props.item)"
-              :handle-delete="() => deleteHandler(props.item)"
+              :row="row"
+              :handle-show="() => showHandler(row.item)"
+              :handle-edit="() => editHandler(row.item)"
+              :handle-delete="() => deleteHandler(row.item)"
             />
-          </b-table>
+          </template>
+        </b-table>
 
-          <b-pagination
-            :v-model="options.page"
-            :total-rows="totalItems"
-            :per-page="options.itemsPerPage"
-            aria-controls="documents"
-            @input="onUpdateOptions()"
-          />
-        </b-col>
-      </b-row>
-    </b-container>
+        <b-pagination
+          v-model="options.page"
+          :total-rows="totalItems"
+          :per-page="options.itemsPerPage"
+          aria-controls="documents"
+          @input="onUpdateOptions(options)"
+        />
+      </b-col>
+    </b-row>
   </div>
 </template>
 
@@ -116,7 +118,7 @@ export default {
     created() {
         let nodeId = this.$route.params['node'];
         this.findResourceNode('/api/resource_nodes/'+ nodeId);
-        this.onUpdateOptions();
+        this.onUpdateOptions(this.options);
     },
     computed: {
         // From crud.js list function

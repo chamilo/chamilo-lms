@@ -21,6 +21,8 @@
         </b-col>
 
         <b-col cols="10">
+
+          <Breadcrumb layout-class="pl-3 py-3" />
           <router-view />
           <div
             id="legacy_content"
@@ -121,11 +123,13 @@ import Footer from "./components/layout/Footer";
             let payload = {isAuthenticated: isAuthenticated, user: user};
             this.$store.dispatch("security/onRefresh", payload);
 
-            let messages = JSON.parse(this.$parent.$el.attributes["data-messages"].value);
-            if (messages) {
-              Array.from(messages).forEach(element =>
-                  this.showMessage(element)
-              );
+            if (this.$parent.$el.attributes["data-messages"]) {
+              let messages = JSON.parse(this.$parent.$el.attributes["data-messages"].value);
+                if (messages) {
+                  Array.from(messages).forEach(element =>
+                      this.showMessage(element)
+                  );
+                }
             }
 
             axios.interceptors.response.use(undefined, (err) => {

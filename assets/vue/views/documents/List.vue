@@ -29,28 +29,24 @@
       <b-col>
         <b-pagination
           v-model="options.page"
-          align="right"
           :total-rows="totalItems"
           :per-page="options.itemsPerPage"
           aria-controls="documents"
+          align="right"
+          size="sm"
           @input="onUpdateOptions(options)"
         />
       </b-col>
     </b-row>
     <b-row>
       <b-col>
-
         <b-table
           id="documents"
-          class="table table-bordered data_table"
           striped
-          small
           hover
-          selectable
-          select-mode="single"
           :fields="fields"
           :items="items"
-          :per-page.sync="options.itemsPerPage"
+          :per-page="0"
           :current-page="options.page"
           :sort-desc.sync="options.sortDesc"
           :busy.sync="isLoading"

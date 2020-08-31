@@ -1,7 +1,5 @@
 var Encore = require('@symfony/webpack-encore');
 const CopyPlugin = require('copy-webpack-plugin');
-//const FileManagerPlugin = require('filemanager-webpack-plugin');
-//var dotEnv = require('dotenv');
 
 Encore
     .setOutputPath('public/build/')

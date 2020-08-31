@@ -30,29 +30,32 @@ class CourseCategory
     /**
      * Get category details from a simple category code.
      *
-     * @param string $categoryCode The literal category code
+     * @param string|null $categoryCode The literal category code
      *
      * @return array
      */
-    public static function getCategory($categoryCode)
+    public static function getCategory(string $categoryCode = null)
     {
-        $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
-        $categoryCode = Database::escape_string($categoryCode);
-        $sql = "SELECT * FROM $table WHERE code ='$categoryCode'";
-        $result = Database::query($sql);
-        if (Database::num_rows($result)) {
-            $category = Database::fetch_array($result, 'ASSOC');
-            if ($category) {
-                // Get access url id
-                $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
-                $sql = "SELECT * FROM $table WHERE course_category_id = ".$category['id'];
-                $result = Database::query($sql);
-                $result = Database::fetch_array($result);
-                if ($result) {
-                    $category['access_url_id'] = $result['access_url_id'];
-                }
+        if (!empty($categoryCode)) {
+            $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
+            $categoryCode = Database::escape_string($categoryCode);
+            $sql = "SELECT * FROM $table WHERE code ='$categoryCode'";
+            $result = Database::query($sql);
 
-                return $category;
+            if (Database::num_rows($result)) {
+                $category = Database::fetch_array($result, 'ASSOC');
+                if ($category) {
+                    // Get access url id
+                    $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
+                    $sql = "SELECT * FROM $table WHERE course_category_id = ".$category['id'];
+                    $result = Database::query($sql);
+                    $result = Database::fetch_array($result);
+                    if ($result) {
+                        $category['access_url_id'] = $result['access_url_id'];
+                    }
+
+                    return $category;
+                }
             }
         }
 
@@ -68,6 +71,7 @@ class CourseCategory
     {
         $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
+        $tbl_course_rel_category = Database::get_main_table(TABLE_MAIN_COURSE_REL_CATEGORY);
         $category = (int) $category;
         $conditions = null;
 
@@ -80,6 +84,7 @@ class CourseCategory
         }
 
         $parentIdCondition = " AND (t1.parent_id IS NULL OR t1.parent_id = '' )";
+
         if ($category) {
             $parentIdCondition = " AND t1.parent_id = $category ";
         }
@@ -90,14 +95,16 @@ class CourseCategory
                 t1.parent_id,
                 t1.tree_pos,
                 t1.children_count,
-                COUNT(DISTINCT t3.code) AS nbr_courses,
+                COUNT(DISTINCT t4.code) AS nbr_courses,
                 a.access_url_id
                 FROM $tbl_category t1
                 $conditions
                 LEFT JOIN $tbl_category t2
                 ON t1.id = t2.parent_id
-                LEFT JOIN $tbl_course t3
-                ON t3.category_id = t1.id
+                LEFT JOIN $tbl_course_rel_category t3
+                ON t1.id = t3.course_category_id
+                LEFT JOIN $tbl_course t4
+                ON t3.course_id = t4.id
                 WHERE
                     1 = 1
                     $parentIdCondition
@@ -107,12 +114,12 @@ class CourseCategory
                          t1.parent_id,
                          t1.tree_pos,
                          t1.children_count
-                ORDER BY t1.tree_pos";
+                ORDER BY t1.tree_pos
+        ";
 
         $result = Database::query($sql);
-        $categories = Database::store_result($result, 'ASSOC');
 
-        return $categories;
+        return Database::store_result($result, 'ASSOC');
     }
 
     /**
@@ -136,25 +143,25 @@ class CourseCategory
         }
 
         $sql = "SELECT
-                t1.id, 
-                t1.name, 
-                t1.code, 
-                t1.parent_id, 
-                t1.tree_pos, 
-                t1.children_count, 
-                COUNT(DISTINCT t3.code) AS number_courses 
-                FROM $tbl_category t1 
+                t1.id,
+                t1.name,
+                t1.code,
+                t1.parent_id,
+                t1.tree_pos,
+                t1.children_count,
+                COUNT(DISTINCT t3.code) AS number_courses
+                FROM $tbl_category t1
                 $conditions
-                LEFT JOIN $tbl_course t3 
+                LEFT JOIN $tbl_course t3
                 ON t3.category_id=t1.id
                 WHERE 1=1
-                    $whereCondition 
+                    $whereCondition
                 GROUP BY
-                    t1.name, 
-                    t1.code, 
-                    t1.parent_id, 
-                    t1.tree_pos, 
-                    t1.children_count 
+                    t1.name,
+                    t1.code,
+                    t1.parent_id,
+                    t1.tree_pos,
+                    t1.children_count
                 ORDER BY t1.parent_id, t1.tree_pos";
 
         $result = Database::query($sql);
@@ -301,9 +308,9 @@ class CourseCategory
 
         $code = CourseManager::generate_course_code($code);
         // Updating category
-        $sql = "UPDATE $tbl_category SET 
-                    name='$name', 
-                    code='$code', 
+        $sql = "UPDATE $tbl_category SET
+                    name='$name',
+                    code='$code',
                     auth_course_child = '$canHaveCourses'
                 WHERE code = '$old_code'";
         Database::query($sql);
@@ -388,14 +395,14 @@ class CourseCategory
         if (empty($categoryId)) {
             return 0;
         }
-        $sql = "SELECT id, code FROM $table 
+        $sql = "SELECT id, code FROM $table
                 WHERE parent_id = $categoryId";
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
             $count += self::courseCategoryChildrenCount($row['id']);
         }
-        $sql = "UPDATE $table SET 
-                    children_count = $count 
+        $sql = "UPDATE $table SET
+                    children_count = $count
                 WHERE id = $categoryId";
         Database::query($sql);
 
@@ -411,7 +418,7 @@ class CourseCategory
     {
         $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
         $categoryCode = Database::escape_string($categoryCode);
-        $sql = "SELECT code, id FROM $table 
+        $sql = "SELECT code, id FROM $table
                 WHERE parent_id = '$categoryCode'";
         $result = Database::query($sql);
         $children = [];
@@ -437,7 +444,7 @@ class CourseCategory
 
         $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
         $categoryCode = Database::escape_string($categoryCode);
-        $sql = "SELECT code, parent_id 
+        $sql = "SELECT code, parent_id
                 FROM $table
                 WHERE code = '$categoryCode'";
 
@@ -476,6 +483,8 @@ class CourseCategory
     }
 
     /**
+     * @param array
+     *
      * @return string
      */
     public static function listCategories(array $categorySource = [])
@@ -636,15 +645,15 @@ class CourseCategory
         $searchFilter = '';
         if (!empty($searchTerm)) {
             $searchFilter = ' AND (
-                course.code LIKE "%'.$searchTerm.'%" OR 
-                course.title LIKE "%'.$searchTerm.'%" OR 
+                course.code LIKE "%'.$searchTerm.'%" OR
+                course.title LIKE "%'.$searchTerm.'%" OR
                 course.tutor_name LIKE "%'.$searchTerm.'%"
             ) ';
         }
 
         $urlCondition = ' url_rel_course.access_url_id = '.api_get_current_access_url_id().' AND';
         $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-        $sql = "SELECT count(course.id) as count 
+        $sql = "SELECT count(course.id) as count
                 FROM $tbl_course as course
                 INNER JOIN $tbl_url_rel_course as url_rel_course
                 ON (url_rel_course.c_id = course.id)

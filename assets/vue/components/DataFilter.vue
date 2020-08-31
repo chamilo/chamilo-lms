@@ -1,10 +1,12 @@
 <template>
   <span>
-
     <b-button
       v-b-toggle.collapse-1
       variant="primary"
-    >{{ $t('Filters') }}</b-button>
+    >
+      <font-awesome-icon icon="search" />
+      {{ $t('Filters') }}
+    </b-button>
     <b-collapse
       id="collapse-1"
       class="mt-2"
@@ -12,7 +14,7 @@
       <b-card>
         <p class="card-text">
           <slot name="filter" />
-
+          <br>
           <b-button
             variant="primary"
             @click="handleFilter"

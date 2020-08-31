@@ -1,11 +1,16 @@
 <template>
-  <div class="documents-list">
+  <span class="documents-list">
     <Toolbar
       :handle-add="addHandler"
       :handle-add-document="addDocumentHandler"
       :handle-upload-document="uploadDocumentHandler"
+
+      :filters="filters"
+      :on-send-filter="onSendFilter"
+      :reset-filter="resetFilter"
     />
 
+    <br>
     <b-row class="text-center">
       <b-col>
         <form class="form-inline">
@@ -34,25 +39,15 @@
     </b-row>
     <b-row>
       <b-col>
-        <DataFilter
-          :handle-filter="onSendFilter"
-          :handle-reset="resetFilter"
-        >
-          <DocumentsFilterForm
-            ref="filterForm"
-            slot="filter"
-            :values="filters"
-          />
-        </DataFilter>
-        <br>
+
         <b-table
           id="documents"
           class="table table-bordered data_table"
           striped
+          small
           hover
           selectable
           select-mode="single"
-
           :fields="fields"
           :items="items"
           :per-page.sync="options.itemsPerPage"
@@ -102,7 +97,7 @@
         </b-table>
       </b-col>
     </b-row>
-  </div>
+  </span>
 </template>
 
 <script>

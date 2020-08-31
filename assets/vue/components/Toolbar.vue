@@ -1,7 +1,5 @@
 <template>
   <div class="">
-    <br>
-
     <slot name="left" />
 
     <b-button
@@ -75,6 +73,18 @@
       <font-awesome-icon icon="cloud-upload-alt" /> File upload
     </b-button>
 
+    <DataFilter
+      v-if="filters"
+      :handle-filter="onSendFilter"
+      :handle-reset="resetFilter"
+    >
+      <DocumentsFilterForm
+        ref="filterForm"
+        slot="filter"
+        :values="filters"
+      />
+    </DataFilter>
+
     <ConfirmDelete
       v-if="handleDelete"
       :visible="confirmDelete"
@@ -86,13 +96,24 @@
 
 <script>
 import ConfirmDelete from './ConfirmDelete';
+import DocumentsFilterForm from './documents/Filter';
+import DataFilter from './DataFilter';
 
 export default {
   name: 'Toolbar',
   components: {
-    ConfirmDelete
+    ConfirmDelete,
+    DocumentsFilterForm,
+    DataFilter
   },
   props: {
+    filters: {
+      type: Object,
+    },
+    handleFilter: {
+      type: Function,
+      required: false
+    },
     handleList: {
       type: Function,
       required: false
@@ -118,6 +139,14 @@ export default {
       required: false
     },
     handleAddDocument: {
+      type: Function,
+      required: false
+    },
+    onSendFilter: {
+      type: Function,
+      required: false
+    },
+    resetFilter: {
       type: Function,
       required: false
     },

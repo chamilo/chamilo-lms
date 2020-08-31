@@ -5,7 +5,6 @@
       :values="item"
       :errors="violations"
     />
-
     <Toolbar
       :handle-submit="onSendForm"
       :handle-reset="resetForm"

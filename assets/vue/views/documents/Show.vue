@@ -12,9 +12,7 @@
         </v-toolbar-title>
       </template>
     </Toolbar>
-
     <br>
-
     <div
       v-if="item"
       class="table-documents-show"
@@ -36,14 +34,6 @@
       </div>
       <b-table-simple>
         <template slot="default">
-          <thead>
-            <tr>
-              <th>Field</th>
-              <th>Value</th>
-              <th>Field</th>
-              <th>Value</th>
-            </tr>
-          </thead>
           <tbody>
             <tr>
               <td><strong>{{ $t('Author') }}</strong></td>
@@ -54,12 +44,13 @@
               <td />
             </tr>
             <tr>
-              <td><strong>{{ $t('title') }}</strong></td>
+              <td><strong>{{ $t('Title') }}</strong></td>
               <td>
                 {{ item['title'] }}
               </td>
-
-              <td><strong>{{ $t('comment') }}</strong></td>
+            </tr>
+            <tr>
+              <td><strong>{{ $t('Comment') }}</strong></td>
               <td>
                 {{ item['comment'] }}
               </td>
@@ -71,16 +62,14 @@
               </td>
               <td />
             </tr>
-            <tr>
-              <td><strong>{{ $t('file') }}</strong></td>
+
+            <tr v-if="item['resourceNode']['resourceFile']">
+              <td><strong>{{ $t('File') }}</strong></td>
               <td>
-                <div v-if="item['resourceNode']['resourceFile']">
+                <div>
                   <b-img
-                    :src=" item['contentUrl'] "
+                    :src="item['contentUrl'] + '?w=300'"
                   />
-                </div>
-                <div v-else>
-                  -
                 </div>
               </td>
               <td />

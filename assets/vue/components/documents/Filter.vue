@@ -1,18 +1,13 @@
 <template>
-  <v-container fluid>
-    <v-row>
-      <v-col cols="12" sm="6" md="6">
-        <v-text-field
-          v-model="item.title"
-          :label="$t('title')"
-          type="text"
-        />
-      </v-col>
-
-      <v-row cols="12"></v-row>
-    </v-row>
-
-  </v-container>
+  <b-row>
+    <b-col cols="12">
+      <b-form-input
+        v-model="item.title"
+        :placeholder="$t('title')"
+        type="text"
+      />
+    </b-col>
+  </b-row>
 </template>
 
 <script>
@@ -28,12 +23,12 @@ export default {
   data() {
     return {};
   },
-  mounted() {
-  },
   computed: {
     item() {
       return this.initialValues || this.values;
     }
+  },
+  mounted() {
   },
   methods: {
   }

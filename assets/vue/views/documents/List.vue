@@ -1,66 +1,99 @@
 <template>
-  <div class="documents-list">
+  <span class="documents-list">
     <Toolbar
-            :handle-add="addHandler"
-            :handle-add-document="addDocumentHandler"
-            :handle-upload-document="uploadDocumentHandler"
+      :handle-add="addHandler"
+      :handle-add-document="addDocumentHandler"
+      :handle-upload-document="uploadDocumentHandler"
+
+      :filters="filters"
+      :on-send-filter="onSendFilter"
+      :reset-filter="resetFilter"
     />
-    <v-container grid-list-xl fluid>
-      <v-layout row wrap>
-        <v-flex lg12>
-          <DataFilter :handle-filter="onSendFilter" :handle-reset="resetFilter">
-            <DocumentsFilterForm
-              ref="filterForm"
-              :values="filters"
-              slot="filter"
+
+    <br>
+    <b-row class="text-center">
+      <b-col>
+        <form class="form-inline">
+          <div class="form-group mb-2">
+            <b-form-select
+              id="perPageSelect"
+              v-model="options.itemsPerPage"
+              size="sm"
+              :options="pageOptions"
+              @input="onUpdateOptions(options)"
             />
-          </DataFilter>
-          <br />
-          <v-data-table
-            dense
-            v-model="selected"
-            :headers="headers"
-            :items="items"
-            :items-per-page.sync="options.itemsPerPage"
-            :loading="isLoading"
-            :loading-text="$t('Loading...')"
-            :options.sync="options"
-            :server-items-length="totalItems"
-            class="elevation-1"
-            item-key="@id"
-            show-select
-            @update:options="onUpdateOptions"
+          </div>
+        </form>
+      </b-col>
+      <b-col />
+      <b-col>
+        <b-pagination
+          v-model="options.page"
+          :total-rows="totalItems"
+          :per-page="options.itemsPerPage"
+          aria-controls="documents"
+          align="right"
+          size="sm"
+          @input="onUpdateOptions(options)"
+        />
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col>
+        <b-table
+          id="documents"
+          striped
+          hover
+          :fields="fields"
+          :items="items"
+          :per-page="0"
+          :current-page="options.page"
+          :sort-desc.sync="options.sortDesc"
+          :busy.sync="isLoading"
+          :filters="filters"
+          primary-key="iid"
+        >
+          <template
+            v-slot:cell(resourceNode.title)="row"
           >
-            <template slot="item.resourceNode.title" slot-scope="{ item }">
-              <div v-if="item['resourceNode']['resourceFile']">
-                <a data-fancybox="gallery"
-                   :href=" item['contentUrl'] ">
-                    <v-icon left color="primary">mdi-file</v-icon> {{ item['resourceNode']['title'] }}
-                </a>
-              </div>
-              <div v-else>
-                <a @click="handleClick(item)">
-                    <v-icon left>mdi-folder</v-icon>{{ item['resourceNode']['title'] }}
-                </a>
-              </div>
-            </template>
+            <div v-if="row.item['resourceNode']['resourceFile']">
+              <a
+                data-fancybox="gallery"
+                :href="row.item['contentUrl'] "
+              >
+                <font-awesome-icon icon="file" />
+                {{ row.item['resourceNode']['title'] }}
+              </a>
+            </div>
+            <div v-else>
+              <a @click="handleClick(row.item)">
+                <font-awesome-icon icon="folder" />
+                {{ row.item['resourceNode']['title'] }}
+              </a>
+            </div>
+          </template>
 
-            <template slot="item.resourceNode.updatedAt" slot-scope="{ item }">
-              {{ item.resourceNode.updatedAt | moment("from", "now") }}
-            </template>
+          <template
+            v-slot:cell(resourceNode.updatedAt)="row"
+          >
+            {{ row.item.resourceNode.updatedAt | moment("from", "now") }}
+          </template>
 
+          <template
+            v-slot:cell(action)="row"
+          >
             <ActionCell
-              slot="item.action"
-              slot-scope="props"
-              :handle-show="() => showHandler(props.item)"
-              :handle-edit="() => editHandler(props.item)"
-              :handle-delete="() => deleteHandler(props.item)"
-            ></ActionCell>
-          </v-data-table>
-        </v-flex>
-      </v-layout>
-    </v-container>
-  </div>
+              slot="action"
+              :row="row"
+              :handle-show="() => showHandler(row.item)"
+              :handle-edit="() => editHandler(row.item)"
+              :handle-delete="() => deleteHandler(row.item)"
+            />
+          </template>
+        </b-table>
+      </b-col>
+    </b-row>
+  </span>
 </template>
 
 <script>
@@ -75,27 +108,29 @@ import Toolbar from '../../components/Toolbar';
 export default {
     name: 'DocumentsList',
     servicePrefix: 'Documents',
-    mixins: [ListMixin],
     components: {
         Toolbar,
         ActionCell,
         DocumentsFilterForm,
         DataFilter
     },
+    mixins: [ListMixin],
+    data() {
+        return {
+          fields: [
+                {label: 'Title', key: 'resourceNode.title', sortable: true},
+                {label: 'Modified', key: 'resourceNode.updatedAt', sortable: true},
+                {label: 'Size', key: 'resourceNode.resourceFile.size', sortable: true},
+                {label: 'Actions', key: 'action', sortable: false}
+            ],
+            selected: [],
+            pageOptions: [5, 10, 15, 20],
+        };
+    },
     created() {
         let nodeId = this.$route.params['node'];
         this.findResourceNode('/api/resource_nodes/'+ nodeId);
-    },
-    data() {
-        return {
-            headers: [
-                {text: 'Title', value: 'resourceNode.title', sortable: true},
-                {text: 'Modified', value: 'resourceNode.updatedAt', sortable: true},
-                {text: 'Size', value: 'resourceNode.resourceFile.size', sortable: true},
-                {text: 'Actions', value: 'action', sortable: false}
-            ],
-            selected: [],
-        };
+        this.onUpdateOptions(this.options);
     },
     computed: {
         // From crud.js list function

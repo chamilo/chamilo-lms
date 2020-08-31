@@ -71,10 +71,10 @@
         });
     </script>
 
-    <div class="grid-tools">
+    <div class="grid-tools row">
         {% for category, items in tools %}
             {% for item in items %}
-                <div class="items-tools">
+                <div class="items-tools col">
                     <div class="tools mt-3 mb-3">
                         <div class="big_icon">
                             <a href=" {{ url('chamilo_core_course_redirect_tool', { 'toolId': item.iid, 'cid': course.id })|raw }}" >

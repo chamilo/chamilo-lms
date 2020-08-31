@@ -9,7 +9,7 @@ export default {
       options: {
         sortBy: [],
         page: 1,
-        itemsPerPage: 10
+        itemsPerPage: 15
       },
       filters: {}
     };
@@ -42,7 +42,6 @@ export default {
       let params = {
         ...this.filters
       };
-
       if (itemsPerPage > 0) {
         params = { ...params, itemsPerPage, page };
       }

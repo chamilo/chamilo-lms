@@ -1,20 +1,20 @@
 <template>
   <div>
+    <DocumentsForm
+      v-if="item"
+      ref="updateForm"
+      :values="item"
+      :errors="violations"
+    />
     <Toolbar
       :handle-submit="onSendForm"
       :handle-reset="resetForm"
       :handle-delete="del"
     />
-    <DocumentsForm
-      ref="updateForm"
-      v-if="item"
-      :values="item"
-      :errors="violations"
-    />
     <ResourceLinkForm
-            ref="resourceLinkForm"
-            v-if="item"
-            :values="item"
+      v-if="item"
+      ref="resourceLinkForm"
+      :values="item"
     />
 
     <Loading :visible="isLoading || deleteLoading" />
@@ -35,13 +35,13 @@ const servicePrefix = 'Documents';
 export default {
   name: 'DocumentsUpdate',
   servicePrefix,
-  mixins: [UpdateMixin],
   components: {
     Loading,
     Toolbar,
     DocumentsForm,
     ResourceLinkForm
   },
+  mixins: [UpdateMixin],
 
   computed: {
     ...mapFields('documents', {

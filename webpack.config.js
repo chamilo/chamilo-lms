@@ -1,5 +1,4 @@
 var Encore = require('@symfony/webpack-encore');
-const prefixer = require('postcss-prefix-selector')
 const CopyPlugin = require('copy-webpack-plugin');
 //const FileManagerPlugin = require('filemanager-webpack-plugin');
 //var dotEnv = require('dotenv');
@@ -172,4 +171,14 @@ themes.forEach(function (theme) {
 //     }
 // }));
 
-module.exports = Encore.getWebpackConfig();
+//module.exports = Encore.getWebpackConfig();
+
+const config = Encore.getWebpackConfig();
+
+config.resolve.alias =  {
+    // If using the runtime only build
+    vue$: 'vue/dist/vue.runtime.esm.js' // 'vue/dist/vue.runtime.common.js' for webpack 1
+    // Or if using full build of Vue (runtime + compiler)
+    // vue$: 'vue/dist/vue.esm.js'      // 'vue/dist/vue.common.js' for webpack 1
+};
+module.exports = config;

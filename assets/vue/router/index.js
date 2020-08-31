@@ -17,7 +17,7 @@ let router = new VueRouter({
     mode: "history",
     routes: [
         { path: "/", name: "Index"},
-        { path: "/login", component: Login },
+        { path: "/login", name: "Login", component: Login },
         { path: "/courses", name: "MyCourses", component: MyCourseList },
         { path: "/sessions", name: "MySessions", component: MySessionList },
         courseRoutes,

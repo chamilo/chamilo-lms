@@ -44,7 +44,7 @@
                     {% include '@ChamiloCore/FlashMessage/render.html.twig' %}
             {% endblock %}
 
-            <section class="container-fluid">
+{#            <section class="container-fluid">#}
                 {% if introduction is defined %}
                     {{ introduction }}
                 {% endif %}
@@ -56,7 +56,7 @@
             {% block content %}
                 {{ content }}
             {% endblock %}
-            </section>
+{#            </section>#}
         {% endautoescape %}
     </section>
 

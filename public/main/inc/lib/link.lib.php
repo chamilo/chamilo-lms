@@ -151,6 +151,7 @@ class Link extends Model
                 ;
             }
 
+            $repo->getEntityManager()->persist($link);
             $repo->getEntityManager()->flush();
             $link_id = $link->getIid();
 
@@ -340,6 +341,7 @@ class Link extends Model
             ->addCourseLink($courseEntity, $sessionEntity)
         ;
 
+        $repo->getEntityManager()->persist($category);
         $repo->getEntityManager()->flush();
         $linkId = $category->getIid();
 
@@ -375,27 +377,6 @@ class Link extends Model
         }
 
         return false;
-
-        // First we delete the category itself and afterwards all the links of this category.
-        $sql = "DELETE FROM ".$tbl_categories."
-                        WHERE c_id = $course_id AND id='".$id."'";
-        Database:: query($sql);
-
-        $sql = "DELETE FROM ".$tbl_link."
-                        WHERE c_id = $course_id AND category_id='".$id."'";
-        Database:: query($sql);
-
-        api_item_property_update(
-            $courseInfo,
-            TOOL_LINK_CATEGORY,
-            $id,
-            'delete',
-            api_get_user_id()
-        );
-
-        Display::addFlash(Display::return_message(get_lang('The category has been deleted.')));
-
-        return true;
     }
 
     /**
@@ -435,7 +416,7 @@ class Link extends Model
         // but the visibility is set to 2 (in item_property).
         // This will make a restore function possible for the platform administrator.
         $sql = "UPDATE $tbl_link SET on_homepage='0'
-                WHERE c_id = $course_id AND id='".$id."'";
+                WHERE c_id = $course_id AND iid='".$id."'";
         Database:: query($sql);
 
         /*api_item_property_update(
@@ -552,7 +533,7 @@ class Link extends Model
 
         // Finding the old category_id.
         $sql = "SELECT * FROM $tbl_link
-                WHERE c_id = $course_id AND id='".$id."'";
+                WHERE c_id = $course_id AND iid='".$id."'";
         $result = Database:: query($sql);
         $row = Database:: fetch_array($result);
         $category_id = $row['category_id'];
@@ -582,7 +563,7 @@ class Link extends Model
         Database::update(
             $tbl_link,
             $params,
-            ['c_id = ? AND id = ?' => [$course_id, $id]]
+            ['c_id = ? AND iid = ?' => [$course_id, $id]]
         );
 
         // Update search enchine and its values table if enabled.

@@ -1016,13 +1016,13 @@ class MySpace
      *
      * @return array
      */
-    public static function export_company_resume_csv($startDate, $endDate)
+    public static function exportCompanyResumeCsv($startDate, $endDate)
     {
         $companys = self::getCompanyLearnpathSubscription($startDate, $endDate);
         $csv_content = [];
         // Printing table
         $total = 0;
-        $displayText = ExtraField::getDisplayNameByVariable('company');
+        $displayText = get_lang('Company');
         // the first line of the csv file with the column headers
         $csv_row = [];
         $csv_row[] = $displayText;
@@ -1065,7 +1065,7 @@ class MySpace
         $total = 0;
         $table = '<div class="table-responsive"><table class="table table-bordered data_table">';
 
-        $displayText = ExtraField::getDisplayNameByVariable('company');
+        $displayText = get_lang('Company');
         $table .= "<thead><tr><th class=\"th-header\">$displayText</th><th class=\"th-header\"> ".get_lang('CountOfSubscribedUsers')." </th></tr></thead><tbody>";
 
         foreach ($companys as $entity => $student) {
@@ -1147,7 +1147,7 @@ class MySpace
                 WHERE
                     variable = 'authors'
             )
-        AND sf.extra_field_type = 6
+        AND sf.extra_field_type = " . ExtraField::FIELD_TYPE_DATE . "
         AND (s.value != '' OR s.value IS NOT NULL)
 ";
         $queryResult = Database::query($query);
@@ -1193,7 +1193,7 @@ class MySpace
                 "<table class='table table-bordered data_table'>".
                 "<thead>".
                 "<tr>".
-                "<th class=\"th-header\">".get_lang('CourseTeachers')."</th>".
+                "<th class=\"th-header\">".get_lang('Author')."</th>".
                 "<th class=\"th-header\">".get_lang('LearningPathList')."</th>".
                 "<th class=\"th-header\">".get_lang('CountOfSubscribedUsers')."</th>".
                 "<th class=\"th-header\">".get_lang('StudentList')."</th>".
@@ -1283,7 +1283,7 @@ class MySpace
         } else {
             $csv_content = [];
             $csv_row = [];
-            $csv_row[] = get_lang('CourseTeachers');
+            $csv_row[] = get_lang('Author');
             $csv_row[] = get_lang('LearningPathList');
             $csv_row[] = get_lang('CountOfSubscribedUsers');
             $csv_row[] = get_lang('StudentList');
@@ -3648,13 +3648,13 @@ class MySpace
 
         // Settings condition and parametter GET to right date
         if (!empty($startDate)) {
-            $startDate = $startDate->format('Y-m-d');
+            $startDate = api_get_utc_datetime($startDate->format('Y-m-d'));
             $_GET['startDate'] = $startDate;
             $whereCondition .= "
             AND $tblItemProperty.lastedit_date >= '$startDate' ";
         }
         if (!empty($endDate)) {
-            $endDate = $endDate->format('Y-m-d');
+            $endDate = api_get_utc_datetime($endDate->format('Y-m-d'));
             $_GET['endDate'] = $endDate;
             $whereCondition .= "
             AND $tblItemProperty.lastedit_date <= '$endDate' ";

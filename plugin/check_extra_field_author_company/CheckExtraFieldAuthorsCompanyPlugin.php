@@ -52,10 +52,10 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
             $this->authorsExist = false;
         }
         $this->authorsField = [
-            'extra_field_type' => 6,
-            'field_type' => 5,
+            'extra_field_type' => ExtraField::FIELD_TYPE_DATE,
+            'field_type' => ExtraField::FIELD_TYPE_SELECT_MULTIPLE,
             'variable' => 'authors',
-            'display_text' => 'Authors',
+            'display_text' => get_lang('Authors'),
             'default_value' => '',
             'field_order' => 0,
             'visible_to_self' => 1,
@@ -64,10 +64,10 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
             'filter' => 1,
         ];
         $this->companyField = [
-            'extra_field_type' => 1,
-            'field_type' => 3,
+            'extra_field_type' => ExtraField::FIELD_TYPE_TEXT,
+            'field_type' => ExtraField::FIELD_TYPE_RADIO,
             'variable' => 'company',
-            'display_text' => 'Company',
+            'display_text' => get_lang('Company'),
             'default_value' => '',
             'field_order' => 0,
             'visible_to_self' => 0,
@@ -151,8 +151,10 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
         $data['filter'] = (int) $data['filter'];
         $data['default_value'] = '';
         $data['variable'] = 'company';
-        $data['display_text'] = strtolower(Database::escape_string(Security::remove_XSS($data['display_text'])));
-        $this->queryInsertUpdate($data);
+        $data['visible'] = 1;
+        $data['display_text'] = strtoupper(strtolower(Database::escape_string(Security::remove_XSS($data['display_text']))));
+        $schedule = new ExtraField('user');
+        $schedule->save($data);
     }
 
     /**
@@ -201,8 +203,10 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
         $data['filter'] = (int) $data['filter'];
         $data['default_value'] = null;
         $data['variable'] = 'authors';
-        $data['display_text'] = strtolower(Database::escape_string(Security::remove_XSS($data['display_text'])));
-        $this->queryInsertUpdate($data);
+        $data['visible'] = 1;
+        $data['display_text'] = strtoupper(strtolower(Database::escape_string(Security::remove_XSS($data['display_text']))));
+        $schedule = new ExtraField('lp');
+        $schedule->save($data);
     }
 
     /**
@@ -304,82 +308,6 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
         }
 
         return $data;
-    }
-
-    /**
-     * Executes the insertion or update of the queries in the database for the extra_field table.
-     *
-     * @param $data
-     */
-    protected function queryInsertUpdate($data)
-    {
-        $data['extra_field_type'] = (int) $data['extra_field_type'];
-        $data['field_type'] = (int) $data['field_type'];
-        $data['field_order'] = (int) $data['field_order'];
-        $data['visible_to_self'] = (int) $data['visible_to_self'];
-        $data['visible_to_others'] = (int) $data['visible_to_others'];
-        $data['changeable'] = (int) $data['changeable'];
-        $data['filter'] = (int) $data['filter'];
-        $data['default_value'] = '';
-        // $data['variable'] = $variable;
-        $data['display_text'] = strtolower(Database::escape_string(Security::remove_XSS($data['display_text'])));
-        $exist = null;
-        $validVariable = false;
-        $variable = $data['variable'];
-        if ($variable == 'company') {
-            $exist = $this->CompanyFieldExist();
-            $validVariable = true;
-        } elseif ($variable == 'authors') {
-            $exist = $this->AuthorsFieldExist();
-            $validVariable = true;
-        }
-        if ($exist == true) {
-            $query = "
-UPDATE ".$this->tblExtraField."
-    SET
-     `extra_field_type` = ".$data['extra_field_type'].",
-     `field_type` =  ".$data['field_type'].",
-     `variable` = '".$data['variable']."',
-     `default_value` = '".$data['default_value']."',
-     `field_order` = ".$data['field_order'].",
-     `visible_to_self` = ".$data['visible_to_self'].",
-     `visible_to_others` = ".$data['visible_to_others'].",
-     `changeable` = ".$data['changeable'].",
-     `filter` = ".$data['filter']."
-    WHERE
-        (`id` = ".$data['id'].");
-	";
-        } else {
-            $query = " INSERT INTO ".$this->tblExtraField." (
-            `extra_field_type`,
-            `field_type`,
-            `variable`,
-            `display_text`,
-            `default_value`,
-            `field_order`,
-            `visible_to_self`,
-            `visible_to_others`,
-            `changeable`,
-            `filter`
-         )
-    VALUES
-        (
-            ".$data['extra_field_type'].",
-            ".$data['field_type'].",
-            '".$data['variable']."',
-            '".$data['display_text']."',
-            '".$data['default_value']."',
-            ".$data['field_order'].",
-            ".$data['visible_to_self'].",
-            ".$data['visible_to_others'].",
-            ".$data['changeable'].",
-            ".$data['filter']."
-	    );
-	";
-        }
-        if ($validVariable == true) {
-            Database::query($query);
-        }
     }
 
     /**

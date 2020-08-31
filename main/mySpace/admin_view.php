@@ -57,7 +57,7 @@ if ($exportCSV) {
         // Getting dates
         $startDate = isset($_GET['startDate']) ? $_GET['startDate'] : null;
         $endDate = isset($_GET['endDate']) ? $_GET['endDate'] : null;
-        MySpace::export_company_resume_csv($startDate, $endDate);
+        MySpace::exportCompanyResumeCsv($startDate, $endDate);
         exit;
     } elseif ('learningPath' === $display) {
         // Getting dates

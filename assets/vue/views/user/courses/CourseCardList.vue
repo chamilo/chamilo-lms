@@ -1,23 +1,25 @@
 <template>
   <span>
-
-    <b-button
-      variant="primary"
-      rounded
-      @click="changeLayout"
-    >
-      <font-awesome-icon icon="th-large" />
-    </b-button>
-
-    <b-button
-      rounded
-      @click="changeLayout"
-    >
-      <font-awesome-icon icon="bars" />
-    </b-button>
+    <b-button-group>
+      <b-button
+        rounded
+        :variant="isList()"
+        @click="changeLayout"
+      >
+        <font-awesome-icon icon="bars" />
+      </b-button>
+      <b-button
+        :variant="isDeck()"
+        rounded
+        @click="changeLayout"
+      >
+        <font-awesome-icon icon="th-large" />
+      </b-button>
+    </b-button-group>
 
     <b-card-group
       v-if="deck"
+      columns
     >
       <b-card
         v-for="card in courses"
@@ -31,7 +33,6 @@
         />
       </b-card>
     </b-card-group>
-
     <span v-else>
       <b-card
         v-for="card in courses"
@@ -62,10 +63,22 @@ export default {
   },
   data() {
     return {
-      deck: true
+      deck: false
     };
   },
   methods: {
+    isList: function (){
+      if (!this.deck) {
+        return 'primary';
+      }
+      return 'secondary';
+    },
+    isDeck: function (){
+      if (this.deck) {
+        return 'primary';
+      }
+      return 'secondary';
+    },
     changeLayout: function () {
       this.deck = !this.deck;
     },

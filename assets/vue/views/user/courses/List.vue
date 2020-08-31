@@ -1,7 +1,6 @@
 <template>
   <div class="course-list">
     {{ status }}
-
     <CourseCardList
       :courses="courses"
     />

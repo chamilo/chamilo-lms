@@ -20,6 +20,32 @@
 
     <b-list-group-item
       v-if="isAuthenticated"
+    />
+
+    <b-list-group-item
+      v-if="isAuthenticated"
+      :to="'/main/admin/user_list.php'"
+    >
+      Users
+    </b-list-group-item>
+
+    <b-list-group-item
+      v-if="isAuthenticated"
+      :to="'/main/admin/course_list.php'"
+    >
+      Courses
+    </b-list-group-item>
+
+    <b-list-group-item
+      v-if="isAuthenticated"
+      :to="'/main/session/session_list.php'"
+    >
+      Sessions
+    </b-list-group-item>
+
+
+    <b-list-group-item
+      v-if="isAuthenticated"
       :to="'/main/admin/index.php'"
     >
       Settings

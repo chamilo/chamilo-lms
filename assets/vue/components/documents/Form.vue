@@ -1,23 +1,21 @@
 <template>
   <v-form>
-    <b-container fluid>
-      <b-row>
-        <b-col
-          cols="12"
-          sm="6"
-          md="6"
-        >
-          <b-form-input
-            v-model="item.title"
-            :error-messages="titleErrors"
-            :placeholder="$t('Title')"
-            required
-            @input="$v.item.title.$touch()"
-            @blur="$v.item.title.$touch()"
-          />
-        </b-col>
-      </b-row>
-    </b-container>
+    <b-row>
+      <b-col
+        cols="12"
+        sm="6"
+        md="6"
+      >
+        <b-form-input
+          v-model="item.title"
+          :error-messages="titleErrors"
+          :placeholder="$t('Title')"
+          required
+          @input="$v.item.title.$touch()"
+          @blur="$v.item.title.$touch()"
+        />
+      </b-col>
+    </b-row>
   </v-form>
 </template>
 

@@ -1,82 +1,79 @@
 <template>
-  <v-toolbar
-    class="my-md-auto"
-    elevation="0"
-  >
+  <div class="">
+    <br>
+
     <slot name="left" />
-    <v-spacer />
-    <div>
-      <b-button
-        v-if="handleList"
-        :loading="isLoading"
-        variant="primary"
-        @click="listItem"
-      >
-        {{ $t('List') }}
-      </b-button>
-      <b-button
-        v-if="handleEdit"
-        :loading="isLoading"
-        variant="primary"
-        @click="editItem"
-      >
-        {{ $t('Edit') }}
-      </b-button>
-      <b-button
-        v-if="handleSubmit"
-        :loading="isLoading"
-        variant="primary"
-        @click="submitItem"
-      >
-        <v-icon left>
-          mdi-content-save
-        </v-icon>
-        {{ $t('Submit') }}
-      </b-button>
-      <!--      <v-btn-->
-      <!--        v-if="handleReset"-->
-      <!--        color="primary"-->
-      <!--        class="ml-sm-2"-->
-      <!--        @click="resetItem"-->
-      <!--      >-->
-      <!--        {{ $t('Reset') }}-->
-      <!--      </v-btn>-->
-      <b-button
-        v-if="handleDelete"
-        variant="danger"
-        class="ml-sm-2"
-        @click="confirmDelete = true"
-      >
-        {{ $t('Delete') }}
-      </b-button>
 
-      <b-button
-        v-if="handleAdd"
-        variant="primary"
-        rounded
-        @click="addItem"
-      >
-        <font-awesome-icon icon="folder-plus" /> New folder
-      </b-button>
+    <b-button
+      v-if="handleList"
+      :loading="isLoading"
+      variant="primary"
+      @click="listItem"
+    >
+      {{ $t('List') }}
+    </b-button>
+    <b-button
+      v-if="handleEdit"
+      :loading="isLoading"
+      variant="primary"
+      @click="editItem"
+    >
+      {{ $t('Edit') }}
+    </b-button>
+    <b-button
+      v-if="handleSubmit"
+      :loading="isLoading"
+      variant="primary"
+      @click="submitItem"
+    >
+      <v-icon left>
+        mdi-content-save
+      </v-icon>
+      {{ $t('Submit') }}
+    </b-button>
+    <!--      <v-btn-->
+    <!--        v-if="handleReset"-->
+    <!--        color="primary"-->
+    <!--        class="ml-sm-2"-->
+    <!--        @click="resetItem"-->
+    <!--      >-->
+    <!--        {{ $t('Reset') }}-->
+    <!--      </v-btn>-->
+    <b-button
+      v-if="handleDelete"
+      variant="danger"
+      class="ml-sm-2"
+      @click="confirmDelete = true"
+    >
+      {{ $t('Delete') }}
+    </b-button>
 
-      <b-button
-        v-if="handleAddDocument"
-        variant="primary"
-        rounded
-        @click="addDocument"
-      >
-        <font-awesome-icon icon="file-alt" /> New document
-      </b-button>
+    <b-button
+      v-if="handleAdd"
+      variant="primary"
+      rounded
+      @click="addItem"
+    >
+      <font-awesome-icon icon="folder-plus" /> New folder
+    </b-button>
 
-      <b-button
-        v-if="handleUploadDocument"
-        variant="primary"
-        rounded
-        @click="uploadDocument"
-      >
-        <font-awesome-icon icon="cloud-upload-alt" /> File upload
-      </b-button>
-    </div>
+    <b-button
+      v-if="handleAddDocument"
+      variant="primary"
+      rounded
+      @click="addDocument"
+    >
+      <font-awesome-icon icon="file-alt" /> New document
+    </b-button>
+
+    <b-button
+      v-if="handleUploadDocument"
+      variant="primary"
+      rounded
+      @click="uploadDocument"
+    >
+      <font-awesome-icon icon="cloud-upload-alt" /> File upload
+    </b-button>
 
     <ConfirmDelete
       v-if="handleDelete"
@@ -84,7 +81,7 @@
       :handle-delete="handleDelete"
       @close="confirmDelete = false"
     />
-  </v-toolbar>
+  </div>
 </template>
 
 <script>

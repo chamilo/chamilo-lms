@@ -3,7 +3,7 @@
     <b-alert
       v-model="show"
       :variant="color"
-      :dismiss-secs="timeout"
+      dismissible
     >
       {{ text }}
       <template v-if="subText">

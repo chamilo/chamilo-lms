@@ -2,7 +2,7 @@
   <b-navbar
     toggleable="lg"
     type="dark"
-    variant="info"
+    variant="primary"
     sticky
   >
     <b-navbar-brand href="/">
@@ -74,10 +74,11 @@
         <b-nav-item-dropdown
           v-if="isAuthenticated"
           right
+          no-caret
         >
           <!-- Using 'button-content' slot -->
           <template v-slot:button-content>
-            User
+            <b-avatar variant="light" />
           </template>
           <b-dropdown-item href="/main/messages/inbox.php">
             Inbox

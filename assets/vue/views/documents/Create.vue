@@ -1,7 +1,15 @@
 <template>
   <div>
-    <Toolbar :handle-submit="onSendForm" :handle-reset="resetForm"></Toolbar>
-    <DocumentsForm ref="createForm" :values="item" :errors="violations" />
+    <DocumentsForm
+      ref="createForm"
+      :values="item"
+      :errors="violations"
+    />
+
+    <Toolbar
+      :handle-submit="onSendForm"
+      :handle-reset="resetForm"
+    />
     <Loading :visible="isLoading" />
   </div>
 </template>
@@ -24,12 +32,12 @@ const { mapFields } = createHelpers({
 export default {
   name: 'DocumentsCreate',
   servicePrefix,
-  mixins: [CreateMixin],
   components: {
     Loading,
     Toolbar,
     DocumentsForm
   },
+  mixins: [CreateMixin],
   data() {
     return {
       item: {},

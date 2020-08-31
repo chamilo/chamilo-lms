@@ -39,6 +39,7 @@ export default {
 
   methods: {
     onUpdateOptions({ page, itemsPerPage, sortBy, sortDesc, totalItems } = {}) {
+      console.log({ page, itemsPerPage, sortBy, sortDesc, totalItems });
       let params = {
         ...this.filters
       };

@@ -1,12 +1,15 @@
 <template>
   <div class="course-list">
     {{ status }}
-    <CourseCard :courses="courses" />
+
+    <CourseCardList
+      :courses="courses"
+    />
   </div>
 </template>
 
 <script>
-import CourseCard from './CourseCard';
+import CourseCardList from './CourseCardList';
 import ListMixin from '../../../mixins/ListMixin';
 import { ENTRYPOINT } from '../../../config/entrypoint';
 import axios from "axios";
@@ -15,7 +18,7 @@ export default {
   name: 'CourseList',
   servicePrefix: 'Course',
   components: {
-    CourseCard
+    CourseCardList
   },
   mixins: [ListMixin],
   data() {

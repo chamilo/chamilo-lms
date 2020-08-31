@@ -1147,7 +1147,7 @@ class MySpace
                 WHERE
                     variable = 'authors'
             )
-        AND sf.extra_field_type = " . ExtraField::FIELD_TYPE_DATE . "
+        AND sf.extra_field_type = ".ExtraField::FIELD_TYPE_DATE."
         AND (s.value != '' OR s.value IS NOT NULL)
 ";
         $queryResult = Database::query($query);
@@ -1226,7 +1226,7 @@ class MySpace
                         "<div id='$hiddenField' class='hidden'>";
                     foreach ($row['studentList'] as $student) {
                         $table .= $student['complete_name']."<br>";
-                        $totalStudent += 1;
+                        $totalStudent++;
                     }
                     $index++;
                     $lpCount++;
@@ -1296,7 +1296,7 @@ class MySpace
                     $csv_row[] = $row['students'];
                     $studentsName = '';
                     foreach ($row['studentList'] as $student) {
-                        $studentsName .= $student['complete_name'] . " / ";
+                        $studentsName .= $student['complete_name']." / ";
                     }
                     $csv_row[] = trim($studentsName, " / ");
                     $csv_content[] = $csv_row;

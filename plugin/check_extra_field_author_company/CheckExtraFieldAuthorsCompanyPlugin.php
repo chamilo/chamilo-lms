@@ -55,7 +55,7 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
             'extra_field_type' => ExtraField::FIELD_TYPE_DATE,
             'field_type' => ExtraField::FIELD_TYPE_SELECT_MULTIPLE,
             'variable' => 'authors',
-            'display_text' => get_lang('Authors'),
+            'display_text' => 'Authors',
             'default_value' => '',
             'field_order' => 0,
             'visible_to_self' => 1,
@@ -67,7 +67,7 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
             'extra_field_type' => ExtraField::FIELD_TYPE_TEXT,
             'field_type' => ExtraField::FIELD_TYPE_RADIO,
             'variable' => 'company',
-            'display_text' => get_lang('Company'),
+            'display_text' => 'Company',
             'default_value' => '',
             'field_order' => 0,
             'visible_to_self' => 0,
@@ -152,7 +152,7 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
         $data['default_value'] = '';
         $data['variable'] = 'company';
         $data['visible'] = 1;
-        $data['display_text'] = strtoupper(strtolower(Database::escape_string(Security::remove_XSS($data['display_text']))));
+        $data['display_text'] = strtolower(Database::escape_string(Security::remove_XSS($data['display_text'])));
         $schedule = new ExtraField('user');
         $schedule->save($data);
     }
@@ -204,7 +204,7 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
         $data['default_value'] = null;
         $data['variable'] = 'authors';
         $data['visible'] = 1;
-        $data['display_text'] = strtoupper(strtolower(Database::escape_string(Security::remove_XSS($data['display_text']))));
+        $data['display_text'] = strtolower(Database::escape_string(Security::remove_XSS($data['display_text'])));
         $schedule = new ExtraField('lp');
         $schedule->save($data);
     }

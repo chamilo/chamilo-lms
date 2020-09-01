@@ -153,13 +153,13 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 if ($resourceNode->hasResourceFile()) {
                     // Process node that contains a file, process previews.
                     if ($resourceNode->isResourceFileAnImage()) {
-                        $url = $router->generate('chamilo_core_resource_view_file', $myParams);
+                        $url = $router->generate('chamilo_core_resource_view', $myParams);
 
                         return $icon.'<a data-fancybox="gallery" href="'.$url.'">'.$value.'</a>';
                     }
 
                     if ($resourceNode->isResourceFileAVideo()) {
-                        $url = $router->generate('chamilo_core_resource_view_file', $myParams);
+                        $url = $router->generate('chamilo_core_resource_view', $myParams);
 
                         return '
                         <video width="640" height="320" controls id="video'.$id.'" controls preload="metadata" style="display:none;">
@@ -554,7 +554,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         $form = $repository->getForm($this->container->get('form.factory'), $resource);
 
-        if ($resourceNode->hasEditableContent() && $settings->isAllowToSaveEditorToResourceFile()) {
+        if ($resourceNode->hasEditableTextContent() && $settings->isAllowToSaveEditorToResourceFile()) {
             $form->add(
                 $this->fileContentName,
                 CKEditorType::class,
@@ -848,7 +848,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
     /**
      * Shows the associated resource file.
      *
-     * @Route("/{tool}/{type}/{id}/view", methods={"GET"}, name="chamilo_core_resource_view_file")
+     * @Route("/{tool}/{type}/{id}/view", methods={"GET"}, name="chamilo_core_resource_view")
      */
     public function viewAction(Request $request, RouterInterface $router): Response
     {

@@ -70,14 +70,6 @@ class ResourceFile
     use TimestampableEntity;
 
     /**
-     * @var string|null
-     *
-     * @ApiProperty(iri="http://schema.org/contentUrl")
-     * @Groups({"resource_file:read", "resource_node:read", "document:read", "media_object_read"})
-     */
-    public $contentUrl;
-
-    /**
      * @Groups({"resource_file:read", "resource_node:read", "document:read"})
      * @ORM\Id
      * @ORM\Column(type="integer")
@@ -147,6 +139,7 @@ class ResourceFile
      * @var string
      *
      * @ORM\Column(name="crop", type="string", length=255, nullable=true)
+     *
      */
     protected $crop;
 
@@ -165,12 +158,29 @@ class ResourceFile
     protected $metadata;
 
     /**
+     * @var boolean
+     *
+     * @Groups({"resource_file:read", "resource_node:read", "document:read"})
+     */
+    protected $isImage;
+
+    /**
      * Constructor.
      */
     public function __construct()
     {
         $this->metadata = [];
         $this->dimensions = [];
+    }
+
+    public function isImage(): bool
+    {
+        $mimeType = $this->getMimeType();
+        if (false !== strpos($mimeType, 'image')) {
+            return true;
+        }
+
+        return false;
     }
 
     public function __toString(): string

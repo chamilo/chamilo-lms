@@ -95,7 +95,7 @@ final class CDocumentRepository extends ResourceRepository implements GridInterf
         ];
 
         return $this->getRouter()->generate(
-            'chamilo_core_resource_view_file',
+            'chamilo_core_resource_view',
             $params
         );
     }

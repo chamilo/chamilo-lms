@@ -21,7 +21,7 @@ const apolloClient = new ApolloClient({
     uri: '/api/graphql/'
 });
 
-import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
+import { BootstrapVue } from 'bootstrap-vue'
 
 // Install BootstrapVue
 Vue.use(BootstrapVue)

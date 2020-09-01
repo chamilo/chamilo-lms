@@ -31,6 +31,14 @@ abstract class AbstractResource
     /**
      * @var string|null
      *
+     * @ApiProperty(iri="http://schema.org/contentUrl")
+     * @Groups({"resource_file:read", "resource_node:read", "document:read", "media_object_read"})
+     */
+    public $downloadUrl;
+
+    /**
+     * @var string|null
+     *
      * @Groups({"resource_file:read", "resource_node:read", "document:read", "document:write", "media_object_read"})
      */
     public $contentFile;

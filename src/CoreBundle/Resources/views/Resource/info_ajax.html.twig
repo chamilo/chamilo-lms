@@ -25,7 +25,7 @@
             </div>
             {% if resource.resourceNode.isResourceFileAnImage %}
                 <img
-                    src="{{ url('chamilo_core_resource_view_file', {
+                    src="{{ url('chamilo_core_resource_view', {
                         'id': resource.resourceNode.id,
                         'cid': course ? course.id : 0,
                         'sid': session ? session.id : 0,

@@ -32,6 +32,11 @@
           </li>
         </ul>
       </div>
+
+      <h2>
+        {{ item['title'] }}
+      </h2>
+
       <b-table-simple>
         <template slot="default">
           <tbody>
@@ -42,12 +47,6 @@
               </td>
               <td><strong /></td>
               <td />
-            </tr>
-            <tr>
-              <td><strong>{{ $t('Title') }}</strong></td>
-              <td>
-                {{ item['title'] }}
-              </td>
             </tr>
             <tr>
               <td><strong>{{ $t('Comment') }}</strong></td>
@@ -68,8 +67,17 @@
               <td>
                 <div>
                   <b-img
+                    v-if="item['resourceNode']['resourceFile']['image']"
                     :src="item['contentUrl'] + '?w=300'"
                   />
+                  <span v-else>
+                    <b-btn
+                      variant="primary"
+                      :href="item['downloadUrl']"
+                    >
+                      Download file
+                    </b-btn>
+                  </span>
                 </div>
               </td>
               <td />

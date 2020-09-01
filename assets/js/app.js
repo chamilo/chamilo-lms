@@ -14,17 +14,21 @@ const locale = document.querySelector('html').lang;
 const moment = require('moment');
 global.moment = moment;
 
+import('bootstrap-vue');
+
 import('bootstrap-daterangepicker');
-import('bootstrap');
 import('webpack-jquery-ui');
 import('webpack-jquery-ui/css');
-require('select2');
+
 import('./vendor');
 import('./main');
 require('webpack-jquery-ui');
 require('webpack-jquery-ui/css');
 require('blueimp-file-upload');
 require('blueimp-load-image');
+import('select2');
+import('mediaelement');
+require('multiselect-two-sides');
 
 import Swal from 'sweetalert2';
 window.Swal = Swal;

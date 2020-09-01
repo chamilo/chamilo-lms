@@ -112,8 +112,7 @@
 </template>
 <script>
 export default {
-  components: {
-  },
+  components: {},
   props: {
     type: {
       type: String,
@@ -137,7 +136,6 @@ export default {
       return this.$store.getters['security/getUser'].username
     }
   },
-  methods: {
-  }
+  methods: {}
 };
 </script>

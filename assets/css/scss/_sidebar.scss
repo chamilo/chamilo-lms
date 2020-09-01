@@ -86,3 +86,7 @@
   background-color: $breadcrumb-back;
   margin-bottom: 0.7rem;
 }
+
+.navbar-expand-sm .navbar-toggler {
+  display: block;
+}

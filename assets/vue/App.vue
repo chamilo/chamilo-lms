@@ -1,5 +1,5 @@
 <template>
-  <span>
+  <div>
     <transition
       name="fade"
       mode="out-in"
@@ -8,30 +8,24 @@
       <Header />
     </transition>
 
-    <b-container fluid>
-      <b-row>
-        <b-col>
-          <transition
-            name="fade"
-            mode="out-in"
-            appear
-          >
-            <Sidebar />
-          </transition>
-        </b-col>
+    <Sidebar />
 
-        <b-col cols="10">
-          <Breadcrumb layout-class="pl-3 py-3" />
-          <snackbar />
-          <router-view />
-          <div
-            id="legacy_content"
-            v-html="legacy_content"
-          />
-          <b-col />
-        </b-col></b-row>
-    </b-container>
-  </span>
+    <main role="main">
+      <b-container fluid>
+        <b-row>
+          <b-col cols="12">
+            <Breadcrumb />
+            <snackbar />
+            <router-view />
+            <div
+              id="legacy_content"
+              v-html="legacy_content"
+            />
+          </b-col>
+        </b-row>
+      </b-container>
+    </main>
+  </div>
 </template>
 <style>
 </style>

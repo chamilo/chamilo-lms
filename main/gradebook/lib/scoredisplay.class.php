@@ -495,7 +495,7 @@ class ScoreDisplay
      *
      * @return string
      */
-    private function display_custom($score)
+    public function display_custom($score)
     {
         if (empty($score)) {
             return null;

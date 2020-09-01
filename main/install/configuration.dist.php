@@ -1249,6 +1249,9 @@ $_configuration['required_extra_fields_in_profile'] = [
 // See api.lib.php in order to find the options: examples SCORE_DIV = 1, SCORE_PERCENT = 2, etc
 //$_configuration['gradebook_report_score_style'] = 1; //  Means the score will be (X / Y) "SCORE_DIV"
 
+// Allow show the score display custom (when it is enabled) in a standalone column in gradebook
+//$_configuration['gradebook_score_display_custom_standalone'] = false;
+
 // Blocks "my files" access to anon users
 //$_configuration['block_my_files_access'] = false;
 

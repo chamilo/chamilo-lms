@@ -71,7 +71,9 @@ abstract class AbstractResource
      */
     public $resourceLinkList;
 
-    /** @var ResourceLink[] */
+    /**
+     * @var ResourceLink[]
+     */
     public $linkEntityList;
 
     /** @var AbstractResource */
@@ -218,12 +220,13 @@ abstract class AbstractResource
         return $this;
     }
 
-    public function getResourceLinkListFromEntity()
+    public function getResourceLinkList()
     {
-        return $this->resourceLinkList;
+        return $this->getResourceLinkListFromEntity();
+        //return $this->resourceLinkList;
     }
 
-    /*public function getResourceLinkList(): array
+    public function getResourceLinkListFromEntity(): array
     {
         $resourceNode = $this->getResourceNode();
         $links = $resourceNode->getResourceLinks();
@@ -242,7 +245,7 @@ abstract class AbstractResource
         }
 
         return $resourceLinkList;
-    }*/
+    }
 
     public function hasParentResourceNode(): bool
     {

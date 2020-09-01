@@ -44,8 +44,8 @@
           id="documents"
           striped
           hover
-          small
           no-local-sorting
+          responsive="sm"
 
           :per-page="0"
           :fields="fields"
@@ -166,7 +166,6 @@ export default {
     },
     methods: {
         sortingChanged(ctx) {
-          console.log(ctx);
           this.options.sortDesc = ctx.sortDesc;
           this.options.sortBy = ctx.sortBy;
           this.onUpdateOptions(this.options);

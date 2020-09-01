@@ -169,7 +169,8 @@ class ResourceListener
         }
 
         // Use by api platform
-        $links = $resource->getResourceLinkListFromEntity();
+        $links = $resource->getResourceLinkList();
+
         if ($links) {
             $courseRepo = $em->getRepository(Course::class);
             $sessionRepo = $em->getRepository(Session::class);

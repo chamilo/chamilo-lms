@@ -1,28 +1,36 @@
 <template>
-    <div v-if="item">
+  <b-row>
+    <b-col
+      cols="12"
+      sm="6"
+      md="6"
+    >
+      <div v-if="item">
         <div v-if="item['resourceLinkList']">
-            <ul>
-                <li
-                        v-for="link in item['resourceLinkList']"
-                >
-                    <div v-if="link['course']">
-                        Course: {{ link.course.resourceNode.title }}
-                    </div>
+          <ul>
+            <li
+              v-for="link in item['resourceLinkList']"
+            >
+              <div v-if="link['course']">
+                Course: {{ link.course.resourceNode.title }}
+              </div>
 
-                    <div v-if="link['session']">
-                        Session: {{ link.session.resourceNode.title }}
-                    </div>
+              <div v-if="link['session']">
+                Session: {{ link.session.resourceNode.title }}
+              </div>
 
-                    <v-select
-                            :items="visibilityList"
-                            v-model="link.visibility"
-                            label="Status"
-                            persistent-hint
-                    ></v-select>
-                </li>
-            </ul>
+              <b-form-select
+                v-model="link.visibility"
+                :options="visibilityList"
+                label="Status"
+                persistent-hint
+              />
+            </li>
+          </ul>
         </div>
-    </div>
+      </div>
+    </b-col>
+  </b-row>
 </template>
 
 <script>

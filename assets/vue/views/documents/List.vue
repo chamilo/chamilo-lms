@@ -44,15 +44,29 @@
           id="documents"
           striped
           hover
+          small
+          no-local-sorting
+
+          :per-page="0"
           :fields="fields"
           :items="items"
-          :per-page="0"
-          :current-page="options.page"
+          :current-page.sync="options.page"
+
+          :sort-by.sync="options.sortBy"
           :sort-desc.sync="options.sortDesc"
+
           :busy.sync="isLoading"
           :filters="filters"
           primary-key="iid"
+          @sort-changed="sortingChanged"
         >
+          <template v-slot:table-busy>
+            <div class="text-center my-2">
+              <b-spinner class="align-middle" />
+              <strong>Loading...</strong>
+            </div>
+          </template>
+
           <template
             v-slot:cell(resourceNode.title)="row"
           >
@@ -110,13 +124,13 @@ export default {
     servicePrefix: 'Documents',
     components: {
         Toolbar,
-        ActionCell,
-        DocumentsFilterForm,
-        DataFilter
+        ActionCell
     },
     mixins: [ListMixin],
     data() {
         return {
+          sortBy: 'title',
+          sortDesc: false,
           fields: [
                 {label: 'Title', key: 'resourceNode.title', sortable: true},
                 {label: 'Modified', key: 'resourceNode.updatedAt', sortable: true},
@@ -151,6 +165,14 @@ export default {
         }),
     },
     methods: {
+        sortingChanged(ctx) {
+          console.log(ctx);
+          this.options.sortDesc = ctx.sortDesc;
+          this.options.sortBy = ctx.sortBy;
+          this.onUpdateOptions(this.options);
+          // ctx.sortBy   ==> Field key for sorting by (or null for no sorting)
+          // ctx.sortDesc ==> true if sorting descending, false otherwise
+        },
         // From ListMixin
         ...mapActions('documents', {
             getPage: 'fetchAll',

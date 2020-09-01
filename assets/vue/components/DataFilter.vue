@@ -5,7 +5,7 @@
       variant="primary"
     >
       <font-awesome-icon icon="search" />
-      {{ $t('Filters') }}
+      {{ $t('Search') }}
     </b-button>
     <b-collapse
       id="collapse-1"

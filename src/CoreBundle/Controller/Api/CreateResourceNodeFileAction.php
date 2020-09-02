@@ -14,10 +14,7 @@ class CreateResourceNodeFileAction
     public function __invoke(Request $request): CDocument
     {
         error_log('CreateResourceNodeFileAction __invoke');
-        $document = new CDocument();
-
         $contentData = $request->getContent();
-        error_log('CreateResourceNodeFileAction __invoke');
 
         if (!empty($contentData)) {
             $contentData = json_decode($contentData, true);
@@ -29,6 +26,7 @@ class CreateResourceNodeFileAction
             $comment = $request->request->get('comment');
         }
 
+        $document = new CDocument();
         if ($request->request->has('filetype')) {
             $document->setFiletype($request->get('filetype'));
         }
@@ -57,7 +55,7 @@ class CreateResourceNodeFileAction
                     $fileParsed = true;
                 }
 
-                // Get data in content and create a HTML file
+                // Get data in content and create a HTML file.
                 if (false === $fileParsed && $content) {
                     $handle = tmpfile();
                     fwrite($handle, $content);
@@ -90,10 +88,11 @@ class CreateResourceNodeFileAction
             } else {
                 $links = json_decode($links, true);
             }
+            error_log(print_r($links, 1));
             if (empty($links)) {
-                throw new \InvalidArgumentException('resourceLinkList is not a valid json. Example: [{"c_id":1:"visibility":1}]');
+                throw new \InvalidArgumentException('resourceLinkList is not a valid json. Example: [{"c_id":1, "visibility":1}]');
             }
-            $document->setResourceLinkList($links);
+            $document->setResourceLinkArray($links);
         }
 
         $document->setComment($comment);

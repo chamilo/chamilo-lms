@@ -54,10 +54,19 @@
                 {{ item['comment'] }}
               </td>
             </tr>
+
             <tr>
               <td><strong>{{ $t('Created at') }}</strong></td>
               <td>
                 {{ item['resourceNode'] && item['resourceNode'].createdAt | moment("from", "now") }}
+              </td>
+              <td />
+            </tr>
+
+            <tr>
+              <td><strong>{{ $t('Updated at') }}</strong></td>
+              <td>
+                {{ item['resourceNode'] && item['resourceNode'].updatedAt | moment("from", "now") }}
               </td>
               <td />
             </tr>
@@ -75,7 +84,7 @@
                       variant="primary"
                       :href="item['downloadUrl']"
                     >
-                      Download file
+                      {{ $t('Download file') }}
                     </b-btn>
                   </span>
                 </div>

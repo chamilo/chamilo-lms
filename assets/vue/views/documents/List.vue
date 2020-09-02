@@ -29,6 +29,7 @@
       <b-col>
         <b-pagination
           v-model="options.page"
+          :disabled.sync="isLoading"
           :total-rows="totalItems"
           :per-page="options.itemsPerPage"
           aria-controls="documents"
@@ -63,7 +64,7 @@
           <template v-slot:table-busy>
             <div class="text-center my-2">
               <b-spinner class="align-middle" />
-              <strong>Loading...</strong>
+              <strong>{{ $t('Loading ...') }}</strong>
             </div>
           </template>
 
@@ -75,7 +76,8 @@
                 data-fancybox="gallery"
                 :href="row.item['contentUrl'] "
               >
-                <font-awesome-icon icon="file" />
+                <ResourceFileIcon :file="row.item['resourceNode']['resourceFile']" />
+
                 {{ row.item['resourceNode']['title'] }}
               </a>
             </div>
@@ -91,6 +93,17 @@
             v-slot:cell(resourceNode.updatedAt)="row"
           >
             {{ row.item.resourceNode.updatedAt | moment("from", "now") }}
+          </template>
+
+          <template
+            v-slot:cell(resourceNode.resourceFile.size)="row"
+          >
+            <span
+              v-if="row.item['resourceNode']['resourceFile']"
+            >
+              {{ row.item.resourceNode.resourceFile.size | prettyBytes }}
+            </span>
+
           </template>
 
           <template
@@ -115,16 +128,17 @@ import { mapActions, mapGetters } from 'vuex';
 import { mapFields } from 'vuex-map-fields';
 import ListMixin from '../../mixins/ListMixin';
 import ActionCell from '../../components/ActionCell';
-import DocumentsFilterForm from '../../components/documents/Filter';
-import DataFilter from '../../components/DataFilter';
 import Toolbar from '../../components/Toolbar';
+import ResourceFileIcon from './ResourceFileIcon';
+
 
 export default {
     name: 'DocumentsList',
     servicePrefix: 'Documents',
     components: {
-        Toolbar,
-        ActionCell
+      Toolbar,
+      ActionCell,
+      ResourceFileIcon
     },
     mixins: [ListMixin],
     data() {

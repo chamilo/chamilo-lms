@@ -66,26 +66,42 @@ abstract class AbstractResource
      */
     public $uploadFile;
 
+    /** @var AbstractResource */
+    public $parentResource;
+
     /**
      * @Groups({"resource_node:read", "document:read"})
+     */
+    public $resourceLinkListFromEntity;
+
+    /**
+     * Use when sending a request to Api platform.
+     * Temporal array that saves the resource link list that will be filled by CreateResourceNodeFileAction.php.
+     *
+     * @var array
      */
     public $resourceLinkList;
 
     /**
+     * Use when sending request to Chamilo.
+     * Temporal array of objects locates the resource link list that will be filled by CreateResourceNodeFileAction.php.
+     *
      * @var ResourceLink[]
      */
-    public $linkEntityList;
-
-    /** @var AbstractResource */
-    public $parentResource;
+    public $resourceLinkEntityList;
 
     abstract public function getResourceName(): string;
 
     abstract public function setResourceName(string $name);
 
+    public function getResourceLinkEntityList()
+    {
+        return $this->resourceLinkEntityList;
+    }
+
     public function addLink(ResourceLink $link)
     {
-        $this->linkEntityList[] = $link;
+        $this->resourceLinkEntityList[] = $link;
 
         return $this;
     }
@@ -201,32 +217,24 @@ abstract class AbstractResource
         return $this;
     }
 
-    public function getLinks()
-    {
-        return $this->linkEntityList;
-    }
-
-    public function addResourceLink($link)
-    {
-        $this->resourceLinkList[] = $link;
-
-        return $this;
-    }
-
-    public function setResourceLinkList($links)
+    public function setResourceLinkArray(array $links)
     {
         $this->resourceLinkList = $links;
 
         return $this;
     }
 
-    public function getResourceLinkList()
+    public function getResourceLinkArray()
     {
-        return $this->getResourceLinkListFromEntity();
-        //return $this->resourceLinkList;
+        return $this->resourceLinkList;
     }
 
-    public function getResourceLinkListFromEntity(): array
+    public function getResourceLinkListFromEntity()
+    {
+        return $this->resourceLinkListFromEntity;
+    }
+
+    public function setResourceLinkListFromEntity()
     {
         $resourceNode = $this->getResourceNode();
         $links = $resourceNode->getResourceLinks();
@@ -243,9 +251,9 @@ abstract class AbstractResource
                 'userGroup' => $link->getUserGroup(),
             ];
         }
-
-        return $resourceLinkList;
+        $this->resourceLinkListFromEntity = $resourceLinkList;
     }
+
 
     public function hasParentResourceNode(): bool
     {

@@ -169,7 +169,7 @@ class ResourceListener
         }
 
         // Use by api platform
-        $links = $resource->getResourceLinkList();
+        $links = $resource->getResourceLinkArray();
 
         if ($links) {
             $courseRepo = $em->getRepository(Course::class);
@@ -207,7 +207,7 @@ class ResourceListener
         }
 
         // Use by Chamilo.
-        $links = $resource->getLinks();
+        $links = $resource->getResourceLinkEntityList();
         if ($links) {
             foreach ($links as $link) {
                 $link->setResourceNode($resourceNode);

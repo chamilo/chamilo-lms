@@ -115,7 +115,6 @@ class AccessUrl extends AbstractResource implements ResourceInterface
     protected $root;
 
     /**
-     *
      * @var string
      * @Assert\NotBlank()
      *

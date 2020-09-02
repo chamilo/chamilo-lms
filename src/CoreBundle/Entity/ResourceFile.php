@@ -160,7 +160,14 @@ class ResourceFile
      *
      * @Groups({"resource_file:read", "resource_node:read", "document:read"})
      */
-    protected $isImage;
+    protected $image;
+
+    /**
+     * @var bool
+     *
+     * @Groups({"resource_file:read", "resource_node:read", "document:read"})
+     */
+    protected $video;
 
     /**
      * Constructor.
@@ -175,6 +182,16 @@ class ResourceFile
     {
         $mimeType = $this->getMimeType();
         if (false !== strpos($mimeType, 'image')) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function isVideo(): bool
+    {
+        $mimeType = $this->getMimeType();
+        if (false !== strpos($mimeType, 'video')) {
             return true;
         }
 

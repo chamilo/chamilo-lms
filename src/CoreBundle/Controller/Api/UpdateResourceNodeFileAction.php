@@ -59,21 +59,6 @@ class UpdateResourceNodeFileAction
             }
         }
 
-        /*if ($request->request->has('resourceLinkList')) {
-            $links = $request->get('resourceLinkList');
-            if (false === strpos($links, '[')) {
-                $links = json_decode('['.$links.']', true);
-            } else {
-                $links = json_decode($links, true);
-            }
-            if (empty($links)) {
-                throw new \InvalidArgumentException(
-                    'resourceLinkList is not a valid json. Example: [{"c_id":1:"visibility":1}]'
-                );
-            }
-            $document->setResourceLinkList($links);
-        }*/
-
         $document->setComment($comment);
 
         error_log('Finish update resource node file action');

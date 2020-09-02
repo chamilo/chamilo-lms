@@ -329,52 +329,6 @@ class Connector
      */
     public function manageCommands($cmd, $result, $args, $elFinder)
     {
-        $cmd = ucfirst($cmd);
-        $cmd = 'after'.$cmd;
-        /*
-                if (isset($args['target'])) {
-                    $driverName = $elFinder->getVolumeDriverNameByTarget($args['target']);
-                }
-
-                if (isset($args['targets'])) {
-                    foreach ($args['targets'] as $target) {
-                        $driverName = $elFinder->getVolumeDriverNameByTarget($target);
-                        break;
-                    }
-                }
-        */
-        if (empty($driverName)) {
-            return false;
-        }
-
-        if (!empty($result['error'])) {
-        }
-
-        if (!empty($result['warning'])) {
-        }
-
-        if (!empty($result['removed'])) {
-            foreach ($result['removed'] as $file) {
-                /** @var Driver $driver */
-//                $driver = $this->getDriver($driverName);
-//                $driver->$cmd($file, $args, $elFinder);
-                // removed file contain additional field "realpath"
-                //$log .= "\tREMOVED: ".$file['realpath']."\n";
-            }
-        }
-
-        if (!empty($result['added'])) {
-            foreach ($result['added'] as $file) {
-//                $driver = $this->getDriver($driverName);
-//                $driver->$cmd($file, $args, $elFinder);
-            }
-        }
-
-        if (!empty($result['changed'])) {
-            foreach ($result['changed'] as $file) {
-                //$log .= "\tCHANGED: ".$elfinder->realpath($file['hash'])."\n";
-            }
-        }
     }
 
     /**

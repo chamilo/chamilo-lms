@@ -23,19 +23,19 @@ class SessionVoter extends Voter
     public const EDIT = 'EDIT';
     public const DELETE = 'DELETE';
 
-    private $entityManager;
-    private $courseManager;
+    //private $entityManager;
+    //private $courseManager;
     private $security;
     private $settingsManager;
 
     public function __construct(
         EntityManagerInterface $entityManager,
-        CourseRepository $courseManager,
+        //CourseRepository $courseManager,
         Security $security,
         SettingsManager $settingsManager
     ) {
         $this->entityManager = $entityManager;
-        $this->courseManager = $courseManager;
+        //$this->courseManager = $courseManager;
         $this->security = $security;
         $this->settingsManager = $settingsManager;
     }

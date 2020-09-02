@@ -22,20 +22,20 @@ class GroupVoter extends Voter
     public const EDIT = 'EDIT';
     public const DELETE = 'DELETE';
 
-    private $entityManager;
-    private $courseManager;
-    private $groupManager;
+    //private $entityManager;
+    //private $courseManager;
+    //private $groupManager;
     private $security;
 
     public function __construct(
-        EntityManager $entityManager,
-        CourseRepository $courseManager,
-        CGroupRepository $groupManager,
+        //EntityManager $entityManager,
+        //CourseRepository $courseManager,
+        //CGroupRepository $groupManager,
         Security $security
     ) {
-        $this->entityManager = $entityManager;
-        $this->courseManager = $courseManager;
-        $this->groupManager = $groupManager;
+        //$this->entityManager = $entityManager;
+        //$this->courseManager = $courseManager;
+        //$this->groupManager = $groupManager;
         $this->security = $security;
     }
 
@@ -80,7 +80,7 @@ class GroupVoter extends Voter
         /** @var CGroup $group */
         $group = $subject;
         $groupInfo = [
-            'id' => $group->getIid(),
+            'iid' => $group->getIid(),
             'session_id' => 0,
             'status' => $group->getStatus(),
         ];

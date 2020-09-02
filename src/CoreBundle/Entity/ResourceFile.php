@@ -5,7 +5,6 @@
 namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiFilter;
-use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
@@ -139,7 +138,6 @@ class ResourceFile
      * @var string
      *
      * @ORM\Column(name="crop", type="string", length=255, nullable=true)
-     *
      */
     protected $crop;
 
@@ -158,7 +156,7 @@ class ResourceFile
     protected $metadata;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @Groups({"resource_file:read", "resource_node:read", "document:read"})
      */

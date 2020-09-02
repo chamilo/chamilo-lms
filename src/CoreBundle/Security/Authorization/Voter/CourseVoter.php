@@ -22,17 +22,17 @@ class CourseVoter extends Voter
     public const EDIT = 'EDIT';
     public const DELETE = 'DELETE';
 
-    private $entityManager;
-    private $courseManager;
+    //private $entityManager;
+    //private $courseManager;
     private $security;
 
     public function __construct(
         EntityManagerInterface $entityManager,
-        CourseRepository $courseManager,
+      //  CourseRepository $courseManager,
         Security $security
     ) {
-        $this->entityManager = $entityManager;
-        $this->courseManager = $courseManager;
+        //$this->entityManager = $entityManager;
+        //$this->courseManager = $courseManager;
         $this->security = $security;
     }
 

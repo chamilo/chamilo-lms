@@ -298,11 +298,11 @@ class ResourceListener
 
         $extension = $this->slugify->slugify(pathinfo($resourceName, PATHINFO_EXTENSION));
         if (empty($extension)) {
-            $slug = $this->slugify->slugify($resourceName);
+            //$slug = $this->slugify->slugify($resourceName);
         } else {
-            $originalExtension = pathinfo($resourceName, PATHINFO_EXTENSION);
+            /*$originalExtension = pathinfo($resourceName, PATHINFO_EXTENSION);
             $originalBasename = \basename($resourceName, $originalExtension);
-            $slug = sprintf('%s.%s', $this->slugify->slugify($originalBasename), $originalExtension);
+            $slug = sprintf('%s.%s', $this->slugify->slugify($originalBasename), $originalExtension);*/
         }
         //error_log($resourceName); error_log($slug);
         $resourceNode

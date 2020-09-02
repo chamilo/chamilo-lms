@@ -11,6 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="class_user")
  * @ORM\Entity
+ *
+ * @deprecated  The class user class will be removed as it will not be used.
  */
 class ClassUser
 {
@@ -46,15 +48,6 @@ class ClassUser
         return $this;
     }
 
-//    /**
-//     * @var int
-//     *
-//     * @ORM\Column(name="user_id", type="integer")
-//     * @ORM\Id
-//     * @ORM\GeneratedValue(strategy="NONE")
-//     */
-//     protected $userId;
-
     /**
      * Set classId.
      *
@@ -78,29 +71,4 @@ class ClassUser
     {
         return $this->classId;
     }
-
-//    /**
-//     * Set userId.
-//     *
-//     * @param int $userId
-//     *
-//     * @return ClassUser
-//     */
-//    public function setUserId($userId)
-//    {
-//        $this->userId = $userId;
-//
-//        return $this;
-//    }
-//
-//    /**
-//     * Get userId.
-//     *
-//     * @return int
-//     */
-//
-//    public function getUserId()
-//    {
-//        return $this->userId;
-//    }
 }

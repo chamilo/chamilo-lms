@@ -23,16 +23,17 @@ class UserCourseCategory
      */
     protected $id;
 
-//    /**
-//     * @var int
-//     *
-//     * @ORM\Column(name="user_id", type="integer", nullable=false)
-//     */
-//    protected $userId;
     /**
-     * @ORM\OneToOne (targetEntity="Chamilo\CoreBundle\Entity\User",
-     *      inversedBy="user_course_category")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
+     * @var User
+     * @ORM\ManyToOne (
+     *    targetEntity="Chamilo\CoreBundle\Entity\User",
+     *    inversedBy="userCourseCategory"
+     * )
+     * @ORM\JoinColumn(
+     *    name="user_id",
+     *    referencedColumnName="id",
+     *    onDelete="CASCADE"
+     * )
      */
     protected $user;
 
@@ -72,30 +73,6 @@ class UserCourseCategory
      * @ORM\Column(name="collapsed", type="boolean", nullable=true)
      */
     protected $isCollapsed;
-
-//    /**
-//     * Set userId.
-//     *
-//     * @param int $userId
-//     *
-//     * @return UserCourseCategory
-//     */
-//    public function setUserId($userId)
-//    {
-//        $this->userId = $userId;
-//
-//        return $this;
-//    }
-//
-//    /**
-//     * Get userId.
-//     *
-//     * @return int
-//     */
-//    public function getUserId()
-//    {
-//        return $this->userId;
-//    }
 
     /**
      * Set title.

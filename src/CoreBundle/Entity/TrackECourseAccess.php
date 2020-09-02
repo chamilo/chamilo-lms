@@ -39,16 +39,17 @@ class TrackECourseAccess
      */
     protected $cId;
 
-//    /**
-//     * @var int
-//     *
-//     * @ORM\Column(name="user_id", type="integer", nullable=false)
-//     */
-//    protected $userId;
     /**
-     * @ORM\OneToOne (targetEntity="Chamilo\CoreBundle\Entity\User",
-     *      inversedBy="track_e_course_access")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
+     * @var User
+     * @ORM\ManyToOne (
+     *    targetEntity="Chamilo\CoreBundle\Entity\User",
+     *    inversedBy="trackECourseAccess"
+     * )
+     * @ORM\JoinColumn(
+     *    name="user_id",
+     *    referencedColumnName="id",
+     *    onDelete="CASCADE"
+     * )
      */
     protected $user;
 
@@ -126,30 +127,6 @@ class TrackECourseAccess
     {
         return $this->cId;
     }
-
-//    /**
-//     * Set userId.
-//     *
-//     * @param int $userId
-//     *
-//     * @return TrackECourseAccess
-//     */
-//    public function setUserId($userId)
-//    {
-//        $this->userId = $userId;
-//
-//        return $this;
-//    }
-//
-//    /**
-//     * Get userId.
-//     *
-//     * @return int
-//     */
-//    public function getUserId()
-//    {
-//        return $this->userId;
-//    }
 
     /**
      * Set loginCourseDate.

@@ -18,16 +18,18 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class GradebookResult
 {
-//    /**
-//     * @var int
-//     *
-//     * @ORM\Column(name="user_id", type="integer", nullable=false)
-//     */
-//    protected $userId;
+
     /**
-     * @ORM\OneToOne (targetEntity="Chamilo\CoreBundle\Entity\User",
-     *      inversedBy="gradebook_result")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
+     * @var User
+     * @ORM\ManyToOne (
+     *    targetEntity="Chamilo\CoreBundle\Entity\User",
+     *    inversedBy="gradebookResult"
+     * )
+     * @ORM\JoinColumn(
+     *    name="user_id",
+     *    referencedColumnName="id",
+     *    onDelete="CASCADE"
+     * )
      */
     protected $user;
 
@@ -77,30 +79,6 @@ class GradebookResult
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     protected $id;
-
-//    /**
-//     * Set userId.
-//     *
-//     * @param int $userId
-//     *
-//     * @return GradebookResult
-//     */
-//    public function setUserId($userId)
-//    {
-//        $this->userId = $userId;
-//
-//        return $this;
-//    }
-//
-//    /**
-//     * Get userId.
-//     *
-//     * @return int
-//     */
-//    public function getUserId()
-//    {
-//        return $this->userId;
-//    }
 
     /**
      * Set evaluationId.

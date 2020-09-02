@@ -45,18 +45,20 @@ class Templates
      */
     protected $course;
 
-//    /**
-//     * @var int
-//     *
-//     * @ORM\Column(name="user_id", type="integer", nullable=false)
-//     */
-//    protected $userId;
     /**
-     * @ORM\OneToOne (targetEntity="Chamilo\CoreBundle\Entity\User",
-     *      inversedBy="templates")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
+     * @var User
+     * @ORM\ManyToOne (
+     *    targetEntity="Chamilo\CoreBundle\Entity\User",
+     *    inversedBy="templates"
+     * )
+     * @ORM\JoinColumn(
+     *    name="user_id",
+     *    referencedColumnName="id",
+     *    onDelete="CASCADE"
+     * )
      */
     protected $user;
+
 
     public function getUser(): User
     {
@@ -135,30 +137,6 @@ class Templates
     {
         return $this->description;
     }
-
-//    /**
-//     * Set userId.
-//     *
-//     * @param int $userId
-//     *
-//     * @return Templates
-//     */
-//    public function setUserId($userId)
-//    {
-//        $this->userId = $userId;
-//
-//        return $this;
-//    }
-//
-//    /**
-//     * Get userId.
-//     *
-//     * @return int
-//     */
-//    public function getUserId()
-//    {
-//        return $this->userId;
-//    }
 
     /**
      * Set refDoc.

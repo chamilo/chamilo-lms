@@ -27,16 +27,17 @@ class UserRelUser
      */
     protected $id;
 
-//    /**
-//     * @var int
-//     *
-//     * @ORM\Column(name="user_id", type="integer", nullable=false)
-//     */
-//    protected $userId;
     /**
-     * @ORM\OneToOne (targetEntity="Chamilo\CoreBundle\Entity\User",
-     *      inversedBy="user_rel_user")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
+     * @var User
+     * @ORM\ManyToOne (
+     *    targetEntity="Chamilo\CoreBundle\Entity\User",
+     *    inversedBy="userRelUser"
+     * )
+     * @ORM\JoinColumn(
+     *    name="user_id",
+     *    referencedColumnName="id",
+     *    onDelete="CASCADE"
+     * )
      */
     protected $user;
 
@@ -76,30 +77,6 @@ class UserRelUser
      * @ORM\Column(name="last_edit", type="datetime", nullable=true)
      */
     protected $lastEdit;
-
-//    /**
-//     * Set userId.
-//     *
-//     * @param int $userId
-//     *
-//     * @return UserRelUser
-//     */
-//    public function setUserId($userId)
-//    {
-//        $this->userId = $userId;
-//
-//        return $this;
-//    }
-//
-//    /**
-//     * Get userId.
-//     *
-//     * @return int
-//     */
-//    public function getUserId()
-//    {
-//        return $this->userId;
-//    }
 
     /**
      * Set friendUserId.

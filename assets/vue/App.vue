@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="d-flex flex-column h-100">
     <transition
       name="fade"
       mode="out-in"
@@ -10,7 +10,10 @@
 
     <Sidebar />
 
-    <main role="main">
+    <main
+      role="main"
+      class="flex-shrink-0"
+    >
       <b-container fluid>
         <b-row>
           <b-col cols="12">
@@ -25,6 +28,8 @@
         </b-row>
       </b-container>
     </main>
+
+    <Footer />
   </div>
 </template>
 <style>

@@ -1,5 +1,5 @@
 <template>
-  <footer class="footer px-4">
+  <footer class="footer mt-auto px-4">
     <b-row
       align-v="center"
       class="justify-content-lg-between"

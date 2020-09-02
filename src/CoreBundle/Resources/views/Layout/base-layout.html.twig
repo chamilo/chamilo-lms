@@ -4,10 +4,7 @@
 {% import "@ChamiloCore/Macros/image.html.twig" as macro_image %}
 {% import '@ChamiloCore/Macros/headers.html.twig' as macro_headers %}
 <!doctype html>
-<!--[if IE 9 ]>
-<html lang="{{ app.request.locale }}" class="no-js ie9"> <![endif]-->
-<!--[if (gt IE 9)|!(IE)]><!-->
-<html lang="{{ app.request.locale }}" class="no-js"> <!--<![endif]-->
+<html lang="{{ app.request.locale }}" class="no-js h-100">
 {# Chamilo theme #}
 {% set theme = 'chamilo' %}
 {% block chamilo_head %}
@@ -16,7 +13,7 @@
 </head>
 {% endblock %}
 <body
-    class="{{ section_name }} "
+    class="{{ section_name }} h-100"
     data-in-course="{{ course ? 'true' : 'false' }}"
     data-course-code="{{ course ? course.code : '' }}"
     data-session-id="{{ session ? session.id : '' }}"

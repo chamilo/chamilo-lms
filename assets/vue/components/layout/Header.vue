@@ -3,7 +3,7 @@
     toggleable="sm"
     type="dark"
     variant="primary"
-    sticky
+    fixed="top"
   >
     <button
       v-b-toggle.sidebar-1

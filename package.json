@@ -56,6 +56,7 @@
     "pace-js-amd-fix": "^1.0.5",
     "perfect-scrollbar": "^1.4",
     "portal-vue": "^2.1.7",
+    "pretty-bytes": "^5.4.1",
     "pretty-checkbox": "^3.0.3",
     "pwstrength-bootstrap": "^3.0.5",
     "qtip2": "^3.0.3",

@@ -21,8 +21,7 @@ const apolloClient = new ApolloClient({
     uri: '/api/graphql/'
 });
 
-import { BootstrapVue } from 'bootstrap-vue'
-
+import { BootstrapVue } from 'bootstrap-vue';
 // Install BootstrapVue
 Vue.use(BootstrapVue)
 // Optionally install the BootstrapVue icon components plugin
@@ -42,6 +41,12 @@ Vue.use(require('vue-moment'));
 
 const apolloProvider = new VueApollo({
     defaultClient: apolloClient,
+});
+
+const prettyBytes = require('pretty-bytes');
+
+Vue.filter('prettyBytes', function (num) {
+    return prettyBytes(num);
 });
 
 store.registerModule(

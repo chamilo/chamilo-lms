@@ -13,7 +13,8 @@ export default {
     },
 
     showError(error) {
-      this.showMessage(error, 'danger');
+      console.log(error);
+      //this.showMessage(error, 'danger');
     },
 
     showMessage(message, color = 'success') {

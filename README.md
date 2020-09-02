@@ -18,7 +18,7 @@ not in a sub folder inside a domain.
 
 ~~~~
 # on a fresh Ubuntu, you can prepare your server by issuing an apt command like the following
-apt update && apt -y upgrade && apt install apache2 libapache2-mod-php mariadb-client mariadb-server php-pear php-dev php-gd php-curl php-intl php-mysql php-mbstring php-zip php-xml php-cli php-apcu php-bcmath git unzip
+apt update && apt -y upgrade && apt install apache2 libapache2-mod-php mariadb-client mariadb-server php-pear php-dev php-gd php-curl php-intl php-mysql php-mbstring php-zip php-xml php-cli php-apcu php-bcmath git unzip npm
 # otherwise, you can use the following directly:
 git clone https://github.com/chamilo/chamilo-lms.git chamilo2
 cd chamilo2
@@ -31,7 +31,7 @@ chmod -R 777 .
 
 Then enter the main/install/index.php and follow the UI instructions (database, admin user settings, etc).
 
-After the web install process, change the permissions back to a reasonnably safe state:
+After the web install process, change the permissions back to a reasonably safe state:
 ~~~~
 chmod -R 755 .
 chown -R www-data: public/ var/
@@ -71,13 +71,18 @@ Go back to the beginning of this section and try again.
 * main/inc/lib/javascript moved to public/js
 * main/img/ moved to public/img
 * main/template/default moved to src/Chamilo/CoreBundle/Resources/views
+* src/Chamilo/XXXBundle moved to src/CoreBundle or src/CourseBundle
 * bin/doctrine.php removed use bin/console doctrine:xyz options
-* PHPMailer replaced with Swift Mailer
 * Plugin images, css and js libs are loaded inside the public/plugins folder
   (composer update copies the content inside plugin_name/public inside web/plugins/plugin_name
 * Plugins templates use asset() function instead of using "_p.web_plugin"
-* bower replaced by [yarn](https://yarnpkg.com)
+* Remove main/inc/local.inc.php
 
+Libraries 
+
+* Integration with Symfony 5 
+* PHPMailer replaced with Swift Mailer
+* bower replaced by [yarn](https://yarnpkg.com)
 
 ## Todo
 

@@ -69,7 +69,7 @@ if (isset($form)) {
         foreach ($values as $key => $value) {
             api_add_setting(
                 $value,
-                Database::escape_string($pluginName.'_'.$key),
+                $pluginName.'_'.$key,
                 $pluginName,
                 'setting',
                 'Plugins',
@@ -81,21 +81,24 @@ if (isset($form)) {
                 1
             );
         }
+
         Event::addEvent(
             LOG_PLUGIN_CHANGE,
             LOG_PLUGIN_SETTINGS_CHANGE,
             $pluginName,
             api_get_utc_datetime(),
-            $user_id
+            api_get_user_id()
         );
 
-        /** @var \Plugin $objPlugin */
-        $objPlugin = $pluginInfo['plugin_class']::create();
-        $objPlugin->get_settings(true);
-        $objPlugin->performActionsAfterConfigure();
+        if (!empty($pluginInfo['plugin_class'])) {
+            /** @var \Plugin $objPlugin */
+            $objPlugin = $pluginInfo['plugin_class']::create();
+            $objPlugin->get_settings(true);
+            $objPlugin->performActionsAfterConfigure();
 
-        if (isset($values['show_main_menu_tab'])) {
-            $objPlugin->manageTab($values['show_main_menu_tab']);
+            if (isset($values['show_main_menu_tab'])) {
+                $objPlugin->manageTab($values['show_main_menu_tab']);
+            }
         }
 
         Display::addFlash(Display::return_message(get_lang('Update successful'), 'success'));

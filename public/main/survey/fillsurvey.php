@@ -378,7 +378,6 @@ if (count($_POST) > 0) {
                 $result = Database::query($sql);
                 $row = Database::fetch_array($result, 'ASSOC');
                 $option_value = $row['value'];
-                //$option_value = 0;
                 $survey_question_answer = $value;
 
                 // We save the answer after making sure that a possible previous attempt is deleted
@@ -406,7 +405,6 @@ if (count($_POST) > 0) {
 }
 
 $user_id = api_get_user_id();
-
 if (0 == $user_id) {
     $user_id = $survey_invitation['user'];
 }
@@ -674,7 +672,8 @@ if (1 == $survey_data['shuffle']) {
     $shuffle = ' BY RAND() ';
 }
 
-if ((isset($_GET['show']) && '' != $_GET['show']) ||
+$pageBreakText = [];
+if ((isset($_GET['show']) && $_GET['show'] != '') ||
     isset($_POST['personality'])
 ) {
     // Getting all the questions for this page and add them to a
@@ -709,6 +708,7 @@ if ((isset($_GET['show']) && '' != $_GET['show']) ||
                 } else {
                     if ('pagebreak' == $row['type']) {
                         $counter++;
+                        $pageBreakText[$counter] = $row['survey_question'];
                     } else {
                         $paged_questions[$counter][] = $row['question_id'];
                     }
@@ -1001,6 +1001,7 @@ if ((isset($_GET['show']) && '' != $_GET['show']) ||
                                 $counter++;
                             } elseif ('pagebreak' == $row['type']) {
                                 $counter++;
+                                $pageBreakText[$counter] = $row['survey_question'];
                             } else {
                                 // ids from question of the current survey
                                 $paged_questions_sec[$counter][] = $row['question_id'];
@@ -1105,6 +1106,7 @@ if ((isset($_GET['show']) && '' != $_GET['show']) ||
                     } else {
                         if ('pagebreak' == $row['type']) {
                             $counter++;
+                            $pageBreakText[$counter] = $row['survey_question'];
                         } else {
                             // ids from question of the current survey
                             $paged_questions[$counter][] = $row['question_id'];
@@ -1237,6 +1239,11 @@ $form = new FormValidator(
 );
 $form->addHidden('language', $p_l);
 
+$showNumber = true;
+if (SurveyManager::hasDependency($survey_data)) {
+    $showNumber = false;
+}
+
 if (isset($questions) && is_array($questions)) {
     $originalShow = isset($_GET['show']) ? (int) $_GET['show'] : 0;
     $questionCounter = 1;
@@ -1252,6 +1259,18 @@ if (isset($questions) && is_array($questions)) {
 
     $form->addHtml('<div class="start-survey">');
     $js = '';
+
+    if (isset($pageBreakText[$originalShow]) && !empty(strip_tags($pageBreakText[$originalShow]))) {
+        // Only show page-break texts if there is something there, apart from
+        // HTML tags
+        $form->addHtml(
+            '<div>'.
+            Security::remove_XSS($pageBreakText[$originalShow]).
+            '</div>'
+        );
+        $form->addHtml('<br />');
+    }
+
     foreach ($questions as $key => &$question) {
         $ch_type = 'ch_'.$question['type'];
         $questionNumber = $questionCounter;
@@ -1273,7 +1292,9 @@ if (isset($questions) && is_array($questions)) {
 
         // @todo move this in a function.
         $form->addHtml('<div class="survey_question '.$ch_type.' '.$parentClass.'">');
-        $form->addHtml('<div style="float:left; font-weight: bold; margin-right: 5px;"> '.$questionNumber.'. </div>');
+        if ($showNumber) {
+            $form->addHtml('<div style="float:left; font-weight: bold; margin-right: 5px;"> '.$questionNumber.'. </div>');
+        }
         $form->addHtml('<div>'.Security::remove_XSS($question['survey_question']).'</div> ');
 
         $userAnswerData = SurveyUtil::get_answers_of_question_by_user($question['survey_id'], $question['question_id']);

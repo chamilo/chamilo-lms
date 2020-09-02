@@ -51,7 +51,7 @@ class LeftMenuBuilder implements ContainerAwareInterface
                 );
             }
 
-            $link = $this->container->get('router')->generate('web.main');
+            $link = $this->container->get('router')->generate('web_main');
 
             $menu->addChild(
                 $translator->trans('ManageCourses'),

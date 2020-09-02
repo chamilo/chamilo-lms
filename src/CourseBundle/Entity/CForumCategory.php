@@ -301,4 +301,9 @@ class CForumCategory extends AbstractResource implements ResourceInterface
     {
         return $this->getCatTitle();
     }
+
+    public function setResourceName(string $name): self
+    {
+        return $this->setCatTitle($name);
+    }
 }

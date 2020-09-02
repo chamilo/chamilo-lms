@@ -1,9 +1,10 @@
 <?php
-
 /* For license terms, see /license.txt */
 
 /**
  * List page for Paypal Payout for the Buy Courses plugin.
+ *
+ * @package chamilo.plugin.buycourses
  */
 /**
  * Initialization.
@@ -21,7 +22,7 @@ $plugin = BuyCoursesPlugin::create();
 $paypalEnable = $plugin->get('paypal_enable');
 $commissionsEnable = $plugin->get('commissions_enable');
 
-if ('true' !== $paypalEnable && 'true' !== $commissionsEnable) {
+if ($paypalEnable !== "true" && $commissionsEnable !== "true") {
     api_not_allowed(true);
 }
 

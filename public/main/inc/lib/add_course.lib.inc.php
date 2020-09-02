@@ -295,8 +295,8 @@ class AddCourse
         foreach ($settings as $variable => $setting) {
             $title = $setting['title'] ?? '';
             Database::query(
-                "INSERT INTO $TABLESETTING (id, c_id, title, variable, value, category)
-                      VALUES ($counter, $course_id, '".$title."', '".$variable."', '".$setting['default']."', '".$setting['category']."')"
+                "INSERT INTO $TABLESETTING (c_id, title, variable, value, category)
+                      VALUES ($course_id, '".$title."', '".$variable."', '".$setting['default']."', '".$setting['category']."')"
             );
             $counter++;
         }
@@ -307,7 +307,6 @@ class AddCourse
             $TABLEGROUPCATEGORIES,
             [
                 'c_id' => $course_id,
-                'id' => 2,
                 'title' => get_lang('Default groups'),
                 'description' => '',
                 'max_student' => 0,

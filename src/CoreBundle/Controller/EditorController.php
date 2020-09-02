@@ -4,9 +4,6 @@
 
 namespace Chamilo\CoreBundle\Controller;
 
-use APY\DataGridBundle\Grid\Grid;
-use APY\DataGridBundle\Grid\Row;
-use APY\DataGridBundle\Grid\Source\Entity;
 use Chamilo\CoreBundle\Component\Editor\CkEditor\CkEditor;
 use Chamilo\CoreBundle\Component\Editor\Connector;
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
@@ -73,7 +70,7 @@ class EditorController extends BaseController
      *
      * @param int $parentId
      */
-    public function customEditorFileManager(ResourceFactory $resourceFactory, Request $request, $tool, $type, Grid $grid, $parentId = 0): Response
+    public function customEditorFileManager(ResourceFactory $resourceFactory, Request $request, $tool, $type, $parentId = 0): Response
     {
         $id = $request->get('id');
 
@@ -81,7 +78,7 @@ class EditorController extends BaseController
         $session = $this->getCourseSession();
         $parent = $course->getResourceNode();
 
-        $repository = $resourceFactory->createRepository($tool, $type);
+        $repository = $resourceFactory->getRepositoryService($tool, $type);
         $class = $repository->getRepository()->getClassName();
 
         if (!empty($parentId)) {

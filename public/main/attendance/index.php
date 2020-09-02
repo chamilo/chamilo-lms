@@ -752,9 +752,9 @@ switch ($action) {
                 if (!$is_locked_attendance || api_is_platform_admin()) {
                     if (api_is_allowed_to_edit()) {
                         $content .= '<div class="pull-right">';
-                        $content .= '<a href="index.php?'.api_get_cidreq().'&action=calendar_edit&calendar_id='.(int) ($calendar['id']).'&attendance_id='.$attendanceId.'">'.
+                        $content .= '<a href="index.php?'.api_get_cidreq().'&action=calendar_edit&calendar_id='.(int) ($calendar['iid']).'&attendance_id='.$attendanceId.'">'.
                             Display::return_icon('edit.png', get_lang('Edit'), ['style' => 'vertical-align:middle'], ICON_SIZE_SMALL).'</a>&nbsp;';
-                        $content .= '<a onclick="javascript:if(!confirm(\''.get_lang('Are you sure you want to delete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=calendar_delete&calendar_id='.(int) ($calendar['id']).'&attendance_id='.$attendanceId.'">'.
+                        $content .= '<a onclick="javascript:if(!confirm(\''.get_lang('Are you sure you want to delete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=calendar_delete&calendar_id='.(int) ($calendar['iid']).'&attendance_id='.$attendanceId.'">'.
                             Display::return_icon('delete.png', get_lang('Delete'), ['style' => 'vertical-align:middle'], ICON_SIZE_SMALL).'</a>';
                         $content .= '</div>';
                     }

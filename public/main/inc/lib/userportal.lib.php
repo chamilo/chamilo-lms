@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -299,6 +300,26 @@ class IndexManager
                     'title' => get_lang('Manage skills'),
                 ];
             }
+        }
+
+        return $items;
+    }
+
+    public static function studentPublicationBlock()
+    {
+        if (api_is_anonymous()) {
+            return [];
+        }
+
+        $allow = api_get_configuration_value('allow_my_student_publication_page');
+        $items = [];
+
+        if ($allow) {
+            $items[] = [
+                'icon' => Display::return_icon('lp_student_publication.png', get_lang('StudentPublications')),
+                'link' => api_get_path(WEB_CODE_PATH).'work/publications.php',
+                'title' => get_lang('MyStudentPublications'),
+            ];
         }
 
         return $items;

@@ -194,6 +194,11 @@ Display::display_header();
                 true
             );
             ?>
+
+            $('#usergroups').jqGrid(
+                'filterToolbar',
+                {stringResult: true, searchOnEnter: false, defaultSearch : "cn"}
+            );
         });
     </script>
 <?php

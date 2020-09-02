@@ -23,12 +23,6 @@ services:
         resource: '../../Controller'
         tags: ['controller.service_arguments']
 
-    apy_grid.factory:
-        class: APY\DataGridBundle\Grid\GridFactory
-        arguments: ['@service_container', '@apy_grid.registry']
-
-    APY\DataGridBundle\Grid\Grid: '@grid'
-
     menu.voter.regex:
         class: Chamilo\CoreBundle\Menu\MenuVoter
         arguments: ['@request_stack']
@@ -51,47 +45,9 @@ services:
 #        tags:
 #            - { name: twig.extension }
 
-    # Chamilo custom password encoder (depends on the password_encryption param)
-#    chamilo_user.security.encoder:
-#        class: Chamilo\CoreBundle\Security\Encoder
-#        bind:
-#            $passwordEncrypt: '%password_encryption%'
-
     Chamilo\CoreBundle\Security\Encoder:
         arguments:
             - '%password_encryption%'
-
-    # Course voter checks if a user has permissions to do actions in a course
-    chamilo_core.security.authorization.voter.course_voter:
-        class: Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter
-        arguments:
-            - '@doctrine.orm.entity_manager'
-            - '@Chamilo\CoreBundle\Repository\CourseRepository'
-            - '@security.authorization_checker'
-        public: false
-        tags:
-            - {name: security.voter}
-
-    # group voter is inside CourseBundle
-
-    # Session voter checks if a user has permissions to do actions in a session
-    chamilo_core.security.authorization.voter.session_voter:
-        class: Chamilo\CoreBundle\Security\Authorization\Voter\SessionVoter
-        arguments:
-            - '@doctrine.orm.entity_manager'
-            - '@Chamilo\CoreBundle\Repository\CourseRepository'
-            - '@security.authorization_checker'
-        public: false
-        tags:
-            - {name: security.voter}
-
-    # Resrouce voter checks if a user has permissions to do actions in a resource
-    chamilo_core.security.authorization.voter.resource_node_voter:
-        class: Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter
-        public: false
-        arguments: ['@service_container']
-        tags:
-            - {name: security.voter}
 
     # User image naming
 #    chamilo_core.naming.user_image:
@@ -127,11 +83,6 @@ services:
         class: Chamilo\CoreBundle\Component\Editor\CkEditor\CkEditor
         arguments: ['@translator', '@router']
 
-    # Listeners
-#    chamilo.doctrine.entity_listener_resolver:
-#        class: Chamilo\CoreBundle\Doctrine\EntityListenerResolver
-#        arguments: ['@service_container' ]
-
     # Check if users are online
 #    chamilo_core.listener.online:
 #        class: Chamilo\CoreBundle\EventListener\OnlineListener
@@ -139,13 +90,11 @@ services:
 #        tags:
 #            - {name: kernel.event_listener, event: kernel.controller, method: onCoreController}
 
-#    chamilo_core.listener.resource:
-#        class: Chamilo\CoreBundle\Entity\Listener\ResourceListener
-#        arguments: ['@cocur_slugify', '@request_stack', ]
-#        tags:
-#            - {name: doctrine.orm.entity_listener, entity_manager: default, lazy: true}
-
     Chamilo\CoreBundle\Entity\Listener\ResourceListener:
+        tags:
+            - {name: doctrine.orm.entity_listener, entity_manager: default, lazy: true}
+
+    Chamilo\CoreBundle\Entity\Listener\ResourceNodeListener:
         tags:
             - {name: doctrine.orm.entity_listener, entity_manager: default, lazy: true}
 
@@ -153,8 +102,7 @@ services:
         tags:
             - {name: doctrine.orm.entity_listener, entity_manager: default, lazy: true}
 
-    chamilo_course.listener.course:
-        class: Chamilo\CoreBundle\EventListener\CourseListener
+    Chamilo\CoreBundle\EventListener\CourseListener:
         calls:
             - [setContainer, ['@service_container']]
         tags:
@@ -163,8 +111,7 @@ services:
             - {name: kernel.event_listener, event: kernel.controller, method: onKernelController}
 
     # Sets the user access in a course listener
-    chamilo_course.listener.course_access:
-        class: Chamilo\CoreBundle\EventListener\CourseAccessListener
+    Chamilo\CoreBundle\EventListener\CourseAccessListener:
         arguments:
             - '@doctrine.orm.entity_manager'
         calls:
@@ -173,8 +120,7 @@ services:
             - {name: kernel.event_listener, event: chamilo_course.course.access, method: onCourseAccessEvent}
 
     # Sets the user access in a course session listener
-    chamilo_course.listener.session_access:
-        class: Chamilo\CoreBundle\EventListener\SessionAccessListener
+    Chamilo\CoreBundle\EventListener\SessionAccessListener:
         arguments:
             - '@doctrine.orm.entity_manager'
         calls:
@@ -183,15 +129,13 @@ services:
             - {name: kernel.event_listener, event: chamilo_course.course.session, method: onSessionAccessEvent}
 
     # When Course entity is loaded
-    chamilo_core.listener.course:
-        class: Chamilo\CoreBundle\Entity\Listener\CourseListener
-        arguments: ['@Chamilo\CourseBundle\Repository\CToolRepository', '@Chamilo\CoreBundle\ToolChain', '@chamilo.settings.manager']
+    Chamilo\CoreBundle\Entity\Listener\CourseListener:
+        arguments: ['@Chamilo\CoreBundle\ToolChain', '@chamilo.settings.manager']
         tags:
             - {name: doctrine.orm.entity_listener, entity_manager: default, lazy: true}
 
     # Setting user
-    chamilo_core.listener.legacy:
-        class: Chamilo\CoreBundle\EventListener\LegacyListener
+    Chamilo\CoreBundle\EventListener\LegacyListener:
         calls:
             - [setContainer, ['@service_container']]
         tags:
@@ -200,9 +144,8 @@ services:
             - {name: kernel.event_listener, event: kernel.controller, method: onKernelController}
 
     # Locale listener
-    chamilo_core.listener.locale:
-        class: Chamilo\CoreBundle\EventListener\LocaleListener
-        arguments: ['%kernel.default_locale%', '@service_container']
+    Chamilo\CoreBundle\EventListener\LocaleListener:
+        arguments: ['%kernel.default_locale%', '@chamilo.settings.manager', '@parameter_bag']
         tags:
             - {name: kernel.event_subscriber, priority: 15}
 
@@ -212,8 +155,7 @@ services:
             - {name: kernel.event_listener, event: security.interactive_login, method: onInteractiveLogin, priority: 15}
 
     # Settings listener
-    chamilo_core.listener.settings:
-        class: Chamilo\CoreBundle\EventListener\SettingListener
+    Chamilo\CoreBundle\EventListener\SettingListener:
         arguments: ['@service_container']
         tags:
             - {name: kernel.event_listener, event: sylius.settings.pre_save, method: onSettingPreSave}
@@ -245,22 +187,21 @@ services:
 #            - {name: kernel.event_listener, event: theme.messages, method: onListMessages}
 
     # Course upload listener
-    chamilo_core.listener.resource_upload_listener:
-        class: Chamilo\CoreBundle\EventListener\ResourceUploadListener
+    Chamilo\CoreBundle\EventListener\ResourceUploadListener:
         arguments: ['@router']
         tags:
             - {name: kernel.event_listener, event: oneup_uploader.post_persist, method: onUpload}
 
-    chamilo_core.menu.nav_builder:
-        class: Chamilo\CoreBundle\Menu\NavBuilder
-        arguments:
-            - '@knp_menu.factory'
-            - '@security.authorization_checker'
-        calls:
-            - [setContainer, ['@service_container']]
-        tags:
-#            - {name: mopa_bootstrap.menu, alias: chamilo_core.menu.nav}
-            - {name: knp_menu.menu_builder, method: menuApp, alias: menuApp}
+#    chamilo_core.menu.nav_builder:
+#        class: Chamilo\CoreBundle\Menu\NavBuilder
+#        arguments:
+#            - '@knp_menu.factory'
+#            - '@security.authorization_checker'
+#        calls:
+#            - [setContainer, ['@service_container']]
+#        tags:
+##            - {name: mopa_bootstrap.menu, alias: chamilo_core.menu.nav}
+#            - {name: knp_menu.menu_builder, method: menuApp, alias: menuApp}
 
 #    chamilo_core.menu.course_menu_builder:
 #        class: Chamilo\CoreBundle\Menu\LeftMenuBuilder
@@ -285,6 +226,3 @@ services:
             - '@chamilo.settings.manager'
         tags:
             - {name: templating.helper, alias: chamilo_settings}
-
-    Liip\ImagineBundle\Service\FilterService:
-        alias: 'liip_imagine.service.filter'

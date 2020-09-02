@@ -15,6 +15,8 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -44,12 +46,11 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
  * @ORM\Table(
  *  name="user",
  *  indexes={
- *      @ORM\Index(name="idx_user_uid", columns={"user_id"}),
  *      @ORM\Index(name="status", columns={"status"})
  *  }
  * )
  * @UniqueEntity("username")
- * @ORM\Entity()
+ * @ORM\Entity
  */
 class User implements UserInterface, EquatableInterface
 {
@@ -65,12 +66,19 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * @var int
-     * @Groups({"user:read"})
+     * @Groups({"user:read", "resource_node:read"})
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
+
+    /**
+     * @var UuidInterface|null
+     *
+     * @ORM\Column(type="uuid", unique=true)
+     */
+    protected $uuid;
 
     /**
      * @ORM\Column(type="string", unique=true, nullable=true)
@@ -81,14 +89,14 @@ class User implements UserInterface, EquatableInterface
      * @var string
      * @Assert\NotBlank()
      * @ApiProperty(iri="http://schema.org/name")
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"user:read", "user:write", "resource_node:read"})
      * @ORM\Column(name="firstname", type="string", length=64, nullable=true, unique=false)
      */
     protected $firstname;
 
     /**
      * @var string
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"user:read", "user:write", "resource_node:read"})
      * @ORM\Column(name="lastname", type="string", length=64, nullable=true, unique=false)
      */
     protected $lastname;
@@ -116,7 +124,7 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * @var string
-     * @Groups({"user:read", "user:write", "course:read"})
+     * @Groups({"user:read", "user:write", "course:read", "resource_node:read"})
      * @Assert\NotBlank()
      * @ORM\Column(name="username", type="string", length=100, nullable=false, unique=true)
      */
@@ -132,13 +140,6 @@ class User implements UserInterface, EquatableInterface
      * @ORM\Column(name="password", type="string", length=255, nullable=false, unique=false)
      */
     protected $password;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="user_id", type="integer", nullable=true)
-     */
-    protected $userId;
 
     /**
      * @var string
@@ -746,6 +747,7 @@ class User implements UserInterface, EquatableInterface
      */
     public function __construct()
     {
+        $this->uuid = Uuid::uuid4()->toString();
         $this->status = self::STUDENT;
         $this->salt = sha1(uniqid(null, true));
         $this->active = true;
@@ -760,7 +762,6 @@ class User implements UserInterface, EquatableInterface
         $this->dropBoxReceivedFiles = new ArrayCollection();
         $this->groups = new ArrayCollection();
         //$this->extraFields = new ArrayCollection();
-        //$this->userId = 0;
         $this->createdAt = new \DateTime();
         $this->updatedAt = new \DateTime();
 
@@ -775,6 +776,27 @@ class User implements UserInterface, EquatableInterface
     }
 
     /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $userId
+     */
+    public function setId($userId)
+    {
+        $this->id = $userId;
+    }
+
+    public function getUuid(): UuidInterface
+    {
+        return $this->uuid;
+    }
+
+    /**
      * @return string
      */
     public function __toString()
@@ -782,9 +804,6 @@ class User implements UserInterface, EquatableInterface
         return $this->username;
     }
 
-    /**
-     * @return $this
-     */
     public function setResourceNode(ResourceNode $resourceNode): self
     {
         $this->resourceNode = $resourceNode;
@@ -816,40 +835,12 @@ class User implements UserInterface, EquatableInterface
     }
 
     /**
-     * Updates the id with the user_id.
-     *
      * @ORM\PostPersist()
      */
     public function postPersist(LifecycleEventArgs $args)
     {
-        $user = $args->getEntity();
-        $this->setUserId($user->getId());
-    }
-
-    /**
-     * @param int $userId
-     */
-    public function setId($userId)
-    {
-        $this->id = $userId;
-    }
-
-    /**
-     * @param int $userId
-     */
-    public function setUserId($userId)
-    {
-        if (!empty($userId)) {
-            $this->userId = $userId;
-        }
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
+        /*$user = $args->getEntity();
+        */
     }
 
     /**
@@ -1184,11 +1175,9 @@ class User implements UserInterface, EquatableInterface
     /**
      * Set status.
      *
-     * @param int $status
-     *
      * @return User
      */
-    public function setStatus($status)
+    public function setStatus(int $status)
     {
         $this->status = $status;
 
@@ -1202,7 +1191,7 @@ class User implements UserInterface, EquatableInterface
      */
     public function getStatus()
     {
-        return $this->status;
+        return (int) $this->status;
     }
 
     /**
@@ -1727,9 +1716,6 @@ class User implements UserInterface, EquatableInterface
         return $this->passwordRequestedAt;
     }
 
-    /**
-     * @return bool
-     */
     /*public function isPasswordRequestNonExpired($ttl)
     {
         return $this->getPasswordRequestedAt() instanceof \DateTime &&
@@ -2235,10 +2221,12 @@ class User implements UserInterface, EquatableInterface
 
     public function getFirstname()
     {
+        return $this->firstname;
     }
 
     public function getLastname()
     {
+        return $this->lastname;
     }
 
     public function eraseCredentials()

@@ -36,13 +36,6 @@ class COnlineLink
     protected $cId;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=true)
-     */
-    protected $id;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=50, nullable=false)
@@ -102,30 +95,6 @@ class COnlineLink
     public function getUrl()
     {
         return $this->url;
-    }
-
-    /**
-     * Set id.
-     *
-     * @param int $id
-     *
-     * @return COnlineLink
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**

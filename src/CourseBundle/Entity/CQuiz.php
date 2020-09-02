@@ -45,13 +45,6 @@ class CQuiz extends AbstractResource implements ResourceInterface
     protected $cId;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=true)
-     */
-    protected $id;
-
-    /**
      * @var string
      * @Assert\NotBlank()
      * @ORM\Column(name="title", type="text", nullable=false)
@@ -804,30 +797,6 @@ class CQuiz extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Set id.
-     *
-     * @param int $id
-     *
-     * @return CQuiz
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
      * Set cId.
      *
      * @param int $cId
@@ -938,14 +907,38 @@ class CQuiz extends AbstractResource implements ResourceInterface
         return $this->iid;
     }
 
-    /**
-     * @param int $iid
-     *
-     * @return CQuiz
-     */
-    public function setIid($iid)
+    public function getPreventBackwards(): int
     {
-        $this->iid = $iid;
+        return $this->preventBackwards;
+    }
+
+    public function setPreventBackwards(int $preventBackwards): self
+    {
+        $this->preventBackwards = $preventBackwards;
+
+        return $this;
+    }
+
+    public function isAutoLaunch(): bool
+    {
+        return $this->autoLaunch;
+    }
+
+    public function setAutoLaunch(bool $autoLaunch): self
+    {
+        $this->autoLaunch = $autoLaunch;
+
+        return $this;
+    }
+
+    public function getPageResultConfiguration(): int
+    {
+        return $this->pageResultConfiguration;
+    }
+
+    public function setPageResultConfiguration(int $pageResultConfiguration): self
+    {
+        $this->pageResultConfiguration = $pageResultConfiguration;
 
         return $this;
     }
@@ -955,11 +948,6 @@ class CQuiz extends AbstractResource implements ResourceInterface
      */
     public function postPersist(LifecycleEventArgs $args)
     {
-        // Update id with iid value
-        $em = $args->getEntityManager();
-        $this->setId($this->iid);
-        $em->persist($this);
-        $em->flush();
     }
 
     /**
@@ -973,5 +961,10 @@ class CQuiz extends AbstractResource implements ResourceInterface
     public function getResourceName(): string
     {
         return $this->getTitle();
+    }
+
+    public function setResourceName(string $name): self
+    {
+        return $this->setTitle($name);
     }
 }

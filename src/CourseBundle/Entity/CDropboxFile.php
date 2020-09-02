@@ -36,13 +36,6 @@ class CDropboxFile
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer", nullable=true)
-     */
-    protected $id;
-
-    /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
     protected $cId;
@@ -355,30 +348,6 @@ class CDropboxFile
     public function getSessionId()
     {
         return $this->sessionId;
-    }
-
-    /**
-     * Set id.
-     *
-     * @param int $id
-     *
-     * @return CDropboxFile
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**

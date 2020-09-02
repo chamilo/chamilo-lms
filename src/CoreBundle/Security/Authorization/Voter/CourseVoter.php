@@ -7,11 +7,10 @@ namespace Chamilo\CoreBundle\Security\Authorization\Voter;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\CourseRepository;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -23,45 +22,21 @@ class CourseVoter extends Voter
     public const EDIT = 'EDIT';
     public const DELETE = 'DELETE';
 
-    private $entityManager;
-    private $courseManager;
-    private $authorizationChecker;
+    //private $entityManager;
+    //private $courseManager;
+    private $security;
 
     public function __construct(
         EntityManagerInterface $entityManager,
-        CourseRepository $courseManager,
-        AuthorizationCheckerInterface $authorizationChecker
+      //  CourseRepository $courseManager,
+        Security $security
     ) {
-        $this->entityManager = $entityManager;
-        $this->courseManager = $courseManager;
-        $this->authorizationChecker = $authorizationChecker;
+        //$this->entityManager = $entityManager;
+        //$this->courseManager = $courseManager;
+        $this->security = $security;
     }
 
-    /**
-     * @return AuthorizationCheckerInterface
-     */
-    public function getAuthorizationChecker()
-    {
-        return $this->authorizationChecker;
-    }
-
-    /**
-     * @return EntityManager
-     */
-    public function getEntityManager()
-    {
-        return $this->entityManager;
-    }
-
-    /**
-     * @return CourseRepository
-     */
-    public function getCourseManager()
-    {
-        return $this->courseManager;
-    }
-
-    protected function supports($attribute, $subject): bool
+    protected function supports(string $attribute, $subject): bool
     {
         $options = [
             self::VIEW,
@@ -82,7 +57,7 @@ class CourseVoter extends Voter
         return true;
     }
 
-    protected function voteOnAttribute($attribute, $course, TokenInterface $token): bool
+    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
     {
         /** @var User $user */
         $user = $token->getUser();
@@ -91,19 +66,19 @@ class CourseVoter extends Voter
             return false;
         }*/
 
-        $authChecker = $this->getAuthorizationChecker();
-
         // Admins have access to everything
-        if ($authChecker->isGranted('ROLE_ADMIN')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             return true;
         }
 
         // Course is active?
         /** @var Course $course */
+        $course = $subject;
+
         switch ($attribute) {
             case self::VIEW:
                 // Course is hidden then is not visible for nobody expect admins.
-                if (Course::HIDDEN === $course->getVisibility()) {
+                if ($course->isHidden()) {
                     return false;
                 }
 

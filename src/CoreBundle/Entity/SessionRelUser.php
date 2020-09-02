@@ -34,6 +34,8 @@ class SessionRelUser
     protected $id;
 
     /**
+     * @var Session
+     *
      * @ORM\ManyToOne(targetEntity="Session", inversedBy="users", cascade={"persist"})
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
      */
@@ -112,12 +114,7 @@ class SessionRelUser
         return $this;
     }
 
-    /**
-     * Get Session.
-     *
-     * @return Session
-     */
-    public function getSession()
+    public function getSession(): Session
     {
         return $this->session;
     }
@@ -136,12 +133,7 @@ class SessionRelUser
         return $this;
     }
 
-    /**
-     * Get idUser.
-     *
-     * @return User
-     */
-    public function getUser()
+    public function getUser(): User
     {
         return $this->user;
     }

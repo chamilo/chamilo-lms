@@ -164,7 +164,6 @@ class UniqueAnswer extends Question
                 $defaults['weighting[1]'] = 10;
                 $defaults['answer[2]'] = get_lang('A then C then B');
                 $defaults['weighting[2]'] = 0;
-
                 $temp_scenario['destination'.$i] = ['0'];
                 $temp_scenario['lp'.$i] = ['0'];
             }
@@ -262,16 +261,25 @@ class UniqueAnswer extends Question
             $correct = 1;
         }
 
+        if (isset($_POST) && isset($_POST['correct'])) {
+            $correct = (int) $_POST['correct'];
+        }
+
         $defaults['correct'] = $correct;
 
         if (!empty($this->id)) {
             $form->setDefaults($defaults);
         } else {
-            if (1 == $this->isContent) {
+            if ($this->isContent == 1) {
                 // Default sample content.
                 $form->setDefaults($defaults);
             } else {
-                $form->setDefaults(['correct' => 1]);
+                $correct = 1;
+                if (isset($_POST) && isset($_POST['correct'])) {
+                    $correct = (int) $_POST['correct'];
+                }
+
+                $form->setDefaults(['correct' => $correct]);
             }
         }
         $form->setConstants(['nb_answers' => $nb_answers]);
@@ -332,7 +340,7 @@ class UniqueAnswer extends Question
 
     public function processAnswersCreation($form, $exercise)
     {
-        $questionWeighting = 0;
+        $questionWeighting = $nbrGoodAnswers = 0;
         $correct = $form->getSubmitValue('correct');
         $objAnswer = new Answer($this->id);
         $nb_answers = $form->getSubmitValue('nb_answers');
@@ -343,13 +351,25 @@ class UniqueAnswer extends Question
             $weighting = trim($form->getSubmitValue('weighting['.$i.']'));
             $scenario = $form->getSubmitValue('scenario');
 
+            $try = null;
+            $lp = null;
+            $destination = null;
+            $url = null;
+            if (isset($scenario['try'.$i])) {
+                $try = !empty($scenario['try'.$i]);
+            }
             //$list_destination = $form -> getSubmitValue('destination'.$i);
+            if (isset($scenario['lp'.$i])) {
+                $lp = $scenario['lp'.$i];
+            }
             //$destination_str = $form -> getSubmitValue('destination'.$i);
+            if (isset($scenario['destination'.$i])) {
+                $destination = $scenario['destination'.$i];
+            }
 
-            $try = !empty($scenario['try'.$i]);
-            $lp = $scenario['lp'.$i] ?? null;
-            $destination = $scenario['destination'.$i] ?? null;
-            $url = trim($scenario['url'.$i] ?? null);
+            if (isset($scenario['url'.$i])) {
+                $url = trim($scenario['url'.$i]);
+            }
 
             /*
             How we are going to parse the destination value
@@ -373,6 +393,7 @@ class UniqueAnswer extends Question
             $goodAnswer = $correct == $i ? true : false;
 
             if ($goodAnswer) {
+                $nbrGoodAnswers++;
                 $weighting = abs($weighting);
                 if ($weighting > 0) {
                     $questionWeighting += $weighting;

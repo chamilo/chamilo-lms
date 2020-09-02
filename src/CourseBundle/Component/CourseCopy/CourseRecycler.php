@@ -86,6 +86,10 @@ class CourseRecycler
                 }
             }
         }
+
+        if ('full_backup' === $backupType) {
+            \CourseManager::deleteCoursePicture($this->course_info['code']);
+        }
     }
 
     /**

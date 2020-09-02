@@ -4,8 +4,6 @@
 
 namespace Chamilo\CourseBundle\Repository;
 
-use APY\DataGridBundle\Grid\Column\Column;
-use APY\DataGridBundle\Grid\Grid;
 use Chamilo\CoreBundle\Component\Resource\Settings;
 use Chamilo\CoreBundle\Component\Resource\Template;
 use Chamilo\CoreBundle\Entity\Course;
@@ -16,7 +14,7 @@ use Chamilo\CoreBundle\Form\Resource\CGlossaryType;
 use Chamilo\CoreBundle\Repository\GridInterface;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CGlossary;
-use Chamilo\CourseBundle\Entity\CGroupInfo;
+use Chamilo\CourseBundle\Entity\CGroup;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Form\FormInterface;
 
@@ -42,14 +40,9 @@ final class CGlossaryRepository extends ResourceRepository implements GridInterf
         return $templates;
     }
 
-    public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroupInfo $group = null): QueryBuilder
+    public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroup $group = null): QueryBuilder
     {
         return $this->getResourcesByCourse($course, $session, $group, $parentNode);
-    }
-
-    public function getTitleColumn(Grid $grid): Column
-    {
-        return $grid->getColumn('name');
     }
 
     public function setResourceProperties(FormInterface $form, $course, $session, $fileType)

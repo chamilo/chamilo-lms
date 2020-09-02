@@ -1,71 +1,126 @@
 <template>
-  <div class="documents-list">
+  <span class="documents-list">
     <Toolbar
-            :handle-add="addHandler"
-            :handle-add-document="addDocumentHandler"
+      :handle-add="addHandler"
+      :handle-add-document="addDocumentHandler"
+      :handle-upload-document="uploadDocumentHandler"
+
+      :filters="filters"
+      :on-send-filter="onSendFilter"
+      :reset-filter="resetFilter"
     />
-    <v-container grid-list-xl fluid>
-      <v-layout row wrap>
-        <v-flex lg12>
-          <DataFilter :handle-filter="onSendFilter" :handle-reset="resetFilter">
-            <DocumentsFilterForm
-              ref="filterForm"
-              :values="filters"
-              slot="filter"
+
+    <br>
+    <b-row class="text-center">
+      <b-col>
+        <form class="form-inline">
+          <div class="form-group mb-2">
+            <b-form-select
+              id="perPageSelect"
+              v-model="options.itemsPerPage"
+              size="sm"
+              :options="pageOptions"
+              @input="onUpdateOptions(options)"
             />
-          </DataFilter>
-          <br />
-          <v-data-table
-            dense
-            v-model="selected"
-            :headers="headers"
-            :items="items"
-            :items-per-page.sync="options.itemsPerPage"
-            :loading="isLoading"
-            :loading-text="$t('Loading...')"
-            :options.sync="options"
-            :server-items-length="totalItems"
-            class="elevation-1"
-            item-key="@id"
-            show-select
-            @update:options="onUpdateOptions"
+          </div>
+        </form>
+      </b-col>
+      <b-col />
+      <b-col>
+        <b-pagination
+          v-model="options.page"
+          :disabled.sync="isLoading"
+          :total-rows="totalItems"
+          :per-page="options.itemsPerPage"
+          aria-controls="documents"
+          align="right"
+          size="sm"
+          @input="onUpdateOptions(options)"
+        />
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col>
+        <b-table
+          id="documents"
+          striped
+          hover
+          no-local-sorting
+          responsive="sm"
+
+          :per-page="0"
+          :fields="fields"
+          :items="items"
+          :current-page.sync="options.page"
+
+          :sort-by.sync="options.sortBy"
+          :sort-desc.sync="options.sortDesc"
+
+          :busy.sync="isLoading"
+          :filters="filters"
+          primary-key="iid"
+          @sort-changed="sortingChanged"
+        >
+          <template v-slot:table-busy>
+            <div class="text-center my-2">
+              <b-spinner class="align-middle" />
+              <strong>{{ $t('Loading ...') }}</strong>
+            </div>
+          </template>
+
+          <template
+            v-slot:cell(resourceNode.title)="row"
           >
-            <template slot="item.resourceNode.title" slot-scope="{ item }">
-              <div v-if="item['resourceNode']['resourceFile']">
-<!--                <a @click="showHandler(item)" >-->
-<!--                  {{ item['contentUrl'] }}-->
-<!--                </a>-->
-                <a data-fancybox="gallery"
-                   :href=" item['contentUrl'] ">
-                    <v-icon left color="primary">mdi-file</v-icon> {{ item['resourceNode']['title'] }}
-                </a>
-              </div>
-              <div v-else>
-                <a @click="handleClick(item)">
-                    <v-icon left>mdi-folder</v-icon>{{ item['resourceNode']['title'] }}
-                </a>
-              </div>
-            </template>
-<!--            <template slot="item.resourceNode" slot-scope="{ item }">-->
-<!--              {{ item['@id'] }}-->
-<!--            </template>-->
+            <div v-if="row.item['resourceNode']['resourceFile']">
+              <a
+                data-fancybox="gallery"
+                :href="row.item['contentUrl'] "
+              >
+                <ResourceFileIcon :file="row.item['resourceNode']['resourceFile']" />
 
-            <template slot="item.resourceNode.updatedAt" slot-scope="{ item }">
-              {{ item.resourceNode.updatedAt | moment("from", "now") }}
-            </template>
+                {{ row.item['resourceNode']['title'] }}
+              </a>
+            </div>
+            <div v-else>
+              <a @click="handleClick(row.item)">
+                <font-awesome-icon icon="folder" />
+                {{ row.item['resourceNode']['title'] }}
+              </a>
+            </div>
+          </template>
 
+          <template
+            v-slot:cell(resourceNode.updatedAt)="row"
+          >
+            {{ row.item.resourceNode.updatedAt | moment("from", "now") }}
+          </template>
+
+          <template
+            v-slot:cell(resourceNode.resourceFile.size)="row"
+          >
+            <span
+              v-if="row.item['resourceNode']['resourceFile']"
+            >
+              {{ row.item.resourceNode.resourceFile.size | prettyBytes }}
+            </span>
+
+          </template>
+
+          <template
+            v-slot:cell(action)="row"
+          >
             <ActionCell
-              slot="item.action"
-              slot-scope="props"
-              :handle-show="() => showHandler(props.item)"
-              :handle-edit="() => editHandler(props.item)"
-              :handle-delete="() => deleteHandler(props.item)"
-            ></ActionCell>
-          </v-data-table>
-        </v-flex>
-      </v-layout>
-    </v-container>
-  </div>
+              slot="action"
+              :row="row"
+              :handle-show="() => showHandler(row.item)"
+              :handle-edit="() => editHandler(row.item)"
+              :handle-delete="() => deleteHandler(row.item)"
+            />
+          </template>
+        </b-table>
+      </b-col>
+    </b-row>
+  </span>
 </template>
 
 <script>
@@ -73,49 +128,72 @@ import { mapActions, mapGetters } from 'vuex';
 import { mapFields } from 'vuex-map-fields';
 import ListMixin from '../../mixins/ListMixin';
 import ActionCell from '../../components/ActionCell';
-import DocumentsFilterForm from '../../components/documents/Filter';
-import DataFilter from '../../components/DataFilter';
 import Toolbar from '../../components/Toolbar';
+import ResourceFileIcon from './ResourceFileIcon';
+
 
 export default {
-  name: 'DocumentsList',
-  servicePrefix: 'Documents',
-  mixins: [ListMixin],
-  components: {
-    Toolbar,
-    ActionCell,
-    DocumentsFilterForm,
-    DataFilter
-  },
-  data() {
-    return {
-      headers: [
-        {text: 'Title', value: 'resourceNode.title', sortable: true},
-        {text: 'Modified', value: 'resourceNode.updatedAt', sortable: true},
-        {text: 'Size', value: 'resourceNode.resourceFile.size', sortable: true},
-        {text: 'Actions', value: 'action', sortable: false}
-      ],
-      selected: []
-    };
-  },
-  computed: {
-    ...mapGetters('documents', {
-      items: 'list'
-    }),
-    ...mapFields('documents', {
-      deletedItem: 'deleted',
-      error: 'error',
-      isLoading: 'isLoading',
-      resetList: 'resetList',
-      totalItems: 'totalItems',
-      view: 'view'
-    })
-  },
-  methods: {
-    ...mapActions('documents', {
-      getPage: 'fetchAll',
-      deleteItem: 'del'
-    })
-  }
+    name: 'DocumentsList',
+    servicePrefix: 'Documents',
+    components: {
+      Toolbar,
+      ActionCell,
+      ResourceFileIcon
+    },
+    mixins: [ListMixin],
+    data() {
+        return {
+          sortBy: 'title',
+          sortDesc: false,
+          fields: [
+                {label: 'Title', key: 'resourceNode.title', sortable: true},
+                {label: 'Modified', key: 'resourceNode.updatedAt', sortable: true},
+                {label: 'Size', key: 'resourceNode.resourceFile.size', sortable: true},
+                {label: 'Actions', key: 'action', sortable: false}
+            ],
+            selected: [],
+            pageOptions: [5, 10, 15, 20],
+        };
+    },
+    created() {
+        let nodeId = this.$route.params['node'];
+        this.findResourceNode('/api/resource_nodes/'+ nodeId);
+        this.onUpdateOptions(this.options);
+    },
+    computed: {
+        // From crud.js list function
+        ...mapGetters('documents', {
+            items: 'list'
+        }),
+        ...mapGetters('resourcenode', {
+            resourceNode: 'getResourceNode'
+        }),
+        // From ListMixin
+        ...mapFields('documents', {
+            deletedItem: 'deleted',
+            error: 'error',
+            isLoading: 'isLoading',
+            resetList: 'resetList',
+            totalItems: 'totalItems',
+            view: 'view'
+        }),
+    },
+    methods: {
+        sortingChanged(ctx) {
+          this.options.sortDesc = ctx.sortDesc;
+          this.options.sortBy = ctx.sortBy;
+          this.onUpdateOptions(this.options);
+          // ctx.sortBy   ==> Field key for sorting by (or null for no sorting)
+          // ctx.sortDesc ==> true if sorting descending, false otherwise
+        },
+        // From ListMixin
+        ...mapActions('documents', {
+            getPage: 'fetchAll',
+            deleteItem: 'del'
+        }),
+        ...mapActions('resourcenode', {
+            findResourceNode: 'findResourceNode',
+        }),
+    }
 };
 </script>

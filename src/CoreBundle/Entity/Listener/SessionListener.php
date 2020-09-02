@@ -40,7 +40,7 @@ class SessionListener
     {
         $em = $args->getEntityManager();
         $id = $this->request->getCurrentRequest()->getSession()->get('access_url_id');
-        $url = $em->getRepository('ChamiloCoreBundle:AccessUrl')->find($id);
+        $url = $em->getRepository(AccessUrl::class)->find($id);
         $session->addUrl($url);
         //$this->checkLimit($repo, $url);
     }

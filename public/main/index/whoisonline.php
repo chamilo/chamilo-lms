@@ -52,7 +52,7 @@ if ($user_list) {
 $whoisonline_list .= SocialManager::display_user_list($user_list);
 
 if (isset($_GET['id'])) {
-    if ('true' == api_get_setting('allow_social_tool') && api_user_is_login()) {
+    if ('true' == api_get_setting('allow_social_tool') && !api_is_anonymous()) {
         header("Location: ".api_get_path(WEB_CODE_PATH)."social/profile.php?u=".intval($_GET['id']));
         exit;
     }

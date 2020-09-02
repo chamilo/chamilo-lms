@@ -36,13 +36,6 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer", nullable=true)
-     */
-    protected $id;
-
-    /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
     protected $cId;
@@ -303,30 +296,6 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Set id.
-     *
-     * @param int $id
-     *
-     * @return CCalendarEvent
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
      * Set cId.
      *
      * @param int $cId
@@ -468,5 +437,10 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
     public function getResourceName(): string
     {
         return $this->getTitle();
+    }
+
+    public function setResourceName(string $name): self
+    {
+        return $this->setTitle($name);
     }
 }

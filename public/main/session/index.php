@@ -42,7 +42,7 @@ Session::erase('duration_time');
 
 $userId = api_get_user_id();
 $session_info = SessionManager::fetch($session_id);
-$session_list = SessionManager::get_sessions_by_general_coach(api_get_user_id());
+$session_list = SessionManager::get_sessions_by_coach(api_get_user_id());
 $courseList = SessionManager::get_course_list_by_session_id($session_id);
 $userIsGeneralCoach = SessionManager::user_is_general_coach($userId, $session_id);
 
@@ -663,7 +663,6 @@ $tabs = [
 $tabToHide = api_get_setting('session.hide_tab_list');
 
 if (!empty($tabToHide)) {
-    $tabToHide = explode(',', $tabToHide);
     foreach ($tabToHide as $columnId) {
         unset($headers[$columnId]);
         unset($tabs[$columnId]);

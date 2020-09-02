@@ -72,6 +72,11 @@ class CLpCategory extends AbstractResource implements ResourceInterface
         return $this->getName();
     }
 
+    public function getIid()
+    {
+        return $this->iid;
+    }
+
     /**
      * Set cId.
      *
@@ -94,30 +99,6 @@ class CLpCategory extends AbstractResource implements ResourceInterface
     public function getCId()
     {
         return $this->cId;
-    }
-
-    /**
-     * Set id.
-     *
-     * @param int $id
-     *
-     * @return CLpCategory
-     */
-    public function setId($id)
-    {
-        $this->iid = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->iid;
     }
 
     /**
@@ -244,11 +225,16 @@ class CLpCategory extends AbstractResource implements ResourceInterface
      */
     public function getResourceIdentifier(): int
     {
-        return $this->getId();
+        return $this->getIid();
     }
 
     public function getResourceName(): string
     {
         return $this->getName();
+    }
+
+    public function setResourceName(string $name): self
+    {
+        return $this->setName($name);
     }
 }

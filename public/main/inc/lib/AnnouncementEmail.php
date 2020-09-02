@@ -230,7 +230,7 @@ class AnnouncementEmail
         $id = $this->announcement->getIid();
         $course_id = $this->course['real_id'];
         $sql = "SELECT * FROM $table
-                WHERE c_id = $course_id AND announcement_id = $id ";
+                WHERE announcement_id = $id ";
         $rs = Database::query($sql);
         while ($row = Database::fetch_array($rs)) {
             $result[] = $row;
@@ -359,14 +359,11 @@ class AnnouncementEmail
     public function logMailSent()
     {
         $id = $this->announcement->getIid();
-        $courseId = $this->course['real_id'];
         $table = Database::get_course_table(TABLE_ANNOUNCEMENT);
         $sql = "UPDATE $table SET
                 email_sent = 1
                 WHERE
-                    c_id = $courseId AND
-                    id = $id AND
-                    session_id = {$this->session_id}
+                    iid = $id
                 ";
         Database::query($sql);
     }

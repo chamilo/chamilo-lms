@@ -1,19 +1,23 @@
 <template>
   <v-form>
-    <v-container fluid>
-      <v-row>
-        <v-col cols="12" sm="6" md="6">
-          <v-text-field
-                  v-model="item.title"
-                  :error-messages="titleErrors"
-                  :label="$t('Title')"
-                  required
-                  @input="$v.item.title.$touch()"
-                  @blur="$v.item.title.$touch()"
-          />
-        </v-col>
-      </v-row>
-    </v-container>
+    <b-row>
+      <b-col
+        cols="12"
+        sm="6"
+        md="6"
+      >
+        <b-form-input
+          v-model="item.title"
+          :error-messages="titleErrors"
+          :placeholder="$t('Title')"
+          required
+          @input="$v.item.title.$touch()"
+          @blur="$v.item.title.$touch()"
+        />
+      </b-col>
+    </b-row>
+
+    <br>
   </v-form>
 </template>
 
@@ -41,8 +45,6 @@ export default {
       default: () => {}
     },
   },
-  created () {
-  },
   data() {
     return {
       title: null,
@@ -66,6 +68,8 @@ export default {
     violations() {
       return this.errors || {};
     }
+  },
+  created () {
   },
   methods: {
   },

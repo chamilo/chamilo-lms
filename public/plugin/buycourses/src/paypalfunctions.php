@@ -20,9 +20,9 @@ $API_Password = $paypalPassword;
 $API_Signature = $paypalSignature;
 
 // BN Code is only applicable for partners
-$sBNCode = 'PP-ECWizard';
+$sBNCode = "PP-ECWizard";
 
-/*
+/**
  * Define the PayPal Redirect URLs.
  * This is the URL that the buyer is first sent to do authorize payment with their paypal account
  * change the URL depending if you are testing on the sandbox or the live PayPal site.
@@ -30,18 +30,18 @@ $sBNCode = 'PP-ECWizard';
  * For the sandbox, the URL is https://www.sandbox.paypal.com/webscr&cmd=_express-checkout&token=
  * For the live site, the URL is https://www.paypal.com/webscr&cmd=_express-checkout&token=
  */
-if (true == $SandboxFlag) {
-    $API_Endpoint = 'https://api-3t.sandbox.paypal.com/nvp';
-    $PAYPAL_URL = 'https://www.sandbox.paypal.com/webscr?cmd=_express-checkout&token=';
+if ($SandboxFlag == true) {
+    $API_Endpoint = "https://api-3t.sandbox.paypal.com/nvp";
+    $PAYPAL_URL = "https://www.sandbox.paypal.com/webscr?cmd=_express-checkout&token=";
 } else {
-    $API_Endpoint = 'https://api-3t.paypal.com/nvp';
-    $PAYPAL_URL = 'https://www.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=';
+    $API_Endpoint = "https://api-3t.paypal.com/nvp";
+    $PAYPAL_URL = "https://www.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=";
 }
 
 $USE_PROXY = false;
-$version = '93';
+$version = "93";
 
-if ('' == session_id()) {
+if (session_id() == "") {
     session_start();
 }
 
@@ -66,26 +66,26 @@ if ('' == session_id()) {
 function CallShortcutExpressCheckout($paymentAmount, $currencyCodeType, $paymentType, $returnURL, $cancelURL, $extra)
 {
     // Construct the parameter string that describes the SetExpressCheckout API call in the shortcut implementation
-    $nvpstr = '&PAYMENTREQUEST_0_AMT='.$paymentAmount;
-    $nvpstr .= '&PAYMENTREQUEST_0_ITEMAMT='.$paymentAmount;
-    $nvpstr .= '&PAYMENTREQUEST_0_PAYMENTACTION='.$paymentType;
-    $nvpstr .= '&RETURNURL='.$returnURL;
-    $nvpstr .= '&CANCELURL='.$cancelURL;
-    $nvpstr .= '&PAYMENTREQUEST_0_CURRENCYCODE='.$currencyCodeType;
+    $nvpstr = "&PAYMENTREQUEST_0_AMT=".$paymentAmount;
+    $nvpstr .= "&PAYMENTREQUEST_0_ITEMAMT=".$paymentAmount;
+    $nvpstr .= "&PAYMENTREQUEST_0_PAYMENTACTION=".$paymentType;
+    $nvpstr .= "&RETURNURL=".$returnURL;
+    $nvpstr .= "&CANCELURL=".$cancelURL;
+    $nvpstr .= "&PAYMENTREQUEST_0_CURRENCYCODE=".$currencyCodeType;
     $nvpstr .= $extra;
 
-    $_SESSION['currencyCodeType'] = $currencyCodeType;
-    $_SESSION['PaymentType'] = $paymentType;
+    $_SESSION["currencyCodeType"] = $currencyCodeType;
+    $_SESSION["PaymentType"] = $paymentType;
 
     /**
      * Make the API call to PayPal
      * If the API call succeded, then redirect the buyer to PayPal to begin to authorize payment.
      * If an error occured, show the resulting errors.
      */
-    $resArray = hash_call('SetExpressCheckout', $nvpstr);
-    $ack = strtoupper($resArray['ACK']);
-    if ('SUCCESS' == $ack || 'SUCCESSWITHWARNING' == $ack) {
-        $token = urldecode($resArray['TOKEN']);
+    $resArray = hash_call("SetExpressCheckout", $nvpstr);
+    $ack = strtoupper($resArray["ACK"]);
+    if ($ack == "SUCCESS" || $ack == "SUCCESSWITHWARNING") {
+        $token = urldecode($resArray["TOKEN"]);
         $_SESSION['TOKEN'] = $token;
     }
 
@@ -125,33 +125,33 @@ function CallMarkExpressCheckout(
     $phoneNum
 ) {
     // Construct the parameter string that describes the SetExpressCheckout API call in the shortcut implementation
-    $nvpstr = '&PAYMENTREQUEST_0_AMT='.$paymentAmount;
-    $nvpstr .= '&PAYMENTREQUEST_0_PAYMENTACTION='.$paymentType;
-    $nvpstr .= '&RETURNURL='.$returnURL;
-    $nvpstr .= '&CANCELURL='.$cancelURL;
-    $nvpstr .= '&PAYMENTREQUEST_0_CURRENCYCODE='.$currencyCodeType;
-    $nvpstr .= '&ADDROVERRIDE=1';
-    $nvpstr .= '&PAYMENTREQUEST_0_SHIPTONAME='.$shipToName;
-    $nvpstr .= '&PAYMENTREQUEST_0_SHIPTOSTREET='.$shipToStreet;
-    $nvpstr .= '&PAYMENTREQUEST_0_SHIPTOSTREET2='.$shipToStreet2;
-    $nvpstr .= '&PAYMENTREQUEST_0_SHIPTOCITY='.$shipToCity;
-    $nvpstr .= '&PAYMENTREQUEST_0_SHIPTOSTATE='.$shipToState;
-    $nvpstr .= '&PAYMENTREQUEST_0_SHIPTOCOUNTRYCODE='.$shipToCountryCode;
-    $nvpstr .= '&PAYMENTREQUEST_0_SHIPTOZIP='.$shipToZip;
-    $nvpstr .= '&PAYMENTREQUEST_0_SHIPTOPHONENUM='.$phoneNum;
+    $nvpstr = "&PAYMENTREQUEST_0_AMT=".$paymentAmount;
+    $nvpstr = $nvpstr."&PAYMENTREQUEST_0_PAYMENTACTION=".$paymentType;
+    $nvpstr = $nvpstr."&RETURNURL=".$returnURL;
+    $nvpstr = $nvpstr."&CANCELURL=".$cancelURL;
+    $nvpstr = $nvpstr."&PAYMENTREQUEST_0_CURRENCYCODE=".$currencyCodeType;
+    $nvpstr = $nvpstr."&ADDROVERRIDE=1";
+    $nvpstr = $nvpstr."&PAYMENTREQUEST_0_SHIPTONAME=".$shipToName;
+    $nvpstr = $nvpstr."&PAYMENTREQUEST_0_SHIPTOSTREET=".$shipToStreet;
+    $nvpstr = $nvpstr."&PAYMENTREQUEST_0_SHIPTOSTREET2=".$shipToStreet2;
+    $nvpstr = $nvpstr."&PAYMENTREQUEST_0_SHIPTOCITY=".$shipToCity;
+    $nvpstr = $nvpstr."&PAYMENTREQUEST_0_SHIPTOSTATE=".$shipToState;
+    $nvpstr = $nvpstr."&PAYMENTREQUEST_0_SHIPTOCOUNTRYCODE=".$shipToCountryCode;
+    $nvpstr = $nvpstr."&PAYMENTREQUEST_0_SHIPTOZIP=".$shipToZip;
+    $nvpstr = $nvpstr."&PAYMENTREQUEST_0_SHIPTOPHONENUM=".$phoneNum;
 
-    $_SESSION['currencyCodeType'] = $currencyCodeType;
-    $_SESSION['PaymentType'] = $paymentType;
+    $_SESSION["currencyCodeType"] = $currencyCodeType;
+    $_SESSION["PaymentType"] = $paymentType;
 
     /**
      * Make the API call to PayPal
      * If the API call succeded, then redirect the buyer to PayPal to begin to authorize payment.
      * If an error occured, show the resulting errors.
      */
-    $resArray = hash_call('SetExpressCheckout', $nvpstr);
-    $ack = strtoupper($resArray['ACK']);
-    if ('SUCCESS' == $ack || 'SUCCESSWITHWARNING' == $ack) {
-        $token = urldecode($resArray['TOKEN']);
+    $resArray = hash_call("SetExpressCheckout", $nvpstr);
+    $ack = strtoupper($resArray["ACK"]);
+    if ($ack == "SUCCESS" || $ack == "SUCCESSWITHWARNING") {
+        $token = urldecode($resArray["TOKEN"]);
         $_SESSION['TOKEN'] = $token;
     }
 
@@ -179,7 +179,7 @@ function GetShippingDetails($token)
      * Build a second API request to PayPal, using the token as the
      * ID to get the details on the payment authorization
      */
-    $nvpstr = '&TOKEN='.$token;
+    $nvpstr = "&TOKEN=".$token;
 
     /**
      * Make the API call and store the results in an array.
@@ -187,9 +187,9 @@ function GetShippingDetails($token)
      * an action to complete the payment.
      * If failed, show the error.
      */
-    $resArray = hash_call('GetExpressCheckoutDetails', $nvpstr);
-    $ack = strtoupper($resArray['ACK']);
-    if ('SUCCESS' == $ack || 'SUCCESSWITHWARNING' == $ack) {
+    $resArray = hash_call("GetExpressCheckoutDetails", $nvpstr);
+    $ack = strtoupper($resArray["ACK"]);
+    if ($ack == "SUCCESS" || $ack == "SUCCESSWITHWARNING") {
         $_SESSION['payer_id'] = $resArray['PAYERID'];
     }
 
@@ -237,14 +237,14 @@ function ConfirmPayment($FinalPaymentAmt)
      * Make the call to PayPal to finalize payment
      * If an error occured, show the resulting errors.
      */
-    $resArray = hash_call('DoExpressCheckoutPayment', $nvpstr);
+    $resArray = hash_call("DoExpressCheckoutPayment", $nvpstr);
 
     /**
      * Display the API response back to the browser.
      * If the response from PayPal was a success, display the response parameters
      * If the response was an error, display the errors received using APIError.php.
      */
-    $ack = strtoupper($resArray['ACK']);
+    $ack = strtoupper($resArray["ACK"]);
 
     return $resArray;
 }
@@ -286,22 +286,24 @@ function DirectPayment(
     $currencyCode
 ) {
     //Construct the parameter string that describes DoDirectPayment
-    $nvpstr = '&AMT='.$paymentAmount;
-    $nvpstr .= '&CURRENCYCODE='.$currencyCode;
-    $nvpstr .= '&PAYMENTACTION='.$paymentType;
-    $nvpstr .= '&CREDITCARDTYPE='.$creditCardType;
-    $nvpstr .= '&ACCT='.$creditCardNumber;
-    $nvpstr .= '&EXPDATE='.$expDate;
-    $nvpstr .= '&CVV2='.$cvv2;
-    $nvpstr .= '&FIRSTNAME='.$firstName;
-    $nvpstr .= '&LASTNAME='.$lastName;
-    $nvpstr .= '&STREET='.$street;
-    $nvpstr .= '&CITY='.$city;
-    $nvpstr .= '&STATE='.$state;
-    $nvpstr .= '&COUNTRYCODE='.$countryCode;
-    $nvpstr .= '&IPADDRESS='.$_SERVER['REMOTE_ADDR'];
+    $nvpstr = "&AMT=".$paymentAmount;
+    $nvpstr = $nvpstr."&CURRENCYCODE=".$currencyCode;
+    $nvpstr = $nvpstr."&PAYMENTACTION=".$paymentType;
+    $nvpstr = $nvpstr."&CREDITCARDTYPE=".$creditCardType;
+    $nvpstr = $nvpstr."&ACCT=".$creditCardNumber;
+    $nvpstr = $nvpstr."&EXPDATE=".$expDate;
+    $nvpstr = $nvpstr."&CVV2=".$cvv2;
+    $nvpstr = $nvpstr."&FIRSTNAME=".$firstName;
+    $nvpstr = $nvpstr."&LASTNAME=".$lastName;
+    $nvpstr = $nvpstr."&STREET=".$street;
+    $nvpstr = $nvpstr."&CITY=".$city;
+    $nvpstr = $nvpstr."&STATE=".$state;
+    $nvpstr = $nvpstr."&COUNTRYCODE=".$countryCode;
+    $nvpstr = $nvpstr."&IPADDRESS=".$_SERVER['REMOTE_ADDR'];
 
-    return hash_call('DoDirectPayment', $nvpstr);
+    $resArray = hash_call("DoDirectPayment", $nvpstr);
+
+    return $resArray;
 }
 
 /**
@@ -314,18 +316,20 @@ function DirectPayment(
  */
 function MassPayment(array $beneficiaries, $currencyCode)
 {
-    $nvpstr = '&RECEIVERTYPE=EmailAddress';
-    $nvpstr .= '&CURRENCYCODE='.$currencyCode;
+    $nvpstr = "&RECEIVERTYPE=EmailAddress";
+    $nvpstr .= "&CURRENCYCODE=".$currencyCode;
 
     $index = 0;
 
     foreach ($beneficiaries as $beneficiary) {
-        $nvpstr .= '&L_EMAIL'.$index.'='.$beneficiary['paypal_account'];
-        $nvpstr .= '&L_AMT'.$index.'='.$beneficiary['commission'];
+        $nvpstr .= "&L_EMAIL".$index."=".$beneficiary['paypal_account'];
+        $nvpstr .= "&L_AMT".$index."=".$beneficiary['commission'];
         $index++;
     }
 
-    return hash_call('MassPay', $nvpstr);
+    $resArray = hash_call("MassPay", $nvpstr);
+
+    return $resArray;
 }
 
 /**
@@ -355,13 +359,13 @@ function hash_call($methodName, $nvpStr)
     //if USE_PROXY constant set to TRUE in Constants.php, then only proxy will be enabled.
     //Set proxy name to PROXY_HOST and port number to PROXY_PORT in constants.php
     if ($USE_PROXY) {
-        curl_setopt($ch, CURLOPT_PROXY, $PROXY_HOST.':'.$PROXY_PORT);
+        curl_setopt($ch, CURLOPT_PROXY, $PROXY_HOST.":".$PROXY_PORT);
     }
 
     //NVPRequest for submitting to server
-    $nvpreq = 'METHOD='.urlencode($methodName).'&VERSION='.urlencode($version).
-        '&PWD='.urlencode($API_Password).'&USER='.urlencode($API_UserName).
-        '&SIGNATURE='.urlencode($API_Signature).$nvpStr.'&BUTTONSOURCE='.urlencode($sBNCode);
+    $nvpreq = "METHOD=".urlencode($methodName)."&VERSION=".urlencode($version).
+        "&PWD=".urlencode($API_Password)."&USER=".urlencode($API_UserName).
+        "&SIGNATURE=".urlencode($API_Signature).$nvpStr."&BUTTONSOURCE=".urlencode($sBNCode);
 
     //setting the nvpreq as POST FIELD to curl
     curl_setopt($ch, CURLOPT_POSTFIELDS, $nvpreq);
@@ -395,7 +399,7 @@ function RedirectToPayPal($token)
     global $PAYPAL_URL;
     // Redirect to paypal.com here
     $payPalURL = $PAYPAL_URL.$token;
-    header('Location: '.$payPalURL);
+    header("Location: ".$payPalURL);
     exit;
 }
 
@@ -415,7 +419,7 @@ function deformatNVP($nvpstr)
         //postion of Key
         $keypos = strpos($nvpstr, '=');
         //position of value
-        $valuepos = strpos($nvpstr, '&') ?: strlen($nvpstr);
+        $valuepos = strpos($nvpstr, '&') ? strpos($nvpstr, '&') : strlen($nvpstr);
         /*getting the Key and Value values and storing in a Associative Array*/
         $keyval = substr($nvpstr, $intial, $keypos);
         $valval = substr($nvpstr, $keypos + 1, $valuepos - $keypos - 1);

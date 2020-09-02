@@ -1,12 +1,14 @@
 <?php
+
 /* For licensing terms, see /license.txt */
+
+use Chamilo\CoreBundle\Framework\Container;
 
 /**
  * Show the skills report.
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  */
-use Chamilo\CoreBundle\Framework\Container;
 
 require_once __DIR__.'/../inc/global.inc.php';
 

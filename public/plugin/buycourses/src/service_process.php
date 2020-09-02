@@ -1,13 +1,14 @@
 <?php
-
 /* For license terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
-use Chamilo\CoreBundle\Entity\User;
+use Chamilo\UserBundle\Entity\User;
 
 /**
  * Process payments for the Buy Courses plugin.
+ *
+ * @package chamilo.plugin.buycourses
  */
 $cidReset = true;
 
@@ -31,18 +32,18 @@ $htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="'.api_get_path(
 $em = Database::getManager();
 $plugin = BuyCoursesPlugin::create();
 $includeServices = $plugin->get('include_services');
-$paypalEnabled = 'true' === $plugin->get('paypal_enable');
-$transferEnabled = 'true' === $plugin->get('transfer_enable');
-$culqiEnabled = 'true' === $plugin->get('culqi_enable');
+$paypalEnabled = $plugin->get('paypal_enable') === 'true';
+$transferEnabled = $plugin->get('transfer_enable') === 'true';
+$culqiEnabled = $plugin->get('culqi_enable') === 'true';
 $additionalQueryString = '';
-if ('true' !== $includeServices) {
+if ($includeServices !== 'true') {
     api_not_allowed(true);
 }
 
-$typeUser = BuyCoursesPlugin::SERVICE_TYPE_USER === $type;
-$typeCourse = BuyCoursesPlugin::SERVICE_TYPE_COURSE === $type;
-$typeSession = BuyCoursesPlugin::SERVICE_TYPE_SESSION === $type;
-$typeFinalLp = BuyCoursesPlugin::SERVICE_TYPE_LP_FINAL_ITEM === $type;
+$typeUser = $type === BuyCoursesPlugin::SERVICE_TYPE_USER;
+$typeCourse = $type === BuyCoursesPlugin::SERVICE_TYPE_COURSE;
+$typeSession = $type === BuyCoursesPlugin::SERVICE_TYPE_SESSION;
+$typeFinalLp = $type === BuyCoursesPlugin::SERVICE_TYPE_LP_FINAL_ITEM;
 $queryString = 'i='.$serviceId.'&t='.$type.$additionalQueryString;
 
 $serviceInfo = $plugin->getService($serviceId);
@@ -83,7 +84,7 @@ if ($typeUser || $typeCourse || $typeSession || $typeFinalLp) {
 }
 
 $selectOptions = [
-    0 => get_lang('none'),
+    0 => get_lang('None'),
 ];
 
 if ($typeUser) {
@@ -91,13 +92,13 @@ if ($typeUser) {
     $selectOptions[$userInfo['user_id']] = api_get_person_name(
         $userInfo['firstname'],
         $userInfo['lastname']
-    ).' ('.get_lang('myself').')';
+    ).' ('.get_lang('Myself').')';
 
     if (!empty($users)) {
         /** @var User $user */
         foreach ($users as $user) {
-            if ((int) ($userInfo['user_id']) !== (int) ($user->getId())) {
-                $selectOptions[$user->getId()] = UserManager::formatUserFullName($user, true);
+            if (intval($userInfo['user_id']) !== intval($user->getId())) {
+                $selectOptions[$user->getId()] = $user->getCompleteNameWithUsername();
             }
         }
     }
@@ -172,7 +173,7 @@ if ($typeUser) {
 
             foreach ($thisLpItems as $item) {
                 //Now only we need the final item and return the current LP
-                if (TOOL_LP_FINAL_ITEM == $item->getItemType()) {
+                if ($item->getItemType() == TOOL_LP_FINAL_ITEM) {
                     $checker = true;
                     $sessionLpList[$lp->getCId()] = $lp->getName().' ('.$session->getSession()->getName().')';
                 }
@@ -186,7 +187,7 @@ if ($typeUser) {
             $thisLpItems = $em->getRepository('ChamiloCourseBundle:CLpItem')->findBy(['lpId' => $lp->getId()]);
             foreach ($thisLpItems as $item) {
                 //Now only we need the final item and return the current LP
-                if (TOOL_LP_FINAL_ITEM == $item->getItemType()) {
+                if ($item->getItemType() == TOOL_LP_FINAL_ITEM) {
                     $checker = true;
                     $sessionLpList[$lp->getCId()] = $lp->getName().' ('.$session->getSession()->getName().')';
                 }
@@ -198,16 +199,16 @@ if ($typeUser) {
     if (!$checker) {
         $form->addHtml(
             Display::return_message(
-                $plugin->get_lang('YourCoursesNeedAtLeastOneLearning paths'),
+                $plugin->get_lang('YourCoursesNeedAtLeastOneLearningPath'),
                 'error'
             )
         );
     }
-    $form->addSelect('info_select', get_lang('Learning paths'), $selectOptions);
+    $form->addSelect('info_select', get_lang('LearningPath'), $selectOptions);
 }
 
-$form->addHidden('t', (int) ($_GET['t']));
-$form->addHidden('i', (int) ($_GET['i']));
+$form->addHidden('t', intval($_GET['t']));
+$form->addHidden('i', intval($_GET['i']));
 $form->addButton('submit', $plugin->get_lang('ConfirmOrder'), 'check', 'success');
 
 if ($form->validate()) {
@@ -240,7 +241,7 @@ if ($form->validate()) {
         $infoSelected
     );
 
-    if (false !== $serviceSaleId) {
+    if ($serviceSaleId !== false) {
         $_SESSION['bc_service_sale_id'] = $serviceSaleId;
         header('Location: '.api_get_path(WEB_PLUGIN_PATH).'buycourses/src/service_process_confirm.php');
     }

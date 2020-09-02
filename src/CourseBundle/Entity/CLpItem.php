@@ -41,13 +41,6 @@ class CLpItem
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer", nullable=true)
-     */
-    protected $id;
-
-    /**
-     * @var int
-     *
      * @ORM\Column(name="lp_id", type="integer", nullable=false)
      */
     protected $lpId;
@@ -739,30 +732,6 @@ class CLpItem
     public function getPrerequisiteMaxScore()
     {
         return $this->prerequisiteMaxScore;
-    }
-
-    /**
-     * Set id.
-     *
-     * @param int $id
-     *
-     * @return CLpItem
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**

@@ -1071,6 +1071,26 @@ function clean_up_files_in_zip($p_event, &$p_header)
     return 1;
 }
 
+function cleanZipFilesNoRename($p_event, &$p_header)
+{
+    $originalStoredFileName = $p_header['stored_filename'];
+    $baseName = basename($originalStoredFileName);
+    // Skip files
+    $skipFiles = [
+        '__MACOSX',
+        '.Thumbs.db',
+        'Thumbs.db',
+    ];
+
+    if (in_array($baseName, $skipFiles)) {
+        return 0;
+    }
+    $modifiedStoredFileName = clean_up_path($originalStoredFileName, false);
+    $p_header['filename'] = str_replace($originalStoredFileName, $modifiedStoredFileName, $p_header['filename']);
+
+    return 1;
+}
+
 /**
  * Allow .htaccess file.
  *
@@ -1110,21 +1130,25 @@ function cleanZipFilesAllowHtaccess($p_event, &$p_header)
  * by eliminating dangerous file names and cleaning them.
  *
  * @param string $path
+ * @param bool   $replaceName
  *
  * @return string
  *
  * @see disable_dangerous_file()
  * @see api_replace_dangerous_char()
  */
-function clean_up_path($path)
+function clean_up_path($path, $replaceName = true)
 {
     // Split the path in folders and files
     $path_array = explode('/', $path);
     // Clean up every folder and filename in the path
     foreach ($path_array as $key => &$val) {
         // We don't want to lose the dots in ././folder/file (cfr. zipfile)
-        if ('.' != $val) {
-            $val = disable_dangerous_file(api_replace_dangerous_char($val));
+        if ($val != '.') {
+            if ($replaceName) {
+                $val = api_replace_dangerous_char($val);
+            }
+            $val = disable_dangerous_file($val);
         }
     }
     // Join the "cleaned" path (modified in-place as passed by reference)
@@ -1485,7 +1509,7 @@ function create_unexisting_directory(
 
     // Check if pathname already exists inside document table
     $table = Database::get_course_table(TABLE_DOCUMENT);
-    $sql = "SELECT id, path FROM $table
+    $sql = "SELECT iid, path FROM $table
             WHERE
                 c_id = $course_id AND
                 path = '".Database::escape_string($systemFolderName)."'";
@@ -1520,7 +1544,7 @@ function create_unexisting_directory(
     } else {
         $document = Database::fetch_array($rs);
         $documentData = DocumentManager::get_document_data_by_id(
-            $document['id'],
+            $document['iid'],
             $_course['code'],
             false,
             $session_id

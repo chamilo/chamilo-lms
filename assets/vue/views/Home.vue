@@ -1,9 +1,8 @@
 <template>
-        <v-container
-                class="fill-height"
-                fluid
-        >
-        </v-container>
+  <v-container
+    class="fill-height"
+    fluid
+  />
 </template>
 
 <script>

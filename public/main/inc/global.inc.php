@@ -10,10 +10,6 @@ use Symfony\Component\ErrorHandler\Debug;
  * All legacy Chamilo scripts should include this important file.
  */
 
-// Specification for user names:
-// 1. ASCII-letters, digits, "." (dot), "_" (underscore) are acceptable, 40 characters maximum length.
-// 2. Empty username is formally valid, but it is reserved for the anonymous user.
-// 3. Checking the login_is_email portal setting in order to accept 100 chars maximum
 define('USERNAME_MAX_LENGTH', 100);
 
 require_once __DIR__.'/../../../vendor/autoload.php';

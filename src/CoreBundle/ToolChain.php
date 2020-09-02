@@ -5,7 +5,6 @@
 namespace Chamilo\CoreBundle;
 
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceType;
 use Chamilo\CoreBundle\Entity\Tool;
 use Chamilo\CoreBundle\Entity\ToolResourceRight;
@@ -13,7 +12,6 @@ use Chamilo\CoreBundle\Manager\SettingsManager;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CoreBundle\Tool\AbstractTool;
 use Chamilo\CourseBundle\Entity\CTool;
-use Chamilo\CourseBundle\Repository\CToolRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PropertyAccess\Exception\InvalidArgumentException;
 use Symfony\Component\Security\Core\Security;
@@ -129,13 +127,11 @@ class ToolChain
         //$tool->addToolResourceRight($toolResourceRightReader);
     }
 
-    public function addToolsInCourse(CToolRepository $toolRepository, Course $course): Course
+    public function addToolsInCourse(Course $course): Course
     {
         $tools = $this->getTools();
         $manager = $this->entityManager;
         $toolVisibility = $this->settingsManager->getSetting('course.active_tools_on_create');
-        $token = $this->security->getToken();
-        $user = $token->getUser();
 
         // Hardcoded tool list order
         $toolList = [
@@ -167,6 +163,8 @@ class ToolChain
         ];
         $toolList = array_flip($toolList);
 
+        // @todo handle plugin
+
         /** @var AbstractTool $tool */
         foreach ($tools as $tool) {
             $visibility = in_array($tool->getName(), $toolVisibility, true);
@@ -183,9 +181,9 @@ class ToolChain
                 ->setName($tool->getName())
                 ->setPosition($position)
                 ->setVisibility($visibility)
-                ->setCategory($tool->getCategory())
+                ->setParent($course)
+                ->addCourseLink($course)
             ;
-            $toolRepository->addResourceToCourse($courseTool, ResourceLink::VISIBILITY_PUBLISHED, $user, $course);
             $course->addTool($courseTool);
         }
 
@@ -193,11 +191,9 @@ class ToolChain
     }
 
     /**
-     * @param string $name
-     *
      * @return AbstractTool
      */
-    public function getToolFromName($name)
+    public function getToolFromName(string $name)
     {
         $tools = $this->getTools();
 

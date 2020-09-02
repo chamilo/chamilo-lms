@@ -14,12 +14,12 @@ use Symfony\Component\Security\Core\Encoder\PlaintextPasswordEncoder;
  */
 class Encoder extends BasePasswordEncoder
 {
-    private $passwordEncrypt;
+    //private $passwordEncrypt;
 
-    public function __construct(string $passwordEncrypt)
+    public function __construct()
     {
-        $passwordEncrypt = str_replace("'", '', trim($passwordEncrypt));
-        $this->passwordEncrypt = $passwordEncrypt;
+        /*$passwordEncrypt = str_replace("'", '', trim($passwordEncrypt));
+        $this->passwordEncrypt = $passwordEncrypt;*/
     }
 
     /**
@@ -53,12 +53,9 @@ class Encoder extends BasePasswordEncoder
         return $encoder->isPasswordValid($encoded, $raw, $salt);
     }
 
-    /**
-     * @return BCryptPasswordEncoder|MessageDigestPasswordEncoder|PlaintextPasswordEncoder
-     */
     private function getEncoder()
     {
-        switch ($this->passwordEncrypt) {
+        /*switch ($this->passwordEncrypt) {
             case 'none':
                 $defaultEncoder = new PlaintextPasswordEncoder();
 
@@ -72,8 +69,8 @@ class Encoder extends BasePasswordEncoder
                 $defaultEncoder = new MessageDigestPasswordEncoder($this->passwordEncrypt, false, 1);
 
                 break;
-        }
+        }*/
 
-        return $defaultEncoder;
+        //return $defaultEncoder;
     }
 }

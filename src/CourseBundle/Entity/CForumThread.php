@@ -41,13 +41,6 @@ class CForumThread extends AbstractResource implements ResourceInterface
     protected $cId;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="thread_id", type="integer")
-     */
-    protected $threadId;
-
-    /**
      * @var string
      * @Assert\NotBlank()
      * @ORM\Column(name="thread_title", type="string", length=255, nullable=true)
@@ -180,7 +173,6 @@ class CForumThread extends AbstractResource implements ResourceInterface
         $this->threadReplies = 0;
         $this->threadViews = 0;
         $this->locked = 0;
-        $this->threadId = 0;
         $this->threadQualifyMax = 0;
         $this->threadWeight = 0;
         $this->lpItemId = 0;
@@ -383,10 +375,8 @@ class CForumThread extends AbstractResource implements ResourceInterface
      * Set threadDate.
      *
      * @param \DateTime $threadDate
-     *
-     * @return CForumThread
      */
-    public function setThreadDate($threadDate)
+    public function setThreadDate($threadDate): self
     {
         $this->threadDate = $threadDate;
 
@@ -572,30 +562,6 @@ class CForumThread extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Set threadId.
-     *
-     * @param int $threadId
-     *
-     * @return CForumThread
-     */
-    public function setThreadId($threadId)
-    {
-        $this->threadId = $threadId;
-
-        return $this;
-    }
-
-    /**
-     * Get threadId.
-     *
-     * @return int
-     */
-    public function getThreadId()
-    {
-        return $this->threadId;
-    }
-
-    /**
      * Set cId.
      *
      * @param int $cId
@@ -672,5 +638,10 @@ class CForumThread extends AbstractResource implements ResourceInterface
     public function getResourceName(): string
     {
         return $this->getThreadTitle();
+    }
+
+    public function setResourceName(string $name): self
+    {
+        return $this->setThreadTitle($name);
     }
 }

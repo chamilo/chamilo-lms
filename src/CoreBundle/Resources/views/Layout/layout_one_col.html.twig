@@ -28,7 +28,7 @@
     {% endif %}
 
     {% autoescape %}
-    <div id="app" data-is-authenticated="{{ is_authenticated }}" data-user="{{ user }}">
+    <div id="app" data-is-authenticated="{{ is_authenticated }}" data-user-json="{{ user_json }}">
     </div>
 
     {% endautoescape %}
@@ -44,7 +44,7 @@
                     {% include '@ChamiloCore/FlashMessage/render.html.twig' %}
             {% endblock %}
 
-            <section class="container-fluid">
+{#            <section class="container-fluid">#}
                 {% if introduction is defined %}
                     {{ introduction }}
                 {% endif %}
@@ -56,7 +56,7 @@
             {% block content %}
                 {{ content }}
             {% endblock %}
-            </section>
+{#            </section>#}
         {% endautoescape %}
     </section>
 

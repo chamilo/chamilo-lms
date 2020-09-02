@@ -5,10 +5,13 @@ import store from "./store";
 import courseCategoryService from './services/coursecategory';
 import documentsService from './services/documents';
 import courseService from './services/course';
+import resourceLinkService from './services/resourcelink';
+import resourceNodeService from './services/resourcenode';
+
 import makeCrudModule from './store/modules/crud';
 import vuetify from './plugins/vuetify' // path to vuetify export
 require('@fancyapps/fancybox');
-require ('@fancyapps/fancybox/dist/jquery.fancybox.css');
+require('@fancyapps/fancybox/dist/jquery.fancybox.css');
 import VueApollo from 'vue-apollo';
 import Vuelidate from 'vuelidate';
 import i18n from './i18n';
@@ -18,8 +21,20 @@ const apolloClient = new ApolloClient({
     uri: '/api/graphql/'
 });
 
-Vue.config.productionTip = false;
+import { BootstrapVue } from 'bootstrap-vue';
+// Install BootstrapVue
+Vue.use(BootstrapVue)
+// Optionally install the BootstrapVue icon components plugin
+//Vue.use(IconsPlugin)
 
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { fas } from '@fortawesome/free-solid-svg-icons'
+
+library.add(fas);
+Vue.component('font-awesome-icon', FontAwesomeIcon);
+
+Vue.config.productionTip = false;
 Vue.use(Vuelidate);
 Vue.use(VueApollo);
 Vue.use(require('vue-moment'));
@@ -28,11 +43,30 @@ const apolloProvider = new VueApollo({
     defaultClient: apolloClient,
 });
 
-//import './quasar'
+const prettyBytes = require('pretty-bytes');
+
+Vue.filter('prettyBytes', function (num) {
+    return prettyBytes(num);
+});
+
 store.registerModule(
     'course',
     makeCrudModule({
         service: courseService
+    })
+);
+
+store.registerModule(
+    'resourcelink',
+    makeCrudModule({
+        service: resourceLinkService
+    })
+);
+
+store.registerModule(
+    'resourcenode',
+    makeCrudModule({
+        service: resourceNodeService
     })
 );
 

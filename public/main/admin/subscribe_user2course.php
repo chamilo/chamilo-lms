@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -77,8 +78,8 @@ if (is_array($extra_field_list)) {
 /* React on POSTed request */
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $form_sent = $_POST['form_sent'];
-    $users = isset($_POST['User list']) && is_array($_POST['User list']) ? $_POST['User list'] : [];
-    $courses = isset($_POST['Course list']) && is_array($_POST['Course list']) ? $_POST['Course list'] : [];
+    $users = isset($_POST['UserList']) && is_array($_POST['UserList']) ? $_POST['UserList'] : [];
+    $courses = isset($_POST['CourseList']) && is_array($_POST['CourseList']) ? $_POST['CourseList'] : [];
     $first_letter_user = Database::escape_string($_POST['firstLetterUser']);
     $first_letter_course = Database::escape_string($_POST['firstLetterCourse']);
 
@@ -168,17 +169,17 @@ if ($use_extra_fields) {
 
     if (api_is_multiple_url_enabled()) {
         if (is_array($final_result) && count($final_result) > 0) {
-            $where_filter = " AND u.user_id IN  ('".implode("','", $final_result)."') ";
+            $where_filter = " AND u.id IN  ('".implode("','", $final_result)."') ";
         } else {
             //no results
-            $where_filter = " AND u.user_id  = -1";
+            $where_filter = " AND u.id  = -1";
         }
     } else {
         if (is_array($final_result) && count($final_result) > 0) {
-            $where_filter = " AND user_id IN  ('".implode("','", $final_result)."') ";
+            $where_filter = " AND id IN  ('".implode("','", $final_result)."') ";
         } else {
             //no results
-            $where_filter = " AND user_id  = -1";
+            $where_filter = " AND id  = -1";
         }
     }
 }
@@ -192,25 +193,25 @@ if ('true' === $orderListByOfficialCode) {
     $orderBy = " official_code, lastname, firstname";
 }
 
-$sql = "SELECT user_id, lastname, firstname, username, official_code
+$sql = "SELECT id as user_id, lastname, firstname, username, official_code
         FROM $tbl_user
-        WHERE user_id<>2 AND ".$target_name." LIKE '".$first_letter_user."%' $where_filter
-        ORDER BY ".(count($users) > 0 ? "(user_id IN(".implode(',', $users).")) DESC," : "")." ".$orderBy;
+        WHERE id <>2 AND ".$target_name." LIKE '".$first_letter_user."%' $where_filter
+        ORDER BY ".(count($users) > 0 ? "(id IN(".implode(',', $users).")) DESC," : "")." ".$orderBy;
 
 if (api_is_multiple_url_enabled()) {
     $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
     $access_url_id = api_get_current_access_url_id();
     if (-1 != $access_url_id) {
-        $sql = "SELECT u.user_id,lastname,firstname,username, official_code
+        $sql = "SELECT u.id as user_id,lastname,firstname,username, official_code
                 FROM $tbl_user u
                 INNER JOIN $tbl_user_rel_access_url user_rel_url
-                ON (user_rel_url.user_id = u.user_id)
+                ON (user_rel_url.user_id = u.id)
                 WHERE
-                    u.user_id<>2 AND
+                    u.id <> 2 AND
                     access_url_id =  $access_url_id AND
                     (".$target_name." LIKE '".$first_letter_user."%' )
                     $where_filter
-                ORDER BY ".(count($users) > 0 ? "(u.user_id IN(".implode(',', $users).")) DESC," : "")." ".$orderBy;
+                ORDER BY ".(count($users) > 0 ? "(u.id IN(".implode(',', $users).")) DESC," : "")." ".$orderBy;
     }
 }
 
@@ -314,7 +315,7 @@ if (is_array($extra_field_list)) {
    </tr>
    <tr>
     <td width="40%" align="center">
-     <select name="User list[]" multiple="multiple" size="20" style="width:300px;">
+     <select name="UserList[]" multiple="multiple" size="20" style="width:300px;">
     <?php foreach ($db_users as $user) {
           ?>
           <option value="<?php echo $user['user_id']; ?>" <?php if (in_array($user['user_id'], $users)) {
@@ -338,7 +339,7 @@ if (is_array($extra_field_list)) {
     </button>
    </td>
    <td width="40%" align="center">
-    <select name="Course list[]" multiple="multiple" size="20" style="width:300px;">
+    <select name="CourseList[]" multiple="multiple" size="20" style="width:300px;">
     <?php foreach ($db_courses as $course) {
           ?>
          <option value="<?php echo $course['code']; ?>" <?php if (in_array($course['code'], $courses)) {

@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
  * Storage class for HTML::Table data
@@ -778,12 +777,47 @@ class HTML_Table_Storage extends HTML_Common
                     if (!empty($contents) || is_numeric($contents)) {
                         $strHtml .= $typeContent;
                     }
-
                 }
                 $strHtml .= $tabs . $tab . $extraTab . '</tr>' . $lnEnd;
             }
         }
         return $strHtml;
+    }
+
+    function toArray($tabs = null, $tab = null)
+    {
+        $data = [];
+        if ($this->_cols > 0) {
+            for ($i = 0 ; $i < $this->_rows ; $i++) {
+                $item = [];
+                for ($j = 0 ; $j < $this->_cols ; $j++) {
+                    $contents = '';
+                    if (isset($this->_structure[$i][$j]) && $this->_structure[$i][$j] == '__SPANNED__') {
+                        continue;
+                    }
+
+                    if (isset($this->_structure[$i][$j]['contents'])) {
+                        $contents = $this->_structure[$i][$j]['contents'];
+                    }
+
+                    if (is_object($contents)) {
+                        if (method_exists($contents, 'toHtml')) {
+                            $contents = $contents->toHtml();
+                        } elseif (method_exists($contents, 'toString')) {
+                            $contents = $contents->toString();
+                        }
+                        $item = $contents;
+                    }
+                    if (is_array($contents)) {
+                        $contents = implode(', ', $contents);
+                    }
+                    $item[] = $contents;
+                }
+                $data[] = $item;
+            }
+        }
+
+        return $data;
     }
 
     /**

@@ -1,16 +1,18 @@
 import isEmpty from 'lodash/isEmpty';
+import isString from 'lodash/isString';
+import isBoolean from 'lodash/isBoolean';
 import { formatDateTime } from '../utils/dates';
 import NotificationMixin from './NotificationMixin';
 
 export default {
   mixins: [NotificationMixin],
-
   data() {
     return {
       options: {
-        sortBy: [],
+        //sortBy: [], vuetify
+        //sortDesc: [], , vuetify
         page: 1,
-        itemsPerPage: 15
+        itemsPerPage: 5
       },
       filters: {}
     };
@@ -21,6 +23,8 @@ export default {
       // react to route changes...
       this.resetList = true;
       this.onUpdateOptions(this.options);
+      let nodeId = this.$route.params['node'];
+      this.findResourceNode('/api/resource_nodes/'+ nodeId);
     },
 
     deletedItem(item) {
@@ -38,9 +42,11 @@ export default {
 
   methods: {
     onUpdateOptions({ page, itemsPerPage, sortBy, sortDesc, totalItems } = {}) {
+      console.log({ page, itemsPerPage, sortBy, sortDesc, totalItems });
       let params = {
         ...this.filters
       };
+
       if (itemsPerPage > 0) {
         params = { ...params, itemsPerPage, page };
       }
@@ -49,11 +55,13 @@ export default {
         params[`resourceNode.parent`] = this.$route.params.node;
       }
 
-      if (!isEmpty(sortBy) && !isEmpty(sortDesc)) {
-        params[`order[${sortBy[0]}]`] = sortDesc[0] ? 'desc' : 'asc'
+      if (isString(sortBy) && isBoolean(sortDesc)) {
+        //params[`order[${sortBy[0]}]`] = sortDesc[0] ? 'desc' : 'asc'
+        params[`order[${sortBy}]`] = sortDesc ? 'desc' : 'asc'
       }
 
       this.resetList = true;
+    console.log(params);
 
       this.getPage(params).then(() => {
         this.options.sortBy = sortBy;
@@ -82,48 +90,69 @@ export default {
       this.$router.push({ name: `${this.$options.servicePrefix}CreateFile` , query: folderParams});
     },
 
+    uploadDocumentHandler() {
+      let folderParams = this.$route.query;
+      this.$router.push({ name: `${this.$options.servicePrefix}UploadFile` , query: folderParams});
+    },
+
     showHandler(item) {
       let folderParams = this.$route.query;
+      folderParams['id'] = item['@id'];
+
       this.$router.push({
         name: `${this.$options.servicePrefix}Show`,
-        params: { id: item['@id'] },
+        //params: { id: item['@id'] },
         query: folderParams
       });
     },
 
     handleClick(item) {
-      /*this.$router.push({
-        name: `${this.$options.servicePrefix}Show`,
-        params: { id: item['@id'] }
-      });*/
       let folderParams = this.$route.query;
       this.resetList = true;
       this.$route.params.node = item['resourceNode']['id'];
+
       this.$router.push({
         name: `${this.$options.servicePrefix}List`,
         params: {node: item['resourceNode']['id']},
         query: folderParams,
       });
+
       /*this.$router.push({
         name: `${this.$options.servicePrefix}List`,
         params: {node: item['resourceNode']['id']}
       });*/
-
       /*console.log(item['resourceNode']['id']);
       this.$route.params.node = item['resourceNode']['id'];
       this.onUpdateOptions(this.options);*/
-
     },
-
     editHandler(item) {
       let folderParams = this.$route.query;
-      this.$router.push({
-        name: `${this.$options.servicePrefix}Update`,
-        params: { id: item['@id'] },
-        query: folderParams
-      });
-    },
+      folderParams['id'] = item['@id'];
 
+      if ('folder' === item.filetype) {
+        this.$router.push({
+          name: `${this.$options.servicePrefix}Update`,
+          params: { id: item['@id'] },
+          query: folderParams
+        });
+      }
+
+      if ('file' === item.filetype) {
+        folderParams['getFile'] = false;
+
+        if (item.resourceNode.resourceFile &&
+            item.resourceNode.resourceFile.mimeType &&
+            'text/html' === item.resourceNode.resourceFile.mimeType) {
+          folderParams['getFile'] = true;
+        }
+
+        this.$router.push({
+          name: `${this.$options.servicePrefix}UpdateFile`,
+          params: { id: item['@id'] },
+          query: folderParams
+        });
+      }
+    },
     deleteHandler(item) {
       this.deleteItem(item).then(() => this.onUpdateOptions(this.options));
     },

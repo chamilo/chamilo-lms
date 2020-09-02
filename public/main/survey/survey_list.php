@@ -5,9 +5,10 @@
 use ChamiloSession as Session;
 
 /**
- * @author unknown, the initial survey that did not make it in 1.8 because of bad code
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
- * @author Julio Montoya Armas <gugli100@gmail.com>, Chamilo: Personality Test modification and rewriting large parts of the code
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of
+ *         the code
+ * @author Julio Montoya Armas <gugli100@gmail.com>, Chamilo: Personality Test modification and rewriting large parts
+ *         of the code
  *
  * @todo use quickforms for the forms
  */

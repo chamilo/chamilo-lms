@@ -11,7 +11,7 @@ use ApiPlatform\Core\Annotation\ApiSubresource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
-use Chamilo\CourseBundle\Entity\CGroupInfo;
+use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CTool;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
@@ -58,6 +58,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
 
     /**
      * @var int
+     *
      * @Groups({"course:read", "course_rel_user:read"})
      * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
      * @ORM\Id
@@ -108,8 +109,8 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * @var ArrayCollection|ResourceLink[]
      *
-     * @ApiSubresource()
-     * @Groups({"course:read"})
+     * ApiSubresource()
+     * Groups({"course:read"})
      * @ORM\OneToMany(targetEntity="ResourceLink", mappedBy="course", cascade={"persist"}, orphanRemoval=true)
      */
     protected $resourceLinks;
@@ -132,7 +133,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     protected $sessionUserSubscriptions;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CGroupInfo", mappedBy="course", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CGroup", mappedBy="course", cascade={"persist", "remove"})
      */
     protected $groups;
 
@@ -240,6 +241,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
 
     /**
      * @var int Course visibility
+     *
      * @Groups({"course:read", "course:write"})
      * @Assert\NotBlank()
      *
@@ -481,7 +483,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     }
 
     /**
-     * @return CGroupInfo[]|ArrayCollection
+     * @return CGroup[]|ArrayCollection
      */
     public function getGroups()
     {
@@ -570,7 +572,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * @return bool
      */
-    public function hasGroup(CGroupInfo $group)
+    public function hasGroup(CGroup $group)
     {
         /*$criteria = Criteria::create()->where(
             Criteria::expr()->eq('groups', $group)
@@ -1240,12 +1242,15 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
 
     /**
      * Anybody can see this course.
-     *
-     * @return bool
      */
-    public function isPublic()
+    public function isPublic(): bool
     {
-        return self::OPEN_WORLD == $this->visibility;
+        return self::OPEN_WORLD === $this->visibility;
+    }
+
+    public function isHidden(): bool
+    {
+        return self::HIDDEN === $this->visibility;
     }
 
     /**
@@ -1378,5 +1383,10 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     public function getResourceName(): string
     {
         return $this->getCode();
+    }
+
+    public function setResourceName(string $name): self
+    {
+        return $this->setCode($name);
     }
 }

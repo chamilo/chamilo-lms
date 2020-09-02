@@ -6,6 +6,8 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -38,13 +40,6 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
      * @ORM\Column(name="c_id", type="integer")
      */
     protected $cId;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=true)
-     */
-    protected $id;
 
     /**
      * @var string
@@ -117,16 +112,67 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
     protected $questionCode;
 
     /**
+     * @var Collection|CQuizQuestionCategory[]
+     *
+     * @ORM\ManyToMany(targetEntity="Chamilo\CourseBundle\Entity\CQuizQuestionCategory", inversedBy="questions")
+     * @ORM\JoinTable(name="c_quiz_question_rel_category",
+     *      joinColumns={@ORM\JoinColumn(name="category_id", referencedColumnName="iid")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="question_id", referencedColumnName="iid")}
+     * )
+     */
+    protected $categories;
+
+    /**
      * CQuizQuestion constructor.
      */
     public function __construct()
     {
+        $this->categories = new ArrayCollection();
         $this->ponderation = 0.0;
     }
 
     public function __toString(): string
     {
         return $this->getQuestion();
+    }
+
+    public function addCategory(CQuizQuestionCategory $category)
+    {
+        if ($this->categories->contains($category)) {
+            return false;
+        }
+
+        $this->categories->add($category);
+        $category->addQuestion($this);
+    }
+
+    public function updateCategory(CQuizQuestionCategory $category)
+    {
+        if (0 === $this->categories->count()) {
+            $this->addCategory($category);
+        }
+
+        if ($this->categories->contains($category)) {
+            return;
+        }
+
+        foreach ($this->categories as $item) {
+            $this->categories->removeElement($item);
+        }
+
+        $this->addCategory($category);
+
+        return $this;
+    }
+
+    public function removeCategory(CQuizQuestionCategory $category)
+    {
+        if (!$this->categories->contains($category)) {
+            return;
+        }
+
+        $this->categories->removeElement($category);
+        $category->removeQuestion($this);
     }
 
     /**
@@ -346,30 +392,6 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Set id.
-     *
-     * @param int $id
-     *
-     * @return CQuizQuestion
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
      * Set cId.
      *
      * @param int $cId
@@ -432,5 +454,10 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
     public function getResourceName(): string
     {
         return $this->getQuestion();
+    }
+
+    public function setResourceName(string $name): self
+    {
+        return $this->setQuestion($name);
     }
 }

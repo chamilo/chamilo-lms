@@ -3,7 +3,7 @@
 
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CourseBundle\Entity\CGroupInfo;
+use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CGroupRelUser;
 
 /**
@@ -109,8 +109,7 @@ class GroupManager
         $course_id = $course_info['real_id'];
         $table_group = Database::get_course_table(TABLE_GROUP);
 
-        $select = ' g.id,
-                    g.iid,
+        $select = ' g.iid,
                     g.name,
                     g.description,
                     g.category_id,
@@ -231,7 +230,7 @@ class GroupManager
         $course = api_get_course_entity($course_id);
         $session = api_get_session_entity($session_id);
 
-        $group = new CGroupInfo();
+        $group = new CGroup();
         $group
             ->setName($name)
             ->setCourse($course)
@@ -248,25 +247,14 @@ class GroupManager
             ->setSelfUnregistrationAllowed($selfUnregAllwoed)
             ->setSessionId($session_id)
             ->setDocumentAccess($documentAccess)
+            ->setParent($course)
+            ->addCourseLink($course, $session)
         ;
 
-        $repo = Container::getGroupInfoRepository();
-
-        $repo->addResourceToCourse(
-            $group,
-            ResourceLink::VISIBILITY_PUBLISHED,
-            $user,
-            $course,
-            $session
-        );
+        $repo = Container::getGroupRepository();
         $repo->getEntityManager()->flush();
-
         $lastId = $group->getIid();
-
         if ($lastId) {
-            $sql = "UPDATE $table_group SET id = iid WHERE iid = $lastId";
-            Database::query($sql);
-
             /*$desired_dir_name = '/'.api_replace_dangerous_char($name).'_groupdocs';
 
             $newFolderData = create_unexisting_directory(
@@ -493,7 +481,7 @@ class GroupManager
             // delete the groups
             $em
                 ->createQuery(
-                    'DELETE FROM ChamiloCourseBundle:CGroupInfo g WHERE g.course = :course AND g.iid = :id'
+                    'DELETE FROM ChamiloCourseBundle:CGroup g WHERE g.course = :course AND g.iid = :id'
                 )
                 ->execute(['course' => $course_id, 'id' => $groupIid]);
         }
@@ -1016,10 +1004,6 @@ class GroupManager
 
         $categoryId = Database::insert($table, $params);
         if ($categoryId) {
-            $sql = "UPDATE $table SET id = iid
-                    WHERE iid = $categoryId";
-            Database::query($sql);
-
             return $categoryId;
         }
 
@@ -1337,7 +1321,7 @@ class GroupManager
                 SELECT u.id FROM ChamiloCoreBundle:User u
                 INNER JOIN ChamiloCourseBundle:CGroupRelUser gu
                     WITH u.id = gu.userId
-                INNER JOIN ChamiloCourseBundle:CGroupInfo g
+                INNER JOIN ChamiloCourseBundle:CGroup g
                 WITH gu.groupId = g.id AND g.cId = gu.cId
                 WHERE gu.cId = :course AND g.id = :group
                     $activeCondition

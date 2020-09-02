@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -74,6 +75,10 @@ class SelectAjax extends HTML_QuickForm_select
         $max = $this->getAttribute('maximumSelectionLength');
         $max = !empty($max) ? "maximumSelectionLength: $max, " : '';
 
+        // wait XX milliseconds before triggering the request
+        $delay = (int) $this->getAttribute('delay');
+        $delay = (0 !== $delay) ? "delay: $delay, " : '';
+
         $html = <<<JS
             <script>
                 $(function(){
@@ -86,6 +91,7 @@ class SelectAjax extends HTML_QuickForm_select
                         tags: $tags,
                         ajax: {
                             url: $url,
+                            {$delay}
                             dataType: 'json',
                             data: function(params) {
                                 return {

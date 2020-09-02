@@ -4,8 +4,6 @@
 
 namespace Chamilo\CourseBundle\Repository;
 
-use APY\DataGridBundle\Grid\Column\Column;
-use APY\DataGridBundle\Grid\Grid;
 use Chamilo\CoreBundle\Component\Resource\Settings;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
@@ -17,7 +15,7 @@ use Chamilo\CoreBundle\Repository\GridInterface;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CoreBundle\Repository\UploadInterface;
 use Chamilo\CourseBundle\Entity\CDocument;
-use Chamilo\CourseBundle\Entity\CGroupInfo;
+use Chamilo\CourseBundle\Entity\CGroup;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -27,7 +25,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  */
 final class CDocumentRepository extends ResourceRepository implements GridInterface, UploadInterface
 {
-    public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroupInfo $group = null): QueryBuilder
+    public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroup $group = null): QueryBuilder
     {
         return $this->getResourcesByCourse($course, $session, $group, $parentNode);
     }
@@ -53,7 +51,7 @@ final class CDocumentRepository extends ResourceRepository implements GridInterf
         $resource = new CDocument();
         $resource
             ->setFiletype('file')
-            ->setSize($file->getSize())
+            //->setSize($file->getSize())
             ->setTitle($file->getClientOriginalName())
         ;
 
@@ -91,13 +89,13 @@ final class CDocumentRepository extends ResourceRepository implements GridInterf
 
         $params = [
             'course' => $document->getCourse()->getCode(),
-            'id' => ltrim($document->getPath(), '/'),
+            'id' => $document->getResourceNode()->getId(),
             'tool' => 'document',
             'type' => $document->getResourceNode()->getResourceType()->getName(),
         ];
 
         return $this->getRouter()->generate(
-            'chamilo_core_resource_view_file',
+            'chamilo_core_resource_view',
             $params
         );
     }
@@ -210,11 +208,6 @@ final class CDocumentRepository extends ResourceRepository implements GridInterf
             ->getQuery();
 
         return $query->getResult();
-    }
-
-    public function getTitleColumn(Grid $grid): Column
-    {
-        return $grid->getColumn('title');
     }
 
     public function getResourceFormType(): string

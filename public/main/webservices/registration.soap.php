@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
@@ -121,18 +122,6 @@ function WSHelperVerifyKey($params)
 
 // Create the server instance
 $server = new soap_server();
-
-/** @var HookWSRegistration $hook */
-$hook = Container::instantiateHook(HookWSRegistration::class);
-
-if (!empty($hook)) {
-    $hook->setEventData(['server' => $server]);
-    $res = $hook->notifyWSRegistration(HOOK_EVENT_TYPE_PRE);
-    if (!empty($res['server'])) {
-        $server = $res['server'];
-    }
-}
-
 $server->soap_defencoding = 'UTF-8';
 
 // Initialize WSDL support
@@ -6768,7 +6757,7 @@ function WSCertificatesList($startingDate = '', $endingDate = '')
                     certificate.path_certificate
                 FROM $certificateTable AS certificate
                 JOIN $userTable AS user
-                ON certificate.user_id = user.user_id
+                ON certificate.user_id = user.id
                 JOIN $categoryTable AS category
                 ON certificate.cat_id = category.id";
 

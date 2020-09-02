@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
  * Class representing a page of a multipage form.
@@ -71,6 +70,7 @@ class HTML_QuickForm_Page extends HTML_QuickForm
     * Registers a handler for a specific action.
     *
     * @access public
+     *
     * @param  string                name of the action
     * @param  HTML_QuickForm_Action the handler for the action
     */
@@ -87,7 +87,9 @@ class HTML_QuickForm_Page extends HTML_QuickForm
     * method will be called.
     *
     * @access public
+     *
     * @param  string Name of the action
+     *
     * @throws PEAR_Error
     */
     function handle($actionName)
@@ -104,7 +106,9 @@ class HTML_QuickForm_Page extends HTML_QuickForm
     * Returns a name for a submit button that will invoke a specific action.
     *
     * @access public
+     *
     * @param  string  Name of the action
+     *
     * @return string  "name" attribute for a submit button
     */
     function getButtonName($actionName)
@@ -119,6 +123,7 @@ class HTML_QuickForm_Page extends HTML_QuickForm
     * The method is NOT intended for general usage.
     *
     * @param array  'submit' values
+     *
     * @access public
     */
     function loadValues($values)
@@ -129,7 +134,6 @@ class HTML_QuickForm_Page extends HTML_QuickForm
             $this->_elements[$key]->onQuickFormEvent('updateValue', null, $this);
         }
     }
-
 
    /**
     * Builds a form.
@@ -147,7 +151,6 @@ class HTML_QuickForm_Page extends HTML_QuickForm
     {
         $this->_formBuilt = true;
     }
-
 
    /**
     * Checks whether the form was already built.
@@ -169,6 +172,7 @@ class HTML_QuickForm_Page extends HTML_QuickForm
     * be passed to the script.
     *
     * @access public
+     *
     * @param  string    default action name
     */
     function setDefaultAction($actionName)
@@ -198,6 +202,7 @@ class HTML_QuickForm_Page extends HTML_QuickForm
                 }
             }
         }
+
         return $values;
     }
 }

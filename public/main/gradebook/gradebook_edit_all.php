@@ -1,8 +1,8 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
- * Script.
  *
  * @author Julio Montoya - fixes in order to use gradebook models + some code cleaning
  */
@@ -13,7 +13,6 @@ $current_course_tool = TOOL_GRADEBOOK;
 api_protect_course_script(true);
 api_block_anonymous_users();
 GradebookUtils::block_students();
-
 $my_selectcat = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : 0;
 
 if (empty($my_selectcat)) {
@@ -27,8 +26,6 @@ if (isset($_GET['selectcat'])) {
 
 $logInfo = [
     'tool' => TOOL_GRADEBOOK,
-    'tool_id' => 0,
-    'tool_id_detail' => 0,
     'action' => 'edit-weight',
     'action_details' => $action_details,
 ];
@@ -155,7 +152,9 @@ foreach ($links as &$row) {
                </td></tr>';
 }
 
-$sql = 'SELECT * FROM '.$table_evaluation.' WHERE category_id = '.$my_selectcat;
+$sql = "SELECT * FROM $table_evaluation
+        WHERE category_id = $my_selectcat
+        ORDER BY name";
 $result = Database::query($sql);
 $evaluations = Database::store_result($result);
 foreach ($evaluations as $evaluationRow) {

@@ -275,12 +275,18 @@ $actionsRight .= Display::url(
 
 $toolbar = Display::toolbarAction('toolbar-user', [$actionsLeft, $actionsRight]);
 
+$itemPerPage = 10;
+$perPage = api_get_configuration_value('my_space_users_items_per_page');
+if ($perPage) {
+    $itemPerPage = (int) $perPage;
+}
+
 $table = new SortableTable(
     'tracking_student',
     'get_count_users',
     'get_users',
     ($is_western_name_order xor $sort_by_first_name) ? 1 : 0,
-    10
+    $itemPerPage
 );
 
 $params = [

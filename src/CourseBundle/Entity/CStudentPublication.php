@@ -42,13 +42,6 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     protected $cId;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=true)
-     */
-    protected $id;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="url", type="string", length=500, nullable=true)
@@ -710,38 +703,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
         return $this->containsFile;
     }
 
-    /**
-     * Set id.
-     *
-     * @param int $id
-     *
-     * @return CStudentPublication
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set cId.
-     *
-     * @param int $cId
-     *
-     * @return CStudentPublication
-     */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 
@@ -772,6 +734,8 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     public function setUrlCorrection($urlCorrection)
     {
         $this->urlCorrection = $urlCorrection;
+
+        return $this;
     }
 
     /**
@@ -788,6 +752,8 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     public function setTitleCorrection($titleCorrection)
     {
         $this->titleCorrection = $titleCorrection;
+
+        return $this;
     }
 
     /**
@@ -804,6 +770,8 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     public function setDocumentId($documentId)
     {
         $this->documentId = $documentId;
+
+        return $this;
     }
 
     /**
@@ -839,5 +807,10 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     public function getResourceName(): string
     {
         return $this->getTitle();
+    }
+
+    public function setResourceName(string $name): self
+    {
+        return $this->setTitle($name);
     }
 }

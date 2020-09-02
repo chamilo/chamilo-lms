@@ -156,6 +156,8 @@ class ExerciseCategoryManager extends Model
             ->setName($params['name'])
             ->setCourse($course)
             ->setDescription($params['description'])
+            ->setParent($course)
+            ->addCourseLink($course, api_get_session_entity())
         ;
 
         /*
@@ -174,16 +176,6 @@ class ExerciseCategoryManager extends Model
             $category->setPosition($position);
 */
         $em->persist($category);
-
-        $repo->addResourceToCourse(
-            $category,
-            ResourceLink::VISIBILITY_PUBLISHED,
-            api_get_user_entity(api_get_user_id()),
-            $course,
-            api_get_session_entity(),
-            api_get_group_entity()
-        );
-
         $em->flush();
 
         return $category;

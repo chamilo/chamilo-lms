@@ -505,7 +505,7 @@ class Answer
     {
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $sql = "SELECT type FROM $table
-                WHERE c_id = {$this->course_id} AND id = '".$this->questionId."'";
+                WHERE c_id = {$this->course_id} AND iid = '".$this->questionId."'";
         $res = Database::query($sql);
         if (Database::num_rows($res) <= 0) {
             return null;
@@ -735,7 +735,6 @@ class Answer
 
                 if ($iid) {
                     $quizAnswer
-                        ->setId($iid)
                         ->setIdAuto($iid);
 
                     $questionType = $this->getQuestionType();

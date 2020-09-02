@@ -228,6 +228,7 @@ if ('learnpath' !== $origin) {
 
 /* Display Forum Category and the Forum information */
 /*New display forum div*/
+/*New display forum div*/
 echo '<div class="forum_title">';
 echo '<h1>';
 echo Display::url(

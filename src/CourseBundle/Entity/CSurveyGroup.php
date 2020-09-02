@@ -36,13 +36,6 @@ class CSurveyGroup
     protected $cId;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=true)
-     */
-    protected $id;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=20, nullable=false)
@@ -133,30 +126,6 @@ class CSurveyGroup
     public function getSurveyId()
     {
         return $this->surveyId;
-    }
-
-    /**
-     * Set id.
-     *
-     * @param int $id
-     *
-     * @return CSurveyGroup
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**

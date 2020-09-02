@@ -16,6 +16,8 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -34,7 +36,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ApiFilter(OrderFilter::class, properties={"id", "title", "resourceFile", "createdAt", "updatedAt"})
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\ResourceNodeRepository")
  *
+ * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="resource_node")
+ * @ORM\EntityListeners({"Chamilo\CoreBundle\Entity\Listener\ResourceNodeListener"})
  *
  * @Gedmo\Tree(type="materializedPath")
  */
@@ -42,7 +46,8 @@ class ResourceNode
 {
     use TimestampableEntity;
     use TimestampableAgoTrait;
-    public const PATH_SEPARATOR = '`';
+
+    public const PATH_SEPARATOR = '/';
 
     /**
      * @Groups({"resource_node:read", "document:read"})
@@ -70,13 +75,20 @@ class ResourceNode
     protected $slug;
 
     /**
-     * @ORM\ManyToOne(targetEntity="ResourceType")
+     * @var UuidInterface|null
+     *
+     * @ORM\Column(type="uuid", unique=true)
+     */
+    protected $uuid;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="ResourceType", inversedBy="resourceNodes")
      * @ORM\JoinColumn(name="resource_type_id", referencedColumnName="id", nullable=false)
      */
     protected $resourceType;
 
     /**
-     * @Groups({"resource_node:read", "resource_node:write", "document:write"})
+     * @ApiSubresource()
      *
      * @var ResourceLink[]
      *
@@ -98,9 +110,7 @@ class ResourceNode
      * @var User the creator of this node
      * @Assert\Valid()
      * @Groups({"resource_node:read", "resource_node:write", "document:write"})
-     * @ORM\ManyToOne(
-     *     targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="resourceNodes"
-     * )
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="resourceNodes")
      * @ORM\JoinColumn(name="creator_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
      */
     protected $creator;
@@ -137,7 +147,7 @@ class ResourceNode
 
     /**
      * @Groups({"resource_node:read", "document:read"})
-     * @Gedmo\TreePath(appendId=true,separator="`")
+     * @Gedmo\TreePath(appendId=true,separator="/")
      *
      * @ORM\Column(name="path", type="text", nullable=true)
      */
@@ -176,14 +186,25 @@ class ResourceNode
     protected $updatedAt;
 
     /**
+     * @var bool
+     *
+     * @Groups({"resource_node:read", "document:read"})
+     */
+    protected $fileEditableText;
+
+    protected $content;
+
+    /**
      * Constructor.
      */
     public function __construct()
     {
+        $this->uuid = Uuid::uuid4()->toString();
         $this->children = new ArrayCollection();
         $this->resourceLinks = new ArrayCollection();
         $this->comments = new ArrayCollection();
         $this->createdAt = new \DateTime();
+        $this->editableContent = false;
     }
 
     /**
@@ -205,18 +226,6 @@ class ResourceNode
     }
 
     /**
-     * @param int $id
-     *
-     * @return $this
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
      * Returns the resource creator.
      *
      * @return User
@@ -226,7 +235,7 @@ class ResourceNode
         return $this->creator;
     }
 
-    public function setCreator(User $creator = null)
+    public function setCreator(User $creator = null): self
     {
         $this->creator = $creator;
 
@@ -245,12 +254,8 @@ class ResourceNode
 
     /**
      * Sets the parent resource.
-     *
-     * @param ResourceNode $parent
-     *
-     * @return $this
      */
-    public function setParent(self $parent = null)
+    public function setParent(self $parent = null): self
     {
         $this->parent = $parent;
 
@@ -339,10 +344,7 @@ class ResourceNode
         return $list;
     }
 
-    /**
-     * @return string
-     */
-    public function getPathForDisplayRemoveBase(string $base)
+    public function getPathForDisplayRemoveBase(string $base): string
     {
         $path = str_replace($base, '', $this->path);
 
@@ -366,10 +368,7 @@ class ResourceNode
         return $this;
     }
 
-    /**
-     * @return ResourceNode
-     */
-    public function setSlug(string $slug)
+    public function setSlug(string $slug): self
     {
         if (false !== strpos(self::PATH_SEPARATOR, $slug)) {
             throw new \InvalidArgumentException('Invalid character "'.self::PATH_SEPARATOR.'" in resource name.');
@@ -419,12 +418,7 @@ class ResourceNode
         return $this->resourceType;
     }
 
-    /**
-     * @param ResourceType $resourceType
-     *
-     * @return ResourceNode
-     */
-    public function setResourceType($resourceType)
+    public function setResourceType(ResourceType $resourceType): self
     {
         $this->resourceType = $resourceType;
 
@@ -466,26 +460,17 @@ class ResourceNode
         return $links->matching($criteria);
     }
 
-    /**
-     * @return bool
-     */
-    public function hasResourceFile()
+    public function hasResourceFile(): bool
     {
         return null !== $this->resourceFile;
     }
 
-    /**
-     * @return ResourceFile
-     */
     public function getResourceFile(): ?ResourceFile
     {
         return $this->resourceFile;
     }
 
-    /**
-     * @return bool
-     */
-    public function hasEditableContent()
+    public function hasEditableTextContent(): bool
     {
         if ($this->hasResourceFile()) {
             $mimeType = $this->getResourceFile()->getMimeType();
@@ -497,10 +482,12 @@ class ResourceNode
         return false;
     }
 
-    /**
-     * @return bool
-     */
-    public function isResourceFileAnImage()
+    public function isFileEditableText(): bool
+    {
+        return $this->hasEditableTextContent();
+    }
+
+    public function isResourceFileAnImage(): bool
     {
         if ($this->hasResourceFile()) {
             $mimeType = $this->getResourceFile()->getMimeType();
@@ -512,10 +499,7 @@ class ResourceNode
         return false;
     }
 
-    /**
-     * @return bool
-     */
-    public function isResourceFileAVideo()
+    public function isResourceFileAVideo(): bool
     {
         if ($this->hasResourceFile()) {
             $mimeType = $this->getResourceFile()->getMimeType();
@@ -534,10 +518,7 @@ class ResourceNode
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getIcon()
+    public function getIcon(): string
     {
         $class = 'fa fa-folder';
         if ($this->hasResourceFile()) {
@@ -554,10 +535,7 @@ class ResourceNode
         return '<i class="'.$class.'"></i>';
     }
 
-    /**
-     * @return string
-     */
-    public function getThumbnail(RouterInterface $router)
+    public function getThumbnail(RouterInterface $router): string
     {
         $size = 'fa-3x';
         $class = "fa fa-folder $size";
@@ -574,7 +552,7 @@ class ResourceNode
                     'filter' => 'editor_thumbnail',
                 ];
                 $url = $router->generate(
-                    'chamilo_core_resource_view_file',
+                    'chamilo_core_resource_view',
                     $params
                 );
 
@@ -586,5 +564,17 @@ class ResourceNode
         }
 
         return '<i class="'.$class.'"></i>';
+    }
+
+    public function getContent()
+    {
+        return $this->content;
+    }
+
+    public function setContent(string $content): self
+    {
+        $this->content = $content;
+
+        return $this;
     }
 }

@@ -4,7 +4,6 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
-use APY\DataGridBundle\Grid\Mapping as GRID;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
@@ -13,7 +12,6 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
  *
  * @ORM\Table(name="personal_file")
  * @ORM\Entity
- * @GRID\Source(columns="id, name, resourceNode.createdAt", filterable=false, groups={"resource"})
  */
 class PersonalFile extends AbstractResource implements ResourceInterface
 {
@@ -79,5 +77,10 @@ class PersonalFile extends AbstractResource implements ResourceInterface
     public function getResourceName(): string
     {
         return $this->getName();
+    }
+
+    public function setResourceName(string $name): self
+    {
+        return $this->setName($name);
     }
 }

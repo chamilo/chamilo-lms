@@ -34,14 +34,6 @@ class CQuizQuestionOption
      * @ORM\Column(name="c_id", type="integer")
      */
     protected $cId;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=true)
-     */
-    protected $id;
-
     /**
      * @var int
      *
@@ -133,30 +125,6 @@ class CQuizQuestionOption
     public function getPosition()
     {
         return $this->position;
-    }
-
-    /**
-     * Set id.
-     *
-     * @param int $id
-     *
-     * @return CQuizQuestionOption
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**

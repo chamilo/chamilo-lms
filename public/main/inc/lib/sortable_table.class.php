@@ -909,7 +909,7 @@ class SortableTable extends HTML_Table
     {
         $param_string_parts = [];
         if (is_array($this->additional_parameters) && count($this->additional_parameters) > 0) {
-            foreach ($this->additional_parameters as $key => &$value) {
+            foreach ($this->additional_parameters as $key => $value) {
                 $param_string_parts[] = urlencode($key).'='.urlencode($value);
             }
         }
@@ -917,7 +917,6 @@ class SortableTable extends HTML_Table
         foreach ($this->other_tables as $index => &$tablename) {
             $param = [];
             if (isset($_GET[$tablename.'_direction'])) {
-                //$param[$tablename.'_direction'] = $_GET[$tablename.'_direction'];
                 $my_get_direction = $_GET[$tablename.'_direction'];
                 if (!in_array($my_get_direction, ['ASC', 'DESC'])) {
                     $param[$tablename.'_direction'] = 'ASC';

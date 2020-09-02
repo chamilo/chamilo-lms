@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 // resetting the course id
@@ -60,7 +61,7 @@ function validate_filter() {
     document.formulaire.submit();
 }
 
-function checked_in_no_group(checked) 
+function checked_in_no_group(checked)
 {
     $("#relation")
     .find("option")
@@ -453,7 +454,6 @@ echo Display::input('hidden', 'add_type', null);
             ],
             false
         );
-        unset($sessionUsersList);
     ?>
     </div>
 </div>

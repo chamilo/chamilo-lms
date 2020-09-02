@@ -142,7 +142,7 @@ switch ($action) {
 
                 if (api_is_user_of_course($course_id, api_get_user_id())) {
                     //------Forum messages
-                    $forum_result = get_all_post_from_user($user_id, $course_code);
+                    $forum_result = get_all_post_from_user($user_id, $course_id);
                     $all_result_data = 0;
                     if ('' != $forum_result) {
                         echo '<div id="social-forum-main-title">';

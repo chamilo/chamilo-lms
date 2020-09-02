@@ -1,5 +1,7 @@
 <?php
+
 /* For licensing terms, see /license.txt */
+
 /**
  * This script provides the caller service with a list
  * of courses that have a certain level of visibility

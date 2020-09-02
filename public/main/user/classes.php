@@ -1,5 +1,7 @@
 <?php
+
 /* For licensing terms, see /license.txt */
+
 /**
  * @author Julio Montoya <gugli100@gmail.com>
  */

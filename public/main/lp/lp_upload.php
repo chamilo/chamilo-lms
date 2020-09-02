@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
@@ -53,10 +54,7 @@ if (isset($_POST) && $is_error) {
     $file_base_name = str_replace('.'.$extension, '', $filename);
 
     $new_dir = api_replace_dangerous_char(trim($file_base_name));
-    $type = learnpath::get_package_type(
-        $_FILES['user_file']['tmp_name'],
-        $_FILES['user_file']['name']
-    );
+    $type = learnpath::getPackageType($_FILES['user_file']['tmp_name'], $_FILES['user_file']['name']);
 
     $proximity = 'local';
     if (!empty($_REQUEST['content_proximity'])) {
@@ -70,15 +68,13 @@ if (isset($_POST) && $is_error) {
 
     switch ($type) {
         case 'chamilo':
-            $filename = CourseArchiver::importUploadedFile(
-                $_FILES['user_file']['tmp_name']
-            );
+            $filename = CourseArchiver::importUploadedFile($_FILES['user_file']['tmp_name']);
             if ($filename) {
                 $course = CourseArchiver::readCourse($filename, false);
                 $courseRestorer = new CourseRestorer($course);
                 // FILE_SKIP, FILE_RENAME or FILE_OVERWRITE
                 $courseRestorer->set_file_option(FILE_OVERWRITE);
-                $courseRestorer->restore();
+                $courseRestorer->restore('', api_get_session_id());
                 Display::addFlash(Display::return_message(get_lang('File upload succeeded!')));
             }
             break;
@@ -160,7 +156,7 @@ if (isset($_POST) && $is_error) {
             Display::return_message(get_lang('The file is too big to upload.'))
         );
     }
-    $type = learnpath::get_package_type($s, basename($s));
+    $type = learnpath::getPackageType($s, basename($s));
 
     switch ($type) {
         case 'scorm':

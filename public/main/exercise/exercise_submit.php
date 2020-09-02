@@ -79,6 +79,38 @@ if ('true' === api_get_setting('enable_record_audio')) {
     $htmlHeadXtra[] = api_get_js('record_audio/record_audio.js');
 }
 
+$zoomOptions = api_get_configuration_value('quiz_image_zoom');
+if (isset($zoomOptions['options']) && !in_array($origin, ['embeddable', 'mobileapp'])) {
+    $options = $zoomOptions['options'];
+    $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'jquery.elevatezoom.js"></script>';
+    $htmlHeadXtra[] = '<script>
+        $(document).ready(function() {
+            $("img").each(function() {
+                var attr = $(this).attr("data-zoom-image");
+                // For some browsers, `attr` is undefined; for others,
+                // `attr` is false.  Check for both.
+                if (typeof attr !== typeof undefined && attr !== false) {
+                    $(this).elevateZoom({
+                        scrollZoom : true,
+                        cursor: "crosshair",
+                        tint:true,
+                        tintColour:\'#CCC\',
+                        tintOpacity:0.5,
+                        zoomWindowWidth:'.$options['zoomWindowWidth'].',
+                        zoomWindowHeight:'.$options['zoomWindowHeight'].',
+                        zoomWindowPosition: 7
+                    });
+                }
+            });
+
+            $(document).contextmenu(function() {
+                return false;
+            })
+
+        });
+    </script>';
+}
+
 $template = new Template();
 
 // General parameters passed via POST/GET
@@ -121,7 +153,7 @@ if (api_is_allowed_to_edit(null, true) &&
 // 1. Loading the $objExercise variable
 /** @var \Exercise $exerciseInSession */
 $exerciseInSession = Session::read('objExercise');
-if (!isset($exerciseInSession) || isset($exerciseInSession) && ($exerciseInSession->id != $_GET['exerciseId'])) {
+if (empty($exerciseInSession) || (!empty($exerciseInSession) && ($exerciseInSession->id != $_GET['exerciseId']))) {
     // Construction of Exercise
     $objExercise = new Exercise($courseId);
     Session::write('firstTime', true);
@@ -849,18 +881,20 @@ $interbreadcrumb[] = [
 ];
 $interbreadcrumb[] = ['url' => '#', 'name' => $objExercise->selectTitle(true)];
 
-if (!in_array($origin, ['learnpath', 'embeddable'])) { //so we are not in learnpath tool
-    if (!api_is_allowed_to_session_edit()) {
-        Display::addFlash(
-            Display::return_message(get_lang('The session is read only'), 'warning')
-        );
-    }
+if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) { //so we are not in learnpath tool
+    SessionManager::addFlashSessionReadOnly();
 
-    Display::display_header(null, 'Tests');
+    Display::display_header(null, 'Exercises');
 } else {
-    $htmlHeadXtra[] = '<style> body { background: none;} </style> ';
     Display::display_reduced_header();
     echo '<div style="height:10px">&nbsp;</div>';
+}
+
+if ($origin == 'mobileapp') {
+    echo '<div class="actions">';
+    echo '<a href="javascript:window.history.go(-1);">'.
+        Display::return_icon('back.png', get_lang('GoBackToQuestionList'), [], 32).'</a>';
+    echo '</div>';
 }
 
 $show_quiz_edition = $objExercise->added_in_lp();
@@ -888,6 +922,13 @@ if (false == $is_visible_return['value']) {
     echo $is_visible_return['message'];
     if (!in_array($origin, ['learnpath', 'embeddable'])) {
         Display :: display_footer();
+    }
+    exit;
+}
+
+if (!api_is_allowed_to_session_edit()) {
+    if (!in_array($origin, ['learnpath', 'embeddable'])) {
+        Display::display_footer();
     }
     exit;
 }
@@ -1297,7 +1338,12 @@ if (!empty($error)) {
                         $("#save_for_now_"+question_id).html(\''.
                             Display::return_icon('save.png', get_lang('Saved'), [], ICON_SIZE_SMALL).'\');
 
-                        window.location = url;
+                        // window.quizTimeEnding will be reset in exercise.class.php
+                        if (window.quizTimeEnding) {
+                            redirectExerciseToResult();
+                        } else {
+                            window.location = url;
+                        }
                     }
                 },
                 error: function() {
@@ -1361,6 +1407,8 @@ if (!empty($error)) {
         function validate_all() {
             save_now_all("validate");
         }
+
+        window.quizTimeEnding = false;
     </script>';
 
     echo '<form id="exercise_form" method="post" action="'.

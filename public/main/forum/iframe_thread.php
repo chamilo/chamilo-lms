@@ -56,7 +56,9 @@ $sessionEntity = api_get_session_entity(api_get_session_id());
 // if the user is not a course administrator and the forum is hidden
 // then the user is not allowed here.
 if (!api_is_allowed_to_edit(false, true) &&
-    (false == $forumEntity->isVisible($courseEntity, $sessionEntity) || false == $threadEntity->isVisible($courseEntity, $sessionEntity))
+    (   false == $forumEntity->isVisible($courseEntity, $sessionEntity) ||
+        false == $threadEntity->isVisible($courseEntity, $sessionEntity)
+    )
 ) {
     api_not_allowed(false);
 }
@@ -66,18 +68,14 @@ $course_id = api_get_course_int_id();
 $table_posts = Database::get_course_table(TABLE_FORUM_POST);
 $table_users = Database::get_main_table(TABLE_MAIN_USER);
 
-/* Display Forum Category and the Forum information */
-
-// We are getting all the information about the current forum and forum category.
-// Note pcool: I tried to use only one sql statement (and function) for this,
-// but the problem is that the visibility of the forum AND forum cateogory are stored in the item_property table.
-$sql = "SELECT * FROM $table_posts posts
-        INNER JOIN $table_users users
-        ON (posts.poster_id = users.user_id)
+$sql = "SELECT username, firstname, lastname, u.id, post_date, post_title, post_text
+        FROM $table_posts posts
+        INNER JOIN $table_users u
+        ON (posts.poster_id = u.id)
         WHERE
             posts.c_id = $course_id AND
             posts.thread_id='".$threadEntity->getIid()."'
-        ORDER BY posts.post_id ASC";
+        ORDER BY posts.iid ASC";
 $result = Database::query($sql);
 
 $template = new Template('', false, false);
@@ -87,7 +85,7 @@ while ($row = Database::fetch_array($result)) {
     $content .= '<tr>';
     $content .= '<td rowspan="2" class="forum_message_left">';
     $username = api_htmlentities(sprintf(get_lang('Login: %s'), $row['username']), ENT_QUOTES);
-    if ('0' == $row['user_id']) {
+    if ('0' == $row['id']) {
         $name = $row['poster_name'];
     } else {
         $name = api_get_person_name($row['firstname'], $row['lastname']);

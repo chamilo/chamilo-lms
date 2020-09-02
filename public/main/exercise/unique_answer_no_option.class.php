@@ -289,6 +289,7 @@ class UniqueAnswerNoOption extends Question
         }
 
         for ($i = 1; $i <= $nb_answers - $minus; $i++) {
+            $position = trim($form->getSubmitValue('position['.$i.']'));
             $answer = trim($form->getSubmitValue('answer['.$i.']'));
             $comment = trim($form->getSubmitValue('comment['.$i.']'));
             $weighting = trim($form->getSubmitValue('weighting['.$i.']'));
@@ -320,7 +321,7 @@ class UniqueAnswerNoOption extends Question
             $goodAnswer = $correct == $i ? true : false;
 
             if ($goodAnswer) {
-                //$nbrGoodAnswers++;
+                $nbrGoodAnswers++;
                 $weighting = abs($weighting);
                 if ($weighting > 0) {
                     $questionWeighting += $weighting;

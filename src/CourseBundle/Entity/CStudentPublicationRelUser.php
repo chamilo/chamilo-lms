@@ -33,13 +33,6 @@ class CStudentPublicationRelUser
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer", nullable=true)
-     */
-    protected $id;
-
-    /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
     protected $cId;

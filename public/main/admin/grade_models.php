@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 $cidReset = true;
@@ -50,11 +51,8 @@ function plusItem(item) {
 function minItem(item) {
     if (item != 1) {
         document.getElementById(item).style.display = "none";
-        //document.getElementById("txta-"+item).value = "";
-        //document.getElementById("txtb-"+item).value = "";
         document.getElementById("plus-"+item).style.display = "inline";
         document.getElementById("min-"+(item-1)).style.display = "inline";
-        //document.getElementById("txta-"+(item-1)).value = "100";
         $("input").removeClass("form-control");
 	}
 	if (item = 1) {

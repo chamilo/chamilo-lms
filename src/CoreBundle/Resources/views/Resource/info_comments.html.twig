@@ -2,7 +2,7 @@
     {% set nodeParams = {
         'id': resource.resourceNode.id,
         'cid': course.id,
-        'sid': session.id,
+        'sid': session ? session.id : 0,
         'type' : type,
         'tool' : tool
     } %}

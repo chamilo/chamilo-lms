@@ -51,8 +51,8 @@ class OnlineListener
             if ($user instanceof User && $user->getLastLogin() < $delay) {
                 // User
                 $user->setLastLogin(new DateTime());
-
-                $this->em->flush($user);
+                $this->em->persist($user);
+                $this->em->flush();
             }
         }
     }

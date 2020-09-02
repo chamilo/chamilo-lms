@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Migrations;
 
 use Chamilo\CoreBundle\Entity\SettingsCurrent;
 use Chamilo\CoreBundle\Entity\SettingsOptions;
-use Doctrine\DBAL\Migrations\AbstractMigration;
+use Doctrine\Migrations\AbstractMigration;
 use Doctrine\ORM\EntityManager;
 
 /**
@@ -27,6 +27,8 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
     public function getEntityManager()
     {
         if (empty($this->manager)) {
+            $params = $this->connection->getParams();
+            /*
             $dbParams = [
                 'driver' => 'pdo_mysql',
                 'host' => $this->connection->getHost(),
@@ -34,10 +36,10 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
                 'password' => $this->connection->getPassword(),
                 'dbname' => $this->connection->getDatabase(),
                 'port' => $this->connection->getPort(),
-            ];
+            ];*/
             $database = new \Database();
             $database->connect(
-                $dbParams,
+                $params,
                 __DIR__.'/../../',
                 __DIR__.'/../../'
             );

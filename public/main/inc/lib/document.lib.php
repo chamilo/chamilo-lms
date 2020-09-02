@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ResourceFile;
@@ -6,7 +7,7 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CDocument;
-use Chamilo\CourseBundle\Entity\CGroupInfo;
+use Chamilo\CourseBundle\Entity\CGroup;
 use ChamiloSession as Session;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -352,7 +353,7 @@ class DocumentManager
      * This function streams a file to the client.
      *
      * @param string $full_file_name
-     * @param bool   $forced              Wether to force the browser to download the file
+     * @param bool   $forced              Whether to force the browser to download the file
      * @param string $name
      * @param bool   $fixLinksHttpToHttps change file content from http to https
      * @param array  $extraHeaders        Additional headers to be sent
@@ -363,7 +364,8 @@ class DocumentManager
         $full_file_name,
         $forced = false,
         $name = '',
-        $fixLinksHttpToHttps = false
+        $fixLinksHttpToHttps = false,
+        $extraHeaders = []
     ) {
         session_write_close(); //we do not need write access to session anymore
         if (!is_file($full_file_name)) {
@@ -1181,7 +1183,7 @@ class DocumentManager
         $sessionCondition = api_get_session_condition($session_id, true, true);
 
         $sql = "SELECT * FROM $TABLE_DOCUMENT
-                WHERE c_id = $course_id $sessionCondition AND id = $id";
+                WHERE c_id = $course_id $sessionCondition AND iid = $id";
 
         if ($ignoreDeleted) {
             $sql .= " AND path NOT LIKE '%_DELETED_%' ";
@@ -1350,8 +1352,7 @@ class DocumentManager
         $course_id = $course['real_id'];
         // note the extra / at the end of doc_path to match every path in
         // the document table that is part of the document path
-
-        $session_id = intval($session_id);
+        $session_id = (int) $session_id;
         $condition = " AND d.session_id IN  ('$session_id', '0') ";
         // The " d.filetype='file' " let the user see a file even if the folder is hidden see #2198
 
@@ -1609,16 +1610,17 @@ class DocumentManager
         $my_content_html = null;
         if ($document_id) {
             $sql = "SELECT path FROM $tbl_document
-                    WHERE c_id = $course_id AND id = $document_id";
+                    WHERE c_id = $course_id AND iid = $document_id";
             $rs = Database::query($sql);
             $new_content = '';
             $all_user_info = [];
             if (Database::num_rows($rs)) {
                 $row = Database::fetch_array($rs);
-                $filepath = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document'.$row['path'];
+                /*$filepath = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document'.$row['path'];
                 if (is_file($filepath)) {
                     $my_content_html = file_get_contents($filepath);
-                }
+                }*/
+                $my_content_html = '';
                 $all_user_info = self::get_all_info_to_certificate(
                     $user_id,
                     $courseInfo,
@@ -1652,11 +1654,12 @@ class DocumentManager
      *
      * @return array
      */
-    public static function get_all_info_to_certificate($user_id, $course_id, $is_preview = false)
+    public static function get_all_info_to_certificate($user_id, $course_info, $sessionId, $is_preview = false)
     {
         $info_list = [];
-        $user_id = intval($user_id);
-        $course_info = api_get_course_info($course_id);
+        $user_id = (int) $user_id;
+        $sessionId = (int) $sessionId;
+        $courseCode = $course_info['code'];
 
         // Portal info
         $organization_name = api_get_setting('Institution');
@@ -1689,10 +1692,14 @@ class DocumentManager
         $teacher_last_name = $teacher_info['lastname'];
 
         // info gradebook certificate
-        $info_grade_certificate = UserManager::get_info_gradebook_certificate($course_id, $user_id);
-        $date_certificate = $info_grade_certificate['created_at'];
+        $info_grade_certificate = UserManager::get_info_gradebook_certificate($course_info, $sessionId, $user_id);
         $date_long_certificate = '';
-
+        $date_certificate = '';
+        $url = '';
+        if ($info_grade_certificate) {
+            $date_certificate = $info_grade_certificate['created_at'];
+            $url = api_get_path(WEB_PATH).'certificates/index.php?id='.$info_grade_certificate['id'];
+        }
         $date_no_time = api_convert_and_format_date(api_get_utc_datetime(), DATE_FORMAT_LONG_NO_DAY);
         if (!empty($date_certificate)) {
             $date_long_certificate = api_convert_and_format_date($date_certificate);
@@ -1704,11 +1711,43 @@ class DocumentManager
             $date_no_time = api_convert_and_format_date(api_get_utc_datetime(), DATE_FORMAT_LONG_NO_DAY);
         }
 
-        $url = api_get_path(WEB_PATH).'certificates/index.php?id='.$info_grade_certificate['id'];
         $externalStyleFile = api_get_path(SYS_CSS_PATH).'themes/'.api_get_visual_theme().'/certificate.css';
         $externalStyle = '';
         if (is_file($externalStyleFile)) {
             $externalStyle = file_get_contents($externalStyleFile);
+        }
+        $timeInCourse = Tracking::get_time_spent_on_the_course($user_id, $course_info['real_id'], $sessionId);
+        $timeInCourse = api_time_to_hms($timeInCourse, ':', false, true);
+
+        $timeInCourseInAllSessions = 0;
+        $sessions = SessionManager::get_session_by_course($course_info['real_id']);
+
+        if (!empty($sessions)) {
+            foreach ($sessions as $session) {
+                $timeInCourseInAllSessions += Tracking::get_time_spent_on_the_course($user_id, $course_info['real_id'], $session['id']);
+            }
+        }
+        $timeInCourseInAllSessions = api_time_to_hms($timeInCourseInAllSessions, ':', false, true);
+
+        $first = Tracking::get_first_connection_date_on_the_course($user_id, $course_info['real_id'], $sessionId, false);
+        $first = substr($first, 0, 10);
+        $last = Tracking::get_last_connection_date_on_the_course($user_id, $course_info, $sessionId, false);
+        $last = substr($last, 0, 10);
+
+        if ($first === $last) {
+            $startDateAndEndDate = get_lang('From').' '.$first;
+        } else {
+            $startDateAndEndDate = sprintf(
+                get_lang('FromDateXToDateY'),
+                $first,
+                $last
+            );
+        }
+        $courseDescription = new CourseDescription();
+        $description = $courseDescription->get_data_by_description_type(2, $course_info['real_id'], $sessionId);
+        $courseObjectives = '';
+        if ($description) {
+            $courseObjectives = $description['description_content'];
         }
 
         // Replace content
@@ -1723,13 +1762,17 @@ class DocumentManager
             $official_code,
             $date_long_certificate,
             $date_no_time,
-            $course_id,
+            $course_info['code'],
             $course_info['name'],
-            $info_grade_certificate['grade'],
+            isset($info_grade_certificate['grade']) ? $info_grade_certificate['grade'] : '',
             $url,
             '<a href="'.$url.'" target="_blank">'.get_lang('Online link to certificate').'</a>',
             '((certificate_barcode))',
             $externalStyle,
+            $timeInCourse,
+            $timeInCourseInAllSessions,
+            $startDateAndEndDate,
+            $courseObjectives,
         ];
 
         $tags = [
@@ -1750,6 +1793,10 @@ class DocumentManager
             '((certificate_link_html))',
             '((certificate_barcode))',
             '((external_style))',
+            '((time_in_course))',
+            '((time_in_course_in_all_sessions))',
+            '((start_date_and_end_date))',
+            '((course_objectives))',
         ];
 
         if (!empty($extraFields)) {
@@ -2845,6 +2892,8 @@ class DocumentManager
      * @param bool   $showOnlyFolders
      * @param int    $folderId
      * @param bool   $addCloseButton
+     * @param bool   $addAudioPreview
+     * @param array  $filterByExtension
      *
      * @return string
      */
@@ -2859,7 +2908,9 @@ class DocumentManager
         $showInvisibleFiles = false,
         $showOnlyFolders = false,
         $folderId = false,
-        $addCloseButton = true
+        $addCloseButton = true,
+        $addAudioPreview = false,
+        $filterByExtension = []
     ) {
         if (empty($course_info['real_id']) || empty($course_info['code']) || !is_array($course_info)) {
             return '';
@@ -2889,7 +2940,7 @@ class DocumentManager
                     $folder = '';
                 }
 
-                $link .= '<a data_id="'.$node['id'].'" class="moved ui-sortable-handle link_with_id">';
+                $link .= '<a data_id="'.$node['id'].'" data_type="document" class="moved ui-sortable-handle link_with_id">';
                 $link .= $folder.'&nbsp;'.$node['slug'];
                 $link .= '</a>';
 
@@ -3196,7 +3247,8 @@ class DocumentManager
         $target = '',
         $add_move_button = false,
         $overwrite_url = '',
-        $folderId = false
+        $folderId = false,
+        $addAudioPreview = false
     ) {
         $return = '';
         if (!empty($documents)) {
@@ -3220,7 +3272,9 @@ class DocumentManager
                             $lp_id,
                             $target,
                             $add_move_button,
-                            $overwrite_url
+                            $overwrite_url,
+                            null,
+                            $addAudioPreview
                         );
                     }
                     $return .= '</div>';
@@ -3237,7 +3291,8 @@ class DocumentManager
                             $lp_id,
                             $add_move_button,
                             $target,
-                            $overwrite_url
+                            $overwrite_url,
+                            $addAudioPreview
                         );
                     }
                 }
@@ -4325,7 +4380,7 @@ class DocumentManager
 
         // Check if pathname already exists inside document table
         $tbl_document = Database::get_course_table(TABLE_DOCUMENT);
-        $sql = "SELECT id, path FROM $tbl_document
+        $sql = "SELECT iid, path FROM $tbl_document
                 WHERE
                     filetype = 'folder' AND
                     c_id = $courseId AND
@@ -6046,13 +6101,12 @@ This folder contains all sessions that have been opened in the chat. Although th
      * @param string              $realPath
      * @param string|UploadedFile $content
      * @param int                 $visibility
-     * @param CGroupInfo          $group
+     * @param CGroup              $group
      *
      * @return CDocument
      */
     public static function addFileToDocument(CDocument $document, $realPath, $content, $visibility, $group)
     {
-        $repo = Container::getDocumentRepository();
         $fileType = $document->getFiletype();
         $resourceNode = $document->getResourceNode();
 
@@ -6095,30 +6149,12 @@ This folder contains all sessions that have been opened in the chat. Although th
             $resourceNode->setResourceFile($resourceFile);
             $em->persist($resourceNode);
         }
-
-        // By default visibility is published
-        // @todo change default visibility
-        //$newVisibility = ResourceLink::VISIBILITY_PUBLISHED;
-        $visibility = (int) $visibility;
-        if (empty($visibility)) {
-            $visibility = ResourceLink::VISIBILITY_PUBLISHED;
-        }
-
-        $repo->addResourceNodeToCourse(
-            $resourceNode,
-            $visibility,
-            $document->getCourse(),
-            $document->getSession(),
-            $group
-        );
+        $em->persist($document);
         $em->flush();
 
         $documentId = $document->getIid();
 
         if ($documentId) {
-            $table = Database::get_course_table(TABLE_DOCUMENT);
-            $sql = "UPDATE $table SET id = iid WHERE iid = $documentId";
-            Database::query($sql);
 
             return $document;
         }
@@ -6213,12 +6249,13 @@ This folder contains all sessions that have been opened in the chat. Although th
             ->setComment($comment)
             ->setReadonly($readonly)
             ->setSession($session)
+            ->setParent($courseEntity)
+            ->addCourseLink($courseEntity, $session, $group)
         ;
 
         $em = $documentRepo->getEntityManager();
         $em->persist($document);
 
-        $documentRepo->addResourceNode($document, $userEntity, $parentNode);
         $document = self::addFileToDocument($document, $realPath, $content, $visibility, $group);
 
         if ($document) {

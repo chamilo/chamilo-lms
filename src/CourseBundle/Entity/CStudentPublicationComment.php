@@ -42,13 +42,6 @@ class CStudentPublicationComment extends AbstractResource implements ResourceInt
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer", nullable=true)
-     */
-    protected $id;
-
-    /**
-     * @var int
-     *
      * @ORM\Column(name="work_id", type="integer", nullable=false)
      */
     protected $workId;
@@ -91,22 +84,9 @@ class CStudentPublicationComment extends AbstractResource implements ResourceInt
         return (string) $this->getIid();
     }
 
-    /**
-     * @return int
-     */
-    public function getIid()
+    public function getIid(): int
     {
         return $this->iid;
-    }
-
-    /**
-     * @return int
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
     }
 
     /**
@@ -274,5 +254,10 @@ class CStudentPublicationComment extends AbstractResource implements ResourceInt
     public function getResourceName(): string
     {
         return (string) substr($this->getComment(), 0, 80);
+    }
+
+    public function setResourceName(string $name): self
+    {
+        return $this->setComment($name);
     }
 }

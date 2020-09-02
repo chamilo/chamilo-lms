@@ -40,7 +40,6 @@ class SettingsManager extends ChamiloSettingsManager
     {
         $schemaAliasNoPrefix = $schemaAlias;
         $schemaAlias = 'chamilo_course.settings.'.$schemaAlias;
-
         if ($this->schemaRegistry->has($schemaAlias)) {
             /** @var SchemaInterface $schema */
             $schema = $this->schemaRegistry->get($schemaAlias);
@@ -99,7 +98,8 @@ class SettingsManager extends ChamiloSettingsManager
             }
         }
 
-        $repo = $this->manager->getRepository('ChamiloCoreBundle:SettingsCurrent');
+        $repo = $this->manager->getRepository(SettingsCurrent::class);
+        /** @var CCourseSetting[] $persistedParameters */
         $persistedParameters = $repo->findBy(['category' => $settings->getSchemaAlias()]);
 
         $persistedParametersMap = [];
@@ -204,7 +204,7 @@ class SettingsManager extends ChamiloSettingsManager
      */
     private function getParameters($namespace)
     {
-        $repo = $this->manager->getRepository('ChamiloCourseBundle:CCourseSetting');
+        $repo = $this->manager->getRepository(CCourseSetting::class);
         $parameters = [];
         foreach ($repo->findBy(['category' => $namespace]) as $parameter) {
             $parameters[$parameter->getTitle()] = $parameter->getValue();

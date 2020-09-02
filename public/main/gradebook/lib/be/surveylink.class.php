@@ -237,7 +237,7 @@ class SurveyLink extends AbstractLink
             $courseId = $this->getCourseId();
 
             if ('' != $tbl_name) {
-                $sql = 'SELECT survey_id 
+                $sql = 'SELECT survey_id
                         FROM '.$this->get_survey_table().'
                         WHERE
                             c_id = '.$courseId.' AND
@@ -247,7 +247,7 @@ class SurveyLink extends AbstractLink
                 $row = Database::fetch_array($result, 'ASSOC');
                 $survey_id = $row['survey_id'];
 
-                return api_get_path(WEB_PATH).'main/survey/reporting.php?'.api_get_cidreq_params($this->get_course_code(), $sessionId).'&survey_id='.$survey_id;
+                return api_get_path(WEB_PATH).'main/survey/reporting.php?'.api_get_cidreq_params($this->getCourseId(), $sessionId).'&survey_id='.$survey_id;
             }
         }
 

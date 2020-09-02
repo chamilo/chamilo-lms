@@ -37,13 +37,6 @@ class CGroupRelUser
     protected $cId;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=true)
-     */
-    protected $id;
-
-    /**
      * @var User
      *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="courseGroupsAsMember")
@@ -52,9 +45,9 @@ class CGroupRelUser
     protected $user;
 
     /**
-     * @var CGroupInfo
+     * @var CGroup
      *
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CGroupInfo", inversedBy="members")
+     * @ORM\ManyToOne(targetEntity="CGroup", inversedBy="members")
      * @ORM\JoinColumn(name="group_id", referencedColumnName="iid", nullable=false)
      */
     protected $group;
@@ -102,7 +95,7 @@ class CGroupRelUser
      *
      * @return CGroupRelUser
      */
-    public function setGroup(CGroupInfo $group)
+    public function setGroup(CGroup $group)
     {
         $this->group = $group;
 
@@ -112,7 +105,7 @@ class CGroupRelUser
     /**
      * Get group.
      *
-     * @return CGroupInfo
+     * @return CGroup
      */
     public function getGroup()
     {
@@ -165,30 +158,6 @@ class CGroupRelUser
     public function getRole()
     {
         return $this->role;
-    }
-
-    /**
-     * Set id.
-     *
-     * @param int $id
-     *
-     * @return CGroupRelUser
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**

@@ -275,6 +275,7 @@ class Plugin
                             $selectedValue = 'checked';
                         }
                     }
+
                     $element = $result->createElement(
                         $type,
                         $name,
@@ -294,6 +295,21 @@ class Plugin
                         $attributes
                     );
                     break;
+                case 'user':
+                    $options = [];
+                    if (!empty($value)) {
+                        $userInfo = api_get_user_info($value);
+                        if ($userInfo) {
+                            $options[$value] = $userInfo['complete_name'];
+                        }
+                    }
+                    $result->addSelectAjax(
+                        $name,
+                        [$this->get_lang($name), $help],
+                        $options,
+                        ['url' => api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_like']
+                    );
+                    break;
             }
         }
 
@@ -301,7 +317,7 @@ class Plugin
             $result->addGroup(
                 $checkboxGroup,
                 null,
-                [$this->get_lang('sms_types'), $help]
+                ['', $help]
             );
         }
         $result->setDefaults($defaults);
@@ -459,7 +475,7 @@ class Plugin
      *
      * @return bool|null False on error, null otherwise
      */
-    public function install_course_fields($courseId, $add_tool_link = true)
+    public function install_course_fields($courseId, $add_tool_link = true, $iconName = '')
     {
         $plugin_name = $this->get_name();
         $t_course = Database::get_course_table(TABLE_COURSE_SETTING);
@@ -476,6 +492,11 @@ class Plugin
                 $value = '';
                 if (isset($setting['init_value'])) {
                     $value = $setting['init_value'];
+                }
+
+                $pluginGlobalValue = api_get_plugin_setting($plugin_name, $variable);
+                if (null !== $pluginGlobalValue) {
+                    $value = 1;
                 }
 
                 $type = 'textfield';
@@ -531,7 +552,7 @@ class Plugin
         }
 
         // Add an icon in the table tool list
-        $this->createLinkToCourseTool($plugin_name, $courseId);
+        $this->createLinkToCourseTool($plugin_name, $courseId, $iconName);
     }
 
     /**
@@ -585,14 +606,14 @@ class Plugin
      *
      * @param bool $add_tool_link Whether we want to add a plugin link on the course homepage
      */
-    public function install_course_fields_in_all_courses($add_tool_link = true)
+    public function install_course_fields_in_all_courses($add_tool_link = true, $iconName = '')
     {
         // Update existing courses to add plugin settings
         $table = Database::get_main_table(TABLE_MAIN_COURSE);
         $sql = "SELECT id FROM $table ORDER BY id";
         $res = Database::query($sql);
         while ($row = Database::fetch_assoc($res)) {
-            $this->install_course_fields($row['id'], $add_tool_link);
+            $this->install_course_fields($row['id'], $add_tool_link, $iconName);
         }
     }
 
@@ -619,6 +640,10 @@ class Plugin
         $settings = [];
         if (is_array($this->course_settings)) {
             foreach ($this->course_settings as $item) {
+                // Skip html type
+                if ('html' === $item['type']) {
+                    continue;
+                }
                 if (isset($item['group'])) {
                     if (!in_array($item['group'], $settings)) {
                         $settings[] = $item['group'];
@@ -846,9 +871,11 @@ class Plugin
     /**
      * Returns true if the plugin is installed, false otherwise.
      *
+     * @param bool $checkEnabled Also check if enabled (instead of only installed)
+     *
      * @return bool True if plugin is installed/enabled, false otherwise
      */
-    public function isEnabled()
+    public function isEnabled($checkEnabled = false)
     {
         $settings = api_get_settings_params_simple(
             [
@@ -859,7 +886,26 @@ class Plugin
                 ],
             ]
         );
-        if (is_array($settings) && isset($settings['selected_value']) && 'installed' == $settings['selected_value']) {
+        if (is_array($settings) && isset($settings['selected_value']) && $settings['selected_value'] == 'installed') {
+            // The plugin is installed
+            // If we need a check on whether it is enabled, also check for
+            // *plugin*_tool_enable and make sure it is *NOT* false
+            if ($checkEnabled) {
+                $enabled = api_get_settings_params_simple(
+                    [
+                        "variable = ? AND subkey = ? AND category = 'Plugins' " => [
+                            $this->get_name().'_tool_enable',
+                            $this->get_name(),
+                        ],
+                    ]
+                );
+                if (is_array($enabled) && isset($enabled['selected_value']) && $enabled['selected_value'] == 'false') {
+                    // Only return false if the setting exists and it is
+                    // *specifically* set to false
+                    return false;
+                }
+            }
+
             return true;
         }
 

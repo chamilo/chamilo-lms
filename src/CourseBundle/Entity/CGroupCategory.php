@@ -37,13 +37,6 @@ class CGroupCategory
     protected $cId;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=true)
-     */
-    protected $id;
-
-    /**
      * @var string
      * @Assert\NotBlank()
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
@@ -482,30 +475,6 @@ class CGroupCategory
     public function getDisplayOrder()
     {
         return $this->displayOrder;
-    }
-
-    /**
-     * Set id.
-     *
-     * @param int $id
-     *
-     * @return CGroupCategory
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**

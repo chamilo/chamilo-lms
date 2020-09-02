@@ -4,8 +4,6 @@
 
 namespace Chamilo\CoreBundle\Repository;
 
-use APY\DataGridBundle\Grid\Action\RowAction;
-use APY\DataGridBundle\Grid\Row;
 use Chamilo\CoreBundle\Component\Resource\Settings;
 use Chamilo\CoreBundle\Component\Resource\Template;
 use Chamilo\CoreBundle\Entity\AbstractResource;
@@ -18,11 +16,9 @@ use Chamilo\CoreBundle\Entity\ResourceRight;
 use Chamilo\CoreBundle\Entity\ResourceType;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CoreBundle\ToolChain;
-use Chamilo\CourseBundle\Entity\CDocument;
-use Chamilo\CourseBundle\Entity\CGroupInfo;
+use Chamilo\CourseBundle\Entity\CGroup;
 use Cocur\Slugify\SlugifyInterface;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
@@ -93,17 +89,30 @@ class ResourceRepository extends EntityRepository
         RouterInterface $router,
         SlugifyInterface $slugify,
         ToolChain $toolChain,
-        ResourceNodeRepository $resourceNodeRepository,
-        string $className
+        ResourceNodeRepository $resourceNodeRepository
     ) {
-        $this->authorizationChecker = $authorizationChecker;
+        $className = $this->getClassName();
         $this->repository = $entityManager->getRepository($className);
+        $this->authorizationChecker = $authorizationChecker;
         $this->router = $router;
         $this->resourceNodeRepository = $resourceNodeRepository;
         $this->slugify = $slugify;
         $this->toolChain = $toolChain;
         $this->settings = new Settings();
         $this->templates = new Template();
+    }
+
+    public function getClassName()
+    {
+        $class = get_class($this);
+        //Chamilo\CoreBundle\Repository\IllustrationRepository
+        $class = str_replace('\\Repository\\', '\\Entity\\', $class);
+        $class = str_replace('Repository', '', $class);
+        if (false === class_exists($class)) {
+            throw new \Exception("Repo: $class not found ");
+        }
+
+        return $class;
     }
 
     public function getAuthorizationChecker(): AuthorizationCheckerInterface
@@ -170,7 +179,12 @@ class ResourceRepository extends EntityRepository
      */
     public function find($id, $lockMode = null, $lockVersion = null)
     {
-        return $this->getRepository()->find($id);
+        return $this->getRepository()->find($id, $lockMode, $lockVersion);
+    }
+
+    public function getResourceByResourceNode(ResourceNode $resourceNode)
+    {
+        return $this->getRepository()->findOneBy(['resourceNode' => $resourceNode]);
     }
 
     public function findOneBy(array $criteria, array $orderBy = null)
@@ -251,187 +265,13 @@ class ResourceRepository extends EntityRepository
         return $this->createNodeForResource($resource, $creator, $parent);
     }
 
-    public function addResourceToCourse(AbstractResource $resource, int $visibility, User $creator, Course $course, Session $session = null, CGroupInfo $group = null, UploadedFile $file = null)
-    {
-        $resourceNode = $this->createNodeForResource($resource, $creator, $course->getResourceNode(), $file);
-
-        $this->addResourceNodeToCourse($resourceNode, $visibility, $course, $session, $group);
-    }
-
-    public function addResourceToCourseWithParent(AbstractResource $resource, ResourceNode $parentNode, int $visibility, User $creator, Course $course, Session $session = null, CGroupInfo $group = null, UploadedFile $file = null)
-    {
-        $resourceNode = $this->createNodeForResource($resource, $creator, $parentNode, $file);
-
-        $this->addResourceNodeToCourse($resourceNode, $visibility, $course, $session, $group);
-    }
-
-    public function addResourceNodeToCourse(ResourceNode $resourceNode, int $visibility, Course $course, Session $session = null, CGroupInfo $group = null, User $toUser = null): void
-    {
-        if (0 === $visibility) {
-            $visibility = ResourceLink::VISIBILITY_PUBLISHED;
-        }
-
-        $link = new ResourceLink();
-        $link
-            ->setCourse($course)
-            ->setSession($session)
-            ->setGroup($group)
-            ->setUser($toUser)
-            ->setResourceNode($resourceNode)
-            ->setVisibility($visibility)
-        ;
-
-        $rights = [];
-        switch ($visibility) {
-            case ResourceLink::VISIBILITY_PENDING:
-            case ResourceLink::VISIBILITY_DRAFT:
-                $editorMask = ResourceNodeVoter::getEditorMask();
-                $resourceRight = new ResourceRight();
-                $resourceRight
-                    ->setMask($editorMask)
-                    ->setRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)
-                ;
-                $rights[] = $resourceRight;
-
-                break;
-        }
-
-        if (!empty($rights)) {
-            foreach ($rights as $right) {
-                $link->addResourceRight($right);
-            }
-        }
-
-        $em = $this->getEntityManager();
-        $em->persist($resourceNode);
-        $em->persist($link);
-    }
-
-    public function addResourceToMe(ResourceNode $resourceNode): ResourceLink
-    {
-        $resourceLink = new ResourceLink();
-        $resourceLink->setResourceNode($resourceNode);
-
-        $this->getEntityManager()->persist($resourceLink);
-        $this->getEntityManager()->flush();
-
-        return $resourceLink;
-    }
-
-    public function addResourceToEveryone(ResourceNode $resourceNode, ResourceRight $right): ResourceLink
-    {
-        $resourceLink = new ResourceLink();
-        $resourceLink
-            ->setResourceNode($resourceNode)
-            ->addResourceRight($right)
-        ;
-
-        $this->getEntityManager()->persist($resourceLink);
-        $this->getEntityManager()->flush();
-
-        return $resourceLink;
-    }
-
-    public function addResourceToUser(ResourceNode $resourceNode, User $toUser): ResourceLink
-    {
-        $resourceLink = $this->addResourceNodeToUser($resourceNode, $toUser);
-        $this->getEntityManager()->persist($resourceLink);
-
-        return $resourceLink;
-    }
-
-    public function addResourceNodeToUser(ResourceNode $resourceNode, User $toUser): ResourceLink
-    {
-        $resourceLink = new ResourceLink();
-        $resourceLink
-            ->setResourceNode($resourceNode)
-            ->setVisibility(ResourceLink::VISIBILITY_PUBLISHED)
-            ->setUser($toUser);
-
-        return $resourceLink;
-    }
-
-    public function addResourceToCourseGroup(ResourceNode $resourceNode, CGroupInfo $group)
-    {
-        $exists = $resourceNode->getResourceLinks()->exists(
-            function ($key, $element) use ($group) {
-                if ($element->getGroup()) {
-                    return $group->getIid() == $element->getGroup()->getIid();
-                }
-            }
-        );
-
-        if (false === $exists) {
-            $resourceLink = new ResourceLink();
-            $resourceLink
-                ->setResourceNode($resourceNode)
-                ->setGroup($group)
-                ->setVisibility(ResourceLink::VISIBILITY_PUBLISHED)
-            ;
-            $this->getEntityManager()->persist($resourceLink);
-
-            return $resourceLink;
-        }
-    }
-
-    /*public function addResourceToSession(
-        ResourceNode $resourceNode,
-        Course $course,
-        Session $session,
-        ResourceRight $right
-    ) {
-        $resourceLink = $this->addResourceToCourse(
-            $resourceNode,
-            $course,
-            $right
-        );
-        $resourceLink->setSession($session);
-        $this->getEntityManager()->persist($resourceLink);
-
-        return $resourceLink;
-    }*/
-
-    /**
-     * @return ResourceLink
-     */
-    public function addResourceToGroup(
-        ResourceNode $resourceNode,
-        Usergroup $group,
-        ResourceRight $right
-    ) {
-        $resourceLink = new ResourceLink();
-        $resourceLink
-            ->setResourceNode($resourceNode)
-            ->setUserGroup($group)
-            ->addResourceRight($right);
-
-        return $resourceLink;
-    }
-
-    /**
-     * @param array $userList User id list
-     */
-    public function addResourceToUserList(ResourceNode $resourceNode, array $userList)
-    {
-        $em = $this->getEntityManager();
-
-        if (!empty($userList)) {
-            $userRepo = $em->getRepository('ChamiloCoreBundle:User');
-            foreach ($userList as $userId) {
-                $toUser = $userRepo->find($userId);
-                $resourceLink = $this->addResourceNodeToUser($resourceNode, $toUser);
-                $em->persist($resourceLink);
-            }
-        }
-    }
-
     /**
      * @return ResourceType
      */
     public function getResourceType()
     {
         $name = $this->getResourceTypeName();
-        $repo = $this->getEntityManager()->getRepository('ChamiloCoreBundle:ResourceType');
+        $repo = $this->getEntityManager()->getRepository(ResourceType::class);
         $this->resourceType = $repo->findOneBy(['name' => $name]);
 
         return $this->resourceType;
@@ -442,7 +282,7 @@ class ResourceRepository extends EntityRepository
         return $this->toolChain->getResourceTypeNameFromRepository(get_class($this));
     }
 
-    public function getResourcesByCourse(Course $course, Session $session = null, CGroupInfo $group = null, ResourceNode $parentNode = null): QueryBuilder
+    public function getResourcesByCourse(Course $course, Session $session = null, CGroup $group = null, ResourceNode $parentNode = null): QueryBuilder
     {
         $repo = $this->getRepository();
         $className = $repo->getClassName();
@@ -459,7 +299,6 @@ class ResourceRepository extends EntityRepository
             ->innerJoin('resource.resourceNode', 'node')
             ->innerJoin('node.resourceLinks', 'links')
             ->innerJoin('node.resourceType', 'type')
-            //->innerJoin('links.course', 'course')
             ->leftJoin('node.resourceFile', 'file')
 
             ->where('type.name = :type')
@@ -473,10 +312,11 @@ class ResourceRepository extends EntityRepository
             ->addSelect('file')
         ;
 
-        $isAdmin = $checker->isGranted('ROLE_ADMIN') ||
+        $isAdmin =
+            $checker->isGranted('ROLE_ADMIN') ||
             $checker->isGranted('ROLE_CURRENT_COURSE_TEACHER');
 
-        // Do not show deleted resources
+        // Do not show deleted resources.
         $qb
             ->andWhere('links.visibility != :visibilityDeleted')
             ->setParameter('visibilityDeleted', ResourceLink::VISIBILITY_DELETED)
@@ -611,8 +451,13 @@ class ResourceRepository extends EntityRepository
         return $qb;
     }
 
-    public function getResourcesByCourseLinkedToUser(User $user, Course $course, Session $session = null, CGroupInfo $group = null, ResourceNode $parentNode = null): QueryBuilder
-    {
+    public function getResourcesByCourseLinkedToUser(
+        User $user,
+        Course $course,
+        Session $session = null,
+        CGroup $group = null,
+        ResourceNode $parentNode = null
+    ): QueryBuilder {
         $qb = $this->getResourcesByCourse($course, $session, $group, $parentNode);
 
         $qb
@@ -671,19 +516,11 @@ class ResourceRepository extends EntityRepository
 
     public function getResourceFromResourceNode(int $resourceNodeId): ?AbstractResource
     {
-        //return $this->getRepository()->findOneBy(['resourceNode' => $resourceNodeId]);
-        //$className = $this->getClassName();
-        /*var_dump(get_class($this->repository));
-        var_dump(get_class($this->getRepository()));
-        var_dump(get_class($this));*/
-        //var_dump($className);
         // Include links
         $qb = $this->getRepository()->createQueryBuilder('resource')
             ->select('resource')
             ->addSelect('node')
             ->addSelect('links')
-            //->addSelect('file')
-            //->from($className, 'resource')
             ->innerJoin('resource.resourceNode', 'node')
         //    ->innerJoin('node.creator', 'userCreator')
             ->innerJoin('node.resourceLinks', 'links')
@@ -694,22 +531,6 @@ class ResourceRepository extends EntityRepository
         ;
 
         return $qb->getQuery()->getOneOrNullResult();
-    }
-
-    public function rowCanBeEdited(RowAction $action, Row $row, Session $session = null): ?RowAction
-    {
-        if (null !== $session) {
-            /** @var AbstractResource $entity */
-            $entity = $row->getEntity();
-            $hasSession = $entity->getResourceNode()->hasSession($session);
-            if ($hasSession->count() > 0) {
-                return $action;
-            }
-
-            return null;
-        }
-
-        return $action;
     }
 
     public function delete(AbstractResource $resource)
@@ -784,7 +605,7 @@ class ResourceRepository extends EntityRepository
 
                 $referenceType = $referenceType ?? UrlGeneratorInterface::ABSOLUTE_PATH;
 
-                return $this->router->generate('chamilo_core_resource_view_file', $params, $referenceType);
+                return $this->router->generate('chamilo_core_resource_view', $params, $referenceType);
             }
 
             return '';
@@ -810,26 +631,48 @@ class ResourceRepository extends EntityRepository
      */
     public function updateResourceFileContent(AbstractResource $resource, $content)
     {
-        try {
-            $resourceNode = $resource->getResourceNode();
-            if ($resourceNode->hasResourceFile()) {
-                $resourceFile = $resourceNode->getResourceFile();
-                if ($resourceFile) {
-                    $fileName = $this->getResourceNodeRepository()->getFilename($resourceFile);
-                    $this->getResourceNodeRepository()->getFileSystem()->update($fileName, $content);
-                    //$size = $this->getResourceNodeRepository()->getSize($resourceNode);
+        error_log('updateResourceFileContent');
 
-                    if ($resource instanceof CDocument) {
-                        //$resource->setSize($size);
-                    }
-                    $this->entityManager->persist($resource);
+        $resourceNode = $resource->getResourceNode();
+        if ($resourceNode->hasResourceFile()) {
+            error_log('has file');
+            $resourceFile = $resourceNode->getResourceFile();
+            if ($resourceFile) {
+                error_log('$resourceFile');
+                $title = $resource->getResourceName();
+                $handle = tmpfile();
+                fwrite($handle, $content);
+                error_log($title);
+                error_log($content);
+                $meta = stream_get_meta_data($handle);
+                $file = new UploadedFile($meta['uri'], $title, 'text/html', null, true);
+                $resource->setUploadFile($file);
 
-                    return true;
-                }
+                return true;
             }
+        }
+        error_log('false');
 
-            return false;
-        } catch (\Throwable $exception) {
+        return false;
+    }
+
+    public function setResourceName(AbstractResource $resource, $title)
+    {
+        $resource->setResourceName($title);
+        $resourceNode = $resource->getResourceNode();
+        $resourceNode->setTitle($title);
+        if ($resourceNode->hasResourceFile()) {
+            //$resourceNode->getResourceFile()->getFile()->
+            //$resourceNode->getResourceFile()->setName($title);
+            //$resourceFile->setName($title);
+
+            /*$fileName = $this->getResourceNodeRepository()->getFilename($resourceFile);
+            error_log('$fileName');
+            error_log($fileName);
+            error_log($title);
+            $this->getResourceNodeRepository()->getFileSystem()->rename($fileName, $title);
+            $resourceFile->setName($title);
+            $resourceFile->setOriginalName($title);*/
         }
     }
 
@@ -844,6 +687,11 @@ class ResourceRepository extends EntityRepository
     public function setVisibilityPublished(AbstractResource $resource)
     {
         $this->setLinkVisibility($resource, ResourceLink::VISIBILITY_PUBLISHED);
+    }
+
+    public function setVisibilityDeleted(AbstractResource $resource)
+    {
+        $this->setLinkVisibility($resource, ResourceLink::VISIBILITY_DELETED);
     }
 
     public function setVisibilityDraft(AbstractResource $resource)

@@ -267,9 +267,7 @@ switch ($action) {
 
         if ('get_basic_course_documents_list' === $action) {
             $courseInfo = api_get_course_info_by_id($course->getId());
-
             $exists = DocumentManager::folderExists('/basic-course-documents', $courseInfo, $session->getId(), 0);
-
             if (!$exists) {
                 $courseDir = $courseInfo['directory'].'/document';
                 $sysCoursePath = api_get_path(SYS_COURSE_PATH);
@@ -303,6 +301,7 @@ switch ($action) {
                 false,
                 $session->getId()
             );
+
             $documentAndFolders = array_filter(
                 $documentAndFolders,
                 function (array $documentData) {
@@ -312,7 +311,7 @@ switch ($action) {
             $documentAndFolders = array_map(
                 function (array $documentData) use ($course, $session, $courseInfo, $currentUserId, $http_www, $folderName, $id) {
                     $downloadUrl = api_get_path(WEB_CODE_PATH).'document/document.php?'
-                        .api_get_cidreq_params($course->getCode(), $session->getId()).'&'
+                        .api_get_cidreq_params($course->getId(), $session->getId()).'&'
                         .http_build_query(['action' => 'download', 'id' => $documentData['id']]);
                     $deleteUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?'
                         .http_build_query(
@@ -367,7 +366,7 @@ switch ($action) {
             $form = new FormValidator('get_basic_course_documents_form_'.$session->getId());
             $form->addMultipleUpload(
                 api_get_path(WEB_AJAX_PATH).'document.ajax.php?'
-                    .api_get_cidreq_params($course->getCode(), $session->getId())
+                    .api_get_cidreq_params($course->getId(), $session->getId())
                     .'&a=upload_file&curdirpath='.$folderName,
                 ''
             );
@@ -434,6 +433,39 @@ switch ($action) {
         }
 
         echo true;
+        break;
+    case 'search_template_session':
+        SessionManager::protectSession(null, false);
+
+        api_protect_limit_for_session_admin();
+
+        if (empty($_GET['q'])) {
+            break;
+        }
+
+        $q = strtolower(trim($_GET['q']));
+
+        $list = array_map(
+            function ($session) {
+                return [
+                    'id' => $session['id'],
+                    'text' => strip_tags($session['name']),
+                ];
+            },
+            SessionManager::formatSessionsAdminForGrid()
+        );
+
+        $list = array_filter(
+            $list,
+            function ($session) use ($q) {
+                $name = strtolower($session['text']);
+
+                return strpos($name, $q) !== false;
+            }
+        );
+
+        header('Content-Type: application/json');
+        echo json_encode(['items' => array_values($list)]);
         break;
     default:
         echo '';

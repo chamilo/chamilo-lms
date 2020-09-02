@@ -5,14 +5,13 @@
 namespace Chamilo\CoreBundle\Hook;
 
 use Chamilo\CoreBundle\Entity\HookCall;
-use Chamilo\CoreBundle\Hook\Interfaces\HookManagementInterface;
 use Database;
 use Doctrine\ORM\EntityManager;
 
 /**
  * @TODO: Improve description
  */
-class HookManagement implements HookManagementInterface
+class HookManagement
 {
     private $entityManager;
 
@@ -127,32 +126,30 @@ class HookManagement implements HookManagementInterface
      * Update hook observer order by hook event.
      *
      * @param $eventName
-     * @param $type
-     * @param $hookOrders
      *
      * @return int
      */
-    public function orderHook($eventName, $type, $hookOrders)
-    {
-        foreach ($this->hookCalls[$eventName] as $observerClassName => $types) {
-            foreach ($hookOrders as $oldOrder => $newOrder) {
-                $res = Database::update(
-                    $this->tables[TABLE_HOOK_CALL],
-                    [
-                        'hook_order ' => $newOrder,
-                    ],
-                    [
-                        'id = ? ' => $types[$type],
-                        'AND hook_order = ? ' => $oldOrder,
-                    ]
-                );
+    //public function orderHook($eventName, $type, $hookOrders)
+    //{
+    /*foreach ($this->hookCalls[$eventName] as $observerClassName => $types) {
+        foreach ($hookOrders as $oldOrder => $newOrder) {
+            $res = Database::update(
+                $this->tables[TABLE_HOOK_CALL],
+                [
+                    'hook_order ' => $newOrder,
+                ],
+                [
+                    'id = ? ' => $types[$type],
+                    'AND hook_order = ? ' => $oldOrder,
+                ]
+            );
 
-                if ($res) {
-                    break;
-                }
+            if ($res) {
+                break;
             }
         }
-    }
+    }*/
+    //}
 
     /**
      * Return a list an associative array where keys are the active hook observer class name.

@@ -48,10 +48,7 @@ class ResourceType
     {
     }
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString(): string
     {
         return (string) $this->name;
     }
@@ -61,10 +58,7 @@ class ResourceType
         return $this->id;
     }
 
-    /**
-     * @return ResourceType
-     */
-    public function setId($id)
+    public function setId($id): self
     {
         $this->id = $id;
 
@@ -81,10 +75,8 @@ class ResourceType
 
     /**
      * @param string $name
-     *
-     * @return ResourceType
      */
-    public function setName($name)
+    public function setName($name): self
     {
         $this->name = $name;
 
@@ -101,10 +93,8 @@ class ResourceType
 
     /**
      * @param Tool $tool
-     *
-     * @return ResourceType
      */
-    public function setTool($tool)
+    public function setTool($tool): self
     {
         $this->tool = $tool;
 
@@ -116,10 +106,7 @@ class ResourceType
         return $this->resourceNodes;
     }
 
-    /**
-     * @return ResourceType
-     */
-    public function setResourceNodes($resourceNodes)
+    public function setResourceNodes($resourceNodes): self
     {
         $this->resourceNodes = $resourceNodes;
 

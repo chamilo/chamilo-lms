@@ -5,7 +5,10 @@
 namespace Chamilo\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\SequenceResource;
+use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\SessionRelUser;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Fhaculty\Graph\Set\Vertices;
@@ -142,12 +145,12 @@ class SequenceResourceRepository extends ServiceEntityRepository
                 $resource = null;
                 switch ($type) {
                     case SequenceResource::SESSION_TYPE:
-                        $repo = $em->getRepository('ChamiloCoreBundle:Session');
+                        $repo = $em->getRepository(Session::class);
                         $resource = $repo->find($vertexId);
 
                         break;
                     case SequenceResource::COURSE_TYPE:
-                        $repo = $em->getRepository('ChamiloCoreBundle:Course');
+                        $repo = $em->getRepository(Course::class);
                         $resource = $repo->find($vertexId);
 
                         break;
@@ -221,12 +224,12 @@ class SequenceResourceRepository extends ServiceEntityRepository
     {
         $sequenceList = [];
         $em = $this->getEntityManager();
-        $gradebookCategoryRepo = $em->getRepository('ChamiloCoreBundle:GradebookCategory');
+        $gradebookCategoryRepo = $em->getRepository(GradebookCategory::class);
 
         $sessionUserList = [];
         if (SequenceResource::COURSE_TYPE == $type) {
             $criteria = ['user' => $userId];
-            $sessions = $em->getRepository('ChamiloCoreBundle:SessionRelUser')->findBy($criteria);
+            $sessions = $em->getRepository(SessionRelUser::class)->findBy($criteria);
             if ($sessions) {
                 foreach ($sessions as $sessionRelUser) {
                     $sessionUserList[] = $sessionRelUser->getSession()->getId();
@@ -318,7 +321,7 @@ class SequenceResourceRepository extends ServiceEntityRepository
         $em = $this->getEntityManager();
         $sessionId = (int) $sessionId;
 
-        $gradebookCategoryRepo = $em->getRepository('ChamiloCoreBundle:GradebookCategory');
+        $gradebookCategoryRepo = $em->getRepository(GradebookCategory::class);
         $gradebooks = $gradebookCategoryRepo->findBy(
             [
                 'courseCode' => $course->getCode(),
@@ -399,11 +402,11 @@ class SequenceResourceRepository extends ServiceEntityRepository
             $vertexId = $supVertex->getId();
             switch ($type) {
                 case SequenceResource::SESSION_TYPE:
-                    $resource = $em->getRepository('ChamiloCoreBundle:Session')->find($vertexId);
+                    $resource = $em->getRepository(Session::class)->find($vertexId);
 
                     break;
                 case SequenceResource::COURSE_TYPE:
-                    $resource = $em->getRepository('ChamiloCoreBundle:Course')->find($vertexId);
+                    $resource = $em->getRepository(Course::class)->find($vertexId);
 
                     break;
             }

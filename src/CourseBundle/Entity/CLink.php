@@ -4,7 +4,6 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
-use APY\DataGridBundle\Grid\Mapping as GRID;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Doctrine\ORM\Mapping as ORM;
@@ -21,7 +20,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  *  }
  * )
  * @ORM\Entity
- * @GRID\Source(columns="iid, title, resourceNode.createdAt", filterable=false, groups={"resource"})
  */
 class CLink extends AbstractResource implements ResourceInterface
 {
@@ -40,13 +38,6 @@ class CLink extends AbstractResource implements ResourceInterface
      * @ORM\Column(name="c_id", type="integer")
      */
     protected $cId;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=true)
-     */
-    protected $id;
 
     /**
      * @var string
@@ -282,40 +273,9 @@ class CLink extends AbstractResource implements ResourceInterface
         return $this->sessionId;
     }
 
-    /**
-     * Set id.
-     *
-     * @param int $id
-     *
-     * @return CLink
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
     public function getIid(): int
     {
         return $this->iid;
-    }
-
-    public function setIid(int $iid): self
-    {
-        $this->iid = $iid;
-
-        return $this;
     }
 
     /**
@@ -365,5 +325,10 @@ class CLink extends AbstractResource implements ResourceInterface
     public function getResourceName(): string
     {
         return $this->getTitle();
+    }
+
+    public function setResourceName($name): self
+    {
+        return $this->setTitle($name);
     }
 }

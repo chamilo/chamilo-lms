@@ -288,8 +288,7 @@ if ('true' === api_get_setting('allow_group_categories')) {
         echo $groupToShow;
     }
 } else {
-    $group_list = GroupManager::get_group_list();
-    echo GroupManager::process_groups($group_list);
+    echo GroupManager::process_groups(GroupManager::get_group_list());
 }
 
 if (!isset($_GET['origin']) || 'learnpath' != $_GET['origin']) {

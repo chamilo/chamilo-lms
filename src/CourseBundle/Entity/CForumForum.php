@@ -41,13 +41,6 @@ class CForumForum extends AbstractResource implements ResourceInterface
     protected $cId;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="forum_id", type="integer")
-     */
-    protected $forumId;
-
-    /**
      * @var string
      * @Assert\NotBlank
      *
@@ -225,7 +218,6 @@ class CForumForum extends AbstractResource implements ResourceInterface
      */
     public function __construct()
     {
-        $this->forumId = 0;
         $this->locked = 0;
         $this->forumImage = '';
         $this->forumOfGroup = 0;
@@ -708,30 +700,6 @@ class CForumForum extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Set forumId.
-     *
-     * @param int $forumId
-     *
-     * @return CForumForum
-     */
-    public function setForumId($forumId)
-    {
-        $this->forumId = $forumId;
-
-        return $this;
-    }
-
-    /**
-     * Get forumId.
-     *
-     * @return int
-     */
-    public function getForumId()
-    {
-        return $this->forumId;
-    }
-
-    /**
      * Set cId.
      *
      * @param int $cId
@@ -830,5 +798,10 @@ class CForumForum extends AbstractResource implements ResourceInterface
     public function getResourceName(): string
     {
         return $this->getForumTitle();
+    }
+
+    public function setResourceName(string $name): self
+    {
+        return $this->setForumTitle($name);
     }
 }

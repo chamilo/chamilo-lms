@@ -93,17 +93,17 @@ function search_users($needle, $type = 'multiple')
         }
 
         if (count($assigned_users_id) > 0) {
-            $without_assigned_users = ' AND user.user_id NOT IN('.implode(',', $assigned_users_id).')';
+            $without_assigned_users = ' AND user.id NOT IN('.implode(',', $assigned_users_id).')';
         }
 
         if (api_is_multiple_url_enabled()) {
-            $sql = "SELECT user.user_id, username, lastname, firstname
+            $sql = "SELECT user.id as user_id, username, lastname, firstname
                     FROM $tbl_user user
-                    LEFT JOIN $tbl_access_url_rel_user au ON (au.user_id = user.user_id)
+                    LEFT JOIN $tbl_access_url_rel_user au ON (au.user_id = user.id)
                     WHERE
                         ".(api_sort_by_first_name() ? 'firstname' : 'lastname')." LIKE '$needle%' AND
                         status NOT IN(".DRH.', '.SESSIONADMIN.', '.STUDENT_BOSS.") AND
-                        user.user_id NOT IN ($user_anonymous, $current_user_id, $user_id)
+                        user.id NOT IN ($user_anonymous, $current_user_id, $user_id)
                         $without_assigned_users AND
                         access_url_id = ".api_get_current_access_url_id()."
                     $order_clause
@@ -126,9 +126,9 @@ function search_users($needle, $type = 'multiple')
             $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
             $access_url_id = api_get_current_access_url_id();
 
-            $sql = 'SELECT user.user_id, username, lastname, firstname
+            $sql = 'SELECT user.id as user_id, username, lastname, firstname
                     FROM '.$tbl_user.' user
-                    INNER JOIN '.$tbl_user_rel_access_url.' url_user ON (url_user.user_id=user.user_id)
+                    INNER JOIN '.$tbl_user_rel_access_url.' url_user ON (url_user.user_id=user.id)
                     WHERE
                         access_url_id = '.$access_url_id.'  AND
                         (
@@ -367,7 +367,7 @@ switch ($userStatus) {
 $assigned_users_id = array_keys($assigned_users_to_hrm);
 $without_assigned_users = '';
 if (count($assigned_users_id) > 0) {
-    $without_assigned_users = ' user.user_id NOT IN('.implode(',', $assigned_users_id).') AND ';
+    $without_assigned_users = ' user.id NOT IN('.implode(',', $assigned_users_id).') AND ';
 }
 
 $search_user = '';
@@ -394,9 +394,9 @@ if (!empty($conditions)) {
 }
 
 if (api_is_multiple_url_enabled()) {
-    $sql = "SELECT user.user_id, username, lastname, firstname
-            FROM $tbl_user user  
-            LEFT JOIN $tbl_access_url_rel_user au 
+    $sql = "SELECT user.id as user_id, username, lastname, firstname
+            FROM $tbl_user user
+            LEFT JOIN $tbl_access_url_rel_user au
             ON (au.user_id = user.user_id)
             WHERE
                 $without_assigned_users

@@ -1862,9 +1862,11 @@ class Skill extends Model
 
         /*  ORDER BY $sidx $sord */
         $sql = "SELECT *, @rownum:=@rownum+1 rank FROM (
-                    SELECT u.user_id, firstname, lastname, count(username) skills_acquired
-                    FROM {$this->table} s INNER JOIN {$this->table_skill_rel_user} su ON (s.id = su.skill_id)
-                    INNER JOIN {$this->table_user} u ON u.user_id = su.user_id, (SELECT @rownum:=0) r
+                    SELECT u.id as user_id, firstname, lastname, count(username) skills_acquired
+                    FROM {$this->table} s INNER JOIN {$this->table_skill_rel_user} su
+                    ON (s.id = su.skill_id)
+                    INNER JOIN {$this->table_user} u
+                    ON u.id = su.user_id, (SELECT @rownum:=0) r
                     WHERE 1=1 $where_condition
                     GROUP BY username
                     ORDER BY skills_acquired desc
@@ -1888,7 +1890,7 @@ class Skill extends Model
                     INNER JOIN {$this->table_skill_rel_user} su
                     ON (s.id = su.skill_id)
                     INNER JOIN {$this->table_user} u
-                    ON u.user_id = su.user_id
+                    ON u.id = su.user_id
                     GROUP BY username
                  ) as T1";
         $result = Database::query($sql);
@@ -2049,7 +2051,7 @@ class Skill extends Model
                     course.id c_id,
                     course.title c_name,
                     course.directory c_directory,
-                    user.user_id,
+                    user.id as user_id,
                     user.lastname,
                     user.firstname,
                     user.username,
@@ -2060,7 +2062,7 @@ class Skill extends Model
                 INNER JOIN {$this->table_course}
                 ON sru.course_id = course.id
                 INNER JOIN {$this->table_user}
-                ON sru.user_id = user.user_id
+                ON sru.user_id = user.id
                 INNER JOIN {$this->table}
                 ON sru.skill_id = skill.id
                 WHERE course.id = $courseId";
@@ -2095,7 +2097,7 @@ class Skill extends Model
                     course.id c_id,
                     course.title c_name,
                     course.directory c_directory,
-                    user.user_id,
+                    user.id as user_id,
                     user.lastname,
                     user.firstname,
                     user.username,
@@ -2106,7 +2108,7 @@ class Skill extends Model
                 INNER JOIN {$this->table_course}
                 ON sru.course_id = course.id
                 INNER JOIN {$this->table_user}
-                ON sru.user_id = user.user_id
+                ON sru.user_id = user.id
                 INNER JOIN {$this->table}
                 ON sru.skill_id = skill.id
                 WHERE skill.id = $skillId ";

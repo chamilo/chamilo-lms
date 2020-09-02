@@ -76,7 +76,8 @@ if (api_can_login_as($userId)) {
             [],
             ICON_SIZE_MEDIUM
         ),
-        api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=login_as&user_id='.$userId.'&sec_token='.Security::getTokenFromSession()
+        api_get_path(WEB_CODE_PATH).
+        'admin/user_list.php?action=login_as&user_id='.$userId.'&sec_token='.Security::getTokenFromSession()
     );
 }
 
@@ -191,7 +192,6 @@ foreach ($data as $label => $item) {
     $csvContent[] = [$label, strip_tags($item)];
     $row++;
 }
-//$userInformation = $table->toHtml();
 
 $table = new HTML_Table(['class' => 'data_table']);
 $table->setHeaderContents(0, 0, get_lang('Reporting'));
@@ -252,7 +252,7 @@ foreach ($data as $label => $item) {
 if ('true' === api_get_setting('allow_social_tool')) {
     $userObject = api_get_user_entity($userId);
     $data = [];
-
+    $messagesSent = '';
     // Calculate values
     if ('true' === api_get_setting('allow_message_tool')) {
         $messagesSent = SocialManager::getCountMessagesSent($userId);
@@ -277,8 +277,8 @@ if ('true' === api_get_setting('allow_social_tool')) {
         'invitation_sent' => $countSent,
         'invitation_received' => $countReceived,
         'messages_posted' => $wallMessagesPosted,
-        'message_sent' => $messagesSent,
-        'message_received' => $messagesReceived,
+        'messages_sent' => $messagesSent,
+        'messages_received' => $messagesReceived,
     ];
 }
 

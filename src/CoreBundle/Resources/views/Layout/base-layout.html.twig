@@ -4,10 +4,7 @@
 {% import "@ChamiloCore/Macros/image.html.twig" as macro_image %}
 {% import '@ChamiloCore/Macros/headers.html.twig' as macro_headers %}
 <!doctype html>
-<!--[if IE 9 ]>
-<html lang="{{ app.request.locale }}" class="no-js ie9"> <![endif]-->
-<!--[if (gt IE 9)|!(IE)]><!-->
-<html lang="{{ app.request.locale }}" class="no-js"> <!--<![endif]-->
+<html lang="{{ app.request.locale }}" class="no-js h-100">
 {# Chamilo theme #}
 {% set theme = 'chamilo' %}
 {% block chamilo_head %}
@@ -16,28 +13,22 @@
 </head>
 {% endblock %}
 <body
-    class="{{ section_name }} "
-{#    {{ sonata_seo_html_attributes() }}#}
+    class="{{ section_name }} h-100"
     data-in-course="{{ course ? 'true' : 'false' }}"
     data-course-code="{{ course ? course.code : '' }}"
     data-session-id="{{ session ? session.id : '' }}"
 >
 <noscript> {{ "Your browser does not support Javascript" | trans }} </noscript>
 {% block chamilo_wrap %}
-    <!-- PAGE -->
     {% block page_header %}
-        <!-- HEADER -->
 {#        {% include '@ChamiloCore/Layout/header.html.twig' %}#}
-        <!-- END HEADER -->
     {% endblock %}
-    <div class="app-body">
+{#    <div class="app-body">#}
         {% block page_sidebar %}
-            <!-- SIDEBAR -->
 {#            {% include '@ChamiloCore/Layout/sidebar.html.twig' %}#}
-            <!-- END SIDEBAR -->
         {% endblock %}
 
-        <main id="app-main" class="main">
+{#        <main id="app-main" class="main">#}
             {% block chamilo_breadcrumb %}
                 <!-- BREADCRUMB -->
                 {% include '@ChamiloCore/Layout/breadcrumb.html.twig' %}
@@ -46,9 +37,8 @@
 
             {% block page_content %}
             {% endblock %}
-        </main>
-    </div>
-    <!-- END PAGE -->
+{#        </main>#}
+{#    </div>#}
 {% endblock %}
 
 {% block chamilo_footer %}
@@ -57,36 +47,6 @@
     <!-- END FOOTER -->
 {% endblock %}
 <script src="{{ url('home') ~ 'build/vue.js' }}"></script>
-
-<script>
-
-    // MODAL DELETE CONFIRM
-    $('.delete-swal').click(function (e) {
-        e.preventDefault(); // Prevent the href from redirecting directly
-        var url = $(this).attr("href");
-        var title = $(this).attr("title");
-
-        Swal.fire({
-            title: title,
-            text: '',
-            icon: 'warning',
-            showCancelButton: true,
-            cancelButtonText: '{{ 'Cancel' | trans }}',
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: '{{ 'Yes' | trans }}',
-        }).then((result) => {
-            if (result.value) {
-                /*Swal.fire(
-                    'Deleted!',
-                    'Your file has been deleted.',
-                    'success'
-                )*/
-                window.location.href = url;
-            }
-        });
-    });
-</script>
 
 </body>
 </html>

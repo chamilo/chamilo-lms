@@ -138,34 +138,24 @@ class Link extends Model
             ;
 
             $repo = Container::getLinkRepository();
-
             $courseEntity = api_get_course_entity($course_id);
-
             if (empty($category)) {
-                $repo->addResourceToCourse(
-                    $link,
-                    ResourceLink::VISIBILITY_PUBLISHED,
-                    api_get_user_entity(api_get_user_id()),
-                    $courseEntity,
-                    api_get_session_entity($session_id),
-                    api_get_group_entity()
-                );
+                $link
+                    ->setParent($courseEntity)
+                    ->addCourseLink($courseEntity, api_get_session_entity($session_id))
+                ;
             } else {
-                $repo->addResourceToCourseWithParent(
-                    $link,
-                    $category->getResourceNode(),
-                    ResourceLink::VISIBILITY_PUBLISHED,
-                    api_get_user_entity(api_get_user_id()),
-                    $courseEntity,
-                    api_get_session_entity($session_id),
-                    api_get_group_entity()
-                );
+                $link
+                    ->setParent($category)
+                    ->addCourseLink($courseEntity, api_get_session_entity($session_id))
+                ;
             }
 
+            $repo->getEntityManager()->persist($link);
             $repo->getEntityManager()->flush();
             $link_id = $link->getIid();
 
-            if (('true' == api_get_setting('search_enabled')) &&
+            if (('true' === api_get_setting('search_enabled')) &&
                 $link_id && extension_loaded('xapian')
             ) {
                 require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
@@ -347,25 +337,15 @@ class Link extends Model
             ->setCategoryTitle($category_title)
             ->setDescription($description)
             ->setDisplayOrder($order)
+            ->setParent($courseEntity)
+            ->addCourseLink($courseEntity, $sessionEntity)
         ;
 
-        $repo->addResourceToCourse(
-            $category,
-            ResourceLink::VISIBILITY_PUBLISHED,
-            api_get_user_entity(api_get_user_id()),
-            $courseEntity,
-            $sessionEntity,
-            api_get_group_entity()
-        );
-
+        $repo->getEntityManager()->persist($category);
         $repo->getEntityManager()->flush();
         $linkId = $category->getIid();
 
         if ($linkId) {
-            // iid
-            $sql = "UPDATE $tbl_categories SET id = iid WHERE iid = $linkId";
-            Database:: query($sql);
-
             // add link_category visibility
             // course ID is taken from context in api_set_default_visibility
             //api_set_default_visibility($linkId, TOOL_LINK_CATEGORY);
@@ -397,27 +377,6 @@ class Link extends Model
         }
 
         return false;
-
-        // First we delete the category itself and afterwards all the links of this category.
-        $sql = "DELETE FROM ".$tbl_categories."
-                        WHERE c_id = $course_id AND id='".$id."'";
-        Database:: query($sql);
-
-        $sql = "DELETE FROM ".$tbl_link."
-                        WHERE c_id = $course_id AND category_id='".$id."'";
-        Database:: query($sql);
-
-        api_item_property_update(
-            $courseInfo,
-            TOOL_LINK_CATEGORY,
-            $id,
-            'delete',
-            api_get_user_id()
-        );
-
-        Display::addFlash(Display::return_message(get_lang('The category has been deleted.')));
-
-        return true;
     }
 
     /**
@@ -457,7 +416,7 @@ class Link extends Model
         // but the visibility is set to 2 (in item_property).
         // This will make a restore function possible for the platform administrator.
         $sql = "UPDATE $tbl_link SET on_homepage='0'
-                WHERE c_id = $course_id AND id='".$id."'";
+                WHERE c_id = $course_id AND iid='".$id."'";
         Database:: query($sql);
 
         /*api_item_property_update(
@@ -574,7 +533,7 @@ class Link extends Model
 
         // Finding the old category_id.
         $sql = "SELECT * FROM $tbl_link
-                WHERE c_id = $course_id AND id='".$id."'";
+                WHERE c_id = $course_id AND iid='".$id."'";
         $result = Database:: query($sql);
         $row = Database:: fetch_array($result);
         $category_id = $row['category_id'];
@@ -604,7 +563,7 @@ class Link extends Model
         Database::update(
             $tbl_link,
             $params,
-            ['c_id = ? AND id = ?' => [$course_id, $id]]
+            ['c_id = ? AND iid = ?' => [$course_id, $id]]
         );
 
         // Update search enchine and its values table if enabled.
@@ -1953,8 +1912,8 @@ Do you really want to delete this category and its links ?')."')) return false;\
             $link->setDisplayOrder($newLinkDisplayOrder);
             $prevLink->setDisplayOrder($newPrevLinkDisplayOrder);
 
-            $em->merge($prevLink);
-            $em->merge($link);
+            $em->persist($prevLink);
+            $em->persist($link);
             break;
         }
 

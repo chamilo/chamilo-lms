@@ -11,13 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * CAnnouncement.
  *
- * @ORM\Table(
- *  name="c_announcement",
- *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"}),
- *      @ORM\Index(name="session_id", columns={"session_id"})
- *  }
- * )
+ * @ORM\Table(name="c_announcement")
  * @ORM\Entity
  */
 class CAnnouncement extends AbstractResource implements ResourceInterface
@@ -30,20 +24,6 @@ class CAnnouncement extends AbstractResource implements ResourceInterface
      * @ORM\GeneratedValue
      */
     protected $iid;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=true)
-     */
-    protected $id;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="c_id", type="integer")
-     */
-    protected $cId;
 
     /**
      * @var string
@@ -81,16 +61,9 @@ class CAnnouncement extends AbstractResource implements ResourceInterface
     protected $emailSent;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="session_id", type="integer", nullable=true)
-     */
-    protected $sessionId;
-
-    /**
      * @var CAnnouncementAttachment[]
      *
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CAnnouncementAttachment", mappedBy="announcement", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="CAnnouncementAttachment", mappedBy="announcement", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     protected $attachments;
 
@@ -237,78 +210,6 @@ class CAnnouncement extends AbstractResource implements ResourceInterface
         return $this->emailSent;
     }
 
-    /**
-     * Set sessionId.
-     *
-     * @param int $sessionId
-     *
-     * @return CAnnouncement
-     */
-    public function setSessionId($sessionId)
-    {
-        $this->sessionId = $sessionId;
-
-        return $this;
-    }
-
-    /**
-     * Get sessionId.
-     *
-     * @return int
-     */
-    public function getSessionId()
-    {
-        return $this->sessionId;
-    }
-
-    /**
-     * Set id.
-     *
-     * @param int $id
-     *
-     * @return CAnnouncement
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set cId.
-     *
-     * @param int $cId
-     *
-     * @return CAnnouncement
-     */
-    public function setCId($cId)
-    {
-        $this->cId = $cId;
-
-        return $this;
-    }
-
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
-    {
-        return $this->cId;
-    }
-
     public function getIid(): int
     {
         return $this->iid;
@@ -325,5 +226,10 @@ class CAnnouncement extends AbstractResource implements ResourceInterface
     public function getResourceName(): string
     {
         return $this->getTitle();
+    }
+
+    public function setResourceName(string $name): self
+    {
+        return $this->setTitle($name);
     }
 }

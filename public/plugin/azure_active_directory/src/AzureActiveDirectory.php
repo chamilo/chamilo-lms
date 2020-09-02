@@ -1,5 +1,4 @@
 <?php
-
 /* For license terms, see /license.txt */
 
 use TheNetworg\OAuth2\Client\Provider\Azure;
@@ -8,6 +7,8 @@ use TheNetworg\OAuth2\Client\Provider\Azure;
  * AzureActiveDirectory plugin class.
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
+ *
+ * @package chamilo.plugin.azure_active_directory
  */
 class AzureActiveDirectory extends Plugin
 {
@@ -54,7 +55,7 @@ class AzureActiveDirectory extends Plugin
     {
         static $result = null;
 
-        return $result ?: $result = new self();
+        return $result ? $result : $result = new self();
     }
 
     /**
@@ -70,11 +71,13 @@ class AzureActiveDirectory extends Plugin
      */
     public function getProvider()
     {
-        return new Azure([
+        $provider = new Azure([
             'clientId' => $this->get(self::SETTING_APP_ID),
             'clientSecret' => $this->get(self::SETTING_APP_SECRET),
             'redirectUri' => api_get_path(WEB_PLUGIN_PATH).'azure_active_directory/src/callback.php',
         ]);
+
+        return $provider;
     }
 
     /**

@@ -1,7 +1,15 @@
 <template>
   <div>
-    <Toolbar :handle-submit="onSendForm" :handle-reset="resetForm"></Toolbar>
-    <DocumentsForm ref="createForm" :values="item" :errors="violations" />
+    <DocumentsForm
+      ref="createForm"
+      :values="item"
+      :errors="violations"
+    />
+
+    <Toolbar
+      :handle-submit="onSendForm"
+      :handle-reset="resetForm"
+    />
     <Loading :visible="isLoading" />
   </div>
 </template>
@@ -9,7 +17,7 @@
 <script>
 import { mapActions } from 'vuex';
 import { createHelpers } from 'vuex-map-fields';
-import DocumentsForm from '../../components/documents/FormUpload';
+import DocumentsForm from '../../components/documents/FormNewDocument';
 import Loading from '../../components/Loading';
 import Toolbar from '../../components/Toolbar';
 import CreateMixin from '../../mixins/CreateMixin';
@@ -24,18 +32,20 @@ const { mapFields } = createHelpers({
 export default {
   name: 'DocumentsCreate',
   servicePrefix,
-  mixins: [CreateMixin],
   components: {
     Loading,
     Toolbar,
     DocumentsForm
   },
+  mixins: [CreateMixin],
   data() {
     return {
       item: {
+        newDocument: true, // Used in FormNewDocument.vue to show the editor
         filetype: 'file',
         parentResourceNodeId: null,
-        resourceLinks: null
+        resourceLinkList: null,
+        contentFile: null
       },
     };
   },
@@ -44,7 +54,7 @@ export default {
   },
   created() {
     this.item.parentResourceNodeId = this.$route.params.node;
-    this.item.resourceLinks = JSON.stringify([{
+    this.item.resourceLinkList = JSON.stringify([{
       c_id: this.$route.query.cid,
       visibility: 2,
     }]);

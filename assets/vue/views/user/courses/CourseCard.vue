@@ -1,47 +1,39 @@
 <template>
-  <v-container grid-list-xl fluid>
-    <v-layout row wrap>
-      <v-row dense>
-        <v-col
-              v-for="card in courses"
-              :key="card.course.id"
-              :cols="12"
+  <b-row no-gutters>
+    <b-col md="4">
+      <b-card-img
+        src="/img/icons/64/course.png"
+        alt="Image"
+        class="rounded-0"
+      />
+    </b-col>
+    <b-col md="8">
+      <b-card-body :title="course.title">
+        <!--              <b-card-text>-->
+        <!--                Course description-->
+        <!--              </b-card-text>-->
+        <b-button
+          :href=" '/course/' + course.id + '/home'"
+          variant="primary"
         >
-          <v-card>
-            <div class="d-flex flex-no-wrap">
-              <v-avatar
-                      class="ma-3"
-                      tile
-              >
-                <v-img src="/img/icons/48/blackboard.png"></v-img>
-              </v-avatar>
-              <div >
-                <v-card-title v-text="card.course.title">
-                </v-card-title>
-              </div>
-            </div>
-
-            <v-card-actions>
-              <v-btn
-                      :href=" '/course/' + card.course.id + '/home'"
-                      text
-                      color="deep-purple accent-4"
-              >
-                Go
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-col>
-      </v-row>
-    </v-layout>
-  </v-container>
+          Go
+        </b-button>
+      </b-card-body>
+    </b-col>
+  </b-row>
 </template>
 
 <script>
 export default {
   name: 'CourseCard',
   props: {
-    courses: Array
+    course: Object,
   },
+  data() {
+    return {
+    };
+  },
+  methods: {
+  }
 };
 </script>

@@ -127,9 +127,9 @@ class CourseDescription
         $description_type = (int) $description_type;
 
         $sql = "SELECT * FROM $table
-		        WHERE 
-		            c_id = $courseId AND 
-		            description_type = '$description_type' 
+		        WHERE
+		            c_id = $courseId AND
+		            description_type = '$description_type'
 		            $condition_session ";
         $rs = Database::query($sql);
         $data = [];
@@ -237,17 +237,14 @@ class CourseDescription
         $last_id = Database::insert($table, $params);
 
         if ($last_id > 0) {
-            $sql = "UPDATE $table SET id = iid WHERE iid = $last_id";
-            Database::query($sql);
-
-            // insert into item_property
+            /*// insert into item_property
             api_item_property_update(
                 api_get_course_info(),
                 TOOL_COURSE_DESCRIPTION,
                 $last_id,
                 'CourseDescriptionAdded',
                 api_get_user_id()
-            );
+            );*/
         }
 
         return $last_id > 0 ? 1 : 0;

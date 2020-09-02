@@ -157,20 +157,8 @@ if (!empty($userJustifications)) {
     $userJustificationList .= $justificationContent.$table->toHtml();
 }
 
-$justificationTab = '';
-$headers = [
-    [
-        'url' => api_get_path(WEB_CODE_PATH).'auth/profile.php',
-        'content' => get_lang('Profile'),
-    ],
-    [
-        'url' => api_get_path(WEB_CODE_PATH).'auth/justification.php',
-        'content' => $plugin->get_lang('Justification'),
-    ],
-];
-$justificationTab = Display::tabsOnlyLink($headers, 2);
-
-$justification = $justificationTab.$formValidator->returnForm().$userJustificationList;
+$tabs = SocialManager::getHomeProfileTabs('justification');
+$justification = $tabs.$formValidator->returnForm().$userJustificationList;
 
 $tpl = new Template(get_lang('ModifyProfile'));
 

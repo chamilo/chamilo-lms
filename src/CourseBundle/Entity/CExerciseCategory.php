@@ -4,7 +4,6 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
-use APY\DataGridBundle\Grid\Mapping as GRID;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
@@ -17,10 +16,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * CExerciseCategory.
  *
  * @ORM\Table(name="c_exercise_category")
- *
  * @ORM\Entity(repositoryClass="Gedmo\Sortable\Entity\Repository\SortableRepository")
- *
- * @GRID\Source(columns="id, name", filterable=false)
  */
 class CExerciseCategory extends AbstractResource implements ResourceInterface
 {
@@ -189,5 +185,10 @@ class CExerciseCategory extends AbstractResource implements ResourceInterface
     public function getResourceName(): string
     {
         return $this->getName();
+    }
+
+    public function setResourceName(string $name): self
+    {
+        return $this->setName($name);
     }
 }

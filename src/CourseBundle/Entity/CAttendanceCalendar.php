@@ -33,13 +33,6 @@ class CAttendanceCalendar
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer", nullable=true)
-     */
-    protected $id;
-
-    /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
     protected $cId;
@@ -135,30 +128,6 @@ class CAttendanceCalendar
     public function getDoneAttendance()
     {
         return $this->doneAttendance;
-    }
-
-    /**
-     * Set id.
-     *
-     * @param int $id
-     *
-     * @return CAttendanceCalendar
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**

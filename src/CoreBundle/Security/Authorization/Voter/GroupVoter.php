@@ -5,12 +5,12 @@
 namespace Chamilo\CoreBundle\Security\Authorization\Voter;
 
 use Chamilo\CoreBundle\Repository\CourseRepository;
-use Chamilo\CourseBundle\Entity\CGroupInfo;
-use Chamilo\CourseBundle\Repository\CGroupInfoRepository;
+use Chamilo\CourseBundle\Entity\CGroup;
+use Chamilo\CourseBundle\Repository\CGroupRepository;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -22,70 +22,24 @@ class GroupVoter extends Voter
     public const EDIT = 'EDIT';
     public const DELETE = 'DELETE';
 
-    private $entityManager;
-    private $courseManager;
-    private $groupManager;
-    private $authorizationChecker;
+    //private $entityManager;
+    //private $courseManager;
+    //private $groupManager;
+    private $security;
 
     public function __construct(
-        EntityManager $entityManager,
-        CourseRepository $courseManager,
-        CGroupInfoRepository $groupManager,
-        AuthorizationCheckerInterface $authorizationChecker
+        //EntityManager $entityManager,
+        //CourseRepository $courseManager,
+        //CGroupRepository $groupManager,
+        Security $security
     ) {
-        $this->entityManager = $entityManager;
-        $this->courseManager = $courseManager;
-        $this->groupManager = $groupManager;
-        $this->authorizationChecker = $authorizationChecker;
+        //$this->entityManager = $entityManager;
+        //$this->courseManager = $courseManager;
+        //$this->groupManager = $groupManager;
+        $this->security = $security;
     }
 
-    /**
-     * @return AuthorizationCheckerInterface
-     */
-    public function getAuthorizationChecker()
-    {
-        return $this->authorizationChecker;
-    }
-
-    /**
-     * @return EntityManager
-     */
-    public function getEntityManager()
-    {
-        return $this->entityManager;
-    }
-
-    public function getCourseManager(): CourseRepository
-    {
-        return $this->courseManager;
-    }
-
-    /**
-     * @return GroupVoter
-     */
-    public function setCourseManager(CourseRepository $courseManager): self
-    {
-        $this->courseManager = $courseManager;
-
-        return $this;
-    }
-
-    public function getGroupManager(): CGroupInfoRepository
-    {
-        return $this->groupManager;
-    }
-
-    /**
-     * @return GroupVoter
-     */
-    public function setGroupManager(CGroupInfoRepository $groupManager): self
-    {
-        $this->groupManager = $groupManager;
-
-        return $this;
-    }
-
-    protected function supports($attribute, $subject): bool
+    protected function supports(string $attribute, $subject): bool
     {
         $options = [
             self::VIEW,
@@ -99,14 +53,14 @@ class GroupVoter extends Voter
         }
 
         // only vote on Post objects inside this voter
-        if (!$subject instanceof CGroupInfo) {
+        if (!$subject instanceof CGroup) {
             return false;
         }
 
         return true;
     }
 
-    protected function voteOnAttribute($attribute, $group, TokenInterface $token): bool
+    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
     {
         $user = $token->getUser();
 
@@ -115,19 +69,18 @@ class GroupVoter extends Voter
             return false;
         }
 
-        if (false == $group) {
+        if (false == $subject) {
             return false;
         }
 
-        $authChecker = $this->getAuthorizationChecker();
-
         // Admins have access to everything
-        if ($authChecker->isGranted('ROLE_ADMIN')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             return true;
         }
-
+        /** @var CGroup $group */
+        $group = $subject;
         $groupInfo = [
-            'id' => $group->getId(),
+            'iid' => $group->getIid(),
             'session_id' => 0,
             'status' => $group->getStatus(),
         ];

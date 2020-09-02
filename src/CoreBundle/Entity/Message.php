@@ -108,11 +108,18 @@ class Message
     protected $votes;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection|MessageAttachment[]
      *
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\MessageAttachment", mappedBy="message")
+     * @ORM\OneToMany(targetEntity="MessageAttachment", mappedBy="message")
      */
     protected $attachments;
+
+    /**
+     * @var ArrayCollection|MessageFeedback[]
+     *
+     * @ORM\OneToMany(targetEntity="MessageFeedback", mappedBy="message", orphanRemoval=true)
+     */
+    protected $likes;
 
     /**
      * Message constructor.
@@ -120,6 +127,7 @@ class Message
     public function __construct()
     {
         $this->attachments = new ArrayCollection();
+        $this->likes = new ArrayCollection();
     }
 
     /**

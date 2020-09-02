@@ -44,12 +44,13 @@ if ($form->validate()) {
 $meetings = $bbb->getMeetings(0, 0, 0, true, $dateRange);
 
 foreach ($meetings as &$meeting) {
-    $participants = $bbb->findConnectedMeetingMembers($meeting['id']);
-
+    $participants = $bbb->findConnectedMeetingParticipants($meeting['id']);
     foreach ($participants as $meetingParticipant) {
         /** @var User $participant */
         $participant = $meetingParticipant['participant'];
-        $meeting['participants'][] = $participant->getCompleteName().' ('.$participant->getEmail().')';
+        if ($participant) {
+            $meeting['participants'][] = $participant->getCompleteName().' ('.$participant->getEmail().')';
+        }
     }
 }
 
@@ -60,12 +61,12 @@ if ($action) {
                 [$tool_name, $plugin->get_lang('RecordList')],
                 [],
                 [
-                    get_lang('Created at'),
+                    get_lang('CreatedAt'),
                     get_lang('Status'),
                     $plugin->get_lang('Records'),
                     get_lang('Course'),
                     get_lang('Session'),
-                    get_lang('Members'),
+                    get_lang('Participants'),
                 ],
             ];
 
@@ -81,7 +82,6 @@ if ($action) {
             }
 
             Export::arrayToXls($dataToExport);
-
             break;
     }
 }
@@ -105,8 +105,46 @@ $tpl = new Template($tool_name);
 $tpl->assign('meetings', $meetings);
 $tpl->assign('search_form', $form->returnForm());
 
-$content = $tpl->fetch('bbb/view/admin.tpl');
+$settingsForm = new FormValidator('settings', api_get_self());
+$settingsForm->addHeader($plugin->get_lang('UpdateAllCourseSettings'));
+$settingsForm->addHtml(Display::return_message($plugin->get_lang('ThisWillUpdateAllSettingsInAllCourses')));
+$settings = $plugin->course_settings;
+$defaults = [];
+foreach ($settings as $setting) {
+    $setting = $setting['name'];
+    $text = $settingsForm->addText($setting, $plugin->get_lang($setting), false);
+    $text->freeze();
+    $defaults[$setting] = api_get_plugin_setting('bbb', $setting) === 'true' ? get_lang('Yes') : get_lang('No');
+}
 
+$settingsForm->addButtonSave($plugin->get_lang('UpdateAllCourses'));
+
+if ($settingsForm->validate()) {
+    $table = Database::get_course_table(TABLE_COURSE_SETTING);
+    foreach ($settings as $setting) {
+        $setting = $setting['name'];
+        $setting = Database::escape_string($setting);
+
+        if (empty($setting)) {
+            continue;
+        }
+        $value = api_get_plugin_setting('bbb', $setting);
+        if ($value === 'true') {
+            $value = 1;
+        } else {
+            $value = '';
+        }
+        $sql = "UPDATE $table SET value = '$value' WHERE variable = '$setting'";
+        Database::query($sql);
+    }
+    Display::addFlash(Display::return_message(get_lang('Updated')));
+    header('Location: '.api_get_self());
+    exit;
+}
+
+$settingsForm->setDefaults($defaults);
+$tpl->assign('settings_form', $settingsForm->returnForm());
+$content = $tpl->fetch('bbb/view/admin.tpl');
 if ($meetings) {
     $actions = Display::toolbarButton(
         get_lang('Export in Excel format'),

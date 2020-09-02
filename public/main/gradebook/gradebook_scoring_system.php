@@ -1,9 +1,7 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
-/**
- * Script.
- */
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
@@ -20,8 +18,6 @@ function plusItem(item) {
     document.getElementById("min-"+(item-1)).style.display = "none";
     document.getElementById("min-"+(item)).style.display = "inline";
     document.getElementById("plus-"+(item+1)).style.display = "inline";
-    //document.getElementById("txta-"+(item)).value = "100";
-    //document.getElementById("txta-"+(item-1)).value = "";
 }
 
 function minItem(item) {
@@ -44,14 +40,18 @@ $interbreadcrumb[] = [
     'name' => get_lang('Assessments'),
 ];
 
-$select_cat = intval($_GET['selectcat']);
-$displayScore = ScoreDisplay :: instance();
+$categoryId = (int) $_GET['selectcat'];
+if (empty($categoryId)) {
+    api_not_allowed(true);
+}
+
+$displayScore = ScoreDisplay::instance($categoryId);
 $customdisplays = $displayScore->get_custom_score_display_settings();
 
 $nr_items = '0' != count($customdisplays) ? count($customdisplays) : '1';
 $scoreform = new ScoreDisplayForm(
     'scoring_system_form',
-    api_get_self().'?selectcat='.$select_cat.'&'.api_get_cidreq()
+    api_get_self().'?selectcat='.$categoryId.'&'.api_get_cidreq()
 );
 
 if ($scoreform->validate()) {
@@ -87,7 +87,7 @@ if ($scoreform->validate()) {
                 false
             )
         );
-        header('Location: '.api_get_self().'?selectcat='.$select_cat.'&'.api_get_cidreq());
+        header('Location: '.api_get_self().'?selectcat='.$categoryId.'&'.api_get_cidreq());
         exit;
     }
 
@@ -97,17 +97,14 @@ if ($scoreform->validate()) {
     }
 
     if ($displayScore->is_custom() && !empty($scoringDisplay)) {
-        $displayScore->update_custom_score_display_settings(
-            $scoringDisplay,
-            $scorecolpercent
-        );
+        $displayScore->updateCustomScoreDisplaySettings($scoringDisplay, $scorecolpercent);
     }
 
     Display::addFlash(
         Display::return_message(get_lang('Skills ranking updated'), 'confirm', false)
     );
 
-    header('Location:'.api_get_self().'?selectcat='.$select_cat.'&'.api_get_cidreq());
+    header('Location:'.api_get_self().'?selectcat='.$categoryId.'&'.api_get_cidreq());
     exit;
 }
 

@@ -545,8 +545,9 @@ class Category implements GradebookItem
         $category->set_id($gradebookCategory->getId());
         $category->set_name($gradebookCategory->getName());
         $category->set_description($gradebookCategory->getDescription());
-        $category->set_user_id($gradebookCategory->getUserId());
-        $category->set_course_code($gradebookCategory->getCourseCode());
+        $category->set_user_id($gradebookCategory->getId());
+        //$category->set_course_code($gradebookCategory->getCourseCode());
+        $category->setCourseId($gradebookCategory->getCourse()->getId());
         $category->set_parent_id($gradebookCategory->getParentId());
         $category->set_weight($gradebookCategory->getWeight());
         $category->set_visible($gradebookCategory->getVisible());
@@ -675,7 +676,7 @@ class Category implements GradebookItem
         $gradebookCategory->setGradeModelId($this->grade_model_id);
         $gradebookCategory->setIsRequirement($this->isRequirement);
 
-        $em->merge($gradebookCategory);
+        $em->persist($gradebookCategory);
         $em->flush();
 
         if (!empty($this->id)) {
@@ -795,7 +796,7 @@ class Category implements GradebookItem
     public function show_message_resource_delete($course_id)
     {
         $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-        $sql = 'SELECT count(*) AS num 
+        $sql = 'SELECT count(*) AS num
                 FROM '.$table.'
                 WHERE
                     c_id = "'.Database::escape_string($course_id).'" AND
@@ -804,9 +805,9 @@ class Category implements GradebookItem
         $option = Database::fetch_array($res, 'ASSOC');
         if ($option['num'] >= 1) {
             return '&nbsp;&nbsp;<span class="resource-deleted">(&nbsp;'.get_lang('The resource has been deleted').'&nbsp;)</span>';
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -1518,8 +1519,8 @@ class Category implements GradebookItem
 
         $sql = 'SELECT DISTINCT(code), title
                 FROM '.$tbl_main_courses.' cc, '.$tbl_main_course_user.' cu
-                WHERE 
-                    cc.id = cu.c_id AND 
+                WHERE
+                    cc.id = cu.c_id AND
                     cu.status = '.COURSEMANAGER;
 
         if (!api_is_platform_admin()) {

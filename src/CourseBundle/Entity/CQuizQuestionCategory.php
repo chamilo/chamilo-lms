@@ -8,6 +8,8 @@ use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CourseBundle\Traits\ShowCourseResourcesInSessionTrait;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -36,13 +38,6 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
     protected $iid;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=true)
-     */
-    protected $id;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
@@ -68,27 +63,49 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
      */
     protected $session;
 
+    /**
+     * @var Collection|CQuizQuestion[]
+     *
+     * @ORM\ManyToMany(targetEntity="Chamilo\CourseBundle\Entity\CQuizQuestion", mappedBy="categories")
+     */
+    protected $questions;
+
+    public function __construct()
+    {
+        $this->questions = new ArrayCollection();
+    }
+
+    public function addQuestion(CQuizQuestion $question)
+    {
+        if ($this->questions->contains($question)) {
+            return;
+        }
+
+        $this->questions->add($question);
+        $question->addCategory($this);
+    }
+
+    public function removeQuestion(CQuizQuestion $question)
+    {
+        if (!$this->questions->contains($question)) {
+            return;
+        }
+
+        $this->questions->removeElement($question);
+        $question->removeCategory($this);
+    }
+
     public function __toString(): string
     {
         return $this->getTitle();
     }
 
-    /**
-     * @return int
-     */
-    public function getIid()
+    public function getIid(): int
     {
         return $this->iid;
     }
 
-    /**
-     * Set title.
-     *
-     * @param string $title
-     *
-     * @return CQuizQuestionCategory
-     */
-    public function setTitle($title)
+    public function setTitle(string $title): self
     {
         $this->title = $title;
 
@@ -105,14 +122,7 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
         return (string) $this->title;
     }
 
-    /**
-     * Set description.
-     *
-     * @param string $description
-     *
-     * @return CQuizQuestionCategory
-     */
-    public function setDescription($description)
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -127,30 +137,6 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
     public function getDescription()
     {
         return $this->description;
-    }
-
-    /**
-     * Set id.
-     *
-     * @param int $id
-     *
-     * @return CQuizQuestionCategory
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     public function getCourse()
@@ -199,10 +185,29 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
     public function postPersist(LifecycleEventArgs $args)
     {
         // Update id with iid value
-        $em = $args->getEntityManager();
-        $this->setId($this->iid);
+        /*$em = $args->getEntityManager();
         $em->persist($this);
-        $em->flush();
+        $em->flush();*/
+    }
+
+    /**
+     * @return CQuizQuestionCategory[]
+     */
+    public function getQuestionCategories()
+    {
+        return $this->questionCategories;
+    }
+
+    /**
+     * @param CQuizQuestionCategory[] $questionCategories
+     *
+     * @return CQuizQuestionCategory
+     */
+    public function setQuestionCategories($questionCategories): self
+    {
+        $this->questionCategories = $questionCategories;
+
+        return $this;
     }
 
     /**
@@ -216,5 +221,10 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
     public function getResourceName(): string
     {
         return $this->getTitle();
+    }
+
+    public function setResourceName(string $name): self
+    {
+        return $this->setTitle($name);
     }
 }

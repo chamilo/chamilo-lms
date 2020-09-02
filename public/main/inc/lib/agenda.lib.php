@@ -276,9 +276,7 @@ class Agenda
                 $id = $event->getId();
                 break;
             case 'course':
-                $senderId = $this->getSenderId();
                 $sessionId = $this->getSessionId();
-                $userEntity = api_get_user_entity(api_get_user_id());
                 $sessionEntity = api_get_session_entity($sessionId);
                 $courseEntity = api_get_course_entity($this->course['real_id']);
                 $groupEntity = api_get_group_entity(api_get_group_id());
@@ -300,26 +298,12 @@ class Agenda
                     $event->setParentEventId($parentEventId);
                 }
 
-                $repo = Container::getCalendarEventRepository();
-
-                // Node added.
-                $resourceNode = $repo->createNodeForResource(
-                    $event,
-                    $userEntity,
-                    $courseEntity->getResourceNode()
-                );
+                $event->setParent($courseEntity);
 
                 if (!empty($usersToSend)) {
                     $sendTo = $this->parseSendToArray($usersToSend);
                     if ($sendTo['everyone']) {
-                        $repo->addResourceNodeToCourse(
-                            $resourceNode,
-                            ResourceLink::VISIBILITY_PUBLISHED,
-                            $courseEntity,
-                            $sessionEntity,
-                            $groupEntity
-                        );
-
+                        $event->addCourseLink($courseEntity, $sessionEntity, $groupEntity);
                     /*api_item_property_update(
                         $this->course,
                         TOOL_CALENDAR_EVENT,
@@ -351,15 +335,8 @@ class Agenda
                                 $groupInfo = null;
                                 if ($group) {
                                     $groupInfo = api_get_group_entity($group);
+                                    $event->addCourseLink($courseEntity, $sessionEntity, $groupInfo);
                                 }
-
-                                $repo->addResourceNodeToCourse(
-                                    $resourceNode,
-                                    ResourceLink::VISIBILITY_PUBLISHED,
-                                    $courseEntity,
-                                    $sessionEntity,
-                                    $groupInfo
-                                );
 
                                 /*api_item_property_update(
                                     $this->course,
@@ -392,14 +369,13 @@ class Agenda
                         // storing the selected users
                         if (!empty($sendTo['users'])) {
                             foreach ($sendTo['users'] as $userId) {
-                                $repo->addResourceNodeToCourse(
-                                    $resourceNode,
-                                    ResourceLink::VISIBILITY_PUBLISHED,
+                                $event->addUserLink(
+                                    api_get_user_entity($userId),
                                     $courseEntity,
                                     $sessionEntity,
-                                    $groupEntity,
-                                    api_get_user_entity($userId)
+                                    $groupEntity
                                 );
+
                                 /*api_item_property_update(
                                     $this->course,
                                     TOOL_CALENDAR_EVENT,
@@ -430,13 +406,11 @@ class Agenda
                     }
                 }
 
+                $em->persist($event);
                 $em->flush();
                 $id = $event->getIid();
 
                 if ($id) {
-                    $sql = "UPDATE ".$this->tbl_course_agenda." SET id = iid WHERE iid = $id";
-                    Database::query($sql);
-
                     // Add announcement.
                     if ($addAsAnnouncement) {
                         $this->storeAgendaEventAsAnnouncement($id, $usersToSend);
@@ -1084,21 +1058,7 @@ class Agenda
                 break;
             case 'course':
                 $courseId = api_get_course_int_id();
-                $sessionId = api_get_session_id();
-                $isAllowToEdit = api_is_allowed_to_edit(null, true);
-
-                if (false == $isAllowToEdit && !empty($sessionId)) {
-                    $allowDhrToEdit = api_get_configuration_value('allow_agenda_edit_for_hrm');
-                    if ($allowDhrToEdit) {
-                        $isHrm = SessionManager::isUserSubscribedAsHRM(
-                            $sessionId,
-                            api_get_user_id()
-                        );
-                        if ($isHrm) {
-                            $isAllowToEdit = true;
-                        }
-                    }
-                }
+                $isAllowToEdit = $this->getIsAllowedToEdit();
 
                 if (!empty($courseId) && $isAllowToEdit) {
                     // Delete
@@ -1703,7 +1663,7 @@ class Agenda
                 FROM $tbl_property ip
                 INNER JOIN $tlb_course_agenda agenda
                 ON (
-                  ip.ref = agenda.id AND
+                  ip.ref = agenda.iid AND
                   ip.c_id = agenda.c_id AND
                   ip.tool = '".TOOL_CALENDAR_EVENT."'
                 )
@@ -2927,30 +2887,19 @@ class Agenda
                 ->setPath($fileName)
                 ->setEvent($event)
                 ->setSize($file->getSize())
-            ;
+                ->setParent($event)
+                ->addCourseLink(
+                    api_get_course_entity(),
+                    api_get_session_entity(),
+                    api_get_group_entity()
+                );
 
             $repo = Container::getCalendarEventAttachmentRepository();
-
-            $repo->addResourceToCourseWithParent(
-                $attachment,
-                $event->getResourceNode(),
-                ResourceLink::VISIBILITY_PUBLISHED,
-                api_get_user_entity(api_get_user_id()),
-                api_get_course_entity(),
-                api_get_session_entity(),
-                api_get_group_entity(),
-                $file
-            );
-
+            $repo->getEntityManager()->persist($attachment);
             $repo->getEntityManager()->flush();
 
             $id = $attachment->getIid();
             if ($id) {
-                $table = Database::get_course_table(TABLE_AGENDA_ATTACHMENT);
-                $sql = "UPDATE $table
-                        SET id = iid WHERE iid = $id";
-                Database::query($sql);
-
                 /*api_item_property_update(
                     $courseInfo,
                     'calendar_event_attachment',
@@ -3069,7 +3018,7 @@ class Agenda
         $eventId = (int) $eventId;
         $courseId = (int) $courseId;
 
-        $sql = "SELECT count(DISTINCT(id)) as count
+        $sql = "SELECT count(DISTINCT(iid)) as count
                 FROM ".$this->tbl_course_agenda."
                 WHERE
                     c_id = $courseId AND
@@ -3155,6 +3104,13 @@ class Agenda
                 Display::return_icon('1day.png', get_lang('Sessions plan calendar'), [], ICON_SIZE_MEDIUM),
                 $codePath."calendar/planification.php"
             );
+
+            if (api_is_student_boss() || api_is_platform_admin()) {
+                $actionsLeft .= Display::url(
+                    Display::return_icon('calendar-user.png', get_lang('MyStudentsSchedule'), [], ICON_SIZE_MEDIUM),
+                    $codePath.'mySpace/calendar_plan.php'
+                );
+            }
         }
 
         if (api_is_platform_admin() ||

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -96,8 +97,8 @@ if (isset($_GET['exportpdf'])) {
     $pdf->content_to_pdf($html);
     exit;
 }
-$actions = '<div class="actions">';
 
+$actions = '<div class="actions">';
 if (!empty($categoryId)) {
     $interbreadcrumb[] = [
         'url' => 'gradebook_flatview.php?selectcat='.$categoryId.'&'.api_get_cidreq(),

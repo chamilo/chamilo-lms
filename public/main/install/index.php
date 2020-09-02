@@ -161,7 +161,7 @@ require_once __DIR__.'/version.php';
 if (isAlreadyInstalledSystem()) {
     // The system has already been installed, so block re-installation.
     $global_error_code = 6;
-    require '../inc/global_error_message.inc.php';
+    echo 'Portal already installed';
     exit;
 }
 
@@ -650,9 +650,11 @@ if (isset($_POST['step2'])) {
 
         // No errors
         if (0 == $result) {
+            error_log('Delete session');
             session_unset();
             $_SESSION = [];
             session_destroy();
+            error_log('Boot kernel');
 
             // Boot kernel and get the doctrine from Symfony container
             $kernel->boot();

@@ -19,75 +19,11 @@ class Auth
     }
 
     /**
-     * retrieves all the courses that the user has already subscribed to.
-     *
-     * @param int $user_id
-     *
-     * @return array an array containing all the information of the courses of the given user
-     */
-    public function get_courses_of_user($user_id)
-    {
-        $TABLECOURS = Database::get_main_table(TABLE_MAIN_COURSE);
-        $TABLECOURSUSER = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $avoidCoursesCondition = CoursesAndSessionsCatalog::getAvoidCourseCondition();
-        $visibilityCondition = CourseManager::getCourseVisibilitySQLCondition('course', true);
-        $tblCourseCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
-
-        // Secondly we select the courses that are in a category (user_course_cat<>0) and
-        // sort these according to the sort of the category
-        $user_id = (int) $user_id;
-        $sql = "SELECT
-                    course.code k,
-                    course.visual_code vc,
-                    course.subscribe subscr,
-                    course.unsubscribe unsubscr,
-                    course.title i,
-                    course.tutor_name t,
-                    category.code cat,
-                    course.directory dir,
-                    course_rel_user.status status,
-                    course_rel_user.sort sort,
-                    course_rel_user.user_course_cat user_course_cat
-                FROM $TABLECOURS as course
-                LEFT JOIN $tblCourseCategory category
-                ON course.category_id = category.id, 
-                $TABLECOURSUSER  course_rel_user
-                WHERE
-                    course.id = course_rel_user.c_id AND
-                    course_rel_user.relation_type <> ".COURSE_RELATION_TYPE_RRHH." AND
-                    course_rel_user.user_id = '".$user_id."' 
-                    $avoidCoursesCondition
-                    $visibilityCondition
-                ORDER BY course_rel_user.sort ASC";
-
-        $result = Database::query($sql);
-        $courses = [];
-        while ($row = Database::fetch_array($result)) {
-            //we only need the database name of the course
-            $courses[] = [
-                'code' => $row['k'],
-                'visual_code' => $row['vc'],
-                'title' => $row['i'],
-                'directory' => $row['dir'],
-                'status' => $row['status'],
-                'tutor' => $row['t'],
-                'subscribe' => $row['subscr'],
-                'category' => $row['cat'],
-                'unsubscribe' => $row['unsubscr'],
-                'sort' => $row['sort'],
-                'user_course_category' => $row['user_course_cat'],
-            ];
-        }
-
-        return $courses;
-    }
-
-    /**
      * This function get all the courses in the particular user category.
      *
      * @return array
      */
-    public function get_courses_in_category()
+    public function getCoursesInCategory()
     {
         $user_id = api_get_user_id();
 
@@ -169,7 +105,7 @@ class Auth
         $table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
         $current_user_id = api_get_user_id();
-        $all_user_courses = $this->get_courses_of_user($current_user_id);
+        $all_user_courses = CourseManager::getCoursesByUserCourseCategory($current_user_id);
 
         // we need only the courses of the category we are moving in
         $user_courses = [];
@@ -238,7 +174,7 @@ class Auth
     public function move_category($direction, $category2move)
     {
         $userId = api_get_user_id();
-        $userCategories = CourseManager::get_user_course_categories(api_get_user_id());
+        $userCategories = CourseManager::get_user_course_categories($userId);
         $categories = array_values($userCategories);
 
         $previous = null;
@@ -290,7 +226,6 @@ class Auth
      */
     public function store_edit_course_category($title, $category_id)
     {
-        // protect data
         $title = Database::escape_string($title);
         $category_id = (int) $category_id;
         $result = false;
@@ -355,9 +290,8 @@ class Auth
                     id= $categoryId AND 
                     user_id= $userId";
         $resultQuery = Database::query($sql);
-        $result = Database::fetch_array($resultQuery, 'ASSOC');
 
-        return $result;
+        return Database::fetch_array($resultQuery, 'ASSOC');
     }
 
     /**
@@ -412,7 +346,6 @@ class Auth
         // protect data
         $current_user_id = api_get_user_id();
         $category_title = Database::escape_string($category_title);
-        $result = false;
 
         // step 1: we determine the max value of the user defined course categories
         $sql = "SELECT sort FROM $table 
@@ -430,15 +363,19 @@ class Auth
                     title='".$category_title."'
                 ORDER BY sort DESC";
         $rs = Database::query($sql);
-        if (0 == Database::num_rows($rs)) {
+
+        $result = false;
+        if (Database::num_rows($rs) == 0) {
             $sql = "INSERT INTO $table (user_id, title,sort)
-                    VALUES ('".$current_user_id."', '".api_htmlentities($category_title, ENT_QUOTES, api_get_system_encoding())."', '".$nextsort."')";
+                    VALUES ('".$current_user_id."', '".api_htmlentities(
+                    $category_title,
+                    ENT_QUOTES,
+                    api_get_system_encoding()
+                )."', '".$nextsort."')";
             $resultQuery = Database::query($sql);
             if (Database::affected_rows($resultQuery)) {
                 $result = true;
             }
-        } else {
-            $result = false;
         }
 
         return $result;

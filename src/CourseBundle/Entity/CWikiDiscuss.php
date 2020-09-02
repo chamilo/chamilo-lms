@@ -38,13 +38,6 @@ class CWikiDiscuss
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer", nullable=true)
-     */
-    protected $id;
-
-    /**
-     * @var int
-     *
      * @ORM\Column(name="publication_id", type="integer", nullable=false)
      */
     protected $publicationId;
@@ -195,30 +188,6 @@ class CWikiDiscuss
     public function getDtime()
     {
         return $this->dtime;
-    }
-
-    /**
-     * Set id.
-     *
-     * @param int $id
-     *
-     * @return CWikiDiscuss
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**

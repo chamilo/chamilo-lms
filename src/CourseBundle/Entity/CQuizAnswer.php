@@ -33,13 +33,6 @@ class CQuizAnswer
     /**
      * @var int
      *
-     * @ORM\Column(name="id_auto", type="integer", options={"unsigned": true, "default": null})
-     */
-    protected $idAuto;
-
-    /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer", options={"unsigned": true, "default": null})
      */
     protected $cId;
@@ -116,7 +109,6 @@ class CQuizAnswer
 
     public function __construct()
     {
-        $this->idAuto = 0;
         $this->correct = null;
         $this->comment = null;
         $this->ponderation = 0.0;
@@ -364,30 +356,6 @@ class CQuizAnswer
     public function getAnswerCode()
     {
         return $this->answerCode;
-    }
-
-    /**
-     * Set idAuto.
-     *
-     * @param int $idAuto
-     *
-     * @return CQuizAnswer
-     */
-    public function setIdAuto($idAuto)
-    {
-        $this->idAuto = $idAuto;
-
-        return $this;
-    }
-
-    /**
-     * Get idAuto.
-     *
-     * @return int
-     */
-    public function getIdAuto()
-    {
-        return $this->idAuto;
     }
 
     /**

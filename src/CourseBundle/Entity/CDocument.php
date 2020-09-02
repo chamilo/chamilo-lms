@@ -137,13 +137,6 @@ class CDocument extends AbstractResource implements ResourceInterface
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="path", type="string", length=255, nullable=true)
-     */
-    protected $path;
-
-    /**
-     * @var string
      * @Groups({"document:read", "document:write"})
      * @ORM\Column(name="title", type="string", length=255, nullable=true)
      */
@@ -163,13 +156,6 @@ class CDocument extends AbstractResource implements ResourceInterface
      * @ORM\Column(name="filetype", type="string", length=10, nullable=false)
      */
     protected $filetype;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="size", type="integer", nullable=false)
-     */
-    protected $size;
 
     /**
      * @var bool
@@ -202,8 +188,6 @@ class CDocument extends AbstractResource implements ResourceInterface
      */
     public function __construct()
     {
-        $this->id = 0;
-        $this->size = 0;
         $this->filetype = 'folder';
         $this->readonly = false;
         $this->template = false;
@@ -224,30 +208,6 @@ class CDocument extends AbstractResource implements ResourceInterface
         $this->template = $template;
 
         return $this;
-    }
-
-    /**
-     * Set path.
-     *
-     * @param string $path
-     *
-     * @return CDocument
-     */
-    public function setPath($path)
-    {
-        $this->path = $path;
-
-        return $this;
-    }
-
-    /**
-     * Get path.
-     *
-     * @return string
-     */
-    public function getPath()
-    {
-        return $this->path;
     }
 
     /**
@@ -305,26 +265,6 @@ class CDocument extends AbstractResource implements ResourceInterface
     public function getFiletype()
     {
         return $this->filetype;
-    }
-
-    /**
-     * Set size.
-     */
-    public function setSize(int $size): self
-    {
-        $this->size = $size ?: 0;
-
-        return $this;
-    }
-
-    /**
-     * Get size.
-     *
-     * @return int
-     */
-    public function getSize()
-    {
-        return $this->size;
     }
 
     /**

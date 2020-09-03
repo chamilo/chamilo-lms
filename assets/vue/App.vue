@@ -36,6 +36,8 @@
 </style>
 <script>
 
+import { mapGetters } from 'vuex';
+
 import NotificationMixin from './mixins/NotificationMixin';
 import Breadcrumb from './components/Breadcrumb';
 import Snackbar from './components/Snackbar';
@@ -71,12 +73,10 @@ export default {
     legacy_content: null,
   }),
   computed: {
-    isAuthenticated() {
-      return this.$store.getters['security/isAuthenticated']
-    },
-    isAdmin() {
-      return this.$store.getters['security/isAdmin']
-    },
+    ...mapGetters({
+      'isAuthenticated': 'security/isAuthenticated',
+      'isAdmin': 'security/isAdmin',
+    }),
   },
   watch: {
     $route(to, from) {

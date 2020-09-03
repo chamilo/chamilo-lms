@@ -23,7 +23,7 @@
         v-if="isAuthenticated"
         class="d-sm-none px-3 py-2 mb-0 bg-dark text-light"
       >
-        {{ username }}
+        {{ currentUser.username }}
       </p>
       <b-nav
         v-if="isAuthenticated"
@@ -86,14 +86,14 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
   computed: {
-    isAuthenticated() {
-      return this.$store.getters['security/isAuthenticated']
-    },
-    username() {
-      return this.$store.getters['security/getUser'].username
-    }
+    ...mapGetters({
+      'isAuthenticated': 'security/isAuthenticated',
+      'currentUser': 'security/getUser',
+    }),
   },
 };
 

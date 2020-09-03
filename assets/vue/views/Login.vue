@@ -46,6 +46,7 @@
 </template>
 
 <script>
+    import { mapGetters } from 'vuex';
     import ErrorMessage from "../components/ErrorMessage";
 
     export default {
@@ -60,15 +61,11 @@
             };
         },
         computed: {
-            isLoading() {
-                return this.$store.getters["security/isLoading"];
-            },
-            hasError() {
-                return this.$store.getters["security/hasError"];
-            },
-            error() {
-                return this.$store.getters["security/error"];
-            }
+            ...mapGetters({
+                'isLoading': 'security/isLoading',
+                'hasError': 'security/hasError',
+                'error': 'security/error',
+            }),
         },
         created() {
             let redirect = this.$route.query.redirect;

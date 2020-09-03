@@ -93,7 +93,7 @@
             <b-avatar variant="light" />
           </template>
           <b-dropdown-text style="width: 240px;">
-            {{ username }}
+            {{ currentUser.username }}
           </b-dropdown-text>
           <b-dropdown-divider />
           <b-dropdown-item href="/main/messages/inbox.php">
@@ -111,6 +111,8 @@
   </b-navbar>
 </template>
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
   components: {},
   props: {
@@ -129,12 +131,10 @@ export default {
     };
   },
   computed: {
-    isAuthenticated() {
-      return this.$store.getters['security/isAuthenticated']
-    },
-    username() {
-      return this.$store.getters['security/getUser'].username
-    }
+    ...mapGetters({
+      'isAuthenticated': 'security/isAuthenticated',
+      'currentUser': 'security/getUser',
+    }),
   },
   methods: {}
 };

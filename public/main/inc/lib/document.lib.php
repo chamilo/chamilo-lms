@@ -6219,7 +6219,6 @@ This folder contains all sessions that have been opened in the chat. Although th
         $session = api_get_session_entity($sessionId);
         $group = api_get_group_entity($groupId);
         $readonly = (int) $readonly;
-        $fileSize = (int) $fileSize;
         $documentRepo = Container::getDocumentRepository();
 
         $parentNode = $courseEntity;
@@ -6230,26 +6229,23 @@ This folder contains all sessions that have been opened in the chat. Although th
             }
         }
 
-        $criteria = ['path' => $path, 'course' => $courseEntity];
-        $document = $documentRepo->findOneBy($criteria);
-
-        // Document already exists
-        if ($document) {
-            return false;
-        }
+//        $criteria = ['path' => $path, 'course' => $courseEntity];
+//        $document = $documentRepo->findOneBy($criteria);
+//
+//        // Document already exists
+//        if ($document) {
+//            return false;
+//        }
 
         // is updated using the title
         $document = new CDocument();
         $document
             ->setCourse($courseEntity)
             ->setFiletype($fileType)
-            ->setSize($fileSize)
             ->setTitle($title)
-            ->setPath($path)
             ->setComment($comment)
             ->setReadonly($readonly)
-            ->setSession($session)
-            ->setParent($courseEntity)
+            ->setParent($parentNode)
             ->addCourseLink($courseEntity, $session, $group)
         ;
 

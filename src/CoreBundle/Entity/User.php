@@ -439,7 +439,7 @@ class User implements UserInterface, EquatableInterface
     /**
      * @var ArrayCollection
      * @ORM\OneToMany(
-     *     targetEntity="Chamilo\CoreBundle\Entity\TrackEAttemp",
+     *     targetEntity="Chamilo\CoreBundle\Entity\TrackEAttempt",
      *     mappedBy="user",
      *     cascade={"persist", "remove"},
      *     orphanRemoval=true
@@ -450,13 +450,13 @@ class User implements UserInterface, EquatableInterface
     /**
      * @var ArrayCollection
      * @ORM\OneToMany(
-     *     targetEntity="Chamilo\CoreBundle\Entity\TrackECourseAccessRepository",
+     *     targetEntity="Chamilo\CoreBundle\Entity\TrackECourseAccess",
      *     mappedBy="user",
      *     cascade={"persist", "remove"},
      *     orphanRemoval=true
      * )
      */
-    protected $trackECourseAccessRepository;
+    protected $trackECourseAccess;
 
     /**
      * @var ArrayCollection
@@ -500,7 +500,7 @@ class User implements UserInterface, EquatableInterface
      *     orphanRemoval=true
      * )
      */
-    protected $userRelUser;
+    protected $userRelationship;
 
     /**
      * @var ArrayCollection
@@ -2584,22 +2584,22 @@ class User implements UserInterface, EquatableInterface
     }
 
     /**
-     * Gets the Track E CourseA ccess Repository's for the current user.
+     * Gets the Track E CourseA ccess 's for the current user.
      * @return ArrayCollection
      */
-    public function getTrackECourseAccessRepository(): ArrayCollection
+    public function getTrackECourseAccess(): ArrayCollection
     {
-        return $this->trackECourseAccessRepository;
+        return $this->trackECourseAccess;
     }
 
     /**
-     * Sets the Track E CourseA ccess Repository's for the current user.
-     * @param ArrayCollection $trackECourseAccessRepository
+     * Sets the Track E CourseA ccess 's for the current user.
+     * @param ArrayCollection $trackECourseAccess
      * @return User
      */
-    public function setTrackECourseAccessRepository(ArrayCollection $trackECourseAccessRepository): User
+    public function setTrackECourseAccess(ArrayCollection $trackECourseAccess): User
     {
-        $this->trackECourseAccessRepository = $trackECourseAccessRepository;
+        $this->trackECourseAccess = $trackECourseAccess;
         return $this;
     }
 
@@ -2667,19 +2667,19 @@ class User implements UserInterface, EquatableInterface
      * Gets the User Rel User's for the current user.
      * @return ArrayCollection
      */
-    public function getUserRelUser(): ArrayCollection
+    public function getUserRelationship(): ArrayCollection
     {
-        return $this->userRelUser;
+        return $this->userRelationship;
     }
 
     /**
      * Sets the User Rel User's for the current user.
-     * @param ArrayCollection $userRelUser
+     * @param ArrayCollection $userRelationship
      * @return User
      */
-    public function setUserRelUser(ArrayCollection $userRelUser): User
+    public function setUserRelationship(ArrayCollection $userRelationship): User
     {
-        $this->userRelUser = $userRelUser;
+        $this->userRelationship = $userRelationship;
         return $this;
     }
 }

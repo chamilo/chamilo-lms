@@ -4,6 +4,7 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use Chamilo\CoreBundle\Traits\CourseTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -11,6 +12,19 @@ use Gedmo\Mapping\Annotation as Gedmo;
 /**
  * GradebookLink.
  *
+ * @ApiResource(
+ *      attributes={"security"="is_granted('ROLE_ADMIN')"},
+ *      iri="http://schema.org/Person",
+ *      attributes={"security"="is_granted('ROLE_ADMIN')"},
+ *      normalizationContext={"groups"={"user:read"}},
+ *      denormalizationContext={"groups"={"user:write"}},
+ *      collectionOperations={"get"},
+ *      itemOperations={
+ *          "get"={},
+ *          "put"={},
+ *          "delete"={},
+ *     }
+ * )
  * @ORM\Table(name="gradebook_link",
  *  indexes={
  *     @ORM\Index(name="idx_gl_cat", columns={"category_id"}),
@@ -46,6 +60,14 @@ class GradebookLink
     protected $refId;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="user_id", type="integer", nullable=false)
+     * @deprecated Use user
+     */
+    protected $userId;
+
+    /**
      * @var User
      * @ORM\ManyToOne (
      *    targetEntity="Chamilo\CoreBundle\Entity\User",
@@ -59,6 +81,11 @@ class GradebookLink
      */
     protected $user;
 
+    /**
+     * Get user.
+     *
+     * @return User
+     */
     public function getUser(): User
     {
         return $this->user;
@@ -172,6 +199,32 @@ class GradebookLink
     public function getRefId()
     {
         return $this->refId;
+    }
+
+    /**
+     * Set userId.
+     *
+     * @param int $userId
+     *
+     * @return GradebookLink
+     * @deprecated Use setUser
+     */
+    public function setUserId($userId)
+    {
+        $this->userId = $userId;
+
+        return $this;
+    }
+
+    /**
+     * Get userId.
+     *
+     * @return int
+     * @deprecated Use getUser
+     */
+    public function getUserId()
+    {
+        return $this->userId;
     }
 
     /**

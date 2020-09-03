@@ -43,6 +43,14 @@ class TrackEAttempt
     protected $exeId;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="user_id", type="integer", nullable=false)
+     * @deprecated Use user
+     */
+    protected $userId;
+
+    /**
      * @var User
      * @ORM\ManyToOne (
      *    targetEntity="Chamilo\CoreBundle\Entity\User",
@@ -56,6 +64,11 @@ class TrackEAttempt
      */
     protected $user;
 
+    /**
+     * Get user.
+     *
+     * @return User
+     */
     public function getUser(): User
     {
         return $this->user;
@@ -129,7 +142,7 @@ class TrackEAttempt
     protected $filename;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="trackEAttempts")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="trackEAttempt")
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
      */
     protected $course;
@@ -164,6 +177,7 @@ class TrackEAttempt
      * @param int $userId
      *
      * @return TrackEAttempt
+     * @deprecated Use setUser
      */
     public function setUserId($userId)
     {
@@ -176,6 +190,7 @@ class TrackEAttempt
      * Get userId.
      *
      * @return int
+     * @deprecated Use getUser
      */
     public function getUserId()
     {

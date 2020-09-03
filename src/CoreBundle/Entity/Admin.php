@@ -4,11 +4,25 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Admin.
+ * @ApiResource(
+ *      attributes={"security"="is_granted('ROLE_ADMIN')"},
+ *      iri="http://schema.org/Person",
+ *      attributes={"security"="is_granted('ROLE_ADMIN')"},
+ * )
  *
+ * @ApiFilter(SearchFilter::class,
+ *         properties={
+ *             "user_id": "partial",
+ *         }
+ *     )
  * @ORM\Table(name="admin", uniqueConstraints={@ORM\UniqueConstraint(name="user_id", columns={"user_id"})})
  * @ORM\Entity
  */
@@ -35,6 +49,11 @@ class Admin
      */
     protected $user;
 
+    /**
+     * Get user.
+     *
+     * @return User
+     */
     public function getUser(): User
     {
         return $this->user;
@@ -52,6 +71,38 @@ class Admin
         return $this;
     }
 
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="user_id", type="integer", nullable=false)
+     * @deprecated Use user
+     */
+    protected $userId;
+
+    /**
+     * Set userId.
+     * @param int $userId
+     *
+     * @return Admin
+     * @deprecated Use setUser
+     */
+    public function setUserId($userId)
+    {
+        $this->userId = $userId;
+
+        return $this;
+    }
+
+    /**
+     * Get userId.
+     *
+     * @return int
+     * @deprecated Use getUser
+     */
+    public function getUserId()
+    {
+        return $this->userId;
+    }
 
     /**
      * Get id.

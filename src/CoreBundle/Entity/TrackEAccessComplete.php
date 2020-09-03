@@ -4,11 +4,25 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * TrackEAccessComplete.
  *
+ * @ApiResource(
+ *      attributes={"security"="is_granted('ROLE_ADMIN')"},
+ *      iri="http://schema.org/Person",
+ *      attributes={"security"="is_granted('ROLE_ADMIN')"},
+ *      normalizationContext={"groups"={"user:read"}},
+ *      denormalizationContext={"groups"={"user:write"}},
+ *      collectionOperations={"get"},
+ *      itemOperations={
+ *          "get"={},
+ *          "put"={},
+ *          "delete"={},
+ *     }
+ * )
  * @ORM\Table(name="track_e_access_complete")
  * @ORM\Entity
  */
@@ -23,12 +37,40 @@ class TrackEAccessComplete
      */
     protected $id;
 
-//    /**
-//     * @var int
-//     *
-//     * @ORM\Column(name="user_id", type="integer", nullable=false)
-//     */
-//    protected $userId;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="user_id", type="integer", nullable=false)
+     * @deprecated Use user
+     */
+    protected $userId;
+
+    /**
+     * Set userId.
+     *
+     * @param int $userId
+     *
+     * @return TrackEAccessComplete
+     * @deprecated Use setUser
+     */
+    public function setUserId($userId)
+    {
+        $this->userId = $userId;
+
+        return $this;
+    }
+
+    /**
+     * Get userId.
+     *
+     * @return int
+     * @deprecated Use getUser
+     */
+    public function getUserId()
+    {
+        return $this->userId;
+    }
+
     /**
      * @ORM\OneToOne (targetEntity="Chamilo\CoreBundle\Entity\User",
      *      inversedBy="track_e_access_complete")
@@ -36,6 +78,11 @@ class TrackEAccessComplete
      */
     protected $user;
 
+    /**
+     * Get user.
+     *
+     * @return User
+     */
     public function getUser(): User
     {
         return $this->user;

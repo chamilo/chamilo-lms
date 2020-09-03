@@ -4,11 +4,25 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * UserCourseCategory.
  *
+ * @ApiResource(
+ *      attributes={"security"="is_granted('ROLE_ADMIN')"},
+ *      iri="http://schema.org/Person",
+ *      attributes={"security"="is_granted('ROLE_ADMIN')"},
+ *      normalizationContext={"groups"={"user:read"}},
+ *      denormalizationContext={"groups"={"user:write"}},
+ *      collectionOperations={"get"},
+ *      itemOperations={
+ *          "get"={},
+ *          "put"={},
+ *          "delete"={},
+ *     }
+ * )
  * @ORM\Table(name="user_course_category", indexes={@ORM\Index(name="idx_user_c_cat_uid", columns={"user_id"})})
  * @ORM\Entity
  */
@@ -24,6 +38,40 @@ class UserCourseCategory
     protected $id;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="user_id", type="integer", nullable=false)
+     * @deprecated Use user
+     */
+    protected $userId;
+
+    /**
+     * Set userId.
+     *
+     * @param int $userId
+     *
+     * @return UserCourseCategory
+     * @deprecated Use setUser
+     */
+    public function setUserId($userId)
+    {
+        $this->userId = $userId;
+
+        return $this;
+    }
+
+    /**
+     * Get userId.
+     *
+     * @return int
+     * @deprecated Use getUser
+     */
+    public function getUserId()
+    {
+        return $this->userId;
+    }
+
+    /**
      * @var User
      * @ORM\ManyToOne (
      *    targetEntity="Chamilo\CoreBundle\Entity\User",
@@ -37,6 +85,11 @@ class UserCourseCategory
      */
     protected $user;
 
+    /**
+     * Get user.
+     *
+     * @return User
+     */
     public function getUser(): User
     {
         return $this->user;

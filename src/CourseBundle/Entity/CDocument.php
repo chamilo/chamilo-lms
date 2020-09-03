@@ -113,7 +113,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(
  *  name="c_document",
  *  indexes={
- *      @ORM\Index(name="idx_cdoc_size", columns={"size"}),
  *      @ORM\Index(name="idx_cdoc_type", columns={"filetype"}),
  *  }
  * )

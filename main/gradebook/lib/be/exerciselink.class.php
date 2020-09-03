@@ -14,6 +14,7 @@ class ExerciseLink extends AbstractLink
     private $exercise_table;
     private $exercise_data = [];
     private $is_hp;
+    public $checkBaseExercises = false;
 
     /**
      * @param int $hp
@@ -296,8 +297,14 @@ class ExerciseLink extends AbstractLink
                     //$lpId = $exercise->getLpBySession($sessionId);
                     $lpList = [];
                     foreach ($exercise->lpList as $lpData) {
-                        if ((int) $lpData['session_id'] == $sessionId) {
-                            $lpList[] = $lpData['lp_id'];
+                        if ($this->checkBaseExercises) {
+                            if ((int) $lpData['session_id'] == 0) {
+                                $lpList[] = $lpData['lp_id'];
+                            }
+                        } else {
+                            if ((int) $lpData['session_id'] == $sessionId) {
+                                $lpList[] = $lpData['lp_id'];
+                            }
                         }
                     }
                     $lpCondition = ' orig_lp_id = 0 OR (orig_lp_id IN ("'.implode('", "', $lpList).'")) AND ';

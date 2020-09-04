@@ -14,6 +14,7 @@ class ExerciseLink extends AbstractLink
     private $exercise_table;
     private $exercise_data = [];
     private $is_hp;
+    // This variable is used in the WSGetGradebookUserItemScore service, to check base course tests.
     public $checkBaseExercises = false;
 
     /**
@@ -307,7 +308,17 @@ class ExerciseLink extends AbstractLink
                             }
                         }
                     }
-                    $lpCondition = ' orig_lp_id = 0 OR (orig_lp_id IN ("'.implode('", "', $lpList).'")) AND ';
+
+                    if (empty($lpList) && !empty($sessionId)) {
+                        // Check also if an LP was added in the base course.
+                        foreach ($exercise->lpList as $lpData) {
+                            if ((int) $lpData['session_id'] == 0) {
+                                $lpList[] = $lpData['lp_id'];
+                            }
+                        }
+                    }
+
+                    $lpCondition = ' (orig_lp_id = 0 OR (orig_lp_id IN ("'.implode('", "', $lpList).'"))) AND ';
                 }
 
                 $sql = "SELECT *

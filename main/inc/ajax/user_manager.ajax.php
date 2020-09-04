@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 require_once __DIR__.'/../global.inc.php';
 
 $request = Request::createFromGlobals();
+$isRequestByAjax = $request->isXmlHttpRequest();
 
 $action = $_GET['a'];
 
@@ -36,6 +37,10 @@ switch ($action) {
         }
         break;
     case 'get_user_popup':
+        if (!$isRequestByAjax) {
+            break;
+        }
+
         $courseId = (int) $request->get('course_id');
         $sessionId = (int) $request->get('session_id');
         $userId = (int) $request->get('user_id');

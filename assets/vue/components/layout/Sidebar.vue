@@ -58,25 +58,25 @@
         Sessions
       </b-nav-item>
       <b-nav-item
-        v-if="isAuthenticated"
+        v-if="isAuthenticated && isAdmin"
         :to="'/main/admin/user_list.php'"
       >
         Users
       </b-nav-item>
       <b-nav-item
-        v-if="isAuthenticated"
+        v-if="isAuthenticated && isAdmin"
         :to="'/main/admin/course_list.php'"
       >
         Courses
       </b-nav-item>
       <b-nav-item
-        v-if="isAuthenticated"
+        v-if="isAuthenticated && isAdmin"
         :to="'/main/session/session_list.php'"
       >
         Sessions
       </b-nav-item>
       <b-nav-item
-        v-if="isAuthenticated"
+        v-if="isAuthenticated && isAdmin"
         :to="'/main/admin/index.php'"
       >
         Settings
@@ -93,6 +93,7 @@ export default {
     ...mapGetters({
       'isAuthenticated': 'security/isAuthenticated',
       'currentUser': 'security/getUser',
+      'isAdmin': 'security/isAdmin',
     }),
   },
 };

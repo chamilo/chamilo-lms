@@ -39,7 +39,7 @@ export default {
                 }
 
                 return false;
-            }
+            };
         }
     },
     mutations: {

@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * CUserinfoContent.
  *
+ * @deprecated ?
  * @ORM\Table(
  *  name="c_userinfo_content",
  *  indexes={

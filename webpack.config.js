@@ -1,7 +1,5 @@
 var Encore = require('@symfony/webpack-encore');
 const CopyPlugin = require('copy-webpack-plugin');
-//const FileManagerPlugin = require('filemanager-webpack-plugin');
-//var dotEnv = require('dotenv');
 
 Encore
     .setOutputPath('public/build/')
@@ -181,4 +179,5 @@ config.resolve.alias =  {
     // Or if using full build of Vue (runtime + compiler)
     // vue$: 'vue/dist/vue.esm.js'      // 'vue/dist/vue.common.js' for webpack 1
 };
+
 module.exports = config;

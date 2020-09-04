@@ -14,11 +14,8 @@ class CreateResourceNodeFileAction
     public function __invoke(Request $request): CDocument
     {
         error_log('CreateResourceNodeFileAction __invoke');
-        $document = new CDocument();
 
         $contentData = $request->getContent();
-        error_log('CreateResourceNodeFileAction __invoke');
-
         if (!empty($contentData)) {
             $contentData = json_decode($contentData, true);
             error_log(print_r($contentData, 1));
@@ -26,17 +23,12 @@ class CreateResourceNodeFileAction
             $comment = $contentData['comment'];
         } else {
             $title = $request->get('title');
-            $comment = $request->request->get('comment');
+            $comment = $request->get('comment');
         }
 
+        $document = new CDocument();
         if ($request->request->has('filetype')) {
             $document->setFiletype($request->get('filetype'));
-        }
-
-        $content = '';
-        if ($request->request->has('contentFile')) {
-            $document->setFiletype('file');
-            $content = $request->request->get('contentFile');
         }
 
         $nodeId = (int) $request->get('parentResourceNodeId');
@@ -44,6 +36,10 @@ class CreateResourceNodeFileAction
 
         switch ($document->getFiletype()) {
             case 'file':
+                $content = '';
+                if ($request->request->has('contentFile')) {
+                    $content = $request->request->get('contentFile');
+                }
                 $fileParsed = false;
                 // File upload
                 if ($request->files->count() > 0) {
@@ -57,7 +53,7 @@ class CreateResourceNodeFileAction
                     $fileParsed = true;
                 }
 
-                // Get data in content and create a HTML file
+                // Get data in content and create a HTML file.
                 if (false === $fileParsed && $content) {
                     $handle = tmpfile();
                     fwrite($handle, $content);
@@ -90,10 +86,11 @@ class CreateResourceNodeFileAction
             } else {
                 $links = json_decode($links, true);
             }
+            error_log(print_r($links, 1));
             if (empty($links)) {
-                throw new \InvalidArgumentException('resourceLinkList is not a valid json. Example: [{"c_id":1:"visibility":1}]');
+                throw new \InvalidArgumentException('resourceLinkList is not a valid json. Example: [{"c_id":1, "visibility":1}]');
             }
-            $document->setResourceLinkList($links);
+            $document->setResourceLinkArray($links);
         }
 
         $document->setComment($comment);

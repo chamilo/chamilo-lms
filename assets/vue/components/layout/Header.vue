@@ -1,15 +1,26 @@
 <template>
   <b-navbar
-    toggleable="lg"
+    toggleable="sm"
     type="dark"
     variant="primary"
-    sticky
+    fixed="top"
   >
-    <b-navbar-brand href="/">
+    <button
+      v-b-toggle.sidebar-1
+      type="button"
+      aria-label="Toggle navigation"
+      class="navbar-toggler mr-3"
+      aria-controls="sidebar-1"
+    >
+      <span class="navbar-toggler-icon" />
+    </button>
+
+    <b-navbar-brand
+      href="/"
+      class="mr-auto mr-sm-0"
+    >
       Chamilo
     </b-navbar-brand>
-
-    <b-navbar-toggle target="nav-collapse" />
 
     <b-collapse
       id="nav-collapse"
@@ -75,11 +86,16 @@
           v-if="isAuthenticated"
           right
           no-caret
+          toggle-class="p-0"
         >
           <!-- Using 'button-content' slot -->
           <template v-slot:button-content>
             <b-avatar variant="light" />
           </template>
+          <b-dropdown-text style="width: 240px;">
+            {{ currentUser.username }}
+          </b-dropdown-text>
+          <b-dropdown-divider />
           <b-dropdown-item href="/main/messages/inbox.php">
             Inbox
           </b-dropdown-item>
@@ -95,9 +111,10 @@
   </b-navbar>
 </template>
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
-  components: {
-  },
+  components: {},
   props: {
     type: {
       type: String,
@@ -114,11 +131,11 @@ export default {
     };
   },
   computed: {
-    isAuthenticated() {
-      return this.$store.getters['security/isAuthenticated']
-    },
+    ...mapGetters({
+      'isAuthenticated': 'security/isAuthenticated',
+      'currentUser': 'security/getUser',
+    }),
   },
-  methods: {
-  }
+  methods: {}
 };
 </script>

@@ -6,7 +6,10 @@ export default {
   methods: {
     formatDateTime,
     onCreated(item) {
-      this.showMessage(`${item['@id']} created`);
+
+      //this.showMessage(`${item['@id']} created`);
+      //let message = item['@id'] + $t('Created');
+      this.showMessage(this.$i18n.t('{resource} created', {'resource': item['resourceNode'].title}));
       let folderParams = this.$route.query;
 
       this.$router.push({

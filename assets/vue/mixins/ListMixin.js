@@ -1,4 +1,6 @@
 import isEmpty from 'lodash/isEmpty';
+import isString from 'lodash/isString';
+import isBoolean from 'lodash/isBoolean';
 import { formatDateTime } from '../utils/dates';
 import NotificationMixin from './NotificationMixin';
 
@@ -7,9 +9,10 @@ export default {
   data() {
     return {
       options: {
-        sortBy: [],
+        //sortBy: [], vuetify
+        //sortDesc: [], , vuetify
         page: 1,
-        itemsPerPage: 10
+        itemsPerPage: 5
       },
       filters: {}
     };
@@ -39,6 +42,7 @@ export default {
 
   methods: {
     onUpdateOptions({ page, itemsPerPage, sortBy, sortDesc, totalItems } = {}) {
+      console.log({ page, itemsPerPage, sortBy, sortDesc, totalItems });
       let params = {
         ...this.filters
       };
@@ -51,11 +55,13 @@ export default {
         params[`resourceNode.parent`] = this.$route.params.node;
       }
 
-      if (!isEmpty(sortBy) && !isEmpty(sortDesc)) {
-        params[`order[${sortBy[0]}]`] = sortDesc[0] ? 'desc' : 'asc'
+      if (isString(sortBy) && isBoolean(sortDesc)) {
+        //params[`order[${sortBy[0]}]`] = sortDesc[0] ? 'desc' : 'asc'
+        params[`order[${sortBy}]`] = sortDesc ? 'desc' : 'asc'
       }
 
       this.resetList = true;
+    console.log(params);
 
       this.getPage(params).then(() => {
         this.options.sortBy = sortBy;

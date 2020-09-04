@@ -1,16 +1,19 @@
 <template>
-  <footer class="footer px-4">
+  <footer class="footer mt-auto px-4">
     <b-row
       align-v="center"
       class="justify-content-lg-between"
     >
       <b-col lg="6">
         <div class="text-center text-lg-left text-muted">
-          © {{ year }} <a
+          © {{ year }}
+          <a
             href="https://www.chamilo.com"
             class="font-weight-bold ml-1"
             target="_blank"
-          >Chamilo</a>
+          >
+            Chamilo
+          </a>
         </div>
       </b-col>
       <b-col lg="6">

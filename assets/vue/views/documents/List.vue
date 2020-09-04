@@ -29,6 +29,7 @@
       <b-col>
         <b-pagination
           v-model="options.page"
+          :disabled.sync="isLoading"
           :total-rows="totalItems"
           :per-page="options.itemsPerPage"
           aria-controls="documents"
@@ -44,15 +45,29 @@
           id="documents"
           striped
           hover
+          no-local-sorting
+          responsive="sm"
+
+          :per-page="0"
           :fields="fields"
           :items="items"
-          :per-page="0"
-          :current-page="options.page"
+          :current-page.sync="options.page"
+
+          :sort-by.sync="options.sortBy"
           :sort-desc.sync="options.sortDesc"
+
           :busy.sync="isLoading"
           :filters="filters"
           primary-key="iid"
+          @sort-changed="sortingChanged"
         >
+          <template v-slot:table-busy>
+            <div class="text-center my-2">
+              <b-spinner class="align-middle" />
+              <strong>{{ $t('Loading ...') }}</strong>
+            </div>
+          </template>
+
           <template
             v-slot:cell(resourceNode.title)="row"
           >
@@ -61,7 +76,8 @@
                 data-fancybox="gallery"
                 :href="row.item['contentUrl'] "
               >
-                <font-awesome-icon icon="file" />
+                <ResourceFileIcon :file="row.item['resourceNode']['resourceFile']" />
+
                 {{ row.item['resourceNode']['title'] }}
               </a>
             </div>
@@ -77,6 +93,17 @@
             v-slot:cell(resourceNode.updatedAt)="row"
           >
             {{ row.item.resourceNode.updatedAt | moment("from", "now") }}
+          </template>
+
+          <template
+            v-slot:cell(resourceNode.resourceFile.size)="row"
+          >
+            <span
+              v-if="row.item['resourceNode']['resourceFile']"
+            >
+              {{ row.item.resourceNode.resourceFile.size | prettyBytes }}
+            </span>
+
           </template>
 
           <template
@@ -101,22 +128,23 @@ import { mapActions, mapGetters } from 'vuex';
 import { mapFields } from 'vuex-map-fields';
 import ListMixin from '../../mixins/ListMixin';
 import ActionCell from '../../components/ActionCell';
-import DocumentsFilterForm from '../../components/documents/Filter';
-import DataFilter from '../../components/DataFilter';
 import Toolbar from '../../components/Toolbar';
+import ResourceFileIcon from './ResourceFileIcon';
+
 
 export default {
     name: 'DocumentsList',
     servicePrefix: 'Documents',
     components: {
-        Toolbar,
-        ActionCell,
-        DocumentsFilterForm,
-        DataFilter
+      Toolbar,
+      ActionCell,
+      ResourceFileIcon
     },
     mixins: [ListMixin],
     data() {
         return {
+          sortBy: 'title',
+          sortDesc: false,
           fields: [
                 {label: 'Title', key: 'resourceNode.title', sortable: true},
                 {label: 'Modified', key: 'resourceNode.updatedAt', sortable: true},
@@ -151,6 +179,13 @@ export default {
         }),
     },
     methods: {
+        sortingChanged(ctx) {
+          this.options.sortDesc = ctx.sortDesc;
+          this.options.sortBy = ctx.sortBy;
+          this.onUpdateOptions(this.options);
+          // ctx.sortBy   ==> Field key for sorting by (or null for no sorting)
+          // ctx.sortDesc ==> true if sorting descending, false otherwise
+        },
         // From ListMixin
         ...mapActions('documents', {
             getPage: 'fetchAll',

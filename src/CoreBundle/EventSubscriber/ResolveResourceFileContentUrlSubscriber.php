@@ -74,13 +74,21 @@ class ResolveResourceFileContentUrlSubscriber implements EventSubscriberInterfac
                     'type' => $resourceNode->getResourceType()->getName(),
                 ];
 
-                $mediaObject->contentUrl = $this->generator->generate('chamilo_core_resource_view_file', $params);
+                if ($getFile) {
+                    // Get all links from resource.
+                    $mediaObject->setResourceLinkListFromEntity();
+                }
+
+                $mediaObject->contentUrl = $this->generator->generate('chamilo_core_resource_view', $params);
+                $mediaObject->downloadUrl = $this->generator->generate('chamilo_core_resource_download', $params);
 
                 if ($getFile &&
                     $resourceNode->hasResourceFile() &&
-                    $resourceNode->hasEditableContent()
+                    $resourceNode->hasEditableTextContent()
                 ) {
-                    $mediaObject->contentFile = $this->resourceNodeRepository->getResourceNodeFileContent($resourceNode);
+                    $mediaObject->contentFile = $this->resourceNodeRepository->getResourceNodeFileContent(
+                        $resourceNode
+                    );
                 }
             }
         }

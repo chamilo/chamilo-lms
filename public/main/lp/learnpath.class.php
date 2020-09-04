@@ -6953,7 +6953,7 @@ class learnpath
             /** @var CDocument $document */
             $document = $repo->find($id);
 
-            if ($document->getResourceNode()->hasEditableContent()) {
+            if ($document->getResourceNode()->hasEditableTextContent()) {
                 $repo->updateResourceFileContent($document, $_REQUEST['content_lp']);
             }
 

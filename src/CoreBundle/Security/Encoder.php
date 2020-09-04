@@ -14,12 +14,12 @@ use Symfony\Component\Security\Core\Encoder\PlaintextPasswordEncoder;
  */
 class Encoder extends BasePasswordEncoder
 {
-    private $passwordEncrypt;
+    //private $passwordEncrypt;
 
-    public function __construct(string $passwordEncrypt)
+    public function __construct()
     {
-        $passwordEncrypt = str_replace("'", '', trim($passwordEncrypt));
-        $this->passwordEncrypt = $passwordEncrypt;
+        /*$passwordEncrypt = str_replace("'", '', trim($passwordEncrypt));
+        $this->passwordEncrypt = $passwordEncrypt;*/
     }
 
     /**

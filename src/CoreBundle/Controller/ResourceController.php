@@ -54,6 +54,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
     /**
      * @Route("/{tool}/{type}", name="chamilo_core_resource_index")
      *
+     * @deprecated
      * Example: /document/files (See the 'tool' and the 'resource_type' DB tables.)
      * For the tool value check the Tool entity.
      * For the type value check the ResourceType entity.
@@ -91,6 +92,9 @@ class ResourceController extends AbstractResourceController implements CourseCon
         );
     }
 
+    /**
+     * @deprecated
+     */
     public function getGrid(Request $request, ResourceRepository $repository, int $resourceNodeId, string $routeName): Grid
     {
         $class = $repository->getRepository()->getClassName();
@@ -153,13 +157,13 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 if ($resourceNode->hasResourceFile()) {
                     // Process node that contains a file, process previews.
                     if ($resourceNode->isResourceFileAnImage()) {
-                        $url = $router->generate('chamilo_core_resource_view_file', $myParams);
+                        $url = $router->generate('chamilo_core_resource_view', $myParams);
 
                         return $icon.'<a data-fancybox="gallery" href="'.$url.'">'.$value.'</a>';
                     }
 
                     if ($resourceNode->isResourceFileAVideo()) {
-                        $url = $router->generate('chamilo_core_resource_view_file', $myParams);
+                        $url = $router->generate('chamilo_core_resource_view', $myParams);
 
                         return '
                         <video width="640" height="320" controls id="video'.$id.'" controls preload="metadata" style="display:none;">
@@ -406,6 +410,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
     /**
      * @Route("/{tool}/{type}/{id}/list", name="chamilo_core_resource_list")
      *
+     * @deprecated
+     *
      * If node has children show it
      */
     public function listAction(Request $request): Response
@@ -437,6 +443,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
     }
 
     /**
+     * @deprecated
+     *
      * @Route("/{tool}/{type}/{id}/new_folder", methods={"GET", "POST"}, name="chamilo_core_resource_new_folder")
      */
     public function newFolderAction(Request $request): Response
@@ -445,6 +453,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
     }
 
     /**
+     * @deprecated
+     *
      * @Route("/{tool}/{type}/{id}/new", methods={"GET", "POST"}, name="chamilo_core_resource_new")
      */
     public function newAction(Request $request): Response
@@ -528,6 +538,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
     }
 
     /**
+     * @deprecated
      * @Route("/{tool}/{type}/{id}/edit", methods={"GET", "POST"})
      */
     public function editAction(Request $request, IllustrationRepository $illustrationRepository): Response
@@ -554,7 +565,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         $form = $repository->getForm($this->container->get('form.factory'), $resource);
 
-        if ($resourceNode->hasEditableContent() && $settings->isAllowToSaveEditorToResourceFile()) {
+        if ($resourceNode->hasEditableTextContent() && $settings->isAllowToSaveEditorToResourceFile()) {
             $form->add(
                 $this->fileContentName,
                 CKEditorType::class,
@@ -846,9 +857,9 @@ class ResourceController extends AbstractResourceController implements CourseCon
     }
 
     /**
-     * Shows the associated resource file.
+     * View file of a resource node.
      *
-     * @Route("/{tool}/{type}/{id}/view", methods={"GET"}, name="chamilo_core_resource_view_file")
+     * @Route("/{tool}/{type}/{id}/view", methods={"GET"}, name="chamilo_core_resource_view")
      */
     public function viewAction(Request $request, RouterInterface $router): Response
     {
@@ -875,6 +886,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
     }
 
     /**
+     * Download file of a resource node.
+     *
      * @Route("/{tool}/{type}/{id}/download", methods={"GET"}, name="chamilo_core_resource_download")
      */
     public function downloadAction(Request $request)

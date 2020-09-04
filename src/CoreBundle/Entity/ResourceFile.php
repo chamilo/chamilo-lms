@@ -5,7 +5,6 @@
 namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiFilter;
-use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
@@ -68,14 +67,6 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 class ResourceFile
 {
     use TimestampableEntity;
-
-    /**
-     * @var string|null
-     *
-     * @ApiProperty(iri="http://schema.org/contentUrl")
-     * @Groups({"resource_file:read", "resource_node:read", "document:read", "media_object_read"})
-     */
-    public $contentUrl;
 
     /**
      * @Groups({"resource_file:read", "resource_node:read", "document:read"})
@@ -165,12 +156,46 @@ class ResourceFile
     protected $metadata;
 
     /**
+     * @var bool
+     *
+     * @Groups({"resource_file:read", "resource_node:read", "document:read"})
+     */
+    protected $image;
+
+    /**
+     * @var bool
+     *
+     * @Groups({"resource_file:read", "resource_node:read", "document:read"})
+     */
+    protected $video;
+
+    /**
      * Constructor.
      */
     public function __construct()
     {
         $this->metadata = [];
         $this->dimensions = [];
+    }
+
+    public function isImage(): bool
+    {
+        $mimeType = $this->getMimeType();
+        if (false !== strpos($mimeType, 'image')) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function isVideo(): bool
+    {
+        $mimeType = $this->getMimeType();
+        if (false !== strpos($mimeType, 'video')) {
+            return true;
+        }
+
+        return false;
     }
 
     public function __toString(): string

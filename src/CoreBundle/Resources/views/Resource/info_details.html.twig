@@ -41,7 +41,7 @@
 
 {% if resource.resourceNode.resourceFile %}
     <a class="btn btn-success"
-       href="{{ url('chamilo_core_resource_view_file', {
+       href="{{ url('chamilo_core_resource_view', {
            'id': resource.resourceNode.id,
            'cid': course ? course.id : 0,
            'sid': session ? session.id : 0,

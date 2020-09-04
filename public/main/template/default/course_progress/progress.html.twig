@@ -71,8 +71,8 @@
                     <tbody>
                     {% for item in data %}
                         <tr>
-                            <td id="id-thematic-{{ item.id }}">
-                                {% if session_star is empty %}
+                            <td id="id-thematic-{{ item.iid }}">
+                                {% if session_star is not defined %}
                                     <h5>{{ item.title }}</h5>
                                 {% else %}
                                     <h5>{{ item.title }} {{ session_star }}</h5>
@@ -83,11 +83,11 @@
                                 </div>
                             </td>
                             <td>
-                                <div class="thematic_plan_{{ item.id }}">
+                                <div class="thematic_plan_{{ item.iid }}">
                                     {% if tutor %}
                                         <div class="btn-group">
                                             <a title="{{ 'Edit thematic section' | trans }}"
-                                               href="index.php?{{ course_url_params }}&origin=thematic_details&action=thematic_plan_list&thematic_id={{ item.id }}&width=700&height=500"
+                                               href="index.php?{{ course_url_params }}&origin=thematic_details&action=thematic_plan_list&thematic_id={{ item.iid }}&width=700&height=500"
                                                class="btn btn-outline-secondary btn-sm">
                                                 <i class="fas fa-pencil-alt"></i>
                                             </a>
@@ -111,7 +111,7 @@
                                 {% if tutor %}
                                     <div class="btn-group">
                                         <a title="{{ 'New thematic advance' | trans }}"
-                                           href="index.php?{{ course_url_params }}&action=thematic_advance_add&thematic_id={{ item.id }}"
+                                           href="index.php?{{ course_url_params }}&action=thematic_advance_add&thematic_id={{ item.iid }}"
                                            class="btn btn-outline-secondary btn-sm">
                                             <i class="fa fa-plus-circle" aria-hidden="true"></i>
                                         </a>
@@ -121,7 +121,7 @@
                                 {% if item.advances is not empty %}
                                     {% for advance in item.advances %}
                                         <tr>
-                                            <td style="width: 90%" class="thematic_advance_content" id="thematic_advance_content_id_{{ advance.id }}">
+                                            <td style="width: 90%" class="thematic_advance_content" id="thematic_advance_content_id_{{ advance.iid }}">
                                                 <div id="thematic_advance_{{ advance.id }}">
                                                 <strong>{{ advance.startDate | format_date }}</strong>
                                                 {{ advance.content }}
@@ -131,12 +131,12 @@
                                                         <div id="thematic_advance_tools_{{ advance.id }}" class="thematic_advance_actions">
                                                             <div class="btn-group btn-group-sm">
                                                                 <a class="btn btn-default btn-sm"
-                                                                   href="index.php?{{ course_url_params }}&action=thematic_advance_edit&thematic_id={{ item.id }}&thematic_advance_id={{ advance.id }}" title="{{ 'Edit' |trans }}">
+                                                                   href="index.php?{{ course_url_params }}&action=thematic_advance_edit&thematic_id={{ item.iid }}&thematic_advance_id={{ advance.id }}" title="{{ 'Edit' |trans }}">
                                                                     <i class="fa fa-pen" aria-hidden="true"></i>
                                                                 </a>
                                                                 <a class="btn btn-default btn-sm"
                                                                     onclick="javascript:if(!confirm('{{ 'Are you sure to delete' | trans }}')) return false;"
-                                                                   href="index.php?{{ course_url_params }}&action=thematic_advance_delete&thematic_id={{ item.id }}&thematic_advance_id={{ advance.id }}" title="{{ 'Delete' |trans }}">
+                                                                   href="index.php?{{ course_url_params }}&action=thematic_advance_delete&thematic_id={{ item.iid }}&thematic_advance_id={{ advance.id }}" title="{{ 'Delete' |trans }}">
                                                                     <i class="fa fa-trash" aria-hidden="true"></i>
                                                                 </a>
                                                             </div>

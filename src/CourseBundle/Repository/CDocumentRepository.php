@@ -51,7 +51,7 @@ final class CDocumentRepository extends ResourceRepository implements GridInterf
         $resource = new CDocument();
         $resource
             ->setFiletype('file')
-            ->setSize($file->getSize())
+            //->setSize($file->getSize())
             ->setTitle($file->getClientOriginalName())
         ;
 
@@ -89,13 +89,13 @@ final class CDocumentRepository extends ResourceRepository implements GridInterf
 
         $params = [
             'course' => $document->getCourse()->getCode(),
-            'id' => ltrim($document->getPath(), '/'),
+            'id' => $document->getResourceNode()->getId(),
             'tool' => 'document',
             'type' => $document->getResourceNode()->getResourceType()->getName(),
         ];
 
         return $this->getRouter()->generate(
-            'chamilo_core_resource_view_file',
+            'chamilo_core_resource_view',
             $params
         );
     }

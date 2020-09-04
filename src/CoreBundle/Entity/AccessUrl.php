@@ -32,6 +32,8 @@ class AccessUrl extends AbstractResource implements ResourceInterface
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     *
+     * @Groups({"access_url:read", "access_url:write"})
      */
     protected $id;
 

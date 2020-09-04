@@ -161,7 +161,7 @@ final class IllustrationRepository extends ResourceRepository implements GridInt
             }
 
             return $this->getRouter()->generate(
-                'chamilo_core_resource_view_file',
+                'chamilo_core_resource_view',
                 $params
             );
         }

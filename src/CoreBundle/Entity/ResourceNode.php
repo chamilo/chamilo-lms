@@ -470,7 +470,7 @@ class ResourceNode
         return $this->resourceFile;
     }
 
-    public function hasEditableContent(): bool
+    public function hasEditableTextContent(): bool
     {
         if ($this->hasResourceFile()) {
             $mimeType = $this->getResourceFile()->getMimeType();
@@ -484,7 +484,7 @@ class ResourceNode
 
     public function isFileEditableText(): bool
     {
-        return $this->hasEditableContent();
+        return $this->hasEditableTextContent();
     }
 
     public function isResourceFileAnImage(): bool
@@ -552,7 +552,7 @@ class ResourceNode
                     'filter' => 'editor_thumbnail',
                 ];
                 $url = $router->generate(
-                    'chamilo_core_resource_view_file',
+                    'chamilo_core_resource_view',
                     $params
                 );
 

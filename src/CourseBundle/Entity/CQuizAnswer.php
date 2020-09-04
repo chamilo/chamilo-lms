@@ -14,7 +14,6 @@ use Doctrine\ORM\Mapping as ORM;
  *  indexes={
  *      @ORM\Index(name="c_id", columns={"c_id"}),
  *      @ORM\Index(name="idx_cqa_q", columns={"question_id"}),
- *      @ORM\Index(name="c_id_auto", columns={"c_id", "id_auto"})
  *  }
  * )
  * @ORM\Entity
@@ -29,13 +28,6 @@ class CQuizAnswer
      * @ORM\GeneratedValue
      */
     protected $iid;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id_auto", type="integer", options={"unsigned": true, "default": null})
-     */
-    protected $idAuto;
 
     /**
      * @var int
@@ -116,7 +108,6 @@ class CQuizAnswer
 
     public function __construct()
     {
-        $this->idAuto = 0;
         $this->correct = null;
         $this->comment = null;
         $this->ponderation = 0.0;
@@ -364,30 +355,6 @@ class CQuizAnswer
     public function getAnswerCode()
     {
         return $this->answerCode;
-    }
-
-    /**
-     * Set idAuto.
-     *
-     * @param int $idAuto
-     *
-     * @return CQuizAnswer
-     */
-    public function setIdAuto($idAuto)
-    {
-        $this->idAuto = $idAuto;
-
-        return $this;
-    }
-
-    /**
-     * Get idAuto.
-     *
-     * @return int
-     */
-    public function getIdAuto()
-    {
-        return $this->idAuto;
     }
 
     /**

@@ -516,19 +516,11 @@ class ResourceRepository extends EntityRepository
 
     public function getResourceFromResourceNode(int $resourceNodeId): ?AbstractResource
     {
-        //return $this->getRepository()->findOneBy(['resourceNode' => $resourceNodeId]);
-        //$className = $this->getClassName();
-        /*var_dump(get_class($this->repository));
-        var_dump(get_class($this->getRepository()));
-        var_dump(get_class($this));*/
-        //var_dump($className);
         // Include links
         $qb = $this->getRepository()->createQueryBuilder('resource')
             ->select('resource')
             ->addSelect('node')
             ->addSelect('links')
-            //->addSelect('file')
-            //->from($className, 'resource')
             ->innerJoin('resource.resourceNode', 'node')
         //    ->innerJoin('node.creator', 'userCreator')
             ->innerJoin('node.resourceLinks', 'links')
@@ -613,7 +605,7 @@ class ResourceRepository extends EntityRepository
 
                 $referenceType = $referenceType ?? UrlGeneratorInterface::ABSOLUTE_PATH;
 
-                return $this->router->generate('chamilo_core_resource_view_file', $params, $referenceType);
+                return $this->router->generate('chamilo_core_resource_view', $params, $referenceType);
             }
 
             return '';

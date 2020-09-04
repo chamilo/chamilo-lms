@@ -6,17 +6,18 @@
       :values="item"
       :errors="violations"
     />
-    <Toolbar
-      :handle-submit="onSendForm"
-      :handle-reset="resetForm"
-      :handle-delete="del"
-    />
+
     <ResourceLinkForm
       v-if="item"
       ref="resourceLinkForm"
       :values="item"
     />
 
+    <Toolbar
+      :handle-submit="onSendForm"
+      :handle-reset="resetForm"
+      :handle-delete="del"
+    />
     <Loading :visible="isLoading || deleteLoading" />
   </div>
 </template>

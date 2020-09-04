@@ -4,14 +4,14 @@
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Query\Expr\Join;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
 /**
  * Responses to AJAX calls.
  */
 require_once __DIR__.'/../global.inc.php';
 
-$request = Request::createFromGlobals();
+$request = HttpRequest::createFromGlobals();
 $isRequestByAjax = $request->isXmlHttpRequest();
 
 $action = $_GET['a'];

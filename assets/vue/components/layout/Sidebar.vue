@@ -45,43 +45,50 @@
       <b-nav-item :to="{ name: 'Index' }">
         Home
       </b-nav-item>
-      <b-nav-item
-        v-if="isAuthenticated"
-        :to="{ name: 'MyCourses' }"
-      >
-        Courses
-      </b-nav-item>
-      <b-nav-item
-        v-if="isAuthenticated"
-        :to="{ name: 'MySessions' }"
-      >
-        Sessions
-      </b-nav-item>
-      <b-nav-item
-        v-if="isAuthenticated && isAdmin"
-        :to="'/main/admin/user_list.php'"
-      >
-        Users
-      </b-nav-item>
-      <b-nav-item
-        v-if="isAuthenticated && isAdmin"
-        :to="'/main/admin/course_list.php'"
-      >
-        Courses
-      </b-nav-item>
-      <b-nav-item
-        v-if="isAuthenticated && isAdmin"
-        :to="'/main/session/session_list.php'"
-      >
-        Sessions
-      </b-nav-item>
-      <b-nav-item
-        v-if="isAuthenticated && isAdmin"
-        :to="'/main/admin/index.php'"
-      >
-        Settings
-      </b-nav-item>
     </b-nav>
+
+    <template v-if="isAuthenticated && isAdmin">
+      <b-nav vertical>
+        <b-nav-item
+          :to="{ name: 'MyCourses' }"
+        >
+          Courses
+        </b-nav-item>
+        <b-nav-item
+          :to="{ name: 'MySessions' }"
+        >
+          Sessions
+        </b-nav-item>
+      </b-nav>
+    </template>
+
+    <template v-if="isAuthenticated && isAdmin">
+      <b-nav vertical>
+        <h4 class="pt-3 px-3 mb-0">
+          Administration
+        </h4>
+        <b-nav-item
+          :to="'/main/admin/user_list.php'"
+        >
+          Users
+        </b-nav-item>
+        <b-nav-item
+          :to="'/main/admin/course_list.php'"
+        >
+          Courses
+        </b-nav-item>
+        <b-nav-item
+          :to="'/main/session/session_list.php'"
+        >
+          Sessions
+        </b-nav-item>
+        <b-nav-item
+          :to="'/main/admin/index.php'"
+        >
+          Settings
+        </b-nav-item>
+      </b-nav>
+    </template>
   </b-sidebar>
 </template>
 

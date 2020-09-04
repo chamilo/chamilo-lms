@@ -14,8 +14,8 @@ class CreateResourceNodeFileAction
     public function __invoke(Request $request): CDocument
     {
         error_log('CreateResourceNodeFileAction __invoke');
-        $contentData = $request->getContent();
 
+        $contentData = $request->getContent();
         if (!empty($contentData)) {
             $contentData = json_decode($contentData, true);
             error_log(print_r($contentData, 1));
@@ -23,7 +23,7 @@ class CreateResourceNodeFileAction
             $comment = $contentData['comment'];
         } else {
             $title = $request->get('title');
-            $comment = $request->request->get('comment');
+            $comment = $request->get('comment');
         }
 
         $document = new CDocument();
@@ -31,17 +31,15 @@ class CreateResourceNodeFileAction
             $document->setFiletype($request->get('filetype'));
         }
 
-        $content = '';
-        if ($request->request->has('contentFile')) {
-            $document->setFiletype('file');
-            $content = $request->request->get('contentFile');
-        }
-
         $nodeId = (int) $request->get('parentResourceNodeId');
         $document->setParentResourceNode($nodeId);
 
         switch ($document->getFiletype()) {
             case 'file':
+                $content = '';
+                if ($request->request->has('contentFile')) {
+                    $content = $request->request->get('contentFile');
+                }
                 $fileParsed = false;
                 // File upload
                 if ($request->files->count() > 0) {

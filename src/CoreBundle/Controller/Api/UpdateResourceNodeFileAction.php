@@ -16,7 +16,7 @@ class UpdateResourceNodeFileAction
         $fileType = $document->getFileType();
         $contentData = $request->getContent();
         error_log('UpdateResourceNodeFileAction __invoke');
-
+        $resourceLinkList = [];
         if (!empty($contentData)) {
             error_log('contentData');
             $contentData = json_decode($contentData, true);

@@ -46,7 +46,40 @@ switch ($action) {
         $userId = (int) $request->get('user_id');
 
         $user_info = api_get_user_info($userId);
+
+        if (empty($user_info)) {
+            break;
+        }
+
+        if ($courseId) {
+            $courseInfo = api_get_course_info_by_id($courseId);
+
+            if (empty($courseInfo)) {
+                break;
+            }
+        }
+
+        if ($sessionId) {
+            $sessionInfo = api_get_session_info($sessionId);
+
+            if (empty($sessionInfo)) {
+                break;
+            }
+        }
+
         $isAnonymous = api_is_anonymous();
+
+        if ($isAnonymous && $courseId) {
+            if ('false' === api_get_setting('course_catalog_published')) {
+                break;
+            }
+
+            $coursesNotInCatalog = CoursesAndSessionsCatalog::getCoursesToAvoid();
+
+            if (in_array($courseId, $coursesNotInCatalog)) {
+                break;
+            }
+        }
 
         echo '<div class="row">';
         echo '<div class="col-sm-5">';
@@ -70,7 +103,7 @@ switch ($action) {
         if ($isAnonymous) {
             // Only allow anonymous users to see user popup if the popup user
             // is a teacher (which might be necessary to illustrate a course)
-            if ($user_info['status'] === COURSEMANAGER) {
+            if ((int) $user_info['status'] === COURSEMANAGER) {
                 echo $userData;
             }
         } else {

@@ -19,4 +19,5 @@ export default {
   'Please type something': 'Please type something',
   'Field is required': 'Field is required',
   'Records per page:': 'Records per page:',
+  '{resource} created': '{resource} created',
 };

@@ -49,6 +49,10 @@ Vue.filter('prettyBytes', function (num) {
     return prettyBytes(num);
 });
 
+import flatPickr from 'vue-flatpickr-component';
+import 'flatpickr/dist/flatpickr.css';
+Vue.component('flat-pickr', flatPickr);
+
 store.registerModule(
     'course',
     makeCrudModule({

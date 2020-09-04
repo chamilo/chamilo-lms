@@ -16,10 +16,16 @@ import MySessionList from "../views/user/sessions/List";
 let router = new VueRouter({
     mode: "history",
     routes: [
-        { path: "/", name: "Index"},
-        { path: "/login", name: "Login", component: Login },
-        { path: "/courses", name: "MyCourses", component: MyCourseList },
-        { path: "/sessions", name: "MySessions", component: MySessionList },
+        {path: "/", name: "Index"},
+        {path: "/login", name: "Login", component: Login},
+        {
+            path: "/courses", name: "MyCourses", component: MyCourseList,
+            meta: {requiresAuth: true},
+        },
+        {
+            path: "/sessions", name: "MySessions", component: MySessionList,
+            meta: {requiresAuth: true},
+        },
         courseRoutes,
         courseCategoryRoutes,
         documents
@@ -35,7 +41,7 @@ router.beforeEach((to, from, next) => {
         } else {
             next({
                 path: "/login",
-                query: { redirect: to.fullPath },
+                query: {redirect: to.fullPath},
             });
         }
     } else {

@@ -10,12 +10,12 @@
  */
 class ExerciseLink extends AbstractLink
 {
+    // This variable is used in the WSGetGradebookUserItemScore service, to check base course tests.
+    public $checkBaseExercises = false;
     private $course_info;
     private $exercise_table;
     private $exercise_data = [];
     private $is_hp;
-    // This variable is used in the WSGetGradebookUserItemScore service, to check base course tests.
-    public $checkBaseExercises = false;
 
     /**
      * @param int $hp

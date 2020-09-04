@@ -341,6 +341,39 @@ class ScoreDisplay
     }
 
     /**
+     * Depends on the teacher's configuration of thresholds. i.e. [0 50] "Bad", [50:100] "Good".
+     *
+     * @param array $score
+     *
+     * @return string
+     */
+    public function display_custom($score)
+    {
+        if (empty($score)) {
+            return null;
+        }
+
+        $my_score_denom = $score[1] == 0 ? 1 : $score[1];
+        $scaledscore = $score[0] / $my_score_denom;
+
+        if ($this->upperlimit_included) {
+            foreach ($this->custom_display_conv as $displayitem) {
+                if ($scaledscore <= $displayitem['score']) {
+                    return $displayitem['display'];
+                }
+            }
+        } else {
+            if (!empty($this->custom_display_conv)) {
+                foreach ($this->custom_display_conv as $displayitem) {
+                    if ($scaledscore < $displayitem['score'] || $displayitem['score'] == 1) {
+                        return $displayitem['display'];
+                    }
+                }
+            }
+        }
+    }
+
+    /**
      * Get current gradebook category id.
      *
      * @return int Category id
@@ -486,39 +519,6 @@ class ScoreDisplay
         $score[1] = isset($score[1]) ? $this->format_score($score[1], $ignoreDecimals) : 0;
 
         return $score[0].' / '.$score[1];
-    }
-
-    /**
-     * Depends on the teacher's configuration of thresholds. i.e. [0 50] "Bad", [50:100] "Good".
-     *
-     * @param array $score
-     *
-     * @return string
-     */
-    public function display_custom($score)
-    {
-        if (empty($score)) {
-            return null;
-        }
-
-        $my_score_denom = $score[1] == 0 ? 1 : $score[1];
-        $scaledscore = $score[0] / $my_score_denom;
-
-        if ($this->upperlimit_included) {
-            foreach ($this->custom_display_conv as $displayitem) {
-                if ($scaledscore <= $displayitem['score']) {
-                    return $displayitem['display'];
-                }
-            }
-        } else {
-            if (!empty($this->custom_display_conv)) {
-                foreach ($this->custom_display_conv as $displayitem) {
-                    if ($scaledscore < $displayitem['score'] || $displayitem['score'] == 1) {
-                        return $displayitem['display'];
-                    }
-                }
-            }
-        }
     }
 
     /**

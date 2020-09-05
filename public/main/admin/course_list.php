@@ -47,7 +47,6 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
                 title AS col1,
                 course.code AS col2,
                 course_language AS col3,
-                category.code AS col4,
                 subscribe AS col5,
                 unsubscribe AS col6,
                 course.code AS col7,
@@ -61,9 +60,12 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
         $select = 'SELECT COUNT(DISTINCT(course.id)) as count ';
     }
 
-    $sql = "$select FROM $course_table course
-        LEFT JOIN $tblCourseRelCategory course_rel_category ON course.id = course_rel_category.course_id
-        LEFT JOIN $tblCourseCategory category ON course_rel_category.course_category_id = category.id ";
+    $sql = "$select FROM $course_table course ";
+
+    if (isset($_GET['keyword_category']) && !empty($_GET['keyword_category'])) {
+        $sql .= "INNER JOIN $tblCourseRelCategory course_rel_category ON course.id = course_rel_category.course_id
+            INNER JOIN $tblCourseCategory category ON course_rel_category.course_category_id = category.id ";
+    }
 
     if ((api_is_platform_admin() || api_is_session_admin()) &&
         api_is_multiple_url_enabled() && -1 != api_get_current_access_url_id()
@@ -85,7 +87,7 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
         $keyword_code = Database::escape_string('%'.$_GET['keyword_code'].'%');
         $keyword_title = Database::escape_string('%'.$_GET['keyword_title'].'%');
         $keyword_category = isset($_GET['keyword_category'])
-            ? Database::escape_string('%'.$_GET['keyword_category'].'%')
+            ? Database::escape_string($_GET['keyword_category'])
             : null;
         $keyword_language = Database::escape_string('%'.$_GET['keyword_language'].'%');
         $keyword_visibility = Database::escape_string('%'.$_GET['keyword_visibility'].'%');
@@ -101,7 +103,7 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
                 unsubscribe LIKE '".$keyword_unsubscribe."'";
 
         if (!empty($keyword_category)) {
-            $sql .= " AND category.code LIKE '".$keyword_category."' ";
+            $sql .= " AND category.id = ".$keyword_category . " ";
         }
     }
 
@@ -113,6 +115,7 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
     }
 
     if ($getCount) {
+        $sql .= "GROUP BY course.code";
         $res = Database::query($sql);
         $row = Database::fetch_array($res);
         if ($row) {
@@ -122,6 +125,7 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
         return 0;
     }
 
+    $sql .= "GROUP BY course.code";
     $sql .= " ORDER BY col$column $direction ";
     $sql .= " LIMIT $from, $number_of_items";
 
@@ -133,6 +137,17 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
 
     while ($course = Database::fetch_array($res)) {
         $courseInfo = api_get_course_info_by_id($course['id']);
+
+        // get categories
+        $sqlCategoriesByCourseId = "SELECT category.name FROM $tblCourseCategory category
+            INNER JOIN $tblCourseRelCategory course_rel_category ON category.id = course_rel_category.course_category_id
+            WHERE course_rel_category.course_id = " . $course['id'];
+        $resultCategories = Database::query($sqlCategoriesByCourseId);
+        $categories = [];
+
+        while ($category = Database::fetch_array($resultCategories)) {
+            $categories[] = $category['name'];
+        }
 
         // Place colour icons in front of courses.
         $show_visual_code = $course['visual_code'] != $course[2] ? Display::label($course['visual_code'], 'info') : null;
@@ -181,7 +196,7 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
             $course[1],
             $course[2],
             $language,
-            $course[4],
+            implode(", ", $categories),
             $course[5],
             $course[6],
             implode(PHP_EOL, $actions),
@@ -543,7 +558,7 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
     $table->set_header(1, get_lang('Title'), true, null, ['class' => 'title']);
     $table->set_header(2, get_lang('Course code'));
     $table->set_header(3, get_lang('Language'), false, 'width="70px"');
-    $table->set_header(4, get_lang('Category'));
+    $table->set_header(4, get_lang('Categories'));
     $table->set_header(5, get_lang('Registr. allowed'), true, 'width="60px"');
     $table->set_header(6, get_lang('UnsubscribeAllowed'), false, 'width="50px"');
     $table->set_header(

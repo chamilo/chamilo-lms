@@ -2359,18 +2359,7 @@ function api_format_course_array(Course $course = null)
         return [];
     }
 
-    $category = $course->getCategory();
-
     $courseData = [];
-    $courseData['categoryCode'] = '';
-    $courseData['categoryName'] = '';
-    $courseData['category_id'] = 0;
-    if ($category) {
-        $courseData['categoryCode'] = $category->getCode();
-        $courseData['categoryName'] = $category->getName();
-        $courseData['category_id'] = $category->getId();
-    }
-
     $courseData['id'] = $courseData['real_id'] = $course->getId();
 
     // Added

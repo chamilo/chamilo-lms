@@ -777,12 +777,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this;
     }
 
-    /**
-     * Get category.
-     *
-     * @return ArrayCollection
-     */
-    public function getCategories(): ?ArrayCollection
+    public function getCategories()
     {
         return $this->categories;
     }

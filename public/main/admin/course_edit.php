@@ -16,10 +16,7 @@ api_protect_admin_script();
 
 $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
 $em = Database::getManager();
-/** @var CourseRepository $courseRepo */
-$courseRepo = $em->getRepository('ChamiloCoreBundle:CourseCategory');
-/** @var CourseCategoryRepository $courseCategoriesRepo */
-$courseCategoriesRepo = $em->getRepository('ChamiloCoreBundle:CourseCategory');
+
 // Get all possible teachers.
 $urlId = api_get_current_access_url_id();
 
@@ -146,43 +143,30 @@ $form->addText(
 $form->applyFilter('visual_code', 'strtoupper');
 $form->applyFilter('visual_code', 'html_filter');
 
-$countCategories = $courseCategoriesRepo->countAllInAccessUrl(
-    $urlId,
-    api_get_configuration_value('allow_base_course_category')
-);
-if ($countCategories >= 100) {
-    // Category code
-    $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_category';
-
-    $categorySelect = $form->addSelectAjax(
-        'category_id',
-        get_lang('Category'),
-        null,
-        ['url' => $url]
-    );
-
-    if (!empty($courseInfo['categoryCode'])) {
-        $data = \CourseCategory::getCategory($courseInfo['categoryCode']);
-        $categorySelect->addOption($data['name'], $data['code']);
-    }
-} else {
-    $categories = $courseCategoriesRepo->findAllInAccessUrl(
-        $urlId,
-        api_get_configuration_value('allow_base_course_category')
-    );
-    $categoriesOptions = [0 => get_lang('None')];
-
-    /** @var CourseCategory $category */
-    foreach ($categories as $category) {
-        $categoriesOptions[$category->getId()] = (string) $category;
-    }
-
-    $form->addSelect(
-        'category_id',
-        get_lang('Category'),
-        $categoriesOptions
-    );
+// Set categories selected
+$tbl_course_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
+$tbl_course_rel_category = Database::get_main_table(TABLE_MAIN_COURSE_REL_CATEGORY);
+$sqlGetCategoriesByCourse = "SELECT category.id, category.name FROM $tbl_course_category category
+    INNER JOIN $tbl_course_rel_category course_rel_category ON category.id = course_rel_category.course_category_id
+    WHERE course_rel_category.course_id = $courseId";
+$categoriesResult = Database::query($sqlGetCategoriesByCourse);
+$courseCategoryNames = [];
+$courseCategoryIds = [];
+while ($category = Database::fetch_array($categoriesResult)) {
+    $courseCategoryNames[$category['id']] = $category['name'];
+    $courseCategoryIds[] = $category['id'];
 }
+
+$form->addSelectAjax(
+    'course_categories',
+    get_lang('Categories'),
+    $courseCategoryNames,
+    [
+        'url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_category',
+        'multiple' => 'multiple'
+    ]
+);
+$courseInfo['course_categories'] = $courseCategoryIds;
 
 $courseTeacherNames = [];
 
@@ -355,16 +339,10 @@ if ($form->validate()) {
     }
 
     $teachers = isset($course['course_teachers']) ? $course['course_teachers'] : '';
-    $categoryId = isset($course['category_id']) && !empty($course['category_id']) ? (int) $course['category_id'] : null;
     $department_url = $course['department_url'];
 
     if (!stristr($department_url, 'http://')) {
         $department_url = 'http://'.$department_url;
-    }
-
-    $category = null;
-    if (!empty($categoryId)) {
-        $category = $courseCategoriesRepo->find($categoryId);
     }
 
     /** @var \Chamilo\CoreBundle\Entity\Course $courseEntity */
@@ -379,7 +357,6 @@ if ($form->validate()) {
         ->setSubscribe($course['subscribe'])
         ->setUnsubscribe($course['unsubscribe'])
         ->setVisibility($visibility)
-        ->setCategory($category)
     ;
 
     $em->persist($courseEntity);
@@ -389,6 +366,20 @@ if ($form->validate()) {
     $courseFieldValue = new ExtraFieldValue('course');
     $courseFieldValue->saveFieldValues($course);
     $addTeacherToSessionCourses = isset($course['add_teachers_to_sessions_courses']) && !empty($course['add_teachers_to_sessions_courses']) ? 1 : 0;
+
+    // Updating categories
+    if (isset($course['course_categories'])) {
+        $courseId = $courseInfo['real_id'];
+        $sqlDeleteBeforeUpdateCategories = "DELETE FROM $tbl_course_rel_category
+            WHERE course_id = " . $courseInfo['real_id'];
+        Database::query($sqlDeleteBeforeUpdateCategories);
+
+        foreach ($course['course_categories'] as $categoryId) {
+            $sqlUpdateCategories = "INSERT INTO $tbl_course_rel_category (course_id, course_category_id)
+                VALUES($courseId, $categoryId)";
+            Database::query($sqlUpdateCategories);
+        }
+    }
 
     // Updating teachers
     if ($addTeacherToSessionCourses) {

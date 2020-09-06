@@ -1,0 +1,160 @@
+/*!
+ * CSS SpaceLab - v. 2.0
+ * 2015 - Alex Aragón (aragonc@beeznest.com)
+ * OpenClipArt ilustration (https://openclipart.org/detail/178586/mad-scientist) By AnNinihah
+ * Licensed GPL
+ * Based on Bootstrap
+*/
+
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Open Sans Light'), local('OpenSans-Light'), url(../chamilo/fonts/OpenSans-Light.woff2) format('woff2'), url(../chamilo/fonts/OpenSans-Light.woff) format('woff');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Open Sans'), local('OpenSans'), url(../chamilo/fonts/OpenSans.woff2) format('woff2'), url(../chamilo/fonts/OpenSans.woff) format('woff');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 600;
+  src: local('Open Sans Semibold'), local('OpenSans-Semibold'), url(../chamilo/fonts/OpenSans-Semibold.woff2) format('woff2'), url(../chamilo/fonts/OpenSans-Semibold.woff) format('woff');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Open Sans Bold'), local('OpenSans-Bold'), url(../chamilo/fonts/OpenSans-Bold.woff2) format('woff2'), url(../chamilo/fonts/OpenSans-Bold.woff) format('woff');
+}
+html {
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  margin: 0;
+  font-family: 'Open Sans', sans-serif;
+  line-height: 1.72222;
+}
+a{
+  color: #185B8E;
+}
+a:hover{
+  color: #3F9BC7;
+}
+header{
+  background: url("images/background.png") repeat-x center -25px;
+}
+.navbar-default {
+background: -moz-linear-gradient(top, rgba(92,107,106,0.29) 0%, rgba(15,32,36,0.85) 86%, rgba(15,32,36,0.94) 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(92,107,106,0.29)), color-stop(86%,rgba(15,32,36,0.85)), color-stop(100%,rgba(15,32,36,0.94))); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top, rgba(92,107,106,0.29) 0%,rgba(15,32,36,0.85) 86%,rgba(15,32,36,0.94) 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top, rgba(92,107,106,0.29) 0%,rgba(15,32,36,0.85) 86%,rgba(15,32,36,0.94) 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top, rgba(92,107,106,0.29) 0%,rgba(15,32,36,0.85) 86%,rgba(15,32,36,0.94) 100%); /* IE10+ */
+background: linear-gradient(to bottom, rgba(92,107,106,0.29) 0%,rgba(15,32,36,0.85) 86%,rgba(15,32,36,0.94) 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4a5c6b6a', endColorstr='#f00f2024',GradientType=0 ); /* IE6-9 */
+border:none;
+}
+.navbar{
+    border-bottom: 3px solid #4A8480;
+}
+.navbar-default .navbar-brand {
+  color: #ffffff;
+}
+.navbar-default .navbar-brand:hover, .navbar-default .navbar-brand:focus {
+  color: #ededed;
+}
+.navbar-default .navbar-text {
+  color: #ffffff;
+}
+.navbar-default .navbar-nav > li > a {
+  color: #ffffff;
+}
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+  color: #9DD0F1;
+}
+.navbar-default .navbar-nav > li > .dropdown-menu {
+  background-color: #E48A1D;
+}
+.navbar-default .navbar-nav > li > .dropdown-menu > li > a {
+  color: #ffffff;
+}
+.navbar-default .navbar-nav > li > .dropdown-menu > li > a:hover,
+.navbar-default .navbar-nav > li > .dropdown-menu > li > a:focus {
+  color: #ededed;
+  background-color: #C76027;
+}
+.navbar-default .navbar-nav > li > .dropdown-menu > li > .divider {
+  background-color: #0099c0;
+}
+.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
+  color: #ededed;
+  background: #465251;
+}
+.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
+  color: #ededed;
+  background: #e48a1d; /* Old browsers */
+  background: -moz-linear-gradient(top, #e48a1d 0%, #e48a1d 52%, #c86027 52%, #c86027 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#e48a1d), color-stop(52%,#e48a1d), color-stop(52%,#c86027), color-stop(100%,#c86027)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, #e48a1d 0%,#e48a1d 52%,#c86027 52%,#c86027 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, #e48a1d 0%,#e48a1d 52%,#c86027 52%,#c86027 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, #e48a1d 0%,#e48a1d 52%,#c86027 52%,#c86027 100%); /* IE10+ */
+  background: linear-gradient(to bottom, #e48a1d 0%,#e48a1d 52%,#c86027 52%,#c86027 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e48a1d', endColorstr='#c86027',GradientType=0 ); /* IE6-9 */
+}
+.navbar-default .navbar-toggle {
+  border-color: #0099c0;
+}
+.navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus {
+  background-color: #0099c0;
+}
+.navbar-default .navbar-toggle .icon-bar {
+  background-color: #ffffff;
+}
+.navbar-default .navbar-collapse,
+.navbar-default .navbar-form {
+  border-color: #ffffff;
+}
+.navbar-default .navbar-link {
+  color: #ffffff;
+}
+.navbar-default .navbar-link:hover {
+  color: #ededed;
+}
+
+@media (max-width: 767px) {
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a {
+    color: #ffffff;
+  }
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover, .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
+    color: #ededed;
+  }
+  .navbar-default .navbar-nav .open .dropdown-menu > .active > a, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
+    color: #ededed;
+    background-color: #0099c0;
+  }
+}
+.breadcrumb{
+  background: #ddecef;
+  color: #006A84;
+}
+.nav li a:hover{
+    background: transparent;
+}
+.panel-default .panel-heading{
+    background-color: #ddecef;
+}
+footer.bgfooter{
+  background: #272727;
+  color: #9DD0F1;
+  border-top: 4px solid #4A8480;
+}
+footer.bgfooter a{
+  color: #ffffff;
+}
+footer.bgfooter a:hover{
+  color: #CCC;
+}

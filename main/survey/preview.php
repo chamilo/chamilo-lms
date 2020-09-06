@@ -200,7 +200,8 @@ if (is_array($questions) && count($questions) > 0) {
 
     $js = '';
 
-    if (isset($pageBreakText[$originalShow]) && !empty(strip_tags($pageBreakText[$originalShow]))) {        // Only show page-break texts if there is something there, apart from
+    if (isset($pageBreakText[$originalShow]) && !empty(strip_tags($pageBreakText[$originalShow]))) {
+        // Only show page-break texts if there is something there, apart from
         // HTML tags
         $form->addHtml(
             '<div>'.

@@ -585,6 +585,7 @@ if (typeof CKEDITOR !== 'undefined') {
         'asciimath',
         'asciisvg',
         'audio',
+        'blockimagepaste',
         'ckeditor_wiris',
         'dialogui',
         'glossary',

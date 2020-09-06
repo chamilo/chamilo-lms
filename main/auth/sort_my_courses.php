@@ -10,7 +10,7 @@ api_block_anonymous_users();
 
 $auth = new Auth();
 $user_course_categories = CourseManager::get_user_course_categories(api_get_user_id());
-$courses_in_category = $auth->getCoursesInCategory();
+$courses_in_category = $auth->getCoursesInCategory(false);
 
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
 $currentUrl = api_get_self();

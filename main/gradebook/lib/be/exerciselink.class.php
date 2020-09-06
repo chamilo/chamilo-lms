@@ -10,6 +10,8 @@
  */
 class ExerciseLink extends AbstractLink
 {
+    // This variable is used in the WSGetGradebookUserItemScore service, to check base course tests.
+    public $checkBaseExercises = false;
     private $course_info;
     private $exercise_table;
     private $exercise_data = [];
@@ -296,11 +298,27 @@ class ExerciseLink extends AbstractLink
                     //$lpId = $exercise->getLpBySession($sessionId);
                     $lpList = [];
                     foreach ($exercise->lpList as $lpData) {
-                        if ((int) $lpData['session_id'] == $sessionId) {
-                            $lpList[] = $lpData['lp_id'];
+                        if ($this->checkBaseExercises) {
+                            if ((int) $lpData['session_id'] == 0) {
+                                $lpList[] = $lpData['lp_id'];
+                            }
+                        } else {
+                            if ((int) $lpData['session_id'] == $sessionId) {
+                                $lpList[] = $lpData['lp_id'];
+                            }
                         }
                     }
-                    $lpCondition = ' orig_lp_id = 0 OR (orig_lp_id IN ("'.implode('", "', $lpList).'")) AND ';
+
+                    if (empty($lpList) && !empty($sessionId)) {
+                        // Check also if an LP was added in the base course.
+                        foreach ($exercise->lpList as $lpData) {
+                            if ((int) $lpData['session_id'] == 0) {
+                                $lpList[] = $lpData['lp_id'];
+                            }
+                        }
+                    }
+
+                    $lpCondition = ' (orig_lp_id = 0 OR (orig_lp_id IN ("'.implode('", "', $lpList).'"))) AND ';
                 }
 
                 $sql = "SELECT *

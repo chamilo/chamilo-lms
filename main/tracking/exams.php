@@ -131,7 +131,7 @@ if (!$exportToXLS) {
     echo '<h3>'.sprintf(get_lang('FilteringWithScoreX'), $filter_score).'%</h3>';
 }
 
-$html = '<table  class="data_table">';
+$html = '<table  class="data_table table table-responsive">';
 if ($global) {
     $html .= '<tr>';
     $html .= '<th>'.get_lang('Courses').'</th>';

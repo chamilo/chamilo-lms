@@ -9,12 +9,28 @@ require_once __DIR__.'/../inc/global.inc.php';
 api_block_anonymous_users();
 
 $exportCSV = isset($_GET['export']) && $_GET['export'] === 'csv' ? true : false;
+// Catch param export_csv from buttom
+$exportCSV = isset($_GET['export_csv']) && $exportCSV == false ? true : false;
 $display = isset($_GET['display']) ? Security::remove_XSS($_GET['display']) : null;
 
 $htmlHeadXtra[] = api_get_jqgrid_js();
 $htmlHeadXtra[] = '<script
 type="text/javascript"
-src="'.api_get_path(WEB_PUBLIC_PATH).'assets/jquery.easy-pie-chart/dist/jquery.easypiechart.js"></script>';
+src="'.api_get_path(WEB_PUBLIC_PATH).'assets/jquery.easy-pie-chart/dist/jquery.easypiechart.js"></script>
+<script type="text/javascript">
+// show hide a student based on BT#17648
+function showHideStudent(el){
+    if($("#"+el).hasClass("hidden")){
+        $("#"+el).removeClass("hidden");
+        $("#"+el+"_").find(".icon_add").addClass("hidden");
+        $("#"+el+"_").find(".icon_remove").removeClass("hidden");
+    }else{
+        $("#"+el).addClass("hidden")
+        $("#"+el+"_").find(".icon_add").removeClass("hidden");
+        $("#"+el+"_").find(".icon_remove").addClass("hidden");
+    }
+}
+</script>';
 
 // the section (for the tabs)
 $this_section = SECTION_TRACKING;
@@ -37,6 +53,18 @@ if ($exportCSV) {
     } elseif ('course' === $display) {
         MySpace::export_tracking_course_overview();
         exit;
+    } elseif ('company' === $display) {
+        // Getting dates
+        $startDate = isset($_GET['startDate']) ? $_GET['startDate'] : null;
+        $endDate = isset($_GET['endDate']) ? $_GET['endDate'] : null;
+        MySpace::exportCompanyResumeCsv($startDate, $endDate);
+        exit;
+    } elseif ('learningPath' === $display) {
+        // Getting dates
+        $startDate = isset($_GET['startDate']) ? $_GET['startDate'] : null;
+        $endDate = isset($_GET['endDate']) ? $_GET['endDate'] : null;
+        MySpace::displayResumeLP($startDate, $endDate, true);
+        exit;
     }
 }
 
@@ -58,6 +86,18 @@ switch ($display) {
         break;
     case 'course':
         MySpace::display_tracking_course_overview();
+        break;
+    case 'company':
+        // Getting dates
+        $startDate = isset($_GET['startDate']) ? $_GET['startDate'] : null;
+        $endDate = isset($_GET['endDate']) ? $_GET['endDate'] : null;
+        MySpace::displayResumeCompany($startDate, $endDate);
+        break;
+    case 'learningPath':
+        // Getting dates
+        $startDate = isset($_GET['startDate']) ? $_GET['startDate'] : null;
+        $endDate = isset($_GET['endDate']) ? $_GET['endDate'] : null;
+        MySpace::displayResumeLP($startDate, $endDate);
         break;
     case 'accessoverview':
         $courseId = isset($_GET['course_id']) ? (int) $_GET['course_id'] : 0;

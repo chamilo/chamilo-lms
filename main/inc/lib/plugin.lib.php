@@ -218,6 +218,7 @@ class AppPlugin
             'before_login',
             'buycourses',
             'card_game',
+            'check_extra_field_author_company',
             'clockworksms',
             'courseblock',
             'coursehomenotify',

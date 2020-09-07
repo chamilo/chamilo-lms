@@ -1094,7 +1094,7 @@ class MySpace
             //$form->addButtonSave(get_lang('Ok'), 'export');
             $form
                 ->addButton(
-                    'export',
+                    'export_csv',
                     get_lang('ExportAsCSV'),
                     'check',
                     'primary',
@@ -1266,7 +1266,7 @@ class MySpace
                 //$form->addButtonSave(get_lang('Ok'), 'export');
                 $form
                     ->addButton(
-                        'export',
+                        'export_csv',
                         get_lang('ExportAsCSV'),
                         'check',
                         'primary',

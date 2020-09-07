@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
+use Chamilo\CoreBundle\Entity\ExtraFieldSavedSearch;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\SkillRelUser;
 use Chamilo\CoreBundle\Entity\SkillRelUserComment;
@@ -853,7 +854,7 @@ class UserManager
         $em = Database::getManager();
 
         $criteria = ['user' => $user_id];
-        $skills = $em->getRepository('ChamiloCoreBundle:SkillRelUser')->findBy($criteria);
+        $skills = $em->getRepository(SkillRelUser::class)->findBy($criteria);
         if ($skills) {
             /** @var SkillRelUser $skill */
             foreach ($skills as $skill) {
@@ -870,7 +871,7 @@ class UserManager
 
         // ExtraFieldSavedSearch
         $criteria = ['user' => $user_id];
-        $searchList = $em->getRepository('ChamiloCoreBundle:ExtraFieldSavedSearch')->findBy($criteria);
+        $searchList = $em->getRepository(ExtraFieldSavedSearch::class)->findBy($criteria);
         if ($searchList) {
             foreach ($searchList as $search) {
                 $em->remove($search);
@@ -1091,8 +1092,7 @@ class UserManager
         }
 
         $userManager = self::getManager();
-        /** @var User $user */
-        $user = self::getRepository()->find($user_id);
+        $user = api_get_user_entity($user_id);
 
         if (empty($user)) {
             return false;

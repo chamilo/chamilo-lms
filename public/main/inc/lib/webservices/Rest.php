@@ -153,9 +153,7 @@ class Rest extends WebService
             return;
         }
 
-        $em = Database::getManager();
-        /** @var Course $course */
-        $course = $em->find('ChamiloCoreBundle:Course', $id);
+        $course = api_get_course_entity($id);
 
         if (!$course) {
             throw new Exception(get_lang('NoCourse'));
@@ -179,9 +177,7 @@ class Rest extends WebService
             return;
         }
 
-        $em = Database::getManager();
-        /** @var Session $session */
-        $session = $em->find('ChamiloCoreBundle:Session', $id);
+        $session = api_get_session_entity( $id);
 
         if (!$session) {
             throw new Exception(get_lang('NoSession'));
@@ -325,8 +321,7 @@ class Rest extends WebService
         $data = [];
 
         foreach ($courses as $courseInfo) {
-            /** @var Course $course */
-            $course = Database::getManager()->find('ChamiloCoreBundle:Course', $courseInfo['real_id']);
+            $course = api_get_course_entity($courseInfo['real_id']);
             $teachers = CourseManager::getTeacherListFromCourseCodeToString($course->getCode());
             $picturePath = CourseManager::getPicturePath($course, true)
                 ?: Display::return_icon('session_default.png', null, null, null, null, true);

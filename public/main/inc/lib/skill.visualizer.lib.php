@@ -113,7 +113,7 @@ class SkillVisualizer
             } else {
                 $brothers[$skill['parent_id']] = 1;
             }*/
-            $brother_count = $brothers[$skill['id']];
+            //$brother_count = $brothers[$skill['id']];
             $my_count = 0;
             $parent_x = 0;
             if (0 == $skill['parent_id']) {

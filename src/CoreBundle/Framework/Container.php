@@ -10,6 +10,8 @@ use Chamilo\CoreBundle\Repository\AccessUrlRepository;
 use Chamilo\CoreBundle\Repository\CourseCategoryRepository;
 use Chamilo\CoreBundle\Repository\CourseRepository;
 use Chamilo\CoreBundle\Repository\IllustrationRepository;
+use Chamilo\CoreBundle\Repository\SequenceRepository;
+use Chamilo\CoreBundle\Repository\SequenceResourceRepository;
 use Chamilo\CoreBundle\Repository\UserRepository;
 use Chamilo\CoreBundle\ToolChain;
 use Chamilo\CourseBundle\Repository\CAnnouncementAttachmentRepository;
@@ -517,6 +519,22 @@ class Container
     public static function getStudentPublicationCommentRepository()
     {
         return self::$container->get(CStudentPublicationCommentRepository::class);
+    }
+
+    /**
+     * @return SequenceResourceRepository
+     */
+    public static function getSequenceResourceRepository()
+    {
+        return self::$container->get(SequenceResourceRepository::class);
+    }
+
+    /**
+     * @return SequenceRepository
+     */
+    public static function getSequenceRepository()
+    {
+        return self::$container->get(SequenceRepository::class);
     }
 
     public static function getThematicRepository()

@@ -200,7 +200,7 @@ if ($attendanceEntity) {
     $interbreadcrumb[] = ['url' => '#', 'name' => $attendanceEntity->getName()];
 }
 
-if ('calendar_list' == $action || 'calendar_edit' == $action) {
+if ('calendar_list' === $action || 'calendar_edit' === $action) {
     $interbreadcrumb[] = [
         'url' => 'index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendanceId,
         'name' => $attendanceEntity->getName(),
@@ -211,7 +211,6 @@ if ('calendar_list' == $action || 'calendar_edit' == $action) {
 $allowToEdit = api_is_allowed_to_edit(null, true);
 $currentUrl = api_get_path(WEB_CODE_PATH).'attendance/index.php?'.api_get_cidreq();
 $content = '';
-
 switch ($action) {
     case 'attendance_list':
         if ($allowToEdit) {
@@ -685,7 +684,7 @@ switch ($action) {
 
         if (!$is_locked_attendance || api_is_platform_admin()) {
             $content .= '<div class="actions">';
-            if ('calendar_add' == $action) {
+            if ('calendar_add' === $action) {
                 $content .= '<a href="index.php?'.api_get_cidreq().'&action=calendar_list&attendance_id='.$attendanceId.'">'.
                     Display::return_icon('back.png', get_lang('Attendance calendar'), '', ICON_SIZE_MEDIUM).'</a>';
             } else {

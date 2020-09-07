@@ -251,8 +251,7 @@ switch ($action) {
         $currentUserId = api_get_user_id();
 
         $em = Database::getManager();
-
-        $course = $em->find('ChamiloCoreBundle:Course', $courseId);
+        $course = api_get_course_entity($courseId);
         $session = api_get_session_entity($sessionId);
 
         if (!$course || !$session) {

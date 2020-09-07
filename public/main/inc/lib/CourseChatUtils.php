@@ -654,12 +654,10 @@ class CourseChatUtils
             return array_merge($tutors, $students);
         }
 
-        /** @var Course $course */
-        $course = $em->find('ChamiloCoreBundle:Course', $this->courseId);
+        $course = api_get_course_entity($this->courseId);
 
         if ($this->sessionId) {
-            /** @var Session $session */
-            $session = $em->find('ChamiloCoreBundle:Session', $this->sessionId);
+            $session = api_get_session_entity($this->sessionId);
             $criteria = Criteria::create()->where(Criteria::expr()->eq('course', $course));
             $userIsCoach = api_is_course_session_coach($this->userId, $course->getId(), $session->getId());
 

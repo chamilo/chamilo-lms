@@ -189,7 +189,7 @@ if (false == api_is_coach_of_course_in_session($session_id)) {
 }
 
 $entityManager = Database::getManager();
-$session = $entityManager->find('ChamiloCoreBundle:Session', $session_id);
+$session = api_get_session_entity($session_id);
 $sessionTitleLink = api_get_configuration_value('courses_list_session_title_link');
 
 if (2 == $sessionTitleLink && 1 === $session->getNbrCourses()) {

@@ -230,6 +230,8 @@ class SocialManager extends UserManager
      */
     public static function get_list_web_path_user_invitation_by_user_id($user_id)
     {
+        return [];
+        // @todo
         $list_ids = self::get_list_invitation_of_friends_by_user_id($user_id);
         $list = [];
         foreach ($list_ids as $values_ids) {
@@ -1154,15 +1156,19 @@ class SocialManager extends UserManager
 
                 if (!empty($announcementsByCourse)) {
                     foreach ($announcementsByCourse as $announcement) {
-                        $courseInfo = api_get_course_info_by_id($announcement->getCId());
-                        $url = Display::url(
-                            Display::return_icon(
-                                'announcement.png',
-                                get_lang('Announcements')
-                            ).$courseInfo['name'],
-                            api_get_path(WEB_CODE_PATH).'announcements/announcements.php?cid='.$courseInfo['real_id']
-                        );
-                        $announcements[] = Display::tag('li', $url);
+                        $resourceLink = $announcement->getFirstResourceLink();
+                        $course = $resourceLink->getCourse();
+                        //$courseInfo = api_get_course_info_by_id($announcement->getCId());
+                        if ($course) {
+                            $url = Display::url(
+                                Display::return_icon(
+                                    'announcement.png',
+                                    get_lang('Announcements')
+                                ).$course->getName(),
+                                api_get_path(WEB_CODE_PATH).'announcements/announcements.php?cid='.$course->getId()
+                            );
+                            $announcements[] = Display::tag('li', $url);
+                        }
                     }
                 }
 
@@ -1348,6 +1354,8 @@ class SocialManager extends UserManager
      */
     public static function display_productions($user_id)
     {
+        return ;
+
         $webdir_array = UserManager::get_user_picture_path_by_id($user_id, 'web');
         $sysdir = UserManager::getUserPathById($user_id, 'system');
         $webdir = UserManager::getUserPathById($user_id, 'web');
@@ -1663,8 +1671,8 @@ class SocialManager extends UserManager
             $res = Database::query($oneQuery);
             $em = Database::getManager();
             if (Database::num_rows($res) > 0) {
-                $repo = $em->getRepository('ChamiloCourseBundle:CForumPost');
-                $repoThread = $em->getRepository('ChamiloCourseBundle:CForumThread');
+                $repo = $em->getRepository(CForumPost::class);
+                $repoThread = $em->getRepository(CForumThread::class);
                 $groups = [];
                 $userGroup = new UserGroup();
                 $urlGroup = api_get_path(WEB_CODE_PATH).'social/group_view.php?id=';
@@ -1692,12 +1700,12 @@ class SocialManager extends UserManager
                         $thread = $repoThread->find($row['thread_id']);
                         if ($post && $thread) {
                             $courseInfo = api_get_course_info_by_id($post->getCId());
-                            $row['post_title'] = $post->getForumId();
+                            $row['post_title'] = $post->getForum()->getForumTitle();
                             $row['forum_title'] = $thread->getThreadTitle();
                             $row['thread_url'] = api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.http_build_query([
                                     'cid' => $courseInfo['real_id'],
-                                    'forum' => $post->getForumId(),
-                                    'thread' => $post->getThreadId(),
+                                    'forum' => $post->getForum()->getIid(),
+                                    'thread' => $post->getThread()->getIid(),
                                     'post_id' => $post->getIid(),
                                 ]).'#post_id_'.$post->getIid();
                         }

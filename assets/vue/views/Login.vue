@@ -10,19 +10,19 @@
             @submit="onSubmit"
           >
             <p class="h4 text-center mb-4">
-              Sign in
+              {{ $t('Sing in') }}
             </p>
             <div class="grey-text">
               <b-form-input
                 v-model="login"
-                placeholder="Your login"
+                :placeholder="$t('Login')"
                 icon="envelope"
                 type="text"
                 required
               />
               <b-form-input
                 v-model="password"
-                placeholder="Your password"
+                :placeholder=" $t('Password') "
                 icon="lock"
                 type="password"
                 required
@@ -34,7 +34,7 @@
                 type="submit"
                 variant="primary"
               >
-                Login
+                {{ $t('Login') }}
               </b-button>
             </div>
           </form>
@@ -46,6 +46,7 @@
 </template>
 
 <script>
+    import { mapGetters } from 'vuex';
     import ErrorMessage from "../components/ErrorMessage";
 
     export default {
@@ -60,15 +61,11 @@
             };
         },
         computed: {
-            isLoading() {
-                return this.$store.getters["security/isLoading"];
-            },
-            hasError() {
-                return this.$store.getters["security/hasError"];
-            },
-            error() {
-                return this.$store.getters["security/error"];
-            }
+            ...mapGetters({
+                'isLoading': 'security/isLoading',
+                'hasError': 'security/hasError',
+                'error': 'security/error',
+            }),
         },
         created() {
             let redirect = this.$route.query.redirect;
@@ -76,7 +73,7 @@
                 if (typeof redirect !== "undefined") {
                     this.$router.push({path: redirect});
                 } else {
-                    this.$router.push({path: "/home"});
+                    this.$router.push({path: "/courses"});
                 }
             }
         },
@@ -93,7 +90,7 @@
                     if (typeof redirect !== "undefined") {
                         this.$router.push({path: redirect});
                     } else {
-                        this.$router.push({path: "/home"});
+                        this.$router.push({path: "/courses"});
                     }
                 }
             }

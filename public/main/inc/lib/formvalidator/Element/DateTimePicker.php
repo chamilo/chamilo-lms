@@ -47,9 +47,24 @@ class DateTimePicker extends HTML_QuickForm_text
             $label = $label[0];
         }
 
-        $resetFieldX = sprintf(get_lang('Reset %s'), $label);
+        //$resetFieldX = sprintf(get_lang('Reset %s'), $label);
 
         return '
+            <div id="'.$id.'" class="input-group mb-3">
+                <input '.$this->_getAttrString($this->_attributes).'
+                    class="form-control" type="text" value="'.$value.'" data-input>
+                <div class="input-group-prepend" id="button-addon3">
+                    <button class="btn btn-outline-secondary"  type="button" data-toggle>
+                        <i class="fas fa-calendar-alt"></i>
+                    </button>
+                    <button class="btn btn-outline-secondary" type="button" data-clear>
+                        <i class="fas fa-times"></i>
+                    </button>
+              </div>
+            </div>
+        '.$this->getElementJS();
+
+        /*return '
             <div class="input-group mb-3" id="date_time_wrapper_'.$id.'">
                 <span class="input-group-prepend">
                     <input '.$this->_getAttrString($this->_attributes).'>
@@ -64,7 +79,7 @@ class DateTimePicker extends HTML_QuickForm_text
                     </button>
                 </div>
             </div>
-        '.$this->getElementJS();
+        '.$this->getElementJS();*/
     }
 
     /**
@@ -106,9 +121,7 @@ class DateTimePicker extends HTML_QuickForm_text
                     </label>
                     <div class="col-sm-'.$size[1].'">
                         {icon}
-
                         {element}
-
                         <!-- BEGIN label_2 -->
                             <p class="help-block">{label_2}</p>
                         <!-- END label_2 -->
@@ -142,11 +155,22 @@ class DateTimePicker extends HTML_QuickForm_text
         //timeFormat: 'hh:mm'
         $js .= "<script>
             $(function() {
+                var config = {
+                    altInput: true,
+                    altFormat: '".get_lang('F d, Y')." ".get_lang('at')." H:i',
+                    enableTime: true,
+                    dateFormat: 'Y-m-d H:i',
+                    time_24hr: true,
+                    wrap: true
+                };
+                $('#{$id}').flatpickr(config);
+
+                /*
+
                 var txtDateTime = $('#$id'),
                     inputGroup = txtDateTime.parents('.input-group'),
                     txtDateTimeAlt = $('#{$id}_alt'),
                     txtDateTimeAltText = $('#{$id}_alt_text');
-
                 txtDateTime
                     .hide()
                     .datetimepicker({
@@ -168,7 +192,7 @@ class DateTimePicker extends HTML_QuickForm_text
                     .on('change', function (e) {
                         txtDateTimeAltText.text(txtDateTimeAlt.val());
                     });
-                    
+
                 txtDateTimeAltText.on('click', function () {
                     txtDateTime.datepicker('show');
                 });
@@ -181,6 +205,7 @@ class DateTimePicker extends HTML_QuickForm_text
                         $('#$id, #{$id}_alt').val('');
                         $('#{$id}_alt_text').html('');
                     });
+                */
             });
         </script>";
 

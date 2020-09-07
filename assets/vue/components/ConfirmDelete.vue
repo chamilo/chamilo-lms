@@ -1,8 +1,8 @@
 <template>
-  <v-dialog
+  <b-modal
     v-model="show"
     persistent
-    width="300"
+    hide-footer
   >
     <b-card>
       <b-card-text>{{ $t('Are you sure you want to delete this item?') }}</b-card-text>
@@ -20,7 +20,7 @@
         {{ $t('Cancel') }}
       </b-button>
     </b-card>
-  </v-dialog>
+  </b-modal>
 </template>
 
 <script>

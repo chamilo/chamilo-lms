@@ -906,7 +906,7 @@ class GroupManager
 
         $table_group = Database::get_course_table(TABLE_GROUP);
         $table_group_cat = Database::get_course_table(TABLE_GROUP_CATEGORY);
-        $cat_id = intval($cat_id);
+        $cat_id = (int) $cat_id;
         $sql = "SELECT iid FROM $table_group
                 WHERE c_id = $course_id AND category_id='".$cat_id."'";
         $res = Database::query($sql);
@@ -922,7 +922,7 @@ class GroupManager
             }
         }
         $sql = "DELETE FROM $table_group_cat
-                WHERE c_id = $course_id  AND id='".$cat_id."'";
+                WHERE c_id = $course_id  AND iid='".$cat_id."'";
         Database::query($sql);
 
         return true;

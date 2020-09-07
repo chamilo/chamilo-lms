@@ -82,7 +82,7 @@ class StudentPublicationLink extends AbstractLink
         }
         $em = Database::getManager();
         $sessionId = $this->get_session_id();
-        $session = $em->find('ChamiloCoreBundle:Session', $sessionId);
+        $session = api_get_session_entity($sessionId);
         /*
         if (empty($session_id)) {
             $session_condition = api_get_session_condition(0, true);
@@ -128,7 +128,7 @@ class StudentPublicationLink extends AbstractLink
         $id = $data['id'];
 
         $em = Database::getManager();
-        $session = $em->find('ChamiloCoreBundle:Session', $this->get_session_id());
+        $session = api_get_session_entity($this->get_session_id());
         $results = $em
             ->getRepository('ChamiloCourseBundle:CStudentPublication')
             ->findBy([

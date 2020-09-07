@@ -254,7 +254,6 @@ abstract class AbstractResource
         $this->resourceLinkListFromEntity = $resourceLinkList;
     }
 
-
     public function hasParentResourceNode(): bool
     {
         return null !== $this->parentResourceNode;

@@ -58,8 +58,7 @@ if ($form->validate()) {
     }
 
     foreach ($values['courses_to_avoid'] as $courseId) {
-        /** @var Course $course */
-        $course = $em->find('ChamiloCoreBundle:Course', $courseId);
+        $course = api_get_course_entity($courseId);
 
         if (!$session->getUserInCourse($user, $course)->count()) {
             continue;
@@ -71,8 +70,7 @@ if ($form->validate()) {
     $coursesToResubscribe = array_diff($avoidedCourseIds, $values['courses_to_avoid']);
 
     foreach ($coursesToResubscribe as $courseId) {
-        /** @var Course $course */
-        $course = $em->find('ChamiloCoreBundle:Course', $courseId);
+        $course = api_get_course_entity($courseId);
 
         if ($session->getUserInCourse($user, $course)->count()) {
             continue;

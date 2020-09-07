@@ -146,13 +146,13 @@ export default {
           sortBy: 'title',
           sortDesc: false,
           fields: [
-                {label: 'Title', key: 'resourceNode.title', sortable: true},
-                {label: 'Modified', key: 'resourceNode.updatedAt', sortable: true},
-                {label: 'Size', key: 'resourceNode.resourceFile.size', sortable: true},
-                {label: 'Actions', key: 'action', sortable: false}
+                {label:  this.$i18n.t('Title'), key: 'resourceNode.title', sortable: true},
+                {label: this.$i18n.t('Modified'), key: 'resourceNode.updatedAt', sortable: true},
+                {label: this.$i18n.t('Size'), key: 'resourceNode.resourceFile.size', sortable: true},
+                {label: this.$i18n.t('Actions'), key: 'action', sortable: false}
             ],
             selected: [],
-            pageOptions: [5, 10, 15, 20],
+            pageOptions: [5, 10, 15, 20, this.$i18n.t('All')],
         };
     },
     created() {

@@ -84,6 +84,10 @@ class CourseListener
                 $em = $container->get('doctrine')->getManager();
                 $course = $em->getRepository(Course::class)->find($courseId);
 
+                if (null === $course) {
+                    throw new NotFoundHttpException($translator->trans('Course does not exist'));
+                }
+
                 //dump("Course loaded from DB $courseId");
                 $courseInfo = api_get_course_info($course->getCode());
             }

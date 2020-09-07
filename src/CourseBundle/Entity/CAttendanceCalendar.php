@@ -12,7 +12,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(
  *  name="c_attendance_calendar",
  *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"}),
  *      @ORM\Index(name="attendance_id", columns={"attendance_id"}),
  *      @ORM\Index(name="done_attendance", columns={"done_attendance"})
  *  }
@@ -29,13 +28,6 @@ class CAttendanceCalendar
      * @ORM\GeneratedValue
      */
     protected $iid;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="c_id", type="integer")
-     */
-    protected $cId;
 
     /**
      * @var int
@@ -128,29 +120,5 @@ class CAttendanceCalendar
     public function getDoneAttendance()
     {
         return $this->doneAttendance;
-    }
-
-    /**
-     * Set cId.
-     *
-     * @param int $cId
-     *
-     * @return CAttendanceCalendar
-     */
-    public function setCId($cId)
-    {
-        $this->cId = $cId;
-
-        return $this;
-    }
-
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
-    {
-        return $this->cId;
     }
 }

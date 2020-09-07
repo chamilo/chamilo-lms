@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt*/
 
+use Chamilo\CoreBundle\Entity\AccessUrlRelSession;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\CoreBundle\Entity\SequenceResource;
@@ -13,6 +14,7 @@ use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
 use Chamilo\CourseBundle\Manager\SettingsManager;
 use ChamiloSession as Session;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManager;
 
 /**
@@ -564,13 +566,13 @@ class CourseManager
         if (api_get_configuration_value('catalog_course_subscription_in_user_s_session')) {
             // Also unlink the course from the users' currently accessible sessions
             /** @var Course $course */
-            $course = Database::getManager()->getRepository('ChamiloCoreBundle:Course')->findOneBy([
+            $course = Container::getCourseRepository()->findOneBy([
                 'code' => $course_code,
             ]);
             if (is_null($course)) {
                 return false;
             }
-            /** @var Chamilo\UserBundle\Entity\User $user */
+            /** @var Chamilo\CoreBundle\Entity\User $user */
             foreach (UserManager::getRepository()->matching(
                 Criteria::create()->where(Criteria::expr()->in('id', $userList))
             ) as $user) {
@@ -609,7 +611,7 @@ class CourseManager
             return false;
         }
 
-        $course = Database::getManager()->getRepository('ChamiloCoreBundle:Course')->findOneBy(['code' => $courseCode]);
+        $course = Container::getCourseRepository()->findOneBy(['code' => $courseCode]);
 
         if (null === $course) {
             return false;
@@ -647,9 +649,7 @@ class CourseManager
         $userId = api_get_user_id();
 
         if (api_get_configuration_value('catalog_course_subscription_in_user_s_session')) {
-            /**
-             * @var Chamilo\UserBundle\Entity\User
-             */
+            /** @var \Chamilo\CoreBundle\Entity\User $user */
             $user = UserManager::getRepository()->find($userId);
             $sessions = $user->getCurrentlyAccessibleSessions();
             if (empty($sessions)) {
@@ -689,7 +689,8 @@ class CourseManager
                 $session->setCoachAccessEndDate($endDate);
                 $session->setDisplayEndDate($endDate);
                 $session->setSendSubscriptionNotification(false);
-                $session->setSessionAdminId(api_get_configuration_value('session_automatic_creation_user_id') ?: 1);
+                $adminId = api_get_configuration_value('session_automatic_creation_user_id') ?: 1;
+                $session->setSessionAdmin(api_get_user_entity($adminId));
                 $session->addUserInSession(0, $user);
                 Database::getManager()->persist($session);
                 try {
@@ -704,9 +705,9 @@ class CourseManager
 
                     return false;
                 }
-                $accessUrlRelSession = new \Chamilo\CoreBundle\Entity\AccessUrlRelSession();
-                $accessUrlRelSession->setAccessUrlId(api_get_current_access_url_id());
-                $accessUrlRelSession->setSessionId($session->getId());
+                $accessUrlRelSession = new AccessUrlRelSession();
+                $accessUrlRelSession->setUrl(api_get_url_entity());
+                $accessUrlRelSession->setSession($session);
                 Database::getManager()->persist($accessUrlRelSession);
                 try {
                     Database::getManager()->flush();
@@ -1273,15 +1274,13 @@ class CourseManager
 
         if (api_get_configuration_value('catalog_course_subscription_in_user_s_session')) {
             // with this option activated, only check whether the course is in one of the users' sessions
-            $course = Database::getManager()->getRepository('ChamiloCoreBundle:Course')->findOneBy([
+            $course = Container::getCourseRepository()->findOneBy([
                 'code' => $course_code,
             ]);
             if (is_null($course)) {
                 return false;
             }
-            /**
-             * @var \Chamilo\UserBundle\Entity\User
-             */
+            /** @var \Chamilo\CoreBundle\Entity\User $user */
             $user = UserManager::getRepository()->find($user_id);
             if (is_null($user)) {
                 return false;
@@ -2537,7 +2536,7 @@ class CourseManager
         $courseEntity = api_get_course_entity($courseId);
 
         /** @var SequenceResourceRepository $repo */
-        $repo = Database::getManager()->getRepository('ChamiloCoreBundle:SequenceResource');
+        $repo = Database::getManager()->getRepository(SequenceResource::class);
         $sequenceResource = $repo->findRequirementForResource(
             $courseId,
             SequenceResource::COURSE_TYPE
@@ -4399,7 +4398,7 @@ class CourseManager
         $params['link'] = $session_url;
         $entityManager = Database::getManager();
         /** @var SequenceResourceRepository $repo */
-        $repo = $entityManager->getRepository('ChamiloCoreBundle:SequenceResource');
+        $repo = $entityManager->getRepository(SequenceResource::class);
 
         $sequences = $repo->getRequirements($course_info['real_id'], SequenceResource::COURSE_TYPE);
         $sequenceList = $repo->checkRequirementsForUser($sequences, SequenceResource::COURSE_TYPE, $user_id);
@@ -4527,11 +4526,9 @@ class CourseManager
             if (Skill::isAllowed($user_id, false)) {
                 $em = Database::getManager();
                 $objUser = api_get_user_entity($user_id);
-                /** @var Course $objCourse */
-                $objCourse = $em->find('ChamiloCoreBundle:Course', $course['real_id']);
-                $objSession = $em->find('ChamiloCoreBundle:Session', $session_id);
-
-                $skill = $em->getRepository('ChamiloCoreBundle:Skill')->getLastByUser($objUser, $objCourse, $objSession);
+                $objCourse = api_get_course_entity($course['real_id']);
+                $objSession = api_get_session_entity($session_id);
+                $skill = $em->getRepository(\Chamilo\CoreBundle\Entity\Skill::class)->getLastByUser($objUser, $objCourse, $objSession);
 
                 $output['skill'] = null;
                 if ($skill) {
@@ -5589,7 +5586,7 @@ class CourseManager
                         $courseUserData = $teacherBackup[$userId][$course_code];
                         $userCourseCategory = $courseUserData['user_course_cat'];
                         if ($logger) {
-                            $logger->addInfo("Recovering user_course_cat: $userCourseCategory");
+                            $logger->debug("Recovering user_course_cat: $userCourseCategory");
                         }
                     }
 
@@ -5611,7 +5608,7 @@ class CourseManager
             $sessions = SessionManager::get_session_by_course($courseId);
             if (!empty($sessions)) {
                 if ($logger) {
-                    $logger->addInfo("Edit teachers in sessions");
+                    $logger->debug("Edit teachers in sessions");
                 }
                 foreach ($sessions as $session) {
                     $sessionId = $session['id'];
@@ -5619,7 +5616,7 @@ class CourseManager
                     if ($deleteSessionTeacherNotInList) {
                         foreach ($teachers as $userId) {
                             if ($logger) {
-                                $logger->addInfo("Set coach #$userId in session #$sessionId of course #$courseId ");
+                                $logger->debug("Set coach #$userId in session #$sessionId of course #$courseId ");
                             }
                             SessionManager::set_coach_to_course_session(
                                 $userId,
@@ -5636,7 +5633,7 @@ class CourseManager
                         if (!empty($teachersToDelete)) {
                             foreach ($teachersToDelete as $userId) {
                                 if ($logger) {
-                                    $logger->addInfo("Delete coach #$userId in session #$sessionId of course #$courseId ");
+                                    $logger->debug("Delete coach #$userId in session #$sessionId of course #$courseId ");
                                 }
                                 SessionManager::set_coach_to_course_session(
                                     $userId,
@@ -5650,7 +5647,7 @@ class CourseManager
                         // Add new teachers only
                         foreach ($teachers as $userId) {
                             if ($logger) {
-                                $logger->addInfo("Add coach #$userId in session #$sessionId of course #$courseId ");
+                                $logger->debug("Add coach #$userId in session #$sessionId of course #$courseId ");
                             }
                             SessionManager::set_coach_to_course_session(
                                 $userId,
@@ -6787,7 +6784,7 @@ class CourseManager
      *
      * @return string HTML string
      */
-    public static function returnDescriptionButton($course)
+    public static function returnDescriptionButton($course, $url = '')
     {
         if (empty($course)) {
             return '';

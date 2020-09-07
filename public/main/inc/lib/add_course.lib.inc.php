@@ -480,7 +480,6 @@ class AddCourse
             $toolIntro = new CToolIntro();
             $toolIntro
                 ->setCId($course_id)
-                ->setId(TOOL_COURSE_HOMEPAGE)
                 ->setSessionId(0)
                 ->setIntroText($intro_text);
             $manager->persist($toolIntro);
@@ -488,7 +487,6 @@ class AddCourse
             $toolIntro = new CToolIntro();
             $toolIntro
                 ->setCId($course_id)
-                ->setId(TOOL_STUDENTPUBLICATION)
                 ->setSessionId(0)
                 ->setIntroText(get_lang('This page allows users and groups to publish documents.'));
             $manager->persist($toolIntro);
@@ -496,7 +494,6 @@ class AddCourse
             $toolIntro = new CToolIntro();
             $toolIntro
                 ->setCId($course_id)
-                ->setId(TOOL_WIKI)
                 ->setSessionId(0)
                 ->setIntroText(get_lang('The word Wiki is short for WikiWikiWeb. Wikiwiki is a Hawaiian word, meaning "fast" or "speed". In a wiki, people write pages together. If one person writes something wrong, the next person can correct it. The next person can also add something new to the page. Because of this, the pages improve continuously.'));
             $manager->persist($toolIntro);

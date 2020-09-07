@@ -415,29 +415,29 @@ class SortableTable extends HTML_Table
 
             if (count($this->form_actions) > 0) {
                 $html .= '<div class="btn-group" role="group">';
-                $html .= '<a 
-                    class="btn btn-outline-primary" 
-                    href="?'.$params.'&amp;'.$this->param_prefix.'selectall=1" 
+                $html .= '<a
+                    class="btn btn-outline-primary"
+                    href="?'.$params.'&amp;'.$this->param_prefix.'selectall=1"
                     onclick="javascript: setCheckbox(true, \''.$table_id.'\'); return false;">'.get_lang('Select all').'</a>';
-                $html .= '<a 
-                    class="btn btn-outline-primary" 
-                    href="?'.$params.'" 
+                $html .= '<a
+                    class="btn btn-outline-primary"
+                    href="?'.$params.'"
                     onclick="javascript: setCheckbox(false, \''.$table_id.'\'); return false;">'.get_lang('UnSelect all').'</a> ';
                 $html .= '<div class="btn-group" role="group">
-                            <button 
-                                id="'.$table_id.'_actions" 
+                            <button
+                                id="'.$table_id.'_actions"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                                class="btn btn-outline-primary dropdown-toggle" 
+                                class="btn btn-outline-primary dropdown-toggle"
                                 onclick="javascript:return false;">'.
                                 get_lang('Detail').'
                             </button>
                           ';
                 $html .= '<div class="dropdown-menu" aria-labelledby="'.$table_id.'_actions" >';
                 foreach ($this->form_actions as $action => &$label) {
-                    $html .= '<a 
-                        class="dropdown-item" 
-                        data-action ="'.$action.'" 
-                        href="#" 
+                    $html .= '<a
+                        class="dropdown-item"
+                        data-action ="'.$action.'"
+                        href="#"
                         onclick="javascript:action_click(this, \''.$table_id.'\');">'.$label.'</a>';
                 }
                 $html .= '</div>';
@@ -881,7 +881,7 @@ class SortableTable extends HTML_Table
      * @param string $label         The label
      * @param bool   $sortable      Is the table sortable by this column? (defatult
      *                              = true)
-     * @param string $th_attributes Additional attributes for the th-tag of the
+     * @param array  $th_attributes Additional attributes for the th-tag of the
      *                              table header
      * @param string $td_attributes Additional attributes for the td-tags of the
      *                              column

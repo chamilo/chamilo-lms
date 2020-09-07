@@ -2217,4 +2217,64 @@ class User implements UserInterface, EquatableInterface
 
         return $this->courseGroupsAsTutor->matching($criteria);
     }
+
+
+    /**
+     * Retreives this user's related sessions.
+     *
+     * @param int $relationType \Chamilo\CoreBundle\Entity\SessionRelUser::relationTypeList key
+     *
+     * @return Session[]
+     */
+    public function getSessions($relationType)
+    {
+        $sessions = [];
+        foreach ($this->sessions as $sessionRelUser) {
+            if ($sessionRelUser->getRelationType() == $relationType) {
+                $sessions[] = $sessionRelUser->getSession();
+            }
+        }
+
+        return $sessions;
+    }
+
+    /**
+     * Retreives this user's related student sessions.
+     *
+     * @return Session[]
+     */
+    public function getStudentSessions()
+    {
+        return $this->getSessions(0);
+    }
+
+    /**
+     * Retreives this user's related DRH sessions.
+     *
+     * @return Session[]
+     */
+    public function getDRHSessions()
+    {
+        return $this->getSessions(1);
+    }
+
+    /**
+     * Get this user's related accessible sessions of a type, student by default.
+     *
+     * @param int $relationType \Chamilo\CoreBundle\Entity\SessionRelUser::relationTypeList key
+     *
+     * @return Session[]
+     */
+    public function getCurrentlyAccessibleSessions($relationType = 0)
+    {
+        $sessions = [];
+        foreach ($this->getSessions($relationType) as $session) {
+            if ($session->isCurrentlyAccessible()) {
+                $sessions[] = $session;
+            }
+        }
+
+        return $sessions;
+    }
+
 }

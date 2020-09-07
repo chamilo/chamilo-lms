@@ -6,10 +6,12 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\SessionCategory;
 use Chamilo\CoreBundle\Entity\SessionRelCourse;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\SessionRelUser;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\SequenceRepository;
 use ExtraField as ExtraFieldModel;
 use Monolog\Logger;
@@ -58,8 +60,7 @@ class SessionManager
             return [];
         }
 
-        /** @var Session $session */
-        $session = $em->find('ChamiloCoreBundle:Session', $id);
+        $session = api_get_session_entity($id);
 
         if (!$session) {
             return [];
@@ -775,15 +776,15 @@ class SessionManager
 
             // Cleaning double selects.
             foreach ($session as $key => &$value) {
-                if (isset($optionsByDouble[$key]) || isset($optionsByDouble[$key.'_second'])) {
+                /*if (isset($optionsByDouble[$key]) || isset($optionsByDouble[$key.'_second'])) {
                     $options = explode('::', $value);
-                }
+                }*/
                 $original_key = $key;
                 if (false !== strpos($key, '_second')) {
                     $key = str_replace('_second', '', $key);
                 }
 
-                if (isset($optionsByDouble[$key]) &&
+                /*if (isset($optionsByDouble[$key]) &&
                     isset($options[0]) &&
                     isset($optionsByDouble[$key][$options[0]])
                 ) {
@@ -792,7 +793,7 @@ class SessionManager
                     } else {
                         $value = $optionsByDouble[$key][$options[1]]['option_display_text'];
                     }
-                }
+                }*/
             }
 
             $categoryName = isset($orderedCategories[$session['session_category_id']]) ? $orderedCategories[$session['session_category_id']] : '';
@@ -1710,7 +1711,7 @@ class SessionManager
                 ;
 
                 if (!empty($sessionAdminId)) {
-                    $sessionEntity->setSessionAdminId($sessionAdminId);
+                    $sessionEntity->setSessionAdmin(api_get_user_entity($sessionAdminId));
                 }
 
                 if (!empty($startDate)) {
@@ -1738,7 +1739,7 @@ class SessionManager
                 }
 
                 if (!empty($sessionCategoryId)) {
-                    $category = $em->getRepository('ChamiloCoreBundle:SessionCategory')->find($sessionCategoryId);
+                    $category = $em->getRepository(SessionCategory::class)->find($sessionCategoryId);
                     $sessionEntity->setCategory($category);
                 } else {
                     $sessionEntity->setCategory(null);
@@ -1803,8 +1804,7 @@ class SessionManager
         $em = Database::getManager();
         $userId = api_get_user_id();
 
-        /** @var SequenceRepository $repo */
-        $repo = Database::getManager()->getRepository('ChamiloCoreBundle:SequenceResource');
+        $repo = Container::getSequenceResourceRepository();
         $sequenceResource = $repo->findRequirementForResource(
             $sessionId,
             SequenceResource::SESSION_TYPE
@@ -2112,7 +2112,7 @@ class SessionManager
                         FROM $tbl_session_rel_course_rel_user
                         WHERE session_id = $sessionId AND c_id = $courseId AND status<>2";
                 $rs = Database::query($sql);
-                list($nbr_users) = Database::fetch_array($rs);
+                [$nbr_users] = Database::fetch_array($rs);
                 // update the session-course relation to add the users total
                 $sql = "UPDATE $tbl_session_rel_course SET nbr_users = $nbr_users
                         WHERE session_id = $sessionId AND c_id = $courseId";
@@ -2336,7 +2336,7 @@ class SessionManager
                         c_id = $courseId AND
                         status <> 2";
             $result = Database::query($sql);
-            list($userCount) = Database::fetch_array($result);
+            [$userCount] = Database::fetch_array($result);
 
             // update the session-course relation to add the users total
             $sql = "UPDATE $tableSessionCourse
@@ -2438,7 +2438,7 @@ class SessionManager
                 $userInfo = api_get_user_info($enreg_user);
                 foreach ($forums as $forum) {
                     $forumId = $forum['iid'];
-                    set_notification('forum', $forumId, false, $userInfo, $courseInfo);
+                    //set_notification('forum', $forumId, false, $userInfo, $courseInfo);
                 }
             }
 
@@ -2471,7 +2471,7 @@ class SessionManager
                 FROM $tbl_session_rel_course_rel_user
                 WHERE session_id = $session_id AND c_id = $courseId AND status <> 2";
         $rs = Database::query($sql);
-        list($nbr_users) = Database::fetch_array($rs);
+        [$nbr_users] = Database::fetch_array($rs);
         // update the session-course relation to add the users total
         $sql = "UPDATE $tbl_session_rel_course
                 SET nbr_users = $nbr_users
@@ -2598,10 +2598,7 @@ class SessionManager
             return false;
         }
 
-        $em = Database::getManager();
-
-        /** @var Session $session */
-        $session = $em->find('ChamiloCoreBundle:Session', $sessionId);
+        $session = api_get_session_entity( $sessionId);
 
         if (!$session) {
             return false;
@@ -4434,7 +4431,7 @@ class SessionManager
     {
         $em = Database::getManager();
         $subscriptions = $em
-            ->getRepository('ChamiloCoreBundle:SessionRelUser')
+            ->getRepository(SessionRelUser::class)
             ->findBy(['session' => $sessionId, 'user' => $userId]);
 
         /** @var SessionRelUser $subscription */
@@ -4638,7 +4635,8 @@ class SessionManager
                                 $flat_list = $list->get_flat_list();
                                 if (!empty($flat_list)) {
                                     foreach ($flat_list as $lp_id => $data) {
-                                        api_item_property_update(
+                                        // @todo fix
+                                        /*api_item_property_update(
                                             $course_info,
                                             TOOL_LEARNPATH,
                                             $lp_id,
@@ -4649,7 +4647,7 @@ class SessionManager
                                             0,
                                             0,
                                             $sid
-                                        );
+                                        );*/
                                     }
                                 }
                                 $quiz_table = Database::get_course_table(TABLE_QUIZ_TEST);
@@ -5036,9 +5034,9 @@ class SessionManager
                 $session_name = $enreg['SessionName'];
 
                 if ($debug) {
-                    $logger->addInfo('---------------------------------------');
-                    $logger->addInfo("Sessions - Start process of session: $session_name");
-                    $logger->addInfo('---------------------------------------');
+                    $logger->debug('---------------------------------------');
+                    $logger->debug("Sessions - Start process of session: $session_name");
+                    $logger->debug('---------------------------------------');
                 }
 
                 // Default visibility
@@ -5138,7 +5136,7 @@ class SessionManager
                 $deleteOnlyCourseCoaches = false;
                 if (1 == count($courses)) {
                     if ($logger) {
-                        $logger->addInfo('Only one course delete old coach list');
+                        $logger->debug('Only one course delete old coach list');
                     }
                     $deleteOnlyCourseCoaches = true;
                 }
@@ -5185,14 +5183,14 @@ class SessionManager
                     if ($debug) {
                         if ($session_id) {
                             foreach ($enreg as $key => $value) {
-                                if ('extra_' == substr($key, 0, 6)) { //an extra field
+                                if ('extra_' === substr($key, 0, 6)) { //an extra field
                                     self::update_session_extra_field_value($session_id, substr($key, 6), $value);
                                 }
                             }
-                            $logger->addInfo("Session created: #$session_id - $session_name");
+                            $logger->debug("Session created: #$session_id - $session_name");
                         } else {
                             $message = "Sessions - Session NOT created: $session_name";
-                            $logger->addError($message);
+                            $logger->debug($message);
                             $report[] = $message;
                         }
                     }
@@ -5216,7 +5214,7 @@ class SessionManager
                         if ($sessionExistsWithName) {
                             if ($debug) {
                                 $message = "Skip Session - Trying to update a session, but name already exists: $session_name";
-                                $logger->addError($message);
+                                $logger->debug($message);
                                 $report[] = $message;
                             }
                             continue;
@@ -5251,7 +5249,7 @@ class SessionManager
                                 }
                             }
                             if ($debug) {
-                                $logger->addInfo("Sessions - #$session_id created: $session_name");
+                                $logger->debug("Sessions - #$session_id created: $session_name");
                             }
 
                             // Delete session-user relation only for students
@@ -5311,7 +5309,7 @@ class SessionManager
                                     $sessionName = Database::escape_string($enreg['SessionName']);
                                     $sql = "UPDATE $tbl_session SET name = '$sessionName' WHERE id = $session_id";
                                     Database::query($sql);
-                                    $logger->addInfo(
+                                    $logger->debug(
                                         "Session #$session_id name IS updated with: '$session_name' External id: ".$enreg['extra_'.$extraFieldId]
                                     );
                                 } else {
@@ -5322,13 +5320,13 @@ class SessionManager
                                     if (true === $sessionExistsBesidesMe) {
                                         if ($debug) {
                                             $message = "Skip Session. Error when update session Session #$session_id Name: '$session_name'. Other session has the same name. External id: ".$enreg['extra_'.$extraFieldId];
-                                            $logger->addError($message);
+                                            $logger->debug($message);
                                             $report[] = $message;
                                         }
                                         continue;
                                     } else {
                                         if ($debug) {
-                                            $logger->addInfo(
+                                            $logger->debug(
                                                 "Session #$session_id name is not updated because it didn't change (but update of other session values will continue) Name: '$session_name' External id: ".$enreg['extra_'.$extraFieldId]
                                             );
                                         }
@@ -5341,7 +5339,7 @@ class SessionManager
                         }
 
                         if ($debug) {
-                            $logger->addInfo("Session #$session_id to be updated: '$session_name'");
+                            $logger->debug("Session #$session_id to be updated: '$session_name'");
                         }
 
                         if ($session_id) {
@@ -5372,7 +5370,7 @@ class SessionManager
                             }
 
                             if ($debug) {
-                                $logger->addInfo("Session updated #$session_id");
+                                $logger->debug("Session updated #$session_id");
                             }
 
                             // Delete session-user relation only for students
@@ -5402,7 +5400,7 @@ class SessionManager
                             }
                         } else {
                             if ($debug) {
-                                $logger->addError(
+                                $logger->debug(
                                     "Sessions - Session not found"
                                 );
                             }
@@ -5448,7 +5446,7 @@ class SessionManager
                                     registered_at = '".api_get_utc_datetime()."'";
                             Database::query($sql);
                             if ($debug) {
-                                $logger->addInfo("Adding User #$user_id ($user) to session #$session_id");
+                                $logger->debug("Adding User #$user_id ($user) to session #$session_id");
                             }
                             $user_counter++;
                         }
@@ -5500,7 +5498,7 @@ class SessionManager
                         self::installCourse($session_id, $courseInfo['real_id']);
 
                         if ($debug) {
-                            $logger->addInfo("Adding course '$course_code' to session #$session_id");
+                            $logger->debug("Adding course '$course_code' to session #$session_id");
                         }
 
                         $course_counter++;
@@ -5526,7 +5524,7 @@ class SessionManager
                                 );
                                 if ($debug) {
                                     $msg = "Adding student list ".implode(', #', $userList)." to course: '$course_code' and session #$session_id";
-                                    $logger->addInfo($msg);
+                                    $logger->debug($msg);
                                 }
                             }
                         }
@@ -5566,7 +5564,7 @@ class SessionManager
                                         );
 
                                         if ($debug) {
-                                            $logger->addInfo("Adding course coach: user #$coach_id ($course_coach) to course: '$course_code' and session #$session_id");
+                                            $logger->debug("Adding course coach: user #$coach_id ($course_coach) to course: '$course_code' and session #$session_id");
                                         }
                                         $savedCoaches[] = $coach_id;
                                     } else {
@@ -5580,7 +5578,7 @@ class SessionManager
                             // Only one coach is added.
                             if (true == $onlyAddFirstCoachOrTeacher) {
                                 if ($debug) {
-                                    $logger->addInfo("onlyAddFirstCoachOrTeacher : true");
+                                    $logger->debug("onlyAddFirstCoachOrTeacher : true");
                                 }
 
                                 foreach ($course_coaches as $course_coach) {
@@ -5639,7 +5637,7 @@ class SessionManager
                                             );
 
                                             if ($debug) {
-                                                $logger->addInfo("Delete user #".$teacher['user_id']." from base course: $course_code");
+                                                $logger->debug("Delete user #".$teacher['user_id']." from base course: $course_code");
                                             }
                                         }
                                     }
@@ -5654,7 +5652,7 @@ class SessionManager
                                     );
 
                                     if ($debug) {
-                                        $logger->addInfo("Add coach #$teacherToAdd to course $courseId and session $session_id");
+                                        $logger->debug("Add coach #$teacherToAdd to course $courseId and session $session_id");
                                     }
 
                                     $userCourseCategory = '';
@@ -5674,7 +5672,7 @@ class SessionManager
                                     );
 
                                     if ($debug) {
-                                        $logger->addInfo("Subscribe user #$teacherToAdd as teacher in course $course_code with user userCourseCategory $userCourseCategory");
+                                        $logger->debug("Subscribe user #$teacherToAdd as teacher in course $course_code with user userCourseCategory $userCourseCategory");
                                     }
 
                                     if (isset($groupBackup['user'][$teacherToAdd]) &&
@@ -5711,7 +5709,7 @@ class SessionManager
                             // All coaches are added.
                             if ($removeAllTeachersFromCourse) {
                                 if ($debug) {
-                                    $logger->addInfo("removeAllTeachersFromCourse true");
+                                    $logger->debug("removeAllTeachersFromCourse true");
                                 }
                                 $teacherToAdd = null;
                                 foreach ($course_coaches as $course_coach) {
@@ -5773,7 +5771,7 @@ class SessionManager
                                                 );
 
                                                 if ($debug) {
-                                                    $logger->addInfo("Delete user #".$teacher['user_id']." from base course: $course_code");
+                                                    $logger->debug("Delete user #".$teacher['user_id']." from base course: $course_code");
                                                 }
                                             }
                                         }
@@ -5797,7 +5795,7 @@ class SessionManager
                                         );
 
                                         if ($debug) {
-                                            $logger->addInfo("Add user as teacher #".$teacherId." in base course: $course_code with userCourseCategory: $userCourseCategory");
+                                            $logger->debug("Add user as teacher #".$teacherId." in base course: $course_code with userCourseCategory: $userCourseCategory");
                                         }
 
                                         if (isset($groupBackup['user'][$teacherId]) &&
@@ -5850,7 +5848,7 @@ class SessionManager
                                             );
 
                                             if ($debug) {
-                                                $logger->addInfo("Sessions - Adding course coach: user #$coach_id ($course_coach) to course: '$course_code' and session #$session_id");
+                                                $logger->debug("Sessions - Adding course coach: user #$coach_id ($course_coach) to course: '$course_code' and session #$session_id");
                                             }
                                             $savedCoaches[] = $coach_id;
                                         } else {
@@ -5874,7 +5872,7 @@ class SessionManager
                                         $course_code
                                     );
                                     if ($debug) {
-                                        $logger->addInfo("Adding student: user #$user_id ($user) to course: '$course_code' and session #$session_id");
+                                        $logger->debug("Adding student: user #$user_id ($user) to course: '$course_code' and session #$session_id");
                                     }
                                 } else {
                                     $error_message .= get_lang('This user doesn\'t exist').': '.$user.$eol;
@@ -5893,15 +5891,15 @@ class SessionManager
                 self::addClassesByName($session_id, $classes, false);
 
                 if ($debug) {
-                    $logger->addInfo("End process session #$session_id -------------------- ");
+                    $logger->debug("End process session #$session_id -------------------- ");
                 }
             }
 
             if (!empty($report)) {
                 if ($debug) {
-                    $logger->addInfo("--Summary--");
+                    $logger->debug("--Summary--");
                     foreach ($report as $line) {
-                        $logger->addInfo($line);
+                        $logger->debug($line);
                     }
                 }
             }
@@ -7188,11 +7186,9 @@ class SessionManager
     public static function getCoursesListByCourseCoach($coachId)
     {
         $entityManager = Database::getManager();
-        $scuRepo = $entityManager->getRepository(
-            'ChamiloCoreBundle:SessionRelCourseRelUser'
-        );
+        $repo = $entityManager->getRepository(SessionRelCourseRelUser::class);
 
-        return $scuRepo->findBy([
+        return $repo->findBy([
             'user' => $coachId,
             'status' => SessionRelCourseRelUser::STATUS_COURSE_COACH,
         ]);

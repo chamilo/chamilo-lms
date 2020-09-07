@@ -35,8 +35,7 @@ class Attendance
     {
         $tbl_attendance = Database::get_course_table(TABLE_ATTENDANCE);
         $session_id = api_get_session_id();
-        $condition_session = api_get_session_condition($session_id);
-        $course_id = api_get_course_int_id();
+        $condition_session = '';
 
         $active_plus = '';
         if ((isset($_GET['isStudentView']) && 'true' == $_GET['isStudentView']) ||
@@ -48,7 +47,6 @@ class Attendance
         $sql = "SELECT COUNT(att.iid) AS total_number_of_items
                 FROM $tbl_attendance att
                 WHERE
-                      c_id = $course_id AND
                       active <> 2 $active_plus $condition_session  ";
         /*$active = (int) $active;
         if ($active === 1 || $active === 0) {
@@ -82,7 +80,7 @@ class Attendance
         // Get attendance data
         $sql = "SELECT iid, name, attendance_qualify_max
                 FROM $table
-                WHERE c_id = $course_id AND active = 1 $condition_session ";
+                WHERE active = 1 $condition_session ";
         $result = Database::query($sql);
         $data = [];
         if (Database::num_rows($result) > 0) {
@@ -115,7 +113,7 @@ class Attendance
         $tbl_attendance = Database::get_course_table(TABLE_ATTENDANCE);
         $course_id = api_get_course_int_id();
         $session_id = api_get_session_id();
-        $condition_session = api_get_session_condition($session_id);
+        $condition_session = '';
         $column = (int) $column;
         $from = (int) $from;
         $number_of_items = (int) $number_of_items;
@@ -137,12 +135,11 @@ class Attendance
                     att.description AS col2,
                     att.attendance_qualify_max AS col3,
                     att.locked AS col4,
-                    att.active AS col5,
-                    att.session_id
+                    att.active AS col5
                 FROM $tbl_attendance att
                 WHERE
-                    att.active <> 2 AND
-                    c_id = $course_id $active_plus $condition_session
+                    att.active <> 2
+                     $active_plus $condition_session
                 ORDER BY col$column $direction
                 LIMIT $from,$number_of_items ";
 
@@ -159,9 +156,9 @@ class Attendance
 
         while ($attendance = Database::fetch_row($res)) {
             $session_star = '';
-            if ($session_id == $attendance[6]) {
+            /*if ($session_id == $attendance[6]) {
                 $session_star = api_get_session_image($session_id, $user_info['status']);
-            }
+            }*/
 
             if (1 == $attendance[5]) {
                 $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
@@ -290,10 +287,10 @@ class Attendance
     {
         $tbl_attendance = Database::get_course_table(TABLE_ATTENDANCE);
         $attendanceId = (int) $attendanceId;
-        $course_id = api_get_course_int_id();
+
         $attendance_data = [];
         $sql = "SELECT * FROM $tbl_attendance
-                WHERE c_id = $course_id AND iid = '$attendanceId'";
+                WHERE iid = $attendanceId";
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
             while ($row = Database::fetch_array($res)) {
@@ -469,7 +466,7 @@ class Attendance
             foreach ($attendanceId as $id) {
                 $id = (int) $id;
                 $sql = "UPDATE $tbl_attendance SET active = 1
-                        WHERE c_id = $course_id AND iid = '$id'";
+                        WHERE iid = '$id'";
                 $result = Database::query($sql);
                 $affected_rows = Database::affected_rows($result);
                 if (!empty($affected_rows)) {
@@ -486,7 +483,7 @@ class Attendance
         } else {
             $attendanceId = (int) $attendanceId;
             $sql = "UPDATE $tbl_attendance SET active = 1
-                    WHERE c_id = $course_id AND iid = '$attendanceId'";
+                    WHERE iid = '$attendanceId'";
             $result = Database::query($sql);
             $affected_rows = Database::affected_rows($result);
             if (!empty($affected_rows)) {
@@ -614,7 +611,7 @@ class Attendance
         $attendanceId = (int) $attendanceId;
         $locked = $lock ? 1 : 0;
         $upd = "UPDATE $tbl_attendance SET locked = $locked
-                WHERE c_id = $course_id AND iid = $attendanceId";
+                WHERE iid = $attendanceId";
         $result = Database::query($upd);
         $affected_rows = Database::affected_rows($result);
         if ($affected_rows && $lock) {
@@ -826,7 +823,7 @@ class Attendance
 
         // update done_attendance inside attendance calendar table
         $sql = "UPDATE $tbl_attendance_calendar SET done_attendance = 1
-                WHERE  c_id = $course_id AND iid = '$calendar_id'";
+                WHERE  iid = '$calendar_id'";
         Database::query($sql);
 
         // save users' results
@@ -990,7 +987,6 @@ class Attendance
         $sql = "SELECT count(done_attendance) as count
                 FROM $table
                 WHERE
-                    c_id = $course_id AND
                     attendance_id = '$attendanceId' AND
                     done_attendance = 1
                 ";
@@ -1550,7 +1546,6 @@ class Attendance
                 $sql = "SELECT count(a.iid)
                         FROM $tbl_attendance_calendar a
                         WHERE
-                            c_id = $course_id AND
                             $where_attendance
                             attendance_id = '$attendanceId' AND
                             iid NOT IN (
@@ -1565,9 +1560,8 @@ class Attendance
                 $sql = "SELECT count(a.iid)
                         FROM $tbl_attendance_calendar a
                         INNER JOIN $calendarRelGroup g
-                        ON (a.iid = g.calendar_id AND a.c_id = g.c_id)
+                        ON (a.iid = g.calendar_id)
                         WHERE
-                            a.c_id = $course_id AND
                             $where_attendance
                             attendance_id = '$attendanceId' AND
                             group_id = $groupId
@@ -1598,7 +1592,7 @@ class Attendance
                 $sql = "SELECT count(a.iid)
                         FROM $tbl_attendance_calendar a
                         INNER JOIN $calendarRelGroup g
-                        ON (a.iid = g.calendar_id AND a.c_id = g.c_id)
+                        ON (a.iid = g.calendar_id)
                         WHERE
                             a.c_id = $course_id AND
                             $where_attendance
@@ -1628,7 +1622,6 @@ class Attendance
         $course_id = api_get_course_int_id();
         $sql = "SELECT count(iid) FROM $tbl_attendance_calendar
                 WHERE
-                    c_id = $course_id AND
                     attendance_id = '$attendanceId'";
         $rs = Database::query($sql);
         $count = 0;

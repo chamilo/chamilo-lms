@@ -19,7 +19,29 @@
        <!-- <directory name="public/main/session" /> -->
         <!--  <directory name="public/main/exercise"/> -->
 
+        <file name="public/main/inc/lib/add_course.lib.inc.php"/>
+<!--        <file name="public/main/inc/lib/agenda.lib.php"/>-->
         <file name="public/main/inc/lib/attendance.lib.php"/>
+        <file name="public/main/inc/lib/career.lib.php"/>
+        <file name="public/main/inc/lib/course.lib.php"/>
+        <file name="public/main/inc/lib/course_category.lib.php"/>
+<!--        <file name="public/main/inc/lib/course_description.lib.php"/>-->
+<!--        <file name="public/main/inc/lib/course_home.lib.php"/>-->
+        <file name="public/main/inc/lib/course_request.lib.php"/>
+        <file name="public/main/inc/lib/sessionmanager.lib.php"/>
+<!--        <file name="public/main/inc/lib/skill.lib.php"/>-->
+        <file name="public/main/inc/lib/skill.visualizer.lib.php"/>
+        <file name="public/main/inc/lib/social.lib.php"/>
+        <file name="public/main/inc/lib/sortable_table.class.php"/>
+        <file name="public/main/inc/lib/SortableTableFromArray.php"/>
+        <file name="public/main/inc/lib/SortableTableFromArrayConfig.php"/>
+
+        <file name="public/main/inc/lib/thematic.lib.php"/>
+        <file name="public/main/inc/lib/urlmanager.lib.php"/>
+        <file name="public/main/inc/lib/usergroup.lib.php"/>
+
+<!--        <file name="public/main/inc/lib/usergroup.lib.php"/>-->
+
 
         <ignoreFiles>
             <directory name="vendor/*"/>

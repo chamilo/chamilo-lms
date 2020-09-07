@@ -66,7 +66,7 @@ trait CourseControllerTrait
             return null;
         }
 
-        return $this->getDoctrine()->getManager()->find('ChamiloCoreBundle:Session', $sessionId);
+        return $this->getDoctrine()->getManager()->find(Session::class, $sessionId);
     }
 
     public function getGroup()

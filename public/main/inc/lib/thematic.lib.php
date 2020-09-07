@@ -654,20 +654,20 @@ class Thematic
     public function getThematicAdvance($id)
     {
         $repo = Container::getThematicAdvanceRepository();
-
+        /*
         $courseEntity = api_get_course_entity($courseId);
         $sessionEntity = null;
         if ($sessionId) {
             $sessionEntity = api_get_session_entity($sessionId);
-            /*$list = api_get_item_property_by_tool(
+            $list = api_get_item_property_by_tool(
                 'thematic_advance',
                 $course_info['code'],
                 api_get_session_id()
             );
             foreach ($list as $value) {
                 $elements[$value['ref']] = $value;
-            }*/
-        }
+            }
+        }*/
 
         return $repo->find($id);
     }

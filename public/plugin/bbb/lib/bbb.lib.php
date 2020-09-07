@@ -1147,8 +1147,8 @@ class bbb
             }
             $item = array_merge($item, $meetingDB, $meetingBBB);
 
-            $item['course'] = $em->find('ChamiloCoreBundle:Course', $item['c_id']);
-            $item['session'] = $em->find('ChamiloCoreBundle:Session', $item['session_id']);
+            $item['course'] = api_get_course_entity($item['c_id']);
+            $item['session'] = api_get_session_entity($item['session_id']);
             $newMeetingList[] = $item;
         }
 

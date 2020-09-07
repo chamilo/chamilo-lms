@@ -3,7 +3,7 @@
 {% endif %}
 {% if terms %}
 <div class="table-responsive">
-<table class="table data_table">
+<table class="table table table-hover table-striped data_table">
 	<thead>
 		<tr>
 			<th>

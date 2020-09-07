@@ -1001,7 +1001,7 @@ class SurveyUtil
             .$surveyId.'&'.api_get_cidreq().'">';
 
         // The table
-        $content .= '<br /><table class="data_table" border="1">';
+        $content .= '<br /><table class="table table-hover table-striped data_table" border="1">';
         // Getting the number of options per question
         $content .= '	<tr>';
         $content .= '		<th>';
@@ -2117,7 +2117,7 @@ class SurveyUtil
             $answers_y = self::get_answers_of_question_by_user($surveyId, $yAxis);
 
             // Displaying the table
-            $tableHtml = '<table border="1" class="data_table">';
+            $tableHtml = '<table border="1" class="table table-hover table-striped data_table">';
             $xOptions = [];
             // The header
             $tableHtml .= '<tr>';

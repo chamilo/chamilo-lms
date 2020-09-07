@@ -244,7 +244,7 @@ function getReport($userId, $from, $to, $addTime = false)
         }
     }
 
-    $table = new HTML_Table(['class' => 'data_table']);
+    $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
     $headers = [
         get_lang('MinStartDate'),
         get_lang('MaxEndDate'),
@@ -276,7 +276,7 @@ function getReport($userId, $from, $to, $addTime = false)
             $courseSessionTable .= '<div class="data-title">'.Display::page_subheader3(
                     $iconCourse.$data['name'][$courseId]
                 ).'</div>';
-            $table = new HTML_Table(['class' => 'data_table']);
+            $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
             $headers = [
                 get_lang('StartDate'),
                 get_lang('EndDate'),
@@ -306,7 +306,7 @@ function getReport($userId, $from, $to, $addTime = false)
     }
     $totalCourseSessionTable = '';
     if ($courseSessionTableData) {
-        $table = new HTML_Table(['class' => 'data_table']);
+        $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
         $headers = [
             get_lang('Course'),
             get_lang('TotalDuration'),

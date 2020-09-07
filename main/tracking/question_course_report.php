@@ -177,7 +177,7 @@ $course_average = [];
 $counter = 0;
 
 if (!empty($main_question_list) && is_array($main_question_list)) {
-    $html_result .= '<table  class="data_table">';
+    $html_result .= '<table  class="table table-hover table-striped data_table">';
     $html_result .= '<tr><th>'.get_lang('Question').
                     Display::return_icon('info3.gif', get_lang('QuestionsAreTakenFromLPExercises'), ['align' => 'absmiddle', 'hspace' => '3px']).'</th>';
     $html_result .= '<th>'.$course_info['visual_code'].' '.get_lang('AverageScore').Display::return_icon('info3.gif', get_lang('AllStudentsAttemptsAreConsidered'), ['align' => 'absmiddle', 'hspace' => '3px']).' </th>';

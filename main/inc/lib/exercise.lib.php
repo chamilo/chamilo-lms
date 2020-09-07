@@ -146,7 +146,7 @@ class ExerciseLib
                         ';
                     } else {
                         $s .= '<div id="drag'.$questionId.'_question" class="drag_question">
-                               <table class="data_table">';
+                               <table class="table table-hover table-striped data_table">';
                     }
 
                     // Iterate through answers.
@@ -373,7 +373,7 @@ class ExerciseLib
                     $header .= Display::tag('th', get_lang('Feedback'));
                 }
 
-                $s .= '<table class="data_table">';
+                $s .= '<table class="table table-hover table-striped data_table">';
                 $s .= Display::tag('tr', $header, ['style' => 'text-align:left;']);
 
                 // ajout de la 2eme ligne d'entête pour true/falss et les pourcentages de certitude

@@ -292,7 +292,7 @@ if ($objExercise->getFeedbackType() === EXERCISE_FEEDBACK_TYPE_DIRECT) {
     $comments = '';
     if ($answerType != HOT_SPOT_DELINEATION) {
         if (isset($result['correct_answer_id'])) {
-            $table = new HTML_Table(['class' => 'table data_table']);
+            $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
             $row = 0;
             $table->setCellContents($row, 0, get_lang('YourAnswer'));
             if ($answerType != DRAGGABLE) {

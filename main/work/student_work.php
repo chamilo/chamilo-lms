@@ -105,7 +105,7 @@ if (api_is_allowed_to_edit()) {
 
 echo '</div>';
 
-$table = new HTML_Table(['class' => 'data_table']);
+$table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
 $column = 0;
 $row = 0;
 $headers = [

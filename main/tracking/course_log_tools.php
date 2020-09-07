@@ -128,7 +128,7 @@ if ($lpReporting) {
                 get_lang('AverageProgressInLearnpath')
             ).' '.get_lang('AverageProgressInLearnpath')
         );
-        echo '<table class="data_table">';
+        echo '<table class="table table-hover table-striped data_table">';
         if ($export_csv) {
             $temp = [get_lang('AverageProgressInLearnpath', ''), ''];
             $csv_content[] = ['', ''];
@@ -182,7 +182,7 @@ if ($exerciseReporting) {
             get_lang('AverageResultsToTheExercices')
         ).' '.get_lang('AverageResultsToTheExercices')
     );
-    echo '<table class="data_table">';
+    echo '<table class="table table-hover table-striped data_table">';
     $course_id = api_get_course_int_id();
     $sql = "SELECT id, title FROM $TABLEQUIZ
             WHERE c_id = $course_id AND active <> -1 AND session_id = $session_id";
@@ -273,7 +273,7 @@ echo Display::page_subheader(
     get_lang('Forum').'&nbsp;-&nbsp;<a href="../forum/index.php?'.api_get_cidreq().'">'.
     get_lang('SeeDetail').'</a>'
 );
-echo '<table class="data_table">';
+echo '<table class="table table-hover table-striped data_table">';
 echo '<tr><td>'.get_lang('ForumForumsNumber').'</td><td align="right">'.$count_number_of_forums_by_course.'</td></tr>';
 echo '<tr><td>'.get_lang('ForumThreadsNumber').'</td><td align="right">'.$count_number_of_threads_by_course.'</td></tr>';
 echo '<tr><td>'.get_lang('ForumPostsNumber').'</td><td align="right">'.$count_number_of_posts_by_course.'</td></tr>';
@@ -287,7 +287,7 @@ if ($showChatReporting) {
         Display::return_icon('chat.gif', get_lang('Chat')).' '.get_lang('Chat')
     );
 
-    echo '<table class="data_table">';
+    echo '<table class="table table-hover table-striped data_table">';
     $chat_connections_during_last_x_days_by_course = Tracking::chat_connections_during_last_x_days_by_course(
         $course_code,
         7,
@@ -323,7 +323,7 @@ if ($showTrackingReporting) {
             get_lang('ToolsMostUsed')
         ).' '.get_lang('ToolsMostUsed')
     );
-    echo '<table class="data_table">';
+    echo '<table class="table table-hover table-striped data_table">';
 
     $tools_most_used = Tracking::get_tools_most_used_by_course(
         $course_id,
@@ -373,7 +373,7 @@ if ($documentReporting) {
         ).'&nbsp;'.get_lang('DocumentsMostDownloaded').$link
     );
 
-    echo '<table class="data_table">';
+    echo '<table class="table table-hover table-striped data_table">';
     $documents_most_downloaded = Tracking::get_documents_most_downloaded_by_course(
         $course_code,
         $session_id,
@@ -427,7 +427,7 @@ if ($linkReporting) {
             get_lang('LinksMostClicked')
         ).'&nbsp;'.get_lang('LinksMostClicked')
     );
-    echo '<table class="data_table">';
+    echo '<table class="table table-hover table-striped data_table">';
     $links_most_visited = Tracking::get_links_most_visited_by_course(
         $course_code,
         $session_id

@@ -1183,7 +1183,7 @@ if (0 == $table->get_total_number_of_items()) {
         if (!empty($user_list)) {
             $extra_search_options = Display::page_subheader(get_lang('UsersFoundInOtherPortals'));
 
-            $table = new HTML_Table(['class' => 'data_table']);
+            $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
             $column = 0;
             $row = 0;
             $headers = [get_lang('User'), 'URL', get_lang('Actions')];

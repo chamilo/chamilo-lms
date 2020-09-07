@@ -37,7 +37,7 @@ if (empty($templates)) {
     );
 }
 
-$table = new HTML_Table(['class' => 'data_table']);
+$table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
 $column = 0;
 $row = 0;
 
@@ -142,8 +142,8 @@ $selectionoptions[] = '<option value="setconfigvalue">'.$plugin->get_lang('setco
 $selectionaction = '<select name="what" onchange="this.form.submit()">'.implode('', $selectionoptions).'</select>';
 
 $content .= '<div class="vchamilo-right"><div></div><div>
-<a href="javascript:selectallhosts()">'.$plugin->get_lang('selectall').'</a> - 
-<a href="javascript:deselectallhosts()">'.$plugin->get_lang('selectnone').'</a> - 
+<a href="javascript:selectallhosts()">'.$plugin->get_lang('selectall').'</a> -
+<a href="javascript:deselectallhosts()">'.$plugin->get_lang('selectnone').'</a> -
 &nbsp; - '.$plugin->get_lang('withselection').' '.$selectionaction.'</div></div>';
 
 $content .= '</form>';

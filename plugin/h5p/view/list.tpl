@@ -1,7 +1,7 @@
 {{ tables }}
 {{ form }}
 
-<table class="data_table">
+<table class="table table-hover table-striped data_table">
 	<thead>
 		<tr>
 			<th>

@@ -189,7 +189,7 @@ class ResultTable extends SortableTable
         $resultQuery = Database::query($sql);
         $list = Database::store_result($resultQuery);
 
-        $htmlTable = new HTML_Table(['class' => 'data_table']);
+        $htmlTable = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
         $htmlTable->setHeaderContents(0, 0, get_lang('Score'));
         $htmlTable->setHeaderContents(0, 1, get_lang('Comment'));
         $htmlTable->setHeaderContents(0, 2, get_lang('CreatedAt'));

@@ -208,7 +208,7 @@ if (api_is_allowed_to_edit(null, true) ||
         <form method="post" action="index.php?action=attendance_sheet_add&<?php echo api_get_cidreq().$param_filter; ?>&attendance_id=<?php echo $attendance_id; ?>" >
             <div class="attendance-sheet-content" style="width:100%;background-color:#E1E1E1;margin-top:20px;">
                 <div class="divTableWithFloatingHeader attendance-users-table" style="width:45%;float:left;margin:0px;padding:0px;">
-                    <table class="tableWithFloatingHeader data_table" width="100%">
+                    <table class="tableWithFloatingHeader table table-hover table-striped data_table" width="100%">
                         <thead>
                         <tr class="tableFloatingHeader" style="position: absolute; top: 0px; left: 0px; visibility: hidden; margin:0px;padding:0px" >
                             <th width="10px"><?php echo '#'; ?></th>
@@ -260,7 +260,7 @@ if (api_is_allowed_to_edit(null, true) ||
                 <?php
 
                 echo '<div class="divTableWithFloatingHeader attendance-calendar-table" style="margin:0px;padding:0px;float:left;width:55%;overflow:auto;overflow-y:hidden;">';
-        echo '<table class="tableWithFloatingHeader data_table" width="100%">';
+        echo '<table class="tableWithFloatingHeader table table-hover table-striped data_table" width="100%">';
         echo '<thead>';
         $result = null;
         if (count($attendant_calendar) > 0) {
@@ -436,7 +436,7 @@ if (api_is_allowed_to_edit(null, true) ||
         </div>
     <?php
     } ?>
-    <table class="data_table">
+    <table class="table table-hover table-striped data_table">
         <tr class="row_odd" >
             <th><?php echo get_lang('Attendance'); ?></th>
         </tr>

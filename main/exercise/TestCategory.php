@@ -978,7 +978,7 @@ class TestCategory
             }
 
             $return .= $warning;
-            $return .= '<table class="table table-bordered data_table">';
+            $return .= '<table class="table table-hover table-bordered data_table">';
             $return .= '<tr>';
             $return .= '<th height="24">'.get_lang('Categories').'</th>';
             $return .= '<th width="70" height="24">'.get_lang('Number').'</th></tr>';

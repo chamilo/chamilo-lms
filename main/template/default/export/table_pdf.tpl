@@ -7,7 +7,7 @@
     <br /><br />
 {% endif %}
 
-<table align="center" width="100%" class="table table-bordered data_table">
+<table align="center" width="100%" class="table table-hover table-bordered data_table">
     {% if pdf_student_info %}
     <tr>
         <td style="background-color: #E5E5E5; text-align: left; width:130px; ">

@@ -90,7 +90,7 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
 	 			ORDER BY $sort $order
 	 			LIMIT $from,".($limit + 1);
 
-    $query_rows = "SELECT count(*) as total_rows 
+    $query_rows = "SELECT count(*) as total_rows
                   FROM $tbl_session_category sc $where ";
     $order = ($order == 'ASC') ? 'DESC' : 'ASC';
     $result_rows = Database::query($query_rows);
@@ -170,7 +170,7 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
                 <?php
             } ?>
 
-            <table class="data_table" width="100%">
+            <table class="table table-hover table-striped data_table" width="100%">
                 <tr>
                     <th>&nbsp;</th>
                     <th><a href="<?php echo api_get_self(); ?>?sort=name&order=<?php echo ($sort == 'name') ? $order
@@ -192,11 +192,11 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
                     break;
                 }
                 $sql = 'SELECT COUNT(session_category_id)
-                        FROM '.$tbl_session.' s 
-                        INNER JOIN '.$table_access_url_rel_session.'  us 
+                        FROM '.$tbl_session.' s
+                        INNER JOIN '.$table_access_url_rel_session.'  us
                         ON (s.id = us.session_id)
-                        WHERE 
-                            s.session_category_id = '.intval($enreg['id']).' AND 
+                        WHERE
+                            s.session_category_id = '.intval($enreg['id']).' AND
                             us.access_url_id = '.api_get_current_access_url_id();
 
                 $rs = Database::query($sql);

@@ -42,7 +42,7 @@ function handleRegions()
     $installed_plugins = $plugin_obj->getInstalledPlugins();
 
     echo '<form name="plugins" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).'">';
-    echo '<table class="data_table">';
+    echo '<table class="table table-hover table-striped data_table">';
     echo '<tr>';
     echo '<th width="400px">';
     echo get_lang('Plugin');

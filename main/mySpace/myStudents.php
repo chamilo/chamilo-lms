@@ -277,7 +277,7 @@ switch ($action) {
         $first = Tracking::get_first_connection_date($student_id);
         $last = Tracking::get_last_connection_date($student_id);
 
-        $table = new HTML_Table(['class' => 'data_table']);
+        $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
         $column = 0;
         $row = 0;
         $headers = [
@@ -301,7 +301,7 @@ switch ($action) {
         $courseTable = '';
 
         if (!empty($courses)) {
-            $courseTable .= '<table class="data_table">';
+            $courseTable .= '<table class="table table-hover table-striped data_table">';
             $courseTable .= '<thead>';
             $courseTable .= '<tr>
                     <th>'.get_lang('FormationUnit').'</th>
@@ -2022,7 +2022,7 @@ if (empty($details)) {
             }
 
             if (!empty($survey_data)) {
-                $table = new HTML_Table(['class' => 'data_table']);
+                $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
                 $header_names = [get_lang('Survey'), get_lang('Answered')];
                 $row = 0;
                 $column = 0;

@@ -2218,7 +2218,6 @@ class User implements UserInterface, EquatableInterface
         return $this->courseGroupsAsTutor->matching($criteria);
     }
 
-
     /**
      * Retreives this user's related sessions.
      *
@@ -2276,5 +2275,4 @@ class User implements UserInterface, EquatableInterface
 
         return $sessions;
     }
-
 }

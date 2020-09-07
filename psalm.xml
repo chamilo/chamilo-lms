@@ -14,6 +14,11 @@
 <!--        <directory name="public/main/badge"/>-->
         <directory name="public/main/blog"/>
 <!--        <directory name="public/main/calendar"/>-->
+<!--        <directory name="public/main/chat"/>-->
+<!--        <directory name="public/main/course_description"/>-->
+<!--        <directory name="public/main/course_info"/>-->
+<!--        <directory name="public/main/dropbox"/>-->
+
         <directory name="public/main/group"/>
         <directory name="public/main/link" />
        <!-- <directory name="public/main/session" /> -->
@@ -39,9 +44,8 @@
         <file name="public/main/inc/lib/thematic.lib.php"/>
         <file name="public/main/inc/lib/urlmanager.lib.php"/>
         <file name="public/main/inc/lib/usergroup.lib.php"/>
-
-<!--        <file name="public/main/inc/lib/usergroup.lib.php"/>-->
-
+<!--        <file name="public/main/inc/lib/usermanager.lib.php"/>-->
+        <file name="public/main/inc/lib/userportal.lib.php"/>
 
         <ignoreFiles>
             <directory name="vendor/*"/>

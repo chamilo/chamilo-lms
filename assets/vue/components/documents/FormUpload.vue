@@ -1,5 +1,5 @@
 <template>
-  <v-form>
+  <b-form>
     <b-row>
       <b-col
         cols="12"
@@ -14,7 +14,7 @@
         />
       </b-col>
     </b-row>
-  </v-form>
+  </b-form>
 </template>
 
 <script>

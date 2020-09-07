@@ -8,7 +8,7 @@ require('cropper');
 require('jquery-ui-timepicker-addon/dist/jquery-ui-timepicker-addon');
 //import('select2');
 require('timeago');
-require('sweetalert2');
+//require('sweetalert2');
 //import('bootstrap-select');
 import('fullcalendar/dist/fullcalendar.js');
 import('fullcalendar/dist/gcal.js');

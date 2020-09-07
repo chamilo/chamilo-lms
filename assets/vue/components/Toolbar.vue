@@ -18,15 +18,14 @@
     >
       {{ $t('Edit') }}
     </b-button>
+
     <b-button
       v-if="handleSubmit"
       :loading="isLoading"
       variant="primary"
       @click="submitItem"
     >
-      <v-icon left>
-        mdi-content-save
-      </v-icon>
+      <font-awesome-icon icon="save" />
       {{ $t('Submit') }}
     </b-button>
     <!--      <v-btn-->

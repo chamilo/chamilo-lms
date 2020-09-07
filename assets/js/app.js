@@ -15,12 +15,10 @@ const moment = require('moment');
 global.moment = moment;
 require('select2/dist/js/select2.full.min');
 require("flatpickr");
-
 import('bootstrap-vue');
 import('bootstrap-daterangepicker');
 import('webpack-jquery-ui');
 import('webpack-jquery-ui/css');
-
 import('./vendor');
 import('./main');
 require('webpack-jquery-ui');

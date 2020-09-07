@@ -142,7 +142,7 @@ class SortableTable extends HTML_Table
 
         if (empty($attributes)) {
             $attributes = [];
-            $attributes['class'] = 'table table-hover table-bordered data_table';
+            $attributes['class'] = 'table table-hover table-striped table-bordered data_table';
             $attributes['id'] = $table_id;
         }
 

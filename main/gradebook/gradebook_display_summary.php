@@ -177,7 +177,7 @@ $allowSkillRelItem = api_get_configuration_value('allow_skill_rel_items');
 if (count($userList) == 0) {
     echo Display::return_message(get_lang('NoResultsAvailable'), 'warning');
 } else {
-    echo '<br /><br /><div class="table-responsive"><table class=" table table-bordered data_table">';
+    echo '<br /><br /><div class="table-responsive"><table class="table table-hover table-striped table-bordered data_table">';
     echo '<tr><th>';
     echo get_lang('Student');
     echo '</th>';

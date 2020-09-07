@@ -1063,7 +1063,7 @@ class MySpace
         $tableHtml = '';
         // Printing table
         $total = 0;
-        $table = '<div class="table-responsive"><table class="table table-hover table-bordered data_table">';
+        $table = '<div class="table-responsive"><table class="table table-hover table-striped table-bordered data_table">';
 
         $displayText = get_lang('Company');
         $table .= "<thead><tr><th class=\"th-header\">$displayText</th><th class=\"th-header\"> ".get_lang('CountOfSubscribedUsers')." </th></tr></thead><tbody>";
@@ -1190,7 +1190,7 @@ class MySpace
         }
         if ($csv == false) {
             $table = "<div class='table-responsive'>".
-                "<table class='table table-hover table-bordered data_table'>".
+                "<table class='table table-hover table-striped table-bordered data_table'>".
                 "<thead>".
                 "<tr>".
                 "<th class=\"th-header\">".get_lang('Author')."</th>".

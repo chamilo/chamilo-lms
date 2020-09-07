@@ -4957,7 +4957,7 @@ EOT;
     {
         $data = self::exerciseResultsInRanking($exerciseId, $courseId, $sessionId);
 
-        $table = new HTML_Table(['class' => 'table table-hover table-bordered']);
+        $table = new HTML_Table(['class' => 'table table-hover table-striped table-bordered']);
         $table->setHeaderContents(0, 0, get_lang('Position'), ['class' => 'text-right']);
         $table->setHeaderContents(0, 1, get_lang('Username'));
         $table->setHeaderContents(0, 2, get_lang('Score'), ['class' => 'text-right']);

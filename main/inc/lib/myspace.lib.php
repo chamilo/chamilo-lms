@@ -1254,11 +1254,13 @@ class MySpace
             $form->addDatePicker(
                 'startDate',
                 get_lang('DateStart'),
-                []);
+                []
+            );
             $form->addDatePicker(
                 'endDate',
                 get_lang('DateEnd'),
-                []);
+                []
+            );
             $form->addButtonSearch(get_lang('Search'));
             if (count($data) != 0) {
                 //$form->addButtonSave(get_lang('Ok'), 'export');

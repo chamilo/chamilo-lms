@@ -1174,8 +1174,8 @@ class ExtraField extends Model
                         if (empty($defaultValueId)) {
                             $options[''] = get_lang('SelectAnOption');
                         }
-                        // for task BT#17648
-                        //When a varible is 'authors', this will be a select of  teachers
+                        // When a varible is 'authors', this will be a 
+                        // select element of teachers (see BT#17648)
                         $variable = $field_details['variable'];
                         if ($variable != 'authors') {
                             foreach ($field_details['options'] as $optionDetails) {
@@ -3134,15 +3134,11 @@ JAVASCRIPT;
         if ($variableName == null) {
             return null;
         }
-        $variableName = Security::remove_XSS($variableName);
         $variableName = Database::escape_string($variableName);
         $tblExtraField = Database::get_main_table(TABLE_EXTRA_FIELD);
-        $query = "SELECT
-			display_text
-		FROM
-			$tblExtraField
-		WHERE
-			variable = '$variableName'";
+        $query = "SELECT display_text
+            FROM $tblExtraField
+            WHERE variable = '$variableName'";
         $companyField = Database::fetch_assoc(Database::query($query));
 
         if ($companyField == false or !isset($companyField['display_text'])) {

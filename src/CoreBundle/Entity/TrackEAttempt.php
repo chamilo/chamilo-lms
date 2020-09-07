@@ -43,18 +43,10 @@ class TrackEAttempt
     protected $exeId;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="user_id", type="integer", nullable=false)
-     * @deprecated Use user
-     */
-    protected $userId;
-
-    /**
      * @var User
      * @ORM\ManyToOne (
      *    targetEntity="Chamilo\CoreBundle\Entity\User",
-     *    inversedBy="trackEAttemp"
+     *    inversedBy="trackEAttemps"
      * )
      * @ORM\JoinColumn(
      *    name="user_id",
@@ -67,7 +59,6 @@ class TrackEAttempt
     /**
      * Get user.
      *
-     * @return User
      */
     public function getUser(): User
     {
@@ -75,7 +66,6 @@ class TrackEAttempt
     }
 
     /**
-     * @param User $user
      *
      * @return $this
      */
@@ -169,32 +159,6 @@ class TrackEAttempt
     public function getExeId()
     {
         return $this->exeId;
-    }
-
-    /**
-     * Set userId.
-     *
-     * @param int $userId
-     *
-     * @return TrackEAttempt
-     * @deprecated Use setUser
-     */
-    public function setUserId($userId)
-    {
-        $this->userId = $userId;
-
-        return $this;
-    }
-
-    /**
-     * Get userId.
-     *
-     * @return int
-     * @deprecated Use getUser
-     */
-    public function getUserId()
-    {
-        return $this->userId;
     }
 
     /**

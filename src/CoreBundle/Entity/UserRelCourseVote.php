@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ApiResource(
  *      attributes={"security"="is_granted('ROLE_ADMIN')"},
- *      iri="http://schema.org/Person",
+ *      iri="http://schema.org/userRelCourseVote",
  *      attributes={"security"="is_granted('ROLE_ADMIN')"},
  *      normalizationContext={"groups"={"user:read"}},
  *      denormalizationContext={"groups"={"user:write"}},
@@ -40,44 +40,10 @@ class UserRelCourseVote
     protected $cId;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="user_id", type="integer", nullable=false)
-     * @deprecated Use user
-     */
-    protected $userId;
-
-    /**
-     * Set userId.
-     *
-     * @param int $userId
-     *
-     * @return UserRelCourseVote
-     * @deprecated Use setUser
-     */
-    public function setUserId($userId)
-    {
-        $this->userId = $userId;
-
-        return $this;
-    }
-
-    /**
-     * Get userId.
-     *
-     * @return int
-     * @deprecated Use getUser
-     */
-    public function getUserId()
-    {
-        return $this->userId;
-    }
-
-    /**
      * @var User
      * @ORM\ManyToOne (
      *    targetEntity="Chamilo\CoreBundle\Entity\User",
-     *    inversedBy="userRelCourseVote"
+     *    inversedBy="userRelCourseVotes"
      * )
      * @ORM\JoinColumn(
      *    name="user_id",
@@ -90,7 +56,6 @@ class UserRelCourseVote
     /**
      * Get user.
      *
-     * @return User
      */
     public function getUser(): User
     {
@@ -98,7 +63,6 @@ class UserRelCourseVote
     }
 
     /**
-     * @param User $user
      *
      * @return $this
      */

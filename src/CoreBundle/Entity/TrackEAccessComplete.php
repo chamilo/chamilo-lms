@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ApiResource(
  *      attributes={"security"="is_granted('ROLE_ADMIN')"},
- *      iri="http://schema.org/Person",
+ *      iri="http://schema.org/trackEAccessComplete",
  *      attributes={"security"="is_granted('ROLE_ADMIN')"},
  *      normalizationContext={"groups"={"user:read"}},
  *      denormalizationContext={"groups"={"user:write"}},
@@ -38,40 +38,6 @@ class TrackEAccessComplete
     protected $id;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="user_id", type="integer", nullable=false)
-     * @deprecated Use user
-     */
-    protected $userId;
-
-    /**
-     * Set userId.
-     *
-     * @param int $userId
-     *
-     * @return TrackEAccessComplete
-     * @deprecated Use setUser
-     */
-    public function setUserId($userId)
-    {
-        $this->userId = $userId;
-
-        return $this;
-    }
-
-    /**
-     * Get userId.
-     *
-     * @return int
-     * @deprecated Use getUser
-     */
-    public function getUserId()
-    {
-        return $this->userId;
-    }
-
-    /**
      * @ORM\OneToOne (targetEntity="Chamilo\CoreBundle\Entity\User",
      *      inversedBy="track_e_access_complete")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
@@ -81,7 +47,6 @@ class TrackEAccessComplete
     /**
      * Get user.
      *
-     * @return User
      */
     public function getUser(): User
     {
@@ -89,7 +54,6 @@ class TrackEAccessComplete
     }
 
     /**
-     * @param User $user
      *
      * @return $this
      */

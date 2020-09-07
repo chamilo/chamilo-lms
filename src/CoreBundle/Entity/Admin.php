@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Admin.
  * @ApiResource(
  *      attributes={"security"="is_granted('ROLE_ADMIN')"},
- *      iri="http://schema.org/Person",
+ *      iri="http://schema.org/admin",
  *      attributes={"security"="is_granted('ROLE_ADMIN')"},
  * )
  *
@@ -52,7 +52,6 @@ class Admin
     /**
      * Get user.
      *
-     * @return User
      */
     public function getUser(): User
     {
@@ -60,7 +59,6 @@ class Admin
     }
 
     /**
-     * @param User $user
      *
      * @return $this
      */
@@ -69,39 +67,6 @@ class Admin
         $this->user = $user;
 
         return $this;
-    }
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="user_id", type="integer", nullable=false)
-     * @deprecated Use user
-     */
-    protected $userId;
-
-    /**
-     * Set userId.
-     * @param int $userId
-     *
-     * @return Admin
-     * @deprecated Use setUser
-     */
-    public function setUserId($userId)
-    {
-        $this->userId = $userId;
-
-        return $this;
-    }
-
-    /**
-     * Get userId.
-     *
-     * @return int
-     * @deprecated Use getUser
-     */
-    public function getUserId()
-    {
-        return $this->userId;
     }
 
     /**

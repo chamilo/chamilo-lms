@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ApiResource(
  *      attributes={"security"="is_granted('ROLE_ADMIN')"},
- *      iri="http://schema.org/Person",
+ *      iri="http://schema.org/userRelUser",
  *      attributes={"security"="is_granted('ROLE_ADMIN')"},
  *      normalizationContext={"groups"={"user:read"}},
  *      denormalizationContext={"groups"={"user:write"}},
@@ -42,44 +42,10 @@ class UserRelUser
     protected $id;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="user_id", type="integer", nullable=false)
-     * @deprecated Use user
-     */
-    protected $userId;
-
-    /**
-     * Set userId.
-     *
-     * @param int $userId
-     *
-     * @return UserRelUser
-     * @deprecated Use setUser
-     */
-    public function setUserId($userId)
-    {
-        $this->userId = $userId;
-
-        return $this;
-    }
-
-    /**
-     * Get userId.
-     *
-     * @return int
-     * @deprecated Use getUser
-     */
-    public function getUserId()
-    {
-        return $this->userId;
-    }
-
-    /**
      * @var User
      * @ORM\ManyToOne (
      *    targetEntity="Chamilo\CoreBundle\Entity\User",
-     *    inversedBy="userRelationship"
+     *    inversedBy="userRelationships"
      * )
      * @ORM\JoinColumn(
      *    name="user_id",
@@ -92,7 +58,6 @@ class UserRelUser
     /**
      * Get user.
      *
-     * @return User
      */
     public function getUser(): User
     {
@@ -100,7 +65,6 @@ class UserRelUser
     }
 
     /**
-     * @param User $user
      *
      * @return $this
      */

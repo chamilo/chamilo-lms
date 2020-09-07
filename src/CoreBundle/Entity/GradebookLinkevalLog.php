@@ -4,16 +4,64 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * GradebookLinkevalLog.
+ * @ApiResource(
+ *      attributes={"security"="is_granted('ROLE_ADMIN')"},
+ *      iri="http://schema.org/gradebookLinkevalLog",
+ *      attributes={"security"="is_granted('ROLE_ADMIN')"},
+ *      normalizationContext={"groups"={"user:read"}},
+ *      denormalizationContext={"groups"={"user:write"}},
+ *      collectionOperations={"get"},
+ *      itemOperations={
+ *          "get"={},
+ *          "put"={},
+ *          "delete"={},
+ *     }
+ * )
  *
  * @ORM\Table(name="gradebook_linkeval_log")
  * @ORM\Entity
  */
 class GradebookLinkevalLog
 {
+    /**
+     * @var User
+     * @ORM\ManyToOne (
+     *    targetEntity="Chamilo\CoreBundle\Entity\User",
+     *    inversedBy="gradebookLinkevalLogs"
+     * )
+     * @ORM\JoinColumn(
+     *    name="user_id_log",
+     *    referencedColumnName="id",
+     *    onDelete="CASCADE"
+     * )
+     */
+    protected $user;
+
+    /**
+     * Get user.
+     *
+     */
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    /**
+     *
+     * @return $this
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
     /**
      * @var int
      *
@@ -62,13 +110,6 @@ class GradebookLinkevalLog
      * @ORM\Column(name="type", type="string", length=20, nullable=false)
      */
     protected $type;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="user_id_log", type="integer", nullable=false)
-     */
-    protected $userIdLog;
 
     /**
      * @var int
@@ -245,30 +286,6 @@ class GradebookLinkevalLog
     public function getType()
     {
         return $this->type;
-    }
-
-    /**
-     * Set userIdLog.
-     *
-     * @param int $userIdLog
-     *
-     * @return GradebookLinkevalLog
-     */
-    public function setUserIdLog($userIdLog)
-    {
-        $this->userIdLog = $userIdLog;
-
-        return $this;
-    }
-
-    /**
-     * Get userIdLog.
-     *
-     * @return int
-     */
-    public function getUserIdLog()
-    {
-        return $this->userIdLog;
     }
 
     /**

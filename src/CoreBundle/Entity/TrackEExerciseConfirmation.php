@@ -4,10 +4,24 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Class TrackEExerciseConfirmation.
+ * @ApiResource(
+ *      attributes={"security"="is_granted('ROLE_ADMIN')"},
+ *      iri="http://schema.org/trackEExerciseConfirmation",
+ *      attributes={"security"="is_granted('ROLE_ADMIN')"},
+ *      normalizationContext={"groups"={"user:read"}},
+ *      denormalizationContext={"groups"={"user:write"}},
+ *      collectionOperations={"get"},
+ *      itemOperations={
+ *          "get"={},
+ *          "put"={},
+ *          "delete"={},
+ *     }
+ * )
  *
  * @ORM\Table(name="track_e_exercise_confirmation")
  * @ORM\Entity()
@@ -24,11 +38,18 @@ class TrackEExerciseConfirmation
     protected $id;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="user_id", type="integer")
+     * @var User
+     * @ORM\ManyToOne (
+     *    targetEntity="Chamilo\CoreBundle\Entity\User",
+     *    inversedBy="trackEExerciseConfirmations"
+     * )
+     * @ORM\JoinColumn(
+     *    name="user_id",
+     *    referencedColumnName="id",
+     *    onDelete="CASCADE"
+     * )
      */
-    private $userId;
+    protected $user;
 
     /**
      * @var int
@@ -107,26 +128,6 @@ class TrackEExerciseConfirmation
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * @return int
-     */
-    public function getUserId()
-    {
-        return $this->userId;
-    }
-
-    /**
-     * @param int $userId
-     *
-     * @return TrackEExerciseConfirmation
-     */
-    public function setUserId($userId)
-    {
-        $this->userId = $userId;
-
-        return $this;
     }
 
     /**
@@ -305,6 +306,27 @@ class TrackEExerciseConfirmation
     public function setUpdatedAt($updatedAt)
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get user.
+     *
+     */
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    /**
+     * Set user.
+     *
+     * @return $this
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
 
         return $this;
     }

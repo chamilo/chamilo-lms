@@ -357,7 +357,7 @@ class User implements UserInterface, EquatableInterface
      *     orphanRemoval=true
      * )
      */
-    protected $gradebookCertificate;
+    protected $gradebookCertificates;
 
     /**
      * @var ArrayCollection
@@ -368,7 +368,7 @@ class User implements UserInterface, EquatableInterface
      *     orphanRemoval=true
      * )
      */
-    protected $gradebookEvaluation;
+    protected $gradebookEvaluations;
 
     /**
      * @var ArrayCollection
@@ -379,7 +379,7 @@ class User implements UserInterface, EquatableInterface
      *     orphanRemoval=true
      * )
      */
-    protected $gradebookLink;
+    protected $gradebookLinks;
 
     /**
      * @var ArrayCollection
@@ -390,7 +390,7 @@ class User implements UserInterface, EquatableInterface
      *     orphanRemoval=true
      * )
      */
-    protected $gradebookResult;
+    protected $gradebookResults;
 
     /**
      * @var ArrayCollection
@@ -401,7 +401,7 @@ class User implements UserInterface, EquatableInterface
      *     orphanRemoval=true
      * )
      */
-    protected $gradebookResultLog;
+    protected $gradebookResultLogs;
 
     /**
      * @var ArrayCollection
@@ -412,7 +412,7 @@ class User implements UserInterface, EquatableInterface
      *     orphanRemoval=true
      * )
      */
-    protected $gradebookScoreLog;
+    protected $gradebookScoreLogs;
 
     /**
      * @var ArrayCollection
@@ -423,7 +423,18 @@ class User implements UserInterface, EquatableInterface
      *     orphanRemoval=true
      * )
      */
-    protected $sequenceValue;
+    protected $sequenceValues;
+
+    /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CoreBundle\Entity\TrackEExerciseConfirmation",
+     *     mappedBy="user",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true
+     * )
+     */
+    protected $trackEExerciseConfirmations;
 
     /**
      * @var ArrayCollection
@@ -445,7 +456,7 @@ class User implements UserInterface, EquatableInterface
      *     orphanRemoval=true
      * )
      */
-    protected $trackEAttemp;
+    protected $trackEAttemps;
 
     /**
      * @var ArrayCollection
@@ -467,7 +478,7 @@ class User implements UserInterface, EquatableInterface
      *     orphanRemoval=true
      * )
      */
-    protected $userCourseCategory;
+    protected $userCourseCategorys;
 
     /**
      * @var ArrayCollection
@@ -478,7 +489,7 @@ class User implements UserInterface, EquatableInterface
      *     orphanRemoval=true
      * )
      */
-    protected $userRelCourseVote;
+    protected $userRelCourseVotes;
 
     /**
      * @var ArrayCollection
@@ -489,7 +500,19 @@ class User implements UserInterface, EquatableInterface
      *     orphanRemoval=true
      * )
      */
-    protected $userRelTag;
+    protected $userRelTags;
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CoreBundle\Entity\GradebookLinkevalLog",
+     *     mappedBy="user",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true
+     * )
+     */
+    protected $gradebookLinkevalLogs;
 
     /**
      * @var ArrayCollection
@@ -500,7 +523,7 @@ class User implements UserInterface, EquatableInterface
      *     orphanRemoval=true
      * )
      */
-    protected $userRelationship;
+    protected $userRelationships;
 
     /**
      * @var ArrayCollection
@@ -2443,7 +2466,7 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Gets the Admin for the current user.
-     * @return Admin
+     *
      */
     public function getAdmin(): Admin
     {
@@ -2452,158 +2475,158 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Sets the Admin for the current user.
-     * @param Admin $admin
-     * @return User
+     *
      */
     public function setAdmin(Admin $admin): User
     {
         $this->admin = $admin;
+
         return $this;
     }
 
     /**
      * Sets the Gradebook Certificate's for the current user.
-     * @return ArrayCollection
+     *
      */
-    public function getGradebookCertificate(): ArrayCollection
+    public function getGradebookCertificates(): ArrayCollection
     {
-        return $this->gradebookCertificate;
+        return $this->gradebookCertificates;
     }
 
     /**
      * Sets the Gradebook Certificate's for the current user.
-     * @param ArrayCollection $gradebookCertificate
-     * @return User
+     *
      */
-    public function setGradebookCertificate(ArrayCollection $gradebookCertificate): User
+    public function setGradebookCertificates(ArrayCollection $gradebookCertificates): User
     {
-        $this->gradebookCertificate = $gradebookCertificate;
+        $this->gradebookCertificates = $gradebookCertificates;
+
         return $this;
     }
 
     /**
      * Gets the Gradebook Certificate's for the current user.
-     * @return ArrayCollection
+     *
      */
-    public function getGradebookEvaluation(): ArrayCollection
+    public function getGradebookEvaluations(): ArrayCollection
     {
-        return $this->gradebookEvaluation;
+        return $this->gradebookEvaluations;
     }
 
     /**
      * Sets the Gradebook Evaluation's for the current user.
-     * @param ArrayCollection $gradebookEvaluation
-     * @return User
+     *
      */
-    public function setGradebookEvaluation(ArrayCollection $gradebookEvaluation): User
+    public function setGradebookEvaluations(ArrayCollection $gradebookEvaluations): User
     {
-        $this->gradebookEvaluation = $gradebookEvaluation;
+        $this->gradebookEvaluations = $gradebookEvaluations;
+
         return $this;
     }
 
     /**
      * Gets the Gradebook Evaluation's for the current user.
-     * @return ArrayCollection
+     *
      */
-    public function getGradebookLink(): ArrayCollection
+    public function getGradebookLinks(): ArrayCollection
     {
-        return $this->gradebookLink;
+        return $this->gradebookLinks;
     }
 
     /**
      * Sets the Gradebook Link's for the current user.
-     * @param ArrayCollection $gradebookLink
-     * @return User
+     *
      */
-    public function setGradebookLink(ArrayCollection $gradebookLink): User
+    public function setGradebookLinks(ArrayCollection $gradebookLinks): User
     {
-        $this->gradebookLink = $gradebookLink;
+        $this->gradebookLinks = $gradebookLinks;
+
         return $this;
     }
 
     /**
      * Gets the Gradebook Result's for the current user.
-     * @return ArrayCollection
+     *
      */
-    public function getGradebookResult(): ArrayCollection
+    public function getGradebookResults(): ArrayCollection
     {
-        return $this->gradebookResult;
+        return $this->gradebookResults;
     }
 
     /**
      * Sets the Gradebook Result's for the current user.
-     * @param ArrayCollection $gradebookResult
-     * @return User
+     *
      */
-    public function setGradebookResult(ArrayCollection $gradebookResult): User
+    public function setGradebookResults(ArrayCollection $gradebookResults): User
     {
-        $this->gradebookResult = $gradebookResult;
+        $this->gradebookResults = $gradebookResults;
+
         return $this;
     }
 
     /**
      * Gets the Gradebook Result Log's for the current user.
-     * @return ArrayCollection
+     *
      */
-    public function getGradebookResultLog(): ArrayCollection
+    public function getGradebookResultLogs(): ArrayCollection
     {
-        return $this->gradebookResultLog;
+        return $this->gradebookResultLogs;
     }
 
     /**
      * Sets the Gradebook Result Log's for the current user.
-     * @param ArrayCollection $gradebookResultLog
-     * @return User
+     *
      */
-    public function setGradebookResultLog(ArrayCollection $gradebookResultLog): User
+    public function setGradebookResultLogs(ArrayCollection $gradebookResultLogs): User
     {
-        $this->gradebookResultLog = $gradebookResultLog;
+        $this->gradebookResultLogs = $gradebookResultLogs;
+
         return $this;
     }
 
     /**
      * Gets the Gradebook Score Log's for the current user.
-     * @return ArrayCollection
+     *
      */
-    public function getGradebookScoreLog(): ArrayCollection
+    public function getGradebookScoreLogs(): ArrayCollection
     {
-        return $this->gradebookScoreLog;
+        return $this->gradebookScoreLogs;
     }
 
     /**
      * Sets the Gradebook Score Log's for the current user.
-     * @param ArrayCollection $gradebookScoreLog
-     * @return User
+     *
      */
-    public function setGradebookScoreLog(ArrayCollection $gradebookScoreLog): User
+    public function setGradebookScoreLogs(ArrayCollection $gradebookScoreLogs): User
     {
-        $this->gradebookScoreLog = $gradebookScoreLog;
+        $this->gradebookScoreLogs = $gradebookScoreLogs;
+
         return $this;
     }
 
     /**
      * Gets the Sequence Value's for the current user.
-     * @return ArrayCollection
+     *
      */
-    public function getSequenceValue(): ArrayCollection
+    public function getSequenceValues(): ArrayCollection
     {
-        return $this->sequenceValue;
+        return $this->sequenceValues;
     }
 
     /**
      * Sets the Sequence Value's for the current user.
-     * @param ArrayCollection $sequenceValue
-     * @return User
+     *
      */
-    public function setSequenceValue(ArrayCollection $sequenceValue): User
+    public function setSequenceValues(ArrayCollection $sequenceValues): User
     {
-        $this->sequenceValue = $sequenceValue;
+        $this->sequenceValues = $sequenceValues;
+
         return $this;
     }
 
     /**
      * Gets the Templates's for the current user.
-     * @return ArrayCollection
+     *
      */
     public function getTemplates(): ArrayCollection
     {
@@ -2612,38 +2635,38 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Sets the Templates's for the current user.
-     * @param ArrayCollection $templates
-     * @return User
+     *
      */
     public function setTemplates(ArrayCollection $templates): User
     {
         $this->templates = $templates;
+
         return $this;
     }
 
     /**
      * Gets the Track E Attemp's for the current user.
-     * @return ArrayCollection
+     *
      */
-    public function getTrackEAttemp(): ArrayCollection
+    public function getTrackEAttemps(): ArrayCollection
     {
-        return $this->trackEAttemp;
+        return $this->trackEAttemps;
     }
 
     /**
      * Sets the Track E Attemp's for the current user.
-     * @param ArrayCollection $trackEAttemp
-     * @return User
+     *
      */
-    public function setTrackEAttemp(ArrayCollection $trackEAttemp): User
+    public function setTrackEAttemps(ArrayCollection $trackEAttemps): User
     {
-        $this->trackEAttemp = $trackEAttemp;
+        $this->trackEAttemps = $trackEAttemps;
+
         return $this;
     }
 
     /**
      * Gets the Track E CourseA ccess 's for the current user.
-     * @return ArrayCollection
+     *
      */
     public function getTrackECourseAccess(): ArrayCollection
     {
@@ -2652,92 +2675,133 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Sets the Track E CourseA ccess 's for the current user.
-     * @param ArrayCollection $trackECourseAccess
-     * @return User
+     *
      */
     public function setTrackECourseAccess(ArrayCollection $trackECourseAccess): User
     {
         $this->trackECourseAccess = $trackECourseAccess;
+
         return $this;
     }
 
     /**
      * Gets the User Course Category's for the current user.
-     * @return ArrayCollection
+     *
      */
-    public function getUserCourseCategory(): ArrayCollection
+    public function getUserCourseCategorys(): ArrayCollection
     {
-        return $this->userCourseCategory;
+        return $this->userCourseCategorys;
     }
 
     /**
      * Sets the User Course Category's for the current user.
-     * @param ArrayCollection $userCourseCategory
-     * @return User
+     *
      */
-    public function setUserCourseCategory(ArrayCollection $userCourseCategory): User
+    public function setUserCourseCategorys(ArrayCollection $userCourseCategorys): User
     {
-        $this->userCourseCategory = $userCourseCategory;
+        $this->userCourseCategorys = $userCourseCategorys;
+
         return $this;
     }
 
     /**
      * Gets the User Rel Course Vote's for the current user.
-     * @return ArrayCollection
+     *
      */
-    public function getUserRelCourseVote(): ArrayCollection
+    public function getUserRelCourseVotes(): ArrayCollection
     {
-        return $this->userRelCourseVote;
+        return $this->userRelCourseVotes;
     }
 
     /**
      * Sets the User Rel Course Vote's for the current user.
-     * @param ArrayCollection $userRelCourseVote
-     * @return User
+     *
      */
-    public function setUserRelCourseVote(ArrayCollection $userRelCourseVote): User
+    public function setUserRelCourseVotes(ArrayCollection $userRelCourseVotes): User
     {
-        $this->userRelCourseVote = $userRelCourseVote;
+        $this->userRelCourseVotes = $userRelCourseVotes;
+
         return $this;
     }
 
     /**
      * Gets the User Rel Tag's for the current user.
-     * @return ArrayCollection
+     *
      */
-    public function getUserRelTag(): ArrayCollection
+    public function getUserRelTags(): ArrayCollection
     {
-        return $this->userRelTag;
+        return $this->userRelTags;
     }
 
     /**
      * Sets the User Rel Tag's for the current user.
-     * @param ArrayCollection $userRelTag
-     * @return User
+     *
      */
-    public function setUserRelTag(ArrayCollection $userRelTag): User
+    public function setUserRelTags(ArrayCollection $userRelTags): User
     {
-        $this->userRelTag = $userRelTag;
+        $this->userRelTags = $userRelTags;
+
         return $this;
     }
 
     /**
      * Gets the User Rel User's for the current user.
-     * @return ArrayCollection
+     *
      */
-    public function getUserRelationship(): ArrayCollection
+    public function getUserRelationships(): ArrayCollection
     {
-        return $this->userRelationship;
+        return $this->userRelationships;
     }
 
     /**
      * Sets the User Rel User's for the current user.
-     * @param ArrayCollection $userRelationship
-     * @return User
+     *
      */
-    public function setUserRelationship(ArrayCollection $userRelationship): User
+    public function setUserRelationships(ArrayCollection $userRelationships): User
     {
-        $this->userRelationship = $userRelationship;
+        $this->userRelationships = $userRelationships;
+
         return $this;
     }
+
+    /**
+     * Gets the Track E Exercise Confirmation's for the current user.
+     *
+     */
+    public function getTrackEExerciseConfirmations(): ArrayCollection
+    {
+        return $this->trackEExerciseConfirmations;
+    }
+
+    /**
+     * Sets the Track E Exercise Confirmation's for the current user.
+     *
+     */
+    public function setTrackEExerciseConfirmations(ArrayCollection $trackEExerciseConfirmations): User
+    {
+        $this->trackEExerciseConfirmations = $trackEExerciseConfirmations;
+
+        return $this;
+    }
+
+    /**
+     * Gets the Gradebook Linkeval Log's for the current user.
+     *
+     */
+    public function getGradebookLinkevalLogs(): ArrayCollection
+    {
+        return $this->gradebookLinkevalLogs;
+    }
+
+    /**
+     * Sets the Gradebook Linkeval Log's for the current user.
+     *
+     */
+    public function setGradebookLinkevalLogs(ArrayCollection $gradebookLinkevalLogs): User
+    {
+        $this->gradebookLinkevalLogs = $gradebookLinkevalLogs;
+
+        return $this;
+    }
+
 }

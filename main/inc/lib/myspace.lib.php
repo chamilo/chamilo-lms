@@ -1157,6 +1157,7 @@ class MySpace
             $registeredUsers = self::getCompanyLearnpathSubscription($startDate, $endDate, $lp_id);
             if (!empty($registeredUsers)) {
                 $lp_info = [];
+                $teacherList = [];
                 $teachersId = explode(',', trim($row['users_id'], ","));
                 $lp_table = Database::get_course_table(TABLE_LP_MAIN);
                 $query = "

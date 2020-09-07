@@ -9,10 +9,18 @@
     <projectFiles>
         <directory name="src"/>
 <!--        <directory name="public/main/admin" />-->
+        <directory name="public/main/announcements"/>
+        <directory name="public/main/attendance"/>
+<!--        <directory name="public/main/badge"/>-->
+        <directory name="public/main/blog"/>
+<!--        <directory name="public/main/calendar"/>-->
         <directory name="public/main/group"/>
         <directory name="public/main/link" />
        <!-- <directory name="public/main/session" /> -->
         <!--  <directory name="public/main/exercise"/> -->
+
+        <file name="public/main/inc/lib/attendance.lib.php"/>
+
         <ignoreFiles>
             <directory name="vendor/*"/>
             <directory name="src/CoreBundle/Menu"/>

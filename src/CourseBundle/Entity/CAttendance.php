@@ -15,8 +15,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(
  *  name="c_attendance",
  *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"}),
- *      @ORM\Index(name="session_id", columns={"session_id"}),
  *      @ORM\Index(name="active", columns={"active"})
  *  }
  * )
@@ -34,13 +32,6 @@ class CAttendance extends AbstractResource implements ResourceInterface
     protected $iid;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="c_id", type="integer")
-     */
-    protected $cId;
-
-    /**
      * @var string
      * @Assert\NotBlank
      * @ORM\Column(name="name", type="text", nullable=false)
@@ -55,9 +46,9 @@ class CAttendance extends AbstractResource implements ResourceInterface
     protected $description;
 
     /**
-     * @var bool
+     * @var int
      *
-     * @ORM\Column(name="active", type="boolean", nullable=false)
+     * @ORM\Column(name="active", type="integer", nullable=false)
      */
     protected $active;
 
@@ -81,13 +72,6 @@ class CAttendance extends AbstractResource implements ResourceInterface
      * @ORM\Column(name="attendance_weight", type="float", precision=6, scale=2, nullable=false)
      */
     protected $attendanceWeight;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="session_id", type="integer", nullable=false)
-     */
-    protected $sessionId;
 
     /**
      * @var int
@@ -158,12 +142,8 @@ class CAttendance extends AbstractResource implements ResourceInterface
 
     /**
      * Set active.
-     *
-     * @param bool $active
-     *
-     * @return CAttendance
      */
-    public function setActive($active)
+    public function setActive(int $active): self
     {
         $this->active = $active;
 
@@ -172,12 +152,10 @@ class CAttendance extends AbstractResource implements ResourceInterface
 
     /**
      * Get active.
-     *
-     * @return bool
      */
-    public function getActive()
+    public function getActive(): int
     {
-        return $this->active;
+        return (int) $this->active;
     }
 
     /**
@@ -208,10 +186,8 @@ class CAttendance extends AbstractResource implements ResourceInterface
      * Set attendanceQualifyMax.
      *
      * @param int $attendanceQualifyMax
-     *
-     * @return CAttendance
      */
-    public function setAttendanceQualifyMax($attendanceQualifyMax)
+    public function setAttendanceQualifyMax($attendanceQualifyMax): self
     {
         $this->attendanceQualifyMax = $attendanceQualifyMax;
 
@@ -232,10 +208,8 @@ class CAttendance extends AbstractResource implements ResourceInterface
      * Set attendanceWeight.
      *
      * @param float $attendanceWeight
-     *
-     * @return CAttendance
      */
-    public function setAttendanceWeight($attendanceWeight)
+    public function setAttendanceWeight($attendanceWeight): self
     {
         $this->attendanceWeight = $attendanceWeight;
 
@@ -253,37 +227,9 @@ class CAttendance extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Set sessionId.
-     *
-     * @param int $sessionId
-     *
-     * @return CAttendance
-     */
-    public function setSessionId($sessionId)
-    {
-        $this->sessionId = $sessionId;
-
-        return $this;
-    }
-
-    /**
-     * Get sessionId.
-     *
-     * @return int
-     */
-    public function getSessionId()
-    {
-        return $this->sessionId;
-    }
-
-    /**
      * Set locked.
-     *
-     * @param int $locked
-     *
-     * @return CAttendance
      */
-    public function setLocked($locked)
+    public function setLocked(int $locked): self
     {
         $this->locked = $locked;
 
@@ -298,30 +244,6 @@ class CAttendance extends AbstractResource implements ResourceInterface
     public function getLocked()
     {
         return $this->locked;
-    }
-
-    /**
-     * Set cId.
-     *
-     * @param int $cId
-     *
-     * @return CAttendance
-     */
-    public function setCId($cId)
-    {
-        $this->cId = $cId;
-
-        return $this;
-    }
-
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
-    {
-        return $this->cId;
     }
 
     public function getIid(): int

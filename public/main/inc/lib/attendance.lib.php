@@ -318,17 +318,14 @@ class Attendance
         $table_link = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
         $session_id = api_get_session_id();
         $course_code = $_course['code'];
-        $course_id = $_course['real_id'];
         $title_gradebook = $this->attendance_qualify_title;
         $value_calification = 0;
         $weight_calification = api_float_val($this->attendance_weight);
         $course = api_get_course_entity();
         $attendance = new CAttendance();
         $attendance
-            ->setCId($course_id)
             ->setName($this->name)
             ->setDescription($this->description)
-            ->setSessionId($session_id)
             ->setAttendanceQualifyTitle($title_gradebook)
             ->setAttendanceWeight($weight_calification)
             ->setParent($course)
@@ -339,18 +336,7 @@ class Attendance
         $em = $repo->getEntityManager();
         $em->persist($attendance);
         $em->flush();
-
         $last_id = $attendance->getIid();
-
-        if (!empty($last_id)) {
-            /*api_item_property_update(
-                $_course,
-                TOOL_ATTENDANCE,
-                $last_id,
-                "AttendanceAdded",
-                $user_id
-            );*/
-        }
 
         // add link to gradebook
         if ($link_to_gradebook && !empty($this->category_id)) {

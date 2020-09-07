@@ -1,4 +1,7 @@
 <?php
+
+/* For licensing terms, see /license.txt */
+
 // Check extra_field authors to lp and company to user
 require_once 'CheckExtraFieldAuthorsCompanyPlugin.php';
 

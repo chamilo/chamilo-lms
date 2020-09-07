@@ -1114,9 +1114,12 @@ $_configuration['profile_fields_visibility'] = [
 // Add a minimum time limit to be in the learning path
 // in order to get the last item completed
 // Requires a DB change:
-// ALTER TABLE c_lp ADD accumulate_work_time INT NOT NULL;
-// CREATE TABLE track_e_access_complete (id int(11) NOT NULL AUTO_INCREMENT, user_id int(11) NOT NULL, date_reg datetime NOT NULL, tool varchar(255) NOT NULL,  tool_id int(11) NOT NULL,   tool_id_detail int(11) NOT NULL,  action varchar(255) NOT NULL,   action_details varchar(255) NOT NULL, current_id int(11) NOT NULL,  ip_user varchar(255) NOT NULL,  user_agent varchar(255) NOT NULL,   session_id int(11) NOT NULL,   c_id int(11) NOT NULL,   ch_sid varchar(255) NOT NULL,   login_as int(11) NOT NULL,   info longtext NOT NULL,   url text NOT NULL,   PRIMARY KEY (id) ) ENGINE=InnoDB AUTO_INCREMENT=13989 DEFAULT CHARSET=utf8;
-// CREATE INDEX user_course_session ON track_e_access_complete (user_id, c_id, session_id);
+/*
+  ALTER TABLE c_lp ADD accumulate_work_time INT NOT NULL;
+  CREATE TABLE track_e_access_complete (id int(11) NOT NULL AUTO_INCREMENT, user_id int(11) NOT NULL, date_reg datetime NOT NULL, tool varchar(255) NOT NULL, tool_id int(11) NOT NULL,   tool_id_detail int(11) NOT NULL,  action varchar(255) NOT NULL,   action_details varchar(255) NOT NULL, current_id int(11) NOT NULL, ip_user varchar(255) NOT NULL, user_agent varchar(255) NOT NULL, session_id int(11) NOT NULL, c_id int(11) NOT NULL,   ch_sid varchar(255) NOT NULL, login_as int(11) NOT NULL, info longtext NOT NULL, url text NOT NULL, PRIMARY KEY (id) ) ENGINE=InnoDB AUTO_INCREMENT=13989 DEFAULT CHARSET=utf8;
+  CREATE INDEX user_course_session ON track_e_access_complete (user_id, c_id, session_id);
+*/
+
 // Add course checkbox extra field "new_tracking_system"
 // Add session checkbox extra field "new_tracking_system"
 // Only applied for courses/sessions with extra field "new_tracking_system" to "1"
@@ -1245,6 +1248,9 @@ $_configuration['required_extra_fields_in_profile'] = [
 // Add gradebook score style configuration in the flat view
 // See api.lib.php in order to find the options: examples SCORE_DIV = 1, SCORE_PERCENT = 2, etc
 //$_configuration['gradebook_report_score_style'] = 1; //  Means the score will be (X / Y) "SCORE_DIV"
+
+// Allow show the score display custom (when it is enabled) in a standalone column in gradebook
+//$_configuration['gradebook_score_display_custom_standalone'] = false;
 
 // Blocks "my files" access to anon users
 //$_configuration['block_my_files_access'] = false;
@@ -1600,6 +1606,10 @@ $_configuration['auth_password_links'] = [
 
 // Allow teachers and admins to see students as friends on social network
 // $_configuration['social_make_teachers_friend_all'] = false;
+
+// Prevent the use of images copy-paste as base64 in the editor to avoid
+// filling the database with images
+//$_configuration['ck_editor_block_image_copy_paste'] = false;
 
 // KEEP THIS AT THE END
 // -------- Custom DB changes

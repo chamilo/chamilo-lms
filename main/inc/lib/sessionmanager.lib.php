@@ -3284,9 +3284,8 @@ class SessionManager
             foreach ($conditions as $field => $options) {
                 $operator = strtolower($options['operator']);
                 $value = Database::escape_string($options['value']);
-                $sql_query .= ' AND ';
                 if (in_array($field, $availableFields) && in_array($operator, $availableOperator)) {
-                    $sql_query .= $field." $operator '".$value."'";
+                    $sql_query .= ' AND '.$field." $operator '".$value."'";
                 }
             }
         }
@@ -9535,6 +9534,18 @@ class SessionManager
         $result = Database::query($sql);
 
         return Database::num_rows($result) > 0;
+    }
+
+    /**
+     * Add a warning message when session is read-only mode.
+     */
+    public static function addFlashSessionReadOnly()
+    {
+        if (api_get_session_id() && !api_is_allowed_to_session_edit()) {
+            Display::addFlash(
+                Display::return_message(get_lang('SessionIsReadOnly'), 'warning')
+            );
+        }
     }
 
     /**

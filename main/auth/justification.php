@@ -23,7 +23,7 @@ foreach ($fields as $field) {
     $formValidator->addHtml('<a name="'.$field['code'].'"></a>');
     $formValidator->addFile($field['code'].'_file', [$field['name'], $field['comment']]);
     if ($field['date_manual_on']) {
-        $formValidator->addDatePicker($field['code'].'_date', $plugin->get_lang('DateValidity'));
+        $formValidator->addDatePicker($field['code'].'_date', $plugin->get_lang('ValidityDate'));
     }
     $formValidator->addHtml('<hr>');
 }

@@ -86,7 +86,7 @@ class Meeting
     /**
      * @var CGroupInfo
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CGroupInfo")
-     * @ORM\JoinColumn(name="group_id", referencedColumnName="id", nullable=true)
+     * @ORM\JoinColumn(name="group_id", referencedColumnName="iid", nullable=true)
      */
     protected $group;
 
@@ -131,6 +131,7 @@ class Meeting
 
     /**
      * @var Recording[]|ArrayCollection
+     *
      * @ORM\OneToMany(targetEntity="Recording", mappedBy="meeting", cascade={"persist"}, orphanRemoval=true)
      */
     protected $recordings;
@@ -405,6 +406,14 @@ class Meeting
     /**
      * @return bool
      */
+    public function isCourseGroupMeeting()
+    {
+        return null !== $this->course && null !== $this->group;
+    }
+
+    /**
+     * @return bool
+     */
     public function isUserMeeting()
     {
         return null !== $this->user && null === $this->course;
@@ -489,7 +498,7 @@ class Meeting
      */
     public function hasCloudAutoRecordingEnabled()
     {
-        return 'cloud' === $this->meetingInfoGet->settings->auto_recording;
+        return \ZoomPlugin::RECORDING_TYPE_NONE !== $this->meetingInfoGet->settings->auto_recording;
     }
 
     /**
@@ -532,7 +541,12 @@ class Meeting
     {
         $introduction = sprintf('<h1>%s</h1>', $this->meetingInfoGet->topic);
         if (!$this->isGlobalMeeting()) {
-            $introduction .= sprintf('<p>%s (%s)</p>', $this->formattedStartTime, $this->formattedDuration);
+            if (!empty($this->formattedStartTime)) {
+                $introduction .= $this->formattedStartTime;
+                if (!empty($this->formattedDuration)) {
+                    $introduction .= ' ('.$this->formattedDuration.')';
+                }
+            }
         }
         if ($this->user) {
             $introduction .= sprintf('<p>%s</p>', $this->user->getFullname());

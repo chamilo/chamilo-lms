@@ -68,7 +68,8 @@ if (!empty($question_list)) {
             $question_id,
             $exerciseId,
             $courseCode,
-            $sessionId
+            $sessionId,
+            true
         );
 
         $count_users = ExerciseLib::get_number_students_question_with_answer_count(
@@ -137,7 +138,8 @@ if (!empty($question_list)) {
             $question_id,
             $exerciseId,
             $courseCode,
-            $sessionId
+            $sessionId,
+            true
         );
 
         $answer = new Answer($question_id);

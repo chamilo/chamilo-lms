@@ -1,6 +1,6 @@
 <?php
 
-/* For license terms, see /license.txt */
+/* For licensing terms, see /license.txt */
 
 /**
  * Class CheckExtraFieldAuthorsCompanyPlugin.

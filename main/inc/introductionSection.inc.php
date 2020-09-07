@@ -219,11 +219,12 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
         $thematic_info = $thematic->get_thematic_list($thematic_advance_info['thematic_id']);
         $thematic_info['title'] = isset($thematic_info['title']) ? $thematic_info['title'] : '';
 
-        /*
-        $thematic_advance_info['start_date'] = api_get_local_time(
-            $thematic_advance_info['start_date']
-        );
-        */
+        if (!empty($thematic_advance_info['start_date'])) {
+            $thematic_advance_info['start_date'] = api_get_local_time(
+                $thematic_advance_info['start_date']
+            );
+        }
+
         $thematic_advance_info['start_date'] = api_format_date(
             $thematic_advance_info['start_date'],
             DATE_TIME_FORMAT_LONG

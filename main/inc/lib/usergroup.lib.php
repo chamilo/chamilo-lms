@@ -195,11 +195,11 @@ class UserGroup extends Model
     }
 
     /**
-     * @param int $type
+     * @param string $extraWhereCondition
      *
      * @return int
      */
-    public function get_count()
+    public function get_count($extraWhereCondition = '')
     {
         $authorCondition = '';
 
@@ -217,6 +217,7 @@ class UserGroup extends Model
                     INNER JOIN $this->access_url_rel_usergroup a
                     ON (u.id = a.usergroup_id)
                     WHERE access_url_id = $urlId $authorCondition
+                    AND $extraWhereCondition
             ";
 
             $result = Database::query($sql);
@@ -230,6 +231,7 @@ class UserGroup extends Model
                     FROM {$this->table} a
                     WHERE 1 = 1
                     $authorCondition
+                    AND $extraWhereCondition
             ";
             $result = Database::query($sql);
             if (Database::num_rows($result)) {
@@ -1112,45 +1114,43 @@ class UserGroup extends Model
     }
 
     /**
-     * @param int $sidx
-     * @param int $sord
-     * @param int $start
-     * @param int $limit
+     * @param int    $sidx
+     * @param int    $sord
+     * @param int    $start
+     * @param int    $limit
+     * @param string $extraWhereCondition
      *
      * @return array
      */
-    public function getUsergroupsPagination($sidx, $sord, $start, $limit)
+    public function getUsergroupsPagination($sidx, $sord, $start, $limit, $extraWhereCondition = '')
     {
         $sord = in_array(strtolower($sord), ['asc', 'desc']) ? $sord : 'desc';
 
         $start = (int) $start;
         $limit = (int) $limit;
+
+        $sqlFrom = "{$this->table} u ";
+        $sqlWhere = '1 = 1 ';
+
         if ($this->getUseMultipleUrl()) {
             $urlId = api_get_current_access_url_id();
-            $from = $this->table." u
-                    INNER JOIN {$this->access_url_rel_usergroup} a
-                    ON (u.id = a.usergroup_id)";
-            $where = [' access_url_id = ?' => $urlId];
-        } else {
-            $from = $this->table.' u ';
-            $where = [];
+            $sqlFrom .= " INNER JOIN {$this->access_url_rel_usergroup} a ON (u.id = a.usergroup_id) ";
+            $sqlWhere .= " AND a.access_url_id = $urlId ";
         }
 
         if ($this->allowTeachers()) {
             if (!api_is_platform_admin()) {
                 $userId = api_get_user_id();
-                $where = [' author_id = ?' => $userId];
+                $sqlWhere .= " AND author_id = $userId ";
             }
         }
 
-        $result = Database::select(
-            'u.*',
-            $from,
-            [
-                'where' => $where,
-                'order' => "name $sord",
-                'LIMIT' => "$start , $limit",
-            ]
+        if ($extraWhereCondition) {
+            $sqlWhere .= " AND $extraWhereCondition ";
+        }
+
+        $result = Database::store_result(
+            Database::query("SELECT u.* FROM $sqlFrom WHERE $sqlWhere ORDER BY name $sord LIMIT $start, $limit")
         );
 
         $new_result = [];
@@ -1320,7 +1320,7 @@ class UserGroup extends Model
     public function save($params, $show_query = false)
     {
         $params['updated_at'] = $params['created_at'] = api_get_utc_datetime();
-        $params['group_type'] = isset($params['group_type']) ? self::SOCIAL_CLASS : self::NORMAL_CLASS;
+        $params['group_type'] = !empty($params['group_type']) ? self::SOCIAL_CLASS : self::NORMAL_CLASS;
         $params['allow_members_leave_group'] = isset($params['allow_members_leave_group']) ? 1 : 0;
 
         $groupExists = $this->usergroup_exists(trim($params['name']));
@@ -1338,7 +1338,7 @@ class UserGroup extends Model
                     $this->add_user_to_group(
                         api_get_user_id(),
                         $id,
-                        $params['group_type']
+                        GROUP_USER_PERMISSION_ADMIN
                     );
                 }
                 $picture = isset($_FILES['picture']) ? $_FILES['picture'] : null;
@@ -1365,7 +1365,7 @@ class UserGroup extends Model
     public function update($values, $showQuery = false)
     {
         $values['updated_on'] = api_get_utc_datetime();
-        $values['group_type'] = isset($values['group_type']) ? self::SOCIAL_CLASS : self::NORMAL_CLASS;
+        $values['group_type'] = !empty($values['group_type']) ? self::SOCIAL_CLASS : self::NORMAL_CLASS;
         $values['allow_members_leave_group'] = isset($values['allow_members_leave_group']) ? 1 : 0;
 
         if (isset($values['id'])) {

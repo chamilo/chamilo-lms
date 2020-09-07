@@ -353,7 +353,7 @@ if ($bbb->isGlobalConference() === false &&
 ) {
     $url = api_get_self().'?'.api_get_cidreq(true, false).'&gidReq=';
     $htmlHeadXtra[] = '<script>
-        $(document).ready(function() {
+         $(function() {
             $("#group_select").on("change", function() {
                 var groupId = $(this).find("option:selected").val();
                 var url = "'.$url.'";

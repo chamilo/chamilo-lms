@@ -616,7 +616,7 @@ class survey_question
         foreach ($list as $child) {
             $childQuestionId = $child['question_id'];
             $optionId = $child['parent_option_id'];
-            $newList[$optionId] = $childQuestionId;
+            $newList[$optionId][] = $childQuestionId;
         }
 
         if ('multipleresponse' === $type) {
@@ -624,14 +624,11 @@ class survey_question
             foreach ($newList as $optionId => $child) {
                 $multiple .= '
                     $(\'input[name="question'.$questionId.'['.$optionId.']"]\').on("change", function() {
-
                         var isChecked= $(this).is(\':checked\');
                         var checkedValue = $(this).val();
                         if (isChecked) {
                             $.each(list, function(index, value) {
-                                //$(".with_parent_" + value).hide();
                                 $(".with_parent_" + value).find("input").prop("checked", false);
-                                //$(".with_parent_only_hide_" + value).hide();
                             });
 
                             var questionId = $(this).val();
@@ -639,11 +636,6 @@ class survey_question
                             $(".with_parent_" + questionToShow).show();
                         } else {
                             var checkedValue = list[checkedValue];
-                             //$.each(list, function(index, value) {
-                                $(".with_parent_" + checkedValue).hide();
-                                $(".with_parent_" + checkedValue).find("input").prop("checked", false);
-                                $(".with_parent_only_hide_" + checkedValue).hide();
-                            //});
                         }
                     });
                 ';
@@ -666,14 +658,18 @@ class survey_question
                 var list = '.json_encode($newList).';
                 $("input[name=question'.$questionId.']").on("click", function() {
                     $.each(list, function(index, value) {
-                        $(".with_parent_" + value).hide();
-                        $(".with_parent_" + value).find("input").prop("checked", false);
-                        $(".with_parent_only_hide_" + value).hide();
+                         $.each(value, function(index, itemValue) {
+                            $(".with_parent_" + itemValue).hide();
+                            $(".with_parent_" + itemValue).find("input").prop("checked", false);
+                            $(".with_parent_only_hide_" + itemValue).hide();
+                        });
                     });
 
                     var questionId = $(this).val();
-                    var questionToShow = list[questionId];
-                    $(".with_parent_" + questionToShow).show();
+                    var questionToShowList = list[questionId];
+                    $.each(questionToShowList, function(index, value) {
+                        $(".with_parent_" + value).show();
+                    });
                 });
             });
             </script>';

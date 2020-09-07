@@ -2252,15 +2252,11 @@ class Exercise
                 $form->addGroup($group, null, get_lang('ShowPreviousButton'));
             }
 
-            // Attempts
-            $attempt_option = range(0, 10);
-            $attempt_option[0] = get_lang('Infinite');
-
             $form->addElement(
-                'select',
+                'number',
                 'exerciseAttempts',
                 get_lang('ExerciseAttempts'),
-                $attempt_option,
+                null,
                 ['id' => 'exerciseAttempts']
             );
 

@@ -29,6 +29,9 @@ use Doctrine\ORM\Tools\ToolsException;
  */
 class ZoomPlugin extends Plugin
 {
+    const RECORDING_TYPE_CLOUD = 'cloud';
+    const RECORDING_TYPE_LOCAL = 'local';
+    const RECORDING_TYPE_NONE = 'none';
     public $isCoursePlugin = true;
 
     /**
@@ -44,7 +47,7 @@ class ZoomPlugin extends Plugin
     public function __construct()
     {
         parent::__construct(
-            '0.2',
+            '0.3',
             'Sébastien Ducoulombier, Julio Montoya',
             [
                 'tool_enable' => 'boolean',
@@ -52,7 +55,14 @@ class ZoomPlugin extends Plugin
                 'apiSecret' => 'text',
                 'verificationToken' => 'text',
                 'enableParticipantRegistration' => 'boolean',
-                'enableCloudRecording' => 'boolean',
+                'enableCloudRecording' => [
+                    'type' => 'select',
+                    'options' => [
+                        self::RECORDING_TYPE_CLOUD => 'Cloud',
+                        self::RECORDING_TYPE_LOCAL => 'Local',
+                        self::RECORDING_TYPE_NONE => get_lang('None'),
+                    ],
+                ],
                 'enableGlobalConference' => 'boolean',
                 'globalConferenceAllowRoles' => [
                     'type' => 'select',
@@ -123,7 +133,7 @@ class ZoomPlugin extends Plugin
             $items[] = [
                 'class' => 'video-conference',
                 'icon' => Display::return_icon(
-                    'zoom.png',
+                    'bbb.png',
                     get_lang('VideoConference')
                 ),
                 'link' => $link,
@@ -341,9 +351,14 @@ class ZoomPlugin extends Plugin
         if (null === $meeting) {
             return false;
         }
+
         $em = Database::getManager();
         try {
-            $meeting->getMeetingInfoGet()->delete();
+            // No need to delete a instant meeting.
+            if (\Chamilo\PluginBundle\Zoom\API\Meeting::TYPE_INSTANT != $meeting->getMeetingInfoGet()->type) {
+                $meeting->getMeetingInfoGet()->delete();
+            }
+
             $em->remove($meeting);
             $em->flush();
 
@@ -439,16 +454,18 @@ class ZoomPlugin extends Plugin
      *
      * @return FormValidator
      */
-    public function getFileForm($meeting)
+    public function getFileForm($meeting, $returnURL)
     {
         $form = new FormValidator('fileForm', 'post', $_SERVER['REQUEST_URI']);
         if (!$meeting->getRecordings()->isEmpty()) {
             $fileIdSelect = $form->addSelect('fileIds', get_lang('Files'));
             $fileIdSelect->setMultiple(true);
-            foreach ($meeting->getRecordings() as &$recording) {
+            $recordingList = $meeting->getRecordings();
+            foreach ($recordingList as &$recording) {
                 // $recording->instanceDetails = $plugin->getPastMeetingInstanceDetails($instance->uuid);
                 $options = [];
-                foreach ($recording->getRecordingMeeting()->recording_files as $file) {
+                $recordings = $recording->getRecordingMeeting()->recording_files;
+                foreach ($recordings as $file) {
                     $options[] = [
                         'text' => sprintf(
                             '%s.%s (%s)',
@@ -477,9 +494,14 @@ class ZoomPlugin extends Plugin
             );
             $form->addButtonUpdate($this->get_lang('DoIt'));
             if ($form->validate()) {
-                foreach ($meeting->getRecordings() as $recording) {
-                    foreach ($recording->files as $file) {
-                        if (in_array($file->id, $form->getSubmitValue('fileIds'))) {
+                $action = $form->getSubmitValue('action');
+                $idList = $form->getSubmitValue('fileIds');
+
+                foreach ($recordingList as $recording) {
+                    $recordings = $recording->getRecordingMeeting()->recording_files;
+
+                    foreach ($recordings as $file) {
+                        if (in_array($file->id, $idList)) {
                             $name = sprintf(
                                 $this->get_lang('XRecordingOfMeetingXFromXDurationXDotX'),
                                 $file->recording_type,
@@ -488,7 +510,6 @@ class ZoomPlugin extends Plugin
                                 $recording->formattedDuration,
                                 $file->file_type
                             );
-                            $action = $form->getSubmitValue('action');
                             if ('CreateLinkInCourse' === $action && $meeting->isCourseMeeting()) {
                                 try {
                                     $this->createLinkToFileInCourse($meeting, $file, $name);
@@ -516,9 +537,10 @@ class ZoomPlugin extends Plugin
                                 }
                             } elseif ('DeleteFile' === $action) {
                                 try {
+                                    $name = $file->recording_type;
                                     $file->delete();
                                     Display::addFlash(
-                                        Display::return_message($this->get_lang('FileWasDeleted'), 'confirm')
+                                        Display::return_message($this->get_lang('FileWasDeleted').': '.$name, 'confirm')
                                     );
                                 } catch (Exception $exception) {
                                     Display::addFlash(
@@ -529,6 +551,7 @@ class ZoomPlugin extends Plugin
                         }
                     }
                 }
+                api_location($returnURL);
             }
         }
 
@@ -602,6 +625,19 @@ class ZoomPlugin extends Plugin
         if (false === curl_exec($curl)) {
             throw new Exception("curl_exec failed: ".curl_error($curl));
         }
+
+        $sessionId = 0;
+        $session = $meeting->getSession();
+        if (null !== $session) {
+            $sessionId = $session->getId();
+        }
+
+        $groupId = 0;
+        $group = $meeting->getGroup();
+        if (null !== $group) {
+            $groupId = $group->getIid();
+        }
+
         $newPath = handle_uploaded_document(
             $courseInfo,
             [
@@ -609,24 +645,26 @@ class ZoomPlugin extends Plugin
                 'tmp_name' => stream_get_meta_data($tmpFile)['uri'],
                 'size' => filesize(stream_get_meta_data($tmpFile)['uri']),
                 'from_file' => true,
+                'move_file' => true,
                 'type' => $file->file_type,
             ],
-            '/',
             api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document',
+            '/',
             api_get_user_id(),
-            0,
+            $groupId,
             null,
             0,
-            '',
+            'overwrite',
             true,
             false,
             null,
-            $meeting->getSession()->getId(),
+            $sessionId,
             true
         );
+
         fclose($tmpFile);
         if (false === $newPath) {
-            throw new Exception('could not handle uploaded document');
+            throw new Exception('Could not handle uploaded document');
         }
     }
 
@@ -634,15 +672,19 @@ class ZoomPlugin extends Plugin
      * Generates a form to fast and easily create and start an instant meeting.
      * On validation, create it then redirect to it and exit.
      *
-     * @param User    $user
-     * @param Course  $course
-     * @param Session $session
-     *
      * @return FormValidator
      */
-    public function getCreateInstantMeetingForm($user, $course, $group, $session)
-    {
-        $form = new FormValidator('createInstantMeetingForm', 'post', '', '_blank');
+    public function getCreateInstantMeetingForm(
+        User $user,
+        Course $course,
+        CGroupInfo $group = null,
+        Session $session = null
+    ) {
+        $extraUrl = '';
+        if (!empty($course)) {
+            $extraUrl = api_get_cidreq();
+        }
+        $form = new FormValidator('createInstantMeetingForm', 'post', api_get_self().'?'.$extraUrl, '_blank');
         $form->addButton('startButton', $this->get_lang('StartInstantMeeting'), 'video-camera', 'primary');
         if ($form->validate()) {
             try {
@@ -661,17 +703,17 @@ class ZoomPlugin extends Plugin
      * Generates a form to schedule a meeting.
      * On validation, creates it and redirects to its page.
      *
-     * @param User|null    $user
-     * @param Course|null  $course
-     * @param Session|null $session
-     *
      * @throws Exception
      *
      * @return FormValidator
      */
-    public function getScheduleMeetingForm($user, $course = null, $group = null, $session = null)
+    public function getScheduleMeetingForm(User $user, Course $course = null, CGroupInfo $group = null, Session $session = null)
     {
-        $form = new FormValidator('scheduleMeetingForm');
+        $extraUrl = '';
+        if (!empty($course)) {
+            $extraUrl = api_get_cidreq();
+        }
+        $form = new FormValidator('scheduleMeetingForm', 'post', api_get_self().'?'.$extraUrl);
         $form->addHeader($this->get_lang('ScheduleAMeeting'));
         $startTimeDatePicker = $form->addDateTimePicker('startTime', get_lang('StartTime'));
         $form->setRequired($startTimeDatePicker);
@@ -743,6 +785,7 @@ class ZoomPlugin extends Plugin
             switch ($type) {
                 case 'everyone':
                     $user = null;
+                    $group = null;
                     $course = null;
                     $session = null;
 
@@ -798,7 +841,7 @@ class ZoomPlugin extends Plugin
                         );
                     }
                 }
-                api_location('meeting.php?meetingId='.$newMeeting->getMeetingId());
+                api_location('meeting.php?meetingId='.$newMeeting->getMeetingId().'&'.$extraUrl);
             } catch (Exception $exception) {
                 Display::addFlash(
                     Display::return_message($exception->getMessage(), 'error')
@@ -854,7 +897,8 @@ class ZoomPlugin extends Plugin
     public function getStartOrJoinMeetingURL($meeting)
     {
         $status = $meeting->getMeetingInfoGet()->status;
-        $currentUser = api_get_user_entity(api_get_user_id());
+        $userId = api_get_user_id();
+        $currentUser = api_get_user_entity($userId);
         $isGlobal = 'true' === $this->get('enableGlobalConference') && $meeting->isGlobalMeeting();
 
         switch ($status) {
@@ -892,22 +936,36 @@ class ZoomPlugin extends Plugin
                     }
 
                     $sessionId = api_get_session_id();
+                    $courseCode = api_get_course_id();
+
                     if (empty($sessionId)) {
                         $isSubscribed = CourseManager::is_user_subscribed_in_course(
-                            $currentUser->getId(),
-                            api_get_course_id(),
+                            $userId,
+                            $courseCode,
                             false
                         );
                     } else {
                         $isSubscribed = CourseManager::is_user_subscribed_in_course(
-                            $currentUser->getId(),
-                            api_get_course_id(),
+                            $userId,
+                            $courseCode,
                             true,
-                            api_get_session_id()
+                            $sessionId
                         );
                     }
 
                     if ($isSubscribed) {
+                        if ($meeting->isCourseGroupMeeting()) {
+                            $groupInfo = GroupManager::get_group_properties($meeting->getGroup()->getIid(), true);
+                            $isInGroup = GroupManager::is_user_in_group($userId, $groupInfo);
+                            if (false === $isInGroup) {
+                                throw new Exception($this->get_lang('YouAreNotRegisteredToThisMeeting'));
+                            }
+                        }
+
+                        if (\Chamilo\PluginBundle\Zoom\API\Meeting::TYPE_INSTANT == $meeting->getMeetingInfoGet()->type) {
+                            return $meeting->getMeetingInfoGet()->join_url;
+                        }
+
                         return $this->registerUser($meeting, $currentUser)->getCreatedRegistration()->join_url;
                     }
 
@@ -1065,6 +1123,24 @@ class ZoomPlugin extends Plugin
         return Display::toolbarAction('toolbar', [$actionsLeft]);
     }
 
+    public function getRecordingSetting()
+    {
+        $recording = (string) $this->get('enableCloudRecording');
+
+        if (in_array($recording, [self::RECORDING_TYPE_LOCAL, self::RECORDING_TYPE_CLOUD], true)) {
+            return $recording;
+        }
+
+        return self::RECORDING_TYPE_NONE;
+    }
+
+    public function hasRecordingAvailable()
+    {
+        $recording = $this->getRecordingSetting();
+
+        return self::RECORDING_TYPE_NONE !== $recording;
+    }
+
     /**
      * Updates meeting registrants list. Adds the missing registrants and removes the extra.
      *
@@ -1131,16 +1207,12 @@ class ZoomPlugin extends Plugin
     }
 
     /**
-     * @param Meeting $meeting
-     * @param User    $user
-     * @param bool    $andFlush
-     *
      * @throws Exception
      * @throws OptimisticLockException
      *
      * @return Registrant
      */
-    private function registerUser($meeting, $user, $andFlush = true)
+    private function registerUser(Meeting $meeting, User $user, $andFlush = true)
     {
         if (empty($user->getEmail())) {
             throw new Exception($this->get_lang('CannotRegisterWithoutEmailAddress'));
@@ -1158,6 +1230,7 @@ class ZoomPlugin extends Plugin
             ->setMeetingRegistrant($meetingRegistrant)
             ->setCreatedRegistration($meeting->getMeetingInfoGet()->addRegistrant($meetingRegistrant));
         Database::getManager()->persist($registrantEntity);
+
         if ($andFlush) {
             Database::getManager()->flush($registrantEntity);
         }
@@ -1200,9 +1273,11 @@ class ZoomPlugin extends Plugin
      */
     private function startInstantMeeting($topic, $user = null, $course = null, $group = null, $session = null)
     {
+        $meetingInfoGet = MeetingInfoGet::fromTopicAndType($topic, MeetingInfoGet::TYPE_INSTANT);
+        //$meetingInfoGet->settings->approval_type = MeetingSettings::APPROVAL_TYPE_AUTOMATICALLY_APPROVE;
         $meeting = $this->createMeetingFromMeeting(
             (new Meeting())
-                ->setMeetingInfoGet(MeetingInfoGet::fromTopicAndType($topic, MeetingInfoGet::TYPE_INSTANT))
+                ->setMeetingInfoGet($meetingInfoGet)
                 ->setUser($user)
                 ->setGroup($group)
                 ->setCourse($course)
@@ -1223,12 +1298,13 @@ class ZoomPlugin extends Plugin
     private function createMeetingFromMeeting($meeting)
     {
         $currentUser = api_get_user_entity(api_get_user_id());
-        //$meeting->getMeetingInfoGet()->host_email = $currentUser->getEmail();
+
         $meeting->getMeetingInfoGet()->settings->contact_email = $currentUser->getEmail();
         $meeting->getMeetingInfoGet()->settings->contact_name = $currentUser->getFullname();
-        $recording = 'true' === $this->get('enableCloudRecording') ? 'cloud' : 'local';
-        $meeting->getMeetingInfoGet()->settings->auto_recording = $recording;
+        $meeting->getMeetingInfoGet()->settings->auto_recording = $this->getRecordingSetting();
         $meeting->getMeetingInfoGet()->settings->registrants_email_notification = false;
+
+        //$meeting->getMeetingInfoGet()->host_email = $currentUser->getEmail();
         //$meeting->getMeetingInfoGet()->settings->alternative_hosts = $currentUser->getEmail();
 
         // Send create to Zoom.
@@ -1269,24 +1345,21 @@ class ZoomPlugin extends Plugin
      * Schedules a meeting and returns it.
      * set $course, $session and $user to null in order to create a global meeting.
      *
-     * @param User|null    $user      the current user, for a course meeting or a user meeting
-     * @param Course|null  $course    the course, for a course meeting
-     * @param Session|null $session   the session, for a course meeting
-     * @param DateTime     $startTime meeting local start date-time (configure local timezone on your Zoom account)
-     * @param int          $duration  in minutes
-     * @param string       $topic     short title of the meeting, required
-     * @param string       $agenda    ordre du jour
-     * @param string       $password  meeting password
+     * @param DateTime $startTime meeting local start date-time (configure local timezone on your Zoom account)
+     * @param int      $duration  in minutes
+     * @param string   $topic     short title of the meeting, required
+     * @param string   $agenda    ordre du jour
+     * @param string   $password  meeting password
      *
      * @throws Exception
      *
      * @return Meeting meeting
      */
     private function createScheduleMeeting(
-        $user,
-        $course,
-        $group,
-        $session,
+        User $user = null,
+        Course $course = null,
+        CGroupInfo $group = null,
+        Session $session = null,
         $startTime,
         $duration,
         $topic,

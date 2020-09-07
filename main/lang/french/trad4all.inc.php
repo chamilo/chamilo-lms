@@ -3727,7 +3727,7 @@ $CertificateMinScore = "Score minimum";
 $InViMod = "Dossier rendu invisible";
 $ViewResult = "Visualisation des résultats";
 $NoResultsInEvaluation = "Aucune note actuellement pour cette activité";
-$AddStudent = "Ajout utilisateurs";
+$AddStudent = "Ajouter des apprenants";
 $ImportResult = "Import résultats";
 $ImportFileLocation = "Importer un fichier";
 $FileType = "Type de fichier";
@@ -8596,4 +8596,7 @@ $CompilatioNoConnection = "Impossible d'effectuer la connection au serveur SOAP 
 $CompilatioParamVerification = "érifiez votre clé, l'ouverture des ports de votre serveur et éventuellement vos paramétres de proxy.";
 $LastVisitedCourse = "Dernier cours visité";
 $YouDidNotVisitACourseHereTheCourseList = "Vous n'avez encore visité aucun cours, voici la liste de vos cours.";
+$NoEntity = "Aucune organisation";
+$UserByEntityReport = "Utilisateur par organisation";
+$LpByAuthor = "Parcours par auteur";
 ?>

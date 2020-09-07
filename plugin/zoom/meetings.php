@@ -20,7 +20,7 @@ $endDate = new DateTime($form->getElement('end')->getValue());
 $scheduleForm = $plugin->getScheduleMeetingForm($user);
 $tpl = new Template();
 $tpl->assign('meetings', $plugin->getMeetingRepository()->periodUserMeetings($startDate, $endDate, $user));
-$tpl->assign('allow_recording', 'true' === $plugin->get('enableCloudRecording'));
+$tpl->assign('allow_recording', $plugin->hasRecordingAvailable());
 $tpl->assign('actions', $plugin->getToolbar());
 $tpl->assign('search_form', $form->returnForm());
 $tpl->assign('schedule_form', $scheduleForm->returnForm());

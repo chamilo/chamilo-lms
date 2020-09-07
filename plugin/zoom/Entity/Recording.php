@@ -40,6 +40,7 @@ class Recording
 
     /**
      * @var string
+     *
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue()
@@ -48,12 +49,14 @@ class Recording
 
     /**
      * @var string
+     *
      * @ORM\Column(type="string")
      */
     protected $uuid;
 
     /**
      * @var Meeting
+     *
      * @ORM\ManyToOne(targetEntity="Meeting", inversedBy="recordings")
      * @ORM\JoinColumn(name="meeting_id")
      */
@@ -61,6 +64,7 @@ class Recording
 
     /**
      * @var string
+     *
      * @ORM\Column(type="text", name="recording_meeting_json", nullable=true)
      */
     protected $recordingMeetingJson;
@@ -139,7 +143,7 @@ class Recording
         }
         if (null === $this->meeting) {
             $this->meeting = Database::getManager()->getRepository(Meeting::class)->find($recordingMeeting->id);
-        } elseif ($this->meeting->getId() != $recordingMeeting->id) {
+        } elseif ($this->meeting->getMeetingId() != $recordingMeeting->id) {
             // $this->meeting remains null when the remote RecordingMeeting refers to a deleted meeting.
             throw new Exception('The RecordingEntity meeting id differs from the RecordingMeeting meeting id');
         }

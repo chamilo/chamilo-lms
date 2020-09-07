@@ -523,7 +523,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
  */
 function email_filter($email)
 {
-    return Display::encrypted_mailto_link($email, cut($email, 26));
+    return Display::encrypted_mailto_link($email, cut($email, 26), 'small clickable_email_link');
 }
 
 /**
@@ -801,7 +801,7 @@ function modify_filter($user_id, $url_params, $row)
         }
     }
 
-    return $result;
+    return '<div style="width:205px">'.$result.'</div>';
 }
 
 /**
@@ -1121,10 +1121,14 @@ $table = new SortableTable(
     'users',
     'get_number_of_users',
     'get_user_data',
-    (api_is_western_name_order() xor api_sort_by_first_name()) ? 3 : 2
+    (api_is_western_name_order() xor api_sort_by_first_name()) ? 3 : 2,
+    20,
+    'ASC',
+    null,
+    ['style' => 'font-size: 1.4rem;', 'class' => 'table table-hover table-striped table-bordered table-condensed']
 );
 $table->set_additional_parameters($parameters);
-$table->set_header(0, '&nbsp;', false, 'width="18px"');
+$table->set_header(0, '&nbsp;', false);
 $table->set_header(1, get_lang('Photo'), false);
 $table->set_header(2, get_lang('OfficialCode'));
 
@@ -1138,9 +1142,9 @@ if (api_is_western_name_order()) {
 $table->set_header(5, get_lang('LoginName'));
 $table->set_header(6, get_lang('Email'));
 $table->set_header(7, get_lang('Profile'));
-$table->set_header(8, get_lang('Active'), true);
-$table->set_header(9, get_lang('RegistrationDate'), true);
-$table->set_header(10, get_lang('LatestLogin'), true);
+$table->set_header(8, get_lang('Active'));
+$table->set_header(9, get_lang('RegistrationDate'));
+$table->set_header(10, get_lang('LatestLogin'));
 $table->set_header(11, get_lang('Action'), false);
 
 $table->set_column_filter(3, 'user_filter');
@@ -1149,7 +1153,6 @@ $table->set_column_filter(6, 'email_filter');
 $table->set_column_filter(7, 'status_filter');
 $table->set_column_filter(8, 'active_filter');
 $table->set_column_filter(11, 'modify_filter');
-$table->setColAttributes(10, ['class' => 'text-nowrap']);
 
 // Hide email column if login is email, to avoid column with same data
 if (api_get_setting('login_is_email') === 'true') {

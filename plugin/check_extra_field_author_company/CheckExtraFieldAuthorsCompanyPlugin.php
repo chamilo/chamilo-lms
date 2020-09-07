@@ -1,5 +1,7 @@
 <?php
 
+/* For license terms, see /license.txt */
+
 /**
  * Class CheckExtraFieldAuthorsCompanyPlugin.
  */
@@ -254,11 +256,11 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
         ];
         $order = 0;
         $query = "SELECT
-					id
-				FROM
-					".$this->tblExtraField."
-				WHERE
-					variable = 'company'";
+                    id
+                FROM
+                    ".$this->tblExtraField."
+                WHERE
+                    variable = 'company'";
         $companyId = Database::fetch_assoc(Database::query($query));
         $companyId = isset($companyId['id']) ? $companyId['id'] : null;
         for ($i = 0; $i < count($companys); $i++) {
@@ -297,11 +299,11 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
         $variableName = strtolower(Database::escape_string(Security::remove_XSS($variableName)));
         $tblExtraField = $this->tblExtraField;
         $query = "SELECT
-			*
-		FROM
-			$tblExtraField
-		WHERE
-			variable = '$variableName'";
+            *
+        FROM
+            $tblExtraField
+        WHERE
+            variable = '$variableName'";
         $data = Database::fetch_assoc(Database::query($query));
         if ($data == false or !isset($data['display_text'])) {
             return [];
@@ -333,11 +335,11 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
         }
         if ($validVariable == true && $id != 0 && !empty($extraFieldType)) {
             $query = "SELECT
-			id
-		FROM
-			".$this->tblExtraField."
-		WHERE
-		    id = $id
+            id
+        FROM
+            ".$this->tblExtraField."
+        WHERE
+            id = $id
             AND
             variable = '$variable'
             AND

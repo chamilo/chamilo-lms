@@ -1011,8 +1011,8 @@ class MySpace
      * Export to cvs a list of users who were enrolled in the lessons.
      * It is necessary that in the extra field, a company is defined.
      *
-     * @param null $startDate
-     * @param null $endDate
+     * @param string|null $startDate
+     * @param string|null $endDate
      *
      * @return array
      */
@@ -1052,8 +1052,8 @@ class MySpace
      * Displays a list as a table of users who were enrolled in the lessons.
      * It is necessary that in the extra field, a company is defined.
      *
-     * @param null $startDate
-     * @param null $endDate
+     * @param string|null $startDate
+     * @param string|null $endDate
      */
     public static function displayResumeCompany(
         $startDate = null,
@@ -1094,7 +1094,7 @@ class MySpace
             //$form->addButtonSave(get_lang('Ok'), 'export');
             $form
                 ->addButton(
-                    'export_csv',
+                    'export',
                     get_lang('ExportAsCSV'),
                     'check',
                     'primary',
@@ -1118,8 +1118,8 @@ class MySpace
     /**
      *  Displays a list as a table of teachers who are set authors by a extra_field authors.
      *
-     * @param null $startDate
-     * @param null $endDate
+     * @param string|null $startDate
+     * @param string|null $endDate
      * @param bool $csv
      */
     public static function displayResumeLP(
@@ -1157,7 +1157,6 @@ class MySpace
             $registeredUsers = self::getCompanyLearnpathSubscription($startDate, $endDate, $lp_id);
             if (!empty($registeredUsers)) {
                 $lp_info = [];
-                $teacherList = [];
                 $teachersId = explode(',', trim($row['users_id'], ","));
                 $lp_table = Database::get_course_table(TABLE_LP_MAIN);
                 $query = "
@@ -1203,7 +1202,7 @@ class MySpace
             $index = 0;
             //icons for show and hode
             $iconAdd = Display::return_icon('add.png', get_lang('ShowOrHide'), '', ICON_SIZE_SMALL);
-            $iconRemove = Display::return_icon('error.png', get_lang('howOrHide'), '', ICON_SIZE_SMALL);
+            $iconRemove = Display::return_icon('error.png', get_lang('ShowOrHide'), '', ICON_SIZE_SMALL);
             $teacherNameTemp = '';
             foreach ($data as $teacherName => $reportData) {
                 $lpCount = 0;
@@ -1264,7 +1263,7 @@ class MySpace
                 //$form->addButtonSave(get_lang('Ok'), 'export');
                 $form
                     ->addButton(
-                        'export_csv',
+                        'export',
                         get_lang('ExportAsCSV'),
                         'check',
                         'primary',
@@ -3615,8 +3614,8 @@ class MySpace
      *
      *  if lpId is different to 0, this search by lp id too
      *
-     * @param null $startDate
-     * @param null $endDate
+     * @param string|null $startDate
+     * @param string|null $endDate
      * @param int  $lpId
      *
      * @return array

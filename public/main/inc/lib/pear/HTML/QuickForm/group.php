@@ -570,15 +570,14 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
                 break;
             case FormValidator::LAYOUT_HORIZONTAL:
                 return '
-                <div class="row mb-3  {error_class}" id="'.$this->getName().'-group">
-                    <label {label-for}  class="col-sm-'.$size[0].' col-form-label  {extra_label_class}" >
+                <div class="row form-group {error_class}" id="'.$this->getName().'-group">
+                    <label {label-for}  class="col-sm-'.$size[0].'  {extra_label_class}" >
                         <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
                         {label}
                     </label>
                     <div class="col-sm-'.$size[1].'">
                         {icon}
                         {element}
-
                         <!-- BEGIN label_2 -->
                         <p class="help-block">{label_2}</p>
                         <!-- END label_2 -->

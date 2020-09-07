@@ -2571,7 +2571,7 @@ class CourseManager
             $groupCategories = GroupManager::get_categories($course['code']);
             if (!empty($groupCategories)) {
                 foreach ($groupCategories as $category) {
-                    GroupManager::delete_category($category['id'], $course['code']);
+                    GroupManager::delete_category($category['iid'], $course['code']);
                 }
             }
 

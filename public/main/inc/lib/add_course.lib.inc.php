@@ -751,6 +751,8 @@ class AddCourse
 
         if ($ok_to_register_course) {
             $repo = Container::getCourseRepository();
+            $categoryRepo = Container::getCourseCategoryRepository();
+
             $course = new \Chamilo\CoreBundle\Entity\Course();
             $course
                 ->setCode($code)
@@ -769,6 +771,23 @@ class AddCourse
                 ->setUnsubscribe($unsubscribe)
                 ->setVisualCode($visual_code)
             ;
+
+            if (!empty($categories)) {
+                if (!is_array($categories)) {
+                    $categories = [$categories];
+                }
+
+                foreach ($categories as $key) {
+                    if (empty($key)) {
+                        continue;
+                    }
+
+                    $category = $categoryRepo->find($key);
+
+                    $course->addCategory($category);
+                }
+            }
+
             $repo->getEntityManager()->persist($course);
             $repo->getEntityManager()->flush();
 
@@ -807,29 +826,14 @@ class AddCourse
                         if (empty($key)) {
                             continue;
                         }
-                        $sql = "INSERT INTO ".$TABLECOURSUSER." SET
-                            c_id     = '".Database::escape_string($course_id)."',
-                            user_id         = '".Database::escape_string($key)."',
+                        $sql = "INSERT INTO " . $TABLECOURSUSER . " SET
+                            c_id     = '" . Database::escape_string($course_id) . "',
+                            user_id         = '" . Database::escape_string($key) . "',
                             status          = '1',
                             is_tutor        = '0',
-                            sort            = '".($sort + 1)."',
+                            sort            = '" . ($sort + 1) . "',
                             relation_type = 0,
                             user_course_cat = '0'";
-                        Database::query($sql);
-                    }
-                }
-
-                if (!empty($categories)) {
-                    if (!is_array($categories)) {
-                        $categories = [$categories];
-                    }
-                    foreach ($categories as $key) {
-                        if (empty($key)) {
-                            continue;
-                        }
-                        $sql = "INSERT INTO ".$TABLECOURSERELCATEGORY." SET
-                            course_id = '".Database::escape_string($course_id)."',
-                            course_category_id = '".Database::escape_string($key)."'";
                         Database::query($sql);
                     }
                 }

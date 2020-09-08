@@ -16,8 +16,8 @@ api_protect_admin_script();
 
 $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
 $em = Database::getManager();
+$courseCategoriesRepo = $em->getRepository('ChamiloCoreBundle:CourseCategory');
 
-// Get all possible teachers.
 $urlId = api_get_current_access_url_id();
 
 $courseId = isset($_GET['id']) ? $_GET['id'] : null;
@@ -143,18 +143,18 @@ $form->addText(
 $form->applyFilter('visual_code', 'strtoupper');
 $form->applyFilter('visual_code', 'html_filter');
 
-// Set categories selected
-$tbl_course_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
-$tbl_course_rel_category = Database::get_main_table(TABLE_MAIN_COURSE_REL_CATEGORY);
-$sqlGetCategoriesByCourse = "SELECT category.id, category.name FROM $tbl_course_category category
-    INNER JOIN $tbl_course_rel_category course_rel_category ON category.id = course_rel_category.course_category_id
-    WHERE course_rel_category.course_id = $courseId";
-$categoriesResult = Database::query($sqlGetCategoriesByCourse);
+$categories = $courseCategoriesRepo->getCategoriesByCourseIdAndAccessUrlId(
+    $urlId,
+    $courseId,
+    api_get_configuration_value('allow_base_course_category')
+);
+
 $courseCategoryNames = [];
 $courseCategoryIds = [];
-while ($category = Database::fetch_array($categoriesResult)) {
-    $courseCategoryNames[$category['id']] = $category['name'];
-    $courseCategoryIds[] = $category['id'];
+
+foreach ($categories as $category) {
+    $courseCategoryNames[$category->getId()] = $category->getName();
+    $courseCategoryIds[] = $category->getId();
 }
 
 $form->addSelectAjax(

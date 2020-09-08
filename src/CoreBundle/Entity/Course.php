@@ -782,6 +782,11 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this->categories;
     }
 
+    public function addCategory(CourseCategory $category)
+    {
+        $this->categories[] = $category;
+    }
+
     /**
      * Set visibility.
      *

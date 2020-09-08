@@ -54,6 +54,35 @@ class CourseCategoryRepository extends ServiceEntityRepository
     }
 
     /**
+     * Get all categories in an access url and course id.
+     *
+     * @param int  $accessUrl
+     * @param int $courseId
+     * @param bool $allowBaseCategories
+     *
+     * @return array
+     */
+    public function getCategoriesByCourseIdAndAccessUrlId($accessUrl, $courseId, $allowBaseCategories = false)
+    {
+        $qb = $this->createQueryBuilder('c');
+        $qb
+            ->join('c.courses', 'a')
+            ->where($qb->expr()->eq('a.id', $courseId))
+            ->join('c.urls', 'b')
+            ->where($qb->expr()->eq('b.url', $accessUrl))
+            ->orderBy('c.treePos', 'ASC')
+        ;
+
+        if ($allowBaseCategories) {
+            $qb->orWhere($qb->expr()->eq('b.url', 1));
+        }
+
+        $query = $qb->getQuery();
+
+        return $query->getResult();
+    }
+
+    /**
      * Get the number of course categories in an access url.
      *
      * @param int  $accessUrl

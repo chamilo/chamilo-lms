@@ -236,7 +236,7 @@ switch ($action) {
         $table = new SortableTable(
             'attendance_list',
             ['Attendance', 'getNumberOfAttendances'],
-            ['Attendance', 'get_attendance_data'],
+            ['Attendance', 'getAttendanceData'],
             $default_column
         );
         $table->set_additional_parameters($parameters);
@@ -579,7 +579,6 @@ switch ($action) {
             );
 
             $defaults['repeat'] = isset($repeat) ? $repeat : null;
-
             if ($defaults['repeat']) {
                 $form->addElement('html', '<div id="repeat-date-attendance" style="display:block">');
             } else {
@@ -593,11 +592,9 @@ switch ($action) {
             ];
             $form->addElement('select', 'repeat_type', get_lang('Repeat type'), $a_repeat_type);
 
-            $form->addElement(
-                'date_picker',
+            $form->addDatePicker(
                 'end_date_time',
-                get_lang('Repeat end date'),
-                ['form_name' => 'attendance_calendar_add']
+                get_lang('Repeat end date')
             );
             $defaults['end_date_time'] = date('Y-m-d');
             $form->addElement('html', '</div>');

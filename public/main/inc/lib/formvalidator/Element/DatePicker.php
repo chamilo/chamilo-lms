@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -43,19 +44,17 @@ class DatePicker extends HTML_QuickForm_text
         }
 
         return '
-            <div class="input-group">
-                <span class="input-group-addon cursor-pointer">
-                    <input '.$this->_getAttrString($this->_attributes).'>
-                </span>
-                <p class="form-control disabled" id="'.$id.'_alt_text">'.$value.'</p>
-                <input class="form-control" type="hidden" id="'.$id.'_alt" value="'.$value.'">
-                <span class="input-group-btn">
-                    <button class="btn btn-default" type="button"
-                            title="'.sprintf(get_lang('Reset %s'), $this->_label).'">
-                        <span class="fa fa-trash text-danger" aria-hidden="true"></span>
-                        <span class="sr-only">'.sprintf(get_lang('Reset %s'), $this->_label).'</span>
+            <div id="'.$id.'" class="input-group mb-3">
+                <input '.$this->_getAttrString($this->_attributes).'
+                    class="form-control" type="text" value="'.$value.'" data-input>
+                <div class="input-group-prepend" id="button-addon3">
+                    <button class="btn btn-outline-secondary"  type="button" data-toggle>
+                        <i class="fas fa-calendar-alt"></i>
                     </button>
-                </span>
+                    <button class="btn btn-outline-secondary" type="button" data-clear>
+                        <i class="fas fa-times"></i>
+                    </button>
+              </div>
             </div>
         '.$this->getElementJS();
     }
@@ -103,9 +102,7 @@ class DatePicker extends HTML_QuickForm_text
                     </label>
                     <div class="col-sm-'.$size[1].'">
                         {icon}
-
                         {element}
-
                         <!-- BEGIN label_2 -->
                             <p class="help-block">{label_2}</p>
                         <!-- END label_2 -->
@@ -136,14 +133,30 @@ class DatePicker extends HTML_QuickForm_text
     {
         $js = null;
         $id = $this->getAttribute('id');
+        //timeFormat: 'hh:mm'
+        $js .= "<script>
+            $(function() {
+                var config = {
+                    altInput: true,
+                    altFormat: '".get_lang('F d, Y')."',
+                    enableTime: false,
+                    dateFormat: 'Y-m-d',
+                    wrap: true
+                };
+                $('#{$id}').flatpickr(config);
+             });
+        </script>";
 
-        $js .= "<script>                    
+        return $js;
+
+
+        $js .= "<script>
             $(function() {
                 var txtDate = $('#$id'),
                     inputGroup = txtDate.parents('.input-group'),
                     txtDateAlt = $('#{$id}_alt'),
                     txtDateAltText = $('#{$id}_alt_text');
-                    
+
                 txtDate
                     .hide()
                     .datepicker({
@@ -162,7 +175,7 @@ class DatePicker extends HTML_QuickForm_text
                     .on('change', function (e) {
                         txtDateAltText.text(txtDateAlt.val());
                     });
-                    
+
                 txtDateAltText.on('click', function () {
                     txtDate.datepicker('show');
                 });

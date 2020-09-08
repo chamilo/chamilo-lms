@@ -7614,7 +7614,7 @@ class TrackingCourseLog
         $getCount = isset($conditions['get_count']) ? $conditions['get_count'] : false;
 
         $csv_content = [];
-        $course_code = Database::escape_string($course_code);
+        $course_code = $course_code ? Database::escape_string($course_code) : api_get_course_id();
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
         $tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $access_url_id = api_get_current_access_url_id();

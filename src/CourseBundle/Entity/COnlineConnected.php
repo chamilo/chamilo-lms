@@ -5,9 +5,21 @@
 namespace Chamilo\CourseBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Chamilo\CoreBundle\Entity\User;
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiProperty;
 
 /**
  * COnlineConnected.
+ *
+ * @ApiResource(
+ *      attributes={"security"="is_granted('ROLE_ADMIN')"},
+ *      iri="http://schema.org/cOnlineConnected",
+ *      normalizationContext={"groups"={"user:read"}},
+ *      denormalizationContext={"groups"={"user:write"}},
+ *      collectionOperations={"get"},
+ *      itemOperations={"get"}
+ * )
  *
  * @ORM\Table(
  *  name="c_online_connected",
@@ -43,11 +55,39 @@ class COnlineConnected
     protected $lastConnection;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="user_id", type="integer")
+     * @var User
+     * @ApiProperty(iri="http://schema.org/Person")
+     * @ORM\ManyToOne (
+     *    targetEntity="Chamilo\CoreBundle\Entity\User",
+     *    inversedBy="cOnlineConnected"
+     * )
+     * @ORM\JoinColumn(
+     *    name="user_id",
+     *    referencedColumnName="id",
+     *    onDelete="CASCADE"
+     * )
      */
-    protected $userId;
+    protected $user;
+
+    /**
+     * Get user.
+     *
+     */
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    /**
+     * Set user.
+     *
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
 
     /**
      * Set lastConnection.
@@ -97,27 +137,4 @@ class COnlineConnected
         return $this->cId;
     }
 
-    /**
-     * Set userId.
-     *
-     * @param int $userId
-     *
-     * @return COnlineConnected
-     */
-    public function setUserId($userId)
-    {
-        $this->userId = $userId;
-
-        return $this;
-    }
-
-    /**
-     * Get userId.
-     *
-     * @return int
-     */
-    public function getUserId()
-    {
-        return $this->userId;
-    }
 }

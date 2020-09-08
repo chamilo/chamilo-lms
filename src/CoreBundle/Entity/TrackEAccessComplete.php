@@ -4,8 +4,9 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiProperty;
 
 /**
  * TrackEAccessComplete.
@@ -13,15 +14,10 @@ use Doctrine\ORM\Mapping as ORM;
  * @ApiResource(
  *      attributes={"security"="is_granted('ROLE_ADMIN')"},
  *      iri="http://schema.org/trackEAccessComplete",
- *      attributes={"security"="is_granted('ROLE_ADMIN')"},
  *      normalizationContext={"groups"={"user:read"}},
  *      denormalizationContext={"groups"={"user:write"}},
  *      collectionOperations={"get"},
- *      itemOperations={
- *          "get"={},
- *          "put"={},
- *          "delete"={},
- *     }
+ *      itemOperations={"get"}
  * )
  * @ORM\Table(name="track_e_access_complete")
  * @ORM\Entity
@@ -38,9 +34,17 @@ class TrackEAccessComplete
     protected $id;
 
     /**
-     * @ORM\OneToOne (targetEntity="Chamilo\CoreBundle\Entity\User",
-     *      inversedBy="track_e_access_complete")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
+     * @var User
+     * @ApiProperty(iri="http://schema.org/Person")
+     * @ORM\OneToOne (
+     *    targetEntity="Chamilo\CoreBundle\Entity\User",
+     *    inversedBy="trackEAccessComplete"
+     * )
+     * @ORM\JoinColumn(
+     *    name="user_id",
+     *    referencedColumnName="id",
+     *    onDelete="CASCADE"
+     * )
      */
     protected $user;
 
@@ -54,8 +58,8 @@ class TrackEAccessComplete
     }
 
     /**
+     * Set user.
      *
-     * @return $this
      */
     public function setUser($user)
     {
@@ -63,6 +67,7 @@ class TrackEAccessComplete
 
         return $this;
     }
+
     /**
      * @var int
      *

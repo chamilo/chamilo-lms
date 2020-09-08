@@ -4,23 +4,19 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Core\Annotation\ApiProperty;
+use ApiPlatform\Core\Annotation\ApiResource;
 
 /**
  * Templates.
  * @ApiResource(
  *      attributes={"security"="is_granted('ROLE_ADMIN')"},
  *      iri="http://schema.org/templates",
- *      attributes={"security"="is_granted('ROLE_ADMIN')"},
  *      normalizationContext={"groups"={"user:read"}},
  *      denormalizationContext={"groups"={"user:write"}},
  *      collectionOperations={"get"},
- *      itemOperations={
- *          "get"={},
- *          "put"={},
- *          "delete"={},
- *     }
+ *      itemOperations={"get"}
  * )
  *
  * @ORM\Table(name="templates")
@@ -61,6 +57,7 @@ class Templates
 
     /**
      * @var User
+     * @ApiProperty(iri="http://schema.org/trackEAccessComplete")
      * @ORM\ManyToOne (
      *    targetEntity="Chamilo\CoreBundle\Entity\User",
      *    inversedBy="templates"
@@ -84,8 +81,8 @@ class Templates
     }
 
     /**
+     * Set user.
      *
-     * @return $this
      */
     public function setUser($user)
     {
@@ -93,6 +90,7 @@ class Templates
 
         return $this;
     }
+
     /**
      * @var int
      *

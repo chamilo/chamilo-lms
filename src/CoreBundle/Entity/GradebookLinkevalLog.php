@@ -4,23 +4,19 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiProperty;
 
 /**
  * GradebookLinkevalLog.
  * @ApiResource(
  *      attributes={"security"="is_granted('ROLE_ADMIN')"},
  *      iri="http://schema.org/gradebookLinkevalLog",
- *      attributes={"security"="is_granted('ROLE_ADMIN')"},
  *      normalizationContext={"groups"={"user:read"}},
  *      denormalizationContext={"groups"={"user:write"}},
  *      collectionOperations={"get"},
- *      itemOperations={
- *          "get"={},
- *          "put"={},
- *          "delete"={},
- *     }
+ *      itemOperations={"get"}
  * )
  *
  * @ORM\Table(name="gradebook_linkeval_log")
@@ -30,6 +26,7 @@ class GradebookLinkevalLog
 {
     /**
      * @var User
+     * @ApiProperty(iri="http://schema.org/Person")
      * @ORM\ManyToOne (
      *    targetEntity="Chamilo\CoreBundle\Entity\User",
      *    inversedBy="gradebookLinkevalLogs"
@@ -52,8 +49,8 @@ class GradebookLinkevalLog
     }
 
     /**
+     * Set user.
      *
-     * @return $this
      */
     public function setUser($user)
     {

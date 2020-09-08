@@ -4,8 +4,9 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiProperty;
 
 /**
  * UserRelTag.
@@ -13,15 +14,10 @@ use Doctrine\ORM\Mapping as ORM;
  * @ApiResource(
  *      attributes={"security"="is_granted('ROLE_ADMIN')"},
  *      iri="http://schema.org/userRelTag",
- *      attributes={"security"="is_granted('ROLE_ADMIN')"},
  *      normalizationContext={"groups"={"user:read"}},
  *      denormalizationContext={"groups"={"user:write"}},
  *      collectionOperations={"get"},
- *      itemOperations={
- *          "get"={},
- *          "put"={},
- *          "delete"={},
- *     }
+ *      itemOperations={"get"}
  * )
  * @ORM\Table(
  *  name="user_rel_tag",
@@ -36,6 +32,7 @@ class UserRelTag
 {
     /**
      * @var User
+     * @ApiProperty(iri="http://schema.org/Person")
      * @ORM\ManyToOne (
      *    targetEntity="Chamilo\CoreBundle\Entity\User",
      *    inversedBy="userRelTags"
@@ -58,8 +55,8 @@ class UserRelTag
     }
 
     /**
+     * Set user.
      *
-     * @return $this
      */
     public function setUser($user)
     {
@@ -67,6 +64,7 @@ class UserRelTag
 
         return $this;
     }
+
     /**
      * @var int
      *

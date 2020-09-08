@@ -41,8 +41,8 @@ class ClassUser
     }
 
     /**
+     * Set user.
      *
-     * @return $this
      */
     public function setUser($user)
     {

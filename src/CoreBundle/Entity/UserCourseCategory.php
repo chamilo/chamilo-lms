@@ -4,8 +4,9 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiProperty;
 
 /**
  * UserCourseCategory.
@@ -13,15 +14,10 @@ use Doctrine\ORM\Mapping as ORM;
  * @ApiResource(
  *      attributes={"security"="is_granted('ROLE_ADMIN')"},
  *      iri="http://schema.org/userCourseCategory",
- *      attributes={"security"="is_granted('ROLE_ADMIN')"},
  *      normalizationContext={"groups"={"user:read"}},
  *      denormalizationContext={"groups"={"user:write"}},
  *      collectionOperations={"get"},
- *      itemOperations={
- *          "get"={},
- *          "put"={},
- *          "delete"={},
- *     }
+ *      itemOperations={"get"}
  * )
  * @ORM\Table(name="user_course_category", indexes={@ORM\Index(name="idx_user_c_cat_uid", columns={"user_id"})})
  * @ORM\Entity
@@ -39,6 +35,7 @@ class UserCourseCategory
 
     /**
      * @var User
+     * @ApiProperty(iri="http://schema.org/Person")
      * @ORM\ManyToOne (
      *    targetEntity="Chamilo\CoreBundle\Entity\User",
      *    inversedBy="userCourseCategorys"
@@ -61,8 +58,8 @@ class UserCourseCategory
     }
 
     /**
+     * Set user.
      *
-     * @return $this
      */
     public function setUser($user)
     {
@@ -70,6 +67,7 @@ class UserCourseCategory
 
         return $this;
     }
+
     /**
      * @var string
      *

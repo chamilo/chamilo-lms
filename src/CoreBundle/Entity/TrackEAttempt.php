@@ -6,10 +6,20 @@ namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\CoreBundle\Traits\CourseTrait;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiProperty;
 
 /**
  * TrackEAttempt.
  *
+ * @ApiResource(
+ *      attributes={"security"="is_granted('ROLE_ADMIN')"},
+ *      iri="http://schema.org/trackEAttempt",
+ *      normalizationContext={"groups"={"user:read"}},
+ *      denormalizationContext={"groups"={"user:write"}},
+ *      collectionOperations={"get"},
+ *      itemOperations={"get"}
+ * )
  * @ORM\Table(
  *  name="track_e_attempt",
  *  indexes={
@@ -44,9 +54,10 @@ class TrackEAttempt
 
     /**
      * @var User
+     * @ApiProperty(iri="http://schema.org/Person")
      * @ORM\ManyToOne (
      *    targetEntity="Chamilo\CoreBundle\Entity\User",
-     *    inversedBy="trackEAttemps"
+     *    inversedBy="trackEAttempts"
      * )
      * @ORM\JoinColumn(
      *    name="user_id",
@@ -66,8 +77,8 @@ class TrackEAttempt
     }
 
     /**
+     * Set user.
      *
-     * @return $this
      */
     public function setUser($user)
     {
@@ -75,6 +86,7 @@ class TrackEAttempt
 
         return $this;
     }
+
     /**
      * @var int
      *
@@ -132,8 +144,16 @@ class TrackEAttempt
     protected $filename;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="trackEAttempt")
-     * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
+     * @var Course
+     * @ApiProperty(iri="http://schema.org/Course")
+     * @ORM\ManyToOne(
+     *     targetEntity="Chamilo\CoreBundle\Entity\Course",
+     *     inversedBy="trackEAttempts"
+     * )
+     * @ORM\JoinColumn(
+     *     name="c_id",
+     *     referencedColumnName="id"
+     * )
      */
     protected $course;
 

@@ -5,9 +5,20 @@
 namespace Chamilo\CourseBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Chamilo\CoreBundle\Entity\User;
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiProperty;
 
 /**
  * CAttendanceSheet.
+ * @ApiResource(
+ *      attributes={"security"="is_granted('ROLE_ADMIN')"},
+ *      iri="http://schema.org/cAttendanceSheet",
+ *      normalizationContext={"groups"={"user:read"}},
+ *      denormalizationContext={"groups"={"user:write"}},
+ *      collectionOperations={"get"},
+ *      itemOperations={"get"}
+ * )
  *
  * @ORM\Table(
  *  name="c_attendance_sheet",
@@ -45,11 +56,39 @@ class CAttendanceSheet
     protected $presence;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="user_id", type="integer")
+     * @var User
+     * @ApiProperty(iri="http://schema.org/Person")
+     * @ORM\ManyToOne (
+     *    targetEntity="Chamilo\CoreBundle\Entity\User",
+     *    inversedBy="cAttendanceSheets"
+     * )
+     * @ORM\JoinColumn(
+     *    name="user_id",
+     *    referencedColumnName="id",
+     *    onDelete="CASCADE"
+     * )
      */
-    protected $userId;
+    protected $user;
+
+    /**
+     * Get user.
+     *
+     */
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    /**
+     * Set user.
+     *
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
 
     /**
      * @var int
@@ -104,30 +143,6 @@ class CAttendanceSheet
     public function getCId()
     {
         return $this->cId;
-    }
-
-    /**
-     * Set userId.
-     *
-     * @param int $userId
-     *
-     * @return CAttendanceSheet
-     */
-    public function setUserId($userId)
-    {
-        $this->userId = $userId;
-
-        return $this;
-    }
-
-    /**
-     * Get userId.
-     *
-     * @return int
-     */
-    public function getUserId()
-    {
-        return $this->userId;
     }
 
     /**

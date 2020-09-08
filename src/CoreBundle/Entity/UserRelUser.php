@@ -4,8 +4,9 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiProperty;
 
 /**
  * UserRelUser.
@@ -13,15 +14,10 @@ use Doctrine\ORM\Mapping as ORM;
  * @ApiResource(
  *      attributes={"security"="is_granted('ROLE_ADMIN')"},
  *      iri="http://schema.org/userRelUser",
- *      attributes={"security"="is_granted('ROLE_ADMIN')"},
  *      normalizationContext={"groups"={"user:read"}},
  *      denormalizationContext={"groups"={"user:write"}},
  *      collectionOperations={"get"},
- *      itemOperations={
- *          "get"={},
- *          "put"={},
- *          "delete"={},
- *     }
+ *      itemOperations={"get"}
  * )
  * @ORM\Table(name="user_rel_user", indexes={
  *     @ORM\Index(name="idx_user_rel_user__user", columns={"user_id"}),
@@ -43,6 +39,7 @@ class UserRelUser
 
     /**
      * @var User
+     * @ApiProperty(iri="http://schema.org/Person")
      * @ORM\ManyToOne (
      *    targetEntity="Chamilo\CoreBundle\Entity\User",
      *    inversedBy="userRelationships"
@@ -65,8 +62,8 @@ class UserRelUser
     }
 
     /**
+     * Set user.
      *
-     * @return $this
      */
     public function setUser($user)
     {
@@ -74,6 +71,7 @@ class UserRelUser
 
         return $this;
     }
+
     /**
      * @var int
      *

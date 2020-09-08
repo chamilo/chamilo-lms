@@ -4,8 +4,9 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiProperty;
 
 /**
  * UserRelCourseVote.
@@ -13,15 +14,10 @@ use Doctrine\ORM\Mapping as ORM;
  * @ApiResource(
  *      attributes={"security"="is_granted('ROLE_ADMIN')"},
  *      iri="http://schema.org/userRelCourseVote",
- *      attributes={"security"="is_granted('ROLE_ADMIN')"},
  *      normalizationContext={"groups"={"user:read"}},
  *      denormalizationContext={"groups"={"user:write"}},
  *      collectionOperations={"get"},
- *      itemOperations={
- *          "get"={},
- *          "put"={},
- *          "delete"={},
- *     }
+ *      itemOperations={"get"}
  * )
  * @ORM\Table(name="user_rel_course_vote", indexes={
  *     @ORM\Index(name="idx_ucv_cid", columns={"c_id"}),
@@ -41,6 +37,7 @@ class UserRelCourseVote
 
     /**
      * @var User
+     * @ApiProperty(iri="http://schema.org/Person")
      * @ORM\ManyToOne (
      *    targetEntity="Chamilo\CoreBundle\Entity\User",
      *    inversedBy="userRelCourseVotes"
@@ -63,8 +60,8 @@ class UserRelCourseVote
     }
 
     /**
+     * Set user.
      *
-     * @return $this
      */
     public function setUser($user)
     {
@@ -72,6 +69,7 @@ class UserRelCourseVote
 
         return $this;
     }
+
     /**
      * @var int
      *

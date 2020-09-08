@@ -28,7 +28,6 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
  * @ApiResource(
  *      attributes={"security"="is_granted('ROLE_ADMIN')"},
  *      iri="http://schema.org/Person",
- *      attributes={"security"="is_granted('ROLE_ADMIN')"},
  *      normalizationContext={"groups"={"user:read"}},
  *      denormalizationContext={"groups"={"user:write"}},
  *      collectionOperations={"get"},
@@ -338,7 +337,9 @@ class User implements UserInterface, EquatableInterface
     protected $portals;
 
     /**
+     * @ApiSubresource()
      * @var Admin
+     * @ApiProperty(iri="http://schema.org/admin")
      * @ORM\OneToOne(
      *     targetEntity="Chamilo\CoreBundle\Entity\Admin",
      *     mappedBy="user",
@@ -349,6 +350,8 @@ class User implements UserInterface, EquatableInterface
     protected $admin;
 
     /**
+     * @ApiSubresource()
+     * @ApiProperty(iri="http://schema.org/gradebookCertificate")
      * @var ArrayCollection
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CoreBundle\Entity\GradebookCertificate",
@@ -360,6 +363,8 @@ class User implements UserInterface, EquatableInterface
     protected $gradebookCertificates;
 
     /**
+     * @ApiSubresource()
+     * @ApiProperty(iri="http://schema.org/gradebookEvaluation")
      * @var ArrayCollection
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CoreBundle\Entity\GradebookEvaluation",
@@ -371,6 +376,8 @@ class User implements UserInterface, EquatableInterface
     protected $gradebookEvaluations;
 
     /**
+     * @ApiSubresource()
+     * @ApiProperty(iri="http://schema.org/gradebookLink")
      * @var ArrayCollection
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CoreBundle\Entity\GradebookLink",
@@ -382,6 +389,8 @@ class User implements UserInterface, EquatableInterface
     protected $gradebookLinks;
 
     /**
+     * @ApiSubresource()
+     * @ApiProperty(iri="http://schema.org/gradebookResult")
      * @var ArrayCollection
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CoreBundle\Entity\GradebookResult",
@@ -393,6 +402,8 @@ class User implements UserInterface, EquatableInterface
     protected $gradebookResults;
 
     /**
+     * @ApiSubresource()
+     * @ApiProperty(iri="http://schema.org/gradebookResultLog")
      * @var ArrayCollection
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CoreBundle\Entity\GradebookResultLog",
@@ -404,6 +415,8 @@ class User implements UserInterface, EquatableInterface
     protected $gradebookResultLogs;
 
     /**
+     * @ApiSubresource()
+     * @ApiProperty(iri="http://schema.org/gradebookScoreLog")
      * @var ArrayCollection
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CoreBundle\Entity\GradebookScoreLog",
@@ -415,6 +428,8 @@ class User implements UserInterface, EquatableInterface
     protected $gradebookScoreLogs;
 
     /**
+     * @ApiSubresource()
+     * @ApiProperty(iri="http://schema.org/sequenceValue")
      * @var ArrayCollection
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CoreBundle\Entity\SequenceValue",
@@ -426,6 +441,8 @@ class User implements UserInterface, EquatableInterface
     protected $sequenceValues;
 
     /**
+     * @ApiSubresource()
+     * @ApiProperty(iri="http://schema.org/trackEExerciseConfirmation")
      * @var ArrayCollection
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CoreBundle\Entity\TrackEExerciseConfirmation",
@@ -437,6 +454,8 @@ class User implements UserInterface, EquatableInterface
     protected $trackEExerciseConfirmations;
 
     /**
+     * @ApiSubresource()
+     * @ApiProperty(iri="http://schema.org/templates")
      * @var ArrayCollection
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CoreBundle\Entity\Templates",
@@ -448,6 +467,8 @@ class User implements UserInterface, EquatableInterface
     protected $templates;
 
     /**
+     * @ApiSubresource()
+     * @ApiProperty(iri="http://schema.org/trackEAttempt")
      * @var ArrayCollection
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CoreBundle\Entity\TrackEAttempt",
@@ -456,9 +477,11 @@ class User implements UserInterface, EquatableInterface
      *     orphanRemoval=true
      * )
      */
-    protected $trackEAttemps;
+    protected $trackEAttempts;
 
     /**
+     * @ApiSubresource()
+     * @ApiProperty(iri="http://schema.org/trackECourseAccess")
      * @var ArrayCollection
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CoreBundle\Entity\TrackECourseAccess",
@@ -470,6 +493,8 @@ class User implements UserInterface, EquatableInterface
     protected $trackECourseAccess;
 
     /**
+     * @ApiSubresource()
+     * @ApiProperty(iri="http://schema.org/userCourseCategory")
      * @var ArrayCollection
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CoreBundle\Entity\UserCourseCategory",
@@ -481,6 +506,8 @@ class User implements UserInterface, EquatableInterface
     protected $userCourseCategorys;
 
     /**
+     * @ApiSubresource()
+     * @ApiProperty(iri="http://schema.org/userRelCourseVote")
      * @var ArrayCollection
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CoreBundle\Entity\UserRelCourseVote",
@@ -492,6 +519,8 @@ class User implements UserInterface, EquatableInterface
     protected $userRelCourseVotes;
 
     /**
+     * @ApiSubresource()
+     * @ApiProperty(iri="http://schema.org/userRelTag")
      * @var ArrayCollection
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CoreBundle\Entity\UserRelTag",
@@ -503,8 +532,9 @@ class User implements UserInterface, EquatableInterface
     protected $userRelTags;
 
     /**
+     * @ApiSubresource()
+     * @ApiProperty(iri="http://schema.org/gradebookLinkevalLog")
      * @var ArrayCollection
-     *
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CoreBundle\Entity\GradebookLinkevalLog",
      *     mappedBy="user",
@@ -515,6 +545,8 @@ class User implements UserInterface, EquatableInterface
     protected $gradebookLinkevalLogs;
 
     /**
+     * @ApiSubresource()
+     * @ApiProperty(iri="http://schema.org/userRelUser")
      * @var ArrayCollection
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CoreBundle\Entity\UserRelUser",
@@ -524,6 +556,279 @@ class User implements UserInterface, EquatableInterface
      * )
      */
     protected $userRelationships;
+
+    /**
+     * @ApiSubresource()
+     * @ApiProperty(iri="http://schema.org/cAttendanceResult")
+     * @var ArrayCollection
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CourseBundle\Entity\CAttendanceResult",
+     *     mappedBy="user",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true
+     * )
+     */
+    protected $cAttendanceResults;
+
+    /**
+     * @ApiSubresource()
+     * @ApiProperty(iri="http://schema.org/cAttendanceSheet")
+     * @var ArrayCollection
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CourseBundle\Entity\CAttendanceSheet",
+     *     mappedBy="user",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true
+     * )
+     */
+    protected $cAttendanceSheets;
+
+    /**
+     * @ApiSubresource()
+     * @ApiProperty(iri="http://schema.org/cBlogRating")
+     * @var ArrayCollection
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CourseBundle\Entity\CBlogRating",
+     *     mappedBy="user",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true
+     * )
+     */
+    protected $cBlogRatings;
+
+    /**
+     * @ApiSubresource()
+     * @ApiProperty(iri="http://schema.org/cBlogRelUser")
+     * @var ArrayCollection
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CourseBundle\Entity\CBlogRelUser",
+     *     mappedBy="user",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true
+     * )
+     */
+    protected $cBlogRelUsers;
+
+    /**
+     * @ApiSubresource()
+     * @ApiProperty(iri="http://schema.org/cBlogTaskRelUser")
+     * @var ArrayCollection
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CourseBundle\Entity\CBlogTaskRelUser",
+     *     mappedBy="user",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true
+     * )
+     */
+    protected $cBlogTaskRelUsers;
+
+    /**
+     * @ApiSubresource()
+     * @ApiProperty(iri="http://schema.org/cChatConnected")
+     * @var ArrayCollection
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CourseBundle\Entity\CChatConnected",
+     *     mappedBy="user",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true
+     * )
+     */
+    protected $cChatConnected;
+
+    /**
+     * @ApiSubresource()
+     * @ApiProperty(iri="http://schema.org/cDropboxCategory")
+     * @var ArrayCollection
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CourseBundle\Entity\CDropboxCategory",
+     *     mappedBy="user",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true
+     * )
+     */
+    protected $cDropboxCategorys;
+    /**
+     * @ApiSubresource()
+     * @ApiProperty(iri="http://schema.org/cDropboxPerson")
+     * @var ArrayCollection
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CourseBundle\Entity\CDropboxPerson",
+     *     mappedBy="user",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true
+     * )
+     */
+    protected $cDropboxPersons;
+
+    /**
+     * @ApiSubresource()
+     * @ApiProperty(iri="http://schema.org/cForumMailcue")
+     * @var ArrayCollection
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CourseBundle\Entity\CForumMailcue",
+     *     mappedBy="user",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true
+     * )
+     */
+    protected $cForumMailcues;
+    /**
+     * @ApiSubresource()
+     * @ApiProperty(iri="http://schema.org/cForumNotification")
+     * @var ArrayCollection
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CourseBundle\Entity\CForumNotification",
+     *     mappedBy="user",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true
+     * )
+     */
+    protected $cForumNotifications;
+    /**
+     * @ApiSubresource()
+     * @ApiProperty(iri="http://schema.org/cForumThreadQualify")
+     * @var ArrayCollection
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CourseBundle\Entity\CForumThreadQualify",
+     *     mappedBy="user",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true
+     * )
+     */
+    protected $cForumThreadQualifys;
+    /**
+     * @ApiSubresource()
+     * @ApiProperty(iri="http://schema.org/cForumThreadQualifyLog")
+     * @var ArrayCollection
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CourseBundle\Entity\CForumThreadQualifyLog",
+     *     mappedBy="user",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true
+     * )
+     */
+    protected $cForumThreadQualifyLogs;
+    /**
+     * @ApiSubresource()
+     * @ApiProperty(iri="http://schema.org/cLpView")
+     * @var ArrayCollection
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CourseBundle\Entity\CLpView",
+     *     mappedBy="user",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true
+     * )
+     */
+    protected $cLpViews;
+    /**
+     * @ApiSubresource()
+     * @ApiProperty(iri="http://schema.org/cNotebook")
+     * @var ArrayCollection
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CourseBundle\Entity\CNotebook",
+     *     mappedBy="user",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true
+     * )
+     */
+    protected $cNotebooks;
+    /**
+     * @ApiSubresource()
+     * @ApiProperty(iri="http://schema.org/cOnlineConnected")
+     * @var ArrayCollection
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CourseBundle\Entity\COnlineConnected",
+     *     mappedBy="user",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true
+     * )
+     */
+    protected $cOnlineConnected;
+    /**
+     * @ApiSubresource()
+     * @ApiProperty(iri="http://schema.org/cRoleUser")
+     * @var ArrayCollection
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CourseBundle\Entity\CRoleUser",
+     *     mappedBy="user",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true
+     * )
+     */
+    protected $cRoleUsers;
+    /**
+     * @ApiSubresource()
+     * @ApiProperty(iri="http://schema.org/cStudentPublication")
+     * @var ArrayCollection
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CourseBundle\Entity\CStudentPublication",
+     *     mappedBy="user",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true
+     * )
+     */
+    protected $cStudentPublications;
+    /**
+     * @ApiSubresource()
+     * @ApiProperty(iri="http://schema.org/cStudentPublicationComment")
+     * @var ArrayCollection
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CourseBundle\Entity\CStudentPublicationComment",
+     *     mappedBy="user",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true
+     * )
+     */
+    protected $cStudentPublicationComments;
+    /**
+     * @ApiSubresource()
+     * @ApiProperty(iri="http://schema.org/cStudentPublicationRelUser")
+     * @var ArrayCollection
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CourseBundle\Entity\CStudentPublicationRelUser",
+     *     mappedBy="user",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true
+     * )
+     */
+    protected $CStudentPublicationRelUser;
+    /**
+     * @ApiSubresource()
+     * @ApiProperty(iri="http://schema.org/cWiki")
+     * @var ArrayCollection
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CourseBundle\Entity\CWiki",
+     *     mappedBy="user",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true
+     * )
+     */
+    protected $cWiki;
+    /**
+     * @ApiSubresource()
+     * @ApiProperty(iri="http://schema.org/cWikiMailcue")
+     * @var ArrayCollection
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CourseBundle\Entity\CWikiMailcue",
+     *     mappedBy="user",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true
+     * )
+     */
+    protected $cWikiMailcues;
+
+    /**
+     * @ApiSubresource()
+     * @ApiProperty(iri="http://schema.org/Person")
+     * @var TrackEAccessComplete
+     * @ORM\OneToOne (
+     *     targetEntity="Chamilo\CoreBundle\Entity\TrackEAccessComplete",
+     *     mappedBy="user",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true
+     * )
+     */
+    protected $trackEAccessComplete;
 
     /**
      * @var ArrayCollection
@@ -2465,7 +2770,7 @@ class User implements UserInterface, EquatableInterface
     }
 
     /**
-     * Gets the Admin for the current user.
+     * Get the Admin for the current user.
      *
      */
     public function getAdmin(): Admin
@@ -2505,7 +2810,7 @@ class User implements UserInterface, EquatableInterface
     }
 
     /**
-     * Gets the Gradebook Certificate's for the current user.
+     * Get the Gradebook Certificate's for the current user.
      *
      */
     public function getGradebookEvaluations(): ArrayCollection
@@ -2525,7 +2830,7 @@ class User implements UserInterface, EquatableInterface
     }
 
     /**
-     * Gets the Gradebook Evaluation's for the current user.
+     * Get the Gradebook Evaluation's for the current user.
      *
      */
     public function getGradebookLinks(): ArrayCollection
@@ -2545,7 +2850,7 @@ class User implements UserInterface, EquatableInterface
     }
 
     /**
-     * Gets the Gradebook Result's for the current user.
+     * Get the Gradebook Result's for the current user.
      *
      */
     public function getGradebookResults(): ArrayCollection
@@ -2565,7 +2870,7 @@ class User implements UserInterface, EquatableInterface
     }
 
     /**
-     * Gets the Gradebook Result Log's for the current user.
+     * Get the Gradebook Result Log's for the current user.
      *
      */
     public function getGradebookResultLogs(): ArrayCollection
@@ -2585,7 +2890,7 @@ class User implements UserInterface, EquatableInterface
     }
 
     /**
-     * Gets the Gradebook Score Log's for the current user.
+     * Get the Gradebook Score Log's for the current user.
      *
      */
     public function getGradebookScoreLogs(): ArrayCollection
@@ -2605,7 +2910,7 @@ class User implements UserInterface, EquatableInterface
     }
 
     /**
-     * Gets the Sequence Value's for the current user.
+     * Get the Sequence Value's for the current user.
      *
      */
     public function getSequenceValues(): ArrayCollection
@@ -2625,7 +2930,7 @@ class User implements UserInterface, EquatableInterface
     }
 
     /**
-     * Gets the Templates's for the current user.
+     * Get the Templates's for the current user.
      *
      */
     public function getTemplates(): ArrayCollection
@@ -2645,27 +2950,26 @@ class User implements UserInterface, EquatableInterface
     }
 
     /**
-     * Gets the Track E Attemp's for the current user.
+     * Get the Track E Attemp's for the current user.
      *
      */
-    public function getTrackEAttemps(): ArrayCollection
+    public function getTrackEAttempts(): ArrayCollection
     {
-        return $this->trackEAttemps;
+        return $this->trackEAttempts;
     }
 
     /**
      * Sets the Track E Attemp's for the current user.
      *
      */
-    public function setTrackEAttemps(ArrayCollection $trackEAttemps): User
+    public function setTrackEAttempts(ArrayCollection $trackEAttempts): User
     {
-        $this->trackEAttemps = $trackEAttemps;
-
+        $this->trackEAttempts = $trackEAttempts;
         return $this;
     }
 
     /**
-     * Gets the Track E CourseA ccess 's for the current user.
+     * Get the Track E CourseA ccess 's for the current user.
      *
      */
     public function getTrackECourseAccess(): ArrayCollection
@@ -2685,7 +2989,7 @@ class User implements UserInterface, EquatableInterface
     }
 
     /**
-     * Gets the User Course Category's for the current user.
+     * Get the User Course Category's for the current user.
      *
      */
     public function getUserCourseCategorys(): ArrayCollection
@@ -2705,7 +3009,7 @@ class User implements UserInterface, EquatableInterface
     }
 
     /**
-     * Gets the User Rel Course Vote's for the current user.
+     * Get the User Rel Course Vote's for the current user.
      *
      */
     public function getUserRelCourseVotes(): ArrayCollection
@@ -2725,7 +3029,7 @@ class User implements UserInterface, EquatableInterface
     }
 
     /**
-     * Gets the User Rel Tag's for the current user.
+     * Get the User Rel Tag's for the current user.
      *
      */
     public function getUserRelTags(): ArrayCollection
@@ -2745,7 +3049,7 @@ class User implements UserInterface, EquatableInterface
     }
 
     /**
-     * Gets the User Rel User's for the current user.
+     * Get the User Rel User's for the current user.
      *
      */
     public function getUserRelationships(): ArrayCollection
@@ -2765,7 +3069,7 @@ class User implements UserInterface, EquatableInterface
     }
 
     /**
-     * Gets the Track E Exercise Confirmation's for the current user.
+     * Get the Track E Exercise Confirmation's for the current user.
      *
      */
     public function getTrackEExerciseConfirmations(): ArrayCollection
@@ -2785,7 +3089,7 @@ class User implements UserInterface, EquatableInterface
     }
 
     /**
-     * Gets the Gradebook Linkeval Log's for the current user.
+     * Get the Gradebook Linkeval Log's for the current user.
      *
      */
     public function getGradebookLinkevalLogs(): ArrayCollection
@@ -2800,8 +3104,424 @@ class User implements UserInterface, EquatableInterface
     public function setGradebookLinkevalLogs(ArrayCollection $gradebookLinkevalLogs): User
     {
         $this->gradebookLinkevalLogs = $gradebookLinkevalLogs;
-
         return $this;
     }
 
+    /**
+     * Get the Course Attendance Result's for the current user.
+     *
+     */
+    public function getCAttendanceResults(): ArrayCollection
+    {
+        return $this->cAttendanceResults;
+    }
+
+    /**
+     * Sets the Course Attendance Result's for the current user.
+     *
+     */
+    public function setCAttendanceResults(ArrayCollection $cAttendanceResults): User
+    {
+        $this->cAttendanceResults = $cAttendanceResults;
+        return $this;
+    }
+
+    /**
+     *  Gets the Course Attendance Sheet's for the current user.
+     *
+     */
+    public function getCAttendanceSheets(): ArrayCollection
+    {
+        return $this->cAttendanceSheets;
+    }
+
+    /**
+     * Sets the Course Attendance Sheet's for the current user.
+     *
+     */
+    public function setCAttendanceSheets(ArrayCollection $cAttendanceSheets): User
+    {
+        $this->cAttendanceSheets = $cAttendanceSheets;
+        return $this;
+    }
+
+    /**
+     *  Gets the Course Blog Ratings's for the current user.
+     *
+     */
+    public function getCBlogRatings(): ArrayCollection
+    {
+        return $this->cBlogRatings;
+    }
+
+    /**
+     * Sets the Course Blog Ratings's for the current user.
+     *
+     */
+    public function setCBlogRatings(ArrayCollection $cBlogRatings): User
+    {
+        $this->cBlogRatings = $cBlogRatings;
+        return $this;
+    }
+
+    /**
+     *  Gets the Course Blog Relation with the current user.
+     *
+     */
+    public function getCBlogRelUsers(): ArrayCollection
+    {
+        return $this->cBlogRelUsers;
+    }
+
+    /**
+     * Sets the Course Blog Relation with the current user.
+     *
+     */
+    public function setCBlogRelUsers(ArrayCollection $cBlogRelUsers): User
+    {
+        $this->cBlogRelUsers = $cBlogRelUsers;
+        return $this;
+    }
+
+    /**
+     *  Gets the Course Blog Tak Relation with the current user.
+     *
+     */
+    public function getCBlogTaskRelUsers(): ArrayCollection
+    {
+        return $this->cBlogTaskRelUsers;
+    }
+
+    /**
+     * Sets the Course Blog Tak Relation with the current user.
+     *
+     */
+    public function setCBlogTaskRelUsers(ArrayCollection $cBlogTaskRelUsers): User
+    {
+        $this->cBlogTaskRelUsers = $cBlogTaskRelUsers;
+        return $this;
+    }
+
+    /**
+     *  Gets the Course Chat Connected for the current user.
+     *
+     */
+    public function getCChatConnected(): ArrayCollection
+    {
+        return $this->cChatConnected;
+    }
+
+    /**
+     * Sets the Course Chat Connected for the current user.
+     *
+     */
+    public function setCChatConnected(ArrayCollection $cChatConnected): User
+    {
+        $this->cChatConnected = $cChatConnected;
+        return $this;
+    }
+
+    /**
+     *  Gets the Course Dropbox Category's for the current user.
+     *
+     */
+    public function getCDropboxCategorys(): ArrayCollection
+    {
+        return $this->cDropboxCategorys;
+    }
+
+    /**
+     * Sets the Course Dropbox Category's for the current user.
+     *
+     */
+    public function setCDropboxCategorys(ArrayCollection $cDropboxCategorys): User
+    {
+        $this->cDropboxCategorys = $cDropboxCategorys;
+        return $this;
+    }
+
+    /**
+     *  Gets the Course Dropbox Person's for the current user.
+     *
+     */
+    public function getCDropboxPersons(): ArrayCollection
+    {
+        return $this->cDropboxPersons;
+    }
+
+    /**
+     * Sets the Course Dropbox Person's for the current user.
+     *
+     */
+    public function setCDropboxPersons(ArrayCollection $cDropboxPersons): User
+    {
+        $this->cDropboxPersons = $cDropboxPersons;
+        return $this;
+    }
+
+    /**
+     *  Gets the Course Forum Mailcue's for the current user.
+     *
+     */
+    public function getCForumMailcues(): ArrayCollection
+    {
+        return $this->cForumMailcues;
+    }
+
+    /**
+     * Sets the Course Forum Mailcue's for the current user.
+     *
+     */
+    public function setCForumMailcues(ArrayCollection $cForumMailcues): User
+    {
+        $this->cForumMailcues = $cForumMailcues;
+        return $this;
+    }
+
+    /**
+     *  Gets the Course Forum Notification's for the current user.
+     *
+     */
+    public function getCForumNotifications(): ArrayCollection
+    {
+        return $this->cForumNotifications;
+    }
+
+    /**
+     * Sets the Course Forum Notification's for the current user.
+     *
+     */
+    public function setCForumNotifications(ArrayCollection $cForumNotifications): User
+    {
+        $this->cForumNotifications = $cForumNotifications;
+        return $this;
+    }
+
+    /**
+     *  Gets the Course Forum Thread Qualify's for the current user.
+     *
+     */
+    public function getCForumThreadQualifys(): ArrayCollection
+    {
+        return $this->cForumThreadQualifys;
+    }
+
+    /**
+     * Sets the Course Forum Thread Qualify's for the current user.
+     *
+     */
+    public function setCForumThreadQualifys(ArrayCollection $cForumThreadQualifys): User
+    {
+        $this->cForumThreadQualifys = $cForumThreadQualifys;
+        return $this;
+    }
+
+    /**
+     *  Gets the Course Forum Thread Qualify Log's for the current user.
+     *
+     */
+    public function getCForumThreadQualifyLogs(): ArrayCollection
+    {
+        return $this->cForumThreadQualifyLogs;
+    }
+
+    /**
+     * Sets the Course Forum Thread Qualify Log's for the current user.
+     *
+     */
+    public function setCForumThreadQualifyLogs(ArrayCollection $cForumThreadQualifyLogs): User
+    {
+        $this->cForumThreadQualifyLogs = $cForumThreadQualifyLogs;
+        return $this;
+    }
+
+    /**
+     *  Gets the Course Lp View's for the current user.
+     *
+     */
+    public function getCLpViews(): ArrayCollection
+    {
+        return $this->cLpViews;
+    }
+
+    /**
+     * Sets the Course Lp View's for the current user.
+     *
+     */
+    public function setCLpViews(ArrayCollection $cLpViews): User
+    {
+        $this->cLpViews = $cLpViews;
+        return $this;
+    }
+
+    /**
+     *  Gets the Course Notebook's for the current user.
+     *
+     */
+    public function getCNotebooks(): ArrayCollection
+    {
+        return $this->cNotebooks;
+    }
+
+    /**
+     * Sets the Course Notebook's for the current user.
+     *
+     */
+    public function setCNotebooks(ArrayCollection $cNotebooks): User
+    {
+        $this->cNotebooks = $cNotebooks;
+        return $this;
+    }
+
+    /**
+     *  Gets the Course Online Connected for the current user.
+     *
+     */
+    public function getCOnlineConnected(): ArrayCollection
+    {
+        return $this->cOnlineConnected;
+    }
+
+    /**
+     * Sets the Course Online Connected for the current user.
+     *
+     */
+    public function setCOnlineConnected(ArrayCollection $cOnlineConnected): User
+    {
+        $this->cOnlineConnected = $cOnlineConnected;
+        return $this;
+    }
+
+    /**
+     *  Gets the Course Role User's for the current user.
+     *
+     */
+    public function getCRoleUsers(): ArrayCollection
+    {
+        return $this->cRoleUsers;
+    }
+
+    /**
+     * Sets the Course Role User's for the current user.
+     *
+     */
+    public function setCRoleUsers(ArrayCollection $cRoleUsers): User
+    {
+        $this->cRoleUsers = $cRoleUsers;
+        return $this;
+    }
+
+    /**
+     *  Gets the Course Student Publication's for the current user.
+     *
+     */
+    public function getCStudentPublications(): ArrayCollection
+    {
+        return $this->cStudentPublications;
+    }
+
+    /**
+     * Sets the Course Student Publication's for the current user.
+     *
+     */
+    public function setCStudentPublications(ArrayCollection $cStudentPublications): User
+    {
+        $this->cStudentPublications = $cStudentPublications;
+        return $this;
+    }
+
+    /**
+     *  Gets the Course Student Publication Comment's for the current user.
+     *
+     */
+    public function getCStudentPublicationComments(): ArrayCollection
+    {
+        return $this->cStudentPublicationComments;
+    }
+
+    /**
+     * Sets the Course Student Publication Comment's for the current user.
+     *
+     */
+    public function setCStudentPublicationComments(ArrayCollection $cStudentPublicationComments): User
+    {
+        $this->cStudentPublicationComments = $cStudentPublicationComments;
+        return $this;
+    }
+
+    /**
+     *  Gets the Course Student Publication Rel User's for the current user.
+     *
+     */
+    public function getCStudentPublicationRelUser(): ArrayCollection
+    {
+        return $this->CStudentPublicationRelUser;
+    }
+
+    /**
+     * Sets the Course Student Publication Rel User's for the current user.
+     *
+     */
+    public function setCStudentPublicationRelUser(ArrayCollection $CStudentPublicationRelUser): User
+    {
+        $this->CStudentPublicationRelUser = $CStudentPublicationRelUser;
+        return $this;
+    }
+
+    /**
+     *  Gets the Wiki's for the current user.
+     *
+     */
+    public function getCWiki(): ArrayCollection
+    {
+        return $this->cWiki;
+    }
+
+    /**
+     * Sets the Wiki's for the current user.
+     *
+     */
+    public function setCWiki(ArrayCollection $cWiki): User
+    {
+        $this->cWiki = $cWiki;
+        return $this;
+    }
+
+    /**
+     *  Gets the Wiki Mailcue's for the current user.
+     *
+     */
+    public function getCWikiMailcues(): ArrayCollection
+    {
+        return $this->cWikiMailcues;
+    }
+
+    /**
+     * Sets the Course Wiki Mailcue's for the current user.
+     *
+     */
+    public function setCWikiMailcues(ArrayCollection $cWikiMailcues): User
+    {
+        $this->cWikiMailcues = $cWikiMailcues;
+        return $this;
+    }
+
+    /**
+     * Sets the Track E Access Complete for the current user.
+     *
+     */
+    public function getTrackEAccessComplete(): TrackEAccessComplete
+    {
+        return $this->trackEAccessComplete;
+    }
+
+    /**
+     * Get the Track E Access Complete for the current user.
+     *
+     */
+    public function setTrackEAccessComplete(TrackEAccessComplete $trackEAccessComplete): User
+    {
+        $this->trackEAccessComplete = $trackEAccessComplete;
+        return $this;
+    }
 }

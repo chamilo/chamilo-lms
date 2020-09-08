@@ -4,18 +4,17 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
-use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Admin.
  * @ApiResource(
  *      attributes={"security"="is_granted('ROLE_ADMIN')"},
  *      iri="http://schema.org/admin",
- *      attributes={"security"="is_granted('ROLE_ADMIN')"},
  * )
  *
  * @ApiFilter(SearchFilter::class,
@@ -59,8 +58,8 @@ class Admin
     }
 
     /**
+     * Set user.
      *
-     * @return $this
      */
     public function setUser($user)
     {

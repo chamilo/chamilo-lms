@@ -1120,7 +1120,7 @@ class MySpace
      *
      * @param string|null $startDate
      * @param string|null $endDate
-     * @param bool $csv
+     * @param bool        $csv
      */
     public static function displayResumeLP(
         $startDate = null,
@@ -3619,7 +3619,7 @@ class MySpace
      *
      * @param string|null $startDate
      * @param string|null $endDate
-     * @param int  $lpId
+     * @param int         $lpId
      *
      * @return array
      */

@@ -9,9 +9,9 @@ require_once __DIR__.'/../inc/global.inc.php';
 api_block_anonymous_users();
 
 $exportCSV = isset($_GET['export']) && $_GET['export'] === 'csv' ? true : false;
-if(isset($_GET['export_csv']) && $exportCSV == false){
+if (isset($_GET['export_csv']) && $exportCSV == false) {
     // to export learningPath and company
-    $exportCSV =  true ;
+    $exportCSV = true;
 }
 $display = isset($_GET['display']) ? Security::remove_XSS($_GET['display']) : null;
 

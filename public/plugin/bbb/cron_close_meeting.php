@@ -30,7 +30,7 @@ if ($bbb->pluginEnabled) {
                 ]
             );
 
-            if ($meetingBBB === false) {
+            if (false === $meetingBBB) {
                 //checking with the remote_id didn't work, so just in case and
                 // to provide backwards support, check with the id
                 $params = [

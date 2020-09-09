@@ -2,7 +2,6 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
@@ -351,7 +350,9 @@ abstract class Question
      *
      * @param int $categoryId
      * @param int $courseId
+     *
      * @deprecated
+     *
      * @return bool
      *
      * @author Hubert Borderiou 12-10-2011
@@ -399,7 +400,9 @@ abstract class Question
      * @param int $courseId
      *                      delete any category entry for question id
      *                      delete the category for question
+     *
      * @deprecated
+     *
      * @return bool
      */
     public function deleteCategory($courseId = 0)
@@ -1004,7 +1007,7 @@ abstract class Question
                 LOG_QUESTION_ID,
                 $this->iid
             );
-            //$this->removePicture();
+        //$this->removePicture();
         } else {
             // just removes the exercise from the list
             $this->removeFromList($deleteFromEx, $courseId);
@@ -1850,7 +1853,6 @@ abstract class Question
         $question_id = Database::insert($tbl_quiz_question, $params);
 
         if ($question_id) {
-
             // Get the max question_order
             $sql = "SELECT max(question_order) as max_order
                     FROM $tbl_quiz_rel_question
@@ -2141,5 +2143,4 @@ abstract class Question
 
         return (int) $result['c'];
     }
-
 }

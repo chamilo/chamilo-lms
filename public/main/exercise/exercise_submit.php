@@ -890,7 +890,7 @@ if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) { //so we are 
     echo '<div style="height:10px">&nbsp;</div>';
 }
 
-if ($origin == 'mobileapp') {
+if ('mobileapp' == $origin) {
     echo '<div class="actions">';
     echo '<a href="javascript:window.history.go(-1);">'.
         Display::return_icon('back.png', get_lang('GoBackToQuestionList'), [], 32).'</a>';

@@ -76,14 +76,14 @@ class SkillProfile extends Model
      * Call the save method of the parent class and the SkillRelProfile object.
      *
      * @param array $params
-     * @param bool  $show_query Whether to show the query in parent save() method
+     * @param bool  $showQuery Whether to show the query in parent save() method
      *
      * @return mixed Profile ID or false if incomplete params
      */
-    public function save($params, $show_query = false)
+    public function save($params, $showQuery = false)
     {
         if (!empty($params)) {
-            $profile_id = parent::save($params, $show_query);
+            $profile_id = parent::save($params, $showQuery);
             if ($profile_id) {
                 $skill_rel_profile = new SkillRelProfile();
                 if (isset($params['skills'])) {

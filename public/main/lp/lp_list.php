@@ -131,7 +131,7 @@ if ($allowCategory) {
     $newCategoryFiltered = [];
     foreach ($categoriesTempList as $category) {
         $categorySessionId = (int) learnpath::getCategorySessionId($category->getIid());
-        if ($categorySessionId === $sessionId || $categorySessionId === 0) {
+        if ($categorySessionId === $sessionId || 0 === $categorySessionId) {
             $newCategoryFiltered[] = $category;
         }
         if (!empty($sessionId) && empty($firstSessionCategoryId) && $categorySessionId == $sessionId) {

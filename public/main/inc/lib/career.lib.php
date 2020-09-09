@@ -228,25 +228,25 @@ class Career extends Model
     public function get_status($career_id)
     {
         $table = Database::get_main_table(TABLE_CAREER);
-        $career_id = intval($career_id);
+        $career_id = (int) $career_id;
         $sql = "SELECT status FROM $table WHERE id = '$career_id'";
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
             $data = Database::fetch_array($result);
 
             return $data['status'];
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
      * @param array $params
-     * @param bool  $show_query
+     * @param bool  $showQuery
      *
      * @return int
      */
-    public function save($params, $show_query = false)
+    public function save($params, $showQuery = false)
     {
         $career = new \Chamilo\CoreBundle\Entity\Career();
         $career
@@ -815,16 +815,16 @@ class Career extends Model
             }
 
             if (!empty($newGroup)) {
-                $graphHtml .= '<div 
+                $graphHtml .= '<div
                     id ="group_'.$newGroup.'"
-                    class="group'.$newGroup.' group_class" 
-                    style="display:grid; 
+                    class="group'.$newGroup.' group_class"
+                    style="display:grid;
                         align-self: start;
-                        grid-gap: 10px;                                     
+                        grid-gap: 10px;
                         justify-items: stretch;
                         align-items: start;
-                        align-content: start;	
-                        justify-content: stretch;	
+                        align-content: start;
+                        justify-content: stretch;
                         grid-area:'.$minRow.'/'.$minColumn.'/'.$maxRow.'/'.$maxColumn.'">'; //style="display:grid"
             }
 
@@ -882,12 +882,12 @@ class Career extends Model
             }
             $id = $vertex->getId();
             $area = "$realRow/$column";
-            $graphHtml .= '<div 
-                id = "row_wrapper_'.$id.'"   
-                data= "'.$originalRow.'-'.$column.'"                            
+            $graphHtml .= '<div
+                id = "row_wrapper_'.$id.'"
+                data= "'.$originalRow.'-'.$column.'"
                 style="
                     align-self: start;
-                    justify-content: stretch; 
+                    justify-content: stretch;
                     grid-area:'.$area.'"
             >';
             $color = '';
@@ -1134,8 +1134,8 @@ class Career extends Model
         $groupIdTag = "group_$group";
         $borderLine = true === $showGroupLine ? 'border-style:solid;' : '';
 
-        $graphHtml = '<div 
-            id="'.$groupIdTag.'" class="career_group" 
+        $graphHtml = '<div
+            id="'.$groupIdTag.'" class="career_group"
             style=" '.$borderLine.' padding:15px; float:left; margin-left:'.$leftGroup.'; width:'.$widthGroup.'%">';
 
         if (!empty($groupLabel)) {
@@ -1156,8 +1156,8 @@ class Career extends Model
             }
 
             // padding:15px;
-            $graphHtml .= '<div 
-                id="subgroup_'.$subGroup.'" class="career_subgroup" 
+            $graphHtml .= '<div
+                id="subgroup_'.$subGroup.'" class="career_subgroup"
                 style="'.$line.' margin-bottom:20px; padding:15px; float:left; margin-left:0px; width:100%">';
             if (!empty($subGroupLabel)) {
                 $graphHtml .= '<h3>'.$subGroupLabel.'</h3>';
@@ -1172,8 +1172,8 @@ class Career extends Model
                 }
 
                 $widthColumn = 85 / count($columnList);
-                $graphHtml .= '<div 
-                    id="col_'.$column.'" class="career_column" 
+                $graphHtml .= '<div
+                    id="col_'.$column.'" class="career_column"
                     style="padding:15px;float:left; margin-left:'.$leftColumn.'; width:'.$widthColumn.'%">';
                 $maxRow = 0;
                 foreach ($rows as $row => $vertex) {
@@ -1346,19 +1346,19 @@ class Career extends Model
         $html .= 'jsPlumb.connect({
             source:"'.$source.'",
             target:"'.$target.'",
-            endpoint:[ "Rectangle", { width:1, height:1 }],                                        
-            connector: ["Flowchart"],             
-            paintStyle: connectorPaintStyle,    
-            hoverPaintStyle: endpointHoverStyle,                
+            endpoint:[ "Rectangle", { width:1, height:1 }],
+            connector: ["Flowchart"],
+            paintStyle: connectorPaintStyle,
+            hoverPaintStyle: endpointHoverStyle,
             anchor: ["'.$anchor.'"],
             overlays: [
-                [ 
-                    "Arrow", 
-                    { 
-                        location:1,  
-                        width:11, 
-                        length:11 
-                    } 
+                [
+                    "Arrow",
+                    {
+                        location:1,
+                        width:11,
+                        length:11
+                    }
                 ],
             ],
         });';

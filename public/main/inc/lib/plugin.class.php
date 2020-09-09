@@ -886,7 +886,7 @@ class Plugin
                 ],
             ]
         );
-        if (is_array($settings) && isset($settings['selected_value']) && $settings['selected_value'] == 'installed') {
+        if (is_array($settings) && isset($settings['selected_value']) && 'installed' == $settings['selected_value']) {
             // The plugin is installed
             // If we need a check on whether it is enabled, also check for
             // *plugin*_tool_enable and make sure it is *NOT* false
@@ -899,7 +899,7 @@ class Plugin
                         ],
                     ]
                 );
-                if (is_array($enabled) && isset($enabled['selected_value']) && $enabled['selected_value'] == 'false') {
+                if (is_array($enabled) && isset($enabled['selected_value']) && 'false' == $enabled['selected_value']) {
                     // Only return false if the setting exists and it is
                     // *specifically* set to false
                     return false;

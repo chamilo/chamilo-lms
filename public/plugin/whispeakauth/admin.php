@@ -108,7 +108,7 @@ foreach ($results as $userId => $logEvents) {
             [
                 api_convert_and_format_date($logEvent->getDatetime(), DATE_TIME_FORMAT_SHORT),
                 $type.PHP_EOL.$logEvent->getTypeString(),
-                $logEvent->getActionStatus() === LogEvent::STATUS_SUCCESS ? get_lang('Success') : get_lang('Failed'),
+                LogEvent::STATUS_SUCCESS === $logEvent->getActionStatus() ? get_lang('Success') : get_lang('Failed'),
             ]
         );
     }

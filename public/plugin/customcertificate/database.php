@@ -6,8 +6,6 @@ use Doctrine\DBAL\Types\Type;
 /**
  * Plugin database installation script. Can only be executed if included
  * inside another script loading global.inc.php.
- *
- * @package chamilo.plugin.customcertificate
  */
 /**
  * Check if script can be called.

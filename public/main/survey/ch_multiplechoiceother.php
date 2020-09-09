@@ -28,7 +28,7 @@ class ch_multiplechoiceother extends survey_question
 
         if (is_array($formData['answers'])) {
             foreach ($formData['answers'] as $key => $value) {
-                if ($value === 'other') {
+                if ('other' === $value) {
                     continue;
                 }
                 $this->getForm()->addHtmlEditor('answers['.$key.']', null, false, false, $config);
@@ -68,7 +68,7 @@ class ch_multiplechoiceother extends survey_question
         }
 
         foreach ($questionData['options'] as &$option) {
-            if ($option === 'other') {
+            if ('other' === $option) {
                 $option = '<p>'.get_lang('SurveyOtherAnswerSpecify').'</p>';
             }
         }

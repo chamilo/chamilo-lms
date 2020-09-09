@@ -4,8 +4,6 @@
 
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\Hook\HookWSRegistration;
 
 require_once __DIR__.'/../inc/global.inc.php';
 $debug = true;

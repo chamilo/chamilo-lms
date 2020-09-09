@@ -5,6 +5,7 @@
 namespace Chamilo\CourseBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * CBlog.
@@ -45,7 +46,7 @@ class CBlog
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank()
      * @ORM\Column(name="blog_name", type="string", length=250, nullable=false)
      */
     protected $blogName;

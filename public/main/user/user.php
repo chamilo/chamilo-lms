@@ -439,7 +439,7 @@ if (api_is_allowed_to_edit(null, true)) {
 
             $result = Database::query($sql);
             $row = Database::fetch_array($result, 'ASSOC');
-            if ($row['user_id'] == $user_id || $row['user_id'] == "") {
+            if ($row['user_id'] == $user_id || "" == $row['user_id']) {
                 CourseManager::unsubscribe_user($_GET['user_id'], $courseCode);
                 Display::addFlash(
                         Display::return_message(get_lang('UserUnsubscribed'))
@@ -886,11 +886,11 @@ function get_user_data($from, $number_of_items, $column, $direction)
 
                 // Status
                 $default_status = get_lang('Student');
-                if ((isset($userData['status_rel']) && $userData['status_rel'] == 1) ||
-                    (isset($userData['status_session']) && $userData['status_session'] == 2)
+                if ((isset($userData['status_rel']) && 1 == $userData['status_rel']) ||
+                    (isset($userData['status_session']) && 2 == $userData['status_session'])
                 ) {
                     $default_status = get_lang('CourseManager');
-                } elseif (isset($userData['is_tutor']) && $userData['is_tutor'] == 1) {
+                } elseif (isset($userData['is_tutor']) && 1 == $userData['is_tutor']) {
                     $default_status = get_lang('Tutor');
                 }
 
@@ -908,12 +908,12 @@ function get_user_data($from, $number_of_items, $column, $direction)
                             $extraField['id']
                         );
                         if (isset($data['value'])) {
-                        $optionList = $extraFieldOption->get_field_option_by_field_and_option(
+                            $optionList = $extraFieldOption->get_field_option_by_field_and_option(
                             $extraField['id'],
                             $data['value']
                         );
-                        if (!empty($optionList)) {
-                            $options = implode(', ', array_column($optionList, 'display_text'));
+                            if (!empty($optionList)) {
+                                $options = implode(', ', array_column($optionList, 'display_text'));
                                 $temp[] = Security::remove_XSS($options);
                             } else {
                                 $temp[] = Security::remove_XSS($data['value']);
@@ -950,7 +950,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
                 // Group.
                 $temp[] = implode(', ', $groupsNameListParsed);
 
-                if ($course_info['unsubscribe'] == 1) {
+                if (1 == $course_info['unsubscribe']) {
                     //User id for actions
                     $temp[] = $user_id;
                 }

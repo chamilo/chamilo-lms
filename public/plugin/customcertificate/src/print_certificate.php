@@ -5,7 +5,7 @@ use Chamilo\CourseBundle\Entity\CLpCategory;
 
 $default = isset($_GET['default']) ? (int) $_GET['default'] : null;
 
-if ($default === 1) {
+if (1 === $default) {
     $cidReset = true;
 }
 
@@ -14,7 +14,7 @@ require_once __DIR__.'/../config.php';
 
 api_block_anonymous_users();
 $plugin = CustomCertificatePlugin::create();
-$enable = $plugin->get('enable_plugin_customcertificate') == 'true';
+$enable = 'true' == $plugin->get('enable_plugin_customcertificate');
 $tblProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
 $categoryId = isset($_GET['cat_id']) ? (int) $_GET['cat_id'] : 0;
 
@@ -22,7 +22,7 @@ if (!$enable) {
     api_not_allowed(true, $plugin->get_lang('ToolDisabled'));
 }
 
-if ($default == 1) {
+if (1 == $default) {
     $courseId = 0;
     $courseCode = '';
     $sessionId = 0;
@@ -32,8 +32,8 @@ if ($default == 1) {
     $courseId = api_get_course_int_id();
     $courseCode = api_get_course_id();
     $sessionId = api_get_session_id();
-    $enableCourse = api_get_course_setting('customcertificate_course_enable') == 1 ? true : false;
-    $useDefault = api_get_course_setting('use_certificate_default') == 1 ? true : false;
+    $enableCourse = 1 == api_get_course_setting('customcertificate_course_enable') ? true : false;
+    $useDefault = 1 == api_get_course_setting('use_certificate_default') ? true : false;
 }
 
 if (empty($courseCode)) {
@@ -224,11 +224,11 @@ foreach ($userList as $userInfo) {
     );
 
     $dateExpediction = '';
-    if ($infoCertificate['type_date_expediction'] != 3) {
+    if (3 != $infoCertificate['type_date_expediction']) {
         $dateExpediction .= $plugin->get_lang('ExpedictionIn').' '.$infoCertificate['place'];
-        if ($infoCertificate['type_date_expediction'] == 1) {
+        if (1 == $infoCertificate['type_date_expediction']) {
             $dateExpediction .= $plugin->get_lang('to').api_format_date(time(), DATE_FORMAT_LONG);
-        } elseif ($infoCertificate['type_date_expediction'] == 2) {
+        } elseif (2 == $infoCertificate['type_date_expediction']) {
             $dateFormat = $plugin->get_lang('formatDownloadDate');
             if (!empty($infoCertificate['day']) &&
                 !empty($infoCertificate['month']) &&
@@ -248,7 +248,7 @@ foreach ($userList as $userInfo) {
                     '............'
                 );
             }
-        } elseif ($infoCertificate['type_date_expediction'] == 4) {
+        } elseif (4 == $infoCertificate['type_date_expediction']) {
             $dateExpediction .= $plugin->get_lang('to').$infoToReplaceInContentHtml[9]; //date_certificate_no_time
         } else {
             if (!empty($sessionInfo)) {
@@ -340,9 +340,9 @@ foreach ($userList as $userInfo) {
     $htmlText .= '</div>';
 
     // Rear certificate
-    if ($infoCertificate['contents_type'] != 3) {
+    if (3 != $infoCertificate['contents_type']) {
         $htmlText .= '<div class="caraB" style="page-break-before:always; margin:0px; padding:0px;">';
-        if ($infoCertificate['contents_type'] == 0) {
+        if (0 == $infoCertificate['contents_type']) {
             $courseDescription = new CourseDescription();
             $contentDescription = $courseDescription->get_data_by_description_type(3, $courseId, 0);
             $domd = new DOMDocument();
@@ -366,7 +366,7 @@ foreach ($userList as $userInfo) {
             $htmlText .= getIndexFiltered($output);
         }
 
-        if ($infoCertificate['contents_type'] == 1) {
+        if (1 == $infoCertificate['contents_type']) {
             $items = [];
             $categoriesTempList = learnpath::getCategories($courseId);
             $categoryTest = new CLpCategory();
@@ -441,7 +441,7 @@ foreach ($userList as $userInfo) {
                 $htmlText .= '<td>';
                 $i = 0;
                 foreach ($items as $value) {
-                    if ($i == 50) {
+                    if (50 == $i) {
                         $htmlText .= '</td><td>';
                     }
                     $htmlText .= $value;
@@ -454,7 +454,7 @@ foreach ($userList as $userInfo) {
             $htmlText .= '</td></table>';
         }
 
-        if ($infoCertificate['contents_type'] == 2) {
+        if (2 == $infoCertificate['contents_type']) {
             $htmlText .= '<table width="100%" class="contents-learnpath">';
             $htmlText .= '<tr>';
             $htmlText .= '<td>';

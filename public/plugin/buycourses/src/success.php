@@ -3,13 +3,11 @@
 
 /**
  * Success page for the purchase of a course in the Buy Courses plugin.
- *
- * @package chamilo.plugin.buycourses
  */
 require_once '../config.php';
 
 $plugin = BuyCoursesPlugin::create();
-$paypalEnabled = $plugin->get('paypal_enable') === 'true';
+$paypalEnabled = 'true' === $plugin->get('paypal_enable');
 
 if (!$paypalEnabled) {
     api_not_allowed(true);
@@ -36,7 +34,7 @@ switch ($sale['product_type']) {
 }
 
 $paypalParams = $plugin->getPaypalParams();
-$pruebas = $paypalParams['sandbox'] == 1;
+$pruebas = 1 == $paypalParams['sandbox'];
 $paypalUsername = $paypalParams['username'];
 $paypalPassword = $paypalParams['password'];
 $paypalSignature = $paypalParams['signature'];
@@ -65,7 +63,7 @@ if ($form->validate()) {
 
     $confirmPayments = ConfirmPayment($sale['price']);
 
-    if ($confirmPayments['ACK'] !== 'Success') {
+    if ('Success' !== $confirmPayments['ACK']) {
         $erroMessage = vsprintf(
             $plugin->get_lang('ErrorOccurred'),
             [$expressCheckout['L_ERRORCODE0'], $confirmPayments['L_LONGMESSAGE0']]
@@ -164,7 +162,7 @@ if (empty($token)) {
 
 $shippingDetails = GetShippingDetails($token);
 
-if ($shippingDetails['ACK'] !== 'Success') {
+if ('Success' !== $shippingDetails['ACK']) {
     $erroMessage = vsprintf(
         $plugin->get_lang('ErrorOccurred'),
         [$expressCheckout['L_ERRORCODE0'], $shippingDetails['L_LONGMESSAGE0']]

@@ -1144,7 +1144,7 @@ function clean_up_path($path, $replaceName = true)
     // Clean up every folder and filename in the path
     foreach ($path_array as $key => &$val) {
         // We don't want to lose the dots in ././folder/file (cfr. zipfile)
-        if ($val != '.') {
+        if ('.' != $val) {
             if ($replaceName) {
                 $val = api_replace_dangerous_char($val);
             }

@@ -144,7 +144,7 @@ if (isset($zoomOptions['options']) && !in_array($origin, ['embeddable', 'noheade
     </script>';
 }
 
-$allowLpItemTip = api_get_configuration_value('hide_accessibility_label_on_lp_item') === false;
+$allowLpItemTip = false === api_get_configuration_value('hide_accessibility_label_on_lp_item');
 if ($allowLpItemTip) {
     $htmlHeadXtra[] = '<script>
     $(function() {
@@ -326,8 +326,8 @@ if (!empty($_REQUEST['exeId']) &&
 
     if (!empty($safe_id) && !empty($safe_item_id)) {
         Exercise::saveExerciseInLp($safe_item_id, $safe_exe_id);
-                }
-    if (intval($_GET['fb_type']) != EXERCISE_FEEDBACK_TYPE_END) {
+    }
+    if (EXERCISE_FEEDBACK_TYPE_END != intval($_GET['fb_type'])) {
         $src = 'blank.php?msg=exerciseFinished&'.api_get_cidreq(true, true, 'learnpath');
     } else {
         $src = api_get_path(WEB_CODE_PATH).'exercise/result.php?id='.$safe_exe_id.'&'.api_get_cidreq(true, true, 'learnpath');
@@ -566,7 +566,7 @@ if (Tracking::minimumTimeAvailable(api_get_session_id(), api_get_course_int_id()
 $template->assign('lp_accumulate_work_time', $lpMinTime);
 $template->assign('lp_mode', $lp->mode);
 $template->assign('lp_title_scorm', $lp->get_name());
-if (api_get_configuration_value('lp_view_accordion') === true && $lpType == 1) {
+if (true === api_get_configuration_value('lp_view_accordion') && 1 == $lpType) {
     $template->assign('data_panel', $lp->getTOCTree());
     $template->assign('data_list', null);
 } else {

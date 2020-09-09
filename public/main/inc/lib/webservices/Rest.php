@@ -177,7 +177,7 @@ class Rest extends WebService
             return;
         }
 
-        $session = api_get_session_entity( $id);
+        $session = api_get_session_entity($id);
 
         if (!$session) {
             throw new Exception(get_lang('NoSession'));
@@ -439,11 +439,11 @@ class Rest extends WebService
 
             /** @var array $document */
             foreach ($documents as $document) {
-                if ($document['visibility'] != '1') {
+                if ('1' != $document['visibility']) {
                     continue;
                 }
 
-                $icon = $document['filetype'] == 'file'
+                $icon = 'file' == $document['filetype']
                     ? choose_image($document['path'])
                     : chooseFolderIcon($document['path']);
 
@@ -651,7 +651,7 @@ class Rest extends WebService
 
         $categoriesFullData = get_forum_categories('', $this->course->getId(), $sessionId);
         $categories = [];
-        $includeGroupsForums = api_get_setting('display_groups_forum_in_general_tool') === 'true';
+        $includeGroupsForums = 'true' === api_get_setting('display_groups_forum_in_general_tool');
         $forumsFullData = get_forums('', $this->course->getCode(), $includeGroupsForums, $sessionId);
         $forums = [];
 
@@ -873,7 +873,7 @@ class Rest extends WebService
             $listData = [];
 
             foreach ($flatLpList as $lpId => $lpDetails) {
-                if ($lpDetails['lp_visibility'] == 0) {
+                if (0 == $lpDetails['lp_visibility']) {
                     continue;
                 }
 
@@ -1081,7 +1081,7 @@ class Rest extends WebService
         $repo = UserManager::getRepository();
 
         $users = $repo->findUsersToSendMessage($this->user->getId(), $search);
-        $showEmail = api_get_setting('show_email_addresses') === 'true';
+        $showEmail = 'true' === api_get_setting('show_email_addresses');
         $data = [];
 
         /** @var User $user */
@@ -1355,7 +1355,7 @@ class Rest extends WebService
         }
 
         if (api_is_multiple_url_enabled()) {
-            if (api_get_current_access_url_id() != -1) {
+            if (-1 != api_get_current_access_url_id()) {
                 UrlManager::add_user_to_url(
                     $userId,
                     api_get_current_access_url_id()
@@ -1434,7 +1434,7 @@ class Rest extends WebService
 
     public function deleteUserMessage($messageId, $messageType)
     {
-        if ($messageType === "sent") {
+        if ("sent" === $messageType) {
             return MessageManager::delete_message_by_user_sender($this->user->getId(), $messageId);
         } else {
             return MessageManager::delete_message_by_user_receiver($this->user->getId(), $messageId);
@@ -1460,9 +1460,9 @@ class Rest extends WebService
 
         $active = isset($params['active']) ? intval($params['active']) : 0;
         $num = UrlManager::url_exist($urlCampus);
-        if ($num == 0) {
+        if (0 == $num) {
             // checking url
-            if (substr($urlCampus, strlen($urlCampus) - 1, strlen($urlCampus)) == '/') {
+            if ('/' == substr($urlCampus, strlen($urlCampus) - 1, strlen($urlCampus))) {
                 $idCampus = UrlManager::add($urlCampus, $description, $active, true);
             } else {
                 //create
@@ -1498,11 +1498,11 @@ class Rest extends WebService
 
         if (!empty($url_id)) {
             //we can't change the status of the url with id=1
-            if ($url_id == 1) {
+            if (1 == $url_id) {
                 $active = 1;
             }
             //checking url
-            if (substr($urlCampus, strlen($urlCampus) - 1, strlen($urlCampus)) == '/') {
+            if ('/' == substr($urlCampus, strlen($urlCampus) - 1, strlen($urlCampus))) {
                 UrlManager::update($url_id, $urlCampus, $description, $active);
             } else {
                 UrlManager::update($url_id, $urlCampus.'/', $description, $active);
@@ -1620,7 +1620,7 @@ class Rest extends WebService
 
         $modelSession['accessUrlId'] = 1;
         if (api_is_multiple_url_enabled()) {
-            if (api_get_current_access_url_id() != -1) {
+            if (-1 != api_get_current_access_url_id()) {
                 $modelSession['accessUrlId'] = api_get_current_access_url_id();
             }
         }
@@ -1684,7 +1684,7 @@ class Rest extends WebService
         }
 
         if (api_is_multiple_url_enabled()) {
-            if (api_get_current_access_url_id() != -1) {
+            if (-1 != api_get_current_access_url_id()) {
                 UrlManager::add_session_to_url(
                     $newSessionId,
                     api_get_current_access_url_id()
@@ -1786,7 +1786,7 @@ class Rest extends WebService
             throw new Exception('NoData');
         }
         foreach ($parameters as $name => $value) {
-            if (strtolower($name) === 'loginname') {
+            if ('loginname' === strtolower($name)) {
                 $userId = UserManager::get_user_id_from_username($value);
                 if (false === $userId) {
                     throw new Exception(get_lang('UserNotFound'));
@@ -1957,7 +1957,7 @@ class Rest extends WebService
 
         // invalidate cache for this user
         $cacheAvailable = api_get_configuration_value('apc');
-        if ($cacheAvailable === true) {
+        if (true === $cacheAvailable) {
             $apcVar = api_get_configuration_value('apc_prefix').'userinfo_'.$userId;
             if (apcu_exists($apcVar)) {
                 apcu_delete($apcVar);

@@ -2,7 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CForumAttachment;
 use Chamilo\CourseBundle\Entity\CForumCategory;
@@ -1042,7 +1042,7 @@ function delete_post($post_id)
     $em = Database::getManager();
     /** @var CForumPost $post */
     $post = $em
-        ->getRepository('ChamiloCourseBundle:CForumPost')
+        ->getRepository(CForumPost::class)
         ->findOneBy(['cId' => $course_id, 'iid' => $post_id]);
 
     if ($post) {
@@ -1145,7 +1145,7 @@ function return_visible_invisible_icon(
     $id = (int) $id;
     $current_visibility_status = (int) $current_visibility_status;
 
-    if ($current_visibility_status == 1) {
+    if (1 == $current_visibility_status) {
         $html .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&';
         if (is_array($additional_url_parameters)) {
             foreach ($additional_url_parameters as $key => $value) {
@@ -1155,7 +1155,7 @@ function return_visible_invisible_icon(
         $html .= 'action=invisible&content='.$content.'&id='.$id.'">'.
             Display::return_icon('visible.png', get_lang('MakeInvisible'), [], ICON_SIZE_SMALL).'</a>';
     }
-    if ($current_visibility_status == 0) {
+    if (0 == $current_visibility_status) {
         $html .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&';
         if (is_array($additional_url_parameters)) {
             foreach ($additional_url_parameters as $key => $value) {
@@ -1915,7 +1915,7 @@ function get_threads($forumId, $courseId = null, $sessionId = null)
  */
 function getThreadInfo($threadId, $cId)
 {
-    $repo = Database::getManager()->getRepository('ChamiloCourseBundle:CForumThread');
+    $repo = Database::getManager()->getRepository(CForumThread::class);
     /** @var CForumThread $forumThread */
     $forumThread = $repo->findOneBy(['iid' => $threadId, 'cId' => $cId]);
 
@@ -1994,7 +1994,7 @@ function getPosts(
         $criteria->andWhere(Criteria::expr()->eq('postParentId', $postId));
     }
 
-    $qb = $em->getRepository('ChamiloCourseBundle:CForumPost')->createQueryBuilder('p');
+    $qb = $em->getRepository(CForumPost::class)->createQueryBuilder('p');
     $qb->select('p')
         ->addCriteria($criteria)
         ->addOrderBy('p.iid', $orderDirection);
@@ -2380,7 +2380,7 @@ function updateThread($values)
     $gradebookLink = null;
     $em = Database::getManager();
     if (!empty($linkInfo) && isset($linkInfo['id'])) {
-        $gradebookLink = $em->getRepository('ChamiloCoreBundle:GradebookLink')->find($linkInfo['id']);
+        $gradebookLink = $em->getRepository(GradebookLink::class)->find($linkInfo['id']);
     }
 
     // values 1 or 0
@@ -2710,7 +2710,7 @@ function store_thread(
  *
  * @return FormValidator
  */
-function show_add_post_form(CForumForum $forum, CForumThread $thread, CForumPost $post = null, $action, $form_values = '', $showPreview = true)
+function show_add_post_form(CForumForum $forum, CForumThread $thread, CForumPost $post = null, $action, $form_values, $showPreview = true)
 {
     $_user = api_get_user_info();
     $action = isset($action) ? Security::remove_XSS($action) : '';
@@ -3680,7 +3680,7 @@ function show_edit_post_form(
     $post,
     $thread,
     $forum,
-    $form_values = '',
+    $form_values,
     $id_attach = 0
 ) {
     // Initialize the object.
@@ -4133,7 +4133,7 @@ function approve_post($post_id, $action)
  * This is needed to display the icon that there are unapproved messages in that thread (only the courseadmin can see
  * this).
  *
- * @param the $forum_id forum where we want to know the unapproved messages of
+ * @param int $forum_id forum where we want to know the unapproved messages of
  *
  * @return array returns
  *
@@ -4163,8 +4163,6 @@ function get_unaproved_messages($forum_id)
 /**
  * This function sends the notification mails to everybody who stated that they wanted to be informed when a new post
  * was added to a given thread.
- *
- * @param array $forum reply information
  */
 function send_notification_mails(CForumForum $forum, CForumThread $thread, $reply_info)
 {
@@ -6424,7 +6422,7 @@ function getCountPostsWithStatus($status, $forum, $threadId = null)
         $criteria->andWhere(Criteria::expr()->eq('thread', $threadId));
     }
 
-    $qb = $em->getRepository('ChamiloCourseBundle:CForumPost')->createQueryBuilder('p');
+    $qb = $em->getRepository(CForumPost::class)->createQueryBuilder('p');
     $qb->select('count(p.iid)')
         ->addCriteria($criteria);
 

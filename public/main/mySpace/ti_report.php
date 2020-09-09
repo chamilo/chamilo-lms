@@ -172,7 +172,7 @@ if ($form->validate()) {
                         $sessionAdded[] = $session['session_id'];
                     }
 
-                    if ($showName === false) {
+                    if (false === $showName) {
                         $name = '';
                     }
                     $sessionArray[] = Display::url(

@@ -4478,8 +4478,8 @@ class Tracking
 
         $rs = Database::query($sql);
 
-        $allow = api_get_plugin_setting('pausetraining', 'tool_enable') === 'true';
-        $allowPauseFormation = api_get_plugin_setting('pausetraining', 'allow_users_to_edit_pause_formation') === 'true';
+        $allow = 'true' === api_get_plugin_setting('pausetraining', 'tool_enable');
+        $allowPauseFormation = 'true' === api_get_plugin_setting('pausetraining', 'allow_users_to_edit_pause_formation');
 
         $extraFieldValue = new ExtraFieldValue('user');
         $users = [];
@@ -7900,7 +7900,7 @@ class TrackingCourseLog
                 }
             }
 
-            if (api_get_setting('show_email_addresses') === 'true') {
+            if ('true' === api_get_setting('show_email_addresses')) {
                 $user_row['email'] = $user['col4'];
             }
 

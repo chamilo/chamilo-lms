@@ -3,8 +3,6 @@
 
 /**
  * List of pending payments of the Buy Courses plugin.
- *
- * @package chamilo.plugin.buycourses
  */
 $cidReset = true;
 
@@ -17,7 +15,7 @@ $plugin = BuyCoursesPlugin::create();
 $paypalEnable = $plugin->get('paypal_enable');
 $commissionsEnable = $plugin->get('commissions_enable');
 $includeServices = $plugin->get('include_services');
-$invoicingEnable = $plugin->get('invoicing_enable') === 'true';
+$invoicingEnable = 'true' === $plugin->get('invoicing_enable');
 
 if (isset($_GET['order'])) {
     $sale = $plugin->getSale($_GET['order']);
@@ -84,11 +82,11 @@ if ($form->validate()) {
     $dateEnd = $form->getSubmitValue('date_end');
     $email = $form->getSubmitValue('email');
 
-    if ($selectedStatus === false) {
+    if (false === $selectedStatus) {
         $selectedStatus = BuyCoursesPlugin::SALE_STATUS_PENDING;
     }
 
-    if ($selectedFilterType === false) {
+    if (false === $selectedFilterType) {
         $selectedFilterType = '0';
     }
 }
@@ -103,16 +101,16 @@ $form->addRadio(
         $plugin->get_lang('ByEmail'),
     ]
 );
-$form->addHtml('<div id="report-by-status" '.($selectedFilterType !== '0' ? 'style="display:none"' : '').'>');
+$form->addHtml('<div id="report-by-status" '.('0' !== $selectedFilterType ? 'style="display:none"' : '').'>');
 $form->addSelect('status', $plugin->get_lang('OrderStatus'), $saleStatuses);
 $form->addHtml('</div>');
-$form->addHtml('<div id="report-by-user" '.($selectedFilterType !== '1' ? 'style="display:none"' : '').'>');
+$form->addHtml('<div id="report-by-user" '.('1' !== $selectedFilterType ? 'style="display:none"' : '').'>');
 $form->addText('user', get_lang('UserName'), false);
 $form->addHtml('</div>');
-$form->addHtml('<div id="report-by-date" '.($selectedFilterType !== '2' ? 'style="display:none"' : '').'>');
+$form->addHtml('<div id="report-by-date" '.('2' !== $selectedFilterType ? 'style="display:none"' : '').'>');
 $form->addDateRangePicker('date', get_lang('Date'), false);
 $form->addHtml('</div>');
-$form->addHtml('<div id="report-by-email" '.($selectedFilterType !== '3' ? 'style="display:none"' : '').'>');
+$form->addHtml('<div id="report-by-email" '.('3' !== $selectedFilterType ? 'style="display:none"' : '').'>');
 $form->addText('email', get_lang('Email'), false);
 $form->addHtml('</div>');
 $form->addButtonFilter(get_lang('Search'));
@@ -158,7 +156,7 @@ $toolbar = Display::url(
     ['class' => 'btn btn-primary']
 );
 
-if ($paypalEnable === 'true' && $commissionsEnable === 'true') {
+if ('true' === $paypalEnable && 'true' === $commissionsEnable) {
     $toolbar .= Display::toolbarButton(
         $plugin->get_lang('PaypalPayoutCommissions'),
         api_get_path(WEB_PLUGIN_PATH).'buycourses/src/paypal_payout.php',
@@ -173,7 +171,7 @@ if ($paypalEnable === 'true' && $commissionsEnable === 'true') {
     );
 }
 
-if ($commissionsEnable === 'true') {
+if ('true' === $commissionsEnable) {
     $toolbar .= Display::toolbarButton(
         $plugin->get_lang('PayoutReport'),
         api_get_path(WEB_PLUGIN_PATH).'buycourses/src/payout_report.php',

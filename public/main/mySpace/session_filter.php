@@ -13,7 +13,7 @@ if (!api_is_allowed_to_create_course() && !api_is_drh()) {
     api_not_allowed(true);
 }
 
-$allowCustomCertificate = api_get_plugin_setting('customcertificate', 'enable_plugin_customcertificate') === 'true';
+$allowCustomCertificate = 'true' === api_get_plugin_setting('customcertificate', 'enable_plugin_customcertificate');
 $plugin = CustomCertificatePlugin::create();
 
 $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -138,7 +138,7 @@ if (isset($_POST['formSent'])) {
                     case ExtraField::FIELD_TYPE_TEXT:
                     case ExtraField::FIELD_TYPE_ALPHANUMERIC:
                         $pos = stripos($extraFieldValueData['value'], $_POST['extra_'.$field['variable']]);
-                        if ($pos === false) {
+                        if (false === $pos) {
                             unset($certificateList[$key]);
                         }
                         break;
@@ -155,15 +155,15 @@ if (isset($_POST['formSent'])) {
                         break;
                  }
             }
+        }
     }
-}
 
     $params = [
             'session_id' => (int) $_POST['session_id'],
             'date_begin' => Security::remove_XSS($_POST['date_begin']),
             'date_end' => Security::remove_XSS($_POST['date_end']),
     ];
-//select of sessions
+    //select of sessions
     foreach ($filterCheckList as $field) {
         $params['extra_'.$field['variable']] = Security::remove_XSS($_POST['extra_'.$field['variable']]);
     }
@@ -228,7 +228,7 @@ $sql = "SELECT s.id, name FROM $tblSession s
 if (api_is_multiple_url_enabled()) {
     $tblSessionRelAccessUrl = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
     $accessUrlId = api_get_current_access_url_id();
-    if ($accessUrlId != -1) {
+    if (-1 != $accessUrlId) {
         $sql = "SELECT s.id, name FROM $tblSession s
                 INNER JOIN $tblSessionRelAccessUrl as session_rel_url
                 ON (s.id = session_rel_url.session_id)
@@ -296,7 +296,7 @@ if ($allowCustomCertificate) {
 echo Display::toolbarAction('actions', [$actions]);
 echo $form->returnForm();
 
-if (count($certificateList) == 0) {
+if (0 == count($certificateList)) {
     echo Display::return_message(get_lang('NoResultsAvailable'), 'warning');
 } else {
     echo '<table class="table data_table">';

@@ -82,7 +82,7 @@ class Wiki
         $result = Database::query($sql);
         $num = Database::num_rows($result);
         // the value has not been found and is this available
-        if ($num == 0) {
+        if (0 == $num) {
             return true;
         }
 

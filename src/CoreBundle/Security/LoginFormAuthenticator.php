@@ -37,6 +37,9 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
     use TargetPathTrait;
 
     private const LOGIN_ROUTE = 'login_json';
+    //private $entityManager;
+    public $serializer;
+    public $router;
 
     //private $router;
     private $passwordEncoder;
@@ -45,9 +48,6 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
     private $userRepository;
     //private $csrfTokenManager;
     private $urlGenerator;
-    //private $entityManager;
-    public $serializer;
-    public $router;
 
     public function __construct(
         //EntityManagerInterface $entityManager,

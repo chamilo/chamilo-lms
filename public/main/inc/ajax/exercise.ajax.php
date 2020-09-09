@@ -444,7 +444,7 @@ switch ($action) {
             }
 
             if (WhispeakAuthPlugin::questionRequireAuthentify($question_id)) {
-                if ($objExercise->type == ONE_PER_PAGE) {
+                if (ONE_PER_PAGE == $objExercise->type) {
                     echo 'one_per_page';
                     break;
                 }
@@ -483,7 +483,7 @@ switch ($action) {
             Session::write('exe_id', $exeId);
 
             // Updating Reminder algorithm.
-            if ($objExercise->type == ONE_PER_PAGE) {
+            if (ONE_PER_PAGE == $objExercise->type) {
                 $bd_reminder_list = explode(',', $exercise_stat_info['questions_to_check']);
                 if (empty($remind_list)) {
                     $remind_list = $bd_reminder_list;
@@ -506,18 +506,17 @@ switch ($action) {
 
             // No exe id? Can't save answer.
             $total_weight = 0;
-            if ($type === 'simple') {
+            if ('simple' === $type) {
                 foreach ($question_list as $my_question_id) {
                     $objQuestionTmp = Question::read($my_question_id, $objExercise->course);
                     $total_weight += $objQuestionTmp->selectWeighting();
                 }
             }
             unset($objQuestionTmp);
-                // Fires an error.
-                if ($debug) {
+            // Fires an error.
+            if ($debug) {
                 error_log('Starting questions loop in save_exercise_by_now');
             }
-
 
             // Getting the total weight if the request is simple
             if ('all' === $type) {
@@ -526,8 +525,8 @@ switch ($action) {
                     if (!empty($choice[$my_question_id])) {
                         $atLeastOneAnswer = true;
                         break;
+                    }
                 }
-            }
                 if (!$atLeastOneAnswer) {
                     error_log(
                         'In '.__FILE__.'::action save_exercise_by_now,'.
@@ -542,10 +541,10 @@ switch ($action) {
 
             // Looping the question list
             foreach ($question_list as $my_question_id) {
-                if ($type === 'simple' && $question_id != $my_question_id) {
-                if ($debug) {
+                if ('simple' === $type && $question_id != $my_question_id) {
+                    if ($debug) {
                         error_log('Skipping question '.$my_question_id.' in single-question save action');
-                }
+                    }
                     continue;
                 }
                 if ($debug) {
@@ -575,7 +574,7 @@ switch ($action) {
                         : null;
                 }
 
-                if ($type === 'all') {
+                if ('all' === $type) {
                     // If saving the whole exercise (not only one question),
                     // record the sum of individual max scores (called
                     // "exe_weighting" in track_e_exercises)

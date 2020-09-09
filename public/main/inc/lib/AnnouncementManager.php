@@ -462,6 +462,7 @@ class AnnouncementManager
             return '';
         }
 
+        $stok = null;
         $html = '';
         $course = api_get_course_entity(api_get_course_int_id());
         $session = api_get_session_entity(api_get_session_id());
@@ -499,7 +500,6 @@ class AnnouncementManager
                 $alt_visibility = get_lang('Hide');
                 $setNewStatus = 'invisible';
             }
-            global $stok;
             $modify_icons .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=set_visibility&status=".$setNewStatus."&id=".$id."&sec_token=".$stok."\">".
                 Display::return_icon($image_visibility.'.png', $alt_visibility, '', ICON_SIZE_SMALL)."</a>";
 
@@ -588,6 +588,7 @@ class AnnouncementManager
         if (!isset($courseInfo['real_id'])) {
             return false;
         }
+
         return false;
 
         $courseId = $courseInfo['real_id'];
@@ -817,14 +818,14 @@ class AnnouncementManager
             $sentToAllGroup = false;
             if (empty($send_to_users['groups']) && empty($send_to_users['users'])) {
                 $groupInfo = GroupManager::get_group_properties($groupId);
-                api_item_property_update(
+                /*api_item_property_update(
                     $courseInfo,
                     TOOL_ANNOUNCEMENT,
                     $last_id,
                     'AnnouncementAdded',
                     api_get_user_id(),
                     $groupInfo
-                );
+                );*/
                 $sentToAllGroup = true;
             }
 
@@ -832,21 +833,21 @@ class AnnouncementManager
                 if (!empty($send_to_users['groups'])) {
                     foreach ($send_to_users['groups'] as $group) {
                         $groupInfo = GroupManager::get_group_properties($group);
-                        api_item_property_update(
+                        /*api_item_property_update(
                             $courseInfo,
                             TOOL_ANNOUNCEMENT,
                             $last_id,
                             'AnnouncementAdded',
                             api_get_user_id(),
                             $groupInfo
-                        );
+                        );*/
                     }
                 }
 
                 $groupInfo = GroupManager::get_group_properties($groupId);
                 if (!empty($send_to_users['users'])) {
                     foreach ($send_to_users['users'] as $user) {
-                        api_item_property_update(
+                        /*api_item_property_update(
                             $courseInfo,
                             TOOL_ANNOUNCEMENT,
                             $last_id,
@@ -854,7 +855,7 @@ class AnnouncementManager
                             api_get_user_id(),
                             $groupInfo,
                             $user
-                        );
+                        );*/
                     }
                 }
             }
@@ -952,7 +953,7 @@ class AnnouncementManager
             if (is_array($send_to['groups'])) {
                 foreach ($send_to['groups'] as $group) {
                     $groupInfo = api_get_group_entity($group);
-                    $announcement->addGroupLink( $course, $session, $groupInfo);
+                    $announcement->addGroupLink($course, $session, $groupInfo);
                     /*
                     if ($groupInfo) {
                         api_item_property_update(
@@ -971,7 +972,7 @@ class AnnouncementManager
             if (is_array($send_to['users'])) {
                 foreach ($send_to['users'] as $user) {
                     $user = api_get_user_entity($user);
-                    $announcement->addUserLink( $user, $course, $session, $group);
+                    $announcement->addUserLink($user, $course, $session, $group);
                     /*api_item_property_update(
                         $courseInfo,
                         TOOL_ANNOUNCEMENT,
@@ -1171,7 +1172,7 @@ class AnnouncementManager
                 $result['users'][] = $link->getUser()->getId();
             }
             if ($link->getGroup()) {
-                $result['groups'][] = $link->getGroup()->getId();
+                $result['groups'][] = $link->getGroup()->getIid();
             }
         }
 
@@ -1462,6 +1463,9 @@ class AnnouncementManager
         $file,
         $file_comment
     ) {
+        // @todo fix edition
+        exit;
+        /*
         $courseInfo = api_get_course_info();
         $table = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
         $return = 0;
@@ -1500,7 +1504,7 @@ class AnnouncementManager
                             comment = '$safe_file_comment',
                             path = '$safe_new_file_name',
                             size ='".intval($file['size'])."'
-					 	WHERE iid = '$id_attach'";
+                         WHERE iid = '$id_attach'";
                 $result = Database::query($sql);
                 if (false === $result) {
                     $return = -1;
@@ -1514,7 +1518,7 @@ class AnnouncementManager
             }
         }
 
-        return $return;
+        return $return;*/
     }
 
     /**
@@ -2128,6 +2132,7 @@ class AnnouncementManager
 
                 $qb = $repo->getResourcesByCourse($course, $session, $group);
                 $qb->select('count(resource)');
+
                 return $qb->getQuery()->getSingleScalarResult();
             }
         } else {
@@ -2141,129 +2146,6 @@ class AnnouncementManager
             $qb->select('count(resource)');
 
             return $qb->getQuery()->getSingleScalarResult();
-
-            // students only get to see the visible announcements
-            if (empty($_GET['origin']) || 'learnpath' !== $_GET['origin']) {
-                $group_memberships = GroupManager::get_group_ids(
-                    $courseInfo['real_id'],
-                    $userId
-                );
-
-                if ((api_get_course_setting('allow_user_edit_announcement') &&
-                    !api_is_anonymous())
-                ) {
-                    if (0 == api_get_group_id()) {
-                        $cond_user_id = " AND (
-                        ip.lastedit_user_id = '".$userId."' OR (
-                            ip.to_user_id='".$userId."' OR
-                            ip.to_group_id IN (0, ".implode(", ", $group_memberships).") OR
-                            ip.to_group_id IS NULL
-                            )
-                        )
-                        ";
-                    } else {
-                        $cond_user_id = " AND (
-                            ip.lastedit_user_id = '".$userId."'OR
-                            ip.to_group_id IN (0, ".api_get_group_id().") OR
-                            ip.to_group_id IS NULL
-                        )";
-                    }
-                } else {
-                    if (0 == api_get_group_id()) {
-                        $cond_user_id = " AND (
-                            ip.to_user_id='".$userId."' OR
-                            ip.to_group_id IN (0, ".implode(", ", $group_memberships).") OR
-                            ip.to_group_id IS NULL
-                        ) ";
-                    } else {
-                        $cond_user_id = " AND (
-                            ip.to_user_id='".$userId."' OR
-                            ip.to_group_id IN (0, ".api_get_group_id().") OR
-                            ip.to_group_id IS NULL
-                        ) ";
-                    }
-                }
-
-                // the user is member of several groups => display personal announcements AND
-                // his group announcements AND the general announcements
-                if (is_array($group_memberships) && count($group_memberships) > 0) {
-                    $sql = "SELECT announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id
-                            FROM $tbl_announcement announcement
-                            INNER JOIN $tbl_item_property ip
-                            ON (announcement.id = ip.ref AND announcement.c_id = ip.c_id)
-                            WHERE
-                                announcement.c_id = $courseId AND
-                                ip.c_id = $courseId AND
-                                ip.tool='announcement' AND
-                                ip.visibility='1'
-                                $cond_user_id
-                                $condition_session
-                            GROUP BY ip.ref
-                            ORDER BY display_order DESC
-                            LIMIT 0, $maximum";
-                } else {
-                    // the user is not member of any group
-                    // this is an identified user => show the general announcements AND his personal announcements
-                    if ($userId) {
-                        if ((api_get_course_setting('allow_user_edit_announcement') &&
-                            !api_is_anonymous())
-                        ) {
-                            $cond_user_id = " AND (
-                                ip.lastedit_user_id = '".$userId."' OR
-                                ( ip.to_user_id='".$userId."' OR ip.to_group_id='0' OR ip.to_group_id IS NULL)
-                            ) ";
-                        } else {
-                            $cond_user_id = " AND ( ip.to_user_id='".$userId."' OR ip.to_group_id='0' OR ip.to_group_id IS NULL) ";
-                        }
-                        $sql = "SELECT announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id
-                                FROM $tbl_announcement announcement
-                                INNER JOIN $tbl_item_property ip
-                                ON (announcement.c_id = ip.c_id AND announcement.id = ip.ref)
-                                WHERE
-                                    announcement.c_id = $courseId AND
-                                    ip.c_id = $courseId AND
-                                    ip.tool='announcement' AND
-                                    ip.visibility='1'
-                                    $cond_user_id
-                                    $condition_session
-                                GROUP BY ip.ref
-                                ORDER BY display_order DESC
-                                LIMIT 0, $maximum";
-                    } else {
-                        if (api_get_course_setting('allow_user_edit_announcement')) {
-                            $cond_user_id = " AND (
-                                ip.lastedit_user_id = '".api_get_user_id()."' OR ip.to_group_id='0' OR ip.to_group_id IS NULL
-                            ) ";
-                        } else {
-                            $cond_user_id = " AND ip.to_group_id='0' ";
-                        }
-
-                        // the user is not identiefied => show only the general announcements
-                        $sql = "SELECT
-                                    announcement.*,
-                                    ip.visibility,
-                                    ip.to_group_id,
-                                    ip.insert_user_id
-                                FROM $tbl_announcement announcement
-                                INNER JOIN $tbl_item_property ip
-                                ON (announcement.id = ip.ref AND announcement.c_id = ip.c_id)
-                                WHERE
-                                    announcement.c_id = $courseId AND
-                                    ip.c_id = $courseId AND
-                                    ip.tool='announcement' AND
-                                    ip.visibility='1' AND
-                                    ip.to_group_id='0'
-                                    $condition_session
-                                GROUP BY ip.ref
-                                ORDER BY display_order DESC
-                                LIMIT 0, $maximum";
-                    }
-                }
-            }
         }
-
-        $result = Database::query($sql);
-
-        return Database::num_rows($result);
     }
 }

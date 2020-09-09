@@ -365,7 +365,7 @@ class Auth
         $rs = Database::query($sql);
 
         $result = false;
-        if (Database::num_rows($rs) == 0) {
+        if (0 == Database::num_rows($rs)) {
             $sql = "INSERT INTO $table (user_id, title,sort)
                     VALUES ('".$current_user_id."', '".api_htmlentities(
                     $category_title,

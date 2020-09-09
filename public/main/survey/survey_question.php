@@ -150,7 +150,7 @@ class survey_question
         $type = isset($_GET['type']) ? Security::remove_XSS($_GET['type']) : null;
 
         $actionHeader = get_lang('EditQuestion').': ';
-        if ($action === 'add') {
+        if ('add' === $action) {
             $actionHeader = get_lang('AddQuestion').': ';
         }
 
@@ -280,11 +280,11 @@ class survey_question
 			<fieldset style="border:1px solid black">
 			    <legend>'.get_lang('Condition').'</legend>
 			<b>'.get_lang('Primary').'</b><br />
-			    <input type="radio" name="choose" value="1" '.(($formData['choose'] == 1) ? 'checked' : '').'>
+			    <input type="radio" name="choose" value="1" '.((1 == $formData['choose']) ? 'checked' : '').'>
 			    <select name="assigned">'.$grouplist.'</select><br />';
             $this->html .= '
 			<b>'.get_lang('Secondary').'</b><br />
-			    <input type="radio" name="choose" value="2" '.(($formData['choose'] == 2) ? 'checked' : '').'>
+			    <input type="radio" name="choose" value="2" '.((2 == $formData['choose']) ? 'checked' : '').'>
 			    <select name="assigned1">'.$grouplist1.'</select>
                 <select name="assigned2">'.$grouplist2.'</select>
             </fieldset><br />';
@@ -308,7 +308,7 @@ class survey_question
              */
             $surveyId = isset($_GET['survey_id']) ? (int) $_GET['survey_id'] : 0;
             $answersChecker = SurveyUtil::checkIfSurveyHasAnswers($surveyId);
-            $allowQuestionEdit = api_get_configuration_value('survey_allow_answered_question_edit') == true;
+            $allowQuestionEdit = true == api_get_configuration_value('survey_allow_answered_question_edit');
             if ($allowQuestionEdit or !$answersChecker) {
                 $this->buttonList[] = $this->getForm()->addButtonUpdate(get_lang('ModifyQuestionSurvey'), 'save', true);
             } else {
@@ -460,15 +460,15 @@ class survey_question
             }
             // Check if no deleted answer remains at the end of the answers
             // array and add empty answers if the array is too short
-                foreach ($formData['answers'] as $index => $data) {
-                    if ($index > $counter) {
-                        unset($formData['answers'][$index]);
-                    }
+            foreach ($formData['answers'] as $index => $data) {
+                if ($index > $counter) {
+                    unset($formData['answers'][$index]);
                 }
+            }
 
-                for ($i = 0; $i <= $counter; $i++) {
-                    if (!isset($formData['answers'][$i])) {
-                        $formData['answers'][$i] = '';
+            for ($i = 0; $i <= $counter; $i++) {
+                if (!isset($formData['answers'][$i])) {
+                    $formData['answers'][$i] = '';
                 }
             }
         }
@@ -497,7 +497,7 @@ class survey_question
             Session::erase('answer_list');
             $message = SurveyManager::save_question($surveyData, $formData, true, $dataFromDatabase);
 
-            if ($message === 'QuestionAdded' || $message === 'QuestionUpdated') {
+            if ('QuestionAdded' === $message || 'QuestionUpdated' === $message) {
                 $url = api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.intval($_GET['survey_id']).'&message='.$message.'&'.api_get_cidreq();
                 header('Location: '.$url);
                 exit;

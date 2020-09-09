@@ -171,17 +171,29 @@ if ($form->validate()) {
 
     // Returning to the group area (note: this is inconsistent with the rest of chamilo)
     $cat = GroupManager::get_category_from_group($current_group['iid']);
-    $max_member = $cat['max_student'];
+    $categoryId = null;
+    $max_member = null;
+    if (!empty($cat)) {
+        $categoryId = $cat['iid'];
+        $max_member = $cat['max_student'];
+    }
 
     if (isset($_POST['group_members']) &&
         count($_POST['group_members']) > $max_member &&
         GroupManager::MEMBER_PER_GROUP_NO_LIMIT != $max_member
     ) {
-        Display::addFlash(Display::return_message(get_lang('Number proposed exceeds max. that you allowed (you can modify in the group settings). Group composition has not been modified'), 'warning'));
+        Display::addFlash(
+            Display::return_message(
+                get_lang(
+                    'Number proposed exceeds max. that you allowed (you can modify in the group settings). Group composition has not been modified'
+                ),
+                'warning'
+            )
+        );
         header('Location: group.php?'.api_get_cidreq(true, false));
     } else {
         Display::addFlash(Display::return_message(get_lang('Group settings modified'), 'success'));
-        header('Location: group.php?'.api_get_cidreq(true, false).'&category='.$cat['id']);
+        header('Location: group.php?'.api_get_cidreq(true, false).'&category='.$categoryId);
     }
     exit;
 }

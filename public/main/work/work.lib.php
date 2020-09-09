@@ -1530,13 +1530,13 @@ function getAllWorkListStudent(
         $cidReq = api_get_cidreq_params($courseCode, $sessionId);
         $url = api_get_path(WEB_CODE_PATH).'work/work_list.php?'.$cidReq;
         $isSubscribed = userIsSubscribedToWork($userId, $work['iid'], $courseId);
-        if ($isSubscribed == false) {
+        if (false == $isSubscribed) {
             continue;
         }
 
         $visibility = api_get_item_visibility($courseInfo, 'work', $work['iid'], $sessionId);
 
-        if ($visibility != 1) {
+        if (1 != $visibility) {
             continue;
         }
 
@@ -4125,7 +4125,7 @@ function sendAlertToUsers($workInfo, $workId, $courseInfo, $sessionId = 0)
         }
     }
 
-    if ($send == SEND_EMAIL_EVERYONE || $send == SEND_EMAIL_STUDENTS) {
+    if (SEND_EMAIL_EVERYONE == $send || SEND_EMAIL_STUDENTS == $send) {
         // Send mail only to sender
         $studentList = [[
            'user_id' => api_get_user_id(),

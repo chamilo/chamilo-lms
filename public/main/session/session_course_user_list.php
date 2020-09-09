@@ -104,7 +104,7 @@ $sql = "
     ORDER BY $sort $direction
     LIMIT $from,".($limit + 1);
 
-if ($direction === 'desc') {
+if ('desc' === $direction) {
     $direction = 'asc';
 } else {
     $direction = 'desc';

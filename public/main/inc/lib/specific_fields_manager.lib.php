@@ -148,7 +148,7 @@ function get_specific_field_values_list(
 }
 
 /**
- * @param char   $prefix      xapian prefix
+ * @param string $prefix      xapian prefix
  * @param string $course_code
  * @param string $tool_id     Constant from mainapi.lib.php
  * @param int    $ref_id      representative id inside one tool item

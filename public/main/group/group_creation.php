@@ -135,7 +135,7 @@ if (isset($_POST['number_of_groups'])) {
         $group_id = GroupManager::get_number_of_groups() + 1;
         $cat_options = [];
         foreach ($group_categories as $index => $category) {
-            $cat_options[$category['id']] = $category['title'];
+            $cat_options[$category['iid']] = $category['title'];
         }
         $form = new FormValidator('create_groups_step2', 'POST', api_get_self().'?'.api_get_cidreq());
 
@@ -257,13 +257,14 @@ EOT;
         if (!empty($groups)) {
             $base_group_options = [];
             foreach ($groups as $index => $group) {
-                $number_of_students = GroupManager::number_of_students($group['id']);
+                $groupId = $group['iid'];
+                $number_of_students = GroupManager::number_of_students($groupId);
                 if ($number_of_students > 0) {
-                    $base_group_options[$group['id']] =
+                    $base_group_options[$groupId] =
                         $group['name'].' ('.$number_of_students.' '.get_lang('Users').')';
                 }
             }
-            if (count($base_group_options) > 0) {
+            /*if (count($base_group_options) > 0) {
                 $create_subgroups_form = new FormValidator(
                     'create_subgroups',
                     'post',
@@ -288,7 +289,7 @@ EOT;
                 $defaults['action'] = 'create_subgroups';
                 $create_subgroups_form->setDefaults($defaults);
                 $create_subgroups_form->display();
-            }
+            }*/
         }
     }
 

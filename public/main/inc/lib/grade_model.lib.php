@@ -131,7 +131,7 @@ class GradeModel extends Model
             $form->addElement('hidden', 'components['.$i.'][id]', null);
 
             $template_percentage =
-            '<div id='.$i.' style="display: '.(($i <= $nr_items) ? 'inline' : 'none').';" class="form-group">                
+            '<div id='.$i.' style="display: '.(($i <= $nr_items) ? 'inline' : 'none').';" class="form-group">
                 <label for="" class="col-sm-2 control-label">
                     {label}
                 </label>
@@ -212,13 +212,13 @@ class GradeModel extends Model
 
     /**
      * @param array $params
-     * @param bool  $show_query
+     * @param bool  $showQuery
      *
      * @return bool
      */
-    public function save($params, $show_query = false)
+    public function save($params, $showQuery = false)
     {
-        $id = parent::save($params, $show_query);
+        $id = parent::save($params, $showQuery);
         if (!empty($id)) {
             foreach ($params['components'] as $component) {
                 if (!empty($component['title']) && !empty($component['percentage']) && !empty($component['acronym'])) {

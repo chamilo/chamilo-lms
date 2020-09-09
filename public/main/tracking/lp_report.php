@@ -89,7 +89,7 @@ function prepare_user_sql_query($getCount)
         }
     }
 
-    if ($atLeastOne == false) {
+    if (false == $atLeastOne) {
         $keywordListValues = [];
     }
 
@@ -110,7 +110,7 @@ function prepare_user_sql_query($getCount)
         $keyword_admin = '';
 
         if (isset($keywordListValues['keyword_status']) &&
-            $keywordListValues['keyword_status'] == PLATFORM_ADMIN
+            PLATFORM_ADMIN == $keywordListValues['keyword_status']
         ) {
             $query_admin_table = " , $admin_table a ";
             $keyword_admin = ' AND a.user_id = u.id ';
@@ -147,7 +147,7 @@ function prepare_user_sql_query($getCount)
     }
 
     $preventSessionAdminsToManageAllUsers = api_get_setting('prevent_session_admins_to_manage_all_users');
-    if (api_is_session_admin() && $preventSessionAdminsToManageAllUsers === 'true') {
+    if (api_is_session_admin() && 'true' === $preventSessionAdminsToManageAllUsers) {
         $sql .= ' AND u.creator_id = '.api_get_user_id();
     }
 
@@ -180,7 +180,7 @@ function prepare_user_sql_query($getCount)
                     if (empty($value)) {
                         continue;
                     }
-                    if ($info['field_type'] == ExtraField::FIELD_TYPE_TAG) {
+                    if (ExtraField::FIELD_TYPE_TAG == $info['field_type']) {
                         $result = $extraField->getAllUserPerTag(
                             $info['id'],
                             $value

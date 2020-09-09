@@ -127,7 +127,6 @@ class SurveyUtil
             $option_id = $option_id.'@:@'.$otherOption;
         }
 
-
         $answer = new CSurveyAnswer();
         $answer
             ->setCId($survey_data['c_id'])
@@ -246,7 +245,7 @@ class SurveyUtil
 
         $counter = 0;
         foreach ($questions as $key => $value) {
-            if ($value['type'] !== 'pagebreak') {
+            if ('pagebreak' !== $value['type']) {
                 $counter++;
             }
         }
@@ -1312,7 +1311,7 @@ class SurveyUtil
                     $content .= '</td>';
                 } else {
                     foreach ($possible_option as $option_id => $value) {
-                        if ($questions[$question_id]['type'] === 'multiplechoiceother') {
+                        if ('multiplechoiceother' === $questions[$question_id]['type']) {
                             foreach ($answers_of_user[$question_id] as $key => $newValue) {
                                 $parts = ch_multiplechoiceother::decodeOptionValue($key);
                                 if (isset($parts[0])) {
@@ -1323,7 +1322,7 @@ class SurveyUtil
                                 }
                             }
                         }
-                        if ($questions[$question_id]['type'] === 'percentage') {
+                        if ('percentage' === $questions[$question_id]['type']) {
                             if (!empty($answers_of_user[$question_id][$option_id])) {
                                 $content .= "<td align='center'>";
                                 $content .= $answers_of_user[$question_id][$option_id]['value'];
@@ -1383,7 +1382,7 @@ class SurveyUtil
         $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
 
         $translate = false;
-        if (api_get_configuration_value('translate_html') == true) {
+        if (true == api_get_configuration_value('translate_html')) {
             $translate = true;
         }
 
@@ -1434,7 +1433,7 @@ class SurveyUtil
                     is_array($_POST['questions_filter']) &&
                     in_array($row['question_id'], $_POST['questions_filter']))
             ) {
-                if ($row['number_of_options'] == 0 || $compact) {
+                if (0 == $row['number_of_options'] || $compact) {
                     $return .= str_replace(
                         "\r\n",
                         '  ',
@@ -1530,7 +1529,7 @@ class SurveyUtil
 		          c_id = $course_id AND
 		          survey_id = $surveyId
 		          ";
-        if ($user_id != 0) {
+        if (0 != $user_id) {
             $user_id = (int) $user_id;
             $sql .= " AND user = $user_id ";
         }
@@ -1635,15 +1634,14 @@ class SurveyUtil
             }
         }
 
-
         if (is_array($possible_options)) {
             foreach ($possible_options as $question_id => $possible_option) {
                 if (is_array($possible_option) && count($possible_option) > 0) {
                     foreach ($possible_option as $option_id => &$value) {
                         // For each option of this question, look if it matches the user's answer
-                        $my_answer_of_user = !isset($answers_of_user[$question_id]) || isset($answers_of_user[$question_id]) && $answers_of_user[$question_id] == null ? [] : $answers_of_user[$question_id];
+                        $my_answer_of_user = !isset($answers_of_user[$question_id]) || isset($answers_of_user[$question_id]) && null == $answers_of_user[$question_id] ? [] : $answers_of_user[$question_id];
                         $key = array_keys($my_answer_of_user);
-                        if (isset($key[0]) && substr($key[0], 0, 4) == 'open') {
+                        if (isset($key[0]) && 'open' == substr($key[0], 0, 4)) {
                             // If this is an open type question (type starts by 'open'), take whatever answer is given
                             $return .= '"'.
                                 str_replace(
@@ -1662,9 +1660,9 @@ class SurveyUtil
                             if ($compact) {
                                 // If we asked for a compact view, show only one column for the question
                                 // and fill it with the text of the selected option (i.e. "Yes") instead of an ID
-                                if ($answers_of_user[$question_id][$option_id]['value'] != 0) {
+                                if (0 != $answers_of_user[$question_id][$option_id]['value']) {
                                     $return .= $answers_of_user[$question_id][$option_id]['value'].";";
-                            } else {
+                                } else {
                                     $return .= '"'.
                                         str_replace(
                                             '"',
@@ -1677,19 +1675,19 @@ class SurveyUtil
                                             )
                                         ).
                                         '";';
-                            }
+                                }
                             } else {
                                 // If we don't want a compact view, show one column per possible option and mark a 'v'
                                 // or the defined value in the corresponding column if the user selected it
-                                if ($answers_of_user[$question_id][$option_id]['value'] != 0) {
+                                if (0 != $answers_of_user[$question_id][$option_id]['value']) {
                                     $return .= $answers_of_user[$question_id][$option_id]['value'].";";
                                 } else {
                                     $return .= 'v;';
-                        }
+                                }
                             }
                         } else {
                             if (!$compact) {
-                        $return .= ';';
+                                $return .= ';';
                             }
                         }
                     }
@@ -2362,11 +2360,11 @@ class SurveyUtil
      * @param string $invitation_title  title of the mail
      * @param string $invitation_text   text of the mail has to contain a **link** string or
      *                                  this will automatically be added to the end
-     * @param int  $reminder
-     * @param bool $sendmail
-     * @param int  $remindUnAnswered
-     * @param bool $isAdditionalEmail
-     * @param bool $hideLink
+     * @param int    $reminder
+     * @param bool   $sendmail
+     * @param int    $remindUnAnswered
+     * @param bool   $isAdditionalEmail
+     * @param bool   $hideLink
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @author Julio Montoya - Adding auto-generated link support
@@ -3618,7 +3616,7 @@ class SurveyUtil
             }
 
             echo '<tr>';
-            if ($row['answered'] == 0) {
+            if (0 == $row['answered']) {
                 echo '<td>';
                 $url = self::generateFillSurveyLink($row['invitation_code'], $_course, $row['session_id']);
                 $icon = Display::return_icon(

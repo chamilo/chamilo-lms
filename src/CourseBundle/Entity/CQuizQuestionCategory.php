@@ -75,6 +75,11 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
         $this->questions = new ArrayCollection();
     }
 
+    public function __toString(): string
+    {
+        return $this->getTitle();
+    }
+
     public function addQuestion(CQuizQuestion $question)
     {
         if ($this->questions->contains($question)) {
@@ -93,11 +98,6 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
 
         $this->questions->removeElement($question);
         $question->removeCategory($this);
-    }
-
-    public function __toString(): string
-    {
-        return $this->getTitle();
     }
 
     public function getIid(): int

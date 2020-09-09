@@ -1115,10 +1115,10 @@ class UserGroup extends Model
     }
 
     /**
-     * @param int $sidx
-     * @param int $sord
-     * @param int $start
-     * @param int $limit
+     * @param int    $sidx
+     * @param int    $sord
+     * @param int    $start
+     * @param int    $limit
      * @param string $extraWhereCondition
      *
      * @return array
@@ -1314,11 +1314,11 @@ class UserGroup extends Model
 
     /**
      * @param $params
-     * @param bool $show_query
+     * @param bool $showQuery
      *
      * @return bool|int
      */
-    public function save($params, $show_query = false)
+    public function save($params, $showQuery = false)
     {
         $params['updated_at'] = $params['created_at'] = api_get_utc_datetime();
         $params['group_type'] = isset($params['group_type']) ? self::SOCIAL_CLASS : self::NORMAL_CLASS;
@@ -1329,7 +1329,7 @@ class UserGroup extends Model
             if ($this->allowTeachers()) {
                 $params['author_id'] = api_get_user_id();
             }
-            $id = parent::save($params, $show_query);
+            $id = parent::save($params, $showQuery);
             if ($id) {
                 if ($this->getUseMultipleUrl()) {
                     $this->subscribeToUrl($id, api_get_current_access_url_id());
@@ -1715,7 +1715,7 @@ class UserGroup extends Model
      * @param string $id group id
      * @param string picture group name
      * @param string height
-     * @param int    $size_picture picture size it can be small_,  medium_  or  big_
+     * @param int $size_picture picture size it can be small_,  medium_  or  big_
      * @param string style css
      *
      * @return array with the file and the style of an image i.e $array['file'] $array['style']
@@ -2569,7 +2569,7 @@ class UserGroup extends Model
 
     /**
      * @param string $user_id
-     * @param int $relation_type
+     * @param int    $relation_type
      * @param bool   $with_image
      *
      * @deprecated

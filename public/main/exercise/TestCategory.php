@@ -497,8 +497,8 @@ class TestCategory
      * @param int $exerciseId
      *
      * @return int
-     * @author - hubert borderiou
      *
+     * @author - hubert borderiou
      */
     public static function getNumberMaxQuestionByCat($exerciseId)
     {
@@ -720,7 +720,9 @@ class TestCategory
      * @param int $categoryId
      * @param int $questionId
      * @param int $courseId
+     *
      * @deprecated use entities
+     *
      * @return string|false
      */
     public static function addCategoryToQuestion($categoryId, $questionId, $courseId)
@@ -732,7 +734,6 @@ class TestCategory
             $questionId > 0 &&
             $courseId > 0
         ) {
-
             $sql = "INSERT INTO $table (c_id, question_id, category_id)
                     VALUES (".(int) $courseId.', '.(int) $questionId.', '.(int) $categoryId.')';
             Database::query($sql);
@@ -781,7 +782,6 @@ class TestCategory
             $em->flush();
 
             if ($category) {
-
                 return $category->getIid();
             }
         }
@@ -1140,7 +1140,7 @@ class TestCategory
             $id = $category->getIid();
             $nb_question = $category->getQuestions()->count();
             $rowname = self::protectJSDialogQuote($category->getTitle());
-            $nb_question_label = $nb_question == 1 ? $nb_question.' '.get_lang('Question') : $nb_question.' '.get_lang(
+            $nb_question_label = 1 == $nb_question ? $nb_question.' '.get_lang('Question') : $nb_question.' '.get_lang(
                     'Questions'
                 );
             $content = "<span style='float:right'>".$nb_question_label."</span>";

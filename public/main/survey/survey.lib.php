@@ -5,7 +5,6 @@
 use Chamilo\CourseBundle\Entity\CSurvey;
 use Chamilo\CourseBundle\Entity\CSurveyInvitation;
 use Chamilo\CourseBundle\Entity\CSurveyQuestion;
-use Chamilo\CourseBundle\Entity\CSurveyQuestionOption;
 
 /**
  * Class SurveyManager.
@@ -1103,8 +1102,8 @@ class SurveyManager
             $questions[$questionId]['sort'] = $row['sort'];
             $questions[$questionId]['survey_question_comment'] = $row['survey_question_comment'];
 
-        // Getting the information of the question options
-        $sql = "SELECT * FROM $table_survey_question_option
+            // Getting the information of the question options
+            $sql = "SELECT * FROM $table_survey_question_option
 		             WHERE c_id = $courseId AND survey_id= $surveyId  AND question_id = $questionId";
             $resultOptions = Database::query($sql);
             while ($rowOption = Database::fetch_array($resultOptions, 'ASSOC')) {
@@ -1134,19 +1133,19 @@ class SurveyManager
         if (strlen($form_content['question']) > 1) {
             // Checks length of the question
             $empty_answer = false;
-            if ($survey_data['survey_type'] == 1) {
+            if (1 == $survey_data['survey_type']) {
                 if (empty($form_content['choose'])) {
                     return 'PleaseChooseACondition';
                 }
 
-                if (($form_content['choose'] == 2) &&
+                if ((2 == $form_content['choose']) &&
                     ($form_content['assigned1'] == $form_content['assigned2'])
                 ) {
                     return 'ChooseDifferentCategories';
                 }
             }
 
-            if ($form_content['type'] !== 'percentage') {
+            if ('percentage' !== $form_content['type']) {
                 if (isset($form_content['answers'])) {
                     for ($i = 0; $i < count($form_content['answers']); $i++) {
                         if (strlen($form_content['answers'][$i]) < 1) {
@@ -1174,7 +1173,7 @@ class SurveyManager
                 $survey_data = self::get_survey($surveyId);
 
                 // Storing the question in the shared database
-                if (is_numeric($survey_data['survey_share']) && $survey_data['survey_share'] != 0) {
+                if (is_numeric($survey_data['survey_share']) && 0 != $survey_data['survey_share']) {
                     $shared_question_id = self::save_shared_question($form_content, $survey_data);
                     $form_content['shared_question_id'] = $shared_question_id;
                 }
@@ -1582,7 +1581,7 @@ class SurveyManager
         $type = $form_content['type'];
 
         // A percentage question type has options 1 -> 100
-        if ($type === 'percentage') {
+        if ('percentage' === $type) {
             for ($i = 1; $i < 101; $i++) {
                 $form_content['answers'][] = $i;
             }
@@ -1618,7 +1617,7 @@ class SurveyManager
 			                c_id = $course_id AND
                             question_id = '".intval($form_content['question_id'])."'
                             ";
-            Database::query($sql);
+                Database::query($sql);
             }
         }
 
@@ -1660,7 +1659,6 @@ class SurveyManager
         }
 
         if ('multiplechoiceother' === $type) {
-
             if (empty($dataFromDatabase['answer_data'])) {
                 $params = [
                     'c_id' => $course_id,
@@ -2387,15 +2385,15 @@ class SurveyManager
 
         $classToParse = [];
         foreach ($classList as $class) {
-                $users = $obj->get_users_by_usergroup($class['id']);
-                if (empty($users)) {
-                    continue;
+            $users = $obj->get_users_by_usergroup($class['id']);
+            if (empty($users)) {
+                continue;
             }
             $classToParse[] = [
                 'name' => $class['name'],
                 'users' => $users,
             ];
-                }
+        }
 
         self::parseMultiplicateUserList($classToParse, $questions, $courseId, $surveyData);
 

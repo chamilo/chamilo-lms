@@ -2,7 +2,6 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\CourseRepository;
@@ -16,7 +15,6 @@ use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CLpItemView;
 use Chamilo\CourseBundle\Entity\CQuiz;
-use Chamilo\CourseBundle\Entity\CShortcut;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CTool;
 use ChamiloSession as Session;
@@ -519,7 +517,7 @@ class learnpath
         $id = (int) $id;
         $typeCleaned = Database::escape_string($type);
         $max_score = 100;
-        if ($type === 'quiz' && $id) {
+        if ('quiz' === $type && $id) {
             $sql = 'SELECT SUM(ponderation)
                     FROM '.Database::get_course_table(TABLE_QUIZ_QUESTION).' as quiz_question
                     INNER JOIN '.Database::get_course_table(TABLE_QUIZ_TEST_QUESTION).' as quiz_rel_question
@@ -2049,8 +2047,8 @@ class learnpath
                     }
 
                     if ($type_quiz) {
-                        if ($_SESSION['oLP']->prevent_reinit == 1) {
-                            $autostart_audio = $row['status'] === 'completed' ? 'false' : 'true';
+                        if (1 == $_SESSION['oLP']->prevent_reinit) {
+                            $autostart_audio = 'completed' === $row['status'] ? 'false' : 'true';
                         } else {
                             $autostart_audio = $autostart;
                         }
@@ -2450,7 +2448,7 @@ class learnpath
         // path, then the rules are completely different: we assume only one
         // item exists and the progress of the LP depends on the score
         $scoreAsProgressSetting = api_get_configuration_value('lp_score_as_progress_enable');
-        if ($scoreAsProgressSetting === true) {
+        if (true === $scoreAsProgressSetting) {
             $scoreAsProgress = $this->getUseScoreAsProgress();
             if ($scoreAsProgress) {
                 // Get single item's score
@@ -2475,19 +2473,19 @@ class learnpath
         // otherwise just continue the normal processing of progress
         $total_items = $this->getTotalItemsCountWithoutDirs();
         $completeItems = $this->get_complete_items_count();
-        if ($add != 0) {
+        if (0 != $add) {
             $completeItems += $add;
         }
         if ($completeItems > $total_items) {
             $completeItems = $total_items;
         }
-        if ($mode == '%') {
+        if ('%' == $mode) {
             if ($total_items > 0) {
                 $percentage = ((float) $completeItems / (float) $total_items) * 100;
             }
             $percentage = number_format($percentage, 0);
             $text = '%';
-        } elseif ($mode === 'abs') {
+        } elseif ('abs' === $mode) {
             $percentage = $completeItems;
             $text = '/'.$total_items;
         }
@@ -3168,7 +3166,7 @@ class learnpath
                 }
                 $listParent[] = $subtree;
             }
-            if (!in_array($subtree['type'], $dirTypes) && $subtree['parent'] == null) {
+            if (!in_array($subtree['type'], $dirTypes) && null == $subtree['parent']) {
                 if (array_key_exists($subtree['status'], self::STATUS_CSS_CLASS_NAME)) {
                     $cssStatus = self::STATUS_CSS_CLASS_NAME[$subtree['status']];
                 }
@@ -4327,7 +4325,7 @@ class learnpath
 
     /**
      * Publishes a learnpath. This basically means show or hide the learnpath
-     * on the course homepage
+     * on the course homepage.
      *
      * @param int    $id            Learnpath id
      * @param string $setVisibility New visibility (v/i - visible/invisible)
@@ -4609,31 +4607,31 @@ class learnpath
         }
 
         $groups = GroupManager::getAllGroupPerUserSubscription($user->getId());
-            $em = Database::getManager();
+        $em = Database::getManager();
 
-            /** @var ItemPropertyRepository $itemRepo */
-            $itemRepo = $em->getRepository('ChamiloCourseBundle:CItemProperty');
+        /** @var ItemPropertyRepository $itemRepo */
+        $itemRepo = $em->getRepository('ChamiloCourseBundle:CItemProperty');
 
-            /** @var CourseRepository $courseRepo */
-            $courseRepo = $em->getRepository('ChamiloCoreBundle:Course');
-            $session = null;
-            if (!empty($sessionId)) {
-                $session = $em->getRepository('ChamiloCoreBundle:Session')->find($sessionId);
-            }
+        /** @var CourseRepository $courseRepo */
+        $courseRepo = $em->getRepository('ChamiloCoreBundle:Course');
+        $session = null;
+        if (!empty($sessionId)) {
+            $session = $em->getRepository('ChamiloCoreBundle:Session')->find($sessionId);
+        }
 
-                $course = $courseRepo->find($courseId);
+        $course = $courseRepo->find($courseId);
 
-        if ($courseId != 0) {
-                // Subscribed groups to a LP
-                $subscribedGroupsInLp = $itemRepo->getGroupsSubscribedToItem(
+        if (0 != $courseId) {
+            // Subscribed groups to a LP
+            $subscribedGroupsInLp = $itemRepo->getGroupsSubscribedToItem(
                     TOOL_LEARNPATH_CATEGORY,
                     $category->getId(),
                     $course,
                     $session
                 );
-            }
+        }
 
-            if (!empty($subscribedGroupsInLp)) {
+        if (!empty($subscribedGroupsInLp)) {
             $noGroupSubscribed = false;
             if (!empty($groups)) {
                 $groups = array_column($groups, 'iid');
@@ -6518,9 +6516,9 @@ class learnpath
      * This function builds the action menu.
      *
      * @param bool   $returnString           Optional
-     * @param bool $showRequirementButtons Optional. Allow show the requirements button
-     * @param bool $isConfigPage           Optional. If is the config page, show the edit button
-     * @param bool $allowExpand            Optional. Allow show the expand/contract button
+     * @param bool   $showRequirementButtons Optional. Allow show the requirements button
+     * @param bool   $isConfigPage           Optional. If is the config page, show the edit button
+     * @param bool   $allowExpand            Optional. Allow show the expand/contract button
      * @param string $action
      *
      * @return string
@@ -6604,8 +6602,8 @@ class learnpath
             );
         }
 
-        if ((strpos($request, 'build') === false &&
-            strpos($request, 'add_item') === false) ||
+        if ((false === strpos($request, 'build') &&
+            false === strpos($request, 'add_item')) ||
             in_array($action, ['add_audio'])
         ) {
             $actionsLeft .= Display::url(
@@ -7998,7 +7996,7 @@ class learnpath
                 $checked = in_array($prerequisiteId, [$item['id'], $item['ref']]) ? ' checked="checked" ' : '';
             }
 
-            $disabled = $item['item_type'] === 'dir' ? ' disabled="disabled" ' : '';
+            $disabled = 'dir' === $item['item_type'] ? ' disabled="disabled" ' : '';
 
             $return .= '<input '.$checked.' '.$disabled.' id="id'.$item['id'].'" name="prerequisites" type="radio" value="'.$item['id'].'" />';
 
@@ -11710,7 +11708,7 @@ EOD;
     public function getUseScoreAsProgress()
     {
         // If not a SCORM, we don't care about the setting
-        if ($this->get_type() != 2) {
+        if (2 != $this->get_type()) {
             return false;
         }
         // If more than one step in the SCORM, we don't care about the setting
@@ -11737,7 +11735,7 @@ EOD;
     {
         if (api_get_configuration_value('scorm_api_username_as_student_id')) {
             return api_get_user_info(api_get_user_id())['username'];
-        } elseif (api_get_configuration_value('scorm_api_extrafield_to_use_as_student_id') != null) {
+        } elseif (null != api_get_configuration_value('scorm_api_extrafield_to_use_as_student_id')) {
             $extraFieldValue = new ExtraFieldValue('user');
             $extrafield = $extraFieldValue->get_values_by_handler_and_field_variable(api_get_user_id(), api_get_configuration_value('scorm_api_extrafield_to_use_as_student_id'));
 

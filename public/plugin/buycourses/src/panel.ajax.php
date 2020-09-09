@@ -3,8 +3,6 @@
 
 /**
  * Responses to AJAX calls.
- *
- * @package chamilo.plugin.buycourses
  */
 $cidReset = true;
 
@@ -24,13 +22,13 @@ switch ($action) {
         //$saleId is only used in getSale() and is always filtered there
         $saleId = isset($_POST['id']) ? $_POST['id'] : '';
         $sale = $plugin->getSale($saleId);
-        $productType = ($sale['product_type'] == 1) ? get_lang('Course') : get_lang('Session');
-        $paymentType = ($sale['payment_type'] == 1) ? 'Paypal' : $plugin->get_lang('BankTransfer');
-        $productInfo = ($sale['product_type'] == 1)
+        $productType = (1 == $sale['product_type']) ? get_lang('Course') : get_lang('Session');
+        $paymentType = (1 == $sale['payment_type']) ? 'Paypal' : $plugin->get_lang('BankTransfer');
+        $productInfo = (1 == $sale['product_type'])
             ? api_get_course_info_by_id($sale['product_id'])
             : api_get_session_info($sale['product_id']);
         $currency = $plugin->getSelectedCurrency();
-        if ($sale['product_type'] == 1) {
+        if (1 == $sale['product_type']) {
             $productImage = $productInfo['course_image_large'];
         } else {
             $productImage = ($productInfo['image'])
@@ -166,7 +164,7 @@ switch ($action) {
         }
 
         $paypalParams = $plugin->getPaypalParams();
-        $pruebas = $paypalParams['sandbox'] == 1;
+        $pruebas = 1 == $paypalParams['sandbox'];
         $paypalUsername = $paypalParams['username'];
         $paypalPassword = $paypalParams['password'];
         $paypalSignature = $paypalParams['signature'];
@@ -193,7 +191,7 @@ switch ($action) {
 
         $result = MassPayment($allPayouts, $isoCode);
 
-        if ($result['ACK'] === 'Success') {
+        if ('Success' === $result['ACK']) {
             foreach ($allPayouts as $payout) {
                 $plugin->setStatusPayouts($payout['id'], BuyCoursesPlugin::PAYOUT_STATUS_COMPLETED);
             }

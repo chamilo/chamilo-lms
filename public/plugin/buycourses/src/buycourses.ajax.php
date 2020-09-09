@@ -8,8 +8,6 @@ use Chamilo\UserBundle\Entity\User;
 
 /**
  * Responses to AJAX calls.
- *
- * @package chamilo.plugin.buycourses
  */
 $cidReset = true;
 
@@ -46,13 +44,13 @@ switch ($action) {
 
         $saleId = isset($_POST['id']) ? (int) $_POST['id'] : '';
         $sale = $plugin->getSale($saleId);
-        $productType = $sale['product_type'] == 1 ? get_lang('Course') : get_lang('Session');
-        $paymentType = $sale['payment_type'] == 1 ? 'Paypal' : $plugin->get_lang('BankTransfer');
-        $productInfo = $sale['product_type'] == 1
+        $productType = 1 == $sale['product_type'] ? get_lang('Course') : get_lang('Session');
+        $paymentType = 1 == $sale['payment_type'] ? 'Paypal' : $plugin->get_lang('BankTransfer');
+        $productInfo = 1 == $sale['product_type']
             ? api_get_course_info_by_id($sale['product_id'])
             : api_get_session_info($sale['product_id']);
         $currency = $plugin->getSelectedCurrency();
-        if ($sale['product_type'] == 1) {
+        if (1 == $sale['product_type']) {
             $productImage = $productInfo['course_image_large'];
         } else {
             $productImage = ($productInfo['image'])
@@ -191,7 +189,7 @@ switch ($action) {
 
         $paypalParams = $plugin->getPaypalParams();
 
-        $pruebas = $paypalParams['sandbox'] == 1;
+        $pruebas = 1 == $paypalParams['sandbox'];
         $paypalUsername = $paypalParams['username'];
         $paypalPassword = $paypalParams['password'];
         $paypalSignature = $paypalParams['signature'];
@@ -223,13 +221,13 @@ switch ($action) {
         $currentCurrency = $plugin->getSelectedCurrency();
         $isoCode = $currentCurrency['iso_code'];
         $result = MassPayment($allPayouts, $isoCode);
-        if ($result['ACK'] === 'Success') {
+        if ('Success' === $result['ACK']) {
             foreach ($allPayouts as $payout) {
                 $plugin->setStatusPayouts(
                     $payout['id'],
                     BuyCoursesPlugin::PAYOUT_STATUS_COMPLETED
                 );
-                if ($plugin->get('invoicing_enable') === 'true') {
+                if ('true' === $plugin->get('invoicing_enable')) {
                     $plugin->setInvoice($payout['id']);
                 }
             }
@@ -461,25 +459,25 @@ switch ($action) {
         $html .= "<li><b>{$plugin->get_lang('Description')}:</b> {$serviceSale['service']['description']}</li> ";
         $nodeType = $serviceSale['node_type'];
         $nodeName = '';
-        if ($nodeType == BuyCoursesPlugin::SERVICE_TYPE_USER) {
+        if (BuyCoursesPlugin::SERVICE_TYPE_USER == $nodeType) {
             $nodeType = get_lang('User');
             /** @var User $user */
             $user = UserManager::getManager()->find($serviceSale['node_id']);
             $nodeName = $user ? $user->getCompleteNameWithUsername() : null;
         } else {
-            if ($nodeType == BuyCoursesPlugin::SERVICE_TYPE_COURSE) {
+            if (BuyCoursesPlugin::SERVICE_TYPE_COURSE == $nodeType) {
                 $nodeType = get_lang('Course');
                 /** @var Course $course */
                 $course = $em->find('ChamiloCoreBundle:Course', $serviceSale['node_id']);
                 $nodeName = $course ? $course->getTitle() : null;
             } else {
-                if ($nodeType == BuyCoursesPlugin::SERVICE_TYPE_SESSION) {
+                if (BuyCoursesPlugin::SERVICE_TYPE_SESSION == $nodeType) {
                     $nodeType = get_lang('Session');
                     /** @var Session $session */
                     $session = $em->find('ChamiloCoreBundle:Session', $serviceSale['node_id']);
                     $nodeName = $session ? $session->getName() : null;
                 } else {
-                    if ($nodeType == BuyCoursesPlugin::SERVICE_TYPE_LP_FINAL_ITEM) {
+                    if (BuyCoursesPlugin::SERVICE_TYPE_LP_FINAL_ITEM == $nodeType) {
                         $nodeType = get_lang('TemplateTitleCertificate');
                         /** @var CLp $lp */
                         $lp = $em->find('ChamiloCourseBundle:CLp', $serviceSale['node_id']);
@@ -498,13 +496,13 @@ switch ($action) {
         $orderDate = api_format_date($serviceSale['buy_date'], DATE_FORMAT_LONG);
         $html .= "<li><b>{$plugin->get_lang('OrderDate')}:</b> $orderDate</li> ";
         $paymentType = $serviceSale['payment_type'];
-        if ($paymentType == BuyCoursesPlugin::PAYMENT_TYPE_PAYPAL) {
+        if (BuyCoursesPlugin::PAYMENT_TYPE_PAYPAL == $paymentType) {
             $paymentType = 'PayPal';
         } else {
-            if ($paymentType == BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER) {
+            if (BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER == $paymentType) {
                 $paymentType = $plugin->get_lang('BankTransfer');
             } else {
-                if ($paymentType == BuyCoursesPlugin::PAYMENT_TYPE_CULQI) {
+                if (BuyCoursesPlugin::PAYMENT_TYPE_CULQI == $paymentType) {
                     $paymentType = 'Culqi';
                 }
             }
@@ -512,17 +510,17 @@ switch ($action) {
         $html .= "<li><b>{$plugin->get_lang('PaymentMethod')}:</b> $paymentType</li> ";
         $status = $serviceSale['status'];
         $buttons = '';
-        if ($status == BuyCoursesPlugin::SERVICE_STATUS_COMPLETED) {
+        if (BuyCoursesPlugin::SERVICE_STATUS_COMPLETED == $status) {
             $status = $plugin->get_lang('Active');
         } else {
-            if ($status == BuyCoursesPlugin::SERVICE_STATUS_PENDING) {
+            if (BuyCoursesPlugin::SERVICE_STATUS_PENDING == $status) {
                 $status = $plugin->get_lang('Pending');
                 if ($isAdmin) {
                     $buttons .= "<a id='{$serviceSale['id']}' tag='service_sale_confirm' class='btn btn-success pull-left'>{$plugin->get_lang('ConfirmOrder')}</a>";
                     $buttons .= "<a id='{$serviceSale['id']}' tag='service_sale_cancel' class='btn btn-danger pull-right'>{$plugin->get_lang('CancelOrder')}</a>";
                 }
             } else {
-                if ($status == BuyCoursesPlugin::SERVICE_STATUS_CANCELLED) {
+                if (BuyCoursesPlugin::SERVICE_STATUS_CANCELLED == $status) {
                     $status = $plugin->get_lang('Cancelled');
                 }
             }

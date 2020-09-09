@@ -190,11 +190,11 @@ class learnpathItem
     public static function fixAudio($audio)
     {
         $courseInfo = api_get_course_info();
-            // Do not check in DB as we expect the call to come from the
+        // Do not check in DB as we expect the call to come from the
         if (empty($audio) || empty($courseInfo)) {
             return '';
         }
-            // learnpath class which should be aware of any fake.
+        // learnpath class which should be aware of any fake.
         // Old structure
         $file = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document/audio/'.$audio;
         if (file_exists($file)) {
@@ -723,7 +723,7 @@ class learnpathItem
      */
     public function get_max()
     {
-        if ($this->type === 'sco') {
+        if ('sco' === $this->type) {
             if (!empty($this->view_max_score) && $this->view_max_score > 0) {
                 return $this->view_max_score;
             } else {
@@ -731,7 +731,7 @@ class learnpathItem
                     return $this->max_score;
                 }
 
-                    return 100;
+                return 100;
             }
         } else {
             if (!empty($this->max_score)) {
@@ -1479,7 +1479,7 @@ class learnpathItem
                             iid = '".$this->db_item_view_id."' AND
                             view_count = '".$this->get_attempt_id()."'";
                 $res = Database::query($sql);
-                if (Database::num_rows($res) == 1) {
+                if (1 == Database::num_rows($res)) {
                     $row = Database::fetch_array($res);
                     if ($update_local) {
                         $this->set_status($row['status']);
@@ -4072,7 +4072,6 @@ class learnpathItem
                 WHERE iid = ".$this->db_id;
         Database::query($sql);
     }
-
 
     /**
      * Adds an audio file to the current item, using a file already in documents.

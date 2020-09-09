@@ -9,7 +9,6 @@ use Chamilo\CoreBundle\Framework\Container;
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 $userId = api_get_user_id();

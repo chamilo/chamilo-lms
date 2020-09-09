@@ -6,8 +6,6 @@
  * Show information about a service (for custom purposes).
  *
  * @author José Loguercio Silva <jose.loguercio@beeznest.com>
- *
- * @package chamilo.buycourses_plugin
  */
 $cidReset = true;
 
@@ -19,7 +17,7 @@ $htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="'.api_get_path(
     ).'buycourses/resources/css/style.css"/>';
 $plugin = BuyCoursesPlugin::create();
 
-$includeServices = $plugin->get('include_services') === 'true';
+$includeServices = 'true' === $plugin->get('include_services');
 
 if (!$includeServices) {
     api_not_allowed(true);

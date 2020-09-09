@@ -1,7 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-
 ob_start();
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';

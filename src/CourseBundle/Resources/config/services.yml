@@ -35,9 +35,3 @@ services:
 #        arguments:
 #            $entityName: 'Chamilo\CoreBundle\Entity\Illustration'
 #            $repository: 'Chamilo\CoreBundle\Repository\IllustrationRepository'
-
-    # Entity repository as a service
-
-
-
-    # Event Listeners

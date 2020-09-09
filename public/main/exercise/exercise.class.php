@@ -231,7 +231,7 @@ class Exercise
             $this->force_edit_exercise_in_lp = api_get_configuration_value('force_edit_exercise_in_lp');
             $this->edit_exercise_in_lp = true;
             if ($this->exercise_was_added_in_lp) {
-                $this->edit_exercise_in_lp = $this->force_edit_exercise_in_lp == true;
+                $this->edit_exercise_in_lp = true == $this->force_edit_exercise_in_lp;
             }
 
             if (!empty($object->end_time)) {
@@ -280,7 +280,9 @@ class Exercise
 
     /**
      * returns the exercise ID.
+     *
      * @deprecated
+     *
      * @author Olivier Brouckaert
      *
      * @return int - exercise ID
@@ -2490,7 +2492,7 @@ class Exercise
                 }
             }
         }
-            // Can't convert a question from one feedback to another
+        // Can't convert a question from one feedback to another
         $direct = $form->createElement(
                     'radio',
                     'exerciseFeedbackType',
@@ -2506,7 +2508,7 @@ class Exercise
         if ($freeze) {
             $direct->freeze();
             $noFeedBack->freeze();
-            }
+        }
 
         $feedback[] = $noFeedBack;
         $feedback[] = $direct;
@@ -3130,57 +3132,57 @@ class Exercise
         $isReviewingAnswers = isset($_REQUEST['reminder']) && 2 == $_REQUEST['reminder'];
 
         // User
-                $endReminderValue = false;
+        $endReminderValue = false;
         if (!empty($myRemindList) && $isReviewingAnswers) {
-                    $endValue = end($myRemindList);
-                    if ($endValue == $question_id) {
-                        $endReminderValue = true;
-                    }
-                }
-        if ($this->type == ALL_ON_ONE_PAGE || $nbrQuestions == $questionNum || $endReminderValue) {
-                    if ($this->review_answers) {
+            $endValue = end($myRemindList);
+            if ($endValue == $question_id) {
+                $endReminderValue = true;
+            }
+        }
+        if (ALL_ON_ONE_PAGE == $this->type || $nbrQuestions == $questionNum || $endReminderValue) {
+            if ($this->review_answers) {
                 $label = get_lang('ReviewQuestions');
-                        $class = 'btn btn-success';
-                    } else {
+                $class = 'btn btn-success';
+            } else {
                 $label = get_lang('EndTest');
-                        $class = 'btn btn-warning';
-                    }
-                } else {
+                $class = 'btn btn-warning';
+            }
+        } else {
             $label = get_lang('NextQuestion');
-                    $class = 'btn btn-primary';
-                }
-                // used to select it with jquery
-                $class .= ' question-validate-btn';
-        if ($this->type == ONE_PER_PAGE) {
-            if ($questionNum != 1 && $this->showPreviousButton()) {
-                            $prev_question = $questionNum - 2;
-                            $showPreview = true;
+            $class = 'btn btn-primary';
+        }
+        // used to select it with jquery
+        $class .= ' question-validate-btn';
+        if (ONE_PER_PAGE == $this->type) {
+            if (1 != $questionNum && $this->showPreviousButton()) {
+                $prev_question = $questionNum - 2;
+                $showPreview = true;
                 if (!empty($myRemindList) && $isReviewingAnswers) {
-                                $beforeId = null;
-                                for ($i = 0; $i < count($myRemindList); $i++) {
-                                    if (isset($myRemindList[$i]) && $myRemindList[$i] == $question_id) {
-                                        $beforeId = isset($myRemindList[$i - 1]) ? $myRemindList[$i - 1] : null;
+                    $beforeId = null;
+                    for ($i = 0; $i < count($myRemindList); $i++) {
+                        if (isset($myRemindList[$i]) && $myRemindList[$i] == $question_id) {
+                            $beforeId = isset($myRemindList[$i - 1]) ? $myRemindList[$i - 1] : null;
 
-                                        break;
-                                    }
-                                }
+                            break;
+                        }
+                    }
 
-                                if (empty($beforeId)) {
-                                    $showPreview = false;
-                                } else {
-                                    $num = 0;
-                                    foreach ($this->questionList as $originalQuestionId) {
-                                        if ($originalQuestionId == $beforeId) {
-                                            break;
-                                        }
-                                        $num++;
-                                    }
-                                    $prev_question = $num;
-                                }
+                    if (empty($beforeId)) {
+                        $showPreview = false;
+                    } else {
+                        $num = 0;
+                        foreach ($this->questionList as $originalQuestionId) {
+                            if ($originalQuestionId == $beforeId) {
+                                break;
                             }
+                            $num++;
+                        }
+                        $prev_question = $num;
+                    }
+                }
 
-                            if ($showPreview && 0 === $this->getPreventBackwards()) {
-                                $buttonList[] = Display::button(
+                if ($showPreview && 0 === $this->getPreventBackwards()) {
+                    $buttonList[] = Display::button(
                                     'previous_question_and_save',
                                     get_lang('Previous question'),
                                     [
@@ -3190,12 +3192,12 @@ class Exercise
                                         'data-question' => $question_id,
                                     ]
                                 );
-                            }
-                        }
+                }
+            }
 
-                    // Next question
-                    if (!empty($questions_in_media)) {
-                        $buttonList[] = Display::button(
+            // Next question
+            if (!empty($questions_in_media)) {
+                $buttonList[] = Display::button(
                             'save_question_list',
                             $label,
                             [
@@ -3204,13 +3206,13 @@ class Exercise
                                 'data-list' => implode(',', $questions_in_media),
                             ]
                         );
-                    } else {
-                        $buttonList[] = Display::button(
+            } else {
+                $buttonList[] = Display::button(
                             'save_now',
                             $label,
                             ['type' => 'button', 'class' => $class, 'data-question' => $question_id]
                         );
-                    }
+            }
             $buttonList[] = '<span id="save_for_now_'.$question_id.'" class="exercise_save_mini_message"></span>';
 
             $html .= implode(PHP_EOL, $buttonList).PHP_EOL;
@@ -5671,7 +5673,7 @@ class Exercise
                 }
             }
 
-            if ($show_result && $answerType != ANNOTATION) {
+            if ($show_result && ANNOTATION != $answerType) {
                 echo '</table>';
             }
         }
@@ -8493,7 +8495,7 @@ class Exercise
         $learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? (int) $_REQUEST['learnpath_item_id'] : null;
 
         $autoLaunchAvailable = false;
-        if (api_get_course_setting('enable_exercise_auto_launch') == 1 &&
+        if (1 == api_get_course_setting('enable_exercise_auto_launch') &&
             api_get_configuration_value('allow_exercise_auto_launch')
         ) {
             $autoLaunchAvailable = true;
@@ -8630,7 +8632,7 @@ class Exercise
                 // Teacher only
                 if ($is_allowedToEdit) {
                     $lp_blocked = null;
-                    if ($exercise->exercise_was_added_in_lp == true) {
+                    if (true == $exercise->exercise_was_added_in_lp) {
                         $lp_blocked = Display::div(
                             get_lang('AddedToLPCannotBeAccessed'),
                             ['class' => 'lp_content_type_label']
@@ -8653,7 +8655,7 @@ class Exercise
                         // specifically set to true, then hide it.
                         if (false === $visibility) {
                             if (!$visibilitySetting) {
-                                if ($exercise->exercise_was_added_in_lp == true) {
+                                if (true == $exercise->exercise_was_added_in_lp) {
                                     continue;
                                 }
                             }
@@ -8662,7 +8664,7 @@ class Exercise
                         $visibility = $exerciseEntity->isVisible($course, $session);
                     }
 
-                    if ($exerciseEntity->getActive() == 0 || false === $visibility) {
+                    if (0 == $exerciseEntity->getActive() || false === $visibility) {
                         $title = Display::tag('font', $cut_title, ['style' => 'color:grey']);
                     } else {
                         $title = $cut_title;
@@ -8793,7 +8795,7 @@ class Exercise
                         $actions .= $clean;
                         // Visible / invisible
                         // Check if this exercise was added in a LP
-                        if ($exercise->exercise_was_added_in_lp == true) {
+                        if (true == $exercise->exercise_was_added_in_lp) {
                             $visibility = Display::return_icon(
                                 'invisible.png',
                                 get_lang('AddedToLPCannotBeAccessed'),
@@ -8801,7 +8803,7 @@ class Exercise
                                 ICON_SIZE_SMALL
                             );
                         } else {
-                            if ($exerciseEntity->getActive() == 0 || $visibility == 0) {
+                            if (0 == $exerciseEntity->getActive() || 0 == $visibility) {
                                 $visibility = Display::url(
                                     Display::return_icon(
                                         'invisible.png',
@@ -8855,7 +8857,7 @@ class Exercise
                         );
 
                         // Check if this exercise was added in a LP
-                        if ($exercise->exercise_was_added_in_lp == true) {
+                        if (true == $exercise->exercise_was_added_in_lp) {
                             $visibility = Display::return_icon(
                                 'invisible.png',
                                 get_lang('AddedToLPCannotBeAccessed'),
@@ -8863,7 +8865,7 @@ class Exercise
                                 ICON_SIZE_SMALL
                             );
                         } else {
-                            if ($exerciseEntity->getActive() == 0 || $visibility == 0) {
+                            if (0 == $exerciseEntity->getActive() || 0 == $visibility) {
                                 $visibility = Display::url(
                                     Display::return_icon(
                                         'invisible.png',
@@ -8907,7 +8909,7 @@ class Exercise
                     // Delete
                     $delete = '';
                     if ($sessionId == $exerciseEntity->getSessionId()) {
-                        if ($locked == false) {
+                        if (false == $locked) {
                             $delete = Display::url(
                                 Display::return_icon(
                                     'delete.png',
@@ -8940,10 +8942,10 @@ class Exercise
                     // Number of questions
                     $random_label = null;
                     $random = $exerciseEntity->getRandom();
-                    if ($random > 0 || $random == -1) {
+                    if ($random > 0 || -1 == $random) {
                         // if random == -1 means use random questions with all questions
                         $random_number_of_question = $random;
-                        if ($random_number_of_question == -1) {
+                        if (-1 == $random_number_of_question) {
                             $random_number_of_question = $rowi;
                         }
                         if ($exerciseEntity->getRandomByCategory() > 0) {
@@ -9127,7 +9129,7 @@ class Exercise
         }
 
         if (empty($tableRows) && empty($categoryId)) {
-            if ($is_allowedToEdit && $origin !== 'learnpath') {
+            if ($is_allowedToEdit && 'learnpath' !== $origin) {
                 $content .= '<div id="no-data-view">';
                 $content .= '<h3>'.get_lang('Quiz').'</h3>';
                 $content .= Display::return_icon('quiz.png', '', [], 64);

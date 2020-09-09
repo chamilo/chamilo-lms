@@ -4,8 +4,8 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
 use Chamilo\CoreBundle\Entity\User;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * CAttendanceSheet.
@@ -60,8 +60,14 @@ class CAttendanceSheet
     protected $user;
 
     /**
-     * Get user.
+     * @var int
      *
+     * @ORM\Column(name="attendance_calendar_id", type="integer")
+     */
+    protected $attendanceCalendarId;
+
+    /**
+     * Get user.
      */
     public function getUser(): User
     {
@@ -70,7 +76,6 @@ class CAttendanceSheet
 
     /**
      * Set user.
-     *
      */
     public function setUser($user)
     {
@@ -78,13 +83,6 @@ class CAttendanceSheet
 
         return $this;
     }
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="attendance_calendar_id", type="integer")
-     */
-    protected $attendanceCalendarId;
 
     /**
      * Set presence.

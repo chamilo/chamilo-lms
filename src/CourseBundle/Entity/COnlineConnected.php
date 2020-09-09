@@ -4,8 +4,8 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
 use Chamilo\CoreBundle\Entity\User;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * COnlineConnected.
@@ -59,7 +59,6 @@ class COnlineConnected
 
     /**
      * Get user.
-     *
      */
     public function getUser(): User
     {
@@ -68,7 +67,6 @@ class COnlineConnected
 
     /**
      * Set user.
-     *
      */
     public function setUser($user)
     {
@@ -124,5 +122,4 @@ class COnlineConnected
     {
         return $this->cId;
     }
-
 }

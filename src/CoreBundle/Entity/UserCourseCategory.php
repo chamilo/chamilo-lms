@@ -38,26 +38,6 @@ class UserCourseCategory
     protected $user;
 
     /**
-     * Get user.
-     *
-     */
-    public function getUser(): User
-    {
-        return $this->user;
-    }
-
-    /**
-     * Set user.
-     *
-     */
-    public function setUser($user)
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    /**
      * @var string
      *
      * @ORM\Column(name="title", type="text", nullable=false)
@@ -77,6 +57,24 @@ class UserCourseCategory
      * @ORM\Column(name="collapsed", type="boolean", nullable=true)
      */
     protected $isCollapsed;
+
+    /**
+     * Get user.
+     */
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    /**
+     * Set user.
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
 
     /**
      * Set title.

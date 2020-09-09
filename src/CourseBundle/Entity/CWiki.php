@@ -4,9 +4,9 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use Chamilo\CoreBundle\Entity\User;
 
 /**
  * CWiki.
@@ -83,26 +83,6 @@ class CWiki
      * )
      */
     protected $user;
-
-    /**
-     * Get user.
-     *
-     */
-    public function getUser(): User
-    {
-        return $this->user;
-    }
-
-    /**
-     * Set user.
-     *
-     */
-    public function setUser($user)
-    {
-        $this->user = $user;
-
-        return $this;
-    }
 
     /**
      * @var int
@@ -243,6 +223,24 @@ class CWiki
      * @ORM\Column(name="session_id", type="integer", nullable=true)
      */
     protected $sessionId;
+
+    /**
+     * Get user.
+     */
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    /**
+     * Set user.
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
 
     /**
      * Set pageId.

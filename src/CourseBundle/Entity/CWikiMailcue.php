@@ -4,8 +4,8 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
 use Chamilo\CoreBundle\Entity\User;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * CWikiMailcue.
@@ -75,7 +75,6 @@ class CWikiMailcue
 
     /**
      * Get user.
-     *
      */
     public function getUser(): User
     {
@@ -84,7 +83,6 @@ class CWikiMailcue
 
     /**
      * Set user.
-     *
      */
     public function setUser($user)
     {

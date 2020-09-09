@@ -59,26 +59,6 @@ class GradebookEvaluation
     protected $user;
 
     /**
-     * Get user.
-     *
-     */
-    public function getUser(): User
-    {
-        return $this->user;
-    }
-
-    /**
-     * Set user.
-     *
-     */
-    public function setUser($user)
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="gradebookEvaluations")
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
      */
@@ -141,6 +121,24 @@ class GradebookEvaluation
     public function __construct()
     {
         $this->locked = 0;
+    }
+
+    /**
+     * Get user.
+     */
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    /**
+     * Set user.
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
+
+        return $this;
     }
 
     /**

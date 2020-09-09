@@ -59,27 +59,6 @@ class Templates
      */
     protected $user;
 
-
-    /**
-     * Get user.
-     *
-     */
-    public function getUser(): User
-    {
-        return $this->user;
-    }
-
-    /**
-     * Set user.
-     *
-     */
-    public function setUser($user)
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
     /**
      * @var int
      *
@@ -93,6 +72,24 @@ class Templates
      * @ORM\Column(name="image", type="string", length=250, nullable=false)
      */
     protected $image;
+
+    /**
+     * Get user.
+     */
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    /**
+     * Set user.
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
 
     /**
      * Set title.

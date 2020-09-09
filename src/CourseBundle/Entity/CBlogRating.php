@@ -4,8 +4,8 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
 use Chamilo\CoreBundle\Entity\User;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * CBlogRating.
@@ -79,8 +79,14 @@ class CBlogRating
     protected $user;
 
     /**
-     * Get user.
+     * @var int
      *
+     * @ORM\Column(name="rating", type="integer", nullable=false)
+     */
+    protected $rating;
+
+    /**
+     * Get user.
      */
     public function getUser(): User
     {
@@ -89,7 +95,6 @@ class CBlogRating
 
     /**
      * Set user.
-     *
      */
     public function setUser($user)
     {
@@ -97,13 +102,6 @@ class CBlogRating
 
         return $this;
     }
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="rating", type="integer", nullable=false)
-     */
-    protected $rating;
 
     /**
      * Set blogId.

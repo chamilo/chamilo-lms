@@ -29,26 +29,6 @@ class GradebookLinkevalLog
     protected $user;
 
     /**
-     * Get user.
-     *
-     */
-    public function getUser(): User
-    {
-        return $this->user;
-    }
-
-    /**
-     * Set user.
-     *
-     */
-    public function setUser($user)
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    /**
      * @var int
      *
      * @ORM\Column(name="id_linkeval_log", type="integer", nullable=false)
@@ -105,6 +85,24 @@ class GradebookLinkevalLog
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     protected $id;
+
+    /**
+     * Get user.
+     */
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    /**
+     * Set user.
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
 
     /**
      * Set idLinkevalLog.

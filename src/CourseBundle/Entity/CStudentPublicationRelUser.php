@@ -4,8 +4,8 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
 use Chamilo\CoreBundle\Entity\User;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * CStudentPublicationRelUser.
@@ -61,7 +61,6 @@ class CStudentPublicationRelUser
 
     /**
      * Get user.
-     *
      */
     public function getUser(): User
     {
@@ -70,7 +69,6 @@ class CStudentPublicationRelUser
 
     /**
      * Set user.
-     *
      */
     public function setUser($user)
     {

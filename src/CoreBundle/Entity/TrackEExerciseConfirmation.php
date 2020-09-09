@@ -298,7 +298,6 @@ class TrackEExerciseConfirmation
 
     /**
      * Get user.
-     *
      */
     public function getUser(): User
     {
@@ -307,7 +306,6 @@ class TrackEExerciseConfirmation
 
     /**
      * Set user.
-     *
      */
     public function setUser($user)
     {

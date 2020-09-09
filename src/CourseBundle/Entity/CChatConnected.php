@@ -4,8 +4,8 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
 use Chamilo\CoreBundle\Entity\User;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * CChatConnected.
@@ -67,8 +67,14 @@ class CChatConnected
     protected $user;
 
     /**
-     * Get user.
+     * @var \DateTime
      *
+     * @ORM\Column(name="last_connection", type="datetime")
+     */
+    protected $lastConnection;
+
+    /**
+     * Get user.
      */
     public function getUser(): User
     {
@@ -77,7 +83,6 @@ class CChatConnected
 
     /**
      * Set user.
-     *
      */
     public function setUser($user)
     {
@@ -85,13 +90,6 @@ class CChatConnected
 
         return $this;
     }
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="last_connection", type="datetime")
-     */
-    protected $lastConnection;
 
     /**
      * Set sessionId.

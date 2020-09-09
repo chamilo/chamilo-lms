@@ -51,27 +51,6 @@ class GradebookCertificate
     protected $user;
 
     /**
-     * Get user.
-     *
-     */
-    public function getUser(): User
-    {
-        return $this->user;
-    }
-
-    /**
-     * Set user.
-     *
-     */
-    public function setUser($user)
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-
-    /**
      * @var float
      *
      * @ORM\Column(name="score_certificate", type="float", precision=10, scale=0, nullable=false)
@@ -98,6 +77,24 @@ class GradebookCertificate
      * @ORM\Column(name="downloaded_at", type="datetime", nullable=true)
      */
     protected $downloadedAt;
+
+    /**
+     * Get user.
+     */
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    /**
+     * Set user.
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
 
     /**
      * Set catId.

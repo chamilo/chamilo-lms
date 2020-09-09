@@ -4,8 +4,8 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
 use Chamilo\CoreBundle\Entity\User;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * CRoleUser.
@@ -67,7 +67,6 @@ class CRoleUser
 
     /**
      * Get user.
-     *
      */
     public function getUser(): User
     {
@@ -76,7 +75,6 @@ class CRoleUser
 
     /**
      * Set user.
-     *
      */
     public function setUser($user)
     {
@@ -156,5 +154,4 @@ class CRoleUser
     {
         return $this->roleId;
     }
-
 }

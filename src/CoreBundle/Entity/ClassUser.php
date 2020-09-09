@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="class_user")
  * @ORM\Entity
  *
- * @deprecated  The class user class will be removed as it will not be used.
+ * @deprecated  the class user class will be removed as it will not be used.
  */
 class ClassUser
 {
@@ -33,7 +33,6 @@ class ClassUser
 
     /**
      * Get user.
-     *
      */
     public function getUser(): User
     {
@@ -42,7 +41,6 @@ class ClassUser
 
     /**
      * Set user.
-     *
      */
     public function setUser($user)
     {

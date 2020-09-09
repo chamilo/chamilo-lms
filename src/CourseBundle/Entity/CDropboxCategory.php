@@ -80,8 +80,14 @@ class CDropboxCategory
     protected $user;
 
     /**
-     * Get user.
+     * @var int
      *
+     * @ORM\Column(name="session_id", type="integer", nullable=false)
+     */
+    protected $sessionId;
+
+    /**
+     * Get user.
      */
     public function getUser(): User
     {
@@ -90,7 +96,6 @@ class CDropboxCategory
 
     /**
      * Set user.
-     *
      */
     public function setUser($user)
     {
@@ -98,13 +103,6 @@ class CDropboxCategory
 
         return $this;
     }
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="session_id", type="integer", nullable=false)
-     */
-    protected $sessionId;
 
     /**
      * Set catName.

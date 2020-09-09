@@ -6,8 +6,8 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
-use Doctrine\ORM\Mapping as ORM;
 use Chamilo\CoreBundle\Entity\User;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * CStudentPublicationComment.
@@ -76,26 +76,6 @@ class CStudentPublicationComment extends AbstractResource implements ResourceInt
     protected $user;
 
     /**
-     * Get user.
-     *
-     */
-    public function getUser(): User
-    {
-        return $this->user;
-    }
-
-    /**
-     * Set user.
-     *
-     */
-    public function setUser($user)
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    /**
      * @var \DateTime
      *
      * @ORM\Column(name="sent_at", type="datetime", nullable=false)
@@ -110,6 +90,24 @@ class CStudentPublicationComment extends AbstractResource implements ResourceInt
     public function __toString(): string
     {
         return (string) $this->getIid();
+    }
+
+    /**
+     * Get user.
+     */
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    /**
+     * Set user.
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
+
+        return $this;
     }
 
     public function getIid(): int

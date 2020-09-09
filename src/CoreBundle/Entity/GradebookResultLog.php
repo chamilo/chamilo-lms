@@ -45,26 +45,6 @@ class GradebookResultLog
     protected $user;
 
     /**
-     * Get user.
-     *
-     */
-    public function getUser(): User
-    {
-        return $this->user;
-    }
-
-    /**
-     * Set user.
-     *
-     */
-    public function setUser($user)
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    /**
      * @var int
      *
      * @ORM\Column(name="evaluation_id", type="integer", nullable=false)
@@ -84,6 +64,24 @@ class GradebookResultLog
      * @ORM\Column(name="score", type="float", precision=10, scale=0, nullable=true)
      */
     protected $score;
+
+    /**
+     * Get user.
+     */
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    /**
+     * Set user.
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
 
     /**
      * Set evaluationId.

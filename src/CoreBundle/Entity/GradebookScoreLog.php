@@ -50,26 +50,6 @@ class GradebookScoreLog
     protected $user;
 
     /**
-     * Get user.
-     *
-     */
-    public function getUser(): User
-    {
-        return $this->user;
-    }
-
-    /**
-     * Set user.
-     *
-     */
-    public function setUser($user)
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    /**
      * @var float
      *
      * @ORM\Column(name="score", type="float", precision=10, scale=0, nullable=false)
@@ -82,6 +62,24 @@ class GradebookScoreLog
      * @ORM\Column(name="registered_at", type="datetime", nullable=false)
      */
     protected $registeredAt;
+
+    /**
+     * Get user.
+     */
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    /**
+     * Set user.
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
 
     /**
      * Get the category id.

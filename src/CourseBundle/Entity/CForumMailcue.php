@@ -4,8 +4,8 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
 use Chamilo\CoreBundle\Entity\User;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * CForumMailcue.
@@ -61,8 +61,14 @@ class CForumMailcue
     protected $user;
 
     /**
-     * Get user.
+     * @var int
      *
+     * @ORM\Column(name="post_id", type="integer")
+     */
+    protected $postId;
+
+    /**
+     * Get user.
      */
     public function getUser(): User
     {
@@ -71,7 +77,6 @@ class CForumMailcue
 
     /**
      * Set user.
-     *
      */
     public function setUser($user)
     {
@@ -79,13 +84,6 @@ class CForumMailcue
 
         return $this;
     }
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="post_id", type="integer")
-     */
-    protected $postId;
 
     /**
      * Set cId.

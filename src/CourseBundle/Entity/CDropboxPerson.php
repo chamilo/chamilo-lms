@@ -4,8 +4,8 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
 use Chamilo\CoreBundle\Entity\User;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * CDropboxPerson.
@@ -60,7 +60,6 @@ class CDropboxPerson
 
     /**
      * Get user.
-     *
      */
     public function getUser(): User
     {
@@ -69,7 +68,6 @@ class CDropboxPerson
 
     /**
      * Set user.
-     *
      */
     public function setUser($user)
     {
@@ -125,5 +123,4 @@ class CDropboxPerson
     {
         return $this->fileId;
     }
-
 }

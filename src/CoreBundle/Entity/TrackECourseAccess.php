@@ -54,26 +54,6 @@ class TrackECourseAccess
     protected $user;
 
     /**
-     * Get user.
-     *
-     */
-    public function getUser(): User
-    {
-        return $this->user;
-    }
-
-    /**
-     * Set user.
-     *
-     */
-    public function setUser($user)
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    /**
      * @var \DateTime
      *
      * @ORM\Column(name="login_course_date", type="datetime", nullable=false)
@@ -107,6 +87,24 @@ class TrackECourseAccess
      * @ORM\Column(name="user_ip", type="string", length=39, nullable=false)
      */
     protected $userIp;
+
+    /**
+     * Get user.
+     */
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    /**
+     * Set user.
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
 
     /**
      * Set cId.

@@ -37,7 +37,6 @@ class Admin
 
     /**
      * Get user.
-     *
      */
     public function getUser(): User
     {
@@ -46,7 +45,6 @@ class Admin
 
     /**
      * Set user.
-     *
      */
     public function setUser($user)
     {

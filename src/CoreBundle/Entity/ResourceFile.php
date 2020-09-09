@@ -178,6 +178,11 @@ class ResourceFile
         $this->dimensions = [];
     }
 
+    public function __toString(): string
+    {
+        return $this->getOriginalName();
+    }
+
     public function isImage(): bool
     {
         $mimeType = $this->getMimeType();
@@ -196,11 +201,6 @@ class ResourceFile
         }
 
         return false;
-    }
-
-    public function __toString(): string
-    {
-        return $this->getOriginalName();
     }
 
     /**

@@ -67,7 +67,7 @@ if ($conferenceManager) {
             }
             break;
         case 'regenerate_record':
-            if ($plugin->get('allow_regenerate_recording') !== 'true') {
+            if ('true' !== $plugin->get('allow_regenerate_recording')) {
                 api_not_allowed(true);
             }
             $recordId = isset($_GET['record_id']) ? $_GET['record_id'] : '';
@@ -131,9 +131,9 @@ if ($conferenceManager) {
             exit;
             break;
         case 'logout':
-            if ($plugin->get('allow_regenerate_recording') === 'true') {
+            if ('true' === $plugin->get('allow_regenerate_recording')) {
                 $setting = api_get_course_plugin_setting('bbb', 'bbb_force_record_generation', $courseInfo);
-                $allow = $setting == 1 ? true : false;
+                $allow = 1 == $setting ? true : false;
                 if ($allow) {
                     $result = $bbb->getMeetingByRemoteId($_GET['remote_id']);
                     if (!empty($result)) {
@@ -171,7 +171,7 @@ if ($conferenceManager) {
                         ]
                     );
 
-                    if ($meetingBBB === false) {
+                    if (false === $meetingBBB) {
                         //checking with the remote_id didn't work, so just in case and
                         // to provide backwards support, check with the id
                         $params = [
@@ -261,7 +261,7 @@ if ($conferenceManager) {
             break;
     }
 } else {
-    if ($action == 'logout') {
+    if ('logout' == $action) {
         // Update out_at field of user
         $remoteId = Database::escape_string($_GET['remote_id']);
         $meetingData = Database::select(
@@ -294,7 +294,7 @@ if ($conferenceManager) {
             $i = 0;
             foreach ($roomData as $item) {
                 $roomId = $roomData['id'];
-                if ($i == 0) {
+                if (0 == $i) {
                     Database::update(
                         $roomTable,
                         ['out_at' => api_get_utc_datetime()],
@@ -340,16 +340,16 @@ if ($bbb->isGlobalConference() && $bbb->isGlobalConferencePerUserEnabled()) {
     $userCanSeeJoinButton = true;
 }
 
-if (($meetingExists || $userCanSeeJoinButton) && ($maxUsers == 0 || $maxUsers > $usersOnline)) {
+if (($meetingExists || $userCanSeeJoinButton) && (0 == $maxUsers || $maxUsers > $usersOnline)) {
     $showJoinButton = true;
 }
 $conferenceUrl = $bbb->getConferenceUrl();
 $courseInfo = api_get_course_info();
 $formToString = '';
 
-if ($bbb->isGlobalConference() === false &&
+if (false === $bbb->isGlobalConference() &&
     !empty($courseInfo) &&
-    $plugin->get('enable_conference_in_course_groups') === 'true'
+    'true' === $plugin->get('enable_conference_in_course_groups')
 ) {
     $url = api_get_self().'?'.api_get_cidreq(true, false).'&gidReq=';
     $htmlHeadXtra[] = '<script>
@@ -381,7 +381,7 @@ if ($bbb->isGlobalConference() === false &&
         $groupList[0] = get_lang('Select');
         foreach ($groups as $groupData) {
             $itemGroupId = $groupData['iid'];
-            if (isset($meetingsGroup[$itemGroupId]) && $meetingsGroup[$itemGroupId] == 1) {
+            if (isset($meetingsGroup[$itemGroupId]) && 1 == $meetingsGroup[$itemGroupId]) {
                 $groupData['name'] .= ' ('.get_lang('Active').')';
             }
             $groupList[$itemGroupId] = $groupData['name'];

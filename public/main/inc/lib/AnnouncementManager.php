@@ -588,6 +588,7 @@ class AnnouncementManager
         if (!isset($courseInfo['real_id'])) {
             return false;
         }
+
         return false;
 
         $courseId = $courseInfo['real_id'];
@@ -952,7 +953,7 @@ class AnnouncementManager
             if (is_array($send_to['groups'])) {
                 foreach ($send_to['groups'] as $group) {
                     $groupInfo = api_get_group_entity($group);
-                    $announcement->addGroupLink( $course, $session, $groupInfo);
+                    $announcement->addGroupLink($course, $session, $groupInfo);
                     /*
                     if ($groupInfo) {
                         api_item_property_update(
@@ -971,7 +972,7 @@ class AnnouncementManager
             if (is_array($send_to['users'])) {
                 foreach ($send_to['users'] as $user) {
                     $user = api_get_user_entity($user);
-                    $announcement->addUserLink( $user, $course, $session, $group);
+                    $announcement->addUserLink($user, $course, $session, $group);
                     /*api_item_property_update(
                         $courseInfo,
                         TOOL_ANNOUNCEMENT,
@@ -1503,7 +1504,7 @@ class AnnouncementManager
                             comment = '$safe_file_comment',
                             path = '$safe_new_file_name',
                             size ='".intval($file['size'])."'
-					 	WHERE iid = '$id_attach'";
+                         WHERE iid = '$id_attach'";
                 $result = Database::query($sql);
                 if (false === $result) {
                     $return = -1;

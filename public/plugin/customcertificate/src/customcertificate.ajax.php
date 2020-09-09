@@ -3,8 +3,6 @@
 
 /**
  * Responses to AJAX calls.
- *
- * @package chamilo.plugin.customcertificate
  */
 $cidReset = true;
 
@@ -13,9 +11,9 @@ require_once __DIR__.'/../../../main/inc/global.inc.php';
 api_block_anonymous_users();
 
 $plugin = CustomCertificatePlugin::create();
-$enable = $plugin->get('enable_plugin_customcertificate') == 'true';
+$enable = 'true' == $plugin->get('enable_plugin_customcertificate');
 
-if ($enable === false) {
+if (false === $enable) {
     api_not_allowed();
 }
 

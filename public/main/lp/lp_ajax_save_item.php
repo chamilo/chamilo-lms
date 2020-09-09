@@ -332,31 +332,31 @@ function save_item(
                     }
 
                     if ($updateStatus) {
-                    /**
-                     * After setting the cmi.core.lesson_status to "completed",
-                     *   the LMS should now check to see if a Mastery Score has been
-                     *   specified in the cmi.student_data.mastery_score, if supported,
-                     *   or the manifest that the SCO is a member of.
-                     *   If a Mastery Score is provided and the SCO did set the
-                     *   cmi.core.score.raw, the LMS shall compare the cmi.core.score.raw
-                     *   to the Mastery Score and set the cmi.core.lesson_status to
-                     *   either "passed" or "failed".  If no Mastery Score is provided,
-                     *   the LMS will leave the cmi.core.lesson_status as "completed”.
-                     */
-                    if ($masteryScore && (isset($score) && -1 != $score)) {
-                        if ($score >= $masteryScore) {
-                            $myStatus = 'passed';
-                        } else {
-                            $myStatus = 'failed';
+                        /**
+                         * After setting the cmi.core.lesson_status to "completed",
+                         *   the LMS should now check to see if a Mastery Score has been
+                         *   specified in the cmi.student_data.mastery_score, if supported,
+                         *   or the manifest that the SCO is a member of.
+                         *   If a Mastery Score is provided and the SCO did set the
+                         *   cmi.core.score.raw, the LMS shall compare the cmi.core.score.raw
+                         *   to the Mastery Score and set the cmi.core.lesson_status to
+                         *   either "passed" or "failed".  If no Mastery Score is provided,
+                         *   the LMS will leave the cmi.core.lesson_status as "completed”.
+                         */
+                        if ($masteryScore && (isset($score) && -1 != $score)) {
+                            if ($score >= $masteryScore) {
+                                $myStatus = 'passed';
+                            } else {
+                                $myStatus = 'failed';
+                            }
                         }
+                        if ($debug) {
+                            error_log("Set status: $myStatus because lmsFinish || userNavigatesAway");
+                        }
+                        $myLPI->set_status($myStatus);
+                        $statusIsSet = true;
                     }
-                    if ($debug) {
-                        error_log("Set status: $myStatus because lmsFinish || userNavigatesAway");
-                    }
-                    $myLPI->set_status($myStatus);
-                    $statusIsSet = true;
                 }
-            }
             }
             // End of type=='sco'
         }
@@ -485,7 +485,7 @@ function save_item(
     }
     $progressBarSpecial = false;
     $scoreAsProgressSetting = api_get_configuration_value('lp_score_as_progress_enable');
-    if ($scoreAsProgressSetting === true) {
+    if (true === $scoreAsProgressSetting) {
         $scoreAsProgress = $myLP->getUseScoreAsProgress();
         if ($scoreAsProgress) {
             $score = $myLPI->get_score();

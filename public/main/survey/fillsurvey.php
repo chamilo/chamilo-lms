@@ -258,8 +258,8 @@ if (count($_POST) > 0) {
         // Looping through all the post values
         foreach ($_POST as $key => &$value) {
             // If the post value key contains the string 'question' then it is an answer on a question
-            if (strpos($key, 'other_question') === false &&
-                strpos($key, 'question') !== false && $key !== '_qf__question'
+            if (false === strpos($key, 'other_question') &&
+                false !== strpos($key, 'question') && '_qf__question' !== $key
             ) {
                 // Finding the question id by removing 'question'
                 $survey_question_id = str_replace('question', '', $key);
@@ -673,7 +673,7 @@ if (1 == $survey_data['shuffle']) {
 }
 
 $pageBreakText = [];
-if ((isset($_GET['show']) && $_GET['show'] != '') ||
+if ((isset($_GET['show']) && '' != $_GET['show']) ||
     isset($_POST['personality'])
 ) {
     // Getting all the questions for this page and add them to a
@@ -689,7 +689,7 @@ if ((isset($_GET['show']) && $_GET['show'] != '') ||
     }
 
     // If non-conditional survey
-    if ($survey_data['survey_type'] == '0') {
+    if ('0' == $survey_data['survey_type']) {
         if (empty($paged_questions)) {
             $sql = "SELECT * FROM $table_survey_question
                     WHERE
@@ -792,7 +792,7 @@ if ((isset($_GET['show']) && $_GET['show'] != '') ||
             $questions = [];
             while ($row = Database :: fetch_array($result, 'ASSOC')) {
                 // If the type is not a pagebreak we store it in the $questions array
-                if ($row['type'] !== 'pagebreak') {
+                if ('pagebreak' !== $row['type']) {
                     $sort = $row['sort'];
                     $questions[$sort]['question_id'] = $row['question_id'];
                     $questions[$sort]['survey_id'] = $row['survey_id'];

@@ -2,8 +2,6 @@
 /* For licensing terms, see /license.txt */
 /**
  * Update the plugin.
- *
- * @package chamilo.plugin.bigbluebutton
  */
 require_once __DIR__.'/config.php';
 

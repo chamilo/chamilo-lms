@@ -1511,10 +1511,10 @@ class MessageManager
                     Display::return_icon('message_reply.png', get_lang('Reply to this message')).'</a> &nbsp';
                 $message_content .= '<a href="inbox.php?action=deleteone&id='.$messageId.'&'.$social_link.'" >'.
                     Display::return_icon('delete.png', get_lang('DeleteMessage')).'</a>&nbsp;';
-                if ($idPrevMessage != 0) {
+                if (0 != $idPrevMessage) {
                     $message_content .= '<a title="'.get_lang('PrevMessage').'" href="view_message.php?type='.$type.'&id='.$idPrevMessage.'" ">'.Display::return_icon('icons/22/back.png', get_lang('ScormPrevious')).'</a> &nbsp';
                 }
-                if ($idNextMessage != 0) {
+                if (0 != $idNextMessage) {
                     $message_content .= '<a title="'.get_lang('NextMessage').'" href="view_message.php?type='.$type.'&id='.$idNextMessage.'">'.Display::return_icon('icons/22/move.png', get_lang('ScormNext')).'</a> &nbsp';
                 }
                 break;

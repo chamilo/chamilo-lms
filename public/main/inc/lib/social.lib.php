@@ -66,8 +66,8 @@ class SocialManager extends UserManager
     {
         $table = Database::get_main_table(TABLE_MAIN_USER_FRIEND_RELATION_TYPE);
         $userRelUserTable = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
-        if ($includeRH == false) {
-        $sql = 'SELECT rt.id as id
+        if (false == $includeRH) {
+            $sql = 'SELECT rt.id as id
                 FROM '.$table.' rt
                 WHERE rt.id = (
                     SELECT uf.relation_type
@@ -117,8 +117,8 @@ class SocialManager extends UserManager
                         }
                     }
                 }
-        } else {
-            return USER_UNKNOWN;
+            } else {
+                return USER_UNKNOWN;
             }
         }
     }
@@ -1354,7 +1354,7 @@ class SocialManager extends UserManager
      */
     public static function display_productions($user_id)
     {
-        return ;
+        return;
 
         $webdir_array = UserManager::get_user_picture_path_by_id($user_id, 'web');
         $sysdir = UserManager::getUserPathById($user_id, 'system');
@@ -3130,7 +3130,7 @@ class SocialManager extends UserManager
                 'content' => get_lang('Profile'),
             ],
         ];
-        $allowJustification = api_get_plugin_setting('justification', 'tool_enable') === 'true';
+        $allowJustification = 'true' === api_get_plugin_setting('justification', 'tool_enable');
         if ($allowJustification) {
             $plugin = Justification::create();
             $headers[] = [
@@ -3139,8 +3139,8 @@ class SocialManager extends UserManager
             ];
         }
 
-        $allowPauseTraining = api_get_plugin_setting('pausetraining', 'tool_enable') === 'true';
-        $allowEdit = api_get_plugin_setting('pausetraining', 'allow_users_to_edit_pause_formation') === 'true';
+        $allowPauseTraining = 'true' === api_get_plugin_setting('pausetraining', 'tool_enable');
+        $allowEdit = 'true' === api_get_plugin_setting('pausetraining', 'allow_users_to_edit_pause_formation');
         if ($allowPauseTraining && $allowEdit) {
             $plugin = PauseTraining::create();
             $headers[] = [

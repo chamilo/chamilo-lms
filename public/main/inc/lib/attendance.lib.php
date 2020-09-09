@@ -2,7 +2,6 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CAttendance;
 use Chamilo\CourseBundle\Entity\CAttendanceCalendar;
@@ -56,8 +55,6 @@ class Attendance
 
         return $data;
     }
-
-
 
     /**
      * Get the total number of attendance inside current course and current session.
@@ -187,7 +184,7 @@ class Attendance
                     api_get_user_id(),
                     api_get_course_info()
                 ) || api_is_drh();
-                if ( $isDrhOfCourse || api_is_allowed_to_edit(null, true)) {
+                if ($isDrhOfCourse || api_is_allowed_to_edit(null, true)) {
                     // Link to edit
                     $row[1] = '<a href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$id.$student_param.'">'.$name.'</a>'.$session_star;
                 } else {
@@ -1422,11 +1419,11 @@ class Attendance
     /**
      * Get all attendance calendar data inside current attendance.
      *
-     * @param int    $attendanceId
-     * @param string $type
-     * @param int    $calendar_id
-     * @param int    $groupId
-     * @param bool   $showAll      = false show group calendar items or not
+     * @param int      $attendanceId
+     * @param string   $type
+     * @param int      $calendar_id
+     * @param int      $groupId
+     * @param bool     $showAll      = false show group calendar items or not
      * @param int      $course_id
      * @param DateTime $startDate    Filter calendar with a start date
      * @param DateTime $endDate      Filter calendar with a end date

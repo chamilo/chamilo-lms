@@ -157,8 +157,8 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
         $course[1] = get_course_visibility_icon($course['visibility']).PHP_EOL
             .Display::url(Security::remove_XSS($course[1]), $coursePath.$course['directory'].'/index.php').PHP_EOL
             .$showVisualCode;
-        $course[5] = $course[5] == SUBSCRIBE_ALLOWED ? get_lang('Yes') : get_lang('No');
-        $course[6] = $course[6] == UNSUBSCRIBE_ALLOWED ? get_lang('Yes') : get_lang('No');
+        $course[5] = SUBSCRIBE_ALLOWED == $course[5] ? get_lang('Yes') : get_lang('No');
+        $course[6] = UNSUBSCRIBE_ALLOWED == $course[6] ? get_lang('Yes') : get_lang('No');
 
         $actions = [];
         $actions[] = Display::url(
@@ -296,7 +296,7 @@ $content = '';
 $message = '';
 $actions = '';
 
-if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
+if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
     // Get all course categories
     $interbreadcrumb[] = [
         'url' => 'index.php',
@@ -414,7 +414,7 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
         api_get_path(WEB_CODE_PATH).'admin/course_add.php'
     );
 
-    if (api_get_setting('course_validation') === 'true') {
+    if ('true' === api_get_setting('course_validation')) {
         $actions1 .= Display::url(
             Display::return_icon(
                 'course_request_pending.png',

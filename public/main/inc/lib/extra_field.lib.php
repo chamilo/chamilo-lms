@@ -2613,21 +2613,21 @@ JAVASCRIPT;
                             }
 
                             if (!isset($rule->data)) {
-                                    $conditionArray[] = ' ('
+                                $conditionArray[] = ' ('
                                 .$this->get_where_clause($rule->field, $rule->op, $rule->data)
                                 .') ';
-                                    $extraFields[] = ['field' => $rule->field, 'id' => $field_option['id']];
+                                $extraFields[] = ['field' => $rule->field, 'id' => $field_option['id']];
                             }
                                 break;
                             case self::FIELD_TYPE_TAG:
                             if (isset($rule->data)) {
-                                    if (is_int($rule->data) && -1 == $rule->data) {
-                                        break;
+                                if (is_int($rule->data) && -1 == $rule->data) {
+                                    break;
                                 }
 
-                                    //$where = $this->get_where_clause($rule->field, $rule->op, $rule->data, 'OR');
-                                    //$conditionArray[] = " ( $where ) ";
-                                    $extraFields[] = [
+                                //$where = $this->get_where_clause($rule->field, $rule->op, $rule->data, 'OR');
+                                //$conditionArray[] = " ( $where ) ";
+                                $extraFields[] = [
                                 'field' => $rule->field,
                                 'id' => $field_option['id'],
                                 'data' => $rule->data,
@@ -2793,15 +2793,15 @@ JAVASCRIPT;
             if (empty($options['where'])) {
                 $options['where'] = ' 1 = 1 ';
             }
-                $options['where'] = str_replace(' 1 = 1  AND', '', $options['where']);
-                // Always OR
-                $counter = 1;
-                foreach ($extra_fields as $extra_info) {
-                    $extra_field_info = $extra_info['extra_field_info'];
-                    $inject_joins .= " INNER JOIN $this->table_field_values fv$counter
+            $options['where'] = str_replace(' 1 = 1  AND', '', $options['where']);
+            // Always OR
+            $counter = 1;
+            foreach ($extra_fields as $extra_info) {
+                $extra_field_info = $extra_info['extra_field_info'];
+                $inject_joins .= " INNER JOIN $this->table_field_values fv$counter
                                        ON ($alias.".$this->primaryKey." = fv$counter.".$this->handler_id.') ';
-                    // Add options
-                    switch ($extra_field_info['field_type']) {
+                // Add options
+                switch ($extra_field_info['field_type']) {
                         case self::FIELD_TYPE_SELECT:
                         case self::FIELD_TYPE_DOUBLE_SELECT:
                             $options['where'] = str_replace(
@@ -2850,15 +2850,14 @@ JAVASCRIPT;
                             );
                             break;
                     }
-                    $field_value_to_join[] = " fv$counter.$this->handler_id ";
-                    $counter++;
-                }
+                $field_value_to_join[] = " fv$counter.$this->handler_id ";
+                $counter++;
             }
+        }
 
         if (!empty($options['where'])) {
             $where .= ' AND '.$options['where'];
         }
-
 
         $order = '';
         if (!empty($options['order'])) {

@@ -77,7 +77,7 @@ if ((user_is_author($id) || $isDrhOfCourse || $allowEdition || $isDrhOfSession) 
         ) ||
         $isCourseManager || user_is_author($id) || $isDrhOfCourse || $idDrhOfSession
     ) {
-        if ($page === 'edit') {
+        if ('edit' === $page) {
             $url = api_get_path(WEB_CODE_PATH).'work/edit.php?id='.$folderData['id'].'&item_id='.$work['id'].'&'.api_get_cidreq();
         } else {
             $url = api_get_path(WEB_CODE_PATH).'work/view.php?id='.$work['id'].'&'.api_get_cidreq();
@@ -104,14 +104,14 @@ if ((user_is_author($id) || $isDrhOfCourse || $allowEdition || $isDrhOfSession) 
                 );
 
                 if ($allowEdition) {
-                        $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-                        $sql = "UPDATE $work_table
+                    $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+                    $sql = "UPDATE $work_table
                                 SET
                                     qualificator_id = '".api_get_user_id()."',
                                     qualification = '".api_float_val($_POST['qualification'])."',
                                     date_of_qualification = '".api_get_utc_datetime()."'
                                 WHERE c_id = ".$courseInfo['real_id']." AND id = $id";
-                        Database::query($sql);
+                    Database::query($sql);
                     Display::addFlash(Display::return_message(get_lang('Updated')));
 
                     $resultUpload = uploadWork(
@@ -155,7 +155,7 @@ if ((user_is_author($id) || $isDrhOfCourse || $allowEdition || $isDrhOfSession) 
                 break;
             case 'delete_correction':
                 if ($allowEdition && isset($work['url_correction']) && !empty($work['url_correction'])) {
-                        deleteCorrection($courseInfo, $work);
+                    deleteCorrection($courseInfo, $work);
                     Display::addFlash(Display::return_message(get_lang('Deleted')));
                 }
 

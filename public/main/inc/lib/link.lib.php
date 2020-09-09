@@ -2,7 +2,6 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CLink;
 use Chamilo\CourseBundle\Entity\CLinkCategory;
@@ -71,7 +70,7 @@ class Link extends Model
      *
      * @param array $params
      * @param bool  $showQuery Whether to show the query in logs when
-     *                          calling parent's save method
+     *                         calling parent's save method
      *
      * @return bool True if link could be saved, false otherwise
      */

@@ -3,10 +3,10 @@
 
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\PluginBundle\Entity\WhispeakAuth\LogEvent;
 use Chamilo\PluginBundle\Entity\WhispeakAuth\LogEventLp;
 use Chamilo\PluginBundle\Entity\WhispeakAuth\LogEventQuiz;
-use Chamilo\CoreBundle\Entity\User;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**

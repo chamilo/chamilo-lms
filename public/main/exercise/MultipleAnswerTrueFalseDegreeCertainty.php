@@ -73,7 +73,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                 <th width="50%">'.get_lang('Answer').'</th>';
 
         // show column comment when feedback is enable
-        if ($objEx->getFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
+        if (EXERCISE_FEEDBACK_TYPE_EXAM != $objEx->getFeedbackType()) {
             $html .= '<th width="50%">'.get_lang('Comment').'</th>';
         }
         $html .= '</tr>';

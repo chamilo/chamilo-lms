@@ -7,8 +7,6 @@ use TheNetworg\OAuth2\Client\Provider\Azure;
  * AzureActiveDirectory plugin class.
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
- *
- * @package chamilo.plugin.azure_active_directory
  */
 class AzureActiveDirectory extends Plugin
 {

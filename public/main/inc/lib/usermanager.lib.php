@@ -288,7 +288,7 @@ class UserManager
 
         if (empty($expirationDate) || '0000-00-00 00:00:00' === $expirationDate) {
             $expirationDate = null;
-            // Default expiration date
+        // Default expiration date
             // if there is a default duration of a valid account then
             // we have to change the expiration_date accordingly
             // Accept 0000-00-00 00:00:00 as a null value to avoid issues with
@@ -5288,8 +5288,8 @@ class UserManager
      * Gets the info about a gradebook certificate for a user by course.
      *
      * @param array $course_info The course code
-     * @param int    $session_id
-     * @param int    $user_id     The user id
+     * @param int   $session_id
+     * @param int   $user_id     The user id
      *
      * @return array if there is not information return false
      */

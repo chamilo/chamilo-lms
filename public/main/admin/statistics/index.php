@@ -13,7 +13,7 @@ api_protect_admin_script();
 $interbreadcrumb[] = ['url' => '../index.php', 'name' => get_lang('Administration')];
 
 $report = isset($_REQUEST['report']) ? $_REQUEST['report'] : '';
-$sessionDuration = isset($_GET['session_duration']) ? (int)$_GET['session_duration'] : '';
+$sessionDuration = isset($_GET['session_duration']) ? (int) $_GET['session_duration'] : '';
 $validated = false;
 
 if (
@@ -225,7 +225,7 @@ in_array(
                     $dateEnd = Security::remove_XSS($_REQUEST['range_end']);
                 }
 
-                $statusId = (int)$_REQUEST['status_id'];
+                $statusId = (int) $_REQUEST['status_id'];
 
                 $conditions = "&date_start=$dateStart&date_end=$dateEnd&status=$statusId";
 
@@ -529,7 +529,7 @@ switch ($report) {
             get_lang('StartDate'),
             get_lang('EndDate'),
             get_lang('Language'),
-            get_lang('Status')
+            get_lang('Status'),
         ];
         $headers[] = get_lang('NumberOfStudents');
         $row = 0;
@@ -790,7 +790,7 @@ switch ($report) {
             }
 
             if (isset($_REQUEST['table_users_active_per_page'])) {
-                $limit = (int)$_REQUEST['table_users_active_per_page'];
+                $limit = (int) $_REQUEST['table_users_active_per_page'];
             }
 
             $users = UserManager::getUserListExtraConditions(
@@ -1130,7 +1130,7 @@ switch ($report) {
                         if ($validDate) {
                             $date1 = new DateTime($row['value']);
                             $interval = $now->diff($date1);
-                            $years = (int)$interval->y;
+                            $years = (int) $interval->y;
 
                             if ($years >= 16 && $years <= 17) {
                                 $all['16-17']++;

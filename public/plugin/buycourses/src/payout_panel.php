@@ -1,8 +1,6 @@
 <?php
 /**
  * User Panel.
- *
- * @package chamilo.plugin.buycourses
  */
 /**
  * Initialization.
@@ -12,7 +10,7 @@ $cidReset = true;
 require_once __DIR__.'/../../../main/inc/global.inc.php';
 
 $plugin = BuyCoursesPlugin::create();
-$includeSessions = $plugin->get('include_sessions') === 'true';
+$includeSessions = 'true' === $plugin->get('include_sessions');
 
 $userInfo = api_get_user_info();
 
@@ -26,7 +24,7 @@ foreach ($payouts as $payout) {
         'sale_id' => $payout['sale_id'],
         'reference' => $payout['sale_reference'],
         'date' => api_format_date($payout['date'], DATE_TIME_FORMAT_LONG_24H),
-        'payout_date' => ($payout['payout_date'] === '0000-00-00 00:00:00')
+        'payout_date' => ('0000-00-00 00:00:00' === $payout['payout_date'])
             ? '-'
             : api_format_date($payout['payout_date'], DATE_TIME_FORMAT_LONG_24H),
         'currency' => $payout['iso_code'],

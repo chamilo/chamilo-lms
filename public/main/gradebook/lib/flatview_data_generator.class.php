@@ -671,13 +671,13 @@ class FlatViewDataGenerator
                     }
                 } else {
                     if (null !== $item_value) {
-                    $item_value = $item_value * $item->get_weight();
-                }
+                        $item_value = $item_value * $item->get_weight();
+                    }
                 }
             } else {
                 if ($score) {
-                $item_value = $score[0] / $divide * $item->get_weight();
-            }
+                    $item_value = $score[0] / $divide * $item->get_weight();
+                }
             }
 
             $item_total += $item->get_weight();
@@ -743,7 +743,7 @@ class FlatViewDataGenerator
                         }
                     } else {
                         if (isset($score[0])) {
-                        $row[] = $temp_score.' ';
+                            $row[] = $temp_score.' ';
                         } else {
                             $row[] = '';
                         }
@@ -953,11 +953,11 @@ class FlatViewDataGenerator
                     $displayScore = null;
 
                     if (null !== $score) {
-                    $divide = 0 == $score[1] ? 1 : $score[1];
-                    $item_value += $score[0] / $divide * $item->get_weight();
-                    $item_total += $item->get_weight();
-                    $score_denom = (0 == $score[1]) ? 1 : $score[1];
-                    $score_final = ($score[0] / $score_denom) * 100;
+                        $divide = 0 == $score[1] ? 1 : $score[1];
+                        $item_value += $score[0] / $divide * $item->get_weight();
+                        $item_total += $item->get_weight();
+                        $score_denom = (0 == $score[1]) ? 1 : $score[1];
+                        $score_final = ($score[0] / $score_denom) * 100;
 
                         $displayScore = trim(
                             $scoreDisplay->display_score(

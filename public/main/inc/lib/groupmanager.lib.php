@@ -2,8 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CGroupCategory;
 
@@ -381,7 +381,7 @@ class GroupManager
         $users = self::get_users($group_id);
         $group_ids = [];
 
-        for ($group_nr = 1; $group_nr <= $number_of_groups; ++$group_nr) {
+        for ($group_nr = 1; $group_nr <= $number_of_groups; $group_nr++) {
             $group_ids[] = self::create_group(
                 get_lang('Subgroup').' '.$group_nr,
                 $category_id,
@@ -398,7 +398,7 @@ class GroupManager
                 $user_id,
                 $groupInfo
             );
-            ++$members[$group_ids[$groupId]];
+            $members[$group_ids[$groupId]]++;
         }
 
         foreach ($members as $group_id => $places) {
@@ -2824,7 +2824,7 @@ class GroupManager
                     $categoryInfo['self_unreg_allowed'],
                     $categoryInfo['groups_per_user'],
                 ];
-                ++$count;
+                $count++;
             }
         }
 
@@ -2894,7 +2894,7 @@ class GroupManager
                     break;
                 }
             }
-            ++$count;
+            $count++;
         }
 
         return $data;

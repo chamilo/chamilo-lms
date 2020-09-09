@@ -2,8 +2,6 @@
 /* For license terms, see /license.txt */
 /**
  * Configuration script for the Buy Courses plugin.
- *
- * @package chamilo.plugin.buycourses
  */
 use Doctrine\ORM\Tools\Pagination\Paginator;
 
@@ -12,9 +10,9 @@ $cidReset = true;
 require_once __DIR__.'/../../../main/inc/global.inc.php';
 
 $plugin = BuyCoursesPlugin::create();
-$includeSession = $plugin->get('include_sessions') === 'true';
-$includeServices = $plugin->get('include_services') === 'true';
-$taxEnable = $plugin->get('tax_enable') === 'true';
+$includeSession = 'true' === $plugin->get('include_sessions');
+$includeServices = 'true' === $plugin->get('include_services');
+$taxEnable = 'true' === $plugin->get('tax_enable');
 
 api_protect_admin_script(true);
 
@@ -36,7 +34,7 @@ $courses = new Paginator($query, $fetchJoinCollection = true);
 foreach ($courses as $course) {
     $item = $plugin->getItemByProduct($course->getId(), BuyCoursesPlugin::PRODUCT_TYPE_COURSE);
     $course->buyCourseData = [];
-    if ($item !== false) {
+    if (false !== $item) {
         $course->buyCourseData = $item;
     }
 }

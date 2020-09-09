@@ -241,7 +241,7 @@ $lpType = $learnPath->get_type();
 // using the score as progress would not work anymore (we would have to divide
 // between the two without knowing if the second has any score at all)
 // TODO: automatically cancel this setting if items >= 2
-if ($scoreAsProgressSetting && $countItems < 2 && $lpType == 2) {
+if ($scoreAsProgressSetting && $countItems < 2 && 2 == $lpType) {
     $scoreAsProgress = $learnPath->getUseScoreAsProgress();
     $form->addElement(
         'checkbox',

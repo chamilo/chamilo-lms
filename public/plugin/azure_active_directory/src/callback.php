@@ -83,13 +83,13 @@ try {
         throw new Exception('User not found');
     }
 
-    if ($userInfo['active'] != '1') {
+    if ('1' != $userInfo['active']) {
         throw new Exception('account_inactive');
     }
 } catch (Exception $exception) {
     $message = Display::return_message($plugin->get_lang('InvalidId'), 'error');
 
-    if ($exception->getMessage() === 'account_inactive') {
+    if ('account_inactive' === $exception->getMessage()) {
         $message = Display::return_message(get_lang('AccountInactive'), 'error');
     }
 

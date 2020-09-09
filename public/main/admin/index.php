@@ -2,7 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\Hook\HookAdminBlock;
 
 /**
  * Index page of the admin tools.

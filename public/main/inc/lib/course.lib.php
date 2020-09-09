@@ -2146,7 +2146,7 @@ class CourseManager
                 $sql .= " AND s.access_start_date >= '$date_from' AND s.access_end_date <= '$date_to'";
             }
 
-            if ($sessionId != 0) {
+            if (0 != $sessionId) {
                 $sql .= " AND scu.session_id = $sessionId";
             }
 
@@ -2814,7 +2814,7 @@ class CourseManager
                     if (!empty($courses['sort'])) {
                         $course_sort = $courses['sort'];
                     }
-                    if ($counter == 0) {
+                    if (0 == $counter) {
                         $sql = "UPDATE $TABLECOURSUSER
                                 SET sort = sort+1
                                 WHERE
@@ -2962,7 +2962,7 @@ class CourseManager
         $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_course_field = Database::get_main_table(TABLE_EXTRA_FIELD);
         $tbl_course_field_value = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
-                $tbl_url_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+        $tbl_url_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
 
         $extraFieldType = EntityExtraField::COURSE_FIELD_TYPE;
 
@@ -2993,13 +2993,13 @@ class CourseManager
             if (api_get_multiple_access_url()) {
                 //we filter the courses by the active URL
                 $coursesSelect = '';
-                if (count($courseList) == 1) {
+                if (1 == count($courseList)) {
                     $coursesSelect = $courseList[0];
                 } else {
                     $coursesSelect = implode(',', $courseList);
                 }
                 $access_url_id = api_get_current_access_url_id();
-                if ($access_url_id != -1) {
+                if (-1 != $access_url_id) {
                     $sql = "SELECT c_id FROM $tbl_url_course
                             WHERE access_url_id = $access_url_id
                             AND c_id IN ($coursesSelect)";
@@ -3856,7 +3856,7 @@ class CourseManager
 
                 $params['extrafields'] = CourseManager::getExtraFieldsToBePresented($course_info['real_id']);
 
-                if ($showCustomIcon === 'true') {
+                if ('true' === $showCustomIcon) {
                     $params['thumbnails'] = $course_info['course_image'];
                     $params['image'] = $course_info['course_image_large'];
                 }
@@ -4164,7 +4164,7 @@ class CourseManager
                 );
             }
 
-            if ($course_info['visibility'] != COURSE_VISIBILITY_CLOSED) {
+            if (COURSE_VISIBILITY_CLOSED != $course_info['visibility']) {
                 $params['notifications'] = $showNotification;
             }
             $courseAdded[] = $course_info['real_id'];
@@ -5148,7 +5148,7 @@ class CourseManager
         $join_access_url = $where_access_url = '';
         if (api_get_multiple_access_url()) {
             $access_url_id = api_get_current_access_url_id();
-            if ($access_url_id != -1) {
+            if (-1 != $access_url_id) {
                 $tbl_url_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
                 $join_access_url = "LEFT JOIN $tbl_url_course url_rel_course
                 ON url_rel_course.c_id = tcfv.item_id ";
@@ -6134,7 +6134,7 @@ class CourseManager
         if ($addShortCut && empty($sessionId)) {
             $addStudents = [];
             foreach ($userList as $user) {
-                if ($user['status_rel'] == STUDENT) {
+                if (STUDENT == $user['status_rel']) {
                     $addStudents[] = $user['user_id'];
                 }
             }
@@ -6779,7 +6779,7 @@ class CourseManager
     /**
      * Display the description button of a course in the course catalog.
      *
-     * @param array $course
+     * @param array  $course
      * @param string $url
      *
      * @return string HTML string
@@ -6791,14 +6791,14 @@ class CourseManager
         }
 
         $class = '';
-        if (api_get_setting('show_courses_descriptions_in_catalog') === 'true') {
+        if ('true' === api_get_setting('show_courses_descriptions_in_catalog')) {
             $title = $course['title'];
             if (empty($url)) {
                 $class = 'ajax';
                 $url = api_get_path(WEB_CODE_PATH).
                     'inc/ajax/course_home.ajax.php?a=show_course_information&code='.$course['code'];
             } else {
-                if (strpos($url, 'ajax') !== false) {
+                if (false !== strpos($url, 'ajax')) {
                     $class = 'ajax';
                 }
             }

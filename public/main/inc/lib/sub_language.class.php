@@ -3,6 +3,7 @@
 
 /**
  * Class SubLanguageManager.
+ *
  * @deprecated
  */
 class SubLanguageManager

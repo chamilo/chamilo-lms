@@ -61,23 +61,23 @@ if ('1' === $lp->getSubscribeUsers()) {
             }
         }
     } else {
-if (empty($sessionId)) {
-    $users = CourseManager::get_user_list_from_course_code(
+        if (empty($sessionId)) {
+            $users = CourseManager::get_user_list_from_course_code(
         $courseCode,
         0,
         null,
         null,
                 STUDENT
     );
-} else {
-    $users = CourseManager::get_user_list_from_course_code(
+        } else {
+            $users = CourseManager::get_user_list_from_course_code(
         $courseCode,
         $sessionId,
         null,
         null,
                 0
     );
-}
+        }
     }
 }
 

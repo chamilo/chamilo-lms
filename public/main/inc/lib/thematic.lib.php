@@ -2,7 +2,6 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CThematic;
 use Chamilo\CourseBundle\Entity\CThematicAdvance;
@@ -734,7 +733,7 @@ class Thematic
                 // group all data group by thematic id
                 $tmp = [];
                 while ($row = Database::fetch_array($res, 'ASSOC')) {
-                    if ($withLocalTime == true) {
+                    if (true == $withLocalTime) {
                         $row['start_date'] = api_get_local_time($row['start_date']);
                     }
                     $tmp[] = $row['thematic_id'];

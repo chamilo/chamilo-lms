@@ -611,6 +611,14 @@ class User implements UserInterface, EquatableInterface
     }
 
     /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->username;
+    }
+
+    /**
      * @return int
      */
     public function getId()
@@ -629,14 +637,6 @@ class User implements UserInterface, EquatableInterface
     public function getUuid(): UuidInterface
     {
         return $this->uuid;
-    }
-
-    /**
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->username;
     }
 
     public function setResourceNode(ResourceNode $resourceNode): self

@@ -658,6 +658,7 @@ class HookAdvancedSubscription extends HookObserver implements HookAdminBlockObs
 
             return $data;
         } //Else hook type is not valid, nothing to do
+
         return false;
     }
 
@@ -682,6 +683,7 @@ class HookAdvancedSubscription extends HookObserver implements HookAdminBlockObs
 
             return $data;
         } // Else: hook type is not valid, nothing to do
+
         return false;
     }
 }

@@ -490,7 +490,7 @@ class Statistics
             }
             $percentage = ($total > 0 ? number_format(100 * $number / $total, 1, ',', '.') : '0');
 
-            $content .= '<tr class="row_'.($i % 2 == 0 ? 'odd' : 'even').'">
+            $content .= '<tr class="row_'.(0 == $i % 2 ? 'odd' : 'even').'">
                     <td width="25%" style="vertical-align:top;">'.$subtitle.'</td>
                     <td width="60%">'.Display::bar_progress($percentage, false).'</td>
                     <td width="5%" align="right" style="vertical-align:top;">'.$number_label.'</td>';
@@ -582,7 +582,7 @@ class Statistics
             $res_last_x = Database::query($sql_last_x);
             $result_last_x = [];
             while ($obj = Database::fetch_object($res_last_x)) {
-                $stat_date = ($type === 'day') ? $periodCollection[$obj->stat_date] : $obj->stat_date;
+                $stat_date = ('day' === $type) ? $periodCollection[$obj->stat_date] : $obj->stat_date;
                 $result_last_x[$stat_date] = $obj->number_of_logins;
             }
             $content .= self::printStats(get_lang('LastLogins').' ('.$period.')', $result_last_x, true);
@@ -613,7 +613,7 @@ class Statistics
     /**
      * Print the number of recent logins.
      *
-     * @param bool $distinct        whether to only give distinct users stats, or *all* logins
+     * @param bool  $distinct        whether to only give distinct users stats, or *all* logins
      * @param int   $sessionDuration Number of minutes a session must have lasted at a minimum to be taken into account
      * @param array $periods         List of number of days we want to query (default: [1, 7, 31] for last 1 day, last 7 days, last 31 days)
      *
@@ -666,7 +666,7 @@ class Statistics
             $sql = "SELECT count($field) AS number
                     FROM $table $table_url
                     WHERE ";
-            if ($sessionDuration == 0) {
+            if (0 == $sessionDuration) {
                 $sql .= " logout_date != login_date AND ";
             } else {
                 $sql .= " UNIX_TIMESTAMP(logout_date) - UNIX_TIMESTAMP(login_date) > $sessionDuration AND ";
@@ -678,7 +678,7 @@ class Statistics
 
         $sql = "SELECT count($field) AS number
                 FROM $table $table_url ";
-        if ($sessionDuration == 0) {
+        if (0 == $sessionDuration) {
             $sql .= " WHERE logout_date != login_date $where_url";
         } else {
             $sql .= " WHERE UNIX_TIMESTAMP(logout_date) - UNIX_TIMESTAMP(login_date) > $sessionDuration $where_url";
@@ -695,7 +695,7 @@ class Statistics
             $content = self::printStats(get_lang('DistinctUsersLogins'), $totalLogin, false);
         } else {
             $content = self::printStats(get_lang('Logins'), $totalLogin, false);
-    }
+        }
 
         return $content;
     }
@@ -738,7 +738,7 @@ class Statistics
         $sql = "SELECT count($field) AS number, date(login_date) as login_date
                 FROM $table $table_url
                 WHERE ";
-        if ($sessionDuration == 0) {
+        if (0 == $sessionDuration) {
             $sql .= " logout_date != login_date AND ";
         } else {
             $sql .= " UNIX_TIMESTAMP(logout_date) - UNIX_TIMESTAMP(login_date) > $sessionDuration AND ";
@@ -821,6 +821,7 @@ class Statistics
         if (empty($result)) {
             $result = self::getToolsStats();
         }
+
         return self::printStats(get_lang('Tools access'), $result, true);
     }
 
@@ -1335,7 +1336,7 @@ class Statistics
             exit;
         }
 
-        $content =  Display::page_header(get_lang('Logins by date'));
+        $content = Display::page_header(get_lang('Logins by date'));
 
         $actions = '';
         $form = new FormValidator('frm_logins_by_date', 'get');

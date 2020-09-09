@@ -1046,7 +1046,7 @@ switch ($action) {
 
         if (!empty($userExtraFields)) {
             foreach ($userExtraFields as $extra) {
-                if ($extra['1'] == 'ruc') {
+                if ('ruc' == $extra['1']) {
                     continue;
                 }
                 $columns[] = $extra['1'];

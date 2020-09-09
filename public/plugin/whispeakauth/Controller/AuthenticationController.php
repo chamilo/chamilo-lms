@@ -13,8 +13,6 @@ use WhispeakAuthPlugin;
 
 /**
  * Class AuthenticationController.
- *
- * @package Chamilo\PluginBundle\WhispeakAuth\Controller
  */
 class AuthenticationController extends BaseController
 {

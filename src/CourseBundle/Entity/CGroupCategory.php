@@ -134,14 +134,14 @@ class CGroupCategory extends AbstractResource implements ResourceInterface
     {
     }
 
-    public function getIid(): int
-    {
-        return $this->iid;
-    }
-
     public function __toString(): string
     {
         return $this->getTitle();
+    }
+
+    public function getIid(): int
+    {
+        return $this->iid;
     }
 
     /**

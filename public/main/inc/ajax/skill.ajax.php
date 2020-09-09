@@ -8,7 +8,6 @@ use Chamilo\CoreBundle\Entity\SkillRelItem;
 /**
  * Responses to AJAX calls.
  */
-
 require_once __DIR__.'/../global.inc.php';
 
 $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;

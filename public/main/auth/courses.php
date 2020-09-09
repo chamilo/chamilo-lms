@@ -485,7 +485,7 @@ switch ($action) {
                     }
 
                     $course['rating'] = '';
-                    if ($hideRating === false) {
+                    if (false === $hideRating) {
                         $ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';
                         $rating = Display::return_rating_system(
                             'star_'.$course['real_id'],

@@ -29,7 +29,7 @@ $hasRelation = SocialManager::get_relation_between_contacts(
     $userId,
     true
 );
-if ($hasRelation == 0) {
+if (0 == $hasRelation) {
     /* if has not relation, check if are admin */
     api_protect_admin_script();
 }

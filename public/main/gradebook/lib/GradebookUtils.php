@@ -959,7 +959,7 @@ class GradebookUtils
                 if ($my_cat->get_course_code() == api_get_course_id()) {
                     $grade_model_id = $my_cat->get_grade_model_id();
                     if (empty($grade_model_id)) {
-                        if ($my_cat->get_parent_id() == 0) {
+                        if (0 == $my_cat->get_parent_id()) {
                             $select_gradebook->addOption(get_lang('Default'), $my_cat->get_id());
                             $cats_added[] = $my_cat->get_id();
                         } else {

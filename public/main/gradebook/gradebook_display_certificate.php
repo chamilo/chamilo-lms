@@ -74,8 +74,8 @@ if ('true' === $filter) {
 
 $content = '';
 $courseCode = api_get_course_id();
-$allowCustomCertificate = api_get_plugin_setting('customcertificate', 'enable_plugin_customcertificate') === 'true' &&
-    api_get_course_setting('customcertificate_course_enable', $courseInfo) == 1;
+$allowCustomCertificate = 'true' === api_get_plugin_setting('customcertificate', 'enable_plugin_customcertificate') &&
+    1 == api_get_course_setting('customcertificate_course_enable', $courseInfo);
 
 $tags = Certificate::notificationTags();
 
@@ -195,7 +195,7 @@ $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('AssessmentsListOfLearner
 $this_section = SECTION_COURSES;
 Display::display_header('');
 
-if ($action === 'delete') {
+if ('delete' === $action) {
     $check = Security::check_token('get');
     if ($check) {
         $certificate = new Certificate($_GET['certificate_id']);

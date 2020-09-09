@@ -149,7 +149,6 @@ class DatePicker extends HTML_QuickForm_text
 
         return $js;
 
-
         $js .= "<script>
             $(function() {
                 var txtDate = $('#$id'),

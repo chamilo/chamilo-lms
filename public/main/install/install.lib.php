@@ -23,7 +23,6 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
  * - a function get_old_version_settings to retrieve the config file settings
  *   of older versions before upgrading.
  */
-
 define('SYSTEM_CONFIG_FILENAME', 'configuration.dist.php');
 define('USERNAME_MAX_LENGTH', 100);
 
@@ -95,6 +94,7 @@ function checkExtension(
                 return Display::label(get_lang('Extension installed but not enabled'), 'important');
             }
         }
+
         return Display::label($returnSuccess, 'success');
     } else {
         if ($optional) {
@@ -130,7 +130,6 @@ function checkPhpSetting(
 
     return Display::label($currentPhpValue.' '.$returnSuccess, 'important');
 }
-
 
 /**
  * This function return the value of a php.ini setting if not "" or if exists,
@@ -1395,26 +1394,26 @@ function display_database_settings_form(
             <div class="col-sm-3"><?php echo get_lang('ex.').' 3306'; ?></div>
             <?php
     }
-            echo '</div><div class="form-group row">';
-            //database user username
-            $example_login = get_lang('ex.').' root';
-            displayDatabaseParameter(
+    echo '</div><div class="form-group row">';
+    //database user username
+    $example_login = get_lang('ex.').' root';
+    displayDatabaseParameter(
                 $installType,
                 get_lang('Database Login'),
                 'dbUsernameForm',
                 $dbUsernameForm,
                 $example_login
             );
-            echo '</div><div class="form-group row">';
-            //database user password
-            $example_password = get_lang('ex.').' '.api_generate_password();
-            displayDatabaseParameter($installType, get_lang('Database Password'), 'dbPassForm', $dbPassForm, $example_password);
-            echo '</div><div class="form-group row">';
-            // Database Name fix replace weird chars
-            if (INSTALL_TYPE_UPDATE != $installType) {
-                $dbNameForm = str_replace(['-', '*', '$', ' ', '.'], '', $dbNameForm);
-            }
-            displayDatabaseParameter(
+    echo '</div><div class="form-group row">';
+    //database user password
+    $example_password = get_lang('ex.').' '.api_generate_password();
+    displayDatabaseParameter($installType, get_lang('Database Password'), 'dbPassForm', $dbPassForm, $example_password);
+    echo '</div><div class="form-group row">';
+    // Database Name fix replace weird chars
+    if (INSTALL_TYPE_UPDATE != $installType) {
+        $dbNameForm = str_replace(['-', '*', '$', ' ', '.'], '', $dbNameForm);
+    }
+    displayDatabaseParameter(
                 $installType,
                 get_lang('Main Chamilo database (DB)'),
                 'dbNameForm',
@@ -1423,8 +1422,8 @@ function display_database_settings_form(
                 null,
                 'id="optional_param1"'
                 );
-        echo '</div>';
-        if (INSTALL_TYPE_UPDATE != $installType) {                    ?>
+    echo '</div>';
+    if (INSTALL_TYPE_UPDATE != $installType) {                    ?>
         <div class="form-group row">
             <div class="col-sm-4"></div>
             <div class="col-sm-8">
@@ -3569,11 +3568,11 @@ function generateRandomToken()
 }
 
 /**
- * This function checks if the given file can be created or overwritten
+ * This function checks if the given file can be created or overwritten.
  *
- * @param string $file     Full path to a file
+ * @param string $file Full path to a file
  *
- * @return string   An HTML coloured label showing success or failure
+ * @return string An HTML coloured label showing success or failure
  */
 function checkCanCreateFile($file)
 {
@@ -3587,6 +3586,7 @@ function checkCanCreateFile($file)
         $write = @file_put_contents($file, '');
         if ($write) {
             unlink($file);
+
             return Display::label(get_lang('Writable'), 'success');
         } else {
             return Display::label(get_lang('Not writable'), 'important');

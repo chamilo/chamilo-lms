@@ -2048,10 +2048,10 @@ function api_get_course_plugin_setting($plugin, $settingName, $courseInfo = [])
     if (-1 === $value) {
         // Check global settings
         $value = api_get_plugin_setting($plugin, $settingName);
-        if ($value === 'true') {
+        if ('true' === $value) {
             return 1;
         }
-        if ($value === 'false') {
+        if ('false' === $value) {
             return 0;
         }
         if (null === $value) {
@@ -2129,15 +2129,15 @@ function api_get_anonymous_id()
 }
 
 /**
- * @param int    $courseId
- * @param int    $sessionId
- * @param int    $groupId
+ * @param int $courseId
+ * @param int $sessionId
+ * @param int $groupId
  *
  * @return string
  */
 function api_get_cidreq_params($courseId, $sessionId = 0, $groupId = 0)
 {
-    $courseId = !empty($courseId) ? (int) $courseId :0;
+    $courseId = !empty($courseId) ? (int) $courseId : 0;
     $sessionId = !empty($sessionId) ? (int) $sessionId : 0;
     $groupId = !empty($groupId) ? (int) $groupId : 0;
 
@@ -4924,7 +4924,6 @@ function copy_folder_course_session(
                 ];
                 $document_id = Database::insert($table, $params);
                 if ($document_id) {
-
                     /*api_item_property_update(
                         $course_info,
                         TOOL_DOCUMENT,
@@ -7115,7 +7114,7 @@ function api_is_global_chat_enabled()
 }
 
 /**
- * @param int $item_id
+ * @param int   $item_id
  * @param int   $tool_id
  * @param int   $group_id   id
  * @param array $courseInfo
@@ -7123,7 +7122,6 @@ function api_is_global_chat_enabled()
  * @param int   $userId
  *
  * @deprecated
- *
  */
 function api_set_default_visibility(
     $item_id,
@@ -7631,7 +7629,7 @@ function api_remove_tags_with_space($in_html, $in_double_quote_replace = true)
  */
 function api_drh_can_access_all_session_content()
 {
-    return api_get_setting('drh_can_access_all_session_content') === 'true';
+    return 'true' === api_get_setting('drh_can_access_all_session_content');
 }
 
 /**
@@ -8590,7 +8588,7 @@ function api_number_format($number, $decimals = 0, $decimalSeparator = '.', $tho
  * Set location url with a exit break by default.
  *
  * @param string $url
- * @param bool $exit
+ * @param bool   $exit
  */
 function api_location($url, $exit = true)
 {

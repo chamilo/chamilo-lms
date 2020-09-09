@@ -969,6 +969,33 @@ class ResourceController extends AbstractResourceController implements CourseCon
     }
 
     /**
+     * Upload form.
+     *
+     * @Route("/{tool}/{type}/{id}/upload", name="chamilo_core_resource_upload", methods={"GET", "POST"},
+     *                                      options={"expose"=true})
+     */
+    public function uploadAction(Request $request, $tool, $type, $id): Response
+    {
+        $repository = $this->getRepositoryFromRequest($request);
+        $resourceNode = $repository->getResourceNodeRepository()->find($id);
+
+        $this->denyAccessUnlessGranted(
+            ResourceNodeVoter::EDIT,
+            $resourceNode,
+            $this->trans('Unauthorised access to resource')
+        );
+
+        $this->setBreadCrumb($request, $resourceNode);
+
+        $routeParams = $this->getResourceParams($request);
+        $routeParams['tool'] = $tool;
+        $routeParams['type'] = $type;
+        $routeParams['id'] = $id;
+
+        return $this->render($repository->getTemplates()->getFromAction(__FUNCTION__), $routeParams);
+    }
+
+    /**
      * @param string $mode
      * @param string $filter
      *
@@ -1042,33 +1069,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $response->headers->set('Content-Type', $mimeType ?: 'application/octet-stream');
 
         return $response;
-    }
-
-    /**
-     * Upload form.
-     *
-     * @Route("/{tool}/{type}/{id}/upload", name="chamilo_core_resource_upload", methods={"GET", "POST"},
-     *                                      options={"expose"=true})
-     */
-    public function uploadAction(Request $request, $tool, $type, $id): Response
-    {
-        $repository = $this->getRepositoryFromRequest($request);
-        $resourceNode = $repository->getResourceNodeRepository()->find($id);
-
-        $this->denyAccessUnlessGranted(
-            ResourceNodeVoter::EDIT,
-            $resourceNode,
-            $this->trans('Unauthorised access to resource')
-        );
-
-        $this->setBreadCrumb($request, $resourceNode);
-
-        $routeParams = $this->getResourceParams($request);
-        $routeParams['tool'] = $tool;
-        $routeParams['type'] = $type;
-        $routeParams['id'] = $id;
-
-        return $this->render($repository->getTemplates()->getFromAction(__FUNCTION__), $routeParams);
     }
 
     /**

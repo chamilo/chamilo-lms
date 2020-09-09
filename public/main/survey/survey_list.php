@@ -94,7 +94,7 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
         }
         $surveyData['title'] = trim(strip_tags($surveyData['title']));
 
-switch ($action) {
+        switch ($action) {
             case 'export_all':
                 $filename = $surveyData['code'].'.xlsx';
                 $exportList[] = @SurveyUtil::export_complete_report_xls($surveyData, $filename, 0, true);
@@ -117,7 +117,7 @@ switch ($action) {
                             false
                         )
                     );
-        }
+                }
                 break;
             case 'multiplicate':
                 $result = SurveyManager::multiplicateQuestions($surveyData);
@@ -155,7 +155,7 @@ switch ($action) {
         }
     }
 
-    if ($action === 'export_all') {
+    if ('export_all' === $action) {
         $tempZipFile = api_get_path(SYS_ARCHIVE_PATH).api_get_unique_id().'.zip';
         $zip = new PclZip($tempZipFile);
         foreach ($exportList as $file) {

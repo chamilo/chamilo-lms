@@ -24,6 +24,3 @@ interface ImsAnswerInterface
      */
     public function imsExportResponsesDeclaration($questionIdent, Question $question = null);
 }
-
-
-

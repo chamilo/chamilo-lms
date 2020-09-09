@@ -508,7 +508,7 @@ class Event
         $position = Database::escape_string($position);
         $now = api_get_utc_datetime();
         $course_id = (int) $course_id;
-        $recording = api_get_configuration_value('quiz_answer_extra_recording') == true;
+        $recording = true == api_get_configuration_value('quiz_answer_extra_recording');
 
         // check user_id or get from context
         if (empty($user_id)) {
@@ -2203,9 +2203,8 @@ class Event
                     login_user_id = $userId AND
                     (UNIX_TIMESTAMP(logout_date) - UNIX_TIMESTAMP(login_date)) = '$virtualTime'
                 ORDER BY login_date DESC LIMIT 0,1";
-            $result = Database::query($sql);
+        $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
-
             $row = Database::fetch_row($result);
             $loginAccessId = $row[0];
             $sql = "DELETE FROM $platformTrackingTable
@@ -2278,7 +2277,7 @@ class Event
             return false;
         }
 
-        $loginAs = (int) Session::read('login_as') === true;
+        $loginAs = true === (int) Session::read('login_as');
 
         $logInfo['user_id'] = isset($logInfo['user_id']) ? $logInfo['user_id'] : api_get_user_id();
         $logInfo['date_reg'] = isset($logInfo['date_reg']) ? $logInfo['date_reg'] : api_get_utc_datetime();

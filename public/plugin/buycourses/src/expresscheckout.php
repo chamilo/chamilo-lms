@@ -2,8 +2,6 @@
 /* For license terms, see /license.txt */
 /**
  * PayPal Express Checkout Module.
- *
- * @package chamilo.plugin.buycourses
  */
 /**
  * Init.
@@ -30,7 +28,7 @@ $paymentType = "Sale";
  */
 $resArray = CallShortcutExpressCheckout($paymentAmount, $currencyCodeType, $paymentType, $returnURL, $cancelURL);
 $ack = strtoupper($resArray["ACK"]);
-if ($ack == "SUCCESS" || $ack == "SUCCESSWITHWARNING") {
+if ("SUCCESS" == $ack || "SUCCESSWITHWARNING" == $ack) {
     RedirectToPayPal($resArray["TOKEN"]);
 } else {
     //Display a user friendly Error on the page using any of the following error information returned by PayPal

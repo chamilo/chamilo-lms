@@ -9,8 +9,6 @@ use FFMpeg\Format\Audio\Wav;
 
 /**
  * Class BaseController.
- *
- * @package Chamilo\PluginBundle\WhispeakAuth\Controller
  */
 abstract class BaseController
 {

@@ -926,8 +926,6 @@ class SystemAnnouncementManager
      *
      * @param string $visible see self::VISIBLE_* constants
      * @param int    $id      The identifier of the announcement to display
-     *
-     * @return array
      */
     public static function getAnnouncements($visible, $id = null): array
     {

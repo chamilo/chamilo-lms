@@ -9,8 +9,6 @@ use GuzzleHttp\Exception\RequestException;
 
 /**
  * Class ApiRequest.
- *
- * @package Chamilo\PluginBundle\WhispeakAuth\Request
  */
 class ApiRequest
 {

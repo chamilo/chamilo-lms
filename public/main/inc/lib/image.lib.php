@@ -6,7 +6,9 @@
  * This class provides a layer to manage images.
  *
  * @author Julio Montoya <gugli100@gmail.com>
+ *
  * @deprecated
+ *
  * @todo move in a DB configuration setting
  */
 class Image

@@ -1115,10 +1115,10 @@ class UserGroup extends Model
     }
 
     /**
-     * @param int $sidx
-     * @param int $sord
-     * @param int $start
-     * @param int $limit
+     * @param int    $sidx
+     * @param int    $sord
+     * @param int    $start
+     * @param int    $limit
      * @param string $extraWhereCondition
      *
      * @return array
@@ -1715,7 +1715,7 @@ class UserGroup extends Model
      * @param string $id group id
      * @param string picture group name
      * @param string height
-     * @param int    $size_picture picture size it can be small_,  medium_  or  big_
+     * @param int $size_picture picture size it can be small_,  medium_  or  big_
      * @param string style css
      *
      * @return array with the file and the style of an image i.e $array['file'] $array['style']
@@ -2569,7 +2569,7 @@ class UserGroup extends Model
 
     /**
      * @param string $user_id
-     * @param int $relation_type
+     * @param int    $relation_type
      * @param bool   $with_image
      *
      * @deprecated

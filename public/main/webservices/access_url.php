@@ -2,9 +2,6 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\Hook\HookWSRegistration;
-
 require_once __DIR__.'/../inc/global.inc.php';
 $debug = true;
 

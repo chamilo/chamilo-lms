@@ -34,8 +34,8 @@ if (empty($courseList) && empty($sessionList)) {
 $hideExportLink = api_get_setting('hide_certificate_export_link');
 $hideExportLinkStudent = api_get_setting('hide_certificate_export_link_students');
 $allowExport = true;
-if ($hideExportLink === 'true' ||
-    (api_is_student() && $hideExportLinkStudent === 'true')
+if ('true' === $hideExportLink ||
+    (api_is_student() && 'true' === $hideExportLinkStudent)
 ) {
     $allowExport = false;
 }

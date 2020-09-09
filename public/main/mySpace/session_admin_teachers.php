@@ -17,17 +17,17 @@ if (!$allowToTrack) {
     api_not_allowed(true);
 }
 
-$export_csv = isset($_GET['export']) && $_GET['export'] === 'csv' ? true : false;
+$export_csv = isset($_GET['export']) && 'csv' === $_GET['export'] ? true : false;
 $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
 $nameTools = get_lang('Teachers');
 $this_section = SECTION_TRACKING;
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('MySpace')];
 
-if (isset($_GET['user_id']) && $_GET['user_id'] != '' && !isset($_GET['type'])) {
+if (isset($_GET['user_id']) && '' != $_GET['user_id'] && !isset($_GET['type'])) {
     $interbreadcrumb[] = ['url' => 'teachers.php', 'name' => get_lang('Teachers')];
 }
 
-if (isset($_GET['user_id']) && $_GET['user_id'] != '' && isset($_GET['type']) && $_GET['type'] === 'coach') {
+if (isset($_GET['user_id']) && '' != $_GET['user_id'] && isset($_GET['type']) && 'coach' === $_GET['type']) {
     $interbreadcrumb[] = ['url' => 'coaches.php', 'name' => get_lang('Tutors')];
 }
 
@@ -46,7 +46,7 @@ function get_count_users()
                 $coaches = CourseManager::get_coachs_from_course($sessionId, $courseId);
                 foreach ($coaches as $coach) {
                     if (!empty($keyword)) {
-                        if (stripos($coach['full_name'], $keyword) === false) {
+                        if (false === stripos($coach['full_name'], $keyword)) {
                             continue;
                         }
                     }
@@ -84,7 +84,7 @@ function get_users($from, $limit, $column, $direction)
                 $coaches = CourseManager::get_coachs_from_course($sessionId, $courseId);
                 foreach ($coaches as $coach) {
                     if (!empty($keyword)) {
-                        if (stripos($coach['full_name'], $keyword) === false) {
+                        if (false === stripos($coach['full_name'], $keyword)) {
                             continue;
                         }
                     }
@@ -140,7 +140,7 @@ function get_users($from, $limit, $column, $direction)
         }
 
         $urlDetails = $url."?student=$student_id&origin=teacher_details";
-        if (isset($_GET['id_coach']) && intval($_GET['id_coach']) != 0) {
+        if (isset($_GET['id_coach']) && 0 != intval($_GET['id_coach'])) {
             $urlDetails = $url."?student=$student_id&id_coach=$coach_id&id_session=$sessionId";
         }
 

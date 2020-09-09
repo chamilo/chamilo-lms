@@ -97,7 +97,6 @@ if ($is_survey_type_1 && ('addgroup' == $action || 'deletegroup' == $action)) {
     exit;
 }
 
-
 $my_question_id_survey = isset($_GET['question_id']) ? (int) $_GET['question_id'] : null;
 $my_survey_id_survey = (int) $_GET['survey_id'];
 $message_information = isset($_GET['message']) ? Security::remove_XSS($_GET['message']) : null;
@@ -110,7 +109,7 @@ if (!empty($action)) {
                 $sendmsg = 'QuestionAdded';
             } else {
                 $sendmsg = 'ErrorOccurred';
-    }
+            }
             break;
         case 'delete':
             $result = SurveyManager::delete_survey_question(
@@ -122,7 +121,7 @@ if (!empty($action)) {
                 $sendmsg = 'ErrorOccured';
             } else {
                 $sendmsg = 'Deleted';
-    }
+            }
             break;
         case 'moveup':
         case 'movedown':
@@ -229,11 +228,11 @@ if (0 == $survey_data['survey_type']) {
         Display::return_icon('commentquestion.png', get_lang('Comment'), null, ICON_SIZE_BIG),
         $urlQuestion.'&type=comment&survey_id='.$survey_id
     );
-        echo Display::url(
+    echo Display::url(
         Display::return_icon('mcua.png', get_lang('SurveyMultipleAnswerWithOther'), null, ICON_SIZE_BIG),
         $urlQuestion.'&type=multiplechoiceother&survey_id='.$survey_id
     );
-    if ($survey_data['one_question_per_page'] == 0) {
+    if (0 == $survey_data['one_question_per_page']) {
         echo Display::url(
             Display::return_icon('yesno.png', get_lang('SurveyQuestionSelectiveDisplay'), null, ICON_SIZE_BIG),
             $urlQuestion.'&type=selectivedisplay&survey_id='.$survey_id
@@ -299,7 +298,7 @@ $questionsGroupClass = '';
 while ($row = Database::fetch_array($result, 'ASSOC')) {
     $breakClass = '';
     // Visually impact questions between page breaks by changing the bg color
-    if ($row['type'] == 'pagebreak') {
+    if ('pagebreak' == $row['type']) {
         $breakClass = ' highlight';
         if (empty($questionsGroupClass)) {
             $questionsGroupClass = 'row_even';
@@ -323,13 +322,13 @@ while ($row = Database::fetch_array($result, 'ASSOC')) {
         echo api_get_local_time($parts[0]).' - '.api_get_local_time($parts[1]);
     }
 
-    if ($row['type'] === 'yesno') {
+    if ('yesno' === $row['type']) {
         $tool_name = get_lang('YesNo');
-    } elseif ($row['type'] === 'multiplechoice') {
+    } elseif ('multiplechoice' === $row['type']) {
         $tool_name = get_lang('UniqueSelect');
-    } elseif ($row['type'] === 'multipleresponse') {
+    } elseif ('multipleresponse' === $row['type']) {
         $tool_name = get_lang('MultipleChoiceMultipleAnswers');
-    } elseif ($row['type'] === 'selectivedisplay') {
+    } elseif ('selectivedisplay' === $row['type']) {
         $tool_name = get_lang('SurveyQuestionSelectiveDisplay');
     } else {
         $tool_name = get_lang(api_ucfirst(Security::remove_XSS($row['type'])));

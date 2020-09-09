@@ -42,7 +42,9 @@ class CForumThread extends AbstractResource implements ResourceInterface
 
     /**
      * @var string
+     *
      * @Assert\NotBlank()
+     *
      * @ORM\Column(name="thread_title", type="string", length=255, nullable=true)
      */
     protected $threadTitle;

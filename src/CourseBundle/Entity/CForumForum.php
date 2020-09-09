@@ -42,6 +42,7 @@ class CForumForum extends AbstractResource implements ResourceInterface
 
     /**
      * @var string
+     *
      * @Assert\NotBlank
      *
      * @ORM\Column(name="forum_title", type="string", length=255, nullable=false)

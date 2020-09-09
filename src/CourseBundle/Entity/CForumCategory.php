@@ -42,6 +42,7 @@ class CForumCategory extends AbstractResource implements ResourceInterface
 
     /**
      * @var string
+     *
      * @Assert\NotBlank()
      *
      * @ORM\Column(name="cat_title", type="string", length=255, nullable=false)

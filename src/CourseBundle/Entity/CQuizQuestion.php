@@ -43,7 +43,9 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
 
     /**
      * @var string
+     *
      * @Assert\NotBlank()
+     *
      * @ORM\Column(name="question", type="text", nullable=false)
      */
     protected $question;

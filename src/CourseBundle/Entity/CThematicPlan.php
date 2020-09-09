@@ -7,6 +7,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * CThematicPlan.
@@ -32,6 +33,15 @@ class CThematicPlan extends AbstractResource implements ResourceInterface
     protected $iid;
 
     /**
+     * @var string
+     *
+     * @Assert\NotBlank()
+     *
+     * @ORM\Column(name="title", type="string", length=255, nullable=false)
+     */
+    protected $title;
+
+    /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
@@ -45,13 +55,6 @@ class CThematicPlan extends AbstractResource implements ResourceInterface
      * @ORM\JoinColumn(name="thematic_id", referencedColumnName="iid")
      */
     protected $thematic;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="title", type="string", length=255, nullable=false)
-     */
-    protected $title;
 
     /**
      * @var string

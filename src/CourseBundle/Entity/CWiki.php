@@ -57,7 +57,9 @@ class CWiki
 
     /**
      * @var string
+     *
      * @Assert\NotBlank()
+     *
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
     protected $title;

@@ -5,20 +5,10 @@
 namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use ApiPlatform\Core\Annotation\ApiResource;
-use ApiPlatform\Core\Annotation\ApiProperty;
 
 /**
  * UserRelTag.
  *
- * @ApiResource(
- *      attributes={"security"="is_granted('ROLE_ADMIN')"},
- *      iri="http://schema.org/userRelTag",
- *      normalizationContext={"groups"={"user:read"}},
- *      denormalizationContext={"groups"={"user:write"}},
- *      collectionOperations={"get"},
- *      itemOperations={"get"}
- * )
  * @ORM\Table(
  *  name="user_rel_tag",
  *  indexes={
@@ -32,7 +22,6 @@ class UserRelTag
 {
     /**
      * @var User
-     * @ApiProperty(iri="http://schema.org/Person")
      * @ORM\ManyToOne (
      *    targetEntity="Chamilo\CoreBundle\Entity\User",
      *    inversedBy="userRelTags"

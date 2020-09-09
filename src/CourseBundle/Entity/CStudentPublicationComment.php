@@ -8,20 +8,9 @@ use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Chamilo\CoreBundle\Entity\User;
-use ApiPlatform\Core\Annotation\ApiResource;
-use ApiPlatform\Core\Annotation\ApiProperty;
 
 /**
  * CStudentPublicationComment.
- *
- * @ApiResource(
- *      attributes={"security"="is_granted('ROLE_ADMIN')"},
- *      iri="http://schema.org/cStudentPublicationComment",
- *      normalizationContext={"groups"={"user:read"}},
- *      denormalizationContext={"groups"={"user:write"}},
- *      collectionOperations={"get"},
- *      itemOperations={"get"}
- * )
  *
  * @ORM\Table(
  *  name="c_student_publication_comment",
@@ -74,7 +63,6 @@ class CStudentPublicationComment extends AbstractResource implements ResourceInt
 
     /**
      * @var User
-     * @ApiProperty(iri="http://schema.org/Person")
      * @ORM\ManyToOne (
      *    targetEntity="Chamilo\CoreBundle\Entity\User",
      *    inversedBy="cStudentPublicationComments"

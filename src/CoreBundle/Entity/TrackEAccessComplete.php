@@ -5,20 +5,10 @@
 namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use ApiPlatform\Core\Annotation\ApiResource;
-use ApiPlatform\Core\Annotation\ApiProperty;
 
 /**
  * TrackEAccessComplete.
  *
- * @ApiResource(
- *      attributes={"security"="is_granted('ROLE_ADMIN')"},
- *      iri="http://schema.org/trackEAccessComplete",
- *      normalizationContext={"groups"={"user:read"}},
- *      denormalizationContext={"groups"={"user:write"}},
- *      collectionOperations={"get"},
- *      itemOperations={"get"}
- * )
  * @ORM\Table(name="track_e_access_complete")
  * @ORM\Entity
  */
@@ -35,7 +25,6 @@ class TrackEAccessComplete
 
     /**
      * @var User
-     * @ApiProperty(iri="http://schema.org/Person")
      * @ORM\OneToOne (
      *    targetEntity="Chamilo\CoreBundle\Entity\User",
      *    inversedBy="trackEAccessComplete"

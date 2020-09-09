@@ -6,20 +6,9 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Chamilo\CoreBundle\Entity\User;
-use ApiPlatform\Core\Annotation\ApiResource;
-use ApiPlatform\Core\Annotation\ApiProperty;
 
 /**
  * CChatConnected.
- *
- * @ApiResource(
- *      attributes={"security"="is_granted('ROLE_ADMIN')"},
- *      iri="http://schema.org/cChatConnected",
- *      normalizationContext={"groups"={"user:read"}},
- *      denormalizationContext={"groups"={"user:write"}},
- *      collectionOperations={"get"},
- *      itemOperations={"get"}
- * )
  *
  * @ORM\Table(
  *  name="c_chat_connected",
@@ -65,7 +54,6 @@ class CChatConnected
 
     /**
      * @var User
-     * @ApiProperty(iri="http://schema.org/Person")
      * @ORM\ManyToOne (
      *    targetEntity="Chamilo\CoreBundle\Entity\User",
      *    inversedBy="cChatConnected"

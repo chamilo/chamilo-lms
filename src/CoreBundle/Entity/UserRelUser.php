@@ -5,20 +5,10 @@
 namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use ApiPlatform\Core\Annotation\ApiResource;
-use ApiPlatform\Core\Annotation\ApiProperty;
 
 /**
  * UserRelUser.
  *
- * @ApiResource(
- *      attributes={"security"="is_granted('ROLE_ADMIN')"},
- *      iri="http://schema.org/userRelUser",
- *      normalizationContext={"groups"={"user:read"}},
- *      denormalizationContext={"groups"={"user:write"}},
- *      collectionOperations={"get"},
- *      itemOperations={"get"}
- * )
  * @ORM\Table(name="user_rel_user", indexes={
  *     @ORM\Index(name="idx_user_rel_user__user", columns={"user_id"}),
  *     @ORM\Index(name="idx_user_rel_user__friend_user", columns={"friend_user_id"}),
@@ -39,7 +29,6 @@ class UserRelUser
 
     /**
      * @var User
-     * @ApiProperty(iri="http://schema.org/Person")
      * @ORM\ManyToOne (
      *    targetEntity="Chamilo\CoreBundle\Entity\User",
      *    inversedBy="userRelationships"

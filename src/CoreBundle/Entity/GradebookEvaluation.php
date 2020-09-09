@@ -7,20 +7,10 @@ namespace Chamilo\CoreBundle\Entity;
 use Chamilo\CoreBundle\Traits\CourseTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use ApiPlatform\Core\Annotation\ApiResource;
-use ApiPlatform\Core\Annotation\ApiProperty;
 
 /**
  * GradebookEvaluation.
  *
- * @ApiResource(
- *      attributes={"security"="is_granted('ROLE_ADMIN')"},
- *      iri="http://schema.org/gradebookEvaluation",
- *      normalizationContext={"groups"={"user:read"}},
- *      denormalizationContext={"groups"={"user:write"}},
- *      collectionOperations={"get"},
- *      itemOperations={"get"}
- * )
  * @ORM\Table(name="gradebook_evaluation",
  *  indexes={
  *     @ORM\Index(name="idx_ge_cat", columns={"category_id"}),
@@ -56,7 +46,6 @@ class GradebookEvaluation
 
     /**
      * @var User
-     * @ApiProperty(iri="http://schema.org/Person")
      * @ORM\ManyToOne (
      *    targetEntity="Chamilo\CoreBundle\Entity\User",
      *    inversedBy="gradebookEvaluations"

@@ -337,9 +337,7 @@ class User implements UserInterface, EquatableInterface
     protected $portals;
 
     /**
-     * @ApiSubresource()
      * @var Admin
-     * @ApiProperty(iri="http://schema.org/admin")
      * @ORM\OneToOne(
      *     targetEntity="Chamilo\CoreBundle\Entity\Admin",
      *     mappedBy="user",
@@ -350,8 +348,6 @@ class User implements UserInterface, EquatableInterface
     protected $admin;
 
     /**
-     * @ApiSubresource()
-     * @ApiProperty(iri="http://schema.org/gradebookCertificate")
      * @var ArrayCollection
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CoreBundle\Entity\GradebookCertificate",
@@ -363,8 +359,6 @@ class User implements UserInterface, EquatableInterface
     protected $gradebookCertificates;
 
     /**
-     * @ApiSubresource()
-     * @ApiProperty(iri="http://schema.org/gradebookEvaluation")
      * @var ArrayCollection
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CoreBundle\Entity\GradebookEvaluation",
@@ -376,8 +370,6 @@ class User implements UserInterface, EquatableInterface
     protected $gradebookEvaluations;
 
     /**
-     * @ApiSubresource()
-     * @ApiProperty(iri="http://schema.org/gradebookLink")
      * @var ArrayCollection
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CoreBundle\Entity\GradebookLink",
@@ -389,8 +381,6 @@ class User implements UserInterface, EquatableInterface
     protected $gradebookLinks;
 
     /**
-     * @ApiSubresource()
-     * @ApiProperty(iri="http://schema.org/gradebookResult")
      * @var ArrayCollection
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CoreBundle\Entity\GradebookResult",
@@ -402,8 +392,6 @@ class User implements UserInterface, EquatableInterface
     protected $gradebookResults;
 
     /**
-     * @ApiSubresource()
-     * @ApiProperty(iri="http://schema.org/gradebookResultLog")
      * @var ArrayCollection
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CoreBundle\Entity\GradebookResultLog",
@@ -415,8 +403,6 @@ class User implements UserInterface, EquatableInterface
     protected $gradebookResultLogs;
 
     /**
-     * @ApiSubresource()
-     * @ApiProperty(iri="http://schema.org/gradebookScoreLog")
      * @var ArrayCollection
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CoreBundle\Entity\GradebookScoreLog",
@@ -428,8 +414,6 @@ class User implements UserInterface, EquatableInterface
     protected $gradebookScoreLogs;
 
     /**
-     * @ApiSubresource()
-     * @ApiProperty(iri="http://schema.org/sequenceValue")
      * @var ArrayCollection
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CoreBundle\Entity\SequenceValue",
@@ -441,8 +425,6 @@ class User implements UserInterface, EquatableInterface
     protected $sequenceValues;
 
     /**
-     * @ApiSubresource()
-     * @ApiProperty(iri="http://schema.org/trackEExerciseConfirmation")
      * @var ArrayCollection
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CoreBundle\Entity\TrackEExerciseConfirmation",
@@ -454,8 +436,6 @@ class User implements UserInterface, EquatableInterface
     protected $trackEExerciseConfirmations;
 
     /**
-     * @ApiSubresource()
-     * @ApiProperty(iri="http://schema.org/templates")
      * @var ArrayCollection
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CoreBundle\Entity\Templates",
@@ -467,8 +447,6 @@ class User implements UserInterface, EquatableInterface
     protected $templates;
 
     /**
-     * @ApiSubresource()
-     * @ApiProperty(iri="http://schema.org/trackEAttempt")
      * @var ArrayCollection
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CoreBundle\Entity\TrackEAttempt",
@@ -480,8 +458,6 @@ class User implements UserInterface, EquatableInterface
     protected $trackEAttempts;
 
     /**
-     * @ApiSubresource()
-     * @ApiProperty(iri="http://schema.org/trackECourseAccess")
      * @var ArrayCollection
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CoreBundle\Entity\TrackECourseAccess",
@@ -493,8 +469,6 @@ class User implements UserInterface, EquatableInterface
     protected $trackECourseAccess;
 
     /**
-     * @ApiSubresource()
-     * @ApiProperty(iri="http://schema.org/userCourseCategory")
      * @var ArrayCollection
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CoreBundle\Entity\UserCourseCategory",
@@ -506,8 +480,6 @@ class User implements UserInterface, EquatableInterface
     protected $userCourseCategorys;
 
     /**
-     * @ApiSubresource()
-     * @ApiProperty(iri="http://schema.org/userRelCourseVote")
      * @var ArrayCollection
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CoreBundle\Entity\UserRelCourseVote",
@@ -519,8 +491,6 @@ class User implements UserInterface, EquatableInterface
     protected $userRelCourseVotes;
 
     /**
-     * @ApiSubresource()
-     * @ApiProperty(iri="http://schema.org/userRelTag")
      * @var ArrayCollection
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CoreBundle\Entity\UserRelTag",
@@ -532,8 +502,6 @@ class User implements UserInterface, EquatableInterface
     protected $userRelTags;
 
     /**
-     * @ApiSubresource()
-     * @ApiProperty(iri="http://schema.org/gradebookLinkevalLog")
      * @var ArrayCollection
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CoreBundle\Entity\GradebookLinkevalLog",
@@ -545,8 +513,6 @@ class User implements UserInterface, EquatableInterface
     protected $gradebookLinkevalLogs;
 
     /**
-     * @ApiSubresource()
-     * @ApiProperty(iri="http://schema.org/userRelUser")
      * @var ArrayCollection
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CoreBundle\Entity\UserRelUser",
@@ -558,8 +524,6 @@ class User implements UserInterface, EquatableInterface
     protected $userRelationships;
 
     /**
-     * @ApiSubresource()
-     * @ApiProperty(iri="http://schema.org/cAttendanceResult")
      * @var ArrayCollection
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CourseBundle\Entity\CAttendanceResult",
@@ -571,8 +535,6 @@ class User implements UserInterface, EquatableInterface
     protected $cAttendanceResults;
 
     /**
-     * @ApiSubresource()
-     * @ApiProperty(iri="http://schema.org/cAttendanceSheet")
      * @var ArrayCollection
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CourseBundle\Entity\CAttendanceSheet",
@@ -584,8 +546,6 @@ class User implements UserInterface, EquatableInterface
     protected $cAttendanceSheets;
 
     /**
-     * @ApiSubresource()
-     * @ApiProperty(iri="http://schema.org/cBlogRating")
      * @var ArrayCollection
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CourseBundle\Entity\CBlogRating",
@@ -597,8 +557,6 @@ class User implements UserInterface, EquatableInterface
     protected $cBlogRatings;
 
     /**
-     * @ApiSubresource()
-     * @ApiProperty(iri="http://schema.org/cBlogRelUser")
      * @var ArrayCollection
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CourseBundle\Entity\CBlogRelUser",
@@ -610,8 +568,6 @@ class User implements UserInterface, EquatableInterface
     protected $cBlogRelUsers;
 
     /**
-     * @ApiSubresource()
-     * @ApiProperty(iri="http://schema.org/cBlogTaskRelUser")
      * @var ArrayCollection
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CourseBundle\Entity\CBlogTaskRelUser",
@@ -623,8 +579,6 @@ class User implements UserInterface, EquatableInterface
     protected $cBlogTaskRelUsers;
 
     /**
-     * @ApiSubresource()
-     * @ApiProperty(iri="http://schema.org/cChatConnected")
      * @var ArrayCollection
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CourseBundle\Entity\CChatConnected",
@@ -636,8 +590,6 @@ class User implements UserInterface, EquatableInterface
     protected $cChatConnected;
 
     /**
-     * @ApiSubresource()
-     * @ApiProperty(iri="http://schema.org/cDropboxCategory")
      * @var ArrayCollection
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CourseBundle\Entity\CDropboxCategory",
@@ -648,8 +600,6 @@ class User implements UserInterface, EquatableInterface
      */
     protected $cDropboxCategorys;
     /**
-     * @ApiSubresource()
-     * @ApiProperty(iri="http://schema.org/cDropboxPerson")
      * @var ArrayCollection
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CourseBundle\Entity\CDropboxPerson",
@@ -661,8 +611,6 @@ class User implements UserInterface, EquatableInterface
     protected $cDropboxPersons;
 
     /**
-     * @ApiSubresource()
-     * @ApiProperty(iri="http://schema.org/cForumMailcue")
      * @var ArrayCollection
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CourseBundle\Entity\CForumMailcue",
@@ -673,8 +621,6 @@ class User implements UserInterface, EquatableInterface
      */
     protected $cForumMailcues;
     /**
-     * @ApiSubresource()
-     * @ApiProperty(iri="http://schema.org/cForumNotification")
      * @var ArrayCollection
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CourseBundle\Entity\CForumNotification",
@@ -685,8 +631,6 @@ class User implements UserInterface, EquatableInterface
      */
     protected $cForumNotifications;
     /**
-     * @ApiSubresource()
-     * @ApiProperty(iri="http://schema.org/cForumThreadQualify")
      * @var ArrayCollection
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CourseBundle\Entity\CForumThreadQualify",
@@ -697,8 +641,6 @@ class User implements UserInterface, EquatableInterface
      */
     protected $cForumThreadQualifys;
     /**
-     * @ApiSubresource()
-     * @ApiProperty(iri="http://schema.org/cForumThreadQualifyLog")
      * @var ArrayCollection
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CourseBundle\Entity\CForumThreadQualifyLog",
@@ -709,8 +651,6 @@ class User implements UserInterface, EquatableInterface
      */
     protected $cForumThreadQualifyLogs;
     /**
-     * @ApiSubresource()
-     * @ApiProperty(iri="http://schema.org/cLpView")
      * @var ArrayCollection
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CourseBundle\Entity\CLpView",
@@ -721,8 +661,6 @@ class User implements UserInterface, EquatableInterface
      */
     protected $cLpViews;
     /**
-     * @ApiSubresource()
-     * @ApiProperty(iri="http://schema.org/cNotebook")
      * @var ArrayCollection
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CourseBundle\Entity\CNotebook",
@@ -733,8 +671,6 @@ class User implements UserInterface, EquatableInterface
      */
     protected $cNotebooks;
     /**
-     * @ApiSubresource()
-     * @ApiProperty(iri="http://schema.org/cOnlineConnected")
      * @var ArrayCollection
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CourseBundle\Entity\COnlineConnected",
@@ -745,8 +681,6 @@ class User implements UserInterface, EquatableInterface
      */
     protected $cOnlineConnected;
     /**
-     * @ApiSubresource()
-     * @ApiProperty(iri="http://schema.org/cRoleUser")
      * @var ArrayCollection
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CourseBundle\Entity\CRoleUser",
@@ -757,8 +691,6 @@ class User implements UserInterface, EquatableInterface
      */
     protected $cRoleUsers;
     /**
-     * @ApiSubresource()
-     * @ApiProperty(iri="http://schema.org/cStudentPublication")
      * @var ArrayCollection
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CourseBundle\Entity\CStudentPublication",
@@ -769,8 +701,6 @@ class User implements UserInterface, EquatableInterface
      */
     protected $cStudentPublications;
     /**
-     * @ApiSubresource()
-     * @ApiProperty(iri="http://schema.org/cStudentPublicationComment")
      * @var ArrayCollection
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CourseBundle\Entity\CStudentPublicationComment",
@@ -781,8 +711,6 @@ class User implements UserInterface, EquatableInterface
      */
     protected $cStudentPublicationComments;
     /**
-     * @ApiSubresource()
-     * @ApiProperty(iri="http://schema.org/cStudentPublicationRelUser")
      * @var ArrayCollection
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CourseBundle\Entity\CStudentPublicationRelUser",
@@ -793,8 +721,6 @@ class User implements UserInterface, EquatableInterface
      */
     protected $CStudentPublicationRelUser;
     /**
-     * @ApiSubresource()
-     * @ApiProperty(iri="http://schema.org/cWiki")
      * @var ArrayCollection
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CourseBundle\Entity\CWiki",
@@ -805,8 +731,6 @@ class User implements UserInterface, EquatableInterface
      */
     protected $cWiki;
     /**
-     * @ApiSubresource()
-     * @ApiProperty(iri="http://schema.org/cWikiMailcue")
      * @var ArrayCollection
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CourseBundle\Entity\CWikiMailcue",
@@ -818,8 +742,6 @@ class User implements UserInterface, EquatableInterface
     protected $cWikiMailcues;
 
     /**
-     * @ApiSubresource()
-     * @ApiProperty(iri="http://schema.org/Person")
      * @var TrackEAccessComplete
      * @ORM\OneToOne (
      *     targetEntity="Chamilo\CoreBundle\Entity\TrackEAccessComplete",

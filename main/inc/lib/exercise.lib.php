@@ -1472,34 +1472,35 @@ HTML;
                 }
 
                 $answerList .= '
-                        </ul>
+                        </ol>
                     </div>
                 ';
-                if ($freeze) {
-                    $relPath = api_get_path(WEB_CODE_PATH);
-                    echo "
-                        <div class=\"row\">
-                            <div class=\"col-sm-9\">
-                                <div id=\"hotspot-preview-$questionId\"></div>
-                            </div>
-                            <div class=\"col-sm-3\">
-                                $answerList
-                            </div>
-                        </div>
-                        <script>
-                            new ".($answerType == HOT_SPOT ? "HotspotQuestion" : "DelineationQuestion")."({
-                                questionId: $questionId,
-                                exerciseId: $exerciseId,
-                                exeId: 0,
-                                selector: '#hotspot-preview-$questionId',
-                                'for': 'preview',
-                                relPath: '$relPath'
-                            });
-                        </script>
-                    ";
+            }
 
-                    return;
-                }
+            if ($freeze) {
+                $relPath = api_get_path(WEB_CODE_PATH);
+                echo "
+                    <div class=\"row\">
+                        <div class=\"col-sm-9\">
+                            <div id=\"hotspot-preview-$questionId\"></div>
+                        </div>
+                        <div class=\"col-sm-3\">
+                            $answerList
+                        </div>
+                    </div>
+                    <script>
+                        new ".($answerType == HOT_SPOT ? "HotspotQuestion" : "DelineationQuestion")."({
+                            questionId: $questionId,
+                            exerciseId: $exerciseId,
+                            exeId: 0,
+                            selector: '#hotspot-preview-$questionId',
+                            'for': 'preview',
+                            relPath: '$relPath'
+                        });
+                    </script>
+                ";
+
+                return;
             }
 
             if (!$only_questions) {
@@ -1534,8 +1535,8 @@ HOTSPOT;
                                 questionId: $questionId,
                                 exerciseId: $exerciseId,
                                 exeId: 0,
-                                selector: '#question_div_' + $questionId + ' .hotspot-image, #pnl-question-' + $questionId + ' .hotspot-image',
-                                'for': 'preview',
+                                selector: '#question_div_' + $questionId + ' .hotspot-image',
+                                'for': 'user',
                                 relPath: '$relPath'
                             });
                         });

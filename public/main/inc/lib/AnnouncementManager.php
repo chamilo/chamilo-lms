@@ -2131,6 +2131,7 @@ class AnnouncementManager
 
                 $qb = $repo->getResourcesByCourse($course, $session, $group);
                 $qb->select('count(resource)');
+
                 return $qb->getQuery()->getSingleScalarResult();
             }
         } else {

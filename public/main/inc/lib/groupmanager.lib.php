@@ -145,7 +145,8 @@ class GroupManager
                     g.secret_directory,
                     g.self_registration_allowed,
                     g.self_unregistration_allowed,
-                    g.status';
+                    g.status
+                    ';
         if ($getCount) {
             $select = ' DISTINCT count(g.iid) as count ';
         }
@@ -1373,14 +1374,13 @@ class GroupManager
             ->createQuery("
                 SELECT u.id FROM ChamiloCoreBundle:User u
                 INNER JOIN ChamiloCourseBundle:CGroupRelUser gu
-                    WITH u.id = gu.userId
+                    WITH u.id = gu.user
                 INNER JOIN ChamiloCourseBundle:CGroup g
-                WITH gu.groupId = g.id
+                WITH gu.group = g.iid
                 WHERE g.iid = :group
                     $activeCondition
             ")
             ->setParameters([
-                'course' => api_get_course_int_id(),
                 'group' => $groupId,
             ])
             ->getResult();
@@ -2341,7 +2341,7 @@ class GroupManager
             $row = [];
             // Checkbox
             if (api_is_allowed_to_edit(false, true) && count($group_list) > 1) {
-                $row[] = $this_group['id'];
+                $row[] = $this_group['iid'];
             }
 
             if (self::userHasAccessToBrowse($user_id, $this_group, $session_id)) {
@@ -2831,14 +2831,19 @@ class GroupManager
         $groups = self::get_group_list();
 
         foreach ($groups as $groupInfo) {
+            $groupId = $groupInfo['iid'];
             $categoryTitle = null;
-            $categoryInfo = self::get_category($groupInfo['category_id']);
-            $groupSettings = self::get_group_properties($groupInfo['id']);
+            $categoryInfo = [];
+            if (isset($groupInfo['category'])) {
+                $categoryInfo = self::get_category($groupInfo['category']);
+            }
+
+            $groupSettings = self::get_group_properties($groupId);
             if (!empty($categoryInfo)) {
                 $categoryTitle = $categoryInfo['title'];
             }
 
-            $users = self::getStudents($groupInfo['iid']);
+            $users = self::getStudents($groupId);
             $userList = [];
             foreach ($users as $user) {
                 $user = api_get_user_info($user['user_id']);
@@ -2885,7 +2890,7 @@ class GroupManager
             }
 
             if (!empty($groupId)) {
-                if ($groupId == $groupInfo['id']) {
+                if ($groupId == $groupInfo['iid']) {
                     break;
                 }
             }

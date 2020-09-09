@@ -4098,6 +4098,8 @@ function api_get_track_item_property_history($tool, $ref)
 /**
  * Gets item property data from tool of a course id.
  *
+ * @deprecated
+ *
  * @param int    $course_id
  * @param string $tool       tool name, linked to 'rubrique' of the course tool_list (Warning: language sensitive !!)
  * @param int    $ref        id of the item itself, linked to key of every tool ('id', ...), "*" = all items of the tool

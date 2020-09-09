@@ -264,7 +264,7 @@ EOT;
                         $group['name'].' ('.$number_of_students.' '.get_lang('Users').')';
                 }
             }
-            if (count($base_group_options) > 0) {
+            /*if (count($base_group_options) > 0) {
                 $create_subgroups_form = new FormValidator(
                     'create_subgroups',
                     'post',
@@ -289,7 +289,7 @@ EOT;
                 $defaults['action'] = 'create_subgroups';
                 $create_subgroups_form->setDefaults($defaults);
                 $create_subgroups_form->display();
-            }
+            }*/
         }
     }
 

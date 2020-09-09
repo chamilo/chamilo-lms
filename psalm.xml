@@ -17,12 +17,15 @@
 <!--        <directory name="public/main/chat"/>-->
 <!--        <directory name="public/main/course_description"/>-->
 <!--        <directory name="public/main/course_info"/>-->
+        <directory name="public/main/dashboard"/>
 <!--        <directory name="public/main/dropbox"/>-->
 
+<!--        <directory name="public/main/exercise"/>-->
         <directory name="public/main/group"/>
+<!--        <directory name="public/main/forum"/>-->
         <directory name="public/main/link" />
        <!-- <directory name="public/main/session" /> -->
-        <!--  <directory name="public/main/exercise"/> -->
+
 <!--        <directory name="public/main/inc/ajax" />-->
 
 
@@ -46,6 +49,7 @@
 <!--        <file name="public/main/inc/lib/course_description.lib.php"/>-->
 <!--        <file name="public/main/inc/lib/course_home.lib.php"/>-->
         <file name="public/main/inc/lib/course_request.lib.php"/>
+        <file name="public/main/inc/lib/groupmanager.lib.php"/>
         <file name="public/main/inc/lib/sessionmanager.lib.php"/>
 <!--        <file name="public/main/inc/lib/skill.lib.php"/>-->
         <file name="public/main/inc/lib/link.lib.php"/>

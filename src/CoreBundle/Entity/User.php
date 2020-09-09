@@ -1026,6 +1026,14 @@ class User implements UserInterface, EquatableInterface
     }
 
     /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->username;
+    }
+
+    /**
      * @return int
      */
     public function getId()
@@ -1044,14 +1052,6 @@ class User implements UserInterface, EquatableInterface
     public function getUuid(): UuidInterface
     {
         return $this->uuid;
-    }
-
-    /**
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->username;
     }
 
     public function setResourceNode(ResourceNode $resourceNode): self
@@ -2686,7 +2686,6 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Get the Admin for the current user.
-     *
      */
     public function getAdmin(): Admin
     {
@@ -2695,7 +2694,6 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Sets the Admin for the current user.
-     *
      */
     public function setAdmin(Admin $admin): User
     {
@@ -2706,7 +2704,6 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Sets the Gradebook Certificate's for the current user.
-     *
      */
     public function getGradebookCertificates(): ArrayCollection
     {
@@ -2715,7 +2712,6 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Sets the Gradebook Certificate's for the current user.
-     *
      */
     public function setGradebookCertificates(ArrayCollection $gradebookCertificates): User
     {
@@ -2726,7 +2722,6 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Get the Gradebook Certificate's for the current user.
-     *
      */
     public function getGradebookEvaluations(): ArrayCollection
     {
@@ -2735,7 +2730,6 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Sets the Gradebook Evaluation's for the current user.
-     *
      */
     public function setGradebookEvaluations(ArrayCollection $gradebookEvaluations): User
     {
@@ -2746,7 +2740,6 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Get the Gradebook Evaluation's for the current user.
-     *
      */
     public function getGradebookLinks(): ArrayCollection
     {
@@ -2755,7 +2748,6 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Sets the Gradebook Link's for the current user.
-     *
      */
     public function setGradebookLinks(ArrayCollection $gradebookLinks): User
     {
@@ -2766,7 +2758,6 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Get the Gradebook Result's for the current user.
-     *
      */
     public function getGradebookResults(): ArrayCollection
     {
@@ -2775,7 +2766,6 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Sets the Gradebook Result's for the current user.
-     *
      */
     public function setGradebookResults(ArrayCollection $gradebookResults): User
     {
@@ -2786,7 +2776,6 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Get the Gradebook Result Log's for the current user.
-     *
      */
     public function getGradebookResultLogs(): ArrayCollection
     {
@@ -2795,7 +2784,6 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Sets the Gradebook Result Log's for the current user.
-     *
      */
     public function setGradebookResultLogs(ArrayCollection $gradebookResultLogs): User
     {
@@ -2806,7 +2794,6 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Get the Gradebook Score Log's for the current user.
-     *
      */
     public function getGradebookScoreLogs(): ArrayCollection
     {
@@ -2815,7 +2802,6 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Sets the Gradebook Score Log's for the current user.
-     *
      */
     public function setGradebookScoreLogs(ArrayCollection $gradebookScoreLogs): User
     {
@@ -2826,7 +2812,6 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Get the Sequence Value's for the current user.
-     *
      */
     public function getSequenceValues(): ArrayCollection
     {
@@ -2835,7 +2820,6 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Sets the Sequence Value's for the current user.
-     *
      */
     public function setSequenceValues(ArrayCollection $sequenceValues): User
     {
@@ -2846,7 +2830,6 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Get the Templates's for the current user.
-     *
      */
     public function getTemplates(): ArrayCollection
     {
@@ -2855,7 +2838,6 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Sets the Templates's for the current user.
-     *
      */
     public function setTemplates(ArrayCollection $templates): User
     {
@@ -2866,7 +2848,6 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Get the Track E Attemp's for the current user.
-     *
      */
     public function getTrackEAttempts(): ArrayCollection
     {
@@ -2875,17 +2856,16 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Sets the Track E Attemp's for the current user.
-     *
      */
     public function setTrackEAttempts(ArrayCollection $trackEAttempts): User
     {
         $this->trackEAttempts = $trackEAttempts;
+
         return $this;
     }
 
     /**
      * Get the Track E CourseA ccess 's for the current user.
-     *
      */
     public function getTrackECourseAccess(): ArrayCollection
     {
@@ -2894,7 +2874,6 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Sets the Track E CourseA ccess 's for the current user.
-     *
      */
     public function setTrackECourseAccess(ArrayCollection $trackECourseAccess): User
     {
@@ -2905,7 +2884,6 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Get the User Course Category's for the current user.
-     *
      */
     public function getUserCourseCategorys(): ArrayCollection
     {
@@ -2914,7 +2892,6 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Sets the User Course Category's for the current user.
-     *
      */
     public function setUserCourseCategorys(ArrayCollection $userCourseCategorys): User
     {
@@ -2925,7 +2902,6 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Get the User Rel Course Vote's for the current user.
-     *
      */
     public function getUserRelCourseVotes(): ArrayCollection
     {
@@ -2934,7 +2910,6 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Sets the User Rel Course Vote's for the current user.
-     *
      */
     public function setUserRelCourseVotes(ArrayCollection $userRelCourseVotes): User
     {
@@ -2945,7 +2920,6 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Get the User Rel Tag's for the current user.
-     *
      */
     public function getUserRelTags(): ArrayCollection
     {
@@ -2954,7 +2928,6 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Sets the User Rel Tag's for the current user.
-     *
      */
     public function setUserRelTags(ArrayCollection $userRelTags): User
     {
@@ -2965,7 +2938,6 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Get the User Rel User's for the current user.
-     *
      */
     public function getUserRelationships(): ArrayCollection
     {
@@ -2974,7 +2946,6 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Sets the User Rel User's for the current user.
-     *
      */
     public function setUserRelationships(ArrayCollection $userRelationships): User
     {
@@ -2985,7 +2956,6 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Get the Track E Exercise Confirmation's for the current user.
-     *
      */
     public function getTrackEExerciseConfirmations(): ArrayCollection
     {
@@ -2994,7 +2964,6 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Sets the Track E Exercise Confirmation's for the current user.
-     *
      */
     public function setTrackEExerciseConfirmations(ArrayCollection $trackEExerciseConfirmations): User
     {
@@ -3005,7 +2974,6 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Get the Gradebook Linkeval Log's for the current user.
-     *
      */
     public function getGradebookLinkevalLogs(): ArrayCollection
     {
@@ -3014,17 +2982,16 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Sets the Gradebook Linkeval Log's for the current user.
-     *
      */
     public function setGradebookLinkevalLogs(ArrayCollection $gradebookLinkevalLogs): User
     {
         $this->gradebookLinkevalLogs = $gradebookLinkevalLogs;
+
         return $this;
     }
 
     /**
      * Get the Course Attendance Result's for the current user.
-     *
      */
     public function getCAttendanceResults(): ArrayCollection
     {
@@ -3033,17 +3000,16 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Sets the Course Attendance Result's for the current user.
-     *
      */
     public function setCAttendanceResults(ArrayCollection $cAttendanceResults): User
     {
         $this->cAttendanceResults = $cAttendanceResults;
+
         return $this;
     }
 
     /**
      *  Gets the Course Attendance Sheet's for the current user.
-     *
      */
     public function getCAttendanceSheets(): ArrayCollection
     {
@@ -3052,17 +3018,16 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Sets the Course Attendance Sheet's for the current user.
-     *
      */
     public function setCAttendanceSheets(ArrayCollection $cAttendanceSheets): User
     {
         $this->cAttendanceSheets = $cAttendanceSheets;
+
         return $this;
     }
 
     /**
      *  Gets the Course Blog Ratings's for the current user.
-     *
      */
     public function getCBlogRatings(): ArrayCollection
     {
@@ -3071,17 +3036,16 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Sets the Course Blog Ratings's for the current user.
-     *
      */
     public function setCBlogRatings(ArrayCollection $cBlogRatings): User
     {
         $this->cBlogRatings = $cBlogRatings;
+
         return $this;
     }
 
     /**
      *  Gets the Course Blog Relation with the current user.
-     *
      */
     public function getCBlogRelUsers(): ArrayCollection
     {
@@ -3090,17 +3054,16 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Sets the Course Blog Relation with the current user.
-     *
      */
     public function setCBlogRelUsers(ArrayCollection $cBlogRelUsers): User
     {
         $this->cBlogRelUsers = $cBlogRelUsers;
+
         return $this;
     }
 
     /**
      *  Gets the Course Blog Tak Relation with the current user.
-     *
      */
     public function getCBlogTaskRelUsers(): ArrayCollection
     {
@@ -3109,17 +3072,16 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Sets the Course Blog Tak Relation with the current user.
-     *
      */
     public function setCBlogTaskRelUsers(ArrayCollection $cBlogTaskRelUsers): User
     {
         $this->cBlogTaskRelUsers = $cBlogTaskRelUsers;
+
         return $this;
     }
 
     /**
      *  Gets the Course Chat Connected for the current user.
-     *
      */
     public function getCChatConnected(): ArrayCollection
     {
@@ -3128,17 +3090,16 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Sets the Course Chat Connected for the current user.
-     *
      */
     public function setCChatConnected(ArrayCollection $cChatConnected): User
     {
         $this->cChatConnected = $cChatConnected;
+
         return $this;
     }
 
     /**
      *  Gets the Course Dropbox Category's for the current user.
-     *
      */
     public function getCDropboxCategorys(): ArrayCollection
     {
@@ -3147,17 +3108,16 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Sets the Course Dropbox Category's for the current user.
-     *
      */
     public function setCDropboxCategorys(ArrayCollection $cDropboxCategorys): User
     {
         $this->cDropboxCategorys = $cDropboxCategorys;
+
         return $this;
     }
 
     /**
      *  Gets the Course Dropbox Person's for the current user.
-     *
      */
     public function getCDropboxPersons(): ArrayCollection
     {
@@ -3166,17 +3126,16 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Sets the Course Dropbox Person's for the current user.
-     *
      */
     public function setCDropboxPersons(ArrayCollection $cDropboxPersons): User
     {
         $this->cDropboxPersons = $cDropboxPersons;
+
         return $this;
     }
 
     /**
      *  Gets the Course Forum Mailcue's for the current user.
-     *
      */
     public function getCForumMailcues(): ArrayCollection
     {
@@ -3185,17 +3144,16 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Sets the Course Forum Mailcue's for the current user.
-     *
      */
     public function setCForumMailcues(ArrayCollection $cForumMailcues): User
     {
         $this->cForumMailcues = $cForumMailcues;
+
         return $this;
     }
 
     /**
      *  Gets the Course Forum Notification's for the current user.
-     *
      */
     public function getCForumNotifications(): ArrayCollection
     {
@@ -3204,17 +3162,16 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Sets the Course Forum Notification's for the current user.
-     *
      */
     public function setCForumNotifications(ArrayCollection $cForumNotifications): User
     {
         $this->cForumNotifications = $cForumNotifications;
+
         return $this;
     }
 
     /**
      *  Gets the Course Forum Thread Qualify's for the current user.
-     *
      */
     public function getCForumThreadQualifys(): ArrayCollection
     {
@@ -3223,17 +3180,16 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Sets the Course Forum Thread Qualify's for the current user.
-     *
      */
     public function setCForumThreadQualifys(ArrayCollection $cForumThreadQualifys): User
     {
         $this->cForumThreadQualifys = $cForumThreadQualifys;
+
         return $this;
     }
 
     /**
      *  Gets the Course Forum Thread Qualify Log's for the current user.
-     *
      */
     public function getCForumThreadQualifyLogs(): ArrayCollection
     {
@@ -3242,17 +3198,16 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Sets the Course Forum Thread Qualify Log's for the current user.
-     *
      */
     public function setCForumThreadQualifyLogs(ArrayCollection $cForumThreadQualifyLogs): User
     {
         $this->cForumThreadQualifyLogs = $cForumThreadQualifyLogs;
+
         return $this;
     }
 
     /**
      *  Gets the Course Lp View's for the current user.
-     *
      */
     public function getCLpViews(): ArrayCollection
     {
@@ -3261,17 +3216,16 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Sets the Course Lp View's for the current user.
-     *
      */
     public function setCLpViews(ArrayCollection $cLpViews): User
     {
         $this->cLpViews = $cLpViews;
+
         return $this;
     }
 
     /**
      *  Gets the Course Notebook's for the current user.
-     *
      */
     public function getCNotebooks(): ArrayCollection
     {
@@ -3280,17 +3234,16 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Sets the Course Notebook's for the current user.
-     *
      */
     public function setCNotebooks(ArrayCollection $cNotebooks): User
     {
         $this->cNotebooks = $cNotebooks;
+
         return $this;
     }
 
     /**
      *  Gets the Course Online Connected for the current user.
-     *
      */
     public function getCOnlineConnected(): ArrayCollection
     {
@@ -3299,17 +3252,16 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Sets the Course Online Connected for the current user.
-     *
      */
     public function setCOnlineConnected(ArrayCollection $cOnlineConnected): User
     {
         $this->cOnlineConnected = $cOnlineConnected;
+
         return $this;
     }
 
     /**
      *  Gets the Course Role User's for the current user.
-     *
      */
     public function getCRoleUsers(): ArrayCollection
     {
@@ -3318,17 +3270,16 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Sets the Course Role User's for the current user.
-     *
      */
     public function setCRoleUsers(ArrayCollection $cRoleUsers): User
     {
         $this->cRoleUsers = $cRoleUsers;
+
         return $this;
     }
 
     /**
      *  Gets the Course Student Publication's for the current user.
-     *
      */
     public function getCStudentPublications(): ArrayCollection
     {
@@ -3337,17 +3288,16 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Sets the Course Student Publication's for the current user.
-     *
      */
     public function setCStudentPublications(ArrayCollection $cStudentPublications): User
     {
         $this->cStudentPublications = $cStudentPublications;
+
         return $this;
     }
 
     /**
      *  Gets the Course Student Publication Comment's for the current user.
-     *
      */
     public function getCStudentPublicationComments(): ArrayCollection
     {
@@ -3356,17 +3306,16 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Sets the Course Student Publication Comment's for the current user.
-     *
      */
     public function setCStudentPublicationComments(ArrayCollection $cStudentPublicationComments): User
     {
         $this->cStudentPublicationComments = $cStudentPublicationComments;
+
         return $this;
     }
 
     /**
      *  Gets the Course Student Publication Rel User's for the current user.
-     *
      */
     public function getCStudentPublicationRelUser(): ArrayCollection
     {
@@ -3375,17 +3324,16 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Sets the Course Student Publication Rel User's for the current user.
-     *
      */
     public function setCStudentPublicationRelUser(ArrayCollection $CStudentPublicationRelUser): User
     {
         $this->CStudentPublicationRelUser = $CStudentPublicationRelUser;
+
         return $this;
     }
 
     /**
      *  Gets the Wiki's for the current user.
-     *
      */
     public function getCWiki(): ArrayCollection
     {
@@ -3394,17 +3342,16 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Sets the Wiki's for the current user.
-     *
      */
     public function setCWiki(ArrayCollection $cWiki): User
     {
         $this->cWiki = $cWiki;
+
         return $this;
     }
 
     /**
      *  Gets the Wiki Mailcue's for the current user.
-     *
      */
     public function getCWikiMailcues(): ArrayCollection
     {
@@ -3413,17 +3360,16 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Sets the Course Wiki Mailcue's for the current user.
-     *
      */
     public function setCWikiMailcues(ArrayCollection $cWikiMailcues): User
     {
         $this->cWikiMailcues = $cWikiMailcues;
+
         return $this;
     }
 
     /**
      * Sets the Track E Access Complete for the current user.
-     *
      */
     public function getTrackEAccessComplete(): TrackEAccessComplete
     {
@@ -3432,11 +3378,11 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Get the Track E Access Complete for the current user.
-     *
      */
     public function setTrackEAccessComplete(TrackEAccessComplete $trackEAccessComplete): User
     {
         $this->trackEAccessComplete = $trackEAccessComplete;
+
         return $this;
     }
 }

@@ -133,11 +133,6 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     protected $sessionUserSubscriptions;
 
     /**
-     * ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CGroup", mappedBy="course", cascade={"persist", "remove"}).
-     */
-    //protected $groups;
-
-    /**
      * @var CTool[]|ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CTool", mappedBy="course", cascade={"persist", "remove"})

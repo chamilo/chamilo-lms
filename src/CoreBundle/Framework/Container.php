@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Repository\CourseRepository;
 use Chamilo\CoreBundle\Repository\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\SequenceRepository;
 use Chamilo\CoreBundle\Repository\SequenceResourceRepository;
+use Chamilo\CoreBundle\Repository\SessionRepository;
 use Chamilo\CoreBundle\Repository\UserRepository;
 use Chamilo\CoreBundle\ToolChain;
 use Chamilo\CourseBundle\Repository\CAnnouncementAttachmentRepository;
@@ -327,6 +328,14 @@ class Container
     public static function getCourseRepository()
     {
         return self::$container->get(CourseRepository::class);
+    }
+
+    /**
+     * @return SessionRepository
+     */
+    public static function getSessionRepository()
+    {
+        return self::$container->get(SessionRepository::class);
     }
 
     /**

@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Entity\SettingsCurrent;
 use Chamilo\CoreBundle\Entity\User;
@@ -988,7 +989,7 @@ function api_valid_email($address)
  *
  * @param bool Option to print headers when displaying error message. Default: false
  * @param bool whether session admins should be allowed or not
- * @param bool $checkTool check if tool is available for users (user, group)
+ * @param string $checkTool check if tool is available for users (user, group)
  *
  * @return bool True if the user has access to the current course or is out of a course context, false otherwise
  *
@@ -1176,45 +1177,45 @@ function api_get_navigator()
 
     if (false !== strpos($_SERVER['HTTP_USER_AGENT'], 'Opera')) {
         $navigator = 'Opera';
-        list(, $version) = explode('Opera', $_SERVER['HTTP_USER_AGENT']);
+        [, $version] = explode('Opera', $_SERVER['HTTP_USER_AGENT']);
     } elseif (false !== strpos($_SERVER['HTTP_USER_AGENT'], 'Edge')) {
         $navigator = 'Edge';
-        list(, $version) = explode('Edge', $_SERVER['HTTP_USER_AGENT']);
+        [, $version] = explode('Edge', $_SERVER['HTTP_USER_AGENT']);
     } elseif (false !== strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE')) {
         $navigator = 'Internet Explorer';
-        list(, $version) = explode('MSIE ', $_SERVER['HTTP_USER_AGENT']);
+        [, $version] = explode('MSIE ', $_SERVER['HTTP_USER_AGENT']);
     } elseif (false !== strpos($_SERVER['HTTP_USER_AGENT'], 'Chrome')) {
         $navigator = 'Chrome';
-        list(, $version) = explode('Chrome', $_SERVER['HTTP_USER_AGENT']);
+        [, $version] = explode('Chrome', $_SERVER['HTTP_USER_AGENT']);
     } elseif (false !== stripos($_SERVER['HTTP_USER_AGENT'], 'Safari')) {
         $navigator = 'Safari';
         if (false !== stripos($_SERVER['HTTP_USER_AGENT'], 'Version/')) {
             // If this Safari does have the "Version/" string in its user agent
             // then use that as a version indicator rather than what's after
             // "Safari/" which is rather a "build number" or something
-            list(, $version) = explode('Version/', $_SERVER['HTTP_USER_AGENT']);
+            [, $version] = explode('Version/', $_SERVER['HTTP_USER_AGENT']);
         } else {
-            list(, $version) = explode('Safari/', $_SERVER['HTTP_USER_AGENT']);
+            [, $version] = explode('Safari/', $_SERVER['HTTP_USER_AGENT']);
         }
     } elseif (false !== strpos($_SERVER['HTTP_USER_AGENT'], 'Firefox')) {
         $navigator = 'Firefox';
-        list(, $version) = explode('Firefox', $_SERVER['HTTP_USER_AGENT']);
+        [, $version] = explode('Firefox', $_SERVER['HTTP_USER_AGENT']);
     } elseif (false !== strpos($_SERVER['HTTP_USER_AGENT'], 'Netscape')) {
         $navigator = 'Netscape';
         if (false !== stripos($_SERVER['HTTP_USER_AGENT'], 'Netscape/')) {
-            list(, $version) = explode('Netscape', $_SERVER['HTTP_USER_AGENT']);
+            [, $version] = explode('Netscape', $_SERVER['HTTP_USER_AGENT']);
         } else {
-            list(, $version) = explode('Navigator', $_SERVER['HTTP_USER_AGENT']);
+            [, $version] = explode('Navigator', $_SERVER['HTTP_USER_AGENT']);
         }
     } elseif (false !== strpos($_SERVER['HTTP_USER_AGENT'], 'Konqueror')) {
         $navigator = 'Konqueror';
-        list(, $version) = explode('Konqueror', $_SERVER['HTTP_USER_AGENT']);
+        [, $version] = explode('Konqueror', $_SERVER['HTTP_USER_AGENT']);
     } elseif (false !== stripos($_SERVER['HTTP_USER_AGENT'], 'applewebkit')) {
         $navigator = 'AppleWebKit';
-        list(, $version) = explode('Version/', $_SERVER['HTTP_USER_AGENT']);
+        [, $version] = explode('Version/', $_SERVER['HTTP_USER_AGENT']);
     } elseif (false !== strpos($_SERVER['HTTP_USER_AGENT'], 'Gecko')) {
         $navigator = 'Mozilla';
-        list(, $version) = explode('; rv:', $_SERVER['HTTP_USER_AGENT']);
+        [, $version] = explode('; rv:', $_SERVER['HTTP_USER_AGENT']);
     }
 
     // Now cut extra stuff around (mostly *after*) the version number
@@ -2260,24 +2261,20 @@ function api_get_course_info($course_code = null)
 
 /**
  * @param int $courseId
- *
- * @return Course
  */
-function api_get_course_entity($courseId = 0)
+function api_get_course_entity($courseId = 0): ?Course
 {
     if (empty($courseId)) {
         $courseId = api_get_course_int_id();
     }
 
-    return CourseManager::getManager()->find($courseId);
+    return Container::getCourseRepository()->find($courseId);
 }
 
 /**
  * @param int $id
- *
- * @return SessionEntity|null
  */
-function api_get_session_entity($id = 0)
+function api_get_session_entity($id = 0): ?SessionEntity
 {
     if (empty($id)) {
         $id = api_get_session_id();
@@ -2287,21 +2284,19 @@ function api_get_session_entity($id = 0)
         return null;
     }
 
-    return Database::getManager()->getRepository('ChamiloCoreBundle:Session')->find($id);
+    return Container::getSessionRepository()->find($id);
 }
 
 /**
  * @param int $id
- *
- * @return CGroup
  */
-function api_get_group_entity($id = 0)
+function api_get_group_entity($id = 0): ?CGroup
 {
     if (empty($id)) {
         $id = api_get_group_id();
     }
 
-    return Database::getManager()->getRepository('ChamiloCourseBundle:CGroup')->find($id);
+    return Container::getGroupRepository()->find($id);
 }
 
 /**
@@ -3845,9 +3840,9 @@ function api_not_allowed(
  */
 function convert_sql_date($last_post_datetime)
 {
-    list($last_post_date, $last_post_time) = explode(' ', $last_post_datetime);
-    list($year, $month, $day) = explode('-', $last_post_date);
-    list($hour, $min, $sec) = explode(':', $last_post_time);
+    [$last_post_date, $last_post_time] = explode(' ', $last_post_datetime);
+    [$year, $month, $day] = explode('-', $last_post_date);
+    [$hour, $min, $sec] = explode(':', $last_post_time);
 
     return mktime((int) $hour, (int) $min, (int) $sec, (int) $month, (int) $day, (int) $year);
 }
@@ -4424,8 +4419,7 @@ function api_get_language_info($languageId)
         return [];
     }
 
-    $language = Database::getManager()
-        ->find('ChamiloCoreBundle:Language', $languageId);
+    $language = Database::getManager()->find(Language::class, $languageId);
 
     if (!$language) {
         return [];
@@ -4445,13 +4439,13 @@ function api_get_language_info($languageId)
 /**
  * @param string $code
  *
- * @return \Chamilo\CoreBundle\Entity\Language
+ * @return Language
  */
 function api_get_language_from_iso($code)
 {
     $em = Database::getManager();
 
-    return $em->getRepository('ChamiloCoreBundle:Language')->findOneBy(['isocode' => $code]);
+    return $em->getRepository(Language::class)->findOneBy(['isocode' => $code]);
 }
 
 /**
@@ -4509,14 +4503,14 @@ function api_get_visual_theme()
 
                 $allow_lp_theme = api_get_course_setting('allow_learning_path_theme');
                 if (1 == $allow_lp_theme) {
-                    global $lp_theme_css, $lp_theme_config;
+                    /*global $lp_theme_css, $lp_theme_config;
                     // These variables come from the file lp_controller.php.
                     if (!$lp_theme_config) {
                         if (!empty($lp_theme_css)) {
                             // LP's theme.
                             $visual_theme = $lp_theme_css;
                         }
-                    }
+                    }*/
                 }
             }
         }
@@ -4525,10 +4519,10 @@ function api_get_visual_theme()
             $visual_theme = 'chamilo';
         }
 
-        global $lp_theme_log;
+        /*global $lp_theme_log;
         if ($lp_theme_log) {
             $visual_theme = $platform_theme;
-        }
+        }*/
     }
 
     return $visual_theme;
@@ -4928,10 +4922,8 @@ function copy_folder_course_session(
                 ];
                 $document_id = Database::insert($table, $params);
                 if ($document_id) {
-                    $sql = "UPDATE $table SET id = iid WHERE iid = $document_id";
-                    Database::query($sql);
 
-                    api_item_property_update(
+                    /*api_item_property_update(
                         $course_info,
                         TOOL_DOCUMENT,
                         $document_id,
@@ -4942,7 +4934,7 @@ function copy_folder_course_session(
                         null,
                         null,
                         $session_id
-                    );
+                    );*/
                 }
             }
         }
@@ -5567,7 +5559,8 @@ function api_add_setting(
     $visibility = 0
 ) {
     $em = Database::getManager();
-    $settingRepo = $em->getRepository('ChamiloCoreBundle:SettingsCurrent');
+
+    $settingRepo = $em->getRepository(SettingsCurrent::class);
     $accessUrlId = (int) $accessUrlId ?: 1;
 
     if (is_array($value)) {
@@ -7084,7 +7077,7 @@ function api_check_ip_in_range($ip, $range)
             continue; //otherwise, get to the next range
         }
         // the range contains a "/", so analyse completely
-        list($net, $mask) = explode("/", $range);
+        [$net, $mask] = explode("/", $range);
 
         $ip_net = ip2long($net);
         // mask binary magic
@@ -7120,15 +7113,15 @@ function api_is_global_chat_enabled()
 }
 
 /**
- * @todo Fix tool_visible_by_default_at_creation labels
- * @todo Add sessionId parameter to avoid using context
- *
- * @param int   $item_id
+ * @param int $item_id
  * @param int   $tool_id
  * @param int   $group_id   id
  * @param array $courseInfo
  * @param int   $sessionId
  * @param int   $userId
+ *
+ * @deprecated
+ *
  */
 function api_set_default_visibility(
     $item_id,
@@ -7193,7 +7186,7 @@ function api_set_default_visibility(
             $visibility = DocumentManager::getDocumentDefaultVisibility($courseInfo);
         }
 
-        api_item_property_update(
+        /*api_item_property_update(
             $courseInfo,
             $original_tool_id,
             $item_id,
@@ -7204,7 +7197,7 @@ function api_set_default_visibility(
             null,
             null,
             $sessionId
-        );
+        );*/
 
         // Fixes default visibility for tests
         switch ($original_tool_id) {
@@ -7756,42 +7749,6 @@ function api_is_allowed_in_course()
 }
 
 /**
- * Set the cookie to go directly to the course code $in_firstpage
- * after login.
- *
- * @param string $value is the course code of the course to go
- */
-function api_set_firstpage_parameter($value)
-{
-    setcookie('GotoCourse', $value);
-}
-
-/**
- * Delete the cookie to go directly to the course code $in_firstpage
- * after login.
- */
-function api_delete_firstpage_parameter()
-{
-    setcookie('GotoCourse', '', time() - 3600);
-}
-
-/**
- * @return bool if course_code for direct course access after login is set
- */
-function exist_firstpage_parameter()
-{
-    return isset($_COOKIE['GotoCourse']) && '' != $_COOKIE['GotoCourse'];
-}
-
-/**
- * @return return the course_code of the course where user login
- */
-function api_get_firstpage_parameter()
-{
-    return $_COOKIE['GotoCourse'];
-}
-
-/**
  * Return true on https install.
  *
  * @return bool
@@ -7799,7 +7756,7 @@ function api_get_firstpage_parameter()
 function api_is_https()
 {
     if (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) &&
-        'https' == $_SERVER['HTTP_X_FORWARDED_PROTO'] || !empty($_configuration['force_https_forwarded_proto'])
+        'https' == $_SERVER['HTTP_X_FORWARDED_PROTO'] || !empty(api_get_configuration_value('force_https_forwarded_proto'))
     ) {
         $isSecured = true;
     } else {
@@ -8708,7 +8665,12 @@ function api_unserialize_content($type, $serialized, $ignoreErrors = false)
     switch ($type) {
         case 'career':
         case 'sequence_graph':
-            $allowedClasses = [Graph::class, VerticesMap::class, Vertices::class, Edges::class];
+            $allowedClasses = [
+                \Fhaculty\Graph\Graph::class,
+                \Fhaculty\Graph\Set\VerticesMap::class,
+                \Fhaculty\Graph\Set\Vertices::class,
+                \Fhaculty\Graph\Set\Edges::class,
+            ];
             break;
         case 'lp':
             $allowedClasses = [
@@ -8730,34 +8692,34 @@ function api_unserialize_content($type, $serialized, $ignoreErrors = false)
             break;
         case 'course':
             $allowedClasses = [
-                Course::class,
-                Announcement::class,
-                Attendance::class,
-                CalendarEvent::class,
-                CourseCopyLearnpath::class,
-                CourseCopyTestCategory::class,
-                CourseDescription::class,
-                CourseSession::class,
-                Document::class,
-                Forum::class,
-                ForumCategory::class,
-                ForumPost::class,
-                ForumTopic::class,
-                Glossary::class,
-                GradeBookBackup::class,
-                Link::class,
-                LinkCategory::class,
-                Quiz::class,
-                QuizQuestion::class,
-                QuizQuestionOption::class,
-                ScormDocument::class,
-                Survey::class,
-                SurveyInvitation::class,
-                SurveyQuestion::class,
-                Thematic::class,
-                ToolIntro::class,
-                Wiki::class,
-                Work::class,
+                \Chamilo\CourseBundle\Component\CourseCopy\Course::class,
+                \Chamilo\CourseBundle\Component\CourseCopy\Resources\Announcement::class,
+                \Chamilo\CourseBundle\Component\CourseCopy\Resources\Attendance::class,
+                \Chamilo\CourseBundle\Component\CourseCopy\Resources\CalendarEvent::class,
+                \Chamilo\CourseBundle\Component\CourseCopy\Resources\CourseCopyLearnpath::class,
+                \Chamilo\CourseBundle\Component\CourseCopy\Resources\CourseCopyTestCategory::class,
+                \Chamilo\CourseBundle\Component\CourseCopy\Resources\CourseDescription::class,
+                \Chamilo\CourseBundle\Component\CourseCopy\Resources\CourseSession::class,
+                \Chamilo\CourseBundle\Component\CourseCopy\Resources\Document::class,
+                \Chamilo\CourseBundle\Component\CourseCopy\Resources\Forum::class,
+                \Chamilo\CourseBundle\Component\CourseCopy\Resources\ForumCategory::class,
+                \Chamilo\CourseBundle\Component\CourseCopy\Resources\ForumPost::class,
+                \Chamilo\CourseBundle\Component\CourseCopy\Resources\ForumTopic::class,
+                \Chamilo\CourseBundle\Component\CourseCopy\Resources\Glossary::class,
+                \Chamilo\CourseBundle\Component\CourseCopy\Resources\GradeBookBackup::class,
+                \Chamilo\CourseBundle\Component\CourseCopy\Resources\Link::class,
+                \Chamilo\CourseBundle\Component\CourseCopy\Resources\LinkCategory::class,
+                \Chamilo\CourseBundle\Component\CourseCopy\Resources\Quiz::class,
+                \Chamilo\CourseBundle\Component\CourseCopy\Resources\QuizQuestion::class,
+                \Chamilo\CourseBundle\Component\CourseCopy\Resources\QuizQuestionOption::class,
+                \Chamilo\CourseBundle\Component\CourseCopy\Resources\ScormDocument::class,
+                \Chamilo\CourseBundle\Component\CourseCopy\Resources\Survey::class,
+                \Chamilo\CourseBundle\Component\CourseCopy\Resources\SurveyInvitation::class,
+                \Chamilo\CourseBundle\Component\CourseCopy\Resources\SurveyQuestion::class,
+                \Chamilo\CourseBundle\Component\CourseCopy\Resources\Thematic::class,
+                \Chamilo\CourseBundle\Component\CourseCopy\Resources\ToolIntro::class,
+                \Chamilo\CourseBundle\Component\CourseCopy\Resources\Wiki::class,
+                \Chamilo\CourseBundle\Component\CourseCopy\Resources\Work::class,
                 stdClass::class,
             ];
             break;
@@ -8767,13 +8729,13 @@ function api_unserialize_content($type, $serialized, $ignoreErrors = false)
     }
 
     if ($ignoreErrors) {
-        return @Unserialize::unserialize(
+        return @UnserializeApi::unserialize(
             $serialized,
             ['allowed_classes' => $allowedClasses]
         );
     }
 
-    return Unserialize::unserialize(
+    return UnserializeApi::unserialize(
         $serialized,
         ['allowed_classes' => $allowedClasses]
     );

@@ -1314,11 +1314,11 @@ class UserGroup extends Model
 
     /**
      * @param $params
-     * @param bool $show_query
+     * @param bool $showQuery
      *
      * @return bool|int
      */
-    public function save($params, $show_query = false)
+    public function save($params, $showQuery = false)
     {
         $params['updated_at'] = $params['created_at'] = api_get_utc_datetime();
         $params['group_type'] = isset($params['group_type']) ? self::SOCIAL_CLASS : self::NORMAL_CLASS;
@@ -1329,7 +1329,7 @@ class UserGroup extends Model
             if ($this->allowTeachers()) {
                 $params['author_id'] = api_get_user_id();
             }
-            $id = parent::save($params, $show_query);
+            $id = parent::save($params, $showQuery);
             if ($id) {
                 if ($this->getUseMultipleUrl()) {
                     $this->subscribeToUrl($id, api_get_current_access_url_id());

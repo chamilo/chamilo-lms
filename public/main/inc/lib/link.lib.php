@@ -70,12 +70,12 @@ class Link extends Model
      * updating the item_property table.
      *
      * @param array $params
-     * @param bool  $show_query Whether to show the query in logs when
+     * @param bool  $showQuery Whether to show the query in logs when
      *                          calling parent's save method
      *
      * @return bool True if link could be saved, false otherwise
      */
-    public function save($params, $show_query = null)
+    public function save($params, $showQuery = null)
     {
         $course_info = $this->getCourse();
         $course_id = $course_info['real_id'];
@@ -127,13 +127,11 @@ class Link extends Model
             // Looking for the largest order number for this category.
             $link = new CLink();
             $link
-                ->setCId($course_id)
                 ->setUrl($urllink)
                 ->setTitle($title)
                 ->setDescription($description)
                 ->setOnHomepage($onhomepage)
                 ->setTarget($target)
-                ->setSessionId($session_id)
                 ->setCategory($category)
             ;
 
@@ -317,13 +315,13 @@ class Link extends Model
         }
 
         // Looking for the largest order number for this category.
-        $result = Database:: query(
+        /*$result = Database:: query(
             "SELECT MAX(display_order) FROM  $tbl_categories
             WHERE c_id = $course_id "
         );
-        list($orderMax) = Database:: fetch_row($result);
+        [$orderMax] = Database:: fetch_row($result);
         $order = $orderMax + 1;
-        $order = (int) $order;
+        $order = (int) $order;*/
         $session_id = api_get_session_id();
 
         $repo = Container::getLinkCategoryRepository();
@@ -332,11 +330,9 @@ class Link extends Model
 
         $category = new CLinkCategory();
         $category
-            ->setSessionId($session_id)
-            ->setCId($course_id)
             ->setCategoryTitle($category_title)
             ->setDescription($description)
-            ->setDisplayOrder($order)
+         //   ->setDisplayOrder($order)
             ->setParent($courseEntity)
             ->addCourseLink($courseEntity, $sessionEntity)
         ;
@@ -545,7 +541,7 @@ class Link extends Model
                         c_id = $course_id AND
                         category_id='".intval($values['category_id'])."'";
             $result = Database:: query($sql);
-            list($max_display_order) = Database:: fetch_row($result);
+            [$max_display_order] = Database:: fetch_row($result);
             $max_display_order++;
         } else {
             $max_display_order = $row['display_order'];
@@ -563,11 +559,11 @@ class Link extends Model
         Database::update(
             $tbl_link,
             $params,
-            ['c_id = ? AND iid = ?' => [$course_id, $id]]
+            ['iid = ?' => [$course_id, $id]]
         );
 
         // Update search enchine and its values table if enabled.
-        if ('true' == api_get_setting('search_enabled')) {
+        if ('true' === api_get_setting('search_enabled')) {
             $course_int_id = api_get_course_int_id();
             $course_id = api_get_course_id();
             $link_title = Database:: escape_string($values['title']);
@@ -704,14 +700,6 @@ class Link extends Model
             }
         }
 
-        // "WHAT'S NEW" notification: update table last_toolEdit.
-        api_item_property_update(
-            $_course,
-            TOOL_LINK,
-            $id,
-            'LinkUpdated',
-            api_get_user_id()
-        );
         Display::addFlash(Display::return_message(get_lang('The link has been modified.')));
     }
 
@@ -1022,6 +1010,7 @@ class Link extends Model
             $linksAdded = [];
             foreach ($links as $link) {
                 $linkId = $link->getIid();
+                $resourceLink = $link->getFirstResourceLink();
 
                 if (in_array($linkId, $linksAdded)) {
                     continue;
@@ -1036,10 +1025,14 @@ class Link extends Model
                 }
 
                 // Validation when belongs to a session.
-                $session_img = api_get_session_image(
-                    $link->getSessionId(),
-                    $_user['status']
-                );
+                $session_img = '';
+                $session = $resourceLink->getSession();
+                if ($session) {
+                    $session_img = api_get_session_image(
+                        $session->getId(),
+                        $_user['status']
+                    );
+                }
 
                 $toolbar = '';
                 $link_validator = '';
@@ -1063,7 +1056,7 @@ class Link extends Model
                         ]
                     );
 
-                    if ($sessionId == $link->getSessionId()) {
+                    if ($session && $sessionId == $session->getId()) {
                         $url = api_get_self().'?'.api_get_cidreq().'&action=editlink&id='.$linkId;
                         $title = get_lang('Edit');
                         $toolbar .= Display::toolbarButton(
@@ -1111,7 +1104,7 @@ class Link extends Model
                             break;
                     }
 
-                    if ($sessionId == $link->getSessionId()) {
+                    if ($session && $sessionId == $session->getId()) {
                         $moveLinkParams = [
                             'id' => $linkId,
                             'scope' => 'category',
@@ -1315,7 +1308,7 @@ Do you really want to delete this category and its links ?')."')) return false;\
                 $sortDirection = 'ASC';
             }
 
-            $sql = "SELECT id, display_order FROM $movetable
+            $sql = "SELECT id, display_order FROM $tbl_categories
                     WHERE c_id = $courseId
                     ORDER BY display_order $sortDirection";
             $linkresult = Database:: query($sql);
@@ -1586,7 +1579,8 @@ Do you really want to delete this category and its links ?')."')) return false;\
 
             if ($showActionLinks) {
                 if (api_is_allowed_to_edit(null, true)) {
-                    if ($session_id == $category->getSessionId()) {
+                    if ($category->getFirstResourceLink() && $category->getFirstResourceLink()->getSession() &&
+                        $session_id == $category->getFirstResourceLink()->getSession()->getId()) {
                         $header .= $strVisibility;
                         $header .= self::showCategoryAdminTools($category, $counter, count($categories));
                     } else {
@@ -1874,18 +1868,18 @@ Do you really want to delete this category and its links ?')."')) return false;\
     private static function moveLinkDisplayOrder($id, $direction)
     {
         $em = Database::getManager();
+        $repo = Container::getLinkRepository();
+
         /** @var CLink $link */
-        $link = $em->find('ChamiloCourseBundle:CLink', $id);
+        $link = $repo->find($id);
 
         if (!$link) {
             return false;
         }
 
-        $compareLinks = $em
-            ->getRepository('ChamiloCourseBundle:CLink')
+        $compareLinks = $repo
             ->findBy(
                 [
-                    'cId' => $link->getCId(),
                     'categoryId' => $link->getCategory() ? $link->getCategory()->getIid() : 0,
                 ],
                 ['displayOrder' => $direction]
@@ -1896,7 +1890,7 @@ Do you really want to delete this category and its links ?')."')) return false;\
 
         /** @var CLink $compareLink */
         foreach ($compareLinks as $compareLink) {
-            if ($compareLink->getId() !== $link->getId()) {
+            if ($compareLink->getIid() !== $link->getIid()) {
                 $prevLink = $compareLink;
 
                 continue;

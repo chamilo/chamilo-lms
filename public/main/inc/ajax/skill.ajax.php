@@ -1,9 +1,14 @@
 <?php
+
 /* For licensing terms, see /license.txt */
+
+use Chamilo\CoreBundle\Entity\SkillRelCourse;
+use Chamilo\CoreBundle\Entity\SkillRelItem;
 
 /**
  * Responses to AJAX calls.
  */
+
 require_once __DIR__.'/../global.inc.php';
 
 $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
@@ -373,12 +378,12 @@ switch ($action) {
             exit;
         }
         $em = Database::getManager();
-        $skills = $em->getRepository('ChamiloCoreBundle:SkillRelCourse')->findBy(
+        $skills = $em->getRepository(SkillRelCourse::class)->findBy(
             ['course' => $courseId, 'session' => $sessionId]
         );
 
         $returnSkills = [];
-        /** @var \Chamilo\CoreBundle\Entity\SkillRelCourse $skill */
+        /** @var SkillRelCourse $skill */
         foreach ($skills as $skill) {
             $returnSkills[] = [
                 'id' => $skill->getSkill()->getId(),
@@ -420,9 +425,9 @@ switch ($action) {
                 exit;
             }
 
-            $session = $em->getRepository('ChamiloCoreBundle:Session')->find($sessionId);
-            /** @var \Chamilo\CoreBundle\Entity\SkillRelItem $skillRelItem */
-            $skillRelItem = $em->getRepository('ChamiloCoreBundle:SkillRelItem')->findOneBy(
+            $session = api_get_session_entity($sessionId);
+            /** @var SkillRelItem $skillRelItem */
+            $skillRelItem = $em->getRepository(SkillRelItem::class)->findOneBy(
                 ['itemId' => $itemId, 'itemType' => $typeId, 'skill' => $skillId]
             );
 

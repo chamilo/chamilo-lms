@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\SysAnnouncement;
+
 /**
  * Class SystemAnnouncementManager.
  */
@@ -92,8 +94,6 @@ class SystemAnnouncementManager
 
         $announcements = Database::query($sql);
         if (Database::num_rows($announcements) > 0) {
-            $query_string = ereg_replace('announcement=[1-9]+', '', $_SERVER['QUERY_STRING']);
-            $query_string = ereg_replace('&$', '', $query_string);
             $url = api_get_self();
             echo '<div class="system_announcements">';
             echo '<h3>'.get_lang('Portal news').'</h3>';
@@ -101,11 +101,7 @@ class SystemAnnouncementManager
 
             while ($announcement = Database::fetch_object($announcements)) {
                 if ($id != $announcement->id) {
-                    if (strlen($query_string) > 0) {
-                        $show_url = 'news_list.php#'.$announcement->id;
-                    } else {
-                        $show_url = 'news_list.php#'.$announcement->id;
-                    }
+                    $show_url = 'news_list.php#'.$announcement->id;
                     $display_date = api_convert_and_format_date($announcement->display_date, DATE_FORMAT_LONG);
                     echo '<a name="'.$announcement->id.'"></a>
                         <div class="system_announcement">
@@ -119,7 +115,7 @@ class SystemAnnouncementManager
                     echo '<div class="system_announcement">
                             <div class="system_announcement_title">'
                         .$announcement->display_date.'
-                                <a name="ann'.$announcement->id.'" href="'.$url.'?'.$query_string.'#ann'.$announcement->id.'">'.
+                                <a name="ann'.$announcement->id.'" href="'.$url.'?#ann'.$announcement->id.'">'.
                         $announcement->title.'
                                 </a>
                             </div>';
@@ -607,7 +603,7 @@ class SystemAnnouncementManager
         $promotionId = 0
     ) {
         $em = Database::getManager();
-        $announcement = $em->find('ChamiloCoreBundle:SysAnnouncement', $id);
+        $announcement = $em->find(SysAnnouncement::class, $id);
         if (!$announcement) {
             return false;
         }
@@ -931,7 +927,7 @@ class SystemAnnouncementManager
      * @param string $visible see self::VISIBLE_* constants
      * @param int    $id      The identifier of the announcement to display
      *
-     * @return string
+     * @return array
      */
     public static function getAnnouncements($visible, $id = null): array
     {

@@ -1877,11 +1877,11 @@ class ExtraField extends Model
 
     /**
      * @param array $params
-     * @param bool  $show_query
+     * @param bool  $showQuery
      *
      * @return int|bool
      */
-    public function save($params, $show_query = false)
+    public function save($params, $showQuery = false)
     {
         $fieldInfo = self::get_handler_field_info_by_field_variable($params['variable']);
         $params = $this->clean_parameters($params);
@@ -1890,7 +1890,7 @@ class ExtraField extends Model
         if ($fieldInfo) {
             return $fieldInfo['id'];
         } else {
-            $id = parent::save($params, $show_query);
+            $id = parent::save($params, $showQuery);
             if ($id) {
                 $fieldOption = new ExtraFieldOption($this->type);
                 $params['field_id'] = $id;

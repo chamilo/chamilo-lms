@@ -1437,9 +1437,7 @@ class Statistics
      */
     private static function getLoginsByDate($startDate, $endDate)
     {
-        /** @var DateTime $startDate */
         $startDate = api_get_utc_datetime("$startDate 00:00:00");
-        /** @var DateTime $endDate */
         $endDate = api_get_utc_datetime("$endDate 23:59:59");
 
         if (empty($startDate) || empty($endDate)) {
@@ -1472,8 +1470,7 @@ class Statistics
                 GROUP BY u.id";
 
         $stmt = Database::query($sql);
-        $result = Database::store_result($stmt, 'ASSOC');
 
-        return $result;
+        return Database::store_result($stmt, 'ASSOC');
     }
 }

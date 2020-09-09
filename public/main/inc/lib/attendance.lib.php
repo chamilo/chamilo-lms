@@ -252,7 +252,7 @@ class Attendance
                 $is_done_all_calendar = self::is_all_attendance_calendar_done($id);
 
                 if ($is_done_all_calendar) {
-                    $locked = $attendance[4];
+                    $locked = $attendance->getLocked();
                     if (0 == $locked) {
                         if (api_is_platform_admin()) {
                             $message_alert = get_lang('Are you sure you want to lock the attendance?');

@@ -3,6 +3,7 @@
 
 /**
  * Class SubLanguageManager.
+ * @deprecated
  */
 class SubLanguageManager
 {
@@ -80,7 +81,7 @@ class SubLanguageManager
         $table = Database::get_main_table(TABLE_MAIN_LANGUAGE);
         $parent_id = intval($parent_id);
         $sub_language_id = intval($sub_language_id);
-        $sql = "SELECT * FROM $table 
+        $sql = "SELECT * FROM $table
                 WHERE
                     parent_id = $parent_id AND
                     id = $sub_language_id";

@@ -12,13 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * CLink.
  *
- * @ORM\Table(
- *  name="c_link",
- *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"}),
- *      @ORM\Index(name="session_id", columns={"session_id"})
- *  }
- * )
+ * @ORM\Table(name="c_link")
  * @ORM\Entity
  */
 class CLink extends AbstractResource implements ResourceInterface
@@ -33,13 +27,6 @@ class CLink extends AbstractResource implements ResourceInterface
     protected $iid;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="c_id", type="integer")
-     */
-    protected $cId;
-
-    /**
      * @var string
      * @Assert\NotBlank()
      * @ORM\Column(name="url", type="text", nullable=false)
@@ -48,6 +35,7 @@ class CLink extends AbstractResource implements ResourceInterface
 
     /**
      * @var string
+     * @Assert\NotBlank()
      * @ORM\Column(name="title", type="string", length=150, nullable=true)
      */
     protected $title;
@@ -87,13 +75,6 @@ class CLink extends AbstractResource implements ResourceInterface
      * @ORM\Column(name="target", type="string", length=10, nullable=true)
      */
     protected $target;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="session_id", type="integer", nullable=true)
-     */
-    protected $sessionId;
 
     public function __construct()
     {
@@ -249,57 +230,9 @@ class CLink extends AbstractResource implements ResourceInterface
         return $this->target;
     }
 
-    /**
-     * Set sessionId.
-     *
-     * @param int $sessionId
-     *
-     * @return CLink
-     */
-    public function setSessionId($sessionId)
-    {
-        $this->sessionId = $sessionId;
-
-        return $this;
-    }
-
-    /**
-     * Get sessionId.
-     *
-     * @return int
-     */
-    public function getSessionId()
-    {
-        return $this->sessionId;
-    }
-
     public function getIid(): int
     {
         return $this->iid;
-    }
-
-    /**
-     * Set cId.
-     *
-     * @param int $cId
-     *
-     * @return CLink
-     */
-    public function setCId($cId)
-    {
-        $this->cId = $cId;
-
-        return $this;
-    }
-
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
-    {
-        return $this->cId;
     }
 
     public function getCategory(): ?CLinkCategory

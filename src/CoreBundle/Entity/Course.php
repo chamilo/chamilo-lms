@@ -69,7 +69,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * @var string The course title
      *
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message="A Course requires a title")
      *
      * @Groups({"course:read", "course:write", "course_rel_user:read", "session_rel_course_rel_user:read"})
      *
@@ -133,9 +133,9 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     protected $sessionUserSubscriptions;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CGroup", mappedBy="course", cascade={"persist", "remove"})
+     * ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CGroup", mappedBy="course", cascade={"persist", "remove"})
      */
-    protected $groups;
+    //protected $groups;
 
     /**
      * @var CTool[]|ArrayCollection

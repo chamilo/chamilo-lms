@@ -475,7 +475,7 @@ class Link extends Model
         }
 
         $sql = "SELECT * FROM $tbl_link
-                WHERE c_id = $course_id AND iid= $id ";
+                WHERE iid= $id ";
         $result = Database::query($sql);
         $data = [];
         if (Database::num_rows($result)) {

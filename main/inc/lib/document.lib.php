@@ -5732,10 +5732,8 @@ class DocumentManager
                         $firstPath = $path_displayed;
                         $group_dir = $firstPath;
                     }
-                    $display_folder = substr($path_displayed, strlen($group_dir) + 1);
-                    if ($display_folder != '') {
-                        $display_folder = ' &mdash; '.$display_folder;
-                    } else {
+                    $display_folder = substr($path_displayed, strlen($group_dir));
+                    if ($display_folder == '') {
                         $display_folder = get_lang('Documents');
                     }
                     $options[$folder] = $display_folder;

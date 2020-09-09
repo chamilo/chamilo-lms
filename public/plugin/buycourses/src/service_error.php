@@ -2,8 +2,6 @@
 /* For license terms, see /license.txt */
 /**
  * Errors management for the Buy Courses plugin - Redirects to service_catalog.php with a error msg.
- *
- * @package chamilo.plugin.buycourses
  */
 require_once '../config.php';
 

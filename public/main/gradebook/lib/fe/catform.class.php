@@ -390,7 +390,6 @@ class CatForm extends FormValidator
             );
         }
 
-
         $isRequirementCheckbox = $this->addCheckBox(
             'is_requirement',
             [
@@ -399,7 +398,6 @@ class CatForm extends FormValidator
             ],
             get_lang('Is requirement')
         );
-        
 
         if ($this->category_object->getIsRequirement()) {
             $isRequirementCheckbox->setChecked(true);

@@ -2602,7 +2602,6 @@ class Category implements GradebookItem
         return $this->weight - $subWeight;
     }
 
-
     /**
      * @return int
      */

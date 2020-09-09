@@ -81,7 +81,7 @@ if ($show_headers) {
         body { background: none;}
     </style>';
 
-    if ($origin == 'mobileapp') {
+    if ('mobileapp' == $origin) {
         echo '<div class="actions">';
         echo '<a href="javascript:window.history.go(-1);">'.
             Display::return_icon('back.png', get_lang('GoBackToQuestionList'), [], 32).'</a>';

@@ -1,7 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-
 use Chamilo\CoreBundle\Entity\ExtraField as ExtraFieldEntity;
 use ChamiloSession as Session;
 use Knp\Component\Pager\Paginator;

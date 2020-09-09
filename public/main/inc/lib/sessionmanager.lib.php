@@ -12,7 +12,6 @@ use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\SessionRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\Repository\SequenceRepository;
 use ExtraField as ExtraFieldModel;
 use Monolog\Logger;
 
@@ -2598,7 +2597,7 @@ class SessionManager
             return false;
         }
 
-        $session = api_get_session_entity( $sessionId);
+        $session = api_get_session_entity($sessionId);
 
         if (!$session) {
             return false;

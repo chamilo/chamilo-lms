@@ -50,6 +50,11 @@ class CAttendanceCalendar
      */
     protected $doneAttendance;
 
+    public function getIid(): int
+    {
+        return $this->iid;
+    }
+
     /**
      * Set attendanceId.
      *

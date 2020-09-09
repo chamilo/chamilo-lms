@@ -459,7 +459,7 @@ switch ($action) {
             function ($session) use ($q) {
                 $name = strtolower($session['text']);
 
-                return strpos($name, $q) !== false;
+                return false !== strpos($name, $q);
             }
         );
 

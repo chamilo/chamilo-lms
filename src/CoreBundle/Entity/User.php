@@ -98,7 +98,7 @@ class User implements UserInterface, EquatableInterface
      * @Groups({"user:read", "user:write", "resource_node:read"})
      * @ORM\Column(name="lastname", type="string", length=64, nullable=true, unique=false)
      */
-    protected $lastname;
+    protected $lastnamt
 
     /**
      * @var string
@@ -1024,6 +1024,11 @@ class User implements UserInterface, EquatableInterface
         $this->courseGroupsAsMember = new ArrayCollection();
         $this->courseGroupsAsTutor = new ArrayCollection();
     }
+  
+    public function __toString()
+    {
+        return $this->username;
+    }
 
     /**
      * @return int
@@ -1756,13 +1761,6 @@ class User implements UserInterface, EquatableInterface
         return $this->active;
     }
 
-    /**
-     * Set openid.
-     *
-     * @param string $openid
-     *
-     * @return User
-     */
     public function setOpenid($openid)
     {
         $this->openid = $openid;
@@ -1802,8 +1800,8 @@ class User implements UserInterface, EquatableInterface
     public function getTheme()
     {
         return $this->theme;
-    }
-
+    } 
+  
     /**
      * Set hrDeptId.
      *

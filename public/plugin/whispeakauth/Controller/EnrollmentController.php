@@ -7,8 +7,6 @@ use Chamilo\PluginBundle\WhispeakAuth\Request\ApiRequest;
 
 /**
  * Class EnrollmentController.
- *
- * @package Chamilo\PluginBundle\WhispeakAuth\Controller
  */
 class EnrollmentController extends BaseController
 {

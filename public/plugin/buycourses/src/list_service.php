@@ -2,21 +2,19 @@
 /* For license terms, see /license.txt */
 /**
  * Configuration script for the Buy Courses plugin.
- *
- * @package chamilo.plugin.buycourses
  */
 $cidReset = true;
 
 require_once __DIR__.'/../../../main/inc/global.inc.php';
 
 $plugin = BuyCoursesPlugin::create();
-$includeSession = $plugin->get('include_sessions') === 'true';
-$includeServices = $plugin->get('include_services') === 'true';
+$includeSession = 'true' === $plugin->get('include_sessions');
+$includeServices = 'true' === $plugin->get('include_services');
 if (!$includeServices) {
     api_not_allowed(true);
 }
 
-$taxEnable = $plugin->get('tax_enable') === 'true';
+$taxEnable = 'true' === $plugin->get('tax_enable');
 
 api_protect_admin_script(true);
 

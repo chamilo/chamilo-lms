@@ -462,7 +462,7 @@ if ($nbStudents > 0) {
         }
     }
 
-    if ($hideReports === false) {
+    if (false === $hideReports) {
         $conditions['include_invited_users'] = false;
         $usersTracking = TrackingCourseLog::get_user_data(
             null,
@@ -597,14 +597,14 @@ if ($nbStudents > 0) {
         $_GET['users_tracking_per_page'] = 1000000;
     }
 
-    if ($hideReports === false) {
-    $table = new SortableTableFromArray(
+    if (false === $hideReports) {
+        $table = new SortableTableFromArray(
         $usersTracking,
         1,
         20,
         'users_tracking'
     );
-    $table->total_number_of_items = $nbStudents;
+        $table->total_number_of_items = $nbStudents;
     } else {
         $conditions['include_invited_users'] = true;
         $table = new SortableTable(
@@ -694,7 +694,7 @@ if ($nbStudents > 0) {
     $table->set_header(14, get_lang('LatestLoginInCourse'), false);
     $headers['latest_login'] = get_lang('LatestLoginInCourse');
     $counter = 15;
-    if (api_get_setting('show_email_addresses') === 'true') {
+    if ('true' === api_get_setting('show_email_addresses')) {
         $table->set_header($counter, get_lang('Email'), false);
         $headers['email'] = get_lang('Email');
         $counter++;
@@ -715,8 +715,8 @@ if ($nbStudents > 0) {
             $key = Security::remove_XSS($key);
             $value = Security::remove_XSS($value);
             $parameters[$key] = $value;
-            }
         }
+    }
     $parameters['cidReq'] = $courseCode;
     $parameters['id_session'] = $sessionId;
     $table->set_additional_parameters($parameters);

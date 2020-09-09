@@ -36,6 +36,13 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     protected $iid;
 
     /**
+     * @var string
+     * @Assert\NotBlank()
+     * @ORM\Column(name="title", type="string", length=255, nullable=true)
+     */
+    protected $title;
+
+    /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
@@ -55,13 +62,6 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
      * @ORM\Column(name="url_correction", type="string", length=500, nullable=true)
      */
     protected $urlCorrection;
-
-    /**
-     * @var string
-     * @Assert\NotBlank()
-     * @ORM\Column(name="title", type="string", length=255, nullable=true)
-     */
-    protected $title;
 
     /**
      * @var string

@@ -306,25 +306,25 @@ function getReport($userId, $from, $to, $addTime = false)
     }
     $totalCourseSessionTable = '';
     if ($courseSessionTableData) {
-    $table = new HTML_Table(['class' => 'data_table']);
-    $headers = [
+        $table = new HTML_Table(['class' => 'data_table']);
+        $headers = [
         get_lang('Course'),
             get_lang('TotalDuration'),
     ];
-    $row = 0;
-    $column = 0;
-    foreach ($headers as $header) {
-        $table->setHeaderContents($row, $column, $header);
-        $column++;
-    }
-    $row++;
-    foreach ($courseSessionTableData as $name => $duration) {
+        $row = 0;
         $column = 0;
-        $table->setCellContents($row, $column++, $name);
-        $table->setCellContents($row, $column++, $duration);
+        foreach ($headers as $header) {
+            $table->setHeaderContents($row, $column, $header);
+            $column++;
+        }
         $row++;
-    }
-    $totalCourseSessionTable = $table->toHtml();
+        foreach ($courseSessionTableData as $name => $duration) {
+            $column = 0;
+            $table->setCellContents($row, $column++, $name);
+            $table->setCellContents($row, $column++, $duration);
+            $row++;
+        }
+        $totalCourseSessionTable = $table->toHtml();
     }
 
     $result = [];
@@ -445,7 +445,7 @@ if ($formByDay->validate()) {
             foreach ($period as $value) {
                 $dateToCheck = api_get_utc_datetime($value->format('Y-m-d').' 00:00:01');
                 $end = api_get_utc_datetime($value->format('Y-m-d').' 23:59:59');
-                if ($counter === 1) {
+                if (1 === $counter) {
                     $dateToCheck = $item['login_date'];
                 }
                 $itemKey = substr($value->format('Y-m-d'), 0, 10);

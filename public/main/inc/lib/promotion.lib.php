@@ -288,11 +288,11 @@ class Promotion extends Model
 
     /**
      * @param array $params
-     * @param bool  $show_query
+     * @param bool  $showQuery
      *
      * @return bool
      */
-    public function save($params, $show_query = false)
+    public function save($params, $showQuery = false)
     {
         $promotion = new \Chamilo\CoreBundle\Entity\Promotion();
 

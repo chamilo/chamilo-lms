@@ -3,8 +3,6 @@
 
 /**
  * Configuration page for payment methods for the Buy Courses plugin.
- *
- * @package chamilo.plugin.buycourses
  */
 $cidReset = true;
 
@@ -20,7 +18,7 @@ $commissionsEnable = $plugin->get('commissions_enable');
 $culqiEnable = $plugin->get('culqi_enable');
 
 if (isset($_GET['action'], $_GET['id'])) {
-    if ($_GET['action'] == 'delete_taccount') {
+    if ('delete_taccount' == $_GET['action']) {
         $plugin->deleteTransferAccount($_GET['id']);
 
         Display::addFlash(
@@ -90,8 +88,8 @@ $globalSettingForm->addElement(
     $plugin->get_lang('SaleEmail')
 );
 
-$taxEnable = $plugin->get('tax_enable') === 'true';
-$invoicingEnable = $plugin->get('invoicing_enable') === 'true';
+$taxEnable = 'true' === $plugin->get('tax_enable');
+$invoicingEnable = 'true' === $plugin->get('invoicing_enable');
 
 if ($taxEnable) {
     $globalSettingForm->addHtml('<hr/>');

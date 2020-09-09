@@ -88,7 +88,7 @@ echo MySpace::getTopMenu();
 echo '</div>';
 echo MySpace::getAdminActions();
 
-if ($action !== 'add_user') {
+if ('add_user' !== $action) {
     $form = new FormValidator('language_filter');
     $form->addHidden('a', 'language_filter');
     $form->addSelectLanguage(
@@ -133,9 +133,9 @@ echo $style;
 
 $tableContent = '';
 
-if ($action !== 'add_user') {
+if ('add_user' !== $action) {
     $conditions = ['status' => STUDENT_BOSS, 'active' => 1];
-    if (!empty($languageFilter) && $languageFilter !== 'placeholder') {
+    if (!empty($languageFilter) && 'placeholder' !== $languageFilter) {
         $conditions['language'] = $languageFilter;
     }
     $bossList = UserManager::get_user_list($conditions, ['firstname']);

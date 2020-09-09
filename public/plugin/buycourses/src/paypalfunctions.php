@@ -30,7 +30,7 @@ $sBNCode = "PP-ECWizard";
  * For the sandbox, the URL is https://www.sandbox.paypal.com/webscr&cmd=_express-checkout&token=
  * For the live site, the URL is https://www.paypal.com/webscr&cmd=_express-checkout&token=
  */
-if ($SandboxFlag == true) {
+if (true == $SandboxFlag) {
     $API_Endpoint = "https://api-3t.sandbox.paypal.com/nvp";
     $PAYPAL_URL = "https://www.sandbox.paypal.com/webscr?cmd=_express-checkout&token=";
 } else {
@@ -41,7 +41,7 @@ if ($SandboxFlag == true) {
 $USE_PROXY = false;
 $version = "93";
 
-if (session_id() == "") {
+if ("" == session_id()) {
     session_start();
 }
 
@@ -84,7 +84,7 @@ function CallShortcutExpressCheckout($paymentAmount, $currencyCodeType, $payment
      */
     $resArray = hash_call("SetExpressCheckout", $nvpstr);
     $ack = strtoupper($resArray["ACK"]);
-    if ($ack == "SUCCESS" || $ack == "SUCCESSWITHWARNING") {
+    if ("SUCCESS" == $ack || "SUCCESSWITHWARNING" == $ack) {
         $token = urldecode($resArray["TOKEN"]);
         $_SESSION['TOKEN'] = $token;
     }
@@ -150,7 +150,7 @@ function CallMarkExpressCheckout(
      */
     $resArray = hash_call("SetExpressCheckout", $nvpstr);
     $ack = strtoupper($resArray["ACK"]);
-    if ($ack == "SUCCESS" || $ack == "SUCCESSWITHWARNING") {
+    if ("SUCCESS" == $ack || "SUCCESSWITHWARNING" == $ack) {
         $token = urldecode($resArray["TOKEN"]);
         $_SESSION['TOKEN'] = $token;
     }
@@ -189,7 +189,7 @@ function GetShippingDetails($token)
      */
     $resArray = hash_call("GetExpressCheckoutDetails", $nvpstr);
     $ack = strtoupper($resArray["ACK"]);
-    if ($ack == "SUCCESS" || $ack == "SUCCESSWITHWARNING") {
+    if ("SUCCESS" == $ack || "SUCCESSWITHWARNING" == $ack) {
         $_SESSION['payer_id'] = $resArray['PAYERID'];
     }
 

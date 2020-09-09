@@ -535,7 +535,7 @@ switch ($action) {
                     $prerequisites = isset($_POST['prerequisites']) ? $_POST['prerequisites'] : '';
                     $maxTimeAllowed = isset($_POST['maxTimeAllowed']) ? $_POST['maxTimeAllowed'] : '';
 
-	                    if (TOOL_DOCUMENT === $_POST['type']) {
+                    if (TOOL_DOCUMENT === $_POST['type']) {
                         if (isset($_POST['path']) && isset($_GET['id']) && !empty($_GET['id'])) {
                             $document_id = $_POST['path'];
                         } else {
@@ -625,7 +625,7 @@ switch ($action) {
                 $lp_item_obj = new learnpathItem($_REQUEST['id']);
 
                 // Remove audio
-                if (isset($_GET['delete_file']) && $_GET['delete_file'] == 1) {
+                if (isset($_GET['delete_file']) && 1 == $_GET['delete_file']) {
                     $lp_item_obj->removeAudio();
                     Display::addFlash(Display::return_message(get_lang('FileDeleted')));
 
@@ -849,7 +849,7 @@ switch ($action) {
                 header('Location: '.$url);
                 exit;
             }
-            if (isset($_GET['view']) && $_GET['view'] === 'build') {
+            if (isset($_GET['view']) && 'build' === $_GET['view']) {
                 require 'lp_edit_item.php';
             } else {
                 require 'lp_admin_view.php';

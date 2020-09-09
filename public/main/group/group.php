@@ -224,22 +224,21 @@ if (api_is_allowed_to_edit(false, true)) {
 
 $actionsRight = GroupManager::getSearchForm();
 $toolbar = Display::toolbarAction('toolbar-groups', [$actionsLeft, $actionsRight]);
-$group_cats = GroupManager::get_categories(api_get_course_id());
+$categories = GroupManager::get_categories();
 echo $toolbar;
 echo UserManager::getUserSubscriptionTab(3);
 
 /*  List all categories */
 if ('true' === api_get_setting('allow_group_categories')) {
     $defaultCategory = [
-        'id' => 0,
-        'iid' => 0,
+        'iid' => null,
         'description' => '',
         'title' => get_lang('Default groups'),
     ];
-    $group_cats = array_merge([$defaultCategory], $group_cats);
+    $categories = array_merge([$defaultCategory], $categories);
 
-    foreach ($group_cats as $index => $category) {
-        $categoryId = $category['id'];
+    foreach ($categories as $index => $category) {
+        $categoryId = $category['iid'];
         $group_list = GroupManager::get_group_list($categoryId);
         $groupToShow = GroupManager::process_groups($group_list, $categoryId);
 
@@ -268,11 +267,13 @@ if ('true' === api_get_setting('allow_group_categories')) {
             );
             // Move
             if (0 != $index) {
-                $actions .= ' <a href="group.php?'.api_get_cidreq().'&action=swap_cat_order&id1='.$categoryId.'&id2='.$group_cats[$index - 1]['id'].'">'.
+                $actions .= ' <a
+                href="group.php?'.api_get_cidreq().'&action=swap_cat_order&id1='.$categoryId.'&id2='.$categories[$index - 1]['iid'].'">'.
                     Display::return_icon('up.png', '&nbsp;', '', ICON_SIZE_SMALL).'</a>';
             }
-            if ($index != count($group_cats) - 1) {
-                $actions .= ' <a href="group.php?'.api_get_cidreq().'&action=swap_cat_order&id1='.$categoryId.'&id2='.$group_cats[$index + 1]['id'].'">'.
+            if ($index != count($categories) - 1) {
+                $actions .= ' <a
+                href="group.php?'.api_get_cidreq().'&action=swap_cat_order&id1='.$categoryId.'&id2='.$categories[$index + 1]['iid'].'">'.
                     Display::return_icon('down.png', '&nbsp;', '', ICON_SIZE_SMALL).'</a>';
             }
         }
@@ -291,7 +292,7 @@ if ('true' === api_get_setting('allow_group_categories')) {
     echo GroupManager::process_groups(GroupManager::get_group_list());
 }
 
-if (!isset($_GET['origin']) || 'learnpath' != $_GET['origin']) {
+if (!isset($_GET['origin']) || 'learnpath' !== $_GET['origin']) {
     Display::display_footer();
 }
 

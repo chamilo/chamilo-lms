@@ -342,7 +342,7 @@ try {
             exit;
             break;
         case Rest::UPDATE_USER_PAUSE_TRAINING:
-            $allow = api_get_plugin_setting('pausetraining', 'tool_enable') === 'true';
+            $allow = 'true' === api_get_plugin_setting('pausetraining', 'tool_enable');
 
             if (false === $allow) {
                 throw new Exception(get_lang('Plugin configured'));

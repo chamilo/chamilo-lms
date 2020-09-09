@@ -77,10 +77,10 @@ class FormValidator extends HTML_QuickForm
         $renderer->setFormTemplate($formTemplate);
 
         // Element template
-        if (isset($attributes['class']) && $attributes['class'] == 'form-inline') {
+        if (isset($attributes['class']) && 'form-inline' == $attributes['class']) {
             $elementTemplate = ' {label}  {element} ';
             $renderer->setElementTemplate($elementTemplate);
-        } elseif (isset($attributes['class']) && $attributes['class'] == 'form-search') {
+        } elseif (isset($attributes['class']) && 'form-search' == $attributes['class']) {
             $elementTemplate = ' {label}  {element} ';
             $renderer->setElementTemplate($elementTemplate);
         } else {
@@ -267,18 +267,6 @@ EOT;
      *
      * @return mixed
      */
-    public function addDatePicker($name, $label, $attributes = [])
-    {
-        return $this->addElement('DatePicker', $name, $label, $attributes);
-    }
-
-    /**
-     * @param string $name
-     * @param string $label
-     * @param array  $attributes
-     *
-     * @return mixed
-     */
     public function addSelectLanguage($name, $label, $options = [], $attributes = [])
     {
         return $this->addElement('SelectLanguage', $name, $label, $options, $attributes);
@@ -307,6 +295,18 @@ EOT;
             $options,
             $attributes
         );
+    }
+
+    /**
+     * @param string $name
+     * @param string $label
+     * @param array  $attributes
+     *
+     * @return mixed
+     */
+    public function addDatePicker($name, $label, $attributes = [])
+    {
+        return $this->addElement('DatePicker', $name, $label, $attributes);
     }
 
     /**

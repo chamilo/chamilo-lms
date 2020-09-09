@@ -5,6 +5,7 @@
 namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * SysAnnouncement.
@@ -82,12 +83,16 @@ class SysAnnouncement
     /**
      * @var string
      *
+     * @Assert\NotBlank()
+     *
      * @ORM\Column(name="title", type="string", length=250, nullable=false)
      */
     protected $title;
 
     /**
      * @var string
+     *
+     * @Assert\NotBlank()
      *
      * @ORM\Column(name="content", type="text", nullable=false)
      */

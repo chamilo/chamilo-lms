@@ -3,8 +3,6 @@
 
 /**
  * Create new Services for the Buy Courses plugin.
- *
- * @package chamilo.plugin.buycourses
  */
 $cidReset = true;
 

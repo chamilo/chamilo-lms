@@ -122,7 +122,7 @@ $logInfo = [
 ];
 Event::registerLog($logInfo);
 
-if ($origin === 'learnpath') {
+if ('learnpath' === $origin) {
     $pageTop .= '
         <form method="GET" action="exercise.php?'.api_get_cidreq().'">
             <input type="hidden" name="origin" value='.$origin.'/>
@@ -136,7 +136,7 @@ $i = $total_score = $max_score = 0;
 $remainingMessage = '';
 $attemptButton = '';
 
-if ($origin !== 'embeddable') {
+if ('embeddable' !== $origin) {
     $attemptButton = Display::toolbarButton(
         get_lang('Another attempt'),
         api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.api_get_cidreq().'&'.http_build_query([
@@ -195,7 +195,7 @@ if (!empty($exercise_stat_info)) {
 
 $max_score = $objExercise->get_max_score();
 
-if ($origin === 'embeddable') {
+if ('embeddable' === $origin) {
     $pageTop .= showEmbeddableFinishButton();
 } else {
     Display::addFlash(
@@ -258,7 +258,7 @@ if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
     $url = '../lp/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$learnpath_id
         .'&lp_item_id='.$learnpath_item_id.'&exeId='.$exercise_stat_info['exe_id']
         .'&fb_type='.$objExercise->getFeedbackType().'#atoc_'.$learnpath_item_id;
-    $href = $lp_mode === 'fullscreen' ? ' window.opener.location.href="'.$url.'" ' : ' top.location.href="'.$url.'"';
+    $href = 'fullscreen' === $lp_mode ? ' window.opener.location.href="'.$url.'" ' : ' top.location.href="'.$url.'"';
 
     if (api_is_allowed_to_session_edit()) {
         Exercise::cleanSessionVariables();

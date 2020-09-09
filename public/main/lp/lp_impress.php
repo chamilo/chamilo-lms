@@ -72,7 +72,7 @@ foreach ($list as $toc) {
     $html .= '<div id="'.strtolower($stepId).'" title="'.$toc['title'].'" class="step slide" data-x="'.$x.'" data-y="-1500"  >';
     $html .= '<div class="impress-content">';
     $src = $lp->get_link('http', $toc['id']);
-    if ($toc['type'] !== 'dir') {
+    if ('dir' !== $toc['type']) {
         //just showing the src in a iframe ...
         $html .= '<h2>'.$toc['title'].'</h2>';
         $html .= '<iframe border="0" frameborder="0" src="'.$src.'"></iframe>';

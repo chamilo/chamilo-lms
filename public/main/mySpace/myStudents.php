@@ -111,7 +111,7 @@ if (isset($_GET['from']) && 'myspace' === $_GET['from']) {
 $nameTools = get_lang('Learner details');
 
 if (!empty($details)) {
-    if ($origin === 'user_course') {
+    if ('user_course' === $origin) {
         if (empty($cidReq)) {
             $interbreadcrumb[] = [
                 'url' => api_get_path(WEB_COURSE_PATH).$courseInfo['directory'],
@@ -979,7 +979,7 @@ if ('true' === api_get_setting('allow_terms_conditions')) {
     ];
 }
 
-if (isset($_GET['action']) and $_GET['action'] == 'all_attendance') {
+if (isset($_GET['action']) and 'all_attendance' == $_GET['action']) {
     /*Display all attendances */
     // Varible for all attendance list
     $startDate = new DateTime();
@@ -1061,7 +1061,7 @@ if (isset($_GET['action']) and $_GET['action'] == 'all_attendance') {
             $date = api_get_local_time($attendanceWork[1]);
             $sId = $attendanceWork['session'];
             $printSession = '';
-            if ($sId != 0) {
+            if (0 != $sId) {
                 // get session name
                 $printSession = "(".$attendanceWork['sessionName'].")";
             }
@@ -1764,8 +1764,8 @@ if (empty($details)) {
                     echo '</td>';
                 }
 
-                    echo '</tr>';
-                }
+                echo '</tr>';
+            }
             echo '</tbody></table></div>';
         }
     }

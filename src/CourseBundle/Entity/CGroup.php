@@ -6,10 +6,8 @@ namespace Chamilo\CourseBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use Chamilo\CoreBundle\Entity\AbstractResource;
-use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Traits\CourseTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
@@ -19,8 +17,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(
  *  name="c_group_info",
  *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"}),
- *      @ORM\Index(name="session_id", columns={"session_id"})
  *  }
  * )
  *
@@ -29,8 +25,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class CGroup extends AbstractResource implements ResourceInterface
 {
-    use CourseTrait;
-
     /**
      * @var int
      *
@@ -55,11 +49,12 @@ class CGroup extends AbstractResource implements ResourceInterface
     protected $status;
 
     /**
-     * @var int
+     * @var CGroupCategory
      *
-     * @ORM\Column(name="category_id", type="integer", nullable=true)
+     * @ORM\ManyToOne(targetEntity="CGroupCategory", cascade={"persist"})
+     * @ORM\JoinColumn(name="category_id", referencedColumnName="iid", onDelete="CASCADE")
      */
-    protected $categoryId;
+    protected $category;
 
     /**
      * @var string
@@ -148,24 +143,9 @@ class CGroup extends AbstractResource implements ResourceInterface
     /**
      * @var int
      *
-     * @ORM\Column(name="session_id", type="integer", nullable=false)
-     */
-    protected $sessionId;
-
-    /**
-     * @var int
-     *
      * @ORM\Column(name="document_access", type="integer", nullable=false, options={"default":0})
      */
     protected $documentAccess;
-
-    /**
-     * @var Course
-     *
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="groups", cascade={"persist"})
-     * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false)
-     */
-    protected $course;
 
     /**
      * @var ArrayCollection|CGroupRelUser[]
@@ -247,30 +227,6 @@ class CGroup extends AbstractResource implements ResourceInterface
     public function getStatus()
     {
         return $this->status;
-    }
-
-    /**
-     * Set categoryId.
-     *
-     * @param int $categoryId
-     *
-     * @return CGroup
-     */
-    public function setCategoryId($categoryId)
-    {
-        $this->categoryId = $categoryId;
-
-        return $this;
-    }
-
-    /**
-     * Get categoryId.
-     *
-     * @return int
-     */
-    public function getCategoryId()
-    {
-        return $this->categoryId;
     }
 
     /**
@@ -528,28 +484,6 @@ class CGroup extends AbstractResource implements ResourceInterface
         return $this->selfUnregistrationAllowed;
     }
 
-    /**
-     * Set sessionId.
-     *
-     * @param int $sessionId
-     */
-    public function setSessionId($sessionId): self
-    {
-        $this->sessionId = $sessionId;
-
-        return $this;
-    }
-
-    /**
-     * Get sessionId.
-     *
-     * @return int
-     */
-    public function getSessionId()
-    {
-        return $this->sessionId;
-    }
-
     public function getDocumentAccess(): int
     {
         return $this->documentAccess;
@@ -609,9 +543,18 @@ class CGroup extends AbstractResource implements ResourceInterface
         return $relation->count() > 0;
     }
 
-    /**
-     * Resource identifier.
-     */
+    public function getCategory(): CGroupCategory
+    {
+        return $this->category;
+    }
+
+    public function setCategory(CGroupCategory $category = null): CGroup
+    {
+        $this->category = $category;
+
+        return $this;
+    }
+
     public function getResourceIdentifier(): int
     {
         return $this->iid;

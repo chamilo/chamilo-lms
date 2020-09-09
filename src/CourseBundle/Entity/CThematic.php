@@ -42,7 +42,9 @@ class CThematic extends AbstractResource implements ResourceInterface
 
     /**
      * @var string
+     *
      * @Assert\NotBlank()
+     *
      * @ORM\Column(name="title", type="text", nullable=false)
      */
     protected $title;

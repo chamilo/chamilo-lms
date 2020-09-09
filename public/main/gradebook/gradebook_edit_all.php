@@ -3,7 +3,6 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *
  * @author Julio Montoya - fixes in order to use gradebook models + some code cleaning
  */
 require_once __DIR__.'/../inc/global.inc.php';

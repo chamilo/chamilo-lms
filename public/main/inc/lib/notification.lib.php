@@ -1,10 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\Hook\HookNotificationContent;
-use Chamilo\CoreBundle\Hook\HookNotificationTitle;
-
 /**
  * Notification class
  * This class provides methods for the Notification management.

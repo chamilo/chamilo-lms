@@ -48,6 +48,17 @@ class CLpItem
     /**
      * @var string
      *
+     * @Assert\NotBlank()
+     *
+     * @ORM\Column(name="title", type="string", length=511, nullable=false)
+     */
+    protected $title;
+
+    /**
+     * @var string
+     *
+     * @Assert\NotBlank()
+     *
      * @ORM\Column(name="item_type", type="string", length=32, nullable=false)
      */
     protected $itemType;
@@ -58,13 +69,6 @@ class CLpItem
      * @ORM\Column(name="ref", type="text", nullable=false)
      */
     protected $ref;
-
-    /**
-     * @var string
-     * @Assert\NotBlank()
-     * @ORM\Column(name="title", type="string", length=511, nullable=false)
-     */
-    protected $title;
 
     /**
      * @var string

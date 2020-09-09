@@ -1,7 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-
 /**
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup,
  *  refactoring and rewriting large parts (if not all) of the code

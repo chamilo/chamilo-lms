@@ -68,7 +68,7 @@ class ExerciseLib
 
         $questionRequireAuth = WhispeakAuthPlugin::questionRequireAuthentify($questionId);
 
-        if ($exercise->getFeedbackType() != EXERCISE_FEEDBACK_TYPE_END) {
+        if (EXERCISE_FEEDBACK_TYPE_END != $exercise->getFeedbackType()) {
             $show_comment = false;
         }
 
@@ -104,7 +104,7 @@ class ExerciseLib
                     return false;
                 }
 
-                if (!empty($questionDescription) && $answerType != READING_COMPREHENSION) {
+                if (!empty($questionDescription) && READING_COMPREHENSION != $answerType) {
                     echo Display::div(
                         $questionDescription,
                         ['class' => 'question_description']
@@ -532,7 +532,7 @@ class ExerciseLib
                             }
                         }
 
-                        if ($answerType != UNIQUE_ANSWER_IMAGE) {
+                        if (UNIQUE_ANSWER_IMAGE != $answerType) {
                             $answer = Security::remove_XSS($answer, STUDENT);
                         }
                         $s .= Display::input(
@@ -1364,8 +1364,8 @@ HTML;
                 $s .= '</table>';
             }
 
-            if ($answerType == DRAGGABLE) {
-                $isVertical = $objQuestionTmp->extra == 'v';
+            if (DRAGGABLE == $answerType) {
+                $isVertical = 'v' == $objQuestionTmp->extra;
                 $s .= "
                            </ul>
                         </div><!-- .col-md-12 -->
@@ -5155,8 +5155,6 @@ EOT;
      * Check if an exercise complies with the requirements to be embedded in the mobile app or a video.
      * By making sure it is set on one question per page and it only contains unique-answer or multiple-answer questions
      * or unique-answer image. And that the exam does not have immediate feedback.
-     *
-     * @param CQuiz $exercise
      *
      * @return bool
      */

@@ -50,7 +50,7 @@ $extraUrlCondition = '';
 if (api_is_multiple_url_enabled()) {
     $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
     $access_url_id = api_get_current_access_url_id();
-    if ($access_url_id != -1) {
+    if (-1 != $access_url_id) {
         $extraUrlJoin .= " INNER JOIN $tbl_user_rel_access_url as user_rel_url
 				           ON (u.id = user_rel_url.user_id) ";
         $extraUrlCondition = " AND access_url_id = $access_url_id";
@@ -105,7 +105,7 @@ if (strlen($course_code) > 0) {
     if (api_is_multiple_url_enabled()) {
         $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $access_url_id = api_get_current_access_url_id();
-        if ($access_url_id != -1) {
+        if (-1 != $access_url_id) {
             $sql .= " FROM $userTable u
 					INNER JOIN $tbl_user_rel_access_url as user_rel_url
                     ON (u.id = user_rel_url.user_id)
@@ -119,8 +119,8 @@ if (strlen($course_code) > 0) {
 }
 $data = [];
 $extra_fields = UserManager::get_extra_fields(0, 0, 5, 'ASC', false);
-if ($export['addcsvheader'] == '1' && $export['file_type'] === 'csv') {
-    if ($_configuration['password_encryption'] !== 'none') {
+if ('1' == $export['addcsvheader'] && 'csv' === $export['file_type']) {
+    if ('none' !== $_configuration['password_encryption']) {
         $data[] = [
             'UserId',
             'LastName',

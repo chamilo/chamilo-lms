@@ -286,7 +286,7 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
 
             <?php
             // Create the searching dialog.
-            if ($hideSearch !== true) {
+            if (true !== $hideSearch) {
                 echo 'grid.searchGrid(prmSearch);';
             }
             ?>

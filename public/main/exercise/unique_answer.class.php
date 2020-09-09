@@ -270,7 +270,7 @@ class UniqueAnswer extends Question
         if (!empty($this->id)) {
             $form->setDefaults($defaults);
         } else {
-            if ($this->isContent == 1) {
+            if (1 == $this->isContent) {
                 // Default sample content.
                 $form->setDefaults($defaults);
             } else {

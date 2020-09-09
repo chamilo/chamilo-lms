@@ -147,7 +147,7 @@ switch ($action) {
         $repository = $em->getRepository('ChamiloCourseBundle:CTool');
         // Allow tool visibility in sessions.
         if (api_is_allowed_to_edit(null, true)) {
-            if (is_array($tools_ids) && count($tools_ids) != 0) {
+            if (is_array($tools_ids) && 0 != count($tools_ids)) {
                 $total_tools = count($tools_ids);
                 for ($i = 0; $i < $total_tools; $i++) {
                     $tool_id = (int) $tools_ids[$i];
@@ -195,7 +195,7 @@ switch ($action) {
                     $toolImage = $tool->getImage();
                     $customIcon = $tool->getCustomIcon();
 
-                    if (api_get_setting('homepage_view') != 'activity_big') {
+                    if ('activity_big' != api_get_setting('homepage_view')) {
                         $toolImage = Display::return_icon(
                             $toolImage,
                             null,
@@ -224,14 +224,14 @@ switch ($action) {
                         $inactiveImage = CourseHome::getCustomWebIconPath().CourseHome::getDisableIcon($customIcon);
                     }
 
-                    $requested_image = $visibility == 0 ? $toolImage : $inactiveImage;
-                    $requested_class = $visibility == 0 ? '' : 'text-muted';
-                    $requested_message = $visibility == 0 ? 'is_active' : 'is_inactive';
-                    $requested_view = $visibility == 0 ? 'visible.png' : 'invisible.png';
-                    $requestedVisible = $visibility == 0 ? 1 : 0;
-                    $requested_view = $visibility == 0 ? 'visible.png' : 'invisible.png';
-                    $requested_fa_class = $visibility == 0 ? 'fa fa-eye '.$requested_class : 'fa fa-eye-slash '.$requested_class;
-                    $requestedVisible = $visibility == 0 ? 1 : 0;
+                    $requested_image = 0 == $visibility ? $toolImage : $inactiveImage;
+                    $requested_class = 0 == $visibility ? '' : 'text-muted';
+                    $requested_message = 0 == $visibility ? 'is_active' : 'is_inactive';
+                    $requested_view = 0 == $visibility ? 'visible.png' : 'invisible.png';
+                    $requestedVisible = 0 == $visibility ? 1 : 0;
+                    $requested_view = 0 == $visibility ? 'visible.png' : 'invisible.png';
+                    $requested_fa_class = 0 == $visibility ? 'fa fa-eye '.$requested_class : 'fa fa-eye-slash '.$requested_class;
+                    $requestedVisible = 0 == $visibility ? 1 : 0;
 
                     // HIDE AND REACTIVATE TOOL
                     if ($tool_id == strval(intval($tool_id))) {

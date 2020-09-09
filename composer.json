@@ -64,7 +64,7 @@
         "ext-zip": "*",
         "ext-zlib": "*",
         "a2lix/translation-form-bundle": "^3.0",
-        "antishov/doctrine-extensions-bundle": "~1.4",
+        "stof/doctrine-extensions-bundle": "~1.4",
         "api-platform/api-pack": "^1.2",
         "beberlei/doctrineextensions": "^1.2",
         "brumann/polyfill-unserialize": "^1.0",

@@ -59,18 +59,18 @@ if (Security::check_token('post') && (
     if (isset($_POST['course_code_confirmation'])) {
         $courseCodeConfirmation = $_POST['course_code_confirmation'];
     }
-    if (isset($_POST['recycle_option']) && $_POST['recycle_option'] === 'full_backup') {
+    if (isset($_POST['recycle_option']) && 'full_backup' === $_POST['recycle_option']) {
         $recycle_type = 'full_backup';
         $fullDelete = 1;
-    } elseif (isset($_POST['action']) && $_POST['action'] === 'course_select_form') {
+    } elseif (isset($_POST['action']) && 'course_select_form' === $_POST['action']) {
         $recycle_type = 'select_items';
     }
     $cr = new CourseRecycler($course);
 
-    if ($recycle_type == 'full_backup') {
+    if ('full_backup' == $recycle_type) {
         /* to delete, course code confirmation must be equal that current course code */
         if ($current_course_code == $courseCodeConfirmation) {
-    $cr->recycle($recycle_type);
+            $cr->recycle($recycle_type);
             echo Display::return_message(get_lang('RecycleFinished'), 'confirm');
         } else {
             $messageFailCourseCode = '<p>'.get_lang('CourseRegistrationCodeIncorrect').'</p>';
@@ -79,13 +79,13 @@ if (Security::check_token('post') && (
                 '</a></p>';
             echo Display::return_message($messageFailCourseCode, 'error', false);
         }
-    } elseif ($recycle_type == 'select_items') {
+    } elseif ('select_items' == $recycle_type) {
         $cr->recycle($recycle_type);
         echo Display::return_message(get_lang('RecycleFinished'), 'confirm');
     }
 } elseif (Security::check_token('post') && (
         isset($_POST['recycle_option']) &&
-        $_POST['recycle_option'] === 'select_items'
+        'select_items' === $_POST['recycle_option']
     )
 ) {
     // Clear token

@@ -298,7 +298,7 @@ class ScoreDisplay
         $disableColor = false,
         $ignoreDecimals = false
     ) {
-        $my_score = $score == 0 ? [] : $score;
+        $my_score = 0 == $score ? [] : $score;
 
         switch ($type) {
             case SCORE_BAR:
@@ -454,7 +454,7 @@ class ScoreDisplay
         if (empty($score)) {
             return null;
         }
-        $score_denom = ($score[1] == 0) ? 1 : $score[1];
+        $score_denom = (0 == $score[1]) ? 1 : $score[1];
 
         return $this->format_score($score[0] / $score_denom * 100).' %';
     }
@@ -469,7 +469,7 @@ class ScoreDisplay
      */
     private function display_as_div($score, $ignoreDecimals = false)
     {
-        if ($score == 1) {
+        if (1 == $score) {
             return '0 / 0';
         }
 
@@ -496,7 +496,7 @@ class ScoreDisplay
             return null;
         }
 
-        $my_score_denom = $score[1] == 0 ? 1 : $score[1];
+        $my_score_denom = 0 == $score[1] ? 1 : $score[1];
         $scaledscore = $score[0] / $my_score_denom;
 
         if ($this->upperlimit_included) {

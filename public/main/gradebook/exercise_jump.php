@@ -54,7 +54,7 @@ if (!empty($doExerciseUrl)) {
         if (!empty($exercise->id)) {
             if ($exercise->exercise_was_added_in_lp) {
                 if (!empty($exercise->lpList)) {
-                        // If the exercise was added once redirect to the LP
+                    // If the exercise was added once redirect to the LP
                     $firstLp = $exercise->getLpBySession($session_id);
                     if (isset($firstLp['lp_id'])) {
                         $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&'

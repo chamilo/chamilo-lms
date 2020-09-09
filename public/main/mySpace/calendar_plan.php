@@ -20,7 +20,7 @@ $now = new DateTime('now', $timezone);
 $currentYear = (int) $now->format('Y');
 
 $searchYear = isset($_GET['year']) ? (int) $_GET['year'] : $currentYear;
-$currentOrder = isset($_GET['order']) && $_GET['order'] === 'desc' ? 'desc' : 'asc';
+$currentOrder = isset($_GET['order']) && 'desc' === $_GET['order'] ? 'desc' : 'asc';
 
 if (api_is_western_name_order()) {
     $orderBy = " firstname ";
@@ -43,7 +43,7 @@ $students = UserManager::getUsersFollowedByUser(
     api_is_student_boss() ? STUDENT_BOSS : COURSEMANAGER
 );
 
-if ($currentOrder === 'desc') {
+if ('desc' === $currentOrder) {
     $order = 'asc';
 } else {
     $order = 'desc';

@@ -108,7 +108,7 @@ class LinkForm extends FormValidator
             $link->set_session_id(api_get_session_id());
             // and if there are no links left
             // and if there are no links left
-            if (!$link->needs_name_and_description() && count($link->get_all_links()) == '0') {
+            if (!$link->needs_name_and_description() && '0' == count($link->get_all_links())) {
                 $select->addOption($link->get_type_name(), $linkType, 'disabled');
             } else {
                 $select->addOption($link->get_type_name(), $linkType);

@@ -82,6 +82,8 @@ class ResourceNode
     protected $uuid;
 
     /**
+     * @var ResourceType
+     *
      * @ORM\ManyToOne(targetEntity="ResourceType", inversedBy="resourceNodes")
      * @ORM\JoinColumn(name="resource_type_id", referencedColumnName="id", nullable=false)
      */

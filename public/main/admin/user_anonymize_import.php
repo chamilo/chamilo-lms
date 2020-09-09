@@ -3,8 +3,6 @@
 
 /**
  * This tool allows platform admins to anonymize users by uploading a text file, with one username per line.
- *
- * @package chamilo.admin
  */
 
 use Doctrine\Common\Collections\Criteria;

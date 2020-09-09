@@ -696,7 +696,6 @@ switch ($action) {
                 Security::clear_token();
                 header('Location: '.$homeUrl);
                 exit;
-
             } else {
                 // Insert mode
                 $file = $_FILES['user_upload'];
@@ -755,7 +754,6 @@ switch ($action) {
                     exit;
                 }
                 api_not_allowed(true);
-
             }
         }
         $content = $form->returnForm();

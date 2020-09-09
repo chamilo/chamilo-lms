@@ -332,7 +332,7 @@ switch ($action) {
                 foreach ($languages['folder'] as $language) {
                     $conditions = ['language' => $language];
                     $key = $language;
-                    if (substr($language, -1) === '2') {
+                    if ('2' === substr($language, -1)) {
                         $key = str_replace(2, '', $language);
                     }
                     if (!isset($all[$key])) {

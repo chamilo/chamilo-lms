@@ -948,7 +948,7 @@ class CourseHome
         if (isset($item['tool']['custom_icon']) && !empty($item['tool']['custom_icon'])) {
             $customIcon = $item['tool']['custom_icon'];
 
-            if ($item['tool']['visibility'] == '0') {
+            if ('0' == $item['tool']['visibility']) {
                 $customIcon = self::getDisableIcon($item['tool']['custom_icon']);
             }
 

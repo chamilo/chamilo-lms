@@ -49,4 +49,3 @@ return Tracking::getLpStats(
     $type,
     $allowExtend
 );
-

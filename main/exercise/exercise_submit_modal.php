@@ -233,7 +233,7 @@ $result = $objExercise->manage_answer(
     $questionId,
     $choiceValue,
     'exercise_result',
-    null,
+    [],
     false,
     false,
     $showResult,

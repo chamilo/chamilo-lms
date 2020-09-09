@@ -69,7 +69,7 @@ function poly_compile($poly, $max, $test = false)
     $bords = array_fill(0, $bord_lenght, []); // building this array
 
     /* adding the first point of the polygone */
-    if (is_array($bords[$poly[0]['y']])) {
+    if (isset($bords[$poly[0]['y']]) && is_array($bords[$poly[0]['y']])) {
         // avoid warning
         array_push($bords[$poly[0]['y']], $poly[0]['x']);
     }

@@ -9808,7 +9808,7 @@ class Exercise
             $resfree = Database::query($queryfree);
             $questionScore = Database::result($resfree, 0, 'marks');
             $totalScore += $questionScore;*/
-            $relPath = api_get_path(REL_PATH);
+            $relPath = api_get_path(REL_CODE_PATH);
             echo '</table></td></tr>';
             echo "
                         <tr>

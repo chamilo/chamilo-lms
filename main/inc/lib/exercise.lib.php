@@ -1492,7 +1492,7 @@ HTML;
                                 exerciseId: $exerciseId,
                                 exeId: 0,
                                 selector: '#hotspot-preview-$questionId',
-                                for: 'preview',
+                                'for': 'preview',
                                 relPath: '$relPath'
                             });
                         </script>
@@ -1533,8 +1533,9 @@ HOTSPOT;
                             new ".($answerType == HOT_SPOT_DELINEATION ? 'DelineationQuestion' : 'HotspotQuestion')."({
                                 questionId: $questionId,
                                 exerciseId: $exerciseId,
-                                selector: '#question_div_' + $questionId + ' .hotspot-image',
-                                for: 'user',
+                                exeId: 0,
+                                selector: '#question_div_' + $questionId + ' .hotspot-image, #pnl-question-' + $questionId + ' .hotspot-image',
+                                'for': 'preview',
                                 relPath: '$relPath'
                             });
                         });

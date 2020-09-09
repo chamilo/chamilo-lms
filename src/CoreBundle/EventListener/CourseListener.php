@@ -167,7 +167,13 @@ class CourseListener
                     throw new NotFoundHttpException($translator->trans('Group not found'));
                 }
 
-                if ($course->hasGroup($group)) {
+                if (false === $checker->isGranted(GroupVoter::VIEW, $group)) {
+                    throw new AccessDeniedException($translator->trans('Unauthorised access to group'));
+                }
+
+                $sessionHandler->set('gid', $groupId);
+                // @todo check if course has group
+                /*if ($course->hasGroup($group)) {
                     // Check if user is allowed to this course-group
                     // See GroupVoter.php
                     if (false === $checker->isGranted(GroupVoter::VIEW, $group)) {
@@ -176,7 +182,7 @@ class CourseListener
                     $sessionHandler->set('gid', $groupId);
                 } else {
                     throw new AccessDeniedException($translator->trans('Group does not exist in course'));
-                }
+                }*/
             }
 
             $origin = $request->get('origin');

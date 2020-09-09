@@ -2567,7 +2567,7 @@ class CourseManager
             self::create_database_dump($code);
 
             // Cleaning group categories
-            $groupCategories = GroupManager::get_categories($course['code']);
+            $groupCategories = GroupManager::get_categories($courseEntity);
             if (!empty($groupCategories)) {
                 foreach ($groupCategories as $category) {
                     GroupManager::delete_category($category['iid'], $course['code']);

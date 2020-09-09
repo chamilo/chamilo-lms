@@ -27,6 +27,7 @@ use Chamilo\CourseBundle\Repository\CForumCategoryRepository;
 use Chamilo\CourseBundle\Repository\CForumForumRepository;
 use Chamilo\CourseBundle\Repository\CForumPostRepository;
 use Chamilo\CourseBundle\Repository\CForumThreadRepository;
+use Chamilo\CourseBundle\Repository\CGroupCategoryRepository;
 use Chamilo\CourseBundle\Repository\CGroupRepository;
 use Chamilo\CourseBundle\Repository\CLinkCategoryRepository;
 use Chamilo\CourseBundle\Repository\CLinkRepository;
@@ -432,6 +433,14 @@ class Container
     public static function getGroupRepository()
     {
         return self::$container->get(CGroupRepository::class);
+    }
+
+    /**
+     * @return CGroupCategoryRepository
+     */
+    public static function getGroupCategoryRepository()
+    {
+        return self::$container->get(CGroupCategoryRepository::class);
     }
 
     /**

@@ -4,6 +4,8 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\AbstractResource;
+use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -13,12 +15,11 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(
  *  name="c_group_category",
  *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"})
  *  }
  * )
  * @ORM\Entity
  */
-class CGroupCategory
+class CGroupCategory extends AbstractResource implements ResourceInterface
 {
     /**
      * @var int
@@ -30,15 +31,10 @@ class CGroupCategory
     protected $iid;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="c_id", type="integer")
-     */
-    protected $cId;
-
-    /**
      * @var string
+     *
      * @Assert\NotBlank()
+     *
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
     protected $title;
@@ -130,16 +126,23 @@ class CGroupCategory
     /**
      * @var int
      *
-     * @ORM\Column(name="display_order", type="integer", nullable=false)
-     */
-    protected $displayOrder;
-
-    /**
-     * @var int
-     *
      * @ORM\Column(name="document_access", type="integer", nullable=false, options={"default":0})
      */
     protected $documentAccess;
+
+    public function __construct()
+    {
+    }
+
+    public function getIid(): int
+    {
+        return $this->iid;
+    }
+
+    public function __toString(): string
+    {
+        return $this->getTitle();
+    }
 
     /**
      * Set title.
@@ -157,22 +160,18 @@ class CGroupCategory
 
     /**
      * Get title.
-     *
-     * @return string
      */
-    public function getTitle()
+    public function getTitle(): string
     {
-        return $this->title;
+        return (string) $this->title;
     }
 
     /**
      * Set description.
      *
      * @param string $description
-     *
-     * @return CGroupCategory
      */
-    public function setDescription($description)
+    public function setDescription($description): self
     {
         $this->description = $description;
 
@@ -453,54 +452,6 @@ class CGroupCategory
         return $this->groupsPerUser;
     }
 
-    /**
-     * Set displayOrder.
-     *
-     * @param int $displayOrder
-     *
-     * @return CGroupCategory
-     */
-    public function setDisplayOrder($displayOrder)
-    {
-        $this->displayOrder = $displayOrder;
-
-        return $this;
-    }
-
-    /**
-     * Get displayOrder.
-     *
-     * @return int
-     */
-    public function getDisplayOrder()
-    {
-        return $this->displayOrder;
-    }
-
-    /**
-     * Set cId.
-     *
-     * @param int $cId
-     *
-     * @return CGroupCategory
-     */
-    public function setCId($cId)
-    {
-        $this->cId = $cId;
-
-        return $this;
-    }
-
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
-    {
-        return $this->cId;
-    }
-
     public function getDocumentAccess(): int
     {
         return $this->documentAccess;
@@ -511,5 +462,20 @@ class CGroupCategory
         $this->documentAccess = $documentAccess;
 
         return $this;
+    }
+
+    public function getResourceIdentifier(): int
+    {
+        return $this->iid;
+    }
+
+    public function getResourceName(): string
+    {
+        return $this->getTitle();
+    }
+
+    public function setResourceName(string $name): self
+    {
+        return $this->setTitle($name);
     }
 }

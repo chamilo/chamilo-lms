@@ -54,8 +54,8 @@ before_install:
   - java -jar selenium-server-standalone-3.141.59.jar -log selenium.log  > /dev/null &
 
   # Use default config
-  - apt-get update
-  - apt-get install php php-mysql php-xml php-gd php-intl php-soap php-bcmath
+  #- apt-get update
+  #- apt-get install php php-mysql php-xml php-gd php-intl php-soap php-bcmath
   #- sudo apt-get install php7.3 php7.3-mysql php7.3-xml php7.3-gd php7.3-intl php7.3-soap php7.3-bcmath
   #- sudo a2enmod rewrite actions fastcgi alias
 

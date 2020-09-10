@@ -1,11 +1,10 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * Adds gradebook certificates to gradebook_certificate table from users
  * who have achieved the requirements but have not reviewed them yet.
- *
- * @package chamilo.cron
  *
  * @author Imanol Losada <imanol.losada@beeznest.com>
  */
@@ -32,7 +31,9 @@ if ($categoriesAndUsers = getAllCategoriesAndUsers()) {
     foreach ($categoriesAndUsers as $categoryAndUser) {
         Category::generateUserCertificate(
             $categoryAndUser['category_id'],
-            $categoryAndUser['user_id']
+            $categoryAndUser['user_id'],
+            false,
+            true
         );
     }
 }

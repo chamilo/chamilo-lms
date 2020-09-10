@@ -2070,13 +2070,15 @@ class Category implements GradebookItem
      * @param int  $category_id      gradebook id
      * @param int  $user_id
      * @param bool $sendNotification
+     * @param bool $skipGenerationIfExists
      *
      * @return array
      */
     public static function generateUserCertificate(
         $category_id,
         $user_id,
-        $sendNotification = false
+        $sendNotification = false,
+        $skipGenerationIfExists = false
     ) {
         $user_id = (int) $user_id;
         $category_id = (int) $category_id;
@@ -2167,6 +2169,10 @@ class Category implements GradebookItem
             $category_id,
             $user_id
         );
+
+        if ($skipGenerationIfExists && !empty($my_certificate)) {
+            return false;
+        }
 
         if (empty($my_certificate)) {
             GradebookUtils::registerUserInfoAboutCertificate(

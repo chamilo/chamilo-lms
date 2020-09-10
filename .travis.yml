@@ -10,6 +10,11 @@ addons:
       - apache2
       - php
       - php-mysql
+      - php-xml
+      - php-gd
+      - php-intl
+      - php-soap
+      - php-bcmath
       - libapache2-mod-php
       - postfix
       - libappindicator1
@@ -27,8 +32,8 @@ matrix:
   fast_finish: false
   include:
     - php: 7.2
-    - php: 7.3
-    - php: 7.4
+#    - php: 7.3
+#    - php: 7.4
 
 env:
   global:
@@ -85,6 +90,7 @@ install:
   - sudo chown -R 775 $TRAVIS_BUILD_DIR
   - sudo chmod +x /home/travis/build
   - ls -la public/build
+  - curl http://localhost/public/check.php
   - curl http://localhost/main/install/index.php
 
 script:

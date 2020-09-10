@@ -3670,13 +3670,13 @@ class MySpace
 
         // Settings condition and parametter GET to right date
         if (!empty($startDate)) {
-            $startDate = api_get_local_time($startDate->format('Y-m-d'));
+            $startDate = api_get_utc_datetime($startDate->format('Y-m-d'));
             $_GET['startDate'] = $startDate;
             $whereCondition .= "
             AND $tblItemProperty.lastedit_date >= '$startDate' ";
         }
         if (!empty($endDate)) {
-            $endDate = api_get_local_time($endDate->format('Y-m-d'));
+            $endDate = api_get_utc_datetime($endDate->format('Y-m-d'));
             $_GET['endDate'] = $endDate;
             $whereCondition .= "
             AND $tblItemProperty.lastedit_date <= '$endDate' ";

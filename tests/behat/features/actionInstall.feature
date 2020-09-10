@@ -2,7 +2,7 @@
 Feature: Install portal
 
   Scenario: See the company reports link on the admin page
-    Given I am on "/main/install"
+    Given I am on "/main/install/index.php"
     Then I should see "Step1 – Installation Language"
     Then I press "Next"
     Then I should see "Step2 – Requirements"

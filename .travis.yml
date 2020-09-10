@@ -35,7 +35,6 @@ env:
     - VHOST_URL=localhost
 
 before_install:
-  - sudo composer self-update --snapshot
   - curl http://localhost/php.php
   - mysqld --version
   - apache2 -v
@@ -72,6 +71,7 @@ before_install:
 
 install:
   - phpenv config-rm xdebug.ini || return 0
+  - composer self-update --snapshot
   - composer update --prefer-source --no-interaction
   # Install bundle js/css
   - php bin/console assets:install

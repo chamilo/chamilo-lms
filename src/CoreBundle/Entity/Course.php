@@ -238,7 +238,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      * @ORM\JoinTable(
      *      name="course_rel_category",
      *      joinColumns={@ORM\JoinColumn(name="course_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="course_category_id", referencedColumnName="id", unique=true)}
+     *      inverseJoinColumns={@ORM\JoinColumn(name="course_category_id", referencedColumnName="id")}
      * )
      */
     protected $categories;
@@ -782,9 +782,16 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this->categories;
     }
 
-    public function addCategory(CourseCategory $category)
+    public function addCategory(CourseCategory $category): self
     {
         $this->categories[] = $category;
+
+        return $this;
+    }
+
+    public function removeCategory(CourseCategory $category)
+    {
+        $this->categories->removeElement($category);
     }
 
     /**

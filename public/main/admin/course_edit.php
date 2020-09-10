@@ -6,6 +6,7 @@ use Chamilo\CoreBundle\Entity\CourseCategory;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\CourseCategoryRepository;
 use Chamilo\CoreBundle\Repository\CourseRepository;
+use Chamilo\CoreBundle\Framework\Container;
 
 $cidReset = true;
 
@@ -16,7 +17,7 @@ api_protect_admin_script();
 
 $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
 $em = Database::getManager();
-$courseCategoriesRepo = $em->getRepository('ChamiloCoreBundle:CourseCategory');
+$courseCategoriesRepo = Container::getCourseCategoryRepository();
 
 $urlId = api_get_current_access_url_id();
 
@@ -362,24 +363,13 @@ if ($form->validate()) {
     $em->persist($courseEntity);
     $em->flush();
 
+    // Updating course categories
+    $courseCategoriesRepo->updateCourseRelCategoryByCourse($courseEntity, $course);
+
     // update the extra fields
     $courseFieldValue = new ExtraFieldValue('course');
     $courseFieldValue->saveFieldValues($course);
     $addTeacherToSessionCourses = isset($course['add_teachers_to_sessions_courses']) && !empty($course['add_teachers_to_sessions_courses']) ? 1 : 0;
-
-    // Updating categories
-    if (isset($course['course_categories'])) {
-        $courseId = $courseInfo['real_id'];
-        $sqlDeleteBeforeUpdateCategories = "DELETE FROM $tbl_course_rel_category
-            WHERE course_id = " . $courseInfo['real_id'];
-        Database::query($sqlDeleteBeforeUpdateCategories);
-
-        foreach ($course['course_categories'] as $categoryId) {
-            $sqlUpdateCategories = "INSERT INTO $tbl_course_rel_category (course_id, course_category_id)
-                VALUES($courseId, $categoryId)";
-            Database::query($sqlUpdateCategories);
-        }
-    }
 
     // Updating teachers
     if ($addTeacherToSessionCourses) {

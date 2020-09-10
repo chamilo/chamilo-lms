@@ -4,10 +4,12 @@
 
 namespace Chamilo\CoreBundle\Repository;
 
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseCategory;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Class CCourseCategoryRepository.
@@ -42,7 +44,7 @@ class CourseCategoryRepository extends ServiceEntityRepository
             )
             ->where($qb->expr()->eq('a.url', $accessUrl))
             ->orderBy('c.treePos', 'ASC')
-           ;
+        ;
 
         if ($allowBaseCategories) {
             $qb->orWhere($qb->expr()->eq('a.url', 1));
@@ -67,10 +69,9 @@ class CourseCategoryRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('c');
         $qb
             ->join('c.courses', 'a')
-            ->where($qb->expr()->eq('a.id', $courseId))
             ->join('c.urls', 'b')
-            ->where($qb->expr()->eq('b.url', $accessUrl))
-            ->orderBy('c.treePos', 'ASC')
+            ->where($qb->expr()->eq('a.id', $courseId))
+            ->andWhere($qb->expr()->eq('b.url', $accessUrl))
         ;
 
         if ($allowBaseCategories) {
@@ -111,5 +112,33 @@ class CourseCategoryRepository extends ServiceEntityRepository
         $count = $qb->getQuery()->getSingleScalarResult();
 
         return (int) $count;
+    }
+
+    public function updateCourseRelCategoryByCourse(Course $course, $courseData)
+    {
+        $em = $this->getEntityManager();
+
+        // Remove current categories
+        foreach ($course->getCategories() as $category) {
+            $course->removeCategory($category);
+        }
+        $em->persist($course);
+        $em->flush();
+
+
+        // Add new categories
+        $courseCategories = new ArrayCollection();
+
+        if (isset($courseData['course_categories'])) {
+            foreach ($courseData['course_categories'] as $categoryId) {
+                $courseCategory = $this->find($categoryId);
+                $courseCategories->add($courseCategory);
+            }
+        }
+
+        $course->setCategories($courseCategories);
+
+        $em->persist($course);
+        $em->flush();
     }
 }

@@ -8,9 +8,10 @@ addons:
   apt:
     packages:
       - apache2
+      - php
+      - libapache2-mod-php
       - postfix
       - libappindicator1
-      - fonts-liberation
 
 services:
   - mysql
@@ -39,7 +40,7 @@ before_install:
   - php -m
   - php -ini | grep memory_limit
   # Fix travis error https://github.com/travis-ci/travis-ci/issues/8607
-  - rm -vf /etc/apt/sources.list.d/*riak*
+  - sudo rm -vf /etc/apt/sources.list.d/*riak*
   - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
   # Get Chrome driver
   - wget https://chromedriver.storage.googleapis.com/2.35/chromedriver_linux64.zip && unzip chromedriver_linux64.zip
@@ -54,10 +55,9 @@ before_install:
   - java -jar selenium-server-standalone-3.141.59.jar -log selenium.log  > /dev/null &
 
   # Use default config
-  #- apt-get update
-  #- apt-get install php php-mysql php-xml php-gd php-intl php-soap php-bcmath
-  #- sudo apt-get install php7.3 php7.3-mysql php7.3-xml php7.3-gd php7.3-intl php7.3-soap php7.3-bcmath
-  #- sudo a2enmod rewrite actions fastcgi alias
+  #- sudo apt-get update
+  #- sudo apt-get install php php-mysql php-xml php-gd php-intl php-soap php-bcmath
+  - sudo a2enmod rewrite actions alias setenvif
 
   # Apache & php-fpm configuration
   - bash tests/travis/setup-php-fpm.sh

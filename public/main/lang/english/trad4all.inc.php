@@ -8664,4 +8664,8 @@ $CompilatioNoConnection = "Could not connect to Compilatio's SOAP server.";
 $CompilatioParamVerification = "Check your key, your server ports and possibly your proxy settings.";
 $LastVisitedCourse = "Last visited course";
 $YouDidNotVisitACourseHereTheCourseList = "You haven't visited any courses yet, here is the list of your courses.";
+$NoEntity = "No organization";
+$UserByEntityReport = "User by organization";
+$LpByAuthor = "Learning path by author";
+$SessionImportAssignments = "Import assignments from base course";
 ?>

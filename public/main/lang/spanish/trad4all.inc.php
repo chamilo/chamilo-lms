@@ -8692,4 +8692,8 @@ $CompilatioNoConnection = "Imposible conectarse al servidor SOAP de Compilatio."
 $CompilatioParamVerification = "Verifique su clave, los puertos de sus servidores y posiblemente sus parámetros de proxy.";
 $LastVisitedCourse = "Último curso visitado";
 $YouDidNotVisitACourseHereTheCourseList = "Aún no ha visitado ningún curso, aquí está la lista de sus cursos.";
+$NoEntity = "Sin entidad";
+$UserByEntityReport = "Usuario por entidad";
+$LpByAuthor = "Lección por autor";
+$SessionImportAssignments = "Importar los tareas del curso base";
 ?>

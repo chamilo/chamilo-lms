@@ -31,7 +31,9 @@
     <div id="app"
          data-is-authenticated="{{ is_authenticated }}"
          data-user-json="{{ user_json }}"
+        {% if legacy_breadcrumb is defined %}
          data-breadcrumb="{{ legacy_breadcrumb | json_encode() }}"
+        {% endif %}
     >
     </div>
 

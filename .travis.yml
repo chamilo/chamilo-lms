@@ -9,6 +9,7 @@ addons:
     packages:
       - apache2
       - php
+      - php-mysql
       - libapache2-mod-php
       - postfix
       - libappindicator1
@@ -34,6 +35,7 @@ env:
     - VHOST_URL=localhost
 
 before_install:
+  - sudo composer self-update --snapshot
   - curl http://localhost/php.php
   - mysqld --version
   - apache2 -v

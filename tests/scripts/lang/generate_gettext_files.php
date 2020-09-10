@@ -8,7 +8,7 @@
  */
 
 die(); //remove before execution
-require_once __DIR__.'/../../../main/inc/global.inc.php';
+//require_once __DIR__.'/../../../public/main/inc/global.inc.php';
 ini_set('memory_limit', '600M');
 $partial = false; //if set to true, do not add empty strings to .po files
 $destinationDir = '/tmp/gettext'; //where to put the generated files
@@ -16,7 +16,7 @@ $destinationDir = '/tmp/gettext'; //where to put the generated files
 /**
  * Get list of languages.
  */
-$langPath = api_get_path(SYS_LANG_PATH);
+$langPath = __DIR__.'/../../../public/main/lang/';
 $languagesListFull = scandir($langPath);
 $languagesList = [];
 foreach ($languagesListFull as $language) {
@@ -28,7 +28,7 @@ foreach ($languagesListFull as $language) {
         $languagesList[] = $language;
     }
 }
-
+require __DIR__.'/../../../public/main/inc/lib/sub_language.class.php';
 /**
  * Get English language terms (the main source of terms)
  */

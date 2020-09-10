@@ -2147,7 +2147,7 @@ msgstr "Curso de destino"
 msgid "Convert to multiple answer"
 msgstr "Convertir a respuesta múltiple"
 
-msgid "Enabling CAS authentication will allow users to authenticate with their CAS credentials.<br/>Go to <a href='settings.php?category=CAS'>Plugin</a> to add a configurable 'CAS Login' button for your Chamilo campus."
+msgid "Enabling CAS authentication will allow users to authenticate with their CAS credentials.<br/>Go to <a href='settings.php?category=CAS'>Plugin</a> to add a configurable 'CAS Login' button for your Chamilo campus. Or you can force CAS authentication by setting cas[force_redirect] in app/config/auth.conf.php."
 msgstr "Activar la autentificación CAS permitirá a usuarios autentificarse con sus credenciales CAS"
 
 msgid "Users registered in any group"
@@ -2165,7 +2165,7 @@ msgstr "Eliminar stream"
 msgid "Record"
 msgstr "Grabar"
 
-msgid "No File availible"
+msgid "No File available"
 msgstr "No hay archivos disponibles"
 
 msgid "Recording only for trainers"
@@ -4991,8 +4991,8 @@ msgstr "Resumen de la sesión de formación"
 msgid "Add user in the course only if not yet in"
 msgstr "Inscribir un usuario en el caso de que ya no lo esté"
 
-msgid "Remove user from course if his name is not in the list"
-msgstr "Dar de baja a un usuario si no está en el fichero"
+msgid "Remove users from any courses that are not mentioned explicitly in this file"
+msgstr "Dar de baja a un usuario de cualquier curso en el cual no esté inscrito explícitamente en este fichero"
 
 msgid "Delete selected sessions"
 msgstr "Eliminar las sesiones seleccionadas"
@@ -10401,13 +10401,13 @@ msgid "No results in evaluation for now"
 msgstr "Por ahora no hay resultados en la evaluación"
 
 msgid "Add learners"
-msgstr "Añadir usuarios"
+msgstr "Añadir estudiantes"
 
 msgid "Import marks"
 msgstr "Importar resultados"
 
-msgid "Import marks in an assessment"
-msgstr "Ubicación del fichero a importar"
+msgid "Import file"
+msgstr "Ubicación del archivo a importar"
 
 msgid "File type"
 msgstr "Tipo de fichero"
@@ -13406,8 +13406,8 @@ msgstr "Opciones de respuesta"
 msgid "Dropdown"
 msgstr "Lista desplegable"
 
-msgid "Page end (distinct questions)"
-msgstr "Fin de página"
+msgid "Page break (distinct questions)"
+msgstr "Corte de página"
 
 msgid "Survey invitations"
 msgstr "Invitaciones a la encuesta"
@@ -15060,7 +15060,7 @@ msgid "You have to create at least one answer"
 msgstr "Tienes que crear al menos una respuesta"
 
 msgid "A learner attempted an exercise"
-msgstr "Un estudiante ha contestado una pregunta"
+msgstr "Un estudiante ha contestado una prueba"
 
 msgid "Exact Selection"
 msgstr "Combinación exacta"
@@ -17885,7 +17885,7 @@ msgstr "Usuario no válido detectado."
 msgid "Invalid group detected."
 msgstr "Grupo no válido detectado"
 
-msgid "Overview of diles in this Zip"
+msgid "Overview of files in this Zip"
 msgstr "Listado de archivos en este Zip"
 
 msgid "Tests limits added"
@@ -18821,6 +18821,9 @@ msgstr "Protocolo con el que nos conectamos al servidor CAS"
 msgid "Enable CAS user addition"
 msgstr "Activar registrar usuarios mediante CAS"
 
+msgid "Enable CAS user addition. To create the user account from the LDAP directory, the extldap_config and extldap_user_correspondance tables must be filled in in app/config/auth.conf.php"
+msgstr "Permite crear cuentas de usuarios con CAS"
+
 msgid "Add CAS user login"
 msgstr "Registrar el nombre de usuario"
 
@@ -19358,7 +19361,7 @@ msgstr "En primer lugar, tiene que configurar Shibboleth para su servidor web."
 msgid "<h3>LDAP autentication</h3>"
 msgstr "<h3>Autentificacion LDAP</h3>"
 
-msgid "<h3>Facebook authentication</h3>"
+msgid "Facebook authentication"
 msgstr "Autenticación con Facebook"
 
 msgid "<p><h5>Create your Facebook Application</h5>First of all, you have to create a Facebook Application (see <a href='https://developers.facebook.com/apps'>https://developers.facebook.com/apps</a>) with your Facebook account. In the Facebook Apps settings, the site URL value should be the URL of this campus. Enable the Web OAuth Login option. And add the site URL of your campus to the Valid OAuth redirect URIs field</p><p>Uncomment the line <code>&#36;_configuration['facebook_auth'] = 1;</code> to enable the Facebook Auth.</p><p>Then, edit the <code>app/config/auth.conf.php</code> file and enter '<code>appId</code>' and '<code>secret</code>' values for <code>&#36;facebook_config</code>.</p><p>Go to <a href='settings.php?category=Plugins'>Plugins</a> to add a configurable <em>Facebook Login</em> button for your Chamilo campus.</p>"
@@ -19685,8 +19688,17 @@ msgstr "Herramienta visible al crear un curso"
 msgid "Select the tools that will be visible when creating the courses - not yet available"
 msgstr "Seleccione las herramientas que serán visibles cuando se crean los cursos"
 
-msgid "CAS internal setting"
+msgid "Create a user account for any new CAS-authenticated user, from scratch"
 msgstr "Activar añadir usuarios Plataforma (parámetro de configuración interno de CAS)"
+
+msgid "Create a user account for any new CAS-authenticated user, from LDAP"
+msgstr "Activar añadir usuarios LDAP (parámetro de configuración interno de CAS)"
+
+msgid "Update CAS-authenticated user account information from LDAP"
+msgstr "Actualizar la información con LDAP (parámetro de configuración interno de CAS)"
+
+msgid "Makes sure the user firstname, lastname and email address are the same as current values in the LDAP directory"
+msgstr "Actualizar la información de usuario con LDAP (Parámetro de configuración CAS)"
 
 msgid "Installation process execution"
 msgstr "Ejecución del proceso de instalación"
@@ -19916,8 +19928,8 @@ msgstr "Guardar insignia"
 msgid "Badge measures 200x200 pixels in PNG"
 msgstr "Medidas de la insignia 200x200 píxeles en formato PNG"
 
-msgid "Set as coach"
-msgstr "Hacer tutor"
+msgid "Convert to assistant"
+msgstr "Convertir a asistente"
 
 msgid "Unique answer image"
 msgstr "Respuesta de imagen única"
@@ -20510,8 +20522,8 @@ msgstr "Activar HTMLPurifier en la herramienta de wiki (aumentará la seguridad 
 msgid "Click or drop files"
 msgstr "Suelte un o más archivos aquí o haga clic"
 
-msgid "Remove tutor status"
-msgstr "Quitar el status de tutor"
+msgid "Remove assistant role"
+msgstr "Quitar rol asistente"
 
 msgid "Import gradebook from base course"
 msgstr "Importar las evaluaciones desde el curso base"
@@ -23232,52 +23244,686 @@ msgid "Type your new password once again, to reduce the likeliness of typing err
 msgstr "Introduzca su nueva contraseña una vez más, para reducir la probabilidad de errores."
 
 msgid "Extraction from %s"
-msgstr ""
+msgstr "Extracción del : %s"
 
 msgid "Compilatio"
-msgstr ""
+msgstr "Compilatio"
 
 msgid "Verify that it contains text (and not only images)"
-msgstr ""
+msgstr "Verifique que contenga texto (y no solo imágenes)"
 
 msgid "and that it is not corrupted"
-msgstr ""
+msgstr "y que no está corrompido"
 
 msgid "Analyse"
-msgstr ""
+msgstr "Analizar"
 
 msgid "(Pourcentage of file analysis)"
-msgstr ""
+msgstr "(Porcentaje de análisis de archivo)"
 
 msgid "Pending Analysis"
-msgstr ""
+msgstr "Análisis pendiente"
 
 msgid "Waiting for analysis"
-msgstr ""
+msgstr "Esperando análisis"
 
 msgid "Ending analysis"
-msgstr ""
+msgstr "Finalizando análisis"
 
 msgid "If the file is in pdf format, check that it is not protected by modification."
-msgstr ""
+msgstr "Si el archivo está en formato pdf, verifique que no esté protegido por modificación."
 
 msgid "Connecting with the Compilatio server"
-msgstr ""
+msgstr "Conectando con el servidor Compilatio"
 
 msgid "with Compilatio"
-msgstr ""
+msgstr "con Compilatio"
 
 msgid "Start Compilatio analysis"
-msgstr ""
+msgstr "Iniciar análisis de Compilacio"
 
 msgid "See report"
-msgstr ""
+msgstr "Ver informe"
 
 msgid "Your selection contains no jobs to analyze. Only jobs managed by Compilatio and not already scanned can be sent."
-msgstr ""
+msgstr "Su selección no contiene trabajos para analizar. Solo se pueden enviar trabajos gestionados por Compilatio y no ya analizados."
 
 msgid "AJAX communication with the Compilatio server impossible. Please retry later."
-msgstr ""
+msgstr "La comunicación AJAX con el servidor Compilatio es imposible. Vuelva a intentarlo más tarde."
 
 msgid "Information: The list of classes below contains the list of classes you have already registered in your course. If this list is empty, use the + green above to add classes."
 msgstr "Información: La lista de clases a continuación contiene la lista de clases que ya ha registrado en su clase. Si esta lista está vacía, use el + verde arriba para agregar clases."
+
+msgid "Insert your two names"
+msgstr "Agregar los dos apellidos"
+
+msgid "Add right logo"
+msgstr "Añadir logo derecho"
+
+msgid "Use score as progress"
+msgstr "Usar la puntuación como progreso"
+
+msgid "Use the score returned, by the only SCO in this learning path, as the progress indicator in the progress bar. This modifies the SCORM behaviour in the strict sense, but improves visual feedback to the learner."
+msgstr "Usar el puntaje devuelto, por el único SCO en esta leccion, como el indicador de progreso en la barra de progreso. Esto modifica el comportamiento de SCORM en el sentido estricto, pero mejora la retroalimentación visual para el alumno."
+
+msgid "Planned"
+msgstr "planificada"
+
+msgid "In progress"
+msgstr "en progreso"
+
+msgid "Cancelled"
+msgstr "cancelada"
+
+msgid "Finished"
+msgstr "terminada"
+
+msgid "Session status"
+msgstr "Estado"
+
+msgid "Update session status"
+msgstr "Actualizar estado de sesión"
+
+msgid "Custom list"
+msgstr "Lista personalizada"
+
+msgid "No status"
+msgstr "sin estado"
+
+msgid "CAS 3"
+msgstr "CAS 3"
+
+msgid "Go back to video"
+msgstr "Volver al video"
+
+msgid "Some SCORM learning paths, specifically those with one single SCO, can report their progress as the SCO's score (cmi.core.score.raw). By checking this option (only available for single SCO learning paths), Chamilo will show the progress based on the score received from the SCO item. Beware that, by using this trick, you lose the ability to get any real score from the item."
+msgstr "Algunas lecciones SCORM, en particular las que tienen un solo SCO, reportan su progreso a través del score de SCO (cmi.core.score.raw). Al seleccionar esta opción (solo disponible para las lecciones con un solo SCO), Chamilo mostrará el progreso en base al score que le envía el elemento SCO. Cuidado: al usar el score como progreso, se pierde la habilidad de obtener el score real del elemento."
+
+msgid "There is a sequence resource linked to this course. You must delete this link first."
+msgstr "Un recurso de secuencia está vinculado a este curso. Tiene que borrar este enlace primero."
+
+msgid "Prevent moving backwards to previous questions"
+msgstr "Prohibir regresar en las preguntas anteriores"
+
+msgid "Upload plugin"
+msgstr "Subir un plugin"
+
+msgid "Please remember that uploading third party plugins can be harmful to both your portal and your server. Always ensure you install plugins from secure sources or that you can count on professional support from their developers."
+msgstr "Por favor, recuerde que subir un plugin de terceros puede ser muy dañino para su portal y su servidor. Asegúrese siempre de instalar plugins de fuentes seguras o contando con soporte de sus desarrolladores."
+
+msgid "Uploading the same plugin more than once will overwrite the previous plugin files. As in the first upload, uploading a third party plugin can have harmful effects."
+msgstr "Subir un mismo plugin más de una vez aplastará los archivos del plugin subido anteriormente. Tal como en la primera subida, subir un plugin de terceros o una actualización de este es arriesgado."
+
+msgid "Select the new plugin"
+msgstr "Seleccione el nuevo plugin"
+
+msgid "The third party plugins upload is not enabled. Make sure the 'plugin_upload_enable' is set to 'true' in the platform configuration file."
+msgstr "La subida de plugins no está activada. Asegúrese que la opción 'plugin_upload_enable' esté en 'true' en el archivo de configuración de Chamilo."
+
+msgid "Plugin uploaded"
+msgstr "Plugin subido"
+
+msgid "Official"
+msgstr "Oficial"
+
+msgid "Third party"
+msgstr "Plugin de terceros"
+
+msgid "Your plugin has the same name as an official plugin. Official plugins cannot be overwritten. Please change your plugin's zip file name."
+msgstr "Su plugin tiene el mismo nombre que un plugin oficial. Los plugins oficiales no pueden ser sobre-escritos. Por favor cambie el nombre del archivo de su plugin."
+
+msgid "Courses of %s %s"
+msgstr "Cursos de %s %s"
+
+msgid "You can not subscrive to the course any more because your session has expired."
+msgstr "No puede mas inscribirse a cursos porque su sesion ha expirado."
+
+msgid "Certificate of achievement by day"
+msgstr "Certificado de logro por dia"
+
+msgid "Reduced report"
+msgstr "Reporte reducido"
+
+msgid "Outside courses"
+msgstr "Fuera de cursos"
+
+msgid "Learnpaths category"
+msgstr "Categoría de lecciones"
+
+msgid "Mail templates"
+msgstr "Plantillas de correos"
+
+msgid "An email to reset your password has been sent."
+msgstr "Se le ha enviado un correo electrónico para restablecer su contraseña."
+
+msgid "Total number of available courses"
+msgstr "Total de cursos disponibles"
+
+msgid "Number of matching courses"
+msgstr "Total de cursos correspondiendo a los filtros"
+
+msgid "Sessions by date"
+msgstr "Sesiones por fechas"
+
+msgid "Global statistics"
+msgstr "Estadísticas globales"
+
+msgid "Weeks"
+msgstr "Semanas"
+
+msgid "Sessions count"
+msgstr "Número de sesiones"
+
+msgid "Sessions per week"
+msgstr "Sesiones por semana"
+
+msgid "Average number of users per session"
+msgstr "Número promedio de usuarios por sesión"
+
+msgid "Average number of sessions per general session coach"
+msgstr "Número promedio de sesiones por tutor general de sesión"
+
+msgid "Sessions per category"
+msgstr "Sesiones por categoría"
+
+msgid "Sessions per language"
+msgstr "Sesiones por idioma"
+
+msgid "Courses in sessions"
+msgstr "Cursos en sesiones"
+
+msgid "Users statistics"
+msgstr "Estadísticas usuarios"
+
+msgid "Total number of students"
+msgstr "Número total de estudiantes"
+
+msgid "Users created in the selected period"
+msgstr "Usuarios creados en el periodo seleccionado"
+
+msgid "Users per language"
+msgstr "Usuarios por idioma"
+
+msgid "Count"
+msgstr "Número"
+
+msgid "Sort by"
+msgstr "Ordenar por"
+
+msgid "Subscription count"
+msgstr "Numero de suscripción"
+
+msgid "Vote count"
+msgstr "Numero de votos"
+
+msgid "Export as compact CSV"
+msgstr "Exportar a CSV compacto"
+
+msgid "Promoted messages"
+msgstr "Mensajes importantes"
+
+msgid "Publish for group tutors"
+msgstr "Publicar a los tutores de grupo"
+
+msgid "Group survey for %s"
+msgstr "Encuesta del groupo %s"
+
+msgid "Hi %s <br/><br/>As group tutor for the group %s you are invited to participate at the following survey :"
+msgstr "Hola %s<br/><br/>Como tutor del grupo %s te invitamos a participar en la siguiente encuesta:"
+
+msgid "Survey %s multiplicated"
+msgstr "Encuesta %s demultiplicada"
+
+msgid "Survey %s not multiplicated"
+msgstr "Encuesta %s no demultiplicada"
+
+msgid "Export survey results"
+msgstr "Exportar resultados de encuestas"
+
+msgid "Score Sum"
+msgstr "Suma de puntajes"
+
+msgid "Export results"
+msgstr "Exportar resultados"
+
+msgid "Your browser has been verified. You can safely proceed."
+msgstr "Su navegador ha sido verificado. Puede proceder con seguridad."
+
+msgid "Your browser could not be verified. Please try again, or try another browser or device before starting your test."
+msgstr "Su navegador no pudo ser verificado. Inténtelo de nuevo o pruebe con otro navegador o dispositivo antes de comenzar el examen."
+
+msgid "Partially correct"
+msgstr "Parcialmente correcto"
+
+msgid "%d / %d answers saved."
+msgstr "%d / %d respuestas guardadas en el ejercicio."
+
+msgid "Test your browser"
+msgstr "Prueba de navegador"
+
+msgid "Sort the following options from the list as you see fit by dragging them to the lower areas. You can put them back in this area to modify your answer."
+msgstr "Ordene las siguientes opciones de la lista como mejor le parezca arrastrándolas a las áreas inferiores. Puede volver a colocarlas en esta área para modificar su respuesta."
+
+msgid "Average time in the course"
+msgstr "Tiempo promedio en el curso"
+
+msgid "Users active in a test"
+msgstr "Usuarios activos en una prueba"
+
+msgid "Selective display"
+msgstr "Aparición selectiva"
+
+msgid "This question, when located on a single survey page with a first multiple choice question, will only show if the first *option* of the first question is selected. For example, 'Did you go on holiday?' -> if answering the first option 'Yes', the selective display question will appear with a list of possible holiday locations to select from."
+msgstr "Esta pregunta, cuando esté ubicada en una página individual con una primera pregunta de tipo elección única, solo se mostrará si la primera opción de la primera pregunta es seleccionada. Por ejemplo '¿Se fue de vacaciones?' -> si la respuesta es 'Sí', entonces la pregunta selectiva aparecerá con una lista de ubicaciones posibles de vacaciones."
+
+msgid "Multiple choice with free text"
+msgstr "Elección múltiple con texto libre"
+
+msgid "Offer some pre-defined options, then let the user answer by text if no option matches."
+msgstr "Ofrezca unas opciones pre-definidas, pero agregue la posibilidad para el usuario de responder con un texto libre si ninguna opción corresponde."
+
+msgid "Multiple choice with 'other' option"
+msgstr "Elección múltiple con opción 'Otro'"
+
+msgid "Other..."
+msgstr "Otro/a..."
+
+msgid "Please specify:"
+msgstr "Por favor especifique:"
+
+msgid "User %s has posted a document in the Assignments tool in the course %s"
+msgstr "El usuario %s ha enviado un documento en la herramienta Tareas  en el curso %s"
+
+msgid "Download documents first"
+msgstr "Descargar los documentos primero"
+
+msgid "File %s is empty or only contains empty lines."
+msgstr "El archivo %s está vacío o solo contiene líneas vacías."
+
+msgid "File %s has %d non-empty lines."
+msgstr "El archivo %s tiene %d líneas no vacías."
+
+msgid "There are duplicates: only %d unique user names were extracted."
+msgstr "Hay duplicados : solo se extrajeron %d nombres de usuario únicos."
+
+msgid "No line matched any actual user name."
+msgstr "Ninguna línea coincide con ningún nombre de usuario real."
+
+msgid "Only %d lines matched actual users."
+msgstr "Solo %d líneas coinciden con los usuarios reales."
+
+msgid "The following %d line(s) do not match any actual user:"
+msgstr "Las siguientes %d líneas no coinciden con ningún usuario real :"
+
+msgid "%d users are about to be anonymized :"
+msgstr "%d usuarios están a punto de ser anonimizados :"
+
+msgid "Loading %d users..."
+msgstr "Cargando %d usuarios ..."
+
+msgid "Anonymizing %d users..."
+msgstr "Anonimizar %d usuarios ..."
+
+msgid "All %d users were anonymized."
+msgstr "Todos los %d usuarios fueron anonimizados."
+
+msgid "Only %d users were anonymized."
+msgstr "Solo %d usuarios fueron anonimizados."
+
+msgid "Attempted anonymization of the following %d users failed:"
+msgstr "El intento de anonimización de los siguientes %d usuarios falló :"
+
+msgid "Please upload a text file listing the users to be anonymized, one username per line."
+msgstr "Cargue un archivo de texto que enumere los usuarios que se van a anonimizar, un nombre de usuario por línea."
+
+msgid "Internal inconsistency found : %d users found from %d submitted usernames. Please start over."
+msgstr "Inconsistencia interna encontrada : %d usuarios encontrados de %d nombres de usuario enviados. Por favor comienza de nuevo."
+
+msgid "Anonymise users list"
+msgstr "Anonimizar usuarios por CSV"
+
+msgid "Username list"
+msgstr "Lista de usuarios"
+
+msgid "Users about to be anonymized:"
+msgstr "Usuarios que van a ser anonimizados :"
+
+msgid "Could not read file."
+msgstr "No se puede leer el archivo."
+
+msgid "Could not read file lines."
+msgstr "No se puede leer las lineas del archivo."
+
+msgid "Certificates in sessions"
+msgstr "Certificados en sesiones"
+
+msgid "Filter certificates in sessions"
+msgstr "Filtro de certificados en sesiones"
+
+msgid "Update user list"
+msgstr "Actualizar lista de usuarios"
+
+msgid "Chamilo is an Open Source project and this portal is provided to our community free of charge by the Chamilo Association, which pursues the goal of improving the availability of a quality education around the globe.<br /><br />"
+msgstr "Chamilo es un proyecto Open Source (o \"Software Libre\") y este portal está proveído a nuestra comunidad sin costo por la Asociación Chamilo, que persigue el objetivo de mejorar la calidad de una educación de calidad en todo el mundo.<br /><br />"
+
+msgid "My assignments"
+msgstr "Mis tareas"
+
+msgid "Add to editor"
+msgstr "Añadir al editor"
+
+msgid "Image URL"
+msgstr "URL imagen"
+
+msgid "px width"
+msgstr "Ancho en px"
+
+msgid "Add image with zoom"
+msgstr "Agregar imagen con zoom"
+
+msgid "Delete in all languages"
+msgstr "Eliminar en todos los idiomas"
+
+msgid "My students schedule"
+msgstr "Horario de mis estudiante"
+
+msgid "I accept the number of saved responses in this section."
+msgstr "Acepto la cantidad de respuestas guardadas en esta sección."
+
+msgid "If you are not satisfied, do not check the acceptance box and consult the course manager or the platform administrator."
+msgstr "Si no está satisfecho, no marque la casilla de aceptación y consulte con el encargado del curso o el administrador de la plataforma."
+
+msgid "Student's superior follow up"
+msgstr "Seguimiento de superiores de estudiantes"
+
+msgid "General Coaches planning"
+msgstr "Calendario de ocupaciones de tutores generales."
+
+msgid "Sent or past assignments"
+msgstr "Tareas enviadas o terminadas"
+
+msgid "Pending assignments"
+msgstr "Tareas en curso"
+
+msgid "All Assignments"
+msgstr "Todas las tareas"
+
+msgid "You will find below all your assignment from all the courses and session in which you are registered."
+msgstr "A continuación encontrará todas sus tareas de todos los cursos y sesiones en los que está registrado."
+
+msgid "Required courses"
+msgstr "Cursos requeridos"
+
+msgid "Standard List"
+msgstr "lista estándar"
+
+msgid "Management List"
+msgstr "Gestión administrativa"
+
+msgid "Anonymize user's sessions"
+msgstr "Anonimizar las sesiones del usuario"
+
+msgid "Continue last import"
+msgstr "Continuar con el último importe"
+
+msgid "Notifications"
+msgstr "Notificaciones"
+
+msgid "Justification"
+msgstr "Justificación"
+
+msgid "Periodic export"
+msgstr "Exporte periódico"
+
+msgid "Dates"
+msgstr "Fechas"
+
+msgid "Error: Some of the files inside the zip package have unauthorized extensions."
+msgstr "Error: Algunos de los archivos dentro del paquete ZIP tienen extensiones no autorizadas."
+
+msgid "Users by status"
+msgstr "Usuarios por status"
+
+msgid "Sessions per status"
+msgstr "Sesiones por status"
+
+msgid "Users by target language"
+msgstr "Usuarios por idioma objetivo"
+
+msgid "Users by career"
+msgstr "Usuarios por carrera"
+
+msgid "Users by contract"
+msgstr "Usuarios por contrato"
+
+msgid "Users by certificate"
+msgstr "Usuarios por certificado"
+
+msgid "Users by age"
+msgstr "Usuarios por edad"
+
+msgid "Continue the import"
+msgstr "Seguir con la importación"
+
+msgid "LDAP connect operation failed."
+msgstr "La operación LDAP_connect falló."
+
+msgid "ldap_bind() failed."
+msgstr "ldap_bind() falló."
+
+msgid "ldap_search() failed."
+msgstr "ldap_search() falló."
+
+msgid "ldap_first_entry() failed."
+msgstr "ldap_first_entry() falló."
+
+msgid "ldap_get_values() failed."
+msgstr "ldap_get_values() falló."
+
+msgid "More than one attribute value was found."
+msgstr "Más de un valor de atributo ha sido encontrado."
+
+msgid "More than one user matched."
+msgstr "Más de un usuario corresponde."
+
+msgid "Course code confirmation"
+msgstr "Confirmación de código de curso"
+
+msgid "Unsupported IMS/QTI version."
+msgstr "Versión IMS/QTI no soportada."
+
+msgid "Export all certificates to ZIP"
+msgstr "Exportar todos los certificados a ZIP"
+
+msgid "Current score"
+msgstr "Score actual"
+
+msgid "Add attempt"
+msgstr "Añadir intento"
+
+msgid "survey"
+msgstr "encuesta"
+
+msgid "Private between users"
+msgstr "Privado entre usuarios"
+
+msgid "Nothing"
+msgstr "Nada"
+
+msgid "Compilatio analysis in progress"
+msgstr "Análisis de Compilatio en progreso"
+
+msgid "Account expiration"
+msgstr "Expiración de cuenta"
+
+msgid "Justification expiration"
+msgstr "Expiración de justificativo"
+
+msgid "Justification type"
+msgstr "Tipo de justificativo"
+
+msgid "Persistent"
+msgstr "Persistente"
+
+msgid "Logout from your %s account"
+msgstr "Desconectarse de la cuenta %s"
+
+msgid "Days difference"
+msgstr "Días de diferencia"
+
+msgid "Graduated"
+msgstr "Graduado"
+
+msgid "Absent"
+msgstr "Ausente"
+
+msgid "Internal database error"
+msgstr "Error interno de base de datos"
+
+msgid "Wrong number of days"
+msgstr "Número de días erróneo"
+
+msgid "Subscription not allowed"
+msgstr "Suscripción no autorizada"
+
+msgid "You have passed the %s minutes limit to see the results."
+msgstr "Ha pasado el límite de %s minutos para ver los resultados."
+
+msgid "Last updated"
+msgstr "Última actualización"
+
+msgid "Export to XLS"
+msgstr "Exportar a XLS"
+
+msgid "Learning paths generic stats"
+msgstr "Estadísticas genéricas de lecciones"
+
+msgid "Failed to create extra field cas_user."
+msgstr "Falló la creación del campo de perfil cas_user."
+
+msgid "Failed to create user."
+msgstr "Falló la creación del usuario."
+
+msgid "No such user in LDAP."
+msgstr "No corresponde ningún usuario en LDAP."
+
+msgid "No such user in the internal database."
+msgstr "No corresponde ningún usuario en la base de datos local."
+
+msgid "The user could not be updated."
+msgstr "El usuario no ha podido ser actualizado."
+
+msgid "The template session does not exist."
+msgstr "La sesión plantilla no existe."
+
+msgid "Session not registered."
+msgstr "Sesión no registrada."
+
+msgid "Courses not added to session."
+msgstr "Cursos no añadidos a la sesión."
+
+msgid "Session not found."
+msgstr "Sesión no encontrada."
+
+msgid "User not found."
+msgstr "Usuario no encontrado."
+
+msgid "User not subscribed."
+msgstr "Usuario no inscrito."
+
+msgid "No session matched."
+msgstr "Ninguna sesión corresponde."
+
+msgid "More than one session matched."
+msgstr "Más de una sesión corresponde."
+
+msgid "Could not load user."
+msgstr "Imposible de cargar el usuario."
+
+msgid "Language unavailable."
+msgstr "Idioma no disponible."
+
+msgid "Could not update extra field value."
+msgstr "Imposible actualizar el campo de perfil."
+
+msgid "Unsupported update."
+msgstr "Actualización no soportada."
+
+msgid "No user matched."
+msgstr "Ningún usuario corresponde."
+
+msgid "Resume"
+msgstr "Resumen"
+
+msgid "Attendance from %s to %s"
+msgstr "Asistencia del %s al %s"
+
+msgid "Add time"
+msgstr "Añadir tiempo"
+
+msgid "Add user"
+msgstr "Añadir usuario"
+
+msgid "Time spent on assignment"
+msgstr "Tiempo dedicado a la tarea"
+
+msgid "User %s signed the agreement on %s"
+msgstr "El usuario %s firmó el acuerdo el %s"
+
+msgid "Available"
+msgstr "Disponible"
+
+msgid "Compilatio anti-plagiarism module"
+msgstr "Módulo anti-plagio de Compilatio"
+
+msgid "Quotas"
+msgstr "Quotas"
+
+msgid "Credits: %s on %s"
+msgstr "Créditos: %s sobre %s"
+
+msgid "SOAP connection test..."
+msgstr "Prueba de conexión SOAP..."
+
+msgid "Connection to Compilatio's SOAP server"
+msgstr "Conexión al servidor SOAP de Compilatio"
+
+msgid "Connection successful."
+msgstr "Conexión exitosa."
+
+msgid "Sending text to the Compilatio server"
+msgstr "Envío de texto al servidor de Compilatio"
+
+msgid "This is a text sending test to the Compilatio server via its API.\nCompilatio key used: %s"
+msgstr "Esta es una prueba de envío de texto al servidor de Compilatio a través de su API.\nLlave Compilatio usada: %s"
+
+msgid "Transfer successful."
+msgstr "Transferencia exitosa."
+
+msgid "Transfer failed."
+msgstr "La transferencia falló."
+
+msgid "Could not connect to Compilatio's SOAP server."
+msgstr "Imposible conectarse al servidor SOAP de Compilatio."
+
+msgid "Check your key, your server ports and possibly your proxy settings."
+msgstr "Verifique su clave, los puertos de sus servidores y posiblemente sus parámetros de proxy."
+
+msgid "Last visited course"
+msgstr "Último curso visitado"
+
+msgid "You haven't visited any courses yet, here is the list of your courses."
+msgstr "Aún no ha visitado ningún curso, aquí está la lista de sus cursos."
+
+msgid "No organization"
+msgstr "Sin entidad"
+
+msgid "User by organization"
+msgstr "Usuario por entidad"
+
+msgid "Learning path by author"
+msgstr "Lección por autor"
+
+msgid "Import assignments from base course"
+msgstr "Importar los tareas del curso base"
+

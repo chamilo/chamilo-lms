@@ -1081,14 +1081,25 @@ class MySpace
 
         $form = new FormValidator('searchDate', 'get');
         $form->addHidden('display', 'company');
+        $today = new DateTime();
+        if (empty($startDate)) {
+            $startDate = api_get_local_time($today->modify('first day of this month')->format('Y-m-d'));
+        }
+        if (empty($endDate)) {
+            $endDate = api_get_local_time($today->modify('last day of this month')->format('Y-m-d'));
+        }
         $form->addDatePicker(
             'startDate',
             get_lang('DateStart'),
-            []);
+            [
+                'value' => $startDate,
+            ]);
         $form->addDatePicker(
             'endDate',
             get_lang('DateEnd'),
-            []);
+            [
+                'value' => $endDate,
+            ]);
         $form->addButtonSearch(get_lang('Search'));
         if (count($companys) != 0) {
             //$form->addButtonSave(get_lang('Ok'), 'export');
@@ -1251,16 +1262,25 @@ class MySpace
 
             $form = new FormValidator('searchDate', 'get');
             $form->addHidden('display', 'learningPath');
+            $today = new DateTime();
+            if (empty($startDate)) {
+                $startDate = $today->modify('first day of this month')->format('Y-m-d');
+            }
+            if (empty($endDate)) {
+                $endDate = $today->modify('last day of this month')->format('Y-m-d');
+            }
             $form->addDatePicker(
                 'startDate',
                 get_lang('DateStart'),
-                []
-            );
+                [
+                    'value' => $startDate,
+                ]);
             $form->addDatePicker(
                 'endDate',
                 get_lang('DateEnd'),
-                []
-            );
+                [
+                    'value' => $endDate,
+                ]);
             $form->addButtonSearch(get_lang('Search'));
             if (count($data) != 0) {
                 //$form->addButtonSave(get_lang('Ok'), 'export');
@@ -3650,13 +3670,13 @@ class MySpace
 
         // Settings condition and parametter GET to right date
         if (!empty($startDate)) {
-            $startDate = api_get_utc_datetime($startDate->format('Y-m-d'));
+            $startDate = api_get_local_time($startDate->format('Y-m-d'));
             $_GET['startDate'] = $startDate;
             $whereCondition .= "
             AND $tblItemProperty.lastedit_date >= '$startDate' ";
         }
         if (!empty($endDate)) {
-            $endDate = api_get_utc_datetime($endDate->format('Y-m-d'));
+            $endDate = api_get_local_time($endDate->format('Y-m-d'));
             $_GET['endDate'] = $endDate;
             $whereCondition .= "
             AND $tblItemProperty.lastedit_date <= '$endDate' ";

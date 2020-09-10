@@ -8667,4 +8667,5 @@ $YouDidNotVisitACourseHereTheCourseList = "You haven't visited any courses yet, 
 $NoEntity = "No organization";
 $UserByEntityReport = "User by organization";
 $LpByAuthor = "Learning path by author";
+$SessionImportAssignments = "Import assignments from base course";
 ?>

@@ -8695,4 +8695,5 @@ $YouDidNotVisitACourseHereTheCourseList = "Aún no ha visitado ningún curso, aq
 $NoEntity = "Sin entidad";
 $UserByEntityReport = "Usuario por entidad";
 $LpByAuthor = "Lección por autor";
+$SessionImportAssignments = "Importar los tareas del curso base";
 ?>

@@ -8599,4 +8599,5 @@ $YouDidNotVisitACourseHereTheCourseList = "Vous n'avez encore visité aucun cour
 $NoEntity = "Aucune organisation";
 $UserByEntityReport = "Utilisateur par organisation";
 $LpByAuthor = "Parcours par auteur";
+$SessionImportAssignments = "Importer les travaux du cours de base";
 ?>

@@ -17,7 +17,7 @@
       <b-container fluid>
         <b-row>
           <b-col cols="12">
-            <Breadcrumb />
+            <Breadcrumb :legacy="breadcrumb" />
             <snackbar />
             <router-view />
             <div
@@ -60,6 +60,7 @@ export default {
   mixins: [NotificationMixin],
   data: () => ({
     drawer: true,
+    breadcrumb: [],
     courses: [
       ['Courses', 'mdi-book', 'CourseList'],
       ['Courses category', 'mdi-book', 'CourseCategoryList'],
@@ -129,6 +130,10 @@ export default {
           this.showMessage(element)
         );
       }
+    }
+
+    if (this.$parent.$el.attributes["data-breadcrumb"]) {
+      this.breadcrumb = JSON.parse(this.$parent.$el.attributes["data-breadcrumb"].value);
     }
 
     axios.interceptors.response.use(undefined, (err) => {

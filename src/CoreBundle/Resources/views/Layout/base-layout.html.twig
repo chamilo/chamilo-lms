@@ -17,7 +17,9 @@
     <body class="{{ section_name }} h-100"
           data-in-course="{{ course ? 'true' : 'false' }}"
           data-course-code="{{ course ? course.code : '' }}"
-          data-session-id="{{ session ? session.id : '' }}">
+          data-session-id="{{ session ? session.id : '' }}"
+          data-breadcrumb="{{ legacy_breadcrumb | json_encode() }}"
+    >
     <noscript> {{ "Your browser does not support Javascript" | trans }} </noscript>
 
     {% block chamilo_wrap %}
@@ -32,7 +34,7 @@
         {# <main id="app-main" class="main"> #}
         {% block chamilo_breadcrumb %}
             <!-- BREADCRUMB -->
-            {% include '@ChamiloCore/Layout/breadcrumb.html.twig' %}
+{#            {% include '@ChamiloCore/Layout/breadcrumb.html.twig' %}#}
             <!-- END BREADCRUMB -->
         {% endblock %}
 

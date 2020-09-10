@@ -3,6 +3,20 @@
         {% set legacy_breadcrumb = '' %}
     {% endif %}
 
+{#    {% if legacy_breadcrumb %}#}
+{#        <nav aria-label="breadcrumb">#}
+{#            <ol class="breadcrumb">#}
+{#                {% for item in legacy_breadcrumb %}#}
+{#                    <li class="breadcrumb-item" aria-current="page">#}
+{#                        <a href="{{ item.url }}">#}
+{#                            {{ item.name }}#}
+{#                        </a>#}
+{#                    </li>#}
+{#                {% endfor %}#}
+{#            </ol>#}
+{#        </nav>#}
+{#    {% endif %}#}
+
     {# course and session variables are set in the src/CourseBundle/EventListener/CourseListener.php #}
 {#    {{#}
 {#        sonata_block_render_event(#}

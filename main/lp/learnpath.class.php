@@ -3572,7 +3572,8 @@ class learnpath
                         $course_id,
                         $this->get_id(),
                         $item_id,
-                        $this->get_view_id()
+                        $this->get_view_id(),
+                        $this->get_lp_session_id()
                     );
                     switch ($lp_item_type) {
                         case 'document':
@@ -12995,6 +12996,7 @@ EOD;
      * @param int $learningPathId The learning path ID (in lp table)
      * @param int $id_in_path     the unique index in the items table
      * @param int $lpViewId
+     * @param int $lpSessionId
      *
      * @return string
      */
@@ -13002,7 +13004,8 @@ EOD;
         $course_id,
         $learningPathId,
         $id_in_path,
-        $lpViewId
+        $lpViewId,
+        $lpSessionId = 0
     ) {
         $session_id = api_get_session_id();
         $course_info = api_get_course_info_by_id($course_id);
@@ -13169,7 +13172,29 @@ EOD;
                 return $main_dir_path.'user/user.php?'.$extraParams;
             case TOOL_STUDENTPUBLICATION:
                 if (!empty($rowItem->getPath())) {
-                    return $main_dir_path.'work/work_list.php?id='.$rowItem->getPath().'&'.$extraParams;
+                    $workId = $rowItem->getPath();
+                    if (empty($lpSessionId) && !empty($session_id)) {
+                        // Check if a student publication with the same name exists in this session see BT#17700
+                        $title = Database::escape_string($rowItem->getTitle());
+                        $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+                        $sql = "SELECT * FROM $table
+                                WHERE
+                                    active = 1 AND
+                                    parent_id = 0 AND
+                                    c_id = $course_id AND
+                                    session_id = $session_id AND
+                                    title = '$title'
+                                LIMIT 1";
+                        $result = Database::query($sql);
+                        if (Database::num_rows($result)) {
+                            $work = Database::fetch_array($result, 'ASSOC');
+                            if ($work) {
+                                $workId = $work['iid'];
+                            }
+                        }
+                    }
+
+                    return $main_dir_path.'work/work_list.php?id='.$workId.'&'.$extraParams;
                 }
 
                 return $main_dir_path.'work/work.php?'.api_get_cidreq().'&id='.$rowItem->getPath().'&'.$extraParams;

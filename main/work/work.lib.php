@@ -1566,13 +1566,19 @@ function getWorkListTeacher(
     $column,
     $direction,
     $where_condition,
-    $getCount = false
+    $getCount = false,
+    $courseInfoParam = []
 ) {
     $workTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $workTableAssignment = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
 
     $courseInfo = api_get_course_info();
     $course_id = api_get_course_int_id();
+    if (!empty($courseInfoParam)) {
+        $courseInfo = $courseInfoParam;
+        $course_id = $courseInfoParam['real_id'];
+    }
+
     $session_id = api_get_session_id();
     $condition_session = api_get_session_condition($session_id);
     $group_id = api_get_group_id();

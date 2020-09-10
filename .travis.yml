@@ -102,12 +102,12 @@ script:
   # Set to APP_ENV to test
   - sed -i "s/APP_ENV='dev'/APP_ENV='test'/g" .env.local
   - cd tests/behat
-  - ../../vendor/behat/behat/bin/behat features/adminFillUsers.feature -vv
+  - ../../vendor/behat/behat/bin/behat features/adminFillUsers.feature -vvv
 #  - ../../vendor/behat/behat/bin/behat features/adminSettings.feature -v
 #  - ../../vendor/behat/behat/bin/behat features/career.feature -v
 #  - ../../vendor/behat/behat/bin/behat features/class.feature -v
 #  - ../../vendor/behat/behat/bin/behat features/companyReports.feature -v
-  - ../../vendor/behat/behat/bin/behat features/course.feature -vv
+  - ../../vendor/behat/behat/bin/behat features/course.feature -vvv
 #  - ../../vendor/behat/behat/bin/behat features/course_user_registration.feature -v
 #  - ../../vendor/behat/behat/bin/behat features/createUser.feature -v
 #  - ../../vendor/behat/behat/bin/behat features/createUserViaCSV.feature -v

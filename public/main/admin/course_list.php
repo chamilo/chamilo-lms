@@ -439,7 +439,7 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
     $sessionSelect = $sessionFilter->addElement(
         'select_ajax',
         'session_name',
-        get_lang('Search coursesBySession'),
+        get_lang('Search course by session'),
         null,
         ['id' => 'session_name', 'url' => $url]
     );

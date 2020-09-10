@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="class_user")
  * @ORM\Entity
  *
- * @deprecated  the class user class will be removed as it will not be used.
+ * @deprecated  the class user class will be removed as it will not be used
  */
 class ClassUser
 {

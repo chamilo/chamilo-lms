@@ -19,12 +19,14 @@
                 icon="envelope"
                 type="text"
                 required
+                name="login"
               />
               <b-form-input
                 v-model="password"
                 :placeholder=" $t('Password') "
                 icon="lock"
                 type="password"
+                name="password"
                 required
               />
             </div>

@@ -35,7 +35,6 @@ env:
     - VHOST_URL=localhost
 
 before_install:
-  - curl http://localhost/php.php
   - mysqld --version
   - apache2 -v
   - php -m
@@ -67,11 +66,10 @@ before_install:
   # Starting Apache
   - sudo service apache2 restart
   - sudo cat /etc/hosts
-  - curl http://localhost/php.php
 
 install:
   - phpenv config-rm xdebug.ini || return 0
-  - composer self-update --snapshot
+#  - composer self-update --snapshot
   - composer update --prefer-source --no-interaction
   # Install bundle js/css
   - php bin/console assets:install
@@ -81,7 +79,7 @@ install:
   - php bin/console fos:js-routing:dump --format=json --target=public/js/fos_js_routes.json
   # Install third party js/css libraries
   - yarn install
-  - ./node_modules/.bin/encore dev
+  - yarn run encore production
   # Permissions
   - sudo chown -R www-data:www-data $TRAVIS_BUILD_DIR
   - sudo chown -R 775 $TRAVIS_BUILD_DIR

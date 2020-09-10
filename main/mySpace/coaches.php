@@ -74,7 +74,7 @@ if (isset($_GET["id_student"])) {
 $result_coachs = Database::query($sql_coachs);
 
 if (api_is_western_name_order()) {
-    echo '<table class="data_table">
+    echo '<table class="table table-hover table-striped data_table">
 	    <tr>
             <th>'.get_lang('FirstName').'</th>
             <th>'.get_lang('LastName').'</th>
@@ -83,7 +83,7 @@ if (api_is_western_name_order()) {
             <th>'.get_lang('Students').'</th>
         </tr>';
 } else {
-    echo '<table class="data_table">
+    echo '<table class="table table-hover table-striped data_table">
 	        <tr>
                 <th>'.get_lang('LastName').'</th>
                 <th>'.get_lang('FirstName').'</th>

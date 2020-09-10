@@ -1485,7 +1485,7 @@ class Display
     public static function table($headers, $rows, $attributes = [])
     {
         if (empty($attributes)) {
-            $attributes['class'] = 'data_table';
+            $attributes['class'] = 'table table-hover table-striped data_table';
         }
         $table = new HTML_Table($attributes);
         $row = 0;

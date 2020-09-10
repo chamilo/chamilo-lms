@@ -1054,7 +1054,7 @@ echo '<input type="hidden" name="selected_course" value="'.$selected_course.'">'
 echo '<input type="hidden" name="course_id" value="'.$selected_course.'">';
 echo '<input type="hidden" name="action">';
 
-$table = new HTML_Table(['class' => 'table table-bordered data_table'], false);
+$table = new HTML_Table(['class' => 'table table-hover table-bordered data_table'], false);
 $row = 0;
 $column = 0;
 foreach ($headers as $header) {

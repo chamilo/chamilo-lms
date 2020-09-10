@@ -5,7 +5,7 @@
 {{ session_header }}
 {{ title }}
 
-<table id="session-properties" class="table table-hover data_table">
+<table id="session-properties" class="table table-hover table-striped data_table">
     <tr>
         <td>{{ 'CreatedBy'|get_lang }}</td>
         <td>{{ session_admin.complete_name_with_message_link }}</td>

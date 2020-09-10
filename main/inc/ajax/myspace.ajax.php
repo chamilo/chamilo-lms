@@ -41,7 +41,7 @@ switch ($action) {
         $sessionCategoryList = UserManager::get_sessions_by_category($userId, false);
         $total = 0;
         $totalAverage = 0;
-        $table = new HTML_Table(['class' => 'data_table']);
+        $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
         $row = 0;
         $col = 0;
         foreach ($sessionCategoryList as $category) {

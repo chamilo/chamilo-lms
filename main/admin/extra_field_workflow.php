@@ -93,20 +93,20 @@ $htmlHeadXtra[] = '<script>
         }
     }
 
-    $(function() {        
+    $(function() {
         $("#workflow_status").on("change", function() {
-            var roleId = $(this).find(":selected").val();            
+            var roleId = $(this).find(":selected").val();
             if (roleId != 0) {
                 window.location.replace("'.api_get_self().'?'.$paramsNoRole.'&roleId="+roleId);
             }
         });
-        
+
         $("[name=select_all]").on("click", function() {
             $("#workflow :checkbox").prop("checked", 1);
             $("#workflow :hidden").prop("value", 1);
             return false;
         });
-        
+
         $("[name=unselect_all]").on("click", function() {
             $("#workflow :checkbox").prop("checked", 0);
             $("#workflow :hidden").prop("value", 0);
@@ -126,7 +126,7 @@ $result = Database::select(
     ]
 );
 
-$table = new HTML_Table(['class' => 'data_table']);
+$table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
 $column = 0;
 $row = 0;
 $table->setHeaderContents($row, $column, get_lang('CurrentStatus'));

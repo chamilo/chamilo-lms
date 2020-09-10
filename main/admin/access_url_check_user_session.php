@@ -80,7 +80,8 @@ foreach ($session_list as $session_item) {
     $users = Database::store_result($result);
 
     if (!empty($users)) {
-        $html .= '<table class="data_table"><tr><th>'.get_lang('User').'<th>'.get_lang('Actions').'</th></tr>';
+        $html .= '<table class="table table-hover table-striped data_table">
+            <thead><tr><th>'.get_lang('User').'<th>'.get_lang('Actions').'</th></tr></thead><tbody>';
 
         foreach ($users as $user) {
             $user_link = '';
@@ -105,7 +106,7 @@ foreach ($session_list as $session_item) {
                     </td>
                     </tr>';
         }
-        $html .= '</table>';
+        $html .= '</tbody>s</table>';
     }
 }
 echo $html;

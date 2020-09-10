@@ -5584,7 +5584,7 @@ class Exercise
                             $final_overlap = 100;
                         }
 
-                        $table_resume = '<table class="data_table">
+                        $table_resume = '<table class="table table-hover table-striped data_table">
                                 <tr class="row_odd" >
                                     <td></td>
                                     <td ><b>'.get_lang('Requirements').'</b></td>
@@ -9729,7 +9729,7 @@ class Exercise
             }
 
             $table_resume = '
-                    <table class="data_table">
+                    <table class="table table-hover table-striped data_table">
                         <tr class="row_odd" >
                             <td>&nbsp;</td>
                             <td><b>'.get_lang('Requirements').'</b></td>

@@ -150,7 +150,7 @@ $url = Display::url(
 );
 $courseListToShow = Display::page_subheader(get_lang('CourseList').$url);
 
-$courseListToShow .= '<table id="session-list-course" class="table table-hover data_table">
+$courseListToShow .= '<table id="session-list-course" class="table table-hover table-striped data_table">
 <tr>
   <th width="35%">'.get_lang('CourseTitle').'</th>
   <th width="30%">'.get_lang('CourseCoach').'</th>
@@ -298,7 +298,7 @@ $userList = SessionManager::get_users_by_session($sessionId);
 
 if (!empty($userList)) {
     $table = new HTML_Table(
-        ['class' => 'table table-hover data_table', 'id' => 'session-user-list']
+        ['class' => 'table table-hover table-striped data_table', 'id' => 'session-user-list']
     );
     $table->setHeaderContents(0, 0, get_lang('User'));
     $table->setHeaderContents(0, 1, get_lang('Status'));

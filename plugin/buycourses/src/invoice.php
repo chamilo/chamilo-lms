@@ -136,7 +136,7 @@ if ($taxEnable) {
 }
 $data[] = $row;
 $attr = [];
-$attr['class'] = 'table data_table';
+$attr['class'] = 'table table-hover table-striped data_table';
 $attr['width'] = '100%';
 $htmlText .= Display::table($header, $data, $attr);
 $htmlText .= '</body></html>';

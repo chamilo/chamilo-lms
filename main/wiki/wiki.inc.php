@@ -3722,7 +3722,7 @@ class Wiki
             $total_ip = $total_ip + 1;
         }
 
-        echo '<table class="data_table">';
+        echo '<table class="table table-hover table-striped data_table">';
         echo '<thead>';
         echo '<tr>';
         echo '<th colspan="2">'.get_lang('General').'</th>';
@@ -3759,7 +3759,7 @@ class Wiki
         echo '</table>';
         echo '<br/>';
 
-        echo '<table class="data_table">';
+        echo '<table class="table table-hover table-striped data_table">';
         echo '<thead>';
         echo '<tr>';
         echo '<th colspan="2">'.get_lang('Pages').' '.get_lang(
@@ -3840,7 +3840,7 @@ class Wiki
         echo '</table>';
         echo '<br/>';
 
-        echo '<table class="data_table">';
+        echo '<table class="table table-hover table-striped data_table">';
         echo '<thead>';
         echo '<tr>';
         echo '<th colspan="3">'.get_lang('ContentPagesInfo').'</th>';

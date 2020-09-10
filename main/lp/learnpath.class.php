@@ -5956,7 +5956,7 @@ class learnpath
         if (count($this->items) == 0) {
             $return .= Display::return_message(get_lang('YouShouldAddItemsBeforeAttachAudio'), 'normal');
         } else {
-            $return_audio = '<table class="data_table">';
+            $return_audio = '<table class="table table-hover table-striped data_table">';
             $return_audio .= '<tr>';
             $return_audio .= '<th width="40%">'.get_lang('Title').'</th>';
             $return_audio .= '<th>'.get_lang('Audio').'</th>';

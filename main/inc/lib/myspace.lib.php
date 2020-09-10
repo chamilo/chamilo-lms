@@ -1063,7 +1063,7 @@ class MySpace
         $tableHtml = '';
         // Printing table
         $total = 0;
-        $table = '<div class="table-responsive"><table class="table table-bordered data_table">';
+        $table = '<div class="table-responsive"><table class="table table-hover table-bordered data_table">';
 
         $displayText = get_lang('Company');
         $table .= "<thead><tr><th class=\"th-header\">$displayText</th><th class=\"th-header\"> ".get_lang('CountOfSubscribedUsers')." </th></tr></thead><tbody>";
@@ -1190,7 +1190,7 @@ class MySpace
         }
         if ($csv == false) {
             $table = "<div class='table-responsive'>".
-                "<table class='table table-bordered data_table'>".
+                "<table class='table table-hover table-bordered data_table'>".
                 "<thead>".
                 "<tr>".
                 "<th class=\"th-header\">".get_lang('Author')."</th>".
@@ -1831,7 +1831,7 @@ class MySpace
     {
         $session_id = $row[0];
         // the table header
-        $return = '<table class="data_table" style="width: 100%;border:0;padding:0;border-collapse:collapse;table-layout: fixed">';
+        $return = '<table class="table table-hover table-striped data_table" style="width: 100%;border:0;padding:0;border-collapse:collapse;table-layout: fixed">';
 
         // database table definition
         $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);

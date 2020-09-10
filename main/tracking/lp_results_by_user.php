@@ -170,7 +170,7 @@ if (!empty($user_list)) {
 }
 $export_array = [];
 if (!empty($main_result)) {
-    $html_result .= '<table  class="data_table">';
+    $html_result .= '<table  class="table table-hover table-striped data_table">';
     $html_result .= '<tr><th>'.get_lang('Course').'</th>';
     $html_result .= '<th>'.get_lang('LearningPath').'</th>';
     $html_result .= '<th>'.get_lang('Exercise').'</th>';

@@ -104,7 +104,7 @@ class BlockCourse extends Block
         $content = '<h4>'.get_lang('YourCourseList').'</h4>';
         $data_table = null;
         if (!empty($course_data)) {
-            $data_table .= '<table class="data_table" width:"95%">';
+            $data_table .= '<table class="table table-hover table-striped data_table" width:"95%">';
             $data_table .= '<tr>
 	    						<th>'.get_lang('CourseTitle').'</th>
 	    						<th width="20%">'.get_lang('NbStudents').'</th>

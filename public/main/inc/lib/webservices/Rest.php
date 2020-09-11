@@ -1455,7 +1455,7 @@ class Rest extends WebService
 
         $result = Database::query($count_homework);  
         //url work
-        $course_code=self::getCourseCode($course_id); 
+        $course_code=CourseManager::get_course_code_from_course_id($course_id);
         if (Database::num_rows($result)) {
                 while($row= Database::fetch_array($result, 'ASSOC')){
                     $id=$row["id_w"];
@@ -1482,7 +1482,7 @@ class Rest extends WebService
                             AND w.user_id=$idUser;";
         $informationHomework=[];
         $result = Database::query($informationWork);
-        $course_code=self::getCourseCode($course_id); 
+        $course_code=CourseManager::get_course_code_from_course_id($course_id);
         if (Database::num_rows($result)) {
             while($row= Database::fetch_array($result, 'ASSOC')){
                 $id=$row["id_w"];
@@ -1511,19 +1511,6 @@ class Rest extends WebService
             }
         }
         return $informationHomework;
-    }
-    
-    /**
-     * Get Course Code
-     * @param $course_id
-     */
-    private function getCourseCode($course_id)
-    {
-         $query_code_course="SELECT code FROM course WHERE id=$course_id";
-                    $exe_result_c= Database::query($query_code_course);
-                    $c_row= Database::fetch_array($exe_result_c, 'ASSOC');
-                    $course_code= isset($c_row["code"])?$c_row["code"]:'';
-         return $course_code;
     }
 
     public function deleteUserMessage($messageId, $messageType)

@@ -1174,7 +1174,7 @@ class ExtraField extends Model
                         if (empty($defaultValueId)) {
                             $options[''] = get_lang('SelectAnOption');
                         }
-                        // When a varible is 'authors', this will be a 
+                        // When a varible is 'authors', this will be a
                         // select element of teachers (see BT#17648)
                         $variable = $field_details['variable'];
                         if ($variable != 'authors') {

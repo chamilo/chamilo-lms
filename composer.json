@@ -40,12 +40,6 @@
             "public/main/survey"
         ]
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url":  "https://github.com/jmontoyaa/APYDataGridBundle.git"
-        }
-    ],
     "require": {
         "php": "^7.2.9",
         "ext-bcmath": "*",

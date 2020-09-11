@@ -23,7 +23,7 @@ Feature: Course tools basic testing
     When I fill in "title" with "TEMP_PRIVATE"
     Then I check the "Private access (access authorized to group members only)" radio button
     Then wait for the page to be loaded
-    And I press "Create a course"
+    And I press "submit"
     Then wait for the page to be loaded
     Then I should see "Course TEMP_PRIVATE added"
 

@@ -17,6 +17,9 @@ class Rest extends WebService
 {
     const SERVICE_NAME = 'MsgREST';
     const EXTRA_FIELD_GCM_REGISTRATION = 'gcm_registration_id';
+    
+    const GET_HOMEWORK='user_homework';
+    const GET_INFO_HOMEWORK='student_info_homework';
 
     const GET_AUTH = 'authenticate';
     const GET_USER_MESSAGES = 'user_messages';
@@ -1430,6 +1433,97 @@ class Rest extends WebService
         }
 
         return [true];
+    }
+
+     /**
+     * @param $course_id
+     * @return array
+     */
+    public function getHomework($course_id){
+        //echo "string";
+        $workTable =Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+        $workassignment =Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
+        $homeWork=[];
+        $idUser=$this->user->getId();
+            
+        $count_homework="SELECT *,w.id as id_w,(SELECT AVG(if(qualification>0,qualification,NULL))  
+                    FROM $workTable WHERE c_id=$course_id AND active in (0,1) AND filetype='file'
+                    AND user_id= $idUser AND parent_id = w.id) AS cal_tarea 
+                    FROM $workTable as w 
+                    INNER JOIN $workassignment AS a ON a.publication_id=w.id
+                    WHERE w.parent_id=0 AND w.active IN (1,0) AND w.c_id = $course_id;";
+
+        $result = Database::query($count_homework);  
+        //url work
+        $course_code=self::getCourseCode($course_id); 
+        if (Database::num_rows($result)) {
+                while($row= Database::fetch_array($result, 'ASSOC')){
+                    $id=$row["id_w"];
+                    $url="https://".$_SERVER['SERVER_NAME']."/main/work/work_list.php?cidReq=$course_code&id_session=0&gidReq=0&gradebook=0&origin=&id=$id";
+                    $row["url"]=$url;
+                    $homeWork[] = $row; 
+                }
+                return $homeWork;
+        }          
+        return [];
+    }
+    /**
+     * @param $course_id
+     * @param $homeWork_id
+     * @return array
+     */
+    public function getInformationHomework($course_id, $homeWork_id){
+        $workTable =Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+        $workassignment =Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
+        $workcomment =Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT_COMMENT);
+        $idUser=$this->user->getId();
+        $informationWork= "SELECT *,w.id AS id_w FROM $workTable as w LEFT JOIN $workassignment AS a 
+                            ON a.publication_id=w.id WHERE w.c_id = $course_id AND w.parent_id = $homeWork_id 
+                            AND w.user_id=$idUser;";
+        $informationHomework=[];
+        $result = Database::query($informationWork);
+        $course_code=self::getCourseCode($course_id); 
+        if (Database::num_rows($result)) {
+            while($row= Database::fetch_array($result, 'ASSOC')){
+                $id=$row["id_w"];
+                $studentId = $row['user_id'];
+                $teacherId = $row['qualificator_id'];
+                $url="https://".$_SERVER['SERVER_NAME']."/main/work/view.php?cidReq=$course_code&id_session=0&gidReq=0&gradebook=0&origin=&id=$id";
+                $row['url'] = $url;
+                
+                //Feedback is obtained on each task submitted by the specific user
+                 $commentWork= "SELECT c_c.*, concat(u.lastname,' ',u.firstname) as user_comment
+                                FROM $workcomment AS c_c 
+                                INNER JOIN user AS u ON c_c.user_id = u.user_id
+                                WHERE work_id=$id AND (c_c.user_id=$studentId OR c_c.user_id=$teacherId)";
+                 $resultComment = Database::query($commentWork);
+                 if (Database::num_rows($resultComment)) {
+                     while($rowComments= Database::fetch_array($resultComment, 'ASSOC')){
+                         //The html tags are removed from the comment and at the same time the comment is inserted with a <br> every 85 characters
+                         $rowComments['comment'] = strip_tags($rowComments['comment']);
+                         $rowComments['comment'] = wordwrap($rowComments['comment'] , 85, "<br/>",1);
+                         $row['comments'][] = $rowComments;
+                     }
+                 }else{
+                    $row['comments']['no_comment'] = "No comment";
+                 }
+                 $informationHomework[] = $row;
+            }
+        }
+        return $informationHomework;
+    }
+    
+    /**
+     * Get Course Code
+     * @param $course_id
+     */
+    private function getCourseCode($course_id)
+    {
+         $query_code_course="SELECT code FROM course WHERE id=$course_id";
+                    $exe_result_c= Database::query($query_code_course);
+                    $c_row= Database::fetch_array($exe_result_c, 'ASSOC');
+                    $course_code= isset($c_row["code"])?$c_row["code"]:'';
+         return $course_code;
     }
 
     public function deleteUserMessage($messageId, $messageType)

@@ -127,6 +127,18 @@ class FeatureContext extends MinkContext
     }
 
     /**
+     * Checks, that element with specified CSS doesn't exist on page
+     *
+     * @Then /^(?:|I )should not see an error$/
+     */
+    public function iShouldNotSeeAnError()
+    {
+        $this->assertSession()->pageTextNotContains('Internal server error');
+        $this->assertSession()->pageTextNotContains('error');
+        $this->assertSession()->elementNotExists('css', '.alert-danger');
+    }
+
+    /**
      * @Given /^I have a friend named "([^"]*)" with id "([^"]*)"$/
      */
     public function iHaveAFriend($friendUsername, $friendId)
@@ -514,7 +526,6 @@ class FeatureContext extends MinkContext
      */
     public function saveUrlWithName($name)
     {
-
         $url = $this->getSession()->getCurrentUrl();
         $this->getSession()->setCookie($name, $url);
     }

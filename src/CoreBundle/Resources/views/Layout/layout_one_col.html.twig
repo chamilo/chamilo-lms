@@ -28,15 +28,16 @@
     {% endif %}
 
     {% autoescape %}
-    <div id="app"
-         data-is-authenticated="{{ is_authenticated }}"
-         data-user-json="{{ user_json }}"
+    <div
+        id="app"
+        data-is-authenticated="{{ is_authenticated }}"
+        data-user-json="{{ user_json }}"
+        data-flashes="{{ app.flashes()|json_encode }}"
         {% if legacy_breadcrumb is defined %}
-         data-breadcrumb="{{ legacy_breadcrumb | json_encode() }}"
+            data-breadcrumb="{{ legacy_breadcrumb | json_encode() }}"
         {% endif %}
     >
     </div>
-
     {% endautoescape %}
 
     {% set hideContent = 'display: none' %}
@@ -45,25 +46,19 @@
     {% endif %}
 
     <section id="sectionMainContent" class="section-content" style="{{ hideContent }}">
-        {% autoescape false %}
-            {% block chamilo_messages %}
-                    {% include '@ChamiloCore/FlashMessage/render.html.twig' %}
-            {% endblock %}
+    {% autoescape false %}
+        {% if introduction is defined %}
+            {{ introduction }}
+        {% endif %}
 
-{#            <section class="container-fluid">#}
-                {% if introduction is defined %}
-                    {{ introduction }}
-                {% endif %}
+        {% if actions != '' %}
+            {{ actions }}
+        {% endif %}
 
-            {% if actions != '' %}
-                {{ actions }}
-            {% endif %}
-            {# Content #}
-            {% block content %}
-                {{ content }}
-            {% endblock %}
-{#            </section>#}
-        {% endautoescape %}
+        {% block content %}
+            {{ content }}
+        {% endblock %}
+    {% endautoescape %}
     </section>
 
     {% if plugin_content_bottom %}

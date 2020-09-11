@@ -123,12 +123,14 @@ export default {
     let payload = {isAuthenticated: isAuthenticated, user: user};
     this.$store.dispatch("security/onRefresh", payload);
 
-    if (this.$parent.$el.attributes["data-messages"]) {
-      let messages = JSON.parse(this.$parent.$el.attributes["data-messages"].value);
-      if (messages) {
-        Array.from(messages).forEach(element =>
-          this.showMessage(element)
-        );
+    if (this.$parent.$el.attributes["data-flashes"]) {
+      let flashes = JSON.parse(this.$parent.$el.attributes["data-flashes"].value);
+      if (flashes) {
+        for (const key in flashes) {
+          for (const text in flashes[key]) {
+            this.showMessage(flashes[key][text], key);
+          }
+        }
       }
     }
 

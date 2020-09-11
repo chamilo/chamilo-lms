@@ -3,59 +3,35 @@
 {% import "@ChamiloCore/Macros/buttons.html.twig" as macro_buttons %}
 {% import "@ChamiloCore/Macros/image.html.twig" as macro_image %}
 {% import '@ChamiloCore/Macros/headers.html.twig' as macro_headers %}
-
+{# Chamilo theme #}
+{% set theme = 'chamilo' %}
 {% if not from_vue %}
-    <!doctype html>
-    <html lang="{{ app.request.locale }}" class="no-js h-100">
-    {# Chamilo theme #}
-    {% set theme = 'chamilo' %}
+<!DOCTYPE html>
+<html lang="{{ app.request.locale }}" class="no-js h-100">
     {% block chamilo_head %}
-        <head>
-            {% include "@ChamiloCore/Layout/head.html.twig" %}
-        </head>
+    <head>
+        {% include "@ChamiloCore/Layout/head.html.twig" %}
+    </head>
     {% endblock %}
-    <body class="{{ section_name }} h-100"
-          data-in-course="{{ course ? 'true' : 'false' }}"
-          data-course-code="{{ course ? course.code : '' }}"
-          data-session-id="{{ session ? session.id : '' }}"
-
+    <body
+        class="{{ section_name }} h-100"
+        data-in-course="{{ course ? 'true' : 'false' }}"
+        data-course-code="{{ course ? course.code : '' }}"
+        data-session-id="{{ session ? session.id : '' }}"
         {% if legacy_breadcrumb is defined %}
             data-breadcrumb="{{ legacy_breadcrumb | json_encode() }}"
         {% endif %}
     >
     <noscript> {{ "Your browser does not support Javascript" | trans }} </noscript>
-
     {% block chamilo_wrap %}
-        {% block page_header %}
-            {# {% include '@ChamiloCore/Layout/header.html.twig' %} #}
-        {% endblock %}
-        {# <div class="app-body"> #}
-        {% block page_sidebar %}
-            {# {% include '@ChamiloCore/Layout/sidebar.html.twig' %} #}
-        {% endblock %}
-
-        {# <main id="app-main" class="main"> #}
-        {% block chamilo_breadcrumb %}
-            <!-- BREADCRUMB -->
-{#            {% include '@ChamiloCore/Layout/breadcrumb.html.twig' %}#}
-            <!-- END BREADCRUMB -->
-        {% endblock %}
-
-        {% block page_content %}
-        {% endblock %}
-        {# </main> #}
-        {# </div> #}
+    {% block page_content %}
     {% endblock %}
-
+    {% endblock %}
     {% block chamilo_footer %}
-        <!-- FOOTER -->
-        {# {% include '@ChamiloCore/Layout/footer.html.twig' %} #}
-        <!-- END FOOTER -->
     {% endblock %}
     <script src="{{ url('home') ~ 'build/vue.js' }}"></script>
-
-    </body>
-    </html>
+</body>
+</html>
 {% else %}
     {{ block('page_content') }}
 {% endif %}

@@ -96,6 +96,34 @@ class GradebookLink
     protected $locked;
 
     /**
+     * @var float
+     *
+     * @ORM\Column(name="best_score", type="float", precision=6, scale=2, nullable=true)
+     */
+    protected $bestScore;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="average_score", type="float", precision=6, scale=2, nullable=true)
+     */
+    protected $averageScore;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="score_weight", type="float", precision=6, scale=2, nullable=true)
+     */
+    protected $scoreWeight;
+
+    /**
+     * @var array
+     *
+     * @ORM\Column(name="user_score_list", type="array", nullable=true)
+     */
+    protected $userScoreList;
+
+    /**
      * GradebookEvaluation constructor.
      */
     public function __construct()
@@ -303,5 +331,89 @@ class GradebookLink
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return float
+     */
+    public function getBestScore()
+    {
+        return $this->bestScore;
+    }
+
+    /**
+     * @param float $bestScore
+     *
+     * @return GradebookLink
+     */
+    public function setBestScore($bestScore)
+    {
+        $this->bestScore = $bestScore;
+
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getAverageScore()
+    {
+        return $this->averageScore;
+    }
+
+    /**
+     * @param float $averageScore
+     *
+     * @return GradebookLink
+     */
+    public function setAverageScore($averageScore)
+    {
+        $this->averageScore = $averageScore;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getUserScoreList()
+    {
+        if (empty($this->userScoreList)) {
+            return [];
+        }
+
+        return $this->userScoreList;
+    }
+
+    /**
+     * @param array $userScoreList
+     *
+     * @return GradebookLink
+     */
+    public function setUserScoreList($userScoreList)
+    {
+        $this->userScoreList = $userScoreList;
+
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getScoreWeight()
+    {
+        return $this->scoreWeight;
+    }
+
+    /**
+     * @param float $scoreWeight
+     *
+     * @return GradebookLink
+     */
+    public function setScoreWeight($scoreWeight)
+    {
+        $this->scoreWeight = $scoreWeight;
+
+        return $this;
     }
 }

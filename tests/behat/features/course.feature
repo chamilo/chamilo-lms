@@ -22,10 +22,9 @@ Feature: Course tools basic testing
     Then I should not see "not authorized"
     When I fill in "title" with "TEMP_PRIVATE"
     Then I check the "Private access (access authorized to group members only)" radio button
-    Then wait for the page to be loaded
     And I press "submit"
     Then wait for the page to be loaded
-    Then I should see "Course TEMP_PRIVATE added"
+    Then I should see "added"
 
   Scenario: Create a course before testing
     Given I am on "/main/admin/course_add.php"
@@ -93,10 +92,10 @@ Feature: Course tools basic testing
     And I am on "/main/calendar/agenda_js.php?cid=1"
     Then I should not see an error
 
-  Scenario: Make sure the forums tool is available
-    Given I am on course "TEMP" homepage
-    And I am on "/main/forum/index.php?cid=1"
-    Then I should not see an error
+#  Scenario: Make sure the forums tool is available
+#    Given I am on course "TEMP" homepage
+#    And I am on "/main/forum/index.php?cid=1"
+#    Then I should not see an error
 
   Scenario: Make sure the dropbox tool is available
     Given I am on course "TEMP" homepage

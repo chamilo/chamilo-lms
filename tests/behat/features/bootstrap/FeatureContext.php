@@ -22,7 +22,6 @@ class FeatureContext extends MinkContext
     public function iAmAPlatformAdministrator()
     {
         $this->iAmLoggedAs('admin');
-        $this->getSession()->back();
     }
 
     /**

@@ -2456,18 +2456,30 @@ class CourseManager
             return [];
         }
 
-        0 != $session_id ? $session_condition = ' WHERE g.session_id IN(1,'.intval($session_id).')' : $session_condition = ' WHERE g.session_id = 0';
+        $repo = Container::getGroupRepository();
+
+        $course = api_get_course_entity($course_info['real_id']);
+        $session = api_get_session_entity($session_id);
+        $qb = $repo->getResourcesByCourse($course, $session);
+        $groups = $qb->getQuery()->getArrayResult();
+        $groupList = [];
+
+        foreach ($groups as $group) {
+            $groupList[$group['iid']] = $group;
+        }
+
+       /* 0 != $session_id ? $session_condition = ' WHERE g.session_id IN(1,'.intval($session_id).')' : $session_condition = ' WHERE g.session_id = 0';
         if (0 == $in_get_empty_group) {
             // get only groups that are not empty
-            $sql = "SELECT DISTINCT g.iid, g.iid, g.name
+            $sql = "SELECT DISTINCT g.iid, g.name
                     FROM ".Database::get_course_table(TABLE_GROUP)." AS g
                     INNER JOIN ".Database::get_course_table(TABLE_GROUP_USER)." gu
-                    ON (g.iid = gu.group_id AND g.c_id = $course_id AND gu.c_id = $course_id)
+                    ON (g.iid = gu.group_id)
                     $session_condition
                     ORDER BY g.name";
         } else {
             // get all groups even if they are empty
-            $sql = "SELECT g.iid, g.name, g.iid
+            $sql = "SELECT g.iid, g.name
                     FROM ".Database::get_course_table(TABLE_GROUP)." AS g
                     $session_condition
                     AND c_id = $course_id";
@@ -2478,7 +2490,7 @@ class CourseManager
         while ($groupData = Database::fetch_array($result)) {
             $groupData['userNb'] = GroupManager::number_of_students($groupData['iid'], $course_id);
             $groupList[$groupData['iid']] = $groupData;
-        }
+        }*/
 
         return $groupList;
     }
@@ -2575,12 +2587,13 @@ class CourseManager
             }
 
             // Cleaning groups
-            $groups = GroupManager::get_groups($courseId);
+            // @todo should be cleaned by the resource.
+            /*$groups = GroupManager::get_groups($courseId);
             if (!empty($groups)) {
                 foreach ($groups as $group) {
                     GroupManager::deleteGroup($group, $course['code']);
                 }
-            }
+            }*/
 
             $course_tables = AddCourse::get_course_tables();
             // Cleaning c_x tables
@@ -2685,7 +2698,7 @@ class CourseManager
 
             // Deletes all groups, group-users, group-tutors information
             // To prevent fK mix up on some tables
-            GroupManager::deleteAllGroupsFromCourse($courseId);
+            //GroupManager::deleteAllGroupsFromCourse($courseId);
 
             $appPlugin = new AppPlugin();
             $appPlugin->performActionsWhenDeletingItem('course', $courseId);

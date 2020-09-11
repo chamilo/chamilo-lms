@@ -306,14 +306,12 @@ class AddCourse
         Database::insert(
             $TABLEGROUPCATEGORIES,
             [
-                'c_id' => $course_id,
                 'title' => get_lang('Default groups'),
                 'description' => '',
                 'max_student' => 0,
                 'self_reg_allowed' => 0,
                 'self_unreg_allowed' => 0,
                 'groups_per_user' => 0,
-                'display_order' => 0,
                 'doc_state' => 1,
                 'calendar_state' => 1,
                 'work_state' => 1,

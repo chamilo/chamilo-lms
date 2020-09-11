@@ -68,6 +68,8 @@ class GroupManager
     }
 
     /**
+     * @deprecated use Resources
+     *
      * @param int $courseId
      *
      * @return array
@@ -524,6 +526,8 @@ class GroupManager
     }
 
     /**
+     * @deprecated Should be deleted by the resources.
+     *
      * Function needed only when deleting a course, in order to be sure that all group ids are deleted.
      *
      * @param int $courseId

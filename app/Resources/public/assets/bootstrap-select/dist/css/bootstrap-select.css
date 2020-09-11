@@ -148,7 +148,7 @@ select.selectpicker {
 }
 .form-inline .bootstrap-select,
 .form-inline .bootstrap-select.form-control:not([class*="col-"]) {
-  width: auto;
+  width: 100%;
 }
 .bootstrap-select:not(.input-group-btn),
 .bootstrap-select[class*="col-"] {

@@ -816,7 +816,13 @@ function deleteDirWork($id)
                         if (count($userWorks) != 1) {
                             continue;
                         }
-                        Event::eventRemoveVirtualCourseTime($course_id, $user['user_id'], $sessionId, $workingTime);
+                        Event::eventRemoveVirtualCourseTime(
+                            $course_id,
+                            $user['user_id'],
+                            $sessionId,
+                            $workingTime,
+                            $work_data['iid']
+                        );
                     }
                 }
             }

@@ -14,10 +14,20 @@ if (!empty($sessionName) && !empty($courseCode)) {
     $sessionInfo = SessionManager::get_session_by_name($sessionName);
     $courseInfo = api_get_course_info($courseCode);
     if (!empty($sessionInfo) && !empty($courseInfo)) {
-        $url = api_get_path(WEB_COURSE_PATH).$courseInfo['directory'].'/index.php?sid='.$sessionInfo['id'];
+        $url = $courseInfo['course_public_url'].'?sid='.$sessionInfo['id'];
         header('Location: '.$url);
         exit;
     }
 }
+
+if (!empty($courseCode)) {
+    $courseInfo = api_get_course_info($courseCode);
+    if (!empty($courseInfo)) {
+        $url = $courseInfo['course_public_url'];
+        header('Location: '.$url);
+        exit;
+    }
+}
+
 
 api_not_allowed(true);

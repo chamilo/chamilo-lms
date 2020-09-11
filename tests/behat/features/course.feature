@@ -17,15 +17,13 @@ Feature: Course tools basic testing
     Given I am on "/main/admin/index.php"
     Then I should see "Add course"
 
-  Scenario: Access the course creation page
-    Given I am on "/main/admin/course_add.php"
-    Then I should not see "not authorized"
-
   Scenario: Create a private course before testing
     Given I am on "/main/admin/course_add.php"
+    Then I should not see "not authorized"
     When I fill in "title" with "TEMP_PRIVATE"
     Then I check the "Private access (access authorized to group members only)" radio button
-    And I press "submit"
+    Then wait for the page to be loaded
+    And I press "Create a course"
     Then I should see "Course TEMP_PRIVATE added"
 
   Scenario: Create a course before testing

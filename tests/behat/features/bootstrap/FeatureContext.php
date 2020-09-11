@@ -89,7 +89,8 @@ class FeatureContext extends MinkContext
      */
     public function iAmOnCourseXHomepage($courseCode)
     {
-        $this->visit('/courses/'.$courseCode.'/index.php');
+        $this->visit('/main/course_home/redirect.php?cidReq='.$courseCode);
+        //$this->visit('/courses/'.$courseCode.'/index.php');
         $this->assertElementNotOnPage('.alert-danger');
     }
 
@@ -99,6 +100,7 @@ class FeatureContext extends MinkContext
     public function iAmOnCourseXHomepageInSessionY($courseCode, $sessionName)
     {
         $this->visit('/main/course_home/redirect.php?cidReq='.$courseCode.'&session_name='.$sessionName);
+        $this->assertElementNotOnPage('.alert-danger');
     }
 
     /**

@@ -68,7 +68,6 @@ class GroupManager
     }
 
     /**
-     * @deprecated use Resources
      *
      * @param int $courseId
      *
@@ -76,6 +75,14 @@ class GroupManager
      */
     public static function get_groups($courseId = 0)
     {
+        $repo = Container::getGroupRepository();
+        $course = api_get_course_entity($courseId);
+
+        $qb = $repo->getResourcesByCourse($course);
+
+        return $qb->getQuery()->getArrayResult();
+
+
         $table_group = Database::get_course_table(TABLE_GROUP);
         $courseId = !empty($courseId) ? (int) $courseId : api_get_course_int_id();
 

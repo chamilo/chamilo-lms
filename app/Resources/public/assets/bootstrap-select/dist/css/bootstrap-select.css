@@ -35,7 +35,7 @@ select.selectpicker {
   display: none !important;
 }
 .bootstrap-select {
-  width: 220px \0;
+  width: 220px;
   /*IE9 and below*/
   vertical-align: middle;
 }

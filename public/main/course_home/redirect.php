@@ -29,5 +29,4 @@ if (!empty($courseCode)) {
     }
 }
 
-
 api_not_allowed(true);

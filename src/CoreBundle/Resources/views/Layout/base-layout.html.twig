@@ -8,11 +8,11 @@
 {% if not from_vue %}
 <!DOCTYPE html>
 <html lang="{{ app.request.locale }}" class="no-js h-100">
-    {% block chamilo_head %}
-    <head>
-        {% include "@ChamiloCore/Layout/head.html.twig" %}
-    </head>
-    {% endblock %}
+{% block chamilo_head %}
+<head>
+{% include "@ChamiloCore/Layout/head.html.twig" %}
+</head>
+{% endblock %}
     <body
         class="{{ section_name }} h-100"
         data-in-course="{{ course ? 'true' : 'false' }}"

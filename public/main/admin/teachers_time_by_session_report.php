@@ -3,7 +3,6 @@
 
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CourseBundle\Repository\CStudentPublicationRepository;
 use Doctrine\Common\Collections\Criteria;
 
 /**

@@ -549,7 +549,6 @@ function forumForm(CForumForum $forum = null, $lp_id)
 function delete_forum_image($forum_id)
 {
     throw new Exception('delete_forum_image');
-
     /*$table_forums = Database::get_course_table(TABLE_FORUM);
     $course_id = api_get_course_int_id();
     $forum_id = (int) $forum_id;
@@ -795,7 +794,6 @@ function store_forum($values, $courseInfo = [], $returnId = false)
     if (isset($upload_ok)) {
         if ($has_attachment) {
             throw new Exception('$has_attachment');
-
             /*$course_dir = $courseInfo['path'].'/upload/forum/images';
             $sys_course_path = api_get_path(SYS_COURSE_PATH);
             $updir = $sys_course_path.$course_dir;
@@ -1109,7 +1107,7 @@ function delete_post($post_id)
  * @param int $thread_id id of the thread we want to know the last post of
  *
  * @return array an array or bool if there is a last post found, false if there is
- *            no post entry linked to that thread => thread will be deleted
+ *               no post entry linked to that thread => thread will be deleted
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  *

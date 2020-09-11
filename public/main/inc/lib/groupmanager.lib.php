@@ -68,7 +68,6 @@ class GroupManager
     }
 
     /**
-     *
      * @param int $courseId
      *
      * @return array
@@ -81,7 +80,6 @@ class GroupManager
         $qb = $repo->getResourcesByCourse($course);
 
         return $qb->getQuery()->getArrayResult();
-
 
         $table_group = Database::get_course_table(TABLE_GROUP);
         $courseId = !empty($courseId) ? (int) $courseId : api_get_course_int_id();

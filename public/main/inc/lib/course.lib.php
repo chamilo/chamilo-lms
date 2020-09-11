@@ -2468,29 +2468,29 @@ class CourseManager
             $groupList[$group['iid']] = $group;
         }
 
-       /* 0 != $session_id ? $session_condition = ' WHERE g.session_id IN(1,'.intval($session_id).')' : $session_condition = ' WHERE g.session_id = 0';
-        if (0 == $in_get_empty_group) {
-            // get only groups that are not empty
-            $sql = "SELECT DISTINCT g.iid, g.name
-                    FROM ".Database::get_course_table(TABLE_GROUP)." AS g
-                    INNER JOIN ".Database::get_course_table(TABLE_GROUP_USER)." gu
-                    ON (g.iid = gu.group_id)
-                    $session_condition
-                    ORDER BY g.name";
-        } else {
-            // get all groups even if they are empty
-            $sql = "SELECT g.iid, g.name
-                    FROM ".Database::get_course_table(TABLE_GROUP)." AS g
-                    $session_condition
-                    AND c_id = $course_id";
-        }
+        /* 0 != $session_id ? $session_condition = ' WHERE g.session_id IN(1,'.intval($session_id).')' : $session_condition = ' WHERE g.session_id = 0';
+         if (0 == $in_get_empty_group) {
+             // get only groups that are not empty
+             $sql = "SELECT DISTINCT g.iid, g.name
+                     FROM ".Database::get_course_table(TABLE_GROUP)." AS g
+                     INNER JOIN ".Database::get_course_table(TABLE_GROUP_USER)." gu
+                     ON (g.iid = gu.group_id)
+                     $session_condition
+                     ORDER BY g.name";
+         } else {
+             // get all groups even if they are empty
+             $sql = "SELECT g.iid, g.name
+                     FROM ".Database::get_course_table(TABLE_GROUP)." AS g
+                     $session_condition
+                     AND c_id = $course_id";
+         }
 
-        $result = Database::query($sql);
-        $groupList = [];
-        while ($groupData = Database::fetch_array($result)) {
-            $groupData['userNb'] = GroupManager::number_of_students($groupData['iid'], $course_id);
-            $groupList[$groupData['iid']] = $groupData;
-        }*/
+         $result = Database::query($sql);
+         $groupList = [];
+         while ($groupData = Database::fetch_array($result)) {
+             $groupData['userNb'] = GroupManager::number_of_students($groupData['iid'], $course_id);
+             $groupList[$groupData['iid']] = $groupData;
+         }*/
 
         return $groupList;
     }

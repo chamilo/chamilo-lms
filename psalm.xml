@@ -19,15 +19,19 @@
 <!--        <directory name="public/main/course_info"/>-->
         <directory name="public/main/dashboard"/>
 <!--        <directory name="public/main/dropbox"/>-->
-
 <!--        <directory name="public/main/exercise"/>-->
+        <file name="public/main/exercise/oral_expression.class.php"/>
+        <file name="public/main/exercise/exercise.class.php"/>
+
         <directory name="public/main/group"/>
+<!--        <directory name="public/main/gradebook/lib/fe"/>-->
 <!--        <directory name="public/main/forum"/>-->
         <directory name="public/main/link" />
-       <!-- <directory name="public/main/session" /> -->
 
+       <!-- <directory name="public/main/session" /> -->
 <!--        <directory name="public/main/inc/ajax" />-->
 
+        <directory name="public/main/work" />
 
         <file name="public/main/inc/lib/access_url_edit_courses_to_url_functions.lib.php"/>
         <file name="public/main/inc/lib/access_url_edit_sessions_to_url_functions.lib.php"/>

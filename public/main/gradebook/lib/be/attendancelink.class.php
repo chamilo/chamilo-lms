@@ -89,11 +89,11 @@ class AttendanceLink extends AbstractLink
     }
 
     /**
-     * @param int $stud_id
+     * @param int $studentId
      *
      * @return array|null
      */
-    public function calc_score($stud_id = null, $type = null)
+    public function calc_score($studentId = null, $type = null)
     {
         $tbl_attendance_result = Database::get_course_table(TABLE_ATTENDANCE_RESULT);
         $sessionId = $this->get_session_id();
@@ -112,12 +112,12 @@ class AttendanceLink extends AbstractLink
         $sql = 'SELECT *
                 FROM '.$tbl_attendance_result.'
                 WHERE c_id = '.$this->course_id.' AND attendance_id = '.$this->get_ref_id();
-        if (isset($stud_id)) {
-            $sql .= ' AND user_id = '.intval($stud_id);
+        if (isset($studentId)) {
+            $sql .= ' AND user_id = '.intval($studentId);
         }
         $scores = Database::query($sql);
         // for 1 student
-        if (isset($stud_id)) {
+        if (isset($studentId)) {
             if ($data = Database::fetch_array($scores, 'ASSOC')) {
                 return [
                     $data['score'],
@@ -135,7 +135,6 @@ class AttendanceLink extends AbstractLink
             $sum = 0;
             $sumResult = 0;
             $bestResult = 0;
-
             while ($data = Database::fetch_array($scores)) {
                 if (!(array_key_exists($data['user_id'], $students))) {
                     if (0 != $attendance['attendance_qualify_max']) {
@@ -162,7 +161,7 @@ class AttendanceLink extends AbstractLink
                         return [$sumResult / $rescount, $weight];
                         break;
                     case 'ranking':
-                        return AbstractLink::getCurrentUserRanking($stud_id, $students);
+                        return AbstractLink::getCurrentUserRanking($studentId, $students);
                         break;
                     default:
                         return [$sum, $rescount];

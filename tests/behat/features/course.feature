@@ -117,10 +117,10 @@ Feature: Course tools basic testing
 #    And I am on "/main/chat/chat.php?cid=1"
 #    Then I should not see an error
 
-  Scenario: Make sure the assignments tool is available
-    Given I am on course "TEMP" homepage
-    And I am on "/main/work/work.php?cid=1"
-    Then I should not see an error
+#  Scenario: Make sure the assignments tool is available
+#    Given I am on course "TEMP" homepage
+#    And I am on "/main/work/work.php?cid=1"
+#    Then I should not see an error
 
   Scenario: Make sure the surveys tool is available
     Given I am on course "TEMP" homepage

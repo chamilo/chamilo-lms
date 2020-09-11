@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
@@ -371,13 +372,13 @@ class StudentPublicationLink extends AbstractLink
             return '';
         }
 
-        if (!empty($id)) {
+        /*if (!empty($id)) {
             //Cleans works
             $sql = 'UPDATE '.$this->get_studpub_table().'
                     SET weight = 0
                     WHERE c_id = '.$this->course_id.' AND id ='.$id;
             Database::query($sql);
-        }
+        }*/
     }
 
     /**

@@ -3912,7 +3912,8 @@ function store_edit_post(CForumForum $forum, $values)
     }
 
     if (!empty($values['remove_attach'])) {
-        delete_attachment($post->getIid());
+        throw new Exception('remove_attach');
+        //delete_attachment($post->getIid());
     }
 
     if (empty($values['id_attach'])) {

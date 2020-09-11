@@ -71,7 +71,7 @@ class CatForm extends FormValidator
             '"'.$this->category_object->get_name().'" '
         );
         $this->addElement('static', null, null, get_lang('Move to').' : ');
-        $select = $this->addElement('select', 'move_cat', null, null);
+        $select = $this->addSelect( 'move_cat', null);
         $line = null;
         foreach ($this->category_object->get_target_categories() as $cat) {
             for ($i = 0; $i < $cat[2]; $i++) {

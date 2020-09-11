@@ -45,6 +45,27 @@ try {
     }
 
     switch ($action) {
+
+        case Rest::GET_HOMEWORK:
+
+            $rest= new Rest($username,$apiKeroot);
+            $idCourse=$_REQUEST['c_id'];
+
+            $data=$rest->getHomework($idCourse);
+
+            $restResponse->setData($data);            
+            break;
+            
+        case Rest::GET_INFO_HOMEWORK:
+
+            $rest= new Rest($username,$apiKeroot);
+            $idCourse=$_REQUEST['c_id'];
+            $idWork=$_REQUEST['w_id'];
+            $data=$rest->getInformationHomework($idCourse, $idWork);
+
+            $restResponse->setData($data);            
+            break;
+
         case Rest::GET_AUTH:
             Rest::init();
 

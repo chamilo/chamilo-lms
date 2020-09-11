@@ -814,7 +814,7 @@ function deleteDirWork($id)
     $t_agenda = Database::get_course_table(TABLE_AGENDA);
     $course_id = api_get_course_int_id();
     $sessionId = api_get_session_id();
-
+    $check = true;
     if (!empty($work_data['url'])) {
         if ($check) {
             $consideredWorkingTime = api_get_configuration_value('considered_working_time');
@@ -854,7 +854,13 @@ function deleteDirWork($id)
                         if (1 != count($userWorks)) {
                             continue;
                         }
-                        Event::eventRemoveVirtualCourseTime($course_id, $user['user_id'], $sessionId, $workingTime);
+                        Event::eventRemoveVirtualCourseTime(
+                            $course_id,
+                            $user['user_id'],
+                            $sessionId,
+                            $workingTime,
+                            $work_data['iid']
+                        );
                     }
                 }
             }
@@ -868,7 +874,7 @@ function deleteDirWork($id)
                     WHERE c_id = $course_id AND parent_id = $id";
             Database::query($sql);
 
-            $new_dir = $work_data_url.'_DELETED_'.$id;
+            /*$new_dir = $work_data_url.'_DELETED_'.$id;
 
             if ('true' == api_get_setting('permanently_remove_deleted_files')) {
                 my_delete($work_data_url);
@@ -876,7 +882,7 @@ function deleteDirWork($id)
                 if (file_exists($work_data_url)) {
                     rename($work_data_url, $new_dir);
                 }
-            }
+            }*/
 
             // Gets calendar_id from student_publication_assigment
             $sql = "SELECT add_to_calendar FROM $TSTDPUBASG
@@ -1534,11 +1540,11 @@ function getAllWorkListStudent(
             continue;
         }
 
-        $visibility = api_get_item_visibility($courseInfo, 'work', $work['iid'], $sessionId);
+        /*$visibility = api_get_item_visibility($courseInfo, 'work', $work['iid'], $sessionId);
 
         if (1 != $visibility) {
             continue;
-        }
+        }*/
 
         $work['type'] = Display::return_icon('work.png');
         $work['expires_on'] = empty($work['expires_on']) ? null : api_get_local_time($work['expires_on']);
@@ -2510,6 +2516,8 @@ function get_work_user_list(
                 $work['correction'] = $correction;
 
                 if (!empty($compilation)) {
+                    throw new Exception('compilatio');
+                    /*
                     $compilationId = $compilation->getCompilatioId($item_id, $course_id);
                     if ($compilationId) {
                         $actionCompilatio = "<div id='id_avancement".$item_id."' class='compilation_block'>
@@ -2534,7 +2542,7 @@ function get_work_user_list(
                             $actionCompilatio .= get_lang('with Compilatio');
                         }
                     }
-                    $work['compilatio'] = $actionCompilatio;
+                    $work['compilatio'] = $actionCompilatio;*/
                 }
                 $works[] = $work;
             }
@@ -3686,7 +3694,7 @@ function addWorkComment($courseInfo, $userId, $parentWork, $work, $data)
     $courseId = $courseInfo['real_id'];
     $courseEntity = api_get_course_entity($courseId);
 
-    /** @var CStudentPublication $work */
+    /** @var CStudentPublication $studentPublication */
     $studentPublication = Container::getStudentPublicationRepository()->find($work['iid']);
 
     $request = Container::getRequest();
@@ -4016,14 +4024,16 @@ function uploadWork($my_folder_data, $_course, $isCorrection = false, $workInfo 
                 'error'
             ),
         ];
-    } elseif (!filter_extension($new_file_name)) {
+    }
+
+    /*if (!filter_extension($new_file_name)) {
         return [
             'error' => Display::return_message(
                 get_lang('File upload failed: this file extension or file type is prohibited'),
                 'error'
             ),
         ];
-    }
+    }*/
 
     $repo = Container::getDocumentRepository();
     $totalSpace = $repo->getTotalSpace($_course['real_id']);
@@ -4886,7 +4896,8 @@ function deleteWorkItem($item_id, $courseInfo)
                             $course_id,
                             $row['user_id'],
                             $sessionId,
-                            $workingTime
+                            $workingTime,
+                            $row['parent_id']
                         );
                     }
                 }
@@ -5103,11 +5114,6 @@ function getUploadDocumentType()
  */
 function makeVisible($itemId, $course_info)
 {
-    $itemId = (int) $itemId;
-    if (empty($course_info) || empty($itemId)) {
-        return false;
-    }
-
     $itemId = (int) $itemId;
     if (empty($course_info) || empty($itemId)) {
         return false;
@@ -5772,6 +5778,8 @@ function exportAllStudentWorkFromPublication(
  */
 function downloadAllFilesPerUser($userId, $courseInfo)
 {
+    throw new Exception('downloadAllFilesPerUser');
+    /*
     $userInfo = api_get_user_info($userId);
 
     if (empty($userInfo) || empty($courseInfo)) {
@@ -5823,7 +5831,7 @@ function downloadAllFilesPerUser($userId, $courseInfo)
             exit;
         }
     }
-    exit;
+    exit;*/
 }
 
 /**
@@ -5940,6 +5948,8 @@ function protectWork($courseInfo, $workId)
  */
 function deleteCorrection($courseInfo, $work)
 {
+    throw new Exception('deleteCorrection');
+    /*
     if (isset($work['url_correction']) && !empty($work['url_correction']) && isset($work['iid'])) {
         $id = $work['iid'];
         $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
@@ -5954,7 +5964,7 @@ function deleteCorrection($courseInfo, $work)
                 unlink($coursePath.$work['url_correction']);
             }
         }
-    }
+    }*/
 }
 
 /**

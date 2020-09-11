@@ -1032,7 +1032,7 @@ class Wiki
                     c_id = '.$course_id.' AND
                     reflink="'.Database::escape_string($pageMIX).'" AND
                    '.$groupfilter.$condition_session.'
-                ORDER BY id ASC';
+                ORDER BY iid ASC';
         $result = Database::query($sql);
         $row = Database::fetch_array($result, 'ASSOC');
 
@@ -1050,7 +1050,7 @@ class Wiki
                     w.reflink	  = "'.Database::escape_string($pageMIX).'" AND
                     w.session_id  = '.$session_id.' AND
                     w.'.$groupfilter.'  '.$filter.'
-                ORDER BY id DESC';
+                ORDER BY w.iid DESC';
 
         $result = Database::query($sql);
         // we do not need a while loop since we are always displaying the last version
@@ -1060,17 +1060,18 @@ class Wiki
         if (!empty($row['page_id'])) {
             Event::addEvent(LOG_WIKI_ACCESS, LOG_WIKI_PAGE_ID, $row['page_id']);
         }
+
         //update visits
         if ($row && $row['id']) {
             $sql = 'UPDATE '.$tbl_wiki.' SET hits=(hits+1)
-                    WHERE c_id = '.$course_id.' AND id='.$row['id'].'';
+                    WHERE c_id = '.$course_id.' AND iid='.$row['id'].'';
             Database::query($sql);
         }
 
         $groupInfo = GroupManager::get_group_properties(api_get_group_id());
 
         // if both are empty and we are displaying the index page then we display the default text.
-        if ('' == $row['content'] && '' == $row['title'] && 'index' == $page) {
+        if ($row && '' == $row['content'] && '' == $row['title'] && 'index' === $page) {
             if (api_is_allowed_to_edit(false, true) ||
                 api_is_platform_admin() ||
                 GroupManager::is_user_in_group(api_get_user_id(), $groupInfo) ||
@@ -1096,8 +1097,14 @@ class Wiki
                 );
             }
         } else {
-            $content = Security::remove_XSS($row['content']);
-            $title = Security::remove_XSS($row['title']);
+            if ($row) {
+                $content = Security::remove_XSS($row['content']);
+                $title = Security::remove_XSS($row['title']);
+            }
+        }
+
+        if (empty($row)) {
+            return '';
         }
 
         //assignment mode: identify page type
@@ -1504,7 +1511,7 @@ class Wiki
         $sql = 'SELECT *
                 FROM '.$tbl_wiki.'
                 WHERE c_id = '.$course_id.' AND '.$groupfilter.$condition_session.'
-                ORDER BY id ASC';
+                ORDER BY iid ASC';
 
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
@@ -1534,7 +1541,7 @@ class Wiki
             $sql = 'SELECT *
                     FROM '.$tbl_wiki.'
                     WHERE c_id = '.$course_id.' AND '.$groupfilter.$condition_session.'
-                    ORDER BY id ASC';
+                    ORDER BY iid ASC';
             $result = Database::query($sql);
             $row = Database::fetch_array($result);
             if ($row) {

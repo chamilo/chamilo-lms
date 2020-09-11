@@ -630,122 +630,6 @@ class Exercise
     }
 
     /**
-     * @param int    $start
-     * @param int    $limit
-     * @param int    $sidx
-     * @param string $sord
-     * @param array  $whereCondition
-     * @param array  $extraFields
-     *
-     * @return array
-     */
-    public function getQuestionListPagination(
-        $start,
-        $limit,
-        $sidx,
-        $sord,
-        $whereCondition = [],
-        $extraFields = []
-    ) {
-        if (!empty($this->getId())) {
-            $category_list = TestCategory::getListOfCategoriesNameForTest(
-                $this->getId(),
-                false
-            );
-            $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-            $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
-
-            $sql = "SELECT q.iid
-                    FROM $TBL_EXERCICE_QUESTION e
-                    INNER JOIN $TBL_QUESTIONS  q
-                    ON (e.question_id = q.iid AND e.c_id = ".$this->course_id." )
-					WHERE e.exercice_id	= '".$this->getId()."' ";
-
-            $orderCondition = ' ORDER BY question_order ';
-
-            if (!empty($sidx) && !empty($sord)) {
-                if ('question' === $sidx) {
-                    if (in_array(strtolower($sord), ['desc', 'asc'])) {
-                        $orderCondition = " ORDER BY q.$sidx $sord";
-                    }
-                }
-            }
-
-            $sql .= $orderCondition;
-            $limitCondition = null;
-            if (isset($start) && isset($limit)) {
-                $start = (int) $start;
-                $limit = (int) $limit;
-                $limitCondition = " LIMIT $start, $limit";
-            }
-            $sql .= $limitCondition;
-            $result = Database::query($sql);
-            $questions = [];
-            if (Database::num_rows($result)) {
-                if (!empty($extraFields)) {
-                    $extraFieldValue = new ExtraFieldValue('question');
-                }
-                while ($question = Database::fetch_array($result, 'ASSOC')) {
-                    /** @var Question $objQuestionTmp */
-                    $objQuestionTmp = Question::read($question['iid']);
-                    $category_labels = TestCategory::return_category_labels(
-                        $objQuestionTmp->category_list,
-                        $category_list
-                    );
-
-                    if (empty($category_labels)) {
-                        $category_labels = '-';
-                    }
-
-                    // Question type
-                    $typeImg = $objQuestionTmp->getTypePicture();
-                    $typeExpl = $objQuestionTmp->getExplanation();
-
-                    $question_media = null;
-                    if (!empty($objQuestionTmp->parent_id)) {
-                        $objQuestionMedia = Question::read($objQuestionTmp->parent_id);
-                        $question_media = Question::getMediaLabel($objQuestionMedia->question);
-                    }
-
-                    $questionType = Display::tag(
-                        'div',
-                        Display::return_icon($typeImg, $typeExpl, [], ICON_SIZE_MEDIUM).$question_media
-                    );
-
-                    $question = [
-                        'id' => $question['iid'],
-                        'question' => $objQuestionTmp->selectTitle(),
-                        'type' => $questionType,
-                        'category' => Display::tag(
-                            'div',
-                            '<a href="#" style="padding:0px; margin:0px;">'.$category_labels.'</a>'
-                        ),
-                        'score' => $objQuestionTmp->selectWeighting(),
-                        'level' => $objQuestionTmp->level,
-                    ];
-
-                    if (!empty($extraFields)) {
-                        foreach ($extraFields as $extraField) {
-                            $value = $extraFieldValue->get_values_by_handler_and_field_id(
-                                $question['id'],
-                                $extraField['id']
-                            );
-                            $stringValue = null;
-                            if ($value) {
-                                $stringValue = $value['field_value'];
-                            }
-                            $question[$extraField['field_variable']] = $stringValue;
-                        }
-                    }
-                    $questions[] = $question;
-                }
-            }
-
-            return $questions;
-        }
-    }
-
-    /**
      * Get question count per exercise from DB (any special treatment).
      *
      * @return int
@@ -923,10 +807,6 @@ class Exercise
                 );
 
                 break;
-            case EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_ORDERED_NO_GROUPED: // 7
-                break;
-            case EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_RANDOM_NO_GROUPED: // 8
-                break;
             case EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_QUESTIONS_ORDERED: // 9
                 $categoriesAddedInExercise = $cat->getCategoryExerciseTree(
                     $this,
@@ -980,13 +860,12 @@ class Exercise
         if (!empty($questions_by_category)) {
             $newCategoryList = [];
             $em = Database::getManager();
-            $repo = $em->getRepository('ChamiloCourseBundle:CQuizCategory');
+            $repo = $em->getRepository(CQuizCategory::class);
 
             foreach ($questions_by_category as $categoryId => $questionList) {
-                $cat = new TestCategory();
-                $cat = $cat->getCategory($categoryId);
+                $category = new TestCategory();
+                $cat = (array) $category->getCategory($categoryId);
                 if ($cat) {
-                    $cat = (array) $cat;
                     $cat['iid'] = $cat['id'];
                 }
 
@@ -995,7 +874,7 @@ class Exercise
                 if (isset($cat['parent_id']) && !empty($cat['parent_id'])) {
                     /** @var CQuizCategory $categoryEntity */
                     if (!isset($parentsLoaded[$cat['parent_id']])) {
-                        $categoryEntity = $em->find('ChamiloCourseBundle:CQuizCategory', $cat['parent_id']);
+                        $categoryEntity = $em->find(CQuizCategory::class, $cat['parent_id']);
                         $parentsLoaded[$cat['parent_id']] = $categoryEntity;
                     } else {
                         $categoryEntity = $parentsLoaded[$cat['parent_id']];
@@ -1008,7 +887,8 @@ class Exercise
                     }
 
                     /** @var CQuizCategory $categoryParent */
-                    foreach ($path as $categoryParent) {
+                    // @todo check code
+                    /*foreach ($path as $categoryParent) {
                         $visibility = $categoryParent->getVisibility();
                         if (0 == $visibility) {
                             $categoryParentId = $categoryId;
@@ -1029,7 +909,7 @@ class Exercise
                         $categoryParentInfo['parent_id'] = null;
 
                         break;
-                    }
+                    }*/
                 }
                 $cat['parent_info'] = $categoryParentInfo;
                 $newCategoryList[$categoryId] = [
@@ -1569,7 +1449,7 @@ class Exercise
         $expired_time = (int) $this->expired_time;
 
         $em = Database::getManager();
-        $repo = Container::getExerciseRepository();
+        $repo = Container::getQuizRepository();
         $repoCategory = Container::getExerciseCategoryRepository();
 
         // we prepare date in the database using the api_get_utc_datetime() function
@@ -1786,7 +1666,7 @@ class Exercise
 
         $exerciseId = $this->iId;
 
-        $repo = Container::getExerciseRepository();
+        $repo = Container::getQuizRepository();
         $exercise = $repo->find($exerciseId);
 
         if (null === $exercise) {
@@ -3560,7 +3440,7 @@ class Exercise
         $questionScore = 0;
         $orderedHotSpots = [];
         if (HOT_SPOT == $answerType || ANNOTATION == $answerType) {
-            $orderedHotSpots = $em->getRepository('ChamiloCoreBundle:TrackEHotspot')->findBy(
+            $orderedHotSpots = $em->getRepository(TrackEHotspot::class)->findBy(
                 [
                     'hotspotQuestionId' => $questionId,
                     'course' => $course_id,
@@ -6190,7 +6070,7 @@ class Exercise
                 $em->flush();
             } else {
                 $trackConfirmation = $em
-                    ->getRepository('ChamiloCoreBundle:TrackEExerciseConfirmation')
+                    ->getRepository(TrackEExerciseConfirmation::class)
                     ->findOneBy(
                         [
                             'attemptId' => $trackExerciseInfo['exe_id'],
@@ -6302,7 +6182,7 @@ class Exercise
             ];
         }
 
-        $repo = Container::getExerciseRepository();
+        $repo = Container::getQuizRepository();
         $exercise = $repo->find($this->iId);
 
         if (null === $exercise) {
@@ -6939,9 +6819,14 @@ class Exercise
      */
     public function fill_in_blank_answer_to_array($answer)
     {
-        api_preg_match_all('/\[[^]]+\]/', $answer, $teacher_answer_list);
+        $list = null;
+        api_preg_match_all('/\[[^]]+\]/', $answer, $list);
 
-        return $teacher_answer_list[0];
+        if (empty($list)) {
+            return '';
+        }
+
+        return $list[0];
     }
 
     /**
@@ -6954,7 +6839,6 @@ class Exercise
         $teacher_answer_list = $this->fill_in_blank_answer_to_array($answer);
         $result = '';
         if (!empty($teacher_answer_list)) {
-            $i = 0;
             foreach ($teacher_answer_list as $teacher_item) {
                 $value = null;
                 //Cleaning student answer list
@@ -7414,6 +7298,8 @@ class Exercise
         $realQuestionList,
         $generateJS = true
     ) {
+        return false;
+
         // With this option on the question is loaded via AJAX
         //$generateJS = true;
         //$this->loadQuestionAJAX = true;
@@ -7447,7 +7333,7 @@ class Exercise
             <div id="ajaxquestiondiv'.$questionId.'"></div>';
             echo $script;
         } else {
-            global $origin;
+            $origin = api_get_origin();
             $question_obj = Question::read($questionId);
             $user_choice = isset($attemptList[$questionId]) ? $attemptList[$questionId] : null;
             $remind_highlight = null;
@@ -7538,7 +7424,7 @@ class Exercise
             }
 
             // Checkbox review answers
-            if ($this->review_answers &&
+            /*if ($this->review_answers &&
                 !in_array($question_obj->type, Question::question_type_no_review())
             ) {
                 $remind_question_div = Display::tag(
@@ -7558,7 +7444,7 @@ class Exercise
                     $remind_question_div,
                     ['class' => 'exercise_save_now_button']
                 );
-            }
+            }*/
 
             echo Display::div(' ', ['class' => 'clear']);
 
@@ -8428,7 +8314,7 @@ class Exercise
         }
 
         if (!empty($links)) {
-            $repo = $em->getRepository('ChamiloCoreBundle:GradebookLink');
+            $repo = $em->getRepository(GradebookLink::class);
 
             foreach ($links as $link) {
                 $linkId = $link['id'];
@@ -8465,7 +8351,7 @@ class Exercise
         $course = api_get_course_entity($courseId);
         $session = api_get_session_entity($sessionId);
 
-        $repo = Container::getExerciseRepository();
+        $repo = Container::getQuizRepository();
 
         // 2. Get query builder from repo.
         $qb = $repo->getResourcesByCourse($course, $session);
@@ -8613,7 +8499,8 @@ class Exercise
                 }
 
                 // Blocking empty start times see BT#2800
-                global $_custom;
+                // @todo replace global
+                /*global $_custom;
                 if (isset($_custom['exercises_hidden_when_no_start_date']) &&
                     $_custom['exercises_hidden_when_no_start_date']
                 ) {
@@ -8621,7 +8508,7 @@ class Exercise
                         $time_limits = true;
                         $is_actived_time = false;
                     }
-                }
+                }*/
 
                 $cut_title = $exercise->getCutTitle();
                 $alt_title = '';
@@ -9310,44 +9197,44 @@ class Exercise
             }
 
             $table_resume = '
-                    <table class="data_table">
+                    <table class="table table-hover table-striped data_table">
                         <tr class="row_odd" >
                             <td>&nbsp;</td>
                             <td><b>'.get_lang('Requirements').'</b></td>
-                            <td><b>'.get_lang('Your answer').'</b></td>
+                            <td><b>'.get_lang('YourAnswer').'</b></td>
                         </tr>
                         <tr class="row_even">
-                            <td><b>'.get_lang('Overlapping areaping area').'</b></td>
-                            <td>'.get_lang('Minimumimum').' '.$threadhold1.'</td>
+                            <td><b>'.get_lang('Overlap').'</b></td>
+                            <td>'.get_lang('Min').' '.$threadhold1.'</td>
                             <td>
                                 <div style="color:'.$overlap_color.'">
-                                    '.$final_overlap < 0 ? 0 : (int) $final_overlap.'
+                                    '.(($final_overlap < 0) ? 0 : intval($final_overlap)).'
                                 </div>
                             </td>
                         </tr>
                         <tr>
-                            <td><b>'.get_lang('Excessive areaive area').'</b></td>
-                            <td>'.get_lang('max. 20 characters, e.g. <i>INNOV21</i>').' '.$threadhold2.'</td>
+                            <td><b>'.get_lang('Excess').'</b></td>
+                            <td>'.get_lang('Max').' '.$threadhold2.'</td>
                             <td>
                                 <div style="color:'.$excess_color.'">
-                                    '.$final_excess < 0 ? 0 : (int) $final_excess.'
+                                    '.(($final_excess < 0) ? 0 : intval($final_excess)).'
                                 </div>
                             </td>
                         </tr>
                         <tr class="row_even">
-                            <td><b>'.get_lang('Missing area area').'</b></td>
-                            <td>'.get_lang('max. 20 characters, e.g. <i>INNOV21</i>').' '.$threadhold3.'</td>
+                            <td><b>'.get_lang('Missing').'</b></td>
+                            <td>'.get_lang('Max').' '.$threadhold3.'</td>
                             <td>
                                 <div style="color:'.$missing_color.'">
-                                    '.$final_missing < 0 ? 0 : (int) $final_missing.'
+                                    '.(($final_missing < 0) ? 0 : intval($final_missing)).'
                                 </div>
                             </td>
                         </tr>
                     </table>
                 ';
 
-            $answerType = $objQuestionTmp->selectType();
-            if (HOT_SPOT_DELINEATION != $answerType) {
+            /*$answerType = $objQuestionTmp->selectType();
+            if ($answerType != HOT_SPOT_DELINEATION) {
                 $item_list = explode('@@', $destination);
                 $try = $item_list[0];
                 $lp = $item_list[1];
@@ -9355,7 +9242,7 @@ class Exercise
                 $url = $item_list[3];
                 $table_resume = '';
             } else {
-                if (0 == $next) {
+                if ($next == 0) {
                     $try = $try_hotspot;
                     $lp = $lp_hotspot;
                     $destinationid = $select_question_hotspot;
@@ -9368,20 +9255,20 @@ class Exercise
             }
 
             echo '<h1><div style="color:#333;">'.get_lang('Feedback').'</div></h1>';
-            if (HOT_SPOT_DELINEATION == $answerType) {
+            if ($answerType == HOT_SPOT_DELINEATION) {
                 if ($organs_at_risk_hit > 0) {
-                    $message = '<br />'.get_lang('Your result is :').' <b>'.$result_comment.'</b><br />';
-                    $message .= '<p style="color:#DC0A0A;"><b>'.get_lang('One (or more) area at risk has been hit').'</b></p>';
+                    $message = '<br />'.get_lang('ResultIs').' <b>'.$result_comment.'</b><br />';
+                    $message .= '<p style="color:#DC0A0A;"><b>'.get_lang('OARHit').'</b></p>';
                 } else {
-                    $message = '<p>'.get_lang('Your delineation :').'</p>';
+                    $message = '<p>'.get_lang('YourDelineation').'</p>';
                     $message .= $table_resume;
-                    $message .= '<br />'.get_lang('Your result is :').' <b>'.$result_comment.'</b><br />';
+                    $message .= '<br />'.get_lang('ResultIs').' <b>'.$result_comment.'</b><br />';
                 }
                 $message .= '<p>'.$comment.'</p>';
                 echo $message;
             } else {
                 echo '<p>'.$comment.'</p>';
-            }
+            }*/
 
             // Showing the score
             /*$queryfree = "SELECT marks FROM $TBL_TRACK_ATTEMPT
@@ -9389,7 +9276,7 @@ class Exercise
             $resfree = Database::query($queryfree);
             $questionScore = Database::result($resfree, 0, 'marks');
             $totalScore += $questionScore;*/
-            $relPath = api_get_path(REL_PATH);
+            $relPath = api_get_path(REL_CODE_PATH);
             echo '</table></td></tr>';
             echo "
                         <tr>
@@ -9399,7 +9286,7 @@ class Exercise
                                     $(function() {
                                         new HotspotQuestion({
                                             questionId: $questionId,
-                                            exerciseId: {$this->getId()},
+                                            exerciseId: {$this->id},
                                             exeId: $id,
                                             selector: '#hotspot-solution',
                                             for: 'solution',

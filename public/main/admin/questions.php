@@ -41,7 +41,7 @@ if ($formSent) {
     $page = isset($_GET['page']) && !empty($_GET['page']) ? (int) $_GET['page'] : 1;
 
     $em = Database::getManager();
-    $repo = $em->getRepository('ChamiloCourseBundle:CQuizQuestion');
+    $repo = $em->getRepository(CQuizQuestion::class);
     $criteria = new Criteria();
     if (!empty($id)) {
         $criteria->where($criteria->expr()->eq('iid', $id));

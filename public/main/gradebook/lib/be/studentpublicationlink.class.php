@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+
 /**
  * Gradebook link to student publication item.
  *
@@ -94,8 +96,7 @@ class StudentPublicationLink extends AbstractLink
 
         //Only show works from the session
         //AND has_properties != ''
-        $links = $em
-            ->getRepository('ChamiloCourseBundle:CStudentPublication')
+        $links = Container::getStudentPublicationRepository()
             ->findBy([
                 'cId' => $this->course_id,
                 'active' => true,
@@ -129,8 +130,7 @@ class StudentPublicationLink extends AbstractLink
 
         $em = Database::getManager();
         $session = api_get_session_entity($this->get_session_id());
-        $results = $em
-            ->getRepository('ChamiloCourseBundle:CStudentPublication')
+        $results = Container::getStudentPublicationRepository()
             ->findBy([
                 'cId' => $this->course_id,
                 'parentId' => $id,
@@ -157,8 +157,7 @@ class StudentPublicationLink extends AbstractLink
         $id = $data['id'];
         $session = api_get_session_entity($this->get_session_id());
 
-        $assignment = $em
-            ->getRepository('ChamiloCourseBundle:CStudentPublication')
+        $assignment = Container::getStudentPublicationRepository()
             ->findOneBy([
                 'cId' => $this->course_id,
                 'id' => $id,

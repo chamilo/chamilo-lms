@@ -548,7 +548,9 @@ function forumForm(CForumForum $forum = null, $lp_id)
  */
 function delete_forum_image($forum_id)
 {
-    $table_forums = Database::get_course_table(TABLE_FORUM);
+    throw new Exception('delete_forum_image');
+
+    /*$table_forums = Database::get_course_table(TABLE_FORUM);
     $course_id = api_get_course_int_id();
     $forum_id = (int) $forum_id;
 
@@ -565,7 +567,7 @@ function delete_forum_image($forum_id)
         return true;
     } else {
         return false;
-    }
+    }*/
 }
 
 function editForumCategoryForm(CForumCategory $category)
@@ -792,7 +794,9 @@ function store_forum($values, $courseInfo = [], $returnId = false)
     $new_file_name = '';
     if (isset($upload_ok)) {
         if ($has_attachment) {
-            $course_dir = $courseInfo['path'].'/upload/forum/images';
+            throw new Exception('$has_attachment');
+
+            /*$course_dir = $courseInfo['path'].'/upload/forum/images';
             $sys_course_path = api_get_path(SYS_COURSE_PATH);
             $updir = $sys_course_path.$course_dir;
             // Try to add an extension to the file if it hasn't one.
@@ -813,7 +817,7 @@ function store_forum($values, $courseInfo = [], $returnId = false)
                 if ($result) {
                     $image_moved = true;
                 }
-            }
+            }*/
         }
     }
 
@@ -855,7 +859,6 @@ function store_forum($values, $courseInfo = [], $returnId = false)
         ->setLpId($values['lp_id'] ?? 0)
     ;
 
-    $user = api_get_user_entity(api_get_user_id());
     $course = api_get_course_entity($courseId);
     $session = api_get_session_entity($session_id);
 
@@ -887,7 +890,7 @@ function store_forum($values, $courseInfo = [], $returnId = false)
                 }
                 $tableItemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
                 foreach ($threads as $thread) {
-                    $sql = "UPDATE $tableItemProperty
+                    /*$sql = "UPDATE $tableItemProperty
                             SET to_group_id = $toGroupId
                             WHERE
                                 tool = '".TOOL_FORUM_THREAD."' AND
@@ -898,7 +901,7 @@ function store_forum($values, $courseInfo = [], $returnId = false)
                     $posts = getPosts(
                         $forumData,
                         $thread['thread_id']
-                    );
+                    );*/
 
                     /*foreach ($posts as $post) {
                         $postId = $post['post_id'];
@@ -1023,7 +1026,7 @@ function store_forum($values, $courseInfo = [], $returnId = false)
  * an alternative would be to store the posts also in item_property and mark this post as deleted (visibility = 2).
  * We also have to decrease the number of replies in the thread table.
  *
- * @param the $post_id id of the post that will be deleted
+ * @param int $post_id id of the post that will be deleted
  *
  * @todo write recursive function that deletes all the posts that have this message as parent
  *
@@ -1103,9 +1106,9 @@ function delete_post($post_id)
  * This function gets the all information of the last (=most recent) post of the thread
  * This can be done by sorting the posts that have the field thread_id=$thread_id and sort them by post_date.
  *
- * @param the $thread_id id of the thread we want to know the last post of
+ * @param int $thread_id id of the thread we want to know the last post of
  *
- * @return an array or bool if there is a last post found, false if there is
+ * @return array an array or bool if there is a last post found, false if there is
  *            no post entry linked to that thread => thread will be deleted
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
@@ -1139,7 +1142,7 @@ function return_visible_invisible_icon(
     $content,
     $id,
     $current_visibility_status,
-    $additional_url_parameters = ''
+    $additional_url_parameters
 ) {
     $html = '';
     $id = (int) $id;
@@ -1264,15 +1267,15 @@ function return_up_down_icon($content, $id, $list)
 /**
  * This function moves a forum or a forum category up or down.
  *
- * @param what $content   is it that we want to make (in)visible: forum category, forum, thread, post
- * @param do   $direction we want to move it up or down
- * @param the  $id        id of the content we want to make invisible
+ * @param string $content   is it that we want to make (in)visible: forum category, forum, thread, post
+ * @param string $direction we want to move it up or down
+ * @param int    $id        id of the content we want to make invisible
+ *
+ * @return string language variable
  *
  * @todo consider removing the table_item_property calls here but this can
  * prevent unwanted side effects when a forum does not have an entry in
  * the item_property table but does have one in the forum table.
- *
- * @return string language variable
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  *
@@ -1286,12 +1289,12 @@ function move_up_down($content, $direction, $id)
     $id = (int) $id;
 
     // Determine which field holds the sort order.
-    if ('forumcategory' == $content) {
+    if ('forumcategory' === $content) {
         $table = $table_categories;
         $sort_column = 'cat_order';
         $id_column = 'cat_id';
         $sort_column = 'cat_order';
-    } elseif ('forum' == $content) {
+    } elseif ('forum' === $content) {
         $table = $table_forums;
         $sort_column = 'forum_order';
         $id_column = 'forum_id';
@@ -1307,23 +1310,23 @@ function move_up_down($content, $direction, $id)
     }
 
     // Determine the need for sorting ascending or descending order.
-    if ('down' == $direction) {
+    if ('down' === $direction) {
         $sort_direction = 'ASC';
-    } elseif ('up' == $direction) {
+    } elseif ('up' === $direction) {
         $sort_direction = 'DESC';
     } else {
         return false;
     }
 
     // The SQL statement
-    if ('forumcategory' == $content) {
+    if ('forumcategory' === $content) {
         $sql = "SELECT *
                 FROM $table_categories forum_categories
                 WHERE
                     forum_categories.c_id = $course_id
                 ORDER BY forum_categories.cat_order $sort_direction";
     }
-    if ('forum' == $content) {
+    if ('forum' === $content) {
         $sql = "SELECT *
             FROM $table
             WHERE
@@ -1350,7 +1353,7 @@ function move_up_down($content, $direction, $id)
         }
     }
 
-    if ('forum' == $content && $next_sort) {
+    if ('forum' === $content && $next_sort) {
         $repo = Container::getForumRepository();
         /** @var CForumForum $forum */
         $forum = $repo->find($id);
@@ -3846,13 +3849,11 @@ function store_edit_post(CForumForum $forum, $values)
     Event::registerLog($logInfo);
 
     $threadTable = Database::get_course_table(TABLE_FORUM_THREAD);
-    $table_posts = Database::get_course_table(TABLE_FORUM_POST);
     $course_id = api_get_course_int_id();
 
     //check if this post is the first of the thread
     // First we check if the change affects the thread and if so we commit
     // the changes (sticky and post_title=thread_title are relevant).
-
     $posts = getPosts($forum, $values['thread_id']);
     $first_post = null;
     if (!empty($posts) && count($posts) > 0 && isset($posts[0])) {
@@ -3913,7 +3914,7 @@ function store_edit_post(CForumForum $forum, $values)
     }
 
     if (!empty($values['remove_attach'])) {
-        delete_attachment($values['post_id']);
+        delete_attachment($post->getIid());
     }
 
     if (empty($values['id_attach'])) {
@@ -4246,10 +4247,11 @@ function handle_mail_cue($content, $id)
 
     /* If the post is made visible we only have to send mails to the people
      who indicated that they wanted to be informed for that thread.*/
-    if ('post' == $content) {
+    if ('post' === $content) {
         // Getting the information about the post (need the thread_id).
-        $post_info = get_post_information($id);
-        $thread_id = (int) $post_info['thread_id'];
+        /** @var CForumPost $post */
+        $post = Container::getForumPostRepository()->find($id);
+        $thread_id = $post->getThread()->getIid();
 
         // Sending the mail to all the users that wanted to be informed for replies on this thread.
         $sql = "SELECT users.firstname, users.lastname, users.user_id, users.email
@@ -4265,11 +4267,12 @@ function handle_mail_cue($content, $id)
                 GROUP BY users.email";
 
         $result = Database::query($sql);
+        $forum = Container::getForumRepository()->find($post->getForum()->getIid());
+
         while ($row = Database::fetch_array($result)) {
-            $forumInfo = get_forum_information($post_info['forum_id']);
-            send_mail($row, $forumInfo, get_thread_information($post_info['forum_id'], $post_info['thread_id']), $post_info);
+            send_mail($row, $forum, $post->getThread(), $post);
         }
-    } elseif ('thread' == $content) {
+    } elseif ('thread' === $content) {
         // Sending the mail to all the users that wanted to be informed for replies on this thread.
         $sql = "SELECT users.firstname, users.lastname, users.user_id, users.email, posts.forum_id
                 FROM $table_mailcue mailcue, $table_posts posts, $table_users users
@@ -4284,8 +4287,9 @@ function handle_mail_cue($content, $id)
                 GROUP BY users.email";
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
-            $forumInfo = get_forum_information($row['forum_id']);
-            send_mail($row, $forumInfo, get_thread_information($row['forum_id'], $id));
+            $forum = Container::getForumRepository()->find($row['forum_id']);
+            $thread = Container::getForumThreadRepository()->find($id);
+            send_mail($row, $forum, $thread);
         }
 
         // Deleting the relevant entries from the mailcue.
@@ -4299,7 +4303,7 @@ function handle_mail_cue($content, $id)
         while ($row = Database::fetch_array($result)) {
             handle_mail_cue('thread', $row['thread_id']);
         }
-    } elseif ('forum_category' == $content) {
+    } elseif ('forum_category' === $content) {
         $sql = "SELECT forum_id FROM $table_forums
                 WHERE c_id = $course_id AND forum_category = $id";
         $result = Database::query($sql);

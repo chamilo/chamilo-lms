@@ -106,7 +106,7 @@ class Dropbox_Work
         $this->isOldWork = false;
         $sql = 'SELECT id, upload_date
                 FROM '.Database::get_course_table(TABLE_DROPBOX_FILE)."
-                WHERE 
+                WHERE
                     c_id = $course_id AND
                     filename = '".Database::escape_string($this->filename)."'";
         $result = Database::query($sql);
@@ -215,7 +215,7 @@ class Dropbox_Work
         if ('viewfeedback' == $action && $this->id == $_GET['id']) {
             $feedback2 = [];
             $sql = 'SELECT * FROM '.Database::get_course_table(TABLE_DROPBOX_FEEDBACK)."
-                    WHERE c_id = $course_id AND file_id='".$id."' 
+                    WHERE c_id = $course_id AND file_id='".$id."'
                     ORDER BY feedback_id ASC";
             $result = Database::query($sql);
             while ($row_feedback = Database::fetch_array($result)) {
@@ -478,10 +478,10 @@ class Dropbox_Person
             $this->receivedWork[] = $temp;
         }
         // Find all entries where this person is the sender/uploader
-        $sql = "SELECT DISTINCT f.id
+        $sql = "SELECT DISTINCT f.iid
                 FROM $file_tbl f
                 INNER JOIN $person_tbl p
-                ON (f.id = p.file_id AND f.c_id = p.c_id)
+                ON (f.iid = p.file_id AND f.c_id = p.c_id)
                 WHERE
                     f.c_id = $course_id AND
                     f.uploader_id   = ".intval($this->userId).' AND
@@ -490,7 +490,7 @@ class Dropbox_Person
                 ";
         $result = Database::query($sql);
         while ($res = Database::fetch_array($result)) {
-            $this->sentWork[] = new Dropbox_SentWork($res['id']);
+            $this->sentWork[] = new Dropbox_SentWork($res['iid']);
         }
     }
 

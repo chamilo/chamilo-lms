@@ -12,8 +12,8 @@ use ChamiloSession as Session;
  *
  * @todo use quickforms for the forms
  */
-if (!isset($_GET['cidReq'])) {
-    $_GET['cidReq'] = 'none'; // Prevent sql errors
+if (!isset($_GET['cid'])) {
+    $_GET['cid'] = 'none'; // Prevent sql errors
     $cidReset = true;
 }
 

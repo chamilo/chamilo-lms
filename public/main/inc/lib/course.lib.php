@@ -1280,8 +1280,8 @@ class CourseManager
             if (is_null($course)) {
                 return false;
             }
-            /** @var \Chamilo\CoreBundle\Entity\User $user */
-            $user = UserManager::getRepository()->find($user_id);
+
+            $user = api_get_user_entity($user_id);
             if (is_null($user)) {
                 return false;
             }

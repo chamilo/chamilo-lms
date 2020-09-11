@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\TrackEAttempt;
+
 /**
  * Class OralExpression
  * This class allows to instantiate an object of type FREE_ANSWER,
@@ -135,7 +137,7 @@ class OralExpression extends Question
             //Load the real filename just if exists
             if (isset($this->exeId, $this->userId, $this->id, $this->sessionId, $this->course['real_id'])) {
                 $result = $em
-                    ->getRepository('ChamiloCoreBundle:TrackEAttempt')
+                    ->getRepository(TrackEAttempt::class)
                     ->findOneBy([
                         'exeId' => $this->exeId,
                         'userId' => $this->userId,
@@ -181,13 +183,15 @@ class OralExpression extends Question
 
     /**
      * Get the URL for the audio file. Return null if the file doesn't exists.
-     *
+     * @todo fix path
      * @param bool $loadFromDatabase
      *
      * @return string
      */
     public function getFileUrl($loadFromDatabase = false)
     {
+        return null;
+
         $filePath = $this->getAbsoluteFilePath($loadFromDatabase);
 
         if (empty($filePath)) {

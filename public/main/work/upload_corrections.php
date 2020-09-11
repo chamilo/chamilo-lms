@@ -102,7 +102,9 @@ if ($form->validate()) {
             );
         }
 
-        $folder = api_get_unique_id();
+        throw new Exception('upload corrections');
+
+        /*$folder = api_get_unique_id();
         $destinationDir = api_get_path(SYS_ARCHIVE_PATH).$folder;
         mkdir($destinationDir, api_get_permissions_for_new_directories(), true);
 
@@ -142,11 +144,8 @@ if ($form->validate()) {
         $finder = new Finder();
         $finder->files()->in($destinationDir);
         $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-        //var_dump($finalResult);
-        /** @var SplFileInfo $file */
         foreach ($finder as $file) {
             $fileName = $file->getBasename();
-
             if (isset($finalResult[$fileName])) {
                 $workStudentId = $finalResult[$fileName];
                 $workStudent = get_work_data_by_id($workStudentId);
@@ -185,7 +184,7 @@ if ($form->validate()) {
                     }
                 }
             }
-        }
+        }*/
 
         Display::addFlash(
             Display::return_message(

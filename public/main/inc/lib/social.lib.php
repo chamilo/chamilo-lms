@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
 use ChamiloSession as Session;
@@ -2949,13 +2950,13 @@ class SocialManager extends UserManager
             if (isset($notification['thread']) && !empty($notification['thread'])) {
                 $threadList = array_filter(array_unique($notification['thread']));
                 $em = Database::getManager();
-                $repo = $em->getRepository('ChamiloCourseBundle:CForumThread');
+                $repo = Container::getForumThreadRepository();
                 foreach ($threadList as $threadId) {
-                    /** @var \Chamilo\CourseBundle\Entity\CForumThread $thread */
+                    /** @var CForumThread $thread */
                     $thread = $repo->find($threadId);
                     if ($thread) {
                         $threadUrl = $threadUrlBase.http_build_query([
-                            'forum' => $thread->getForumId(),
+                            'forum' => $thread->getForum()->getIid(),
                             'thread' => $thread->getIid(),
                         ]);
                         $threads[] = [

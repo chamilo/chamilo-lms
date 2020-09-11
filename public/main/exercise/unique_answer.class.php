@@ -499,7 +499,6 @@ class UniqueAnswer extends Question
         $quizAnswer = new CQuizAnswer();
         $quizAnswer
             ->setCId($course_id)
-            ->setId($id)
             ->setQuestionId($question_id)
             ->setAnswer($title)
             ->setCorrect($correct)
@@ -510,16 +509,6 @@ class UniqueAnswer extends Question
 
         $em->persist($quizAnswer);
         $em->flush();
-
-        $id = $quizAnswer->getIid();
-
-        if ($id) {
-            $quizAnswer
-                ->setId($id);
-
-            $em->persist($quizAnswer);
-            $em->flush();
-        }
 
         if ($correct) {
             $sql = "UPDATE $tbl_quiz_question

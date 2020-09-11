@@ -962,7 +962,7 @@ class TestCategory
             get_lang('Category name'),
             ['class' => 'span6']
         );
-        $form->add_html_editor(
+        $form->addHtmlEditor(
             'category_description',
             get_lang('Category description'),
             false,

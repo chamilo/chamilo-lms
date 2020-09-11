@@ -24,12 +24,14 @@ Feature: Course tools basic testing
     Then I check the "Private access (access authorized to group members only)" radio button
     Then wait for the page to be loaded
     And I press "Create a course"
+    Then wait for the page to be loaded
     Then I should see "Course TEMP_PRIVATE added"
 
   Scenario: Create a course before testing
     Given I am on "/main/admin/course_add.php"
     When I fill in "title" with "TEMP"
     And I press "submit"
+    Then wait for the page to be loaded
     Then I should see "Course list"
 
   Scenario: Make sure the course exists
@@ -111,10 +113,10 @@ Feature: Course tools basic testing
     And I am on "/main/group/group.php?cid=1"
     Then I should not see an error
 
-  Scenario: Make sure the chat tool is available
-    Given I am on course "TEMP" homepage
-    And I am on "/main/chat/chat.php?cid=1"
-    Then I should not see an error
+#  Scenario: Make sure the chat tool is available
+#    Given I am on course "TEMP" homepage
+#    And I am on "/main/chat/chat.php?cid=1"
+#    Then I should not see an error
 
   Scenario: Make sure the assignments tool is available
     Given I am on course "TEMP" homepage

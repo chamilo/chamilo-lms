@@ -5,7 +5,7 @@
 use ChamiloSession as Session;
 
 /**
- * This file is included in main/inc/local.inc.php at user login if the user have 'external_ldap' in
+ * This file is included in main/inc/local.inc.php at user login if the user have 'extldap' in
  * his auth_source field instead of platform.
  *
  * Variables that can be used :

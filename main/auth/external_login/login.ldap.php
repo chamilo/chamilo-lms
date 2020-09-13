@@ -57,7 +57,7 @@ if ($ldap_user !== false) {
         error_log("chamilo_user found user_id: {$uData['user_id']}");
     }
 
-    //U pdate user info
+    //Update user info
     if (isset($extldap_config['update_userinfo']) && $extldap_config['update_userinfo']) {
         external_update_user($chamilo_user);
         if ($debug) {

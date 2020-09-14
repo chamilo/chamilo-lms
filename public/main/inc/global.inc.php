@@ -6,6 +6,7 @@ use Chamilo\CoreBundle\Framework\Container;
 use Patchwork\Utf8\Bootup;
 use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\ErrorHandler\Debug;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
 
 /**
  * All legacy Chamilo scripts should include this important file.
@@ -41,7 +42,7 @@ try {
     $kernel->boot();
     $container = $kernel->getContainer();
     $router = $container->get('router');
-    /** @var \Symfony\Component\HttpFoundation\Session\Flash\FlashBag $flashBag */
+    /** @var FlashBag $flashBag */
     $flashBag = $container->get('session')->getFlashBag();
     $saveFlashBag = null;
     if (!empty($flashBag->keys())) {

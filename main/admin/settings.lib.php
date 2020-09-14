@@ -1618,16 +1618,11 @@ function select_gradebook_default_grade_model_id()
  * @param array $settings
  * @param array $settings_by_access_list
  *
- * @throws \Doctrine\ORM\ORMException
- * @throws \Doctrine\ORM\OptimisticLockException
- * @throws \Doctrine\ORM\TransactionRequiredException
- *
  * @return FormValidator
  */
 function generateSettingsForm($settings, $settings_by_access_list)
 {
     global $_configuration, $settings_to_avoid, $convert_byte_to_mega_list;
-    $em = Database::getManager();
     $table_settings_current = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 
     $form = new FormValidator(

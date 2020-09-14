@@ -154,10 +154,12 @@ if ($form->validate()) {
     $values['survey_code'] = SurveyManager::generateSurveyCode($values['survey_title']);
     // see #3499
     if (isset($values['end_date'])) {
-        $values['end_date'] = api_get_utc_datetime($values['end_date'], true);
+        $temp = new DateTime(api_get_utc_datetime($values['end_date']));
+        $values['end_date'] = $temp->format('Y-m-d H:i');
     }
     if (isset($values['start_date'])) {
-        $values['start_date'] = api_get_utc_datetime($values['start_date'], true);
+        $temp = new DateTime(api_get_utc_datetime($values['start_date']));
+        $values['start_date'] = $temp->format('Y-m-d H:i');
     }
     // Storing the survey
     SurveyManager::store_survey($values);

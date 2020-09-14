@@ -100,7 +100,10 @@ class ItemPropertyRepository extends EntityRepository
         if ($groupsSubscribedToItem) {
             /** @var CItemProperty $itemProperty */
             foreach ($groupsSubscribedToItem as $itemProperty) {
-                $alreadyAdded[] = $itemProperty->getGroup()->getId();
+                $getGroup = $itemProperty->getGroup();
+                if (!empty($getGroup)) {
+                    $alreadyAdded[] = $getGroup->getId();
+                }
             }
         }
 

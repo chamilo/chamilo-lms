@@ -593,7 +593,7 @@ class Meeting
         $this->formattedDuration = '';
         if (!empty($this->meetingInfoGet->start_time)) {
             $this->startDateTime = new DateTime($this->meetingInfoGet->start_time);
-            $this->startDateTime->setTimezone(new DateTimeZone(date_default_timezone_get()));
+            $this->startDateTime->setTimezone(new DateTimeZone(api_get_timezone()));
             $this->formattedStartTime = $this->startDateTime->format('Y-m-d H:i');
         }
 

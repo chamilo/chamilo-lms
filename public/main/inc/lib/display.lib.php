@@ -124,9 +124,9 @@ class Display
         $params['legacy_javascript'] = $htmlHeadXtra;
         $params['legacy_breadcrumb'] = $interbreadcrumb;
 
-        $flash = Display::getFlashToString();
-        Display::cleanFlashMessages();
-        $params['flash_messages'] = $flash;
+        $flash = self::getFlashToString();
+        self::cleanFlashMessages();
+        //$params['flash_messages'] = $flash;
 
         Template::setVueParams($params);
         $content = Container::getTemplating()->render($tpl, $params);
@@ -2401,19 +2401,23 @@ class Display
     }
 
     /**
-     * Adds a message in the queue.
+     * Adds a legacy message in the queue.
      *
      * @param string $message
      */
     public static function addFlash($message)
     {
-        $messages = Session::read('flash_messages');
-        if (empty($messages)) {
-            $messages[] = $message;
-        } else {
-            array_push($messages, $message);
+        // Detect type of message.
+        $parts = preg_match('/alert-([a-z]*)/', $message, $matches);
+        $type = 'primary';
+        if ($parts && isset($matches[1]) && $matches[1]) {
+            $type = $matches[1];
         }
-        Session::write('flash_messages', $messages);
+        // Detect legacy content of message.
+        $result = preg_match('/<div(.*?)\>(.*?)\<\/div>/s', $message, $matches);
+        if ($result && isset($matches[2])) {
+            Container::getSession()->getFlashBag()->add($type, $matches[2]);
+        }
     }
 
     /**

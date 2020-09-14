@@ -1,4 +1,5 @@
 import { mapFields } from 'vuex-map-fields';
+import Component from "../components/Snackbar.vue";
 
 export default {
   computed: {
@@ -7,19 +8,52 @@ export default {
 
   methods: {
     cleanState() {
-      setTimeout(() => {
-        this.show = false;
-      }, this.timeout);
+
+      /*setTimeout(() => {
+            this.show = false;
+          }, this.timeout
+      );*/
     },
 
     showError(error) {
       //this.showMessage(error, 'danger');
     },
 
-    showMessage(message, color = 'success') {
-      this.show = true;
-      this.color = color;
+    showMessage(message, type = 'success') {
+      const content = {
+        // Your component or JSX template
+        component: Component,
 
+        // Props are just regular props, but these won't be reactive
+        props: {
+          message: message
+        },
+
+        // Listeners will listen to and execute on event emission
+        listeners: {
+          //click: () => console.log("Clicked!"),
+          //myEvent: myEventHandler
+        }
+      };
+
+      this.$toast(content, {
+        type: type,
+        position: 'top-right',
+        timeout: 10000, // 10 seconds
+        closeOnClick: true,
+        pauseOnFocusLoss: true,
+        pauseOnHover: true,
+        draggable: true,
+        draggablePercent: 0.6,
+        showCloseButtonOnHover: false,
+        hideProgressBar: true,
+        closeButton: "button",
+        icon: true,
+        rtl: false
+      });
+
+      /*this.show = true;
+      this.color = color;
       if (typeof message === 'string') {
         this.text = message;
         this.cleanState();
@@ -31,7 +65,9 @@ export default {
 
       if (message.response) this.subText = message.response.data.message;
 
-      this.cleanState();
+      this.cleanState();*/
+
+
     }
   }
 };

@@ -18,7 +18,7 @@
         <b-row>
           <b-col cols="12">
             <Breadcrumb :legacy="breadcrumb" />
-            <snackbar />
+<!--            <snackbar />-->
             <router-view />
             <div
               id="legacy_content"
@@ -122,8 +122,9 @@ export default {
 
     let payload = {isAuthenticated: isAuthenticated, user: user};
     this.$store.dispatch("security/onRefresh", payload);
-
+    console.log('flashes??');
     if (this.$parent.$el.attributes["data-flashes"]) {
+      console.log('Found!');
       let flashes = JSON.parse(this.$parent.$el.attributes["data-flashes"].value);
       if (flashes) {
         for (const key in flashes) {

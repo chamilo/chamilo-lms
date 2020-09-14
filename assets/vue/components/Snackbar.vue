@@ -1,15 +1,7 @@
 <template>
-  <b-alert
-    v-model="show"
-    :variant="color"
-    dismissible
-  >
-    {{ text }}
-    <template v-if="subText">
-      <p>{{ subText }}</p>
-    </template>
-  </b-alert>
-
+<div>
+  <span v-html="message"></span>
+</div>
   <!--    <v-snackbar-->
   <!--      v-model="show"-->
   <!--      :color="color"-->
@@ -36,14 +28,18 @@
 import { mapFields } from 'vuex-map-fields';
 
 export default {
-  computed: {
+  props: {
+    message: String,
+  },
+  /*computed: {
     ...mapFields('notifications', ['color', 'show', 'subText', 'text', 'timeout'])
   },
-
   methods: {
+
     close() {
       this.show = false;
     }
-  }
+  }*/
+
 };
 </script>

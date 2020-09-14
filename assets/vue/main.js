@@ -40,6 +40,15 @@ Vue.use(Vuelidate);
 //Vue.use(VueApollo);
 Vue.use(require('vue-moment'));
 
+import Toast from 'vue-toastification';
+import 'vue-toastification/dist/index.css';
+
+Vue.use(Toast, {
+    transition: 'Vue-Toastification__bounce',
+    maxToasts: 20,
+    newestOnTop: true
+});
+
 /*const apolloProvider = new VueApollo({
     defaultClient: apolloClient,
 });*/

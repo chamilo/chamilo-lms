@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
@@ -31,7 +32,6 @@ try {
     $kernel = new Chamilo\Kernel($env, true);
     // Loading Request from Sonata. In order to use Sonata Pages Bundle.
     $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
-    //$request = Sonata\PageBundle\Request\RequestFactory::createFromGlobals('host_with_path_by_locale');
 
     // This 'load_legacy' variable is needed to know that symfony is loaded using old style legacy mode,
     // and not called from a symfony controller from public/
@@ -39,9 +39,15 @@ try {
 
     $currentBaseUrl = $request->getBaseUrl();
     $kernel->boot();
-
     $container = $kernel->getContainer();
     $router = $container->get('router');
+    /** @var \Symfony\Component\HttpFoundation\Session\Flash\FlashBag $flashBag */
+    $flashBag = $container->get('session')->getFlashBag();
+    $saveFlashBag = null;
+    if (!empty($flashBag->keys())) {
+        $saveFlashBag = $flashBag->all();
+    }
+
     $context = $router->getContext();
 
     $router->setContext($context);
@@ -71,6 +77,14 @@ try {
 
     // Symfony uses request_stack now
     $container->get('request_stack')->push($request);
+
+    if (!empty($saveFlashBag)) {
+        foreach ($saveFlashBag as $type => $messageList) {
+            foreach ($messageList as $message) {
+                Container::getSession()->getFlashBag()->add($type, $message);
+            }
+        }
+    }
 
     // Connect Chamilo with the Symfony container
     // Container::setContainer($container);

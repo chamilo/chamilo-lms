@@ -9,8 +9,12 @@ require_once __DIR__.'/../inc/global.inc.php';
 api_block_anonymous_users();
 
 $exportCSV = isset($_GET['export']) && $_GET['export'] === 'csv' ? true : false;
-// Catch param export_csv from buttom
-$exportCSV = isset($_GET['export_csv']) && $exportCSV == false ? true : false;
+if (isset($_GET['export_csv']) && $exportCSV == false) {
+    // to export learningPath and company
+    $exportCSV = true;
+}
+$startDate = isset($_GET['startDate']) ? $_GET['startDate'] : null;
+$endDate = isset($_GET['endDate']) ? $_GET['endDate'] : null;
 $display = isset($_GET['display']) ? Security::remove_XSS($_GET['display']) : null;
 
 $htmlHeadXtra[] = api_get_jqgrid_js();
@@ -54,15 +58,9 @@ if ($exportCSV) {
         MySpace::export_tracking_course_overview();
         exit;
     } elseif ('company' === $display) {
-        // Getting dates
-        $startDate = isset($_GET['startDate']) ? $_GET['startDate'] : null;
-        $endDate = isset($_GET['endDate']) ? $_GET['endDate'] : null;
         MySpace::exportCompanyResumeCsv($startDate, $endDate);
         exit;
     } elseif ('learningPath' === $display) {
-        // Getting dates
-        $startDate = isset($_GET['startDate']) ? $_GET['startDate'] : null;
-        $endDate = isset($_GET['endDate']) ? $_GET['endDate'] : null;
         MySpace::displayResumeLP($startDate, $endDate, true);
         exit;
     }
@@ -88,15 +86,9 @@ switch ($display) {
         MySpace::display_tracking_course_overview();
         break;
     case 'company':
-        // Getting dates
-        $startDate = isset($_GET['startDate']) ? $_GET['startDate'] : null;
-        $endDate = isset($_GET['endDate']) ? $_GET['endDate'] : null;
         MySpace::displayResumeCompany($startDate, $endDate);
         break;
     case 'learningPath':
-        // Getting dates
-        $startDate = isset($_GET['startDate']) ? $_GET['startDate'] : null;
-        $endDate = isset($_GET['endDate']) ? $_GET['endDate'] : null;
         MySpace::displayResumeLP($startDate, $endDate);
         break;
     case 'accessoverview':

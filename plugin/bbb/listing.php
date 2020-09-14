@@ -367,6 +367,15 @@ if ($bbb->isGlobalConference() === false &&
     if ($conferenceManager) {
         $groups = GroupManager::get_groups();
     } else {
+        if (!empty($groupId)) {
+            $groupInfo = GroupManager::get_group_properties($groupId);
+            if ($groupInfo) {
+                $isSubscribed = GroupManager::is_user_in_group(api_get_user_id(), $groupInfo);
+                if (false === $isSubscribed) {
+                    api_not_allowed(true);
+                }
+            }
+        }
         $groups = GroupManager::getAllGroupPerUserSubscription(
             api_get_user_id(),
             api_get_course_int_id(),

@@ -118,6 +118,13 @@ if ($form->validate()) {
     // Exporting the values
     $values = $form->getSubmitValues();
     $values['survey_code'] = SurveyManager::generateSurveyCode($values['survey_title']);
+    // see #3499
+    if (isset($values['end_date'])) {
+        $values['end_date'] = api_get_utc_datetime($values['end_date'], true);
+    }
+    if (isset($values['start_date'])) {
+        $values['start_date'] = api_get_utc_datetime($values['start_date'], true);
+    }
     // Storing the survey
     $surveyData = SurveyManager::store_survey($values);
 

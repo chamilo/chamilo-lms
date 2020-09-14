@@ -360,6 +360,13 @@ $form->setDefaults($defaults);
 if ($form->validate()) {
     // Exporting the values
     $values = $form->getSubmitValues();
+    // see #3499
+    if (isset($values['end_date'])) {
+        $values['end_date'] = api_get_utc_datetime($values['end_date'], true);
+    }
+    if (isset($values['start_date'])) {
+        $values['start_date'] = api_get_utc_datetime($values['start_date'], true);
+    }
     // Storing the survey
     $return = SurveyManager::store_survey($values);
     Skill::saveSkills($form, ITEM_TYPE_SURVEY, $return['id']);

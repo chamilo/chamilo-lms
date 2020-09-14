@@ -1922,7 +1922,8 @@ function generateSettingsForm($settings, $settings_by_access_list)
                 break;
             case 'select':
                 /*
-                * To populate the list of options, the select type dynamically calls a function that must be called select_ + the name of the variable being displayed.
+                * To populate the list of options, the select type dynamically calls a
+                * function that must be called select_ + the name of the variable being displayed.
                 * The functions being called must be added to the file settings.lib.php.
                 */
                 $form->addElement(
@@ -1938,11 +1939,11 @@ function generateSettingsForm($settings, $settings_by_access_list)
                 break;
             case 'select_course':
                 $courseSelectOptions = [];
-
                 if (!empty($row['selected_value'])) {
-                    $course = $em->find('ChamiloCoreBundle:Course', $row['selected_value']);
-
-                    $courseSelectOptions[$course->getId()] = $course->getTitle();
+                    $course = api_get_course_entity($row['selected_value']);
+                    if ($course) {
+                        $courseSelectOptions[$course->getId()] = $course->getTitle();
+                    }
                 }
 
                 $form->addElement(

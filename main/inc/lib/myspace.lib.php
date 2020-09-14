@@ -1011,8 +1011,8 @@ class MySpace
      * Export to cvs a list of users who were enrolled in the lessons.
      * It is necessary that in the extra field, a company is defined.
      *
-     * @param null $startDate
-     * @param null $endDate
+     * @param string|null $startDate
+     * @param string|null $endDate
      *
      * @return array
      */
@@ -1052,8 +1052,8 @@ class MySpace
      * Displays a list as a table of users who were enrolled in the lessons.
      * It is necessary that in the extra field, a company is defined.
      *
-     * @param null $startDate
-     * @param null $endDate
+     * @param string|null $startDate
+     * @param string|null $endDate
      */
     public static function displayResumeCompany(
         $startDate = null,
@@ -1081,14 +1081,25 @@ class MySpace
 
         $form = new FormValidator('searchDate', 'get');
         $form->addHidden('display', 'company');
+        $today = new DateTime();
+        if (empty($startDate)) {
+            $startDate = api_get_local_time($today->modify('first day of this month')->format('Y-m-d'));
+        }
+        if (empty($endDate)) {
+            $endDate = api_get_local_time($today->modify('last day of this month')->format('Y-m-d'));
+        }
         $form->addDatePicker(
             'startDate',
             get_lang('DateStart'),
-            []);
+            [
+                'value' => $startDate,
+            ]);
         $form->addDatePicker(
             'endDate',
             get_lang('DateEnd'),
-            []);
+            [
+                'value' => $endDate,
+            ]);
         $form->addButtonSearch(get_lang('Search'));
         if (count($companys) != 0) {
             //$form->addButtonSave(get_lang('Ok'), 'export');
@@ -1118,9 +1129,9 @@ class MySpace
     /**
      *  Displays a list as a table of teachers who are set authors by a extra_field authors.
      *
-     * @param null $startDate
-     * @param null $endDate
-     * @param bool $csv
+     * @param string|null $startDate
+     * @param string|null $endDate
+     * @param bool        $csv
      */
     public static function displayResumeLP(
         $startDate = null,
@@ -1203,7 +1214,7 @@ class MySpace
             $index = 0;
             //icons for show and hode
             $iconAdd = Display::return_icon('add.png', get_lang('ShowOrHide'), '', ICON_SIZE_SMALL);
-            $iconRemove = Display::return_icon('error.png', get_lang('howOrHide'), '', ICON_SIZE_SMALL);
+            $iconRemove = Display::return_icon('error.png', get_lang('ShowOrHide'), '', ICON_SIZE_SMALL);
             $teacherNameTemp = '';
             foreach ($data as $teacherName => $reportData) {
                 $lpCount = 0;
@@ -1251,16 +1262,25 @@ class MySpace
 
             $form = new FormValidator('searchDate', 'get');
             $form->addHidden('display', 'learningPath');
+            $today = new DateTime();
+            if (empty($startDate)) {
+                $startDate = $today->modify('first day of this month')->format('Y-m-d');
+            }
+            if (empty($endDate)) {
+                $endDate = $today->modify('last day of this month')->format('Y-m-d');
+            }
             $form->addDatePicker(
                 'startDate',
                 get_lang('DateStart'),
-                []
-            );
+                [
+                    'value' => $startDate,
+                ]);
             $form->addDatePicker(
                 'endDate',
                 get_lang('DateEnd'),
-                []
-            );
+                [
+                    'value' => $endDate,
+                ]);
             $form->addButtonSearch(get_lang('Search'));
             if (count($data) != 0) {
                 //$form->addButtonSave(get_lang('Ok'), 'export');
@@ -3617,9 +3637,9 @@ class MySpace
      *
      *  if lpId is different to 0, this search by lp id too
      *
-     * @param null $startDate
-     * @param null $endDate
-     * @param int  $lpId
+     * @param string|null $startDate
+     * @param string|null $endDate
+     * @param int         $lpId
      *
      * @return array
      */
@@ -3650,13 +3670,13 @@ class MySpace
 
         // Settings condition and parametter GET to right date
         if (!empty($startDate)) {
-            $startDate = api_get_utc_datetime($startDate->format('Y-m-d'));
+            $startDate = api_get_utc_datetime($startDate->setTime(0, 0, 0)->format('Y-m-d H:i:s'));
             $_GET['startDate'] = $startDate;
             $whereCondition .= "
             AND $tblItemProperty.lastedit_date >= '$startDate' ";
         }
         if (!empty($endDate)) {
-            $endDate = api_get_utc_datetime($endDate->format('Y-m-d'));
+            $endDate = api_get_utc_datetime($endDate->setTime(23, 59, 59)->format('Y-m-d H:i:s'));
             $_GET['endDate'] = $endDate;
             $whereCondition .= "
             AND $tblItemProperty.lastedit_date <= '$endDate' ";

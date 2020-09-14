@@ -226,7 +226,10 @@ class ItemPropertyRepository extends EntityRepository
         if ($usersSubscribedToItem) {
             /** @var CItemProperty $itemProperty */
             foreach ($usersSubscribedToItem as $itemProperty) {
-                $alreadyAddedUsers[] = $itemProperty->getToUser()->getId();
+                $getToUser = $itemProperty->getToUser();
+                if (!empty($getToUser)) {
+                    $alreadyAddedUsers[] = $itemProperty->getToUser()->getId();
+                }
             }
         }
 

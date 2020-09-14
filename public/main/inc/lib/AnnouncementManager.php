@@ -1130,30 +1130,6 @@ class AnnouncementManager
         return $result;*/
     }
 
-    /**
-     * this function gets all the groups of the course,
-     * not including linked courses.
-     */
-    public static function get_course_groups()
-    {
-        $session_id = api_get_session_id();
-        if (0 != $session_id) {
-            $new_group_list = CourseManager::get_group_list_of_course(
-                api_get_course_id(),
-                $session_id,
-                1
-            );
-        } else {
-            $new_group_list = CourseManager::get_group_list_of_course(
-                api_get_course_id(),
-                0,
-                1
-            );
-        }
-
-        return $new_group_list;
-    }
-
     public static function getSenders(CAnnouncement $announcement)
     {
         $result = [];
@@ -1222,7 +1198,7 @@ class AnnouncementManager
     public static function sent_to_form($sent_to_array)
     {
         // we find all the names of the groups
-        $group_names = self::get_course_groups();
+        $groupList = CourseManager::getCourseGroups();
 
         // we count the number of users and the number of groups
         $number_users = 0;
@@ -1249,7 +1225,7 @@ class AnnouncementManager
                     }
                     $output[] =
                         '<br />'.
-                        Display::label($group_names[$group_id]['name'], 'info').
+                        Display::label($groupList[$group_id]->getName(), 'info').
                         '&nbsp;'.implode(', ', $userToArray);
                 }
             }
@@ -1284,7 +1260,7 @@ class AnnouncementManager
                 }
                 $output[] =
                     '<br />'.
-                    Display::label($group_names[$group_id]['name'], 'info').
+                    Display::label($groupList[$group_id]->getName(), 'info').
                     '&nbsp;'.implode(', ', $userToArray);
             }
             if (empty($sent_to_array['groups']) && empty($sent_to_array['users'])) {

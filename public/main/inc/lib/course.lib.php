@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Repository\SequenceResourceRepository;
 use Chamilo\CoreBundle\ToolChain;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
+use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Manager\SettingsManager;
 use ChamiloSession as Session;
 use Doctrine\Common\Collections\Criteria;
@@ -187,9 +188,11 @@ class CourseManager
      * @param int    $orderby            The column we want to order it by. Optional, defaults to first column.
      * @param string $orderdirection     The direction of the order (ASC or DESC). Optional, defaults to ASC.
      * @param int    $visibility         the visibility of the course, or all by default
-     * @param string $startwith          If defined, only return results for which the course *title* begins with this string
+     * @param string $startwith          If defined, only return results for which the course *title* begins with this
+     *                                   string
      * @param string $urlId              The Access URL ID, if using multiple URLs
-     * @param bool   $alsoSearchCode     An extension option to indicate that we also want to search for course codes (not *only* titles)
+     * @param bool   $alsoSearchCode     An extension option to indicate that we also want to search for course codes
+     *                                   (not *only* titles)
      * @param array  $conditionsLike
      * @param array  $onlyThisCourseList
      *
@@ -1389,8 +1392,8 @@ class CourseManager
      * @param int       $sessionId
      * @param string    $limit
      * @param string    $order_by         the field to order the users by.
-     *                                    Valid values are 'lastname', 'firstname', 'username', 'email', 'official_code' OR a part of a SQL statement
-     *                                    that starts with ORDER BY ...
+     *                                    Valid values are 'lastname', 'firstname', 'username', 'email',
+     *                                    'official_code' OR a part of a SQL statement that starts with ORDER BY ...
      * @param int|null  $filter_by_status if using the session_id: 0 or 2 (student, coach),
      *                                    if using session_id = 0 STUDENT or COURSEMANAGER
      * @param bool|null $return_count
@@ -2367,14 +2370,14 @@ class CourseManager
      *
      * @param string $course_code
      * @param int    $session_id         Session ID (optional)
-     * @param int    $in_get_empty_group get empty groups (optional)
+     * @param int    $getEmptyGroups get empty groups (optional)
      *
-     * @return array List of groups info
+     * @return CGroup[]
      */
     public static function get_group_list_of_course(
         $course_code,
         $session_id = 0,
-        $in_get_empty_group = 0
+        $getEmptyGroups = 0
     ) {
         $course_info = api_get_course_info($course_code);
 
@@ -2392,11 +2395,16 @@ class CourseManager
         $course = api_get_course_entity($course_info['real_id']);
         $session = api_get_session_entity($session_id);
         $qb = $repo->getResourcesByCourse($course, $session);
-        $groups = $qb->getQuery()->getArrayResult();
+        $groups = $qb->getQuery()->getResult();
         $groupList = [];
-
+        /** @var CGroup $group */
         foreach ($groups as $group) {
-            $groupList[$group['iid']] = $group;
+            if (0 === $getEmptyGroups) {
+                if (!$group->hasMembers()){
+                    continue;
+                }
+            }
+            $groupList[$group->getIid()] = $group;
         }
 
         /* 0 != $session_id ? $session_condition = ' WHERE g.session_id IN(1,'.intval($session_id).')' : $session_condition = ' WHERE g.session_id = 0';
@@ -3018,7 +3026,8 @@ class CourseManager
      * @param int   $user_id
      * @param bool  $include_sessions                   Whether to include courses from session or not
      * @param bool  $adminGetsAllCourses                If the user is platform admin,
-     *                                                  whether he gets all the courses or just his. Note: This does *not* include all sessions
+     *                                                  whether he gets all the courses or just his. Note: This does
+     *                                                  *not* include all sessions
      * @param bool  $loadSpecialCourses
      * @param array $skipCourseList                     List of course ids to skip
      * @param bool  $useUserLanguageFilterIfAvailable
@@ -4572,8 +4581,8 @@ class CourseManager
      * Creates a new course code based in a given code.
      *
      * @param string    wanted code
-     * <code>    $wanted_code = 'curse' if there are in the DB codes like curse1 curse2 the function will return: course3</code>
-     * if the course code doest not exist in the DB the same course code will be returned
+     * <code>    $wanted_code = 'curse' if there are in the DB codes like curse1 curse2 the function will return:
+     * course3</code> if the course code doest not exist in the DB the same course code will be returned
      *
      * @return string wanted unused code
      */
@@ -6023,19 +6032,22 @@ class CourseManager
     /**
      * this function gets all the groups of the course,
      * not including linked courses.
+     *
+     * @return CGroup[]
      */
     public static function getCourseGroups()
     {
         $sessionId = api_get_session_id();
+        $courseCode = api_get_course_id();
         if (0 != $sessionId) {
             $groupList = self::get_group_list_of_course(
-                api_get_course_id(),
+                $courseCode,
                 $sessionId,
                 1
             );
         } else {
             $groupList = self::get_group_list_of_course(
-                api_get_course_id(),
+                $courseCode,
                 0,
                 1
             );
@@ -6174,9 +6186,9 @@ class CourseManager
     /**
      * this function shows the form for sending a message to a specific group or user.
      *
-     * @param array $groupList
-     * @param array $userList
-     * @param array $alreadySelected
+     * @param CGroup[] $groupList
+     * @param array    $userList
+     * @param array    $alreadySelected
      *
      * @return array
      */
@@ -6193,25 +6205,23 @@ class CourseManager
         // adding the groups to the select form
         if ($groupList) {
             foreach ($groupList as $thisGroup) {
-                $groupId = $thisGroup['iid'];
+                $groupId = $thisGroup->getIid();
                 if (is_array($alreadySelected)) {
                     if (!in_array(
                         "GROUP:".$groupId,
                         $alreadySelected
                     )
                     ) {
-                        $userCount = isset($thisGroup['userNb']) ? $thisGroup['userNb'] : 0;
-                        if (empty($userCount)) {
-                            $userCount = isset($thisGroup['count_users']) ? $thisGroup['count_users'] : 0;
-                        }
+                        $userCount = $thisGroup->getMembers()->count();
+
                         // $alreadySelected is the array containing the groups (and users) that are already selected
-                        $user_label = ($userCount > 0) ? get_lang('Users') : get_lang('user');
-                        $user_disabled = ($userCount > 0) ? "" : "disabled=disabled";
+                        $userLabel = ($userCount > 0) ? get_lang('Users') : get_lang('user');
+                        $userDisabled = ($userCount > 0) ? "" : "disabled=disabled";
                         $result[] = [
-                            'disabled' => $user_disabled,
+                            'disabled' => $userDisabled,
                             'value' => "GROUP:".$groupId,
                             // The space before "G" is needed in order to advmultiselect.php js puts groups first
-                            'content' => " G: ".$thisGroup['name']." - ".$userCount." ".$user_label,
+                            'content' => " G: ".$thisGroup->getName()." - ".$userCount." ".$userLabel,
                         ];
                     }
                 }

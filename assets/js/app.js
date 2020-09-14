@@ -16,7 +16,7 @@ global.moment = moment;
 require('select2/dist/js/select2.full.min');
 require("flatpickr");
 import('bootstrap-vue');
-import('bootstrap-daterangepicker');
+require('bootstrap-daterangepicker');
 import('webpack-jquery-ui');
 import('webpack-jquery-ui/css');
 import('./vendor');

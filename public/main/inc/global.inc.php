@@ -80,9 +80,9 @@ try {
     $container->get('request_stack')->push($request);
 
     if (!empty($saveFlashBag)) {
-        foreach ($saveFlashBag as $type => $messageList) {
+        foreach ($saveFlashBag as $typeMessage => $messageList) {
             foreach ($messageList as $message) {
-                Container::getSession()->getFlashBag()->add($type, $message);
+                Container::getSession()->getFlashBag()->add($typeMessage, $message);
             }
         }
     }

@@ -12,10 +12,10 @@
         class="d-sm-none bg-dark text-light"
       >
         <b-nav-item to="/login">
-          Login
+          {{ $t('Login') }}
         </b-nav-item>
         <b-nav-item to="/register">
-          Register
+          {{ $t('Register') }}
         </b-nav-item>
       </b-nav>
 
@@ -30,20 +30,20 @@
         class="d-sm-none bg-dark text-light"
       >
         <b-nav-item href="/main/messages/inbox.php">
-          Inbox
+          {{ $t('Inbox') }}
         </b-nav-item>
         <b-nav-item href="/account/home">
-          Profile
+          {{ $t('Profile') }}
         </b-nav-item>
         <b-nav-item href="/logout">
-          Logout
+          {{ $t('Logout') }}
         </b-nav-item>
       </b-nav>
     </template>
 
     <b-nav vertical>
       <b-nav-item :to="{ name: 'Index' }">
-        Home
+        {{ $t('Home') }}
       </b-nav-item>
     </b-nav>
 
@@ -52,12 +52,12 @@
         <b-nav-item
           :to="{ name: 'MyCourses' }"
         >
-          Courses
+          {{ $t('Courses') }}
         </b-nav-item>
         <b-nav-item
           :to="{ name: 'MySessions' }"
         >
-          Sessions
+          {{ $t('Sessions') }}
         </b-nav-item>
       </b-nav>
     </template>
@@ -65,27 +65,27 @@
     <template v-if="isAuthenticated && isAdmin">
       <b-nav vertical>
         <h4 class="pt-3 px-3 mb-0">
-          Administration
+          {{ $t('Administration') }}
         </h4>
         <b-nav-item
           :to="'/main/admin/user_list.php'"
         >
-          Users
+          {{ $t('Users') }}
         </b-nav-item>
         <b-nav-item
           :to="'/main/admin/course_list.php'"
         >
-          Courses
+          {{ $t('Courses') }}
         </b-nav-item>
         <b-nav-item
           :to="'/main/session/session_list.php'"
         >
-          Sessions
+          {{ $t('Sessions') }}
         </b-nav-item>
         <b-nav-item
           :to="'/main/admin/index.php'"
         >
-          Settings
+          {{ $t('Administration') }}
         </b-nav-item>
       </b-nav>
     </template>

@@ -2369,7 +2369,7 @@ class CourseManager
      * Get the list of groups from the course.
      *
      * @param string $course_code
-     * @param int    $session_id         Session ID (optional)
+     * @param int    $session_id     Session ID (optional)
      * @param int    $getEmptyGroups get empty groups (optional)
      *
      * @return CGroup[]
@@ -2400,7 +2400,7 @@ class CourseManager
         /** @var CGroup $group */
         foreach ($groups as $group) {
             if (0 === $getEmptyGroups) {
-                if (!$group->hasMembers()){
+                if (!$group->hasMembers()) {
                     continue;
                 }
             }

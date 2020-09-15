@@ -46,14 +46,14 @@ try {
     $router->setContext($context);
 
     /** @var FlashBag $flashBag */
-    $flashBag = $container->get('session')->getFlashBag();
     $saveFlashBag = null;
+    $flashBag = $container->get('session')->getFlashBag();
     if (!empty($flashBag->keys())) {
         $saveFlashBag = $flashBag->all();
     }
 
     $response = $kernel->handle($request);
-    //$context = Container::getRouter()->getContext();
+    $context = Container::getRouter()->getContext();
 
     $pos = strpos($currentBaseUrl, 'main');
     if (false === $pos) {

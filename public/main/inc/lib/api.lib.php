@@ -2214,14 +2214,14 @@ function api_remove_in_gradebook()
  * If the course_code is given, the returned array gives info about that
  * particular course, if none given it gets the course info from the session.
  *
- * @param string $course_code
+ * @param string $courseCode
  *
  * @return array
  */
-function api_get_course_info($course_code = null)
+function api_get_course_info($courseCode = null)
 {
-    if (!empty($course_code)) {
-        $course = Container::getCourseRepository()->findOneByCode($course_code);
+    if (!empty($courseCode)) {
+        $course = Container::getCourseRepository()->findOneByCode($courseCode);
 
         return api_format_course_array($course);
     }
@@ -2386,7 +2386,8 @@ function api_format_course_array(Course $course = null)
     $courseData['legal'] = $course->getLegal();
     $courseData['show_score'] = $course->getShowScore(); //used in the work tool
 
-    $coursePath = api_get_path(WEB_COURSE_PATH);
+    //$coursePath = api_get_path(WEB_COURSE_PATH);
+    $coursePath = '/course/';
     $webCourseHome = $coursePath.$courseData['real_id'].'/home';
 
     // Course password

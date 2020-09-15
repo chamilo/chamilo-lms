@@ -18,9 +18,6 @@
         data-in-course="{{ course ? 'true' : 'false' }}"
         data-course-code="{{ course ? course.code : '' }}"
         data-session-id="{{ session ? session.id : '' }}"
-{#        {% if legacy_breadcrumb is defined %}#}
-{#            data-breadcrumb="{{ legacy_breadcrumb | json_encode() }}"#}
-{#        {% endif %}#}
     >
     <noscript> {{ "Your browser does not support Javascript" | trans }} </noscript>
     {% block chamilo_wrap %}

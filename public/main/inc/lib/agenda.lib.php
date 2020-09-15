@@ -2247,13 +2247,12 @@ class Agenda
     }
 
     /**
-     * @param FormValidator $form
-     * @param CGroup[]      $groupList
-     * @param array         $userList
-     * @param array         $sendTo               array('users' => [1, 2], 'groups' => [3, 4])
-     * @param array         $attributes
-     * @param bool          $addOnlyItemsInSendTo
-     * @param bool          $required
+     * @param CGroup[] $groupList
+     * @param array    $userList
+     * @param array    $sendTo               array('users' => [1, 2], 'groups' => [3, 4])
+     * @param array    $attributes
+     * @param bool     $addOnlyItemsInSendTo
+     * @param bool     $required
      */
     public function setSendToSelect(
         FormValidator $form,

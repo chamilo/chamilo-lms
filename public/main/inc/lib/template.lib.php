@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
@@ -176,7 +177,6 @@ class Template
      * Render the template.
      *
      * @param string $template           The template path
-     * @param bool   $clearFlashMessages Clear the $_SESSION variables for flash messages
      */
     public function display($template)
     {
@@ -695,10 +695,7 @@ class Template
      */
     public function returnResponse($params, $template)
     {
-        $flash = Display::getFlashToString();
-        Display::cleanFlashMessages();
         $response = new Response();
-        $params['flash_messages'] = $flash;
         $content = Container::getTemplating()->render($template, $params);
         $response->setContent($content);
         $response->send();
@@ -875,13 +872,14 @@ class Template
             'icon' => 'user fa-fw',
             'placeholder' => get_lang('Username'),
         ];
-        $browserAutoCapitalize = false;
+
         // Avoid showing the autocapitalize option if the browser doesn't
         // support it: this attribute is against the HTML5 standard
+        /*$browserAutoCapitalize = false;
         if (api_browser_support('autocapitalize')) {
             $browserAutoCapitalize = false;
             $params['autocapitalize'] = 'none';
-        }
+        }*/
         $form->addText(
             '_username',
             get_lang('Username'),
@@ -893,9 +891,9 @@ class Template
             'icon' => 'lock fa-fw',
             'placeholder' => get_lang('Pass'),
         ];
-        if ($browserAutoCapitalize) {
+        /*if ($browserAutoCapitalize) {
             $params['autocapitalize'] = 'none';
-        }
+        }*/
         $form->addElement(
             'password',
             '_password',
@@ -1234,15 +1232,15 @@ class Template
         $this->assign('title_string', $title_string);
 
         // Setting the theme and CSS files
-        $this->setCssFiles();
+        //$this->setCssFiles();
         $this->set_js_files();
         $this->setCssCustomFiles();
 
-        $browser = api_browser_support('check_browser');
+        /*$browser = api_browser_support('check_browser');
         if ('Internet Explorer' == $browser[0] && $browser[1] >= '11') {
             $browser_head = '<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9" />';
             $this->assign('browser_specific_head', $browser_head);
-        }
+        }*/
 
         // Implementation of prefetch.
         // See http://cdn.chamilo.org/main/img/online.png for details
@@ -1590,8 +1588,7 @@ class Template
                     }
                 } elseif (0 !== $sessionId) {
                     // If we are on a session "about" screen, publish info about the session
-                    $em = Database::getManager();
-                    $session = $em->find('ChamiloCoreBundle:Session', $sessionId);
+                    $session = api_get_session_entity($sessionId);
 
                     $socialMeta .= '<meta property="og:title" content="'.$session->getName().' - '.$metaTitle.'" />'."\n";
                     $socialMeta .= '<meta property="twitter:title" content="'.$session->getName().' - '.$metaTitle.'" />'."\n";

@@ -1,29 +1,30 @@
-import Vue from "vue";
-import VueRouter from "vue-router";
+import Vue from 'vue';
+import VueRouter from 'vue-router';
 
+import i18n from '../i18n';
 Vue.use(VueRouter);
 
 import courseRoutes from './course';
 import courseCategoryRoutes from './coursecategory';
 import documents from './documents';
-import store from "../store";
-import Login from "../views/Login";
-//import Legacy from "../views/Legacy";
-import Home from "../views/Home";
-import MyCourseList from "../views/user/courses/List";
-import MySessionList from "../views/user/sessions/List";
+import store from '../store';
+import Login from '../views/Login';
+//import Legacy from '../views/Legacy';
+import Home from '../views/Home';
+import MyCourseList from '../views/user/courses/List';
+import MySessionList from '../views/user/sessions/List';
 
 let router = new VueRouter({
-    mode: "history",
+    mode: 'history',
     routes: [
-        {path: "/", name: "Index"},
-        {path: "/login", name: "Login", component: Login},
+        {path: '/', name: 'Index'},
+        {path: '/login', name: i18n.t('Login'), component: Login},
         {
-            path: "/courses", name: "MyCourses", component: MyCourseList,
+            path: '/courses', name: i18n.t('My courses'), component: MyCourseList,
             meta: {requiresAuth: true},
         },
         {
-            path: "/sessions", name: "MySessions", component: MySessionList,
+            path: '/sessions', name: i18n.t('My sessions'), component: MySessionList,
             meta: {requiresAuth: true},
         },
         courseRoutes,
@@ -36,11 +37,11 @@ router.beforeEach((to, from, next) => {
     if (to.matched.some(record => record.meta.requiresAuth)) {
         // this route requires auth, check if logged in
         // if not, redirect to login page.
-        if (store.getters["security/isAuthenticated"]) {
+        if (store.getters['security/isAuthenticated']) {
             next();
         } else {
             next({
-                path: "/login",
+                path: '/login',
                 query: {redirect: to.fullPath},
             });
         }

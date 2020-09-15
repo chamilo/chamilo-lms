@@ -14,7 +14,7 @@ const locale = document.querySelector('html').lang;
 const moment = require('moment');
 global.moment = moment;
 require('select2/dist/js/select2.full.min');
-require("flatpickr");
+require('flatpickr');
 //import('bootstrap-vue');
 import('bootstrap');
 require('bootstrap-daterangepicker');

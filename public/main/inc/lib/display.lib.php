@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Entity\ExtraField;
+use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
 use Symfony\Component\HttpFoundation\Response;
@@ -121,12 +122,17 @@ class Display
         $response = new Response();
         $params['content'] = $contents;
         global $interbreadcrumb, $htmlHeadXtra;
+
+        $courseInfo = api_get_course_info();
+        if (!empty($courseInfo)) {
+            array_unshift(
+                $interbreadcrumb,
+                ['name' => $courseInfo['title'], 'url' => $courseInfo['course_public_url']]
+            );
+        }
+
         $params['legacy_javascript'] = $htmlHeadXtra;
         $params['legacy_breadcrumb'] = $interbreadcrumb;
-
-        $flash = self::getFlashToString();
-        self::cleanFlashMessages();
-        //$params['flash_messages'] = $flash;
 
         Template::setVueParams($params);
         $content = Container::getTemplating()->render($tpl, $params);
@@ -153,10 +159,6 @@ class Display
         global $interbreadcrumb, $htmlHeadXtra;
         $params['legacy_javascript'] = $htmlHeadXtra;
         $params['legacy_breadcrumb'] = $interbreadcrumb;
-
-        $flash = Display::getFlashToString();
-        Display::cleanFlashMessages();
-        $params['flash_messages'] = $flash;
 
         $content = Container::getTemplating()->render($tpl, $params);
         $response->setContent($content);
@@ -987,7 +989,7 @@ class Display
      * @param int    $default
      * @param array  $extra_attributes
      * @param bool   $show_blank_item
-     * @param null   $blank_item_text
+     * @param string $blank_item_text
      *
      * @return string
      */
@@ -1065,7 +1067,7 @@ class Display
      * @param string $id            id of the container of the tab in the example "tabs"
      * @param array  $attributes    for the ul
      * @param array  $ul_attributes
-     * @param int    $selected
+     * @param string $selected
      *
      * @return string
      */
@@ -1700,6 +1702,8 @@ class Display
     /**
      * Get the session box details as an array.
      *
+     * @todo check session visibility.
+     *
      * @param int $session_id
      *
      * @return array Empty array or session array
@@ -1707,84 +1711,75 @@ class Display
      */
     public static function getSessionTitleBox($session_id)
     {
-        global $nosession;
-
-        if (!$nosession) {
-            global $now, $date_start, $date_end;
+        $session_info = api_get_session_info($session_id);
+        $coachInfo = [];
+        if (!empty($session_info['id_coach'])) {
+            $coachInfo = api_get_user_info($session_info['id_coach']);
         }
-        $output = [];
-        if (!$nosession) {
-            $session_info = api_get_session_info($session_id);
-            $coachInfo = [];
-            if (!empty($session['id_coach'])) {
-                $coachInfo = api_get_user_info($session['id_coach']);
-            }
 
-            $session = [];
-            $session['category_id'] = $session_info['session_category_id'];
-            $session['title'] = $session_info['name'];
-            $session['coach_id'] = $session['id_coach'] = $session_info['id_coach'];
-            $session['dates'] = '';
-            $session['coach'] = '';
+        $session = [];
+        $session['category_id'] = $session_info['session_category_id'];
+        $session['title'] = $session_info['name'];
+        $session['coach_id'] = $session['id_coach'] = $session_info['id_coach'];
+        $session['dates'] = '';
+        $session['coach'] = '';
+        if ('true' === api_get_setting('show_session_coach') && isset($coachInfo['complete_name'])) {
+            $session['coach'] = get_lang('General coach').': '.$coachInfo['complete_name'];
+        }
+        $active = false;
+        if (('0000-00-00 00:00:00' == $session_info['access_end_date'] &&
+            '0000-00-00 00:00:00' == $session_info['access_start_date']) ||
+            (empty($session_info['access_end_date']) && empty($session_info['access_start_date']))
+        ) {
+            if (isset($session_info['duration']) && !empty($session_info['duration'])) {
+                $daysLeft = SessionManager::getDayLeftInSession($session_info, api_get_user_id());
+                $session['duration'] = $daysLeft >= 0
+                    ? sprintf(get_lang('This session has a maximum duration. Only %s days to go.'), $daysLeft)
+                    : get_lang('You are already registered but your allowed access time has expired.');
+            }
+            $active = true;
+        } else {
+            $dates = SessionManager::parseSessionDates($session_info, true);
+            $session['dates'] = $dates['access'];
             if ('true' === api_get_setting('show_session_coach') && isset($coachInfo['complete_name'])) {
-                $session['coach'] = get_lang('General coach').': '.$coachInfo['complete_name'];
+                $session['coach'] = $coachInfo['complete_name'];
             }
+            //$active = $date_start <= $now && $date_end >= $now;
+        }
+        $session['active'] = $active;
+        $session['session_category_id'] = $session_info['session_category_id'];
+        $session['visibility'] = $session_info['visibility'];
+        $session['num_users'] = $session_info['nbr_users'];
+        $session['num_courses'] = $session_info['nbr_courses'];
+        $session['description'] = $session_info['description'];
+        $session['show_description'] = $session_info['show_description'];
+        //$session['image'] = SessionManager::getSessionImage($session_info['id']);
+        $session['url'] = api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$session_info['id'];
 
-            if (('0000-00-00 00:00:00' == $session_info['access_end_date'] &&
-                '0000-00-00 00:00:00' == $session_info['access_start_date']) ||
-                (empty($session_info['access_end_date']) && empty($session_info['access_start_date']))
-            ) {
-                if (isset($session_info['duration']) && !empty($session_info['duration'])) {
-                    $daysLeft = SessionManager::getDayLeftInSession($session_info, api_get_user_id());
-                    $session['duration'] = $daysLeft >= 0
-                        ? sprintf(get_lang('This session has a maximum duration. Only %s days to go.'), $daysLeft)
-                        : get_lang('You are already registered but your allowed access time has expired.');
-                }
-                $active = true;
-            } else {
-                $dates = SessionManager::parseSessionDates($session_info, true);
-                $session['dates'] = $dates['access'];
-                if ('true' === api_get_setting('show_session_coach') && isset($coachInfo['complete_name'])) {
-                    $session['coach'] = $coachInfo['complete_name'];
-                }
-                $active = $date_start <= $now && $date_end >= $now;
+        $entityManager = Database::getManager();
+        $fieldValuesRepo = $entityManager->getRepository(ExtraFieldValues::class);
+        $extraFieldValues = $fieldValuesRepo->getVisibleValues(
+            ExtraField::SESSION_FIELD_TYPE,
+            $session_id
+        );
+
+        $session['extra_fields'] = [];
+        /** @var ExtraFieldValues $value */
+        foreach ($extraFieldValues as $value) {
+            if (empty($value)) {
+                continue;
             }
-            $session['active'] = $active;
-            $session['session_category_id'] = $session_info['session_category_id'];
-            $session['visibility'] = $session_info['visibility'];
-            $session['num_users'] = $session_info['nbr_users'];
-            $session['num_courses'] = $session_info['nbr_courses'];
-            $session['description'] = $session_info['description'];
-            $session['show_description'] = $session_info['show_description'];
-            //$session['image'] = SessionManager::getSessionImage($session_info['id']);
-            $session['url'] = api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$session_info['id'];
-
-            $entityManager = Database::getManager();
-            $fieldValuesRepo = $entityManager->getRepository('ChamiloCoreBundle:ExtraFieldValues');
-            $extraFieldValues = $fieldValuesRepo->getVisibleValues(
-                ExtraField::SESSION_FIELD_TYPE,
-                $session_id
-            );
-
-            $session['extra_fields'] = [];
-            /** @var \Chamilo\CoreBundle\Entity\ExtraFieldValues $value */
-            foreach ($extraFieldValues as $value) {
-                if (empty($value)) {
-                    continue;
-                }
-                $session['extra_fields'][] = [
-                    'field' => [
-                        'variable' => $value->getField()->getVariable(),
-                        'display_text' => $value->getField()->getDisplayText(),
-                    ],
-                    'value' => $value->getValue(),
-                ];
-            }
-
-            $output = $session;
+            $session['extra_fields'][] = [
+                'field' => [
+                    'variable' => $value->getField()->getVariable(),
+                    'display_text' => $value->getField()->getDisplayText(),
+                ],
+                'value' => $value->getValue(),
+            ];
         }
 
-        return $output;
+
+        return $session;
     }
 
     /**
@@ -2418,38 +2413,6 @@ class Display
         if ($result && isset($matches[2])) {
             Container::getSession()->getFlashBag()->add($type, $matches[2]);
         }
-    }
-
-    /**
-     * @return string
-     */
-    public static function getFlashToString()
-    {
-        $messages = Session::read('flash_messages');
-        $messageToString = '';
-        if (!empty($messages)) {
-            foreach ($messages as $message) {
-                $messageToString .= $message;
-            }
-        }
-
-        return $messageToString;
-    }
-
-    /**
-     * Shows the message from the session.
-     */
-    public static function showFlash()
-    {
-        echo self::getFlashToString();
-    }
-
-    /**
-     * Destroys the message session.
-     */
-    public static function cleanFlashMessages()
-    {
-        Session::erase('flash_messages');
     }
 
     /**

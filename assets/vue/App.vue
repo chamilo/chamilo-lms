@@ -20,6 +20,19 @@
             <Breadcrumb :legacy="breadcrumb" />
 <!--            <snackbar />-->
             <router-view />
+
+<!--            <div class="lang-dropdown">-->
+<!--              <select v-model="$i18n.locale">-->
+<!--                <option-->
+<!--                    v-for="(lang, i) in languageArray"-->
+<!--                    :key="`lang${i}`"-->
+<!--                    :value="lang"-->
+<!--                >-->
+<!--                  {{ lang }}-->
+<!--                </option>-->
+<!--              </select>-->
+<!--            </div>-->
+
             <div
               id="legacy_content"
               v-html="legacy_content"
@@ -61,6 +74,7 @@ export default {
   data: () => ({
     drawer: true,
     breadcrumb: [],
+    languageArray: ['en', 'fr'],
     courses: [
       ['Courses', 'mdi-book', 'CourseList'],
       ['Courses category', 'mdi-book', 'CourseCategoryList'],

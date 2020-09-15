@@ -1,7 +1,8 @@
-import Vue from "vue";
-import App from "./App";
-import router from "./router";
-import store from "./store";
+import Vue from 'vue';
+import App from './App';
+import i18n from './i18n';
+import router from './router';
+import store from './store';
 import courseCategoryService from './services/coursecategory';
 import documentsService from './services/documents';
 import courseService from './services/course';
@@ -9,12 +10,11 @@ import resourceLinkService from './services/resourcelink';
 import resourceNodeService from './services/resourcenode';
 import makeCrudModule from './store/modules/crud';
 
-//import vuetify from './plugins/vuetify'; // path to vuetify export
 require('@fancyapps/fancybox');
 require('@fancyapps/fancybox/dist/jquery.fancybox.css');
-
 import Vuelidate from 'vuelidate';
-import i18n from './i18n';
+
+
 /*
 import VueApollo from 'vue-apollo';
 import ApolloClient from 'apollo-boost';
@@ -99,7 +99,6 @@ store.registerModule(
 
 if (document.getElementById('app')) {
     new Vue({
-        //vuetify,
         i18n,
         components: {App},
         //apolloProvider,
@@ -109,5 +108,5 @@ if (document.getElementById('app')) {
         mounted() {
         },
         render: h => h(App)
-    }).$mount("#app");
+    }).$mount('#app');
 }

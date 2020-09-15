@@ -90,8 +90,7 @@ install:
   - sudo chown -R 775 $TRAVIS_BUILD_DIR
   - sudo chmod +x /home/travis/build
   - ls -la public/build
-  - curl http://localhost/public/check.php
-  - curl http://localhost/main/install/index.php
+  - curl http://localhost/check.php
 
 script:
   - cd tests/behat

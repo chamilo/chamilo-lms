@@ -15,6 +15,7 @@ Feature: Group tool
 
   Scenario: Create a group directory
     Given I am on "/main/group/group_category.php?cid=1&sid=0&action=add_category"
+    And wait for the page to be loaded
     When I fill in the following:
       | title | Group category 1 |
     And I press "group_category_submit"
@@ -39,7 +40,6 @@ Feature: Group tool
     And I fill in select bootstrap static by text "#category_4" select "Group category 1"
     And I press "submit"
     Then I should see "group(s) has (have) been added"
-
 
   Scenario: Create document folder in group
     Given I am on "/main/group/group.php?cid=1&sid=0"

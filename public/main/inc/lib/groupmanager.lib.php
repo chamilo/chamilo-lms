@@ -967,7 +967,7 @@ class GroupManager
         $table_group_cat = Database::get_course_table(TABLE_GROUP_CATEGORY);
         $cat_id = (int) $cat_id;
         $sql = "SELECT iid FROM $table_group
-                WHERE c_id = $course_id AND category_id='".$cat_id."'";
+                WHERE category_id='".$cat_id."'";
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
             while ($group = Database::fetch_object($res)) {
@@ -980,9 +980,16 @@ class GroupManager
                 Database::query($sql);
             }
         }
-        $sql = "DELETE FROM $table_group_cat
-                WHERE c_id = $course_id  AND iid='".$cat_id."'";
-        Database::query($sql);
+
+        $category = Database::getManager()->getRepository(CGroupCategory::class)->find($cat_id);
+        if ($category) {
+            Database::getManager()->remove($category);
+            Database::getManager()->flush();
+        }
+
+        /*$sql = "DELETE FROM $table_group_cat
+                WHERE iid='".$cat_id."'";
+        Database::query($sql);*/
 
         return true;
     }

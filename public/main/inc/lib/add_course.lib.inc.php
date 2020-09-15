@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CGroupCategory;
 use Chamilo\CourseBundle\Entity\CToolIntro;
 
 /**
@@ -303,27 +304,15 @@ class AddCourse
 
         /* Course homepage tools for platform admin only */
         /* Group tool */
-        Database::insert(
-            $TABLEGROUPCATEGORIES,
-            [
-                'title' => get_lang('Default groups'),
-                'description' => '',
-                'max_student' => 0,
-                'self_reg_allowed' => 0,
-                'self_unreg_allowed' => 0,
-                'groups_per_user' => 0,
-                'doc_state' => 1,
-                'calendar_state' => 1,
-                'work_state' => 1,
-                'announcements_state' => 1,
-                'forum_state' => 1,
-                'wiki_state' => 1,
-                'chat_state' => 1,
-            ]
-        );
+        $groupCategory = new CGroupCategory();
+        $groupCategory
+            ->setTitle(get_lang('Default groups'))
+            ->setParent($course)
+            ->addCourseLink($course)
+        ;
+        Database::getManager()->persist($groupCategory);
 
         $now = api_get_utc_datetime();
-
         $files = [
             ['path' => '/shared_folder', 'title' => get_lang('Folders of users'), 'filetype' => 'folder', 'size' => 0],
             ['path' => '/chat_files', 'title' => get_lang('Chat conversations history'), 'filetype' => 'folder', 'size' => 0],

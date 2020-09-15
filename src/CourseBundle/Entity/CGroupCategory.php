@@ -132,6 +132,20 @@ class CGroupCategory extends AbstractResource implements ResourceInterface
 
     public function __construct()
     {
+        $this->maxStudent = 0;
+        $this->description = '';
+        $this->selfRegAllowed = 0;
+        $this->selfUnregAllowed = 0;
+        $this->groupsPerUser = 0;
+
+        $this->announcementsState = 1;
+        $this->calendarState = 1;
+        $this->documentAccess = 1;
+        $this->chatState = 1;
+        $this->docState = 1;
+        $this->forumState = 1;
+        $this->wikiState = 1;
+        $this->workState = 1;
     }
 
     public function __toString(): string

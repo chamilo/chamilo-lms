@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\SettingsCurrent;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CGroup;
+use Chamilo\CourseBundle\Entity\CLp;
 use ChamiloSession as Session;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Finder\Finder;
@@ -1841,14 +1842,14 @@ function api_get_user_info_from_entity(
     return $result;
 }
 
-/**
- * @param int $userId
- *
- * @return User
- */
-function api_get_user_entity($userId)
+function api_get_lp_entity(int $id): ? CLp
 {
-    $userId = (int) $userId;
+    return Database::getManager()->getRepository(CLp::class)->find($id);
+}
+
+function api_get_user_entity(int $userId = 0): ?User
+{
+    $userId = $userId ?: api_get_user_id();
     $repo = UserManager::getRepository();
 
     /** @var User $user */

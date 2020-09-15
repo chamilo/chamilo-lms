@@ -1,12 +1,11 @@
-# features/login.feature
-@common
-Feature: User login
-  In order to log in
-  As any registered user
-  I need to be able to enter my details in the form and get in
+Feature: Fill users
 
   Scenario: Login as admin user successfully
-    Given I am a platform administrator
+    Given I am on "/login"
+    Then I should see "Sign in"
+    And I fill in "admin" for "login"
+    And I fill in "admin" for "password"
+    Then I press "submit"
     Then I should not see an error
 
   Scenario: Create tests users successfully

@@ -124,8 +124,8 @@ switch ($action) {
             $list = [];
             foreach ($categories as $item) {
                 $list['items'][] = [
-                    'id' => $item['code'],
-                    'text' => '('.$item['code'].') '.strip_tags($item['name']),
+                    'id' => $item['id'],
+                    'text' => strip_tags($item['name']),
                 ];
             }
 

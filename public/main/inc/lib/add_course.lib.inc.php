@@ -652,7 +652,6 @@ class AddCourse
         $visual_code = $params['visual_code'];
         $directory = $params['directory'];
         $tutor_name = isset($params['tutor_name']) ? $params['tutor_name'] : null;
-        $categoryId = isset($params['category_id']) ? (int) $params['category_id'] : '';
         $course_language = isset($params['course_language']) && !empty($params['course_language']) ? $params['course_language'] : api_get_setting(
             'platformLanguage'
         );
@@ -678,9 +677,10 @@ class AddCourse
         $unsubscribe = isset($params['unsubscribe']) ? (int) $params['unsubscribe'] : 0;
         $expiration_date = isset($params['expiration_date']) ? $params['expiration_date'] : null;
         $teachers = isset($params['teachers']) ? $params['teachers'] : null;
-        $status = isset($params['status']) ? $params['status'] : null;
+        $categories = isset($params['course_categories']) ? $params['course_categories'] : null;
 
         $TABLECOURSUSER = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $TABLECOURSERELCATEGORY = Database::get_main_table(TABLE_MAIN_COURSE_REL_CATEGORY);
         $ok_to_register_course = true;
 
         // Check whether all the needed parameters are present.
@@ -735,17 +735,15 @@ class AddCourse
 
         if ($ok_to_register_course) {
             $repo = Container::getCourseRepository();
-            $course = new \Chamilo\CoreBundle\Entity\Course();
-            /** @var \Chamilo\CoreBundle\Entity\CourseCategory $courseCategory */
-            $courseCategory = Container::getCourseCategoryRepository()->find($categoryId);
+            $categoryRepo = Container::getCourseCategoryRepository();
 
+            $course = new \Chamilo\CoreBundle\Entity\Course();
             $course
                 ->setCode($code)
                 ->setDirectory($directory)
                 ->setCourseLanguage($course_language)
                 ->setTitle($title)
                 ->setDescription(get_lang('Course Description'))
-                ->setCategory($courseCategory)
                 ->setVisibility($visibility)
                 ->setShowScore(1)
                 ->setDiskQuota($disk_quota)
@@ -757,6 +755,23 @@ class AddCourse
                 ->setUnsubscribe($unsubscribe)
                 ->setVisualCode($visual_code)
             ;
+
+            if (!empty($categories)) {
+                if (!is_array($categories)) {
+                    $categories = [$categories];
+                }
+
+                foreach ($categories as $key) {
+                    if (empty($key)) {
+                        continue;
+                    }
+
+                    $category = $categoryRepo->find($key);
+
+                    $course->addCategory($category);
+                }
+            }
+
             $repo->getEntityManager()->persist($course);
             $repo->getEntityManager()->flush();
 
@@ -795,12 +810,12 @@ class AddCourse
                         if (empty($key)) {
                             continue;
                         }
-                        $sql = "INSERT INTO ".$TABLECOURSUSER." SET
-                            c_id     = '".Database::escape_string($course_id)."',
-                            user_id         = '".Database::escape_string($key)."',
+                        $sql = "INSERT INTO " . $TABLECOURSUSER . " SET
+                            c_id     = '" . Database::escape_string($course_id) . "',
+                            user_id         = '" . Database::escape_string($key) . "',
                             status          = '1',
                             is_tutor        = '0',
-                            sort            = '".($sort + 1)."',
+                            sort            = '" . ($sort + 1) . "',
                             relation_type = 0,
                             user_course_cat = '0'";
                         Database::query($sql);

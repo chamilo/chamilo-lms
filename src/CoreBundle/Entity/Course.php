@@ -226,13 +226,17 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     protected $description;
 
     /**
-     * @var CourseCategory
+     * @var ArrayCollection
      * @ApiSubresource()
      * @Groups({"course:read", "course:write"})
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\CourseCategory", inversedBy="courses")
-     * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
+     * @ORM\ManyToMany(targetEntity="Chamilo\CoreBundle\Entity\CourseCategory", inversedBy="courses")
+     * @ORM\JoinTable(
+     *      name="course_rel_category",
+     *      joinColumns={@ORM\JoinColumn(name="course_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="course_category_id", referencedColumnName="id")}
+     * )
      */
-    protected $category;
+    protected $categories;
 
     /**
      * @var int Course visibility
@@ -391,6 +395,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         $this->users = new ArrayCollection();
         $this->urls = new ArrayCollection();
         $this->tools = new ArrayCollection();
+        $this->categories = new ArrayCollection();
         $this->gradebookCategories = new ArrayCollection();
         $this->gradebookEvaluations = new ArrayCollection();
         $this->gradebookLinks = new ArrayCollection();
@@ -756,23 +761,32 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * Set category.
      *
-     * @param CourseCategory $category
+     * @param ArrayCollection $categories
+     *
+     * @return Course
      */
-    public function setCategory(CourseCategory $category = null): self
+    public function setCategories(ArrayCollection $categories): self
     {
-        $this->category = $category;
+        $this->categories = $categories;
 
         return $this;
     }
 
-    /**
-     * Get category.
-     *
-     * @return CourseCategory
-     */
-    public function getCategory(): ?CourseCategory
+    public function getCategories()
     {
-        return $this->category;
+        return $this->categories;
+    }
+
+    public function addCategory(CourseCategory $category): self
+    {
+        $this->categories[] = $category;
+
+        return $this;
+    }
+
+    public function removeCategory(CourseCategory $category)
+    {
+        $this->categories->removeElement($category);
     }
 
     /**

@@ -6,6 +6,7 @@ use Chamilo\CoreBundle\Entity\CourseCategory;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\CourseCategoryRepository;
 use Chamilo\CoreBundle\Repository\CourseRepository;
+use Chamilo\CoreBundle\Framework\Container;
 
 $cidReset = true;
 
@@ -16,11 +17,8 @@ api_protect_admin_script();
 
 $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
 $em = Database::getManager();
-/** @var CourseRepository $courseRepo */
-$courseRepo = $em->getRepository('ChamiloCoreBundle:CourseCategory');
-/** @var CourseCategoryRepository $courseCategoriesRepo */
-$courseCategoriesRepo = $em->getRepository('ChamiloCoreBundle:CourseCategory');
-// Get all possible teachers.
+$courseCategoriesRepo = Container::getCourseCategoryRepository();
+
 $urlId = api_get_current_access_url_id();
 
 $courseId = isset($_GET['id']) ? $_GET['id'] : null;
@@ -146,43 +144,30 @@ $form->addText(
 $form->applyFilter('visual_code', 'strtoupper');
 $form->applyFilter('visual_code', 'html_filter');
 
-$countCategories = $courseCategoriesRepo->countAllInAccessUrl(
+$categories = $courseCategoriesRepo->getCategoriesByCourseIdAndAccessUrlId(
     $urlId,
+    $courseId,
     api_get_configuration_value('allow_base_course_category')
 );
-if ($countCategories >= 100) {
-    // Category code
-    $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_category';
 
-    $categorySelect = $form->addSelectAjax(
-        'category_id',
-        get_lang('Category'),
-        null,
-        ['url' => $url]
-    );
+$courseCategoryNames = [];
+$courseCategoryIds = [];
 
-    if (!empty($courseInfo['categoryCode'])) {
-        $data = \CourseCategory::getCategory($courseInfo['categoryCode']);
-        $categorySelect->addOption($data['name'], $data['code']);
-    }
-} else {
-    $categories = $courseCategoriesRepo->findAllInAccessUrl(
-        $urlId,
-        api_get_configuration_value('allow_base_course_category')
-    );
-    $categoriesOptions = [0 => get_lang('None')];
-
-    /** @var CourseCategory $category */
-    foreach ($categories as $category) {
-        $categoriesOptions[$category->getId()] = (string) $category;
-    }
-
-    $form->addSelect(
-        'category_id',
-        get_lang('Category'),
-        $categoriesOptions
-    );
+foreach ($categories as $category) {
+    $courseCategoryNames[$category->getId()] = $category->getName();
+    $courseCategoryIds[] = $category->getId();
 }
+
+$form->addSelectAjax(
+    'course_categories',
+    get_lang('Categories'),
+    $courseCategoryNames,
+    [
+        'url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_category',
+        'multiple' => 'multiple'
+    ]
+);
+$courseInfo['course_categories'] = $courseCategoryIds;
 
 $courseTeacherNames = [];
 
@@ -355,16 +340,10 @@ if ($form->validate()) {
     }
 
     $teachers = isset($course['course_teachers']) ? $course['course_teachers'] : '';
-    $categoryId = isset($course['category_id']) && !empty($course['category_id']) ? (int) $course['category_id'] : null;
     $department_url = $course['department_url'];
 
     if (!stristr($department_url, 'http://')) {
         $department_url = 'http://'.$department_url;
-    }
-
-    $category = null;
-    if (!empty($categoryId)) {
-        $category = $courseCategoriesRepo->find($categoryId);
     }
 
     /** @var \Chamilo\CoreBundle\Entity\Course $courseEntity */
@@ -379,11 +358,13 @@ if ($form->validate()) {
         ->setSubscribe($course['subscribe'])
         ->setUnsubscribe($course['unsubscribe'])
         ->setVisibility($visibility)
-        ->setCategory($category)
     ;
 
     $em->persist($courseEntity);
     $em->flush();
+
+    // Updating course categories
+    $courseCategoriesRepo->updateCourseRelCategoryByCourse($courseEntity, $course);
 
     // update the extra fields
     $courseFieldValue = new ExtraFieldValue('course');

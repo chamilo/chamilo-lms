@@ -27,4 +27,7 @@ Feature: Install portal
     Then I press "button_step6"
     Then wait the page to be loaded when ready
     Then wait the page to be loaded when ready
+    Then wait the page to be loaded when ready
     Then I should see "Step7"
+    Then I should see "Go to your newly created portal"
+

@@ -27,6 +27,7 @@
 <!--        <directory name="public/main/gradebook/lib/fe"/>-->
 <!--        <directory name="public/main/forum"/>-->
         <directory name="public/main/link" />
+<!--        <directory name="public/main/lp"/>-->
 
        <!-- <directory name="public/main/session" /> -->
 <!--        <directory name="public/main/inc/ajax" />-->

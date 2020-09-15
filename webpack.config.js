@@ -10,12 +10,12 @@ Encore
     .enableBuildNotifications()
 
     .addEntry('app', './assets/js/app.js')
-    .addEntry('vue', './assets/vue/main.js')
     .addEntry('bootstrap', './assets/js/bootstrap.js')
     .addEntry('exercise', './assets/js/exercise.js')
     .addEntry('free-jqgrid', './assets/js/free-jqgrid.js')
-    .addStyleEntry('css/app', './assets/css/app.scss')
+    .addEntry('vue', './assets/vue/main.js')
 
+    .addStyleEntry('css/app', './assets/css/app.scss')
     .addStyleEntry('css/chat', './assets/css/chat.css')
     .addStyleEntry('css/document', './assets/css/document.css')
     .addStyleEntry('css/editor', './assets/css/editor.css')
@@ -49,6 +49,16 @@ Encore
         }
     })*/
     .copyFiles([
+        {
+            from: './node_modules/fullcalendar/',
+            pattern: /(main.js)$/,
+            to: 'libs/fullcalendar/main.js'
+        },
+        {
+            from: './node_modules/fullcalendar/',
+            pattern: /(main.css)$/,
+            to: 'libs/fullcalendar/main.css'
+        },
         {
             from: './node_modules/multiselect-two-sides/dist/js',
             pattern: /(multiselect.js)$/,

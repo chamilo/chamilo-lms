@@ -11,7 +11,8 @@ Feature: User login
 
   Scenario: Create tests users successfully
     Given I am a platform administrator
-    And I am on "/main/admin/filler.php?fill=users"
+    Then I am on "/main/admin/filler.php?fill=users"
+    And wait for the page to be loaded
     Then I should not see an error
 
   Scenario: Login as student user successfully

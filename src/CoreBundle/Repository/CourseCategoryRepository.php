@@ -7,9 +7,9 @@ namespace Chamilo\CoreBundle\Repository;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseCategory;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\Query\Expr\Join;
-use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Class CCourseCategoryRepository.
@@ -59,7 +59,7 @@ class CourseCategoryRepository extends ServiceEntityRepository
      * Get all categories in an access url and course id.
      *
      * @param int  $accessUrl
-     * @param int $courseId
+     * @param int  $courseId
      * @param bool $allowBaseCategories
      *
      * @return array
@@ -124,7 +124,6 @@ class CourseCategoryRepository extends ServiceEntityRepository
         }
         $em->persist($course);
         $em->flush();
-
 
         // Add new categories
         $courseCategories = new ArrayCollection();

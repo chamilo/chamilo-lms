@@ -761,8 +761,6 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * Set category.
      *
-     * @param ArrayCollection $categories
-     *
      * @return Course
      */
     public function setCategories(ArrayCollection $categories): self

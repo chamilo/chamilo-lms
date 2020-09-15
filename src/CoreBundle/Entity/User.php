@@ -2275,4 +2275,36 @@ class User implements UserInterface, EquatableInterface
 
         return $sessions;
     }
+
+    /**
+     * Find the largest sort value in a given UserCourseCategory
+     * This method is used when we are moving a course to a different category
+     * and also when a user subscribes to courses (the new course is added at the end of the main category).
+     *
+     * Used to be implemented in global function \api_max_sort_value.
+     * Reimplemented using the ORM cache.
+     *
+     * @param UserCourseCategory|null $userCourseCategory the user_course_category
+     *
+     * @return int|mixed
+     */
+    public function getMaxSortValue($userCourseCategory = null)
+    {
+        $categoryCourses = $this->courses->matching(
+            Criteria::create()
+                ->where(Criteria::expr()->neq('relationType', COURSE_RELATION_TYPE_RRHH))
+                ->andWhere(Criteria::expr()->eq('userCourseCat', $userCourseCategory))
+        );
+
+        return $categoryCourses->isEmpty()
+            ? 0
+            : max(
+                $categoryCourses->map(
+                    /** @var CourseRelUser $courseRelUser */
+                    function ($courseRelUser) {
+                        return $courseRelUser->getSort();
+                    }
+                )->toArray()
+            );
+    }
 }

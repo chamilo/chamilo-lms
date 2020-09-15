@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CGroupCategory;
 use Chamilo\CourseBundle\Entity\CToolIntro;
@@ -733,11 +735,19 @@ class AddCourse
         }
         $course_id = 0;
 
+        $userId = empty($params['user_id']) ? api_get_user_id() : (int) $params['user_id'];
+        $user = api_get_user_entity($userId);
+        if (null === $user) {
+            error_log(sprintf('user_id "%s" is invalid', $userId));
+
+            return 0;
+        }
+
         if ($ok_to_register_course) {
             $repo = Container::getCourseRepository();
             $categoryRepo = Container::getCourseCategoryRepository();
 
-            $course = new \Chamilo\CoreBundle\Entity\Course();
+            $course = new Course();
             $course
                 ->setCode($code)
                 ->setDirectory($directory)
@@ -781,44 +791,46 @@ class AddCourse
                 // Default true
                 $addTeacher = isset($params['add_user_as_teacher']) ? $params['add_user_as_teacher'] : true;
                 if ($addTeacher) {
-                    $i_course_sort = CourseManager::userCourseSort(
-                        $user_id,
-                        $code
-                    );
-                    if (!empty($user_id)) {
-                        $sql = "INSERT INTO ".$TABLECOURSUSER." SET
-                                c_id     = '".$course_id."',
-                                user_id         = '".intval($user_id)."',
-                                status          = '1',
-                                is_tutor        = '0',
-                                sort            = '".($i_course_sort)."',
-                                relation_type = 0,
-                                user_course_cat = '0'";
-                        Database::query($sql);
-                    }
+                    $iCourseSort = CourseManager::userCourseSort($userId, $code);
+                    $courseRelTutor = (new CourseRelUser())
+                        ->setCourse($course)
+                        ->setUser($user)
+                        ->setStatus(true)
+                        ->setTutor(true)
+                        ->setSort($iCourseSort)
+                        ->setRelationType(0)
+                        ->setUserCourseCat(0)
+                    ;
+                    Database::getManager()->persist($courseRelTutor);
                 }
 
                 if (!empty($teachers)) {
+                    $sort = $user->getMaxSortValue();
                     if (!is_array($teachers)) {
                         $teachers = [$teachers];
                     }
                     foreach ($teachers as $key) {
-                        //just in case
-                        if ($key == $user_id) {
+                        // Just in case.
+                        if ($key == $userId) {
                             continue;
                         }
                         if (empty($key)) {
                             continue;
                         }
-                        $sql = "INSERT INTO " . $TABLECOURSUSER . " SET
-                            c_id     = '" . Database::escape_string($course_id) . "',
-                            user_id         = '" . Database::escape_string($key) . "',
-                            status          = '1',
-                            is_tutor        = '0',
-                            sort            = '" . ($sort + 1) . "',
-                            relation_type = 0,
-                            user_course_cat = '0'";
-                        Database::query($sql);
+                        $teacher = api_get_user_entity($key);
+                        if (is_null($teacher)) {
+                            continue;
+                        }
+                        $courseRelTeacher = (new CourseRelUser())
+                            ->setCourse($course)
+                            ->setUser($teacher)
+                            ->setStatus(true)
+                            ->setTutor(false)
+                            ->setSort($sort + 1)
+                            ->setRelationType(0)
+                            ->setUserCourseCat(0)
+                        ;
+                        Database::getManager()->persist($courseRelTeacher);
                     }
                 }
 
@@ -857,10 +869,11 @@ class AddCourse
                         ).' '.$siteName.' - '.$iname."\n";
                     $message .= get_lang('Course name').' '.$title."\n";
 
-                    if ($courseCategory) {
-                        $message .= get_lang(
-                                'Category'
-                            ).' '.$courseCategory->getCode()."\n";
+                    if ($course->getCategories()->count() > 0) {
+                        foreach ($course->getCategories() as $category) {
+                            $message .= get_lang('Category').': '.$category->getCode()."\n";
+                        }
+
                     }
                     $message .= get_lang('Coach').' '.$tutor_name."\n";
                     $message .= get_lang('Language').' '.$course_language;

@@ -261,6 +261,8 @@ class CourseRelUser
     public function setTutor($tutor)
     {
         $this->tutor = $tutor;
+
+        return $this;
     }
 
     /**

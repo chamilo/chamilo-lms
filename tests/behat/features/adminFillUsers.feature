@@ -5,7 +5,7 @@ Feature: Fill users
     Then I should see "Sign in"
     And I fill in "admin" for "login"
     And I fill in "admin" for "password"
-    Then I press "submit"
+    Then I press "Login"
     Then I should not see an error
 
   Scenario: Create tests users successfully

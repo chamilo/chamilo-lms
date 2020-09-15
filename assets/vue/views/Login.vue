@@ -10,7 +10,7 @@
             @submit="onSubmit"
           >
             <p class="h4 text-center mb-4">
-              {{ $t('Sing in') }}
+              {{ $t('Sign in') }}
             </p>
             <div class="grey-text">
               <b-form-input
@@ -30,6 +30,7 @@
                 required
               />
             </div>
+
             <div class="text-center">
               <b-button
                 block
@@ -39,6 +40,8 @@
                 {{ $t('Login') }}
               </b-button>
             </div>
+
+            <a href="/main/auth/lostPassword.php" id="forgot">Forgot password?</a>
           </form>
         </b-col>
         <b-col cols="4" />

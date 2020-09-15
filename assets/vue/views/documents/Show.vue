@@ -5,11 +5,11 @@
       :handle-delete="del"
     >
       <template slot="left">
-        <v-toolbar-title v-if="item">
-          {{
-            `${$options.servicePrefix} ${item['@id']}`
-          }}
-        </v-toolbar-title>
+<!--        <v-toolbar-title v-if="item">-->
+<!--          {{-->
+<!--            `${$options.servicePrefix} ${item['@id']}`-->
+<!--          }}-->
+<!--        </v-toolbar-title>-->
       </template>
     </Toolbar>
     <br>

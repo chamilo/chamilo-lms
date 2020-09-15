@@ -104,8 +104,8 @@ script:
   - cd tests/behat
   - ../../vendor/behat/behat/bin/behat features/adminFillUsers.feature -vvv
   - ../../vendor/behat/behat/bin/behat features/adminSettings.feature -vvv
-  - ../../vendor/behat/behat/bin/behat features/career.feature -v
-  - ../../vendor/behat/behat/bin/behat features/class.feature -v
+  - ../../vendor/behat/behat/bin/behat features/career.feature -vvv
+  - ../../vendor/behat/behat/bin/behat features/class.feature -vvv
 #  - ../../vendor/behat/behat/bin/behat features/companyReports.feature -v
   - ../../vendor/behat/behat/bin/behat features/course.feature -vvv
 #  - ../../vendor/behat/behat/bin/behat features/course_user_registration.feature -v

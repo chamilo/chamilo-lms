@@ -94,8 +94,15 @@ $subscribedUsersInLp = $itemRepo->getUsersSubscribedToItem(
 );
 
 $selectedChoices = [];
-foreach ($subscribedUsersInLp as $itemProperty) {
-    $selectedChoices[] = $itemProperty->getToUser()->getId();
+if (!empty($subscribedUsersInLp)) {
+    foreach ($subscribedUsersInLp as $itemProperty) {
+        if (!empty($itemProperty)) {
+            $getToUser = $itemProperty->getToUser();
+            if (!empty($getToUser)) {
+                $selectedChoices[] = $getToUser->getId();
+            }
+        }
+    }
 }
 
 //Building the form for Users
@@ -140,8 +147,15 @@ $subscribedGroupsInLp = $itemRepo->getGroupsSubscribedToItem(
 
 $selectedGroupChoices = [];
 /** @var CItemProperty $itemProperty */
-foreach ($subscribedGroupsInLp as $itemProperty) {
-    $selectedGroupChoices[] = $itemProperty->getGroup()->getId();
+if (!empty($subscribedGroupsInLp)) {
+    foreach ($subscribedGroupsInLp as $itemProperty) {
+        if (!empty($itemProperty)) {
+            $getGroup = $itemProperty->getGroup();
+            if (!empty($getGroup)) {
+                $selectedGroupChoices[] = $itemProperty->getGroup()->getId();
+            }
+        }
+    }
 }
 
 $groupMultiSelect = $form->addElement(

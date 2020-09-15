@@ -605,7 +605,6 @@ if ($nbStudents > 0) {
             20,
             'users_tracking'
         );
-        $table->direction = $trackingDirection ? $trackingDirection : 'ASC';
         $table->total_number_of_items = $nbStudents;
     } else {
         $conditions['include_invited_users'] = true;

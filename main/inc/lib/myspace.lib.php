@@ -1246,7 +1246,7 @@ class MySpace
                             .'&id_session='.$lpInfo['session_id']
                             .'&course='.$lpInfo['courseCode']
                         );
-                        $table .= "$reportLink " . $student['complete_name'] . "<br>";
+                        $table .= "$reportLink ".$student['complete_name']."<br>";
                         $totalStudent++;
                     }
                     $index++;

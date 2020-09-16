@@ -104,6 +104,7 @@ script:
   # Warm up
   - sudo chmod -R 777 var public
   - php bin/console cache:clear
+  - sudo chmod -R 777 var public
   - cd tests/behat
   - ../../vendor/behat/behat/bin/behat features/actionUserLogin.feature -vvv
   - ../../vendor/behat/behat/bin/behat features/adminFillUsers.feature -vvv

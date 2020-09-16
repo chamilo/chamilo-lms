@@ -3,8 +3,10 @@ Feature: Fill users
   Scenario: Create tests users successfully
     Given I am a platform administrator
     Then I am on "/main/admin/filler.php?fill=users"
-    And wait for the page to be loaded
-    Then I should not see an error
+    And wait very long for the page to be loaded
+    And wait very long for the page to be loaded
+    Then I should see "Inserted"
+    And I should not see an error
 
   Scenario: Login as student user successfully
     Given I am a student

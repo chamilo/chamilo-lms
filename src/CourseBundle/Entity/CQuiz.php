@@ -8,6 +8,7 @@ use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CourseBundle\Traits\ShowCourseResourcesInSessionTrait;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -66,9 +67,9 @@ class CQuiz extends AbstractResource implements ResourceInterface
     protected $sound;
 
     /**
-     * @var bool
+     * @var int
      *
-     * @ORM\Column(name="type", type="boolean", nullable=false)
+     * @ORM\Column(name="type", type="integer", nullable=false)
      */
     protected $type;
 
@@ -256,15 +257,36 @@ class CQuiz extends AbstractResource implements ResourceInterface
     protected $pageResultConfiguration;
 
     /**
+     * @var CQuizRelQuestion[]|ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CQuizRelQuestion", mappedBy="quiz"))
+     */
+    protected $quizRelQuestions;
+
+    /**
      * CQuiz constructor.
      */
     public function __construct()
     {
         $this->hideQuestionTitle = false;
+        $this->type = ONE_PER_PAGE;
         $this->showPreviousButton = true;
         $this->notifications = '';
         $this->autoLaunch = 0;
         $this->preventBackwards = 0;
+        $this->random = 0;
+        $this->randomAnswers = false;
+        $this->active = true;
+        $this->resultsDisabled = 0;
+        $this->maxAttempt = 1;
+        $this->feedbackType = 0;
+        $this->expiredTime = 0;
+        $this->propagateNeg = 0;
+        $this->saveCorrectAnswers = false;
+        $this->reviewAnswers = 0;
+        $this->randomByCategory = 0;
+        $this->displayCategoryName = 0;
+        $this->quizRelQuestions = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -346,12 +368,8 @@ class CQuiz extends AbstractResource implements ResourceInterface
 
     /**
      * Set type.
-     *
-     * @param bool $type
-     *
-     * @return CQuiz
      */
-    public function setType($type)
+    public function setType(int $type): self
     {
         $this->type = $type;
 
@@ -360,10 +378,8 @@ class CQuiz extends AbstractResource implements ResourceInterface
 
     /**
      * Get type.
-     *
-     * @return bool
      */
-    public function getType()
+    public function getType(): int
     {
         return $this->type;
     }
@@ -948,6 +964,19 @@ class CQuiz extends AbstractResource implements ResourceInterface
      */
     public function postPersist(LifecycleEventArgs $args)
     {
+    }
+
+    /**
+     * Returns the sum of question's ponderation
+     */
+    public function getMaxScore(): int
+    {
+        $maxScore = 0;
+        foreach ($this->quizRelQuestions as $relQuestion) {
+            $maxScore += $relQuestion->getQuestion()->getPonderation();
+        }
+
+        return $maxScore;
     }
 
     /**

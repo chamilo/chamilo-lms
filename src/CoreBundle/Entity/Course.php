@@ -116,6 +116,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     protected $resourceLinks;
 
     /**
+     * @var ArrayCollection|AccessUrlRelCourse[]
      * @ORM\OneToMany(targetEntity="AccessUrlRelCourse", mappedBy="course", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     protected $urls;
@@ -433,16 +434,20 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         foreach ($tools as $tool) {
             $this->addTool($tool);
         }
+
+        return $this;
     }
 
     public function addTool(CTool $tool)
     {
         $tool->setCourse($this);
         $this->tools[] = $tool;
+
+        return $this;
     }
 
     /**
-     * @return ArrayCollection
+     * @return AccessUrlRelCourse[]|ArrayCollection
      */
     public function getUrls()
     {
@@ -458,12 +463,16 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         foreach ($urls as $url) {
             $this->addUrl($url);
         }
+
+        return $this;
     }
 
     public function addUrlRelCourse(AccessUrlRelCourse $url)
     {
         $url->setCourse($this);
         $this->urls[] = $url;
+
+        return $this;
     }
 
     public function addUrl(AccessUrl $url)
@@ -472,6 +481,8 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         $urlRelCourse->setCourse($this);
         $urlRelCourse->setUrl($url);
         $this->addUrlRelCourse($urlRelCourse);
+
+        return $this;
     }
 
     /**
@@ -522,6 +533,8 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         foreach ($users as $user) {
             $this->addUsers($user);
         }
+
+        return $this;
     }
 
     public function addUsers(CourseRelUser $courseRelUser)
@@ -531,6 +544,8 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         if (!$this->hasSubscription($courseRelUser)) {
             $this->users[] = $courseRelUser;
         }
+
+        return $this;
     }
 
     /**
@@ -596,21 +611,15 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     public function addTeacher(User $user)
     {
         $this->addUser($user, 0, 'Trainer', User::COURSE_MANAGER);
+
+        return $this;
     }
 
     public function addStudent(User $user)
     {
         $this->addUser($user, 0, '', User::STUDENT);
-    }
 
-    /**
-     * Set id.
-     *
-     * @return int
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
+        return $this;
     }
 
     /**
@@ -1335,10 +1344,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this->issuedSkills;
     }
 
-    /**
-     * @return bool
-     */
-    public function hasSubscription(CourseRelUser $subscription)
+    public function hasSubscription(CourseRelUser $subscription): bool
     {
         if ($this->getUsers()->count()) {
             $criteria = Criteria::create()->where(
@@ -1362,7 +1368,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      * @param string $role
      * @param string $status
      */
-    public function addUser(User $user, $relationType, $role, $status)
+    public function addUser(User $user, $relationType, $role, $status): self
     {
         $courseRelUser = new CourseRelUser();
         $courseRelUser->setCourse($this);
@@ -1371,6 +1377,8 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         //$courseRelUser->setRole($role);
         $courseRelUser->setStatus($status);
         $this->addUsers($courseRelUser);
+
+        return $this;
     }
 
     /**

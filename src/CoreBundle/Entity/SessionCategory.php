@@ -33,7 +33,7 @@ class SessionCategory
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AccessUrl", inversedBy="sessionCategory", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="AccessUrl", inversedBy="sessionCategories", cascade={"persist"})
      * @ORM\JoinColumn(name="access_url_id", referencedColumnName="id")
      */
     protected $url;
@@ -75,10 +75,8 @@ class SessionCategory
 
     /**
      * Set url.
-     *
-     * @return SessionCategory
      */
-    public function setUrl(AccessUrl $url)
+    public function setUrl(AccessUrl $url): self
     {
         $this->url = $url;
 
@@ -104,10 +102,8 @@ class SessionCategory
      * Set name.
      *
      * @param string $name
-     *
-     * @return SessionCategory
      */
-    public function setName($name)
+    public function setName($name): self
     {
         $this->name = $name;
 
@@ -128,10 +124,8 @@ class SessionCategory
      * Set dateStart.
      *
      * @param \DateTime $dateStart
-     *
-     * @return SessionCategory
      */
-    public function setDateStart($dateStart)
+    public function setDateStart($dateStart): self
     {
         $this->dateStart = $dateStart;
 

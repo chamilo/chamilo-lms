@@ -125,10 +125,7 @@ class CourseRelUser
         return $this->id;
     }
 
-    /**
-     * @return $this
-     */
-    public function setCourse(Course $course)
+    public function setCourse(Course $course): self
     {
         $this->course = $course;
 
@@ -145,12 +142,7 @@ class CourseRelUser
         return $this->course;
     }
 
-    /**
-     * @param User $user
-     *
-     * @return $this
-     */
-    public function setUser($user)
+    public function setUser(User $user): self
     {
         $this->user = $user;
 
@@ -159,22 +151,16 @@ class CourseRelUser
 
     /**
      * Get User.
-     *
-     * @return User
      */
-    public function getUser()
+    public function getUser(): User
     {
         return $this->user;
     }
 
     /**
      * Set relationType.
-     *
-     * @param int $relationType
-     *
-     * @return CourseRelUser
      */
-    public function setRelationType($relationType)
+    public function setRelationType(int $relationType): self
     {
         $this->relationType = $relationType;
 
@@ -183,10 +169,8 @@ class CourseRelUser
 
     /**
      * Get relationType.
-     *
-     * @return int
      */
-    public function getRelationType()
+    public function getRelationType(): int
     {
         return $this->relationType;
     }
@@ -195,10 +179,8 @@ class CourseRelUser
      * Set status.
      *
      * @param bool $status
-     *
-     * @return CourseRelUser
      */
-    public function setStatus($status)
+    public function setStatus($status): self
     {
         $this->status = $status;
 
@@ -219,10 +201,8 @@ class CourseRelUser
      * Set sort.
      *
      * @param int $sort
-     *
-     * @return CourseRelUser
      */
-    public function setSort($sort)
+    public function setSort($sort): self
     {
         $this->sort = $sort;
 

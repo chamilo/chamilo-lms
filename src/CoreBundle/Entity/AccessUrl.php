@@ -5,7 +5,6 @@
 namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use Chamilo\CoreBundle\Traits\CourseTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -24,8 +23,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class AccessUrl extends AbstractResource implements ResourceInterface
 {
-    use CourseTrait;
-
     /**
      * @var int
      *
@@ -40,12 +37,12 @@ class AccessUrl extends AbstractResource implements ResourceInterface
     /**
      * @ORM\OneToMany(targetEntity="AccessUrlRelCourse", mappedBy="url", cascade={"persist"}, orphanRemoval=true)
      */
-    protected $course;
+    protected $courses;
 
     /**
      * @ORM\OneToMany(targetEntity="AccessUrlRelSession", mappedBy="url", cascade={"persist"}, orphanRemoval=true)
      */
-    protected $session;
+    protected $sessions;
 
     /**
      * @ORM\OneToMany(targetEntity="AccessUrlRelUser", mappedBy="url", cascade={"persist"}, orphanRemoval=true)
@@ -58,9 +55,14 @@ class AccessUrl extends AbstractResource implements ResourceInterface
     protected $settings;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SessionCategory", mappedBy="url", cascade={"persist"}, orphanRemoval=true)
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CoreBundle\Entity\SessionCategory",
+     *     mappedBy="url",
+     *     cascade={"persist"},
+     *     orphanRemoval=true
+     * )
      */
-    protected $sessionCategory;
+    protected $sessionCategories;
 
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\AccessUrlRelCourseCategory", mappedBy="url", cascade={"persist"}, orphanRemoval=true)
@@ -511,21 +513,6 @@ class AccessUrl extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    public function getSessionCategory()
-    {
-        return $this->sessionCategory;
-    }
-
-    /**
-     * @return AccessUrl
-     */
-    public function setSessionCategory($sessionCategory)
-    {
-        $this->sessionCategory = $sessionCategory;
-
-        return $this;
-    }
-
     /**
      * @return int
      */
@@ -542,6 +529,46 @@ class AccessUrl extends AbstractResource implements ResourceInterface
     public function setLimitCourses($limitCourses)
     {
         $this->limitCourses = $limitCourses;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCourses()
+    {
+        return $this->courses;
+    }
+
+    /**
+     * @param mixed $courses
+     *
+     * @return AccessUrl
+     */
+    public function setCourses($courses)
+    {
+        $this->courses = $courses;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSessionCategories()
+    {
+        return $this->sessionCategories;
+    }
+
+    /**
+     * @param mixed $sessionCategories
+     *
+     * @return AccessUrl
+     */
+    public function setSessionCategories($sessionCategories)
+    {
+        $this->sessionCategories = $sessionCategories;
 
         return $this;
     }

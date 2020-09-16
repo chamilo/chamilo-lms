@@ -8,7 +8,7 @@
 >
     <projectFiles>
         <directory name="src"/>
-<!--        <directory name="public/main/admin" />-->
+        <directory name="public/main/admin" />
         <directory name="public/main/announcements"/>
         <directory name="public/main/attendance"/>
 <!--        <directory name="public/main/badge"/>-->
@@ -97,7 +97,22 @@
             <directory name="src/GraphQlBundle"/>
             <directory name="src/LtiBundle"/>
 
+            <file name="public/main/admin/index.php"/>
             <file name="public/main/admin/db.php"/>
+            <file name="public/main/admin/settings.php"/>
+
+
+            <file name="public/main/admin/periodic_export.php"/>
+            <file name="public/main/admin/user_move_stats.php"/>
+
+            <file name="public/main/admin/settings.lib.php"/>
+            <file name="public/main/admin/user_update_import.php"/>
+            <file name="public/main/admin/teachers_time_by_session_report.php"/>
+            <file name="public/main/admin/sub_language*"/>
+            <file name="public/main/admin/ldap_*"/>
+            <file name="public/main/admin/special_exports.php"/>
+
+
             <file name="src/CoreBundle/Controller/EditorController.php"/>
             <file name="src/CoreBundle/Controller/ResourceController.php"/>
         </ignoreFiles>

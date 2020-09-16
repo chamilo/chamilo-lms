@@ -10,10 +10,7 @@ Feature: Users management as admin
   Scenario: See the users list link on the admin page
     Given I am on "/main/admin/index.php"
     Then I should see "Users list"
-
-  Scenario: See the user creation link on the admin page
-    And I am on "/main/admin/index.php"
-    Then I should see "Add a user"
+    And I should see "Add a user"
 
   Scenario: Create a user with only basic info
     And I am on "/main/admin/user_add.php"
@@ -25,6 +22,7 @@ Feature: Users management as admin
       | password  | smarshall             |
     And I check the "#send_mail_no" radio button selector
     And I press "submit"
+    And wait very long for the page to be loaded
     Then I should see "The user has been added"
 
   Scenario: Create a user with wrong username
@@ -37,6 +35,7 @@ Feature: Users management as admin
       | password  | smarshall             |
     And I check the "#send_mail_no" radio button selector
     And I press "submit"
+    And wait very long for the page to be loaded
     Then I should see "Only letters and numbers allowed"
 
   Scenario: Create a user with wrong email
@@ -49,6 +48,7 @@ Feature: Users management as admin
       | password  | Juls                  |
     And I check the "#send_mail_no" radio button selector
     And I press "submit"
+    And wait very long for the page to be loaded
     Then I should see "The email address is not complete or contains some invalid characters"
 
   Scenario: Search and delete a user
@@ -71,6 +71,7 @@ Feature: Users management as admin
     And I check the "#send_mail_no" radio button selector
     And I fill in select bootstrap static input "#status_select" select "4"
     And I press "submit"
+    And wait very long for the page to be loaded
     Then I should see "The user has been added"
 
   Scenario: Create a teacher user
@@ -84,6 +85,7 @@ Feature: Users management as admin
     And I fill in select bootstrap static input "#status_select" select "1"
     And I check the "#send_mail_no" radio button selector
     And I press "submit"
+    And wait very long for the page to be loaded
     Then I should see "The user has been added"
 
   Scenario: Create a student user
@@ -97,6 +99,7 @@ Feature: Users management as admin
     And I fill in select bootstrap static input "#status_select" select "5"
     And I check the "#send_mail_no" radio button selector
     And I press "submit"
+    And wait very long for the page to be loaded
     Then I should see "The user has been added"
 
   Scenario: HRM follows teacher
@@ -107,6 +110,7 @@ Feature: Users management as admin
     And I select "teacher firstname teacher lastname" from "NoAssignedUsersList[]"
     And I press "add_user_button"
     And I press "assign_user"
+    And wait very long for the page to be loaded
     Then I should see "The assigned users have been updated"
 
   Scenario: HRM follows student
@@ -117,6 +121,7 @@ Feature: Users management as admin
     And I select "student firstname student lastname" from "NoAssignedUsersList[]"
     And I press "add_user_button"
     And I press "assign_user"
+    And wait very long for the page to be loaded
     Then I should see "The assigned users have been updated"
 
   Scenario: HRM logs as teacher

@@ -28,6 +28,7 @@ Feature: Group tool
     When I fill in the following:
       | number_of_groups | 5 |
     And I press "submit"
+    And wait the page to be loaded when ready
     Then I should see "New groups creation"
     When I fill in the following:
       | group_0_places | 1 |
@@ -41,7 +42,7 @@ Feature: Group tool
     And I fill in select bootstrap static by text "#category_3" select "Group category 1"
     And I fill in select bootstrap static by text "#category_4" select "Group category 1"
     And I press "submit"
-    And wait the page to be loaded when ready
+    And wait very long for the page to be loaded
     Then I should see "group(s) has (have) been added"
 
   Scenario: Create document folder in group

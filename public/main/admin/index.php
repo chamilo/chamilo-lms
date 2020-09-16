@@ -434,7 +434,7 @@ if (api_is_platform_admin()) {
         'label' => get_lang('Tickets'),
     ];
 
-    if (true == api_get_configuration_value('db_manager_enabled') &&
+    /*if (true == api_get_configuration_value('db_manager_enabled') &&
         api_is_global_platform_admin()
     ) {
         $host = $_configuration['db_host'];
@@ -445,7 +445,7 @@ if (api_is_platform_admin()) {
             'url' => "db.php?username=$username&db=$databaseName&server=$host",
             'label' => get_lang('Database manager'),
         ];
-    }
+    }*/
 
     $blocks['settings']['items'] = $items;
     $blocks['settings']['extra'] = null;

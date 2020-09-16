@@ -1778,7 +1778,6 @@ class Display
             ];
         }
 
-
         return $session;
     }
 

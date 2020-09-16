@@ -103,7 +103,7 @@ if ($session) {
     }
 }
 
-if (isset($_GET['export']) && $session && ($coursesInfo && $usersInfo)) {
+if (isset($_GET['export']) && $session && $coursesInfo && $usersInfo) {
     $fileName = get_lang('Teachers time report').' '.api_get_local_time();
 
     $dataToExport = [];

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -19,6 +20,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 $extraFields = UserManager::createDataPrivacyExtraFields();
 Session::write('data_privacy_extra_fields', $extraFields);
+$userInfo = api_get_user_info();
 
 /**
  * Prepares the shared SQL query for the user table.
@@ -60,7 +62,7 @@ function prepare_user_sql_query($getCount)
     // adding the filter to see the user's only of the current access_url
     if ((api_is_platform_admin() || api_is_session_admin()) && api_get_multiple_access_url()) {
         $access_url_rel_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-        $sql .= " INNER JOIN $access_url_rel_user_table url_rel_user 
+        $sql .= " INNER JOIN $access_url_rel_user_table url_rel_user
                   ON (u.id=url_rel_user.user_id)";
     }
 
@@ -71,7 +73,7 @@ function prepare_user_sql_query($getCount)
     $extraFieldValue = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
     $sql .= " INNER JOIN $extraFieldValue v
               ON (
-                    u.id = v.item_id AND 
+                    u.id = v.item_id AND
                     (field_id = $extraFieldId OR field_id = $extraFieldIdDeleteAccount) AND
                     v.value = 1
               ) ";
@@ -218,9 +220,9 @@ function get_user_data($from, $number_of_items, $column, $direction)
             $user[0],
             USER_IMAGE_SIZE_SMALL
         );
-        $photo = '<img 
-            src="'.$userPicture.'" width="22" height="22" 
-            alt="'.api_get_person_name($user[2], $user[3]).'" 
+        $photo = '<img
+            src="'.$userPicture.'" width="22" height="22"
+            alt="'.api_get_person_name($user[2], $user[3]).'"
             title="'.api_get_person_name($user[2], $user[3]).'" />';
 
         if (1 == $user[7] && !empty($user[10])) {
@@ -482,7 +484,7 @@ if (!empty($action)) {
                     $number_of_affected_users = 0;
                     if (is_array($_POST['id'])) {
                         foreach ($_POST['id'] as $index => $user_id) {
-                            if ($user_id != $_user['user_id']) {
+                            if ($user_id != $userInfo['user_id']) {
                                 if (UserManager::delete_user($user_id)) {
                                     $number_of_affected_users++;
                                 }

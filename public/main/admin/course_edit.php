@@ -2,10 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\CourseCategory;
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Repository\CourseCategoryRepository;
-use Chamilo\CoreBundle\Repository\CourseRepository;
 use Chamilo\CoreBundle\Framework\Container;
 
 $cidReset = true;
@@ -164,7 +161,7 @@ $form->addSelectAjax(
     $courseCategoryNames,
     [
         'url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_category',
-        'multiple' => 'multiple'
+        'multiple' => 'multiple',
     ]
 );
 $courseInfo['course_categories'] = $courseCategoryIds;
@@ -297,7 +294,8 @@ if ($form->validate()) {
     $course = $form->getSubmitValues();
     $visibility = $course['visibility'];
 
-    global $_configuration;
+    // @todo should be check in the CourseListener
+    /*global $_configuration;
 
     if (isset($_configuration[$urlId]) &&
         isset($_configuration[$urlId]['hosting_limit_active_courses']) &&
@@ -312,14 +310,18 @@ if ($form->validate()) {
                 api_warn_hosting_contact('hosting_limit_active_courses');
 
                 Display::addFlash(
-                    Display::return_message(get_lang('Sorry, this installation has an active courses limit, which has now been reached. You can still create new courses, but only if you hide/disable at least one existing active course. To do this, edit a course from the administration courses list, and change the visibility to \'hidden\', then try creating this course again. To increase the maximum number of active courses allowed on this Chamilo installation, please contact your hosting provider or, if available, upgrade to a superior hosting plan.'))
+                    Display::return_message(
+                        get_lang(
+                            'Sorry, this installation has an active courses limit, which has now been reached. You can still create new courses, but only if you hide/disable at least one existing active course. To do this, edit a course from the administration courses list, and change the visibility to \'hidden\', then try creating this course again. To increase the maximum number of active courses allowed on this Chamilo installation, please contact your hosting provider or, if available, upgrade to a superior hosting plan.'
+                        )
+                    )
                 );
 
                 header('Location: course_list.php');
                 exit;
             }
         }
-    }
+    }*/
 
     $visual_code = $course['visual_code'];
     $visual_code = CourseManager::generate_course_code($visual_code);

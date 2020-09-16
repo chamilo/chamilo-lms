@@ -126,14 +126,6 @@ class CourseRelUser
     }
 
     /**
-     * @param int $id
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-    }
-
-    /**
      * @return $this
      */
     public function setCourse(Course $course)

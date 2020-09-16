@@ -102,6 +102,7 @@ script:
   - sed -i "s/APP_ENV='dev'/APP_ENV='test'/g" .env.local
   - cd tests/behat
   - ../../vendor/behat/behat/bin/behat features/adminFillUsers.feature -vvv
+  - ../../vendor/behat/behat/bin/behat features/actionUserLogin.feature -vvv
   - ../../vendor/behat/behat/bin/behat features/adminSettings.feature -vvv
   - ../../vendor/behat/behat/bin/behat features/career.feature -vvv
   - ../../vendor/behat/behat/bin/behat features/class.feature -vvv
@@ -114,7 +115,7 @@ script:
 #  - ../../vendor/behat/behat/bin/behat features/profile.feature -v
 #  - ../../vendor/behat/behat/bin/behat features/promotion.feature -v
 #  - ../../vendor/behat/behat/bin/behat features/registration.feature -v
-#  - ../../vendor/behat/behat/bin/behat features/sessionAccess.feature -v
+  - ../../vendor/behat/behat/bin/behat features/sessionAccess.feature -v
 #  - ../../vendor/behat/behat/bin/behat features/sessionManagement.feature -v
 #  - ../../vendor/behat/behat/bin/behat features/socialGroup.feature -v
 #  - ../../vendor/behat/behat/bin/behat features/systemAnnouncements.feature -v

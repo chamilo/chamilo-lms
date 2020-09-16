@@ -657,7 +657,6 @@ class AddCourse
         $course_language = isset($params['course_language']) && !empty($params['course_language']) ? $params['course_language'] : api_get_setting(
             'platformLanguage'
         );
-        $user_id = empty($params['user_id']) ? api_get_user_id() : intval($params['user_id']);
         $department_name = isset($params['department_name']) ? $params['department_name'] : null;
         $department_url = isset($params['department_url']) ? $params['department_url'] : null;
         $disk_quota = isset($params['disk_quota']) ? $params['disk_quota'] : null;
@@ -680,9 +679,6 @@ class AddCourse
         $expiration_date = isset($params['expiration_date']) ? $params['expiration_date'] : null;
         $teachers = isset($params['teachers']) ? $params['teachers'] : null;
         $categories = isset($params['course_categories']) ? $params['course_categories'] : null;
-
-        $TABLECOURSUSER = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $TABLECOURSERELCATEGORY = Database::get_main_table(TABLE_MAIN_COURSE_REL_CATEGORY);
         $ok_to_register_course = true;
 
         // Check whether all the needed parameters are present.
@@ -838,13 +834,12 @@ class AddCourse
                 //UrlManager::add_course_to_url($course_id, $accessUrlId);
 
                 // Add event to the system log.
-                $user_id = api_get_user_id();
                 Event::addEvent(
                     LOG_COURSE_CREATE,
                     LOG_COURSE_CODE,
                     $code,
                     api_get_utc_datetime(),
-                    $user_id,
+                    $userId,
                     $course_id
                 );
 
@@ -873,18 +868,15 @@ class AddCourse
                         foreach ($course->getCategories() as $category) {
                             $message .= get_lang('Category').': '.$category->getCode()."\n";
                         }
-
                     }
                     $message .= get_lang('Coach').' '.$tutor_name."\n";
                     $message .= get_lang('Language').' '.$course_language;
 
-                    $userInfo = api_get_user_info($user_id);
-
                     $additionalParameters = [
                         'smsType' => SmsPlugin::NEW_COURSE_BEEN_CREATED,
-                        'userId' => $user_id,
+                        'userId' => $userId,
                         'courseName' => $title,
-                        'creatorUsername' => $userInfo['username'],
+                        'creatorUsername' => $user->getUsername(),
                     ];
 
                     api_mail_html(

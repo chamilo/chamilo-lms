@@ -245,19 +245,6 @@ $form->addElement(
 //drh list (display only if student)
 $display = (isset($_POST['status']) && STUDENT == $_POST['status']) || !isset($_POST['status']) ? 'block' : 'none';
 
-//@todo remove the drh list here. This code is unused
-$form->addElement('html', '<div id="drh_list" style="display:'.$display.';">');
-
-if (isset($drh_list) && is_array($drh_list)) {
-    foreach ($drh_list as $drh) {
-        $drh_select->addOption(
-            api_get_person_name($drh['firstname'], $drh['lastname']),
-            $drh['user_id']
-        );
-    }
-}
-$form->addElement('html', '</div>');
-
 if (api_is_platform_admin()) {
     // Platform admin
     $group = [];

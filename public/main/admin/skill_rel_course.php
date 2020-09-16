@@ -36,7 +36,7 @@ $form->addHeader(get_lang('Add skills').$sessionName);
 
 $skillList = [];
 $em = Database::getManager();
-$items = $em->getRepository('ChamiloCoreBundle:SkillRelCourse')->findBy(
+$items = $em->getRepository(SkillRelCourse::class)->findBy(
     ['course' => $courseId, 'session' => $sessionId]
 );
 /** @var SkillRelCourse $skillRelCourse */

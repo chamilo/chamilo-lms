@@ -16,7 +16,7 @@ if (false == $allow) {
 }
 
 $em = Database::getManager();
-$repo = $em->getRepository('ChamiloCoreBundle:GradebookCategory');
+$repo = $em->getRepository(GradebookCategory::class);
 
 $maxItems = 20;
 
@@ -178,7 +178,7 @@ switch ($action) {
             );
             $form->addText('name', get_lang('Name'));
             $form->addText('weight', get_lang('Weight'));
-            $form->addLabel(get_lang('Course'), $category->getCourseCode());
+            $form->addLabel(get_lang('Course'), $category->getCourse()->getCode());
 
             $sql = "SELECT
                         depends,

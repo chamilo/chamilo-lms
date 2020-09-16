@@ -176,7 +176,7 @@ class Template
     /**
      * Render the template.
      *
-     * @param string $template           The template path
+     * @param string $template The template path
      */
     public function display($template)
     {

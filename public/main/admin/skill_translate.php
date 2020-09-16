@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
@@ -21,7 +22,7 @@ $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : 'name';
 
 if (isset($_GET['skill'])) {
     /** @var Skill $skill */
-    $skill = $em->find('ChamiloCoreBundle:Skill', intval($_GET['skill']));
+    $skill = $em->find(Skill::class, $_GET['skill']);
 
     if ('name' === $action) {
         $variableLanguage = ChamiloApi::getLanguageVar(
@@ -53,7 +54,7 @@ if (empty($originalName)) {
 $languageId = isset($_GET['sub_language']) ? intval($_GET['sub_language']) : 0;
 
 $languages = $em
-    ->getRepository('ChamiloCoreBundle:Language')
+    ->getRepository(Language::class)
     ->findAllPlatformSubLanguages();
 
 $languagesOptions = [0 => get_lang('none')];

@@ -1,5 +1,9 @@
 <?php
+
 /* For licensing terms, see /license.txt */
+
+use Chamilo\CoreBundle\Entity\Skill;
+use Skill as SkillManager;
 
 /**
  * Skill list for management.
@@ -14,7 +18,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
 
-Skill::isAllowed();
+SkillManager::isAllowed();
 
 $action = isset($_GET['action']) ? $_GET['action'] : 'list';
 $skillId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
@@ -23,7 +27,7 @@ $entityManager = Database::getManager();
 
 switch ($action) {
     case 'enable':
-        $skill = $entityManager->find('ChamiloCoreBundle:Skill', $skillId);
+        $skill = $entityManager->find(Skill::class, $skillId);
 
         if (is_null($skill)) {
             Display::addFlash(
@@ -56,8 +60,8 @@ switch ($action) {
         exit;
         break;
     case 'disable':
-        /** @var \Chamilo\CoreBundle\Entity\Skill $skill */
-        $skill = $entityManager->find('ChamiloCoreBundle:Skill', $skillId);
+        /** @var Skill $skill */
+        $skill = $entityManager->find(Skill::class, $skillId);
 
         if (is_null($skill)) {
             Display::addFlash(
@@ -77,12 +81,12 @@ switch ($action) {
 
             $entityManager->persist($skill);
 
-            $skillObj = new Skill();
+            $skillObj = new SkillManager();
             $children = $skillObj->getChildren($skill->getId());
 
             foreach ($children as $child) {
                 $skill = $entityManager->find(
-                    'ChamiloCoreBundle:Skill',
+                    Skill::class,
                     $child['id']
                 );
 
@@ -156,7 +160,7 @@ switch ($action) {
         }
 
         /* View */
-        $skill = new Skill();
+        $skill = new SkillManager();
         $skillList = $skill->get_all();
         $extraFieldSearchTagId = isset($_REQUEST['tag_id']) ? $_REQUEST['tag_id'] : 0;
 

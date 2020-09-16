@@ -2,9 +2,6 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\CourseCategory;
-use Chamilo\CoreBundle\Repository\CourseCategoryRepository;
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -16,8 +13,6 @@ $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')
 $interbreadcrumb[] = ['url' => 'course_list.php', 'name' => get_lang('Course list')];
 
 $em = Database::getManager();
-/** @var CourseCategoryRepository $courseCategoriesRepo */
-$courseCategoriesRepo = $em->getRepository('ChamiloCoreBundle:CourseCategory');
 // Get all possible teachers.
 $accessUrlId = api_get_current_access_url_id();
 

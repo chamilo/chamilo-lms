@@ -2,6 +2,7 @@
 /* For license terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Skill;
+use Chamilo\CoreBundle\Entity\Profile;
 
 /**
  * This script manages the skills, levels and profiles assignments.
@@ -10,8 +11,8 @@ $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 api_protect_admin_script();
 $em = Database::getManager();
-$profiles = $em->getRepository('ChamiloCoreBundle:Profile')->findAll();
-$list = $em->getRepository('ChamiloCoreBundle:Skill')->findAll();
+$profiles = $em->getRepository(Profile::class)->findAll();
+$list = $em->getRepository(Skill::class)->findAll();
 
 $listAction = api_get_self();
 $toolbarAction = '';
@@ -26,7 +27,7 @@ $id = isset($_GET['id']) ? $_GET['id'] : '';
 $item = null;
 if (!empty($id)) {
     /** @var Skill $item */
-    $item = $em->getRepository('ChamiloCoreBundle:Skill')->find($id);
+    $item = $em->getRepository(Skill::class)->find($id);
     if (!$item) {
         api_not_allowed();
     }
@@ -62,7 +63,7 @@ switch ($action) {
 
         if ($form->validate()) {
             $values = $form->exportValues();
-            $profile = $em->getRepository('ChamiloCoreBundle:Profile')->find($values['profile_id']);
+            $profile = $em->getRepository(Profile::class)->find($values['profile_id']);
             if ($profile) {
                 $item->setProfile($profile);
                 $em->persist($item);

@@ -103,7 +103,7 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
                 unsubscribe LIKE '".$keyword_unsubscribe."'";
 
         if (!empty($keyword_category)) {
-            $sql .= " AND category.id = ".$keyword_category . " ";
+            $sql .= " AND category.id = ".$keyword_category." ";
         }
     }
 
@@ -141,7 +141,7 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
         // get categories
         $sqlCategoriesByCourseId = "SELECT category.name FROM $tblCourseCategory category
             INNER JOIN $tblCourseRelCategory course_rel_category ON category.id = course_rel_category.course_category_id
-            WHERE course_rel_category.course_id = " . $course['id'];
+            WHERE course_rel_category.course_id = ".$course['id'];
         $resultCategories = Database::query($sqlCategoriesByCourseId);
         $categories = [];
 
@@ -151,7 +151,7 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
 
         // Place colour icons in front of courses.
         $show_visual_code = $course['visual_code'] != $course[2] ? Display::label($course['visual_code'], 'info') : null;
-        $course[1] = get_course_visibility_icon($course[8]).PHP_EOL
+        $course[1] = get_course_visibility_icon($courseInfo['visibility']).PHP_EOL
             .Display::url(Security::remove_XSS($course[1]), $courseInfo['course_public_url']).PHP_EOL
             .$show_visual_code;
         $course[5] = SUBSCRIBE_ALLOWED == $course[5] ? get_lang('Yes') : get_lang('No');
@@ -260,7 +260,7 @@ function get_course_data_by_session($from, $number_of_items, $column, $direction
     while ($course = Database::fetch_array($res)) {
         // Place colour icons in front of courses.
         $showVisualCode = $course['visual_code'] != $course[2] ? Display::label($course['visual_code'], 'info') : null;
-        $course[1] = get_course_visibility_icon($course[8]).
+        $course[1] = get_course_visibility_icon($course['col8']).
             '<a href="'.$courseUrl.$course[9].'/index.php">'.
             $course[1].
             '</a> '.
@@ -286,12 +286,14 @@ function get_course_data_by_session($from, $number_of_items, $column, $direction
 /**
  * Return an icon representing the visibility of the course.
  *
- * @param string $visibility
+ * @param int $visibility
  *
  * @return string
  */
 function get_course_visibility_icon($visibility)
 {
+    $visibility = (int) $visibility;
+
     $style = 'margin-bottom:0;margin-right:5px;';
     switch ($visibility) {
         case 0:
@@ -453,8 +455,7 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
         FormValidator::LAYOUT_INLINE
     );
     $url = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=search_session';
-    $sessionSelect = $sessionFilter->addElement(
-        'select_ajax',
+    $sessionSelect = $sessionFilter->addSelectAjax(
         'session_name',
         get_lang('Search course by session'),
         null,
@@ -504,7 +505,6 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
                 if (!sessionId) {
                     return;
                 }
-
                 window.location = "'.$courseListUrl.'?session_id="+sessionId;
             });
         });

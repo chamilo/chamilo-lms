@@ -93,20 +93,20 @@ $htmlHeadXtra[] = '<script>
         }
     }
 
-    $(function() {        
+    $(function() {
         $("#workflow_status").on("change", function() {
-            var roleId = $(this).find(":selected").val();            
+            var roleId = $(this).find(":selected").val();
             if (roleId != 0) {
                 window.location.replace("'.api_get_self().'?'.$paramsNoRole.'&roleId="+roleId);
             }
         });
-        
+
         $("[name=select_all]").on("click", function() {
             $("#workflow :checkbox").prop("checked", 1);
             $("#workflow :hidden").prop("value", 1);
             return false;
         });
-        
+
         $("[name=unselect_all]").on("click", function() {
             $("#workflow :checkbox").prop("checked", 0);
             $("#workflow :hidden").prop("value", 0);
@@ -147,7 +147,7 @@ ksort($options);
 $form->addElement('select', 'status', get_lang('Select role'), $options);
 
 $em = Database::getManager();
-$repo = $em->getRepository('ChamiloCoreBundle:ExtraFieldOptionRelFieldOption');
+$repo = $em->getRepository(ExtraFieldOptionRelFieldOption::class);
 
 $checks = $repo->findBy(
     ['fieldId' => $field_id, 'roleId' => $roleId]

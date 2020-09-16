@@ -27,8 +27,6 @@ $courses = [];
 $courses[''] = '--';
 $sql = "SELECT code,visual_code,title FROM $course_table ORDER BY visual_code";
 
-global $_configuration;
-
 if (api_is_multiple_url_enabled()) {
     $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
     $access_url_id = api_get_current_access_url_id();
@@ -83,7 +81,7 @@ if ($form->validate()) {
                 u.firstname 	AS FirstName,
                 u.email 		AS Email,
                 u.username	AS UserName,
-                ".(('none' != $_configuration['password_encryption']) ? " " : "u.password AS Password, ")."
+                ".(('none' != api_get_configuration_value('password_encryption')) ? " " : "u.password AS Password, ")."
                 u.auth_source	AS AuthSource,
                 u.status		AS Status,
                 u.official_code	AS OfficialCode,
@@ -102,7 +100,7 @@ if ($form->validate()) {
                     WHERE
                         u.user_id = scu.user_id AND
                         scu.c_id = $courseSessionId AND
-                        scu.session_id = $sessionId 
+                        scu.session_id = $sessionId
                     ORDER BY lastname,firstname";
         $filename = 'export_users_'.$courseSessionCode.'_'.$sessionInfo['name'].'_'.api_get_local_time();
     } else {
@@ -126,7 +124,7 @@ if ($form->validate()) {
 
     if (!empty($export['addcsvheader'])) {
         if ('1' == $export['addcsvheader'] && ('csv' == $export['file_type'] || 'xls' == $export['file_type'])) {
-            if ('none' != $_configuration['password_encryption']) {
+            if ('none' != api_get_configuration_value('password_encryption')) {
                 $data[] = [
                     'UserId',
                     'LastName',

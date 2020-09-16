@@ -789,12 +789,8 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
 
     /**
      * Set visibility.
-     *
-     * @param int $visibility
-     *
-     * @return Course
      */
-    public function setVisibility($visibility)
+    public function setVisibility(int $visibility): Course
     {
         $this->visibility = $visibility;
 
@@ -803,10 +799,8 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
 
     /**
      * Get visibility.
-     *
-     * @return int
      */
-    public function getVisibility()
+    public function getVisibility(): int
     {
         return (int) $this->visibility;
     }

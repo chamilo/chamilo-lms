@@ -15,7 +15,7 @@ $tool_name = get_lang('Edit a course request');
 api_protect_admin_script();
 
 // A check whether the course validation feature is enabled.
-$course_validation_feature = 'true' == api_get_setting('course_validation');
+$course_validation_feature = 'true' === api_get_setting('course_validation');
 
 // Filtering passed to this page parameters.
 $id = (int) ($_GET['id']);
@@ -55,8 +55,7 @@ if ($course_validation_feature) {
         // Course category.
         $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_category';
 
-        $courseSelect = $form->addElement(
-            'select_ajax',
+        $courseSelect = $form->addSelectAjax(
             'category_code',
             get_lang('Category'),
             null,
@@ -69,7 +68,12 @@ if ($course_validation_feature) {
         }
 
         // Course code.
-        $form->addText('wanted_code', get_lang('Course code'), false, ['size' => '$maxlength', 'maxlength' => $maxlength]);
+        $form->addText(
+            'wanted_code',
+            get_lang('Course code'),
+            false,
+            ['size' => '$maxlength', 'maxlength' => $maxlength]
+        );
         $form->applyFilter('wanted_code', 'html_filter');
         $form->addRule('wanted_code', get_lang('max. 20 characters, e.g. <i>INNOV21</i>'), 'maxlength', $maxlength);
         $form->addRule('wanted_code', get_lang('Required field'), 'required');

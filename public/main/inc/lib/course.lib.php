@@ -3211,8 +3211,6 @@ class CourseManager
     /**
      * Get course code(s) from visual code.
      *
-     * @deprecated
-     *
      * @param   string  Visual code
      *
      * @return array List of codes for the given visual code

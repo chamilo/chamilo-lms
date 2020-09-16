@@ -88,7 +88,7 @@ if ($allowRedirect) {
 
 $succeed = false;
 if ($form->validate()) {
-    if ($student_can_edit_in_session && $check) {
+    if ($student_can_edit_in_session) {
         $values = $form->getSubmitValues();
         // Process work
         $result = processWorkForm(

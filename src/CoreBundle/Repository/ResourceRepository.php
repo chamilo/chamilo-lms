@@ -16,6 +16,7 @@ use Chamilo\CoreBundle\Entity\ResourceRight;
 use Chamilo\CoreBundle\Entity\ResourceType;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Form\Resource\PersonalFileType;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CoreBundle\ToolChain;
 use Chamilo\CourseBundle\Entity\CGroup;
@@ -795,5 +796,46 @@ class ResourceRepository extends EntityRepository
         $em->flush();
 
         return true;
+    }
+
+    public function getTotalSpaceByCourse(Course $course, CGroup $group = null, Session $session = null): int
+    {
+        $repo = $this->getRepository();
+
+        $qb = $repo->createQueryBuilder('resource');
+        $qb
+            ->select('SUM(file.size) as total')
+            ->innerJoin('resource.resourceNode', 'node')
+            ->innerJoin('node.resourceLinks', 'l')
+            ->innerJoin('node.resourceFile', 'file')
+            ->where('l.course = :course')
+            ->andWhere('l.visibility <> :visibility')
+            ->andWhere('file IS NOT NULL')
+            ->setParameters(
+                [
+                    'course' => $course,
+                    'visibility' => ResourceLink::VISIBILITY_DELETED,
+                ]
+            );
+
+        if (null === $group) {
+            $qb->andWhere('l.group IS NULL');
+        } else {
+            $qb
+                ->andWhere('l.group = :group')
+                ->setParameter('group', $group);
+        }
+
+        if (null === $session) {
+            $qb->andWhere('l.session IS NULL');
+        } else {
+            $qb
+                ->andWhere('l.session = :session')
+                ->setParameter('session', $session);
+        }
+
+        $query = $qb->getQuery();
+
+        return (int) $query->getSingleScalarResult();
     }
 }

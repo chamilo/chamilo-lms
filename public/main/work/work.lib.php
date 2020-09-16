@@ -7,6 +7,7 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CStudentPublicationComment;
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Entity\Course;
 
 /**
  *  @author Thomas, Hugues, Christophe - original version
@@ -2222,10 +2223,8 @@ function get_work_user_list(
         $repo = Container::getStudentPublicationRepository();
         while ($work = Database::fetch_array($result, 'ASSOC')) {
             /** @var CStudentPublication $studentPublication */
-            $studentPublication = $repo->find($work['iid']);
-
-            $item_id = $work['iid'];
-            $dbTitle = $work['title'];
+            $studentPublication = $repo->find($work['id']);
+            $item_id = $work['id'];
             // Get the author ID for that document from the item_property table
             $is_author = false;
             $can_read = false;
@@ -3982,15 +3981,15 @@ function setWorkUploadForm($form, $uploadFormType = 0)
 }
 
 /**
- * @param array $my_folder_data
- * @param array $_course
- * @param bool  $isCorrection
- * @param array $workInfo
- * @param array $file
+ * @param array  $my_folder_data
+ * @param Course $course
+ * @param bool   $isCorrection
+ * @param array  $workInfo
+ * @param array  $file
  *
  * @return array
  */
-function uploadWork($my_folder_data, $_course, $isCorrection = false, $workInfo = [], $file = [])
+function uploadWork($my_folder_data, $course, $isCorrection = false, $workInfo = [], $file = [])
 {
     if (isset($_FILES['file']) && !empty($_FILES['file'])) {
         $file = $_FILES['file'];
@@ -3999,7 +3998,9 @@ function uploadWork($my_folder_data, $_course, $isCorrection = false, $workInfo 
     if (empty($file['size'])) {
         return [
             'error' => Display:: return_message(
-                get_lang('There was a problem uploading your document: the received file had a 0 bytes size on the server. Please, review your local file for any corruption or damage, then try again.'),
+                get_lang(
+                    'There was a problem uploading your document: the received file had a 0 bytes size on the server. Please, review your local file for any corruption or damage, then try again.'
+                ),
                 'error'
             ),
         ];
@@ -4019,7 +4020,9 @@ function uploadWork($my_folder_data, $_course, $isCorrection = false, $workInfo 
     if (empty($filesize)) {
         return [
             'error' => Display::return_message(
-                get_lang('There was a problem uploading your document: the received file had a 0 bytes size on the server. Please, review your local file for any corruption or damage, then try again.'),
+                get_lang(
+                    'There was a problem uploading your document: the received file had a 0 bytes size on the server. Please, review your local file for any corruption or damage, then try again.'
+                ),
                 'error'
             ),
         ];
@@ -4035,13 +4038,18 @@ function uploadWork($my_folder_data, $_course, $isCorrection = false, $workInfo 
     }*/
 
     $repo = Container::getDocumentRepository();
-    $totalSpace = $repo->getTotalSpace($_course['real_id']);
-    $course_max_space = DocumentManager::get_course_quota($_course['code']);
+    $totalSpace = $repo->getTotalSpaceByCourse($course);
+    $course_max_space = DocumentManager::get_course_quota($course->getCode());
     $total_size = $filesize + $totalSpace;
 
     if ($total_size > $course_max_space) {
         return [
-            'error' => Display::return_message(get_lang('The upload has failed. Either you have exceeded your maximum quota, or there is not enough disk space.'), 'error'),
+            'error' => Display::return_message(
+                get_lang(
+                    'The upload has failed. Either you have exceeded your maximum quota, or there is not enough disk space.'
+                ),
+                'error'
+            ),
         ];
     }
 
@@ -4225,6 +4233,8 @@ function processWorkForm(
     $checkDuplicated = false,
     $showFlashMessage = true
 ) {
+    $courseEntity = $courseInfo['entity'];
+
     $courseId = $courseInfo['real_id'];
     $groupId = (int) $groupId;
     $sessionId = (int) $sessionId;
@@ -4260,10 +4270,10 @@ function processWorkForm(
                 $result['error'] = get_lang('You have already sent this file or another file with the same name. Please make sure you only upload each file once.');
                 $workData['error'] = get_lang(' already exists.');
             } else {
-                $result = uploadWork($workInfo, $courseInfo, false, [], $file);
+                $result = uploadWork($workInfo, $courseEntity, false, [], $file);
             }
         } else {
-            $result = uploadWork($workInfo, $courseInfo, false, [], $file);
+            $result = uploadWork($workInfo, $courseEntity, false, [], $file);
         }
 
         if (isset($result['error'])) {

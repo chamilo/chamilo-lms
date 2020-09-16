@@ -30,7 +30,7 @@ $interbreadcrumb[] = [
 
 $folderData = get_work_data_by_id($work['parent_id']);
 $courseInfo = api_get_course_info();
-
+$courseEntity = api_get_course_entity();
 $isCourseManager = api_is_platform_admin() || api_is_coach() || api_is_allowed_to_edit(false, false, true);
 
 $allowEdition = false;
@@ -116,7 +116,7 @@ if ((user_is_author($id) || $isDrhOfCourse || $allowEdition || $isDrhOfSession) 
 
                     $resultUpload = uploadWork(
                         $folderData,
-                        $courseInfo,
+                        $courseEntity,
                         true,
                         $work
                     );

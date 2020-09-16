@@ -174,11 +174,11 @@ function search_users($needle, $type)
                             WHERE
                                 access_url_id = '$access_url_id' AND
                                 (
-                                    username LIKE '$needle%' OR 
-                                    lastname LIKE '$needle%' OR 
+                                    username LIKE '$needle%' OR
+                                    lastname LIKE '$needle%' OR
                                     firstname LIKE '$needle%'
-                                ) AND 
-                                user.status <> 6 AND 
+                                ) AND
+                                user.status <> 6 AND
                                 user.status <> ".DRH."
                             $order_clause LIMIT 11
                         ";
@@ -275,7 +275,7 @@ function add_user_to_session (code, content) {
 	}
 	destination.options[destination.length] = new Option(content,code);
 	destination.selectedIndex = -1;
-	
+
 	$("#remove_user").show();
 	sortOptions(destination.options);
 }
@@ -371,8 +371,6 @@ if ($ajax_search) {
             continue;
         }
     }
-
-    unset($users); //clean to free memory
 } else {
     // Filter by Extra Fields
     $extra_field_result = [];

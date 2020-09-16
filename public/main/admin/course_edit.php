@@ -169,8 +169,7 @@ $courseInfo['course_categories'] = $courseCategoryIds;
 $courseTeacherNames = [];
 
 foreach ($course_teachers as $courseTeacherId) {
-    /** @var User $courseTeacher */
-    $courseTeacher = UserManager::getRepository()->find($courseTeacherId);
+    $courseTeacher = api_get_user_entity($courseTeacherId);
     $courseTeacherNames[$courseTeacher->getId()] = UserManager::formatUserFullName($courseTeacher, true);
 }
 

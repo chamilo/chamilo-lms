@@ -3,6 +3,7 @@
 
 use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\Promotion;
 use Chamilo\CoreBundle\Entity\SessionRelCourse;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Repository\SequenceRepository;
@@ -47,10 +48,7 @@ $table_access_url_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER
 
 $em = Database::getManager();
 $sessionInfo = api_get_session_info($sessionId);
-/** @var SessionRepository $sessionRepository */
-$sessionRepository = $em->getRepository('ChamiloCoreBundle:Session');
-/** @var Session $session */
-$session = $sessionRepository->find($sessionId);
+$session = api_get_session_entity($sessionId);
 $sessionCategory = $session->getCategory();
 
 $action = isset($_GET['action']) ? $_GET['action'] : null;
@@ -376,7 +374,7 @@ if (!empty($userList)) {
 }
 
 /** @var SequenceRepository $repo */
-$repo = $em->getRepository('ChamiloCoreBundle:SequenceResource');
+$repo = $em->getRepository(SequenceResource::class);
 $requirementAndDependencies = $repo->getRequirementAndDependencies(
     $sessionId,
     SequenceResource::SESSION_TYPE
@@ -395,7 +393,7 @@ if (!empty($requirementAndDependencies['dependencies'])) {
 
 $promotion = null;
 if (!empty($sessionInfo['promotion_id'])) {
-    $promotion = $em->getRepository('ChamiloCoreBundle:Promotion');
+    $promotion = $em->getRepository(Promotion::class);
     $promotion = $promotion->find($sessionInfo['promotion_id']);
 }
 

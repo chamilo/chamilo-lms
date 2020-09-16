@@ -8,6 +8,7 @@ use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Entity\SettingsCurrent;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\UserCourseCategory;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CLp;
@@ -1842,7 +1843,7 @@ function api_get_user_info_from_entity(
     return $result;
 }
 
-function api_get_lp_entity(int $id): ? CLp
+function api_get_lp_entity(int $id): ?CLp
 {
     return Database::getManager()->getRepository(CLp::class)->find($id);
 }
@@ -1858,10 +1859,7 @@ function api_get_user_entity(int $userId = 0): ?User
     return $user;
 }
 
-/**
- * @return User|null
- */
-function api_get_current_user()
+function api_get_current_user(): ?User
 {
     $isLoggedIn = Container::$container->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED');
     if (false === $isLoggedIn) {
@@ -2302,10 +2300,8 @@ function api_get_group_entity($id = 0): ?CGroup
 
 /**
  * @param int $id
- *
- * @return AccessUrl
  */
-function api_get_url_entity($id = 0)
+function api_get_url_entity($id = 0): ?AccessUrl
 {
     if (empty($id)) {
         $id = api_get_current_access_url_id();
@@ -4576,29 +4572,17 @@ function api_get_themes($getOnlyThemeFromVirtualInstance = false)
  * This function is used when we are moving a course to a different category
  * and also when a user subscribes to courses (the new course is added at the end of the main category.
  *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- *
- * @param int $user_course_category the id of the user_course_category
- * @param int $user_id
+ * @param int $courseCategoryId the id of the user_course_category
+ * @param int $userId
  *
  * @return int the value of the highest sort of the user_course_category
  */
-function api_max_sort_value($user_course_category, $user_id)
+function api_max_sort_value($courseCategoryId, $userId)
 {
-    $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-    $sql = "SELECT max(sort) as max_sort FROM $tbl_course_user
-            WHERE
-                user_id='".intval($user_id)."' AND
-                relation_type<>".COURSE_RELATION_TYPE_RRHH." AND
-                user_course_cat='".intval($user_course_category)."'";
-    $result_max = Database::query($sql);
-    if (1 == Database::num_rows($result_max)) {
-        $row_max = Database::fetch_array($result_max);
+    $user = api_get_user_entity($userId);
+    $userCourseCategory = Database::getManager()->getRepository(UserCourseCategory::class)->find($courseCategoryId);
 
-        return $row_max['max_sort'];
-    }
-
-    return 0;
+    return null === $user ? 0 : $user->getMaxSortValue($userCourseCategory);
 }
 
 /**

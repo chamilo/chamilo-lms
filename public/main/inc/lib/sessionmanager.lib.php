@@ -4372,24 +4372,6 @@ class SessionManager
 
     /**
      * @param int $user_id
-     *
-     * @return array
-     *
-     * @deprecated use get_sessions_by_general_coach()
-     */
-    public static function get_sessions_by_coach($user_id)
-    {
-        $session_table = Database::get_main_table(TABLE_MAIN_SESSION);
-
-        return Database::select(
-            '*',
-            $session_table,
-            ['where' => ['id_coach = ?' => $user_id]]
-        );
-    }
-
-    /**
-     * @param int $user_id
      * @param int $courseId
      * @param int $session_id
      *

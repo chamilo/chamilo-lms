@@ -42,8 +42,7 @@ foreach ($list as $mail) {
         $pass = api_substr($row['username'], 0, 4).rand(0, 9).rand(0, 9);
 
         if ($user) {
-            /** @var User $user */
-            $user = $repository->find($row['user_id']);
+            $user = api_get_user_entity($row['user_id']);
             $user->setPlainPassword($pass);
             $userManager->updateUser($user, true);
         } else {

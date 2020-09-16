@@ -1,13 +1,5 @@
 Feature: Fill users
 
-  Scenario: Login as admin user successfully
-    Given I am on "/login"
-    Then I should see "Sign in"
-    And I fill in "admin" for "login"
-    And I fill in "admin" for "password"
-    Then I press "Login"
-    Then I should not see an error
-
   Scenario: Create tests users successfully
     Given I am a platform administrator
     Then I am on "/main/admin/filler.php?fill=users"

@@ -28,10 +28,8 @@ class HTML_QuickForm_Rule_HTML extends HTML_QuickForm_Rule
     /**
      * Get allowed tags.
      *
-     * @param int  $mode     NO_HTML, STUDENT_HTML, TEACHER_HTML,
-     *                       STUDENT_HTML_FULLPAGE or TEACHER_HTML_FULLPAGE
-     * @param bool $fullpage if true, the allowed tags for full-page editing
-     *                       are returned
+     * @param int $mode NO_HTML, STUDENT_HTML, TEACHER_HTML,
+     *                  STUDENT_HTML_FULLPAGE or TEACHER_HTML_FULLPAGE
      */
     public static function get_allowed_tags($mode)
     {

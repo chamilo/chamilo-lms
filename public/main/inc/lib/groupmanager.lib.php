@@ -997,20 +997,11 @@ class GroupManager
     /**
      * Create group category.
      *
-     * @param string $title                      The title of the new category
-     * @param string $description                The description of the new category
-     * @param int    $doc_state
-     * @param int    $work_state
-     * @param int    $calendar_state
-     * @param int    $announcements_state
-     * @param int    $forum_state
-     * @param int    $wiki_state
-     * @param int    $chat_state
-     * @param int    $selfRegistrationAllowed    allow users to self register
-     * @param int    $selfUnRegistrationAllowed  allow user to self unregister
-     * @param int    $maximum_number_of_students
-     * @param int    $groups_per_user
-     * @param int    $documentAccess             document access
+     * @param string $title                     The title of the new category
+     * @param string $description               The description of the new category
+     * @param int    $selfRegistrationAllowed   allow users to self register
+     * @param int    $selfUnRegistrationAllowed allow user to self unregister
+     * @param int    $documentAccess            document access
      *
      * @return mixed
      */
@@ -1374,7 +1365,6 @@ class GroupManager
     /**
      * Get only students from a group (not tutors).
      *
-     * @param int  $group_id         iid
      * @param bool $filterOnlyActive
      *
      * @return array

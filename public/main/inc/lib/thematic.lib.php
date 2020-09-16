@@ -1130,8 +1130,7 @@ class Thematic
     /**
      * Delete a thematic plan description.
      *
-     * @param int $thematic_id      Thematic id
-     * @param int $description_type Description type
+     * @param int $thematic_id Thematic id
      *
      * @return int Affected rows
      */

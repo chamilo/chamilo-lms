@@ -239,8 +239,7 @@ function handleForum($url)
 /**
  * This function displays the form that is used to add a forum category.
  *
- * @param array $inputvalues (deprecated, set to null when calling)
- * @param int   $lp_id       Learning path ID
+ * @param int $lp_id Learning path ID
  *
  * @return string
  *
@@ -1430,7 +1429,6 @@ function get_forums_in_category($categoryId, $courseId = 0)
  * Since it does not take the forum category into account there probably
  * will be two or more forums that have forum_order=1, ...
  *
- * @param int  $id                 forum id
  * @param bool $includeGroupsForum
  * @param int  $sessionId
  *
@@ -1800,7 +1798,6 @@ function get_last_post_information($forum_id, $show_invisibles = false, $course_
 /**
  * Retrieve all the threads of a given forum.
  *
- * @param int      $forum_id
  * @param int|null $courseId  Optional If is null then it is considered the current course
  * @param int|null $sessionId Optional. If is null then it is considered the current session
  *
@@ -5775,8 +5772,7 @@ function get_name_thread_by_id($thread_id)
 /**
  * This function gets all the post written by an user.
  *
- * @param int    $user_id
- * @param string $course_code
+ * @param int $user_id
  *
  * @return string
  */
@@ -5856,10 +5852,9 @@ function get_all_post_from_user($user_id, $courseId)
 }
 
 /**
- * @param string $course_code
- * @param int    $thread_id
- * @param int    $user_id
- * @param int    $limit
+ * @param int $thread_id
+ * @param int $user_id
+ * @param int $limit
  *
  * @return array
  */

@@ -967,7 +967,7 @@ class CQuiz extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Returns the sum of question's ponderation
+     * Returns the sum of question's ponderation.
      */
     public function getMaxScore(): int
     {

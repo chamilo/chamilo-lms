@@ -423,8 +423,6 @@ function domesticate($input)
  *         However the function simply returns the submitted text without any
  *         transformation if it already contains some "<a href:" or "<img src=".
  *
- * @param string $text text to be converted
- *
  * @return text after conversion
  *
  * @author Rewritten by Nathan Codding - Feb 6, 2001.

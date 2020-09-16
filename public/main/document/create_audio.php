@@ -241,7 +241,6 @@ Display::display_footer();
 /**
  * This function save a post into a file mp3 from google services.
  *
- * @param $filepath
  * @param $dir
  *
  * @author Juan Carlos Raña Trabado <herodoto@telefonica.net>

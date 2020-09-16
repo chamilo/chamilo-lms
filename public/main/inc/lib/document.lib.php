@@ -906,13 +906,12 @@ class DocumentManager
      * This check if a document has the readonly property checked, then see if the user
      * is the owner of this file, if all this is true then return true.
      *
-     * @param array  $_course
-     * @param int    $user_id     id of the current user
-     * @param string $file        path stored in the database (if not defined, $documentId must be used)
-     * @param int    $document_id in case you don't have the file path ,
-     *                            insert the id of the file here and leave $file in blank ''
-     * @param bool   $to_delete
-     * @param int    $sessionId
+     * @param array $_course
+     * @param int   $user_id     id of the current user
+     * @param int   $document_id in case you don't have the file path ,
+     *                           insert the id of the file here and leave $file in blank ''
+     * @param bool  $to_delete
+     * @param int   $sessionId
      *
      * @return bool true/false
      * */
@@ -1649,7 +1648,6 @@ class DocumentManager
      * Return all content to replace and all content to be replace.
      *
      * @param int  $user_id
-     * @param int  $course_id
      * @param bool $is_preview
      *
      * @return array

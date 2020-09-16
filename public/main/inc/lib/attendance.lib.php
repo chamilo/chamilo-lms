@@ -59,8 +59,6 @@ class Attendance
     /**
      * Get the total number of attendance inside current course and current session.
      *
-     * @param int $active
-     *
      * @return int
      *
      * @see SortableTable#get_total_number_of_items()
@@ -2804,8 +2802,7 @@ class Attendance
     /**
      * It's used to print attendance sheet.
      *
-     * @param string $action
-     * @param int    $attendance_id
+     * @param int $attendance_id
      */
     public function attendance_sheet_export_to_pdf(
         $attendance_id,

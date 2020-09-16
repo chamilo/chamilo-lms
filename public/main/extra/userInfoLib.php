@@ -86,12 +86,11 @@ function edit_cat_def($id, $title, $comment, $nbline)
  * @author - Hugues peeters <peeters@ipm.ucl.ac.be>
  * @author - Christophe Gesche <gesche@ipm.ucl.ac.be>
  *
- * @param int  $id     - id of the category
- *                     or "ALL" for all category
- * @param bool $force  - FALSE (default) : prevents removal if users have
- *                     already fill this category
- *                     TRUE : bypass user content existence check
- * @param int  $nbline - lines number for the field the user will fill
+ * @param int  $id    - id of the category
+ *                    or "ALL" for all category
+ * @param bool $force - FALSE (default) : prevents removal if users have
+ *                    already fill this category
+ *                    TRUE : bypass user content existence check
  *
  * @return bool - TRUE if succeed, ELSE otherwise
  */

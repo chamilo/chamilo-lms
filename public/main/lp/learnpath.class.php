@@ -2166,7 +2166,6 @@ class learnpath
      * of its prerequisite is completed, considering the time availability and
      * the LP visibility.
      *
-     * @param int   $lp_id
      * @param int   $student_id
      * @param array $courseInfo
      * @param int   $sessionId
@@ -7402,9 +7401,7 @@ class learnpath
      * Return the HTML form to display an item (generally a dir item).
      *
      * @param CLpItem $lpItem
-     * @param string  $title
      * @param string  $action
-     * @param string  $extra_info
      *
      * @throws Exception
      * @throws HTML_QuickForm_Error

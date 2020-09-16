@@ -1,8 +1,8 @@
 <?php
 /* For license terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\Skill;
 use Chamilo\CoreBundle\Entity\Profile;
+use Chamilo\CoreBundle\Entity\Skill;
 
 /**
  * This script manages the skills, levels and profiles assignments.

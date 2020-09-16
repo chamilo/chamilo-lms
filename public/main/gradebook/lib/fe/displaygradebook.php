@@ -12,8 +12,6 @@ class DisplayGradebook
      *
      * @param Evaluation $evalobj
      * @param $selectcat
-     * @param $shownavbar 1=show navigation bar
-     * @param $forpdf only output for pdf file
      */
     public static function display_header_result($evalobj, $selectcat, $page)
     {

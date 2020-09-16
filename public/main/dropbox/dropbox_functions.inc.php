@@ -1155,8 +1155,6 @@ function feedback($array, $url)
 /**
  * This function returns the html code to display the feedback messages on a given dropbox file.
  *
- * @param $feedback_array an array that contains all the feedback messages about the given document
- *
  * @return string code
  *
  * @todo add the form for adding new comment (if the other party has not deleted it yet).

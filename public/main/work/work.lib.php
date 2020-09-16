@@ -867,11 +867,11 @@ function deleteDirWork($id)
 
             // Deleting all contents inside the folder
             $sql = "UPDATE $table SET active = 2
-                    WHERE c_id = $course_id AND filetype = 'folder' AND id = $id";
+                    WHERE filetype = 'folder' AND iid = $id";
             Database::query($sql);
 
             $sql = "UPDATE $table SET active = 2
-                    WHERE c_id = $course_id AND parent_id = $id";
+                    WHERE parent_id = $id";
             Database::query($sql);
 
             /*$new_dir = $work_data_url.'_DELETED_'.$id;
@@ -988,7 +988,7 @@ function updateWorkUrl($id, $new_path, $parent_id)
         $sql = "UPDATE $table SET
                    url = '$new_url',
                    parent_id = '$parent_id'
-                WHERE c_id = $course_id AND id = $id";
+                WHERE iid = $id";
 
         return Database::query($sql);
     }
@@ -1021,7 +1021,6 @@ function updateDirName($work_data, $newPath)
         $sql = "UPDATE $table SET
                     title = '".$originalNewPath."'
                 WHERE
-                    c_id = $course_id AND
                     iid = $work_id";
         Database::query($sql);
     }
@@ -4721,15 +4720,10 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
         $my_last_id = Database::insert_id();
 
         if ($my_last_id) {
-            $sql = "UPDATE $table SET
-                        id = iid
-                    WHERE iid = $my_last_id";
-            Database::query($sql);
-
             $sql = "UPDATE $workTable SET
                         has_properties  = $my_last_id,
                         view_properties = 1
-                    WHERE c_id = $course_id AND id = $workId";
+                    WHERE iid = $workId";
             Database::query($sql);
         }
     } else {
@@ -4740,7 +4734,6 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
                     enable_qualification = '".$qualification."'
                 WHERE
                     publication_id = $workId AND
-                    c_id = $course_id AND
                     iid = ".$data['iid'];
         Database::query($sql);
     }

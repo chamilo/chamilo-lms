@@ -11,6 +11,7 @@ Feature: Group tool
     Then I should see "Default groups"
     Then I follow "Delete"
     Then I confirm the popup
+    And wait the page to be loaded when ready
     Then I should see "The category has been deleted"
 
   Scenario: Create a group directory
@@ -19,6 +20,7 @@ Feature: Group tool
     When I fill in the following:
       | title | Group category 1 |
     And I press "group_category_submit"
+    And wait the page to be loaded when ready
     Then I should see "Category created"
 
   Scenario: Create 4 groups
@@ -39,6 +41,7 @@ Feature: Group tool
     And I fill in select bootstrap static by text "#category_3" select "Group category 1"
     And I fill in select bootstrap static by text "#category_4" select "Group category 1"
     And I press "submit"
+    And wait the page to be loaded when ready
     Then I should see "group(s) has (have) been added"
 
   Scenario: Create document folder in group
@@ -52,6 +55,7 @@ Feature: Group tool
     Then I fill in the following:
       | dirname | My folder in group |
     And I press "create_dir_form_submit"
+    And wait the page to be loaded when ready
     Then I should see "Folder created"
 
   Scenario: Create document inside folder in group
@@ -67,6 +71,7 @@ Feature: Group tool
       | title | html test |
     And I fill in ckeditor field "content" with "My first HTML!!"
     Then I press "create_document_submit"
+    And wait the page to be loaded when ready
     Then I should see "Item added"
 
   Scenario: Upload a document inside folder in group

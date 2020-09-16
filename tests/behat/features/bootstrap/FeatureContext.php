@@ -414,7 +414,7 @@ class FeatureContext extends MinkContext
     }
 
     /**
-     * @When /^wait for the page to be loaded$/
+     * @When /^(?:|I )wait for the page to be loaded$/
      */
     public function waitForThePageToBeLoaded()
     {

@@ -54,7 +54,7 @@ if ($onlyOnePublication) {
     }
 }
 
-$homework = get_work_assignment_by_id($workInfo['id']);
+$homework = get_work_assignment_by_id($workInfo['iid']);
 $validationStatus = getWorkDateValidationStatus($homework);
 
 $interbreadcrumb[] = [

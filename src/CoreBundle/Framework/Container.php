@@ -257,23 +257,12 @@ class Container
         return self::$container->get('Symfony\Component\Mailer\Mailer');
     }
 
-    /**
-     * @return SettingsManager
-     */
-    public static function getSettingsManager()
+    public static function getSettingsManager(): SettingsManager
     {
         return self::$container->get('chamilo.settings.manager');
     }
 
-    /*public static function setSettingsManager($manager)
-    {
-        self::$settingsManager = $manager;
-    }*/
-
-    /**
-     * @return \Chamilo\CourseBundle\Manager\SettingsManager
-     */
-    public static function getCourseSettingsManager()
+    public static function getCourseSettingsManager(): \Chamilo\CourseBundle\Manager\SettingsManager
     {
         return self::$container->get('Chamilo\CourseBundle\Manager\SettingsManager');
     }
@@ -291,50 +280,32 @@ class Container
         return self::$container->get(UserRepository::class);
     }
 
-    /**
-     * @return CAttendanceRepository
-     */
-    public static function getAttendanceRepository()
+    public static function getAttendanceRepository(): CAttendanceRepository
     {
         return self::$container->get(CAttendanceRepository::class);
     }
 
-    /**
-     * @return CAnnouncementRepository
-     */
-    public static function getAnnouncementRepository()
+    public static function getAnnouncementRepository(): CAnnouncementRepository
     {
         return self::$container->get(CAnnouncementRepository::class);
     }
 
-    /**
-     * @return AccessUrlRepository
-     */
-    public static function getAccessUrlRepository()
+    public static function getAccessUrlRepository(): AccessUrlRepository
     {
         return self::$container->get(AccessUrlRepository::class);
     }
 
-    /**
-     * @return CAnnouncementAttachmentRepository
-     */
-    public static function getAnnouncementAttachmentRepository()
+    public static function getAnnouncementAttachmentRepository(): CAnnouncementAttachmentRepository
     {
         return self::$container->get(CAnnouncementAttachmentRepository::class);
     }
 
-    /**
-     * @return CourseRepository
-     */
-    public static function getCourseRepository()
+    public static function getCourseRepository(): CourseRepository
     {
         return self::$container->get(CourseRepository::class);
     }
 
-    /**
-     * @return SessionRepository
-     */
-    public static function getSessionRepository()
+    public static function getSessionRepository(): SessionRepository
     {
         return self::$container->get(SessionRepository::class);
     }

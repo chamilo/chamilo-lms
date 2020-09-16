@@ -14,6 +14,7 @@ Feature: Session access
     Then I select "TEMP_PRIVATE (TEMPPRIVATE)" from "NoSessionCoursesList[]"
     And I press "add_course"
     And I press "next"
+    And wait the page to be loaded when ready
     Then I should see "Update successful"
     Then I should see "Subscribe users to this session"
     Then I follow "Multiple registration"
@@ -37,6 +38,7 @@ Feature: Session access
     Then I select "TEMP_PRIVATE (TEMPPRIVATE)" from "NoSessionCoursesList[]"
     And I press "add_course"
     And I press "next"
+    And wait the page to be loaded when ready
     Then I should see "Update successful"
     Then I should see "Subscribe users to this session"
     Then I follow "Multiple registration"

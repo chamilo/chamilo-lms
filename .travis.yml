@@ -133,7 +133,7 @@ script:
   - ../../vendor/behat/behat/bin/behat features/toolGroup.feature -vvv
   - ../../vendor/behat/behat/bin/behat features/toolLink.feature -v
 #  - ../../vendor/behat/behat/bin/behat features/toolLp.feature -v
-#  - ../../vendor/behat/behat/bin/behat features/toolWork.feature -v
+  - ../../vendor/behat/behat/bin/behat features/toolWork.feature -v
 
 after_failure:
   - sudo cat /var/log/apache2/error.log

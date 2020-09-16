@@ -2292,11 +2292,10 @@ class GroupManager
         $sql = "SELECT DISTINCT g.*
                FROM $table_group g
                LEFT JOIN $table_group_user gu
-               ON (gu.group_id = g.iid AND g.c_id = gu.c_id)
+               ON (gu.group_id = g.iid)
                LEFT JOIN $table_tutor_user tu
-               ON (tu.group_id = g.iid AND g.c_id = tu.c_id)
+               ON (tu.group_id = g.iid)
                WHERE
-                  g.c_id = $courseId AND
                   (gu.user_id = $user_id OR tu.user_id = $user_id) ";
 
         if (null !== $sessionId) {

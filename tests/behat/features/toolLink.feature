@@ -13,14 +13,16 @@ Feature: Link tool
       | category_title | Category 1 |
       | description    | Category description |
     And I press "submitCategory"
+    And wait for the page to be loaded
     Then I should see "Category added"
 
   Scenario: Create a link
-    Given I am on "/main/link/link.php?action=addlink&cid=1"
+    And I am on "/main/link/link.php?action=addlink&cid=1"
     When I fill in the following:
       | url   | http://www.chamilo.org |
       | title | Chamilo |
     And I press "submitLink"
+    And wait for the page to be loaded
     Then I should see "The link has been added"
 
 #  Scenario: Create a link with category

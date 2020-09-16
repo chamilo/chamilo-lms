@@ -87,7 +87,7 @@ install:
   - yarn run encore production
   # Permissions
   - sudo chown -R www-data:www-data $TRAVIS_BUILD_DIR
-  - sudo chmod -R 775 $TRAVIS_BUILD_DIR
+  - sudo chmod -R 777 var public
   - sudo chmod +x /home/travis/build
   - ls -la public/build
   - curl http://localhost/check.php
@@ -102,8 +102,8 @@ script:
   - sed -i "s/APP_ENV='dev'/APP_ENV='prod'/g" .env.local
   - sed -i "s/APP_DEBUG='1'/APP_DEBUG='0'/g" .env.local
   # Warm up
+  - sudo chmod -R 777 var public
   - php bin/console cache:clear
-  - sudo chmod -R 775 $TRAVIS_BUILD_DIR
   - cd tests/behat
   - ../../vendor/behat/behat/bin/behat features/actionUserLogin.feature -vvv
   - ../../vendor/behat/behat/bin/behat features/adminFillUsers.feature -vvv

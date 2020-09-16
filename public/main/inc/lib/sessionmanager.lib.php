@@ -1792,7 +1792,6 @@ class SessionManager
         $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
         $tbl_url_session = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-        $tbl_item_properties = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $tbl_student_publication = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
         $tbl_student_publication_assignment = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
         $userGroupSessionTable = Database::get_main_table(TABLE_USERGROUP_REL_SESSION);
@@ -1809,6 +1808,12 @@ class SessionManager
             SequenceResource::SESSION_TYPE
         );
 
+        $sessionEntity = api_get_session_entity($sessionId);
+        if (null === $sessionEntity) {
+            return false;
+        }
+
+
         if ($sequenceResource) {
             Display::addFlash(
                 Display::return_message(
@@ -1821,16 +1826,8 @@ class SessionManager
         }
 
         if (self::allowed($sessionId) && !$from_ws) {
-            $qb = $em
-                ->createQuery('
-                    SELECT s.sessionAdminId FROM ChamiloCoreBundle:Session s
-                    WHERE s.id = ?1
-                ')
-                ->setParameter(1, $sessionId);
-
-            $res = $qb->getSingleScalarResult();
-
-            if ($res != $userId && !api_is_platform_admin()) {
+            $sessionAdminId = $sessionEntity->getSessionAdmin()->getId();
+            if ($sessionAdminId != $userId && !api_is_platform_admin()) {
                 api_not_allowed(true);
             }
         }
@@ -1857,7 +1854,6 @@ class SessionManager
             }*/
         }
 
-        $sessionEntity = api_get_session_entity($sessionId);
         $sessionName = $sessionEntity->getName();
         $em->remove($sessionEntity);
         $em->flush();

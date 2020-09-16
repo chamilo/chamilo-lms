@@ -24,6 +24,7 @@ Feature: Session management tool
     Then I select "TEMP (TEMP)" from "NoSessionCoursesList[]"
     And I press "add_course"
     And I press "next"
+    And wait for the page to be loaded
     Then I should see "Update successful"
 
   @javascript

@@ -20,6 +20,7 @@ Feature: Session access
     Then I select "Warnier Yannick (ywarnier)" from "nosessionUsersList[]"
     And I press "add_user"
     And I press "next"
+    And wait for the page to be loaded
     Then I should see "Session1"
     Then I should see "TEMPPRIVATE"
     Then I should see "ywarnier"
@@ -42,6 +43,7 @@ Feature: Session access
     Then I select "Mosquera Guardamino Michela (mmosquera)" from "nosessionUsersList[]"
     And I press "add_user"
     And I press "next"
+    And wait for the page to be loaded
     Then I should see "Session2"
     Then I should see "TEMPPRIVATE"
     Then I should see "mmosquera"
@@ -77,6 +79,7 @@ Feature: Session access
     And wait for the page to be loaded
     And I follow "Delete"
     And I confirm the popup
+    And wait for the page to be loaded
     Then I should see "Deleted"
 
   Scenario: Delete session "Session1"
@@ -85,4 +88,5 @@ Feature: Session access
     And wait for the page to be loaded
     And I follow "Delete"
     And I confirm the popup
+    And wait for the page to be loaded
     Then I should see "Deleted"

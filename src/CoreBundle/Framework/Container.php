@@ -339,26 +339,17 @@ class Container
         return self::$container->get(SessionRepository::class);
     }
 
-    /**
-     * @return CourseCategoryRepository|object|null
-     */
-    public static function getCourseCategoryRepository()
+    public static function getCourseCategoryRepository(): CourseCategoryRepository
     {
         return self::$container->get(CourseCategoryRepository::class);
     }
 
-    /**
-     * @return CCalendarEventRepository
-     */
-    public static function getCalendarEventRepository()
+    public static function getCalendarEventRepository(): CCalendarEventRepository
     {
         return self::$container->get(CCalendarEventRepository::class);
     }
 
-    /**
-     * @return CCalendarEventAttachmentRepository
-     */
-    public static function getCalendarEventAttachmentRepository()
+    public static function getCalendarEventAttachmentRepository(): CCalendarEventAttachmentRepository
     {
         return self::$container->get(CCalendarEventAttachmentRepository::class);
     }

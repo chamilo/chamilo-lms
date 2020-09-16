@@ -32,10 +32,11 @@ Feature: Course tools basic testing
     And I press "submit"
     Then wait for the page to be loaded
     Then I should see "Course list"
+    And I should see "TEMP"
 
-  Scenario: Make sure the course exists
-    Given course "TEMP" exists
-    Then I should not see an error
+#  Scenario: Make sure the course exists
+#    Given course "TEMP" exists
+#    Then I should not see an error
 
 #  Scenario: Make sure the course description tool is available
 #    Given I am on course "TEMP" homepage

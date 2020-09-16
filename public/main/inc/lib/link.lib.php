@@ -1636,9 +1636,9 @@ Do you really want to delete this category and its links ?')."')) return false;\
         );
 
         if ('addlink' === $action) {
-            $form->addHeader(get_lang('LinksAdd'));
+            $form->addHeader(get_lang('Add a link'));
         } else {
-            $form->addHeader(get_lang('LinksMod'));
+            $form->addHeader(get_lang('Edit link'));
         }
 
         $target_link = '_blank';
@@ -1661,8 +1661,14 @@ Do you really want to delete this category and its links ?')."')) return false;\
         $form->addHidden('id', $linkId);
         $form->addText('url', 'URL');
         $form->addRule('url', get_lang('Please give the link URL, it should be valid.'), 'url');
-        $form->addText('title', get_lang('LinksName'));
-        $form->addHtmlEditor('description', get_lang('Description'), false, false, ['ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130']);
+        $form->addText('title', get_lang('Link name'));
+        $form->addHtmlEditor(
+            'description',
+            get_lang('Description'),
+            false,
+            false,
+            ['ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130']
+        );
 
         $resultcategories = self::getLinkCategories($courseId, $sessionId);
         $options = ['0' => '--'];
@@ -1676,17 +1682,17 @@ Do you really want to delete this category and its links ?')."')) return false;\
         $form->addCheckBox('on_homepage', null, get_lang('Show link on course homepage'));
 
         $targets = [
-            '_self' => get_lang('LinksOpenSelf'),
-            '_blank' => get_lang('LinksOpenBlank'),
-            '_parent' => get_lang('LinksOpenParent'),
-            '_top' => get_lang('LinksOpenTop'),
+            '_self' => get_lang('Open self'),
+            '_blank' => get_lang('Open blank'),
+            '_parent' => get_lang('Open parent'),
+            '_top' => get_lang('Open top'),
         ];
 
         $form->addSelect(
             'target',
             [
-                get_lang('LinksTarget'),
-                get_lang('AddTargetOfLinksShow link on course homepage'),
+                get_lang('Link\'s target'),
+                get_lang('Select the target which shows the link on the homepage of the course'),
             ],
             $targets
         );
@@ -1700,14 +1706,14 @@ Do you really want to delete this category and its links ?')."')) return false;\
             'target' => $target_link,
         ];
 
-        if ('true' == api_get_setting('search_enabled')) {
+        if ('true' === api_get_setting('search_enabled')) {
             require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
             $specific_fields = get_specific_field_list();
             $form->addCheckBox('index_document', get_lang('Index link title and description?s'), get_lang('Yes'));
 
             foreach ($specific_fields as $specific_field) {
                 $default_values = '';
-                if ('editlink' == $action) {
+                if ('editlink' === $action) {
                     $filter = [
                         'field_id' => $specific_field['id'],
                         'ref_id' => intval($_GET['id']),

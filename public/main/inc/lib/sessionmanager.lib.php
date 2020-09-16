@@ -1813,7 +1813,6 @@ class SessionManager
             return false;
         }
 
-
         if ($sequenceResource) {
             Display::addFlash(
                 Display::return_message(

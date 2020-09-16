@@ -1584,7 +1584,7 @@ Do you really want to delete this category and its links ?')."')) return false;\
             if ($showActionLinks) {
                 if ($allowToEdit) {
                     if ($category->getFirstResourceLink() &&
-                        $sessionEntity ===  $category->getFirstResourceLink()->getSession()
+                        $sessionEntity === $category->getFirstResourceLink()->getSession()
                     ) {
                         $header .= $strVisibility;
                         $header .= self::showCategoryAdminTools($category, $counter, count($categories));

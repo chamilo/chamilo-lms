@@ -2,16 +2,16 @@ Feature: Work tool
   In order to use the work tool
   The teachers should be able to create works
 
-#  Scenario: Create a work
-#    Given I am a platform administrator
-#    And I am on course "TEMP" homepage
-#    And I am on "/main/work/work.php?action=create_dir&cid=1"
-#    When I fill in the following:
-#      | new_dir | Work 1 |
-#    And I fill in ckeditor field "description" with "Work description"
-#    And I press "submit"
-#    And I wait for the page to be loaded
-#    Then I should see "Directory created"
+  Scenario: Create a work
+    Given I am a platform administrator
+    And I am on course "TEMP" homepage
+    And I am on "/main/work/work.php?action=create_dir&cid=1"
+    When I fill in the following:
+      | new_dir | Work 1 |
+    And I fill in ckeditor field "description" with "Work description"
+    And I press "submit"
+    And I wait for the page to be loaded
+    Then I should see "Directory created"
 
   Scenario: Edit a work
     Given I am a platform administrator

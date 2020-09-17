@@ -504,7 +504,7 @@ if ('' != $survey_data['form_fields'] &&
         if ('true' == api_get_setting('registration', 'email')) {
             $form->addRule('email', get_lang('Required field'), 'required');
         }
-        $form->addRule('email', get_lang('e-mailWrong'), 'email');
+        $form->addEmailRule('email');
     }
 
     if (isset($list['phone']) && 1 == $list['phone']) {

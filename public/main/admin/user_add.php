@@ -138,13 +138,18 @@ $form->applyFilter('official_code', 'html_filter');
 $form->applyFilter('official_code', 'trim');
 // e-mail
 $form->addElement('text', 'email', get_lang('e-mail'), ['size' => '40', 'autocomplete' => 'off', 'id' => 'email']);
-$form->addRule('email', get_lang('e-mailWrong'), 'email');
+$form->addEmailRule('email');
 if ('true' == api_get_setting('registration', 'email')) {
-    $form->addRule('email', get_lang('e-mailWrong'), 'required');
+    $form->addRule('email', get_lang('Required field'), 'required');
 }
 
 if ('true' == api_get_setting('login_is_email')) {
-    $form->addRule('email', sprintf(get_lang('The login needs to be maximum %s characters long'), (string) USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
+    $form->addRule(
+        'email',
+        sprintf(get_lang('The login needs to be maximum %s characters long'), (string) USERNAME_MAX_LENGTH),
+        'maxlength',
+        USERNAME_MAX_LENGTH
+    );
     $form->addRule('email', get_lang('This login is already in use'), 'username_available');
 }
 

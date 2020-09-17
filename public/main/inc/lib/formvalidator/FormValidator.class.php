@@ -1864,6 +1864,15 @@ EOT;
         });
         </script>");
     }
+
+    public function addEmailRule(string $element)
+    {
+        $this->addRule(
+            $element,
+            get_lang('The email address is not complete or contains some invalid characters'),
+            'email'
+        );
+    }
 }
 
 /**

@@ -104,6 +104,7 @@ Feature: Users management as admin
 
   Scenario: HRM follows teacher
     And I am on "/main/admin/user_list.php?keyword=hrm&submit=&_qf__search_simple="
+    And wait the page to be loaded when ready
     And I should see "HRM lastname"
     And I should see "Human Resources Manager"
     And I follow "Assign users"
@@ -115,6 +116,7 @@ Feature: Users management as admin
 
   Scenario: HRM follows student
     And I am on "/main/admin/user_list.php?keyword=hrm&submit=&_qf__search_simple="
+    And wait the page to be loaded when ready
     And I should see "HRM lastname"
     And I should see "Human Resources Manager"
     And I follow "Assign users"
@@ -125,7 +127,8 @@ Feature: Users management as admin
     Then I should see "The assigned users have been updated"
 
   Scenario: HRM logs as teacher
-    Given I am logged as "hrm"
+    Given I am not logged
+    Then I am logged as "hrm"
     And I am on "/main/mySpace/teachers.php"
     Then I should see "teacher lastname"
     Then I follow "teacher lastname"
@@ -135,7 +138,8 @@ Feature: Users management as admin
     Then I should see "Login successful"
 
   Scenario: HRM logs as student
-    Given I am logged as "hrm"
+    Given I am not logged
+    Then I am logged as "hrm"
     And I am on "/main/mySpace/student.php"
     Then I should see "student lastname"
     Then I follow "student lastname"

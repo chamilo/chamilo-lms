@@ -201,8 +201,7 @@ class FeatureContext extends MinkContext
      */
     public function iAmNotLogged()
     {
-        $this->visit('/index.php?logout=logout');
-        $this->visit('I am on homepage');
+        $this->visit('/logout');
     }
 
     /**

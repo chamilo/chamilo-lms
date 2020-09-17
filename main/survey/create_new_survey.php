@@ -73,8 +73,8 @@ if ($action == 'edit' && isset($survey_id) && is_numeric($survey_id)) {
     $defaults['anonymous'] = $survey_data['anonymous'];
 
     if ($allowSurveyAvailabilityDatetime) {
-        $defaults['avail_from'] = api_get_local_time($defaults['avail_from'], null, 'UTC');
-        $defaults['avail_till'] = api_get_local_time($defaults['avail_till'], null, 'UTC');
+        $defaults['avail_from'] = api_get_local_time($defaults['avail_from']);
+        $defaults['avail_till'] = api_get_local_time($defaults['avail_till']);
         $defaults['start_date'] = $defaults['avail_from'];
         $defaults['end_date'] = $defaults['avail_till'];
     }
@@ -360,15 +360,6 @@ $form->setDefaults($defaults);
 if ($form->validate()) {
     // Exporting the values
     $values = $form->getSubmitValues();
-    // see #3499
-    if (isset($values['end_date'])) {
-        $temp = new DateTime(api_get_utc_datetime($values['end_date']));
-        $values['end_date'] = $temp->format('Y-m-d H:i');
-    }
-    if (isset($values['start_date'])) {
-        $temp = new DateTime(api_get_utc_datetime($values['start_date']));
-        $values['start_date'] = $temp->format('Y-m-d H:i');
-    }
     // Storing the survey
     $return = SurveyManager::store_survey($values);
     Skill::saveSkills($form, ITEM_TYPE_SURVEY, $return['id']);

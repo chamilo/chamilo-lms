@@ -107,7 +107,7 @@ for ($i = $currentQuestionsCount; $i <= $maxEvents; $i++) {
 $form->addHtml('<script>
 $(function() {
     '.$hideList.'
-    var number = "'.--$currentQuestionsCount.'";    
+    var number = "'.--$currentQuestionsCount.'";
     $("#add_button").on("click", function() {
         number++;
         $("#time_" + number + "_date_time_wrapper").show();
@@ -115,15 +115,15 @@ $(function() {
         $("#time_" + number + "_time_range_end").val("");
         $("#time_" + number + "_alt").val("");
     });
-    
+
     $("#remove_button").on("click", function() {
-        if (number > 1) {      
+        if (number > 1) {
             console.log("#time_" + number + "_time_range_start");
             $("#time_" + number + "_date_time_wrapper").hide();
             $("#time_" + number).val("delete");
-            
+
             $("#time_" + number + "_alt").val("delete");
-            $("#time_" + number + "_time_range_start").val("delete");                        
+            $("#time_" + number + "_time_range_start").val("delete");
             number--;
         }
     });
@@ -152,15 +152,6 @@ if ($form->validate()) {
 
     $values['survey_id'] = $surveyId;
     $values['survey_code'] = SurveyManager::generateSurveyCode($values['survey_title']);
-    // see #3499
-    if (isset($values['end_date'])) {
-        $temp = new DateTime(api_get_utc_datetime($values['end_date']));
-        $values['end_date'] = $temp->format('Y-m-d H:i');
-    }
-    if (isset($values['start_date'])) {
-        $temp = new DateTime(api_get_utc_datetime($values['start_date']));
-        $values['start_date'] = $temp->format('Y-m-d H:i');
-    }
     // Storing the survey
     SurveyManager::store_survey($values);
 

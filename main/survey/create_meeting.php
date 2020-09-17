@@ -82,14 +82,14 @@ for ($i = 1; $i <= $maxEvents; $i++) {
 $form->addHtml('<script>
 $(function() {
     '.$hideList.'
-    var number = 3;    
+    var number = 3;
     $("#add_button").on("click", function() {
         number++;
         $("#time_" + number + "_date_time_wrapper").show();
     });
-    
+
     $("#remove_button").on("click", function() {
-        if (number > 1) {            
+        if (number > 1) {
             $("#time_" + number + "_date_time_wrapper").hide();
             number--;
         }
@@ -118,15 +118,6 @@ if ($form->validate()) {
     // Exporting the values
     $values = $form->getSubmitValues();
     $values['survey_code'] = SurveyManager::generateSurveyCode($values['survey_title']);
-    // see #3499
-    if (isset($values['end_date'])) {
-        $temp = new DateTime(api_get_utc_datetime($values['end_date']));
-        $values['end_date'] = $temp->format('Y-m-d H:i');
-    }
-    if (isset($values['start_date'])) {
-        $temp = new DateTime(api_get_utc_datetime($values['start_date']));
-        $values['start_date'] = $temp->format('Y-m-d H:i');
-    }
     // Storing the survey
     $surveyData = SurveyManager::store_survey($values);
 

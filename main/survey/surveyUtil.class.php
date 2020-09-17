@@ -3423,7 +3423,6 @@ class SurveyUtil
             $array[5] = '';
 
             if (!empty($survey[5]) && $survey[5] !== '0000-00-00' && $survey[5] !== '0000-00-00 00:00:00') {
-                $survey[5] = api_get_local_time($survey[5]);
                 $array[5] = api_convert_and_format_date(
                     $survey[5],
                     $allowSurveyAvailabilityDatetime ? DATE_TIME_FORMAT_LONG : DATE_FORMAT_LONG
@@ -3432,7 +3431,6 @@ class SurveyUtil
 
             $array[6] = '';
             if (!empty($survey[6]) && $survey[6] !== '0000-00-00' && $survey[6] !== '0000-00-00 00:00:00') {
-                $survey[6] = api_get_local_time($survey[6]);
                 $array[6] = api_convert_and_format_date(
                     $survey[6],
                     $allowSurveyAvailabilityDatetime ? DATE_TIME_FORMAT_LONG : DATE_FORMAT_LONG

@@ -16,6 +16,7 @@ Encore
     .addEntry('vue', './assets/vue/main.js')
 
     .addStyleEntry('css/app', './assets/css/app.scss')
+    .addStyleEntry('css/bootstrap', './assets/css/bootstrap.scss')
     .addStyleEntry('css/chat', './assets/css/chat.css')
     .addStyleEntry('css/document', './assets/css/document.css')
     .addStyleEntry('css/editor', './assets/css/editor.css')

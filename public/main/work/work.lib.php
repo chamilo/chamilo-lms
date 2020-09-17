@@ -3359,7 +3359,7 @@ function getTotalWorkComment($workList, $courseInfo = [])
 
     $count = 0;
     foreach ($workList as $data) {
-        $count += getWorkCommentCount($data['iid'], $courseInfo);
+        $count += getWorkCommentCount($data['id'], $courseInfo);
     }
 
     return $count;

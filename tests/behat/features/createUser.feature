@@ -59,7 +59,7 @@ Feature: Users management as admin
     And I am on "/main/admin/user_list.php"
     When I follow "Delete"
     And I press "Yes"
-    And wait the page to be loaded when ready
+    And wait very long for the page to be loaded
     Then I should see "The user has been deleted"
 
   Scenario: Create a HRM user
@@ -115,6 +115,7 @@ Feature: Users management as admin
     And I should see "HRM lastname"
     And I should see "Human Resources Manager"
     And I follow "Assign users"
+    And wait the page to be loaded when ready
     And I select "teacher firstname teacher lastname" from "NoAssignedUsersList[]"
     And I press "add_user_button"
     And I press "assign_user"
@@ -127,6 +128,7 @@ Feature: Users management as admin
     And I should see "HRM lastname"
     And I should see "Human Resources Manager"
     And I follow "Assign users"
+    And wait the page to be loaded when ready
     And I select "student firstname student lastname" from "NoAssignedUsersList[]"
     And I press "add_user_button"
     And I press "assign_user"
@@ -137,6 +139,7 @@ Feature: Users management as admin
     Given I am not logged
     Then I am logged as "hrm"
     And I am on "/main/mySpace/teachers.php"
+    And wait the page to be loaded when ready
     Then I should see "teacher lastname"
     Then I follow "teacher lastname"
     And wait for the page to be loaded
@@ -148,6 +151,7 @@ Feature: Users management as admin
     Given I am not logged
     Then I am logged as "hrm"
     And I am on "/main/mySpace/student.php"
+    And wait the page to be loaded when ready
     Then I should see "student lastname"
     Then I follow "student lastname"
     And wait for the page to be loaded

@@ -18,6 +18,7 @@ Feature: Session access
     Then I should see "Update successful"
     Then I should see "Subscribe users to this session"
     Then I follow "Multiple registration"
+    And wait the page to be loaded when ready
     Then I select "Warnier Yannick (ywarnier)" from "nosessionUsersList[]"
     And I press "add_user"
     And I press "next"
@@ -42,6 +43,7 @@ Feature: Session access
     Then I should see "Update successful"
     Then I should see "Subscribe users to this session"
     Then I follow "Multiple registration"
+    And wait the page to be loaded when ready
     Then I select "Mosquera Guardamino Michela (mmosquera)" from "nosessionUsersList[]"
     And I press "add_user"
     And I press "next"

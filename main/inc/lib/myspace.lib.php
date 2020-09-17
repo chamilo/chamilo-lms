@@ -1172,13 +1172,14 @@ class MySpace
                 $teachersId = explode(',', trim($row['users_id'], ","));
                 $lp_table = Database::get_course_table(TABLE_LP_MAIN);
                 $query = "
-            SELECT *,
-                   (select title from $tblCourse where course.id = c_lp.c_id) as courseTitle,
-                   (select code from $tblCourse where course.id = c_lp.c_id) as courseCode
+            SELECT $lp_table.*,
+                   $tblCourse.title as courseTitle,
+                   $tblCourse.code as courseCode
             FROM
                 $lp_table
+            INNER JOIN $tblCourse ON $tblCourse.id = $lp_table.c_id
             WHERE
-                id = $lp_id
+                $lp_table.iid = $lp_id
                 ";
                 $res = Database::query($query);
                 if (Database::num_rows($res)) {

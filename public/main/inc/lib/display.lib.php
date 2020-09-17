@@ -469,11 +469,8 @@ class Display
      *
      * @return string Message wrapped into an HTML div
      */
-    public static function return_message(
-        $message,
-        $type = 'normal',
-        $filter = true
-    ) {
+    public static function return_message($message, $type = 'normal', $filter = true)
+    {
         if (empty($message)) {
             return '';
         }
@@ -500,6 +497,7 @@ class Display
                 $class .= 'alert alert-success';
                 break;
             case 'normal':
+            case 'info':
             default:
                 $class .= 'alert alert-info';
         }

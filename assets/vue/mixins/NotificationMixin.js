@@ -32,6 +32,10 @@ export default {
                 }
             };
 
+            if ('danger' === type) {
+                type = 'error';
+            }
+
             this.$toast(content, {
                 type: type,
                 position: 'top-center',

@@ -130,11 +130,19 @@ export default {
   },
   created() {
     this.$data.legacy_content = '';
-    // section-content
-    let isAuthenticated = JSON.parse(this.$parent.$el.attributes["data-is-authenticated"].value),
-      user = JSON.parse(this.$parent.$el.attributes["data-user-json"].value);
+
+    let isAuthenticated = false;
+    if (this.$parent.$el.attributes["data-is-authenticated"].value) {
+      isAuthenticated = JSON.parse(this.$parent.$el.attributes["data-is-authenticated"].value);
+    }
+
+    let user = null;
+    if (this.$parent.$el.attributes["data-user-json"].value) {
+        user = JSON.parse(this.$parent.$el.attributes["data-user-json"].value);
+    }
 
     let payload = {isAuthenticated: isAuthenticated, user: user};
+
     this.$store.dispatch("security/onRefresh", payload);
     if (this.$parent.$el.attributes["data-flashes"]) {
       let flashes = JSON.parse(this.$parent.$el.attributes["data-flashes"].value);

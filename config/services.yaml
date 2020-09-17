@@ -73,7 +73,12 @@ services:
 
     League\Flysystem\MountManager: '@oneup_flysystem.mount_manager'
 
-    Chamilo\CoreBundle\Security\HTTPExceptionListener:
+    Chamilo\CoreBundle\EventListener\HTTPExceptionListener:
+        tags:
+            - {name: kernel.event_listener, event: kernel.exception}
+
+    Chamilo\CoreBundle\EventListener\ExceptionListener:
+        arguments: ['@twig']
         tags:
             - {name: kernel.event_listener, event: kernel.exception}
 

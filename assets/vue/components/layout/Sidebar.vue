@@ -47,7 +47,7 @@
       </b-nav-item>
     </b-nav>
 
-    <template v-if="isAuthenticated && isAdmin">
+    <template v-if="isAuthenticated">
       <b-nav vertical>
         <b-nav-item
           :to="{ name: 'MyCourses' }"

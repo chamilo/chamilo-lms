@@ -13,13 +13,17 @@ class ExceptionListener
 {
     protected $twig;
 
-    public function __construct(Environment $twig) {
-
+    public function __construct(Environment $twig)
+    {
         $this->twig = $twig;
-
     }
+
     public function onKernelException(ExceptionEvent $event)
     {
+        if ('dev' === $_ENV['APP_ENV']) {
+            return;
+        }
+
         // You get the exception object from the received event
         $exception = $event->getThrowable();
         /*$message = sprintf(
@@ -28,9 +32,13 @@ class ExceptionListener
             $exception->getCode()
         );*/
 
-        $message = $this->twig->render('@ChamiloCore/Exception/error.html.twig', array(
-            'exception' => $exception,
-        ));
+        $message = $this->twig->render(
+            '@ChamiloCore/Exception/error.html.twig',
+            [
+                'from_vue' => false,
+                'exception' => $exception,
+            ]
+        );
 
         // Customize your response object to display the exception details
         $response = new Response();

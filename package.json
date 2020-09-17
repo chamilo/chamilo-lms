@@ -59,7 +59,7 @@
     "portal-vue": "^2.1.7",
     "pretty-bytes": "^5.4.1",
     "pretty-checkbox": "^3.0.3",
-    "pwstrength-bootstrap": "^3.0.5",
+    "pwstrength-bootstrap": "^3.0",
     "qtip2": "^3.0.3",
     "readmore-js": "^2.2.1",
     "router": "^1.3.5",

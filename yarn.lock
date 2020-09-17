@@ -11910,7 +11910,7 @@ punycode@^2.1.0, punycode@^2.1.1:
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.1.1.tgz#b58b010ac40c22c5657616c8d2c2c02c7bf479ec"
   integrity sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==
 
-pwstrength-bootstrap@^3.0.5:
+pwstrength-bootstrap@^3.0:
   version "3.0.9"
   resolved "https://registry.yarnpkg.com/pwstrength-bootstrap/-/pwstrength-bootstrap-3.0.9.tgz#53edeb9250451e16a897c2058d7a1ae683fa62de"
   integrity sha512-Q99PECtZP0JnlNzaYr74hUtbsI7Jz7h53Ye59fhHlu3TglEfY/Hrf9F23FboudVzSUZ2fWdH/ccZEYmXNAJh1g==

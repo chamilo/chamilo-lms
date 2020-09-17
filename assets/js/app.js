@@ -7,6 +7,7 @@ import $ from 'jquery';
 
 window.jQuery = $;
 window.$ = $;
+global.jQuery = $;
 
 Routing.setRoutingData(routes);
 

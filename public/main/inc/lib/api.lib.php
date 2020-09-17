@@ -7453,7 +7453,7 @@ function api_get_password_checker_js($usernameInputId, $passwordInputId)
         'veryStrong' => get_lang('Very strong'),
     ];
 
-    $js = api_get_asset('pwstrength-bootstrap/dist/pwstrength-bootstrap.min.js');
+    $js = api_get_asset('pwstrength-bootstrap/dist/pwstrength-bootstrap.js');
     $js .= "<script>
     var errorMessages = {
         password_to_short : \"".get_lang('The password is too short')."\",

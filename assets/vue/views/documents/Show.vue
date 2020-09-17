@@ -79,6 +79,11 @@
                     v-if="item['resourceNode']['resourceFile']['image']"
                     :src="item['contentUrl'] + '?w=300'"
                   />
+                  <span v-else-if="item['resourceNode']['resourceFile']['video']">
+                    <video controls>
+                      <source :src="item['contentUrl']" />
+                    </video>
+                  </span>
                   <span v-else>
                     <b-btn
                       variant="primary"

@@ -20,4 +20,5 @@ export default {
   'Field is required': 'Field is required',
   'Records per page:': 'Records per page:',
   '{resource} created': '{resource} created',
+  '{resource} deleted': '{resource} deleted',
 };

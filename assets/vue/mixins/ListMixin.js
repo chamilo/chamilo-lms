@@ -28,7 +28,8 @@ export default {
     },
 
     deletedItem(item) {
-      this.showMessage(`${item['@id']} deleted.`);
+      this.showMessage(this.$i18n.t('{resource} deleted', {'resource': item['resourceNode'].title}));
+      // this.showMessage(`${item['@id']} deleted.`);
     },
 
     error(message) {

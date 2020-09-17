@@ -25,13 +25,24 @@ class Attendance
     /**
      * Get attendance list only the id, name and attendance_qualify_max fields.
      *
-     * @param int $course_id  course db name (optional)
-     * @param int $session_id session id (optional)
+     * @param int $courseId
+     * @param int $sessionId
      *
      * @return array attendances list
      */
-    public function get_attendances_list($course_id = 0, $session_id = 0)
+    public function get_attendances_list($courseId = 0, $sessionId = 0)
     {
+        $repo = Container::getAttendanceRepository();
+
+        $course = api_get_course_entity($courseId);
+        $session = api_get_session_entity($sessionId);
+
+        $qb = $repo->getResourcesByCourse($course, $session, null);
+        //$qb->select('resource');
+        $qb->andWhere('resource.active = 1');
+
+        return $qb->getQuery()->getResult();
+
         $table = Database::get_course_table(TABLE_ATTENDANCE);
         $course_id = (int) $course_id;
         if (empty($course_id)) {

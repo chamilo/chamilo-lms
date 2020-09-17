@@ -644,7 +644,7 @@ $toolbarActions = Display::toolbarAction(
 );
 
 $noticeMessage = sprintf(
-    get_lang('InformationrmationRightToBeForgottenLinkX'),
+    get_lang("You can find more information about the user's right to be forgotten through the following page: %s"),
     '<a href="https://gdpr-info.eu/art-17-gdpr/">https://gdpr-info.eu/art-17-gdpr/</a>'
 );
 $notice = Display::return_message($noticeMessage, 'normal', false);

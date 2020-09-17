@@ -77,7 +77,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
         $this->encoder = $encoder;
     }
 
-    public function loadUserByUsername($username)
+    public function loadUserByUsername($username): ?User
     {
         return $this->findBy(['username' => $username]);
     }
@@ -252,38 +252,47 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
     /**
      * Get course user relationship based in the course_rel_user table.
      *
-     * @return array
+     * @return Course[]
      */
-    /*public function getCourses(User $user)
+    public function getCourses(User $user, AccessUrl $url, int $status, $keyword = '')
     {
-        $queryBuilder = $this->createQueryBuilder('user');
+        $qb = $this->repository->createQueryBuilder('user');
 
-        // Selecting course info.
-        $queryBuilder->select('c');
+        $qb
+            ->select('DISTINCT course')
+            //->addSelect('user.courses')
+            ->innerJoin(
+                CourseRelUser::class,
+                'courseRelUser',
+                Join::WITH,
+                'user = courseRelUser.user'
+            )
+            ->innerJoin('courseRelUser.course', 'course')
+            ->innerJoin('course.urls', 'accessUrlRelCourse')
+            ->innerJoin('accessUrlRelCourse.url', 'url')
+            ->where('user = :user')
+            ->andWhere('url = :url')
+            ->andWhere('courseRelUser.status = :status')
+            ->setParameters(['user' => $user, 'url' => $url, 'status' => $status])
+            ->addSelect('courseRelUser');
 
-        // Loading User.
-        //$qb->from('Chamilo\CoreBundle\Entity\User', 'u');
+        if (!empty($keyword)) {
+            $qb
+                ->andWhere('course.title like = :keyword')
+                ->setParameter('keyword', $keyword);
+        }
 
-        // Selecting course
-        $queryBuilder->innerJoin('Chamilo\CoreBundle\Entity\Course', 'c');
+        $qb->add('orderBy', 'course.title DESC');
 
-        //@todo check app settings
-        //$qb->add('orderBy', 'u.lastname ASC');
+        $query = $qb->getQuery();
 
-        $wherePart = $queryBuilder->expr()->andx();
-
-        // Get only users subscribed to this course
-        $wherePart->add($queryBuilder->expr()->eq('user.userId', $user->getUserId()));
-
-        $queryBuilder->where($wherePart);
-        $query = $queryBuilder->getQuery();
-
-        return $query->execute();
+        return $query->getResult();
     }
 
+    /*
     public function getTeachers()
     {
-        $queryBuilder = $this->createQueryBuilder('u');
+        $queryBuilder = $this->repository->createQueryBuilder('u');
 
         // Selecting course info.
         $queryBuilder
@@ -298,7 +307,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
 
     /*public function getUsers($group)
     {
-        $queryBuilder = $this->createQueryBuilder('u');
+        $queryBuilder = $this->repository->createQueryBuilder('u');
 
         // Selecting course info.
         $queryBuilder

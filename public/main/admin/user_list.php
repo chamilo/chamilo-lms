@@ -597,9 +597,9 @@ function modify_filter($user_id, $url_params, $row)
     if (api_is_platform_admin()) {
         if (!$user_is_anonymous) {
             $result .= '<a href="user_information.php?user_id='.$user_id.'">'.
-                        Display::return_icon('info2.png', get_lang('Informationrmation')).'</a>&nbsp;&nbsp;';
+                        Display::return_icon('info2.png', get_lang('Information')).'</a>&nbsp;&nbsp;';
         } else {
-            $result .= Display::return_icon('info2_na.png', get_lang('Informationrmation')).'&nbsp;&nbsp;';
+            $result .= Display::return_icon('info2_na.png', get_lang('Information')).'&nbsp;&nbsp;';
         }
     }
 

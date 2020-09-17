@@ -2081,10 +2081,10 @@ function api_get_anonymous_id()
     if ($max >= 2) {
         $sql = "SELECT * FROM $table as TEL
                 JOIN $tableU as U
-                ON U.user_id = TEL.login_user_id
+                ON U.id = TEL.login_user_id
                 WHERE TEL.user_ip = '$ip'
                     AND U.status = ".ANONYMOUS."
-                    AND U.user_id != 2 ";
+                    AND U.id != 2 ";
 
         $result = Database::query($sql);
         if (empty(Database::num_rows($result))) {
@@ -2108,19 +2108,19 @@ function api_get_anonymous_id()
         } else {
             $row = Database::fetch_array($result, 'ASSOC');
 
-            return $row['user_id'];
+            return $row['id'];
         }
     }
 
     $table = Database::get_main_table(TABLE_MAIN_USER);
-    $sql = "SELECT user_id
+    $sql = "SELECT id
             FROM $table
             WHERE status = ".ANONYMOUS." ";
     $res = Database::query($sql);
     if (Database::num_rows($res) > 0) {
         $row = Database::fetch_array($res, 'ASSOC');
 
-        return $row['user_id'];
+        return $row['id'];
     }
 
     // No anonymous user was found.
@@ -3088,7 +3088,7 @@ function api_get_user_status($user_id = null)
         $user_id = api_get_user_id();
     }
     $table = Database::get_main_table(TABLE_MAIN_USER);
-    $sql = "SELECT status FROM $table WHERE user_id = $user_id ";
+    $sql = "SELECT status FROM $table WHERE id = $user_id ";
     $result = Database::query($sql);
     $status = null;
     if (Database::num_rows($result)) {
@@ -5705,7 +5705,7 @@ function api_is_course_visible_for_user($userid = null, $cid = null)
                 $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 
                 $sql = "SELECT status FROM $tbl_user
-                        WHERE user_id = $userid
+                        WHERE id = $userid
                         LIMIT 1";
 
                 $result = Database::query($sql);

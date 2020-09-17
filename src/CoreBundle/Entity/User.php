@@ -10,6 +10,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use Chamilo\CourseBundle\Entity\CGroupRelUser;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
@@ -269,12 +270,16 @@ class User implements UserInterface, EquatableInterface
     protected $passwordRequestedAt;
 
     /**
+     * @var CourseRelUser[]|ArrayCollection
+     *
      * @ApiSubresource()
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\CourseRelUser", mappedBy="user", orphanRemoval=true)
      */
     protected $courses;
 
     /**
+     * @var UsergroupRelUser[]|ArrayCollection
+     *
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\UsergroupRelUser", mappedBy="user")
      */
     protected $classes;
@@ -328,6 +333,8 @@ class User implements UserInterface, EquatableInterface
     protected $curriculumItems;
 
     /**
+     * @var AccessUrlRelUser[]|ArrayCollection
+     *
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CoreBundle\Entity\AccessUrlRelUser",
      *     mappedBy="user",
@@ -394,6 +401,8 @@ class User implements UserInterface, EquatableInterface
     protected $gradeBookCategories;
 
     /**
+     * @var Session[]|ArrayCollection
+     *
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CoreBundle\Entity\SessionRelUser",
      *     mappedBy="user",
@@ -404,7 +413,7 @@ class User implements UserInterface, EquatableInterface
     protected $sessions;
 
     /**
-     * @var Collection
+     * @var CGroupRelUser[]|ArrayCollection
      *
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CourseBundle\Entity\CGroupRelUser",
@@ -713,12 +722,14 @@ class User implements UserInterface, EquatableInterface
     /**
      * @param ArrayCollection $courses
      */
-    public function setCourses($courses)
+    public function setCourses($courses): self
     {
         $this->courses = $courses;
+
+        return $this;
     }
 
-    public function getCourses(): Collection
+    public function getCourses()
     {
         return $this->courses;
     }
@@ -794,10 +805,6 @@ class User implements UserInterface, EquatableInterface
         $this->portals->add($portal);
     }
 
-    /**
-     * @param $value
-     * @param (mixed|string|string[])[] $value
-     */
     public function setPortals(array $value)
     {
         $this->portals = $value;
@@ -811,37 +818,26 @@ class User implements UserInterface, EquatableInterface
         return $this->curriculumItems;
     }
 
-    /**
-     * @param $items
-     *
-     * @return $this
-     */
-    public function setCurriculumItems(array $items)
+    public function setCurriculumItems(array $items): self
     {
         $this->curriculumItems = $items;
 
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function getIsActive()
+    public function getIsActive(): bool
     {
-        return 1 == $this->active;
+        return true === $this->active;
     }
 
-    /**
-     * @return bool
-     */
-    public function isActive()
+    public function isActive(): bool
     {
         return $this->getIsActive();
     }
 
     public function isEnabled()
     {
-        return 1 == $this->getActive();
+        return $this->isActive();
     }
 
     /**
@@ -1455,7 +1451,7 @@ class User implements UserInterface, EquatableInterface
         return $this->setUsername($slug);
     }
 
-    public function setUsername($username)
+    public function setUsername($username): self
     {
         $this->username = $username;
 
@@ -1469,7 +1465,7 @@ class User implements UserInterface, EquatableInterface
         return $this;
     }
 
-    public function setEmailCanonical($emailCanonical)
+    public function setEmailCanonical($emailCanonical): self
     {
         $this->emailCanonical = $emailCanonical;
 
@@ -1480,10 +1476,8 @@ class User implements UserInterface, EquatableInterface
      * Set lastLogin.
      *
      * @param \DateTime $lastLogin
-     *
-     * @return User
      */
-    public function setLastLogin(\DateTime $lastLogin = null)
+    public function setLastLogin(\DateTime $lastLogin = null): self
     {
         $this->lastLogin = $lastLogin;
 
@@ -1510,13 +1504,7 @@ class User implements UserInterface, EquatableInterface
         return $this->sessionCourseSubscriptions;
     }
 
-    /**
-     * @param $value
-     * @param string[][] $value
-     *
-     * @return $this
-     */
-    public function setSessionCourseSubscriptions(array $value)
+    public function setSessionCourseSubscriptions(array $value): self
     {
         $this->sessionCourseSubscriptions = $value;
 
@@ -1533,10 +1521,8 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * @param string $confirmationToken
-     *
-     * @return User
      */
-    public function setConfirmationToken($confirmationToken)
+    public function setConfirmationToken($confirmationToken): self
     {
         $this->confirmationToken = $confirmationToken;
 
@@ -1567,7 +1553,7 @@ class User implements UserInterface, EquatableInterface
         return $this->plainPassword;
     }
 
-    public function setPlainPassword(string $password)
+    public function setPlainPassword(string $password): self
     {
         $this->plainPassword = $password;
 
@@ -1600,17 +1586,15 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Sets the credentials expiration date.
-     *
-     * @return User
      */
-    public function setCredentialsExpireAt(\DateTime $date = null)
+    public function setCredentialsExpireAt(\DateTime $date = null): self
     {
         $this->credentialsExpireAt = $date;
 
         return $this;
     }
 
-    public function addGroup($group)
+    public function addGroup($group): self
     {
         if (!$this->getGroups()->contains($group)) {
             $this->getGroups()->add($group);
@@ -1623,10 +1607,8 @@ class User implements UserInterface, EquatableInterface
      * Sets the user groups.
      *
      * @param array $groups
-     *
-     * @return User
      */
-    public function setGroups($groups)
+    public function setGroups($groups): self
     {
         foreach ($groups as $group) {
             $this->addGroup($group);
@@ -1635,10 +1617,7 @@ class User implements UserInterface, EquatableInterface
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getFullname()
+    public function getFullname(): string
     {
         return sprintf('%s %s', $this->getFirstname(), $this->getLastname());
     }
@@ -1648,10 +1627,7 @@ class User implements UserInterface, EquatableInterface
         return $this->groups;
     }
 
-    /**
-     * @return array
-     */
-    public function getGroupNames()
+    public function getGroupNames(): array
     {
         $names = [];
         foreach ($this->getGroups() as $group) {
@@ -1663,15 +1639,13 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * @param string $name
-     *
-     * @return bool
      */
-    public function hasGroup($name)
+    public function hasGroup($name): bool
     {
         return in_array($name, $this->getGroupNames());
     }
 
-    public function removeGroup($group)
+    public function removeGroup($group): self
     {
         if ($this->getGroups()->contains($group)) {
             $this->getGroups()->removeElement($group);
@@ -1682,10 +1656,8 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * @param string $role
-     *
-     * @return $this
      */
-    public function addRole($role)
+    public function addRole($role): self
     {
         $role = strtoupper($role);
         if ($role === static::ROLE_DEFAULT) {
@@ -1760,10 +1732,8 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * @param bool $boolean
-     *
-     * @return User
      */
-    public function setCredentialsExpired($boolean)
+    public function setCredentialsExpired($boolean): self
     {
         $this->credentialsExpired = $boolean;
 
@@ -1772,10 +1742,8 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * @param $boolean
-     *
-     * @return $this
      */
-    public function setEnabled($boolean)
+    public function setEnabled($boolean): self
     {
         $this->enabled = (bool) $boolean;
 
@@ -1794,20 +1762,15 @@ class User implements UserInterface, EquatableInterface
      * Sets this user to expired.
      *
      * @param bool $boolean
-     *
-     * @return User
      */
-    public function setExpired($boolean)
+    public function setExpired($boolean): self
     {
         $this->expired = (bool) $boolean;
 
         return $this;
     }
 
-    /**
-     * @return User
-     */
-    public function setExpiresAt(\DateTime $date)
+    public function setExpiresAt(\DateTime $date): self
     {
         $this->expiresAt = $date;
 
@@ -1821,20 +1784,15 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * @param $boolean
-     *
-     * @return $this
      */
-    public function setLocked($boolean)
+    public function setLocked($boolean): self
     {
         $this->locked = $boolean;
 
         return $this;
     }
 
-    /**
-     * @return $this
-     */
-    public function setRoles(array $roles)
+    public function setRoles(array $roles): self
     {
         $this->roles = [];
 
@@ -1856,12 +1814,9 @@ class User implements UserInterface, EquatableInterface
     }
 
     /**
-     * @param $value
      * @param string[] $value
-     *
-     * @return $this
      */
-    public function setAchievedSkills(array $value)
+    public function setAchievedSkills(array $value): self
     {
         $this->achievedSkills = $value;
 
@@ -1872,10 +1827,8 @@ class User implements UserInterface, EquatableInterface
      * Check if the user has the skill.
      *
      * @param Skill $skill The skill
-     *
-     * @return bool
      */
-    public function hasSkill(Skill $skill)
+    public function hasSkill(Skill $skill): bool
     {
         $achievedSkills = $this->getAchievedSkills();
 
@@ -1896,10 +1849,7 @@ class User implements UserInterface, EquatableInterface
         return $this->profileCompleted;
     }
 
-    /**
-     * @return User
-     */
-    public function setProfileCompleted($profileCompleted)
+    public function setProfileCompleted($profileCompleted): self
     {
         $this->profileCompleted = $profileCompleted;
 
@@ -1908,10 +1858,8 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Sets the AccessUrl for the current user in memory.
-     *
-     * @return $this
      */
-    public function setCurrentUrl(AccessUrl $url)
+    public function setCurrentUrl(AccessUrl $url): self
     {
         $urlList = $this->getPortals();
         /** @var AccessUrlRelUser $item */
@@ -1948,10 +1896,8 @@ class User implements UserInterface, EquatableInterface
      * Get sessionAsGeneralCoach.
      *
      * @param ArrayCollection $value
-     *
-     * @return $this
      */
-    public function setSessionAsGeneralCoach($value)
+    public function setSessionAsGeneralCoach($value): self
     {
         $this->sessionAsGeneralCoach = $value;
 
@@ -1966,7 +1912,7 @@ class User implements UserInterface, EquatableInterface
     /**
      * @return User
      */
-    public function setCommentedUserSkills(array $commentedUserSkills)
+    public function setCommentedUserSkills(array $commentedUserSkills): self
     {
         $this->commentedUserSkills = $commentedUserSkills;
 
@@ -2190,10 +2136,8 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * @param \DateTime $dateOfBirth
-     *
-     * @return User
      */
-    public function setDateOfBirth($dateOfBirth)
+    public function setDateOfBirth($dateOfBirth): self
     {
         $this->dateOfBirth = $dateOfBirth;
 

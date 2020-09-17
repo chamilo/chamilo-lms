@@ -2605,7 +2605,7 @@ class Tracking
         }
 
         $resultLP = Database::select(
-            'id',
+            'iid',
             $lPTable,
             ['where' => $lpConditions]
         );
@@ -2773,13 +2773,13 @@ class Tracking
         // Check the real number of LPs corresponding to the filter in the
         // database (and if no list was given, get them all)
         if (empty($session_id)) {
-            $sql = "SELECT DISTINCT(id), use_max_score
+            $sql = "SELECT DISTINCT(iid), use_max_score
                     FROM $lp_table
                     WHERE
                         c_id = $course_id AND
                         (session_id = 0 OR session_id IS NULL) $condition_lp ";
         } else {
-            $sql = "SELECT DISTINCT(id), use_max_score
+            $sql = "SELECT DISTINCT(iid), use_max_score
                     FROM $lp_table
                     WHERE c_id = $course_id $condition_lp ";
         }
@@ -6499,9 +6499,9 @@ class Tracking
             }
 
             // Now fill users data
-            $sqlUsers = "SELECT user_id, username, lastname, firstname
+            $sqlUsers = "SELECT id as user_id, username, lastname, firstname
                          FROM $tuser
-                         WHERE user_id IN (".implode(',', $userIds).")";
+                         WHERE id IN (".implode(',', $userIds).")";
             $resUsers = Database::query($sqlUsers);
             while ($rowUser = Database::fetch_assoc($resUsers)) {
                 $users[$rowUser['user_id']] = $rowUser;

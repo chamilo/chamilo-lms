@@ -61,13 +61,15 @@ class CourseRelUser
 
     /**
      * @var int
+     *
      * @Groups({"user:read", "course:read"})
      * @ORM\Column(name="relation_type", type="integer", nullable=false, unique=false)
      */
     protected $relationType;
 
     /**
-     * @var bool
+     * @var int
+     *
      * @Groups({"user:read"})
      * @ORM\Column(name="status", type="integer", nullable=false, unique=false)
      */
@@ -177,10 +179,8 @@ class CourseRelUser
 
     /**
      * Set status.
-     *
-     * @param bool $status
      */
-    public function setStatus($status): self
+    public function setStatus(int $status): self
     {
         $this->status = $status;
 
@@ -189,10 +189,8 @@ class CourseRelUser
 
     /**
      * Get status.
-     *
-     * @return bool
      */
-    public function getStatus()
+    public function getStatus(): int
     {
         return $this->status;
     }
@@ -219,18 +217,12 @@ class CourseRelUser
         return $this->sort;
     }
 
-    /**
-     * @return bool
-     */
-    public function isTutor()
+    public function isTutor(): bool
     {
         return $this->tutor;
     }
 
-    /**
-     * @param bool $tutor
-     */
-    public function setTutor($tutor)
+    public function setTutor(bool $tutor): self
     {
         $this->tutor = $tutor;
 
@@ -241,10 +233,8 @@ class CourseRelUser
      * Set userCourseCat.
      *
      * @param int $userCourseCat
-     *
-     * @return CourseRelUser
      */
-    public function setUserCourseCat($userCourseCat)
+    public function setUserCourseCat($userCourseCat): self
     {
         $this->userCourseCat = $userCourseCat;
 
@@ -265,10 +255,8 @@ class CourseRelUser
      * Set legalAgreement.
      *
      * @param int $legalAgreement
-     *
-     * @return CourseRelUser
      */
-    public function setLegalAgreement($legalAgreement)
+    public function setLegalAgreement($legalAgreement): self
     {
         $this->legalAgreement = $legalAgreement;
 
@@ -287,10 +275,8 @@ class CourseRelUser
 
     /**
      * Get relation_type list.
-     *
-     * @return array
      */
-    public static function getRelationTypeList()
+    public static function getRelationTypeList(): array
     {
         return [
             '0' => '',
@@ -300,10 +286,8 @@ class CourseRelUser
 
     /**
      * Get status list.
-     *
-     * @return array
      */
-    public static function getStatusList()
+    public static function getStatusList(): array
     {
         return [
             User::COURSE_MANAGER => 'Teacher',

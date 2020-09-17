@@ -6140,7 +6140,7 @@ class SessionManager
         $masterSelect = 'SELECT DISTINCT id FROM ';
 
         if ($getCount) {
-            $select = 'SELECT DISTINCT u.id as user_id ';
+            $select = 'SELECT DISTINCT u.id';
             $masterSelect = 'SELECT COUNT(DISTINCT(id)) as count FROM ';
         }
 

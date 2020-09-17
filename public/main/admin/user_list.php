@@ -19,26 +19,31 @@ $currentUserId = api_get_user_id();
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
 
 // Login as can be used by different roles
-if (isset($_GET['user_id']) && 'login_as' == $action) {
+if (isset($_GET['user_id']) && 'login_as' === $action) {
     $check = Security::check_token('get');
     if ($check && api_can_login_as($_GET['user_id'])) {
         $result = UserManager::loginAsUser($_GET['user_id']);
+
+        $oldUserInfo = api_get_user_info($_GET['user_id']);
         if ($result) {
-            $userInfo = api_get_user_info();
-            $userId = $userInfo['id'];
+            $userId = $oldUserInfo['id'];
             $message = sprintf(
                 get_lang('Attempting to login as %s %s (id %s)'),
-                $userInfo['complete_name_with_username'],
+                $oldUserInfo['complete_name_with_username'],
                 '',
                 $userId
             );
 
-            $url = api_get_path(WEB_PATH).'user_portal.php';
+            $url = api_get_path(WEB_PATH);
             $goTo = sprintf(get_lang('Login successful. Go to %s'), Display::url($url, $url));
-            Display::display_header(get_lang('User list'));
+
+            Display::addFlash(Display::return_message($message, 'normal', false));
+
+            api_location($url.'?_switch_user='.$oldUserInfo['username']);
+            /*Display::display_header(get_lang('User list'));
             echo Display::return_message($message, 'normal', false);
             echo Display::return_message($goTo, 'normal', false);
-            Display::display_footer();
+            Display::display_footer();*/
             exit;
         } else {
             api_not_allowed(true);

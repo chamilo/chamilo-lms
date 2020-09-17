@@ -5909,6 +5909,8 @@ SQL;
             // Logout the current user
             self::loginDelete(api_get_user_id());
 
+            return true;
+
             Session::erase('_user');
             Session::erase('is_platformAdmin');
             Session::erase('is_allowedCreateCourse');

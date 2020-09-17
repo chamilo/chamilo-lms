@@ -11,6 +11,7 @@ security:
         users:
             entity:
                 class: Chamilo\CoreBundle\Entity\User
+                property: 'username'
 
     access_control:
         - {path: ^/administrator, role: ROLE_ADMIN}
@@ -73,7 +74,7 @@ security:
             logout:
                 path: /logout
                 target: /
-            switch_user: false
+            switch_user: true
 #            access_denied_handler: Chamilo\CoreBundle\Security\AccessDeniedHandler
             json_login:
                 check_path: /login_json

@@ -82,7 +82,7 @@ function get_users($from, $limit, $column, $direction)
     }
     $is_western_name_order = api_is_western_name_order();
     $coach_id = api_get_user_id();
-    $column = 'u.user_id';
+    $column = 'u.id';
     $drhLoaded = false;
 
     if (api_is_drh()) {
@@ -128,7 +128,7 @@ function get_users($from, $limit, $column, $direction)
 
     $all_datas = [];
     foreach ($students as $student_data) {
-        $student_id = $student_data['user_id'];
+        $student_id = $student_data['id'];
         $student_data = api_get_user_info($student_id);
 
         if (isset($_GET['id_session'])) {

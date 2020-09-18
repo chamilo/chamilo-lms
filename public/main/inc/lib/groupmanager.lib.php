@@ -475,7 +475,6 @@ class GroupManager
         $groupInfo = self::get_group_properties($groupInfo['iid'], true);
         if ($groupInfo) {
             $groupIid = $groupInfo['iid'];
-            $groupId = $groupInfo['id'];
             // Unsubscribe all users
             self::unsubscribe_all_users($groupInfo);
             self::unsubscribe_all_tutors($groupInfo);
@@ -509,7 +508,7 @@ class GroupManager
                 ->createQuery(
                     'DELETE FROM ChamiloCourseBundle:CForumForum f WHERE f.forumOfGroup = :group'
                 )
-                ->execute(['group' => $groupId]);
+                ->execute(['group' => $groupIid]);
 
             // Delete item properties of this group.
             // to_group_id is related to c_group_info.iid
@@ -520,11 +519,17 @@ class GroupManager
                 ->execute(['course' => $course_id, 'group' => $groupId]);
             */
             // delete the groups
-            $em
+            $repo = Container::getGroupRepository();
+            $group = $repo->find($groupIid);
+            if ($group) {
+                $em->remove($group);
+                $em->flush();
+            }
+            /*$em
                 ->createQuery(
                     'DELETE FROM ChamiloCourseBundle:CGroup g WHERE g.course = :course AND g.iid = :id'
                 )
-                ->execute(['course' => $course_id, 'id' => $groupIid]);
+                ->execute(['course' => $course_id, 'id' => $groupIid]);*/
         }
 
         return true;

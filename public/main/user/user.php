@@ -1006,22 +1006,22 @@ function active_filter($active, $urlParams, $row)
  */
 function modify_filter($user_id, $row, $data)
 {
-    global $charset;
     $canEditUsers = 'true' == api_get_setting('allow_user_course_subscription_by_course_admin') || api_is_platform_admin();
 
     $is_allowed_to_track = api_is_allowed_to_edit(true, true);
-
     $user_id = $data[0];
     $userInfo = api_get_user_info($user_id);
     $isInvitee = INVITEE == $userInfo['status'] ? true : false;
     $course_info = $_course = api_get_course_info();
     $current_user_id = api_get_user_id();
     $sessionId = api_get_session_id();
+    $courseId = $_course['id'];
     $type = isset($_REQUEST['type']) ? intval($_REQUEST['type']) : STUDENT;
 
     $result = '';
     if ($is_allowed_to_track) {
-        $result .= '<a href="../mySpace/myStudents.php?'.api_get_cidreq().'&student='.$user_id.'&details=true&course='.$_course['id'].'&origin=user_course&id_session='.api_get_session_id().'" title="'.get_lang('Reporting').'">
+        $result .= '<a href="../mySpace/myStudents.php?'.api_get_cidreq().'&student='.$user_id.'&details=true&course='.$courseId.'&origin=user_course&id_session='.api_get_session_id().'"
+        title="'.get_lang('Reporting').'">
             '.Display::return_icon('statistics.png', get_lang('Reporting')).'
         </a>';
     }
@@ -1029,18 +1029,19 @@ function modify_filter($user_id, $row, $data)
     // If platform admin, show the login_as icon (this drastically shortens
     // time taken by support to test things out)
     if (api_is_platform_admin()) {
-        $result .= ' <a href="'.api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=login_as&user_id='.$user_id.'&sec_token='.Security::getTokenFromSession().'">'.
+        $result .= ' <a
+        href="'.api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=login_as&user_id='.$user_id.'&sec_token='.Security::getTokenFromSession().'">'.
             Display::return_icon('login_as.png', get_lang('Login as')).'</a>&nbsp;&nbsp;';
     }
 
     if (api_is_allowed_to_edit(null, true)) {
         if (empty($sessionId)) {
-            $isTutor = isset($data['is_tutor']) ? intval($data['is_tutor']) : 0;
+            $isTutor = isset($data['is_tutor']) ? (int) $data['is_tutor'] : 0;
             $isTutor = empty($isTutor) ? 1 : 0;
 
-            $text = get_lang('RemoveCoachStatus');
+            $text = get_lang('Remove assistant role');
             if ($isTutor) {
-                $text = get_lang('SetCoach');
+                $text = get_lang('Convert to assistant');
             }
 
             if ($isInvitee) {
@@ -1052,7 +1053,8 @@ function modify_filter($user_id, $row, $data)
             $allow = api_get_configuration_value('extra');
             if ($allow) {
                 $result .= '<a href="'.
-                    api_get_path(WEB_CODE_PATH).'extra/userInfo.php?'.api_get_cidreq().'&editMainUserInfo='.$user_id.'" title="'.get_lang('Edit').'" >'.
+                    api_get_path(WEB_CODE_PATH).'extra/userInfo.php?'.api_get_cidreq().'&editMainUserInfo='.$user_id.'"
+                    title="'.get_lang('Edit').'" >'.
                     Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).
                     '</a>&nbsp;';
             }
@@ -1070,7 +1072,10 @@ function modify_filter($user_id, $row, $data)
         if ($canEditUsers) {
             // unregister
             if ($user_id != $current_user_id || api_is_platform_admin()) {
-                $result .= '<a class="btn btn-sm btn-danger delete-swal" href="'.api_get_self().'?'.api_get_cidreq().'&type='.$type.'&unregister=yes&user_id='.$user_id.'" title="'.addslashes(api_htmlentities(get_lang('Unsubscribe'))).' " >'.
+                $result .= '<a
+                class="btn btn-sm btn-danger delete-swal"
+                href="'.api_get_self().'?'.api_get_cidreq().'&type='.$type.'&unregister=yes&user_id='.$user_id.'"
+                title="'.addslashes(api_htmlentities(get_lang('Unsubscribe'))).' " >'.
                     get_lang('Unsubscribe').'</a>&nbsp;';
             }
         }
@@ -1078,7 +1083,10 @@ function modify_filter($user_id, $row, $data)
         // Show buttons for unsubscribe
         if (1 == $course_info['unsubscribe']) {
             if ($user_id == $current_user_id) {
-                $result .= '<a class="btn btn-sm btn-danger delete-swal" href="'.api_get_self().'?'.api_get_cidreq().'&type='.$type.'&unregister=yes&user_id='.$user_id.'" title="'.addslashes(api_htmlentities(get_lang('Unsubscribe'))).' >'.
+                $result .= '<a
+                class="btn btn-sm btn-danger delete-swal"
+                href="'.api_get_self().'?'.api_get_cidreq().'&type='.$type.'&unregister=yes&user_id='.$user_id.'"
+                title="'.addslashes(api_htmlentities(get_lang('Unsubscribe'))).' >'.
                     get_lang('Unsubscribe').'</a>&nbsp;';
             }
         }

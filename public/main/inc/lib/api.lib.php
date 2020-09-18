@@ -7657,10 +7657,6 @@ function api_can_login_as($loginAsUserId, $userId = null)
         return false;
     }
 
-    if (empty($loginAsUserId)) {
-        return false;
-    }
-
     // Check if the user to login is an admin
     if (api_is_platform_admin_by_id($loginAsUserId)) {
         // Only super admins can login to admin accounts

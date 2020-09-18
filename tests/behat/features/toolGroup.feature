@@ -244,8 +244,8 @@ Feature: Group tool
     And I follow "Announcements"
     Then I should see "Announcements"
     Then I follow "Add an announcement"
+    And wait for the page to be loaded
     Then I should see "Add an announcement"
-    Then wait for the page to be loaded
     Then I fill in the following:
       | title | Announcement for all users inside Group 0001 |
     And I fill in ckeditor field "content" with "Announcement description in Group 0001"
@@ -286,8 +286,8 @@ Feature: Group tool
     Then wait for the page to be loaded
     Then I should see "Announcements"
     Then I follow "Add an announcement"
+    And wait for the page to be loaded
     Then I should see "Add an announcement"
-    Then wait for the page to be loaded
     Then I fill in the following:
       | title | Announcement for all users inside Group 0003 |
     And I fill in ckeditor field "content" with "Announcement description in Group 0003"
@@ -305,6 +305,7 @@ Feature: Group tool
     And I follow "Announcements"
     Then I should see "Announcements"
     Then I follow "Add an announcement"
+    Then wait for the page to be loaded
     Then I should see "Add an announcement"
     Then wait for the page to be loaded
     Then I press "choose_recipients"
@@ -320,15 +321,17 @@ Feature: Group tool
     Then I should see "Announcement has been added"
 
   Scenario: Create an announcement as acostea and send only to fapple
+    Given I am not logged
     Given I am logged as "acostea"
     Given I am on "/main/group/group.php?cid=1&sid=0"
     And I follow "Group 0005"
     Then I should see "Group 0005"
     And I follow "Announcements"
+    Then wait the page to be loaded when ready
     Then I should see "Announcements"
     Then I follow "Add an announcement"
-    Then I should see "Add an announcement"
     Then wait for the page to be loaded
+    Then I should see "Add an announcement"
     Then I press "choose_recipients"
     Then I select "Fiona Apple Maggart" from "users"
     Then I press "users_rightSelected"
@@ -342,6 +345,7 @@ Feature: Group tool
     Then I should see "Announcement has been added"
 
   Scenario: Check fapple/acostea access of announcements
+    Given I am not logged
     Given I am logged as "fapple"
     And I am on course "TEMP" homepage
     And I am on "/main/group/group.php?cid=1&sid=0"
@@ -386,6 +390,7 @@ Feature: Group tool
     Then I save current URL with name "announcement_only_for_fapple_private"
 
     ## Finish tests with fapple now check access with acostea ##
+    Given I am not logged
     Given I am logged as "acostea"
     And I am on course "TEMP" homepage
     Given I am on "/main/group/group.php?cid=1&sid=0"
@@ -400,6 +405,7 @@ Feature: Group tool
     Then I visit URL saved with name "announcement_only_for_fapple_private"
     Then I should see "Sorry, you are not allowed to access this page"
 
+    Given I am not logged
     Given I am logged as "acostea"
     And I am on course "TEMP" homepage
     Given I am on "/main/group/group.php?cid=1&sid=0"

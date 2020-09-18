@@ -6185,7 +6185,8 @@ class CourseManager
     public static function addGroupMultiSelect($form, $groupInfo, $to = [])
     {
         $groupUsers = GroupManager::get_subscribed_users($groupInfo);
-        $array = self::buildSelectOptions([$groupInfo], $groupUsers, $to);
+        $groupEntity = api_get_group_entity($groupInfo['iid']);
+        $array = self::buildSelectOptions([$groupEntity], $groupUsers, $to);
 
         $result = [];
         foreach ($array as $content) {
@@ -6204,11 +6205,8 @@ class CourseManager
      *
      * @return array
      */
-    public static function buildSelectOptions(
-        $groupList = [],
-        $userList = [],
-        $alreadySelected = []
-    ) {
+    public static function buildSelectOptions($groupList = [], $userList = [], $alreadySelected = [])
+    {
         if (empty($alreadySelected)) {
             $alreadySelected = [];
         }

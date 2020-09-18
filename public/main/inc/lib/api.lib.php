@@ -6794,24 +6794,19 @@ function api_get_jquery_libraries_js($libraries)
  * @param int    $sessionId  The session ID  - optional (takes it from context if not given)
  * @param int    $groupId    The group ID - optional (takes it from context if not given)
  *
- * @return string The URL to a course, a session, or empty string if nothing works e.g. https://localhost/courses/ABC/index.php?session_id=3&gidReq=1
+ * @return string The URL to a course, a session, or empty string if nothing works
+ * e.g. https://localhost/courses/ABC/index.php?session_id=3&gidReq=1
  *
  * @author  Julio Montoya <gugli100@gmail.com>
  */
 function api_get_course_url($courseCode = null, $sessionId = null, $groupId = null)
 {
-    $courseDirectory = '';
     $url = '';
     // If courseCode not set, get context or []
     if (empty($courseCode)) {
         $courseInfo = api_get_course_info();
     } else {
         $courseInfo = api_get_course_info($courseCode);
-    }
-
-    // If course defined, get directory, otherwise keep empty string
-    if (!empty($courseInfo['directory'])) {
-        $courseDirectory = $courseInfo['directory'];
     }
 
     // If sessionId not set, get context or 0
@@ -6825,14 +6820,14 @@ function api_get_course_url($courseCode = null, $sessionId = null, $groupId = nu
     }
 
     // Build the URL
-    if (!empty($courseDirectory)) {
+    if (!empty($courseInfo)) {
         // directory not empty, so we do have a course
-        $url = api_get_path(WEB_COURSE_PATH).$courseDirectory.'/index.php?id_session='.$sessionId.'&gidReq='.$groupId;
-    } elseif (!empty($sessionId) &&
-        'true' !== api_get_setting('session.remove_session_url')
-    ) {
-        // if the course was unset and the session was set, send directly to the session
-        $url = api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$sessionId;
+        $url = $courseInfo['course_public_url'].'?sid='.$sessionId.'&gid='.$groupId;
+    } else {
+        if (!empty($sessionId) && 'true' !== api_get_setting('session.remove_session_url')) {
+            // if the course was unset and the session was set, send directly to the session
+            $url = api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$sessionId;
+        }
     }
 
     // if not valid combination was found, return an empty string

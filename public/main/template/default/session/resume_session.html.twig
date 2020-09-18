@@ -7,16 +7,16 @@
 
 <table id="session-properties" class="table table-bordered">
     <tr>
-        <td>{{ 'CreatedBy'|get_lang }}</td>
+        <td>{{ 'Created by'|get_lang }}</td>
         <td>{{ session_admin.complete_name_with_message_link }}</td>
     </tr>
     <tr>
-        <td>{{ 'GeneralCoach' | get_lang}} :</td>
+        <td>{{ 'General coach' | get_lang}} :</td>
         <td>{{ general_coach.complete_name_with_message_link }}</td>
     </tr>
     {% if session_category  %}
     <tr>
-        <td>{{ 'SessionCategory' | get_lang}} </td>
+        <td>{{ 'Session category' | get_lang}} </td>
         <td>{{ session_category }}</td>
     </tr>
     {% endif %}
@@ -30,15 +30,15 @@
     </tr>
     {% else %}
     <tr>
-        <td>{{ 'DisplayDates' | get_lang}} </td>
+        <td>{{ 'Dates shown' | get_lang}} </td>
         <td>{{ session_dates.display }}</td>
     </tr>
     <tr>
-        <td>{{ 'AccessDates' | get_lang}} </td>
+        <td>{{ 'Access dates for students' | get_lang}} </td>
         <td>{{ session_dates.access }}</td>
     </tr>
     <tr>
-        <td>{{ 'CoachDates' | get_lang}} </td>
+        <td>{{ 'Access dates for coaches' | get_lang}} </td>
         <td>{{ session_dates.coach }}</td>
     </tr>
     {% endif %}
@@ -50,7 +50,7 @@
         </td>
     </tr>
     <tr>
-        <td>{{ 'ShowDescription' | get_lang}} </td>
+        <td>{{ 'Show description' | get_lang}} </td>
         <td>
             {% if session.show_description == 1 %}
                 {{ 'Yes' | get_lang}}
@@ -60,7 +60,7 @@
         </td>
     </tr>
     <tr>
-        <td>{{ 'SessionVisibility' | get_lang}} </td>
+        <td>{{ 'Visibility after end date' | get_lang}} </td>
         <td>
             {{ session_visibility }}
         </td>
@@ -104,7 +104,7 @@
 
     {% if programmed_announcement %}
         <tr>
-            <td>{{ 'ScheduledAnnouncements' | get_lang}}</td>
+            <td>{{ 'Scheduled announcements' | get_lang }}</td>
             <td>
                 <a class="btn btn-default" href="{{ _p.web_main }}session/scheduled_announcement.php?session_id={{ session.id }}">
                     {{ 'Edit' | get_lang }}

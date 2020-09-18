@@ -1731,6 +1731,18 @@ EOT;
     }
 
     /**
+     * Add email rule for an element.
+     */
+    public function addEmailRule(string $element)
+    {
+        $this->addRule(
+            $element,
+            get_lang('The email address is not complete or contains some invalid characters'),
+            'email'
+        );
+    }
+
+    /**
      * @param string $url           page that will handle the upload
      * @param string $inputName
      * @param string $urlToRedirect
@@ -1863,15 +1875,6 @@ EOT;
             $('.fileinput-button').hide();
         });
         </script>");
-    }
-
-    public function addEmailRule(string $element)
-    {
-        $this->addRule(
-            $element,
-            get_lang('The email address is not complete or contains some invalid characters'),
-            'email'
-        );
     }
 }
 

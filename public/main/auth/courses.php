@@ -434,7 +434,7 @@ switch ($action) {
                     $course['image_url'] = $settingsUrl[$courseCatalogSettings['image_url']];
 
                     $userRegisteredInCourse = CourseManager::is_user_subscribed_in_course($user_id, $course['code']);
-                    $userRegisteredInCourseAsTeacher = CourseManager::is_course_teacher($user_id, $course['code']);
+                    $userRegisteredInCourseAsTeacher = CourseManager::isCourseTeacher($user_id, $course['real_id']);
                     $userRegistered = $userRegisteredInCourse && $userRegisteredInCourseAsTeacher;
 
                     $course_public = COURSE_VISIBILITY_OPEN_WORLD == $course['visibility'];

@@ -1791,9 +1791,9 @@ class Agenda
         if (api_is_platform_admin() || api_is_allowed_to_edit()) {
             $isAllowToEdit = true;
         } else {
-            $isAllowToEdit = CourseManager::is_course_teacher(
+            $isAllowToEdit = CourseManager::isCourseTeacher(
                 $userId,
-                $courseInfo['code']
+                $courseId
             );
         }
 

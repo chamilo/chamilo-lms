@@ -29,7 +29,7 @@ if (!api_is_allowed_to_create_course() &&
     // Francois Belisle Kezber...
     // If user is NOT a teacher -> student, but IS the teacher of the course... Won't have the global teacher status
     // and won't be tutor... So have to check is_course_teacher
-    if ((1 != $user_course_status) && !(CourseManager::is_course_teacher(api_get_user_id(), $course_code))) {
+    if ((1 != $user_course_status) && !(CourseManager::isCourseTeacher(api_get_user_id(), api_get_course_int_id()))) {
         api_not_allowed(true);
     }
 }

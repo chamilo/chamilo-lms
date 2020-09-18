@@ -1161,78 +1161,9 @@ class CourseManager
 
         $url = api_get_url_entity();
         $user = api_get_user_entity($userId);
-
         $repo = Container::getUserRepository();
 
         return $repo->getCourses($user, $url, COURSEMANAGER, $keyword);
-
-
-        // Definitions database tables and variables
-        $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
-        $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $tblCourseCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
-        $userId = (int) $userId;
-
-
-        if (empty($userId)) {
-            return [];
-        }
-
-        $sql = "SELECT
-                    course.code,
-                    course.title,
-                    course.id,
-                    course.id as real_id,
-                    course_category.code AS category_code
-                FROM $tbl_course_user as course_rel_user
-                INNER JOIN $tbl_course as course
-                ON course.id = course_rel_user.c_id
-                LEFT JOIN $tblCourseCategory
-                ON course.category_id = $tblCourseCategory.id
-                WHERE
-                    course_rel_user.user_id = $userId AND
-                    course_rel_user.status = 1
-        ";
-
-        if (api_get_multiple_access_url()) {
-            $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-            $access_url_id = api_get_current_access_url_id();
-            if (-1 != $access_url_id) {
-                $sql = "
-                    SELECT
-                        course.code,
-                        course.title,
-                        course.id,
-                        course.id as real_id
-                    FROM $tbl_course_user as course_rel_user
-                    INNER JOIN $tbl_course as course
-                    ON course.id = course_rel_user.c_id
-                    INNER JOIN $tbl_course_rel_access_url course_rel_url
-                    ON (course_rel_url.c_id = course.id)
-                    WHERE
-                        access_url_id = $access_url_id  AND
-                        course_rel_user.user_id = $userId AND
-                        course_rel_user.status = 1
-                ";
-            }
-        }
-
-        if (!empty($keyword)) {
-            $keyword = Database::escape_string($keyword);
-            $sql .= " AND (course.title LIKE '$keyword%' OR course.code LIKE '$keyword%')";
-        }
-
-        $sql .= ' ORDER BY course.title';
-
-        $query = Database::query($sql);
-        $data = [];
-        if (Database::num_rows($query) > 0) {
-            while ($row = Database::fetch_array($query, 'ASSOC')) {
-                $data[$row['id']] = $row;
-            }
-        }
-
-        return $data;
     }
 
     /**
@@ -1371,22 +1302,20 @@ class CourseManager
     /**
      * Is the user a teacher in the given course?
      *
-     * @param int    $userId     , the id (int) of the user
-     * @param string $course_code , the course code
+     * @param int    $userId
+     * @param int    $courseId
      *
      * @return bool if the user is a teacher in the course, false otherwise
      */
-    public static function is_course_teacher($userId, $course_code)
+    public static function isCourseTeacher($userId, $courseId)
     {
-        if ($userId != strval(intval($userId))) {
+        $userId = (int) $userId;
+        $courseId = (int) $courseId;
+
+        if (empty($courseId) || empty($userId)) {
             return false;
         }
 
-        $courseInfo = api_get_course_info($course_code);
-        if (empty($courseInfo)) {
-            return false;
-        }
-        $courseId = $courseInfo['real_id'];
         $sql = "SELECT status FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
                 WHERE c_id = $courseId AND user_id = $userId ";
         $result = Database::query($sql);
@@ -5175,7 +5104,7 @@ class CourseManager
             );
 
             $userRegisteredInCourse = self::is_user_subscribed_in_course($user_id, $course_info['code']);
-            $userRegisteredInCourseAsTeacher = self::is_course_teacher($user_id, $course_info['code']);
+            $userRegisteredInCourseAsTeacher = self::isCourseTeacher($user_id, $courseId['c_id']);
             $userRegistered = $userRegisteredInCourse && $userRegisteredInCourseAsTeacher;
             $my_course['is_course_student'] = $userRegisteredInCourse;
             $my_course['is_course_teacher'] = $userRegisteredInCourseAsTeacher;

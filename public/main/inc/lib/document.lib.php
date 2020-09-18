@@ -2984,7 +2984,7 @@ class DocumentManager
         $userInfo = api_get_user_info();
         $user_in_course = api_is_platform_admin();
         if (!$user_in_course) {
-            if (CourseManager::is_course_teacher($user_id, $course_info['code'])) {
+            if (CourseManager::isCourseTeacher($user_id, $course_info['real_id'])) {
                 $user_in_course = true;
             }
         }
@@ -3346,7 +3346,7 @@ class DocumentManager
 
         if (!empty($document_data)) {
             // If admin or course teacher, allow anyway
-            if (api_is_platform_admin() || CourseManager::is_course_teacher($user_id, $courseCode)) {
+            if (api_is_platform_admin() || CourseManager::isCourseTeacher($user_id, $courseInfo['real_id'])) {
                 return true;
             }
 

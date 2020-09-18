@@ -260,7 +260,6 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
 
         $qb
             ->select('DISTINCT course')
-            //->addSelect('user.courses')
             ->innerJoin(
                 CourseRelUser::class,
                 'courseRelUser',
@@ -278,7 +277,7 @@ class UserRepository extends ResourceRepository implements UserLoaderInterface, 
 
         if (!empty($keyword)) {
             $qb
-                ->andWhere('course.title like = :keyword')
+                ->andWhere('course.title like = :keyword OR course.code like = :keyword')
                 ->setParameter('keyword', $keyword);
         }
 

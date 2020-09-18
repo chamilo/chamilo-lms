@@ -62,9 +62,9 @@ if (!api_is_session_admin() &&
         $isTeacher = false;
         // Check if is current teacher if set
         if (!empty($courseInfo)) {
-            $isTeacher = CourseManager::is_course_teacher(
+            $isTeacher = CourseManager::isCourseTeacher(
                 api_get_user_id(),
-                $courseInfo['code']
+                $courseInfo['real_id']
             );
         }
 

@@ -7237,7 +7237,7 @@ function api_detect_user_roles($user_id, $courseId, $session_id = 0)
 
     if (!empty($course_code)) {
         if (empty($session_id)) {
-            if (CourseManager::is_course_teacher($user_id, $course_code)) {
+            if (CourseManager::isCourseTeacher($user_id, $courseInfo['real_id'])) {
                 $user_roles[] = COURSEMANAGER;
             }
             if (CourseManager::get_tutor_in_course_status($user_id, $courseInfo['real_id'])) {

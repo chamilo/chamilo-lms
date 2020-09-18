@@ -65,21 +65,21 @@ Feature: Session access
     Given I am logged as "ywarnier"
     Then I am on course "TEMPPRIVATE" homepage in session "Session2"
     And wait the page to be loaded when ready
-    Then I should see "Unauthorised access to course"
+    Then I should see "Unauthorised access"
 
   Scenario: ywarnier connect to session that doesn't exists
     Given I am not logged
     Given I am logged as "ywarnier"
     And I am on course "TEMPPRIVATE" homepage in session "Session does not exists"
     And wait the page to be loaded when ready
-    Then I should see "You are not allowed"
+    Then I should see "Session not found"
 
   Scenario: mmosquera connect to Session 1
     Given I am not logged
     Given I am logged as "mmosquera"
     Then I am on course "TEMPPRIVATE" homepage in session "Session1"
     And wait the page to be loaded when ready
-    Then I should see "Unauthorised access to course"
+    Then I should see "Unauthorised access"
 
   Scenario: mmosquera connect to Session 2
     Given I am not logged

@@ -1,17 +1,14 @@
 <meta charset="utf-8">
-{# Check settings to add more metadata in app/config/sonata/sonata_seo.yml #}
-{#{{ sonata_seo_metadatas() }}#}
 <link href="https://chamilo.org/chamilo-lms/" rel="help"/>
 <link href="https://chamilo.org/the-association/" rel="author"/>
 <link href="https://chamilo.org/the-association/" rel="copyright"/>
 <link rel="apple-touch-icon" href="{{ url('home') ~ 'apple-touch-icon.png' }}"/>
 {#<link rel="shortcut icon" href="{{ url('home') ~  favico}}" type="image/x-icon" />#}
 <title>
-{% block title %}
+{%- block title %}
 {{ chamilo_settings_get('platform.institution') }} - {{ chamilo_settings_get('platform.site_name') }}
-{% endblock %}
+{% endblock -%}
 </title>
-
 {% set bug_notification_link = '' %}
 {% set help_content = '' %}
 {% set header_extra_content = '' %}
@@ -25,7 +22,7 @@
 {% set profile_link = '' %}
 {% set message_link = '' %}
 
-{% block stylesheets %}
+{%- block stylesheets %}
     {# Files app.css is generated from "assets/css/app.scss" file using the file webpack.config.js #}
     <link rel="stylesheet" href="{{ url('home') ~ 'build/css/app.css' }}"/>
 {#    {{ encore_entry_link_tags('app') }}#}
@@ -35,10 +32,8 @@
     <link rel="stylesheet" media="print" href="{{ url('home') ~ 'build/css/print.css' }}"/>
 {#    {{ encore_entry_link_tags('vue') }}#}
     <link rel="stylesheet" href="{{ url('home') ~ 'build/vue.css' }}"/>
-{% endblock %}
-
+{% endblock -%}
 {# app.js is generated using the file webpack.config.js and using yarn read /assets/README.md for more info #}
-
 <script src="{{ url('home') ~ 'build/libs/ckeditor/ckeditor.js' }}"></script>
 <script src="{{ url('home') ~ 'build/runtime.js' }}"></script>
 <script src="{{ url('home') ~ 'build/app.js' }}"></script>

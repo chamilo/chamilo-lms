@@ -1,76 +1,72 @@
 {% extends '@ChamiloCore/Layout/base-layout.html.twig' %}
+{%- block page_content %}
+    {%- autoescape false %}
+        {% if js is defined %}
+            {% for item in js %}
+                {{ item }}
+            {% endfor %}
+        {% endif %}
 
-{% block page_content %}
-    {% autoescape false %}
+        {% if plugin_main_top %}
+            <div id="plugin_main_top" class="col-md-12">
+                {{ plugin_main_top }}
+            </div>
+        {% endif %}
 
-    {% if js is defined %}
-        {% for item in js %}
-            {{ item }}
-        {% endfor %}
-    {% endif %}
+        {% if plugin_content_top %}
+            <div id="plugin_content_top" class="col-md-12">
+                {{ plugin_content_top }}
+            </div>
+        {% endif %}
 
-    {% if plugin_main_top %}
-        <div id="plugin_main_top" class="col-md-12">
-            {{ plugin_main_top }}
-        </div>
-    {% endif %}
-
-    {% if plugin_content_top %}
-        <div id="plugin_content_top" class="col-md-12">
-            {{ plugin_content_top }}
-        </div>
-    {% endif %}
-
-    {% if show_course_shortcut is not null %}
-        <div class="nav-tools">
-            {{ show_course_shortcut }}
-        </div>
-    {% endif %}
-
-    {% autoescape %}
+        {% if show_course_shortcut is not null %}
+            <div class="nav-tools">
+                {{ show_course_shortcut }}
+            </div>
+        {% endif %}
+    {% endautoescape -%}
+    {%- autoescape %}
     <div
         id="app"
         data-is-authenticated="{{ is_authenticated }}"
         data-user-json="{{ user_json }}"
         data-flashes="{{ app.flashes()|json_encode }}"
-        {% if legacy_breadcrumb is defined %}
+        {%- if legacy_breadcrumb is defined %}
             data-breadcrumb="{{ legacy_breadcrumb | json_encode() }}"
-        {% endif %}
+        {% endif -%}
     >
     </div>
-    {% endautoescape %}
+    {% endautoescape -%}
 
     {% set hideContent = 'display: none' %}
     {% if from_vue %}
         {% set hideContent = '' %}
     {% endif %}
+    {%- autoescape false %}
+        <section id="sectionMainContent" class="section-content" style="{{ hideContent }}">
+            {% if introduction is defined %}
+                {{ introduction }}
+            {% endif %}
 
-    <section id="sectionMainContent" class="section-content" style="{{ hideContent }}">
-    {% autoescape false %}
-        {% if introduction is defined %}
-            {{ introduction }}
+            {% if actions != '' %}
+                {{ actions }}
+            {% endif %}
+
+            {%- block content %}
+                {{ content }}
+            {% endblock -%}
+        </section>
+
+        {% if plugin_content_bottom %}
+            <div id="plugin_content_bottom" class="col-md-12">
+                {{ plugin_content_bottom }}
+            </div>
         {% endif %}
 
-        {% if actions != '' %}
-            {{ actions }}
+        {% if plugin_main_bottom %}
+            <div id="plugin_main_bottom" class="col-md-12">
+                {{ plugin_main_bottom }}
+            </div>
         {% endif %}
-
-        {% block content %}
-            {{ content }}
-        {% endblock %}
-    {% endautoescape %}
-    </section>
-
-    {% if plugin_content_bottom %}
-        <div id="plugin_content_bottom" class="col-md-12">
-            {{ plugin_content_bottom }}
-        </div>
-    {% endif %}
-
-    {% if plugin_main_bottom %}
-        <div id="plugin_main_bottom" class="col-md-12">
-            {{ plugin_main_bottom }}
-        </div>
-    {% endif %}
-    {% endautoescape %}
-{% endblock %}
+    {% endautoescape -%}
+{% endblock -%}

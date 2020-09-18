@@ -13,19 +13,19 @@
 {% include "@ChamiloCore/Layout/head.html.twig" %}
 </head>
 {% endblock %}
-    <body
-        class="{{ section_name }} h-100"
-        data-in-course="{{ course ? 'true' : 'false' }}"
-        data-course-code="{{ course ? course.code : '' }}"
-        data-session-id="{{ session ? session.id : '' }}"
-    >
+<body
+    class="{{ section_name }} h-100"
+    data-in-course="{{ course ? 'true' : 'false' }}"
+    data-course-code="{{ course ? course.code : '' }}"
+    data-session-id="{{ session ? session.id : '' }}"
+>
     <noscript> {{ "Your browser does not support Javascript" | trans }} </noscript>
-    {% block chamilo_wrap %}
-    {% block page_content %}
-    {% endblock %}
-    {% endblock %}
-    {% block chamilo_footer %}
-    {% endblock %}
+    {%- block chamilo_wrap %}
+        {% block page_content %}
+        {% endblock %}
+    {% endblock -%}
+    {%- block chamilo_footer %}
+    {% endblock -%}
     <script src="{{ url('home') ~ 'build/vue.js' }}"></script>
 </body>
 </html>

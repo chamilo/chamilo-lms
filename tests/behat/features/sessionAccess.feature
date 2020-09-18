@@ -19,6 +19,7 @@ Feature: Session access
     Then I should see "Subscribe users to this session"
     Then I follow "Multiple registration"
     And wait very long for the page to be loaded
+    And wait very long for the page to be loaded
     Then I select "Warnier Yannick (ywarnier)" from "nosessionUsersList[]"
     And I press "add_user"
     And I press "next"
@@ -53,26 +54,35 @@ Feature: Session access
     Then I should see "mmosquera"
 
   Scenario: ywarnier connects to Session1
+    Given I am not logged
     Given I am logged as "ywarnier"
     Then I am on course "TEMPPRIVATE" homepage in session "Session1"
+    And wait the page to be loaded when ready
     Then I should not see "You are not allowed"
 
   Scenario: ywarnier connect to Session 2
+    Given I am not logged
     Given I am logged as "ywarnier"
     Then I am on course "TEMPPRIVATE" homepage in session "Session2"
+    And wait the page to be loaded when ready
     Then I should see "Unauthorised access to course"
 
   Scenario: ywarnier connect to session that doesn't exists
+    Given I am not logged
     Given I am logged as "ywarnier"
     And I am on course "TEMPPRIVATE" homepage in session "Session does not exists"
+    And wait the page to be loaded when ready
     Then I should see "You are not allowed"
 
   Scenario: mmosquera connect to Session 1
+    Given I am not logged
     Given I am logged as "mmosquera"
     Then I am on course "TEMPPRIVATE" homepage in session "Session1"
+    And wait the page to be loaded when ready
     Then I should see "Unauthorised access to course"
 
   Scenario: mmosquera connect to Session 2
+    Given I am not logged
     Given I am logged as "mmosquera"
     Then I am on course "TEMPPRIVATE" homepage in session "Session2"
     Then I should not see "You are not allowed"

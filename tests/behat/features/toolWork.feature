@@ -28,6 +28,7 @@ Feature: Work tool
     Then I should see "Update successful"
 
   Scenario: Send work as student
+    Given I am not logged
     Given I am a student
     And I am on "/main/work/work.php?cid=1"
     And wait very long for the page to be loaded
@@ -43,6 +44,7 @@ Feature: Work tool
     Then I should see "The file has been added to the list of publications"
 
   Scenario: Check that work previously uploaded by student is available for the teacher.
+    Given I am not logged
     Given I am a platform administrator
     And I am on "/main/work/work.php?cid=1"
     And wait for the page to be loaded

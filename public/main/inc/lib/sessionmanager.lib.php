@@ -9484,19 +9484,19 @@ class SessionManager
     {
         $tabs = [
             [
-                'content' => get_lang('AllSessionsShort'),
+                'content' => get_lang('All sessions'),
                 'url' => api_get_path(WEB_CODE_PATH).'session/session_list.php?list_type=all',
             ],
             [
-                'content' => get_lang('ActiveSessionsShort'),
+                'content' => get_lang('Active sessions'),
                 'url' => api_get_path(WEB_CODE_PATH).'session/session_list.php?list_type=active',
             ],
             [
-                'content' => get_lang('ClosedSessionsShort'),
+                'content' => get_lang('Closed sessions'),
                 'url' => api_get_path(WEB_CODE_PATH).'session/session_list.php?list_type=close',
             ],
             [
-                'content' => get_lang('SessionListCustom'),
+                'content' => get_lang('Custom sessions'),
                 'url' => api_get_path(WEB_CODE_PATH).'session/session_list.php?list_type=custom',
             ],
             /*[

@@ -144,7 +144,7 @@ Feature: Users management as admin
     Then I follow "teacher lastname"
     And wait for the page to be loaded
     And I follow "Login as"
-    And wait for the page to be loaded
+    And wait very long for the page to be loaded
     Then I should see "Login successful"
 
   Scenario: HRM logs as student
@@ -156,5 +156,5 @@ Feature: Users management as admin
     Then I follow "student lastname"
     And wait for the page to be loaded
     And I follow "Login as"
-    And wait for the page to be loaded
+    And wait very long for the page to be loaded
     Then I should see "Login successful"

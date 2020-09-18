@@ -6272,7 +6272,6 @@ class Tracking
      */
     public static function setUserSearchForm($form)
     {
-        global $_configuration;
         $form->addElement('text', 'keyword', get_lang('Keyword'));
         $form->addElement(
             'select',
@@ -6284,7 +6283,7 @@ class Tracking
         $form->addElement(
             'select',
             'sleeping_days',
-            get_lang('inactiveDays'),
+            get_lang('Inactive days'),
             [
                 '',
                 1 => 1,

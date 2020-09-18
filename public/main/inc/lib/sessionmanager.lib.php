@@ -6136,11 +6136,11 @@ class SessionManager
                 break;
         }
 
-        $select = 'SELECT DISTINCT u.* ';
-        $masterSelect = 'SELECT DISTINCT id FROM ';
+        $select = 'SELECT DISTINCT u.*, u.id as user_id';
+        $masterSelect = 'SELECT DISTINCT id, id as user_id FROM ';
 
         if ($getCount) {
-            $select = 'SELECT DISTINCT u.id';
+            $select = 'SELECT DISTINCT u.id, u.id as user_id';
             $masterSelect = 'SELECT COUNT(DISTINCT(id)) as count FROM ';
         }
 

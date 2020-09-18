@@ -143,13 +143,16 @@ class ResourceNodeVoter extends Voter
         $request = $this->requestStack->getCurrentRequest();
 
         // @todo fix parameters.
-        $courseId = $request->get('cid');
-        $sessionId = $request->get('sid');
+        $courseId = (int) $request->get('cid');
+        $sessionId = (int) $request->get('sid');
 
         $links = $resourceNode->getResourceLinks();
         $linkFound = false;
         $courseManager = $this->entityManager->getRepository(Course::class);
         $sessionManager = $this->entityManager->getRepository(Session::class);
+
+        $course = null;
+        $link = null;
 
         // @todo implement view, edit, delete.
         foreach ($links as $link) {
@@ -178,8 +181,9 @@ class ResourceNodeVoter extends Voter
             }
 
             // @todo Check if resource was sent to a usergroup
-            // @todo Check if resource was sent to a group inside a course
-            // Check if resource was sent to a course inside a session
+            // @todo Check if resource was sent to a group inside a course.
+
+            // Check if resource was sent to a course inside a session.
             if ($linkSession instanceof Session && !empty($sessionId) &&
                 $linkCourse instanceof Course && !empty($courseId)
             ) {
@@ -196,24 +200,21 @@ class ResourceNodeVoter extends Voter
                 }
             }
 
-            // Check if resource was sent to a course
+            // Check if resource was sent to a course.
             if ($linkCourse instanceof Course && !empty($courseId)) {
-                $course = $courseManager->find($courseId);
-
-                if ($course instanceof Course &&
-                    $linkCourse->getCode() === $course->getCode()
-                ) {
+                //$course = $courseManager->find($courseId);
+                if ($linkCourse->getId() === $courseId) {
                     $linkFound = true;
 
                     break;
                 }
             }
 
-            if (ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility()) {
+            /*if (ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility()) {
                 $linkFound = true;
 
                 break;
-            }
+            }*/
         }
 
         // No link was found or not available.
@@ -223,7 +224,7 @@ class ResourceNodeVoter extends Voter
 
         // Getting rights from the link
         $rightFromResourceLink = $link->getResourceRight();
-
+        $allowAnonsToSee = false;
         $rights = [];
         if ($rightFromResourceLink->count() > 0) {
             // Taken rights from the link
@@ -239,8 +240,8 @@ class ResourceNodeVoter extends Voter
             // Anons: Only read.
             $readerMask = self::getReaderMask();
             $editorMask = self::getEditorMask();
-
-            if (!empty($courseId)) {
+            error_log($courseId);
+            if ($courseId) {
                 $resourceRight = new ResourceRight();
                 $resourceRight
                     ->setMask($editorMask)
@@ -253,7 +254,8 @@ class ResourceNodeVoter extends Voter
                     ->setRole(self::ROLE_CURRENT_COURSE_STUDENT);
                 $rights[] = $resourceRight;
 
-                if ($course->isPublic() && ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility()) {
+                if (ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility() && $link->getCourse()->isPublic()) {
+                    $allowAnonsToSee = true;
                     $resourceRight = new ResourceRight();
                     $resourceRight
                         ->setMask($readerMask)
@@ -289,6 +291,8 @@ class ResourceNodeVoter extends Voter
             }
         }
 
+        error_log(print_r($rights, 1));
+
         // Asked mask
         $mask = new MaskBuilder();
         $mask->add($attribute);
@@ -301,13 +305,14 @@ class ResourceNodeVoter extends Voter
         // @todo move this in a service
         $anon = new Role('IS_AUTHENTICATED_ANONYMOUSLY');
         $userRole = new Role('ROLE_USER');
-        $teacher = new Role('ROLE_TEACHER');
         $student = new Role('ROLE_STUDENT');
-        $currentTeacher = new Role(self::ROLE_CURRENT_COURSE_TEACHER);
-        $currentStudent = new Role(self::ROLE_CURRENT_COURSE_STUDENT);
+        $teacher = new Role('ROLE_TEACHER');
 
-        $currentTeacherSession = new Role(self::ROLE_CURRENT_SESSION_COURSE_TEACHER);
+        $currentStudent = new Role(self::ROLE_CURRENT_COURSE_STUDENT);
+        $currentTeacher = new Role(self::ROLE_CURRENT_COURSE_TEACHER);
+
         $currentStudentSession = new Role(self::ROLE_CURRENT_SESSION_COURSE_STUDENT);
+        $currentTeacherSession = new Role(self::ROLE_CURRENT_SESSION_COURSE_TEACHER);
 
         $superAdmin = new Role('ROLE_SUPER_ADMIN');
         $admin = new Role('ROLE_ADMIN');
@@ -326,9 +331,9 @@ class ResourceNodeVoter extends Voter
             ->addRole($admin)
         ;
 
-        // Add a resource.
-        $resource = new SecurityResource($link);
-        $acl->addResource($resource);
+        // Add a security resource.
+        $securityResource = new SecurityResource($link);
+        $acl->addResource($securityResource);
 
         // Check all the right this link has.
         // Set rights from the ResourceRight.
@@ -342,7 +347,9 @@ class ResourceNodeVoter extends Voter
         $acl->allow($student, null, self::getReaderMask());
 
         // Anons can see.
-        $acl->allow($anon, null, self::getReaderMask());
+        if ($allowAnonsToSee) {
+            $acl->allow($anon, null, self::getReaderMask());
+        }
 
         // Teacher can view/edit
         $acl->allow(
@@ -359,7 +366,7 @@ class ResourceNodeVoter extends Voter
         $acl->allow($superAdmin);
 
         if ($token instanceof AnonymousToken) {
-            if ($acl->isAllowed('IS_AUTHENTICATED_ANONYMOUSLY', $resource, $askedMask)) {
+            if ($acl->isAllowed('IS_AUTHENTICATED_ANONYMOUSLY', $securityResource, $askedMask)) {
                 return true;
             }
 
@@ -367,7 +374,7 @@ class ResourceNodeVoter extends Voter
         }
 
         foreach ($user->getRoles() as $role) {
-            if ($acl->isAllowed($role, $resource, $askedMask)) {
+            if ($acl->isAllowed($role, $securityResource, $askedMask)) {
                 return true;
             }
         }

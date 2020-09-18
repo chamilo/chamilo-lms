@@ -29,7 +29,6 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
  * @ApiResource(
  *      attributes={"security"="is_granted('ROLE_ADMIN')"},
  *      iri="http://schema.org/Person",
- *      attributes={"security"="is_granted('ROLE_ADMIN')"},
  *      normalizationContext={"groups"={"user:read"}},
  *      denormalizationContext={"groups"={"user:write"}},
  *      collectionOperations={"get"},

@@ -1225,22 +1225,14 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this->room;
     }
 
-    /**
-     * @param Room $room
-     *
-     * @return Course
-     */
-    public function setRoom($room)
+    public function setRoom(Room $room): self
     {
         $this->room = $room;
 
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function isActive()
+    public function isActive(): bool
     {
         $activeVisibilityList = [
             self::REGISTERED,
@@ -1264,10 +1256,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return self::HIDDEN === $this->visibility;
     }
 
-    /**
-     * @return array
-     */
-    public static function getStatusList()
+    public static function getStatusList(): array
     {
         return [
             self::CLOSED => 'Closed',
@@ -1286,10 +1275,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this->currentSession;
     }
 
-    /**
-     * @return $this
-     */
-    public function setCurrentSession(Session $session)
+    public function setCurrentSession(Session $session): self
     {
         // If the session is registered in the course session list.
         /*if ($this->getSessions()->contains($session->getId())) {
@@ -1309,10 +1295,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this;
     }
 
-    /**
-     * @return $this
-     */
-    public function setCurrentUrl(AccessUrl $url)
+    public function setCurrentUrl(AccessUrl $url): self
     {
         $urlList = $this->getUrls();
         /** @var AccessUrlRelCourse $item */

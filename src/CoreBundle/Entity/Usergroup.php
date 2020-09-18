@@ -11,6 +11,7 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
  * @ApiResource(
+ *     attributes={"security"="is_granted('ROLE_ADMIN')"},
  *     normalizationContext={"groups"={"usergroup:read"}}
  * )
  *

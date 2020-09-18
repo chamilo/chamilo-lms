@@ -20,7 +20,7 @@ Feature: Group tool
     When I fill in the following:
       | title | Group category 1 |
     And I press "group_category_submit"
-    And wait the page to be loaded when ready
+    And wait very long for the page to be loaded
     Then I should see "Category created"
 
   Scenario: Create 4 groups
@@ -36,73 +36,73 @@ Feature: Group tool
       | group_2_places | 1 |
       | group_3_places | 1 |
       | group_4_places | 2 |
-    And I fill in select bootstrap static by text "#category_0" select "Group category 1"
-    And I fill in select bootstrap static by text "#category_1" select "Group category 1"
-    And I fill in select bootstrap static by text "#category_2" select "Group category 1"
-    And I fill in select bootstrap static by text "#category_3" select "Group category 1"
-    And I fill in select bootstrap static by text "#category_4" select "Group category 1"
+    And I select "Group category 1" from "category_0"
+    And I select "Group category 1" from "category_1"
+    And I select "Group category 1" from "category_2"
+    And I select "Group category 1" from "category_3"
+    And I select "Group category 1" from "category_4"
     And I press "submit"
     And wait very long for the page to be loaded
     Then I should see "group(s) has (have) been added"
 
-  Scenario: Create document folder in group
-    Given I am on "/main/group/group.php?cid=1&sid=0"
-    And I follow "Group 0001"
-    Then I should see "Group 0001"
-    And I follow "Documents"
-    Then I should see "There are no documents to be displayed"
-    Then I follow "Create folder"
-    Then I should see "Create folder"
-    Then I fill in the following:
-      | dirname | My folder in group |
-    And I press "create_dir_form_submit"
-    And wait the page to be loaded when ready
-    Then I should see "Folder created"
+#  Scenario: Create document folder in group
+#    Given I am on "/main/group/group.php?cid=1&sid=0"
+#    And I follow "Group 0001"
+#    Then I should see "Group 0001"
+#    And I follow "Documents"
+#    Then I should see "There are no documents to be displayed"
+#    Then I follow "Create folder"
+#    Then I should see "Create folder"
+#    Then I fill in the following:
+#      | dirname | My folder in group |
+#    And I press "create_dir_form_submit"
+#    And wait the page to be loaded when ready
+#    Then I should see "Folder created"
 
-  Scenario: Create document inside folder in group
-    Given I am on "/main/group/group.php?cid=1&sid=0"
-    And I follow "Group 0001"
-    Then I should see "Group 0001"
-    And I follow "Documents"
-    Then I should see "My folder in group"
-    Then I follow "My folder in group"
-    Then I follow "Create a rich media page / activity"
-    Then I should see "Create a rich media page"
-    Then I fill in the following:
-      | title | html test |
-    And I fill in ckeditor field "content" with "My first HTML!!"
-    Then I press "create_document_submit"
-    And wait the page to be loaded when ready
-    Then I should see "Item added"
+#  Scenario: Create document inside folder in group
+#    Given I am on "/main/group/group.php?cid=1&sid=0"
+#    And I follow "Group 0001"
+#    Then I should see "Group 0001"
+#    And I follow "Documents"
+#    Then I should see "My folder in group"
+#    Then I follow "My folder in group"
+#    Then I follow "Create a rich media page / activity"
+#    Then I should see "Create a rich media page"
+#    Then I fill in the following:
+#      | title | html test |
+#    And I fill in ckeditor field "content" with "My first HTML!!"
+#    Then I press "create_document_submit"
+#    And wait the page to be loaded when ready
+#    Then I should see "Item added"
 
-  Scenario: Upload a document inside folder in group
-    Given I am on "/main/group/group.php?cid=1&sid=0"
-    And I follow "Group 0001"
-    Then I should see "Group 0001"
-    And I follow "Documents"
-    Then I should see "My folder in group"
-    Then I follow "My folder in group"
-    Then I follow "Upload documents"
-    Then I follow "Upload (Simple)"
-    # File path is located in behat.yml
-    Then I attach the file "/public/favicon.ico" to "file"
-    Then wait for the page to be loaded
-    Then I press "upload_submitDocument"
-    Then wait for the page to be loaded
-    Then I should see "File upload succeeded"
-
-  Scenario: Delete 2 uploaded files
-    Given I am on "/main/group/group.php?cid=1&sid=0"
-    And I follow "Group 0001"
-    Then I should see "Group 0001"
-    And I follow "Documents"
-    Then I should see "My folder in group"
-    Then I follow "My folder in group"
-    Then I follow "Delete"
-    Then wait for the page to be loaded
-    Then I should see "Are you sure to delete"
-    Then I follow "delete_item"
-
+#  Scenario: Upload a document inside folder in group
+#    Given I am on "/main/group/group.php?cid=1&sid=0"
+#    And I follow "Group 0001"
+#    Then I should see "Group 0001"
+#    And I follow "Documents"
+#    Then I should see "My folder in group"
+#    Then I follow "My folder in group"
+#    Then I follow "Upload documents"
+#    Then I follow "Upload (Simple)"
+#    # File path is located in behat.yml
+#    Then I attach the file "/public/favicon.ico" to "file"
+#    Then wait for the page to be loaded
+#    Then I press "upload_submitDocument"
+#    Then wait for the page to be loaded
+#    Then I should see "File upload succeeded"
+#
+#  Scenario: Delete 2 uploaded files
+#    Given I am on "/main/group/group.php?cid=1&sid=0"
+#    And I follow "Group 0001"
+#    Then I should see "Group 0001"
+#    And I follow "Documents"
+#    Then I should see "My folder in group"
+#    Then I follow "My folder in group"
+#    Then I follow "Delete"
+#    Then wait for the page to be loaded
+#    Then I should see "Are you sure to delete"
+#    Then I follow "delete_item"
+#
   Scenario: Delete directory
     Given I am on "/main/group/group.php?cid=1&sid=0"
     And I follow "Group 0001"
@@ -125,7 +125,7 @@ Feature: Group tool
     Then I select "Fiona Apple Maggart (fapple)" from "group_members"
     Then I press "group_members_rightSelected"
     Then I press "Save settings"
-    And wait for the page to be loaded
+    And wait very long for the page to be loaded
     Then I should see "Group settings modified"
     Then I follow "Group 0001"
     Then I should see "Fiona"
@@ -141,7 +141,7 @@ Feature: Group tool
     Then I select "Fiona Apple Maggart (fapple)" from "group_members"
     Then I press "group_members_rightSelected"
     Then I press "Save settings"
-    And wait for the page to be loaded
+    And wait very long for the page to be loaded
     Then I should see "Group settings modified"
     Then I follow "Group 0003"
     Then I should not see "Fiona"
@@ -151,8 +151,10 @@ Feature: Group tool
     Given I am on "/main/group/group.php?cid=1&sid=0"
     And I follow "Edit this category"
     Then I should see "Edit group category: Group category 1"
-    Then I fill in select bootstrap static by text "#groups_per_user" select "10"
+    And I select "10" from "groups_per_user"
+    #Then I fill in select bootstrap static by text "#groups_per_user" select "10"
     Then I press "Edit"
+    And wait the page to be loaded when ready
     Then I should see "Group settings have been modified"
 
   Scenario: Change Group 0003 settings to make announcements private
@@ -162,6 +164,7 @@ Feature: Group tool
     Then I follow "Edit this group"
     Then I check the "announcements_state" radio button with "2" value
     Then I press "Save settings"
+    And wait very long for the page to be loaded
     Then I should see "Group settings modified"
 
   Scenario: Change Group 0004 settings to make it private
@@ -171,6 +174,7 @@ Feature: Group tool
     Then I follow "Edit this group"
     Then I check the "announcements_state" radio button with "2" value
     Then I press "Save settings"
+    And wait very long for the page to be loaded
     Then I should see "Group settings modified"
 
   Scenario: Change Group 0005 settings to make announcements private between users
@@ -180,6 +184,7 @@ Feature: Group tool
     Then I follow "Edit this group"
     Then I check the "announcements_state" radio button with "3" value
     Then I press "Save settings"
+    And wait very long for the page to be loaded
     Then I should see "Group settings modified"
 
   Scenario: Add fapple and acostea to Group 0005
@@ -194,7 +199,7 @@ Feature: Group tool
     Then I additionally select "Andrea Costea (acostea)" from "group_members"
     Then I press "group_members_rightSelected"
     Then I press "Save settings"
-    And wait for the page to be loaded
+    And wait very long for the page to be loaded
     Then I should see "Group settings modified"
     Then I follow "Group 0005"
     Then I should see "Fiona"
@@ -211,7 +216,7 @@ Feature: Group tool
     Then I select "Fiona Apple Maggart (fapple)" from "group_members"
     Then I press "group_members_rightSelected"
     Then I press "Save settings"
-    And wait for the page to be loaded
+    And wait very long for the page to be loaded
     Then I should see "Group settings modified"
     Then I follow "Group 0003"
     Then I should see "Fiona"
@@ -227,7 +232,7 @@ Feature: Group tool
     Then I select "Andrea Costea (acostea)" from "group_members"
     Then I press "group_members_rightSelected"
     Then I press "Save settings"
-    And wait for the page to be loaded
+    And wait very long for the page to be loaded
     Then I should see "Group settings modified"
     Then I follow "Group 0002"
     Then I should see "Andrea"
@@ -248,6 +253,7 @@ Feature: Group tool
     And wait for the page to be loaded
     Then I should see "Announcement will be sent to"
     Then I press "submit"
+    And wait very long for the page to be loaded
     Then I should see "Announcement has been added"
 
   Scenario: Create an announcement for fapple inside Group 0001
@@ -257,8 +263,8 @@ Feature: Group tool
     And I follow "Announcements"
     Then I should see "Announcements"
     Then I follow "Add an announcement"
+    Then wait the page to be loaded when ready
     Then I should see "Add an announcement"
-    Then wait for the page to be loaded
     Then I press "choose_recipients"
     Then I select "Fiona Apple" from "users"
     Then I press "users_rightSelected"
@@ -269,6 +275,7 @@ Feature: Group tool
     And wait for the page to be loaded
     Then I should see "Announcement will be sent to"
     Then I press "submit"
+    Then wait for the page to be loaded
     Then I should see "Announcement has been added"
 
   Scenario: Create an announcement for everybody inside Group 0003 (private)
@@ -276,6 +283,7 @@ Feature: Group tool
     And I follow "Group 0003"
     Then I should see "Group 0003"
     And I follow "Announcements"
+    Then wait for the page to be loaded
     Then I should see "Announcements"
     Then I follow "Add an announcement"
     Then I should see "Add an announcement"
@@ -287,6 +295,7 @@ Feature: Group tool
     And wait for the page to be loaded
     Then I should see "Announcement will be sent to"
     Then I press "submit"
+    Then wait for the page to be loaded
     Then I should see "Announcement has been added"
 
   Scenario: Create an announcement for fapple inside Group 0003

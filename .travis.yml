@@ -120,7 +120,7 @@ script:
 #  - ../../vendor/behat/behat/bin/behat features/profile.feature -v
   - ../../vendor/behat/behat/bin/behat features/promotion.feature -v
 #  - ../../vendor/behat/behat/bin/behat features/registration.feature -v
-  - ../../vendor/behat/behat/bin/behat features/sessionAccess.feature -v
+  - ../../vendor/behat/behat/bin/behat features/sessionAccess.feature -vvv
 #  - ../../vendor/behat/behat/bin/behat features/sessionManagement.feature -v
 #  - ../../vendor/behat/behat/bin/behat features/socialGroup.feature -v
 #  - ../../vendor/behat/behat/bin/behat features/systemAnnouncements.feature -v
@@ -133,7 +133,7 @@ script:
 #  - ../../vendor/behat/behat/bin/behat features/toolGroup.feature -vv
   - ../../vendor/behat/behat/bin/behat features/toolLink.feature -v
 #  - ../../vendor/behat/behat/bin/behat features/toolLp.feature -v
-  - ../../vendor/behat/behat/bin/behat features/toolWork.feature -v
+  - ../../vendor/behat/behat/bin/behat features/toolWork.feature -vvv
 
 after_failure:
   - sudo cat /var/log/apache2/error.log

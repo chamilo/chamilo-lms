@@ -30,7 +30,7 @@ Feature: Work tool
   Scenario: Send work as student
     Given I am a student
     And I am on "/main/work/work.php?cid=1"
-    And wait for the page to be loaded
+    And wait very long for the page to be loaded
     And I follow "Work 1"
     Then I should see "Work 1"
     Then I follow "Upload my assignment"

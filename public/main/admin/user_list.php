@@ -38,6 +38,7 @@ if (isset($_GET['user_id']) && 'login_as' === $action) {
             $goTo = sprintf(get_lang('Login successful. Go to %s'), Display::url($url, $url));
 
             Display::addFlash(Display::return_message($message, 'normal', false));
+            Display::addFlash(Display::return_message($goTo, 'normal', false));
 
             api_location($url.'?_switch_user='.$oldUserInfo['username']);
             /*Display::display_header(get_lang('User list'));

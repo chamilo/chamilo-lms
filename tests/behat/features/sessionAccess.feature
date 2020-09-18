@@ -18,11 +18,11 @@ Feature: Session access
     Then I should see "Update successful"
     Then I should see "Subscribe users to this session"
     Then I follow "Multiple registration"
-    And wait the page to be loaded when ready
+    And wait very long for the page to be loaded
     Then I select "Warnier Yannick (ywarnier)" from "nosessionUsersList[]"
     And I press "add_user"
     And I press "next"
-    And wait for the page to be loaded
+    And wait very long for the page to be loaded
     Then I should see "Session1"
     Then I should see "TEMPPRIVATE"
     Then I should see "ywarnier"

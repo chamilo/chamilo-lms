@@ -7643,18 +7643,21 @@ function api_get_default_tool_setting($tool, $setting, $defaultValue)
  */
 function api_can_login_as($loginAsUserId, $userId = null)
 {
-    if (empty($userId)) {
-        $userId = api_get_user_id();
-    }
-    if ($loginAsUserId == $userId) {
-        return false;
-    }
+    $loginAsUserId = (int) $loginAsUserId;
 
     if (empty($loginAsUserId)) {
         return false;
     }
 
-    if ($loginAsUserId != strval(intval($loginAsUserId))) {
+    if (empty($userId)) {
+        $userId = api_get_user_id();
+    }
+
+    if ($loginAsUserId == $userId) {
+        return false;
+    }
+
+    if (empty($loginAsUserId)) {
         return false;
     }
 
@@ -7677,7 +7680,7 @@ function api_can_login_as($loginAsUserId, $userId = null)
                 $userList = [];
                 if (is_array($users)) {
                     foreach ($users as $user) {
-                        $userList[] = $user['user_id'];
+                        $userList[] = $user['id'];
                     }
                 }
                 if (in_array($loginAsUserId, $userList)) {

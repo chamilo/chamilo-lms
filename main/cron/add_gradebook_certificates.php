@@ -37,3 +37,42 @@ if ($categoriesAndUsers = getAllCategoriesAndUsers()) {
         );
     }
 }
+
+// Optional set the url id
+// $_configuration['access_url'] = 7;
+
+$sql = "SELECT * FROM gradebook_category
+        WHERE generate_certificates = 1 AND parent_id = 0";
+$result = Database::query($sql);
+$categories = Database::store_result($result);
+$total = count($categories);
+$counter = 1;
+foreach ($categories as $category) {
+    $courseCode = $category['course_code'];
+    $sessionId = (int) $category['session_id'];
+    $filter = STUDENT;
+    if (!empty($sessionId)) {
+        $filter = 0;
+    }
+    $users = CourseManager::get_user_list_from_course_code(
+        $courseCode,
+        $sessionId,
+        null,
+        null,
+        $filter
+    );
+
+    $_SESSION['id_session'] = $sessionId;
+
+    echo "Category: ".$category['id']." Course: ".$courseCode." Session: $sessionId - Processing: $counter/".$total.PHP_EOL;
+    foreach ($users as $user) {
+        echo "Generating certificate user #".$user['user_id'].PHP_EOL;
+        Category::generateUserCertificate(
+            $category['id'],
+            $user['user_id'],
+            false,
+            true
+        );
+    }
+    $counter++;
+}

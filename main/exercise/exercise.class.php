@@ -3017,7 +3017,7 @@ class Exercise
     public function copyExercise()
     {
         $exerciseObject = $this;
-        $categories = $exerciseObject->getCategoriesInExercise();
+        $categories = $exerciseObject->getCategoriesInExercise(true);
         // Get all questions no matter the order/category settings
         $questionList = $exerciseObject->getQuestionOrderedList();
         // Force the creation of a new exercise
@@ -3032,13 +3032,16 @@ class Exercise
         $exerciseRelQuestionTable = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 
         $count = 1;
+        $batchSize = 20;
+        $em = Database::getManager();
+
         if ($newId && !empty($questionList)) {
             // Question creation
             foreach ($questionList as $oldQuestionId) {
                 $oldQuestionObj = Question::read($oldQuestionId, null, false);
                 $newQuestionId = $oldQuestionObj->duplicate();
                 if ($newQuestionId) {
-                    $newQuestionObj = Question::read($newQuestionId);
+                    $newQuestionObj = Question::read($newQuestionId, null, false);
                     if (isset($newQuestionObj) && $newQuestionObj) {
                         //$newQuestionObj->addToList($newId);
                         $sql = "INSERT INTO $exerciseRelQuestionTable (c_id, question_id, exercice_id, question_order)
@@ -3051,9 +3054,13 @@ class Exercise
                         }
 
                         // This should be moved to the duplicate function
-                        $newAnswerObj = new Answer($oldQuestionId);
+                        $newAnswerObj = new Answer($oldQuestionId, $courseId, $exerciseObject);
                         $newAnswerObj->read();
                         $newAnswerObj->duplicate($newQuestionObj);
+
+                        if (($count % $batchSize) === 0) {
+                            $em->clear(); // Detaches all objects from Doctrine!
+                        }
                     }
                 }
             }

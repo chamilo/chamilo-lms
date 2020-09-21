@@ -6,6 +6,7 @@ use Chamilo\CoreBundle\Framework\Container;
 use Patchwork\Utf8\Bootup;
 use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\ErrorHandler\Debug;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
 
 /**
@@ -16,8 +17,6 @@ define('USERNAME_MAX_LENGTH', 100);
 require_once __DIR__.'/../../../vendor/autoload.php';
 
 try {
-    // Check the PHP version
-    api_check_php_version();
 
     // Get settings from .env.local file created.
     $envFile = __DIR__.'/../../../.env.local';
@@ -29,10 +28,14 @@ try {
     }
 
     $env = $_SERVER['APP_ENV'] ?? 'dev';
-    //Debug::enable();
-    $kernel = new Chamilo\Kernel($env, true);
+    $debug = 'dev' === $env;
+    if ($debug) {
+        Debug::enable();
+    }
+
+    $kernel = new Chamilo\Kernel($env, $debug);
     // Loading Request from Sonata. In order to use Sonata Pages Bundle.
-    $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
+    $request = Request::createFromGlobals();
 
     // This 'load_legacy' variable is needed to know that symfony is loaded using old style legacy mode,
     // and not called from a symfony controller from public/
@@ -65,6 +68,7 @@ try {
 
     $container = $kernel->getContainer();
 
+    // Load legacy configuration.php
     if ($kernel->isInstalled()) {
         require_once $kernel->getConfigurationFile();
     } else {

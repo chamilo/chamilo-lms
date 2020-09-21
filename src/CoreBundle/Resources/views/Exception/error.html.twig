@@ -1,8 +1,15 @@
 {% extends '@ChamiloCore/Layout/base-layout.html.twig' %}
 {% block page_content %}
-    <div class="error-page">
-        <div class="error-content">
-            {{ exception.message }}
-        </div>
+    <div
+        id="app"
+    >
     </div>
+    <section id="sectionMainContent" class="section-content">
+        <div class="jumbotron jumbotron-fluid">
+            <div class="container">
+                <h1 class="display-4">Error</h1>
+                <p class="lead"> {{ exception.message }}</p>
+            </div>
+        </div>
+    </section>
 {% endblock %}

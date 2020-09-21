@@ -224,12 +224,24 @@ class UserManager
             $hook->notifyCreateUser(HOOK_EVENT_TYPE_PRE);
         }
 
-        if (false === api_valid_email($email)) {
-            Display::addFlash(
-                Display::return_message(get_lang('PleaseEnterValidEmail').' - '.$email, 'warning')
-            );
+        if ('true' === api_get_setting('registration', 'email')) {
+            // Force email validation.
+           if (false === api_valid_email($email)) {
+               Display::addFlash(
+                   Display::return_message(get_lang('PleaseEnterValidEmail').' - '.$email, 'warning')
+               );
 
-            return false;
+               return false;
+           }
+        } else {
+            // Allow empty email. If email is set, check if is valid.
+            if (!empty($email) && false === api_valid_email($email)) {
+                Display::addFlash(
+                    Display::return_message(get_lang('PleaseEnterValidEmail').' - '.$email, 'warning')
+                );
+
+                return false;
+            }
         }
 
         if ('true' === api_get_setting('login_is_email')) {
@@ -7142,5 +7154,10 @@ SQL;
         }
 
         return $url;
+    }
+
+    private static function checkEmail($email)
+    {
+
     }
 }

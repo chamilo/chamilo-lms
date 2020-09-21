@@ -3209,7 +3209,7 @@ class Exercise
                 'exerciseType' => $this->type,
                 'exerciseId' => $this->id,
                 'reminder' => empty($myRemindList) ? null : 2,
-                'tryagain' => isset($_REQUEST['tryagain']) && 1 === (int) $_REQUEST['tryagain'] ? 1 : 0
+                'tryagain' => isset($_REQUEST['tryagain']) && 1 === (int) $_REQUEST['tryagain'] ? 1 : 0,
             ]);
 
             $params = [

@@ -2783,6 +2783,7 @@ class Category implements GradebookItem
         if (empty($category)) {
             return 0;
         }
+
         $courseEvaluations = $category->get_evaluations(
             $userId,
             true
@@ -2791,6 +2792,7 @@ class Category implements GradebookItem
         $evaluationsAndLinks = array_merge($courseEvaluations, $courseLinks);
         $categoryScore = 0;
         for ($i = 0; $i < count($evaluationsAndLinks); $i++) {
+            /** @var AbstractLink $item */
             $item = $evaluationsAndLinks[$i];
             $score = $item->calc_score($userId);
             $itemValue = 0;

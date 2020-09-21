@@ -3026,17 +3026,26 @@ class Exercise
         $exerciseObject->updateStatus(false);
         $exerciseObject->updateId(0);
         $exerciseObject->sessionId = api_get_session_id();
+        $courseId = api_get_course_int_id();
         $exerciseObject->save();
         $newId = $exerciseObject->selectId();
+        $exerciseRelQuestionTable = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+
+        $count = 1;
         if ($newId && !empty($questionList)) {
             // Question creation
             foreach ($questionList as $oldQuestionId) {
-                $oldQuestionObj = Question::read($oldQuestionId);
+                $oldQuestionObj = Question::read($oldQuestionId, null, false);
                 $newQuestionId = $oldQuestionObj->duplicate();
                 if ($newQuestionId) {
                     $newQuestionObj = Question::read($newQuestionId);
                     if (isset($newQuestionObj) && $newQuestionObj) {
-                        $newQuestionObj->addToList($newId);
+                        //$newQuestionObj->addToList($newId);
+                        $sql = "INSERT INTO $exerciseRelQuestionTable (c_id, question_id, exercice_id, question_order)
+                                VALUES ($courseId, ".$newQuestionId.", ".$newId.", '$count')";
+                        Database::query($sql);
+                        $count++;
+
                         if (!empty($oldQuestionObj->category)) {
                             $newQuestionObj->saveCategory($oldQuestionObj->category);
                         }

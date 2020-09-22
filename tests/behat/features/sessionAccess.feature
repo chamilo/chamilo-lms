@@ -66,10 +66,10 @@ Feature: Session access
     And wait the page to be loaded when ready
     Then I should see "Unauthorised access"
 
-  Scenario: ywarnier connect to session that doesn't exists
+  Scenario: ywarnier connect to course TEMPPRIVATE inside a session that doesn't exists
     Given I am not logged
     Given I am logged as "ywarnier"
-    And I am on course "TEMPPRIVATE" homepage in session "Session does not exists"
+    And I am on "/course/2/home?sid=2000&gid=0"
     And wait the page to be loaded when ready
     Then I should see "Session not found"
 

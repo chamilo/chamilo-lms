@@ -583,8 +583,8 @@ echo '</div>';
           ); ?>?page=<?php echo $page; ?>&id_session=<?php echo $id_session; ?><?php if (!empty($addProcess)) {
               echo '&add=true';
           } ?>" <?php if ($ajax_search) {
-        echo ' onsubmit="valide();"';
-    } ?>>
+              echo ' onsubmit="valide();"';
+          } ?>>
         <?php echo '<legend>'.$tool_name.' ('.$session_info['name'].') </legend>'; ?>
         <?php
         if ('multiple' === $add_type) {
@@ -658,7 +658,7 @@ echo '</div>';
                                     $selected = in_array($uid, $UserList) ? 'selected="selected"' : '';
                                     $personName = $enreg['ln'].' '.$enreg['fn'].' ('.$enreg['un'].')';
                                     if (!empty($enreg['official_code'])) {
-                                        $personName.= ' '.$enreg['official_code'];
+                                        $personName .= ' '.$enreg['official_code'];
                                     }
                                     if ($showOfficialCode) {
                                         $officialCode = !empty($enreg['official_code']) ? $enreg['official_code'].' - ' : '? - ';
@@ -683,7 +683,7 @@ echo '</div>';
 
             <div class="col-md-4">
                 <?php if ('multiple' === $add_type) {
-                    ?>
+                        ?>
                     <?php echo get_lang('First letter (last name)'); ?> :
                     <select id="first_letter_user" name="firstLetterUser" onchange="change_select(this.value);">
                         <option value="%">--</option>
@@ -693,7 +693,7 @@ echo '</div>';
                     <br/>
                     <br/>
                     <?php
-                } ?>
+                    } ?>
                 <div class="control-course">
                     <?php
                     if ($ajax_search) {

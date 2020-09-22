@@ -1841,7 +1841,7 @@ if (empty($details)) {
         if ($exerciseList) {
             //while ($exercices = Database::fetch_array($result_exercices)) {
             /** @var CQuiz $exercise */
-            foreach($exerciseList as $exercise) {
+            foreach ($exerciseList as $exercise) {
                 $exercise_id = (int) $exercise->getIid();
                 $count_attempts = Tracking::count_student_exercise_attempts(
                     $studentId,

@@ -828,17 +828,17 @@ class SystemAnnouncementManager
         }
 
         if (0 != $teacher && 0 == $student) {
-            $sql = "SELECT DISTINCT u.user_id FROM $user_table u $urlJoin
+            $sql = "SELECT DISTINCT u.id as user_id FROM $user_table u $urlJoin
                     WHERE status = '1' $urlCondition";
         }
 
         if (0 == $teacher && 0 != $student) {
-            $sql = "SELECT DISTINCT u.user_id FROM $user_table u $urlJoin
+            $sql = "SELECT DISTINCT u.id as user_id FROM $user_table u $urlJoin
                     WHERE status = '5' $urlCondition";
         }
 
         if (0 != $teacher && 0 != $student) {
-            $sql = "SELECT DISTINCT u.user_id FROM $user_table u $urlJoin
+            $sql = "SELECT DISTINCT u.id as user_id FROM $user_table u $urlJoin
                     WHERE 1 = 1 $urlCondition";
         }
 

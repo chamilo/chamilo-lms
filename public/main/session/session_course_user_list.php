@@ -88,7 +88,7 @@ $urlTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 $urlId = api_get_current_access_url_id();
 
 $sql = "
-    SELECT DISTINCT u.user_id,"
+    SELECT DISTINCT u.id as user_id,"
         .($is_western_name_order ? 'u.firstname, u.lastname' : 'u.lastname, u.firstname')
         .", u.username, scru.user_id as is_subscribed
     FROM $tbl_session_rel_user s

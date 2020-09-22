@@ -3126,7 +3126,7 @@ function finishInstallationWithContainer(
     if ($executeResult) {
         error_log('data.sql Ok');
     }
-    $result->free();
+    $result->closeCursor();
 
     UserManager::setPasswordEncryption($encryptPassForm);
 

@@ -341,7 +341,7 @@ function getWorkPerUser($userId, $courseId = 0, $sessionId = 0)
     $result = [];
     if (!empty($works)) {
         foreach ($works as $workData) {
-            $workId = $workData->id;
+            $workId = $workData->iid;
             $result[$workId]['work'] = $workData;
             $result[$workId]['work']->user_results = get_work_user_list(
                 0,

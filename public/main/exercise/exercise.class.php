@@ -8368,11 +8368,10 @@ class Exercise
             ['grid' => $grid]
         );*/
 
-        $allowDelete = Exercise::allowAction('delete');
-        $allowClean = Exercise::allowAction('clean_results');
+        $allowDelete = self::allowAction('delete');
+        $allowClean = self::allowAction('clean_results');
 
         $TBL_EXERCISE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-        $TBL_EXERCISES = Database::get_course_table(TABLE_QUIZ_TEST);
         $TBL_TRACK_EXERCISES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 
         $categoryId = (int) $categoryId;
@@ -8433,8 +8432,6 @@ class Exercise
         //var_dump($qb->getQuery()->getSQL());
         $exerciseList = $qb->getQuery()->getResult();
         $total = $qb->select('count(resource.iid)')->setMaxResults(1)->getQuery()->getScalarResult();
-
-        $webPath = api_get_path(WEB_CODE_PATH);
 
         if (!empty($exerciseList)) {
             $visibilitySetting = api_get_configuration_value('show_hidden_exercise_added_to_lp');

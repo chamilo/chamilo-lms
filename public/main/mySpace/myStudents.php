@@ -2,7 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CLpCategory;
+use Chamilo\CourseBundle\Entity\CQuiz;
 use ChamiloSession as Session;
 
 if (!isset($_GET['course'])) {
@@ -17,10 +19,10 @@ api_block_anonymous_users();
 $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH).'assets/jquery.easy-pie-chart/dist/jquery.easypiechart.js"></script>';
 
 $export = isset($_GET['export']) ? $_GET['export'] : false;
-$sessionId = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
+$sessionId = isset($_GET['sid']) ? (int) $_GET['sid'] : 0;
 $origin = api_get_origin();
-$course_code = isset($_GET['course']) ? Security::remove_XSS($_GET['course']) : '';
-$courseInfo = api_get_course_info($course_code);
+$courseId = isset($_GET['cid']) ? (int) $_GET['cid'] : '';
+$courseInfo = api_get_course_info_by_id($courseId);
 $courseCode = '';
 if ($courseInfo) {
     $courseCode = $courseInfo['code'];
@@ -34,7 +36,7 @@ if (empty($studentId)) {
 $coachId = isset($_GET['id_coach']) ? (int) $_GET['id_coach'] : 0;
 $details = isset($_GET['details']) ? Security::remove_XSS($_GET['details']) : '';
 $currentUrl = api_get_self().'?student='.$studentId.'&course='.$courseCode.'&id_session='.$sessionId
-    .'&origin='.$origin.'&details='.$details;
+    .'&origin='.$origin.'&details='.$details.'&cid='.$courseId;
 $allowMessages = api_get_configuration_value('private_messages_about_user');
 $workingTime = api_get_configuration_value('considered_working_time');
 $workingTimeEdit = api_get_configuration_value('allow_working_time_edition');
@@ -115,7 +117,7 @@ if (!empty($details)) {
     if ('user_course' === $origin) {
         if (empty($cidReq)) {
             $interbreadcrumb[] = [
-                'url' => api_get_path(WEB_COURSE_PATH).$courseInfo['directory'],
+                'url' => $courseInfo['course_public_url'],
                 'name' => $courseInfo['title'],
             ];
         }
@@ -126,7 +128,7 @@ if (!empty($details)) {
     } else {
         if ('tracking_course' === $origin) {
             $interbreadcrumb[] = [
-                'url' => '../tracking/courseLog.php?cidReq='.$course_code.'&id_session='.api_get_session_id(),
+                'url' => '../tracking/courseLog.php?cidReq='.$courseCode.'&id_session='.api_get_session_id(),
                 'name' => get_lang('Reporting'),
             ];
         } else {
@@ -704,8 +706,8 @@ if (!empty($userInfo['email'])) {
 echo $send_mail;
 if (!empty($studentId) && !empty($courseCode)) {
     // Only show link to connection details if course and student were defined in the URL
-    echo '<a href="access_details.php?student='.$studentId.'&course='.$course_code.'&origin='.$origin.'&cidReq='
-        .$course_code.'&id_session='.$sessionId.'">'
+    echo '<a href="access_details.php?student='.$studentId.'&course='.$courseCode.'&origin='.$origin.'&cid='
+        .$courseId.'&id_session='.$sessionId.'">'
         .Display::return_icon('statistics.png', get_lang('Access details'), '', ICON_SIZE_MEDIUM)
         .'</a>';
 }
@@ -713,7 +715,7 @@ if (!empty($studentId) && !empty($courseCode)) {
 $notebookTeacherEnable = 'true' === api_get_plugin_setting('notebookteacher', 'enable_plugin_notebookteacher');
 if ($notebookTeacherEnable && !empty($studentId) && !empty($course_code)) {
     // link notebookteacher
-    $optionsLink = 'student_id='.$studentId.'&origin='.$origin.'&cidReq='.$courseCode.'&id_session='.$sessionId;
+    $optionsLink = 'student_id='.$studentId.'&origin='.$origin.'&cid='.$courseId.'&id_session='.$sessionId;
     echo '<a href="'.api_get_path(WEB_PLUGIN_PATH).'notebookteacher/src/index.php?'.$optionsLink.'">'
         .Display::return_icon('notebookteacher.png', get_lang('Notebook'), '', ICON_SIZE_MEDIUM)
         .'</a>';
@@ -944,7 +946,7 @@ if ('true' === api_get_setting('allow_terms_conditions')) {
         $legalTime = null;
 
         if (isset($value['value']) && !empty($value['value'])) {
-            list($legalId, $legalLanguageId, $legalTime) = explode(':', $value['value']);
+            [$legalId, $legalLanguageId, $legalTime] = explode(':', $value['value']);
             $icon = Display::return_icon('accept.png');
             $btn = Display::url(
                 get_lang('Delete legal agreement'),
@@ -1500,8 +1502,7 @@ if (empty($details)) {
             );
         }
 
-        $hookLpTracking = HookMyStudentsLpTracking::create();
-
+        /*$hookLpTracking = HookMyStudentsLpTracking::create();
         if ($hookLpTracking) {
             $hookHeaders = $hookLpTracking->notifyTrackingHeader();
 
@@ -1510,13 +1511,13 @@ if (empty($details)) {
 
                 $headers .= Display::tag('th', $hookHeader['value'], $hookHeader['attrs']);
             }
-        }
+        }*/
 
         $csv_content[] = $columnHeadersToExport;
         $columnHeadersKeys = array_keys($columnHeaders);
         $categoriesTempList = learnpath::getCategories($courseInfo['real_id']);
         $categoryTest = new CLpCategory();
-        $categoryTest->setId(0);
+        //$categoryTest->setId(0);
         $categoryTest->setName(get_lang('Without category'));
         $categoryTest->setPosition(0);
         $categories = [
@@ -1531,7 +1532,7 @@ if (empty($details)) {
 
         /** @var CLpCategory $item */
         foreach ($categories as $item) {
-            $categoryId = $item->getId();
+            $categoryId = $item->getIid();
             if (!learnpath::categoryIsVisibleForStudent($item, $userEntity, $courseInfo['real_id'], $sessionId)) {
                 continue;
             }
@@ -1776,8 +1777,7 @@ if (empty($details)) {
         echo '<th>'.get_lang('LatestAttempt').'</th>';
         echo '<th>'.get_lang('AllAttempts').'</th>';
 
-        $hookQuizTracking = HookMyStudentsQuizTracking::create();
-
+        /*$hookQuizTracking = HookMyStudentsQuizTracking::create();
         if ($hookQuizTracking) {
             $hookHeaders = array_map(
                 function ($hookHeader) {
@@ -1787,7 +1787,7 @@ if (empty($details)) {
             );
 
             echo implode(PHP_EOL, $hookHeaders);
-        }
+        }*/
 
         echo '</tr></thead><tbody>';
 
@@ -1799,7 +1799,7 @@ if (empty($details)) {
             get_lang('Attempts'),
         ];
 
-        if ($hookQuizTracking) {
+        /*if ($hookQuizTracking) {
             $hookHeaders = array_map(
                 function ($hookHeader) {
                     return strip_tags($hookHeader['value']);
@@ -1809,9 +1809,9 @@ if (empty($details)) {
 
             $csvContentIndex = count($csv_content) - 1;
             $csv_content[$csvContentIndex] = array_merge($csv_content[$csvContentIndex], $hookHeaders);
-        }
+        }*/
 
-        $t_quiz = Database::get_course_table(TABLE_QUIZ_TEST);
+        /*$t_quiz = Database::get_course_table(TABLE_QUIZ_TEST);
         $sessionCondition = api_get_session_condition(
             $sessionId,
             true,
@@ -1828,10 +1828,21 @@ if (empty($details)) {
                 ORDER BY quiz.title ASC ";
 
         $result_exercices = Database::query($sql);
-        $i = 0;
-        if (Database::num_rows($result_exercices) > 0) {
-            while ($exercices = Database::fetch_array($result_exercices)) {
-                $exercise_id = (int) $exercices['id'];
+        $i = 0;*/
+
+        $repo = Container::getQuizRepository();
+        $course = api_get_course_entity($courseInfo['real_id']);
+        $session = api_get_session_entity($sessionId);
+        // 2. Get query builder from repo.
+        $qb = $repo->getResourcesByCourse($course, $session);
+        $qb->andWhere('resource.active = 1 OR resource.active = 0');
+        $exerciseList = $qb->getQuery()->getResult();
+
+        if ($exerciseList) {
+            //while ($exercices = Database::fetch_array($result_exercices)) {
+            /** @var CQuiz $exercise */
+            foreach($exerciseList as $exercise) {
+                $exercise_id = (int) $exercise->getIid();
                 $count_attempts = Tracking::count_student_exercise_attempts(
                     $studentId,
                     $courseInfo['real_id'],
@@ -1851,10 +1862,10 @@ if (empty($details)) {
                 );
 
                 $lp_name = '-';
-                $hookContents = $hookQuizTracking
+                /*$hookContents = $hookQuizTracking
                     ? $hookQuizTracking->notifyTrackingContent($exercise_id, $studentId)
-                    : [];
-
+                    : [];*/
+                $hookContents = '';
                 if (!isset($score_percentage) && $count_attempts > 0) {
                     $scores_lp = Tracking::get_avg_student_exercise_score(
                         $studentId,
@@ -1966,7 +1977,6 @@ if (empty($details)) {
                         $csv_content[$csvContentIndex][] = strip_tags($hookContent['value']);
                     }
                 }
-
                 $i++;
             }
         } else {
@@ -1986,14 +1996,14 @@ if (empty($details)) {
                     $courseInfo['real_id']
                 );
                 $survey_done = Display::return_icon(
-                    "accept_na.png",
+                    'accept_na.png',
                     get_lang('There is no answer for the moment'),
                     [],
                     ICON_SIZE_SMALL
                 );
                 if (in_array($studentId, $user_list)) {
                     $survey_done = Display::return_icon(
-                        "accept.png",
+                        'accept.png',
                         get_lang('Answered'),
                         [],
                         ICON_SIZE_SMALL
@@ -2055,8 +2065,8 @@ if (empty($details)) {
             echo '<tr>';
             echo '<td>'.$work->title.'</td>';
             $documentNumber = $key + 1;
-            $url = api_get_path(WEB_CODE_PATH).'work/view.php?cidReq='.$courseCode.'&id_session='.$sessionId.'&id='
-                .$resultId;
+            $url = api_get_path(WEB_CODE_PATH).
+                'work/view.php?cidReq='.$courseCode.'&id_session='.$sessionId.'&id='.$resultId;
             echo '<td class="text-center"><a href="'.$url.'">('.$documentNumber.')</a></td>';
             $qualification = !empty($results['qualification']) ? $results['qualification'] : '-';
             echo '<td class="text-center">'.$qualification.'</td>';

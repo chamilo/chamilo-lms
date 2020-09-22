@@ -5172,8 +5172,8 @@ EOT;
             ->createQuery('SELECT COUNT(qq)
                 FROM ChamiloCourseBundle:CQuizQuestion qq
                 INNER JOIN ChamiloCourseBundle:CQuizRelQuestion qrq
-                   WITH qq.iid = qrq.questionId
-                WHERE qrq.exerciceId = :id'
+                   WITH qq.iid = qrq.question
+                WHERE qrq.quiz = :id'
             )
             ->setParameter('id', $exercise->getIid())
             ->getSingleScalarResult();
@@ -5182,8 +5182,8 @@ EOT;
             ->createQuery('SELECT COUNT(qq)
                 FROM ChamiloCourseBundle:CQuizQuestion qq
                 INNER JOIN ChamiloCourseBundle:CQuizRelQuestion qrq
-                   WITH qq.iid = qrq.questionId
-                WHERE qrq.exerciceId = :id AND qq.type IN (:types)'
+                   WITH qq.iid = qrq.question
+                WHERE qrq.quiz = :id AND qq.type IN (:types)'
             )
             ->setParameters(
                 [

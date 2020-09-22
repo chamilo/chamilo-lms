@@ -439,15 +439,17 @@ if (api_is_allowed_to_edit(null, true)) {
 
             $result = Database::query($sql);
             $row = Database::fetch_array($result, 'ASSOC');
-            if ($row['user_id'] == $user_id || "" == $row['user_id']) {
-                CourseManager::unsubscribe_user($_GET['user_id'], $courseCode);
+            if (($row && $row['user_id'] == $user_id) || empty($row)) {
+                CourseManager::unsubscribe_user($user_id, $courseCode);
                 Display::addFlash(
-                        Display::return_message(get_lang('UserUnsubscribed'))
+                    Display::return_message(get_lang('User is now unsubscribed'))
                 );
             } else {
                 Display::addFlash(
                     Display::return_message(
-                        get_lang('ThisStudentIsSubscribeThroughASession')
+                        get_lang(
+                            'This learner is subscribed in this training through a training session. You cannot edit his information'
+                        )
                     )
                 );
             }

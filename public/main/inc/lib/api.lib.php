@@ -6794,7 +6794,7 @@ function api_get_jquery_libraries_js($libraries)
  * @param int    $groupId    The group ID - optional (takes it from context if not given)
  *
  * @return string The URL to a course, a session, or empty string if nothing works
- * e.g. https://localhost/courses/ABC/index.php?session_id=3&gidReq=1
+ *                e.g. https://localhost/courses/ABC/index.php?session_id=3&gidReq=1
  *
  * @author  Julio Montoya <gugli100@gmail.com>
  */

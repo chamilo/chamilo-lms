@@ -2852,7 +2852,7 @@ function updateEnvFile($distFile, $envFile, $params)
 }
 
 /**
- * @param EntityManager    $manager
+ * @param EntityManager $manager
  */
 function installGroups($manager)
 {

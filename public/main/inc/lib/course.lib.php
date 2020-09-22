@@ -1302,8 +1302,8 @@ class CourseManager
     /**
      * Is the user a teacher in the given course?
      *
-     * @param int    $userId
-     * @param int    $courseId
+     * @param int $userId
+     * @param int $courseId
      *
      * @return bool if the user is a teacher in the course, false otherwise
      */

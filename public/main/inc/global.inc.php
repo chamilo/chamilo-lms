@@ -17,7 +17,6 @@ define('USERNAME_MAX_LENGTH', 100);
 require_once __DIR__.'/../../../vendor/autoload.php';
 
 try {
-
     // Get settings from .env.local file created.
     $envFile = __DIR__.'/../../../.env.local';
     if (file_exists($envFile)) {

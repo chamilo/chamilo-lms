@@ -212,8 +212,9 @@ class CourseManager
         $onlyThisCourseList = []
     ) {
         $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
-        $tblCourseCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
-        $sql = "SELECT course.*, course.id as real_id, course_category.code AS category_code
+        //$tblCourseCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
+        // @todo fix , course_category.code AS category_code
+        $sql = "SELECT course.*, course.id as real_id
                 FROM $courseTable course  ";
 
         if (!empty($urlId)) {
@@ -221,7 +222,7 @@ class CourseManager
             $sql .= " INNER JOIN $table url ON (url.c_id = course.id) ";
         }
 
-        $sql .= " LEFT JOIN $tblCourseCategory ON course.category_id = course_category.id ";
+        //$sql .= " LEFT JOIN $tblCourseCategory ON course.category_id = course_category.id ";
 
         $visibility = (int) $visibility;
 
@@ -297,8 +298,8 @@ class CourseManager
             $sql .= ' LIMIT 1000000'; //virtually no limit
         }
         if (!empty($from)) {
-            $from = intval($from);
-            $sql .= ' OFFSET '.intval($from);
+            $from = (int) $from;
+            $sql .= ' OFFSET '.(int) $from;
         } else {
             $sql .= ' OFFSET 0';
         }

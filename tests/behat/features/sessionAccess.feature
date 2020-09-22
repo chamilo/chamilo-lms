@@ -19,7 +19,7 @@ Feature: Session access
     Then I should see "Subscribe users to this session"
     Then I follow "Multiple registration"
     And wait the page to be loaded when ready
-    Then I select "Warnier Yannick (ywarnier)" from "nosessionUsersList[]"
+    Then I select "3" from "nosessionUsersList[]"
     And I press "add_user"
     And I press "next"
     And wait very long for the page to be loaded

@@ -106,17 +106,18 @@ script:
   - php bin/console cache:clear
   - sudo chmod -R 777 var public
   - cd tests/behat
+#  - ../../vendor/behat/behat/bin/behat features/accessCompanyReports.feature -v
   - ../../vendor/behat/behat/bin/behat features/actionUserLogin.feature -v
   - ../../vendor/behat/behat/bin/behat features/adminFillUsers.feature -vvv
   - ../../vendor/behat/behat/bin/behat features/adminSettings.feature -vvv
   - ../../vendor/behat/behat/bin/behat features/career.feature -vvv
   - ../../vendor/behat/behat/bin/behat features/class.feature -vvv
-#  - ../../vendor/behat/behat/bin/behat features/companyReports.feature -v
+  - ../../vendor/behat/behat/bin/behat features/companyReports.feature -v
   - ../../vendor/behat/behat/bin/behat features/course.feature -vvv
-#  - ../../vendor/behat/behat/bin/behat features/course_user_registration.feature -v
+  - ../../vendor/behat/behat/bin/behat features/course_user_registration.feature -v
   - ../../vendor/behat/behat/bin/behat features/createUser.feature -vvv
-#  - ../../vendor/behat/behat/bin/behat features/createUserViaCSV.feature -v
-#  - ../../vendor/behat/behat/bin/behat features/extraFieldUser.feature -v
+  - ../../vendor/behat/behat/bin/behat features/createUserViaCSV.feature -v
+  - ../../vendor/behat/behat/bin/behat features/extraFieldUser.feature -v
 #  - ../../vendor/behat/behat/bin/behat features/profile.feature -v
   - ../../vendor/behat/behat/bin/behat features/promotion.feature -v
 #  - ../../vendor/behat/behat/bin/behat features/registration.feature -v

@@ -2951,11 +2951,15 @@ function installSchemas($container, $manager, $upgrade = false)
         ;
         $em->persist($accessUrl);
         $em->flush();
+
+        error_log('AccessUrl created');
     }
 
     if ($upgrade) {
+        error_log('Upgrade settings');
         $settingsManager->updateSchemas($accessUrl);
     } else {
+        error_log('Install settings');
         // Installing schemas (filling settings_current table)
         $settingsManager->installSchemas($accessUrl);
     }
@@ -3117,8 +3121,12 @@ function finishInstallationWithContainer(
     // Inserting default data
     $data = file_get_contents($sysPath.'public/main/install/data.sql');
     $result = $manager->getConnection()->prepare($data);
-    $result->execute();
-    $result->free();
+    $executeResult = $result->execute();
+
+    if ($executeResult) {
+        error_log('data.sql Ok');
+    }
+    //$result->free();
 
     UserManager::setPasswordEncryption($encryptPassForm);
 

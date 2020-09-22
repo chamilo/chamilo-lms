@@ -435,7 +435,7 @@ class Plugin
                 }
             } elseif ($languageParentId > 0) {
                 $languageParentInfo = api_get_language_info($languageParentId);
-                $languageParentFolder = $languageParentInfo['dokeos_folder'];
+                $languageParentFolder = $languageParentInfo['english_name'];
 
                 $parentPath = "{$root}{$plugin_name}/lang/{$languageParentFolder}.php";
                 if (is_readable($parentPath)) {

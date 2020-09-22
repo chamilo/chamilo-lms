@@ -4365,7 +4365,7 @@ function api_get_languages_to_array()
     $result = Database::query($sql);
     $languages = [];
     while ($row = Database::fetch_array($result)) {
-        $languages[$row['dokeos_folder']] = $row['original_name'];
+        $languages[$row['english_name']] = $row['original_name'];
     }
 
     return $languages;
@@ -4386,7 +4386,7 @@ function api_get_language_id($language)
     }
     $language = Database::escape_string($language);
     $sql = "SELECT id FROM $tbl_language
-            WHERE dokeos_folder = '$language' LIMIT 1";
+            WHERE english_name = '$language' LIMIT 1";
     $result = Database::query($sql);
     $row = Database::fetch_array($result);
 
@@ -4419,7 +4419,6 @@ function api_get_language_info($languageId)
         'original_name' => $language->getOriginalName(),
         'english_name' => $language->getEnglishName(),
         'isocode' => $language->getIsocode(),
-        'dokeos_folder' => $language->getDokeosFolder(),
         'available' => $language->getAvailable(),
         'parent_id' => $language->getParent() ? $language->getParent()->getId() : null,
     ];

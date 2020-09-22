@@ -32,7 +32,7 @@ class SubLanguageManager
         $rs = Database::query($sql);
         $all_languages = [];
         while ($row = Database::fetch_array($rs, 'ASSOC')) {
-            $all_languages[$row['dokeos_folder']] = $row;
+            $all_languages[$row['english_name']] = $row;
         }
 
         return $all_languages;

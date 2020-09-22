@@ -59,7 +59,12 @@ if ($languageId) {
     $languageInfo = api_get_language_info($languageId);
     $form->addText(
         'new_language',
-        [get_lang('Translation'), get_lang('If this term has already been translated, this operation will replace its translation for this sub-language.')]
+        [
+            get_lang('Translation'),
+            get_lang(
+                'If this term has already been translated, this operation will replace its translation for this sub-language.'
+            ),
+        ]
     );
     $form->addHidden('file_id', 0);
     $form->addHidden('id', $languageInfo['parent_id']);

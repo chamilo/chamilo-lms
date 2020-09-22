@@ -8600,4 +8600,5 @@ $NoEntity = "Aucune organisation";
 $UserByEntityReport = "Utilisateur par organisation";
 $LpByAuthor = "Parcours par auteur";
 $SessionImportAssignments = "Importer les travaux du cours de base";
+$RedirectToPortalHome = "Rediriger vers la page d'accueil de la plateforme";
 ?>

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 // resetting the course id
@@ -231,10 +232,10 @@ function search_users($needle, $type)
                     }
 
                     $return .= Display::url(
-                        $person_name,
-                        'javascript: void(0);',
-                        ['onclick' => "add_user_to_session('".$user['id']."', '".addslashes($person_name)."');"]
-                    ).'<br>';
+                            $person_name,
+                            'javascript: void(0);',
+                            ['onclick' => "add_user_to_session('".$user['id']."', '".addslashes($person_name)."');"]
+                        ).'<br>';
                 } else {
                     $return .= '...<br />';
                 }
@@ -250,7 +251,7 @@ function search_users($needle, $type)
                     $officialCode = !empty($user['official_code']) ? $user['official_code'].' - ' : '? - ';
                     $person_name = $officialCode.$user['lastname'].' '.$user['firstname'].' ('.$user['username'].')';
                 }
-                $return .= '<option value="'.$user['id'].'">'.$person_name.' </option>';
+                $return .= '<option value="'.$user['id'].'">'.trim($person_name).' </option>';
             }
             $return .= '</select>';
             $xajax_response->addAssign('ajax_list_users_multiple', 'innerHTML', api_utf8_encode($return));
@@ -560,32 +561,33 @@ $link_add_group = Display::url(
 
 $newLinks = Display::url(
     Display::return_icon('teacher.png', get_lang('Enroll trainers from existing sessions'), null, ICON_SIZE_TINY).
-        get_lang('Enroll trainers from existing sessions'),
+    get_lang('Enroll trainers from existing sessions'),
     api_get_path(WEB_CODE_PATH).'session/add_teachers_to_session.php?id='.$id_session
 );
 $newLinks .= Display::url(
     Display::return_icon('user.png', get_lang('Enroll trainers from existing sessions'), null, ICON_SIZE_TINY).
-        get_lang('Enroll students from existing sessions'),
+    get_lang('Enroll students from existing sessions'),
     api_get_path(WEB_CODE_PATH).'session/add_students_to_session.php?id='.$id_session
 );
+
+echo '<div class="actions">';
+echo $link_add_type_unique;
+echo $link_add_type_multiple;
+echo $link_add_group;
+echo $newLinks;
+echo '</div>';
+
 ?>
-    <div class="actions">
-        <?php
-        echo $link_add_type_unique;
-        echo $link_add_type_multiple;
-        echo $link_add_group;
-        echo $newLinks;
-        ?>
-    </div>
     <form name="formulaire" method="post"
-          action="<?php echo api_get_self(); ?>?page=<?php echo $page; ?>&id_session=<?php echo $id_session; ?><?php if (!empty($addProcess)) {
-            echo '&add=true';
-        } ?>" <?php if ($ajax_search) {
-            echo ' onsubmit="valide();"';
-        } ?>>
+          action="<?php echo api_get_self(
+          ); ?>?page=<?php echo $page; ?>&id_session=<?php echo $id_session; ?><?php if (!empty($addProcess)) {
+              echo '&add=true';
+          } ?>" <?php if ($ajax_search) {
+        echo ' onsubmit="valide();"';
+    } ?>>
         <?php echo '<legend>'.$tool_name.' ('.$session_info['name'].') </legend>'; ?>
         <?php
-        if ('multiple' == $add_type) {
+        if ('multiple' === $add_type) {
             if (is_array($extra_field_list)) {
                 if (is_array($new_field_list) && count($new_field_list) > 0) {
                     echo '<h3>'.get_lang('Filter users').'</h3>';
@@ -638,12 +640,12 @@ $newLinks .= Display::url(
             <div class="col-md-4">
                 <div class="form-group">
                     <?php
-                    if (!('multiple' == $add_type)) {
+                    if (!('multiple' === $add_type)) {
                         ?>
                         <input
-                                placeholder="<?php echo get_lang('Search'); ?>"
-                                type="text" id="user_to_add" onkeyup="xajax_search_users(this.value,'single')"
-                               class="form-control"/>
+                            placeholder="<?php echo get_lang('Search'); ?>"
+                            type="text" id="user_to_add" onkeyup="xajax_search_users(this.value,'single')"
+                            class="form-control"/>
                         <div id="ajax_list_users_single" class="select-list-ajax"></div>
                         <?php
                     } else {
@@ -653,30 +655,25 @@ $newLinks .= Display::url(
                                     class="form-control">
                                 <?php
                                 foreach ($nosessionUsersList as $uid => $enreg) {
-                                    ?>
-                                    <option value="<?php echo $uid; ?>" <?php if (in_array($uid, $UserList)) {
-                                        echo 'selected="selected"';
-                                    } ?>>
-                                        <?php
-                                        $personName = $enreg['ln'].' '.$enreg['fn'].' ('.$enreg['un'].') '
-                                            .$enreg['official_code'];
-                                    if ($showOfficialCode) {
-                                        $officialCode =
-                                                !empty($enreg['official_code']) ? $enreg['official_code'].' - '
-                                                    : '? - ';
-                                        $personName =
-                                                $officialCode.$enreg['ln'].' '.$enreg['fn'].' ('.$enreg['un'].')';
+                                    $selected = in_array($uid, $UserList) ? 'selected="selected"' : '';
+                                    $personName = $enreg['ln'].' '.$enreg['fn'].' ('.$enreg['un'].')';
+                                    if (!empty($enreg['official_code'])) {
+                                        $personName.= ' '.$enreg['official_code'];
                                     }
-                                    echo $personName; ?>
-                                    </option>
-                                    <?php
+                                    if ($showOfficialCode) {
+                                        $officialCode = !empty($enreg['official_code']) ? $enreg['official_code'].' - ' : '? - ';
+                                        $personName = $officialCode.$enreg['ln'].' '.$enreg['fn'].' ('.$enreg['un'].')';
+                                    }
+                                    echo "<option value='$uid' $selected>$personName</option>";
                                 } ?>
                             </select>
                         </div>
                         <input type="checkbox" onchange="checked_in_no_session(this.checked);"
                                name="user_with_any_session" id="user_with_any_session_id">
                         <label
-                            for="user_with_any_session_id"><?php echo get_lang('Users not registered in any session'); ?></label>
+                            for="user_with_any_session_id"><?php echo get_lang(
+                                'Users not registered in any session'
+                            ); ?></label>
                         <?php
                     }
                     unset($nosessionUsersList);
@@ -685,24 +682,21 @@ $newLinks .= Display::url(
             </div>
 
             <div class="col-md-4">
-                <?php if ('multiple' == $add_type) {
-                        ?>
+                <?php if ('multiple' === $add_type) {
+                    ?>
                     <?php echo get_lang('First letter (last name)'); ?> :
                     <select id="first_letter_user" name="firstLetterUser" onchange="change_select(this.value);">
                         <option value="%">--</option>
                         <?php
-                        echo Display:: get_alphabet_options(); ?>
+                        echo Display::get_alphabet_options(); ?>
                     </select>
                     <br/>
                     <br/>
-                <?php
-                    } ?>
+                    <?php
+                } ?>
                 <div class="control-course">
                     <?php
                     if ($ajax_search) {
-                        ?>
-
-                        <?php
                     } else {
                         ?>
                         <div class="separate-action">
@@ -719,7 +713,6 @@ $newLinks .= Display::url(
                                 <em class="fa fa-chevron-left"></em>
                             </button>
                         </div>
-
                         <?php
                     }
                     if (!empty($addProcess)) {
@@ -737,12 +730,11 @@ $newLinks .= Display::url(
                 <select id="destination_users" name="sessionUsersList[]" multiple="multiple" size="15"
                         class="form-control">
                 </select>
-                <br />
+                <br/>
                 <button style="display:none" id="remove_user" name="remove_user" class="btn btn-danger" type="button"
                         onclick="remove_item(document.getElementById('destination_users'))">
                     <?php echo get_lang('Remove'); ?> <em class="fa fa-trash"></em>
                 </button>
-
             </div>
         </div>
     </form>

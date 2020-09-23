@@ -60,6 +60,7 @@ class CourseListener
         $sessionHandler = $request->getSession();
         $container = $this->container;
         $translator = $container->get('translator');
+        $twig = $container->get('twig');
 
         $course = null;
         $courseInfo = [];
@@ -113,7 +114,7 @@ class CourseListener
             $sessionHandler->set('_course', $courseInfo);
 
             // Setting variables for the twig templates.
-            $container->get('twig')->addGlobal('course', $course);
+            $twig->addGlobal('course', $course);
 
             // Checking if sid is used.
             $sessionId = (int) $request->get('sid');
@@ -148,7 +149,7 @@ class CourseListener
                     $sessionHandler->set('sid', $session->getId());
                     $sessionHandler->set('session', $session);
 
-                    $container->get('twig')->addGlobal('session', $session);
+                    $twig->addGlobal('session', $session);
                 } else {
                     throw new NotFoundHttpException($translator->trans('Session not found'));
                 }
@@ -192,7 +193,7 @@ class CourseListener
 
             $courseParams = $this->generateCourseUrl($course, $sessionId, $groupId, $origin);
             $sessionHandler->set('course_url_params', $courseParams);
-            $container->get('twig')->addGlobal('course_url_params', $courseParams);
+            $twig->addGlobal('course_url_params', $courseParams);
         }
     }
 

@@ -56,15 +56,6 @@ class LearnpathList
         $course_id = $courseInfo['real_id'];
         $this->user_id = $user_id;
 
-        // Condition for the session.
-        $session_id = empty($session_id) ? api_get_session_id() : (int) $session_id;
-        $condition_session = api_get_session_condition(
-            $session_id,
-            true,
-            true,
-            'lp.sessionId'
-        );
-
         $order = ' ORDER BY lp.displayOrder ASC, lp.name ASC';
         if (isset($order_by)) {
             $order = Database::parse_conditions(['order' => $order_by]);
@@ -72,61 +63,48 @@ class LearnpathList
 
         $repo = Container::getLpRepository();
 
+        $course = api_get_course_entity($course_id);
+        $session = api_get_session_entity($session_id);
+        $qb = $repo->getResourcesByCourse($course, $session);
+
         $now = api_get_utc_datetime();
 
-        $time_conditions = '';
         if ($check_publication_dates) {
-            $time_conditions = " AND (
-                (lp.publicatedOn IS NOT NULL AND lp.publicatedOn < '$now' AND lp.expiredOn IS NOT NULL AND lp.expiredOn > '$now') OR
-                (lp.publicatedOn IS NOT NULL AND lp.publicatedOn < '$now' AND lp.expiredOn IS NULL) OR
-                (lp.publicatedOn IS NULL AND lp.expiredOn IS NOT NULL AND lp.expiredOn > '$now') OR
-                (lp.publicatedOn IS NULL AND lp.expiredOn IS NULL ))
-            ";
+            $qb->andWhere(
+                $qb->orWhere("resource.publicatedOn IS NOT NULL AND resource.publicatedOn < '$now' AND resource.expiredOn IS NOT NULL AND resource.expiredOn > '$now'"),
+                $qb->orWhere("resource.publicatedOn IS NOT NULL AND resource.publicatedOn < '$now' AND resource.expiredOn IS NULL"),
+                $qb->orWhere("resource.publicatedOn IS NULL AND resource.expiredOn IS NOT NULL AND resource.expiredOn > '$now'"),
+                $qb->orWhere("resource.publicatedOn IS NULL AND resource.expiredOn IS NULL "),
+            );
         }
 
-        $categoryFilter = '';
         if (false == $ignoreCategoryFilter) {
             if (!empty($categoryId)) {
                 $categoryId = (int) $categoryId;
-                $categoryFilter = " AND lp.categoryId = $categoryId";
+                $categoryFilter = " resource.category = $categoryId";
             } else {
-                $categoryFilter = ' AND (lp.categoryId = 0 OR lp.categoryId IS NULL) ';
+                $categoryFilter = ' resource.category IS NULL ';
             }
+            $qb->andWhere($categoryFilter);
         }
 
-        $dql = "SELECT lp FROM ChamiloCourseBundle:CLp as lp
+        /*$dql = "SELECT lp FROM ChamiloCourseBundle:CLp as lp
                 WHERE
-                    lp.cId = $course_id
                     $time_conditions
                     $condition_session
                     $categoryFilter
                     $order
-                ";
-        $learningPaths = Database::getManager()->createQuery($dql)->getResult();
+                ";*/
+        //$learningPaths = Database::getManager()->createQuery($dql)->getResult();
         $showBlockedPrerequisite = api_get_configuration_value('show_prerequisite_as_blocked');
         $names = [];
         $isAllowToEdit = api_is_allowed_to_edit();
-        $courseEntity = api_get_course_entity($course_id);
-        $sessionEntity = api_get_session_entity($session_id);
+        $learningPaths = $qb->getQuery()->getResult();
+
         $shortcutRepository = Container::getShortcutRepository();
 
         /** @var CLp $lp */
         foreach ($learningPaths as $lp) {
-            //$name = Database::escape_string($lp->getName());
-            //$link = 'lp/lp_controller.php?action=view&lp_id='.$lp->getId().'&id_session='.$session_id;
-            //$oldLink = 'newscorm/lp_controller.php?action=view&lp_id='.$lp->getId().'&id_session='.$session_id;
-
-            /*$sql2 = "SELECT visibility FROM $tbl_tool
-                     WHERE
-                        c_id = $course_id AND
-                        name = '$name' AND
-                        image = 'scormbuilder.gif' AND
-                        (
-                            link LIKE '$link%' OR
-                            link LIKE '$oldLink%'
-                        )
-                      ";
-            $res2 = Database::query($sql2);*/
             $pub = 'i';
             $shortcut = $shortcutRepository->getShortcutFromResource($lp);
             if ($shortcut) {
@@ -144,7 +122,7 @@ class LearnpathList
                 $lp->getId(),
                 $session_id
             );*/
-            $visibility = $lp->isVisible($courseEntity, $sessionEntity);
+            $visibility = $lp->isVisible($course, $session);
 
             // If option is not true then don't show invisible LP to user
             if (false === $ignoreLpVisibility) {
@@ -186,7 +164,7 @@ class LearnpathList
                 'expired_on' => $lp->getExpiredOn() ? $lp->getExpiredOn()->format('Y-m-d H:i:s') : null,
                 //'category_id'       => $lp['category_id'],
                 'subscribe_users' => $lp->getSubscribeUsers(),
-                'lp_old_id' => $lp->getId(),
+                'lp_old_id' => $lp->getIid(),
                 'iid' => $lp->getIid(),
                 'prerequisite' => $lp->getPrerequisite(),
                 'entity' => $lp,

@@ -11,6 +11,7 @@ Feature: LP tool
     When I fill in the following:
       | name | LP category 1 |
     And I press "submit"
+    And wait very long for the page to be loaded
     Then I should see "Added"
 
   Scenario: Create a LP
@@ -19,6 +20,7 @@ Feature: LP tool
       | lp_name | LP 1 |
 #    And I select "LP category 1" from "category_id"
     And I press "submit"
+    And wait very long for the page to be loaded
     Then I should see "Click on the [Learner view] button to see your learning path"
 
   Scenario: Add document to LP
@@ -31,23 +33,23 @@ Feature: LP tool
     And I press "submit_button"
     Then I should see "Document 1"
 
-  Scenario: Add an exercise to LP
-    Given I am on "/main/lp/lp_controller.php?cid=1&action=list"
-    And I follow "Edit learnpath"
-    And I follow "Tests"
-    And I follow "Exercise 1"
-    Then I should see "Adding a test to the course"
-    And I press "submit_button"
-    Then I should see "Click on the [Learner view] button to see your learning path"
-    And I should see "Exercise 1"
-
-  Scenario: Enter LP
-    Given I am on "/main/lp/lp_controller.php?cid=1&action=list"
-    And I follow "LP 1"
-    And wait for the page to be loaded
-    Then I should see "LP 1"
-    And I should see "Document 1"
-    And I should see "Exercise 1"
+#  Scenario: Add an exercise to LP
+#    Given I am on "/main/lp/lp_controller.php?cid=1&action=list"
+#    And I follow "Edit learnpath"
+#    And I follow "Tests"
+#    And I follow "Exercise 1"
+#    Then I should see "Adding a test to the course"
+#    And I press "submit_button"
+#    Then I should see "Click on the [Learner view] button to see your learning path"
+#    And I should see "Exercise 1"
+#
+#  Scenario: Enter LP
+#    Given I am on "/main/lp/lp_controller.php?cid=1&action=list"
+#    And I follow "LP 1"
+#    And wait for the page to be loaded
+#    Then I should see "LP 1"
+#    And I should see "Document 1"
+#    And I should see "Exercise 1"
 
 #  Scenario: Check the PDF export in LP list if hide SCORM PDF link is false
 #    Given I am on "/main/admin/settings.php?category=Course"

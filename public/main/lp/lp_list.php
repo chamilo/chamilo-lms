@@ -142,10 +142,10 @@ if ($allowCategory) {
     $categoriesTempList = $newCategoryFiltered;
 }
 
-/*$categoryTest = new CLpCategory();
+$categoryTest = new CLpCategory();
 $categoryTest->setName(get_lang('WithOutCategory'));
-$categoryTest->setPosition(0);*/
-$categories = [];
+$categoryTest->setPosition(0);
+$categories = [$categoryTest];
 
 if (!empty($categoriesTempList)) {
     $categories = array_merge($categories, $categoriesTempList);
@@ -216,7 +216,7 @@ $shortcutRepository = Container::getShortcutRepository();
 foreach ($categories as $category) {
     $categoryId = $category->getIid();
     $visibility = true;
-    if (0 !== $categoryId) {
+    if (null !== $categoryId) {
         $visibility = $category->isVisible($courseEntity, $sessionEntity);
     }
     if (0 !== $categoryId && true == $subscriptionSettings['allow_add_users_to_lp_category']) {

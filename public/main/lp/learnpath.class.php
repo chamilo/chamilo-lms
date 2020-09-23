@@ -168,7 +168,11 @@ class learnpath
                 $this->created_on = $entity->getCreatedOn()->format('Y-m-d H:i:s');
                 $this->modified_on = $entity->getModifiedOn()->format('Y-m-d H:i:s');
                 $this->ref = $entity->getRef();
-                $this->categoryId = $entity->getCategoryId();
+                $this->categoryId = 0;
+                if ($entity->getCategory()) {
+                    $this->categoryId = $entity->getCategory()->getIid();
+                }
+
                 $this->accumulateScormTime = $entity->getAccumulateWorkTime();
 
                 if (!empty($entity->getPublicatedOn())) {
@@ -217,7 +221,7 @@ class learnpath
                 if (Database::num_rows($res) > 0) {
                     $row = Database::fetch_array($res);
                     $this->attempt = $row['view_count'];
-                    $this->lp_view_id = $row['id'];
+                    $this->lp_view_id = $row['iid'];
                     $this->last_item_seen = $row['last_item'];
                     $this->progress_db = $row['progress'];
                     $this->lp_view_session_id = $row['session_id'];
@@ -758,6 +762,12 @@ class learnpath
                     $dsp = $row[0] + 1;
                 }
 
+                $category = null;
+                if (!empty($categoryId)) {
+                    $category = Container::getLpCategoryRepository()->find($categoryId);
+                }
+
+
                 $lp = new CLp();
                 $lp
                     ->setCId($course_id)
@@ -766,7 +776,7 @@ class learnpath
                     ->setDescription($description)
                     ->setDisplayOrder($dsp)
                     ->setSessionId($session_id)
-                    ->setCategoryId($categoryId)
+                    ->setCategory($category)
                     ->setPublicatedOn($publicated_on)
                     ->setExpiredOn($expired_on)
                     ->setParent($courseEntity)
@@ -6931,7 +6941,7 @@ class learnpath
                 }
 
                 $sql = "UPDATE $tbl_doc SET ".substr($ct, 1)."
-                        WHERE c_id = $course_id AND id = $document_id ";
+                        WHERE iid = $document_id ";
                 Database::query($sql);
             }
         }
@@ -8121,10 +8131,13 @@ class learnpath
         $return .= '<option value="0">'.get_lang('none').'</option>';
         if (Database::num_rows($rs) > 0) {
             while ($row = Database::fetch_array($rs)) {
-                if ($row['id'] == $lp_id) {
+                if ($row['iid'] == $lp_id) {
                     continue;
                 }
-                $return .= '<option value="'.$row['id'].'" '.(($row['id'] == $prerequisiteId) ? ' selected ' : '').'>'.$row['name'].'</option>';
+                $return .= '<option
+                    value="'.$row['iid'].'" '.(($row['iid'] == $prerequisiteId) ? ' selected ' : '').'>'.
+                    $row['name'].
+                    '</option>';
             }
         }
         $return .= '</select>';
@@ -10086,7 +10099,7 @@ EOD;
             api_get_user_id()
         );*/
 
-        return $item->getId();
+        return $item->getIid();
     }
 
     /**
@@ -10242,10 +10255,10 @@ EOD;
         $em = Database::getManager();
         $item = $em->find('ChamiloCourseBundle:CLpCategory', $id);
         if ($item) {
-            $courseId = $item->getCId();
-            $query = $em->createQuery('SELECT u FROM ChamiloCourseBundle:CLp u WHERE u.cId = :id AND u.categoryId = :catId');
+            /*$courseId = $item->getCId();
+            $query = $em->createQuery('SELECT u FROM ChamiloCourseBundle:CLp u WHERE u.category = :catId');
             $query->setParameter('id', $courseId);
-            $query->setParameter('catId', $item->getId());
+            $query->setParameter('catId', $item->getIid());
             $lps = $query->getResult();
 
             // Setting category = 0.
@@ -10253,7 +10266,7 @@ EOD;
                 foreach ($lps as $lpItem) {
                     $lpItem->setCategoryId(0);
                 }
-            }
+            }*/
 
             // Removing category.
             $em->remove($item);
@@ -10292,7 +10305,7 @@ EOD;
 
         if (!empty($items)) {
             foreach ($items as $cat) {
-                $cats[$cat->getId()] = $cat->getName();
+                $cats[$cat->getIid()] = $cat->getName();
             }
         }
 

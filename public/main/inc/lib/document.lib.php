@@ -578,7 +578,7 @@ class DocumentManager
         }
 
         $sql = "SELECT
-                    docs.id,
+                    docs.iid,
                     docs.filetype,
                     docs.path,
                     docs.title,
@@ -597,10 +597,9 @@ class DocumentManager
                 INNER JOIN resource_link l
                 ON (l.resource_node_id = n.id)
                 WHERE
-                    docs.c_id = {$courseInfo['real_id']} AND
-                    docs.path LIKE '".Database::escape_string($path.$addedSlash.'%')."' AND
-                    docs.path NOT LIKE '".Database::escape_string($path.$addedSlash.'%/%')."' AND
-                    docs.path NOT LIKE '%_DELETED_%' AND
+                    l.c_id = {$courseInfo['real_id']} AND
+                    n.path LIKE '".Database::escape_string($path.$addedSlash.'%')."' AND
+                    n.path NOT LIKE '".Database::escape_string($path.$addedSlash.'%/%')."' AND
                     l.visibility NOT IN ('".ResourceLink::VISIBILITY_DELETED."')
                     $sharedCondition
                 ";
@@ -761,23 +760,22 @@ class DocumentManager
             $condition_session = " AND (l.session_id = '$sessionId' OR (l.session_id = '0' OR l.session_id IS NULL) )";
             $condition_session .= self::getSessionFolderFilters($path, $sessionId);
 
-            $sql = "SELECT DISTINCT docs.id, docs.path
+            $sql = "SELECT DISTINCT docs.iid, n.path
                     FROM resource_node AS n
-                    INNER JOIN $TABLE_DOCUMENT  AS docs
+                    INNER JOIN $TABLE_DOCUMENT AS docs
                     ON (docs.resource_node_id = n.id)
                     INNER JOIN resource_link l
                     ON (l.resource_node_id = n.id)
                     WHERE
-                        docs.c_id = $courseId AND
+                        l.c_id = $courseId AND
                         docs.filetype = 'folder' AND
                         $groupCondition AND
-                        docs.path NOT LIKE '%shared_folder%' AND
-                        docs.path NOT LIKE '%_DELETED_%' AND
+                        n.path NOT LIKE '%shared_folder%' AND
                         l.visibility NOT IN ('".ResourceLink::VISIBILITY_DELETED."')
                         $condition_session ";
 
             if (0 != $groupIid) {
-                $sql .= " AND docs.path NOT LIKE '%shared_folder%' ";
+                $sql .= " AND n.path NOT LIKE '%shared_folder%' ";
             } else {
                 $sql .= $show_users_condition;
             }
@@ -795,7 +793,7 @@ class DocumentManager
                         }
                     }
 
-                    $folders[$row['id']] = $row['path'];
+                    $folders[$row['iid']] = $row['path'];
                 }
 
                 if (!empty($folders)) {
@@ -803,9 +801,9 @@ class DocumentManager
                 }
 
                 return $folders;
-            } else {
-                return false;
             }
+
+            return false;
         } else {
             // No invisible folders
             // Condition for the session
@@ -836,7 +834,7 @@ class DocumentManager
                         $visibilityCondition
                         $show_users_condition
                         $condition_session AND
-                        docs.c_id = $courseId ";
+                        l.c_id = $courseId ";
             $result = Database::query($sql);
             $visibleFolders = [];
             while ($row = Database::fetch_array($result, 'ASSOC')) {
@@ -848,7 +846,7 @@ class DocumentManager
             }
 
             // get invisible folders
-            $sql = "SELECT DISTINCT docs.id, docs.path
+            $sql = "SELECT DISTINCT docs.iid, n.path
                     FROM resource_node AS n
                     INNER JOIN $TABLE_DOCUMENT  AS docs
                     ON (docs.resource_node_id = n.id)
@@ -859,12 +857,12 @@ class DocumentManager
                         $groupCondition AND
                         l.visibility IN ('".ResourceLink::VISIBILITY_PENDING."')
                         $condition_session AND
-                        docs.c_id = $courseId ";
+                        l.c_id = $courseId ";
             $result = Database::query($sql);
             $invisibleFolders = [];
             while ($row = Database::fetch_array($result, 'ASSOC')) {
                 //get visible folders in the invisible ones -> they are invisible too
-                $sql = "SELECT DISTINCT docs.id, docs.path
+                $sql = "SELECT DISTINCT docs.iid, n.path
                         FROM resource_node AS n
                         INNER JOIN $TABLE_DOCUMENT  AS docs
                         ON (docs.resource_node_id = n.id)
@@ -876,7 +874,7 @@ class DocumentManager
                             $groupCondition AND
                             l.visibility NOT IN ('".ResourceLink::VISIBILITY_DELETED."')
                             $condition_session AND
-                            docs.c_id = $courseId ";
+                            l.c_id = $courseId ";
                 $folder_in_invisible_result = Database::query($sql);
                 while ($folders_in_invisible_folder = Database::fetch_array($folder_in_invisible_result, 'ASSOC')) {
                     $invisibleFolders[$folders_in_invisible_folder['id']] = $folders_in_invisible_folder['path'];
@@ -4541,12 +4539,25 @@ class DocumentManager
             }
             $folder_sql = implode("','", $escaped_folders);
 
-            $sql = "SELECT path, title
+            $sql = "SELECT DISTINCT docs.title, n.path
+                    FROM resource_node AS n
+                    INNER JOIN $doc_table AS docs
+                    ON (docs.resource_node_id = n.id)
+                    INNER JOIN resource_link l
+                    ON (l.resource_node_id = n.id)
+                    WHERE
+                        l.c_id = $course_id AND
+                        docs.filetype = 'folder' AND
+                        path IN ('".$folder_sql."') AND
+                        l.visibility NOT IN ('".ResourceLink::VISIBILITY_DELETED."')
+                         ";
+
+            /*$sql = "SELECT path, title
                     FROM $doc_table
                     WHERE
                         filetype = 'folder' AND
                         c_id = $course_id AND
-                        path IN ('".$folder_sql."')";
+                        path IN ('".$folder_sql."') ";*/
             $res = Database::query($sql);
             $folder_titles = [];
             while ($obj = Database::fetch_object($res)) {

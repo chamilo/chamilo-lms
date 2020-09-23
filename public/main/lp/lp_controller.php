@@ -333,16 +333,12 @@ if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $
 
         $lp_table = Database::get_course_table(TABLE_LP_MAIN);
         if (!empty($lp_id)) {
-            $sel = "SELECT iid, lp_type FROM $lp_table WHERE c_id = $course_id AND id = $lp_id";
+            $sel = "SELECT iid, lp_type FROM $lp_table WHERE iid = $lp_id";
             $res = Database::query($sel);
             if (Database::num_rows($res)) {
                 $row = Database::fetch_array($res);
                 $lpIid = $row['iid'];
                 $type = $row['lp_type'];
-                if ($debug > 0) {
-                    error_log('Found row type '.$type);
-                    error_log('Calling constructor: '.api_get_course_id().' - '.$lp_id.' - '.api_get_user_id());
-                }
                 $logInfo = [
                     'tool' => TOOL_LEARNPATH,
                     'action' => 'lp_load',
@@ -376,16 +372,9 @@ if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $
                         break;
                 }
             }
-        } else {
-            if ($debug > 0) {
-                error_log(' Request[lp_id] is not numeric');
-            }
-        }
-    } else {
-        if ($debug > 0) {
-            error_log(' Request[lp_id] and refresh_id were empty');
         }
     }
+
     if ($lp_found) {
         Session::write('oLP', $oLP);
     }

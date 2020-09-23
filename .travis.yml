@@ -133,7 +133,7 @@ script:
 #  - ../../vendor/behat/behat/bin/behat features/toolForum.feature -v
 #  - ../../vendor/behat/behat/bin/behat features/toolGroup.feature -vv
   - ../../vendor/behat/behat/bin/behat features/toolLink.feature -v
-#  - ../../vendor/behat/behat/bin/behat features/toolLp.feature -v
+  - ../../vendor/behat/behat/bin/behat features/toolLp.feature -v
   - ../../vendor/behat/behat/bin/behat features/toolWork.feature -vvv
 
 after_failure:

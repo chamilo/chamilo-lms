@@ -76,8 +76,9 @@ if (!empty($courses)) {
             $link
         );
 
+        $name = trim(strip_tags(Security::remove_XSS($lp->getName())));
         $lps[] = [
-            'name' => $lp->getName(),
+            'name' => $name,
             'link' => $link,
             'icon' => $icon,
             'creation_date' => api_get_local_time($lp->getCreatedOn()),

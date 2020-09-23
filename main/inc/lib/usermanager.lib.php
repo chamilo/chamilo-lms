@@ -226,13 +226,13 @@ class UserManager
 
         if ('true' === api_get_setting('registration', 'email')) {
             // Force email validation.
-           if (false === api_valid_email($email)) {
-               Display::addFlash(
+            if (false === api_valid_email($email)) {
+                Display::addFlash(
                    Display::return_message(get_lang('PleaseEnterValidEmail').' - '.$email, 'warning')
                );
 
-               return false;
-           }
+                return false;
+            }
         } else {
             // Allow empty email. If email is set, check if is valid.
             if (!empty($email) && false === api_valid_email($email)) {
@@ -7154,10 +7154,5 @@ SQL;
         }
 
         return $url;
-    }
-
-    private static function checkEmail($email)
-    {
-
     }
 }

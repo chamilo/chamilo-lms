@@ -3064,11 +3064,10 @@ class CourseManager
         $useUserLanguageFilterIfAvailable = true,
         $showCoursesSessionWithDifferentKey = false
     ) {
-        $user_id = intval($user_id);
+        $user_id = (int) $user_id;
         $urlId = api_get_current_access_url_id();
         $course_list = [];
         $codes = [];
-
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $tbl_user_course_category = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);

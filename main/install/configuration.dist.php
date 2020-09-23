@@ -1611,6 +1611,10 @@ $_configuration['auth_password_links'] = [
 // filling the database with images
 //$_configuration['ck_editor_block_image_copy_paste'] = false;
 
+// Shows a link to the "my lps" page in the /index.php and /user_portal.php page.
+// It also enables the main/lp/my_list.php page.
+//$_configuration['show_my_lps_page'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

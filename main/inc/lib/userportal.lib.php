@@ -895,7 +895,7 @@ class IndexManager
                 'title' => get_lang('Compose'),
             ];
 
-            if (api_get_setting('allow_social_tool') == 'true') {
+            if (api_get_setting('allow_social_tool') === 'true') {
                 $total_invitations = Display::badge($total_invitations);
                 $items[] = [
                     'class' => 'invitations-social',
@@ -939,6 +939,14 @@ class IndexManager
                 'icon' => Display::return_icon('new_group.png', $label),
                 'link' => api_get_path(WEB_CODE_PATH).'social/require_user_linking.php',
                 'title' => $label,
+            ];
+        }
+
+        if (api_get_configuration_value('show_my_lps_page')) {
+            $items[] = [
+                'icon' => Display::return_icon('learnpath.png', get_lang('MyLps')),
+                'link' => api_get_path(WEB_CODE_PATH).'lp/my_list.php',
+                'title' => get_lang('MyLps'),
             ];
         }
 

@@ -19,7 +19,6 @@ class SkillRelItemRelUser
     use TimestampableEntity;
     use UserTrait;
 
-
     /**
      * @var int
      *

@@ -29,7 +29,6 @@ class TrackEAttempt
     use CourseTrait;
     use UserTrait;
 
-
     /**
      * @var int
      *

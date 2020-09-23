@@ -3,10 +3,10 @@
 {% for namespace in schemas|keys %}
     {% set namespace = namespace | replace({'chamilo_course.settings.' : ''}) %}
     <a
-        class = "list-group-item list-group-item-action {% if (current_namespace ==  namespace)  %} active {% endif %} "
+        class = "list-group-item list-group-item-action {% if (current_namespace ==  namespace) %} active {% endif %}"
         href="{{ path('chamilo_core_course_settings', { 'namespace': namespace, 'cid' : course.id }) }}"
     >
-        <img src="{{ asset('img/icons/32/' ~ namespace ~'.png') }}" />
+        <img src="{{ asset('img/icons/32/' ~ namespace ~'.png') }}" alt="{{ namespace }}" />
         {{ namespace | capitalize | trans }}
     </a>
 {% endfor %}

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
@@ -11,14 +12,13 @@ use ChamiloSession as Session;
  *
  * @author Christian Fasanando
  * @author Julio Montoya <gugli100@gmail.com> Lots of bug fixes/improvements
- *
- * @package chamilo.backup
  */
+
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_COURSE_MAINTENANCE;
 
-api_protect_global_admin_script();
+api_protect_admin_script();
 api_protect_limit_for_session_admin();
 api_set_more_memory_and_time_limits();
 

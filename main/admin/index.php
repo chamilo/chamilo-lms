@@ -508,12 +508,10 @@ $items[] = [
     'label' => get_lang('ExportSessionListXMLCSV'),
 ];
 
-if (api_is_global_platform_admin()) {
-    $items[] = [
-        'url' => '../coursecopy/copy_course_session.php',
-        'label' => get_lang('CopyFromCourseInSessionToAnotherSession'),
-    ];
-}
+$items[] = [
+    'url' => '../coursecopy/copy_course_session.php',
+    'label' => get_lang('CopyFromCourseInSessionToAnotherSession'),
+];
 
 $allowCareer = api_get_configuration_value('allow_session_admin_read_careers');
 

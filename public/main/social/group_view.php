@@ -171,6 +171,8 @@ if (!$is_group_member && GROUP_PERMISSION_CLOSED == $groupInfo['visibility']) {
         $social_right_content .= Display::return_message(get_lang('You already sent an invitation'));
     }
 }
+$listTopic = null;
+$listMembers = null;
 
 if ($is_group_member || GROUP_PERMISSION_OPEN == $groupInfo['visibility']) {
     if (!$is_group_member) {
@@ -303,6 +305,10 @@ if ($is_group_member || GROUP_PERMISSION_OPEN == $groupInfo['visibility']) {
     }
     $headers = [get_lang('Discussions'), get_lang('Members')];
     $socialForum = Display::tabs($headers, [$content, $member_content], 'tabs');
+
+    $listTopic = $content;
+    $listMembers = $member_content;
+
 } else {
     // if I already sent an invitation message
     if (!in_array(
@@ -332,5 +338,7 @@ $tpl->assign('social_friend_block', $friend_html);
 $tpl->assign('social_menu_block', $social_menu_block);
 $tpl->assign('social_forum', $socialForum);
 $tpl->assign('social_right_content', $social_right_content);
+$tpl->assign('list_members', $listMembers);
+$tpl->assign('list_topic', $listTopic);
 $social_layout = $tpl->get_template('social/group_view.tpl');
 $tpl->display($social_layout);

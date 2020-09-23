@@ -108,8 +108,8 @@ script:
   - cd tests/behat
 #  - ../../vendor/behat/behat/bin/behat features/accessCompanyReports.feature -v
   - ../../vendor/behat/behat/bin/behat features/actionUserLogin.feature -v
-  - ../../vendor/behat/behat/bin/behat features/adminFillUsers.feature -vvv
-  - ../../vendor/behat/behat/bin/behat features/adminSettings.feature -vvv
+  - ../../vendor/behat/behat/bin/behat features/adminFillUsers.feature -v
+  - ../../vendor/behat/behat/bin/behat features/adminSettings.feature -v
   - ../../vendor/behat/behat/bin/behat features/career.feature -vvv
   - ../../vendor/behat/behat/bin/behat features/class.feature -vvv
   - ../../vendor/behat/behat/bin/behat features/companyReports.feature -v
@@ -121,10 +121,10 @@ script:
   - ../../vendor/behat/behat/bin/behat features/profile.feature -v
   - ../../vendor/behat/behat/bin/behat features/promotion.feature -v
 #  - ../../vendor/behat/behat/bin/behat features/registration.feature -v
-  - ../../vendor/behat/behat/bin/behat features/sessionAccess.feature -vvv
-#  - ../../vendor/behat/behat/bin/behat features/sessionManagement.feature -v
-#  - ../../vendor/behat/behat/bin/behat features/socialGroup.feature -v
-#  - ../../vendor/behat/behat/bin/behat features/systemAnnouncements.feature -v
+  - ../../vendor/behat/behat/bin/behat features/sessionAccess.feature -v
+  - ../../vendor/behat/behat/bin/behat features/sessionManagement.feature -v
+  - ../../vendor/behat/behat/bin/behat features/socialGroup.feature -v
+  - ../../vendor/behat/behat/bin/behat features/systemAnnouncements.feature -v
 #  - ../../vendor/behat/behat/bin/behat features/ticket.feature -v
   - ../../vendor/behat/behat/bin/behat features/toolAgenda.feature -v
   - ../../vendor/behat/behat/bin/behat features/toolAnnouncement.feature -v

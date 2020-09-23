@@ -29,9 +29,11 @@ if ($form->validate()) {
     $values['relation_type'] = GROUP_USER_PERMISSION_ADMIN;
 
     $groupId = $usergroup->save($values);
-    Display::addFlash(Display::return_message(get_lang('Group added')));
-    header('Location: group_view.php?id='.$groupId);
-    exit();
+    if ($groupId) {
+        Display::addFlash(Display::return_message(get_lang('Group added')));
+        api_location(api_get_path(WEB_CODE_PATH).'social/group_view.php?id='.$groupId);
+    }
+    api_location(api_get_self());
 }
 
 $nameTools = get_lang('Add group');

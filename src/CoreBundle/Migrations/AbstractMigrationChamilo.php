@@ -27,7 +27,7 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
     public function getEntityManager()
     {
         if (empty($this->manager)) {
-            $params = $this->connection->getParams();
+            //$params = $this->connection->getParams();
             /*
             $dbParams = [
                 'driver' => 'pdo_mysql',
@@ -37,13 +37,13 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
                 'dbname' => $this->connection->getDatabase(),
                 'port' => $this->connection->getPort(),
             ];*/
-            $database = new \Database();
+            /*$database = new \Database();
             $database->connect(
                 $params,
                 __DIR__.'/../../',
                 __DIR__.'/../../'
             );
-            $this->manager = $database->getManager();
+            $this->manager = $database->getManager();*/
         }
 
         return $this->manager;

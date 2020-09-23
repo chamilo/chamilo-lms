@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
@@ -340,7 +341,7 @@ function getWorkPerUser($userId, $courseId = 0, $sessionId = 0)
     $result = [];
     if (!empty($works)) {
         foreach ($works as $workData) {
-            $workId = $workData->id;
+            $workId = $workData->iid;
             $result[$workId]['work'] = $workData;
             $result[$workId]['work']->user_results = get_work_user_list(
                 0,
@@ -814,7 +815,7 @@ function deleteDirWork($id)
     $t_agenda = Database::get_course_table(TABLE_AGENDA);
     $course_id = api_get_course_int_id();
     $sessionId = api_get_session_id();
-
+    $check = true;
     if (!empty($work_data['url'])) {
         if ($check) {
             $consideredWorkingTime = api_get_configuration_value('considered_working_time');
@@ -854,21 +855,27 @@ function deleteDirWork($id)
                         if (1 != count($userWorks)) {
                             continue;
                         }
-                        Event::eventRemoveVirtualCourseTime($course_id, $user['user_id'], $sessionId, $workingTime);
+                        Event::eventRemoveVirtualCourseTime(
+                            $course_id,
+                            $user['user_id'],
+                            $sessionId,
+                            $workingTime,
+                            $work_data['iid']
+                        );
                     }
                 }
             }
 
             // Deleting all contents inside the folder
             $sql = "UPDATE $table SET active = 2
-                    WHERE c_id = $course_id AND filetype = 'folder' AND id = $id";
+                    WHERE filetype = 'folder' AND iid = $id";
             Database::query($sql);
 
             $sql = "UPDATE $table SET active = 2
-                    WHERE c_id = $course_id AND parent_id = $id";
+                    WHERE parent_id = $id";
             Database::query($sql);
 
-            $new_dir = $work_data_url.'_DELETED_'.$id;
+            /*$new_dir = $work_data_url.'_DELETED_'.$id;
 
             if ('true' == api_get_setting('permanently_remove_deleted_files')) {
                 my_delete($work_data_url);
@@ -876,7 +883,7 @@ function deleteDirWork($id)
                 if (file_exists($work_data_url)) {
                     rename($work_data_url, $new_dir);
                 }
-            }
+            }*/
 
             // Gets calendar_id from student_publication_assigment
             $sql = "SELECT add_to_calendar FROM $TSTDPUBASG
@@ -982,7 +989,7 @@ function updateWorkUrl($id, $new_path, $parent_id)
         $sql = "UPDATE $table SET
                    url = '$new_url',
                    parent_id = '$parent_id'
-                WHERE c_id = $course_id AND id = $id";
+                WHERE iid = $id";
 
         return Database::query($sql);
     }
@@ -1015,7 +1022,6 @@ function updateDirName($work_data, $newPath)
         $sql = "UPDATE $table SET
                     title = '".$originalNewPath."'
                 WHERE
-                    c_id = $course_id AND
                     iid = $work_id";
         Database::query($sql);
     }
@@ -1534,11 +1540,11 @@ function getAllWorkListStudent(
             continue;
         }
 
-        $visibility = api_get_item_visibility($courseInfo, 'work', $work['iid'], $sessionId);
+        /*$visibility = api_get_item_visibility($courseInfo, 'work', $work['iid'], $sessionId);
 
         if (1 != $visibility) {
             continue;
-        }
+        }*/
 
         $work['type'] = Display::return_icon('work.png');
         $work['expires_on'] = empty($work['expires_on']) ? null : api_get_local_time($work['expires_on']);
@@ -2217,10 +2223,8 @@ function get_work_user_list(
         $repo = Container::getStudentPublicationRepository();
         while ($work = Database::fetch_array($result, 'ASSOC')) {
             /** @var CStudentPublication $studentPublication */
-            $studentPublication = $repo->find($work['iid']);
-
-            $item_id = $work['iid'];
-            $dbTitle = $work['title'];
+            $studentPublication = $repo->find($work['id']);
+            $item_id = $work['id'];
             // Get the author ID for that document from the item_property table
             $is_author = false;
             $can_read = false;
@@ -2510,6 +2514,8 @@ function get_work_user_list(
                 $work['correction'] = $correction;
 
                 if (!empty($compilation)) {
+                    throw new Exception('compilatio');
+                    /*
                     $compilationId = $compilation->getCompilatioId($item_id, $course_id);
                     if ($compilationId) {
                         $actionCompilatio = "<div id='id_avancement".$item_id."' class='compilation_block'>
@@ -2534,7 +2540,7 @@ function get_work_user_list(
                             $actionCompilatio .= get_lang('with Compilatio');
                         }
                     }
-                    $work['compilatio'] = $actionCompilatio;
+                    $work['compilatio'] = $actionCompilatio;*/
                 }
                 $works[] = $work;
             }
@@ -3353,7 +3359,7 @@ function getTotalWorkComment($workList, $courseInfo = [])
 
     $count = 0;
     foreach ($workList as $data) {
-        $count += getWorkCommentCount($data['iid'], $courseInfo);
+        $count += getWorkCommentCount($data['id'], $courseInfo);
     }
 
     return $count;
@@ -3686,7 +3692,7 @@ function addWorkComment($courseInfo, $userId, $parentWork, $work, $data)
     $courseId = $courseInfo['real_id'];
     $courseEntity = api_get_course_entity($courseId);
 
-    /** @var CStudentPublication $work */
+    /** @var CStudentPublication $studentPublication */
     $studentPublication = Container::getStudentPublicationRepository()->find($work['iid']);
 
     $request = Container::getRequest();
@@ -3975,15 +3981,15 @@ function setWorkUploadForm($form, $uploadFormType = 0)
 }
 
 /**
- * @param array $my_folder_data
- * @param array $_course
- * @param bool  $isCorrection
- * @param array $workInfo
- * @param array $file
+ * @param array  $my_folder_data
+ * @param Course $course
+ * @param bool   $isCorrection
+ * @param array  $workInfo
+ * @param array  $file
  *
  * @return array
  */
-function uploadWork($my_folder_data, $_course, $isCorrection = false, $workInfo = [], $file = [])
+function uploadWork($my_folder_data, $course, $isCorrection = false, $workInfo = [], $file = [])
 {
     if (isset($_FILES['file']) && !empty($_FILES['file'])) {
         $file = $_FILES['file'];
@@ -3992,7 +3998,9 @@ function uploadWork($my_folder_data, $_course, $isCorrection = false, $workInfo 
     if (empty($file['size'])) {
         return [
             'error' => Display:: return_message(
-                get_lang('There was a problem uploading your document: the received file had a 0 bytes size on the server. Please, review your local file for any corruption or damage, then try again.'),
+                get_lang(
+                    'There was a problem uploading your document: the received file had a 0 bytes size on the server. Please, review your local file for any corruption or damage, then try again.'
+                ),
                 'error'
             ),
         ];
@@ -4012,27 +4020,36 @@ function uploadWork($my_folder_data, $_course, $isCorrection = false, $workInfo 
     if (empty($filesize)) {
         return [
             'error' => Display::return_message(
-                get_lang('There was a problem uploading your document: the received file had a 0 bytes size on the server. Please, review your local file for any corruption or damage, then try again.'),
+                get_lang(
+                    'There was a problem uploading your document: the received file had a 0 bytes size on the server. Please, review your local file for any corruption or damage, then try again.'
+                ),
                 'error'
             ),
         ];
-    } elseif (!filter_extension($new_file_name)) {
+    }
+
+    /*if (!filter_extension($new_file_name)) {
         return [
             'error' => Display::return_message(
                 get_lang('File upload failed: this file extension or file type is prohibited'),
                 'error'
             ),
         ];
-    }
+    }*/
 
     $repo = Container::getDocumentRepository();
-    $totalSpace = $repo->getTotalSpace($_course['real_id']);
-    $course_max_space = DocumentManager::get_course_quota($_course['code']);
+    $totalSpace = $repo->getTotalSpaceByCourse($course);
+    $course_max_space = DocumentManager::get_course_quota($course->getCode());
     $total_size = $filesize + $totalSpace;
 
     if ($total_size > $course_max_space) {
         return [
-            'error' => Display::return_message(get_lang('The upload has failed. Either you have exceeded your maximum quota, or there is not enough disk space.'), 'error'),
+            'error' => Display::return_message(
+                get_lang(
+                    'The upload has failed. Either you have exceeded your maximum quota, or there is not enough disk space.'
+                ),
+                'error'
+            ),
         ];
     }
 
@@ -4216,6 +4233,8 @@ function processWorkForm(
     $checkDuplicated = false,
     $showFlashMessage = true
 ) {
+    $courseEntity = $courseInfo['entity'];
+
     $courseId = $courseInfo['real_id'];
     $groupId = (int) $groupId;
     $sessionId = (int) $sessionId;
@@ -4251,10 +4270,10 @@ function processWorkForm(
                 $result['error'] = get_lang('You have already sent this file or another file with the same name. Please make sure you only upload each file once.');
                 $workData['error'] = get_lang(' already exists.');
             } else {
-                $result = uploadWork($workInfo, $courseInfo, false, [], $file);
+                $result = uploadWork($workInfo, $courseEntity, false, [], $file);
             }
         } else {
-            $result = uploadWork($workInfo, $courseInfo, false, [], $file);
+            $result = uploadWork($workInfo, $courseEntity, false, [], $file);
         }
 
         if (isset($result['error'])) {
@@ -4711,15 +4730,10 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
         $my_last_id = Database::insert_id();
 
         if ($my_last_id) {
-            $sql = "UPDATE $table SET
-                        id = iid
-                    WHERE iid = $my_last_id";
-            Database::query($sql);
-
             $sql = "UPDATE $workTable SET
                         has_properties  = $my_last_id,
                         view_properties = 1
-                    WHERE c_id = $course_id AND id = $workId";
+                    WHERE iid = $workId";
             Database::query($sql);
         }
     } else {
@@ -4730,7 +4744,6 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
                     enable_qualification = '".$qualification."'
                 WHERE
                     publication_id = $workId AND
-                    c_id = $course_id AND
                     iid = ".$data['iid'];
         Database::query($sql);
     }
@@ -4886,7 +4899,8 @@ function deleteWorkItem($item_id, $courseInfo)
                             $course_id,
                             $row['user_id'],
                             $sessionId,
-                            $workingTime
+                            $workingTime,
+                            $row['parent_id']
                         );
                     }
                 }
@@ -5103,11 +5117,6 @@ function getUploadDocumentType()
  */
 function makeVisible($itemId, $course_info)
 {
-    $itemId = (int) $itemId;
-    if (empty($course_info) || empty($itemId)) {
-        return false;
-    }
-
     $itemId = (int) $itemId;
     if (empty($course_info) || empty($itemId)) {
         return false;
@@ -5772,6 +5781,8 @@ function exportAllStudentWorkFromPublication(
  */
 function downloadAllFilesPerUser($userId, $courseInfo)
 {
+    throw new Exception('downloadAllFilesPerUser');
+    /*
     $userInfo = api_get_user_info($userId);
 
     if (empty($userInfo) || empty($courseInfo)) {
@@ -5823,7 +5834,7 @@ function downloadAllFilesPerUser($userId, $courseInfo)
             exit;
         }
     }
-    exit;
+    exit;*/
 }
 
 /**
@@ -5940,6 +5951,8 @@ function protectWork($courseInfo, $workId)
  */
 function deleteCorrection($courseInfo, $work)
 {
+    throw new Exception('deleteCorrection');
+    /*
     if (isset($work['url_correction']) && !empty($work['url_correction']) && isset($work['iid'])) {
         $id = $work['iid'];
         $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
@@ -5954,7 +5967,7 @@ function deleteCorrection($courseInfo, $work)
                 unlink($coursePath.$work['url_correction']);
             }
         }
-    }
+    }*/
 }
 
 /**

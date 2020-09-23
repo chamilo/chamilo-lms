@@ -10,4 +10,5 @@ Feature: Classes
           | name          | Class 1               |
       Then I fill in ckeditor field "description" with "description"
       And I press "submit"
+      And wait for the page to be loaded
       Then I should see "Item added"

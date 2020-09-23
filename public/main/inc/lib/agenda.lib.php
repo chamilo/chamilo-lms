@@ -7,6 +7,7 @@ use Chamilo\CoreBundle\Entity\SysCalendar;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Chamilo\CourseBundle\Entity\CCalendarEventAttachment;
+use Chamilo\CourseBundle\Entity\CGroup;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
@@ -1790,9 +1791,9 @@ class Agenda
         if (api_is_platform_admin() || api_is_allowed_to_edit()) {
             $isAllowToEdit = true;
         } else {
-            $isAllowToEdit = CourseManager::is_course_teacher(
+            $isAllowToEdit = CourseManager::isCourseTeacher(
                 $userId,
-                $courseInfo['code']
+                $courseId
             );
         }
 
@@ -2246,16 +2247,15 @@ class Agenda
     }
 
     /**
-     * @param FormValidator $form
-     * @param array         $groupList
-     * @param array         $userList
-     * @param array         $sendTo               array('users' => [1, 2], 'groups' => [3, 4])
-     * @param array         $attributes
-     * @param bool          $addOnlyItemsInSendTo
-     * @param bool          $required
+     * @param CGroup[] $groupList
+     * @param array    $userList
+     * @param array    $sendTo               array('users' => [1, 2], 'groups' => [3, 4])
+     * @param array    $attributes
+     * @param bool     $addOnlyItemsInSendTo
+     * @param bool     $required
      */
     public function setSendToSelect(
-        $form,
+        FormValidator $form,
         $groupList = [],
         $userList = [],
         $sendTo = [],
@@ -2307,14 +2307,16 @@ class Agenda
         $options = [];
         if (is_array($groupList)) {
             foreach ($groupList as $group) {
-                $count_users = isset($group['count_users']) ? $group['count_users'] : $group['userNb'];
-                $count_users = " &ndash; $count_users ".get_lang('Users');
+                $groupId = $group->getIid();
+                $count = $group->getMembers()->count();
+                $countUsers = " &ndash; $count ".get_lang('Users');
                 $option = [
-                    'text' => $group['name'].$count_users,
-                    'value' => "GROUP:".$group['id'],
+                    'text' => $group->getName().$countUsers,
+                    'value' => "GROUP:".$groupId,
                 ];
+
                 $selected = in_array(
-                    $group['id'],
+                    $groupId,
                     $sendToGroups
                 ) ? true : false;
                 if ($selected) {
@@ -2393,7 +2395,7 @@ class Agenda
                 if ('everyone' == $item) {
                     $sendTo['everyone'] = true;
                 } else {
-                    list($type, $id) = explode(':', $item);
+                    [$type, $id] = explode(':', $item);
                     switch ($type) {
                         case 'GROUP':
                             $groupList[] = $id;
@@ -4077,12 +4079,12 @@ class Agenda
                     )."main/calendar/agenda.php?cidReq=".urlencode(
                         $course["code"]
                     )."&day=$agendaday&month=$month&year=$year#$agendaday";
-                list($year, $month, $day, $hour, $min, $sec) = explode(
+                [$year, $month, $day, $hour, $min, $sec] = explode(
                     '[-: ]',
                     $item['start_date']
                 );
                 $start_date = $year.$month.$day.$hour.$min;
-                list($year, $month, $day, $hour, $min, $sec) = explode(
+                [$year, $month, $day, $hour, $min, $sec] = explode(
                     '[-: ]',
                     $item['end_date']
                 );

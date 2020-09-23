@@ -274,7 +274,6 @@ class AppPlugin
     }
 
     /**
-     * @param array            $pluginRegionList
      * @param string           $region
      * @param Twig_Environment $template
      * @param bool             $forced
@@ -353,7 +352,6 @@ class AppPlugin
     }
 
     /**
-     * @param array            $_plugins
      * @param string           $region
      * @param Twig_Environment $template
      * @param bool             $forced

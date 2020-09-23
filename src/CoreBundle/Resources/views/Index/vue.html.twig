@@ -3,7 +3,7 @@
 {% block content %}
     <div
         id="app"
-        data-messages="{{ app.session.flashbag.get('warning')|json_encode }}"
+        data-flashes="{{ app.flashes()|json_encode }}"
         data-is-authenticated="{{ is_authenticated }}"
         data-user-json="{{ user_json }}">
     </div>

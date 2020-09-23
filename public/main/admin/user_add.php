@@ -138,13 +138,18 @@ $form->applyFilter('official_code', 'html_filter');
 $form->applyFilter('official_code', 'trim');
 // e-mail
 $form->addElement('text', 'email', get_lang('e-mail'), ['size' => '40', 'autocomplete' => 'off', 'id' => 'email']);
-$form->addRule('email', get_lang('e-mailWrong'), 'email');
+$form->addEmailRule('email');
 if ('true' == api_get_setting('registration', 'email')) {
-    $form->addRule('email', get_lang('e-mailWrong'), 'required');
+    $form->addRule('email', get_lang('Required field'), 'required');
 }
 
 if ('true' == api_get_setting('login_is_email')) {
-    $form->addRule('email', sprintf(get_lang('The login needs to be maximum %s characters long'), (string) USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
+    $form->addRule(
+        'email',
+        sprintf(get_lang('The login needs to be maximum %s characters long'), (string) USERNAME_MAX_LENGTH),
+        'maxlength',
+        USERNAME_MAX_LENGTH
+    );
     $form->addRule('email', get_lang('This login is already in use'), 'username_available');
 }
 
@@ -245,19 +250,6 @@ $form->addElement(
 //drh list (display only if student)
 $display = (isset($_POST['status']) && STUDENT == $_POST['status']) || !isset($_POST['status']) ? 'block' : 'none';
 
-//@todo remove the drh list here. This code is unused
-$form->addElement('html', '<div id="drh_list" style="display:'.$display.';">');
-
-if (isset($drh_list) && is_array($drh_list)) {
-    foreach ($drh_list as $drh) {
-        $drh_select->addOption(
-            api_get_person_name($drh['firstname'], $drh['lastname']),
-            $drh['user_id']
-        );
-    }
-}
-$form->addElement('html', '</div>');
-
 if (api_is_platform_admin()) {
     // Platform admin
     $group = [];
@@ -272,8 +264,8 @@ $form->addSelectLanguage('language', get_lang('Language'), null);
 
 // Send email
 $group = [];
-$group[] = $form->createElement('radio', 'send_mail', null, get_lang('Yes'), 1);
-$group[] = $form->createElement('radio', 'send_mail', null, get_lang('No'), 0);
+$group[] = $form->createElement('radio', 'send_mail', null, get_lang('Yes'), 1, ['id' => 'send_mail_yes']);
+$group[] = $form->createElement('radio', 'send_mail', null, get_lang('No'), 0, ['id' => 'send_mail_no']);
 $form->addGroup($group, 'mail', get_lang('Send mail to new user'));
 // Expiration Date
 $form->addElement('radio', 'radio_expiration_date', get_lang('Expiration date'), get_lang('Never expires'), 0);

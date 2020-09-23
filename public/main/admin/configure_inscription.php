@@ -182,7 +182,7 @@ if ($display_all_form) {
     if ('true' == api_get_setting('registration', 'email')) {
         $form->addRule('email', get_lang('Required field'), 'required');
     }
-    $form->addRule('email', get_lang('e-mailWrong'), 'email');
+    $form->addEmailRule('email');
 
     //	USERNAME
     $form->addElement('text', 'username', get_lang('Username'), ['size' => USERNAME_MAX_LENGTH, 'disabled' => 'disabled']);

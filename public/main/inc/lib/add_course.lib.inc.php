@@ -1,7 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CGroupCategory;
 use Chamilo\CourseBundle\Entity\CToolIntro;
 
 /**
@@ -303,29 +306,15 @@ class AddCourse
 
         /* Course homepage tools for platform admin only */
         /* Group tool */
-        Database::insert(
-            $TABLEGROUPCATEGORIES,
-            [
-                'c_id' => $course_id,
-                'title' => get_lang('Default groups'),
-                'description' => '',
-                'max_student' => 0,
-                'self_reg_allowed' => 0,
-                'self_unreg_allowed' => 0,
-                'groups_per_user' => 0,
-                'display_order' => 0,
-                'doc_state' => 1,
-                'calendar_state' => 1,
-                'work_state' => 1,
-                'announcements_state' => 1,
-                'forum_state' => 1,
-                'wiki_state' => 1,
-                'chat_state' => 1,
-            ]
-        );
+        $groupCategory = new CGroupCategory();
+        $groupCategory
+            ->setTitle(get_lang('Default groups'))
+            ->setParent($course)
+            ->addCourseLink($course)
+        ;
+        Database::getManager()->persist($groupCategory);
 
         $now = api_get_utc_datetime();
-
         $files = [
             ['path' => '/shared_folder', 'title' => get_lang('Folders of users'), 'filetype' => 'folder', 'size' => 0],
             ['path' => '/chat_files', 'title' => get_lang('Chat conversations history'), 'filetype' => 'folder', 'size' => 0],
@@ -665,11 +654,9 @@ class AddCourse
         $visual_code = $params['visual_code'];
         $directory = $params['directory'];
         $tutor_name = isset($params['tutor_name']) ? $params['tutor_name'] : null;
-        $categoryId = isset($params['category_id']) ? (int) $params['category_id'] : '';
         $course_language = isset($params['course_language']) && !empty($params['course_language']) ? $params['course_language'] : api_get_setting(
             'platformLanguage'
         );
-        $user_id = empty($params['user_id']) ? api_get_user_id() : intval($params['user_id']);
         $department_name = isset($params['department_name']) ? $params['department_name'] : null;
         $department_url = isset($params['department_url']) ? $params['department_url'] : null;
         $disk_quota = isset($params['disk_quota']) ? $params['disk_quota'] : null;
@@ -691,9 +678,7 @@ class AddCourse
         $unsubscribe = isset($params['unsubscribe']) ? (int) $params['unsubscribe'] : 0;
         $expiration_date = isset($params['expiration_date']) ? $params['expiration_date'] : null;
         $teachers = isset($params['teachers']) ? $params['teachers'] : null;
-        $status = isset($params['status']) ? $params['status'] : null;
-
-        $TABLECOURSUSER = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $categories = isset($params['course_categories']) ? $params['course_categories'] : null;
         $ok_to_register_course = true;
 
         // Check whether all the needed parameters are present.
@@ -746,19 +731,25 @@ class AddCourse
         }
         $course_id = 0;
 
+        $userId = empty($params['user_id']) ? api_get_user_id() : (int) $params['user_id'];
+        $user = api_get_user_entity($userId);
+        if (null === $user) {
+            error_log(sprintf('user_id "%s" is invalid', $userId));
+
+            return 0;
+        }
+
         if ($ok_to_register_course) {
             $repo = Container::getCourseRepository();
-            $course = new \Chamilo\CoreBundle\Entity\Course();
-            /** @var \Chamilo\CoreBundle\Entity\CourseCategory $courseCategory */
-            $courseCategory = Container::getCourseCategoryRepository()->find($categoryId);
+            $categoryRepo = Container::getCourseCategoryRepository();
 
+            $course = new Course();
             $course
                 ->setCode($code)
                 ->setDirectory($directory)
                 ->setCourseLanguage($course_language)
                 ->setTitle($title)
                 ->setDescription(get_lang('Course Description'))
-                ->setCategory($courseCategory)
                 ->setVisibility($visibility)
                 ->setShowScore(1)
                 ->setDiskQuota($disk_quota)
@@ -770,6 +761,23 @@ class AddCourse
                 ->setUnsubscribe($unsubscribe)
                 ->setVisualCode($visual_code)
             ;
+
+            if (!empty($categories)) {
+                if (!is_array($categories)) {
+                    $categories = [$categories];
+                }
+
+                foreach ($categories as $key) {
+                    if (empty($key)) {
+                        continue;
+                    }
+
+                    $category = $categoryRepo->find($key);
+
+                    $course->addCategory($category);
+                }
+            }
+
             $repo->getEntityManager()->persist($course);
             $repo->getEntityManager()->flush();
 
@@ -779,44 +787,46 @@ class AddCourse
                 // Default true
                 $addTeacher = isset($params['add_user_as_teacher']) ? $params['add_user_as_teacher'] : true;
                 if ($addTeacher) {
-                    $i_course_sort = CourseManager::userCourseSort(
-                        $user_id,
-                        $code
-                    );
-                    if (!empty($user_id)) {
-                        $sql = "INSERT INTO ".$TABLECOURSUSER." SET
-                                c_id     = '".$course_id."',
-                                user_id         = '".intval($user_id)."',
-                                status          = '1',
-                                is_tutor        = '0',
-                                sort            = '".($i_course_sort)."',
-                                relation_type = 0,
-                                user_course_cat = '0'";
-                        Database::query($sql);
-                    }
+                    $iCourseSort = CourseManager::userCourseSort($userId, $code);
+                    $courseRelTutor = (new CourseRelUser())
+                        ->setCourse($course)
+                        ->setUser($user)
+                        ->setStatus(true)
+                        ->setTutor(true)
+                        ->setSort($iCourseSort)
+                        ->setRelationType(0)
+                        ->setUserCourseCat(0)
+                    ;
+                    Database::getManager()->persist($courseRelTutor);
                 }
 
                 if (!empty($teachers)) {
+                    $sort = $user->getMaxSortValue();
                     if (!is_array($teachers)) {
                         $teachers = [$teachers];
                     }
                     foreach ($teachers as $key) {
-                        //just in case
-                        if ($key == $user_id) {
+                        // Just in case.
+                        if ($key == $userId) {
                             continue;
                         }
                         if (empty($key)) {
                             continue;
                         }
-                        $sql = "INSERT INTO ".$TABLECOURSUSER." SET
-                            c_id     = '".Database::escape_string($course_id)."',
-                            user_id         = '".Database::escape_string($key)."',
-                            status          = '1',
-                            is_tutor        = '0',
-                            sort            = '".($sort + 1)."',
-                            relation_type = 0,
-                            user_course_cat = '0'";
-                        Database::query($sql);
+                        $teacher = api_get_user_entity($key);
+                        if (is_null($teacher)) {
+                            continue;
+                        }
+                        $courseRelTeacher = (new CourseRelUser())
+                            ->setCourse($course)
+                            ->setUser($teacher)
+                            ->setStatus(true)
+                            ->setTutor(false)
+                            ->setSort($sort + 1)
+                            ->setRelationType(0)
+                            ->setUserCourseCat(0)
+                        ;
+                        Database::getManager()->persist($courseRelTeacher);
                     }
                 }
 
@@ -824,13 +834,12 @@ class AddCourse
                 //UrlManager::add_course_to_url($course_id, $accessUrlId);
 
                 // Add event to the system log.
-                $user_id = api_get_user_id();
                 Event::addEvent(
                     LOG_COURSE_CREATE,
                     LOG_COURSE_CODE,
                     $code,
                     api_get_utc_datetime(),
-                    $user_id,
+                    $userId,
                     $course_id
                 );
 
@@ -855,21 +864,19 @@ class AddCourse
                         ).' '.$siteName.' - '.$iname."\n";
                     $message .= get_lang('Course name').' '.$title."\n";
 
-                    if ($courseCategory) {
-                        $message .= get_lang(
-                                'Category'
-                            ).' '.$courseCategory->getCode()."\n";
+                    if ($course->getCategories()->count() > 0) {
+                        foreach ($course->getCategories() as $category) {
+                            $message .= get_lang('Category').': '.$category->getCode()."\n";
+                        }
                     }
                     $message .= get_lang('Coach').' '.$tutor_name."\n";
                     $message .= get_lang('Language').' '.$course_language;
 
-                    $userInfo = api_get_user_info($user_id);
-
                     $additionalParameters = [
                         'smsType' => SmsPlugin::NEW_COURSE_BEEN_CREATED,
-                        'userId' => $user_id,
+                        'userId' => $userId,
                         'courseName' => $title,
-                        'creatorUsername' => $userInfo['username'],
+                        'creatorUsername' => $user->getUsername(),
                     ];
 
                     api_mail_html(

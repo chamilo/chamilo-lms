@@ -1,42 +1,55 @@
 <template>
   <div class="d-flex flex-column h-100">
     <transition
-      name="fade"
-      mode="out-in"
-      appear
+        name="fade"
+        mode="out-in"
+        appear
     >
-      <Header />
+      <Header/>
     </transition>
 
-    <Sidebar />
+    <Sidebar/>
 
     <main
-      role="main"
-      class="flex-shrink-0"
+        role="main"
+        class="flex-shrink-0"
     >
       <b-container fluid>
         <b-row>
           <b-col cols="12">
-            <Breadcrumb />
-            <snackbar />
-            <router-view />
+            <Breadcrumb :legacy="breadcrumb"/>
+            <!--            <snackbar />-->
+            <router-view/>
+
+            <!--            <div class="lang-dropdown">-->
+            <!--              <select v-model="$i18n.locale">-->
+            <!--                <option-->
+            <!--                    v-for="(lang, i) in languageArray"-->
+            <!--                    :key="`lang${i}`"-->
+            <!--                    :value="lang"-->
+            <!--                >-->
+            <!--                  {{ lang }}-->
+            <!--                </option>-->
+            <!--              </select>-->
+            <!--            </div>-->
+
             <div
-              id="legacy_content"
-              v-html="legacy_content"
+                id="legacy_content"
+                v-html="legacy_content"
             />
           </b-col>
         </b-row>
       </b-container>
     </main>
 
-    <Footer />
+    <Footer/>
   </div>
 </template>
 <style>
 </style>
 <script>
 
-import { mapGetters } from 'vuex';
+import {mapGetters} from 'vuex';
 
 import NotificationMixin from './mixins/NotificationMixin';
 import Breadcrumb from './components/Breadcrumb';
@@ -60,6 +73,8 @@ export default {
   mixins: [NotificationMixin],
   data: () => ({
     drawer: true,
+    breadcrumb: [],
+    languageArray: ['en', 'fr'],
     courses: [
       ['Courses', 'mdi-book', 'CourseList'],
       ['Courses category', 'mdi-book', 'CourseCategoryList'],
@@ -93,10 +108,26 @@ export default {
             from_vue: 1
           }
         })
-          .then((response) => {
-            // handle success
-            this.$data.legacy_content = response.data;
-          });
+            .then((response) => {
+              // handle success
+              this.$data.legacy_content = response.data;
+            })
+            .catch(function (error) {
+              if (error.response) {
+                // Request made and server responded
+                this.showMessage(error.response.data.detail);
+
+                console.log(error.response.data);
+                console.log(error.response.status);
+                console.log(error.response.headers);
+              } else if (error.request) {
+                // The request was made but no response was received
+                console.log(error.request);
+              } else {
+                // Something happened in setting up the request that triggered an Error
+                console.log('Error', error.message);
+              }
+            });
       }
     },
     legacy_content: {
@@ -115,20 +146,33 @@ export default {
   },
   created() {
     this.$data.legacy_content = '';
-    // section-content
-    let isAuthenticated = JSON.parse(this.$parent.$el.attributes["data-is-authenticated"].value),
+
+    let isAuthenticated = false;
+    if (this.$parent.$el.attributes["data-is-authenticated"].value) {
+      isAuthenticated = JSON.parse(this.$parent.$el.attributes["data-is-authenticated"].value);
+    }
+
+    let user = null;
+    if (this.$parent.$el.attributes["data-user-json"].value) {
       user = JSON.parse(this.$parent.$el.attributes["data-user-json"].value);
+    }
 
     let payload = {isAuthenticated: isAuthenticated, user: user};
-    this.$store.dispatch("security/onRefresh", payload);
 
-    if (this.$parent.$el.attributes["data-messages"]) {
-      let messages = JSON.parse(this.$parent.$el.attributes["data-messages"].value);
-      if (messages) {
-        Array.from(messages).forEach(element =>
-          this.showMessage(element)
-        );
+    this.$store.dispatch("security/onRefresh", payload);
+    if (this.$parent.$el.attributes["data-flashes"]) {
+      let flashes = JSON.parse(this.$parent.$el.attributes["data-flashes"].value);
+      if (flashes) {
+        for (const key in flashes) {
+          for (const text in flashes[key]) {
+            this.showMessage(flashes[key][text], key);
+          }
+        }
       }
+    }
+
+    if (this.$parent.$el.attributes["data-breadcrumb"]) {
+      this.breadcrumb = JSON.parse(this.$parent.$el.attributes["data-breadcrumb"].value);
     }
 
     axios.interceptors.response.use(undefined, (err) => {

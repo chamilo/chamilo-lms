@@ -102,7 +102,8 @@ class Version20 extends AbstractMigrationChamilo
         $connection = $this->getEntityManager()->getConnection();
         $sql = 'SELECT * FROM course_category';
         $result = $connection->executeQuery($sql);
-        $all = $result->fetchAll();
+        //$all = $result->fetchAll();
+        $all = $result->fetchAllAssociative();
 
         $categories = array_column($all, 'parent_id', 'id');
         $categoryCodeList = array_column($all, 'id', 'code');
@@ -914,7 +915,7 @@ class Version20 extends AbstractMigrationChamilo
 
         $result = $connection
             ->executeQuery("SELECT COUNT(1) FROM settings_current WHERE variable = 'exercise_invisible_in_session' AND category = 'Session'");
-        $count = $result->fetch()[0];
+        $count = $result->fetchNumeric()[0];
 
         if (empty($count)) {
             $this->addSql("INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('exercise_invisible_in_session',NULL,'radio','Session','false','ExerciseInvisibleInSessionTitle','ExerciseInvisibleInSessionComment','',NULL, 1)");
@@ -923,7 +924,7 @@ class Version20 extends AbstractMigrationChamilo
         }
 
         $result = $connection->executeQuery("SELECT COUNT(1) FROM settings_current WHERE variable = 'configure_exercise_visibility_in_course' AND category = 'Session'");
-        $count = $result->fetch()[0];
+        $count = $result->fetchNumeric()[0];
 
         if (empty($count)) {
             $this->addSql("INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('configure_exercise_visibility_in_course',NULL,'radio','Session','false','ConfigureExerciseVisibilityInCourseTitle','ConfigureExerciseVisibilityInCourseComment','',NULL, 1)");

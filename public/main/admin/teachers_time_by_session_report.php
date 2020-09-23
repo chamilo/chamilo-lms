@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\CourseBundle\Repository\CStudentPublicationRepository;
+use Chamilo\CoreBundle\Framework\Container;
 use Doctrine\Common\Collections\Criteria;
 
 /**
@@ -83,8 +83,7 @@ if ($session) {
                 continue;
             }
 
-            /** @var CStudentPublicationRepository $studentPubRepo */
-            $studentPubRepo = $em->getRepository('ChamiloCourseBundle:CStudentPublication');
+            $studentPubRepo = Container::getStudentPublicationRepository();
             $works = $studentPubRepo->findWorksByTeacher($user, $course, $session);
 
             $usersInfo[$user->getId()][$course->getId().'_number_of_students'] = $sessionCourse->getNbrUsers();
@@ -104,7 +103,7 @@ if ($session) {
     }
 }
 
-if (isset($_GET['export']) && $session && ($coursesInfo && $usersInfo)) {
+if (isset($_GET['export']) && $session && $coursesInfo && $usersInfo) {
     $fileName = get_lang('Teachers time report').' '.api_get_local_time();
 
     $dataToExport = [];

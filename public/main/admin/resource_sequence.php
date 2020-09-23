@@ -21,7 +21,7 @@ $type = isset($_REQUEST['type']) ? (int) $_REQUEST['type'] : SequenceResource::S
 
 $tpl = new Template(get_lang('ResourcesSequencing'));
 $em = Database::getManager();
-$sequenceRepository = $em->getRepository('ChamiloCoreBundle:Sequence');
+$sequenceRepository = $em->getRepository(Sequence::class);
 
 $currentUrl = api_get_self().'?type='.$type;
 

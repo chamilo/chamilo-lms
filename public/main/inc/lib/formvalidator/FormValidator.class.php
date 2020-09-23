@@ -280,7 +280,7 @@ EOT;
      *
      * @throws Exception
      *
-     * @return HTML_QuickForm_element
+     * @return SelectAjax
      */
     public function addSelectAjax($name, $label, $options = [], $attributes = [])
     {
@@ -302,7 +302,7 @@ EOT;
      * @param string $label
      * @param array  $attributes
      *
-     * @return mixed
+     * @return DatePicker
      */
     public function addDatePicker($name, $label, $attributes = [])
     {
@@ -1728,6 +1728,18 @@ EOT;
             });
             </script>");
         }
+    }
+
+    /**
+     * Add email rule for an element.
+     */
+    public function addEmailRule(string $element)
+    {
+        $this->addRule(
+            $element,
+            get_lang('The email address is not complete or contains some invalid characters'),
+            'email'
+        );
     }
 
     /**

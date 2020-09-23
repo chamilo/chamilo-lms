@@ -1792,7 +1792,6 @@ class SessionManager
         $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
         $tbl_url_session = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-        $tbl_item_properties = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $tbl_student_publication = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
         $tbl_student_publication_assignment = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
         $userGroupSessionTable = Database::get_main_table(TABLE_USERGROUP_REL_SESSION);
@@ -1809,6 +1808,11 @@ class SessionManager
             SequenceResource::SESSION_TYPE
         );
 
+        $sessionEntity = api_get_session_entity($sessionId);
+        if (null === $sessionEntity) {
+            return false;
+        }
+
         if ($sequenceResource) {
             Display::addFlash(
                 Display::return_message(
@@ -1821,16 +1825,8 @@ class SessionManager
         }
 
         if (self::allowed($sessionId) && !$from_ws) {
-            $qb = $em
-                ->createQuery('
-                    SELECT s.sessionAdminId FROM ChamiloCoreBundle:Session s
-                    WHERE s.id = ?1
-                ')
-                ->setParameter(1, $sessionId);
-
-            $res = $qb->getSingleScalarResult();
-
-            if ($res != $userId && !api_is_platform_admin()) {
+            $sessionAdminId = $sessionEntity->getSessionAdmin()->getId();
+            if ($sessionAdminId != $userId && !api_is_platform_admin()) {
                 api_not_allowed(true);
             }
         }
@@ -1857,7 +1853,6 @@ class SessionManager
             }*/
         }
 
-        $sessionEntity = api_get_session_entity($sessionId);
         $sessionName = $sessionEntity->getName();
         $em->remove($sessionEntity);
         $em->flush();
@@ -4372,24 +4367,6 @@ class SessionManager
 
     /**
      * @param int $user_id
-     *
-     * @return array
-     *
-     * @deprecated use get_sessions_by_general_coach()
-     */
-    public static function get_sessions_by_coach($user_id)
-    {
-        $session_table = Database::get_main_table(TABLE_MAIN_SESSION);
-
-        return Database::select(
-            '*',
-            $session_table,
-            ['where' => ['id_coach = ?' => $user_id]]
-        );
-    }
-
-    /**
-     * @param int $user_id
      * @param int $courseId
      * @param int $session_id
      *
@@ -6159,11 +6136,11 @@ class SessionManager
                 break;
         }
 
-        $select = 'SELECT DISTINCT u.* ';
-        $masterSelect = 'SELECT DISTINCT id FROM ';
+        $select = 'SELECT DISTINCT u.*, u.id as user_id';
+        $masterSelect = 'SELECT DISTINCT id, id as user_id FROM ';
 
         if ($getCount) {
-            $select = 'SELECT DISTINCT u.id as user_id ';
+            $select = 'SELECT DISTINCT u.id, u.id as user_id';
             $masterSelect = 'SELECT COUNT(DISTINCT(id)) as count FROM ';
         }
 
@@ -9507,19 +9484,19 @@ class SessionManager
     {
         $tabs = [
             [
-                'content' => get_lang('AllSessionsShort'),
+                'content' => get_lang('All sessions'),
                 'url' => api_get_path(WEB_CODE_PATH).'session/session_list.php?list_type=all',
             ],
             [
-                'content' => get_lang('ActiveSessionsShort'),
+                'content' => get_lang('Active sessions'),
                 'url' => api_get_path(WEB_CODE_PATH).'session/session_list.php?list_type=active',
             ],
             [
-                'content' => get_lang('ClosedSessionsShort'),
+                'content' => get_lang('Closed sessions'),
                 'url' => api_get_path(WEB_CODE_PATH).'session/session_list.php?list_type=close',
             ],
             [
-                'content' => get_lang('SessionListCustom'),
+                'content' => get_lang('Custom sessions'),
                 'url' => api_get_path(WEB_CODE_PATH).'session/session_list.php?list_type=custom',
             ],
             /*[

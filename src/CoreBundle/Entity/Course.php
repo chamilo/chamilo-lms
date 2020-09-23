@@ -28,10 +28,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     attributes={"security"="is_granted('ROLE_ADMIN')"},
  *     iri="https://schema.org/Course",
  *     normalizationContext={"groups"={"course:read"}, "swagger_definition_name"="Read"},
- *     denormalizationContext={"groups"={"course:write","course_category:write"}},
+ *     denormalizationContext={"groups"={"course:write"}},
  * )
  *
- * @ApiFilter(SearchFilter::class, properties={"title": "partial", "code": "partial", "category": "partial"})
+ * @ApiFilter(SearchFilter::class, properties={"title": "partial", "code": "partial"})
  * @ApiFilter(PropertyFilter::class)
  * @ApiFilter(OrderFilter::class, properties={"id", "title"})
  *
@@ -116,6 +116,8 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     protected $resourceLinks;
 
     /**
+     * @var ArrayCollection|AccessUrlRelCourse[]
+     *
      * @ORM\OneToMany(targetEntity="AccessUrlRelCourse", mappedBy="course", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     protected $urls;
@@ -226,13 +228,17 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     protected $description;
 
     /**
-     * @var CourseCategory
+     * @var ArrayCollection
      * @ApiSubresource()
      * @Groups({"course:read", "course:write"})
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\CourseCategory", inversedBy="courses")
-     * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
+     * @ORM\ManyToMany(targetEntity="Chamilo\CoreBundle\Entity\CourseCategory", inversedBy="courses")
+     * @ORM\JoinTable(
+     *      name="course_rel_category",
+     *      joinColumns={@ORM\JoinColumn(name="course_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="course_category_id", referencedColumnName="id")}
+     * )
      */
-    protected $category;
+    protected $categories;
 
     /**
      * @var int Course visibility
@@ -391,6 +397,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         $this->users = new ArrayCollection();
         $this->urls = new ArrayCollection();
         $this->tools = new ArrayCollection();
+        $this->categories = new ArrayCollection();
         $this->gradebookCategories = new ArrayCollection();
         $this->gradebookEvaluations = new ArrayCollection();
         $this->gradebookLinks = new ArrayCollection();
@@ -428,16 +435,20 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         foreach ($tools as $tool) {
             $this->addTool($tool);
         }
+
+        return $this;
     }
 
     public function addTool(CTool $tool)
     {
         $tool->setCourse($this);
         $this->tools[] = $tool;
+
+        return $this;
     }
 
     /**
-     * @return ArrayCollection
+     * @return AccessUrlRelCourse[]|ArrayCollection
      */
     public function getUrls()
     {
@@ -453,12 +464,16 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         foreach ($urls as $url) {
             $this->addUrl($url);
         }
+
+        return $this;
     }
 
     public function addUrlRelCourse(AccessUrlRelCourse $url)
     {
         $url->setCourse($this);
         $this->urls[] = $url;
+
+        return $this;
     }
 
     public function addUrl(AccessUrl $url)
@@ -467,6 +482,8 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         $urlRelCourse->setCourse($this);
         $urlRelCourse->setUrl($url);
         $this->addUrlRelCourse($urlRelCourse);
+
+        return $this;
     }
 
     /**
@@ -517,6 +534,8 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         foreach ($users as $user) {
             $this->addUsers($user);
         }
+
+        return $this;
     }
 
     public function addUsers(CourseRelUser $courseRelUser)
@@ -526,6 +545,8 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         if (!$this->hasSubscription($courseRelUser)) {
             $this->users[] = $courseRelUser;
         }
+
+        return $this;
     }
 
     /**
@@ -591,21 +612,15 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     public function addTeacher(User $user)
     {
         $this->addUser($user, 0, 'Trainer', User::COURSE_MANAGER);
+
+        return $this;
     }
 
     public function addStudent(User $user)
     {
         $this->addUser($user, 0, '', User::STUDENT);
-    }
 
-    /**
-     * Set id.
-     *
-     * @return int
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
+        return $this;
     }
 
     /**
@@ -756,33 +771,36 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * Set category.
      *
-     * @param CourseCategory $category
+     * @return Course
      */
-    public function setCategory(CourseCategory $category = null): self
+    public function setCategories(ArrayCollection $categories): self
     {
-        $this->category = $category;
+        $this->categories = $categories;
 
         return $this;
     }
 
-    /**
-     * Get category.
-     *
-     * @return CourseCategory
-     */
-    public function getCategory(): ?CourseCategory
+    public function getCategories()
     {
-        return $this->category;
+        return $this->categories;
+    }
+
+    public function addCategory(CourseCategory $category): self
+    {
+        $this->categories[] = $category;
+
+        return $this;
+    }
+
+    public function removeCategory(CourseCategory $category)
+    {
+        $this->categories->removeElement($category);
     }
 
     /**
      * Set visibility.
-     *
-     * @param int $visibility
-     *
-     * @return Course
      */
-    public function setVisibility($visibility)
+    public function setVisibility(int $visibility): Course
     {
         $this->visibility = $visibility;
 
@@ -791,10 +809,8 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
 
     /**
      * Get visibility.
-     *
-     * @return int
      */
-    public function getVisibility()
+    public function getVisibility(): int
     {
         return (int) $this->visibility;
     }
@@ -1209,22 +1225,14 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this->room;
     }
 
-    /**
-     * @param Room $room
-     *
-     * @return Course
-     */
-    public function setRoom($room)
+    public function setRoom(Room $room): self
     {
         $this->room = $room;
 
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function isActive()
+    public function isActive(): bool
     {
         $activeVisibilityList = [
             self::REGISTERED,
@@ -1248,10 +1256,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return self::HIDDEN === $this->visibility;
     }
 
-    /**
-     * @return array
-     */
-    public static function getStatusList()
+    public static function getStatusList(): array
     {
         return [
             self::CLOSED => 'Closed',
@@ -1270,10 +1275,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this->currentSession;
     }
 
-    /**
-     * @return $this
-     */
-    public function setCurrentSession(Session $session)
+    public function setCurrentSession(Session $session): self
     {
         // If the session is registered in the course session list.
         /*if ($this->getSessions()->contains($session->getId())) {
@@ -1293,10 +1295,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this;
     }
 
-    /**
-     * @return $this
-     */
-    public function setCurrentUrl(AccessUrl $url)
+    public function setCurrentUrl(AccessUrl $url): self
     {
         $urlList = $this->getUrls();
         /** @var AccessUrlRelCourse $item */
@@ -1329,10 +1328,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this->issuedSkills;
     }
 
-    /**
-     * @return bool
-     */
-    public function hasSubscription(CourseRelUser $subscription)
+    public function hasSubscription(CourseRelUser $subscription): bool
     {
         if ($this->getUsers()->count()) {
             $criteria = Criteria::create()->where(
@@ -1356,7 +1352,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
      * @param string $role
      * @param string $status
      */
-    public function addUser(User $user, $relationType, $role, $status)
+    public function addUser(User $user, $relationType, $role, $status): self
     {
         $courseRelUser = new CourseRelUser();
         $courseRelUser->setCourse($this);
@@ -1365,6 +1361,8 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         //$courseRelUser->setRole($role);
         $courseRelUser->setStatus($status);
         $this->addUsers($courseRelUser);
+
+        return $this;
     }
 
     /**

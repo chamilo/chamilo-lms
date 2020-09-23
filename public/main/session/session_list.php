@@ -51,7 +51,7 @@ switch ($action) {
         break;
 }
 
-$tool_name = get_lang('SessionList');
+$tool_name = get_lang('Session list');
 Display::display_header($tool_name);
 
 $courseId = isset($_GET['course_id']) ? $_GET['course_id'] : null;

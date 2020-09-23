@@ -2,7 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\CoreBundle\Security;
+namespace Chamilo\CoreBundle\EventListener;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
@@ -13,7 +13,9 @@ final class HTTPExceptionListener
     public function onKernelException(ExceptionEvent $event): void
     {
         $exception = $event->getThrowable();
-        if (!($exception instanceof HttpException) || false === strpos($event->getRequest()->getRequestUri(), '/api/')) {
+        if (!($exception instanceof HttpException) ||
+            false === strpos($event->getRequest()->getRequestUri(), '/api/')
+        ) {
             return;
         }
 

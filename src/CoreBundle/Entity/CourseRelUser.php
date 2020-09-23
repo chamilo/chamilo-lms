@@ -61,13 +61,15 @@ class CourseRelUser
 
     /**
      * @var int
+     *
      * @Groups({"user:read", "course:read"})
      * @ORM\Column(name="relation_type", type="integer", nullable=false, unique=false)
      */
     protected $relationType;
 
     /**
-     * @var bool
+     * @var int
+     *
      * @Groups({"user:read"})
      * @ORM\Column(name="status", type="integer", nullable=false, unique=false)
      */
@@ -125,18 +127,7 @@ class CourseRelUser
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-    }
-
-    /**
-     * @return $this
-     */
-    public function setCourse(Course $course)
+    public function setCourse(Course $course): self
     {
         $this->course = $course;
 
@@ -153,12 +144,7 @@ class CourseRelUser
         return $this->course;
     }
 
-    /**
-     * @param User $user
-     *
-     * @return $this
-     */
-    public function setUser($user)
+    public function setUser(User $user): self
     {
         $this->user = $user;
 
@@ -167,22 +153,16 @@ class CourseRelUser
 
     /**
      * Get User.
-     *
-     * @return User
      */
-    public function getUser()
+    public function getUser(): User
     {
         return $this->user;
     }
 
     /**
      * Set relationType.
-     *
-     * @param int $relationType
-     *
-     * @return CourseRelUser
      */
-    public function setRelationType($relationType)
+    public function setRelationType(int $relationType): self
     {
         $this->relationType = $relationType;
 
@@ -191,22 +171,16 @@ class CourseRelUser
 
     /**
      * Get relationType.
-     *
-     * @return int
      */
-    public function getRelationType()
+    public function getRelationType(): int
     {
         return $this->relationType;
     }
 
     /**
      * Set status.
-     *
-     * @param bool $status
-     *
-     * @return CourseRelUser
      */
-    public function setStatus($status)
+    public function setStatus(int $status): self
     {
         $this->status = $status;
 
@@ -215,10 +189,8 @@ class CourseRelUser
 
     /**
      * Get status.
-     *
-     * @return bool
      */
-    public function getStatus()
+    public function getStatus(): int
     {
         return $this->status;
     }
@@ -227,10 +199,8 @@ class CourseRelUser
      * Set sort.
      *
      * @param int $sort
-     *
-     * @return CourseRelUser
      */
-    public function setSort($sort)
+    public function setSort($sort): self
     {
         $this->sort = $sort;
 
@@ -247,30 +217,24 @@ class CourseRelUser
         return $this->sort;
     }
 
-    /**
-     * @return bool
-     */
-    public function isTutor()
+    public function isTutor(): bool
     {
         return $this->tutor;
     }
 
-    /**
-     * @param bool $tutor
-     */
-    public function setTutor($tutor)
+    public function setTutor(bool $tutor): self
     {
         $this->tutor = $tutor;
+
+        return $this;
     }
 
     /**
      * Set userCourseCat.
      *
      * @param int $userCourseCat
-     *
-     * @return CourseRelUser
      */
-    public function setUserCourseCat($userCourseCat)
+    public function setUserCourseCat($userCourseCat): self
     {
         $this->userCourseCat = $userCourseCat;
 
@@ -291,10 +255,8 @@ class CourseRelUser
      * Set legalAgreement.
      *
      * @param int $legalAgreement
-     *
-     * @return CourseRelUser
      */
-    public function setLegalAgreement($legalAgreement)
+    public function setLegalAgreement($legalAgreement): self
     {
         $this->legalAgreement = $legalAgreement;
 
@@ -313,10 +275,8 @@ class CourseRelUser
 
     /**
      * Get relation_type list.
-     *
-     * @return array
      */
-    public static function getRelationTypeList()
+    public static function getRelationTypeList(): array
     {
         return [
             '0' => '',
@@ -326,10 +286,8 @@ class CourseRelUser
 
     /**
      * Get status list.
-     *
-     * @return array
      */
-    public static function getStatusList()
+    public static function getStatusList(): array
     {
         return [
             User::COURSE_MANAGER => 'Teacher',

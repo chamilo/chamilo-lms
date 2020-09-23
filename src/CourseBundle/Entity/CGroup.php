@@ -164,6 +164,8 @@ class CGroup extends AbstractResource implements ResourceInterface
     public function __construct()
     {
         $this->status = 1;
+        $this->members = new ArrayCollection();
+        $this->tutors = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -185,10 +187,8 @@ class CGroup extends AbstractResource implements ResourceInterface
      * Set name.
      *
      * @param string $name
-     *
-     * @return CGroup
      */
-    public function setName($name)
+    public function setName($name): self
     {
         $this->name = $name;
 
@@ -197,10 +197,8 @@ class CGroup extends AbstractResource implements ResourceInterface
 
     /**
      * Get name.
-     *
-     * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return (string) $this->name;
     }
@@ -209,10 +207,8 @@ class CGroup extends AbstractResource implements ResourceInterface
      * Set status.
      *
      * @param bool $status
-     *
-     * @return CGroup
      */
-    public function setStatus($status)
+    public function setStatus($status): self
     {
         $this->status = $status;
 
@@ -496,7 +492,7 @@ class CGroup extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    public function getMembers(): ArrayCollection
+    public function getMembers()
     {
         return $this->members;
     }
@@ -508,7 +504,12 @@ class CGroup extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    public function getTutors(): ArrayCollection
+    public function hasMembers(): bool
+    {
+        return $this->members->count() > 0;
+    }
+
+    public function getTutors()
     {
         return $this->tutors;
     }
@@ -518,6 +519,11 @@ class CGroup extends AbstractResource implements ResourceInterface
         $this->tutors = $tutors;
 
         return $this;
+    }
+
+    public function hasTutors(): bool
+    {
+        return $this->tutors->count() > 0;
     }
 
     public function userIsTutor(User $user = null): bool

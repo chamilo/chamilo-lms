@@ -5,11 +5,11 @@
       :handle-delete="del"
     >
       <template slot="left">
-        <v-toolbar-title v-if="item">
-          {{
-            `${$options.servicePrefix} ${item['@id']}`
-          }}
-        </v-toolbar-title>
+<!--        <v-toolbar-title v-if="item">-->
+<!--          {{-->
+<!--            `${$options.servicePrefix} ${item['@id']}`-->
+<!--          }}-->
+<!--        </v-toolbar-title>-->
       </template>
     </Toolbar>
     <br>
@@ -79,6 +79,11 @@
                     v-if="item['resourceNode']['resourceFile']['image']"
                     :src="item['contentUrl'] + '?w=300'"
                   />
+                  <span v-else-if="item['resourceNode']['resourceFile']['video']">
+                    <video controls>
+                      <source :src="item['contentUrl']" />
+                    </video>
+                  </span>
                   <span v-else>
                     <b-btn
                       variant="primary"

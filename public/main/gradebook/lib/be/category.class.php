@@ -652,27 +652,25 @@ class Category implements GradebookItem
 
         /** @var GradebookCategory $gradebookCategory */
         $gradebookCategory = $em
-            ->getRepository('ChamiloCoreBundle:GradebookCategory')
+            ->getRepository(GradebookCategory::class)
             ->find($this->id);
 
         if (empty($gradebookCategory)) {
             return false;
         }
 
-        $course = api_get_user_course_entity();
+        $course = api_get_course_entity();
 
         $gradebookCategory->setName($this->name);
         $gradebookCategory->setDescription($this->description);
-        $gradebookCategory->setUserId($this->user_id);
+        $gradebookCategory->setUser(api_get_user_entity($this->user_id));
         $gradebookCategory->setCourse($course);
         //$gradebookCategory->setCourseCode($this->course_code);
         $gradebookCategory->setParentId($this->parent);
         $gradebookCategory->setWeight($this->weight);
         $gradebookCategory->setVisible($this->visible);
         $gradebookCategory->setCertifMinScore($this->certificate_min_score);
-        $gradebookCategory->setGenerateCertificates(
-            $this->generateCertificates
-        );
+        $gradebookCategory->setGenerateCertificates($this->generateCertificates);
         $gradebookCategory->setGradeModelId($this->grade_model_id);
         $gradebookCategory->setIsRequirement($this->isRequirement);
 
@@ -725,7 +723,7 @@ class Category implements GradebookItem
     /**
      * Update link weights see #5168.
      *
-     * @param type $new_weight
+     * @param int $new_weight
      */
     public function updateChildrenWeight($new_weight)
     {
@@ -1509,7 +1507,7 @@ class Category implements GradebookItem
      *
      * @return array 2-dimensional array - every element contains 2 subelements (code, title)
      */
-    public function get_not_created_course_categories($user_id)
+    public static function get_not_created_course_categories($user_id)
     {
         $tbl_main_courses = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_main_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
@@ -2653,7 +2651,7 @@ class Category implements GradebookItem
         $allow = api_get_configuration_value('allow_gradebook_stats');
         if ($allow) {
             $em = Database::getManager();
-            $repo = $em->getRepository('ChamiloCoreBundle:GradebookCategory');
+            $repo = $em->getRepository(GradebookCategory::class);
         }
 
         while ($data = Database::fetch_array($result)) {

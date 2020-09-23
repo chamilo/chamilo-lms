@@ -15,7 +15,7 @@ if (false == $allow) {
 $categoryId = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 1;
 
 $em = Database::getManager();
-$repo = $em->getRepository('ChamiloCoreBundle:GradebookCategory');
+$repo = $em->getRepository(GradebookCategory::class);
 /** @var GradebookCategory $category */
 $category = $repo->find($categoryId);
 if (!$category) {

@@ -2277,16 +2277,16 @@ class Tracking
             $tbl_stats_exercise = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 
             // Compose a filter based on optional exercise given
-            $condition_quiz = "";
+            $condition_quiz = '';
             if (!empty($exercise_id)) {
-                $exercise_id = intval($exercise_id);
+                $exercise_id = (int) $exercise_id;
                 $condition_quiz = " AND id = $exercise_id ";
             }
 
             // Compose a filter based on optional session id given
             $condition_session = '';
             if (isset($session_id)) {
-                $session_id = intval($session_id);
+                $session_id = (int) $session_id;
                 $condition_session = " AND session_id = $session_id ";
             }
             if (1 == $active_filter) {
@@ -2308,6 +2308,7 @@ class Tracking
     		        FROM $tbl_course_quiz
     				WHERE c_id = {$course_info['real_id']} $condition_active $condition_quiz ";
             $count_quiz = 0;
+
             $countQuizResult = Database::query($sql);
             if (!empty($countQuizResult)) {
                 $count_quiz = Database::fetch_row($countQuizResult);
@@ -2318,7 +2319,7 @@ class Tracking
                     $student_id = array_map('intval', $student_id);
                     $condition_user = " AND exe_user_id IN (".implode(',', $student_id).") ";
                 } else {
-                    $student_id = intval($student_id);
+                    $student_id = (int) $student_id;
                     $condition_user = " AND exe_user_id = '$student_id' ";
                 }
 
@@ -2386,9 +2387,9 @@ class Tracking
                         $lp_name = $row_lp[0];
 
                         return [$quiz_avg_score, $lp_name];
-                    } else {
-                        return [$quiz_avg_score, null];
                     }
+
+                    return [$quiz_avg_score, null];
                 }
             }
         }
@@ -2605,7 +2606,7 @@ class Tracking
         }
 
         $resultLP = Database::select(
-            'id',
+            'iid',
             $lPTable,
             ['where' => $lpConditions]
         );
@@ -2773,13 +2774,13 @@ class Tracking
         // Check the real number of LPs corresponding to the filter in the
         // database (and if no list was given, get them all)
         if (empty($session_id)) {
-            $sql = "SELECT DISTINCT(id), use_max_score
+            $sql = "SELECT DISTINCT(iid), use_max_score
                     FROM $lp_table
                     WHERE
                         c_id = $course_id AND
                         (session_id = 0 OR session_id IS NULL) $condition_lp ";
         } else {
-            $sql = "SELECT DISTINCT(id), use_max_score
+            $sql = "SELECT DISTINCT(iid), use_max_score
                     FROM $lp_table
                     WHERE c_id = $course_id $condition_lp ";
         }
@@ -6272,7 +6273,6 @@ class Tracking
      */
     public static function setUserSearchForm($form)
     {
-        global $_configuration;
         $form->addElement('text', 'keyword', get_lang('Keyword'));
         $form->addElement(
             'select',
@@ -6284,7 +6284,7 @@ class Tracking
         $form->addElement(
             'select',
             'sleeping_days',
-            get_lang('inactiveDays'),
+            get_lang('Inactive days'),
             [
                 '',
                 1 => 1,
@@ -6499,9 +6499,9 @@ class Tracking
             }
 
             // Now fill users data
-            $sqlUsers = "SELECT user_id, username, lastname, firstname
+            $sqlUsers = "SELECT id as user_id, username, lastname, firstname
                          FROM $tuser
-                         WHERE user_id IN (".implode(',', $userIds).")";
+                         WHERE id IN (".implode(',', $userIds).")";
             $resUsers = Database::query($sqlUsers);
             while ($rowUser = Database::fetch_assoc($resUsers)) {
                 $users[$rowUser['user_id']] = $rowUser;

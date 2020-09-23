@@ -81,8 +81,6 @@ function get_document_title($name)
 /**
  * This function checks if the upload succeeded.
  *
- * @param array|UploadedFile $uploadedFile ($_FILES)
- *
  * @return true if upload succeeded
  */
 function process_uploaded_file($uploadedFileData, $show_output = true)

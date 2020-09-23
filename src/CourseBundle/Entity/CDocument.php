@@ -20,27 +20,30 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-//*      attributes={"security"="is_granted('ROLE_ADMIN')"},
 /**
  * @ApiResource(
  *      shortName="Documents",
  *      normalizationContext={"groups"={"document:read", "resource_node:read"}},
  *      denormalizationContext={"groups"={"document:write"}},
- *     itemOperations={
- *     "put" ={
- *             "controller"=UpdateResourceNodeFileAction::class,
- *             "deserialize"=false,
- *             "security"="is_granted('ROLE_USER')",
- *             "validation_groups"={"Default", "media_object_create", "document:write"},
- *         },
- *     "get",
- *     "delete"
+ *      itemOperations={
+ *          "put" ={
+ *              "controller"=UpdateResourceNodeFileAction::class,
+ *              "deserialize"=false,
+ *              "security" = "is_granted('EDIT', object.resourceNode)",
+ *              "validation_groups"={"Default", "media_object_create", "document:write"},
+ *          },
+ *          "get" = {
+ *              "security" = "is_granted('VIEW', object.resourceNode)",
+ *          },
+ *          "delete" = {
+ *              "security" = "is_granted('DELETE', object.resourceNode)",
+ *          },
  *     },
- *      collectionOperations={
+ *     collectionOperations={
  *         "post"={
  *             "controller"=CreateResourceNodeFileAction::class,
  *             "deserialize"=false,
- *             "security"="is_granted('ROLE_USER')",
+ *             "security"="is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_SESSION_COURSE_TEACHER')",
  *             "validation_groups"={"Default", "media_object_create", "document:write"},
  *             "openapi_context"={
  *                 "requestBody"={
@@ -93,7 +96,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  *                 }
  *             }
  *         },
- *         "get",
+ *         "get" = {
+ *              "security"="is_granted('ROLE_USER')",
+ *         },
  *     },
  * )
  * @ApiFilter(SearchFilter::class, properties={"title": "partial", "resourceNode.parent": "exact"})

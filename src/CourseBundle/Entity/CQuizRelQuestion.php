@@ -45,18 +45,20 @@ class CQuizRelQuestion
     protected $questionOrder;
 
     /**
-     * @var int
+     * @var CQuizQuestion
      *
-     * @ORM\Column(name="question_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CQuizQuestion", inversedBy="relQuiz")
+     * @ORM\JoinColumn(name="question_id", referencedColumnName="iid")
      */
-    protected $questionId;
+    protected $question;
 
     /**
-     * @var int
+     * @var CQuiz
      *
-     * @ORM\Column(name="exercice_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="CQuiz", inversedBy="relQuestions")
+     * @ORM\JoinColumn(name="exercice_id", referencedColumnName="iid")
      */
-    protected $exerciceId;
+    protected $quiz;
 
     /**
      * Set questionOrder.
@@ -106,51 +108,13 @@ class CQuizRelQuestion
         return $this->cId;
     }
 
-    /**
-     * Set questionId.
-     *
-     * @param int $questionId
-     *
-     * @return CQuizRelQuestion
-     */
-    public function setQuestionId($questionId)
+    public function getQuiz()
     {
-        $this->questionId = $questionId;
-
-        return $this;
+        return $this->quiz;
     }
 
-    /**
-     * Get questionId.
-     *
-     * @return int
-     */
-    public function getQuestionId()
+    public function getQuestion()
     {
-        return $this->questionId;
-    }
-
-    /**
-     * Set exerciceId.
-     *
-     * @param int $exerciceId
-     *
-     * @return CQuizRelQuestion
-     */
-    public function setExerciceId($exerciceId)
-    {
-        $this->exerciceId = $exerciceId;
-
-        return $this;
-    }
-
-    /**
-     * Get exerciceId.
-     *
-     * @return int
-     */
-    public function getExerciceId()
-    {
-        return $this->exerciceId;
+        return $this->question;
     }
 }

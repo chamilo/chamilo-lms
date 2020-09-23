@@ -421,19 +421,15 @@ abstract class AbstractLink implements GradebookItem
     public function save()
     {
         $em = Database::getManager();
-
-        $link = $em->find('ChamiloCoreBundle:GradebookLink', $this->id);
+        $link = $em->find(GradebookLink::class, $this->id);
 
         if (!$link) {
             return;
         }
 
         self::add_link_log($this->id);
-
         $this->save_linked_data();
-
         $course = api_get_course_entity($this->getCourseId());
-
         $link
             ->setType($this->get_type())
             ->setRefId($this->get_ref_id())
@@ -543,7 +539,7 @@ abstract class AbstractLink implements GradebookItem
      *
      * @return array
      */
-    public function find_links($name_mask, $selectcat)
+    public static function find_links($name_mask, $selectcat)
     {
         $rootcat = Category::load($selectcat);
         $links = $rootcat[0]->get_links((api_is_allowed_to_edit() ? null : api_get_user_id()), true);
@@ -753,7 +749,7 @@ abstract class AbstractLink implements GradebookItem
         $allow = api_get_configuration_value('allow_gradebook_stats');
         if ($allow) {
             $em = Database::getManager();
-            $repo = $em->getRepository('ChamiloCoreBundle:GradebookLink');
+            $repo = $em->getRepository(GradebookLink::class);
         }
 
         while ($data = Database::fetch_array($result)) {

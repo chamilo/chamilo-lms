@@ -10,37 +10,41 @@ Feature: Work tool
       | new_dir | Work 1 |
     And I fill in ckeditor field "description" with "Work description"
     And I press "submit"
+    And I wait for the page to be loaded
     Then I should see "Directory created"
 
   Scenario: Edit a work
     Given I am a platform administrator
     And I am on course "TEMP" homepage
     And I am on "/main/work/work.php?cid=1"
-    And wait for the page to be loaded
+    And wait very long for the page to be loaded
     And I follow "Work 1"
     Then I should see "Work description"
     Then I follow "Edit"
     Then I should see "Assignment name"
     And wait for the page to be loaded
     And I press "Validate"
+    And I wait for the page to be loaded
     Then I should see "Update successful"
 
   Scenario: Send work as student
+    Given I am not logged
     Given I am a student
     And I am on "/main/work/work.php?cid=1"
-    And wait for the page to be loaded
-    And I follow "Work 1"
+    Then I should see "Assignments"
+    Then I am on "/main/work/work_list.php?cid=1&sid=0&gid=0&gradebook=0&origin=&id=1"
     Then I should see "Work 1"
+    Then I should see "Work description"
     Then I follow "Upload my assignment"
     Then I should see "Upload a document"
     Then I follow "Upload (Simple)"
-    #Then I should see "File extension"
-    Then I attach the file "/public/favicon.ico" to "file_upload"
+    Then I attach the file "/public/favicon.ico" to "form-work_file"
     And I press "Upload"
     And wait for the page to be loaded
     Then I should see "The file has been added to the list of publications"
 
   Scenario: Check that work previously uploaded by student is available for the teacher.
+    Given I am not logged
     Given I am a platform administrator
     And I am on "/main/work/work.php?cid=1"
     And wait for the page to be loaded
@@ -48,7 +52,7 @@ Feature: Work tool
     And wait for the page to be loaded
     Then I should see "Work description"
     And wait for the page to be loaded
-    Then I should see "base.css"
+    Then I should see "favicon"
 
 #  Scenario: Add a comment and a attachment to the work previously uploaded by student
 #    Given I am a platform administrator

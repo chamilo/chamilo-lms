@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -20,12 +21,12 @@ require_once __DIR__.'/../inc/global.inc.php';
 // already be some display output.
 
 // Forbidden to retrieve the lost password
-if ('false' == api_get_setting('allow_lostpassword')) {
+if ('false' === api_get_setting('allow_lostpassword')) {
     api_not_allowed(true);
 }
 
-$reset = Request::get('reset');
-$userId = Request::get('id');
+$reset = $_REQUEST['reset'] ?? '';
+$userId = $_REQUEST['id'] ?? '';
 
 $this_section = SECTION_CAMPUS;
 
@@ -33,14 +34,6 @@ $tool_name = get_lang('I lost my password');
 
 if ($reset && $userId) {
     $messageText = Login::reset_password($reset, $userId, true);
-
-    if (CustomPages::enabled() && CustomPages::exists(CustomPages::INDEX_UNLOGGED)) {
-        CustomPages::display(
-            CustomPages::INDEX_UNLOGGED,
-            ['info' => $messageText]
-        );
-        exit;
-    }
 
     Display::addFlash(
         Display::return_message($messageText, 'info', false)
@@ -101,14 +94,6 @@ if ($form->validate()) {
     if (!$user) {
         $messageText = get_lang('There is no account with this user and/or e-mail address');
 
-        if (CustomPages::enabled() && CustomPages::exists(CustomPages::LOST_PASSWORD)) {
-            CustomPages::display(
-                CustomPages::LOST_PASSWORD,
-                ['info' => $messageText]
-            );
-            exit;
-        }
-
         Display::addFlash(
             Display::return_message($messageText, 'error', false)
         );
@@ -125,14 +110,6 @@ if ($form->validate()) {
     if ('none' === $passwordEncryption) {
         $messageText = Login::send_password_to_user($user, true);
 
-        if (CustomPages::enabled() && CustomPages::exists(CustomPages::INDEX_UNLOGGED)) {
-            CustomPages::display(
-                CustomPages::INDEX_UNLOGGED,
-                ['info' => $messageText]
-            );
-            exit;
-        }
-
         Display::addFlash(
             Display::return_message($messageText, 'info', false)
         );
@@ -140,7 +117,7 @@ if ($form->validate()) {
         exit;
     }
 
-    if ('extldap' == $user['auth_source']) {
+    if ('extldap' === $user['auth_source']) {
         Display::addFlash(
             Display::return_message(get_lang('Could not reset password, contact your helpdesk.'), 'info', false)
         );
@@ -154,40 +131,16 @@ if ($form->validate()) {
         $userObj = api_get_user_entity($user['uid']);
         Login::sendResetEmail($userObj);
 
-        if (CustomPages::enabled() && CustomPages::exists(CustomPages::INDEX_UNLOGGED)) {
-            CustomPages::display(
-                CustomPages::INDEX_UNLOGGED,
-                ['info' => get_lang('Check your e-mail and follow the instructions.')]
-            );
-            exit;
-        }
-
         header('Location: '.api_get_path(WEB_PATH));
         exit;
     }
 
     $messageText = Login::handle_encrypted_password($user, true);
 
-    if (CustomPages::enabled() && CustomPages::exists(CustomPages::INDEX_UNLOGGED)) {
-        CustomPages::display(
-            CustomPages::INDEX_UNLOGGED,
-            ['info' => $messageText]
-        );
-        exit;
-    }
-
     Display::addFlash(
         Display::return_message($messageText, 'info', false)
     );
     header('Location: '.api_get_path(WEB_PATH));
-    exit;
-}
-
-if (CustomPages::enabled() && CustomPages::exists(CustomPages::LOST_PASSWORD)) {
-    CustomPages::display(
-        CustomPages::LOST_PASSWORD,
-        ['form' => $form->returnForm()]
-    );
     exit;
 }
 

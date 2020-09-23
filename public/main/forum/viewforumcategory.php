@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CForumCategory;
+use Chamilo\CourseBundle\Entity\CForumNotification;
 use Chamilo\CourseBundle\Entity\CForumPost;
 use ChamiloSession as Session;
 
@@ -237,8 +238,7 @@ if ('add' !== $action) {
     echo '<div class="forum_display">';
     $notifications = [];
     $em = Database::getManager();
-
-    $notifications = $em->getRepository('ChamiloCourseBundle:CForumNotification')->findBy(
+    $notifications = $em->getRepository(CForumNotification::class)->findBy(
         ['userId' => api_get_user_id()]
     );
 

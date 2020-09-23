@@ -257,23 +257,12 @@ class Container
         return self::$container->get('Symfony\Component\Mailer\Mailer');
     }
 
-    /**
-     * @return SettingsManager
-     */
-    public static function getSettingsManager()
+    public static function getSettingsManager(): SettingsManager
     {
         return self::$container->get('chamilo.settings.manager');
     }
 
-    /*public static function setSettingsManager($manager)
-    {
-        self::$settingsManager = $manager;
-    }*/
-
-    /**
-     * @return \Chamilo\CourseBundle\Manager\SettingsManager
-     */
-    public static function getCourseSettingsManager()
+    public static function getCourseSettingsManager(): \Chamilo\CourseBundle\Manager\SettingsManager
     {
         return self::$container->get('Chamilo\CourseBundle\Manager\SettingsManager');
     }
@@ -291,281 +280,182 @@ class Container
         return self::$container->get(UserRepository::class);
     }
 
-    /**
-     * @return CAttendanceRepository
-     */
-    public static function getAttendanceRepository()
+    public static function getAttendanceRepository(): CAttendanceRepository
     {
         return self::$container->get(CAttendanceRepository::class);
     }
 
-    /**
-     * @return CAnnouncementRepository
-     */
-    public static function getAnnouncementRepository()
+    public static function getAnnouncementRepository(): CAnnouncementRepository
     {
         return self::$container->get(CAnnouncementRepository::class);
     }
 
-    /**
-     * @return AccessUrlRepository
-     */
-    public static function getAccessUrlRepository()
+    public static function getAccessUrlRepository(): AccessUrlRepository
     {
         return self::$container->get(AccessUrlRepository::class);
     }
 
-    /**
-     * @return CAnnouncementAttachmentRepository
-     */
-    public static function getAnnouncementAttachmentRepository()
+    public static function getAnnouncementAttachmentRepository(): CAnnouncementAttachmentRepository
     {
         return self::$container->get(CAnnouncementAttachmentRepository::class);
     }
 
-    /**
-     * @return CourseRepository
-     */
-    public static function getCourseRepository()
+    public static function getCourseRepository(): CourseRepository
     {
         return self::$container->get(CourseRepository::class);
     }
 
-    /**
-     * @return SessionRepository
-     */
-    public static function getSessionRepository()
+    public static function getSessionRepository(): SessionRepository
     {
         return self::$container->get(SessionRepository::class);
     }
 
-    /**
-     * @return CourseCategoryRepository|object|null
-     */
-    public static function getCourseCategoryRepository()
+    public static function getCourseCategoryRepository(): CourseCategoryRepository
     {
         return self::$container->get(CourseCategoryRepository::class);
     }
 
-    /**
-     * @return CCalendarEventRepository
-     */
-    public static function getCalendarEventRepository()
+    public static function getCalendarEventRepository(): CCalendarEventRepository
     {
         return self::$container->get(CCalendarEventRepository::class);
     }
 
-    /**
-     * @return CCalendarEventAttachmentRepository
-     */
-    public static function getCalendarEventAttachmentRepository()
+    public static function getCalendarEventAttachmentRepository(): CCalendarEventAttachmentRepository
     {
         return self::$container->get(CCalendarEventAttachmentRepository::class);
     }
 
-    /**
-     * @return CDocumentRepository
-     */
-    public static function getDocumentRepository()
+    public static function getDocumentRepository(): CDocumentRepository
     {
         return self::$container->get(CDocumentRepository::class);
     }
 
-    /**
-     * @return CQuizRepository
-     */
-    public static function getExerciseRepository()
+    public static function getQuizRepository(): CQuizRepository
     {
         return self::$container->get(CQuizRepository::class);
     }
 
-    /**
-     * @return CExerciseCategoryRepository
-     */
-    public static function getExerciseCategoryRepository()
+    public static function getExerciseCategoryRepository(): CExerciseCategoryRepository
     {
         return self::$container->get(CExerciseCategoryRepository::class);
     }
 
-    /**
-     * @return CForumForumRepository
-     */
-    public static function getForumRepository()
+    public static function getForumRepository(): CForumForumRepository
     {
         return self::$container->get(CForumForumRepository::class);
     }
 
-    /**
-     * @return CForumCategoryRepository
-     */
-    public static function getForumCategoryRepository()
+    public static function getForumCategoryRepository(): CForumCategoryRepository
     {
         return self::$container->get(CForumCategoryRepository::class);
     }
 
-    /**
-     * @return CForumPostRepository
-     */
-    public static function getForumPostRepository()
+    public static function getForumPostRepository(): CForumPostRepository
     {
         return self::$container->get(CForumPostRepository::class);
     }
 
-    /**
-     * @return CForumAttachmentRepository
-     */
-    public static function getForumAttachmentRepository()
+    public static function getForumAttachmentRepository(): CForumAttachmentRepository
     {
         return self::$container->get(CForumAttachmentRepository::class);
     }
 
-    /**
-     * @return CForumThreadRepository
-     */
-    public static function getForumThreadRepository()
+    public static function getForumThreadRepository(): CForumThreadRepository
     {
         return self::$container->get(CForumThreadRepository::class);
     }
 
-    /**
-     * @return CGroupRepository
-     */
-    public static function getGroupRepository()
+    public static function getGroupRepository(): CGroupRepository
     {
         return self::$container->get(CGroupRepository::class);
     }
 
-    /**
-     * @return CGroupCategoryRepository
-     */
-    public static function getGroupCategoryRepository()
+    public static function getGroupCategoryRepository(): CGroupCategoryRepository
     {
         return self::$container->get(CGroupCategoryRepository::class);
     }
 
-    /**
-     * @return CQuizQuestionRepository
-     */
-    public static function getQuestionRepository()
+    public static function getQuestionRepository(): CQuizQuestionRepository
     {
         return self::$container->get(CQuizQuestionRepository::class);
     }
 
-    /**
-     * @return CQuizQuestionCategoryRepository
-     */
-    public static function getQuestionCategoryRepository()
+    public static function getQuestionCategoryRepository(): CQuizQuestionCategoryRepository
     {
         return self::$container->get(CQuizQuestionCategoryRepository::class);
     }
 
-    /**
-     * @return CLinkRepository
-     */
-    public static function getLinkRepository()
+    public static function getLinkRepository(): CLinkRepository
     {
         return self::$container->get(CLinkRepository::class);
     }
 
-    /**
-     * @return CLinkCategoryRepository
-     */
-    public static function getLinkCategoryRepository()
+    public static function getLinkCategoryRepository(): CLinkCategoryRepository
     {
         return self::$container->get(CLinkCategoryRepository::class);
     }
 
-    /**
-     * @return CLpRepository
-     */
-    public static function getLpRepository()
+    public static function getLpRepository(): CLpRepository
     {
         return self::$container->get(CLpRepository::class);
     }
 
-    /**
-     * @return CLpCategoryRepository
-     */
-    public static function getLpCategoryRepository()
+    public static function getLpCategoryRepository(): CLpCategoryRepository
     {
         return self::$container->get(CLpCategoryRepository::class);
     }
 
-    /**
-     * @return UserRepository
-     */
-    public static function getUserRepository()
+    public static function getUserRepository(): UserRepository
     {
         return self::$container->get(UserRepository::class);
     }
 
-    /**
-     * @return IllustrationRepository
-     */
-    public static function getIllustrationRepository()
+    public static function getIllustrationRepository(): IllustrationRepository
     {
         return self::$container->get(IllustrationRepository::class);
     }
 
-    /**
-     * @return CShortcutRepository
-     */
-    public static function getShortcutRepository()
+    public static function getShortcutRepository(): CShortcutRepository
     {
         return self::$container->get(CShortcutRepository::class);
     }
 
-    /**
-     * @return CStudentPublicationRepository
-     */
-    public static function getStudentPublicationRepository()
+    public static function getStudentPublicationRepository(): CStudentPublicationRepository
     {
         return self::$container->get(CStudentPublicationRepository::class);
     }
 
-    /**
-     * @return CStudentPublicationAssignmentRepository
-     */
-    public static function getStudentPublicationAssignmentRepository()
+    public static function getStudentPublicationAssignmentRepository(): CStudentPublicationAssignmentRepository
     {
         return self::$container->get(CStudentPublicationAssignmentRepository::class);
     }
 
-    /**
-     * @return CStudentPublicationCommentRepository
-     */
-    public static function getStudentPublicationCommentRepository()
+    public static function getStudentPublicationCommentRepository(): CStudentPublicationCommentRepository
     {
         return self::$container->get(CStudentPublicationCommentRepository::class);
     }
 
-    /**
-     * @return SequenceResourceRepository
-     */
-    public static function getSequenceResourceRepository()
+    public static function getSequenceResourceRepository(): SequenceResourceRepository
     {
         return self::$container->get(SequenceResourceRepository::class);
     }
 
-    /**
-     * @return SequenceRepository
-     */
-    public static function getSequenceRepository()
+    public static function getSequenceRepository(): SequenceRepository
     {
         return self::$container->get(SequenceRepository::class);
     }
 
-    public static function getThematicRepository()
+    public static function getThematicRepository(): CThematicRepository
     {
         return self::$container->get(CThematicRepository::class);
     }
 
-    public static function getThematicPlanRepository()
+    public static function getThematicPlanRepository(): CThematicPlanRepository
     {
         return self::$container->get(CThematicPlanRepository::class);
     }
 
-    public static function getThematicAdvanceRepository()
+    public static function getThematicAdvanceRepository(): CThematicAdvanceRepository
     {
         return self::$container->get(CThematicAdvanceRepository::class);
     }

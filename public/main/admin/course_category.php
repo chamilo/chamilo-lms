@@ -49,10 +49,10 @@ if (!empty($action)) {
             $ret = $categoryInfo['id'];
 
             //Delete Picture Category
-            $deletePicture = isset($_POST['delete_picture']) ? $_POST['delete_picture'] : '';
+            /*$deletePicture = isset($_POST['delete_picture']) ? $_POST['delete_picture'] : '';
             if ($deletePicture) {
                 CourseCategory::deletePictureCategory($ret);
-            }
+            }*/
 
             $errorMsg = Display::return_message(get_lang('Update successful'));
         }

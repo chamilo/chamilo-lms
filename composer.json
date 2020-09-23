@@ -40,12 +40,6 @@
             "public/main/survey"
         ]
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url":  "https://github.com/jmontoyaa/APYDataGridBundle.git"
-        }
-    ],
     "require": {
         "php": "^7.2.9",
         "ext-bcmath": "*",
@@ -162,6 +156,7 @@
         "behat/mink": "dev-master",
         "behat/mink-goutte-driver": "@stable",
         "behat/mink-selenium2-driver": "@stable",
+        "friends-of-behat/mink-extension": "dev-master",
         "php-translation/symfony-bundle": "^0.12",
         "phpstan/phpstan": "^0.12",
         "psalm/plugin-symfony": "^1.4",

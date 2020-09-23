@@ -7,22 +7,22 @@ $use_anonymous = true;
 $typeList = ['personal', 'course', 'admin', 'platform'];
 // Calendar type
 $type = isset($_REQUEST['type']) && in_array($_REQUEST['type'], $typeList) ? $_REQUEST['type'] : 'personal';
-$userId = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : null;
 
-if ('personal' == $type || 'admin' == $type) {
+if ('personal' === $type || 'admin' === $type) {
     $cidReset = true; // fixes #5162
 }
+
 require_once __DIR__.'/../inc/global.inc.php';
+
+$userId = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : null;
 
 $current_course_tool = TOOL_CALENDAR_EVENT;
 $this_section = SECTION_MYAGENDA;
 
-/*$htmlHeadXtra[] = api_get_asset('fullcalendar/dist/fullcalendar.js');
-$htmlHeadXtra[] = api_get_asset('fullcalendar/dist/locale-all.js');
-$htmlHeadXtra[] = api_get_asset('fullcalendar/dist/gcal.js');
-$htmlHeadXtra[] = api_get_css_asset('fullcalendar/dist/fullcalendar.min.css');*/
+$htmlHeadXtra[] = api_get_asset('fullcalendar/main.js');
+$htmlHeadXtra[] = api_get_css_asset('fullcalendar/main.css');
 
-if (api_is_platform_admin() && ('admin' == $type || 'platform' == $type)) {
+if (api_is_platform_admin() && ('admin' === $type || 'platform' === $type)) {
     $type = 'admin';
 }
 
@@ -164,7 +164,11 @@ if ('course' === $type && !empty($group_id)) {
 $defaultView = api_get_setting('default_calendar_view');
 
 if (empty($defaultView)) {
-    $defaultView = 'month';
+    $defaultView = 'dayGridMonth';
+}
+
+if ('month' === $defaultView) {
+    $defaultView = 'dayGridMonth';
 }
 
 /* month, basicWeek, agendaWeek, agendaDay */

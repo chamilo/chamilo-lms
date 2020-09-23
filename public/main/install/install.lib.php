@@ -2852,11 +2852,11 @@ function updateEnvFile($distFile, $envFile, $params)
 }
 
 /**
- * @param SymfonyContainer $container
- * @param EntityManager    $manager
+ * @param EntityManager $manager
  */
-function installGroups($container, $manager)
+function installGroups($manager)
 {
+    error_log('installGroups');
     // Creating fos_group (groups and roles)
     $groups = [
         [
@@ -2951,11 +2951,15 @@ function installSchemas($container, $manager, $upgrade = false)
         ;
         $em->persist($accessUrl);
         $em->flush();
+
+        error_log('AccessUrl created');
     }
 
     if ($upgrade) {
+        error_log('Upgrade settings');
         $settingsManager->updateSchemas($accessUrl);
     } else {
+        error_log('Install settings');
         // Installing schemas (filling settings_current table)
         $settingsManager->installSchemas($accessUrl);
     }
@@ -2970,8 +2974,7 @@ function upgradeWithContainer($container)
     Container::setLegacyServices($container, false);
     error_log('setLegacyServices');
     $manager = Database::getManager();
-    installGroups($container, $manager);
-    error_log('installGroups');
+    installGroups($manager);
     // @todo check if adminId = 1
     installTools($container, $manager, true);
     installSchemas($container, $manager, true);
@@ -3087,7 +3090,7 @@ function finishInstallationWithContainer(
         $manager->persist($ticketPriority);
         $i++;
     }
-    error_log("Save ticket data");
+    error_log('Save ticket data');
     $manager->flush();
 
     $table = Database::get_main_table(TABLE_TICKET_STATUS);
@@ -3112,13 +3115,17 @@ function finishInstallationWithContainer(
         $i++;
     }
 
-    installGroups($container, $manager);
+    installGroups($manager);
 
     error_log('Inserting data.sql');
     // Inserting default data
     $data = file_get_contents($sysPath.'public/main/install/data.sql');
     $result = $manager->getConnection()->prepare($data);
-    $result->execute();
+    $executeResult = $result->execute();
+
+    if ($executeResult) {
+        error_log('data.sql Ok');
+    }
     $result->closeCursor();
 
     UserManager::setPasswordEncryption($encryptPassForm);
@@ -3221,7 +3228,7 @@ function finishInstallationWithContainer(
     Database::update(
         Database::get_main_table(TABLE_MAIN_LANGUAGE),
         ['available' => 1],
-        ['dokeos_folder = ?' => $languageForm]
+        ['english_name = ?' => $languageForm]
     );
 
     // Install settings
@@ -3270,6 +3277,7 @@ function getVersionTable()
  */
 function installProfileSettings($installationProfile = '')
 {
+    error_log('installProfileSettings');
     if (empty($installationProfile)) {
         return false;
     }

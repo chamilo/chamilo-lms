@@ -67,7 +67,7 @@ $calendarEntity = null;
 if (isset($_GET['calendar_id'])) {
     $calendarId = (int) ($_GET['calendar_id']);
     /** @var CAttendanceCalendar $calendarEntity */
-    $calendarEntity = Database::getManager()->getRepository('ChamiloCourseBundle:CAttendanceCalendar')->find($calendarId);
+    $calendarEntity = Database::getManager()->getRepository(CAttendanceCalendar::class)->find($calendarId);
 }
 
 $token = Security::get_token();
@@ -175,7 +175,6 @@ $(function() {
 $tpl = new Template(get_lang('Attendance'));
 $student_param = '';
 $student_id = null;
-
 if (api_is_drh() && isset($_GET['student_id'])) {
     $student_id = (int) ($_GET['student_id']);
     $student_param = '&student_id='.$student_id;

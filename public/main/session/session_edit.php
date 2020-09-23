@@ -70,10 +70,10 @@ if (api_is_multiple_url_enabled()) {
     $table_access_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
     $access_url_id = api_get_current_access_url_id();
     if (-1 != $access_url_id) {
-        $sql = "SELECT DISTINCT u.user_id,lastname,firstname,username
+        $sql = "SELECT DISTINCT u.id as user_id,lastname,firstname,username
                 FROM $tbl_user u
                 INNER JOIN $table_access_url_rel_user url_rel_user
-                ON (url_rel_user.user_id = u.user_id)
+                ON (url_rel_user.user_id = u.id)
                 WHERE status='1' AND access_url_id = '$access_url_id' $order_clause";
     }
 }

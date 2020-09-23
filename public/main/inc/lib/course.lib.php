@@ -6,12 +6,14 @@ use Chamilo\CoreBundle\Entity\AccessUrlRelSession;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\CoreBundle\Entity\SequenceResource;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\CourseRepository;
 use Chamilo\CoreBundle\Repository\SequenceResourceRepository;
 use Chamilo\CoreBundle\ToolChain;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
+use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Manager\SettingsManager;
 use ChamiloSession as Session;
 use Doctrine\Common\Collections\Criteria;
@@ -187,9 +189,11 @@ class CourseManager
      * @param int    $orderby            The column we want to order it by. Optional, defaults to first column.
      * @param string $orderdirection     The direction of the order (ASC or DESC). Optional, defaults to ASC.
      * @param int    $visibility         the visibility of the course, or all by default
-     * @param string $startwith          If defined, only return results for which the course *title* begins with this string
+     * @param string $startwith          If defined, only return results for which the course *title* begins with this
+     *                                   string
      * @param string $urlId              The Access URL ID, if using multiple URLs
-     * @param bool   $alsoSearchCode     An extension option to indicate that we also want to search for course codes (not *only* titles)
+     * @param bool   $alsoSearchCode     An extension option to indicate that we also want to search for course codes
+     *                                   (not *only* titles)
      * @param array  $conditionsLike
      * @param array  $onlyThisCourseList
      *
@@ -208,8 +212,9 @@ class CourseManager
         $onlyThisCourseList = []
     ) {
         $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
-        $tblCourseCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
-        $sql = "SELECT course.*, course.id as real_id, course_category.code AS category_code
+        //$tblCourseCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
+        // @todo fix , course_category.code AS category_code
+        $sql = "SELECT course.*, course.id as real_id
                 FROM $courseTable course  ";
 
         if (!empty($urlId)) {
@@ -217,7 +222,7 @@ class CourseManager
             $sql .= " INNER JOIN $table url ON (url.c_id = course.id) ";
         }
 
-        $sql .= " LEFT JOIN $tblCourseCategory ON course.category_id = course_category.id ";
+        //$sql .= " LEFT JOIN $tblCourseCategory ON course.category_id = course_category.id ";
 
         $visibility = (int) $visibility;
 
@@ -293,8 +298,8 @@ class CourseManager
             $sql .= ' LIMIT 1000000'; //virtually no limit
         }
         if (!empty($from)) {
-            $from = intval($from);
-            $sql .= ' OFFSET '.intval($from);
+            $from = (int) $from;
+            $sql .= ' OFFSET '.(int) $from;
         } else {
             $sql .= ' OFFSET 0';
         }
@@ -649,8 +654,7 @@ class CourseManager
         $userId = api_get_user_id();
 
         if (api_get_configuration_value('catalog_course_subscription_in_user_s_session')) {
-            /** @var \Chamilo\CoreBundle\Entity\User $user */
-            $user = UserManager::getRepository()->find($userId);
+            $user = api_get_user_entity($userId);
             $sessions = $user->getCurrentlyAccessibleSessions();
             if (empty($sessions)) {
                 // user has no accessible session
@@ -1073,9 +1077,8 @@ class CourseManager
             'c_id' => $courseId,
             'visible' => $visible,
         ];
-        $insertId = Database::insert($courseUserTable, $params);
 
-        return $insertId;
+        return Database::insert($courseUserTable, $params);
     }
 
     /**
@@ -1143,79 +1146,25 @@ class CourseManager
     }
 
     /**
-     * @param int    $user_id
-     * @param string $startsWith Optional
+     * @param int    $userId
+     * @param string $keyword
      *
      * @return array an array with the course info of all the courses (real and virtual)
      *               of which the current user is course admin
      */
-    public static function get_course_list_of_user_as_course_admin($user_id, $startsWith = '')
+    public static function get_course_list_of_user_as_course_admin($userId, $keyword = '')
     {
-        if ($user_id != strval(intval($user_id))) {
+        $user = api_get_user_entity($userId);
+
+        if (null === $user) {
             return [];
         }
 
-        // Definitions database tables and variables
-        $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
-        $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $tblCourseCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
-        $user_id = intval($user_id);
-        $data = [];
+        $url = api_get_url_entity();
+        $user = api_get_user_entity($userId);
+        $repo = Container::getUserRepository();
 
-        $sql = "SELECT
-                    course.code,
-                    course.title,
-                    course.id,
-                    course.id as real_id,
-                    course_category.code AS category_code
-                FROM $tbl_course_user as course_rel_user
-                INNER JOIN $tbl_course as course
-                ON course.id = course_rel_user.c_id
-                LEFT JOIN $tblCourseCategory ON course.category_id = $tblCourseCategory.id
-                WHERE
-                    course_rel_user.user_id = $user_id AND
-                    course_rel_user.status = 1
-        ";
-
-        if (api_get_multiple_access_url()) {
-            $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-            $access_url_id = api_get_current_access_url_id();
-            if (-1 != $access_url_id) {
-                $sql = "
-                    SELECT
-                        course.code,
-                        course.title,
-                        course.id,
-                        course.id as real_id
-                    FROM $tbl_course_user as course_rel_user
-                    INNER JOIN $tbl_course as course
-                    ON course.id = course_rel_user.c_id
-                    INNER JOIN $tbl_course_rel_access_url course_rel_url
-                    ON (course_rel_url.c_id = course.id)
-                    WHERE
-                        access_url_id = $access_url_id  AND
-                        course_rel_user.user_id = $user_id AND
-                        course_rel_user.status = 1
-                ";
-            }
-        }
-
-        if (!empty($startsWith)) {
-            $startsWith = Database::escape_string($startsWith);
-
-            $sql .= " AND (course.title LIKE '$startsWith%' OR course.code LIKE '$startsWith%')";
-        }
-
-        $sql .= ' ORDER BY course.title';
-
-        $result_nb_cours = Database::query($sql);
-        if (Database::num_rows($result_nb_cours) > 0) {
-            while ($row = Database::fetch_array($result_nb_cours, 'ASSOC')) {
-                $data[$row['id']] = $row;
-            }
-        }
-
-        return $data;
+        return $repo->getCourses($user, $url, COURSEMANAGER, $keyword);
     }
 
     /**
@@ -1256,7 +1205,7 @@ class CourseManager
     /**
      * Check if user is subscribed inside a course.
      *
-     * @param int    $user_id
+     * @param int    $userId
      * @param string $course_code  , if this parameter is null, it'll check for all courses
      * @param bool   $in_a_session True for checking inside sessions too, by default is not checked
      * @param int    $session_id
@@ -1264,12 +1213,12 @@ class CourseManager
      * @return bool $session_id true if the user is registered in the course, false otherwise
      */
     public static function is_user_subscribed_in_course(
-        $user_id,
+        $userId,
         $course_code = null,
         $in_a_session = false,
         $session_id = 0
     ) {
-        $user_id = (int) $user_id;
+        $userId = (int) $userId;
         $session_id = (int) $session_id;
 
         if (api_get_configuration_value('catalog_course_subscription_in_user_s_session')) {
@@ -1280,8 +1229,8 @@ class CourseManager
             if (is_null($course)) {
                 return false;
             }
-            /** @var \Chamilo\CoreBundle\Entity\User $user */
-            $user = UserManager::getRepository()->find($user_id);
+
+            $user = api_get_user_entity($userId);
             if (is_null($user)) {
                 return false;
             }
@@ -1310,7 +1259,7 @@ class CourseManager
 
         $sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
                 WHERE
-                    user_id = $user_id AND
+                    user_id = $userId AND
                     relation_type<>".COURSE_RELATION_TYPE_RRHH."
                     $condition_course ";
 
@@ -1328,21 +1277,21 @@ class CourseManager
 
         $tableSessionCourseUser = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $sql = "SELECT 1 FROM $tableSessionCourseUser
-                WHERE user_id = $user_id AND session_id = $session_id $condition_course";
+                WHERE user_id = $userId AND session_id = $session_id $condition_course";
 
         if (Database::num_rows(Database::query($sql)) > 0) {
             return true;
         }
 
         $sql = "SELECT 1 FROM $tableSessionCourseUser
-                WHERE user_id = $user_id AND session_id = $session_id AND status = 2 $condition_course";
+                WHERE user_id = $userId AND session_id = $session_id AND status = 2 $condition_course";
 
         if (Database::num_rows(Database::query($sql)) > 0) {
             return true;
         }
 
         $sql = 'SELECT 1 FROM '.Database::get_main_table(TABLE_MAIN_SESSION).
-              " WHERE id = $session_id AND id_coach = $user_id";
+              " WHERE id = $session_id AND id_coach = $userId";
 
         if (Database::num_rows(Database::query($sql)) > 0) {
             return true;
@@ -1354,97 +1303,26 @@ class CourseManager
     /**
      * Is the user a teacher in the given course?
      *
-     * @param int    $user_id     , the id (int) of the user
-     * @param string $course_code , the course code
+     * @param int $userId
+     * @param int $courseId
      *
      * @return bool if the user is a teacher in the course, false otherwise
      */
-    public static function is_course_teacher($user_id, $course_code)
+    public static function isCourseTeacher($userId, $courseId)
     {
-        if ($user_id != strval(intval($user_id))) {
+        $userId = (int) $userId;
+        $courseId = (int) $courseId;
+
+        if (empty($courseId) || empty($userId)) {
             return false;
         }
 
-        $courseInfo = api_get_course_info($course_code);
-        if (empty($courseInfo)) {
-            return false;
-        }
-        $courseId = $courseInfo['real_id'];
         $sql = "SELECT status FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
-                WHERE c_id = $courseId AND user_id = $user_id ";
+                WHERE c_id = $courseId AND user_id = $userId ";
         $result = Database::query($sql);
 
         if (Database::num_rows($result) > 0) {
             return 1 == Database::result($result, 0, 'status');
-        }
-
-        return false;
-    }
-
-    /**
-     *    Is the user subscribed in the real course or linked courses?
-     *
-     * @param int the id of the user
-     * @param int $courseId
-     *
-     * @deprecated linked_courses definition doesn't exists
-     *
-     * @return bool if the user is registered in the real course or linked courses, false otherwise
-     */
-    public static function is_user_subscribed_in_real_or_linked_course($user_id, $courseId, $session_id = 0)
-    {
-        if ($user_id != strval(intval($user_id))) {
-            return false;
-        }
-
-        $courseId = intval($courseId);
-        $session_id = intval($session_id);
-
-        if (empty($session_id)) {
-            $result = Database::fetch_array(
-                Database::query(
-                    "SELECT *
-                    FROM ".Database::get_main_table(TABLE_MAIN_COURSE)." course
-                    LEFT JOIN ".Database::get_main_table(TABLE_MAIN_COURSE_USER)." course_user
-                    ON course.id = course_user.c_id
-                    WHERE
-                        course_user.user_id = $user_id AND
-                        course_user.relation_type<>".COURSE_RELATION_TYPE_RRHH." AND
-                        ( course.id = $courseId)"
-                )
-            );
-
-            return !empty($result);
-        }
-
-        // From here we trust session id.
-        // Is he/she subscribed to the session's course?
-        // A user?
-        if (Database::num_rows(Database::query("SELECT user_id
-                FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)."
-                WHERE session_id = $session_id
-                AND user_id = $user_id"))
-        ) {
-            return true;
-        }
-
-        // A course coach?
-        if (Database::num_rows(Database::query("SELECT user_id
-                FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)."
-                WHERE session_id = $session_id
-                AND user_id = $user_id AND status = 2
-                AND c_id = $courseId"))
-        ) {
-            return true;
-        }
-
-        // A session coach?
-        if (Database::num_rows(Database::query("SELECT id_coach
-                FROM ".Database::get_main_table(TABLE_MAIN_SESSION)." AS session
-                WHERE session.id = $session_id
-                AND id_coach = $user_id"))
-        ) {
-            return true;
         }
 
         return false;
@@ -1458,8 +1336,8 @@ class CourseManager
      * @param int       $sessionId
      * @param string    $limit
      * @param string    $order_by         the field to order the users by.
-     *                                    Valid values are 'lastname', 'firstname', 'username', 'email', 'official_code' OR a part of a SQL statement
-     *                                    that starts with ORDER BY ...
+     *                                    Valid values are 'lastname', 'firstname', 'username', 'email',
+     *                                    'official_code' OR a part of a SQL statement that starts with ORDER BY ...
      * @param int|null  $filter_by_status if using the session_id: 0 or 2 (student, coach),
      *                                    if using session_id = 0 STUDENT or COURSEMANAGER
      * @param bool|null $return_count
@@ -2435,15 +2313,15 @@ class CourseManager
      * Get the list of groups from the course.
      *
      * @param string $course_code
-     * @param int    $session_id         Session ID (optional)
-     * @param int    $in_get_empty_group get empty groups (optional)
+     * @param int    $session_id     Session ID (optional)
+     * @param int    $getEmptyGroups get empty groups (optional)
      *
-     * @return array List of groups info
+     * @return CGroup[]
      */
     public static function get_group_list_of_course(
         $course_code,
         $session_id = 0,
-        $in_get_empty_group = 0
+        $getEmptyGroups = 0
     ) {
         $course_info = api_get_course_info($course_code);
 
@@ -2456,29 +2334,46 @@ class CourseManager
             return [];
         }
 
-        0 != $session_id ? $session_condition = ' WHERE g.session_id IN(1,'.intval($session_id).')' : $session_condition = ' WHERE g.session_id = 0';
-        if (0 == $in_get_empty_group) {
-            // get only groups that are not empty
-            $sql = "SELECT DISTINCT g.iid, g.iid, g.name
-                    FROM ".Database::get_course_table(TABLE_GROUP)." AS g
-                    INNER JOIN ".Database::get_course_table(TABLE_GROUP_USER)." gu
-                    ON (g.iid = gu.group_id AND g.c_id = $course_id AND gu.c_id = $course_id)
-                    $session_condition
-                    ORDER BY g.name";
-        } else {
-            // get all groups even if they are empty
-            $sql = "SELECT g.iid, g.name, g.iid
-                    FROM ".Database::get_course_table(TABLE_GROUP)." AS g
-                    $session_condition
-                    AND c_id = $course_id";
+        $repo = Container::getGroupRepository();
+
+        $course = api_get_course_entity($course_info['real_id']);
+        $session = api_get_session_entity($session_id);
+        $qb = $repo->getResourcesByCourse($course, $session);
+        $groups = $qb->getQuery()->getResult();
+        $groupList = [];
+        /** @var CGroup $group */
+        foreach ($groups as $group) {
+            if (0 === $getEmptyGroups) {
+                if (!$group->hasMembers()) {
+                    continue;
+                }
+            }
+            $groupList[$group->getIid()] = $group;
         }
 
-        $result = Database::query($sql);
-        $groupList = [];
-        while ($groupData = Database::fetch_array($result)) {
-            $groupData['userNb'] = GroupManager::number_of_students($groupData['iid'], $course_id);
-            $groupList[$groupData['iid']] = $groupData;
-        }
+        /* 0 != $session_id ? $session_condition = ' WHERE g.session_id IN(1,'.intval($session_id).')' : $session_condition = ' WHERE g.session_id = 0';
+         if (0 == $in_get_empty_group) {
+             // get only groups that are not empty
+             $sql = "SELECT DISTINCT g.iid, g.name
+                     FROM ".Database::get_course_table(TABLE_GROUP)." AS g
+                     INNER JOIN ".Database::get_course_table(TABLE_GROUP_USER)." gu
+                     ON (g.iid = gu.group_id)
+                     $session_condition
+                     ORDER BY g.name";
+         } else {
+             // get all groups even if they are empty
+             $sql = "SELECT g.iid, g.name
+                     FROM ".Database::get_course_table(TABLE_GROUP)." AS g
+                     $session_condition
+                     AND c_id = $course_id";
+         }
+
+         $result = Database::query($sql);
+         $groupList = [];
+         while ($groupData = Database::fetch_array($result)) {
+             $groupData['userNb'] = GroupManager::number_of_students($groupData['iid'], $course_id);
+             $groupList[$groupData['iid']] = $groupData;
+         }*/
 
         return $groupList;
     }
@@ -2575,12 +2470,13 @@ class CourseManager
             }
 
             // Cleaning groups
-            $groups = GroupManager::get_groups($courseId);
+            // @todo should be cleaned by the resource.
+            /*$groups = GroupManager::get_groups($courseId);
             if (!empty($groups)) {
                 foreach ($groups as $group) {
                     GroupManager::deleteGroup($group, $course['code']);
                 }
-            }
+            }*/
 
             $course_tables = AddCourse::get_course_tables();
             // Cleaning c_x tables
@@ -2685,7 +2581,7 @@ class CourseManager
 
             // Deletes all groups, group-users, group-tutors information
             // To prevent fK mix up on some tables
-            GroupManager::deleteAllGroupsFromCourse($courseId);
+            //GroupManager::deleteAllGroupsFromCourse($courseId);
 
             $appPlugin = new AppPlugin();
             $appPlugin->performActionsWhenDeletingItem('course', $courseId);
@@ -3074,7 +2970,8 @@ class CourseManager
      * @param int   $user_id
      * @param bool  $include_sessions                   Whether to include courses from session or not
      * @param bool  $adminGetsAllCourses                If the user is platform admin,
-     *                                                  whether he gets all the courses or just his. Note: This does *not* include all sessions
+     *                                                  whether he gets all the courses or just his. Note: This does
+     *                                                  *not* include all sessions
      * @param bool  $loadSpecialCourses
      * @param array $skipCourseList                     List of course ids to skip
      * @param bool  $useUserLanguageFilterIfAvailable
@@ -3257,8 +3154,6 @@ class CourseManager
 
     /**
      * Get course code(s) from visual code.
-     *
-     * @deprecated
      *
      * @param   string  Visual code
      *
@@ -4628,8 +4523,8 @@ class CourseManager
      * Creates a new course code based in a given code.
      *
      * @param string    wanted code
-     * <code>    $wanted_code = 'curse' if there are in the DB codes like curse1 curse2 the function will return: course3</code>
-     * if the course code doest not exist in the DB the same course code will be returned
+     * <code>    $wanted_code = 'curse' if there are in the DB codes like curse1 curse2 the function will return:
+     * course3</code> if the course code doest not exist in the DB the same course code will be returned
      *
      * @return string wanted unused code
      */
@@ -5210,7 +5105,7 @@ class CourseManager
             );
 
             $userRegisteredInCourse = self::is_user_subscribed_in_course($user_id, $course_info['code']);
-            $userRegisteredInCourseAsTeacher = self::is_course_teacher($user_id, $course_info['code']);
+            $userRegisteredInCourseAsTeacher = self::isCourseTeacher($user_id, $courseId['c_id']);
             $userRegistered = $userRegisteredInCourse && $userRegisteredInCourseAsTeacher;
             $my_course['is_course_student'] = $userRegisteredInCourse;
             $my_course['is_course_teacher'] = $userRegisteredInCourseAsTeacher;
@@ -6079,19 +5974,22 @@ class CourseManager
     /**
      * this function gets all the groups of the course,
      * not including linked courses.
+     *
+     * @return CGroup[]
      */
     public static function getCourseGroups()
     {
         $sessionId = api_get_session_id();
+        $courseCode = api_get_course_id();
         if (0 != $sessionId) {
             $groupList = self::get_group_list_of_course(
-                api_get_course_id(),
+                $courseCode,
                 $sessionId,
                 1
             );
         } else {
             $groupList = self::get_group_list_of_course(
-                api_get_course_id(),
+                $courseCode,
                 0,
                 1
             );
@@ -6217,7 +6115,8 @@ class CourseManager
     public static function addGroupMultiSelect($form, $groupInfo, $to = [])
     {
         $groupUsers = GroupManager::get_subscribed_users($groupInfo);
-        $array = self::buildSelectOptions([$groupInfo], $groupUsers, $to);
+        $groupEntity = api_get_group_entity($groupInfo['iid']);
+        $array = self::buildSelectOptions([$groupEntity], $groupUsers, $to);
 
         $result = [];
         foreach ($array as $content) {
@@ -6230,17 +6129,14 @@ class CourseManager
     /**
      * this function shows the form for sending a message to a specific group or user.
      *
-     * @param array $groupList
-     * @param array $userList
-     * @param array $alreadySelected
+     * @param CGroup[] $groupList
+     * @param array    $userList
+     * @param array    $alreadySelected
      *
      * @return array
      */
-    public static function buildSelectOptions(
-        $groupList = [],
-        $userList = [],
-        $alreadySelected = []
-    ) {
+    public static function buildSelectOptions($groupList = [], $userList = [], $alreadySelected = [])
+    {
         if (empty($alreadySelected)) {
             $alreadySelected = [];
         }
@@ -6249,25 +6145,23 @@ class CourseManager
         // adding the groups to the select form
         if ($groupList) {
             foreach ($groupList as $thisGroup) {
-                $groupId = $thisGroup['iid'];
+                $groupId = $thisGroup->getIid();
                 if (is_array($alreadySelected)) {
                     if (!in_array(
                         "GROUP:".$groupId,
                         $alreadySelected
                     )
                     ) {
-                        $userCount = isset($thisGroup['userNb']) ? $thisGroup['userNb'] : 0;
-                        if (empty($userCount)) {
-                            $userCount = isset($thisGroup['count_users']) ? $thisGroup['count_users'] : 0;
-                        }
+                        $userCount = $thisGroup->getMembers()->count();
+
                         // $alreadySelected is the array containing the groups (and users) that are already selected
-                        $user_label = ($userCount > 0) ? get_lang('Users') : get_lang('user');
-                        $user_disabled = ($userCount > 0) ? "" : "disabled=disabled";
+                        $userLabel = ($userCount > 0) ? get_lang('Users') : get_lang('user');
+                        $userDisabled = ($userCount > 0) ? "" : "disabled=disabled";
                         $result[] = [
-                            'disabled' => $user_disabled,
+                            'disabled' => $userDisabled,
                             'value' => "GROUP:".$groupId,
                             // The space before "G" is needed in order to advmultiselect.php js puts groups first
-                            'content' => " G: ".$thisGroup['name']." - ".$userCount." ".$user_label,
+                            'content' => " G: ".$thisGroup->getName()." - ".$userCount." ".$userLabel,
                         ];
                     }
                 }
@@ -6932,11 +6826,11 @@ class CourseManager
     {
         $tabs = [
             [
-                'content' => get_lang('SimpleCourseList'),
+                'content' => get_lang('Standard list'),
                 'url' => api_get_path(WEB_CODE_PATH).'admin/course_list.php',
             ],
             [
-                'content' => get_lang('AdminCourseList'),
+                'content' => get_lang('Management List'),
                 'url' => api_get_path(WEB_CODE_PATH).'admin/course_list_admin.php',
             ],
         ];

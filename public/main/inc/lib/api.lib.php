@@ -8,8 +8,10 @@ use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Entity\SettingsCurrent;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\UserCourseCategory;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CGroup;
+use Chamilo\CourseBundle\Entity\CLp;
 use ChamiloSession as Session;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Finder\Finder;
@@ -1841,14 +1843,14 @@ function api_get_user_info_from_entity(
     return $result;
 }
 
-/**
- * @param int $userId
- *
- * @return User
- */
-function api_get_user_entity($userId)
+function api_get_lp_entity(int $id): ?CLp
 {
-    $userId = (int) $userId;
+    return Database::getManager()->getRepository(CLp::class)->find($id);
+}
+
+function api_get_user_entity(int $userId = 0): ?User
+{
+    $userId = $userId ?: api_get_user_id();
     $repo = UserManager::getRepository();
 
     /** @var User $user */
@@ -1857,10 +1859,7 @@ function api_get_user_entity($userId)
     return $user;
 }
 
-/**
- * @return User|null
- */
-function api_get_current_user()
+function api_get_current_user(): ?User
 {
     $isLoggedIn = Container::$container->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED');
     if (false === $isLoggedIn) {
@@ -2082,10 +2081,10 @@ function api_get_anonymous_id()
     if ($max >= 2) {
         $sql = "SELECT * FROM $table as TEL
                 JOIN $tableU as U
-                ON U.user_id = TEL.login_user_id
+                ON U.id = TEL.login_user_id
                 WHERE TEL.user_ip = '$ip'
                     AND U.status = ".ANONYMOUS."
-                    AND U.user_id != 2 ";
+                    AND U.id != 2 ";
 
         $result = Database::query($sql);
         if (empty(Database::num_rows($result))) {
@@ -2109,19 +2108,19 @@ function api_get_anonymous_id()
         } else {
             $row = Database::fetch_array($result, 'ASSOC');
 
-            return $row['user_id'];
+            return $row['id'];
         }
     }
 
     $table = Database::get_main_table(TABLE_MAIN_USER);
-    $sql = "SELECT user_id
+    $sql = "SELECT id
             FROM $table
             WHERE status = ".ANONYMOUS." ";
     $res = Database::query($sql);
     if (Database::num_rows($res) > 0) {
         $row = Database::fetch_array($res, 'ASSOC');
 
-        return $row['user_id'];
+        return $row['id'];
     }
 
     // No anonymous user was found.
@@ -2214,14 +2213,14 @@ function api_remove_in_gradebook()
  * If the course_code is given, the returned array gives info about that
  * particular course, if none given it gets the course info from the session.
  *
- * @param string $course_code
+ * @param string $courseCode
  *
  * @return array
  */
-function api_get_course_info($course_code = null)
+function api_get_course_info($courseCode = null)
 {
-    if (!empty($course_code)) {
-        $course = Container::getCourseRepository()->findOneByCode($course_code);
+    if (!empty($courseCode)) {
+        $course = Container::getCourseRepository()->findOneByCode($courseCode);
 
         return api_format_course_array($course);
     }
@@ -2301,10 +2300,8 @@ function api_get_group_entity($id = 0): ?CGroup
 
 /**
  * @param int $id
- *
- * @return AccessUrl
  */
-function api_get_url_entity($id = 0)
+function api_get_url_entity($id = 0): ?AccessUrl
 {
     if (empty($id)) {
         $id = api_get_current_access_url_id();
@@ -2354,18 +2351,7 @@ function api_format_course_array(Course $course = null)
         return [];
     }
 
-    $category = $course->getCategory();
-
     $courseData = [];
-    $courseData['categoryCode'] = '';
-    $courseData['categoryName'] = '';
-    $courseData['category_id'] = 0;
-    if ($category) {
-        $courseData['categoryCode'] = $category->getCode();
-        $courseData['categoryName'] = $category->getName();
-        $courseData['category_id'] = $category->getId();
-    }
-
     $courseData['id'] = $courseData['real_id'] = $course->getId();
 
     // Added
@@ -2386,7 +2372,8 @@ function api_format_course_array(Course $course = null)
     $courseData['legal'] = $course->getLegal();
     $courseData['show_score'] = $course->getShowScore(); //used in the work tool
 
-    $coursePath = api_get_path(WEB_COURSE_PATH);
+    //$coursePath = api_get_path(WEB_COURSE_PATH);
+    $coursePath = '/course/';
     $webCourseHome = $coursePath.$courseData['real_id'].'/home';
 
     // Course password
@@ -3101,7 +3088,7 @@ function api_get_user_status($user_id = null)
         $user_id = api_get_user_id();
     }
     $table = Database::get_main_table(TABLE_MAIN_USER);
-    $sql = "SELECT status FROM $table WHERE user_id = $user_id ";
+    $sql = "SELECT status FROM $table WHERE id = $user_id ";
     $result = Database::query($sql);
     $status = null;
     if (Database::num_rows($result)) {
@@ -4378,7 +4365,7 @@ function api_get_languages_to_array()
     $result = Database::query($sql);
     $languages = [];
     while ($row = Database::fetch_array($result)) {
-        $languages[$row['dokeos_folder']] = $row['original_name'];
+        $languages[$row['english_name']] = $row['original_name'];
     }
 
     return $languages;
@@ -4399,7 +4386,7 @@ function api_get_language_id($language)
     }
     $language = Database::escape_string($language);
     $sql = "SELECT id FROM $tbl_language
-            WHERE dokeos_folder = '$language' LIMIT 1";
+            WHERE english_name = '$language' LIMIT 1";
     $result = Database::query($sql);
     $row = Database::fetch_array($result);
 
@@ -4432,7 +4419,6 @@ function api_get_language_info($languageId)
         'original_name' => $language->getOriginalName(),
         'english_name' => $language->getEnglishName(),
         'isocode' => $language->getIsocode(),
-        'dokeos_folder' => $language->getDokeosFolder(),
         'available' => $language->getAvailable(),
         'parent_id' => $language->getParent() ? $language->getParent()->getId() : null,
     ];
@@ -4585,29 +4571,17 @@ function api_get_themes($getOnlyThemeFromVirtualInstance = false)
  * This function is used when we are moving a course to a different category
  * and also when a user subscribes to courses (the new course is added at the end of the main category.
  *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- *
- * @param int $user_course_category the id of the user_course_category
- * @param int $user_id
+ * @param int $courseCategoryId the id of the user_course_category
+ * @param int $userId
  *
  * @return int the value of the highest sort of the user_course_category
  */
-function api_max_sort_value($user_course_category, $user_id)
+function api_max_sort_value($courseCategoryId, $userId)
 {
-    $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-    $sql = "SELECT max(sort) as max_sort FROM $tbl_course_user
-            WHERE
-                user_id='".intval($user_id)."' AND
-                relation_type<>".COURSE_RELATION_TYPE_RRHH." AND
-                user_course_cat='".intval($user_course_category)."'";
-    $result_max = Database::query($sql);
-    if (1 == Database::num_rows($result_max)) {
-        $row_max = Database::fetch_array($result_max);
+    $user = api_get_user_entity($userId);
+    $userCourseCategory = Database::getManager()->getRepository(UserCourseCategory::class)->find($courseCategoryId);
 
-        return $row_max['max_sort'];
-    }
-
-    return 0;
+    return null === $user ? 0 : $user->getMaxSortValue($userCourseCategory);
 }
 
 /**
@@ -5730,7 +5704,7 @@ function api_is_course_visible_for_user($userid = null, $cid = null)
                 $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 
                 $sql = "SELECT status FROM $tbl_user
-                        WHERE user_id = $userid
+                        WHERE id = $userid
                         LIMIT 1";
 
                 $result = Database::query($sql);
@@ -6651,6 +6625,12 @@ function api_get_build_js($file)
     return '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH).'build/'.$file.'"></script>'."\n";
 }
 
+function api_get_build_css($file, $media = 'screen')
+{
+    return '<link
+        href="'.api_get_path(WEB_PUBLIC_PATH).'build/'.$file.'" rel="stylesheet" media="'.$media.'" type="text/css" />'."\n";
+}
+
 /**
  * Returns the <script> HTML tag.
  *
@@ -6671,7 +6651,7 @@ function api_get_asset($file)
  */
 function api_get_css_asset($file, $media = 'screen')
 {
-    return '<link href="'.api_get_path(WEB_PUBLIC_PATH).'libs/'.$file.'" rel="stylesheet" media="'.$media.'" type="text/css" />'."\n";
+    return '<link href="'.api_get_path(WEB_PUBLIC_PATH).'build/libs/'.$file.'" rel="stylesheet" media="'.$media.'" type="text/css" />'."\n";
 }
 
 /**
@@ -6813,24 +6793,19 @@ function api_get_jquery_libraries_js($libraries)
  * @param int    $sessionId  The session ID  - optional (takes it from context if not given)
  * @param int    $groupId    The group ID - optional (takes it from context if not given)
  *
- * @return string The URL to a course, a session, or empty string if nothing works e.g. https://localhost/courses/ABC/index.php?session_id=3&gidReq=1
+ * @return string The URL to a course, a session, or empty string if nothing works
+ *                e.g. https://localhost/courses/ABC/index.php?session_id=3&gidReq=1
  *
  * @author  Julio Montoya <gugli100@gmail.com>
  */
 function api_get_course_url($courseCode = null, $sessionId = null, $groupId = null)
 {
-    $courseDirectory = '';
     $url = '';
     // If courseCode not set, get context or []
     if (empty($courseCode)) {
         $courseInfo = api_get_course_info();
     } else {
         $courseInfo = api_get_course_info($courseCode);
-    }
-
-    // If course defined, get directory, otherwise keep empty string
-    if (!empty($courseInfo['directory'])) {
-        $courseDirectory = $courseInfo['directory'];
     }
 
     // If sessionId not set, get context or 0
@@ -6844,14 +6819,14 @@ function api_get_course_url($courseCode = null, $sessionId = null, $groupId = nu
     }
 
     // Build the URL
-    if (!empty($courseDirectory)) {
+    if (!empty($courseInfo)) {
         // directory not empty, so we do have a course
-        $url = api_get_path(WEB_COURSE_PATH).$courseDirectory.'/index.php?id_session='.$sessionId.'&gidReq='.$groupId;
-    } elseif (!empty($sessionId) &&
-        'true' !== api_get_setting('session.remove_session_url')
-    ) {
-        // if the course was unset and the session was set, send directly to the session
-        $url = api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$sessionId;
+        $url = $courseInfo['course_public_url'].'?sid='.$sessionId.'&gid='.$groupId;
+    } else {
+        if (!empty($sessionId) && 'true' !== api_get_setting('session.remove_session_url')) {
+            // if the course was unset and the session was set, send directly to the session
+            $url = api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$sessionId;
+        }
     }
 
     // if not valid combination was found, return an empty string
@@ -7256,7 +7231,7 @@ function api_detect_user_roles($user_id, $courseId, $session_id = 0)
 
     if (!empty($course_code)) {
         if (empty($session_id)) {
-            if (CourseManager::is_course_teacher($user_id, $course_code)) {
+            if (CourseManager::isCourseTeacher($user_id, $courseInfo['real_id'])) {
                 $user_roles[] = COURSEMANAGER;
             }
             if (CourseManager::get_tutor_in_course_status($user_id, $courseInfo['real_id'])) {
@@ -7472,7 +7447,7 @@ function api_get_password_checker_js($usernameInputId, $passwordInputId)
         'veryStrong' => get_lang('Very strong'),
     ];
 
-    $js = api_get_asset('pwstrength-bootstrap/dist/pwstrength-bootstrap.min.js');
+    $js = api_get_asset('pwstrength-bootstrap/dist/pwstrength-bootstrap.js');
     $js .= "<script>
     var errorMessages = {
         password_to_short : \"".get_lang('The password is too short')."\",
@@ -7662,18 +7637,17 @@ function api_get_default_tool_setting($tool, $setting, $defaultValue)
  */
 function api_can_login_as($loginAsUserId, $userId = null)
 {
-    if (empty($userId)) {
-        $userId = api_get_user_id();
-    }
-    if ($loginAsUserId == $userId) {
-        return false;
-    }
+    $loginAsUserId = (int) $loginAsUserId;
 
     if (empty($loginAsUserId)) {
         return false;
     }
 
-    if ($loginAsUserId != strval(intval($loginAsUserId))) {
+    if (empty($userId)) {
+        $userId = api_get_user_id();
+    }
+
+    if ($loginAsUserId == $userId) {
         return false;
     }
 
@@ -7696,7 +7670,7 @@ function api_can_login_as($loginAsUserId, $userId = null)
                 $userList = [];
                 if (is_array($users)) {
                     foreach ($users as $user) {
-                        $userList[] = $user['user_id'];
+                        $userList[] = $user['id'];
                     }
                 }
                 if (in_array($loginAsUserId, $userList)) {
@@ -8656,7 +8630,6 @@ function api_get_relative_path($from, $to)
  *
  * @param string $type
  * @param string $serialized
- * @param bool   $ignoreErrors. Optional.
  *
  * @return mixed
  */

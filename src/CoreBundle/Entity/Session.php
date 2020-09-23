@@ -420,7 +420,7 @@ class Session
     /**
      * @param int $status
      */
-    public function addUserInSession($status, User $user)
+    public function addUserInSession($status, User $user): self
     {
         $sessionRelUser = new SessionRelUser();
         $sessionRelUser->setSession($this);
@@ -428,6 +428,8 @@ class Session
         $sessionRelUser->setRelationType($status);
 
         $this->addUser($sessionRelUser);
+
+        return $this;
     }
 
     /**
@@ -478,10 +480,7 @@ class Session
         $this->courses[] = $course;
     }
 
-    /**
-     * @return bool
-     */
-    public function hasCourse(Course $course)
+    public function hasCourse(Course $course): bool
     {
         if ($this->getCourses()->count()) {
             $criteria = Criteria::create()->where(

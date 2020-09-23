@@ -666,7 +666,7 @@ class Answer
         $em = Database::getManager();
 
         /** @var CQuizAnswer $quizAnswer */
-        $quizAnswer = $em->find('ChamiloCourseBundle:CQuizAnswer', $iid);
+        $quizAnswer = $em->find(CQuizAnswer::class, $iid);
         if ($quizAnswer) {
             $quizAnswer
                 ->setAnswer($answer)
@@ -716,7 +716,6 @@ class Answer
             if (!isset($this->position[$i])) {
                 $quizAnswer = new CQuizAnswer();
                 $quizAnswer
-                    ->setIdAuto($autoId)
                     ->setCId($courseId)
                     ->setQuestionId($questionId)
                     ->setAnswer($answer)
@@ -734,11 +733,7 @@ class Answer
                 $iid = $quizAnswer->getIid();
 
                 if ($iid) {
-                    $quizAnswer
-                        ->setIdAuto($iid);
-
                     $questionType = $this->getQuestionType();
-
                     if (in_array(
                         $questionType,
                         [MATCHING, MATCHING_DRAGGABLE]
@@ -949,7 +944,7 @@ class Answer
                         ->setPosition($answer['position'])
                         ->setHotspotCoordinates($answer['hotspot_coordinates'])
                         ->setHotspotType($answer['hotspot_type'])
-                        ->setIdAuto(0);
+                    ;
 
                     $em->persist($quizAnswer);
                     $em->flush();
@@ -957,10 +952,6 @@ class Answer
                     $answerId = $quizAnswer->getIid();
 
                     if ($answerId) {
-                        $quizAnswer
-                            ->setId($answerId)
-                            ->setIdAuto($answerId);
-
                         $em->persist($quizAnswer);
                         $em->flush();
 
@@ -1007,12 +998,6 @@ class Answer
                     $em->flush();
 
                     $answerId = $quizAnswer->getIid();
-                    $quizAnswer
-                        ->setId($answerId)
-                        ->setIdAuto($answerId);
-
-                    $em->persist($quizAnswer);
-                    $em->flush();
 
                     $correctAnswers[$answerId] = $correct;
                     $onlyAnswers[$answerId] = $this->answer[$i];

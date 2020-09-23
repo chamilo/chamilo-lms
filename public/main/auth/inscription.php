@@ -157,7 +157,7 @@ if (false === $user_already_registered_show_terms &&
         $form->addRule('email', get_lang('This login is already in use'), 'username_available');
     }
 
-    $form->addRule('email', get_lang('e-mailWrong'), 'email');
+    $form->addEmailRule('email');
 
     // USERNAME
     if ('true' != api_get_setting('login_is_email')) {

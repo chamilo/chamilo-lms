@@ -351,8 +351,6 @@ abstract class Question
      * @param int $categoryId
      * @param int $courseId
      *
-     * @deprecated
-     *
      * @return bool
      *
      * @author Hubert Borderiou 12-10-2011
@@ -537,7 +535,7 @@ abstract class Question
 
         $questionCategoryRepo = Container::getQuestionCategoryRepository();
         $questionRepo = Container::getQuestionRepository();
-        $exerciseRepo = Container::getExerciseRepository();
+        $exerciseRepo = Container::getQuizRepository();
 
         // question already exists
         if (!empty($id)) {
@@ -640,12 +638,6 @@ abstract class Question
                     $em->flush();
 
                     $id = $quizAnswer->getIid();
-
-                    if ($id) {
-                        $quizAnswer->setIdAuto($id);
-                        $em->persist($quizAnswer);
-                        $em->flush();
-                    }
                 }
 
                 if (HOT_SPOT_DELINEATION == $type) {
@@ -661,14 +653,6 @@ abstract class Question
 
                     $em->persist($quizAnswer);
                     $em->flush();
-
-                    $id = $quizAnswer->getIid();
-
-                    if ($id) {
-                        $quizAnswer->setIdAuto($id);
-                        $em->persist($quizAnswer);
-                        $em->flush();
-                    }
                 }
 
                 if ('true' === api_get_setting('search_enabled')) {

@@ -30,8 +30,6 @@ function chamilo_query_simple_query($query_string, $offset = 0, $length = 10, $e
 
 /**
  * Wrapper for getting boolean queries.
- *
- * @param string $query_string The term string
  */
 function chamilo_get_boolean_query($term)
 {

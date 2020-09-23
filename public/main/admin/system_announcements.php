@@ -267,14 +267,13 @@ if ($action_todo) {
         if (file_exists($store_path.'/announcement_'.$announcement->id.'.png')) {
             $announcementsPath = api_get_path(WEB_UPLOAD_PATH).'announcements'; // announcement web path
             $announcementsImage = $announcementsPath.'/announcement_'.$announcement->id.'_100x100.png?'.rand(1, 1000); // redimensioned image 85x85
-            $image = '<div class="row"><label class="col-md-2 control-label">'.get_lang('Image').'</label> 
+            $image = '<div class="row"><label class="col-md-2 control-label">'.get_lang('Image').'</label>
                     <div class="col-md-8"><img class="img-thumbnail" src="'.$announcementsImage.'" /></div></div>';
 
             $form->addHtml($image);
             $form->addElement('checkbox', 'delete_picture', null, get_lang('Delete picture'));
         }
     } catch (Exception $e) {
-    } catch (HTML_QuickForm_Error $e) {
         error_log($e);
     }
 

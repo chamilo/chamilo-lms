@@ -154,39 +154,6 @@ final class CDocumentRepository extends ResourceRepository implements GridInterf
     }
 
     /**
-     * @param int $courseId
-     * @param int $groupId
-     * @param int $sessionId
-     *
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     */
-    public function getTotalSpace($courseId, $groupId = null, $sessionId = null)
-    {
-        $repo = $this->getRepository();
-        $groupId = empty($groupId) ? null : $groupId;
-        $sessionId = empty($sessionId) ? null : $sessionId;
-
-        $qb = $repo->createQueryBuilder('d');
-        $query = $qb
-            ->select('SUM(d.size)')
-            ->innerJoin('d.resourceNode', 'r')
-            ->innerJoin('r.resourceLinks', 'l')
-            ->where('l.course = :course')
-            ->andWhere('l.group = :group')
-            ->andWhere('l.session = :session')
-            ->andWhere('l.visibility <> :visibility')
-            ->setParameters([
-                'course' => $courseId,
-                'group' => $groupId,
-                'session' => $sessionId,
-                'visibility' => ResourceLink::VISIBILITY_DELETED,
-            ])
-            ->getQuery();
-
-        return $query->getSingleScalarResult();
-    }
-
-    /**
      * @param int $userId
      *
      * @return array

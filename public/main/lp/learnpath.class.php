@@ -2166,7 +2166,6 @@ class learnpath
      * of its prerequisite is completed, considering the time availability and
      * the LP visibility.
      *
-     * @param int   $lp_id
      * @param int   $student_id
      * @param array $courseInfo
      * @param int   $sessionId
@@ -7110,7 +7109,7 @@ class learnpath
                 break;
             case TOOL_QUIZ:
                 if (!empty($path)) {
-                    $repo = Container::getExerciseRepository();
+                    $repo = Container::getQuizRepository();
                     $resource = $repo->find($path);
                 }
                 $return .= $this->displayItemMenu($lpItem);
@@ -7402,9 +7401,7 @@ class learnpath
      * Return the HTML form to display an item (generally a dir item).
      *
      * @param CLpItem $lpItem
-     * @param string  $title
      * @param string  $action
-     * @param string  $extra_info
      *
      * @throws Exception
      * @throws HTML_QuickForm_Error
@@ -8352,7 +8349,7 @@ class learnpath
         $moveIcon = Display::return_icon('move_everywhere.png', get_lang('Move'), [], ICON_SIZE_TINY);
 
         $exerciseUrl = api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.api_get_cidreq();
-        $repo = Container::getExerciseRepository();
+        $repo = Container::getQuizRepository();
         $courseEntity = api_get_course_entity();
         $sessionEntity = api_get_session_entity();
         while ($row_quiz = Database::fetch_array($res_quiz)) {

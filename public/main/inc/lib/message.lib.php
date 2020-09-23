@@ -438,7 +438,6 @@ class MessageManager
     /**
      * Sends a message to a user/group.
      *
-     * @param int    $receiver_user_id
      * @param string $subject
      * @param string $content
      * @param array  $attachments                files array($_FILES) (optional)

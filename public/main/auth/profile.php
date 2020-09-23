@@ -175,7 +175,7 @@ if ('true' == api_get_setting('registration', 'email') && in_array('email', $pro
     $form->applyFilter('email', 'stripslashes');
     $form->applyFilter('email', 'trim');
     $form->addRule('email', get_lang('Required field'), 'required');
-    $form->addRule('email', get_lang('e-mailWrong'), 'email');
+    $form->addEmailRule('email');
 }
 
 //    PHONE

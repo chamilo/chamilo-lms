@@ -743,6 +743,47 @@ class ResourceRepository extends EntityRepository
         return $resourceNode;
     }
 
+    public function getTotalSpaceByCourse(Course $course, CGroup $group = null, Session $session = null): int
+    {
+        $repo = $this->getRepository();
+
+        $qb = $repo->createQueryBuilder('resource');
+        $qb
+            ->select('SUM(file.size) as total')
+            ->innerJoin('resource.resourceNode', 'node')
+            ->innerJoin('node.resourceLinks', 'l')
+            ->innerJoin('node.resourceFile', 'file')
+            ->where('l.course = :course')
+            ->andWhere('l.visibility <> :visibility')
+            ->andWhere('file IS NOT NULL')
+            ->setParameters(
+                [
+                    'course' => $course,
+                    'visibility' => ResourceLink::VISIBILITY_DELETED,
+                ]
+            );
+
+        if (null === $group) {
+            $qb->andWhere('l.group IS NULL');
+        } else {
+            $qb
+                ->andWhere('l.group = :group')
+                ->setParameter('group', $group);
+        }
+
+        if (null === $session) {
+            $qb->andWhere('l.session IS NULL');
+        } else {
+            $qb
+                ->andWhere('l.session = :session')
+                ->setParameter('session', $session);
+        }
+
+        $query = $qb->getQuery();
+
+        return (int) $query->getSingleScalarResult();
+    }
+
     private function setLinkVisibility(AbstractResource $resource, int $visibility, bool $recursive = true): bool
     {
         $resourceNode = $resource->getResourceNode();

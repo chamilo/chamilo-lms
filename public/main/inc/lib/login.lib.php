@@ -255,7 +255,7 @@ class Login
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
         $id = intval($id);
         $sql = "SELECT
-                    user_id AS uid,
+                    id AS uid,
                     lastname AS lastName,
                     firstname AS firstName,
                     username AS loginName,
@@ -263,7 +263,7 @@ class Login
                     email,
                     auth_source
                 FROM ".$tbl_user."
-                WHERE user_id = $id";
+                WHERE id = $id";
         $result = Database::query($sql);
         $num_rows = Database::num_rows($result);
 
@@ -392,7 +392,7 @@ class Login
 
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
         $query = "SELECT
-                    user_id AS uid,
+                    id AS uid,
 		            lastname AS lastName,
 		            firstname AS firstName,
 		            username AS loginName,

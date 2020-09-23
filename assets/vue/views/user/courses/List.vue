@@ -2,7 +2,7 @@
   <div class="course-list">
     {{ status }}
     <CourseCardList
-      :courses="courses"
+        :courses="courses"
     />
   </div>
 </template>
@@ -10,7 +10,7 @@
 <script>
 import CourseCardList from './CourseCardList';
 import ListMixin from '../../../mixins/ListMixin';
-import { ENTRYPOINT } from '../../../config/entrypoint';
+import {ENTRYPOINT} from '../../../config/entrypoint';
 import axios from "axios";
 
 export default {
@@ -30,13 +30,13 @@ export default {
     this.load();
   },
   methods: {
-    load: function() {
+    load: function () {
       this.status = 'Loading';
       let user = this.$store.getters['security/getUser'];
-      axios.get(ENTRYPOINT + 'users/'+ user.id +'/courses.json').then(response => {
+      axios.get(ENTRYPOINT + 'users/' + user.id + '/courses.json').then(response => {
         this.status = '';
         this.courses = response.data;
-      }).catch(function(error) {
+      }).catch(function (error) {
         console.log(error);
       });
     }

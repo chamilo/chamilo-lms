@@ -7,6 +7,7 @@ import $ from 'jquery';
 
 window.jQuery = $;
 window.$ = $;
+global.jQuery = $;
 
 Routing.setRoutingData(routes);
 
@@ -14,13 +15,15 @@ const locale = document.querySelector('html').lang;
 const moment = require('moment');
 global.moment = moment;
 require('select2/dist/js/select2.full.min');
-require("flatpickr");
-import('bootstrap-vue');
-import('bootstrap-daterangepicker');
+require('flatpickr');
+//import('bootstrap-vue');
+import('bootstrap');
+require('bootstrap-daterangepicker');
 import('webpack-jquery-ui');
 import('webpack-jquery-ui/css');
-import('./vendor');
+require('./vendor');
 import('./main');
+
 require('webpack-jquery-ui');
 require('webpack-jquery-ui/css');
 require('blueimp-file-upload');

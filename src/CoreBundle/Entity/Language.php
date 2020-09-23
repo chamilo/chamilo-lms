@@ -12,8 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(
  *     name="language",
- *     options={"row_format":"DYNAMIC"},
- *     indexes={@ORM\Index(name="idx_language_dokeos_folder", columns={"dokeos_folder"})}
+ *     options={"row_format":"DYNAMIC"}
  * )
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\LanguageRepository")
  */
@@ -50,13 +49,6 @@ class Language
     protected $isocode;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="dokeos_folder", type="string", length=250, nullable=true)
-     */
-    protected $dokeosFolder;
-
-    /**
      * @var bool
      *
      * @ORM\Column(name="available", type="boolean", nullable=false)
@@ -64,7 +56,7 @@ class Language
     protected $available;
 
     /**
-     * @var \Chamilo\CoreBundle\Entity\Language
+     * @var Language
      * @ORM\ManyToOne(targetEntity="Language", inversedBy="subLanguages")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", nullable=true)
      */
@@ -154,30 +146,6 @@ class Language
     public function getIsocode()
     {
         return $this->isocode;
-    }
-
-    /**
-     * Set dokeosFolder.
-     *
-     * @param string $dokeosFolder
-     *
-     * @return Language
-     */
-    public function setDokeosFolder($dokeosFolder)
-    {
-        $this->dokeosFolder = $dokeosFolder;
-
-        return $this;
-    }
-
-    /**
-     * Get dokeosFolder.
-     *
-     * @return string
-     */
-    public function getDokeosFolder()
-    {
-        return $this->dokeosFolder;
     }
 
     /**

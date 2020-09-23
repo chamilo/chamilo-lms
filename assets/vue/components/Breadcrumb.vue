@@ -13,13 +13,15 @@ import {mapGetters} from "vuex";
 
 export default {
   name: 'Breadcrumb',
-  props: ['layoutClass'],
+  props: ['layoutClass', 'legacy'],
   data() {
-    return {};
+    return {
+      //legacy:[],
+    };
   },
   computed: {
     ...mapGetters('resourcenode', {
-      resourceNode: 'getResourceNode'
+      resourceNode: 'getResourceNode',
     }),
     items() {
       const items = [
@@ -28,6 +30,7 @@ export default {
           href: '/'
         }
       ];
+
       // Course
       /*if (this.$route.query.cid) {
         items.push({
@@ -36,6 +39,14 @@ export default {
           href: '/course/' + this.$route.query.cid + '/home'
         });
       }*/
+      for (let i = 0, len = this.legacy.length; i < len; i += 1) {
+          items.push({
+            text: this.legacy[i]['name'] ,
+            //disabled: route.path === path || lastItem.path === route.path,
+            href: this.legacy[i]['url']
+          });
+      }
+
       const { path, matched } = this.$route;
       const lastItem = matched[matched.length - 1];
       for (let i = 0, len = matched.length; i < len; i += 1) {
@@ -51,9 +62,7 @@ export default {
       }
 
       if (this.resourceNode) {
-
         let folderParams = this.$route.query;
-
         var queryParams = '';
         for (var key in folderParams) {
           if (queryParams != '') {

@@ -62,7 +62,7 @@ $categoryId = isset($_REQUEST['category_id']) ? (int) $_REQUEST['category_id'] :
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
 $keyword = isset($_REQUEST['keyword']) ? Security::remove_XSS($_REQUEST['keyword']) : '';
 
-$exerciseRepo = Container::getExerciseRepository();
+$exerciseRepo = Container::getQuizRepository();
 $exerciseEntity = null;
 if (!empty($exerciseId)) {
     /** @var CQuiz $exerciseEntity */
@@ -260,7 +260,7 @@ if ($is_allowedToEdit && !empty($action)) {
         case 'down_category':
             $categoryIdFromGet = isset($_REQUEST['category_id_edit']) ? $_REQUEST['category_id_edit'] : 0;
             $em = Database::getManager();
-            $repo = $em->getRepository('ChamiloCourseBundle:CExerciseCategory');
+            $repo = Container::getExerciseCategoryRepository();
             $category = $repo->find($categoryIdFromGet);
             $currentPosition = $category->getPosition();
 

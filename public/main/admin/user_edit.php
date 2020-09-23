@@ -133,9 +133,9 @@ $form->applyFilter('official_code', 'trim');
 
 // e-mail
 $form->addElement('text', 'email', get_lang('e-mail'));
-$form->addRule('email', get_lang('e-mailWrong'), 'email');
+$form->addEmailRule('email');
 if ('true' == api_get_setting('registration', 'email')) {
-    $form->addRule('email', get_lang('e-mailWrong'), 'required');
+    $form->addRule('email', get_lang('Required field'), 'required');
 }
 
 if ('true' == api_get_setting('login_is_email')) {

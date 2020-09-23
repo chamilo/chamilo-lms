@@ -111,9 +111,7 @@ class UserManager
      */
     public static function updatePassword($userId, $password)
     {
-        $repository = self::getRepository();
-        /** @var User $user */
-        $user = $repository->find($userId);
+        $user = api_get_user_entity($userId);
         $userManager = self::getManager();
         $user->setPlainPassword($password);
         $userManager->updateUser($user, true);
@@ -5910,6 +5908,8 @@ SQL;
 
             // Logout the current user
             self::loginDelete(api_get_user_id());
+
+            return true;
 
             Session::erase('_user');
             Session::erase('is_platformAdmin');

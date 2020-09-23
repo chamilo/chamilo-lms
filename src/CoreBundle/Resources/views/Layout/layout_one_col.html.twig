@@ -1,75 +1,72 @@
 {% extends '@ChamiloCore/Layout/base-layout.html.twig' %}
+{%- block page_content %}
+    {%- autoescape false %}
+        {% if js is defined %}
+            {% for item in js %}
+                {{ item }}
+            {% endfor %}
+        {% endif %}
 
-{% block page_content %}
-    {% autoescape false %}
+        {% if plugin_main_top %}
+            <div id="plugin_main_top" class="col-md-12">
+                {{ plugin_main_top }}
+            </div>
+        {% endif %}
 
-    {% if js is defined %}
-        {% for item in js %}
-            {{ item }}
-        {% endfor %}
-    {% endif %}
+        {% if plugin_content_top %}
+            <div id="plugin_content_top" class="col-md-12">
+                {{ plugin_content_top }}
+            </div>
+        {% endif %}
 
-    {% if plugin_main_top %}
-        <div id="plugin_main_top" class="col-md-12">
-            {{ plugin_main_top }}
-        </div>
-    {% endif %}
-
-    {% if plugin_content_top %}
-        <div id="plugin_content_top" class="col-md-12">
-            {{ plugin_content_top }}
-        </div>
-    {% endif %}
-
-    {% if show_course_shortcut is not null %}
-        <div class="nav-tools">
-            {{ show_course_shortcut }}
-        </div>
-    {% endif %}
-
-    {% autoescape %}
-    <div id="app" data-is-authenticated="{{ is_authenticated }}" data-user-json="{{ user_json }}">
+        {% if show_course_shortcut is not null %}
+            <div class="nav-tools">
+                {{ show_course_shortcut }}
+            </div>
+        {% endif %}
+    {% endautoescape -%}
+    {%- autoescape %}
+    <div
+        id="app"
+        data-is-authenticated="{{ is_authenticated }}"
+        data-user-json="{{ user_json }}"
+        data-flashes="{{ app.flashes()|json_encode }}"
+        {%- if legacy_breadcrumb is defined %}
+            data-breadcrumb="{{ legacy_breadcrumb | json_encode() }}"
+        {% endif -%}
+    >
     </div>
-
-    {% endautoescape %}
+    {% endautoescape -%}
 
     {% set hideContent = 'display: none' %}
     {% if from_vue %}
         {% set hideContent = '' %}
     {% endif %}
-
-    <section id="sectionMainContent" class="section-content" style="{{ hideContent }}">
-        {% autoescape false %}
-            {% block chamilo_messages %}
-                    {% include '@ChamiloCore/FlashMessage/render.html.twig' %}
-            {% endblock %}
-
-{#            <section class="container-fluid">#}
-                {% if introduction is defined %}
-                    {{ introduction }}
-                {% endif %}
+    {%- autoescape false %}
+        <section id="sectionMainContent" class="section-content" style="{{ hideContent }}">
+            {% if introduction is defined %}
+                {{ introduction }}
+            {% endif %}
 
             {% if actions != '' %}
                 {{ actions }}
             {% endif %}
-            {# Content #}
-            {% block content %}
+
+            {%- block content %}
                 {{ content }}
-            {% endblock %}
-{#            </section>#}
-        {% endautoescape %}
-    </section>
+            {% endblock -%}
+        </section>
 
-    {% if plugin_content_bottom %}
-        <div id="plugin_content_bottom" class="col-md-12">
-            {{ plugin_content_bottom }}
-        </div>
-    {% endif %}
+        {% if plugin_content_bottom %}
+            <div id="plugin_content_bottom" class="col-md-12">
+                {{ plugin_content_bottom }}
+            </div>
+        {% endif %}
 
-    {% if plugin_main_bottom %}
-        <div id="plugin_main_bottom" class="col-md-12">
-            {{ plugin_main_bottom }}
-        </div>
-    {% endif %}
-    {% endautoescape %}
-{% endblock %}
+        {% if plugin_main_bottom %}
+            <div id="plugin_main_bottom" class="col-md-12">
+                {{ plugin_main_bottom }}
+            </div>
+        {% endif %}
+    {% endautoescape -%}
+{% endblock -%}

@@ -715,7 +715,7 @@ class GradebookUtils
      * @param int $cat_id  The category id
      * @param int $user_id The user id
      *
-     * @return Datetime The date when you obtained the certificate
+     * @return array
      */
     public static function get_certificate_by_user_id($cat_id, $user_id)
     {
@@ -727,9 +727,8 @@ class GradebookUtils
                 WHERE cat_id = $cat_id AND user_id = $user_id ";
 
         $result = Database::query($sql);
-        $row = Database::fetch_array($result, 'ASSOC');
 
-        return $row;
+        return Database::fetch_array($result, 'ASSOC');
     }
 
     /**
@@ -948,8 +947,7 @@ class GradebookUtils
             $session_id,
             false
         );
-        $select_gradebook = $form->addElement(
-            'select',
+        $select_gradebook = $form->addSelect(
             'category_id',
             get_lang('Select assessment')
         );
@@ -976,12 +974,12 @@ class GradebookUtils
 
     /**
      * @param FlatViewTable $flatviewtable
-     * @param Category      $cat
-     * @param $users
-     * @param $alleval
-     * @param $alllinks
-     * @param array $params
-     * @param null  $mainCourseCategory
+     * @param array         $cat
+     * @param               $users
+     * @param               $alleval
+     * @param               $alllinks
+     * @param array         $params
+     * @param null          $mainCourseCategory
      */
     public static function export_pdf_flatview(
         $flatviewtable,

@@ -74,6 +74,13 @@ class GroupManager
      */
     public static function get_groups($courseId = 0)
     {
+        $repo = Container::getGroupRepository();
+        $course = api_get_course_entity($courseId);
+
+        $qb = $repo->getResourcesByCourse($course);
+
+        return $qb->getQuery()->getArrayResult();
+
         $table_group = Database::get_course_table(TABLE_GROUP);
         $courseId = !empty($courseId) ? (int) $courseId : api_get_course_int_id();
 
@@ -468,7 +475,6 @@ class GroupManager
         $groupInfo = self::get_group_properties($groupInfo['iid'], true);
         if ($groupInfo) {
             $groupIid = $groupInfo['iid'];
-            $groupId = $groupInfo['id'];
             // Unsubscribe all users
             self::unsubscribe_all_users($groupInfo);
             self::unsubscribe_all_tutors($groupInfo);
@@ -502,7 +508,7 @@ class GroupManager
                 ->createQuery(
                     'DELETE FROM ChamiloCourseBundle:CForumForum f WHERE f.forumOfGroup = :group'
                 )
-                ->execute(['group' => $groupId]);
+                ->execute(['group' => $groupIid]);
 
             // Delete item properties of this group.
             // to_group_id is related to c_group_info.iid
@@ -513,17 +519,25 @@ class GroupManager
                 ->execute(['course' => $course_id, 'group' => $groupId]);
             */
             // delete the groups
-            $em
+            $repo = Container::getGroupRepository();
+            $group = $repo->find($groupIid);
+            if ($group) {
+                $em->remove($group);
+                $em->flush();
+            }
+            /*$em
                 ->createQuery(
                     'DELETE FROM ChamiloCourseBundle:CGroup g WHERE g.course = :course AND g.iid = :id'
                 )
-                ->execute(['course' => $course_id, 'id' => $groupIid]);
+                ->execute(['course' => $course_id, 'id' => $groupIid]);*/
         }
 
         return true;
     }
 
     /**
+     * @deprecated Should be deleted by the resources.
+     *
      * Function needed only when deleting a course, in order to be sure that all group ids are deleted.
      *
      * @param int $courseId
@@ -958,7 +972,7 @@ class GroupManager
         $table_group_cat = Database::get_course_table(TABLE_GROUP_CATEGORY);
         $cat_id = (int) $cat_id;
         $sql = "SELECT iid FROM $table_group
-                WHERE c_id = $course_id AND category_id='".$cat_id."'";
+                WHERE category_id='".$cat_id."'";
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
             while ($group = Database::fetch_object($res)) {
@@ -971,9 +985,16 @@ class GroupManager
                 Database::query($sql);
             }
         }
-        $sql = "DELETE FROM $table_group_cat
-                WHERE c_id = $course_id  AND iid='".$cat_id."'";
-        Database::query($sql);
+
+        $category = Database::getManager()->getRepository(CGroupCategory::class)->find($cat_id);
+        if ($category) {
+            Database::getManager()->remove($category);
+            Database::getManager()->flush();
+        }
+
+        /*$sql = "DELETE FROM $table_group_cat
+                WHERE iid='".$cat_id."'";
+        Database::query($sql);*/
 
         return true;
     }
@@ -981,20 +1002,11 @@ class GroupManager
     /**
      * Create group category.
      *
-     * @param string $title                      The title of the new category
-     * @param string $description                The description of the new category
-     * @param int    $doc_state
-     * @param int    $work_state
-     * @param int    $calendar_state
-     * @param int    $announcements_state
-     * @param int    $forum_state
-     * @param int    $wiki_state
-     * @param int    $chat_state
-     * @param int    $selfRegistrationAllowed    allow users to self register
-     * @param int    $selfUnRegistrationAllowed  allow user to self unregister
-     * @param int    $maximum_number_of_students
-     * @param int    $groups_per_user
-     * @param int    $documentAccess             document access
+     * @param string $title                     The title of the new category
+     * @param string $description               The description of the new category
+     * @param int    $selfRegistrationAllowed   allow users to self register
+     * @param int    $selfUnRegistrationAllowed allow user to self unregister
+     * @param int    $documentAccess            document access
      *
      * @return mixed
      */
@@ -1358,7 +1370,6 @@ class GroupManager
     /**
      * Get only students from a group (not tutors).
      *
-     * @param int  $group_id         iid
      * @param bool $filterOnlyActive
      *
      * @return array
@@ -2286,11 +2297,10 @@ class GroupManager
         $sql = "SELECT DISTINCT g.*
                FROM $table_group g
                LEFT JOIN $table_group_user gu
-               ON (gu.group_id = g.iid AND g.c_id = gu.c_id)
+               ON (gu.group_id = g.iid)
                LEFT JOIN $table_tutor_user tu
-               ON (tu.group_id = g.iid AND g.c_id = tu.c_id)
+               ON (tu.group_id = g.iid)
                WHERE
-                  g.c_id = $courseId AND
                   (gu.user_id = $user_id OR tu.user_id = $user_id) ";
 
         if (null !== $sessionId) {

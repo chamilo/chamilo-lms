@@ -11,6 +11,7 @@ Feature: Settings update
     And I additionally select "Official code" from "form_changeable_options"
     And I additionally select "Login" from "form_changeable_options"
     And I press "Save"
+    And wait for the page to be loaded
     Then I should see "Settings have been successfully updated"
 
   Scenario: Update 'allow_registration' setting
@@ -18,6 +19,7 @@ Feature: Settings update
     And I am on "/admin/settings/search_settings?keyword=allow_registration"
     And I select "Yes" from "form_allow_registration"
     And I press "Save"
+    And wait for the page to be loaded
     Then I should see "Settings have been successfully updated"
 
   Scenario: Update 'allow_group_categories' setting
@@ -25,4 +27,5 @@ Feature: Settings update
     And I am on "/admin/settings/search_settings?keyword=allow_group_categories"
     And I select "Yes" from "form_allow_group_categories"
     And I press "Save"
+    And wait for the page to be loaded
     Then I should see "Settings have been successfully updated"

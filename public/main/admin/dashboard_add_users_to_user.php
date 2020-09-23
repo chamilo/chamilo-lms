@@ -109,12 +109,12 @@ function search_users($needle, $type = 'multiple')
                     $order_clause
                     ";
         } else {
-            $sql = "SELECT user_id, username, lastname, firstname
+            $sql = "SELECT id as user_id, username, lastname, firstname
                     FROM $tbl_user user
                     WHERE
                         ".(api_sort_by_first_name() ? 'firstname' : 'lastname')." LIKE '$needle%' AND
                         status NOT IN(".DRH.', '.SESSIONADMIN.', '.STUDENT_BOSS.") AND
-                        user_id NOT IN ($user_anonymous, $current_user_id, $user_id)
+                        id NOT IN ($user_anonymous, $current_user_id, $user_id)
                     $without_assigned_users
                     $order_clause
             ";
@@ -397,20 +397,20 @@ if (api_is_multiple_url_enabled()) {
     $sql = "SELECT user.id as user_id, username, lastname, firstname
             FROM $tbl_user user
             LEFT JOIN $tbl_access_url_rel_user au
-            ON (au.user_id = user.user_id)
+            ON (au.user_id = user.id)
             WHERE
                 $without_assigned_users
-                user.user_id NOT IN ($user_anonymous, $current_user_id, $user_id) AND
+                user.id NOT IN ($user_anonymous, $current_user_id, $user_id) AND
                 status NOT IN(".DRH.', '.SESSIONADMIN.', '.ANONYMOUS.") $search_user AND
                 access_url_id = ".api_get_current_access_url_id()."
                 $sqlConditions
             ORDER BY firstname";
 } else {
-    $sql = "SELECT user_id, username, lastname, firstname
+    $sql = "SELECT id as user_id, username, lastname, firstname
             FROM $tbl_user user
             WHERE
                 $without_assigned_users
-                user_id NOT IN ($user_anonymous, $current_user_id, $user_id) AND
+                id NOT IN ($user_anonymous, $current_user_id, $user_id) AND
                 status NOT IN(".DRH.', '.SESSIONADMIN.', '.ANONYMOUS.")
                 $search_user
                 $sqlConditions

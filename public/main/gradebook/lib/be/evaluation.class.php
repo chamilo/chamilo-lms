@@ -921,7 +921,7 @@ class Evaluation implements GradebookItem
         $allow = api_get_configuration_value('allow_gradebook_stats');
         if ($allow) {
             $em = Database::getManager();
-            $repo = $em->getRepository('ChamiloCoreBundle:GradebookEvaluation');
+            $repo = $em->getRepository(GradebookEvaluation::class);
         }
 
         if (Database::num_rows($result)) {

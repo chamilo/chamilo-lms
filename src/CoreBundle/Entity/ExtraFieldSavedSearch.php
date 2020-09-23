@@ -4,6 +4,7 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
@@ -16,6 +17,7 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 class ExtraFieldSavedSearch
 {
     use TimestampableEntity;
+    use UserTrait;
 
     /**
      * @var int
@@ -75,26 +77,6 @@ class ExtraFieldSavedSearch
     public function setField($field)
     {
         $this->field = $field;
-
-        return $this;
-    }
-
-    /**
-     * @return User
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
-
-    /**
-     * @param User $user
-     *
-     * @return ExtraFieldSavedSearch
-     */
-    public function setUser($user)
-    {
-        $this->user = $user;
 
         return $this;
     }

@@ -4,6 +4,7 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -20,6 +21,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class GradebookCertificate
 {
+    use UserTrait;
+
     /**
      * @var int
      *
@@ -77,24 +80,6 @@ class GradebookCertificate
      * @ORM\Column(name="downloaded_at", type="datetime", nullable=true)
      */
     protected $downloadedAt;
-
-    /**
-     * Get user.
-     */
-    public function getUser(): User
-    {
-        return $this->user;
-    }
-
-    /**
-     * Set user.
-     */
-    public function setUser($user)
-    {
-        $this->user = $user;
-
-        return $this;
-    }
 
     /**
      * Set catId.

@@ -4,6 +4,7 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -18,6 +19,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class GradebookResult
 {
+    use UserTrait;
+
     /**
      * @var User
      * @ORM\ManyToOne (
@@ -61,24 +64,6 @@ class GradebookResult
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     protected $id;
-
-    /**
-     * Get user.
-     */
-    public function getUser(): User
-    {
-        return $this->user;
-    }
-
-    /**
-     * Set user.
-     */
-    public function setUser($user)
-    {
-        $this->user = $user;
-
-        return $this;
-    }
 
     /**
      * Set evaluationId.

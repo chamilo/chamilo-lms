@@ -4,6 +4,7 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -14,6 +15,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class GradebookResultLog
 {
+    use UserTrait;
+
     /**
      * @var int
      *
@@ -64,24 +67,6 @@ class GradebookResultLog
      * @ORM\Column(name="score", type="float", precision=10, scale=0, nullable=true)
      */
     protected $score;
-
-    /**
-     * Get user.
-     */
-    public function getUser(): User
-    {
-        return $this->user;
-    }
-
-    /**
-     * Set user.
-     */
-    public function setUser($user)
-    {
-        $this->user = $user;
-
-        return $this;
-    }
 
     /**
      * Set evaluationId.

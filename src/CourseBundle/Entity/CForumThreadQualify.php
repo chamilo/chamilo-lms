@@ -5,6 +5,7 @@
 namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -21,6 +22,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class CForumThreadQualify
 {
+    use UserTrait;
+
     /**
      * @var int
      *
@@ -85,24 +88,6 @@ class CForumThreadQualify
      * @ORM\Column(name="session_id", type="integer", nullable=true)
      */
     protected $sessionId;
-
-    /**
-     * Get user.
-     */
-    public function getUser(): User
-    {
-        return $this->user;
-    }
-
-    /**
-     * Set user.
-     */
-    public function setUser($user)
-    {
-        $this->user = $user;
-
-        return $this;
-    }
 
     /**
      * Set threadId.

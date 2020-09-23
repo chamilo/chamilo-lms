@@ -5,6 +5,7 @@
 namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -22,6 +23,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class CBlogTaskRelUser
 {
+    use UserTrait;
+
     /**
      * @var int
      *
@@ -72,24 +75,6 @@ class CBlogTaskRelUser
      * @ORM\Column(name="task_id", type="integer")
      */
     protected $taskId;
-
-    /**
-     * Get user.
-     */
-    public function getUser(): User
-    {
-        return $this->user;
-    }
-
-    /**
-     * Set user.
-     */
-    public function setUser($user)
-    {
-        $this->user = $user;
-
-        return $this;
-    }
 
     /**
      * Set targetDate.

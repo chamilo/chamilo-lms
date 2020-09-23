@@ -5,6 +5,7 @@
 namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -21,6 +22,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class CSurveyInvitation
 {
+    use UserTrait;
+
     /**
      * @var int
      *
@@ -129,30 +132,6 @@ class CSurveyInvitation
     public function getSurveyCode()
     {
         return $this->surveyCode;
-    }
-
-    /**
-     * Set user.
-     *
-     * @param string $user
-     *
-     * @return CSurveyInvitation
-     */
-    public function setUser($user)
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    /**
-     * Get user.
-     *
-     * @return string
-     */
-    public function getUser()
-    {
-        return $this->user;
     }
 
     /**

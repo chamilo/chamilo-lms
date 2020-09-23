@@ -4,6 +4,7 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
@@ -16,6 +17,8 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 class SkillRelItemRelUser
 {
     use TimestampableEntity;
+    use UserTrait;
+
 
     /**
      * @var int
@@ -108,26 +111,6 @@ class SkillRelItemRelUser
     public function setSkillRelItem($skillRelItem)
     {
         $this->skillRelItem = $skillRelItem;
-
-        return $this;
-    }
-
-    /**
-     * @return User
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
-
-    /**
-     * @param User $user
-     *
-     * @return SkillRelItemRelUser
-     */
-    public function setUser($user)
-    {
-        $this->user = $user;
 
         return $this;
     }

@@ -5,6 +5,7 @@
 namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\CoreBundle\Traits\CourseTrait;
+use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -21,6 +22,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 class GradebookLink
 {
     use CourseTrait;
+    use UserTrait;
 
     /**
      * @var int
@@ -136,24 +138,6 @@ class GradebookLink
     public function __construct()
     {
         $this->locked = 0;
-    }
-
-    /**
-     * Get user.
-     */
-    public function getUser(): User
-    {
-        return $this->user;
-    }
-
-    /**
-     * Set user.
-     */
-    public function setUser($user)
-    {
-        $this->user = $user;
-
-        return $this;
     }
 
     /**

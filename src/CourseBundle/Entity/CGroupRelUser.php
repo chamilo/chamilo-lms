@@ -5,6 +5,7 @@
 namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -20,6 +21,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class CGroupRelUser
 {
+    use UserTrait;
+
     /**
      * @var int
      *
@@ -65,30 +68,6 @@ class CGroupRelUser
      * @ORM\Column(name="role", type="string", length=50, nullable=false)
      */
     protected $role;
-
-    /**
-     * Set userId.
-     *
-     * @param int $user
-     *
-     * @return CGroupRelUser
-     */
-    public function setUser($user)
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    /**
-     * Get userId.
-     *
-     * @return User
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
 
     /**
      * Set group.

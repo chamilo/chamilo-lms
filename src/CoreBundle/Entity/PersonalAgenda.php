@@ -4,6 +4,7 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -15,6 +16,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class PersonalAgenda
 {
+    use UserTrait;
+
     /**
      * @var int
      *
@@ -79,30 +82,6 @@ class PersonalAgenda
      * @ORM\Column(name="color", type="string", length=255, nullable=true)
      */
     protected $color;
-
-    /**
-     * Set user.
-     *
-     * @param int $user
-     *
-     * @return PersonalAgenda
-     */
-    public function setUser($user)
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    /**
-     * Get user.
-     *
-     * @return int
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
 
     /**
      * Set title.

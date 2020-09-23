@@ -4,6 +4,7 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -19,6 +20,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class SessionRelUser
 {
+    use UserTrait;
+
     public $relationTypeList = [
         0 => 'student',
         1 => 'drh',
@@ -117,25 +120,6 @@ class SessionRelUser
     public function getSession(): Session
     {
         return $this->session;
-    }
-
-    /**
-     * Set User.
-     *
-     * @param User $user
-     *
-     * @return SessionRelUser
-     */
-    public function setUser($user)
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    public function getUser(): User
-    {
-        return $this->user;
     }
 
     /**

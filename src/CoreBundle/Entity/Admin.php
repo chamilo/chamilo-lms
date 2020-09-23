@@ -4,6 +4,7 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -14,6 +15,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Admin
 {
+    use UserTrait;
+
     /**
      * @var int
      *
@@ -34,24 +37,6 @@ class Admin
      *     onDelete="CASCADE")
      */
     protected $user;
-
-    /**
-     * Get user.
-     */
-    public function getUser(): User
-    {
-        return $this->user;
-    }
-
-    /**
-     * Set user.
-     */
-    public function setUser($user)
-    {
-        $this->user = $user;
-
-        return $this;
-    }
 
     /**
      * Get id.

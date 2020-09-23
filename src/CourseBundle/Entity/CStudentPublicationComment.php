@@ -7,6 +7,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -24,6 +25,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class CStudentPublicationComment extends AbstractResource implements ResourceInterface
 {
+    use UserTrait;
+
     /**
      * @var int
      *
@@ -90,24 +93,6 @@ class CStudentPublicationComment extends AbstractResource implements ResourceInt
     public function __toString(): string
     {
         return (string) $this->getIid();
-    }
-
-    /**
-     * Get user.
-     */
-    public function getUser(): User
-    {
-        return $this->user;
-    }
-
-    /**
-     * Set user.
-     */
-    public function setUser($user)
-    {
-        $this->user = $user;
-
-        return $this;
     }
 
     public function getIid(): int

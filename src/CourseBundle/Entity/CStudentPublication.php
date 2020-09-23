@@ -8,6 +8,7 @@ use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -26,6 +27,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class CStudentPublication extends AbstractResource implements ResourceInterface
 {
+    use UserTrait;
+
     /**
      * @var int
      *
@@ -231,24 +234,6 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     public function __toString(): string
     {
         return (string) $this->getTitle();
-    }
-
-    /**
-     * Get user.
-     */
-    public function getUser(): User
-    {
-        return $this->user;
-    }
-
-    /**
-     * Set user.
-     */
-    public function setUser($user)
-    {
-        $this->user = $user;
-
-        return $this;
     }
 
     /**

@@ -3,9 +3,9 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\GradebookLink;
-use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\TrackEExerciseConfirmation;
 use Chamilo\CoreBundle\Entity\TrackEHotspot;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CourseBundle\Entity\CExerciseCategory;

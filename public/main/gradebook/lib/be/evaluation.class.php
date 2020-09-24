@@ -103,7 +103,6 @@ class Evaluation implements GradebookItem
      */
     public function getUser()
     {
-
         $em = Database::getManager();
         $userRepo = $em->getRepository(User::class);
 

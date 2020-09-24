@@ -10374,6 +10374,14 @@ EOD;
         $this->categoryId = (int) $categoryId;
         $table = Database::get_course_table(TABLE_LP_MAIN);
         $lp_id = $this->get_id();
+        if (empty($categoryId)) {
+            $this->categoryId = null;
+            $sql = "UPDATE $table SET category_id = NULL WHERE iid = $lp_id";
+            Database::query($sql);
+
+            return true;
+        }
+
         $sql = "UPDATE $table SET category_id = ".$this->categoryId."
                 WHERE iid = $lp_id";
         Database::query($sql);

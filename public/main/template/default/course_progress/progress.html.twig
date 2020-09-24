@@ -46,7 +46,6 @@
     }
 </script>
 
-
 {% if data is not empty %}
 {% set tutor = is_granted('ROLE_TEACHER') %}
 <div id="course-progress" class="thematic">
@@ -99,7 +98,7 @@
                                             <div class="alert alert-info" role="alert">{{ 'There is no thematic plan for now' | trans }}</div>
                                         </div>
                                     {% else %}
-                                        {% for plan in item.plans %}ssss
+                                        {% for plan in item.plans %}
                                             <h5>{{ plan.title }}</h5>
                                             {{ plan.description }}
                                         {% endfor %}
@@ -121,7 +120,9 @@
                                 {% if item.advances is not empty %}
                                     {% for advance in item.advances %}
                                         <tr>
-                                            <td style="width: 90%" class="thematic_advance_content" id="thematic_advance_content_id_{{ advance.iid }}">
+                                            <td style="width: 90%"
+                                                class="thematic_advance_content"
+                                                id="thematic_advance_content_id_{{ advance.iid }}">
                                                 <div id="thematic_advance_{{ advance.id }}">
                                                 <strong>{{ advance.startDate | format_date }}</strong>
                                                 {{ advance.content }}
@@ -131,12 +132,14 @@
                                                         <div id="thematic_advance_tools_{{ advance.id }}" class="thematic_advance_actions">
                                                             <div class="btn-group btn-group-sm">
                                                                 <a class="btn btn-default btn-sm"
-                                                                   href="index.php?{{ course_url_params }}&action=thematic_advance_edit&thematic_id={{ item.iid }}&thematic_advance_id={{ advance.id }}" title="{{ 'Edit' |trans }}">
+                                                                   href="index.php?{{ course_url_params }}&action=thematic_advance_edit&thematic_id={{ item.iid }}&thematic_advance_id={{ advance.id }}"
+                                                                   title="{{ 'Edit' |trans }}">
                                                                     <i class="fa fa-pen" aria-hidden="true"></i>
                                                                 </a>
                                                                 <a class="btn btn-default btn-sm"
-                                                                    onclick="javascript:if(!confirm('{{ 'Are you sure to delete' | trans }}')) return false;"
-                                                                   href="index.php?{{ course_url_params }}&action=thematic_advance_delete&thematic_id={{ item.iid }}&thematic_advance_id={{ advance.id }}" title="{{ 'Delete' |trans }}">
+                                                                   onclick="javascript:if(!confirm('{{ 'Are you sure to delete' | trans }}')) return false;"
+                                                                   href="index.php?{{ course_url_params }}&action=thematic_advance_delete&thematic_id={{ item.iid }}&thematic_advance_id={{ advance.id }}"
+                                                                   title="{{ 'Delete' |trans }}">
                                                                     <i class="fa fa-trash" aria-hidden="true"></i>
                                                                 </a>
                                                             </div>
@@ -151,16 +154,21 @@
                                                 {% set color = "background-color:#FFFFFF;" %}
                                             {% endif %}
                                             {% if tutor %}
-                                                <td style="width: 10%; {{ color }}" id="td_done_thematic_{{ advance.id }}">
-                                                {% set check = ""  %}
-                                                {% if item.last_done == advance.id %}
-                                                    {% set check = "checked"  %}
-                                                {% endif %}
-                                                    <input type="radio" class="done_thematic"
+                                                <td
+                                                    style="width: 10%; {{ color }}"
+                                                    id="td_done_thematic_{{ advance.id }}">
+                                                    {% set check = ""  %}
+                                                    {% if item.last_done == advance.id %}
+                                                        {% set check = "checked"  %}
+                                                    {% endif %}
+                                                    <input
+                                                        type="radio"
+                                                        class="done_thematic"
                                                        id="done_thematic_{{ advance.id }}"
                                                        name="done_thematic"
                                                        value="{{ advance.id }}" {{ check }}
-                                                       onclick="updateDoneThematicAdvance(this.value); ">
+                                                       onclick="updateDoneThematicAdvance(this.value);"
+                                                    />
                                             {% else %}
                                                 </td>
                                             {% endif %}

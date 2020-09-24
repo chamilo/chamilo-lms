@@ -28,7 +28,7 @@ class Attendance
      * @param int $courseId
      * @param int $sessionId
      *
-     * @return array attendances list
+     * @return CAttendance[]
      */
     public function get_attendances_list($courseId = 0, $sessionId = 0)
     {

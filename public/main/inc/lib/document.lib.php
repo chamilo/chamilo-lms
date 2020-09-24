@@ -1595,19 +1595,15 @@ class DocumentManager
         $sessionId,
         $is_preview = false
     ) {
-        $user_id = intval($user_id);
+        $user_id = (int) $user_id;
         $tbl_document = Database::get_course_table(TABLE_DOCUMENT);
         $course_id = $courseInfo['real_id'];
-
-        $document_id = self::get_default_certificate_id(
-            $course_id,
-            $sessionId
-        );
+        $document_id = self::get_default_certificate_id($course_id, $sessionId);
 
         $my_content_html = null;
         if ($document_id) {
             $sql = "SELECT path FROM $tbl_document
-                    WHERE c_id = $course_id AND iid = $document_id";
+                    WHERE iid = $document_id";
             $rs = Database::query($sql);
             $new_content = '';
             $all_user_info = [];

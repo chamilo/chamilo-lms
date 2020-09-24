@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -46,23 +47,28 @@ class AttendanceLink extends AbstractLink
         if (empty($this->course_code)) {
             return [];
         }
-        $tbl_attendance = $this->get_attendance_table();
         $sessionId = $this->get_session_id();
+        $repo = \Chamilo\CoreBundle\Framework\Container::getStudentPublicationRepository();
+        $qb = $repo->getResourcesByCourse(api_get_course_entity($this->course_id), api_get_session_entity($sessionId));
+        $qb->andWhere('resource.active = 1');
+        $links = $qb->getQuery()->getResult();
 
+        /*$tbl_attendance = $this->get_attendance_table();
         $sql = 'SELECT att.iid, att.name, att.attendance_qualify_title
                 FROM '.$tbl_attendance.' att
                 WHERE
                     att.c_id = '.$this->course_id.' AND
                     att.active = 1 AND
                     att.session_id = '.$sessionId;
+        $result = Database::query($sql);*/
 
-        $result = Database::query($sql);
-
-        while ($data = Database::fetch_array($result)) {
-            if (isset($data['attendance_qualify_title']) && '' != $data['attendance_qualify_title']) {
-                $cats[] = [$data['iid'], $data['attendance_qualify_title']];
+        /** @var \Chamilo\CourseBundle\Entity\CAttendance $link */
+        foreach ($links as $link) {
+            $title = $link->getAttendanceQualifyTitle();
+            if (!empty($title)) {
+                $cats[] = [$link->getIid(), $title];
             } else {
-                $cats[] = [$data['iid'], $data['name']];
+                $cats[] = [$link->getIid(), $link->getName()];
             }
         }
 
@@ -139,7 +145,7 @@ class AttendanceLink extends AbstractLink
                 if (!(array_key_exists($data['user_id'], $students))) {
                     if (0 != $attendance['attendance_qualify_max']) {
                         $students[$data['user_id']] = $data['score'];
-                        $rescount++;
+                        ++$rescount;
                         $sum += $data['score'] / $attendance['attendance_qualify_max'];
                         $sumResult += $data['score'];
                         if ($data['score'] > $bestResult) {

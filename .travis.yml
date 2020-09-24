@@ -107,33 +107,33 @@ script:
   - sudo chmod -R 777 var public
   - cd tests/behat
 #  - ../../vendor/behat/behat/bin/behat features/accessCompanyReports.feature -v
-  - ../../vendor/behat/behat/bin/behat features/actionUserLogin.feature -v
-  - ../../vendor/behat/behat/bin/behat features/adminFillUsers.feature -v
-  - ../../vendor/behat/behat/bin/behat features/adminSettings.feature -v
+  - ../../vendor/behat/behat/bin/behat features/actionUserLogin.feature -vv
+  - ../../vendor/behat/behat/bin/behat features/adminFillUsers.feature -vv
+  - ../../vendor/behat/behat/bin/behat features/adminSettings.feature -vv
   - ../../vendor/behat/behat/bin/behat features/career.feature -vvv
   - ../../vendor/behat/behat/bin/behat features/class.feature -vvv
-  - ../../vendor/behat/behat/bin/behat features/companyReports.feature -v
+  - ../../vendor/behat/behat/bin/behat features/companyReports.feature -vv
   - ../../vendor/behat/behat/bin/behat features/course.feature -vvv
-  - ../../vendor/behat/behat/bin/behat features/course_user_registration.feature -v
+  - ../../vendor/behat/behat/bin/behat features/course_user_registration.feature -vv
   - ../../vendor/behat/behat/bin/behat features/createUser.feature -vvv
-  - ../../vendor/behat/behat/bin/behat features/createUserViaCSV.feature -v
-  - ../../vendor/behat/behat/bin/behat features/extraFieldUser.feature -v
-  - ../../vendor/behat/behat/bin/behat features/profile.feature -v
-  - ../../vendor/behat/behat/bin/behat features/promotion.feature -v
+  - ../../vendor/behat/behat/bin/behat features/createUserViaCSV.feature -vv
+  - ../../vendor/behat/behat/bin/behat features/extraFieldUser.feature -vv
+  - ../../vendor/behat/behat/bin/behat features/profile.feature -vv
+  - ../../vendor/behat/behat/bin/behat features/promotion.feature -vv
 #  - ../../vendor/behat/behat/bin/behat features/registration.feature -v
-  - ../../vendor/behat/behat/bin/behat features/sessionAccess.feature -v
-  - ../../vendor/behat/behat/bin/behat features/sessionManagement.feature -v
-  - ../../vendor/behat/behat/bin/behat features/socialGroup.feature -v
-  - ../../vendor/behat/behat/bin/behat features/systemAnnouncements.feature -v
+  - ../../vendor/behat/behat/bin/behat features/sessionAccess.feature -vv
+  - ../../vendor/behat/behat/bin/behat features/sessionManagement.feature -vv
+  - ../../vendor/behat/behat/bin/behat features/socialGroup.feature -vv
+  - ../../vendor/behat/behat/bin/behat features/systemAnnouncements.feature -vv
 #  - ../../vendor/behat/behat/bin/behat features/ticket.feature -v
-  - ../../vendor/behat/behat/bin/behat features/toolAgenda.feature -v
-  - ../../vendor/behat/behat/bin/behat features/toolAnnouncement.feature -v
+  - ../../vendor/behat/behat/bin/behat features/toolAgenda.feature -vv
+  - ../../vendor/behat/behat/bin/behat features/toolAnnouncement.feature -vv
 #  - ../../vendor/behat/behat/bin/behat features/toolDocument.feature -v
 #  - ../../vendor/behat/behat/bin/behat features/toolExercise.feature -v
 #  - ../../vendor/behat/behat/bin/behat features/toolForum.feature -v
 #  - ../../vendor/behat/behat/bin/behat features/toolGroup.feature -vv
-  - ../../vendor/behat/behat/bin/behat features/toolLink.feature -v
-  - ../../vendor/behat/behat/bin/behat features/toolLp.feature -v
+  - ../../vendor/behat/behat/bin/behat features/toolLink.feature -vv
+  - ../../vendor/behat/behat/bin/behat features/toolLp.feature -vvv
   - ../../vendor/behat/behat/bin/behat features/toolWork.feature -vvv
 
 after_failure:

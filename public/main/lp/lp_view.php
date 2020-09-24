@@ -205,20 +205,12 @@ $htmlHeadXtra[] = '<script>
 chamilo_courseCode = "'.$course_code.'";
 </script>';
 
-/**
- * Get a link to the corresponding document.
- */
-if ($debug) {
-    error_log(" src: $src ");
-    error_log(" lp_type: $lpType ");
-}
-
 $get_toc_list = $lp->get_toc();
 $get_teacher_buttons = $lp->get_teacher_toc_buttons();
 
 $type_quiz = false;
 foreach ($get_toc_list as $toc) {
-    if ($toc['id'] == $lp_item_id && 'quiz' == $toc['type']) {
+    if ($toc['id'] == $lp_item_id && 'quiz' === $toc['type']) {
         $type_quiz = true;
     }
 }
@@ -303,12 +295,12 @@ if (!isset($src)) {
 $autostart = 'true';
 // Update status, total_time from lp_item_view table when you finish the exercises in learning path.
 
-if ($debug) {
+/*if ($debug) {
     error_log('$type_quiz: '.$type_quiz);
     error_log('$_REQUEST[exeId]: '.intval($_REQUEST['exeId']));
     error_log('$lp_id: '.$lp_id);
     error_log('$_REQUEST[lp_item_id]: '.intval($_REQUEST['lp_item_id']));
-}
+}*/
 
 if (!empty($_REQUEST['exeId']) &&
     isset($lp_id) &&

@@ -259,9 +259,9 @@ class CQuiz extends AbstractResource implements ResourceInterface
     /**
      * @var CQuizRelQuestion[]|ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CQuizRelQuestion", mappedBy="quiz"))
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CQuizRelQuestion", mappedBy="quiz", cascade={"persist"}, orphanRemoval=true))
      */
-    protected $quizRelQuestions;
+    protected $questions;
 
     /**
      * CQuiz constructor.
@@ -286,12 +286,20 @@ class CQuiz extends AbstractResource implements ResourceInterface
         $this->reviewAnswers = 0;
         $this->randomByCategory = 0;
         $this->displayCategoryName = 0;
-        $this->quizRelQuestions = new ArrayCollection();
+        $this->questions = new ArrayCollection();
     }
 
     public function __toString(): string
     {
         return $this->getTitle();
+    }
+
+    /**
+     * @return CQuizRelQuestion[]|ArrayCollection
+     */
+    public function getQuestions()
+    {
+        return $this->questions;
     }
 
     /**
@@ -972,7 +980,7 @@ class CQuiz extends AbstractResource implements ResourceInterface
     public function getMaxScore(): int
     {
         $maxScore = 0;
-        foreach ($this->quizRelQuestions as $relQuestion) {
+        foreach ($this->questions as $relQuestion) {
             $maxScore += $relQuestion->getQuestion()->getPonderation();
         }
 

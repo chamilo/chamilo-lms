@@ -19,13 +19,13 @@ Feature: Session access
     Then I should see "Subscribe users to this session"
     Then I follow "Multiple registration"
     And wait the page to be loaded when ready
-    Then I select "3" from "nosessionUsersList[]"
+    Then I select "Apple Maggart Fiona (fapple)" from "nosessionUsersList[]"
     And I press "add_user"
     And I press "next"
     And wait very long for the page to be loaded
     Then I should see "Session1"
     Then I should see "TEMPPRIVATE"
-    Then I should see "ywarnier"
+    Then I should see "fapple"
 
   @javascript
   Scenario: Create session 2

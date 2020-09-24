@@ -108,8 +108,8 @@ $attendance = new Attendance();
 $attendance_list = $attendance->get_attendances_list();
 $attendance_select = [];
 $attendance_select[0] = get_lang('Select an attendance');
-foreach ($attendance_list as $attendance_id => $attendance_data) {
-    $attendance_select[$attendance_id] = $attendance_data['name'];
+foreach ($attendance_list as $attendanceEntity) {
+    $attendance_select[$attendanceEntity->getIid()] = $attendanceEntity->getName();
 }
 
 $token = Security::get_token();
@@ -117,11 +117,11 @@ $url_token = '&sec_token='.$token;
 $user_info = api_get_user_info();
 $params = '&'.api_get_cidreq();
 
-if (isset($_POST['action']) && 'thematic_delete_select' == $_POST['action']) {
+if (isset($_POST['action']) && 'thematic_delete_select' === $_POST['action']) {
     $action = 'thematic_delete_select';
 }
 
-if (isset($_GET['isStudentView']) && 'true' == $_GET['isStudentView']) {
+if (isset($_GET['isStudentView']) && 'true' === $_GET['isStudentView']) {
     $action = 'thematic_details';
 }
 
@@ -651,7 +651,6 @@ switch ($action) {
         $content = $tpl->fetch($thematicLayout);
         break;
     case 'thematic_list':
-
         $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Thematic control')];
         $actionLeft = '<a href="index.php?'.api_get_cidreq().'&action=thematic_add'.$url_token.'">'.
             Display::return_icon(

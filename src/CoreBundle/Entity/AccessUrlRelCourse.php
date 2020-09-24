@@ -27,7 +27,7 @@ class AccessUrlRelCourse
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Course", inversedBy="urls", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="urls", cascade={"persist"})
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
      */
     protected $course;

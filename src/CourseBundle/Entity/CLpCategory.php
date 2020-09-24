@@ -18,9 +18,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Table(
  *  name="c_lp_category",
- *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"})
- *  }
  * )
  * @ORM\Entity(repositoryClass="Gedmo\Sortable\Entity\Repository\SortableRepository")
  */
@@ -60,11 +57,19 @@ class CLpCategory extends AbstractResource implements ResourceInterface
     protected $users;
 
     /**
+     * @var ArrayCollection|CLp[]
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CLp", mappedBy="category", cascade={"detach"})
+     */
+    protected $lps;
+
+    /**
      * CLpCategory constructor.
      */
     public function __construct()
     {
         $this->users = new ArrayCollection();
+        $this->lps = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -141,6 +146,14 @@ class CLpCategory extends AbstractResource implements ResourceInterface
     public function getPosition()
     {
         return $this->position;
+    }
+
+    /**
+     * @return CLp[]|ArrayCollection
+     */
+    public function getLps()
+    {
+        return $this->lps;
     }
 
     /**

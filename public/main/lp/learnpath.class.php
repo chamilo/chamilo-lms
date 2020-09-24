@@ -168,7 +168,11 @@ class learnpath
                 $this->created_on = $entity->getCreatedOn()->format('Y-m-d H:i:s');
                 $this->modified_on = $entity->getModifiedOn()->format('Y-m-d H:i:s');
                 $this->ref = $entity->getRef();
-                $this->categoryId = $entity->getCategoryId();
+                $this->categoryId = 0;
+                if ($entity->getCategory()) {
+                    $this->categoryId = $entity->getCategory()->getIid();
+                }
+
                 $this->accumulateScormTime = $entity->getAccumulateWorkTime();
 
                 if (!empty($entity->getPublicatedOn())) {
@@ -217,7 +221,7 @@ class learnpath
                 if (Database::num_rows($res) > 0) {
                     $row = Database::fetch_array($res);
                     $this->attempt = $row['view_count'];
-                    $this->lp_view_id = $row['id'];
+                    $this->lp_view_id = $row['iid'];
                     $this->last_item_seen = $row['last_item'];
                     $this->progress_db = $row['progress'];
                     $this->lp_view_session_id = $row['session_id'];
@@ -503,7 +507,7 @@ class learnpath
                         WHERE
                             c_id = $course_id AND
                             lp_id = ".$this->get_id()." AND
-                            id = $previous";
+                            iid = $previous";
                 $result = Database::query($sql);
                 $row = Database::fetch_array($result);
                 if ($row) {
@@ -566,7 +570,7 @@ class learnpath
             if (!empty($next)) {
                 $sql = "UPDATE $tbl_lp_item
                         SET previous_item_id = $new_item_id
-                        WHERE c_id = $course_id AND id = $next AND item_type != '".TOOL_LP_FINAL_ITEM."'";
+                        WHERE c_id = $course_id AND iid = $next AND item_type != '".TOOL_LP_FINAL_ITEM."'";
                 Database::query($sql);
             }
 
@@ -574,7 +578,7 @@ class learnpath
             if (!empty($tmp_previous)) {
                 $sql = "UPDATE $tbl_lp_item
                         SET next_item_id = $new_item_id
-                        WHERE c_id = $course_id AND id = $tmp_previous";
+                        WHERE c_id = $course_id AND iid = $tmp_previous";
                 Database::query($sql);
             }
 
@@ -758,6 +762,11 @@ class learnpath
                     $dsp = $row[0] + 1;
                 }
 
+                $category = null;
+                if (!empty($categoryId)) {
+                    $category = Container::getLpCategoryRepository()->find($categoryId);
+                }
+
                 $lp = new CLp();
                 $lp
                     ->setCId($course_id)
@@ -766,7 +775,7 @@ class learnpath
                     ->setDescription($description)
                     ->setDisplayOrder($dsp)
                     ->setSessionId($session_id)
-                    ->setCategoryId($categoryId)
+                    ->setCategory($category)
                     ->setPublicatedOn($publicated_on)
                     ->setExpiredOn($expired_on)
                     ->setParent($courseEntity)
@@ -983,8 +992,7 @@ class learnpath
                 WHERE c_id = $course_id AND lp_id = ".$this->lp_id;
         Database::query($sql);
 
-        self::toggle_publish($this->lp_id, 'i');
-        //self::toggle_publish($this->lp_id, 'i');
+        self::toggleVisibility($this->lp_id, 0);
 
         if (2 == $this->type || 3 == $this->type) {
             // This is a scorm learning path, delete the files as well.
@@ -4240,7 +4248,7 @@ class learnpath
      * Can be used as abstract.
      *
      * @param int $id         Learnpath ID
-     * @param int $visibility New visibility
+     * @param int $visibility New visibility (1 = visible/published, 0= invisible/draft)
      *
      * @return bool
      */
@@ -6931,7 +6939,7 @@ class learnpath
                 }
 
                 $sql = "UPDATE $tbl_doc SET ".substr($ct, 1)."
-                        WHERE c_id = $course_id AND id = $document_id ";
+                        WHERE iid = $document_id ";
                 Database::query($sql);
             }
         }
@@ -8121,10 +8129,13 @@ class learnpath
         $return .= '<option value="0">'.get_lang('none').'</option>';
         if (Database::num_rows($rs) > 0) {
             while ($row = Database::fetch_array($rs)) {
-                if ($row['id'] == $lp_id) {
+                if ($row['iid'] == $lp_id) {
                     continue;
                 }
-                $return .= '<option value="'.$row['id'].'" '.(($row['id'] == $prerequisiteId) ? ' selected ' : '').'>'.$row['name'].'</option>';
+                $return .= '<option
+                    value="'.$row['iid'].'" '.(($row['iid'] == $prerequisiteId) ? ' selected ' : '').'>'.
+                    $row['name'].
+                    '</option>';
             }
         }
         $return .= '</select>';
@@ -8353,11 +8364,10 @@ class learnpath
         $courseEntity = api_get_course_entity();
         $sessionEntity = api_get_session_entity();
         while ($row_quiz = Database::fetch_array($res_quiz)) {
+            $exerciseId = $row_quiz['iid'];
             /** @var CQuiz $exercise */
-            $exercise = $repo->find($row_quiz['id']);
-            $title = strip_tags(
-                api_html_entity_decode($row_quiz['title'])
-            );
+            $exercise = $repo->find($exerciseId);
+            $title = strip_tags(api_html_entity_decode($row_quiz['title']));
 
             $visibility = $exercise->isVisible($courseEntity, $sessionEntity);
             /*$visibility = api_get_item_visibility(
@@ -8369,10 +8379,10 @@ class learnpath
 
             $link = Display::url(
                 $previewIcon,
-                $exerciseUrl.'&exerciseId='.$row_quiz['id'],
+                $exerciseUrl.'&exerciseId='.$exerciseId,
                 ['target' => '_blank']
             );
-            $return .= '<li class="lp_resource_element" data_id="'.$row_quiz['id'].'" data_type="quiz" title="'.$title.'" >';
+            $return .= '<li class="lp_resource_element" data_id="'.$exerciseId.'" data_type="quiz" title="'.$title.'" >';
             $return .= Display::url($moveIcon, '#', ['class' => 'moved']);
             $return .= $quizIcon;
             $sessionStar = api_get_session_image(
@@ -8381,7 +8391,7 @@ class learnpath
             );
             $return .= Display::url(
                 Security::remove_XSS(cut($title, 80)).$link.$sessionStar,
-                api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_QUIZ.'&file='.$row_quiz['id'].'&lp_id='.$this->lp_id,
+                api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_QUIZ.'&file='.$exerciseId.'&lp_id='.$this->lp_id,
                 [
                     'class' => false === $visibility ? 'moved text-muted' : 'moved',
                 ]
@@ -8481,7 +8491,6 @@ class learnpath
             /** @var CLink $link */
             foreach ($links as $key => $link) {
                 $title = $link->getTitle();
-                $linkSessionId = $link->getSessionId();
 
                 $linkUrl = Display::url(
                     Display::return_icon('preview_view.png', get_lang('Preview')),
@@ -8490,7 +8499,8 @@ class learnpath
                 );
 
                 if ($link->isVisible($course, $session)) {
-                    $sessionStar = api_get_session_image($linkSessionId, $userInfo['status']);
+                    //$sessionStar = api_get_session_image($linkSessionId, $userInfo['status']);
+                    $sessionStar = '';
                     $linkNodes .=
                         '<li class="lp_resource_element" data_id="'.$key.'" data_type="'.TOOL_LINK.'" title="'.$title.'" >
                         <a class="moved" href="#">'.
@@ -10086,7 +10096,7 @@ EOD;
             api_get_user_id()
         );*/
 
-        return $item->getId();
+        return $item->getIid();
     }
 
     /**
@@ -10234,41 +10244,24 @@ EOD;
 
     /**
      * @param int $id
-     *
-     * @return mixed
      */
-    public static function deleteCategory($id)
+    public static function deleteCategory($id): bool
     {
-        $em = Database::getManager();
-        $item = $em->find('ChamiloCourseBundle:CLpCategory', $id);
-        if ($item) {
-            $courseId = $item->getCId();
-            $query = $em->createQuery('SELECT u FROM ChamiloCourseBundle:CLp u WHERE u.cId = :id AND u.categoryId = :catId');
-            $query->setParameter('id', $courseId);
-            $query->setParameter('catId', $item->getId());
-            $lps = $query->getResult();
+        $repo = Container::getLpCategoryRepository();
+        /** @var CLpCategory $category */
+        $category = $repo->find($id);
+        if ($category) {
+            $em = $repo->getEntityManager();
+            $lps = $category->getLps();
 
-            // Setting category = 0.
-            if ($lps) {
-                foreach ($lps as $lpItem) {
-                    $lpItem->setCategoryId(0);
-                }
+            foreach ($lps as $lp) {
+                $lp->setCategory(null);
+                $em->persist($lp);
             }
 
             // Removing category.
-            $em->remove($item);
+            $em->remove($category);
             $em->flush();
-
-            $courseInfo = api_get_course_info_by_id($courseId);
-            $sessionId = api_get_session_id();
-
-            // Delete link tool
-            /*$tbl_tool = Database::get_course_table(TABLE_TOOL_LIST);
-            $link = 'lp/lp_controller.php?cid='.$courseInfo['real_id'].'&sid='.$sessionId.'&gidReq=0&gradebook=0&origin=&action=view_category&id='.$id;
-            // Delete tools
-            $sql = "DELETE FROM $tbl_tool
-                    WHERE c_id = ".$courseId." AND (link LIKE '$link%' AND image='lp_category.gif')";
-            Database::query($sql);*/
 
             return true;
         }
@@ -10292,7 +10285,7 @@ EOD;
 
         if (!empty($items)) {
             foreach ($items as $cat) {
-                $cats[$cat->getId()] = $cat->getName();
+                $cats[$cat->getIid()] = $cat->getName();
             }
         }
 
@@ -10381,6 +10374,14 @@ EOD;
         $this->categoryId = (int) $categoryId;
         $table = Database::get_course_table(TABLE_LP_MAIN);
         $lp_id = $this->get_id();
+        if (empty($categoryId)) {
+            $this->categoryId = null;
+            $sql = "UPDATE $table SET category_id = NULL WHERE iid = $lp_id";
+            Database::query($sql);
+
+            return true;
+        }
+
         $sql = "UPDATE $table SET category_id = ".$this->categoryId."
                 WHERE iid = $lp_id";
         Database::query($sql);

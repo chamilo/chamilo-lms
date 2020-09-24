@@ -125,6 +125,11 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
     protected $categories;
 
     /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CQuizRelQuestion", mappedBy="question", cascade={"persist"})
+     */
+    protected $relQuizzes;
+
+    /**
      * CQuizQuestion constructor.
      */
     public function __construct()

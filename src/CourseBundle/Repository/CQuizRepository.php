@@ -7,6 +7,7 @@ namespace Chamilo\CourseBundle\Repository;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CoreBundle\Repository\ResourceWithLinkInterface;
+use Chamilo\CourseBundle\Entity\CQuiz;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
@@ -22,5 +23,21 @@ final class CQuizRepository extends ResourceRepository implements ResourceWithLi
         }
 
         return $router->generate('legacy_main', $params);
+    }
+
+    public function deleteAllByCourse($course)
+    {
+        $qb = $this->getResourcesByCourse($course);
+        $resources = $qb->getQuery()->getResult();
+
+        /** @var CQuiz $quiz */
+        foreach ($resources as $quiz) {
+            $questions = $quiz->getQuestions();
+            foreach ($questions as $question) {
+                //$this->getEntityManager()->remove($question);
+            }
+            $this->getEntityManager()->remove($quiz);
+        }
+        $this->getEntityManager()->flush();
     }
 }

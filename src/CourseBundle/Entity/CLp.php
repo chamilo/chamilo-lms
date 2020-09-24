@@ -13,11 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * CLp.
  *
  * @ORM\Table(
- *  name="c_lp",
- *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"}),
- *     @ORM\Index(name="session", columns={"session_id"})
- *  }
+ *  name="c_lp"
  * )
  * @ORM\Entity
  */
@@ -208,11 +204,12 @@ class CLp extends AbstractResource implements ResourceInterface
     protected $autolaunch;
 
     /**
-     * @var int
+     * @var CLpCategory|null
      *
-     * @ORM\Column(name="category_id", type="integer", nullable=false, unique=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CLpCategory", inversedBy="lps")
+     * @ORM\JoinColumn(name="category_id", referencedColumnName="iid")
      */
-    protected $categoryId;
+    protected $category;
 
     /**
      * @var int
@@ -1005,22 +1002,14 @@ class CLp extends AbstractResource implements ResourceInterface
         return $this->cId;
     }
 
-    /**
-     * @return int
-     */
-    public function getCategoryId()
+    public function getCategory()
     {
-        return $this->categoryId;
+        return $this->category;
     }
 
-    /**
-     * @param int $categoryId
-     *
-     * @return CLp
-     */
-    public function setCategoryId($categoryId)
+    public function setCategory($category)
     {
-        $this->categoryId = $categoryId;
+        $this->category = $category;
 
         return $this;
     }

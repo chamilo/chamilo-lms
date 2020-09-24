@@ -317,7 +317,12 @@ class AddCourse
         $now = api_get_utc_datetime();
         $files = [
             ['path' => '/shared_folder', 'title' => get_lang('Folders of users'), 'filetype' => 'folder', 'size' => 0],
-            ['path' => '/chat_files', 'title' => get_lang('Chat conversations history'), 'filetype' => 'folder', 'size' => 0],
+            [
+                'path' => '/chat_files',
+                'title' => get_lang('Chat conversations history'),
+                'filetype' => 'folder',
+                'size' => 0,
+            ],
             ['path' => '/certificates', 'title' => get_lang('Certificates'), 'filetype' => 'folder', 'size' => 0],
         ];
 
@@ -332,15 +337,17 @@ class AddCourse
         /*    Documents   */
         if ($fill_with_exemplary_content) {
             $files = [
-                ['path' => '/images', 'title' => get_lang('Images'), 'filetype' => 'folder', 'size' => 0],
-                ['path' => '/images/gallery', 'title' => get_lang('Gallery'), 'filetype' => 'folder', 'size' => 0],
                 ['path' => '/audio', 'title' => get_lang('Audio'), 'filetype' => 'folder', 'size' => 0],
                 ['path' => '/flash', 'title' => get_lang('Flash'), 'filetype' => 'folder', 'size' => 0],
+                ['path' => '/images', 'title' => get_lang('Images'), 'filetype' => 'folder', 'size' => 0],
+                ['path' => '/images/gallery', 'title' => get_lang('Gallery'), 'filetype' => 'folder', 'size' => 0],
                 ['path' => '/video', 'title' => get_lang('Video'), 'filetype' => 'folder', 'size' => 0],
+                ['path' => '/video/flv', 'title' => 'flv', 'filetype' => 'folder', 'size' => 0],
             ];
-
+            $paths = [];
             foreach ($files as $file) {
-                self::insertDocument($courseInfo, $counter, $file, $authorId);
+                $doc = self::insertDocument($courseInfo, $counter, $file, $authorId);
+                $paths[$file['path']] = $doc->getIid();
                 $counter++;
             }
 
@@ -350,20 +357,17 @@ class AddCourse
 
             /** @var SplFileInfo $file */
             foreach ($finder as $file) {
-                $path = str_replace($defaultPath, '', $file->getRealPath());
                 $parentName = dirname(str_replace($defaultPath, '', $file->getRealPath()));
-                $title = $file->getFilename();
-                $parent = DocumentManager::getDocumentByPathInCourse($courseInfo, $parentName);
-
-                $parentId = 0;
-                if (!empty($parent)) {
-                    $parent = $parent[0];
-                    $parentId = $parent['iid'];
+                if ('/' === $parentName || '/certificates' === $parentName) {
+                    continue;
                 }
+
+                $title = $file->getFilename();
+                $parentId = $paths[$parentName];
 
                 if ($file->isDir()) {
                     $realPath = str_replace($defaultPath, '', $file->getRealPath());
-                    DocumentManager::addDocument(
+                    $document = DocumentManager::addDocument(
                         $courseInfo,
                         $realPath,
                         'folder',
@@ -380,6 +384,7 @@ class AddCourse
                         $parentId,
                         $file->getRealPath()
                     );
+                    $paths[$realPath] = $document->getIid();
                 } else {
                     $realPath = str_replace($defaultPath, '', $file->getRealPath());
                     $document = DocumentManager::addDocument(
@@ -443,7 +448,7 @@ class AddCourse
             ];
 
             foreach ($links as $params) {
-                $link->save($params);
+                $link->save($params, false, false);
             }
 
             /* Announcement tool */
@@ -509,6 +514,7 @@ class AddCourse
             $exercise_id = $exercise->id;
 
             $question = new MultipleAnswer();
+            $question->course = $courseInfo;
             $question->question = get_lang('Socratic irony is...');
             $question->description = get_lang('(more than one answer can be true)');
             $question->weighting = 10;
@@ -518,7 +524,6 @@ class AddCourse
             $questionId = $question->id;
 
             $answer = new Answer($questionId, $courseInfo['real_id']);
-
             $answer->createAnswer(get_lang('Ridiculise one\'s interlocutor in order to have him concede he is wrong.'), 0, get_lang('No. Socratic irony is not a matter of psychology, it concerns argumentation.'), -5, 1);
             $answer->createAnswer(get_lang('Admit one\'s own errors to invite one\'s interlocutor to do the same.'), 0, get_lang('No. Socratic irony is not a seduction strategy or a method based on the example.'), -5, 2);
             $answer->createAnswer(get_lang('Compell one\'s interlocutor, by a series of questions and sub-questions, to admit he doesn\'t know what he claims to know.'), 1, get_lang('Indeed'), 5, 3);
@@ -593,7 +598,7 @@ class AddCourse
      */
     public static function insertDocument($courseInfo, $counter, $file, $authorId = 0)
     {
-        DocumentManager::addDocument(
+        return DocumentManager::addDocument(
             $courseInfo,
             $file['path'],
             $file['filetype'],

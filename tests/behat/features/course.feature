@@ -50,7 +50,7 @@ Feature: Course tools basic testing
 
   Scenario: Make sure the learning path tool is available
     Given I am on course "TEMP" homepage
-    And I am on "/main/lp/lp_controller.php?cid=1"
+    And I am on "/main/lp/lp_controller.php?action=list&cid=1"
     Then I should not see an error
 
   Scenario: Make sure the links tool is available

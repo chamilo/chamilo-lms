@@ -524,7 +524,7 @@ abstract class Question
         $TBL_EXERCISE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $em = Database::getManager();
-        $exerciseId = $exercise->id;
+        $exerciseId = $exercise->iId;
 
         $id = $this->id;
         $type = $this->type;
@@ -597,9 +597,9 @@ abstract class Question
                 ->setFeedback($this->feedback)
                 ->setParent($exerciseEntity)
                 ->addCourseLink(
-                api_get_course_entity(),
-                api_get_session_entity(),
-                api_get_group_entity()
+                    $courseEntity,
+                    api_get_session_entity(),
+                    api_get_group_entity()
                 )
             ;
 
@@ -636,8 +636,6 @@ abstract class Question
 
                     $em->persist($quizAnswer);
                     $em->flush();
-
-                    $id = $quizAnswer->getIid();
                 }
 
                 if (HOT_SPOT_DELINEATION == $type) {

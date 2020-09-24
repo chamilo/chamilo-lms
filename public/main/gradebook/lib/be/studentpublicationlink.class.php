@@ -97,20 +97,25 @@ class StudentPublicationLink extends AbstractLink
 
         //Only show works from the session
         //AND has_properties != ''
-        $links = Container::getStudentPublicationRepository()
+        $repo = Container::getStudentPublicationRepository();
+        $qb = $repo->getResourcesByCourse(api_get_course_entity($this->course_id), $session);
+        $qb->andWhere("resource.filetype = 'folder' AND resource.active = true");
+        $links = $qb->getQuery()->getResult();
+
+        /*$links = Container::getStudentPublicationRepository()
             ->findBy([
                 'cId' => $this->course_id,
                 'active' => true,
                 'filetype' => 'folder',
                 'session' => $session,
-            ]);
+            ]);*/
 
         foreach ($links as $data) {
             $work_name = $data->getTitle();
             if (empty($work_name)) {
                 $work_name = basename($data->getUrl());
             }
-            $cats[] = [$data->getId(), $work_name];
+            $cats[] = [$data->getIid(), $work_name];
         }
         $cats = isset($cats) ? $cats : [];
 

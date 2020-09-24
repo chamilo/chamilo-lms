@@ -2043,7 +2043,7 @@ class SocialManager extends UserManager
         $groupId = 0,
         $show_full_profile = true
     ) {
-        if ('true' != api_get_setting('allow_social_tool')) {
+        if ('true' !== api_get_setting('allow_social_tool')) {
             return '';
         }
 

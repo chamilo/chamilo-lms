@@ -46,7 +46,7 @@ class LearnpathLink extends AbstractLink
 
         $cats = [];
         while ($data = Database::fetch_array($result)) {
-            $cats[] = [$data['id'], $data['name']];
+            $cats[] = [$data['iid'], $data['name']];
         }
 
         return $cats;

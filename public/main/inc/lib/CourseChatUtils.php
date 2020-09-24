@@ -238,7 +238,7 @@ class CourseChatUtils
                 ')
                 ->execute([
                     'course' => $this->courseId,
-                    'user' => $connection->getUserId(),
+                    'user' => $connection->getUser()->getId(),
                     'group' => $this->groupId,
                 ]);
         }

@@ -193,7 +193,7 @@ if ($is_allowed_to_edit && !empty($item_id)) {
     );
 
     // Check if user to qualify has some DRHs
-    $drhList = UserManager::getDrhListFromUser($studentPublication->getUserId());
+    $drhList = UserManager::getDrhListFromUser($studentPublication->getUser()->getId());
     if (!empty($drhList)) {
         $form->addCheckBox(
             'send_to_drh_users',
@@ -246,7 +246,7 @@ if ($form->validate()) {
                     $message = sprintf(get_lang('There\'s a new feedback in work: %sInWorkXHere'), $studentPublication->getTitle(), $url);
 
                     MessageManager::send_message_simple(
-                        $studentPublication->getUserId(),
+                        $studentPublication->getUser()->getId(),
                         $subject,
                         $message,
                         api_get_user_id(),

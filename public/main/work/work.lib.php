@@ -135,7 +135,7 @@ function get_work_data_by_id($id, $courseId = 0, $sessionId = 0)
         $work['active'] = $studentPublication->getActive();
         $work['allow_text_assignment'] = $studentPublication->getAllowTextAssignment();
         $work['c_id'] = $studentPublication->getCId();
-        $work['user_id'] = $studentPublication->getUserId();
+        $work['user_id'] = $studentPublication->getUser()->getId();
         $work['parent_id'] = $studentPublication->getParentId();
         $work['qualification'] = $studentPublication->getQualification();
         $work['contains_file'] = $studentPublication->getContainsFile();
@@ -5582,7 +5582,7 @@ function getFileContents($id, $courseInfo, $sessionId = 0, $correction = false, 
         $title = str_replace(' ', '_', $title);
 
         if (false == $correction) {
-            $userInfo = api_get_user_info($studentPublication->getUserId());
+            $userInfo = api_get_user_info($studentPublication->getUser()->getId());
             if ($userInfo) {
                 $date = api_get_local_time($studentPublication->getSentDate()->format('Y-m-d H:i:s'));
                 $date = str_replace([':', '-', ' '], '_', $date);

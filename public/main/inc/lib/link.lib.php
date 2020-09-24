@@ -74,7 +74,7 @@ class Link extends Model
      *
      * @return bool True if link could be saved, false otherwise
      */
-    public function save($params, $showQuery = null)
+    public function save($params, $showQuery = null, $showFlash = true)
     {
         $course_info = $this->getCourse();
         $course_id = $course_info['real_id'];
@@ -253,7 +253,9 @@ class Link extends Model
                     Database:: query($sql);
                 }
             }
-            Display::addFlash(Display::return_message(get_lang('The link has been added.')));
+            if ($showFlash) {
+                Display::addFlash(Display::return_message(get_lang('The link has been added.')));
+            }
 
             return $link_id;
         }

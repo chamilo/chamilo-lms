@@ -4117,6 +4117,8 @@ class DocumentManager
     /**
      * Check if the path is used in this course.
      *
+     * @deprecated
+     *
      * @param array  $courseInfo
      * @param string $path
      *

@@ -1420,8 +1420,6 @@ class Exercise
      */
     public function save()
     {
-        $TBL_EXERCISES = Database::get_course_table(TABLE_QUIZ_TEST);
-
         $id = $this->getId();
         $title = $this->exercise;
         $description = $this->description;
@@ -1545,8 +1543,9 @@ class Exercise
             $em->persist($exercise);
             $em->flush();
             $id = $exercise->getIid();
+            $this->iId = $this->id = $id;
             if ($id) {
-                if ('true' == api_get_setting('search_enabled') && extension_loaded('xapian')) {
+                if ('true' === api_get_setting('search_enabled') && extension_loaded('xapian')) {
                     $this->search_engine_save();
                 }
             }
@@ -1554,7 +1553,7 @@ class Exercise
 
         $this->save_categories_in_exercise($this->categories);
 
-        return $this->iId;
+        return $id;
     }
 
     /**
@@ -8429,7 +8428,7 @@ class Exercise
         } else {
             $qb->andWhere($qb->expr()->eq('resource.active', 1));
         }
-        //var_dump($qb->getQuery()->getSQL());
+
         $exerciseList = $qb->getQuery()->getResult();
         $total = $qb->select('count(resource.iid)')->setMaxResults(1)->getQuery()->getScalarResult();
 

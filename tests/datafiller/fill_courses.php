@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -31,7 +32,7 @@ function fill_courses()
         }
         // Effectively create the course
         $res = CourseManager::create_course($course);
-    	$output[$i]['line-info'] = $res ? get_lang('Added') : get_lang('NotInserted');
+    	$output[$i]['line-info'] = $res ? get_lang('Added') : get_lang('Not inserted');
     	$i++;
     }
 

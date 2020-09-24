@@ -68,13 +68,12 @@ class LearnpathList
         $qb = $repo->getResourcesByCourse($course, $session);
 
         $now = api_get_utc_datetime();
-
         if ($check_publication_dates) {
             $qb->andWhere(
-                $qb->orWhere("resource.publicatedOn IS NOT NULL AND resource.publicatedOn < '$now' AND resource.expiredOn IS NOT NULL AND resource.expiredOn > '$now'"),
-                $qb->orWhere("resource.publicatedOn IS NOT NULL AND resource.publicatedOn < '$now' AND resource.expiredOn IS NULL"),
-                $qb->orWhere("resource.publicatedOn IS NULL AND resource.expiredOn IS NOT NULL AND resource.expiredOn > '$now'"),
-                $qb->orWhere("resource.publicatedOn IS NULL AND resource.expiredOn IS NULL "),
+                " (resource.publicatedOn IS NOT NULL AND resource.publicatedOn < '$now' AND resource.expiredOn IS NOT NULL AND resource.expiredOn > '$now') OR
+                  (resource.publicatedOn IS NOT NULL AND resource.publicatedOn < '$now' AND resource.expiredOn IS NULL) OR
+                  (resource.publicatedOn IS NULL AND resource.expiredOn IS NOT NULL AND resource.expiredOn > '$now') OR
+                  (resource.publicatedOn IS NULL AND resource.expiredOn IS NULL) "
             );
         }
 

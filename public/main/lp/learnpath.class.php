@@ -8366,11 +8366,10 @@ class learnpath
         $courseEntity = api_get_course_entity();
         $sessionEntity = api_get_session_entity();
         while ($row_quiz = Database::fetch_array($res_quiz)) {
+            $exerciseId = $row_quiz['iid'];
             /** @var CQuiz $exercise */
-            $exercise = $repo->find($row_quiz['id']);
-            $title = strip_tags(
-                api_html_entity_decode($row_quiz['title'])
-            );
+            $exercise = $repo->find($exerciseId);
+            $title = strip_tags(api_html_entity_decode($row_quiz['title']));
 
             $visibility = $exercise->isVisible($courseEntity, $sessionEntity);
             /*$visibility = api_get_item_visibility(
@@ -8382,10 +8381,10 @@ class learnpath
 
             $link = Display::url(
                 $previewIcon,
-                $exerciseUrl.'&exerciseId='.$row_quiz['id'],
+                $exerciseUrl.'&exerciseId='.$exerciseId,
                 ['target' => '_blank']
             );
-            $return .= '<li class="lp_resource_element" data_id="'.$row_quiz['id'].'" data_type="quiz" title="'.$title.'" >';
+            $return .= '<li class="lp_resource_element" data_id="'.$exerciseId.'" data_type="quiz" title="'.$title.'" >';
             $return .= Display::url($moveIcon, '#', ['class' => 'moved']);
             $return .= $quizIcon;
             $sessionStar = api_get_session_image(
@@ -8394,7 +8393,7 @@ class learnpath
             );
             $return .= Display::url(
                 Security::remove_XSS(cut($title, 80)).$link.$sessionStar,
-                api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_QUIZ.'&file='.$row_quiz['id'].'&lp_id='.$this->lp_id,
+                api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_QUIZ.'&file='.$exerciseId.'&lp_id='.$this->lp_id,
                 [
                     'class' => false === $visibility ? 'moved text-muted' : 'moved',
                 ]
@@ -8494,7 +8493,6 @@ class learnpath
             /** @var CLink $link */
             foreach ($links as $key => $link) {
                 $title = $link->getTitle();
-                $linkSessionId = $link->getSessionId();
 
                 $linkUrl = Display::url(
                     Display::return_icon('preview_view.png', get_lang('Preview')),
@@ -8503,7 +8501,8 @@ class learnpath
                 );
 
                 if ($link->isVisible($course, $session)) {
-                    $sessionStar = api_get_session_image($linkSessionId, $userInfo['status']);
+                    //$sessionStar = api_get_session_image($linkSessionId, $userInfo['status']);
+                    $sessionStar = '';
                     $linkNodes .=
                         '<li class="lp_resource_element" data_id="'.$key.'" data_type="'.TOOL_LINK.'" title="'.$title.'" >
                         <a class="moved" href="#">'.

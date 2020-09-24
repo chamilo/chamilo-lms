@@ -1419,9 +1419,6 @@ switch ($action) {
         if (!$lp_found) {
             require 'lp_list.php';
         } else {
-            if ($debug > 0) {
-                error_log('Trying to impress this LP item to '.$_REQUEST['item_id'], 0);
-            }
             if (!empty($_REQUEST['item_id'])) {
                 $_SESSION['oLP']->set_current_item($_REQUEST['item_id']);
             }

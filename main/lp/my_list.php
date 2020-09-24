@@ -81,7 +81,7 @@ if (!empty($courses)) {
             'name' => $name,
             'link' => $link,
             'icon' => $icon,
-            'creation_date' => api_get_local_time($lp->getCreatedOn()),
+            //'creation_date' => api_get_local_time($lp->getCreatedOn()),
         ];
     }
 }

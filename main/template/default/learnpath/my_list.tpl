@@ -6,9 +6,6 @@
         <th>
         {{ 'Title' | get_lang }}
         </th>
-        <th>
-            {{ 'CreationDate' | get_lang }}
-        </th>
     </tr>
     {% for lp in lps %}
         <tr>
@@ -17,9 +14,6 @@
                 <a href="{{ lp.link }}" target="_blank">
                     {{ lp.name }}
                 </a>
-            </td>
-            <td>
-                {{ lp.creation_date }}
             </td>
         </tr>
     {% endfor %}

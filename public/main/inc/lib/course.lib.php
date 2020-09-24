@@ -2391,10 +2391,6 @@ class CourseManager
      * course.
      *
      * @param string $code The code of the course to delete
-     *
-     * @todo When deleting a virtual course: unsubscribe users from that virtual
-     * course from the groups in the real course if they are not subscribed in
-     * that real course.
      */
     public static function delete_course($code)
     {
@@ -2585,6 +2581,9 @@ class CourseManager
 
             $appPlugin = new AppPlugin();
             $appPlugin->performActionsWhenDeletingItem('course', $courseId);
+
+            $repo = Container::getQuizRepository();
+            $repo->deleteAllByCourse($courseEntity);
 
             // Delete the course from the database
             $repo = Container::getCourseRepository();

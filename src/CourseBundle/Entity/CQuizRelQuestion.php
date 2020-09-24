@@ -47,7 +47,7 @@ class CQuizRelQuestion
     /**
      * @var CQuizQuestion
      *
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CQuizQuestion", inversedBy="relQuiz")
+     * @ORM\ManyToOne(targetEntity="CQuizQuestion", inversedBy="relQuizzes", cascade={"persist"})
      * @ORM\JoinColumn(name="question_id", referencedColumnName="iid")
      */
     protected $question;
@@ -55,7 +55,7 @@ class CQuizRelQuestion
     /**
      * @var CQuiz
      *
-     * @ORM\ManyToOne(targetEntity="CQuiz", inversedBy="relQuestions")
+     * @ORM\ManyToOne(targetEntity="CQuiz", inversedBy="questions", cascade={"persist"})
      * @ORM\JoinColumn(name="exercice_id", referencedColumnName="iid")
      */
     protected $quiz;

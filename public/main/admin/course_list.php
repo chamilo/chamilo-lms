@@ -355,6 +355,7 @@ if (isset($_POST['action'])) {
 
                 Display::addFlash(Display::return_message(get_lang('Deleted')));
             }
+            api_location(api_get_self());
 
             break;
     }
@@ -424,6 +425,8 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
         if ($result) {
             Display::addFlash(Display::return_message(get_lang('Deleted')));
         }
+
+        api_location(api_get_self());
     }
     // Create a search-box
     $form = new FormValidator(

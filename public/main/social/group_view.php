@@ -308,7 +308,6 @@ if ($is_group_member || GROUP_PERMISSION_OPEN == $groupInfo['visibility']) {
 
     $listTopic = $content;
     $listMembers = $member_content;
-
 } else {
     // if I already sent an invitation message
     if (!in_array(

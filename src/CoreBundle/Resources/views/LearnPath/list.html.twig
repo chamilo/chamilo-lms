@@ -110,19 +110,19 @@
                                         {{ "Title"|trans }}
                                     </th>
                                     {% if is_allowed_to_edit %}
-                                        <th>{{ "PublicationDate"|trans }}</th>
-                                        <th>{{ "ExpirationDate"|trans }}</th>
+                                        <th>{{ "Publication date"|trans }}</th>
+                                        <th>{{ "Expiration date"|trans }}</th>
                                         <th>{{ "Progress"|trans }}</th>
                                         {% if allow_min_time %}
-                                            <th>{{ "TimeSpentTimeRequired"|trans }}</th>
+                                            <th>{{ "Time spent / Time required"|trans }}</th>
                                         {% endif %}
-                                        <th>{{ "AuthoringOptions"|trans }}</th>
+                                        <th>{{ "Authoring options"|trans }}</th>
                                     {% else %}
                                         {% if not is_invitee %}
                                             <th>{{ "Progress"|trans }}</th>
                                         {% endif %}
                                         {% if allow_min_time %}
-                                            <th>{{ "TimeSpentTimeRequired"|trans }}</th>
+                                            <th>{{ "Time spent / Time required"|trans }}</th>
                                         {% endif %}
                                         <th>{{ "Actions"|trans }}</th>
                                     {% endif %}
@@ -210,10 +210,10 @@
                                         <tr>
                                             <th>{{ "Title"|trans }}</th>
                                             {% if is_allowed_to_edit %}
-                                                <th>{{ "PublicationDate"|trans }}</th>
-                                                <th>{{ "ExpirationDate"|trans }}</th>
+                                                <th>{{ "Publication date"|trans }}</th>
+                                                <th>{{ "Expiration date"|trans }}</th>
                                                 <th>{{ "Progress"|trans }}</th>
-                                                <th>{{ "AuthoringOptions"|trans }}</th>
+                                                <th>{{ "Authoring options"|trans }}</th>
                                             {% else %}
                                                 {% if not is_invitee %}
                                                     <th>{{ "Progress"|trans }}</th>
@@ -409,10 +409,10 @@
                                                     <tr>
                                                         <th>{{ "Title"|trans }}</th>
                                                         {% if is_allowed_to_edit %}
-                                                            <th>{{ "PublicationDate"|trans }}</th>
-                                                            <th>{{ "ExpirationDate"|trans }}</th>
+                                                            <th>{{ "Publication date"|trans }}</th>
+                                                            <th>{{ "Expiration date"|trans }}</th>
                                                             <th>{{ "Progress"|trans }}</th>
-                                                            <th>{{ "AuthoringOptions"|trans }}</th>
+                                                            <th>{{ "Authoring options"|trans }}</th>
                                                         {% else %}
                                                             {% if not is_invitee %}
                                                                 <th>{{ "Progress"|trans }}</th>
@@ -503,7 +503,6 @@
                                 </div>
                             </div>
                         </div>
-
                     {% endif %}
                     <!-- end view block accordeon -->
                 {% endif %}
@@ -515,11 +514,11 @@
         <div class="controls text-center">
             {% if not is_ending %}
                 <button class="btn btn-primary" type="button" disabled>
-                    {{ 'IHaveFinishedTheLessonsNotifyTheTeacher'|trans }}
+                    {{ 'I have finished the lessons, notify the teacher'|trans }}
                 </button>
             {% else %}
                 <a href="{{ web_self ~ "?" ~ course_url_params ~ "&action=send_notify_teacher" }}" class="btn btn-primary">
-                    {{ 'IHaveFinishedTheLessonsNotifyTheTeacher'|trans }}
+                    {{ 'I have finished the lessons, notify the teacher'|trans }}
                 </a>
             {% endif %}
         </div>

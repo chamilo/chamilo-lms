@@ -27,10 +27,12 @@ Feature: LP tool
     Given I am on "/main/lp/lp_controller.php?cid=1&action=list"
     And I follow "Edit learnpath"
     And I follow "Create a new document"
+    And wait the page to be loaded when ready
     When I fill in the following:
       | idTitle | Document 1 |
     And I fill in ckeditor field "content_lp" with "Sample HTML text"
     And I press "submit_button"
+    And wait very long for the page to be loaded
     Then I should see "Document 1"
 
 #  Scenario: Add an exercise to LP

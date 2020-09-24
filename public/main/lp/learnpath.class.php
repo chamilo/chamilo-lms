@@ -507,7 +507,7 @@ class learnpath
                         WHERE
                             c_id = $course_id AND
                             lp_id = ".$this->get_id()." AND
-                            id = $previous";
+                            iid = $previous";
                 $result = Database::query($sql);
                 $row = Database::fetch_array($result);
                 if ($row) {
@@ -570,7 +570,7 @@ class learnpath
             if (!empty($next)) {
                 $sql = "UPDATE $tbl_lp_item
                         SET previous_item_id = $new_item_id
-                        WHERE c_id = $course_id AND id = $next AND item_type != '".TOOL_LP_FINAL_ITEM."'";
+                        WHERE c_id = $course_id AND iid = $next AND item_type != '".TOOL_LP_FINAL_ITEM."'";
                 Database::query($sql);
             }
 
@@ -578,7 +578,7 @@ class learnpath
             if (!empty($tmp_previous)) {
                 $sql = "UPDATE $tbl_lp_item
                         SET next_item_id = $new_item_id
-                        WHERE c_id = $course_id AND id = $tmp_previous";
+                        WHERE c_id = $course_id AND iid = $tmp_previous";
                 Database::query($sql);
             }
 
@@ -766,7 +766,6 @@ class learnpath
                 if (!empty($categoryId)) {
                     $category = Container::getLpCategoryRepository()->find($categoryId);
                 }
-
 
                 $lp = new CLp();
                 $lp
@@ -993,8 +992,7 @@ class learnpath
                 WHERE c_id = $course_id AND lp_id = ".$this->lp_id;
         Database::query($sql);
 
-        self::toggle_publish($this->lp_id, 'i');
-        //self::toggle_publish($this->lp_id, 'i');
+        self::toggleVisibility($this->lp_id, 0);
 
         if (2 == $this->type || 3 == $this->type) {
             // This is a scorm learning path, delete the files as well.
@@ -4250,7 +4248,7 @@ class learnpath
      * Can be used as abstract.
      *
      * @param int $id         Learnpath ID
-     * @param int $visibility New visibility
+     * @param int $visibility New visibility (1 = visible/published, 0= invisible/draft)
      *
      * @return bool
      */
@@ -10246,41 +10244,24 @@ EOD;
 
     /**
      * @param int $id
-     *
-     * @return mixed
      */
-    public static function deleteCategory($id)
+    public static function deleteCategory($id): bool
     {
-        $em = Database::getManager();
-        $item = $em->find('ChamiloCourseBundle:CLpCategory', $id);
-        if ($item) {
-            /*$courseId = $item->getCId();
-            $query = $em->createQuery('SELECT u FROM ChamiloCourseBundle:CLp u WHERE u.category = :catId');
-            $query->setParameter('id', $courseId);
-            $query->setParameter('catId', $item->getIid());
-            $lps = $query->getResult();
+        $repo = Container::getLpCategoryRepository();
+        /** @var CLpCategory $category */
+        $category = $repo->find($id);
+        if ($category) {
+            $em = $repo->getEntityManager();
+            $lps = $category->getLps();
 
-            // Setting category = 0.
-            if ($lps) {
-                foreach ($lps as $lpItem) {
-                    $lpItem->setCategoryId(0);
-                }
-            }*/
+            foreach ($lps as $lp) {
+                $lp->setCategory(null);
+                $em->persist($lp);
+            }
 
             // Removing category.
-            $em->remove($item);
+            $em->remove($category);
             $em->flush();
-
-            $courseInfo = api_get_course_info_by_id($courseId);
-            $sessionId = api_get_session_id();
-
-            // Delete link tool
-            /*$tbl_tool = Database::get_course_table(TABLE_TOOL_LIST);
-            $link = 'lp/lp_controller.php?cid='.$courseInfo['real_id'].'&sid='.$sessionId.'&gidReq=0&gradebook=0&origin=&action=view_category&id='.$id;
-            // Delete tools
-            $sql = "DELETE FROM $tbl_tool
-                    WHERE c_id = ".$courseId." AND (link LIKE '$link%' AND image='lp_category.gif')";
-            Database::query($sql);*/
 
             return true;
         }

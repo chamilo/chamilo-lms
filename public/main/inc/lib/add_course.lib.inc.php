@@ -340,17 +340,6 @@ class AddCourse
                 ['path' => '/audio', 'title' => get_lang('Audio'), 'filetype' => 'folder', 'size' => 0],
                 ['path' => '/flash', 'title' => get_lang('Flash'), 'filetype' => 'folder', 'size' => 0],
                 ['path' => '/images', 'title' => get_lang('Images'), 'filetype' => 'folder', 'size' => 0],
-                ['path' => '/images/diagrams', 'title' => get_lang('Diagrams'), 'filetype' => 'folder', 'size' => 0],
-                ['path' => '/images/diagrams/animated', 'title' => 'animated', 'filetype' => 'folder', 'size' => 0],
-                [
-                    'path' => '/images/mr_chamilo',
-                    'title' => get_lang('Mr Chamilo'),
-                    'filetype' => 'folder',
-                    'size' => 0,
-                ],
-                ['path' => '/images/mr_chamilo/svg', 'title' => 'svg', 'filetype' => 'folder', 'size' => 0],
-                ['path' => '/images/small', 'title' => get_lang('Small'), 'filetype' => 'folder', 'size' => 0],
-                ['path' => '/images/trainer', 'title' => get_lang('Trainer'), 'filetype' => 'folder', 'size' => 0],
                 ['path' => '/images/gallery', 'title' => get_lang('Gallery'), 'filetype' => 'folder', 'size' => 0],
                 ['path' => '/video', 'title' => get_lang('Video'), 'filetype' => 'folder', 'size' => 0],
                 ['path' => '/video/flv', 'title' => 'flv', 'filetype' => 'folder', 'size' => 0],
@@ -367,7 +356,7 @@ class AddCourse
             $finder->in($defaultPath);
 
             /** @var SplFileInfo $file */
-            /*foreach ($finder as $file) {
+            foreach ($finder as $file) {
                 $parentName = dirname(str_replace($defaultPath, '', $file->getRealPath()));
                 if ('/' === $parentName || '/certificates' === $parentName) {
                     continue;
@@ -378,7 +367,7 @@ class AddCourse
 
                 if ($file->isDir()) {
                     $realPath = str_replace($defaultPath, '', $file->getRealPath());
-                    DocumentManager::addDocument(
+                    $document = DocumentManager::addDocument(
                         $courseInfo,
                         $realPath,
                         'folder',
@@ -395,6 +384,7 @@ class AddCourse
                         $parentId,
                         $file->getRealPath()
                     );
+                    $paths[$realPath] = $document->getIid();
                 } else {
                     $realPath = str_replace($defaultPath, '', $file->getRealPath());
                     $document = DocumentManager::addDocument(
@@ -419,7 +409,7 @@ class AddCourse
                         $certificateId = $document->getIid();
                     }
                 }
-            }*/
+            }
 
             $agenda = new Agenda('course');
             $agenda->set_course($courseInfo);

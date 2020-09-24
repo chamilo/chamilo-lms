@@ -279,11 +279,14 @@ class CourseChatUtils
 
             return;
         }
+        $em = Database::getManager();
+        $userRepo = $em->getRepository(User::class);
+        $user = $userRepo->find($this->userId);
 
         $connection = new CChatConnected();
         $connection
             ->setCId($this->courseId)
-            ->setUserId($this->userId)
+            ->setUser($user)
             ->setLastConnection($currentTime)
             ->setSessionId($this->sessionId)
             ->setToGroupId($this->groupId);

@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\GradebookEvaluation;
+use Chamilo\CoreBundle\Entity\User;
 use ChamiloSession as Session;
 
 /**
@@ -95,6 +96,18 @@ class Evaluation implements GradebookItem
     public function get_user_id()
     {
         return $this->user_id;
+    }
+
+    /**
+     * @return User|object|null
+     */
+    public function getUser()
+    {
+
+        $em = Database::getManager();
+        $userRepo = $em->getRepository(User::class);
+
+        return $userRepo->find($this->user_id);
     }
 
     public function get_course_code()
@@ -320,7 +333,7 @@ class Evaluation implements GradebookItem
                 ->setCourse(api_get_course_entity())
                 ->setName($this->get_name())
                 ->setCategoryId($this->get_category_id())
-                ->setUserId($this->get_user_id())
+                ->setUser($this->getUser())
                 ->setWeight(api_float_val($this->get_weight()))
                 ->setMax($this->get_max())
                 ->setVisible($this->is_visible())

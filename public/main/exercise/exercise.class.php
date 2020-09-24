@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\GradebookLink;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\TrackEExerciseConfirmation;
 use Chamilo\CoreBundle\Entity\TrackEHotspot;
 use Chamilo\CoreBundle\Framework\Container;
@@ -6055,9 +6056,12 @@ class Exercise
             $em = Database::getManager();
 
             if ($saveUserResult) {
+                $em = Database::getManager();
+                $userRepo = $em->getRepository(User::class);
+                $user = $userRepo->find($trackExerciseInfo['exe_user_id']);
                 $trackConfirmation = new TrackEExerciseConfirmation();
                 $trackConfirmation
-                    ->setUserId($trackExerciseInfo['exe_user_id'])
+                    ->setUser($user)
                     ->setQuizId($trackExerciseInfo['exe_exo_id'])
                     ->setAttemptId($trackExerciseInfo['exe_id'])
                     ->setQuestionsCount($questionsCount)

@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CStudentPublicationComment;
@@ -3700,12 +3701,15 @@ function addWorkComment($courseInfo, $userId, $parentWork, $work, $data)
     if (is_array($fileObject)) {
         $fileObject = $fileObject[0];
     }
+    $em = Database::getManager();
+    $userRepo = $em->getRepository(User::class);
+    $user = $userRepo->find($userId);
 
     $comment = new CStudentPublicationComment();
     $comment
         ->setCId($courseId)
         ->setComment($data['comment'])
-        ->setUserId($userId)
+        ->setUser($user)
         ->setWorkId($work['iid'])
         ->setParent($studentPublication)
         ->addCourseLink(
@@ -4329,6 +4333,10 @@ function processWorkForm(
         $repo = Container::getStudentPublicationRepository();
         $parentResource = $repo->find($workInfo['iid']);
 
+        $em = Database::getManager();
+        $userRepo = $em->getRepository(User::class);
+        $user = $userRepo->find($userId);
+
         $studentPublication = new CStudentPublication();
         $studentPublication
             ->setCId($courseId)
@@ -4346,7 +4354,7 @@ function processWorkForm(
             ->setParentId($workInfo['iid'])
             ->setSession(api_get_session_entity($sessionId))
             ->setFilesize($filesize)
-            ->setUserId($userId)
+            ->setUser($user)
             ->setDocumentId($documentId)
             ->setParent($parentResource)
             ->addCourseLink($courseEntity, $session, api_get_group_entity())
@@ -4492,6 +4500,10 @@ function addDir($formValues, $user_id, $courseInfo, $groupId, $sessionId = 0)
     $title = isset($formValues['work_title']) ? $formValues['work_title'] : $formValues['new_dir'];
     $courseEntity = api_get_course_entity($course_id);
 
+    $em = Database::getManager();
+    $userRepo = $em->getRepository(User::class);
+    $user = $userRepo->find($user_id);
+
     $studentPublication = new CStudentPublication();
     $studentPublication
         ->setCId($course_id)
@@ -4506,7 +4518,7 @@ function addDir($formValues, $user_id, $courseInfo, $groupId, $sessionId = 0)
         ->setWeight(!empty($formValues['weight']) ? $formValues['weight'] : 0)
         ->setSession($session)
         ->setAllowTextAssignment($formValues['allow_text_assignment'])
-        ->setUserId($user_id)
+        ->setUser($user)
         ->setParent($courseEntity)
         ->addCourseLink(
             $courseEntity,

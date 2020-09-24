@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\GradebookLink;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CForumAttachment;
 use Chamilo\CourseBundle\Entity\CForumCategory;
@@ -5416,6 +5417,9 @@ function set_notification($content, $id, $addOnly = false, $userInfo = [], $cour
     }
 
     $userId = $userInfo['user_id'];
+    $em = Database::getManager();
+    $userRepo = $em->getRepository(User::class);
+    $user = $userRepo->find($userId);
 
     // First we check if the notification is already set for this.
     $sql = "SELECT * FROM $table_notification
@@ -5432,7 +5436,7 @@ function set_notification($content, $id, $addOnly = false, $userInfo = [], $cour
         $notification = new CForumNotification();
         $notification
             ->setCId($course_id)
-            ->setUserId($userId)
+            ->setUser($user)
         ;
 
         if ('forum' === $content) {

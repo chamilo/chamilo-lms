@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\GradebookLink;
+use Chamilo\CoreBundle\Entity\User;
 
 /**
  * Class AbstractLink
@@ -117,6 +118,17 @@ abstract class AbstractLink implements GradebookItem
     public function get_user_id()
     {
         return $this->user_id;
+    }
+
+    /**
+     * @return User|object|null
+     */
+    public function getUser()
+    {
+        $em = Database::getManager();
+        $userRepo = $em->getRepository(User::class);
+
+        return $userRepo->find($this->user_id);
     }
 
     /**
@@ -398,7 +410,7 @@ abstract class AbstractLink implements GradebookItem
                     ->setType($this->get_type())
                     ->setVisible($this->is_visible())
                     ->setWeight(api_float_val($this->get_weight()))
-                    ->setUserId($this->get_user_id())
+                    ->setUser($this->getUser())
                     ->setRefId($this->get_ref_id())
                     ->setCategoryId($this->get_category_id())
                     ->setCourse(api_get_course_entity())
@@ -433,7 +445,7 @@ abstract class AbstractLink implements GradebookItem
         $link
             ->setType($this->get_type())
             ->setRefId($this->get_ref_id())
-            ->setUserId($this->get_user_id())
+            ->setUser($this->getUser())
             ->setCourse($course)
             ->setCategoryId($this->get_category_id())
             ->setWeight($this->get_weight())

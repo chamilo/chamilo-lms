@@ -716,7 +716,8 @@ if ($showForm) {
         $forumEntity,
         $threadEntity,
         null,
-        false
+        null,
+        null
     );
     $formToString = $form->returnForm();
 }

@@ -61,7 +61,8 @@ Feature: Session management tool
     And I check "Show description"
     And I press "submit"
     Then wait very long for the page to be loaded
-    Then I should see "Update successful"
+    Then I should not see an error
+    #Then I should see "Update successful"
 
   Scenario: Check session description with platform setting off
     Given I am on "/admin/settings/search_settings?keyword=show_session_description"

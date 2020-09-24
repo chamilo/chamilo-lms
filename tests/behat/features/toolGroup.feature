@@ -11,7 +11,7 @@ Feature: Group tool
     Then I should see "Default groups"
     Then I follow "Delete"
     Then I confirm the popup
-    And wait the page to be loaded when ready
+    And wait very long for the page to be loaded
     Then I should see "The category has been deleted"
 
   Scenario: Create a group directory

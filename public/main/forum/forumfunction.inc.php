@@ -270,7 +270,7 @@ function show_add_forumcategory_form($lp_id)
     );
 
     $extraField = new ExtraField('forum_category');
-    $returnParams = $extraField->addElements(
+    $extraField->addElements(
         $form,
         null,
         [], //exclude
@@ -571,8 +571,11 @@ function delete_forum_image($forum_id)
 function editForumCategoryForm(CForumCategory $category)
 {
     $categoryId = $category->getIid();
-    $form = new FormValidator('forumcategory', 'post', 'index.php?action=edit_category&'.api_get_cidreq().'&id='.$categoryId);
-
+    $form = new FormValidator(
+        'forumcategory',
+        'post',
+        'index.php?action=edit_category&'.api_get_cidreq().'&id='.$categoryId
+    );
     // Setting the form elements.
     $form->addElement('header', '', get_lang('Edit forumCategory'));
 
@@ -652,7 +655,6 @@ function store_forumcategory($values, $courseInfo = [], $showMessage = true)
     $session_id = api_get_session_id();
     $clean_cat_title = $values['forum_category_title'];
     $last_id = null;
-
     $repo = Container::getForumCategoryRepository();
 
     if (isset($values['forum_category_id'])) {
@@ -665,15 +667,7 @@ function store_forumcategory($values, $courseInfo = [], $showMessage = true)
 
         $repo->getEntityManager()->persist($category);
         $repo->getEntityManager()->flush();
-
-        /*api_item_property_update(
-            $courseInfo,
-            TOOL_FORUM_CATEGORY,
-            $values['forum_category_id'],
-            'ForumCategoryUpdated',
-            api_get_user_id()
-        );*/
-        $return_message = get_lang('The forum category has been modified');
+        $message = get_lang('The forum category has been modified');
 
         $logInfo = [
             'tool' => TOOL_FORUM,
@@ -702,31 +696,14 @@ function store_forumcategory($values, $courseInfo = [], $showMessage = true)
         $repo->getEntityManager()->flush();
 
         $last_id = $category->getIid();
-
         if ($last_id > 0) {
             $sql = "UPDATE $table_categories SET cat_id = $last_id WHERE iid = $last_id";
             Database::query($sql);
-
-            /*api_item_property_update(
-                $courseInfo,
-                TOOL_FORUM_CATEGORY,
-                $last_id,
-                'ForumCategoryAdded',
-                api_get_user_id()
-            );
-            api_set_default_visibility(
-                $last_id,
-                TOOL_FORUM_CATEGORY,
-                0,
-                $courseInfo
-            );*/
+            $message = get_lang('The forum category has been added');
         }
-        $return_message = get_lang('The forum category has been added');
 
         $logInfo = [
             'tool' => TOOL_FORUM,
-            'tool_id' => 0,
-            'tool_id_detail' => 0,
             'action' => 'new-forumcategory',
             'action_details' => 'forumcategory',
             'info' => $clean_cat_title,
@@ -740,7 +717,7 @@ function store_forumcategory($values, $courseInfo = [], $showMessage = true)
     $extraFieldValue->saveFieldValues($values);
 
     if ($showMessage) {
-        Display::addFlash(Display::return_message($return_message, 'confirmation'));
+        Display::addFlash(Display::return_message($message, 'confirmation'));
     }
 
     return $last_id;
@@ -1117,7 +1094,7 @@ function check_if_last_post_of_thread($thread_id)
     $table_posts = Database::get_course_table(TABLE_FORUM_POST);
     $course_id = api_get_course_int_id();
     $sql = "SELECT * FROM $table_posts
-            WHERE c_id = $course_id AND thread_id = ".(int) $thread_id.'
+            WHERE thread_id = ".(int) $thread_id.'
             ORDER BY post_date DESC';
     $result = Database::query($sql);
     if (Database::num_rows($result) > 0) {
@@ -1139,7 +1116,7 @@ function return_visible_invisible_icon(
     $content,
     $id,
     $current_visibility_status,
-    $additional_url_parameters
+    $additional_url_parameters = []
 ) {
     $html = '';
     $id = (int) $id;
@@ -3861,7 +3838,7 @@ function store_edit_post(CForumForum $forum, $values)
             'thread_title' => $values['post_title'],
             'thread_sticky' => isset($values['thread_sticky']) ? $values['thread_sticky'] : 0,
         ];
-        $where = ['c_id = ? AND thread_id = ?' => [$course_id, $values['thread_id']]];
+        $where = ['iid = ?' => [$values['thread_id']]];
         Database::update($threadTable, $params, $where);
     }
 
@@ -3928,9 +3905,12 @@ function store_edit_post(CForumForum $forum, $values)
 
     $message = get_lang('The post has been modified').'<br />';
     $message .= get_lang('You can now return to the').
-        ' <a href="viewforum.php?'.api_get_cidreq().'&forum='.(int) ($_GET['forum']).'&">'.get_lang('Forum').'</a><br />';
+        ' <a href="viewforum.php?'.api_get_cidreq().'&forum='.(int) ($_GET['forum']).'&">'.
+        get_lang('Forum').'</a><br />';
     $message .= get_lang('You can now return to the').
-        ' <a href="viewthread.php?'.api_get_cidreq().'&forum='.(int) ($_GET['forum']).'&thread='.$values['thread_id'].'&post='.Security::remove_XSS($_GET['post']).'">'.get_lang('Message').'</a>';
+        ' <a
+            href="viewthread.php?'.api_get_cidreq().'&forum='.(int) ($_GET['forum']).'&thread='.$values['thread_id'].'&post='.Security::remove_XSS($_GET['post']).'">'.
+        get_lang('Message').'</a>';
 
     Session::erase('formelements');
     Session::erase('origin');

@@ -1126,6 +1126,11 @@ class IndexManager
                 'link' => api_get_path(WEB_CODE_PATH).'course_home/last_course.php',
                 'title' => get_lang('LastVisitedCourse'),
             ];
+            $items[] = [
+                'icon' => Display::return_icon('learnpath.png', get_lang('LastVisitedLp')),
+                'link' => api_get_path(WEB_CODE_PATH).'course_home/last_lp.php',
+                'title' => get_lang('LastVisitedLp'),
+            ];
         }
 
         return $items;

@@ -13,7 +13,6 @@ use ChamiloSession as Session;
  * @author Christian Fasanando
  * @author Julio Montoya <gugli100@gmail.com> Lots of bug fixes/improvements
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_COURSE_MAINTENANCE;

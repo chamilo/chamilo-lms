@@ -8670,4 +8670,6 @@ $LpByAuthor = "Learning path by author";
 $SessionImportAssignments = "Import assignments from base course";
 $RedirectToPortalHome = "Redirect to the platform home page";
 $MyLps = "My learning paths";
+$LastVisitedLp = "Last visited learning path";
+$YouDidNotVisitALpHereTheLpList = "You haven't visited any learning paths yet, here is the list of your learning paths.";
 ?>

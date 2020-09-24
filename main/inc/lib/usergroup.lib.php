@@ -996,7 +996,6 @@ class UserGroup extends Model
 
         $delete_items = [];
         $new_items = [];
-
         if (!empty($list)) {
             foreach ($list as $user_id) {
                 if (!in_array($user_id, $current_list)) {

@@ -1536,11 +1536,11 @@ class User implements UserInterface, EquatableInterface
         return $this->passwordRequestedAt;
     }
 
-    /*public function isPasswordRequestNonExpired($ttl)
+    public function isPasswordRequestNonExpired($ttl)
     {
         return $this->getPasswordRequestedAt() instanceof \DateTime &&
             $this->getPasswordRequestedAt()->getTimestamp() + $ttl > time();
-    }*/
+    }
 
     public function getUsername(): string
     {
@@ -1787,6 +1787,13 @@ class User implements UserInterface, EquatableInterface
     public function setLocked($boolean): self
     {
         $this->locked = $boolean;
+
+        return $this;
+    }
+
+    public function setPasswordRequestedAt(\DateTime $date = null)
+    {
+        $this->passwordRequestedAt = $date;
 
         return $this;
     }

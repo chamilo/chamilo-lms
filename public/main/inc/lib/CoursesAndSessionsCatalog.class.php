@@ -1017,7 +1017,7 @@ class CoursesAndSessionsCatalog
      */
     public static function returnThumbnail($course)
     {
-        $course_path = api_get_path(SYS_COURSE_PATH).$course['directory'];
+        /*$course_path = api_get_path(SYS_COURSE_PATH).$course['directory'];
 
         if (file_exists($course_path.'/course-pic.png')) {
             // redimensioned image 85x85
@@ -1034,7 +1034,7 @@ class CoursesAndSessionsCatalog
             );
         }
 
-        return $courseMediumImage;
+        return $courseMediumImage;*/
     }
 
     /**

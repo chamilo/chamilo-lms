@@ -8393,12 +8393,13 @@ function api_is_student_view_active()
  * @param int    $itemId
  * @param string $cropParameters
  *
- * @deprecated use Resources
  *
  * @return array|bool
  */
 function api_upload_file($type, $file, $itemId, $cropParameters = '')
 {
+    throw new Exception('api_upload_file not implemented');
+
     $upload = process_uploaded_file($file);
     if ($upload) {
         $name = api_replace_dangerous_char($file['name']);

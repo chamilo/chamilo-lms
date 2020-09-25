@@ -264,8 +264,10 @@ if (!empty($courseList)) {
                     $start_date = $exerciseInfo['start_time'];
                 }
 
+                $exerciseId = $exerciseInfo['id'];
+
                 $best_score_data = ExerciseLib::get_best_attempt_in_course(
-                    $exerciseInfo['id'],
+                    $exerciseId,
                     $courseInfo['real_id'],
                     $session_id
                 );

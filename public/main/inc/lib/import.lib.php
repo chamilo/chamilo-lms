@@ -1,7 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Ddeboer\DataImport\Reader\ExcelReader;
 use League\Csv\Reader;
 
 /**
@@ -78,9 +77,10 @@ class Import
             return [];
         }
 
-        $file = new \SplFileObject($filename);
-        $reader = new ExcelReader($file, 0);
+        $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xls();
+        $spreadsheet = $reader->load($filename);
+        $sheet = $spreadsheet->getActiveSheet();
 
-        return $reader;
+        return $sheet->toArray();
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Kigkonsult\Icalcreator\Vcalendar;
@@ -44,13 +45,14 @@ if (isset($_GET['course_id'])) {
 }
 
 $event = $agenda->get_event($id);
+$charset = api_get_system_encoding();
 
 if (!empty($event)) {
     define('ICAL_LANG', api_get_language_isocode());
 
     $ical = new Vcalendar();
     $ical->setConfig('unique_id', api_get_path(WEB_PATH));
-    $ical->setProperty('method', 'PUBLISH');
+    $ical->setMethod(Vcalendar::PUBLISH);
     $ical->setConfig('url', api_get_path(WEB_PATH));
     $vevent = new Vevent();
 
@@ -75,15 +77,13 @@ if (!empty($event)) {
     switch ($type) {
         case 'personal':
         case 'platform':
-            $vevent->setProperty('summary', api_convert_encoding($event['title'], 'UTF-8', $charset));
+            $vevent->setSummary(api_convert_encoding($event['title'], 'UTF-8', $charset));
             if (empty($event['start_date'])) {
                 header('location:'.Security::remove_XSS($_SERVER['HTTP_REFERER']));
+                exit;
             }
             list($y, $m, $d, $h, $M, $s) = preg_split('/[\s:-]/', $event['start_date']);
-            $vevent->setProperty(
-                'dtstart',
-                ['year' => $y, 'month' => $m, 'day' => $d, 'hour' => $h, 'min' => $M, 'sec' => $s]
-            );
+            $vevent->setDtstart(new DateTime($event['start_date']));
             if (empty($event['end_date'])) {
                 $y2 = $y;
                 $m2 = $m;
@@ -98,12 +98,10 @@ if (!empty($event)) {
             } else {
                 list($y2, $m2, $d2, $h2, $M2, $s2) = preg_split('/[\s:-]/', $event['end_date']);
             }
-            $vevent->setProperty(
-                'dtend',
-                ['year' => $y2, 'month' => $m2, 'day' => $d2, 'hour' => $h2, 'min' => $M2, 'sec' => $s2]
-            );
+
+            $vevent->setDtend(new DateTime("$y2-$m2-$d2 $h2:$M2:$s2"));
             //$vevent->setProperty( 'LOCATION', get_lang('Unknown') ); // property name - case independent
-            $vevent->setProperty('description', api_convert_encoding($event['description'], 'UTF-8', $charset));
+            $vevent->setDescription(api_convert_encoding($event['description'], 'UTF-8', $charset));
             //$vevent->setProperty( 'comment', 'This is a comment' );
             //$user = api_get_user_info($event['user']);
             //$vevent->setProperty('organizer',$user['mail']);
@@ -114,13 +112,12 @@ if (!empty($event)) {
             $ical->returnCalendar();
             break;
         case 'course':
-            $vevent->setProperty('summary', api_convert_encoding($event['title'], 'UTF-8', $charset));
+            $vevent->setSummary(api_convert_encoding($event['title'], 'UTF-8', $charset));
             if (empty($event['start_date'])) {
                 header('location:'.Security::remove_XSS($_SERVER['HTTP_REFERER']));
             }
             list($y, $m, $d, $h, $M, $s) = preg_split('/[\s:-]/', $event['start_date']);
-            $vevent->setProperty(
-                'dtstart',
+            $vevent->setDtstart(
                 ['year' => $y, 'month' => $m, 'day' => $d, 'hour' => $h, 'min' => $M, 'sec' => $s]
             );
             if (empty($event['end_date'])) {
@@ -137,17 +134,15 @@ if (!empty($event)) {
             } else {
                 list($y2, $m2, $d2, $h2, $M2, $s2) = preg_split('/[\s:-]/', $event['end_date']);
             }
-            $vevent->setProperty(
-                'dtend',
-                ['year' => $y2, 'month' => $m2, 'day' => $d2, 'hour' => $h2, 'min' => $M2, 'sec' => $s2]
-            );
-            $vevent->setProperty('description', api_convert_encoding($event['description'], 'UTF-8', $charset));
+
+            $vevent->setDtend(new DateTime("$y2-$m2-$d2 $h2:$M2:$s2"));
+            $vevent->setDescription(api_convert_encoding($event['description'], 'UTF-8', $charset));
             //$vevent->setProperty( 'comment', 'This is a comment' );
             //$user = api_get_user_info($event['user']);
             //$vevent->setProperty('organizer',$user['mail']);
             //$vevent->setProperty('attendee',$user['mail']);
             //$course = api_get_course_info();
-            $vevent->setProperty('location', $course_info['name']); // property name - case independent
+            $vevent->setLocation($course_info['name']); // property name - case independent
             /*if($ai['repeat']) {
                 $trans = array('daily'=>'DAILY','weekly'=>'WEEKLY','monthlyByDate'=>'MONTHLY','yearly'=>'YEARLY');
                 $freq = $trans[$ai['repeat_type']];

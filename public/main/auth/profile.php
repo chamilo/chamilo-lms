@@ -481,7 +481,7 @@ if ($form->validate()) {
     }
 
     // upload production if a new one is provided
-    if (isset($_FILES['production']) && $_FILES['production']['size']) {
+    /*if (isset($_FILES['production']) && $_FILES['production']['size']) {
         $res = upload_user_production(api_get_user_id());
         if (!$res) {
             //it's a bit excessive to assume the extension is the reason why
@@ -496,7 +496,7 @@ if ($form->validate()) {
                 )
             );
         }
-    }
+    }*/
 
     // remove values that shouldn't go in the database
     unset(
@@ -640,12 +640,12 @@ if ($form->validate()) {
     );
     Session::write('_user', $userInfo);
 
-    if ($hook) {
+    /*if ($hook) {
         Database::getManager()->clear(User::class); // Avoid cache issue (user entity is used before)
         $user = api_get_user_entity(api_get_user_id()); // Get updated user info for hook event
         $hook->setEventData(['user' => $user]);
         $hook->notifyUpdateUser(HOOK_EVENT_TYPE_POST);
-    }
+    }*/
 
     Session::erase('system_timezone');
 

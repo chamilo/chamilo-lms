@@ -8,6 +8,8 @@ require_once __DIR__.'/../inc/global.inc.php';
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true);
+
+$_user = api_get_user_info();
 $id = (int) $_GET['id'];
 $formSent = 0;
 $errorMsg = '';

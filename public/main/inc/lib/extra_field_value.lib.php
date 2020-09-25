@@ -64,7 +64,7 @@ class ExtraFieldValue extends Model
     public function get_count()
     {
         $em = Database::getManager();
-        $query = $em->getRepository('ChamiloCoreBundle:ExtraFieldValues')->createQueryBuilder('e');
+        $query = $em->getRepository(ExtraFieldValues::class)->createQueryBuilder('e');
         $query->select('count(e.id)');
         $query->where('e.extraFieldType = :type');
         $query->setParameter('type', $this->getExtraField()->getExtraFieldType());
@@ -198,7 +198,7 @@ class ExtraFieldValue extends Model
                     $em = Database::getManager();
 
                     $currentTags = $em
-                        ->getRepository('ChamiloCoreBundle:ExtraFieldRelTag')
+                        ->getRepository(ExtraFieldRelTag::class)
                         ->findBy([
                             'fieldId' => $extraFieldInfo['id'],
                             'itemId' => $params['item_id'],
@@ -216,7 +216,7 @@ class ExtraFieldValue extends Model
                             continue;
                         }
 
-                        $tagsResult = $em->getRepository('ChamiloCoreBundle:Tag')
+                        $tagsResult = $em->getRepository(Tag::class)
                             ->findBy([
                                 'tag' => $tagValue,
                                 'fieldId' => $extraFieldInfo['id'],
@@ -235,7 +235,7 @@ class ExtraFieldValue extends Model
 
                     foreach ($tags as $tag) {
                         $tagUses = $em
-                            ->getRepository('ChamiloCoreBundle:ExtraFieldRelTag')
+                            ->getRepository(ExtraFieldRelTag::class)
                             ->findBy([
                                 'tagId' => $tag->getId(),
                             ]);
@@ -908,7 +908,7 @@ class ExtraFieldValue extends Model
             } else {
                 if (ExtraField::FIELD_TYPE_TAG == $field['field_type']) {
                     $tagResult = [];
-                    $tags = $em->getRepository('ChamiloCoreBundle:ExtraFieldRelTag')
+                    $tags = $em->getRepository(ExtraFieldRelTag::class)
                         ->findBy(
                             [
                                 'fieldId' => $field['id'],
@@ -919,7 +919,7 @@ class ExtraFieldValue extends Model
                         /** @var ExtraFieldRelTag $extraFieldTag */
                         foreach ($tags as $extraFieldTag) {
                             /** @var \Chamilo\CoreBundle\Entity\Tag $tag */
-                            $tag = $em->find('ChamiloCoreBundle:Tag', $extraFieldTag->getTagId());
+                            $tag = $em->find(Tag::class, $extraFieldTag->getTagId());
                             $tagResult[] = [
                                 'id' => $extraFieldTag->getTagId(),
                                 'value' => $tag->getTag(),
@@ -1085,7 +1085,7 @@ class ExtraFieldValue extends Model
             ->getQuery()
             ->getResult();
 
-        $fieldOptionsRepo = $em->getRepository('ChamiloCoreBundle:ExtraFieldOptions');
+        $fieldOptionsRepo = $em->getRepository(\Chamilo\CoreBundle\Entity\ExtraFieldOptions::class);
 
         $valueList = [];
         /** @var ExtraFieldValues $fieldValue */

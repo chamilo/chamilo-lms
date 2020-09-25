@@ -107,7 +107,8 @@ switch ($action) {
         break;
     case 'subscribe_course':
         if (api_is_anonymous()) {
-            header('Location: '.api_get_path(WEB_CODE_PATH).'auth/inscription.php?c='.$courseCodeToSubscribe);
+            //header('Location: '.api_get_path(WEB_CODE_PATH).'auth/inscription.php?c='.$courseCodeToSubscribe);
+            header('Location: '.api_get_path(WEB_CODE_PATH).'auth/inscription.php');
             exit;
         }
         $courseCodeToSubscribe = isset($_GET['course_code']) ? Security::remove_XSS($_GET['course_code']) : '';
@@ -408,8 +409,8 @@ switch ($action) {
             if ($allowExtraFields) {
                 $extraFieldValues = new ExtraFieldValue('course');
                 $em = Database::getManager();
-                $fieldsRepo = $em->getRepository('ChamiloCoreBundle:ExtraField');
-                $fieldTagsRepo = $em->getRepository('ChamiloCoreBundle:ExtraFieldRelTag');
+                $fieldsRepo = $em->getRepository(\Chamilo\CoreBundle\Entity\ExtraField::class);
+                $fieldTagsRepo = $em->getRepository(\Chamilo\CoreBundle\Entity\ExtraFieldRelTag::class);
             }
 
             $courseUrl = api_get_path(WEB_COURSE_PATH);
@@ -613,7 +614,7 @@ switch ($action) {
         $registrationAllowed = api_get_setting('catalog_allow_session_auto_subscription');
         if ('true' === $registrationAllowed) {
             $entityManager = Database::getManager();
-            $repository = $entityManager->getRepository('ChamiloCoreBundle:SequenceResource');
+            $repository = $entityManager->getRepository(SequenceResource::class);
             $sequences = $repository->getRequirements(
                 $sessionId,
                 SequenceResource::SESSION_TYPE

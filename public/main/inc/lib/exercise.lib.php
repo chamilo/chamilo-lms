@@ -472,6 +472,7 @@ class ExerciseLib
 
             $hidingClass = '';
             if (READING_COMPREHENSION == $answerType) {
+                /** @var ReadingComprehension */
                 $objQuestionTmp->setExerciseType($exercise->selectType());
                 $objQuestionTmp->processText($objQuestionTmp->selectDescription());
                 $hidingClass = 'hide-reading-answers';
@@ -4542,7 +4543,7 @@ EOT;
             } else {
                 $pluginEvaluation = QuestionOptionsEvaluationPlugin::create();
                 if ('true' === $pluginEvaluation->get(QuestionOptionsEvaluationPlugin::SETTING_ENABLE)) {
-                    $formula = $pluginEvaluation->getFormulaForExercise($objExercise->selectId());
+                    $formula = $pluginEvaluation->getFormulaForExercise($objExercise->getId());
 
                     if (!empty($formula)) {
                         $total_score = $pluginEvaluation->getResultWithFormula($exeId, $formula);
@@ -4625,7 +4626,7 @@ EOT;
                 if (api_is_allowed_to_session_edit()) {
                     Event::updateEventExercise(
                         $exercise_stat_info['exe_id'],
-                        $objExercise->selectId(),
+                        $objExercise->getId(),
                         $total_score,
                         $total_weight,
                         $sessionId,
@@ -4639,7 +4640,7 @@ EOT;
                     $allowStats = api_get_configuration_value('allow_gradebook_stats');
                     if ($allowStats) {
                         $objExercise->generateStats(
-                            $objExercise->selectId(),
+                            $objExercise->getId(),
                             api_get_course_info(),
                             $sessionId
                         );
@@ -5235,7 +5236,7 @@ EOT;
         $link = LinkFactory::load(
             null,
             null,
-            $objExercise->selectId(),
+            $objExercise->getId(),
             null,
             $courseCode,
             $categoryId
@@ -5280,7 +5281,7 @@ EOT;
 
         $em = Database::getManager();
         /** @var TrackEExercises $trackedExercise */
-        $trackedExercise = $em->getRepository('ChamiloCoreBundle:TrackEExercises')->find($exeId);
+        $trackedExercise = $em->getRepository(TrackEExercises::class)->find($exeId);
 
         if (empty($trackedExercise)) {
             return null;
@@ -5351,8 +5352,8 @@ EOT;
         }
 
         $trackedExercise
-            ->setExeResult($totalScore)
-            ->setExeWeighting($totalWeight);
+            ->setScore($totalScore)
+            ->setMaxScore($totalWeight);
 
         $em->persist($trackedExercise);
         $em->flush();

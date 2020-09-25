@@ -552,7 +552,7 @@ class ExtraField extends Model
     public function get_count()
     {
         $em = Database::getManager();
-        $query = $em->getRepository('ChamiloCoreBundle:ExtraField')->createQueryBuilder('e');
+        $query = $em->getRepository(EntityExtraField::class)->createQueryBuilder('e');
         $query->select('count(e.id)');
         $query->where('e.extraFieldType = :type');
         $query->setParameter('type', $this->getExtraFieldType());
@@ -602,7 +602,7 @@ class ExtraField extends Model
                 break;
         }
         $em = Database::getManager();
-        $query = $em->getRepository('ChamiloCoreBundle:ExtraField')->createQueryBuilder('e');
+        $query = $em->getRepository(EntityExtraField::class)->createQueryBuilder('e');
         $query->select('e')
             ->where('e.extraFieldType = :type')
             ->setParameter('type', $this->getExtraFieldType())
@@ -895,23 +895,23 @@ class ExtraField extends Model
      * Get an array of all the values from the extra_field and extra_field_options tables
      * based on the current object's type.
      *
-     * @param array $conditions
+     * @param array $options
      * @param null  $order_field_options_by
      *
      * @return array
      */
-    public function get_all($conditions = [], $order_field_options_by = null)
+    public function get_all($options = [], $order_field_options_by = null)
     {
-        $conditions = Database::parse_conditions(['where' => $conditions]);
+        $options = Database::parse_conditions(['where' => $options]);
 
-        if (empty($conditions)) {
-            $conditions .= ' WHERE extra_field_type = '.$this->extraFieldType;
+        if (empty($options)) {
+            $options .= ' WHERE extra_field_type = '.$this->extraFieldType;
         } else {
-            $conditions .= ' AND extra_field_type = '.$this->extraFieldType;
+            $options .= ' AND extra_field_type = '.$this->extraFieldType;
         }
 
         $sql = "SELECT * FROM $this->table
-                $conditions
+                $options
                 ORDER BY field_order ASC
         ";
 
@@ -1246,7 +1246,7 @@ class ExtraField extends Model
                         if ($separateValue > 0) {
                             $em = Database::getManager();
                             $fieldTags = $em
-                                ->getRepository('ChamiloCoreBundle:ExtraFieldRelTag')
+                                ->getRepository(ExtraFieldRelTag::class)
                                 ->findBy(
                                     [
                                         'fieldId' => $field_id,
@@ -1256,8 +1256,7 @@ class ExtraField extends Model
                             // ofaj
 
                             for ($i = 0; $i < $separateValue; $i++) {
-                                $tagsSelect = $form->addElement(
-                                    'select',
+                                $tagsSelect = $form->addSelect(
                                     'extra_'.$field_details['variable'].'['.$i.']',
                                     $customLabelsExtraMultipleSelect[$field_details['variable']][$i], //$field_details['display_text'],
                                     null,
@@ -1272,7 +1271,7 @@ class ExtraField extends Model
                                 }
 
                                 foreach ($fieldTags as $fieldTag) {
-                                    $tag = $em->find('ChamiloCoreBundle:Tag', $fieldTag->getTagId());
+                                    $tag = $em->find(Tag::class, $fieldTag->getTagId());
 
                                     if (empty($tag)) {
                                         continue;
@@ -1330,7 +1329,7 @@ class ExtraField extends Model
                             } else {
                                 $em = Database::getManager();
                                 $fieldTags = $em->getRepository(
-                                    'ChamiloCoreBundle:ExtraFieldRelTag'
+                                    ExtraFieldRelTag::class
                                 )
                                 ->findBy(
                                     [
@@ -1342,7 +1341,7 @@ class ExtraField extends Model
                                 /** @var ExtraFieldRelTag $fieldTag */
                                 foreach ($fieldTags as $fieldTag) {
                                     /** @var Tag $tag */
-                                    $tag = $em->find('ChamiloCoreBundle:Tag', $fieldTag->getTagId());
+                                    $tag = $em->find(Tag::class, $fieldTag->getTagId());
 
                                     if (empty($tag)) {
                                         continue;
@@ -1367,7 +1366,7 @@ class ExtraField extends Model
                                 }
 
                                 if ($useTagAsSelect) {
-                                    $fieldTags = $em->getRepository('ChamiloCoreBundle:ExtraFieldRelTag')
+                                    $fieldTags = $em->getRepository(ExtraFieldRelTag::class)
                                         ->findBy(
                                             [
                                                 'fieldId' => $field_id,
@@ -1375,7 +1374,7 @@ class ExtraField extends Model
                                         );
                                     $tagsAdded = [];
                                     foreach ($fieldTags as $fieldTag) {
-                                        $tag = $em->find('ChamiloCoreBundle:Tag', $fieldTag->getTagId());
+                                        $tag = $em->find(Tag::class, $fieldTag->getTagId());
 
                                         if (empty($tag)) {
                                             continue;
@@ -1464,7 +1463,7 @@ class ExtraField extends Model
                             'extra_'.$field_details['variable'],
                             $field_details['display_text'],
                             [
-                                'size' => 60,
+                                //'size' => 60,
                                 'size' => implode(
                                     '; ',
                                     [
@@ -2007,7 +2006,7 @@ class ExtraField extends Model
     public function delete($id)
     {
         $em = Database::getManager();
-        $items = $em->getRepository('ChamiloCoreBundle:ExtraFieldSavedSearch')->findBy(['field' => $id]);
+        $items = $em->getRepository(\Chamilo\CoreBundle\Entity\ExtraFieldSavedSearch::class)->findBy(['field' => $id]);
         if ($items) {
             foreach ($items as $item) {
                 $em->remove($item);
@@ -2894,7 +2893,7 @@ JAVASCRIPT;
         $fields = $this->get_all();
         $em = Database::getManager();
 
-        $repoTag = $em->getRepository('ChamiloCoreBundle:ExtraFieldRelTag');
+        $repoTag = $em->getRepository(ExtraFieldRelTag::class);
 
         foreach ($fields as $field) {
             if ('1' != $field['visible_to_self']) {
@@ -2923,7 +2922,7 @@ JAVASCRIPT;
                     $data = [];
                     foreach ($tags as $extraFieldTag) {
                         /** @var \Chamilo\CoreBundle\Entity\Tag $tag */
-                        $tag = $em->find('ChamiloCoreBundle:Tag', $extraFieldTag->getTagId());
+                        $tag = $em->find(Tag::class, $extraFieldTag->getTagId());
                         $data[] = $tag->getTag();
                     }
                     $valueData = implode(',', $data);
@@ -3481,7 +3480,7 @@ JAVASCRIPT;
         $level3 = $this->getOptionsFromTripleSelect($options['level3'], $secondId);
         /** @var \HTML_QuickForm_select $slctFirst */
         $slctFirst = $form->createElement('select', "extra_$variable", null, $values1, ['id' => $slctFirstId]);
-        /** @var \HTML_QuickForm_select $slctFirst */
+        /** @var \HTML_QuickForm_select $slctSecond */
         $slctSecond = $form->createElement(
             'select',
             "extra_{$variable}_second",
@@ -3489,7 +3488,7 @@ JAVASCRIPT;
             $values2,
             ['id' => $slctSecondId]
         );
-        /** @var \HTML_QuickForm_select $slctFirst */
+        /** @var \HTML_QuickForm_select $slctThird */
         $slctThird = $form->createElement('select', "extra_{$variable}_third", null, $values3, ['id' => $slctThirdId]);
 
         foreach ($level1 as $item1) {

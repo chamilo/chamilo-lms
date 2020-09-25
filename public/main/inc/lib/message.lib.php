@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Message;
+use Chamilo\CoreBundle\Entity\MessageFeedback;
 use Chamilo\CoreBundle\Entity\User;
 use ChamiloSession as Session;
 
@@ -350,7 +351,7 @@ class MessageManager
                     ';
             $result = Database::query($sql);
             $messages = [];
-            $repo = Database::getManager()->getRepository('ChamiloCoreBundle:Message');
+            $repo = Database::getManager()->getRepository(Message::class);
             while ($row = Database::fetch_array($result)) {
                 $message = $repo->find($row['id']);
                 $messages[] = $message;
@@ -387,7 +388,7 @@ class MessageManager
                     false,
                     false
                 );
-                $senderId = $message->getUserSenderId();
+                $senderId = $message->getUserSender()->getId();
                 $senderInfo = api_get_user_info($senderId);
                 $html .= Display::panelCollapse(
                     $localTime.' '.$senderInfo['complete_name'].' '.$message->getTitle(),
@@ -1342,10 +1343,6 @@ class MessageManager
         $currentUserId = api_get_user_id();
 
         $table = Database::get_main_table(TABLE_MESSAGE);
-
-        if (empty($type)) {
-            return '';
-        }
 
         switch ($type) {
             case self::MESSAGE_TYPE_OUTBOX:
@@ -3047,7 +3044,7 @@ class MessageManager
         }
 
         $userLike = $em
-            ->getRepository('ChamiloCoreBundle:MessageFeedback')
+            ->getRepository(MessageFeedback::class)
             ->findOneBy(['message' => $messageId, 'user' => $userId]);
 
         return [

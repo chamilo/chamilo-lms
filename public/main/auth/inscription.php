@@ -431,47 +431,50 @@ $content = null;
 
 $tool_name = get_lang('Registration');
 
-if (!CustomPages::enabled()) {
-    // Load terms & conditions from the current lang
-    if ('true' === api_get_setting('allow_terms_conditions')) {
-        $get = array_keys($_GET);
-        if (isset($get)) {
-            if (isset($get[0]) && 'legal' == $get[0]) {
-                $language = api_get_interface_language();
+// Load terms & conditions from the current lang
+if ('true' === api_get_setting('allow_terms_conditions')) {
+    $get = array_keys($_GET);
+    if (isset($get)) {
+        if (isset($get[0]) && 'legal' == $get[0]) {
+            $language = api_get_interface_language();
+            $language = api_get_language_id($language);
+            $term_preview = LegalManager::get_last_condition($language);
+            if (!$term_preview) {
+                //look for the default language
+                $language = api_get_setting('platformLanguage');
                 $language = api_get_language_id($language);
                 $term_preview = LegalManager::get_last_condition($language);
-                if (!$term_preview) {
-                    //look for the default language
-                    $language = api_get_setting('platformLanguage');
-                    $language = api_get_language_id($language);
-                    $term_preview = LegalManager::get_last_condition($language);
-                }
-                Display::display_header(get_lang('Terms and Conditions'));
-                if (!empty($term_preview['content'])) {
-                    echo $term_preview['content'];
-
-                    $termExtraFields = new ExtraFieldValue('terms_and_condition');
-                    $values = $termExtraFields->getAllValuesByItem($term_preview['id']);
-                    foreach ($values as $value) {
-                        echo '<h3>'.$value['display_text'].'</h3><br />'.$value['value'].'<br />';
-                    }
-                } else {
-                    echo get_lang('Coming soon...');
-                }
-                Display::display_footer();
-                exit;
             }
+            Display::display_header(get_lang('Terms and Conditions'));
+            if (!empty($term_preview['content'])) {
+                echo $term_preview['content'];
+
+                $termExtraFields = new ExtraFieldValue('terms_and_condition');
+                $values = $termExtraFields->getAllValuesByItem($term_preview['id']);
+                foreach ($values as $value) {
+                    echo '<h3>'.$value['display_text'].'</h3><br />'.$value['value'].'<br />';
+                }
+            } else {
+                echo get_lang('Coming soon...');
+            }
+            Display::display_footer();
+            exit;
         }
     }
+}
 
-    if ('true' === api_get_setting('allow_terms_conditions') && $user_already_registered_show_terms) {
-        $tool_name = get_lang('Terms and Conditions');
-    }
+if ('true' === api_get_setting('allow_terms_conditions') && $user_already_registered_show_terms) {
+    $tool_name = get_lang('Terms and Conditions');
 }
 
 // Forbidden to self-register
 if ($isNotAllowedHere) {
-    api_not_allowed(true, get_lang('Sorry, you are trying to access the registration page for this portal, but registration is currently disabled. Please contact the administrator (see contact information in the footer). If you already have an account on this site.'));
+    api_not_allowed(
+        true,
+        get_lang(
+            'Sorry, you are trying to access the registration page for this portal, but registration is currently disabled. Please contact the administrator (see contact information in the footer). If you already have an account on this site.'
+        )
+    );
 }
 
 if ('approval' === api_get_setting('allow_registration')) {
@@ -655,13 +658,13 @@ if ($form->validate()) {
                 //an extra field
                 $extras[substr($key, 6)] = $value;
             } elseif (false !== strpos($key, 'remove_extra_')) {
-                $extra_value = Security::filter_filename(urldecode(key($value)));
+                /*$extra_value = Security::filter_filename(urldecode(key($value)));
                 // To remove from user_field_value and folder
                 UserManager::update_extra_field_value(
                     $user_id,
                     substr($key, 13),
                     $extra_value
-                );
+                );*/
             }
         }
 
@@ -1061,60 +1064,46 @@ if ($form->validate()) {
     Session::erase('session_redirect');
     Session::erase('only_one_course_session_redirect');
 
-    if (CustomPages::enabled() && CustomPages::exists(CustomPages::REGISTRATION_FEEDBACK)) {
-        CustomPages::display(
-            CustomPages::REGISTRATION_FEEDBACK,
-            ['info' => $text_after_registration]
-        );
-    } else {
-        $tpl = new Template($tool_name);
-        $tpl->assign('inscription_content', $content);
-        $tpl->assign('text_after_registration', $text_after_registration);
-        $tpl->assign('hide_header', $hideHeaders);
-        $inscription = $tpl->get_template('auth/inscription.tpl');
-        $tpl->display($inscription);
-    }
+    $tpl = new Template($tool_name);
+    $tpl->assign('inscription_content', $content);
+    $tpl->assign('text_after_registration', $text_after_registration);
+    $tpl->assign('hide_header', $hideHeaders);
+    $inscription = $tpl->get_template('auth/inscription.tpl');
+    $tpl->display($inscription);
 } else {
-    // Custom pages
-    if (CustomPages::enabled() && CustomPages::exists(CustomPages::REGISTRATION)) {
-        CustomPages::display(
-            CustomPages::REGISTRATION,
-            ['form' => $form, 'content' => $content]
-        );
-    } else {
-        if (!api_is_anonymous()) {
-            // Saving user to course if it was set.
-            if (!empty($course_code_redirect)) {
-                $course_info = api_get_course_info($course_code_redirect);
-                if (!empty($course_info)) {
-                    if (in_array(
-                        $course_info['visibility'],
-                        [
-                            COURSE_VISIBILITY_OPEN_PLATFORM,
-                            COURSE_VISIBILITY_OPEN_WORLD,
-                        ]
-                    )
-                    ) {
-                        CourseManager::subscribeUser(
-                            $user_id,
-                            $course_info['code']
-                        );
-                    }
+    if (!api_is_anonymous()) {
+        // Saving user to course if it was set.
+        if (!empty($course_code_redirect)) {
+            $course_info = api_get_course_info($course_code_redirect);
+            if (!empty($course_info)) {
+                if (in_array(
+                    $course_info['visibility'],
+                    [
+                        COURSE_VISIBILITY_OPEN_PLATFORM,
+                        COURSE_VISIBILITY_OPEN_WORLD,
+                    ]
+                )
+                ) {
+                    CourseManager::subscribeUser(
+                        api_get_user_id(),
+                        $course_info['code']
+                    );
                 }
             }
-            CourseManager::redirectToCourse([]);
         }
-
-        $tpl = new Template($tool_name);
-
-        $tpl->assign('inscription_header', Display::page_header($tool_name));
-        $tpl->assign('inscription_content', $content);
-        $tpl->assign('form', $form->returnForm());
-        $tpl->assign('hide_header', $hideHeaders);
-        $page = Container::getPage('inscription');
-        $tpl->assign('page', $page);
-
-        $inscription = $tpl->get_template('auth/inscription.tpl');
-        $tpl->display($inscription);
+        CourseManager::redirectToCourse([]);
     }
+
+    $tpl = new Template($tool_name);
+
+    $tpl->assign('inscription_header', Display::page_header($tool_name));
+    $tpl->assign('inscription_content', $content);
+    $tpl->assign('form', $form->returnForm());
+    $tpl->assign('hide_header', $hideHeaders);
+    //$page = Container::getPage('inscription');
+    //$tpl->assign('page', $page);
+
+    $inscription = $tpl->get_template('auth/inscription.tpl');
+    $tpl->display($inscription);
+
 }

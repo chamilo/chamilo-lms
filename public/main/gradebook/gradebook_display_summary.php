@@ -154,13 +154,13 @@ $interbreadcrumb[] = [
 ];
 $interbreadcrumb[] = [
     'url' => '#',
-    'name' => get_lang('AssessmentsListOfLearnersReports'),
+    'name' => get_lang('Students list report'),
 ];
 
 $this_section = SECTION_COURSES;
 Display::display_header('');
 $token = Security::get_token();
-echo Display::page_header(get_lang('AssessmentsListOfLearnersReports'));
+echo Display::page_header(get_lang('Students list report'));
 
 echo '<div class="btn-group">';
 if (count($userList) > 0) {
@@ -188,7 +188,8 @@ if (0 == count($userList)) {
         echo '<td>';
         $link = '';
         if ($allowSkillRelItem) {
-            $url = api_get_path(WEB_CODE_PATH).'gradebook/skill_rel_user.php?'.api_get_cidreq().'&user_id='.$value['user_id'].'&selectcat='.$cat_id;
+            $url = api_get_path(WEB_CODE_PATH).
+                'gradebook/skill_rel_user.php?'.api_get_cidreq().'&user_id='.$value['user_id'].'&selectcat='.$cat_id;
             $link = Display::url(
                 get_lang('Skills'),
                 $url,

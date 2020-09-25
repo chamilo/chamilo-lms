@@ -105,7 +105,6 @@ class CNotebook extends AbstractResource implements ResourceInterface
         return $this->getTitle();
     }
 
-
     /**
      * Set userId.
      *

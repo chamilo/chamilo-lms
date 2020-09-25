@@ -84,7 +84,7 @@ function preventMultipleLogin($userId)
             $isFirstLogin = Session::read('first_user_login');
             if (empty($isFirstLogin)) {
                 $sql = "SELECT login_id FROM $table
-                        WHERE login_user_id = $userId 
+                        WHERE login_user_id = $userId
                         LIMIT 1";
 
                 $result = Database::query($sql);
@@ -197,7 +197,6 @@ function online_logout($user_id = null, $logout_redirect = false)
         }
     }
 
-    api_delete_firstpage_parameter();
     Session::erase('last_id');
     CourseChatUtils::exitChat($user_id);
     session_regenerate_id();
@@ -235,7 +234,7 @@ function user_is_online($user_id)
 
     $query = " SELECT login_user_id, login_date
                FROM $track_online_table track
-               INNER JOIN $table_user u 
+               INNER JOIN $table_user u
                ON (u.id=track.login_user_id)
                WHERE
                     track.access_url_id =  $access_url_id AND
@@ -485,13 +484,13 @@ function who_is_online_in_this_course($from, $number_of_items, $uid, $time_limit
     }
 
     $query = "SELECT o.login_user_id, o.login_date
-              FROM $track_online_table o 
+              FROM $track_online_table o
               INNER JOIN $tableUser u
               ON (o.login_user_id = u.id)
               $urlJoin
               WHERE
-                u.status <> '".ANONYMOUS."' AND 
-                o.c_id = $courseId AND 
+                u.status <> '".ANONYMOUS."' AND
+                o.c_id = $courseId AND
                 o.login_date >= '$current_date'
                 $urlCondition
               LIMIT $from, $number_of_items ";
@@ -542,13 +541,13 @@ function who_is_online_in_this_course_count(
     }
 
     $query = "SELECT count(login_user_id) as count
-              FROM $track_online_table o 
-              INNER JOIN $tableUser u              
+              FROM $track_online_table o
+              INNER JOIN $tableUser u
               ON (login_user_id = u.id)
               $urlJoin
-              WHERE 
+              WHERE
                 u.status <> '".ANONYMOUS."' AND
-                c_id = $courseId AND 
+                c_id = $courseId AND
                 login_date >= '$current_date'
                 $urlCondition
                 ";
@@ -591,14 +590,14 @@ function whoIsOnlineInThisSessionCount($timeLimit, $sessionId)
     }
 
     $query = "SELECT count(login_user_id) as count
-              FROM $tblTrackOnline o 
-              INNER JOIN $tableUser u 
+              FROM $tblTrackOnline o
+              INNER JOIN $tableUser u
               ON (login_user_id = u.id)
               $urlJoin
-              WHERE 
-                    u.status <> '".ANONYMOUS."' AND 
-                    session_id = $sessionId AND 
-                    login_date >= '$current_date' 
+              WHERE
+                    u.status <> '".ANONYMOUS."' AND
+                    session_id = $sessionId AND
+                    login_date >= '$current_date'
                     $urlCondition
             ";
     $result = Database::query($query);

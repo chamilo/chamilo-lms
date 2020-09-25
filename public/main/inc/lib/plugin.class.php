@@ -1035,7 +1035,7 @@ class Plugin
 
         /** @var CTool $tool */
         $tool = $em
-            ->getRepository('ChamiloCourseBundle:CTool')
+            ->getRepository(CTool::class)
             ->findOneBy([
                 'name' => $name,
                 'course' => $courseId,
@@ -1048,7 +1048,6 @@ class Plugin
 
             $tool = new CTool();
             $tool
-                ->setId($cToolId)
                 ->setCourse(api_get_course_entity($courseId))
                 ->setName($name.$visibilityPerStatus)
                 ->setLink($link ?: "$pluginName/start.php")

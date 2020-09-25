@@ -259,7 +259,7 @@ class PDF
                 }
                 if ($printTitle) {
                     $this->pdf->WriteHTML(
-                        '<html><body><h3>'.$html_title.'</h3></body></html>'.$page_break
+                        '<html><body><h3>'.$htmlTitle.'</h3></body></html>'.$pageBreak
                     );
                 }
                 continue;

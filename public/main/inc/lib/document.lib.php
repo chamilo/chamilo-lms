@@ -1602,18 +1602,12 @@ class DocumentManager
 
         $my_content_html = null;
         if ($document_id) {
-            $sql = "SELECT path FROM $tbl_document
-                    WHERE iid = $document_id";
-            $rs = Database::query($sql);
+            $repo = Container::getDocumentRepository();
+            $doc = Container::getDocumentRepository()->find($document_id);
             $new_content = '';
             $all_user_info = [];
-            if (Database::num_rows($rs)) {
-                $row = Database::fetch_array($rs);
-                /*$filepath = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document'.$row['path'];
-                if (is_file($filepath)) {
-                    $my_content_html = file_get_contents($filepath);
-                }*/
-                $my_content_html = '';
+            if ($doc) {
+                $my_content_html = $repo->getResourceFileContent($doc);
                 $all_user_info = self::get_all_info_to_certificate(
                     $user_id,
                     $courseInfo,

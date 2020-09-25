@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -297,7 +298,7 @@ class Promotion extends Model
         $promotion = new \Chamilo\CoreBundle\Entity\Promotion();
 
         $em = Database::getManager();
-        $repo = $em->getRepository('ChamiloCoreBundle:Career');
+        $repo = $em->getRepository(\Chamilo\CoreBundle\Entity\Career::class);
         $promotion
             ->setName($params['name'])
             ->setStatus($params['status'])

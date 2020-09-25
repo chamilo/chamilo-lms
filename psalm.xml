@@ -90,11 +90,18 @@
         <file name="public/main/inc/lib/notebook.lib.php"/>
         <file name="public/main/inc/lib/notification.lib.php"/>
         <file name="public/main/inc/lib/NotificationEvent.php"/>
+        <file name="public/main/inc/lib/online.inc.php"/>
+<!--        <file name="public/main/inc/lib/pdf.lib.php"/>-->
+<!--        <file name="public/main/inc/lib/plugin.class.php"/>-->
+<!--        <file name="public/main/inc/lib/plugin.lib.php"/>-->
+        <file name="public/main/inc/lib/redirect.class.php"/>
+        <file name="public/main/inc/lib/ScheduledAnnouncement.php"/>
+<!--        <file name="public/main/inc/lib/security.lib.php"/>-->
+
+
 
         <file name="public/main/inc/lib/sessionmanager.lib.php"/>
-<!--        <file name="public/main/inc/lib/skill.lib.php"/>-->
-        <file name="public/main/inc/lib/link.lib.php"/>
-        <file name="public/main/inc/lib/legal.lib.php"/>
+        <!--        <file name="public/main/inc/lib/skill.lib.php"/>-->
         <file name="public/main/inc/lib/skill.visualizer.lib.php"/>
         <file name="public/main/inc/lib/social.lib.php"/>
         <file name="public/main/inc/lib/sortable_table.class.php"/>
@@ -104,7 +111,6 @@
         <file name="public/main/inc/lib/statistics.lib.php"/>
         <file name="public/main/inc/lib/SurveyTree.php"/>
         <file name="public/main/inc/lib/system_announcements.lib.php"/>
-
         <file name="public/main/inc/lib/table_sort.class.php"/>
         <file name="public/main/inc/lib/tablesort.lib.php"/>
         <file name="public/main/inc/lib/TeacherTimeReport.php"/>

@@ -31,7 +31,7 @@ if (!empty($exerciseInSession)) {
 if (!$objExercise) {
     // Redirect to the exercise overview
     // Check if the exe_id exists
-    header('Location: '.api_get_path(WEB_CODE_PATH).'exercise/overview.php?exerciseId='.$exerciseId.'&'.api_get_cidreq());
+    header('Location: '.api_get_path(WEB_CODE_PATH).'exercise/overview.php?id='.$exerciseId.'&'.api_get_cidreq());
     exit;
 }
 

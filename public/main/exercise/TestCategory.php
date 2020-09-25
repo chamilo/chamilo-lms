@@ -161,7 +161,7 @@ class TestCategory
         $courseId = api_get_course_int_id();
         $categories = self::getCategories($courseId);
 
-        $result = ['0' => get_lang('GeneralSelected')];
+        $result = ['0' => get_lang('No category selected')];
         foreach ($categories as $category) {
             $result[$category->getIid()] = $category->getTitle();
         }
@@ -1131,7 +1131,6 @@ class TestCategory
     {
         $course = api_get_course_entity($courseId);
         $session = api_get_session_entity($sessionId);
-        $repo = Container::getQuestionCategoryRepository();
 
         $sessionId = (int) $sessionId;
         $categories = $this->getCategories($courseId, $sessionId);

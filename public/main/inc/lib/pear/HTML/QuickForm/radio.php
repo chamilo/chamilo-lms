@@ -54,7 +54,7 @@ class HTML_QuickForm_radio extends HTML_QuickForm_input
         $elementLabel = null,
         $text = null,
         $value = null,
-        array $attributes = []
+        $attributes = []
     ) {
         $this->labelClass = isset($attributes['label-class']) ? $attributes['label-class'] : '';
         $this->radioClass = isset($attributes['radio-class']) ? $attributes['radio-class'] : 'form-check';

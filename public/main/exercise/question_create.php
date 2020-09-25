@@ -94,7 +94,7 @@ if ($form->validate()) {
         header('Location: question_create.php?'.api_get_cidreq().'&error=true');
         exit;
     }
-    header('Location: admin.php?exerciseId='.$values['exercise'].'&newQuestion=yes&isContent='.$values['is_content'].'&answerType='.$answer_type);
+    header('Location: admin.php?id='.$values['exercise'].'&newQuestion=yes&isContent='.$values['is_content'].'&answerType='.$answer_type);
     exit;
 } else {
     // header

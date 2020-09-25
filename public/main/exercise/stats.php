@@ -310,7 +310,7 @@ $interbreadcrumb[] = [
     'name' => get_lang('Tests'),
 ];
 $interbreadcrumb[] = [
-    'url' => "admin.php?exerciseId=$exerciseId&".api_get_cidreq(),
+    'url' => "admin.php?id=$exerciseId&".api_get_cidreq(),
     'name' => $objExercise->selectTitle(true),
 ];
 

@@ -191,21 +191,21 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
     }
 
     /**
-     * @return CQuizQuestionCategory[]
+     * @return CQuizQuestion[]|Collection
      */
-    public function getQuestionCategories()
+    public function getQuestions()
     {
-        return $this->questionCategories;
+        return $this->questions;
     }
 
     /**
-     * @param CQuizQuestionCategory[] $questionCategories
+     * @param CQuizQuestion[]|Collection $questions
      *
      * @return CQuizQuestionCategory
      */
-    public function setQuestionCategories($questionCategories): self
+    public function setQuestions($questions)
     {
-        $this->questionCategories = $questionCategories;
+        $this->questions = $questions;
 
         return $this;
     }

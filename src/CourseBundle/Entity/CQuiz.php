@@ -250,7 +250,7 @@ class CQuiz extends AbstractResource implements ResourceInterface
     protected $autoLaunch;
 
     /**
-     * @var int
+     * @var array
      *
      * @ORM\Column(name="page_result_configuration", type="array", nullable=true)
      */
@@ -955,12 +955,12 @@ class CQuiz extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    public function getPageResultConfiguration(): int
+    public function getPageResultConfiguration(): array
     {
         return $this->pageResultConfiguration;
     }
 
-    public function setPageResultConfiguration(int $pageResultConfiguration): self
+    public function setPageResultConfiguration($pageResultConfiguration): self
     {
         $this->pageResultConfiguration = $pageResultConfiguration;
 

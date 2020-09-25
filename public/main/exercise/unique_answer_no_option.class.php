@@ -186,9 +186,15 @@ class UniqueAnswerNoOption extends Question
             $answer_number = $form->addElement('text', 'counter['.$i.']', null, 'value="'.$i.'"');
             $answer_number->freeze();
 
-            $form->addElement('radio', 'correct', null, null, $i, 'class="checkbox" style="margin-left: 0em;"');
+            $form->addElement(
+                'radio',
+                'correct',
+                null,
+                null,
+                $i,
+                ['class' => 'checkbox', 'style' => 'margin-left: 0em;']
+            );
             $form->addElement('html_editor', 'answer['.$i.']', null, [], $editor_config);
-
             $form->addElement('html_editor', 'comment['.$i.']', null, [], $editor_config);
             $form->addElement('text', 'weighting['.$i.']', null, ['style' => 'width: 60px;', 'value' => '0']);
             $form->addElement('html', '</tr>');

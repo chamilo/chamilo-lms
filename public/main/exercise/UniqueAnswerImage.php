@@ -277,7 +277,7 @@ class UniqueAnswerImage extends UniqueAnswer
             $answerNumber = $form->addElement('text', 'counter['.$i.']', null, ' value = "'.$i.'"');
             $answerNumber->freeze();
 
-            $form->addElement('radio', 'correct', null, null, $i, 'class="checkbox"');
+            $form->addElement('radio', 'correct', null, null, $i, ['class' => 'checkbox']);
             $form->addHtmlEditor('answer['.$i.']', null, null, false, $editorConfig);
 
             $form->addRule('answer['.$i.']', get_lang('Required field'), 'required');

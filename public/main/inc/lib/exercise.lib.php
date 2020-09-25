@@ -1897,7 +1897,7 @@ HOTSPOT;
                 $sql_inner_join_tbl_user = "
                 (
                     SELECT
-                        u.user_id,
+                        u.id as user_id,
                         firstname,
                         lastname,
                         official_code,
@@ -1907,7 +1907,7 @@ HOTSPOT;
                         g.id as group_id
                     FROM $TBL_USER u
                     INNER JOIN $TBL_GROUP_REL_USER gru
-                    ON (gru.user_id = u.user_id AND gru.c_id= $course_id )
+                    ON (gru.user_id = u.id AND gru.c_id= $course_id )
                     INNER JOIN $TBL_GROUP g
                     ON (gru.group_id = g.id AND g.c_id= $course_id )
                 )";
@@ -1933,7 +1933,7 @@ HOTSPOT;
                 $sql_inner_join_tbl_user = "
                 (
                     SELECT
-                        u.user_id,
+                        u.id as user_id,
                         firstname,
                         lastname,
                         official_code,
@@ -1960,17 +1960,17 @@ HOTSPOT;
                 $sql_inner_join_tbl_user = "
             (
                 SELECT
-                    u.user_id,
+                    u.id as user_id,
                     firstname,
                     lastname,
                     official_code,
                     email,
                     username,
                     g.name as group_name,
-                    g.id as group_id
+                    g.iid as group_id
                 FROM $TBL_USER u
                 LEFT OUTER JOIN $TBL_GROUP_REL_USER gru
-                ON ( gru.user_id = u.user_id AND gru.c_id= $course_id )
+                ON (gru.user_id = u.id AND gru.c_id= $course_id )
                 LEFT OUTER JOIN $TBL_GROUP g
                 ON (gru.group_id = g.id AND g.c_id = $course_id )
             )";
@@ -1982,7 +1982,7 @@ HOTSPOT;
                 $is_empty_sql_inner_join_tbl_user = true;
                 $sql_inner_join_tbl_user = "
             (
-                SELECT u.user_id, firstname, lastname, email, username, ' ' as group_name, '' as group_id, official_code
+                SELECT u.id as user_id, firstname, lastname, email, username, ' ' as group_name, '' as group_id, official_code
                 FROM $TBL_USER u
                 WHERE u.status NOT IN(".api_get_users_status_ignored_in_reports('string').")
             )";
@@ -1996,7 +1996,7 @@ HOTSPOT;
                 $sql_select = 'SELECT count(te.exe_id) ';
             } else {
                 $sql_select = "SELECT DISTINCT
-                    user_id,
+                    user.user_id,
                     $first_and_last_name,
                     official_code,
                     ce.title,
@@ -2024,9 +2024,9 @@ HOTSPOT;
             $sql = " $sql_select
                 FROM $TBL_EXERCICES AS ce
                 INNER JOIN $sql_inner_join_tbl_track_exercices AS te
-                ON (te.exe_exo_id = ce.id)
+                ON (te.exe_exo_id = ce.iid)
                 INNER JOIN $sql_inner_join_tbl_user AS user
-                ON (user.id = exe_user_id)
+                ON (user.user_id = exe_user_id)
                 WHERE
                     te.c_id = $course_id $session_id_and AND
                     ce.active <> -1 AND
@@ -3859,7 +3859,7 @@ EOT;
         if (empty($session_id)) {
             $courseCondition = "
             INNER JOIN $courseUser cu
-            ON cu.c_id = c.id AND cu.user_id  = exe_user_id";
+            ON cu.c_id = c.id AND cu.user_id = exe_user_id";
             $courseConditionWhere = " AND relation_type <> 2 AND cu.status = ".STUDENT;
         } else {
             $courseCondition = "

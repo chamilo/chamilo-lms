@@ -1105,5 +1105,4 @@ if ($form->validate()) {
 
     $inscription = $tpl->get_template('auth/inscription.tpl');
     $tpl->display($inscription);
-
 }

@@ -87,7 +87,7 @@
         <file name="public/main/inc/lib/model.lib.php"/>
 <!--        <file name="public/main/inc/lib/MoodleImport.php"/>-->
 <!--        <file name="public/main/inc/lib/myspace.lib.php"/>-->
-<!--        <file name="public/main/inc/lib/notebook.lib.php"/>-->
+        <file name="public/main/inc/lib/notebook.lib.php"/>
         <file name="public/main/inc/lib/notification.lib.php"/>
         <file name="public/main/inc/lib/NotificationEvent.php"/>
 

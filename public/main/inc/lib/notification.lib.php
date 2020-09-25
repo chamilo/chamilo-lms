@@ -195,13 +195,13 @@ class Notification extends Model
             $newTitle = $title;
         }
 
-        if (!empty($hook)) {
+        /*if (!empty($hook)) {
             $hook->setEventData(['title' => $newTitle]);
             $data = $hook->notifyNotificationTitle(HOOK_EVENT_TYPE_POST);
             if (isset($data['title'])) {
                 $newTitle = $data['title'];
             }
-        }
+        }*/
 
         return $newTitle;
     }
@@ -437,13 +437,13 @@ class Notification extends Model
                 Display::url($preferenceUrl, $preferenceUrl)
             ).'</i>';
 
-        if (!empty($hook)) {
+        /*if (!empty($hook)) {
             $hook->setEventData(['content' => $content]);
             $data = $hook->notifyNotificationContent(HOOK_EVENT_TYPE_POST);
             if (isset($data['content'])) {
                 $content = $data['content'];
             }
-        }
+        }*/
 
         return $content;
     }

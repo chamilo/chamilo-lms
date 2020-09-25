@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Entity\CNotebook;
 use ChamiloSession as Session;
 
 /**
@@ -251,14 +252,19 @@ class NotebookManager
         if (!api_is_anonymous()) {
             if (0 == $sessionId || api_is_allowed_to_session_edit(false, true)) {
                 echo '<a href="index.php?'.api_get_cidreq().'&action=addnote">'.
-                    Display::return_icon('new_note.png', get_lang('Add new note in my personal notebook'), '', '32').'</a>';
+                    Display::return_icon('new_note.png', get_lang('Add new note in my personal notebook'), '', '32').
+                    '</a>';
             }
         }
 
-        echo '<a href="index.php?'.api_get_cidreq().'&action=changeview&view=creation_date&direction='.$link_sort_direction.'">'.
-            Display::return_icon('notes_order_by_date_new.png', get_lang('Sort by date created'), '', '32').'</a>';
-        echo '<a href="index.php?'.api_get_cidreq().'&action=changeview&view=update_date&direction='.$link_sort_direction.'">'.
-            Display::return_icon('notes_order_by_date_mod.png', get_lang('Sort by date last modified'), '', '32').'</a>';
+        echo '<a
+            href="index.php?'.api_get_cidreq().'&action=changeview&view=creation_date&direction='.$link_sort_direction.'">'.
+            Display::return_icon('notes_order_by_date_new.png', get_lang('Sort by date created'), '', '32').
+            '</a>';
+        echo '<a
+            href="index.php?'.api_get_cidreq().'&action=changeview&view=update_date&direction='.$link_sort_direction.'">'.
+            Display::return_icon('notes_order_by_date_mod.png', get_lang('Sort by date last modified'), '', '32').
+            '</a>';
         echo '<a href="index.php?'.api_get_cidreq().'&action=changeview&view=title&direction='.$link_sort_direction.'">'.
             Display::return_icon('notes_order_by_title.png', get_lang('Sort by title'), '', '32').'</a>';
         echo '</div>';
@@ -279,7 +285,7 @@ class NotebookManager
         // Condition for the session
         $condition_session = api_get_session_condition($sessionId);
 
-        $cond_extra = 'update_date' == $notebookView ? " AND update_date <> ''" : ' ';
+        $cond_extra = 'update_date' === $notebookView ? " AND update_date <> ''" : ' ';
         $course_id = api_get_course_int_id();
 
         $sql = "SELECT * FROM $table
@@ -300,7 +306,9 @@ class NotebookManager
 
             $actions = '<a href="'.api_get_self().'?action=editnote&notebook_id='.$row['notebook_id'].'">'.
                 Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>';
-            $actions .= '<a href="'.api_get_self().'?action=deletenote&notebook_id='.$row['notebook_id'].'" onclick="return confirmation(\''.$row['title'].'\');">'.
+            $actions .= '<a
+                href="'.api_get_self().'?action=deletenote&notebook_id='.$row['notebook_id'].'"
+                onclick="return confirmation(\''.$row['title'].'\');">'.
                 Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>';
 
             echo Display::panel(

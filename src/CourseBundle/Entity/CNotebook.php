@@ -5,6 +5,7 @@
 namespace Chamilo\CourseBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * CNotebook.
@@ -80,12 +81,16 @@ class CNotebook
     /**
      * @var \DateTime
      *
+     * @Gedmo\Timestampable(on="create")
+     *
      * @ORM\Column(name="creation_date", type="datetime", nullable=false)
      */
     protected $creationDate;
 
     /**
      * @var \DateTime
+     *
+     * @Gedmo\Timestampable(on="update")
      *
      * @ORM\Column(name="update_date", type="datetime", nullable=false)
      */
@@ -97,6 +102,11 @@ class CNotebook
      * @ORM\Column(name="status", type="integer", nullable=true)
      */
     protected $status;
+
+    public function __construct()
+    {
+        $this->status = 0;
+    }
 
     /**
      * Set userId.

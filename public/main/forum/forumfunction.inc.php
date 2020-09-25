@@ -5764,24 +5764,26 @@ function get_all_post_from_user($user_id, $courseId)
     $forum_results = '';
 
     foreach ($forums as $forum) {
-        if (0 == $forum['visibility']) {
-            continue;
-        }
-        if ($j <= 4) {
-            $threads = get_threads($forum['forum_id']);
+        $forumId = $forum->getIid();
 
-            if (is_array($threads)) {
+        /*if (0 == $forum['visibility']) {
+            continue;
+        }*/
+        if ($j <= 4) {
+            $threads = get_threads($forumId);
+
+            if ($threads) {
                 $i = 0;
                 $hand_forums = '';
                 $post_counter = 0;
                 foreach ($threads as $thread) {
-                    if (0 == $thread['visibility']) {
+                    /*if (0 == $thread['visibility']) {
                         continue;
-                    }
+                    }*/
                     if ($i <= 4) {
                         $post_list = get_thread_user_post_limit(
                             $courseId,
-                            $thread['thread_id'],
+                            $thread->getIid(),
                             $user_id,
                             1
                         );
@@ -5794,7 +5796,7 @@ function get_all_post_from_user($user_id, $courseId)
                                 '',
                                 ICON_SIZE_MEDIUM
                             );
-                            $hand_forums .= '&nbsp;'.Security::remove_XSS($thread['thread_title'], STUDENT);
+                            $hand_forums .= '&nbsp;'.Security::remove_XSS($thread->getThreadTitle(), STUDENT);
                             $hand_forums .= '</div>';
 
                             foreach ($post_list as $posts) {

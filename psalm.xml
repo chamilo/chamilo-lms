@@ -85,7 +85,11 @@
         <file name="public/main/inc/lib/link.lib.php"/>
 <!--        <file name="public/main/inc/lib/message.lib.php"/>-->
         <file name="public/main/inc/lib/model.lib.php"/>
+<!--        <file name="public/main/inc/lib/MoodleImport.php"/>-->
 <!--        <file name="public/main/inc/lib/myspace.lib.php"/>-->
+<!--        <file name="public/main/inc/lib/notebook.lib.php"/>-->
+        <file name="public/main/inc/lib/notification.lib.php"/>
+        <file name="public/main/inc/lib/NotificationEvent.php"/>
 
         <file name="public/main/inc/lib/sessionmanager.lib.php"/>
 <!--        <file name="public/main/inc/lib/skill.lib.php"/>-->

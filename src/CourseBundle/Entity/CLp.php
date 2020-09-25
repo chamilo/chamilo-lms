@@ -7,6 +7,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -228,12 +229,16 @@ class CLp extends AbstractResource implements ResourceInterface
     /**
      * @var \DateTime
      *
+     * @Gedmo\Timestampable(on="create")
+     *
      * @ORM\Column(name="created_on", type="datetime", nullable=false)
      */
     protected $createdOn;
 
     /**
      * @var \DateTime
+     *
+     * @Gedmo\Timestampable(on="update")
      *
      * @ORM\Column(name="modified_on", type="datetime", nullable=false)
      */

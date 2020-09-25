@@ -453,7 +453,7 @@ class TestCategory
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
         $sql = "SELECT title
                 FROM $table
-                WHERE id = $categoryId AND c_id = $courseId";
+                WHERE iid = $categoryId ";
         $res = Database::query($sql);
         $data = Database::fetch_array($res);
         $result = '';

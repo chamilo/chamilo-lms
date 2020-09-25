@@ -1668,7 +1668,7 @@ HOTSPOT;
         $exercise_id = (int) $exercise_id;
         $table = Database::get_course_table(TABLE_QUIZ_TEST);
         $sql = "SELECT expired_time FROM $table
-                WHERE c_id = $course_id AND id = $exercise_id";
+                WHERE c_id = $course_id AND iid = $exercise_id";
         $result = Database::query($sql);
         $row = Database::fetch_array($result, 'ASSOC');
         if (!empty($row['expired_time'])) {

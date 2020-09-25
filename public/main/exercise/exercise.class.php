@@ -2353,7 +2353,7 @@ class Exercise
             'radio',
             'exerciseFeedbackType',
             null,
-            get_lang('NoFeedback'),
+            get_lang('Exam (no feedback)'),
             EXERCISE_FEEDBACK_TYPE_EXAM,
             [
                 'id' => 'exerciseType_'.EXERCISE_FEEDBACK_TYPE_EXAM,
@@ -2373,16 +2373,16 @@ class Exercise
         }
         // Can't convert a question from one feedback to another
         $direct = $form->createElement(
-                    'radio',
-                    'exerciseFeedbackType',
-                    null,
-            get_lang('DirectFeedback'),
-                    EXERCISE_FEEDBACK_TYPE_DIRECT,
-                    [
-                        'id' => 'exerciseType_'.EXERCISE_FEEDBACK_TYPE_DIRECT,
-                        'onclick' => 'check_direct_feedback()',
-                    ]
-                );
+            'radio',
+            'exerciseFeedbackType',
+            null,
+            get_lang('Adaptative test with immediate feedback'),
+            EXERCISE_FEEDBACK_TYPE_DIRECT,
+            [
+                'id' => 'exerciseType_'.EXERCISE_FEEDBACK_TYPE_DIRECT,
+                'onclick' => 'check_direct_feedback()',
+            ]
+        );
 
         if ($freeze) {
             $direct->freeze();
@@ -2396,7 +2396,7 @@ class Exercise
             'radio',
             'exerciseFeedbackType',
             null,
-            get_lang('ExerciseDirectPopUp'),
+            get_lang('Direct feedback as pop-up'),
             EXERCISE_FEEDBACK_TYPE_POPUP,
             ['id' => 'exerciseType_'.EXERCISE_FEEDBACK_TYPE_POPUP, 'onclick' => 'check_direct_feedback()']
         );
@@ -2405,8 +2405,8 @@ class Exercise
             $feedback,
             null,
             [
-                get_lang('FeedbackType'),
-                get_lang('FeedbackDisplayOptions'),
+                get_lang('Feedback'),
+                get_lang('How should we show the feedback/comment for each question? This option defines how it will be shown to the learner when taking the test. We recommend you try different options by editing your test options before having learners take it.'),
             ]
         );
 
@@ -3023,11 +3023,11 @@ class Exercise
                 $label = get_lang('ReviewQuestions');
                 $class = 'btn btn-success';
             } else {
-                $label = get_lang('EndTest');
+                $label = get_lang('End test');
                 $class = 'btn btn-warning';
             }
         } else {
-            $label = get_lang('NextQuestion');
+            $label = get_lang('Next question');
             $class = 'btn btn-primary';
         }
         // used to select it with jquery
@@ -3062,35 +3062,35 @@ class Exercise
 
                 if ($showPreview && 0 === $this->getPreventBackwards()) {
                     $buttonList[] = Display::button(
-                                    'previous_question_and_save',
-                                    get_lang('Previous question'),
-                                    [
-                                        'type' => 'button',
-                                        'class' => 'btn btn-default',
-                                        'data-prev' => $prev_question,
-                                        'data-question' => $question_id,
-                                    ]
-                                );
+                        'previous_question_and_save',
+                        get_lang('Previous question'),
+                        [
+                            'type' => 'button',
+                            'class' => 'btn btn-default',
+                            'data-prev' => $prev_question,
+                            'data-question' => $question_id,
+                        ]
+                    );
                 }
             }
 
             // Next question
             if (!empty($questions_in_media)) {
                 $buttonList[] = Display::button(
-                            'save_question_list',
-                            $label,
-                            [
-                                'type' => 'button',
-                                'class' => $class,
-                                'data-list' => implode(',', $questions_in_media),
-                            ]
-                        );
+                    'save_question_list',
+                    $label,
+                    [
+                        'type' => 'button',
+                        'class' => $class,
+                        'data-list' => implode(',', $questions_in_media),
+                    ]
+                );
             } else {
                 $buttonList[] = Display::button(
-                            'save_now',
-                            $label,
-                            ['type' => 'button', 'class' => $class, 'data-question' => $question_id]
-                        );
+                    'save_now',
+                    $label,
+                    ['type' => 'button', 'class' => $class, 'data-question' => $question_id]
+                );
             }
             $buttonList[] = '<span id="save_for_now_'.$question_id.'" class="exercise_save_mini_message"></span>';
 
@@ -3419,14 +3419,14 @@ class Exercise
 
         $user_answer = '';
         // Get answer list for matching
-        $sql = "SELECT id_auto, id, answer
+        $sql = "SELECT iid, answer
                 FROM $table_ans
                 WHERE c_id = $course_id AND question_id = $questionId";
         $res_answer = Database::query($sql);
 
         $answerMatching = [];
         while ($real_answer = Database::fetch_array($res_answer)) {
-            $answerMatching[$real_answer['id_auto']] = $real_answer['answer'];
+            $answerMatching[$real_answer['iid']] = $real_answer['answer'];
         }
 
         $real_answers = [];
@@ -7487,11 +7487,10 @@ class Exercise
                 INNER JOIN $TBL_QUESTIONS q
                 ON (e.question_id = q.iid AND e.c_id = q.c_id)
                 INNER JOIN $categoryRelTable catRel
-                ON (catRel.question_id = e.question_id AND catRel.c_id = e.c_id)
+                ON (catRel.question_id = e.question_id)
                 INNER JOIN $categoryTable cat
-                ON (cat.id = catRel.category_id AND cat.c_id = e.c_id)
+                ON (cat.iid = catRel.category_id)
                 WHERE
-                  e.c_id = {$this->course_id} AND
                   e.exercice_id	= ".(int) ($this->getId());
 
         $result = Database::query($sql);
@@ -9018,7 +9017,7 @@ class Exercise
                 $content .= Display::return_icon('quiz.png', '', [], 64);
                 $content .= '<div class="controls">';
                 $content .= Display::url(
-                    '<em class="fa fa-plus"></em> '.get_lang('NewEx'),
+                    '<em class="fa fa-plus"></em> '.get_lang('Create a new test'),
                     'exercise_admin.php?'.api_get_cidreq(),
                     ['class' => 'btn btn-primary']
                 );
@@ -10023,7 +10022,7 @@ class Exercise
             'radio',
             'results_disabled',
             null,
-            get_lang('TestRankingMode'),
+            get_lang('Ranking mode: Do not show results details question by question and show a table with the ranking of all other users.'),
             RESULT_DISABLE_RANKING,
             ['id' => 'result_disabled_6']
         );
@@ -10032,7 +10031,7 @@ class Exercise
             'radio',
             'results_disabled',
             null,
-            get_lang('TestShowOnlyGlobalScoreAndCorrect answers'),
+            get_lang('Show only global score (not question score) and show only the correct answers, do not show incorrect answers at all'),
             RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
             ['id' => 'result_disabled_7']
         );
@@ -10041,7 +10040,7 @@ class Exercise
             'radio',
             'results_disabled',
             null,
-            get_lang('TestAutoEvaluationAndRankingMode'),
+            get_lang('Auto-evaluation mode and ranking'),
             RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING,
             ['id' => 'result_disabled_8']
         );
@@ -10049,7 +10048,7 @@ class Exercise
         return $form->addGroup(
             $resultDisabledGroup,
             null,
-            get_lang('ShowResults and feedback and feedback and feedback and feedback and feedback and feedbackToStudents')
+            get_lang('Show score to learner')
         );
     }
 }

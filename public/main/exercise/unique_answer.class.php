@@ -205,7 +205,7 @@ class UniqueAnswer extends Question
                 null,
                 null,
                 $i,
-                'class="checkbox"'
+                ['class' => 'checkbox']
             );
 
             $form->addHtmlEditor('answer['.$i.']', null, null, false, $editor_config);

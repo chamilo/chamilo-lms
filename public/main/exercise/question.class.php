@@ -2083,7 +2083,7 @@ abstract class Question
         $count = $em
             ->createQuery('
                 SELECT COUNT(qq.iid) FROM ChamiloCourseBundle:CQuizRelQuestion qq
-                WHERE qq.questionId = :id
+                WHERE qq.question = :id
             ')
             ->setParameters(['id' => (int) $this->id])
             ->getSingleScalarResult();

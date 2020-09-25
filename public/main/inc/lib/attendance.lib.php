@@ -1105,17 +1105,18 @@ class Attendance
             //$course_info = api_get_course_info($course_code);
             $course_id = $course['real_id'];
             $tbl_attendance_result = Database::get_course_table(TABLE_ATTENDANCE_RESULT);
-            $attendances_by_course = $this->get_attendances_list($course_id);
+            $attendances = $this->get_attendances_list($course_id);
 
-            foreach ($attendances_by_course as $attendance) {
+            foreach ($attendances as $attendance) {
+                $attendanceId = $attendance->getIid();
                 // get total faults and total weight
-                $total_done_attendance = $attendance['attendance_qualify_max'];
+                $total_done_attendance = $attendance->getAttendanceQualifyMax();
                 $sql = "SELECT score
                         FROM $tbl_attendance_result
                         WHERE
                             c_id = $course_id AND
                             user_id = $user_id AND
-                            attendance_id = ".$attendance['iid'];
+                            attendance_id = ".$attendanceId;
                 $rs = Database::query($sql);
                 $score = 0;
                 if (Database::num_rows($rs) > 0) {
@@ -1129,10 +1130,10 @@ class Attendance
             }
         }
 
-        $porcent = $total_weight > 0 ? round(($total_faults * 100) / $total_weight, 0) : 0;
+        $percent = $total_weight > 0 ? round(($total_faults * 100) / $total_weight, 0) : 0;
         $results['faults'] = $total_faults;
         $results['total'] = $total_weight;
-        $results['porcent'] = $porcent;
+        $results['percent'] = $percent;
 
         return $results;
     }
@@ -1145,32 +1146,27 @@ class Attendance
      * @param int Session id (optional)
      *
      * @return array results containing number of faults,
-     *               total done attendance, porcent of faults and color depend on result (red, orange)
+     *               total done attendance, percent of faults and color depend on result (red, orange)
      */
-    public function get_faults_average_by_course(
-        $user_id,
-        $course_code,
-        $session_id = null
-    ) {
+    public function get_faults_average_by_course($user_id, $course_code, $session_id = null)
+    {
         // Database tables and variables
         $course_info = api_get_course_info($course_code);
         $tbl_attendance_result = Database::get_course_table(TABLE_ATTENDANCE_RESULT);
         $user_id = (int) $user_id;
         $results = [];
         $total_faults = $total_weight = $porcent = 0;
-        $attendances_by_course = $this->get_attendances_list(
-            $course_info['real_id'],
-            $session_id
-        );
+        $attendances = $this->get_attendances_list($course_info['real_id'], $session_id);
 
-        foreach ($attendances_by_course as $attendance) {
+        foreach ($attendances as $attendance) {
+            $attendanceId = $attendance->getIid();
             // Get total faults and total weight
-            $total_done_attendance = $attendance['attendance_qualify_max'];
+            $total_done_attendance = $attendance->getAttendanceQualifyMax();
             $sql = "SELECT score FROM $tbl_attendance_result
                     WHERE
                         c_id = {$course_info['real_id']} AND
                         user_id = $user_id AND
-                        attendance_id=".$attendance['iid'];
+                        attendance_id=".$attendanceId;
             $rs = Database::query($sql);
             $score = 0;
             if (Database::num_rows($rs) > 0) {
@@ -1183,10 +1179,10 @@ class Attendance
             $total_weight += $total_done_attendance;
         }
 
-        $porcent = $total_weight > 0 ? round(($total_faults * 100) / $total_weight, 0) : 0;
+        $percent = $total_weight > 0 ? round(($total_faults * 100) / $total_weight, 0) : 0;
         $results['faults'] = $total_faults;
         $results['total'] = $total_weight;
-        $results['porcent'] = $porcent;
+        $results['percent'] = $percent;
 
         return $results;
     }

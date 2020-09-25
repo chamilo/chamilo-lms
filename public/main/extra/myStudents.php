@@ -737,7 +737,7 @@ if (!empty($studentId)) {
                                     '<a title="'.get_lang('Go to attendances').'" href="'.api_get_path(
                                         WEB_CODE_PATH
                                     ).'attendance/index.php?cidReq='.$courseCodeItem.'&id_session='.$sId.'&student_id='.$studentId.'">'.
-                                    $results_faults_avg['faults'].'/'.$results_faults_avg['total'].' ('.$results_faults_avg['porcent'].'%)</a>';
+                                    $results_faults_avg['faults'].'/'.$results_faults_avg['total'].' ('.$results_faults_avg['percent'].'%)</a>';
                             } else {
                                 $attendances_faults_avg =
                                     $results_faults_avg['faults'].'/'.
@@ -1878,11 +1878,13 @@ if (empty($_GET['details'])) {
                     );
                     if (!empty($results_faults_avg['total'])) {
                         if (api_is_drh()) {
-                            $attendances_faults_avg = '<a title="'.get_lang('Go to attendances').'" href="'.api_get_path(
-                                    WEB_CODE_PATH
-                                ).'attendance/index.php?cidReq='.$course_code.'&id_session='.$session_id.'&student_id='.$studentId.'">'.$results_faults_avg['faults'].'/'.$results_faults_avg['total'].' ('.$results_faults_avg['porcent'].'%)</a>';
+                            $attendances_faults_avg =
+                                '<a title="'.get_lang('Go to attendances').'" href="'.api_get_path(WEB_CODE_PATH).
+                                'attendance/index.php?cidReq='.$course_code.'&id_session='.$session_id.'&student_id='.$studentId.'">'.
+                                $results_faults_avg['faults'].'/'.$results_faults_avg['total'].' ('.$results_faults_avg['porcent'].'%)</a>';
                         } else {
-                            $attendances_faults_avg = $results_faults_avg['faults'].'/'.$results_faults_avg['total'].' ('.$results_faults_avg['porcent'].'%)';
+                            $attendances_faults_avg = $results_faults_avg['faults'].'/'.$results_faults_avg['total'].
+                                ' ('.$results_faults_avg['percent'].'%)';
                         }
                     } else {
                         $attendances_faults_avg = '0/0 (0%)';

@@ -1280,11 +1280,11 @@ if (empty($details)) {
                                 .'attendance/index.php?cidReq='.$courseCodeItem.'&id_session='.$sId.'&student_id='
                                 .$studentId.'">'
                                 .$results_faults_avg['faults'].'/'.$results_faults_avg['total'].' ('
-                                .$results_faults_avg['porcent'].'%)</a>';
+                                .$results_faults_avg['percent'].'%)</a>';
                         } else {
                             $attendances_faults_avg = $results_faults_avg['faults'].'/'
                                 .$results_faults_avg['total']
-                                .' ('.$results_faults_avg['porcent'].'%)';
+                                .' ('.$results_faults_avg['percent'].'%)';
                         }
                         $totalAttendance[0] += $results_faults_avg['faults'];
                         $totalAttendance[1] += $results_faults_avg['total'];

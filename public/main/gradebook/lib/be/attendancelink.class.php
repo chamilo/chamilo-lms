@@ -145,7 +145,7 @@ class AttendanceLink extends AbstractLink
                 if (!(array_key_exists($data['user_id'], $students))) {
                     if (0 != $attendance['attendance_qualify_max']) {
                         $students[$data['user_id']] = $data['score'];
-                        ++$rescount;
+                        $rescount++;
                         $sum += $data['score'] / $attendance['attendance_qualify_max'];
                         $sumResult += $data['score'];
                         if ($data['score'] > $bestResult) {

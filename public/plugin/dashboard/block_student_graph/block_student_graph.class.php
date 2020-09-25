@@ -97,12 +97,10 @@ class BlockStudentGraph extends Block
         if (is_array($students) && count($students) > 0) {
             foreach ($students as $student) {
                 $student_id = $student['user_id'];
-                //$student_info = api_get_user_info($student_id);
                 // get average of faults in attendances by student
                 $results_faults_avg = $attendance->get_faults_average_inside_courses($student_id);
-
                 if (!empty($results_faults_avg)) {
-                    $attendances_faults_avg[$student['lastname']] = $results_faults_avg['porcent'];
+                    $attendances_faults_avg[$student['lastname']] = $results_faults_avg['percent'];
                 } else {
                     $attendances_faults_avg[$student['lastname']] = 0;
                 }

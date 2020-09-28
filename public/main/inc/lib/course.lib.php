@@ -152,6 +152,9 @@ class CourseManager
 
                     return $courseInfo;
                 }
+            }else{
+                    $courseInfo["already_exist"]= true;
+                    return $courseInfo;
             }
         }
 

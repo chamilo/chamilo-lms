@@ -116,8 +116,7 @@ class ExerciseLink extends AbstractLink
     /**
      * Get the score of this exercise. Only the first attempts are taken into account.
      *
-     * @param int    $studentId student id (default: all students who have results -
-     *                        then the average is returned)
+     * @param int    $studentId (default: all students who have results then the average is returned)
      * @param string $type
      *
      * @return array (score, max) if student is given

@@ -6056,7 +6056,7 @@ class Exercise
             if ($saveUserResult) {
                 $trackConfirmation = new TrackEExerciseConfirmation();
                 $trackConfirmation
-                    ->setUserId($trackExerciseInfo['exe_user_id'])
+                    ->setUser(api_get_user_entity($trackExerciseInfo['exe_user_id']))
                     ->setQuizId($trackExerciseInfo['exe_exo_id'])
                     ->setAttemptId($trackExerciseInfo['exe_id'])
                     ->setQuestionsCount($questionsCount)

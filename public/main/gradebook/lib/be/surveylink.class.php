@@ -131,7 +131,7 @@ class SurveyLink extends AbstractLink
      * Calculate score for a student (to show in the gradebook).
      *
      * @param int    $studentId
-     * @param string $type    Type of result we want (best|average|ranking)
+     * @param string $type Type of result we want (best|average|ranking)
      *
      * @return array|null
      */

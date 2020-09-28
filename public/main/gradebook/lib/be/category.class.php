@@ -873,13 +873,12 @@ class Category implements GradebookItem
     /**
      * Calculate the score of this category.
      *
-     * @param int    $studentId     student id (default: all students - then the average is returned)
-     * @param        $type
+     * @param int    $studentId (default: all students - then the average is returned)
+     * @param string $type
      * @param string $course_code
      * @param int    $session_id
      *
-     * @return array (score sum, weight sum)
-     *               or null if no scores available
+     * @return array (score sum, weight sum) or null if no scores available
      */
     public function calc_score(
         $studentId = null,

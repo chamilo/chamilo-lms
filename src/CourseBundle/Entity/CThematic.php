@@ -95,7 +95,6 @@ class CThematic extends AbstractResource implements ResourceInterface
 
     public function __construct()
     {
-        $this->id = 0;
         $this->plans = new ArrayCollection();
         $this->advances = new ArrayCollection();
     }

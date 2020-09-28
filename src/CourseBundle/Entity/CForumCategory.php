@@ -85,7 +85,7 @@ class CForumCategory extends AbstractResource implements ResourceInterface
     protected $catId;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection|CForumForum[]
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CForumForum", mappedBy="forumCategory")
      */
@@ -95,6 +95,7 @@ class CForumCategory extends AbstractResource implements ResourceInterface
     {
         $this->locked = 0;
         $this->catId = 0;
+        $this->forums = new ArrayCollection();
     }
 
     public function __toString(): string

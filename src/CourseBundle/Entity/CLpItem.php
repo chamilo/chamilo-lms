@@ -201,7 +201,6 @@ class CLpItem
      */
     public function __construct()
     {
-        $this->iid = 0;
         $this->maxScore = 100.0;
     }
 

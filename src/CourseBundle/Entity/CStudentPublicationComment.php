@@ -234,16 +234,6 @@ class CStudentPublicationComment extends AbstractResource implements ResourceInt
     }
 
     /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
      * Resource identifier.
      */
     public function getResourceIdentifier(): int

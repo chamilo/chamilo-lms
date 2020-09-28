@@ -136,6 +136,7 @@ class CForumPost extends AbstractResource implements ResourceInterface
     public function __construct()
     {
         $this->postParentId = null;
+        $this->attachments = new ArrayCollection();
     }
 
     public function __toString(): string

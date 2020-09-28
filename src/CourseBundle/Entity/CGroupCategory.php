@@ -137,7 +137,6 @@ class CGroupCategory extends AbstractResource implements ResourceInterface
         $this->selfRegAllowed = 0;
         $this->selfUnregAllowed = 0;
         $this->groupsPerUser = 0;
-
         $this->announcementsState = 1;
         $this->calendarState = 1;
         $this->documentAccess = 1;

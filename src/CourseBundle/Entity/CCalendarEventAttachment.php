@@ -68,7 +68,7 @@ class CCalendarEventAttachment extends AbstractResource implements ResourceInter
     /**
      * @var CCalendarEvent
      *
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CCalendarEvent", cascade={"persist"}, inversedBy="attachments")
+     * @ORM\ManyToOne(targetEntity="CCalendarEvent", cascade={"persist"}, inversedBy="attachments")
      * @ORM\JoinColumn(name="agenda_id", referencedColumnName="iid", onDelete="CASCADE")
      */
     protected $event;

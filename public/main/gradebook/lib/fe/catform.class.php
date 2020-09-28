@@ -79,9 +79,9 @@ class CatForm extends FormValidator
                 $line .= '--';
             }
             if ($cat[0] != $this->category_object->get_parent_id()) {
-                $select->addoption($line.' '.$cat[1], $cat[0]);
+                $select->addOption($line.' '.$cat[1], $cat[0]);
             } else {
-                $select->addoption($line.' '.$cat[1], $cat[0], 'disabled');
+                $select->addOption($line.' '.$cat[1], $cat[0], 'disabled');
             }
             $line = '';
         }

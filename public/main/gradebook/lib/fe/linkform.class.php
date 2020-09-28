@@ -74,7 +74,7 @@ class LinkForm extends FormValidator
             for ($i = 0; $i < $cat[2]; $i++) {
                 $line .= '&mdash;';
             }
-            $select->addoption($line.' '.$cat[1], $cat[0]);
+            $select->addOption($line.' '.$cat[1], $cat[0]);
             $line = '';
         }
         $this->addElement('submit', null, get_lang('Validate'));

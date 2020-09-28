@@ -87,18 +87,16 @@ class CTool extends AbstractResource implements ResourceInterface
      */
     public function __construct()
     {
-        // Default values
-        $this->id = 0;
     }
 
     public function __toString(): string
     {
-        return (string) $this->getName();
+        return $this->getName();
     }
 
     public function getName(): string
     {
-        return $this->name;
+        return (string) $this->name;
     }
 
     public function setName(string $name): self

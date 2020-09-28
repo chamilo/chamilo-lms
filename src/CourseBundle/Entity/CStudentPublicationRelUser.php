@@ -122,14 +122,4 @@ class CStudentPublicationRelUser
     {
         return $this->cId;
     }
-
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
 }

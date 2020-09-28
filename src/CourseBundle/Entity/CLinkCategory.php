@@ -62,6 +62,7 @@ class CLinkCategory extends AbstractResource implements ResourceInterface
     public function __construct()
     {
         $this->displayOrder = 0;
+        $this->links = new ArrayCollection();
     }
 
     public function __toString(): string

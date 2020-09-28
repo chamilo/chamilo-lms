@@ -163,7 +163,7 @@ class CForumThread extends AbstractResource implements ResourceInterface
     protected $lpItemId;
 
     /**
-     * @var CForumPost[]
+     * @var ArrayCollection|CForumPost[]
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CForumPost", mappedBy="thread", cascade={"persist", "remove"}, orphanRemoval=true)
      */
@@ -171,6 +171,7 @@ class CForumThread extends AbstractResource implements ResourceInterface
 
     public function __construct()
     {
+        $this->posts = new ArrayCollection();
         $this->threadPeerQualify = false;
         $this->threadReplies = 0;
         $this->threadViews = 0;

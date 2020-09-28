@@ -24,10 +24,9 @@
         <file name="public/main/exercise/oral_expression.class.php"/>
         <file name="public/main/exercise/exercise.class.php"/>
 
-        <directory name="public/main/group"/>
         <directory name="public/main/gradebook"/>
-
-<!--        <directory name="public/main/forum"/>-->
+        <directory name="public/main/group"/>
+        <directory name="public/main/forum"/>
         <directory name="public/main/link" />
 <!--        <directory name="public/main/lp"/>-->
 <!--        <directory name="public/main/session" />-->
@@ -133,6 +132,7 @@
             <directory name="src/CourseBundle/Component/CourseCopy"/>
             <directory name="src/GraphQlBundle"/>
             <directory name="src/LtiBundle"/>
+
 
             <file name="public/main/forum/forumfunction.inc.php"/>
             <file name="public/main/admin/index.php"/>

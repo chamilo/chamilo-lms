@@ -269,7 +269,7 @@ class Agenda
                     ->setEndDate($end)
                     ->setAllDay($allDay)
                     ->setColor($color)
-                    ->setUser(api_get_user_id())
+                    ->setUser(api_get_user_entity())
                 ;
                 $em->persist($event);
                 $em->flush();
@@ -2932,7 +2932,7 @@ class Agenda
             $courseInfo
         );
         if (!empty($attachment)) {
-            $this->deleteAttachmentFile($attachmentId, $courseInfo);
+            $this->deleteAttachmentFile($attachmentId);
         }
         $this->addAttachment($eventId, $fileUserUpload, $comment, $courseInfo);
     }
@@ -2941,39 +2941,26 @@ class Agenda
      * This function delete a attachment file by id.
      *
      * @param int   $attachmentId
-     * @param array $courseInfo
      *
      * @return string
      */
-    public function deleteAttachmentFile($attachmentId, $courseInfo)
+    public function deleteAttachmentFile($attachmentId)
     {
-        $table = Database::get_course_table(TABLE_AGENDA_ATTACHMENT);
-        $attachmentId = (int) $attachmentId;
-        $courseId = $courseInfo['real_id'];
+        $repo = Container::getCalendarEventAttachmentRepository();
+        /** @var CCalendarEventAttachment $attachment */
+        $attachment = $repo->find($attachmentId);
 
-        if (empty($courseId) || empty($attachmentId)) {
+        if (empty($attachment)) {
             return false;
         }
 
-        $sql = "DELETE FROM $table
-                WHERE c_id = $courseId AND id = ".$attachmentId;
-        $result = Database::query($sql);
+        $repo->getEntityManager()->remove($attachment);
+        $repo->getEntityManager()->flush();
 
-        // update item_property
-        api_item_property_update(
-            $courseInfo,
-            'calendar_event_attachment',
-            $attachmentId,
-            'AgendaAttachmentDeleted',
-            api_get_user_id()
+        return Display::return_message(
+            get_lang("The attached file has been deleted"),
+            'confirmation'
         );
-
-        if (!empty($result)) {
-            return Display::return_message(
-                get_lang("The attached file has been deleted"),
-                'confirmation'
-            );
-        }
     }
 
     /**
@@ -3611,17 +3598,19 @@ class Agenda
         $type
     ) {
         $tbl_personal_agenda = Database::get_main_table(TABLE_PERSONAL_AGENDA);
-        $user_id = intval($user_id);
-
+        $user_id = (int) $user_id;
+        $course_link = '';
         // 1. creating the SQL statement for getting the personal agenda items in MONTH view
-        if ("month_view" == $type or "" == $type) {
+        if ("month_view" === $type || "" == $type) {
             // we are in month view
-            $sql = "SELECT * FROM ".$tbl_personal_agenda." WHERE user='".$user_id."' and MONTH(date)='".$month."' AND YEAR(date) = '".$year."'  ORDER BY date ASC";
+            $sql = "SELECT * FROM ".$tbl_personal_agenda."
+                    WHERE user='".$user_id."' and MONTH(date)='".$month."' AND YEAR(date) = '".$year."'
+                    ORDER BY date ASC";
         }
 
         // 2. creating the SQL statement for getting the personal agenda items in WEEK view
         // we are in week view
-        if ("week_view" == $type) {
+        if ("week_view" === $type) {
             $start_end_day_of_week = self::calculate_start_end_of_week(
                 $week,
                 $year
@@ -3637,17 +3626,19 @@ class Agenda
             $start_filter = api_get_utc_datetime($start_filter);
             $end_filter = $end_year."-".$end_month."-".$end_day." 23:59:59";
             $end_filter = api_get_utc_datetime($end_filter);
-            $sql = " SELECT * FROM ".$tbl_personal_agenda." WHERE user='".$user_id."' AND date>='".$start_filter."' AND date<='".$end_filter."'";
+            $sql = "SELECT * FROM ".$tbl_personal_agenda."
+                    WHERE user='".$user_id."' AND date>='".$start_filter."' AND date<='".$end_filter."'";
         }
         // 3. creating the SQL statement for getting the personal agenda items in DAY view
-        if ("day_view" == $type) {
+        if ("day_view" === $type) {
             // we are in day view
             // we could use mysql date() function but this is only available from 4.1 and higher
             $start_filter = $year."-".$month."-".$day." 00:00:00";
             $start_filter = api_get_utc_datetime($start_filter);
             $end_filter = $year."-".$month."-".$day." 23:59:59";
             $end_filter = api_get_utc_datetime($end_filter);
-            $sql = " SELECT * FROM ".$tbl_personal_agenda." WHERE user='".$user_id."' AND date>='".$start_filter."' AND date<='".$end_filter."'";
+            $sql = "SELECT * FROM ".$tbl_personal_agenda."
+                    WHERE user='".$user_id."' AND date>='".$start_filter."' AND date<='".$end_filter."'";
         }
 
         $result = Database::query($sql);
@@ -3676,20 +3667,24 @@ class Agenda
             $minute = $agendatime[1];
             $second = $agendatime[2];
 
-            if ('month_view' == $type) {
+            if ('month_view' === $type) {
                 $item['calendar_type'] = 'personal';
                 $item['start_date'] = $item['date'];
                 $agendaitems[$day][] = $item;
                 continue;
             }
 
-            // Creating the array that will be returned. If we have week or month view we have an array with the date as the key
+            // Creating the array that will be returned.
+            // If we have week or month view we have an array with the date as the key
             // if we have a day_view we use a half hour as index => key 33 = 16h30
             if ("day_view" !== $type) {
                 // This is the array construction for the WEEK or MONTH view
 
                 //Display events in agenda
-                $agendaitems[$day] .= "<div><i>$time_minute</i> $course_link <a href=\"myagenda.php?action=view&view=personal&day=$day&month=$month&year=$year&id=".$item['id']."#".$item['id']."\" class=\"personal_agenda\">".$item['title']."</a></div><br />";
+                $agendaitems[$day] .= "<div>
+                     <i>$time_minute</i> $course_link
+                     <a href=\"myagenda.php?action=view&view=personal&day=$day&month=$month&year=$year&id=".$item['id']."#".$item['id']."\" class=\"personal_agenda\">".
+                    $item['title']."</a></div><br />";
             } else {
                 // this is the array construction for the DAY view
                 $halfhour = 2 * $agendatime['0'];
@@ -3698,7 +3693,9 @@ class Agenda
                 }
 
                 //Display events by list
-                $agendaitems[$halfhour] .= "<div><i>$time_minute</i> $course_link <a href=\"myagenda.php?action=view&view=personal&day=$day&month=$month&year=$year&id=".$item['id']."#".$item['id']."\" class=\"personal_agenda\">".$item['title']."</a></div>";
+                $agendaitems[$halfhour] .= "<div>
+                    <i>$time_minute</i> $course_link
+                    <a href=\"myagenda.php?action=view&view=personal&day=$day&month=$month&year=$year&id=".$item['id']."#".$item['id']."\" class=\"personal_agenda\">".$item['title']."</a></div>";
             }
         }
 
@@ -3706,7 +3703,7 @@ class Agenda
     }
 
     /**
-     * Show the monthcalender of the given month.
+     * Show the month calendar of the given month.
      *
      * @param    array    Agendaitems
      * @param    int    Month number
@@ -3979,11 +3976,10 @@ class Agenda
      *
      * @deprecated use agenda events
      */
-    public static function get_personal_agenda_items_between_dates(
-        $user_id,
-        $date_start = '',
-        $date_end = ''
-    ) {
+    public static function get_personal_agenda_items_between_dates($user_id, $date_start = '', $date_end = '')
+    {
+        throw new Exception('fix get_personal_agenda_items_between_dates');
+        /*
         $items = [];
         if ($user_id != strval(intval($user_id))) {
             return $items;
@@ -4006,10 +4002,10 @@ class Agenda
         }
 
         // get agenda-items for every course
-        $courses = api_get_user_courses($user_id, false);
+        //$courses = api_get_user_courses($user_id, false);
+        $courses = CourseManager::get_courses_list_by_user_id($user_id, false);
         foreach ($courses as $id => $course) {
             $c = api_get_course_info_by_id($course['real_id']);
-            //databases of the courses
             $t_a = Database::get_course_table(TABLE_AGENDA, $course['db']);
             $t_ip = Database::get_course_table(
                 TABLE_ITEM_PROPERTY,
@@ -4100,7 +4096,7 @@ class Agenda
             }
         }
 
-        return $items;
+        return $items;*/
     }
 
     /**

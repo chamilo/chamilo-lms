@@ -489,7 +489,9 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * @var ArrayCollection|TrackEAttempt[]
-     * @ORM\OneToMany(targetEntity="TrackEAccessComplete", mappedBy="user", cascade={"persist", "remove"},orphanRemoval=true)
+     * @ORM\OneToMany(
+     *     targetEntity="TrackEAccessComplete", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true
+     * )
      */
     protected $trackEAccessCompleteList;
 
@@ -517,9 +519,10 @@ class User implements UserInterface, EquatableInterface
     protected $trackECourseAccess;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection|UserCourseCategory[]
+     *
      * @ORM\OneToMany(
-     *     targetEntity="Chamilo\CoreBundle\Entity\UserCourseCategory",
+     *     targetEntity="UserCourseCategory",
      *     mappedBy="user",
      *     cascade={"persist", "remove"},
      *     orphanRemoval=true
@@ -528,19 +531,19 @@ class User implements UserInterface, EquatableInterface
     protected $userCourseCategories;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection|UserRelCourseVote[]
      * @ORM\OneToMany(targetEntity="UserRelCourseVote", mappedBy="user",cascade={"persist","remove"},orphanRemoval=true)
      */
     protected $userRelCourseVotes;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection|UserRelTag[]
      * @ORM\OneToMany(targetEntity="UserRelTag", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     protected $userRelTags;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection|PersonalAgenda[]
      * @ORM\OneToMany(targetEntity="PersonalAgenda",mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     protected $personalAgendas;

@@ -272,17 +272,17 @@ if ('add' !== $action) {
                     //echo 'student';
                     // it is not a group forum => show forum
                     // (invisible forums are already left out see get_forums function)
-                    if ('0' == $forum['forum_of_group']) {
+                    if ('0' == $forum->getForumOfGroup()) {
                         $show_forum = true;
                     } else {
                         // it is a group forum
                         // it is a group forum but it is public => show
-                        if ('public' == $forum['forum_group_public_private']) {
+                        if ('public' === $forum->getForumGroupPublicPrivate()) {
                             $show_forum = true;
                         } else {
                             // it is a group forum and it is private
                             // it is a group forum and it is private but the user is member of the group
-                            if (in_array($forum['forum_of_group'], $groups_of_user)) {
+                            if (in_array($forum->getForumOfGroup(), $groups_of_user)) {
                                 $show_forum = true;
                             } else {
                                 $show_forum = false;
@@ -323,9 +323,10 @@ if ('add' !== $action) {
                     }
 
                     $session_displayed = '';
-                    if (!empty($sessionId) && !empty($forum['session_name'])) {
+                    // @todo fix session name
+                    /*if (!empty($sessionId) && !empty($forum['session_name'])) {
                         $session_displayed = ' ('.$forum['session_name'].')';
-                    }
+                    }*/
 
                     // the number of topics and posts
                     $my_number_threads = $forum->getThreads() ? $forum->getThreads()->count() : 0;
@@ -411,7 +412,7 @@ if ('add' !== $action) {
                     $html .= '<div class="col-md-6">';
                     if (!empty($forum->getForumLastPost())) {
                         $html .= Display::return_icon('post-item.png', null, null, ICON_SIZE_TINY).' ';
-                        $html .= Display::dateToStringAgoAndLongDate($forum['last_post_date'])
+                        $html .= Display::dateToStringAgoAndLongDate($forum->getForumLastPost())
                             .' '.get_lang('By').' '
                             .display_user_link($poster_id, $name);
                     }

@@ -1020,7 +1020,7 @@ function delete_post($post_id)
     /** @var CForumPost $post */
     $post = $em
         ->getRepository(CForumPost::class)
-        ->findOneBy(['cId' => $course_id, 'iid' => $post_id]);
+        ->findOneBy(['iid' => $post_id]);
 
     if ($post) {
         $em
@@ -3201,12 +3201,12 @@ function newThread(CForumForum $forum, $form_values = '', $showPreview = true)
 }
 
 /**
- * @param array $threadInfo
- * @param int   $user_id
- * @param int   $thread_id
- * @param int   $thread_qualify
- * @param int   $qualify_time
- * @param int   $session_id
+ * @param CForumThread $threadInfo
+ * @param int          $user_id
+ * @param int          $thread_id
+ * @param int          $thread_qualify
+ * @param int          $qualify_time
+ * @param int          $session_id
  *
  * @return array optional
  *
@@ -3215,7 +3215,7 @@ function newThread(CForumForum $forum, $form_values = '', $showPreview = true)
  * @version October 2008, dokeos  1.8.6
  */
 function saveThreadScore(
-    $threadInfo,
+    CForumThread $threadEntity,
     $user_id,
     $thread_id,
     $thread_qualify = 0,
@@ -3223,7 +3223,6 @@ function saveThreadScore(
     $session_id = 0
 ) {
     $table_threads_qualify = Database::get_course_table(TABLE_FORUM_THREAD_QUALIFY);
-    $table_threads = Database::get_course_table(TABLE_FORUM_THREAD);
 
     $course_id = api_get_course_int_id();
     $session_id = (int) $session_id;
@@ -3233,24 +3232,20 @@ function saveThreadScore(
         $thread_id == (string) ((int) $thread_id) &&
         $thread_qualify == (string) ((float) $thread_qualify)
     ) {
-        // Testing
-        $sql = "SELECT thread_qualify_max FROM $table_threads
-                WHERE c_id = $course_id AND thread_id=".$thread_id;
-        $res_string = Database::query($sql);
-        $row_string = Database::fetch_array($res_string);
-        if ($thread_qualify <= $row_string[0]) {
-            if (0 == $threadInfo['thread_peer_qualify']) {
+        $max = $threadEntity->getThreadQualifyMax();
+        if ($thread_qualify <= $max) {
+            if ($threadEntity->isThreadPeerQualify()) {
                 $sql = "SELECT COUNT(*) FROM $table_threads_qualify
                         WHERE
                             c_id = $course_id AND
                             user_id = $user_id AND
+                            qualify_user_id = $currentUserId AND
                             thread_id = ".$thread_id;
             } else {
                 $sql = "SELECT COUNT(*) FROM $table_threads_qualify
                         WHERE
                             c_id = $course_id AND
                             user_id = $user_id AND
-                            qualify_user_id = $currentUserId AND
                             thread_id = ".$thread_id;
             }
 
@@ -3261,8 +3256,6 @@ function saveThreadScore(
                 $sql = "INSERT INTO $table_threads_qualify (c_id, user_id, thread_id,qualify,qualify_user_id,qualify_time,session_id)
                         VALUES (".$course_id.", '".$user_id."','".$thread_id."',".(float) $thread_qualify.", '".$currentUserId."','".$qualify_time."','".$session_id."')";
                 Database::query($sql);
-                $insertId = Database::insert_id();
-
                 return 'insert';
             } else {
                 saveThreadScoreHistory(
@@ -4086,18 +4079,18 @@ function approve_post($post_id, $action)
     $table_posts = Database::get_course_table(TABLE_FORUM_POST);
     $course_id = api_get_course_int_id();
 
-    if ('invisible' == $action) {
+    if ('invisible' === $action) {
         $visibility_value = 0;
     }
 
-    if ('visible' == $action) {
+    if ('visible' === $action) {
         $visibility_value = 1;
         handle_mail_cue('post', $post_id);
     }
 
     $sql = "UPDATE $table_posts SET
-            visible='".Database::escape_string($visibility_value)."'
-            WHERE c_id = $course_id AND post_id='".Database::escape_string($post_id)."'";
+                visible='".Database::escape_string($visibility_value)."'
+            WHERE post_id='".Database::escape_string($post_id)."'";
     $return = Database::query($sql);
 
     if ($return) {
@@ -4638,8 +4631,8 @@ function store_move_thread($values)
     Database::query($sql);
 
     // Fix group id, if forum is moved to a different group
-    if (!empty($forumInfo['to_group_id'])) {
-        /*$groupId = $forumInfo['to_group_id'];
+    /*if (!empty($forumInfo['to_group_id'])) {
+        $groupId = $forumInfo['to_group_id'];
         $item = api_get_item_property_info(
             $courseId,
             TABLE_FORUM_THREAD,
@@ -4672,8 +4665,8 @@ function store_move_thread($values)
                       $sessionCondition
             ";
             Database::query($sql);
-        }*/
-    }
+        }
+    }*/
 
     return get_lang('Thread moved');
 }
@@ -5814,9 +5807,9 @@ function get_all_post_from_user($user_id, $courseId)
                 $forum_results .= '<div id="social-forum">';
                 $forum_results .= '<div class="clear"></div><br />';
                 $forum_results .= '<div id="social-forum-title">'.
-                    Display::return_icon('forum.gif', get_lang('Forum')).'&nbsp;'.Security::remove_XSS($forum['forum_title'], STUDENT).
+                    Display::return_icon('forum.gif', get_lang('Forum')).'&nbsp;'.Security::remove_XSS($forum->getForumTitle(), STUDENT).
                     '<div style="float:right;margin-top:-35px">
-                        <a href="../forum/viewforum.php?'.api_get_cidreq_params($courseId).'&forum='.$forum['forum_id'].' " >'.
+                        <a href="../forum/viewforum.php?'.api_get_cidreq_params($courseId).'&forum='.$forum->getIid().' " >'.
                     get_lang('See forum').'
                         </a>
                      </div></div>';
@@ -5959,9 +5952,9 @@ function forumRecursiveSort($rows, &$threads, $seed = 0, $indent = 0)
 /**
  * Update forum attachment data, used to update comment and post ID.
  *
- * @param array  $array    (field => value) to update forum attachment row
- * @param attach $id       ID to find row to update
- * @param null   $courseId course ID to find row to update
+ * @param array $array    (field => value) to update forum attachment row
+ * @param int   $id       ID to find row to update
+ * @param int   $courseId course ID to find row to update
  *
  * @return int number of affected rows
  */
@@ -6439,28 +6432,22 @@ function postIsEditableByStudent($forum, $post)
 }
 
 /**
- * @param int $postId
+ * @param CForumPost $post
  *
  * @return bool
  */
-function savePostRevision($postId)
+function savePostRevision(CForumPost $post)
 {
-    $postData = get_post_information($postId);
-
-    if (empty($postData)) {
-        return false;
-    }
-
     $userId = api_get_user_id();
 
-    if ($postData['poster_id'] != $userId) {
+    if ($post->getPosterId() != $userId) {
         return false;
     }
 
-    $status = (int) !postNeedsRevision($postId);
+    $status = (int) !postNeedsRevision($post);
     $extraFieldValue = new ExtraFieldValue('forum_post');
     $params = [
-        'item_id' => $postId,
+        'item_id' => $post->getIid(),
         'extra_ask_for_revision' => ['extra_ask_for_revision' => $status],
     ];
     if (empty($status)) {
@@ -6494,13 +6481,9 @@ function getPostRevision($postId)
     return $revision;
 }
 
-/**
- * @param int $postId
- *
- * @return bool
- */
-function postNeedsRevision($postId)
+function postNeedsRevision(CForumPost $post): bool
 {
+    $postId = $post->getIid();
     $extraFieldValue = new ExtraFieldValue('forum_post');
     $value = $extraFieldValue->get_values_by_handler_and_field_variable(
         $postId,
@@ -6515,21 +6498,21 @@ function postNeedsRevision($postId)
 }
 
 /**
- * @param int   $postId
+ * @param CForumPost   $post
  * @param array $threadInfo
  *
  * @return string
  */
-function getAskRevisionButton($postId, $threadInfo)
+function getAskRevisionButton(CForumPost $post, $threadInfo)
 {
     if (false === api_get_configuration_value('allow_forum_post_revisions')) {
         return '';
     }
 
-    $postId = (int) $postId;
+    $postId = $post->getIid();
 
     $status = 'btn-default';
-    if (postNeedsRevision($postId)) {
+    if (postNeedsRevision($post)) {
         $status = 'btn-success';
     }
 
@@ -6651,13 +6634,13 @@ function getReportRecipients()
 }
 
 /**
- * @param int   $postId
- * @param array $forumInfo
- * @param array $threadInfo
+ * @param CForumPost $post
+ * @param array      $forumInfo
+ * @param array      $threadInfo
  *
  * @return bool
  */
-function reportPost($postId, $forumInfo, $threadInfo)
+function reportPost(CForumPost $post, $forumInfo, $threadInfo)
 {
     if (!reportAvailable()) {
         return false;
@@ -6667,30 +6650,27 @@ function reportPost($postId, $forumInfo, $threadInfo)
         return false;
     }
 
-    $postId = (int) $postId;
+    $postId = $post->getIid();
 
-    $postData = get_post_information($postId);
     $currentUser = api_get_user_info();
-
-    if (!empty($postData)) {
-        $users = getReportRecipients();
-        if (!empty($users)) {
-            $url = api_get_path(WEB_CODE_PATH).
-                'forum/viewthread.php?forum='.$threadInfo['forum_id'].'&thread='.$threadInfo['thread_id'].'&'.api_get_cidreq().'&post_id='.$postId.'#post_id_'.$postId;
-            $postLink = Display::url(
-                $postData['post_title'],
-                $url
-            );
-            $subject = get_lang('Post reported');
-            $content = sprintf(
-                get_lang('User %s has reported the message %s in the forum %s'),
-                $currentUser['complete_name'],
-                $postLink,
-                $forumInfo['forum_title']
-            );
-            foreach ($users as $userId) {
-                MessageManager::send_message_simple($userId, $subject, $content);
-            }
+    $users = getReportRecipients();
+    if (!empty($users)) {
+        $url = api_get_path(WEB_CODE_PATH).
+            'forum/viewthread.php?forum='.$threadInfo['forum_id'].'&thread='.$threadInfo['thread_id'].'&'.api_get_cidreq().'&post_id='.$postId.'#post_id_'.$postId;
+        $postLink = Display::url(
+            $post->getPostTitle(),
+            $url
+        );
+        $subject = get_lang('Post reported');
+        $content = sprintf(
+            get_lang('User %s has reported the message %s in the forum %s'),
+            $currentUser['complete_name'],
+            $postLink,
+            $forumInfo['forum_title']
+        );
+        foreach ($users as $userId) {
+            MessageManager::send_message_simple($userId, $subject, $content);
         }
     }
+
 }

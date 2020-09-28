@@ -502,9 +502,13 @@ if (is_array($threads)) {
             }*/
             $id_attach = !empty($attachment_list) ? $attachment_list['id'] : '';
             $iconsEdit = '';
-            if ('learnpath' != $origin) {
-                if (api_is_allowed_to_edit(false, true) &&
-                    !(api_is_session_general_coach() && $current_forum['session_id'] != $sessionId)
+            if ('learnpath' !== $origin) {
+                if (api_is_allowed_to_edit(false, true)
+                    /*&& @todo fix session validation
+                    !(
+                        api_is_session_general_coach() &&
+                        $current_forum['session_id'] != $sessionId
+                    )*/
                 ) {
                     $iconsEdit .= '<a href="'.$forumUrl.'editthread.php?'.api_get_cidreq()
                         .'&forum='.$forumId.'&thread='

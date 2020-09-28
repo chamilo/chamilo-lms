@@ -201,14 +201,14 @@ class CForumForum extends AbstractResource implements ResourceInterface
     protected $moderated;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection|CForumThread[]
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CForumThread", mappedBy="forum")
      */
     protected $threads;
 
     /**
-     * @var CForumPost[]
+     * @var ArrayCollection|CForumPost[]
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CForumPost", mappedBy="forum")
      */
@@ -219,6 +219,8 @@ class CForumForum extends AbstractResource implements ResourceInterface
      */
     public function __construct()
     {
+        $this->threads = new ArrayCollection();
+        $this->posts = new ArrayCollection();
         $this->locked = 0;
         $this->forumImage = '';
         $this->forumOfGroup = 0;
@@ -259,10 +261,8 @@ class CForumForum extends AbstractResource implements ResourceInterface
      * Set forumComment.
      *
      * @param string $forumComment
-     *
-     * @return CForumForum
      */
-    public function setForumComment($forumComment)
+    public function setForumComment($forumComment): self
     {
         $this->forumComment = $forumComment;
 
@@ -283,10 +283,8 @@ class CForumForum extends AbstractResource implements ResourceInterface
      * Set forumThreads.
      *
      * @param int $forumThreads
-     *
-     * @return CForumForum
      */
-    public function setForumThreads($forumThreads)
+    public function setForumThreads($forumThreads): self
     {
         $this->forumThreads = $forumThreads;
 
@@ -301,6 +299,11 @@ class CForumForum extends AbstractResource implements ResourceInterface
     public function getForumThreads()
     {
         return $this->forumThreads;
+    }
+
+    public function hasThread($thread)
+    {
+        return $this->threads->contains($thread);
     }
 
     /**

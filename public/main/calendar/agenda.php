@@ -265,10 +265,7 @@ if ($allowToEdit) {
 
                 if (!empty($deleteAttachmentList)) {
                     foreach ($deleteAttachmentList as $deleteAttachmentId => $value) {
-                        $agenda->deleteAttachmentFile(
-                            $deleteAttachmentId,
-                            $agenda->course
-                        );
+                        $agenda->deleteAttachmentFile($deleteAttachmentId);
                     }
                 }
 

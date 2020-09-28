@@ -24,6 +24,7 @@ $my_search = null;
 $moveForm = '';
 
 $forumId = isset($_GET['forum']) ? (int) $_GET['forum'] : 0;
+$postId = isset($_GET['post_id']) ? $_GET['post_id'] : 0;
 $threadId = isset($_GET['thread']) ? (int) $_GET['thread'] : 0;
 
 $repo = Container::getForumRepository();
@@ -41,6 +42,13 @@ if (empty($threadEntity)) {
     $url = api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.api_get_cidreq().'&forum='.$forumId;
     header('Location: '.$url);
     exit;
+}
+
+$repoPost = Container::getForumPostRepository();
+$postEntity = null;
+if (!empty($postId)) {
+    /** @var CForumPost $postEntity */
+    $postEntity = $repoPost->find($postId);
 }
 
 $courseEntity = api_get_course_entity(api_get_course_int_id());
@@ -146,9 +154,8 @@ switch ($my_action) {
 
         break;
     case 'report':
-        $postId = isset($_GET['post_id']) ? $_GET['post_id'] : 0;
 
-        $result = reportPost($postId, $forumEntity, $threadEntity);
+        $result = reportPost($postEntity, $forumEntity, $threadEntity);
         Display::addFlash(Display::return_message(get_lang('Reported')));
         header('Location: '.$currentUrl);
         exit;
@@ -156,8 +163,7 @@ switch ($my_action) {
         break;
     case 'ask_revision':
         if (api_get_configuration_value('allow_forum_post_revisions')) {
-            $postId = isset($_GET['post_id']) ? $_GET['post_id'] : 0;
-            $result = savePostRevision($postId);
+            $result = savePostRevision($postEntity);
             Display::addFlash(Display::return_message(get_lang('Saved.')));
         }
         header('Location: '.$currentUrl);
@@ -362,7 +368,7 @@ foreach ($posts as $post) {
         );
     }
 
-    if ('learnpath' != $origin) {
+    if ('learnpath' !== $origin) {
         $post['user_data'] .= Display::tag(
             'p',
             Display::dateToStringAgoAndLongDate($post['post_date']),
@@ -466,7 +472,7 @@ foreach ($posts as $post) {
     if ($post['poster_id'] == $userId) {
         $revision = getPostRevision($post['post_id']);
         if (empty($revision)) {
-            $askForRevision = getAskRevisionButton($post['post_id'], $threadEntity);
+            $askForRevision = getAskRevisionButton($postEntity, $threadEntity);
         } else {
             $postIsARevision = true;
             $languageId = api_get_language_id(strtolower($revision));
@@ -477,7 +483,7 @@ foreach ($posts as $post) {
             }
         }
     } else {
-        if (postNeedsRevision($post['post_id'])) {
+        if (postNeedsRevision($postEntity)) {
             $askForRevision = giveRevisionButton($post['post_id'], $threadEntity);
         } else {
             $revision = getPostRevision($post['post_id']);

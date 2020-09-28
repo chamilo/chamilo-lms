@@ -16,6 +16,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -54,6 +55,8 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
  */
 class User implements UserInterface, EquatableInterface
 {
+    use TimestampableEntity;
+
     public const ROLE_DEFAULT = 'ROLE_USER';
     public const ROLE_SUPER_ADMIN = 'ROLE_SUPER_ADMIN';
 
@@ -717,28 +720,9 @@ class User implements UserInterface, EquatableInterface
     protected $receivedMessages;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="created_at", type="datetime", nullable=true, unique=false)
-     */
-    protected $createdAt;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="updated_at", type="datetime", nullable=true, unique=false)
-     */
-    protected $updatedAt;
-
-    /**
      * @var Admin
      *
-     * @ORM\OneToOne(
-     *     targetEntity="Chamilo\CoreBundle\Entity\Admin",
-     *     mappedBy="user",
-     *     cascade={"persist", "remove"},
-     *     orphanRemoval=true
-     * )
+     * @ORM\OneToOne(targetEntity="Admin", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     protected $admin;
 

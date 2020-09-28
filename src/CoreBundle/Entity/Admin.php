@@ -27,14 +27,8 @@ class Admin
     protected $id;
 
     /**
-     * @ORM\OneToOne(
-     *     targetEntity="Chamilo\CoreBundle\Entity\User",
-     *     inversedBy="admin"
-     * )
-     * @ORM\JoinColumn(
-     *     name="user_id",
-     *     referencedColumnName="id",
-     *     onDelete="CASCADE")
+     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="admin")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $user;
 

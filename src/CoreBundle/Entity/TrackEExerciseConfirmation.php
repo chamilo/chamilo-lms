@@ -6,6 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
  * Class TrackEExerciseConfirmation.
@@ -15,6 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class TrackEExerciseConfirmation
 {
+    use TimestampableEntity;
     use UserTrait;
 
     /**
@@ -82,20 +84,6 @@ class TrackEExerciseConfirmation
      * @ORM\Column(name="saved_answers_count", type="integer")
      */
     private $savedAnswersCount;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="created_at", type="datetime")
-     */
-    private $createdAt;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
-     */
-    private $updatedAt;
 
     /**
      * TrackEExerciseConfirmation constructor.
@@ -249,46 +237,6 @@ class TrackEExerciseConfirmation
     public function setSavedAnswersCount($savedAnswersCount)
     {
         $this->savedAnswersCount = $savedAnswersCount;
-
-        return $this;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * @param \DateTime $createdAt
-     *
-     * @return TrackEExerciseConfirmation
-     */
-    public function setCreatedAt($createdAt)
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getUpdatedAt()
-    {
-        return $this->updatedAt;
-    }
-
-    /**
-     * @param \DateTime $updatedAt
-     *
-     * @return TrackEExerciseConfirmation
-     */
-    public function setUpdatedAt($updatedAt)
-    {
-        $this->updatedAt = $updatedAt;
 
         return $this;
     }

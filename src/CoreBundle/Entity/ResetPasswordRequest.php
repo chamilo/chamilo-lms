@@ -2,7 +2,6 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
-use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
 use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordRequestInterface;
 use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordRequestTrait;
@@ -12,7 +11,6 @@ use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordRequestTrait;
  */
 class ResetPasswordRequest implements ResetPasswordRequestInterface
 {
-    use UserTrait;
     use ResetPasswordRequestTrait;
 
     /**
@@ -38,13 +36,8 @@ class ResetPasswordRequest implements ResetPasswordRequestInterface
         return $this->id;
     }
 
-    /**
-     * @return ResetPasswordRequest
-     */
-    public function setId($id)
+    public function getUser(): object
     {
-        $this->id = $id;
-
-        return $this;
+        return $this->user;
     }
 }

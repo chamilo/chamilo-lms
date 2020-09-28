@@ -873,7 +873,7 @@ class Category implements GradebookItem
     /**
      * Calculate the score of this category.
      *
-     * @param int    $studentId (default: all students - then the average is returned)
+     * @param int    $studentId   (default: all students - then the average is returned)
      * @param string $type
      * @param string $course_code
      * @param int    $session_id

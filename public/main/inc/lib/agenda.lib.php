@@ -304,30 +304,6 @@ class Agenda
                     $sendTo = $this->parseSendToArray($usersToSend);
                     if ($sendTo['everyone']) {
                         $event->addCourseLink($courseEntity, $sessionEntity, $groupEntity);
-                    /*api_item_property_update(
-                        $this->course,
-                        TOOL_CALENDAR_EVENT,
-                        $id,
-                        'AgendaAdded',
-                        $senderId,
-                        $groupInfo,
-                        '',
-                        $start,
-                        $end,
-                        $sessionId
-                    );
-                    api_item_property_update(
-                        $this->course,
-                        TOOL_CALENDAR_EVENT,
-                        $id,
-                        'visible',
-                        $senderId,
-                        $groupInfo,
-                        '',
-                        $start,
-                        $end,
-                        $sessionId
-                    );*/
                     } else {
                         // Storing the selected groups
                         if (!empty($sendTo['groups'])) {
@@ -337,32 +313,6 @@ class Agenda
                                     $groupInfo = api_get_group_entity($group);
                                     $event->addCourseLink($courseEntity, $sessionEntity, $groupInfo);
                                 }
-
-                                /*api_item_property_update(
-                                    $this->course,
-                                    TOOL_CALENDAR_EVENT,
-                                    $id,
-                                    'AgendaAdded',
-                                    $senderId,
-                                    $groupInfoItem,
-                                    0,
-                                    $start,
-                                    $end,
-                                    $sessionId
-                                );
-
-                                api_item_property_update(
-                                    $this->course,
-                                    TOOL_CALENDAR_EVENT,
-                                    $id,
-                                    'visible',
-                                    $senderId,
-                                    $groupInfoItem,
-                                    0,
-                                    $start,
-                                    $end,
-                                    $sessionId
-                                );*/
                             }
                         }
 
@@ -375,32 +325,6 @@ class Agenda
                                     $sessionEntity,
                                     $groupEntity
                                 );
-
-                                /*api_item_property_update(
-                                    $this->course,
-                                    TOOL_CALENDAR_EVENT,
-                                    $id,
-                                    'AgendaAdded',
-                                    $senderId,
-                                    $groupInfo,
-                                    $userId,
-                                    $start,
-                                    $end,
-                                    $sessionId
-                                );
-
-                                api_item_property_update(
-                                    $this->course,
-                                    TOOL_CALENDAR_EVENT,
-                                    $id,
-                                    'visible',
-                                    $senderId,
-                                    $groupInfo,
-                                    $userId,
-                                    $start,
-                                    $end,
-                                    $sessionId
-                                );*/
                             }
                         }
                     }
@@ -810,7 +734,7 @@ class Agenda
                         $this->tbl_course_agenda,
                         $attributes,
                         [
-                            'id = ? AND c_id = ? AND session_id = ? ' => [
+                            'iid = ? AND c_id = ? AND session_id = ? ' => [
                                 $id,
                                 $courseId,
                                 $this->sessionId,
@@ -1475,7 +1399,7 @@ class Agenda
             case 'course':
                 if (!empty($this->course['real_id'])) {
                     $sql = "SELECT * FROM ".$this->tbl_course_agenda."
-                            WHERE c_id = ".$this->course['real_id']." AND id = ".$id;
+                            WHERE c_id = ".$this->course['real_id']." AND iid = ".$id;
                     $result = Database::query($sql);
                     if (Database::num_rows($result)) {
                         $event = Database::fetch_array($result, 'ASSOC');
@@ -2065,20 +1989,20 @@ class Agenda
                 $event['borderColor'] = $event['backgroundColor'] = $row->getColor();
             }
 
-            $event['editable'] = false;
+            $event['resourceEditable'] = false;
             if ($this->getIsAllowedToEdit() && 'course' === $this->type) {
-                $event['editable'] = true;
+                $event['resourceEditable'] = true;
                 if (!empty($sessionId)) {
                     if (false == $coachCanEdit) {
-                        $event['editable'] = false;
+                        $event['resourceEditable'] = false;
                     }
                     if ($isAllowToEditByHrm) {
-                        $event['editable'] = true;
+                        $event['resourceEditable'] = true;
                     }
                 }
                 // if user is author then he can edit the item
                 if (api_get_user_id() == $row->getResourceNode()->getCreator()->getId()) {
-                    $event['editable'] = true;
+                    $event['resourceEditable'] = true;
                 }
             }
 
@@ -2280,7 +2204,6 @@ class Agenda
         $sendToGroups = isset($sendTo['groups']) ? $sendTo['groups'] : [];
         $sendToUsers = isset($sendTo['users']) ? $sendTo['users'] : [];
 
-        /** @var HTML_QuickForm_select $select */
         $select = $form->addSelect(
             'users_to_send',
             get_lang('To'),
@@ -2424,7 +2347,7 @@ class Agenda
         $id = isset($params['id']) ? (int) $params['id'] : 0;
 
         $url = api_get_self().'?action='.$action.'&id='.$id.'&type='.$this->type;
-        if ('course' == $this->type) {
+        if ('course' === $this->type) {
             $url = api_get_self().'?'.api_get_cidreq().'&action='.$action.'&id='.$id.'&type='.$this->type;
         }
 
@@ -2452,7 +2375,7 @@ class Agenda
         $isParentFromSerie = false;
         $showAttachmentForm = true;
 
-        if ('course' == $this->type) {
+        if ('course' === $this->type) {
             // Edition mode.
             if (!empty($id)) {
                 $showAttachmentForm = false;
@@ -2487,7 +2410,7 @@ class Agenda
             $form->addElement('hidden', 'to', 'true');
         } else {
             $sendTo = isset($params['send_to']) ? $params['send_to'] : ['everyone' => true];
-            if ('course' == $this->type) {
+            if ('course' === $this->type) {
                 $this->showToForm($form, $sendTo, [], false, true);
             }
         }
@@ -2500,7 +2423,7 @@ class Agenda
         );
         $form->addElement('checkbox', 'all_day', null, get_lang('All day'));
 
-        if ('course' == $this->type) {
+        if ('course' === $this->type) {
             $repeat = $form->addElement(
                 'checkbox',
                 'repeat',
@@ -2667,7 +2590,7 @@ class Agenda
         $addOnlyItemsInSendTo = false,
         $required = false
     ) {
-        if ('course' != $this->type) {
+        if ('course' !== $this->type) {
             return false;
         }
 
@@ -2784,7 +2707,7 @@ class Agenda
         $courseId = (int) $courseInfo['real_id'];
         $eventId = (int) $eventId;
 
-        $sql = "SELECT id, path, filename, comment
+        $sql = "SELECT iid, path, filename, comment
                 FROM $tableAttachment
                 WHERE
                     c_id = $courseId AND
@@ -2819,12 +2742,12 @@ class Agenda
         $attachmentId = (int) $attachmentId;
 
         $row = [];
-        $sql = "SELECT id, path, filename, comment
+        $sql = "SELECT iid, path, filename, comment
                 FROM $tableAttachment
                 WHERE
                     c_id = $courseId AND
                     agenda_id = $eventId AND
-                    id = $attachmentId
+                    iid = $attachmentId
                 ";
         $result = Database::query($sql);
         if (0 != Database::num_rows($result)) {

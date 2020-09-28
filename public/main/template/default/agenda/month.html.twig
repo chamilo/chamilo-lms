@@ -52,6 +52,7 @@
 
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
+            editable: true,
             themeSystem: 'bootstrap',
             contentHeight: 650,
             handleWindowResize: true,
@@ -83,7 +84,6 @@
             selectMirror: true,
             datesSet: function(dateInfo) {
                 var view = dateInfo.view;
-
                 var data = {
                     'view': view.name,
                     //'start': view.intervalStart.format("YYYY-MM-DD")
@@ -206,7 +206,6 @@
             eventClick: function(info) {
                 var calEvent = info.event;
                 var view = info.view;
-
                 var start = calEvent.start;
                 var end = calEvent.end;
                 var diffDays = moment(end).diff(start, 'days');
@@ -218,9 +217,9 @@
                     endDateMinusOne = endValue.subtract(1, 'days').format('{{ js_format_date }}');
                 }
                 var startDateToString = moment(start).format("{{ js_format_date }}");
-
+                var editable = calEvent.extendedProps.resourceEditable;
                 // Edit event.
-                if (calEvent.editable) {
+                if (editable) {
                     $('#visible_to_input').hide();
                     $('#add_as_announcement_div').hide();
                     {% if type != 'admin' %}
@@ -289,6 +288,7 @@
                     var exportCalPrivate = '<a href="'+urlTwo+'" class="btn btn-light">{{"Export in iCal format as private event"|trans}}</a>';
                     var exportCalPublic = '<a href="'+urlThree+'" class="btn btn-light">{{"Export in iCal format as public event"|trans}}</a>';
                     var btnEdit = '<a href="'+urlEdit+'" id="btnEdit" class="btn btn-primary">{{ "Edit" | trans }}</a>';
+                    console.log(btnEdit);
                     var btnDelete = '<button type="button" id="btnDelete" class="btn btn-danger">{{ "Delete" | trans }}</button>';
 
                     $('#calendarModal #modalFooter').html(exportCalConfidential+exportCalPrivate+exportCalPublic+btnEdit+btnDelete);
@@ -435,7 +435,6 @@
 
                 }
             },
-            editable: true,
             events: "{{web_agenda_ajax_url}}&a=get_events",
             eventDrop: function(event, delta, revert_func) {
                 var allDay = 0;

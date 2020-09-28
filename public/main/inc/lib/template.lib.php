@@ -1104,6 +1104,20 @@ class Template
     {
         // Set legacy breadcrumb
         global $interbreadcrumb;
+
+        $courseInfo = api_get_course_info();
+        if (!empty($courseInfo)) {
+            $url = $courseInfo['course_public_url'];
+            $sessionId = api_get_session_id();
+            if (!empty($sessionId)) {
+                $url.= '&sid='.$sessionId;
+            }
+            array_unshift(
+                $interbreadcrumb,
+                ['name' => $courseInfo['title'], 'url' => $url]
+            );
+        }
+
         $this->params['legacy_breadcrumb'] = $interbreadcrumb;
 
         global $htmlHeadXtra;

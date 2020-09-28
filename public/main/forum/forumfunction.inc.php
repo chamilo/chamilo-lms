@@ -3230,6 +3230,7 @@ function saveThreadScore(
                 $sql = "INSERT INTO $table_threads_qualify (c_id, user_id, thread_id,qualify,qualify_user_id,qualify_time,session_id)
                         VALUES (".$course_id.", '".$user_id."','".$thread_id."',".(float) $thread_qualify.", '".$currentUserId."','".$qualify_time."','".$session_id."')";
                 Database::query($sql);
+
                 return 'insert';
             } else {
                 saveThreadScoreHistory(
@@ -6388,8 +6389,6 @@ function postIsEditableByStudent($forum, $post)
 }
 
 /**
- * @param CForumPost $post
- *
  * @return bool
  */
 function savePostRevision(CForumPost $post)
@@ -6454,7 +6453,6 @@ function postNeedsRevision(CForumPost $post): bool
 }
 
 /**
- * @param CForumPost   $post
  * @param array $threadInfo
  *
  * @return string
@@ -6590,9 +6588,8 @@ function getReportRecipients()
 }
 
 /**
- * @param CForumPost $post
- * @param array      $forumInfo
- * @param array      $threadInfo
+ * @param array $forumInfo
+ * @param array $threadInfo
  *
  * @return bool
  */
@@ -6628,5 +6625,4 @@ function reportPost(CForumPost $post, $forumInfo, $threadInfo)
             MessageManager::send_message_simple($userId, $subject, $content);
         }
     }
-
 }

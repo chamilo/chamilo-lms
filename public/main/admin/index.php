@@ -70,9 +70,9 @@ if (api_is_platform_admin()) {
     $items = [
         ['url' => 'user_list.php', 'label' => get_lang('User list')],
         ['url' => 'user_add.php', 'label' => get_lang('Add a user')],
-        ['url' => 'user_export.php', 'label' => get_lang('ExportUser listXMLCSV')],
-        ['url' => 'user_import.php', 'label' => get_lang('ImportUser listXMLCSV')],
-        ['url' => 'user_update_import.php', 'label' => get_lang('EditUser listCSV')],
+        ['url' => 'user_export.php', 'label' => get_lang('Export users list')],
+        ['url' => 'user_import.php', 'label' => get_lang('Import users list')],
+        ['url' => 'user_update_import.php', 'label' => get_lang('Edit users list')],
     ];
 
     if (isset($extAuthSource) && isset($extAuthSource['extldap']) && count($extAuthSource['extldap']) > 0) {
@@ -90,7 +90,7 @@ if (api_is_platform_admin()) {
     $items = [
         ['url' => 'user_list.php', 'label' => get_lang('User list')],
         ['url' => 'user_add.php', 'label' => get_lang('Add a user')],
-        ['url' => 'user_import.php', 'label' => get_lang('ImportUser listXMLCSV')],
+        ['url' => 'user_import.php', 'label' => get_lang('Import users list')],
         ['url' => 'usergroups.php', 'label' => get_lang('Classes')],
     ];
 

@@ -2940,7 +2940,7 @@ class Agenda
     /**
      * This function delete a attachment file by id.
      *
-     * @param int   $attachmentId
+     * @param int $attachmentId
      *
      * @return string
      */

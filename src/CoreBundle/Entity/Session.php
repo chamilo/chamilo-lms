@@ -60,14 +60,13 @@ class Session
     protected $id;
 
     /**
-     * @ORM\OneToMany(
-     *     targetEntity="SkillRelCourse", mappedBy="session", cascade={"persist", "remove"}
-     * )
+     * @var ArrayCollection|SkillRelCourse[]
+     * @ORM\OneToMany(targetEntity="SkillRelCourse", mappedBy="session", cascade={"persist", "remove"})
      */
     protected $skills;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection|SessionRelCourse[]
      *
      * @ORM\OrderBy({"position" = "ASC"})
      * @ORM\OneToMany(targetEntity="SessionRelCourse", mappedBy="session", cascade={"persist"}, orphanRemoval=true)
@@ -75,7 +74,7 @@ class Session
     protected $courses;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection|SessionRelUser[]
      *
      * @ORM\OneToMany(targetEntity="SessionRelUser", mappedBy="session", cascade={"persist"}, orphanRemoval=true)
      */
@@ -99,11 +98,15 @@ class Session
     protected $currentCourse;
 
     /**
+     * @var ArrayCollection|SkillRelUser[]
+     *
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelUser", mappedBy="session", cascade={"persist"})
      */
     protected $issuedSkills;
 
     /**
+     * @var ArrayCollection|AccessUrlRelSession[]
+     *
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CoreBundle\Entity\AccessUrlRelSession",
      *     mappedBy="session",
@@ -113,6 +116,8 @@ class Session
     protected $urls;
 
     /**
+     * @var ArrayCollection|ResourceLink[]
+     *
      * @ORM\OneToMany(targetEntity="ResourceLink", mappedBy="session", cascade={"remove"}, orphanRemoval=true)
      */
     protected $resourceLinks;

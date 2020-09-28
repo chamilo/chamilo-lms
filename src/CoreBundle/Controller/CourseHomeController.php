@@ -114,10 +114,7 @@ class CourseHomeController extends ToolBaseController
 
         $qb = $toolRepository->getResourcesByCourse($course, $this->getSession());
         $qb->addSelect('tool');
-        $qb->innerJoin(
-            'resource.tool',
-            'tool'
-        );
+        $qb->innerJoin('resource.tool', 'tool');
         $result = $qb->getQuery()->getResult();
         $tools = [];
         /** @var CTool $item */

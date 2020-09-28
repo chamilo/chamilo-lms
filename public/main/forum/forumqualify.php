@@ -9,7 +9,6 @@ use Chamilo\CourseBundle\Entity\CForumThread;
 /**
  * @todo fix all this qualify files avoid including files, use classes POO jmontoya
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 require_once 'forumfunction.inc.php';
 

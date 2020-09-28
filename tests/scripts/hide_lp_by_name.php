@@ -1,15 +1,16 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * Batch to hide all LPs with the $nameToSearch name.
  */
 
+exit;
 if (PHP_SAPI != 'cli') {
     die('This script can only be executed from the command line');
 }
 
-exit;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 

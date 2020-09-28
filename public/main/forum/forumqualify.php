@@ -121,12 +121,12 @@ if ('learnpath' === $origin) {
             'name' => get_lang('Group area').' ('.$group_properties['name'].')',
         ];
         $interbreadcrumb[] = [
-            'url' => 'viewforum.php?'.api_get_cidreq().'&forum='.(int) ($_GET['forum']).'&search='.$search,
+            'url' => 'viewforum.php?'.api_get_cidreq().'&forum='.$forumId.'&search='.$search,
             'name' => prepare4display($forumEntity->getForumTitle()),
         ];
         if ('PostDeletedSpecial' != $message) {
             $interbreadcrumb[] = [
-                'url' => 'viewthread.php?'.api_get_cidreq().'&forum='.(int) ($_GET['forum']).'&thread='.(int) ($_GET['thread']),
+                'url' => 'viewthread.php?'.api_get_cidreq().'&forum='.$forumId.'&thread='.$threadId,
                 'name' => prepare4display($threadEntity->getThreadTitle()),
             ];
         }
@@ -168,29 +168,30 @@ if ('learnpath' === $origin) {
     }
 }
 
-/*
-    Actions
-*/
+$postId = isset($_GET['id']) ? (int) ($_GET['id']) : 0;
+$repoPost = Container::getForumPostRepository();
+$postEntity = !empty($postId) ? $repoPost->find($postId) : null;
 $action = isset($_GET['action']) ? $_GET['action'] : '';
+
+$currentUrl = api_get_self().'?forum='.$forumId.'&'.api_get_cidreq().'&thread='.$threadId;
 
 if ('delete' === $action &&
     isset($_GET['content']) &&
     isset($_GET['id']) && api_is_allowed_to_edit(false, true)
 ) {
-    $message = delete_post($_GET['id']);
+    deletePost($postEntity);
+    api_location($currentUrl);
 }
 if (('invisible' === $action || 'visible' === $action) &&
     isset($_GET['id']) && api_is_allowed_to_edit(false, true)
 ) {
-    $message = approve_post($_GET['id'], $action);
+    approvePost($postEntity, $action);
+    api_location($currentUrl);
 }
 if ('move' === $action && isset($_GET['post'])) {
     $message = move_post_form();
 }
 
-/*
-    Display the action messages
-*/
 if (!empty($message)) {
     echo Display::return_message(get_lang($message), 'confirm');
 }

@@ -114,8 +114,9 @@ switch ($my_action) {
             (api_is_allowed_to_edit(false, true) ||
                 (isset($group_properties['iid']) && GroupManager::is_tutor_of_group(api_get_user_id(), $group_properties)))
         ) {
-            $message = delete_post($_GET['id']);
-            Display::addFlash(Display::return_message(get_lang($message)));
+            /** @var CForumPost $postEntity */
+            $postEntity = $repoPost->find($_GET['id']);
+            deletePost($postEntity);
         }
         header('Location: '.$currentUrl);
         exit;
@@ -127,7 +128,9 @@ switch ($my_action) {
             (api_is_allowed_to_edit(false, true) ||
                 (isset($group_properties['iid']) && GroupManager::is_tutor_of_group(api_get_user_id(), $group_properties)))
         ) {
-            $message = approve_post($_GET['id'], $_GET['action']);
+            /** @var CForumPost $postEntity */
+            $postEntity = $repoPost->find($_GET['id']);
+            $message = approvePost($postEntity, $_GET['action']);
             Display::addFlash(Display::return_message(get_lang($message)));
         }
         header('Location: '.$currentUrl);
@@ -143,7 +146,8 @@ switch ($my_action) {
                 $values = $form->exportValues();
                 store_move_post($values);
 
-                $currentUrl = api_get_path(WEB_CODE_PATH).'forum/viewthread.php?forum='.$forumId.'&'.api_get_cidreq().'&thread='.$threadId;
+                $currentUrl = api_get_path(WEB_CODE_PATH).
+                    'forum/viewthread.php?forum='.$forumId.'&'.api_get_cidreq().'&thread='.$threadId;
 
                 header('Location: '.$currentUrl);
                 exit;
@@ -154,7 +158,6 @@ switch ($my_action) {
 
         break;
     case 'report':
-
         $result = reportPost($postEntity, $forumEntity, $threadEntity);
         Display::addFlash(Display::return_message(get_lang('Reported')));
         header('Location: '.$currentUrl);

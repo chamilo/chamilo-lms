@@ -222,8 +222,8 @@ function handleForum($url)
                         api_get_session_id()
                     );
 
-                    $link_id = $link_info['id'];
                     if (false !== $link_info) {
+                        $link_id = $link_info['id'];
                         GradebookUtils::remove_resource_from_course_gradebook($link_id);
                     }
                 }
@@ -992,36 +992,11 @@ function store_forum($values, $courseInfo = [], $returnId = false)
     return $return_message;
 }
 
-/**
- * This function deletes a forum post. This separate function is needed because forum posts do not appear
- * in the item_property table (yet)
- * and because deleting a post also has consequence on the posts that have this post as parent_id
- * (they are also deleted).
- * an alternative would be to store the posts also in item_property and mark this post as deleted (visibility = 2).
- * We also have to decrease the number of replies in the thread table.
- *
- * @param int $post_id id of the post that will be deleted
- *
- * @todo write recursive function that deletes all the posts that have this message as parent
- *
- * @return string language variable
- *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- * @author Hubert Borderiou Function cleanead and fixed
- *
- * @version february 2006
- */
-function delete_post($post_id)
+function deletePost(CForumPost $post)
 {
     $table_threads = Database::get_course_table(TABLE_FORUM_THREAD);
-    $post_id = (int) $post_id;
     $course_id = api_get_course_int_id();
     $em = Database::getManager();
-    /** @var CForumPost $post */
-    $post = $em
-        ->getRepository(CForumPost::class)
-        ->findOneBy(['iid' => $post_id]);
-
     if ($post) {
         $em
             ->createQuery('
@@ -1063,8 +1038,7 @@ function delete_post($post_id)
                     thread_date='".Database::escape_string($last_post_of_thread['post_date'])."'
                 WHERE c_id = $course_id AND iid = ".(int) ($_GET['thread']);
         Database::query($sql);
-
-        return 'PostDeleted';
+        Display::addFlash(Display::return_message(get_lang('Post has been deleted')));
     }
     if (!$last_post_of_thread) {
         // We deleted the very single post of the thread so we need to delete the entry in the thread table also.
@@ -1072,7 +1046,7 @@ function delete_post($post_id)
                 WHERE c_id = $course_id AND iid = ".(int) ($_GET['thread']);
         Database::query($sql);
 
-        return 'PostDeletedSpecial';
+        Display::addFlash(Display::return_message(get_lang('Special Post Deleted')));
     }
 }
 
@@ -4062,40 +4036,22 @@ function get_whats_new()
     }
 }
 
-/**
- * This function approves a post = change.
- *
- * @param int    $post_id the id of the post that will be deleted
- * @param string $action  make the post visible or invisible
- *
- * @return string language variable
- *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- *
- * @version february 2006, dokeos 1.8
- */
-function approve_post($post_id, $action)
+function approvePost(CForumPost $post, $action)
 {
-    $table_posts = Database::get_course_table(TABLE_FORUM_POST);
-    $course_id = api_get_course_int_id();
-
     if ('invisible' === $action) {
-        $visibility_value = 0;
+        $visibility = 0;
     }
 
     if ('visible' === $action) {
-        $visibility_value = 1;
-        handle_mail_cue('post', $post_id);
+        $visibility = 1;
+        handle_mail_cue('post', $post->getIid());
     }
 
-    $sql = "UPDATE $table_posts SET
-                visible='".Database::escape_string($visibility_value)."'
-            WHERE post_id='".Database::escape_string($post_id)."'";
-    $return = Database::query($sql);
+    $post->setVisible($visibility);
+    Database::getManager()->persist($post);
+    Database::getManager()->flush();
 
-    if ($return) {
-        return 'PostThe visibility has been changed.';
-    }
+    Display::addFlash(Display::return_message(get_lang('The visibility has been changed')));
 }
 
 /**
@@ -4223,7 +4179,7 @@ function handle_mail_cue($content, $id)
         $thread_id = $post->getThread()->getIid();
 
         // Sending the mail to all the users that wanted to be informed for replies on this thread.
-        $sql = "SELECT users.firstname, users.lastname, users.user_id, users.email
+        $sql = "SELECT users.firstname, users.lastname, users.id as user_id, users.email
                 FROM $table_mailcue mailcue, $table_posts posts, $table_users users
                 WHERE
                     posts.c_id = $course_id AND
@@ -4231,7 +4187,7 @@ function handle_mail_cue($content, $id)
                     posts.thread_id = $thread_id AND
                     posts.post_notification = '1' AND
                     mailcue.thread_id = $thread_id AND
-                    users.user_id = posts.poster_id AND
+                    users.id = posts.poster_id AND
                     users.active = 1
                 GROUP BY users.email";
 

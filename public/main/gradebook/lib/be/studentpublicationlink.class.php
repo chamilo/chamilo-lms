@@ -147,13 +147,13 @@ class StudentPublicationLink extends AbstractLink
     }
 
     /**
-     * @param null $stud_id
+     * @param null $studentId
      *
      * @return array
      */
-    public function calc_score($stud_id = null, $type = null)
+    public function calc_score($studentId = null, $type = null)
     {
-        $stud_id = (int) $stud_id;
+        $studentId = (int) $studentId;
         $em = Database::getManager();
         $data = $this->get_exercise_data();
 
@@ -206,9 +206,9 @@ class StudentPublicationLink extends AbstractLink
             ];
         }
 
-        if (!empty($stud_id)) {
+        if (!empty($studentId)) {
             $dql .= ' AND a.userId = :student ';
-            $params['student'] = $stud_id;
+            $params['student'] = $studentId;
         }
 
         $order = api_get_setting('student_publication_to_take_in_gradebook');
@@ -228,7 +228,7 @@ class StudentPublicationLink extends AbstractLink
         $scores = $em->createQuery($dql)->execute($params);
 
         // for 1 student
-        if (!empty($stud_id)) {
+        if (!empty($studentId)) {
             if (!count($scores)) {
                 return [null, null];
             }
@@ -279,7 +279,7 @@ class StudentPublicationLink extends AbstractLink
                 return [$sumResult / $rescount, $weight];
                 break;
             case 'ranking':
-                return AbstractLink::getCurrentUserRanking($stud_id, $students);
+                return AbstractLink::getCurrentUserRanking($studentId, $students);
                 break;
             default:
                 return [$sum, $rescount];

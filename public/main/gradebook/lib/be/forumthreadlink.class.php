@@ -99,12 +99,12 @@ class ForumThreadLink extends AbstractLink
     }
 
     /**
-     * @param int    $stud_id
+     * @param int    $studentId
      * @param string $type
      *
      * @return array|null
      */
-    public function calc_score($stud_id = null, $type = null)
+    public function calc_score($studentId = null, $type = null)
     {
         require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
         $threadInfo = get_thread_information('', $this->get_ref_id());
@@ -133,8 +133,8 @@ class ForumThreadLink extends AbstractLink
                     iid = ".$this->get_ref_id()."
                     $sessionCondition
                 ";
-        if (isset($stud_id)) {
-            $sql .= ' AND user_id = '.intval($stud_id);
+        if (isset($studentId)) {
+            $sql .= ' AND user_id = '.intval($studentId);
         }
 
         // order by id, that way the student's first attempt is accessed first
@@ -142,7 +142,7 @@ class ForumThreadLink extends AbstractLink
         $scores = Database::query($sql);
 
         // for 1 student
-        if (isset($stud_id)) {
+        if (isset($studentId)) {
             if (0 == $threadInfo['thread_peer_qualify']) {
                 // Classic way of calculate score
                 if ($data = Database::fetch_array($scores)) {
@@ -207,7 +207,7 @@ class ForumThreadLink extends AbstractLink
                         return [$sumResult / $counter, $weight];
                         break;
                     case 'ranking':
-                        return AbstractLink::getCurrentUserRanking($stud_id, $students);
+                        return AbstractLink::getCurrentUserRanking($studentId, $students);
                         break;
                     default:
                         return [$sum, $counter];

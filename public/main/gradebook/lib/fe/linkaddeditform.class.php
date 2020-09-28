@@ -50,10 +50,10 @@ class LinkAddEditForm extends FormValidator
             if ($link->needs_name_and_description()) {
                 $this->addText('name', get_lang('Name'), true, ['size' => '40', 'maxlength' => '40']);
             } else {
-                $select = $this->addElement('select', 'select_link', get_lang('ChooseItem'));
+                $select = $this->addSelect('select_link', get_lang('ChooseItem'));
                 foreach ($link->get_all_links() as $newlink) {
                     $name = strip_tags(Exercise::get_formated_title_variable($newlink[1]));
-                    $select->addoption($name, $newlink[0]);
+                    $select->addOption($name, $newlink[0]);
                 }
             }
         } else {
@@ -74,8 +74,7 @@ class LinkAddEditForm extends FormValidator
         if (1 == count($category_object)) {
             $this->addElement('hidden', 'select_gradebook', $category_object[0]->get_id());
         } else {
-            $select_gradebook = $this->addElement(
-                'select',
+            $select_gradebook = $this->addSelect(
                 'select_gradebook',
                 get_lang('Select assessment'),
                 [],
@@ -90,12 +89,12 @@ class LinkAddEditForm extends FormValidator
                         if (empty($grade_model_id)) {
                             if (0 == $my_cat->get_parent_id()) {
                                 $default_weight = $my_cat->get_weight();
-                                $select_gradebook->addoption(get_lang('Default'), $my_cat->get_id());
+                                $select_gradebook->addOption(get_lang('Default'), $my_cat->get_id());
                             } else {
-                                $select_gradebook->addoption($my_cat->get_name(), $my_cat->get_id());
+                                $select_gradebook->addOption($my_cat->get_name(), $my_cat->get_id());
                             }
                         } else {
-                            $select_gradebook->addoption(get_lang('Select'), 0);
+                            $select_gradebook->addOption(get_lang('Select'), 0);
                         }
                         if ($link->get_category_id() == $my_cat->get_id()) {
                             $default_weight = $my_cat->get_weight();

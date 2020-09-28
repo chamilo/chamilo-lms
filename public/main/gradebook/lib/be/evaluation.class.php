@@ -512,14 +512,14 @@ class Evaluation implements GradebookItem
     /**
      * Calculate the score of this evaluation.
      *
-     * @param int    $stud_id (default: all students who have results for this eval - then the average is returned)
+     * @param int    $studentId (default: all students who have results for this eval - then the average is returned)
      * @param string $type    (best, average, ranking)
      *
      * @return array (score, max) if student is given
      *               array (sum of scores, number of scores) otherwise
      *               or null if no scores available
      */
-    public function calc_score($stud_id = null, $type = null)
+    public function calc_score($studentId = null, $type = null)
     {
         $allowStats = api_get_configuration_value('allow_gradebook_stats');
         if ($allowStats) {
@@ -547,17 +547,17 @@ class Evaluation implements GradebookItem
                         return $result;
                         break;
                     case 'ranking':
-                        $ranking = AbstractLink::getCurrentUserRanking($stud_id, $evaluation->getUserScoreList());
+                        $ranking = AbstractLink::getCurrentUserRanking($studentId, $evaluation->getUserScoreList());
 
                         return $ranking;
                         break;
                     default:
                         $weight = $evaluation->getMax();
-                        if (!empty($stud_id)) {
+                        if (!empty($studentId)) {
                             $scoreList = $evaluation->getUserScoreList();
                             $result = [0, $weight];
-                            if (isset($scoreList[$stud_id])) {
-                                $result = [$scoreList[$stud_id], $weight];
+                            if (isset($scoreList[$studentId])) {
+                                $result = [$scoreList[$studentId], $weight];
                             }
 
                             return $result;
@@ -574,8 +574,8 @@ class Evaluation implements GradebookItem
         }
 
         $useSession = true;
-        if (isset($stud_id) && empty($type)) {
-            $key = 'result_score_student_list_'.api_get_course_int_id().'_'.api_get_session_id().'_'.$this->id.'_'.$stud_id;
+        if (isset($studentId) && empty($type)) {
+            $key = 'result_score_student_list_'.api_get_course_int_id().'_'.api_get_session_id().'_'.$this->id.'_'.$studentId;
             $data = Session::read('calc_score');
             $results = isset($data[$key]) ? $data[$key] : null;
 
@@ -584,7 +584,7 @@ class Evaluation implements GradebookItem
             }
             $results = null;
             if (empty($results)) {
-                $results = Result::load(null, $stud_id, $this->id);
+                $results = Result::load(null, $studentId, $this->id);
                 Session::write('calc_score', [$key => $results]);
             }
 
@@ -649,7 +649,7 @@ class Evaluation implements GradebookItem
                         $students[$res->get_user_id()] = $score;
                     }
 
-                    return AbstractLink::getCurrentUserRanking($stud_id, $students);
+                    return AbstractLink::getCurrentUserRanking($studentId, $students);
                     break;
                 default:
                     return [$sum, $count];
@@ -783,7 +783,7 @@ class Evaluation implements GradebookItem
      *
      * @todo can be written more efficiently using a new (but very complex) sql query
      */
-    public function findEvaluations($name_mask, $selectcat)
+    public static function findEvaluations($name_mask, $selectcat)
     {
         $rootcat = Category::load($selectcat);
         $evals = $rootcat[0]->get_evaluations(

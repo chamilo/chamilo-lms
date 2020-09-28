@@ -1141,7 +1141,7 @@ class GradebookUtils
      *
      * @param string $courseCode
      *
-     * @deprecated use CourseManager
+     * @todo use CourseManager
      *
      * @return array
      */

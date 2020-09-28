@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -129,12 +130,12 @@ class SurveyLink extends AbstractLink
     /**
      * Calculate score for a student (to show in the gradebook).
      *
-     * @param int    $stud_id
+     * @param int    $studentId
      * @param string $type    Type of result we want (best|average|ranking)
      *
      * @return array|null
      */
-    public function calc_score($stud_id = null, $type = null)
+    public function calc_score($studentId = null, $type = null)
     {
         // Note: Max score is assumed to be always 1 for surveys,
         // only student's participation is to be taken into account.
@@ -144,7 +145,7 @@ class SurveyLink extends AbstractLink
         $courseId = $this->getCourseId();
         $tbl_survey = Database::get_course_table(TABLE_SURVEY);
         $tbl_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
-        $get_individual_score = !is_null($stud_id);
+        $get_individual_score = !is_null($studentId);
 
         $sql = "SELECT i.answered
                 FROM $tbl_survey AS s
@@ -158,7 +159,7 @@ class SurveyLink extends AbstractLink
                 ";
 
         if ($get_individual_score) {
-            $sql .= ' AND i.user = '.intval($stud_id);
+            $sql .= ' AND i.user = '.intval($studentId);
         }
 
         $sql_result = Database::query($sql);

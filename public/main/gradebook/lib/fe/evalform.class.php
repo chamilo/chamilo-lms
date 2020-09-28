@@ -27,7 +27,7 @@ class EvalForm extends FormValidator
      *
      * @param int        $form_type         1=add, 2=edit,3=move,4=result_add
      * @param Evaluation $evaluation_object the category object
-     * @param obj        $result_object     the result object
+     * @param            $result_object     the result object
      * @param string     $form_name
      * @param string     $method
      * @param string     $action
@@ -85,9 +85,9 @@ class EvalForm extends FormValidator
         parent::display();
     }
 
-    public function setDefaults($defaults = [], $filter = null)
+    public function setDefaults($defaultValues = [], $filter = null)
     {
-        parent::setDefaults($defaults, $filter);
+        parent::setDefaults($defaultValues, $filter);
     }
 
     public function sort_by_user($item1, $item2)
@@ -114,9 +114,8 @@ class EvalForm extends FormValidator
      */
     protected function build_add_user_to_eval()
     {
-        $this->addElement('header', get_lang('Choose users for this evaluation'));
-        $select = $this->addElement(
-            'select',
+        $this->addHeader(get_lang('Choose users for this evaluation'));
+        $select = $this->addSelect(
             'firstLetterUser',
             get_lang('First letter'),
             null,
@@ -133,8 +132,7 @@ class EvalForm extends FormValidator
                 $select->addOption($letter, $letter);
             }
         }
-        $select = $this->addElement(
-            'select',
+        $select = $this->addSelect(
             'add_users',
             null,
             null,
@@ -290,7 +288,7 @@ class EvalForm extends FormValidator
         $renderer->setCustomElementTemplate('<span>{element}</span> ');
         $this->addElement('static', null, null, '"'.$this->evaluation_object->get_name().'" ');
         $this->addElement('static', null, null, get_lang('Move to').' : ');
-        $select = $this->addElement('select', 'move_cat', null, null);
+        $select = $this->addSelect('move_cat', null, null);
         $line = '';
         foreach ($this->evaluation_object->get_target_categories() as $cat) {
             for ($i = 0; $i < $cat[2]; $i++) {
@@ -558,8 +556,7 @@ class EvalForm extends FormValidator
         if (1 == count($all_categories)) {
             $this->addElement('hidden', 'hid_category_id', $cat_id);
         } else {
-            $select_gradebook = $this->addElement(
-                'select',
+            $select_gradebook = $this->addSelect(
                 'hid_category_id',
                 get_lang('Select assessment'),
                 [],

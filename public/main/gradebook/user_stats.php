@@ -54,7 +54,7 @@ if (isset($_GET['exportpdf'])) {
         $newarray[] = array_slice($data, 1);
     }
     $userInfo = api_get_user_info($userId);
-    $html .= get_lang('Results and feedback').' : '.$userInfo['complete_name_with_username'].' ('.api_get_local_time().')';
+    $html = get_lang('Results and feedback').' : '.$userInfo['complete_name_with_username'].' ('.api_get_local_time().')';
 
     if ($displayscore->is_custom()) {
         $header_names = [

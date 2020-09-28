@@ -694,7 +694,8 @@ if (isset($_GET['studentoverview'])) {
         foreach ($data_array as $data) {
             $newarray[] = array_slice($data, 1);
         }
-        $pdf = new Cezpdf();
+        // @todo use pdf.lib.php
+        /*$pdf = new Cezpdf();
         $pdf->selectFont(api_get_path(LIBRARY_PATH).'ezpdf/fonts/Courier.afm');
         $pdf->ezSetMargins(30, 30, 50, 30);
         $pdf->ezSetY(810);
@@ -722,7 +723,7 @@ if (isset($_GET['studentoverview'])) {
             ]
         );
         $pdf->ezStream();
-        exit;
+        exit;*/
     }
 } else {
     // Student view

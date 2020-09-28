@@ -48,7 +48,7 @@ if ('true' === $filter) {
         'POST',
         api_get_self().'?'.api_get_cidreq().'&cat_id='.$categoryId
     );
-    $form->addElement('select', 'filter', get_lang('Code'), $options);
+    $form->addSelect('filter', get_lang('Code'), $options);
     $form->addButton('submit', get_lang('Submit'));
     $filterForm = '<br />'.$form->returnForm();
 

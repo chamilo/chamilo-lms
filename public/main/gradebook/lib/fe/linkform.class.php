@@ -68,7 +68,7 @@ class LinkForm extends FormValidator
             '"'.$this->link_object->get_name().'" '
         );
         $this->addElement('static', null, null, get_lang('Move to').' : ');
-        $select = $this->addElement('select', 'move_cat', null, null);
+        $select = $this->addSelect('move_cat', null, null);
         $line = '';
         foreach ($this->link_object->get_target_categories() as $cat) {
             for ($i = 0; $i < $cat[2]; $i++) {
@@ -86,8 +86,7 @@ class LinkForm extends FormValidator
     protected function build_create()
     {
         $this->addHeader(get_lang('Add online activity'));
-        $select = $this->addElement(
-            'select',
+        $select = $this->addSelect(
             'select_link',
             get_lang('Choose type of activity to assess'),
             null,

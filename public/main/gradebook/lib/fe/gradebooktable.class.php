@@ -1165,7 +1165,7 @@ class GradebookTable extends SortableTable
         $categoryId = $item->getCategory()->get_id();
 
         $cat = new Category();
-
+        $is_student = api_is_student();
         switch ($item->get_item_type()) {
             case 'C':
                 // Category

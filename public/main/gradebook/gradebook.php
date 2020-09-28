@@ -506,6 +506,8 @@ if (!empty($keyword)) {
         foreach ($data_array as $data) {
             $newarray[] = array_slice($data, 1);
         }
+
+        /* @todo use pdf.lib.php
         $pdf = new Cezpdf();
         $pdf->selectFont(api_get_path(LIBRARY_PATH).'ezpdf/fonts/Courier.afm');
         $pdf->ezSetMargins(30, 30, 50, 30);
@@ -526,7 +528,7 @@ if (!empty($keyword)) {
                 'width' => 500,
             ]
         );
-        $pdf->ezStream();
+        $pdf->ezStream();*/
         exit;
     }
 } elseif (!empty($_GET['export_certificate'])) {
@@ -553,19 +555,19 @@ if (!empty($keyword)) {
         $stud_ln = $user['lastname'];
         $certif_text = sprintf(get_lang('%s certifies that
 
- %s 
+ %s
 
-has successfully completed the course 
+has successfully completed the course
 
- \'%s\' 
+ \'%s\'
 
 with a grade of
 
  \'%s\''), $organization_name, $stud_fn.' '.$stud_ln, $category[0]->get_name(), $scorecourse_display);
         $certif_text = str_replace("\\n", "\n", $certif_text);
         $date = api_convert_and_format_date(null, DATE_FORMAT_SHORT);
-
-        $pdf = new Cezpdf('a4', 'landscape');
+        // @todo use pdf.lib.php
+        /*$pdf = new Cezpdf('a4', 'landscape');
         $pdf->selectFont(api_get_path(LIBRARY_PATH).'ezpdf/fonts/Courier.afm');
         $pdf->ezSetMargins(30, 30, 50, 50);
         //line Y coordinates in landscape mode are upside down (500 is on top, 10 is on the bottom)
@@ -581,7 +583,7 @@ with a grade of
         $pdf->ezText($organization_name, 22, ['justification' => 'left']);
         $pdf->ezSetY(580);
         $pdf->ezText($portal_name, 22, ['justification' => 'right']);
-        $pdf->ezStream();
+        $pdf->ezStream();*/
     }
     exit;
 } else {

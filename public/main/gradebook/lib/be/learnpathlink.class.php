@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -69,14 +70,14 @@ class LearnpathLink extends AbstractLink
     /**
      * Get the progress of this learnpath. Only the last attempt are taken into account.
      *
-     * @param $stud_id student id (default: all students who have results - then the average is returned)
+     * @param $studentId student id (default: all students who have results - then the average is returned)
      * @param $type The type of score we want to get: best|average|ranking
      *
      * @return array (score, max) if student is given
      *               array (sum of scores, number of scores) otherwise
      *               or null if no scores available
      */
-    public function calc_score($stud_id = null, $type = null)
+    public function calc_score($studentId = null, $type = null)
     {
         $tbl_stats = Database::get_course_table(TABLE_LP_VIEW);
         $session_id = $this->get_session_id();
@@ -90,8 +91,8 @@ class LearnpathLink extends AbstractLink
                     lp_id = ".$this->get_ref_id()." AND
                     session_id = $session_id ";
 
-        if (isset($stud_id)) {
-            $sql .= ' AND user_id = '.intval($stud_id);
+        if (isset($studentId)) {
+            $sql .= ' AND user_id = '.intval($studentId);
         }
 
         // order by id, that way the student's first attempt is accessed first
@@ -99,7 +100,7 @@ class LearnpathLink extends AbstractLink
 
         $scores = Database::query($sql);
         // for 1 student
-        if (isset($stud_id)) {
+        if (isset($studentId)) {
             if ($data = Database::fetch_assoc($scores)) {
                 return [$data['progress'], 100];
             } else {
@@ -137,7 +138,7 @@ class LearnpathLink extends AbstractLink
                         return [$sumResult / $rescount, 100];
                         break;
                     case 'ranking':
-                        return AbstractLink::getCurrentUserRanking($stud_id, $students);
+                        return AbstractLink::getCurrentUserRanking($studentId, $students);
                         break;
                     default:
                         return [$sum, $rescount];

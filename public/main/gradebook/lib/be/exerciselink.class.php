@@ -116,7 +116,7 @@ class ExerciseLink extends AbstractLink
     /**
      * Get the score of this exercise. Only the first attempts are taken into account.
      *
-     * @param int    $stud_id student id (default: all students who have results -
+     * @param int    $studentId student id (default: all students who have results -
      *                        then the average is returned)
      * @param string $type
      *
@@ -124,7 +124,7 @@ class ExerciseLink extends AbstractLink
      *               array (sum of scores, number of scores) otherwise
      *               or null if no scores available
      */
-    public function calc_score($stud_id = null, $type = null)
+    public function calc_score($studentId = null, $type = null)
     {
         $allowStats = api_get_configuration_value('allow_gradebook_stats');
 
@@ -156,11 +156,11 @@ class ExerciseLink extends AbstractLink
                         return [null, null];
                         break;
                     default:
-                        if (!empty($stud_id)) {
+                        if (!empty($studentId)) {
                             $scoreList = $link->getUserScoreList();
                             $result = [0, $weight];
-                            if (isset($scoreList[$stud_id])) {
-                                $result = [$scoreList[$stud_id], $weight];
+                            if (isset($scoreList[$studentId])) {
+                                $result = [$scoreList[$studentId], $weight];
                             }
 
                             return $result;
@@ -186,7 +186,7 @@ class ExerciseLink extends AbstractLink
         $courseId = $this->getCourseId();
         $exerciseData = $this->get_exercise_data();
         $exerciseId = isset($exerciseData['id']) ? (int) $exerciseData['id'] : 0;
-        $stud_id = (int) $stud_id;
+        $studentId = (int) $studentId;
 
         if (empty($exerciseId)) {
             return null;
@@ -194,7 +194,7 @@ class ExerciseLink extends AbstractLink
 
         $key = 'exercise_link_id:'.
             $this->get_id().
-            'exerciseId:'.$exerciseId.'student:'.$stud_id.'session:'.$sessionId.'courseId:'.$courseId.'type:'.$type;
+            'exerciseId:'.$exerciseId.'student:'.$studentId.'session:'.$sessionId.'courseId:'.$courseId.'type:'.$type;
 
         $useCache = api_get_configuration_value('gradebook_use_apcu_cache');
         $cacheAvailable = api_get_configuration_value('apc') && $useCache;
@@ -243,8 +243,8 @@ class ExerciseLink extends AbstractLink
                             c_id = $courseId ";
             }
 
-            if (!empty($stud_id) && 'ranking' !== $type) {
-                $sql .= " AND exe_user_id = $stud_id ";
+            if (!empty($studentId) && 'ranking' !== $type) {
+                $sql .= " AND exe_user_id = $studentId ";
             }
             $sql .= ' ORDER BY exe_id DESC';
         } else {
@@ -255,14 +255,14 @@ class ExerciseLink extends AbstractLink
                         hp.c_id = $courseId AND
                         doc.iid = $exerciseId";
 
-            if (!empty($stud_id)) {
-                $sql .= " AND hp.exe_user_id = $stud_id ";
+            if (!empty($studentId)) {
+                $sql .= " AND hp.exe_user_id = $studentId ";
             }
         }
 
         $scores = Database::query($sql);
 
-        if (isset($stud_id) && empty($type)) {
+        if (isset($studentId) && empty($type)) {
             // for 1 student
             if ($data = Database::fetch_array($scores, 'ASSOC')) {
                 $attempts = Database::query($sql);
@@ -357,7 +357,7 @@ class ExerciseLink extends AbstractLink
                         return $result;
                         break;
                     case 'ranking':
-                        $ranking = AbstractLink::getCurrentUserRanking($stud_id, $students);
+                        $ranking = AbstractLink::getCurrentUserRanking($studentId, $students);
                         if ($cacheAvailable) {
                             $cacheDriver->save($key, $ranking);
                         }

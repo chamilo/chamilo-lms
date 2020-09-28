@@ -249,7 +249,7 @@ class DisplayGradebook
      * @param $selectcat
      * @param bool  $is_course_admin
      * @param bool  $is_platform_admin
-     * @param bool  $simple_search_form
+     * @param FormValidator  $simple_search_form
      * @param bool  $show_add_qualification Whether to show or not the link to add a new qualification
      *                                      (we hide it in case of the course-embedded tool where we have only one
      *                                      per course or session)

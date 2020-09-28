@@ -190,8 +190,7 @@ class CatForm extends FormValidator
      */
     protected function build_select_course_form()
     {
-        $select = $this->addElement(
-            'select',
+        $select = $this->addSelect(
             'select_course',
             [get_lang('Pick a course'), 'test'],
             null
@@ -253,8 +252,7 @@ class CatForm extends FormValidator
 
         if ($allowSkillEdit) {
             if (Skill::isToolAvailable()) {
-                $skillSelect = $this->addElement(
-                    'select_ajax',
+                $skillSelect = $this->addSelectAjax(
                     'skills',
                     [
                         get_lang('Skills'),

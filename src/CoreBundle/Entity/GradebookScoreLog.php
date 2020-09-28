@@ -4,6 +4,7 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -19,6 +20,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class GradebookScoreLog
 {
+    use UserTrait;
+
     /**
      * @var int
      *
@@ -36,11 +39,12 @@ class GradebookScoreLog
     protected $categoryId;
 
     /**
-     * @var int
+     * @var User
      *
-     * @ORM\Column(name="user_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="gradebookScoreLogs")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $userId;
+    protected $user;
 
     /**
      * @var float
@@ -64,16 +68,6 @@ class GradebookScoreLog
     public function getCategoryId()
     {
         return $this->categoryId;
-    }
-
-    /**
-     * Get the user id.
-     *
-     * @return int
-     */
-    public function getUserId()
-    {
-        return $this->userId;
     }
 
     /**
@@ -116,20 +110,6 @@ class GradebookScoreLog
     public function setCategoryId($categoryId)
     {
         $this->categoryId = $categoryId;
-
-        return $this;
-    }
-
-    /**
-     * Set the user id.
-     *
-     * @param int $userId
-     *
-     * @return $this
-     */
-    public function setUserId($userId)
-    {
-        $this->userId = $userId;
 
         return $this;
     }

@@ -4,7 +4,9 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * GradebookResult.
@@ -18,33 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class GradebookResult
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="user_id", type="integer", nullable=false)
-     */
-    protected $userId;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="evaluation_id", type="integer", nullable=false)
-     */
-    protected $evaluationId;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="created_at", type="datetime", nullable=false)
-     */
-    protected $createdAt;
-
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="score", type="float", precision=10, scale=0, nullable=true)
-     */
-    protected $score;
+    use UserTrait;
 
     /**
      * @var int
@@ -56,28 +32,34 @@ class GradebookResult
     protected $id;
 
     /**
-     * Set userId.
+     * @var int
      *
-     * @param int $userId
-     *
-     * @return GradebookResult
+     * @ORM\Column(name="evaluation_id", type="integer", nullable=false)
      */
-    public function setUserId($userId)
-    {
-        $this->userId = $userId;
-
-        return $this;
-    }
+    protected $evaluationId;
 
     /**
-     * Get userId.
+     * @var float
      *
-     * @return int
+     * @ORM\Column(name="score", type="float", precision=10, scale=0, nullable=true)
      */
-    public function getUserId()
-    {
-        return $this->userId;
-    }
+    protected $score;
+
+    /**
+     * @var \DateTime
+     *
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(name="created_at", type="datetime", nullable=false)
+     */
+    protected $createdAt;
+
+    /**
+     * @var User
+     *
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="gradebookResults")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    protected $user;
 
     /**
      * Set evaluationId.

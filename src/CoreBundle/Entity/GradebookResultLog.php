@@ -4,7 +4,9 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * GradebookResultLog.
@@ -14,6 +16,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class GradebookResultLog
 {
+    use UserTrait;
+
     /**
      * @var int
      *
@@ -33,13 +37,6 @@ class GradebookResultLog
     /**
      * @var int
      *
-     * @ORM\Column(name="user_id", type="integer", nullable=false)
-     */
-    protected $userId;
-
-    /**
-     * @var int
-     *
      * @ORM\Column(name="evaluation_id", type="integer", nullable=false)
      */
     protected $evaluationId;
@@ -47,6 +44,7 @@ class GradebookResultLog
     /**
      * @var \DateTime
      *
+     * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="created_at", type="datetime", nullable=false)
      */
     protected $createdAt;
@@ -59,28 +57,12 @@ class GradebookResultLog
     protected $score;
 
     /**
-     * Set userId.
+     * @var User
      *
-     * @param int $userId
-     *
-     * @return GradebookResultLog
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="gradebookResultLogs")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    public function setUserId($userId)
-    {
-        $this->userId = $userId;
-
-        return $this;
-    }
-
-    /**
-     * Get userId.
-     *
-     * @return int
-     */
-    public function getUserId()
-    {
-        return $this->userId;
-    }
+    protected $user;
 
     /**
      * Set evaluationId.

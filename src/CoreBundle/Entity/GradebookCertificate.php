@@ -42,15 +42,8 @@ class GradebookCertificate
     /**
      * @var User
      *
-     * @ORM\ManyToOne(
-     *     targetEntity="Chamilo\CoreBundle\Entity\User",
-     *     inversedBy="gradebookCertificates"
-     * )
-     * @ORM\JoinColumn(
-     *    name="user_id",
-     *    referencedColumnName="id",
-     *    onDelete="CASCADE"
-     * )
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="gradeBookCertificates")
+     * @ORM\JoinColumn(name="user_id",referencedColumnName="id",onDelete="CASCADE")
      */
     protected $user;
 

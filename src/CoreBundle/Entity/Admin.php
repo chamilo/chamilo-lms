@@ -4,16 +4,19 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Admin.
  *
- * @ORM\Table(name="admin", uniqueConstraints={@ORM\UniqueConstraint(name="user_id", columns={"user_id"})})
+ * @ORM\Table(name="admin")
  * @ORM\Entity
  */
 class Admin
 {
+    use UserTrait;
+
     /**
      * @var int
      *
@@ -24,35 +27,16 @@ class Admin
     protected $id;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="user_id", type="integer", nullable=false)
+     * @ORM\OneToOne(
+     *     targetEntity="Chamilo\CoreBundle\Entity\User",
+     *     inversedBy="admin"
+     * )
+     * @ORM\JoinColumn(
+     *     name="user_id",
+     *     referencedColumnName="id",
+     *     onDelete="CASCADE")
      */
-    protected $userId;
-
-    /**
-     * Set userId.
-     *
-     * @param int $userId
-     *
-     * @return Admin
-     */
-    public function setUserId($userId)
-    {
-        $this->userId = $userId;
-
-        return $this;
-    }
-
-    /**
-     * Get userId.
-     *
-     * @return int
-     */
-    public function getUserId()
-    {
-        return $this->userId;
-    }
+    protected $user;
 
     /**
      * Get id.

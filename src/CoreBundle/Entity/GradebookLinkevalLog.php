@@ -49,14 +49,6 @@ class GradebookLinkevalLog
     protected $description;
 
     /**
-     * @var \DateTime
-     *
-     * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(name="created_at", type="datetime", nullable=false)
-     */
-    protected $createdAt;
-
-    /**
      * @var int
      *
      * @ORM\Column(name="weight", type="smallint", nullable=true)
@@ -80,10 +72,18 @@ class GradebookLinkevalLog
     /**
      * @var User
      *
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="gradebookLinkevalLogs")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="gradeBookLinkEvalLogs")
      * @ORM\JoinColumn(name="user_id_log", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $user;
+
+    /**
+     * @var \DateTime
+     *
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(name="created_at", type="datetime", nullable=false)
+     */
+    protected $createdAt;
 
     /**
      * Set idLinkevalLog.

@@ -33,7 +33,7 @@ class AccessUrlRelCourse
     protected $course;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AccessUrl", inversedBy="course", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="AccessUrl", inversedBy="courses", cascade={"persist"})
      * @ORM\JoinColumn(name="access_url_id", referencedColumnName="id")
      */
     protected $url;

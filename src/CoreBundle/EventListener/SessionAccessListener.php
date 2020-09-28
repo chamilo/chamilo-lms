@@ -44,7 +44,7 @@ class SessionAccessListener
         $access = new TrackECourseAccess();
         $access
             ->setCId($course->getId())
-            ->setUserId($user->getId())
+            ->setUser($user)
             ->setSessionId($session->getId())
             ->setUserIp($ip);
 

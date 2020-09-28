@@ -5,6 +5,7 @@
 namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -15,6 +16,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class CLpCategoryUser
 {
+    use UserTrait;
+
     /**
      * @var int
      *
@@ -82,26 +85,6 @@ class CLpCategoryUser
     public function setCategory($category)
     {
         $this->category = $category;
-
-        return $this;
-    }
-
-    /**
-     * @return User
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
-
-    /**
-     * @param User $user
-     *
-     * @return CLpCategoryUser
-     */
-    public function setUser($user)
-    {
-        $this->user = $user;
 
         return $this;
     }

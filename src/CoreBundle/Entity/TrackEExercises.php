@@ -21,6 +21,15 @@ class TrackEExercises
     /**
      * @var int
      *
+     * @ORM\Column(name="exe_id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $exeId;
+
+    /**
+     * @var int
+     *
      * @ORM\Column(name="exe_user_id", type="integer", nullable=false)
      */
     protected $exeUserId;
@@ -143,15 +152,6 @@ class TrackEExercises
      * @ORM\Column(name="questions_to_check", type="text", nullable=false)
      */
     protected $questionsToCheck;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="exe_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $exeId;
 
     /**
      * Set exeUserId.

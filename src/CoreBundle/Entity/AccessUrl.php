@@ -50,22 +50,17 @@ class AccessUrl extends AbstractResource implements ResourceInterface
     protected $user;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SettingsCurrent", mappedBy="url", cascade={"persist"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="SettingsCurrent", mappedBy="url",cascade={"persist"}, orphanRemoval=true)
      */
     protected $settings;
 
     /**
-     * @ORM\OneToMany(
-     *     targetEntity="Chamilo\CoreBundle\Entity\SessionCategory",
-     *     mappedBy="url",
-     *     cascade={"persist"},
-     *     orphanRemoval=true
-     * )
+     * @ORM\OneToMany(targetEntity="SessionCategory", mappedBy="url", cascade={"persist"}, orphanRemoval=true)
      */
     protected $sessionCategories;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\AccessUrlRelCourseCategory", mappedBy="url", cascade={"persist"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="AccessUrlRelCourseCategory", mappedBy="url", cascade={"persist"},orphanRemoval=true)
      */
     protected $courseCategory;
 

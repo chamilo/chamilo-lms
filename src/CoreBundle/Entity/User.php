@@ -395,9 +395,152 @@ class User implements UserInterface, EquatableInterface
     protected $commentedUserSkills;
 
     /**
+     * @var ArrayCollection|GradebookCategory[]
+     *
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\GradebookCategory", mappedBy="user")
      */
     protected $gradeBookCategories;
+
+    /**
+     * @var ArrayCollection|GradebookCertificate[]
+     *
+     * @ORM\OneToMany(
+     *  targetEntity="GradebookCertificate", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true
+     * )
+     */
+    protected $gradeBookCertificates;
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(
+     *     targetEntity="GradebookEvaluation", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true
+     * )
+     */
+    protected $gradeBookEvaluations;
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="GradebookLink", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
+     */
+    protected $gradeBookLinks;
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="GradebookResult", mappedBy="user", cascade={"persist","remove"}, orphanRemoval=true)
+     */
+    protected $gradeBookResults;
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(
+     *     targetEntity="GradebookResultLog", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true
+     * )
+     */
+    protected $gradeBookResultLogs;
+
+    /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(
+     *     targetEntity="GradebookScoreLog", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true
+     * )
+     */
+    protected $gradeBookScoreLogs;
+
+    /**
+     * @var ArrayCollection|UserRelUser[]
+     * @ORM\OneToMany(targetEntity="UserRelUser", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
+     */
+    protected $userRelUsers;
+
+    /**
+     * @var ArrayCollection|GradebookLinkevalLog[]
+     * @ORM\OneToMany(
+     *     targetEntity="GradebookLinkevalLog",
+     *     mappedBy="user",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true
+     * )
+     */
+    protected $gradeBookLinkEvalLogs;
+
+    /**
+     * @var ArrayCollection|SequenceValue[]
+     * @ORM\OneToMany(targetEntity="SequenceValue", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
+     */
+    protected $sequenceValues;
+
+    /**
+     * @var ArrayCollection|TrackEExerciseConfirmation[]
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CoreBundle\Entity\TrackEExerciseConfirmation",
+     *     mappedBy="user",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true
+     * )
+     */
+    protected $trackEExerciseConfirmations;
+
+    /**
+     * @var ArrayCollection|TrackEAttempt[]
+     * @ORM\OneToMany(targetEntity="TrackEAccessComplete", mappedBy="user", cascade={"persist", "remove"},orphanRemoval=true)
+     */
+    protected $trackEAccessCompleteList;
+
+    /**
+     * @var ArrayCollection|Templates[]
+     * @ORM\OneToMany(targetEntity="Templates", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
+     */
+    protected $templates;
+
+    /**
+     * @var ArrayCollection|TrackEAttempt[]
+     * @ORM\OneToMany(targetEntity="TrackEAttempt", mappedBy="user", cascade={"persist", "remove"},orphanRemoval=true)
+     */
+    protected $trackEAttempts;
+
+    /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CoreBundle\Entity\TrackECourseAccess",
+     *     mappedBy="user",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true
+     * )
+     */
+    protected $trackECourseAccess;
+
+    /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CoreBundle\Entity\UserCourseCategory",
+     *     mappedBy="user",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true
+     * )
+     */
+    protected $userCourseCategories;
+
+    /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="UserRelCourseVote", mappedBy="user",cascade={"persist","remove"},orphanRemoval=true)
+     */
+    protected $userRelCourseVotes;
+
+    /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="UserRelTag", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
+     */
+    protected $userRelTags;
+
+    /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="PersonalAgenda",mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
+     */
+    protected $personalAgendas;
 
     /**
      * @var Session[]|ArrayCollection
@@ -575,15 +718,29 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * @var \DateTime
+     *
      * @ORM\Column(name="created_at", type="datetime", nullable=true, unique=false)
      */
     protected $createdAt;
 
     /**
      * @var \DateTime
+     *
      * @ORM\Column(name="updated_at", type="datetime", nullable=true, unique=false)
      */
     protected $updatedAt;
+
+    /**
+     * @var Admin
+     *
+     * @ORM\OneToOne(
+     *     targetEntity="Chamilo\CoreBundle\Entity\Admin",
+     *     mappedBy="user",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true
+     * )
+     */
+    protected $admin;
 
     /**
      * Constructor.

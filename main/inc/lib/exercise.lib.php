@@ -1491,7 +1491,7 @@ HTML;
                     <script>
                         new ".($answerType == HOT_SPOT ? "HotspotQuestion" : "DelineationQuestion")."({
                             questionId: $questionId,
-                            exerciseId: $exerciseId,
+                            exerciseId: {$exercise->id},
                             exeId: 0,
                             selector: '#hotspot-preview-$questionId',
                             'for': 'preview',
@@ -1533,7 +1533,7 @@ HOTSPOT;
                         $(function() {
                             new ".($answerType == HOT_SPOT_DELINEATION ? 'DelineationQuestion' : 'HotspotQuestion')."({
                                 questionId: $questionId,
-                                exerciseId: $exerciseId,
+                                exerciseId: {$exercise->id},
                                 exeId: 0,
                                 selector: '#question_div_' + $questionId + ' .hotspot-image',
                                 'for': 'user',

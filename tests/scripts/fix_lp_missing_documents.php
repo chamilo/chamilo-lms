@@ -5,6 +5,7 @@
 /**
  * Set id = iid in c_document for a c_lp
  */
+
 exit;
 require_once '../../main/inc/global.inc.php';
 

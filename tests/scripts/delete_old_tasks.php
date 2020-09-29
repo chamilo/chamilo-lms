@@ -11,7 +11,7 @@
  * @author Percy Santiago <psantiago@icpna.edu.pe>
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
  */
-exit(); //remove this line to execute from the command line
+exit; //remove this line to execute from the command line
 if (PHP_SAPI !== 'cli') {
     die('This script can only be executed from the command line');
 }

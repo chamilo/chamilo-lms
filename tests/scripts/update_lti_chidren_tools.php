@@ -1,15 +1,16 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * Update all children tools created by a LTI tool in courses.
  */
 
+exit;
 use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
 
 require __DIR__.'/../../main/inc/global.inc.php';
 
-exit;
 
 // Arguments
 $parentLtiToolId = 1;

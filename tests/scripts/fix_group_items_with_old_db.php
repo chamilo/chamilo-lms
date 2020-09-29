@@ -21,6 +21,7 @@
 /**
  * Context initialization
  */
+exit;
 if (PHP_SAPI != 'cli') {
     die('This script can only be executed from the command line');
 }

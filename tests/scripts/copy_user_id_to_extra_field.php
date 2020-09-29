@@ -3,6 +3,7 @@
 /*
  * Copy user.user_id to extra field ScormStudentId
 */
+exit;
 $extraFieldName = 'ScormStudentId';
 
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;

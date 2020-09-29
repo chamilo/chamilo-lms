@@ -1,5 +1,7 @@
 <?php
+
 /* For license terms, see /license.txt */
+
 /**
  * Fix failed migration 1.9.x to 1.10.0
  * Note: You need execute the ./fix_duplicate_settings.php to remove duplicated settings from failed migration

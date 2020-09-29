@@ -203,18 +203,12 @@ class ResourceFile
         return false;
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @return ResourceFile
-     */
-    public function setName($name)
+    public function setName($name): self
     {
         $this->name = $name;
 
@@ -234,7 +228,7 @@ class ResourceFile
      *
      * @return $this
      */
-    public function setCrop($crop)
+    public function setCrop($crop): self
     {
         $this->crop = $crop;
 
@@ -286,13 +280,6 @@ class ResourceFile
     public function getId()
     {
         return $this->id;
-    }
-
-    public function setId($id): self
-    {
-        $this->id = $id;
-
-        return $this;
     }
 
     /*public function getDescription(): string
@@ -389,9 +376,6 @@ class ResourceFile
         return $this;
     }
 
-    /**
-     * @return File
-     */
     public function getFile(): ?File
     {
         return $this->file;

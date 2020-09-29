@@ -39,10 +39,7 @@ class ResourceRight
      */
     protected $mask;
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString(): string
     {
         return (string) $this->getId();
     }
@@ -83,43 +80,22 @@ class ResourceRight
         return $this->resourceLink;
     }
 
-    /**
-     * @param ResourceLink $resourceLink
-     *
-     * @return $this
-     */
-    public function setResourceLink($resourceLink)
+    public function setResourceLink(ResourceLink $resourceLink): self
     {
         $this->resourceLink = $resourceLink;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getRole()
+    public function getRole(): string
     {
         return $this->role;
     }
 
-    /**
-     * @param string $role
-     *
-     * @return $this
-     */
-    public function setRole($role)
+    public function setRole(string $role): self
     {
         $this->role = $role;
 
         return $this;
-    }
-
-    /**
-     * @param int $id
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
     }
 }

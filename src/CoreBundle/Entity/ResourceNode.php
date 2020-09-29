@@ -229,8 +229,6 @@ class ResourceNode
 
     /**
      * Returns the resource creator.
-     *
-     * @return User
      */
     public function getCreator(): ?User
     {
@@ -276,12 +274,10 @@ class ResourceNode
 
     /**
      * Return the lvl value of the resource in the tree.
-     *
-     * @return int
      */
-    public function getLevel()
+    public function getLevel(): int
     {
-        return $this->level;
+        return (int) $this->level;
     }
 
     /**
@@ -412,10 +408,7 @@ class ResourceNode
         return $pathForDisplay;
     }
 
-    /**
-     * @return ResourceType
-     */
-    public function getResourceType()
+    public function getResourceType(): ResourceType
     {
         return $this->resourceType;
     }
@@ -435,10 +428,7 @@ class ResourceNode
         return $this->resourceLinks;
     }
 
-    /**
-     * @return ResourceNode
-     */
-    public function setResourceLinks($resourceLinks)
+    public function setResourceLinks($resourceLinks): self
     {
         $this->resourceLinks = $resourceLinks;
 
@@ -446,9 +436,7 @@ class ResourceNode
     }
 
     /**
-     * @param Session $session
-     *
-     * @return ArrayCollection
+     * @return ResourceLink[]
      */
     public function hasSession(Session $session = null)
     {

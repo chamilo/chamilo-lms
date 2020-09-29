@@ -114,16 +114,6 @@ class ResourceComment
         return $this->id;
     }
 
-    /**
-     * @return ResourceComment
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
     public function getContent(): string
     {
         return $this->content;
@@ -175,7 +165,7 @@ class ResourceComment
     /**
      * @return ResourceComment[]
      */
-    public function getChildren(): array
+    public function getChildren()
     {
         return $this->children;
     }

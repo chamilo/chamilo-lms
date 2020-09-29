@@ -132,10 +132,8 @@ class ResourceLink
 
     /**
      * @param ArrayCollection $rights
-     *
-     * @return $this
      */
-    public function setResourceRight($rights)
+    public function setResourceRight($rights): self
     {
         $this->resourceRight = $rights;
 
@@ -146,10 +144,7 @@ class ResourceLink
         return $this;
     }
 
-    /**
-     * @return $this
-     */
-    public function addResourceRight(ResourceRight $right)
+    public function addResourceRight(ResourceRight $right): self
     {
         $right->setResourceLink($this);
         $this->resourceRight[] = $right;
@@ -173,46 +168,28 @@ class ResourceLink
         return $this->id;
     }
 
-    /**
-     * @param User $user
-     *
-     * @return $this
-     */
-    public function setUser(User $user = null)
+    public function setUser(User $user = null): self
     {
         $this->user = $user;
 
         return $this;
     }
 
-    /**
-     * @param Course $course
-     *
-     * @return $this
-     */
-    public function setCourse(Course $course = null)
+    public function setCourse(Course $course = null): self
     {
         $this->course = $course;
 
         return $this;
     }
 
-    /**
-     * @param Session $session
-     *
-     * @return $this
-     */
-    public function setSession(Session $session = null)
+    public function setSession(Session $session = null): self
     {
         $this->session = $session;
 
         return $this;
     }
 
-    /**
-     * @return CGroup
-     */
-    public function getGroup()
+    public function getGroup(): ?CGroup
     {
         return $this->group;
     }
@@ -224,20 +201,12 @@ class ResourceLink
         return $this;
     }
 
-    /**
-     * @return Usergroup
-     */
-    public function getUserGroup()
+    public function getUserGroup(): ?Usergroup
     {
         return $this->userGroup;
     }
 
-    /**
-     * @param Usergroup $group
-     *
-     * @return $this
-     */
-    public function setUserGroup(Usergroup $group = null)
+    public function setUserGroup(Usergroup $group = null): self
     {
         $this->userGroup = $group;
 

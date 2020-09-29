@@ -115,7 +115,9 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
     /**
      * @var ArrayCollection|CCalendarEventAttachment[]
      *
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CCalendarEventAttachment", mappedBy="event", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\OneToMany(
+     *   targetEntity="Chamilo\CourseBundle\Entity\CCalendarEventAttachment", mappedBy="event", cascade={"persist", "remove"}, orphanRemoval=true
+     * )
      */
     protected $attachments;
 
@@ -132,10 +134,8 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
      * Set title.
      *
      * @param string $title
-     *
-     * @return CCalendarEvent
      */
-    public function setTitle($title)
+    public function setTitle($title): self
     {
         $this->title = $title;
 
@@ -156,10 +156,8 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
      * Set content.
      *
      * @param string $content
-     *
-     * @return CCalendarEvent
      */
-    public function setContent($content)
+    public function setContent($content): self
     {
         $this->content = $content;
 
@@ -180,10 +178,8 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
      * Set startDate.
      *
      * @param \DateTime $startDate
-     *
-     * @return CCalendarEvent
      */
-    public function setStartDate($startDate)
+    public function setStartDate($startDate): self
     {
         $this->startDate = $startDate;
 
@@ -204,10 +200,8 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
      * Set endDate.
      *
      * @param \DateTime $endDate
-     *
-     * @return CCalendarEvent
      */
-    public function setEndDate($endDate)
+    public function setEndDate($endDate): self
     {
         $this->endDate = $endDate;
 
@@ -228,10 +222,8 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
      * Set parentEventId.
      *
      * @param int $parentEventId
-     *
-     * @return CCalendarEvent
      */
-    public function setParentEventId($parentEventId)
+    public function setParentEventId($parentEventId): self
     {
         $this->parentEventId = $parentEventId;
 
@@ -252,10 +244,8 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
      * Set sessionId.
      *
      * @param int $sessionId
-     *
-     * @return CCalendarEvent
      */
-    public function setSessionId($sessionId)
+    public function setSessionId($sessionId): self
     {
         $this->sessionId = $sessionId;
 
@@ -276,10 +266,8 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
      * Set allDay.
      *
      * @param int $allDay
-     *
-     * @return CCalendarEvent
      */
-    public function setAllDay($allDay)
+    public function setAllDay($allDay): self
     {
         $this->allDay = $allDay;
 
@@ -330,10 +318,8 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
 
     /**
      * @param string $comment
-     *
-     * @return CCalendarEvent
      */
-    public function setComment($comment)
+    public function setComment($comment): self
     {
         $this->comment = $comment;
 
@@ -350,10 +336,8 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
 
     /**
      * @param Room $room
-     *
-     * @return $this
      */
-    public function setRoom($room)
+    public function setRoom($room): self
     {
         $this->room = $room;
 
@@ -370,10 +354,8 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
 
     /**
      * @param string $color
-     *
-     * @return $this
      */
-    public function setColor($color)
+    public function setColor($color): self
     {
         $this->color = $color;
 
@@ -389,18 +371,6 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @param int $iid
-     *
-     * @return CCalendarEvent
-     */
-    public function setIid($iid)
-    {
-        $this->iid = $iid;
-
-        return $this;
-    }
-
-    /**
      * @return CCalendarEventAttachment[]|ArrayCollection
      */
     public function getAttachments()
@@ -410,21 +380,45 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
 
     /**
      * @param CCalendarEventAttachment[]|ArrayCollection $attachments
-     *
-     * @return CCalendarEvent
      */
-    public function setAttachments($attachments)
+    public function setAttachments($attachments): self
     {
         $this->attachments = $attachments;
 
         return $this;
     }
 
-    public function addAttachment(CCalendarEventAttachment $attachment)
+    public function addAttachment(CCalendarEventAttachment $attachment): self
     {
         $this->attachments->add($attachment);
 
         return $this;
+    }
+
+    public function getUsersAndGroupSubscribedToEvent()
+    {
+        $users = [];
+        $groups = [];
+        $everyone = false;
+        $links = $this->getResourceNode()->getResourceLinks();
+        foreach ($links as $link) {
+            if ($link->getUser()) {
+                $users[] = $link->getUser()->getId();
+            }
+            if ($link->getGroup()) {
+                $groups[] = $link->getGroup()->getIid();
+            }
+        }
+
+        if (empty($users) && empty($groups)) {
+            $everyone = true;
+        }
+
+        return [
+            'everyone' => $everyone,
+            'users' => $users,
+            'groups' => $groups,
+        ];
     }
 
     /**

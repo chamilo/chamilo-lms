@@ -5858,36 +5858,34 @@ function preAddAllWorkStudentCallback($p_event, &$p_header)
 /**
  * Get all work created by a user.
  *
- * @param int $user_id
+ * @param int $userId
  * @param int $courseId
  * @param int $sessionId
  *
  * @return array
  */
-function getWorkCreatedByUser($user_id, $courseId, $sessionId)
+function getWorkCreatedByUser($userId, $courseId, $sessionId)
 {
-    $items = api_get_item_property_list_by_tool_by_user(
-        $user_id,
-        'work',
-        $courseId,
-        $sessionId
-    );
+    $repo = Container::getStudentPublicationRepository();
+
+    $courseEntity = api_get_course_entity($courseId);
+    $sessionEntity = api_get_session_entity($sessionId);
+
+    $qb = $repo->getResourcesByCourse($courseEntity, $sessionEntity);
+
+    $qb->andWhere('node.creator = :creator');
+    $qb->setParameter('creator', $userId);
+    $items = $qb->getQuery()->getResult();
 
     $list = [];
     if (!empty($items)) {
+        /** @var CStudentPublication $work */
         foreach ($items as $work) {
-            $item = get_work_data_by_id(
-                $work['ref'],
-                $courseId,
-                $sessionId
-            );
-            if (!empty($item)) {
-                $list[] = [
-                    $item['title'],
-                    api_get_local_time($work['insert_date']),
-                    api_get_local_time($work['lastedit_date']),
-                ];
-            }
+            $list[] = [
+                $work->getTitle(),
+                api_get_local_time($work->getResourceNode()->getCreatedAt()),
+                api_get_local_time($work->getResourceNode()->getUpdatedAt()),
+            ];
         }
     }
 

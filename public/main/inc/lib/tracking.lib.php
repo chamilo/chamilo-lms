@@ -6861,11 +6861,7 @@ class Tracking
             );
         }
 
-        $courseWorkInformationArray = getWorkCreatedByUser(
-            $userId,
-            $courseInfo['real_id'],
-            $sessionId
-        );
+        $courseWorkInformationArray = getWorkCreatedByUser($userId, $courseInfo['real_id'], $sessionId);
 
         if (!empty($courseWorkInformationArray)) {
             $csvContent[] = null;

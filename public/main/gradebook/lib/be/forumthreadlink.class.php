@@ -49,7 +49,6 @@ class ForumThreadLink extends AbstractLink
         }
 
         $tbl_grade_links = Database::get_course_table(TABLE_FORUM_THREAD);
-        $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $sessionId = $this->get_session_id();
 
         if ($sessionId) {
@@ -73,9 +72,8 @@ class ForumThreadLink extends AbstractLink
                 $cats[] = [$data['thread_id'], $data['thread_title']];
             }
         }
-        $my_cats = isset($cats) ? $cats : [];
 
-        return $my_cats;
+        return isset($cats) ? $cats : [];
     }
 
     /**

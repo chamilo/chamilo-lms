@@ -5,7 +5,6 @@
 use Chamilo\CoreBundle\Framework\Container;
 
 // use anonymous mode when accessing this course tool
-
 $use_anonymous = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_CALENDAR_EVENT;
@@ -36,27 +35,24 @@ $logInfo = [
 Event::registerLog($logInfo);
 
 $group_id = api_get_group_id();
-$groupInfo = GroupManager::get_group_properties($group_id);
 $eventId = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
 $type = $event_type = isset($_GET['type']) ? $_GET['type'] : null;
+$htmlHeadXtra[] = '<script>
+$(function() {
+    var checked = $("input[name=repeat]").attr("checked");
+    if (checked) {
+        $("#options2").show();
+    }
+});
 
-$htmlHeadXtra[] = "<script>
 function plus_repeated_event() {
-    if (document.getElementById('options2').style.display == 'none') {
-        document.getElementById('options2').style.display = 'block';
+    if (document.getElementById("options2").style.display == "none") {
+        document.getElementById("options2").style.display = "block";
     } else {
-        document.getElementById('options2').style.display = 'none';
+        document.getElementById("options2").style.display = "none";
     }
 }
-    $(function() {
-        var checked = $('input[name=repeat]').attr('checked');
-        if (checked) {
-            $('#options2').show();
-        }
-    });
-</script>";
 
-$htmlHeadXtra[] = '<script>
 var counter_image = 1;
 function add_image_form() {
 	// Multiple filepaths for image form
@@ -310,20 +306,20 @@ if ($allowToEdit) {
 }
 
 if (!empty($group_id)) {
-    $group_properties = GroupManager :: get_group_properties($group_id);
+    $group_properties = GroupManager::get_group_properties($group_id);
     $interbreadcrumb[] = [
-        "url" => api_get_path(WEB_CODE_PATH)."group/group.php?".api_get_cidreq(),
-        "name" => get_lang('Groups'),
+        'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
+        'name' => get_lang('Groups'),
     ];
     $interbreadcrumb[] = [
-        "url" => api_get_path(WEB_CODE_PATH)."group/group_space.php?".api_get_cidreq(),
-        "name" => get_lang('Group area').' '.$group_properties['name'],
+        'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
+        'name' => get_lang('Group area').' '.$group_properties['name'],
     ];
 }
 if (!empty($actionName)) {
     $interbreadcrumb[] = [
-        "url" => $url,
-        "name" => get_lang('Agenda'),
+        'url' => $url,
+        'name' => get_lang('Agenda'),
     ];
 } else {
     $actionName = '';

@@ -80,7 +80,9 @@ class CThematic extends AbstractResource implements ResourceInterface
     /**
      * @var CThematicPlan[]
      *
-     * @ORM\OneToMany(targetEntity="CThematicPlan", mappedBy="thematic", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\OneToMany(
+     *     targetEntity="CThematicPlan", mappedBy="thematic", cascade={"persist", "remove"}, orphanRemoval=true
+     * )
      */
     protected $plans;
 
@@ -89,7 +91,9 @@ class CThematic extends AbstractResource implements ResourceInterface
      *
      * @ORM\OrderBy({"startDate" = "ASC"})
      *
-     * @ORM\OneToMany(targetEntity="CThematicAdvance", mappedBy="thematic", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\OneToMany(
+     *     targetEntity="CThematicAdvance", mappedBy="thematic", cascade={"persist", "remove"}, orphanRemoval=true
+     * )
      */
     protected $advances;
 
@@ -108,10 +112,8 @@ class CThematic extends AbstractResource implements ResourceInterface
      * Set title.
      *
      * @param string $title
-     *
-     * @return CThematic
      */
-    public function setTitle($title)
+    public function setTitle($title): self
     {
         $this->title = $title;
 
@@ -132,10 +134,8 @@ class CThematic extends AbstractResource implements ResourceInterface
      * Set content.
      *
      * @param string $content
-     *
-     * @return CThematic
      */
-    public function setContent($content)
+    public function setContent($content): self
     {
         $this->content = $content;
 
@@ -156,10 +156,8 @@ class CThematic extends AbstractResource implements ResourceInterface
      * Set displayOrder.
      *
      * @param int $displayOrder
-     *
-     * @return CThematic
      */
-    public function setDisplayOrder($displayOrder)
+    public function setDisplayOrder($displayOrder): self
     {
         $this->displayOrder = $displayOrder;
 
@@ -180,10 +178,8 @@ class CThematic extends AbstractResource implements ResourceInterface
      * Set active.
      *
      * @param bool $active
-     *
-     * @return CThematic
      */
-    public function setActive($active)
+    public function setActive($active): self
     {
         $this->active = $active;
 

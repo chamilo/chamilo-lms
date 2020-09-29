@@ -620,53 +620,11 @@ class Thematic
         $qb->andWhere($qb->expr()->eq('resource.thematic', $thematic_id));
 
         return $qb->getQuery()->getResult();
-
-        // set current course
-        $table = Database::get_course_table(TABLE_THEMATIC_ADVANCE);
-        $thematic_id = (int) $thematic_id;
-        $data = [];
-        $sql = "SELECT * FROM $table
-                WHERE c_id = $course_id AND thematic_id = $thematic_id ";
-
-        $elements = [];
-        $list = api_get_item_property_by_tool(
-            'thematic_advance',
-            $course_info['code'],
-            api_get_session_id()
-        );
-        foreach ($list as $value) {
-            $elements[] = $value['ref'];
-        }
-
-        $res = Database::query($sql);
-        if (Database::num_rows($res) > 0) {
-            while ($row = Database::fetch_array($res, 'ASSOC')) {
-                if (in_array($row['id'], $elements)) {
-                    $data[] = $row;
-                }
-            }
-        }
-
-        return $data;
     }
 
-    public function getThematicAdvance($id)
+    public function getThematicAdvance($id): ?CThematicAdvance
     {
         $repo = Container::getThematicAdvanceRepository();
-        /*
-        $courseEntity = api_get_course_entity($courseId);
-        $sessionEntity = null;
-        if ($sessionId) {
-            $sessionEntity = api_get_session_entity($sessionId);
-            $list = api_get_item_property_by_tool(
-                'thematic_advance',
-                $course_info['code'],
-                api_get_session_id()
-            );
-            foreach ($list as $value) {
-                $elements[$value['ref']] = $value;
-            }
-        }*/
 
         return $repo->find($id);
     }
@@ -674,40 +632,20 @@ class Thematic
     /**
      * Get thematic advance list.
      *
-     * @param int    $thematic_advance_id Thematic advance id (optional), get data by thematic advance list
      * @param string $course_code         Course code (optional)
      * @param bool   $force_session_id    Force to have a session id
      * @param bool   $withLocalTime       Force start_date to local time
      *
-     * @return array $data
+     * @return CThematicAdvance[]
      */
-    public function get_thematic_advance_list(
-        $thematic_advance_id = null,
-        $course_code = null,
-        $force_session_id = false,
-        $withLocalTime = false
-    ) {
+    public function get_thematic_advance_list($course_code = null, $force_session_id = false, $withLocalTime = false)
+    {
         $course_info = api_get_course_info($course_code);
-        $tbl_thematic_advance = Database::get_course_table(TABLE_THEMATIC_ADVANCE);
-        $data = [];
-        $condition = '';
-        $thematic_advance_id = (int) $thematic_advance_id;
-
-        if (!empty($thematic_advance_id)) {
-            $condition = " AND a.id = $thematic_advance_id ";
-        }
-
         $course_id = $course_info['real_id'];
-
-        $sql = "SELECT * FROM $tbl_thematic_advance a
-                WHERE c_id = $course_id $condition
-                ORDER BY start_date ";
-
         $repo = Container::getThematicAdvanceRepository();
 
         $courseEntity = api_get_course_entity($course_id);
         $sessionEntity = null;
-        $elements = [];
         if ($force_session_id) {
             $sessionEntity = api_get_session_entity(api_get_session_id());
             /*$list = api_get_item_property_by_tool(
@@ -724,34 +662,6 @@ class Thematic
         $qb->orderBy('resource.startDate', 'DESC');
 
         return $qb->getQuery()->getResult();
-
-        $res = Database::query($sql);
-        if (Database::num_rows($res) > 0) {
-            if (!empty($thematic_advance_id)) {
-                $data = Database::fetch_array($res);
-            } else {
-                // group all data group by thematic id
-                $tmp = [];
-                while ($row = Database::fetch_array($res, 'ASSOC')) {
-                    if (true == $withLocalTime) {
-                        $row['start_date'] = api_get_local_time($row['start_date']);
-                    }
-                    $tmp[] = $row['thematic_id'];
-                    if (in_array($row['thematic_id'], $tmp)) {
-                        if ($force_session_id) {
-                            if (in_array($row['id'], array_keys($elements))) {
-                                $row['session_id'] = $elements[$row['id']]['session_id'];
-                                $data[$row['thematic_id']][$row['id']] = $row;
-                            }
-                        } else {
-                            $data[$row['thematic_id']][$row['id']] = $row;
-                        }
-                    }
-                }
-            }
-        }
-
-        return $data;
     }
 
     /**
@@ -763,19 +673,12 @@ class Thematic
      */
     public function thematic_advance_save()
     {
-        $_course = api_get_course_info();
-        // definition database table
-        $table = Database::get_course_table(TABLE_THEMATIC_ADVANCE);
-
-        // protect data
-        $id = intval($this->thematic_advance_id);
+        $id = (int) $this->thematic_advance_id;
         $thematic_id = intval($this->thematic_id);
         $attendance_id = intval($this->attendance_id);
         $content = $this->thematic_advance_content;
         $start_date = $this->start_date;
         $duration = intval($this->duration);
-        $user_id = api_get_user_id();
-
         $repo = Container::getThematicAdvanceRepository();
         $em = $repo->getEntityManager();
 
@@ -816,16 +719,6 @@ class Thematic
             $em->flush();
 
             $last_id = $advance->getIid();
-
-            if ($last_id) {
-                /*api_item_property_update(
-                    $_course,
-                    'thematic_advance',
-                    $last_id,
-                    'ThematicAdvanceAdded',
-                    $user_id
-                );*/
-            }
         } else {
             $advance
                 ->setCId($this->course_int_id)
@@ -843,20 +736,6 @@ class Thematic
             }
             $em->persist($advance);
             $em->flush();
-            /*
-            Database::update(
-                $table,
-                $params,
-                ['id = ? AND c_id = ?' => [$id, $this->course_int_id]]
-            );
-
-            api_item_property_update(
-                $_course,
-                'thematic_advance',
-                $id,
-                'ThematicAdvanceUpdated',
-                $user_id
-            );*/
         }
 
         return $last_id;

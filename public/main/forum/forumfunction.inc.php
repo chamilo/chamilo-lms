@@ -2649,11 +2649,14 @@ function store_thread(
  *
  * @param string $action
  *                            is the parameter that determines if we are
- *                            2. replythread: Replying to a thread ($action = replythread) => I-frame with the complete thread (if enabled)
- *                            3. replymessage: Replying to a message ($action =replymessage) => I-frame with the complete thread (if enabled)
+ *                            2. replythread: Replying to a thread ($action = replythread) => I-frame with the complete
+ *                            thread (if enabled)
+ *                            3. replymessage: Replying to a message ($action =replymessage) => I-frame with the
+ *                            complete thread (if enabled)
  *                            (I first thought to put and I-frame with the message only)
- *                            4. quote: Quoting a message ($action= quotemessage) => I-frame with the complete thread (if enabled).
- *                            The message will be in the reply. (I first thought not to put an I-frame here)
+ *                            4. quote: Quoting a message ($action= quotemessage) => I-frame with the complete thread
+ *                            (if enabled). The message will be in the reply. (I first thought not to put an I-frame
+ *                            here)
  * @param array  $form_values
  * @param bool   $showPreview
  *
@@ -5829,29 +5832,27 @@ function getForumCreatedByUser($userId, $courseInfo, $sessionId)
     }
 
     $courseId = $courseInfo['real_id'];
-    $items = api_get_item_property_list_by_tool_by_user(
-        $userId,
-        'forum',
-        $courseId,
-        $sessionId
-    );
+
+    $repo = Container::getForumRepository();
+
+    $courseEntity = api_get_course_entity($courseId);
+    $sessionEntity = api_get_session_entity($sessionId);
+
+    $qb = $repo->getResourcesByCourse($courseEntity, $sessionEntity);
+
+    $qb->andWhere('node.creator = :creator');
+    $qb->setParameter('creator', $userId);
+    $items = $qb->getQuery()->getResult();
 
     $forumList = [];
     if (!empty($items)) {
+        /** @var CForumForum $forum */
         foreach ($items as $forum) {
-            $forumInfo = get_forums(
-                $forum['ref'],
-                $courseInfo['code'],
-                true,
-                $sessionId
-            );
-            if (!empty($forumInfo) && isset($forumInfo['forum_title'])) {
-                $forumList[] = [
-                    $forumInfo['forum_title'],
-                    api_get_local_time($forum['insert_date']),
-                    api_get_local_time($forum['lastedit_date']),
-                ];
-            }
+            $forumList[] = [
+                $forum->getForumTitle(),
+                api_get_local_time($forum->getResourceNode()->getCreatedAt()),
+                api_get_local_time($forum->getResourceNode()->getUpdatedAt()),
+            ];
         }
     }
 

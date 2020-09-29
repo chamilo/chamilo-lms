@@ -189,6 +189,11 @@ class ResourceLink
         return $this;
     }
 
+    public function hasGroup(): bool
+    {
+        return null !== $this->group;
+    }
+
     public function getGroup(): ?CGroup
     {
         return $this->group;
@@ -215,12 +220,15 @@ class ResourceLink
 
     /**
      * Get user.
-     *
-     * @return User
      */
-    public function getUser()
+    public function getUser(): ?User
     {
         return $this->user;
+    }
+
+    public function hasUser(): bool
+    {
+        return null !== $this->user;
     }
 
     /**

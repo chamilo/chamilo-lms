@@ -1422,6 +1422,7 @@ function getAllWorkListStudent(
             return [];
         }
         $select = 'SELECT DISTINCT
+                        w.title,
                         w.url,
                         w.id,
                         w.c_id,

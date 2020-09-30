@@ -1615,6 +1615,26 @@ $_configuration['auth_password_links'] = [
 // It also enables the main/lp/my_list.php page.
 //$_configuration['show_my_lps_page'] = false;
 
+// When exercise is finished send results by email to users, depending the settings below:
+$_configuration['exercise_finished_email_settings'] = [
+    'send_by_status' => [
+        [
+            'status' => 5, // 5 = student that is doing the exercise send to the Chamilo inbox + email
+            'type' => 'only_score', // Shows only the score result.
+        ],
+    ],
+    'send_by_email' => [
+        [
+            'email' => 'example@example.com', // Only by email
+            'type' => 'complete', // Shows all the results page (feedback/comments/etc)
+        ],
+        [
+            'email' => 'example@example.com',
+            'type' => 'only_score',
+        ],
+    ],
+];
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

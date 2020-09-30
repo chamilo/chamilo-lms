@@ -7026,10 +7026,8 @@ class Exercise
         $teacher_answer_list = $this->fill_in_blank_answer_to_array($answer);
         $result = '';
         if (!empty($teacher_answer_list)) {
-            $i = 0;
             foreach ($teacher_answer_list as $teacher_item) {
-                $value = null;
-                //Cleaning student answer list
+                // Cleaning student answer list
                 $value = strip_tags($teacher_item);
                 $value = api_substr($value, 1, api_strlen($value) - 2);
                 $value = explode('/', $value);
@@ -9998,11 +9996,12 @@ class Exercise
         foreach ($attemptList as $questionId => $options) {
             foreach ($options as $option) {
                 $question = Question::read($option['question_id']);
-
-                switch ($question->type) {
-                    case FILL_IN_BLANKS:
-                        $option['answer'] = $this->fill_in_blank_answer_to_string($option['answer']);
-                        break;
+                if ($question) {
+                    switch ($question->type) {
+                        case FILL_IN_BLANKS:
+                            $option['answer'] = $this->fill_in_blank_answer_to_string($option['answer']);
+                            break;
+                    }
                 }
 
                 if (!empty($option['answer'])) {

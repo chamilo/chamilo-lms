@@ -247,10 +247,10 @@ class Agenda
         $content,
         $usersToSend = [],
         $addAsAnnouncement = false,
-        $parentEventId = null,
+        $parentEventId = 0,
         $attachmentArray = [],
         $attachmentCommentList = [],
-        $eventComment = null,
+        $eventComment = '',
         $color = ''
     ) {
         $start = api_get_utc_datetime($start, false, true);
@@ -1032,30 +1032,28 @@ class Agenda
                     );
                 }
 
-                if (api_is_drh()) {
-                    if (api_drh_can_access_all_session_content()) {
-                        $session_list = [];
-                        $sessionList = SessionManager::get_sessions_followed_by_drh(
-                            api_get_user_id(),
-                            null,
-                            null,
-                            null,
-                            true,
-                            false
-                        );
+                if (api_is_drh() && api_drh_can_access_all_session_content()) {
+                    $session_list = [];
+                    $sessionList = SessionManager::get_sessions_followed_by_drh(
+                        api_get_user_id(),
+                        null,
+                        null,
+                        null,
+                        true,
+                        false
+                    );
 
-                        if (!empty($sessionList)) {
-                            foreach ($sessionList as $sessionItem) {
-                                $sessionId = $sessionItem['id'];
-                                $courses = SessionManager::get_course_list_by_session_id(
-                                    $sessionId
-                                );
-                                $sessionInfo = [
-                                    'session_id' => $sessionId,
-                                    'courses' => $courses,
-                                ];
-                                $session_list[] = $sessionInfo;
-                            }
+                    if (!empty($sessionList)) {
+                        foreach ($sessionList as $sessionItem) {
+                            $sessionId = $sessionItem['id'];
+                            $courses = SessionManager::get_course_list_by_session_id(
+                                $sessionId
+                            );
+                            $sessionInfo = [
+                                'session_id' => $sessionId,
+                                'courses' => $courses,
+                            ];
+                            $session_list[] = $sessionInfo;
                         }
                     }
                 }
@@ -2494,36 +2492,14 @@ class Agenda
         }
 
         if ($valid) {
-            /*$courseDir = $courseInfo['directory'].'/upload/calendar';
-            $sys_course_path = api_get_path(SYS_COURSE_PATH);
-            $uploadDir = $sys_course_path.$courseDir;*/
-
-            // Try to add an extension to the file if it hasn't one
-            /*$new_file_name = add_ext_on_mime(
-                stripslashes($fileUserUpload['name']),
-                $fileUserUpload['type']
-            );*/
-
             // user's file name
             $fileName = $file->getClientOriginalName();
-            $courseId = api_get_course_int_id();
-            /*$new_file_name = uniqid('');
-            $new_path = $uploadDir.'/'.$new_file_name;
-            $result = @move_uploaded_file(
-                $fileUserUpload['tmp_name'],
-                $new_path
-            );
-            $courseId = api_get_course_int_id();
-            $size = intval($fileUserUpload['size']);*/
-            // Storing the attachments if any
-            //if ($result) {
+
             $attachment = new CCalendarEventAttachment();
             $attachment
                 ->setFilename($fileName)
                 ->setComment($comment)
-                ->setPath($fileName)
                 ->setEvent($event)
-                ->setSize($file->getSize())
                 ->setParent($event)
                 ->addCourseLink(
                     api_get_course_entity(),
@@ -2535,16 +2511,9 @@ class Agenda
             $repo->getEntityManager()->persist($attachment);
             $repo->getEntityManager()->flush();
 
-            $id = $attachment->getIid();
-            if ($id) {
-                /*api_item_property_update(
-                    $courseInfo,
-                    'calendar_event_attachment',
-                    $id,
-                    'AgendaAttachmentAdded',
-                    api_get_user_id()
-                );*/
-            }
+            $repo->addFile($attachment, $file);
+            $repo->getEntityManager()->persist($attachment);
+            $repo->getEntityManager()->flush();
         }
     }
 

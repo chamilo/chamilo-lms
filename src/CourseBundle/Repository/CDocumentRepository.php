@@ -119,38 +119,9 @@ final class CDocumentRepository extends ResourceRepository implements GridInterf
         return null;
     }
 
-    /**
-     * @param int    $courseId
-     * @param string $path
-     *
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     */
-    public function getFolderSize($courseId, $path)
+    public function getFolderSize(ResourceNode $resourceNode, Course $course, Session $session = null): int
     {
-        $path = str_replace('_', '\_', $path);
-        $addedSlash = '/' === $path ? '' : '/';
-
-        $repo = $this->getRepository();
-        $qb = $repo->createQueryBuilder('d');
-        $query = $qb
-            ->select('SUM(d.size)')
-            ->innerJoin('d.resourceNode', 'r')
-            ->innerJoin('r.resourceLinks', 'l')
-            ->where('d.path LIKE :path')
-            ->andWhere('d.path NOT LIKE :deleted')
-            ->andWhere('d.path NOT LIKE :extra_path ')
-            ->andWhere('l.visibility <> :visibility')
-            ->andWhere('d.course = :course')
-            ->setParameters([
-                'path' => $path.$addedSlash.'%',
-                'extra_path' => $path.$addedSlash.'%/%',
-                'course' => $courseId,
-                'deleted' => '%_DELETED_%',
-                'visibility' => ResourceLink::VISIBILITY_DELETED,
-            ])
-            ->getQuery();
-
-        return $query->getSingleScalarResult();
+        return $this->getResourceNodeRepository()->getSize($resourceNode, $this->getResourceType(), $course, $session);
     }
 
     /**

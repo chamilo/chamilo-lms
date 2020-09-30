@@ -229,7 +229,6 @@ class ResourceRepository extends EntityRepository
             }
         }
 
-
         $em->persist($resourceNode);
         $em->persist($resource);
         $em->flush();

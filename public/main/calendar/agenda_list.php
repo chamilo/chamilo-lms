@@ -89,11 +89,11 @@ $tpl->assign('agenda_actions', $actions);
 $tpl->assign('is_allowed_to_edit', api_is_allowed_to_edit());
 
 if (api_is_allowed_to_edit()) {
-    if ('change_visibility' == $action) {
+    if ('change_visibility' === $action) {
         $courseInfo = api_get_course_info();
         $courseCondition = '';
         // This happens when list agenda is not inside a course
-        if (('course' == $type || 'session' == $type && !empty($courseInfo))) {
+        if (('course' === $type || 'session' === $type) && !empty($courseInfo)) {
             // For course and session event types
             // Just needs course ID
             $agenda->changeVisibility($_GET['id'], $_GET['visibility'], $courseInfo);

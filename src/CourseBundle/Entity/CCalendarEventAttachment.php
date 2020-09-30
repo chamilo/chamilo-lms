@@ -32,23 +32,9 @@ class CCalendarEventAttachment extends AbstractResource implements ResourceInter
     /**
      * @var string
      *
-     * @ORM\Column(name="path", type="string", length=255, nullable=false)
-     */
-    protected $path;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="comment", type="text", nullable=true)
      */
     protected $comment;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="size", type="integer", nullable=false)
-     */
-    protected $size;
 
     /**
      * @var string
@@ -71,28 +57,6 @@ class CCalendarEventAttachment extends AbstractResource implements ResourceInter
     }
 
     /**
-     * Set path.
-     *
-     * @param string $path
-     */
-    public function setPath($path): self
-    {
-        $this->path = $path;
-
-        return $this;
-    }
-
-    /**
-     * Get path.
-     *
-     * @return string
-     */
-    public function getPath()
-    {
-        return $this->path;
-    }
-
-    /**
      * Set comment.
      *
      * @param string $comment
@@ -112,30 +76,6 @@ class CCalendarEventAttachment extends AbstractResource implements ResourceInter
     public function getComment()
     {
         return $this->comment;
-    }
-
-    /**
-     * Set size.
-     *
-     * @param int $size
-     *
-     * @return CCalendarEventAttachment
-     */
-    public function setSize($size)
-    {
-        $this->size = $size;
-
-        return $this;
-    }
-
-    /**
-     * Get size.
-     *
-     * @return int
-     */
-    public function getSize()
-    {
-        return $this->size;
     }
 
     /**

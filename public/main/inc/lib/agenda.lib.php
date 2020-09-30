@@ -290,12 +290,12 @@ class Agenda
                     ->setAllDay($allDay)
                     ->setColor($color)
                     ->setComment($eventComment)
-                    ->setCId($this->course['real_id'])
-                    ->setSessionId($this->getSessionId())
                 ;
 
                 if (!empty($parentEventId)) {
-                    $event->setParentEventId($parentEventId);
+                    $repo = Container::getCalendarEventRepository();
+                    $parentEvent = $repo->find($parentEventId);
+                    $event->setParentEvent($parentEvent);
                 }
 
                 $event->setParent($courseEntity);
@@ -374,28 +374,6 @@ class Agenda
         }
 
         return $id;
-    }
-
-    /**
-     * @param int $eventId
-     * @param int $courseId
-     *
-     * @return array
-     */
-    public function getRepeatedInfoByEvent($eventId, $courseId)
-    {
-        $repeatTable = Database::get_course_table(TABLE_AGENDA_REPEAT);
-        $eventId = (int) $eventId;
-        $courseId = (int) $courseId;
-        $sql = "SELECT * FROM $repeatTable
-                WHERE c_id = $courseId AND cal_id = $eventId";
-        $res = Database::query($sql);
-        $repeatInfo = [];
-        if (Database::num_rows($res) > 0) {
-            $repeatInfo = Database::fetch_array($res, 'ASSOC');
-        }
-
-        return $repeatInfo;
     }
 
     /**
@@ -652,7 +630,7 @@ class Agenda
         $usersToSend = [],
         $attachmentArray = [],
         $attachmentCommentList = [],
-        $comment = null,
+        $comment = '',
         $color = '',
         $addAnnouncement = false,
         $updateContent = true,
@@ -730,8 +708,6 @@ class Agenda
                         $event->setColor($color);
                     }
 
-                    $em->persist($event);
-
                     if (!empty($usersToSend)) {
                         $sendTo = $this->parseSendToArray($usersToSend);
 
@@ -740,7 +716,9 @@ class Agenda
                         $groupsToDelete = array_diff($sentToEvent['groups'], $sendTo['groups']);
                         $groupToAdd = array_diff($sendTo['groups'], $sentToEvent['groups']);
 
+                        //var_dump($sendTo['everyone'], $usersToDelete, $usersToAdd, $groupsToDelete, $groupToAdd);exit;
                         $links = $event->getResourceNode()->getResourceLinks();
+
                         if ($sendTo['everyone']) {
                             // Delete all from group
                             if (isset($sentToEvent['groups']) && !empty($sentToEvent['groups'])) {
@@ -790,7 +768,7 @@ class Agenda
                             // Add users.
                             if (!empty($usersToAdd)) {
                                 foreach ($usersToAdd as $userId) {
-                                    $event->addUserLink(
+                                    $event = $event->addUserLink(
                                         api_get_user_entity($userId),
                                         $courseEntity,
                                         $sessionEntity,
@@ -812,8 +790,7 @@ class Agenda
                         }
                     }
 
-                    $em->persist($event);
-                    $em->flush();
+                    $repo->updateResource($event);
 
                     // Add announcement.
                     if (isset($addAnnouncement) && !empty($addAnnouncement)) {
@@ -888,6 +865,7 @@ class Agenda
                 if (!empty($courseId) && $isAllowToEdit) {
                     // Delete
                     $eventInfo = $this->get_event($id);
+
                     if ($deleteAllItemsFromSerie) {
                         /* This is one of the children.
                            Getting siblings and delete 'Em all + the father! */
@@ -1298,32 +1276,32 @@ class Agenda
                 }
                 break;
             case 'course':
+                $repo = Container::getCalendarEventRepository();
+                /** @var CCalendarEvent $eventEntity */
+                $eventEntity = $repo->find($id);
+
                 if (!empty($this->course['real_id'])) {
-                    $sql = "SELECT * FROM ".$this->tbl_course_agenda."
-                            WHERE iid = ".$id;
-                    $result = Database::query($sql);
-                    if (Database::num_rows($result)) {
-                        $event = Database::fetch_array($result, 'ASSOC');
-                        $event['description'] = $event['content'];
+                    if ($eventEntity) {
+                        $event = [];
+                        $event['iid'] = $eventEntity->getIid();
+                        $event['title'] = $eventEntity->getTitle();
+                        $event['content'] = $eventEntity->getContent();
+                        $event['all_day'] = $eventEntity->getAllDay();
+                        $event['start_date'] = $eventEntity->getStartDate()->format('Y-m-d H:i:s');
+                        $event['end_date'] = $eventEntity->getEndDate()->format('Y-m-d H:i:s');
+                        $event['description'] = $eventEntity->getComment();
 
                         // Getting send to array
-                        $event['send_to'] = $this->getUsersAndGroupSubscribedToEvent(
-                            $id,
-                            $this->course['real_id'],
-                            $this->sessionId
-                        );
+                        $event['send_to'] = $eventEntity->getUsersAndGroupSubscribedToEvent();
 
                         // Getting repeat info
-                        $event['repeat_info'] = $this->getRepeatedInfoByEvent(
-                            $id,
-                            $this->course['real_id']
-                        );
+                        $event['repeat_info'] = $eventEntity->getRepeatEvents();
 
                         if (!empty($event['parent_event_id'])) {
-                            $event['parent_info'] = $this->get_event($event['parent_event_id']);
+                            $event['parent_info'] = $eventEntity->getParentEvent();
                         }
 
-                        $event['attachment'] = $this->getAttachmentList($id, $this->course);
+                        $event['attachment'] = $eventEntity->getAttachments();
                     }
                 }
                 break;
@@ -1416,106 +1394,6 @@ class Agenda
         }
 
         return $my_events;
-    }
-
-    /**
-     * Get user/group list per event.
-     *
-     * @param int $eventId
-     * @param int $courseId
-     * @param int $sessionId
-     * @paraù int $sessionId
-     *
-     * @return array
-     */
-    public function getUsersAndGroupSubscribedToEvent($eventId, $courseId, $sessionId)
-    {
-        $eventId = (int) $eventId;
-        $courseId = (int) $courseId;
-        $sessionId = (int) $sessionId;
-
-        $repo = Container::getCalendarEventRepository();
-        /** @var CCalendarEvent $event */
-        $event = $repo->find($eventId);
-
-        if (null === $event) {
-            return [];
-        }
-
-        $users = [];
-        $groups = [];
-        $everyone = false;
-        $links = $event->getResourceNode()->getResourceLinks();
-        foreach ($links as $link) {
-            if ($link->getUser()) {
-                $users[] = $link->getUser()->getId();
-            }
-            if ($link->getGroup()) {
-                $groups[] = $link->getGroup()->getIid();
-            }
-        }
-
-        if (empty($users) && empty($groups)) {
-            $everyone = true;
-        }
-
-        return [
-            'everyone' => $everyone,
-            'users' => $users,
-            'groups' => $groups,
-        ];
-
-        exit;
-
-        $sessionCondition = "ip.session_id = $sessionId";
-        if (empty($sessionId)) {
-            $sessionCondition = " (ip.session_id = 0 OR ip.session_id IS NULL) ";
-        }
-
-        $tlb_course_agenda = Database::get_course_table(TABLE_AGENDA);
-        $tbl_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
-
-        // Get sent_tos
-        $sql = "SELECT DISTINCT to_user_id, to_group_id
-                FROM $tbl_property ip
-                INNER JOIN $tlb_course_agenda agenda
-                ON (
-                  ip.ref = agenda.iid AND
-                  ip.c_id = agenda.c_id AND
-                  ip.tool = '".TOOL_CALENDAR_EVENT."'
-                )
-                WHERE
-                    ref = $eventId AND
-                    ip.visibility = '1' AND
-                    ip.c_id = $courseId AND
-                    $sessionCondition
-                ";
-
-        $result = Database::query($sql);
-        $users = [];
-        $groups = [];
-        $everyone = false;
-
-        while ($row = Database::fetch_array($result, 'ASSOC')) {
-            if (!empty($row['to_group_id'])) {
-                $groups[] = $row['to_group_id'];
-            }
-            if (!empty($row['to_user_id'])) {
-                $users[] = $row['to_user_id'];
-            }
-
-            if (empty($groups) && empty($users)) {
-                if (0 == $row['to_group_id']) {
-                    $everyone = true;
-                }
-            }
-        }
-
-        return [
-            'everyone' => $everyone,
-            'users' => $users,
-            'groups' => $groups,
-        ];
     }
 
     /**
@@ -1809,19 +1687,16 @@ class Agenda
         if (!empty($sessionId)) {
             $coachCanEdit = api_is_coach($sessionId, $courseId) || api_is_platform_admin();
         }
-        //var_dump($groupMemberships, $courseId);        echo $qb->getQuery()->getSQL();exit;
         $events = $qb->getQuery()->getResult();
-        //$eventsAdded = array_column($this->events, 'unique_id');
+
+        $repo = Container::getCalendarEventAttachmentRepository();
+
         /** @var CCalendarEvent $row */
         foreach ($events as $row) {
             $eventId = $row->getIid();
             $event = [];
             $event['id'] = 'course_'.$eventId;
             $event['unique_id'] = $eventId;
-            // To avoid doubles
-            /*if (in_array($event['unique_id'], $eventsAdded)) {
-                continue;
-            }*/
 
             $eventsAdded[] = $eventId;
             //$eventId = $row['ref'];
@@ -1843,9 +1718,8 @@ class Agenda
                     'paperclip',
                     '1'
                 );
-                $repo = Container::getCalendarEventAttachmentRepository();
+                /** @var CCalendarEventAttachment $attachment */
                 foreach ($attachmentList as $attachment) {
-                    //$url = api_get_path(WEB_CODE_PATH).'calendar/download.php?file='.$attachment['path'].'&course_id='.$courseId.'&'.api_get_cidreq();
                     $url = $repo->getResourceFileDownloadUrl($attachment);
                     $event['attachment'] .= $icon.
                         Display::url(
@@ -1862,10 +1736,10 @@ class Agenda
             $event['borderColor'] = $event['backgroundColor'] = $this->event_course_color;
 
             $sessionInfo = [];
-            if (!empty($row->getSessionId())) {
+            /*if (!empty($row->getSessionId())) {
                 $sessionInfo = api_get_session_info($row->getSessionId());
                 $event['borderColor'] = $event['backgroundColor'] = $this->event_session_color;
-            }
+            }*/
 
             $event['session_name'] = $sessionInfo['name'] ?? '';
             $event['course_name'] = $courseInfo['title'] ?? '';
@@ -1910,9 +1784,9 @@ class Agenda
 
             $event['sent_to'] = '';
             $event['type'] = 'course';
-            if (0 != $row->getSessionId()) {
+            /*if (0 != $row->getSessionId()) {
                 $event['type'] = 'session';
-            }
+            }*/
 
             $everyone = false;
             $links = $row->getResourceNode()->getResourceLinks();
@@ -1985,8 +1859,8 @@ class Agenda
             $event['visibility'] = $row->isVisible($courseEntity, $session) ? 1 : 0;
             $event['real_id'] = $eventId;
             $event['allDay'] = $row->getAllDay();
-            $event['parent_event_id'] = $row->getParentEventId();
-            $event['has_children'] = $this->hasChildren($eventId, $courseId) ? 1 : 0;
+            $event['parent_event_id'] = $row->getParentEvent() ? $row->getParentEvent()->getIid() : null;
+            $event['has_children'] = $row->getChildren()->count() > 0;
             $event['comment'] = $row->getComment();
             $this->events[] = $event;
         }
@@ -2260,9 +2134,9 @@ class Agenda
         }
 
         $form->addHeader($form_Title);
-        $form->addElement('hidden', 'id', $id);
-        $form->addElement('hidden', 'action', $action);
-        $form->addElement('hidden', 'id_attach', $idAttach);
+        $form->addHidden('id', $id);
+        $form->addHidden('action', $action);
+        $form->addHidden('id_attach', $idAttach);
 
         $isSubEventEdition = false;
         $isParentFromSerie = false;
@@ -2376,8 +2250,7 @@ class Agenda
             $toolbar = 'AgendaStudent';
         }
 
-        $form->addElement(
-            'html_editor',
+        $form->addHtmlEditor(
             'content',
             get_lang('Description'),
             null,
@@ -2389,7 +2262,7 @@ class Agenda
         );
 
         if ('course' === $this->type) {
-            $form->addElement('textarea', 'comment', get_lang('Comment'));
+            $form->addTextarea('comment', get_lang('Comment'));
             $form->addLabel(
                 get_lang('Files attachments'),
                 '<div id="filepaths" class="file-upload-event">
@@ -2545,30 +2418,6 @@ class Agenda
         }
 
         return true;
-
-        if (empty($userId)) {
-            $userId = api_get_user_id();
-        } else {
-            $userId = (int) $userId;
-        }
-
-        if (0 === $visibility) {
-            api_item_property_update(
-                $courseInfo,
-                TOOL_CALENDAR_EVENT,
-                $id,
-                'invisible',
-                $userId
-            );
-        } else {
-            api_item_property_update(
-                $courseInfo,
-                TOOL_CALENDAR_EVENT,
-                $id,
-                'visible',
-                $userId
-            );
-        }
     }
 
     /**
@@ -2584,34 +2433,6 @@ class Agenda
             //monthlyByDayR' => get_lang('Monthly, by dayR'),
             'yearly' => get_lang('Yearly'),
         ];
-    }
-
-    /**
-     * Show a list with all the attachments according to the post's id.
-     *
-     * @param int   $eventId
-     * @param array $courseInfo
-     *
-     * @return array with the post info
-     */
-    public function getAttachmentList($eventId, $courseInfo)
-    {
-        $tableAttachment = Database::get_course_table(TABLE_AGENDA_ATTACHMENT);
-        $courseId = (int) $courseInfo['real_id'];
-        $eventId = (int) $eventId;
-
-        $sql = "SELECT iid, path, filename, comment
-                FROM $tableAttachment
-                WHERE
-                    c_id = $courseId AND
-                    agenda_id = $eventId";
-        $result = Database::query($sql);
-        $list = [];
-        if (0 != Database::num_rows($result)) {
-            $list = Database::store_result($result, 'ASSOC');
-        }
-
-        return $list;
     }
 
     /**
@@ -2698,7 +2519,6 @@ class Agenda
             //if ($result) {
             $attachment = new CCalendarEventAttachment();
             $attachment
-                ->setCId($courseId)
                 ->setFilename($fileName)
                 ->setComment($comment)
                 ->setPath($fileName)
@@ -2809,32 +2629,6 @@ class Agenda
         }
 
         return $events;
-    }
-
-    /**
-     * @param int $eventId
-     * @param int $courseId
-     *
-     * @return bool
-     */
-    public function hasChildren($eventId, $courseId)
-    {
-        $eventId = (int) $eventId;
-        $courseId = (int) $courseId;
-
-        $sql = "SELECT count(DISTINCT(iid)) as count
-                FROM ".$this->tbl_course_agenda."
-                WHERE
-                    c_id = $courseId AND
-                    parent_event_id = $eventId";
-        $result = Database::query($sql);
-        if (Database::num_rows($result)) {
-            $row = Database::fetch_array($result, 'ASSOC');
-
-            return $row['count'] > 0;
-        }
-
-        return false;
     }
 
     /**

@@ -22,8 +22,8 @@ class UpdateResourceNodeFileAction
             $contentData = json_decode($contentData, true);
             $title = $contentData['title'];
             $content = $contentData['contentFile'];
-            $comment = $contentData['comment'];
-            $resourceLinkList = $contentData['resourceLinkList'];
+            $comment = $contentData['comment'] ?? '';
+            $resourceLinkList = $contentData['resourceLinkList'] ?? [];
         } else {
             $title = $request->get('title');
             $content = $request->request->get('contentFile');
@@ -47,11 +47,12 @@ class UpdateResourceNodeFileAction
             foreach ($resourceLinkList as $linkArray) {
                 $linkId = $linkArray['id'];
                 /** @var ResourceLink $link */
-                $link = $document->getResourceNode()->getResourceLinks()->filter(
-                    function ($link) use ($linkId) {
-                        return $link->getId() === $linkId;
-                    }
-                )->first();
+                $link = $document->getResourceNode()->getResourceLinks()
+                    ->filter(
+                        function ($link) use ($linkId) {
+                            return $link->getId() === $linkId;
+                        }
+                    )->first();
 
                 if (null !== $link) {
                     $link->setVisibility((int) $linkArray['visibility']);

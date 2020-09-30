@@ -207,34 +207,7 @@ class ResourceListener
         }
 
         // Use by Chamilo.
-        $links = $resource->getResourceLinkEntityList();
-        if ($links) {
-            foreach ($links as $link) {
-                $link->setResourceNode($resourceNode);
-
-                $rights = [];
-                switch ($link->getVisibility()) {
-                    case ResourceLink::VISIBILITY_PENDING:
-                    case ResourceLink::VISIBILITY_DRAFT:
-                        $editorMask = ResourceNodeVoter::getEditorMask();
-                        $resourceRight = new ResourceRight();
-                        $resourceRight
-                            ->setMask($editorMask)
-                            ->setRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)
-                        ;
-                        $rights[] = $resourceRight;
-
-                        break;
-                }
-
-                if (!empty($rights)) {
-                    foreach ($rights as $right) {
-                        $link->addResourceRight($right);
-                    }
-                }
-                $em->persist($link);
-            }
-        }
+        $this->setLinks($resourceNode, $resource, $em);
 
         if (null !== $resource->getParent()) {
             $resourceNode->setParent($resource->getParent()->getResourceNode());
@@ -258,12 +231,7 @@ class ResourceListener
      */
     public function preUpdate(AbstractResource $resource, PreUpdateEventArgs $event)
     {
-        //error_log('resource listener preUpdate');
-
-        $this->updateResourceName($resource);
-        $resourceNode = $resource->getResourceNode();
-        $resourceNode->setTitle($resource->getResourceName());
-
+        error_log('Resource listener preUpdate');
         if ($resource->hasUploadFile()) {
             $uploadedFile = $resource->getUploadFile();
 
@@ -294,8 +262,6 @@ class ResourceListener
             throw new \InvalidArgumentException('Resource needs a name');
         }
 
-        $resourceNode = $resource->getResourceNode();
-
         $extension = $this->slugify->slugify(pathinfo($resourceName, PATHINFO_EXTENSION));
         if (empty($extension)) {
             //$slug = $this->slugify->slugify($resourceName);
@@ -304,10 +270,40 @@ class ResourceListener
             $originalBasename = \basename($resourceName, $originalExtension);
             $slug = sprintf('%s.%s', $this->slugify->slugify($originalBasename), $originalExtension);*/
         }
-        //error_log($resourceName); error_log($slug);
-        $resourceNode
-            ->setTitle($resourceName)
-           // ->setSlug($slug)
-        ;
+
+        $resource->getResourceNode()->setTitle($resourceName);
+    }
+
+    public function setLinks($resourceNode, AbstractResource $resource, $em)
+    {
+        $links = $resource->getResourceLinkEntityList();
+        if ($links) {
+            foreach ($links as $link) {
+                $link->setResourceNode($resourceNode);
+
+                $rights = [];
+                switch ($link->getVisibility()) {
+                    case ResourceLink::VISIBILITY_PENDING:
+                    case ResourceLink::VISIBILITY_DRAFT:
+                        $editorMask = ResourceNodeVoter::getEditorMask();
+                        $resourceRight = new ResourceRight();
+                        $resourceRight
+                            ->setMask($editorMask)
+                            ->setRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)
+                        ;
+                        $rights[] = $resourceRight;
+
+                        break;
+                }
+
+                if (!empty($rights)) {
+                    foreach ($rights as $right) {
+                        $link->addResourceRight($right);
+                    }
+                }
+                $em->persist($resourceNode);
+                $em->persist($link);
+            }
+        }
     }
 }

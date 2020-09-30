@@ -14,7 +14,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(
  *  name="c_calendar_event_attachment",
  *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"})
  *  }
  * )
  * @ORM\Entity
@@ -29,13 +28,6 @@ class CCalendarEventAttachment extends AbstractResource implements ResourceInter
      * @ORM\GeneratedValue
      */
     protected $iid;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="c_id", type="integer")
-     */
-    protected $cId;
 
     /**
      * @var string
@@ -82,10 +74,8 @@ class CCalendarEventAttachment extends AbstractResource implements ResourceInter
      * Set path.
      *
      * @param string $path
-     *
-     * @return CCalendarEventAttachment
      */
-    public function setPath($path)
+    public function setPath($path): self
     {
         $this->path = $path;
 
@@ -106,10 +96,8 @@ class CCalendarEventAttachment extends AbstractResource implements ResourceInter
      * Set comment.
      *
      * @param string $comment
-     *
-     * @return CCalendarEventAttachment
      */
-    public function setComment($comment)
+    public function setComment($comment): self
     {
         $this->comment = $comment;
 
@@ -172,30 +160,6 @@ class CCalendarEventAttachment extends AbstractResource implements ResourceInter
     public function getFilename()
     {
         return $this->filename;
-    }
-
-    /**
-     * Set cId.
-     *
-     * @param int $cId
-     *
-     * @return CCalendarEventAttachment
-     */
-    public function setCId($cId)
-    {
-        $this->cId = $cId;
-
-        return $this;
-    }
-
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
-    {
-        return $this->cId;
     }
 
     /**

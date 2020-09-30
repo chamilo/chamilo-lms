@@ -187,10 +187,8 @@ if ($allowToEdit) {
             }
 
             $event['action'] = 'edit';
-            $event['id'] = $eventId;
-
+            $event['id'] = $event['iid'];
             $form = $agenda->getForm($event);
-
             if ($form->validate()) {
                 $values = $form->getSubmitValues();
 

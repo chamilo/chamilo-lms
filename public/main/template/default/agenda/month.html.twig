@@ -208,6 +208,10 @@
                 var view = info.view;
                 var start = calEvent.start;
                 var end = calEvent.end;
+
+                var momentStart = moment(start);
+                var momentEnd = moment(end);
+
                 var diffDays = moment(end).diff(start, 'days');
                 var endDateMinusOne = '';
 
@@ -234,9 +238,9 @@
                     if (diffDays > 1) {
                         $('#simple_end_date').html(' - ' + endDateMinusOne);
                     } else if (diffDays == 0) {
-                        var start_date_value = start.format('ll');
-                        var startTime = start.format('LT');
-                        var endTime = end.format('LT');
+                        var start_date_value = momentStart.format('ll');
+                        var startTime = momentStart.format('LT');
+                        var endTime = momentEnd.format('LT');
                         $('#simple_start_date').html('');
                         $('#simple_end_date').html(start_date_value + " (" + startTime + " - " + endTime+") ");
                     } else {
@@ -288,7 +292,6 @@
                     var exportCalPrivate = '<a href="'+urlTwo+'" class="btn btn-light">{{"Export in iCal format as private event"|trans}}</a>';
                     var exportCalPublic = '<a href="'+urlThree+'" class="btn btn-light">{{"Export in iCal format as public event"|trans}}</a>';
                     var btnEdit = '<a href="'+urlEdit+'" id="btnEdit" class="btn btn-primary">{{ "Edit" | trans }}</a>';
-                    console.log(btnEdit);
                     var btnDelete = '<button type="button" id="btnDelete" class="btn btn-danger">{{ "Delete" | trans }}</button>';
 
                     $('#calendarModal #modalFooter').html(exportCalConfidential+exportCalPrivate+exportCalPublic+btnEdit+btnDelete);

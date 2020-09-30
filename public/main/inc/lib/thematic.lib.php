@@ -632,9 +632,9 @@ class Thematic
     /**
      * Get thematic advance list.
      *
-     * @param string $course_code         Course code (optional)
-     * @param bool   $force_session_id    Force to have a session id
-     * @param bool   $withLocalTime       Force start_date to local time
+     * @param string $course_code      Course code (optional)
+     * @param bool   $force_session_id Force to have a session id
+     * @param bool   $withLocalTime    Force start_date to local time
      *
      * @return CThematicAdvance[]
      */

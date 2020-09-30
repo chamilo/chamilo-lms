@@ -192,6 +192,49 @@ class ResourceRepository extends EntityRepository
         return $this->getRepository()->findOneBy($criteria, $orderBy);
     }
 
+    public function updateResource(AbstractResource $resource)
+    {
+        $em = $this->getEntityManager();
+
+        $resourceNode = $resource->getResourceNode();
+        $resourceNode->setTitle($resource->getResourceName());
+
+        $links = $resource->getResourceLinkEntityList();
+        if ($links) {
+            foreach ($links as $link) {
+                error_log($link->getUser()->getUsername());
+                $link->setResourceNode($resourceNode);
+
+                $rights = [];
+                switch ($link->getVisibility()) {
+                    case ResourceLink::VISIBILITY_PENDING:
+                    case ResourceLink::VISIBILITY_DRAFT:
+                        $editorMask = ResourceNodeVoter::getEditorMask();
+                        $resourceRight = new ResourceRight();
+                        $resourceRight
+                            ->setMask($editorMask)
+                            ->setRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)
+                        ;
+                        $rights[] = $resourceRight;
+
+                        break;
+                }
+
+                if (!empty($rights)) {
+                    foreach ($rights as $right) {
+                        $link->addResourceRight($right);
+                    }
+                }
+                $em->persist($link);
+            }
+        }
+
+
+        $em->persist($resourceNode);
+        $em->persist($resource);
+        $em->flush();
+    }
+
     public function updateNodeForResource(ResourceInterface $resource): ResourceNode
     {
         $em = $this->getEntityManager();

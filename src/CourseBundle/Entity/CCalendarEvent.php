@@ -17,8 +17,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(
  *  name="c_calendar_event",
  *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"}),
- *      @ORM\Index(name="session_id", columns={"session_id"})
  *  }
  * )
  * @ORM\Entity
@@ -33,13 +31,6 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
      * @ORM\GeneratedValue
      */
     protected $iid;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="c_id", type="integer")
-     */
-    protected $cId;
 
     /**
      * @var string
@@ -70,18 +61,25 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
     protected $endDate;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="parent_event_id", type="integer", nullable=true)
+     * @var ArrayCollection|CCalendarEvent[]
+     * @ORM\OneToMany(targetEntity="CCalendarEvent", mappedBy="parentEvent")
      */
-    protected $parentEventId;
+    protected $children;
 
     /**
-     * @var int
+     * @var CCalendarEvent
      *
-     * @ORM\Column(name="session_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CCalendarEvent", inversedBy="children")
+     * @ORM\JoinColumn(name="parent_event_id", referencedColumnName="iid")
      */
-    protected $sessionId;
+    protected $parentEvent;
+
+    /**
+     * @var ArrayCollection|CCalendarEventRepeat[]
+     *
+     * @ORM\OneToMany(targetEntity="CCalendarEventRepeat", mappedBy="event", cascade={"persist"}, orphanRemoval=true)
+     */
+    protected $repeatEvents;
 
     /**
      * @var int
@@ -116,13 +114,14 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
      * @var ArrayCollection|CCalendarEventAttachment[]
      *
      * @ORM\OneToMany(
-     *   targetEntity="Chamilo\CourseBundle\Entity\CCalendarEventAttachment", mappedBy="event", cascade={"persist", "remove"}, orphanRemoval=true
+     *   targetEntity="CCalendarEventAttachment", mappedBy="event", cascade={"persist", "remove"}, orphanRemoval=true
      * )
      */
     protected $attachments;
 
     public function __construct()
     {
+        $this->children = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -218,48 +217,43 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
         return $this->endDate;
     }
 
-    /**
-     * Set parentEventId.
-     *
-     * @param int $parentEventId
-     */
-    public function setParentEventId($parentEventId): self
+    public function setParentEvent(CCalendarEvent $parent): self
     {
-        $this->parentEventId = $parentEventId;
+        $this->parentEvent = $parent;
+
+        return $this;
+    }
+
+    public function getParentEvent(): ?CCalendarEvent
+    {
+        return $this->parentEvent;
+    }
+
+    /**
+     * @return CCalendarEvent[]|ArrayCollection
+     */
+    public function getChildren()
+    {
+        return $this->children;
+    }
+
+    public function addChild($event): self
+    {
+        if (!$this->getChildren()->contains($event)) {
+            $this->getChildren()->add($event);
+        }
 
         return $this;
     }
 
     /**
-     * Get parentEventId.
-     *
-     * @return int
+     * @param CCalendarEvent[]|ArrayCollection $children
      */
-    public function getParentEventId()
+    public function setChildren($children): self
     {
-        return $this->parentEventId;
-    }
-
-    /**
-     * Set sessionId.
-     *
-     * @param int $sessionId
-     */
-    public function setSessionId($sessionId): self
-    {
-        $this->sessionId = $sessionId;
+        $this->children = $children;
 
         return $this;
-    }
-
-    /**
-     * Get sessionId.
-     *
-     * @return int
-     */
-    public function getSessionId()
-    {
-        return $this->sessionId;
     }
 
     /**
@@ -282,30 +276,6 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
     public function getAllDay()
     {
         return (int) $this->allDay;
-    }
-
-    /**
-     * Set cId.
-     *
-     * @param int $cId
-     *
-     * @return CCalendarEvent
-     */
-    public function setCId($cId)
-    {
-        $this->cId = $cId;
-
-        return $this;
-    }
-
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
-    {
-        return $this->cId;
     }
 
     /**
@@ -395,7 +365,27 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    public function getUsersAndGroupSubscribedToEvent()
+    /**
+     * @return CCalendarEventRepeat[]|ArrayCollection
+     */
+    public function getRepeatEvents()
+    {
+        return $this->repeatEvents;
+    }
+
+    /**
+     * @param CCalendarEventRepeat[]|ArrayCollection $repeatEvents
+     *
+     * @return CCalendarEvent
+     */
+    public function setRepeatEvents($repeatEvents)
+    {
+        $this->repeatEvents = $repeatEvents;
+
+        return $this;
+    }
+
+    public function getUsersAndGroupSubscribedToEvent(): array
     {
         $users = [];
         $groups = [];

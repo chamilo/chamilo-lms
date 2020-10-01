@@ -88,7 +88,7 @@ trait ResourceControllerTrait
                 }
             }
         } else {
-            $repo = $this->getDoctrine()->getRepository('ChamiloCoreBundle:ResourceNode');
+            $repo = $this->getDoctrine()->getRepository(ResourceNode::class);
             $parentResourceNode = $repo->find($parentNodeId);
         }
 

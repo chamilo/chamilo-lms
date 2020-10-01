@@ -7,7 +7,7 @@ namespace Chamilo\CoreBundle\Repository;
 use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * Class MessageRepository.

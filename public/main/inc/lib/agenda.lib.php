@@ -915,9 +915,8 @@ class Agenda
                         Database::delete(
                             $this->table_repeat,
                             [
-                                'cal_id = ? AND c_id = ?' => [
-                                    $id,
-                                    $courseId,
+                                'cal_id = ?' => [
+                                    $id
                                 ],
                             ]
                         );
@@ -930,6 +929,7 @@ class Agenda
                                 );
                             }
                         }*/
+                        echo 1;
                     }
                 }
                 break;

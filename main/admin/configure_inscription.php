@@ -73,9 +73,9 @@ if (api_is_multiple_url_enabled()) {
         $clean_url = str_replace('/', '-', $clean_url);
         $clean_url .= '/';
 
-        $homep = api_get_path(SYS_APP_PATH).'home/'; //homep for Home Path
-        $homep_new = api_get_path(SYS_APP_PATH).'home/'.$clean_url; //homep for Home Path added the url
-        $new_url_dir = api_get_path(SYS_APP_PATH).'home/'.$clean_url;
+        $homep = api_get_path(SYS_HOME_PATH); //homep for Home Path
+        $homep_new = api_get_path(SYS_HOME_PATH).$clean_url; //homep for Home Path added the url
+        $new_url_dir = api_get_path(SYS_HOME_PATH).$clean_url;
         //we create the new dir for the new sites
         if (!is_dir($new_url_dir)) {
             mkdir($new_url_dir, api_get_permissions_for_new_directories());
@@ -83,7 +83,7 @@ if (api_is_multiple_url_enabled()) {
     }
 } else {
     $homep_new = '';
-    $homep = api_get_path(SYS_APP_PATH).'home/'; //homep for Home Path
+    $homep = api_get_path(SYS_HOME_PATH); //homep for Home Path
 }
 
 $topf = 'register_top'; //topf for Top File

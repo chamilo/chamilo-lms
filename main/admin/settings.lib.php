@@ -1452,10 +1452,13 @@ function addEditTemplate()
 
                 if ($upload_ok) {
                     // Try to add an extension to the file if it hasn't one.
-                    $new_file_name = add_ext_on_mime(stripslashes($_FILES['template_image']['name']), $_FILES['template_image']['type']);
+                    $new_file_name = add_ext_on_mime(
+                        stripslashes($_FILES['template_image']['name']),
+                        $_FILES['template_image']['type']
+                    );
 
                     // The upload directory.
-                    $upload_dir = api_get_path(SYS_APP_PATH).'home/default_platform_document/template_thumb/';
+                    $upload_dir = api_get_path(SYS_HOME_PATH).'default_platform_document/template_thumb/';
 
                     // Create the directory if it does not exist.
                     if (!is_dir($upload_dir)) {
@@ -1505,7 +1508,7 @@ function addEditTemplate()
                     ->setContent(Security::remove_XSS($templateContent, COURSEMANAGERLOWSECURITY));
 
                 if ($isDelete) {
-                    $filePath = api_get_path(SYS_APP_PATH).'home/default_platform_document/template_thumb/'.$template->getImage();
+                    $filePath = api_get_path(SYS_HOME_PATH).'default_platform_document/template_thumb/'.$template->getImage();
                     if (file_exists($filePath)) {
                         unlink($filePath);
                     }
@@ -1554,7 +1557,7 @@ function deleteTemplate($id)
     $result = Database::query($sql);
     $row = Database::fetch_array($result);
     if (!empty($row['image'])) {
-        @unlink(api_get_path(SYS_APP_PATH).'home/default_platform_document/template_thumb/'.$row['image']);
+        @unlink(api_get_path(SYS_HOME_PATH).'default_platform_document/template_thumb/'.$row['image']);
     }
 
     // Now we remove it from the database.

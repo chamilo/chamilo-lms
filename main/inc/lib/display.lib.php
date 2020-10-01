@@ -2641,6 +2641,7 @@ class Display
      * @param bool       $fixWidth        Optional. Whether add the fw class
      * @param string     $additionalClass
      * @param string     $title
+     *
      * @return string
      */
     public static function returnFontAwesomeIcon(

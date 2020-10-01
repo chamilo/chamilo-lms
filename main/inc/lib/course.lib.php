@@ -7046,6 +7046,21 @@ class CourseManager
         return Display::tabsOnlyLink($tabs, $default);
     }
 
+    public static function getUrlMarker($courseId)
+    {
+        if (UrlManager::getCountAccessUrlFromCourse($courseId) > 1) {
+            return '&nbsp;'.Display::returnFontAwesomeIcon(
+                'link',
+                null,
+                null,
+                null,
+                get_lang('CourseUsedInOtherURL')
+            );
+        }
+
+        return '';
+    }
+
     /**
      * Check if a specific access-url-related setting is a problem or not.
      *
@@ -7123,20 +7138,5 @@ class CourseManager
 
         $courseFieldValue = new ExtraFieldValue('course');
         $courseFieldValue->saveFieldValues($params);
-    }
-
-    public static function getUrlMarker($courseId)
-    {
-        if (UrlManager::getCountAccessUrlFromCourse($courseId) > 1) {
-            return '&nbsp;'.Display::returnFontAwesomeIcon(
-                'link',
-                null,
-                null,
-                null,
-                get_lang('CourseUsedInOtherURL')
-            );
-        }
-
-        return '';
     }
 }

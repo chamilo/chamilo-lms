@@ -231,7 +231,7 @@ if (!empty($learnpath_id) && $saveResults) {
 $emailSettings = api_get_configuration_value('exercise_finished_email_settings');
 if (!empty($emailSettings)) {
     $subject = get_lang('ExerciseFinished');
-    $totalScore =  ExerciseLib::show_score($total_score, $max_score, false, true);
+    $totalScore = ExerciseLib::show_score($total_score, $max_score, false, true);
 
     if (isset($emailSettings['send_by_status']) && !empty($emailSettings['send_by_status'])) {
         foreach ($emailSettings['send_by_status'] as $item) {

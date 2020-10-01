@@ -47,10 +47,10 @@
                             {% endif %}
                             <h4 class="course-items-title">
                                 {% if item.visibility == constant('COURSE_VISIBILITY_CLOSED') and not item.current_user_is_teacher %}
-                                    {{ item.title }} {{ item.code_course }}
+                                    {{ item.title }} {{ item.code_course }} {{ item.url_marker }}
                                 {% else %}
                                     <a href="{{ item.link }}">
-                                        {{ item.title }} {{ item.code_course }}
+                                        {{ item.title }} {{ item.code_course }} {{ item.url_marker }}
                                     </a>
                                     {{ item.notifications }}
                                 {% endif %}

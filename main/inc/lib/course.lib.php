@@ -3833,6 +3833,9 @@ class CourseManager
 
         $courseList = [];
         if ($number_of_courses > 0) {
+            $hideCourseNotification = api_get_configuration_value('hide_course_notification');
+            $showUrlMarker = api_get_configuration_value('multiple_access_url_show_shared_course_marker') &&
+                (api_is_platform_admin() || api_is_teacher());
             while ($course = Database::fetch_array($rs_special_course)) {
                 $course_info = api_get_course_info($course['code']);
                 $courseId = $course_info['real_id'];
@@ -3841,7 +3844,7 @@ class CourseManager
                 }
 
                 $params = [];
-                //Param (course_code) needed to get the student info in page "My courses"
+                // Param (course_code) needed to get the student info in page "My courses"
                 $params['course_code'] = $course['code'];
                 $params['code'] = $course['code'];
                 // Get notifications.
@@ -3853,9 +3856,7 @@ class CourseManager
                 } else {
                     $course_info['status'] = $courseUserInfo['status'];
                 }
-                $show_notification = !api_get_configuration_value('hide_course_notification')
-                    ? Display::show_notification($course_info)
-                    : '';
+                $show_notification = !$hideCourseNotification ? Display::show_notification($course_info) : '';
                 $params['edit_actions'] = '';
                 $params['document'] = '';
                 if (api_is_platform_admin()) {
@@ -3885,7 +3886,12 @@ class CourseManager
                     null
                 );
 
-                if (api_get_setting('display_coursecode_in_courselist') == 'true') {
+                $params['url_marker'] = '';
+                if ($showUrlMarker) {
+                    $params['url_marker'] = self::getUrlMarker($courseId);
+                }
+
+                if (api_get_setting('display_coursecode_in_courselist') === 'true') {
                     $params['code_course'] = '('.$course_info['visual_code'].')';
                 }
 
@@ -4082,6 +4088,9 @@ class CourseManager
         // Browse through all courses.
         $courseAdded = [];
         $courseList = [];
+        $hideNotification = api_get_configuration_value('hide_course_notification');
+        $showUrlMarker = api_get_configuration_value('multiple_access_url_show_shared_course_marker') &&
+            (api_is_platform_admin() || api_is_teacher());
 
         while ($row = Database::fetch_array($result)) {
             $course_info = api_get_course_info_by_id($row['id']);
@@ -4103,13 +4112,11 @@ class CourseManager
             $course_info['status'] = $row['status'];
             // For each course, get if there is any notification icon to show
             // (something that would have changed since the user's last visit).
-            $showNotification = !api_get_configuration_value('hide_course_notification')
-                ? Display::show_notification($course_info)
-                : '';
+            $showNotification = !$hideNotification ? Display::show_notification($course_info) : '';
             $iconName = basename($course_info['course_image']);
 
             $params = [];
-            //Param (course_code) needed to get the student process
+            // Param (course_code) needed to get the student process
             $params['course_code'] = $row['course_code'];
             $params['code'] = $row['course_code'];
 
@@ -4175,6 +4182,11 @@ class CourseManager
             $params['status'] = $row['status'];
             if (api_get_setting('display_coursecode_in_courselist') === 'true') {
                 $params['code_course'] = '('.$course_info['visual_code'].') ';
+            }
+
+            $params['url_marker'] = '';
+            if ($showUrlMarker) {
+                $params['url_marker'] = self::getUrlMarker($course_info['real_id']);
             }
 
             $params['current_user_is_teacher'] = false;
@@ -7111,5 +7123,20 @@ class CourseManager
 
         $courseFieldValue = new ExtraFieldValue('course');
         $courseFieldValue->saveFieldValues($params);
+    }
+
+    public static function getUrlMarker($courseId)
+    {
+        if (UrlManager::getCountAccessUrlFromCourse($courseId) > 1) {
+            return '&nbsp;'.Display::returnFontAwesomeIcon(
+                'link',
+                null,
+                null,
+                null,
+                get_lang('CourseUsedInOtherURL')
+            );
+        }
+
+        return '';
     }
 }

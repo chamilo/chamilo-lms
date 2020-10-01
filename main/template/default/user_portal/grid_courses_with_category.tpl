@@ -58,9 +58,12 @@
                                 <div class="description">
                                     <h4 class="title">
                                         {% if item.visibility == constant('COURSE_VISIBILITY_CLOSED') and not item.current_user_is_teacher %}
-                                            {{ item.title }} {{ item.code_course }}
+                                            {{ item.title }} {{ item.code_course }} {{ item.url_marker }}
                                         {% else %}
-                                            <a href="{{ item.link }}">{{ item.title }} {{ item.code_course }}</a>
+                                            <a href="{{ item.link }}">
+                                                {{ item.title }} {{ item.code_course }}
+                                            </a>
+                                            {{ item.url_marker }}
                                         {% endif %}
                                     </h4>
                                     {% if item.notifications %}

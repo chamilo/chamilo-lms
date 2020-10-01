@@ -1616,7 +1616,7 @@ $_configuration['auth_password_links'] = [
 //$_configuration['show_my_lps_page'] = false;
 
 // When exercise is finished send results by email to users, depending the settings below:
-$_configuration['exercise_finished_email_settings'] = [
+/*$_configuration['exercise_finished_email_settings'] = [
     'send_by_status' => [
         [
             'status' => 5, // 5 = student that is doing the exercise send to the Chamilo inbox + email
@@ -1633,7 +1633,10 @@ $_configuration['exercise_finished_email_settings'] = [
             'type' => 'only_score',
         ],
     ],
-];
+];*/
+
+// Shows a marker if the course was shared in other portals.
+//$_configuration['multiple_access_url_show_shared_course_marker'] = false;
 
 // KEEP THIS AT THE END
 // -------- Custom DB changes

@@ -8604,4 +8604,5 @@ $RedirectToPortalHome = "Rediriger vers la page d'accueil de la plateforme";
 $MyLps = "Mes parcours";
 $LastVisitedLp = "Dernier parcours visité";
 $YouDidNotVisitALpHereTheLpList = "Vous n'avez encore visité aucun parcours, voici la liste de vos parcours.";
+$CourseUsedInOtherURL = "Ce cours est utilisé sur au moins un autre portail";
 ?>

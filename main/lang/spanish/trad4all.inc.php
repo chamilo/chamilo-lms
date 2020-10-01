@@ -8700,4 +8700,5 @@ $RedirectToPortalHome = "Redirigir a la página de inicio de la plataforma";
 $MyLps = "Mis lecciones";
 $LastVisitedLp = "Última lección visitada";
 $YouDidNotVisitALpHereTheLpList = "Aún no ha visitado una lección, aquí está la lista de sus lecciones.";
+$CourseUsedInOtherURL = "Este curso es usado en otro portal";
 ?>

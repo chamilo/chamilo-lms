@@ -112,6 +112,22 @@ abstract class AbstractResource
             throw new \Exception('addCourseLink requires to set the parent.');
         }
 
+        if ($this->hasResourceNode()) {
+            $resourceNode = $this->getResourceNode();
+            $exists = $resourceNode->getResourceLinks()->exists(
+                function ($key, $element) use ($course, $session, $group) {
+                    return
+                        $course === $element->getCourse() &&
+                        $session === $element->getSession() &&
+                        $group === $element->getGroup();
+                }
+            );
+
+            if ($exists) {
+                return $this;
+            }
+        }
+
         $resourceLink = new ResourceLink();
         $resourceLink
             ->setVisibility($visibility)
@@ -147,32 +163,51 @@ abstract class AbstractResource
 
     public function addGroupLink(Course $course, Session $session = null, CGroup $group = null)
     {
-        $resourceNode = $this->getResourceNode();
-        $exists = $resourceNode->getResourceLinks()->exists(
-            function ($key, $element) use ($group) {
-                if ($element->getGroup()) {
-                    return $group->getIid() == $element->getGroup()->getIid();
+        if ($this->hasResourceNode()) {
+            $resourceNode = $this->getResourceNode();
+            $exists = $resourceNode->getResourceLinks()->exists(
+                function ($key, $element) use ($group) {
+                    if ($element->getGroup()) {
+                        return $group->getIid() === $element->getGroup()->getIid();
+                    }
                 }
-            }
-        );
+            );
 
-        if (false === $exists) {
-            $resourceLink = new ResourceLink();
-            $resourceLink
-                ->setResourceNode($resourceNode)
-                ->setCourse($course)
-                ->setSession($session)
-                ->setGroup($group)
-                ->setVisibility(ResourceLink::VISIBILITY_PUBLISHED)
-            ;
-            $this->addLink($resourceLink);
+            if ($exists) {
+                return $this;
+            }
         }
+
+        $resourceLink = new ResourceLink();
+        $resourceLink
+            ->setResourceNode($resourceNode)
+            ->setCourse($course)
+            ->setSession($session)
+            ->setGroup($group)
+            ->setVisibility(ResourceLink::VISIBILITY_PUBLISHED)
+        ;
+        $this->addLink($resourceLink);
 
         return $this;
     }
 
     public function addUserLink(User $user, Course $course = null, Session $session = null, CGroup $group = null)
     {
+        if ($this->hasResourceNode()) {
+            $resourceNode = $this->getResourceNode();
+            $exists = $resourceNode->getResourceLinks()->exists(
+                function ($key, $element) use ($user) {
+                    if ($element->getUser()) {
+                        return $user->getId() === $element->getUser()->getId();
+                    }
+                }
+            );
+
+            if ($exists) {
+                return $this;
+            }
+        }
+
         $resourceLink = new ResourceLink();
         $resourceLink
             ->setVisibility(ResourceLink::VISIBILITY_PUBLISHED)
@@ -366,5 +401,31 @@ abstract class AbstractResource
         }
 
         return null;
+    }
+
+    public function getUsersAndGroupSubscribedToResource(): array
+    {
+        $users = [];
+        $groups = [];
+        $everyone = false;
+        $links = $this->getResourceNode()->getResourceLinks();
+        foreach ($links as $link) {
+            if ($link->getUser()) {
+                $users[] = $link->getUser()->getId();
+            }
+            if ($link->getGroup()) {
+                $groups[] = $link->getGroup()->getIid();
+            }
+        }
+
+        if (empty($users) && empty($groups)) {
+            $everyone = true;
+        }
+
+        return [
+            'everyone' => $everyone,
+            'users' => $users,
+            'groups' => $groups,
+        ];
     }
 }

@@ -337,7 +337,7 @@ class Agenda
                 if ($id) {
                     // Add announcement.
                     if ($addAsAnnouncement) {
-                        $this->storeAgendaEventAsAnnouncement($id, $usersToSend);
+                        $this->storeAgendaEventAsAnnouncement($event, $usersToSend);
                     }
 
                     // Add attachment.
@@ -554,50 +554,31 @@ class Agenda
         return true;
     }
 
-    /**
-     * @param int   $item_id
-     * @param array $sentTo
-     *
-     * @return int
-     */
-    public function storeAgendaEventAsAnnouncement($item_id, $sentTo = [])
+    public function storeAgendaEventAsAnnouncement(CCalendarEvent $event, array $sentTo = [])
     {
-        $table_agenda = Database::get_course_table(TABLE_AGENDA);
-        $courseId = api_get_course_int_id();
+        // Sending announcement
+        if (!empty($sentTo)) {
+            $id = AnnouncementManager::add_announcement(
+                api_get_course_info(),
+                api_get_session_id(),
+                $event->getTitle(),
+                $event->getContent(),
+                $sentTo,
+                null,
+                null,
+                $event->getEndDate()->format('Y-m-d H:i:s')
+            );
 
-        // Get the agenda item.
-        $item_id = (int) $item_id;
-        $sql = "SELECT * FROM $table_agenda
-                WHERE c_id = $courseId AND id = ".$item_id;
-        $res = Database::query($sql);
+            AnnouncementManager::sendEmail(
+                api_get_course_info(),
+                api_get_session_id(),
+                $id
+            );
 
-        if (Database::num_rows($res) > 0) {
-            $row = Database::fetch_array($res, 'ASSOC');
-
-            // Sending announcement
-            if (!empty($sentTo)) {
-                $id = AnnouncementManager::add_announcement(
-                    api_get_course_info(),
-                    api_get_session_id(),
-                    $row['title'],
-                    $row['content'],
-                    $sentTo,
-                    null,
-                    null,
-                    $row['end_date']
-                );
-
-                AnnouncementManager::sendEmail(
-                    api_get_course_info(),
-                    api_get_session_id(),
-                    $id
-                );
-
-                return $id;
-            }
+            return true;
         }
 
-        return -1;
+        return false;
     }
 
     /**
@@ -680,7 +661,7 @@ class Agenda
                     return false;
                 }
 
-                $sentToEvent = $event->getUsersAndGroupSubscribedToEvent();
+                $sentToEvent = $event->getUsersAndGroupSubscribedToResource();
                 $courseId = $this->course['real_id'];
 
                 if (empty($courseId)) {
@@ -794,7 +775,7 @@ class Agenda
 
                     // Add announcement.
                     if (isset($addAnnouncement) && !empty($addAnnouncement)) {
-                        $this->storeAgendaEventAsAnnouncement($id, $usersToSend);
+                        $this->storeAgendaEventAsAnnouncement($event, $usersToSend);
                     }
 
                     // Add attachment.
@@ -916,7 +897,7 @@ class Agenda
                             $this->table_repeat,
                             [
                                 'cal_id = ?' => [
-                                    $id
+                                    $id,
                                 ],
                             ]
                         );
@@ -1290,7 +1271,7 @@ class Agenda
                         $event['description'] = $eventEntity->getComment();
 
                         // Getting send to array
-                        $event['send_to'] = $eventEntity->getUsersAndGroupSubscribedToEvent();
+                        $event['send_to'] = $eventEntity->getUsersAndGroupSubscribedToResource();
 
                         // Getting repeat info
                         $event['repeat_info'] = $eventEntity->getRepeatEvents();
@@ -1697,18 +1678,6 @@ class Agenda
             $event['unique_id'] = $eventId;
 
             $eventsAdded[] = $eventId;
-            //$eventId = $row['ref'];
-            /*$items = $this->getUsersAndGroupSubscribedToEvent(
-                $eventId,
-                $courseId,
-                $this->sessionId
-            );
-            $group_to_array = $items['groups'];
-            $user_to_array = $items['users'];*/
-            /*$attachmentList = $this->getAttachmentList(
-                $eventId,
-                $courseInfo
-            );*/
             $attachmentList = $row->getAttachments();
             $event['attachment'] = '';
             if (!empty($attachmentList)) {
@@ -2290,23 +2259,18 @@ class Agenda
 
             if (isset($params['attachment']) && !empty($params['attachment'])) {
                 $attachmentList = $params['attachment'];
+                /** @var CCalendarEventAttachment $attachment */
                 foreach ($attachmentList as $attachment) {
-                    $params['file_comment'] = $attachment['comment'];
-                    if (!empty($attachment['path'])) {
-                        $form->addElement(
-                            'checkbox',
-                            'delete_attachment['.$attachment['id'].']',
-                            null,
-                            get_lang(
-                                'DeleteAttachment'
-                            ).': '.$attachment['filename']
-                        );
-                    }
+                    $form->addElement(
+                        'checkbox',
+                        'delete_attachment['.$attachment->getIid().']',
+                        null,
+                        get_lang('Delete attachment').': '.$attachment->getFilename()
+                    );
                 }
             }
 
-            $form->addElement(
-                'textarea',
+            $form->addTextarea(
                 'file_comment',
                 get_lang('File comment')
             );

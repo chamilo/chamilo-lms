@@ -612,14 +612,18 @@ switch ($action) {
         );
 
         if (!$announcementAttachmentIsDisabled) {
-            $form->addElement('file', 'user_upload', get_lang('AddAnAttachment'));
-            $form->addElement('textarea', 'file_comment', get_lang('FileComment'));
+            $form->addElement('file', 'user_upload', get_lang('Add attachment'));
+            $form->addElement('textarea', 'file_comment', get_lang('File comment'));
         }
 
         $form->addHidden('sec_token', $token);
 
         if (empty($sessionId)) {
-            $form->addCheckBox('send_to_users_in_session', null, get_lang('Send to users in all sessions of this course'));
+            $form->addCheckBox(
+                'send_to_users_in_session',
+                null,
+                get_lang('Send to users in all sessions of this course')
+            );
         }
 
         $config = api_get_configuration_value('announcement.hide_send_to_hrm_users');
@@ -659,7 +663,6 @@ switch ($action) {
                 // there is an Id => the announcement already exists => update mode
                 $file_comment = $announcementAttachmentIsDisabled ? null : $_POST['file_comment'];
                 $file = $announcementAttachmentIsDisabled ? [] : $_FILES['user_upload'];
-
                 $announcement = AnnouncementManager::edit_announcement(
                     $id,
                     $data['title'],
@@ -765,7 +768,7 @@ if (!empty($_GET['remind_inactive'])) {
     $to[] = 'USER:'.(int) ($_GET['remind_inactive']);
 }
 
-if (empty($_GET['origin']) or 'learnpath' !== $_GET['origin']) {
+if (empty($_GET['origin']) || 'learnpath' !== $_GET['origin']) {
     // We are not in the learning path
     Display::display_header($nameTools, get_lang('Announcements'));
 }

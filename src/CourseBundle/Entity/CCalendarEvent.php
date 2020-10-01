@@ -385,32 +385,6 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    public function getUsersAndGroupSubscribedToEvent(): array
-    {
-        $users = [];
-        $groups = [];
-        $everyone = false;
-        $links = $this->getResourceNode()->getResourceLinks();
-        foreach ($links as $link) {
-            if ($link->getUser()) {
-                $users[] = $link->getUser()->getId();
-            }
-            if ($link->getGroup()) {
-                $groups[] = $link->getGroup()->getIid();
-            }
-        }
-
-        if (empty($users) && empty($groups)) {
-            $everyone = true;
-        }
-
-        return [
-            'everyone' => $everyone,
-            'users' => $users,
-            'groups' => $groups,
-        ];
-    }
-
     /**
      * Resource identifier.
      */

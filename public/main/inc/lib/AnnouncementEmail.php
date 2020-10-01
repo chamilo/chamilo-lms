@@ -63,45 +63,6 @@ class AnnouncementEmail
     }
 
     /**
-     * Returns users and groups an announcement item has been sent to.
-     *
-     * @return array Array of users and groups to whom the element has been sent
-     */
-    public function sent_to_info()
-    {
-        return AnnouncementManager::getSenders($this->announcement);
-
-        $sql = "SELECT to_group_id, to_user_id
-                FROM $table
-                WHERE
-                    c_id = $course_id AND
-                    tool = '$tool' AND
-                    ref = $id
-                    $sessionCondition";
-
-        $rs = Database::query($sql);
-
-        while ($row = Database::fetch_array($rs, 'ASSOC')) {
-            // if to_user_id <> 0 then it is sent to a specific user
-            $user_id = $row['to_user_id'];
-            if (!empty($user_id)) {
-                $result['users'][] = (int) $user_id;
-                // If user is set then skip the group
-                continue;
-            }
-
-            // if to_group_id is null then it is sent to a specific user
-            // if to_group_id = 0 then it is sent to everybody
-            $group_id = $row['to_group_id'];
-            if (!empty($group_id)) {
-                $result['groups'][] = (int) $group_id;
-            }
-        }
-
-        return $result;
-    }
-
-    /**
      * Returns the list of user info to which an announcement was sent.
      * This function returns a list of actual users even when recipient
      * are groups.
@@ -110,7 +71,7 @@ class AnnouncementEmail
      */
     public function sent_to()
     {
-        $sent_to = $this->sent_to_info();
+        $sent_to = $this->announcement->getUsersAndGroupSubscribedToResource();
         $users = $sent_to['users'];
         $users = $users ? $users : [];
         $groups = $sent_to['groups'];
@@ -139,7 +100,7 @@ class AnnouncementEmail
         $newListUsers = [];
         if (!empty($users)) {
             foreach ($users as $user) {
-                $newListUsers[$user['user_id']] = ['user_id' => $user['user_id']];
+                $newListUsers[$user['id']] = ['user_id' => $user['id']];
             }
         }
 

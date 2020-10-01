@@ -94,10 +94,8 @@ class CAnnouncementAttachment extends AbstractResource implements ResourceInterf
      * Set comment.
      *
      * @param string $comment
-     *
-     * @return CAnnouncementAttachment
      */
-    public function setComment($comment)
+    public function setComment($comment): self
     {
         $this->comment = $comment;
 
@@ -118,10 +116,8 @@ class CAnnouncementAttachment extends AbstractResource implements ResourceInterf
      * Set size.
      *
      * @param int $size
-     *
-     * @return CAnnouncementAttachment
      */
-    public function setSize($size)
+    public function setSize($size): self
     {
         $this->size = $size;
 
@@ -147,10 +143,8 @@ class CAnnouncementAttachment extends AbstractResource implements ResourceInterf
      * Set filename.
      *
      * @param string $filename
-     *
-     * @return CAnnouncementAttachment
      */
-    public function setFilename($filename)
+    public function setFilename($filename): self
     {
         $this->filename = $filename;
 

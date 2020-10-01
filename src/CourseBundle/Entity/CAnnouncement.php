@@ -6,6 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -64,7 +65,7 @@ class CAnnouncement extends AbstractResource implements ResourceInterface
     protected $emailSent;
 
     /**
-     * @var CAnnouncementAttachment[]
+     * @var ArrayCollection|CAnnouncementAttachment[]
      *
      * @ORM\OneToMany(
      *     targetEntity="CAnnouncementAttachment",
@@ -73,14 +74,16 @@ class CAnnouncement extends AbstractResource implements ResourceInterface
      */
     protected $attachments;
 
+    public function __construct()
+    {
+        $this->attachments = new ArrayCollection();
+    }
+
     public function __toString(): string
     {
         return $this->getTitle();
     }
 
-    /**
-     * @return CAnnouncementAttachment[]
-     */
     public function getAttachments()
     {
         return $this->attachments;
@@ -100,10 +103,8 @@ class CAnnouncement extends AbstractResource implements ResourceInterface
      * Set title.
      *
      * @param string $title
-     *
-     * @return CAnnouncement
      */
-    public function setTitle($title)
+    public function setTitle($title): self
     {
         $this->title = $title;
 
@@ -124,10 +125,8 @@ class CAnnouncement extends AbstractResource implements ResourceInterface
      * Set content.
      *
      * @param string $content
-     *
-     * @return CAnnouncement
      */
-    public function setContent($content)
+    public function setContent($content): self
     {
         $this->content = $content;
 
@@ -148,10 +147,8 @@ class CAnnouncement extends AbstractResource implements ResourceInterface
      * Set endDate.
      *
      * @param \DateTime $endDate
-     *
-     * @return CAnnouncement
      */
-    public function setEndDate($endDate)
+    public function setEndDate($endDate): self
     {
         $this->endDate = $endDate;
 
@@ -172,10 +169,8 @@ class CAnnouncement extends AbstractResource implements ResourceInterface
      * Set displayOrder.
      *
      * @param int $displayOrder
-     *
-     * @return CAnnouncement
      */
-    public function setDisplayOrder($displayOrder)
+    public function setDisplayOrder($displayOrder): self
     {
         $this->displayOrder = $displayOrder;
 
@@ -196,10 +191,8 @@ class CAnnouncement extends AbstractResource implements ResourceInterface
      * Set emailSent.
      *
      * @param bool $emailSent
-     *
-     * @return CAnnouncement
      */
-    public function setEmailSent($emailSent)
+    public function setEmailSent($emailSent): self
     {
         $this->emailSent = $emailSent;
 

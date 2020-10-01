@@ -531,7 +531,7 @@ class AnnouncementManager
 
         $allow = !api_get_configuration_value('hide_announcement_sent_to_users_info');
         if ($allow && api_is_allowed_to_edit(false, true)) {
-            $sent_to = self::sent_to('announcement', $id);
+            $sent_to = $announcement->getUsersAndGroupSubscribedToResource();
             $sentToForm = self::sent_to_form($sent_to);
             $html .= Display::tag(
                 'td',
@@ -908,61 +908,35 @@ class AnnouncementManager
         $repo->getEntityManager()->persist($announcement);
         $repo->getEntityManager()->flush();
 
-        // save attachment file
-        $row_attach = self::get_attachment($id);
-
-        $id_attach = 0;
-        if ($row_attach) {
-            $id_attach = (int) $row_attach['id'];
-        }
-
         if (!empty($file)) {
-            if (empty($id_attach)) {
-                self::add_announcement_attachment_file(
-                    $announcement,
-                    $file_comment,
-                    $file
-                );
+            self::add_announcement_attachment_file(
+                $announcement,
+                $file_comment,
+                $file
+            );
+            /*if (empty($id_attach)) {
             } else {
                 self::edit_announcement_attachment_file(
                     $id_attach,
                     $file,
                     $file_comment
                 );
-            }
+            }*/
         }
-
-        // We remove everything from item_property for this
-        /*$sql = "DELETE FROM $tbl_item_property
-                WHERE c_id = $courseId AND ref='$id' AND tool='announcement'";
-        Database::query($sql);*/
 
         if ($sendToUsersInSession) {
             self::addAnnouncementToAllUsersInSessions($announcement);
         }
 
-        // store in item_property (first the groups, then the users
+        // store, first the groups, then the users
         if (!empty($to)) {
             // !is_null($to): when no user is selected we send it to everyone
             $send_to = CourseManager::separateUsersGroups($to);
-            $resourceNode = $announcement->getResourceNode();
 
             // storing the selected groups
             if (is_array($send_to['groups'])) {
-                foreach ($send_to['groups'] as $group) {
-                    $groupInfo = api_get_group_entity($group);
-                    $announcement->addGroupLink($course, $session, $groupInfo);
-                    /*
-                    if ($groupInfo) {
-                        api_item_property_update(
-                            $courseInfo,
-                            TOOL_ANNOUNCEMENT,
-                            $id,
-                            'AnnouncementUpdated',
-                            api_get_user_id(),
-                            $groupInfo
-                        );
-                    }*/
+                foreach ($send_to['groups'] as $groupId) {
+                    $announcement->addGroupLink($course, $session, api_get_group_entity($groupId));
                 }
             }
 
@@ -971,43 +945,18 @@ class AnnouncementManager
                 foreach ($send_to['users'] as $user) {
                     $user = api_get_user_entity($user);
                     $announcement->addUserLink($user, $course, $session, $group);
-                    /*api_item_property_update(
-                        $courseInfo,
-                        TOOL_ANNOUNCEMENT,
-                        $id,
-                        'AnnouncementUpdated',
-                        api_get_user_id(),
-                        0,
-                        $user
-                    );*/
                 }
             }
 
             // Send to everyone
             if (isset($to[0]) && 'everyone' === $to[0]) {
-                /*api_item_property_update(
-                    $courseInfo,
-                    TOOL_ANNOUNCEMENT,
-                    $id,
-                    'AnnouncementUpdated',
-                    api_get_user_id(),
-                    0
-                );*/
+                $announcement->addCourseLink($course, $session, $group);
             }
         } else {
-            // the message is sent to everyone, so we set the group to 0
-            /*api_item_property_update(
-                $courseInfo,
-                TOOL_ANNOUNCEMENT,
-                $id,
-                'AnnouncementUpdated',
-                api_get_user_id(),
-                0
-            );*/
+            $announcement->addCourseLink($course, $session);
         }
 
-        $repo->getEntityManager()->persist($announcement);
-        $repo->getEntityManager()->flush();
+        $repo->updateResource($announcement);
 
         return $announcement;
     }
@@ -1128,31 +1077,6 @@ class AnnouncementManager
         return $result;*/
     }
 
-    public static function getSenders(CAnnouncement $announcement)
-    {
-        $result = [];
-        $result['groups'] = [];
-        $result['users'] = [];
-
-        $links = $announcement->getResourceNode()->getResourceLinks();
-
-        if (empty($links)) {
-            return $result;
-        }
-
-        /** @var ResourceLink $link */
-        foreach ($links as $link) {
-            if ($link->getUser()) {
-                $result['users'][] = $link->getUser()->getId();
-            }
-            if ($link->getGroup()) {
-                $result['groups'][] = $link->getGroup()->getIid();
-            }
-        }
-
-        return $result;
-    }
-
     /**
      * This tools loads all the users and all the groups who have received
      * a specific item (in this case an announcement item).
@@ -1164,7 +1088,7 @@ class AnnouncementManager
      */
     public static function loadEditUsers($announcement, $includeGroupWhenLoadingUser = false)
     {
-        $result = self::getSenders($announcement);
+        $result = $announcement->getUsersAndGroupSubscribedToResource();
         $to = [];
 
         foreach ($result['users'] as $itemId) {
@@ -1240,7 +1164,7 @@ class AnnouncementManager
             }
         } else {
             // there is only one user/group
-            if (isset($sent_to_array['users']) && is_array($sent_to_array['users'])) {
+            if (isset($sent_to_array['users']) && !empty($sent_to_array['users'])) {
                 $user_info = api_get_user_info($sent_to_array['users'][0]);
                 $output[] = api_get_person_name($user_info['firstname'], $user_info['lastname']);
             }
@@ -1274,57 +1198,6 @@ class AnnouncementManager
 
             return $output;
         }
-    }
-
-    /**
-     * Returns all the users and all the groups a specific announcement item
-     * has been sent to.
-     *
-     * @param    string  The tool (announcement, agenda, ...)
-     * @param    int     ID of the element of the corresponding type
-     *
-     * @return array Array of users and groups to whom the element has been sent
-     */
-    public static function sent_to($tool, $id)
-    {
-        return [];
-
-        $table = Database::get_course_table(TABLE_ITEM_PROPERTY);
-        $tool = Database::escape_string($tool);
-        $id = (int) $id;
-
-        $sent_to_group = [];
-        $sent_to = [];
-        $courseId = api_get_course_int_id();
-
-        $sql = "SELECT to_group_id, to_user_id
-                FROM $table
-                WHERE c_id = $courseId AND tool = '$tool' AND ref=".$id;
-        $result = Database::query($sql);
-
-        while ($row = Database::fetch_array($result)) {
-            // if to_user_id <> 0 then it is sent to a specific user
-            if (0 != $row['to_user_id']) {
-                $sent_to_user[] = $row['to_user_id'];
-                continue;
-            }
-
-            // if to_group_id is null then it is sent to a specific user
-            // if to_group_id = 0 then it is sent to everybody
-            if (0 != $row['to_group_id']) {
-                $sent_to_group[] = $row['to_group_id'];
-            }
-        }
-
-        if (isset($sent_to_group)) {
-            $sent_to['groups'] = $sent_to_group;
-        }
-
-        if (isset($sent_to_user)) {
-            $sent_to['users'] = $sent_to_user;
-        }
-
-        return $sent_to;
     }
 
     /**
@@ -1363,11 +1236,8 @@ class AnnouncementManager
      *
      * @return int -1 if failed, 0 if unknown (should not happen), 1 if success
      */
-    public static function add_announcement_attachment_file(
-        CAnnouncement $announcement,
-        $file_comment,
-        $file
-    ) {
+    public static function add_announcement_attachment_file(CAnnouncement $announcement, $file_comment, $file)
+    {
         $return = 0;
         $courseId = api_get_course_int_id();
 

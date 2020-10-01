@@ -10960,12 +10960,12 @@ EOD;
         $lpViewId = (int) $lpViewId;
 
         $em = Database::getManager();
-        $lpItemRepo = $em->getRepository('ChamiloCourseBundle:CLpItem');
+        $lpItemRepo = $em->getRepository(CLpItem::class);
 
         /** @var CLpItem $rowItem */
         $rowItem = $lpItemRepo->findOneBy([
             'cId' => $course_id,
-            'lpId' => $learningPathId,
+            'lp' => $learningPathId,
             'iid' => $id_in_path,
         ]);
 
@@ -10974,7 +10974,7 @@ EOD;
             /** @var CLpItem $rowItem */
             $rowItem = $lpItemRepo->findOneBy([
                 'cId' => $course_id,
-                'lpId' => $learningPathId,
+                'lp' => $learningPathId,
                 'id' => $id_in_path,
             ]);
 

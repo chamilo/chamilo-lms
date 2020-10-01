@@ -39,11 +39,12 @@ class CLpItem
     protected $cId;
 
     /**
-     * @var int
+     * @var CLp
      *
-     * @ORM\Column(name="lp_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CLp", inversedBy="items")
+     * @ORM\JoinColumn(name="lp_id", referencedColumnName="iid")
      */
-    protected $lpId;
+    protected $lp;
 
     /**
      * @var string
@@ -204,33 +205,21 @@ class CLpItem
         $this->maxScore = 100.0;
     }
 
-    public function getIid(): int
+    public function getIid()
     {
         return $this->iid;
     }
 
-    /**
-     * Set lpId.
-     *
-     * @param int $lpId
-     *
-     * @return CLpItem
-     */
-    public function setLpId($lpId)
+    public function setLp(CLp $lp): self
     {
-        $this->lpId = $lpId;
+        $this->lp = $lp;
 
         return $this;
     }
 
-    /**
-     * Get lpId.
-     *
-     * @return int
-     */
-    public function getLpId()
+    public function getLp(): CLp
     {
-        return $this->lpId;
+        return $this->lp;
     }
 
     /**

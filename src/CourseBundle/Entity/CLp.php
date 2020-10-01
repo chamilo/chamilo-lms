@@ -6,6 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -273,6 +274,13 @@ class CLp extends AbstractResource implements ResourceInterface
     protected $accumulateWorkTime;
 
     /**
+     * @var CLpItem[]
+     *
+     * @ORM\OneToMany(targetEntity="CLpItem", mappedBy="lp", cascade={"persist", "remove"}, orphanRemoval=true)
+     */
+    protected $items;
+
+    /**
      * Constructor.
      */
     public function __construct()
@@ -304,6 +312,7 @@ class CLp extends AbstractResource implements ResourceInterface
         $this->subscribeUsers = 0;
         $this->useMaxScore = 1;
         $this->theme = '';
+        $this->items = new ArrayCollection();
     }
 
     public function __toString(): string

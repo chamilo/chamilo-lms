@@ -66,7 +66,10 @@ class CAnnouncement extends AbstractResource implements ResourceInterface
     /**
      * @var CAnnouncementAttachment[]
      *
-     * @ORM\OneToMany(targetEntity="CAnnouncementAttachment", mappedBy="announcement", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\OneToMany(
+     *     targetEntity="CAnnouncementAttachment",
+     *     mappedBy="announcement", cascade={"persist", "remove"}, orphanRemoval=true
+     * )
      */
     protected $attachments;
 

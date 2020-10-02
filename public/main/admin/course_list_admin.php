@@ -178,7 +178,7 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
             $path.'admin/course_edit.php?id='.$courseId
         );
         $actions[] = Display::url(
-            Display::return_icon('backup.png', get_lang('CreateBackup')),
+            Display::return_icon('backup.png', get_lang('Create a backup')),
             $path.'coursecopy/create_backup.php?'.api_get_cidreq_params($courseId)
         );
         $actions[] = Display::url(
@@ -186,7 +186,7 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
             $path.'admin/course_list_admin.php?delete_course='.$courseCode,
             [
                 'onclick' => "javascript: if (!confirm('"
-                    .addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."')) return false;",
+                    .addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES))."')) return false;",
             ]
         );
 
@@ -238,35 +238,35 @@ function get_course_visibility_icon($visibility)
         case 0:
             return Display::return_icon(
                 'bullet_red.png',
-                get_lang('CourseVisibilityClosed'),
+                get_lang('Closed - the course is only accessible to the teachers'),
                 ['style' => $style]
             );
             break;
         case 1:
             return Display::return_icon(
                 'bullet_orange.png',
-                get_lang('Private'),
+                get_lang('Private access (access authorized to group members only)'),
                 ['style' => $style]
             );
             break;
         case 2:
             return Display::return_icon(
                 'bullet_green.png',
-                get_lang('OpenToThePlatform'),
+                get_lang('Open - access allowed for users registered on the platform'),
                 ['style' => $style]
             );
             break;
         case 3:
             return Display::return_icon(
                 'bullet_blue.png',
-                get_lang('OpenToTheWorld'),
+                get_lang('Public - access allowed for the whole world'),
                 ['style' => $style]
             );
             break;
         case 4:
             return Display::return_icon(
                 'bullet_grey.png',
-                get_lang('CourseVisibilityHidden'),
+                get_lang('Hidden - Completely hidden to all users except the administrators'),
                 ['style' => $style]
             );
             break;
@@ -300,16 +300,16 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
     // Get all course categories
     $interbreadcrumb[] = [
         'url' => 'index.php',
-        'name' => get_lang('PlatformAdmin'),
+        'name' => get_lang('Administration'),
     ];
     $interbreadcrumb[] = [
         'url' => 'course_list_admin.php',
-        'name' => get_lang('CourseList'),
+        'name' => get_lang('Course list'),
     ];
-    $tool_name = get_lang('SearchACourse');
+    $tool_name = get_lang('Search courses');
     $form = new FormValidator('advanced_course_search', 'get');
     $form->addElement('header', $tool_name);
-    $form->addText('keyword_code', get_lang('CourseCode'), false);
+    $form->addText('keyword_code', get_lang('Course code'), false);
     $form->addText('keyword_title', get_lang('Title'), false);
 
     // Category code
@@ -318,20 +318,20 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
     $form->addElement(
         'select_ajax',
         'keyword_category',
-        get_lang('CourseFaculty'),
+        get_lang('Category'),
         null,
         [
             'url' => $url,
         ]
     );
 
-    $el = $form->addSelectLanguage('keyword_language', get_lang('CourseLanguage'));
+    $el = $form->addSelectLanguage('keyword_language', get_lang('Course language'));
     $el->addOption(get_lang('All'), '%');
 
     if ($addTeacherColumn) {
         $form->addSelectAjax(
             'course_teachers',
-            get_lang('CourseTeachers'),
+            get_lang('Teachers'),
             [0 => get_lang('None')],
             [
                 'url' => api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=teacher_to_basis_course',
@@ -354,7 +354,7 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
     $form->addElement('radio', 'keyword_unsubscribe', get_lang('Unsubscription'), get_lang('AllowedToUnsubscribe'), 1);
     $form->addElement('radio', 'keyword_unsubscribe', null, get_lang('NotAllowedToUnsubscribe'), 0);
     $form->addElement('radio', 'keyword_unsubscribe', null, get_lang('All'), '%');
-    $form->addButtonSearch(get_lang('SearchCourse'));
+    $form->addButtonSearch(get_lang('Search courses'));
     $defaults['keyword_language'] = '%';
     $defaults['keyword_visibility'] = '%';
     $defaults['keyword_subscribe'] = '%';
@@ -391,7 +391,7 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
     $form->addButtonSearch(get_lang('SearchCourse'));
     $advanced = '<a class="btn btn-default" href="'.api_get_path(WEB_CODE_PATH).'admin/course_list_admin.php?search=advanced">
         <em class="fa fa-search"></em> '.
-        get_lang('AdvancedSearch').'</a>';
+        get_lang('Advanced search').'</a>';
 
     // Create a filter by session
     $sessionFilter = new FormValidator(
@@ -474,8 +474,8 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
     $column = 0;
     $table->set_header($column++, '', false, 'width="8px"');
     $table->set_header($column++, get_lang('Title'), true, null, ['class' => 'title']);
-    $table->set_header($column++, get_lang('CreationDate'), true, 'width="70px"');
-    $table->set_header($column++, get_lang('LatestLoginInCourse'), false, 'width="70px"');
+    $table->set_header($column++, get_lang('Creation date'), true, 'width="70px"');
+    $table->set_header($column++, get_lang('Latest access in course'), false, 'width="70px"');
     //$table->set_header($column++, get_lang('Category'));
     //$table->set_header($column++, get_lang('SubscriptionAllowed'), true, 'width="60px"');
     //$table->set_header($column++, get_lang('UnsubscriptionAllowed'), false, 'width="50px"');
@@ -490,7 +490,7 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
         ['class' => 'td_actions']
     );
     $table->set_form_actions(
-        ['delete_courses' => get_lang('DeleteCourse')],
+        ['delete_courses' => get_lang('Delete selected course(s)')],
         'course'
     );
     $tab = CourseManager::getCourseListTabs('admin');

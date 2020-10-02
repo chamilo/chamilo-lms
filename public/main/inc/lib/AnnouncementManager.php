@@ -4,7 +4,6 @@
 
 use Chamilo\CoreBundle\Entity\ExtraField as ExtraFieldEntity;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
-use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CourseBundle\Entity\CAnnouncement;
@@ -610,13 +609,13 @@ class AnnouncementManager
      *
      * @param array  $courseInfo
      * @param int    $sessionId
-     * @param string $title        Announcement title (pure text)
-     * @param string $content      Content of the announcement (can be HTML)
-     * @param array  $sentTo       Array of users and groups to send the announcement to
-     * @param array  $file         uploaded file $_FILES
-     * @param string $file_comment Comment describing the attachment
+     * @param string $title                Announcement title (pure text)
+     * @param string $content              Content of the announcement (can be HTML)
+     * @param array  $sentTo               Array of users and groups to send the announcement to
+     * @param array  $file                 uploaded file $_FILES
+     * @param string $file_comment         Comment describing the attachment
      * @param string $end_date
-     * @param bool   $sendToUsersInSession
+     * @param bool   $sendToUsersInSession Send announcements to users inside a session.
      * @param int    $authorId
      *
      * @return int false on failure, ID of the announcement on success
@@ -1190,11 +1189,10 @@ class AnnouncementManager
                 );
             } else {
                 $repo = Container::getAnnouncementAttachmentRepository();
-                $new_file_name = uniqid('');
                 $attachment = new CAnnouncementAttachment();
                 $attachment
                     ->setFilename($file_name)
-                    ->setPath($new_file_name)
+                    ->setPath(uniqid('announce_', true))
                     ->setComment($file_comment)
                     ->setAnnouncement($announcement)
                     ->setSize((int) $file['size'])

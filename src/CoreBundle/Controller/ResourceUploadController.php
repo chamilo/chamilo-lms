@@ -83,12 +83,6 @@ class ResourceUploadController extends BlueimpController
 
                     $resource = $repo->saveUpload($file, $course, $session);
 
-                    if ($resource instanceof CDocument) {
-                        $resource
-                            ->setCourse($course)
-                            ->setSession($session)
-                        ;
-                    }
                     // @todo fix correct $parent
                     $resource->setParent($parent);
                     $resource->addCourseLink(

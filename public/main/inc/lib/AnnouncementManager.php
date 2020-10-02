@@ -6,6 +6,7 @@ use Chamilo\CoreBundle\Entity\ExtraField as ExtraFieldEntity;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CourseBundle\Entity\CAnnouncement;
 use Chamilo\CourseBundle\Entity\CAnnouncementAttachment;
 
@@ -462,8 +463,6 @@ class AnnouncementManager
 
         $stok = null;
         $html = '';
-        $course = api_get_course_entity(api_get_course_int_id());
-        $session = api_get_session_entity(api_get_session_id());
 
         $announcement = self::getAnnouncementInfoById(
             $id,
@@ -482,7 +481,8 @@ class AnnouncementManager
         $html .= "<table height=\"100\" width=\"100%\" cellpadding=\"5\" cellspacing=\"0\" class=\"data_table\">";
         $html .= "<tr><td><h2>".$title."</h2></td></tr>";
 
-        $isVisible = $announcement->isVisible($course, $session);
+        $repo = Container::getAnnouncementRepository();
+        $isVisible = $repo->isGranted(ResourceNodeVoter::VIEW, $announcement);
 
         if (api_is_allowed_to_edit(false, true) ||
             (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())
@@ -1392,20 +1392,15 @@ class AnnouncementManager
         $session = api_get_session_entity($session_id);
         $group = api_get_group_entity(api_get_group_id());
 
-        $qb = $repo->getResourcesByCourse($course, $session, $group);
+        if (api_is_allowed_to_edit(false, true)) {
+            $qb = $repo->getResourcesByCourse($course, $session, $group);
+        } else {
+            $qb = $repo->getResourcesByCourseLinkedToUser(api_get_user_entity(), $course, $session, $group);
+        }
+
         $announcements = $qb->getQuery()->getResult();
 
-        /*$condition_session = api_get_session_condition(
-            $session_id,
-            true,
-            true,
-            'announcement.session_id'
-        );
-
-        $group_memberships = GroupManager::get_group_ids(
-            $courseId,
-            api_get_user_id()
-        );
+        /*
         $allowUserEditSetting = api_get_course_setting('allow_user_edit_announcement');
 
         $select = ' DISTINCT
@@ -1715,10 +1710,8 @@ class AnnouncementManager
                     $sent_to_icon = ' '.$emailIcon;
                 }
 
-                //$groupReference = $row['to_group_id'] > 0 ? ' <span class="label label-info">'.get_lang('Group').'</span> ' : '';
                 $groupReference = '';
                 $disableEdit = false;
-                //$to = self::loadEditUsers('announcement', $announcementId, true);
                 $to = [];
                 $separated = CourseManager::separateUsersGroups($to);
                 if (!empty($group_id)) {
@@ -1774,16 +1767,18 @@ class AnnouncementManager
 
                 // we can edit if : we are the teacher OR the element belongs to
                 // the session we are coaching OR the option to allow users to edit is on
-                if (api_is_allowed_to_edit(false, true) ||
+                if ($repo->isGranted(ResourceNodeVoter::EDIT, $announcement)) {
+                /*if api_is_allowed_to_edit(false, true) ||
                     (api_is_session_general_coach() && api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $announcementId)) ||
                     (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous()) ||
                     ($isTutor)
                     //$row['to_group_id'] == $group_id &&
-                ) {
+                ) {*/
                     if (true === $disableEdit) {
                         $modify_icons = "<a href='#'>".$editIconDisable."</a>";
                     } else {
-                        $modify_icons = "<a href=\"".$actionUrl."&action=modify&id=".$announcementId."\">".$editIcon."</a>";
+                        $modify_icons = "<a
+                            href=\"".$actionUrl."&action=modify&id=".$announcementId."\">".$editIcon."</a>";
                     }
 
                     $image_visibility = 'invisible';
@@ -1796,7 +1791,8 @@ class AnnouncementManager
                         $alt_visibility = get_lang('Hide');
                     }
 
-                    $modify_icons .= "<a href=\"".$actionUrl."&action=set_visibility&status=".$setNewStatus."&id=".$announcementId."&sec_token=".$stok."\">".
+                    $modify_icons .= "<a
+                        href=\"".$actionUrl."&action=set_visibility&status=".$setNewStatus."&id=".$announcementId."&sec_token=".$stok."\">".
                         Display::return_icon($image_visibility.'.png', $alt_visibility, '', ICON_SIZE_SMALL)."</a>";
 
                     // DISPLAY MOVE UP COMMAND only if it is not the top announcement
@@ -1816,7 +1812,8 @@ class AnnouncementManager
                         if (true === $disableEdit) {
                             $modify_icons .= Display::url($deleteIconDisable, '#');
                         } else {
-                            $modify_icons .= "<a href=\"".$actionUrl."&action=delete&id=".$announcementId."&sec_token=".$stok."\" onclick=\"javascript:if(!confirm('".addslashes(
+                            $modify_icons .= "<a
+                                href=\"".$actionUrl."&action=delete&id=".$announcementId."&sec_token=".$stok."\" onclick=\"javascript:if(!confirm('".addslashes(
                                     api_htmlentities(
                                         get_lang('Please confirm your choice'),
                                         ENT_QUOTES,

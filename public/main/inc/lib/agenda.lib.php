@@ -1456,13 +1456,6 @@ class Agenda
             $sessionId
         );
 
-        $groupNameList = [];
-        if (!empty($groupList)) {
-            foreach ($groupList as $group) {
-                $groupNameList[$group['iid']] = $group['name'];
-            }
-        }
-
         if (api_is_platform_admin() || api_is_allowed_to_edit()) {
             $isAllowToEdit = true;
         } else {
@@ -1489,8 +1482,6 @@ class Agenda
         } else {
             if ($isAllowToEdit) {
                 if (!empty($groupList)) {
-                    // c_item_property.to_group_id field was migrated to use
-                    // c_group_info.iid
                     $groupMemberships = array_column($groupList, 'iid');
                 }
             } else {
@@ -1514,9 +1505,7 @@ class Agenda
                     // admin see only his stuff
                     if ('personal' === $this->type) {
                         $userCondition = " (links.user = ".api_get_user_id()." AND (links.group IS NULL) ";
-                        //$userCondition = " (ip.to_user_id = ".api_get_user_id()." AND (ip.to_group_id IS NULL OR ip.to_group_id = 0) ) ";
                         $userCondition .= " OR ( (links.user IS NULL)  AND (links.group IS NULL ))) ";
-                        //$userCondition .= " OR ( (ip.to_user_id = 0 OR ip.to_user_id is NULL)  AND (ip.to_group_id IS NULL OR ip.to_group_id = 0) ) ";
                     }
 
                     if (!empty($groupMemberships)) {
@@ -1547,7 +1536,8 @@ class Agenda
                 $userCondition = ' ( (links.user is NULL) AND (links.group IS NULL) ';
                 // Show events sent to selected groups
                 if (!empty($groupMemberships)) {
-                    $userCondition .= " OR (links.user is NULL) AND (links.group IN (".implode(", ", $groupMemberships)."))) ";
+                    $userCondition .= " OR (links.user is NULL) AND
+                                        (links.group IN (".implode(", ", $groupMemberships)."))) ";
                 } else {
                     $userCondition .= " ) ";
                 }
@@ -1555,13 +1545,17 @@ class Agenda
             } else {
                 if (!empty($groupMemberships)) {
                     // Show send to everyone - and only selected groups
-                    $userCondition = " (links.user is NULL) AND (links.group IN (".implode(", ", $groupMemberships).")) ";
+                    $userCondition = " (links.user is NULL) AND
+                                       (links.group IN (".implode(", ", $groupMemberships).")) ";
                 }
             }
 
             // Show sent to only me and no group
             if (!empty($groupMemberships)) {
-                $userCondition .= " OR (links.user = ".api_get_user_id().") AND (links.group IN (".implode(", ", $groupMemberships).")) ";
+                $userCondition .= " OR (
+                                    links.user = ".api_get_user_id().") AND
+                                    (links.group IN (".implode(", ", $groupMemberships).")
+                                    ) ";
             }
         }
 
@@ -1569,17 +1563,6 @@ class Agenda
             $qb->andWhere($userCondition);
         }
 
-        /*if (!empty($groupMemberships)) {
-            $orX = $qb->expr()->orX();
-            foreach ($groupMemberships as $groupId) {
-                $group = api_get_group_entity($groupId);
-                $orX->add("links.group = :group$groupId");
-                $qb->setParameter("group$groupId", $group);
-            }
-            $qb->andWhere($orX);
-        }*/
-
-        //$dateCondition = '';
         if (!empty($start) && !empty($end)) {
             $qb->andWhere(
                 $qb->expr()->orX(
@@ -1595,17 +1578,6 @@ class Agenda
             )
             ->setParameter('start', $start)
             ->setParameter('end', $end);
-
-            /*
-            $dateCondition .= "AND (
-                 agenda.start_date BETWEEN '".$start."' AND '".$end."' OR
-                 agenda.end_date BETWEEN '".$start."' AND '".$end."' OR
-                 (
-                     agenda.start_date IS NOT NULL AND agenda.end_date IS NOT NULL AND
-                     YEAR(agenda.start_date) = YEAR(agenda.end_date) AND
-                     MONTH('$start') BETWEEN MONTH(agenda.start_date) AND MONTH(agenda.end_date)
-                 )
-            )";*/
         }
 
         /*

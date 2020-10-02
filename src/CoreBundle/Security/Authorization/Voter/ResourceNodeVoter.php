@@ -9,7 +9,6 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\ResourceRight;
 use Chamilo\CoreBundle\Entity\Session;
-use Doctrine\ORM\EntityManagerInterface;
 use Laminas\Permissions\Acl\Acl;
 use Laminas\Permissions\Acl\Resource\GenericResource as SecurityResource;
 use Laminas\Permissions\Acl\Role\GenericRole as Role;
@@ -39,15 +38,15 @@ class ResourceNodeVoter extends Voter
 
     private $requestStack;
     private $security;
-    private $entityManager;
+    //private $entityManager;
 
     /**
      * Constructor.
      */
-    public function __construct(Security $security, RequestStack $requestStack, EntityManagerInterface $entityManager)
+    public function __construct(Security $security, RequestStack $requestStack)
     {
         $this->security = $security;
-        $this->entityManager = $entityManager;
+        //$this->entityManager = $entityManager;
         $this->requestStack = $requestStack;
     }
 
@@ -148,8 +147,8 @@ class ResourceNodeVoter extends Voter
 
         $links = $resourceNode->getResourceLinks();
         $linkFound = false;
-        $courseManager = $this->entityManager->getRepository(Course::class);
-        $sessionManager = $this->entityManager->getRepository(Session::class);
+        //$courseManager = $this->entityManager->getRepository(Course::class);
+        //$sessionManager = $this->entityManager->getRepository(Session::class);
 
         $course = null;
         $link = null;
@@ -187,12 +186,9 @@ class ResourceNodeVoter extends Voter
             if ($linkSession instanceof Session && !empty($sessionId) &&
                 $linkCourse instanceof Course && !empty($courseId)
             ) {
-                $session = $sessionManager->find($sessionId);
-                $course = $courseManager->find($courseId);
-                if ($session instanceof Session &&
-                    $course instanceof Course &&
-                    $linkCourse->getCode() === $course->getCode() &&
-                    $linkSession->getId() === $session->getId()
+                if (
+                    $linkCourse->getId() === $courseId &&
+                    $linkSession->getId() === $sessionId
                 ) {
                     $linkFound = true;
 
@@ -201,8 +197,7 @@ class ResourceNodeVoter extends Voter
             }
 
             // Check if resource was sent to a course.
-            if ($linkCourse instanceof Course && !empty($courseId)) {
-                //$course = $courseManager->find($courseId);
+            if ($linkCourse instanceof Course && !empty($courseId) && false === $link->hasUser()) {
                 if ($linkCourse->getId() === $courseId) {
                     $linkFound = true;
 
@@ -240,7 +235,7 @@ class ResourceNodeVoter extends Voter
             // Anons: Only read.
             $readerMask = self::getReaderMask();
             $editorMask = self::getEditorMask();
-            error_log($courseId);
+
             if ($courseId) {
                 $resourceRight = new ResourceRight();
                 $resourceRight
@@ -290,8 +285,6 @@ class ResourceNodeVoter extends Voter
                 $rights[] = $resourceRight;
             }
         }
-
-        error_log(print_r($rights, 1));
 
         // Asked mask
         $mask = new MaskBuilder();

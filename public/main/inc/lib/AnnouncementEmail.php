@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CAnnouncement;
+use Chamilo\CourseBundle\Entity\CAnnouncementAttachment;
 
 /**
  * Announcement Email.
@@ -158,6 +159,7 @@ class AnnouncementEmail
         $attachments = $this->announcement->getAttachments();
         if (!empty($attachments)) {
             $repo = Container::getAnnouncementAttachmentRepository();
+            /** @var CAnnouncementAttachment $attachment */
             foreach ($attachments as $attachment) {
                 $url = $repo->getResourceFileDownloadUrl($attachment);
                 $result .= '<br />';

@@ -62,8 +62,8 @@ final class CDocumentRepository extends ResourceRepository implements GridInterf
     {
         $newResource = $form->getData();
         $newResource
-            ->setCourse($course)
-            ->setSession($session)
+            //->setCourse($course)
+            //->setSession($session)
             ->setFiletype($fileType)
             //->setTitle($title) // already added in $form->getData()
             ->setReadonly(false)
@@ -75,12 +75,13 @@ final class CDocumentRepository extends ResourceRepository implements GridInterf
     /**
      * @return string
      */
-    public function getDocumentUrl(CDocument $document)
+    public function getDocumentUrl(CDocument $document, $courseId, $sessionId)
     {
         // There are no URL for folders.
         if ('folder' === $document->getFiletype()) {
             return '';
         }
+
         $file = $document->getResourceNode()->getResourceFile();
 
         if (null === $file) {
@@ -88,16 +89,14 @@ final class CDocumentRepository extends ResourceRepository implements GridInterf
         }
 
         $params = [
-            'course' => $document->getCourse()->getCode(),
+            'cid' => $courseId,
+            'sid' => $sessionId,
             'id' => $document->getResourceNode()->getId(),
             'tool' => 'document',
             'type' => $document->getResourceNode()->getResourceType()->getName(),
         ];
 
-        return $this->getRouter()->generate(
-            'chamilo_core_resource_view',
-            $params
-        );
+        return $this->getRouter()->generate('chamilo_core_resource_view', $params);
     }
 
     /**

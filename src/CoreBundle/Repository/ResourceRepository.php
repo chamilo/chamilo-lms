@@ -446,7 +446,7 @@ class ResourceRepository extends EntityRepository
                 ->andWhere('links.visibility = :visibility')
                 ->setParameter('visibility', ResourceLink::VISIBILITY_PUBLISHED)
             ;
-            // @todo Add start/end visibility restrictrions
+            // @todo Add start/end visibility restrictions
         }
 
         if (null !== $parentNode) {
@@ -876,5 +876,10 @@ class ResourceRepository extends EntityRepository
         $em->flush();
 
         return true;
+    }
+
+    public function isGranted(string $subject, AbstractResource $resource): bool
+    {
+        return $this->getAuthorizationChecker()->isGranted($subject, $resource->getResourceNode());
     }
 }

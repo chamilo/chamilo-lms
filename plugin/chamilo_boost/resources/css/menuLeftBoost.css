@@ -1,0 +1,290 @@
+
+  body{
+  }
+  #main{}
+
+  @media (min-width: 1142px) {
+    .container {
+      padding-right: 15px!important;
+      padding-left: 15px!important;
+      margin-right: auto!important;
+      margin-left: 1%!important;
+    }
+    .container{
+      width:98%!important;
+    }
+    .classic-courses{
+      position:relative!important;
+    }
+    .classic-courses .panel-default{
+      float:left!important;
+      width:48%!important;
+      min-height: 230px!important;
+      margin-right:1%!important;
+    }
+
+    .classic-courses .panel-default .panel-body .row .col-md-2 {
+      width: 100%!important;
+    }
+    .classic-courses .panel-default .panel-body .row .col-md-2 .thumbnail>img {
+        display: block!important;
+        max-width: 100%!important;
+        height: 70px!important;
+    }
+
+    .classic-courses .panel-default .panel-body .row .col-md-10{
+      width: 100%!important;
+    }
+
+  }
+
+  .navbar-toggle-boost{
+    position : absolute;
+    left : 0px;
+    top : 8px;
+    width : 36px;
+    height : 36px;
+    border : solid 1px #e1ffff;
+    border-radius : 4px;
+    border-top-left-radius : 0px;
+    border-bottom-left-radius : 0px;
+    border-left : none;
+    background-color: #2e353d;
+    background-image: url('menu_boost.png');
+    background-position: center center;
+    background-repeat: no-repeat;
+    z-index : 101;
+  }
+  .nav-side-menu-boost .menu-list{
+    position: relative;
+    z-index : 102;
+  }
+  .nav-side-message-boost {
+    position: absolute;
+    left : 0px;
+    right : 0px;
+    padding : 10px;
+    bottom: 14px;
+    height: auto;
+    z-index : 101;
+  }
+
+  .nav-side-menu-boost {
+    overflow: auto;
+    font-family: verdana;
+    font-size: 14px;
+    font-weight: 200;
+    background-color: #2e353d;
+    position: fixed;
+    left : 0px;
+    top: 0px;
+    width: 260px;
+    height: 100%;
+    color: #e1ffff;
+    z-index : 100;
+  }
+  .nav-side-menu-boost .brand-login{
+    border-bottom : solid 5px #23282e;
+    padding-top : 2px;
+    padding-bottom : 2px;
+    line-height : 32px;
+    display : block;
+    text-align : center;
+    font-size : 14px;
+  }
+  .boost-circle-user-login{
+    display : inline-block;
+    border: 2px solid #FFFFFF;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    vertical-align: middle;
+    z-index : 50;
+  }
+  .boost-name-user{
+    display : inline-block;
+    border: 0px solid #FFFFFF;
+    margin-left: 5px;
+    line-height: 32px;
+    width: 140px;
+    height: 32px;
+    margin-right:10px;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+  }
+  .boost-logout{
+    display : inline-block;
+    color:white;
+    border: 0px solid #FFFFFF;
+    font-size:18px;
+    height: 32px;
+    line-height: 32px;
+    vertical-align: middle;
+  }
+  .boost-logout:hover{
+    color:yellow;
+  }
+  .boost-message{
+    margin-top: -10px;
+    margin-right: -5px;
+    z-index : 100;
+  }
+  .contain_message_boost{
+    opacity:0;
+  }
+  .nav-side-menu-boost .brand {
+      background-color: #23282e;
+      line-height: 50px;
+      display: block;
+      text-align: center;
+      font-size: 14px;
+  }
+  .nav-side-menu-boost .toggle-btn {
+    display: block;
+  }
+  .nav-side-menu-boost ul,
+  .nav-side-menu-boost li {
+    list-style: none;
+    padding: 0px;
+    margin: 0px;
+    line-height: 40px;
+    cursor: pointer;
+    /*    
+      .collapsed{
+          .arrow:before{
+                    font-family: FontAwesome;
+                    content: "\f053";
+                    display: inline-block;
+                    padding-left:10px;
+                    padding-right: 10px;
+                    vertical-align: middle;
+                    float:right;
+              }
+        }
+  */
+  }
+  .nav-side-menu-boost ul :not(collapsed) .arrow:before,
+  .nav-side-menu-boost li :not(collapsed) .arrow:before {
+    font-family: FontAwesome;
+    content: "\f078";
+    display: inline-block;
+    padding-left: 10px;
+    padding-right: 10px;
+    vertical-align: middle;
+    float: right;
+  }
+
+
+
+  .nav-side-menu-boost ul .active,
+  .nav-side-menu-boost li .active {
+    border-left: 3px solid #d19b3d;
+    background-color: #4f5b69;
+  }
+  .nav-side-menu-boost ul .sub-menu li.active,
+  .nav-side-menu-boost li .sub-menu li.active {
+    color: #d19b3d;
+  }
+  .nav-side-menu-boost ul .sub-menu li.active a,
+  .nav-side-menu-boost li .sub-menu li.active a {
+    color: #d19b3d;
+  }
+  .nav-side-menu-boost ul .sub-menu li,
+  .nav-side-menu-boost li .sub-menu li {
+    background-color: #181c20;
+    border: none;
+    line-height: 28px;
+    border-bottom: 1px solid #23282e;
+    margin-left: 0px;
+  }
+  .nav-side-menu-boost ul .sub-menu li:hover,
+  .nav-side-menu-boost li .sub-menu li:hover {
+    background-color: #020203;
+  }
+
+  .nav-side-course:before{
+    padding-left: 20px!important;
+    content: "\f02d"!important;
+  }
+
+  .nav-side-menu-boost ul .sub-menu li:before,
+  .nav-side-menu-boost li .sub-menu li:before {
+    font-family: FontAwesome;
+    content: "\f105";
+    display: inline-block;
+    padding-left: 10px;
+    padding-right: 10px;
+    vertical-align: middle;
+  }
+
+
+  .nav-side-menu-boost li {
+    padding-left: 0px;
+    border-left: 3px solid #2e353d;
+    border-bottom: 1px solid #23282e;
+  }
+  .nav-side-menu-boost li a {
+    text-decoration: none;
+    color: #e1ffff;
+  }
+  .nav-side-menu-boost li a i {
+    padding-left: 10px;
+    width: 20px;
+    padding-right: 20px;
+  }
+  .nav-side-menu-boost li:hover {
+    border-left: 3px solid #d19b3d;
+    background-color: #4f5b69;
+    -webkit-transition: all 1s ease;
+    -moz-transition: all 1s ease;
+    -o-transition: all 1s ease;
+    -ms-transition: all 1s ease;
+    transition: all 1s ease;
+  }
+
+  @media (min-width: 1142px) {
+    .nav-side-menu-boost .menu-list .menu-content {
+      display: block;
+    }
+    .navbar-toggle-boost{
+      display: none;
+    }
+  }
+  
+  @media (max-width: 1142px) {
+    .nav-side-menu-boost {
+      left : -260px;
+      display : none;
+    }
+    .nav-side-menu-boost .toggle-btn {
+      display: block;
+      cursor: pointer;
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      z-index: 10 !important;
+      padding: 3px;
+      background-color: #ffffff;
+      color: #000;
+      width: 40px;
+      text-align: center;
+    }
+
+  }
+  /*
+    .brand {
+      text-align: left !important;
+      font-size: 22px;
+      padding-left: 20px;
+      line-height: 50px !important;
+    }
+  */
+
+  body {
+    margin: 0px;
+    padding: 0px;
+  }
+  

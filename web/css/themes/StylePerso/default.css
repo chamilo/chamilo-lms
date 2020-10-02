@@ -1,0 +1,175 @@
+/*!
+ * CSS Fruity Orange - v. 2.0
+ * 2015 - Alex Aragón (aragonc@beeznest.com)
+ * Licensed GPL
+ * Based on Bootstrap
+*/
+
+@font-face {
+  font-family: 'Dosis', sans-serif;
+  src: url('https://fonts.googleapis.com/css2?family=Dosis&display=swap');
+}
+@font-face {
+  font-family: 'Dosis', sans-serif;
+  src: url('https://fonts.googleapis.com/css2?family=Dosis&display=swap');
+}
+@font-face {
+  font-family: 'Dosis', sans-serif;
+  src: url('https://fonts.googleapis.com/css2?family=Dosis&display=swap');
+}
+@font-face {
+  font-family: 'Dosis', sans-serif;
+  src: url('https://fonts.googleapis.com/css2?family=Dosis&display=swap');
+}
+html {
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  margin: 0;
+  font-family: 'Dosis', sans-serif;
+  line-height: 1.72222;
+  background-color: #F3F3F3;
+}
+a{
+  color: #666666;
+}
+a:hover{
+  color: #50B387;
+  text-decoration: none;
+}
+
+.navbar-default {
+background: #E61983; 
+border: none;
+font-size: x-large;
+font-weight: bold;
+
+}
+.navbar-default .navbar-brand {
+  color: #ffffff;
+}
+
+.navbar-default .navbar-text {
+  color: #ffffff;
+}
+
+.navbar-default .navbar-nav > li {
+  
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+.navbar-default .navbar-nav > li > a {
+  color: #FFFFFF;
+}
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+color: #FFFFFF;
+/*background: #d30d91;*/ 
+}
+.navbar-default .navbar-nav > li > .dropdown-menu {
+  background: #FFFFFF;
+}
+.navbar-default .navbar-nav > li > .dropdown-menu > li > a {
+  color: #ffffff;
+}
+.navbar-default .navbar-nav > li > .dropdown-menu > li{
+    border: none;
+}
+.navbar-default .navbar-nav > li > .dropdown-menu > li > a:hover,
+.navbar-default .navbar-nav > li > .dropdown-menu > li > a:focus {
+  color: #FFFFFF;
+/*background: #d30d91;*/
+}
+.navbar-default .navbar-nav > li > .dropdown-menu > li > .divider {
+  background-color: #0099c0;
+}
+.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
+  color: #FFFFFF;
+  background: #E61983; 
+  /*background: #d30d91;*/; 
+}
+.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
+  color: #FFFFFF;
+  /*background: #d30d91;*/ 
+}
+.navbar-default .navbar-toggle {
+  border-color: #6D0019;
+}
+.navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus {
+  background-color: #6D0019;
+}
+.navbar-default .navbar-toggle .icon-bar {
+  background-color: #ffffff;
+}
+.navbar-default .navbar-collapse,
+.navbar-default .navbar-form {
+  border-color: #6D0019;
+}
+.navbar-default .navbar-link {
+  color: #ffffff;
+}
+.navbar-default .navbar-link:hover {
+  color: #ededed;
+}
+.badge{
+    background-color: #50B387;
+}
+@media (max-width: 767px) {
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover, .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
+    color: #ededed;
+    background-color: #6D0019;
+  }
+  .navbar-default .navbar-nav .open .dropdown-menu > .active > a, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
+    color: #ededed;
+
+    background-color: #0099c0;
+  }
+}
+.breadcrumb{
+  background: #F9F9F9;
+  color: #006A84;
+}
+.nav li a:hover{
+    background: transparent;
+}
+.panel-default .panel-heading{
+    background-color: #EBECF2;
+}
+.panel-default{
+    border-color: #F3F3F4;
+}
+footer.bgfooter{
+background: #000000;
+
+
+}
+footer.bgfooter a{
+  color: #ffffff;
+}
+footer.bgfooter a:hover{
+  color: #CCC;
+}
+
+/*Perso plus */
+
+#cm-content{
+  background-color: #F3F3F3;
+}
+
+.thumbnail{
+  max-height: 370px !important;
+  
+}
+.thumbnail a > img{
+  max-height: 220px;
+  width: 100%;
+  margin: 0 !important;
+}
+
+footer{
+  position: relative !important;
+}
+.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
+  background: #E61983 !important;
+}

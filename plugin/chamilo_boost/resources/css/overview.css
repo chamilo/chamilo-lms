@@ -1,0 +1,108 @@
+
+#frameoverview,#frameoverview2{
+}
+
+.imagesOverviewClose{
+	position : absolute;
+	cursor:pointer;
+	left:50%;
+	top:-36px;
+	margin-left:-32px;
+	width : 64px;
+	height: 64px;
+	background-size: cover;
+	background-image : url(closeround.png);
+}
+
+.imagesOverviewSelect{
+	position : fixed;
+	padding-left: 1px;
+	left : 50%;
+	top : 50%;
+	overflow: visible;
+	width : 480px;
+	height : 450px;
+	background : white;
+	border : solid 5px black;
+	margin-top : -225px;
+	margin-left : -240px;
+	z-index: 1500;
+	display:none;
+	-webkit-box-shadow: 0px 0px 300px -28px rgba(0,0,0,0.49);
+	-moz-box-shadow: 0px 0px 300px -28px rgba(0,0,0,0.49);
+	box-shadow: 0px 0px 300px -28px rgba(0,0,0,0.49);
+}
+
+@media(min-width: 767px){
+	.imagesOverviewSelect{
+		left : 60%;
+	}
+}
+
+.imagesOverviewMain{
+	position : absolute;
+	top : 25px;
+	left : 0px;
+	width : 470px;
+	height : 404px;
+	border : solid 0px gray;
+	overflow : auto;
+}
+
+.imagesOverviewOne{
+	float : left;
+	margin-top : 2px;
+	margin-left : 1px;
+	cursor : pointer;
+	width : 109px;
+	height : 84px;
+	background-size: cover;
+	background-repeat: no-repeat;
+	border : solid 2px gray;
+}
+.imagesOverviewOne:hover{
+	border : solid 2px blue;
+}
+
+/* header cell in data table in tools */
+.data_table {
+    margin-bottom: 18px;
+    width: 100%;
+    border: 1px solid #DDDDDD;
+}
+.data_table td {
+    font-size: 12px;
+}
+.data_table th, .data_table td {
+    border-top: 1px solid #DDDDDD;
+    line-height: 18px;
+    padding: 10px;
+}
+.data_table th {
+    padding: 8px 10px;
+    font-weight: normal;
+    background-color: #EEEEEE;
+    border-bottom: 1px solid #DDDDDD;
+    color: #333;
+}
+.data_table th a {
+    color: #333;
+}
+.data_table_no_border {
+    border-collapse: collapse;
+    border-spacing: 0;
+    font-size: 12px;
+    margin-bottom: 15px;
+    margin-top: 8px;
+    text-align: left;
+    width: 100%;
+}
+.data_table_no_border td {
+    line-height: normal;
+    padding: 6px;
+    text-align: left;
+    vertical-align: middle;
+}
+.data_table tr.row_odd {
+    background-color: #F9F9F9;
+}

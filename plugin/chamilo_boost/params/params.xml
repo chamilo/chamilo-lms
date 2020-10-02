@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" ?><params><param><title><![CDATA[]]></title><logo><![CDATA[]]></logo><logotop><![CDATA[http://chamilo.frequence-ecoles.org/app/upload/users/1/13/my_files/logo-freq-01.png]]></logotop><extracode1><![CDATA[<script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.4/lib/darkmode-js.min.js"></script>
+<script>
+  new Darkmode().showWidget();
+</script>]]></extracode1><extracode2><![CDATA[]]></extracode2><activeSearch><![CDATA[]]></activeSearch><activeSkills><![CDATA[]]></activeSkills><btnSuscribe><![CDATA[0]]></btnSuscribe><btnBuy><![CDATA[0]]></btnBuy><labelBuy><![CDATA[Abonnements]]></labelBuy><labelSuscribe><![CDATA[Se connecter]]></labelSuscribe><linkBuy><![CDATA[]]></linkBuy><lateralMenu><![CDATA[0]]></lateralMenu><stylecourses><![CDATA[1]]></stylecourses></param></params>

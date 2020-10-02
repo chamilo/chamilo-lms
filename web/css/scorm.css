@@ -1,0 +1,894 @@
+/*
+File used to display Learning Path item in student view
+If scorm.css file exists in theme folder, scorm.css file is used instead of this one
+See https://support.chamilo.org/issues/6976
+*/
+/* LP SCORM */
+/* Default LP left column values */
+
+.audio-scorm #container {
+    min-height: 45px;
+    margin-bottom: 5px;
+}
+
+#author_image {
+    border: 1px solid #CCCCCC;
+    float: left;
+    margin: 0;
+    padding: 8px;
+    position: relative;
+    width: 100%;
+}
+
+#author_name {
+    float: left;
+    text-align: center;
+    width: 100%;
+    font-size: 11px;
+    color: #888;
+    margin-top: 2px;
+}
+
+#learning_path_left_zone #scorm-gamification {
+}
+
+#scorm-gamification .fa-star {
+    font-size: 20px;
+    color: #C2C2C2;
+}
+
+#scorm-gamification .fa-star.level {
+    color: #D9534F;
+}
+
+#learning_path_left_zone .navegation-bar .buttons {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+#learning_path_left_zone .description-autor {
+    text-align: left;
+}
+
+.inner_lp_toc .scorm_item a {
+    font-weight: bold;
+    font-size: 14px;
+    margin-right: 1px;
+    padding-bottom: 2px;
+    text-decoration: none;
+    color: #2F3E46;
+}
+
+.inner_lp_toc .scorm_item a.chapter_module {
+    font-weight: normal;
+    margin-right: 10px;
+}
+
+.inner_lp_toc .scorm_item_highlight {
+    border: 1px solid #999;
+    background: #999;
+    font-weight: bold;
+    text-shadow: 0 -1px 1px #666;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#666), to(#999));
+    background-image: -webkit-linear-gradient(top, #666, #999);
+    background-image: -moz-linear-gradient(top, #666, #999);
+    background-image: -ms-linear-gradient(top, #666, #999);
+    background-image: -o-linear-gradient(top, #666, #999);
+    background-image: linear-gradient(top, #666, #999);
+    margin-right: 0;
+    padding: 10px 0 10px 0;
+    text-decoration: none;
+}
+
+.inner_lp_toc .scorm_item_highlight a {
+    color: #fff;
+    margin-right: 1px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.inner_lp_toc .scorm_item {
+    font-size: 16px;
+    margin-left: 10px;
+    margin-right: 10px;
+    text-decoration: none;
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.inner_lp_toc .scorm_item_section .scorm_item:before {
+    content: url('../../main/img/lp_section.png'); /* path from main/lp/lp_controller.php file */
+    vertical-align: text-top;
+    margin-right: 5px;
+}
+
+/* learning path's classes for section and item for 5 levels of depth */
+.scorm_section_level_0 {
+    margin: 0 0 0 0;
+}
+
+.scorm_section_level_1 {
+    margin: 0 0.5em 0 20px;
+}
+
+.scorm_section_level_2 {
+    margin: 0 0.5em 0 40px;
+}
+
+.scorm_section_level_3 {
+    margin: 0 0.5em 0 60px;
+}
+
+.scorm_section_level_4 {
+    margin: 0 0.5em 0 70px;
+}
+
+.scorm_section_level_5 {
+    margin: 0 0.5em 0 10em;
+}
+
+.scorm_item_normal {
+    line-height: 25px;
+    border-bottom: 1px solid #DDD;
+    padding: 10px 0;
+}
+
+.level_0 {
+    margin: 0;
+    padding-left: 30px;
+}
+
+.level_1 {
+    margin: 0 0.5em 0 20px;
+    padding-left: 30px;
+}
+
+.level_2 {
+    margin: 0 0.5em 0 40px;
+    padding-left: 30px;
+}
+
+.level_3 {
+    margin: 0 0.5em 0 60px;
+    padding: 5px 5px 5px 30px;
+    line-height: 14px;
+}
+
+.level_4 {
+    margin: 0 0.5em 0 70px;
+    padding-left: 30px;
+}
+
+.level_5 {
+    margin: 0 0.5em 0 90px;
+    padding-left: 30px;
+}
+
+#learning_path_breadcrumb_zone .breadcrumb {
+    background-color: #2b3d53;
+    border-radius: 0;
+    -moz-border-radius: 0;
+    -webkit-border-radius: 0;
+    color: #ffffff;
+    font-size: 12px;
+}
+
+#learning_path_breadcrumb_zone .breadcrumb a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+#learning_path_breadcrumb_zone .breadcrumb a:hover {
+    color: #dddddd;
+}
+
+.total {
+    width: 100%;
+}
+
+.view-options {
+    padding-top: 3px;
+    margin-right: 5px;
+}
+
+.panel-default .panel-heading .btn {
+    top: -25px;
+}
+
+.panel-default .panel-heading .dropdown-menu {
+    top: 30%;
+}
+
+#content-scorm .breadcrumb {
+    padding: 5px;
+}
+
+.scorm-heading {
+    font-size: 14px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+#control-bottom {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    left: 0;
+}
+
+#control-bottom.well {
+    margin-bottom: 0;
+}
+
+/*SCORM CSS BASE */
+#learning_path_left_zone .home {
+    display: inline-block;
+    width: 94%;
+    margin-bottom: .5em;
+    margin-top: .5em;
+    font-size: 12px;
+}
+
+/* for section */
+.scorm_item_section {
+    border-bottom: 1px solid #DDD;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.scorm_item_section .section {
+    background: url("../../main/img/scorm/folder-item-closed.png") no-repeat 10px center;
+    padding: 10px 20px 10px 35px;
+}
+
+.scorm_item_section.scorm_completed .section {
+    background: url("../../main/img/scorm/folder-item-open.png") no-repeat 10px center;
+    padding-right: 1.5em;
+}
+
+.scorm_item_normal a.items-list {
+    color: #666666;
+    display: inline-block;
+    width: 100%;
+}
+
+.scorm_item_normal a:hover {
+    text-decoration: none;
+}
+
+.scorm_item_normal.scorm_completed {
+    background-color: #F5F5F5;
+}
+
+.scorm_item_section.scorm_completed {
+    background-color: #F5F5F5;
+    color: #000;
+}
+
+.scorm_completed .item {
+    background: url("../../main/img/scorm/scorm_completed.png") no-repeat 10px center;
+}
+
+.scorm_completed .item a {
+    color: #000;
+}
+
+.scorm_failed .item {
+    background: url("../../main/img/scorm/scorm_failed.png") no-repeat 10px center;
+}
+
+.scorm_not_attempted .item {
+    background: url("../../main/img/scorm/scorm_not_attempted.png") no-repeat 10px center;
+}
+
+.scorm_highlight .item {
+    background: url("../../main/img/scorm/scorm_highlight.png") no-repeat 10px center !important;
+    color: #009AB8;
+}
+
+.scorm_highlight.scorm_completed .item {
+    background: url("../../main/img/scorm/scorm_current.png") no-repeat 10px center !important;
+}
+
+.scorm_highlight.scorm_failed .item {
+    background: url("../../main/img/scorm/scorm_failed.png") no-repeat 10px center !important;
+}
+
+.scorm_highlight a {
+    /* color: #FFFFFF !important;*/
+}
+
+.scorm_item_normal.scorm_highlight {
+    background-color: #00829C;
+}
+
+.scorm_item_normal.scorm_highlight a {
+    /* color: #FFFFFF; once again this make links invisible!! */
+}
+
+/* END SCORM CSS BASE*/
+#scorm-info {
+    padding: 0;
+    background-color: #EBF3F5;
+    display: inline-block;
+    width: 100%;
+}
+
+#scorm-info .description-autor p {
+    font-size: 12px;
+    line-height: 20px;
+    color: #666666;
+}
+
+#scorm-info hr {
+    width: 100%;
+    border-top: 1px solid #d7d7d7;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+#scorm-info #progress_bar .progress {
+    margin-bottom: 5px;
+}
+
+.scorm-title {
+    padding: 10px;
+    display: inline-block;
+    width: 100%;
+}
+
+.scorm-body{
+    display: inline-block;
+    width: 100%;
+}
+
+.scorm-title h4 {
+    font-size: 18px;
+    font-weight: bold;
+    color: #686f7a;
+}
+
+.image-avatar {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-left: 3rem;
+    margin-right: 1rem;
+}
+.image-avatar .media-author .media-author-avatar{
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+.image-avatar .media-author .media-author-avatar img{
+    border: 1px solid #cdcdcd;
+    border-radius: 10px;
+}
+
+.lp-view-tabs{
+    margin-top: 4px;
+}
+
+#learning_path_right_zone .lp-view-tabs li a {
+    padding: 5px;
+}
+
+#learning_path_main {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    position: absolute;
+    width: 100%;
+}
+
+#learning_path_left_zone,
+#learning_path_right_zone {
+    bottom: 0;
+    box-sizing: content-box;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition-property: left, width;
+    transition-duration: 0.5s;
+}
+
+#learning_path_right_zone #wrapper-iframe {
+    height: 100%;
+    width: 100%;
+}
+
+#learning_path_left_zone .lp-view-zone-container,
+#learning_path_right_zone .lp-view-zone-container {
+    bottom: 0;
+    left: 0;
+    padding: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+#learning_path_toc {
+    bottom: 0;
+    left: 0;
+    overflow: auto;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    transition-property: top;
+    transition-duration: 0.1s;
+}
+
+#learning_path_right_zone {
+    left: 100%;
+    width: 100%;
+}
+
+#learning_path_right_zone.no-right-col {
+    left: 0;
+}
+
+#learning_path_right_zone .lp-view-tabs .tab-content {
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 45px;
+    border: 1px solid #dddddd;
+    border-top: none;
+}
+
+#learning_path_right_zone .tab-pane {
+    height: 100%;
+    position: relative;
+}
+
+#learning_path_right_zone .tab-pane iframe {
+    border: 0 none;
+    height: 100%;
+    width: 100%;
+}
+
+#learning_path_main.lp-view-collapsed #learning_path_left_zone {
+    left: -100%;
+}
+
+#learning_path_main.lp-view-collapsed #learning_path_right_zone {
+    left: 0;
+    width: 100%;
+}
+.iframe_sco{
+    top: 0 !important;
+}
+.nav-tabs li.active a {
+    color: #006A84;
+}
+
+.nav-tabs li a {
+    color: #666666;
+}
+
+#lp-view-expand-button {
+    border: none;
+    background: none;
+    padding: 0;
+    margin: 0;
+}
+
+.icon-toolbar .fa {
+    width: 35px;
+    height: 35px;
+    line-height: 35px;
+    text-align: center;
+    border-radius: 100%;
+    background-color: #34495E;
+    font-size: 20px;
+    color: #FFF;
+}
+
+.icon-toolbar .fa:hover {
+    background-color: #000;
+}
+
+.expand .fa {
+    background-color: #00829C;
+}
+
+.expand .fa:hover {
+    background-color: #006A84;
+    color: #ffffff;
+}
+
+.expand .fa:active, .expand .fa:focus {
+    color: #ffffff;
+}
+
+#scorm-info .progress-bar {
+    line-height: 17px;
+}
+
+.actions_lp {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+}
+
+/** MENU FLOAT **/
+
+.c-menu-left {
+    height: auto;
+    left: 0;
+    top: 0;
+    position: fixed;
+    z-index: 5;
+}
+.c-menu-right {
+    display: inline-flex;
+    position: relative;
+    top: 0;
+    left: 0;
+    z-index: 5;
+}
+.c-menu-left .circle {
+    opacity: 0;
+    margin-left: 50px;
+    margin-top: 4px;
+    padding: 2px;
+    border-radius: 20px;
+    background-color: #ffffff;
+    border: 1px solid #8dcbf3;
+    -webkit-transform: translate(-100%);
+    -moz-transform:  translate(-100%);
+    -transform:  translate(-100%);
+    -webkit-transition: all 0.4s ease-out;
+    -moz-transition: all 0.4s ease-out;
+    transition: all 0.4s ease-out;
+}
+.c-menu-right .circle {
+    opacity: 0;
+    margin-left: 50px;
+    margin-top: 4px;
+    padding: 2px;
+    border-radius: 20px;
+    background-color: #ffffff;
+    border: 1px solid #8dcbf3;
+}
+
+.c-menu-left .open.circle {
+    opacity: 1;
+    -webkit-transform:  translate(0%);
+    -moz-transform: translate(0%);
+    -transform: translate(0%);
+}
+.c-menu-right .open.circle {
+    opacity: 1;
+}
+
+.c-menu-left .circle a, .c-menu-right .circle a {
+    text-decoration: none;
+    color: #fff;
+    display: inline-block;
+    height: 35px;
+    width: 35px;
+    line-height: 35px;
+    text-align: center;
+    border-radius: 100%;
+}
+
+.c-menu-left .circle a:hover {
+    color: #eef;
+}
+
+.menu-button {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    text-align: center;
+    border-radius: 50%;
+    display: block;
+    height: 40px;
+    width: 40px;
+    line-height: 19px;
+    padding: 10px;
+    background: #ffffff;
+    font-size: 16px;
+    border: 1px solid #8dcbf3;
+}
+
+.menu-button:hover {
+    background-color: #ffffff;
+}
+
+/* LP VIEW COLLAPSE */
+.scorm-collapse .panel:hover {
+    box-shadow: 0 3px 1px 0 rgba(20, 23, 28, .1);
+}
+
+.scorm-collapse .panel-default .panel-heading {
+    background: url(../../main/img/icons/svg/arrow-down.svg) #FFF right center no-repeat;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.scorm-collapse a.item-header {
+    padding-bottom: 4px;
+    padding-top: 10px;
+}
+
+.scorm-collapse .panel-default .panel-heading h4 {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.scorm-collapse a {
+    color: #686f7a;
+}
+
+.scorm-collapse a.item-action,
+.scorm-collapse a.item-header {
+    width: 100%;
+    display: inline-block;
+}
+
+.scorm-collapse .panel-body {
+    padding: 0;
+}
+
+.scorm-collapse .panel-body .list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.scorm-collapse .panel-body .list li {
+    padding: 15px 30px 15px 20px;
+    border-bottom: 1px solid #dddddd;
+    margin-bottom: 0;
+}
+
+.scorm-collapse .panel-body .list li:last-child {
+    border-bottom: none;
+}
+
+.scorm_item_normal.scorm_completed {
+    background: url(../../main/img/icons/svg/check-completed.svg) #F5F5F5 right center no-repeat;
+}
+
+.scorm_item_normal.scorm_not_attempted {
+    background: url(../../main/img/icons/svg/check-not-attempted.svg) #FFFFFF right center no-repeat;
+}
+
+.scorm_item_normal.scorm_highlight.scorm_not_attempted {
+    background: url(../../main/img/icons/svg/check-not-attempted.svg) #00829C right center no-repeat;
+}
+
+.scorm_item_normal.scorm_highlight.scorm_completed {
+    background: url(../../main/img/icons/svg/check-highlight.svg) #00829C right center no-repeat;
+}
+
+.sidebar-scorm {
+    border-right: 1px solid #e6e6e6;
+}
+
+.scorm-collapse-list {
+    padding: 0;
+    margin: 0 0 10px 0;
+    list-style: none;
+}
+
+.scorm-collapse-list li {
+    margin-bottom: 0;
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+
+.scorm-collapse-list .sub-item {
+    padding-left: 20px;
+}
+
+.scorm_item_normal.scorm_highlight a {
+    color: #FFFFFF;
+}
+.tab-none-forum{
+    top: 0 !important;
+}
+.circular-menu.none-forum{
+    top: 0 !important;
+}
+.tabs-right li{
+    display: inline-block;
+    float: initial;
+}
+.tabs-right{
+    text-align: right;
+}
+
+#learning_path_toc .panel-default{
+    border: none;
+    box-shadow: none;
+}
+.status-heading .panel-heading{
+    padding: 0;
+}
+.status-heading .panel-heading .item-header{
+    padding: 10px 15px 10px 30px;
+    display: inline-block;
+    width: 100%;
+    color: #333333;
+    font-weight: bold;
+    background: url("../../main/img/scorm/folder-item-open.png") #f5f5f5 no-repeat 10px center;
+}
+#learning_path_toc .child_item.lp_item_type_document.scorm_completed{
+    background: url(../../main/img/icons/svg/check-completed.svg) #FFFFFF right center no-repeat;
+}
+#learning_path_toc .child_item.lp_item_type_document.scorm_not_attempted{
+    background: url(../../main/img/icons/svg/check-not-attempted.svg) #FFFFFF right center no-repeat;
+}
+#learning_path_toc .root_item.lp_item_type_document.scorm_completed{
+    background: url(../../main/img/icons/svg/check-completed.svg) #FFFFFF right center no-repeat;
+}
+#learning_path_toc .root_item.lp_item_type_document.scorm_not_attempted{
+    background: url(../../main/img/icons/svg/check-not-attempted.svg) #FFFFFF right center no-repeat;
+}
+#learning_path_toc .root_item.lp_item_type_document.scorm_highlight{
+    background-color: #f1f4f9;
+}
+#learning_path_toc .child_item.lp_item_type_document.scorm_highlight{
+    background-color: #f1f4f9;
+}
+.status-heading .panel-heading .item-action{
+    padding: 10px 15px;
+    display: inline-block;
+    width: 100%;
+    background-color: transparent;
+    color: #525252;
+    border-left: 1px solid #cdcdcd;
+}
+#learning_path_toc .panel-collapse .panel-body{
+    padding: 10px 0 10px 10px;
+}
+
+/* END LP VIEW COLLAPSE */
+/* Small devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+    #learning_path_left_zone {
+        width: 250px;
+    }
+
+    #learning_path_right_zone {
+        left: 250px;
+        width: calc(100% - 250px);
+    }
+
+    #learning_path_right_zone.no-right-col {
+        width: 100%;
+    }
+
+    #learning_path_main.lp-view-include-breadcrumb #learning_path_left_zone,
+    #learning_path_main.lp-view-include-breadcrumb #learning_path_right_zone {
+        top: 0;
+    }
+
+    #learning_path_right_zone .lp-view-tabs .tab-content {
+        bottom: 0;
+        right: 0;
+        top: 45px;
+        left: 0;
+    }
+
+    #learning_path_right_zone .tab-pane {
+    }
+
+    #learning_path_right_zone .tab-pane iframe {
+    }
+}
+
+/* Medium devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+    #learning_path_left_zone {
+        width: 300px;
+    }
+
+    #learning_path_right_zone {
+        left: 300px;
+        width: calc(100% - 300px);
+    }
+}
+
+/* Large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+    #learning_path_left_zone {
+        width: 450px;
+    }
+
+    #learning_path_right_zone {
+        left: 465px;
+        width: calc(100% - 465px);
+    }
+}
+
+@media (min-width: 979px) and (max-width: 1024px) {
+    #panel-scorm .image-avatar {
+        display: none;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 978px) {
+    #panel-scorm .image-avatar {
+        display: none;
+    }
+}
+
+@media (min-width: 480px) and (max-width: 767px) {
+    #panel-scorm .image-avatar {
+        display: none;
+    }
+
+    #scorm-info {
+        padding: 0;
+        margin: 0;
+    }
+
+    #learning_path_left_zone .lp-view-zone-container,
+    #learning_path_right_zone .lp-view-zone-container {
+        padding: 0;
+    }
+
+    #scorm-info {
+        padding: 30px 0 0 0;
+        margin: 0;
+    }
+
+}
+
+/* Landscape phones and down */
+@media (max-width: 480px) {
+    .scorm-title {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    .movil-toolbar {
+        width: 100%;
+        height: auto;
+    }
+
+    .scorm_item_normal {
+        padding: 10px 5px;
+    }
+
+    .icon-toolbar .fa {
+        width: 35px;
+        height: 35px;
+        line-height: 35px;
+        font-size: 22px;
+    }
+
+    .btn-movil {
+        width: 130px;
+        margin: auto;
+    }
+
+    #scorm-info {
+        padding: 30px 0 0 0;
+        margin: 0;
+    }
+
+    #learning_path_right_zone {
+        left: 100%;
+        width: auto;
+    }
+
+    #panel-scorm .image-avatar {
+        display: none;
+    }
+
+    #learning_path_left_zone .lp-view-zone-container,
+    #learning_path_right_zone .lp-view-zone-container {
+        padding: 0;
+    }
+
+    #scorm-info hr {
+        display: none;
+    }
+}

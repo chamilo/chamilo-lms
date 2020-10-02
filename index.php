@@ -115,9 +115,9 @@ $controller->set_login_form();
 //@todo move this inside the IndexManager
 
 if (!api_is_anonymous()) {
-    $controller->tpl->assign('profile_block', $controller->return_profile_block());
-    $controller->tpl->assign('user_image_block', $controller->return_user_image_block());
-    $controller->tpl->assign('course_block', $controller->return_course_block());
+//    $controller->tpl->assign('profile_block', $controller->return_profile_block());
+//    $controller->tpl->assign('user_image_block', $controller->return_user_image_block());
+//    $controller->tpl->assign('course_block', $controller->return_course_block());
 }
 $hotCourses = '';
 $announcements_block = '';
@@ -183,9 +183,9 @@ $controller->tpl->assign('navigation_links', $controller->return_navigation_link
 $controller->tpl->assign('notice_block', $controller->return_notice());
 $controller->tpl->assign('help_block', $controller->return_help());
 $controller->tpl->assign('student_publication_block', $controller->studentPublicationBlock());
-if (api_is_platform_admin() || api_is_drh()) {
-    $controller->tpl->assign('skills_block', $controller->returnSkillLinks());
-}
+//if (api_is_platform_admin() || api_is_drh()) {
+//    $controller->tpl->assign('skills_block', $controller->returnSkillLinks());
+//}
 if (api_is_anonymous()) {
     $controller->tpl->setLoginBodyClass();
 }
@@ -201,7 +201,7 @@ if (isset($_GET['firstpage'])) {
 }
 
 $controller->setGradeBookDependencyBar(api_get_user_id());
-$controller->tpl->display_two_col_template();
+$controller->tpl->display_hot_course_item();
 
 // Deleting the session_id.
 Session::erase('session_id');

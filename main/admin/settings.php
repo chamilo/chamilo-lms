@@ -468,7 +468,7 @@ if (!empty($_GET['category'])) {
             echo '<li><a href="#tabs-4">'.get_lang('UploadPlugin').'</a></li>';
             echo '</ul>';
 
-            echo '<div id="tabs-1">';
+            echo '<div id="tabs-1" class="container-fluid">';
             handlePlugins();
             echo '</div>';
 

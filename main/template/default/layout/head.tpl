@@ -9,6 +9,7 @@
 {{ prefetch }}
 {{ favico }}
 <link rel="apple-touch-icon" href="{{ _p.web }}apple-touch-icon.png" />
+<link href="https://fonts.googleapis.com/css2?family=Dosis:wght@400;500;600&display=swap" rel="stylesheet">
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="generator" content="{{ _s.software_name }} {{ _s.system_version|slice(0,1) }}" />
 {#  Use the latest engine in ie8/ie9 or use google chrome engine if available  #}

@@ -1,0 +1,277 @@
+/*
+    Deprecated stylesheet. Use document.css.
+
+    Theme Name: Frame Scorm
+    URI Project: http://www.chamilo.org
+    Description: Styles main base of Chamilo LMS appearance, works with Bootstrap 3.0.x
+    Author:
+        alex.aragon@beeznest.com
+    Version: 1.0
+*/
+
+@import url(../assets/fontawesome/css/font-awesome.min.css);
+@import url(../assets/bootstrap/dist/css/bootstrap.min.css);
+
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Open Sans Light'), local('OpenSans-Light'), url(themes/chamilo/fonts/OpenSans-Light.woff2) format('woff2'), url(themes/chamilo/fonts/OpenSans-Light.woff) format('woff');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Open Sans'), local('OpenSans'), url(themes/chamilo/fonts/OpenSans.woff2) format('woff2'), url(themes/chamilo/fonts/OpenSans.woff) format('woff');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 600;
+  src: local('Open Sans Semibold'), local('OpenSans-Semibold'), url(themes/chamilo/fonts/OpenSans-Semibold.woff2) format('woff2'), url(themes/chamilo/fonts/OpenSans-Semibold.woff) format('woff');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Open Sans Bold'), local('OpenSans-Bold'), url(themes/chamilo/fonts/OpenSans-Bold.woff2) format('woff2'), url(themes/chamilo/fonts/OpenSans-Bold.woff) format('woff');
+}
+
+
+body{
+    color: #666;
+    font-family: 'Open Sans', sans-serif;
+    line-height: 30px;
+
+}
+.ck{
+    display: block;
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1;
+    font-size-adjust: none;
+    font-stretch: normal;
+    font-feature-settings: normal;
+    font-language-override: normal;
+    font-kerning: auto;
+    font-synthesis: weight style;
+    font-variant: normal;
+}
+.ck-article{
+    text-transform: uppercase;
+    color: #E95839;
+    font-weight: bold;
+    background: url(../../main/img/document/border-title.png) repeat-x 0 80%;
+    padding-bottom: 2%;
+    margin-bottom: 10px;
+}
+.ck-article:before{
+    content: "\f15c";
+    margin-right: 5px;
+    font-family: FontAwesome;
+    font-weight: normal;
+}
+.ck-paragraph-box{
+    background-color: #F5EEE2;
+    padding: 2% 3%;
+    line-height: 20px;
+}
+.ck-title{
+    display: block;
+    font-weight: bold;
+    color: #000;
+}
+.ck-title2{
+    padding-top: 0;
+    margin-top: 0;
+    font-weight: 500;
+    position: relative;
+    color: #000;
+}
+.ck-title2:after{
+    background-color:#E95839;
+    margin: 10px 0 0;
+    width: 50px;
+    height: 2px;
+    display: block;
+    content: "";
+
+}
+
+figure .image.alignleft{
+    margin: 0 20px 20px 0;
+}
+figure .image.alignright{
+    margin: 0 20px 0 20px;
+}
+figure .image{
+    margin: 0 20px 0 20px;
+}
+figure figcaption{
+    text-align: left;
+    background-color: #f3f3f3;
+    padding-top: 0;
+    margin: 0;
+    border-radius: 0;
+    padding-left: 5px;
+}
+figure{
+    border: 1px solid #ddd;
+    margin-bottom: 20px !important;
+    padding: 5px;
+    border-radius: 5px;
+}
+blockquote {
+  background: #f9f9f9;
+  border-left: 8px solid #ccc;
+  font: 14px/20px italic Times, serif;
+  margin: 1.5em 10px;
+  padding: 0.5em 10px;
+  quotes: "\201C""\201D""\2018""\2019";
+  display: inline-block;
+}
+blockquote:before {
+  color: #ccc;
+  content: open-quote;
+  font-size: 4em;
+  line-height: 0.1em;
+  margin-right: 0.25em;
+  vertical-align: -0.4em;
+}
+blockquote p {
+  display: inline;
+}
+.ck-stand-out{
+    background-color: yellow;
+}
+/* line horizontal separation */
+.ck-style1 {
+    height: 6px;
+    background: url(../../main/img/document/hr-1.png) repeat-x 0 0;
+    border: 0;
+}
+.ck-style2 {
+    height: 6px;
+    background: url(../../main/img/document/hr-2.png) repeat-x 0 0;
+    border: 0;
+}
+.ck-style3 {
+  border-top: 1px dashed #8c8b8b;
+}
+.ck-style3:after {
+  content: '\002702';
+  display: inline-block;
+  position: relative;
+  top: -12px;
+  left: 40px;
+  padding: 0 3px;
+  background: #FFF;
+  color: #8c8b8b;
+  font-size: 18px;
+}
+.alert {
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+}
+.alert-dismissible {
+    padding-right: 35px;
+}
+.alert h4 {
+  margin-top: 0;
+  color: inherit;
+}
+.alert .alert-link {
+  font-weight: bold;
+}
+.alert > p,
+.alert > ul {
+  margin-bottom: 0;
+}
+.alert > p + p {
+  margin-top: 5px;
+}
+.alert-success {
+  color: #3c763d;
+  background-color: #dff0d8;
+  border-color: #d6e9c6;
+}
+.alert-success hr {
+  border-top-color: #c9e2b3;
+}
+.alert-success .alert-link {
+  color: #2b542c;
+}
+.alert-info {
+  color: #31708f;
+  background-color: #d9edf7;
+  border-color: #bce8f1;
+}
+.alert-info hr {
+  border-top-color: #a6e1ec;
+}
+.alert-info .alert-link {
+  color: #245269;
+}
+.alert-warning {
+  color: #8a6d3b;
+  background-color: #fcf8e3;
+  border-color: #faebcc;
+}
+.alert-warning hr {
+  border-top-color: #f7e1b5;
+}
+.alert-warning .alert-link {
+  color: #66512c;
+}
+.alert-danger {
+  color: #a94442;
+  background-color: #f2dede;
+  border-color: #ebccd1;
+}
+.alert-danger hr {
+  border-top-color: #e4b9c0;
+}
+.alert-danger .alert-link {
+  color: #843534;
+}
+.img-responsive {
+  max-width: 100%;
+  height: auto;
+}
+.img-va-baseline {
+    vertical-align: baseline;
+}
+.img-va-top {
+    vertical-align: top;
+}
+.img-va-bottom {
+    vertical-align: bottom;
+}
+.img-va-middle {
+    vertical-align: middle;
+}
+.img-va-super {
+    vertical-align: super;
+}
+.img-va-sub {
+    vertical-align: sub;
+}
+.img-va-text-top {
+    vertical-align: text-top;
+}
+.img-va-text-bottom {
+    vertical-align: text-bottom;
+}
+
+.text-center .img-responsive {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@media (max-width: 767px) {
+    .img-responsive {
+        display: block;
+    }
+}

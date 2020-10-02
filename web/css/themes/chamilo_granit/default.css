@@ -1,0 +1,181 @@
+/*!
+ * CSS GRANIT - v. 1.0
+ * 2015 - Alex Aragón (aragonc@beeznest.com)
+ * 2018 - Renou Damien (chamilo@ludiscape.com)
+ * OpenClipArt ilustration (https://openclipart.org/detail/220955/pirate-ship-silhouette)
+ * Licensed GPL
+ * Based on Bootstrap
+*/
+
+.panel-default>.panel-heading{
+  background-color: #CEE3F6;
+  font-weight: bold;
+}
+.navbar {
+  border-radius: 0px;
+  border-top : 0px solid black;
+  border-bottom: 0px;
+}
+@media (min-width: 768px){
+  .navbar {
+    border-radius: 0px;
+  }
+}
+.user-online a{
+  color:white;
+}
+.navbar-default {
+  background: 	#0e4b81;
+  border-color: #0e4b81;
+}
+#header-logo{
+  width : 136px;
+  height : 38px;
+}
+.header-ol{
+  margin:0px;
+}
+.logo{
+  margin-top:0px;
+  margin-bottom:0px;
+}
+.big_icon img{
+  padding: 40px;
+  border-radius: 0px;
+  box-shadow: 0 4px 8px #C8C8C8;
+  border: 1px solid #e6e6e6;
+}
+
+.toolbar-edit{
+  position:absolute;
+  bottom:0px;
+  left:50%;
+  width:400px;
+  margin-left:-200px;
+}
+#course_tools .content {
+  text-align: center;
+  margin-bottom: 5px;
+  margin-top: 5px;
+  width: 100%;
+  height: 30px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Open Sans Light'), local('OpenSans-Light'), url(../chamilo/fonts/OpenSans-Light.woff2) format('woff2'), url(../chamilo/fonts/OpenSans-Light.woff) format('woff');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Open Sans'), local('OpenSans'), url(../chamilo/fonts/OpenSans.woff2) format('woff2'), url(../chamilo/fonts/OpenSans.woff) format('woff');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 600;
+  src: local('Open Sans Semibold'), local('OpenSans-Semibold'), url(../chamilo/fonts/OpenSans-Semibold.woff2) format('woff2'), url(../chamilo/fonts/OpenSans-Semibold.woff) format('woff');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Open Sans Bold'), local('OpenSans-Bold'), url(../chamilo/fonts/OpenSans-Bold.woff2) format('woff2'), url(../chamilo/fonts/OpenSans-Bold.woff) format('woff');
+}
+html {
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  margin: 0;
+  font-family: 'Open Sans', sans-serif;
+  line-height: 1.72222;
+}
+a{
+  color: #185B8E;
+}
+a:hover{
+  color: #3F9BC7;
+}
+header{
+  background: url("images/bg-blue.png") no-repeat top center;
+}
+
+.navbar-default .navbar-brand {
+  color: #ffffff;
+}
+.navbar-default .navbar-brand:hover, .navbar-default .navbar-brand:focus {
+  color: #ededed;
+}
+.navbar-default .navbar-text {
+  color: #ffffff;
+}
+.navbar-default .navbar-nav > li > a {
+  color: #ffffff;
+}
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+  color: #9DD0F1;
+}
+.navbar-default .navbar-nav > li > .dropdown-menu > li > .divider {
+  background-color: #0099c0;
+}
+.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
+  color: #ffffff;
+  font-weight : bold;
+  background-color : #0e4b81;
+  text-decoration: underline;
+  border-top : none;
+  margin-top : -1px;
+  margin-bottom : 0px;
+  border-bottom : 0px #ffffff solid;
+  background-image : url("images/cursor.png");
+  background-repeat : no-repeat;
+  background-position : center bottom;
+}
+.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
+  color: #ededed;
+  background-color: #0099c0;
+}
+.navbar-default .navbar-toggle {
+  border-color: #0099c0;
+}
+.navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus {
+  background-color: #0099c0;
+}
+.navbar-default .navbar-toggle .icon-bar {
+  background-color: #ffffff;
+}
+.navbar-default .navbar-collapse,
+.navbar-default .navbar-form {
+  border-color: #ffffff;
+}
+.navbar-default .navbar-link {
+  color: #ffffff;
+}
+.navbar-default .navbar-link:hover {
+  color: #ededed;
+}
+.breadcrumb{
+  background: #afdde9;
+  color: #006A84;
+}
+.nav li a:hover{
+    background: transparent;
+}
+footer.bgfooter{
+  background: #2E75A3;
+  color: #9DD0F1;
+  border-top: 2px solid #0099C0;
+}
+footer.bgfooter a{
+  color: #ffffff;
+}
+footer.bgfooter a:hover{
+  color: #CCC;
+}

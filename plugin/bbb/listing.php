@@ -6,6 +6,15 @@
  * This script initiates a video conference session, calling the BigBlueButton API.
  */
 $course_plugin = 'bbb'; //needed in order to load the plugin lang variables
+
+$isGlobal = isset($_GET['global']) ? true : false;
+$isGlobalPerUser = isset($_GET['user_id']) ? (int) $_GET['user_id'] : false;
+
+// If global setting is used then we delete the course sessions (cidReq/id_session)
+if ($isGlobalPerUser || $isGlobal) {
+    $cidReset = true;
+}
+
 require_once __DIR__.'/config.php';
 
 $plugin = BBBPlugin::create();
@@ -14,8 +23,6 @@ $roomTable = Database::get_main_table('plugin_bbb_room');
 
 $htmlHeadXtra[] = api_get_js_simple(api_get_path(WEB_PLUGIN_PATH).'bbb/resources/utils.js');
 
-$isGlobal = isset($_GET['global']) ? true : false;
-$isGlobalPerUser = isset($_GET['user_id']) ? (int) $_GET['user_id'] : false;
 $action = isset($_GET['action']) ? $_GET['action'] : '';
 $userId = api_get_user_id();
 
@@ -140,7 +147,7 @@ if ($conferenceManager) {
                         $result = $bbb->regenerateRecording($result['id']);
                         if ($result) {
                             Display::addFlash(Display::return_message(get_lang('Success')));
-                        } else {	
+                        } else {
                             Display::addFlash(Display::return_message(get_lang('Error'), 'error'));
                         }
                     }

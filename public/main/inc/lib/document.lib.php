@@ -6242,7 +6242,6 @@ This folder contains all sessions that have been opened in the chat. Although th
         // is updated using the title
         $document = new CDocument();
         $document
-            ->setCourse($courseEntity)
             ->setFiletype($fileType)
             ->setTitle($title)
             ->setComment($comment)

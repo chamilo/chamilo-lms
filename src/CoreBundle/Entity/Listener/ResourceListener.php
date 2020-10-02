@@ -170,7 +170,6 @@ class ResourceListener
 
         // Use by api platform
         $links = $resource->getResourceLinkArray();
-
         if ($links) {
             $courseRepo = $em->getRepository(Course::class);
             $sessionRepo = $em->getRepository(Session::class);
@@ -222,8 +221,6 @@ class ResourceListener
                 throw new \InvalidArgumentException('Resource Node should have a parent');
             }
         }
-
-        return $resourceNode;
     }
 
     /**
@@ -232,6 +229,9 @@ class ResourceListener
     public function preUpdate(AbstractResource $resource, PreUpdateEventArgs $event)
     {
         error_log('Resource listener preUpdate');
+
+        $this->setLinks($resource->getResourceNode(), $resource, $event->getEntityManager());
+
         if ($resource->hasUploadFile()) {
             $uploadedFile = $resource->getUploadFile();
 
@@ -274,13 +274,12 @@ class ResourceListener
         $resource->getResourceNode()->setTitle($resourceName);
     }
 
-    public function setLinks($resourceNode, AbstractResource $resource, $em)
+    public function setLinks(ResourceNode $resourceNode, AbstractResource $resource, $em)
     {
+        error_log('setLinks');
         $links = $resource->getResourceLinkEntityList();
         if ($links) {
             foreach ($links as $link) {
-                $link->setResourceNode($resourceNode);
-
                 $rights = [];
                 switch ($link->getVisibility()) {
                     case ResourceLink::VISIBILITY_PENDING:
@@ -301,7 +300,10 @@ class ResourceListener
                         $link->addResourceRight($right);
                     }
                 }
-                $em->persist($resourceNode);
+                //error_log('link adding to node: '.$resource->getResourceNode()->getId());
+                //error_log('link with user : '.$link->getUser()->getUsername());
+                $resource->getResourceNode()->addResourceLink($link);
+
                 $em->persist($link);
             }
         }

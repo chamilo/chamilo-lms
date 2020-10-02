@@ -112,22 +112,6 @@ abstract class AbstractResource
             throw new \Exception('addCourseLink requires to set the parent.');
         }
 
-        if ($this->hasResourceNode()) {
-            $resourceNode = $this->getResourceNode();
-            $exists = $resourceNode->getResourceLinks()->exists(
-                function ($key, $element) use ($course, $session, $group) {
-                    return
-                        $course === $element->getCourse() &&
-                        $session === $element->getSession() &&
-                        $group === $element->getGroup();
-                }
-            );
-
-            if ($exists) {
-                return $this;
-            }
-        }
-
         $resourceLink = new ResourceLink();
         $resourceLink
             ->setVisibility($visibility)
@@ -135,8 +119,6 @@ abstract class AbstractResource
             ->setSession($session)
             ->setGroup($group)
         ;
-        $this->addLink($resourceLink);
-
         $rights = [];
         switch ($visibility) {
             case ResourceLink::VISIBILITY_PENDING:
@@ -158,11 +140,38 @@ abstract class AbstractResource
             }
         }
 
+        if ($this->hasResourceNode()) {
+            $resourceNode = $this->getResourceNode();
+            $exists = $resourceNode->getResourceLinks()->exists(
+                function ($key, $element) use ($course, $session, $group) {
+                    return
+                        $course === $element->getCourse() &&
+                        $session === $element->getSession() &&
+                        $group === $element->getGroup();
+                }
+            );
+
+            if ($exists) {
+                return $this;
+            }
+            $resourceNode->addResourceLink($resourceLink);
+        } else {
+            $this->addLink($resourceLink);
+        }
+
         return $this;
     }
 
     public function addGroupLink(Course $course, Session $session = null, CGroup $group = null)
     {
+        $resourceLink = new ResourceLink();
+        $resourceLink
+            ->setCourse($course)
+            ->setSession($session)
+            ->setGroup($group)
+            ->setVisibility(ResourceLink::VISIBILITY_PUBLISHED)
+        ;
+
         if ($this->hasResourceNode()) {
             $resourceNode = $this->getResourceNode();
             $exists = $resourceNode->getResourceLinks()->exists(
@@ -176,38 +185,16 @@ abstract class AbstractResource
             if ($exists) {
                 return $this;
             }
+            $resourceNode->addResourceLink($resourceLink);
+        } else {
+            $this->addLink($resourceLink);
         }
-
-        $resourceLink = new ResourceLink();
-        $resourceLink
-            ->setResourceNode($resourceNode)
-            ->setCourse($course)
-            ->setSession($session)
-            ->setGroup($group)
-            ->setVisibility(ResourceLink::VISIBILITY_PUBLISHED)
-        ;
-        $this->addLink($resourceLink);
 
         return $this;
     }
 
     public function addUserLink(User $user, Course $course = null, Session $session = null, CGroup $group = null)
     {
-        if ($this->hasResourceNode()) {
-            $resourceNode = $this->getResourceNode();
-            $exists = $resourceNode->getResourceLinks()->exists(
-                function ($key, $element) use ($user) {
-                    if ($element->getUser()) {
-                        return $user->getId() === $element->getUser()->getId();
-                    }
-                }
-            );
-
-            if ($exists) {
-                return $this;
-            }
-        }
-
         $resourceLink = new ResourceLink();
         $resourceLink
             ->setVisibility(ResourceLink::VISIBILITY_PUBLISHED)
@@ -217,7 +204,27 @@ abstract class AbstractResource
             ->setGroup($group)
         ;
 
-        $this->addLink($resourceLink);
+        if ($this->hasResourceNode()) {
+            $resourceNode = $this->getResourceNode();
+            $exists = $resourceNode->getResourceLinks()->exists(
+                function ($key, $element) use ($user) {
+                    if ($element->hasUser()) {
+                        return $user->getId() === $element->getUser()->getId();
+                    }
+                }
+            );
+
+            if ($exists) {
+                error_log('Link already exist for user: '.$user->getUsername().', skipping');
+
+                return $this;
+            }
+
+            error_log('New link can be added for user: '.$user->getUsername());
+            $resourceNode->addResourceLink($resourceLink);
+        } else {
+            $this->addLink($resourceLink);
+        }
 
         return $this;
     }

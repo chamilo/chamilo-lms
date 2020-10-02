@@ -962,7 +962,12 @@ class MessageManager
         // user's file name
         $file_name = $file_attach['name'];
         if (!filter_extension($new_file_name)) {
-            Display::addFlash(Display::return_message(get_lang('File upload failed: this file extension or file type is prohibited'), 'error'));
+            Display::addFlash(
+                Display::return_message(
+                    get_lang('File upload failed: this file extension or file type is prohibited'),
+                    'error'
+                )
+            );
         } else {
             $new_file_name = uniqid('');
             if (!empty($receiver_user_id)) {
@@ -986,7 +991,7 @@ class MessageManager
             $path_message_attach = $path_user_info['dir'].'message_attachments/';
             // If this directory does not exist - we create it.
             if (!file_exists($path_message_attach)) {
-                @mkdir($path_message_attach, api_get_permissions_for_new_directories(), true);
+                //@mkdir($path_message_attach, api_get_permissions_for_new_directories(), true);
             }
 
             $new_path = $path_message_attach.$new_file_name;

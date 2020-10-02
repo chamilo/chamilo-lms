@@ -771,7 +771,8 @@ class Agenda
                         }
                     }
 
-                    $repo->updateResource($event);
+                    $em->persist($event);
+                    $em->flush($event);
 
                     // Add announcement.
                     if (isset($addAnnouncement) && !empty($addAnnouncement)) {

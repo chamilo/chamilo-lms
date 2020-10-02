@@ -174,20 +174,6 @@ class CDocument extends AbstractResource implements ResourceInterface
     protected $template;
 
     /**
-     * @var Course
-     *
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", cascade={"persist"})
-     * @ORM\JoinColumn(name="c_id", referencedColumnName="id", onDelete="CASCADE" )
-     */
-    protected $course;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session", cascade={"persist"})
-     * @ORM\JoinColumn(name="session_id", referencedColumnName="id", onDelete="CASCADE" )
-     */
-    protected $session;
-
-    /**
      * CDocument constructor.
      */
     public function __construct()
@@ -295,49 +281,12 @@ class CDocument extends AbstractResource implements ResourceInterface
         return $this->readonly;
     }
 
-    public function getCourse(): Course
-    {
-        return $this->course;
-    }
-
-    /**
-     * @param Course $course
-     *
-     * @return CDocument
-     */
-    public function setCourse($course)
-    {
-        $this->course = $course;
-
-        return $this;
-    }
-
     /**
      * @return int
      */
     public function getIid()
     {
         return $this->iid;
-    }
-
-    /**
-     * @return Session
-     */
-    public function getSession()
-    {
-        return $this->session;
-    }
-
-    /**
-     * @param Session $session
-     *
-     * @return CDocument
-     */
-    public function setSession($session)
-    {
-        $this->session = $session;
-
-        return $this;
     }
 
     /**

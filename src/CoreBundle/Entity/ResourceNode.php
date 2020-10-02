@@ -428,6 +428,14 @@ class ResourceNode
         return $this->resourceLinks;
     }
 
+    public function addResourceLink(ResourceLink $link): self
+    {
+        $link->setResourceNode($this);
+        $this->resourceLinks[] = $link;
+
+        return $this;
+    }
+
     public function setResourceLinks($resourceLinks): self
     {
         $this->resourceLinks = $resourceLinks;
@@ -436,7 +444,7 @@ class ResourceNode
     }
 
     /**
-     * @return ResourceLink[]
+     * @return ArrayCollection|ResourceLink[]
      */
     public function hasSession(Session $session = null)
     {

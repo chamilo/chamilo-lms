@@ -192,7 +192,7 @@ class ResourceRepository extends EntityRepository
         return $this->getRepository()->findOneBy($criteria, $orderBy);
     }
 
-    public function updateResource(AbstractResource $resource)
+    /*public function updateResource(AbstractResource $resource)
     {
         $em = $this->getEntityManager();
 
@@ -202,7 +202,6 @@ class ResourceRepository extends EntityRepository
         $links = $resource->getResourceLinkEntityList();
         if ($links) {
             foreach ($links as $link) {
-                error_log($link->getUser()->getUsername());
                 $link->setResourceNode($resourceNode);
 
                 $rights = [];
@@ -232,7 +231,7 @@ class ResourceRepository extends EntityRepository
         $em->persist($resourceNode);
         $em->persist($resource);
         $em->flush();
-    }
+    }*/
 
     public function updateNodeForResource(ResourceInterface $resource): ResourceNode
     {
@@ -502,9 +501,8 @@ class ResourceRepository extends EntityRepository
     ): QueryBuilder {
         $qb = $this->getResourcesByCourse($course, $session, $group, $parentNode);
 
-        $qb
-            ->andWhere('links.user = :user')
-            ->setParameter('user', $user);
+        $qb->andWhere('links.user = :user OR links.user IS NULL');
+        $qb->setParameter('user', $user);
 
         return $qb;
     }

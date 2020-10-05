@@ -824,6 +824,11 @@ class ResourceRepository extends EntityRepository
         return (int) $query->getSingleScalarResult();
     }
 
+    public function isGranted(string $subject, AbstractResource $resource): bool
+    {
+        return $this->getAuthorizationChecker()->isGranted($subject, $resource->getResourceNode());
+    }
+
     private function setLinkVisibility(AbstractResource $resource, int $visibility, bool $recursive = true): bool
     {
         $resourceNode = $resource->getResourceNode();
@@ -876,10 +881,5 @@ class ResourceRepository extends EntityRepository
         $em->flush();
 
         return true;
-    }
-
-    public function isGranted(string $subject, AbstractResource $resource): bool
-    {
-        return $this->getAuthorizationChecker()->isGranted($subject, $resource->getResourceNode());
     }
 }

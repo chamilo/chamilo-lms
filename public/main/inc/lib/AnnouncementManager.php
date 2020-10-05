@@ -1765,13 +1765,13 @@ class AnnouncementManager
 
                 // we can edit if : we are the teacher OR the element belongs to
                 // the session we are coaching OR the option to allow users to edit is on
-                if ($repo->isGranted(ResourceNodeVoter::EDIT, $announcement)) {
                 /*if api_is_allowed_to_edit(false, true) ||
-                    (api_is_session_general_coach() && api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $announcementId)) ||
-                    (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous()) ||
-                    ($isTutor)
-                    //$row['to_group_id'] == $group_id &&
-                ) {*/
+                     (api_is_session_general_coach() && api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $announcementId)) ||
+                     (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous()) ||
+                     ($isTutor)
+                     //$row['to_group_id'] == $group_id &&
+                 ) {*/
+                if ($repo->isGranted(ResourceNodeVoter::EDIT, $announcement)) {
                     if (true === $disableEdit) {
                         $modify_icons = "<a href='#'>".$editIconDisable."</a>";
                     } else {

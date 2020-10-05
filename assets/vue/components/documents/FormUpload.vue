@@ -6,12 +6,53 @@
         sm="6"
         md="6"
       >
-        <b-form-file
-          v-model="item.uploadFile"
-          show-size
-          placeholder="File upload"
-          drop-placeholder="Drop file here..."
-        />
+        <!--          v-model="item.uploadFile"-->
+<!--        <b-form-file-->
+<!--          ref="fileList"-->
+<!--          multiple-->
+<!--          @change="selectFile"-->
+<!--        />-->
+
+
+        <div class="input-group mb-3">
+          <div class="custom-file">
+
+            <input
+                id="inputGroupFile02"
+                type="file"
+                class="custom-file-input"
+                ref="fileList"
+                multiple
+                placeholder="File upload"
+                @change="selectFile"
+            />
+
+            <label class="custom-file-label" for="inputGroupFile02" aria-describedby="inputGroupFileAddon02">
+              Choose file
+            </label>
+          </div>
+        </div>
+
+        <div class="field">
+          <div
+              v-for="(file, index) in files"
+              :key="index"
+              :class="{ error : file.invalidMessage}"
+          >
+            <div>
+              {{ file.name }}
+              <span v-if="file.invalidMessage">
+                - {{ file.invalidMessage }}
+              </span>
+            </div>
+            <span>
+              <a @click.prevent="files.splice(index, 1)"
+                 class="delete">
+                <font-awesome-icon icon="trash"/>
+              </a>
+            </span>
+          </div>
+        </div>
       </b-col>
     </b-row>
   </b-form>
@@ -19,6 +60,7 @@
 
 <script>
 import has from 'lodash/has';
+import map from 'lodash/map';
 import { validationMixin } from 'vuelidate';
 import { required } from 'vuelidate/lib/validators';
 import { mapActions } from 'vuex';
@@ -29,34 +71,29 @@ export default {
   mixins: [validationMixin],
   props: {
     values: {
-      type: Object,
+      type: Array,
       required: true
     },
-    errors: {
-      type: Object,
-      default: () => {}
+    parentResourceNodeId: {
+      type: Number
     },
-    initialValues: {
+    resourceLinkList: {
+      type: String,
+    },
+    errors: {
       type: Object,
       default: () => {}
     }
   },
   data() {
     return {
-      parentResourceNodeId: null,
-      uploadFile: null,
-      resourceLinkList: null,
-      filetype: null
+      fileList:[],
+      files: [],
     };
   },
   computed: {
-    // eslint-disable-next-line
-    item() {
-      return this.initialValues || this.values;
-    },
     titleErrors() {
       const errors = [];
-
       if (!this.$v.item.title.$dirty) return errors;
       has(this.violations, 'title') && errors.push(this.violations.title);
       !this.$v.item.title.required && errors.push(this.$t('Field is required'));
@@ -68,18 +105,33 @@ export default {
     }
   },
   methods: {
+    selectFile() {
+      const files = this.$refs.fileList.files;
+
+      this.files = [
+        ...this.files,
+        ...map(files, file => ({
+          name: file.name,
+          size: file.size,
+          type: file.type,
+          filetype: 'file',
+          parentResourceNodeId: this.parentResourceNodeId,
+          resourceLinkList: this.resourceLinkList,
+          uploadFile: file,
+          invalidMessage: this.validate(file),
+        }))
+      ]
+    },
+    validate(file) {
+      if (file) {
+        return '';
+      }
+
+      return 'error';
+    }
   },
   validations: {
-    item: {
-      parentResourceNodeId: {
-      },
-      uploadFile: {
-      },
-      resourceLinkList:{
-      },
-      filetype:{
-      }
-    }
+    files: {}
   }
 };
 </script>

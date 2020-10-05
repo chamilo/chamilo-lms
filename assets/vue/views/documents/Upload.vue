@@ -2,12 +2,13 @@
   <div>
     <DocumentsForm
       ref="createForm"
-      :values="item"
+      :values="files"
+      :parentResourceNodeId="parentResourceNodeId"
+      :resourceLinkList="resourceLinkList"
       :errors="violations"
     />
     <Toolbar
-      :handle-submit="onSendForm"
-      :handle-reset="resetForm"
+      :handle-submit="onUploadForm"
     />
     <Loading :visible="isLoading" />
   </div>
@@ -19,7 +20,7 @@ import { createHelpers } from 'vuex-map-fields';
 import DocumentsForm from '../../components/documents/FormUpload';
 import Loading from '../../components/Loading';
 import Toolbar from '../../components/Toolbar';
-import CreateMixin from '../../mixins/CreateMixin';
+import UploadMixin from '../../mixins/UploadMixin';
 
 const servicePrefix = 'Documents';
 
@@ -36,28 +37,28 @@ export default {
     Toolbar,
     DocumentsForm
   },
-  mixins: [CreateMixin],
+  mixins: [UploadMixin],
   data() {
     return {
-      item: {
-        filetype: 'file',
-        parentResourceNodeId: null,
-        resourceLinkList: null
-      },
+      files : [],
+      parentResourceNodeId: 0,
+      resourceLinkList: '',
     };
   },
   computed: {
     ...mapFields(['error', 'isLoading', 'created', 'violations'])
   },
   created() {
-    this.item.parentResourceNodeId = this.$route.params.node;
-    this.item.resourceLinkList = JSON.stringify([{
+    console.log('created');
+    this.parentResourceNodeId = Number(this.$route.params.node);
+    this.resourceLinkList = JSON.stringify([{
       c_id: this.$route.query.cid,
       visibility: 2,
     }]);
+    this.files = [];
   },
   methods: {
-    ...mapActions('documents', ['create', 'reset'])
+    ...mapActions('documents', ['uploadMany', 'create'])
   }
 };
 </script>

@@ -7,24 +7,27 @@ export default {
     formatDateTime,
     onCreated(item) {
       this.showMessage(this.$i18n.t('{resource} created', {'resource': item['resourceNode'].title}));
+      this.$refs.createForm.files = [];
+
       let folderParams = this.$route.query;
 
-      this.$router.push({
+      /*this.$router.push({
         name: `${this.$options.servicePrefix}List`,
         params: {id: item['@id']},
         query: folderParams
-      });
+      });*/
     },
-    onSendForm() {
+    onUploadForm() {
+      console.log('onUploadForm');
       const createForm = this.$refs.createForm;
       createForm.$v.$touch();
+
       if (!createForm.$v.$invalid) {
-        this.create(createForm.$v.item.$model);
+        for (let i = 0; i < createForm.files.length; i++) {
+          let file = createForm.files[i];
+          this.create(file);
+        }
       }
-    },
-    resetForm() {
-      this.$refs.createForm.$v.$reset();
-      this.item = {};
     }
   },
   watch: {

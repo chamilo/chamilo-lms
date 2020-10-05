@@ -7,7 +7,7 @@ export default {
     formatDateTime,
     onCreated(item) {
       this.showMessage(this.$i18n.t('{resource} created', {'resource': item['resourceNode'].title}));
-      this.$refs.createForm.files = [];
+      const createForm = this.$refs.createForm;
 
       let folderParams = this.$route.query;
 

@@ -44,6 +44,7 @@ export const ACTIONS = {
   RESET_UPDATE: 'RESET_UPDATE',
   SET_CREATED: 'SET_CREATED',
   SET_DELETED: 'SET_DELETED',
+  SET_DELETED_MULTIPLE: 'SET_DELETED_MULTIPLE',
   SET_ERROR: 'SET_ERROR',
   SET_SELECT_ITEMS: 'SET_SELECT_ITEMS',
   SET_TOTAL_ITEMS: 'SET_TOTAL_ITEMS',
@@ -86,6 +87,29 @@ export default function makeCrudModule({
           })
           .catch(e => handleError(commit, e));
       },
+      delMultiple: ({ commit }, items) => {
+        console.log('delete items');
+        commit(ACTIONS.TOGGLE_LOADING);
+
+        const promises = items.map(async item => {
+          const result = await service.del(item).then(() => {
+            //commit(ACTIONS.TOGGLE_LOADING);
+            commit(ACTIONS.SET_DELETED_MULTIPLE, item);
+
+            console.log(item.title);
+            console.log('item deleted');
+          });
+
+          return result;
+        });
+
+        const result = Promise.all(promises);
+
+        if (result) {
+          commit(ACTIONS.TOGGLE_LOADING);
+        }
+      },
+
       fetchAll: ({ commit, state }, params) => {
         if (!service) throw new Error('No service specified!');
 
@@ -252,7 +276,20 @@ export default function makeCrudModule({
         Object.assign(state, { created });
       },
       [ACTIONS.SET_DELETED]: (state, deleted) => {
-        if (!state.allIds.includes(deleted['@id'])) return;
+        if (!state.allIds.includes(deleted['@id'])) {
+          return;
+        }
+        Object.assign(state, {
+          allIds: remove(state.allIds, item => item['@id'] === deleted['@id']),
+          byId: remove(state.byId, id => id === deleted['@id']),
+          deleted
+        });
+      },
+      [ACTIONS.SET_DELETED_MULTIPLE]: (state, deleted) => {
+        //console.log(deleted['@id']);
+        /*if (!state.allIds.includes(deleted['@id'])) {
+          return;
+        }*/
         Object.assign(state, {
           allIds: remove(state.allIds, item => item['@id'] === deleted['@id']),
           byId: remove(state.byId, id => id === deleted['@id']),

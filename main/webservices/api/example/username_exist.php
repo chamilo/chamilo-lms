@@ -15,6 +15,7 @@ use GuzzleHttp\Client as Client;
 $webserviceURL = 'https://YOURCHAMILO/main/webservices/api/';
 $webserviceUsername = 'USERNAME';
 $webservicePassword = 'PASSWORD';
+
 /**
  * Make a request to get the API key for admin user.
  *
@@ -29,7 +30,9 @@ function authenticate()
     global $webservicePassword;
     $client = new Client([
         'base_uri' => $webserviceURL,
+
     ]);
+
 
     $response = $client->post('v2.php', [
         'form_params' => [
@@ -54,31 +57,30 @@ function authenticate()
 
 /**
  * @param $apiKey
- * @param $courseId
- * @param $announcementId
  *
  * @return int
  * @throws Exception
  *
  */
-function getCourseAnnouncement($apiKey, $courseId, $announcementId)
+function getUserNameExist($apiKey, $loginname)
 {
     global $webserviceURL;
     global $webserviceUsername;
     $client = new Client([
         'base_uri' => $webserviceURL,
+
     ]);
+
 
     $response = $client->post(
         'v2.php',
         [
             'form_params' => [
                 // data for the user who makes the request
-                'action' => 'course_announcement',
+                'action' => 'username_exist',
                 'username' => $webserviceUsername,
                 'api_key' => $apiKey,
-                'course' => $courseId,
-                'announcement ' => $announcementId,
+                'loginname' => $loginname,
             ],
         ]
     );
@@ -91,14 +93,20 @@ function getCourseAnnouncement($apiKey, $courseId, $announcementId)
     $jsonResponse = json_decode($content, true);
 
     if ($jsonResponse['error']) {
-        throw new Exception('cant get announcement because : '.$jsonResponse['message']);
+        throw new Exception('cant get user profile because : '.$jsonResponse['message']);
     }
-    return $jsonResponse['data'];
+    return $jsonResponse['data'][0];
 }
 
 $apiKey = authenticate();
 
 
-//Get the announcement published in the given course.
-$courseAnnouncement = getCourseAnnouncement($apiKey,1,1);
-echo json_encode($courseAnnouncement);
+//Return if a username already exist
+$userNameExist = getUserNameExist($apiKey, 'admin');
+if ($userNameExist == true) {
+    echo "User name exist";
+} else {
+    echo "User doesnt name exist";
+
+}
+

@@ -54,8 +54,9 @@ function authenticate()
 
 /**
  * @param $apiKey
+ * @param $courseId
  *
- * @return int
+ * @return array
  * @throws Exception
  *
  */

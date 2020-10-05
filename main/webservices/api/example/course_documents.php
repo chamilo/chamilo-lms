@@ -15,6 +15,7 @@ use GuzzleHttp\Client as Client;
 $webserviceURL = 'https://YOURCHAMILO/main/webservices/api/';
 $webserviceUsername = 'USERNAME';
 $webservicePassword = 'PASSWORD';
+
 /**
  * Make a request to get the API key for admin user.
  *
@@ -55,13 +56,12 @@ function authenticate()
 /**
  * @param $apiKey
  * @param $courseId
- * @param $announcementId
  *
- * @return int
+ * @return array
  * @throws Exception
  *
  */
-function getCourseAnnouncement($apiKey, $courseId, $announcementId)
+function getCourseDocuments($apiKey, $courseId)
 {
     global $webserviceURL;
     global $webserviceUsername;
@@ -74,11 +74,10 @@ function getCourseAnnouncement($apiKey, $courseId, $announcementId)
         [
             'form_params' => [
                 // data for the user who makes the request
-                'action' => 'course_announcement',
+                'action' => 'course_documents',
                 'username' => $webserviceUsername,
                 'api_key' => $apiKey,
                 'course' => $courseId,
-                'announcement ' => $announcementId,
             ],
         ]
     );
@@ -91,7 +90,7 @@ function getCourseAnnouncement($apiKey, $courseId, $announcementId)
     $jsonResponse = json_decode($content, true);
 
     if ($jsonResponse['error']) {
-        throw new Exception('cant get announcement because : '.$jsonResponse['message']);
+        throw new Exception('cant get course documents because : '.$jsonResponse['message']);
     }
     return $jsonResponse['data'];
 }
@@ -99,6 +98,6 @@ function getCourseAnnouncement($apiKey, $courseId, $announcementId)
 $apiKey = authenticate();
 
 
-//Get the announcement published in the given course.
-$courseAnnouncement = getCourseAnnouncement($apiKey,1,1);
-echo json_encode($courseAnnouncement);
+//Get the list of documents in the given course.
+$courseDescription = getCourseDocuments($apiKey,1);
+echo json_encode($courseDescription);

@@ -15,6 +15,7 @@ use GuzzleHttp\Client as Client;
 $webserviceURL = 'https://YOURCHAMILO/main/webservices/api/';
 $webserviceUsername = 'USERNAME';
 $webservicePassword = 'PASSWORD';
+
 /**
  * Make a request to get the API key for admin user.
  *
@@ -54,12 +55,13 @@ function authenticate()
 
 /**
  * @param $apiKey
+ * @param $courseId
+ * @param $forumId
  *
- * @return int
+ * @return array
  * @throws Exception
- *
  */
-function getCourseDescription($apiKey, $courseId)
+function getCourseForum($apiKey, $courseId, $forumId)
 {
     global $webserviceURL;
     global $webserviceUsername;
@@ -72,10 +74,11 @@ function getCourseDescription($apiKey, $courseId)
         [
             'form_params' => [
                 // data for the user who makes the request
-                'action' => 'course_descriptions',
+                'action' => 'course_forum',
                 'username' => $webserviceUsername,
                 'api_key' => $apiKey,
                 'course' => $courseId,
+                'forum' => $forumId,
             ],
         ]
     );
@@ -88,7 +91,7 @@ function getCourseDescription($apiKey, $courseId)
     $jsonResponse = json_decode($content, true);
 
     if ($jsonResponse['error']) {
-        throw new Exception('cant get course description because : '.$jsonResponse['message']);
+        throw new Exception('cant get course documents because : '.$jsonResponse['message']);
     }
     return $jsonResponse['data'];
 }
@@ -96,6 +99,6 @@ function getCourseDescription($apiKey, $courseId)
 $apiKey = authenticate();
 
 
-//Get the list of documents in the given course.
-$courseDescription = getCourseDescription($apiKey,1);
-echo json_encode($courseDescription);
+//Get details about a specific forum.
+$courseForum = getCourseForum($apiKey,1,1);
+echo json_encode($courseForum);

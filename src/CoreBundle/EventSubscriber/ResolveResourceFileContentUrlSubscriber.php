@@ -56,8 +56,21 @@ class ResolveResourceFileContentUrlSubscriber implements EventSubscriberInterfac
 
         $getFile = $request->get('getFile');
 
-        /*$courseId = (int) $request->get('cid');
-        $sessionId = (int) $request->get('sid');*/
+        $courseId = (int) $request->get('cid');
+        if (empty($courseId)) {
+            // Try with cid from session
+            $courseId = (int) $request->getSession()->get('cid');
+        }
+
+        $sessionId = (int) $request->get('sid');
+        if (empty($sessionId)) {
+            $sessionId = (int) $request->getSession()->get('sid');
+        }
+
+        $groupId = (int) $request->get('gid');
+        if (empty($groupId)) {
+            $groupId = (int) $request->getSession()->get('gid');
+        }
 
         foreach ($mediaObjects as $mediaObject) {
             if (!$mediaObject instanceof AbstractResource) {
@@ -68,8 +81,9 @@ class ResolveResourceFileContentUrlSubscriber implements EventSubscriberInterfac
 
                 $params = [
                     'id' => $resourceNode->getId(),
-                   // 'cid' => $courseId,
-                    //'sid' => $sessionId,
+                    'cid' => $courseId,
+                    'sid' => $sessionId,
+                    'gid' => $groupId,
                     'tool' => $resourceNode->getResourceType()->getTool()->getName(),
                     'type' => $resourceNode->getResourceType()->getName(),
                 ];

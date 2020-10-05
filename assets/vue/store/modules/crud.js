@@ -88,16 +88,11 @@ export default function makeCrudModule({
           .catch(e => handleError(commit, e));
       },
       delMultiple: ({ commit }, items) => {
-        console.log('delete items');
         commit(ACTIONS.TOGGLE_LOADING);
-
         const promises = items.map(async item => {
           const result = await service.del(item).then(() => {
             //commit(ACTIONS.TOGGLE_LOADING);
             commit(ACTIONS.SET_DELETED_MULTIPLE, item);
-
-            console.log(item.title);
-            console.log('item deleted');
           });
 
           return result;

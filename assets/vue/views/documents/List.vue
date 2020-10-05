@@ -137,7 +137,7 @@
           <b-button size="sm" @click="selectAllRows">{{ $t('Select all') }}</b-button>
           <b-button size="sm" @click="clearSelected">{{ $t('Clear selected') }}</b-button>
             <b-button v-if="this.selected.length > 0" variant="danger" size="sm" @click="deleteSelected">
-              {{ $t('Delete ...') }}
+              {{ $t('Delete') }}
             </b-button>
         </p>
       </b-col>
@@ -224,7 +224,7 @@ export default {
         this.deleteItem(item);
       }*/
 
-      this.deleteItem(this.selected);
+      this.delMultiple(this.selected);
       this.onUpdateOptions(this.options);
 
       /*const promises = this.selected.map(async item => {
@@ -255,7 +255,8 @@ export default {
     // From ListMixin
     ...mapActions('documents', {
       getPage: 'fetchAll',
-      deleteItem: 'delMultiple'
+      deleteItem: 'del',
+      deleteMultipleItem: 'delMultiple'
     }),
     ...mapActions('resourcenode', {
       findResourceNode: 'findResourceNode',

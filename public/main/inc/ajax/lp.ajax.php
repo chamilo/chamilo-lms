@@ -66,9 +66,7 @@ switch ($action) {
                     $title = $document->getTitle();
                     break;
             }
-            error_log($id);
-            error_log($title);
-            exit;
+
             $parentId = isset($_REQUEST['parent_id']) ? $_REQUEST['parent_id'] : '';
             $previousId = isset($_REQUEST['previous_id']) ? $_REQUEST['previous_id'] : '';
 

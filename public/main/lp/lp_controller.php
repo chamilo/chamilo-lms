@@ -226,14 +226,14 @@ $htmlHeadXtra[] = '
                 );
             },
             receive: function(event, ui) {
-                var id = $(ui.item).attr("data_id");
+                /*var id = $(ui.item).attr("data_id");
                 var type = $(ui.item).attr("data_type");
-                var title = $(ui.item).attr("title");
-                console.log($(ui.item));
-                console.log(type);
-                console.log(title);
-                processReceive = true;
+                var title = $(ui.item).attr("title");*/
+                var id = $(ui.item).find(".link_with_id").attr("data_id");
+                var type = $(ui.item).find(".link_with_id").attr("data_type");
+                var title = $(ui.item).find(".link_with_id").html();
 
+                processReceive = true;
                 if (ui.item.parent()[0]) {
                     var parent_id = $(ui.item.parent()[0]).attr("id");
                     var previous_id = $(ui.item.prev()).attr("id");

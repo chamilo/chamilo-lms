@@ -2917,10 +2917,15 @@ class DocumentManager
             'childClose' => '</li>',
             'nodeDecorator' => function ($node) use ($icon, $folderIcon) {
                 $link = '<div class="item_data">';
-                $slug = $node['slug'];
-                $extension = pathinfo($slug, PATHINFO_EXTENSION);
+
+                $file = $node['resourceFile'];
+                $extension = '';
+                if ($file) {
+                    $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
+                }
+
                 $folder = $folderIcon;
-                if (empty($node['__children']) && !empty($extension)) {
+                if (!empty($extension)) {
                     $link .= '<a class="moved ui-sortable-handle" href="#">';
                     $link .= $icon;
                     $link .= '</a>';
@@ -2942,15 +2947,16 @@ class DocumentManager
         $query = $em
             ->createQueryBuilder()
             ->select('node')
-            ->from('ChamiloCoreBundle:ResourceNode', 'node')
+            ->from(\Chamilo\CoreBundle\Entity\ResourceNode::class, 'node')
             ->innerJoin('node.resourceType', 'type')
             ->innerJoin('node.resourceLinks', 'links')
-            //->innerJoin('node.resourceFile', 'file')
+            ->leftJoin('node.resourceFile', 'file')
             ->where('type = :type')
             ->andWhere('links.course = :course')
             /*  ->where('node.parent = :parent') */
             ->setParameters(['type' => $type, 'course' => $course_info['entity']])
             ->orderBy('node.parent', 'ASC')
+            ->addSelect('file')
             ->getQuery()
         ;
 

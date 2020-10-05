@@ -63,7 +63,7 @@ function load_cbo(id, previousId) {
     }
 
     cbo.options[k].selected = true;
-    $('#' + previousId).selectpicker('refresh');
+    //$('#' + previousId).selectpicker('refresh');
 }
 
 $(function() {

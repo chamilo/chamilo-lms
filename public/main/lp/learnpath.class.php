@@ -494,7 +494,7 @@ class learnpath
                             lp_id = ".$this->get_id()." AND
                             parent_item_id = $parent AND
                             previous_item_id = 0 OR
-                            previous_item_id = $parent";
+                            previous_item_id = $parent ";
                 $result = Database::query($sql);
                 $row = Database::fetch_array($result);
                 if ($row) {
@@ -7849,7 +7849,7 @@ class learnpath
                 }
 
                 cbo.options[k].selected = true;
-                $('#previous').selectpicker('refresh');
+                //$('#previous').selectpicker('refresh');
             }";
 
         return $return;

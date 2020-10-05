@@ -276,10 +276,11 @@ class ResourceListener
 
     public function setLinks(ResourceNode $resourceNode, AbstractResource $resource, $em)
     {
-        error_log('setLinks');
+        error_log('Resource listener setLinks');
         $links = $resource->getResourceLinkEntityList();
         if ($links) {
             foreach ($links as $link) {
+                error_log('Adding resource links');
                 $rights = [];
                 switch ($link->getVisibility()) {
                     case ResourceLink::VISIBILITY_PENDING:

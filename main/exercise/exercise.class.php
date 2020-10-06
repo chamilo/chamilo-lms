@@ -2587,14 +2587,16 @@ class Exercise
 
         $freeze = true;
         if ('true' === api_get_setting('enable_quiz_scenario')) {
-            if (0 === $this->getQuestionCount()) {
-                $freeze = false;
-            } else {
+            if ($this->getQuestionCount() > 0) {
                 $hasDifferentQuestion = $this->hasQuestionWithTypeNotInList([UNIQUE_ANSWER, HOT_SPOT_DELINEATION]);
                 if (false === $hasDifferentQuestion) {
                     $freeze = false;
                 }
+            } else {
+                $freeze = false;
             }
+        } else {
+            $freeze = false;
         }
 
         $direct = $form->createElement(

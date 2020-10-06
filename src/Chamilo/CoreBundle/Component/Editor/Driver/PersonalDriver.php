@@ -63,7 +63,7 @@ class PersonalDriver extends Driver implements DriverInterface
                     'accessControl' => [$this, 'access'],
                     'uploadDeny' => $mimeType,
                     'uploadAllow' => $mimeTypeAllow,
-                    'uploadOrder' => array('deny', 'allow'),
+                    'uploadOrder' => ['deny', 'allow'],
                     'disabled' => [
                         'duplicate',
                         //'rename',

@@ -209,6 +209,7 @@ if ($session->getNbrCourses() === 0) {
         }
 
         $courseUrl = api_get_course_url($course->getCode(), $sessionId);
+        $courseBaseUrl = api_get_course_url($course->getCode());
 
         // hide_course_breadcrumb the parameter has been added to hide the name
         // of the course, that appeared in the default $interbreadcrumb
@@ -222,7 +223,13 @@ if ($session->getNbrCourses() === 0) {
         $courseItem .= '<td>'.($namesOfCoaches ? implode('<br>', $namesOfCoaches) : get_lang('None')).'</td>';
         $courseItem .= '<td>'.$numberOfUsers.'</td>';
         $courseItem .= '<td>';
-        $courseItem .= Display::url(Display::return_icon('course_home.gif', get_lang('Course')), $courseUrl);
+        $courseItem .= Display::url(Display::return_icon('course_home.gif', get_lang('CourseInSession')), $courseUrl);
+
+        $courseItem .= Display::url(
+            Display::return_icon('settings.png', get_lang('Course')),
+            $courseBaseUrl,
+            ['target' => '_blank']
+        );
 
         if ($allowSkills) {
             $courseItem .= Display::url(

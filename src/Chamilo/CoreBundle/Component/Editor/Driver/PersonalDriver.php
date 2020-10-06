@@ -51,6 +51,9 @@ class PersonalDriver extends Driver implements DriverInterface
                     'image/svg+xml',
                     'image/svg',
                 ];
+                $mimeTypeAllow = [
+                    'application/pdf',
+                ];
 
                 $driver = [
                     'driver' => 'PersonalDriver',
@@ -59,6 +62,8 @@ class PersonalDriver extends Driver implements DriverInterface
                     'URL' => $dirWeb.'my_files',
                     'accessControl' => [$this, 'access'],
                     'uploadDeny' => $mimeType,
+                    'uploadAllow' => $mimeTypeAllow,
+                    'uploadOrder' => array('deny', 'allow'),
                     'disabled' => [
                         'duplicate',
                         //'rename',

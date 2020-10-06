@@ -8,6 +8,19 @@
     </div>
     <div class="col-sm-12">
         <div class="form-group text-center">
+            <div id="timer" style="display: none">
+                <h2>
+                    <div class="label label-danger">
+                        <span id="hour">00</span>
+                        <span class="divider">:</span>
+                        <span id="minute">00</span>
+                        <span class="divider">:</span>
+                        <span id="second">00</span>
+                    </div>
+                </h2>
+                <br />
+            </div>
+
             <button class="btn btn-primary" type="button" id="btn-start-record-{{ question_id }}">
                 <span class="fa fa-circle fa-fw" aria-hidden="true"></span> {{ 'StartRecordingAudio'|get_lang }}
             </button>

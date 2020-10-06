@@ -37,6 +37,10 @@ window.RecordAudio = (function () {
         $("#timer").hide();
     }
 
+    function pauseTimer() {
+        clearInterval(window.timerInterval);
+    }
+
     function useRecordRTC(rtcInfo, fileName) {
         $(rtcInfo.blockId).show();
 
@@ -155,6 +159,7 @@ window.RecordAudio = (function () {
             if (!recordRTC) {
                 return;
             }
+            pauseTimer();
 
             btnPause.prop('disabled', true).addClass('hidden');
             btnPlay.prop('disabled', false).removeClass('hidden');
@@ -171,6 +176,7 @@ window.RecordAudio = (function () {
             btnPause.prop('disabled', false).removeClass('hidden');
             btnStop.prop('disabled', false).removeClass('hidden');
             recordRTC.resumeRecording();
+            startTimer();
         });
 
         btnStop.on('click', function () {

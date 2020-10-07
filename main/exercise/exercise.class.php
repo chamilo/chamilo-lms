@@ -4674,6 +4674,7 @@ class Exercise
                     if ($from_database) {
                         $TBL_TRACK_HOTSPOT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
                         // Check auto id
+                        $foundAnswerId = $answerAutoId;
                         $sql = "SELECT hotspot_correct
                                 FROM $TBL_TRACK_HOTSPOT
                                 WHERE
@@ -4703,7 +4704,7 @@ class Exercise
                                     hotspot_answer_id = ".intval($answerId)."
                                 ORDER BY hotspot_id ASC";
                             $result = Database::query($sql);
-
+                            $foundAnswerId = $answerId;
                             if (Database::num_rows($result)) {
                                 $studentChoice = Database::result(
                                     $result,
@@ -4726,7 +4727,7 @@ class Exercise
                                                 hotspot_answer_id = $answerIid
                                             ORDER BY hotspot_id ASC";
                                     $result = Database::query($sql);
-
+                                    $foundAnswerId = $answerIid;
                                     $studentChoice = Database::result(
                                         $result,
                                         0,
@@ -4983,7 +4984,7 @@ class Exercise
                             $correctAnswerId = 0;
                             /** @var TrackEHotspot $hotspot */
                             foreach ($orderedHotSpots as $correctAnswerId => $hotspot) {
-                                if ($hotspot->getHotspotAnswerId() == $answerAutoId) {
+                                if ($hotspot->getHotspotAnswerId() == $answerIid) {
                                     break;
                                 }
                             }
@@ -5369,14 +5370,22 @@ class Exercise
                                 </table>';
                             break;
                         case HOT_SPOT:
+                            $correctAnswerId = 0;
+                            /** @var TrackEHotspot $hotspot */
+                            foreach ($orderedHotSpots as $correctAnswerId => $hotspot) {
+                                if ($hotspot->getHotspotAnswerId() == $foundAnswerId) {
+                                    break;
+                                }
+                            }
+
                             ExerciseShowFunctions::display_hotspot_answer(
                                 $feedback_type,
-                                $answerId,
+                                ++$correctAnswerId,
                                 $answer,
                                 $studentChoice,
                                 $answerComment,
                                 $results_disabled,
-                                $answerId,
+                                $correctAnswerId,
                                 $showTotalScoreAndUserChoicesInLastAttempt
                             );
                             break;

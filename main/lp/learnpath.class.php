@@ -4916,21 +4916,32 @@ class learnpath
             Database::query($sql);
         }
 
-        if (!api_is_invitee()) {
-            // Save progress.
-            list($progress) = $this->get_progress_bar_text('%');
-            if ($progress >= 0 && $progress <= 100) {
-                $progress = (int) $progress;
-                $sql = "UPDATE $table SET
-                            progress = $progress
-                        WHERE
-                            c_id = $course_id AND
-                            lp_id = ".$this->get_id()." AND
-                            user_id = ".$userId." ".$session_condition;
-                // Ignore errors as some tables might not have the progress field just yet.
-                Database::query($sql);
-                $this->progress_db = $progress;
-            }
+        if (api_is_invitee()) {
+            return;
+        }
+
+        // Save progress.
+        list($progress) = $this->get_progress_bar_text('%');
+
+        if ($progress < 0 || $progress > 100) {
+            return;
+        }
+
+        $progress = (int) $progress;
+        $sql = "UPDATE $table SET
+                    progress = $progress
+                WHERE
+                    c_id = $course_id AND
+                    lp_id = ".$this->get_id()." AND
+                    user_id = ".$userId." ".$session_condition;
+        // Ignore errors as some tables might not have the progress field just yet.
+        Database::query($sql);
+        $this->progress_db = $progress;
+
+        if (100 === (int) $progress && $this->lp_view_id) {
+            HookLearningPathEnd::create()
+                ->setEventData(['lp_view_id' => $this->lp_view_id])
+                ->hookLearningPathEnd();
         }
     }
 

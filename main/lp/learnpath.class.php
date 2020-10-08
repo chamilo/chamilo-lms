@@ -4973,6 +4973,12 @@ class learnpath
                     error_log($sql);
                 }
                 $this->progress_db = $progress;
+
+                if (100 == $progress) {
+                    HookLearningPathEnd::create()
+                        ->setEventData(['lp_view_id' => $this->lp_view_id])
+                        ->hookLearningPathEnd();
+                }
             }
         }
     }

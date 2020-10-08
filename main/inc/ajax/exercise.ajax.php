@@ -728,6 +728,18 @@ switch ($action) {
                     $remind_list
                 );
 
+                HookQuizQuestionAnswered::create()
+                    ->setEventData(
+                        [
+                            'exe_id' => (int) $exeId,
+                            'question' => [
+                                'id' => (int) $my_question_id,
+                                'weight' => (float) $result['weight']
+                            ],
+                        ]
+                    )
+                    ->notifyQuizQuestionAnswered();
+
                 // Destruction of the Question object
                 unset($objQuestionTmp);
                 if ($debug) {

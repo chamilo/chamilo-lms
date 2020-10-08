@@ -541,6 +541,10 @@ function save_item(
     // To be sure progress is updated.
     $myLP->save_last($score);
 
+    HookLearningPathItemViewed::create()
+        ->setEventData(['item_view_id' => $myLPI->db_item_view_id])
+        ->notifyLearningPathItemViewed();
+
     Session::write('lpobject', serialize($myLP));
     Session::write('oLP', $myLP);
     if ($debug > 0) {

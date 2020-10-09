@@ -57,7 +57,17 @@ switch ($action) {
         $result = SessionManager::copy($idChecked);
         if ($result) {
             $sessionInfo = api_get_session_info($result);
-            Display::addFlash(Display::return_message(get_lang('ItemCopied').' - '.$sessionInfo['name']));
+            $url = Display::url(
+                $sessionInfo['name'],
+                api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$result
+            );
+            Display::addFlash(
+                Display::return_message(
+                    get_lang('ItemCopied').' - '.$url,
+                    'success',
+                    false
+                )
+            );
         } else {
             Display::addFlash(Display::return_message(get_lang('ThereWasAnError'), 'error'));
         }

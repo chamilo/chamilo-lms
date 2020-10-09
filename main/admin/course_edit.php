@@ -324,7 +324,7 @@ if (api_get_configuration_value('multiple_access_url_show_shared_course_marker')
     $urls = UrlManager::get_access_url_from_course($courseId);
     $urlToString = '';
     foreach ($urls as $url) {
-        $urlToString .= $url['url'];
+        $urlToString .= $url['url'].'<br />';
     }
     $form->addLabel('URLs', $urlToString);
 }

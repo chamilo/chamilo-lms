@@ -996,7 +996,6 @@ class UserGroup extends Model
 
         $delete_items = [];
         $new_items = [];
-
         if (!empty($list)) {
             foreach ($list as $user_id) {
                 if (!in_array($user_id, $current_list)) {
@@ -1338,7 +1337,7 @@ class UserGroup extends Model
                     $this->add_user_to_group(
                         api_get_user_id(),
                         $id,
-                        $params['group_type']
+                        GROUP_USER_PERMISSION_ADMIN
                     );
                 }
                 $picture = isset($_FILES['picture']) ? $_FILES['picture'] : null;

@@ -449,9 +449,13 @@ switch ($returnLink) {
         $buttonHomeUrl .= '&redirectTo=lp_list';
         $buttonHomeText = get_lang('LearningPathList');
         break;
-    case 2: // user portal
+    case 2: // Course home
         $buttonHomeUrl .= '&redirectTo=my_courses';
         $buttonHomeText = get_lang('MyCourses');
+        break;
+    case 3: // Portal home
+        $buttonHomeUrl .= '&redirectTo=portal_home';
+        $buttonHomeText = get_lang('Home');
         break;
 }
 

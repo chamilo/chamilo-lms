@@ -146,7 +146,7 @@ class ExerciseLib
                         ';
                     } else {
                         $s .= '<div id="drag'.$questionId.'_question" class="drag_question">
-                               <table class="data_table">';
+                               <table class="table table-hover table-striped data_table">';
                     }
 
                     // Iterate through answers.
@@ -373,7 +373,7 @@ class ExerciseLib
                     $header .= Display::tag('th', get_lang('Feedback'));
                 }
 
-                $s .= '<table class="data_table">';
+                $s .= '<table class="table table-hover table-striped data_table">';
                 $s .= Display::tag('tr', $header, ['style' => 'text-align:left;']);
 
                 // ajout de la 2eme ligne d'entête pour true/falss et les pourcentages de certitude
@@ -1472,34 +1472,35 @@ HTML;
                 }
 
                 $answerList .= '
-                        </ul>
+                        </ol>
                     </div>
                 ';
-                if ($freeze) {
-                    $relPath = api_get_path(WEB_CODE_PATH);
-                    echo "
-                        <div class=\"row\">
-                            <div class=\"col-sm-9\">
-                                <div id=\"hotspot-preview-$questionId\"></div>
-                            </div>
-                            <div class=\"col-sm-3\">
-                                $answerList
-                            </div>
-                        </div>
-                        <script>
-                            new ".($answerType == HOT_SPOT ? "HotspotQuestion" : "DelineationQuestion")."({
-                                questionId: $questionId,
-                                exerciseId: $exerciseId,
-                                exeId: 0,
-                                selector: '#hotspot-preview-$questionId',
-                                for: 'preview',
-                                relPath: '$relPath'
-                            });
-                        </script>
-                    ";
+            }
 
-                    return;
-                }
+            if ($freeze) {
+                $relPath = api_get_path(WEB_CODE_PATH);
+                echo "
+                    <div class=\"row\">
+                        <div class=\"col-sm-9\">
+                            <div id=\"hotspot-preview-$questionId\"></div>
+                        </div>
+                        <div class=\"col-sm-3\">
+                            $answerList
+                        </div>
+                    </div>
+                    <script>
+                        new ".($answerType == HOT_SPOT ? "HotspotQuestion" : "DelineationQuestion")."({
+                            questionId: $questionId,
+                            exerciseId: {$exercise->id},
+                            exeId: 0,
+                            selector: '#hotspot-preview-$questionId',
+                            'for': 'preview',
+                            relPath: '$relPath'
+                        });
+                    </script>
+                ";
+
+                return;
             }
 
             if (!$only_questions) {
@@ -1532,9 +1533,10 @@ HOTSPOT;
                         $(function() {
                             new ".($answerType == HOT_SPOT_DELINEATION ? 'DelineationQuestion' : 'HotspotQuestion')."({
                                 questionId: $questionId,
-                                exerciseId: $exerciseId,
+                                exerciseId: {$exercise->id},
+                                exeId: 0,
                                 selector: '#question_div_' + $questionId + ' .hotspot-image',
-                                for: 'user',
+                                'for': 'user',
                                 relPath: '$relPath'
                             });
                         });
@@ -4542,7 +4544,11 @@ EOT;
                 if ($save_user_result) {
                     $numberAttempts++;
                 }
+
                 $showTotalScore = false;
+                if ($objExercise->results_disabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
+                    $showTotalScore = true;
+                }
                 $showTotalScoreAndUserChoicesInLastAttempt = false;
                 if ($numberAttempts >= $objExercise->attempts) {
                     $showTotalScore = true;
@@ -4957,7 +4963,7 @@ EOT;
     {
         $data = self::exerciseResultsInRanking($exerciseId, $courseId, $sessionId);
 
-        $table = new HTML_Table(['class' => 'table table-hover table-bordered']);
+        $table = new HTML_Table(['class' => 'table table-hover table-striped table-bordered']);
         $table->setHeaderContents(0, 0, get_lang('Position'), ['class' => 'text-right']);
         $table->setHeaderContents(0, 1, get_lang('Username'));
         $table->setHeaderContents(0, 2, get_lang('Score'), ['class' => 'text-right']);

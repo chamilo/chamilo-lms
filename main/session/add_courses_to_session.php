@@ -84,13 +84,15 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
     $courseList = $_POST['SessionCoursesList'];
     $copyEvaluation = isset($_POST['copy_evaluation']);
     $copyCourseTeachersAsCoach = isset($_POST['import_teachers_as_course_coach']);
+    $importAssignments = isset($_POST['import_assignments']);
 
     SessionManager::add_courses_to_session(
         $sessionId,
         $courseList,
         true,
         $copyEvaluation,
-        $copyCourseTeachersAsCoach
+        $copyCourseTeachersAsCoach,
+        $importAssignments
     );
 
     Display::addFlash(Display::return_message(get_lang('Updated')));
@@ -293,6 +295,10 @@ unset($Courses);
                     <label>
                         <input type="checkbox" name="import_teachers_as_course_coach">
                         <?php echo get_lang('ImportCourseTeachersAsCourseCoach'); ?>
+                    </label>
+                    <label>
+                        <input type="checkbox" name="import_assignments">
+                        <?php echo get_lang('SessionImportAssignments'); ?>
                     </label>
                 </div>
             <?php

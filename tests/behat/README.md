@@ -10,7 +10,7 @@ And run it with the following command:
 ```
 Example:
 wget https://selenium-release.storage.googleapis.com/3.141/selenium-server-standalone-3.141.59.jar
-java -jar /my-dir/selenium-server-standalone-3.1.0.jar
+java -jar selenium-server-standalone-3.141.59.jar
 
 ```
 
@@ -20,10 +20,16 @@ Check the latest version at https://sites.google.com/a/chromium.org/chromedriver
 then adapt the following command to the latest version:
 
 ```
-cd /tmp && wget https://chromedriver.storage.googleapis.com/2.34/chromedriver_linux64.zip && unzip chromedriver_linux64.zip && sudo mv chromedriver /usr/local/bin
+cd /tmp && wget https://chromedriver.storage.googleapis.com/85.0.4183.83/chromedriver_linux64.zip && unzip chromedriver_linux64.zip && sudo mv chromedriver /usr/local/bin
 ```
 
 - Install google-chrome (stable version, not beta or dev).
+- Test if chromedriver is working correctly, the result should be something like:
+
+```
+chromedriver --version
+ChromeDriver 2.34.522913
+```
 
 ### Chamilo configuration
 

@@ -118,7 +118,7 @@ switch ($action) {
 
 if (!empty($userJustifications)) {
     $userJustificationList .= Display::page_subheader3($plugin->get_lang('MyJustifications'));
-    $table = new HTML_Table(['class' => 'data_table']);
+    $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
     $column = 0;
     $row = 0;
     $headers = [

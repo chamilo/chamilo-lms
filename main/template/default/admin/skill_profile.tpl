@@ -1,6 +1,6 @@
 {{ form }}
 
-<table class="data_table">
+<table class="table table-hover table-striped data_table">
     <tr>
         <th>{{ 'Name' | get_lang }}</th>
         <th>{{ 'SkillLevel' | get_lang }}</th>

@@ -75,7 +75,7 @@ if (isset($_GET['exportpdf'])) {
         ];
     }
 
-    $table = new HTML_Table(['class' => 'data_table']);
+    $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
     $row = 0;
     $column = 0;
     foreach ($header_names as $item) {

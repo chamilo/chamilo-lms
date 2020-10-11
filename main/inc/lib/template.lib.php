@@ -1857,7 +1857,7 @@ class Template
                 $clean_url = str_replace('/', '-', $clean_url);
                 $clean_url .= '/';
                 $homep = api_get_path(WEB_HOME_PATH).$clean_url; //homep for Home Path
-                $icon_real_homep = api_get_path(SYS_APP_PATH).'home/'.$clean_url;
+                $icon_real_homep = api_get_path(SYS_HOME_PATH).$clean_url;
                 //we create the new dir for the new sites
                 if (is_file($icon_real_homep.'favicon.ico')) {
                     $favico = '<link rel="shortcut icon" href="'.$homep.'favicon.ico" type="image/x-icon" />';

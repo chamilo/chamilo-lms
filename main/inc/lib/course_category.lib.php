@@ -461,7 +461,7 @@ class CourseCategory
         $categorySource = Security::remove_XSS($categorySource);
 
         if (count($categories) > 0) {
-            $table = new HTML_Table(['class' => 'data_table']);
+            $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
             $column = 0;
             $row = 0;
             $headers = [

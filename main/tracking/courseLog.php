@@ -751,7 +751,7 @@ if ($nbStudents > 0) {
 $groupContent = '';
 echo Display::panel($html, $titleSession);
 
-$groupTable = new HTML_Table(['class' => 'table table-bordered data_table']);
+$groupTable = new HTML_Table(['class' => 'table table-hover table-striped table-bordered data_table']);
 $column = 0;
 $groupTable->setHeaderContents(0, $column++, get_lang('Name'));
 $groupTable->setHeaderContents(0, $column++, get_lang('TrainingTime'));

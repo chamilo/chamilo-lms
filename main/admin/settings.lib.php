@@ -42,7 +42,7 @@ function handleRegions()
     $installed_plugins = $plugin_obj->getInstalledPlugins();
 
     echo '<form name="plugins" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).'">';
-    echo '<table class="data_table">';
+    echo '<table class="table table-hover table-striped data_table">';
     echo '<tr>';
     echo '<th width="400px">';
     echo get_lang('Plugin');
@@ -1452,10 +1452,13 @@ function addEditTemplate()
 
                 if ($upload_ok) {
                     // Try to add an extension to the file if it hasn't one.
-                    $new_file_name = add_ext_on_mime(stripslashes($_FILES['template_image']['name']), $_FILES['template_image']['type']);
+                    $new_file_name = add_ext_on_mime(
+                        stripslashes($_FILES['template_image']['name']),
+                        $_FILES['template_image']['type']
+                    );
 
                     // The upload directory.
-                    $upload_dir = api_get_path(SYS_APP_PATH).'home/default_platform_document/template_thumb/';
+                    $upload_dir = api_get_path(SYS_HOME_PATH).'default_platform_document/template_thumb/';
 
                     // Create the directory if it does not exist.
                     if (!is_dir($upload_dir)) {
@@ -1505,7 +1508,7 @@ function addEditTemplate()
                     ->setContent(Security::remove_XSS($templateContent, COURSEMANAGERLOWSECURITY));
 
                 if ($isDelete) {
-                    $filePath = api_get_path(SYS_APP_PATH).'home/default_platform_document/template_thumb/'.$template->getImage();
+                    $filePath = api_get_path(SYS_HOME_PATH).'default_platform_document/template_thumb/'.$template->getImage();
                     if (file_exists($filePath)) {
                         unlink($filePath);
                     }
@@ -1554,7 +1557,7 @@ function deleteTemplate($id)
     $result = Database::query($sql);
     $row = Database::fetch_array($result);
     if (!empty($row['image'])) {
-        @unlink(api_get_path(SYS_APP_PATH).'home/default_platform_document/template_thumb/'.$row['image']);
+        @unlink(api_get_path(SYS_HOME_PATH).'default_platform_document/template_thumb/'.$row['image']);
     }
 
     // Now we remove it from the database.
@@ -1618,16 +1621,11 @@ function select_gradebook_default_grade_model_id()
  * @param array $settings
  * @param array $settings_by_access_list
  *
- * @throws \Doctrine\ORM\ORMException
- * @throws \Doctrine\ORM\OptimisticLockException
- * @throws \Doctrine\ORM\TransactionRequiredException
- *
  * @return FormValidator
  */
 function generateSettingsForm($settings, $settings_by_access_list)
 {
     global $_configuration, $settings_to_avoid, $convert_byte_to_mega_list;
-    $em = Database::getManager();
     $table_settings_current = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 
     $form = new FormValidator(
@@ -1922,7 +1920,8 @@ function generateSettingsForm($settings, $settings_by_access_list)
                 break;
             case 'select':
                 /*
-                * To populate the list of options, the select type dynamically calls a function that must be called select_ + the name of the variable being displayed.
+                * To populate the list of options, the select type dynamically calls a
+                * function that must be called select_ + the name of the variable being displayed.
                 * The functions being called must be added to the file settings.lib.php.
                 */
                 $form->addElement(
@@ -1938,11 +1937,11 @@ function generateSettingsForm($settings, $settings_by_access_list)
                 break;
             case 'select_course':
                 $courseSelectOptions = [];
-
                 if (!empty($row['selected_value'])) {
-                    $course = $em->find('ChamiloCoreBundle:Course', $row['selected_value']);
-
-                    $courseSelectOptions[$course->getId()] = $course->getTitle();
+                    $course = api_get_course_entity($row['selected_value']);
+                    if ($course) {
+                        $courseSelectOptions[$course->getId()] = $course->getTitle();
+                    }
                 }
 
                 $form->addElement(

@@ -120,7 +120,7 @@ if ($show) {
 
     if (!empty($careers)) {
         $title = Display::page_subheader(get_lang('Careers'), null, 'h3', ['class' => 'section-title']);
-        $table = new HTML_Table(['class' => 'data_table']);
+        $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
         $table->setHeaderContents(0, 0, get_lang('Career'));
         $table->setHeaderContents(0, 1, get_lang('Diagram'));
 

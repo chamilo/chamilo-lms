@@ -131,7 +131,7 @@ $userInfo = null;
 $studentBossList = UserManager::getStudentBossList($userId);
 $studentBossListToString = '';
 if (!empty($studentBossList)) {
-    $table = new HTML_Table(['class' => 'data_table']);
+    $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
     $table->setHeaderContents(0, 0, get_lang('User'));
     $csvContent[] = [get_lang('StudentBoss')];
 
@@ -147,7 +147,7 @@ if (!empty($studentBossList)) {
 
 $registrationDate = $user['registration_date'];
 
-$table = new HTML_Table(['class' => 'data_table']);
+$table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
 $table->setHeaderContents(0, 0, get_lang('Information'));
 
 $csvContent[] = [get_lang('Information')];
@@ -192,7 +192,7 @@ foreach ($data as $label => $item) {
     $row++;
 }
 
-$table = new HTML_Table(['class' => 'data_table']);
+$table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
 $table->setHeaderContents(0, 0, get_lang('Tracking'));
 $csvContent[] = [get_lang('Tracking')];
 $userInfo['first_connection'] = Tracking::get_first_connection_date($userId);
@@ -702,7 +702,7 @@ if (api_get_configuration_value('allow_career_users')) {
     $careers = UserManager::getUserCareers($userId);
     if (!empty($careers)) {
         echo Display::page_subheader(get_lang('Careers'), null, 'h3', ['class' => 'section-title']);
-        $table = new HTML_Table(['class' => 'data_table']);
+        $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
         $table->setHeaderContents(0, 0, get_lang('Career'));
         $row = 1;
         foreach ($careers as $carerData) {

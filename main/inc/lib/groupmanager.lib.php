@@ -2544,7 +2544,8 @@ class GroupManager
                         $data['self_reg_allowed'],
                         $data['self_unreg_allowed'],
                         $data['max_student'],
-                        $data['groups_per_user']
+                        $data['groups_per_user'],
+                        isset($data['document_access']) ? $data['document_access'] : null
                     );
                     $data['category_id'] = $categoryId;
                     $result['updated']['category'][] = $data;

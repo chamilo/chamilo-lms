@@ -1,14 +1,14 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * Script to restore some deleted documents
  */
 
+exit;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CItemProperty;
-
-exit;
 
 require __DIR__.'/../../main/inc/global.inc.php';
 

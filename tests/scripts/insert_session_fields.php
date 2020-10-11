@@ -1,9 +1,12 @@
 <?php
+
+/* For licensing terms, see /license.txt */
+
 /*
  * This script insert session extra fields
  */
 
-//exit;
+exit;
 
 require_once '../../main/inc/global.inc.php';
 

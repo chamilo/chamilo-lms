@@ -6660,6 +6660,10 @@ div#chat-remote-video video {
     text-overflow: ellipsis;
 }
 
+.grid-courses .items .category a {
+    color: #fff;
+}
+
 .grid-courses .items .cribbon {
     width: 0;
     height: 0;

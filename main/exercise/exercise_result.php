@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -225,6 +226,47 @@ ob_end_clean();
 if (!empty($learnpath_id) && $saveResults) {
     // Save attempt in lp
     Exercise::saveExerciseInLp($learnpath_item_id, $exe_id);
+}
+
+$emailSettings = api_get_configuration_value('exercise_finished_email_settings');
+if (!empty($emailSettings)) {
+    $subject = get_lang('ExerciseFinished');
+    $totalScore = ExerciseLib::show_score($total_score, $max_score, false, true);
+
+    if (isset($emailSettings['send_by_status']) && !empty($emailSettings['send_by_status'])) {
+        foreach ($emailSettings['send_by_status'] as $item) {
+            $type = $item['type'];
+            switch ($item['type']) {
+                case 'only_score':
+                    $content = get_lang('YourScore')." $totalScore ";
+                    break;
+                case 'complete':
+                    $content = $pageContent;
+                    break;
+            }
+
+            switch ($item['status']) {
+                case STUDENT:
+                    MessageManager::send_message(api_get_user_id(), $subject, $content);
+                    break;
+            }
+        }
+    }
+
+    if (isset($emailSettings['send_by_email']) && !empty($emailSettings['send_by_email'])) {
+        foreach ($emailSettings['send_by_email'] as $item) {
+            $type = $item['type'];
+            switch ($item['type']) {
+                case 'only_score':
+                    $content = get_lang('YourScore')." $totalScore ";
+                    break;
+                case 'complete':
+                    $content = $pageContent;
+                    break;
+            }
+            api_mail_html('', $item['email'], $subject, $content);
+        }
+    }
 }
 
 $hookQuizEnd = HookQuizEnd::create();

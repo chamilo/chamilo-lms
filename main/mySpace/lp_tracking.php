@@ -149,7 +149,7 @@ switch ($action) {
         }
 
         $counter = 1;
-        $table = new HTML_Table(['class' => 'table data_table']);
+        $table = new HTML_Table(['class' => 'table table-hover table-striped  data_table']);
         $row = 0;
         $scoreDisplay = new ScoreDisplay();
         $globalTotal = 0;

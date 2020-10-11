@@ -1,7 +1,8 @@
 <?php
 
+/* For licensing terms, see /license.txt */
+
 exit;
-/* For license terms, see /license.txt */
 if (PHP_SAPI != 'cli') {
     die('This script can only be launched from the command line');
 }

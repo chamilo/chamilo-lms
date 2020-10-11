@@ -1485,7 +1485,7 @@ class Display
     public static function table($headers, $rows, $attributes = [])
     {
         if (empty($attributes)) {
-            $attributes['class'] = 'data_table';
+            $attributes['class'] = 'table table-hover table-striped data_table';
         }
         $table = new HTML_Table($attributes);
         $row = 0;
@@ -2639,7 +2639,8 @@ class Display
      * @param string     $name            The icon name. Example: "mail-reply"
      * @param int|string $size            Optional. The size for the icon. (Example: lg, 2, 3, 4, 5)
      * @param bool       $fixWidth        Optional. Whether add the fw class
-     * @param string     $additionalClass Optional. Additional class
+     * @param string     $additionalClass
+     * @param string     $title
      *
      * @return string
      */
@@ -2647,7 +2648,8 @@ class Display
         $name,
         $size = '',
         $fixWidth = false,
-        $additionalClass = ''
+        $additionalClass = '',
+        $title = ''
     ) {
         $className = "fa fa-$name";
 
@@ -2671,7 +2673,7 @@ class Display
             $className .= " $additionalClass";
         }
 
-        $icon = self::tag('em', null, ['class' => $className]);
+        $icon = self::tag('em', null, ['class' => $className, 'title' => $title]);
 
         return "$icon ";
     }

@@ -22,6 +22,9 @@ $document_data = DocumentManager::get_document_data_by_id(
     api_get_course_id(),
     true
 );
+
+$dir = '/';
+$document_id = 0;
 if (empty($document_data)) {
     if (api_is_in_group()) {
         $group_properties = GroupManager::get_group_properties(api_get_group_id());
@@ -34,10 +37,10 @@ if (empty($document_data)) {
             api_get_course_id()
         );
     }
+} else {
+    $document_id = $document_data['id'];
+    $dir = $document_data['path'];
 }
-
-$document_id = $document_data['id'];
-$dir = $document_data['path'];
 
 //make some vars
 $wamidir = $dir;

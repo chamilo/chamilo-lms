@@ -16,9 +16,26 @@ $htmlHeadXtra[] = api_get_jqgrid_js();
 
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 $idChecked = isset($_REQUEST['idChecked']) ? $_REQUEST['idChecked'] : null;
+$idMultiple = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
 $listType = isset($_REQUEST['list_type']) ? Security::remove_XSS($_REQUEST['list_type']) : SessionManager::getDefaultSessionTab();
 
 switch ($action) {
+    case 'delete_multiple':
+        $sessionList = explode(',', $idMultiple);
+        foreach ($sessionList as $id) {
+            $sessionInfo = api_get_session_info($id);
+            if ($sessionInfo) {
+                $response = SessionManager::delete($id);
+                /*if ($response) {
+                    Display::addFlash(
+                        Display::return_message(get_lang('Deleted').': '.Security::remove_XSS($sessionInfo['name']))
+                    );
+                }*/
+            }
+        }
+        echo 1;
+        exit;
+        break;
     case 'delete':
         $sessionInfo = api_get_session_info($idChecked);
         if ($sessionInfo) {
@@ -39,7 +56,8 @@ switch ($action) {
     case 'copy':
         $result = SessionManager::copy($idChecked);
         if ($result) {
-            Display::addFlash(Display::return_message(get_lang('ItemCopied')));
+            $sessionInfo = api_get_session_info($result);
+            Display::addFlash(Display::return_message(get_lang('ItemCopied').' - '.$sessionInfo['name']));
         } else {
             Display::addFlash(Display::return_message(get_lang('ThereWasAnError'), 'error'));
         }
@@ -48,12 +66,30 @@ switch ($action) {
             $url = 'session_list.php?list_type='.$listType;
         }
         header('Location: '.$url);
+        exit;
+        break;
+    case 'copy_multiple':
+        $sessionList = explode(',', $idMultiple);
+        foreach ($sessionList as $id) {
+            $sessionIdCopied = SessionManager::copy($id);
+            if ($sessionIdCopied) {
+                $sessionInfo = api_get_session_info($sessionIdCopied);
+                Display::addFlash(Display::return_message(get_lang('ItemCopied').' - '.$sessionInfo['name']));
+            } else {
+                Display::addFlash(Display::return_message(get_lang('ThereWasAnError'), 'error'));
+            }
+        }
+        $url = 'session_list.php';
+        if ('custom' !== $listType) {
+            $url = 'session_list.php?list_type='.$listType;
+        }
+        header('Location: '.$url);
+        exit;
         break;
 }
 
 $tool_name = get_lang('SessionList');
 Display::display_header($tool_name);
-
 $courseId = isset($_GET['course_id']) ? $_GET['course_id'] : null;
 
 $sessionFilter = new FormValidator(
@@ -75,7 +111,6 @@ $courseSelect = $sessionFilter->addElement(
 if (!empty($courseId)) {
     $courseInfo = api_get_course_info_by_id($courseId);
     $parents = CourseCategory::getParentsToString($courseInfo['categoryCode']);
-
     $courseSelect->addOption($parents.$courseInfo['title'], $courseInfo['code'], ['selected' => 'selected']);
 }
 
@@ -87,7 +122,7 @@ $(function() {
        var courseId = $(this).val();
 
        if (!courseId) {
-        return;
+            return;
        }
 
        window.location = "'.$url.'?course_id="+courseId;
@@ -103,7 +138,7 @@ if (!empty($courseId)) {
 }
 
 if (isset($_REQUEST['keyword'])) {
-    //Begin with see the searchOper param
+    // Begin with see the searchOper param
     $filter = new stdClass();
     $filter->groupOp = 'OR';
     $rule = new stdClass();
@@ -170,6 +205,9 @@ $action_links = 'function action_formatter(cellvalue, options, rowObject) {
 $urlAjaxExtraField = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?1=1';
 $allowOrder = api_get_configuration_value('session_list_order');
 $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
+$deleteUrl = api_get_self().'?list_type='.$listType.'&action=delete_multiple';
+$copyUrl = api_get_self().'?list_type='.$listType.'&action=copy_multiple';
+$extra_params['multiselect'] = true;
 
 ?>
     <script>
@@ -199,7 +237,6 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
         }
 
         var second_filters = [];
-
         $(function() {
             date_pick_today = function(elem) {
                 $(elem).datetimepicker({dateFormat: "yy-mm-dd"});
@@ -313,12 +350,24 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
             } ?>
 
             grid.jqGrid('navGrid','#sessions_pager',
-                {edit:false,add:false,del:false},
+                {edit:false,add:false,del:true},
                 {height:280,reloadAfterSubmit:false}, // edit options
                 {height:280,reloadAfterSubmit:false}, // add options
-                {reloadAfterSubmit:false},// del options
+                {reloadAfterSubmit:true, url: '<?php echo $deleteUrl; ?>' }, // del options
                 prmSearch
-            );
+            ).navButtonAdd('#sessions_pager',{
+                caption:"<?php echo addslashes(get_lang('Copy')); ?>",
+                buttonicon:"ui-icon ui-icon-plus",
+                onClickButton: function(a) {
+                    var list = $("#sessions").jqGrid('getGridParam', 'selarrrow');
+                    if (list.length) {
+                        window.location.replace('<?php echo $copyUrl; ?>&id='+list.join(','));
+                    } else {
+                        alert("<?php echo addslashes(get_lang('SelectAnOption')); ?>");
+                    }
+                },
+                position:"last"
+            });
 
             <?php
             // Create the searching dialog.

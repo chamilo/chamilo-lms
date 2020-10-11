@@ -2947,8 +2947,10 @@ class Agenda
 
         $form = '';
         if (api_is_allowed_to_edit(false, true) ||
-            (api_get_course_setting('allow_user_edit_agenda') == '1' && !api_is_anonymous()) &&
-            api_is_allowed_to_session_edit(false, true)
+            ('personal' === $this->type && !api_is_anonymous() && 'true' === api_get_setting('allow_personal_agenda')) ||
+            (
+                '1' === api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous() &&
+                api_is_allowed_to_session_edit(false, true))
             || (
                 GroupManager::user_has_access($currentUserId, $groupIid, GroupManager::GROUP_TOOL_CALENDAR)
                 && GroupManager::is_tutor_of_group($currentUserId, $groupInfo)

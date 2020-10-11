@@ -670,6 +670,11 @@ switch ($action) {
         }
 
         $startDate = Database::escape_string($_REQUEST['start_date']);
+
+        if (!empty($whereCondition)) {
+            $whereCondition = " AND $whereCondition";
+        }
+
         $whereCondition .= " AND exe_date > '$startDate' AND te.status = '' ";
         $count = ExerciseLib::get_count_exam_results(
             $exerciseId,

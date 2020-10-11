@@ -280,7 +280,7 @@ class Blog
         // Update course homepage link
         $sql = "UPDATE $tbl_tool SET
                 name = '$title'
-                WHERE c_id = $course_id AND link = 'blog/blog.php?blog_id=$blog_id' 
+                WHERE c_id = $course_id AND link = 'blog/blog.php?blog_id=$blog_id'
                 LIMIT 1";
         Database::query($sql);
     }
@@ -704,7 +704,7 @@ class Blog
 
         if ($articleEdit == 'on') {
             $sql = "
-                INSERT INTO $tbl_tasks_permissions (c_id, task_id, tool, action ) 
+                INSERT INTO $tbl_tasks_permissions (c_id, task_id, tool, action )
                 VALUES ($course_id, $task_id, '$tool', 'article_edit')";
             Database::query($sql);
             $id = Database::insert_id();
@@ -789,7 +789,7 @@ class Blog
         }
 
         if ($articleEdit == 'on') {
-            $sql = "INSERT INTO $tbl_tasks_permissions (c_id, task_id, tool, action) 
+            $sql = "INSERT INTO $tbl_tasks_permissions (c_id, task_id, tool, action)
                     VALUES ($course_id, $task_id, '$tool', 'article_edit')";
             Database::query($sql);
             $id = Database::insert_id();
@@ -938,7 +938,7 @@ class Blog
             Database::query($sql);
 
             $sql = "DELETE FROM $tbl_tool
-                    WHERE c_id = $course_id AND name = '".Database::escape_string($title)."' 
+                    WHERE c_id = $course_id AND name = '".Database::escape_string($title)."'
                     LIMIT 1";
             Database::query($sql);
         } else {
@@ -1006,11 +1006,11 @@ class Blog
                 FROM $tbl_blogs_posts post
                 INNER JOIN $tbl_users user
                 ON post.author_id = user.user_id
-                WHERE 	
+                WHERE
                     post.blog_id = $blog_id AND
                     post.c_id = $course_id AND
                     $filter
-                ORDER BY post_id DESC 
+                ORDER BY post_id DESC
                 LIMIT 0, $max_number_of_posts";
         $result = Database::query($sql);
 
@@ -1077,9 +1077,9 @@ class Blog
     public static function getDailyResults($blog_id, $query_string)
     {
         $date = explode('-', $query_string);
-        $query_string = ' 
-            DAYOFMONTH(date_creation) ='.intval($date[2]).' AND 
-            MONTH(date_creation) ='.intval($date[1]).' AND 
+        $query_string = '
+            DAYOFMONTH(date_creation) ='.intval($date[2]).' AND
+            MONTH(date_creation) ='.intval($date[1]).' AND
             YEAR(date_creation) ='.intval($date[0]);
         $list = self::getPosts($blog_id, $query_string);
 
@@ -1724,7 +1724,7 @@ class Blog
             $html .= '</div>';
 
             $html .= '<span class="blogpost_title">'.get_lang('TaskList').'</span><br />';
-            $html .= "<table class=\"data_table\">";
+            $html .= "<table class=\"table table-hover table-striped data_table\">";
             $html .= "<tr bgcolor=\"$color2\" align=\"center\" valign=\"top\">"
                 ."<th width='240'><b>".get_lang('Title')."</b></th>"
                 ."<th><b>".get_lang('Description')."</b></th>"
@@ -1794,7 +1794,7 @@ class Blog
         global $charset, $color2;
 
         $return = '<span class="blogpost_title">'.get_lang('AssignedTasks').'</span><br />';
-        $return .= "<table class=\"data_table\">";
+        $return .= "<table class=\"table table-hover table-striped data_table\">";
         $return .= "<tr bgcolor=\"$color2\" align=\"center\" valign=\"top\">"
             ."<th width='240'><b>".get_lang('Member')."</b></th>"
             ."<th><b>".get_lang('Task')."</b></th>"
@@ -1808,7 +1808,7 @@ class Blog
 
         $sql = "SELECT task_rel_user.*, task.title, user.firstname, user.lastname, user.username, task.description, task.system_task, task.blog_id, task.task_id
                 FROM $tbl_blogs_tasks_rel_user task_rel_user
-                INNER JOIN $tbl_blogs_tasks task 
+                INNER JOIN $tbl_blogs_tasks task
                 ON task_rel_user.task_id = task.task_id
                 INNER JOIN $tbl_users user
                 ON task_rel_user.user_id = user.user_id
@@ -1921,7 +1921,7 @@ class Blog
                         '.get_lang('TaskManager').'
                     </label>
                     <div class="controls">';
-        $return .= '<table class="data_table" cellspacing="0" style="border-collapse:collapse; width:446px;">';
+        $return .= '<table class="table table-hover table-striped data_table" cellspacing="0" style="border-collapse:collapse; width:446px;">';
         $return .= '<tr>';
         $return .= '<th colspan="2" style="width:223px;">'.get_lang('ArticleManager').'</th>';
         $return .= '<th width:223px;>'.get_lang('CommentManager').'</th>';
@@ -2005,7 +2005,7 @@ class Blog
             '000000',
         ];
 
-        $sql = "SELECT blog_id, task_id, title, description, color FROM $tbl_blogs_tasks 
+        $sql = "SELECT blog_id, task_id, title, description, color FROM $tbl_blogs_tasks
                 WHERE c_id = $course_id AND task_id = $task_id";
         $result = Database::query($sql);
         $task = Database::fetch_array($result);
@@ -2039,7 +2039,7 @@ class Blog
         $return .= '<tr>';
         $return .= '<td style="text-align:right; vertical-align:top;">'.get_lang('TaskManager').':&nbsp;&nbsp;</td>';
         $return .= '<td>';
-        $return .= '<table  class="data_table" cellspacing="0" style="border-collapse:collapse; width:446px;">';
+        $return .= '<table  class="table table-hover table-striped data_table" cellspacing="0" style="border-collapse:collapse; width:446px;">';
         $return .= '<tr>';
         $return .= '<th colspan="2" style="width:223px;">'.get_lang('ArticleManager').'</th>';
         $return .= '<th width:223px;>'.get_lang('CommentManager').'</th>';
@@ -2243,9 +2243,9 @@ class Blog
         $sql = "
             SELECT COUNT(*) as 'number'
             FROM $table
-            WHERE c_id = $course_id 
-            AND blog_id = $blog_id 
-            AND	user_id = $user_id 
+            WHERE c_id = $course_id
+            AND blog_id = $blog_id
+            AND	user_id = $user_id
             AND	task_id = $task_id";
 
         $result = Database::query($sql);
@@ -2580,7 +2580,7 @@ class Blog
         $course_id = api_get_course_int_id();
 
         $sql = "SELECT user.user_id, user.lastname, user.firstname, user.email, user.username
-                FROM $tbl_users user 
+                FROM $tbl_users user
                 INNER JOIN $tbl_blogs_rel_user blogs_rel_user
                 ON user.user_id = blogs_rel_user.user_id
                 WHERE blogs_rel_user.c_id = $course_id AND  blogs_rel_user.blog_id = $blog_id";
@@ -2769,15 +2769,15 @@ class Blog
 
         // Get tasks for this month
         if ($_user['user_id']) {
-            $sql = "SELECT 
-                        task_rel_user.*,  
-                        DAYOFMONTH(target_date) as task_day, 
-                        task.title, 
+            $sql = "SELECT
+                        task_rel_user.*,
+                        DAYOFMONTH(target_date) as task_day,
+                        task.title,
                         blog.blog_name
                     FROM $tbl_blogs_tasks_rel_user task_rel_user
-                    INNER JOIN $tbl_blogs_tasks task 
+                    INNER JOIN $tbl_blogs_tasks task
                     ON task_rel_user.task_id = task.task_id
-                    INNER JOIN $tbl_blogs blog 
+                    INNER JOIN $tbl_blogs blog
                     ON task_rel_user.blog_id = blog.blog_id
                     WHERE
                         task_rel_user.c_id = $course_id AND
@@ -3045,9 +3045,9 @@ class Blog
 
         $course_id = api_get_course_int_id();
 
-        $sql = "SELECT path, filename, comment 
+        $sql = "SELECT path, filename, comment
                 FROM $blog_table_attachment
-	            WHERE c_id = $course_id AND blog_id = $blog_id  
+	            WHERE c_id = $course_id AND blog_id = $blog_id
 	            $where";
 
         $result = Database::query($sql);
@@ -3138,7 +3138,7 @@ class Blog
                 WHERE
                     blog.c_id = $courseId AND
                     post.c_id = $courseId AND
-                    author_id =  $userId AND 
+                    author_id =  $userId AND
                     visibility = 1
                 ORDER BY post.date_creation DESC ";
         $result = Database::query($sql);
@@ -3181,7 +3181,7 @@ class Blog
         $courseId = intval($courseId);
 
         $sql = "SELECT DISTINCT blog.blog_id, comment_id, title, comment, comment.date_creation
-                FROM $tbl_blogs blog 
+                FROM $tbl_blogs blog
                 INNER JOIN  $tbl_blog_comment comment
                 ON (blog.blog_id = comment.blog_id AND blog.c_id = comment.c_id)
                 WHERE 	blog.c_id = $courseId AND

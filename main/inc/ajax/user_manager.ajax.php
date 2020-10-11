@@ -4,11 +4,15 @@
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Query\Expr\Join;
+use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
 /**
  * Responses to AJAX calls.
  */
 require_once __DIR__.'/../global.inc.php';
+
+$request = HttpRequest::createFromGlobals();
+$isRequestByAjax = $request->isXmlHttpRequest();
 
 $action = $_GET['a'];
 
@@ -33,39 +37,74 @@ switch ($action) {
         }
         break;
     case 'get_user_popup':
-        $courseId = isset($_REQUEST['course_id']) ? (int) $_REQUEST['course_id'] : 0;
-        $sessionId = isset($_REQUEST['session_id']) ? (int) $_REQUEST['session_id'] : 0;
+        if (!$isRequestByAjax) {
+            break;
+        }
 
-        $user_info = api_get_user_info($_REQUEST['user_id']);
+        $courseId = (int) $request->get('course_id');
+        $sessionId = (int) $request->get('session_id');
+        $userId = (int) $request->get('user_id');
+
+        $user_info = api_get_user_info($userId);
+
+        if (empty($user_info)) {
+            break;
+        }
+
+        if ($courseId) {
+            $courseInfo = api_get_course_info_by_id($courseId);
+
+            if (empty($courseInfo)) {
+                break;
+            }
+        }
+
+        if ($sessionId) {
+            $sessionInfo = api_get_session_info($sessionId);
+
+            if (empty($sessionInfo)) {
+                break;
+            }
+        }
+
         $isAnonymous = api_is_anonymous();
+
+        if ($isAnonymous && $courseId) {
+            if ('false' === api_get_setting('course_catalog_published')) {
+                break;
+            }
+
+            $coursesNotInCatalog = CoursesAndSessionsCatalog::getCoursesToAvoid();
+
+            if (in_array($courseId, $coursesNotInCatalog)) {
+                break;
+            }
+        }
 
         echo '<div class="row">';
         echo '<div class="col-sm-5">';
         echo '<div class="thumbnail">';
-        echo '<img src="'.$user_info['avatar'].'" /> ';
+        echo Display::img($user_info['avatar'], $user_info['complete_name']);
         echo '</div>';
         echo '</div>';
 
         echo '<div class="col-sm-7">';
 
-        if (api_get_setting('show_email_addresses') == 'false') {
-            $user_info['mail'] = ' ';
-        } else {
-            $user_info['mail'] = ' '.$user_info['mail'].' ';
+        if ($isAnonymous || api_get_setting('show_email_addresses') == 'false') {
+            $user_info['mail'] = '';
         }
 
-        if ($isAnonymous) {
-            $user_info['mail'] = ' ';
-        }
+        $userData = '<h3>'.$user_info['complete_name'].'</h3>'
+            .PHP_EOL
+            .$user_info['mail']
+            .PHP_EOL
+            .$user_info['official_code'];
 
-        $userData = '<h3>'.$user_info['complete_name'].'</h3>'.$user_info['mail'].$user_info['official_code'];
         if ($isAnonymous) {
             // Only allow anonymous users to see user popup if the popup user
             // is a teacher (which might be necessary to illustrate a course)
-            if ($user_info['status'] === COURSEMANAGER) {
+            if ((int) $user_info['status'] === COURSEMANAGER) {
                 echo $userData;
-            } else {
-                echo '<h3>-</h3>';
             }
         } else {
             echo Display::url(
@@ -76,7 +115,15 @@ switch ($action) {
         echo '</div>';
         echo '</div>';
 
-        $url = api_get_path(WEB_AJAX_PATH).'message.ajax.php?a=send_message&user_id='.$user_info['user_id'].'&course_id='.$courseId.'&session_id='.$sessionId;
+        $url = api_get_path(WEB_AJAX_PATH).'message.ajax.php?'
+            .http_build_query(
+                [
+                    'a' => 'send_message',
+                    'user_id' => $user_info['user_id'],
+                    'course_id' => $courseId,
+                    'session_id' => $sessionId,
+                ]
+            );
 
         if ($isAnonymous === false &&
             api_get_setting('allow_message_tool') == 'true'

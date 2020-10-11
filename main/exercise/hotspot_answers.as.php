@@ -153,7 +153,7 @@ if (!$hideExpectedAnswer) {
         $qb
             ->where($qb->expr()->eq('a.cId', $courseId))
             ->andWhere($qb->expr()->eq('a.questionId', $questionId))
-            ->andWhere($qb->expr()->neq('a.hotspotType', 'noerror'))
+            ->andWhere("a.hotspotType != 'noerror'")
             ->orderBy('a.id', 'ASC');
     } else {
         $qb

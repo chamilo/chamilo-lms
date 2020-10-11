@@ -299,7 +299,7 @@ echo $form->returnForm();
 if (count($certificateList) == 0) {
     echo Display::return_message(get_lang('NoResultsAvailable'), 'warning');
 } else {
-    echo '<table class="table data_table">';
+    echo '<table class="table table-hover table-striped  data_table">';
     echo '<tbody>';
     foreach ($certificateList as $index => $value) {
         $categoryId = $value['category_id'];
@@ -313,7 +313,7 @@ if (count($certificateList) == 0) {
         echo '<td width="50%" class="actions">'.$courseInfo['title'].'</td>';
         echo '</tr>';
         echo '<tr><td colspan="2">
-            <table class="table data_table">
+            <table class="table table-hover table-striped  data_table">
                 <tbody>';
 
         $list = GradebookUtils::get_list_gradebook_certificates_by_user_id($value['user_id'], $categoryId);

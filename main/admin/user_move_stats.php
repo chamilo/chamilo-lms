@@ -784,13 +784,16 @@ if (!empty($user_list)) {
 
         $course_list = $course_list_registered;
 
-        echo '<div>';
-        echo '<table class="data_table">';
+        echo '<div class="table-responsive">';
+        echo '<table class="table table-hover table-striped data_table">';
+        echo '<thead>';
         echo '<tr>';
         echo '<th style="text-align:left;" colspan="'.count($course_list).'">';
         echo "<h3>$name #$user_id </h3>  ";
         echo '</th>';
         echo '</tr>';
+        echo '</thead>';
+        echo '<tbody>';
 
         if (!empty($course_list)) {
             echo '<tr>';
@@ -822,7 +825,7 @@ if (!empty($user_list)) {
                 $unique_id = uniqid();
                 $combinations[$unique_id] = ['course_code' => $course_code, 'session_id' => $session_id];
 
-                echo '<select id="'.$unique_id.'" name="'.$unique_id.'">';
+                echo '<select id="'.$unique_id.'" name="'.$unique_id.'" class="form-control">';
                 echo $options;
                 echo '</select>';
                 echo '<br />';
@@ -837,6 +840,7 @@ if (!empty($user_list)) {
             echo get_lang('NoCoursesForThisUser');
             echo '</td>';
         }
+        echo '</tbody>';
         echo '</table>';
         echo '</div>';
     }

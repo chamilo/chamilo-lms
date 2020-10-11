@@ -253,7 +253,7 @@ if (isset($rows)) {
             echo Display::page_subheader($name);
         }
 
-        echo "<div ".$style."><table class=\"data_table\">";
+        echo "<div ".$style."><table class=\"table table-hover table-striped data_table\">";
 
         if ($row['visible'] == '0') {
             $titleclass = 'forum_message_post_title_2_be_approved';

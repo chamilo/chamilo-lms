@@ -260,7 +260,7 @@ if ($my_action == 'liststd' &&
         $table_list .= Display::tabsOnlyLink($tabs, $active);
 
         $icon_qualify = 'quiz.png';
-        $table_list .= '<center><br /><table class="data_table" style="width:50%">';
+        $table_list .= '<center><br /><table class="table table-hover table-striped data_table" style="width:50%">';
         // The column headers (TODO: Make this sortable).
         $table_list .= '<tr >';
         $table_list .= '<th height="24">'.get_lang('NamesAndLastNames').'</th>';

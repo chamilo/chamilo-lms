@@ -268,7 +268,7 @@ if (api_get_setting('go_to_course_after_login') == 'true') {
         $count_of_sessions == 0 &&
         $count_of_courses_no_sessions == 1
     ) {
-        if (!empty($courseAndSessions['courses']) && isset($courseAndSessions['courses'][0])) {
+        if (!empty($courseAndSessions['courses']) && isset($courseAndSessions['courses'][0]) && !empty($courseAndSessions['courses'][0]['link'])) {
             header("Location: {$courseAndSessions['courses'][0]['link']}");
             exit;
         }

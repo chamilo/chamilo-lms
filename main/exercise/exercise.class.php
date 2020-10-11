@@ -2040,7 +2040,7 @@ class Exercise
                 $form->addGroup($radios, null, get_lang('QuestionsPerPage'));
             } else {
                 // if is Direct feedback but has not questions we can allow to modify the question type
-                if (0 === $this->getQuestionCount()) {
+                if (empty($this->iId) || 0 === $this->getQuestionCount()) {
                     $this->setResultFeedbackGroup($form);
                     $this->setResultDisabledGroup($form);
 
@@ -2587,14 +2587,16 @@ class Exercise
 
         $freeze = true;
         if ('true' === api_get_setting('enable_quiz_scenario')) {
-            if (0 === $this->getQuestionCount()) {
-                $freeze = false;
-            } else {
+            if ($this->getQuestionCount() > 0) {
                 $hasDifferentQuestion = $this->hasQuestionWithTypeNotInList([UNIQUE_ANSWER, HOT_SPOT_DELINEATION]);
                 if (false === $hasDifferentQuestion) {
                     $freeze = false;
                 }
+            } else {
+                $freeze = false;
             }
+        } else {
+            $freeze = false;
         }
 
         $direct = $form->createElement(
@@ -3017,7 +3019,7 @@ class Exercise
     public function copyExercise()
     {
         $exerciseObject = $this;
-        $categories = $exerciseObject->getCategoriesInExercise();
+        $categories = $exerciseObject->getCategoriesInExercise(true);
         // Get all questions no matter the order/category settings
         $questionList = $exerciseObject->getQuestionOrderedList();
         // Force the creation of a new exercise
@@ -3026,25 +3028,41 @@ class Exercise
         $exerciseObject->updateStatus(false);
         $exerciseObject->updateId(0);
         $exerciseObject->sessionId = api_get_session_id();
+        $courseId = api_get_course_int_id();
         $exerciseObject->save();
         $newId = $exerciseObject->selectId();
+        $exerciseRelQuestionTable = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+
+        $count = 1;
+        $batchSize = 20;
+        $em = Database::getManager();
+
         if ($newId && !empty($questionList)) {
             // Question creation
             foreach ($questionList as $oldQuestionId) {
-                $oldQuestionObj = Question::read($oldQuestionId);
+                $oldQuestionObj = Question::read($oldQuestionId, null, false);
                 $newQuestionId = $oldQuestionObj->duplicate();
                 if ($newQuestionId) {
-                    $newQuestionObj = Question::read($newQuestionId);
+                    $newQuestionObj = Question::read($newQuestionId, null, false);
                     if (isset($newQuestionObj) && $newQuestionObj) {
-                        $newQuestionObj->addToList($newId);
+                        //$newQuestionObj->addToList($newId);
+                        $sql = "INSERT INTO $exerciseRelQuestionTable (c_id, question_id, exercice_id, question_order)
+                                VALUES ($courseId, ".$newQuestionId.", ".$newId.", '$count')";
+                        Database::query($sql);
+                        $count++;
+
                         if (!empty($oldQuestionObj->category)) {
                             $newQuestionObj->saveCategory($oldQuestionObj->category);
                         }
 
                         // This should be moved to the duplicate function
-                        $newAnswerObj = new Answer($oldQuestionId);
+                        $newAnswerObj = new Answer($oldQuestionId, $courseId, $exerciseObject);
                         $newAnswerObj->read();
                         $newAnswerObj->duplicate($newQuestionObj);
+
+                        if (($count % $batchSize) === 0) {
+                            $em->clear(); // Detaches all objects from Doctrine!
+                        }
                     }
                 }
             }
@@ -3209,6 +3227,7 @@ class Exercise
                 'exerciseType' => $this->type,
                 'exerciseId' => $this->id,
                 'reminder' => empty($myRemindList) ? null : 2,
+                'tryagain' => isset($_REQUEST['tryagain']) && 1 === (int) $_REQUEST['tryagain'] ? 1 : 0,
             ]);
 
             $params = [
@@ -4655,6 +4674,7 @@ class Exercise
                     if ($from_database) {
                         $TBL_TRACK_HOTSPOT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
                         // Check auto id
+                        $foundAnswerId = $answerAutoId;
                         $sql = "SELECT hotspot_correct
                                 FROM $TBL_TRACK_HOTSPOT
                                 WHERE
@@ -4684,7 +4704,7 @@ class Exercise
                                     hotspot_answer_id = ".intval($answerId)."
                                 ORDER BY hotspot_id ASC";
                             $result = Database::query($sql);
-
+                            $foundAnswerId = $answerId;
                             if (Database::num_rows($result)) {
                                 $studentChoice = Database::result(
                                     $result,
@@ -4707,7 +4727,7 @@ class Exercise
                                                 hotspot_answer_id = $answerIid
                                             ORDER BY hotspot_id ASC";
                                     $result = Database::query($sql);
-
+                                    $foundAnswerId = $answerIid;
                                     $studentChoice = Database::result(
                                         $result,
                                         0,
@@ -4964,7 +4984,7 @@ class Exercise
                             $correctAnswerId = 0;
                             /** @var TrackEHotspot $hotspot */
                             foreach ($orderedHotSpots as $correctAnswerId => $hotspot) {
-                                if ($hotspot->getHotspotAnswerId() == $answerAutoId) {
+                                if ($hotspot->getHotspotAnswerId() == $answerIid) {
                                     break;
                                 }
                             }
@@ -5350,14 +5370,22 @@ class Exercise
                                 </table>';
                             break;
                         case HOT_SPOT:
+                            $correctAnswerId = 0;
+                            /** @var TrackEHotspot $hotspot */
+                            foreach ($orderedHotSpots as $correctAnswerId => $hotspot) {
+                                if ($hotspot->getHotspotAnswerId() == $foundAnswerId) {
+                                    break;
+                                }
+                            }
+
                             ExerciseShowFunctions::display_hotspot_answer(
                                 $feedback_type,
-                                $answerId,
+                                ++$correctAnswerId,
                                 $answer,
                                 $studentChoice,
                                 $answerComment,
                                 $results_disabled,
-                                $answerId,
+                                $correctAnswerId,
                                 $showTotalScoreAndUserChoicesInLastAttempt
                             );
                             break;
@@ -5584,7 +5612,7 @@ class Exercise
                             $final_overlap = 100;
                         }
 
-                        $table_resume = '<table class="data_table">
+                        $table_resume = '<table class="table table-hover table-striped data_table">
                                 <tr class="row_odd" >
                                     <td></td>
                                     <td ><b>'.get_lang('Requirements').'</b></td>
@@ -7009,10 +7037,8 @@ class Exercise
         $teacher_answer_list = $this->fill_in_blank_answer_to_array($answer);
         $result = '';
         if (!empty($teacher_answer_list)) {
-            $i = 0;
             foreach ($teacher_answer_list as $teacher_item) {
-                $value = null;
-                //Cleaning student answer list
+                // Cleaning student answer list
                 $value = strip_tags($teacher_item);
                 $value = api_substr($value, 1, api_strlen($value) - 2);
                 $value = explode('/', $value);
@@ -9729,7 +9755,7 @@ class Exercise
             }
 
             $table_resume = '
-                    <table class="data_table">
+                    <table class="table table-hover table-striped data_table">
                         <tr class="row_odd" >
                             <td>&nbsp;</td>
                             <td><b>'.get_lang('Requirements').'</b></td>
@@ -9808,7 +9834,7 @@ class Exercise
             $resfree = Database::query($queryfree);
             $questionScore = Database::result($resfree, 0, 'marks');
             $totalScore += $questionScore;*/
-            $relPath = api_get_path(REL_PATH);
+            $relPath = api_get_path(REL_CODE_PATH);
             echo '</table></td></tr>';
             echo "
                         <tr>
@@ -9981,11 +10007,12 @@ class Exercise
         foreach ($attemptList as $questionId => $options) {
             foreach ($options as $option) {
                 $question = Question::read($option['question_id']);
-
-                switch ($question->type) {
-                    case FILL_IN_BLANKS:
-                        $option['answer'] = $this->fill_in_blank_answer_to_string($option['answer']);
-                        break;
+                if ($question) {
+                    switch ($question->type) {
+                        case FILL_IN_BLANKS:
+                            $option['answer'] = $this->fill_in_blank_answer_to_string($option['answer']);
+                            break;
+                    }
                 }
 
                 if (!empty($option['answer'])) {

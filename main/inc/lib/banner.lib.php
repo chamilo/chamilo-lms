@@ -859,6 +859,18 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
             $html .= Display::tag('div', $view_as_student_link, ['id' => 'view_as_link', 'class' => 'pull-right']);
         }
 
+        if ($sessionId &&
+            (api_is_platform_admin() || CourseManager::is_course_teacher($user_id, $courseInfo['code']))
+        ) {
+            $url = Display::url(
+                Display::return_icon('course.png', get_lang('Course')),
+                $courseInfo['course_public_url'].'?id_session=0',
+                ['class' => 'btn btn-default btn-sm', 'target' => '_blank']
+            );
+            $button = Display::tag('div', $url, ['class' => 'view-options']);
+            $html .= Display::tag('div', $button, ['id' => 'view_as_link', 'class' => 'pull-right']);
+        }
+
         if (!empty($navigation_right)) {
             foreach ($navigation_right as $item) {
                 $extra_class = isset($item['class']) ? $item['class'] : null;

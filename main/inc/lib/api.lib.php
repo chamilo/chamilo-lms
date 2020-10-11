@@ -6568,6 +6568,13 @@ function api_request_uri()
  */
 function api_get_current_access_url_id()
 {
+    if ('cli' === PHP_SAPI) {
+        $accessUrlId = api_get_configuration_value('access_url');
+        if (!empty($accessUrlId)) {
+            return $accessUrlId;
+        }
+    }
+
     static $id;
     if (!empty($id)) {
         return (int) $id;

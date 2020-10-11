@@ -1,4 +1,7 @@
 <?php
+
+/* For licensing terms, see /license.txt */
+
 /**
  * This script pre-generates a list of commits to generate a changelog in the
  * form (branch, then commits in HTML form, then a final feedback):
@@ -17,6 +20,10 @@
  * @usage php gitlog.php [-t|some-commit|-max20171001]
  * @see https://github.com/ywarnier/git
  */
+exit;
+if (PHP_SAPI != 'cli') {
+    die('This script can only be launched from the command line');
+}
 require 'php-git/src/Git.php';
 $repository = __DIR__.'/../..';
 $number = 2000; //the number of commits to check (including minor)

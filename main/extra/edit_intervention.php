@@ -17,7 +17,7 @@ $tbl_stats_exercices = Database:: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCIS
 
 ?>
 <form action="update_intervention.php" method="post" name="save_intercention">
-    <table class='data_table'>
+    <table class='table table-hover table-striped data_table'>
         <tr>
             <th colspan="4"><?php echo get_lang('Edit'); ?>
         <tr>

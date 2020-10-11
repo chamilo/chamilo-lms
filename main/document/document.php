@@ -263,8 +263,6 @@ switch ($action) {
                 // Check whether the document is in the database.
                 if (!empty($documentInfo) ) {
                     $file = $_FILES['file_'.$fileTarget];
-/**/
-
                     if ($documentInfo['filetype'] ==  'file') {
                         $deleteDocument = DocumentManager::writeContentIntoDocument(
                             $courseInfo,
@@ -276,25 +274,16 @@ switch ($action) {
                             $file
                         );
                         if ($deleteDocument) {
-                            /*
-                            $certificateId = isset($_GET['delete_certificate_id']) ? $_GET['delete_certificate_id'] : null;
-                            DocumentManager::remove_attach_certificate(
-                                api_get_course_id(),
-                                $certificateId
-                            );
-                            */
                             Display::addFlash(
                                 Display::return_message(
-                                    get_lang('DocDeleted').': '.$documentInfo['title'],
+                                    get_lang('DownloadEnd').': '.$documentInfo['title'],
                                     'success'
                                 )
                             );
                         } else {
-                            Display::addFlash(Display::return_message(get_lang('DocDeleteError'), 'warning'));
+                            Display::addFlash(Display::return_message(get_lang('Impossible'), 'warning'));
                         }
                     }
-/**/
-
                 } else {
                     Display::addFlash(Display::return_message(get_lang('FileNotFound'), 'warning'));
                 }
@@ -351,7 +340,6 @@ switch ($action) {
 
                 // Check whether the document is in the database.
                 if (!empty($documentInfo)) {
-
                     if ($documentInfo['filetype'] != 'link') {
                         $deleteDocument = DocumentManager::delete_document(
                             $courseInfo,
@@ -2294,19 +2282,20 @@ if (false === $disableQuotaMessage && count($documentAndFolders) > 1) {
     echo '<span id="course_quota"></span>';
 }
 echo '<script>
-var temporal = undefined;
         $(function() {
             $(".removeHiddenFile").click(function(){
-               temporal = this;
                data = $(this).data("id");
                $(".upload_element_"+data).removeClass("hidden");
-               $.each($(".currentFile"),function(a,b){$(b).val(data);});
+               $.each($(".currentFile"),function(a,b){
+                   $(b).val(data);
+               });
             });
             $(".btnSendFile").click(function(){
-               temporal = this;
                data = $(this).data("id");
                $(".upload_element_"+data).removeClass("hidden");
-               $.each($(".currentFile"),function(a,b){$(b).val(data);});
+               $.each($(".currentFile"),function(a,b){
+                   $(b).val(data);
+               });
             });
 
        $("form[name=form_teacher_table]").prop("enctype","multipart/form-data")

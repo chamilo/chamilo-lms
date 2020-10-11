@@ -5640,70 +5640,50 @@ class DocumentManager
             );
         }
         if ($type == 'file') {
-            $randomUploadName= md5(uniqid(mt_rand(), true));
-            $ur = "#!";
-
+            $randomUploadName = md5(uniqid(mt_rand(), true));
             $modify_icons[] = Display::url(
-                Display::return_icon('upload_file.png', "****** REEMPLAZAAR ".get_lang('Export2PDF')),
-                $ur,
+                Display::return_icon('upload_file.png', get_lang('UplUploadDocument')),
+                "#!",
                 [
                     'data-id' => $randomUploadName,
                     'class' => 'removeHiddenFile'
                 ]
             );
+            $html = "
+            <div class='upload_element_".$randomUploadName." hidden'>
+                <div class='form-group ' id='file_file'>
+                    <label class='col-sm-2 control-label' for='file_".$randomUploadName."'>
+                        ".get_lang('File')."
+                    </label>
+                    <div class='col-sm-8'>
+                        <input class='' name='file_".$randomUploadName."' style='width: 250px' type='file'>
+                    </div>
+                    <div class='col-sm-2'></div>
+                </div>
+                <div class='form-group '>
+                    <label class='col-sm-2 control-label' for='upload_".$randomUploadName."_submitDocument'>
 
-$html = '';
-$html .= "
-<div class='upload_element_".$randomUploadName." hidden'>
-    <div class='form-group ' id='file_file'>
-        <label class='col-sm-2 control-label' for='file_".$randomUploadName."'>
-            ".get_lang('File')."
-        </label>
-        <div class='col-sm-8'>
-            <input class='' name='file_".$randomUploadName."' style='width: 250px' type='file'>
-        </div>
-        <div class='col-sm-2'></div>
-    </div>
-    <div class='form-group '>
-        <label class='col-sm-2 control-label' for='upload_".$randomUploadName."_submitDocument'>
+                    </label>
+                    <div class='col-sm-8'>
 
-        </label>
-        <div class='col-sm-8'>
+                        <button class=' btn btn-primary ' id='upload_".$randomUploadName."_submitDocument'
+                        name='submitDocument'
+                                type='submit'>
+                                <em class='fa fa-paper-plane'></em> ".get_lang('SendDocument')."
+                        </button>
+                    </div>
+                    <div class='col-sm-2'></div>
+                </div>
+                <input class='currentFile' name='currentFile' type='hidden' >
 
-            <button class=' btn btn-primary ' id='upload_".$randomUploadName."_submitDocument'
-            name='submitDocument'
-                    type='submit'>
-                    <em class='fa fa-paper-plane'></em> ".get_lang('SendDocument')."
-            </button>
-        </div>
-        <div class='col-sm-2'></div>
-    </div>
-    <input class='currentFile' name='currentFile' type='hidden' >
-
-    <input id='upload_".$randomUploadName."__qf__upload_".$randomUploadName."' name='_qf__upload_".$randomUploadName."'
-           type='hidden'
-           value=''>
-    <input id='upload_".$randomUploadName."_id' name='id_$randomUploadName' type='hidden' value='$id'>
-    <input id='upload_".$randomUploadName."_MAX_FILE_SIZE' name='MAX_FILE_SIZE' type='hidden' value='".ini_get('upload_max_filesize')."'>
-</div>
-";
-/*
-            $form->addElement('hidden', 'action', 'replace');
-            $form->addButtonSend(get_lang('SendDocument'), 'submitDocument',false,[
-                'data-id' => $randomUploadName,
-                'class' => 'btnSendFile'
-            ]);
-            $form->setDefaults([]);
-        $form->addElement('html', '</div>');
-        $form->addElement('html', '<input name ="currentFile" class="currentFile" type="hidden">');
-
-
-            //$modify_icons[] = $form->returnForm();
-            */
+                <input id='upload_".$randomUploadName."__qf__upload_".$randomUploadName."' name='_qf__upload_".$randomUploadName."'
+                       type='hidden'
+                       value=''>
+                <input id='upload_".$randomUploadName."_id' name='id_$randomUploadName' type='hidden' value='$id'>
+                <input id='upload_".$randomUploadName."_MAX_FILE_SIZE' name='MAX_FILE_SIZE' type='hidden' value='".ini_get('upload_max_filesize')."'>
+            </div>
+            ";
             $modify_icons[] = $html;
-if($html == null) {
-    $a = $html;
-}
         }
 
         return implode(PHP_EOL, $modify_icons);
@@ -7125,16 +7105,8 @@ if($html == null) {
         return $btn;
     }
 
-
-
-
-
-
-
-
-
     /**
-     * TODO: Escribe nuevo contenido en un archivo in borrarlo
+     * Writes the content of a sent file to an existing one in the system, backing up the previous one
      *
      * @param array  $_course
      * @param string $path          Path stored in the database
@@ -7142,12 +7114,10 @@ if($html == null) {
      * @param int    $sessionId     The ID of the session, if any
      * @param int    $documentId    The document id, if available
      * @param int    $groupId       iid
-     * @param file    $file         $_FILE content
+     * @param file   $file          $_FILES content
      *
      * @return bool true/false
      *
-     * @todo now only files/folders in a folder get visibility 2, we should rename them too.
-     * @todo We should be able to get rid of this later when using only documentId (check further usage)
      */
 
     public static function writeContentIntoDocument(
@@ -7161,13 +7131,13 @@ if($html == null) {
     ) {
         $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
 
-        $documentId = (int) $documentId;
-        $groupId = (int) $groupId;
+        $documentId = (int)$documentId;
+        $groupId = (int)$groupId;
         if (empty($groupId)) {
             $groupId = api_get_group_id();
         }
 
-        $sessionId = (int) $sessionId;
+        $sessionId = (int)$sessionId;
         if (empty($sessionId)) {
             $sessionId = api_get_session_id();
         }
@@ -7245,75 +7215,35 @@ if($html == null) {
 
 
         if ($document_exists_in_disk) {
-            /*
-            if (api_get_setting('permanently_remove_deleted_files') === 'true') {
-                // Delete documents, do it like this so metadata gets deleted too
-                my_delete($base_work_dir.$path);
-                // Hard delete.
-                self::deleteDocumentFromDb($documentId, $_course, $sessionId, true);
-                $file_deleted_from_disk = true;
-
-            } else
-                */{
-                // Set visibility to 2 and rename file/folder to xxx_DELETED_#id (soft delete)
-                if (is_file($base_work_dir.$path) || is_dir($base_work_dir.$path)) {
-                    if (rename($base_work_dir.$path, $base_work_dir.$new_path)) {
-                        /*
-                        $new_path = Database::escape_string($new_path);
-
-                        $sql = "UPDATE $TABLE_DOCUMENT
-                                SET path = '".$new_path."'
-                                WHERE
-                                    c_id = $course_id AND
-                                    session_id = $sessionId AND
-                                    id = ".$documentId;
-                        Database::query($sql);
-
-                        // Soft delete.
-                        self::deleteDocumentFromDb($documentId, $_course, $sessionId);
-
-                        // Change path of sub folders and documents in database.
-                        $old_item_path = $docInfo['path'];
-                        $new_item_path = $new_path.substr($old_item_path, strlen($path));
-                        $new_item_path = Database::escape_string($new_item_path);
-
-                        $sql = "UPDATE $TABLE_DOCUMENT
-                                SET path = '".$new_item_path."'
-                                WHERE
-                                    c_id = $course_id AND
-                                    session_id = $sessionId AND
-                                    id = ".$documentId;
-                        Database::query($sql);
-                        */
-                        $file_renamed_from_disk = true;
-                    } else {
-                        // Couldn't rename - file permissions problem?
-                        error_log(
-                            __FILE__.' '.__LINE__.': Error renaming '.$base_work_dir.$path.' to '.$base_work_dir.$new_path.'. This is probably due to file permissions',
-                            0
-                        );
-                    }
+            // Set visibility to 2 and rename file/folder to xxx_REPLACED_DATE_#date_ID_#id (soft delete)
+            if (is_file($base_work_dir.$path) || is_dir($base_work_dir.$path)) {
+                if (rename($base_work_dir.$path, $base_work_dir.$new_path)) {
+                    $file_renamed_from_disk = true;
+                } else {
+                    // Couldn't rename - file permissions problem?
+                    error_log(
+                        __FILE__.' '.__LINE__.': Error renaming '.$base_work_dir.$path.' to '.$base_work_dir.$new_path.'. This is probably due to file permissions',
+                        0
+                    );
                 }
+            }
 
-                if (move_uploaded_file($file['tmp_name'], $base_work_dir.$path)) {
-                    $size = filesize($base_work_dir.$path);
-
-                    $sql = "UPDATE $TABLE_DOCUMENT
+            if (move_uploaded_file($file['tmp_name'], $base_work_dir.$path)) {
+                $size = filesize($base_work_dir.$path);
+                $sql = "UPDATE $TABLE_DOCUMENT
                                 SET size = '".$size."'
                                 WHERE
                                     c_id = $course_id AND
                                     session_id = $sessionId AND
                                     id = ".$documentId;
-                    Database::query($sql);
-                    $fileMoved = true;
+                Database::query($sql);
+                $fileMoved = true;
 
-                }
             }
         }
         // Checking inconsistency
-        //error_log('Doc status: (1 del db :'.($file_deleted_from_db?'yes':'no').') - (2 del disk: '.($file_deleted_from_disk?'yes':'no').') - (3 ren disk: '.($file_renamed_from_disk?'yes':'no').')');
-        if ( $file_deleted_from_disk ||
-             $file_renamed_from_disk
+        if ($file_deleted_from_disk ||
+            $file_renamed_from_disk
         ) {
             return true;
         } else {

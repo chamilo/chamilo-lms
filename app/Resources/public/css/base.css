@@ -221,13 +221,10 @@ select {
 #login-block .btn-language.open .dropdown-menu {
     display: block;
 }
-
-#toolbar-admin.navbar {
+#toolbar-admin{
     margin-bottom: 0;
     border-radius: 0;
-    border: none;
 }
-
 .blackboard_show {
     float: left;
     position: absolute;

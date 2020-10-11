@@ -5646,7 +5646,7 @@ class DocumentManager
                 "#!",
                 [
                     'data-id' => $randomUploadName,
-                    'class' => 'removeHiddenFile'
+                    'class' => 'removeHiddenFile',
                 ]
             );
             $html = "
@@ -6661,6 +6661,158 @@ class DocumentManager
     }
 
     /**
+     * Writes the content of a sent file to an existing one in the system, backing up the previous one.
+     *
+     * @param array  $_course
+     * @param string $path          Path stored in the database
+     * @param string $base_work_dir Path to the documents folder (if not defined, $documentId must be used)
+     * @param int    $sessionId     The ID of the session, if any
+     * @param int    $documentId    The document id, if available
+     * @param int    $groupId       iid
+     * @param file   $file          $_FILES content
+     *
+     * @return bool true/false
+     */
+    public static function writeContentIntoDocument(
+        $_course,
+        $path = null,
+        $base_work_dir = null,
+        $sessionId = null,
+        $documentId = null,
+        $groupId = 0,
+        $file
+    ) {
+        $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
+
+        $documentId = (int) $documentId;
+        $groupId = (int) $groupId;
+        if (empty($groupId)) {
+            $groupId = api_get_group_id();
+        }
+
+        $sessionId = (int) $sessionId;
+        if (empty($sessionId)) {
+            $sessionId = api_get_session_id();
+        }
+
+        $course_id = $_course['real_id'];
+
+        if (empty($course_id)) {
+            return false;
+        }
+
+        if (empty($base_work_dir)) {
+            return false;
+        }
+
+        if (empty($documentId)) {
+            $documentId = self::get_document_id($_course, $path, $sessionId);
+            $docInfo = self::get_document_data_by_id(
+                $documentId,
+                $_course['code'],
+                false,
+                $sessionId
+            );
+            $path = $docInfo['path'];
+        } else {
+            $docInfo = self::get_document_data_by_id(
+                $documentId,
+                $_course['code'],
+                false,
+                $sessionId
+            );
+            if (empty($docInfo)) {
+                return false;
+            }
+            $path = $docInfo['path'];
+        }
+
+        if (empty($path) || empty($docInfo) || empty($documentId)) {
+            return false;
+        }
+
+        $itemInfo = api_get_item_property_info(
+            $_course['real_id'],
+            TOOL_DOCUMENT,
+            $documentId,
+            $sessionId,
+            $groupId
+        );
+
+        if (empty($itemInfo)) {
+            return false;
+        }
+
+        // File was already deleted.
+        if ($itemInfo['lastedit_type'] == 'DocumentReplaced' ||
+            $itemInfo['lastedit_type'] == 'replace' ||
+            $itemInfo['visibility'] == 2
+        ) {
+            return false;
+        }
+
+        // Filtering by group.
+        if ($itemInfo['to_group_id'] != $groupId) {
+            return false;
+        }
+        $now = new DateTime();
+        $now = $now->format('Y_m_d__H_i_s_');
+
+        $document_exists_in_disk = file_exists($base_work_dir.$path);
+        $new_path = $path.'_REPLACED_DATE_'.$now.'_ID_'.$documentId;
+
+        $file_deleted_from_disk = false;
+        $file_deleted_from_disk = true;
+        $fileMoved = fale;
+        $file_renamed_from_disk = false;
+
+        if ($document_exists_in_disk) {
+            // Set visibility to 2 and rename file/folder to xxx_REPLACED_DATE_#date_ID_#id (soft delete)
+            if (is_file($base_work_dir.$path) || is_dir($base_work_dir.$path)) {
+                if (rename($base_work_dir.$path, $base_work_dir.$new_path)) {
+                    $file_renamed_from_disk = true;
+                } else {
+                    // Couldn't rename - file permissions problem?
+                    error_log(
+                        __FILE__.' '.__LINE__.': Error renaming '.$base_work_dir.$path.' to '.$base_work_dir.$new_path.'. This is probably due to file permissions',
+                        0
+                    );
+                }
+            }
+
+            if (move_uploaded_file($file['tmp_name'], $base_work_dir.$path)) {
+                $size = filesize($base_work_dir.$path);
+                $sql = "UPDATE $TABLE_DOCUMENT
+                                SET size = '".$size."'
+                                WHERE
+                                    c_id = $course_id AND
+                                    session_id = $sessionId AND
+                                    id = ".$documentId;
+                Database::query($sql);
+                $fileMoved = true;
+            }
+        }
+        // Checking inconsistency
+        if ($file_deleted_from_disk ||
+            $file_renamed_from_disk
+        ) {
+            return true;
+        } else {
+            //Something went wrong
+            //The file or directory isn't there anymore (on the filesystem)
+            // This means it has been removed externally. To prevent a
+            // blocking error from happening, we drop the related items from the
+            // item_property and the document table.
+            error_log(
+                __FILE__.' '.__LINE__.': System inconsistency detected. The file or directory '.$base_work_dir.$path.' seems to have been removed from the filesystem independently from the web platform. To restore consistency, the elements using the same path will be removed from the database',
+                0
+            );
+
+            return false;
+        }
+    }
+
+    /**
      * Parse file information into a link.
      *
      * @param array  $userInfo        Current user info
@@ -7103,161 +7255,5 @@ class DocumentManager
         }
 
         return $btn;
-    }
-
-    /**
-     * Writes the content of a sent file to an existing one in the system, backing up the previous one
-     *
-     * @param array  $_course
-     * @param string $path          Path stored in the database
-     * @param string $base_work_dir Path to the documents folder (if not defined, $documentId must be used)
-     * @param int    $sessionId     The ID of the session, if any
-     * @param int    $documentId    The document id, if available
-     * @param int    $groupId       iid
-     * @param file   $file          $_FILES content
-     *
-     * @return bool true/false
-     *
-     */
-
-    public static function writeContentIntoDocument(
-        $_course,
-        $path = null,
-        $base_work_dir = null,
-        $sessionId = null,
-        $documentId = null,
-        $groupId = 0,
-        $file
-    ) {
-        $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
-
-        $documentId = (int)$documentId;
-        $groupId = (int)$groupId;
-        if (empty($groupId)) {
-            $groupId = api_get_group_id();
-        }
-
-        $sessionId = (int)$sessionId;
-        if (empty($sessionId)) {
-            $sessionId = api_get_session_id();
-        }
-
-        $course_id = $_course['real_id'];
-
-        if (empty($course_id)) {
-            return false;
-        }
-
-        if (empty($base_work_dir)) {
-            return false;
-        }
-
-        if (empty($documentId)) {
-            $documentId = self::get_document_id($_course, $path, $sessionId);
-            $docInfo = self::get_document_data_by_id(
-                $documentId,
-                $_course['code'],
-                false,
-                $sessionId
-            );
-            $path = $docInfo['path'];
-        } else {
-            $docInfo = self::get_document_data_by_id(
-                $documentId,
-                $_course['code'],
-                false,
-                $sessionId
-            );
-            if (empty($docInfo)) {
-                return false;
-            }
-            $path = $docInfo['path'];
-        }
-
-        if (empty($path) || empty($docInfo) || empty($documentId)) {
-            return false;
-        }
-
-        $itemInfo = api_get_item_property_info(
-            $_course['real_id'],
-            TOOL_DOCUMENT,
-            $documentId,
-            $sessionId,
-            $groupId
-        );
-
-        if (empty($itemInfo)) {
-            return false;
-        }
-
-        // File was already deleted.
-        if ($itemInfo['lastedit_type'] == 'DocumentReplaced' ||
-            $itemInfo['lastedit_type'] == 'replace' ||
-            $itemInfo['visibility'] == 2
-        ) {
-            return false;
-        }
-
-        // Filtering by group.
-        if ($itemInfo['to_group_id'] != $groupId) {
-            return false;
-        }
-        $now = new DateTime();
-        $now = $now->format('Y_m_d__H_i_s_');
-
-        $document_exists_in_disk = file_exists($base_work_dir.$path);
-        $new_path = $path.'_REPLACED_DATE_'.$now.'_ID_'.$documentId;
-
-        $file_deleted_from_disk = false;
-        $file_deleted_from_disk = true;
-        $fileMoved = fale;
-        $file_renamed_from_disk = false;
-
-
-        if ($document_exists_in_disk) {
-            // Set visibility to 2 and rename file/folder to xxx_REPLACED_DATE_#date_ID_#id (soft delete)
-            if (is_file($base_work_dir.$path) || is_dir($base_work_dir.$path)) {
-                if (rename($base_work_dir.$path, $base_work_dir.$new_path)) {
-                    $file_renamed_from_disk = true;
-                } else {
-                    // Couldn't rename - file permissions problem?
-                    error_log(
-                        __FILE__.' '.__LINE__.': Error renaming '.$base_work_dir.$path.' to '.$base_work_dir.$new_path.'. This is probably due to file permissions',
-                        0
-                    );
-                }
-            }
-
-            if (move_uploaded_file($file['tmp_name'], $base_work_dir.$path)) {
-                $size = filesize($base_work_dir.$path);
-                $sql = "UPDATE $TABLE_DOCUMENT
-                                SET size = '".$size."'
-                                WHERE
-                                    c_id = $course_id AND
-                                    session_id = $sessionId AND
-                                    id = ".$documentId;
-                Database::query($sql);
-                $fileMoved = true;
-
-            }
-        }
-        // Checking inconsistency
-        if ($file_deleted_from_disk ||
-            $file_renamed_from_disk
-        ) {
-            return true;
-        } else {
-            //Something went wrong
-            //The file or directory isn't there anymore (on the filesystem)
-            // This means it has been removed externally. To prevent a
-            // blocking error from happening, we drop the related items from the
-            // item_property and the document table.
-            error_log(
-                __FILE__.' '.__LINE__.': System inconsistency detected. The file or directory '.$base_work_dir.$path.' seems to have been removed from the filesystem independently from the web platform. To restore consistency, the elements using the same path will be removed from the database',
-                0
-            );
-
-            return false;
-        }
     }
 }

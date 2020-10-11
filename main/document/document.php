@@ -37,7 +37,7 @@ $parent_id = null;
 $lib_path = api_get_path(LIBRARY_PATH);
 $actionsRight = '';
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
-if(isset($_POST['currentFile'])){
+if (isset($_POST['currentFile'])) {
     $action = 'replace';
 }
 $allowUseTool = false;
@@ -227,7 +227,7 @@ switch ($action) {
         ) {
             $fileTarget = $_POST['currentFile'];
             if (isset($_FILES) && isset($_FILES['file_'.$fileTarget])) {
-                $fileId = (int)$_POST['id_'.$fileTarget];
+                $fileId = (int) $_POST['id_'.$fileTarget];
                 if (!$isAllowedToEdit) {
                     if (api_is_coach()) {
                         if (!DocumentManager::is_visible_by_id(
@@ -246,7 +246,6 @@ switch ($action) {
                     }
                 }
 
-
                 $documentInfo = DocumentManager::get_document_data_by_id(
                     $fileId,
                     $courseInfo['code'],
@@ -261,9 +260,9 @@ switch ($action) {
                     true
                 );
                 // Check whether the document is in the database.
-                if (!empty($documentInfo) ) {
+                if (!empty($documentInfo)) {
                     $file = $_FILES['file_'.$fileTarget];
-                    if ($documentInfo['filetype'] ==  'file') {
+                    if ($documentInfo['filetype'] == 'file') {
                         $deleteDocument = DocumentManager::writeContentIntoDocument(
                             $courseInfo,
                             null,
@@ -290,9 +289,7 @@ switch ($action) {
 
                 header("Location: $currentUrl");
                 exit;
-
             }
-
         }
         break;
         exit();

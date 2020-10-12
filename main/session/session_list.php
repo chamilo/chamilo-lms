@@ -18,6 +18,11 @@ $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 $idChecked = isset($_REQUEST['idChecked']) ? $_REQUEST['idChecked'] : null;
 $idMultiple = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
 $listType = isset($_REQUEST['list_type']) ? Security::remove_XSS($_REQUEST['list_type']) : SessionManager::getDefaultSessionTab();
+$copySessionContent = isset($_REQUEST['copy_session_content']) ? true : false;
+$addSessionContent = api_get_configuration_value('duplicate_specific_session_content_on_session_copy');
+if (false === $addSessionContent) {
+    $copySessionContent = false;
+}
 
 switch ($action) {
     case 'delete_multiple':
@@ -54,7 +59,14 @@ switch ($action) {
         exit();
         break;
     case 'copy':
-        $result = SessionManager::copy($idChecked);
+        $result = SessionManager::copy(
+            $idChecked,
+            true,
+            true,
+            false,
+            false,
+            $copySessionContent
+        );
         if ($result) {
             $sessionInfo = api_get_session_info($result);
             $url = Display::url(
@@ -157,23 +169,22 @@ if (isset($_REQUEST['keyword'])) {
     $rule->data = Security::remove_XSS($_REQUEST['keyword']);
     $filter->rules[] = $rule;
     $filter->groupOp = 'OR';
-
     $filter = json_encode($filter);
-    $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&_force_search=true&rows=20&page=1&sidx=&sord=asc&filters='.$filter.'&searchField=s.name&searchString='.Security::remove_XSS($_REQUEST['keyword']).'&searchOper=in';
+    $url = api_get_path(WEB_AJAX_PATH).
+        'model.ajax.php?a=get_sessions&_force_search=true&rows=20&page=1&sidx=&sord=asc&filters='.$filter.'&searchField=s.name&searchString='.Security::remove_XSS($_REQUEST['keyword']).'&searchOper=in';
 }
 
 if (isset($_REQUEST['id_category'])) {
     $sessionCategory = SessionManager::get_session_category($_REQUEST['id_category']);
     if (!empty($sessionCategory)) {
-        //Begin with see the searchOper param
-        $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&_force_search=true&rows=20&page=1&sidx=&sord=asc&filters=&searchField=sc.name&searchString='.Security::remove_XSS($sessionCategory['name']).'&searchOper=in';
+        // Begin with see the searchOper param
+        $url = api_get_path(WEB_AJAX_PATH).
+            'model.ajax.php?a=get_sessions&_force_search=true&rows=20&page=1&sidx=&sord=asc&filters=&searchField=sc.name&searchString='.Security::remove_XSS($sessionCategory['name']).'&searchOper=in';
     }
 }
 
 $url .= '&list_type='.$listType;
-
 $result = SessionManager::getGridColumns($listType);
-
 $columns = $result['columns'];
 $column_model = $result['column_model'];
 $extra_params['autowidth'] = 'true';
@@ -196,6 +207,11 @@ if (!isset($_GET['keyword'])) {
 }
 
 $hideSearch = api_get_configuration_value('hide_search_form_in_session_list');
+$copySessionContentLink = '';
+if ($addSessionContent) {
+    $copySessionContentLink = '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."\'".')) return false;" href="session_list.php?copy_session_content=1&list_type='.$listType.'&action=copy&idChecked=\'+options.rowId+\'">'.
+    Display::return_icon('cd.png', get_lang('CopyWithSessionContent'), '', ICON_SIZE_SMALL).'</a>';
+}
 
 // With this function we can add actions to the jgrid (edit, delete, etc)
 $action_links = 'function action_formatter(cellvalue, options, rowObject) {
@@ -207,6 +223,7 @@ $action_links = 'function action_formatter(cellvalue, options, rowObject) {
     Display::return_icon('courses_to_session.png', get_lang('SubscribeCoursesToSession'), '', ICON_SIZE_SMALL).'</a>'.
     '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."\'".')) return false;" href="session_list.php?list_type='.$listType.'&action=copy&idChecked=\'+options.rowId+\'">'.
     Display::return_icon('copy.png', get_lang('Copy'), '', ICON_SIZE_SMALL).'</a>'.
+    $copySessionContentLink.
     '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."\'".')) return false;" href="session_list.php?list_type='.$listType.'&action=delete&idChecked=\'+options.rowId+\'">'.
     Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>'.
     '\';

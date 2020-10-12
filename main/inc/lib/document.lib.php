@@ -2794,7 +2794,7 @@ class DocumentManager
                     if ($type_url == 'abs' || $type_url == 'rel') {
                         $document_file = strstr($real_orig_path, 'document');
 
-                        if (strpos($real_orig_path, $document_file) !== false) {
+                        if ($document_file && strpos($real_orig_path, $document_file) !== false) {
                             $origin_filepath = $orig_course_path.$document_file;
                             $destination_filepath = $dest_course_path.$document_file;
 

@@ -5535,10 +5535,6 @@ EOT;
      * @param int $exerciseId Exercise ID
      * @param int $courseId   Optional. Coure ID.
      *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
-     *
      * @return TrackEExercises|null
      */
     public static function recalculateResult($exeId, $userId, $exerciseId, $courseId = 0)
@@ -5627,5 +5623,65 @@ EOT;
         $em->flush();
 
         return $trackedExercise;
+    }
+
+    public static function getTotalQuestionAnswered($courseId, $exerciseId, $questionId)
+    {
+        $courseId = (int) $courseId;
+        $exerciseId = (int) $exerciseId;
+        $questionId = (int) $questionId;
+
+        $attemptTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+        $trackTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+
+        $sql = "SELECT count(te.exe_id) total
+            FROM $attemptTable t
+            INNER JOIN $trackTable te
+            ON (te.c_id = t.c_id AND t.exe_id = te.exe_id)
+            WHERE
+                t.c_id = $courseId AND
+                exe_exo_id = $exerciseId AND
+                t.question_id = $questionId AND
+                status != 'incomplete'
+        ";
+        $queryTotal = Database::query($sql);
+        $totalRow = Database::fetch_array($queryTotal, 'ASSOC');
+        $total = 0;
+        if ($totalRow) {
+            $total = (int) $totalRow['total'];
+        }
+
+        return $total;
+    }
+
+    public static function getWrongQuestionResults($courseId, $exerciseId, $limit = 10)
+    {
+        $courseId = (int) $courseId;
+        $exerciseId = (int) $exerciseId;
+        $limit = (int) $limit;
+
+        $questionTable = Database::get_course_table(TABLE_QUIZ_QUESTION);
+        $attemptTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+        $trackTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+
+        $sql = "SELECT q.question, question_id, count(q.iid) count
+                FROM $attemptTable t
+                INNER JOIN $questionTable q
+                ON (q.c_id = t.c_id AND q.id = t.question_id)
+                INNER JOIN $trackTable te
+                ON (te.c_id = q.c_id AND t.exe_id = te.exe_id)
+                WHERE
+                    t.c_id = $courseId AND
+                    t.marks != q.ponderation AND
+                    exe_exo_id = $exerciseId AND
+                    status != 'incomplete'
+                GROUP BY q.iid
+                ORDER BY count DESC
+                LIMIT $limit
+        ";
+
+        $result = Database::query($sql);
+
+        return Database::store_result($result, 'ASSOC');
     }
 }

@@ -6785,7 +6785,7 @@ class DocumentManager
             }
         }
         // Checking inconsistency
-        if ($fileMoved ||
+        if ($fileMoved &&
             $file_renamed_from_disk
         ) {
             return true;

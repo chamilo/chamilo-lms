@@ -263,7 +263,7 @@ switch ($action) {
                 if (!empty($documentInfo)) {
                     $file = $_FILES['file_'.$fileTarget];
                     if ($documentInfo['filetype'] == 'file') {
-                        $deleteDocument = DocumentManager::writeContentIntoDocument(
+                        $updateDocument = DocumentManager::writeContentIntoDocument(
                             $courseInfo,
                             null,
                             $base_work_dir,
@@ -272,7 +272,7 @@ switch ($action) {
                             $groupIid,
                             $file
                         );
-                        if ($deleteDocument) {
+                        if ($updateDocument) {
                             Display::addFlash(
                                 Display::return_message(
                                     get_lang('DownloadEnd').': '.$documentInfo['title'],

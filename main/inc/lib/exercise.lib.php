@@ -5654,7 +5654,7 @@ EOT;
         return $total;
     }
 
-    public static function getWrongQuestionResults($courseId, $exerciseId, $limit = 10)
+    public static function getWrongQuestionResults($courseId, $exerciseId, $sessionId = 0, $limit = 10)
     {
         $courseId = (int) $courseId;
         $exerciseId = (int) $exerciseId;
@@ -5663,6 +5663,11 @@ EOT;
         $questionTable = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $attemptTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
         $trackTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+
+        $sessionCondition = '';
+        if (!empty($sessionId)) {
+            $sessionCondition = api_get_session_condition($sessionId, true, false, 'te.session_id');
+        }
 
         $sql = "SELECT q.question, question_id, count(q.iid) count
                 FROM $attemptTable t
@@ -5675,6 +5680,7 @@ EOT;
                     t.marks != q.ponderation AND
                     exe_exo_id = $exerciseId AND
                     status != 'incomplete'
+                    $sessionCondition
                 GROUP BY q.iid
                 ORDER BY count DESC
                 LIMIT $limit
@@ -5683,5 +5689,55 @@ EOT;
         $result = Database::query($sql);
 
         return Database::store_result($result, 'ASSOC');
+    }
+
+    public static function getExerciseResultsCount($type, $courseId, $exerciseId, $sessionId = 0)
+    {
+        $courseId = (int) $courseId;
+        $exerciseId = (int) $exerciseId;
+
+        $trackTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+
+        $sessionCondition = '';
+        if (!empty($sessionId)) {
+            $sessionCondition = api_get_session_condition($sessionId, true, false, 'te.session_id');
+        }
+
+        $selectCount = 'count(DISTINCT te.exe_id)';
+        $scoreCondition = '';
+        switch ($type) {
+            case 'correct_student':
+                $selectCount = 'count(DISTINCT te.exe_user_id)';
+                $scoreCondition = ' AND exe_result = exe_weighting ';
+                break;
+            case 'wrong_student':
+                $selectCount = 'count(DISTINCT te.exe_user_id)';
+                $scoreCondition = ' AND  exe_result != exe_weighting ';
+                break;
+            case 'correct':
+                $scoreCondition = ' AND exe_result = exe_weighting ';
+                break;
+            case 'wrong':
+                $scoreCondition = ' AND exe_result != exe_weighting ';
+                break;
+        }
+
+        $sql = "SELECT $selectCount count
+                FROM $trackTable te
+                WHERE
+                    c_id = $courseId AND
+                    exe_exo_id = $exerciseId AND
+                    status != 'incomplete'
+                    $scoreCondition
+                    $sessionCondition
+        ";
+        $result = Database::query($sql);
+        $totalRow = Database::fetch_array($result, 'ASSOC');
+        $total = 0;
+        if ($totalRow) {
+            $total = (int) $totalRow['count'];
+        }
+
+        return $total;
     }
 }

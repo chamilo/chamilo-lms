@@ -1610,6 +1610,17 @@ class DocumentManager
         // note the extra / at the end of doc_path to match every path in
         // the document table that is part of the document path
         $session_id = (int) $session_id;
+
+        $drhAccessContent = api_drh_can_access_all_session_content() &&
+            $session_id &&
+            SessionManager::isSessionFollowedByDrh($session_id, $userId);
+
+        $hasAccess = api_is_allowed_in_course() || api_is_platform_admin() || $drhAccessContent;
+
+        if (false === $hasAccess) {
+            return false;
+        }
+
         $condition = "AND d.session_id IN  ('$session_id', '0') ";
         // The " d.filetype='file' " let the user see a file even if the folder is hidden see #2198
 
@@ -1642,7 +1653,7 @@ class DocumentManager
         }
         $doc_path = Database::escape_string($doc_path).'/';
 
-        $sql = "SELECT visibility
+        $sql = "SELECT visibility, ip.session_id
                 FROM $docTable d
                 INNER JOIN $propTable ip
                 ON (d.id = ip.ref AND d.c_id = ip.c_id)
@@ -1655,15 +1666,38 @@ class DocumentManager
                 ";
 
         $result = Database::query($sql);
-        $is_visible = false;
-        if (Database::num_rows($result) > 0) {
-            $row = Database::fetch_array($result, 'ASSOC');
-            if ($row['visibility'] == 1) {
-                $drhAccessContent = api_drh_can_access_all_session_content()
-                    && $session_id
-                    && SessionManager::isSessionFollowedByDrh($session_id, $userId);
+        $isVisible = false;
+        $numRows = (int) Database::num_rows($result);
 
-                $is_visible = api_is_allowed_in_course() || api_is_platform_admin() || $drhAccessContent;
+        if ($numRows) {
+            if (1 === $numRows) {
+                $row = Database::fetch_array($result, 'ASSOC');
+                if ($row['visibility'] == 1) {
+                    $isVisible = true;
+                }
+            } else {
+                $sessionVisibility = null;
+                $courseVisibility = null;
+                while ($row = Database::fetch_array($result, 'ASSOC')) {
+                    $checkSessionId = (int) $row['session_id'];
+                    if (empty($checkSessionId)) {
+                        $courseVisibility = 1 === (int) $row['visibility'];
+                    } else {
+                        if ($session_id === $checkSessionId) {
+                            $sessionVisibility = 1 === (int) $row['visibility'];
+                        }
+                    }
+                }
+
+                if (empty($session_id) || (!empty($session_id) && null === $sessionVisibility)) {
+                    if ($courseVisibility) {
+                        $isVisible = true;
+                    }
+                } else {
+                    if ($sessionVisibility) {
+                        $isVisible = true;
+                    }
+                }
             }
         }
 
@@ -1676,7 +1710,7 @@ class DocumentManager
             the document is only accessible to the course admin and
             teaching assistants.*/
         //return $_SESSION ['is_allowed_in_course'] || api_is_platform_admin();
-        return $is_visible;
+        return $isVisible;
     }
 
     /**

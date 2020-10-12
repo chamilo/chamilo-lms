@@ -151,7 +151,6 @@ class CourseRestorer
             $this->course->destination_path = $course_info['path'];
         }
         $this->destination_course_id = $course_info['real_id'];
-
         // Getting first teacher (for the forums)
         $teacher_list = CourseManager::get_teacher_list_from_course_code($course_info['code']);
         $this->first_teacher_id = api_get_user_id();
@@ -297,14 +296,19 @@ class CourseRestorer
         $table = Database::get_course_table(TABLE_DOCUMENT);
         $resources = $this->course->resources;
         $path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/';
-
+        $originalFolderNameList = [];
         foreach ($resources[RESOURCE_DOCUMENT] as $id => $document) {
-            $my_session_id = empty($document->item_properties[0]['id_session']) ? 0 : $session_id;
+            $my_session_id = empty($document->item_properties[0]['session_id']) ? 0 : $session_id;
+
+            if (false === $respect_base_content && $session_id) {
+                if (empty($my_session_id)) {
+                    $my_session_id = $session_id;
+                }
+            }
 
             if ($document->file_type == FOLDER) {
                 $visibility = isset($document->item_properties[0]['visibility']) ? $document->item_properties[0]['visibility'] : '';
                 $new = substr($document->path, 8);
-
                 $folderList = explode('/', $new);
                 $tempFolder = '';
 
@@ -317,14 +321,16 @@ class CourseRestorer
                     if (empty($folderToCreate)) {
                         continue;
                     }
-
                     $title = $document->title;
+                    $originalFolderNameList[basename($document->path)] = $document->title;
                     if (empty($title)) {
                         $title = basename($sysFolderPath);
                     }
-
+                    //error_log($title); error_log($sysFolderPath);
                     // File doesn't exist in file system.
                     if (!is_dir($sysFolderPath)) {
+                        /*error_log('Creating directory');
+                        error_log("Creating $folderToCreate");*/
                         // Creating directory
                         create_unexisting_directory(
                             $course_info,
@@ -344,37 +350,40 @@ class CourseRestorer
                     $documentData = DocumentManager::get_document_id(
                         $course_info,
                         $folderToCreate,
-                        $my_session_id
+                        $session_id
                     );
 
+                    //error_log("session_id $session_id");
                     if (empty($documentData)) {
-                        /* This means the folder exists in the
-                        filesystem but not in the DB, trying to fix it */
-                        add_document(
-                            $course_info,
-                            $folderToCreate,
-                            'folder',
-                            0,
-                            $title,
-                            null,
-                            null,
-                            false,
-                            null,
-                            $my_session_id,
-                            0,
-                            false
-                        );
+                        if (!is_dir($sysFolderPath)) {
+                            //error_log('$documentData empty');
+                            //error_log('$folderToCreate '.$folderToCreate);
+                            /* This means the folder exists in the
+                            filesystem but not in the DB, trying to fix it */
+                            add_document(
+                                $course_info,
+                                $folderToCreate,
+                                'folder',
+                                0,
+                                $title,
+                                null,
+                                null,
+                                false,
+                                null,
+                                $session_id,
+                                0,
+                                false
+                            );
+                        }
                     } else {
                         $insertUserId = isset($document->item_properties[0]['insert_user_id']) ? $document->item_properties[0]['insert_user_id'] : api_get_user_id();
                         $insertUserId = $this->checkUserId($insertUserId);
-
                         // Check if user exists in platform
                         $toUserId = isset($document->item_properties[0]['to_user_id']) ? $document->item_properties[0]['to_user_id'] : null;
                         $toUserId = $this->checkUserId($toUserId, true);
-
                         $groupId = isset($document->item_properties[0]['to_group_id']) ? $document->item_properties[0]['to_group_id'] : null;
                         $groupInfo = $this->checkGroupId($groupId);
-
+                        //error_log(" if folder exists then just refresh it");
                         // if folder exists then just refresh it
                         api_item_property_update(
                             $course_info,
@@ -393,6 +402,7 @@ class CourseRestorer
             } elseif ($document->file_type == DOCUMENT) {
                 // Checking if folder exists in the database otherwise we created it
                 $dir_to_create = dirname($document->path);
+                $originalFolderNameList[basename($document->path)] = $document->title;
                 if (!empty($dir_to_create) && $dir_to_create != 'document' && $dir_to_create != '/') {
                     if (is_dir($path.dirname($document->path))) {
                         $sql = "SELECT id FROM $table
@@ -450,6 +460,7 @@ class CourseRestorer
                     }
                 }
 
+                //error_log(print_r($originalFolderNameList, 1));
                 if (file_exists($path.$document->path)) {
                     switch ($this->file_option) {
                         case FILE_OVERWRITE:
@@ -600,6 +611,7 @@ class CourseRestorer
                             $this->course->resources[RESOURCE_DOCUMENT][$id]->destination_id = $obj->id;
                             break;
                         case FILE_RENAME:
+                            //error_log("Rename: ".$path.$document->path);
                             $i = 1;
                             $ext = explode('.', basename($document->path));
                             if (count($ext) > 1) {
@@ -619,6 +631,8 @@ class CourseRestorer
                             }
 
                             if (!empty($session_id)) {
+                                $originalPath = $document->path;
+                                //error_log("document->path: ".$document->path);
                                 $document_path = explode('/', $document->path, 3);
                                 $course_path = $path;
                                 $orig_base_folder = $document_path[1];
@@ -628,7 +642,9 @@ class CourseRestorer
                                     $new_base_foldername = $orig_base_folder;
                                     $new_base_path = $orig_base_path;
 
-                                    if ($_SESSION['orig_base_foldername'] != $new_base_foldername) {
+                                    if (isset($_SESSION['orig_base_foldername']) &&
+                                        $_SESSION['orig_base_foldername'] != $new_base_foldername
+                                    ) {
                                         unset($_SESSION['new_base_foldername']);
                                         unset($_SESSION['orig_base_foldername']);
                                         unset($_SESSION['new_base_path']);
@@ -638,12 +654,14 @@ class CourseRestorer
                                     if ($folder_exists) {
                                         // e.g: carpeta1 in session
                                         $_SESSION['orig_base_foldername'] = $new_base_foldername;
-                                        $x = '';
+                                        $x = 0;
                                         while ($folder_exists) {
                                             $x = $x + 1;
                                             $new_base_foldername = $document_path[1].'_'.$x;
                                             $new_base_path = $orig_base_path.'_'.$x;
-                                            if ($_SESSION['new_base_foldername'] == $new_base_foldername) {
+                                            if (isset($_SESSION['new_base_foldername']) &&
+                                                $_SESSION['new_base_foldername'] == $new_base_foldername
+                                            ) {
                                                 break;
                                             }
                                             $folder_exists = file_exists($new_base_path);
@@ -662,13 +680,20 @@ class CourseRestorer
                                     $base_path_document = $course_path.$document_path[0]; // e.g: "/var/www/wiener/courses/CURSO4/document"
                                     $path_title = '/'.$new_base_foldername.'/'.$document_path[2];
 
+                                    /*error_log("copy_folder_course_session");
+                                    error_log("original: $orig_base_path");
+                                    error_log($basedir_dest_path);
+                                    error_log($document->title);*/
+
                                     copy_folder_course_session(
                                         $basedir_dest_path,
                                         $base_path_document,
                                         $session_id,
                                         $course_info,
                                         $document,
-                                        $this->course_origin_id
+                                        $this->course_origin_id,
+                                        $originalFolderNameList,
+                                        $originalPath
                                     );
 
                                     if (file_exists($course_path.$document->path)) {
@@ -695,11 +720,16 @@ class CourseRestorer
                                         }
                                     }
 
+                                    $title = basename($path_title);
+                                    if (isset($originalFolderNameList[basename($path_title)])) {
+                                        $title = $originalFolderNameList[basename($path_title)];
+                                    }
+
                                     $params = [
                                         'path' => self::DBUTF8($path_title),
                                         'c_id' => $this->destination_course_id,
                                         'comment' => self::DBUTF8($document->comment),
-                                        'title' => self::DBUTF8(basename($path_title)),
+                                        'title' => self::DBUTF8($title),
                                         'filetype' => self::DBUTF8($document->file_type),
                                         'size' => self::DBUTF8($document->size),
                                         'session_id' => $my_session_id,
@@ -1086,10 +1116,7 @@ class CourseRestorer
                 if (isset($this->course->resources[RESOURCE_FORUMCATEGORY]) &&
                     isset($this->course->resources[RESOURCE_FORUMCATEGORY][$params['forum_category']])) {
                     if ($this->course->resources[RESOURCE_FORUMCATEGORY][$params['forum_category']]->destination_id == -1) {
-                        $cat_id = $this->restore_forum_category(
-                            $params['forum_category'],
-                            $sessionId
-                        );
+                        $cat_id = $this->restore_forum_category($params['forum_category'], $sessionId);
                     } else {
                         $cat_id = $this->course->resources[RESOURCE_FORUMCATEGORY][$params['forum_category']]->destination_id;
                     }
@@ -1132,11 +1159,15 @@ class CourseRestorer
                         TOOL_FORUM,
                         $new_id,
                         'ForumUpdated',
-                        api_get_user_id()
+                        api_get_user_id(),
+                        null,
+                        null,
+                        null,
+                        null,
+                        $sessionId
                     );
 
                     $this->course->resources[RESOURCE_FORUM][$id]->destination_id = $new_id;
-
                     $forum_topics = 0;
                     if (isset($this->course->resources[RESOURCE_FORUMTOPIC]) &&
                         is_array($this->course->resources[RESOURCE_FORUMTOPIC])
@@ -1165,6 +1196,7 @@ class CourseRestorer
     {
         $forum_cat_table = Database::get_course_table(TABLE_FORUM_CATEGORY);
         $resources = $this->course->resources;
+        $sessionId = (int) $sessionId;
         if (!empty($resources[RESOURCE_FORUMCATEGORY])) {
             foreach ($resources[RESOURCE_FORUMCATEGORY] as $id => $forum_cat) {
                 if (!empty($my_id)) {
@@ -1182,7 +1214,7 @@ class CourseRestorer
                         $this->course->backup_path,
                         $this->course->info['path']
                     );
-                    $params['session_id'] = intval($sessionId);
+                    $params['session_id'] = $sessionId;
                     $params['cat_id'] = 0;
                     unset($params['iid']);
 
@@ -1198,7 +1230,12 @@ class CourseRestorer
                             TOOL_FORUM_CATEGORY,
                             $new_id,
                             'ForumCategoryUpdated',
-                            api_get_user_id()
+                            api_get_user_id(),
+                            null,
+                            null,
+                            null,
+                            null,
+                            $sessionId
                         );
                         $this->course->resources[RESOURCE_FORUMCATEGORY][$id]->destination_id = $new_id;
                     }
@@ -1223,7 +1260,9 @@ class CourseRestorer
         $table = Database::get_course_table(TABLE_FORUM_THREAD);
         $topic = $this->course->resources[RESOURCE_FORUMTOPIC][$thread_id];
 
+        $sessionId = (int) $sessionId;
         $params = (array) $topic->obj;
+
         $params = self::DBUTF8_array($params);
         $params['c_id'] = $this->destination_course_id;
         $params['forum_id'] = $forum_id;
@@ -1233,7 +1272,7 @@ class CourseRestorer
         $params['thread_last_post'] = 0;
         $params['thread_replies'] = 0;
         $params['thread_views'] = 0;
-        $params['session_id'] = intval($sessionId);
+        $params['session_id'] = $sessionId;
         $params['thread_id'] = 0;
 
         unset($params['iid']);
@@ -1334,15 +1373,12 @@ class CourseRestorer
             $resources = $this->course->resources;
 
             foreach ($resources[RESOURCE_LINK] as $oldLinkId => $link) {
-                $cat_id = $this->restore_link_category(
-                    $link->category_id,
-                    $session_id
-                );
+                $cat_id = (int) $this->restore_link_category($link->category_id, $session_id);
                 $sql = "SELECT MAX(display_order)
                         FROM $link_table
                         WHERE
                             c_id = ".$this->destination_course_id." AND
-                            category_id='".intval($cat_id)."'";
+                            category_id='".$cat_id."'";
                 $result = Database::query($sql);
                 list($max_order) = Database::fetch_array($result);
 
@@ -1371,7 +1407,12 @@ class CourseRestorer
                         TOOL_LINK,
                         $id,
                         'LinkAdded',
-                        api_get_user_id()
+                        api_get_user_id(),
+                        null,
+                        null,
+                        null,
+                        null,
+                        $session_id
                     );
 
                     if (!isset($this->course->resources[RESOURCE_LINK][$oldLinkId])) {
@@ -1391,11 +1432,12 @@ class CourseRestorer
      *
      * @return bool
      */
-    public function restore_link_category($id, $session_id = 0)
+    public function restore_link_category($id, $sessionId = 0)
     {
         $params = [];
-        if (!empty($session_id)) {
-            $params['session_id'] = $session_id;
+        $sessionId = (int) $sessionId;
+        if (!empty($sessionId)) {
+            $params['session_id'] = $sessionId;
         }
 
         if ($id == 0) {
@@ -1429,13 +1471,19 @@ class CourseRestorer
                     TOOL_LINK_CATEGORY,
                     $new_id,
                     'LinkCategoryAdded',
-                    api_get_user_id()
+                    api_get_user_id(),
+                    null,
+                    null,
+                    null,
+                    null,
+                    $sessionId
                 );
                 api_set_default_visibility(
                     $new_id,
                     TOOL_LINK_CATEGORY,
                     0,
-                    $courseInfo
+                    $courseInfo,
+                    $sessionId
                 );
             }
 
@@ -2604,8 +2652,6 @@ class CourseRestorer
     /**
      * @param int  $sessionId
      * @param bool $baseContent
-     *
-     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function restore_learnpath_category($sessionId = 0, $baseContent = false)
     {
@@ -2628,8 +2674,6 @@ class CourseRestorer
                 $lpCategory = $item->object;
 
                 if ($lpCategory) {
-                    $categoryId = 0;
-
                     $existingLpCategory = Database::select(
                         'iid',
                         $tblLpCategory,
@@ -2675,7 +2719,8 @@ class CourseRestorer
 
             $resources = $this->course->resources;
             $origin_path = $this->course->backup_path.'/upload/learning_path/images/';
-            $destination_path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/upload/learning_path/images/';
+            $destination_path = api_get_path(SYS_COURSE_PATH).
+                $this->course->destination_path.'/upload/learning_path/images/';
 
             // Choose default visibility
             $toolVisibility = api_get_setting('tool_visible_by_default_at_creation');
@@ -2865,7 +2910,7 @@ class CourseRestorer
                         // Dealing with path the same way as ref as some data has
                         // been put into path when it's a local resource
                         // Only fix the path for no scos
-                        if ($item['item_type'] == 'sco') {
+                        if ($item['item_type'] === 'sco') {
                             $path = $item['path'];
                         } else {
                             $path = $this->get_new_id($item['item_type'], $item['path']);
@@ -3085,16 +3130,16 @@ class CourseRestorer
     /**
      * Restore glossary.
      */
-    public function restore_glossary($session_id = 0)
+    public function restore_glossary($sessionId = 0)
     {
+        $sessionId = (int) $sessionId;
         if ($this->course->has_resources(RESOURCE_GLOSSARY)) {
             $table_glossary = Database::get_course_table(TABLE_GLOSSARY);
             $resources = $this->course->resources;
             foreach ($resources[RESOURCE_GLOSSARY] as $id => $glossary) {
                 $params = [];
-                if (!empty($session_id)) {
-                    $session_id = (int) $session_id;
-                    $params['session_id'] = $session_id;
+                if (!empty($sessionId)) {
+                    $params['session_id'] = $sessionId;
                 }
 
                 // check resources inside html from ckeditor tool and copy correct urls into recipient course
@@ -3121,7 +3166,12 @@ class CourseRestorer
                         TOOL_GLOSSARY,
                         $my_id,
                         'GlossaryAdded',
-                        api_get_user_id()
+                        api_get_user_id(),
+                        null,
+                        null,
+                        null,
+                        null,
+                        $sessionId
                     );
 
                     if (!isset($this->course->resources[RESOURCE_GLOSSARY][$id])) {
@@ -3135,9 +3185,9 @@ class CourseRestorer
     }
 
     /**
-     * @param int $session_id
+     * @param int $sessionId
      */
-    public function restore_wiki($session_id = 0)
+    public function restore_wiki($sessionId = 0)
     {
         if ($this->course->has_resources(RESOURCE_WIKI)) {
             // wiki table of the target course
@@ -3169,7 +3219,7 @@ class CourseRestorer
                     'dtime' => self::DBUTF8($wiki->dtime),
                     'progress' => self::DBUTF8($wiki->progress),
                     'version' => intval($wiki->version),
-                    'session_id' => !empty($session_id) ? intval($session_id) : 0,
+                    'session_id' => !empty($sessionId) ? intval($sessionId) : 0,
                     'addlock' => 0,
                     'editlock' => 0,
                     'visibility' => 0,
@@ -3221,9 +3271,9 @@ class CourseRestorer
     /**
      * Restore Thematics.
      *
-     * @param int $session_id
+     * @param int $sessionId
      */
-    public function restore_thematic($session_id = 0)
+    public function restore_thematic($sessionId = 0)
     {
         if ($this->course->has_resources(RESOURCE_THEMATIC)) {
             $table_thematic = Database::get_course_table(TABLE_THEMATIC);
@@ -3254,8 +3304,13 @@ class CourseRestorer
                         $this->destination_course_info,
                         'thematic',
                         $last_id,
-                        "ThematicAdded",
-                        api_get_user_id()
+                        'ThematicAdded',
+                        api_get_user_id(),
+                        null,
+                        null,
+                        null,
+                        null,
+                        $sessionId
                     );
 
                     foreach ($thematic->thematic_advance_list as $thematic_advance) {
@@ -3280,7 +3335,12 @@ class CourseRestorer
                                 'thematic_advance',
                                 $my_id,
                                 'ThematicAdvanceAdded',
-                                api_get_user_id()
+                                api_get_user_id(),
+                                null,
+                                null,
+                                null,
+                                null,
+                                $sessionId
                             );
                         }
                     }
@@ -3301,7 +3361,12 @@ class CourseRestorer
                                 'thematic_plan',
                                 $my_id,
                                 'ThematicPlanAdded',
-                                api_get_user_id()
+                                api_get_user_id(),
+                                null,
+                                null,
+                                null,
+                                null,
+                                $sessionId
                             );
                         }
                     }
@@ -3313,9 +3378,9 @@ class CourseRestorer
     /**
      * Restore Attendance.
      *
-     * @param int $session_id
+     * @param int $sessionId
      */
-    public function restore_attendance($session_id = 0)
+    public function restore_attendance($sessionId = 0)
     {
         if ($this->course->has_resources(RESOURCE_ATTENDANCE)) {
             $table_attendance = Database::get_course_table(TABLE_ATTENDANCE);
@@ -3347,8 +3412,13 @@ class CourseRestorer
                         $this->destination_course_info,
                         TOOL_ATTENDANCE,
                         $last_id,
-                        "AttendanceAdded",
-                        api_get_user_id()
+                        'AttendanceAdded',
+                        api_get_user_id(),
+                        null,
+                        null,
+                        null,
+                        null,
+                        $sessionId
                     );
 
                     foreach ($obj->attendance_calendar as $attendance_calendar) {

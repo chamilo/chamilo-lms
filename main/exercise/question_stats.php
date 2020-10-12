@@ -40,57 +40,25 @@ $interbreadcrumb[] = [
     'url' => 'exercise_report.php?'.api_get_cidreq().'&exerciseId='.$exercise->iId,
     'name' => get_lang('StudentScore'),
 ];
-$TBL_USER = Database::get_main_table(TABLE_MAIN_USER);
-$TBL_EXERCISES = Database::get_course_table(TABLE_QUIZ_TEST);
-$questionTable = Database::get_course_table(TABLE_QUIZ_QUESTION);
-$attemptTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-$trackTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 $courseId = api_get_course_int_id();
 
 $table = new HTML_Table(['class' => 'table table-hover table-striped']);
 $row = 0;
 $column = 0;
-$headers = [get_lang('Question')];
-//$headers = [get_lang('Question'), get_lang('Count')];
+$headers = [get_lang('Question'), get_lang('WrongAnswer').' / '.get_lang('Total'), '%'];
 foreach ($headers as $header) {
     $table->setHeaderContents($row, $column, $header);
     $column++;
 }
 $row++;
-
-$sql = "SELECT q.question, question_id, count(q.iid) count
-        FROM $attemptTable t
-        INNER JOIN $questionTable q
-        ON (q.c_id = t.c_id AND q.id = t.question_id)
-        INNER JOIN $trackTable te
-        ON (te.c_id = q.c_id AND t.exe_id = te.exe_id)
-        WHERE
-            t.c_id = $courseId AND
-            t.marks != q.ponderation AND
-            exe_exo_id = $exerciseId
-        GROUP BY q.iid
-        ORDER BY count DESC
-        LIMIT 10
-        ";
-$query = Database::query($sql);
-while ($data = Database::fetch_array($query, 'ASSOC')) {
-    /*$questionId = $row['question_id'];
-    $question = Question::read($row['question_id']);
-    $exeId = $row['exe_id'];
-    $answer = $row['answer'];
-    $row['question_id'];*/
-    /*$data = $exercise->manage_answer(
-        $exeId,
-        $questionId,
-        $answer,
-        $from = 'exercise_result',
-        [],
-        false,
-        true,
-        false
-    );*/
+$scoreDisplay = new ScoreDisplay();
+$questions = ExerciseLib::getWrongQuestionResults($courseId, $exerciseId, 10);
+foreach ($questions as $data) {
+    $questionId = (int) $data['question_id'];
+    $total = ExerciseLib::getTotalQuestionAnswered($courseId, $exerciseId, $questionId);
     $table->setCellContents($row, 0, $data['question']);
-    //$table->setCellContents($row, 1, $data['count']);
+    $table->setCellContents($row, 1, $data['count'].' / '.$total);
+    $table->setCellContents($row, 2, $scoreDisplay->display_score([$data['count'], $total], SCORE_AVERAGE));
     $row++;
 }
 

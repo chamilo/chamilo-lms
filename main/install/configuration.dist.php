@@ -1638,6 +1638,9 @@ $_configuration['auth_password_links'] = [
 // Shows a marker if the course was shared in other portals.
 //$_configuration['multiple_access_url_show_shared_course_marker'] = false;
 
+// Add option to copy a session with its course-session content BT#17832
+//$_configuration['duplicate_specific_session_content_on_session_copy'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

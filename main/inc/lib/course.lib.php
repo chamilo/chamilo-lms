@@ -4616,20 +4616,21 @@ class CourseManager
         $source_session_id,
         $destination_course_code,
         $destination_session_id,
-        $params = []
+        $params = [],
+        $withBaseContent = true
     ) {
         $course_info = api_get_course_info($source_course_code);
 
         if (!empty($course_info)) {
             $cb = new CourseBuilder('', $course_info);
-            $course = $cb->build($source_session_id, $source_course_code, true);
-            $course_restorer = new CourseRestorer($course);
-            $course_restorer->skip_content = $params;
-            $course_restorer->restore(
+            $course = $cb->build($source_session_id, $source_course_code, $withBaseContent);
+            $restorer = new CourseRestorer($course);
+            $restorer->skip_content = $params;
+            $restorer->restore(
                 $destination_course_code,
                 $destination_session_id,
                 true,
-                true
+                $withBaseContent
             );
 
             return true;
@@ -4646,6 +4647,7 @@ class CourseManager
      * @param int source session id
      * @param int destination session id
      * @param array $params
+     * @param bool $copySessionContent
      *
      * @return array
      */
@@ -4654,7 +4656,8 @@ class CourseManager
         $source_course_code,
         $source_session_id = 0,
         $destination_session_id = 0,
-        $params = []
+        $params = [],
+        $copySessionContent = false
     ) {
         $source_course_info = api_get_course_info($source_course_code);
         if (!empty($source_course_info)) {
@@ -4671,7 +4674,8 @@ class CourseManager
                         $source_session_id,
                         $new_course_info['code'],
                         $destination_session_id,
-                        $params
+                        $params,
+                        true
                     );
                     if ($result) {
                         return $new_course_info;

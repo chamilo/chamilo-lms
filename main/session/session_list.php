@@ -210,7 +210,7 @@ $hideSearch = api_get_configuration_value('hide_search_form_in_session_list');
 $copySessionContentLink = '';
 if ($addSessionContent) {
     $copySessionContentLink = '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."\'".')) return false;" href="session_list.php?copy_session_content=1&list_type='.$listType.'&action=copy&idChecked=\'+options.rowId+\'">'.
-    Display::return_icon('cd.png', get_lang('CopyWithSessionContent'), '', ICON_SIZE_SMALL).'</a>';
+    Display::return_icon('copy.png', get_lang('CopyWithSessionContent'), '', ICON_SIZE_SMALL).'</a>';
 }
 
 // With this function we can add actions to the jgrid (edit, delete, etc)
@@ -222,7 +222,7 @@ $action_links = 'function action_formatter(cellvalue, options, rowObject) {
     '&nbsp;<a href="add_courses_to_session.php?page=session_list.php&id_session=\'+options.rowId+\'">'.
     Display::return_icon('courses_to_session.png', get_lang('SubscribeCoursesToSession'), '', ICON_SIZE_SMALL).'</a>'.
     '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."\'".')) return false;" href="session_list.php?list_type='.$listType.'&action=copy&idChecked=\'+options.rowId+\'">'.
-    Display::return_icon('copy.png', get_lang('Copy'), '', ICON_SIZE_SMALL).'</a>'.
+    Display::return_icon('copy_partial.png', get_lang('Copy'), '', ICON_SIZE_SMALL).'</a>'.
     $copySessionContentLink.
     '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."\'".')) return false;" href="session_list.php?list_type='.$listType.'&action=delete&idChecked=\'+options.rowId+\'">'.
     Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>'.

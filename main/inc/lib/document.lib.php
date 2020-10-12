@@ -5650,7 +5650,7 @@ class DocumentManager
                 ]
             );
             $html = "
-            <div class='upload_element_".$randomUploadName." hidden'>
+            <div class='replaceIndividualFile upload_element_".$randomUploadName." hidden'>
                 <div class='form-group ' id='file_file'>
                     <label class='col-sm-2 control-label' for='file_".$randomUploadName."'>
                         ".get_lang('File')."
@@ -6743,14 +6743,6 @@ class DocumentManager
             return false;
         }
 
-        // File was already deleted.
-        if ($itemInfo['lastedit_type'] == 'DocumentReplaced' ||
-            $itemInfo['lastedit_type'] == 'replace' ||
-            $itemInfo['visibility'] == 2
-        ) {
-            return false;
-        }
-
         // Filtering by group.
         if ($itemInfo['to_group_id'] != $groupId) {
             return false;
@@ -6761,26 +6753,26 @@ class DocumentManager
         $document_exists_in_disk = file_exists($base_work_dir.$path);
         $new_path = $path.'_REPLACED_DATE_'.$now.'_ID_'.$documentId;
 
-        $file_deleted_from_disk = false;
-        $file_deleted_from_disk = true;
-        $fileMoved = fale;
+        $fileMoved = false;
         $file_renamed_from_disk = false;
 
         if ($document_exists_in_disk) {
-            // Set visibility to 2 and rename file/folder to xxx_REPLACED_DATE_#date_ID_#id (soft delete)
+            // Move old file to xxx_REPLACED_DATE_#date_ID_#id (soft delete)
             if (is_file($base_work_dir.$path) || is_dir($base_work_dir.$path)) {
                 if (rename($base_work_dir.$path, $base_work_dir.$new_path)) {
                     $file_renamed_from_disk = true;
                 } else {
                     // Couldn't rename - file permissions problem?
                     error_log(
-                        __FILE__.' '.__LINE__.': Error renaming '.$base_work_dir.$path.' to '.$base_work_dir.$new_path.'. This is probably due to file permissions',
+                        __FILE__.' '.__LINE__.': Error renaming '.$base_work_dir.$path.' to '
+                        .$base_work_dir.$new_path.'. This is probably due to file permissions',
                         0
                     );
                 }
             }
 
             if (move_uploaded_file($file['tmp_name'], $base_work_dir.$path)) {
+                //update file size into db
                 $size = filesize($base_work_dir.$path);
                 $sql = "UPDATE $TABLE_DOCUMENT
                                 SET size = '".$size."'
@@ -6793,7 +6785,7 @@ class DocumentManager
             }
         }
         // Checking inconsistency
-        if ($file_deleted_from_disk ||
+        if ($fileMoved ||
             $file_renamed_from_disk
         ) {
             return true;
@@ -6804,7 +6796,11 @@ class DocumentManager
             // blocking error from happening, we drop the related items from the
             // item_property and the document table.
             error_log(
-                __FILE__.' '.__LINE__.': System inconsistency detected. The file or directory '.$base_work_dir.$path.' seems to have been removed from the filesystem independently from the web platform. To restore consistency, the elements using the same path will be removed from the database',
+                __FILE__.' '.__LINE__.': System inconsistency detected. '.
+                'The file or directory '.$base_work_dir.$path.
+                ' seems to have been removed from the filesystem independently from '.
+                'the web platform. To restore consistency, the elements using the same '.
+                'path will be removed from the database',
                 0
             );
 

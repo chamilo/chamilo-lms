@@ -292,8 +292,6 @@ switch ($action) {
             }
         }
         break;
-        exit();
-        break;
     case 'delete_item':
         if ($isAllowedToEdit ||
             $groupMemberWithUploadRights ||
@@ -2281,21 +2279,16 @@ if (false === $disableQuotaMessage && count($documentAndFolders) > 1) {
 echo '<script>
         $(function() {
             $(".removeHiddenFile").click(function(){
+               $.each($(".replaceIndividualFile"),function(a,b){
+                   $(b).addClass("hidden");
+               });
                data = $(this).data("id");
                $(".upload_element_"+data).removeClass("hidden");
                $.each($(".currentFile"),function(a,b){
                    $(b).val(data);
                });
             });
-            $(".btnSendFile").click(function(){
-               data = $(this).data("id");
-               $(".upload_element_"+data).removeClass("hidden");
-               $.each($(".currentFile"),function(a,b){
-                   $(b).val(data);
-               });
-            });
-
-       $("form[name=form_teacher_table]").prop("enctype","multipart/form-data")
+            $("form[name=form_teacher_table]").prop("enctype","multipart/form-data")
         });
         </script>
     ';

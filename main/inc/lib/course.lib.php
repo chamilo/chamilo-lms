@@ -4647,7 +4647,7 @@ class CourseManager
      * @param int source session id
      * @param int destination session id
      * @param array $params
-     * @param bool $copySessionContent
+     * @param bool  $copySessionContent
      *
      * @return array
      */

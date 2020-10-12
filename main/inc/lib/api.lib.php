@@ -5540,7 +5540,6 @@ function copyr($source, $dest, $exclude = [], $copied_files = [])
  *               the destination and null if everything goes according to plan
  *@todo: Using DIRECTORY_SEPARATOR is not recommended, this is an obsolete approach.
  * Documentation header to be added here.
- *
  */
 function copy_folder_course_session(
     $pathname,
@@ -5601,7 +5600,7 @@ function copy_folder_course_session(
                 $title = basename($new_pathname);
 
                 if (isset($folderTitles[$index + 1])) {
-                    $checkPath = $folderTitles[$index +1];
+                    $checkPath = $folderTitles[$index + 1];
                     //error_log("check $checkPath");
                     if (isset($originalFolderNameList[$checkPath])) {
                         $title = $originalFolderNameList[$checkPath];

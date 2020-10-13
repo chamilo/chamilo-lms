@@ -22,7 +22,7 @@ $params = $_POST["Ds_MerchantParameters"];
 $signatureReceived = $_POST['Ds_Signature'];
 
 require_once '../resources/php/apiRedsys.php';
-$tpv = new RedsysAPI;
+$tpv = new RedsysAPI();
 
 $decodec = $tpv->decodeMerchantParameters($params);
 $kc = $tpvRedsysParams['kc'];
@@ -47,7 +47,7 @@ if ($signature === $signatureReceived) {
 
     $buyingCourse = false;
     $buyingSession = false;
-    
+
     switch ($sale['product_type']) {
         case BuyCoursesPlugin::PRODUCT_TYPE_COURSE:
             $buyingCourse = true;

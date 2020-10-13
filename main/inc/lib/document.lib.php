@@ -5673,6 +5673,52 @@ class DocumentManager
                 api_get_self()."?$courseParams&action=export_to_pdf&id=$id&curdirpath=$curdirpath"
             );
         }
+        if ($type == 'file') {
+            $randomUploadName = md5(uniqid(mt_rand(), true));
+            $modify_icons[] = Display::url(
+                Display::return_icon('upload_file.png', get_lang('UplUploadDocument')),
+                "#!",
+                [
+                    'data-id' => $randomUploadName,
+                    'class' => 'removeHiddenFile',
+                ]
+            );
+            $html = "
+            <div class='replaceIndividualFile upload_element_".$randomUploadName." hidden'>
+                <div class='form-group ' id='file_file'>
+                    <label class='col-sm-2 control-label' for='file_".$randomUploadName."'>
+                        ".get_lang('File')."
+                    </label>
+                    <div class='col-sm-8'>
+                        <input class='' name='file_".$randomUploadName."' style='width: 250px' type='file'>
+                    </div>
+                    <div class='col-sm-2'></div>
+                </div>
+                <div class='form-group '>
+                    <label class='col-sm-2 control-label' for='upload_".$randomUploadName."_submitDocument'>
+
+                    </label>
+                    <div class='col-sm-8'>
+
+                        <button class=' btn btn-primary ' id='upload_".$randomUploadName."_submitDocument'
+                        name='submitDocument'
+                                type='submit'>
+                                <em class='fa fa-paper-plane'></em> ".get_lang('SendDocument')."
+                        </button>
+                    </div>
+                    <div class='col-sm-2'></div>
+                </div>
+                <input class='currentFile' name='currentFile' type='hidden' >
+
+                <input id='upload_".$randomUploadName."__qf__upload_".$randomUploadName."' name='_qf__upload_".$randomUploadName."'
+                       type='hidden'
+                       value=''>
+                <input id='upload_".$randomUploadName."_id' name='id_$randomUploadName' type='hidden' value='$id'>
+                <input id='upload_".$randomUploadName."_MAX_FILE_SIZE' name='MAX_FILE_SIZE' type='hidden' value='".ini_get('upload_max_filesize')."'>
+            </div>
+            ";
+            $modify_icons[] = $html;
+        }
 
         return implode(PHP_EOL, $modify_icons);
     }
@@ -6646,6 +6692,154 @@ class DocumentManager
         }
 
         return $list;
+    }
+
+    /**
+     * Writes the content of a sent file to an existing one in the system, backing up the previous one.
+     *
+     * @param array  $_course
+     * @param string $path          Path stored in the database
+     * @param string $base_work_dir Path to the documents folder (if not defined, $documentId must be used)
+     * @param int    $sessionId     The ID of the session, if any
+     * @param int    $documentId    The document id, if available
+     * @param int    $groupId       iid
+     * @param file   $file          $_FILES content
+     *
+     * @return bool true/false
+     */
+    public static function writeContentIntoDocument(
+        $_course,
+        $path = null,
+        $base_work_dir = null,
+        $sessionId = null,
+        $documentId = null,
+        $groupId = 0,
+        $file
+    ) {
+        $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
+
+        $documentId = (int) $documentId;
+        $groupId = (int) $groupId;
+        if (empty($groupId)) {
+            $groupId = api_get_group_id();
+        }
+
+        $sessionId = (int) $sessionId;
+        if (empty($sessionId)) {
+            $sessionId = api_get_session_id();
+        }
+
+        $course_id = $_course['real_id'];
+
+        if (empty($course_id)) {
+            return false;
+        }
+
+        if (empty($base_work_dir)) {
+            return false;
+        }
+
+        if (empty($documentId)) {
+            $documentId = self::get_document_id($_course, $path, $sessionId);
+            $docInfo = self::get_document_data_by_id(
+                $documentId,
+                $_course['code'],
+                false,
+                $sessionId
+            );
+            $path = $docInfo['path'];
+        } else {
+            $docInfo = self::get_document_data_by_id(
+                $documentId,
+                $_course['code'],
+                false,
+                $sessionId
+            );
+            if (empty($docInfo)) {
+                return false;
+            }
+            $path = $docInfo['path'];
+        }
+
+        if (empty($path) || empty($docInfo) || empty($documentId)) {
+            return false;
+        }
+
+        $itemInfo = api_get_item_property_info(
+            $_course['real_id'],
+            TOOL_DOCUMENT,
+            $documentId,
+            $sessionId,
+            $groupId
+        );
+
+        if (empty($itemInfo)) {
+            return false;
+        }
+
+        // Filtering by group.
+        if ($itemInfo['to_group_id'] != $groupId) {
+            return false;
+        }
+        $now = new DateTime();
+        $now = $now->format('Y_m_d__H_i_s_');
+
+        $document_exists_in_disk = file_exists($base_work_dir.$path);
+        $new_path = $path.'_REPLACED_DATE_'.$now.'_ID_'.$documentId;
+
+        $fileMoved = false;
+        $file_renamed_from_disk = false;
+
+        if ($document_exists_in_disk) {
+            // Move old file to xxx_REPLACED_DATE_#date_ID_#id (soft delete)
+            if (is_file($base_work_dir.$path) || is_dir($base_work_dir.$path)) {
+                if (rename($base_work_dir.$path, $base_work_dir.$new_path)) {
+                    $file_renamed_from_disk = true;
+                } else {
+                    // Couldn't rename - file permissions problem?
+                    error_log(
+                        __FILE__.' '.__LINE__.': Error renaming '.$base_work_dir.$path.' to '
+                        .$base_work_dir.$new_path.'. This is probably due to file permissions',
+                        0
+                    );
+                }
+            }
+
+            if (move_uploaded_file($file['tmp_name'], $base_work_dir.$path)) {
+                //update file size into db
+                $size = filesize($base_work_dir.$path);
+                $sql = "UPDATE $TABLE_DOCUMENT
+                                SET size = '".$size."'
+                                WHERE
+                                    c_id = $course_id AND
+                                    session_id = $sessionId AND
+                                    id = ".$documentId;
+                Database::query($sql);
+                $fileMoved = true;
+            }
+        }
+        // Checking inconsistency
+        if ($fileMoved &&
+            $file_renamed_from_disk
+        ) {
+            return true;
+        } else {
+            //Something went wrong
+            //The file or directory isn't there anymore (on the filesystem)
+            // This means it has been removed externally. To prevent a
+            // blocking error from happening, we drop the related items from the
+            // item_property and the document table.
+            error_log(
+                __FILE__.' '.__LINE__.': System inconsistency detected. '.
+                'The file or directory '.$base_work_dir.$path.
+                ' seems to have been removed from the filesystem independently from '.
+                'the web platform. To restore consistency, the elements using the same '.
+                'path will be removed from the database',
+                0
+            );
+
+            return false;
+        }
     }
 
     /**

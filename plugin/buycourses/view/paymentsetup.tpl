@@ -41,6 +41,24 @@
     </div>
 {% endif %}
 
+{% if tpv_redsys_enable == "true" %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">{{ 'TpvRedsysConfig'|get_plugin_lang('BuyCoursesPlugin') }}</h3>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <p>{{ 'InfoTpvRedsysApiCredentials'|get_plugin_lang('BuyCoursesPlugin') }}</p>
+                </div>
+                <div class="col-md-12">
+                    {{ tpv_redsys_form }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+
 {% if commissions_enable == "true" %}
     <div class="panel panel-default">
         <div class="panel-heading">

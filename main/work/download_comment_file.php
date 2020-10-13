@@ -33,7 +33,11 @@ if (!empty($workData)) {
 
     protectWork($courseInfo, $work['parent_id']);
 
-    if (user_is_author($workData['work_id']) ||
+    $userHasAccess = api_is_coach() ||
+        api_is_allowed_to_edit(false, false, true) ||
+        user_is_author($workData['work_id']);
+
+    if ($userHasAccess ||
         $courseInfo['show_score'] == 0 &&
         $work['active'] == 1 &&
         $work['accepted'] == 1

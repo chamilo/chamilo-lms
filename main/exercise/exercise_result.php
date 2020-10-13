@@ -22,13 +22,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
 
-/* 	ACCESS RIGHTS  */
 api_protect_course_script(true);
-
-if ($debug) {
-    error_log('Entering exercise_result.php: '.print_r($_POST, 1));
-}
-
 $origin = api_get_origin();
 
 /** @var Exercise $objExercise */
@@ -89,6 +83,7 @@ $pageActions = '';
 $pageTop = '';
 $pageBottom = '';
 $pageContent = '';
+$courseInfo = api_get_course_info();
 
 if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
     // So we are not in learnpath tool
@@ -156,14 +151,14 @@ if ($origin !== 'embeddable') {
 }
 
 // We check if the user attempts before sending to the exercise_result.php
+$attempt_count = Event::get_attempt_count(
+    api_get_user_id(),
+    $objExercise->id,
+    $learnpath_id,
+    $learnpath_item_id,
+    $learnpath_item_view_id
+);
 if ($objExercise->selectAttempts() > 0) {
-    $attempt_count = Event::get_attempt_count(
-        api_get_user_id(),
-        $objExercise->id,
-        $learnpath_id,
-        $learnpath_item_id,
-        $learnpath_item_view_id
-    );
     if ($attempt_count >= $objExercise->selectAttempts()) {
         Display::addFlash(
             Display::return_message(
@@ -213,7 +208,7 @@ $feedbackType = $objExercise->getFeedbackType();
 
 ob_start();
 // Display and save questions
-ExerciseLib::displayQuestionListByAttempt(
+$stats = ExerciseLib::displayQuestionListByAttempt(
     $objExercise,
     $exe_id,
     $saveResults,
@@ -230,18 +225,44 @@ if (!empty($learnpath_id) && $saveResults) {
 
 $emailSettings = api_get_configuration_value('exercise_finished_email_settings');
 if (!empty($emailSettings)) {
-    $subject = get_lang('ExerciseFinished');
+    $attemptCountToSend = $attempt_count++;
+    $subject = sprintf(get_lang('WrongAttemptXInCourseX'), $attemptCountToSend, $courseInfo['title']);
+    $wrongAnswersCount = $stats['failed_answers_count'];
+    if (0 === $wrongAnswersCount) {
+        $subject = sprintf(get_lang('ExerciseValidationInCourseX'), $courseInfo['title']);
+    }
+
     $totalScore = ExerciseLib::show_score($total_score, $max_score, false, true);
+    $exerciseExtraFieldValue = new ExtraFieldValue('exercise');
+    $data = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable($objExercise->iId, 'MailAttemptX');
+    $content = '';
+    $userInfo = api_get_user_info();
+    if ($data && isset($data['value'])) {
+        $content = sprintf($data['value'], $attemptCountToSend);
+        $content = str_replace('((exercise_error_count))', $wrongAnswersCount, $content);
+        $content = AnnouncementManager::parseContent(
+            api_get_user_id(),
+            $content,
+            api_get_course_id(),
+            api_get_session_id()
+        );
+
+        if (0 !== $wrongAnswersCount) {
+            $content .= $stats['failed_answers_html'];
+        } else {
+            $content .= 'Exercise ok!';
+        }
+    }
 
     if (isset($emailSettings['send_by_status']) && !empty($emailSettings['send_by_status'])) {
         foreach ($emailSettings['send_by_status'] as $item) {
             $type = $item['type'];
             switch ($item['type']) {
                 case 'only_score':
-                    $content = get_lang('YourScore')." $totalScore ";
+                    //$content = get_lang('YourScore')." $totalScore ";
                     break;
                 case 'complete':
-                    $content = $pageContent;
+                    //$content = $pageContent;
                     break;
             }
 
@@ -256,14 +277,14 @@ if (!empty($emailSettings)) {
     if (isset($emailSettings['send_by_email']) && !empty($emailSettings['send_by_email'])) {
         foreach ($emailSettings['send_by_email'] as $item) {
             $type = $item['type'];
-            switch ($item['type']) {
+            /*switch ($item['type']) {
                 case 'only_score':
                     $content = get_lang('YourScore')." $totalScore ";
                     break;
                 case 'complete':
                     $content = $pageContent;
                     break;
-            }
+            }*/
             api_mail_html('', $item['email'], $subject, $content);
         }
     }

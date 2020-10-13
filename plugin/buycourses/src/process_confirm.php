@@ -316,7 +316,7 @@ switch ($sale['payment_type']) {
         $tpvRedsysParams = $plugin->getTpvRedsysParams();
 
         require_once '../resources/php/apiRedsys.php';
-        $tpv = new RedsysAPI;
+        $tpv = new RedsysAPI();
 
         $merchantcode = $tpvRedsysParams['merchantcode'];
         $terminal = $tpvRedsysParams['terminal'];
@@ -339,7 +339,7 @@ switch ($sale['payment_type']) {
         $tpv->setParameter("DS_MERCHANT_URLKO", $urlFailed);
         $tpv->setParameter("DS_MERCHANT_PRODUCTDESCRIPTION", $description);
 
-        $version="HMAC_SHA256_V1";
+        $version = "HMAC_SHA256_V1";
         $kc = $tpvRedsysParams['kc'];
 
         $urlTpv = $tpvRedsysParams['url_redsys'];

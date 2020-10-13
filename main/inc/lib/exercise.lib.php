@@ -4516,6 +4516,7 @@ EOT;
         $showTotalScoreAndUserChoicesInLastAttempt = true;
         $showTotalScore = true;
         $showQuestionScore = true;
+        $attemptResult = [];
 
         if (in_array(
             $objExercise->results_disabled,
@@ -4724,27 +4725,29 @@ EOT;
                     }
                 }
 
-                $score = [];
-                if ($show_results) {
-                    $scorePassed = $my_total_score >= $my_total_weight;
-                    if (function_exists('bccomp')) {
-                        $compareResult = bccomp($my_total_score, $my_total_weight, 3);
-                        $scorePassed = $compareResult === 1 || $compareResult === 0;
-                    }
-                    $score = [
-                        'result' => self::show_score(
-                            $my_total_score,
-                            $my_total_weight,
-                            false
-                        ),
-                        'pass' => $scorePassed,
-                        'score' => $my_total_score,
-                        'weight' => $my_total_weight,
-                        'comments' => $comnt,
-                        'user_answered' => $result['user_answered'],
-                    ];
+                $scorePassed = $my_total_score >= $my_total_weight;
+                if (function_exists('bccomp')) {
+                    $compareResult = bccomp($my_total_score, $my_total_weight, 3);
+                    $scorePassed = $compareResult === 1 || $compareResult === 0;
                 }
 
+                $calculatedScore = [
+                    'result' => self::show_score(
+                        $my_total_score,
+                        $my_total_weight,
+                        false
+                    ),
+                    'pass' => $scorePassed,
+                    'score' => $my_total_score,
+                    'weight' => $my_total_weight,
+                    'comments' => $comnt,
+                    'user_answered' => $result['user_answered'],
+                ];
+
+                $score = [];
+                if ($show_results) {
+                    $score = $calculatedScore;
+                }
                 if (in_array($objQuestionTmp->type, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION])) {
                     $reviewScore = [
                         'score' => $my_total_score,
@@ -4776,6 +4779,10 @@ EOT;
                 if ($show_results) {
                     $question_content .= '</div>';
                 }
+
+                $calculatedScore['question_content'] = $question_content;
+                $attemptResult[] = $calculatedScore;
+
                 if ($objExercise->showExpectedChoice()) {
                     $exercise_content .= Display::div(
                         Display::panel($question_content),
@@ -4947,6 +4954,22 @@ EOT;
         if (!empty($remainingMessage)) {
             echo Display::return_message($remainingMessage, 'normal', false);
         }
+
+        $failedAnswersCount = 0;
+        $wrongQuestionHtml = '';
+        foreach ($attemptResult as $item) {
+            if (false === $item['pass']) {
+                $failedAnswersCount++;
+                $wrongQuestionHtml .= $item['question_content'].'<br />';
+            }
+        }
+
+        return [
+            'attempts_result' => $attemptResult,
+            'total_answers_count' => count($attemptResult),
+            'failed_answers_count' => $failedAnswersCount,
+            'failed_answers_html' => $wrongQuestionHtml,
+        ];
     }
 
     /**

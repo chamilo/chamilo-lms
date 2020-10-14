@@ -602,6 +602,22 @@ class SurveyUtil
         );
         echo '</div>';
 
+        $fromUntil = sprintf(get_lang('FromXUntilY'), $survey_data['avail_from'], $survey_data['avail_till']);
+        $data = [
+            get_lang('SurveyTitle') => $survey_data['title'],
+            get_lang('SurveySubTitle') => $survey_data['subtitle'],
+            get_lang('Dates') => $fromUntil,
+            get_lang('SurveyIntroduction') => $survey_data['intro']
+        ];
+
+        $table = new HTML_Table(['id' => 'pdf_table', 'class' => 'table']);
+        $row = 0;
+        foreach ($data as $label => $item) {
+            $table->setCellContents($row, 0, $label);
+            $table->setCellContents($row, 1, $item);
+            $row++;
+        }
+
         if ($survey_data['number_of_questions'] > 0) {
             $limitStatement = null;
             if (!$singlePage) {
@@ -797,8 +813,11 @@ class SurveyUtil
             }
             echo '</div>';
         }
-
         echo '</div>';
+
+        // Survey information, needed for the PDF export.
+        echo Display::page_subheader(get_lang('Survey')).'<br />';
+        $table->display();
 
         if (isset($_GET['viewoption'])) {
             echo '<div class="answered-people">';
@@ -3926,7 +3945,6 @@ class SurveyUtil
                     $htmlChart .= '
                         var xAxisCategory =
                         myChart.addCategoryAxis("x", ["'.get_lang("Option").'","'.get_lang("Score").'"]);
-
                         xAxisCategory.addOrderRule('.json_encode($serie).');
                         xAxisCategory.addGroupOrderRule("'.get_lang("Score").'");
                         myChart.addSeries("'.get_lang("Option").'", dimple.plot.bar);';

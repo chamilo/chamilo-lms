@@ -247,7 +247,7 @@ if ($allowUserGroups) {
                         'usergroup_id' => $userGroupId,
                         'created_at' => api_get_utc_datetime(),
                     ];
-                    Database::insert('c_lp_rel_usergroup', $params);
+                    Database::insert($table, $params);
                 }
             }
 

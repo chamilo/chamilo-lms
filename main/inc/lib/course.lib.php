@@ -2653,6 +2653,13 @@ class CourseManager
                 Database::query($sql);
             }
 
+            if (api_get_configuration_value('allow_lp_subscription_to_usergroups')) {
+                $tableGroup = Database::get_course_table(TABLE_LP_REL_USERGROUP);
+                $sql = "DELETE FROM $tableGroup
+                        WHERE c_id = $courseId ";
+                Database::query($sql);
+            }
+
             // Deletes all groups, group-users, group-tutors information
             // To prevent fK mix up on some tables
             GroupManager::deleteAllGroupsFromCourse($courseId);

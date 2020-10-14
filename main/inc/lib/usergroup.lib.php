@@ -490,9 +490,7 @@ class UserGroup extends Model
             }
         }
 
-        $array = Database::store_result($result, 'ASSOC');
-
-        return $array;
+        return Database::store_result($result, 'ASSOC');
     }
 
     /**
@@ -2976,5 +2974,21 @@ class UserGroup extends Model
             api_protect_admin_script(true);
             api_protect_limit_for_session_admin();
         }
+    }
+
+    public function getGroupsByLp($lpId, $courseId, $sessionId)
+    {
+        $lpId = (int) $lpId;
+        $courseId = (int) $courseId;
+        $sessionId = (int) $sessionId;
+
+        $sql = "SELECT usergroup_id FROM c_lp_rel_usergroup
+                WHERE
+                    c_id = $courseId AND
+                    session_id = $sessionId AND
+                    lp_id = $lpId";
+        $result = Database::query($sql);
+
+        return Database::store_result($result, 'ASSOC');
     }
 }

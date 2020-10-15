@@ -37,7 +37,7 @@ if (!empty($courseIdList)) {
         if (!empty($courseExerciseList)) {
             foreach ($courseExerciseList as $exercise) {
                 $exerciseId = $exercise['iid'];
-                if (in_array( $exerciseId, $exercises)) {
+                if (in_array($exerciseId, $exercises)) {
                     $selectedExercises[$courseId][] = $exerciseId;
                 }
             }
@@ -56,7 +56,7 @@ $form->addSelectAjax(
     $courseOptions,
     [
         'url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course',
-        'multiple' => true
+        'multiple' => true,
     ]
 );
 
@@ -81,14 +81,14 @@ if ($form->validate()) {
         get_lang('CorrectAttempts'),
         get_lang('WrongAttempts'),
         get_lang('StudentWithCorrectAnswers'),
-        get_lang('StudentWithWrongAnswers')
+        get_lang('StudentWithWrongAnswers'),
     ];
     $scoreDisplay = new ScoreDisplay();
     $exercises = $form->getSubmitValue('exercises');
 
     if ($exercises) {
         foreach ($selectedExercises as $courseId => $exerciseList) {
-            $sessions = SessionManager::get_session_by_course($courseId );
+            $sessions = SessionManager::get_session_by_course($courseId);
             $courseTitle = $courseOptions[$courseId];
 
             foreach ($exerciseList as $exerciseId) {
@@ -120,7 +120,7 @@ if ($form->validate()) {
                         $correctCount,
                         $wrongCount,
                         $correctCountStudent,
-                        $wrongCountStudent
+                        $wrongCountStudent,
                     ];
                 }
 
@@ -132,13 +132,12 @@ if ($form->validate()) {
                 );
                 $column = 0;
                 foreach ($headers as $header) {
-                    $table->set_header($column,  $header, false);
+                    $table->set_header($column, $header, false);
                     $column++;
                 }
                 $tableContent .= $table->return_table();
             }
         }
-
     }
 }
 
@@ -154,7 +153,6 @@ $(function() {
     });
 });
 </script>';
-
 
 Display::display_header($nameTools, get_lang('Exercise'));
 $form->display();

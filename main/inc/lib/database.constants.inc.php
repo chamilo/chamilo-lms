@@ -195,8 +195,6 @@ define('TABLE_QUIZ_QUESTION_OPTION', 'quiz_question_option');
 define('TABLE_QUIZ_QUESTION_CATEGORY', 'quiz_question_category');
 define('TABLE_QUIZ_QUESTION_REL_CATEGORY', 'quiz_question_rel_category');
 define('TABLE_QUIZ_REL_CATEGORY', 'quiz_rel_category');
-
-// New SCORM tables
 define('TABLE_LP_MAIN', 'lp');
 define('TABLE_LP_ITEM', 'lp_item');
 define('TABLE_LP_VIEW', 'lp_view');
@@ -204,6 +202,7 @@ define('TABLE_LP_ITEM_VIEW', 'lp_item_view');
 define('TABLE_LP_IV_INTERACTION', 'lp_iv_interaction'); // IV = Item View
 define('TABLE_LP_IV_OBJECTIVE', 'lp_iv_objective'); // IV = Item View
 define('TABLE_LP_CATEGORY', 'lp_category');
+define('TABLE_LP_REL_USERGROUP', 'lp_rel_usergroup');
 
 // Smartblogs (Kevin Van Den Haute::kevin@develop-it.be)
 // Permission tables

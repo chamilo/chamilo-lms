@@ -37,7 +37,7 @@ if (!empty($courseIdList)) {
         if (!empty($courseExerciseList)) {
             foreach ($courseExerciseList as $exercise) {
                 $exerciseId = $exercise['iid'];
-                if (in_array( $exerciseId, $exercises)) {
+                if (in_array($exerciseId, $exercises)) {
                     $selectedExercises[$courseId][] = $exerciseId;
                 }
             }
@@ -56,7 +56,7 @@ $form->addSelectAjax(
     $courseOptions,
     [
         'url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course',
-        'multiple' => true
+        'multiple' => true,
     ]
 );
 
@@ -97,7 +97,7 @@ if ($form->validate()) {
         $orderedData = [];
         foreach ($selectedExercises as $courseId => $exerciseList) {
             foreach ($exerciseList as $exerciseId) {
-                $questions = ExerciseLib::getWrongQuestionResults($courseId, $exerciseId, null,10);
+                $questions = ExerciseLib::getWrongQuestionResults($courseId, $exerciseId, null, 10);
                 foreach ($questions as $data) {
                     $questionId = (int) $data['question_id'];
                     $total = ExerciseLib::getTotalQuestionAnswered($courseId, $exerciseId, $questionId);
@@ -133,7 +133,7 @@ if ($form->validate()) {
         $table->column = 4;
         $column = 0;
         foreach ($headers as $header) {
-            $table->set_header($column,  $header, false);
+            $table->set_header($column, $header, false);
             $column++;
         }
 
@@ -153,7 +153,6 @@ $(function() {
     });
 });
 </script>';
-
 
 Display::display_header($nameTools, get_lang('Exercise'));
 $form->display();

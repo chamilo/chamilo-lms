@@ -284,6 +284,11 @@ define('LOG_QUESTION_UPDATED', 'question_updated');
 define('LOG_QUESTION_DELETED', 'question_deleted');
 define('LOG_QUESTION_REMOVED_FROM_QUIZ', 'question_removed_from_quiz');
 
+define('LOG_SURVEY_ID', 'survey_id');
+define('LOG_SURVEY_CREATED', 'survey_created');
+define('LOG_SURVEY_DELETED', 'survey_deleted');
+define('LOG_SURVEY_CLEAN_RESULTS', 'survey_clean_results');
+
 define('USERNAME_PURIFIER', '/[^0-9A-Za-z_\.-]/');
 
 //used when login_is_email setting is true

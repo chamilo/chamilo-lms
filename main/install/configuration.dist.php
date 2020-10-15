@@ -1648,6 +1648,10 @@ $_configuration['auth_password_links'] = [
 // Add option to copy a session with its course-session content BT#17832
 //$_configuration['duplicate_specific_session_content_on_session_copy'] = false;
 
+// Allow add usergroups to a LP BT#17854
+//CREATE TABLE c_lp_rel_usergroup (id INT AUTO_INCREMENT NOT NULL, lp_id INT NOT NULL, usergroup_id INT NOT NULL, c_id INT NOT NULL, session_id INT NOT NULL, created_at DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
+//$_configuration['allow_lp_subscription_to_usergroups'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

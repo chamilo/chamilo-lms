@@ -8701,4 +8701,6 @@ $MyLps = "Mis lecciones";
 $LastVisitedLp = "Última lección visitada";
 $YouDidNotVisitALpHereTheLpList = "Aún no ha visitado una lección, aquí está la lista de sus lecciones.";
 $CourseUsedInOtherURL = "Este curso es usado en otro portal";
+$SubscribeUserGroupsToLp = "Inscripción de clases a lección";
+$ReplaceFile = "Reemplazar archivo";
 ?>

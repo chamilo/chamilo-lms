@@ -1109,6 +1109,15 @@ class learnpath
                 WHERE c_id = $course_id AND (link LIKE '$link%' AND image='scormbuilder.gif')";
         Database::query($sql);
 
+        if (api_get_configuration_value('allow_lp_subscription_to_usergroups')) {
+            $table = Database::get_course_table(TABLE_LP_REL_USERGROUP);
+            $sql = "DELETE FROM $table
+                    WHERE
+                        lp_id = {$this->lp_id} AND
+                        c_id = $course_id ";
+            Database::query($sql);
+        }
+
         $sql = "DELETE FROM $lp
                 WHERE iid = ".$this->lp_id;
         Database::query($sql);

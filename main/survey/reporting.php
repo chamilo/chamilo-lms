@@ -135,6 +135,7 @@ if ($action === 'overview') {
 }
 
 $htmlHeadXtra[] = api_get_asset('jspdf/dist/jspdf.umd.min.js');
+$htmlHeadXtra[] = api_get_asset('svgtopdf/svg2pdf.js');
 $htmlHeadXtra[] = api_get_asset('html2canvas/html2canvas.js');
 $htmlHeadXtra[] = api_get_js('d3/d3.v3.5.4.min.js');
 $htmlHeadXtra[] = api_get_js('dimple.v2.1.2.min.js');
@@ -142,6 +143,8 @@ $htmlHeadXtra[] = api_get_js('dimple.v2.1.2.min.js');
 $htmlHeadXtra[] = '<script>
 async function exportToPdf() {
     window.jsPDF = window.jspdf.jsPDF;
+
+    //console.log(window.jsPDF.API.svg);
     var doc = document.getElementById("question_results");
     var pdf = new jsPDF("", "pt", "a4");
 
@@ -149,7 +152,7 @@ async function exportToPdf() {
     pdf.setFontSize(22);
     pdf.text(40, 50, "'.get_lang('Reporting').'");
 
-    var table = document.getElementById("pdf_table");
+    const table = document.getElementById("pdf_table");
     await html2canvas(table).then(function(canvas) {
         var pageData = canvas.toDataURL("image/jpeg", 1);
         pdf.addImage(pageData, "JPEG", 40, 80, 530, 530.28/canvas.width * canvas.height);
@@ -161,9 +164,55 @@ async function exportToPdf() {
     var pages = [];
     var page = 1;
     for (var i = 0; i < divs.length; i += 1) {
-        //$(divs[i]).hide();
+        //var canvas = document.getElementById("canvas");
+        //var ctx = canvas.getContext("2d");
+            const svg = divs[i].querySelector("svg");
+            // Two parameters after addImage control the size of the added image,
+            // where the page height is compressed according to the width-height ratio column of a4 paper.
+            if (!pages[page]) {
+                pages[page] = 0;
+            }
+            pages[page] += 1;
 
-        await html2canvas(divs[i], {}).then(function(canvas) {
+            var positionY = 200;
+            var diff = 250;
+            if (page > 1) {
+                positionY = 60;
+                diff = 220;
+            }
+            if (pages[page] > 1) {
+                positionY = pages[page] * diff + 10;
+            }
+
+            const title = $(divs[i]).find(".title-question");
+            pdf.setFontSize(16);
+            pdf.text(40, positionY, title.text());
+
+            svg2pdf(svg, pdf, {
+                  xOffset: 10,
+                  yOffset: positionY+10,
+                  scale: 0.5
+            });
+
+            const tables = divs[i].getElementsByClassName("table");
+            for (var j = 0; j < tables.length; j += 1) {
+                await html2canvas(tables[j]).then(function(canvas) {
+                    var pageData = canvas.toDataURL("image/jpeg", 1);
+                    pdf.addImage(pageData, "JPEG", 40, positionY + 210, 530, 530.28/canvas.width * canvas.height);
+                });
+            }
+            //pdf.addImage(pageData, "JPEG", 40, positionY, 530, 530.28/canvas.width * canvas.height);
+            if (i > 0 && (i -1) % 2 === 0) {
+                 pdf.addPage();
+                 page++;
+            }
+        //{ x: 40, y: 50, height: 500, width: 500
+         //pdf.svg(svg, {x:40, 50, 100, 500});
+        /*pdf.svg(svg).then((result) => {
+            // save the created pdf
+            //pdf.save("test.pdf")
+        });*/
+        /*await html2canvas(divs[i], {}).then(function(canvas) {
             // Returns the image data URL, parameter: image format and clarity (0-1)
             var pageData = canvas.toDataURL("image/jpeg", 0.8);
 
@@ -184,12 +233,14 @@ async function exportToPdf() {
                 positionY = pages[page] * diff + 10;
             }
 
-            pdf.addImage(pageData, "JPEG", 40, positionY, 530, 530.28/canvas.width * canvas.height);
+            pdf.addImage(url, "JPEG", 40, positionY, 530, 530.28/canvas.width * canvas.height);
+
+            //pdf.addImage(pageData, "JPEG", 40, positionY, 530, 530.28/canvas.width * canvas.height);
             if (i > 0 && (i -1) % 2 === 0) {
                  pdf.addPage();
                  page++;
             }
-        });
+        });*/
     }
 
     pdf.save("reporting.pdf");

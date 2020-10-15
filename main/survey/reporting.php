@@ -197,7 +197,7 @@ async function exportToPdf() {
         }
 
         //pdf.addImage(pageData, "JPEG", 40, positionY, 530, 530.28/canvas.width * canvas.height);
-        if (i > 0 && (i -1) % 2 === 0) {
+        if (i > 0 && (i -1) % 2 === 0 && (i+1 != divs.length)) {
              pdf.addPage();
              page++;
         }

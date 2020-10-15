@@ -195,7 +195,7 @@ if ($allowUserGroups) {
     $userGroupMultiSelect = $formUserGroup->addElement(
         'advmultiselect',
         'usergroups',
-        get_lang('UserGroups'),
+        get_lang('Classes'),
         $allOptions
     );
 

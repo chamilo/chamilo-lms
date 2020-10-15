@@ -20,6 +20,19 @@ if ($debug) {
 }
 
 switch ($action) {
+    case 'get_lp_list_by_course':
+        $course_id = (isset($_GET['course_id']) && !empty($_GET['course_id'])) ? $_GET['course_id'] : 0;
+        $results = learnpath::getLpList($course_id);
+        $data= [];
+
+        if (!empty($results)) {
+            foreach ($results as $lp) {
+                $data[] = ['id' => $lp['id'], 'text' => html_entity_decode($lp['name'])];
+            }
+        }
+
+        echo json_encode($data);
+        break;
     case 'get_documents':
         $courseInfo = api_get_course_info();
         $folderId = isset($_GET['folder_id']) ? $_GET['folder_id'] : null;

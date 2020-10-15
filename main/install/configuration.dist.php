@@ -568,6 +568,13 @@ $_configuration['send_all_emails_to'] = [
     ]
 ];*/
 
+// Allow additional data (exercise and learningpath) in the ticket
+// - Require change DB
+// ALTER TABLE ticket_ticket ADD exercise_id INT DEFAULT NULL AFTER course_id;
+// ALTER TABLE ticket_ticket ADD CONSTRAINT FK_EB5B2A0D6285C987 FOREIGN KEY (exercise_id) REFERENCES c_quiz (iid);
+// ALTER TABLE ticket_ticket ADD lp_id INT DEFAULT NULL AFTER exercise_id;
+// ALTER TABLE ticket_ticket ADD CONSTRAINT FK_EB5B2A0D6285C231 FOREIGN KEY (lp_id) REFERENCES c_lp (iid);
+
 // Exercises configuration settings
 // Send only quiz answer notifications to course coaches and not general coach
 //$_configuration['block_quiz_mail_notification_general_coach'] = false;

@@ -1821,6 +1821,23 @@ class learnpath
     }
 
     /**
+     * Get the learning path name by id
+     *
+     * @param int $lpId
+     *
+     * @return mixed
+     */
+    public static function getLpById($lpId)
+    {
+        $em = Database::getManager();
+
+        return $em->createQuery('SELECT clp.name FROM ChamiloCourseBundle:CLp clp
+            WHERE clp.iid = :iid')
+            ->setParameter('iid', $lpId)
+            ->getArrayResult();
+    }
+
+    /**
      * Gets the navigation bar for the learnpath display screen.
      *
      * @param string $barId

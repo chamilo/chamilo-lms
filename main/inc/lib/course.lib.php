@@ -2291,12 +2291,13 @@ class CourseManager
     /**
      * This function returns information about coachs from a course in session.
      *
-     * @param int $session_id
-     * @param int $courseId
+     * @param int  $session_id
+     * @param int  $courseId
+     * @param bool $loadAvatars
      *
      * @return array containing user_id, lastname, firstname, username
      */
-    public static function get_coachs_from_course($session_id = 0, $courseId = 0)
+    public static function get_coachs_from_course($session_id = 0, $courseId = 0, $loadAvatars = false)
     {
         if (!empty($session_id)) {
             $session_id = intval($session_id);
@@ -2329,9 +2330,17 @@ class CourseManager
 
         $coaches = [];
         if (Database::num_rows($rs) > 0) {
+            $url = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_popup&course_id='.$courseId;
+
             while ($row = Database::fetch_array($rs)) {
                 $completeName = api_get_person_name($row['firstname'], $row['lastname']);
-                $coaches[] = $row + ['full_name' => $completeName];
+                $row['full_name'] = $completeName;
+                $row['avatar'] = $loadAvatars
+                    ? UserManager::getUserPicture($row['user_id'], USER_IMAGE_SIZE_SMALL)
+                    : '';
+                $row['url'] = "$url&user_id={$row['user_id']}";
+
+                $coaches[] = $row;
             }
         }
 
@@ -4520,7 +4529,8 @@ class CourseManager
             );
             $course_coachs = self::get_coachs_from_course(
                 $course_info['id_session'],
-                $course_info['real_id']
+                $course_info['real_id'],
+                true
             );
             $params['teachers'] = $teacher_list;
 

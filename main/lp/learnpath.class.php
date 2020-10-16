@@ -4887,7 +4887,7 @@ class learnpath
     /**
      * Saves the last item seen's ID only in case.
      */
-    public function save_last()
+    public function save_last($score = null)
     {
         $course_id = api_get_course_int_id();
         $debug = $this->debug;
@@ -4928,6 +4928,11 @@ class learnpath
         if (!api_is_invitee()) {
             // Save progress.
             list($progress) = $this->get_progress_bar_text('%');
+            $scoreAsProgressSetting = api_get_configuration_value('lp_score_as_progress_enable');
+            if ($scoreAsProgressSetting && (null === $score || empty($score) || -1 == $score)) {
+                return false;
+            }
+
             if ($progress >= 0 && $progress <= 100) {
                 $progress = (int) $progress;
                 $sql = "UPDATE $table SET

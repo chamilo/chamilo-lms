@@ -1985,10 +1985,6 @@ function xajax_save_item_scorm(
         }
     }
 
-    if (1 == statusSignalReceived && 'completed' == olms.lesson_status) {
-        scormSleep(3000);
-    }
-
     if (is_interactions == 'true')  {
         interact_string = '';
         temp = '';
@@ -2551,12 +2547,4 @@ function update_chronometer(text_hour, text_minute, text_second)
     }, 1000);
 
     return true;
-}
-
-function scormSleep(milliseconds) {
-    var date = Date.now();
-    var currentDate = null;
-    do {
-        currentDate = Date.now();
-    } while (currentDate - date < milliseconds);
 }

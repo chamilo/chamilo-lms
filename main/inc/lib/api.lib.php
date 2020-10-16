@@ -1256,6 +1256,7 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
             return false;
         }
     }
+
     return true;
 }
 
@@ -1291,6 +1292,7 @@ function api_protect_admin_script($allow_sessions_admins = false, $allow_drh = f
  * Function to determine an inactive user by the database
  *
  * @param int $user_id
+ *
  * @return bool
  */
 function apiBlockInactiveUser($user_id = 0)
@@ -1307,6 +1309,7 @@ function apiBlockInactiveUser($user_id = 0)
     if ($data == false) {
         api_not_allowed(true, get_lang('AccountInactive'));
     }
+
     return $data;
 }
 

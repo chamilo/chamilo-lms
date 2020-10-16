@@ -1147,7 +1147,7 @@ function feedback($array, $url)
 /**
  * This function returns the html code to display the feedback messages on a given dropbox file.
  *
- * @param $feedback_array an array that contains all the feedback messages about the given document
+ * @param array $feedback an array that contains all the feedback messages about the given document
  *
  * @return string code
  *

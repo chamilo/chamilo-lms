@@ -9689,7 +9689,6 @@ function api_get_relative_path($from, $to)
  *
  * @param string $type
  * @param string $serialized
- * @param bool   $ignoreErrors. Optional.
  *
  * @return mixed
  */

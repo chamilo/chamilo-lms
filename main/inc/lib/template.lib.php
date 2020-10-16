@@ -1333,9 +1333,6 @@ class Template
         $this->responseCode = $code;
     }
 
-    /**
-     * @param string $code
-     */
     public function getResponseCode()
     {
         return $this->responseCode;

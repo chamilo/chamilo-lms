@@ -23,9 +23,6 @@ class ExerciseCategoryManager extends Model
     /**
      * Formats the necessary elements for the given datatype.
      *
-     * @param string $type The type of data to which this extra field
-     *                     applies (user, course, session, ...)
-     *
      * @assert (-1) === false
      */
     public function __construct()

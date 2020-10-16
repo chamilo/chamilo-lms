@@ -321,7 +321,7 @@ class Display
      *                              'page_nr' = The page to display
      *                              'hide_navigation' =  true to hide the navigation
      * @param array $query_vars     Additional variables to add in the query-string
-     * @param array $form           actions Additional variables to add in the query-string
+     * @param array $form_actions   actions Additional variables to add in the query-string
      * @param mixed An array with bool values to know which columns show.
      * i.e: $visibility_options= array(true, false) we will only show the first column
      *                Can be also only a bool value. TRUE: show all columns, FALSE: show nothing
@@ -363,7 +363,6 @@ class Display
      *                              'page_nr' = The page to display
      *                              'hide_navigation' =  true to hide the navigation
      * @param array $query_vars     Additional variables to add in the query-string
-     * @param array $form           actions Additional variables to add in the query-string
      * @param mixed An array with bool values to know which columns show. i.e:
      *  $visibility_options= array(true, false) we will only show the first column
      *    Can be also only a bool value. TRUE: show all columns, FALSE: show nothing
@@ -656,8 +655,6 @@ class Display
 
     /**
      * Prints an <option>-list with all letters (A-Z).
-     *
-     * @param string $selected_letter The letter that should be selected
      *
      * @todo This is English language specific implementation.
      * It should be adapted for the other languages.

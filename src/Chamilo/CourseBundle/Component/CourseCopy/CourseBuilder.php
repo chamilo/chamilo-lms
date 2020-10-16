@@ -705,9 +705,6 @@ class CourseBuilder
     /**
      * Build a link category.
      *
-     * @param int $id       Internal link ID
-     * @param int $courseId Internal course ID
-     *
      * @return int
      */
     public function build_link_category($category)

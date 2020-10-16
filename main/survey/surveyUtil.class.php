@@ -607,7 +607,7 @@ class SurveyUtil
             get_lang('SurveyTitle') => $survey_data['title'],
             get_lang('SurveySubTitle') => $survey_data['subtitle'],
             get_lang('Dates') => $fromUntil,
-            get_lang('SurveyIntroduction') => $survey_data['intro']
+            get_lang('SurveyIntroduction') => $survey_data['intro'],
         ];
 
         $table = new HTML_Table(['id' => 'pdf_table', 'class' => 'table']);

@@ -42,7 +42,7 @@
                           {{ course.name }}
                           <span class="code-title">{{ course.visual_code }}</span>
                       {% else %}
-                          <a href="{{ course.link }}">{{ course.title }}</a>
+                          {{ course.title }}
                       {% endif %}
                   </h4>
                 </div>

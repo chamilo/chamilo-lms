@@ -232,84 +232,80 @@ if (!empty($emailSettings)) {
     if (0 === $wrongAnswersCount) {
         $subject = sprintf(get_lang('ExerciseValidationInCourseX'), $courseInfo['title']);
     }
-
     $exercisePassed = $stats['exercise_passed'];
+    $totalScore = ExerciseLib::show_score($total_score, $max_score, false, true);
 
     if ($exercisePassed) {
-        $data = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable($objExercise->iId, 'MailSuccess');
-
-        if ($data && isset($data['value'])) {
-            //$content = sprintf($data['value'], $attemptCountToSend);
-            $content = $data['value'];
-            $content = str_replace('((exercise_error_count))', $wrongAnswersCount, $content);
-            $content = AnnouncementManager::parseContent(
-                api_get_user_id(),
-                $content,
-                api_get_course_id(),
-                api_get_session_id()
-            );
-            MessageManager::send_message(api_get_user_id(), $subject, $content);
-        }
+        $extraFieldData = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
+            $objExercise->iId,
+            'MailSuccess'
+        );
     } else {
-        $totalScore = ExerciseLib::show_score($total_score, $max_score, false, true);
-        $data = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
+        $extraFieldData = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
             $objExercise->iId,
             'MailAttempt'.$wrongAnswersCount
         );
-        $content = '';
-        $userInfo = api_get_user_info();
-        if ($data && isset($data['value'])) {
-            $content = sprintf($data['value'], $attemptCountToSend);
-            $content = str_replace('((exercise_error_count))', $wrongAnswersCount, $content);
-            $content = AnnouncementManager::parseContent(
-                api_get_user_id(),
-                $content,
-                api_get_course_id(),
-                api_get_session_id()
-            );
+    }
 
+    $content = '';
+    if ($extraFieldData && isset($extraFieldData['value'])) {
+        $content = $extraFieldData['value'];
+        $content = str_replace('((exercise_error_count))', $wrongAnswersCount, $content);
+        $content = AnnouncementManager::parseContent(
+            api_get_user_id(),
+            $content,
+            api_get_course_id(),
+            api_get_session_id()
+        );
+
+        if (false === $exercisePassed) {
             if (0 !== $wrongAnswersCount) {
                 $content .= $stats['failed_answers_html'];
             }
         }
 
-        if (!empty($content)) {
-            if (isset($emailSettings['send_by_status']) && !empty($emailSettings['send_by_status'])) {
-                foreach ($emailSettings['send_by_status'] as $item) {
-                    $type = $item['type'];
-                    switch ($item['type']) {
-                        case 'only_score':
-                            //$content = get_lang('YourScore')." $totalScore ";
-                            break;
-                        case 'complete':
-                            //$content = $pageContent;
-                            break;
-                    }
+        // Send to student
+        MessageManager::send_message(api_get_user_id(), $subject, $content);
+    }
 
-                    switch ($item['status']) {
-                        case STUDENT:
-                            MessageManager::send_message(api_get_user_id(), $subject, $content);
-                            break;
-                    }
+    // Send emails depending status, not sending to main user.
+    if (!empty($content)) {
+        /*if (isset($emailSettings['send_by_status']) && !empty($emailSettings['send_by_status'])) {
+            foreach ($emailSettings['send_by_status'] as $item) {
+                $type = $item['type'];
+                switch ($item['type']) {
+                    case 'only_score':
+                        //$content = get_lang('YourScore')." $totalScore ";
+                        break;
+                    case 'complete':
+                        //$content = $pageContent;
+                        break;
+                }
+
+                switch ($item['status']) {
+                    case STUDENT:
+                        //MessageManager::send_message(api_get_user_id(), $subject, $content);
+                        break;
                 }
             }
+        }*/
 
-            if (isset($emailSettings['send_by_email']) && !empty($emailSettings['send_by_email'])) {
-                foreach ($emailSettings['send_by_email'] as $item) {
-                    $type = $item['type'];
-                    /*switch ($item['type']) {
-                        case 'only_score':
-                            $content = get_lang('YourScore')." $totalScore ";
-                            break;
-                        case 'complete':
-                            $content = $pageContent;
-                            break;
-                    }*/
-                    api_mail_html('', $item['email'], $subject, $content);
-                }
+        if (isset($emailSettings['send_by_email']) && !empty($emailSettings['send_by_email'])) {
+            foreach ($emailSettings['send_by_email'] as $item) {
+                $type = $item['type'];
+                /*switch ($item['type']) {
+                    case 'only_score':
+                        $content = get_lang('YourScore')." $totalScore ";
+                        break;
+                    case 'complete':
+                        $content = $pageContent;
+                        break;
+                }*/
+                api_mail_html('', $item['email'], $subject, $content);
             }
         }
     }
+
 }
 
 $hookQuizEnd = HookQuizEnd::create();

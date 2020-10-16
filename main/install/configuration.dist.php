@@ -1616,24 +1616,60 @@ $_configuration['auth_password_links'] = [
 //$_configuration['show_my_lps_page'] = false;
 
 // When exercise is finished send results by email to users, depending the settings below:
-/*$_configuration['exercise_finished_email_settings'] = [
-    'send_by_status' => [
-        [
-            'status' => 5, // 5 = student that is doing the exercise send to the Chamilo inbox + email
-            'type' => 'only_score', // Shows only the score result.
+/*
+$_configuration['exercise_finished_email_settings'] = [
+    'courses' => [
+        'FIRST_CHANGE' => [ // course code
+            'send_by_email' => [
+                'email' => 'example@example.com',
+                'attempts' => [
+                    [
+                        'status' => 'passed', // passed/failed/all (depends in the exercise pass %)
+                        'content' => 'MailAttemptPassed', // exercise extra field,
+                    ],
+                    [
+                        'status' => 'failed',
+                        'content' => 'MailAttemptFailed',
+                    ],
+                    [
+                        'status' => 'all',
+                        'content' => 'MailAttemptAll',
+                    ],
+                    [
+                        'status' => 'all',
+                        'attempt' => 1,
+                        'content' => 'MailAttemptAttempt1', // exercise extra field,
+                    ],
+                    [
+                        'status' => 'failed',
+                        'attempt' => 2,
+                        'content' => 'MailAttemptFailed2', // exercise extra field,
+                         // if Exercise failed and attempt = 2 then the student will be subscribe to course code:
+                        'post_actions' => [
+                            'subscribe_student_to_courses' => ['SECOND_CHANCE']
+                        ]
+                    ],
+                ],
+            ],
         ],
-    ],
-    'send_by_email' => [
-        [
-            'email' => 'example@example.com', // Only by email
-            'type' => 'complete', // Shows all the results page (feedback/comments/etc)
-        ],
-        [
-            'email' => 'example@example.com',
-            'type' => 'only_score',
-        ],
-    ],
-];*/
+        'SECOND_CHANCE' => [
+            'send_by_email' => [
+                'email' => 'example@example.com',
+                'attempts' => [
+                    [
+                        'status' => 'passed',
+                        'content' => 'MailAttemptPassed', // exercise extra field,
+                    ],
+                    [
+                        'status' => 'failed',
+                        'content' => 'MailAttemptFailed', // exercise extra field,
+                    ],
+                ],
+            ],
+        ]
+    ]
+];
+*/
 
 // Shows a marker if the course was shared in other portals.
 //$_configuration['multiple_access_url_show_shared_course_marker'] = false;

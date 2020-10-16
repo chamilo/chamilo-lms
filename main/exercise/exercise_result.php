@@ -158,6 +158,7 @@ $attempt_count = Event::get_attempt_count(
     $learnpath_item_id,
     $learnpath_item_view_id
 );
+
 if ($objExercise->selectAttempts() > 0) {
     if ($attempt_count >= $objExercise->selectAttempts()) {
         Display::addFlash(
@@ -268,44 +269,73 @@ if (!empty($emailSettings)) {
         MessageManager::send_message(api_get_user_id(), $subject, $content);
     }
 
-    // Send emails depending status, not sending to main user.
-    if (!empty($content)) {
-        /*if (isset($emailSettings['send_by_status']) && !empty($emailSettings['send_by_status'])) {
-            foreach ($emailSettings['send_by_status'] as $item) {
-                $type = $item['type'];
-                switch ($item['type']) {
-                    case 'only_score':
-                        //$content = get_lang('YourScore')." $totalScore ";
+    if (isset($emailSettings['courses']) && isset($emailSettings['courses'][$courseInfo['code']])) {
+        if (isset($emailSettings['courses'][$courseInfo['code']]['send_by_email'])) {
+            $email = $emailSettings['courses'][$courseInfo['code']]['send_by_email']['email'];
+            $sendByMailList = $emailSettings['courses'][$courseInfo['code']]['send_by_email']['attempts'];
+
+            foreach ($sendByMailList as $attempt) {
+                $sendMessage = false;
+                if (isset($attempt['attempt']) && $attemptCountToSend !== (int) $attempt['attempt']) {
+                    continue;
+                }
+
+                if (!isset($attempt['status'])) {
+                    continue;
+                }
+
+                switch ($attempt['status']) {
+                    case 'passed':
+                        if ($exercisePassed) {
+                            $sendMessage = true;
+                        }
                         break;
-                    case 'complete':
-                        //$content = $pageContent;
+                    case 'failed':
+                        if (false === $exercisePassed) {
+                            $sendMessage = true;
+                        }
+                        break;
+                    case 'all':
+                        $sendMessage = true;
                         break;
                 }
 
-                switch ($item['status']) {
-                    case STUDENT:
-                        //MessageManager::send_message(api_get_user_id(), $subject, $content);
-                        break;
-                }
-            }
-        }*/
+                if ($sendMessage) {
+                    if (isset($attempt['content'])) {
+                        $extraFieldData = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
+                            $objExercise->iId,
+                            $attempt['content']
+                        );
 
-        if (isset($emailSettings['send_by_email']) && !empty($emailSettings['send_by_email'])) {
-            foreach ($emailSettings['send_by_email'] as $item) {
-                $type = $item['type'];
-                /*switch ($item['type']) {
-                    case 'only_score':
-                        $content = get_lang('YourScore')." $totalScore ";
-                        break;
-                    case 'complete':
-                        $content = $pageContent;
-                        break;
-                }*/
-                api_mail_html('', $item['email'], $subject, $content);
+                        if ($extraFieldData && isset($extraFieldData['value'])) {
+                            $content = $extraFieldData['value'];
+                            $content = str_replace('((exercise_error_count))', $wrongAnswersCount, $content);
+                            $content = AnnouncementManager::parseContent(
+                                api_get_user_id(),
+                                $content,
+                                api_get_course_id(),
+                                api_get_session_id()
+                            );
+                            api_mail_html('', $email, $subject, $content);
+                        }
+                    }
+
+                    if (isset($attempt['post_actions'])) {
+                        foreach ($attempt['post_actions'] as $action => $params) {
+                            switch ($action) {
+                                case 'subscribe_student_to_courses':
+                                    foreach ($params as $code) {
+                                        CourseManager::subscribeUser(api_get_user_id(), $code);
+                                        break;
+                                    }
+                                    break;
+                            }
+                        }
+                    }
+                }
             }
         }
     }
-
 }
 
 $hookQuizEnd = HookQuizEnd::create();

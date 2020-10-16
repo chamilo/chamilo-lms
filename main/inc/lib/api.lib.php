@@ -1251,7 +1251,7 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
     }
     // see BT#17891
     $user_id = api_get_user_id();
-    if($user_id != 0) {
+    if ($user_id != 0) {
         if (apiBlockInactiveUser($user_id) == false) {
             return false;
         }
@@ -1293,7 +1293,8 @@ function api_protect_admin_script($allow_sessions_admins = false, $allow_drh = f
  * @param int $user_id
  * @return bool
  */
-function apiBlockInactiveUser($user_id = 0){
+function apiBlockInactiveUser($user_id = 0)
+{
     $sql = "SELECT active FROM ".Database::get_main_table(TABLE_MAIN_USER)."
             WHERE id = $user_id";
     $data = true;
@@ -1301,11 +1302,10 @@ function apiBlockInactiveUser($user_id = 0){
     if (Database::num_rows($result) > 0) {
         $result_array = Database::fetch_array($result);
 
-        $data =  (bool) $result_array['active'];
+        $data = (bool) $result_array['active'];
     }
-    if ($data == false ) {
+    if ($data == false) {
         api_not_allowed(true, get_lang('AccountInactive'));
-
     }
     return $data;
 }

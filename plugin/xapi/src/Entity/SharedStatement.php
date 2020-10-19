@@ -10,7 +10,15 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @package Chamilo\PluginBundle\Entity\XApi
  *
- * @ORM\Table(name="xapi_shared_statement")
+ * @ORM\Table(
+ *     name="xapi_shared_statement",
+ *     indexes={
+ *         @ORM\Index(name="idx_datatype_dataid", columns={"data_type", "data_id"})
+ *     },
+ *     uniqueConstraints={
+ *         @ORM\UniqueConstraint(name="idx_uuid", columns={"uuid"})
+ *     }
+ * )
  * @ORM\Entity()
  */
 class SharedStatement

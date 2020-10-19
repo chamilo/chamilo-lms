@@ -4957,18 +4957,28 @@ EOT;
 
         $failedAnswersCount = 0;
         $wrongQuestionHtml = '';
+        $all = '';
         foreach ($attemptResult as $item) {
             if (false === $item['pass']) {
                 $failedAnswersCount++;
                 $wrongQuestionHtml .= $item['question_content'].'<br />';
             }
+            $all .= $item['question_content'].'<br />';
         }
 
+        $passed = self::isPassPercentageAttemptPassed(
+            $objExercise,
+            $total_score,
+            $total_weight
+        );
+
         return [
-            'attempts_result' => $attemptResult,
-            'total_answers_count' => count($attemptResult),
-            'failed_answers_count' => $failedAnswersCount,
+            'attempts_result_list' => $attemptResult, // array of results
+            'exercise_passed' => $passed, // boolean
+            'total_answers_count' => count($attemptResult), // int
+            'failed_answers_count' => $failedAnswersCount, // int
             'failed_answers_html' => $wrongQuestionHtml,
+            'all_answers_html' => $all,
         ];
     }
 
@@ -5104,12 +5114,11 @@ EOT;
         $ribbon = $displayChartDegree ? '<div class="ribbon">' : '';
 
         if ($checkPassPercentage) {
-            $isSuccess = self::isSuccessExerciseResult(
-                $score, $weight, $objExercise->selectPassPercentage()
-            );
+            $passPercentage = $objExercise->selectPassPercentage();
+            $isSuccess = self::isSuccessExerciseResult($score, $weight, $passPercentage);
             // Color the final test score if pass_percentage activated
             $ribbonTotalSuccessOrError = '';
-            if (self::isPassPercentageEnabled($objExercise->selectPassPercentage())) {
+            if (self::isPassPercentageEnabled($passPercentage)) {
                 if ($isSuccess) {
                     $ribbonTotalSuccessOrError = ' ribbon-total-success';
                 } else {
@@ -5139,6 +5148,13 @@ EOT;
         $ribbon .= $displayChartDegree ? '</div>' : '';
 
         return $ribbon;
+    }
+
+    public static function isPassPercentageAttemptPassed($objExercise, $score, $weight)
+    {
+        $passPercentage = $objExercise->selectPassPercentage();
+
+        return self::isSuccessExerciseResult($score, $weight, $passPercentage);
     }
 
     /**

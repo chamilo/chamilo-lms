@@ -38,7 +38,6 @@ if (empty($student_id)) {
     api_not_allowed(true);
 }
 
-// user info
 $user_info = api_get_user_info($student_id);
 
 if (empty($user_info)) {
@@ -241,6 +240,8 @@ switch ($action) {
         break;
     case 'export_to_pdf':
         $sessionToExport = $sId = isset($_GET['session_to_export']) ? (int) $_GET['session_to_export'] : 0;
+        $type = isset($_GET['type']) ? $_GET['type'] : 'attendance';
+
         $sessionInfo = api_get_session_info($sessionToExport);
         if (empty($sessionInfo)) {
             api_not_allowed(true);
@@ -276,39 +277,46 @@ switch ($action) {
 
         $first = Tracking::get_first_connection_date($student_id);
         $last = Tracking::get_last_connection_date($student_id);
-
-        $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
-        $column = 0;
-        $row = 0;
-        $headers = [
-            get_lang('TimeSpent'),
-            get_lang('NumberOfVisits'),
-            get_lang('GlobalProgress'),
-            get_lang('FirstLogin'),
-            get_lang('LastConnexionDate'),
-        ];
-
-        foreach ($headers as $header) {
-            $table->setHeaderContents($row, $column, $header);
-            $column++;
+        $timeSpentContent = '';
+        $pdfTitle = get_lang('AttestationOfAttendance');
+        if ('attendance' === $type) {
+            $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
+            $column = 0;
+            $row = 0;
+            $headers = [
+                get_lang('TimeSpent'),
+                get_lang('NumberOfVisits'),
+                get_lang('GlobalProgress'),
+                get_lang('FirstLogin'),
+                get_lang('LastConnexionDate'),
+            ];
+            foreach ($headers as $header) {
+                $table->setHeaderContents($row, $column, $header);
+                $column++;
+            }
+            $table->setCellContents(1, 0, api_time_to_hms($timeSpent));
+            $table->setCellContents(1, 1, $numberVisits);
+            $table->setCellContents(1, 2, $average);
+            $table->setCellContents(1, 3, $first);
+            $table->setCellContents(1, 4, $last);
+            $timeSpentContent = $table->toHtml();
+        } else {
+            $pdfTitle = get_lang('CertificateOfAchievement');
         }
-        $table->setCellContents(1, 0, api_time_to_hms($timeSpent));
-        $table->setCellContents(1, 1, $numberVisits);
-        $table->setCellContents(1, 2, $average);
-        $table->setCellContents(1, 3, $first);
-        $table->setCellContents(1, 4, $last);
 
         $courseTable = '';
-
         if (!empty($courses)) {
             $courseTable .= '<table class="table table-hover table-striped data_table">';
             $courseTable .= '<thead>';
             $courseTable .= '<tr>
                     <th>'.get_lang('FormationUnit').'</th>
                     <th>'.get_lang('ConnectionTime').'</th>
-                    <th>'.get_lang('Progress').'</th>
-                    <th>'.get_lang('Score').'</th>
-                </tr>';
+                    <th>'.get_lang('Progress').'</th>';
+
+            if ('attendance' === $type) {
+                $courseTable .= '<th>'.get_lang('Score').'</th>';
+            }
+            $courseTable .= '</tr>';
             $courseTable .= '</thead>';
             $courseTable .= '<tbody>';
 
@@ -364,8 +372,10 @@ switch ($action) {
                             $courseInfoItem['title'].'</a>
                         </td>
                         <td >'.$time_spent_on_course.'</td>
-                        <td >'.$progress.'</td>
-                        <td >'.$score.'</td>';
+                        <td >'.$progress.'</td>';
+                    if ('attendance' === $type) {
+                        $courseTable .= '<td >'.$score.'</td>';
+                    }
                     $courseTable .= '</tr>';
                 }
             }
@@ -383,16 +393,33 @@ switch ($action) {
                 <th>'.get_lang('Total').'</th>
                 <th>'.$totalTimeFormatted.'</th>
                 <th>'.$totalProgressFormatted.'</th>
-                <th>'.$totalScoreFormatted.'</th>
-            </tr>';
+            ';
+            if ('attendance' === $type) {
+                $courseTable .= '<th>'.$totalScoreFormatted.'</th>';
+            }
+            $courseTable .= '</tr>';
             $courseTable .= '</tbody></table>';
         }
 
         $tpl = new Template('', false, false, false, true, false, false);
-        $tpl->assign('title', get_lang('AttestationOfAttendance'));
+        $tpl->assign('title', $pdfTitle);
         $tpl->assign('session_title', $sessionInfo['name']);
+        $tpl->assign('session_info', $sessionInfo);
+        $sessionCategoryTitle = '';
+        if (isset($sessionInfo['session_category_id'])) {
+            $sessionCategory = SessionManager::get_session_category($sessionInfo['session_category_id']);
+            if ($sessionCategory) {
+                $sessionCategoryTitle = $sessionCategory['name'];
+            }
+        }
+        $dateData = SessionManager::parseSessionDates($sessionInfo, false);
+        $dateToString = $dateData['access'];
+        $tpl->assign('session_display_dates', $dateToString);
+        $tpl->assign('session_category_title', $sessionCategoryTitle);
         $tpl->assign('student', $user_info['complete_name']);
-        $tpl->assign('table_progress', $table->toHtml());
+        $tpl->assign('student_info', $user_info);
+        $tpl->assign('student_info_extra_fields', UserManager::get_extra_user_data($user_info['user_id']));
+        $tpl->assign('table_progress', $timeSpentContent);
         $tpl->assign(
             'subtitle',
             sprintf(
@@ -401,7 +428,11 @@ switch ($action) {
             )
         );
         $tpl->assign('table_course', $courseTable);
-        $content = $tpl->fetch($tpl->get_template('my_space/pdf_export_student.tpl'));
+        $template = 'pdf_export_student.tpl';
+        if ('achievement' === $type) {
+            $template = 'certificate_achievement.tpl';
+        }
+        $content = $tpl->fetch($tpl->get_template('my_space/'.$template));
 
         $params = [
             'pdf_title' => get_lang('Resume'),
@@ -414,7 +445,7 @@ switch ($action) {
             'show_teacher_as_myself' => false,
             'orientation' => 'P',
         ];
-        $pdf = new PDF('A4', $params['orientation'], $params);
+        @$pdf = new PDF('A4', $params['orientation'], $params);
 
         try {
             $pdf->setBackground($tpl->theme);
@@ -1453,7 +1484,12 @@ if (empty($details)) {
                 $sessionAction .= Display::url(
                     Display::return_icon('pdf.png', get_lang('ExportToPDF'), [], ICON_SIZE_MEDIUM),
                     $currentUrl.'&'
-                        .http_build_query(['action' => 'export_to_pdf', 'session_to_export' => $sId])
+                        .http_build_query(['action' => 'export_to_pdf', 'type' => 'attendance', 'session_to_export' => $sId])
+                );
+                $sessionAction .= Display::url(
+                    Display::return_icon('pdf.png', get_lang('CertificateOfAchievement'), [], ICON_SIZE_MEDIUM),
+                    $currentUrl.'&'
+                    .http_build_query(['action' => 'export_to_pdf', 'type' => 'achievement', 'session_to_export' => $sId])
                 );
             }
             echo $sessionAction;

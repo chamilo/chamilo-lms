@@ -570,7 +570,7 @@ class PDF
     {
         $web_path = false;
         $urlId = api_get_current_access_url_id();
-        if (!empty($course_code) && api_get_setting('pdf_export_watermark_by_course') == 'true') {
+        if (!empty($course_code) && api_get_setting('pdf_export_watermark_by_course') === 'true') {
             $course_info = api_get_course_info($course_code);
             // course path
             $store_path = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/'.$urlId.'_pdf_watermark.png';
@@ -772,7 +772,7 @@ class PDF
         // Add decoration only if not stated otherwise
         if ($complete) {
             // Adding watermark
-            if (api_get_setting('pdf_export_watermark_enable') == 'true') {
+            if (api_get_setting('pdf_export_watermark_enable') === 'true') {
                 $watermark_file = self::get_watermark($courseCode);
                 if ($watermark_file) {
                     //http://mpdf1.com/manual/index.php?tid=269&searchstring=watermark
@@ -780,19 +780,21 @@ class PDF
                     $this->pdf->showWatermarkImage = true;
                 } else {
                     $watermark_file = self::get_watermark(null);
+
                     if ($watermark_file) {
                         $this->pdf->SetWatermarkImage($watermark_file);
                         $this->pdf->showWatermarkImage = true;
                     }
                 }
-                if ($courseCode) {
-                    $watermark_text = api_get_course_setting('pdf_export_watermark_text');
-                    if (empty($watermark_text)) {
-                        $watermark_text = api_get_setting('pdf_export_watermark_text');
+
+                $watermark_text = api_get_setting('pdf_export_watermark_text');
+                if ($courseCode && 'true' === api_get_setting('pdf_export_watermark_by_course')) {
+                    $courseWaterMark = api_get_course_setting('pdf_export_watermark_text');
+                    if (!empty($courseWaterMark) && -1 != $courseWaterMark) {
+                        $watermark_text = $courseWaterMark;
                     }
-                } else {
-                    $watermark_text = api_get_setting('pdf_export_watermark_text');
                 }
+
                 if (!empty($watermark_text)) {
                     $this->pdf->SetWatermarkText(
                         strcode2utf($watermark_text),

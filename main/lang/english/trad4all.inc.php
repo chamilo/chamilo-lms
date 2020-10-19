@@ -8673,4 +8673,7 @@ $MyLps = "My learning paths";
 $LastVisitedLp = "Last visited learning path";
 $YouDidNotVisitALpHereTheLpList = "You haven't visited any learning paths yet, here is the list of your learning paths.";
 $CourseUsedInOtherURL = "This course is used in at least one other portal";
+$SubscribeUserGroupsToLp = "Add classes to a learning path";
+$ReplaceFile = "Replace file";
+$SubscribeClassesToLpCategory = "Subscribe classes to category";
 ?>

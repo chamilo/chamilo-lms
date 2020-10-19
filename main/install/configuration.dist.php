@@ -1616,30 +1616,72 @@ $_configuration['auth_password_links'] = [
 //$_configuration['show_my_lps_page'] = false;
 
 // When exercise is finished send results by email to users, depending the settings below:
-/*$_configuration['exercise_finished_email_settings'] = [
-    'send_by_status' => [
-        [
-            'status' => 5, // 5 = student that is doing the exercise send to the Chamilo inbox + email
-            'type' => 'only_score', // Shows only the score result.
+/*
+$_configuration['exercise_finished_email_settings'] = [
+    'courses' => [
+        'FIRST_ATTEMPT' => [ // course code
+            'send_by_email' => [
+                'email' => 'example@example.com',
+                'attempts' => [
+                    [
+                        'status' => 'passed', // passed/failed/all (depends in the exercise pass %)
+                        'content' => 'MailAttemptPassed', // exercise extra field
+                        'add_pdf' => 'PdfExerciseExtraField', // exercise extra field
+                    ],
+                    [
+                        'status' => 'failed',
+                        'content' => 'MailAttemptFailed',
+                    ],
+                    [
+                        'status' => 'all',
+                        'content' => 'MailAttemptAll',
+                    ],
+                    [
+                        'status' => 'all',
+                        'attempt' => 1,
+                        'content' => 'MailAttemptAttempt1', // exercise extra field,
+                    ],
+                    [
+                        'status' => 'failed',
+                        'attempt' => 2,
+                        'content' => 'MailAttemptFailed2', // exercise extra field,
+                         // if Exercise failed and attempt = 2 then the student will be subscribe to course code:
+                        'post_actions' => [
+                            'subscribe_student_to_courses' => ['SECOND_ATTEMPT']
+                        ]
+                    ],
+                ],
+            ],
         ],
-    ],
-    'send_by_email' => [
-        [
-            'email' => 'example@example.com', // Only by email
-            'type' => 'complete', // Shows all the results page (feedback/comments/etc)
-        ],
-        [
-            'email' => 'example@example.com',
-            'type' => 'only_score',
-        ],
-    ],
-];*/
+        'SECOND_ATTEMPT' => [
+            'send_by_email' => [
+                'email' => 'example@example.com',
+                'attempts' => [
+                    [
+                        'status' => 'passed',
+                        'content' => 'MailAttemptPassed', // exercise extra field,
+                    ],
+                    [
+                        'status' => 'failed',
+                        'content' => 'MailAttemptFailed', // exercise extra field,
+                    ],
+                ],
+            ],
+        ]
+    ]
+];
+*/
 
 // Shows a marker if the course was shared in other portals.
 //$_configuration['multiple_access_url_show_shared_course_marker'] = false;
 
 // Add option to copy a session with its course-session content BT#17832
 //$_configuration['duplicate_specific_session_content_on_session_copy'] = false;
+
+// Allow add usergroups to a LP BT#17854
+//CREATE TABLE c_lp_rel_usergroup (id INT AUTO_INCREMENT NOT NULL, lp_id INT NOT NULL, usergroup_id INT NOT NULL, c_id INT NOT NULL, session_id INT, created_at DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
+//CREATE TABLE c_lp_category_rel_usergroup (id INT AUTO_INCREMENT NOT NULL, lp_category_id INT NOT NULL, usergroup_id INT NOT NULL, c_id INT NOT NULL, session_id INT, created_at DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
+//$_configuration['allow_lp_subscription_to_usergroups'] = false;
 
 // KEEP THIS AT THE END
 // -------- Custom DB changes

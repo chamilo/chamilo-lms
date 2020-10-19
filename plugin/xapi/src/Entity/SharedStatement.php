@@ -53,7 +53,7 @@ class SharedStatement
     /**
      * @return int
      */
-    public function getId(): int
+    public function getId()
     {
         return $this->id;
     }
@@ -63,7 +63,7 @@ class SharedStatement
      *
      * @return SharedStatement
      */
-    public function setId(int $id): SharedStatement
+    public function setId($id)
     {
         $this->id = $id;
 
@@ -73,7 +73,7 @@ class SharedStatement
     /**
      * @return string
      */
-    public function getUuid(): string
+    public function getUuid()
     {
         return $this->uuid;
     }
@@ -83,7 +83,7 @@ class SharedStatement
      *
      * @return SharedStatement
      */
-    public function setUuid(string $uuid): SharedStatement
+    public function setUuid($uuid)
     {
         $this->uuid = $uuid;
 
@@ -93,7 +93,7 @@ class SharedStatement
     /**
      * @return string
      */
-    public function getDataType(): string
+    public function getDataType()
     {
         return $this->dataType;
     }
@@ -103,7 +103,7 @@ class SharedStatement
      *
      * @return SharedStatement
      */
-    public function setDataType(string $dataType): SharedStatement
+    public function setDataType($dataType)
     {
         $this->dataType = $dataType;
 
@@ -113,7 +113,7 @@ class SharedStatement
     /**
      * @return int
      */
-    public function getDataId(): int
+    public function getDataId()
     {
         return $this->dataId;
     }
@@ -123,7 +123,7 @@ class SharedStatement
      *
      * @return SharedStatement
      */
-    public function setDataId(int $dataId): SharedStatement
+    public function setDataId($dataId)
     {
         $this->dataId = $dataId;
 

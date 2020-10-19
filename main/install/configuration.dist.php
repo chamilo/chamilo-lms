@@ -1619,13 +1619,14 @@ $_configuration['auth_password_links'] = [
 /*
 $_configuration['exercise_finished_email_settings'] = [
     'courses' => [
-        'FIRST_CHANGE' => [ // course code
+        'FIRST_ATTEMPT' => [ // course code
             'send_by_email' => [
                 'email' => 'example@example.com',
                 'attempts' => [
                     [
                         'status' => 'passed', // passed/failed/all (depends in the exercise pass %)
-                        'content' => 'MailAttemptPassed', // exercise extra field,
+                        'content' => 'MailAttemptPassed', // exercise extra field
+                        'add_pdf' => 'PdfExerciseExtraField', // exercise extra field
                     ],
                     [
                         'status' => 'failed',
@@ -1646,13 +1647,13 @@ $_configuration['exercise_finished_email_settings'] = [
                         'content' => 'MailAttemptFailed2', // exercise extra field,
                          // if Exercise failed and attempt = 2 then the student will be subscribe to course code:
                         'post_actions' => [
-                            'subscribe_student_to_courses' => ['SECOND_CHANCE']
+                            'subscribe_student_to_courses' => ['SECOND_ATTEMPT']
                         ]
                     ],
                 ],
             ],
         ],
-        'SECOND_CHANCE' => [
+        'SECOND_ATTEMPT' => [
             'send_by_email' => [
                 'email' => 'example@example.com',
                 'attempts' => [

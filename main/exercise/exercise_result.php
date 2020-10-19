@@ -208,7 +208,6 @@ $saveResults = true;
 $feedbackType = $objExercise->getFeedbackType();
 
 ob_start();
-// Display and save questions
 $stats = ExerciseLib::displayQuestionListByAttempt(
     $objExercise,
     $exe_id,
@@ -301,6 +300,46 @@ if (!empty($emailSettings)) {
                 }
 
                 if ($sendMessage) {
+                    $attachments = [];
+                    if (isset($attempt['add_pdf']) && $attempt['add_pdf']) {
+                        // Get pdf content
+                        $pdfExtraData = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
+                            $objExercise->iId,
+                            $attempt['add_pdf']
+                        );
+
+                        if ($pdfExtraData && isset($pdfExtraData['value'])) {
+                            $pdfContent = $pdfExtraData['value'];
+                            $pdfContent = str_replace(
+                                ['((exercise_error_count))', '((all_answers_html))', 'exercise_title'],
+                                [$wrongAnswersCount, $stats['all_answers_html'], $objExercise->get_formated_title()],
+                                $pdfContent
+                            );
+                            $pdfContent = AnnouncementManager::parseContent(
+                                api_get_user_id(),
+                                $pdfContent,
+                                api_get_course_id(),
+                                api_get_session_id()
+                            );
+
+                            @$pdf = new PDF();
+                            $filename = get_lang('Exercise');
+                            $cssFile = api_get_path(SYS_CSS_PATH).'themes/chamilo/default.css';
+                            $pdfPath = @$pdf->content_to_pdf(
+                                "<html><body>$pdfContent</body></html>",
+                                file_get_contents($cssFile),
+                                $filename,
+                                api_get_course_id(),
+                                'F',
+                                false,
+                                null,
+                                false,
+                                true
+                            );
+                            $attachments[] = ['filename' => $filename, 'path' => $pdfPath];
+                        }
+                    }
+
                     if (isset($attempt['content'])) {
                         $extraFieldData = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
                             $objExercise->iId,
@@ -316,7 +355,16 @@ if (!empty($emailSettings)) {
                                 api_get_course_id(),
                                 api_get_session_id()
                             );
-                            api_mail_html('', $email, $subject, $content);
+                            api_mail_html(
+                                null,
+                                $email,
+                                $subject,
+                                $content,
+                                null,
+                                null,
+                                [],
+                                $attachments
+                            );
                         }
                     }
 

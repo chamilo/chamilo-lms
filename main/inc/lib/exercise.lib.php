@@ -4957,11 +4957,13 @@ EOT;
 
         $failedAnswersCount = 0;
         $wrongQuestionHtml = '';
+        $all = '';
         foreach ($attemptResult as $item) {
             if (false === $item['pass']) {
                 $failedAnswersCount++;
                 $wrongQuestionHtml .= $item['question_content'].'<br />';
             }
+            $all .= $item['question_content'].'<br />';
         }
 
         $passed = self::isPassPercentageAttemptPassed(
@@ -4971,11 +4973,12 @@ EOT;
         );
 
         return [
-            'attempts_result' => $attemptResult,
-            'exercise_passed' => $passed,
-            'total_answers_count' => count($attemptResult),
-            'failed_answers_count' => $failedAnswersCount,
+            'attempts_result_list' => $attemptResult, // array of results
+            'exercise_passed' => $passed, // boolean
+            'total_answers_count' => count($attemptResult), // int
+            'failed_answers_count' => $failedAnswersCount, // int
             'failed_answers_html' => $wrongQuestionHtml,
+            'all_answers_html' => $all,
         ];
     }
 

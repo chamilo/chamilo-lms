@@ -51,6 +51,10 @@ class XApiLearningPathEndHook extends XApiActivityHookObserver implements HookLe
 
         $statement = $this->createStatement();
 
+        if ($this->isStatementAlreadySent($statement)) {
+            return;
+        }
+
         try {
             $statement = $this->sendStatementToLrs($statement);
 

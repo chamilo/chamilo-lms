@@ -341,8 +341,6 @@ if ($formUsers->validate()) {
         $headers[] = get_lang('SubscribeClassesToLpCategory');
         $items[] = $formUserGroup->toHtml();
     }
-
-
     $tabs = Display::tabs($headers, $items);
     $tpl->assign('content', $tabs);
     $tpl->display_one_col_template();

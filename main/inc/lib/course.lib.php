@@ -4423,7 +4423,8 @@ class CourseManager
                 if ($userInCourseStatus === COURSEMANAGER || $sessionCourseAvailable) {
                     $session_url = $course_info['course_public_url'].'?id_session='.$course_info['id_session'];
                     $session_title = '<a title="'.$course_info['name'].'" href="'.$session_url.'">'.
-                        $course_info['name'].'</a>'.$notifications;
+                        $course_info['name'].'</a>'.PHP_EOL
+                        .'<div class="notifications">'.$notifications.'</div>';
                 } else {
                     $session_title = $course_info['name'];
                 }

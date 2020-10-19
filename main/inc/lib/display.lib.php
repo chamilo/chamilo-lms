@@ -1719,8 +1719,8 @@ class Display
         if (!$nosession) {
             $session_info = api_get_session_info($session_id);
             $coachInfo = [];
-            if (!empty($session['id_coach'])) {
-                $coachInfo = api_get_user_info($session['id_coach']);
+            if (!empty($session_info['id_coach'])) {
+                $coachInfo = api_get_user_info($session_info['id_coach']);
             }
 
             $session = [];

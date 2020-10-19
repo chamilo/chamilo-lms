@@ -133,4 +133,22 @@ abstract class XApiActivityHookObserver extends HookObserver
 
         return $context->withPlatform($platform);
     }
+
+    /**
+     * @param \Xabbuh\XApi\Model\Statement $statement
+     *
+     * @return bool
+     */
+    protected function isStatementAlreadySent(Statement $statement)
+    {
+        $sharedStmt = Database::getManager()
+            ->getRepository(SharedStatement::class)
+            ->findOneByUuid($statement->getId()->getValue());
+
+        if ($sharedStmt) {
+            return true;
+        }
+
+        return false;
+    }
 }

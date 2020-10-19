@@ -2667,6 +2667,11 @@ class CourseManager
                 $sql = "DELETE FROM $tableGroup
                         WHERE c_id = $courseId ";
                 Database::query($sql);
+
+                $tableGroup = Database::get_course_table(TABLE_LP_CATEGORY_REL_USERGROUP);
+                $sql = "DELETE FROM $tableGroup
+                        WHERE c_id = $courseId ";
+                Database::query($sql);
             }
 
             // Deletes all groups, group-users, group-tutors information

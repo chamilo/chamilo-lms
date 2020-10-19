@@ -1848,6 +1848,8 @@ class SessionManager
         if (api_get_configuration_value('allow_lp_subscription_to_usergroups')) {
             $tableGroup = Database::get_course_table(TABLE_LP_REL_USERGROUP);
             Database::query("DELETE FROM $tableGroup WHERE session_id IN($id_checked)");
+            $tableGroup = Database::get_course_table(TABLE_LP_CATEGORY_REL_USERGROUP);
+            Database::query("DELETE FROM $tableGroup WHERE session_id IN($id_checked)");
         }
 
         $sql = "UPDATE $ticket SET session_id = NULL WHERE session_id IN ($id_checked)";

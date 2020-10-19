@@ -278,6 +278,7 @@ switch ($action) {
         $first = Tracking::get_first_connection_date($student_id);
         $last = Tracking::get_last_connection_date($student_id);
         $timeSpentContent = '';
+        $pdfTitle = get_lang('AttestationOfAttendance');
         if ('attendance' === $type) {
             $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
             $column = 0;
@@ -299,6 +300,8 @@ switch ($action) {
             $table->setCellContents(1, 3, $first);
             $table->setCellContents(1, 4, $last);
             $timeSpentContent = $table->toHtml();
+        } else {
+            $pdfTitle = get_lang('CertificateOfAchievement');
         }
 
         $courseTable = '';
@@ -399,7 +402,7 @@ switch ($action) {
         }
 
         $tpl = new Template('', false, false, false, true, false, false);
-        $tpl->assign('title', get_lang('AttestationOfAttendance'));
+        $tpl->assign('title', $pdfTitle);
         $tpl->assign('session_title', $sessionInfo['name']);
         $tpl->assign('session_info', $sessionInfo);
         $sessionCategoryTitle = '';

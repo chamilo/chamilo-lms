@@ -1688,3 +1688,6 @@ $_configuration['exercise_finished_email_settings'] = [
 // You need add a new option called "confirmation" to the registration settings
 //INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_registration', 'confirmation', 'MailConfirmation');
 // ------ (End) Custom DB changes
+
+// Add another layer of security by checking if the user is disabled at every page load (might generate considerable extra DB load)
+// $_configuration['security_block_inactive_users_immediately'] = false;

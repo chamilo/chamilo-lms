@@ -23,7 +23,7 @@
     "bootstrap-daterangepicker": "^3.0",
     "bootstrap-select": "^1.13.17",
     "bootstrap-vue": "^2.16.0",
-    "chart.js": "^2.9.3",
+    "chart.js": "^2.9.4",
     "ckeditor": "^4.0.0",
     "cropper": "^4.0",
     "datepair.js": "^0.4.16",

@@ -333,7 +333,7 @@ if ($form->validate()) {
 
         $sendEmail = $_POST['sendMail'] ? true : false;
 
-        updateUsers($usersToUpdate, isset($formValues['reset_password']),$sendEmail);
+        updateUsers($usersToUpdate, isset($formValues['reset_password']), $sendEmail);
 
         if (empty($errors)) {
             Display::addFlash(

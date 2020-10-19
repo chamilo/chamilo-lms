@@ -1,0 +1,124 @@
+<?php
+/* For licensing terms, see /license.txt */
+
+namespace Chamilo\PluginBundle\Entity\XApi;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Class SharedStatement.
+ *
+ * @package Chamilo\PluginBundle\Entity\XApi
+ *
+ * @ORM\Table(name="xapi_shared_statement")
+ * @ORM\Entity()
+ */
+class SharedStatement
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id()
+     * @ORM\GeneratedValue()
+     */
+    private $id;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="uuid", type="string")
+     */
+    private $uuid;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="data_type", type="string")
+     */
+    private $dataType;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="data_id", type="integer")
+     */
+    private $dataId;
+
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     *
+     * @return SharedStatement
+     */
+    public function setId(int $id): SharedStatement
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUuid(): string
+    {
+        return $this->uuid;
+    }
+
+    /**
+     * @param string $uuid
+     *
+     * @return SharedStatement
+     */
+    public function setUuid(string $uuid): SharedStatement
+    {
+        $this->uuid = $uuid;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDataType(): string
+    {
+        return $this->dataType;
+    }
+
+    /**
+     * @param string $dataType
+     *
+     * @return SharedStatement
+     */
+    public function setDataType(string $dataType): SharedStatement
+    {
+        $this->dataType = $dataType;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDataId(): int
+    {
+        return $this->dataId;
+    }
+
+    /**
+     * @param int $dataId
+     *
+     * @return SharedStatement
+     */
+    public function setDataId(int $dataId): SharedStatement
+    {
+        $this->dataId = $dataId;
+
+        return $this;
+    }
+}

@@ -1,0 +1,141 @@
+<?php
+/* For licensing terms, see /license.txt */
+
+use Xabbuh\XApi\Model\Activity;
+use Xabbuh\XApi\Model\Definition;
+use Xabbuh\XApi\Model\IRI;
+use Xabbuh\XApi\Model\LanguageMap;
+use Xabbuh\XApi\Model\Result as ActivityResult;
+use Xabbuh\XApi\Model\Score;
+
+/**
+ * Class XApiLearningPathEndHook.
+ */
+class XApiLearningPathEndHook extends XApiActivityHookObserver implements HookLearningPathEndObserverInterface
+{
+    use XApiStatementTrait;
+
+    /**
+     * @var \Chamilo\CourseBundle\Entity\CLpView
+     */
+    private $lpView;
+    /**
+     * @var \Chamilo\CourseBundle\Entity\CLp
+     */
+    private $lp;
+    /**
+     * @var \Chamilo\CoreBundle\Entity\Course
+     */
+    private $course;
+    /**
+     * @var \Chamilo\CoreBundle\Entity\Session
+     */
+    private $session;
+    /**
+     * @var \Chamilo\CourseBundle\Entity\CLpView|object|null
+     */
+
+    /**
+     * @inheritDoc
+     */
+    public function notifyLearningPathEnd(HookLearningPathEndEventInterface $event)
+    {
+        $data = $event->getEventData();
+        $em = Database::getManager();
+
+        $this->lpView = $em->find('ChamiloCourseBundle:CLpView', $data['lp_view_id']);
+        $this->lp = $em->find('ChamiloCourseBundle:CLp', $this->lpView->getLpId());
+        $this->user = api_get_user_entity($this->lpView->getUserId());
+        $this->course = api_get_course_entity($this->lpView->getCId());
+        $this->session = api_get_session_entity($this->lpView->getSessionId());
+
+        $statement = $this->createStatement();
+
+        try {
+            $statement = $this->sendStatementToLrs($statement);
+
+            $this->saveSharedStatement(
+                $statement->getId(),
+                XApiPlugin::DATA_TYPE_LP_VIEW,
+                $this->lpView->getId()
+            );
+        } catch (Exception $e) {
+            return;
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getActivityResult()
+    {
+        $raw = (float) $this->lpView->getProgress();
+        $max = 100;
+        $scaled = $raw / $max;
+
+        return new ActivityResult(
+            new Score($scaled, $raw, 0, $max),
+            null,
+            true
+        );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function getActivity()
+    {
+        $lpName = strip_tags($this->lp->getName());
+        $lpName = trim($lpName);
+
+        $languageIso = api_get_language_isocode($this->course->getCourseLanguage());
+
+        $nameMap = LanguageMap::create([$languageIso => $lpName]);
+
+        $activityIdIri = $this->plugin->generateIri(
+            $this->lp->getId(),
+            'lp'
+        );
+
+        return new Activity(
+            IRI::fromString($activityIdIri),
+            new Definition(
+                $nameMap,
+                null,
+                IRI::fromString(XApiPlugin::IRI_LESSON)
+            )
+        );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function getId()
+    {
+        return $this->generateId(
+            XApiPlugin::DATA_TYPE_LP_VIEW,
+            $this->lpView->getId()
+        );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function getActor()
+    {
+        return $this->generateActor(
+            $this->user
+        );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function getVerb()
+    {
+        return $this->generateVerb(
+            'terminated',
+            XApiPlugin::VERB_TERMINATED
+        );
+    }
+}

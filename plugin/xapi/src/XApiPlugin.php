@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\PluginBundle\Entity\XApi\SharedStatement;
+use Doctrine\ORM\Tools\SchemaTool;
 use GuzzleHttp\RequestOptions;
 use Http\Adapter\Guzzle6\Client;
 use Http\Message\MessageFactory\GuzzleMessageFactory;
@@ -11,11 +13,35 @@ use Xabbuh\XApi\Client\XApiClientBuilderInterface;
 /**
  * Class XApiPlugin.
  */
-class XApiPlugin extends Plugin
+class XApiPlugin extends Plugin implements HookPluginInterface
 {
     const SETTING_LRS_URL = 'lrs_url';
     const SETTING_LRS_AUTH = 'lrs_auth';
     const SETTING_UUID_NAMESPACE = 'uuid_namespace';
+    const SETTING_LRS_LP_ITEM_ACTIVE = 'lrs_lp_item_viewed_active';
+    const SETTING_LRS_LP_ACTIVE = 'lrs_lp_end_active';
+    const SETTING_LRS_QUIZ_ACTIVE = 'lrs_quiz_active';
+    const SETTING_LRS_QUIZ_QUESTION_ACTIVE = 'lrs_quiz_question_active';
+
+    const VERB_TERMINATED = 'http://adlnet.gov/expapi/verbs/terminated';
+    const VERB_COMPLETED = 'http://adlnet.gov/expapi/verbs/completed';
+    const VERB_ANSWERED = 'http://adlnet.gov/expapi/verbs/answered';
+    const VERB_VIEWED = 'http://id.tincanapi.com/verb/viewed';
+
+    const IRI_QUIZ = 'http://adlnet.gov/expapi/activities/assessment';
+    const IRI_QUIZ_QUESTION = 'http://adlnet.gov/expapi/activities/question';
+    const IRI_LESSON = 'http://adlnet.gov/expapi/activities/lesson';
+    const IRI_RESOURCE = 'http://id.tincanapi.com/activitytype/resource';
+
+    const DATA_TYPE_ATTEMPT = 'e_attempt';
+    const DATA_TYPE_EXERCISE = 'e_exercise';
+    const DATA_TYPE_LP_ITEM_VIEW = 'lp_item_view';
+    const DATA_TYPE_LP_VIEW = 'lp_view';
+
+    const TYPE_QUIZ = 'quiz';
+    const TYPE_QUIZ_QUESTION = 'quiz_question';
+    const TYPE_LP = 'lp';
+    const TYPE_LP_ITEM = 'lp_item';
 
     /**
      * XApiPlugin constructor.
@@ -30,6 +56,10 @@ class XApiPlugin extends Plugin
             self::SETTING_UUID_NAMESPACE => 'text',
             self::SETTING_LRS_URL => 'text',
             self::SETTING_LRS_AUTH => 'text',
+            self::SETTING_LRS_LP_ITEM_ACTIVE => 'boolean',
+            self::SETTING_LRS_LP_ACTIVE => 'boolean',
+            self::SETTING_LRS_QUIZ_ACTIVE => 'boolean',
+            self::SETTING_LRS_QUIZ_QUESTION_ACTIVE => 'boolean',
         ];
 
         parent::__construct(
@@ -54,7 +84,33 @@ class XApiPlugin extends Plugin
      */
     public function install()
     {
+        $em = Database::getManager();
+
+        $tablesExists = $em->getConnection()->getSchemaManager()->tablesExist(
+            ['xapi_shared_statement']
+        );
+
+        if ($tablesExists) {
+            return;
+        }
+
+        $this->installPluginDbTables();
         $this->installUuid();
+    }
+
+    /**
+     * @throws \Doctrine\ORM\Tools\ToolsException
+     */
+    private function installPluginDbTables()
+    {
+        $em = Database::getManager();
+
+        $schemaTool = new SchemaTool($em);
+        $schemaTool->createSchema(
+            [
+                $em->getClassMetadata(SharedStatement::class),
+            ]
+        );
     }
 
     /**
@@ -87,6 +143,38 @@ class XApiPlugin extends Plugin
      */
     public function uninstall()
     {
+        $this->uninstallHook();
+        $this->uninstallPluginDbTables();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function uninstallHook()
+    {
+        $learningPathItemViewedHook = XApiLearningPathItemViewedHook::create();
+        $learningPathEndHook = XApiLearningPathEndHook::create();
+        $quizQuestionAnsweredHook = XApiQuizQuestionAnsweredHook::create();
+        $quizEndHook = XApiQuizEndHook::create();
+
+        HookLearningPathItemViewed::create()->attach($learningPathItemViewedHook);
+        HookLearningPathEnd::create()->detach($learningPathEndHook);
+        HookQuizQuestionAnswered::create()->attach($quizQuestionAnsweredHook);
+        HookQuizEnd::create()->attach($quizEndHook);
+
+        return 1;
+    }
+
+    public function uninstallPluginDbTables()
+    {
+        $em = Database::getManager();
+
+        $schemaTool = new SchemaTool($em);
+        $schemaTool->dropSchema(
+            [
+                $em->getClassMetadata(SharedStatement::class),
+            ]
+        );
     }
 
     /**
@@ -138,5 +226,96 @@ class XApiPlugin extends Plugin
         }
 
         return $clientBuilder;
+    }
+
+    /**
+     * Perform actions after save the plugin configuration.
+     *
+     * @return \XApiPlugin
+     */
+    public function performActionsAfterConfigure()
+    {
+        $learningPathItemViewedHook = XApiLearningPathItemViewedHook::create();
+        $learningPathEndHook = XApiLearningPathEndHook::create();
+        $quizQuestionAnsweredHook = XApiQuizQuestionAnsweredHook::create();
+        $quizEndHook = XApiQuizEndHook::create();
+
+        $learningPathItemViewedEvent = HookLearningPathItemViewed::create();
+        $learningPathEndEvent = HookLearningPathEnd::create();
+        $quizQuestionAnsweredEvent = HookQuizQuestionAnswered::create();
+        $quizEndEvent = HookQuizEnd::create();
+
+        if ('true' === $this->get(self::SETTING_LRS_LP_ITEM_ACTIVE)) {
+            $learningPathItemViewedEvent->attach($learningPathItemViewedHook);
+        } else {
+            $learningPathItemViewedEvent->detach($learningPathItemViewedHook);
+        }
+
+        if ('true' === $this->get(self::SETTING_LRS_LP_ACTIVE)) {
+            $learningPathEndEvent->attach($learningPathEndHook);
+        } else {
+            $learningPathEndEvent->detach($learningPathEndHook);
+        }
+
+        if ('true' === $this->get(self::SETTING_LRS_QUIZ_ACTIVE)) {
+            $quizQuestionAnsweredEvent->attach($quizQuestionAnsweredHook);
+        } else {
+            $quizQuestionAnsweredEvent->detach($quizQuestionAnsweredHook);
+        }
+
+        if ('true' === $this->get(self::SETTING_LRS_QUIZ_QUESTION_ACTIVE)) {
+            $quizEndEvent->attach($quizEndHook);
+        } else {
+            $quizEndEvent->detach($quizEndHook);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function installHook()
+    {
+        return 0;
+    }
+
+    /**
+     * @param string $variable
+     *
+     * @return array
+     */
+    public function getLangMap($variable)
+    {
+        $platformLanguage = api_get_setting('platformLanguage');
+        $platformLanguageIso = api_get_language_isocode($platformLanguage);
+
+        $map = [];
+        $map[$platformLanguageIso] = $this->getLangFromFile($variable, $platformLanguage);
+
+        try {
+            $interfaceLanguage = api_get_interface_language();
+        } catch (Exception $e) {
+            return $map;
+        }
+
+        if (!empty($interfaceLanguage) && $platformLanguage !== $interfaceLanguage) {
+            $interfaceLanguageIso = api_get_language_isocode($interfaceLanguage);
+
+            $map[$interfaceLanguageIso] = $this->getLangFromFile($variable, $interfaceLanguage);
+        }
+
+        return $map;
+    }
+
+    /**
+     * @param string $value
+     * @param string $type
+     *
+     * @return string
+     */
+    public function generateIri($value, $type)
+    {
+        return api_get_path(WEB_PATH)."xapi/$type/$value";
     }
 }

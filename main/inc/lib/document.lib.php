@@ -5676,7 +5676,7 @@ class DocumentManager
         if ($type == 'file') {
             $randomUploadName = md5(uniqid(mt_rand(), true));
             $modify_icons[] = Display::url(
-                Display::return_icon('upload_file.png', get_lang('UplUploadDocument')),
+                Display::return_icon('upload_file.png', get_lang('ReplaceFile')),
                 "#!",
                 [
                     'data-id' => $randomUploadName,
@@ -5703,7 +5703,7 @@ class DocumentManager
                         <button class=' btn btn-primary ' id='upload_".$randomUploadName."_submitDocument'
                         name='submitDocument'
                                 type='submit'>
-                                <em class='fa fa-paper-plane'></em> ".get_lang('SendDocument')."
+                                <em class='fa fa-paper-plane'></em> ".get_lang('ReplaceFile')."
                         </button>
                     </div>
                     <div class='col-sm-2'></div>
@@ -6739,6 +6739,11 @@ class DocumentManager
             return false;
         }
 
+        if (isset($file) && $file['error'] == 4) {
+            //no file
+            return false;
+        }
+
         if (empty($documentId)) {
             $documentId = self::get_document_id($_course, $path, $sessionId);
             $docInfo = self::get_document_data_by_id(
@@ -6789,6 +6794,14 @@ class DocumentManager
 
         $fileMoved = false;
         $file_renamed_from_disk = false;
+
+        $originalMime = self::file_get_mime_type($base_work_dir.$path);
+        $newMime = finfo_file(finfo_open(FILEINFO_MIME_TYPE), $file['tmp_name']);
+        if ($originalMime != $newMime) {
+            Display::addFlash(Display::return_message(get_lang('FileError'), 'warning'));
+
+            return false;
+        }
 
         if ($document_exists_in_disk) {
             // Move old file to xxx_REPLACED_DATE_#date_ID_#id (soft delete)

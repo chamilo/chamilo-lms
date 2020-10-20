@@ -9,9 +9,9 @@ use Xabbuh\XApi\Model\LanguageMap;
 use Xabbuh\XApi\Model\Result as ActivityResult;
 
 /**
- * Class XApiLearningPathItemViewedHook.
+ * Class XApiLearningPathItemViewedHookObserver.
  */
-class XApiLearningPathItemViewedHook
+class XApiLearningPathItemViewedHookObserver
     extends XApiActivityHookObserver
     implements HookLearningPathItemViewedObserverInterface
 {

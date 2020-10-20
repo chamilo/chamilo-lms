@@ -152,10 +152,10 @@ class XApiPlugin extends Plugin implements HookPluginInterface
      */
     public function uninstallHook()
     {
-        $learningPathItemViewedHook = XApiLearningPathItemViewedHook::create();
-        $learningPathEndHook = XApiLearningPathEndHook::create();
-        $quizQuestionAnsweredHook = XApiQuizQuestionAnsweredHook::create();
-        $quizEndHook = XApiQuizEndHook::create();
+        $learningPathItemViewedHook = XApiLearningPathItemViewedHookObserver::create();
+        $learningPathEndHook = XApiLearningPathEndHookObserver::create();
+        $quizQuestionAnsweredHook = XApiQuizQuestionAnsweredHookObserver::create();
+        $quizEndHook = XApiQuizEndHookObserver::create();
 
         HookLearningPathItemViewed::create()->attach($learningPathItemViewedHook);
         HookLearningPathEnd::create()->detach($learningPathEndHook);
@@ -235,10 +235,10 @@ class XApiPlugin extends Plugin implements HookPluginInterface
      */
     public function performActionsAfterConfigure()
     {
-        $learningPathItemViewedHook = XApiLearningPathItemViewedHook::create();
-        $learningPathEndHook = XApiLearningPathEndHook::create();
-        $quizQuestionAnsweredHook = XApiQuizQuestionAnsweredHook::create();
-        $quizEndHook = XApiQuizEndHook::create();
+        $learningPathItemViewedHook = XApiLearningPathItemViewedHookObserver::create();
+        $learningPathEndHook = XApiLearningPathEndHookObserver::create();
+        $quizQuestionAnsweredHook = XApiQuizQuestionAnsweredHookObserver::create();
+        $quizEndHook = XApiQuizEndHookObserver::create();
 
         $learningPathItemViewedEvent = HookLearningPathItemViewed::create();
         $learningPathEndEvent = HookLearningPathEnd::create();

@@ -58,13 +58,13 @@ class XApiLearningPathItemViewedHook
         $this->course = api_get_course_entity($this->lpView->getCId());
         $this->session = api_get_session_entity($this->lpView->getSessionId());
 
-        $statement = $this->createStatement();
-
         try {
-            $statement = $this->sendStatementToLrs($statement);
+            $statement = $this->createStatement();
+
+            $sharedStmt = $this->sendStatementToLrs($statement);
 
             $this->saveSharedStatement(
-                $statement->getId(),
+                $sharedStmt->getId(),
                 XApiPlugin::DATA_TYPE_LP_ITEM_VIEW,
                 $this->lpItemView->getId()
             );

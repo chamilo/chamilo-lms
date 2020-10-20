@@ -57,17 +57,17 @@ class XApiQuizQuestionAnsweredHook
         $this->course = api_get_course_entity($this->exe->getCId());
         $this->session = api_get_session_entity($this->exe->getSessionId());
 
-        $statement = $this
-            ->createStatement()
-            ->withCreated(
-                $this->attempt->getTms()
-            );
-
         try {
-            $statement = $this->sendStatementToLrs($statement);
+            $statement = $this
+                ->createStatement()
+                ->withCreated(
+                    $this->attempt->getTms()
+                );
+
+            $sharedStmt = $this->sendStatementToLrs($statement);
 
             $this->saveSharedStatement(
-                $statement->getId(),
+                $sharedStmt->getId(),
                 XApiPlugin::DATA_TYPE_ATTEMPT,
                 $this->attempt->getId()
             );

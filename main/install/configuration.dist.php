@@ -1616,62 +1616,55 @@ $_configuration['auth_password_links'] = [
 //$_configuration['show_my_lps_page'] = false;
 
 // When exercise is finished send results by email to users, depending the settings below:
-/*
-$_configuration['exercise_finished_email_settings'] = [
-    'courses' => [
-        'FIRST_ATTEMPT' => [ // course code
-            'send_by_email' => [
-                'example1' => [ // Label
-                    'email' => 'example@example.com',
-                    'attempts' => [
-                        [
-                            'status' => 'passed', // passed/failed/all (depends in the exercise pass %)
-                            'content' => 'MailAttemptPassed', // exercise extra field
-                            'add_pdf' => 'PdfExerciseExtraField', // exercise extra field
-                        ],
-                        [
-                            'status' => 'failed',
-                            'content' => 'MailAttemptFailed',
-                        ],
-                        [
-                            'status' => 'all',
-                            'content' => 'MailAttemptAll',
-                        ],
-                        [
-                            'status' => 'all',
-                            'attempt' => 1,
-                            'content' => 'MailAttemptAttempt1', // exercise extra field,
-                        ],
-                        [
-                            'status' => 'failed',
-                            'attempt' => 2,
-                            'content' => 'MailAttemptFailed2', // exercise extra field,
-                             // if Exercise failed and attempt = 2 then the student will be subscribe to course code:
-                            'post_actions' => [
-                                'subscribe_student_to_courses' => ['SECOND_ATTEMPT']
-                            ]
-                        ],
-                    ],
+// Requires a new Exercise Extra field type called with variable = "notifications".
+/*$_configuration['exercise_finished_notification_settings'] = [
+    'notifications' => [
+        'notification1' => [ // Label
+            'email' => 'example@example.com',
+            'attempts' => [
+                [
+                    'status' => 'passed', // passed/failed/all (depends in the exercise pass %)
+                    'content' => 'MailAttemptPassed', // exercise extra field
+                    'content_default' => 'Hi, ((user_lastname)) ', // value if MailAttemptPassed is empty
+                    'add_pdf' => 'PdfExerciseExtraField', // exercise extra field
+                ],
+                [
+                    'status' => 'failed',
+                    'content' => 'MailAttemptFailed',
+                ],
+                [
+                    'status' => 'all',
+                    'content' => 'MailAttemptAll',
+                ],
+                [
+                    'status' => 'all',
+                    'attempt' => 1,
+                    'content' => 'MailAttemptAttempt1', // exercise extra field,
+                ],
+                [
+                    'status' => 'failed',
+                    'attempt' => 2,
+                    'content' => 'MailAttemptFailed2', // exercise extra field,
+                     // if Exercise failed and attempt = 2 then the student will be subscribe to course code:
+                    'post_actions' => [
+                        'subscribe_student_to_courses' => ['SECOND_ATTEMPT']
+                    ]
                 ],
             ],
         ],
-        'SECOND_ATTEMPT' => [
-            'send_by_email' => [
-                'example2' => [ // Label
-                    'email' => 'example@example.com',
-                    'attempts' => [
-                        [
-                            'status' => 'passed',
-                            'content' => 'MailAttemptPassed', // exercise extra field,
-                        ],
-                        [
-                            'status' => 'failed',
-                            'content' => 'MailAttemptFailed', // exercise extra field,
-                        ],
-                    ],
+        'notification2' => [ // Label
+            'email' => 'example@example.com',
+            'attempts' => [
+                [
+                    'status' => 'passed',
+                    'content' => 'MailAttemptPassed', // exercise extra field,
+                ],
+                [
+                    'status' => 'failed',
+                    'content' => 'MailAttemptFailed', // exercise extra field,
                 ],
             ],
-        ]
+        ],
     ]
 ];
 */

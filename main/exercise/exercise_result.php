@@ -223,8 +223,8 @@ if (!empty($learnpath_id) && $saveResults) {
     Exercise::saveExerciseInLp($learnpath_item_id, $exe_id);
 }
 
-$emailSettings = api_get_configuration_value('exercise_finished_email_settings');
-if (!empty($emailSettings)) {
+$notifications = api_get_configuration_value('exercise_finished_notification_settings');
+if (!empty($notifications)) {
     $exerciseExtraFieldValue = new ExtraFieldValue('exercise');
     $attemptCountToSend = $attempt_count++;
     $subject = sprintf(get_lang('WrongAttemptXInCourseX'), $attemptCountToSend, $courseInfo['title']);
@@ -246,18 +246,10 @@ if (!empty($emailSettings)) {
             'MailAttempt'.$wrongAnswersCount
         );
     }
-
     $content = '';
     if ($extraFieldData && isset($extraFieldData['value'])) {
         $content = $extraFieldData['value'];
-        $content = str_replace('((exercise_error_count))', $wrongAnswersCount, $content);
-        $content = AnnouncementManager::parseContent(
-            api_get_user_id(),
-            $content,
-            api_get_course_id(),
-            api_get_session_id()
-        );
-
+        $content = ExerciseLib::parseContent($content, $stats, $objExercise, $exercise_stat_info);
         if (false === $exercisePassed) {
             if (0 !== $wrongAnswersCount) {
                 $content .= $stats['failed_answers_html'];
@@ -268,125 +260,127 @@ if (!empty($emailSettings)) {
         MessageManager::send_message(api_get_user_id(), $subject, $content);
     }
 
-    if (isset($emailSettings['courses']) && isset($emailSettings['courses'][$courseInfo['code']])) {
-        if (isset($emailSettings['courses'][$courseInfo['code']]['send_by_email'])) {
-            $sendByMailList = $emailSettings['courses'][$courseInfo['code']]['send_by_email'];
+    $extraFieldData = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
+        $objExercise->iId,
+        'notifications'
+    );
 
-            foreach ($sendByMailList as $name => $attemptData) {
-                $email = isset($attemptData['email']) ? $attemptData['email'] : '';
-                if (empty($email)) {
+    $exerciseNotification = '';
+    if ($extraFieldData && isset($extraFieldData['value'])) {
+        $exerciseNotification = $extraFieldData['value'];
+    }
+    if (!empty($exerciseNotification) && isset($notifications['notifications']) &&
+        !empty($notifications['notifications'])
+    ) {
+        foreach ($notifications['notifications'] as $name => $attemptData) {
+            if ($exerciseNotification !== $name) {
+                continue;
+            }
+            $email = isset($attemptData['email']) ? $attemptData['email'] : '';
+            if (empty($email)) {
+                continue;
+            }
+            $attempts = $attemptData['attempts'];
+            foreach ($attempts as $attempt) {
+                $sendMessage = false;
+                if (isset($attempt['attempt']) && $attemptCountToSend !== (int) $attempt['attempt']) {
                     continue;
                 }
-                $attempts = $attemptData['attempts'];
-                foreach ($attempts as $attempt) {
-                    $sendMessage = false;
-                    if (isset($attempt['attempt']) && $attemptCountToSend !== (int) $attempt['attempt']) {
-                        continue;
-                    }
 
-                    if (!isset($attempt['status'])) {
-                        continue;
-                    }
+                if (!isset($attempt['status'])) {
+                    continue;
+                }
 
-                    switch ($attempt['status']) {
-                        case 'passed':
-                            if ($exercisePassed) {
-                                $sendMessage = true;
-                            }
-                            break;
-                        case 'failed':
-                            if (false === $exercisePassed) {
-                                $sendMessage = true;
-                            }
-                            break;
-                        case 'all':
+                switch ($attempt['status']) {
+                    case 'passed':
+                        if ($exercisePassed) {
                             $sendMessage = true;
-                            break;
+                        }
+                        break;
+                    case 'failed':
+                        if (false === $exercisePassed) {
+                            $sendMessage = true;
+                        }
+                        break;
+                    case 'all':
+                        $sendMessage = true;
+                        break;
+                }
+
+                if ($sendMessage) {
+                    $attachments = [];
+                    if (isset($attempt['add_pdf']) && $attempt['add_pdf']) {
+                        // Get pdf content
+                        $pdfExtraData = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
+                            $objExercise->iId,
+                            $attempt['add_pdf']
+                        );
+
+                        if ($pdfExtraData && isset($pdfExtraData['value'])) {
+                            $pdfContent = ExerciseLib::parseContent(
+                                $pdfExtraData['value'],
+                                $stats,
+                                $objExercise,
+                                $exercise_stat_info
+                            );
+
+                            @$pdf = new PDF();
+                            $filename = get_lang('Exercise');
+                            $cssFile = api_get_path(SYS_CSS_PATH).'themes/chamilo/default.css';
+                            $pdfPath = @$pdf->content_to_pdf(
+                                "<html><body>$pdfContent</body></html>",
+                                file_get_contents($cssFile),
+                                $filename,
+                                api_get_course_id(),
+                                'F',
+                                false,
+                                null,
+                                false,
+                                true
+                            );
+                            $attachments[] = ['filename' => $filename, 'path' => $pdfPath];
+                        }
                     }
 
-                    if ($sendMessage) {
-                        $attachments = [];
-                        if (isset($attempt['add_pdf']) && $attempt['add_pdf']) {
-                            // Get pdf content
-                            $pdfExtraData = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
-                                $objExercise->iId,
-                                $attempt['add_pdf']
-                            );
-
-                            if ($pdfExtraData && isset($pdfExtraData['value'])) {
-                                $pdfContent = $pdfExtraData['value'];
-                                $pdfContent = str_replace(
-                                    ['((exercise_error_count))', '((all_answers_html))', 'exercise_title'],
-                                    [
-                                        $wrongAnswersCount,
-                                        $stats['all_answers_html'],
-                                        $objExercise->get_formated_title()
-                                    ],
-                                    $pdfContent
-                                );
-                                $pdfContent = AnnouncementManager::parseContent(
-                                    api_get_user_id(),
-                                    $pdfContent,
-                                    api_get_course_id(),
-                                    api_get_session_id()
-                                );
-
-                                @$pdf = new PDF();
-                                $filename = get_lang('Exercise');
-                                $cssFile = api_get_path(SYS_CSS_PATH).'themes/chamilo/default.css';
-                                $pdfPath = @$pdf->content_to_pdf(
-                                    "<html><body>$pdfContent</body></html>",
-                                    file_get_contents($cssFile),
-                                    $filename,
-                                    api_get_course_id(),
-                                    'F',
-                                    false,
-                                    null,
-                                    false,
-                                    true
-                                );
-                                $attachments[] = ['filename' => $filename, 'path' => $pdfPath];
-                            }
+                    $content = isset($attempt['content_default']) ? $attempt['content_default'] : '';
+                    if (isset($attempt['content'])) {
+                        $extraFieldData = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
+                            $objExercise->iId,
+                            $attempt['content']
+                        );
+                        if ($extraFieldData && isset($extraFieldData['value'])) {
+                            $content = $extraFieldData['value'];
                         }
+                    }
 
-                        if (isset($attempt['content'])) {
-                            $extraFieldData = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
-                                $objExercise->iId,
-                                $attempt['content']
-                            );
+                    if (!empty($content)) {
+                        $content = ExerciseLib::parseContent(
+                            $content,
+                            $stats,
+                            $objExercise,
+                            $exercise_stat_info
+                        );
+                        api_mail_html(
+                            null,
+                            $email,
+                            $subject,
+                            $content,
+                            null,
+                            null,
+                            [],
+                            $attachments
+                        );
+                    }
 
-                            if ($extraFieldData && isset($extraFieldData['value'])) {
-                                $content = $extraFieldData['value'];
-                                $content = str_replace('((exercise_error_count))', $wrongAnswersCount, $content);
-                                $content = AnnouncementManager::parseContent(
-                                    api_get_user_id(),
-                                    $content,
-                                    api_get_course_id(),
-                                    api_get_session_id()
-                                );
-                                api_mail_html(
-                                    null,
-                                    $email,
-                                    $subject,
-                                    $content,
-                                    null,
-                                    null,
-                                    [],
-                                    $attachments
-                                );
-                            }
-                        }
-
-                        if (isset($attempt['post_actions'])) {
-                            foreach ($attempt['post_actions'] as $action => $params) {
-                                switch ($action) {
-                                    case 'subscribe_student_to_courses':
-                                        foreach ($params as $code) {
-                                            CourseManager::subscribeUser(api_get_user_id(), $code);
-                                            break;
-                                        }
+                    if (isset($attempt['post_actions'])) {
+                        foreach ($attempt['post_actions'] as $action => $params) {
+                            switch ($action) {
+                                case 'subscribe_student_to_courses':
+                                    foreach ($params as $code) {
+                                        CourseManager::subscribeUser(api_get_user_id(), $code);
                                         break;
-                                }
+                                    }
+                                    break;
                             }
                         }
                     }

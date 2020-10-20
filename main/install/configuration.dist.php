@@ -1618,9 +1618,9 @@ $_configuration['auth_password_links'] = [
 // When exercise is finished send results by email to users, depending the settings below:
 // Requires a new Exercise Extra field type called with variable = "notifications".
 /*$_configuration['exercise_finished_notification_settings'] = [
-    'notifications' => [
-        'notification1' => [ // Label
-            'email' => 'example@example.com',
+    'notification_teacher' => [ // Notification label
+        'for teacher' => [ // for teacher
+            'email' => 'teacher1@example.com,teacher2@example.com', // multiple emails allowed
             'attempts' => [
                 [
                     'status' => 'passed', // passed/failed/all (depends in the exercise pass %)
@@ -1645,15 +1645,26 @@ $_configuration['auth_password_links'] = [
                     'status' => 'failed',
                     'attempt' => 2,
                     'content' => 'MailAttemptFailed2', // exercise extra field,
-                     // if Exercise failed and attempt = 2 then the student will be subscribe to course code:
+                    // if Exercise failed and attempt = 2 then the student will be subscribe to course code:
                     'post_actions' => [
-                        'subscribe_student_to_courses' => ['SECOND_ATTEMPT']
-                    ]
+                        'subscribe_student_to_courses' => ['SECOND_ATTEMPT'],
+                    ],
                 ],
             ],
         ],
-        'notification2' => [ // Label
-            'email' => 'example@example.com',
+        'for admin' => [
+            'email' => 'admin@example.com',
+            'attempts' => [
+                [
+                    'status' => 'failed',
+                    'content' => 'MailAttemptFailed',
+                ],
+            ],
+        ],
+    ],
+    'notification_coach' => [ // Label
+        'for coach ' => [ // for teacher
+            'email' => 'coach@example.com',
             'attempts' => [
                 [
                     'status' => 'passed',
@@ -1665,9 +1676,8 @@ $_configuration['auth_password_links'] = [
                 ],
             ],
         ],
-    ]
-];
-*/
+    ],
+];*/
 
 // Shows a marker if the course was shared in other portals.
 //$_configuration['multiple_access_url_show_shared_course_marker'] = false;

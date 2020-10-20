@@ -269,118 +269,125 @@ if (!empty($notifications)) {
     if ($extraFieldData && isset($extraFieldData['value'])) {
         $exerciseNotification = $extraFieldData['value'];
     }
-    if (!empty($exerciseNotification) && isset($notifications['notifications']) &&
-        !empty($notifications['notifications'])
-    ) {
-        foreach ($notifications['notifications'] as $name => $attemptData) {
+
+    if (!empty($exerciseNotification) && !empty($notifications)) {
+        foreach ($notifications as $name => $notificationList) {
             if ($exerciseNotification !== $name) {
                 continue;
             }
-            $email = isset($attemptData['email']) ? $attemptData['email'] : '';
-            if (empty($email)) {
-                continue;
-            }
-            $attempts = $attemptData['attempts'];
-            foreach ($attempts as $attempt) {
-                $sendMessage = false;
-                if (isset($attempt['attempt']) && $attemptCountToSend !== (int) $attempt['attempt']) {
+            foreach ($notificationList as $attemptData) {
+                $email = isset($attemptData['email']) ? $attemptData['email'] : '';
+                $emailList = explode(',', $email);
+                if (empty($emailList)) {
                     continue;
                 }
+                $attempts = $attemptData['attempts'];
+                foreach ($attempts as $attempt) {
+                    $sendMessage = false;
+                    if (isset($attempt['attempt']) && $attemptCountToSend !== (int) $attempt['attempt']) {
+                        continue;
+                    }
 
-                if (!isset($attempt['status'])) {
-                    continue;
-                }
+                    if (!isset($attempt['status'])) {
+                        continue;
+                    }
 
-                switch ($attempt['status']) {
-                    case 'passed':
-                        if ($exercisePassed) {
+                    switch ($attempt['status']) {
+                        case 'passed':
+                            if ($exercisePassed) {
+                                $sendMessage = true;
+                            }
+                            break;
+                        case 'failed':
+                            if (false === $exercisePassed) {
+                                $sendMessage = true;
+                            }
+                            break;
+                        case 'all':
                             $sendMessage = true;
-                        }
-                        break;
-                    case 'failed':
-                        if (false === $exercisePassed) {
-                            $sendMessage = true;
-                        }
-                        break;
-                    case 'all':
-                        $sendMessage = true;
-                        break;
-                }
+                            break;
+                    }
 
-                if ($sendMessage) {
-                    $attachments = [];
-                    if (isset($attempt['add_pdf']) && $attempt['add_pdf']) {
-                        // Get pdf content
-                        $pdfExtraData = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
-                            $objExercise->iId,
-                            $attempt['add_pdf']
-                        );
+                    if ($sendMessage) {
+                        $attachments = [];
+                        if (isset($attempt['add_pdf']) && $attempt['add_pdf']) {
+                            // Get pdf content
+                            $pdfExtraData = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
+                                $objExercise->iId,
+                                $attempt['add_pdf']
+                            );
 
-                        if ($pdfExtraData && isset($pdfExtraData['value'])) {
-                            $pdfContent = ExerciseLib::parseContent(
-                                $pdfExtraData['value'],
+                            if ($pdfExtraData && isset($pdfExtraData['value'])) {
+                                $pdfContent = ExerciseLib::parseContent(
+                                    $pdfExtraData['value'],
+                                    $stats,
+                                    $objExercise,
+                                    $exercise_stat_info
+                                );
+
+                                @$pdf = new PDF();
+                                $filename = get_lang('Exercise');
+                                $cssFile = api_get_path(SYS_CSS_PATH).'themes/chamilo/default.css';
+                                $pdfPath = @$pdf->content_to_pdf(
+                                    "<html><body>$pdfContent</body></html>",
+                                    file_get_contents($cssFile),
+                                    $filename,
+                                    api_get_course_id(),
+                                    'F',
+                                    false,
+                                    null,
+                                    false,
+                                    true
+                                );
+                                $attachments[] = ['filename' => $filename, 'path' => $pdfPath];
+                            }
+                        }
+
+                        $content = isset($attempt['content_default']) ? $attempt['content_default'] : '';
+                        if (isset($attempt['content'])) {
+                            $extraFieldData = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
+                                $objExercise->iId,
+                                $attempt['content']
+                            );
+                            if ($extraFieldData && isset($extraFieldData['value'])) {
+                                $content = $extraFieldData['value'];
+                            }
+                        }
+
+                        if (!empty($content)) {
+                            $content = ExerciseLib::parseContent(
+                                $content,
                                 $stats,
                                 $objExercise,
                                 $exercise_stat_info
                             );
-
-                            @$pdf = new PDF();
-                            $filename = get_lang('Exercise');
-                            $cssFile = api_get_path(SYS_CSS_PATH).'themes/chamilo/default.css';
-                            $pdfPath = @$pdf->content_to_pdf(
-                                "<html><body>$pdfContent</body></html>",
-                                file_get_contents($cssFile),
-                                $filename,
-                                api_get_course_id(),
-                                'F',
-                                false,
-                                null,
-                                false,
-                                true
-                            );
-                            $attachments[] = ['filename' => $filename, 'path' => $pdfPath];
+                            foreach ($emailList as $email) {
+                                if (empty($email)) {
+                                    continue;
+                                }
+                                api_mail_html(
+                                    null,
+                                    $email,
+                                    $subject,
+                                    $content,
+                                    null,
+                                    null,
+                                    [],
+                                    $attachments
+                                );
+                            }
                         }
-                    }
 
-                    $content = isset($attempt['content_default']) ? $attempt['content_default'] : '';
-                    if (isset($attempt['content'])) {
-                        $extraFieldData = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
-                            $objExercise->iId,
-                            $attempt['content']
-                        );
-                        if ($extraFieldData && isset($extraFieldData['value'])) {
-                            $content = $extraFieldData['value'];
-                        }
-                    }
-
-                    if (!empty($content)) {
-                        $content = ExerciseLib::parseContent(
-                            $content,
-                            $stats,
-                            $objExercise,
-                            $exercise_stat_info
-                        );
-                        api_mail_html(
-                            null,
-                            $email,
-                            $subject,
-                            $content,
-                            null,
-                            null,
-                            [],
-                            $attachments
-                        );
-                    }
-
-                    if (isset($attempt['post_actions'])) {
-                        foreach ($attempt['post_actions'] as $action => $params) {
-                            switch ($action) {
-                                case 'subscribe_student_to_courses':
-                                    foreach ($params as $code) {
-                                        CourseManager::subscribeUser(api_get_user_id(), $code);
+                        if (isset($attempt['post_actions'])) {
+                            foreach ($attempt['post_actions'] as $action => $params) {
+                                switch ($action) {
+                                    case 'subscribe_student_to_courses':
+                                        foreach ($params as $code) {
+                                            CourseManager::subscribeUser(api_get_user_id(), $code);
+                                            break;
+                                        }
                                         break;
-                                    }
-                                    break;
+                                }
                             }
                         }
                     }

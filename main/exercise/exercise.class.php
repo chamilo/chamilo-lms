@@ -2449,7 +2449,7 @@ class Exercise
             $settings = api_get_configuration_value('exercise_finished_notification_settings');
             if (!empty($settings)) {
                 $options = [];
-                foreach ($settings['notifications'] as $name => $data) {
+                foreach ($settings as $name => $data) {
                     $options[$name] = $name;
                 }
                 $form->addSelect(

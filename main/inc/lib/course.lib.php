@@ -356,8 +356,9 @@ class CourseManager
      */
     public static function get_tutor_in_course_status($userId, $courseId)
     {
-        $userId = intval($userId);
-        $courseId = intval($courseId);
+        $userId = (int) $userId;
+        $courseId = (int) $courseId;
+
         $result = Database::fetch_array(
             Database::query(
                 "SELECT is_tutor
@@ -368,7 +369,11 @@ class CourseManager
             )
         );
 
-        return $result['is_tutor'];
+        if ($result) {
+            return $result['is_tutor'];
+        }
+
+        return false;
     }
 
     /**

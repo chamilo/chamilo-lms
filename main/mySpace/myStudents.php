@@ -50,49 +50,44 @@ $allowToQualify = api_is_allowed_to_edit(null, true) ||
     api_is_drh() ||
     api_is_student_boss();
 
-$allowedToTrackUser = true;
-if (!api_is_session_admin() &&
-    !api_is_drh() &&
-    !api_is_student_boss() &&
-    !api_is_platform_admin()
-) {
+$allowedToTrackUser =
+    api_is_platform_admin(true, true) ||
+    api_is_allowed_to_edit(null, true) ||
+    api_is_session_admin() ||
+    api_is_drh() ||
+    api_is_student_boss() ||
+    api_is_course_admin()
+;
+
+if (false === $allowedToTrackUser && !empty($courseInfo)) {
     if (empty($sessionId)) {
-        $isTeacher = false;
-        // Check if is current teacher if set
-        if (!empty($courseInfo)) {
-            $isTeacher = CourseManager::is_course_teacher(
+        $isTeacher = CourseManager::is_course_teacher(
+            api_get_user_id(),
+            $courseInfo['code']
+        );
+
+        if ($isTeacher) {
+            $allowedToTrackUser = true;
+        } else {
+            // Check if the user is tutor of the course
+            $userCourseStatus = CourseManager::get_tutor_in_course_status(
                 api_get_user_id(),
-                $courseInfo['code']
+                $courseInfo['real_id']
             );
-        }
-
-        if (!api_is_course_admin() && $isTeacher == false) {
-            if (!empty($courseInfo)) {
-                // Check if the user is tutor of the course
-                $userCourseStatus = CourseManager::get_tutor_in_course_status(
-                    api_get_user_id(),
-                    $courseInfo['real_id']
-                );
-
-                if ($userCourseStatus != 1) {
-                    $allowedToTrackUser = false;
-                }
+            if ($userCourseStatus == 1) {
+                $allowedToTrackUser = true;
             }
         }
     } else {
         $coach = api_is_coach($sessionId, $courseInfo['real_id']);
 
-        if (!$coach) {
-            $allowedToTrackUser = false;
+        if ($coach) {
+            $allowedToTrackUser = true;
         }
     }
 }
 
 if (!$allowedToTrackUser) {
-    api_not_allowed(true);
-}
-
-if (api_is_student()) {
     api_not_allowed(true);
 }
 

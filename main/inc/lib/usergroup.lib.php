@@ -2981,12 +2981,33 @@ class UserGroup extends Model
         $lpId = (int) $lpId;
         $courseId = (int) $courseId;
         $sessionId = (int) $sessionId;
-
-        $sql = "SELECT usergroup_id FROM c_lp_rel_usergroup
+        $sessionCondition = api_get_session_condition($sessionId, true);
+        $table = Database::get_course_table(TABLE_LP_REL_USERGROUP);
+        $sql = "SELECT usergroup_id FROM $table
                 WHERE
                     c_id = $courseId AND
-                    session_id = $sessionId AND
-                    lp_id = $lpId";
+                    lp_id = $lpId
+                    $sessionCondition
+                    ";
+        $result = Database::query($sql);
+
+        return Database::store_result($result, 'ASSOC');
+    }
+
+    public function getGroupsByLpCategory($categoryId, $courseId, $sessionId)
+    {
+        $categoryId = (int) $categoryId;
+        $courseId = (int) $courseId;
+        $sessionId = (int) $sessionId;
+        $sessionCondition = api_get_session_condition($sessionId, true);
+
+        $table = Database::get_course_table(TABLE_LP_CATEGORY_REL_USERGROUP);
+        $sql = "SELECT usergroup_id FROM $table
+                WHERE
+                    c_id = $courseId AND
+                    lp_category_id = $categoryId
+                    $sessionCondition
+                ";
         $result = Database::query($sql);
 
         return Database::store_result($result, 'ASSOC');

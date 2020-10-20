@@ -2438,13 +2438,27 @@ class Exercise
             $extraField->addElements(
                 $form,
                 $this->iId,
-                [], //exclude
+                ['notifications'], //exclude
                 false, // filter
                 false, // tag as select
                 [], //show only fields
                 [], // order fields
                 [] // extra data
             );
+
+            $settings = api_get_configuration_value('exercise_finished_notification_settings');
+            if (!empty($settings)) {
+                $options = [];
+                foreach ($settings as $name => $data) {
+                    $options[$name] = $name;
+                }
+                $form->addSelect(
+                    'extra_notifications',
+                    get_lang('Notifications'),
+                    $options,
+                    ['placeholder' => get_lang('SelectAnOption')]
+                );
+            }
             $form->addElement('html', '</div>'); //End advanced setting
             $form->addElement('html', '</div>');
         }

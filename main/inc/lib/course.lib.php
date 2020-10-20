@@ -356,8 +356,9 @@ class CourseManager
      */
     public static function get_tutor_in_course_status($userId, $courseId)
     {
-        $userId = intval($userId);
-        $courseId = intval($courseId);
+        $userId = (int) $userId;
+        $courseId = (int) $courseId;
+
         $result = Database::fetch_array(
             Database::query(
                 "SELECT is_tutor
@@ -368,7 +369,11 @@ class CourseManager
             )
         );
 
-        return $result['is_tutor'];
+        if ($result) {
+            return $result['is_tutor'];
+        }
+
+        return false;
     }
 
     /**
@@ -2667,6 +2672,11 @@ class CourseManager
                 $sql = "DELETE FROM $tableGroup
                         WHERE c_id = $courseId ";
                 Database::query($sql);
+
+                $tableGroup = Database::get_course_table(TABLE_LP_CATEGORY_REL_USERGROUP);
+                $sql = "DELETE FROM $tableGroup
+                        WHERE c_id = $courseId ";
+                Database::query($sql);
             }
 
             // Deletes all groups, group-users, group-tutors information
@@ -4423,7 +4433,8 @@ class CourseManager
                 if ($userInCourseStatus === COURSEMANAGER || $sessionCourseAvailable) {
                     $session_url = $course_info['course_public_url'].'?id_session='.$course_info['id_session'];
                     $session_title = '<a title="'.$course_info['name'].'" href="'.$session_url.'">'.
-                        $course_info['name'].'</a>'.$notifications;
+                        $course_info['name'].'</a>'.PHP_EOL
+                        .'<div class="notifications">'.$notifications.'</div>';
                 } else {
                     $session_title = $course_info['name'];
                 }

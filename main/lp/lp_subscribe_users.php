@@ -201,7 +201,7 @@ if ($allowUserGroups) {
 
     $formUserGroup->setDefaults(['usergroups' => $selectedUserGroupChoices]);
     $formUserGroup->addButtonSave(get_lang('Save'));
-
+    $sessionCondition = api_get_session_condition($sessionId, true);
     if ($formUserGroup->validate()) {
         $values = $formUserGroup->getSubmitValues();
         $table = Database::get_course_table(TABLE_LP_REL_USERGROUP);
@@ -213,9 +213,10 @@ if ($allowUserGroups) {
                     $sql = "DELETE FROM $table
                             WHERE
                                 c_id = $courseId AND
-                                session_id = $sessionId AND
                                 lp_id = $lpId AND
-                                usergroup_id = $userGroupId";
+                                usergroup_id = $userGroupId
+                                $sessionCondition
+                            ";
                     Database::query($sql);
 
                     $userList = $userGroup->get_users_by_usergroup($userGroupId);
@@ -234,19 +235,22 @@ if ($allowUserGroups) {
                 $sql = "SELECT id FROM $table
                         WHERE
                             c_id = $courseId AND
-                            session_id = $sessionId AND
                             lp_id = $lpId AND
-                            usergroup_id = $userGroupId";
+                            usergroup_id = $userGroupId
+                            $sessionCondition
+                            ";
                 $result = Database::query($sql);
 
                 if (0 == Database::num_rows($result)) {
                     $params = [
                         'lp_id' => $lpId,
                         'c_id' => $courseId,
-                        'session_id' => $sessionId,
                         'usergroup_id' => $userGroupId,
                         'created_at' => api_get_utc_datetime(),
                     ];
+                    if (!empty($sessionId)) {
+                        $params['session_id'] = $sessionId;
+                    }
                     Database::insert($table, $params);
                 }
             }
@@ -283,8 +287,9 @@ if ($allowUserGroups) {
             $sql = "DELETE FROM $table
                     WHERE
                         c_id = $courseId AND
-                        session_id = $sessionId AND
-                        lp_id = $lpId ";
+                        lp_id = $lpId
+                        $sessionCondition
+                    ";
             Database::query($sql);
         }
         header("Location: $url");

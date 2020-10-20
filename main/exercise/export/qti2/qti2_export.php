@@ -170,7 +170,7 @@ class ImsSection
 
     public function start_section()
     {
-        return '<section 
+        return '<section
             ident = "EXO_'.$this->exercise->selectId().'"
             title = "'.cleanAttribute(formatExerciseQtiDescription($this->exercise->selectTitle())).'"
         >'."\n";
@@ -394,7 +394,7 @@ class ImsItem
      *
      * This is a default behaviour, some classes may want to override this.
      *
-     * @param $standalone: Boolean stating if it should be exported as a stand-alone question
+     * @param bool $standalone Boolean stating if it should be exported as a stand-alone question
      *
      * @return string string, the XML flow for an Item
      *

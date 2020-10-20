@@ -42,7 +42,7 @@
                           {{ course.name }}
                           <span class="code-title">{{ course.visual_code }}</span>
                       {% else %}
-                          <a href="{{ course.link }}">{{ course.title }}</a>
+                          {{ course.title }}
                       {% endif %}
                   </h4>
                 </div>
@@ -214,10 +214,8 @@
                     </div>
                 {% else %}
                     {% for category_code in row.course_categories %}
+                        <h4>{{ category_code }}</h4>
                         <div class="row">
-                            <div class="col-xs-12">
-                                <h4>{{ category_code }}</h4>
-                            </div>
                             {% for course in row.courses %}
                                 {% if course.category == category_code %}
                                     {{ blocks.course_block(course, false) }}

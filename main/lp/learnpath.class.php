@@ -4904,7 +4904,7 @@ class learnpath
     /**
      * Saves the last item seen's ID only in case.
      */
-    public function save_last()
+    public function save_last($score = null)
     {
         $course_id = api_get_course_int_id();
         $debug = $this->debug;
@@ -4945,6 +4945,11 @@ class learnpath
         if (!api_is_invitee()) {
             // Save progress.
             list($progress) = $this->get_progress_bar_text('%');
+            $scoreAsProgressSetting = api_get_configuration_value('lp_score_as_progress_enable');
+            if ($scoreAsProgressSetting && (null === $score || empty($score) || -1 == $score)) {
+                return false;
+            }
+
             if ($progress >= 0 && $progress <= 100) {
                 $progress = (int) $progress;
                 $sql = "UPDATE $table SET
@@ -12267,15 +12272,12 @@ EOD;
     /**
      * @param int $id
      *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
-     *
-     * @return mixed
+     * @return bool
      */
     public static function deleteCategory($id)
     {
         $em = Database::getManager();
+        $id = (int) $id;
         $item = self::getCategory($id);
         if ($item) {
             $courseId = $item->getCId();
@@ -12289,6 +12291,15 @@ EOD;
                 foreach ($lps as $lpItem) {
                     $lpItem->setCategoryId(0);
                 }
+            }
+
+            if (api_get_configuration_value('allow_lp_subscription_to_usergroups')) {
+                $table = Database::get_course_table(TABLE_LP_CATEGORY_REL_USERGROUP);
+                $sql = "DELETE FROM $table
+                        WHERE
+                            lp_category_id = $id AND
+                            c_id = $courseId ";
+                Database::query($sql);
             }
 
             // Removing category.

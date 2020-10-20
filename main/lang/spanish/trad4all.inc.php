@@ -8703,4 +8703,5 @@ $YouDidNotVisitALpHereTheLpList = "Aún no ha visitado una lección, aquí está
 $CourseUsedInOtherURL = "Este curso es usado en otro portal";
 $SubscribeUserGroupsToLp = "Inscripción de clases a lección";
 $ReplaceFile = "Reemplazar archivo";
+$SubscribeClassesToLpCategory = "Suscribir clases a la categoría de lecciones";
 ?>

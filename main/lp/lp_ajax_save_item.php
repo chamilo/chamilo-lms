@@ -132,6 +132,15 @@ function save_item(
         ];
         Event::registerLog($logInfo);
 
+        /*$logInfo = [
+            'tool' => TOOL_LEARNPATH,
+            'tool_id' => $lp_id,
+            'tool_id_detail' => $item_id,
+            'action' => 'set_status_score',
+            'action_details' => $status.':'.$score,
+        ];
+        Event::registerLog($logInfo);*/
+
         if (isset($max) && $max != -1) {
             $myLPI->max_score = $max;
             $myLPI->set_max_score($max);
@@ -490,12 +499,16 @@ function save_item(
     if ($scoreAsProgressSetting === true) {
         $scoreAsProgress = $myLP->getUseScoreAsProgress();
         if ($scoreAsProgress) {
-            $score = $myLPI->get_score();
-            $maxScore = $myLPI->get_max();
-            $return .= "update_progress_bar('$score', '$maxScore', '$myProgressMode');";
+            // Only update score if it was set by scorm.
+            if (isset($score) && $score != -1) {
+                $score = $myLPI->get_score();
+                $maxScore = $myLPI->get_max();
+                $return .= "update_progress_bar('$score', '$maxScore', '$myProgressMode');";
+            }
             $progressBarSpecial = true;
         }
     }
+
     if (!$progressBarSpecial) {
         $return .= "update_progress_bar('$myComplete', '$myTotal', '$myProgressMode');";
     }
@@ -527,7 +540,7 @@ function save_item(
     }
 
     // To be sure progress is updated.
-    $myLP->save_last();
+    $myLP->save_last($score);
 
     Session::write('lpobject', serialize($myLP));
     Session::write('oLP', $myLP);

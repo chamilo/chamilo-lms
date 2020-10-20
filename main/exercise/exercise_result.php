@@ -243,7 +243,7 @@ if (!empty($notifications)) {
     } else {
         $extraFieldData = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
             $objExercise->iId,
-            'MailAttempt'.$wrongAnswersCount
+            'MailAttempt'.$attemptCountToSend
         );
     }
     $content = '';

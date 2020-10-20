@@ -12,7 +12,7 @@ use Xabbuh\XApi\Model\Score;
 /**
  * Class XApiQuizQuestionAnsweredHook.
  */
-class XApiQuizQuestionAnsweredHook
+class XApiQuizQuestionAnsweredHookObserver
     extends XApiActivityHookObserver
     implements HookQuizQuestionAnsweredObserverInterface
 {

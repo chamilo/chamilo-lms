@@ -9,9 +9,9 @@ use Xabbuh\XApi\Model\Result as ActivityResult;
 use Xabbuh\XApi\Model\Score;
 
 /**
- * Class XApiQuizEndHook.
+ * Class XApiQuizEndHookObserver.
  */
-class XApiQuizEndHook extends XApiActivityHookObserver implements HookQuizEndObserverInterface
+class XApiQuizEndHookObserver extends XApiActivityHookObserver implements HookQuizEndObserverInterface
 {
     use XApiStatementTrait;
 

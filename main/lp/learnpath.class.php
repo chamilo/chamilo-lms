@@ -1836,14 +1836,14 @@ class learnpath
      *
      * @return mixed
      */
-    public static function getLpById($lpId)
+    public static function getLpNameById($lpId)
     {
         $em = Database::getManager();
 
         return $em->createQuery('SELECT clp.name FROM ChamiloCourseBundle:CLp clp
             WHERE clp.iid = :iid')
             ->setParameter('iid', $lpId)
-            ->getArrayResult();
+            ->getSingleScalarResult();
     }
 
     /**

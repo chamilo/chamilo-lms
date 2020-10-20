@@ -5555,7 +5555,7 @@ EOT;
     /**
      * @param int $exerciseId
      */
-    public static function getExerciseById($exerciseId)
+    public static function getExerciseTitleById($exerciseId)
     {
         $em = Database::getManager();
 
@@ -5565,7 +5565,7 @@ EOT;
                 WHERE cq.iid = :iid'
             )
             ->setParameter('iid', $exerciseId)
-            ->getArrayResult();
+            ->getSingleScalarResult();
     }
 
     /**

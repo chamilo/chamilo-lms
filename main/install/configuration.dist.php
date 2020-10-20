@@ -569,6 +569,7 @@ $_configuration['send_all_emails_to'] = [
 ];*/
 
 // Allow additional data (exercise and learningpath) in the ticket
+//$_configuration['ticket_add_quiz_and_lp'] = false;
 // - Require change DB
 // ALTER TABLE ticket_ticket ADD exercise_id INT DEFAULT NULL AFTER course_id;
 // ALTER TABLE ticket_ticket ADD CONSTRAINT FK_EB5B2A0D6285C987 FOREIGN KEY (exercise_id) REFERENCES c_quiz (iid);

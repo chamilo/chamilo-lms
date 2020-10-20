@@ -3,6 +3,7 @@
 
 use Chamilo\PluginBundle\Entity\XApi\SharedStatement;
 use Xabbuh\XApi\Common\Exception\ConflictException;
+use Xabbuh\XApi\Common\Exception\StatementIdAlreadyExistsException;
 use Xabbuh\XApi\Common\Exception\XApiException;
 use Xabbuh\XApi\Model\Context;
 use Xabbuh\XApi\Model\Statement;
@@ -80,12 +81,20 @@ abstract class XApiActivityHookObserver extends HookObserver
     }
 
     /**
+     * @throws \Xabbuh\XApi\Common\Exception\StatementIdAlreadyExistsException
+     *
      * @return \Xabbuh\XApi\Model\Statement
      */
     protected function createStatement()
     {
+        $id = $this->getId();
+
+        if ($this->statementAlreadyShared($id->getValue())) {
+            throw new StatementIdAlreadyExistsException($id->getValue());
+        }
+
         return new Statement(
-            $this->getId(),
+            $id,
             $this->getActor(),
             $this->getVerb(),
             $this->getActivity(),
@@ -101,6 +110,24 @@ abstract class XApiActivityHookObserver extends HookObserver
      * @return \Xabbuh\XApi\Model\StatementId
      */
     abstract protected function getId();
+
+    /**
+     * @param string $uuid
+     *
+     * @return bool
+     */
+    protected function statementAlreadyShared($uuid)
+    {
+        $sharedStmt = Database::getManager()
+            ->getRepository(SharedStatement::class)
+            ->findOneByUuid($uuid);
+
+        if ($sharedStmt) {
+            return true;
+        }
+
+        return false;
+    }
 
     /**
      * @return \Xabbuh\XApi\Model\Agent

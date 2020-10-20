@@ -49,17 +49,13 @@ class XApiLearningPathEndHook extends XApiActivityHookObserver implements HookLe
         $this->course = api_get_course_entity($this->lpView->getCId());
         $this->session = api_get_session_entity($this->lpView->getSessionId());
 
-        $statement = $this->createStatement();
-
-        if ($this->isStatementAlreadySent($statement)) {
-            return;
-        }
-
         try {
-            $statement = $this->sendStatementToLrs($statement);
+            $statement = $this->createStatement();
+
+            $sharedStmt = $this->sendStatementToLrs($statement);
 
             $this->saveSharedStatement(
-                $statement->getId(),
+                $sharedStmt->getId(),
                 XApiPlugin::DATA_TYPE_LP_VIEW,
                 $this->lpView->getId()
             );

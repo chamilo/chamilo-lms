@@ -5,7 +5,7 @@
 * El uso de este software está sujeto a las Condiciones de uso de software que
 * se incluyen en el paquete en el documento "Aviso Legal.pdf". También puede
 * obtener una copia en la siguiente url:
-* http://www.redsys.es/wps/portal/redsys/publica/areadeserviciosweb/descargaDeDocumentacionYEjecutables
+* http://www.redsys.es/comercio-electronico/condiciones-de-uso.pdf
 *
 * Redsys es titular de todos los derechos de propiedad intelectual e industrial
 * del software.
@@ -22,7 +22,7 @@
 */
 class RedsysAPI
 {
-    /*  Array de DatosEntrada */
+    /*  InputData Array */
     public $vars_pay = [];
 
     /*  Set parameter */
@@ -37,16 +37,9 @@ class RedsysAPI
         return $this->vars_pay[$key];
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////					FUNCIONES AUXILIARES:							  ////////////
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////////
-
     /*  3DES Function  */
     public function encrypt_3DES($message, $key)
     {
-        // Se cifra
         $l = ceil(strlen($message) / 8) * 8;
 
         return substr(openssl_encrypt($message.str_repeat("\0", $l - strlen($message)), 'des-ede3-cbc', $key, OPENSSL_RAW_DATA, "\0\0\0\0\0\0\0\0"), 0, $l);
@@ -85,13 +78,7 @@ class RedsysAPI
         return $res;
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////	   FUNCIONES PARA LA GENERACIÓN DEL FORMULARIO DE PAGO:			  ////////////
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////////
-
-    /*  Obtener Número de pedido */
+    /*  Get Order Number */
     public function getOrder()
     {
         $numPedido = "";
@@ -104,7 +91,7 @@ class RedsysAPI
         return $numPedido;
     }
 
-    /*  Convertir Array en Objeto JSON */
+    /*  Convert Array to JSON Object */
     public function arrayToJson()
     {
         $json = json_encode($this->vars_pay); //(PHP 5 >= 5.2.0)
@@ -114,33 +101,27 @@ class RedsysAPI
 
     public function createMerchantParameters()
     {
-        // Se transforma el array de datos en un objeto Json
+        // The data array is transformed into a Json object
         $json = $this->arrayToJson();
-        // Se codifican los datos Base64
+        // Base64 data is encoded
         return $this->encodeBase64($json);
     }
 
     public function createMerchantSignature($key)
     {
-        // Se decodifica la clave Base64
+        // Base64 key is decoded
         $key = $this->decodeBase64($key);
-        // Se genera el parámetro Ds_MerchantParameters
+        // The parameter is generated Ds_MerchantParameters
         $ent = $this->createMerchantParameters();
-        // Se diversifica la clave con el Número de Pedido
+        // The key is diversified with the Order Number
         $key = $this->encrypt_3DES($this->getOrder(), $key);
-        // MAC256 del parámetro Ds_MerchantParameters
+        // MAC256 param Ds_MerchantParameters
         $res = $this->mac256($ent, $key);
-        // Se codifican los datos Base64
+        // Base64 data is encoded
         return $this->encodeBase64($res);
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    //////////// FUNCIONES PARA LA RECEPCIÓN DE DATOS DE PAGO (Notif, URLOK y URLKO): ////////////
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////////
-
-    /*  Obtener Número de pedido */
+    /*  Get Order Number */
     public function getOrderNotif()
     {
         $numPedido = "";
@@ -180,7 +161,7 @@ class RedsysAPI
         return substr($datos, $posReqIni, ($posReqFin + $tamReqFin) - $posReqIni);
     }
 
-    /*  Convertir String en Array */
+    /*  Convert String to Array */
     public function stringToArray($datosDecod)
     {
         $this->vars_pay = json_decode($datosDecod, true); //(PHP 5 >= 5.2.0)
@@ -188,9 +169,9 @@ class RedsysAPI
 
     public function decodeMerchantParameters($datos)
     {
-        // Se decodifican los datos Base64
+        // Base64 data is decoded
         $decodec = $this->base64_url_decode($datos);
-        // Los datos decodificados se pasan al array de datos
+        // The decoded data is passed to the data array
         $this->stringToArray($decodec);
 
         return $decodec;
@@ -198,47 +179,47 @@ class RedsysAPI
 
     public function createMerchantSignatureNotif($key, $datos)
     {
-        // Se decodifica la clave Base64
+        // Base64 key is decoded
         $key = $this->decodeBase64($key);
-        // Se decodifican los datos Base64
+        // Base64 data is decoded
         $decodec = $this->base64_url_decode($datos);
-        // Los datos decodificados se pasan al array de datos
+        // The decoded data is passed to the data array
         $this->stringToArray($decodec);
-        // Se diversifica la clave con el Número de Pedido
+        // The key is diversified with the Order Numb
         $key = $this->encrypt_3DES($this->getOrderNotif(), $key);
-        // MAC256 del parámetro Ds_Parameters que envía Redsys
+        // MAC256 of the Ds_Parameters parameter that Redsys sends
         $res = $this->mac256($datos, $key);
-        // Se codifican los datos Base64
+        // Base64 data is encoded
         return $this->base64_url_encode($res);
     }
 
-    /*  Notificaciones SOAP ENTRADA */
+    /*  INPUT SOAP notifications */
     public function createMerchantSignatureNotifSOAPRequest($key, $datos)
     {
-        // Se decodifica la clave Base64
+        // Base64 key is decoded
         $key = $this->decodeBase64($key);
-        // Se obtienen los datos del Request
+        // Request data is obtained
         $datos = $this->getRequestNotifSOAP($datos);
-        // Se diversifica la clave con el Número de Pedido
+        // The key is diversified with the Order Numb
         $key = $this->encrypt_3DES($this->getOrderNotifSOAP($datos), $key);
-        // MAC256 del parámetro Ds_Parameters que envía Redsys
+        // MAC256 of the Ds_Parameters parameter that Redsys sends
         $res = $this->mac256($datos, $key);
-        // Se codifican los datos Base64
+        // Base64 data is encoded
         return $this->encodeBase64($res);
     }
 
-    /*  Notificaciones SOAP SALIDA */
+    /*  OUTPUT SOAP notifications */
     public function createMerchantSignatureNotifSOAPResponse($key, $datos, $numPedido)
     {
-        // Se decodifica la clave Base64
+        // Base64 key is decoded
         $key = $this->decodeBase64($key);
-        // Se obtienen los datos del Request
+        // Request data is obtained
         $datos = $this->getResponseNotifSOAP($datos);
-        // Se diversifica la clave con el Número de Pedido
+        // The key is diversified with the Order Numb
         $key = $this->encrypt_3DES($numPedido, $key);
-        // MAC256 del parámetro Ds_Parameters que envía Redsys
+        // MAC256 of the Ds_Parameters parameter that Redsys sends
         $res = $this->mac256($datos, $key);
-        // Se codifican los datos Base64
+        // Base64 data is encoded
         return $this->encodeBase64($res);
     }
 }

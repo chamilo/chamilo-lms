@@ -1621,49 +1621,53 @@ $_configuration['exercise_finished_email_settings'] = [
     'courses' => [
         'FIRST_ATTEMPT' => [ // course code
             'send_by_email' => [
-                'email' => 'example@example.com',
-                'attempts' => [
-                    [
-                        'status' => 'passed', // passed/failed/all (depends in the exercise pass %)
-                        'content' => 'MailAttemptPassed', // exercise extra field
-                        'add_pdf' => 'PdfExerciseExtraField', // exercise extra field
-                    ],
-                    [
-                        'status' => 'failed',
-                        'content' => 'MailAttemptFailed',
-                    ],
-                    [
-                        'status' => 'all',
-                        'content' => 'MailAttemptAll',
-                    ],
-                    [
-                        'status' => 'all',
-                        'attempt' => 1,
-                        'content' => 'MailAttemptAttempt1', // exercise extra field,
-                    ],
-                    [
-                        'status' => 'failed',
-                        'attempt' => 2,
-                        'content' => 'MailAttemptFailed2', // exercise extra field,
-                         // if Exercise failed and attempt = 2 then the student will be subscribe to course code:
-                        'post_actions' => [
-                            'subscribe_student_to_courses' => ['SECOND_ATTEMPT']
-                        ]
+                'example1' => [ // Label
+                    'email' => 'example@example.com',
+                    'attempts' => [
+                        [
+                            'status' => 'passed', // passed/failed/all (depends in the exercise pass %)
+                            'content' => 'MailAttemptPassed', // exercise extra field
+                            'add_pdf' => 'PdfExerciseExtraField', // exercise extra field
+                        ],
+                        [
+                            'status' => 'failed',
+                            'content' => 'MailAttemptFailed',
+                        ],
+                        [
+                            'status' => 'all',
+                            'content' => 'MailAttemptAll',
+                        ],
+                        [
+                            'status' => 'all',
+                            'attempt' => 1,
+                            'content' => 'MailAttemptAttempt1', // exercise extra field,
+                        ],
+                        [
+                            'status' => 'failed',
+                            'attempt' => 2,
+                            'content' => 'MailAttemptFailed2', // exercise extra field,
+                             // if Exercise failed and attempt = 2 then the student will be subscribe to course code:
+                            'post_actions' => [
+                                'subscribe_student_to_courses' => ['SECOND_ATTEMPT']
+                            ]
+                        ],
                     ],
                 ],
             ],
         ],
         'SECOND_ATTEMPT' => [
             'send_by_email' => [
-                'email' => 'example@example.com',
-                'attempts' => [
-                    [
-                        'status' => 'passed',
-                        'content' => 'MailAttemptPassed', // exercise extra field,
-                    ],
-                    [
-                        'status' => 'failed',
-                        'content' => 'MailAttemptFailed', // exercise extra field,
+                'example2' => [ // Label
+                    'email' => 'example@example.com',
+                    'attempts' => [
+                        [
+                            'status' => 'passed',
+                            'content' => 'MailAttemptPassed', // exercise extra field,
+                        ],
+                        [
+                            'status' => 'failed',
+                            'content' => 'MailAttemptFailed', // exercise extra field,
+                        ],
                     ],
                 ],
             ],

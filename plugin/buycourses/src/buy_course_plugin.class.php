@@ -584,7 +584,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return array|int
      */
-    public function getCatalogSessionList($start, $end, $name = null, $min = 0, $max = 0, $typeResult = 'all', $sessionCategory= 0)
+    public function getCatalogSessionList($start, $end, $name = null, $min = 0, $max = 0, $typeResult = 'all', $sessionCategory = 0)
     {
         $sessions = $this->filterSessionList($start, $end, $name, $min, $max, $typeResult, $sessionCategory);
 
@@ -3003,24 +3003,24 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Search filtered sessions by name, and range of price.
      *
-     * @param int        $start
-     * @param int        $end
-     * @param string     $name              Optional. The name filter
-     * @param int        $min               Optional. The minimun price filter
-     * @param int        $max               Optional. The maximum price filter
-     * @param string     $max               Optional. all and count
-     * @param int        $sessionCategory   Optional. Session category id
+     * @param int    $start
+     * @param int    $end
+     * @param string $name            Optional. The name filter
+     * @param int    $min             Optional. The minimun price filter
+     * @param int    $max             Optional. The maximum price filter
+     * @param string $max             Optional. all and count
+     * @param int    $sessionCategory Optional. Session category id
      *
      * @return array
      */
-    private function filterSessionList($start, $end, $name = null, $min = 0, $max = 0, $typeResult = 'all', $sessionCategory= 0)
+    private function filterSessionList($start, $end, $name = null, $min = 0, $max = 0, $typeResult = 'all', $sessionCategory = 0)
     {
         $itemTable = Database::get_main_table(self::TABLE_ITEM);
         $sessionTable = Database::get_main_table(TABLE_MAIN_SESSION);
 
         $min = floatval($min);
         $max = floatval($max);
-        $sessionCategory = (int)$sessionCategory;
+        $sessionCategory = (int) $sessionCategory;
 
         $innerJoin = "$itemTable i ON s.id = i.product_id";
         $whereConditions = [
@@ -3039,8 +3039,8 @@ class BuyCoursesPlugin extends Plugin
             $whereConditions['AND i.price <= ?'] = $max;
         }
 
-        $start = (int)$start;
-        $end = (int)$end;
+        $start = (int) $start;
+        $end = (int) $end;
 
         if ($sessionCategory != 0) {
             $whereConditions['AND s.session_category_id = ?'] = $sessionCategory;

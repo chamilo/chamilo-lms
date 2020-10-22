@@ -2847,6 +2847,7 @@ HOTSPOT;
      * @param string $decimalSeparator
      * @param string $thousandSeparator
      * @param bool   $roundValues           This option rounds the float values into a int using ceil()
+     * @param bool   $removeEmptyDecimals
      *
      * @return string an html with the score modified
      */
@@ -2859,11 +2860,15 @@ HOTSPOT;
         $hidePercentageSign = false,
         $decimalSeparator = '.',
         $thousandSeparator = ',',
-        $roundValues = false
+        $roundValues = false,
+        $removeEmptyDecimals = false
     ) {
         if (is_null($score) && is_null($weight)) {
             return '-';
         }
+
+        $decimalSeparator = empty($decimalSeparator) ? '.' : $decimalSeparator;
+        $thousandSeparator = empty($thousandSeparator) ? ',' : $thousandSeparator;
 
         if ($use_platform_settings) {
             $result = self::convertScoreToPlatformSetting($score, $weight);
@@ -2872,6 +2877,7 @@ HOTSPOT;
         }
 
         $percentage = (100 * $score) / ($weight != 0 ? $weight : 1);
+
         // Formats values
         $percentage = float_format($percentage, 1);
         $score = float_format($score, 1);
@@ -2920,6 +2926,11 @@ HOTSPOT;
                 $html = $percentage.$percentageSign;
             }
         } else {
+            /*if ($removeEmptyDecimals) {
+                if (ScoreDisplay::hasEmptyDecimals($weight)) {
+                    $weight = round($weight);
+                }
+            }*/
             $html = $score.' / '.$weight;
         }
 
@@ -4422,12 +4433,14 @@ EOT;
      * @param int      $exeId
      * @param bool     $save_user_result save users results (true) or just show the results (false)
      * @param string   $remainingMessage
+     * @param bool     $allowSignature
      */
     public static function displayQuestionListByAttempt(
         $objExercise,
         $exeId,
         $save_user_result = false,
-        $remainingMessage = ''
+        $remainingMessage = '',
+        $allowSignature = false
     ) {
         $origin = api_get_origin();
         $courseId = api_get_course_int_id();
@@ -4582,7 +4595,8 @@ EOT;
             echo $objExercise->showExerciseResultHeader(
                 $studentInfo,
                 $exercise_stat_info,
-                $save_user_result
+                $save_user_result,
+                $allowSignature
             );
         }
 

@@ -6197,13 +6197,15 @@ class Exercise
      * @param array $user_data         result of api_get_user_info()
      * @param array $trackExerciseInfo result of get_stat_track_exercise_info
      * @param bool  $saveUserResult
+     * @param bool  $allowSignature
      *
      * @return string
      */
     public function showExerciseResultHeader(
         $user_data,
         $trackExerciseInfo,
-        $saveUserResult
+        $saveUserResult,
+        $allowSignature = false
     ) {
         if (api_get_configuration_value('hide_user_info_in_quiz_result')) {
             return '';
@@ -6303,6 +6305,7 @@ class Exercise
 
         $tpl = new Template(null, false, false, false, false, false, false);
         $tpl->assign('data', $data);
+        $tpl->assign('allow_signature', $allowSignature);
         $layoutTemplate = $tpl->get_template('exercise/partials/result_exercise.tpl');
 
         return $tpl->fetch($layoutTemplate);

@@ -36,7 +36,7 @@ if (empty($track_exercise_info)) {
 }
 
 $exercise_id = $track_exercise_info['exe_exo_id'];
-$student_id = $track_exercise_info['exe_user_id'];
+$student_id = (int) $track_exercise_info['exe_user_id'];
 $current_user_id = api_get_user_id();
 
 $objExercise = new Exercise();
@@ -55,9 +55,25 @@ if (!$is_allowedToEdit) {
     }
 }
 
+$allowSignature = false;
+if ($student_id === $current_user_id && 'true' === api_get_plugin_setting('exercise_signature', 'tool_enable')) {
+    $extraFieldValue = new ExtraFieldValue('exercise');
+    $result = $extraFieldValue->get_values_by_handler_and_field_variable($exercise_id, 'signature_activated');
+    if ($result && isset($result['value']) && 1 === (int) $result['value']) {
+        // Check if signature exists.
+        $signature = ExerciseSignaturePlugin::getSignature($current_user_id, $track_exercise_info);
+        if (false === $signature) {
+            $allowSignature = true;
+        }
+    }
+}
+
 $htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/css/hotspot.css">';
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/js/hotspot.js"></script>';
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'annotation/js/annotation.js"></script>';
+if ($allowSignature) {
+    $htmlHeadXtra[] = api_get_asset('signature_pad/signature_pad.umd.js');
+}
 
 if (!empty($objExercise->getResultAccess())) {
     $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/epiclock/renderers/minute/epiclock.minute.css');
@@ -78,7 +94,7 @@ if ($show_headers) {
         body { background: none;}
     </style>';
 
-    if ($origin == 'mobileapp') {
+    if ($origin === 'mobileapp') {
         echo '<div class="actions">';
         echo '<a href="javascript:window.history.go(-1);">'.
             Display::return_icon('back.png', get_lang('GoBackToQuestionList'), [], 32).'</a>';
@@ -94,15 +110,16 @@ ExerciseLib::displayQuestionListByAttempt(
     $objExercise,
     $id,
     false,
-    $message
+    $message,
+    $allowSignature
 );
 $pageContent = ob_get_contents();
 ob_end_clean();
 
 $template = new Template('', $show_headers, $show_headers);
 $template->assign('page_content', $pageContent);
-$layout = $template->fetch(
-    $template->get_template('exercise/result.tpl')
-);
+$template->assign('allow_signature', $allowSignature);
+$template->assign('exe_id', $id);
+$layout = $template->fetch($template->get_template('exercise/result.tpl'));
 $template->assign('content', $layout);
 $template->display_one_col_template();

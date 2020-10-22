@@ -55,4 +55,18 @@ foreach ($urlSource as $sourceId) {
             Database::query($sql);
         }
     }
+
+    $sql = "UPDATE plugin_bbb_meeting SET access_url = $urlDestinationId
+            WHERE access_url = $sourceId";
+    echo $sql.PHP_EOL;
+    if (!$test) {
+        Database::query($sql);
+    }
+
+    $sql = "UPDATE session_category SET access_url_id = $urlDestinationId
+            WHERE access_url_id = $sourceId";
+    echo $sql.PHP_EOL;
+    if (!$test) {
+        Database::query($sql);
+    }
 }

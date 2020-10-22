@@ -50,7 +50,7 @@
 
             $("#sign_popup_save").on("click", function() {
                 if (signaturePad.isEmpty()) {
-                    alert('{{ 'ProvideASignatureFirst'| get_plugin_lang('ExerciseSignaturePlugin') }}');
+                    alert('{{ 'ProvideASignatureFirst'| get_plugin_lang('ExerciseSignaturePlugin') | e('js') }}');
                     return false;
                 }
 

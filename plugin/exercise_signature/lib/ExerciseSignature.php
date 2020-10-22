@@ -106,7 +106,7 @@ class ExerciseSignaturePlugin extends Plugin
      */
     public function install()
     {
-        $extraField = new ExtraField('track_exercise');
+        $extraField = new ExtraField('exercise');
         $extraFieldHandler = $extraField->get_handler_field_info_by_field_variable('signature_activated');
         $exists = $extraFieldHandler !== false;
 
@@ -125,7 +125,7 @@ class ExerciseSignaturePlugin extends Plugin
             );
         }
 
-        $extraField = new ExtraField('exercise');
+        $extraField = new ExtraField('track_exercise');
         $extraFieldHandler = $extraField->get_handler_field_info_by_field_variable('signature');
         $exists = $extraFieldHandler !== false;
 

@@ -18,6 +18,7 @@ $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC
 
 $export = isset($_GET['export']) ? $_GET['export'] : false;
 $sessionId = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
+$action = isset($_GET['action']) ? $_GET['action'] : '';
 $origin = api_get_origin();
 $course_code = isset($_GET['course']) ? Security::remove_XSS($_GET['course']) : '';
 $courseInfo = api_get_course_info($course_code);
@@ -33,16 +34,6 @@ $currentUrl = api_get_self().'?student='.$student_id.'&course='.$courseCode.'&id
 $allowMessages = api_get_configuration_value('private_messages_about_user');
 $workingTime = api_get_configuration_value('considered_working_time');
 $workingTimeEdit = api_get_configuration_value('allow_working_time_edition');
-
-if (empty($student_id)) {
-    api_not_allowed(true);
-}
-
-$user_info = api_get_user_info($student_id);
-
-if (empty($user_info)) {
-    api_not_allowed(true);
-}
 
 $allowToQualify = api_is_allowed_to_edit(null, true) ||
     api_is_course_tutor() ||
@@ -91,6 +82,15 @@ if (!api_is_session_admin() &&
 if (!$allowedToTrackUser) {
     api_not_allowed(true);
 }
+if (empty($student_id)) {
+    api_not_allowed(true);
+}
+
+$user_info = api_get_user_info($student_id);
+
+if (empty($user_info)) {
+    api_not_allowed(true);
+}
 
 if (api_is_student()) {
     api_not_allowed(true);
@@ -109,109 +109,9 @@ if (isset($_GET['from']) && $_GET['from'] === 'myspace') {
 
 $nameTools = get_lang('StudentDetails');
 
-if (!empty($details)) {
-    if ($origin === 'user_course') {
-        if (empty($cidReq)) {
-            $interbreadcrumb[] = [
-                'url' => api_get_path(WEB_COURSE_PATH).$courseInfo['directory'],
-                'name' => $courseInfo['title'],
-            ];
-        }
-        $interbreadcrumb[] = [
-            'url' => '../user/user.php?cidReq='.$courseCode,
-            'name' => get_lang('Users'),
-        ];
-    } else {
-        if ('tracking_course' === $origin) {
-            $interbreadcrumb[] = [
-                'url' => '../tracking/courseLog.php?cidReq='.$courseCode.'&id_session='.api_get_session_id(),
-                'name' => get_lang('Tracking'),
-            ];
-        } else {
-            if ('resume_session' === $origin) {
-                $interbreadcrumb[] = [
-                    'url' => "../session/session_list.php",
-                    'name' => get_lang('SessionList'),
-                ];
-                $interbreadcrumb[] = [
-                    'url' => '../session/resume_session.php?id_session='.$sessionId,
-                    'name' => get_lang('SessionOverview'),
-                ];
-            } else {
-                $interbreadcrumb[] = [
-                    'url' => api_is_student_boss() ? '#' : 'index.php',
-                    'name' => get_lang('MySpace'),
-                ];
-                if (!empty($coachId)) {
-                    $interbreadcrumb[] = [
-                        'url' => 'student.php?id_coach='.$coachId,
-                        'name' => get_lang('CoachStudents'),
-                    ];
-                    $interbreadcrumb[] = [
-                        'url' => 'myStudents.php?student='.$student_id.'&id_coach='.$coachId,
-                        'name' => get_lang('StudentDetails'),
-                    ];
-                } else {
-                    $interbreadcrumb[] = [
-                        'url' => 'student.php',
-                        'name' => get_lang('MyStudents'),
-                    ];
-                    $interbreadcrumb[] = [
-                        'url' => 'myStudents.php?student='.$student_id,
-                        'name' => get_lang('StudentDetails'),
-                    ];
-                }
-            }
-        }
-    }
-    $nameTools = get_lang('DetailsStudentInCourse');
-} else {
-    if ($origin === 'resume_session') {
-        $interbreadcrumb[] = [
-            'url' => '../session/session_list.php',
-            'name' => get_lang('SessionList'),
-        ];
-        if (!empty($sessionId)) {
-            $interbreadcrumb[] = [
-                'url' => '../session/resume_session.php?id_session='.$sessionId,
-                'name' => get_lang('SessionOverview'),
-            ];
-        }
-    } elseif ($origin === 'teacher_details') {
-        $this_section = SECTION_TRACKING;
-        $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('MySpace')];
-        $interbreadcrumb[] = ['url' => 'teachers.php', 'name' => get_lang('Teachers')];
-        $nameTools = $user_info['complete_name'];
-    } else {
-        $interbreadcrumb[] = [
-            'url' => api_is_student_boss() ? '#' : 'index.php',
-            'name' => get_lang('MySpace'),
-        ];
-        if (!empty($coachId)) {
-            if ($sessionId) {
-                $interbreadcrumb[] = [
-                    'url' => 'student.php?id_coach='.$coachId.'&id_session='.$sessionId,
-                    'name' => get_lang('CoachStudents'),
-                ];
-            } else {
-                $interbreadcrumb[] = [
-                    'url' => 'student.php?id_coach='.$coachId,
-                    'name' => get_lang('CoachStudents'),
-                ];
-            }
-        } else {
-            $interbreadcrumb[] = [
-                'url' => 'student.php',
-                'name' => get_lang('MyStudents'),
-            ];
-        }
-    }
-}
-
 // Database Table Definitions
 $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $tbl_stats_exercices = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-$action = isset($_GET['action']) ? $_GET['action'] : '';
 
 switch ($action) {
     case 'add_work_time':
@@ -602,8 +502,106 @@ switch ($action) {
         break;
 }
 
-$courses_in_session = [];
+if (!empty($details)) {
+    if ($origin === 'user_course') {
+        if (empty($cidReq)) {
+            $interbreadcrumb[] = [
+                'url' => api_get_path(WEB_COURSE_PATH).$courseInfo['directory'],
+                'name' => $courseInfo['title'],
+            ];
+        }
+        $interbreadcrumb[] = [
+            'url' => '../user/user.php?cidReq='.$courseCode,
+            'name' => get_lang('Users'),
+        ];
+    } else {
+        if ('tracking_course' === $origin) {
+            $interbreadcrumb[] = [
+                'url' => '../tracking/courseLog.php?cidReq='.$courseCode.'&id_session='.api_get_session_id(),
+                'name' => get_lang('Tracking'),
+            ];
+        } else {
+            if ('resume_session' === $origin) {
+                $interbreadcrumb[] = [
+                    'url' => '../session/session_list.php',
+                    'name' => get_lang('SessionList'),
+                ];
+                $interbreadcrumb[] = [
+                    'url' => '../session/resume_session.php?id_session='.$sessionId,
+                    'name' => get_lang('SessionOverview'),
+                ];
+            } else {
+                $interbreadcrumb[] = [
+                    'url' => api_is_student_boss() ? '#' : 'index.php',
+                    'name' => get_lang('MySpace'),
+                ];
+                if (!empty($coachId)) {
+                    $interbreadcrumb[] = [
+                        'url' => 'student.php?id_coach='.$coachId,
+                        'name' => get_lang('CoachStudents'),
+                    ];
+                    $interbreadcrumb[] = [
+                        'url' => 'myStudents.php?student='.$student_id.'&id_coach='.$coachId,
+                        'name' => get_lang('StudentDetails'),
+                    ];
+                } else {
+                    $interbreadcrumb[] = [
+                        'url' => 'student.php',
+                        'name' => get_lang('MyStudents'),
+                    ];
+                    $interbreadcrumb[] = [
+                        'url' => 'myStudents.php?student='.$student_id,
+                        'name' => get_lang('StudentDetails'),
+                    ];
+                }
+            }
+        }
+    }
+    $nameTools = get_lang('DetailsStudentInCourse');
+} else {
+    if ($origin === 'resume_session') {
+        $interbreadcrumb[] = [
+            'url' => '../session/session_list.php',
+            'name' => get_lang('SessionList'),
+        ];
+        if (!empty($sessionId)) {
+            $interbreadcrumb[] = [
+                'url' => '../session/resume_session.php?id_session='.$sessionId,
+                'name' => get_lang('SessionOverview'),
+            ];
+        }
+    } elseif ($origin === 'teacher_details') {
+        $this_section = SECTION_TRACKING;
+        $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('MySpace')];
+        $interbreadcrumb[] = ['url' => 'teachers.php', 'name' => get_lang('Teachers')];
+        $nameTools = $user_info['complete_name'];
+    } else {
+        $interbreadcrumb[] = [
+            'url' => api_is_student_boss() ? '#' : 'index.php',
+            'name' => get_lang('MySpace'),
+        ];
+        if (!empty($coachId)) {
+            if ($sessionId) {
+                $interbreadcrumb[] = [
+                    'url' => 'student.php?id_coach='.$coachId.'&id_session='.$sessionId,
+                    'name' => get_lang('CoachStudents'),
+                ];
+            } else {
+                $interbreadcrumb[] = [
+                    'url' => 'student.php?id_coach='.$coachId,
+                    'name' => get_lang('CoachStudents'),
+                ];
+            }
+        } else {
+            $interbreadcrumb[] = [
+                'url' => 'student.php',
+                'name' => get_lang('MyStudents'),
+            ];
+        }
+    }
+}
 
+$courses_in_session = [];
 // See #4676
 $drh_can_access_all_courses = false;
 if (api_is_drh() || api_is_platform_admin() || api_is_student_boss() || api_is_session_admin()) {
@@ -621,7 +619,6 @@ if (api_is_session_admin() || api_is_drh()) {
         $courses = array_column($courses, 'real_id');
     }
     $session_by_session_admin = SessionManager::get_sessions_followed_by_drh(api_get_user_id());
-
     if (!empty($session_by_session_admin)) {
         foreach ($session_by_session_admin as $session_coached_by_user) {
             $courses_followed_by_coach = Tracking::get_courses_list_from_session(
@@ -1362,13 +1359,17 @@ if (empty($details)) {
             if (!empty($sId)) {
                 $sessionAction .= Display::url(
                     Display::return_icon('pdf.png', get_lang('ExportToPDF'), [], ICON_SIZE_MEDIUM),
-                    $currentUrl.'&'
-                        .http_build_query(['action' => 'export_to_pdf', 'type' => 'attendance', 'session_to_export' => $sId])
+                    api_get_path(WEB_CODE_PATH).'mySpace/session.php?'
+                    .http_build_query(
+                        ['action' => 'export_to_pdf', 'type' => 'attendance', 'session_to_export' => $sId]
+                    )
                 );
                 $sessionAction .= Display::url(
                     Display::return_icon('pdf.png', get_lang('CertificateOfAchievement'), [], ICON_SIZE_MEDIUM),
-                    $currentUrl.'&'
-                    .http_build_query(['action' => 'export_to_pdf', 'type' => 'achievement', 'session_to_export' => $sId])
+                    api_get_path(WEB_CODE_PATH).'mySpace/session.php?'
+                    .http_build_query(
+                        ['action' => 'export_to_pdf', 'type' => 'achievement', 'session_to_export' => $sId]
+                    )
                 );
             }
             echo $sessionAction;

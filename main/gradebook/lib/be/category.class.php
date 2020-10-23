@@ -910,7 +910,6 @@ class Category implements GradebookItem
             $count = 0;
             $ressum = 0;
             $weightsum = 0;
-
             if (!empty($cats)) {
                 /** @var Category $cat */
                 foreach ($cats as $cat) {
@@ -1079,8 +1078,10 @@ class Category implements GradebookItem
                         foreach ($links as $link) {
                             $linkres = $link->calc_score($studentId, null);
                             $linkweight = $link->get_weight();
-                            $link_res_denom = 0 == $linkres[1] ? 1 : $linkres[1];
-                            $ressum = $linkres[0] / $link_res_denom * $linkweight;
+                            if ($linkres) {
+                                $link_res_denom = 0 == $linkres[1] ? 1 : $linkres[1];
+                                $ressum = $linkres[0] / $link_res_denom * $linkweight;
+                            }
 
                             if (!isset($totalScorePerStudent[$studentId])) {
                                 $totalScorePerStudent[$studentId] = 0;

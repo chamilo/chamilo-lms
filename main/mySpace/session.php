@@ -292,7 +292,7 @@ switch ($action) {
             );
         }
         $name = $sessionInfo['name'].'_'.api_get_utc_datetime().'.zip';
-        $result = DocumentManager::file_send_for_download($tempZipFile, true, $name);
+        DocumentManager::file_send_for_download($tempZipFile, true, $name);
         exit;
         break;
 }

@@ -255,14 +255,16 @@ switch ($action) {
             @$pdf = new PDF('A4', $params['orientation'], $params);
             $pdf->setBackground($tpl->theme);
             $mode = 'D';
+
+            $pdfName = $sessionInfo['name'].'_'.$studentInfo['complete_name'];
             if ($allStudents) {
                 $mode = 'F';
+                $pdfName = $studentInfo['complete_name'];
             }
-
             $result = @$pdf->content_to_pdf(
                 $content,
                 '',
-                '',
+                $pdfName,
                 null,
                 $mode,
                 false,
@@ -289,7 +291,7 @@ switch ($action) {
                 api_get_path(SYS_ARCHIVE_PATH)
             );
         }
-        $name = 'session-report'.api_get_utc_datetime().'.zip';
+        $name = $sessionInfo['name'].'_'.api_get_utc_datetime().'.zip';
         $result = DocumentManager::file_send_for_download($tempZipFile, true, $name);
         exit;
         break;

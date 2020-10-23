@@ -2926,11 +2926,11 @@ HOTSPOT;
                 $html = $percentage.$percentageSign;
             }
         } else {
-            /*if ($removeEmptyDecimals) {
+            if ($removeEmptyDecimals) {
                 if (ScoreDisplay::hasEmptyDecimals($weight)) {
                     $weight = round($weight);
                 }
-            }*/
+            }
             $html = $score.' / '.$weight;
         }
 

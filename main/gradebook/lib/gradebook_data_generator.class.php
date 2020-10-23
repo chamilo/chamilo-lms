@@ -28,6 +28,7 @@ class GradebookDataGenerator
     public $items;
     public $preLoadDataKey;
     private $evals_links;
+    public $exportToPdf;
 
     /**
      * @param array $cats
@@ -39,6 +40,7 @@ class GradebookDataGenerator
         $allcats = isset($cats) ? $cats : [];
         $allevals = isset($evals) ? $evals : [];
         $alllinks = isset($links) ? $links : [];
+        $this->exportToPdf = false;
 
         // if we are in the root category and if there are sub categories
         // display only links depending of the root category and not link that belongs
@@ -108,8 +110,6 @@ class GradebookDataGenerator
         usort($allitems, ['GradebookDataGenerator', 'sort_by_name']);
 
         $userId = $this->userId;
-
-        // Get selected items
         $visibleItems = array_slice($allitems, $start, $count);
         $userCount = !empty($studentList) ? count($studentList) : 0;
 
@@ -118,8 +118,8 @@ class GradebookDataGenerator
         $allowStats = api_get_configuration_value('allow_gradebook_stats');
         $scoreDisplay = ScoreDisplay::instance();
         $defaultData = Session::read($this->preLoadDataKey);
-
         $model = ExerciseLib::getCourseScoreModel();
+        $useExerciseScoreInTotal = api_get_configuration_value('gradebook_use_exercise_score_settings_in_total');
 
         /** @var GradebookItem $item */
         foreach ($visibleItems as $item) {
@@ -140,9 +140,9 @@ class GradebookDataGenerator
                     $resultColumn = $this->build_result_column(
                         $userId,
                         $item,
-                        $ignore_score_color
+                        $ignore_score_color,
+                        false
                     );
-
                     $row[] = $resultColumn['display'];
                     $row['result_score'] = $resultColumn['score'];
                     $row['result_score_weight'] = $resultColumn['score_weight'];
@@ -280,11 +280,9 @@ class GradebookDataGenerator
                                     if (!empty($links)) {
                                         foreach ($links as $link) {
                                             $link->setStudentList($studentList);
-
                                             if ($session_id) {
                                                 $link->set_session_id($session_id);
                                             }
-
                                             $linkres = $link->calc_score($user['user_id'], null);
                                             if (!empty($linkres) && 0 != $link->get_weight()) {
                                                 $linkweight = $link->get_weight();
@@ -333,7 +331,8 @@ class GradebookDataGenerator
                         $userId,
                         $item,
                         $ignore_score_color,
-                        true
+                        true,
+                        $useExerciseScoreInTotal
                     );
                     $row[] = $result['display'];
                     $row['result_score'] = $result['score'];
@@ -343,21 +342,29 @@ class GradebookDataGenerator
                         // Best
                         if (isset($defaultData[$item->get_id()]) && isset($defaultData[$item->get_id()]['best'])) {
                             $best = $defaultData[$item->get_id()]['best'];
+                            if ($useExerciseScoreInTotal) {
+                                $bestScore = $best['score'];
+                                $best['display'] = ExerciseLib::show_score($bestScore[0], $bestScore[1], true);
+                            } else {
+                                $best = $defaultData[$item->get_id()]['best'];
+                            }
                         } else {
-                            $best = $this->buildBestResultColumn($item);
+                            $best = $this->buildBestResultColumn($item, $useExerciseScoreInTotal);
                         }
 
                         $row['best'] = $best['display'];
                         $row['best_score'] = $best['score'];
-
                         $rankingStudentList = [];
                         $invalidateResults = true;
-
                         // Average
                         if (isset($defaultData[$item->get_id()]) && isset($defaultData[$item->get_id()]['average'])) {
                             $average = $defaultData[$item->get_id()]['average'];
+                            if ($useExerciseScoreInTotal) {
+                                $averageScore = $average['score'];
+                                $average['display'] = ExerciseLib::show_score($averageScore[0], $averageScore[1], true);
+                            }
                         } else {
-                            $average = $this->buildAverageResultColumn($item);
+                            $average = $this->buildAverageResultColumn($item, $useExerciseScoreInTotal);
                         }
                         $row['average'] = $average['display'];
                         $row['average_score'] = $average['score'];
@@ -391,6 +398,7 @@ class GradebookDataGenerator
                             SCORE_DIV,
                             SCORE_BOTH,
                             true,
+                            true,
                             true
                         );
 
@@ -418,7 +426,8 @@ class GradebookDataGenerator
     {
         if (is_a($item, 'Category')) {
             if ($item->is_certificate_available(api_get_user_id())) {
-                $link = '<a href="'.Category::getUrl().'export_certificate=1&cat='.$item->get_id().'&user='.api_get_user_id().'">'.
+                $link = '<a
+                href="'.Category::getUrl().'export_certificate=1&cat='.$item->get_id().'&user='.api_get_user_id().'">'.
                     get_lang('Certificate').'</a>';
 
                 return $link;
@@ -460,9 +469,9 @@ class GradebookDataGenerator
     {
         if ($item1->get_item_type() == $item2->get_item_type()) {
             return $this->sort_by_name($item1, $item2);
-        } else {
-            return $item1->get_item_type() < $item2->get_item_type() ? -1 : 1;
         }
+
+        return $item1->get_item_type() < $item2->get_item_type() ? -1 : 1;
     }
 
     /**
@@ -491,9 +500,9 @@ class GradebookDataGenerator
     {
         if ($item1->get_weight() == $item2->get_weight()) {
             return $this->sort_by_name($item1, $item2);
-        } else {
-            return $item1->get_weight() < $item2->get_weight() ? -1 : 1;
         }
+
+        return $item1->get_weight() < $item2->get_weight() ? -1 : 1;
     }
 
     /**
@@ -523,9 +532,9 @@ class GradebookDataGenerator
 
         if ($timestamp1 == $timestamp2) {
             return $this->sort_by_name($item1, $item2);
-        } else {
-            return $timestamp1 < $timestamp2 ? -1 : 1;
         }
+
+        return $timestamp1 < $timestamp2 ? -1 : 1;
     }
 
     /**
@@ -533,7 +542,7 @@ class GradebookDataGenerator
      *
      * @return array
      */
-    public function buildBestResultColumn(GradebookItem $item)
+    public function buildBestResultColumn(GradebookItem $item, $userExerciseSettings = false)
     {
         $score = $item->calc_score(
             null,
@@ -559,11 +568,25 @@ class GradebookDataGenerator
             $score,
             $scoreMode,
             SCORE_BOTH,
+            true,
+            false,
             true
         );
         $type = $item->get_item_type();
         if ('L' === $type && 'ExerciseLink' === get_class($item)) {
-            $display = ExerciseLib::show_score($score[0], $score[1], false);
+            $display = ExerciseLib::show_score(
+                $score[0],
+                $score[1],
+                false
+            );
+        }
+
+        if ($userExerciseSettings) {
+            $display = ExerciseLib::show_score(
+                $score[0],
+                $score[1],
+                true
+            );
         }
 
         return [
@@ -575,7 +598,7 @@ class GradebookDataGenerator
     /**
      * @return array
      */
-    public function buildAverageResultColumn(GradebookItem $item)
+    public function buildAverageResultColumn(GradebookItem $item, $userExerciseSettings = false)
     {
         $score = $item->calc_score(null, 'average');
 
@@ -597,6 +620,8 @@ class GradebookDataGenerator
             $score,
             $scoreMode,
             SCORE_BOTH,
+            true,
+            false,
             true
         );
         $type = $item->get_item_type();
@@ -606,6 +631,14 @@ class GradebookDataGenerator
             $result = ExerciseLib::convertScoreToPlatformSetting($score[0], $score[1]);
             $score[0] = $result['score'];
             $score[1] = $result['weight'];
+        } else {
+            if ($userExerciseSettings) {
+                $display = ExerciseLib::show_score(
+                    $score[0],
+                    $score[1],
+                    true
+                );
+            }
         }
 
         return [
@@ -632,6 +665,7 @@ class GradebookDataGenerator
                 SCORE_DIV,
                 SCORE_BOTH,
                 false,
+                true,
                 true
             );
         }
@@ -653,23 +687,32 @@ class GradebookDataGenerator
         $userId,
         $item,
         $ignore_score_color,
-        $forceSimpleResult = false
+        $forceSimpleResult = false,
+        $useExerciseScoreInTotal = false
     ) {
         $scoreDisplay = ScoreDisplay::instance();
         $score = $item->calc_score($userId);
         $model = ExerciseLib::getCourseScoreModel();
-
         if (!empty($score)) {
             switch ($item->get_item_type()) {
                 // category
                 case 'C':
                     if (null != $score) {
                         if (empty($model)) {
-                            return [
-                                'display' => $scoreDisplay->display_score(
+                            if ($useExerciseScoreInTotal) {
+                                $display = ExerciseLib::show_score($score[0], $score[1], false);
+                            } else {
+                                $display = $scoreDisplay->display_score(
                                     $score,
-                                    SCORE_DIV
-                                ),
+                                    SCORE_DIV,
+                                    null,
+                                    false,
+                                    false,
+                                    true
+                                );
+                            }
+                            return [
+                                'display' => $display,
                                 'score' => $score,
                                 'score_weight' => $score,
                             ];
@@ -704,15 +747,26 @@ class GradebookDataGenerator
                     if (empty($model)) {
                         $display = $scoreDisplay->display_score(
                             $score,
-                            SCORE_DIV_PERCENT_WITH_CUSTOM
+                            SCORE_DIV_PERCENT_WITH_CUSTOM,
+                            null,
+                            false,
+                            false,
+                            true
                         );
 
                         $type = $item->get_item_type();
-                        if ('L' == $type && 'ExerciseLink' == get_class($item)) {
+                        if ('L' === $type && 'ExerciseLink' === get_class($item)) {
                             $display = ExerciseLib::show_score(
                                 $score[0],
                                 $score[1],
-                                false
+                                false,
+                                true,
+                                false,
+                                false,
+                                null,
+                                null,
+                                false,
+                                true
                             );
                         }
                     } else {
@@ -751,9 +805,9 @@ class GradebookDataGenerator
         } else {
             if (is_int($date)) {
                 return api_convert_and_format_date($date);
-            } else {
-                return api_format_date($date);
             }
+
+            return api_format_date($date);
         }
     }
 }

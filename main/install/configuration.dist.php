@@ -1690,6 +1690,14 @@ $_configuration['auth_password_links'] = [
 //CREATE TABLE c_lp_category_rel_usergroup (id INT AUTO_INCREMENT NOT NULL, lp_category_id INT NOT NULL, usergroup_id INT NOT NULL, c_id INT NOT NULL, session_id INT, created_at DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
 //$_configuration['allow_lp_subscription_to_usergroups'] = false;
 
+// Gradebook student pdf export settings
+/*$_configuration['gradebook_pdf_export_settings'] = [
+    'hide_score_weight' => true,
+];*/
+
+// Use exercise score in platform settings in gradebook total rows/columns.
+//$_configuration['gradebook_use_exercise_score_settings_in_total'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

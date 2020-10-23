@@ -1693,7 +1693,11 @@ $_configuration['auth_password_links'] = [
 // Gradebook student pdf export settings
 /*$_configuration['gradebook_pdf_export_settings'] = [
     'hide_score_weight' => true,
+    'hide_feedback_textarea' => true,
 ];*/
+
+// Use exercise score in platform settings in gradebook total rows/columns.
+//$_configuration['gradebook_use_exercise_score_settings_in_total'] = false;
 
 // Use exercise score in platform settings in gradebook total rows/columns.
 //$_configuration['gradebook_use_exercise_score_settings_in_total'] = false;

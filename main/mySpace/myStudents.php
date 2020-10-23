@@ -18,6 +18,7 @@ $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC
 
 $export = isset($_GET['export']) ? $_GET['export'] : false;
 $sessionId = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
+$action = isset($_GET['action']) ? $_GET['action'] : '';
 $origin = api_get_origin();
 $course_code = isset($_GET['course']) ? Security::remove_XSS($_GET['course']) : '';
 $courseInfo = api_get_course_info($course_code);
@@ -33,16 +34,6 @@ $currentUrl = api_get_self().'?student='.$student_id.'&course='.$courseCode.'&id
 $allowMessages = api_get_configuration_value('private_messages_about_user');
 $workingTime = api_get_configuration_value('considered_working_time');
 $workingTimeEdit = api_get_configuration_value('allow_working_time_edition');
-
-if (empty($student_id)) {
-    api_not_allowed(true);
-}
-
-$user_info = api_get_user_info($student_id);
-
-if (empty($user_info)) {
-    api_not_allowed(true);
-}
 
 $allowToQualify = api_is_allowed_to_edit(null, true) ||
     api_is_course_tutor() ||
@@ -90,6 +81,15 @@ if (false === $allowedToTrackUser && !empty($courseInfo)) {
 if (!$allowedToTrackUser) {
     api_not_allowed(true);
 }
+if (empty($student_id)) {
+    api_not_allowed(true);
+}
+
+$user_info = api_get_user_info($student_id);
+
+if (empty($user_info)) {
+    api_not_allowed(true);
+}
 
 if ($export) {
     ob_start();
@@ -104,109 +104,9 @@ if (isset($_GET['from']) && $_GET['from'] === 'myspace') {
 
 $nameTools = get_lang('StudentDetails');
 
-if (!empty($details)) {
-    if ($origin === 'user_course') {
-        if (empty($cidReq)) {
-            $interbreadcrumb[] = [
-                'url' => api_get_path(WEB_COURSE_PATH).$courseInfo['directory'],
-                'name' => $courseInfo['title'],
-            ];
-        }
-        $interbreadcrumb[] = [
-            'url' => '../user/user.php?cidReq='.$courseCode,
-            'name' => get_lang('Users'),
-        ];
-    } else {
-        if ('tracking_course' === $origin) {
-            $interbreadcrumb[] = [
-                'url' => '../tracking/courseLog.php?cidReq='.$courseCode.'&id_session='.api_get_session_id(),
-                'name' => get_lang('Tracking'),
-            ];
-        } else {
-            if ('resume_session' === $origin) {
-                $interbreadcrumb[] = [
-                    'url' => "../session/session_list.php",
-                    'name' => get_lang('SessionList'),
-                ];
-                $interbreadcrumb[] = [
-                    'url' => '../session/resume_session.php?id_session='.$sessionId,
-                    'name' => get_lang('SessionOverview'),
-                ];
-            } else {
-                $interbreadcrumb[] = [
-                    'url' => api_is_student_boss() ? '#' : 'index.php',
-                    'name' => get_lang('MySpace'),
-                ];
-                if (!empty($coachId)) {
-                    $interbreadcrumb[] = [
-                        'url' => 'student.php?id_coach='.$coachId,
-                        'name' => get_lang('CoachStudents'),
-                    ];
-                    $interbreadcrumb[] = [
-                        'url' => 'myStudents.php?student='.$student_id.'&id_coach='.$coachId,
-                        'name' => get_lang('StudentDetails'),
-                    ];
-                } else {
-                    $interbreadcrumb[] = [
-                        'url' => 'student.php',
-                        'name' => get_lang('MyStudents'),
-                    ];
-                    $interbreadcrumb[] = [
-                        'url' => 'myStudents.php?student='.$student_id,
-                        'name' => get_lang('StudentDetails'),
-                    ];
-                }
-            }
-        }
-    }
-    $nameTools = get_lang('DetailsStudentInCourse');
-} else {
-    if ($origin === 'resume_session') {
-        $interbreadcrumb[] = [
-            'url' => '../session/session_list.php',
-            'name' => get_lang('SessionList'),
-        ];
-        if (!empty($sessionId)) {
-            $interbreadcrumb[] = [
-                'url' => '../session/resume_session.php?id_session='.$sessionId,
-                'name' => get_lang('SessionOverview'),
-            ];
-        }
-    } elseif ($origin === 'teacher_details') {
-        $this_section = SECTION_TRACKING;
-        $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('MySpace')];
-        $interbreadcrumb[] = ['url' => 'teachers.php', 'name' => get_lang('Teachers')];
-        $nameTools = $user_info['complete_name'];
-    } else {
-        $interbreadcrumb[] = [
-            'url' => api_is_student_boss() ? '#' : 'index.php',
-            'name' => get_lang('MySpace'),
-        ];
-        if (!empty($coachId)) {
-            if ($sessionId) {
-                $interbreadcrumb[] = [
-                    'url' => 'student.php?id_coach='.$coachId.'&id_session='.$sessionId,
-                    'name' => get_lang('CoachStudents'),
-                ];
-            } else {
-                $interbreadcrumb[] = [
-                    'url' => 'student.php?id_coach='.$coachId,
-                    'name' => get_lang('CoachStudents'),
-                ];
-            }
-        } else {
-            $interbreadcrumb[] = [
-                'url' => 'student.php',
-                'name' => get_lang('MyStudents'),
-            ];
-        }
-    }
-}
-
 // Database Table Definitions
 $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $tbl_stats_exercices = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-$action = isset($_GET['action']) ? $_GET['action'] : '';
 
 switch ($action) {
     case 'add_work_time':
@@ -231,234 +131,6 @@ switch ($action) {
         Display::addFlash(Display::return_message(get_lang('Updated')));
 
         header('Location: '.$currentUrl);
-        exit;
-        break;
-    case 'export_to_pdf':
-        $sessionToExport = $sId = isset($_GET['session_to_export']) ? (int) $_GET['session_to_export'] : 0;
-        $type = isset($_GET['type']) ? $_GET['type'] : 'attendance';
-
-        $sessionInfo = api_get_session_info($sessionToExport);
-        if (empty($sessionInfo)) {
-            api_not_allowed(true);
-        }
-        $courses = Tracking::get_courses_list_from_session($sessionToExport);
-        $timeSpent = 0;
-        $numberVisits = 0;
-        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-        $progress = 0;
-        $timeSpentPerCourse = [];
-        $progressPerCourse = [];
-        foreach ($courses as $course) {
-            $courseId = $course['c_id'];
-            $courseTimeSpent = Tracking::get_time_spent_on_the_course($student_id, $courseId, $sessionToExport);
-            $timeSpentPerCourse[$courseId] = $courseTimeSpent;
-            $timeSpent += $courseTimeSpent;
-            $sql = "SELECT DISTINCT count(course_access_id) as count
-                    FROM $table
-                    WHERE
-                        c_id = $courseId AND
-                        session_id = $sessionToExport AND
-                        user_id = $student_id";
-            $result = Database::query($sql);
-            $row = Database::fetch_array($result);
-            $numberVisits += $row['count'];
-            $courseProgress = Tracking::get_avg_student_progress($student_id, $course['code'], [], $sessionToExport);
-            $progressPerCourse[$courseId] = $courseProgress;
-            $progress += $courseProgress;
-        }
-
-        $average = round($progress / count($courses), 1);
-        $average = empty($average) ? '0%' : $average.'%';
-
-        $first = Tracking::get_first_connection_date($student_id);
-        $last = Tracking::get_last_connection_date($student_id);
-        $timeSpentContent = '';
-        $pdfTitle = get_lang('AttestationOfAttendance');
-        if ('attendance' === $type) {
-            $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
-            $column = 0;
-            $row = 0;
-            $headers = [
-                get_lang('TimeSpent'),
-                get_lang('NumberOfVisits'),
-                get_lang('GlobalProgress'),
-                get_lang('FirstLogin'),
-                get_lang('LastConnexionDate'),
-            ];
-            foreach ($headers as $header) {
-                $table->setHeaderContents($row, $column, $header);
-                $column++;
-            }
-            $table->setCellContents(1, 0, api_time_to_hms($timeSpent));
-            $table->setCellContents(1, 1, $numberVisits);
-            $table->setCellContents(1, 2, $average);
-            $table->setCellContents(1, 3, $first);
-            $table->setCellContents(1, 4, $last);
-            $timeSpentContent = $table->toHtml();
-        } else {
-            $pdfTitle = get_lang('CertificateOfAchievement');
-        }
-
-        $courseTable = '';
-        if (!empty($courses)) {
-            $courseTable .= '<table class="table table-hover table-striped data_table">';
-            $courseTable .= '<thead>';
-            $courseTable .= '<tr>
-                    <th>'.get_lang('FormationUnit').'</th>
-                    <th>'.get_lang('ConnectionTime').'</th>
-                    <th>'.get_lang('Progress').'</th>';
-
-            if ('attendance' === $type) {
-                $courseTable .= '<th>'.get_lang('Score').'</th>';
-            }
-            $courseTable .= '</tr>';
-            $courseTable .= '</thead>';
-            $courseTable .= '<tbody>';
-
-            $totalCourseTime = 0;
-            $totalAttendance = [0, 0];
-            $totalScore = 0;
-            $totalProgress = 0;
-            $gradeBookTotal = [0, 0];
-            $totalEvaluations = '0/0 (0%)';
-            $totalCourses = count($courses);
-            $scoreDisplay = ScoreDisplay::instance();
-
-            foreach ($courses as $course) {
-                $courseId = $course['c_id'];
-                $courseInfoItem = api_get_course_info_by_id($courseId);
-                $courseId = $courseInfoItem['real_id'];
-                $courseCodeItem = $courseInfoItem['code'];
-
-                $isSubscribed = CourseManager::is_user_subscribed_in_course(
-                    $student_id,
-                    $courseCodeItem,
-                    true,
-                    $sId
-                );
-
-                if ($isSubscribed) {
-                    $timeInSeconds = $timeSpentPerCourse[$courseId];
-                    $totalCourseTime += $timeInSeconds;
-                    $time_spent_on_course = api_time_to_hms($timeInSeconds);
-                    $progress = $progressPerCourse[$courseId];
-                    $totalProgress += $progress;
-
-                    $bestScore = Tracking::get_avg_student_score(
-                        $student_id,
-                        $courseCodeItem,
-                        [],
-                        $sId,
-                        false,
-                        false,
-                        true
-                    );
-
-                    if (is_numeric($bestScore)) {
-                        $totalScore += $bestScore;
-                    }
-
-                    $progress = empty($progress) ? '0%' : $progress.'%';
-                    $score = empty($bestScore) ? '0%' : $bestScore.'%';
-
-                    $courseTable .= '<tr>
-                        <td>
-                            <a href="'.$courseInfoItem['course_public_url'].'?id_session='.$sId.'">'.
-                            $courseInfoItem['title'].'</a>
-                        </td>
-                        <td >'.$time_spent_on_course.'</td>
-                        <td >'.$progress.'</td>';
-                    if ('attendance' === $type) {
-                        $courseTable .= '<td >'.$score.'</td>';
-                    }
-                    $courseTable .= '</tr>';
-                }
-            }
-
-            $totalAttendanceFormatted = $scoreDisplay->display_score($totalAttendance);
-            $totalScoreFormatted = $scoreDisplay->display_score([$totalScore / $totalCourses, 100], SCORE_AVERAGE);
-            $totalProgressFormatted = $scoreDisplay->display_score(
-                [$totalProgress / $totalCourses, 100],
-                SCORE_AVERAGE
-            );
-            $totalEvaluations = $scoreDisplay->display_score($gradeBookTotal);
-            $totalTimeFormatted = api_time_to_hms($totalCourseTime);
-            $courseTable .= '
-            <tr>
-                <th>'.get_lang('Total').'</th>
-                <th>'.$totalTimeFormatted.'</th>
-                <th>'.$totalProgressFormatted.'</th>
-            ';
-            if ('attendance' === $type) {
-                $courseTable .= '<th>'.$totalScoreFormatted.'</th>';
-            }
-            $courseTable .= '</tr>';
-            $courseTable .= '</tbody></table>';
-        }
-
-        $tpl = new Template('', false, false, false, true, false, false);
-        $tpl->assign('title', $pdfTitle);
-        $tpl->assign('session_title', $sessionInfo['name']);
-        $tpl->assign('session_info', $sessionInfo);
-        $sessionCategoryTitle = '';
-        if (isset($sessionInfo['session_category_id'])) {
-            $sessionCategory = SessionManager::get_session_category($sessionInfo['session_category_id']);
-            if ($sessionCategory) {
-                $sessionCategoryTitle = $sessionCategory['name'];
-            }
-        }
-        $dateData = SessionManager::parseSessionDates($sessionInfo, false);
-        $dateToString = $dateData['access'];
-        $tpl->assign('session_display_dates', $dateToString);
-        $tpl->assign('session_category_title', $sessionCategoryTitle);
-        $tpl->assign('student', $user_info['complete_name']);
-        $tpl->assign('student_info', $user_info);
-        $tpl->assign('student_info_extra_fields', UserManager::get_extra_user_data($user_info['user_id']));
-        $tpl->assign('table_progress', $timeSpentContent);
-        $tpl->assign(
-            'subtitle',
-            sprintf(
-                get_lang('InSessionXYouHadTheFollowingResults'),
-                $sessionInfo['name']
-            )
-        );
-        $tpl->assign('table_course', $courseTable);
-        $template = 'pdf_export_student.tpl';
-        if ('achievement' === $type) {
-            $template = 'certificate_achievement.tpl';
-        }
-        $content = $tpl->fetch($tpl->get_template('my_space/'.$template));
-
-        $params = [
-            'pdf_title' => get_lang('Resume'),
-            'session_info' => $sessionInfo,
-            'course_info' => '',
-            'pdf_date' => '',
-            'student_info' => $user_info,
-            'show_grade_generated_date' => true,
-            'show_real_course_teachers' => false,
-            'show_teacher_as_myself' => false,
-            'orientation' => 'P',
-        ];
-        @$pdf = new PDF('A4', $params['orientation'], $params);
-
-        try {
-            $pdf->setBackground($tpl->theme);
-            @$pdf->content_to_pdf(
-                $content,
-                '',
-                '',
-                null,
-                'D',
-                false,
-                null,
-                false,
-                true,
-                false
-            );
-        } catch (MpdfException $e) {
-            error_log($e);
-        }
         exit;
         break;
     case 'export_one_session_row':
@@ -597,8 +269,106 @@ switch ($action) {
         break;
 }
 
-$courses_in_session = [];
+if (!empty($details)) {
+    if ($origin === 'user_course') {
+        if (empty($cidReq)) {
+            $interbreadcrumb[] = [
+                'url' => api_get_path(WEB_COURSE_PATH).$courseInfo['directory'],
+                'name' => $courseInfo['title'],
+            ];
+        }
+        $interbreadcrumb[] = [
+            'url' => '../user/user.php?cidReq='.$courseCode,
+            'name' => get_lang('Users'),
+        ];
+    } else {
+        if ('tracking_course' === $origin) {
+            $interbreadcrumb[] = [
+                'url' => '../tracking/courseLog.php?cidReq='.$courseCode.'&id_session='.api_get_session_id(),
+                'name' => get_lang('Tracking'),
+            ];
+        } else {
+            if ('resume_session' === $origin) {
+                $interbreadcrumb[] = [
+                    'url' => '../session/session_list.php',
+                    'name' => get_lang('SessionList'),
+                ];
+                $interbreadcrumb[] = [
+                    'url' => '../session/resume_session.php?id_session='.$sessionId,
+                    'name' => get_lang('SessionOverview'),
+                ];
+            } else {
+                $interbreadcrumb[] = [
+                    'url' => api_is_student_boss() ? '#' : 'index.php',
+                    'name' => get_lang('MySpace'),
+                ];
+                if (!empty($coachId)) {
+                    $interbreadcrumb[] = [
+                        'url' => 'student.php?id_coach='.$coachId,
+                        'name' => get_lang('CoachStudents'),
+                    ];
+                    $interbreadcrumb[] = [
+                        'url' => 'myStudents.php?student='.$student_id.'&id_coach='.$coachId,
+                        'name' => get_lang('StudentDetails'),
+                    ];
+                } else {
+                    $interbreadcrumb[] = [
+                        'url' => 'student.php',
+                        'name' => get_lang('MyStudents'),
+                    ];
+                    $interbreadcrumb[] = [
+                        'url' => 'myStudents.php?student='.$student_id,
+                        'name' => get_lang('StudentDetails'),
+                    ];
+                }
+            }
+        }
+    }
+    $nameTools = get_lang('DetailsStudentInCourse');
+} else {
+    if ($origin === 'resume_session') {
+        $interbreadcrumb[] = [
+            'url' => '../session/session_list.php',
+            'name' => get_lang('SessionList'),
+        ];
+        if (!empty($sessionId)) {
+            $interbreadcrumb[] = [
+                'url' => '../session/resume_session.php?id_session='.$sessionId,
+                'name' => get_lang('SessionOverview'),
+            ];
+        }
+    } elseif ($origin === 'teacher_details') {
+        $this_section = SECTION_TRACKING;
+        $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('MySpace')];
+        $interbreadcrumb[] = ['url' => 'teachers.php', 'name' => get_lang('Teachers')];
+        $nameTools = $user_info['complete_name'];
+    } else {
+        $interbreadcrumb[] = [
+            'url' => api_is_student_boss() ? '#' : 'index.php',
+            'name' => get_lang('MySpace'),
+        ];
+        if (!empty($coachId)) {
+            if ($sessionId) {
+                $interbreadcrumb[] = [
+                    'url' => 'student.php?id_coach='.$coachId.'&id_session='.$sessionId,
+                    'name' => get_lang('CoachStudents'),
+                ];
+            } else {
+                $interbreadcrumb[] = [
+                    'url' => 'student.php?id_coach='.$coachId,
+                    'name' => get_lang('CoachStudents'),
+                ];
+            }
+        } else {
+            $interbreadcrumb[] = [
+                'url' => 'student.php',
+                'name' => get_lang('MyStudents'),
+            ];
+        }
+    }
+}
 
+$courses_in_session = [];
 // See #4676
 $drh_can_access_all_courses = false;
 if (api_is_drh() || api_is_platform_admin() || api_is_student_boss() || api_is_session_admin()) {
@@ -616,7 +386,6 @@ if (api_is_session_admin() || api_is_drh()) {
         $courses = array_column($courses, 'real_id');
     }
     $session_by_session_admin = SessionManager::get_sessions_followed_by_drh(api_get_user_id());
-
     if (!empty($session_by_session_admin)) {
         foreach ($session_by_session_admin as $session_coached_by_user) {
             $courses_followed_by_coach = Tracking::get_courses_list_from_session(
@@ -1483,14 +1252,14 @@ if (empty($details)) {
             if (!empty($sId)) {
                 $sessionAction .= Display::url(
                     Display::return_icon('pdf.png', get_lang('ExportToPDF'), [], ICON_SIZE_MEDIUM),
-                    $currentUrl.'&'
+                    api_get_path(WEB_CODE_PATH).'mySpace/session.php?'
                     .http_build_query(
                         ['action' => 'export_to_pdf', 'type' => 'attendance', 'session_to_export' => $sId]
                     )
                 );
                 $sessionAction .= Display::url(
                     Display::return_icon('pdf.png', get_lang('CertificateOfAchievement'), [], ICON_SIZE_MEDIUM),
-                    $currentUrl.'&'
+                    api_get_path(WEB_CODE_PATH).'mySpace/session.php?'
                     .http_build_query(
                         ['action' => 'export_to_pdf', 'type' => 'achievement', 'session_to_export' => $sId]
                     )

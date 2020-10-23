@@ -2602,10 +2602,14 @@ class Exercise
         $freeze = true;
         if ('true' === api_get_setting('enable_quiz_scenario')) {
             if ($this->getQuestionCount() > 0) {
-                $hasDifferentQuestion = $this->hasQuestionWithTypeNotInList([UNIQUE_ANSWER, HOT_SPOT_DELINEATION]);
-                if (false === $hasDifferentQuestion) {
+                //if (in_array($feedbackType, [EXERCISE_FEEDBACK_TYPE_DIRECT, EXERCISE_FEEDBACK_TYPE_POPUP])) {
+                    $hasDifferentQuestion = $this->hasQuestionWithTypeNotInList([UNIQUE_ANSWER, HOT_SPOT_DELINEATION]);
+                    if (false === $hasDifferentQuestion) {
+                        $freeze = false;
+                    }
+                /*} else {
                     $freeze = false;
-                }
+                }*/
             } else {
                 $freeze = false;
             }
@@ -2625,15 +2629,7 @@ class Exercise
             ]
         );
 
-        if ($freeze) {
-            $direct->freeze();
-            $noFeedBack->freeze();
-        }
-
-        $feedback[] = $noFeedBack;
-        $feedback[] = $direct;
-
-        $feedback[] = $form->createElement(
+        $directPopUp = $form->createElement(
             'radio',
             'exerciseFeedbackType',
             null,
@@ -2642,7 +2638,17 @@ class Exercise
             ['id' => 'exerciseType_'.EXERCISE_FEEDBACK_TYPE_POPUP, 'onclick' => 'check_direct_feedback()']
         );
 
-        $group = $form->addGroup(
+        if ($freeze) {
+            //$noFeedBack->freeze();
+            $direct->freeze();
+            $directPopUp->freeze();
+        }
+
+        $feedback[] = $noFeedBack;
+        $feedback[] = $direct;
+        $feedback[] = $directPopUp;
+
+        $form->addGroup(
             $feedback,
             null,
             [

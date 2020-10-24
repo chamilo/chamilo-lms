@@ -1,7 +1,13 @@
 <?php
 
 /* For licensing terms, see /license.txt */
-
+/**
+ * Inter-URL migration script for multi-URL portals.
+ * This script migrates all content from one (or several) URL(s) to a given
+ * destination URL by updating the access_url_id (or similar) field.
+ * This does *NOT* include settings_current, for which we assume the destination
+ * portal *does* have the right settings.
+ */
 exit;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
@@ -38,6 +44,8 @@ foreach ($urlSource as $sourceId) {
         'access_url_rel_usergroup' => 'usergroup_id',
     ];
 
+    // Move all content to the destination URL except those for which
+    // the contents already exist
     foreach ($tables as $table => $checker) {
         $sql = "UPDATE $table SET access_url_id = $urlDestinationId
                 WHERE access_url_id = $sourceId AND $checker NOT IN (
@@ -46,6 +54,7 @@ foreach ($urlSource as $sourceId) {
         echo $sql.PHP_EOL;
         if (!$test) {
             Database::query($sql);
+            echo "-> ".Database::affected_rows()." rows moved".PHP_EOL;
         }
 
         // Delete doubles
@@ -53,6 +62,7 @@ foreach ($urlSource as $sourceId) {
         echo $sql.PHP_EOL;
         if (!$test) {
             Database::query($sql);
+            echo "-> ".Database::affected_rows()." rows moved".PHP_EOL;
         }
     }
 
@@ -61,6 +71,7 @@ foreach ($urlSource as $sourceId) {
     echo $sql.PHP_EOL;
     if (!$test) {
         Database::query($sql);
+        echo "-> ".Database::affected_rows()." rows moved".PHP_EOL;
     }
 
     $sql = "UPDATE session_category SET access_url_id = $urlDestinationId
@@ -68,6 +79,7 @@ foreach ($urlSource as $sourceId) {
     echo $sql.PHP_EOL;
     if (!$test) {
         Database::query($sql);
+        echo "-> ".Database::affected_rows()." rows moved".PHP_EOL;
     }
 
     $sql = "UPDATE branch_sync SET access_url_id = $urlDestinationId
@@ -75,6 +87,7 @@ foreach ($urlSource as $sourceId) {
     echo $sql.PHP_EOL;
     if (!$test) {
         Database::query($sql);
+        echo "-> ".Database::affected_rows()." rows moved".PHP_EOL;
     }
 
     $sql = "UPDATE skill SET access_url_id = $urlDestinationId
@@ -82,6 +95,7 @@ foreach ($urlSource as $sourceId) {
     echo $sql.PHP_EOL;
     if (!$test) {
         Database::query($sql);
+        echo "-> ".Database::affected_rows()." rows moved".PHP_EOL;
     }
 
     $sql = "UPDATE sys_announcement SET access_url_id = $urlDestinationId
@@ -89,6 +103,7 @@ foreach ($urlSource as $sourceId) {
     echo $sql.PHP_EOL;
     if (!$test) {
         Database::query($sql);
+        echo "-> ".Database::affected_rows()." rows moved".PHP_EOL;
     }
 
     $sql = "UPDATE sys_calendar SET access_url_id = $urlDestinationId
@@ -96,6 +111,7 @@ foreach ($urlSource as $sourceId) {
     echo $sql.PHP_EOL;
     if (!$test) {
         Database::query($sql);
+        echo "-> ".Database::affected_rows()." rows moved".PHP_EOL;
     }
 
     $sql = "UPDATE track_e_online SET access_url_id = $urlDestinationId
@@ -103,6 +119,7 @@ foreach ($urlSource as $sourceId) {
     echo $sql.PHP_EOL;
     if (!$test) {
         Database::query($sql);
+        echo "-> ".Database::affected_rows()." rows moved".PHP_EOL;
     }
 
     $sql = "UPDATE track_e_course_ranking SET url_id = $urlDestinationId
@@ -110,6 +127,7 @@ foreach ($urlSource as $sourceId) {
     echo $sql.PHP_EOL;
     if (!$test) {
         Database::query($sql);
+        echo "-> ".Database::affected_rows()." rows moved".PHP_EOL;
     }
 
     $sql = "UPDATE user_rel_course_vote SET url_id = $urlDestinationId
@@ -117,5 +135,6 @@ foreach ($urlSource as $sourceId) {
     echo $sql.PHP_EOL;
     if (!$test) {
         Database::query($sql);
+        echo "-> ".Database::affected_rows()." rows moved".PHP_EOL;
     }
 }

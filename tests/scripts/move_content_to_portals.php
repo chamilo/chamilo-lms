@@ -12,9 +12,9 @@ exit;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
-$test = true;
-$urlSource = [1];
-$urlDestinationId = 2;
+$test = false;
+$urlSource = [2];
+$urlDestinationId = 3;
 
 $urlDestination = UrlManager::get_url_data_from_id($urlDestinationId);
 if (empty($urlDestination)) {
@@ -45,24 +45,26 @@ foreach ($urlSource as $sourceId) {
     ];
 
     // Move all content to the destination URL except those for which
-    // the contents already exist
+    // the contents already exist (use 3-levels query to avoid derived merge 
+    // optimization issues)
     foreach ($tables as $table => $checker) {
         $sql = "UPDATE $table SET access_url_id = $urlDestinationId
                 WHERE access_url_id = $sourceId AND $checker NOT IN (
-                    SELECT DISTINCT $checker FROM $table WHERE access_url_id = $urlDestinationId
+                    SELECT $checker FROM (
+                        SELECT DISTINCT $checker FROM $table WHERE access_url_id = $urlDestinationId) as c
                 )";
         echo $sql.PHP_EOL;
         if (!$test) {
-            Database::query($sql);
-            echo "-> ".Database::affected_rows()." rows moved".PHP_EOL;
+            $query = Database::query($sql);
+            echo "-> ".Database::affected_rows($query)." rows moved".PHP_EOL;
         }
 
         // Delete doubles
         $sql = "DELETE FROM $table WHERE access_url_id = $sourceId";
         echo $sql.PHP_EOL;
         if (!$test) {
-            Database::query($sql);
-            echo "-> ".Database::affected_rows()." rows moved".PHP_EOL;
+            $query = Database::query($sql);
+            echo "-> ".Database::affected_rows($query)." rows moved".PHP_EOL;
         }
     }
 
@@ -70,71 +72,71 @@ foreach ($urlSource as $sourceId) {
             WHERE access_url = $sourceId";
     echo $sql.PHP_EOL;
     if (!$test) {
-        Database::query($sql);
-        echo "-> ".Database::affected_rows()." rows moved".PHP_EOL;
+        $query = Database::query($sql);
+        echo "-> ".Database::affected_rows($query)." rows moved".PHP_EOL;
     }
 
     $sql = "UPDATE session_category SET access_url_id = $urlDestinationId
             WHERE access_url_id = $sourceId";
     echo $sql.PHP_EOL;
     if (!$test) {
-        Database::query($sql);
-        echo "-> ".Database::affected_rows()." rows moved".PHP_EOL;
+        $query = Database::query($sql);
+        echo "-> ".Database::affected_rows($query)." rows moved".PHP_EOL;
     }
 
     $sql = "UPDATE branch_sync SET access_url_id = $urlDestinationId
             WHERE access_url_id = $sourceId";
     echo $sql.PHP_EOL;
     if (!$test) {
-        Database::query($sql);
-        echo "-> ".Database::affected_rows()." rows moved".PHP_EOL;
+        $query = Database::query($sql);
+        echo "-> ".Database::affected_rows($query)." rows moved".PHP_EOL;
     }
 
     $sql = "UPDATE skill SET access_url_id = $urlDestinationId
             WHERE access_url_id = $sourceId";
     echo $sql.PHP_EOL;
     if (!$test) {
-        Database::query($sql);
-        echo "-> ".Database::affected_rows()." rows moved".PHP_EOL;
+        $query = Database::query($sql);
+        echo "-> ".Database::affected_rows($query)." rows moved".PHP_EOL;
     }
 
     $sql = "UPDATE sys_announcement SET access_url_id = $urlDestinationId
             WHERE access_url_id = $sourceId";
     echo $sql.PHP_EOL;
     if (!$test) {
-        Database::query($sql);
-        echo "-> ".Database::affected_rows()." rows moved".PHP_EOL;
+        $query = Database::query($sql);
+        echo "-> ".Database::affected_rows($query)." rows moved".PHP_EOL;
     }
 
     $sql = "UPDATE sys_calendar SET access_url_id = $urlDestinationId
             WHERE access_url_id = $sourceId";
     echo $sql.PHP_EOL;
     if (!$test) {
-        Database::query($sql);
-        echo "-> ".Database::affected_rows()." rows moved".PHP_EOL;
+        $query = Database::query($sql);
+        echo "-> ".Database::affected_rows($query)." rows moved".PHP_EOL;
     }
 
     $sql = "UPDATE track_e_online SET access_url_id = $urlDestinationId
             WHERE access_url_id = $sourceId";
     echo $sql.PHP_EOL;
     if (!$test) {
-        Database::query($sql);
-        echo "-> ".Database::affected_rows()." rows moved".PHP_EOL;
+        $query = Database::query($sql);
+        echo "-> ".Database::affected_rows($query)." rows moved".PHP_EOL;
     }
 
-    $sql = "UPDATE track_e_course_ranking SET url_id = $urlDestinationId
+    $sql = "UPDATE track_course_ranking SET url_id = $urlDestinationId
             WHERE url_id = $sourceId";
     echo $sql.PHP_EOL;
     if (!$test) {
-        Database::query($sql);
-        echo "-> ".Database::affected_rows()." rows moved".PHP_EOL;
+        $query = Database::query($sql);
+        echo "-> ".Database::affected_rows($query)." rows moved".PHP_EOL;
     }
 
     $sql = "UPDATE user_rel_course_vote SET url_id = $urlDestinationId
             WHERE url_id = $sourceId";
     echo $sql.PHP_EOL;
     if (!$test) {
-        Database::query($sql);
-        echo "-> ".Database::affected_rows()." rows moved".PHP_EOL;
+        $query = Database::query($sql);
+        echo "-> ".Database::affected_rows($query)." rows moved".PHP_EOL;
     }
 }

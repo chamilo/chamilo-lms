@@ -69,4 +69,53 @@ foreach ($urlSource as $sourceId) {
     if (!$test) {
         Database::query($sql);
     }
+
+    $sql = "UPDATE branch_sync SET access_url_id = $urlDestinationId
+            WHERE access_url_id = $sourceId";
+    echo $sql.PHP_EOL;
+    if (!$test) {
+        Database::query($sql);
+    }
+
+    $sql = "UPDATE skill SET access_url_id = $urlDestinationId
+            WHERE access_url_id = $sourceId";
+    echo $sql.PHP_EOL;
+    if (!$test) {
+        Database::query($sql);
+    }
+
+    $sql = "UPDATE sys_announcement SET access_url_id = $urlDestinationId
+            WHERE access_url_id = $sourceId";
+    echo $sql.PHP_EOL;
+    if (!$test) {
+        Database::query($sql);
+    }
+
+    $sql = "UPDATE sys_calendar SET access_url_id = $urlDestinationId
+            WHERE access_url_id = $sourceId";
+    echo $sql.PHP_EOL;
+    if (!$test) {
+        Database::query($sql);
+    }
+
+    $sql = "UPDATE track_e_online SET access_url_id = $urlDestinationId
+            WHERE access_url_id = $sourceId";
+    echo $sql.PHP_EOL;
+    if (!$test) {
+        Database::query($sql);
+    }
+
+    $sql = "UPDATE track_e_course_ranking SET url_id = $urlDestinationId
+            WHERE url_id = $sourceId";
+    echo $sql.PHP_EOL;
+    if (!$test) {
+        Database::query($sql);
+    }
+
+    $sql = "UPDATE user_rel_course_vote SET url_id = $urlDestinationId
+            WHERE url_id = $sourceId";
+    echo $sql.PHP_EOL;
+    if (!$test) {
+        Database::query($sql);
+    }
 }

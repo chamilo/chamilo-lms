@@ -374,6 +374,16 @@ class SurveyManager
 
             $survey_id = Database::insert($table_survey, $params);
             if ($survey_id > 0) {
+                Event::addEvent(
+                    LOG_SURVEY_CREATED,
+                    LOG_SURVEY_ID,
+                    $survey_id,
+                    null,
+                    api_get_user_id(),
+                    api_get_course_int_id(),
+                    api_get_session_id()
+                );
+
                 $sql = "UPDATE $table_survey SET survey_id = $survey_id
                         WHERE iid = $survey_id";
                 Database::query($sql);
@@ -661,6 +671,16 @@ class SurveyManager
             Database::query($sql);
         }
 
+        Event::addEvent(
+            LOG_SURVEY_DELETED,
+            LOG_SURVEY_ID,
+            $survey_id,
+            null,
+            api_get_user_id(),
+            api_get_course_int_id(),
+            api_get_session_id()
+        );
+
         // Deleting groups of this survey
         $sql = "DELETE FROM $table_survey_question_group
                 WHERE c_id = $course_id AND survey_id='".$survey_id."'";
@@ -837,7 +857,6 @@ class SurveyManager
      */
     public static function empty_survey($surveyId, $courseId = 0)
     {
-        // Database table definitions
         $table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
         $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
         $table_survey = Database::get_course_table(TABLE_SURVEY);
@@ -865,6 +884,16 @@ class SurveyManager
         $sql = 'UPDATE '.$table_survey.' SET invited=0, answered=0
 		        WHERE c_id = '.$courseId.' AND survey_id='.$surveyId;
         Database::query($sql);
+
+        Event::addEvent(
+            LOG_SURVEY_CLEAN_RESULTS,
+            LOG_SURVEY_ID,
+            $surveyId,
+            null,
+            api_get_user_id(),
+            api_get_course_int_id(),
+            api_get_session_id()
+        );
 
         return true;
     }

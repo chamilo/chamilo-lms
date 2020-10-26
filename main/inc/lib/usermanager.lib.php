@@ -7050,7 +7050,7 @@ SQL;
     }
 
     /**
-     * @param int $userInfo
+     * @param int $userId
      *
      * @throws Exception
      */

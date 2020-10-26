@@ -11,9 +11,8 @@ class DisplayGradebook
      * Displays the header for the result page containing the navigation tree and links.
      *
      * @param Evaluation $evalobj
-     * @param $selectcat
-     * @param $shownavbar 1=show navigation bar
-     * @param $forpdf only output for pdf file
+     * @param int        $selectcat
+     * @param string     $page
      */
     public static function display_header_result($evalobj, $selectcat, $page)
     {

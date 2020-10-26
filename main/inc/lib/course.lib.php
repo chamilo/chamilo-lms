@@ -356,8 +356,9 @@ class CourseManager
      */
     public static function get_tutor_in_course_status($userId, $courseId)
     {
-        $userId = intval($userId);
-        $courseId = intval($courseId);
+        $userId = (int) $userId;
+        $courseId = (int) $courseId;
+
         $result = Database::fetch_array(
             Database::query(
                 "SELECT is_tutor
@@ -368,7 +369,11 @@ class CourseManager
             )
         );
 
-        return $result['is_tutor'];
+        if ($result) {
+            return $result['is_tutor'];
+        }
+
+        return false;
     }
 
     /**
@@ -2291,12 +2296,13 @@ class CourseManager
     /**
      * This function returns information about coachs from a course in session.
      *
-     * @param int $session_id
-     * @param int $courseId
+     * @param int  $session_id
+     * @param int  $courseId
+     * @param bool $loadAvatars
      *
      * @return array containing user_id, lastname, firstname, username
      */
-    public static function get_coachs_from_course($session_id = 0, $courseId = 0)
+    public static function get_coachs_from_course($session_id = 0, $courseId = 0, $loadAvatars = false)
     {
         if (!empty($session_id)) {
             $session_id = intval($session_id);
@@ -2329,9 +2335,17 @@ class CourseManager
 
         $coaches = [];
         if (Database::num_rows($rs) > 0) {
+            $url = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_popup&course_id='.$courseId;
+
             while ($row = Database::fetch_array($rs)) {
                 $completeName = api_get_person_name($row['firstname'], $row['lastname']);
-                $coaches[] = $row + ['full_name' => $completeName];
+                $row['full_name'] = $completeName;
+                $row['avatar'] = $loadAvatars
+                    ? UserManager::getUserPicture($row['user_id'], USER_IMAGE_SIZE_SMALL)
+                    : '';
+                $row['url'] = "$url&user_id={$row['user_id']}";
+
+                $coaches[] = $row;
             }
         }
 
@@ -2650,6 +2664,18 @@ class CourseManager
 
             if (api_get_configuration_value('allow_skill_rel_items')) {
                 $sql = "DELETE FROM skill_rel_course WHERE c_id = $courseId";
+                Database::query($sql);
+            }
+
+            if (api_get_configuration_value('allow_lp_subscription_to_usergroups')) {
+                $tableGroup = Database::get_course_table(TABLE_LP_REL_USERGROUP);
+                $sql = "DELETE FROM $tableGroup
+                        WHERE c_id = $courseId ";
+                Database::query($sql);
+
+                $tableGroup = Database::get_course_table(TABLE_LP_CATEGORY_REL_USERGROUP);
+                $sql = "DELETE FROM $tableGroup
+                        WHERE c_id = $courseId ";
                 Database::query($sql);
             }
 
@@ -4407,7 +4433,8 @@ class CourseManager
                 if ($userInCourseStatus === COURSEMANAGER || $sessionCourseAvailable) {
                     $session_url = $course_info['course_public_url'].'?id_session='.$course_info['id_session'];
                     $session_title = '<a title="'.$course_info['name'].'" href="'.$session_url.'">'.
-                        $course_info['name'].'</a>'.$notifications;
+                        $course_info['name'].'</a>'.PHP_EOL
+                        .'<div class="notifications">'.$notifications.'</div>';
                 } else {
                     $session_title = $course_info['name'];
                 }
@@ -4513,7 +4540,8 @@ class CourseManager
             );
             $course_coachs = self::get_coachs_from_course(
                 $course_info['id_session'],
-                $course_info['real_id']
+                $course_info['real_id'],
+                true
             );
             $params['teachers'] = $teacher_list;
 

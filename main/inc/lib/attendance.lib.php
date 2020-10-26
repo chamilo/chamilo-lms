@@ -37,8 +37,6 @@ class Attendance
     /**
      * Get the total number of attendance inside current course and current session.
      *
-     * @param int $active
-     *
      * @return int
      *
      * @see SortableTable#get_total_number_of_items()

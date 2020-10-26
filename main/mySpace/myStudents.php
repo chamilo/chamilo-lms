@@ -38,7 +38,6 @@ if (empty($student_id)) {
     api_not_allowed(true);
 }
 
-// user info
 $user_info = api_get_user_info($student_id);
 
 if (empty($user_info)) {
@@ -51,49 +50,44 @@ $allowToQualify = api_is_allowed_to_edit(null, true) ||
     api_is_drh() ||
     api_is_student_boss();
 
-$allowedToTrackUser = true;
-if (!api_is_session_admin() &&
-    !api_is_drh() &&
-    !api_is_student_boss() &&
-    !api_is_platform_admin()
-) {
+$allowedToTrackUser =
+    api_is_platform_admin(true, true) ||
+    api_is_allowed_to_edit(null, true) ||
+    api_is_session_admin() ||
+    api_is_drh() ||
+    api_is_student_boss() ||
+    api_is_course_admin()
+;
+
+if (false === $allowedToTrackUser && !empty($courseInfo)) {
     if (empty($sessionId)) {
-        $isTeacher = false;
-        // Check if is current teacher if set
-        if (!empty($courseInfo)) {
-            $isTeacher = CourseManager::is_course_teacher(
+        $isTeacher = CourseManager::is_course_teacher(
+            api_get_user_id(),
+            $courseInfo['code']
+        );
+
+        if ($isTeacher) {
+            $allowedToTrackUser = true;
+        } else {
+            // Check if the user is tutor of the course
+            $userCourseStatus = CourseManager::get_tutor_in_course_status(
                 api_get_user_id(),
-                $courseInfo['code']
+                $courseInfo['real_id']
             );
-        }
-
-        if (!api_is_course_admin() && $isTeacher == false) {
-            if (!empty($courseInfo)) {
-                // Check if the user is tutor of the course
-                $userCourseStatus = CourseManager::get_tutor_in_course_status(
-                    api_get_user_id(),
-                    $courseInfo['real_id']
-                );
-
-                if ($userCourseStatus != 1) {
-                    $allowedToTrackUser = false;
-                }
+            if ($userCourseStatus == 1) {
+                $allowedToTrackUser = true;
             }
         }
     } else {
         $coach = api_is_coach($sessionId, $courseInfo['real_id']);
 
-        if (!$coach) {
-            $allowedToTrackUser = false;
+        if ($coach) {
+            $allowedToTrackUser = true;
         }
     }
 }
 
 if (!$allowedToTrackUser) {
-    api_not_allowed(true);
-}
-
-if (api_is_student()) {
     api_not_allowed(true);
 }
 
@@ -241,6 +235,8 @@ switch ($action) {
         break;
     case 'export_to_pdf':
         $sessionToExport = $sId = isset($_GET['session_to_export']) ? (int) $_GET['session_to_export'] : 0;
+        $type = isset($_GET['type']) ? $_GET['type'] : 'attendance';
+
         $sessionInfo = api_get_session_info($sessionToExport);
         if (empty($sessionInfo)) {
             api_not_allowed(true);
@@ -276,39 +272,46 @@ switch ($action) {
 
         $first = Tracking::get_first_connection_date($student_id);
         $last = Tracking::get_last_connection_date($student_id);
-
-        $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
-        $column = 0;
-        $row = 0;
-        $headers = [
-            get_lang('TimeSpent'),
-            get_lang('NumberOfVisits'),
-            get_lang('GlobalProgress'),
-            get_lang('FirstLogin'),
-            get_lang('LastConnexionDate'),
-        ];
-
-        foreach ($headers as $header) {
-            $table->setHeaderContents($row, $column, $header);
-            $column++;
+        $timeSpentContent = '';
+        $pdfTitle = get_lang('AttestationOfAttendance');
+        if ('attendance' === $type) {
+            $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
+            $column = 0;
+            $row = 0;
+            $headers = [
+                get_lang('TimeSpent'),
+                get_lang('NumberOfVisits'),
+                get_lang('GlobalProgress'),
+                get_lang('FirstLogin'),
+                get_lang('LastConnexionDate'),
+            ];
+            foreach ($headers as $header) {
+                $table->setHeaderContents($row, $column, $header);
+                $column++;
+            }
+            $table->setCellContents(1, 0, api_time_to_hms($timeSpent));
+            $table->setCellContents(1, 1, $numberVisits);
+            $table->setCellContents(1, 2, $average);
+            $table->setCellContents(1, 3, $first);
+            $table->setCellContents(1, 4, $last);
+            $timeSpentContent = $table->toHtml();
+        } else {
+            $pdfTitle = get_lang('CertificateOfAchievement');
         }
-        $table->setCellContents(1, 0, api_time_to_hms($timeSpent));
-        $table->setCellContents(1, 1, $numberVisits);
-        $table->setCellContents(1, 2, $average);
-        $table->setCellContents(1, 3, $first);
-        $table->setCellContents(1, 4, $last);
 
         $courseTable = '';
-
         if (!empty($courses)) {
             $courseTable .= '<table class="table table-hover table-striped data_table">';
             $courseTable .= '<thead>';
             $courseTable .= '<tr>
                     <th>'.get_lang('FormationUnit').'</th>
                     <th>'.get_lang('ConnectionTime').'</th>
-                    <th>'.get_lang('Progress').'</th>
-                    <th>'.get_lang('Score').'</th>
-                </tr>';
+                    <th>'.get_lang('Progress').'</th>';
+
+            if ('attendance' === $type) {
+                $courseTable .= '<th>'.get_lang('Score').'</th>';
+            }
+            $courseTable .= '</tr>';
             $courseTable .= '</thead>';
             $courseTable .= '<tbody>';
 
@@ -364,8 +367,10 @@ switch ($action) {
                             $courseInfoItem['title'].'</a>
                         </td>
                         <td >'.$time_spent_on_course.'</td>
-                        <td >'.$progress.'</td>
-                        <td >'.$score.'</td>';
+                        <td >'.$progress.'</td>';
+                    if ('attendance' === $type) {
+                        $courseTable .= '<td >'.$score.'</td>';
+                    }
                     $courseTable .= '</tr>';
                 }
             }
@@ -383,16 +388,33 @@ switch ($action) {
                 <th>'.get_lang('Total').'</th>
                 <th>'.$totalTimeFormatted.'</th>
                 <th>'.$totalProgressFormatted.'</th>
-                <th>'.$totalScoreFormatted.'</th>
-            </tr>';
+            ';
+            if ('attendance' === $type) {
+                $courseTable .= '<th>'.$totalScoreFormatted.'</th>';
+            }
+            $courseTable .= '</tr>';
             $courseTable .= '</tbody></table>';
         }
 
         $tpl = new Template('', false, false, false, true, false, false);
-        $tpl->assign('title', get_lang('AttestationOfAttendance'));
+        $tpl->assign('title', $pdfTitle);
         $tpl->assign('session_title', $sessionInfo['name']);
+        $tpl->assign('session_info', $sessionInfo);
+        $sessionCategoryTitle = '';
+        if (isset($sessionInfo['session_category_id'])) {
+            $sessionCategory = SessionManager::get_session_category($sessionInfo['session_category_id']);
+            if ($sessionCategory) {
+                $sessionCategoryTitle = $sessionCategory['name'];
+            }
+        }
+        $dateData = SessionManager::parseSessionDates($sessionInfo, false);
+        $dateToString = $dateData['access'];
+        $tpl->assign('session_display_dates', $dateToString);
+        $tpl->assign('session_category_title', $sessionCategoryTitle);
         $tpl->assign('student', $user_info['complete_name']);
-        $tpl->assign('table_progress', $table->toHtml());
+        $tpl->assign('student_info', $user_info);
+        $tpl->assign('student_info_extra_fields', UserManager::get_extra_user_data($user_info['user_id']));
+        $tpl->assign('table_progress', $timeSpentContent);
         $tpl->assign(
             'subtitle',
             sprintf(
@@ -401,7 +423,11 @@ switch ($action) {
             )
         );
         $tpl->assign('table_course', $courseTable);
-        $content = $tpl->fetch($tpl->get_template('my_space/pdf_export_student.tpl'));
+        $template = 'pdf_export_student.tpl';
+        if ('achievement' === $type) {
+            $template = 'certificate_achievement.tpl';
+        }
+        $content = $tpl->fetch($tpl->get_template('my_space/'.$template));
 
         $params = [
             'pdf_title' => get_lang('Resume'),
@@ -414,7 +440,7 @@ switch ($action) {
             'show_teacher_as_myself' => false,
             'orientation' => 'P',
         ];
-        $pdf = new PDF('A4', $params['orientation'], $params);
+        @$pdf = new PDF('A4', $params['orientation'], $params);
 
         try {
             $pdf->setBackground($tpl->theme);
@@ -738,6 +764,7 @@ if (Skill::isAllowed($student_id, false)) {
         api_get_path(WEB_CODE_PATH).'badge/assign.php?'.http_build_query(['user' => $student_id])
     );
 }
+
 // All Attendance
 if (Skill::isAllowed($student_id, false)) {
     echo Display::url(
@@ -751,11 +778,7 @@ if (Skill::isAllowed($student_id, false)) {
     );
 }
 
-$permissions = StudentFollowUpPlugin::getPermissions(
-    $student_id,
-    api_get_user_id()
-);
-
+$permissions = StudentFollowUpPlugin::getPermissions($student_id, api_get_user_id());
 $isAllow = $permissions['is_allow'];
 if ($isAllow) {
     echo Display::url(
@@ -871,9 +894,7 @@ $csv_content[] = [
 
 $coachs_name = '';
 $session_name = '';
-
 $userPicture = UserManager::getUserPicture($user_info['user_id'], USER_IMAGE_SIZE_BIG);
-
 $userGroupManager = new UserGroup();
 $userGroups = $userGroupManager->getNameListByUser(
     $user_info['user_id'],
@@ -982,9 +1003,8 @@ if (api_get_setting('allow_terms_conditions') === 'true') {
     ];
 }
 
-if (isset($_GET['action']) and $_GET['action'] == 'all_attendance') {
-    /*Display all attendances */
-    // Varible for all attendance list
+if (isset($_GET['action']) && $_GET['action'] === 'all_attendance') {
+    // Variable for all attendance list
     $startDate = new DateTime();
     $startDate = $startDate->modify('-1 week');
     if (isset($_GET['startDate'])) {
@@ -1012,22 +1032,35 @@ if (isset($_GET['action']) and $_GET['action'] == 'all_attendance') {
     /** Start date and end date*/
     $defaults['startDate'] = $startDateText;
     $defaults['endDate'] = $endDateText;
-    $form = new FormValidator('all_attendance_list', 'GET',
+    $form = new FormValidator(
+        'all_attendance_list',
+        'GET',
         'myStudents.php?action=all_attendance&student='.$student_id.'&startDate='.$defaults['startDate'].'&endDate='.$defaults['endDate'].'&&'.api_get_cidreq(),
-        '');
+        ''
+    );
     $form->addElement('html', '<input type="hidden" name="student" value="'.$student_id.'" >');
     $form->addElement('html', '<input type="hidden" name="action" value="all_attendance" >');
 
-    $form->addDateTimePicker('startDate', [
-        get_lang('ExeStartTime'),
-    ], [
-        'form_name' => 'attendance_calendar_edit',
-    ], 5);
-    $form->addDateTimePicker('endDate', [
-        get_lang('ExeEndTime'),
-    ], [
-        'form_name' => 'attendance_calendar_edit',
-    ], 5);
+    $form->addDateTimePicker(
+        'startDate',
+        [
+            get_lang('ExeStartTime'),
+        ],
+        [
+            'form_name' => 'attendance_calendar_edit',
+        ],
+        5
+    );
+    $form->addDateTimePicker(
+        'endDate',
+        [
+            get_lang('ExeEndTime'),
+        ],
+        [
+            'form_name' => 'attendance_calendar_edit',
+        ],
+        5
+    );
 
     $form->addButtonSave(get_lang('Submit'));
     $form->setDefaults($defaults);
@@ -1051,12 +1084,8 @@ if (isset($_GET['action']) and $_GET['action'] == 'all_attendance') {
             </tr>
         </thead>
     <tbody>';
-    // <th>'.get_lang('Professor').'</th>
     foreach ($data as $attendanceData => $attendanceSheet) {
-        /*
-         * $attendanceData  can be in_category or not_category for courses
-         * */
-
+        // $attendanceData  can be in_category or not_category for courses
         $totalAttendance = count($attendanceSheet);
         for ($i = 0; $i < $totalAttendance; $i++) {
             $attendanceWork = $attendanceSheet[$i];
@@ -1068,26 +1097,22 @@ if (isset($_GET['action']) and $_GET['action'] == 'all_attendance') {
                 // get session name
                 $printSession = "(".$attendanceWork['sessionName'].")";
             }
-            // $teacher = isset($attendanceWork['teacher'])?$attendanceWork['teacher']:'';
             echo '
-        <tr>
-            <td>'.$date.'</td>
-            <td>'
-                .'<a title="'.get_lang('GoAttendance').'" href="'.api_get_path(WEB_CODE_PATH)
-                .'attendance/index.php?cidReq='.$attendanceWork['courseCode'].'&id_session='.$sId.'&student_id='
-                .$student_id.'">'
-                .$attendanceWork['courseTitle']." $printSession ".'</a>
-            </td>
+            <tr>
+                <td>'.$date.'</td>
+                <td>'
+                    .'<a title="'.get_lang('GoAttendance').'" href="'.api_get_path(WEB_CODE_PATH)
+                    .'attendance/index.php?cidReq='.$attendanceWork['courseCode'].'&id_session='.$sId.'&student_id='
+                    .$student_id.'">'
+                    .$attendanceWork['courseTitle']." $printSession ".'</a>
+                </td>
 
-            <td>'.$attendanceWork['presence'].'</td>
-        </tr>';
-            //<td>'.$teacher.'</td>
+                <td>'.$attendanceWork['presence'].'</td>
+            </tr>';
         }
     }
     echo '</tbody>
     </table></div>';
-    /** Display dates */
-    /*Display all attendances */
     Display::display_footer();
     exit();
 }
@@ -1118,7 +1143,11 @@ if (!empty($courseInfo)) {
         'chat_connection' => $chat_last_connection,
         'documents' => $documents,
         'upload_documents' => $uploaded_documents,
-        'course_first_access' => Tracking::get_first_connection_date_on_the_course($student_id, $courseInfo['real_id'], $sessionId),
+        'course_first_access' => Tracking::get_first_connection_date_on_the_course(
+            $student_id,
+            $courseInfo['real_id'],
+            $sessionId
+        ),
         'course_last_access' => Tracking::get_last_connection_date_on_the_course($student_id, $courseInfo, $sessionId),
         'count_access_dates' => Tracking::getNumberOfCourseAccessDates($student_id, $courseInfo['real_id'], $sessionId),
     ];
@@ -1372,14 +1401,16 @@ if (empty($details)) {
                     $exportCourseList[$sId][] = $csvRow;
 
                     echo '<tr>
-                    <td><a href="'.$courseInfoItem['course_public_url'].'?id_session='.$sId.'">'.
-                        $courseInfoItem['title'].'</a></td>
+                    <td>
+                        <a href="'.$courseInfoItem['course_public_url'].'?id_session='.$sId.'">'.
+                            $courseInfoItem['title'].'
+                        </a>
+                    </td>
                     <td>'.$time_spent_on_course.'</td>
                     <td>'.$progress.'</td>
                     <td>'.$score.'</td>
                     <td>'.$attendances_faults_avg.'</td>
                     <td>'.$scoretotal_display.'</td>';
-
                     if (!empty($coachId)) {
                         echo '<td width="10"><a href="'.api_get_self().'?student='.$user_info['user_id']
                             .'&details=true&course='.$courseInfoItem['code'].'&id_coach='.$coachId.'&origin='.$origin
@@ -1429,13 +1460,13 @@ if (empty($details)) {
             $sessionAction = Display::url(
                 Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), [], ICON_SIZE_MEDIUM),
                 $currentUrl.'&'
-                    .http_build_query(
-                        [
-                            'action' => 'export_one_session_row',
-                            'export' => 'csv',
-                            'session_to_export' => $sId,
-                        ]
-                    )
+                .http_build_query(
+                    [
+                        'action' => 'export_one_session_row',
+                        'export' => 'csv',
+                        'session_to_export' => $sId,
+                    ]
+                )
             );
             $sessionAction .= Display::url(
                 Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), [], ICON_SIZE_MEDIUM),
@@ -1453,7 +1484,16 @@ if (empty($details)) {
                 $sessionAction .= Display::url(
                     Display::return_icon('pdf.png', get_lang('ExportToPDF'), [], ICON_SIZE_MEDIUM),
                     $currentUrl.'&'
-                        .http_build_query(['action' => 'export_to_pdf', 'session_to_export' => $sId])
+                    .http_build_query(
+                        ['action' => 'export_to_pdf', 'type' => 'attendance', 'session_to_export' => $sId]
+                    )
+                );
+                $sessionAction .= Display::url(
+                    Display::return_icon('pdf.png', get_lang('CertificateOfAchievement'), [], ICON_SIZE_MEDIUM),
+                    $currentUrl.'&'
+                    .http_build_query(
+                        ['action' => 'export_to_pdf', 'type' => 'achievement', 'session_to_export' => $sId]
+                    )
                 );
             }
             echo $sessionAction;
@@ -1522,7 +1562,6 @@ if (empty($details)) {
         }
 
         $hookLpTracking = HookMyStudentsLpTracking::create();
-
         if ($hookLpTracking) {
             $hookHeaders = $hookLpTracking->notifyTrackingHeader();
 
@@ -1773,7 +1812,6 @@ if (empty($details)) {
                     }
                     echo '</td>';
                 }
-
                 echo '</tr>';
             }
             echo '</tbody></table></div>';
@@ -1795,7 +1833,6 @@ if (empty($details)) {
         echo '<th>'.get_lang('AllAttempts').'</th>';
 
         $hookQuizTracking = HookMyStudentsQuizTracking::create();
-
         if ($hookQuizTracking) {
             $hookHeaders = array_map(
                 function ($hookHeader) {
@@ -1844,7 +1881,6 @@ if (empty($details)) {
                     active IN (0, 1)
                     $sessionCondition
                 ORDER BY quiz.title ASC ";
-
         $result_exercices = Database::query($sql);
         $i = 0;
         if (Database::num_rows($result_exercices) > 0) {
@@ -1984,7 +2020,6 @@ if (empty($details)) {
                         $csv_content[$csvContentIndex][] = strip_tags($hookContent['value']);
                     }
                 }
-
                 $i++;
             }
         } else {
@@ -2004,14 +2039,14 @@ if (empty($details)) {
                     $courseInfo['real_id']
                 );
                 $survey_done = Display::return_icon(
-                    "accept_na.png",
+                    'accept_na.png',
                     get_lang('NoAnswer'),
                     [],
                     ICON_SIZE_SMALL
                 );
                 if (in_array($student_id, $user_list)) {
                     $survey_done = Display::return_icon(
-                        "accept.png",
+                        'accept.png',
                         get_lang('Answered'),
                         [],
                         ICON_SIZE_SMALL
@@ -2069,7 +2104,6 @@ if (empty($details)) {
         $showOnce = true;
         foreach ($work->user_results as $key => $results) {
             $resultId = $results['id'];
-
             echo '<tr>';
             echo '<td>'.$work->title.'</td>';
             $documentNumber = $key + 1;
@@ -2080,7 +2114,6 @@ if (empty($details)) {
             echo '<td class="text-center">'.$qualification.'</td>';
             echo '<td class="text-center">'.api_convert_and_format_date($results['sent_date_from_db']).' '.$results['expiry_note'].'</td>';
             $assignment = get_work_assignment_by_id($work->id, $courseInfo['real_id']);
-
             echo '<td class="text-center">';
             if (!empty($assignment['expires_on'])) {
                 echo api_convert_and_format_date($assignment['expires_on']);
@@ -2124,11 +2157,9 @@ if (empty($details)) {
     ';
 
     $csv_content[] = [];
-
     $csv_content[] = [
         get_lang('OtherTools'),
     ];
-
     $csv_content[] = [
         get_lang('Student_publication'),
         $nb_assignments,

@@ -40,13 +40,10 @@ if (!api_is_student_boss()) {
     }
 }
 
-$interbreadcrumb[] = ["url" => 'index.php', 'name' => get_lang('PlatformAdmin')];
-$interbreadcrumb[] = ["url" => 'user_list.php', 'name' => get_lang('UserList')];
-
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => 'user_list.php', 'name' => get_lang('UserList')];
 $userId = $user['user_id'];
-
 $currentUrl = api_get_self().'?user_id='.$userId;
-
 $tool_name = UserManager::formatUserFullName($userEntity);
 $table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $table_course = Database::get_main_table(TABLE_MAIN_COURSE);

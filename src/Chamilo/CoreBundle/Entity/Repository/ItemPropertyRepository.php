@@ -206,6 +206,7 @@ class ItemPropertyRepository extends EntityRepository
      * @param Session $session
      * @param int     $itemId
      * @param array   $newUserList
+     * @param bool    $deleteUsers
      */
     public function subscribeUsersToItem(
         $currentUser,
@@ -213,7 +214,8 @@ class ItemPropertyRepository extends EntityRepository
         Course $course,
         Session $session = null,
         $itemId,
-        $newUserList = []
+        $newUserList = [],
+        $deleteUsers = true
     ) {
         $em = $this->getEntityManager();
         $user = $em->getRepository('ChamiloUserBundle:User');
@@ -236,20 +238,21 @@ class ItemPropertyRepository extends EntityRepository
             }
         }
 
-        $usersToDelete = $alreadyAddedUsers;
+        if ($deleteUsers) {
+            $usersToDelete = $alreadyAddedUsers;
+            if (!empty($newUserList)) {
+                $usersToDelete = array_diff($alreadyAddedUsers, $newUserList);
+            }
 
-        if (!empty($newUserList)) {
-            $usersToDelete = array_diff($alreadyAddedUsers, $newUserList);
-        }
-
-        if ($usersToDelete) {
-            $this->unsubcribeUsersToItem(
-                $tool,
-                $course,
-                $session,
-                $itemId,
-                $usersToDelete
-            );
+            if ($usersToDelete) {
+                $this->unsubcribeUsersToItem(
+                    $tool,
+                    $course,
+                    $session,
+                    $itemId,
+                    $usersToDelete
+                );
+            }
         }
 
         foreach ($newUserList as $userId) {

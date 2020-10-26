@@ -2438,13 +2438,27 @@ class Exercise
             $extraField->addElements(
                 $form,
                 $this->iId,
-                [], //exclude
+                ['notifications'], //exclude
                 false, // filter
                 false, // tag as select
                 [], //show only fields
                 [], // order fields
                 [] // extra data
             );
+
+            $settings = api_get_configuration_value('exercise_finished_notification_settings');
+            if (!empty($settings)) {
+                $options = [];
+                foreach ($settings as $name => $data) {
+                    $options[$name] = $name;
+                }
+                $form->addSelect(
+                    'extra_notifications',
+                    get_lang('Notifications'),
+                    $options,
+                    ['placeholder' => get_lang('SelectAnOption')]
+                );
+            }
             $form->addElement('html', '</div>'); //End advanced setting
             $form->addElement('html', '</div>');
         }
@@ -6183,13 +6197,15 @@ class Exercise
      * @param array $user_data         result of api_get_user_info()
      * @param array $trackExerciseInfo result of get_stat_track_exercise_info
      * @param bool  $saveUserResult
+     * @param bool  $allowSignature
      *
      * @return string
      */
     public function showExerciseResultHeader(
         $user_data,
         $trackExerciseInfo,
-        $saveUserResult
+        $saveUserResult,
+        $allowSignature = false
     ) {
         if (api_get_configuration_value('hide_user_info_in_quiz_result')) {
             return '';
@@ -6289,6 +6305,7 @@ class Exercise
 
         $tpl = new Template(null, false, false, false, false, false, false);
         $tpl->assign('data', $data);
+        $tpl->assign('allow_signature', $allowSignature);
         $layoutTemplate = $tpl->get_template('exercise/partials/result_exercise.tpl');
 
         return $tpl->fetch($layoutTemplate);

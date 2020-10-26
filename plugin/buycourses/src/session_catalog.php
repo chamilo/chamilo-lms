@@ -21,7 +21,7 @@ if (!$includeSessions) {
 $nameFilter = null;
 $minFilter = 0;
 $maxFilter = 0;
-
+$sessionCategory = 0;
 $form = new FormValidator(
     'search_filter_form',
     'get',
@@ -36,10 +36,46 @@ if ($form->validate()) {
     $nameFilter = isset($formValues['name']) ? $formValues['name'] : null;
     $minFilter = isset($formValues['min']) ? $formValues['min'] : 0;
     $maxFilter = isset($formValues['max']) ? $formValues['max'] : 0;
+    $sessionCategory = isset($formValues['session_category']) ? $formValues['session_category'] : 0;
 }
 
 $form->addHeader($plugin->get_lang('SearchFilter'));
 $form->addText('name', get_lang('SessionName'), false);
+
+$categoriesList = SessionManager::get_all_session_category();
+$categoriesOptions = [
+    '0' => get_lang('None'),
+];
+
+if ($categoriesList != false) {
+    foreach ($categoriesList as $categoryItem) {
+        $categoriesOptions[$categoryItem['id']] = $categoryItem['name'];
+    }
+}
+$form->addSelect(
+    'session_category',
+    get_lang('SessionCategory'),
+    $categoriesOptions,
+    [
+        'id' => 'session_category',
+    ]
+);
+$htmlHeadXtra[] = "
+<script>
+    function AdjustInputs(){
+        var w = $('#search_filter_form_name').width();
+        $('#session_category').parent().children('button').width(w).parent().children('div.dropdown-menu').width(w);
+    }
+$(function() {
+    $(window).load(function() {
+        AdjustInputs();
+    });
+     $(window).resize(function() {
+        AdjustInputs();
+    });
+});
+</script>
+";
 $form->addElement(
     'number',
     'min',
@@ -58,8 +94,8 @@ $form->addButtonFilter(get_lang('Search'));
 $pageSize = BuyCoursesPlugin::PAGINATION_PAGE_SIZE;
 $currentPage = isset($_GET['page']) ? (int) $_GET['page'] : 1;
 $first = $pageSize * ($currentPage - 1);
-$sessionList = $plugin->getCatalogSessionList($first, $pageSize, $nameFilter, $minFilter, $maxFilter);
-$totalItems = $plugin->getCatalogSessionList($first, $pageSize, $nameFilter, $minFilter, $maxFilter, 'count');
+$sessionList = $plugin->getCatalogSessionList($first, $pageSize, $nameFilter, $minFilter, $maxFilter, 'all', $sessionCategory);
+$totalItems = $plugin->getCatalogSessionList($first, $pageSize, $nameFilter, $minFilter, $maxFilter, 'count', $sessionCategory);
 $pagesCount = ceil($totalItems / $pageSize);
 $url = api_get_self().'?';
 $pagination = Display::getPagination($url, $currentPage, $pagesCount, $totalItems);

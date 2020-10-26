@@ -8704,4 +8704,6 @@ $CourseUsedInOtherURL = "Este curso es usado en otro portal";
 $SubscribeUserGroupsToLp = "Inscripción de clases a lección";
 $ReplaceFile = "Reemplazar archivo";
 $SubscribeClassesToLpCategory = "Suscribir clases a la categoría de lecciones";
+$ExportResponseReport = "Exportar reporte de respuestas";
+$ResponseReport = "Reporte de respuestas";
 ?>

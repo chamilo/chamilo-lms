@@ -8676,4 +8676,6 @@ $CourseUsedInOtherURL = "This course is used in at least one other portal";
 $SubscribeUserGroupsToLp = "Add classes to a learning path";
 $ReplaceFile = "Replace file";
 $SubscribeClassesToLpCategory = "Subscribe classes to category";
+$ExportResponseReport = "Export response report";
+$ResponseReport = "Response report";
 ?>

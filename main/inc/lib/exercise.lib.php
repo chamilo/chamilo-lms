@@ -4434,13 +4434,16 @@ EOT;
      * @param bool     $save_user_result save users results (true) or just show the results (false)
      * @param string   $remainingMessage
      * @param bool     $allowSignature
+     * @param bool     $allowExportPdf
+     *
      */
     public static function displayQuestionListByAttempt(
         $objExercise,
         $exeId,
         $save_user_result = false,
         $remainingMessage = '',
-        $allowSignature = false
+        $allowSignature = false,
+        $allowExportPdf = false
     ) {
         $origin = api_get_origin();
         $courseId = api_get_course_int_id();
@@ -4587,6 +4590,11 @@ EOT;
             }
         }
 
+        if ($allowExportPdf) {
+            $showTotalScore = false;
+            $showQuestionScore = false;
+        }
+
         if ('embeddable' !== $origin &&
             !empty($exercise_stat_info['exe_user_id']) &&
             !empty($studentInfo)
@@ -4596,7 +4604,8 @@ EOT;
                 $studentInfo,
                 $exercise_stat_info,
                 $save_user_result,
-                $allowSignature
+                $allowSignature,
+                $allowExportPdf
             );
         }
 

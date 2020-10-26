@@ -212,7 +212,9 @@ $stats = ExerciseLib::displayQuestionListByAttempt(
     $objExercise,
     $exe_id,
     $saveResults,
-    $remainingMessage
+    $remainingMessage,
+    false,
+    api_get_configuration_value('quiz_results_answers_report')
 );
 $pageContent .= ob_get_contents();
 ob_end_clean();
@@ -428,7 +430,6 @@ if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
     if (api_is_allowed_to_session_edit()) {
         Exercise::cleanSessionVariables();
     }
-
     Session::write('attempt_remaining', $remainingMessage);
     $showFooter = false;
 } else {
@@ -446,7 +447,6 @@ if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
     // Record the results in the learning path, using the SCORM interface (API)
     $pageBottom .= "<script>window.parent.API.void_save_asset('$total_score', '$max_score', 0, 'completed');</script>";
     $pageBottom .= '<script type="text/javascript">'.$href.'</script>';
-
     $showFooter = false;
 }
 

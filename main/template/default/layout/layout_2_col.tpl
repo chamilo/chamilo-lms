@@ -9,17 +9,19 @@
         <div class="col-md-9 col-md-push-3">
             <div class="page-content">
                 {% if plugin_content_top %}
-                    <div class="page-content-top">
-                        {{ plugin_content_top }}
-                    </div>
+                <div class="page-content-top">
+                    {{ plugin_content_top }}
+                </div>
                 {% endif %}
 
                 {{ sniff_notification }}
 
+                {{ flashMessagesOnTop }}
+
                 {% if home_welcome %}
-                    <article id="home-welcome">
-                        {{ home_welcome }}
-                    </article>
+                <article id="home-welcome">
+                    {{ home_welcome }}
+                </article>
                 {% endif %}
 
                 {% if home_include %}

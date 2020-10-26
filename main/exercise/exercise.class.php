@@ -90,6 +90,8 @@ class Exercise
     public $exerciseCategoryId;
     public $pageResultConfiguration;
     public $preventBackwards;
+    public $currentQuestion;
+    public $currentBlockedCategories;
 
     /**
      * Constructor of the class.
@@ -6204,6 +6206,7 @@ class Exercise
      * @param array $trackExerciseInfo result of get_stat_track_exercise_info
      * @param bool  $saveUserResult
      * @param bool  $allowSignature
+     * @param bool  $allowExportPdf
      *
      * @return string
      */
@@ -6211,14 +6214,14 @@ class Exercise
         $user_data,
         $trackExerciseInfo,
         $saveUserResult,
-        $allowSignature = false
+        $allowSignature = false,
+        $allowExportPdf = false
     ) {
         if (api_get_configuration_value('hide_user_info_in_quiz_result')) {
             return '';
         }
 
         $start_date = null;
-
         if (isset($trackExerciseInfo['start_date'])) {
             $start_date = api_convert_and_format_date($trackExerciseInfo['start_date']);
         }
@@ -6275,6 +6278,7 @@ class Exercise
 
         $data['number_of_answers'] = $questionsCount;
         $data['number_of_answers_saved'] = $savedAnswersCount;
+        $exeId = $trackExerciseInfo['exe_id'];
 
         if (false !== api_get_configuration_value('quiz_confirm_saved_answers')) {
             $em = Database::getManager();
@@ -6312,6 +6316,9 @@ class Exercise
         $tpl = new Template(null, false, false, false, false, false, false);
         $tpl->assign('data', $data);
         $tpl->assign('allow_signature', $allowSignature);
+        $tpl->assign('allow_export_pdf', $allowExportPdf);
+        $tpl->assign('export_url', api_get_path(WEB_CODE_PATH).'exercise/result.php?action=export&id='.$exeId.'&'.api_get_cidreq());
+
         $layoutTemplate = $tpl->get_template('exercise/partials/result_exercise.tpl');
 
         return $tpl->fetch($layoutTemplate);
@@ -6805,11 +6812,11 @@ class Exercise
         if ($this->isRandom()) {
             // USE question categories
             // get questions by category for this exercise
-            // we have to choice $objExercise->random question in each array values of $tabCategoryQuestions
-            // key of $tabCategoryQuestions are the categopy id (0 for not in a category)
+            // we have to choice $objExercise->random question in each array values of $categoryQuestions
+            // key of $categoryQuestions are the categopy id (0 for not in a category)
             // value is the array of question id of this category
             $questionList = [];
-            $tabCategoryQuestions = TestCategory::getQuestionsByCat($this->id);
+            $categoryQuestions = TestCategory::getQuestionsByCat($this->id);
             $isRandomByCategory = $this->getRandomByCategory();
             // We sort categories based on the term between [] in the head
             // of the category's description
@@ -6825,9 +6832,9 @@ class Exercise
             */
             // If test option is Grouped By Categories
             if ($isRandomByCategory == 2) {
-                $tabCategoryQuestions = TestCategory::sortTabByBracketLabel($tabCategoryQuestions);
+                $categoryQuestions = TestCategory::sortTabByBracketLabel($categoryQuestions);
             }
-            foreach ($tabCategoryQuestions as $tabquestion) {
+            foreach ($categoryQuestions as $question) {
                 $number_of_random_question = $this->random;
                 if ($this->random == -1) {
                     $number_of_random_question = count($this->questionList);
@@ -6835,7 +6842,7 @@ class Exercise
                 $questionList = array_merge(
                     $questionList,
                     TestCategory::getNElementsFromArray(
-                        $tabquestion,
+                        $question,
                         $number_of_random_question
                     )
                 );
@@ -9895,6 +9902,7 @@ class Exercise
         Session::erase('objQuestion');
         Session::erase('objAnswer');
         Session::erase('questionList');
+        Session::erase('categoryList');
         Session::erase('exerciseResult');
         Session::erase('firstTime');
 

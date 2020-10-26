@@ -58,7 +58,7 @@
                             <div class="list-data">
                                 <span class="item"></span>
                                 <a href="{{ export_url }}" class="btn btn-default">
-                                    <img src="{{ 'pdf.png'|icon(22) }}" /> {{ 'ExportResponseReport'| get_lang }}
+                                    <img src="{{ 'export_pdf.png'|icon(32) }}" /> {{ 'ExportResponseReport'| get_lang }}
                                 </a>
                             </div>
                         {% endif %}

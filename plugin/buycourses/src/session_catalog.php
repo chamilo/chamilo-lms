@@ -31,6 +31,8 @@ $form = new FormValidator(
     FormValidator::LAYOUT_INLINE
 );
 
+$form->removeAttribute('class');
+
 if ($form->validate()) {
     $formValues = $form->getSubmitValues();
     $nameFilter = isset($formValues['name']) ? $formValues['name'] : null;
@@ -60,22 +62,6 @@ $form->addSelect(
         'id' => 'session_category',
     ]
 );
-$htmlHeadXtra[] = "
-<script>
-    function AdjustInputs(){
-        var w = $('#search_filter_form_name').width();
-        $('#session_category').parent().children('button').width(w).parent().children('div.dropdown-menu').width(w);
-    }
-$(function() {
-    $(window).load(function() {
-        AdjustInputs();
-    });
-     $(window).resize(function() {
-        AdjustInputs();
-    });
-});
-</script>
-";
 $form->addElement(
     'number',
     'min',

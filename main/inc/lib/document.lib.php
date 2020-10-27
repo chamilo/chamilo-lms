@@ -5692,58 +5692,17 @@ class DocumentManager
             );
             $form->addElement('html', "<div class='replaceIndividualFile upload_element_".$randomUploadName." hidden'>");
             $form->addElement('hidden', 'id_'.$randomUploadName, $randomUploadName);
-
             $form->addElement('hidden', 'currentFile', $randomUploadName);
             $form->addElement('hidden', 'currentUrl', api_get_self().'?'.api_get_cidreq().'&id='.$document_id);
-
             $form->addElement('hidden', 'id_'.$randomUploadName, $document_id);
             $label = '';
             $form->addElement('file', 'file_'.$randomUploadName, [get_lang('File'), $label], 'style="width: 250px" id="user_upload"');
-
-
-// Button upload document
             $form->addButtonSend(get_lang('SendDocument'), 'submitDocument');
             $form->addProgress('DocumentUpload', 'file');
             $form->addElement('html', '</div>');
 
             $html = $form->returnForm();
-            /*
 
-            $html = "
-            <div class='replaceIndividualFile upload_element_".$randomUploadName." hidden'>
-                <div class='form-group ' id='file_file'>
-                    <label class='col-sm-2 control-label' for='file_".$randomUploadName."'>
-                        ".get_lang('File')."
-                    </label>
-                    <div class='col-sm-8'>
-                        <input class='' name='file_".$randomUploadName."' style='width: 250px' type='file'>
-                    </div>
-                    <div class='col-sm-2'></div>
-                </div>
-                <div class='form-group '>
-                    <label class='col-sm-2 control-label' for='upload_".$randomUploadName."_submitDocument'>
-
-                    </label>
-                    <div class='col-sm-8'>
-
-                        <button class=' btn btn-primary ' id='upload_".$randomUploadName."_submitDocument'
-                        name='submitDocument'
-                                type='submit'>
-                                <em class='fa fa-paper-plane'></em> ".get_lang('ReplaceFile')."
-                        </button>
-                    </div>
-                    <div class='col-sm-2'></div>
-                </div>
-                <input class='currentFile' name='currentFile' type='hidden' >
-
-                <input id='upload_".$randomUploadName."__qf__upload_".$randomUploadName."' name='_qf__upload_".$randomUploadName."'
-                       type='hidden'
-                       value=''>
-                <input id='upload_".$randomUploadName."_id' name='id_$randomUploadName' type='hidden' value='$id'>
-                <input id='upload_".$randomUploadName."_MAX_FILE_SIZE' name='MAX_FILE_SIZE' type='hidden' value='".ini_get('upload_max_filesize')."'>
-            </div>
-            ";
- */
             $modify_icons[] = $html;
         }
 

@@ -2284,11 +2284,10 @@ echo '<script>
                });
                data = $(this).data("id");
                $(".upload_element_"+data).removeClass("hidden");
-               /*
-               $.each($(".currentFile"),function(a,b){
+               $.each($("[name=\'currentFile\']"),function(a,b){
                    $(b).val(data);
                });
-               */
+
             });
             $("form[name=form_teacher_table]").prop("enctype","multipart/form-data")
         });

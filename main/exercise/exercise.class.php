@@ -92,6 +92,7 @@ class Exercise
     public $preventBackwards;
     public $currentQuestion;
     public $currentBlockedCategories;
+    public $hideComment;
 
     /**
      * Constructor of the class.
@@ -133,6 +134,7 @@ class Exercise
         $this->exerciseCategoryId = null;
         $this->pageResultConfiguration;
         $this->preventBackwards = 0;
+        $this->hideComment = false;
 
         if (!empty($courseId)) {
             $courseInfo = api_get_course_info_by_id($courseId);

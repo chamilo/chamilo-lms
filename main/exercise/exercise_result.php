@@ -214,7 +214,8 @@ $stats = ExerciseLib::displayQuestionListByAttempt(
     $saveResults,
     $remainingMessage,
     false,
-    api_get_configuration_value('quiz_results_answers_report')
+    api_get_configuration_value('quiz_results_answers_report'),
+    false
 );
 $pageContent .= ob_get_contents();
 ob_end_clean();

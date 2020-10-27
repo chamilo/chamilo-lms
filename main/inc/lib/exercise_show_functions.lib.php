@@ -1,6 +1,7 @@
 <?php
 
 /* See license terms in /license.txt */
+
 /**
  * EVENTS LIBRARY.
  *
@@ -422,22 +423,24 @@ class ExerciseShowFunctions
             $showComment = true;
         }
 
-        if ($showComment) {
-            echo '<td width="20%">';
-            $color = 'black';
-            if ($answerCorrect) {
-                $color = 'green';
+        if (false === $exercise->hideComment) {
+            if ($showComment) {
+                echo '<td width="20%">';
+                $color = 'black';
+                if ($answerCorrect) {
+                    $color = 'green';
+                }
+                if ($hide_expected_answer) {
+                    $color = '';
+                }
+                $comment = '<span style="font-weight: bold; color: '.$color.';">'.
+                    Security::remove_XSS($answerComment).
+                    '</span>';
+                echo $comment;
+                echo '</td>';
+            } else {
+                echo '<td>&nbsp;</td>';
             }
-            if ($hide_expected_answer) {
-                $color = '';
-            }
-            $comment = '<span style="font-weight: bold; color: '.$color.';">'.
-                Security::remove_XSS($answerComment).
-                '</span>';
-            echo $comment;
-            echo '</td>';
-        } else {
-            echo '<td>&nbsp;</td>';
         }
 
         echo '</tr>';
@@ -535,27 +538,29 @@ class ExerciseShowFunctions
             $content .= '</td>';
         }
 
-        if (EXERCISE_FEEDBACK_TYPE_EXAM != $feedbackType) {
-            $content .= '<td width="20%">';
-            $color = 'black';
-            if (isset($new_options[$studentChoice]) || in_array(
-                    $exercise->results_disabled,
-                    [
-                        RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
-                        RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING,
-                    ]
-                )
-            ) {
-                if ($studentChoice == $answerCorrect) {
-                    $color = 'green';
-                }
+        if (false === $exercise->hideComment) {
+            if (EXERCISE_FEEDBACK_TYPE_EXAM != $feedbackType) {
+                $content .= '<td width="20%">';
+                $color = 'black';
+                if (isset($new_options[$studentChoice]) || in_array(
+                        $exercise->results_disabled,
+                        [
+                            RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
+                            RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING,
+                        ]
+                    )
+                ) {
+                    if ($studentChoice == $answerCorrect) {
+                        $color = 'green';
+                    }
 
-                if ($hide_expected_answer) {
-                    $color = '';
+                    if ($hide_expected_answer) {
+                        $color = '';
+                    }
+                    $content .= '<span style="font-weight: bold; color: '.$color.';">'.nl2br($answerComment).'</span>';
                 }
-                $content .= '<span style="font-weight: bold; color: '.$color.';">'.nl2br($answerComment).'</span>';
+                $content .= '</td>';
             }
-            $content .= '</td>';
         }
         $content .= '</tr>';
 
@@ -649,15 +654,18 @@ class ExerciseShowFunctions
                 '</div>
             </td>';
 
-        if (EXERCISE_FEEDBACK_TYPE_EXAM != $feedbackType) {
-            echo '<td width="20%">';
-            if (isset($newOptions[$studentChoice])) {
-                echo '<span style="font-weight: bold; color: black;">'.nl2br($answerComment).'</span>';
+        if (false === $exercise->hideComment) {
+            if (EXERCISE_FEEDBACK_TYPE_EXAM != $feedbackType) {
+                echo '<td width="20%">';
+                if (isset($newOptions[$studentChoice])) {
+                    echo '<span style="font-weight: bold; color: black;">'.nl2br($answerComment).'</span>';
+                }
+                echo '</td>';
+            } else {
+                echo '<td>&nbsp;</td>';
             }
-            echo '</td>';
-        } else {
-            echo '<td>&nbsp;</td>';
         }
+
         echo '</tr>';
     }
 
@@ -754,26 +762,31 @@ class ExerciseShowFunctions
             echo '</td>';
         }
 
-        if (EXERCISE_FEEDBACK_TYPE_EXAM != $feedbackType) {
-            echo '<td width="20%">';
-            //@todo replace this harcoded value
-            if ($studentChoice || in_array($resultsDisabled, [
-                RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
-                RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING,
-            ])
-            ) {
-                $color = 'black';
-                if ($studentChoice == $answerCorrect) {
-                    $color = 'green';
+        if (false === $exercise->hideComment) {
+            if (EXERCISE_FEEDBACK_TYPE_EXAM != $feedbackType) {
+                echo '<td width="20%">';
+                //@todo replace this harcoded value
+                if ($studentChoice || in_array(
+                        $resultsDisabled,
+                        [
+                            RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
+                            RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING,
+                        ]
+                    )
+                ) {
+                    $color = 'black';
+                    if ($studentChoice == $answerCorrect) {
+                        $color = 'green';
+                    }
+                    if ($hide_expected_answer) {
+                        $color = '';
+                    }
+                    echo '<span style="font-weight: bold; color: '.$color.';">'.nl2br($answerComment).'</span>';
                 }
-                if ($hide_expected_answer) {
-                    $color = '';
-                }
-                echo '<span style="font-weight: bold; color: '.$color.';">'.nl2br($answerComment).'</span>';
+                echo '</td>';
+            } else {
+                echo '<td>&nbsp;</td>';
             }
-            echo '</td>';
-        } else {
-            echo '<td>&nbsp;</td>';
         }
         echo '</tr>';
     }

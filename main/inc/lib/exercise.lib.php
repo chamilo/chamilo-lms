@@ -4443,7 +4443,8 @@ EOT;
         $save_user_result = false,
         $remainingMessage = '',
         $allowSignature = false,
-        $allowExportPdf = false
+        $allowExportPdf = false,
+        $isExport = false
     ) {
         $origin = api_get_origin();
         $courseId = api_get_course_int_id();
@@ -4590,9 +4591,12 @@ EOT;
             }
         }
 
-        if ($allowExportPdf) {
+        // When exporting to PDF hide feedback/comment and score.
+        if ($allowExportPdf && $isExport) {
             $showTotalScore = false;
             $showQuestionScore = false;
+            $objExercise->feedback_type = 2;
+            $objExercise->hideComment = true;
         }
 
         if ('embeddable' !== $origin &&

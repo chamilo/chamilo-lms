@@ -115,7 +115,8 @@ $stats = ExerciseLib::displayQuestionListByAttempt(
     false,
     $message,
     $allowSignature,
-    $allowExportPdf
+    $allowExportPdf,
+    'export' === $action
 );
 $pageContent = ob_get_contents();
 ob_end_clean();

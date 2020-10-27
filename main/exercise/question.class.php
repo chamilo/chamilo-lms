@@ -2483,6 +2483,10 @@ abstract class Question
      */
     public function showFeedback($exercise)
     {
+        if (false === $exercise->hideComment) {
+            return false;
+        }
+
         return
             in_array($this->type, $this->questionTypeWithFeedback) &&
             $exercise->getFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM;

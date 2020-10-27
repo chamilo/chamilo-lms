@@ -1808,7 +1808,7 @@ if ($isAllowedToEdit ||
         );
     } else {
         $actionsLeft .= Display::url(
-            Display::return_icon('upload_file.png', get_lang('FileToUpload'), '', ICON_SIZE_MEDIUM),
+            Display::return_icon('upload_file.png', get_lang('UplUploadDocument'), '', ICON_SIZE_MEDIUM),
             api_get_path(WEB_CODE_PATH).'document/upload.php?'.api_get_cidreq().'&id='.$current_folder_id
         );
     }

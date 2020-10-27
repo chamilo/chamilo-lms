@@ -4599,6 +4599,9 @@ EOT;
             $objExercise->feedback_type = 2;
             $objExercise->hideComment = true;
             $objExercise->hideNoAnswer = true;
+            $objExercise->results_disabled = 0;
+            $objExercise->hideExpectedAnswer = true;
+            $show_results = true;
         }
 
         if ('embeddable' !== $origin &&

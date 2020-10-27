@@ -94,7 +94,7 @@ class Exercise
     public $currentBlockedCategories;
     public $hideComment;
     public $hideNoAnswer;
-
+    public $hideExpectedAnswer;
 
     /**
      * Constructor of the class.
@@ -138,6 +138,7 @@ class Exercise
         $this->preventBackwards = 0;
         $this->hideComment = false;
         $this->hideNoAnswer = false;
+        $this->hideExpectedAnswer = false;
 
         if (!empty($courseId)) {
             $courseInfo = api_get_course_info_by_id($courseId);
@@ -8253,6 +8254,10 @@ class Exercise
      */
     public function showExpectedChoiceColumn()
     {
+        if ($this->hideExpectedAnswer) {
+            return false;
+        }
+
         if (!in_array($this->results_disabled, [
             RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
         ])

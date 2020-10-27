@@ -2208,6 +2208,12 @@ abstract class Question
             $header .= $message.'<br />';
         }
 
+        if ($exercise->hideComment && $this->type == HOT_SPOT) {
+            $header .= Display::return_message(get_lang('ResultsOnlyAvailableOnline'));
+
+            return $header;
+        }
+
         if (isset($score['pass']) && $score['pass'] === false) {
             if ($this->showFeedback($exercise)) {
                 $header .= $this->returnFormatFeedback();

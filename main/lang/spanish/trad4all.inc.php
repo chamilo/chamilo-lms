@@ -8706,4 +8706,5 @@ $ReplaceFile = "Reemplazar archivo";
 $SubscribeClassesToLpCategory = "Suscribir clases a la categoría de lecciones";
 $ExportResponseReport = "Exportar reporte de respuestas";
 $ResponseReport = "Reporte de respuestas";
+$ResultsOnlyAvailableOnline = "Resultado únicamente disponible online";
 ?>

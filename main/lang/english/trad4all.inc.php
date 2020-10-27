@@ -8678,4 +8678,5 @@ $ReplaceFile = "Replace file";
 $SubscribeClassesToLpCategory = "Subscribe classes to category";
 $ExportResponseReport = "Export response report";
 $ResponseReport = "Response report";
+$ResultsOnlyAvailableOnline = "Results only available online";
 ?>

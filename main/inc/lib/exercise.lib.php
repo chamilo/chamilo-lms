@@ -4435,6 +4435,7 @@ EOT;
      * @param string   $remainingMessage
      * @param bool     $allowSignature
      * @param bool     $allowExportPdf
+     * @param bool     $isExport
      *
      */
     public static function displayQuestionListByAttempt(
@@ -4591,7 +4592,7 @@ EOT;
             }
         }
 
-        // When exporting to PDF hide feedback/comment and score.
+        // When exporting to PDF hide feedback/comment/score show warning in hotspot.
         if ($allowExportPdf && $isExport) {
             $showTotalScore = false;
             $showQuestionScore = false;

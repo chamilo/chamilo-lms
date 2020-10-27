@@ -5683,6 +5683,32 @@ class DocumentManager
                     'class' => 'removeHiddenFile',
                 ]
             );
+            $form = new FormValidator(
+                'upload',
+                'POST',
+                api_get_self().'?'.api_get_cidreq(),
+                '',
+                ['enctype' => 'multipart/form-data']
+            );
+            $form->addElement('html', "<div class='replaceIndividualFile upload_element_".$randomUploadName." hidden'>");
+            $form->addElement('hidden', 'id_'.$randomUploadName, $randomUploadName);
+
+            $form->addElement('hidden', 'currentFile', $randomUploadName);
+            $form->addElement('hidden', 'currentUrl', api_get_self().'?'.api_get_cidreq().'&id='.$document_id);
+
+            $form->addElement('hidden', 'id_'.$randomUploadName, $document_id);
+            $label = '';
+            $form->addElement('file', 'file_'.$randomUploadName, [get_lang('File'), $label], 'style="width: 250px" id="user_upload"');
+
+
+// Button upload document
+            $form->addButtonSend(get_lang('SendDocument'), 'submitDocument');
+            $form->addProgress('DocumentUpload', 'file');
+            $form->addElement('html', '</div>');
+
+            $html = $form->returnForm();
+            /*
+
             $html = "
             <div class='replaceIndividualFile upload_element_".$randomUploadName." hidden'>
                 <div class='form-group ' id='file_file'>
@@ -5717,6 +5743,7 @@ class DocumentManager
                 <input id='upload_".$randomUploadName."_MAX_FILE_SIZE' name='MAX_FILE_SIZE' type='hidden' value='".ini_get('upload_max_filesize')."'>
             </div>
             ";
+ */
             $modify_icons[] = $html;
         }
 
@@ -6732,15 +6759,18 @@ class DocumentManager
         $course_id = $_course['real_id'];
 
         if (empty($course_id)) {
+            Display::addFlash(Display::return_message(get_lang('NoCourse'), 'error'));
             return false;
         }
 
         if (empty($base_work_dir)) {
+            Display::addFlash(get_lang('Path'));
             return false;
         }
 
         if (isset($file) && $file['error'] == 4) {
             //no file
+            Display::addFlash(Display::return_message(get_lang('NoArchive'), 'error'));
             return false;
         }
 
@@ -6761,12 +6791,18 @@ class DocumentManager
                 $sessionId
             );
             if (empty($docInfo)) {
+                Display::addFlash(Display::return_message(get_lang('ArchiveName'), 'error'));
                 return false;
             }
             $path = $docInfo['path'];
         }
 
         if (empty($path) || empty($docInfo) || empty($documentId)) {
+            $str = '';
+            $str .= "<br>".get_lang('Path');
+            $str .= "<br>".get_lang('ArchiveName');
+            $str .= "<br>".get_lang('NoFileSpecified');
+            Display::addFlash(Display::return_message($str, 'error'));
             return false;
         }
 
@@ -6779,11 +6815,13 @@ class DocumentManager
         );
 
         if (empty($itemInfo)) {
+            Display::addFlash(Display::return_message(get_lang('NoFileSpecified'), 'error'));
             return false;
         }
 
         // Filtering by group.
         if ($itemInfo['to_group_id'] != $groupId) {
+            Display::addFlash(Display::return_message(get_lang("NoGroupsAvailable"), 'error'));
             return false;
         }
         $now = new DateTime();
@@ -6798,7 +6836,7 @@ class DocumentManager
         $originalMime = self::file_get_mime_type($base_work_dir.$path);
         $newMime = finfo_file(finfo_open(FILEINFO_MIME_TYPE), $file['tmp_name']);
         if ($originalMime != $newMime) {
-            Display::addFlash(Display::return_message(get_lang('FileError'), 'warning'));
+            Display::addFlash(Display::return_message(get_lang('FileError'), 'error'));
 
             return false;
         }
@@ -6810,6 +6848,7 @@ class DocumentManager
                     $file_renamed_from_disk = true;
                 } else {
                     // Couldn't rename - file permissions problem?
+                    Display::addFlash(Display::return_message(get_lang('ErrorImportingFile'), 'error'));
                     error_log(
                         __FILE__.' '.__LINE__.': Error renaming '.$base_work_dir.$path.' to '
                         .$base_work_dir.$new_path.'. This is probably due to file permissions',
@@ -6837,6 +6876,7 @@ class DocumentManager
         ) {
             return true;
         } else {
+            Display::addFlash(Display::return_message(get_lang('ErrorImportingFile'), 'warning'));
             //Something went wrong
             //The file or directory isn't there anymore (on the filesystem)
             // This means it has been removed externally. To prevent a

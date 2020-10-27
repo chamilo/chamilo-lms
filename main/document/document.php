@@ -280,7 +280,7 @@ switch ($action) {
                                 )
                             );
                         } else {
-                            Display::addFlash(Display::return_message(get_lang('Impossible'), 'warning'));
+                            Display::addFlash(Display::return_message(get_lang('Impossible'), 'error'));
                         }
                     }
                 } else {
@@ -2284,9 +2284,11 @@ echo '<script>
                });
                data = $(this).data("id");
                $(".upload_element_"+data).removeClass("hidden");
+               /*
                $.each($(".currentFile"),function(a,b){
                    $(b).val(data);
                });
+               */
             });
             $("form[name=form_teacher_table]").prop("enctype","multipart/form-data")
         });

@@ -27,8 +27,8 @@ class GradebookDataGenerator
 
     public $items;
     public $preLoadDataKey;
-    private $evals_links;
     public $exportToPdf;
+    private $evals_links;
 
     /**
      * @param array $cats
@@ -711,6 +711,7 @@ class GradebookDataGenerator
                                     true
                                 );
                             }
+
                             return [
                                 'display' => $display,
                                 'score' => $score,

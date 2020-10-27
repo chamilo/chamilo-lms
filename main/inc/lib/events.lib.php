@@ -1080,9 +1080,9 @@ class Event
             $row = Database::fetch_array($result);
 
             return $row['question_id'];
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**

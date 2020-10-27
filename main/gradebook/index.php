@@ -1037,7 +1037,7 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
                     ];
                     $feedback = '';
                     if ($showFeedBack) {
-                        $feedback =  '<br />'.get_lang('Feedback').'<br />
+                        $feedback = '<br />'.get_lang('Feedback').'<br />
                                       <textarea rows="5" cols="100" >&nbsp;</textarea>';
                     }
                     $pdf = new PDF('A4', $params['orientation'], $params);

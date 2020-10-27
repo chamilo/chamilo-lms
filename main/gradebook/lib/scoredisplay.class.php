@@ -265,7 +265,7 @@ class ScoreDisplay
      * @param bool   $ignoreDecimals
      * @param string $decimalSeparator
      * @param string $thousandSeparator
-     * @param bool $removeEmptyDecimals Converts 100.00 to 100, 53.00 to 53
+     * @param bool   $removeEmptyDecimals Converts 100.00 to 100, 53.00 to 53
      *
      * @return float the score formatted
      */
@@ -315,13 +315,13 @@ class ScoreDisplay
     /**
      * Display a score according to the current settings.
      *
-     * @param array $score          data structure, as returned by the calc_score functions
-     * @param int   $type           one of the following constants:
-     *                              SCORE_DIV, SCORE_PERCENT, SCORE_DIV_PERCENT, SCORE_AVERAGE
-     *                              (ignored for student's view if custom score display is enabled)
-     * @param int   $what           one of the following constants:
-     *                              SCORE_BOTH, SCORE_ONLY_DEFAULT, SCORE_ONLY_CUSTOM (default: SCORE_BOTH)
-     *                              (only taken into account if custom score display is enabled and for course/platform admin)
+     * @param array $score               data structure, as returned by the calc_score functions
+     * @param int   $type                one of the following constants:
+     *                                   SCORE_DIV, SCORE_PERCENT, SCORE_DIV_PERCENT, SCORE_AVERAGE
+     *                                   (ignored for student's view if custom score display is enabled)
+     * @param int   $what                one of the following constants:
+     *                                   SCORE_BOTH, SCORE_ONLY_DEFAULT, SCORE_ONLY_CUSTOM (default: SCORE_BOTH)
+     *                                   (only taken into account if custom score display is enabled and for course/platform admin)
      * @param bool  $disableColor
      * @param bool  $ignoreDecimals
      * @param bool  $removeEmptyDecimals Replaces 100.00 to 100
@@ -352,6 +352,7 @@ class ScoreDisplay
                 if (!isset($my_score[0])) {
                     $my_score[0] = 0;
                 }
+
                 return $this->format_score($my_score[0], $ignoreDecimals);
                 break;
         }

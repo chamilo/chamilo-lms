@@ -4436,7 +4436,6 @@ EOT;
      * @param bool     $allowSignature
      * @param bool     $allowExportPdf
      * @param bool     $isExport
-     *
      */
     public static function displayQuestionListByAttempt(
         $objExercise,

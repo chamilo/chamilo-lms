@@ -130,7 +130,7 @@ switch ($action) {
             $title = get_lang('ResponseReport');
             $exerciseTitle = $objExercise->get_formated_title();
             $studentInfo = api_get_user_info($student_id);
-            $userHeader =  $objExercise->showExerciseResultHeader(
+            $userHeader = $objExercise->showExerciseResultHeader(
                 $studentInfo,
                 $track_exercise_info,
                 false,

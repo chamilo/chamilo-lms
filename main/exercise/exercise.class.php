@@ -5016,6 +5016,7 @@ class Exercise
                             // force to show whether the choice is correct or not
                             $showTotalScoreAndUserChoicesInLastAttempt = true;
                             ExerciseShowFunctions::display_hotspot_answer(
+                                $this,
                                 $feedback_type,
                                 ++$correctAnswerId,
                                 $answer,
@@ -5403,6 +5404,7 @@ class Exercise
                             }
 
                             ExerciseShowFunctions::display_hotspot_answer(
+                                $this,
                                 $feedback_type,
                                 ++$correctAnswerId,
                                 $answer,

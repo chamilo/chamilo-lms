@@ -6719,17 +6719,20 @@ class DocumentManager
 
         if (empty($course_id)) {
             Display::addFlash(Display::return_message(get_lang('NoCourse'), 'error'));
+
             return false;
         }
 
         if (empty($base_work_dir)) {
             Display::addFlash(get_lang('Path'));
+
             return false;
         }
 
         if (isset($file) && $file['error'] == 4) {
             //no file
             Display::addFlash(Display::return_message(get_lang('NoArchive'), 'error'));
+
             return false;
         }
 
@@ -6751,6 +6754,7 @@ class DocumentManager
             );
             if (empty($docInfo)) {
                 Display::addFlash(Display::return_message(get_lang('ArchiveName'), 'error'));
+
                 return false;
             }
             $path = $docInfo['path'];
@@ -6762,6 +6766,7 @@ class DocumentManager
             $str .= "<br>".get_lang('ArchiveName');
             $str .= "<br>".get_lang('NoFileSpecified');
             Display::addFlash(Display::return_message($str, 'error'));
+
             return false;
         }
 
@@ -6775,12 +6780,14 @@ class DocumentManager
 
         if (empty($itemInfo)) {
             Display::addFlash(Display::return_message(get_lang('NoFileSpecified'), 'error'));
+
             return false;
         }
 
         // Filtering by group.
         if ($itemInfo['to_group_id'] != $groupId) {
             Display::addFlash(Display::return_message(get_lang("NoGroupsAvailable"), 'error'));
+
             return false;
         }
         $now = new DateTime();

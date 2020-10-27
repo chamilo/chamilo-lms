@@ -2413,39 +2413,46 @@ class SurveyManager
             return false;
         }
 
-        $obj = new UserGroup();
-        $options['where'] = [' usergroup.course_id = ? ' => $courseId];
-        $classList = $obj->getUserGroupInCourse($options);
-
-        $classToParse = [];
-        foreach ($classList as $class) {
-            $users = $obj->get_users_by_usergroup($class['id']);
-            if (empty($users)) {
-                continue;
-            }
-            $classToParse[] = [
-                'name' => $class['name'],
-                'users' => $users,
-            ];
-        }
-
-        self::parseMultiplicateUserList($classToParse, $questions, $courseId, $surveyData);
-
         $extraFieldValue = new ExtraFieldValue('survey');
         $groupData = $extraFieldValue->get_values_by_handler_and_field_variable($surveyId, 'group_id');
+        $groupId = null;
         if ($groupData && !empty($groupData['value'])) {
-            $groupInfo = GroupManager::get_group_properties($groupData['value']);
+            $groupId = (int) $groupData['value'];
+        }
+
+        if (null === $groupId) {
+            $obj = new UserGroup();
+            $options['where'] = [' usergroup.course_id = ? ' => $courseId];
+            $classList = $obj->getUserGroupInCourse($options);
+            $classToParse = [];
+            foreach ($classList as $class) {
+                $users = $obj->get_users_by_usergroup($class['id']);
+                if (empty($users)) {
+                    continue;
+                }
+                $classToParse[] = [
+                    'name' => $class['name'],
+                    'users' => $users,
+                ];
+            }
+            self::parseMultiplicateUserList($classToParse, $questions, $courseId, $surveyData);
+        } else {
+            $groupInfo = GroupManager::get_group_properties($groupId);
             if (!empty($groupInfo)) {
                 $users = GroupManager::getStudents($groupInfo['iid'], true);
                 if (!empty($users)) {
                     $users = array_column($users, 'id');
-                    $classToParse = [
+                    self::parseMultiplicateUserList(
                         [
-                            'name' => $groupInfo['name'],
-                            'users' => $users,
+                            [
+                                'name' => $groupInfo['name'],
+                                'users' => $users,
+                            ],
                         ],
-                    ];
-                    self::parseMultiplicateUserList($classToParse, $questions, $courseId, $surveyData);
+                        $questions,
+                        $courseId,
+                        $surveyData
+                    );
                 }
             }
         }

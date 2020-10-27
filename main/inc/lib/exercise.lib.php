@@ -4598,6 +4598,7 @@ EOT;
             $showQuestionScore = false;
             $objExercise->feedback_type = 2;
             $objExercise->hideComment = true;
+            $objExercise->hideNoAnswer = true;
         }
 
         if ('embeddable' !== $origin &&

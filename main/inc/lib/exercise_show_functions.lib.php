@@ -330,6 +330,9 @@ class ExerciseShowFunctions
         $showTotalScoreAndUserChoices,
         $export = false
     ) {
+        if (true === $exercise->hideNoAnswer && empty($studentChoice)) {
+            return '';
+        }
         if ($export) {
             $answer = strip_tags_blacklist($answer, ['title', 'head']);
             // Fix answers that contains this tags

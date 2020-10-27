@@ -30,8 +30,9 @@ $substitutionTerms = [
 
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
 $formToString = '';
-
-if (api_get_setting('allow_terms_conditions') === 'true') {
+$w = api_get_setting('allow_terms_conditions');
+$w = 'true';
+if ($w === 'true') {
     $form = new FormValidator('delete_term', 'post', api_get_self().'?action=delete_legal&user_id='.$userId);
     $form->addHtml(Display::return_message(get_lang('WhyYouWantToDeleteYourLegalAgreement'), 'normal', false));
     $form->addTextarea('explanation', [get_lang('DeleteLegal'), get_lang('ExplanationDeleteLegal')], [], true);
@@ -361,7 +362,9 @@ $personalDataContent .= '</ul>';
 
 // Check terms acceptation
 $permissionBlock = '';
-if (api_get_setting('allow_terms_conditions') === 'true') {
+$w = api_get_setting('allow_terms_conditions');
+//$w = 'true';
+if ($w === 'true') {
     $extraFieldValue = new ExtraFieldValue('user');
     $value = $extraFieldValue->get_values_by_handler_and_field_variable(
         $userId,
@@ -433,7 +436,9 @@ $actions = Display::url(
 $tpl->assign('actions', Display::toolbarAction('toolbar', [$actions]));
 
 $termLink = '';
-if (api_get_setting('allow_terms_conditions') === 'true') {
+$w = api_get_setting('allow_terms_conditions');
+//$w = 'true';
+if ($w === 'true') {
     $url = api_get_path(WEB_CODE_PATH).'social/terms.php';
     $termLink = Display::url(get_lang('ReadTermsAndConditions'), $url);
 }
@@ -456,5 +461,6 @@ if (api_get_setting('allow_social_tool') === 'true') {
 $tpl->assign('personal_data', $personalData);
 $tpl->assign('permission', $permissionBlock);
 $tpl->assign('term_link', $termLink);
+Display::addFlash('Burur');
 $socialLayout = $tpl->get_template('social/personal_data.tpl');
 $tpl->display($socialLayout);

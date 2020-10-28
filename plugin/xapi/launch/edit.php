@@ -1,0 +1,104 @@
+<?php
+/* For licensing terms, see /license.txt */
+
+use Chamilo\PluginBundle\Entity\XApi\ToolLaunch;
+use Symfony\Component\HttpFoundation\Request as HttpRequest;
+
+require_once __DIR__.'/../../../main/inc/global.inc.php';
+
+api_protect_course_script(true);
+api_protect_teacher_script();
+
+$request = HttpRequest::createFromGlobals();
+
+$em = Database::getManager();
+
+$toolLaunch = $em->find(
+    ToolLaunch::class,
+    $request->query->getInt('edit')
+);
+
+if (null === $toolLaunch) {
+    header('Location: '.api_get_course_url());
+    exit;
+}
+
+$course = api_get_course_entity();
+$session = api_get_session_entity();
+
+$cidReq = api_get_cidreq();
+
+$plugin = XApiPlugin::create();
+
+$langEditActivity = $plugin->get_lang('EditActivity');
+
+$frmActivity = new FormValidator('frm_activity', 'post', api_get_self()."?$cidReq&edit={$toolLaunch->getId()}");
+$frmActivity->addHeader($langEditActivity);
+$frmActivity->addText('title', get_lang('Title'));
+$frmActivity->addTextarea('description', get_lang('Description'));
+$frmActivity->addButtonAdvancedSettings('advanced_params');
+$frmActivity->addHtml('<div id="advanced_params_options" style="display:none">');
+$frmActivity->addUrl('launch_url', $plugin->get_lang('ActivityLaunchUrl'), true);
+$frmActivity->addUrl('activity_id', $plugin->get_lang('ActivityId'), true);
+$frmActivity->addUrl('activity_type', $plugin->get_lang('ActivityType'), true);
+$frmActivity->addHtml('</div>');
+$frmActivity->addButtonUpdate(get_lang('Update'));
+$frmActivity->applyFilter('title', 'trim');
+$frmActivity->applyFilter('description', 'trim');
+
+if ($frmActivity->validate()) {
+    $values = $frmActivity->exportValues();
+
+    $toolLaunch
+        ->setTitle($values['title'])
+        ->setDescription(empty($values['description']) ? null : $values['description'])
+        ->setLaunchUrl($values['launch_url'])
+        ->setActivityId($values['activity_id'])
+        ->setActivityType($values['activity_type']);
+
+    $courseTool = $plugin->getCourseToolFromLaunchTool($toolLaunch);
+    $courseTool->setName($values['title']);
+
+    $em->persist($courseTool);
+    $em->persist($toolLaunch);
+    $em->flush();
+
+    Display::addFlash(
+        Display::return_message($plugin->get_lang('ActivityUpdated'), 'success')
+    );
+
+    header('Location: '.api_get_course_url());
+    exit;
+}
+
+$frmActivity->setDefaults(
+    [
+        'title' => $toolLaunch->getTitle(),
+        'description' => $toolLaunch->getDescription(),
+        'activity_id' => $toolLaunch->getActivityId(),
+        'activity_type' => $toolLaunch->getActivityType(),
+        'launch_url' => $toolLaunch->getLaunchUrl(),
+    ]
+);
+
+$actions = Display::url(
+    Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
+    'list.php?'.api_get_cidreq()
+);
+
+$pageTitle = $plugin->get_title();
+$pageContent = $frmActivity->returnForm();
+
+$interbreadcrumb[] = ['url' => 'list.php', 'name' => $pageTitle];
+
+$view = new Template($langEditActivity);
+$view->assign('header', $pageTitle);
+$view->assign(
+    'actions',
+    Display::toolbarAction(
+        'xapi_actions',
+        [$actions]
+    )
+);
+$view->assign('content', $pageContent);
+$view->display_one_col_template();

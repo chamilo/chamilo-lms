@@ -1361,14 +1361,24 @@ if (empty($details)) {
                     Display::return_icon('pdf.png', get_lang('ExportToPDF'), [], ICON_SIZE_MEDIUM),
                     api_get_path(WEB_CODE_PATH).'mySpace/session.php?'
                     .http_build_query(
-                        ['action' => 'export_to_pdf', 'type' => 'attendance', 'session_to_export' => $sId]
+                        [
+                            'student' => $student_id,
+                            'action' => 'export_to_pdf',
+                            'type' => 'attendance',
+                            'session_to_export' => $sId,
+                        ]
                     )
                 );
                 $sessionAction .= Display::url(
                     Display::return_icon('pdf.png', get_lang('CertificateOfAchievement'), [], ICON_SIZE_MEDIUM),
                     api_get_path(WEB_CODE_PATH).'mySpace/session.php?'
                     .http_build_query(
-                        ['action' => 'export_to_pdf', 'type' => 'achievement', 'session_to_export' => $sId]
+                        [
+                            'student' => $student_id,
+                            'action' => 'export_to_pdf',
+                            'type' => 'achievement',
+                            'session_to_export' => $sId,
+                        ]
                     )
                 );
             }
@@ -1649,7 +1659,6 @@ if (empty($details)) {
 
                     foreach ($hookContents as $hookContent) {
                         $contentToExport[] = strip_tags($hookContent['value']);
-
                         echo Display::tag('td', $hookContent['value'], $hookContent['attrs']);
                     }
                 }

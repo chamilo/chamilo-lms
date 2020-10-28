@@ -30,13 +30,13 @@ if (empty($objExercise)) {
     $objExercise = Session::read('objExercise');
 }
 
-$exe_id = isset($_REQUEST['exe_id']) ? (int) $_REQUEST['exe_id'] : 0;
+$exeId = isset($_REQUEST['exe_id']) ? (int) $_REQUEST['exe_id'] : 0;
 
 if (empty($objExercise)) {
     // Redirect to the exercise overview
     // Check if the exe_id exists
     $objExercise = new Exercise();
-    $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);
+    $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exeId);
     if (!empty($exercise_stat_info) && isset($exercise_stat_info['exe_exo_id'])) {
         header('Location: overview.php?exerciseId='.$exercise_stat_info['exe_exo_id'].'&'.api_get_cidreq());
         exit;
@@ -106,7 +106,7 @@ if (api_is_course_admin() && !in_array($origin, ['learnpath', 'embeddable'])) {
         ]
     );
 }
-$exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);
+$exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exeId);
 $learnpath_id = isset($exercise_stat_info['orig_lp_id']) ? $exercise_stat_info['orig_lp_id'] : 0;
 $learnpath_item_id = isset($exercise_stat_info['orig_lp_item_id']) ? $exercise_stat_info['orig_lp_item_id'] : 0;
 $learnpath_item_view_id = isset($exercise_stat_info['orig_lp_item_view_id'])
@@ -221,7 +221,7 @@ $feedbackType = $objExercise->getFeedbackType();
 ob_start();
 $stats = ExerciseLib::displayQuestionListByAttempt(
     $objExercise,
-    $exe_id,
+    $exeId,
     $saveResults,
     $remainingMessage,
     $allowSignature,
@@ -233,7 +233,7 @@ ob_end_clean();
 // Save here LP status
 if (!empty($learnpath_id) && $saveResults) {
     // Save attempt in lp
-    Exercise::saveExerciseInLp($learnpath_item_id, $exe_id);
+    Exercise::saveExerciseInLp($learnpath_item_id, $exeId);
 }
 
 $notifications = api_get_configuration_value('exercise_finished_notification_settings');
@@ -417,7 +417,7 @@ if (!empty($notifications)) {
 }
 
 $hookQuizEnd = HookQuizEnd::create();
-$hookQuizEnd->setEventData(['exe_id' => $exe_id]);
+$hookQuizEnd->setEventData(['exe_id' => $exeId]);
 $hookQuizEnd->notifyQuizEnd();
 
 // Unset session for clock time
@@ -426,7 +426,7 @@ ExerciseLib::exercise_time_control_delete(
     $learnpath_id,
     $learnpath_item_id
 );
-ExerciseLib::delete_chat_exercise_session($exe_id);
+ExerciseLib::delete_chat_exercise_session($exeId);
 
 if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
     $pageBottom .= '<div class="question-return">';
@@ -451,7 +451,7 @@ if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
 } else {
     $lp_mode = Session::read('lp_mode');
     $url = '../lp/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$learnpath_id
-        .'&lp_item_id='.$learnpath_item_id.'&exeId='.$exercise_stat_info['exe_id']
+        .'&lp_item_id='.$learnpath_item_id.'&exeId='.$exeId
         .'&fb_type='.$objExercise->getFeedbackType().'#atoc_'.$learnpath_item_id;
     $href = $lp_mode === 'fullscreen' ? ' window.opener.location.href="'.$url.'" ' : ' top.location.href="'.$url.'"';
 
@@ -471,7 +471,7 @@ $template->assign('page_top', $pageTop);
 $template->assign('page_content', $pageContent);
 $template->assign('page_bottom', $pageBottom);
 $template->assign('allow_signature', $allowSignature);
-$template->assign('exe_id', $exercise_stat_info['exe_id']);
+$template->assign('exe_id', $exeId);
 $template->assign('actions', $pageActions);
 $template->assign('content', $template->fetch($template->get_template('exercise/result.tpl')));
 $template->display_one_col_template();

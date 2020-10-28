@@ -38,7 +38,7 @@ if (PHP_SAPI != 'cli') {
         require_once __DIR__.'/app/config/configuration.php';
         $chamiloFolder = __DIR__;
     }
-    deleteFilesWeb($mainFolder);
+    deleteFilesWeb($chamiloFolder);
     exit;
 }
 // If CLI, do not depend on being inside a Chamilo folder and ask for cli args
@@ -55,6 +55,9 @@ if ($argc == 3) {
     $subFolder = trim($argv[2]);
     if (substr($subFolder, -1, 1) != '/') {
         $subFolder .= '/';
+    }
+    if (substr($subFolder, 0, 1) != '/') {
+        $subFolder = '/'.$subFolder;
     }
 }
 $mainFolder = trim($argv[1]);
@@ -88,32 +91,50 @@ function deleteFilesWeb($folder) {
     global $deleteList;
     $dangerFolder = $folder.'app/Resources/public/assets/jquery-file-upload/';
     $dangerFolder2 = $folder.'web/assets/jquery-file-upload/';
-    echo "Analyzing Chamilo folder...".PHP_EOL;
-    foreach ($deleteList as $deleteEntry) {
-        if (substr($deleteEntry, -1, 1) == '/') {
-            // this is a folder, recurse
-            rmdirr($dangerFolder.$deleteEntry);
-            rmdirr($dangerFolder2.$deleteEntry);
-        } else {
-            unlink($dangerFolder.$deleteEntry);
-            unlink($dangerFolder2.$deleteEntry);
+    echo "Analyzing Chamilo folder...<br />".PHP_EOL;
+    $risk = 0;
+    if (file_exists($dangerFolder)) {
+        $risk = 1;
+        echo "  Dangerous folder 1 exists in Resources, cleaning...<br/>".PHP_EOL;
+        foreach ($deleteList as $deleteEntry) {
+            if (substr($deleteEntry, -1, 1) == '/') {
+                // this is a folder, recurse
+                rmdirr($dangerFolder.$deleteEntry);
+            } else {
+                unlink($dangerFolder.$deleteEntry);
+            }
+        }
+        if (is_file($dangerFolder.'README.md')) {
+            echo "There was a problem removing files in 'app/Resources/public/assets/jquery-file-upload/'. Please remove the following files and folders manually:<br />".PHP_EOL;
+            echo "<ul>".PHP_EOL;
+            foreach ($deleteList as $deleteEntry) {
+                echo "<li>[chamilo folder]/app/Resources/public/assets/jquery-file-upload/".$deleteEntry."</li>".PHP_EOL;
+            }
+            echo "</ul>".PHP_EOL;
         }
     }
-    if (is_file($dangerFolder.'README.md')) {
-        echo "There was a problem removing files in 'app/Resources/public/assets/jquery-file-upload/'. Please remove the following files and folders manually:".PHP_EOL;
-        echo "<ul>".PHP_EOL;
+    if (file_exists($dangerFolder2)) {
+        $risk = 1;
+        echo "  Dangerous folder 2 exists in web, cleaning...<br />".PHP_EOL;
         foreach ($deleteList as $deleteEntry) {
-            echo "<li>[chamilo folder]/app/Resources/public/assets/jquery-file-upload/".$deleteEntry."</li>".PHP_EOL;
+            if (substr($deleteEntry, -1, 1) == '/') {
+                // this is a folder, recurse
+                rmdirr($dangerFolder2.$deleteEntry);
+            } else {
+                unlink($dangerFolder2.$deleteEntry);
+            }
         }
-        echo "</ul>".PHP_EOL;
+        if (is_file($dangerFolder2.'README.md')) {
+            echo "There was a problem removing files in 'web/assets/jquery-file-upload/'. Please remove the following files and folders manually:<br />".PHP_EOL;
+            echo "<ul>".PHP_EOL;
+            foreach ($deleteList as $deleteEntry) {
+                echo "<li>[chamilo folder]/web/assets/jquery-file-upload/".$deleteEntry."</li>".PHP_EOL;
+            }
+            echo "</ul>".PHP_EOL;
+        }
     }
-    if (is_file($dangerFolder2.'README.md')) {
-        echo "There was a problem removing files in 'web/assets/jquery-file-upload/'. Please remove the following files and folders manually:".PHP_EOL;
-        echo "<ul>".PHP_EOL;
-        foreach ($deleteList as $deleteEntry) {
-            echo "<li>[chamilo folder]/web/assets/jquery-file-upload/".$deleteEntry."</li>".PHP_EOL;
-        }
-        echo "</ul>".PHP_EOL;
+    if ($risk == 0) {
+        echo "No dangerous file could be found. Your installation looks safe.<br />".PHP_EOL;
     }
 }
 

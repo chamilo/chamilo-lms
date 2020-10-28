@@ -240,13 +240,14 @@ $notifications = api_get_configuration_value('exercise_finished_notification_set
 if (!empty($notifications)) {
     $exerciseExtraFieldValue = new ExtraFieldValue('exercise');
     $attemptCountToSend = $attempt_count++;
-    $subject = sprintf(get_lang('WrongAttemptXInCourseX'), $attemptCountToSend, $courseInfo['title']);
     $wrongAnswersCount = $stats['failed_answers_count'];
-    if (0 === $wrongAnswersCount) {
-        $subject = sprintf(get_lang('ExerciseValidationInCourseX'), $courseInfo['title']);
-    }
     $exercisePassed = $stats['exercise_passed'];
     $totalScore = ExerciseLib::show_score($total_score, $max_score, false, true);
+
+    $subject = sprintf(get_lang('WrongAttemptXInCourseX'), $attemptCountToSend, $courseInfo['title']);
+    if ($exercisePassed) {
+        $subject = sprintf(get_lang('ExerciseValidationInCourseX'), $courseInfo['title']);
+    }
 
     if ($exercisePassed) {
         $extraFieldData = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
@@ -274,11 +275,10 @@ if (!empty($notifications)) {
     }
 
     // Subject for notifications
-    $subject = sprintf(get_lang('WrongAttemptXInCourseX'), $attemptCountToSend, $courseInfo['title']);
+    /*$subject = sprintf(get_lang('WrongAttemptXInCourseX'), $attemptCountToSend, $courseInfo['title']);
     if ($exercisePassed) {
         $subject = sprintf(get_lang('ExerciseValidationInCourseX'), $courseInfo['title']);
-    }
-
+    }*/
     $extraFieldData = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
         $objExercise->iId,
         'notifications'

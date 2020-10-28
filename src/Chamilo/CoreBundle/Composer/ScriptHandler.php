@@ -15,10 +15,15 @@ class ScriptHandler
      */
     public static function dumpCssFiles()
     {
-        $appCss = __DIR__.'/../../../../app/Resources/public';
-        $newPath = __DIR__.'/../../../../web';
         $fs = new Filesystem();
-        $fs->mirror($appCss, $newPath, null, ['override' => true]);
+
+        $sysAssets = __DIR__.'/../../../../app/Resources/public/assets';
+        $webAssets = __DIR__.'/../../../../web/assets';
+        $fs->mirror($sysAssets, $webAssets, null, ['override' => true, 'delete' => true]);
+
+        $sysCss = __DIR__.'/../../../../app/Resources/public/css';
+        $webCss = __DIR__.'/../../../../web/css';
+        $fs->mirror($sysCss, $webCss, null, ['override' => true]);
 
         if ($fs->exists(__DIR__.'/../../../../web/build')) {
             $fs->remove(__DIR__.'/../../../../web/build');

@@ -18,7 +18,7 @@ class ScriptHandler
         $appCss = __DIR__.'/../../../../app/Resources/public';
         $newPath = __DIR__.'/../../../../web';
         $fs = new Filesystem();
-        $fs->mirror($appCss, $newPath, null, ['override' => true]);
+        $fs->mirror($appCss, $newPath, null, ['override' => true, 'delete' => true]);
 
         if ($fs->exists(__DIR__.'/../../../../web/build')) {
             $fs->remove(__DIR__.'/../../../../web/build');

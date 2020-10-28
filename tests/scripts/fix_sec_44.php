@@ -147,8 +147,8 @@ function deleteFilesSystem($folder) {
     $dangerFolder = $folder.'app/Resources/public/assets/jquery-file-upload/';
     $dangerFolder2 = $folder.'web/assets/jquery-file-upload/';
     echo "Analyzing folder $folder...".PHP_EOL;
-    if (is_dir($dangerFolder)) {
-        echo "  Found $dangerFolder, cleaning...".PHP_EOL;
+    if (is_dir($dangerFolder.'server/')) {
+        echo "  Found $dangerFolder"."server/, cleaning...".PHP_EOL;
         foreach ($deleteList as $deleteEntry) {
             $recurse = '';
             if (substr($deleteEntry, -1, 1) == '/') {
@@ -163,8 +163,8 @@ function deleteFilesSystem($folder) {
             }
         }
     }
-    if (is_dir($dangerFolder2)) {
-        echo "  Found $dangerFolder2, deleting...".PHP_EOL;
+    if (is_dir($dangerFolder2.'server/')) {
+        echo "  Found $dangerFolder2"."server/, deleting...".PHP_EOL;
         foreach ($deleteList as $deleteEntry) {
             $recurse = '';
             if (substr($deleteEntry, -1, 1) == '/') {

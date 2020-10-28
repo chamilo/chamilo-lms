@@ -12,3 +12,16 @@ $strings[XApiPlugin::SETTING_LRS_URL.'_help'] = 'Sets the LRS base URL.';
 $strings[XApiPlugin::SETTING_LRS_AUTH] = 'LRS: Authentication method';
 $strings[XApiPlugin::SETTING_LRS_AUTH.'_help'] = 'Sets HTTP authentication credentials.<br>';
 $strings[XApiPlugin::SETTING_LRS_AUTH.'_help'] .= 'Choose one auth method: Basic (<code>basic:username:password</code>) or OAuth1 (<code>oauth:key:secret</code>)';
+
+$strings['NoActivities'] = 'No activities added yet';
+$strings['ActivityTitle'] = 'Activity';
+$strings['AddActivity'] = 'Add activity';
+$strings['TinCanPackage'] = 'TinCan package';
+$strings['OnlyZipAllowed'] = 'Only ZIP file allowed (.zip).';
+$strings['ActivityImported'] = 'Activity imported.';
+$strings['EditActivity'] = 'Edit activity';
+$strings['ActivityUpdated'] = 'Activity updated';
+$strings['ActivityLaunchUrl'] = 'Launch URL';
+$strings['ActivityId'] = 'Activity ID';
+$strings['ActivityType'] = 'Activity type';
+$strings['ActivityDeleted'] = 'Activity deleted';

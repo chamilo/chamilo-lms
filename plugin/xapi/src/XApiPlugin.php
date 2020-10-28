@@ -1,7 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\PluginBundle\Entity\XApi\SharedStatement;
+use Chamilo\PluginBundle\Entity\XApi\ToolLaunch;
 use Doctrine\ORM\Tools\SchemaTool;
 use GuzzleHttp\RequestOptions;
 use Http\Adapter\Guzzle6\Client;
@@ -96,6 +98,8 @@ class XApiPlugin extends Plugin implements HookPluginInterface
 
         $this->installPluginDbTables();
         $this->installUuid();
+        $this->deleteCourseTools();
+        $this->addCourseTools();
     }
 
     /**
@@ -109,6 +113,7 @@ class XApiPlugin extends Plugin implements HookPluginInterface
         $schemaTool->createSchema(
             [
                 $em->getClassMetadata(SharedStatement::class),
+                $em->getClassMetadata(ToolLaunch::class),
             ]
         );
     }
@@ -145,6 +150,7 @@ class XApiPlugin extends Plugin implements HookPluginInterface
     {
         $this->uninstallHook();
         $this->uninstallPluginDbTables();
+        $this->deleteCourseTools();
     }
 
     /**
@@ -173,6 +179,7 @@ class XApiPlugin extends Plugin implements HookPluginInterface
         $schemaTool->dropSchema(
             [
                 $em->getClassMetadata(SharedStatement::class),
+                $em->getClassMetadata(ToolLaunch::class),
             ]
         );
     }
@@ -269,6 +276,9 @@ class XApiPlugin extends Plugin implements HookPluginInterface
             $quizEndEvent->detach($quizEndHook);
         }
 
+        $this->deleteCourseTools();
+        $this->addCourseTools();
+
         return $this;
     }
 
@@ -317,5 +327,71 @@ class XApiPlugin extends Plugin implements HookPluginInterface
     public function generateIri($value, $type)
     {
         return api_get_path(WEB_PATH)."xapi/$type/$value";
+    }
+
+    private function addCourseTools()
+    {
+        $courses = Database::getManager()
+            ->createQuery('SELECT c.id FROM ChamiloCoreBundle:Course c')
+            ->getResult();
+
+        foreach ($courses as $course) {
+            $this->createLinkToCourseTool(
+                $this->get_title().':teacher',
+                $course['id'],
+                null,
+                'xapi/launch/list.php'
+            );
+        }
+    }
+
+    private function deleteCourseTools()
+    {
+        Database::getManager()
+            ->createQuery('DELETE FROM ChamiloCourseBundle:CTool t WHERE t.category = :category AND t.link LIKE :link')
+            ->execute(['category' => 'plugin', 'link' => 'xapi/launch/list.php%']);
+
+        Database::getManager()
+            ->createQuery('DELETE FROM ChamiloCourseBundle:CTool t WHERE t.category = :category AND t.link LIKE :link')
+            ->execute(['category' => 'plugin', 'link' => 'xapi/launch.php%']);
+    }
+
+    /**
+     * @param \Chamilo\PluginBundle\Entity\XApi\ToolLaunch $toolLaunch
+     *
+     * @return \Chamilo\CourseBundle\Entity\CTool|null
+     */
+    public function createLaunchCourseTool(ToolLaunch $toolLaunch)
+    {
+        $link ='xapi/launch.php?'.http_build_query(
+            [
+                'id' => $toolLaunch->getId(),
+            ]
+        );
+
+        return $this->createLinkToCourseTool(
+            $toolLaunch->getTitle(),
+            $toolLaunch->getCourse()->getId(),
+            null,
+            $link
+        );
+    }
+
+    /**
+     * @param \Chamilo\PluginBundle\Entity\XApi\ToolLaunch $toolLaunch
+     *
+     * @return \Chamilo\CourseBundle\Entity\CTool
+     */
+    public function getCourseToolFromLaunchTool(ToolLaunch $toolLaunch)
+    {
+        /** @var CTool $tool */
+        $tool = Database::getManager()
+            ->getRepository(CTool::class)
+            ->findOneBy([
+                'link' => 'xapi/launch.php?id='.$toolLaunch->getId(),
+                'cId' => $toolLaunch->getCourse()->getId(),
+            ]);
+
+        return $tool;
     }
 }

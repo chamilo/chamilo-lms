@@ -2435,7 +2435,7 @@ class SurveyManager
                     'users' => $users,
                 ];
             }
-            self::parseMultiplicateUserList($classToParse, $questions, $courseId, $surveyData);
+            self::parseMultiplicateUserList($classToParse, $questions, $courseId, $surveyData, true);
         } else {
             $groupInfo = GroupManager::get_group_properties($groupId);
             if (!empty($groupInfo)) {
@@ -2451,7 +2451,8 @@ class SurveyManager
                         ],
                         $questions,
                         $courseId,
-                        $surveyData
+                        $surveyData,
+                        false
                     );
                 }
             }
@@ -2460,7 +2461,7 @@ class SurveyManager
         return true;
     }
 
-    public static function parseMultiplicateUserList($itemList, $questions, $courseId, $surveyData)
+    public static function parseMultiplicateUserList($itemList, $questions, $courseId, $surveyData, $addClassNewPage = false)
     {
         if (empty($itemList) || empty($questions)) {
             return false;
@@ -2504,7 +2505,6 @@ class SurveyManager
 
                 foreach ($users as $userId) {
                     $userInfo = api_get_user_info($userId);
-
                     if (false !== strpos($text, $studentTag)) {
                         $replacedText = str_replace($studentTag, $userInfo['complete_name'], $text);
                         $values = [
@@ -2531,7 +2531,7 @@ class SurveyManager
                     }
                 }
 
-                if ($classCounter < count($itemList)) {
+                if ($addClassNewPage && $classCounter < count($itemList)) {
                     // Add end page
                     $values = [
                         'c_id' => $courseId,

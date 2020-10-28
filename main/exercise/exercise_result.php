@@ -273,6 +273,12 @@ if (!empty($notifications)) {
         MessageManager::send_message($currentUserId, $subject, $content);
     }
 
+    // Subject for notifications
+    $subject = sprintf(get_lang('WrongAttemptXInCourseX'), $attemptCountToSend, $courseInfo['title']);
+    if ($exercisePassed) {
+        $subject = sprintf(get_lang('ExerciseValidationInCourseX'), $courseInfo['title']);
+    }
+
     $extraFieldData = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
         $objExercise->iId,
         'notifications'
@@ -362,7 +368,7 @@ if (!empty($notifications)) {
                                 $objExercise->iId,
                                 $attempt['content']
                             );
-                            if ($extraFieldData && isset($extraFieldData['value'])) {
+                            if ($extraFieldData && isset($extraFieldData['value']) && !empty($extraFieldData['value'])) {
                                 $content = $extraFieldData['value'];
                             }
                         }

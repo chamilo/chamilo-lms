@@ -55,6 +55,7 @@ if (api_is_in_gradebook()) {
 }
 
 $nameTools = get_lang('Exercises');
+$currentUserId = api_get_user_id();
 
 $interbreadcrumb[] = [
     'url' => 'exercise.php?'.api_get_cidreq(),
@@ -84,7 +85,6 @@ $pageTop = '';
 $pageBottom = '';
 $pageContent = '';
 $courseInfo = api_get_course_info();
-
 if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
     // So we are not in learnpath tool
     $showHeader = true;
@@ -114,11 +114,23 @@ $learnpath_item_view_id = isset($exercise_stat_info['orig_lp_item_view_id'])
 
 $logInfo = [
     'tool' => TOOL_QUIZ,
-    'tool_id' => $objExercise->id,
+    'tool_id' => $objExercise->iId,
     'action' => $learnpath_id,
     'action_details' => $learnpath_id,
 ];
 Event::registerLog($logInfo);
+
+$allowSignature = false;
+if ('true' === api_get_plugin_setting('exercise_signature', 'tool_enable')) {
+    $extraFieldValue = new ExtraFieldValue('exercise');
+    $result = $extraFieldValue->get_values_by_handler_and_field_variable($objExercise->iId, 'signature_activated');
+    if ($result && isset($result['value']) && 1 === (int) $result['value']) {
+        $allowSignature = true;
+    }
+}
+if ($allowSignature) {
+    $htmlHeadXtra[] = api_get_asset('signature_pad/signature_pad.umd.js');
+}
 
 if ($origin === 'learnpath') {
     $pageTop .= '
@@ -152,7 +164,7 @@ if ($origin !== 'embeddable') {
 
 // We check if the user attempts before sending to the exercise_result.php
 $attempt_count = Event::get_attempt_count(
-    api_get_user_id(),
+    $currentUserId,
     $objExercise->id,
     $learnpath_id,
     $learnpath_item_id,
@@ -203,7 +215,6 @@ if ($origin === 'embeddable') {
         Display::return_message(get_lang('Saved'), 'normal', false)
     );
 }
-
 $saveResults = true;
 $feedbackType = $objExercise->getFeedbackType();
 
@@ -213,13 +224,12 @@ $stats = ExerciseLib::displayQuestionListByAttempt(
     $exe_id,
     $saveResults,
     $remainingMessage,
-    false,
+    $allowSignature,
     api_get_configuration_value('quiz_results_answers_report'),
     false
 );
 $pageContent .= ob_get_contents();
 ob_end_clean();
-
 // Save here LP status
 if (!empty($learnpath_id) && $saveResults) {
     // Save attempt in lp
@@ -260,7 +270,7 @@ if (!empty($notifications)) {
         }
 
         // Send to student
-        MessageManager::send_message(api_get_user_id(), $subject, $content);
+        MessageManager::send_message($currentUserId, $subject, $content);
     }
 
     $extraFieldData = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
@@ -386,7 +396,7 @@ if (!empty($notifications)) {
                                 switch ($action) {
                                     case 'subscribe_student_to_courses':
                                         foreach ($params as $code) {
-                                            CourseManager::subscribeUser(api_get_user_id(), $code);
+                                            CourseManager::subscribeUser($currentUserId, $code);
                                             break;
                                         }
                                         break;
@@ -410,7 +420,6 @@ ExerciseLib::exercise_time_control_delete(
     $learnpath_id,
     $learnpath_item_id
 );
-
 ExerciseLib::delete_chat_exercise_session($exe_id);
 
 if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
@@ -455,11 +464,10 @@ $template = new Template($nameTools, $showHeader, $showFooter);
 $template->assign('page_top', $pageTop);
 $template->assign('page_content', $pageContent);
 $template->assign('page_bottom', $pageBottom);
-$layout = $template->fetch(
-    $template->get_template('exercise/result.tpl')
-);
+$template->assign('allow_signature', $allowSignature);
+$template->assign('exe_id', $exercise_stat_info['exe_id']);
 $template->assign('actions', $pageActions);
-$template->assign('content', $layout);
+$template->assign('content', $template->fetch($template->get_template('exercise/result.tpl')));
 $template->display_one_col_template();
 
 function showEmbeddableFinishButton()

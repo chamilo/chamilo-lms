@@ -56,6 +56,9 @@ if ($argc == 3) {
     if (substr($subFolder, -1, 1) != '/') {
         $subFolder .= '/';
     }
+    if (substr($subFolder, 0, 1) != '/') {
+        $subFolder = '/'.$subFolder;
+    }
 }
 $mainFolder = trim($argv[1]);
 if ('.' == trim($argv[1])) {

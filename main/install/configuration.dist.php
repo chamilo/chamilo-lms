@@ -1614,6 +1614,9 @@ $_configuration['auth_password_links'] = [
 // It also enables the main/lp/my_list.php page.
 //$_configuration['show_my_lps_page'] = false;
 
+// Disables access to the main/lp/my_list.php page
+//$_configuration['disable_my_lps_page'] = false;
+
 // When exercise is finished send results by email to users, depending the settings below:
 // Requires a new Exercise Extra field type called with variable = "notifications".
 /*$_configuration['exercise_finished_notification_settings'] = [

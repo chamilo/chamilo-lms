@@ -1709,6 +1709,11 @@ $_configuration['auth_password_links'] = [
 // sniffing around a specific course). Should be combined with hiding the menu
 //$_configuration['breadcrumb_hide'] = false;
 
+// Hide the sidebar completely to avoid users navigating away.
+// Warning: this currently leaves a weird empty space where the sidebar should
+// be. We recommend using this only in very specific circumstances.
+//$_configuration['sidebar_hide'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

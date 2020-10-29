@@ -2180,10 +2180,7 @@ class Exercise
                     break;
             }
 
-            $form->addElement(
-                'html',
-                '<div id="hidden_random" style="display:'.$displayRandom.'">'
-            );
+            $form->addHtml('<div id="hidden_random" style="display:'.$displayRandom.'">');
             // Number of random question.
             $max = ($this->id > 0) ? $this->getQuestionCount() : 10;
             $option = range(0, $max);
@@ -2199,12 +2196,8 @@ class Exercise
                 $option,
                 ['id' => 'randomQuestions']
             );
-            $form->addElement('html', '</div>');
-
-            $form->addElement(
-                'html',
-                '<div id="hidden_matrix" style="display:'.$displayMatrix.'">'
-            );
+            $form->addHtml('</div>');
+            $form->addHtml('<div id="hidden_matrix" style="display:'.$displayMatrix.'">');
 
             // Category selection.
             $cat = new TestCategory();
@@ -2213,7 +2206,7 @@ class Exercise
                 $cat_form = '<span class="label label-warning">'.get_lang('NoCategoriesDefined').'</span>';
             }
             $form->addElement('label', null, $cat_form);
-            $form->addElement('html', '</div>');
+            $form->addHtml('</div>');
 
             // Random answers.
             $radios_random_answers = [
@@ -2237,8 +2230,7 @@ class Exercise
             $form->addGroup($group, null, get_lang('HideQuestionTitle'));
 
             $allow = api_get_configuration_value('allow_quiz_show_previous_button_setting');
-
-            if ($allow === true) {
+            if (true === $allow) {
                 // Hide question title.
                 $group = [
                     $form->createElement(
@@ -2293,9 +2285,9 @@ class Exercise
             );
 
             if (!empty($this->end_time)) {
-                $form->addElement('html', '<div id="end_date_div" style="display:block;">');
+                $form->addHtml('<div id="end_date_div" style="display:block;">');
             } else {
-                $form->addElement('html', '<div id="end_date_div" style="display:none;">');
+                $form->addHtml('<div id="end_date_div" style="display:none;">');
             }
 
             $form->addElement('date_time_picker', 'end_time');

@@ -99,11 +99,10 @@ if ($formSent) {
         $warningText = addslashes(api_htmlentities(get_lang('ConfirmYourChoice')));
 
         /** @var CQuizQuestion $question */
-        //foreach ($pagination as $question) {
         for ($i = 0; $i < $length; $i++) {
             $index = $i;
             if (!empty($page)) {
-                $index = ($page - 1) * $length +  $i; //
+                $index = ($page - 1) * $length + $i;
             }
             if (0 === $i) {
                 $start = $index;

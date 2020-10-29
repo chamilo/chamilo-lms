@@ -280,7 +280,7 @@ switch ($action) {
                                 )
                             );
                         } else {
-                            Display::addFlash(Display::return_message(get_lang('Impossible'), 'warning'));
+                            Display::addFlash(Display::return_message(get_lang('Impossible'), 'error'));
                         }
                     }
                 } else {
@@ -1808,7 +1808,7 @@ if ($isAllowedToEdit ||
         );
     } else {
         $actionsLeft .= Display::url(
-            Display::return_icon('upload_file.png', get_lang('UplUploadDocument'), '', ICON_SIZE_MEDIUM),
+            Display::return_icon('upload_file.png', get_lang('FileToUpload'), '', ICON_SIZE_MEDIUM),
             api_get_path(WEB_CODE_PATH).'document/upload.php?'.api_get_cidreq().'&id='.$current_folder_id
         );
     }
@@ -2284,7 +2284,7 @@ echo '<script>
                });
                data = $(this).data("id");
                $(".upload_element_"+data).removeClass("hidden");
-               $.each($(".currentFile"),function(a,b){
+               $.each($("[name=\'currentFile\']"),function(a,b){
                    $(b).val(data);
                });
             });

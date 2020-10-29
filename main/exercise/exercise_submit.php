@@ -268,8 +268,8 @@ if ($objExercise->selectAttempts() > 0) {
                 $exercise_stat_info = Event::getExerciseResultsByUser(
                     $user_id,
                     $exerciseId,
-                    api_get_course_id(),
-                    api_get_session_id()
+                    $courseId,
+                    $sessionId
                 );
 
                 if (!empty($exercise_stat_info)) {

@@ -1537,7 +1537,7 @@ class Event
      *
      * @param   int     user id
      * @param   int     exercise id
-     * @param   string  course code
+     * @param   int     course id
      * @param   int     session id
      * @param   int     lp id
      * @param   int     lp item id

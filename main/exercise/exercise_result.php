@@ -31,7 +31,6 @@ if (empty($objExercise)) {
 }
 
 $exeId = isset($_REQUEST['exe_id']) ? (int) $_REQUEST['exe_id'] : 0;
-
 if (empty($objExercise)) {
     // Redirect to the exercise overview
     // Check if the exe_id exists

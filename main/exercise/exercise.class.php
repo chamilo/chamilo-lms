@@ -91,7 +91,6 @@ class Exercise
     public $pageResultConfiguration;
     public $preventBackwards;
     public $currentQuestion;
-    public $currentBlockedCategories;
     public $hideComment;
     public $hideNoAnswer;
     public $hideExpectedAnswer;
@@ -3220,6 +3219,7 @@ class Exercise
      * @param array  $questions_in_media
      * @param string $currentAnswer
      * @param array  $myRemindList
+     * @param bool   $showPreviousButton
      *
      * @return string
      */
@@ -3228,7 +3228,8 @@ class Exercise
         $questionNum,
         $questions_in_media = [],
         $currentAnswer = '',
-        $myRemindList = []
+        $myRemindList = [],
+        $showPreviousButton = true
     ) {
         global $safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id;
         $nbrQuestions = $this->countQuestionsInExercise();
@@ -3332,7 +3333,7 @@ class Exercise
                     }
                 }
 
-                if ($showPreview && 0 === $this->getPreventBackwards()) {
+                if ($showPreviousButton && $showPreview && 0 === $this->getPreventBackwards()) {
                     $buttonList[] = Display::button(
                         'previous_question_and_save',
                         get_lang('PreviousQuestion'),

@@ -1702,7 +1702,16 @@ $_configuration['auth_password_links'] = [
 //$_configuration['gradebook_use_exercise_score_settings_in_total'] = false;
 
 // Show a link on the results page to download an answers report
-// $_configuration['quiz_results_answers_report'] = false;
+//$_configuration['quiz_results_answers_report'] = false;
+
+// Hide the breadcrumb navigation (for example if you don't want users to go
+// sniffing around a specific course). Should be combined with hiding the menu
+//$_configuration['breadcrumb_hide'] = false;
+
+// Hide the sidebar completely to avoid users navigating away.
+// Warning: this currently leaves a weird empty space where the sidebar should
+// be. We recommend using this only in very specific circumstances.
+//$_configuration['sidebar_hide'] = false;
 
 // Block question categories BT#17789
 //ALTER TABLE track_e_exercises ADD COLUMN blocked_categories TEXT;

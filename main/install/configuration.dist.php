@@ -1703,7 +1703,11 @@ $_configuration['auth_password_links'] = [
 //$_configuration['gradebook_use_exercise_score_settings_in_total'] = false;
 
 // Show a link on the results page to download an answers report
-// $_configuration['quiz_results_answers_report'] = false;
+//$_configuration['quiz_results_answers_report'] = false;
+
+// Hide the breadcrumb navigation (for example if you don't want users to go
+// sniffing around a specific course). Should be combined with hiding the menu
+//$_configuration['breadcrumb_hide'] = false;
 
 // KEEP THIS AT THE END
 // -------- Custom DB changes

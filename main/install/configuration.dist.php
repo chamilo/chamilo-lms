@@ -1714,7 +1714,7 @@ $_configuration['auth_password_links'] = [
 //$_configuration['sidebar_hide'] = false;
 
 // Block question categories BT#17789
-//ALTER TABLE track_e_exercises ADD COLUMN blocked_categories TEXT;
+//ALTER TABLE track_e_exercises ADD COLUMN blocked_categories LONGTEXT;
 //$_configuration['block_category_questions'] = false;
 
 // KEEP THIS AT THE END

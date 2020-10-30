@@ -36,6 +36,7 @@ $frmActivity = new FormValidator('frm_activity', 'post', api_get_self()."?$cidRe
 $frmActivity->addHeader($langEditActivity);
 $frmActivity->addText('title', get_lang('Title'));
 $frmActivity->addTextarea('description', get_lang('Description'));
+$frmActivity->addCheckBox('allow_multiple_attempts', '', get_lang('AllowMultipleAttempts'));
 $frmActivity->addButtonAdvancedSettings('advanced_params');
 $frmActivity->addHtml('<div id="advanced_params_options" style="display:none">');
 $frmActivity->addUrl('launch_url', $plugin->get_lang('ActivityLaunchUrl'), true);
@@ -54,7 +55,10 @@ if ($frmActivity->validate()) {
         ->setDescription(empty($values['description']) ? null : $values['description'])
         ->setLaunchUrl($values['launch_url'])
         ->setActivityId($values['activity_id'])
-        ->setActivityType($values['activity_type']);
+        ->setActivityType($values['activity_type'])
+        ->setAllowMultipleAttempts(
+            isset($values['allow_multiple_attempts'])
+        );
 
     $courseTool = $plugin->getCourseToolFromLaunchTool($toolLaunch);
     $courseTool->setName($values['title']);
@@ -78,6 +82,7 @@ $frmActivity->setDefaults(
         'activity_id' => $toolLaunch->getActivityId(),
         'activity_type' => $toolLaunch->getActivityType(),
         'launch_url' => $toolLaunch->getLaunchUrl(),
+        'allow_multiple_attempts' => $toolLaunch->isAllowMultipleAttempts(),
     ]
 );
 

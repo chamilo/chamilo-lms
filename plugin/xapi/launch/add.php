@@ -18,6 +18,7 @@ $langAddActivity = $plugin->get_lang('AddActivity');
 $frmActivity = new FormValidator('frm_activity', 'post', api_get_self().'?'.api_get_cidreq());
 $frmActivity->addHeader($langAddActivity);
 $frmActivity->addFile('file', $plugin->get_lang('TinCanPackage'));
+$frmActivity->addCheckBox('allow_multiple_attempts', '', get_lang('AllowMultipleAttempts'));
 $frmActivity->addButtonAdvancedSettings('advanced_params');
 $frmActivity->addHtml('<div id="advanced_params_options" style="display:none">');
 $frmActivity->addText('title', get_lang('Title'), false);
@@ -50,6 +51,10 @@ if ($frmActivity->validate()) {
         exit;
     }
 
+    $toolLaunch->setAllowMultipleAttempts(
+        isset($values['allow_multiple_attempts'])
+    );
+
     if (!empty($values['title'])) {
         $toolLaunch->setTitle($values['title']);
     }
@@ -71,6 +76,8 @@ if ($frmActivity->validate()) {
     header('Location: '.api_get_course_url());
     exit;
 }
+
+$frmActivity->setDefaults(['allow_multiple_attempts' => true]);
 
 $pageTitle = $plugin->get_title();
 $pageContent = $frmActivity->returnForm();

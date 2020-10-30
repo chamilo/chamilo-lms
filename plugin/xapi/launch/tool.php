@@ -141,10 +141,14 @@ if ($toolLaunch->getDescription()) {
     $pageContent .= "<p class='lead'>{$toolLaunch->getDescription()}</p>";
 }
 
-$pageContent .= Display::div(
-    $frmNewRegistration->returnForm(),
-    ['class' => 'exercise_overview_options']
-);
+if ($toolLaunch->isAllowMultipleAttempts()
+    || empty($stateDocument)
+) {
+    $pageContent .= Display::div(
+        $frmNewRegistration->returnForm(),
+        ['class' => 'exercise_overview_options']
+    );
+}
 
 if ($stateDocument) {
     $pageContent .= $table->toHtml();

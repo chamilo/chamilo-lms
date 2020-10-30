@@ -399,7 +399,7 @@ class XApiPlugin extends Plugin implements HookPluginInterface
         $tool = Database::getManager()
             ->getRepository(CTool::class)
             ->findOneBy([
-                'link' => 'xapi/tool.php?id='.$toolLaunch->getId(),
+                'link' => 'xapi/launch/tool.php?id='.$toolLaunch->getId(),
                 'cId' => $toolLaunch->getCourse()->getId(),
             ]);
 

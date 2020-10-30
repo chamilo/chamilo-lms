@@ -76,12 +76,26 @@ class ToolLaunch
      * @ORM\Column(name="activity_type", type="string", nullable=true)
      */
     private $activityType;
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="allow_multiple_attempts", type="boolean", options={"default": true})
+     */
+    private $allowMultipleAttempts;
     /***
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
      */
     private $createdAt;
+
+    /**
+     * ToolLaunch constructor.
+     */
+    public function __construct()
+    {
+        $this->allowMultipleAttempts = true;
+    }
 
     /**
      * @return int
@@ -279,6 +293,26 @@ class ToolLaunch
     public function setActivityType(?string $activityType): ToolLaunch
     {
         $this->activityType = $activityType;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAllowMultipleAttempts(): bool
+    {
+        return $this->allowMultipleAttempts;
+    }
+
+    /**
+     * @param bool $allowMultipleAttempts
+     *
+     * @return ToolLaunch
+     */
+    public function setAllowMultipleAttempts(bool $allowMultipleAttempts): ToolLaunch
+    {
+        $this->allowMultipleAttempts = $allowMultipleAttempts;
 
         return $this;
     }

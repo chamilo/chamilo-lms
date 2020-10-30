@@ -1720,6 +1720,10 @@ $_configuration['auth_password_links'] = [
 //ALTER TABLE track_e_exercises ADD COLUMN blocked_categories LONGTEXT;
 //$_configuration['block_category_questions'] = false;
 
+// Make questions mandatory selectable when using question select type = 5 (category-random)
+//ALTER TABLE c_quiz_question_rel_category ADD COLUMN mandatory INT DEFAULT 0;
+//$_configuration['allow_mandatory_question_in_category'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

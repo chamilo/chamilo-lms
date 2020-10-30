@@ -205,7 +205,7 @@ class Exercise
             $this->is_gradebook_locked = api_resource_is_locked_by_gradebook($id, LINK_EXERCISE);
             $this->review_answers = (isset($object->review_answers) && $object->review_answers == 1) ? true : false;
             $this->globalCategoryId = isset($object->global_category_id) ? $object->global_category_id : null;
-            $this->questionSelectionType = isset($object->question_selection_type) ? $object->question_selection_type : null;
+            $this->questionSelectionType = isset($object->question_selection_type) ? (int) $object->question_selection_type : null;
             $this->hideQuestionTitle = isset($object->hide_question_title) ? (int) $object->hide_question_title : 0;
             $this->autolaunch = isset($object->autolaunch) ? (int) $object->autolaunch : 0;
             $this->exerciseCategoryId = isset($object->exercise_category_id) ? (int) $object->exercise_category_id : null;
@@ -818,7 +818,6 @@ class Exercise
 
         // Order/random categories
         $cat = new TestCategory();
-
         // Setting category order.
         switch ($questionSelectionType) {
             case EX_Q_SELECTION_ORDERED: // 1
@@ -883,12 +882,26 @@ class Exercise
                     $question_list,
                     $categoriesAddedInExercise
                 );
+
+                $questionsByCategoryMandatory = [];
+                if (EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_RANDOM == $this->getQuestionSelectionType() &&
+                    api_get_configuration_value('allow_mandatory_question_in_category')
+                ) {
+                    $questionsByCategoryMandatory = TestCategory::getQuestionsByCat(
+                        $this->id,
+                        $question_list,
+                        $categoriesAddedInExercise,
+                        true
+                    );
+                }
+
                 $question_list = $this->pickQuestionsPerCategory(
                     $categoriesAddedInExercise,
                     $question_list,
                     $questions_by_category,
                     true,
-                    true
+                    true,
+                    $questionsByCategoryMandatory
                 );
                 break;
             case EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_RANDOM: // 6
@@ -6734,10 +6747,7 @@ class Exercise
         // Getting question list.
         $questionList = $this->selectQuestionList(true, $adminView);
         $this->setMediaList($questionList);
-        $this->questionList = $this->transformQuestionListWithMedias(
-            $questionList,
-            false
-        );
+        $this->questionList = $this->transformQuestionListWithMedias($questionList, false);
         $this->questionListUncompressed = $this->transformQuestionListWithMedias(
             $questionList,
             true
@@ -10239,6 +10249,7 @@ class Exercise
      * @param array $questions_by_category     per category
      * @param bool  $flatResult
      * @param bool  $randomizeQuestions
+     * @param array $questionsByCategoryMandatory
      *
      * @return array
      */
@@ -10247,7 +10258,8 @@ class Exercise
         $question_list,
         &$questions_by_category,
         $flatResult = true,
-        $randomizeQuestions = false
+        $randomizeQuestions = false,
+        $questionsByCategoryMandatory = []
     ) {
         $addAll = true;
         $categoryCountArray = [];
@@ -10283,14 +10295,18 @@ class Exercise
                 if ($addAll) {
                     $numberOfQuestions = 999;
                 }
-
                 if (!empty($numberOfQuestions)) {
+                    $mandatoryQuestions = [];
+                    if (isset($questionsByCategoryMandatory[$category_id])) {
+                        $mandatoryQuestions = $questionsByCategoryMandatory[$category_id];
+                    }
+
                     $elements = TestCategory::getNElementsFromArray(
                         $categoryQuestionList,
                         $numberOfQuestions,
-                        $randomizeQuestions
+                        $randomizeQuestions,
+                        $mandatoryQuestions
                     );
-
                     if (!empty($elements)) {
                         $temp_question_list[$category_id] = $elements;
                         $categoryQuestionList = $elements;

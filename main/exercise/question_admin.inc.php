@@ -39,7 +39,6 @@ if (is_object($objQuestion)) {
 
     // form title
     $form->addHeader($text.': '.$form_title_extra.$code);
-
     // question form elements
     $objQuestion->createForm($form, $objExercise);
 

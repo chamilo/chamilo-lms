@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
@@ -28,6 +29,7 @@ abstract class Question
     public $category_list;
     public $parent_id;
     public $category;
+    public $mandatory;
     public $isContent;
     public $course;
     public $feedback;
@@ -91,6 +93,7 @@ abstract class Question
         $this->course = api_get_course_info();
         $this->category_list = [];
         $this->parent_id = 0;
+        $this->mandatory = 0;
         // See BT#12611
         $this->questionTypeWithFeedback = [
             MATCHING,
@@ -164,8 +167,19 @@ abstract class Question
                 $objQuestion->extra = $object->extra;
                 $objQuestion->course = $course_info;
                 $objQuestion->feedback = isset($object->feedback) ? $object->feedback : '';
-                $objQuestion->category = TestCategory::getCategoryForQuestion($id, $course_id);
                 $objQuestion->code = isset($object->code) ? $object->code : '';
+                $categoryInfo = TestCategory::getCategoryInfoForQuestion($id, $course_id);
+                if (!empty($categoryInfo)) {
+                    if (isset($categoryInfo['category_id'])) {
+                        $objQuestion->category = (int) $categoryInfo['category_id'];
+                    }
+
+                    if (api_get_configuration_value('allow_mandatory_question_in_category') &&
+                        isset($categoryInfo['mandatory'])
+                    ) {
+                        $objQuestion->mandatory = (int) $categoryInfo['mandatory'];
+                    }
+                }
 
                 if ($getExerciseList) {
                     $tblQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
@@ -467,6 +481,11 @@ abstract class Question
         $this->category = $category;
     }
 
+    public function setMandatory($value)
+    {
+        $this->mandatory = (int) $value;
+    }
+
     /**
      * @param int $value
      *
@@ -527,8 +546,8 @@ abstract class Question
     }
 
     /**
-     * in this version, a question can only have 1 category
-     * if category is 0, then question has no category then delete the category entry.
+     * In this version, a question can only have 1 category.
+     * If category is 0, then question has no category then delete the category entry.
      *
      * @param int $categoryId
      * @param int $courseId
@@ -558,9 +577,15 @@ abstract class Question
                         c_id = ".$courseId;
             $res = Database::query($sql);
             $row = Database::fetch_array($res);
+            $allowMandatory = api_get_configuration_value('allow_mandatory_question_in_category');
             if ($row['nb'] > 0) {
+                $extraMandatoryCondition = '';
+                if ($allowMandatory) {
+                    $extraMandatoryCondition = ", mandatory = {$this->mandatory}";
+                }
                 $sql = "UPDATE $table
                         SET category_id = $categoryId
+                        $extraMandatoryCondition
                         WHERE
                             question_id = $question_id AND
                             c_id = ".$courseId;
@@ -569,6 +594,15 @@ abstract class Question
                 $sql = "INSERT INTO $table (c_id, question_id, category_id)
                         VALUES (".$courseId.", $question_id, $categoryId)";
                 Database::query($sql);
+
+                if ($allowMandatory) {
+                    $id = Database::insert_id();
+                    if ($id) {
+                        $sql = "UPDATE $table SET mandatory = {$this->mandatory}
+                                WHERE iid = $id";
+                        Database::query($sql);
+                    }
+                }
             }
 
             return true;
@@ -909,7 +943,7 @@ abstract class Question
     }
 
     /**
-     * updates the question in the data base
+     * Updates the question in the database.
      * if an exercise ID is provided, we add that exercise ID into the exercise list.
      *
      * @author Olivier Brouckaert
@@ -977,7 +1011,7 @@ abstract class Question
                 $this->search_engine_edit($exerciseId);
             }
         } else {
-            // Creates a new question
+            // Creates a new question.
             $sql = "SELECT max(position)
                     FROM $TBL_QUESTIONS as question,
                     $TBL_EXERCISE_QUESTION as test_question
@@ -1695,12 +1729,11 @@ abstract class Question
         }
 
         $form->addButtonAdvancedSettings('advanced_params');
-        $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
+        $form->addHtml('<div id="advanced_params_options" style="display:none">');
 
         if (isset($zoomOptions['options'])) {
             $form->addElement('text', 'imageZoom', get_lang('ImageURL'));
             $form->addElement('text', 'imageWidth', get_lang('PixelWidth'));
-
             $form->addButton('btn_create_img', get_lang('AddToEditor'), 'plus', 'info', 'small', 'create_img_link');
         }
 
@@ -1713,26 +1746,32 @@ abstract class Question
         );
 
         if ($this->type != MEDIA_QUESTION) {
-            // Advanced parameters
-            $select_level = self::get_default_levels();
+            // Advanced parameters.
             $form->addElement(
                 'select',
                 'questionLevel',
                 get_lang('Difficulty'),
-                $select_level
+                self::get_default_levels()
             );
 
-            // Categories
-            $tabCat = TestCategory::getCategoriesIdAndName();
+            // Categories.
             $form->addElement(
                 'select',
                 'questionCategory',
                 get_lang('Category'),
-                $tabCat
+                TestCategory::getCategoriesIdAndName()
             );
 
-            global $text;
+            if (EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_RANDOM == $exercise->getQuestionSelectionType() &&
+                api_get_configuration_value('allow_mandatory_question_in_category')
+            ) {
+                $form->addCheckBox(
+                    'mandatory',
+                    get_lang('IsMandatory')
+                );
+            }
 
+            global $text;
             switch ($this->type) {
                 case UNIQUE_ANSWER:
                     $buttonGroup = [];
@@ -1819,6 +1858,7 @@ abstract class Question
         $defaults['questionLevel'] = $this->level;
         $defaults['questionCategory'] = $this->category;
         $defaults['feedback'] = $this->feedback;
+        $defaults['mandatory'] = $this->mandatory;
 
         // Came from he question pool
         if (isset($_GET['fromExercise'])) {
@@ -1850,6 +1890,7 @@ abstract class Question
         $this->updateDescription($form->getSubmitValue('questionDescription'));
         $this->updateLevel($form->getSubmitValue('questionLevel'));
         $this->updateCategory($form->getSubmitValue('questionCategory'));
+        $this->setMandatory($form->getSubmitValue('mandatory'));
         $this->setFeedback($form->getSubmitValue('feedback'));
 
         //Save normal question if NOT media

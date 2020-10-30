@@ -3644,13 +3644,10 @@ class Exercise
             && !empty($extra)
         ) {
             $extra = explode(':', $extra);
-            if ($debug) {
-                error_log(print_r($extra, 1));
-            }
             // Fixes problems with negatives values using intval
-            $true_score = floatval(trim($extra[0]));
-            $false_score = floatval(trim($extra[1]));
-            $doubt_score = floatval(trim($extra[2]));
+            $true_score = (float) trim($extra[0]);
+            $false_score = (float) trim($extra[1]);
+            $doubt_score = (float) trim($extra[2]);
         }
 
         // Construction of the Answer object
@@ -3938,7 +3935,6 @@ class Exercise
                             }
                         }
                         $studentChoice = isset($choice[$answerAutoId]) ? $choice[$answerAutoId] : '';
-
                         $real_answers[$answerId] = false;
                         if ($answerCorrect == $studentChoice) {
                             $real_answers[$answerId] = true;
@@ -10246,7 +10242,7 @@ class Exercise
      *
      * @param array $categoriesAddedInExercise
      * @param array $question_list
-     * @param array $questions_by_category     per category
+     * @param array $questions_by_category per category
      * @param bool  $flatResult
      * @param bool  $randomizeQuestions
      * @param array $questionsByCategoryMandatory
@@ -10393,7 +10389,6 @@ class Exercise
             $question = $item['question'];
             $answer = $item['answer'];
             $answer_type = $item['answer_type'];
-
             if (!empty($question) && !empty($answer) && $answer_type == FREE_ANSWER) {
                 $open_question_list .=
                     '<tr>'

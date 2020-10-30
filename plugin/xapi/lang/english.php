@@ -25,3 +25,7 @@ $strings['ActivityLaunchUrl'] = 'Launch URL';
 $strings['ActivityId'] = 'Activity ID';
 $strings['ActivityType'] = 'Activity type';
 $strings['ActivityDeleted'] = 'Activity deleted';
+$strings['ActivityLaunch'] = 'Launch';
+$strings['ActivityFirstLaunch'] = 'First launch at';
+$strings['ActivityLastLaunch'] = 'Last launch at';
+$strings['LaunchNewAttempt'] = 'Launch new attempt';

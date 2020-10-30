@@ -45,6 +45,9 @@ class XApiPlugin extends Plugin implements HookPluginInterface
     const TYPE_LP = 'lp';
     const TYPE_LP_ITEM = 'lp_item';
 
+    const STATE_FIRST_LAUNCH = 'first_launch';
+    const STATE_LAST_LAUNCH = 'last_launch';
+
     /**
      * XApiPlugin constructor.
      */
@@ -182,6 +185,14 @@ class XApiPlugin extends Plugin implements HookPluginInterface
                 $em->getClassMetadata(ToolLaunch::class),
             ]
         );
+    }
+
+    /**
+     * @return \Xabbuh\XApi\Client\Api\StateApiClientInterface
+     */
+    public function getXApiStateClient()
+    {
+        return $this->createXApiClient()->getStateApiClient();
     }
 
     /**
@@ -353,7 +364,7 @@ class XApiPlugin extends Plugin implements HookPluginInterface
 
         Database::getManager()
             ->createQuery('DELETE FROM ChamiloCourseBundle:CTool t WHERE t.category = :category AND t.link LIKE :link')
-            ->execute(['category' => 'plugin', 'link' => 'xapi/launch.php%']);
+            ->execute(['category' => 'plugin', 'link' => 'xapi/launch/tool.php%']);
     }
 
     /**
@@ -363,7 +374,7 @@ class XApiPlugin extends Plugin implements HookPluginInterface
      */
     public function createLaunchCourseTool(ToolLaunch $toolLaunch)
     {
-        $link ='xapi/launch.php?'.http_build_query(
+        $link ='xapi/launch/tool.php?'.http_build_query(
             [
                 'id' => $toolLaunch->getId(),
             ]
@@ -388,7 +399,7 @@ class XApiPlugin extends Plugin implements HookPluginInterface
         $tool = Database::getManager()
             ->getRepository(CTool::class)
             ->findOneBy([
-                'link' => 'xapi/launch.php?id='.$toolLaunch->getId(),
+                'link' => 'xapi/tool.php?id='.$toolLaunch->getId(),
                 'cId' => $toolLaunch->getCourse()->getId(),
             ]);
 

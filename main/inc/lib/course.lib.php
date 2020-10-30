@@ -4485,12 +4485,11 @@ class CourseManager
         $repo = $entityManager->getRepository('ChamiloCoreBundle:SequenceResource');
 
         $sequences = $repo->getRequirements($course_info['real_id'], SequenceResource::COURSE_TYPE);
-        $sequenceList = $repo->checkRequirementsForUser($sequences, SequenceResource::COURSE_TYPE, $user_id);
+        $sequenceList = $repo->checkRequirementsForUser($sequences, SequenceResource::COURSE_TYPE, $user_id, $session_id);
         $completed = $repo->checkSequenceAreCompleted($sequenceList);
 
         $params['completed'] = $completed;
         $params['requirements'] = '';
-
         if ($sequences && false === $completed) {
             $hasRequirements = false;
             foreach ($sequences as $sequence) {
@@ -4504,7 +4503,8 @@ class CourseManager
                     $course_info['real_id'],
                     SequenceResource::COURSE_TYPE,
                     false,
-                    false
+                    false,
+                    $session_id
                 );
             }
         }

@@ -1724,6 +1724,9 @@ $_configuration['auth_password_links'] = [
 //ALTER TABLE c_quiz_question_rel_category ADD COLUMN mandatory INT DEFAULT 0;
 //$_configuration['allow_mandatory_question_in_category'] = false;
 
+// Resource sequence: Validate course in the same session.
+//$_configuration['course_sequence_valid_only_in_same_session'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

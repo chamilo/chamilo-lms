@@ -2777,24 +2777,22 @@ class Category implements GradebookItem
      *
      * @return float The score
      */
-    private static function calculateCurrentScore(
-        $userId,
-        $category
-    ) {
+    private static function calculateCurrentScore($userId, $category)
+    {
         if (empty($category)) {
             return 0;
         }
 
-        $courseEvaluations = $category->get_evaluations(
-            $userId,
-            true
-        );
+        $courseEvaluations = $category->get_evaluations($userId, true);
         $courseLinks = $category->get_links($userId, true);
         $evaluationsAndLinks = array_merge($courseEvaluations, $courseLinks);
+
         $categoryScore = 0;
         for ($i = 0; $i < count($evaluationsAndLinks); $i++) {
             /** @var AbstractLink $item */
             $item = $evaluationsAndLinks[$i];
+            // Set session id from category
+            $item->set_session_id($category->get_session_id());
             $score = $item->calc_score($userId);
             $itemValue = 0;
             if (!empty($score)) {

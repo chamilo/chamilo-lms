@@ -3,7 +3,7 @@
 require_once __DIR__.'/../../../../vendor/autoload.php';
 
 /**
- * Test example to user API v2.php
+ * Test example to user API v2.php.
  *
  * Using Guzzle' HTTP client to call the API endpoint and make requests.
  * Change URL on the first lines of createUser() below to suit your needs.
@@ -19,9 +19,9 @@ $webservicePassword = 'PASSWORD';
 /**
  * Make a request to get the API key for admin user.
  *
- * @return string
  * @throws Exception
  *
+ * @return string
  */
 function authenticate()
 {
@@ -57,8 +57,9 @@ function authenticate()
  * @param $apiKey
  * @param $courseId
  *
- * @return array
  * @throws Exception
+ *
+ * @return array
  */
 function getCourseForumCategories($apiKey, $courseId)
 {
@@ -91,12 +92,12 @@ function getCourseForumCategories($apiKey, $courseId)
     if ($jsonResponse['error']) {
         throw new Exception('cant get course documents because : '.$jsonResponse['message']);
     }
+
     return $jsonResponse['data'];
 }
 
 $apiKey = authenticate();
 
-
 //A list of forum categories
-$courseForumCategories = getCourseForumCategories($apiKey,1);
+$courseForumCategories = getCourseForumCategories($apiKey, 1);
 echo json_encode($courseForumCategories);

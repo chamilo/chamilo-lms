@@ -3,7 +3,7 @@
 require_once __DIR__.'/../../../../vendor/autoload.php';
 
 /**
- * Test example to user API v2.php
+ * Test example to user API v2.php.
  *
  * Using Guzzle' HTTP client to call the API endpoint and make requests.
  * Change URL on the first lines of createUser() below to suit your needs.
@@ -18,9 +18,9 @@ $webservicePassword = 'PASSWORD';
 /**
  * Make a request to get the API key for admin user.
  *
- * @return string
  * @throws Exception
  *
+ * @return string
  */
 function authenticate()
 {
@@ -56,9 +56,9 @@ function authenticate()
  * @param $apiKey
  * @param $courseId
  *
- * @return array
  * @throws Exception
  *
+ * @return array
  */
 function getCourseAgenda($apiKey, $courseId)
 {
@@ -76,7 +76,7 @@ function getCourseAgenda($apiKey, $courseId)
                 'action' => 'course_agenda',
                 'username' => $webserviceUsername,
                 'api_key' => $apiKey,
-                'course' => $courseId
+                'course' => $courseId,
             ],
         ]
     );
@@ -91,12 +91,12 @@ function getCourseAgenda($apiKey, $courseId)
     if ($jsonResponse['error']) {
         throw new Exception('cant get course agenda because : '.$jsonResponse['message']);
     }
+
     return $jsonResponse['data'];
 }
 
 $apiKey = authenticate();
 
-
 //Get the list of calendar events from inside the given course.
-$courseAgenda = getCourseAgenda($apiKey,1);
+$courseAgenda = getCourseAgenda($apiKey, 1);
 echo json_encode($courseAgenda);

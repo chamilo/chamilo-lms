@@ -3,7 +3,7 @@
 require_once __DIR__.'/../../../../vendor/autoload.php';
 
 /**
- * Test example to user API v2.php
+ * Test example to user API v2.php.
  *
  * Using Guzzle' HTTP client to call the API endpoint and make requests.
  * Change URL on the first lines of createUser() below to suit your needs.
@@ -19,9 +19,9 @@ $webservicePassword = 'PASSWORD';
 /**
  * Make a request to get the API key for admin user.
  *
- * @return string
  * @throws Exception
  *
+ * @return string
  */
 function authenticate()
 {
@@ -56,9 +56,9 @@ function authenticate()
 /**
  * @param $apiKey
  *
- * @return int
  * @throws Exception
  *
+ * @return int
  */
 function getUserProfile($apiKey)
 {
@@ -90,11 +90,11 @@ function getUserProfile($apiKey)
     if ($jsonResponse['error']) {
         throw new Exception('cant get user profile because : '.$jsonResponse['message']);
     }
+
     return $jsonResponse['data'];
 }
 
 $apiKey = authenticate();
-
 
 //Get the list of calendar events from inside the given course.
 $userProfile = getUserProfile($apiKey);

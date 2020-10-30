@@ -3,7 +3,7 @@
 require_once __DIR__.'/../../../../vendor/autoload.php';
 
 /**
- * Test example to user API v2.php
+ * Test example to user API v2.php.
  *
  * Using Guzzle' HTTP client to call the API endpoint and make requests.
  * Change URL on the first lines of createUser() below to suit your needs.
@@ -19,9 +19,9 @@ $webservicePassword = 'PASSWORD';
 /**
  * Make a request to get the API key for admin user.
  *
- * @return string
  * @throws Exception
  *
+ * @return string
  */
 function authenticate()
 {
@@ -30,9 +30,7 @@ function authenticate()
     global $webservicePassword;
     $client = new Client([
         'base_uri' => $webserviceURL,
-
     ]);
-
 
     $response = $client->post('v2.php', [
         'form_params' => [
@@ -58,9 +56,9 @@ function authenticate()
 /**
  * @param $apiKey
  *
- * @return int
  * @throws Exception
  *
+ * @return int
  */
 function getUserNameExist($apiKey, $loginname)
 {
@@ -68,9 +66,7 @@ function getUserNameExist($apiKey, $loginname)
     global $webserviceUsername;
     $client = new Client([
         'base_uri' => $webserviceURL,
-
     ]);
-
 
     $response = $client->post(
         'v2.php',
@@ -95,11 +91,11 @@ function getUserNameExist($apiKey, $loginname)
     if ($jsonResponse['error']) {
         throw new Exception('cant get user profile because : '.$jsonResponse['message']);
     }
+
     return $jsonResponse['data'][0];
 }
 
 $apiKey = authenticate();
-
 
 //Return if a username already exist
 $userNameExist = getUserNameExist($apiKey, 'admin');
@@ -107,6 +103,4 @@ if ($userNameExist == true) {
     echo "User name exist";
 } else {
     echo "User doesnt name exist";
-
 }
-

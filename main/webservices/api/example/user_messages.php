@@ -3,7 +3,7 @@
 require_once __DIR__.'/../../../../vendor/autoload.php';
 
 /**
- * Test example to user API v2.php
+ * Test example to user API v2.php.
  *
  * Using Guzzle' HTTP client to call the API endpoint and make requests.
  * Change URL on the first lines of createUser() below to suit your needs.
@@ -12,16 +12,16 @@ require_once __DIR__.'/../../../../vendor/autoload.php';
 use GuzzleHttp\Client as Client;
 
 // set your URL, username and password here to use it for all webservices in this test file.
-$webserviceURL='https://YOURCHAMILO/main/webservices/api/';
-$webserviceUsername='USERNAME';
-$webservicePassword='PASSWORD';
+$webserviceURL = 'https://YOURCHAMILO/main/webservices/api/';
+$webserviceUsername = 'USERNAME';
+$webservicePassword = 'PASSWORD';
 
 /**
  * Make a request to get the API key for admin user.
  *
- * @return string
  * @throws Exception
  *
+ * @return string
  */
 function authenticate()
 {
@@ -56,9 +56,9 @@ function authenticate()
 /**
  * @param $apiKey
  *
- * @return int
  * @throws Exception
  *
+ * @return int
  */
 function getUserMessages($apiKey)
 {
@@ -85,16 +85,16 @@ function getUserMessages($apiKey)
     }
 
     $content = $response->getBody()->getContents();
-    $jsonResponse = json_decode($content,true);
+    $jsonResponse = json_decode($content, true);
 
     if ($jsonResponse['error']) {
         throw new Exception('Cant get user messages because : '.$jsonResponse['message']);
     }
+
     return $jsonResponse['data'];
 }
 
 $apiKey = authenticate();
-
 
 //Read user mesages
 $userMessages = getUserMessages($apiKey);

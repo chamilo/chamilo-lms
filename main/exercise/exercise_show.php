@@ -311,7 +311,9 @@ if ($show_results || $show_only_total_score || $showTotalScoreAndUserChoicesInLa
     echo $objExercise->showExerciseResultHeader(
         $user_info,
         $track_exercise_info,
-        false
+        false,
+        false,
+        api_get_configuration_value('quiz_results_answers_report')
     );
 }
 

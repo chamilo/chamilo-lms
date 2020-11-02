@@ -29,10 +29,12 @@ switch ($action) {
         $course_id = (isset($_GET['course_id']) && !empty($_GET['course_id'])) ? $_GET['course_id'] : 0;
         $session_id = (!empty($_GET['session_id'])) ? (int) $_GET['session_id'] : 0;
         $data = [];
+        $onlyActiveExercises = !(api_is_platform_admin(true) || api_is_course_admin());
         $results = ExerciseLib::get_all_exercises_for_course_id(
             null,
             $session_id,
-            $course_id
+            $course_id,
+            $onlyActiveExercises
         );
 
         if (!empty($results)) {

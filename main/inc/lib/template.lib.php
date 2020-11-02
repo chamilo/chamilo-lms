@@ -1385,8 +1385,8 @@ class Template
                     $extraParams = '&exerciseId=' . $_GET['exerciseId'];
                 }
 
-                if (isset($_GET['lpId']) && !empty($_GET['lpId'])) {
-                    $extraParams .= '&lpId=' . $_GET['lpId'];
+                if (isset($_GET['lp_id']) && !empty($_GET['lp_id'])) {
+                    $extraParams .= '&lpId=' . $_GET['lp_id'];
                 }
             }
             $url = api_get_path(WEB_CODE_PATH).'ticket/tickets.php?project_id='.$defaultProjectId.'&'.$courseParams.$extraParams;

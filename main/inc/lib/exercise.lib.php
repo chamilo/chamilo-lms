@@ -4726,7 +4726,10 @@ EOT;
                     $category_list[$objQuestionTmp->category]['score'] += $my_total_score;
                     $category_list[$objQuestionTmp->category]['total'] += $my_total_weight;
                     if ($scorePassed) {
-                        $category_list[$objQuestionTmp->category]['passed']++;
+                        // Only count passed if score is not empty
+                        if (!empty($my_total_score)) {
+                            $category_list[$objQuestionTmp->category]['passed']++;
+                        }
                     } else {
                         if ($result['user_answered']) {
                             $category_list[$objQuestionTmp->category]['wrong']++;

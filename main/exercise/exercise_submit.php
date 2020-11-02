@@ -1651,7 +1651,7 @@ if (!empty($error)) {
                             [
                                 'type' => 'button',
                                 'class' => 'btn btn-info',
-                                'data-question' => $questionId
+                                'data-question' => $questionId,
                             ]
                         ),
                         '<span id="save_for_now_'.$questionId.'"></span>&nbsp;',

@@ -40,8 +40,12 @@ $is_allowedToEdit = api_is_allowed_to_edit(null, true);
 $courseId = api_get_course_int_id();
 $sessionId = api_get_session_id();
 $glossaryExtraTools = api_get_setting('show_glossary_in_extra_tools');
-$showPreviousButton = true;
+$allowTimePerQuestion = api_get_configuration_value('allow_time_per_question');
+if ($allowTimePerQuestion) {
+    $htmlHeadXtra[] = api_get_asset('easytimer/easytimer.min.js');
+}
 
+$showPreviousButton = true;
 $showGlossary = in_array($glossaryExtraTools, ['true', 'exercise', 'exercise_and_lp']);
 if ('learnpath' === $origin) {
     $showGlossary = in_array($glossaryExtraTools, ['true', 'lp', 'exercise_and_lp']);
@@ -55,13 +59,11 @@ if ($showGlossary) {
 
 $js = '<script>'.api_get_language_translate_html().'</script>';
 $htmlHeadXtra[] = $js;
-
 $htmlHeadXtra[] = api_get_js('jqueryui-touch-punch/jquery.ui.touch-punch.min.js');
 $htmlHeadXtra[] = api_get_js('jquery.jsPlumb.all.js');
 $htmlHeadXtra[] = api_get_js('d3/jquery.xcolor.js');
 
-//This library is necessary for the time control feature
-//tmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/epiclock/stylesheet/jquery.epiclock.css');
+// This library is necessary for the time control feature.
 $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/epiclock/renderers/minute/epiclock.minute.css');
 $htmlHeadXtra[] = api_get_js('epiclock/javascript/jquery.dateformat.min.js');
 $htmlHeadXtra[] = api_get_js('epiclock/javascript/jquery.epiclock.min.js');
@@ -172,14 +174,11 @@ if (empty($exerciseInSession) || (!empty($exerciseInSession) && $exerciseInSessi
     } else {
         // Saves the object into the session
         Session::write('objExercise', $objExercise);
-        if ($debug) {
-            error_log('1.1. $exerciseInSession was unset - set now - end');
-        }
     }
 } else {
     Session::write('firstTime', false);
 }
-//2. Checking if $objExercise is set
+//2. Checking if $objExercise is set.
 /** @var |Exercise $objExercise */
 if (!isset($objExercise) && isset($exerciseInSession)) {
     if ($debug) {
@@ -190,7 +189,7 @@ if (!isset($objExercise) && isset($exerciseInSession)) {
 
 $exerciseInSession = Session::read('objExercise');
 
-//3. $objExercise is not set, then return to the exercise list
+//3. $objExercise is not set, then return to the exercise list.
 if (!is_object($objExercise)) {
     header('Location: exercise.php');
     exit;
@@ -547,7 +546,7 @@ if ($time_control) {
                 $last_attempt_date = api_get_utc_datetime(api_strtotime($last_attempt_date, 'UTC') + $diff);
             }
 
-            //New expired time - it is due to the possible closure of session
+            // New expired time - it is due to the possible closure of session.
             $new_expired_time_in_seconds = api_strtotime($expired_time_of_this_attempt, 'UTC') - api_strtotime($last_attempt_date, 'UTC');
             $expected_time = $current_timestamp + $new_expired_time_in_seconds;
             $clock_expired_time = api_get_utc_datetime($expected_time);
@@ -618,7 +617,6 @@ if (
     ) {
         $answeredQuestions = array_keys($currentAttempt[$exe_id]['question_list']);
     }
-    //var_dump($exe_id, $answeredQuestions);
     $categoryAllResolved = [];
     $categoryList = Session::read('categoryList');
     foreach ($categoryList as $categoryId => $categoryQuestionList) {
@@ -747,7 +745,7 @@ if ($formSent && isset($_POST)) {
             if (!isset($exerciseResult[$key])) {
                 // stores the user answer into the array
                 $exerciseResult[$key] = $choice[$key];
-                //saving each question
+                // Saving each question.
                 if (!in_array($objExercise->getFeedbackType(), [EXERCISE_FEEDBACK_TYPE_DIRECT, EXERCISE_FEEDBACK_TYPE_POPUP])) {
                     $nro_question = $current_question; // - 1;
                     $questionId = $key;
@@ -1054,6 +1052,12 @@ if (isset($_custom['exercises_hidden_when_no_start_date']) &&
     }
 }
 
+if ($allowTimePerQuestion) {
+    echo '<div class="well" style="text-align: center">
+            <div id="question_timer" class="label label-warning"></div>
+          </div>';
+}
+
 if ($time_control) {
     echo $objExercise->returnTimeLeftDiv();
     echo '<div style="display:none" class="warning-message" id="expired-message-id">'.
@@ -1135,24 +1139,20 @@ if (!empty($error)) {
         foreach ($questionList as $questionId) {
             $i++;
             $objQuestionTmp = Question::read($questionId);
-            // for sequential exercises
-
+            $selectType = $objQuestionTmp->selectType();
+            // for sequential exercises.
             if ($objExercise->type == ONE_PER_PAGE) {
                 // if it is not the right question, goes to the next loop iteration
                 if ($current_question != $i) {
                     continue;
                 } else {
-                    if ($objQuestionTmp->selectType() == HOT_SPOT ||
-                        $objQuestionTmp->selectType() == HOT_SPOT_DELINEATION
-                    ) {
+                    if ($selectType == HOT_SPOT || $selectType == HOT_SPOT_DELINEATION) {
                         $number_of_hotspot_questions++;
                     }
                     break;
                 }
             } else {
-                if ($objQuestionTmp->selectType() == HOT_SPOT ||
-                    $objQuestionTmp->selectType() == HOT_SPOT_DELINEATION
-                ) {
+                if ($selectType == HOT_SPOT || $selectType == HOT_SPOT_DELINEATION) {
                     $number_of_hotspot_questions++;
                 }
             }
@@ -1167,6 +1167,26 @@ if (!empty($error)) {
         false,
         true
     );
+
+    $questionTimeCondition = '';
+    if ($allowTimePerQuestion && $objExercise->type == ONE_PER_PAGE) {
+        $extraFieldValue = new ExtraFieldValue('question');
+        $value = $extraFieldValue->get_values_by_handler_and_field_variable($objQuestionTmp->iid, 'time');
+        if (!empty($value) && isset($value['value']) && !empty($value['value'])) {
+            $seconds = (int) $value['value'];
+            $questionTimeCondition = "
+                var timer = new easytimer.Timer();
+                //timer.start();
+                timer.start({countdown: true, startValues: {seconds: $seconds}});
+                timer.addEventListener('secondsUpdated', function (e) {
+                    $('#question_timer').html(timer.getTimeValues().toString());
+                });
+                timer.addEventListener('targetAchieved', function (e) {
+                    $('.question-validate-btn').click();
+                });
+            ";
+        }
+    }
 
     echo '<script>
         function addExerciseEvent(elm, evType, fn, useCapture) {
@@ -1198,7 +1218,8 @@ if (!empty($error)) {
         }
 
         $(function() {
-            //This pre-load the save.png icon
+            '.$questionTimeCondition.'
+            // This pre-load the save.png icon
             var saveImage = new Image();
             saveImage.src = "'.$saveIcon.'";
 
@@ -1556,7 +1577,6 @@ if (!empty($error)) {
 
         $exerciseActions = '';
         $is_remind_on = false;
-
         $attributes = ['id' => 'remind_list['.$questionId.']'];
         if (in_array($questionId, $remind_list)) {
             $is_remind_on = true;
@@ -1628,7 +1648,11 @@ if (!empty($error)) {
                         Display::button(
                             'save_now',
                             get_lang('SaveForNow'),
-                            ['type' => 'button', 'class' => 'btn btn-info', 'data-question' => $questionId]
+                            [
+                                'type' => 'button',
+                                'class' => 'btn btn-info',
+                                'data-question' => $questionId
+                            ]
                         ),
                         '<span id="save_for_now_'.$questionId.'"></span>&nbsp;',
                     ];
@@ -1670,7 +1694,7 @@ if (!empty($error)) {
             break;
         }
     }
-    // end foreach()
+
     if ($objExercise->type == ALL_ON_ONE_PAGE) {
         $exerciseActions = $objExercise->show_button(
             $questionId,

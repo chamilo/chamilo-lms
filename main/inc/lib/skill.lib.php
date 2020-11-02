@@ -1429,6 +1429,8 @@ class Skill extends Model
                     $courseInfo = api_get_course_info_by_id($courseId);
                     $courseTempList[$courseId] = $courseInfo;
                 }
+            } else {
+                $courseInfo = [];
             }
             $tableRow = [
                 'skill_badge' => $resultData['img_small'],

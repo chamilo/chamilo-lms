@@ -4946,7 +4946,8 @@ class learnpath
             // Save progress.
             list($progress) = $this->get_progress_bar_text('%');
             $scoreAsProgressSetting = api_get_configuration_value('lp_score_as_progress_enable');
-            if ($scoreAsProgressSetting && (null === $score || empty($score) || -1 == $score)) {
+            $scoreAsProgress = $this->getUseScoreAsProgress();
+            if ($scoreAsProgress && $scoreAsProgressSetting && (null === $score || empty($score) || -1 == $score)) {
                 return false;
             }
 

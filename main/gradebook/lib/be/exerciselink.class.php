@@ -199,7 +199,6 @@ class ExerciseLink extends AbstractLink
     public function calc_score($stud_id = null, $type = null)
     {
         $allowStats = api_get_configuration_value('allow_gradebook_stats');
-
         if ($allowStats) {
             $link = $this->entity;
             if (!empty($link)) {
@@ -208,21 +207,19 @@ class ExerciseLink extends AbstractLink
                 switch ($type) {
                     case 'best':
                         $bestResult = $link->getBestScore();
-                        $result = [$bestResult, $weight];
 
-                        return $result;
+                        return [$bestResult, $weight];
+
                         break;
                     case 'average':
                         $count = count($this->getStudentList());
                         if (empty($count)) {
-                            $result = [0, $weight];
-
-                            return $result;
+                            return [0, $weight];
                         }
                         $sumResult = array_sum($link->getUserScoreList());
-                        $result = [$sumResult / $count, $weight];
 
-                        return $result;
+                        return [$sumResult / $count, $weight];
+
                         break;
                     case 'ranking':
                         return [null, null];

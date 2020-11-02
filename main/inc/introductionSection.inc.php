@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CToolIntro;
@@ -26,8 +27,6 @@ use Chamilo\CourseBundle\Entity\CToolIntro;
  *
  * This script is also used since Chamilo 1.9 to show course progress (from the
  * course_progress module)
- *
- * @package chamilo.include
  */
 $em = Database::getManager();
 $intro_editAllowed = $is_allowed_to_edit = api_is_allowed_to_edit();
@@ -76,7 +75,6 @@ if ($intro_editAllowed) {
         if ($form->validate()) {
             $form_values = $form->exportValues();
             $intro_content = $form_values['intro_content'];
-
             if (!empty($intro_content)) {
                 if (!$toolIntro) {
                     $toolIntro = new CToolIntro();
@@ -357,8 +355,12 @@ if ($intro_dispCommand) {
 }
 
 $nameSection = get_lang('AddCustomCourseIntro');
-if ($moduleId != 'course_homepage') {
+if ($moduleId !== 'course_homepage') {
     $nameSection = get_lang('AddCustomToolsIntro');
+}
+
+if (!api_is_anonymous()) {
+    $intro_content = AnnouncementManager::parseContent(api_get_user_id(), $intro_content, api_get_course_id());
 }
 
 $introduction_section .= '<div class="col-md-12">';

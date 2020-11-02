@@ -23,11 +23,15 @@ abstract class AbstractImporter
     /**
      * @var string
      */
-    protected $relCourseDir;
+    protected $courseDirectoryPath;
     /**
      * @var string
      */
-    protected $packageDir;
+    protected $toolDirectoryPath;
+    /**
+     * @var string
+     */
+    protected $packageDirectoryPath;
     /**
      * @var \PclZip
      */
@@ -37,19 +41,20 @@ abstract class AbstractImporter
      * AbstractImporter constructor.
      *
      * @param array                             $fileInfo
-     * @param string                            $directoryName
+     * @param string                            $toolDirectory
      * @param \Chamilo\CoreBundle\Entity\Course $course
      */
-    protected function __construct(array $fileInfo, $directoryName, Course $course)
+    protected function __construct(array $fileInfo, $toolDirectory, Course $course)
     {
         $this->course = $course;
-        $this->relCourseDir = api_get_course_path($this->course->getCode()).'/'.$directoryName;
+
+        $pathInfo = pathinfo($fileInfo['name']);
+
+        $this->courseDirectoryPath = api_get_path(SYS_COURSE_PATH).$this->course->getDirectory();
+        $this->toolDirectoryPath = $this->courseDirectoryPath.'/'.$toolDirectory;
+        $this->packageDirectoryPath = $this->toolDirectoryPath.'/'.api_replace_dangerous_char($pathInfo['filename']);
+
         $this->zipFile = new PclZip($fileInfo['tmp_name']);
-
-        $filePathInfo = pathinfo($fileInfo['name']);
-        $fileBaseName = str_replace(".{$filePathInfo['extension']}", '', $filePathInfo['basename']);
-
-        $this->packageDir = '/'.api_replace_dangerous_char($fileBaseName);
     }
 
     /**
@@ -67,23 +72,19 @@ abstract class AbstractImporter
     {
         $this->validPackage();
 
-        $sysCourseDir = api_get_path(SYS_COURSE_PATH).$this->relCourseDir;
-
         if (!$this->isEnoughSpace()) {
             throw new Exception('Not enough space to storage package.');
         }
 
-        $fullSysPackageDir = $sysCourseDir.$this->packageDir;
-
         $fs = new Filesystem();
         $fs->mkdir(
-            $fullSysPackageDir,
+            $this->packageDirectoryPath,
             api_get_permissions_for_new_directories()
         );
 
-        $this->zipFile->extract($fullSysPackageDir);
+        $this->zipFile->extract($this->packageDirectoryPath);
 
-        return "$fullSysPackageDir/tincan.xml";
+        return "{$this->packageDirectoryPath}/tincan.xml";
     }
 
     /**
@@ -118,9 +119,7 @@ abstract class AbstractImporter
 
         $courseSpaceQuota = DocumentManager::get_course_quota($this->course->getCode());
 
-        $sysCourseDir = api_get_path(SYS_COURSE_PATH).$this->relCourseDir;
-
-        if (!enough_size($zipRealSize, $sysCourseDir, $courseSpaceQuota)) {
+        if (!enough_size($zipRealSize, $this->courseDirectoryPath, $courseSpaceQuota)) {
             return false;
         }
 

@@ -12179,12 +12179,25 @@ EOD;
         }
     }
 
-    public static function getLpList($courseId)
+    public static function getLpList($courseId, $onlyActiveLp = true)
     {
-        $table = Database::get_course_table(TABLE_LP_MAIN);
+        $TABLE_LP = Database::get_course_table(TABLE_LP_MAIN);
+        $TABLE_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $courseId = (int) $courseId;
 
-        $sql = "SELECT * FROM $table WHERE c_id = $courseId";
+        $sql = "SELECT lp.id, lp.name
+                FROM $TABLE_LP lp
+                INNER JOIN $TABLE_ITEM_PROPERTY ip
+                ON lp.id = ip.ref
+                WHERE lp.c_id = $courseId ";
+
+        if ($onlyActiveLp) {
+            $sql .= "AND ip.tool = 'learnpath' ";
+            $sql .= "AND ip.visibility = 1 ";
+        }
+
+        $sql .= "GROUP BY lp.id";
+
         $result = Database::query($sql);
 
         return Database::store_result($result, 'ASSOC');

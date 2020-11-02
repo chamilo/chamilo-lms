@@ -22,7 +22,8 @@ if ($debug) {
 switch ($action) {
     case 'get_lp_list_by_course':
         $course_id = (isset($_GET['course_id']) && !empty($_GET['course_id'])) ? $_GET['course_id'] : 0;
-        $results = learnpath::getLpList($course_id);
+        $onlyActiveLp = !(api_is_platform_admin(true) || api_is_course_admin());
+        $results = learnpath::getLpList($course_id, $onlyActiveLp);
         $data= [];
 
         if (!empty($results)) {

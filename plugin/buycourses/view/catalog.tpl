@@ -3,12 +3,16 @@
 <div id="buy-courses-tabs">
     {% if sessions_are_included %}
         <ul class="nav nav-tabs buy-courses-tabs" role="tablist">
+            {% if coursesExist %}
             <li id="buy-courses-tab" class="{{ showing_courses ? 'active' : '' }}" role="presentation">
                 <a href="course_catalog.php" aria-controls="buy-courses" role="tab">{{ 'Courses'|get_lang }}</a>
             </li>
+            {% endif %}
+            {% if sessionExist %}
             <li id="buy-sessions-tab" class="{{ showing_sessions ? 'active' : '' }}" role="presentation">
                 <a href="session_catalog.php" aria-controls="buy-sessions" role="tab">{{ 'Sessions'|get_lang }}</a>
             </li>
+            {% endif %}
             {% if services_are_included %}
                 <li id="buy-services-tab" class="{{ showing_services ? 'active' : '' }}" role="presentation">
                     <a href="service_catalog.php" aria-controls="buy-services"
@@ -28,7 +32,7 @@
                     <div class="row">
                         {% if showing_courses %}
                             {% for course in courses %}
-                                <div class="col-md-4 col-sm-6">
+                                <div class="col-sm-12 col-md-4 col-lg-3">
                                     <article class="items-course">
                                         <div class="items-course-image">
                                             <img alt="{{ course.title }}" class="img-responsive"
@@ -77,7 +81,7 @@
 
                         {% if showing_sessions %}
                             {% for session in sessions %}
-                                <div class="col-md-4 col-sm-6">
+                                <div class="col-sm-12 col-md-4 col-lg-3 ">
                                     <article class="items-course">
                                         <div class="items-course-image">
                                             <img alt="{{ session.name }}" class="img-responsive"
@@ -96,6 +100,7 @@
                                                     {{ session.item.total_price_formatted }}
                                                 </span>
                                             </p>
+                                            <!--
                                             <ul class="list-unstyled">
                                                 {% for course in session.courses %}
                                                     <li>
@@ -110,6 +115,7 @@
                                                     </li>
                                                 {% endfor %}
                                             </ul>
+                                            -->
                                             {% if session.enrolled == "YES" %}
                                                 <div class="alert alert-success">
                                                     <em class="fa fa-check-square-o fa-fw"></em> {{ 'TheUserIsAlreadyRegisteredInTheSession'|get_plugin_lang('BuyCoursesPlugin') }}
@@ -132,7 +138,7 @@
 
                         {% if showing_services %}
                             {% for service in services %}
-                                <div class="col-md-4 col-sm-6">
+                                <div class="col-sm-12 col-md-4 col-lg-3">
                                     <div class="items-course">
                                         <div class="items-course-image">
                                             <a href="{{ _p.web }}service/{{ service.id }}">

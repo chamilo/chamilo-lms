@@ -87,6 +87,14 @@ $tpl->assign('sessions_are_included', $includeSessions);
 $tpl->assign('services_are_included', $includeServices);
 $tpl->assign('pagination', $pagination);
 
+$sessionList = $plugin->getCatalogSessionList($first, $pageSize, $nameFilter, $minFilter, $maxFilter, 'all', 0);
+$coursesExist = true;
+$sessionExist = true;
+if(count($sessionList)<=0) $sessionExist = false;
+
+$tpl->assign('coursesExist', $coursesExist);
+$tpl->assign('sessionExist', $sessionExist);
+
 $content = $tpl->fetch('buycourses/view/catalog.tpl');
 
 $tpl->assign('header', $templateName);

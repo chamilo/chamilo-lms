@@ -92,7 +92,10 @@ class XApiPlugin extends Plugin implements HookPluginInterface
         $em = Database::getManager();
 
         $tablesExists = $em->getConnection()->getSchemaManager()->tablesExist(
-            ['xapi_shared_statement']
+            [
+                'xapi_shared_statement',
+                'xapi_tool_launch',
+            ]
         );
 
         if ($tablesExists) {
@@ -101,7 +104,6 @@ class XApiPlugin extends Plugin implements HookPluginInterface
 
         $this->installPluginDbTables();
         $this->installUuid();
-        $this->deleteCourseTools();
         $this->addCourseTools();
     }
 
@@ -166,10 +168,10 @@ class XApiPlugin extends Plugin implements HookPluginInterface
         $quizQuestionAnsweredHook = XApiQuizQuestionAnsweredHookObserver::create();
         $quizEndHook = XApiQuizEndHookObserver::create();
 
-        HookLearningPathItemViewed::create()->attach($learningPathItemViewedHook);
+        HookLearningPathItemViewed::create()->detach($learningPathItemViewedHook);
         HookLearningPathEnd::create()->detach($learningPathEndHook);
-        HookQuizQuestionAnswered::create()->attach($quizQuestionAnsweredHook);
-        HookQuizEnd::create()->attach($quizEndHook);
+        HookQuizQuestionAnswered::create()->detach($quizQuestionAnsweredHook);
+        HookQuizEnd::create()->detach($quizEndHook);
 
         return 1;
     }
@@ -286,9 +288,6 @@ class XApiPlugin extends Plugin implements HookPluginInterface
         } else {
             $quizEndEvent->detach($quizEndHook);
         }
-
-        $this->deleteCourseTools();
-        $this->addCourseTools();
 
         return $this;
     }

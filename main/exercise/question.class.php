@@ -1664,7 +1664,7 @@ abstract class Question
             echo $includeFile;
 
             echo '<script type="text/javascript" charset="utf-8">
-            $(document).ready(function () {
+            $(function() {
                 $(".create_img_link").click(function(e){
                     e.preventDefault();
                     e.stopPropagation();

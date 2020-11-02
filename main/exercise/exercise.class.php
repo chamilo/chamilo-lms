@@ -10242,7 +10242,7 @@ class Exercise
      *
      * @param array $categoriesAddedInExercise
      * @param array $question_list
-     * @param array $questions_by_category per category
+     * @param array $questions_by_category
      * @param bool  $flatResult
      * @param bool  $randomizeQuestions
      * @param array $questionsByCategoryMandatory

@@ -4695,6 +4695,12 @@ EOT;
                 $my_total_score = $result['score'];
                 $my_total_weight = $result['weight'];
 
+                $scorePassed = $my_total_score >= $my_total_weight;
+                if (function_exists('bccomp')) {
+                    $compareResult = bccomp($my_total_score, $my_total_weight, 3);
+                    $scorePassed = $compareResult === 1 || $compareResult === 0;
+                }
+
                 // Category report
                 $category_was_added_for_this_test = false;
                 if (isset($objQuestionTmp->category) && !empty($objQuestionTmp->category)) {
@@ -4704,11 +4710,34 @@ EOT;
                     if (!isset($category_list[$objQuestionTmp->category]['total'])) {
                         $category_list[$objQuestionTmp->category]['total'] = 0;
                     }
+                    if (!isset($category_list[$objQuestionTmp->category]['total_questions'])) {
+                        $category_list[$objQuestionTmp->category]['total_questions'] = 0;
+                    }
+                    if (!isset($category_list[$objQuestionTmp->category]['passed'])) {
+                        $category_list[$objQuestionTmp->category]['passed'] = 0;
+                    }
+                    if (!isset($category_list[$objQuestionTmp->category]['wrong'])) {
+                        $category_list[$objQuestionTmp->category]['wrong'] = 0;
+                    }
+                    if (!isset($category_list[$objQuestionTmp->category]['no_answer'])) {
+                        $category_list[$objQuestionTmp->category]['no_answer'] = 0;
+                    }
+
                     $category_list[$objQuestionTmp->category]['score'] += $my_total_score;
                     $category_list[$objQuestionTmp->category]['total'] += $my_total_weight;
+                    if ($scorePassed) {
+                        $category_list[$objQuestionTmp->category]['passed']++;
+                    } else {
+                        if ($result['user_answered']) {
+                            $category_list[$objQuestionTmp->category]['wrong']++;
+                        } else {
+                            $category_list[$objQuestionTmp->category]['no_answer']++;
+                        }
+                    }
+
+                    $category_list[$objQuestionTmp->category]['total_questions']++;
                     $category_was_added_for_this_test = true;
                 }
-
                 if (isset($objQuestionTmp->category_list) && !empty($objQuestionTmp->category_list)) {
                     foreach ($objQuestionTmp->category_list as $category_id) {
                         $category_list[$category_id]['score'] += $my_total_score;
@@ -4754,12 +4783,6 @@ EOT;
                     if ($teacherAudio) {
                         echo $teacherAudio;
                     }
-                }
-
-                $scorePassed = $my_total_score >= $my_total_weight;
-                if (function_exists('bccomp')) {
-                    $compareResult = bccomp($my_total_score, $my_total_weight, 3);
-                    $scorePassed = $compareResult === 1 || $compareResult === 0;
                 }
 
                 $calculatedScore = [
@@ -5004,6 +5027,7 @@ EOT;
         );
 
         return [
+            'category_list' => $category_list,
             'attempts_result_list' => $attemptResult, // array of results
             'exercise_passed' => $passed, // boolean
             'total_answers_count' => count($attemptResult), // int

@@ -5034,6 +5034,8 @@ EOT;
             'failed_answers_count' => $failedAnswersCount, // int
             'failed_answers_html' => $wrongQuestionHtml,
             'all_answers_html' => $all,
+            'total_score' => $total_score,
+            'total_weight' => $total_weight,
         ];
     }
 

@@ -17,7 +17,7 @@ $data = [];
 $students = CourseManager::get_student_list_from_course_code($courseCode);
 $categories = TestCategory::getCategoryListInfo('', $courseId);
 
-$sql = "SELECT iid, title FROM c_quiz WHERE c_id = $courseId AND active = 1 order by iid";
+$sql = "SELECT iid, title FROM c_quiz WHERE c_id = $courseId AND active <> 2 order by iid";
 $result = Database::query($sql);
 $exercises = Database::store_result($result);
 $list = [];
@@ -105,12 +105,12 @@ foreach ($students as $studentInfo) {
                 $categoryData[$categoryInfo->id]['score'] += $categoryItem['score'];
             }
         }
-
-        foreach ($stats['attempts_result_list'] as $attempt) {
+        /*foreach ($stats['attempts_result_list'] as $attempt) {
             // Only first item
             $userExerciseData[$exerciseId] = $attempt['score'];
             break;
-        }
+        }*/
+        $userExerciseData[$exerciseId] = $stats['total_score'];
     }
     foreach ($categories as $categoryInfo) {
         if (isset($categoryData[$categoryInfo->id])) {

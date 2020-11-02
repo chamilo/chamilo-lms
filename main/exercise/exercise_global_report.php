@@ -27,7 +27,8 @@ $header[] = get_lang('Username');
 $header[] = get_lang('FirstName');
 $header[] = get_lang('LastName');
 $header[] = get_lang('Email');
-$header[] = 'NIF';
+$header[] = get_lang('OfficialCode');
+//$header[] = 'NIF';
 /** @var TestCategory $categoryInfo */
 foreach ($categories as $categoryInfo) {
     $header[] = 'Aciertos: '.$categoryInfo->name;
@@ -45,14 +46,15 @@ $objExercise = new Exercise();
 
 foreach ($students as $studentInfo) {
     $studentId = $studentInfo['user_id'];
-    $userExtra = UserManager::get_extra_user_data($studentId);
+    //$userExtra = UserManager::get_extra_user_data($studentId);
 
     $data = [];
     $data[] = $studentInfo['username'];
     $data[] = $studentInfo['lastname'];
     $data[] = $studentInfo['firstname'];
     $data[] = $studentInfo['email'];
-    $data[] = isset($userExtra['extra_nif']) ? $userExtra['extra_nif'] : '';
+    $data[] = $studentInfo['official_code'];
+    //$data[] = isset($userExtra['extra_nif']) ? $userExtra['extra_nif'] : '';
 
     $userExerciseData = [];
     $categoryData = [];
@@ -137,7 +139,7 @@ foreach ($students as $studentInfo) {
 
     $list[] = $data;
 }
-
+//var_dump($list);exit;
 $filePath = Export::arrayToCsv($list, get_lang('Report'), true);
 
 DocumentManager::file_send_for_download($filePath, true, get_lang('Report').'.csv');

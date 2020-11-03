@@ -105,6 +105,7 @@ class XApiPlugin extends Plugin implements HookPluginInterface
         $this->installPluginDbTables();
         $this->installUuid();
         $this->addCourseTools();
+        $this->installHook();
     }
 
     /**
@@ -167,11 +168,13 @@ class XApiPlugin extends Plugin implements HookPluginInterface
         $learningPathEndHook = XApiLearningPathEndHookObserver::create();
         $quizQuestionAnsweredHook = XApiQuizQuestionAnsweredHookObserver::create();
         $quizEndHook = XApiQuizEndHookObserver::create();
+        $createCourseHook = XApiCreateCourseHookObserver::create();
 
         HookLearningPathItemViewed::create()->detach($learningPathItemViewedHook);
         HookLearningPathEnd::create()->detach($learningPathEndHook);
         HookQuizQuestionAnswered::create()->detach($quizQuestionAnsweredHook);
         HookQuizEnd::create()->detach($quizEndHook);
+        HookCreateCourse::create()->detach($createCourseHook);
 
         return 1;
     }
@@ -297,7 +300,9 @@ class XApiPlugin extends Plugin implements HookPluginInterface
      */
     public function installHook()
     {
-        return 0;
+        $createCourseHook = XApiCreateCourseHookObserver::create();
+
+        HookCreateCourse::create()->attach($createCourseHook);
     }
 
     /**
@@ -339,6 +344,19 @@ class XApiPlugin extends Plugin implements HookPluginInterface
         return api_get_path(WEB_PATH)."xapi/$type/$value";
     }
 
+    /**
+     * @param int $courseId
+     */
+    public function addCourseTool($courseId)
+    {
+        $this->createLinkToCourseTool(
+            $this->get_title().':teacher',
+            $courseId,
+            null,
+            'xapi/launch/list.php'
+        );
+    }
+
     private function addCourseTools()
     {
         $courses = Database::getManager()
@@ -346,12 +364,7 @@ class XApiPlugin extends Plugin implements HookPluginInterface
             ->getResult();
 
         foreach ($courses as $course) {
-            $this->createLinkToCourseTool(
-                $this->get_title().':teacher',
-                $course['id'],
-                null,
-                'xapi/launch/list.php'
-            );
+            $this->addCourseTool($course['id']);
         }
     }
 

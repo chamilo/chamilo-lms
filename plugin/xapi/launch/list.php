@@ -19,15 +19,16 @@ $cidReq = api_get_cidreq();
 
 $table = new SortableTable(
     'tbl_xapi',
-    function () use ($em) {
+    function () use ($em, $course) {
         return $em
-            ->createQuery('SELECT COUNT(tl) FROM ChamiloPluginBundle:XApi\ToolLaunch tl')
+            ->createQuery('SELECT COUNT(tl) FROM ChamiloPluginBundle:XApi\ToolLaunch tl WHERE tl.course = :course')
+            ->setParameter('course', $course)
             ->getSingleScalarResult();
     },
-    function ($start, $limit, $orderBy, $orderDir) use ($em) {
+    function ($start, $limit, $orderBy, $orderDir) use ($em, $course) {
         $tools = $em->getRepository('ChamiloPluginBundle:XApi\ToolLaunch')
             ->findBy(
-                [],
+                ['course' => $course],
                 ['title' => $orderDir],
                 $limit,
                 $start

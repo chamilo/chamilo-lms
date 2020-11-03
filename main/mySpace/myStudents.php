@@ -1611,10 +1611,12 @@ if (empty($details)) {
         echo '<th>'.get_lang('AllAttempts').'</th>';
 
         $hookQuizTracking = HookMyStudentsQuizTracking::create();
-        if ($hookQuizTracking) {
+        if ($hookQuizTracking && !empty($header)) {
             $hookHeaders = array_map(
                 function ($hookHeader) {
-                    return Display::tag('th', $hookHeader['value'], $hookHeader['attrs']);
+                    if (isset($hookHeader['value'])) {
+                        return Display::tag('th', $hookHeader['value'], $hookHeader['attrs']);
+                    }
                 },
                 $hookQuizTracking->notifyTrackingHeader()
             );
@@ -1635,7 +1637,9 @@ if (empty($details)) {
         if ($hookQuizTracking) {
             $hookHeaders = array_map(
                 function ($hookHeader) {
-                    return strip_tags($hookHeader['value']);
+                    if (isset($hookHeader['value'])) {
+                        return strip_tags($hookHeader['value']);
+                    }
                 },
                 $hookQuizTracking->notifyTrackingHeader()
             );

@@ -28,7 +28,7 @@ $header[] = get_lang('FirstName');
 $header[] = get_lang('LastName');
 $header[] = get_lang('Email');
 $header[] = get_lang('OfficialCode');
-//$header[] = 'NIF';
+
 /** @var TestCategory $categoryInfo */
 foreach ($categories as $categoryInfo) {
     $header[] = 'Aciertos: '.$categoryInfo->name;
@@ -107,11 +107,6 @@ foreach ($students as $studentInfo) {
                 $categoryData[$categoryInfo->id]['score'] += $categoryItem['score'];
             }
         }
-        /*foreach ($stats['attempts_result_list'] as $attempt) {
-            // Only first item
-            $userExerciseData[$exerciseId] = $attempt['score'];
-            break;
-        }*/
         $userExerciseData[$exerciseId] = $stats['total_score'];
     }
     foreach ($categories as $categoryInfo) {
@@ -139,9 +134,6 @@ foreach ($students as $studentInfo) {
 
     $list[] = $data;
 }
-//var_dump($list);exit;
+
 $filePath = Export::arrayToCsv($list, get_lang('Report'), true);
-
 DocumentManager::file_send_for_download($filePath, true, get_lang('Report').'.csv');
-
-

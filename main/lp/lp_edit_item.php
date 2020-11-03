@@ -119,11 +119,21 @@ $(function() {
 </script>
 <?php
 
-echo $learnPath->build_action_menu();
+$extraField = [];
+$priceExtraField = ExtraField::getDisplayNameByVariable('IsAuthor');
+if ($priceExtraField != null) {
+    $extraField['IsAuthor'] = $priceExtraField;
+}
+echo $learnPath->build_action_menu(false,
+    true,
+    false,
+    true,
+    '',
+    $extraField);
 
 echo '<div class="row">';
 echo '<div id="lp_sidebar" class="col-md-4">';
-$documentId = isset($_GET['path_item']) ? (int) $_GET['path_item'] : 0;
+$documentId = isset($_GET['path_item']) ? (int)$_GET['path_item'] : 0;
 $documentInfo = DocumentManager::get_document_data_by_id($documentId, api_get_course_id(), false, null, true);
 if (empty($documentInfo)) {
     // Try with iid

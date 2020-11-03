@@ -503,6 +503,20 @@ if ($debug > 0) {
 }
 
 switch ($action) {
+    case 'author_view':
+        $authors = ExtraField::getUserByExtrafieldVariableName('IsAuthor', 1);
+        $_SESSION['oLP']->authorsAvaible = $authors;
+        Session::write('oLP', $_SESSION['oLP']);
+        if (!$is_allowed_to_edit) {
+            api_not_allowed(true);
+        }
+        if (!$lp_found) {
+            // Check if the learnpath ID was defined, otherwise send back to list
+            require 'lp_list.php';
+        } else {
+            require 'lp_add_author.php';
+        }
+        break;
     case 'send_notify_teacher':
         // Send notification to the teacher
         $studentInfo = api_get_user_info();

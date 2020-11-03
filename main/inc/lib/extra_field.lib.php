@@ -3579,4 +3579,72 @@ JAVASCRIPT;
             }
         );
     }
+
+    /**
+     *  Gets id of an extra field.
+     *
+     * @param string $variableName
+     */
+    public static function getIdByVariableName($variableName = null)
+    {
+        if ($variableName == null) {
+            return null;
+        }
+        $variableName = Database::escape_string($variableName);
+        $tblExtraField = Database::get_main_table(TABLE_EXTRA_FIELD);
+        $query = "SELECT id
+            FROM $tblExtraField
+            WHERE variable = '$variableName'";
+        $companyField = Database::fetch_assoc(Database::query($query));
+
+
+        if ($companyField == false or !isset($companyField['id'])) {
+            return 0;
+        }
+
+        return (int)$companyField['id'];
+    }
+
+    /**
+     * @TODO: Set description
+     */
+    public static function getUserByExtrafieldVariableName($variableName = 'IsAuthor', $value = 1)
+    {
+
+        $value = (int)$value;
+        $teachers = [];
+        /**/
+        if ($variableName == null) {
+            return $teachers;
+        }
+        $variableName = Database::escape_string($variableName);
+        $tblExtraField = Database::get_main_table(TABLE_EXTRA_FIELD);
+        $query = "SELECT id
+            FROM $tblExtraField
+            WHERE variable = '$variableName'";
+        $companyField = Database::fetch_assoc(Database::query($query));
+        $idExtraField = (int)$companyField['id'];
+        if (empty($idExtraField)) return $teachers;
+
+        $tblExtraFieldValues = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+        $tblExtraField = Database::get_main_table(TABLE_EXTRA_FIELD);
+        $extraTypeUser = EntityExtraField::USER_FIELD_TYPE;
+        $sql = "SELECT $tblExtraFieldValues.item_id as id
+            FROM $tblExtraFieldValues
+	INNER JOIN $tblExtraField on $tblExtraField.id = $tblExtraFieldValues.field_id
+            WHERE $tblExtraFieldValues.field_id =$idExtraField and $tblExtraFieldValues.value = $value and
+            $tblExtraField.extra_field_type = $extraTypeUser";
+
+        $result = Database::query($sql);
+        if (Database::num_rows($result)) {
+            while ($row = Database::fetch_array($result, 'ASSOC')) {
+                $teacherId = $row['id'];
+                $teacher = api_get_user_info($teacherId);
+                $teachers[] = $teacher;
+            }
+        }
+
+        return $teachers;
+    }
+
 }

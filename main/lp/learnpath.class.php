@@ -6575,11 +6575,12 @@ class learnpath
     /**
      * This function builds the action menu.
      *
-     * @param bool   $returnString           Optional
-     * @param bool   $showRequirementButtons Optional. Allow show the requirements button
-     * @param bool   $isConfigPage           Optional. If is the config page, show the edit button
-     * @param bool   $allowExpand            Optional. Allow show the expand/contract button
+     * @param bool $returnString Optional
+     * @param bool $showRequirementButtons Optional. Allow show the requirements button
+     * @param bool $isConfigPage Optional. If is the config page, show the edit button
+     * @param bool $allowExpand Optional. Allow show the expand/contract button
      * @param string $action
+     * @param array $extraField
      *
      * @return string
      */
@@ -6588,7 +6589,8 @@ class learnpath
         $showRequirementButtons = true,
         $isConfigPage = false,
         $allowExpand = true,
-        $action = ''
+        $action = '',
+        $extraField = []
     ) {
         $actionsRight = '';
         $lpId = $this->lp_id;
@@ -6728,13 +6730,43 @@ class learnpath
                     'href' => 'lp_controller.php?'.api_get_cidreq().'&'.http_build_query([
                         'action' => 'clear_prerequisites',
                         'lp_id' => $lpId,
-                    ]),
+                        ]),
                 ],
             ];
             $actionsRight = Display::groupButtonWithDropDown(
                 get_lang('PrerequisitesOptions'),
                 $buttons,
                 true
+            );
+        }
+
+        if (isset($extraField['price'])) {
+            $actionsLeft .= Display::url(
+                Display::return_icon(
+                    'upload_audio.png',
+                    get_lang('UpdateAllAudioFragments'),
+                    '',
+                    ICON_SIZE_MEDIUM
+                ),
+                'lp_controller.php?'.api_get_cidreq().'&'.http_build_query([
+                    'action' => 'admin_view',
+                    'lp_id' => $lpId,
+                    'updateaudio' => 'true',
+                ])
+            );
+        }
+        if (isset($extraField['IsAuthor'])) {
+            $actionsLeft .= Display::url(
+                Display::return_icon(
+                    'add-groups.png',
+                    get_lang('UpdateAllAudioFragments'),
+                    '',
+                    ICON_SIZE_MEDIUM
+                ),
+                'lp_controller.php?'.api_get_cidreq().'&'.http_build_query([
+                    'action' => 'author_view',
+                    'lp_id' => $lpId,
+                ])
             );
         }
 

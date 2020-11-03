@@ -514,6 +514,14 @@ input[type=checkbox], input[type=radio] {
     margin: 3px 0 0;
 }
 
+thead input[type=checkbox], thead input[type=radio] {
+    margin: 0px 0 0;
+}
+
+.ui-jqgrid-btable input[type=checkbox] {
+    margin-top: 4px;
+}
+
 .prerequisites input[type=radio] {
     height: 12px;
 }
@@ -6673,7 +6681,6 @@ div#chat-remote-video video {
 
 .grid-courses .items .description {
     padding: 5px 10px 5px;
-    min-height: 125px;
 }
 
 .grid-courses .items .description .text {

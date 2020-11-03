@@ -284,6 +284,11 @@ define('LOG_QUESTION_UPDATED', 'question_updated');
 define('LOG_QUESTION_DELETED', 'question_deleted');
 define('LOG_QUESTION_REMOVED_FROM_QUIZ', 'question_removed_from_quiz');
 
+define('LOG_SURVEY_ID', 'survey_id');
+define('LOG_SURVEY_CREATED', 'survey_created');
+define('LOG_SURVEY_DELETED', 'survey_deleted');
+define('LOG_SURVEY_CLEAN_RESULTS', 'survey_clean_results');
+
 define('USERNAME_PURIFIER', '/[^0-9A-Za-z_\.-]/');
 
 //used when login_is_email setting is true
@@ -5530,15 +5535,16 @@ function copyr($source, $dest, $exclude = [], $copied_files = [])
 }
 
 /**
- * @todo: Using DIRECTORY_SEPARATOR is not recommended, this is an obsolete approach.
- * Documentation header to be added here.
- *
  * @param string $pathname
  * @param string $base_path_document
  * @param int    $session_id
+ * @param array
+ * @param string
  *
  * @return mixed True if directory already exists, false if a file already exists at
  *               the destination and null if everything goes according to plan
+ *@todo: Using DIRECTORY_SEPARATOR is not recommended, this is an obsolete approach.
+ * Documentation header to be added here.
  */
 function copy_folder_course_session(
     $pathname,
@@ -5546,14 +5552,12 @@ function copy_folder_course_session(
     $session_id,
     $course_info,
     $document,
-    $source_course_id
+    $source_course_id,
+    $originalFolderNameList = [],
+    $originalBaseName = ''
 ) {
-    $table = Database::get_course_table(TABLE_DOCUMENT);
-    $session_id = intval($session_id);
-    $source_course_id = intval($source_course_id);
-
     // Check whether directory already exists.
-    if (is_dir($pathname) || empty($pathname)) {
+    if (empty($pathname) || is_dir($pathname)) {
         return true;
     }
 
@@ -5564,18 +5568,29 @@ function copy_folder_course_session(
         return false;
     }
 
+    //error_log('checking:');
+    //error_log(str_replace($base_path_document.DIRECTORY_SEPARATOR, '', $pathname));
+    $baseNoDocument = str_replace('document', '', $originalBaseName);
+    $folderTitles = explode('/', $baseNoDocument);
+    $folderTitles = array_filter($folderTitles);
+
+    //error_log($baseNoDocument);error_log(print_r($folderTitles, 1));
+
+    $table = Database::get_course_table(TABLE_DOCUMENT);
+    $session_id = (int) $session_id;
+    $source_course_id = (int) $source_course_id;
     $course_id = $course_info['real_id'];
     $folders = explode(DIRECTORY_SEPARATOR, str_replace($base_path_document.DIRECTORY_SEPARATOR, '', $pathname));
     $new_pathname = $base_path_document;
-    $path = '';
 
-    foreach ($folders as $folder) {
+    $path = '';
+    foreach ($folders as $index => $folder) {
         $new_pathname .= DIRECTORY_SEPARATOR.$folder;
         $path .= DIRECTORY_SEPARATOR.$folder;
 
         if (!file_exists($new_pathname)) {
             $path = Database::escape_string($path);
-
+            //error_log("path: $path");
             $sql = "SELECT * FROM $table
                     WHERE
                         c_id = $source_course_id AND
@@ -5587,17 +5602,29 @@ function copy_folder_course_session(
 
             if (0 == $num_rows) {
                 mkdir($new_pathname, api_get_permissions_for_new_directories());
+                $title = basename($new_pathname);
+
+                if (isset($folderTitles[$index + 1])) {
+                    $checkPath = $folderTitles[$index + 1];
+                    //error_log("check $checkPath");
+                    if (isset($originalFolderNameList[$checkPath])) {
+                        $title = $originalFolderNameList[$checkPath];
+                        //error_log('use this name: '.$title);
+                    }
+                }
 
                 // Insert new folder with destination session_id.
                 $params = [
                     'c_id' => $course_id,
                     'path' => $path,
                     'comment' => $document->comment,
-                    'title' => basename($new_pathname),
+                    'title' => $title,
                     'filetype' => 'folder',
                     'size' => '0',
                     'session_id' => $session_id,
                 ];
+
+                //error_log("old $folder"); error_log("Add doc $title in $path");
                 $document_id = Database::insert($table, $params);
                 if ($document_id) {
                     $sql = "UPDATE $table SET id = iid WHERE iid = $document_id";
@@ -5618,7 +5645,7 @@ function copy_folder_course_session(
                 }
             }
         }
-    } // en foreach
+    }
 }
 
 // TODO: chmodr() is a better name. Some corrections are needed. Documentation header to be added here.
@@ -9662,7 +9689,6 @@ function api_get_relative_path($from, $to)
  *
  * @param string $type
  * @param string $serialized
- * @param bool   $ignoreErrors. Optional.
  *
  * @return mixed
  */

@@ -268,7 +268,7 @@ function email_filter($email)
 /**
  * Returns a mailto-link.
  *
- * @param string $email  An email-address
+ * @param string $name   An email-address
  * @param array  $params Deprecated
  * @param array  $row
  *

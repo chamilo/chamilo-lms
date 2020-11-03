@@ -1,32 +1,24 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\TrackEExerciseConfirmation;
 use ChamiloSession as Session;
 
-/**
- * Responses to AJAX calls.
- */
 require_once __DIR__.'/../global.inc.php';
 $debug = false;
 // Check if the user has access to the contextual course/session
 api_protect_course_script(true);
 
 $action = $_REQUEST['a'];
-
-if ($debug) {
-    error_log('-----------------------------------------------------');
-    error_log("$action ajax call");
-    error_log('-----------------------------------------------------');
-}
-
 $course_id = api_get_course_int_id();
 $session_id = isset($_REQUEST['session_id']) ? (int) $_REQUEST['session_id'] : api_get_session_id();
 $course_code = isset($_REQUEST['cidReq']) ? $_REQUEST['cidReq'] : api_get_course_id();
+$currentUserId = api_get_user_id();
+$exeId = isset($_REQUEST['exe_id']) ? $_REQUEST['exe_id'] : 0;
 
 switch ($action) {
     case 'update_duration':
-        $exeId = isset($_REQUEST['exe_id']) ? $_REQUEST['exe_id'] : 0;
 
         if (Session::read('login_as')) {
             if ($debug) {
@@ -70,7 +62,6 @@ switch ($action) {
         $now = $nowObject->getTimestamp();
         $exerciseId = $attempt->getExeExoId();
         $userId = $attempt->getExeUserId();
-        $currentUserId = api_get_user_id();
 
         if ($userId != $currentUserId) {
             if ($debug) {
@@ -356,7 +347,6 @@ switch ($action) {
     case 'add_question_to_reminder':
         /** @var Exercise $objExercise */
         $objExercise = Session::read('objExercise');
-        $exeId = isset($_REQUEST['exe_id']) ? $_REQUEST['exe_id'] : 0;
 
         if (empty($objExercise) || empty($exeId)) {
             echo 0;
@@ -412,9 +402,6 @@ switch ($action) {
             // Needed in manage_answer.
             $learnpath_id = isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : 0;
             $learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? (int) $_REQUEST['learnpath_item_id'] : 0;
-
-            // Attempt id.
-            $exeId = isset($_REQUEST['exe_id']) ? (int) $_REQUEST['exe_id'] : 0;
 
             if ($debug) {
                 error_log("exe_id = $exeId");
@@ -910,6 +897,26 @@ switch ($action) {
             echo Display::return_message($exception->getMessage(), 'error');
         }
 
+        break;
+    case 'sign_attempt':
+        api_block_anonymous_users();
+        if ('true' !== api_get_plugin_setting('exercise_signature', 'tool_enable')) {
+            exit;
+        }
+        $file = isset($_REQUEST['file']) ? $_REQUEST['file'] : '';
+        if (empty($exeId) || empty($file)) {
+            echo 0;
+            exit;
+        }
+        $track = ExerciseLib::get_exercise_track_exercise_info($exeId);
+        if ($track) {
+            $result = ExerciseSignaturePlugin::saveSignature($currentUserId, $track, $file);
+            if ($result) {
+                echo 1;
+                exit;
+            }
+        }
+        echo 0;
         break;
     default:
         echo '';

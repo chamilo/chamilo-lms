@@ -87,8 +87,12 @@ function validate_data($users)
  *
  * @param array $users         List of users.
  * @param bool  $resetPassword Optional.
+ * @param bool  $sendEmail     Optional.
  */
-function updateUsers($users, $resetPassword = false)
+function updateUsers(
+    $users,
+    $resetPassword = false,
+    $sendEmail = false)
 {
     $usergroup = new UserGroup();
 
@@ -137,8 +141,9 @@ function updateUsers($users, $resetPassword = false)
             $hrDeptId = $userInfo['hr_dept_id'];
             $language = isset($user['Language']) ? $user['Language'] : $userInfo['language'];
             //$sendEmail = isset($user['SendEmail']) ? $user['SendEmail'] : $userInfo['language'];
-            $sendEmail = false;
-            if ($resetPassword) {
+            //$sendEmail = false;
+            // see BT#17893
+            if ($resetPassword && $sendEmail == false) {
                 $sendEmail = true;
             }
 
@@ -277,6 +282,13 @@ $form->addHeader($tool_name);
 $form->addFile('import_file', get_lang('ImportFileLocation'), ['accept' => 'text/csv', 'id' => 'import_file']);
 $form->addCheckBox('reset_password', '', get_lang('AutoGeneratePassword'));
 
+$group = [
+    $form->createElement('radio', 'sendMail', '', get_lang('Yes'), 1),
+    $form->createElement('radio', 'sendMail', null, get_lang('No'), 0),
+];
+$form->addGroup($group, '', get_lang('SendMailToUsers'));
+$defaults['sendMail'] = 0;
+
 if ($form->validate()) {
     if (Security::check_token('post')) {
         Security::clear_token();
@@ -319,7 +331,9 @@ if ($form->validate()) {
             }
         }
 
-        updateUsers($usersToUpdate, isset($formValues['reset_password']));
+        $sendEmail = $_POST['sendMail'] ? true : false;
+
+        updateUsers($usersToUpdate, isset($formValues['reset_password']), $sendEmail);
 
         if (empty($errors)) {
             Display::addFlash(
@@ -350,6 +364,7 @@ if ($form->validate()) {
 Display::display_header($tool_name);
 $token = Security::get_token();
 
+$form->setDefaults($defaults);
 $form->addHidden('sec_token', $token);
 $form->addButtonImport(get_lang('Import'));
 $form->display();

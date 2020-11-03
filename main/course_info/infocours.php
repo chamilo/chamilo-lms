@@ -1059,7 +1059,7 @@ if ($form->validate() && is_settings_editable()) {
 
     // update the extra fields
     $courseFieldValue = new ExtraFieldValue('course');
-    $courseFieldValue->saveFieldValues($updateValues);
+    $courseFieldValue->saveFieldValues($updateValues, true);
 
     $appPlugin->saveCourseSettingsHook($updateValues);
     $courseParams = api_get_cidreq();

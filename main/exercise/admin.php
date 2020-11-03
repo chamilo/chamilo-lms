@@ -138,7 +138,7 @@ if (!empty($_GET['action']) && $_GET['action'] == 'exportqti2' && !empty($_GET['
 }
 
 // Exercise object creation.
-if (!is_object($objExercise)) {
+if (!($objExercise instanceof Exercise)) {
     // creation of a new exercise if wrong or not specified exercise ID
     if ($exerciseId) {
         $objExercise = new Exercise();
@@ -148,12 +148,12 @@ if (!is_object($objExercise)) {
             $showPagination = true;
         }
         $objExercise->read($exerciseId, $parseQuestionList);
+        Session::write('objExercise', $objExercise);
     }
-    // saves the object into the session
-    Session::write('objExercise', $objExercise);
 }
 
 if (empty($objExercise)) {
+    Session::erase('objExercise');
     header('Location: '.api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq());
     exit;
 }
@@ -336,7 +336,8 @@ if ($inATest) {
         api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id
     );
 
-    echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.
+    echo '<a
+        href="'.api_get_path(WEB_CODE_PATH).'exercise/exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.
         Display::return_icon('settings.png', get_lang('ModifyExercise'), '', ICON_SIZE_MEDIUM).'</a>';
 
     $maxScoreAllQuestions = 0;
@@ -446,7 +447,6 @@ if ($objExercise->getFeedbackType() == EXERCISE_FEEDBACK_TYPE_EXAM) {
     echo Display::return_message(get_lang('TestFeedbackNotShown'), 'normal');
 }
 
-Session::write('objExercise', $objExercise);
 Session::write('objQuestion', $objQuestion);
 Session::write('objAnswer', $objAnswer);
 Display::display_footer();

@@ -1215,6 +1215,26 @@ class Exercise
         return Database::num_rows($result) > 0;
     }
 
+    public function hasQuestionWithType($type)
+    {
+        $type = (int) $type;
+
+        $table = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+        $tableQuestion = Database::get_course_table(TABLE_QUIZ_QUESTION);
+        $sql = "SELECT q.id
+                FROM $table e
+                INNER JOIN $tableQuestion q
+                ON (e.question_id = q.id AND e.c_id = q.c_id)
+                WHERE
+                    q.type = $type AND
+                    e.c_id = {$this->course_id} AND
+                    e.exercice_id = ".$this->id;
+
+        $result = Database::query($sql);
+
+        return Database::num_rows($result) > 0;
+    }
+
     public function hasQuestionWithTypeNotInList(array $questionTypeList)
     {
         if (empty($questionTypeList)) {
@@ -2588,7 +2608,7 @@ class Exercise
     {
         // Feedback type.
         $feedback = [];
-        $feedback[] = $form->createElement(
+        $endTest = $form->createElement(
             'radio',
             'exerciseFeedbackType',
             null,
@@ -2611,24 +2631,22 @@ class Exercise
             ]
         );
 
+        $feedback[] = $endTest;
+        $feedback[] = $noFeedBack;
+
+        $scenarioEnabled = 'true' === api_get_setting('enable_quiz_scenario');
         $freeze = true;
-        if ('true' === api_get_setting('enable_quiz_scenario')) {
+        if ($scenarioEnabled) {
             if ($this->getQuestionCount() > 0) {
-                //if (in_array($feedbackType, [EXERCISE_FEEDBACK_TYPE_DIRECT, EXERCISE_FEEDBACK_TYPE_POPUP])) {
                 $hasDifferentQuestion = $this->hasQuestionWithTypeNotInList([UNIQUE_ANSWER, HOT_SPOT_DELINEATION]);
+
                 if (false === $hasDifferentQuestion) {
                     $freeze = false;
                 }
             } else {
                 $freeze = false;
             }
-        } else {
-            $freeze = false;
-        }
 
-        $feedback[] = $noFeedBack;
-
-        if ('true' === api_get_setting('enable_quiz_scenario')) {
             $direct = $form->createElement(
                 'radio',
                 'exerciseFeedbackType',
@@ -2651,6 +2669,15 @@ class Exercise
             );
 
             if ($freeze) {
+                $direct->freeze();
+                $directPopUp->freeze();
+            }
+
+            // If has delineation freeze all.
+            $hasDelineation = $this->hasQuestionWithType(HOT_SPOT_DELINEATION);
+            if ($hasDelineation) {
+                $endTest->freeze();
+                $noFeedBack->freeze();
                 $direct->freeze();
                 $directPopUp->freeze();
             }

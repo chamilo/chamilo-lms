@@ -2619,9 +2619,6 @@ class Exercise
                 if (false === $hasDifferentQuestion) {
                     $freeze = false;
                 }
-                /*} else {
-                    $freeze = false;
-                }*/
             } else {
                 $freeze = false;
             }
@@ -2629,36 +2626,38 @@ class Exercise
             $freeze = false;
         }
 
-        $direct = $form->createElement(
-            'radio',
-            'exerciseFeedbackType',
-            null,
-            get_lang('DirectFeedback'),
-            EXERCISE_FEEDBACK_TYPE_DIRECT,
-            [
-                'id' => 'exerciseType_'.EXERCISE_FEEDBACK_TYPE_DIRECT,
-                'onclick' => 'check_direct_feedback()',
-            ]
-        );
-
-        $directPopUp = $form->createElement(
-            'radio',
-            'exerciseFeedbackType',
-            null,
-            get_lang('ExerciseDirectPopUp'),
-            EXERCISE_FEEDBACK_TYPE_POPUP,
-            ['id' => 'exerciseType_'.EXERCISE_FEEDBACK_TYPE_POPUP, 'onclick' => 'check_direct_feedback()']
-        );
-
-        if ($freeze) {
-            //$noFeedBack->freeze();
-            $direct->freeze();
-            $directPopUp->freeze();
-        }
-
         $feedback[] = $noFeedBack;
-        $feedback[] = $direct;
-        $feedback[] = $directPopUp;
+
+        if ('true' === api_get_setting('enable_quiz_scenario')) {
+            $direct = $form->createElement(
+                'radio',
+                'exerciseFeedbackType',
+                null,
+                get_lang('DirectFeedback'),
+                EXERCISE_FEEDBACK_TYPE_DIRECT,
+                [
+                    'id' => 'exerciseType_'.EXERCISE_FEEDBACK_TYPE_DIRECT,
+                    'onclick' => 'check_direct_feedback()',
+                ]
+            );
+
+            $directPopUp = $form->createElement(
+                'radio',
+                'exerciseFeedbackType',
+                null,
+                get_lang('ExerciseDirectPopUp'),
+                EXERCISE_FEEDBACK_TYPE_POPUP,
+                ['id' => 'exerciseType_'.EXERCISE_FEEDBACK_TYPE_POPUP, 'onclick' => 'check_direct_feedback()']
+            );
+
+            if ($freeze) {
+                $direct->freeze();
+                $directPopUp->freeze();
+            }
+
+            $feedback[] = $direct;
+            $feedback[] = $directPopUp;
+        }
 
         $form->addGroup(
             $feedback,
@@ -2668,10 +2667,6 @@ class Exercise
                 get_lang('FeedbackDisplayOptions'),
             ]
         );
-
-        if ($freeze) {
-            //$group->freeze();
-        }
     }
 
     /**
@@ -9929,7 +9924,7 @@ class Exercise
         Session::erase('categoryList');
         Session::erase('exerciseResult');
         Session::erase('firstTime');
-
+        Session::erase('time_per_question');
         Session::erase('exerciseResultCoordinates');
         Session::erase('hotspot_coord');
         Session::erase('hotspot_dest');

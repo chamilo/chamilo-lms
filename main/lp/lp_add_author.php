@@ -40,7 +40,6 @@ echo "<pre>".var_export($learnPath->authorsAvaible,true)."</pre>";
 exit();
 */
 
-
 if (empty($learnPath)) {
     api_not_allowed();
 }
@@ -212,7 +211,7 @@ $form = new FormValidator('configure_homepage_'.$action,
     'post',
     $_SERVER['REQUEST_URI'].'&sub_action=author_view',
     '',
-    ['style' => 'margin: 0px;']);;
+    ['style' => 'margin: 0px;']);
 
 $priceExtraField = ExtraField::getDisplayNameByVariable('IsAuthor');
 if ($priceExtraField != null) {
@@ -225,7 +224,6 @@ echo $learnPath->build_action_menu(false,
     true,
     '',
     $extraField);
-
 
 echo '<div class="row">';
 echo '<div id="lp_sidebar" class="col-md-4">';
@@ -269,7 +267,6 @@ foreach ($learnPath->authorsAvaible as $key => $value) {
                 $default[$labelNameField] = true;
             }
         }
-
     }
     $form->addHtml('</div>');
 }
@@ -308,7 +305,6 @@ if ($form->validate()) {
                 ]);
             }
         }
-
     }
 }
 Display::display_footer();

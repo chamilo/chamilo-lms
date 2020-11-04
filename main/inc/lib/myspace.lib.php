@@ -1419,7 +1419,6 @@ class MySpace
             }
         }
 
-
         $query = "select item_id as lp_item_id ,value as users_id ".
             " from $tblExtraFieldValue ".
             " where field_id IN ( $queryExtraFieldValue )";
@@ -1491,7 +1490,6 @@ class MySpace
                     $total += $facturar;
                     $totalSudent += $studenRegister;
                     if ($studenRegister != 0) {
-
                         $table .= "<td>".
                             "<a href='#!' id='$hiddenFieldLink' onclick='showHideStudent(\"$hiddenField\")'>".
                             "<div class='icon_add'>$iconAdd</div>".
@@ -1523,7 +1521,6 @@ class MySpace
                     "<th class=\"th-header\">$totalSudent</th>".
                     "<th class=\"th-header\">$total</th>".
                     "<th class=\"th-header\"></tr>";
-
             }
             $table .= "</tbody>".
                 "</table>".

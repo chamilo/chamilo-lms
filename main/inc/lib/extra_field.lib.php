@@ -3138,6 +3138,7 @@ JAVASCRIPT;
         if ($variableName == null) {
             return null;
         }
+        $variableName = strtolower($variableName);
         $variableName = Database::escape_string($variableName);
         $tblExtraField = Database::get_main_table(TABLE_EXTRA_FIELD);
         $query = "SELECT display_text
@@ -3162,6 +3163,7 @@ JAVASCRIPT;
         if ($variableName == null) {
             return null;
         }
+        $variableName = strtolower($variableName);
         $variableName = Database::escape_string($variableName);
         $tblExtraField = Database::get_main_table(TABLE_EXTRA_FIELD);
         $query = "SELECT id
@@ -3206,7 +3208,7 @@ JAVASCRIPT;
             FROM $tblExtraFieldValues
 	INNER JOIN $tblExtraField on $tblExtraField.id = $tblExtraFieldValues.field_id
             WHERE $tblExtraFieldValues.field_id =$idExtraField and $tblExtraFieldValues.value = $value and
-            $tblExtraField.extra_field_type = $extraTypeUser";
+              ";
 
         $result = Database::query($sql);
         if (Database::num_rows($result)) {

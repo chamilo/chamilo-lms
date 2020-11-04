@@ -144,19 +144,19 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
     public function SaveCompanyField()
     {
         $data = $this->companyField;
-        $data['extra_field_type'] = (int) $data['extra_field_type'];
-        $data['field_type'] = (int) $data['field_type'];
-        $data['field_order'] = (int) $data['field_order'];
-        $data['visible_to_self'] = (int) $data['visible_to_self'];
-        $data['visible_to_others'] = (int) $data['visible_to_others'];
-        $data['changeable'] = (int) $data['changeable'];
-        $data['filter'] = (int) $data['filter'];
+        $data['extra_field_type'] = (int)$data['extra_field_type'];
+        $data['field_type'] = (int)$data['field_type'];
+        $data['field_order'] = (int)$data['field_order'];
+        $data['visible_to_self'] = (int)$data['visible_to_self'];
+        $data['visible_to_others'] = (int)$data['visible_to_others'];
+        $data['changeable'] = (int)$data['changeable'];
+        $data['filter'] = (int)$data['filter'];
         $data['default_value'] = '';
         $data['variable'] = 'company';
         $data['visible'] = 1;
         $data['display_text'] = strtolower(Database::escape_string(Security::remove_XSS($data['display_text'])));
         $schedule = new ExtraField('user');
-        $schedule->save($data);
+        $this->companyField['id'] = $schedule->save($data);
     }
 
     /**
@@ -196,13 +196,13 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
     public function SaveAuthorsField()
     {
         $data = $this->authorsField;
-        $data['extra_field_type'] = (int) $data['extra_field_type'];
-        $data['field_type'] = (int) $data['field_type'];
-        $data['field_order'] = (int) $data['field_order'];
-        $data['visible_to_self'] = (int) $data['visible_to_self'];
-        $data['visible_to_others'] = (int) $data['visible_to_others'];
-        $data['changeable'] = (int) $data['changeable'];
-        $data['filter'] = (int) $data['filter'];
+        //$data['extra_field_type'] = (int) $data['extra_field_type'];
+        $data['field_type'] = (int)$data['field_type'];
+        $data['field_order'] = (int)$data['field_order'];
+        $data['visible_to_self'] = (int)$data['visible_to_self'];
+        $data['visible_to_others'] = (int)$data['visible_to_others'];
+        $data['changeable'] = (int)$data['changeable'];
+        $data['filter'] = (int)$data['filter'];
         $data['default_value'] = null;
         $data['variable'] = 'authors';
         $data['visible'] = 1;
@@ -312,31 +312,25 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
             1 => 'Company 2',
             2 => 'Company 3',
         ];
-        $order = 0;
-        $query = "SELECT
-                    id
-                FROM
-                    ".$this->tblExtraField."
-                WHERE
-                    variable = 'company'";
-        $companyId = Database::fetch_assoc(Database::query($query));
-        $companyId = isset($companyId['id']) ? $companyId['id'] : null;
-        for ($i = 0; $i < count($companys); $i++) {
-            $order = $i + 1;
-            $extraFieldOptionValue = $companys[$i];
-            if ($companyId != null) {
-                $query = "SELECT * from ".$this->tblExtraFieldOption." where option_value = '$extraFieldOptionValue'";
-                $extraFieldOption = Database::fetch_assoc(Database::query($query));
+        $companyId = (int)$this->companyField['id'];
+        if ($companyId != 0) {
+            for ($i = 0; $i < count($companys); $i++) {
+                $order = $i + 1;
+                $extraFieldOptionValue = $companys[$i];
+                if ($companyId != null) {
+                    $query = "SELECT * from ".$this->tblExtraFieldOption." where option_value = '$extraFieldOptionValue' and field_id = $companyId";
+                    $extraFieldOption = Database::fetch_assoc(Database::query($query));
 
-                if (isset($extraFieldOption['id']) && $extraFieldOption['id'] && $extraFieldOption['field_id'] == $companyId) {
-                    // Update?
-                } else {
-                    $query = "
+                    if (isset($extraFieldOption['id']) && $extraFieldOption['id'] && $extraFieldOption['field_id'] == $companyId) {
+                        // Update?
+                    } else {
+                        $query = "
                     INSERT INTO ".$this->tblExtraFieldOption."
                         (`field_id`, `option_value`, `display_text`, `priority`, `priority_message`, `option_order`) VALUES
                         ( '$companyId', '$extraFieldOptionValue', '$extraFieldOptionValue', NULL, NULL, '$order');
                     ";
-                    $data = Database::query($query);
+                        $data = Database::query($query);
+                    }
                 }
             }
         }
@@ -380,9 +374,9 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
         $exist = null;
         $validVariable = false;
         $variable = $data['variable'];
-        $extraFieldTypeInt = (int) $data['extra_field_type'];
-        $FieldType = (int) $data['field_type'];
-        $id = (int) $data['id'];
+        $extraFieldTypeInt = (int)$data['extra_field_type'];
+        $FieldType = (int)$data['field_type'];
+        $id = (int)$data['id'];
         $extraFieldType = null;
         if ($variable == 'company') {
             $validVariable = true;

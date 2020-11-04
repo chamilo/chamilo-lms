@@ -243,35 +243,44 @@ $form->addHtml('<div id="doc_form" class="col-md-12 row">');
 $extraFieldValue = new ExtraFieldValue('lp_item');
 $form->addHtml('<h1 class="col-md-12 text-center">'.get_lang('LpByAuthor').'</h1>');
 $default = [];
-foreach ($learnPath->authorsAvaible as $key => $value) {
-    $authorId = $value['id'];
-    //add border line bottom
-    $form->addHtml('<div class="col-xs-12 row" style="border-bottom: 1px solid #dddddd;">');
-    //add name of author
-    $form->addHtml('<div class="col-xs-12 label-price">'.$value['complete_name'].'</div>');
-    foreach ($_SESSION['oLP']->items as $item) {
-        $itemId = $item->db_id;
-        $extraFieldValues = $extraFieldValue->get_values_by_handler_and_field_variable(
-            $itemId,
-            'IsAuthorItem'
-        );
-        $itemName = $item->name;
-        $labelNameField = 'authorItemSelect['.$authorId.']['.$itemId.']';
-        //add item name inline
-        $form->addHtml('<div class="col-xs-12 col-md-4 col-lg-4 row" style=" display: flex; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">');
-        $form->addCheckBox($labelNameField, null, Display::return_icon('lp_document.png', $itemName).$itemName);
-        $form->addHtml('</div>');
-        // search by my value
+$form->addHtml('<div class="col-xs-12 row" >');
+$defaultAuthor = [];
+foreach ($_SESSION['oLP']->items as $item) {
+    $itemName = $item->name;
+    $itemId = $item->iId;
+    $extraFieldValues = $extraFieldValue->get_values_by_handler_and_field_variable(
+        $itemId,
+        'AuthorLPItem'
+    );
+    if (!empty($extraFieldValues)) {
+        $default["itemSelected[$itemId]"] = true;
         if ($extraFieldValues != false) {
-            if (is_numeric(array_search($authorId, explode(';', $extraFieldValues['value'])))) {
-                $default[$labelNameField] = true;
+            foreach (explode(';', $extraFieldValues['value']) as $author) {
+                $defaultAuthor[$author] = $author;
             }
         }
     }
-    $form->addHtml('</div>');
+    $form->addCheckBox("itemSelected[$itemId]", null, Display::return_icon('lp_document.png', $itemName).$itemName);
 }
-$form->addHtml('</div>');
 
+$options = ['' => get_lang('SelectAnOption')];
+$default["authorItemSelect"] = [];
+$form->addHtml('</div>');
+foreach ($learnPath->authorsAvaible as $key => $value) {
+    $authorId = $value['id'];
+    $authorName = $value['complete_name'];
+    if (!empty($authorName)) {
+        $options[$authorId] = $authorName;
+        if (isset($defaultAuthor[$authorId])) {
+            $default["authorItemSelect"][$authorId] = $authorId;
+        }
+    }
+}
+$form->addSelect('authorItemSelect', 'ssss', $options, [
+
+    'multiple' => 'multiple',
+]);
+$form->addHtml('</div>');
 $form->addButtonCreate(get_lang('Send'));
 $form->setDefaults($default);
 $form->display();
@@ -279,19 +288,20 @@ echo '</div>';
 echo '</div>';
 if ($form->validate()) {
     if (isset($_GET['sub_action']) && ($_GET['sub_action'] === 'author_view')) {
-        $items = $_POST['authorItemSelect'];
+        $authors = $_POST['authorItemSelect'];
+        $items = $_POST['itemSelected'];
         $saveExtraFieldItem = [];
-        foreach ($learnPath->authorsAvaible as $key => $value) {
-            $authorId = $value['id'];
-            foreach ($_SESSION['oLP']->items as $item) {
-                $itemId = $item->db_id;
-                if (isset($items[$authorId])) {
-                    if (isset($items[$authorId][$itemId])) {
-                        $saveExtraFieldItem[$itemId][$authorId] = $authorId;
-                    }
+        foreach ($_SESSION['oLP']->items as $item) {
+            $itemName = $item->name;
+            $itemId = $item->iId;
+            if (isset($items[$itemId])) {
+                foreach ($authors as $author) {
+                    $saveExtraFieldItem[$itemId][$author] = $author;
                 }
+
             }
         }
+
         if (count($saveExtraFieldItem) > 0) {
             foreach ($saveExtraFieldItem as $saveItemId => $values) {
                 $extraFieldValues = $extraFieldValue->get_values_by_handler_and_field_variable(

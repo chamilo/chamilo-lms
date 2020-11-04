@@ -1221,7 +1221,7 @@ class bbb
 
         // Update users with in_at y ou_at field equal
         $roomTable = Database::get_main_table('plugin_bbb_room');
-        $conditions['where'] = ['meeting_id=? AND in_at=out_at' => [$id]];
+        $conditions['where'] = ['meeting_id=? AND in_at=out_at AND close=?' => [$id, BBBPlugin::ROOM_OPEN]];
         $roomList = Database::select(
             '*',
             $roomTable,

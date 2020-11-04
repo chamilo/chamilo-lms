@@ -643,16 +643,15 @@ class GroupManager
      */
     public static function getGroupListFilterByName($name, $categoryId, $courseId)
     {
-        $name = trim($name);
-        $name = Database::escape_string($name);
+        $name = Database::escape_string(trim($name));
         $categoryId = (int) $categoryId;
         $courseId = (int) $courseId;
 
         if (empty($name)) {
             return [];
         }
-        $table_group = Database::get_course_table(TABLE_GROUP);
-        $sql = "SELECT * FROM $table_group
+        $table = Database::get_course_table(TABLE_GROUP);
+        $sql = "SELECT * FROM $table
                 WHERE c_id = $courseId AND name LIKE '%$name%'";
 
         if (!empty($categoryId)) {
@@ -2907,6 +2906,49 @@ class GroupManager
             </ul>';
     }
 
+    public static function groupOverview($group, $url)
+    {
+        $groupId = $group['id'];
+        $content = '<li>';
+        $content .= Display::tag(
+            'h3',
+            Display::url(
+                Security::remove_XSS($group['name']),
+                $url.'&gidReq='.$groupId
+            )
+        );
+        $users = self::getTutors($group);
+        if (!empty($users)) {
+            $content .= '<ul>';
+            $content .= "<li>".Display::tag('h4', get_lang('Tutors'))."</li><ul>";
+            foreach ($users as $user) {
+                $userInfo = api_get_user_info($user['user_id']);
+                $content .= '<li title="'.$userInfo['username'].'">'.
+                    $userInfo['complete_name_with_username'].
+                    '</li>';
+            }
+            $content .= '</ul>';
+            $content .= '</ul>';
+        }
+
+        $users = self::getStudents($group['id']);
+        if (!empty($users)) {
+            $content .= '<ul>';
+            $content .= "<li>".Display::tag('h4', get_lang('Students'))."</li><ul>";
+            foreach ($users as $user) {
+                $userInfo = api_get_user_info($user['user_id']);
+                $content .= '<li title="'.$userInfo['username'].'">'.
+                    $userInfo['complete_name_with_username'].
+                    '</li>';
+            }
+            $content .= '</ul>';
+            $content .= '</ul>';
+        }
+        $content .= '</li>';
+
+        return $content;
+    }
+
     /**
      * @param int    $courseId
      * @param string $keyword
@@ -2917,11 +2959,13 @@ class GroupManager
     {
         $content = null;
         $categories = self::get_categories();
+        $url = api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(true, false);
         if (!empty($categories)) {
             foreach ($categories as $category) {
                 if ('true' === api_get_setting('allow_group_categories')) {
                     $content .= '<h2>'.$category['title'].'</h2>';
                 }
+
                 if (!empty($keyword)) {
                     $groups = self::getGroupListFilterByName(
                         $keyword,
@@ -2932,56 +2976,25 @@ class GroupManager
                     $groups = self::get_group_list($category['id']);
                 }
 
-                if (empty($groups)) {
-                    $groups = self::get_group_list();
-                }
-
                 $content .= '<ul>';
                 if (!empty($groups)) {
-                    $url = api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(true, false);
                     foreach ($groups as $group) {
-                        $groupId = $group['id'];
-
-                        $content .= '<li>';
-                        $content .= Display::tag(
-                            'h3',
-                            Display::url(
-                                Security::remove_XSS($group['name']),
-                                $url.'&gidReq='.$groupId
-                            )
-                        );
-                        $users = self::getTutors($group);
-                        if (!empty($users)) {
-                            $content .= '<ul>';
-                            $content .= "<li>".Display::tag('h4', get_lang('Tutors'))."</li><ul>";
-                            foreach ($users as $user) {
-                                $userInfo = api_get_user_info($user['user_id']);
-                                $content .= '<li title="'.$userInfo['username'].'">'.
-                                    $userInfo['complete_name_with_username'].
-                                '</li>';
-                            }
-                            $content .= '</ul>';
-                            $content .= '</ul>';
-                        }
-
-                        $users = self::getStudents($group['id']);
-                        if (!empty($users)) {
-                            $content .= '<ul>';
-                            $content .= "<li>".Display::tag('h4', get_lang('Students'))."</li><ul>";
-                            foreach ($users as $user) {
-                                $userInfo = api_get_user_info($user['user_id']);
-                                $content .= '<li title="'.$userInfo['username'].'">'.
-                                    $userInfo['complete_name_with_username'].
-                                    '</li>';
-                            }
-                            $content .= '</ul>';
-                            $content .= '</ul>';
-                        }
-                        $content .= '</li>';
+                        $content = self::groupOverview($group, $url);
                     }
                 }
                 $content .= '</ul>';
             }
+        }
+
+        // No category
+        $groups = self::get_group_list();
+        if (!empty($groups)) {
+            $content .= '<h2>'.get_lang('NoCategorySelected').'</h2>';
+            $content .= '<ul>';
+            foreach ($groups as $group) {
+                $content = self::groupOverview($group, $url);
+            }
+            $content .= '</ul>';
         }
 
         return $content;

@@ -8951,6 +8951,9 @@ ul.dropdown-menu.inner > li > a {
 /* start document mp3 preview */
 .preview .mejs__container {
     background: #aaa;
+    border-radius: 50%;
+    width: 22px;
+    height: 22px;
 }
 
 .preview .mejs__controls {

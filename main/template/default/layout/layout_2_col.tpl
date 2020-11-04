@@ -16,7 +16,7 @@
 
                 {{ sniff_notification }}
 
-                {{ flashMessagesOnTop }}
+                {{ flash_messages_on_top }}
 
                 {% if home_welcome %}
                 <article id="home-welcome">

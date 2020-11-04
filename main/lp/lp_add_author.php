@@ -277,7 +277,6 @@ foreach ($learnPath->authorsAvaible as $key => $value) {
     }
 }
 $form->addSelect('authorItemSelect', 'ssss', $options, [
-
     'multiple' => 'multiple',
 ]);
 $form->addHtml('</div>');
@@ -298,7 +297,6 @@ if ($form->validate()) {
                 foreach ($authors as $author) {
                     $saveExtraFieldItem[$itemId][$author] = $author;
                 }
-
             }
         }
 

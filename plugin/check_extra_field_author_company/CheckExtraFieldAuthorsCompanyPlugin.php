@@ -144,7 +144,7 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
     public function SaveCompanyField()
     {
         $data = $this->companyField;
-        $data['extra_field_type'] = (int)$data['extra_field_type'];
+        //$data['extra_field_type'] = (int) $data['extra_field_type'];
         $data['field_type'] = (int)$data['field_type'];
         $data['field_order'] = (int)$data['field_order'];
         $data['visible_to_self'] = (int)$data['visible_to_self'];
@@ -225,7 +225,6 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
         $data['field_type'] = ExtraField::FIELD_TYPE_CHECKBOX;
 
         $schedule->save($data);
-
     }
 
     public function setYesNoToAuthor($authorLpId)
@@ -262,8 +261,6 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
                     if (!empty($query)) {
                         $data = Database::query($query);
                     }
-
-
                 }
             }
         }

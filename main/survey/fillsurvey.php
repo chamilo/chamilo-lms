@@ -655,7 +655,7 @@ if (isset($_POST['finish_survey'])) {
     );
 
     if ($courseInfo && !api_is_anonymous()) {
-        echo '<br />';
+        echo '<br /><br />';
         echo Display::toolbarButton(
             get_lang('ReturnToCourseHomepage'),
             api_get_course_url($courseInfo['code']),

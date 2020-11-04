@@ -2494,6 +2494,7 @@ class Tracking
                     ex.c_id = $courseId AND
                     ex.session_id  = $session_id AND
                     ex.exe_user_id = $user_id AND
+                    ex.status = '' AND
                     ex.exe_exo_id IN ('$exercise_list_imploded') ";
 
         $rs = Database::query($sql);

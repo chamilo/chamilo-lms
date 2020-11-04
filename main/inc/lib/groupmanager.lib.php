@@ -2986,13 +2986,16 @@ class GroupManager
             }
         }
 
-        // No category
+        // Check groups with no categories.
         $groups = self::get_group_list();
         if (!empty($groups)) {
             $content .= '<h2>'.get_lang('NoCategorySelected').'</h2>';
             $content .= '<ul>';
             foreach ($groups as $group) {
-                $content = self::groupOverview($group, $url);
+                if (!empty($group['category'])) {
+                    continue;
+                }
+                $content .= self::groupOverview($group, $url);
             }
             $content .= '</ul>';
         }

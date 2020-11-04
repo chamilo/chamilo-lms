@@ -76,8 +76,6 @@ $extraField = new ExtraField('user');
 $extraFields = $extraField->get_all(['filter = ?' => 1]);
 $user_image_pdf_size = 80;
 
-
-
 if (isset($_GET['action'])) {
     switch ($_GET['action']) {
         case 'set_tutor':

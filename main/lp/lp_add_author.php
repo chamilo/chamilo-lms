@@ -213,9 +213,9 @@ $form = new FormValidator('configure_homepage_'.$action,
     '',
     ['style' => 'margin: 0px;']);
 
-$priceExtraField = ExtraField::getDisplayNameByVariable('IsAuthor');
+$priceExtraField = ExtraField::getDisplayNameByVariable('AuthorLP');
 if ($priceExtraField != null) {
-    $extraField['IsAuthor'] = $priceExtraField;
+    $extraField['AuthorLP'] = $priceExtraField;
 }
 
 echo $learnPath->build_action_menu(false,
@@ -296,10 +296,10 @@ if ($form->validate()) {
             foreach ($saveExtraFieldItem as $saveItemId => $values) {
                 $extraFieldValues = $extraFieldValue->get_values_by_handler_and_field_variable(
                     $saveItemId,
-                    'IsAuthorItem'
+                    'AuthorLPItem'
                 );
                 $extraFieldValue->save([
-                    'variable' => 'IsAuthorItem',
+                    'variable' => 'AuthorLPItem',
                     'value' => $values,
                     'item_id' => $saveItemId,
                 ]);

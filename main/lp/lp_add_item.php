@@ -194,9 +194,9 @@ $(document).on('shown.bs.tab', 'a[data-toggle="tab"]', function (e) {
 </script>
 <?php
 $extraField = [];
-$priceExtraField = ExtraField::getDisplayNameByVariable('IsAuthor');
+$priceExtraField = ExtraField::getDisplayNameByVariable('AuthorLP');
 if ($priceExtraField != null) {
-    $extraField['IsAuthor'] = $priceExtraField;
+    $extraField['AuthorLP'] = $priceExtraField;
 }
 echo $learnPath->build_action_menu(false,
     true,

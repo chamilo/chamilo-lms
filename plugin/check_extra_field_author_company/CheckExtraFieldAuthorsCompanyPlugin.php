@@ -54,7 +54,7 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
             $this->authorsExist = false;
         }
         $this->authorsField = [
-            'extra_field_type' => ExtraField::FIELD_TYPE_DATE,
+            // 'extra_field_type' => ExtraField::FIELD_TYPE_DATE,
             'field_type' => ExtraField::FIELD_TYPE_SELECT_MULTIPLE,
             'variable' => 'authors',
             'display_text' => 'Authors',
@@ -66,7 +66,7 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
             'filter' => 1,
         ];
         $this->companyField = [
-            'extra_field_type' => ExtraField::FIELD_TYPE_TEXT,
+            //'extra_field_type' => ExtraField::FIELD_TYPE_TEXT,
             'field_type' => ExtraField::FIELD_TYPE_RADIO,
             'variable' => 'company',
             'display_text' => 'Company',
@@ -209,6 +209,64 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
         $data['display_text'] = strtolower(Database::escape_string(Security::remove_XSS($data['display_text'])));
         $schedule = new ExtraField('lp');
         $schedule->save($data);
+
+        $schedule = new ExtraField('user');
+        $data['variable'] = 'AuthorLP';
+        $data['display_text'] = 'AuthorLP';
+        $data['field_type'] = ExtraField::FIELD_TYPE_RADIO;
+
+        $authorLpId = $schedule->save($data);
+
+        $this->setYesNoToAuthor($authorLpId);
+        $schedule = new ExtraField('lp_item');
+
+        $data['variable'] = 'AuthorLPItem';
+        $data['display_text'] = 'AuthorLPItem';
+        $data['field_type'] = ExtraField::FIELD_TYPE_CHECKBOX;
+
+        $schedule->save($data);
+
+    }
+
+    public function setYesNoToAuthor($authorLpId)
+    {
+        $options = [
+            0 => 'No',
+            1 => 'Yes',
+        ];
+        $authorId = (int)$authorLpId;
+        if ($authorId != 0) {
+            for ($i = 0; $i < count($options); $i++) {
+                $order = $i + 1;
+                $extraFieldOptionValue = $options[$i];
+                if ($authorId != null) {
+                    $query = "SELECT * from ".$this->tblExtraFieldOption." where option_value = '$extraFieldOptionValue' and field_id = $authorId";
+                    $extraFieldOption = Database::fetch_assoc(Database::query($query));
+                    $query = null;
+                    if (isset($extraFieldOption['id']) && $extraFieldOption['id'] && $extraFieldOption['field_id'] == $authorId) {
+                        $query = "".
+                            "Update ".$this->tblExtraFieldOption." set".
+                            " `option_value` = $i,".
+                            " `display_text` = '$extraFieldOptionValue',".
+                            " `option_order` = $order".
+                            " where".
+                            " field_id = $authorId ".
+                            " and id = ".$extraFieldOption['id'];
+                    } else {
+                        $query = "
+                    INSERT INTO ".$this->tblExtraFieldOption."
+                        (`field_id`, `option_value`, `display_text`, `priority`, `priority_message`, `option_order`) VALUES
+                        ( '$authorId', $i, '$extraFieldOptionValue', NULL, NULL, '$order');
+                    ";
+                    }
+                    if (!empty($query)) {
+                        $data = Database::query($query);
+                    }
+
+
+                }
+            }
+        }
     }
 
     /**

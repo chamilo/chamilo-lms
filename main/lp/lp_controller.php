@@ -504,7 +504,7 @@ if ($debug > 0) {
 
 switch ($action) {
     case 'author_view':
-        $authors = ExtraField::getUserByExtrafieldVariableName('IsAuthor', 1);
+        $authors = ExtraField::getUserByExtrafieldVariableName('AuthorLP', 1);
         $_SESSION['oLP']->authorsAvaible = $authors;
         Session::write('oLP', $_SESSION['oLP']);
         if (!$is_allowed_to_edit) {

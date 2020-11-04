@@ -81,7 +81,7 @@ class MySpace
                     'content' => get_lang('LpByAuthor'),
                 ];
         }
-        $authorsItemField = ExtraField::getDisplayNameByVariable('IsAuthorItem');
+        $authorsItemField = ExtraField::getDisplayNameByVariable('AuthorLPItem');
         if (!empty($authorsItemField)) {
             $actions[] =
                 [
@@ -1352,7 +1352,7 @@ class MySpace
         $tableHtml = '';
         $tblExtraField = Database::get_main_table(TABLE_EXTRA_FIELD);
         $tblExtraFieldValue = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
-        $extraFieldLpByAutorName = 'IsAuthorItem';
+        $extraFieldLpByAutorName = 'AuthorLPItem';
         $extraFieldLpPrice = 'price';
 
         $queryExtraFieldPrice = "SELECT id  ".

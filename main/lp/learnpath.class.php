@@ -6755,7 +6755,7 @@ class learnpath
                 ])
             );
         }
-        if (isset($extraField['IsAuthor'])) {
+        if (isset($extraField['AuthorLP'])) {
             $actionsLeft .= Display::url(
                 Display::return_icon(
                     'add-groups.png',

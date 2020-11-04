@@ -3179,11 +3179,12 @@ JAVASCRIPT;
     /**
      * @TODO: Set description
      */
-    public static function getUserByExtrafieldVariableName($variableName = 'IsAuthor', $value = 1)
+    public static function getUserByExtrafieldVariableName($variableName = 'AuthorLP', $value = 1)
     {
         $value = (int)$value;
         $teachers = [];
 
+        $variableName = strtolower($variableName);
         if ($variableName == null) {
             return $teachers;
         }

@@ -90,7 +90,9 @@ $tpl->assign('pagination', $pagination);
 $sessionList = $plugin->getCatalogSessionList($first, $pageSize, $nameFilter, $minFilter, $maxFilter, 'all', 0);
 $coursesExist = true;
 $sessionExist = true;
-if(count($sessionList)<=0) $sessionExist = false;
+if (count($sessionList) <= 0) {
+    $sessionExist = false;
+}
 
 $tpl->assign('coursesExist', $coursesExist);
 $tpl->assign('sessionExist', $sessionExist);

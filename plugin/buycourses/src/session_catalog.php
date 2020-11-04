@@ -81,7 +81,7 @@ $form->addButtonFilter(get_lang('Search'));
 
 $form->setDefaults(
     [
-        'session_category'=>$sessionCategory
+        'session_category' => $sessionCategory,
     ]
 );
 $pageSize = BuyCoursesPlugin::PAGINATION_PAGE_SIZE;
@@ -118,7 +118,9 @@ $template->assign('pagination', $pagination);
 $courseList = $plugin->getCatalogCourseList($first, $pageSize, $nameFilter, $minFilter, $maxFilter);
 $coursesExist = true;
 $sessionExist = true;
-if(count($courseList)<=0) $coursesExist = false;
+if (count($courseList) <= 0) {
+    $coursesExist = false;
+}
 $template->assign('coursesExist', $coursesExist);
 $template->assign('sessionExist', $sessionExist);
 

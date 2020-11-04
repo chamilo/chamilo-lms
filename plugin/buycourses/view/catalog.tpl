@@ -32,7 +32,7 @@
                     <div class="row">
                         {% if showing_courses %}
                             {% for course in courses %}
-                                <div class="col-sm-12 col-md-4 col-lg-3">
+                                <div class="col-md-4 col-sm-6">
                                     <article class="items-course">
                                         <div class="items-course-image">
                                             <img alt="{{ course.title }}" class="img-responsive"
@@ -81,7 +81,7 @@
 
                         {% if showing_sessions %}
                             {% for session in sessions %}
-                                <div class="col-sm-12 col-md-4 col-lg-3 ">
+                                <div class="col-md-4 col-sm-6">
                                     <article class="items-course">
                                         <div class="items-course-image">
                                             <img alt="{{ session.name }}" class="img-responsive"
@@ -138,7 +138,7 @@
 
                         {% if showing_services %}
                             {% for service in services %}
-                                <div class="col-sm-12 col-md-4 col-lg-3">
+                                <div class="col-md-4 col-sm-6">
                                     <div class="items-course">
                                         <div class="items-course-image">
                                             <a href="{{ _p.web }}service/{{ service.id }}">

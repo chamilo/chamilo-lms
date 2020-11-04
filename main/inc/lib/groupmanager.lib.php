@@ -2979,7 +2979,7 @@ class GroupManager
                 $content .= '<ul>';
                 if (!empty($groups)) {
                     foreach ($groups as $group) {
-                        $content = self::groupOverview($group, $url);
+                        $content .= self::groupOverview($group, $url);
                     }
                 }
                 $content .= '</ul>';

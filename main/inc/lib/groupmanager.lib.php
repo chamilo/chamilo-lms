@@ -88,6 +88,7 @@ class GroupManager
      * @param int   $status      group status
      * @param int   $sessionId
      * @param bool  $getCount
+     * @param bool  $notInGroup  Get groups not in a category
      *
      * @return array an array with all information about the groups
      */
@@ -96,7 +97,8 @@ class GroupManager
         $course_info = [],
         $status = null,
         $sessionId = 0,
-        $getCount = false
+        $getCount = false,
+        $notInGroup = false
     ) {
         $course_info = empty($course_info) ? api_get_course_info() : $course_info;
         if (empty($course_info)) {
@@ -141,6 +143,10 @@ class GroupManager
         }
 
         $sql .= " AND g.c_id = $course_id ";
+
+        if ($notInGroup) {
+            $sql .= "  AND (g.category_id IS NULL OR g.category_id = 0) ";
+        }
 
         if (!empty($session_condition)) {
             $sql .= $session_condition;
@@ -2987,12 +2993,12 @@ class GroupManager
         }
 
         // Check groups with no categories.
-        $groups = self::get_group_list();
+        $groups = self::get_group_list(null, api_get_course_info(), null, api_get_session_id(), false, true);
         if (!empty($groups)) {
             $content .= '<h2>'.get_lang('NoCategorySelected').'</h2>';
             $content .= '<ul>';
             foreach ($groups as $group) {
-                if (!empty($group['category'])) {
+                if (!empty($group['category_id'])) {
                     continue;
                 }
                 $content .= self::groupOverview($group, $url);

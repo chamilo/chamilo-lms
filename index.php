@@ -206,7 +206,7 @@ $controller->setGradeBookDependencyBar(api_get_user_id());
 $controller->tpl->assign('flash_messages_on_top', Display::getFlashToString());
 Display::cleanFlashMessages();
 
-$controller->tpl->display_two_col_template(true);
+$controller->tpl->display_two_col_template();
 
 // Deleting the session_id.
 Session::erase('session_id');

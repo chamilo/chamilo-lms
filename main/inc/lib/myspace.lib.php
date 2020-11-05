@@ -1373,6 +1373,25 @@ class MySpace
             $cLpItems[] = (int)$row['lp_item_id'];
         }
         $cLpItems = implode(',', $cLpItems);
+        if (count($cLpItems) == 0) {
+            $tableContent = "<div class='table-responsive'>".
+                "<table class='table table-hover table-striped table-bordered data_table'>".
+                "<thead>".
+                "<tr>".
+                "<th class=\"th-header\">".get_lang('NoDataAvailable')."</th>".
+                "</tr>".
+                "</thead>".
+                "</tbody>".
+                "</tbody>".
+                "</table>".
+                "</div>";
+
+            $tpl = new Template('', false, false, false, false, false, false);
+            $tpl->assign('table', $tableContent);
+            $templateName = $tpl->get_template('my_space/course_summary.tpl');
+            $tpl->display($templateName);
+            return null;
+        }
 
         // search by price
         $cLpItemsPriceQuery = "select value as price, item_id as lp_item_id ".

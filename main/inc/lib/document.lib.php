@@ -5692,7 +5692,7 @@ class DocumentManager
             );
             $form->addElement('html', "<div class='replaceIndividualFile upload_element_".$randomUploadName." hidden'>");
             $form->addElement('hidden', 'id_'.$randomUploadName, $randomUploadName);
-            $form->addElement('hidden', 'currentFile', $randomUploadName);
+            $form->addElement('hidden', 'currentFile', '');
             $form->addElement('hidden', 'currentUrl', api_get_self().'?'.api_get_cidreq().'&id='.$document_id);
             $form->addElement('hidden', 'id_'.$randomUploadName, $document_id);
             $label = '';

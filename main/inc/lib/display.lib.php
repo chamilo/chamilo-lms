@@ -2194,7 +2194,7 @@ class Display
         switch ($fileInfo['extension']) {
             case 'mp3':
             case 'webm':
-                $html = '<audio id="'.$id.'" '.$class.' controls '.$autoplay.' '.$width.' src="'.$params['url'].'" >';
+                $html = '<audio id="'.$id.'" '.$class.' controls '.$autoplay.' '.$width.' src="'.$params['url'].'">';
                 $html .= '<object width="'.$width.'" height="50" type="application/x-shockwave-flash" data="'.api_get_path(WEB_LIBRARY_PATH).'javascript/mediaelement/flashmediaelement.swf">
                             <param name="movie" value="'.api_get_path(WEB_LIBRARY_PATH).'javascript/mediaelement/flashmediaelement.swf" />
                             <param name="flashvars" value="controls=true&file='.$params['url'].'" />
@@ -2205,7 +2205,7 @@ class Display
                 break;
             case 'wav':
             case 'ogg':
-                $html = '<audio width="300px" controls id="'.$id.'" '.$autoplay.' src="'.$params['url'].'" >';
+                $html = '<audio width="300px" controls id="'.$id.'" '.$autoplay.' src="'.$params['url'].'"></audio>';
 
                 return $html;
                 break;

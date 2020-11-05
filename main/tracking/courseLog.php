@@ -356,7 +356,6 @@ if ($nbStudents > 0) {
     $groupIdList = [];
     foreach ($groupList as $group) {
         $groupIdList[] = ['text' => $group['name'], 'value' => 'group_'.$group['id']];
-        //$groupIdList['group_'.$group['id']] = $group['name'];
     }
     $select->addOptGroup($groupIdList, get_lang('Group'));
     $formClass->addButtonSearch(get_lang('Search'));

@@ -169,6 +169,7 @@ abstract class Question
                 $objQuestion->feedback = isset($object->feedback) ? $object->feedback : '';
                 $objQuestion->code = isset($object->code) ? $object->code : '';
                 $categoryInfo = TestCategory::getCategoryInfoForQuestion($id, $course_id);
+
                 if (!empty($categoryInfo)) {
                     if (isset($categoryInfo['category_id'])) {
                         $objQuestion->category = (int) $categoryInfo['category_id'];

@@ -37,10 +37,19 @@ $courseCode = $course_info['code'];
 $courseId = $course_info['real_id'];
 $type = isset($_REQUEST['type']) ? (int) $_REQUEST['type'] : STUDENT;
 $canEditUsers = api_get_setting('allow_user_course_subscription_by_course_admin') === 'true' || api_is_platform_admin();
+$canEdit = api_is_allowed_to_edit(null, true);
+$canRead = api_is_allowed_to_edit(null, true) || api_is_coach();
 
 // Can't auto unregister from a session
 if (!empty($sessionId)) {
     $course_info['unsubscribe'] = 0;
+}
+
+$disableUsers = 3 === (int) $course_info['visibility'] &&
+    api_get_configuration_value('disable_change_user_visibility_for_public_courses');
+
+if (false === $canEdit && $disableUsers) {
+    api_not_allowed(true);
 }
 
 /* Un registering a user section	*/
@@ -66,9 +75,6 @@ if (api_is_allowed_to_edit(null, true)) {
 $extraField = new ExtraField('user');
 $extraFields = $extraField->get_all(['filter = ?' => 1]);
 $user_image_pdf_size = 80;
-
-$canEdit = api_is_allowed_to_edit(null, true);
-$canRead = api_is_allowed_to_edit(null, true) || api_is_coach();
 
 if (isset($_GET['action'])) {
     switch ($_GET['action']) {

@@ -1730,6 +1730,9 @@ $_configuration['auth_password_links'] = [
 // Allow time per question. Requires a question text extra field called "time", value in seconds.
 //$_configuration['allow_time_per_question'] = true;
 
+// Disable change user visibility tool icon.
+//$_configuration['disable_change_user_visibility_for_public_courses'] = true;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

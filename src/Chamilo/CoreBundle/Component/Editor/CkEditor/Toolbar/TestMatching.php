@@ -48,7 +48,7 @@ class TestMatching extends Basic
     {
         return [
             ['NewPage', 'Templates', '-', 'Preview', 'Print'],
-            ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord'],
+            ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', 'inserthtml'],
             ['Undo', 'Redo', '-', 'SelectAll', 'Find', '-', 'RemoveFormat'],
             ['Link', 'Unlink', 'Anchor', 'Glossary'],
             [
@@ -90,9 +90,14 @@ class TestMatching extends Basic
                 'Bold',
                 'Image',
                 'Video',
+                'Flash',
+                'Oembed',
+                'Youtube',
+                'VimeoEmbed',
+                'Audio',
                 'Link',
                 'PasteFromWord',
-                'Audio',
+                'inserthtml',
                 'Table',
                 'Subscript',
                 'Superscript',
@@ -109,7 +114,7 @@ class TestMatching extends Basic
     protected function getMinimizedToolbar()
     {
         return [
-            ['PasteFromWord'],
+            ['PasteFromWord', 'inserthtml'],
             ['Undo', 'Redo'],
             [
                 'Link',

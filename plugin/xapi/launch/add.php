@@ -24,6 +24,25 @@ $frmActivity->addHtml('<div id="advanced_params_options" style="display:none">')
 $frmActivity->addText('title', get_lang('Title'), false);
 $frmActivity->addTextarea('description', get_lang('Description'));
 $frmActivity->addHtml('</div>');
+$frmActivity->addButtonAdvancedSettings('lrs_params', $plugin->get_lang('LrsConfiguration'));
+$frmActivity->addHtml('<div id="lrs_params_options" style="display:none">');
+$frmActivity->addText(
+    'lrs_url',
+    [
+        $plugin->get_lang('lrs_url'),
+        $plugin->get_lang('lrs_url_help'),
+    ],
+    false
+);
+$frmActivity->addText(
+    'lrs_auth',
+    [
+        $plugin->get_lang('lrs_auth'),
+        $plugin->get_lang('lrs_auth_help'),
+    ],
+    false
+);
+$frmActivity->addHtml('</div>');
 $frmActivity->addButtonImport(get_lang('Import'));
 $frmActivity->addRule('file', get_lang('ThisFileIsRequired'), 'required');
 $frmActivity->addRule(
@@ -34,6 +53,8 @@ $frmActivity->addRule(
 );
 $frmActivity->applyFilter('title', 'trim');
 $frmActivity->applyFilter('description', 'trim');
+$frmActivity->applyFilter('lrs_url', 'trim');
+$frmActivity->applyFilter('lrs_auth', 'trim');
 
 if ($frmActivity->validate()) {
     $values = $frmActivity->exportValues();
@@ -61,6 +82,11 @@ if ($frmActivity->validate()) {
 
     if (!empty($values['description'])) {
         $toolLaunch->setDescription($values['description']);
+    }
+
+    if (!empty($values['lrs_url']) && !empty($values['lrs_auth'])) {
+        $toolLaunch->setLrsUrl($values['lrs_url']);
+        $toolLaunch->setLrsAuth($values['lrs_auth']);
     }
 
     $em = Database::getManager();

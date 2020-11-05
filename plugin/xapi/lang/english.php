@@ -29,3 +29,4 @@ $strings['ActivityLaunch'] = 'Launch';
 $strings['ActivityFirstLaunch'] = 'First launch at';
 $strings['ActivityLastLaunch'] = 'Last launch at';
 $strings['LaunchNewAttempt'] = 'Launch new attempt';
+$strings['LrsConfiguration'] = 'LRS Configuration';

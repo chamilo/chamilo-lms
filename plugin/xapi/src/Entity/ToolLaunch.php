@@ -67,12 +67,6 @@ class ToolLaunch
     /**
      * @var string|null
      *
-     * @ORM\Column(name="activity_verb_id", type="string", nullable=true)
-     */
-    private $activityVerbId;
-    /**
-     * @var string|null
-     *
      * @ORM\Column(name="activity_type", type="string", nullable=true)
      */
     private $activityType;
@@ -82,6 +76,18 @@ class ToolLaunch
      * @ORM\Column(name="allow_multiple_attempts", type="boolean", options={"default": true})
      */
     private $allowMultipleAttempts;
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="lrs_url", type="string", nullable=true)
+     */
+    private $lrsUrl;
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="lrs_auth", type="string", nullable=true)
+     */
+    private $lrsAuth;
     /***
      * @var \DateTime
      *
@@ -238,26 +244,6 @@ class ToolLaunch
     }
 
     /**
-     * @return string|null
-     */
-    public function getActivityVerbId(): ?string
-    {
-        return $this->activityVerbId;
-    }
-
-    /**
-     * @param string|null $activityVerbId
-     *
-     * @return ToolLaunch
-     */
-    public function setActivityVerbId(?string $activityVerbId): ToolLaunch
-    {
-        $this->activityVerbId = $activityVerbId;
-
-        return $this;
-    }
-
-    /**
      * @return \DateTime
      */
     public function getCreatedAt(): DateTime
@@ -313,6 +299,46 @@ class ToolLaunch
     public function setAllowMultipleAttempts(bool $allowMultipleAttempts): ToolLaunch
     {
         $this->allowMultipleAttempts = $allowMultipleAttempts;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getLrsUrl(): ?string
+    {
+        return $this->lrsUrl;
+    }
+
+    /**
+     * @param string|null $lrsUrl
+     *
+     * @return ToolLaunch
+     */
+    public function setLrsUrl(?string $lrsUrl): ToolLaunch
+    {
+        $this->lrsUrl = $lrsUrl;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getLrsAuth(): ?string
+    {
+        return $this->lrsAuth;
+    }
+
+    /**
+     * @param string|null $lrsAuth
+     *
+     * @return ToolLaunch
+     */
+    public function setLrsAuth(?string $lrsAuth): ToolLaunch
+    {
+        $this->lrsAuth = $lrsAuth;
 
         return $this;
     }

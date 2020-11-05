@@ -61,7 +61,6 @@ class TinCanParser
             ->setSession($this->session)
             ->setCreatedAt(api_get_utc_datetime(null, false, true))
             ->setActivityId($activityNode->attr('id'))
-            ->setActivityVerbId($activityNode->attr('verbid'))
             ->setActivityType($activityNode->attr('type'))
             ->setLaunchUrl($this->parseLaunchUrl($nodeLaunch));
 

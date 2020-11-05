@@ -43,9 +43,30 @@ $frmActivity->addUrl('launch_url', $plugin->get_lang('ActivityLaunchUrl'), true)
 $frmActivity->addUrl('activity_id', $plugin->get_lang('ActivityId'), true);
 $frmActivity->addUrl('activity_type', $plugin->get_lang('ActivityType'), true);
 $frmActivity->addHtml('</div>');
+$frmActivity->addButtonAdvancedSettings('lrs_params', $plugin->get_lang('LrsConfiguration'));
+$frmActivity->addHtml('<div id="lrs_params_options" style="display:none">');
+$frmActivity->addText(
+    'lrs_url',
+    [
+        $plugin->get_lang('lrs_url'),
+        $plugin->get_lang('lrs_url_help'),
+    ],
+    false
+);
+$frmActivity->addText(
+    'lrs_auth',
+    [
+        $plugin->get_lang('lrs_auth'),
+        $plugin->get_lang('lrs_auth_help'),
+    ],
+    false
+);
+$frmActivity->addHtml('</div>');
 $frmActivity->addButtonUpdate(get_lang('Update'));
 $frmActivity->applyFilter('title', 'trim');
 $frmActivity->applyFilter('description', 'trim');
+$frmActivity->applyFilter('lrs_url', 'trim');
+$frmActivity->applyFilter('lrs_auth', 'trim');
 
 if ($frmActivity->validate()) {
     $values = $frmActivity->exportValues();
@@ -59,6 +80,11 @@ if ($frmActivity->validate()) {
         ->setAllowMultipleAttempts(
             isset($values['allow_multiple_attempts'])
         );
+
+    if (!empty($values['lrs_url']) && !empty($values['lrs_auth'])) {
+        $toolLaunch->setLrsUrl($values['lrs_url']);
+        $toolLaunch->setLrsAuth($values['lrs_auth']);
+    }
 
     $courseTool = $plugin->getCourseToolFromLaunchTool($toolLaunch);
     $courseTool->setName($values['title']);
@@ -83,6 +109,8 @@ $frmActivity->setDefaults(
         'activity_type' => $toolLaunch->getActivityType(),
         'launch_url' => $toolLaunch->getLaunchUrl(),
         'allow_multiple_attempts' => $toolLaunch->isAllowMultipleAttempts(),
+        'lrs_url' => $toolLaunch->getLrsUrl(),
+        'lrs_auth' => $toolLaunch->getLrsAuth(),
     ]
 );
 

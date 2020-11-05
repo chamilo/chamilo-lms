@@ -1,0 +1,36 @@
+<?php
+/* For licensing terms, see /license.txt */
+
+/**
+ * Class XApiCreateCourseHookObserver.
+ */
+class XApiCreateCourseHookObserver extends HookObserver implements HookCreateCourseObserverInterface
+{
+    /**
+     * XApiCreateCourseHookObserver constructor.
+     */
+    protected function __construct()
+    {
+        parent::__construct(
+            'plugin/xapi/src/XApiPlugin.php',
+            'xapi'
+        );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function hookCreateCourse(HookCreateCourseEventInterface $hookEvent)
+    {
+        $data = $hookEvent->getEventData();
+
+        $type = $data['type'];
+        $courseInfo = $data['course_info'];
+
+        $plugin = XApiPlugin::create();
+
+        if (HOOK_EVENT_TYPE_POST == $type) {
+            $plugin->addCourseTool($courseInfo['real_id']);
+        }
+    }
+}

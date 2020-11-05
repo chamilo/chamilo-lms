@@ -18,7 +18,8 @@ use Xabbuh\XApi\Client\XApiClientBuilderInterface;
 class XApiPlugin extends Plugin implements HookPluginInterface
 {
     const SETTING_LRS_URL = 'lrs_url';
-    const SETTING_LRS_AUTH = 'lrs_auth';
+    const SETTING_LRS_AUTH_USERNAME = 'lrs_auth_username';
+    const SETTING_LRS_AUTH_PASSWORD = 'lrs_auth_password';
     const SETTING_UUID_NAMESPACE = 'uuid_namespace';
     const SETTING_LRS_LP_ITEM_ACTIVE = 'lrs_lp_item_viewed_active';
     const SETTING_LRS_LP_ACTIVE = 'lrs_lp_end_active';
@@ -59,8 +60,11 @@ class XApiPlugin extends Plugin implements HookPluginInterface
         ];
         $settings = [
             self::SETTING_UUID_NAMESPACE => 'text',
+
             self::SETTING_LRS_URL => 'text',
-            self::SETTING_LRS_AUTH => 'text',
+            self::SETTING_LRS_AUTH_USERNAME => 'text',
+            self::SETTING_LRS_AUTH_PASSWORD => 'text',
+
             self::SETTING_LRS_LP_ITEM_ACTIVE => 'boolean',
             self::SETTING_LRS_LP_ACTIVE => 'boolean',
             self::SETTING_LRS_QUIZ_ACTIVE => 'boolean',
@@ -194,13 +198,16 @@ class XApiPlugin extends Plugin implements HookPluginInterface
 
     /**
      * @param string|null $lrsUrl
-     * @param string|null $lrsAuth
+     * @param string|null $lrsAuthUsername
+     * @param string|null $lrsAuthPassword
      *
      * @return \Xabbuh\XApi\Client\Api\StateApiClientInterface
      */
-    public function getXApiStateClient($lrsUrl = null, $lrsAuth = null)
+    public function getXApiStateClient($lrsUrl = null, $lrsAuthUsername = null, $lrsAuthPassword = null)
     {
-        return $this->createXApiClient($lrsUrl, $lrsAuth)->getStateApiClient();
+        return $this
+            ->createXApiClient($lrsUrl, $lrsAuthUsername, $lrsAuthPassword)
+            ->getStateApiClient();
     }
 
     /**
@@ -213,49 +220,25 @@ class XApiPlugin extends Plugin implements HookPluginInterface
 
     /**
      * @param string|null $lrsUrl
-     * @param string|null $lrsAuth
+     * @param string|null $lrsAuthUsername
+     * @param string|null $lrsAuthPassword
      *
      * @return \Xabbuh\XApi\Client\XApiClientInterface
      */
-    public function createXApiClient($lrsUrl = null, $lrsAuth = null)
+    private function createXApiClient($lrsUrl = null, $lrsAuthUsername = null, $lrsAuthPassword = null)
     {
-        $baseUrl = $lrsUrl ?: trim($this->get(self::SETTING_LRS_URL), "/ \t\n\r\0\x0B");
+        $baseUrl = $lrsUrl ?: $this->get(self::SETTING_LRS_URL);
+        $lrsAuthUsername = $lrsAuthUsername ?: $this->get(self::SETTING_LRS_AUTH_USERNAME);
+        $lrsAuthPassword = $lrsAuthPassword ?: $this->get(self::SETTING_LRS_AUTH_PASSWORD);
 
         $clientBuilder = new XApiClientBuilder();
         $clientBuilder
             ->setHttpClient(Client::createWithConfig([RequestOptions::VERIFY => false]))
             ->setRequestFactory(new GuzzleMessageFactory())
-            ->setBaseUrl($baseUrl);
+            ->setBaseUrl(trim($baseUrl, "/ \t\n\r\0\x0B"))
+            ->setAuth(trim($lrsAuthUsername), trim($lrsAuthPassword));
 
-        return $this
-            ->setAuthMethodToClient($clientBuilder, $lrsAuth)
-            ->build();
-    }
-
-    /**
-     * @param \Xabbuh\XApi\Client\XApiClientBuilderInterface $clientBuilder
-     * @param string|null                                    $lrsAuth
-     *
-     * @return \Xabbuh\XApi\Client\XApiClientBuilderInterface
-     */
-    private function setAuthMethodToClient(XApiClientBuilderInterface $clientBuilder, $lrsAuth = null)
-    {
-        $authString = $lrsAuth ?: $this->get(self::SETTING_LRS_AUTH);
-
-        $parts = explode(':', $authString);
-
-        if (!empty($parts)) {
-            $method = strtolower($parts[0]);
-
-            switch ($method) {
-                case 'basic':
-                    return $clientBuilder->setAuth($parts[1], $parts[2]);
-                case 'oauth':
-                    return $clientBuilder->setOAuthCredentials($parts[1], $parts[2]);
-            }
-        }
-
-        return $clientBuilder;
+        return $clientBuilder->build();
     }
 
     /**

@@ -85,9 +85,15 @@ class ToolLaunch
     /**
      * @var string|null
      *
-     * @ORM\Column(name="lrs_auth", type="string", nullable=true)
+     * @ORM\Column(name="lrs_auth_username", type="string", nullable=true)
      */
-    private $lrsAuth;
+    private $lrsAuthUsername;
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="lrs_auth_password", type="string", nullable=true)
+     */
+    private $lrsAuthPassword;
     /***
      * @var \DateTime
      *
@@ -326,19 +332,39 @@ class ToolLaunch
     /**
      * @return string|null
      */
-    public function getLrsAuth(): ?string
+    public function getLrsAuthUsername(): ?string
     {
-        return $this->lrsAuth;
+        return $this->lrsAuthUsername;
     }
 
     /**
-     * @param string|null $lrsAuth
+     * @param string|null $lrsAuthUsername
      *
      * @return ToolLaunch
      */
-    public function setLrsAuth(?string $lrsAuth): ToolLaunch
+    public function setLrsAuthUsername(?string $lrsAuthUsername): ToolLaunch
     {
-        $this->lrsAuth = $lrsAuth;
+        $this->lrsAuthUsername = $lrsAuthUsername;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getLrsAuthPassword(): ?string
+    {
+        return $this->lrsAuthPassword;
+    }
+
+    /**
+     * @param string|null $lrsAuthPassword
+     *
+     * @return ToolLaunch
+     */
+    public function setLrsAuthPassword(?string $lrsAuthPassword): ToolLaunch
+    {
+        $this->lrsAuthPassword = $lrsAuthPassword;
 
         return $this;
     }

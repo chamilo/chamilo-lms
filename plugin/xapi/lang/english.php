@@ -7,11 +7,12 @@ $strings['plugin_comment'] = 'Allow to incorporate an Learning Record Store and 
 $strings[XApiPlugin::SETTING_UUID_NAMESPACE] = 'UUID Namespace';
 $strings[XApiPlugin::SETTING_UUID_NAMESPACE.'_help'] = 'Namespace for universally unique identifiers used as statement IDs.'
     .'<br>This is automatically by Chamilo LMS. <strong>Don\'t replace it.</strong>';
-$strings[XApiPlugin::SETTING_LRS_URL] = 'LRS: URL for API';
-$strings[XApiPlugin::SETTING_LRS_URL.'_help'] = 'Sets the LRS base URL.';
-$strings[XApiPlugin::SETTING_LRS_AUTH] = 'LRS: Authentication method';
-$strings[XApiPlugin::SETTING_LRS_AUTH.'_help'] = 'Sets HTTP authentication credentials.<br>';
-$strings[XApiPlugin::SETTING_LRS_AUTH.'_help'] .= 'Choose one auth method: Basic (<code>basic:username:password</code>) or OAuth1 (<code>oauth:key:secret</code>)';
+$strings['lrs_url'] = 'LRS endpoint';
+$strings['lrs_url_help'] = 'Base URL from the LRS';
+$strings['lrs_auth_username'] = 'LRS user';
+$strings['lrs_auth_username_help'] = 'Username for basic HTTP authentication';
+$strings['lrs_auth_password'] = 'LRS password';
+$strings['lrs_auth_password_help'] = 'Password for basic HTTP authentication';
 
 $strings['NoActivities'] = 'No activities added yet';
 $strings['ActivityTitle'] = 'Activity';

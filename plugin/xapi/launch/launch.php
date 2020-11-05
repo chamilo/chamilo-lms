@@ -57,7 +57,13 @@ $state = new State(
 $nowDate = api_get_utc_datetime(null, false, true)->format('c');
 
 try {
-    $stateDocument = $plugin->getXApiStateClient()->getDocument($state);
+    $stateDocument = $plugin
+        ->getXApiStateClient(
+            $toolLaunch->getLrsUrl(),
+            $toolLaunch->getLrsAuthUsername(),
+            $toolLaunch->getLrsAuthPassword()
+        )
+        ->getDocument($state);
 
     $data = $stateDocument->getData()->getData();
 
@@ -111,19 +117,20 @@ try {
     exit;
 }
 
-$authString = $plugin->get(XApiPlugin::SETTING_LRS_AUTH);
-$parts = explode(':', $authString);
+$lrsUrl = $toolLaunch->getLrsUrl() ?: $plugin->get(XApiPlugin::SETTING_LRS_URL);
+$lrsAuthUsername = $toolLaunch->getLrsAuthUsername() ?: $plugin->get(XApiPlugin::SETTING_LRS_AUTH_USERNAME);
+$lrsAuthPassword = $toolLaunch->getLrsAuthPassword() ?: $plugin->get(XApiPlugin::SETTING_LRS_AUTH_PASSWORD);
 
 $activityLaunchUrl = $toolLaunch->getLaunchUrl().'?'
     .http_build_query(
         [
-            'endpoint' => $plugin->get(XApiPlugin::SETTING_LRS_URL),
-            'auth' => 'Basic '.base64_encode("{$parts[1]}:{$parts[2]}"),
+            'endpoint' => trim($lrsUrl, "/ \t\n\r\0\x0B"),
+            'auth' => 'Basic '.base64_encode(trim($lrsAuthUsername).':'.trim($lrsAuthPassword)),
             'actor' => Serializer::createSerializer()->serialize($actor, 'json'),
             'registration' => $attemptId,
             'activity_id' => $toolLaunch->getActivityId(),
         ],
-        '',
+        null,
         '&',
         PHP_QUERY_RFC3986
     );

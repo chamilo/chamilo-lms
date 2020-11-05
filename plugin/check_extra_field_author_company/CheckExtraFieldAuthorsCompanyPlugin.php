@@ -308,7 +308,7 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
     public function removeCompanyField()
     {
         $data = $this->getCompanyField();
-        $this->deleteQuery($data);
+        // $this->deleteQuery($data);
     }
 
     /**
@@ -317,7 +317,7 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
     public function removeAuthorsField()
     {
         $data = $this->getAuthorsField();
-        $this->deleteQuery($data);
+        // $this->deleteQuery($data);
     }
 
     /**

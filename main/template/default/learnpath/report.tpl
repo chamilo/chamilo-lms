@@ -43,14 +43,13 @@
                 <td class="text-center">{{ user.lp_last_connection }}</td>
                 {% if not export %}
                 <td>
-                    <button class="btn btn-primary btn-sm" data-id="{{ user.id }}">
-                        {{ 'Details'|get_lang }}
-                    </button>
+                    <a href="javascript:void(0);" class="details" data-id="{{ user.id }}"><img alt="{{ 'Details' | get_lang }}" src="{{ '2rightarrow.png'|icon(22) }}" /></a>
+                    &nbsp;
                     <a
                         href = "{{ url }}&student_id={{ user.id }}&reset=student"
                         onclick = "javascript:if(!confirm('{{ 'AreYouSureToDeleteJS' | get_lang | e('js') }}')) return false;"
                     >
-                        <img title="{{ 'Reset' | get_lang }}" src="{{ 'clean.png'|icon(32) }}">
+                        <img alt="{{ 'Reset' | get_lang }}" src="{{ 'clean.png'|icon(22) }}" />
                     </a>
                 </td>
                 {% endif %}
@@ -63,7 +62,7 @@
 
 <script>
 $(function() {
-    $('tr td button').on('click', function (e) {
+    $('tr td .details').on('click', function (e) {
         e.preventDefault();
         var self = $(this);
         var userId = self.data('id') || 0;

@@ -193,11 +193,14 @@ class XApiPlugin extends Plugin implements HookPluginInterface
     }
 
     /**
+     * @param string|null $lrsUrl
+     * @param string|null $lrsAuth
+     *
      * @return \Xabbuh\XApi\Client\Api\StateApiClientInterface
      */
-    public function getXApiStateClient()
+    public function getXApiStateClient($lrsUrl = null, $lrsAuth = null)
     {
-        return $this->createXApiClient()->getStateApiClient();
+        return $this->createXApiClient($lrsUrl, $lrsAuth)->getStateApiClient();
     }
 
     /**
@@ -209,11 +212,14 @@ class XApiPlugin extends Plugin implements HookPluginInterface
     }
 
     /**
+     * @param string|null $lrsUrl
+     * @param string|null $lrsAuth
+     *
      * @return \Xabbuh\XApi\Client\XApiClientInterface
      */
-    public function createXApiClient()
+    public function createXApiClient($lrsUrl = null, $lrsAuth = null)
     {
-        $baseUrl = trim($this->get(self::SETTING_LRS_URL), "/ \t\n\r\0\x0B");
+        $baseUrl = $lrsUrl ?: trim($this->get(self::SETTING_LRS_URL), "/ \t\n\r\0\x0B");
 
         $clientBuilder = new XApiClientBuilder();
         $clientBuilder
@@ -222,18 +228,19 @@ class XApiPlugin extends Plugin implements HookPluginInterface
             ->setBaseUrl($baseUrl);
 
         return $this
-            ->setAuthMethodToClient($clientBuilder)
+            ->setAuthMethodToClient($clientBuilder, $lrsAuth)
             ->build();
     }
 
     /**
      * @param \Xabbuh\XApi\Client\XApiClientBuilderInterface $clientBuilder
+     * @param string|null                                    $lrsAuth
      *
      * @return \Xabbuh\XApi\Client\XApiClientBuilderInterface
      */
-    private function setAuthMethodToClient(XApiClientBuilderInterface $clientBuilder)
+    private function setAuthMethodToClient(XApiClientBuilderInterface $clientBuilder, $lrsAuth = null)
     {
-        $authString = $this->get(self::SETTING_LRS_AUTH);
+        $authString = $lrsAuth ?: $this->get(self::SETTING_LRS_AUTH);
 
         $parts = explode(':', $authString);
 

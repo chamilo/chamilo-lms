@@ -4,7 +4,7 @@
 use ChamiloSession as Session;
 
 /**
- * This is a learning path editor autor
+ * This is a learning path editor autor.
  *
  * @author Carlos Alvarado
  * @author Yannick Warnier <ywarnier@beeznest.org> - cleaning and update

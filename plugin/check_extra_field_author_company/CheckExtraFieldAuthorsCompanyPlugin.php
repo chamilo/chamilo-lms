@@ -245,7 +245,8 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
     }
 
     /**
-     *  Set Yes or Not selector for AuthorLp field
+     *  Set Yes or Not selector for AuthorLp field.
+     *
      * @param $authorLpId
      */
     public function setYesNoToAuthor($authorLpId)

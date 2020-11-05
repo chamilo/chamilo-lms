@@ -1390,6 +1390,7 @@ class MySpace
             $tpl->assign('table', $tableContent);
             $templateName = $tpl->get_template('my_space/course_summary.tpl');
             $tpl->display($templateName);
+
             return null;
         }
 

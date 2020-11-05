@@ -3154,8 +3154,7 @@ JAVASCRIPT;
     }
 
     /**
-     *
-     * Return array of data to specific variable name with a specificl extra_field_type
+     * Return array of data to specific variable name with a specificl extra_field_type.
      *
      * @param string $variableName Default AuthorLp
      * @param string $value Default user for user type filed

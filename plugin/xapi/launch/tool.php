@@ -54,7 +54,11 @@ $cidReq = api_get_cidreq();
 
 try {
     $stateDocument = $plugin
-        ->getXApiStateClient($toolLaunch->getLrsUrl(), $toolLaunch->getLrsAuth())
+        ->getXApiStateClient(
+            $toolLaunch->getLrsUrl(),
+            $toolLaunch->getLrsAuthUsername(),
+            $toolLaunch->getLrsAuthPassword()
+        )
         ->getDocument($state);
 } catch (NotFoundException $notFoundException) {
     $stateDocument = null;

@@ -56,8 +56,16 @@ $frmActivity->addText(
 $frmActivity->addText(
     'lrs_auth',
     [
-        $plugin->get_lang('lrs_auth'),
-        $plugin->get_lang('lrs_auth_help'),
+        $plugin->get_lang('lrs_auth_username'),
+        $plugin->get_lang('lrs_auth_username_help'),
+    ],
+    false
+);
+$frmActivity->addText(
+    'lrs_auth',
+    [
+        $plugin->get_lang('lrs_auth_password'),
+        $plugin->get_lang('lrs_auth_password_help'),
     ],
     false
 );
@@ -82,8 +90,10 @@ if ($frmActivity->validate()) {
         );
 
     if (!empty($values['lrs_url']) && !empty($values['lrs_auth'])) {
-        $toolLaunch->setLrsUrl($values['lrs_url']);
-        $toolLaunch->setLrsAuth($values['lrs_auth']);
+        $toolLaunch
+            ->setLrsUrl($values['lrs_url'])
+            ->setLrsAuthUsername($values['lrs_auth_username'])
+            ->setLrsAuthPassword($values['lrs_auth_password']);
     }
 
     $courseTool = $plugin->getCourseToolFromLaunchTool($toolLaunch);
@@ -110,7 +120,8 @@ $frmActivity->setDefaults(
         'launch_url' => $toolLaunch->getLaunchUrl(),
         'allow_multiple_attempts' => $toolLaunch->isAllowMultipleAttempts(),
         'lrs_url' => $toolLaunch->getLrsUrl(),
-        'lrs_auth' => $toolLaunch->getLrsAuth(),
+        'lrs_auth_username' => $toolLaunch->getLrsAuthUsername(),
+        'lrs_auth_password' => $toolLaunch->getLrsAuthPassword(),
     ]
 );
 

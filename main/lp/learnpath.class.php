@@ -6728,8 +6728,8 @@ class learnpath
                 [
                     'title' => get_lang('ClearAllPrerequisites'),
                     'href' => 'lp_controller.php?'.api_get_cidreq().'&'.http_build_query([
-                        'action' => 'clear_prerequisites',
-                        'lp_id' => $lpId,
+                            'action' => 'clear_prerequisites',
+                            'lp_id' => $lpId,
                         ]),
                 ],
             ];

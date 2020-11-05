@@ -63,6 +63,9 @@ if ($exportCSV) {
     } elseif ('learningPath' === $display) {
         MySpace::displayResumeLP($startDate, $endDate, true);
         exit;
+    } elseif ('learningPathByItem' === $display) {
+        MySpace::displayResumeLpByItem($startDate, $endDate, true);
+        exit;
     }
 }
 

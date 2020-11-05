@@ -4,12 +4,9 @@
 use ChamiloSession as Session;
 
 /**
- * This is a learning path creation and player tool in Chamilo - previously
- * learnpath_handler.php.
+ * This is a learning path editor autor
  *
- * @author Patrick Cool
- * @author Denes Nagy
- * @author Roan Embrechts, refactoring and code cleaning
+ * @author Carlos Alvarado
  * @author Yannick Warnier <ywarnier@beeznest.org> - cleaning and update
  * @author Julio Montoya  - Improving the list of templates
  *
@@ -200,13 +197,6 @@ $suredel = trim(get_lang('AreYouSureToDeleteJS'));
     </script>
 <?php
 $extraField = [];
-/*
-$priceExtraField = ExtraField::getDisplayNameByVariable('price');
-if($priceExtraField != null)
-{
-    $extraField['price']=$priceExtraField;
-}
-*/
 $form = new FormValidator('configure_homepage_'.$action,
     'post',
     $_SERVER['REQUEST_URI'].'&sub_action=author_view',
@@ -228,7 +218,7 @@ echo $learnPath->build_action_menu(false,
 echo '<div class="row">';
 echo '<div id="lp_sidebar" class="col-md-4">';
 echo $learnPath->return_new_tree(null, false);
-// Segunda columna
+// Second Col
 $message = isset($_REQUEST['message']) ? $_REQUEST['message'] : null;
 
 // Show the template list.
@@ -276,7 +266,7 @@ foreach ($learnPath->authorsAvaible as $key => $value) {
         }
     }
 }
-$form->addSelect('authorItemSelect', 'ssss', $options, [
+$form->addSelect('authorItemSelect', get_lang('Authors'), $options, [
     'multiple' => 'multiple',
 ]);
 $form->addHtml('</div>');

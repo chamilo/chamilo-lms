@@ -3154,47 +3154,29 @@ JAVASCRIPT;
     }
 
     /**
-     *  Gets id of an extra field.
      *
-     * @param string $variableName
+     * Return array of data to specific variable name with a specificl extra_field_type
+     *
+     * @param string $variableName Default AuthorLp
+     * @param string $value Default user for user type filed
+     *
+     * @return array
      */
-    public static function getIdByVariableName($variableName = null)
+    public static function getUserByExtrafieldVariableName($variableName = 'AuthorLP')
     {
-        if ($variableName == null) {
-            return null;
-        }
         $variableName = strtolower($variableName);
-        $variableName = Database::escape_string($variableName);
-        $tblExtraField = Database::get_main_table(TABLE_EXTRA_FIELD);
-        $query = "SELECT id
-            FROM $tblExtraField
-            WHERE variable = '$variableName'";
-        $companyField = Database::fetch_assoc(Database::query($query));
-
-        if ($companyField == false or !isset($companyField['id'])) {
-            return 0;
-        }
-
-        return (int)$companyField['id'];
-    }
-
-    /**
-     * @TODO: Set description
-     */
-    public static function getUserByExtrafieldVariableName($variableName = 'AuthorLP', $value = 1)
-    {
-        $value = (int)$value;
+        $value = EntityExtraField::USER_FIELD_TYPE;
         $teachers = [];
-
-        $variableName = strtolower($variableName);
         if ($variableName == null) {
             return $teachers;
         }
         $variableName = Database::escape_string($variableName);
         $tblExtraField = Database::get_main_table(TABLE_EXTRA_FIELD);
-        $query = "SELECT id
-            FROM $tblExtraField
-            WHERE variable = '$variableName'";
+        $query = "SELECT id ".
+            "FROM $tblExtraField ".
+            "WHERE ".
+            "variable = '$variableName' ".
+            "AND extra_field_type = $value ";
         $companyField = Database::fetch_assoc(Database::query($query));
         $idExtraField = (int)$companyField['id'];
         if (empty($idExtraField)) {
@@ -3203,12 +3185,12 @@ JAVASCRIPT;
 
         $tblExtraFieldValues = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
         $tblExtraField = Database::get_main_table(TABLE_EXTRA_FIELD);
-        $extraTypeUser = EntityExtraField::USER_FIELD_TYPE;
-        $sql = "SELECT $tblExtraFieldValues.item_id as id
-            FROM $tblExtraFieldValues
-	INNER JOIN $tblExtraField on $tblExtraField.id = $tblExtraFieldValues.field_id
-            WHERE $tblExtraFieldValues.field_id =$idExtraField and $tblExtraFieldValues.value = $value and
-              ";
+        $sql = "SELECT $tblExtraFieldValues.item_id as id ".
+            "FROM $tblExtraFieldValues ".
+            "INNER JOIN $tblExtraField on $tblExtraField.id = $tblExtraFieldValues.field_id ".
+            "WHERE ".
+            "$tblExtraFieldValues.field_id = $idExtraField  ".
+            "AND $tblExtraFieldValues.value = $value ";
 
         $result = Database::query($sql);
         if (Database::num_rows($result)) {

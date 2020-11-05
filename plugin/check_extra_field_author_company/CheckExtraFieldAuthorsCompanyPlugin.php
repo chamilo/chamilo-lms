@@ -54,7 +54,6 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
             $this->authorsExist = false;
         }
         $this->authorsField = [
-            // 'extra_field_type' => ExtraField::FIELD_TYPE_DATE,
             'field_type' => ExtraField::FIELD_TYPE_SELECT_MULTIPLE,
             'variable' => 'authors',
             'display_text' => 'Authors',
@@ -66,7 +65,6 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
             'filter' => 1,
         ];
         $this->companyField = [
-            //'extra_field_type' => ExtraField::FIELD_TYPE_TEXT,
             'field_type' => ExtraField::FIELD_TYPE_RADIO,
             'variable' => 'company',
             'display_text' => 'Company',
@@ -144,7 +142,6 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
     public function SaveCompanyField()
     {
         $data = $this->companyField;
-        //$data['extra_field_type'] = (int) $data['extra_field_type'];
         $data['field_type'] = (int)$data['field_type'];
         $data['field_order'] = (int)$data['field_order'];
         $data['visible_to_self'] = (int)$data['visible_to_self'];
@@ -196,7 +193,6 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
     public function SaveAuthorsField()
     {
         $data = $this->authorsField;
-        //$data['extra_field_type'] = (int) $data['extra_field_type'];
         $data['field_type'] = (int)$data['field_type'];
         $data['field_order'] = (int)$data['field_order'];
         $data['visible_to_self'] = (int)$data['visible_to_self'];
@@ -212,7 +208,12 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
 
         $schedule = new ExtraField('user');
         $data['variable'] = 'AuthorLP';
-        $data['display_text'] = 'AuthorLP';
+        $data['display_text'] = 'Author';
+        $data['changeable'] = 1;
+        $data['visible_to_self'] = 1;
+        $data['visible_to_others'] = 0;
+        $data['filter'] = 0;
+
         $data['field_type'] = ExtraField::FIELD_TYPE_RADIO;
 
         $authorLpId = $schedule->save($data);
@@ -220,13 +221,33 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
         $this->setYesNoToAuthor($authorLpId);
         $schedule = new ExtraField('lp_item');
 
+        $data['visible_to_self'] = 0;
+        $data['visible_to_others'] = 0;
+        $data['changeable'] = 1;
+        $data['filter'] = 0;
+
         $data['variable'] = 'AuthorLPItem';
         $data['display_text'] = 'AuthorLPItem';
         $data['field_type'] = ExtraField::FIELD_TYPE_CHECKBOX;
 
         $schedule->save($data);
+        $schedule = new ExtraField('lp_item');
+
+        $data['visible_to_self'] = 1;
+        $data['visible_to_others'] = 1;
+        $data['changeable'] = 1;
+        $data['filter'] = 0;
+        $data['variable'] = 'price';
+        $data['display_text'] = 'SalePrice';
+        $data['field_type'] = ExtraField::FIELD_TYPE_INTEGER;
+
+        $schedule->save($data);
     }
 
+    /**
+     *  Set Yes or Not selector for AuthorLp field
+     * @param $authorLpId
+     */
     public function setYesNoToAuthor($authorLpId)
     {
         $options = [

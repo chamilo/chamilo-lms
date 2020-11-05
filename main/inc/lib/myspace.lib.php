@@ -86,7 +86,7 @@ class MySpace
             $actions[] =
                 [
                     'url' => api_get_path(WEB_CODE_PATH).'mySpace/admin_view.php?display=learningPathByItem',
-                    'content' => "Lecciones por item de autor",
+                    'content' => get_lang('AuthorLPItem'),
                 ];
         }
 
@@ -1447,10 +1447,10 @@ class MySpace
                 "<thead>".
                 "<tr>".
                 "<th class=\"th-header\">".get_lang('Author')."</th>".
-                "<th class=\"th-header\">Lista de contenidos</th>".
-                "<th class=\"th-header\">Tarifa</th>".
-                "<th class=\"th-header\">Numero de incritos</th>".
-                "<th class=\"th-header\">A facturar</th>".
+                "<th class=\"th-header\">".get_lang('ContentList')."</th>".
+                "<th class=\"th-header\">".get_lang('Tariff')."</th>".
+                "<th class=\"th-header\">".get_lang('CountOfSubscribedUsers')."</th>".
+                "<th class=\"th-header\">".get_lang('ToInvoice')."</th>".
                 "<th class=\"th-header\">".get_lang('StudentList')."</th>".
                 "</tr>".
                 "</thead>".
@@ -1496,13 +1496,9 @@ class MySpace
                             "<div class='icon_remove hidden'>$iconRemove</div>".
                             "</a>".
                             "<div id='$hiddenField' class='hidden'>";
-                        $studentUsers = [];
-
                         for ($i = 0; $i < $studenRegister; $i++) {
-                            $studentUsers[] = api_get_user_info($registeredUsers[$i]);
-                        }
-                        foreach ($studentUsers as $student) {
-                            $table .= $student['complete_name']."<br>";
+                            $tempStudent = api_get_user_info($registeredUsers[$i]);
+                            $table .= $tempStudent['complete_name']."<br>";
                             $totalStudent++;
                         }
                         $index++;
@@ -1552,7 +1548,7 @@ class MySpace
                 ]);
             $form->addButtonSearch(get_lang('Search'));
 
-            /*if (count($printData) != 0) {
+            if (count($printData) != 0) {
                 //$form->addButtonSave(get_lang('Ok'), 'export');
                 $form
                     ->addButton(
@@ -1565,7 +1561,7 @@ class MySpace
                         [
                         ]
                     );
-            }*/
+            }
             $tableContent = $form->returnForm();
             $tableContent .= $tableHtml;
             $tpl = new Template('', false, false, false, false, false, false);
@@ -1575,23 +1571,43 @@ class MySpace
         } else {
             $csv_content = [];
             $csv_row = [];
+
             $csv_row[] = get_lang('Author');
-            $csv_row[] = get_lang('LearningPathList');
+            $csv_row[] = get_lang('ContentList');
+            $csv_row[] = get_lang('Tariff');
             $csv_row[] = get_lang('CountOfSubscribedUsers');
+            $csv_row[] = get_lang('ToInvoice');
             $csv_row[] = get_lang('StudentList');
             $csv_content[] = $csv_row;
-            foreach ($printData as $teacherName => $reportData) {
-                foreach ($reportData as $lpName => $row) {
+            foreach ($printData as $authorId => $lpItemData) {
+                $autor = $authors[$authorId];
+                foreach ($lpItemData as $lpItemId => $lpitem) {
+                    $title = $lpitem['title'];
+                    $price = $lpitem['price'];
+
                     $csv_row = [];
-                    $csv_row[] = $teacherName;
-                    $csv_row[] = $lpName;
-                    $csv_row[] = $row['students'];
-                    $studentsName = '';
-                    foreach ($row['studentList'] as $student) {
-                        $studentsName .= $student['complete_name']." / ";
+                    $csv_row[] = $autor['complete_name'];
+                    $csv_row[] = $title;
+                    $csv_row[] = $price;
+                    $registeredUsers = self::getCompanyLearnpathSubscription($startDate, $endDate, $lpitem['lp_id']);
+                    $studenRegister = count($registeredUsers);
+                    $csv_row[] = $studenRegister;
+                    $facturar = ($studenRegister * $price);
+                    $csv_row[] = $facturar;
+                    $totalSudent += $studenRegister;
+                    if ($studenRegister != 0) {
+                        $studentsName = '';
+                        for ($i = 0; $i < $studenRegister; $i++) {
+                            $tempStudent = api_get_user_info($registeredUsers[$i]);
+                            $studentsName .= $tempStudent['complete_name']." / ";
+
+                            $totalStudent++;
+                        }
+                        $csv_row[] = trim($studentsName, " / ");
+                        $csv_content[] = $csv_row;
+                        $index++;
+                        $lpCount++;
                     }
-                    $csv_row[] = trim($studentsName, " / ");
-                    $csv_content[] = $csv_row;
                 }
             }
             Export::arrayToCsv($csv_content, 'reporting_lp_by_authors');

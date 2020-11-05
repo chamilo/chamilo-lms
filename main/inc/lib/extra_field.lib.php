@@ -3157,7 +3157,7 @@ JAVASCRIPT;
      * Return array of data to specific variable name with a specificl extra_field_type.
      *
      * @param string $variableName Default AuthorLp
-     * @param string $value Default user for user type filed
+     * @param string $value        Default user for user type filed
      *
      * @return array
      */
@@ -3177,7 +3177,7 @@ JAVASCRIPT;
             "variable = '$variableName' ".
             "AND extra_field_type = $value ";
         $companyField = Database::fetch_assoc(Database::query($query));
-        $idExtraField = (int)$companyField['id'];
+        $idExtraField = (int) $companyField['id'];
         if (empty($idExtraField)) {
             return $teachers;
         }
@@ -3205,8 +3205,8 @@ JAVASCRIPT;
 
     /**
      * @param \FormValidator $form
-     * @param int $defaultValueId
-     * @param bool $freezeElement
+     * @param int            $defaultValueId
+     * @param bool           $freezeElement
      */
     private function addSelectElement(FormValidator $form, array $fieldDetails, $defaultValueId, $freezeElement = false)
     {

@@ -142,12 +142,12 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
     public function SaveCompanyField()
     {
         $data = $this->companyField;
-        $data['field_type'] = (int)$data['field_type'];
-        $data['field_order'] = (int)$data['field_order'];
-        $data['visible_to_self'] = (int)$data['visible_to_self'];
-        $data['visible_to_others'] = (int)$data['visible_to_others'];
-        $data['changeable'] = (int)$data['changeable'];
-        $data['filter'] = (int)$data['filter'];
+        $data['field_type'] = (int) $data['field_type'];
+        $data['field_order'] = (int) $data['field_order'];
+        $data['visible_to_self'] = (int) $data['visible_to_self'];
+        $data['visible_to_others'] = (int) $data['visible_to_others'];
+        $data['changeable'] = (int) $data['changeable'];
+        $data['filter'] = (int) $data['filter'];
         $data['default_value'] = '';
         $data['variable'] = 'company';
         $data['visible'] = 1;
@@ -193,12 +193,12 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
     public function SaveAuthorsField()
     {
         $data = $this->authorsField;
-        $data['field_type'] = (int)$data['field_type'];
-        $data['field_order'] = (int)$data['field_order'];
-        $data['visible_to_self'] = (int)$data['visible_to_self'];
-        $data['visible_to_others'] = (int)$data['visible_to_others'];
-        $data['changeable'] = (int)$data['changeable'];
-        $data['filter'] = (int)$data['filter'];
+        $data['field_type'] = (int) $data['field_type'];
+        $data['field_order'] = (int) $data['field_order'];
+        $data['visible_to_self'] = (int) $data['visible_to_self'];
+        $data['visible_to_others'] = (int) $data['visible_to_others'];
+        $data['changeable'] = (int) $data['changeable'];
+        $data['filter'] = (int) $data['filter'];
         $data['default_value'] = null;
         $data['variable'] = 'authors';
         $data['visible'] = 1;
@@ -255,7 +255,7 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
             0 => 'No',
             1 => 'Yes',
         ];
-        $authorId = (int)$authorLpId;
+        $authorId = (int) $authorLpId;
         if ($authorId != 0) {
             for ($i = 0; $i < count($options); $i++) {
                 $order = $i + 1;
@@ -331,7 +331,7 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
             1 => 'Company 2',
             2 => 'Company 3',
         ];
-        $companyId = (int)$this->companyField['id'];
+        $companyId = (int) $this->companyField['id'];
         if ($companyId != 0) {
             for ($i = 0; $i < count($companys); $i++) {
                 $order = $i + 1;
@@ -393,9 +393,9 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
         $exist = null;
         $validVariable = false;
         $variable = $data['variable'];
-        $extraFieldTypeInt = (int)$data['extra_field_type'];
-        $FieldType = (int)$data['field_type'];
-        $id = (int)$data['id'];
+        $extraFieldTypeInt = (int) $data['extra_field_type'];
+        $FieldType = (int) $data['field_type'];
+        $id = (int) $data['id'];
         $extraFieldType = null;
         if ($variable == 'company') {
             $validVariable = true;

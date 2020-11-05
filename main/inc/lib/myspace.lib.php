@@ -1341,14 +1341,13 @@ class MySpace
      *
      * @param string|null $startDate
      * @param string|null $endDate
-     * @param bool $csv
+     * @param bool        $csv
      */
     public static function displayResumeLpByItem(
         $startDate = null,
         $endDate = null,
         $csv = false
-    )
-    {
+    ) {
         $tableHtml = '';
         $tblExtraField = Database::get_main_table(TABLE_EXTRA_FIELD);
         $tblExtraFieldValue = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
@@ -1370,7 +1369,7 @@ class MySpace
         $queryResult = Database::query($cLpItemsQuery);
         $cLpItems = [];
         while ($row = Database::fetch_array($queryResult, 'ASSOC')) {
-            $cLpItems[] = (int)$row['lp_item_id'];
+            $cLpItems[] = (int) $row['lp_item_id'];
         }
         $cLpItems = implode(',', $cLpItems);
         if (count($cLpItems) == 0) {
@@ -1445,13 +1444,13 @@ class MySpace
         $queryResult = Database::query($query);
         $printData = [];
         while ($row = Database::fetch_array($queryResult, 'ASSOC')) {
-            $cLpItem = (int)$row['lp_item_id'];
+            $cLpItem = (int) $row['lp_item_id'];
             // get full lp data
             $cLpItemData = isset($cLpItemsData[$cLpItem]) ? $cLpItemsData[$cLpItem] : [];
             $authorData = $row['users_id'];
             if (!empty($authorData)) {
                 if (strpos($authorData, ";") === false) {
-                    $printData[(int)$authorData][$cLpItem] = $cLpItemData;
+                    $printData[(int) $authorData][$cLpItem] = $cLpItemData;
                 } else {
                     foreach (explode(';', $authorData) as $item) {
                         $printData[$item][$cLpItem] = $cLpItemData;

@@ -98,9 +98,9 @@ switch ($display) {
         MySpace::displayResumeLpByItem($startDate, $endDate);
         break;
     case 'accessoverview':
-        $courseId = isset($_GET['course_id']) ? (int)$_GET['course_id'] : 0;
-        $sessionId = isset($_GET['session_id']) ? (int)$_GET['session_id'] : 0;
-        $studentId = isset($_GET['student_id']) ? (int)$_GET['student_id'] : 0;
+        $courseId = isset($_GET['course_id']) ? (int) $_GET['course_id'] : 0;
+        $sessionId = isset($_GET['session_id']) ? (int) $_GET['session_id'] : 0;
+        $studentId = isset($_GET['student_id']) ? (int) $_GET['student_id'] : 0;
 
         MySpace::displayTrackingAccessOverView($courseId, $sessionId, $studentId);
         break;

@@ -206,6 +206,11 @@ function updateUsers(
                     );
                 }
             }
+
+            $userUpdated = api_get_user_info($user_id);
+            Display::addFlash(
+                Display::return_message(get_lang('UserUpdated').': '.$userUpdated['complete_name_with_username'])
+            );
         }
     }
 }
@@ -221,21 +226,18 @@ function updateUsers(
  */
 function parse_csv_data($file)
 {
-    $file = new SplFileObject($file);
-    $csv = new CsvReader($file, ';');
-    $csv->setHeaderRowNumber(0);
-
-    if (!in_array('UserName', $csv->getColumnHeaders())) {
-        throw new Exception(get_lang("UserNameMandatory"));
+    $data = Import::csv_reader($file);
+    if (empty($data)) {
+        throw new Exception(get_lang('NoDataAvailable'));
     }
-
     $users = [];
-
-    foreach ($csv as $row) {
+    foreach ($data as $row) {
         if (isset($row['Courses'])) {
             $row['Courses'] = explode('|', trim($row['Courses']));
         }
-
+        if (!isset($row['UserName'])) {
+            throw new Exception(get_lang('ThisFieldIsRequired').': UserName');
+        }
         $users[] = $row;
     }
 
@@ -332,7 +334,6 @@ if ($form->validate()) {
         }
 
         $sendEmail = $_POST['sendMail'] ? true : false;
-
         updateUsers($usersToUpdate, isset($formValues['reset_password']), $sendEmail);
 
         if (empty($errors)) {

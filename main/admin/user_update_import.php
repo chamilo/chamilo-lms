@@ -6,7 +6,6 @@
  * This tool allows platform admins to add users by uploading a CSV or XML file.
  */
 
-use Ddeboer\DataImport\Reader\CsvReader;
 use Symfony\Component\DomCrawler\Crawler;
 
 $cidReset = true;
@@ -95,7 +94,6 @@ function updateUsers(
     $sendEmail = false)
 {
     $usergroup = new UserGroup();
-
     if (is_array($users)) {
         foreach ($users as $user) {
             if (isset($user['Status'])) {

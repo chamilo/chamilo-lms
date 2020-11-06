@@ -660,7 +660,14 @@ if (api_get_configuration_value('block_category_questions') &&
 
         if ($count === $total) {
             $isLastQuestionInCategory = $categoryId;
+            if ($isLastQuestionInCategory) {
+                // This is the last question
+                if ((int) $current_question + 1 === count($questionList)) {
+                    $isLastQuestionInCategory = 0;
+                }
+            }
         }
+
         if (0 === $isLastQuestionInCategory) {
             $showPreviousButton = false;
         }

@@ -11,6 +11,7 @@ use Http\Message\MessageFactory\GuzzleMessageFactory;
 use Ramsey\Uuid\Uuid;
 use Xabbuh\XApi\Client\XApiClientBuilder;
 use Xabbuh\XApi\Client\XApiClientBuilderInterface;
+use Xabbuh\XApi\Model\IRI;
 
 /**
  * Class XApiPlugin.
@@ -35,6 +36,7 @@ class XApiPlugin extends Plugin implements HookPluginInterface
     const IRI_QUIZ_QUESTION = 'http://adlnet.gov/expapi/activities/question';
     const IRI_LESSON = 'http://adlnet.gov/expapi/activities/lesson';
     const IRI_RESOURCE = 'http://id.tincanapi.com/activitytype/resource';
+    const IRI_INTERACTION = 'http://adlnet.gov/expapi/activities/cmi.interaction';
 
     const DATA_TYPE_ATTEMPT = 'e_attempt';
     const DATA_TYPE_EXERCISE = 'e_exercise';

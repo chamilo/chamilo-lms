@@ -6594,15 +6594,27 @@ class learnpath
     ) {
         $actionsRight = '';
         $lpId = $this->lp_id;
-        $back = Display::url(
-            Display::return_icon(
-                'back.png',
-                get_lang('ReturnToLearningPaths'),
-                '',
-                ICON_SIZE_MEDIUM
-            ),
-            'lp_controller.php?'.api_get_cidreq()
-        );
+        if(!isset($extraField['backTo']) && empty($extraField['backTo'])) {
+            $back = Display::url(
+                Display::return_icon(
+                    'back.png',
+                    get_lang('ReturnToLearningPaths'),
+                    '',
+                    ICON_SIZE_MEDIUM
+                ),
+                'lp_controller.php?'.api_get_cidreq()
+            );
+        }else{
+            $back = Display::url(
+                Display::return_icon(
+                    'back.png',
+                    get_lang('Back'),
+                    '',
+                    ICON_SIZE_MEDIUM
+                ),
+                $extraField['backTo']
+            );
+        }
 
         /*if ($backToBuild) {
             $back = Display::url(
@@ -6740,26 +6752,11 @@ class learnpath
             );
         }
 
-        if (isset($extraField['price'])) {
-            $actionsLeft .= Display::url(
-                Display::return_icon(
-                    'upload_audio.png',
-                    get_lang('UpdateAllAudioFragments'),
-                    '',
-                    ICON_SIZE_MEDIUM
-                ),
-                'lp_controller.php?'.api_get_cidreq().'&'.http_build_query([
-                    'action' => 'admin_view',
-                    'lp_id' => $lpId,
-                    'updateaudio' => 'true',
-                ])
-            );
-        }
         if (isset($extraField['AuthorLP'])) {
             $actionsLeft .= Display::url(
                 Display::return_icon(
                     'add-groups.png',
-                    get_lang('UpdateAllAudioFragments'),
+                    get_lang('Author'),
                     '',
                     ICON_SIZE_MEDIUM
                 ),

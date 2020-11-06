@@ -198,6 +198,7 @@ $priceExtraField = ExtraField::getDisplayNameByVariable('AuthorLP');
 if ($priceExtraField != null) {
     $extraField['AuthorLP'] = $priceExtraField;
 }
+
 echo $learnPath->build_action_menu(false,
     true,
     false,

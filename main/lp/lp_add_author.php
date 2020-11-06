@@ -207,6 +207,7 @@ $priceExtraField = ExtraField::getDisplayNameByVariable('AuthorLP');
 if ($priceExtraField != null) {
     $extraField['AuthorLP'] = $priceExtraField;
 }
+$extraField['backTo'] = api_get_self().'?action=add_item&type=step&lp_id='.intval($lpId).'&'.api_get_cidreq();
 
 echo $learnPath->build_action_menu(false,
     true,
@@ -219,8 +220,7 @@ echo '<div class="row">';
 echo '<div id="lp_sidebar" class="col-md-4">';
 echo $learnPath->return_new_tree(null, false);
 // Second Col
-$message = isset($_REQUEST['message']) ? $_REQUEST['message'] : null;
-
+$message = Session::read('message');
 // Show the template list.
 if (($type == 'document' || $type == 'step') && !isset($_GET['file'])) {
     // Show the template list.
@@ -230,6 +230,10 @@ if (($type == 'document' || $type == 'step') && !isset($_GET['file'])) {
 echo '</div>';
 
 $form->addHtml('<div id="doc_form" class="col-md-12 row">');
+if(!empty($message)){
+    $form->addHtml( Display::return_message($message));
+    Session::erase('message');
+}
 $extraFieldValue = new ExtraFieldValue('lp_item');
 $form->addHtml('<h1 class="col-md-12 text-center">'.get_lang('LpByAuthor').'</h1>');
 $default = [];
@@ -291,6 +295,8 @@ if ($form->validate()) {
         }
 
         if (count($saveExtraFieldItem) > 0) {
+            $messages = '';
+            $lastEdited = [];
             foreach ($saveExtraFieldItem as $saveItemId => $values) {
                 $extraFieldValues = $extraFieldValue->get_values_by_handler_and_field_variable(
                     $saveItemId,
@@ -301,6 +307,18 @@ if ($form->validate()) {
                     'value' => $values,
                     'item_id' => $saveItemId,
                 ]);
+                $lastEdited = $values;
+
+            }
+
+            foreach($lastEdited as $author){
+                if(isset($options[$author])) {
+                    $messages .= " \"".$options[$author]."\"   ";
+                }
+
+            }
+            if(!empty($messages)){
+                Session::write('message',get_lang('UsersRegistered')." ".$messages);
             }
         }
     }

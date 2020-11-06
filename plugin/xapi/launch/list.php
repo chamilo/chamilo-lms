@@ -62,6 +62,10 @@ $table->set_column_filter(
     function ($id) use ($cidReq) {
         $actions = [];
         $actions[] = Display::url(
+            Display::return_icon('statistics.png', get_lang('Reporting')),
+            "stats.php?$cidReq&id=$id"
+        );
+        $actions[] = Display::url(
             Display::return_icon('edit.png', get_lang('Edit')),
             "edit.php?$cidReq&edit=$id"
         );

@@ -220,6 +220,13 @@ class XApiPlugin extends Plugin implements HookPluginInterface
         return $this->createXApiClient()->getStatementsApiClient();
     }
 
+    public function getXApi($lrsUrl = null, $lrsAuthUsername = null, $lrsAuthPassword = null)
+    {
+        $this
+            ->createXApiClient($lrsUrl, $lrsAuthUsername, $lrsAuthPassword)
+            ->getStateApiClient()->getDocument();
+    }
+
     /**
      * @param string|null $lrsUrl
      * @param string|null $lrsAuthUsername

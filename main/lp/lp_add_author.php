@@ -230,8 +230,8 @@ if (($type == 'document' || $type == 'step') && !isset($_GET['file'])) {
 echo '</div>';
 
 $form->addHtml('<div id="doc_form" class="col-md-12 row">');
-if(!empty($message)){
-    $form->addHtml( Display::return_message($message));
+if (!empty($message)) {
+    $form->addHtml(Display::return_message($message));
     Session::erase('message');
 }
 $extraFieldValue = new ExtraFieldValue('lp_item');
@@ -308,17 +308,15 @@ if ($form->validate()) {
                     'item_id' => $saveItemId,
                 ]);
                 $lastEdited = $values;
-
             }
 
-            foreach($lastEdited as $author){
-                if(isset($options[$author])) {
+            foreach ($lastEdited as $author) {
+                if (isset($options[$author])) {
                     $messages .= " \"".$options[$author]."\"   ";
                 }
-
             }
-            if(!empty($messages)){
-                Session::write('message',get_lang('UsersRegistered')." ".$messages);
+            if (!empty($messages)) {
+                Session::write('message', get_lang('UsersRegistered')." ".$messages);
             }
         }
     }

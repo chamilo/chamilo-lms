@@ -186,13 +186,15 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
         } else {
             $authorsField = $this->authorsField;
         }
+
         return $authorsField;
     }
 
     /**
      * Save the arrangement for price, it is adjusted internally so that the values match the necessary ones.
      */
-    public function SavePrice(){
+    public function SavePrice()
+    {
         $data = $this->authorsField;
         $schedule = new ExtraField('lp_item');
         $data['visible_to_self'] = 1;
@@ -205,10 +207,12 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
 
         $schedule->save($data);
     }
+
     /**
      * Save the arrangement for AuthorLPItem, it is adjusted internally so that the values match the necessary ones.
      */
-    public function SaveAuthorLPItem(){
+    public function SaveAuthorLPItem()
+    {
         $data = $this->authorsField;
         $schedule = new ExtraField('lp_item');
         $data['visible_to_self'] = 0;
@@ -221,10 +225,12 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
 
         $schedule->save($data);
     }
+
     /**
      * Save the arrangement for AuthorLP, it is adjusted internally so that the values match the necessary ones.
      */
-    public function SaveAuthorLp(){
+    public function SaveAuthorLp()
+    {
         $data = $this->authorsField;
         $schedule = new ExtraField('user');
         $data['variable'] = 'AuthorLP';
@@ -234,7 +240,7 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
         $data['visible_to_others'] = 0;
         $data['filter'] = 0;
         $data['field_type'] = ExtraField::FIELD_TYPE_RADIO;
-                 $this->setYesNoToAuthor($schedule->save($data));
+        $this->setYesNoToAuthor($schedule->save($data));
     }
 
     /**
@@ -255,7 +261,6 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
         $data['display_text'] = strtolower(Database::escape_string(Security::remove_XSS($data['display_text'])));
         $schedule = new ExtraField('lp');
         $schedule->save($data);
-
     }
 
     /**

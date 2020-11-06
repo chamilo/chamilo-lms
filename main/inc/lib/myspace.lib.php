@@ -1385,9 +1385,7 @@ class MySpace
                 "</table>".
                 "</div>";
             $tableHtml = $tableContent;
-
-        }else {
-
+        } else {
             $cLpItems = implode(',', $cLpItems);
             // search by price
             $cLpItemsPriceQuery = "select value as price, item_id as lp_item_id ".
@@ -1440,13 +1438,13 @@ class MySpace
             $queryResult = Database::query($query);
             $printData = [];
             while ($row = Database::fetch_array($queryResult, 'ASSOC')) {
-                $cLpItem = (int)$row['lp_item_id'];
+                $cLpItem = (int) $row['lp_item_id'];
                 // get full lp data
                 $cLpItemData = isset($cLpItemsData[$cLpItem]) ? $cLpItemsData[$cLpItem] : [];
                 $authorData = $row['users_id'];
                 if (!empty($authorData)) {
                     if (strpos($authorData, ";") === false) {
-                        $printData[(int)$authorData][$cLpItem] = $cLpItemData;
+                        $printData[(int) $authorData][$cLpItem] = $cLpItemData;
                     } else {
                         foreach (explode(';', $authorData) as $item) {
                             $printData[$item][$cLpItem] = $cLpItemData;
@@ -1457,8 +1455,7 @@ class MySpace
             $index = 0;
         }
         if ($csv == false) {
-            if(empty($tableHtml)){
-
+            if (empty($tableHtml)) {
                 $table .= "<div class='table-responsive'>".
                     "<table class='table table-hover table-striped table-bordered data_table'>".
                     "<thead>".
@@ -1493,7 +1490,6 @@ class MySpace
                             // $total = 0;
                         }
 
-
                         $hiddenField = 'student_show_'.$index;
                         $hiddenFieldLink = 'student_show_'.$index.'_';
                         $table .= "<td>$title</td>";
@@ -1524,7 +1520,6 @@ class MySpace
                         }
                         $table .= "</tr>";
                         $lastAuthor = $autor;
-
                     }
                     //footer
                     $table .= "<tr><th class=\"th-header\"></th>".
@@ -1534,12 +1529,11 @@ class MySpace
                         "<th class=\"th-header\">$total</th>".
                         "<th class=\"th-header\"></tr>";
                     $total = 0;
-
                 }
                 $table .= "</tbody>".
                     "</table>".
                     "</div>";
-                    $tableHtml = $table;
+                $tableHtml = $table;
             }
 
             $form = new FormValidator('searchDate', 'get');

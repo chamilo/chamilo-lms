@@ -6594,7 +6594,7 @@ class learnpath
     ) {
         $actionsRight = '';
         $lpId = $this->lp_id;
-        if(!isset($extraField['backTo']) && empty($extraField['backTo'])) {
+        if (!isset($extraField['backTo']) && empty($extraField['backTo'])) {
             $back = Display::url(
                 Display::return_icon(
                     'back.png',
@@ -6604,7 +6604,7 @@ class learnpath
                 ),
                 'lp_controller.php?'.api_get_cidreq()
             );
-        }else{
+        } else {
             $back = Display::url(
                 Display::return_icon(
                     'back.png',

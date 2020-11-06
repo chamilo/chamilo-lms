@@ -43,7 +43,6 @@ class ExerciseSignaturePlugin extends Plugin
         return false;
     }
 
-
     public static function saveSignature($userId, $trackInfo, $file)
     {
         if (false === self::validateSignatureAccess($userId, $trackInfo)) {

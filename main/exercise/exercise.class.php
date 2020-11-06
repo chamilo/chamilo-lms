@@ -10129,7 +10129,6 @@ class Exercise
     public function getUserAnswersSavedInExercise($attemptId)
     {
         $exerciseResult = [];
-
         $attemptList = Event::getAllExerciseEventByExeId($attemptId);
 
         foreach ($attemptList as $questionId => $options) {
@@ -10747,5 +10746,127 @@ class Exercise
             null,
             get_lang('ShowResultsToStudents')
         );
+    }
+
+    public function getReminderTable($questionList, $exercise_stat_info)
+    {
+        $learnpath_id = isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : 0;
+        $learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? (int) $_REQUEST['learnpath_item_id'] : 0;
+        $learnpath_item_view_id = isset($_REQUEST['learnpath_item_view_id']) ? (int) $_REQUEST['learnpath_item_view_id'] : 0;
+
+        $remind_list = $exercise_stat_info['questions_to_check'];
+        $remind_list = explode(',', $remind_list);
+
+        $exeId = $exercise_stat_info['exe_id'];
+        $exerciseId = $exercise_stat_info['exe_exo_id'];
+        $exercise_result = $this->getUserAnswersSavedInExercise($exeId);
+
+        $content = Display::label(get_lang('QuestionWithNoAnswer'), 'danger');
+        $content .= '<div class="clear"></div><br />';
+        $table = '';
+        $counter = 0;
+        // Loop over all question to show results for each of them, one by one
+        foreach ($questionList as $questionId) {
+            // destruction of the Question object
+            unset($objQuestionTmp);
+            // creates a temporary Question object
+            $objQuestionTmp = Question:: read($questionId);
+            $check_id = 'remind_list['.$questionId.']';
+
+            $attributes = ['id' => $check_id, 'onclick' => "save_remind_item(this, '$questionId');"];
+            if (in_array($questionId, $remind_list)) {
+                $attributes['checked'] = 1;
+            }
+
+            $checkbox = Display::input('checkbox', 'remind_list['.$questionId.']', '', $attributes);
+            $checkbox = '<div class="pretty p-svg p-curve">
+                        '.$checkbox.'
+                        <div class="state p-primary ">
+                         <svg class="svg svg-icon" viewBox="0 0 20 20">
+                            <path d="M7.629,14.566c0.125,0.125,0.291,0.188,0.456,0.188c0.164,0,0.329-0.062,0.456-0.188l8.219-8.221c0.252-0.252,0.252-0.659,0-0.911c-0.252-0.252-0.659-0.252-0.911,0l-7.764,7.763L4.152,9.267c-0.252-0.251-0.66-0.251-0.911,0c-0.252,0.252-0.252,0.66,0,0.911L7.629,14.566z" style="stroke: white;fill:white;"></path>
+                         </svg>
+                         <label>&nbsp;</label>
+                        </div>
+                    </div>';
+            $counter++;
+            $questionTitle = $counter.'. '.strip_tags($objQuestionTmp->selectTitle());
+            // Check if the question doesn't have an answer
+            if (!in_array($questionId, $exercise_result)) {
+                $questionTitle = Display::label($questionTitle, 'danger');
+            }
+
+            $label_attributes = [];
+            $label_attributes['for'] = $check_id;
+            $questionTitle = Display::tag('label', $checkbox.$questionTitle, $label_attributes);
+            $table .= Display::div($questionTitle, ['class' => 'exercise_reminder_item ']);
+        }
+        $content .= Display::div('', ['id' => 'message']).
+                    Display::div($table, ['class' => 'question-check-test']);
+
+        $content .= '<script>
+        var lp_data = $.param({
+            "learnpath_id": '.$learnpath_id.',
+            "learnpath_item_id" : '.$learnpath_item_id.',
+            "learnpath_item_view_id": '.$learnpath_item_view_id.'
+        });
+
+        function final_submit() {
+            // Normal inputs
+            window.location = "'.api_get_path(WEB_CODE_PATH).'exercise/exercise_result.php?'.api_get_cidreq().'&exe_id='.$exeId.'&" + lp_data;
+        }
+
+        function changeOptionStatus(status)
+        {
+            $("input[type=checkbox]").each(function () {
+                $(this).prop("checked", status);
+            });
+
+            var action = "";
+            var extraOption = "remove_all";
+            if (status == 1) {
+                extraOption = "add_all";
+            }
+            $.ajax({
+                url: "'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&a=add_question_to_reminder",
+                data: "option="+extraOption+"&exe_id='.$exeId.'&action="+action,
+                success: function(returnValue) {
+                }
+            });
+        }
+
+        function review_questions() {
+            var isChecked = 1;
+            $("input[type=checkbox]").each(function () {
+                if ($(this).prop("checked")) {
+                    isChecked = 2;
+                    return false;
+                }
+            });
+
+            if (isChecked == 1) {
+                $("#message").addClass("warning-message");
+                $("#message").html("'.addslashes(get_lang('SelectAQuestionToReview')).'");
+            } else {
+                window.location = "exercise_submit.php?'.api_get_cidreq().'&exerciseId='.$exerciseId.'&reminder=2&" + lp_data;
+            }
+        }
+
+        function save_remind_item(obj, question_id) {
+            var action = "";
+            if ($(obj).prop("checked")) {
+                action = "add";
+            } else {
+                action = "delete";
+            }
+            $.ajax({
+                url: "'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&a=add_question_to_reminder",
+                data: "question_id="+question_id+"&exe_id='.$exeId.'&action="+action,
+                success: function(returnValue) {
+                }
+            });
+        }
+        </script>';
+
+        return $content;
     }
 }

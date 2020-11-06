@@ -356,15 +356,10 @@ switch ($action) {
             switch ($option) {
                 case 'add_all':
                     $questionListInSession = Session::read('questionList');
-                    $objExercise->addAllQuestionToRemind(
-                        $exeId,
-                        $questionListInSession
-                    );
+                    $objExercise->addAllQuestionToRemind($exeId, $questionListInSession);
                     break;
                 case 'remove_all':
-                    $objExercise->removeAllQuestionToRemind(
-                        $exeId
-                    );
+                    $objExercise->removeAllQuestionToRemind($exeId);
                     break;
                 default:
                     $objExercise->editQuestionToRemind(
@@ -374,6 +369,8 @@ switch ($action) {
                     );
                     break;
             }
+            echo 1;
+            exit;
         }
         break;
     case 'save_exercise_by_now':

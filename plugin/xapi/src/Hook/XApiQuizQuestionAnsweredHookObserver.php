@@ -31,13 +31,9 @@ class XApiQuizQuestionAnsweredHookObserver
      */
     private $question;
     /**
-     * @var \Chamilo\CoreBundle\Entity\Course
+     * @var array
      */
-    private $course;
-    /**
-     * @var \Chamilo\CoreBundle\Entity\Session|null
-     */
-    private $session;
+    private $quizInfo;
 
     /**
      * @inheritDoc
@@ -49,6 +45,7 @@ class XApiQuizQuestionAnsweredHookObserver
         $em = Database::getManager();
 
         $this->exe = $em->find('ChamiloCoreBundle:TrackEExercises', $data['exe_id']);
+        $this->quizInfo = $data['quiz'];
         $this->question = $em->find('ChamiloCourseBundle:CQuizQuestion', $data['question']['id']);
         $this->attempt = $em
             ->getRepository('ChamiloCoreBundle:TrackEAttempt')
@@ -148,20 +145,23 @@ class XApiQuizQuestionAnsweredHookObserver
      */
     protected function getContext()
     {
-        $quizIri = $this->plugin->generateIri(
-            $this->exe->getExeExoId(),
-            XApiPlugin::TYPE_QUIZ
-        );
+        $languageIso = api_get_language_isocode($this->course->getCourseLanguage());
+
+        $quizIri = $this->plugin->generateIri($this->quizInfo['id'], XApiPlugin::TYPE_QUIZ);
 
         $quizActivity = new Activity(
-            IRI::fromString($quizIri)
+            IRI::fromString($quizIri),
+            new Definition(
+                LanguageMap::create([$languageIso => $this->quizInfo['title']]),
+                null,
+                IRI::fromString(XApiPlugin::IRI_QUIZ)
+            )
         );
 
-        $activities = new ContextActivities(
-            [$quizActivity]
-        );
+        $context = parent::getContext();
+        $contextActivities = $context->getContextActivities()->withAddedGroupingActivity($quizActivity);
 
-        return parent::getContext()->withContextActivities($activities);
+        return $context->withContextActivities($contextActivities);
     }
 
     /**

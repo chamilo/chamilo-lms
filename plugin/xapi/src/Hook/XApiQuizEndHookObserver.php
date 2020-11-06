@@ -23,14 +23,6 @@ class XApiQuizEndHookObserver extends XApiActivityHookObserver implements HookQu
      * @var \Chamilo\CourseBundle\Entity\CQuiz
      */
     private $quiz;
-    /**
-     * @var \Chamilo\CoreBundle\Entity\Course
-     */
-    private $course;
-    /**
-     * @var \Chamilo\CoreBundle\Entity\Session|null
-     */
-    private $session;
 
     /**
      * @inheritDoc

@@ -732,6 +732,10 @@ switch ($action) {
                     ->setEventData(
                         [
                             'exe_id' => (int) $exeId,
+                            'quiz' => [
+                                'id' => (int) $objExercise->id,
+                                'title' => $objExercise->selectTitle(true),
+                            ],
                             'question' => [
                                 'id' => (int) $my_question_id,
                                 'weight' => (float) $result['weight']

@@ -6,6 +6,7 @@ use Xabbuh\XApi\Common\Exception\ConflictException;
 use Xabbuh\XApi\Common\Exception\StatementIdAlreadyExistsException;
 use Xabbuh\XApi\Common\Exception\XApiException;
 use Xabbuh\XApi\Model\Context;
+use Xabbuh\XApi\Model\ContextActivities;
 use Xabbuh\XApi\Model\Statement;
 use Xabbuh\XApi\Model\StatementId;
 
@@ -14,6 +15,16 @@ use Xabbuh\XApi\Model\StatementId;
  */
 abstract class XApiActivityHookObserver extends HookObserver
 {
+    use XApiStatementTrait;
+
+    /**
+     * @var \Chamilo\CoreBundle\Entity\Course
+     */
+    protected $course;
+    /**
+     * @var \Chamilo\CoreBundle\Entity\Session|null
+     */
+    protected $session;
     /**
      * @var \Chamilo\UserBundle\Entity\User
      */
@@ -156,9 +167,21 @@ abstract class XApiActivityHookObserver extends HookObserver
     {
         $platform = api_get_setting('Institution').' - '.api_get_setting('siteName');
 
+        $groupingActivities = [
+            $this->generateActivityFromSite(),
+            $this->generateActivityFromCourse($this->course, $this->session),
+        ];
+
         $context = new Context();
 
-        return $context->withPlatform($platform);
+        return $context
+            ->withPlatform($platform)
+            ->withLanguage(
+                api_get_language_isocode()
+            )
+            ->withContextActivities(
+                new ContextActivities(null, $groupingActivities)
+            );
     }
 
     /**

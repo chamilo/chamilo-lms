@@ -41,9 +41,8 @@ $categoryId = $categoryObj->id;
 $params = "exe_id=$exeId&exerciseId=$exerciseId&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id&".api_get_cidreq();
 $url = api_get_path(WEB_CODE_PATH).'exercise/exercise_submit.php?'.$params;
 $validateUrl = api_get_self().'?'.$params.'&category_id='.$categoryId.'&validate=1';
-$time_control = false;
 
-/*
+$time_control = false;
 $clock_expired_time = ExerciseLib::get_session_time_control_key(
     $objExercise->id,
     $learnpath_id,
@@ -64,7 +63,7 @@ if ($time_control) {
     $htmlHeadXtra[] = api_get_js('epiclock/renderers/minute/epiclock.minute.js');
     $htmlHeadXtra[] = $objExercise->showTimeControlJS($time_left);
 }
-$htmlHeadXtra[] = api_get_css_asset('pretty-checkbox/dist/pretty-checkbox.min.css');*/
+$htmlHeadXtra[] = api_get_css_asset('pretty-checkbox/dist/pretty-checkbox.min.css');
 
 $trackInfo = $objExercise->get_stat_track_exercise_info_by_exe_id($exeId);
 if (empty($trackInfo)) {
@@ -111,12 +110,20 @@ echo Display::page_header($categoryObj->name);
 echo '<p>'.Security::remove_XSS($categoryObj->description).'</p>';
 echo '<p>'.get_lang('BlockCategoryExplanation').'</p>';
 
+if ($objExercise->review_answers) {
+    $questionList = [];
+    $categoryList = Session::read('categoryList');
+    if (isset($categoryList[$categoryId])) {
+        $questionList = $categoryList[$categoryId];
+    }
+    echo $objExercise->getReminderTable($questionList, $trackInfo);
+}
+
 if ($time_control) {
     echo $objExercise->returnTimeLeftDiv();
 }
 
 echo Display::div('', ['id' => 'message']);
-
 $previousQuestion = $currentQuestion - 1;
 echo '<script>
     var lp_data = $.param({

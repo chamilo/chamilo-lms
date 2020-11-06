@@ -1727,6 +1727,14 @@ $_configuration['auth_password_links'] = [
 // Resource sequence: Validate course in the same session.
 //$_configuration['course_sequence_valid_only_in_same_session'] = false;
 
+// Allow time per question. BT#17791
+// Requires a question text extra field called "time", value in seconds.
+// ALTER TABLE track_e_attempt ADD COLUMN seconds_spent INT;
+//$_configuration['allow_time_per_question'] = true;
+
+// Disable change user visibility tool icon.
+//$_configuration['disable_change_user_visibility_for_public_courses'] = true;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

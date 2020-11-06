@@ -252,6 +252,8 @@ ALTER TABLE c_lp_item_view ADD INDEX idx_clpiv_c_i_v (c_id, id, view_count);
 
         ALTER TABLE c_chat_connected ADD INDEX idx_course_session(c_id, session_id);
         ALTER TABLE c_chat_connected ADD INDEX idx_course_group(c_id, to_group_id);
+        -- For big online exams, this index reduces the load considerably
+        ALTER TABLE c_quiz_question ADD INDEX idx_cqq_cidid (c_id, id);
     </pre>
 <hr />
 <h2><a name="3.Indexes-caching"></a>3. Indexes caching</h2>

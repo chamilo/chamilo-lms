@@ -169,6 +169,7 @@ abstract class Question
                 $objQuestion->feedback = isset($object->feedback) ? $object->feedback : '';
                 $objQuestion->code = isset($object->code) ? $object->code : '';
                 $categoryInfo = TestCategory::getCategoryInfoForQuestion($id, $course_id);
+
                 if (!empty($categoryInfo)) {
                     if (isset($categoryInfo['category_id'])) {
                         $objQuestion->category = (int) $categoryInfo['category_id'];
@@ -1664,7 +1665,7 @@ abstract class Question
             echo $includeFile;
 
             echo '<script type="text/javascript" charset="utf-8">
-            $(document).ready(function () {
+            $(function() {
                 $(".create_img_link").click(function(e){
                     e.preventDefault();
                     e.stopPropagation();
@@ -1674,12 +1675,10 @@ abstract class Question
                 });
 
                 $("input[name=\'imageZoom\']").on("click", function(){
-                    console.log("click en campo");
                     var elf = $("#elfinder").elfinder({
                         url : "'.api_get_path(WEB_LIBRARY_PATH).'elfinder/connectorAction.php?'.api_get_cidreq().'",
                         getFileCallback: function(file) {
                             var filePath = file; //file contains the relative url.
-                            console.log(filePath);
                             var imgPath = "<img src = \'"+filePath+"\'/>";
                             $("input[name=\'imageZoom\']").val(filePath.url);
                             $("#elfinder").remove(); //close the window after image is selected

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -13,8 +14,6 @@ $this_section = SECTION_COURSES;
 api_protect_course_script(true);
 
 $show = isset($_GET['show']) && $_GET['show'] === 'result' ? 'result' : 'test';
-
-/* 	Constants and variables */
 $is_allowedToEdit = api_is_allowed_to_edit(null, true);
 $is_tutor = api_is_allowed_to_edit(true);
 

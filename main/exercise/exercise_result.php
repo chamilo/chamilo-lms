@@ -99,7 +99,7 @@ if (api_is_course_admin() && !in_array($origin, ['learnpath', 'embeddable'])) {
                 'admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id
             )
             .Display::url(
-                Display::return_icon('edit.png', get_lang('ModifyExercise'), [], 32),
+                Display::return_icon('settings.png', get_lang('ModifyExercise'), [], 32),
                 'exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id
             ),
         ]
@@ -119,14 +119,7 @@ $logInfo = [
 ];
 Event::registerLog($logInfo);
 
-$allowSignature = false;
-if ('true' === api_get_plugin_setting('exercise_signature', 'tool_enable')) {
-    $extraFieldValue = new ExtraFieldValue('exercise');
-    $result = $extraFieldValue->get_values_by_handler_and_field_variable($objExercise->iId, 'signature_activated');
-    if ($result && isset($result['value']) && 1 === (int) $result['value']) {
-        $allowSignature = true;
-    }
-}
+$allowSignature = ExerciseSignaturePlugin::exerciseHasSignatureActivated($objExercise);
 if ($allowSignature) {
     $htmlHeadXtra[] = api_get_asset('signature_pad/signature_pad.umd.js');
 }

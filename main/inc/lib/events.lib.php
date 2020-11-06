@@ -403,21 +403,26 @@ class Event
 
     /**
      * Update the TRACK_E_EXERCICES exercises.
+     * Record result of user when an exercise was done.
      *
-     * @param   int     exeid id of the attempt
-     * @param   int     exo_id    exercise id
-     * @param   mixed   result    score
-     * @param   int     weighting ( higher score )
-     * @param   int     duration ( duration of the attempt in seconds )
-     * @param   int     session_id
-     * @param   int     learnpath_id (id of the learnpath)
-     * @param   int     learnpath_item_id (id of the learnpath_item)
+     * @param int    $exeId
+     * @param int    $exoId
+     * @param mixed  $score
+     * @param int    $weighting
+     * @param int    $sessionId
+     * @param int    $learnpathId
+     * @param int    $learnpathItemId
+     * @param int    $learnpathItemViewId
+     * @param int    $duration
+     * @param array  $questionsList
+     * @param string $status
+     * @param array  $remindList
+     * @param null   $endDate
      *
      * @return bool
      *
      * @author Sebastien Piraux <piraux_seb@hotmail.com>
      * @author Julio Montoya Armas <gugli100@gmail.com> Reworked 2010
-     * @desc Record result of user when an exercise was done
      */
     public static function updateEventExercise(
         $exeId,
@@ -437,15 +442,6 @@ class Event
         if (empty($exeId)) {
             return false;
         }
-
-        /*
-         * Code commented due BT#8423 do not change the score to 0.
-         *
-         * Validation in case of fraud with actived control time
-        if (!ExerciseLib::exercise_time_control_is_valid($exo_id, $learnpath_id, $learnpath_item_id)) {
-            $score = 0;
-        }
-        */
         if (!isset($status) || empty($status)) {
             $status = '';
         } else {
@@ -506,19 +502,20 @@ class Event
     /**
      * Record an event for this attempt at answering an exercise.
      *
-     * @param    float    Score achieved
-     * @param    string    Answer given
-     * @param    int    Question ID
-     * @param    int Exercise attempt ID a.k.a exe_id (from track_e_exercise)
-     * @param    int    Position
-     * @param    int Exercise ID (from c_quiz)
-     * @param    bool update results?
-     * @param $fileName string  Filename (for audio answers - using nanogong)
-     * @param    int User ID The user who's going to get this score. Default value of null means "get from context".
-     * @param    int Course ID (from the "id" column of course table). Default value of null means "get from context".
-     * @param    int Session ID (from the session table). Default value of null means "get from context".
-     * @param    int Learnpath ID (from c_lp table). Default value of null means "get from context".
-     * @param    int Learnpath item ID (from the c_lp_item table). Default value of null means "get from context".
+     * @param float  $score             Score achieved
+     * @param string $answer            Answer given
+     * @param int    $question_id
+     * @param int    $exe_id            Exercise attempt ID a.k.a exe_id (from track_e_exercise)
+     * @param int    $position
+     * @param int    $exercise_id       From c_quiz
+     * @param bool   $updateResults
+     * @param int    $duration          Time spent in seconds
+     * @param string $fileName          Filename (for audio answers - using nanogong)
+     * @param int    $user_id           The user who's going to get this score.
+     * @param int    $course_id         Default value of null means "get from context".
+     * @param int    $session_id        Default value of null means "get from context".
+     * @param int    $learnpath_id      (from c_lp table). Default value of null means "get from context".
+     * @param int    $learnpath_item_id (from the c_lp_item table). Default value of null means "get from context".
      *
      * @return bool Result of the insert query
      */
@@ -530,6 +527,7 @@ class Event
         $position,
         $exercise_id = 0,
         $updateResults = false,
+        $questionDuration = 0,
         $fileName = null,
         $user_id = null,
         $course_id = null,
@@ -538,12 +536,13 @@ class Event
         $learnpath_item_id = null
     ) {
         global $debug;
-        $question_id = Database::escape_string($question_id);
-        $exe_id = Database::escape_string($exe_id);
-        $position = Database::escape_string($position);
-        $now = api_get_utc_datetime();
+        $questionDuration = (int) $questionDuration;
+        $question_id = (int) $question_id;
+        $exe_id = (int) $exe_id;
+        $position = (int) $position;
         $course_id = (int) $course_id;
-        $recording = api_get_configuration_value('quiz_answer_extra_recording') == true;
+        $now = api_get_utc_datetime();
+        $recording = api_get_configuration_value('quiz_answer_extra_recording');
 
         // check user_id or get from context
         if (empty($user_id)) {
@@ -590,121 +589,119 @@ class Event
             $answer = 0;
         }
 
-        if (!empty($question_id) && !empty($exe_id) && !empty($user_id)) {
-            if (is_null($answer)) {
-                $answer = '';
-            }
+        if (empty($question_id) || empty($exe_id) || empty($user_id)) {
+            return false;
+        }
 
-            if (is_null($score)) {
-                $score = 0;
-            }
+        if (is_null($answer)) {
+            $answer = '';
+        }
 
-            $attempt = [
-                'user_id' => $user_id,
-                'question_id' => $question_id,
-                'answer' => $answer,
-                'marks' => $score,
-                'c_id' => $course_id,
-                'session_id' => $session_id,
-                'position' => $position,
-                'tms' => $now,
-                'filename' => !empty($fileName) ? basename($fileName) : $fileName,
-                'teacher_comment' => '',
-            ];
+        if (is_null($score)) {
+            $score = 0;
+        }
 
-            // Check if attempt exists.
-            $sql = "SELECT exe_id FROM $TBL_TRACK_ATTEMPT
-                    WHERE
-                        c_id = $course_id AND
-                        session_id = $session_id AND
-                        exe_id = $exe_id AND
-                        user_id = $user_id AND
-                        question_id = $question_id AND
-                        position = $position";
-            $result = Database::query($sql);
-            if (Database::num_rows($result)) {
-                if ($debug) {
-                    error_log("Attempt already exist: exe_id: $exe_id - user_id:$user_id - question_id:$question_id");
-                }
-                if ($updateResults == false) {
-                    //The attempt already exist do not update use  update_event_exercise() instead
-                    return false;
-                }
-            } else {
-                $attempt['exe_id'] = $exe_id;
-            }
+        $attempt = [
+            'user_id' => $user_id,
+            'question_id' => $question_id,
+            'answer' => $answer,
+            'marks' => $score,
+            'c_id' => $course_id,
+            'session_id' => $session_id,
+            'position' => $position,
+            'tms' => $now,
+            'filename' => !empty($fileName) ? basename($fileName) : $fileName,
+            'teacher_comment' => '',
+        ];
 
-            if ($debug) {
-                error_log("updateResults : $updateResults");
-                error_log("Saving question attempt: ");
-                error_log($sql);
-            }
+        if (api_get_configuration_value('allow_time_per_question')) {
+            $attempt['seconds_spent'] = $questionDuration;
+        }
 
-            $recording_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
-
+        // Check if attempt exists.
+        $sql = "SELECT exe_id FROM $TBL_TRACK_ATTEMPT
+                WHERE
+                    c_id = $course_id AND
+                    session_id = $session_id AND
+                    exe_id = $exe_id AND
+                    user_id = $user_id AND
+                    question_id = $question_id AND
+                    position = $position";
+        $result = Database::query($sql);
+        $attemptData = [];
+        if (Database::num_rows($result)) {
+            $attemptData = Database::fetch_array($result, 'ASSOC');
             if ($updateResults == false) {
-                $attempt_id = Database::insert($TBL_TRACK_ATTEMPT, $attempt);
+                // The attempt already exist do not update use  update_event_exercise() instead
+                return false;
+            }
+        } else {
+            $attempt['exe_id'] = $exe_id;
+        }
 
-                if ($debug) {
-                    error_log("Insert attempt with id #$attempt_id");
-                }
+        if ($debug) {
+            error_log("updateResults : $updateResults");
+            error_log("Saving question attempt: ");
+            error_log($sql);
+        }
 
-                if ($recording) {
-                    if ($debug) {
-                        error_log("Saving e attempt recording ");
-                    }
-                    $attempt_recording = [
-                        'exe_id' => $exe_id,
-                        'question_id' => $question_id,
-                        'answer' => $answer,
-                        'marks' => $score,
-                        'insert_date' => $now,
-                        'session_id' => $session_id,
-                    ];
-                    Database::insert($recording_table, $attempt_recording);
-                }
-            } else {
+        $recording_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
+        if ($updateResults == false) {
+            $attempt_id = Database::insert($TBL_TRACK_ATTEMPT, $attempt);
+            if ($recording) {
+                $attempt_recording = [
+                    'exe_id' => $exe_id,
+                    'question_id' => $question_id,
+                    'answer' => $answer,
+                    'marks' => $score,
+                    'insert_date' => $now,
+                    'session_id' => $session_id,
+                ];
+                Database::insert($recording_table, $attempt_recording);
+            }
+        } else {
+            if (api_get_configuration_value('allow_time_per_question')) {
+                $attempt['seconds_spent'] = $questionDuration + (int) $attemptData['seconds_spent'];
+            }
+            Database::update(
+                $TBL_TRACK_ATTEMPT,
+                $attempt,
+                [
+                    'exe_id = ? AND question_id = ? AND user_id = ? ' => [
+                        $exe_id,
+                        $question_id,
+                        $user_id,
+                    ],
+                ]
+            );
+
+            if ($recording) {
+                $attempt_recording = [
+                    'exe_id' => $exe_id,
+                    'question_id' => $question_id,
+                    'answer' => $answer,
+                    'marks' => $score,
+                    'insert_date' => $now,
+                    'session_id' => $session_id,
+                ];
+
                 Database::update(
-                    $TBL_TRACK_ATTEMPT,
-                    $attempt,
+                    $recording_table,
+                    $attempt_recording,
                     [
-                        'exe_id = ? AND question_id = ? AND user_id = ? ' => [
+                        'exe_id = ? AND question_id = ? AND session_id = ? ' => [
                             $exe_id,
                             $question_id,
-                            $user_id,
+                            $session_id,
                         ],
                     ]
                 );
-
-                if ($recording) {
-                    $attempt_recording = [
-                        'exe_id' => $exe_id,
-                        'question_id' => $question_id,
-                        'answer' => $answer,
-                        'marks' => $score,
-                        'insert_date' => $now,
-                        'session_id' => $session_id,
-                    ];
-
-                    Database::update(
-                        $recording_table,
-                        $attempt_recording,
-                        [
-                            'exe_id = ? AND question_id = ? AND session_id = ? ' => [
-                                $exe_id,
-                                $question_id,
-                                $session_id,
-                            ],
-                        ]
-                    );
-                }
-                $attempt_id = $exe_id;
             }
-
-            return $attempt_id;
-        } else {
-            return false;
+            $attempt_id = $exe_id;
         }
+
+        return $attempt_id;
+
     }
 
     /**
@@ -1197,7 +1194,7 @@ class Event
         $lpInteraction = Database::get_course_table(TABLE_LP_IV_INTERACTION);
         $lpObjective = Database::get_course_table(TABLE_LP_IV_OBJECTIVE);
 
-        if (empty($course)) {
+        if (empty($course) || empty($user_id)) {
             return false;
         }
 
@@ -1732,13 +1729,13 @@ class Event
         $courseId,
         $session_id = 0
     ) {
-        $table_track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $courseId = (int) $courseId;
         $exercise_id = (int) $exercise_id;
         $session_id = (int) $session_id;
         $user_id = (int) $user_id;
 
-        $sql = "SELECT * FROM $table_track_exercises
+        $sql = "SELECT * FROM $table
                 WHERE
                     status = ''  AND
                     c_id = $courseId AND
@@ -1933,6 +1930,26 @@ class Event
         }
 
         return $list;
+    }
+
+    public static function getQuestionAttemptByExeIdAndQuestion($exeId, $questionId)
+    {
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+        $exeId = (int) $exeId;
+        $questionId = (int) $questionId;
+
+        $sql = "SELECT * FROM $table
+                WHERE
+                    exe_id = $exeId AND
+                    question_id = $questionId
+                ORDER BY position";
+        $result = Database::query($sql);
+        $attempt = [];
+        if (Database::num_rows($result)) {
+            $attempt = Database::fetch_array($result, 'ASSOC');
+        }
+
+        return $attempt;
     }
 
     /**
@@ -2565,5 +2582,31 @@ class Event
         }
 
         return true;
+    }
+
+    public static function getAttemptQuestionDuration($exeId, $questionId)
+    {
+        // Check current attempt.
+        $questionAttempt = self::getQuestionAttemptByExeIdAndQuestion($exeId, $questionId);
+        $alreadySpent = 0;
+        if (!empty($questionAttempt) && $questionAttempt['seconds_spent']) {
+            $alreadySpent = $questionAttempt['seconds_spent'];
+        }
+        $now = time();
+        $questionStart = Session::read('question_start', []);
+        if (!empty($questionStart) &&
+            isset($questionStart[$questionId]) && !empty($questionStart[$questionId])
+        ) {
+            $time = $questionStart[$questionId];
+        } else {
+            $diff = 0;
+            if (!empty($alreadySpent)) {
+                $diff = $alreadySpent;
+            }
+            $time = $questionStart[$questionId] = $now - $diff;
+            Session::write('question_start', $questionStart);
+        }
+
+        return $now - $time;
     }
 }

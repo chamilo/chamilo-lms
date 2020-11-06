@@ -3577,6 +3577,7 @@ class Exercise
      * @param bool   $showTotalScoreAndUserChoicesInLastAttempt
      * @param bool   $updateResults
      * @param bool   $showHotSpotDelineationTable
+     * @param int    $questionDuration                          seconds
      *
      * @todo    reduce parameters of this function
      *
@@ -3595,7 +3596,8 @@ class Exercise
         $hotspot_delineation_result = [],
         $showTotalScoreAndUserChoicesInLastAttempt = true,
         $updateResults = false,
-        $showHotSpotDelineationTable = false
+        $showHotSpotDelineationTable = false,
+        $questionDuration = 0
     ) {
         $debug = false;
         //needed in order to use in the exercise_attempt() for the time
@@ -3604,6 +3606,7 @@ class Exercise
         $em = Database::getManager();
         $feedback_type = $this->getFeedbackType();
         $results_disabled = $this->selectResultsDisabled();
+        $questionDuration = (int) $questionDuration;
 
         if ($debug) {
             error_log("<------ manage_answer ------> ");
@@ -5694,10 +5697,6 @@ class Exercise
                                 </tr>
                             </table>';
                         if ($next == 0) {
-                            /*$try = $try_hotspot;
-                            $lp = $lp_hotspot;
-                            $destinationid = $select_question_hotspot;
-                            $url = $url_hotspot;*/
                         } else {
                             $comment = $answerComment = $objAnswerTmp->selectComment($nbrAnswers);
                             $answerDestination = $objAnswerTmp->selectDestination($nbrAnswers);
@@ -5862,7 +5861,8 @@ class Exercise
                                     $exeId,
                                     $i,
                                     $this->id,
-                                    $updateResults
+                                    $updateResults,
+                                    $questionDuration
                                 );
                             }
                         } else {
@@ -5873,7 +5873,8 @@ class Exercise
                                 $exeId,
                                 $i,
                                 $this->id,
-                                $updateResults
+                                $updateResults,
+                                $questionDuration
                             );
                         }
                         if ($debug) {
@@ -5887,7 +5888,9 @@ class Exercise
                         $quesId,
                         $exeId,
                         0,
-                        $this->id
+                        $this->id,
+                        false,
+                        $questionDuration
                     );
                 }
             } elseif ($answerType == MULTIPLE_ANSWER || $answerType == GLOBAL_MULTIPLE_ANSWER) {
@@ -5895,17 +5898,16 @@ class Exercise
                     $reply = array_keys($choice);
                     for ($i = 0; $i < count($reply); $i++) {
                         $ans = $reply[$i];
-                        Event::saveQuestionAttempt($questionScore, $ans, $quesId, $exeId, $i, $this->id);
-                    }
-                } else {
-                    Event::saveQuestionAttempt($questionScore, 0, $quesId, $exeId, 0, $this->id);
-                }
-            } elseif ($answerType == MULTIPLE_ANSWER_COMBINATION) {
-                if ($choice != 0) {
-                    $reply = array_keys($choice);
-                    for ($i = 0; $i < count($reply); $i++) {
-                        $ans = $reply[$i];
-                        Event::saveQuestionAttempt($questionScore, $ans, $quesId, $exeId, $i, $this->id);
+                        Event::saveQuestionAttempt(
+                            $questionScore,
+                            $ans,
+                            $quesId,
+                            $exeId,
+                            $i,
+                            $this->id,
+                            false,
+                            $questionDuration
+                        );
                     }
                 } else {
                     Event::saveQuestionAttempt(
@@ -5914,7 +5916,37 @@ class Exercise
                         $quesId,
                         $exeId,
                         0,
-                        $this->id
+                        $this->id,
+                        false,
+                        $questionDuration
+                    );
+                }
+            } elseif ($answerType == MULTIPLE_ANSWER_COMBINATION) {
+                if ($choice != 0) {
+                    $reply = array_keys($choice);
+                    for ($i = 0; $i < count($reply); $i++) {
+                        $ans = $reply[$i];
+                        Event::saveQuestionAttempt(
+                            $questionScore,
+                            $ans,
+                            $quesId,
+                            $exeId,
+                            $i,
+                            $this->id,
+                            false,
+                            $questionDuration
+                        );
+                    }
+                } else {
+                    Event::saveQuestionAttempt(
+                        $questionScore,
+                        0,
+                        $quesId,
+                        $exeId,
+                        0,
+                        $this->id,
+                        false,
+                        $questionDuration
                     );
                 }
             } elseif (in_array($answerType, [MATCHING, DRAGGABLE, MATCHING_DRAGGABLE])) {
@@ -5926,7 +5958,9 @@ class Exercise
                             $quesId,
                             $exeId,
                             $j,
-                            $this->id
+                            $this->id,
+                            false,
+                            $questionDuration
                         );
                     }
                 }
@@ -5938,7 +5972,9 @@ class Exercise
                     $quesId,
                     $exeId,
                     0,
-                    $this->id
+                    $this->id,
+                    false,
+                    $questionDuration
                 );
             } elseif ($answerType == ORAL_EXPRESSION) {
                 $answer = $choice;
@@ -5950,6 +5986,7 @@ class Exercise
                     0,
                     $this->id,
                     false,
+                    $questionDuration,
                     $objQuestionTmp->getAbsoluteFilePath()
                 );
             } elseif (
@@ -5959,7 +5996,7 @@ class Exercise
                 )
             ) {
                 $answer = $choice;
-                Event::saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
+                Event::saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0, $this->id, false, $questionDuration);
             } elseif ($answerType == HOT_SPOT || $answerType == ANNOTATION) {
                 $answer = [];
                 if (isset($exerciseResultCoordinates[$questionId]) && !empty($exerciseResultCoordinates[$questionId])) {
@@ -5998,9 +6035,27 @@ class Exercise
                         error_log('Empty: exerciseResultCoordinates');
                     }
                 }
-                Event::saveQuestionAttempt($questionScore, implode('|', $answer), $quesId, $exeId, 0, $this->id);
+                Event::saveQuestionAttempt(
+                    $questionScore,
+                    implode('|', $answer),
+                    $quesId,
+                    $exeId,
+                    0,
+                    $this->id,
+                    false,
+                    $questionDuration
+                );
             } else {
-                Event::saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
+                Event::saveQuestionAttempt(
+                    $questionScore,
+                    $answer,
+                    $quesId,
+                    $exeId,
+                    0,
+                    $this->id,
+                    false,
+                    $questionDuration
+                );
             }
         }
 
@@ -9952,6 +10007,7 @@ class Exercise
         Session::erase('exerciseResult');
         Session::erase('firstTime');
         Session::erase('time_per_question');
+        Session::erase('question_start');
         Session::erase('exerciseResultCoordinates');
         Session::erase('hotspot_coord');
         Session::erase('hotspot_dest');

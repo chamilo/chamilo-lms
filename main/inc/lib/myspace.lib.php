@@ -1371,8 +1371,8 @@ class MySpace
         while ($row = Database::fetch_array($queryResult, 'ASSOC')) {
             $cLpItems[] = (int) $row['lp_item_id'];
         }
-        $cLpItems = implode(',', $cLpItems);
         if (count($cLpItems) == 0) {
+            $cLpItems = implode(',', $cLpItems);
             $tableContent = "<div class='table-responsive'>".
                 "<table class='table table-hover table-striped table-bordered data_table'>".
                 "<thead>".
@@ -1518,10 +1518,8 @@ class MySpace
                         for ($i = 0; $i < $studenRegister; $i++) {
                             $tempStudent = api_get_user_info($registeredUsers[$i]);
                             $table .= $tempStudent['complete_name']."<br>";
-                            $totalStudent++;
                         }
                         $index++;
-                        $lpCount++;
                         $table .= "</div>".
                             "</td>";
                     } else {

@@ -1,14 +1,14 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 $current_course_tool = TOOL_GROUP;
 
-// Notice for unauthorized people.
 api_protect_course_script(true);
 
-if (api_get_setting('allow_group_categories') == 'false') {
+if ('false' === api_get_setting('allow_group_categories')) {
     api_not_allowed(true);
 }
 

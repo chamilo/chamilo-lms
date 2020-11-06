@@ -937,72 +937,74 @@ if ($allowTimePerQuestion && $objExercise->type == ONE_PER_PAGE) {
         }
     }
 
-    $extraFieldValue = new ExtraFieldValue('question');
-    $value = $extraFieldValue->get_values_by_handler_and_field_variable($objQuestionTmp->iid, 'time');
-    if (!empty($value) && isset($value['value']) && !empty($value['value'])) {
-        $seconds = (int) $value['value'];
-        $now = time();
-        $loadedQuestions = array_keys(Session::read('question_start', []));
-        if (!empty($loadedQuestions)) {
+    if (api_get_configuration_value('allow_time_per_question')) {
+        $extraFieldValue = new ExtraFieldValue('question');
+        $value = $extraFieldValue->get_values_by_handler_and_field_variable($objQuestionTmp->iid, 'time');
+        if (!empty($value) && isset($value['value']) && !empty($value['value'])) {
+            $seconds = (int) $value['value'];
+            $now = time();
+            /*$loadedQuestions = array_keys(Session::read('question_start', []));
+            if (!empty($loadedQuestions)) {
+                if (!in_array($objQuestionTmp->iid, $loadedQuestions)) {
+                    api_not_allowed(true);
+                }
+            }*/
+
+            $timeSpent = Event::getAttemptQuestionDuration($exe_id, $objQuestionTmp->iid);
+            /*$loadedQuestions = array_keys(Session::read('question_start'));
+            // Block if another question is loaded at the same time.
             if (!in_array($objQuestionTmp->iid, $loadedQuestions)) {
                 api_not_allowed(true);
-            }
-        }
-
-        $timeSpent = Event::getAttemptQuestionDuration($exe_id, $objQuestionTmp->iid);
-        $loadedQuestions = array_keys(Session::read('question_start'));
-        // Block if another question is loaded at the same time.
-        if (!in_array($objQuestionTmp->iid, $loadedQuestions)) {
-            api_not_allowed(true);
-        }
-        /*$timePerQuestion = Session::read('time_per_question', []);
-        if (!empty($timePerQuestion) && isset($timePerQuestion[$objQuestionTmp->iid])) {
-            $time = $timePerQuestion[$objQuestionTmp->iid];
-        } else {
-            $time = $timePerQuestion[$objQuestionTmp->iid] = $now;
-            Session::write('time_per_question', $timePerQuestion);
-        }
-        $timeSpent = $now - $time;*/
-
-        /*if (!empty($questionAttempt) && isset($questionAttempt['tms'])) {
-            var_dump('from DB');
-            var_dump($questionAttempt['tms']);
-            $time = api_strtotime($questionAttempt['tms'], 'UTC');
-            $timeSpent = $now - $time;
-        } else {
-            var_dump('from session');
-            $timePerQuestion = Session::read('time_per_question', []);
+            }*/
+            /*$timePerQuestion = Session::read('time_per_question', []);
             if (!empty($timePerQuestion) && isset($timePerQuestion[$objQuestionTmp->iid])) {
                 $time = $timePerQuestion[$objQuestionTmp->iid];
             } else {
                 $time = $timePerQuestion[$objQuestionTmp->iid] = $now;
                 Session::write('time_per_question', $timePerQuestion);
             }
-            var_dump($timePerQuestion);
-            $timeSpent = $now - $time;
-        }*/
-        //var_dump($timeSpent);
-        //var_dump(api_get_utc_datetime($now).' - '.api_get_utc_datetime($time));
-        // Redirect to next question.
-        if ($timeSpent > $seconds) {
-            $nextQuestion = (int) $currentQuestionFromUrl + 1;
-            $nextQuestionUrl = api_get_path(WEB_CODE_PATH).
-                "exercise/exercise_submit.php?$params&num=$nextQuestion&remind_question_id=$remind_question_id";
-            api_location($nextQuestionUrl);
-        }
+            $timeSpent = $now - $time;*/
 
-        $seconds = $seconds - $timeSpent;
-        //var_dump($seconds);
-        $questionTimeCondition = "
-                var timer = new easytimer.Timer();
-                timer.start({countdown: true, startValues: {seconds: $seconds}});
-                timer.addEventListener('secondsUpdated', function (e) {
-                    $('#question_timer').html(timer.getTimeValues().toString());
-                });
-                timer.addEventListener('targetAchieved', function (e) {
-                    $('.question-validate-btn').click();
-                });
-            ";
+            /*if (!empty($questionAttempt) && isset($questionAttempt['tms'])) {
+                var_dump('from DB');
+                var_dump($questionAttempt['tms']);
+                $time = api_strtotime($questionAttempt['tms'], 'UTC');
+                $timeSpent = $now - $time;
+            } else {
+                var_dump('from session');
+                $timePerQuestion = Session::read('time_per_question', []);
+                if (!empty($timePerQuestion) && isset($timePerQuestion[$objQuestionTmp->iid])) {
+                    $time = $timePerQuestion[$objQuestionTmp->iid];
+                } else {
+                    $time = $timePerQuestion[$objQuestionTmp->iid] = $now;
+                    Session::write('time_per_question', $timePerQuestion);
+                }
+                var_dump($timePerQuestion);
+                $timeSpent = $now - $time;
+            }*/
+            //var_dump($timeSpent);
+            //var_dump(api_get_utc_datetime($now).' - '.api_get_utc_datetime($time));
+            // Redirect to next question.
+            if ($timeSpent > $seconds) {
+                $nextQuestion = (int) $currentQuestionFromUrl + 1;
+                $nextQuestionUrl = api_get_path(WEB_CODE_PATH).
+                    "exercise/exercise_submit.php?$params&num=$nextQuestion&remind_question_id=$remind_question_id";
+                api_location($nextQuestionUrl);
+            }
+
+            $seconds = $seconds - $timeSpent;
+            //var_dump($seconds);
+            $questionTimeCondition = "
+                    var timer = new easytimer.Timer();
+                    timer.start({countdown: true, startValues: {seconds: $seconds}});
+                    timer.addEventListener('secondsUpdated', function (e) {
+                        $('#question_timer').html(timer.getTimeValues().toString());
+                    });
+                    timer.addEventListener('targetAchieved', function (e) {
+                        $('.question-validate-btn').click();
+                    });
+                ";
+        }
     }
 }
 

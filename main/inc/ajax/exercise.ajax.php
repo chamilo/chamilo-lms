@@ -585,6 +585,22 @@ switch ($action) {
                     $total_score = $total_score - $old_result['score'];
                 }
 
+                $questionDuration = 0;
+                if (api_get_configuration_value('allow_time_per_question')) {
+                    $extraFieldValue = new ExtraFieldValue('question');
+                    $value = $extraFieldValue->get_values_by_handler_and_field_variable($objQuestionTmp->iid, 'time');
+                    if (!empty($value) && isset($value['value']) && !empty($value['value'])) {
+                        $questionDuration = Event::getAttemptQuestionDuration($exeId, $objQuestionTmp->iid);
+                        if (empty($questionDuration)) {
+                            echo 'error';
+                            if ($debug) {
+                                error_log("Question duration = 0, in exeId: $exeId, question_id: $my_question_id");
+                            }
+                            exit;
+                        }
+                    }
+                }
+
                 // Deleting old attempt
                 if (isset($attemptList) && !empty($attemptList[$my_question_id])) {
                     if ($debug) {
@@ -613,8 +629,6 @@ switch ($action) {
                         $total_score -= $attemptList[$my_question_id]['marks'];
                     }
                 }
-
-                $questionDuration = Event::getAttemptQuestionDuration($exeId, $objQuestionTmp->iid);
 
                 // We're inside *one* question. Go through each possible answer for this question
                 if ($objQuestionTmp->type === MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {

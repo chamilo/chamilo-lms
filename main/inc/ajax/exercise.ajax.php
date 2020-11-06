@@ -726,10 +726,16 @@ switch ($action) {
                     $remind_list
                 );
 
-                $questionStart = Session::read('question_start');
-                unset($questionStart[$my_question_id]);
-                array_filter($questionStart);
-                Session::write('question_start', $questionStart);
+                if (api_get_configuration_value('allow_time_per_question')) {
+                    $questionStart = Session::read('question_start', []);
+                    if (!empty($questionStart)) {
+                        if (isset($questionStart[$my_question_id])) {
+                            unset($questionStart[$my_question_id]);
+                        }
+                        array_filter($questionStart);
+                        Session::write('question_start', $questionStart);
+                    }
+                }
 
                 // Destruction of the Question object
                 unset($objQuestionTmp);

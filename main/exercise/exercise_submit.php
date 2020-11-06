@@ -1125,16 +1125,16 @@ if (isset($_custom['exercises_hidden_when_no_start_date']) &&
     }
 }
 
-if ($allowTimePerQuestion) {
-    echo '<div class="well" style="text-align: center">
-            <div id="question_timer" class="label label-warning"></div>
-          </div>';
-}
-
 if ($time_control) {
     echo $objExercise->returnTimeLeftDiv();
     echo '<div style="display:none" class="warning-message" id="expired-message-id">'.
         get_lang('ExerciseExpiredTimeMessage').'</div>';
+}
+
+if ($allowTimePerQuestion) {
+    echo '<div class="well" style="text-align: center">
+            <div id="question_timer" class="label label-warning"></div>
+          </div>';
 }
 
 if (!in_array($origin, ['learnpath', 'embeddable'])) {
@@ -1241,7 +1241,6 @@ $saveIcon = Display::return_icon(
     false,
     true
 );
-
 
 echo '<script>
     function addExerciseEvent(elm, evType, fn, useCapture) {

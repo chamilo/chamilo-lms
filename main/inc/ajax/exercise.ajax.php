@@ -389,7 +389,7 @@ switch ($action) {
             $choice = isset($_REQUEST['choice']) ? $_REQUEST['choice'] : [];
 
             // certainty degree choice
-            $choiceDegreeCertainty = isset($_REQUEST['choiceDegreeCertainty'])? $_REQUEST['choiceDegreeCertainty'] : [];
+            $choiceDegreeCertainty = isset($_REQUEST['choiceDegreeCertainty']) ? $_REQUEST['choiceDegreeCertainty'] : [];
 
             // Hot spot coordinates from all questions.
             $hot_spot_coordinates = isset($_REQUEST['hotspot']) ? $_REQUEST['hotspot'] : [];

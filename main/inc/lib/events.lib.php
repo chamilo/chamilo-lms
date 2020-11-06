@@ -701,7 +701,6 @@ class Event
         }
 
         return $attempt_id;
-
     }
 
     /**

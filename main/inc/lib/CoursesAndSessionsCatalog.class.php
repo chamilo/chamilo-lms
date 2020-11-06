@@ -1278,7 +1278,7 @@ class CoursesAndSessionsCatalog
                 'a' => 'get_requirements',
                 'id' => $id,
                 'type' => $type,
-                'sid' => $sessionId
+                'sid' => $sessionId,
             ]
         );
 

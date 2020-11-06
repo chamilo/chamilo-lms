@@ -30,6 +30,7 @@
     "dotenv": "^8.2.0",
     "dropzone": "^5.5.1",
     "easy-pie-chart": "^2.1.7",
+    "easytimer": "^1.1.1",
     "eonasdan-bootstrap-datetimepicker": "^4.17",
     "flag-icon-css": "^3.0",
     "flatpickr": "^4.6.6",

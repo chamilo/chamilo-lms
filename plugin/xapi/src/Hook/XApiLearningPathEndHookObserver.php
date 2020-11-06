@@ -81,13 +81,13 @@ class XApiLearningPathEndHookObserver extends XApiActivityHookObserver implement
 
         $nameMap = LanguageMap::create([$languageIso => $lpName]);
 
-        $activityIdIri = $this->plugin->generateIri(
+        $id = $this->plugin->generateIri(
             $this->lp->getId(),
             'lp'
         );
 
         return new Activity(
-            IRI::fromString($activityIdIri),
+            $id,
             new Definition(
                 $nameMap,
                 null,

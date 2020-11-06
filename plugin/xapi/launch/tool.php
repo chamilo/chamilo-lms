@@ -47,7 +47,7 @@ $actor = new Agent(
 $state = new State(
     $activity,
     $actor,
-    $plugin->generateIri('tool-'.$toolLaunch->getId(), 'state')
+    $plugin->generateIri('tool-'.$toolLaunch->getId(), 'state')->getValue()
 );
 
 $cidReq = api_get_cidreq();

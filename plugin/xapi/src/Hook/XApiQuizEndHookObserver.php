@@ -90,13 +90,13 @@ class XApiQuizEndHookObserver extends XApiActivityHookObserver implements HookQu
         $titleMap = LanguageMap::create([$languageIso => $title]);
         $descriptionMap = $description ? LanguageMap::create([$languageIso => $description]) : null;
 
-        $activityIdIri = $this->plugin->generateIri(
+        $id = $this->plugin->generateIri(
             $this->quiz->getId(),
             'quiz'
         );
 
         return new Activity(
-            IRI::fromString($activityIdIri),
+            $id,
             new Definition(
                 $titleMap,
                 $descriptionMap,

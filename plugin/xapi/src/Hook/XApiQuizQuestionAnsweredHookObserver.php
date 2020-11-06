@@ -106,13 +106,13 @@ class XApiQuizQuestionAnsweredHookObserver
      */
     protected function getActivity()
     {
-        $activityIdIri = $this->plugin->generateIri(
+        $id = $this->plugin->generateIri(
             $this->question->getId(),
             'quiz_question'
         );
 
         return new Activity(
-            IRI::fromString($activityIdIri),
+            $id,
             $this->generateActivityDefinitionFromQuestionType()
         );
     }
@@ -271,10 +271,10 @@ class XApiQuizQuestionAnsweredHookObserver
     {
         $languageIso = api_get_language_isocode($this->course->getCourseLanguage());
 
-        $quizIri = $this->plugin->generateIri($this->quizInfo['id'], XApiPlugin::TYPE_QUIZ);
+        $id = $this->plugin->generateIri($this->quizInfo['id'], XApiPlugin::TYPE_QUIZ);
 
         $quizActivity = new Activity(
-            IRI::fromString($quizIri),
+            $id,
             new Definition(
                 LanguageMap::create([$languageIso => $this->quizInfo['title']]),
                 null,

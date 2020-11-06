@@ -51,7 +51,7 @@ $actor = new Agent(
 $state = new State(
     $activity,
     $actor,
-    $plugin->generateIri('tool-'.$toolLaunch->getId(), 'state')
+    $plugin->generateIri('tool-'.$toolLaunch->getId(), 'state')->getValue()
 );
 
 $nowDate = api_get_utc_datetime(null, false, true)->format('c');

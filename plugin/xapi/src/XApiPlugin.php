@@ -329,11 +329,13 @@ class XApiPlugin extends Plugin implements HookPluginInterface
      * @param string $value
      * @param string $type
      *
-     * @return string
+     * @return \Xabbuh\XApi\Model\IRI
      */
     public function generateIri($value, $type)
     {
-        return api_get_path(WEB_PATH)."xapi/$type/$value";
+        return IRI::fromString(
+            api_get_path(WEB_PATH)."xapi/$type/$value"
+        );
     }
 
     /**

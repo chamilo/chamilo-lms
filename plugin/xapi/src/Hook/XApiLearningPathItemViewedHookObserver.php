@@ -99,13 +99,13 @@ class XApiLearningPathItemViewedHookObserver
 
         $titleMap = LanguageMap::create([$languageIso => $itemTitle]);
 
-        $activityIdIri = $this->plugin->generateIri(
+        $id = $this->plugin->generateIri(
             $this->lpItem->getId(),
             'lp_item'
         );
 
         return new Activity(
-            IRI::fromString($activityIdIri),
+            $id,
             new Definition(
                 $titleMap,
                 null,
@@ -139,14 +139,12 @@ class XApiLearningPathItemViewedHookObserver
      */
     protected function getContext()
     {
-        $lpIri = $this->plugin->generateIri(
+        $id = $this->plugin->generateIri(
             $this->lpView->getLpId(),
             XApiPlugin::TYPE_LP
         );
 
-        $lpActivity = new Activity(
-            IRI::fromString($lpIri)
-        );
+        $lpActivity = new Activity($id);
 
         $activities = new ContextActivities(
             [$lpActivity]

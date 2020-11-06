@@ -29,14 +29,6 @@ class XApiLearningPathItemViewedHookObserver
      * @var \Chamilo\CourseBundle\Entity\CLpView;
      */
     private $lpView;
-    /**
-     * @var \Chamilo\CoreBundle\Entity\Course
-     */
-    private $course;
-    /**
-     * @var \Chamilo\CoreBundle\Entity\Session
-     */
-    private $session;
 
     /**
      * @inheritDoc

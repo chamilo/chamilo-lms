@@ -1,8 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Course as CourseEntity;
+use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\UserBundle\Entity\User as UserEntity;
+use Xabbuh\XApi\Model\Activity;
 use Xabbuh\XApi\Model\Agent;
+use Xabbuh\XApi\Model\Definition;
 use Xabbuh\XApi\Model\InverseFunctionalIdentifier;
 use Xabbuh\XApi\Model\IRI;
 use Xabbuh\XApi\Model\LanguageMap;
@@ -62,5 +66,46 @@ trait XApiStatementTrait
         );
 
         return StatementId::fromUuid($uuid);
+    }
+
+    /**
+     * @return \Xabbuh\XApi\Model\Activity
+     */
+    protected function generateActivityFromSite()
+    {
+        $platform = api_get_setting('Institution').' - '.api_get_setting('siteName');
+        $platformLanguage = api_get_setting('platformLanguage');
+        $platformLanguageIso = api_get_language_isocode($platformLanguage);
+
+        return new Activity(
+            IRI::fromString('http://id.tincanapi.com/activitytype/lms'),
+            new Definition(
+                LanguageMap::create([$platformLanguageIso => $platform])
+            )
+        );
+    }
+
+    /**
+     * @param \Chamilo\CoreBundle\Entity\Course       $course
+     * @param \Chamilo\CoreBundle\Entity\Session|null $session
+     *
+     * @return \Xabbuh\XApi\Model\Activity
+     */
+    protected function generateActivityFromCourse(
+        CourseEntity $course,
+        SessionEntity $session = null
+    ) {
+        $languageIso = api_get_language_isocode($course->getCourseLanguage());
+
+        return new Activity(
+            IRI::fromString(
+                api_get_course_url($course->getCode(), $session ? $session->getId() : null)
+            ),
+            new Definition(
+                LanguageMap::create([$languageIso => $course->getTitle()]),
+                null,
+                IRI::fromString('http://id.tincanapi.com/activitytype/lms/course')
+            )
+        );
     }
 }

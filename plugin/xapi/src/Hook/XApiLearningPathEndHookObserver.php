@@ -23,17 +23,6 @@ class XApiLearningPathEndHookObserver extends XApiActivityHookObserver implement
      * @var \Chamilo\CourseBundle\Entity\CLp
      */
     private $lp;
-    /**
-     * @var \Chamilo\CoreBundle\Entity\Course
-     */
-    private $course;
-    /**
-     * @var \Chamilo\CoreBundle\Entity\Session
-     */
-    private $session;
-    /**
-     * @var \Chamilo\CourseBundle\Entity\CLpView|object|null
-     */
 
     /**
      * @inheritDoc

@@ -6403,19 +6403,14 @@ class Exercise
         }
 
         $signature = '';
-        /*if (api_get_configuration_value('')) {
-            $extraFieldValue = new ExtraFieldValue('exercise');
-            $result = $extraFieldValue->get_values_by_handler_and_field_variable($objExercise->iId, 'signature_activated');
-            if ($result && isset($result['value']) && 1 === (int) $result['value']) {
-                $allowSignature = true;
-            }
-            $signature
-        }*/
+        if (ExerciseSignaturePlugin::exerciseHasSignatureActivated($this)) {
+            $signature = ExerciseSignaturePlugin::getSignature($trackExerciseInfo['exe_user_id'], $trackExerciseInfo);
+        }
 
         $tpl = new Template(null, false, false, false, false, false, false);
         $tpl->assign('data', $data);
         $tpl->assign('allow_signature', $allowSignature);
-        //$tpl->assign('signature', $signature);
+        $tpl->assign('signature', $signature);
         $tpl->assign('allow_export_pdf', $allowExportPdf);
         $tpl->assign('export_url', api_get_path(WEB_CODE_PATH).'exercise/result.php?action=export&id='.$exeId.'&'.api_get_cidreq());
 

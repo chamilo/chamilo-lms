@@ -919,11 +919,14 @@ switch ($action) {
         if ('true' !== api_get_plugin_setting('exercise_signature', 'tool_enable')) {
             exit;
         }
+
         $file = isset($_REQUEST['file']) ? $_REQUEST['file'] : '';
         if (empty($exeId) || empty($file)) {
             echo 0;
             exit;
         }
+
+        $file = str_replace(' ', '+', $file);
         $track = ExerciseLib::get_exercise_track_exercise_info($exeId);
         if ($track) {
             $result = ExerciseSignaturePlugin::saveSignature($currentUserId, $track, $file);

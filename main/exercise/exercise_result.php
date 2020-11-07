@@ -119,14 +119,7 @@ $logInfo = [
 ];
 Event::registerLog($logInfo);
 
-$allowSignature = false;
-if ('true' === api_get_plugin_setting('exercise_signature', 'tool_enable')) {
-    $extraFieldValue = new ExtraFieldValue('exercise');
-    $result = $extraFieldValue->get_values_by_handler_and_field_variable($objExercise->iId, 'signature_activated');
-    if ($result && isset($result['value']) && 1 === (int) $result['value']) {
-        $allowSignature = true;
-    }
-}
+$allowSignature = ExerciseSignaturePlugin::exerciseHasSignatureActivated($objExercise);
 if ($allowSignature) {
     $htmlHeadXtra[] = api_get_asset('signature_pad/signature_pad.umd.js');
 }

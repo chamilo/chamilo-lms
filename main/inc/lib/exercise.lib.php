@@ -4634,8 +4634,7 @@ EOT;
         $exerciseResult = null;
         $exerciseResultCoordinates = null;
         $delineationResults = null;
-
-        if (in_array(
+        if (true === $save_user_result && in_array(
             $objExercise->getFeedbackType(),
             [EXERCISE_FEEDBACK_TYPE_DIRECT, EXERCISE_FEEDBACK_TYPE_POPUP]
         )) {

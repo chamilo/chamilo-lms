@@ -137,7 +137,6 @@ if ($origin === 'learnpath') {
 $i = $total_score = $max_score = 0;
 $remainingMessage = '';
 $attemptButton = '';
-
 if ($origin !== 'embeddable') {
     $attemptButton = Display::toolbarButton(
         get_lang('AnotherAttempt'),

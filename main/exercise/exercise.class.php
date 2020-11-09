@@ -3294,7 +3294,6 @@ class Exercise
             ];
 
             if ($this->getFeedbackType() === EXERCISE_FEEDBACK_TYPE_POPUP) {
-                //$params['data-block-div-after-closing'] = "question_div_$question_id";
                 $params['data-block-closing'] = 'true';
                 $params['class'] .= ' no-header ';
             }
@@ -3309,7 +3308,7 @@ class Exercise
             return '';
         }
 
-        $isReviewingAnswers = isset($_REQUEST['reminder']) && 2 == $_REQUEST['reminder'];
+        $isReviewingAnswers = isset($_REQUEST['reminder']) && 2 === (int) $_REQUEST['reminder'];
 
         // User
         $endReminderValue = false;

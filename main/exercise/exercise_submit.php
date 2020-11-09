@@ -444,7 +444,7 @@ if (empty($exercise_stat_info)) {
         }
     }
 }
-
+Session::write('exe_id', $exe_id);
 $saveDurationUrl = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?a=update_duration&exe_id='.$exe_id.'&'.api_get_cidreq();
 $questionListInSession = Session::read('questionList');
 $selectionType = $objExercise->getQuestionSelectionType();
@@ -741,7 +741,7 @@ if ($formSent && isset($_POST)) {
                 // stores the user answer into the array
                 $exerciseResult[$key] = $choice[$key];
                 // Saving each question.
-                if (!in_array($objExercise->getFeedbackType(), [EXERCISE_FEEDBACK_TYPE_DIRECT, EXERCISE_FEEDBACK_TYPE_POPUP])) {
+                if (!in_array($objExercise->getFeedbackType(), [EXERCISE_FEEDBACK_TYPE_DIRECT])) {
                     $nro_question = $current_question; // - 1;
                     $questionId = $key;
                     // gets the student choice for this question

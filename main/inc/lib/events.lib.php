@@ -1099,7 +1099,7 @@ class Event
         $lp_item_id,
         $lp_item_view_id
     ) {
-        $stat_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $user_id = (int) $user_id;
         $exerciseId = (int) $exerciseId;
         $lp_id = (int) $lp_id;
@@ -1109,7 +1109,7 @@ class Event
         $sessionId = api_get_session_id();
 
         $sql = "SELECT count(*) as count
-                FROM $stat_table
+                FROM $table
                 WHERE
                     exe_exo_id = $exerciseId AND
                     exe_user_id = $user_id AND
@@ -1120,11 +1120,58 @@ class Event
                     c_id = $courseId AND
                     session_id = $sessionId";
 
-        $query = Database::query($sql);
-        if (Database::num_rows($query) > 0) {
-            $attempt = Database::fetch_array($query, 'ASSOC');
+        $result = Database::query($sql);
+        if (Database::num_rows($result) > 0) {
+            $attempt = Database::fetch_array($result, 'ASSOC');
 
             return (int) $attempt['count'];
+        }
+
+        return 0;
+    }
+
+    public static function getAttemptPosition(
+        $exeId,
+        $user_id,
+        $exerciseId,
+        $lp_id,
+        $lp_item_id,
+        $lp_item_view_id
+    ) {
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $user_id = (int) $user_id;
+        $exerciseId = (int) $exerciseId;
+        $lp_id = (int) $lp_id;
+        $lp_item_id = (int) $lp_item_id;
+        $lp_item_view_id = (int) $lp_item_view_id;
+        $courseId = api_get_course_int_id();
+        $sessionId = api_get_session_id();
+
+        $sql = "SELECT exe_id
+                FROM $table
+                WHERE
+                    exe_exo_id = $exerciseId AND
+                    exe_user_id = $user_id AND
+                    status = '' AND
+                    orig_lp_id = $lp_id AND
+                    orig_lp_item_id = $lp_item_id AND
+                    orig_lp_item_view_id = $lp_item_view_id AND
+                    c_id = $courseId AND
+                    session_id = $sessionId
+                ORDER by exe_id
+                ";
+
+        $result = Database::query($sql);
+        if (Database::num_rows($result) > 0) {
+            $position = 1;
+            while ($row = Database::fetch_array($result, 'ASSOC')) {
+                if ($row['exe_id'] === $exeId) {
+                    break;
+                }
+                $position++;
+            }
+
+            return $position;
         }
 
         return 0;

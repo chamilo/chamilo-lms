@@ -4425,8 +4425,11 @@ class Exercise
                                     question_id= ".$questionId;
                         $result = Database::query($sql);
                         $data = Database::fetch_array($result);
+                        $choice = '';
+                        if ($data) {
+                            $choice = $data['answer'];
+                        }
 
-                        $choice = $data['answer'];
                         $choice = str_replace('\r\n', '', $choice);
                         $choice = stripslashes($choice);
                         $questionScore = $data['marks'];

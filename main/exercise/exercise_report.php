@@ -240,8 +240,10 @@ if (isset($_REQUEST['comments']) &&
         $tot = $pluginEvaluation->getResultWithFormula($id, $formula);
     }
 
+    $totalScore = (float) $tot;
+
     $sql = "UPDATE $TBL_TRACK_EXERCISES
-            SET exe_result = '".floatval($tot)."'
+            SET exe_result = '".$totalScore."'
             WHERE exe_id = ".$id;
     Database::query($sql);
 
@@ -262,6 +264,39 @@ if (isset($_REQUEST['comments']) &&
                 Display::return_message(get_lang('MessageSent'))
             );
         }
+    }
+
+    $notifications = api_get_configuration_value('exercise_finished_notification_settings');
+    if ($notifications) {
+        ob_start();
+        $stats = ExerciseLib::displayQuestionListByAttempt(
+            $objExerciseTmp,
+            $track_exercise_info['exe_id'],
+            false,
+            false,
+            false,
+            api_get_configuration_value('quiz_results_answers_report'),
+            false
+        );
+        ob_end_clean();
+
+        $attemptCount = Event::getAttemptPosition(
+            $track_exercise_info['exe_id'],
+            $student_id,
+            $objExerciseTmp->id,
+            $lp_id,
+            $lpItemId,
+            $lp_item_view_id
+        );
+
+        ExerciseLib::sendNotification(
+            $student_id,
+            $objExerciseTmp,
+            $track_exercise_info,
+            api_get_course_info(),
+            $attemptCount,
+            $stats
+        );
     }
 
     // Updating LP score here

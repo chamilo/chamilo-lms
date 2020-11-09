@@ -5038,6 +5038,7 @@ EOT;
             'all_answers_html' => $all,
             'total_score' => $total_score,
             'total_weight' => $total_weight,
+            'count_pending_questions' => $countPendingQuestions,
         ];
     }
 

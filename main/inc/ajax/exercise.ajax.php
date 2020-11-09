@@ -351,27 +351,29 @@ switch ($action) {
         if (empty($objExercise) || empty($exeId)) {
             echo 0;
             exit;
-        } else {
-            $option = isset($_GET['option']) ? $_GET['option'] : '';
-            switch ($option) {
-                case 'add_all':
-                    $questionListInSession = Session::read('questionList');
-                    $objExercise->addAllQuestionToRemind($exeId, $questionListInSession);
-                    break;
-                case 'remove_all':
-                    $objExercise->removeAllQuestionToRemind($exeId);
-                    break;
-                default:
-                    $objExercise->editQuestionToRemind(
-                        $exeId,
-                        $_REQUEST['question_id'],
-                        $_REQUEST['action']
-                    );
-                    break;
-            }
-            echo 1;
-            exit;
         }
+
+        $option = isset($_GET['option']) ? $_GET['option'] : '';
+        switch ($option) {
+            case 'add_all':
+                $questionListInSession = Session::read('questionList');
+                $objExercise->addAllQuestionToRemind($exeId, $questionListInSession);
+                break;
+            case 'remove_all':
+                $objExercise->removeAllQuestionToRemind($exeId);
+                break;
+            default:
+                $objExercise->editQuestionToRemind(
+                    $exeId,
+                    $_REQUEST['question_id'],
+                    $_REQUEST['action']
+                );
+                break;
+        }
+
+        echo 1;
+        exit;
+
         break;
     case 'save_exercise_by_now':
         $course_info = api_get_course_info_by_id($course_id);

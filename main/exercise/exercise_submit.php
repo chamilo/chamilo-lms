@@ -641,6 +641,12 @@ if (api_get_configuration_value('block_category_questions') &&
         $count++;
     }
 
+    // Use reminder list to get the current question.
+    if (2 === $reminder && !empty($myRemindList)) {
+        $remindQuestionId = current($myRemindList);
+        $questionCheck = Question::read($remindQuestionId);
+    }
+
     $categoryId = 0;
     if (null !== $questionCheck) {
         $categoryId = $questionCheck->category;
@@ -648,7 +654,6 @@ if (api_get_configuration_value('block_category_questions') &&
 
     if (!empty($categoryId)) {
         $categoryInfo = $categoryList[$categoryId];
-
         $count = 1;
         $total = count($categoryList[$categoryId]);
         foreach ($categoryList[$categoryId] as $checkQuestionId) {
@@ -673,9 +678,9 @@ if (api_get_configuration_value('block_category_questions') &&
         }
     }
 
-    // Blocked if category was already answered
+    // Blocked if category was already answered.
     if ($categoryId && in_array($categoryId, $blockedCategories)) {
-        // Redirect to category intro
+        // Redirect to category intro.
         $url = api_get_path(WEB_CODE_PATH).'exercise/exercise_question_reminder.php?'.
             $params.'&num='.$current_question.'&category_id='.$isLastQuestionInCategory;
         api_location($url);
@@ -841,9 +846,7 @@ if (is_null($current_question)) {
 }
 
 if ($question_count != 0) {
-    if ($objExercise->type == ALL_ON_ONE_PAGE ||
-        $current_question > $question_count
-    ) {
+    if ($objExercise->type == ALL_ON_ONE_PAGE || $current_question > $question_count) {
         if (api_is_allowed_to_session_edit()) {
             // goes to the script that will show the result of the exercise
             if ($objExercise->type == ALL_ON_ONE_PAGE) {
@@ -1108,11 +1111,11 @@ if ($showQuestionClock) {
 if (!in_array($origin, ['learnpath', 'embeddable'])) {
     echo '<div id="highlight-plugin" class="glossary-content">';
 }
-
 if ($reminder == 2) {
     $data_tracking = $exercise_stat_info['data_tracking'];
     $data_tracking = explode(',', $data_tracking);
     $current_question = 1; //set by default the 1st question
+
     if (!empty($myRemindList)) {
         // Checking which questions we are going to call from the remind list
         for ($i = 0; $i < count($data_tracking); $i++) {

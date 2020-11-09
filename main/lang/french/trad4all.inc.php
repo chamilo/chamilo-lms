@@ -8608,4 +8608,12 @@ $CourseUsedInOtherURL = "Ce cours est utilisé sur au moins un autre portail";
 $SubscribeUserGroupsToLp = "Inscription de classes au parcours";
 $ReplaceFile = "Remplacer le fichier";
 $SubscribeClassesToLpCategory = "Inscrire de classes à la catégorie";
+$ExportResponseReport = "Exporter le rapport de réponse";
+$ResponseReport = "Rapport de réponses";
+$ResultsOnlyAvailableOnline = "Résultat disponible uniquement en ligne";
+$QuestionStats = "Statistiques des questions";
+$WrongAnswer = "Mauvaise réponse";
+$WrongAttemptXInCourseX = "Échec à la tentative %s de %s";
+$ExerciseValidationInCourseX = "Validation de l'exercice pour %s";
+$BlockCategoryExplanation = "Vous avez terminé les questions de cette catégorie, c'est votre dernière chance de revenir en arrière et réviser ces questions. Une fois que vous cliquerez sur le bouton pour continuer l'exercice vous passerez à la prochaine catégorie de questions et vous ne pourrez pas revenir sur cette partie de l'exercice.";
 ?>

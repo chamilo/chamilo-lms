@@ -8707,4 +8707,9 @@ $SubscribeClassesToLpCategory = "Suscribir clases a la categoría de lecciones";
 $ExportResponseReport = "Exportar reporte de respuestas";
 $ResponseReport = "Reporte de respuestas";
 $ResultsOnlyAvailableOnline = "Resultado únicamente disponible online";
+$QuestionStats = "Estadísticas de preguntas";
+$WrongAnswer = "Respuesta incorrecta";
+$WrongAttemptXInCourseX = "Fallo en el intento %s de %s";
+$ExerciseValidationInCourseX = "Validacion del ejercicio de %s";
+$BlockCategoryExplanation = "Ha completado las preguntas de esta categoría, esta es su última oportunidad para volver atrás y revisar estas preguntas. Una vez que haga clic en el botón para continuar con el ejercicio, pasará a la siguiente categoría de preguntas y no podrá volver a esta parte del ejercicio.";
 ?>

@@ -65,7 +65,8 @@ class MySpace
             ],
         ];
 
-        $companyField = ExtraField::getDisplayNameByVariable('company');
+        $field = new ExtraField('user');
+        $companyField = $field->get_handler_field_info_by_field_variable('company');
         if (!empty($companyField)) {
             $actions[] =
                 [
@@ -73,7 +74,8 @@ class MySpace
                     'content' => get_lang('UserByEntityReport'),
                 ];
         }
-        $authorsField = ExtraField::getDisplayNameByVariable('authors');
+        $field = new ExtraField('lp');
+        $authorsField = $field->get_handler_field_info_by_field_variable('authors');
         if (!empty($authorsField)) {
             $actions[] =
                 [
@@ -81,7 +83,8 @@ class MySpace
                     'content' => get_lang('LpByAuthor'),
                 ];
         }
-        $authorsItemField = ExtraField::getDisplayNameByVariable('AuthorLPItem');
+        $field = new ExtraField('lp_item');
+        $authorsItemField = $field->get_handler_field_info_by_field_variable('authorlpitem');
         if (!empty($authorsItemField)) {
             $actions[] =
                 [

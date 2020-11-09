@@ -203,9 +203,10 @@ $form = new FormValidator('configure_homepage_'.$action,
     '',
     ['style' => 'margin: 0px;']);
 
-$priceExtraField = ExtraField::getDisplayNameByVariable('AuthorLP');
-if ($priceExtraField != null) {
-    $extraField['AuthorLP'] = $priceExtraField;
+$field = new ExtraField('user');
+$authorLpField = $field->get_handler_field_info_by_field_variable('AuthorLP');
+if ($authorLpField != null) {
+    $extraField['AuthorLP'] = $authorLpField;
 }
 $extraField['backTo'] = api_get_self().'?action=add_item&type=step&lp_id='.intval($lpId).'&'.api_get_cidreq();
 
@@ -244,7 +245,7 @@ foreach ($_SESSION['oLP']->items as $item) {
     $itemId = $item->iId;
     $extraFieldValues = $extraFieldValue->get_values_by_handler_and_field_variable(
         $itemId,
-        'AuthorLPItem'
+        strtolower('AuthorLPItem')
     );
     if (!empty($extraFieldValues)) {
         $default["itemSelected[$itemId]"] = true;
@@ -257,7 +258,7 @@ foreach ($_SESSION['oLP']->items as $item) {
     $form->addCheckBox("itemSelected[$itemId]", null, Display::return_icon('lp_document.png', $itemName).$itemName);
 }
 
-$options = ['' => get_lang('SelectAnOption')];
+$options = [];
 $default["authorItemSelect"] = [];
 $form->addHtml('</div>');
 foreach ($learnPath->authorsAvaible as $key => $value) {

@@ -120,9 +120,10 @@ $(function() {
 <?php
 
 $extraField = [];
-$priceExtraField = ExtraField::getDisplayNameByVariable('AuthorLP');
-if ($priceExtraField != null) {
-    $extraField['AuthorLP'] = $priceExtraField;
+$field = new ExtraField('lp_item');
+$authorLpField = $field->get_handler_field_info_by_field_variable('authorlpitem');
+if ($authorLpField != null) {
+    $extraField['AuthorLP'] = $authorLpField;
 }
 echo $learnPath->build_action_menu(false,
     true,

@@ -8616,4 +8616,6 @@ $WrongAnswer = "Mauvaise réponse";
 $WrongAttemptXInCourseX = "Échec à la tentative %s de %s";
 $ExerciseValidationInCourseX = "Validation de l'exercice pour %s";
 $BlockCategoryExplanation = "Vous avez terminé les questions de cette catégorie, c'est votre dernière chance de revenir en arrière et réviser ces questions. Une fois que vous cliquerez sur le bouton pour continuer l'exercice vous passerez à la prochaine catégorie de questions et vous ne pourrez pas revenir sur cette partie de l'exercice.";
+$RemainingTimeToFinishExercise = "Temps restant pour terminer l'exercice";
+$RemainingTimeToFinishQuestion = "Temps restant pour terminer la question";
 ?>

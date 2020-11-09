@@ -1139,7 +1139,9 @@ if ($time_control) {
 }
 
 if ($allowTimePerQuestion) {
+    $icon = Display::returnFontAwesomeIcon('clock-o');
     echo '<div class="well" style="text-align: center">
+            '.get_lang('RemainingTimeToFinishQuestion').'
             <div id="question_timer" class="label label-warning"></div>
           </div>';
 }

@@ -8,8 +8,8 @@
  *
  * @package chamilo.custompages
  */
-require_once api_get_path(SYS_PATH) . 'main/inc/global.inc.php';
-require_once __DIR__ . '/language.php';
+require_once api_get_path(SYS_PATH).'main/inc/global.inc.php';
+require_once __DIR__.'/language.php';
 
 $template = new Template(get_lang('Registration'), false, false, false, false, true, true);
 

@@ -73,7 +73,7 @@ if ($extraConditions && isset($extraConditions['conditions'])) {
     }
 }
 
-$form = new FormValidator('registration');
+$form = new FormValidator('registration','post','','',[],FormValidator::LAYOUT_GRID);
 $user_already_registered_show_terms = false;
 if (api_get_setting('allow_terms_conditions') === 'true') {
     $user_already_registered_show_terms = isset($_SESSION['term_and_condition']['user_id']);
@@ -623,7 +623,7 @@ if ($allowDoubleValidation && $showTerms == false) {
         $user_already_registered_show_terms ||
         $showTerms
     ) {
-        $form->addButtonNext(get_lang('RegisterUser'));
+        $form->addButton('register',get_lang('RegisterUser'),null,'primary','btn-block');
         $formContainsSendButton = true;
     }
 }

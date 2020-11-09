@@ -46,7 +46,6 @@ body {
     margin-bottom: 60px;
 }
 .footer {
-    position: absolute;
     bottom: 0;
     width: 100%;
     /* Set the fixed height of the footer here */
@@ -8351,10 +8350,6 @@ ul#toolnavbox-two li a.btn {
     border-top: none !important;
 }
 
-.page-blank {
-    padding: 20px 30px;
-}
-
 /* groups social */
 .group-tool {
     padding: 10px;
@@ -9453,10 +9448,24 @@ ul.dropdown-menu.inner > li > a {
 }
 
 .compilation_block .progress {
-    margin:0px;
+    margin:0;
     width:120px
 }
-
+#registration .form_list {
+    display: grid;
+    grid-template-columns:  repeat(auto-fit, minmax(300px, 1fr));;
+}
+#registration .form_list .form-group{
+    margin: 10px;
+}
+#registration .form_list > *:nth-child(3n-2):nth-last-of-type(2) {
+    border-color: red;
+    grid-column: span 2;
+}
+#registration .form_list > *:nth-child(3n-1):nth-last-of-type(1) {
+    border-color: red;
+    grid-column: span 2;
+}
 /* CSS Responsive */
 @media (min-width: 1025px) and (max-width: 1200px) {
     .sidebar-scorm {

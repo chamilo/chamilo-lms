@@ -164,6 +164,7 @@ define('SECTION_DASHBOARD', 'dashboard');
 define('SECTION_REPORTS', 'reports');
 define('SECTION_GLOBAL', 'global');
 define('SECTION_INCLUDE', 'include');
+define('SECTION_CUSTOMPAGE', 'custompage');
 
 // CONSTANT name for local authentication source
 define('PLATFORM_AUTH_SOURCE', 'platform');

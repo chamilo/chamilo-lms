@@ -130,7 +130,7 @@ class ExtraFieldOption extends Model
      * 'field_id'=> 1,
      * 'option_value'=> 1,
      * 'display_text'=> 'extra value option 1',
-     * 'option_order=>0'
+     * 'option_order'=>0
      * ]);
      * echo "<pre>".var_export($fieldOption,true)."</pre>";
      * ?>

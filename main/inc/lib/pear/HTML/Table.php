@@ -660,6 +660,28 @@ class HTML_Table extends HTML_Common
         $this->_tbodies[$body]->setHeaderContents($row, $col, $contents, $attributes);
     }
 
+    public function setHeaders($headers)
+    {
+        $column = 0;
+        foreach ($headers as $header) {
+            $this->setHeaderContents(0, $column, $header);
+            $column++;
+        }
+    }
+
+    public function setData($data)
+    {
+        $row = 1;
+        foreach ($data as $line) {
+            $column = 0;
+            foreach ($line as $content) {
+                $this->setCellContents($row, $column, $content);
+                $column++;
+            }
+            $row++;
+        }
+    }
+
     /**
      * Adds a table row and returns the row identifier
      * @param    array     $contents     (optional) Must be a indexed array of

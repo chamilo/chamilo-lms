@@ -49,7 +49,7 @@ if (!empty($courseIdList)) {
 
 $exerciseList = array_unique($exerciseList);
 if (!empty($exerciseList)) {
-    array_walk($exerciseList, function(&$title) {
+    array_walk($exerciseList, function (&$title) {
         $title = Exercise::get_formated_title_variable($title);
     });
 }
@@ -142,7 +142,7 @@ if ($form->validate()) {
                     $correctCountStudent += $row['correct_count_student'];
                     $wrongCountStudent += $row['wrong_count_student'];
 
-                    $orderedData[] =  [
+                    $orderedData[] = [
                         $row['title'],
                         $row['correct_count'],
                         $row['wrong_count'],
@@ -153,7 +153,7 @@ if ($form->validate()) {
 
                 // Course base
                 $row = getCourseSessionRow($courseId, $exerciseId, 0, get_lang('BaseCourse'));
-                $orderedData[] =  [
+                $orderedData[] = [
                     $row['title'],
                     $row['correct_count'],
                     $row['wrong_count'],
@@ -165,7 +165,7 @@ if ($form->validate()) {
                 $wrongCount += $row['wrong_count'];
                 $correctCountStudent += $row['correct_count_student'];
                 $wrongCountStudent += $row['wrong_count_student'];
-                $orderedData[] =  [
+                $orderedData[] = [
                     get_lang('Total'),
                     $correctCount,
                     $wrongCount,

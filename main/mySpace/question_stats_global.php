@@ -49,7 +49,7 @@ if (!empty($courseIdList)) {
 
 $exerciseList = array_unique($exerciseList);
 if (!empty($exerciseList)) {
-    array_walk($exerciseList, function(&$title) {
+    array_walk($exerciseList, function (&$title) {
         $title = Exercise::get_formated_title_variable($title);
     });
 }

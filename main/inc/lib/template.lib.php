@@ -663,9 +663,11 @@ class Template
             }
         }
         if (CustomPages::enabled()) {
-            $cssCustomPage = api_get_path(SYS_CSS_PATH) . $this->themeDir . "custompage.css";
+            $cssCustomPage = api_get_path(SYS_CSS_PATH).$this->themeDir."custompage.css";
             if (is_file($cssCustomPage)) {
-                $css[] = api_get_path(WEB_CSS_PATH) . $this->themeDir . 'custompage.css';
+                $css[] = api_get_path(WEB_CSS_PATH).$this->themeDir.'custompage.css';
+            } else {
+                $css[] = api_get_path(WEB_CSS_PATH).'custompage.css';
             }
         }
 

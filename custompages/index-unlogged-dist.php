@@ -5,11 +5,11 @@
  *
  * @package chamilo.custompages
  */
-require_once api_get_path(SYS_PATH).'main/inc/global.inc.php';
-require_once __DIR__.'/language.php';
+require_once api_get_path(SYS_PATH) . 'main/inc/global.inc.php';
+require_once __DIR__ . '/language.php';
 
 
-$template = new Template(get_lang('SignIn'),false,false,false,false,true,true);
+$template = new Template(get_lang('SignIn'), false, false, false, false, true, true);
 
 /**
  * Homemade micro-controller.
@@ -45,13 +45,12 @@ $flash = Display::getFlashToString();
 Display::cleanFlashMessages();
 
 if (api_get_setting('allow_registration') === 'true') {
-    $urlRegister = api_get_path(WEB_CODE_PATH).'auth/inscription.php?language='.api_get_interface_language();
+    $urlRegister = api_get_path(WEB_CODE_PATH) . 'auth/inscription.php?language=' . api_get_interface_language();
     $template->assign('url_register', $urlRegister);
 }
-$urlLostPassword = api_get_path(WEB_CODE_PATH).'auth/lostPassword.php?language='.api_get_interface_language();
+$urlLostPassword = api_get_path(WEB_CODE_PATH) . 'auth/lostPassword.php?language=' . api_get_interface_language();
 $template->assign('url_lost_password', $urlLostPassword);
 $template->assign('mgs_flash', $flash);
-$template->assign('section_name', $this_section);
 
 $layout = $template->get_template('custompage/login.tpl');
 $content = $template->fetch($layout);

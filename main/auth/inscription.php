@@ -629,7 +629,7 @@ if ($allowDoubleValidation && $showTerms == false) {
         $user_already_registered_show_terms ||
         $showTerms
     ) {
-        $form->addButton('register',get_lang('RegisterUser'),null,'primary','btn-block');
+        $form->addButton('register', get_lang('RegisterUser'), null, 'primary', 'btn-block');
         $formContainsSendButton = true;
     }
 }

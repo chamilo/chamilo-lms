@@ -1920,6 +1920,17 @@ class ExtraField extends Model
     }
 
     /**
+     * Gets the set of values of an extra_field searching for the variable name
+     *
+     * Example:
+     * <code>
+     * <?php
+     * $extraField = new ExtraField('lp_item');
+     * $extraFieldArray =  $extraField->get_handler_field_info_by_field_variable('authorlpitem');
+     * echo "<pre>".var_export($extraFieldArray,true)."</pre>";
+     * ?>
+     * </code>
+     *
      * @param string $variable
      *
      * @return array|bool

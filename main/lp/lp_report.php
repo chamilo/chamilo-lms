@@ -39,15 +39,51 @@ $url = api_get_path(WEB_CODE_PATH).
 $em = Database::getManager();
 // Check LP subscribers
 if ('1' === $lp->getSubscribeUsers()) {
+    $course = api_get_course_entity($courseId);
+    $session = api_get_session_entity($sessionId);
+
     /** @var ItemPropertyRepository $itemRepo */
     $itemRepo = $em->getRepository('ChamiloCourseBundle:CItemProperty');
     $subscribedUsersInLp = $itemRepo->getUsersSubscribedToItem(
         'learnpath',
         $lpId,
-        api_get_course_entity($courseId),
-        api_get_session_entity($sessionId)
+        $course,
+        $session
     );
+
+    // Subscribed groups to a LP
+    $subscribedGroupsInLp = $itemRepo->getGroupsSubscribedToItem(
+        'learnpath',
+        $lpId,
+        $course,
+        $session
+    );
+
+    $groups = [];
+    /** @var CItemProperty $itemProperty */
+    if (!empty($subscribedGroupsInLp)) {
+        foreach ($subscribedGroupsInLp as $itemProperty) {
+            if (!empty($itemProperty)) {
+                $getGroup = $itemProperty->getGroup();
+                if (!empty($getGroup)) {
+                    $groups[] = $itemProperty->getGroup()->getId();
+                }
+            }
+        }
+    }
+
     $users = [];
+    if (!empty($groups)) {
+        foreach ($groups as $groupId) {
+            $students = GroupManager::getStudents($groupId);
+            if (!empty($students)) {
+                foreach ($students as $studentInfo) {
+                    $users[]['user_id'] = $studentInfo['user_id'];
+                }
+            }
+       }
+    }
+
     if (!empty($subscribedUsersInLp)) {
         foreach ($subscribedUsersInLp as $itemProperty) {
             $user = $itemProperty->getToUser();
@@ -115,9 +151,12 @@ if (!empty($groups)) {
         'group_filter',
         get_lang('Groups'),
         array_column($groups, 'name', 'iid'),
-        ['placeholder' => get_lang('All')]
+        [
+            'id' => 'group_filter',
+            'placeholder' => get_lang('All')
+        ]
     );
-    $form->addButtonSearch(get_lang('Search'));
+    //$form->addButtonSearch(get_lang('Search'));
 
     if (!empty($groupFilter)) {
         $users = GroupManager::getStudents($groupFilter, true);
@@ -174,8 +213,13 @@ if ($reset) {
 $userList = [];
 $showEmail = api_get_setting('show_email_addresses');
 if (!empty($users)) {
+    $added = [];
     foreach ($users as $user) {
         $userId = $user['user_id'];
+        if (in_array($userId, $added)) {
+            continue;
+        }
+
         $userInfo = api_get_user_info($userId);
         $lpTime = Tracking::get_time_spent_in_lp(
             $userId,
@@ -230,6 +274,7 @@ if (!empty($users)) {
             'lp_progress' => "$lpProgress%",
             'lp_last_connection' => $lpLastConnection,
         ];
+        $added[] = $userId;
     }
 } else {
     Display::addFlash(Display::return_message(get_lang('NoUserAdded'), 'warning'));
@@ -271,7 +316,7 @@ if (!empty($users)) {
         ),
         $url.'&reset=group',
         [
-            'onclick' => 'javascript: if (!confirm(\''.addslashes(get_lang('AreYouSureToDeleteResults').': '.$userListToString).'\')) return false;',
+            'onclick' => 'javascript: if(!confirm(\''.addslashes(get_lang('AreYouSureToDeleteResults').': '.$userListToString).'\')) return false;',
         ]
     );
 }

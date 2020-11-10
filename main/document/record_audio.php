@@ -43,10 +43,10 @@ if (empty($document_data)) {
 
 //make some vars
 $wamidir = $dir;
-if ($wamidir === "/") {
+if ($wamidir === '/') {
     $wamidir = '';
 }
-$wamiurlplay = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document'.$wamidir."/";
+$wamiurlplay = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document'.$wamidir.'/';
 $groupId = api_get_group_id();
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
@@ -55,7 +55,7 @@ if (strstr($dir, '..')) {
     $dir = '/';
 }
 
-if ($dir[0] == '.') {
+if ($dir[0] === '.') {
     $dir = substr($dir, 1);
 }
 
@@ -63,7 +63,7 @@ if ($dir[0] !== '/') {
     $dir = '/'.$dir;
 }
 
-if ($dir[strlen($dir) - 1] != '/') {
+if ($dir[strlen($dir) - 1] !== '/') {
     $dir .= '/';
 }
 

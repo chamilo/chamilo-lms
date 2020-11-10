@@ -33,8 +33,8 @@ if (empty($lp)) {
     api_not_allowed(true);
 }
 
-$url = api_get_path(WEB_CODE_PATH).
-    'lp/lp_controller.php?'.api_get_cidreq().'&action=report&lp_id='.$lpId.'&group_filter='.$groupFilter;
+$urlBase = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&action=report&lp_id='.$lpId;
+$url = $urlBase.'&group_filter='.$groupFilter;
 
 $em = Database::getManager();
 // Check LP subscribers
@@ -330,6 +330,8 @@ $template->assign('show_email', 'true' === $showEmail);
 $template->assign('export', (int) $export);
 $template->assign('group_form', $groupFilterForm);
 $template->assign('url', $url);
+$template->assign('url_base', $urlBase);
+
 $layout = $template->get_template('learnpath/report.tpl');
 $template->assign('header', $lpInfo['name']);
 $template->assign('actions', Display::toolbarAction('lp_actions', [$actions]));

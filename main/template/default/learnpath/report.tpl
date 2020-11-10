@@ -4,7 +4,7 @@
 $(function(){
     $('#group_filter').on('change', function() {
         var groupId  = $(this).val();
-        window.location.href = "{{ url }}&group_filter=" + groupId;
+        window.location.href = "{{ url_base }}&group_filter=" + groupId;
     });
 });
 </script>

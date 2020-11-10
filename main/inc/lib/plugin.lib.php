@@ -230,6 +230,7 @@ class AppPlugin
             'date',
             'dictionary',
             'embedregistry',
+            'exercise_signature',
             'ext_auth_chamilo_logout_button_behaviour',
             'follow_buttons',
             'formLogin_hide_unhide',

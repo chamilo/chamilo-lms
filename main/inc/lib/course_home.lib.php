@@ -497,11 +497,8 @@ class CourseHome
      *
      * @return array
      */
-    public static function get_tools_category(
-        $course_tool_category,
-        $courseId = 0,
-        $sessionId = 0
-    ) {
+    public static function get_tools_category($course_tool_category, $courseId = 0, $sessionId = 0)
+    {
         $course_tool_table = Database::get_course_table(TABLE_TOOL_LIST);
         $is_platform_admin = api_is_platform_admin();
         $all_tools_list = [];
@@ -1027,7 +1024,7 @@ class CourseHome
                 if ($tool['image'] === 'file_html.png' || $tool['image'] === 'file_html_na.png') {
                     $tool['link'] = $tool['link'];
                 } else {
-                    $tool['link'] = $tool['link'].$qm_or_amp.api_get_cidreq();
+                    $tool['link'] = $tool['link'].$qm_or_amp.api_get_cidreq(true, false).'&gidReq=0';
                 }
 
                 $toolIid = isset($tool['iid']) ? $tool['iid'] : null;

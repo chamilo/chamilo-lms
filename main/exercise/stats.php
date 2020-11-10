@@ -305,6 +305,21 @@ foreach ($data as $row_table) {
 }
 $content .= $table->toHtml();
 
+$exportPdf = isset($_GET['export_pdf']) && !empty($_GET['export_pdf']) ? (int) $_GET['export_pdf'] : 0;
+if ($exportPdf) {
+    $fileName = get_lang('Report').'_'.api_get_course_id().'_'.api_get_local_time();
+    $params = [
+        'filename' => $fileName,
+        'pdf_title' => "$fileName",
+        'pdf_description' => get_lang('Report'),
+        'format' => 'A4',
+        'orientation' => 'P',
+    ];
+    
+    Export::export_html_to_pdf($content, $params);
+    exit;
+}
+
 $interbreadcrumb[] = [
     "url" => "exercise.php?".api_get_cidreq(),
     "name" => get_lang('Exercises'),
@@ -323,6 +338,10 @@ $actions = '<a href="exercise_report.php?exerciseId='.$exerciseId.'&'.api_get_ci
         ICON_SIZE_MEDIUM
     )
     .'</a>';
+$actions .= Display::url(
+    Display::return_icon('pdf.png', get_lang('ExportToPDF'), [], ICON_SIZE_MEDIUM),
+    'stats.php?exerciseId='.$exerciseId.'&export_pdf=1&'.api_get_cidreq()
+);
 $actions = Display::div($actions, ['class' => 'actions']);
 $content = $actions.$content;
 $tpl->assign('content', $content);

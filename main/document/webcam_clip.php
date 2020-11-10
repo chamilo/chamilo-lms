@@ -84,6 +84,10 @@ if (!is_dir($filepath)) {
 
 if (!empty($groupId)) {
     $interbreadcrumb[] = [
+        'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
+        'name' => get_lang('Groups'),
+    ];
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
         'name' => get_lang('GroupSpace').' '.$groupProperties['name'],
     ];

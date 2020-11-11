@@ -107,7 +107,6 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
         $this->SavePrice();
         $this->SaveAuthorLPItem();
         $this->SaveAuthorLp();
-
     }
 
     /**
@@ -288,7 +287,7 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
             foreach ($items as $item) {
                 if (isset($item['option_value']) == $options[0] || isset($item['option_value']) == $options[1]) {
                     unset($options[$item['option_value']]);
-                    $order += 1;
+                    $order++;
                 }
             }
 
@@ -299,9 +298,9 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
                     'field_id' => $authorLpId,
                     'option_value' => $order,
                     'display_text' => $extraFieldOptionValue,
-                    'option_order' => $order
+                    'option_order' => $order,
                 ]);
-                $order += 1;
+                $order++;
             }
         }
     }

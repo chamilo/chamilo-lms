@@ -504,14 +504,13 @@ if ($debug > 0) {
 
 switch ($action) {
     case 'author_view':
-        /*** Authors***/
+        /* Authors*/
         $teachers = [];
         $field = new ExtraField('user');
         $authorLp = $field->get_handler_field_info_by_field_variable('AuthorLP');
 
-        $idExtraField = (int)(isset($authorLp['id']) ? $authorLp['id'] : 0);
+        $idExtraField = (int) (isset($authorLp['id']) ? $authorLp['id'] : 0);
         if ($idExtraField != 0) {
-
             $extraFieldValueUser = new ExtraFieldValue('user');
             $arrayExtraFieldValueUser = $extraFieldValueUser->get_item_id_from_field_variable_and_field_value(
                 $authorLp['variable'],
@@ -525,7 +524,7 @@ switch ($action) {
                 $teachers[] = $teacher;
             }
         }
-        /*** Authors***/
+        /* Authors*/
         $_SESSION['oLP']->authorsAvaible = $teachers;
         Session::write('oLP', $_SESSION['oLP']);
         if (!$is_allowed_to_edit) {

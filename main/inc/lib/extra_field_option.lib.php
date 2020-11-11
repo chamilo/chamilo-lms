@@ -120,7 +120,7 @@ class ExtraFieldOption extends Model
     }
 
     /**
-     * Save option
+     * Save option.
      *
      * Example:
      * <code>

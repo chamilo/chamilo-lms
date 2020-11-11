@@ -1920,7 +1920,7 @@ class ExtraField extends Model
     }
 
     /**
-     * Gets the set of values of an extra_field searching for the variable name
+     * Gets the set of values of an extra_field searching for the variable name.
      *
      * Example:
      * <code>

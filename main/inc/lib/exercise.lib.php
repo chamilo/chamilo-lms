@@ -2917,7 +2917,7 @@ HOTSPOT;
         }
 
         if ($show_percentage) {
-            $percentageSign = '%';
+            $percentageSign = ' %';
             if ($hidePercentageSign) {
                 $percentageSign = '';
             }
@@ -4634,8 +4634,7 @@ EOT;
         $exerciseResult = null;
         $exerciseResultCoordinates = null;
         $delineationResults = null;
-
-        if (in_array(
+        if (true === $save_user_result && in_array(
             $objExercise->getFeedbackType(),
             [EXERCISE_FEEDBACK_TYPE_DIRECT, EXERCISE_FEEDBACK_TYPE_POPUP]
         )) {
@@ -5039,6 +5038,7 @@ EOT;
             'all_answers_html' => $all,
             'total_score' => $total_score,
             'total_weight' => $total_weight,
+            'count_pending_questions' => $countPendingQuestions,
         ];
     }
 
@@ -5869,5 +5869,231 @@ EOT;
         );
 
         return $content;
+    }
+
+    public static function sendNotification($currentUserId, $objExercise, $exercise_stat_info, $courseInfo, $attemptCountToSend, $stats)
+    {
+        $notifications = api_get_configuration_value('exercise_finished_notification_settings');
+        if (empty($notifications)) {
+            return false;
+        }
+
+        $exerciseExtraFieldValue = new ExtraFieldValue('exercise');
+        //$attemptCountToSend = $attempt_count++;
+        $wrongAnswersCount = $stats['failed_answers_count'];
+        $exercisePassed = $stats['exercise_passed'];
+        $countPendingQuestions = $stats['count_pending_questions'];
+
+        // If there are no pending questions (Open questions).
+        if (0 === $countPendingQuestions) {
+            //$totalScore = self::show_score($total_score, $max_score, false, true);
+            $subject = sprintf(get_lang('WrongAttemptXInCourseX'), $attemptCountToSend, $courseInfo['title']);
+            if ($exercisePassed) {
+                $subject = sprintf(get_lang('ExerciseValidationInCourseX'), $courseInfo['title']);
+            }
+
+            if ($exercisePassed) {
+                $extraFieldData = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
+                    $objExercise->iId,
+                    'MailSuccess'
+                );
+            } else {
+                $extraFieldData = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
+                    $objExercise->iId,
+                    'MailAttempt'.$attemptCountToSend
+                );
+            }
+
+            if ($extraFieldData && isset($extraFieldData['value'])) {
+                $content = $extraFieldData['value'];
+                $content = self::parseContent($content, $stats, $objExercise, $exercise_stat_info);
+                if (false === $exercisePassed) {
+                    if (0 !== $wrongAnswersCount) {
+                        $content .= $stats['failed_answers_html'];
+                    }
+                }
+
+                // Send to student
+                MessageManager::send_message($currentUserId, $subject, $content);
+            }
+
+            // Subject for notifications
+            /*$subject = sprintf(get_lang('WrongAttemptXInCourseX'), $attemptCountToSend, $courseInfo['title']);
+            if ($exercisePassed) {
+                $subject = sprintf(get_lang('ExerciseValidationInCourseX'), $courseInfo['title']);
+            }*/
+            $extraFieldData = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
+                $objExercise->iId,
+                'notifications'
+            );
+
+            $exerciseNotification = '';
+            if ($extraFieldData && isset($extraFieldData['value'])) {
+                $exerciseNotification = $extraFieldData['value'];
+            }
+
+            if (!empty($exerciseNotification) && !empty($notifications)) {
+                foreach ($notifications as $name => $notificationList) {
+                    if ($exerciseNotification !== $name) {
+                        continue;
+                    }
+                    foreach ($notificationList as $attemptData) {
+                        $email = isset($attemptData['email']) ? $attemptData['email'] : '';
+                        $emailList = explode(',', $email);
+                        if (empty($emailList)) {
+                            continue;
+                        }
+                        $attempts = $attemptData['attempts'];
+                        foreach ($attempts as $attempt) {
+                            $sendMessage = false;
+                            if (isset($attempt['attempt']) && $attemptCountToSend !== (int) $attempt['attempt']) {
+                                continue;
+                            }
+
+                            if (!isset($attempt['status'])) {
+                                continue;
+                            }
+
+                            switch ($attempt['status']) {
+                                case 'passed':
+                                    if ($exercisePassed) {
+                                        $sendMessage = true;
+                                    }
+                                    break;
+                                case 'failed':
+                                    if (false === $exercisePassed) {
+                                        $sendMessage = true;
+                                    }
+                                    break;
+                                case 'all':
+                                    $sendMessage = true;
+                                    break;
+                            }
+
+                            if ($sendMessage) {
+                                $attachments = [];
+                                if (isset($attempt['add_pdf']) && $attempt['add_pdf']) {
+                                    // Get pdf content
+                                    $pdfExtraData = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
+                                        $objExercise->iId,
+                                        $attempt['add_pdf']
+                                    );
+
+                                    if ($pdfExtraData && isset($pdfExtraData['value'])) {
+                                        $pdfContent = self::parseContent(
+                                            $pdfExtraData['value'],
+                                            $stats,
+                                            $objExercise,
+                                            $exercise_stat_info
+                                        );
+
+                                        @$pdf = new PDF();
+                                        $filename = get_lang('Exercise');
+                                        $cssFile = api_get_path(SYS_CSS_PATH).'themes/chamilo/default.css';
+                                        $pdfPath = @$pdf->content_to_pdf(
+                                            "<html><body>$pdfContent</body></html>",
+                                            file_get_contents($cssFile),
+                                            $filename,
+                                            api_get_course_id(),
+                                            'F',
+                                            false,
+                                            null,
+                                            false,
+                                            true
+                                        );
+                                        $attachments[] = ['filename' => $filename, 'path' => $pdfPath];
+                                    }
+                                }
+
+                                $content = isset($attempt['content_default']) ? $attempt['content_default'] : '';
+                                if (isset($attempt['content'])) {
+                                    $extraFieldData = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
+                                        $objExercise->iId,
+                                        $attempt['content']
+                                    );
+                                    if ($extraFieldData && isset($extraFieldData['value']) && !empty($extraFieldData['value'])) {
+                                        $content = $extraFieldData['value'];
+                                    }
+                                }
+
+                                if (!empty($content)) {
+                                    $content = self::parseContent(
+                                        $content,
+                                        $stats,
+                                        $objExercise,
+                                        $exercise_stat_info
+                                    );
+                                    foreach ($emailList as $email) {
+                                        if (empty($email)) {
+                                            continue;
+                                        }
+                                        api_mail_html(
+                                            null,
+                                            $email,
+                                            $subject,
+                                            $content,
+                                            null,
+                                            null,
+                                            [],
+                                            $attachments
+                                        );
+                                    }
+                                }
+
+                                if (isset($attempt['post_actions'])) {
+                                    foreach ($attempt['post_actions'] as $action => $params) {
+                                        switch ($action) {
+                                            case 'subscribe_student_to_courses':
+                                                foreach ($params as $code) {
+                                                    CourseManager::subscribeUser($currentUserId, $code);
+                                                    break;
+                                                }
+                                                break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Delete an exercise attempt.
+     *
+     * Log the exe_id deleted with the exe_user_id related.
+     *
+     * @param int $exeId
+     */
+    public static function deleteExerciseAttempt($exeId)
+    {
+        $exeId = (int) $exeId;
+
+        $trackExerciseInfo = ExerciseLib::get_exercise_track_exercise_info($exeId);
+
+        if (empty($trackExerciseInfo)) {
+            return;
+        }
+
+        $tblTrackExercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $tblTrackAttempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+
+        Database::query("DELETE FROM $tblTrackExercises WHERE exe_id = $exeId");
+        Database::query("DELETE FROM $tblTrackAttempt WHERE exe_id = $exeId");
+
+        Event::addEvent(
+            LOG_EXERCISE_ATTEMPT_DELETE,
+            LOG_EXERCISE_ATTEMPT,
+            $exeId,
+            api_get_utc_datetime()
+        );
+        Event::addEvent(
+            LOG_EXERCISE_ATTEMPT_DELETE,
+            LOG_EXERCISE_AND_USER_ID,
+            $exeId.'-'.$trackExerciseInfo['exe_user_id'],
+            api_get_utc_datetime()
+        );
     }
 }

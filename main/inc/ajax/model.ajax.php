@@ -1398,10 +1398,10 @@ switch ($action) {
         break;
     case 'get_work_user_list':
         $plagiarismColumns = [];
-        if (api_get_configuration_value('allow_compilatio_tool')) {
+        if (api_get_configuration_value('allow_compilatio_tool') && api_is_allowed_to_edit()) {
             $plagiarismColumns = ['compilatio'];
         }
-        if (isset($_GET['type']) && $_GET['type'] == 'simple') {
+        if (isset($_GET['type']) && $_GET['type'] === 'simple') {
             $columns = [
                 'type', 'title', 'qualification', 'sent_date', 'qualificator_id',
             ];

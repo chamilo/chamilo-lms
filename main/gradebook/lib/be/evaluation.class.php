@@ -117,6 +117,11 @@ class Evaluation implements GradebookItem
         $this->sessionId = (int) $sessionId;
     }
 
+    public function set_session_id($sessionId)
+    {
+        $this->setSessionId($sessionId);
+    }
+
     public function get_date()
     {
         return $this->created_at;

@@ -8235,8 +8235,8 @@ function api_set_settings_and_plugins()
 function api_set_more_memory_and_time_limits()
 {
     if (function_exists('ini_set')) {
-        api_set_memory_limit('256M');
-        ini_set('max_execution_time', 1800);
+        api_set_memory_limit('2048M');
+        ini_set('max_execution_time', 3600);
     }
 }
 

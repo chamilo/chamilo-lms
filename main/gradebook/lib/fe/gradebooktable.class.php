@@ -98,7 +98,7 @@ class GradebookTable extends SortableTable
             }
         }
 
-        $this->set_header($column++, get_lang('Type'), '', 'width="35px"');
+        $this->set_header($column++, get_lang('Type'), '', 'width="20px"');
         $this->set_header($column++, get_lang('Name'), false);
         if (false == $this->exportToPdf) {
             $this->set_header($column++, get_lang('Description'), false);
@@ -125,13 +125,13 @@ class GradebookTable extends SortableTable
 
         if (empty($model)) {
             if (in_array(1, $this->loadStats)) {
-                $this->set_header($column++, get_lang('Ranking'), false);
+                $this->set_header($column++, get_lang('Ranking'), false, 'width="50px"');
             }
             if (in_array(2, $this->loadStats)) {
-                $this->set_header($column++, get_lang('BestScore'), false);
+                $this->set_header($column++, get_lang('BestScore'), false, 'width="140px"');
             }
             if (in_array(3, $this->loadStats)) {
-                $this->set_header($column++, get_lang('Average'), false);
+                $this->set_header($column++, get_lang('Average'), false, 'width="140px"');
             }
         }
 

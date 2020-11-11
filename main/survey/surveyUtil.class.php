@@ -3902,20 +3902,23 @@ class SurveyUtil
             $data = '';
             foreach ($chartData as $chartDataElement) {
                 $data .= '{"';
+                $option = str_replace(["\n", "\r"], '', $chartDataElement['option']);
+                $serieValue = isset($chartDataElement['serie']) ? $chartDataElement['serie'] : null;
+
                 if (!$hasSerie) {
-                    $data .= get_lang("Option").'":"'.$chartDataElement['option'].'", "';
-                    array_push($order, $chartDataElement['option']);
+                    $data .= get_lang("Option").'":"'.$option.'", "';
+                    array_push($order, $option);
                 } else {
-                    if (!is_array($chartDataElement['serie'])) {
+                    if (!is_array($serieValue)) {
                         $data .=
-                            get_lang("Option").'":"'.$chartDataElement['serie'].'", "'.
-                            get_lang("Score").'":"'.$chartDataElement['option'].'", "';
-                        array_push($serie, $chartDataElement['serie']);
+                            get_lang("Option").'":"'.$serieValue.'", "'.
+                            get_lang("Score").'":"'.$option.'", "';
+                        array_push($serie, $serieValue);
                     } else {
                         $data .=
-                            get_lang("Serie").'":"'.$chartDataElement['serie'][0].'", "'.
-                            get_lang("Option").'":"'.$chartDataElement['serie'][1].'", "'.
-                            get_lang("Score").'":"'.$chartDataElement['option'].'", "';
+                            get_lang("Serie").'":"'.$serieValue[0].'", "'.
+                            get_lang("Option").'":"'.$serieValue[1].'", "'.
+                            get_lang("Score").'":"'.$option.'", "';
                     }
                 }
                 $data .= get_lang("Votes").'":"'.$chartDataElement['votes'].'"},';

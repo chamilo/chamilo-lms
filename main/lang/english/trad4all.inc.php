@@ -8679,4 +8679,11 @@ $SubscribeClassesToLpCategory = "Subscribe classes to category";
 $ExportResponseReport = "Export response report";
 $ResponseReport = "Response report";
 $ResultsOnlyAvailableOnline = "Results only available online";
+$QuestionStats = "Question stats";
+$WrongAnswer = "Wrong answer";
+$WrongAttemptXInCourseX = "Failure on attempt %s at %s";
+$ExerciseValidationInCourseX = "Validation of exercise at %s";
+$BlockCategoryExplanation = "You finished the questions related to this question category, it's your last chance to go back and revise those questions. Once you click on follow exercise you will go to the next question category and will not be able to go back to this part of the test.";
+$RemainingTimeToFinishExercise = "Remaining time to finish exercise";
+$RemainingTimeToFinishQuestion = "Remaining time to finish question";
 ?>

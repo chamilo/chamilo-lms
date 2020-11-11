@@ -845,7 +845,7 @@ foreach ($questionList as $questionId) {
     $contents = ob_get_clean();
     $question_content = '<div class="question_row">';
     if ($show_results && $objQuestionTmp) {
-        $objQuestionTmp->export = $action == 'export';
+        $objQuestionTmp->export = $action === 'export';
         // Shows question title an description
         $question_content .= $objQuestionTmp->return_header(
             $objExercise,
@@ -913,10 +913,7 @@ if (!empty($category_list) && ($show_results || $show_only_total_score || $showT
         'score' => $myTotalScoreTemp,
         'total' => $totalWeighting,
     ];
-    echo TestCategory::get_stats_table_by_attempt(
-        $objExercise->id,
-        $category_list
-    );
+    echo TestCategory::get_stats_table_by_attempt($objExercise->id, $category_list);
 }
 
 if (in_array(
@@ -1051,7 +1048,6 @@ if ($isFeedbackAllowed && $origin !== 'learnpath' && $origin !== 'student_progre
         $url
     );
     $emailForm->setDefaults(['notification_content' => $content]);
-
     $emailForm->addButtonSend(
         get_lang('CorrectTest'),
         'submit',

@@ -888,7 +888,11 @@ switch ($action) {
                 if (!empty($keyword)) {
                     $options['where']['AND name like %?% '] = $keyword;
                 }
-                $count = $obj->getUserGroupNotInCourse($options, $groupFilter, true);
+                $count = $obj->getUserGroupNotInCourse(
+                    $options,
+                    $groupFilter,
+                    true
+                );
                 break;
             case 'registered':
                 $options['where'] = [' usergroup.course_id = ? ' => $course_id];
@@ -2391,7 +2395,7 @@ switch ($action) {
                     $course_id,
                     $_SESSION['id_session']
                 )) {
-                    $url = 'class.php?action=remove_class_from_course&id='.$group['id'].'&'.api_get_cidreq();
+                    $url = 'class.php?action=remove_class_from_course&id='.$group['id'].'&'.api_get_cidreq().'&id_session='.$_SESSION['id_session'];
                     $icon = Display::return_icon('delete.png', get_lang('Remove'));
                 } else {
                     $url = 'class.php?action=add_class_to_course&id='.$group['id'].'&'.api_get_cidreq().'&type=not_registered';

@@ -81,12 +81,20 @@ if (api_is_allowed_to_edit()) {
     switch ($action) {
         case 'add_class_to_course':
             $id = $_GET['id'];
-            if (!empty($id)) {
+            $idSession = (int)isset($_GET['id_session']) ? $_GET['id_session'] : 0;
+            if (!empty($id) and $idSession == 0) {
+                /* To suscribe Groups*/
                 $usergroup->subscribe_courses_to_usergroup(
                     $id,
                     [api_get_course_int_id()],
                     false
                 );
+                Display::addFlash(Display::return_message(get_lang('Added')));
+                header('Location: class.php?'.api_get_cidreq().'&type=registered');
+                exit;
+            } elseif ($idSession != 0) {
+                /* To suscribe session*/
+                $usergroup->subscribe_sessions_to_usergroup($id, [$idSession]);
                 Display::addFlash(Display::return_message(get_lang('Added')));
                 header('Location: class.php?'.api_get_cidreq().'&type=registered');
                 exit;
@@ -110,7 +118,7 @@ if (api_is_allowed_to_edit()) {
                     }
                 }
                 Database::delete(
-                    $this->usergroup_rel_session_table,
+                    $usergroup->usergroup_rel_session_table,
                     ['usergroup_id = ? AND session_id = ?' => [$id, $idSession]]
                 );
                 /* Remove class */
@@ -195,10 +203,8 @@ $(function() {
 echo $actions;
 echo UserManager::getUserSubscriptionTab(4);
 echo Display::return_message(get_lang('UserClassExplanation'));
-echo "*******-";
 
 $usergroup->display_teacher_view();
-echo "*******-";
 
 Display::display_footer();
 

@@ -122,7 +122,6 @@ if (api_is_allowed_to_edit()) {
                     ['usergroup_id = ? AND session_id = ?' => [$id, $idSession]]
                 );
                 /* Remove class */
-
             }
             break;
     }

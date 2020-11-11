@@ -1230,11 +1230,13 @@ class bbb
 
         foreach ($roomList as $roomDB) {
             $roomId = $roomDB['id'];
-            Database::update(
-                $roomTable,
-                ['out_at' => api_get_utc_datetime(), 'close' => BBBPlugin::ROOM_CLOSE],
-                ['id = ? ' => $roomId]
-            );
+            if (!empty($roomId)) {
+                Database::update(
+                    $roomTable,
+                    ['out_at' => api_get_utc_datetime(), 'close' => BBBPlugin::ROOM_CLOSE],
+                    ['id = ? ' => $roomId]
+                );
+            }
         }
 
         // Close all meeting rooms with meeting ID

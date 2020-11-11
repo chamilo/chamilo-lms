@@ -2917,7 +2917,7 @@ HOTSPOT;
         }
 
         if ($show_percentage) {
-            $percentageSign = '%';
+            $percentageSign = ' %';
             if ($hidePercentageSign) {
                 $percentageSign = '';
             }
@@ -6058,5 +6058,42 @@ EOT;
                 }
             }
         }
+    }
+
+    /**
+     * Delete an exercise attempt.
+     *
+     * Log the exe_id deleted with the exe_user_id related.
+     *
+     * @param int $exeId
+     */
+    public static function deleteExerciseAttempt($exeId)
+    {
+        $exeId = (int) $exeId;
+
+        $trackExerciseInfo = ExerciseLib::get_exercise_track_exercise_info($exeId);
+
+        if (empty($trackExerciseInfo)) {
+            return;
+        }
+
+        $tblTrackExercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $tblTrackAttempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+
+        Database::query("DELETE FROM $tblTrackExercises WHERE exe_id = $exeId");
+        Database::query("DELETE FROM $tblTrackAttempt WHERE exe_id = $exeId");
+
+        Event::addEvent(
+            LOG_EXERCISE_ATTEMPT_DELETE,
+            LOG_EXERCISE_ATTEMPT,
+            $exeId,
+            api_get_utc_datetime()
+        );
+        Event::addEvent(
+            LOG_EXERCISE_ATTEMPT_DELETE,
+            LOG_EXERCISE_AND_USER_ID,
+            $exeId.'-'.$trackExerciseInfo['exe_user_id'],
+            api_get_utc_datetime()
+        );
     }
 }

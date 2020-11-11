@@ -1,5 +1,14 @@
 {{ group_form }}
 
+<script>
+$(function(){
+    $('#group_filter').on('change', function() {
+        var groupId  = $(this).val();
+        window.location.href = "{{ url_base }}&group_filter=" + groupId;
+    });
+});
+</script>
+
 <div class="table-responsive">
     <table class="table table-hover table-striped table-bordered">
         <thead>

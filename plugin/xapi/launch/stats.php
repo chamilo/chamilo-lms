@@ -33,23 +33,10 @@ $plugin = XApiPlugin::create();
 $table = new SortableTable(
     'tbl_xapi',
     function () use ($course, $session) {
-        if ($session) {
-            return CourseManager::get_student_list_from_course_code(
-                $course->getCode(),
-                true,
-                $session->getId(),
-                null,
-                null,
-                true,
-                0,
-                true
-            );
-        }
-
         return CourseManager::get_student_list_from_course_code(
             $course->getCode(),
-            false,
-            0,
+            !!$session,
+            $session ? $session->getId() : 0,
             null,
             null,
             true,
@@ -58,33 +45,18 @@ $table = new SortableTable(
         );
     },
     function ($start, $limit, $orderBy, $orderDir) use ($course, $session) {
-        if ($session) {
-            $students = CourseManager::get_student_list_from_course_code(
-                $course->getCode(),
-                true,
-                $session->getId(),
-                null,
-                null,
-                true,
-                0,
-                false,
-                $start,
-                $limit
-            );
-        } else {
-            $students = CourseManager::get_student_list_from_course_code(
-                $course->getCode(),
-                false,
-                0,
-                null,
-                null,
-                true,
-                0,
-                false,
-                $start,
-                $limit
-            );
-        }
+        $students = CourseManager::get_student_list_from_course_code(
+            $course->getCode(),
+            !!$session,
+            $session ? $session->getId() : 0,
+            null,
+            null,
+            true,
+            0,
+            false,
+            $start,
+            $limit
+        );
 
         return array_map(
             function (array $studentInfo) {

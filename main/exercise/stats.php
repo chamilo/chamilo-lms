@@ -310,12 +310,11 @@ if ($exportPdf) {
     $fileName = get_lang('Report').'_'.api_get_course_id().'_'.api_get_local_time();
     $params = [
         'filename' => $fileName,
-        'pdf_title' => "$fileName",
         'pdf_description' => get_lang('Report'),
         'format' => 'A4',
         'orientation' => 'P',
     ];
-    
+
     Export::export_html_to_pdf($content, $params);
     exit;
 }

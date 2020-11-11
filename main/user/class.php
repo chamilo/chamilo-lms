@@ -94,12 +94,27 @@ if (api_is_allowed_to_edit()) {
             break;
         case 'remove_class_from_course':
             $id = $_GET['id'];
+            $idSession = (int) isset($_GET['id_session'])?$_GET['id_session']:0;
             if (!empty($id)) {
                 $usergroup->unsubscribe_courses_from_usergroup(
                     $id,
-                    [api_get_course_int_id()]
+                    [api_get_course_int_id()],
+                    $idSession
                 );
                 Display::addFlash(Display::return_message(get_lang('Deleted')));
+                /* Remove class */
+                $user_list = $usergroup->get_users_by_usergroup($id);
+                if (!empty($user_list)) {
+                    foreach ($user_list as $user_id) {
+                        SessionManager::unsubscribe_user_from_session($id, $user_id);
+                    }
+                }
+                Database::delete(
+                    $this->usergroup_rel_session_table,
+                    ['usergroup_id = ? AND session_id = ?' => [$id, $idSession]]
+                );
+                /* Remove class */
+
             }
             break;
     }
@@ -180,5 +195,10 @@ $(function() {
 echo $actions;
 echo UserManager::getUserSubscriptionTab(4);
 echo Display::return_message(get_lang('UserClassExplanation'));
+echo "*******-";
+
 $usergroup->display_teacher_view();
+echo "*******-";
+
 Display::display_footer();
+

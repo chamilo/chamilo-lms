@@ -880,6 +880,7 @@ switch ($action) {
         $course_id = api_get_course_int_id();
         $options = [];
         $options['course_id'] = $course_id;
+        $options['session_id'] = $_SESSION['id_session'];
 
         switch ($type) {
             case 'not_registered':
@@ -894,6 +895,7 @@ switch ($action) {
                 $count = $obj->getUserGroupInCourse(
                     $options,
                     $groupFilter,
+                    true,
                     true
                 );
                 break;
@@ -2352,12 +2354,19 @@ switch ($action) {
         $columns = ['name', 'users', 'status', 'group_type', 'actions'];
         $options['order'] = "name $sord";
         $options['limit'] = "$start , $limit";
+        $options['session_id'] = $_SESSION['id_session'];
         switch ($type) {
             case 'not_registered':
-                $result = $obj->getUserGroupNotInCourse($options, $groupFilter);
+
+            $result = $obj->getUserGroupNotInCourse($options, $groupFilter);
                 break;
             case 'registered':
-                $result = $obj->getUserGroupInCourse($options, $groupFilter);
+                $result = $obj->getUserGroupInCourse(
+                    $options,
+                    $groupFilter,
+                    false,
+                    true
+                );
                 break;
         }
 
@@ -2377,7 +2386,11 @@ switch ($action) {
                     );
                 }
 
-                if ($obj->usergroup_was_added_in_course($group['id'], $course_id)) {
+                if ($obj->usergroup_was_added_in_course(
+                    $group['id'],
+                    $course_id,
+                    $_SESSION['id_session']
+                )) {
                     $url = 'class.php?action=remove_class_from_course&id='.$group['id'].'&'.api_get_cidreq();
                     $icon = Display::return_icon('delete.png', get_lang('Remove'));
                 } else {

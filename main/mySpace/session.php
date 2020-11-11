@@ -281,7 +281,7 @@ switch ($action) {
         }
 
         // Creating a ZIP file.
-        $tempZipFile = api_get_path(SYS_ARCHIVE_PATH).api_get_unique_id().'.zip';
+        $tempZipFile = api_get_path(SYS_ARCHIVE_PATH).uniqid('report_session_'.$sessionToExport, true).'.zip';
 
         $zip = new PclZip($tempZipFile);
         foreach ($pdfList as $file) {

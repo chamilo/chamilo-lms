@@ -289,6 +289,17 @@ $url .= Display::url(
     Display::return_icon('export_csv.png', get_lang('ExportUsers')),
     $codePath."user/user_export.php?file_type=csv&session=$sessionId&addcsvheader=1"
 );
+$url .= Display::url(
+    Display::return_icon('pdf.png', get_lang('CertificateOfAchievement'), [], ICON_SIZE_SMALL),
+    $codePath.'mySpace/session.php?'.http_build_query(
+        [
+            'action' => 'export_to_pdf',
+            'type' => 'achievement',
+            'session_to_export' => $sessionId,
+            'all_students' => 1,
+        ]
+    )
+);
 
 $userListToShow = Display::page_subheader(get_lang('UserList').$url);
 $userList = SessionManager::get_users_by_session($sessionId);

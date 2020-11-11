@@ -81,7 +81,7 @@ if (api_is_allowed_to_edit()) {
     switch ($action) {
         case 'add_class_to_course':
             $id = $_GET['id'];
-            $idSession = (int)isset($_GET['id_session']) ? $_GET['id_session'] : 0;
+            $idSession = (int) isset($_GET['id_session']) ? $_GET['id_session'] : 0;
             if (!empty($id) and $idSession == 0) {
                 /* To suscribe Groups*/
                 $usergroup->subscribe_courses_to_usergroup(
@@ -102,7 +102,7 @@ if (api_is_allowed_to_edit()) {
             break;
         case 'remove_class_from_course':
             $id = $_GET['id'];
-            $idSession = (int) isset($_GET['id_session'])?$_GET['id_session']:0;
+            $idSession = (int) isset($_GET['id_session']) ? $_GET['id_session'] : 0;
             if (!empty($id)) {
                 $usergroup->unsubscribe_courses_from_usergroup(
                     $id,
@@ -203,8 +203,5 @@ $(function() {
 echo $actions;
 echo UserManager::getUserSubscriptionTab(4);
 echo Display::return_message(get_lang('UserClassExplanation'));
-
 $usergroup->display_teacher_view();
-
 Display::display_footer();
-

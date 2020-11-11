@@ -81,7 +81,7 @@ if ('1' === $lp->getSubscribeUsers()) {
                     $users[]['user_id'] = $studentInfo['user_id'];
                 }
             }
-       }
+        }
     }
 
     if (!empty($subscribedUsersInLp)) {
@@ -153,7 +153,7 @@ if (!empty($groups)) {
         array_column($groups, 'name', 'iid'),
         [
             'id' => 'group_filter',
-            'placeholder' => get_lang('All')
+            'placeholder' => get_lang('All'),
         ]
     );
     //$form->addButtonSearch(get_lang('Search'));

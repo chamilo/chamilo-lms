@@ -1532,11 +1532,12 @@ class learnpath
         $maxScore = 100
     ) {
         $id = (int) $id;
-        $prerequisite_id = (int) $prerequisite_id;
 
         if (empty($id)) {
             return false;
         }
+
+        $prerequisite_id = (int) $prerequisite_id;
 
         if (empty($minScore) || $minScore < 0) {
             $minScore = 0;
@@ -1546,8 +1547,8 @@ class learnpath
             $maxScore = 100;
         }
 
-        $minScore = floatval($minScore);
-        $maxScore = floatval($maxScore);
+        $minScore = (float) $minScore;
+        $maxScore = (float) $maxScore;
 
         if (empty($prerequisite_id)) {
             $prerequisite_id = 'NULL';

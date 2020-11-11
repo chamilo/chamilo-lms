@@ -196,7 +196,8 @@ $documentTree = DocumentManager::get_document_preview(
 $page .= $recordVoiceForm;
 $page .= '<br>';
 $page .= $form->returnForm();
-$page .= '<h3 class="page-header"><small>'.get_lang('Or').'</small> '.get_lang('SelectAnAudioFileFromDocuments').'</h3>';
+$page .= '<h3 class="page-header">
+            <small>'.get_lang('Or').'</small> '.get_lang('SelectAnAudioFileFromDocuments').'</h3>';
 
 $folders = DocumentManager::get_all_document_folders(
     $courseInfo,
@@ -224,7 +225,6 @@ $selector = DocumentManager::build_directory_selector(
 );
 
 $page .= $selector;
-
 $page .= '<ul class="lp_resource">';
 $page .= '<li class="doc_folder" style="margin-left: 36px;">'.get_lang('Audio').'</li>';
 $page .= '<li class="doc_folder">';

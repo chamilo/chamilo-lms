@@ -972,7 +972,7 @@ if ($isFeedbackAllowed) {
     }
 }
 
-if ($isFeedbackAllowed && $origin != 'learnpath' && $origin != 'student_progress') {
+if ($isFeedbackAllowed && $origin !== 'learnpath' && $origin !== 'student_progress') {
     if (in_array($origin, ['tracking_course', 'user_course', 'correct_exercise_in_lp'])) {
         $formUrl = api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?'.api_get_cidreq().'&';
         $formUrl .= http_build_query([

@@ -91,7 +91,7 @@ if ((!isset($_GET['course']) || !isset($_GET['invitationcode'])) && !isset($_GET
 $invitationcode = $_GET['invitationcode'];
 
 // Start auto-invitation feature FS#3403 (all-users-can-do-the-survey-URL handling)
-if ('auto' == $invitationcode && isset($_GET['scode'])) {
+if ('auto' === $invitationcode && isset($_GET['scode'])) {
     $userid = api_get_user_id();
     // Survey_code of the survey
     $surveyCode = $_GET['scode'];
@@ -225,7 +225,7 @@ if (empty($survey_data)) {
 SurveyManager::checkTimeAvailability($survey_data);
 $survey_data['survey_id'] = $survey_invitation['survey_id'];
 
-if ($survey_data['survey_type'] == '3') {
+if ($survey_data['survey_type'] === '3') {
     header('Location: '.
         api_get_path(WEB_CODE_PATH).
         'survey/meeting.php?cidReq='.$courseInfo['code'].'&id_session='.$sessionId.'&invitationcode='.Security::remove_XSS($invitationcode)
@@ -316,7 +316,7 @@ if (count($_POST) > 0) {
                     } else {
                         $option_value = 0;
                         if (isset($types[$survey_question_id]) &&
-                            'open' == $types[$survey_question_id]
+                            'open' === $types[$survey_question_id]
                         ) {
                             $option_value = $value;
                         }
@@ -557,14 +557,12 @@ $htmlHeadXtra[] = ch_selectivedisplay::getJs();
 $htmlHeadXtra[] = survey_question::getJs();
 
 Display::display_header(get_lang('ToolSurvey'));
-
-// Displaying the survey title and subtitle (appears on every page)
 echo '<div class="survey-block">';
 echo '<div class="page-header">';
 echo '<h2>';
-echo strip_tags($survey_data['survey_title'], '<span>').'</h2></div>';
+echo Security::remove_XSS($survey_data['survey_title']).'</h2></div>';
 if (!empty($survey_data['survey_subtitle'])) {
-    echo '<div class="survey_subtitle"><p>'.strip_tags($survey_data['survey_subtitle']).'</p></div>';
+    echo '<div class="survey_subtitle"><p>'.Security::remove_XSS($survey_data['survey_subtitle']).'</p></div>';
 }
 
 // Displaying the survey introduction
@@ -576,7 +574,7 @@ if (
     Session::erase('page_questions_sec');
     $paged_questions_sec = [];
     if (!empty($survey_data['survey_introduction'])) {
-        echo '<div class="survey_content">'.$survey_data['survey_introduction'].'</div>';
+        echo '<div class="survey_content">'.Security::remove_XSS($survey_data['survey_introduction']).'</div>';
     }
     $limit = 0;
 }
@@ -643,7 +641,7 @@ if ($survey_data['form_fields'] &&
 // Displaying the survey thanks message
 if (isset($_POST['finish_survey'])) {
     echo Display::return_message(get_lang('SurveyFinished'), 'confirm');
-    echo $survey_data['survey_thanks'];
+    echo Security::remove_XSS($survey_data['survey_thanks']);
 
     SurveyManager::update_survey_answered(
         $survey_data,
@@ -657,6 +655,7 @@ if (isset($_POST['finish_survey'])) {
     );
 
     if ($courseInfo && !api_is_anonymous()) {
+        echo '<br /><br />';
         echo Display::toolbarButton(
             get_lang('ReturnToCourseHomepage'),
             api_get_course_url($courseInfo['code']),

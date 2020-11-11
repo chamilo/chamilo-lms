@@ -46,6 +46,8 @@ switch ($action) {
             $studentList = array_column($users, 'user_id');
         }
 
+        $totalCourses = count($courses);
+        $scoreDisplay = ScoreDisplay::instance();
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         $pdfList = [];
         foreach ($studentList as $studentId) {
@@ -80,7 +82,7 @@ switch ($action) {
                 $progress += $courseProgress;
             }
 
-            $average = round($progress / count($courses), 1);
+            $average = round($progress / $totalCourses, 1);
             $average = empty($average) ? '0%' : $average.'%';
             $first = Tracking::get_first_connection_date($studentId);
             $last = Tracking::get_last_connection_date($studentId);
@@ -133,8 +135,6 @@ switch ($action) {
                 $totalProgress = 0;
                 $gradeBookTotal = [0, 0];
                 $totalEvaluations = '0/0 (0%)';
-                $totalCourses = count($courses);
-                $scoreDisplay = ScoreDisplay::instance();
 
                 foreach ($courses as $course) {
                     $courseId = $course['c_id'];
@@ -146,7 +146,7 @@ switch ($action) {
                         $studentId,
                         $courseCodeItem,
                         true,
-                        $sessionId
+                        $sessionToExport
                     );
 
                     if ($isSubscribed) {
@@ -160,7 +160,7 @@ switch ($action) {
                             $studentId,
                             $courseCodeItem,
                             [],
-                            $sessionId,
+                            $sessionToExport,
                             false,
                             false,
                             true
@@ -175,7 +175,7 @@ switch ($action) {
 
                         $courseTable .= '<tr>
                         <td>
-                            <a href="'.$courseInfoItem['course_public_url'].'?id_session='.$sessionId.'">'.
+                            <a href="'.$courseInfoItem['course_public_url'].'?id_session='.$sessionToExport.'">'.
                             $courseInfoItem['title'].'</a>
                         </td>
                         <td >'.$time_spent_on_course.'</td>

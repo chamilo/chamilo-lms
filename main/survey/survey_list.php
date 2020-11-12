@@ -195,6 +195,18 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                                 break;*/
                             case 'multipleresponse':
                                 $finalAnswer = isset($userAnswers[$userIdItem][$surveyId][$question['question_id']]) ? $userAnswers[$userIdItem][$surveyId][$question['question_id']] : '';
+                                if (is_array($finalAnswer)) {
+                                    $items = [];
+                                    foreach ($finalAnswer as $option) {
+                                        foreach ($question['options'] as $optionId => $text) {
+                                            if ($option == $optionId) {
+                                                $items[] = strip_tags($text);
+                                            }
+                                        }
+
+                                    }
+                                    $finalAnswer = implode(', ', $items);
+                                }
                                 break;
                             default:
                                 $finalAnswer = '';
@@ -213,6 +225,7 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                     }
                 }
 
+                $surveyData['user_with_answers'] = $usersWithAnswers;
                 $surveyData['user_answers'] = $userAnswers;
                 $surveyData['questions'] = SurveyManager::get_questions($surveyId);
                 $surveyList[] = $surveyData;
@@ -234,6 +247,7 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                 $columnQuestion = 3;
                 foreach ($surveyList as $survey) {
                     $questions = $survey['questions'];
+                    $usersWithAnswers = $survey['user_with_answers'];
                     foreach ($usersWithAnswers as $userAnswer) {
                         $userId = $userAnswer['user_id'];
                         $cell = @$page->setCellValueByColumnAndRow(
@@ -255,8 +269,8 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                         $lastCoordinate = '';
                         foreach ($questions as $question) {
                             $questionTitle = $question['question'];
-                            if (strpos($question['question'],'{{')) {
-                                $questionPosition =$column+$questionCounter;
+                            if (strpos($question['question'], '{{')) {
+                                $questionPosition = $column + $questionCounter;
                                 $cell = @$page->setCellValueByColumnAndRow(
                                     $questionPosition,
                                     2,
@@ -287,7 +301,7 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                                     );
 
                                     foreach ($questions as $questionData) {
-                                        if (strpos($questionData['question'],'{{') === false) {
+                                        if (strpos($questionData['question'], '{{') === false) {
                                             if ($questionTitle === $questionData['question']) {
                                                 //var_dump('user'.$userId);
                                                 //var_dump($survey['user_answers'][$userId][$survey['survey_id']]);
@@ -295,6 +309,9 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                                                     //var_dump($questionData['question_id'], $questionId);
                                                     if ($questionData['question_id'] == $questionId) {
                                                         //var_dump($questionId, $answerData);                                                        var_dump($column+$questionCounter);
+                                                        if (is_array($answerData)) {
+                                                            $answerData = implode(', ', $answerData);
+                                                        }
                                                         @$page->setCellValueByColumnAndRow(
                                                             $questionPosition,
                                                             $rowStudent,
@@ -325,11 +342,11 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
 
                     $questionPerUser = [];
                     foreach ($questions as $question) {
-                        if (strpos($question['question'],'{{')) {
+                        if (strpos($question['question'], '{{')) {
                         } else {
                             foreach ($users as $user) {
-                                $completeName = $user['firstname'].' '. $user['lastname'];
-                                if (strpos($question['question'],$completeName)) {
+                                $completeName = $user['firstname'].' '.$user['lastname'];
+                                if (strpos($question['question'], $completeName)) {
                                     break;
                                 }
                                 $questionPerUser[$user['id']][] = $question['question_id'];
@@ -357,8 +374,6 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
             @$writer->save($file);
 
             DocumentManager::file_send_for_download($file, true, get_lang('Report').'.xlsx');
-
-            //exit;
             break;
     }
 

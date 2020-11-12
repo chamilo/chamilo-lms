@@ -221,31 +221,38 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
         $data['visible_to_others'] = 0;
         $data['changeable'] = 1;
         $data['filter'] = 0;
-        $data['variable'] = 'AuthorLPItem';
+        $data['variable'] = 'authorlpitem';
         $data['display_text'] = 'AuthorLPItem';
-        $data['field_type'] = ExtraField::FIELD_TYPE_CHECKBOX;
+        $data['field_type'] = ExtraField::FIELD_TYPE_SELECT_MULTIPLE;
 
         $this->authorsField['id'] = $schedule->save($data);
     }
 
     /**
-     * Save the arrangement for AuthorLP, it is adjusted internally so that the values match the necessary ones.
+     * Save the arrangement for authorlp, it is adjusted internally so that the values match the necessary ones.
      */
     public function SaveAuthorLp()
     {
         $schedule = new ExtraField('user');
-        $data = $schedule->get_handler_field_info_by_field_variable('AuthorLP');
+        $data = $schedule->get_handler_field_info_by_field_variable('authorlp');
         if (empty($data)) {
             $data = $this->authorsField;
         }
-        $data['variable'] = 'AuthorLP';
-        $data['display_text'] = 'authors';
-        $data['changeable'] = 1;
-        $data['visible_to_self'] = 1;
-        $data['visible_to_others'] = 0;
-        $data['filter'] = 0;
-        $data['field_type'] = ExtraField::FIELD_TYPE_RADIO;
-        $this->setYesNoToAuthor($schedule->save($data));
+        if (!isset($data['id']) || (int)$data['id'] == 0) {
+            $data['variable'] = 'authorlp';
+            $data['display_text'] = 'authors';
+            $data['changeable'] = 1;
+            $data['visible_to_self'] = 1;
+            $data['visible_to_others'] = 0;
+            $data['filter'] = 0;
+            $data['field_type'] = ExtraField::FIELD_TYPE_RADIO;
+            $id = $schedule->save($data);
+        } else {
+            $this->authorsField = $data;
+            $id = $data['id'];
+        }
+
+        $this->setYesNoToAuthor($id);
     }
 
     /**
@@ -269,7 +276,7 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
     }
 
     /**
-     *  Set Yes or Not selector for AuthorLp field.
+     *  Set Yes or Not selector for authorlp field.
      *
      * @param $authorLpId
      */

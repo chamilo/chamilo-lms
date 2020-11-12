@@ -203,11 +203,7 @@ $form = new FormValidator('configure_homepage_'.$action,
     '',
     ['style' => 'margin: 0px;']);
 
-$field = new ExtraField('user');
-$authorLpField = $field->get_handler_field_info_by_field_variable('AuthorLP');
-if ($authorLpField != null) {
-    $extraField['AuthorLP'] = $authorLpField;
-}
+
 $extraField['backTo'] = api_get_self().'?action=add_item&type=step&lp_id='.intval($lpId).'&'.api_get_cidreq();
 
 echo $learnPath->build_action_menu(false,
@@ -222,6 +218,7 @@ echo '<div id="lp_sidebar" class="col-md-4">';
 echo $learnPath->return_new_tree(null, false);
 // Second Col
 $message = Session::read('message');
+$messageError = Session::read('messageError');
 // Show the template list.
 if (($type == 'document' || $type == 'step') && !isset($_GET['file'])) {
     // Show the template list.
@@ -235,6 +232,10 @@ if (!empty($message)) {
     $form->addHtml(Display::return_message($message));
     Session::erase('message');
 }
+if (!empty($messageError)) {
+    $form->addHtml(Display::return_message($messageError, 'warning'));
+    Session::erase('messageError');
+}
 $extraFieldValue = new ExtraFieldValue('lp_item');
 $form->addHtml('<h1 class="col-md-12 text-center">'.get_lang('LpByAuthor').'</h1>');
 $default = [];
@@ -247,27 +248,64 @@ foreach ($_SESSION['oLP']->items as $item) {
         $itemId,
         strtolower('AuthorLPItem')
     );
+    $authorName = [];
     if (!empty($extraFieldValues)) {
-        $default["itemSelected[$itemId]"] = true;
         if ($extraFieldValues != false) {
-            foreach (explode(';', $extraFieldValues['value']) as $author) {
-                $defaultAuthor[$author] = $author;
+            $authors = explode(';', $extraFieldValues['value']);
+            if (!empty($authors)) {
+                foreach ($authors as $author) {
+                    if ($author != 0) {
+                        $defaultAuthor[$author] = $author;
+                        // $default["itemSelected[$itemId]"] = true;
+                        $teacher = api_get_user_info($author);
+                        $authorName[] = $teacher['complete_name'];
+                    }
+                }
             }
         }
     }
-    $form->addCheckBox("itemSelected[$itemId]", null, Display::return_icon('lp_document.png', $itemName).$itemName);
+    if (count($authorName) != 0) {
+        $authorName = " (".implode(', ', $authorName).")";
+    } else {
+        $authorName = '';
+    }
+    $form->addCheckBox("itemSelected[$itemId]", null, Display::return_icon('lp_document.png', $itemName).$itemName.$authorName);
+    $default["itemSelected"][$itemId] = false;
 }
 
-$options = [];
+$options = [0 => get_lang('RemoveSelected')];
 $default["authorItemSelect"] = [];
 $form->addHtml('</div>');
-foreach ($learnPath->authorsAvaible as $key => $value) {
+
+/* Authors*/
+$teachers = [];
+$field = new ExtraField('user');
+$authorLp = $field->get_handler_field_info_by_field_variable('AuthorLP');
+
+$idExtraField = (int)(isset($authorLp['id']) ? $authorLp['id'] : 0);
+if ($idExtraField != 0) {
+    $extraFieldValueUser = new ExtraFieldValue('user');
+    $arrayExtraFieldValueUser = $extraFieldValueUser->get_item_id_from_field_variable_and_field_value(
+        $authorLp['variable'],
+        1,
+        true,
+        false,
+        true);
+
+    foreach ($arrayExtraFieldValueUser as $item) {
+        $teacher = api_get_user_info($item['item_id']);
+        $teachers[] = $teacher;
+    }
+}
+/* Authors*/
+
+foreach ($teachers as $key => $value) {
     $authorId = $value['id'];
     $authorName = $value['complete_name'];
     if (!empty($authorName)) {
         $options[$authorId] = $authorName;
         if (isset($defaultAuthor[$authorId])) {
-            $default["authorItemSelect"][$authorId] = $authorId;
+            // $default["authorItemSelect"][$authorId] = $authorId;
         }
     }
 }
@@ -284,13 +322,25 @@ if ($form->validate()) {
     if (isset($_GET['sub_action']) && ($_GET['sub_action'] === 'author_view')) {
         $authors = $_POST['authorItemSelect'];
         $items = $_POST['itemSelected'];
+        unset($author);
         $saveExtraFieldItem = [];
+        $saveAuthor = [];
+        $removeExist = 0;
         foreach ($_SESSION['oLP']->items as $item) {
             $itemName = $item->name;
             $itemId = $item->iId;
             if (isset($items[$itemId])) {
+                if (count($authors) == 0) {
+                    $saveExtraFieldItem[$itemId][0] = 0;
+                }
                 foreach ($authors as $author) {
-                    $saveExtraFieldItem[$itemId][$author] = $author;
+                    if ($author == 0 || $removeExist == 1) {
+                        $saveExtraFieldItem[$itemId][0] = 0;
+
+                    } else {
+
+                        $saveExtraFieldItem[$itemId][$author] = $author;
+                    }
                 }
             }
         }
@@ -309,15 +359,21 @@ if ($form->validate()) {
                     'item_id' => $saveItemId,
                 ]);
                 $lastEdited = $values;
+                $saveAuthor[] = $options[$author];
             }
-
-            foreach ($lastEdited as $author) {
-                if (isset($options[$author])) {
-                    $messages .= " \"".$options[$author]."\"   ";
-                }
-            }
+            $saveAuthor = array_unique($saveAuthor);
+            $messages .= implode(' / ', $saveAuthor);
+            $currentUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http")."://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
             if (!empty($messages)) {
-                Session::write('message', get_lang('UsersRegistered')." ".$messages);
+                if ($removeExist) {
+                    Session::write('messageError', get_lang('DeletedAuthors')." ".$messages);
+                    header("Location: $currentUrl");
+                    exit;
+                }
+
+                Session::write('message', get_lang('RegisteredAuthors')." ".$messages);
+                header("Location: $currentUrl");
+                exit;
             }
         }
     }

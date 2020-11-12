@@ -1181,18 +1181,47 @@ class ExtraField extends Model
                         // When a variable is 'authors', this will be a
                         // select element of teachers (see BT#17648)
                         $variable = $field_details['variable'];
-                        if ($variable != 'authors') {
+                        $authors = ($variable == 'authors' || $variable == 'authorlpitem') ? true : false;
+                        if ($authors == false) {
                             foreach ($field_details['options'] as $optionDetails) {
                                 $options[$optionDetails['option_value']] = $optionDetails['display_text'];
                             }
                         } else {
-                            $conditions = [
-                                'enabled' => 1,
-                                'status' => COURSEMANAGER,
-                            ];
-                            $teachers = UserManager::get_user_list($conditions);
-                            foreach ($teachers as $teacher) {
-                                $options[$teacher['id']] = $teacher['complete_name'];
+                            if ($variable == 'authors') {
+                                $conditions = [
+                                    'enabled' => 1,
+                                    'status' => COURSEMANAGER,
+                                ];
+                                echo __FILE__."::".__LINE__."<pre>".var_export($conditions, true)."</pre><br>";
+
+                                $teachers = UserManager::get_user_list($conditions);
+                                foreach ($teachers as $teacher) {
+                                    $options[$teacher['id']] = $teacher['complete_name'];
+                                }
+                            } elseif ($variable == 'authorlpitem') {
+                                /* Authors*/
+                                $options = [];
+                                $field = new ExtraField('user');
+                                $authorLp = $field->get_handler_field_info_by_field_variable('AuthorLP');
+
+                                $idExtraField = (int)(isset($authorLp['id']) ? $authorLp['id'] : 0);
+                                if ($idExtraField != 0) {
+                                    $extraFieldValueUser = new ExtraFieldValue('user');
+                                    $arrayExtraFieldValueUser = $extraFieldValueUser->get_item_id_from_field_variable_and_field_value(
+                                        $authorLp['variable'],
+                                        1,
+                                        true,
+                                        false,
+                                        true);
+
+                                    foreach ($arrayExtraFieldValueUser as $item) {
+                                        $teacher = api_get_user_info($item['item_id']);
+                                        // $teachers[] = $teacher;
+                                        $options[$teacher['id']] = $teacher['complete_name'];
+
+                                    }
+                                }
+                                /* Authors*/
                             }
                         }
                         $form->addElement(

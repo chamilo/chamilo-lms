@@ -271,7 +271,7 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                         }*/
                         //$page->getCellByColumnAndRow($column, 1)->getColumnDimension($coordinate)->setWidth(80);
                         $questionCounter = 0;
-                        $firstCoordinate = '';
+                        $firstCoordinate = $coordinate;
                         $lastCoordinate = '';
                         foreach ($questions as $question) {
                             $questionTitle = $question['question'];
@@ -283,10 +283,19 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                                     strip_tags($questionTitle),
                                     true
                                 );
-                                $coordinate = $page->getCellByColumnAndRow($column, 1)->getCoordinate();
-                                if (0 === $questionCounter) {
-                                    $firstCoordinate = $coordinate;
-                                }
+
+                                //$coordinate = @$page->getCellByColumnAndRow($questionPosition, 2)->getCoordinate();
+                                //$page->getColumnDimension($coordinate);
+                                /*$dimension = @$page->getColumnDimension($questionPosition);
+                                if ($dimension) {
+                                    $dimension->setAutoSize(true);
+                                    $dimension->setWidth(200);
+                                    //$cell->getColumnDimension($coordinate)->setAutoSize(false);
+                                    //$cell->getColumnDimension($coordinate)->setWidth("120");
+                                }*/
+
+
+                                $coordinate = $page->getCellByColumnAndRow($questionPosition, 1)->getCoordinate();
                                 $lastCoordinate = $coordinate;
                                 $rowStudent = 3;
                                 foreach ($users as $user) {
@@ -327,6 +336,12 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                         }
                         $column += $questionCounter;
                         $columnQuestion = $column;
+
+                        if (!empty($lastCoordinate)) {
+                            //$page->mergeCellsByColumnAndRow();
+                            //var_dump($firstCoordinate.':'.$lastCoordinate);exit;
+                            $page->mergeCells($firstCoordinate.':'.$lastCoordinate);
+                        }
                     }
 
                     $questionPerUser = [];

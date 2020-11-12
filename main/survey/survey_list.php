@@ -102,7 +102,7 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                 if (empty($surveyData)) {
                     continue;
                 }
-                $surveyData['title'] = trim(strip_tags($surveyData['title']));
+                $surveyData['title'] = api_html_entity_decode(trim(strip_tags($surveyData['title'])));
                 $groupData = $extraFieldValue->get_values_by_handler_and_field_variable(
                     $surveyId,
                     'group_id'
@@ -111,7 +111,7 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                 if ($groupData && !empty($groupData['value'])) {
                     $groupInfo = GroupManager::get_group_properties($groupData['value']);
                     if ($groupInfo['name']) {
-                        $groupTitle = ' - '.$groupInfo['name'];
+                        $groupTitle = api_html_entity_decode($groupInfo['name']);
                     }
                 }
                 $surveyData['group_title'] = $groupTitle;
@@ -200,12 +200,12 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                                     foreach ($finalAnswer as $option) {
                                         foreach ($question['options'] as $optionId => $text) {
                                             if ($option == $optionId) {
-                                                $items[] = strip_tags($text);
+                                                $items[] = api_html_entity_decode(strip_tags($text));
                                             }
                                         }
 
                                     }
-                                    $finalAnswer = implode(', ', $items);
+                                    $finalAnswer = implode(' - ', $items);
                                 }
                                 break;
                             default:
@@ -214,7 +214,7 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                                     $finalAnswer = $all_answers[$userIdItem][$question['question_id']][0]['option_id'];
                                     foreach ($question['options'] as $optionId => $text) {
                                         if ($finalAnswer == $optionId) {
-                                            $finalAnswer = strip_tags($text);
+                                            $finalAnswer = api_html_entity_decode(strip_tags($text));
                                             break;
                                         }
                                     }
@@ -253,7 +253,8 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                         $cell = @$page->setCellValueByColumnAndRow(
                             $column,
                             1,
-                            $survey['title'].$survey['group_title'].' - '.$userAnswer['complete_name']
+                            //$survey['title'].$survey['group_title'].' - '.$userAnswer['complete_name']
+                            $survey['group_title'].' - '.$userAnswer['complete_name']
                         );
                         $coordinate = $page->getCellByColumnAndRow($column, 1)->getCoordinate();
                         /*if (!empty($coordinate)) {
@@ -353,16 +354,15 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                             }
                         }
                     }
-                    $row = 3;
                 }
 
-                $row = 3;
+                $row = 2;
                 foreach ($users as $user) {
                     $userId = $user['id'];
                     $columnUser = 0;
                     @$page->setCellValueByColumnAndRow($columnUser++, $row, $user['lastname']);
                     @$page->setCellValueByColumnAndRow($columnUser++, $row, $user['firstname']);
-                    @$page->setCellValueByColumnAndRow($columnUser++, $row, $user['username']);
+                    //@$page->setCellValueByColumnAndRow($columnUser++, $row, $user['username']);
                     $row++;
                 }
                 $counter++;

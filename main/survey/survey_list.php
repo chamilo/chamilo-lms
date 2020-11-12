@@ -69,7 +69,7 @@ Session::erase('answer_count');
 Session::erase('answer_list');
 $tool_name = get_lang('SurveyList');
 // Language variables
-if (isset($_GET['search']) && 'advanced' == $_GET['search']) {
+if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php',
         'name' => get_lang('SurveyList'),
@@ -84,6 +84,327 @@ $surveyId = isset($_GET['survey_id']) ? $_GET['survey_id'] : 0;
 if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_array($_POST['id'])) {
     if (!api_is_allowed_to_edit()) {
         api_not_allowed(true);
+    }
+
+    switch ($action) {
+        case 'export_by_class':
+            $surveyList = [];
+            $course_id = api_get_course_int_id();
+            $extraFieldValue = new ExtraFieldValue('survey');
+
+            $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
+            $table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
+            $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
+
+            foreach ($_POST['id'] as $value) {
+                $surveyData = SurveyManager::get_survey($value);
+                $surveyId = $surveyData['survey_id'];
+                if (empty($surveyData)) {
+                    continue;
+                }
+                $surveyData['title'] = trim(strip_tags($surveyData['title']));
+                $groupData = $extraFieldValue->get_values_by_handler_and_field_variable(
+                    $surveyId,
+                    'group_id'
+                );
+                $groupTitle = '';
+                if ($groupData && !empty($groupData['value'])) {
+                    $groupInfo = GroupManager::get_group_properties($groupData['value']);
+                    if ($groupInfo['name']) {
+                        $groupTitle = ' - '.$groupInfo['name'];
+                    }
+                }
+                $surveyData['group_title'] = $groupTitle;
+
+                $firstUser = '';
+                $table = Database::get_course_table(TABLE_SURVEY_INVITATION);
+                $sql = "SELECT * FROM $table
+                        WHERE
+                            answered = 1 AND
+                            c_id = $course_id AND
+                            session_id = $sessionId AND
+                            survey_code = '".Database::escape_string($surveyData['code'])."'
+                        ";
+                $result = Database::query($sql);
+                $usersWithAnswers = [];
+                while ($row = Database::fetch_array($result)) {
+                    if (isset($usersWithAnswers[$row['user']])) {
+                        continue;
+                    }
+                    $userInfo = api_get_user_info($row['user']);
+                    $usersWithAnswers[$row['user']] = $userInfo;
+                }
+
+                $sql = "SELECT
+			            survey_question.question_id,
+			            survey_question.survey_id,
+			            survey_question.survey_question,
+			            survey_question.display,
+			            survey_question.max_value,
+			            survey_question.sort,
+			            survey_question.type,
+                        survey_question_option.question_option_id,
+                        survey_question_option.option_text,
+                        survey_question_option.sort as option_sort
+					FROM $table_survey_question survey_question
+					LEFT JOIN $table_survey_question_option survey_question_option
+					ON
+					    survey_question.question_id = survey_question_option.question_id AND
+					    survey_question_option.c_id = $course_id
+					WHERE
+					    survey_question NOT LIKE '%{{%' AND
+					    survey_question.survey_id = '".$surveyId."' AND
+                        survey_question.c_id = $course_id
+					ORDER BY survey_question.sort, survey_question_option.sort ASC";
+                $result = Database::query($sql);
+                $questionsOptions = [];
+                while ($row = Database::fetch_array($result, 'ASSOC')) {
+                    if ($row['type'] != 'pagebreak') {
+                        $questionsOptions[$row['sort']]['question_id'] = $row['question_id'];
+                        $questionsOptions[$row['sort']]['survey_id'] = $row['survey_id'];
+                        $questionsOptions[$row['sort']]['survey_question'] = $row['survey_question'];
+                        $questionsOptions[$row['sort']]['display'] = $row['display'];
+                        $questionsOptions[$row['sort']]['type'] = $row['type'];
+                        $questionsOptions[$row['sort']]['maximum_score'] = $row['max_value'];
+                        $questionsOptions[$row['sort']]['options'][$row['question_option_id']] = $row['option_text'];
+                    }
+                }
+
+                $sql = "SELECT * FROM $table_survey_answer
+                        WHERE c_id = $course_id AND survey_id = $surveyId and user = 15";
+                //echo $sql;
+                $userAnswers = [];
+                $all_answers = [];
+                $result = Database::query($sql);
+                while ($answers_of_user = Database::fetch_array($result, 'ASSOC')) {
+                    $userAnswers[$answers_of_user['user']][$surveyId][$answers_of_user['question_id']][] = $answers_of_user['option_id'];
+                    $all_answers[$answers_of_user['user']][$answers_of_user['question_id']][] = $answers_of_user;
+                }
+
+                foreach ($questionsOptions as $question) {
+                    foreach ($usersWithAnswers as $userData) {
+                        $userIdItem = $userData['user_id'];
+                        // If the question type is a scoring then we have to format the answers differently
+                        switch ($question['type']) {
+                            /*case 'score':
+                                $finalAnswer = [];
+                                if (is_array($question) && is_array($all_answers)) {
+                                    foreach ($all_answers[$question['question_id']] as $key => &$answer_array) {
+                                        $finalAnswer[$answer_array['option_id']] = $answer_array['value'];
+                                    }
+                                }
+                                break;*/
+                            case 'multipleresponse':
+                                $finalAnswer = isset($userAnswers[$userIdItem][$surveyId][$question['question_id']]) ? $userAnswers[$userIdItem][$surveyId][$question['question_id']] : '';
+                                break;
+                            default:
+                                $finalAnswer = '';
+                                if (isset($all_answers[$userIdItem][$question['question_id']])) {
+                                    $finalAnswer = $all_answers[$userIdItem][$question['question_id']][0]['option_id'];
+                                    foreach ($question['options'] as $optionId => $text) {
+                                        if ($finalAnswer == $optionId) {
+                                            $finalAnswer = strip_tags($text);
+                                            break;
+                                        }
+                                    }
+                                }
+                                break;
+                        }
+                        $userAnswers[$userIdItem][$surveyId][$question['question_id']] = $finalAnswer;
+                    }
+                }
+
+                $surveyData['user_answers'] = $userAnswers;
+                $surveyData['questions'] = SurveyManager::get_questions($surveyId);
+                $surveyList[] = $surveyData;
+            }
+
+            $userGroup = new UserGroup();
+            $options = [];
+            $options['where'] = [' usergroup.course_id = ? ' => $course_id];
+            $classes = $userGroup->getUserGroupInCourse($options, 0);
+
+            @$spreadsheet = new PHPExcel();
+            $counter = 0;
+            foreach ($classes as $class) {
+                $users = $userGroup->getUserListByUserGroup($class['id'], 'u.lastname ASC');
+                $page = @$spreadsheet->createSheet($counter);
+                @$page->setTitle($class['name']);
+                $firstColumn = 3;
+                $column = 3;
+                $columnQuestion = 3;
+                foreach ($surveyList as $survey) {
+                    $questions = $survey['questions'];
+                    foreach ($usersWithAnswers as $userAnswer) {
+                        $userId = $userAnswer['user_id'];
+
+                     /*   if (isset($survey['user_answers'][$userId])) {
+                            foreach ($survey['user_answers'][$userId][$survey['survey_id']] as $questionId => $answerData) {
+                              //var_dump($questionPerUser);
+                              if (isset($questionPerUser[$userId])) {
+                                  //var_dump($questionPerUser);
+                                  foreach ($questionPerUser[$userId] as $questionIdToCheck) {
+                                      if ($questionIdToCheck == $questionId) {
+                                    //      var_dump($column, $row);
+                                          @$page->setCellValueByColumnAndRow($columnAnswer, $row, $answerData);
+                                      }
+                                      $columnAnswer++;
+                                  }
+
+                              }
+                          }
+                  }*/
+
+                        $cell = @$page->setCellValueByColumnAndRow(
+                            $column,
+                            1,
+                            $survey['title'].$survey['group_title'].' - '.$userAnswer['complete_name']
+                        );
+                        //$cell = $page->getCellByColumnAndRow($column, 1);
+                        $coordinate = $page->getCellByColumnAndRow($column, 1)->getCoordinate();
+                        /*if (!empty($coordinate)) {
+                            $dimension = $cell->getColumnDimension($coordinate);
+                            if ($dimension) {
+                                $cell->getColumnDimension($coordinate)->setAutoSize(false);
+                                $cell->getColumnDimension($coordinate)->setWidth("120");
+                            }
+                        }*/
+                        //$page->getCellByColumnAndRow($column, 1)->getColumnDimension($coordinate)->setWidth(80);
+                        $questionCounter = 0;
+                        $firstCoordinate = '';
+                        $lastCoordinate = '';
+                        foreach ($questions as $question) {
+                            $questionTitle = $question['question'];
+                            if (strpos($question['question'],'{{')) {
+                                $questionPosition =$column+$questionCounter;
+                                $cell = @$page->setCellValueByColumnAndRow(
+                                    $questionPosition,
+                                    2,
+                                    strip_tags($questionTitle),
+                                    true
+                                );
+                                $coordinate = $page->getCellByColumnAndRow($column, 1)->getCoordinate();
+                                if (0 === $questionCounter) {
+                                    $firstCoordinate = $coordinate;
+                                }
+                                $lastCoordinate = $coordinate;
+                                $rowStudent = 3;
+                                foreach ($users as $user) {
+                                    $completeName = $user['firstname'].' '.$user['lastname'];
+                                    $questionTitle = str_replace(
+                                        '{{student_full_name}}',
+                                        $completeName,
+                                        $question['question']
+                                    );
+                                    foreach ($questions as $questionData) {
+                                        if (strpos($questionData['question'],'{{') === false) {
+                                            if ($questionTitle === $questionData['question']) {
+                                                //var_dump('user'.$userId);
+                                                //var_dump($survey['user_answers'][$userId][$survey['survey_id']]);
+                                                foreach ($survey['user_answers'][$userId][$survey['survey_id']] as $questionId => $answerData) {
+                                                    //var_dump($questionData['question_id'], $questionId);
+                                                    if ($questionData['question_id'] == $questionId) {
+                                                        //var_dump($questionId, $answerData);                                                        var_dump($column+$questionCounter);
+                                                        @$page->setCellValueByColumnAndRow(
+                                                            $questionPosition,
+                                                            $rowStudent,
+                                                            $answerData,
+                                                            true
+                                                        );
+                                                        break;
+                                                    }
+                                                }
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    $rowStudent++;
+                                }
+
+                                $questionCounter++;
+                                $columnQuestion++;
+                            }
+                        }
+                        $column += $questionCounter;
+                        $columnQuestion = $column;
+                    }
+
+                    $questionPerUser = [];
+                    foreach ($questions as $question) {
+                        if (strpos($question['question'],'{{')) {
+                            /*foreach ($usersWithAnswers as $userAnswer) {
+                                $questionTitle = str_replace(
+                                    '{{student_full_name}}',
+                                    $userAnswer['complete_name'],
+                                    $question['question']
+                                );
+                                $cell = @$page->setCellValueByColumnAndRow(
+                                    $column,
+                                    2,
+                                    strip_tags($questionTitle),
+                                    true
+                                );
+                                //$coordinate = $page->getCellByColumnAndRow($column, 2)->getCoordinate();
+                                //$page->getStyle($coordinate)->getAlignment()->set(true);
+                                $column++;
+                            }*/
+                        } else {
+                            foreach ($users as $user) {
+                                $completeName = $user['firstname'].' '. $user['lastname'];
+                                if (strpos($question['question'],$completeName)) {
+                                    break;
+                                }
+                                $questionPerUser[$user['id']][] = $question['question_id'];
+                            }
+                        }
+                    }
+
+                    //var_dump($questionPerUser);
+                    $row = 3;
+                    /*foreach ($users as $user) {
+                        $columnAnswer = $firstColumn;
+                        $userId = $user['id'];
+                        if (isset($survey['user_answers'][$userId])) {
+                            foreach ($survey['user_answers'][$userId][$survey['survey_id']] as $questionId => $answerData) {
+                                //var_dump($questionPerUser);
+                                if (isset($questionPerUser[$userId])) {
+                                    //var_dump($questionPerUser);
+                                    foreach ($questionPerUser[$userId] as $questionIdToCheck) {
+                                        if ($questionIdToCheck == $questionId) {
+                                      //      var_dump($column, $row);
+                                            @$page->setCellValueByColumnAndRow($columnAnswer, $row, $answerData);
+                                        }
+                                        $columnAnswer++;
+                                    }
+
+                                }
+                            }
+                        }
+                        $row++;
+                    }*/
+                }
+
+                $row = 3;
+                foreach ($users as $user) {
+                    $userId = $user['id'];
+                    $columnUser = 0;
+                    @$page->setCellValueByColumnAndRow($columnUser++, $row, $user['lastname']);
+                    @$page->setCellValueByColumnAndRow($columnUser++, $row, $user['firstname']);
+                    @$page->setCellValueByColumnAndRow($columnUser++, $row, $user['username']);
+                    $row++;
+                }
+                $counter++;
+            }
+//exit;
+            $spreadsheet->setActiveSheetIndex(0);
+            $file = api_get_path(SYS_ARCHIVE_PATH).uniqid('report', true);
+            @$writer = new PHPExcel_Writer_Excel2007($spreadsheet);
+            @$writer->save($file);
+
+            DocumentManager::file_send_for_download($file, true, get_lang('Report').'.xlsx');
+
+            //exit;
+            break;
     }
 
     $exportList = [];

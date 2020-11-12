@@ -280,7 +280,7 @@ $teachers = [];
 $field = new ExtraField('user');
 $authorLp = $field->get_handler_field_info_by_field_variable('AuthorLP');
 
-$idExtraField = (int)(isset($authorLp['id']) ? $authorLp['id'] : 0);
+$idExtraField = (int) (isset($authorLp['id']) ? $authorLp['id'] : 0);
 if ($idExtraField != 0) {
     $extraFieldValueUser = new ExtraFieldValue('user');
     $arrayExtraFieldValueUser = $extraFieldValueUser->get_item_id_from_field_variable_and_field_value(
@@ -335,7 +335,6 @@ if ($form->validate()) {
                         $saveExtraFieldItem[$itemId][0] = 0;
                         $removeExist = 1;
                     } else {
-
                         $saveExtraFieldItem[$itemId][$author] = $author;
                     }
                 }

@@ -1204,7 +1204,7 @@ class ExtraField extends Model
                                 $field = new ExtraField('user');
                                 $authorLp = $field->get_handler_field_info_by_field_variable('AuthorLP');
 
-                                $idExtraField = (int)(isset($authorLp['id']) ? $authorLp['id'] : 0);
+                                $idExtraField = (int) (isset($authorLp['id']) ? $authorLp['id'] : 0);
                                 if ($idExtraField != 0) {
                                     $extraFieldValueUser = new ExtraFieldValue('user');
                                     $arrayExtraFieldValueUser = $extraFieldValueUser->get_item_id_from_field_variable_and_field_value(
@@ -1218,7 +1218,6 @@ class ExtraField extends Model
                                         $teacher = api_get_user_info($item['item_id']);
                                         // $teachers[] = $teacher;
                                         $options[$teacher['id']] = $teacher['complete_name'];
-
                                     }
                                 }
                                 /* Authors*/

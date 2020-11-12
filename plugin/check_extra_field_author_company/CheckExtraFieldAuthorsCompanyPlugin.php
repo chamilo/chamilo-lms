@@ -238,7 +238,7 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
         if (empty($data)) {
             $data = $this->authorsField;
         }
-        if (!isset($data['id']) || (int)$data['id'] == 0) {
+        if (!isset($data['id']) || (int) $data['id'] == 0) {
             $data['variable'] = 'authorlp';
             $data['display_text'] = 'authors';
             $data['changeable'] = 1;

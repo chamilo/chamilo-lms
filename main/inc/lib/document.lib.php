@@ -5783,6 +5783,7 @@ class DocumentManager
                 }
             }
         } else {
+            $firstPath = '';
             foreach ($folders as $folder) {
                 if (($curdirpath != $folder) &&
                     ($folder != $move_file) &&
@@ -5790,8 +5791,14 @@ class DocumentManager
                 ) {
                     // Cannot copy dir into his own subdir
                     $path_displayed = self::get_titles_of_path($folder);
+                    if ($firstPath == '' && $path_displayed != '') {
+                        $firstPath = $path_displayed;
+                        $group_dir = $firstPath;
+                    }
                     $display_folder = substr($path_displayed, strlen($group_dir));
-                    $display_folder = $display_folder == '' ? get_lang('Documents') : $display_folder;
+                    if ($display_folder == '') {
+                        $display_folder = get_lang('Documents');
+                    }
                     $options[$folder] = $display_folder;
                 }
             }

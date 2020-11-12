@@ -29,6 +29,7 @@ $now = $date->format('Y-m-d H:i:s');
 $date = $date->sub(new DateInterval('P3M'));
 $date3Months = $date->format('Y-m-d H:i:s');
 
+$date = new Datetime();
 $date = $date->sub(new DateInterval('P6M'));
 $date6Months = $date->format('Y-m-d H:i:s');
 

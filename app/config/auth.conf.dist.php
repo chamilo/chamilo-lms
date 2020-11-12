@@ -48,20 +48,26 @@ $extldap_config = array(
   //ldap host
   'host' => array('1.2.3.4', '2.3.4.5', '3.4.5.6'),
   // filter
-//  'filter' => '', // no () arround the string
+  'filter' => '', // no () arround the string
   //'port' => , default on 389
+  'port' => 389,
   //protocl version (2 or 3)
   'protocol_version' => 3,
   // set this to 0 to connect to AD server
   'referrals' => 0,
   //String used to search the user in ldap. %username will ber replaced by the username.
   //See extldap_get_user_search_string() function below
-//  'user_search' => 'sAMAccountName=%username%',  // no () arround the string
-  'user_search' => 'uid=%username%',  // no () arround the string
+  // For Active Directory: 'user_search' => 'sAMAccountName=%username%',  // no () arround the string
+  // For OpenLDAP: 'user_search' => 'uid=%username%',  // no () arround the string
+  'user_search' => 'uid=%username%',
   //encoding used in ldap (most common are UTF-8 and ISO-8859-1
   'encoding' => 'UTF-8',
   //Set to true if user info have to be update at each login
-  'update_userinfo' => true
+  'update_userinfo' => true,
+  // Define user_search_import_all_users variable to control main/auth/external_login/ldap.inc.php
+  // Active Directory: 'user_search_import_all_users' => 'sAMAccountName=$char1$char2*'
+  // OpenLDAP: 'user_search_import_all_users' => 'uid=*'
+  'user_search_import_all_users' => 'uid=*'
 );
 
 
@@ -82,17 +88,21 @@ $extldap_config = array(
  *
  * If <ldap_field> is an array then its value will be an array of values with the same rules as above
  *
+ * Please Note that Chamilo expects some attributes that might not be present in your user ldap record
+ *
  **/
 $extldap_user_correspondance = array(
     'firstname' => 'givenName',
     'lastname' => 'sn',
-    'status' => 'func',
-    'admin' => 'func',
     'email' => 'mail',
     'auth_source' => '!extldap',
-    //'username' => ,
+    'username' => 'uid',
     'language' => '!english',
-    'password' => '!PLACEHOLDER',
+    'password' => 'userPassword',
+    'status' => '!5', // Forcing status to 5; To change this set 'status' => 'func' and implement an extldap_get_status($ldap_array) function
+    'active' => '!1', // Forcing active to 1; To change this set 'status' => 'func' and implement an extldap_get_active($ldap_array) function
+    'admin' => 'func' // Using the extldap_get_admin() function to check if user is an administrator based on some ldap user record value
+    /* Extras example
     'extra' => array(
         'title' => 'title',
         'globalid' => 'employeeID',
@@ -100,8 +110,16 @@ $extldap_user_correspondance = array(
         'country' => 'co',
         'bu' => 'Company',
         'cas_user' => 'uid',
-    )
+    ) */
 );
+
+/**
+ * Example method to get whether the user is an admin or not. Please implement your logic inside.
+ */
+function extldap_get_admin($ldap_array)
+{
+    return 0; // By default users comming from ldap are not Administrators
+}
 
 /**
  * OpenID

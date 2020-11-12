@@ -848,7 +848,9 @@ class ImportCsv
                     if (!empty($extraFieldValues)) {
                         $value = 0;
                         foreach ($extraFieldValues as $extraFieldValue) {
-                            $value = $extraFieldValue['value'];
+                            if (isset($extraFieldValue['value'])) {
+                                $value = $extraFieldValue['value'];
+                            }
                         }
                         if (!empty($user_id) && $value != $user_id) {
                             $emails = api_get_configuration_value('cron_notification_help_desk');

@@ -586,7 +586,7 @@ foreach ($categories as $item) {
                 );
 
                 /* PUBLISH COMMAND */
-                if ($sessionId == $details['lp_session']) {
+                //if ($sessionId == $details['lp_session']) {
                     if ($details['lp_published'] === 'i') {
                         $dsp_publish = Display::url(
                             Display::return_icon(
@@ -604,12 +604,12 @@ foreach ($categories as $item) {
                             api_get_self().'?'.$cidReq."&lp_id=$id&action=toggle_publish&new_status=i"
                         );
                     }
-                } else {
+                /*} else {
                     $dsp_publish = Display::return_icon(
                         'lp_publish_na.png',
                         get_lang('LearnpathDoNotPublish')
                     );
-                }
+                }*/
 
                 /*  MULTIPLE ATTEMPTS OR SERIOUS GAME MODE
                   SERIOUSGAME MODE is a special mode where :

@@ -910,7 +910,6 @@ class Category implements GradebookItem
             $count = 0;
             $ressum = 0;
             $weightsum = 0;
-
             if (!empty($cats)) {
                 /** @var Category $cat */
                 foreach ($cats as $cat) {
@@ -1079,8 +1078,10 @@ class Category implements GradebookItem
                         foreach ($links as $link) {
                             $linkres = $link->calc_score($studentId, null);
                             $linkweight = $link->get_weight();
-                            $link_res_denom = 0 == $linkres[1] ? 1 : $linkres[1];
-                            $ressum = $linkres[0] / $link_res_denom * $linkweight;
+                            if ($linkres) {
+                                $link_res_denom = 0 == $linkres[1] ? 1 : $linkres[1];
+                                $ressum = $linkres[0] / $link_res_denom * $linkweight;
+                            }
 
                             if (!isset($totalScorePerStudent[$studentId])) {
                                 $totalScorePerStudent[$studentId] = 0;
@@ -2067,7 +2068,7 @@ class Category implements GradebookItem
     /**
      * Generates a certificate for this user if everything matches.
      *
-     * @param int  $category_id      gradebook id
+     * @param int  $category_id            gradebook id
      * @param int  $user_id
      * @param bool $sendNotification
      * @param bool $skipGenerationIfExists
@@ -2776,22 +2777,22 @@ class Category implements GradebookItem
      *
      * @return float The score
      */
-    private static function calculateCurrentScore(
-        $userId,
-        $category
-    ) {
+    private static function calculateCurrentScore($userId, $category)
+    {
         if (empty($category)) {
             return 0;
         }
-        $courseEvaluations = $category->get_evaluations(
-            $userId,
-            true
-        );
+
+        $courseEvaluations = $category->get_evaluations($userId, true);
         $courseLinks = $category->get_links($userId, true);
         $evaluationsAndLinks = array_merge($courseEvaluations, $courseLinks);
+
         $categoryScore = 0;
         for ($i = 0; $i < count($evaluationsAndLinks); $i++) {
+            /** @var AbstractLink $item */
             $item = $evaluationsAndLinks[$i];
+            // Set session id from category
+            $item->set_session_id($category->get_session_id());
             $score = $item->calc_score($userId);
             $itemValue = 0;
             if (!empty($score)) {

@@ -1,10 +1,12 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity\Repository;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\SequenceResource;
+use Chamilo\CoreBundle\Entity\SessionRelUser;
 use Doctrine\ORM\EntityRepository;
 use Fhaculty\Graph\Set\Vertices;
 use Fhaculty\Graph\Vertex;
@@ -204,22 +206,29 @@ class SequenceResourceRepository extends EntityRepository
      * @param array $sequences The sequences
      * @param int   $type      The type of sequence resource
      * @param int   $userId
+     * @param int   $sessionId
      *
      * @return array
      */
-    public function checkRequirementsForUser(array $sequences, $type, $userId)
+    public function checkRequirementsForUser(array $sequences, $type, $userId, $sessionId = 0)
     {
         $sequenceList = [];
         $em = $this->getEntityManager();
         $gradebookCategoryRepo = $em->getRepository('ChamiloCoreBundle:GradebookCategory');
 
         $sessionUserList = [];
+        $checkOnlySameSession = api_get_configuration_value('course_sequence_valid_only_in_same_session');
         if (SequenceResource::COURSE_TYPE == $type) {
-            $criteria = ['user' => $userId];
-            $sessions = $em->getRepository('ChamiloCoreBundle:SessionRelUser')->findBy($criteria);
-            if ($sessions) {
-                foreach ($sessions as $sessionRelUser) {
-                    $sessionUserList[] = $sessionRelUser->getSession()->getId();
+            if ($checkOnlySameSession) {
+                $sessionUserList = [$sessionId];
+            } else {
+                $criteria = ['user' => $userId];
+                $sessions = $em->getRepository('ChamiloCoreBundle:SessionRelUser')->findBy($criteria);
+                if ($sessions) {
+                    /** @var SessionRelUser $sessionRelUser */
+                    foreach ($sessions as $sessionRelUser) {
+                        $sessionUserList[] = $sessionRelUser->getSession()->getId();
+                    }
                 }
             }
         }
@@ -241,10 +250,8 @@ class SequenceResourceRepository extends EntityRepository
                         ];
 
                         $sessionsCourses = $resource->getCourses();
-
                         foreach ($sessionsCourses as $sessionCourse) {
                             $course = $sessionCourse->getCourse();
-
                             $gradebooks = $gradebookCategoryRepo->findBy(
                                 [
                                     'courseCode' => $course->getCode(),
@@ -255,7 +262,6 @@ class SequenceResourceRepository extends EntityRepository
 
                             foreach ($gradebooks as $gradebook) {
                                 $category = \Category::createCategoryObjectFromEntity($gradebook);
-
                                 if (!empty($userId)) {
                                     $resourceItem['status'] = $resourceItem['status'] && \Category::userFinishedCourse(
                                         $userId,
@@ -264,20 +270,20 @@ class SequenceResourceRepository extends EntityRepository
                                 }
                             }
                         }
-
                         break;
-
                     case SequenceResource::COURSE_TYPE:
                         $id = $resource->getId();
-                        $status = $this->checkCourseRequirements($userId, $resource, 0);
+                        $checkSessionId = 0;
+                        if ($checkOnlySameSession) {
+                            $checkSessionId = $sessionId;
+                        }
+                        $status = $this->checkCourseRequirements($userId, $resource, $checkSessionId);
 
-                        //var_dump($status);
                         if (false === $status) {
                             $sessionsInCourse = \SessionManager::get_session_by_course($id);
                             foreach ($sessionsInCourse as $session) {
                                 if (in_array($session['id'], $sessionUserList)) {
                                     $status = $this->checkCourseRequirements($userId, $resource, $session['id']);
-                                    //var_dump($status.' - '.$session['id']);
                                     if (true === $status) {
                                         break;
                                     }
@@ -331,7 +337,6 @@ class SequenceResourceRepository extends EntityRepository
                 $category,
                 true
             );
-
             if (0 === $sessionId) {
                 if (false === $userFinishedCourse) {
                     $status = false;

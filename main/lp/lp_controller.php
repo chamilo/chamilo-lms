@@ -1449,6 +1449,9 @@ switch ($action) {
                 case 'my_courses':
                     $url = api_get_path(WEB_PATH).'user_portal.php';
                     break;
+                case 'portal_home':
+                    $url = api_get_path(WEB_PATH);
+                    break;
             }
             header('location: '.$url);
             exit;

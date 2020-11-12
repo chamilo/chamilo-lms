@@ -184,7 +184,7 @@ class SurveyUtil
         }
 
         // User report
-        if (isset($_GET['action']) && $_GET['action'] == 'userreport') {
+        if (isset($_GET['action']) && $_GET['action'] === 'userreport') {
             if ($survey_data['anonymous'] == 0) {
                 foreach ($people_filled as $key => &$value) {
                     $people_filled_userids[] = $value['invited_user'];
@@ -199,7 +199,7 @@ class SurveyUtil
         }
 
         // Question report
-        if (isset($_GET['action']) && $_GET['action'] == 'questionreport') {
+        if (isset($_GET['action']) && $_GET['action'] === 'questionreport') {
             if (isset($_GET['question']) && !is_numeric($_GET['question'])) {
                 $error = get_lang('UnknowQuestion');
             }
@@ -217,9 +217,9 @@ class SurveyUtil
             Display::display_header($tool_name);
             Display::display_footer();
             exit;
-        } else {
-            return true;
         }
+
+        return true;
     }
 
     /**
@@ -571,7 +571,7 @@ class SurveyUtil
         $offset = !isset($_GET['question']) ? 0 : (int) $_GET['question'];
         $currentQuestion = isset($_GET['question']) ? (int) $_GET['question'] : 0;
         $surveyId = (int) $survey_data['survey_id'];
-        $action = Security::remove_XSS($_GET['action']);
+        $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : '';
         $course_id = api_get_course_int_id();
 
         // Database table definitions
@@ -581,14 +581,42 @@ class SurveyUtil
         $questions = [];
 
         echo '<div class="actions">';
-        echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?survey_id='.$surveyId.'&'.api_get_cidreq().'">'.
+        echo '<a
+            href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?survey_id='.$surveyId.'&'.api_get_cidreq().'">'.
             Display::return_icon(
                 'back.png',
                 get_lang('BackTo').' '.get_lang('ReportingOverview'),
                 '',
                 ICON_SIZE_MEDIUM
             ).'</a>';
+
+        echo Display::url(
+            Display::return_icon(
+                'pdf.png',
+                get_lang('ExportToPdf'),
+                '',
+                ICON_SIZE_MEDIUM
+            ),
+            'javascript: void(0);',
+            ['onclick' => 'exportToPdf();']
+        );
         echo '</div>';
+
+        $fromUntil = sprintf(get_lang('FromXUntilY'), $survey_data['avail_from'], $survey_data['avail_till']);
+        $data = [
+            get_lang('SurveyTitle') => $survey_data['title'],
+            get_lang('SurveySubTitle') => $survey_data['subtitle'],
+            get_lang('Dates') => $fromUntil,
+            get_lang('SurveyIntroduction') => $survey_data['intro'],
+        ];
+
+        $table = new HTML_Table(['id' => 'pdf_table', 'class' => 'table']);
+        $row = 0;
+        foreach ($data as $label => $item) {
+            $table->setCellContents($row, 0, $label);
+            $table->setCellContents($row, 1, $item);
+            $row++;
+        }
 
         if ($survey_data['number_of_questions'] > 0) {
             $limitStatement = null;
@@ -605,7 +633,7 @@ class SurveyUtil
                         echo '<li><a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action='.$action.'&'
                             .api_get_cidreq().'&survey_id='.$surveyId.'&question='.($i - 1).'">'.$i.'</a></li>';
                     } else {
-                        echo '<li class="disabled"s><a href="#">'.$i.'</a></li>';
+                        echo '<li class="disabled"><a href="#">'.$i.'</a></li>';
                     }
                 }
                 if ($currentQuestion < ($survey_data['number_of_questions'] - 1)) {
@@ -632,7 +660,10 @@ class SurveyUtil
                 $questions[$row['question_id']] = $row;
             }
         }
+
+        echo '<div id="question_results">';
         foreach ($questions as $question) {
+            echo '<div class="question-item">';
             $chartData = [];
             $options = [];
             $questionId = (int) $question['question_id'];
@@ -640,7 +671,7 @@ class SurveyUtil
             echo strip_tags(isset($question['survey_question']) ? $question['survey_question'] : null);
             echo '</div>';
 
-            if ('score' == $question['type']) {
+            if ('score' === $question['type']) {
                 /** @todo This function should return the options as this is needed further in the code */
                 $options = self::display_question_report_score($survey_data, $question, $offset);
             } elseif ($question['type'] === 'open' || $question['type'] === 'comment') {
@@ -701,12 +732,12 @@ class SurveyUtil
                     array_push($chartData, ['option' => $optionText, 'votes' => $votes]);
                 }
                 $chartContainerId = 'chartContainer'.$question['question_id'];
-                echo '<div id="'.$chartContainerId.'" class="col-md-12">';
-
-                echo self::drawChart($chartData, false, $chartContainerId);
+                echo '<div id="'.$chartContainerId.'" >';
+                echo self::drawChart($chartData, false, $chartContainerId, false);
+                echo '</div>';
 
                 // displaying the table: headers
-                echo '<table class="display-survey table">';
+                echo '<table class="display-survey table" id=table_'.$chartContainerId.'>';
                 echo '	<tr>';
                 echo '		<th>&nbsp;</th>';
                 echo '		<th>'.get_lang('AbsoluteTotal').'</th>';
@@ -779,9 +810,14 @@ class SurveyUtil
                 echo '		<td class="total">&nbsp;</td>';
                 echo '	</tr>';
                 echo '</table>';
-                echo '</div>';
             }
+            echo '</div>';
         }
+        echo '</div>';
+
+        // Survey information, needed for the PDF export.
+        echo Display::page_subheader(get_lang('Survey')).'<br />';
+        $table->display();
 
         if (isset($_GET['viewoption'])) {
             echo '<div class="answered-people">';
@@ -1894,8 +1930,8 @@ class SurveyUtil
                 $line++;
                 $column = 0;
             }
-            if ($possible_answers_type[$row['question_id']] == 'open' ||
-                $possible_answers_type[$row['question_id']] == 'comment'
+            if ($possible_answers_type[$row['question_id']] === 'open' ||
+                $possible_answers_type[$row['question_id']] === 'comment'
             ) {
                 $temp_id = 'open'.$open_question_iterator;
                 $answers_of_user[$row['question_id']][$temp_id] = $row;
@@ -2208,7 +2244,7 @@ class SurveyUtil
                     // The Y axis is NOT a score question type so the number of rows = the number of options
                     $tableHtml .= '<tr>';
                     for ($ii = 0; $ii <= count($question_x['answers']); $ii++) {
-                        if ($question_x['type'] == 'score') {
+                        if ($question_x['type'] === 'score') {
                             for ($x = 1; $x <= $question_x['maximum_score']; $x++) {
                                 if ($ii == 0) {
                                     $tableHtml .= '<th>'.$question_y['answers'][$ij].'</th>';
@@ -2938,6 +2974,7 @@ class SurveyUtil
         $table->set_column_filter(8, 'anonymous_filter');
         $actions = [
             'export_all' => get_lang('ExportResults'),
+            'export_by_class' => get_lang('ExportByClass'),
             'send_to_tutors' => get_lang('SendToGroupTutors'),
             'multiplicate' => get_lang('MultiplicateQuestions'),
             'delete' => get_lang('DeleteSurvey'),
@@ -3582,7 +3619,6 @@ class SurveyUtil
         $mandatoryAllowed = api_get_configuration_value('allow_mandatory_survey');
         $allowSurveyAvailabilityDatetime = api_get_configuration_value('allow_survey_availability_datetime');
 
-        // Database table definitions
         $table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
         $table_survey = Database::get_course_table(TABLE_SURVEY);
 
@@ -3857,62 +3893,73 @@ class SurveyUtil
      *
      * @return string (direct output)
      */
-    public static function drawChart(
-        $chartData,
-        $hasSerie = false,
-        $chartContainerId = 'chartContainer'
-    ) {
+    public static function drawChart($chartData, $hasSerie = false, $chartContainerId = 'chartContainer', $loadLibs = true)
+    {
         $htmlChart = '';
         if (api_browser_support('svg')) {
-            $htmlChart .= api_get_js('d3/d3.v3.5.4.min.js');
-            $htmlChart .= api_get_js('dimple.v2.1.2.min.js').'
-            <script>
-            var svg = dimple.newSvg("#'.$chartContainerId.'", "100%", 400);
-            var data = [';
             $serie = [];
             $order = [];
+            $data = '';
             foreach ($chartData as $chartDataElement) {
-                $htmlChart .= '{"';
+                $data .= '{"';
+                $option = str_replace(["\n", "\r"], '', $chartDataElement['option']);
+                $serieValue = isset($chartDataElement['serie']) ? $chartDataElement['serie'] : null;
+
                 if (!$hasSerie) {
-                    $htmlChart .= get_lang("Option").'":"'.$chartDataElement['option'].'", "';
-                    array_push($order, $chartDataElement['option']);
+                    $data .= get_lang("Option").'":"'.$option.'", "';
+                    array_push($order, $option);
                 } else {
-                    if (!is_array($chartDataElement['serie'])) {
-                        $htmlChart .= get_lang("Option").'":"'.$chartDataElement['serie'].'", "'.
-                            get_lang("Score").'":"'.$chartDataElement['option'].'", "';
-                        array_push($serie, $chartDataElement['serie']);
+                    if (!is_array($serieValue)) {
+                        $data .=
+                            get_lang("Option").'":"'.$serieValue.'", "'.
+                            get_lang("Score").'":"'.$option.'", "';
+                        array_push($serie, $serieValue);
                     } else {
-                        $htmlChart .= get_lang("Serie").'":"'.$chartDataElement['serie'][0].'", "'.
-                            get_lang("Option").'":"'.$chartDataElement['serie'][1].'", "'.
-                            get_lang("Score").'":"'.$chartDataElement['option'].'", "';
+                        $data .=
+                            get_lang("Serie").'":"'.$serieValue[0].'", "'.
+                            get_lang("Option").'":"'.$serieValue[1].'", "'.
+                            get_lang("Score").'":"'.$option.'", "';
                     }
                 }
-                $htmlChart .= get_lang("Votes").'":"'.$chartDataElement['votes'].
-                    '"},';
+                $data .= get_lang("Votes").'":"'.$chartDataElement['votes'].'"},';
+                rtrim($data, ",");
             }
-            rtrim($htmlChart, ",");
-            $htmlChart .= '];
+
+            if ($loadLibs) {
+                $htmlChart .= api_get_js('d3/d3.v3.5.4.min.js');
+                $htmlChart .= api_get_js('dimple.v2.1.2.min.js');
+            }
+
+            $htmlChart .= '
+            <script>
+                var svg = dimple.newSvg("#'.$chartContainerId.'", "100%", 400);
+                var data = ['.$data.'];
                 var myChart = new dimple.chart(svg, data);
                 myChart.addMeasureAxis("y", "'.get_lang("Votes").'");';
+
             if (!$hasSerie) {
-                $htmlChart .= 'var xAxisCategory = myChart.addCategoryAxis("x", "'.get_lang("Option").'");
+                $htmlChart .= '
+                    var xAxisCategory = myChart.addCategoryAxis("x", "'.get_lang("Option").'");
                     xAxisCategory.addOrderRule('.json_encode($order).');
                     myChart.addSeries("'.get_lang("Option").'", dimple.plot.bar);';
             } else {
                 if (!is_array($chartDataElement['serie'])) {
                     $serie = array_values(array_unique($serie));
-                    $htmlChart .= 'var xAxisCategory = myChart.addCategoryAxis("x", ["'.get_lang("Option").'","'
-                        .get_lang("Score").'"]);
+                    $htmlChart .= '
+                        var xAxisCategory =
+                        myChart.addCategoryAxis("x", ["'.get_lang("Option").'","'.get_lang("Score").'"]);
                         xAxisCategory.addOrderRule('.json_encode($serie).');
                         xAxisCategory.addGroupOrderRule("'.get_lang("Score").'");
                         myChart.addSeries("'.get_lang("Option").'", dimple.plot.bar);';
                 } else {
-                    $htmlChart .= 'myChart.addCategoryAxis("x", ["'.get_lang("Option").'","'.get_lang("Score").'"]);
+                    $htmlChart .= '
+                        myChart.addCategoryAxis("x", ["'.get_lang("Option").'","'.get_lang("Score").'"]);
                         myChart.addSeries("'.get_lang("Serie").'", dimple.plot.bar);';
                 }
             }
-            $htmlChart .= 'myChart.draw();
-                </script>';
+
+            $htmlChart .= 'myChart.draw();';
+            $htmlChart .= '</script>';
         }
 
         return $htmlChart;

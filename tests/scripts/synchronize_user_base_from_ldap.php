@@ -1,5 +1,7 @@
 <?php
+
 /* For licensing terms, see /license.txt */
+
 /*
 User account synchronisation from LDAP
 
@@ -20,7 +22,7 @@ defined in app/config/auth.conf.php.
 username field is used to identify and match LDAP and Chamilo accounts together.
 ($extldap_user_correspondance['username'])
 */
-
+exit;
 // Change this to the absolute path to chamilo root folder if you move the script out of tests/scripts
 $chamiloRoot = __DIR__.'/../..';
 

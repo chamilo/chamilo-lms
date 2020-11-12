@@ -549,9 +549,10 @@ ALTER TABLE c_survey_question ADD is_required TINYINT(1) DEFAULT 0 NOT NULL;
 // Allow scheduled emails to session users.
 //CREATE TABLE scheduled_announcements (id INT AUTO_INCREMENT NOT NULL, subject VARCHAR(255) NOT NULL, message LONGTEXT NOT NULL, date DATETIME DEFAULT NULL, sent TINYINT(1) NOT NULL, session_id INT NOT NULL, c_id INT DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
 // sudo mkdir app/upload/scheduled_announcement
-// Add "attachment" file extra field in: main/admin/extra_fields.php?type=scheduled_announcement&action=add
-// Add "send_to_coaches" checkbox field in: main/admin/extra_fields.php?type=scheduled_announcement&action=add
+// Uncomment and set the following setting to true before moving on
 //$_configuration['allow_scheduled_announcements'] = false;
+// Add "attachment" file upload extra field label in: main/admin/extra_fields.php?type=scheduled_announcement&action=add
+// Add "send_to_coaches" checkbox options field label in: main/admin/extra_fields.php?type=scheduled_announcement&action=add
 // Add the list of emails as a bcc when sending an email.
 // Configure a cron task pointing at main/cron/scheduled_announcement.php
 /*
@@ -1111,18 +1112,17 @@ $_configuration['profile_fields_visibility'] = [
 // Improve speed when rendering gradebook student reports using Doctrine APCU cache
 // $_configuration['gradebook_use_apcu_cache'] = true;
 
-// Add a minimum time limit to be in the learning path
-// in order to get the last item completed
-// Requires a DB change:
 /*
-  ALTER TABLE c_lp ADD accumulate_work_time INT NOT NULL;
-  CREATE TABLE track_e_access_complete (id int(11) NOT NULL AUTO_INCREMENT, user_id int(11) NOT NULL, date_reg datetime NOT NULL, tool varchar(255) NOT NULL, tool_id int(11) NOT NULL,   tool_id_detail int(11) NOT NULL,  action varchar(255) NOT NULL,   action_details varchar(255) NOT NULL, current_id int(11) NOT NULL, ip_user varchar(255) NOT NULL, user_agent varchar(255) NOT NULL, session_id int(11) NOT NULL, c_id int(11) NOT NULL,   ch_sid varchar(255) NOT NULL, login_as int(11) NOT NULL, info longtext NOT NULL, url text NOT NULL, PRIMARY KEY (id) ) ENGINE=InnoDB AUTO_INCREMENT=13989 DEFAULT CHARSET=utf8;
-  CREATE INDEX user_course_session ON track_e_access_complete (user_id, c_id, session_id);
+ Add a minimum time limit to be in the learning path
+ in order to get the last item completed
+ Requires a DB change:
+    ALTER TABLE c_lp ADD accumulate_work_time INT NOT NULL;
+    CREATE TABLE track_e_access_complete (id int(11) NOT NULL AUTO_INCREMENT, user_id int(11) NOT NULL, date_reg datetime NOT NULL, tool varchar(255) NOT NULL, tool_id int(11) NOT NULL,   tool_id_detail int(11) NOT NULL,  action varchar(255) NOT NULL,   action_details varchar(255) NOT NULL, current_id int(11) NOT NULL, ip_user varchar(255) NOT NULL, user_agent varchar(255) NOT NULL, session_id int(11) NOT NULL, c_id int(11) NOT NULL,   ch_sid varchar(255) NOT NULL, login_as int(11) NOT NULL, info longtext NOT NULL, url text NOT NULL, PRIMARY KEY (id) ) ENGINE=InnoDB AUTO_INCREMENT=13989 DEFAULT CHARSET=utf8;
+    CREATE INDEX user_course_session ON track_e_access_complete (user_id, c_id, session_id);
+ Add course checkbox extra field "new_tracking_system"
+ Add session checkbox extra field "new_tracking_system"
+ Only applied for courses/sessions with extra field "new_tracking_system" to "1"
 */
-
-// Add course checkbox extra field "new_tracking_system"
-// Add session checkbox extra field "new_tracking_system"
-// Only applied for courses/sessions with extra field "new_tracking_system" to "1"
 //$_configuration['lp_minimum_time'] = false;
 
 // Track LP attempts using the new tracking system.
@@ -1610,6 +1610,131 @@ $_configuration['auth_password_links'] = [
 // Prevent the use of images copy-paste as base64 in the editor to avoid
 // filling the database with images
 //$_configuration['ck_editor_block_image_copy_paste'] = false;
+
+// Shows a link to the "my lps" page in the /index.php and /user_portal.php page.
+// It also enables the main/lp/my_list.php page.
+//$_configuration['show_my_lps_page'] = false;
+
+// Disables access to the main/lp/my_list.php page
+//$_configuration['disable_my_lps_page'] = false;
+
+// When exercise is finished send results by email to users, depending the settings below:
+// Requires a new Exercise Extra field type called with variable = "notifications".
+/*$_configuration['exercise_finished_notification_settings'] = [
+    'notification_teacher' => [ // Notification label
+        'for teacher' => [ // for teacher
+            'email' => 'teacher1@example.com,teacher2@example.com', // multiple emails allowed
+            'attempts' => [
+                [
+                    'status' => 'passed', // passed/failed/all (depends in the exercise pass %)
+                    'content' => 'MailAttemptPassed', // exercise extra field
+                    'content_default' => 'Hi, ((user_lastname)) ', // value if MailAttemptPassed is empty
+                    'add_pdf' => 'PdfExerciseExtraField', // exercise extra field
+                ],
+                [
+                    'status' => 'failed',
+                    'content' => 'MailAttemptFailed',
+                ],
+                [
+                    'status' => 'all',
+                    'content' => 'MailAttemptAll',
+                ],
+                [
+                    'status' => 'all',
+                    'attempt' => 1,
+                    'content' => 'MailAttemptAttempt1', // exercise extra field,
+                ],
+                [
+                    'status' => 'failed',
+                    'attempt' => 2,
+                    'content' => 'MailAttemptFailed2', // exercise extra field,
+                    // if Exercise failed and attempt = 2 then the student will be subscribe to course code:
+                    'post_actions' => [
+                        'subscribe_student_to_courses' => ['SECOND_ATTEMPT'],
+                    ],
+                ],
+            ],
+        ],
+        'for admin' => [
+            'email' => 'admin@example.com',
+            'attempts' => [
+                [
+                    'status' => 'failed',
+                    'content' => 'MailAttemptFailed',
+                ],
+            ],
+        ],
+    ],
+    'notification_coach' => [ // Label
+        'for coach ' => [ // for teacher
+            'email' => 'coach@example.com',
+            'attempts' => [
+                [
+                    'status' => 'passed',
+                    'content' => 'MailAttemptPassed', // exercise extra field,
+                ],
+                [
+                    'status' => 'failed',
+                    'content' => 'MailAttemptFailed', // exercise extra field,
+                ],
+            ],
+        ],
+    ],
+];*/
+
+// Shows a marker if the course was shared in other portals.
+//$_configuration['multiple_access_url_show_shared_course_marker'] = false;
+
+// Add option to copy a session with its course-session content BT#17832
+//$_configuration['duplicate_specific_session_content_on_session_copy'] = false;
+
+// Allow add usergroups to a LP BT#17854
+//CREATE TABLE c_lp_rel_usergroup (id INT AUTO_INCREMENT NOT NULL, lp_id INT NOT NULL, usergroup_id INT NOT NULL, c_id INT NOT NULL, session_id INT, created_at DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
+//CREATE TABLE c_lp_category_rel_usergroup (id INT AUTO_INCREMENT NOT NULL, lp_category_id INT NOT NULL, usergroup_id INT NOT NULL, c_id INT NOT NULL, session_id INT, created_at DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
+//$_configuration['allow_lp_subscription_to_usergroups'] = false;
+
+// Gradebook student pdf export settings
+/*$_configuration['gradebook_pdf_export_settings'] = [
+    'hide_score_weight' => true,
+    'hide_feedback_textarea' => true,
+];*/
+
+// Use exercise score in platform settings in gradebook total rows/columns.
+//$_configuration['gradebook_use_exercise_score_settings_in_total'] = false;
+
+// Use exercise score in platform settings in gradebook total rows/columns.
+//$_configuration['gradebook_use_exercise_score_settings_in_total'] = false;
+
+// Show a link on the results page to download an answers report
+//$_configuration['quiz_results_answers_report'] = false;
+
+// Hide the breadcrumb navigation (for example if you don't want users to go
+// sniffing around a specific course). Should be combined with hiding the menu
+//$_configuration['breadcrumb_hide'] = false;
+
+// Hide the sidebar completely to avoid users navigating away.
+// Warning: this currently leaves a weird empty space where the sidebar should
+// be. We recommend using this only in very specific circumstances.
+//$_configuration['sidebar_hide'] = false;
+
+// Block question categories BT#17789
+//ALTER TABLE track_e_exercises ADD COLUMN blocked_categories LONGTEXT;
+//$_configuration['block_category_questions'] = false;
+
+// Make questions mandatory selectable when using question select type = 5 (category-random)
+//ALTER TABLE c_quiz_question_rel_category ADD COLUMN mandatory INT DEFAULT 0;
+//$_configuration['allow_mandatory_question_in_category'] = false;
+
+// Resource sequence: Validate course in the same session.
+//$_configuration['course_sequence_valid_only_in_same_session'] = false;
+
+// Allow time per question. BT#17791
+// Requires a question text extra field called "time", value in seconds.
+// ALTER TABLE track_e_attempt ADD COLUMN seconds_spent INT;
+//$_configuration['allow_time_per_question'] = true;
+
+// Disable change user visibility tool icon.
+//$_configuration['disable_change_user_visibility_for_public_courses'] = true;
 
 // KEEP THIS AT THE END
 // -------- Custom DB changes

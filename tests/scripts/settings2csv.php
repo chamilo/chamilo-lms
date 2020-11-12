@@ -1,5 +1,7 @@
 <?php
+
 /* For licensing terms, see /license.txt */
+
 /**
  * This script generates a CSV file of all settings in the order they appear
  * in the platform settings section, in the given language.

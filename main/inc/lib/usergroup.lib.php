@@ -437,7 +437,7 @@ class UserGroup extends Model
 
     /**
      * @param array $options
-     * @param int   $type
+     * @param int   $type 0 = classes / 1 = social groups
      *
      * @return array
      */
@@ -490,9 +490,7 @@ class UserGroup extends Model
             }
         }
 
-        $array = Database::store_result($result, 'ASSOC');
-
-        return $array;
+        return Database::store_result($result, 'ASSOC');
     }
 
     /**
@@ -996,7 +994,6 @@ class UserGroup extends Model
 
         $delete_items = [];
         $new_items = [];
-
         if (!empty($list)) {
             foreach ($list as $user_id) {
                 if (!in_array($user_id, $current_list)) {
@@ -1659,11 +1656,12 @@ class UserGroup extends Model
     /**
      * Get user list by usergroup.
      *
-     * @param int $id
+     * @param int    $id
+     * @param string $orderBy
      *
      * @return array
      */
-    public function getUserListByUserGroup($id)
+    public function getUserListByUserGroup($id, $orderBy = '')
     {
         $id = (int) $id;
         $sql = "SELECT u.* FROM $this->table_user u
@@ -1671,6 +1669,11 @@ class UserGroup extends Model
                 ON c.user_id = u.id
                 WHERE c.usergroup_id = $id"
                 ;
+
+        if (!empty($orderBy)) {
+            $orderBy = Database::escape_string($orderBy);
+            $sql .= " ORDER BY $orderBy ";
+        }
         $result = Database::query($sql);
 
         return Database::store_result($result);
@@ -2977,5 +2980,42 @@ class UserGroup extends Model
             api_protect_admin_script(true);
             api_protect_limit_for_session_admin();
         }
+    }
+
+    public function getGroupsByLp($lpId, $courseId, $sessionId)
+    {
+        $lpId = (int) $lpId;
+        $courseId = (int) $courseId;
+        $sessionId = (int) $sessionId;
+        $sessionCondition = api_get_session_condition($sessionId, true);
+        $table = Database::get_course_table(TABLE_LP_REL_USERGROUP);
+        $sql = "SELECT usergroup_id FROM $table
+                WHERE
+                    c_id = $courseId AND
+                    lp_id = $lpId
+                    $sessionCondition
+                    ";
+        $result = Database::query($sql);
+
+        return Database::store_result($result, 'ASSOC');
+    }
+
+    public function getGroupsByLpCategory($categoryId, $courseId, $sessionId)
+    {
+        $categoryId = (int) $categoryId;
+        $courseId = (int) $courseId;
+        $sessionId = (int) $sessionId;
+        $sessionCondition = api_get_session_condition($sessionId, true);
+
+        $table = Database::get_course_table(TABLE_LP_CATEGORY_REL_USERGROUP);
+        $sql = "SELECT usergroup_id FROM $table
+                WHERE
+                    c_id = $courseId AND
+                    lp_category_id = $categoryId
+                    $sessionCondition
+                ";
+        $result = Database::query($sql);
+
+        return Database::store_result($result, 'ASSOC');
     }
 }

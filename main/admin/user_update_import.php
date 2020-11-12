@@ -6,7 +6,6 @@
  * This tool allows platform admins to add users by uploading a CSV or XML file.
  */
 
-use Ddeboer\DataImport\Reader\CsvReader;
 use Symfony\Component\DomCrawler\Crawler;
 
 $cidReset = true;
@@ -87,11 +86,14 @@ function validate_data($users)
  *
  * @param array $users         List of users.
  * @param bool  $resetPassword Optional.
+ * @param bool  $sendEmail     Optional.
  */
-function updateUsers($users, $resetPassword = false)
+function updateUsers(
+    $users,
+    $resetPassword = false,
+    $sendEmail = false)
 {
     $usergroup = new UserGroup();
-
     if (is_array($users)) {
         foreach ($users as $user) {
             if (isset($user['Status'])) {
@@ -137,8 +139,9 @@ function updateUsers($users, $resetPassword = false)
             $hrDeptId = $userInfo['hr_dept_id'];
             $language = isset($user['Language']) ? $user['Language'] : $userInfo['language'];
             //$sendEmail = isset($user['SendEmail']) ? $user['SendEmail'] : $userInfo['language'];
-            $sendEmail = false;
-            if ($resetPassword) {
+            //$sendEmail = false;
+            // see BT#17893
+            if ($resetPassword && $sendEmail == false) {
                 $sendEmail = true;
             }
 
@@ -201,6 +204,11 @@ function updateUsers($users, $resetPassword = false)
                     );
                 }
             }
+
+            $userUpdated = api_get_user_info($user_id);
+            Display::addFlash(
+                Display::return_message(get_lang('UserUpdated').': '.$userUpdated['complete_name_with_username'])
+            );
         }
     }
 }
@@ -216,21 +224,18 @@ function updateUsers($users, $resetPassword = false)
  */
 function parse_csv_data($file)
 {
-    $file = new SplFileObject($file);
-    $csv = new CsvReader($file, ';');
-    $csv->setHeaderRowNumber(0);
-
-    if (!in_array('UserName', $csv->getColumnHeaders())) {
-        throw new Exception(get_lang("UserNameMandatory"));
+    $data = Import::csv_reader($file);
+    if (empty($data)) {
+        throw new Exception(get_lang('NoDataAvailable'));
     }
-
     $users = [];
-
-    foreach ($csv as $row) {
+    foreach ($data as $row) {
         if (isset($row['Courses'])) {
             $row['Courses'] = explode('|', trim($row['Courses']));
         }
-
+        if (!isset($row['UserName'])) {
+            throw new Exception(get_lang('ThisFieldIsRequired').': UserName');
+        }
         $users[] = $row;
     }
 
@@ -277,6 +282,13 @@ $form->addHeader($tool_name);
 $form->addFile('import_file', get_lang('ImportFileLocation'), ['accept' => 'text/csv', 'id' => 'import_file']);
 $form->addCheckBox('reset_password', '', get_lang('AutoGeneratePassword'));
 
+$group = [
+    $form->createElement('radio', 'sendMail', '', get_lang('Yes'), 1),
+    $form->createElement('radio', 'sendMail', null, get_lang('No'), 0),
+];
+$form->addGroup($group, '', get_lang('SendMailToUsers'));
+$defaults['sendMail'] = 0;
+
 if ($form->validate()) {
     if (Security::check_token('post')) {
         Security::clear_token();
@@ -319,7 +331,8 @@ if ($form->validate()) {
             }
         }
 
-        updateUsers($usersToUpdate, isset($formValues['reset_password']));
+        $sendEmail = $_POST['sendMail'] ? true : false;
+        updateUsers($usersToUpdate, isset($formValues['reset_password']), $sendEmail);
 
         if (empty($errors)) {
             Display::addFlash(
@@ -350,6 +363,7 @@ if ($form->validate()) {
 Display::display_header($tool_name);
 $token = Security::get_token();
 
+$form->setDefaults($defaults);
 $form->addHidden('sec_token', $token);
 $form->addButtonImport(get_lang('Import'));
 $form->display();

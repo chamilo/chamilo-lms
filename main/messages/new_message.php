@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -134,7 +135,10 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
                 ]
             );
             $form->addRule('id_text_name', get_lang('ThisFieldIsRequired'), 'required');
-            $form->addElement('html', '<div id="id_div_search" style="padding:0px" class="message-select-box" >&nbsp;</div>');
+            $form->addElement(
+                'html',
+                '<div id="id_div_search" style="padding:0px" class="message-select-box" >&nbsp;</div>'
+            );
             $form->addElement('hidden', 'user_list', 0, ['id' => 'user_list']);
         } else {
             if (!empty($sent_to)) {
@@ -232,7 +236,8 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
 
         $form->addLabel(
             '',
-            '<span id="link-more-attach"><a class="btn btn-default" href="javascript://" onclick="return add_image_form()">'.
+            '<span id="link-more-attach">
+              <a class="btn btn-default" href="javascript://" onclick="return add_image_form()">'.
             get_lang('AddOneMoreFile').'</a></span>&nbsp;('.
             sprintf(
                 get_lang('MaximunFileSizeX'),

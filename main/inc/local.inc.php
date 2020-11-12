@@ -1370,7 +1370,7 @@ if ((isset($uidReset) && $uidReset) || $cidReset) {
                                     $sequences = $repo->getRequirements($_real_cid, SequenceResource::COURSE_TYPE);
 
                                     if ($sequences) {
-                                        $sequenceList = $repo->checkRequirementsForUser($sequences, SequenceResource::COURSE_TYPE, $user_id);
+                                        $sequenceList = $repo->checkRequirementsForUser($sequences, SequenceResource::COURSE_TYPE, $user_id, $session_id);
                                         $completed = $repo->checkSequenceAreCompleted($sequenceList);
 
                                         if (false === $completed) {

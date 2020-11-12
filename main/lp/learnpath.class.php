@@ -1109,6 +1109,15 @@ class learnpath
                 WHERE c_id = $course_id AND (link LIKE '$link%' AND image='scormbuilder.gif')";
         Database::query($sql);
 
+        if (api_get_configuration_value('allow_lp_subscription_to_usergroups')) {
+            $table = Database::get_course_table(TABLE_LP_REL_USERGROUP);
+            $sql = "DELETE FROM $table
+                    WHERE
+                        lp_id = {$this->lp_id} AND
+                        c_id = $course_id ";
+            Database::query($sql);
+        }
+
         $sql = "DELETE FROM $lp
                 WHERE iid = ".$this->lp_id;
         Database::query($sql);
@@ -1523,11 +1532,12 @@ class learnpath
         $maxScore = 100
     ) {
         $id = (int) $id;
-        $prerequisite_id = (int) $prerequisite_id;
 
         if (empty($id)) {
             return false;
         }
+
+        $prerequisite_id = (int) $prerequisite_id;
 
         if (empty($minScore) || $minScore < 0) {
             $minScore = 0;
@@ -1537,8 +1547,8 @@ class learnpath
             $maxScore = 100;
         }
 
-        $minScore = floatval($minScore);
-        $maxScore = floatval($maxScore);
+        $minScore = (float) $minScore;
+        $maxScore = (float) $maxScore;
 
         if (empty($prerequisite_id)) {
             $prerequisite_id = 'NULL';
@@ -4878,7 +4888,7 @@ class learnpath
     /**
      * Saves the last item seen's ID only in case.
      */
-    public function save_last()
+    public function save_last($score = null)
     {
         $course_id = api_get_course_int_id();
         $debug = $this->debug;
@@ -4919,6 +4929,12 @@ class learnpath
         if (!api_is_invitee()) {
             // Save progress.
             list($progress) = $this->get_progress_bar_text('%');
+            $scoreAsProgressSetting = api_get_configuration_value('lp_score_as_progress_enable');
+            $scoreAsProgress = $this->getUseScoreAsProgress();
+            if ($scoreAsProgress && $scoreAsProgressSetting && (null === $score || empty($score) || -1 == $score)) {
+                return false;
+            }
+
             if ($progress >= 0 && $progress <= 100) {
                 $progress = (int) $progress;
                 $sql = "UPDATE $table SET
@@ -10023,7 +10039,8 @@ class learnpath
                 $lpItemObj->update();
                 $item['max_score'] = $lpItemObj->max_score;
 
-                if (empty($selectedMinScoreValue) && !empty($masteryScoreAsMinValue)) {
+                //if (empty($selectedMinScoreValue) && !empty($masteryScoreAsMinValue)) {
+                if (!isset($selectedMinScore[$item['id']]) && !empty($masteryScoreAsMinValue)) {
                     // Backwards compatibility with 1.9.x use mastery_score as min value
                     $selectedMinScoreValue = $masteryScoreAsMinValue;
                 }
@@ -12241,15 +12258,12 @@ EOD;
     /**
      * @param int $id
      *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
-     *
-     * @return mixed
+     * @return bool
      */
     public static function deleteCategory($id)
     {
         $em = Database::getManager();
+        $id = (int) $id;
         $item = self::getCategory($id);
         if ($item) {
             $courseId = $item->getCId();
@@ -12263,6 +12277,15 @@ EOD;
                 foreach ($lps as $lpItem) {
                     $lpItem->setCategoryId(0);
                 }
+            }
+
+            if (api_get_configuration_value('allow_lp_subscription_to_usergroups')) {
+                $table = Database::get_course_table(TABLE_LP_CATEGORY_REL_USERGROUP);
+                $sql = "DELETE FROM $table
+                        WHERE
+                            lp_category_id = $id AND
+                            c_id = $courseId ";
+                Database::query($sql);
             }
 
             // Removing category.

@@ -411,7 +411,7 @@ class AnnouncementManager
     /**
      * Displays one specific announcement.
      *
-     * @param int $id, the id of the announcement you want to display
+     * @param int $id the id of the announcement you want to display
      *
      * @return string
      */

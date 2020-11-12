@@ -181,7 +181,7 @@ class Recording
     public function initializeExtraProperties()
     {
         $this->startDateTime = new DateTime($this->recordingMeeting->start_time);
-        $this->startDateTime->setTimezone(new DateTimeZone(date_default_timezone_get()));
+        $this->startDateTime->setTimezone(new DateTimeZone(api_get_timezone()));
         $this->formattedStartTime = $this->startDateTime->format('Y-m-d H:i');
 
         $now = new DateTime();

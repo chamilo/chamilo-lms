@@ -517,6 +517,14 @@ input[type=checkbox], input[type=radio] {
     margin: 3px 0 0;
 }
 
+thead input[type=checkbox], thead input[type=radio] {
+    margin: 0px 0 0;
+}
+
+.ui-jqgrid-btable input[type=checkbox] {
+    margin-top: 4px;
+}
+
 .prerequisites input[type=radio] {
     height: 12px;
 }
@@ -2992,19 +3000,19 @@ table.certaintyTable td.globalChart {
     padding: 5px;
     text-align: center;
     margin-bottom: 10px;
-    background: url(../../main/img/clock-exercise.png) no-repeat center center #FFF;
+    background: no-repeat center center #FFF;
     border: 1px solid #DDD;
     border-radius: 5px;
 }
 
 .time_warning_two {
-    background: url(../../main/img/clock-exercise.png) no-repeat center center #FFD700;
+    background: no-repeat center center #FFD700;
     border: 1px solid #FFCC00;
     color: #C00;
 }
 
 .time_warning_one {
-    background: url(../../main/img/clock-exercise.png) no-repeat center center #FB3A35;
+    background: no-repeat center center #FB3A35;
     border: 1px solid #FB3A35;
     color: #FFF;
 }
@@ -6660,6 +6668,10 @@ div#chat-remote-video video {
     text-overflow: ellipsis;
 }
 
+.grid-courses .items .category a {
+    color: #fff;
+}
+
 .grid-courses .items .cribbon {
     width: 0;
     height: 0;
@@ -6672,7 +6684,6 @@ div#chat-remote-video video {
 
 .grid-courses .items .description {
     padding: 5px 10px 5px;
-    min-height: 125px;
 }
 
 .grid-courses .items .description .text {

@@ -26,10 +26,7 @@ if (0 == $survey_data['anonymous']) {
 } else {
     $people_filled_full_data = false;
 }
-$people_filled = SurveyManager::get_people_who_filled_survey(
-    $survey_id,
-    $people_filled_full_data
-);
+$people_filled = SurveyManager::get_people_who_filled_survey($survey_id, $people_filled_full_data);
 
 // Checking the parameters
 SurveyUtil::check_parameters($people_filled);
@@ -40,7 +37,7 @@ $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
 );
 
 /** @todo this has to be moved to a more appropriate place (after the display_header of the code)*/
-if (!api_is_allowed_to_edit(false, true) || $isDrhOfCourse) {
+if ($isDrhOfCourse || !api_is_allowed_to_edit(false, true)) {
     // Show error message if the survey can be seen only by tutors
     if (SURVEY_VISIBLE_TUTOR == $survey_data['visible_results']) {
         api_not_allowed(true);
@@ -57,6 +54,7 @@ if (!api_is_allowed_to_edit(false, true) || $isDrhOfCourse) {
  */
 $exportReport = isset($_REQUEST['export_report']) ? $_REQUEST['export_report'] : '';
 $format = isset($_REQUEST['export_format']) ? $_REQUEST['export_format'] : '';
+
 if (!empty($exportReport) && !empty($format)) {
     $compact = false;
     switch ($format) {
@@ -111,6 +109,7 @@ $interbreadcrumb[] = [
     'name' => $urlname,
 ];
 
+$actions = '';
 if ($action === 'overview') {
     $tool_name = get_lang('Reporting');
 } else {
@@ -135,10 +134,128 @@ if ($action === 'overview') {
     }
 }
 
-// Displaying the header
-Display::display_header($tool_name, 'Survey');
+$htmlHeadXtra[] = api_get_asset('jspdf/dist/jspdf.umd.min.js');
+$htmlHeadXtra[] = api_get_asset('svgtopdf/svg2pdf.js');
+$htmlHeadXtra[] = api_get_asset('html2canvas/html2canvas.js');
+$htmlHeadXtra[] = api_get_js('d3/d3.v3.5.4.min.js');
+$htmlHeadXtra[] = api_get_js('dimple.v2.1.2.min.js');
 
-// Action handling
+$htmlHeadXtra[] = '<script>
+async function exportToPdf() {
+    window.jsPDF = window.jspdf.jsPDF;
+    var doc = document.getElementById("question_results");
+    var pdf = new jsPDF("", "pt", "a4");
+    //var a4Height = 841.89;
+
+    // Adding title
+    pdf.setFontSize(16);
+    pdf.text(40, 40, "'.get_lang('Reporting').'");
+
+    const table = document.getElementById("pdf_table");
+    var headerY = 0;
+    await html2canvas(table).then(function(canvas) {
+        var pageData = canvas.toDataURL("image/jpeg", 1);
+        headerY = 530.28/canvas.width * canvas.height;
+        pdf.addImage(pageData, "JPEG", 40, 60, 530, headerY);
+    });
+
+    var divs = doc.getElementsByClassName("question-item");
+    var pages = [];
+    var page = 1;
+    for (var i = 0; i < divs.length; i += 1) {
+        const svg = divs[i].querySelector("svg");
+        // Two parameters after addImage control the size of the added image,
+        // where the page height is compressed according to the width-height ratio column of a4 paper.
+        if (!pages[page]) {
+            pages[page] = 0;
+        }
+
+        var positionY = 180;
+        /*var positionY = headerY + 180;
+        if (positionY > 800) {
+             pdf.addPage();
+             page++;
+        }*/
+        pages[page] += 1;
+        var diff = 250;
+        if (page > 1) {
+            headerY = 0;
+            positionY = 60;
+            diff = 220;
+        }
+        if (pages[page] > 1) {
+            positionY = pages[page] * diff + 10;
+        }
+
+        const title = $(divs[i]).find(".title-question");
+        pdf.setFontSize(12);
+        pdf.text(40, positionY, title.text());
+
+        svg2pdf(svg, pdf, {
+              xOffset: 10,
+              yOffset: positionY+10,
+              scale: 0.5
+        });
+
+        const tables = divs[i].getElementsByClassName("table");
+        var config= {
+            ignoreElements: function (element) {
+                if (element.nodeName == "IMG" || element.nodeName =="VIDEO"|| element.nodeName =="AUDIO") {
+                    return true;
+                }
+
+                return false;
+            }
+        };
+
+        for (var j = 0; j < tables.length; j += 1) {
+            await html2canvas(tables[j], config).then(function(canvas) {
+                var pageData = canvas.toDataURL("image/jpeg", 0.8);
+                pdf.addImage(pageData, "JPEG", 40, positionY + 210, 520, 530.28/canvas.width * canvas.height);
+            });
+        }
+
+        if (i > 0 && (i -1) % 2 === 0 && (i+1 != divs.length)) {
+             pdf.addPage();
+             page++;
+        }
+
+        /*await html2canvas(divs[i], {}).then(function(canvas) {
+            // Returns the image data URL, parameter: image format and clarity (0-1)
+            var pageData = canvas.toDataURL("image/jpeg", 0.8);
+
+            // Two parameters after addImage control the size of the added image,
+            // where the page height is compressed according to the width-height ratio column of a4 paper.
+            if (!pages[page]) {
+                pages[page] = 0;
+            }
+            pages[page] += 1;
+
+            var positionY = 200;
+            var diff = 250;
+            if (page > 1) {
+                positionY = 60;
+                diff = 220;
+            }
+            if (pages[page] > 1) {
+                positionY = pages[page] * diff + 10;
+            }
+
+            pdf.addImage(url, "JPEG", 40, positionY, 530, 530.28/canvas.width * canvas.height);
+
+            //pdf.addImage(pageData, "JPEG", 40, positionY, 530, 530.28/canvas.width * canvas.height);
+            if (i > 0 && (i -1) % 2 === 0) {
+                 pdf.addPage();
+                 page++;
+            }
+        });*/
+    }
+
+    pdf.save("reporting.pdf");
+}
+</script>';
+
+Display::display_header($tool_name, 'Survey');
 SurveyUtil::handle_reporting_actions($survey_data, $people_filled);
 
 // Content

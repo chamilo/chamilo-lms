@@ -482,7 +482,7 @@ if (api_get_setting('allow_terms_conditions') === 'true' && $user_already_regist
     $tool_name = get_lang('TermsAndConditions');
 }
 
-$home = api_get_path(SYS_APP_PATH).'home/';
+$home = api_get_path(SYS_HOME_PATH);
 if (api_is_multiple_url_enabled()) {
     $access_url_id = api_get_current_access_url_id();
     if ($access_url_id != -1) {
@@ -491,8 +491,8 @@ if (api_is_multiple_url_enabled()) {
         $clean_url = api_replace_dangerous_char($url);
         $clean_url = str_replace('/', '-', $clean_url);
         $clean_url .= '/';
-        $home_old = api_get_path(SYS_APP_PATH).'home/';
-        $home = api_get_path(SYS_APP_PATH).'home/'.$clean_url;
+        $home_old = api_get_path(SYS_HOME_PATH);
+        $home = api_get_path(SYS_HOME_PATH).$clean_url;
     }
 }
 

@@ -1398,10 +1398,10 @@ switch ($action) {
         break;
     case 'get_work_user_list':
         $plagiarismColumns = [];
-        if (api_get_configuration_value('allow_compilatio_tool')) {
+        if (api_get_configuration_value('allow_compilatio_tool') && api_is_allowed_to_edit()) {
             $plagiarismColumns = ['compilatio'];
         }
-        if (isset($_GET['type']) && $_GET['type'] == 'simple') {
+        if (isset($_GET['type']) && $_GET['type'] === 'simple') {
             $columns = [
                 'type', 'title', 'qualification', 'sent_date', 'qualificator_id',
             ];
@@ -1711,6 +1711,19 @@ switch ($action) {
                 $dateToString = $dateData['access'];
 
                 $detailButtons = [];
+                $detailButtons[] = Display::url(
+                    Display::return_icon('pdf.png', get_lang('CertificateOfAchievement'), [], ICON_SIZE_SMALL),
+                    api_get_path(WEB_CODE_PATH).'mySpace/session.php?'
+                    .http_build_query(
+                        [
+                            'action' => 'export_to_pdf',
+                            'type' => 'achievement',
+                            'session_to_export' => $session['id'],
+                            'all_students' => 1,
+                        ]
+                    ),
+                    ['target' => '_blank']
+                );
                 $detailButtons[] = Display::url(
                     Display::return_icon('works.png', get_lang('WorksReport')),
                     api_get_path(WEB_CODE_PATH).'mySpace/works_in_session_report.php?session='.$session['id']

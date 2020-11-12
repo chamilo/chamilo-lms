@@ -1422,6 +1422,7 @@ function getAllWorkListStudent(
             return [];
         }
         $select = 'SELECT DISTINCT
+                        w.title,
                         w.url,
                         w.id,
                         w.c_id,
@@ -1789,7 +1790,8 @@ function get_work_user_list_from_documents(
                         qualificator_id,
                         w.sent_date,
                         w.contains_file,
-                        w.url
+                        w.url,
+                        w.url_correction
                     ';
         $select2 = ' SELECT DISTINCT
                         u.firstname, u.lastname,
@@ -1802,7 +1804,8 @@ function get_work_user_list_from_documents(
                         0,
                         w.sent_date,
                         w.contains_file,
-                        w.url
+                        w.url,
+                        w.url_correction
                     ';
     }
 
@@ -1881,7 +1884,6 @@ function get_work_user_list_from_documents(
     $currentUserId = api_get_user_id();
     $work_data = get_work_data_by_id($workId);
     $qualificationExists = false;
-
     if (!empty($work_data['qualification']) && intval($work_data['qualification']) > 0) {
         $qualificationExists = true;
     }
@@ -1892,6 +1894,12 @@ function get_work_user_list_from_documents(
     $urlView = api_get_path(WEB_CODE_PATH).'work/view.php?'.api_get_cidreq();
     $urlDownload = api_get_path(WEB_CODE_PATH).'work/download.php?'.api_get_cidreq();
 
+    $correctionIcon = Display::return_icon(
+        'check-circle.png',
+        get_lang('Correction'),
+        null,
+        ICON_SIZE_SMALL
+    );
     $editIcon = Display::return_icon('edit.png', get_lang('Edit'));
     $addIcon = Display::return_icon('add.png', get_lang('Add'));
     $deleteIcon = Display::return_icon('delete.png', get_lang('Delete'));
@@ -1903,7 +1911,7 @@ function get_work_user_list_from_documents(
         ICON_SIZE_SMALL
     );
     $allowEdition = api_get_course_setting('student_delete_own_publication') == 1;
-
+    $cidReq = api_get_cidreq();
     $workList = [];
     while ($row = Database::fetch_array($result, 'ASSOC')) {
         $userId = $row['user_id'];
@@ -1954,7 +1962,6 @@ function get_work_user_list_from_documents(
         }
 
         $row['type'] = null;
-
         if ($qualificationExists) {
             if (empty($row['qualificator_id'])) {
                 $status = Display::label(get_lang('NotRevised'), 'warning');
@@ -1964,9 +1971,28 @@ function get_work_user_list_from_documents(
             $row['qualificator_id'] = $status;
         }
 
-        if (!empty($row['qualification'])) {
-            $row['qualification'] = Display::label($row['qualification'], 'info');
+        $hasCorrection = '';
+        if (!empty($row['url_correction'])) {
+            $hasCorrection = '&nbsp;'.Display::url(
+                $correctionIcon,
+                api_get_path(WEB_CODE_PATH).'work/download.php?id='.$itemId.'&'.$cidReq.'&correction=1'
+            );
         }
+
+        $qualification_string = '';
+        if ($qualificationExists) {
+            if ($row['qualification'] == '') {
+                $qualification_string = Display::label('-');
+            } else {
+                $qualification_string = formatWorkScore($row['qualification'], $work_data['qualification']);
+            }
+        }
+
+        $row['qualification'] = $qualification_string.$hasCorrection;
+
+        /*if (!empty($row['qualification'])) {
+            $row['qualification'] = Display::label($row['qualification'], 'info');
+        }*/
 
         if (!empty($row['sent_date'])) {
             $row['sent_date'] = Display::dateToStringAgoAndLongDate($row['sent_date']);
@@ -2191,6 +2217,14 @@ function get_work_user_list(
         $blockScoreEdition = api_get_configuration_value('block_student_publication_score_edition');
         $loading = Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin');
         $cidReq = api_get_cidreq();
+
+        $qualification_exists = false;
+        if (!empty($work_data['qualification']) &&
+            intval($work_data['qualification']) > 0
+        ) {
+            $qualification_exists = true;
+        }
+
         while ($work = Database::fetch_array($result, 'ASSOC')) {
             $item_id = $work['id'];
             $dbTitle = $work['title'];
@@ -2207,13 +2241,6 @@ function get_work_user_list(
 
             if ($course_info['show_score'] == 0) {
                 $can_read = true;
-            }
-
-            $qualification_exists = false;
-            if (!empty($work_data['qualification']) &&
-                intval($work_data['qualification']) > 0
-            ) {
-                $qualification_exists = true;
             }
 
             $qualification_string = '';

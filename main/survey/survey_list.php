@@ -171,7 +171,7 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                 }
 
                 $sql = "SELECT * FROM $table_survey_answer
-                        WHERE c_id = $course_id AND survey_id = $surveyId and user = 15";
+                        WHERE c_id = $course_id AND survey_id = $surveyId ";
                 //echo $sql;
                 $userAnswers = [];
                 $all_answers = [];
@@ -237,30 +237,11 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                     $questions = $survey['questions'];
                     foreach ($usersWithAnswers as $userAnswer) {
                         $userId = $userAnswer['user_id'];
-
-                     /*   if (isset($survey['user_answers'][$userId])) {
-                            foreach ($survey['user_answers'][$userId][$survey['survey_id']] as $questionId => $answerData) {
-                              //var_dump($questionPerUser);
-                              if (isset($questionPerUser[$userId])) {
-                                  //var_dump($questionPerUser);
-                                  foreach ($questionPerUser[$userId] as $questionIdToCheck) {
-                                      if ($questionIdToCheck == $questionId) {
-                                    //      var_dump($column, $row);
-                                          @$page->setCellValueByColumnAndRow($columnAnswer, $row, $answerData);
-                                      }
-                                      $columnAnswer++;
-                                  }
-
-                              }
-                          }
-                  }*/
-
                         $cell = @$page->setCellValueByColumnAndRow(
                             $column,
                             1,
                             $survey['title'].$survey['group_title'].' - '.$userAnswer['complete_name']
                         );
-                        //$cell = $page->getCellByColumnAndRow($column, 1);
                         $coordinate = $page->getCellByColumnAndRow($column, 1)->getCoordinate();
                         /*if (!empty($coordinate)) {
                             $dimension = $cell->getColumnDimension($coordinate);
@@ -305,11 +286,15 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                                         $completeName,
                                         $question['question']
                                     );
+
                                     foreach ($questions as $questionData) {
                                         if (strpos($questionData['question'],'{{') === false) {
+                                            if ($completeName == 'Aimee Mann') {
+                                                        var_dump($questionTitle, $questionData['question']);
+                                            }
                                             if ($questionTitle === $questionData['question']) {
-                                                //var_dump('user'.$userId);
-                                                //var_dump($survey['user_answers'][$userId][$survey['survey_id']]);
+                                                var_dump('user'.$userId);
+                                                var_dump($survey['user_answers'][$userId][$survey['survey_id']]);
                                                 foreach ($survey['user_answers'][$userId][$survey['survey_id']] as $questionId => $answerData) {
                                                     //var_dump($questionData['question_id'], $questionId);
                                                     if ($questionData['question_id'] == $questionId) {
@@ -347,22 +332,6 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                     $questionPerUser = [];
                     foreach ($questions as $question) {
                         if (strpos($question['question'],'{{')) {
-                            /*foreach ($usersWithAnswers as $userAnswer) {
-                                $questionTitle = str_replace(
-                                    '{{student_full_name}}',
-                                    $userAnswer['complete_name'],
-                                    $question['question']
-                                );
-                                $cell = @$page->setCellValueByColumnAndRow(
-                                    $column,
-                                    2,
-                                    strip_tags($questionTitle),
-                                    true
-                                );
-                                //$coordinate = $page->getCellByColumnAndRow($column, 2)->getCoordinate();
-                                //$page->getStyle($coordinate)->getAlignment()->set(true);
-                                $column++;
-                            }*/
                         } else {
                             foreach ($users as $user) {
                                 $completeName = $user['firstname'].' '. $user['lastname'];
@@ -373,30 +342,7 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                             }
                         }
                     }
-
-                    //var_dump($questionPerUser);
                     $row = 3;
-                    /*foreach ($users as $user) {
-                        $columnAnswer = $firstColumn;
-                        $userId = $user['id'];
-                        if (isset($survey['user_answers'][$userId])) {
-                            foreach ($survey['user_answers'][$userId][$survey['survey_id']] as $questionId => $answerData) {
-                                //var_dump($questionPerUser);
-                                if (isset($questionPerUser[$userId])) {
-                                    //var_dump($questionPerUser);
-                                    foreach ($questionPerUser[$userId] as $questionIdToCheck) {
-                                        if ($questionIdToCheck == $questionId) {
-                                      //      var_dump($column, $row);
-                                            @$page->setCellValueByColumnAndRow($columnAnswer, $row, $answerData);
-                                        }
-                                        $columnAnswer++;
-                                    }
-
-                                }
-                            }
-                        }
-                        $row++;
-                    }*/
                 }
 
                 $row = 3;

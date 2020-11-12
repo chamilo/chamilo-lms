@@ -88,7 +88,7 @@ $extldap_config = array(
  *
  * If <ldap_field> is an array then its value will be an array of values with the same rules as above
  *
- * Please Note that Chamilo expects some attributes that maight not be present in your user ldap record
+ * Please Note that Chamilo expects some attributes that might not be present in your user ldap record
  *
  **/
 $extldap_user_correspondance = array(

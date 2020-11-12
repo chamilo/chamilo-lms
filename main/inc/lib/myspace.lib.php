@@ -1477,25 +1477,31 @@ class MySpace
                 $iconRemove = Display::return_icon('error.png', get_lang('ShowOrHide'), '', ICON_SIZE_SMALL);
 
                 $lastAuthor = '';
-
+                $total = 0;
                 foreach ($printData as $authorId => $lpItemData) {
                     $autor = $authors[$authorId];
                     $totalSudent = 0;
                     foreach ($lpItemData as $lpItemId => $lpitem) {
                         $title = $lpitem['title'];
                         $price = $lpitem['price'];
-                        $table .= "<tr>";
-
+                        $hide = "class='author_$authorId hidden' ";
                         if ($lastAuthor != $autor) {
-                            $table .= "<td>".$autor['complete_name']."</td>";
+                            $table .= "<tr>";
+                            $table .= "<td>".$autor['complete_name'].
+                                "</td>";
                         } else {
+                            $table .= "<tr $hide >";
                             $table .= "<td></td>";
-                            // $total = 0;
                         }
 
                         $hiddenField = 'student_show_'.$index;
                         $hiddenFieldLink = 'student_show_'.$index.'_';
-                        $table .= "<td>$title</td>";
+                        if ($lastAuthor != $autor) {
+                            $table .= "<td>$title".
+                                "</td>";
+                        } else {
+                            $table .= "<td>$title</td>";
+                        }
                         $table .= "<td>$price</td>";
                         $registeredUsers = self::getCompanyLearnpathSubscription($startDate, $endDate, $lpitem['lp_id']);
                         $studenRegister = count($registeredUsers);
@@ -1526,7 +1532,11 @@ class MySpace
                     }
                     //footer
                     $table .= "<tr><th class=\"th-header\"></th>".
-                        "<th class=\"th-header\"></th>".
+                        "<th class=\"th-header\">".
+                        "<a href='#!' id='$hiddenFieldLink' onclick='ShowMoreAuthor(\"$authorId\")'>".
+                        "<div class='icon_add_author_$authorId'>$iconAdd</div>".
+                        "<div class='icon_remove_author_$authorId hidden'>$iconRemove</div>".
+                        "</a>"."</th>".
                         "<th class=\"th-header\"></th>".
                         "<th class=\"th-header\">$totalSudent</th>".
                         "<th class=\"th-header\">$total</th>".

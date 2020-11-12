@@ -34,6 +34,19 @@ function showHideStudent(el){
         $("#"+el+"_").find(".icon_remove").addClass("hidden");
     }
 }
+function ShowMoreAuthor(el){
+    if($(".author_"+el).hasClass("hidden")){
+        $(".author_"+el).removeClass("hidden");
+        $(".icon_remove_author_"+el).removeClass("hidden");
+        $(".icon_add_author_"+el).addClass("hidden");
+    }else{
+        $(".author_"+el).addClass("hidden")
+
+        $(".icon_remove_author_"+el).addClass("hidden");
+        $(".icon_add_author_"+el).removeClass("hidden");
+
+    }
+}
 </script>';
 
 // the section (for the tabs)

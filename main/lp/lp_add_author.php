@@ -203,7 +203,6 @@ $form = new FormValidator('configure_homepage_'.$action,
     '',
     ['style' => 'margin: 0px;']);
 
-
 $extraField['backTo'] = api_get_self().'?action=add_item&type=step&lp_id='.intval($lpId).'&'.api_get_cidreq();
 
 echo $learnPath->build_action_menu(false,
@@ -276,7 +275,6 @@ foreach ($_SESSION['oLP']->items as $item) {
 $options = [0 => get_lang('RemoveSelected')];
 $default["authorItemSelect"] = [];
 $form->addHtml('</div>');
-
 /* Authors*/
 $teachers = [];
 $field = new ExtraField('user');
@@ -298,7 +296,6 @@ if ($idExtraField != 0) {
     }
 }
 /* Authors*/
-
 foreach ($teachers as $key => $value) {
     $authorId = $value['id'];
     $authorName = $value['complete_name'];
@@ -336,7 +333,7 @@ if ($form->validate()) {
                 foreach ($authors as $author) {
                     if ($author == 0 || $removeExist == 1) {
                         $saveExtraFieldItem[$itemId][0] = 0;
-
+                        $removeExist = 1;
                     } else {
 
                         $saveExtraFieldItem[$itemId][$author] = $author;
@@ -366,14 +363,16 @@ if ($form->validate()) {
             $currentUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http")."://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
             if (!empty($messages)) {
                 if ($removeExist) {
-                    Session::write('messageError', get_lang('DeletedAuthors')." ".$messages);
-                    header("Location: $currentUrl");
-                    exit;
+                    Session::write('messageError', get_lang('DeletedAuthors'));
+                    //header("Location: $currentUrl");
+                    echo "<script>window.location.replace(\"$currentUrl\");</script>";
+                    die();
                 }
 
                 Session::write('message', get_lang('RegisteredAuthors')." ".$messages);
-                header("Location: $currentUrl");
-                exit;
+                //header("Location: $currentUrl");
+                echo "<script>window.location.replace(\"$currentUrl\");</script>";
+                die();
             }
         }
     }

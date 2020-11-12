@@ -172,7 +172,6 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
 
                 $sql = "SELECT * FROM $table_survey_answer
                         WHERE c_id = $course_id AND survey_id = $surveyId ";
-                //echo $sql;
                 $userAnswers = [];
                 $all_answers = [];
                 $result = Database::query($sql);
@@ -289,12 +288,9 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
 
                                     foreach ($questions as $questionData) {
                                         if (strpos($questionData['question'],'{{') === false) {
-                                            if ($completeName == 'Aimee Mann') {
-                                                        var_dump($questionTitle, $questionData['question']);
-                                            }
                                             if ($questionTitle === $questionData['question']) {
-                                                var_dump('user'.$userId);
-                                                var_dump($survey['user_answers'][$userId][$survey['survey_id']]);
+                                                //var_dump('user'.$userId);
+                                                //var_dump($survey['user_answers'][$userId][$survey['survey_id']]);
                                                 foreach ($survey['user_answers'][$userId][$survey['survey_id']] as $questionId => $answerData) {
                                                     //var_dump($questionData['question_id'], $questionId);
                                                     if ($questionData['question_id'] == $questionId) {
@@ -323,8 +319,6 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                         $columnQuestion = $column;
 
                         if (!empty($lastCoordinate)) {
-                            //$page->mergeCellsByColumnAndRow();
-                            //var_dump($firstCoordinate.':'.$lastCoordinate);exit;
                             $page->mergeCells($firstCoordinate.':'.$lastCoordinate);
                         }
                     }

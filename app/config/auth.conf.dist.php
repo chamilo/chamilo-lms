@@ -99,9 +99,9 @@ $extldap_user_correspondance = array(
     'username' => 'uid',
     'language' => '!english',
     'password' => 'userPassword',
-    'status' => '!5', // Forcing status to 5; To change this set 'status' => 'func' abd implement $extldap_get_status($ldap_array)
-    'active' => '!1', // Forcing active to 1; To change this set 'status' => 'func' abd implement $extldap_get_active($ldap_array)
-    'admin' => 'func' // Using $extldap_get_admin function to check if user is an administrator based on some ldap user record value
+    'status' => '!5', // Forcing status to 5; To change this set 'status' => 'func' and implement an extldap_get_status($ldap_array) function
+    'active' => '!1', // Forcing active to 1; To change this set 'status' => 'func' and implement an extldap_get_active($ldap_array) function
+    'admin' => 'func' // Using the extldap_get_admin() function to check if user is an administrator based on some ldap user record value
     /* Extras example
     'extra' => array(
         'title' => 'title',
@@ -114,7 +114,7 @@ $extldap_user_correspondance = array(
 );
 
 /**
- * Example Method, please implement your logic inside
+ * Example method to get whether the user is an admin or not. Please implement your logic inside.
  */
 function extldap_get_admin($ldap_array)
 {

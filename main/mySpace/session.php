@@ -261,6 +261,7 @@ switch ($action) {
                 $mode = 'F';
                 $pdfName = $studentInfo['complete_name'];
             }
+            $pdf->set_footer();
             $result = @$pdf->content_to_pdf(
                 $content,
                 '',

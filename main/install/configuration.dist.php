@@ -1727,6 +1727,9 @@ $_configuration['auth_password_links'] = [
 // Resource sequence: Validate course in the same session.
 //$_configuration['course_sequence_valid_only_in_same_session'] = false;
 
+// Allow time per question. Requires a question text extra field called "time", value in seconds.
+//$_configuration['allow_time_per_question'] = true;
+
 // Add another layer of security by checking if the user is disabled at every page load (might generate considerable extra DB load)
 // $_configuration['security_block_inactive_users_immediately'] = false;
 

@@ -24,7 +24,15 @@ $courseCode = api_get_course_id();
 
 $lpId = isset($_REQUEST['lp_id']) ? (int) $_REQUEST['lp_id'] : 0;
 $studentId = isset($_REQUEST['student_id']) ? (int) $_REQUEST['student_id'] : 0;
-$groupFilter = isset($_REQUEST['group_filter']) ? (int) $_REQUEST['group_filter'] : 0;
+$groupFilter = isset($_REQUEST['group_filter']) ? Security::remove_XSS($_REQUEST['group_filter']) : '';
+
+$groupFilterType = '';
+$groupFilterId = 0;
+$groupFilterParts = explode(':', $groupFilter);
+if (!empty($groupFilterParts) && isset($groupFilterParts[1])) {
+    $groupFilterType = $groupFilterParts[0];
+    $groupFilterId = (int) $groupFilterParts[1];
+}
 $export = isset($_REQUEST['export']);
 $reset = isset($_REQUEST['reset']) ? $_REQUEST['reset'] : '';
 
@@ -35,7 +43,7 @@ if (empty($lp)) {
 
 $urlBase = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&action=report&lp_id='.$lpId;
 $url = $urlBase.'&group_filter='.$groupFilter;
-
+$allowUserGroups = api_get_configuration_value('allow_lp_subscription_to_usergroups');
 $em = Database::getManager();
 // Check LP subscribers
 if ('1' === $lp->getSubscribeUsers()) {
@@ -141,25 +149,67 @@ $lpInfo = Database::select(
 );
 
 $groups = GroupManager::get_group_list(null, $courseInfo, null, $sessionId);
+$label = get_lang('Groups');
+$classes = [];
+if ($allowUserGroups) {
+    $label = get_lang('Groups').' / '.get_lang('Classes');
+    $userGroup = new UserGroup();
+    $conditions = [];
+    $conditions['where'] = [' usergroup.course_id = ? ' => $courseId];
+    $classes = $userGroup->getUserGroupInCourse($conditions);
+}
+
 $groupFilterForm = '';
 if (!empty($groups)) {
     $form = new FormValidator('group', 'GET', $url);
     $form->addHidden('action', 'report');
     $form->addHidden('lp_id', $lpId);
     $form->addCourseHiddenParams();
-    $form->addSelect(
+
+    $courseGroups = [];
+    foreach ($groups as $group) {
+        $option = [
+            'text' => $group['name'],
+            'value' => "group:".$group['iid'],
+        ];
+        $courseGroups[] = $option;
+    }
+
+    $select = $form->addSelect(
         'group_filter',
-        get_lang('Groups'),
-        array_column($groups, 'name', 'iid'),
+        $label,
+        [],
         [
             'id' => 'group_filter',
             'placeholder' => get_lang('All'),
         ]
     );
-    //$form->addButtonSearch(get_lang('Search'));
+    $select->addOptGroup($courseGroups, get_lang('Groups'));
+
+    if ($allowUserGroups) {
+        $options = [];
+        foreach ($classes as $group) {
+            $option = [
+                'text' => $group['name'],
+                'value' => "class:".$group['id'],
+            ];
+            $options[] = $option;
+        }
+        $select->addOptGroup($options, get_lang('Classes'));
+    }
 
     if (!empty($groupFilter)) {
-        $users = GroupManager::getStudents($groupFilter, true);
+        switch ($groupFilterType) {
+            case 'group':
+                $users = GroupManager::getStudents($groupFilterId, true);
+                break;
+            case 'class':
+                if ($allowUserGroups) {
+                    $users = $userGroup->getUserListByUserGroup($groupFilterId);
+                }
+                break;
+        }
+
         $form->setDefaults(['group_filter' => $groupFilter]);
     }
     $groupFilterForm = $form->returnForm();
@@ -186,7 +236,7 @@ if ($reset) {
                 }
             }
             break;
-        case 'group':
+        case 'all':
             foreach ($users as $user) {
                 $userId = $user['user_id'];
                 $studentInfo = api_get_user_info($userId);
@@ -212,6 +262,7 @@ if ($reset) {
 
 $userList = [];
 $showEmail = api_get_setting('show_email_addresses');
+
 if (!empty($users)) {
     $added = [];
     foreach ($users as $user) {
@@ -257,8 +308,24 @@ if (!empty($users)) {
         $userGroupList = '';
         if (!empty($groups)) {
             $groupsByUser = GroupManager::getAllGroupPerUserSubscription($userId, $courseId, $sessionId);
+            $icon = Display::return_icon('group.png', get_lang('Group'));
             if (!empty($groupsByUser)) {
-                $userGroupList = implode(', ', array_column($groupsByUser, 'name'));
+                $groupUrl = api_get_path(WEB_CODE_PATH).'main/group.php?'.api_get_cidreq(true, false);
+                foreach ($groupsByUser as $group) {
+                    $userGroupList .= Display::url($icon.$group['name'], $groupUrl.'&gidReq='.$group['iid']);
+                }
+            }
+        }
+
+        $classesToString = '';
+        if ($allowUserGroups) {
+            $classes = $userGroup->getUserGroupListByUser($userId, UserGroup::NORMAL_CLASS);
+            $icon = Display::return_icon('class.png', get_lang('Class'));
+            if (!empty($classes)) {
+                $classUrl = api_get_path(WEB_CODE_PATH).'main/class.php?'.api_get_cidreq(true, false);
+                foreach ($classes as $class) {
+                    $classesToString .= Display::url($icon.$class['name'], $classUrl.'&class_id='.$class['id']);
+                }
             }
         }
 
@@ -269,9 +336,10 @@ if (!empty($users)) {
             'last_name' => $userInfo['lastname'],
             'email' => 'true' === $showEmail ? $userInfo['email'] : '',
             'groups' => $userGroupList,
+            'classes' => $classesToString,
             'lp_time' => api_time_to_hms($lpTime),
             'lp_score' => is_numeric($lpScore) ? "$lpScore%" : $lpScore,
-            'lp_progress' => "$lpProgress%",
+            'lp_progress' => "$lpProgress %",
             'lp_last_connection' => $lpLastConnection,
         ];
         $added[] = $userId;
@@ -314,7 +382,7 @@ if (!empty($users)) {
             [],
             ICON_SIZE_MEDIUM
         ),
-        $url.'&reset=group',
+        $url.'&reset=all',
         [
             'onclick' => 'javascript: if(!confirm(\''.addslashes(get_lang('AreYouSureToDeleteResults').': '.$userListToString).'\')) return false;',
         ]
@@ -322,6 +390,7 @@ if (!empty($users)) {
 }
 
 $template = new Template(get_lang('StudentScore'));
+$template->assign('group_class_label', $label);
 $template->assign('user_list', $userList);
 $template->assign('session_id', api_get_session_id());
 $template->assign('course_code', api_get_course_id());

@@ -418,4 +418,33 @@ class XApiPlugin extends Plugin implements HookPluginInterface
 
         return $tool;
     }
+
+    /**
+     * @param \Xabbuh\XApi\Model\LanguageMap $languageMap
+     * @param string                         $language
+     *
+     * @return mixed|string
+     */
+    public static function extractVerbInLanguage(\Xabbuh\XApi\Model\LanguageMap $languageMap, $language)
+    {
+        if (isset($languageMap[$language])) {
+            return $languageMap[$language];
+        }
+
+        $parts = explode('-', $language, 2);
+
+        if (count($parts) > 0) {
+            foreach ($languageMap->languageTags() as $languageTag) {
+                if (false !== strpos($languageTag, $parts[0])) {
+                    return $languageMap[$languageTag];
+                }
+            }
+        }
+
+        if (isset($languageMap['und'])) {
+            return $languageMap['und'];
+        }
+
+        return array_pop($languageMap);
+    }
 }

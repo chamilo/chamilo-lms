@@ -88,14 +88,12 @@ try {
     exit;
 }
 
-if ($stateDocument) {
-    $table = new HTML_Table(['class' => 'data_table table table-bordered']);
-    $table->setHeaderContents(0, 0, $plugin->get_lang('ActivityFirstLaunch'));
-    $table->setHeaderContents(0, 1, $plugin->get_lang('ActivityLastLaunch'));
+$content = '';
 
+if ($stateDocument) {
     $i = 1;
 
-    foreach ($stateDocument->getData()->getData() as $attempt) {
+    foreach ($stateDocument->getData()->getData() as $attemptId => $attempt) {
         $firstLaunch = api_convert_and_format_date(
             $attempt[XApiPlugin::STATE_FIRST_LAUNCH],
             DATE_TIME_FORMAT_LONG
@@ -105,14 +103,28 @@ if ($stateDocument) {
             DATE_TIME_FORMAT_LONG
         );
 
-        $table->setCellContents($i, 0, $firstLaunch);
-        $table->setCellContents($i, 1, $lastLaunch);
+        $content .= '<dl class="dl-horizontal">'
+            .'<dt>'.$plugin->get_lang('ActivityFirstLaunch').'</dt>'
+            .'<dd>'.$firstLaunch.'</dd>'
+            .'<dt>'.$plugin->get_lang('ActivityLastLaunch').'</dt>'
+            .'<dd>'.$lastLaunch.'</dd>'
+            .'</dl>'
+            .Display::toolbarButton(
+                get_lang('ShowAllAttempts'),
+                '#',
+                'th-list',
+                'default',
+                [
+                    'class' => 'btn_xapi_attempt_detail',
+                    'data-attempt' => $attemptId,
+                    'data-tool' => $toolLaunch->getId(),
+                    'style' => 'margin-bottom: 20px; margin-left: 180px;',
+                    'role' => 'button',
+                ]
+            );
 
         $i++;
     }
-
-    $table->updateColAttributes(0, ['class' => 'text-center']);
-    $table->updateColAttributes(1, ['class' => 'text-center']);
-
-    $table->display();
 }
+
+echo $content;

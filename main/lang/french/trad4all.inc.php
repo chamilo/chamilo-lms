@@ -8623,6 +8623,7 @@ $MyPersonalOpenAreaHelp = "Une brève présentation de vous-même, de vos expér
 $MyCompetencesHelp = "Les compétences que vous avez acquises, formelles ou informelles, sociales ou techniques.";
 $MyDiplomasHelp = "Les diplômes et certificats importants que vous avez obtenu et qui vous donnent une certaine fierté. Vous devriez spécifier au minimum le titre qui apparaît sur le document, l'organisation qui vous l'a attribué et l'année.";
 $MyTeachingCapabilitiesHelp = "Sur base de votre expérience et de vos compétences, vous pouvez habituellement enseigner dans certains domaines pour lesquels vos compétences sont de haut niveau. Si vous pensez que vous pourriez enseigner à d'autres dans un de ces domaines, mentionnez-le ici. Sinon, laissez ce champ vide.";
+$UserGuides = "Guides utilisateur";
 $MyProductionsHelp = "Un de vos articles a été publié, ou vous souhaiteriez mettre votre CV à disposition? Placez-les ici.";
 $CorrectAttempts = "Tentatives correctes";
 $WrongAttempts = "Tentatives incorrectes";

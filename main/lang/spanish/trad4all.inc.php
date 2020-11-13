@@ -8719,6 +8719,7 @@ $MyPersonalOpenAreaHelp = "Una presentación breve de Usted, sus experiencias pr
 $MyCompetencesHelp = "Las competencias que ha adquirido, formalmente o no-formalmente, sociales o técnicas.";
 $MyDiplomasHelp = "Los diplomas relevantes y certificados que ha obtenido y de los cuales se siente orgullos@. Debería especificar por lo mínimo el título que figura en el documento, la organización que lo emitió y el año.";
 $MyTeachingCapabilitiesHelp = "Dadas sus experiencias y competencias, podría probablemente enseñar en uno de los campos en los cuales sus competencias son las más altas. Si piensa poder hacerlo, indíquelo aquí. Sino, deje simplemente este campo vacío.";
+$UserGuides = "Manuales del usuario";
 $MyProductionsHelp = "¿Ha publicado un artículo científico que pueda compartir, o simplemente quiere juntar su CV? Agrégelos aquí.";
 $CorrectAttempts = "Intentos correctos";
 $WrongAttempts = "Intentos incorrectos";

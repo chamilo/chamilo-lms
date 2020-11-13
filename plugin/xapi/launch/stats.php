@@ -30,70 +30,78 @@ $cidReq = api_get_cidreq();
 
 $plugin = XApiPlugin::create();
 
-$table = new SortableTable(
-    'tbl_xapi',
-    function () use ($course, $session) {
-        return CourseManager::get_student_list_from_course_code(
-            $course->getCode(),
-            !!$session,
-            $session ? $session->getId() : 0,
-            null,
-            null,
-            true,
-            0,
-            true
-        );
-    },
-    function ($start, $limit, $orderBy, $orderDir) use ($course, $session) {
-        $students = CourseManager::get_student_list_from_course_code(
-            $course->getCode(),
-            !!$session,
-            $session ? $session->getId() : 0,
-            null,
-            null,
-            true,
-            0,
-            false,
-            $start,
-            $limit
-        );
+$length = 20;
+$page = $request->query->getInt('page', 1);
+$start = ($page - 1) * $length;
+$countStudentList = CourseManager::get_student_list_from_course_code(
+    $course->getCode(),
+    !!$session,
+    $session ? $session->getId() : 0,
+    null,
+    null,
+    true,
+    0,
+    true
+);
 
-        return array_map(
-            function (array $studentInfo) {
-                return [
-                    $studentInfo['firstname'],
-                    $studentInfo['lastname'],
-                    $studentInfo['id'],
-                ];
-            },
-            $students
-        );
+$statsUrl = api_get_self().'?'.api_get_cidreq().'&id='.$toolLaunch->getId();
+
+$paginator = new \Knp\Component\Pager\Paginator();
+$pagination = $paginator->paginate([]);
+$pagination->setTotalItemCount($countStudentList);
+$pagination->setItemNumberPerPage($length);
+$pagination->setCurrentPageNumber($page);
+$pagination->renderer = function ($data) use ($statsUrl) {
+    $render = '';
+    if ($data['pageCount'] > 1) {
+        $render = '<ul class="pagination">';
+        for ($i = 1; $i <= $data['pageCount']; $i++) {
+            $pageContent = '<li><a href="'.$statsUrl.'&page='.$i.'">'.$i.'</a></li>';
+            if ($data['current'] == $i) {
+                $pageContent = '<li class="active"><a href="#" >'.$i.'</a></li>';
+            }
+            $render .= $pageContent;
+        }
+        $render .= '</ul>';
     }
+
+    return $render;
+};
+
+$students = CourseManager::get_student_list_from_course_code(
+    $course->getCode(),
+    !!$session,
+    $session ? $session->getId() : 0,
+    null,
+    null,
+    true,
+    0,
+    false,
+    $start,
+    $length
 );
-$table->set_header(0, get_lang('FirstName'), false);
-$table->set_header(1, get_lang('LastName'), false);
-$table->set_header(2, get_lang('Attempts'), false, [], ['style' => 'width: 65%;']);
-$table->set_column_filter(
-    2,
-    function ($id) use ($toolLaunch) {
-        return Display::button(
-            "xapi_state_$id",
-            get_lang('ShowAllAttempts'),
-            [
-                'class' => 'btn btn-default btn_xapi_attempts',
-                'data-student' => $id,
-                'data-tool' => $toolLaunch->getId(),
-            ]
-        );
-    }
-);
-$table->set_additional_parameters(
-    [
-        'id' => $toolLaunch->getId(),
-        'cidReq' => $course->getCode(),
-        'id_session' => $session ? $session->getId() : 0,
-    ]
-);
+
+$content = '';
+$content .= '<div class="xapi-students">';
+
+foreach ($students as $studentInfo) {
+    $content .= Display::panelCollapse(
+        api_get_person_name($studentInfo['firstname'], $studentInfo['lastname']),
+        '',
+        "pnl-student-{$studentInfo['id']}",
+        [
+            'class' => 'pnl-student',
+            'data-student' => $studentInfo['id'],
+            'data-tool' => $toolLaunch->getId(),
+        ],
+        "pnl-student-{$studentInfo['id']}-accordion",
+        "pnl-student-{$studentInfo['id']}-collapse",
+        false
+    );
+}
+
+$content .= '</div>';
+$content .= $pagination;
 
 // View
 $interbreadcrumb[] = [
@@ -103,18 +111,34 @@ $interbreadcrumb[] = [
 
 $htmlHeadXtra[] = "<script>
     $(function () {
-        $('.btn_xapi_attempts').on('click', function () {
-            var \$self = $(this);
+        $('.pnl-student').on('show.bs.collapse', function (e) {
+            var \$self = \$(this);
+            var \$body = \$self.find('.panel-body');
 
-            \$self
-                .prop('disabled', true)
+            if (!\$self.data('loaded')) {
+                $.post(
+                    'stats_attempts.ajax.php?' + _p.web_cid_query,
+                    \$self.data(),
+                    function (response) {
+                        \$self.data('loaded', true);
+                        \$body.html(response);
+                    }
+                );
+            }
+        });
+
+        $('.xapi-students').on('click', '.btn_xapi_attempt_detail', function (e) {
+            e.preventDefault();
+
+            var \$self = \$(this)
+                .addClass('disabled')
                 .html('<em class=\"fa fa-spinner fa-pulse\"></em> ".get_lang('Loading')."');
 
             $.post(
-                'stats_attempts.ajax.php?' + _p.web_cid_query,
+                'stats_statements.ajax.php?' + _p.web_cid_query,
                 \$self.data(),
                 function (response) {
-                    \$self.parent().html(response);
+                    \$self.replaceWith(response);
                 }
             );
         });
@@ -132,8 +156,5 @@ $view->assign(
     Display::toolbarAction('xapi_actions', [$actions])
 );
 $view->assign('header', $toolLaunch->getTitle());
-$view->assign(
-    'content',
-    Display::page_subheader(get_lang('Reporting'), null, 'h4').PHP_EOL.$table->return_table()
-);
+$view->assign('content', $content);
 $view->display_one_col_template();

@@ -89,7 +89,7 @@ class MySpace
             $actions[] =
                 [
                     'url' => api_get_path(WEB_CODE_PATH).'mySpace/admin_view.php?display=learningPathByItem',
-                    'content' => get_lang('AuthorLPItem'),
+                    'content' => get_lang('LearningPathItemByAuthor'),
                 ];
         }
 

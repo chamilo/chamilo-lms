@@ -62,8 +62,7 @@ foreach ($sessionsToMove as $sessionId) {
     }
 
     $courses = SessionManager::getCoursesInSession($sessionId);
-    foreach ($courses as $course) {
-        $courseId = $course['id'];
+    foreach ($courses as $courseId) {
         /*$sql = "DELETE FROM access_url_rel_course
                 WHERE c_id = $courseId AND access_url_id = $urlSourceId";
         Database::query($sql);*/

@@ -437,7 +437,9 @@ class UniqueAnswerImage extends UniqueAnswer
             }
             $header .= '<th>'.get_lang('Answer').'</th>';
             $header .= '<th>'.get_lang('Status').'</th>';
-            $header .= '<th>'.get_lang('Comment').'</th>';
+            if (false === $exercise->hideComment) {
+                $header .= '<th>'.get_lang('Comment').'</th>';
+            }
             $header .= '</tr>';
         } else {
             $header = parent::return_header($exercise, $counter, $score);

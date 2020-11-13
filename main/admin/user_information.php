@@ -40,13 +40,10 @@ if (!api_is_student_boss()) {
     }
 }
 
-$interbreadcrumb[] = ["url" => 'index.php', 'name' => get_lang('PlatformAdmin')];
-$interbreadcrumb[] = ["url" => 'user_list.php', 'name' => get_lang('UserList')];
-
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => 'user_list.php', 'name' => get_lang('UserList')];
 $userId = $user['user_id'];
-
 $currentUrl = api_get_self().'?user_id='.$userId;
-
 $tool_name = UserManager::formatUserFullName($userEntity);
 $table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -387,13 +384,24 @@ if (count($sessions) > 0) {
         $dates = array_filter(
             [$session_item['access_start_date'], $session_item['access_end_date']]
         );
-
+        $certificateLink = Display::url(
+            Display::return_icon('pdf.png', get_lang('CertificateOfAchievement'), [], ICON_SIZE_SMALL),
+            api_get_path(WEB_CODE_PATH).'mySpace/session.php?'
+            .http_build_query(
+                [
+                    'action' => 'export_to_pdf',
+                    'type' => 'achievement',
+                    'session_to_export' => $id_session,
+                    'student' => $userId,
+                ]
+            ),
+            ['target' => '_blank']
+        );
         $sessionInformation .= Display::page_subheader(
             '<a href="'.api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$id_session.'">'.
             $session_item['session_name'].'</a>',
-            ' '.implode(' - ', $dates)
+            $certificateLink.' '.implode(' - ', $dates)
         );
-
         $sessionInformation .= Display::return_sortable_table(
             $header,
             $data,

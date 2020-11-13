@@ -47,7 +47,10 @@ var SkillWheel = {
                 formSkill.find('ul#gradebook').empty().parent().parent().show();
 
                 $.each(skillInfo.gradebooks, function(index, gradebook) {
-                    $('<li>').text(gradebook.name).appendTo(formSkill.find('ul#gradebook'));
+                    var $gradebookCourse = $('<a>',{href: _p.web_main + 'auth/courses.php'})
+                        .text(gradebook.course_code);
+
+                    $('<li>').html($gradebookCourse).appendTo(formSkill.find('ul#gradebook'));
                 });
             } else {
                 formSkill.find('ul#gradebook').parent().parent().hide();

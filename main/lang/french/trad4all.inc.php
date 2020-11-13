@@ -8607,4 +8607,5 @@ $YouDidNotVisitALpHereTheLpList = "Vous n'avez encore visité aucun parcours, vo
 $CourseUsedInOtherURL = "Ce cours est utilisé sur au moins un autre portail";
 $SubscribeUserGroupsToLp = "Inscription de classes au parcours";
 $ReplaceFile = "Remplacer le fichier";
+$SubscribeClassesToLpCategory = "Inscrire de classes à la catégorie";
 ?>

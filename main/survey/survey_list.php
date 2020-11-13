@@ -25,7 +25,6 @@ $currentUserId = api_get_user_id();
 api_protect_course_script(true);
 $action = isset($_REQUEST['action']) ? Security::remove_XSS($_REQUEST['action']) : '';
 
-// Tracking
 Event::event_access_tool(TOOL_SURVEY);
 
 $logInfo = [
@@ -203,7 +202,6 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                                                 $items[] = api_html_entity_decode(strip_tags($text));
                                             }
                                         }
-
                                     }
                                     $finalAnswer = implode(' - ', $items);
                                 }
@@ -289,7 +287,6 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                                     //$cell->getColumnDimension($coordinate)->setWidth("120");
                                 }*/
 
-
                                 $coordinate = $page->getCellByColumnAndRow($questionPosition, 1)->getCoordinate();
                                 $lastCoordinate = $coordinate;
                                 $rowStudent = 3;
@@ -304,12 +301,8 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                                     foreach ($questions as $questionData) {
                                         if (strpos($questionData['question'], '{{') === false) {
                                             if ($questionTitle === $questionData['question']) {
-                                                //var_dump('user'.$userId);
-                                                //var_dump($survey['user_answers'][$userId][$survey['survey_id']]);
                                                 foreach ($survey['user_answers'][$userId][$survey['survey_id']] as $questionId => $answerData) {
-                                                    //var_dump($questionData['question_id'], $questionId);
                                                     if ($questionData['question_id'] == $questionId) {
-                                                        //var_dump($questionId, $answerData);                                                        var_dump($column+$questionCounter);
                                                         if (is_array($answerData)) {
                                                             $answerData = implode(', ', $answerData);
                                                         }
@@ -362,12 +355,10 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                     $columnUser = 0;
                     @$page->setCellValueByColumnAndRow($columnUser++, $row, $user['lastname']);
                     @$page->setCellValueByColumnAndRow($columnUser++, $row, $user['firstname']);
-                    //@$page->setCellValueByColumnAndRow($columnUser++, $row, $user['username']);
                     $row++;
                 }
                 $counter++;
             }
-//exit;
             $spreadsheet->setActiveSheetIndex(0);
             $file = api_get_path(SYS_ARCHIVE_PATH).uniqid('report', true);
             @$writer = new PHPExcel_Writer_Excel2007($spreadsheet);
@@ -437,7 +428,6 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                     SurveyManager::delete_survey($surveyData['survey_share'], true);
                 }
 
-                // delete the actual survey
                 SurveyManager::delete_survey($value);
                 Display::addFlash(
                     Display::return_message(get_lang('SurveysDeleted').': '.$surveyData['title'], 'confirmation', false)
@@ -584,7 +574,6 @@ echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;search=advanced">'.
     Display::return_icon('search.png', get_lang('Search'), '', ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
-// Load main content
 if (api_is_session_general_coach() && 'false' == $extend_rights_for_coachs) {
     SurveyUtil::display_survey_list_for_coach();
 } else {

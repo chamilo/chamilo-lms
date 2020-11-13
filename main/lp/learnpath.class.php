@@ -4497,13 +4497,10 @@ class learnpath
                             $session_condition
                         ";
                 Database::query($sql);
-            } else {
-                // Parameter and database incompatible, do nothing, exit.
-                return false;
             }
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**

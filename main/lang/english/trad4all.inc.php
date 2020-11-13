@@ -8691,6 +8691,7 @@ $MyPersonalOpenAreaHelp = "A short presentation of yourself, your professional o
 $MyCompetencesHelp = "The skills you have acquired, formally or non-formally, social or technical.";
 $MyDiplomasHelp = "The relevant diplomas and certificates you have obtained and you are proud of. You should specify at a minimum the title that appears on the document, the organization and the year.";
 $MyTeachingCapabilitiesHelp = "Given your experience and skills, you can usually teach in the fields where your skills are at the highest level. If you feel you could indeed teach someone else in some specific field, mention it here. Otherwise leave empty.";
+$UserGuides = "User guides";
 $MyProductionsHelp = "You have written a paper that you can share, or want to attach your CV for download? Add those here.";
 $CorrectAttempts = "Correct attempts";
 $WrongAttempts = "Incorrect attempts";

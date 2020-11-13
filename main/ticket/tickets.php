@@ -231,11 +231,11 @@ if (!empty($projectId)) {
         $extraParams = '';
 
         if (isset($_GET['exerciseId']) && !empty($_GET['exerciseId'])) {
-            $extraParams .= '&exerciseId=' . $_GET['exerciseId'];
+            $extraParams .= '&exerciseId=' . intval($_GET['exerciseId']);
         }
 
         if (isset($_GET['lpId']) && !empty($_GET['lpId'])) {
-            $extraParams .= '&lpId=' . $_GET['lpId'];
+            $extraParams .= '&lpId=' . intval($_GET['lpId']);
         }
 
         $actionRight = Display::url(

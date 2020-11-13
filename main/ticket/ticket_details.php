@@ -395,7 +395,7 @@ if ($ticket['ticket']['course_url'] != null) {
             <td colspan="2"></td>
           </tr>';
 
-    if (api_get_configuration_value('ticket_add_quiz_and_lp')) {
+    if (api_get_configuration_value('ticket_lp_quiz_info_add')) {
         if (!empty($ticket['ticket']['exercise_url'])) {
             echo '<tr>
                 <td><b>' . get_lang('Exercise') . ':</b> ' . $ticket['ticket']['exercise_url'] . ' </td>

@@ -19,8 +19,8 @@ $exeId = isset($_REQUEST['exe_id']) ? $_REQUEST['exe_id'] : 0;
 
 switch ($action) {
     case 'get_exercise_by_course':
-        $course_id = (isset($_GET['course_id']) && !empty($_GET['course_id'])) ? $_GET['course_id'] : 0;
-        $session_id = (!empty($_GET['session_id'])) ? (int) $_GET['session_id'] : 0;
+        $course_id = (isset($_GET['course_id']) && !empty($_GET['course_id'])) ? intval($_GET['course_id']) : 0;
+        $session_id = (!empty($_GET['session_id'])) ? intval($_GET['session_id']) : 0;
         $data = [];
         $onlyActiveExercises = !(api_is_platform_admin(true) || api_is_course_admin());
         $results = ExerciseLib::get_all_exercises_for_course_id(

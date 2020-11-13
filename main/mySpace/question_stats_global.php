@@ -20,7 +20,7 @@ $courseIdList = isset($_REQUEST['courses']) ? $_REQUEST['courses'] : [];
 $exercises = isset($_REQUEST['exercises']) ? $_REQUEST['exercises'] : [];
 
 $courseOptions = [];
-$exercisesList = [];
+$exerciseList = [];
 $selectedExercises = [];
 if (!empty($courseIdList)) {
     foreach ($courseIdList as $courseId) {
@@ -41,13 +41,18 @@ if (!empty($courseIdList)) {
                     $selectedExercises[$courseId][] = $exerciseId;
                 }
             }
-            $exercisesList += array_column($courseExerciseList, 'title', 'iid');
+            $exerciseList += array_column($courseExerciseList, 'title', 'iid');
         }
         $courseOptions[$courseId] = $courseInfo['name'];
     }
 }
 
-$exercisesList = array_unique($exercisesList);
+$exerciseList = array_unique($exerciseList);
+if (!empty($exerciseList)) {
+    array_walk($exerciseList, function (&$title) {
+        $title = Exercise::get_formated_title_variable($title);
+    });
+}
 
 $form = new FormValidator('search_form', 'GET', api_get_self());
 $form->addSelectAjax(
@@ -64,7 +69,7 @@ if (!empty($courseIdList)) {
     $form->addSelect(
         'exercises',
         get_lang('Exercise'),
-        $exercisesList,
+        $exerciseList,
         [
             'multiple' => true,
         ]
@@ -103,7 +108,7 @@ if ($form->validate()) {
                     $total = ExerciseLib::getTotalQuestionAnswered($courseId, $exerciseId, $questionId);
                     /*$column = 0;
                     $table->setCellContents($row, $column++, $courseOptions[$courseId]);
-                    $table->setCellContents($row, $column++, $exercisesList[$exerciseId]);
+                    $table->setCellContents($row, $column++, $exerciseList[$exerciseId]);
                     $table->setCellContents($row, $column++, $data['question']);
                     $table->setCellContents($row, $column++, $data['count'].' / '.$total);
                     $percentage = $data['count']/$total;
@@ -115,7 +120,7 @@ if ($form->validate()) {
                     $row++;*/
                     $orderedData[] = [
                         $courseOptions[$courseId],
-                        $exercisesList[$exerciseId],
+                        $exerciseList[$exerciseId],
                         $data['question'],
                         $data['count'].' / '.$total,
                         $scoreDisplay->display_score([$data['count'], $total], SCORE_AVERAGE),

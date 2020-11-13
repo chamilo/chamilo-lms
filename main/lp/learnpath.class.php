@@ -1532,11 +1532,12 @@ class learnpath
         $maxScore = 100
     ) {
         $id = (int) $id;
-        $prerequisite_id = (int) $prerequisite_id;
 
         if (empty($id)) {
             return false;
         }
+
+        $prerequisite_id = (int) $prerequisite_id;
 
         if (empty($minScore) || $minScore < 0) {
             $minScore = 0;
@@ -1546,8 +1547,8 @@ class learnpath
             $maxScore = 100;
         }
 
-        $minScore = floatval($minScore);
-        $maxScore = floatval($maxScore);
+        $minScore = (float) $minScore;
+        $maxScore = (float) $maxScore;
 
         if (empty($prerequisite_id)) {
             $prerequisite_id = 'NULL';
@@ -4496,13 +4497,10 @@ class learnpath
                             $session_condition
                         ";
                 Database::query($sql);
-            } else {
-                // Parameter and database incompatible, do nothing, exit.
-                return false;
             }
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -10038,7 +10036,8 @@ class learnpath
                 $lpItemObj->update();
                 $item['max_score'] = $lpItemObj->max_score;
 
-                if (empty($selectedMinScoreValue) && !empty($masteryScoreAsMinValue)) {
+                //if (empty($selectedMinScoreValue) && !empty($masteryScoreAsMinValue)) {
+                if (!isset($selectedMinScore[$item['id']]) && !empty($masteryScoreAsMinValue)) {
                     // Backwards compatibility with 1.9.x use mastery_score as min value
                     $selectedMinScoreValue = $masteryScoreAsMinValue;
                 }

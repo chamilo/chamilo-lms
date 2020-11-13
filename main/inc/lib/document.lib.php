@@ -1431,7 +1431,6 @@ class DocumentManager
 
         $session_id = empty($session_id) ? api_get_session_id() : (int) $session_id;
         $groupId = api_get_group_id();
-
         $www = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/document';
         $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
         $id = (int) $id;
@@ -1452,7 +1451,6 @@ class DocumentManager
             $url_path = urlencode($row['path']);
             $path = str_replace('%2F', '/', $url_path);
             $pathinfo = pathinfo($row['path']);
-
             $row['url'] = api_get_path(WEB_CODE_PATH).'document/showinframes.php?id='.$id.$courseParam;
             $row['document_url'] = api_get_path(WEB_CODE_PATH).'document/document.php?id='.$id.$courseParam;
             $row['absolute_path'] = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/document'.$row['path'];
@@ -1460,8 +1458,7 @@ class DocumentManager
             $row['absolute_parent_path'] = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/document'.$pathinfo['dirname'].'/';
             $row['direct_url'] = $www.$path;
             $row['basename'] = basename($row['path']);
-
-            if (dirname($row['path']) == '.') {
+            if (dirname($row['path']) === '.') {
                 $row['parent_id'] = '0';
             } else {
                 $row['parent_id'] = self::get_document_id($course_info, dirname($row['path']), $session_id, true);
@@ -5786,6 +5783,7 @@ class DocumentManager
                 }
             }
         } else {
+            $firstPath = '';
             foreach ($folders as $folder) {
                 if (($curdirpath != $folder) &&
                     ($folder != $move_file) &&
@@ -5793,8 +5791,14 @@ class DocumentManager
                 ) {
                     // Cannot copy dir into his own subdir
                     $path_displayed = self::get_titles_of_path($folder);
+                    if ($firstPath == '' && $path_displayed != '') {
+                        $firstPath = $path_displayed;
+                        $group_dir = $firstPath;
+                    }
                     $display_folder = substr($path_displayed, strlen($group_dir));
-                    $display_folder = $display_folder == '' ? get_lang('Documents') : $display_folder;
+                    if ($display_folder == '') {
+                        $display_folder = get_lang('Documents');
+                    }
                     $options[$folder] = $display_folder;
                 }
             }

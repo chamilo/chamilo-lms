@@ -549,9 +549,10 @@ ALTER TABLE c_survey_question ADD is_required TINYINT(1) DEFAULT 0 NOT NULL;
 // Allow scheduled emails to session users.
 //CREATE TABLE scheduled_announcements (id INT AUTO_INCREMENT NOT NULL, subject VARCHAR(255) NOT NULL, message LONGTEXT NOT NULL, date DATETIME DEFAULT NULL, sent TINYINT(1) NOT NULL, session_id INT NOT NULL, c_id INT DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
 // sudo mkdir app/upload/scheduled_announcement
-// Add "attachment" file extra field in: main/admin/extra_fields.php?type=scheduled_announcement&action=add
-// Add "send_to_coaches" checkbox field in: main/admin/extra_fields.php?type=scheduled_announcement&action=add
+// Uncomment and set the following setting to true before moving on
 //$_configuration['allow_scheduled_announcements'] = false;
+// Add "attachment" file upload extra field label in: main/admin/extra_fields.php?type=scheduled_announcement&action=add
+// Add "send_to_coaches" checkbox options field label in: main/admin/extra_fields.php?type=scheduled_announcement&action=add
 // Add the list of emails as a bcc when sending an email.
 // Configure a cron task pointing at main/cron/scheduled_announcement.php
 /*
@@ -1727,8 +1728,13 @@ $_configuration['auth_password_links'] = [
 // Resource sequence: Validate course in the same session.
 //$_configuration['course_sequence_valid_only_in_same_session'] = false;
 
-// Allow time per question. Requires a question text extra field called "time", value in seconds.
+// Allow time per question. BT#17791
+// Requires a question text extra field called "time", value in seconds.
+// ALTER TABLE track_e_attempt ADD COLUMN seconds_spent INT;
 //$_configuration['allow_time_per_question'] = true;
+
+// Disable change user visibility tool icon.
+//$_configuration['disable_change_user_visibility_for_public_courses'] = true;
 
 // Add another layer of security by checking if the user is disabled at every page load (might generate considerable extra DB load)
 // $_configuration['security_block_inactive_users_immediately'] = false;

@@ -217,8 +217,8 @@ class SequenceResourceRepository extends EntityRepository
         $gradebookCategoryRepo = $em->getRepository('ChamiloCoreBundle:GradebookCategory');
 
         $sessionUserList = [];
+        $checkOnlySameSession = api_get_configuration_value('course_sequence_valid_only_in_same_session');
         if (SequenceResource::COURSE_TYPE == $type) {
-            $checkOnlySameSession = api_get_configuration_value('course_sequence_valid_only_in_same_session');
             if ($checkOnlySameSession) {
                 $sessionUserList = [$sessionId];
             } else {
@@ -273,7 +273,11 @@ class SequenceResourceRepository extends EntityRepository
                         break;
                     case SequenceResource::COURSE_TYPE:
                         $id = $resource->getId();
-                        $status = $this->checkCourseRequirements($userId, $resource, 0);
+                        $checkSessionId = 0;
+                        if ($checkOnlySameSession) {
+                            $checkSessionId = $sessionId;
+                        }
+                        $status = $this->checkCourseRequirements($userId, $resource, $checkSessionId);
 
                         if (false === $status) {
                             $sessionsInCourse = \SessionManager::get_session_by_course($id);

@@ -1343,11 +1343,11 @@ if (empty($details)) {
         $hookLpTracking = HookMyStudentsLpTracking::create();
         if ($hookLpTracking) {
             $hookHeaders = $hookLpTracking->notifyTrackingHeader();
-
             foreach ($hookHeaders as $hookHeader) {
-                $columnHeadersToExport[] = $hookHeader['value'];
-
-                $headers .= Display::tag('th', $hookHeader['value'], $hookHeader['attrs']);
+                if (isset($hookHeader['value'])) {
+                    $columnHeadersToExport[] = $hookHeader['value'];
+                    $headers .= Display::tag('th', $hookHeader['value'], $hookHeader['attrs']);
+                }
             }
         }
 
@@ -1550,8 +1550,10 @@ if (empty($details)) {
                     $hookContents = $hookLpTracking->notifyTrackingContent($lp_id, $student_id);
 
                     foreach ($hookContents as $hookContent) {
-                        $contentToExport[] = strip_tags($hookContent['value']);
-                        echo Display::tag('td', $hookContent['value'], $hookContent['attrs']);
+                        if (isset($hookContent['value'])) {
+                            $contentToExport[] = strip_tags($hookContent['value']);
+                            echo Display::tag('td', $hookContent['value'], $hookContent['attrs']);
+                        }
                     }
                 }
 
@@ -1611,10 +1613,12 @@ if (empty($details)) {
         echo '<th>'.get_lang('AllAttempts').'</th>';
 
         $hookQuizTracking = HookMyStudentsQuizTracking::create();
-        if ($hookQuizTracking) {
+        if ($hookQuizTracking && !empty($header)) {
             $hookHeaders = array_map(
                 function ($hookHeader) {
-                    return Display::tag('th', $hookHeader['value'], $hookHeader['attrs']);
+                    if (isset($hookHeader['value'])) {
+                        return Display::tag('th', $hookHeader['value'], $hookHeader['attrs']);
+                    }
                 },
                 $hookQuizTracking->notifyTrackingHeader()
             );
@@ -1635,7 +1639,9 @@ if (empty($details)) {
         if ($hookQuizTracking) {
             $hookHeaders = array_map(
                 function ($hookHeader) {
-                    return strip_tags($hookHeader['value']);
+                    if (isset($hookHeader['value'])) {
+                        return strip_tags($hookHeader['value']);
+                    }
                 },
                 $hookQuizTracking->notifyTrackingHeader()
             );
@@ -1775,7 +1781,9 @@ if (empty($details)) {
 
                 if (!empty($hookContents)) {
                     foreach ($hookContents as $hookContent) {
-                        echo Display::tag('td', $hookContent['value'], $hookContent['attrs']);
+                        if (isset($hookContent['value'])) {
+                            echo Display::tag('td', $hookContent['value'], $hookContent['attrs']);
+                        }
                     }
                 }
 
@@ -1795,7 +1803,9 @@ if (empty($details)) {
                     $csvContentIndex = count($csv_content) - 1;
 
                     foreach ($hookContents as $hookContent) {
-                        $csv_content[$csvContentIndex][] = strip_tags($hookContent['value']);
+                        if (isset($hookContent['value'])) {
+                            $csv_content[$csvContentIndex][] = strip_tags($hookContent['value']);
+                        }
                     }
                 }
                 $i++;

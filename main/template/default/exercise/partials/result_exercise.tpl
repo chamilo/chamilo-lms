@@ -13,7 +13,11 @@
                         <img src="{{ data.avatar }}">
                     </div>
                     <div class="user-info">
-                        <strong>{{ data.name_url }}</strong><br>
+                        <strong>{{ data.name_url }}</strong>
+                        <br />
+                        {% if signature %}
+                            <img src="{{ signature }}" />
+                        {% endif %}
                     </div>
                 </div>
                 <div class="col-md-9">

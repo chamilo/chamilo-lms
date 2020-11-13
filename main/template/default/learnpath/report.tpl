@@ -1,4 +1,14 @@
-{{ groups }}
+{{ group_form }}
+
+<script>
+$(function(){
+    $('#group_filter').on('change', function() {
+        var groupId  = $(this).val();
+        window.location.href = "{{ url_base }}&group_filter=" + groupId;
+    });
+});
+</script>
+
 <div class="table-responsive">
     <table class="table table-hover table-striped table-bordered">
         <thead>
@@ -8,7 +18,7 @@
                 {% if show_email %}
                     <th>{{ 'Email'|get_lang }}</th>
                 {% endif %}
-                <th class="text-center">{{ 'Group'|get_lang }}</th>
+                <th class="text-center">{{ group_class_label }}</th>
                 <th class="text-center">{{ 'ScormTime'|get_lang }}</th>
                 <th class="text-right">{{ 'Progress'|get_lang }}</th>
                 <th class="text-right">{{ 'ScormScore'|get_lang }}</th>
@@ -19,33 +29,50 @@
             </tr>
         </thead>
         <tbody>
-            {% for user in user_list %}
-                <tr id="row-{{ user.id }}">
-                    <td>{{ user.first_name }}</td>
-                    <td>{{ user.last_name }}</td>
-                    {% if show_email %}
-                        <td>{{ user.email }}</td>
-                    {% endif %}
-                    <td>{{ user.groups }}</td>
-                    <td class="text-center">{{ user.lp_time }}</td>
-                    <td class="text-right">{{ user.lp_progress }}</td>
-                    <td class="text-right">{{ user.lp_score }}</td>
-                    <td class="text-center">{{ user.lp_last_connection }}</td>
-                    {% if not export %}
-                    <td>
-                        <button class="btn btn-primary btn-sm" data-id="{{ user.id }}">{{ 'Details'|get_lang }}</button>
-                    </td>
-                    {% endif %}
-                </tr>
-                <tr class="hide"></tr>
-            {% endfor %}
+        {% for user in user_list %}
+            {% set trackingUrl = _p.web ~ 'main/mySpace/myStudents.php?details=true' ~ _p.web_cid_query ~ '&course=' ~ course.code ~ '&origin=tracking_course&id_session='~ session_id ~'&student=' ~ user.id %}
+            <tr id="row-{{ user.id }}">
+                <td>
+                    <a href="{{ trackingUrl }}" target="_blank">
+                        {{ user.first_name }}
+                    </a>
+                </td>
+                <td>
+                    <a href="{{ trackingUrl }}" target="_blank">
+                        {{ user.last_name }}
+                    </a>
+                </td>
+                {% if show_email %}
+                    <td>{{ user.email }}</td>
+                {% endif %}
+                <td>{{ user.groups }} {{ user.classes }} </td>
+                <td class="text-center">{{ user.lp_time }}</td>
+                <td class="text-right">{{ user.lp_progress }}</td>
+                <td class="text-right">{{ user.lp_score }}</td>
+                <td class="text-center">{{ user.lp_last_connection }}</td>
+                {% if not export %}
+                <td>
+                    <a href="javascript:void(0);" class="details" data-id="{{ user.id }}">
+                        <img alt="{{ 'Details' | get_lang }}" src="{{ '2rightarrow.png'|icon(22) }}" />
+                    </a>&nbsp;
+                    <a
+                        href = "{{ url }}&student_id={{ user.id }}&reset=student"
+                        onclick = "javascript:if(!confirm('{{ 'AreYouSureToDeleteJS' | get_lang | e('js') }}')) return false;"
+                    >
+                        <img alt="{{ 'Reset' | get_lang }}" src="{{ 'clean.png'|icon(22) }}" />
+                    </a>
+                </td>
+                {% endif %}
+            </tr>
+            <tr class="hide"></tr>
+        {% endfor %}
         </tbody>
     </table>
 </div>
 
 <script>
 $(function() {
-    $('tr td button').on('click', function (e) {
+    $('tr td .details').on('click', function (e) {
         e.preventDefault();
         var self = $(this);
         var userId = self.data('id') || 0;

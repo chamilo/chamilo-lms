@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -7,8 +8,6 @@ use ChamiloSession as Session;
  * This script is about deleting a course.
  * It displays a message box ('are you sure you wish to delete this course')
  * and deletes the course if the user answers affirmatively.
- *
- * @package chamilo.course_info
  */
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
@@ -32,12 +31,14 @@ if (isset($_GET['delete']) && $_GET['delete'] === 'yes' && $_GET['course_code'] 
         // DELETE CONFIRMATION MESSAGE
         Session::erase('_cid');
         Session::erase('_real_cid');
-        $message = '<h2>'.get_lang('Course').' : '.$current_course_name.' ('.$current_course_code.') </h2>';
+        $message = '<h3>'.get_lang('CourseTitle').' : '.$current_course_name.'</h3>';
+        $message .= '<h3>'.get_lang('CourseCode').' : '.$current_course_code.'</h3>';
         $message .= get_lang('HasDel');
         $message .= '<br /><br /><a href="../../index.php">'.get_lang('BackHome').'</a>';
     } else {
         /* message if code course is incorrect */
-        $message = '<h2>'.get_lang('Course').' : '.$current_course_name.' ('.$current_course_code.') </h2>';
+        $message = '<h3>'.get_lang('CourseTitle').' : '.$current_course_name.'</h3>';
+        $message .= '<h3>'.get_lang('CourseCode').' : '.$current_course_code.'</h3>';
         $message .= '<p>'.get_lang('CourseRegistrationCodeIncorrect').'</p>';
         $message .= '<p><a class="btn btn-primary" href="'
             .api_get_path(WEB_CODE_PATH)
@@ -48,7 +49,8 @@ if (isset($_GET['delete']) && $_GET['delete'] === 'yes' && $_GET['course_code'] 
         $type_info_message = 'error';
     }
 } else {
-    $message = '<h3>'.get_lang('Course').' : '.$current_course_name.' ('.$current_course_code.') </h3>';
+    $message = '<h3>'.get_lang('CourseTitle').' : '.$current_course_name.'</h3>';
+    $message .= '<h3>'.get_lang('CourseCode').' : '.$current_course_code.'</h3>';
     $message .= '<p>'.get_lang('ByDel').'</p>';
     $message .= '<p><span class="form_required">*</span>'
         .get_lang('CourseCodeConfirmation')

@@ -2705,8 +2705,21 @@ class Display
             $headerClass .= $fullClickable ? 'center-block ' : '';
             $headerClass .= $open ? '' : 'collapsed';
             $contentClass = 'panel-collapse collapse ';
-            $contentClass .= $open ? 'in' : '';
+            $contentClass .= $open ? 'in ' : '';
+            $contentClass .= $params['class'] ?? '';
             $ariaExpanded = $open ? 'true' : 'false';
+
+            $collapseDiv = self::div(
+                '<div class="panel-body">'.$content.'</div>',
+                array_merge(
+                    $params,
+                    [
+                        'id' => $idCollapse,
+                        'class' => $contentClass,
+                        'role' => 'tabpanel',
+                    ]
+                )
+            );
 
             $html = <<<HTML
                 <div class="panel-group" id="$idAccordion" role="tablist" aria-multiselectable="true">
@@ -2716,9 +2729,7 @@ class Display
                                 <a class="$headerClass" role="button" data-toggle="collapse" data-parent="#$idAccordion" href="#$idCollapse" aria-expanded="$ariaExpanded" aria-controls="$idCollapse">$title</a>
                             </h4>
                         </div>
-                        <div id="$idCollapse" class="$contentClass" role="tabpanel">
-                            <div class="panel-body">$content</div>
-                        </div>
+                        $collapseDiv
                     </div>
                 </div>
 HTML;

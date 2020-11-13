@@ -18,7 +18,7 @@ $(function(){
                 {% if show_email %}
                     <th>{{ 'Email'|get_lang }}</th>
                 {% endif %}
-                <th class="text-center">{{ 'Group'|get_lang }}</th>
+                <th class="text-center">{{ group_class_label }}</th>
                 <th class="text-center">{{ 'ScormTime'|get_lang }}</th>
                 <th class="text-right">{{ 'Progress'|get_lang }}</th>
                 <th class="text-right">{{ 'ScormScore'|get_lang }}</th>
@@ -45,15 +45,16 @@ $(function(){
                 {% if show_email %}
                     <td>{{ user.email }}</td>
                 {% endif %}
-                <td>{{ user.groups }}</td>
+                <td>{{ user.groups }} {{ user.classes }} </td>
                 <td class="text-center">{{ user.lp_time }}</td>
                 <td class="text-right">{{ user.lp_progress }}</td>
                 <td class="text-right">{{ user.lp_score }}</td>
                 <td class="text-center">{{ user.lp_last_connection }}</td>
                 {% if not export %}
                 <td>
-                    <a href="javascript:void(0);" class="details" data-id="{{ user.id }}"><img alt="{{ 'Details' | get_lang }}" src="{{ '2rightarrow.png'|icon(22) }}" /></a>
-                    &nbsp;
+                    <a href="javascript:void(0);" class="details" data-id="{{ user.id }}">
+                        <img alt="{{ 'Details' | get_lang }}" src="{{ '2rightarrow.png'|icon(22) }}" />
+                    </a>&nbsp;
                     <a
                         href = "{{ url }}&student_id={{ user.id }}&reset=student"
                         onclick = "javascript:if(!confirm('{{ 'AreYouSureToDeleteJS' | get_lang | e('js') }}')) return false;"

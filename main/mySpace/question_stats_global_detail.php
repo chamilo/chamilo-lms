@@ -113,8 +113,8 @@ if ($form->validate()) {
         get_lang('Session'),
         get_lang('CorrectAttempts'),
         get_lang('WrongAttempts'),
-        get_lang('StudentWithCorrectAnswers'),
-        get_lang('StudentWithWrongAnswers'),
+        get_lang('StudentsWithCorrectAnswers'),
+        get_lang('StudentsWithWrongAnswers'),
     ];
     $scoreDisplay = new ScoreDisplay();
     $exercises = $form->getSubmitValue('exercises');

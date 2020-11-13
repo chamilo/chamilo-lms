@@ -1,7 +1,8 @@
 <?php
 
-require_once __DIR__.'/../../../../vendor/autoload.php';
+/* For licensing terms, see /license.txt */
 
+require_once __DIR__.'/../../../../vendor/autoload.php';
 /**
  * Test example to user API v2.php.
  *

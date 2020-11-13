@@ -34,6 +34,8 @@ if ($test) {
 
 foreach ($sessionsToMove as $sessionId) {
     $sessionInfo = api_get_session_info($sessionId);
+    echo "Session: $sessionId ".PHP_EOL;
+
     if (empty($sessionInfo)) {
         echo "Session does not exists $sessionId ".PHP_EOL;
         continue;
@@ -74,7 +76,7 @@ foreach ($sessionsToMove as $sessionId) {
 
     $users = SessionManager::get_users_by_session($sessionId, null, false,$urlSourceId);
     foreach ($users as $user) {
-        $userId = $users['user_id'];
+        $userId = $user['user_id'];
         //UrlManager::delete_url_rel_user($userId, $sourceId);
         if ($test) {
             echo "Add user: $userId to URL: $urlDestinationId".PHP_EOL;

@@ -284,7 +284,7 @@ if (api_get_setting('extended_profile') === 'true') {
     // WHAT I AM ABLE TO TEACH
     $form->addHtmlEditor(
         'teach',
-        [get_lang('MyTeachingCapabilities'), get_lang('MyTeachingCapabilitiesHelp')],
+        [get_lang('MyTeach'), get_lang('MyTeachingCapabilitiesHelp')],
         false,
         false,
         [

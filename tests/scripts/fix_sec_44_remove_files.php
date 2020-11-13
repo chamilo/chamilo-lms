@@ -38,6 +38,12 @@ $dangerousItems = [
     'select2/docs',
 ];
 
+$acceptableItemNames = [
+    'LICENSE.txt',
+    'LICENSE.md',
+    'LICENSE',
+];
+
 require_once __DIR__.'/../../app/config/configuration.php';
 
 $chamiloFolder = $_configuration['root_sys'];
@@ -56,6 +62,12 @@ $filesToRemove = [];
 foreach ($emptyIterator as $item) {
     if (!$item->isFile()) {
         continue;
+    }
+
+    foreach ($acceptableItemNames as $acceptableItemName) {
+        if (strtolower($item->getFilename()) === strtolower($acceptableItemName)) {
+            continue 2;
+        }
     }
 
     foreach ($dangerousItems as $dangerousItem) {

@@ -770,6 +770,10 @@ if (api_is_platform_admin()) {
         'label' => get_lang('ChamiloHomepage'),
     ];
     $items[] = [
+        'url' => 'https://docs.chamilo.org/',
+        'label' => get_lang('UserGuides'),
+    ];
+    $items[] = [
         'url' => 'https://forum.chamilo.org/',
         'label' => get_lang('ChamiloForum'),
     ];

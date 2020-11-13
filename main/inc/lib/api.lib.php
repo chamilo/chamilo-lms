@@ -1250,7 +1250,7 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
         return false;
     }
     // see BT#17891
-     apiBlockInactiveUser();
+    apiBlockInactiveUser();
 
     return true;
 }
@@ -1296,12 +1296,12 @@ function api_protect_admin_script($allow_sessions_admins = false, $allow_drh = f
 function apiBlockInactiveUser()
 {
     $data = true;
-    $userId =  api_get_user_id();
+    $userId = api_get_user_id();
     $homeUrl = api_get_path(WEB_PATH);
     if (($userId) == 0) {
         return $data;
     }
-    if( api_get_configuration_value('security_block_inactive_users_immediately') != 1){
+    if (api_get_configuration_value('security_block_inactive_users_immediately') != 1) {
         return $data;
     }
 
@@ -1345,7 +1345,6 @@ function apiBlockInactiveUser()
         $tpl->assign('content', $msg);
         $tpl->display_one_col_template();
         exit;
-
     }
 
     return $data;
@@ -1389,6 +1388,7 @@ function api_block_anonymous_users($printHeaders = true)
     }
     // see BT#17891
     apiBlockInactiveUser();
+
     return true;
 }
 

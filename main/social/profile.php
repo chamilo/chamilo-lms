@@ -258,6 +258,7 @@ if ($show_full_profile) {
             $more_info .= '<div class="social-profile-extended">'.$user_info['competences'].'</div>';
             $more_info .= '<br />';
         }
+        //    MY DIPLOMAS
         if (!empty($user_info['diplomas'])) {
             $more_info .= '<div class="social-actions-message"><strong>'.get_lang('MyDiplomas').'</strong></div>';
             $more_info .= '<div class="social-profile-extended">'.$user_info['diplomas'].'</div>';
@@ -290,6 +291,7 @@ $tpl->assign('social_friend_block', $friend_html);
 $tpl->assign('social_menu_block', $menu);
 if($portfolioRequest == true && api_get_setting('extended_profile') == true){
     $tpl->assign('add_post_form', $addPostFormPortfolio);
+    $socialRightInformation = null;
 }else{
     $tpl->assign('add_post_form', $addPostForm);
 }

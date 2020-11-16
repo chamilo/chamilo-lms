@@ -1450,24 +1450,29 @@ class SocialManager extends UserManager
             if (api_get_setting('show_email_addresses') == 'true') {
                 $html .= Display::encrypted_mailto_link($user_object->email, $user_object->email).'<br />';
             }
-
-            if ($user_object->competences) {
-                $html .= Display::page_subheader(get_lang('MyCompetences'));
-                $html .= '<p>'.$user_object->competences.'</p>';
-            }
-            if ($user_object->diplomas) {
-                $html .= Display::page_subheader(get_lang('MyDiplomas'));
-                $html .= '<p>'.$user_object->diplomas.'</p>';
-            }
-            if ($user_object->teach) {
-                $html .= Display::page_subheader(get_lang('MyTeach'));
-                $html .= '<p>'.$user_object->teach.'</p>';
-            }
-            self::display_productions($user_object->user_id);
+            //    MY PERSONAL OPEN AREA
             if ($user_object->openarea) {
                 $html .= Display::page_subheader(get_lang('MyPersonalOpenArea'));
                 $html .= '<p>'.$user_object->openarea.'</p>';
             }
+            //    MY COMPETENCES
+            if ($user_object->competences) {
+                $html .= Display::page_subheader(get_lang('MyCompetences'));
+                $html .= '<p>'.$user_object->competences.'</p>';
+            }
+            //    MY DIPLOMAS
+            if ($user_object->diplomas) {
+                $html .= Display::page_subheader(get_lang('MyDiplomas'));
+                $html .= '<p>'.$user_object->diplomas.'</p>';
+            }
+            // WHAT I AM ABLE TO TEACH
+            if ($user_object->teach) {
+                $html .= Display::page_subheader(get_lang('MyTeach'));
+                $html .= '<p>'.$user_object->teach.'</p>';
+            }
+            //    MY PRODUCTIONS
+            self::display_productions($user_object->user_id);
+
         } else {
             $html .= '<div class="actions-title">';
             $html .= get_lang('UsersOnLineList');
@@ -2512,23 +2517,18 @@ class SocialManager extends UserManager
                 $more_info .= '<div class="social-profile-extended">'.$user_info['competences'].'</div>';
                 $more_info .= '<br />';
             }
-
+            //    MY DIPLOMAS
             if (!empty($user_info['diplomas'])) {
                 $more_info .= '<div class="social-actions-message"><strong>'.get_lang('MyDiplomas').'</strong></div>';
                 $more_info .= '<div class="social-profile-extended">'.$user_info['diplomas'].'</div>';
                 $more_info .= '<br />';
             }
-
             //    MY PRODUCTIONS
-            $product_content = '';
             if (!empty($production_list)) {
                 $more_info .= '<div class="social-actions-message"><strong>'.get_lang('MyProductions').'</strong></div>';
                 $more_info .= '<div class="social-profile-extended">'.$production_list.'</div>';
                 $more_info .= '<br />';
-            }else{
-                $more_info = "Nada aqui";
             }
-
             // WHAT I AM ABLE TO TEACH
             if (!empty($user_info['teach'])) {
                 $more_info .= '<div class="social-actions-message"><strong>'.get_lang('MyTeach').'</strong></div>';

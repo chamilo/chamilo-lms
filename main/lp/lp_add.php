@@ -104,17 +104,27 @@ if (api_get_configuration_value('save_titles_as_html')) {
 $form->applyFilter('lp_name', 'html_filter');
 $form->addRule('lp_name', get_lang('ThisFieldIsRequired'), 'required');
 
+$allowCategory = true;
+if (!empty($sessionId)) {
+    $allowCategory = false;
+    if (api_get_configuration_value('allow_session_lp_category')) {
+        $allowCategory = true;
+    }
+}
+
+if ($allowCategory) {
+    $items = learnpath::getCategoryFromCourseIntoSelect(
+        api_get_course_int_id(),
+        true
+    );
+    $form->addElement('select', 'category_id', get_lang('Category'), $items);
+}
+
 $form->addElement('hidden', 'post_time', time());
 $form->addElement('hidden', 'action', 'add_lp');
 
 $form->addButtonAdvancedSettings('advanced_params');
 $form->addHtml('<div id="advanced_params_options" style="display:none">');
-
-$items = learnpath::getCategoryFromCourseIntoSelect(
-    api_get_course_int_id(),
-    true
-);
-$form->addElement('select', 'category_id', get_lang('Category'), $items);
 
 // accumulate_scorm_time
 $form->addElement(

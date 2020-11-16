@@ -102,7 +102,7 @@ if ($plugin->isEnabled() && $isPlatformAdmin) {
                         $sizePath += $filesize;
                     }
                 } else if ($file!='..' && $file!='.') {
-                    $result = array_merge($result, find_Deleted($pathRelative.'/'.$file));
+                    $result = array_merge($result, findDeletedFiles($pathRelative.'/'.$file));
                 }
             }
         }

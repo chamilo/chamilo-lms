@@ -3,7 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * This is a learning path creation and player tool in Chamilo - previously learnpath_handler.php.
+ * This is a learning path creation and player tool in Chamilo
  *
  * @author Patrick Cool
  * @author Denes Nagy
@@ -14,7 +14,6 @@
 $this_section = SECTION_COURSES;
 api_protect_course_script();
 
-/* Header and action code */
 $currentstyle = api_get_setting('stylesheets');
 $htmlHeadXtra[] = '<script>
 function activate_start_date() {
@@ -34,14 +33,11 @@ function activate_end_date() {
 }
 </script>';
 
-/* Constants and variables */
-
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 $isStudentView = isset($_REQUEST['isStudentView']) ? $_REQUEST['isStudentView'] : null;
 $learnpath_id = isset($_REQUEST['lp_id']) ? $_REQUEST['lp_id'] : null;
 
-/* MAIN CODE */
-if ((!$is_allowed_to_edit) || $isStudentView) {
+if (!$is_allowed_to_edit || $isStudentView) {
     header('location:lp_controller.php?action=view&lp_id='.$learnpath_id.'&'.api_get_cidreq());
     exit;
 }
@@ -86,7 +82,6 @@ $form = new FormValidator(
     api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq()
 );
 
-// Form title
 $form->addHeader(get_lang('AddLpToStart'));
 
 // Title
@@ -129,7 +124,7 @@ $form->addElement(
     get_lang('AccumulateScormTime')
 );
 
-// Start date
+// Start date.
 $form->addElement(
     'checkbox',
     'activate_start_date_check',
@@ -141,7 +136,7 @@ $form->addElement('html', '<div id="start_date_div" style="display:block;">');
 $form->addDateTimePicker('publicated_on', get_lang('PublicationDate'));
 $form->addElement('html', '</div>');
 
-//End date
+// End date.
 $form->addElement(
     'checkbox',
     'activate_end_date_check',
@@ -165,7 +160,6 @@ if ($subscriptionSettings['allow_add_users_to_lp']) {
 
 $extraField = new ExtraField('lp');
 $extra = $extraField->addElements($form, 0, ['lp_icon']);
-
 Skill::addSkillsToForm($form, ITEM_TYPE_LEARNPATH, 0);
 
 $form->addElement('html', '</div>');

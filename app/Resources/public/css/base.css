@@ -10490,3 +10490,7 @@ ul.dropdown-menu.inner > li > a {
     top:-5px;
     left: -2px;
 }
+
+.production-no-padding > .files-production > ul {
+    padding-left: 0px;
+}

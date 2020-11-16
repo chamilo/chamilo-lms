@@ -922,6 +922,11 @@ class SocialManager extends UserManager
             $user_id = api_get_user_id();
         }
 
+        $myExtendedProfileEdit = '';
+        if( $user_id == api_get_user_id()){
+            $myExtendedProfileEdit .= '<a href="/main/auth/profile.php?type=extended#openarea" style="display:initial">'.
+                Display::return_icon('edit.png', get_lang('EditExtendProfile'), '', 16).'</a>';
+        }
         $usergroup = new UserGroup();
         $show_groups = [
             'groups',
@@ -998,9 +1003,11 @@ class SocialManager extends UserManager
                 $active = $show === 'portfolio' ? 'active' : null;
                 $links .= '
                 <li class="portfolio-icon '.$active.'">
-                      <a href="'.api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user_id.'&p=1">
+                      <a href="'.api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user_id.'&p=1"
+                      style="display:initial">
                         '.$portfolio.' '.get_lang('Portfolio').'
                     </a>
+                    '.$myExtendedProfileEdit.'
                 </li>';
             }
 
@@ -1128,9 +1135,11 @@ class SocialManager extends UserManager
                     $active = $show === 'portfolio' ? 'active' : null;
                     $links .= '
                 <li class="portfolio-icon '.$active.'">
-                      <a href="'.api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user_id.'&p=1">
+                      <a href="'.api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user_id.'&p=1"
+                       style="display:initial">
                         '.$portfolio.' '.get_lang('Portfolio').'
                     </a>
+                    '.$myExtendedProfileEdit.'
                 </li>';
                 }
                 $active = $show === 'invitations' ? 'active' : null;
@@ -1229,9 +1238,11 @@ class SocialManager extends UserManager
                     $active = $show === 'portfolio' ? 'active' : null;
                     $links .= '
                 <li class="portfolio-icon '.$active.'">
-                      <a href="'.api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user_id.'&p=1">
+                      <a href="'.api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user_id.'&p=1"
+                       style="display:initial">
                         '.$portfolio.' '.get_lang('Portfolio').'
                     </a>
+                    '.$myExtendedProfileEdit.'
                 </li>';
                 }
 

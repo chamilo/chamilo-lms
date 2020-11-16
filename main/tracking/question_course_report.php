@@ -62,7 +62,7 @@ foreach ($session_list as $sesion_item) {
     $my_session_list[$sesion_item['id']] = $sesion_item['name'];
 }
 
-$form = new FormValidator('search_simple', 'POST', '', '', null, false);
+$form = new FormValidator('search_simple', 'POST', '', '', null);
 $form->addElement(
     'select',
     'session_id',

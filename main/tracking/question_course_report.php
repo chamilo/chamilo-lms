@@ -116,7 +116,7 @@ if (!empty($course_info)) {
             );
 
             foreach ($question_list as $question_id) {
-                $question_data = Question::read($question_id);
+                $question_data = Question::read($question_id, $course_info);
                 $main_question_list[$question_id] = $question_data;
                 $quantity_exercises = 0;
                 $question_result = 0;

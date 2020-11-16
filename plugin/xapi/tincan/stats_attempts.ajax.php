@@ -38,7 +38,7 @@ $toolLaunch = $em->find(
 $student = api_get_user_entity($request->request->getInt('student'));
 
 if (!$toolLaunch || !$student) {
-    echo Display::return_message(get_lang('NoResults'), 'error');
+    echo Display::return_message(get_lang('NotAllowed'), 'error');
     exit;
 }
 
@@ -82,7 +82,7 @@ try {
         )
     );
 } catch (NotFoundException $notFoundException) {
-    echo Display::return_message($notFoundException->getMessage(), 'error');
+    echo Display::return_message(get_lang('NoResults'), 'warning');
     exit;
 } catch (XApiException $exception) {
     echo Display::return_message($exception->getMessage(), 'error');

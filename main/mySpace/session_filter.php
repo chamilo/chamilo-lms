@@ -241,23 +241,22 @@ if ($form->validate()) {
         ];
 
         $extraField = new ExtraField('user');
-        foreach ($extraFieldsAll as $fieldId => $field) {
+        foreach ($extraFieldsAll as $field) {
             $headers[] = $field['display_text'];
         }
         $dataToExport[] = $headers;
 
         $sessionInfo = api_get_session_info($sessionId);
-
         foreach ($certificateList as $index => $value) {
             $categoryId = $value['category_id'];
             $courseCode = $value['course_code'];
             $courseInfo = api_get_course_info($courseCode);
             $extraFields = [];
-            foreach ($extraFieldsAll as $fieldId => $field) {
+            foreach ($extraFieldsAll as $field) {
                 $extraFieldValue = new ExtraFieldValue('user');
                 $extraFieldValueData = $extraFieldValue->get_values_by_handler_and_field_id(
                     $value['user_id'],
-                    $fieldId
+                    $field['id']
                 );
                 $fieldValue = isset($extraFieldValueData['value']) ? $extraFieldValueData['value'] : '';
                 if ('true' === $fieldValue) {

@@ -85,10 +85,12 @@ $students = CourseManager::get_student_list_from_course_code(
 $content = '';
 $content .= '<div class="xapi-students">';
 
+$loadingMessage = Display::returnFontAwesomeIcon('spinner', '', true, 'fa-pulse').' '.get_lang('Loading');
+
 foreach ($students as $studentInfo) {
     $content .= Display::panelCollapse(
         api_get_person_name($studentInfo['firstname'], $studentInfo['lastname']),
-        '',
+        $loadingMessage,
         "pnl-student-{$studentInfo['id']}",
         [
             'class' => 'pnl-student',
@@ -133,7 +135,7 @@ $htmlHeadXtra[] = "<script>
 
             var \$self = \$(this)
                 .addClass('disabled')
-                .html('<em class=\"fa fa-spinner fa-pulse\"></em> ".get_lang('Loading')."');
+                .html('".$loadingMessage."');
 
             $.post(
                 'stats_statements.ajax.php?' + _p.web_cid_query,

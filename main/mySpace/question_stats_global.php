@@ -100,8 +100,8 @@ if ($form->validate()) {
     $exercises = $form->getSubmitValue('exercises');
     if ($exercises) {
         $orderedData = [];
-        foreach ($selectedExercises as $courseId => $exerciseList) {
-            foreach ($exerciseList as $exerciseId) {
+        foreach ($selectedExercises as $courseId => $selectedExerciseList) {
+            foreach ($selectedExerciseList as $exerciseId) {
                 $questions = ExerciseLib::getWrongQuestionResults($courseId, $exerciseId, null, 10);
                 foreach ($questions as $data) {
                     $questionId = (int) $data['question_id'];

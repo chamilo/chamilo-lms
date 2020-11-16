@@ -1733,6 +1733,9 @@ $_configuration['auth_password_links'] = [
 // Disable change user visibility tool icon.
 //$_configuration['disable_change_user_visibility_for_public_courses'] = true;
 
+// Enable a "Previous question" button in surveys GH#3582
+// $_configuration['survey_backwards_enable'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

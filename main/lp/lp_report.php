@@ -310,9 +310,9 @@ if (!empty($users)) {
             $groupsByUser = GroupManager::getAllGroupPerUserSubscription($userId, $courseId, $sessionId);
             $icon = Display::return_icon('group.png', get_lang('Group'));
             if (!empty($groupsByUser)) {
-                $groupUrl = api_get_path(WEB_CODE_PATH).'main/group.php?'.api_get_cidreq(true, false);
+                $groupUrl = api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(true, false);
                 foreach ($groupsByUser as $group) {
-                    $userGroupList .= Display::url($icon.$group['name'], $groupUrl.'&gidReq='.$group['iid']);
+                    $userGroupList .= Display::url($icon.$group['name'], $groupUrl.'&gidReq='.$group['iid']).'&nbsp;';
                 }
             }
         }
@@ -322,9 +322,9 @@ if (!empty($users)) {
             $classes = $userGroup->getUserGroupListByUser($userId, UserGroup::NORMAL_CLASS);
             $icon = Display::return_icon('class.png', get_lang('Class'));
             if (!empty($classes)) {
-                $classUrl = api_get_path(WEB_CODE_PATH).'main/class.php?'.api_get_cidreq(true, false);
+                $classUrl = api_get_path(WEB_CODE_PATH).'user/class.php?'.api_get_cidreq(true, false);
                 foreach ($classes as $class) {
-                    $classesToString .= Display::url($icon.$class['name'], $classUrl.'&class_id='.$class['id']);
+                    $classesToString .= Display::url($icon.$class['name'], $classUrl.'&class_id='.$class['id']).'&nbsp;';
                 }
             }
         }

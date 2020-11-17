@@ -324,12 +324,17 @@ if (!empty($users)) {
             if (!empty($classes)) {
                 $classUrl = api_get_path(WEB_CODE_PATH).'user/class.php?'.api_get_cidreq(true, false);
                 foreach ($classes as $class) {
-                    $classesToString .= Display::url($icon.$class['name'], $classUrl.'&class_id='.$class['id']).'&nbsp;';
+                    $classesToString .= Display::url(
+                            $icon.$class['name'],
+                            $classUrl.'&class_id='.$class['id']
+                        ).'&nbsp;';
                 }
             }
         }
+        $trackingUrl = api_get_path(WEB_CODE_PATH).'main/mySpace/myStudents.php?details=true'.
+        api_get_cidreq().'&course='.$courseCode.'&origin=tracking_course&student='.$userId;
 
-        $userList[] = [
+        /*$userList[] = [
             'id' => $userId,
             'username' => $userInfo['username'],
             'first_name' => $userInfo['firstname'],
@@ -341,11 +346,75 @@ if (!empty($users)) {
             'lp_score' => is_numeric($lpScore) ? "$lpScore%" : $lpScore,
             'lp_progress' => "$lpProgress %",
             'lp_last_connection' => $lpLastConnection,
-        ];
+        ];*/
+        $row = [];
+        $row[] = Display::url($userInfo['firstname'], $trackingUrl);
+        $row[] = Display::url($userInfo['lastname'], $trackingUrl);
+        if ('true' === $showEmail) {
+            $row[] = $userInfo['email'];
+        }
+        $row[] = $userGroupList.$classesToString;
+        $row[] = api_time_to_hms($lpTime);
+        $row[] = "$lpProgress %";
+        $row[] = is_numeric($lpScore) ? "$lpScore%" : $lpScore;
+        $row[] = $lpLastConnection;
+        /*
+                      <a href="javascript:void(0);" class="details" data-id="{{ user.id }}">
+                        <img alt="{{ 'Details' | get_lang }}" src="{{ '2rightarrow.png'|icon(22) }}" />
+                    </a>&nbsp;
+                    <a
+                        href = "{{ url }}&student_id={{ user.id }}&reset=student"
+                        onclick = "javascript:if(!confirm('{{ 'AreYouSureToDeleteJS' | get_lang | e('js') }}')) return false;"
+                    >
+                        <img alt="{{ 'Reset' | get_lang }}" src="{{ 'clean.png'|icon(22) }}" />
+                    </a>
+        */
+
+        $actions = Display::url(Display::return_icon('statistics.png', get_lang('Reporting')), $trackingUrl).'&nbsp;';
+
+        $actions .= Display::url(
+            Display::return_icon('2rightarrow.png', get_lang('Details')),
+            'javascript:void(0);',
+            ['data-id' => $userId, 'class' => 'details']
+        ).'&nbsp;';
+
+        $actions .= Display::url(
+            Display::return_icon('clean.png', get_lang('Reset')),
+            $url.'&student_id='.$userId.'&reset=student',
+            ['onclick' => "javascript:if(!confirm('".get_lang('AreYouSureToDeleteJS')."')) return false;"]
+        );
+
+        $row[] = $actions;
+        $userList[] = $row;
         $added[] = $userId;
     }
 } else {
     Display::addFlash(Display::return_message(get_lang('NoUserAdded'), 'warning'));
+}
+
+$parameters = [
+    'action' => 'report',
+    'group_filter' => $groupFilter,
+    'cidReq' => $courseCode,
+    'id_session' => $sessionId,
+    'lp_id' => $lpId
+];
+
+$table = new SortableTableFromArrayConfig($userList, 1, 20, 'lp');
+$table->set_additional_parameters($parameters);
+$column = 0;
+$table->set_header($column++, get_lang('FirstName'));
+$table->set_header($column++, get_lang('LastName'));
+if ('true' === $showEmail) {
+    $table->set_header($column++, get_lang('Email'));
+}
+$table->set_header($column++, $label, false);
+$table->set_header($column++, get_lang('ScormTime'));
+$table->set_header($column++, get_lang('Progress'));
+$table->set_header($column++, get_lang('ScormScore'));
+$table->set_header($column++, get_lang('LastConnection'), false);
+if (false === $export) {
+    $table->set_header($column++, get_lang('Actions'), false);
 }
 
 $interbreadcrumb[] = [
@@ -396,6 +465,7 @@ $template->assign('session_id', api_get_session_id());
 $template->assign('course_code', api_get_course_id());
 $template->assign('lp_id', $lpId);
 $template->assign('show_email', 'true' === $showEmail);
+$template->assign('table', $table->return_table());
 $template->assign('export', (int) $export);
 $template->assign('group_form', $groupFilterForm);
 $template->assign('url', $url);

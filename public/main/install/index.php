@@ -865,7 +865,7 @@ $poweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chami
 </div>
 </body>
 <script type="text/javascript">
-    function showHidePassword() {
+    function ShowHidePassword() {
         if ($('#showPassword').prop('checked')) {
             $('[name=passForm].form-control').attr('type', 'text');
             $('.showPasswordEye').addClass('fa-eye').removeClass('fa-eye-slash');

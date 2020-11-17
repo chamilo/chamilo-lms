@@ -292,7 +292,7 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
             $extraFieldValueUser = new ExtraFieldOption('user');
             $items = $extraFieldValueUser->get_field_options_by_field($authorLpId);
             foreach ($items as $item) {
-                if (isset($item['option_value']) == $options[0] || isset($item['option_value']) == $options[1]) {
+                if (isset($options[0]) && (isset($item['option_value']) == $options[0] || isset($item['option_value']) == $options[1])) {
                     unset($options[$item['option_value']]);
                     $order++;
                 }

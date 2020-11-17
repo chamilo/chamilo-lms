@@ -1744,6 +1744,9 @@ $_configuration['auth_password_links'] = [
 // Disable change user visibility tool icon.
 //$_configuration['disable_change_user_visibility_for_public_courses'] = true;
 
+// Add another layer of security by checking if the user is disabled at every page load (might generate considerable extra DB load)
+// $_configuration['security_block_inactive_users_immediately'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

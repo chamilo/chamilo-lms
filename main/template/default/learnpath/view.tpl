@@ -211,9 +211,13 @@
 </div>
 
 <script>
-    document.querySelector('.menu-button').onclick = function(e) {
-        e.preventDefault(); document.querySelector('.circle').classList.toggle('open');
-    }
+    // document.querySelector('.menu-button').onclick = function(e) {
+    //     e.preventDefault();
+    //     document.querySelector('.circle').classList.toggle('open', function() {
+    //         console.log('topo');
+    //     });
+    //     $('.menu-button').css('background', '#00829C');
+    // }
     var LPViewUtils = {
         setHeightLPToc: function () {
             var scormInfoHeight = $('#scorm-info').outerHeight(true);
@@ -224,6 +228,16 @@
     };
 
     $(function() {
+        $('.menu-button').on('click', function() {
+            $('.circle').toggleClass('open');
+            if ($('.circle').hasClass('open')) {
+                $('.menu-button').css('background', '#00829C');
+                $('.menu-button').css('color', '#fff');
+            } else {
+                $('.menu-button').css('background', '#fff');
+                $('.menu-button').css('color', '#000');
+            }
+        });
         if (/iPhone|iPod|iPad/.test(navigator.userAgent)) {
             // Fix an issue where you cannot scroll below first screen in
             // learning paths on Apple devices

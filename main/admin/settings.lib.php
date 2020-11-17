@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
@@ -1324,9 +1325,9 @@ function actionsFilter($id)
 function searchImageFilter($image)
 {
     if (!empty($image)) {
-        return '<img src="'.api_get_path(WEB_APP_PATH).'home/default_platform_document/template_thumb/'.$image.'" alt="'.get_lang('TemplatePreview').'"/>';
+        return '<img src="'.api_get_path(WEB_HOME_PATH).'default_platform_document/template_thumb/'.$image.'" alt="'.get_lang('TemplatePreview').'"/>';
     } else {
-        return '<img src="'.api_get_path(WEB_APP_PATH).'home/default_platform_document/template_thumb/noimage.gif" alt="'.get_lang('NoTemplatePreview').'"/>';
+        return '<img src="'.api_get_path(WEB_HOME_PATH).'default_platform_document/template_thumb/noimage.gif" alt="'.get_lang('NoTemplatePreview').'"/>';
     }
 }
 
@@ -1402,8 +1403,8 @@ function addEditTemplate()
                 'static',
                 'template_image_preview',
                 '',
-                '<img src="'.api_get_path(WEB_APP_PATH)
-                    .'home/default_platform_document/template_thumb/'.$template->getImage()
+                '<img src="'.api_get_path(WEB_HOME_PATH).
+                'default_platform_document/template_thumb/'.$template->getImage()
                     .'" alt="'.get_lang('TemplatePreview')
                     .'"/>'
             );
@@ -1413,7 +1414,7 @@ function addEditTemplate()
                 'static',
                 'template_image_preview',
                 '',
-                '<img src="'.api_get_path(WEB_APP_PATH).'home/default_platform_document/template_thumb/noimage.gif" alt="'.get_lang('NoTemplatePreview').'"/>'
+                '<img src="'.api_get_path(WEB_HOME_PATH).'default_platform_document/template_thumb/noimage.gif" alt="'.get_lang('NoTemplatePreview').'"/>'
             );
         }
 

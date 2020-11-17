@@ -5840,7 +5840,7 @@ EOT;
         return $total;
     }
 
-    public static function parseContent($content, $stats, $exercise, $trackInfo)
+    public static function parseContent($content, $stats, $exercise, $trackInfo, $currentUserId = 0)
     {
         $wrongAnswersCount = $stats['failed_answers_count'];
         $attemptDate = substr($trackInfo['exe_date'], 0, 10);
@@ -5861,8 +5861,10 @@ EOT;
             $content
         );
 
+        $currentUserId = empty($currentUserId) ? api_get_user_id() : (int) $currentUserId;
+
         $content = AnnouncementManager::parseContent(
-            api_get_user_id(),
+            $currentUserId,
             $content,
             api_get_course_id(),
             api_get_session_id()
@@ -5878,15 +5880,14 @@ EOT;
             return false;
         }
 
+        $studentId = $exercise_stat_info['exe_user_id'];
         $exerciseExtraFieldValue = new ExtraFieldValue('exercise');
-        //$attemptCountToSend = $attempt_count++;
         $wrongAnswersCount = $stats['failed_answers_count'];
         $exercisePassed = $stats['exercise_passed'];
         $countPendingQuestions = $stats['count_pending_questions'];
 
         // If there are no pending questions (Open questions).
         if (0 === $countPendingQuestions) {
-            //$totalScore = self::show_score($total_score, $max_score, false, true);
             $subject = sprintf(get_lang('WrongAttemptXInCourseX'), $attemptCountToSend, $courseInfo['title']);
             if ($exercisePassed) {
                 $subject = sprintf(get_lang('ExerciseValidationInCourseX'), $courseInfo['title']);
@@ -5906,7 +5907,7 @@ EOT;
 
             if ($extraFieldData && isset($extraFieldData['value'])) {
                 $content = $extraFieldData['value'];
-                $content = self::parseContent($content, $stats, $objExercise, $exercise_stat_info);
+                $content = self::parseContent($content, $stats, $objExercise, $exercise_stat_info, $studentId);
                 if (false === $exercisePassed) {
                     if (0 !== $wrongAnswersCount) {
                         $content .= $stats['failed_answers_html'];
@@ -5917,11 +5918,6 @@ EOT;
                 MessageManager::send_message($currentUserId, $subject, $content);
             }
 
-            // Subject for notifications
-            /*$subject = sprintf(get_lang('WrongAttemptXInCourseX'), $attemptCountToSend, $courseInfo['title']);
-            if ($exercisePassed) {
-                $subject = sprintf(get_lang('ExerciseValidationInCourseX'), $courseInfo['title']);
-            }*/
             $extraFieldData = $exerciseExtraFieldValue->get_values_by_handler_and_field_variable(
                 $objExercise->iId,
                 'notifications'
@@ -5984,7 +5980,8 @@ EOT;
                                             $pdfExtraData['value'],
                                             $stats,
                                             $objExercise,
-                                            $exercise_stat_info
+                                            $exercise_stat_info,
+                                            $studentId
                                         );
 
                                         @$pdf = new PDF();
@@ -6021,7 +6018,8 @@ EOT;
                                         $content,
                                         $stats,
                                         $objExercise,
-                                        $exercise_stat_info
+                                        $exercise_stat_info,
+                                        $studentId
                                     );
                                     foreach ($emailList as $email) {
                                         if (empty($email)) {

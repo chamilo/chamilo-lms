@@ -16,7 +16,7 @@ $nameTools = get_lang('VoiceRecord');
 api_protect_course_script();
 api_block_anonymous_users();
 api_protect_course_group(GroupManager::GROUP_TOOL_DOCUMENTS);
-
+$_course = api_get_course_info();
 $document_data = DocumentManager::get_document_data_by_id(
     $_GET['id'],
     api_get_course_id(),
@@ -28,20 +28,13 @@ $document_id = 0;
 if (empty($document_data)) {
     if (api_is_in_group()) {
         $group_properties = GroupManager::get_group_properties(api_get_group_id());
-        $document_id = DocumentManager::get_document_id(
-            api_get_course_info(),
-            $group_properties['directory']
-        );
-        $document_data = DocumentManager::get_document_data_by_id(
-            $document_id,
-            api_get_course_id()
-        );
+        $document_id = DocumentManager::get_document_id($_course, $group_properties['directory']);
+        $document_data = DocumentManager::get_document_data_by_id($document_id, api_get_course_id());
     }
 } else {
     $document_id = $document_data['id'];
     $dir = $document_data['path'];
 }
-
 //make some vars
 $wamidir = $dir;
 if ($wamidir === "/") {
@@ -69,7 +62,6 @@ if ($dir[strlen($dir) - 1] != '/') {
 }
 
 $filepath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document'.$dir;
-
 if (!is_dir($filepath)) {
     $filepath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document/';
     $dir = '/';
@@ -77,7 +69,7 @@ if (!is_dir($filepath)) {
 
 //groups //TODO: clean
 if (!empty($groupId)) {
-    $group = GroupManager :: get_group_properties($groupId);
+    $group = GroupManager::get_group_properties($groupId);
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
         'name' => get_lang('Groups'),
@@ -86,11 +78,6 @@ if (!empty($groupId)) {
         "url" => api_get_path(WEB_CODE_PATH)."group/group_space.php?".api_get_cidreq(),
         "name" => get_lang('GroupSpace'),
     ];
-
-    $path = explode('/', $dir);
-    if ('/'.$path[1] != $group['directory']) {
-        api_not_allowed(true);
-    }
 }
 
 $interbreadcrumb[] = ["url" => "./document.php?id=".$document_id.'&'.api_get_cidreq(), "name" => get_lang('Documents')];
@@ -98,7 +85,6 @@ $interbreadcrumb[] = ["url" => "./document.php?id=".$document_id.'&'.api_get_cid
 if (!api_is_allowed_in_course()) {
     api_not_allowed(true);
 }
-
 if (!($is_allowed_to_edit || $groupRights ||
     DocumentManager::is_my_shared_folder(
         api_get_user_id(),
@@ -109,7 +95,6 @@ if (!($is_allowed_to_edit || $groupRights ||
     api_not_allowed(true);
 }
 
-/*	Header */
 Event::event_access_tool(TOOL_DOCUMENT);
 
 $display_dir = $dir;
@@ -139,9 +124,7 @@ if (isset($document_data['parents'])) {
     }
 }
 
-//make some vars
 $wamiuserid = api_get_user_id();
-
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'rtc/RecordRTC.js"></script>';
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'wami-recorder/recorder.js"></script>';
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'wami-recorder/gui.js"></script>';
@@ -157,15 +140,12 @@ $actions = Display::toolbarButton(
     [],
     false
 );
-
 $template = new Template($nameTools);
 $template->assign('directory', $wamidir);
 $template->assign('user_id', api_get_user_id());
 $template->assign('reload_page', 1);
-
 $layout = $template->get_template('document/record_audio.tpl');
 $content = $template->fetch($layout);
-
 $template->assign(
     'actions',
     Display::toolbarAction('toolbar', [$actions])

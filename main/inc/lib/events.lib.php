@@ -1295,15 +1295,6 @@ class Event
             Database::query($sql);
         }
 
-        $sql = "DELETE FROM $lp_view_table
-                WHERE
-                    c_id = $course_id AND
-                    user_id = $user_id AND
-                    lp_id= $lp_id AND
-                    session_id = $session_id
-            ";
-        Database::query($sql);
-
         $sql = "SELECT exe_id FROM $track_e_exercises
                 WHERE
                     exe_user_id = $user_id AND
@@ -1316,7 +1307,7 @@ class Event
             $exe_list[] = $row['exe_id'];
         }
 
-        if (!empty($exe_list) && is_array($exe_list) && count($exe_list) > 0) {
+        if (!empty($exe_list) && count($exe_list) > 0) {
             $exeListString = implode(',', $exe_list);
             $sql = "DELETE FROM $track_e_exercises
                     WHERE exe_id IN ($exeListString)";
@@ -1330,6 +1321,15 @@ class Event
                     WHERE exe_id IN ($exeListString)";
             Database::query($sql);
         }
+
+        $sql = "DELETE FROM $lp_view_table
+                WHERE
+                    c_id = $course_id AND
+                    user_id = $user_id AND
+                    lp_id= $lp_id AND
+                    session_id = $session_id
+            ";
+        Database::query($sql);
 
         self::addEvent(
             LOG_LP_ATTEMPT_DELETE,

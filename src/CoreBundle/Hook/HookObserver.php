@@ -54,7 +54,7 @@ abstract class HookObserver implements HookObserverInterface
      */
     public static function create()
     {
-        static $result = null;
+        /*static $result = null;
 
         if ($result) {
             return $result;
@@ -66,7 +66,7 @@ abstract class HookObserver implements HookObserverInterface
             } catch (\Exception $e) {
                 return null;
             }
-        }
+        }*/
     }
 
     /**

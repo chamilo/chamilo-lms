@@ -1,5 +1,8 @@
 <?php
+
 /* For licensing terms, see /license.txt */
+
+use Chamilo\CoreBundle\Framework\Container;
 
 /**
  * Gradebook link to student publication item.
@@ -38,15 +41,15 @@ class StudentPublicationLink extends AbstractLink
         $courseId = $this->course_id;
 
         $sql = "SELECT pub.url
-                FROM $itemProperty prop 
+                FROM $itemProperty prop
                 INNER JOIN $workTable pub
                 ON (prop.c_id = pub.c_id AND prop.ref = pub.id)
                 WHERE
                     prop.c_id = $courseId AND
                     pub.c_id = $courseId AND
-                    prop.tool = 'work' AND 
-                    prop.insert_user_id = $stud_id AND                     
-                    pub.title = '".Database::escape_string($eval->get_name())."' AND 
+                    prop.tool = 'work' AND
+                    prop.insert_user_id = $stud_id AND
+                    pub.title = '".Database::escape_string($eval->get_name())."' AND
                     pub.session_id=".api_get_session_id();
 
         $result = Database::query($sql);
@@ -82,7 +85,7 @@ class StudentPublicationLink extends AbstractLink
         }
         $em = Database::getManager();
         $sessionId = $this->get_session_id();
-        $session = $em->find('ChamiloCoreBundle:Session', $sessionId);
+        $session = api_get_session_entity($sessionId);
         /*
         if (empty($session_id)) {
             $session_condition = api_get_session_condition(0, true);
@@ -94,21 +97,25 @@ class StudentPublicationLink extends AbstractLink
 
         //Only show works from the session
         //AND has_properties != ''
-        $links = $em
-            ->getRepository('ChamiloCourseBundle:CStudentPublication')
+        $repo = Container::getStudentPublicationRepository();
+        $qb = $repo->getResourcesByCourse(api_get_course_entity($this->course_id), $session);
+        $qb->andWhere("resource.filetype = 'folder' AND resource.active = true");
+        $links = $qb->getQuery()->getResult();
+
+        /*$links = Container::getStudentPublicationRepository()
             ->findBy([
                 'cId' => $this->course_id,
                 'active' => true,
                 'filetype' => 'folder',
                 'session' => $session,
-            ]);
+            ]);*/
 
         foreach ($links as $data) {
             $work_name = $data->getTitle();
             if (empty($work_name)) {
                 $work_name = basename($data->getUrl());
             }
-            $cats[] = [$data->getId(), $work_name];
+            $cats[] = [$data->getIid(), $work_name];
         }
         $cats = isset($cats) ? $cats : [];
 
@@ -128,9 +135,8 @@ class StudentPublicationLink extends AbstractLink
         $id = $data['id'];
 
         $em = Database::getManager();
-        $session = $em->find('ChamiloCoreBundle:Session', $this->get_session_id());
-        $results = $em
-            ->getRepository('ChamiloCourseBundle:CStudentPublication')
+        $session = api_get_session_entity($this->get_session_id());
+        $results = Container::getStudentPublicationRepository()
             ->findBy([
                 'cId' => $this->course_id,
                 'parentId' => $id,
@@ -141,13 +147,13 @@ class StudentPublicationLink extends AbstractLink
     }
 
     /**
-     * @param null $stud_id
+     * @param null $studentId
      *
      * @return array
      */
-    public function calc_score($stud_id = null, $type = null)
+    public function calc_score($studentId = null, $type = null)
     {
-        $stud_id = (int) $stud_id;
+        $studentId = (int) $studentId;
         $em = Database::getManager();
         $data = $this->get_exercise_data();
 
@@ -157,8 +163,7 @@ class StudentPublicationLink extends AbstractLink
         $id = $data['id'];
         $session = api_get_session_entity($this->get_session_id());
 
-        $assignment = $em
-            ->getRepository('ChamiloCourseBundle:CStudentPublication')
+        $assignment = Container::getStudentPublicationRepository()
             ->findOneBy([
                 'cId' => $this->course_id,
                 'id' => $id,
@@ -201,9 +206,9 @@ class StudentPublicationLink extends AbstractLink
             ];
         }
 
-        if (!empty($stud_id)) {
+        if (!empty($studentId)) {
             $dql .= ' AND a.userId = :student ';
-            $params['student'] = $stud_id;
+            $params['student'] = $studentId;
         }
 
         $order = api_get_setting('student_publication_to_take_in_gradebook');
@@ -216,14 +221,14 @@ class StudentPublicationLink extends AbstractLink
             case 'first':
             default:
                 // first attempt
-                $dql .= ' ORDER BY a.id';
+                $dql .= ' ORDER BY a.iid';
                 break;
         }
 
         $scores = $em->createQuery($dql)->execute($params);
 
         // for 1 student
-        if (!empty($stud_id)) {
+        if (!empty($studentId)) {
             if (!count($scores)) {
                 return [null, null];
             }
@@ -274,7 +279,7 @@ class StudentPublicationLink extends AbstractLink
                 return [$sumResult / $rescount, $weight];
                 break;
             case 'ranking':
-                return AbstractLink::getCurrentUserRanking($stud_id, $students);
+                return AbstractLink::getCurrentUserRanking($studentId, $students);
                 break;
             default:
                 return [$sum, $rescount];
@@ -305,7 +310,7 @@ class StudentPublicationLink extends AbstractLink
     public function get_link()
     {
         $sessionId = $this->get_session_id();
-        $url = api_get_path(WEB_PATH).'main/work/work.php?'.api_get_cidreq_params($this->get_course_code(), $sessionId).'&id='.$this->exercise_data['id'].'&gradebook=view';
+        $url = api_get_path(WEB_PATH).'main/work/work.php?'.api_get_cidreq_params($this->getCourseId(), $sessionId).'&id='.$this->exercise_data['id'].'&gradebook=view';
 
         return $url;
     }
@@ -329,8 +334,8 @@ class StudentPublicationLink extends AbstractLink
         }
         $id = $data['id'];
         $sql = 'SELECT count(id) FROM '.$this->get_studpub_table().'
-                WHERE 
-                    c_id = "'.$this->course_id.'" AND 
+                WHERE
+                    c_id = "'.$this->course_id.'" AND
                     id = '.$id;
         $result = Database::query($sql);
         $number = Database::fetch_row($result);
@@ -355,7 +360,7 @@ class StudentPublicationLink extends AbstractLink
         $weight = api_float_val($this->get_weight());
         if (!empty($id)) {
             //Cleans works
-            $sql = 'UPDATE '.$this->get_studpub_table().' 
+            $sql = 'UPDATE '.$this->get_studpub_table().'
                     SET weight= '.$weight.'
                     WHERE c_id = '.$this->course_id.' AND id ='.$id;
             Database::query($sql);
@@ -372,13 +377,13 @@ class StudentPublicationLink extends AbstractLink
             return '';
         }
 
-        if (!empty($id)) {
+        /*if (!empty($id)) {
             //Cleans works
-            $sql = 'UPDATE '.$this->get_studpub_table().' 
+            $sql = 'UPDATE '.$this->get_studpub_table().'
                     SET weight = 0
                     WHERE c_id = '.$this->course_id.' AND id ='.$id;
             Database::query($sql);
-        }
+        }*/
     }
 
     /**

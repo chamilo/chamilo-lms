@@ -1,16 +1,23 @@
 dist: bionic
-os: linux
 language: php
 php:
   7.2
+  7.3
 
 addons:
   apt:
     packages:
       - apache2
+      - php
+      - php-mysql
+      - php-xml
+      - php-gd
+      - php-intl
+      - php-soap
+      - php-bcmath
+      - libapache2-mod-php
       - postfix
       - libappindicator1
-      - fonts-liberation
 
 services:
   - mysql
@@ -25,21 +32,20 @@ matrix:
   fast_finish: false
   include:
     - php: 7.2
-    #- php: 7.3
+#    - php: 7.3
+#    - php: 7.4
 
 env:
   global:
     - VHOST_URL=localhost
-    - CHAMILO_VERSION=master
 
 before_install:
-  - curl http://localhost/php.php
   - mysqld --version
   - apache2 -v
   - php -m
   - php -ini | grep memory_limit
   # Fix travis error https://github.com/travis-ci/travis-ci/issues/8607
-  - rm -vf /etc/apt/sources.list.d/*riak*
+  - sudo rm -vf /etc/apt/sources.list.d/*riak*
   - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
   # Get Chrome driver
   - wget https://chromedriver.storage.googleapis.com/2.35/chromedriver_linux64.zip && unzip chromedriver_linux64.zip
@@ -54,77 +60,84 @@ before_install:
   - java -jar selenium-server-standalone-3.141.59.jar -log selenium.log  > /dev/null &
 
   # Use default config
-  - apt-get update
-  - apt-get install php php-mysql php-xml php-gd php-intl php-soap php-bcmath
-  #- sudo apt-get install php7.3 php7.3-mysql php7.3-xml php7.3-gd php7.3-intl php7.3-soap php7.3-bcmath
-  #- sudo a2enmod rewrite actions fastcgi alias
+  #- sudo apt-get update
+  #- sudo apt-get install php php-mysql php-xml php-gd php-intl php-soap php-bcmath
+  - sudo a2enmod rewrite actions alias setenvif
 
   # Apache & php-fpm configuration
   - bash tests/travis/setup-php-fpm.sh
   - bash tests/travis/setup-apache.sh
 
   # Starting Apache
-  - service apache2 restart
-  - cat /etc/hosts
-  - curl http://localhost/php.php
+  - sudo service apache2 restart
+  - sudo cat /etc/hosts
 
 install:
   - phpenv config-rm xdebug.ini || return 0
-  - composer install --prefer-source --no-interaction
+#  - composer self-update --snapshot
+  - composer install --prefer-source --no-interaction --optimize-autoloader
   # Install bundle js/css
   - php bin/console assets:install
   # Permissions
-  - chmod -R 777 var public
+  - sudo chmod -R 777 var public
   # Dump js routes
   - php bin/console fos:js-routing:dump --format=json --target=public/js/fos_js_routes.json
   # Install third party js/css libraries
   - yarn install
-  - ./node_modules/.bin/encore dev
+  - yarn run encore production
   # Permissions
-  - chown -R www-data:www-data $TRAVIS_BUILD_DIR
-  - chown -R 775 $TRAVIS_BUILD_DIR
-  - chmod +x /home/travis/build
+  - sudo chown -R www-data:www-data $TRAVIS_BUILD_DIR
+  - sudo chmod -R 777 var public
+  - sudo chmod +x /home/travis/build
   - ls -la public/build
+  - curl http://localhost/check.php
 
 script:
   - cd tests/behat
   #  - travis_wait 45 ../../vendor/behat/behat/bin/behat -v
-  - ../../vendor/behat/behat/bin/behat features/actionInstall.feature -v
+  - ../../vendor/behat/behat/bin/behat features/actionInstall.feature -vvv
   - cd ..
   - cd ..
   # Set to APP_ENV to test
-  - sed -i "s/APP_ENV='dev'/APP_ENV='test'/g" .env.local
+  - sed -i "s/APP_ENV='dev'/APP_ENV='prod'/g" .env.local
+  - sed -i "s/APP_DEBUG='1'/APP_DEBUG='0'/g" .env.local
+  # Warm up
+  - sudo chmod -R 777 var public
+  - php bin/console cache:clear
+  - sudo chmod -R 777 var public
   - cd tests/behat
-  - ../../vendor/behat/behat/bin/behat features/adminFillUsers.feature -v
-  - ../../vendor/behat/behat/bin/behat features/adminSettings.feature -v
-  - ../../vendor/behat/behat/bin/behat features/career.feature -v
-  - ../../vendor/behat/behat/bin/behat features/class.feature -v
-  - ../../vendor/behat/behat/bin/behat features/companyReports.feature -v
-  - ../../vendor/behat/behat/bin/behat features/course.feature -v
-  - ../../vendor/behat/behat/bin/behat features/course_user_registration.feature -v
-  - ../../vendor/behat/behat/bin/behat features/createUser.feature -v
-  - ../../vendor/behat/behat/bin/behat features/createUserViaCSV.feature -v
-  - ../../vendor/behat/behat/bin/behat features/extraFieldUser.feature -v
-  - ../../vendor/behat/behat/bin/behat features/profile.feature -v
-  - ../../vendor/behat/behat/bin/behat features/promotion.feature -v
-  - ../../vendor/behat/behat/bin/behat features/registration.feature -v
-  - ../../vendor/behat/behat/bin/behat features/sessionAccess.feature -v
-  - ../../vendor/behat/behat/bin/behat features/sessionManagement.feature -v
-  - ../../vendor/behat/behat/bin/behat features/socialGroup.feature -v
-  - ../../vendor/behat/behat/bin/behat features/systemAnnouncements.feature -v
-  - ../../vendor/behat/behat/bin/behat features/ticket.feature -v
-  - ../../vendor/behat/behat/bin/behat features/toolAgenda.feature -v
-  - ../../vendor/behat/behat/bin/behat features/toolAnnouncement.feature -v
-  - ../../vendor/behat/behat/bin/behat features/toolDocument.feature -v
-  - ../../vendor/behat/behat/bin/behat features/toolExercise.feature -v
-  - ../../vendor/behat/behat/bin/behat features/toolForum.feature -v
-  - ../../vendor/behat/behat/bin/behat features/toolGroup.feature -v
-  - ../../vendor/behat/behat/bin/behat features/toolLink.feature -v
-  - ../../vendor/behat/behat/bin/behat features/toolLp.feature -v
-  - ../../vendor/behat/behat/bin/behat features/toolWork.feature -v
+#  - ../../vendor/behat/behat/bin/behat features/accessCompanyReports.feature -v
+  - ../../vendor/behat/behat/bin/behat features/actionUserLogin.feature -vv
+  - ../../vendor/behat/behat/bin/behat features/adminFillUsers.feature -vv
+  - ../../vendor/behat/behat/bin/behat features/adminSettings.feature -vv
+  - ../../vendor/behat/behat/bin/behat features/career.feature -vvv
+  - ../../vendor/behat/behat/bin/behat features/class.feature -vvv
+  - ../../vendor/behat/behat/bin/behat features/companyReports.feature -vv
+  - ../../vendor/behat/behat/bin/behat features/course.feature -vvv
+  - ../../vendor/behat/behat/bin/behat features/course_user_registration.feature -vv
+  - ../../vendor/behat/behat/bin/behat features/createUser.feature -vvv
+  - ../../vendor/behat/behat/bin/behat features/createUserViaCSV.feature -vv
+  - ../../vendor/behat/behat/bin/behat features/extraFieldUser.feature -vv
+  - ../../vendor/behat/behat/bin/behat features/profile.feature -vv
+  - ../../vendor/behat/behat/bin/behat features/promotion.feature -vv
+#  - ../../vendor/behat/behat/bin/behat features/registration.feature -v
+  - ../../vendor/behat/behat/bin/behat features/sessionAccess.feature -vv
+  - ../../vendor/behat/behat/bin/behat features/sessionManagement.feature -vv
+  - ../../vendor/behat/behat/bin/behat features/socialGroup.feature -vv
+  - ../../vendor/behat/behat/bin/behat features/systemAnnouncements.feature -vv
+#  - ../../vendor/behat/behat/bin/behat features/ticket.feature -v
+  - ../../vendor/behat/behat/bin/behat features/toolAgenda.feature -vv
+  - ../../vendor/behat/behat/bin/behat features/toolAnnouncement.feature -vv
+#  - ../../vendor/behat/behat/bin/behat features/toolDocument.feature -v
+#  - ../../vendor/behat/behat/bin/behat features/toolExercise.feature -v
+#  - ../../vendor/behat/behat/bin/behat features/toolForum.feature -v
+#  - ../../vendor/behat/behat/bin/behat features/toolGroup.feature -vv
+  - ../../vendor/behat/behat/bin/behat features/toolLink.feature -vv
+  - ../../vendor/behat/behat/bin/behat features/toolLp.feature -vvv
+  - ../../vendor/behat/behat/bin/behat features/toolWork.feature -vvv
 
 after_failure:
-  - cat /var/log/apache2/error.log
+  - sudo cat /var/log/apache2/error.log
 
 # configure notifications (email, IRC, campfire etc)
 notifications:

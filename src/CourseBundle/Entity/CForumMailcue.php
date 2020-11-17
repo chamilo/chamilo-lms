@@ -41,13 +41,6 @@ class CForumMailcue
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer", nullable=true)
-     */
-    protected $id;
-
-    /**
-     * @var int
-     *
      * @ORM\Column(name="thread_id", type="integer")
      */
     protected $threadId;
@@ -65,30 +58,6 @@ class CForumMailcue
      * @ORM\Column(name="post_id", type="integer")
      */
     protected $postId;
-
-    /**
-     * Set id.
-     *
-     * @param int $id
-     *
-     * @return CForumMailcue
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
 
     /**
      * Set cId.

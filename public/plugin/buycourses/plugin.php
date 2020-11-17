@@ -1,5 +1,4 @@
 <?php
-
 /* For license terms, see /license.txt */
 /**
  * This script is a configuration file for the date plugin. You can use it as a master for other platform plugins (course plugins are slightly different).

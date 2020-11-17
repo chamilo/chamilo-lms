@@ -4,7 +4,9 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * GradebookLinkevalLog.
@@ -14,6 +16,17 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class GradebookLinkevalLog
 {
+    use UserTrait;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $id;
+
     /**
      * @var int
      *
@@ -34,13 +47,6 @@ class GradebookLinkevalLog
      * @ORM\Column(name="description", type="text", nullable=true)
      */
     protected $description;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="created_at", type="datetime", nullable=false)
-     */
-    protected $createdAt;
 
     /**
      * @var int
@@ -64,20 +70,20 @@ class GradebookLinkevalLog
     protected $type;
 
     /**
-     * @var int
+     * @var User
      *
-     * @ORM\Column(name="user_id_log", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="gradeBookLinkEvalLogs")
+     * @ORM\JoinColumn(name="user_id_log", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $userIdLog;
+    protected $user;
 
     /**
-     * @var int
+     * @var \DateTime
      *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(name="created_at", type="datetime", nullable=false)
      */
-    protected $id;
+    protected $createdAt;
 
     /**
      * Set idLinkevalLog.
@@ -245,30 +251,6 @@ class GradebookLinkevalLog
     public function getType()
     {
         return $this->type;
-    }
-
-    /**
-     * Set userIdLog.
-     *
-     * @param int $userIdLog
-     *
-     * @return GradebookLinkevalLog
-     */
-    public function setUserIdLog($userIdLog)
-    {
-        $this->userIdLog = $userIdLog;
-
-        return $this;
-    }
-
-    /**
-     * Get userIdLog.
-     *
-     * @return int
-     */
-    public function getUserIdLog()
-    {
-        return $this->userIdLog;
     }
 
     /**

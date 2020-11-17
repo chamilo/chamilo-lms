@@ -5,6 +5,7 @@
 namespace Chamilo\CourseBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * CCourseSetting.
@@ -31,19 +32,14 @@ class CCourseSetting
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer", nullable=true)
-     */
-    protected $id;
-
-    /**
-     * @var int
-     *
      * @ORM\Column(name="c_id", type="integer")
      */
     protected $cId;
 
     /**
      * @var string
+     *
+     * @Assert\NotBlank()
      *
      * @ORM\Column(name="variable", type="string", length=255, nullable=false)
      */
@@ -288,30 +284,6 @@ class CCourseSetting
     public function getSubkeytext()
     {
         return $this->subkeytext;
-    }
-
-    /**
-     * Set id.
-     *
-     * @param int $id
-     *
-     * @return CCourseSetting
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**

@@ -16,8 +16,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(
  *  name="c_link_category",
  *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"}),
- *      @ORM\Index(name="session_id", columns={"session_id"})
  *  }
  * )
  * @ORM\Entity
@@ -32,20 +30,6 @@ class CLinkCategory extends AbstractResource implements ResourceInterface
      * @ORM\GeneratedValue
      */
     protected $iid;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="c_id", type="integer")
-     */
-    protected $cId;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=true)
-     */
-    protected $id;
 
     /**
      * @var string
@@ -69,13 +53,6 @@ class CLinkCategory extends AbstractResource implements ResourceInterface
     protected $displayOrder;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="session_id", type="integer", nullable=true)
-     */
-    protected $sessionId;
-
-    /**
      * @var ArrayCollection|CLink[]
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CLink", mappedBy="category")
@@ -84,6 +61,8 @@ class CLinkCategory extends AbstractResource implements ResourceInterface
 
     public function __construct()
     {
+        $this->displayOrder = 0;
+        $this->links = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -94,13 +73,6 @@ class CLinkCategory extends AbstractResource implements ResourceInterface
     public function getIid(): int
     {
         return $this->iid;
-    }
-
-    public function setIid(int $iid): self
-    {
-        $this->iid = $iid;
-
-        return $this;
     }
 
     /**
@@ -176,78 +148,6 @@ class CLinkCategory extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Set sessionId.
-     *
-     * @param int $sessionId
-     *
-     * @return CLinkCategory
-     */
-    public function setSessionId($sessionId)
-    {
-        $this->sessionId = $sessionId;
-
-        return $this;
-    }
-
-    /**
-     * Get sessionId.
-     *
-     * @return int
-     */
-    public function getSessionId()
-    {
-        return $this->sessionId;
-    }
-
-    /**
-     * Set id.
-     *
-     * @param int $id
-     *
-     * @return CLinkCategory
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set cId.
-     *
-     * @param int $cId
-     *
-     * @return CLinkCategory
-     */
-    public function setCId($cId)
-    {
-        $this->cId = $cId;
-
-        return $this;
-    }
-
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
-    {
-        return $this->cId;
-    }
-
-    /**
      * Resource identifier.
      */
     public function getResourceIdentifier(): int
@@ -258,5 +158,10 @@ class CLinkCategory extends AbstractResource implements ResourceInterface
     public function getResourceName(): string
     {
         return $this->getCategoryTitle();
+    }
+
+    public function setResourceName(string $name): self
+    {
+        return $this->setCategoryTitle($name);
     }
 }

@@ -4,6 +4,7 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -21,6 +22,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class CourseRelUserCatalogue
 {
+    use UserTrait;
+
     /**
      * @var int
      *
@@ -73,14 +76,6 @@ class CourseRelUserCatalogue
     }
 
     /**
-     * @param int $id
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-    }
-
-    /**
      * @return $this
      */
     public function setCourse(Course $course)
@@ -98,28 +93,6 @@ class CourseRelUserCatalogue
     public function getCourse()
     {
         return $this->course;
-    }
-
-    /**
-     * @param $user
-     *
-     * @return $this
-     */
-    public function setUser($user)
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    /**
-     * Get User.
-     *
-     * @return User
-     */
-    public function getUser()
-    {
-        return $this->user;
     }
 
     /**

@@ -227,18 +227,6 @@ switch ($action) {
                         false,
                         $additionalParameters
                     );
-
-                    /*$result = api_mail_html(
-                        $recipientName,
-                        $user_info['mail'],
-                        $subject,
-                        $body,
-                        $sender_name,
-                        $emailAdmin,
-                        null,
-                        null,
-                        $additionalParameters
-                    );*/
                     Event::addEvent(LOG_USER_ENABLE, LOG_USER_ID, $user_id);
                 } else {
                     Event::addEvent(LOG_USER_DISABLE, LOG_USER_ID, $user_id);
@@ -253,6 +241,7 @@ switch ($action) {
         api_block_anonymous_users(false);
 
         $status = isset($_REQUEST['status']) ? (int) $_REQUEST['status'] : DRH;
+        $active = isset($_REQUEST['active']) ? (int) $_REQUEST['active'] : null;
 
         $criteria = new Criteria();
         $criteria
@@ -267,6 +256,9 @@ switch ($action) {
                 Criteria::expr()->eq('status', $status)
             );
 
+        if (null !== $active) {
+            $criteria->andWhere(Criteria::expr()->eq('active', $active));
+        }
         $users = UserManager::getRepository()->matching($criteria);
 
         if (!$users->count()) {

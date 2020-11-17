@@ -66,7 +66,7 @@ class ExtraFieldOption extends Model
         $fieldId = (int) $fieldId;
 
         $sql = "SELECT count(*) as count
-                FROM $this->table o 
+                FROM $this->table o
                 INNER JOIN $this->tableExtraField e
                 ON o.field_id = e.id
                 WHERE
@@ -535,7 +535,7 @@ class ExtraFieldOption extends Model
         }
 
         $result = Database::getManager()
-            ->getRepository('ChamiloCoreBundle:ExtraFieldOptions')
+            ->getRepository(ExtraFieldOptions::class)
             ->findBy(['field' => $field_id], $orderBy);
 
         if (!$result) {
@@ -576,15 +576,13 @@ class ExtraFieldOption extends Model
     public function get_second_select_field_options_by_field($option_value_id, $to_json = false)
     {
         $em = Database::getManager();
-        $option = $em->find('ChamiloCoreBundle:ExtraFieldOptions', $option_value_id);
+        $option = $em->find(ExtraFieldOptions::class, $option_value_id);
 
         if (!$option) {
             return !$to_json ? [] : '{}';
         }
 
-        $subOptions = $em
-            ->getRepository('ChamiloCoreBundle:ExtraFieldOptions')
-            ->findSecondaryOptions($option);
+        $subOptions = $em->getRepository(ExtraFieldOptions::class)->findSecondaryOptions($option);
 
         $optionsInfo = [];
         /** @var ExtraFieldOptions $subOption */

@@ -14,6 +14,7 @@ Feature: Agenda tool
     And I focus "date_range"
     And I fill in "date_range" with "2017-03-07 12:15 / 2017-03-07 12:15"
     And I press "Add event"
+    And wait very long for the page to be loaded
     Then I should see "Event added"
 
   Scenario: Create an event inside course TEMP
@@ -26,6 +27,7 @@ Feature: Agenda tool
     And I focus "date_range"
     And I fill in "date_range" with "2017-03-07 12:15 / 2017-03-07 12:15"
     And I press "Add event"
+    And wait very long for the page to be loaded
     Then I should see "Event added"
 
 

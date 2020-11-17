@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -71,16 +72,16 @@ class CatForm extends FormValidator
             '"'.$this->category_object->get_name().'" '
         );
         $this->addElement('static', null, null, get_lang('Move to').' : ');
-        $select = $this->addElement('select', 'move_cat', null, null);
+        $select = $this->addSelect('move_cat', null);
         $line = null;
         foreach ($this->category_object->get_target_categories() as $cat) {
             for ($i = 0; $i < $cat[2]; $i++) {
                 $line .= '--';
             }
             if ($cat[0] != $this->category_object->get_parent_id()) {
-                $select->addoption($line.' '.$cat[1], $cat[0]);
+                $select->addOption($line.' '.$cat[1], $cat[0]);
             } else {
-                $select->addoption($line.' '.$cat[1], $cat[0], 'disabled');
+                $select->addOption($line.' '.$cat[1], $cat[0], 'disabled');
             }
             $line = '';
         }
@@ -189,8 +190,7 @@ class CatForm extends FormValidator
      */
     protected function build_select_course_form()
     {
-        $select = $this->addElement(
-            'select',
+        $select = $this->addSelect(
             'select_course',
             [get_lang('Pick a course'), 'test'],
             null
@@ -198,7 +198,7 @@ class CatForm extends FormValidator
         $courses = Category::get_all_courses(api_get_user_id());
         //only return courses that are not yet created by the teacher
         foreach ($courses as $row) {
-            $select->addoption($row[1], $row[0]);
+            $select->addOption($row[1], $row[0]);
         }
         $this->setDefaults([
             'hid_user_id' => $this->category_object->get_user_id(),
@@ -252,8 +252,7 @@ class CatForm extends FormValidator
 
         if ($allowSkillEdit) {
             if (Skill::isToolAvailable()) {
-                $skillSelect = $this->addElement(
-                    'select_ajax',
+                $skillSelect = $this->addSelectAjax(
                     'skills',
                     [
                         get_lang('Skills'),
@@ -390,7 +389,6 @@ class CatForm extends FormValidator
             );
         }
 
-
         $isRequirementCheckbox = $this->addCheckBox(
             'is_requirement',
             [
@@ -399,7 +397,6 @@ class CatForm extends FormValidator
             ],
             get_lang('Is requirement')
         );
-        
 
         if ($this->category_object->getIsRequirement()) {
             $isRequirementCheckbox->setChecked(true);

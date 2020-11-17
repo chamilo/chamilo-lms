@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -20,11 +21,12 @@ class LinkForm extends FormValidator
     /**
      * Builds a form containing form items based on a given parameter.
      *
-     * @param int form_type 1=choose link
-     * @param obj cat_obj the category object
-     * @param string form name
-     * @param method
-     * @param action
+     * @param int          $form_type       1=choose link
+     * @param Category     $category_object the category object
+     * @param AbstractLink $link_object
+     * @param string       $form_name       name
+     * @param string       $method
+     * @param string       $action
      */
     public function __construct(
         $form_type,
@@ -66,13 +68,13 @@ class LinkForm extends FormValidator
             '"'.$this->link_object->get_name().'" '
         );
         $this->addElement('static', null, null, get_lang('Move to').' : ');
-        $select = $this->addElement('select', 'move_cat', null, null);
+        $select = $this->addSelect('move_cat', null, null);
         $line = '';
         foreach ($this->link_object->get_target_categories() as $cat) {
             for ($i = 0; $i < $cat[2]; $i++) {
                 $line .= '&mdash;';
             }
-            $select->addoption($line.' '.$cat[1], $cat[0]);
+            $select->addOption($line.' '.$cat[1], $cat[0]);
             $line = '';
         }
         $this->addElement('submit', null, get_lang('Validate'));
@@ -83,21 +85,18 @@ class LinkForm extends FormValidator
      */
     protected function build_create()
     {
-        $this->addElement('header', get_lang('Add online activity'));
-        $select = $this->addElement(
-            'select',
+        $this->addHeader(get_lang('Add online activity'));
+        $select = $this->addSelect(
             'select_link',
             get_lang('Choose type of activity to assess'),
             null,
             ['onchange' => 'document.create_link.submit()']
         );
 
-        $linkTypes = LinkFactory::get_all_types();
-
-        $select->addoption('['.get_lang('Choose type of activity to assess').']', 0);
-
+        $select->addOption('['.get_lang('Choose type of activity to assess').']', 0);
         $courseCode = $this->category_object->get_course_code();
 
+        $linkTypes = LinkFactory::get_all_types();
         foreach ($linkTypes as $linkType) {
             // The hot potatoe link will be added "inside" the exercise option.
             if (LINK_HOTPOTATOES == $linkType) {
@@ -105,11 +104,13 @@ class LinkForm extends FormValidator
             }
             $link = $this->createLink($linkType, $courseCode);
             // disable this element if the link works with a dropdownlist
+            $link->set_session_id(api_get_session_id());
+            // and if there are no links left
             // and if there are no links left
             if (!$link->needs_name_and_description() && '0' == count($link->get_all_links())) {
-                $select->addoption($link->get_type_name(), $linkType, 'disabled');
+                $select->addOption($link->get_type_name(), $linkType, 'disabled');
             } else {
-                $select->addoption($link->get_type_name(), $linkType);
+                $select->addOption($link->get_type_name(), $linkType);
             }
 
             if (LINK_EXERCISE == $link->get_type()) {
@@ -117,12 +118,12 @@ class LinkForm extends FormValidator
                 $linkHot = $this->createLink(LINK_HOTPOTATOES, $courseCode);
                 $linkHot->setHp(true);
                 if ($linkHot->get_all_links(true)) {
-                    $select->addoption(
+                    $select->addOption(
                         '&nbsp;&nbsp;&nbsp;'.$linkHot->get_type_name(),
                         LINK_HOTPOTATOES
                     );
                 } else {
-                    $select->addoption(
+                    $select->addOption(
                         '&nbsp;&nbsp;&nbsp;'.$linkHot->get_type_name(),
                         LINK_HOTPOTATOES,
                         'disabled'

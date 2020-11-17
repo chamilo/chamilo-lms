@@ -1,5 +1,4 @@
 <?php
-
 /* For license terms, see /license.txt */
 
 /**
@@ -51,7 +50,7 @@ class CustomCertificatePlugin extends Plugin
     {
         static $result = null;
 
-        return $result ?: $result = new self();
+        return $result ? $result : $result = new self();
     }
 
     /**
@@ -109,13 +108,13 @@ class CustomCertificatePlugin extends Plugin
                     'c_id' => $row['c_id'],
                     'session_id' => $row['session_id'],
                     'content_course' => $row['content_course'],
-                    'contents_type' => (int) ($row['contents_type']),
+                    'contents_type' => intval($row['contents_type']),
                     'contents' => $row['contents'],
-                    'date_change' => (int) ($row['date_change']),
+                    'date_change' => intval($row['date_change']),
                     'date_start' => $row['date_start'],
                     'date_end' => $row['date_end'],
                     'place' => $row['place'],
-                    'type_date_expediction' => (int) ($row['type_date_expediction']),
+                    'type_date_expediction' => intval($row['type_date_expediction']),
                     'day' => $row['day'],
                     'month' => $row['month'],
                     'year' => $row['year'],
@@ -132,7 +131,7 @@ class CustomCertificatePlugin extends Plugin
                     'signature_text3' => $row['signature_text3'],
                     'signature_text4' => $row['signature_text4'],
                     'background' => $row['background'],
-                    'margin_left' => (int) ($row['margin']),
+                    'margin_left' => intval($row['margin']),
                     'margin_right' => 0,
                     'certificate_default' => 0,
                 ];

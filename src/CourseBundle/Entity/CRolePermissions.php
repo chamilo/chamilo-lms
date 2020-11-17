@@ -37,13 +37,6 @@ class CRolePermissions
     protected $cId;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=true)
-     */
-    protected $id;
-
-    /**
      * @var bool
      *
      * @ORM\Column(name="default_perm", type="boolean", nullable=false)
@@ -93,30 +86,6 @@ class CRolePermissions
     public function getDefaultPerm()
     {
         return $this->defaultPerm;
-    }
-
-    /**
-     * Set id.
-     *
-     * @param int $id
-     *
-     * @return CRolePermissions
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**

@@ -5,12 +5,13 @@
 namespace Chamilo\CoreBundle\EventListener;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\CoreBundle\Security\Authorization\Voter\GroupVoter;
 use Chamilo\CoreBundle\Security\Authorization\Voter\SessionVoter;
 use Chamilo\CourseBundle\Controller\CourseControllerInterface;
+use Chamilo\CourseBundle\Entity\CGroup;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -59,6 +60,7 @@ class CourseListener
         $sessionHandler = $request->getSession();
         $container = $this->container;
         $translator = $container->get('translator');
+        $twig = $container->get('twig');
 
         $course = null;
         $courseInfo = [];
@@ -74,7 +76,6 @@ class CourseListener
                 if ($courseId === $courseFromSession->getId()) {
                     $course = $courseFromSession;
                     $courseInfo = $sessionHandler->get('_course');
-
                     //dump("Course loaded from Session $courseId");
                 }
             }
@@ -82,7 +83,11 @@ class CourseListener
             if (null === $course) {
                 /** @var EntityManager $em */
                 $em = $container->get('doctrine')->getManager();
-                $course = $em->getRepository('ChamiloCoreBundle:Course')->find($courseId);
+                $course = $em->getRepository(Course::class)->find($courseId);
+
+                if (null === $course) {
+                    throw new NotFoundHttpException($translator->trans('Course does not exist'));
+                }
 
                 //dump("Course loaded from DB $courseId");
                 $courseInfo = api_get_course_info($course->getCode());
@@ -109,7 +114,7 @@ class CourseListener
             $sessionHandler->set('_course', $courseInfo);
 
             // Setting variables for the twig templates.
-            $container->get('twig')->addGlobal('course', $course);
+            $twig->addGlobal('course', $course);
 
             // Checking if sid is used.
             $sessionId = (int) $request->get('sid');
@@ -126,7 +131,7 @@ class CourseListener
                 }
             } else {
                 //dump("Load chamilo session from DB");
-                $session = $em->getRepository('ChamiloCoreBundle:Session')->find($sessionId);
+                $session = $em->getRepository(Session::class)->find($sessionId);
                 if ($session) {
                     if (false === $session->hasCourse($course)) {
                         throw new AccessDeniedException($translator->trans('Course is not registered in the Session'));
@@ -144,7 +149,7 @@ class CourseListener
                     $sessionHandler->set('sid', $session->getId());
                     $sessionHandler->set('session', $session);
 
-                    $container->get('twig')->addGlobal('session', $session);
+                    $twig->addGlobal('session', $session);
                 } else {
                     throw new NotFoundHttpException($translator->trans('Session not found'));
                 }
@@ -157,13 +162,19 @@ class CourseListener
                 $sessionHandler->remove('gid');
             } else {
                 //dump('Load chamilo group from DB');
-                $group = $em->getRepository('ChamiloCourseBundle:CGroupInfo')->find($groupId);
+                $group = $em->getRepository(CGroup::class)->find($groupId);
 
                 if (!$group) {
                     throw new NotFoundHttpException($translator->trans('Group not found'));
                 }
 
-                if ($course->hasGroup($group)) {
+                if (false === $checker->isGranted(GroupVoter::VIEW, $group)) {
+                    throw new AccessDeniedException($translator->trans('Unauthorised access to group'));
+                }
+
+                $sessionHandler->set('gid', $groupId);
+                // @todo check if course has group
+                /*if ($course->hasGroup($group)) {
                     // Check if user is allowed to this course-group
                     // See GroupVoter.php
                     if (false === $checker->isGranted(GroupVoter::VIEW, $group)) {
@@ -172,7 +183,7 @@ class CourseListener
                     $sessionHandler->set('gid', $groupId);
                 } else {
                     throw new AccessDeniedException($translator->trans('Group does not exist in course'));
-                }
+                }*/
             }
 
             $origin = $request->get('origin');
@@ -182,7 +193,7 @@ class CourseListener
 
             $courseParams = $this->generateCourseUrl($course, $sessionId, $groupId, $origin);
             $sessionHandler->set('course_url_params', $courseParams);
-            $container->get('twig')->addGlobal('course_url_params', $courseParams);
+            $twig->addGlobal('course_url_params', $courseParams);
         }
     }
 

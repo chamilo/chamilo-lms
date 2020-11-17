@@ -6,7 +6,6 @@ use Doctrine\ORM\Query\Expr\Join;
 
 /**
  * @todo change class name
- * Class CoursesAndSessionsCatalog
  */
 class CoursesAndSessionsCatalog
 {
@@ -232,7 +231,7 @@ class CoursesAndSessionsCatalog
      * @param string $categoryCode
      * @param int    $randomValue
      * @param array  $limit        will be used if $randomValue is not set.
-     *                              This array should contains 'start' and 'length' keys
+     *                             This array should contains 'start' and 'length' keys
      *
      * @return array
      */
@@ -259,10 +258,11 @@ class CoursesAndSessionsCatalog
                     $urlCondition = ' (access_url_id = '.$urlId.' OR access_url_id = 1)  ';
                 }
 
-                $sql = "SELECT COUNT(*) FROM $tbl_course course
+                $sql = "SELECT COUNT(*)
+                        FROM $tbl_course course
                         INNER JOIN $tbl_url_rel_course as url_rel_course
                         ON (url_rel_course.c_id = course.id)
-                        WHERE access_url_id = '.$urlId.' ";
+                        WHERE access_url_id = $urlId";
                 $result = Database::query($sql);
                 list($num_records) = Database::fetch_row($result);
 
@@ -278,7 +278,8 @@ class CoursesAndSessionsCatalog
                         ORDER BY RAND()
                         LIMIT 0, $randomValue";
             } else {
-                $sql = "SELECT id, id as real_id FROM $tbl_course course
+                $sql = "SELECT id, id as real_id
+                        FROM $tbl_course course
                         WHERE
                             RAND()*$num_records< $randomValue
                             $avoidCoursesCondition
@@ -307,7 +308,7 @@ class CoursesAndSessionsCatalog
             $conditionCode = ' ';
 
             if (empty($listCode)) {
-                if ($categoryCode === 'NONE') {
+                if ('NONE' === $categoryCode) {
                     $conditionCode .= " category_code='' ";
                 } else {
                     $conditionCode .= " category_code='$categoryCode' ";
@@ -319,7 +320,7 @@ class CoursesAndSessionsCatalog
                 $conditionCode .= " category_code='$categoryCode' ";
             }
 
-            if (empty($categoryCode) || $categoryCode == 'ALL') {
+            if (empty($categoryCode) || 'ALL' === $categoryCode) {
                 $sql = "SELECT *, id as real_id
                         FROM $tbl_course course
                         WHERE
@@ -342,8 +343,9 @@ class CoursesAndSessionsCatalog
                 $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
 
                 $urlCondition = ' access_url_id = '.$urlId.' ';
-                if ($categoryCode !== 'ALL') {
-                    $sql = "SELECT *, course.id real_id FROM $tbl_course as course
+                if ('ALL' !== $categoryCode) {
+                    $sql = "SELECT *, course.id real_id
+                            FROM $tbl_course as course
                             INNER JOIN $tbl_url_rel_course as url_rel_course
                             ON (url_rel_course.c_id = course.id)
                             WHERE
@@ -409,7 +411,7 @@ class CoursesAndSessionsCatalog
      * @param string $categoryCode
      * @param string $keyword      The string that the user submitted
      * @param array  $limit
-     * @param bool   $justVisible search only on visible courses in the catalogue
+     * @param bool   $justVisible  search only on visible courses in the catalogue
      * @param array  $conditions
      *
      * @return array an array containing a list of all the courses matching the the search term
@@ -437,15 +439,16 @@ class CoursesAndSessionsCatalog
         }
 
         $categoryFilter = '';
-        if ($categoryCode === 'ALL' || empty($categoryCode)) {
+        if ('ALL' === $categoryCode || empty($categoryCode)) {
             // Nothing to do
-        } elseif ($categoryCode === 'NONE') {
+        } elseif ('NONE' === $categoryCode) {
             $categoryFilter = ' AND category_code = "" ';
         } else {
             $categoryFilter = ' AND category_code = "'.$categoryCode.'" ';
         }
 
-        $sql = "SELECT DISTINCT course.*, $injectExtraFields
+        //$sql = "SELECT DISTINCT course.*, $injectExtraFields
+        $sql = "SELECT DISTINCT(course.id)
                 FROM $courseTable course
                 $sqlInjectJoins
                 WHERE (
@@ -472,7 +475,7 @@ class CoursesAndSessionsCatalog
                     $urlCondition = ' (access_url_id = '.$urlId.' OR access_url_id = 1) AND ';
                 }
 
-                $sql = "SELECT DISTINCT course.*, $injectExtraFields
+                $sql = "SELECT DISTINCT(course.id)
                         FROM $courseTable as course
                         INNER JOIN $tbl_url_rel_course as url_rel_course
                         ON (url_rel_course.c_id = course.id)
@@ -498,9 +501,15 @@ class CoursesAndSessionsCatalog
         $result = Database::query($sql);
         $courses = [];
         while ($row = Database::fetch_array($result)) {
-            $row['registration_code'] = !empty($row['registration_code']);
+            $courseId = $row['id'];
+            $courseInfo = api_get_course_info_by_id($courseId);
+            if (empty($courseInfo)) {
+                continue;
+            }
+            $courseCode = $courseInfo['code'];
+
             $countUsers = CourseManager::get_user_list_from_course_code(
-                $row['code'],
+                $courseCode,
                 0,
                 null,
                 null,
@@ -508,29 +517,18 @@ class CoursesAndSessionsCatalog
                 true
             );
             $connectionsLastMonth = Tracking::get_course_connections_count(
-                $row['id'],
+                $courseId,
                 0,
                 api_get_utc_datetime(time() - (30 * 86400))
             );
 
-            $ranking = CourseManager::get_course_ranking($row['id'], 0);
-            $courses[] = [
-                'real_id' => $row['id'],
-                'point_info' => $ranking,
-                'code' => $row['code'],
-                'directory' => $row['directory'],
-                'visual_code' => $row['visual_code'],
-                'title' => $row['title'],
-                'tutor' => $row['tutor_name'],
-                'subscribe' => $row['subscribe'],
-                'unsubscribe' => $row['unsubscribe'],
-                'registration_code' => $row['registration_code'],
-                'creation_date' => $row['creation_date'],
-                'visibility' => $row['visibility'],
-                'count_users' => $countUsers,
-                'category_code' => $row['category_code'],
-                'count_connections' => $connectionsLastMonth,
-            ];
+            $courseInfo['point_info'] = CourseManager::get_course_ranking($courseId, 0);
+            $courseInfo['tutor'] = $courseInfo['tutor_name'];
+            $courseInfo['registration_code'] = !empty($courseInfo['registration_code']);
+            $courseInfo['count_users'] = $countUsers;
+            $courseInfo['count_connections'] = $connectionsLastMonth;
+
+            $courses[] = $courseInfo;
         }
 
         return $courses;
@@ -714,36 +712,6 @@ class CoursesAndSessionsCatalog
     public static function browseSessions($date = null, $limit = [], $returnQueryBuilder = false, $getCount = false)
     {
         $urlId = api_get_current_access_url_id();
-
-        /*$dql = "SELECT $select
-                FROM ChamiloCoreBundle:Session s
-                WHERE EXISTS
-                    (
-                        SELECT url.sessionId FROM ChamiloCoreBundle:AccessUrlRelSession url
-                        WHERE url.sessionId = s.id AND url.accessUrlId = $urlId
-                    ) AND
-                    s.nbrCourses > 0
-                ";
-        if (!is_null($date)) {
-            $date = Database::escape_string($date);
-            $dql .= "
-                AND (
-                    (s.accessEndDate IS NULL)
-                    OR
-                    (
-                    s.accessStartDate IS NOT NULL AND
-                    s.accessEndDate IS NOT NULL AND
-                    s.accessStartDate <= '$date' AND s.accessEndDate >= '$date')
-                    OR
-                    (
-                        s.accessStartDate IS NULL AND
-                        s.accessEndDate IS NOT NULL AND
-                        s.accessEndDate >= '$date'
-                    )
-                )
-            ";
-        }*/
-
         $em = Database::getManager();
         $qb = $em->createQueryBuilder();
         $qb2 = $em->createQueryBuilder();
@@ -911,7 +879,7 @@ class CoursesAndSessionsCatalog
             ->setMaxResults($limit['length'])
             ;
         }
-            //->setParameter('name', "%$termTag%")
+        //->setParameter('name', "%$termTag%")
         $qb = self::hideFromSessionCatalogCondition($qb);
 
         if ($getCount) {
@@ -962,7 +930,7 @@ class CoursesAndSessionsCatalog
             $qb
                 ->setFirstResult($limit['start'])
                 ->setMaxResults($limit['length']);
-            }
+        }
 
         $qb = self::hideFromSessionCatalogCondition($qb);
 
@@ -1026,7 +994,7 @@ class CoursesAndSessionsCatalog
         $list = [];
         $row = [];
 
-        if ($code !== 'ALL' && $code !== 'NONE') {
+        if ('ALL' !== $code && 'NONE' !== $code) {
             foreach ($allCategories as $category) {
                 if ($category['code'] === $code) {
                     $list = self::buildCourseCategoryTree($allCategories, $category['code'], 0);
@@ -1049,7 +1017,7 @@ class CoursesAndSessionsCatalog
      */
     public static function returnThumbnail($course)
     {
-        $course_path = api_get_path(SYS_COURSE_PATH).$course['directory'];
+        /*$course_path = api_get_path(SYS_COURSE_PATH).$course['directory'];
 
         if (file_exists($course_path.'/course-pic.png')) {
             // redimensioned image 85x85
@@ -1066,7 +1034,7 @@ class CoursesAndSessionsCatalog
             );
         }
 
-        return $courseMediumImage;
+        return $courseMediumImage;*/
     }
 
     /**
@@ -1139,7 +1107,7 @@ class CoursesAndSessionsCatalog
     {
         $icon = '<em class="fa fa-check"></em>';
         $title = get_lang('YouAreATeacherOfThisCourse');
-        if ($status === 'student') {
+        if ('student' === $status) {
             $icon = '<em class="fa fa-check"></em>';
             $title = get_lang('AlreadySubscribed');
         }
@@ -1238,7 +1206,7 @@ class CoursesAndSessionsCatalog
         }
 
         $catalogSessionAutoSubscriptionAllowed = false;
-        if (api_get_setting('catalog_allow_session_auto_subscription') === 'true') {
+        if ('true' === api_get_setting('catalog_allow_session_auto_subscription')) {
             $catalogSessionAutoSubscriptionAllowed = true;
         }
 
@@ -1407,7 +1375,7 @@ class CoursesAndSessionsCatalog
         $tpl->assign('actions', self::getTabList(2));
         $tpl->assign('show_courses', self::showCourses());
         $tpl->assign('show_sessions', self::showSessions());
-        $tpl->assign('show_tutor', api_get_setting('show_session_coach') === 'true');
+        $tpl->assign('show_tutor', 'true' === api_get_setting('show_session_coach'));
         $tpl->assign('course_url', $courseUrl);
         $tpl->assign('catalog_pagination', $pagination);
         $tpl->assign('search_token', Security::get_token());
@@ -1447,7 +1415,7 @@ class CoursesAndSessionsCatalog
         $tpl->assign('actions', self::getTabList(2));
         $tpl->assign('show_courses', self::showCourses());
         $tpl->assign('show_sessions', self::showSessions());
-        $tpl->assign('show_tutor', api_get_setting('show_session_coach') === 'true');
+        $tpl->assign('show_tutor', 'true' === api_get_setting('show_session_coach'));
         $tpl->assign('course_url', $courseUrl);
         $tpl->assign('already_subscribed_label', self::getAlreadyRegisteredInSessionLabel());
         $tpl->assign('search_token', Security::get_token());
@@ -1541,7 +1509,7 @@ class CoursesAndSessionsCatalog
         $tpl->assign('catalog_pagination', $pagination);
         $tpl->assign('show_courses', self::showCourses());
         $tpl->assign('show_sessions', self::showSessions());
-        $tpl->assign('show_tutor', api_get_setting('show_session_coach') === 'true');
+        $tpl->assign('show_tutor', 'true' === api_get_setting('show_session_coach'));
         $tpl->assign('course_url', $courseUrl);
         $tpl->assign('already_subscribed_label', self::getAlreadyRegisteredInSessionLabel());
         $tpl->assign('search_token', Security::get_token());
@@ -1637,7 +1605,7 @@ class CoursesAndSessionsCatalog
 
             $hasRequirements = false;
             foreach ($sequences as $sequence) {
-                if (count($sequence['requirements']) === 0) {
+                if (0 === count($sequence['requirements'])) {
                     continue;
                 }
                 $hasRequirements = true;
@@ -1832,7 +1800,7 @@ class CoursesAndSessionsCatalog
 
         // If is current page ('active' class) clear URL
         if (isset($liAttributes) && is_array($liAttributes) && isset($liAttributes['class'])) {
-            if (strpos('active', $liAttributes['class']) !== false) {
+            if (false !== strpos('active', $liAttributes['class'])) {
                 $url = '';
             }
         }
@@ -1875,7 +1843,7 @@ class CoursesAndSessionsCatalog
         $keyword = isset($_REQUEST['keyword']) ? Security::remove_XSS($_REQUEST['keyword']) : '';
         $searchTag = isset($_REQUEST['search_tag']) ? $_REQUEST['search_tag'] : '';
 
-        if ($action === 'subscribe_user_with_password') {
+        if ('subscribe_user_with_password' === $action) {
             $action = 'subscribe';
         }
 

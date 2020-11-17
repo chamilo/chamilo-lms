@@ -4,6 +4,7 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -20,19 +21,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class UserRelTag
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="user_id", type="integer", nullable=false)
-     */
-    protected $userId;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="tag_id", type="integer", nullable=false)
-     */
-    protected $tagId;
+    use UserTrait;
 
     /**
      * @var int
@@ -44,28 +33,19 @@ class UserRelTag
     protected $id;
 
     /**
-     * Set userId.
+     * @var User
      *
-     * @param int $userId
-     *
-     * @return UserRelTag
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="userRelTags")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    public function setUserId($userId)
-    {
-        $this->userId = $userId;
-
-        return $this;
-    }
+    protected $user;
 
     /**
-     * Get userId.
+     * @var int
      *
-     * @return int
+     * @ORM\Column(name="tag_id", type="integer", nullable=false)
      */
-    public function getUserId()
-    {
-        return $this->userId;
-    }
+    protected $tagId;
 
     /**
      * Set tagId.

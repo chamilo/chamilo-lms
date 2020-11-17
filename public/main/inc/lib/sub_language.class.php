@@ -3,6 +3,8 @@
 
 /**
  * Class SubLanguageManager.
+ *
+ * @deprecated
  */
 class SubLanguageManager
 {
@@ -30,7 +32,7 @@ class SubLanguageManager
         $rs = Database::query($sql);
         $all_languages = [];
         while ($row = Database::fetch_array($rs, 'ASSOC')) {
-            $all_languages[$row['dokeos_folder']] = $row;
+            $all_languages[$row['english_name']] = $row;
         }
 
         return $all_languages;
@@ -80,7 +82,7 @@ class SubLanguageManager
         $table = Database::get_main_table(TABLE_MAIN_LANGUAGE);
         $parent_id = intval($parent_id);
         $sub_language_id = intval($sub_language_id);
-        $sql = "SELECT * FROM $table 
+        $sql = "SELECT * FROM $table
                 WHERE
                     parent_id = $parent_id AND
                     id = $sub_language_id";

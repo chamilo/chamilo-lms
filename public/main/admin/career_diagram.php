@@ -72,7 +72,7 @@ $itemUrls = $extraFieldValue->get_values_by_handler_and_field_variable(
     'career_urls',
     false,
     false,
-    0
+    false
 );
 
 $urlToString = '';

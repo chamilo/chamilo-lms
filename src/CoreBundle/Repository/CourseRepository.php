@@ -4,9 +4,11 @@
 
 namespace Chamilo\CoreBundle\Repository;
 
+use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Query\Expr\Join;
@@ -55,12 +57,7 @@ class CourseRepository extends ResourceRepository
         $em->flush();
     }
 
-    /**
-     * @param string $code
-     *
-     * @return Course
-     */
-    public function findOneByCode($code)
+    public function findOneByCode(string $code): ?Course
     {
         return $this->findOneBy(['code' => $code]);
     }
@@ -68,7 +65,7 @@ class CourseRepository extends ResourceRepository
     /**
      * Get all users that are registered in the course. No matter the status.
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getSubscribedUsers(Course $course)
     {
@@ -81,7 +78,7 @@ class CourseRepository extends ResourceRepository
         // Selecting courses for users.
         $queryBuilder->innerJoin('c.users', 'subscriptions');
         $queryBuilder->innerJoin(
-            'ChamiloCoreBundle:User',
+            User::class,
             'user',
             Join::WITH,
             'subscriptions.user = user.id'
@@ -184,5 +181,30 @@ class CourseRepository extends ResourceRepository
         }
 
         return $courseList;
+    }
+
+    /**
+     * Get course user relationship based in the course_rel_user table.
+     *
+     * @return array
+     */
+    public function getCoursesByUser(User $user, AccessUrl $url)
+    {
+        $qb = $this->repository->createQueryBuilder('course');
+
+        $qb
+            ->innerJoin('user.courses', 'courseRelUser')
+            ->innerJoin('courseRelUser.course', 'course')
+            ->innerJoin('course.urls', 'accessUrlRelCourse')
+            ->innerJoin('accessUrlRelCourse.url', 'url')
+            ->where('user = :user')
+            ->andWhere('url = :url')
+            ->setParameters(['user' => $user, 'url' => $url])
+            ->addSelect('courseRelUser')
+        ;
+
+        $query = $qb->getQuery();
+
+        return $query->getResult();
     }
 }

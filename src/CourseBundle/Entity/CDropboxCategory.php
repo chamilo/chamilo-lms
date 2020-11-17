@@ -5,6 +5,7 @@
 namespace Chamilo\CourseBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * CDropboxCategory.
@@ -45,6 +46,8 @@ class CDropboxCategory
 
     /**
      * @var string
+     *
+     * @Assert\NotBlank()
      *
      * @ORM\Column(name="cat_name", type="text", nullable=false)
      */

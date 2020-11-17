@@ -30,6 +30,7 @@ Feature: Ticket
     And I fill in select bootstrap static input "#category_id" select "1"
     #category id = 1 => Enrollment: Tickets about enrollment
     And I press "Send message"
+    Then wait very long for the page to be loaded
     Then I should see "created"
 #
 #  Scenario: Create ticket project

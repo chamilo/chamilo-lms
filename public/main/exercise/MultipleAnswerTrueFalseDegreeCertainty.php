@@ -64,22 +64,21 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         $renderer = &$form->defaultRenderer();
         $defaults = [];
 
-        $html = '<table class="data_table"><tr style="text-align: center;"><th>'
-            .get_lang('N°')
-            .'</th><th>'
-            .get_lang('True')
-            .'</th><th>'
-            .get_lang('False')
-            .'</th><th>'
-            .get_lang('Answer')
-            .'</th>';
+        $form->addHeader(get_lang('Answers'));
+        $html = '<table class="table table-striped table-hover">
+            <tr>
+                <th width="10px">'.get_lang('Number').'</th>
+                <th width="10px">'.get_lang('True').'</th>
+                <th width="10px">'.get_lang('False').'</th>
+                <th width="50%">'.get_lang('Answer').'</th>';
 
         // show column comment when feedback is enable
         if (EXERCISE_FEEDBACK_TYPE_EXAM != $objEx->getFeedbackType()) {
-            $html .= '<th>'.get_lang('Comment').'</th>';
+            $html .= '<th width="50%">'.get_lang('Comment').'</th>';
         }
         $html .= '</tr>';
-        $form->addElement('label', get_lang('Answers').'<br /> <img src="../img/fill_field.png">', $html);
+
+        $form->addHtml($html);
 
         $correct = 0;
         $answer = null;
@@ -214,7 +213,6 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         ) {
             $form->addElement('submit', 'lessAnswers', get_lang('Remove answer option'), 'class="btn btn-danger minus"');
             $form->addElement('submit', 'moreAnswers', get_lang('Add answer option'), 'class="btn btn-primary plus"');
-            //$text and $class defined in calling script
             $form->addElement('submit', 'submitQuestion', $text, 'class = "btn btn-primary"');
         }
         $renderer->setElementTemplate('{element}&nbsp;', 'lessAnswers');

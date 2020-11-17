@@ -4,6 +4,7 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -22,6 +23,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Portfolio
 {
+    use UserTrait;
+
     /**
      * @var int
      *
@@ -103,28 +106,6 @@ class Portfolio
     public function __construct()
     {
         $this->category = new PortfolioCategory();
-    }
-
-    /**
-     * Set user.
-     *
-     * @return Portfolio
-     */
-    public function setUser(User $user)
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    /**
-     * Get user.
-     *
-     * @return User
-     */
-    public function getUser()
-    {
-        return $this->user;
     }
 
     /**

@@ -9,7 +9,6 @@ window.RecordAudio = (function () {
             recordRTC = null,
             btnStart = $(rtcInfo.btnStartId),
             btnStop = $(rtcInfo.btnStopId),
-            btnSave = $(rtcInfo.btnSaveId),
             tagAudio = $(rtcInfo.plyrPreviewId);
 
         function saveAudio() {
@@ -19,7 +18,7 @@ window.RecordAudio = (function () {
                 return;
             }
 
-            var btnSaveText = btnSave.html();
+            var btnStopText = btnStop.html();
             var fileExtension = recordedBlob.type.split('/')[1];
 
             var formData = new FormData();
@@ -41,15 +40,28 @@ window.RecordAudio = (function () {
                 type: 'POST',
                 beforeSend: function () {
                     btnStart.prop('disabled', true);
-                    btnStop.prop('disabled', true);
-                    btnSave.prop('disabled', true).text(btnSave.data('loadingtext'));
+                    btnStop.prop('disabled', true).text(btnStop.data('loadingtext'));
                 }
             }).done(function (response) {
-                $('#messages-deck').append(response);
-            }).always(function () {
-                btnSave.prop('disabled', true).html(btnSaveText).parent().addClass('hidden');
-                btnStop.prop('disabled', true).parent().addClass('hidden');
-                btnStart.prop('disabled', false).parent().removeClass('hidden');
+                $('#messages-deck').html(response);
+
+                if ($('#messages-deck > .alert.alert-success').length > 0) {
+                    tagAudio.parents('#audio-wrapper').addClass('hidden').removeClass('show');
+                } else {
+                    tagAudio.parents('#audio-wrapper').removeClass('hidden').addClass('show');
+                }
+
+                btnStop.prop('disabled', true).html(btnStopText).parent().addClass('hidden');
+
+                if ($('#messages-deck > .alert.alert-success').length > 0 ||
+                    $('#messages-deck > .alert.alert-warning [data-reach-attempts]').length > 0
+                ) {
+                    btnStart.prop('disabled', true);
+                } else {
+                    btnStart.prop('disabled', false);
+                }
+
+                btnStart.parent().removeClass('hidden');
             });
         }
 
@@ -66,7 +78,6 @@ window.RecordAudio = (function () {
                 });
                 recordRTC.startRecording();
 
-                btnSave.prop('disabled', true).parent().addClass('hidden');
                 btnStop.prop('disabled', false).parent().removeClass('hidden');
                 btnStart.prop('disabled', true).parent().addClass('hidden');
                 tagAudio.removeClass('show').parents('#audio-wrapper').addClass('hidden');
@@ -97,26 +108,12 @@ window.RecordAudio = (function () {
             }
 
             recordRTC.stopRecording(function (audioURL) {
-                btnStart.prop('disabled', false).parent().removeClass('hidden');
-                btnStop.prop('disabled', true).parent().addClass('hidden');
-                btnSave.prop('disabled', false).parent().removeClass('hidden');
-
-                tagAudio
-                    .prop('src', audioURL)
-                    .parents('#audio-wrapper')
-                    .removeClass('hidden')
-                    .addClass('show');
+                tagAudio.prop('src', audioURL);
 
                 localStream.getTracks()[0].stop();
+
+                saveAudio();
             });
-        });
-
-        btnSave.on('click', function () {
-            if (!recordRTC) {
-                return;
-            }
-
-            saveAudio();
         });
     }
 
@@ -135,5 +132,5 @@ window.RecordAudio = (function () {
 
             useRecordRTC(rtcInfo);
         }
-    }
+    };
 })();

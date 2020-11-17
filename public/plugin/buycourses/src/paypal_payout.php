@@ -1,5 +1,4 @@
 <?php
-
 /* For license terms, see /license.txt */
 
 /**
@@ -21,7 +20,7 @@ $plugin = BuyCoursesPlugin::create();
 $paypalEnable = $plugin->get('paypal_enable');
 $commissionsEnable = $plugin->get('commissions_enable');
 
-if ('true' !== $paypalEnable && 'true' !== $commissionsEnable) {
+if ("true" !== $paypalEnable && "true" !== $commissionsEnable) {
     api_not_allowed(true);
 }
 

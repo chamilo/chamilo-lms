@@ -32,7 +32,7 @@ if (empty($track_exercise_info)) {
     api_not_allowed($printHeaders);
 }
 
-$exercise_id = $track_exercise_info['id'];
+$exercise_id = $track_exercise_info['iid'];
 $student_id = $track_exercise_info['exe_user_id'];
 $learnpath_id = $track_exercise_info['orig_lp_id'];
 $learnpath_item_id = $track_exercise_info['orig_lp_item_id'];
@@ -152,7 +152,7 @@ $interbreadcrumb[] = [
     'name' => get_lang('Tests'),
 ];
 $interbreadcrumb[] = [
-    'url' => 'overview.php?exerciseId='.$exercise_id.'&'.api_get_cidreq(),
+    'url' => 'overview.php?id='.$exercise_id.'&'.api_get_cidreq(),
     'name' => $objExercise->selectTitle(true),
 ];
 $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Result')];
@@ -313,7 +313,8 @@ if ($show_results || $show_only_total_score || $showTotalScoreAndUserChoicesInLa
     // Shows exercise header
     echo $objExercise->showExerciseResultHeader(
         $user_info,
-        $track_exercise_info
+        $track_exercise_info,
+        false
     );
 }
 
@@ -332,7 +333,7 @@ $sql = "SELECT attempts.question_id, answer
             quizz_rel_questions.c_id=".api_get_course_int_id()."
         INNER JOIN $TBL_QUESTIONS AS questions
         ON
-            questions.id = quizz_rel_questions.question_id AND
+            questions.iid = quizz_rel_questions.question_id AND
             questions.c_id = ".api_get_course_int_id()."
         WHERE
             attempts.exe_id = $id $user_restriction
@@ -470,9 +471,7 @@ foreach ($questionList as $questionId) {
             break;
         case HOT_SPOT:
             if ($show_results || $showTotalScoreAndUserChoicesInLastAttempt) {
-                echo '<table width="500" border="0"><tr>
-                        <td valign="top" align="center" style="padding-left:0px;" >
-                        <table border="1" bordercolor="#A4A4A4" style="border-collapse: collapse;" width="552">';
+//                echo '<table class="table table-bordered table-striped"><tr><td>';
             }
             $question_result = $objExercise->manage_answer(
                 $id,
@@ -490,11 +489,11 @@ foreach ($questionList as $questionId) {
             $questionScore = $question_result['score'];
             $totalScore += $question_result['score'];
 
-            if ($show_results) {
+            if ($show_results || $showTotalScoreAndUserChoicesInLastAttempt) {
                 echo '</table></td></tr>';
                 echo "
                         <tr>
-                            <td colspan=\"2\">
+                            <td>
                                 <div id=\"hotspot-solution-$questionId-$id\"></div>
                                 <script>
                                     $(function() {
@@ -947,8 +946,9 @@ if ($show_results) {
 if ('export' === $action) {
     $content = ob_get_clean();
     // needed in order to mpdf to work
-    ob_clean();
-
+    if (ob_get_contents()) {
+        ob_clean();
+    }
     $params = [
         'filename' => api_replace_dangerous_char(
             $objExercise->name.' '.

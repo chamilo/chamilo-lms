@@ -152,11 +152,11 @@ class Model
      * Saves an element into the DB.
      *
      * @param array $params
-     * @param bool  $show_query Whether to show the query in logs or not (passed to Database::insert())
+     * @param bool  $showQuery Whether to show the query in logs or not (passed to Database::insert())
      *
      * @return bool|int
      */
-    public function save($params, $show_query = false)
+    public function save($params, $showQuery = false)
     {
         $params = $this->clean_parameters($params);
 
@@ -188,7 +188,7 @@ class Model
         }
 
         if (!empty($params)) {
-            $id = Database::insert($this->table, $params, $show_query);
+            $id = Database::insert($this->table, $params, $showQuery);
             if (is_numeric($id)) {
                 return $id;
             }

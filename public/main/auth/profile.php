@@ -2,8 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\Hook\HookUpdateUser;
 use ChamiloSession as Session;
 
 /**
@@ -23,8 +21,6 @@ if ($allowSocialTool) {
 
 $logInfo = [
     'tool' => 'profile',
-    'tool_id' => 0,
-    'tool_id_detail' => 0,
     'action' => $this_section,
 ];
 Event::registerLog($logInfo);
@@ -100,7 +96,10 @@ $user_data = api_get_user_info(
 );
 $array_list_key = UserManager::get_api_keys(api_get_user_id());
 $id_temp_key = UserManager::get_api_key_id(api_get_user_id(), 'dokeos');
-$value_array = $array_list_key[$id_temp_key];
+$value_array = [];
+if (isset($array_list_key[$id_temp_key])) {
+    $value_array = $array_list_key[$id_temp_key];
+}
 $user_data['api_key_generate'] = $value_array;
 
 if (false !== $user_data) {
@@ -112,9 +111,6 @@ if (false !== $user_data) {
     }
 }
 
-/*
- * Initialize the form.
- */
 $form = new FormValidator('profile');
 
 if (api_is_western_name_order()) {
@@ -179,7 +175,7 @@ if ('true' == api_get_setting('registration', 'email') && in_array('email', $pro
     $form->applyFilter('email', 'stripslashes');
     $form->applyFilter('email', 'trim');
     $form->addRule('email', get_lang('Required field'), 'required');
-    $form->addRule('email', get_lang('e-mailWrong'), 'email');
+    $form->addEmailRule('email');
 }
 
 //    PHONE
@@ -371,12 +367,6 @@ $form->setDefaults($user_data);
 $filtered_extension = false;
 
 if ($form->validate()) {
-    $hook = Container::instantiateHook(HookUpdateUser::class);
-
-    if ($hook) {
-        $hook->notifyUpdateUser(HOOK_EVENT_TYPE_PRE);
-    }
-
     $wrong_current_password = false;
     $user_data = $form->getSubmitValues(1);
     /** @var User $user */
@@ -491,7 +481,7 @@ if ($form->validate()) {
     }
 
     // upload production if a new one is provided
-    if (isset($_FILES['production']) && $_FILES['production']['size']) {
+    /*if (isset($_FILES['production']) && $_FILES['production']['size']) {
         $res = upload_user_production(api_get_user_id());
         if (!$res) {
             //it's a bit excessive to assume the extension is the reason why
@@ -506,7 +496,7 @@ if ($form->validate()) {
                 )
             );
         }
-    }
+    }*/
 
     // remove values that shouldn't go in the database
     unset(
@@ -650,12 +640,12 @@ if ($form->validate()) {
     );
     Session::write('_user', $userInfo);
 
-    if ($hook) {
+    /*if ($hook) {
         Database::getManager()->clear(User::class); // Avoid cache issue (user entity is used before)
         $user = api_get_user_entity(api_get_user_id()); // Get updated user info for hook event
         $hook->setEventData(['user' => $user]);
         $hook->notifyUpdateUser(HOOK_EVENT_TYPE_POST);
-    }
+    }*/
 
     Session::erase('system_timezone');
 
@@ -697,23 +687,7 @@ if ($actions) {
 }
 
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'messages');
-
-$allowJustification = 'true' === api_get_plugin_setting('justification', 'tool_enable');
-$justification = '';
-if ($allowJustification) {
-    $plugin = Justification::create();
-    $headers = [
-        [
-            'url' => api_get_self(),
-            'content' => get_lang('Profile'),
-        ],
-        [
-            'url' => api_get_path(WEB_CODE_PATH).'auth/justification.php',
-            'content' => $plugin->get_lang('Justification'),
-        ],
-    ];
-    $justification = Display::tabsOnlyLink($headers, 1);
-}
+$tabs = SocialManager::getHomeProfileTabs('profile');
 
 if ($allowSocialTool) {
     SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'home');

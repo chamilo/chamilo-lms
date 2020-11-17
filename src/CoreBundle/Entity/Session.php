@@ -60,14 +60,13 @@ class Session
     protected $id;
 
     /**
-     * @ORM\OneToMany(
-     *     targetEntity="SkillRelCourse", mappedBy="session", cascade={"persist", "remove"}
-     * )
+     * @var ArrayCollection|SkillRelCourse[]
+     * @ORM\OneToMany(targetEntity="SkillRelCourse", mappedBy="session", cascade={"persist", "remove"})
      */
     protected $skills;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection|SessionRelCourse[]
      *
      * @ORM\OrderBy({"position" = "ASC"})
      * @ORM\OneToMany(targetEntity="SessionRelCourse", mappedBy="session", cascade={"persist"}, orphanRemoval=true)
@@ -75,7 +74,7 @@ class Session
     protected $courses;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection|SessionRelUser[]
      *
      * @ORM\OneToMany(targetEntity="SessionRelUser", mappedBy="session", cascade={"persist"}, orphanRemoval=true)
      */
@@ -99,11 +98,15 @@ class Session
     protected $currentCourse;
 
     /**
+     * @var ArrayCollection|SkillRelUser[]
+     *
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelUser", mappedBy="session", cascade={"persist"})
      */
     protected $issuedSkills;
 
     /**
+     * @var ArrayCollection|AccessUrlRelSession[]
+     *
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CoreBundle\Entity\AccessUrlRelSession",
      *     mappedBy="session",
@@ -113,6 +116,8 @@ class Session
     protected $urls;
 
     /**
+     * @var ArrayCollection|ResourceLink[]
+     *
      * @ORM\OneToMany(targetEntity="ResourceLink", mappedBy="session", cascade={"remove"}, orphanRemoval=true)
      */
     protected $resourceLinks;
@@ -420,7 +425,7 @@ class Session
     /**
      * @param int $status
      */
-    public function addUserInSession($status, User $user)
+    public function addUserInSession($status, User $user): self
     {
         $sessionRelUser = new SessionRelUser();
         $sessionRelUser->setSession($this);
@@ -428,6 +433,8 @@ class Session
         $sessionRelUser->setRelationType($status);
 
         $this->addUser($sessionRelUser);
+
+        return $this;
     }
 
     /**
@@ -478,10 +485,7 @@ class Session
         $this->courses[] = $course;
     }
 
-    /**
-     * @return bool
-     */
-    public function hasCourse(Course $course)
+    public function hasCourse(Course $course): bool
     {
         if ($this->getCourses()->count()) {
             $criteria = Criteria::create()->where(
@@ -493,6 +497,21 @@ class Session
         }
 
         return false;
+    }
+
+    /**
+     * Check for existence of a relation (SessionRelCourse) between a course and this session.
+     *
+     * @return bool whether the course is related to this session
+     */
+    public function isRelatedToCourse(Course $course): bool
+    {
+        return !is_null(
+            \Database::getManager()->getRepository(SessionRelCourse::class)->findOneBy([
+                'session' => $this,
+                'course' => $course,
+            ])
+        );
     }
 
     /**
@@ -980,11 +999,49 @@ class Session
         return $this->compareDates($start, $end);
     }
 
+    /**
+     * Compare the current date with start and end access dates.
+     * Either missing date is interpreted as no limit.
+     *
+     * @return bool whether now is between the session access start and end dates
+     */
+    public function isCurrentlyAccessible()
+    {
+        try {
+            $now = new \Datetime();
+        } catch (\Exception $exception) {
+            return false;
+        }
+
+        return (is_null($this->accessStartDate) || $this->accessStartDate < $now)
+            && (is_null($this->accessEndDate) || $now < $this->accessEndDate);
+    }
+
     public function addCourse(Course $course)
     {
         $entity = new SessionRelCourse();
         $entity->setCourse($course);
         $this->addCourses($entity);
+    }
+
+    /**
+     * Removes a course from this session.
+     *
+     * @param Course $course the course to remove from this session
+     *
+     * @return bool whether the course was actually found in this session and removed from it
+     */
+    public function removeCourse(Course $course)
+    {
+        $relCourse = $this->getCourseSubscription($course);
+        if ($relCourse) {
+            $this->courses->removeElement($relCourse);
+            $this->setNbrCourses(count($this->courses));
+
+            return true;
+        }
+
+        return false;
     }
 
     /**

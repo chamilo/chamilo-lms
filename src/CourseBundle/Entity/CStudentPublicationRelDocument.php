@@ -40,13 +40,6 @@ class CStudentPublicationRelDocument
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer", nullable=true)
-     */
-    protected $id;
-
-    /**
-     * @var int
-     *
      * @ORM\Column(name="work_id", type="integer", nullable=false)
      */
     protected $workId;
@@ -128,16 +121,6 @@ class CStudentPublicationRelDocument
     public function getCId()
     {
         return $this->cId;
-    }
-
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**

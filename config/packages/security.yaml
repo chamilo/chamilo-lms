@@ -11,6 +11,7 @@ security:
         users:
             entity:
                 class: Chamilo\CoreBundle\Entity\User
+                property: 'username'
 
     access_control:
         - {path: ^/administrator, role: ROLE_ADMIN}
@@ -27,15 +28,15 @@ security:
             - ROLE_DIRECTOR
             - ROLE_JURY_PRESIDENT
             - ROLE_CURRENT_COURSE_TEACHER
+            - ROLE_CURRENT_SESSION_COURSE_TEACHER
         ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
         ROLE_GLOBAL_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
-        ROLE_RRHH: [ROLE_TEACHER]
+        ROLE_RRHH: [ROLE_TEACHER, ROLE_ALLOWED_TO_SWITCH]
         ROLE_TEACHER: [ROLE_STUDENT]
         ROLE_QUESTION_MANAGER: [ROLE_STUDENT, ROLE_QUESTION_MANAGER]
         ROLE_SESSION_MANAGER: [ROLE_STUDENT, ROLE_SESSION_MANAGER, ROLE_ALLOWED_TO_SWITCH]
         ROLE_STUDENT: [ROLE_STUDENT]
-        ROLE_CURRENT_TEACHER: []
-        ROLE_CURRENT_COURSE_STUDENT: [ROLE_CURRENT_COURSE_STUDENT] # Set in the course listener
+        ROLE_CURRENT_COURSE_STUDENT: [ROLE_CURRENT_COURSE_STUDENT] # Set in the CourseListener
         ROLE_CURRENT_COURSE_TEACHER: [ROLE_CURRENT_COURSE_TEACHER, ROLE_CURRENT_COURSE_STUDENT] # Set in the course listener
         ROLE_CURRENT_SESSION_COURSE_STUDENT: [ROLE_CURRENT_SESSION_COURSE_STUDENT]
         ROLE_CURRENT_SESSION_COURSE_TEACHER: [ROLE_CURRENT_SESSION_COURSE_STUDENT, ROLE_CURRENT_SESSION_COURSE_TEACHER]
@@ -54,7 +55,6 @@ security:
             context: admin
             anonymous: true
             form_login:
-#                provider: fos_userbundle
                 csrf_token_generator: security.csrf.token_manager
                 login_path: /login
                 use_forward: false
@@ -64,7 +64,8 @@ security:
                 authenticators:
                     - Chamilo\CoreBundle\Security\LoginFormAuthenticator
                     - Chamilo\CoreBundle\Security\TokenAuthenticator
-                entry_point: Chamilo\CoreBundle\Security\LoginFormAuthenticator
+
+            entry_point: Chamilo\CoreBundle\Security\AuthenticationEntryPoint
 
             remember_me:
                 secret: '%secret%'
@@ -73,7 +74,8 @@ security:
             logout:
                 path: /logout
                 target: /
-            switch_user: false
+            switch_user: true
+#            access_denied_handler: Chamilo\CoreBundle\Security\AccessDeniedHandler
             json_login:
                 check_path: /login_json
 #                username_path: security.credentials.login

@@ -1,5 +1,4 @@
 <?php
-
 /* For license terms, see /license.txt */
 /**
  * Configuration script for the Buy Courses plugin.
@@ -19,7 +18,7 @@ api_protect_admin_script(true);
 
 Display::addFlash(
     Display::return_message(
-        get_lang('Information').' - '.$plugin->get_lang('CoursesInSessionsDoesntDisplayHere'),
+        get_lang('Info').' - '.$plugin->get_lang('CoursesInSessionsDoesntDisplayHere'),
         'info'
     )
 );

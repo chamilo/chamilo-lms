@@ -4,6 +4,7 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Index;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -21,6 +22,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
  */
 class MessageFeedback
 {
+    use UserTrait;
+
     /**
      * @var int
      *
@@ -103,24 +106,6 @@ class MessageFeedback
     public function setMessage(Message $message)
     {
         $this->message = $message;
-
-        return $this;
-    }
-
-    /**
-     * @return User
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
-
-    /**
-     * @return MessageFeedback
-     */
-    public function setUser(User $user)
-    {
-        $this->user = $user;
 
         return $this;
     }

@@ -41,15 +41,10 @@ class CThematic extends AbstractResource implements ResourceInterface
     protected $cId;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=true)
-     */
-    protected $id;
-
-    /**
      * @var string
+     *
      * @Assert\NotBlank()
+     *
      * @ORM\Column(name="title", type="text", nullable=false)
      */
     protected $title;
@@ -85,7 +80,9 @@ class CThematic extends AbstractResource implements ResourceInterface
     /**
      * @var CThematicPlan[]
      *
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CThematicPlan", mappedBy="thematic", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\OneToMany(
+     *     targetEntity="CThematicPlan", mappedBy="thematic", cascade={"persist", "remove"}, orphanRemoval=true
+     * )
      */
     protected $plans;
 
@@ -94,13 +91,14 @@ class CThematic extends AbstractResource implements ResourceInterface
      *
      * @ORM\OrderBy({"startDate" = "ASC"})
      *
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CThematicAdvance", mappedBy="thematic", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\OneToMany(
+     *     targetEntity="CThematicAdvance", mappedBy="thematic", cascade={"persist", "remove"}, orphanRemoval=true
+     * )
      */
     protected $advances;
 
     public function __construct()
     {
-        $this->id = 0;
         $this->plans = new ArrayCollection();
         $this->advances = new ArrayCollection();
     }
@@ -114,10 +112,8 @@ class CThematic extends AbstractResource implements ResourceInterface
      * Set title.
      *
      * @param string $title
-     *
-     * @return CThematic
      */
-    public function setTitle($title)
+    public function setTitle($title): self
     {
         $this->title = $title;
 
@@ -138,10 +134,8 @@ class CThematic extends AbstractResource implements ResourceInterface
      * Set content.
      *
      * @param string $content
-     *
-     * @return CThematic
      */
-    public function setContent($content)
+    public function setContent($content): self
     {
         $this->content = $content;
 
@@ -162,10 +156,8 @@ class CThematic extends AbstractResource implements ResourceInterface
      * Set displayOrder.
      *
      * @param int $displayOrder
-     *
-     * @return CThematic
      */
-    public function setDisplayOrder($displayOrder)
+    public function setDisplayOrder($displayOrder): self
     {
         $this->displayOrder = $displayOrder;
 
@@ -186,10 +178,8 @@ class CThematic extends AbstractResource implements ResourceInterface
      * Set active.
      *
      * @param bool $active
-     *
-     * @return CThematic
      */
-    public function setActive($active)
+    public function setActive($active): self
     {
         $this->active = $active;
 
@@ -228,30 +218,6 @@ class CThematic extends AbstractResource implements ResourceInterface
     public function getSessionId()
     {
         return $this->sessionId;
-    }
-
-    /**
-     * Set id.
-     *
-     * @param int $id
-     *
-     * @return CThematic
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**
@@ -310,5 +276,10 @@ class CThematic extends AbstractResource implements ResourceInterface
     public function getResourceName(): string
     {
         return $this->getTitle();
+    }
+
+    public function setResourceName(string $name): self
+    {
+        return $this->setTitle($name);
     }
 }

@@ -5,6 +5,7 @@
 namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * TrackEAttemptRecording.
@@ -51,6 +52,7 @@ class TrackEAttemptRecording
 
     /**
      * @var \DateTime
+     * @Gedmo\Timestampable(on="create")
      *
      * @ORM\Column(name="insert_date", type="datetime", nullable=false)
      */
@@ -76,6 +78,11 @@ class TrackEAttemptRecording
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
     protected $sessionId;
+
+    public function __construct()
+    {
+        $this->sessionId = 0;
+    }
 
     /**
      * Set exeId.

@@ -10,35 +10,21 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Class IndexController
- * author Julio Montoya <gugli100@gmail.com>.
+ * Class IndexController.
  */
 class IndexController extends BaseController
 {
     /**
-     * The Chamilo index home page.
+     * Index home page.
      *
      * @Route("/", name="home", methods={"GET", "POST"}, options={"expose"=true})
      * @Route("/login", name="login", methods={"GET", "POST"}, options={"expose"=true})
+     * @Route("/courses", name="courses", methods={"GET", "POST"}, options={"expose"=true})
+     * @Route("/sessions", name="sessions", methods={"GET", "POST"}, options={"expose"=true})
      */
     public function indexAction(): Response
     {
-        return $this->render(
-            '@ChamiloCore/Index/vue.html.twig',
-            [
-                'content' => '',
-            ]
-        );
-    }
-
-    public function resources(): Response
-    {
-        return $this->render(
-            '@ChamiloCore/Index/vue.html.twig',
-            [
-                'content' => '',
-            ]
-        );
+        return $this->render('@ChamiloCore/Index/vue.html.twig');
     }
 
     /**

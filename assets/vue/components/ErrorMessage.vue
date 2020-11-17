@@ -4,6 +4,7 @@
             role="alert"
     >
         {{ error.response.data.error }}
+        {{ error.response.data.message }}
     </div>
 </template>
 

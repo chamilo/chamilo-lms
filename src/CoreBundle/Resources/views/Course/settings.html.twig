@@ -19,7 +19,7 @@
                             {{ form_errors(form) }}
                             <form
                                 class="form-horizontal"
-                                action="{{ path('chamilo_core_course_settings', { 'namespace': namespace, 'keyword': keyword, 'cid' : course.id } ) }}"
+                                action="{{ path('chamilo_core_course_settings', { 'namespace': namespace, 'cid' : course.id } ) }}"
                                 method="post"
                                 novalidate
                             >

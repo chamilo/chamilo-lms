@@ -1,5 +1,6 @@
 export default {
   path: '/resources/courses',
+  meta: { requiresAuth: true },
   name: 'courses',
   component: () => import('../components/course/Layout'),
   redirect: { name: 'CourseList' },

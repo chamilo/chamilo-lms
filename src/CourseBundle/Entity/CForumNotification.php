@@ -42,13 +42,6 @@ class CForumNotification
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer", nullable=true)
-     */
-    protected $id;
-
-    /**
-     * @var int
-     *
      * @ORM\Column(name="user_id", type="integer")
      */
     protected $userId;
@@ -79,30 +72,6 @@ class CForumNotification
         $this->forumId = 0;
         $this->threadId = 0;
         $this->postId = 0;
-    }
-
-    /**
-     * Set id.
-     *
-     * @param int $id
-     *
-     * @return CForumNotification
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**

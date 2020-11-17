@@ -22,7 +22,7 @@ use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Exception\ValidatorException;
 
 /**
- * Class SettingsManager.
+ * Handles the platform settings.
  */
 class SettingsManager implements SettingsManagerInterface
 {
@@ -220,7 +220,7 @@ class SettingsManager implements SettingsManagerInterface
                 $schemaRegister->buildSettings($settingsBuilder);
                 $name = $this->convertServiceToNameSpace($schema);
                 $settings = new Settings();
-                $parameters = $all[$name];
+                $parameters = isset($all[$name]) ? $all[$name] : [];
                 foreach ($settingsBuilder->getTransformers() as $parameter => $transformer) {
                     if (array_key_exists($parameter, $parameters)) {
                         if ('course_creation_use_template' === $parameter) {

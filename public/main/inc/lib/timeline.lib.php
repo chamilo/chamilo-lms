@@ -106,7 +106,7 @@ class Timeline extends Model
      * @param   string  url
      * @param   string  action add, edit
      *
-     * @return obj form validator obj
+     * @return FormValidator
      */
     public function return_form($url, $action)
     {

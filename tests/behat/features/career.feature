@@ -10,4 +10,5 @@ Feature: Career
           | name          | Developer               |
       And I fill in ckeditor field "description" with "Description"
       And I press "submit"
+      And wait for the page to be loaded
       Then I should see "Item added"

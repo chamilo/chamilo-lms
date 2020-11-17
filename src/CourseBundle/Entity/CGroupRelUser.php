@@ -5,6 +5,7 @@
 namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -20,6 +21,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class CGroupRelUser
 {
+    use UserTrait;
+
     /**
      * @var int
      *
@@ -37,13 +40,6 @@ class CGroupRelUser
     protected $cId;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=true)
-     */
-    protected $id;
-
-    /**
      * @var User
      *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="courseGroupsAsMember")
@@ -52,9 +48,9 @@ class CGroupRelUser
     protected $user;
 
     /**
-     * @var CGroupInfo
+     * @var CGroup
      *
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CGroupInfo", inversedBy="members")
+     * @ORM\ManyToOne(targetEntity="CGroup", inversedBy="members")
      * @ORM\JoinColumn(name="group_id", referencedColumnName="iid", nullable=false)
      */
     protected $group;
@@ -74,35 +70,11 @@ class CGroupRelUser
     protected $role;
 
     /**
-     * Set userId.
-     *
-     * @param int $user
-     *
-     * @return CGroupRelUser
-     */
-    public function setUser($user)
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    /**
-     * Get userId.
-     *
-     * @return User
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
-
-    /**
      * Set group.
      *
      * @return CGroupRelUser
      */
-    public function setGroup(CGroupInfo $group)
+    public function setGroup(CGroup $group)
     {
         $this->group = $group;
 
@@ -112,7 +84,7 @@ class CGroupRelUser
     /**
      * Get group.
      *
-     * @return CGroupInfo
+     * @return CGroup
      */
     public function getGroup()
     {
@@ -165,30 +137,6 @@ class CGroupRelUser
     public function getRole()
     {
         return $this->role;
-    }
-
-    /**
-     * Set id.
-     *
-     * @param int $id
-     *
-     * @return CGroupRelUser
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**

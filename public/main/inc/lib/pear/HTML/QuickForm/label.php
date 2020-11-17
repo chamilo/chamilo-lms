@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HTML class for static data
  * @example  $form->addElement('label', 'My label', 'Content');

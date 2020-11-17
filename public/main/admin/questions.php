@@ -41,7 +41,7 @@ if ($formSent) {
     $page = isset($_GET['page']) && !empty($_GET['page']) ? (int) $_GET['page'] : 1;
 
     $em = Database::getManager();
-    $repo = $em->getRepository('ChamiloCourseBundle:CQuizQuestion');
+    $repo = $em->getRepository(CQuizQuestion::class);
     $criteria = new Criteria();
     if (!empty($id)) {
         $criteria->where($criteria->expr()->eq('iid', $id));
@@ -105,12 +105,12 @@ if ($formSent) {
             $question->courseCode = $courseCode;
             // Creating empty exercise
             $exercise = new Exercise($courseId);
-            $questionObject = Question::read($question->getId(), $courseInfo);
+            $questionObject = Question::read($question->getIid(), $courseInfo);
 
             ob_start();
             ExerciseLib::showQuestion(
                 $exercise,
-                $question->getId(),
+                $question->getIid(),
                 false,
                 null,
                 null,
@@ -139,7 +139,7 @@ if ($formSent) {
                             'id_session' => $exercise->sessionId,
                             'exerciseId' => $exerciseId,
                             'type' => $question->getType(),
-                            'editQuestion' => $question->getId(),
+                            'editQuestion' => $question->getIid(),
                         ])
                     );
                 }
@@ -153,7 +153,7 @@ if ($formSent) {
                         'id_session' => $exercise->sessionId,
                         'exerciseId' => $exerciseId,
                         'type' => $question->getType(),
-                        'editQuestion' => $question->getId(),
+                        'editQuestion' => $question->getIid(),
                     ])
                 );
 
@@ -161,7 +161,7 @@ if ($formSent) {
                     Display::return_icon('delete.png', get_lang('Delete')),
                     $url.'&'.http_build_query([
                         'courseId' => $question->getCId(),
-                        'questionId' => $question->getId(),
+                        'questionId' => $question->getIid(),
                         'action' => 'delete',
                     ])
                 ).'<br />';

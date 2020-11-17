@@ -4,6 +4,7 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -19,6 +20,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class SessionRelUser
 {
+    use UserTrait;
+
     public $relationTypeList = [
         0 => 'student',
         1 => 'drh',
@@ -34,13 +37,15 @@ class SessionRelUser
     protected $id;
 
     /**
+     * @var Session
+     *
      * @ORM\ManyToOne(targetEntity="Session", inversedBy="users", cascade={"persist"})
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
      */
     protected $session;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="sessions", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="sessions", cascade={"persist"})
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     protected $user;
@@ -112,38 +117,9 @@ class SessionRelUser
         return $this;
     }
 
-    /**
-     * Get Session.
-     *
-     * @return Session
-     */
-    public function getSession()
+    public function getSession(): Session
     {
         return $this->session;
-    }
-
-    /**
-     * Set User.
-     *
-     * @param User $user
-     *
-     * @return SessionRelUser
-     */
-    public function setUser($user)
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    /**
-     * Get idUser.
-     *
-     * @return User
-     */
-    public function getUser()
-    {
-        return $this->user;
     }
 
     /**

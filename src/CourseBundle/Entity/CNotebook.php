@@ -4,20 +4,20 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\AbstractResource;
+use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * CNotebook.
  *
+ * @ORM\Entity
  * @ORM\Table(
- *  name="c_notebook",
- *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"})
- *  }
+ *  name="c_notebook"
  * )
- * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CNotebookRepository")
  */
-class CNotebook
+class CNotebook extends AbstractResource implements ResourceInterface
 {
     /**
      * @var int
@@ -34,13 +34,6 @@ class CNotebook
      * @ORM\Column(name="c_id", type="integer")
      */
     protected $cId;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="notebook_id", type="integer")
-     */
-    protected $notebookId;
 
     /**
      * @var int
@@ -80,12 +73,16 @@ class CNotebook
     /**
      * @var \DateTime
      *
+     * @Gedmo\Timestampable(on="create")
+     *
      * @ORM\Column(name="creation_date", type="datetime", nullable=false)
      */
     protected $creationDate;
 
     /**
      * @var \DateTime
+     *
+     * @Gedmo\Timestampable(on="update")
      *
      * @ORM\Column(name="update_date", type="datetime", nullable=false)
      */
@@ -97,6 +94,16 @@ class CNotebook
      * @ORM\Column(name="status", type="integer", nullable=true)
      */
     protected $status;
+
+    public function __construct()
+    {
+        $this->status = 0;
+    }
+
+    public function __toString(): string
+    {
+        return $this->getTitle();
+    }
 
     /**
      * Set userId.
@@ -191,7 +198,7 @@ class CNotebook
      */
     public function getTitle()
     {
-        return $this->title;
+        return (string) $this->title;
     }
 
     /**
@@ -291,30 +298,6 @@ class CNotebook
     }
 
     /**
-     * Set notebookId.
-     *
-     * @param int $notebookId
-     *
-     * @return CNotebook
-     */
-    public function setNotebookId($notebookId)
-    {
-        $this->notebookId = $notebookId;
-
-        return $this;
-    }
-
-    /**
-     * Get notebookId.
-     *
-     * @return int
-     */
-    public function getNotebookId()
-    {
-        return $this->notebookId;
-    }
-
-    /**
      * Set cId.
      *
      * @param int $cId
@@ -346,5 +329,20 @@ class CNotebook
     public function getIid()
     {
         return $this->iid;
+    }
+
+    public function getResourceIdentifier(): int
+    {
+        return $this->getIid();
+    }
+
+    public function getResourceName(): string
+    {
+        return $this->getTitle();
+    }
+
+    public function setResourceName(string $name): self
+    {
+        return $this->setTitle($name);
     }
 }

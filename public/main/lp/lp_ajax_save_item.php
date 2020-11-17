@@ -93,7 +93,9 @@ function save_item(
     $prerequisitesCheck = $myLP->prerequisites_match($item_id);
 
     /** @var learnpathItem $myLPI */
-    $myLPI = $myLP->items[$item_id];
+    if ($myLP->items && isset($myLP->items[$item_id])) {
+        $myLPI = $myLP->items[$item_id];
+    }
 
     if (empty($myLPI)) {
         if ($debug > 0) {
@@ -322,29 +324,38 @@ function save_item(
                  */
                 if ($lmsFinish || $userNavigatesAway) {
                     $myStatus = 'completed';
-                    /**
-                     * After setting the cmi.core.lesson_status to "completed",
-                     *   the LMS should now check to see if a Mastery Score has been
-                     *   specified in the cmi.student_data.mastery_score, if supported,
-                     *   or the manifest that the SCO is a member of.
-                     *   If a Mastery Score is provided and the SCO did set the
-                     *   cmi.core.score.raw, the LMS shall compare the cmi.core.score.raw
-                     *   to the Mastery Score and set the cmi.core.lesson_status to
-                     *   either "passed" or "failed".  If no Mastery Score is provided,
-                     *   the LMS will leave the cmi.core.lesson_status as "completed”.
-                     */
-                    if ($masteryScore && (isset($score) && -1 != $score)) {
-                        if ($score >= $masteryScore) {
-                            $myStatus = 'passed';
-                        } else {
-                            $myStatus = 'failed';
+                    $updateStatus = true;
+                    // Do not update status if "score as progress" and $userNavigatesAway
+                    // The progress will be saved by the scorm BT#16766.
+                    if ($userNavigatesAway && !$lmsFinish && $myLP->getUseScoreAsProgress()) {
+                        $updateStatus = false;
+                    }
+
+                    if ($updateStatus) {
+                        /**
+                         * After setting the cmi.core.lesson_status to "completed",
+                         *   the LMS should now check to see if a Mastery Score has been
+                         *   specified in the cmi.student_data.mastery_score, if supported,
+                         *   or the manifest that the SCO is a member of.
+                         *   If a Mastery Score is provided and the SCO did set the
+                         *   cmi.core.score.raw, the LMS shall compare the cmi.core.score.raw
+                         *   to the Mastery Score and set the cmi.core.lesson_status to
+                         *   either "passed" or "failed".  If no Mastery Score is provided,
+                         *   the LMS will leave the cmi.core.lesson_status as "completed”.
+                         */
+                        if ($masteryScore && (isset($score) && -1 != $score)) {
+                            if ($score >= $masteryScore) {
+                                $myStatus = 'passed';
+                            } else {
+                                $myStatus = 'failed';
+                            }
                         }
+                        if ($debug) {
+                            error_log("Set status: $myStatus because lmsFinish || userNavigatesAway");
+                        }
+                        $myLPI->set_status($myStatus);
+                        $statusIsSet = true;
                     }
-                    if ($debug) {
-                        error_log("Set status: $myStatus because lmsFinish || userNavigatesAway");
-                    }
-                    $myLPI->set_status($myStatus);
-                    $statusIsSet = true;
                 }
             }
             // End of type=='sco'
@@ -472,7 +483,20 @@ function save_item(
             $return .= "update_toc('".$my_upd_status."','".$my_upd_id."');";
         }
     }
-    $return .= "update_progress_bar('$myComplete', '$myTotal', '$myProgressMode');";
+    $progressBarSpecial = false;
+    $scoreAsProgressSetting = api_get_configuration_value('lp_score_as_progress_enable');
+    if (true === $scoreAsProgressSetting) {
+        $scoreAsProgress = $myLP->getUseScoreAsProgress();
+        if ($scoreAsProgress) {
+            $score = $myLPI->get_score();
+            $maxScore = $myLPI->get_max();
+            $return .= "update_progress_bar('$score', '$maxScore', '$myProgressMode');";
+            $progressBarSpecial = true;
+        }
+    }
+    if (!$progressBarSpecial) {
+        $return .= "update_progress_bar('$myComplete', '$myTotal', '$myProgressMode');";
+    }
 
     if (!Session::read('login_as')) {
         // If $_SESSION['login_as'] is set, then the user is an admin logged as the user.

@@ -150,10 +150,10 @@ class Result
         $sql = "SELECT lastname, gr.id, gr.user_id, gr.evaluation_id, gr.created_at, gr.score
                 FROM $tbl_grade_results gr
                 INNER JOIN $tbl_user u
-                ON gr.user_id = u.user_id ";
+                ON gr.user_id = u.id ";
 
         if (!empty($userIdList)) {
-            $sql .= " AND u.user_id IN ('$userIdListToString')";
+            $sql .= " AND u.id IN ('$userIdListToString')";
         }
 
         $paramcount = 0;

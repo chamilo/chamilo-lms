@@ -1,6 +1,7 @@
 <?php
 
 /* For licensing terms, see /license.txt */
+
 /**
  * Responses to AJAX calls.
  */
@@ -10,6 +11,7 @@ require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
 $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
 $isAllowedToEdit = api_is_allowed_to_edit();
 $courseInfo = api_get_course_info();
+$courseEntity = api_get_course_entity();
 
 switch ($action) {
     case 'show_student_work':
@@ -45,8 +47,13 @@ switch ($action) {
     case 'delete_student_work':
         api_protect_course_script(true);
         if ($isAllowedToEdit) {
-            $itemId = isset($_REQUEST['id']) ? $_REQUEST['id'] : 0;
-            deleteWorkItem($itemId, $courseInfo);
+            if (empty($_REQUEST['id'])) {
+                return false;
+            }
+            $itemList = explode(',', $_REQUEST['id']);
+            foreach ($itemList as $itemId) {
+                deleteWorkItem($itemId, $courseInfo);
+            }
             echo '1';
             exit;
         }
@@ -155,7 +162,7 @@ switch ($action) {
             $courseInfo = api_get_course_info();
             $workInfo = get_work_data_by_id($itemId);
             $workInfoParent = get_work_data_by_id($workInfo['parent_id']);
-            $resultUpload = uploadWork($workInfoParent, $courseInfo, true, $workInfo);
+            $resultUpload = uploadWork($workInfoParent, $courseEntity, true, $workInfo);
             if (!$resultUpload) {
                 echo 'false';
                 break;

@@ -17,6 +17,7 @@ require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 
 $group_id = api_get_group_id();
 $user_id = api_get_user_id();
+
 $current_group = GroupManager::get_group_properties($group_id);
 $group_id = $current_group['iid'];
 if (empty($current_group)) {
@@ -36,7 +37,6 @@ if (!GroupManager::userHasAccessToBrowse($user_id, $current_group, api_get_sessi
     api_not_allowed(true);
 }
 
-/*	Actions and Action links */
 /*
  * User wants to register in this group
  */
@@ -64,7 +64,6 @@ Display::display_header(
     'Group'
 );
 
-/*	Introduction section (editable by course admin) */
 Display::display_introduction_section(TOOL_GROUP);
 
 echo '<div class="actions">';
@@ -115,8 +114,6 @@ if (!empty($current_group['description'])) {
 }
 
 //if (GroupManager::userHasAccessToBrowse($user_id, $this_group, $session_id)) {
-
-// If the user is subscribed to the group or the user is a tutor of the group then
 if (api_is_allowed_to_edit(false, true) ||
     GroupManager::userHasAccessToBrowse($user_id, $current_group, api_get_session_id())
 ) {
@@ -213,6 +210,14 @@ if (api_is_allowed_to_edit(false, true) ||
                 'content' => Display::return_icon('bbb.png', get_lang('Videoconference'), [], 32),
             ];
         }
+    }
+
+    $enabled = api_get_plugin_setting('zoom', 'tool_enable');
+    if ('true' === $enabled) {
+        $actions_array[] = [
+            'url' => api_get_path(WEB_PLUGIN_PATH).'zoom/start.php?'.api_get_cidreq(),
+            'content' => Display::return_icon('bbb.png', get_lang('VideoConference'), [], 32),
+        ];
     }
 
     if (!empty($actions_array)) {

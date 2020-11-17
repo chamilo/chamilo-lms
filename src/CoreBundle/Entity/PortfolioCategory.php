@@ -4,6 +4,7 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
@@ -22,6 +23,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class PortfolioCategory
 {
+    use UserTrait;
+
     /**
      * @var int
      *
@@ -149,28 +152,6 @@ class PortfolioCategory
     public function setDescription($description)
     {
         $this->description = $description;
-
-        return $this;
-    }
-
-    /**
-     * Get user.
-     *
-     * @return User
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
-
-    /**
-     * Set user.
-     *
-     * @return PortfolioCategory
-     */
-    public function setUser(User $user)
-    {
-        $this->user = $user;
 
         return $this;
     }

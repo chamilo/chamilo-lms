@@ -30,5 +30,5 @@ interface GradebookItem
 
     public function setStudentList($list);
 
-    public function calc_score($stud_id = null, $type = null);
+    public function calc_score($studentId = null, $type = null);
 }

@@ -6,6 +6,7 @@ namespace Chamilo\CoreBundle\Traits;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CourseBundle\Entity\CGroup;
 
 /**
  * Trait CourseControllerTrait.
@@ -66,7 +67,7 @@ trait CourseControllerTrait
             return null;
         }
 
-        return $this->getDoctrine()->getManager()->find('ChamiloCoreBundle:Session', $sessionId);
+        return $this->getDoctrine()->getManager()->find(Session::class, $sessionId);
     }
 
     public function getGroup()
@@ -81,7 +82,7 @@ trait CourseControllerTrait
             return null;
         }
 
-        return $this->getDoctrine()->getManager()->find('ChamiloCourseBundle:CGroupInfo', $groupId);
+        return $this->getDoctrine()->getManager()->find(CGroup::class, $groupId);
     }
 
     public function getCourseUrlQuery(): string

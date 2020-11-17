@@ -8,6 +8,7 @@ use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CourseBundle\Traits\ShowCourseResourcesInSessionTrait;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -45,13 +46,6 @@ class CQuiz extends AbstractResource implements ResourceInterface
     protected $cId;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=true)
-     */
-    protected $id;
-
-    /**
      * @var string
      * @Assert\NotBlank()
      * @ORM\Column(name="title", type="text", nullable=false)
@@ -73,9 +67,9 @@ class CQuiz extends AbstractResource implements ResourceInterface
     protected $sound;
 
     /**
-     * @var bool
+     * @var int
      *
-     * @ORM\Column(name="type", type="boolean", nullable=false)
+     * @ORM\Column(name="type", type="integer", nullable=false)
      */
     protected $type;
 
@@ -256,11 +250,18 @@ class CQuiz extends AbstractResource implements ResourceInterface
     protected $autoLaunch;
 
     /**
-     * @var int
+     * @var array
      *
      * @ORM\Column(name="page_result_configuration", type="array", nullable=true)
      */
     protected $pageResultConfiguration;
+
+    /**
+     * @var CQuizRelQuestion[]|ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CQuizRelQuestion", mappedBy="quiz", cascade={"persist"}, orphanRemoval=true))
+     */
+    protected $questions;
 
     /**
      * CQuiz constructor.
@@ -268,15 +269,37 @@ class CQuiz extends AbstractResource implements ResourceInterface
     public function __construct()
     {
         $this->hideQuestionTitle = false;
+        $this->type = ONE_PER_PAGE;
         $this->showPreviousButton = true;
         $this->notifications = '';
         $this->autoLaunch = 0;
         $this->preventBackwards = 0;
+        $this->random = 0;
+        $this->randomAnswers = false;
+        $this->active = true;
+        $this->resultsDisabled = 0;
+        $this->maxAttempt = 1;
+        $this->feedbackType = 0;
+        $this->expiredTime = 0;
+        $this->propagateNeg = 0;
+        $this->saveCorrectAnswers = false;
+        $this->reviewAnswers = 0;
+        $this->randomByCategory = 0;
+        $this->displayCategoryName = 0;
+        $this->questions = new ArrayCollection();
     }
 
     public function __toString(): string
     {
         return $this->getTitle();
+    }
+
+    /**
+     * @return CQuizRelQuestion[]|ArrayCollection
+     */
+    public function getQuestions()
+    {
+        return $this->questions;
     }
 
     /**
@@ -353,12 +376,8 @@ class CQuiz extends AbstractResource implements ResourceInterface
 
     /**
      * Set type.
-     *
-     * @param bool $type
-     *
-     * @return CQuiz
      */
-    public function setType($type)
+    public function setType(int $type): self
     {
         $this->type = $type;
 
@@ -367,10 +386,8 @@ class CQuiz extends AbstractResource implements ResourceInterface
 
     /**
      * Get type.
-     *
-     * @return bool
      */
-    public function getType()
+    public function getType(): int
     {
         return $this->type;
     }
@@ -804,30 +821,6 @@ class CQuiz extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Set id.
-     *
-     * @param int $id
-     *
-     * @return CQuiz
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
      * Set cId.
      *
      * @param int $cId
@@ -938,14 +931,38 @@ class CQuiz extends AbstractResource implements ResourceInterface
         return $this->iid;
     }
 
-    /**
-     * @param int $iid
-     *
-     * @return CQuiz
-     */
-    public function setIid($iid)
+    public function getPreventBackwards(): int
     {
-        $this->iid = $iid;
+        return $this->preventBackwards;
+    }
+
+    public function setPreventBackwards(int $preventBackwards): self
+    {
+        $this->preventBackwards = $preventBackwards;
+
+        return $this;
+    }
+
+    public function isAutoLaunch(): bool
+    {
+        return $this->autoLaunch;
+    }
+
+    public function setAutoLaunch(bool $autoLaunch): self
+    {
+        $this->autoLaunch = $autoLaunch;
+
+        return $this;
+    }
+
+    public function getPageResultConfiguration(): array
+    {
+        return $this->pageResultConfiguration;
+    }
+
+    public function setPageResultConfiguration($pageResultConfiguration): self
+    {
+        $this->pageResultConfiguration = $pageResultConfiguration;
 
         return $this;
     }
@@ -955,11 +972,19 @@ class CQuiz extends AbstractResource implements ResourceInterface
      */
     public function postPersist(LifecycleEventArgs $args)
     {
-        // Update id with iid value
-        $em = $args->getEntityManager();
-        $this->setId($this->iid);
-        $em->persist($this);
-        $em->flush();
+    }
+
+    /**
+     * Returns the sum of question's ponderation.
+     */
+    public function getMaxScore(): int
+    {
+        $maxScore = 0;
+        foreach ($this->questions as $relQuestion) {
+            $maxScore += $relQuestion->getQuestion()->getPonderation();
+        }
+
+        return $maxScore;
     }
 
     /**
@@ -973,5 +998,10 @@ class CQuiz extends AbstractResource implements ResourceInterface
     public function getResourceName(): string
     {
         return $this->getTitle();
+    }
+
+    public function setResourceName(string $name): self
+    {
+        return $this->setTitle($name);
     }
 }

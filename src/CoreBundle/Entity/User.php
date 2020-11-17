@@ -10,11 +10,15 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use Chamilo\CourseBundle\Entity\CGroupRelUser;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -26,7 +30,6 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
  * @ApiResource(
  *      attributes={"security"="is_granted('ROLE_ADMIN')"},
  *      iri="http://schema.org/Person",
- *      attributes={"security"="is_granted('ROLE_ADMIN')"},
  *      normalizationContext={"groups"={"user:read"}},
  *      denormalizationContext={"groups"={"user:write"}},
  *      collectionOperations={"get"},
@@ -44,15 +47,16 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
  * @ORM\Table(
  *  name="user",
  *  indexes={
- *      @ORM\Index(name="idx_user_uid", columns={"user_id"}),
  *      @ORM\Index(name="status", columns={"status"})
  *  }
  * )
  * @UniqueEntity("username")
- * @ORM\Entity()
+ * @ORM\Entity
  */
 class User implements UserInterface, EquatableInterface
 {
+    use TimestampableEntity;
+
     public const ROLE_DEFAULT = 'ROLE_USER';
     public const ROLE_SUPER_ADMIN = 'ROLE_SUPER_ADMIN';
 
@@ -65,12 +69,19 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * @var int
-     * @Groups({"user:read"})
+     * @Groups({"user:read", "resource_node:read"})
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
+
+    /**
+     * @var UuidInterface|null
+     *
+     * @ORM\Column(type="uuid", unique=true)
+     */
+    protected $uuid;
 
     /**
      * @ORM\Column(type="string", unique=true, nullable=true)
@@ -81,14 +92,14 @@ class User implements UserInterface, EquatableInterface
      * @var string
      * @Assert\NotBlank()
      * @ApiProperty(iri="http://schema.org/name")
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"user:read", "user:write", "resource_node:read"})
      * @ORM\Column(name="firstname", type="string", length=64, nullable=true, unique=false)
      */
     protected $firstname;
 
     /**
      * @var string
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"user:read", "user:write", "resource_node:read"})
      * @ORM\Column(name="lastname", type="string", length=64, nullable=true, unique=false)
      */
     protected $lastname;
@@ -116,7 +127,7 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * @var string
-     * @Groups({"user:read", "user:write", "course:read"})
+     * @Groups({"user:read", "user:write", "course:read", "resource_node:read"})
      * @Assert\NotBlank()
      * @ORM\Column(name="username", type="string", length=100, nullable=false, unique=true)
      */
@@ -132,13 +143,6 @@ class User implements UserInterface, EquatableInterface
      * @ORM\Column(name="password", type="string", length=255, nullable=false, unique=false)
      */
     protected $password;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="user_id", type="integer", nullable=true)
-     */
-    protected $userId;
 
     /**
      * @var string
@@ -268,12 +272,16 @@ class User implements UserInterface, EquatableInterface
     protected $passwordRequestedAt;
 
     /**
+     * @var CourseRelUser[]|ArrayCollection
+     *
      * @ApiSubresource()
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\CourseRelUser", mappedBy="user", orphanRemoval=true)
      */
     protected $courses;
 
     /**
+     * @var UsergroupRelUser[]|ArrayCollection
+     *
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\UsergroupRelUser", mappedBy="user")
      */
     protected $classes;
@@ -327,6 +335,8 @@ class User implements UserInterface, EquatableInterface
     protected $curriculumItems;
 
     /**
+     * @var AccessUrlRelUser[]|ArrayCollection
+     *
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CoreBundle\Entity\AccessUrlRelUser",
      *     mappedBy="user",
@@ -388,11 +398,159 @@ class User implements UserInterface, EquatableInterface
     protected $commentedUserSkills;
 
     /**
+     * @var ArrayCollection|GradebookCategory[]
+     *
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\GradebookCategory", mappedBy="user")
      */
     protected $gradeBookCategories;
 
     /**
+     * @var ArrayCollection|GradebookCertificate[]
+     *
+     * @ORM\OneToMany(
+     *  targetEntity="GradebookCertificate", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true
+     * )
+     */
+    protected $gradeBookCertificates;
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(
+     *     targetEntity="GradebookEvaluation", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true
+     * )
+     */
+    protected $gradeBookEvaluations;
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="GradebookLink", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
+     */
+    protected $gradeBookLinks;
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="GradebookResult", mappedBy="user", cascade={"persist","remove"}, orphanRemoval=true)
+     */
+    protected $gradeBookResults;
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(
+     *     targetEntity="GradebookResultLog", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true
+     * )
+     */
+    protected $gradeBookResultLogs;
+
+    /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(
+     *     targetEntity="GradebookScoreLog", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true
+     * )
+     */
+    protected $gradeBookScoreLogs;
+
+    /**
+     * @var ArrayCollection|UserRelUser[]
+     * @ORM\OneToMany(targetEntity="UserRelUser", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
+     */
+    protected $userRelUsers;
+
+    /**
+     * @var ArrayCollection|GradebookLinkevalLog[]
+     * @ORM\OneToMany(
+     *     targetEntity="GradebookLinkevalLog",
+     *     mappedBy="user",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true
+     * )
+     */
+    protected $gradeBookLinkEvalLogs;
+
+    /**
+     * @var ArrayCollection|SequenceValue[]
+     * @ORM\OneToMany(targetEntity="SequenceValue", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
+     */
+    protected $sequenceValues;
+
+    /**
+     * @var ArrayCollection|TrackEExerciseConfirmation[]
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CoreBundle\Entity\TrackEExerciseConfirmation",
+     *     mappedBy="user",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true
+     * )
+     */
+    protected $trackEExerciseConfirmations;
+
+    /**
+     * @var ArrayCollection|TrackEAttempt[]
+     * @ORM\OneToMany(
+     *     targetEntity="TrackEAccessComplete", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true
+     * )
+     */
+    protected $trackEAccessCompleteList;
+
+    /**
+     * @var ArrayCollection|Templates[]
+     * @ORM\OneToMany(targetEntity="Templates", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
+     */
+    protected $templates;
+
+    /**
+     * @var ArrayCollection|TrackEAttempt[]
+     * @ORM\OneToMany(targetEntity="TrackEAttempt", mappedBy="user", cascade={"persist", "remove"},orphanRemoval=true)
+     */
+    protected $trackEAttempts;
+
+    /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(
+     *     targetEntity="Chamilo\CoreBundle\Entity\TrackECourseAccess",
+     *     mappedBy="user",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true
+     * )
+     */
+    protected $trackECourseAccess;
+
+    /**
+     * @var ArrayCollection|UserCourseCategory[]
+     *
+     * @ORM\OneToMany(
+     *     targetEntity="UserCourseCategory",
+     *     mappedBy="user",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true
+     * )
+     */
+    protected $userCourseCategories;
+
+    /**
+     * @var ArrayCollection|UserRelCourseVote[]
+     * @ORM\OneToMany(targetEntity="UserRelCourseVote", mappedBy="user",cascade={"persist","remove"},orphanRemoval=true)
+     */
+    protected $userRelCourseVotes;
+
+    /**
+     * @var ArrayCollection|UserRelTag[]
+     * @ORM\OneToMany(targetEntity="UserRelTag", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
+     */
+    protected $userRelTags;
+
+    /**
+     * @var ArrayCollection|PersonalAgenda[]
+     * @ORM\OneToMany(targetEntity="PersonalAgenda",mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
+     */
+    protected $personalAgendas;
+
+    /**
+     * @var Session[]|ArrayCollection
+     *
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CoreBundle\Entity\SessionRelUser",
      *     mappedBy="user",
@@ -403,7 +561,7 @@ class User implements UserInterface, EquatableInterface
     protected $sessions;
 
     /**
-     * @var Collection
+     * @var CGroupRelUser[]|ArrayCollection
      *
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CourseBundle\Entity\CGroupRelUser",
@@ -565,22 +723,18 @@ class User implements UserInterface, EquatableInterface
     protected $receivedMessages;
 
     /**
-     * @var \DateTime
-     * @ORM\Column(name="created_at", type="datetime", nullable=true, unique=false)
+     * @var Admin
+     *
+     * @ORM\OneToOne(targetEntity="Admin", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
      */
-    protected $createdAt;
-
-    /**
-     * @var \DateTime
-     * @ORM\Column(name="updated_at", type="datetime", nullable=true, unique=false)
-     */
-    protected $updatedAt;
+    protected $admin;
 
     /**
      * Constructor.
      */
     public function __construct()
     {
+        $this->uuid = Uuid::uuid4()->toString();
         $this->status = self::STUDENT;
         $this->salt = sha1(uniqid(null, true));
         $this->active = true;
@@ -595,7 +749,6 @@ class User implements UserInterface, EquatableInterface
         $this->dropBoxReceivedFiles = new ArrayCollection();
         $this->groups = new ArrayCollection();
         //$this->extraFields = new ArrayCollection();
-        //$this->userId = 0;
         $this->createdAt = new \DateTime();
         $this->updatedAt = new \DateTime();
 
@@ -618,8 +771,26 @@ class User implements UserInterface, EquatableInterface
     }
 
     /**
-     * @return $this
+     * @return int
      */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $userId
+     */
+    public function setId($userId)
+    {
+        $this->id = $userId;
+    }
+
+    public function getUuid(): UuidInterface
+    {
+        return $this->uuid;
+    }
+
     public function setResourceNode(ResourceNode $resourceNode): self
     {
         $this->resourceNode = $resourceNode;
@@ -651,40 +822,12 @@ class User implements UserInterface, EquatableInterface
     }
 
     /**
-     * Updates the id with the user_id.
-     *
      * @ORM\PostPersist()
      */
     public function postPersist(LifecycleEventArgs $args)
     {
-        $user = $args->getEntity();
-        $this->setUserId($user->getId());
-    }
-
-    /**
-     * @param int $userId
-     */
-    public function setId($userId)
-    {
-        $this->id = $userId;
-    }
-
-    /**
-     * @param int $userId
-     */
-    public function setUserId($userId)
-    {
-        if (!empty($userId)) {
-            $this->userId = $userId;
-        }
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
+        /*$user = $args->getEntity();
+        */
     }
 
     /**
@@ -722,12 +865,14 @@ class User implements UserInterface, EquatableInterface
     /**
      * @param ArrayCollection $courses
      */
-    public function setCourses($courses)
+    public function setCourses($courses): self
     {
         $this->courses = $courses;
+
+        return $this;
     }
 
-    public function getCourses(): Collection
+    public function getCourses()
     {
         return $this->courses;
     }
@@ -803,10 +948,6 @@ class User implements UserInterface, EquatableInterface
         $this->portals->add($portal);
     }
 
-    /**
-     * @param $value
-     * @param (mixed|string|string[])[] $value
-     */
     public function setPortals(array $value)
     {
         $this->portals = $value;
@@ -820,37 +961,26 @@ class User implements UserInterface, EquatableInterface
         return $this->curriculumItems;
     }
 
-    /**
-     * @param $items
-     *
-     * @return $this
-     */
-    public function setCurriculumItems(array $items)
+    public function setCurriculumItems(array $items): self
     {
         $this->curriculumItems = $items;
 
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function getIsActive()
+    public function getIsActive(): bool
     {
-        return 1 == $this->active;
+        return true === $this->active;
     }
 
-    /**
-     * @return bool
-     */
-    public function isActive()
+    public function isActive(): bool
     {
         return $this->getIsActive();
     }
 
     public function isEnabled()
     {
-        return 1 == $this->getActive();
+        return $this->isActive();
     }
 
     /**
@@ -1019,11 +1149,9 @@ class User implements UserInterface, EquatableInterface
     /**
      * Set status.
      *
-     * @param int $status
-     *
      * @return User
      */
-    public function setStatus($status)
+    public function setStatus(int $status)
     {
         $this->status = $status;
 
@@ -1037,7 +1165,7 @@ class User implements UserInterface, EquatableInterface
      */
     public function getStatus()
     {
-        return $this->status;
+        return (int) $this->status;
     }
 
     /**
@@ -1466,7 +1594,7 @@ class User implements UserInterface, EquatableInterface
         return $this->setUsername($slug);
     }
 
-    public function setUsername($username)
+    public function setUsername($username): self
     {
         $this->username = $username;
 
@@ -1480,7 +1608,7 @@ class User implements UserInterface, EquatableInterface
         return $this;
     }
 
-    public function setEmailCanonical($emailCanonical)
+    public function setEmailCanonical($emailCanonical): self
     {
         $this->emailCanonical = $emailCanonical;
 
@@ -1491,10 +1619,8 @@ class User implements UserInterface, EquatableInterface
      * Set lastLogin.
      *
      * @param \DateTime $lastLogin
-     *
-     * @return User
      */
-    public function setLastLogin(\DateTime $lastLogin = null)
+    public function setLastLogin(\DateTime $lastLogin = null): self
     {
         $this->lastLogin = $lastLogin;
 
@@ -1521,13 +1647,7 @@ class User implements UserInterface, EquatableInterface
         return $this->sessionCourseSubscriptions;
     }
 
-    /**
-     * @param $value
-     * @param string[][] $value
-     *
-     * @return $this
-     */
-    public function setSessionCourseSubscriptions(array $value)
+    public function setSessionCourseSubscriptions(array $value): self
     {
         $this->sessionCourseSubscriptions = $value;
 
@@ -1544,10 +1664,8 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * @param string $confirmationToken
-     *
-     * @return User
      */
-    public function setConfirmationToken($confirmationToken)
+    public function setConfirmationToken($confirmationToken): self
     {
         $this->confirmationToken = $confirmationToken;
 
@@ -1562,14 +1680,11 @@ class User implements UserInterface, EquatableInterface
         return $this->passwordRequestedAt;
     }
 
-    /**
-     * @return bool
-     */
-    /*public function isPasswordRequestNonExpired($ttl)
+    public function isPasswordRequestNonExpired($ttl)
     {
         return $this->getPasswordRequestedAt() instanceof \DateTime &&
             $this->getPasswordRequestedAt()->getTimestamp() + $ttl > time();
-    }*/
+    }
 
     public function getUsername(): string
     {
@@ -1581,7 +1696,7 @@ class User implements UserInterface, EquatableInterface
         return $this->plainPassword;
     }
 
-    public function setPlainPassword(string $password)
+    public function setPlainPassword(string $password): self
     {
         $this->plainPassword = $password;
 
@@ -1614,17 +1729,15 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Sets the credentials expiration date.
-     *
-     * @return User
      */
-    public function setCredentialsExpireAt(\DateTime $date = null)
+    public function setCredentialsExpireAt(\DateTime $date = null): self
     {
         $this->credentialsExpireAt = $date;
 
         return $this;
     }
 
-    public function addGroup($group)
+    public function addGroup($group): self
     {
         if (!$this->getGroups()->contains($group)) {
             $this->getGroups()->add($group);
@@ -1637,10 +1750,8 @@ class User implements UserInterface, EquatableInterface
      * Sets the user groups.
      *
      * @param array $groups
-     *
-     * @return User
      */
-    public function setGroups($groups)
+    public function setGroups($groups): self
     {
         foreach ($groups as $group) {
             $this->addGroup($group);
@@ -1649,10 +1760,7 @@ class User implements UserInterface, EquatableInterface
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getFullname()
+    public function getFullname(): string
     {
         return sprintf('%s %s', $this->getFirstname(), $this->getLastname());
     }
@@ -1662,10 +1770,7 @@ class User implements UserInterface, EquatableInterface
         return $this->groups;
     }
 
-    /**
-     * @return array
-     */
-    public function getGroupNames()
+    public function getGroupNames(): array
     {
         $names = [];
         foreach ($this->getGroups() as $group) {
@@ -1677,15 +1782,13 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * @param string $name
-     *
-     * @return bool
      */
-    public function hasGroup($name)
+    public function hasGroup($name): bool
     {
         return in_array($name, $this->getGroupNames());
     }
 
-    public function removeGroup($group)
+    public function removeGroup($group): self
     {
         if ($this->getGroups()->contains($group)) {
             $this->getGroups()->removeElement($group);
@@ -1696,10 +1799,8 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * @param string $role
-     *
-     * @return $this
      */
-    public function addRole($role)
+    public function addRole($role): self
     {
         $role = strtoupper($role);
         if ($role === static::ROLE_DEFAULT) {
@@ -1774,10 +1875,8 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * @param bool $boolean
-     *
-     * @return User
      */
-    public function setCredentialsExpired($boolean)
+    public function setCredentialsExpired($boolean): self
     {
         $this->credentialsExpired = $boolean;
 
@@ -1786,10 +1885,8 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * @param $boolean
-     *
-     * @return $this
      */
-    public function setEnabled($boolean)
+    public function setEnabled($boolean): self
     {
         $this->enabled = (bool) $boolean;
 
@@ -1808,20 +1905,15 @@ class User implements UserInterface, EquatableInterface
      * Sets this user to expired.
      *
      * @param bool $boolean
-     *
-     * @return User
      */
-    public function setExpired($boolean)
+    public function setExpired($boolean): self
     {
         $this->expired = (bool) $boolean;
 
         return $this;
     }
 
-    /**
-     * @return User
-     */
-    public function setExpiresAt(\DateTime $date)
+    public function setExpiresAt(\DateTime $date): self
     {
         $this->expiresAt = $date;
 
@@ -1835,20 +1927,22 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * @param $boolean
-     *
-     * @return $this
      */
-    public function setLocked($boolean)
+    public function setLocked($boolean): self
     {
         $this->locked = $boolean;
 
         return $this;
     }
 
-    /**
-     * @return $this
-     */
-    public function setRoles(array $roles)
+    public function setPasswordRequestedAt(\DateTime $date = null)
+    {
+        $this->passwordRequestedAt = $date;
+
+        return $this;
+    }
+
+    public function setRoles(array $roles): self
     {
         $this->roles = [];
 
@@ -1870,12 +1964,9 @@ class User implements UserInterface, EquatableInterface
     }
 
     /**
-     * @param $value
      * @param string[] $value
-     *
-     * @return $this
      */
-    public function setAchievedSkills(array $value)
+    public function setAchievedSkills(array $value): self
     {
         $this->achievedSkills = $value;
 
@@ -1886,10 +1977,8 @@ class User implements UserInterface, EquatableInterface
      * Check if the user has the skill.
      *
      * @param Skill $skill The skill
-     *
-     * @return bool
      */
-    public function hasSkill(Skill $skill)
+    public function hasSkill(Skill $skill): bool
     {
         $achievedSkills = $this->getAchievedSkills();
 
@@ -1910,10 +1999,7 @@ class User implements UserInterface, EquatableInterface
         return $this->profileCompleted;
     }
 
-    /**
-     * @return User
-     */
-    public function setProfileCompleted($profileCompleted)
+    public function setProfileCompleted($profileCompleted): self
     {
         $this->profileCompleted = $profileCompleted;
 
@@ -1922,10 +2008,8 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * Sets the AccessUrl for the current user in memory.
-     *
-     * @return $this
      */
-    public function setCurrentUrl(AccessUrl $url)
+    public function setCurrentUrl(AccessUrl $url): self
     {
         $urlList = $this->getPortals();
         /** @var AccessUrlRelUser $item */
@@ -1962,10 +2046,8 @@ class User implements UserInterface, EquatableInterface
      * Get sessionAsGeneralCoach.
      *
      * @param ArrayCollection $value
-     *
-     * @return $this
      */
-    public function setSessionAsGeneralCoach($value)
+    public function setSessionAsGeneralCoach($value): self
     {
         $this->sessionAsGeneralCoach = $value;
 
@@ -1980,7 +2062,7 @@ class User implements UserInterface, EquatableInterface
     /**
      * @return User
      */
-    public function setCommentedUserSkills(array $commentedUserSkills)
+    public function setCommentedUserSkills(array $commentedUserSkills): self
     {
         $this->commentedUserSkills = $commentedUserSkills;
 
@@ -2070,10 +2152,12 @@ class User implements UserInterface, EquatableInterface
 
     public function getFirstname()
     {
+        return $this->firstname;
     }
 
     public function getLastname()
     {
+        return $this->lastname;
     }
 
     public function eraseCredentials()
@@ -2202,10 +2286,8 @@ class User implements UserInterface, EquatableInterface
 
     /**
      * @param \DateTime $dateOfBirth
-     *
-     * @return User
      */
-    public function setDateOfBirth($dateOfBirth)
+    public function setDateOfBirth($dateOfBirth): self
     {
         $this->dateOfBirth = $dateOfBirth;
 
@@ -2228,5 +2310,95 @@ class User implements UserInterface, EquatableInterface
         );
 
         return $this->courseGroupsAsTutor->matching($criteria);
+    }
+
+    /**
+     * Retreives this user's related sessions.
+     *
+     * @param int $relationType \Chamilo\CoreBundle\Entity\SessionRelUser::relationTypeList key
+     *
+     * @return Session[]
+     */
+    public function getSessions($relationType)
+    {
+        $sessions = [];
+        foreach ($this->sessions as $sessionRelUser) {
+            if ($sessionRelUser->getRelationType() == $relationType) {
+                $sessions[] = $sessionRelUser->getSession();
+            }
+        }
+
+        return $sessions;
+    }
+
+    /**
+     * Retreives this user's related student sessions.
+     *
+     * @return Session[]
+     */
+    public function getStudentSessions()
+    {
+        return $this->getSessions(0);
+    }
+
+    /**
+     * Retreives this user's related DRH sessions.
+     *
+     * @return Session[]
+     */
+    public function getDRHSessions()
+    {
+        return $this->getSessions(1);
+    }
+
+    /**
+     * Get this user's related accessible sessions of a type, student by default.
+     *
+     * @param int $relationType \Chamilo\CoreBundle\Entity\SessionRelUser::relationTypeList key
+     *
+     * @return Session[]
+     */
+    public function getCurrentlyAccessibleSessions($relationType = 0)
+    {
+        $sessions = [];
+        foreach ($this->getSessions($relationType) as $session) {
+            if ($session->isCurrentlyAccessible()) {
+                $sessions[] = $session;
+            }
+        }
+
+        return $sessions;
+    }
+
+    /**
+     * Find the largest sort value in a given UserCourseCategory
+     * This method is used when we are moving a course to a different category
+     * and also when a user subscribes to courses (the new course is added at the end of the main category).
+     *
+     * Used to be implemented in global function \api_max_sort_value.
+     * Reimplemented using the ORM cache.
+     *
+     * @param UserCourseCategory|null $userCourseCategory the user_course_category
+     *
+     * @return int|mixed
+     */
+    public function getMaxSortValue($userCourseCategory = null)
+    {
+        $categoryCourses = $this->courses->matching(
+            Criteria::create()
+                ->where(Criteria::expr()->neq('relationType', COURSE_RELATION_TYPE_RRHH))
+                ->andWhere(Criteria::expr()->eq('userCourseCat', $userCourseCategory))
+        );
+
+        return $categoryCourses->isEmpty()
+            ? 0
+            : max(
+                $categoryCourses->map(
+                    /** @var CourseRelUser $courseRelUser */
+                    function ($courseRelUser) {
+                        return $courseRelUser->getSort();
+                    }
+                )->toArray()
+            );
     }
 }

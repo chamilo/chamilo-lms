@@ -9,9 +9,6 @@
 class HTML_QuickForm_Rule_MaxFileSize extends HTML_QuickForm_Rule
 {
     /**
-     * @param $value array     Uploaded file info (from $_FILES)
-     * @param null $options
-     *
      * @return bool
      */
     public function validate($elementValue, $maxSize)

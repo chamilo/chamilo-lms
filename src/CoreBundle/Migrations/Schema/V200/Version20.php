@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 
 /**
  * Class Version20
@@ -14,7 +14,7 @@ use Doctrine\DBAL\Types\Type;
  */
 class Version20 extends AbstractMigrationChamilo
 {
-    public function up(Schema $schema)
+    public function up(Schema $schema): void
     {
         // Use $schema->createTable
         $this->addSql('set sql_mode=""');
@@ -102,7 +102,8 @@ class Version20 extends AbstractMigrationChamilo
         $connection = $this->getEntityManager()->getConnection();
         $sql = 'SELECT * FROM course_category';
         $result = $connection->executeQuery($sql);
-        $all = $result->fetchAll();
+        //$all = $result->fetchAll();
+        $all = $result->fetchAllAssociative();
 
         $categories = array_column($all, 'parent_id', 'id');
         $categoryCodeList = array_column($all, 'id', 'code');
@@ -263,7 +264,7 @@ class Version20 extends AbstractMigrationChamilo
         $survey = $schema->getTable('c_survey');
 
         if (!$survey->hasColumn('is_mandatory')) {
-            $survey->addColumn('is_mandatory', Type::BOOLEAN)->setDefault(false);
+            $survey->addColumn('is_mandatory', Types::BOOLEAN)->setDefault(false);
         }
 
         $this->addSql('ALTER TABLE c_student_publication ADD filesize INT DEFAULT NULL');
@@ -914,7 +915,7 @@ class Version20 extends AbstractMigrationChamilo
 
         $result = $connection
             ->executeQuery("SELECT COUNT(1) FROM settings_current WHERE variable = 'exercise_invisible_in_session' AND category = 'Session'");
-        $count = $result->fetch()[0];
+        $count = $result->fetchNumeric()[0];
 
         if (empty($count)) {
             $this->addSql("INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('exercise_invisible_in_session',NULL,'radio','Session','false','ExerciseInvisibleInSessionTitle','ExerciseInvisibleInSessionComment','',NULL, 1)");
@@ -923,7 +924,7 @@ class Version20 extends AbstractMigrationChamilo
         }
 
         $result = $connection->executeQuery("SELECT COUNT(1) FROM settings_current WHERE variable = 'configure_exercise_visibility_in_course' AND category = 'Session'");
-        $count = $result->fetch()[0];
+        $count = $result->fetchNumeric()[0];
 
         if (empty($count)) {
             $this->addSql("INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('configure_exercise_visibility_in_course',NULL,'radio','Session','false','ConfigureExerciseVisibilityInCourseTitle','ConfigureExerciseVisibilityInCourseComment','',NULL, 1)");
@@ -966,7 +967,7 @@ class Version20 extends AbstractMigrationChamilo
                 $this->addSql("");*/
     }
 
-    public function down(Schema $schema)
+    public function down(Schema $schema): void
     {
     }
 }

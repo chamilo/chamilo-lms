@@ -1,9 +1,11 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Entity\TrackEExercises;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CQuiz;
 use ChamiloSession as Session;
 
 /**
@@ -64,6 +66,8 @@ class ExerciseLib
             return false;
         }
 
+        $questionRequireAuth = WhispeakAuthPlugin::questionRequireAuthentify($questionId);
+
         if (EXERCISE_FEEDBACK_TYPE_END != $exercise->getFeedbackType()) {
             $show_comment = false;
         }
@@ -93,6 +97,13 @@ class ExerciseLib
                     }
                     echo $titleToDisplay;
                 }
+
+                if ($questionRequireAuth) {
+                    WhispeakAuthPlugin::quizQuestionAuthentify($questionId, $exercise);
+
+                    return false;
+                }
+
                 if (!empty($questionDescription) && READING_COMPREHENSION != $answerType) {
                     echo Display::div(
                         $questionDescription,
@@ -120,7 +131,6 @@ class ExerciseLib
             // suggestions here, for the sake of comprehensions, while the ones
             // on the right side are called answers
             $num_suggestions = 0;
-
             switch ($answerType) {
                 case MATCHING:
                 case DRAGGABLE:
@@ -128,10 +138,12 @@ class ExerciseLib
                     if (DRAGGABLE == $answerType) {
                         $isVertical = 'v' == $objQuestionTmp->extra;
                         $s .= '
-                            <div class="col-md-12 ui-widget ui-helper-clearfix">
-                                <div class="clearfix">
-                                <ul class="exercise-draggable-answer '.($isVertical ? '' : 'list-inline').'"
-                                    id="question-'.$questionId.'" data-question="'.$questionId.'">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <p class="small">'.get_lang('DraggableQuestionIntro').'</p>
+                                    <ul class="exercise-draggable-answer list-unstyled '
+                            .($isVertical ? '' : 'list-inline').'" id="question-'.$questionId.'" data-question="'
+                            .$questionId.'">
                         ';
                     } else {
                         $s .= '<div id="drag'.$questionId.'_question" class="drag_question">
@@ -151,9 +163,7 @@ class ExerciseLib
                             // options (A, B, C, ...) that will be put into the list-box
                             // have the "correct" field set to 0 because they are answer
                             $cpt1[$x] = $letter;
-                            $answer_matching[$x] = $objAnswerTmp->selectAnswerByAutoId(
-                                $numAnswer
-                            );
+                            $answer_matching[$x] = $objAnswerTmp->selectAnswerByAutoId($numAnswer);
                             $x++;
                             $letter++;
                         }
@@ -176,7 +186,6 @@ class ExerciseLib
                             $user_choice_array_position[$item['position']] = $item['answer'];
                         }
                     }
-
                     $num_suggestions = ($nbrAnswers - $x) + 1;
                     break;
                 case FREE_ANSWER:
@@ -463,6 +472,7 @@ class ExerciseLib
 
             $hidingClass = '';
             if (READING_COMPREHENSION == $answerType) {
+                /** @var ReadingComprehension */
                 $objQuestionTmp->setExerciseType($exercise->selectType());
                 $objQuestionTmp->processText($objQuestionTmp->selectDescription());
                 $hidingClass = 'hide-reading-answers';
@@ -523,7 +533,9 @@ class ExerciseLib
                             }
                         }
 
-                        $answer = Security::remove_XSS($answer, STUDENT);
+                        if (UNIQUE_ANSWER_IMAGE != $answerType) {
+                            $answer = Security::remove_XSS($answer, STUDENT);
+                        }
                         $s .= Display::input(
                             'hidden',
                             'choice2['.$questionId.']',
@@ -1150,16 +1162,18 @@ class ExerciseLib
                             $draggableSelectOptions = [];
                             $selectedValue = 0;
                             $selectedIndex = 0;
-
                             if ($user_choice) {
-                                foreach ($user_choice as $chosen) {
-                                    if ($answerCorrect != $chosen['answer']) {
+                                foreach ($user_choice as $userChoiceKey => $chosen) {
+                                    $userChoiceKey++;
+                                    if ($lines_count != $userChoiceKey) {
                                         continue;
                                     }
+                                    /*if ($answerCorrect != $chosen['answer']) {
+                                        continue;
+                                    }*/
                                     $selectedValue = $chosen['answer'];
                                 }
                             }
-
                             foreach ($select_items as $key => $select_item) {
                                 $draggableSelectOptions[$select_item['id']] = $select_item['letter'];
                             }
@@ -1353,8 +1367,11 @@ HTML;
 
             if (DRAGGABLE == $answerType) {
                 $isVertical = 'v' == $objQuestionTmp->extra;
-                $s .= "</ul>";
-                $s .= "</div></div>"; // col-md-12
+                $s .= "
+                           </ul>
+                        </div><!-- .col-md-12 -->
+                    </div><!-- .row -->
+                ";
                 $counterAnswer = 1;
                 $s .= $isVertical ? '' : '<div class="row">';
                 for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
@@ -1377,7 +1394,7 @@ HTML;
                 }
 
                 $s .= $isVertical ? '' : '</div>'; // row
-                $s .= '</div>'; // col-md-12 ui-widget ui-helper-clearfix
+//                $s .= '</div>';
             }
 
             if (in_array($answerType, [MATCHING, MATCHING_DRAGGABLE])) {
@@ -1474,6 +1491,13 @@ HTML;
                     echo $objQuestionTmp->getTitleToDisplay($current_item);
                 }
                 //@todo I need to the get the feedback type
+                if ($questionRequireAuth) {
+                    WhispeakAuthPlugin::quizQuestionAuthentify($questionId, $exercise);
+
+                    return false;
+                }
+
+                //@todo I need to the get the feedback type
                 echo <<<HOTSPOT
                     <input type="hidden" name="hidden_hotspot_id" value="$questionId" />
                     <div class="exercise_questions">
@@ -1531,6 +1555,13 @@ HOTSPOT;
                     }
                     echo $objQuestionTmp->getTitleToDisplay($current_item);
                 }
+
+                if ($questionRequireAuth) {
+                    WhispeakAuthPlugin::quizQuestionAuthentify($questionId, $exercise);
+
+                    return false;
+                }
+
                 echo '
                     <input type="hidden" name="hidden_hotspot_id" value="'.$questionId.'" />
                     <div class="exercise_questions">
@@ -1599,11 +1630,11 @@ HOTSPOT;
             $sql = " SELECT q.*, tee.*
                 FROM $quizTable as q
                 INNER JOIN $trackExerciseTable as tee
-                ON q.id = tee.exe_exo_id
+                ON q.iid = tee.exe_exo_id
                 INNER JOIN $courseTable c
                 ON c.id = tee.c_id
-                WHERE tee.exe_id = $exeId
-                AND q.c_id = c.id";
+                WHERE
+                    tee.exe_id = $exeId AND q.c_id = c.id";
 
             $sqlResult = Database::query($sql);
             if (Database::num_rows($sqlResult)) {
@@ -1637,7 +1668,7 @@ HOTSPOT;
         $exercise_id = (int) $exercise_id;
         $table = Database::get_course_table(TABLE_QUIZ_TEST);
         $sql = "SELECT expired_time FROM $table
-                WHERE c_id = $course_id AND id = $exercise_id";
+                WHERE c_id = $course_id AND iid = $exercise_id";
         $result = Database::query($sql);
         $row = Database::fetch_array($result, 'ASSOC');
         if (!empty($row['expired_time'])) {
@@ -1866,7 +1897,7 @@ HOTSPOT;
                 $sql_inner_join_tbl_user = "
                 (
                     SELECT
-                        u.user_id,
+                        u.id as user_id,
                         firstname,
                         lastname,
                         official_code,
@@ -1876,7 +1907,7 @@ HOTSPOT;
                         g.id as group_id
                     FROM $TBL_USER u
                     INNER JOIN $TBL_GROUP_REL_USER gru
-                    ON (gru.user_id = u.user_id AND gru.c_id= $course_id )
+                    ON (gru.user_id = u.id AND gru.c_id= $course_id )
                     INNER JOIN $TBL_GROUP g
                     ON (gru.group_id = g.id AND g.c_id= $course_id )
                 )";
@@ -1902,7 +1933,7 @@ HOTSPOT;
                 $sql_inner_join_tbl_user = "
                 (
                     SELECT
-                        u.user_id,
+                        u.id as user_id,
                         firstname,
                         lastname,
                         official_code,
@@ -1929,17 +1960,17 @@ HOTSPOT;
                 $sql_inner_join_tbl_user = "
             (
                 SELECT
-                    u.user_id,
+                    u.id as user_id,
                     firstname,
                     lastname,
                     official_code,
                     email,
                     username,
                     g.name as group_name,
-                    g.id as group_id
+                    g.iid as group_id
                 FROM $TBL_USER u
                 LEFT OUTER JOIN $TBL_GROUP_REL_USER gru
-                ON ( gru.user_id = u.user_id AND gru.c_id= $course_id )
+                ON (gru.user_id = u.id AND gru.c_id= $course_id )
                 LEFT OUTER JOIN $TBL_GROUP g
                 ON (gru.group_id = g.id AND g.c_id = $course_id )
             )";
@@ -1951,21 +1982,21 @@ HOTSPOT;
                 $is_empty_sql_inner_join_tbl_user = true;
                 $sql_inner_join_tbl_user = "
             (
-                SELECT u.user_id, firstname, lastname, email, username, ' ' as group_name, '' as group_id, official_code
+                SELECT u.id as user_id, firstname, lastname, email, username, ' ' as group_name, '' as group_id, official_code
                 FROM $TBL_USER u
                 WHERE u.status NOT IN(".api_get_users_status_ignored_in_reports('string').")
             )";
             }
 
             $sqlFromOption = " , $TBL_GROUP_REL_USER AS gru ";
-            $sqlWhereOption = "  AND gru.c_id = $course_id AND gru.user_id = user.user_id ";
+            $sqlWhereOption = "  AND gru.c_id = $course_id AND gru.user_id = user.id ";
             $first_and_last_name = api_is_western_name_order() ? "firstname, lastname" : "lastname, firstname";
 
             if ($get_count) {
                 $sql_select = 'SELECT count(te.exe_id) ';
             } else {
                 $sql_select = "SELECT DISTINCT
-                    user_id,
+                    user.user_id,
                     $first_and_last_name,
                     official_code,
                     ce.title,
@@ -1993,7 +2024,7 @@ HOTSPOT;
             $sql = " $sql_select
                 FROM $TBL_EXERCICES AS ce
                 INNER JOIN $sql_inner_join_tbl_track_exercices AS te
-                ON (te.exe_exo_id = ce.id)
+                ON (te.exe_exo_id = ce.iid)
                 INNER JOIN $sql_inner_join_tbl_user AS user
                 ON (user.user_id = exe_user_id)
                 WHERE
@@ -2641,9 +2672,7 @@ HOTSPOT;
             $html = ScoreDisplay::instance()->display_score([$score, $weight], $format);
         }
 
-        $html = Display::span($html, ['class' => 'score_exercise']);
-
-        return $html;
+        return Display::span($html, ['class' => 'score_exercise']);
     }
 
     /**
@@ -2654,9 +2683,7 @@ HOTSPOT;
      */
     public static function getModelStyle($model, $percentage)
     {
-        $modelWithStyle = '<span class="'.$model['css_class'].'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>';
-
-        return $modelWithStyle;
+        return '<span class="'.$model['css_class'].'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>';
     }
 
     /**
@@ -2723,18 +2750,18 @@ HOTSPOT;
     /**
      * @param float  $score
      * @param float  $weight
-     * @param string $pass_percentage
+     * @param string $passPercentage
      *
      * @return bool
      */
-    public static function isSuccessExerciseResult($score, $weight, $pass_percentage)
+    public static function isSuccessExerciseResult($score, $weight, $passPercentage)
     {
         $percentage = float_format(
             ($score / (0 != $weight ? $weight : 1)) * 100,
             1
         );
-        if (isset($pass_percentage) && !empty($pass_percentage)) {
-            if ($percentage >= $pass_percentage) {
+        if (isset($passPercentage) && !empty($passPercentage)) {
+            if ($percentage >= $passPercentage) {
                 return true;
             }
         }
@@ -3506,6 +3533,7 @@ EOT;
      * @param int    $exercise_id
      * @param string $course_code
      * @param int    $session_id
+     * @param bool   $onlyStudent Filter only enrolled students
      *
      * @return array
      */
@@ -3513,10 +3541,12 @@ EOT;
         $question_id,
         $exercise_id,
         $course_code,
-        $session_id
+        $session_id,
+        $onlyStudent = false
     ) {
         $track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+        $courseUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
         $question_id = (int) $question_id;
         $exercise_id = (int) $exercise_id;
@@ -3526,6 +3556,30 @@ EOT;
 
         $sql = "SELECT MAX(marks) as max, MIN(marks) as min, AVG(marks) as average
     		FROM $track_exercises e
+    		";
+        if (true == $onlyStudent) {
+            $courseCondition = '';
+            if (empty($session_id)) {
+                $courseCondition = "
+            INNER JOIN $courseUser c
+            ON (
+                        e.exe_user_id = c.user_id AND
+                        e.c_id = c.c_id AND
+                        c.status = ".STUDENT."
+                        AND relation_type <> 2
+                )";
+            } else {
+                $courseCondition = "
+            INNER JOIN $courseUser c
+            ON (
+                        e.exe_user_id = c.user_id AND
+                        e.c_id = c.c_id AND
+                        c.status = 0
+                )";
+            }
+            $sql .= $courseCondition;
+        }
+        $sql .= "
     		INNER JOIN $track_attempt a
     		ON (
     		    a.exe_id = e.exe_id AND
@@ -3537,7 +3591,7 @@ EOT;
                 a.c_id = $courseId AND
                 e.session_id = $session_id AND
                 question_id = $question_id AND
-                status = ''
+                e.status = ''
             LIMIT 1";
         $result = Database::query($sql);
         $return = [];
@@ -3805,7 +3859,7 @@ EOT;
         if (empty($session_id)) {
             $courseCondition = "
             INNER JOIN $courseUser cu
-            ON cu.c_id = c.id AND cu.user_id  = exe_user_id";
+            ON cu.c_id = c.id AND cu.user_id = exe_user_id";
             $courseConditionWhere = " AND relation_type <> 2 AND cu.status = ".STUDENT;
         } else {
             $courseCondition = "
@@ -4112,6 +4166,7 @@ EOT;
         $remainingMessage = ''
     ) {
         $origin = api_get_origin();
+        $courseId = api_get_course_int_id();
         $courseCode = api_get_course_id();
         $sessionId = api_get_session_id();
 
@@ -4160,7 +4215,6 @@ EOT;
         $total_score = $total_weight = 0;
         $exercise_content = null;
 
-        // Hide results
         $show_results = false;
         $show_only_score = false;
         if (in_array($objExercise->results_disabled,
@@ -4213,8 +4267,8 @@ EOT;
                 $attempts = Event::getExerciseResultsByUser(
                     api_get_user_id(),
                     $objExercise->id,
-                    api_get_course_int_id(),
-                    api_get_session_id(),
+                    $courseId,
+                    $sessionId,
                     $exercise_stat_info['orig_lp_id'],
                     $exercise_stat_info['orig_lp_item_id'],
                     'desc'
@@ -4257,16 +4311,19 @@ EOT;
         ) {
             // Shows exercise header
             echo $objExercise->showExerciseResultHeader(
-                        $studentInfo,
-                        $exercise_stat_info
-                    );
+                $studentInfo,
+                $exercise_stat_info,
+                $save_user_result
+            );
         }
 
         // Display text when test is finished #4074 and for LP #4227
         $endOfMessage = $objExercise->getTextWhenFinished();
         if (!empty($endOfMessage)) {
-            echo Display::return_message($endOfMessage, 'normal', false);
-            echo "<div class='clear'>&nbsp;</div>";
+            echo Display::div(
+                $endOfMessage,
+                ['id' => 'quiz_end_message']
+            );
         }
 
         $question_list_answers = [];
@@ -4485,9 +4542,8 @@ EOT;
                 );
             } else {
                 $pluginEvaluation = QuestionOptionsEvaluationPlugin::create();
-
                 if ('true' === $pluginEvaluation->get(QuestionOptionsEvaluationPlugin::SETTING_ENABLE)) {
-                    $formula = $pluginEvaluation->getFormulaForExercise($objExercise->selectId());
+                    $formula = $pluginEvaluation->getFormulaForExercise($objExercise->getId());
 
                     if (!empty($formula)) {
                         $total_score = $pluginEvaluation->getResultWithFormula($exeId, $formula);
@@ -4531,10 +4587,7 @@ EOT;
                 'score' => $total_score,
                 'total' => $total_weight,
             ];
-            echo TestCategory::get_stats_table_by_attempt(
-                $objExercise->id,
-                $category_list
-            );
+            echo TestCategory::get_stats_table_by_attempt($objExercise->id, $category_list);
         }
 
         if ($show_all_but_expected_answer) {
@@ -4559,7 +4612,6 @@ EOT;
         }
 
         echo $exercise_content;
-
         if (!$show_only_score) {
             echo $totalScoreText;
         }
@@ -4574,10 +4626,10 @@ EOT;
                 if (api_is_allowed_to_session_edit()) {
                     Event::updateEventExercise(
                         $exercise_stat_info['exe_id'],
-                        $objExercise->selectId(),
+                        $objExercise->getId(),
                         $total_score,
                         $total_weight,
-                        api_get_session_id(),
+                        $sessionId,
                         $learnpath_id,
                         $learnpath_item_id,
                         $learnpath_item_view_id,
@@ -4588,9 +4640,9 @@ EOT;
                     $allowStats = api_get_configuration_value('allow_gradebook_stats');
                     if ($allowStats) {
                         $objExercise->generateStats(
-                            $objExercise->selectId(),
+                            $objExercise->getId(),
                             api_get_course_info(),
-                            api_get_session_id()
+                            $sessionId
                         );
                     }
                 }
@@ -4619,8 +4671,8 @@ EOT;
             echo self::displayResultsInRanking(
                 $objExercise->iId,
                 api_get_user_id(),
-                api_get_course_int_id(),
-                api_get_session_id()
+                $courseId,
+                $sessionId
             );
         }
 
@@ -5105,18 +5157,14 @@ EOT;
      * By making sure it is set on one question per page and it only contains unique-answer or multiple-answer questions
      * or unique-answer image. And that the exam does not have immediate feedback.
      *
-     * @param array $exercise Exercise info
-     *
-     * @throws \Doctrine\ORM\Query\QueryException
-     *
      * @return bool
      */
-    public static function isQuizEmbeddable(array $exercise)
+    public static function isQuizEmbeddable(CQuiz $exercise)
     {
         $em = Database::getManager();
 
-        if (ONE_PER_PAGE != $exercise['type'] ||
-            in_array($exercise['feedback_type'], [EXERCISE_FEEDBACK_TYPE_DIRECT, EXERCISE_FEEDBACK_TYPE_POPUP])
+        if (ONE_PER_PAGE != $exercise->getType() ||
+            in_array($exercise->getFeedbackType(), [EXERCISE_FEEDBACK_TYPE_DIRECT, EXERCISE_FEEDBACK_TYPE_POPUP])
         ) {
             return false;
         }
@@ -5125,22 +5173,22 @@ EOT;
             ->createQuery('SELECT COUNT(qq)
                 FROM ChamiloCourseBundle:CQuizQuestion qq
                 INNER JOIN ChamiloCourseBundle:CQuizRelQuestion qrq
-                   WITH qq.iid = qrq.questionId
-                WHERE qrq.exerciceId = :id'
+                   WITH qq.iid = qrq.question
+                WHERE qrq.quiz = :id'
             )
-            ->setParameter('id', $exercise['iid'])
+            ->setParameter('id', $exercise->getIid())
             ->getSingleScalarResult();
 
         $countOfAllowed = $em
             ->createQuery('SELECT COUNT(qq)
                 FROM ChamiloCourseBundle:CQuizQuestion qq
                 INNER JOIN ChamiloCourseBundle:CQuizRelQuestion qrq
-                   WITH qq.iid = qrq.questionId
-                WHERE qrq.exerciceId = :id AND qq.type IN (:types)'
+                   WITH qq.iid = qrq.question
+                WHERE qrq.quiz = :id AND qq.type IN (:types)'
             )
             ->setParameters(
                 [
-                    'id' => $exercise['iid'],
+                    'id' => $exercise->getIid(),
                     'types' => [UNIQUE_ANSWER, MULTIPLE_ANSWER, UNIQUE_ANSWER_IMAGE],
                 ]
             )
@@ -5188,7 +5236,7 @@ EOT;
         $link = LinkFactory::load(
             null,
             null,
-            $objExercise->selectId(),
+            $objExercise->getId(),
             null,
             $courseCode,
             $categoryId
@@ -5233,7 +5281,7 @@ EOT;
 
         $em = Database::getManager();
         /** @var TrackEExercises $trackedExercise */
-        $trackedExercise = $em->getRepository('ChamiloCoreBundle:TrackEExercises')->find($exeId);
+        $trackedExercise = $em->getRepository(TrackEExercises::class)->find($exeId);
 
         if (empty($trackedExercise)) {
             return null;
@@ -5304,8 +5352,8 @@ EOT;
         }
 
         $trackedExercise
-            ->setExeResult($totalScore)
-            ->setExeWeighting($totalWeight);
+            ->setScore($totalScore)
+            ->setMaxScore($totalWeight);
 
         $em->persist($trackedExercise);
         $em->flush();

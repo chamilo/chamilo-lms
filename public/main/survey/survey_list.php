@@ -5,14 +5,15 @@
 use ChamiloSession as Session;
 
 /**
- * @author unknown, the initial survey that did not make it in 1.8 because of bad code
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
- * @author Julio Montoya Armas <gugli100@gmail.com>, Chamilo: Personality Test modification and rewriting large parts of the code
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of
+ *         the code
+ * @author Julio Montoya Armas <gugli100@gmail.com>, Chamilo: Personality Test modification and rewriting large parts
+ *         of the code
  *
  * @todo use quickforms for the forms
  */
-if (!isset($_GET['cidReq'])) {
-    $_GET['cidReq'] = 'none'; // Prevent sql errors
+if (!isset($_GET['cid'])) {
+    $_GET['cid'] = 'none'; // Prevent sql errors
     $cidReset = true;
 }
 
@@ -93,7 +94,7 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
         }
         $surveyData['title'] = trim(strip_tags($surveyData['title']));
 
-switch ($action) {
+        switch ($action) {
             case 'export_all':
                 $filename = $surveyData['code'].'.xlsx';
                 $exportList[] = @SurveyUtil::export_complete_report_xls($surveyData, $filename, 0, true);
@@ -116,7 +117,7 @@ switch ($action) {
                             false
                         )
                     );
-        }
+                }
                 break;
             case 'multiplicate':
                 $result = SurveyManager::multiplicateQuestions($surveyData);
@@ -154,7 +155,7 @@ switch ($action) {
         }
     }
 
-    if ($action === 'export_all') {
+    if ('export_all' === $action) {
         $tempZipFile = api_get_path(SYS_ARCHIVE_PATH).api_get_unique_id().'.zip';
         $zip = new PclZip($tempZipFile);
         foreach ($exportList as $file) {

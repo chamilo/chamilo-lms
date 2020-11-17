@@ -86,7 +86,8 @@ class MoodleImport
         $courseInfo = api_get_course_info();
         $sessionId = api_get_session_id();
         $groupId = api_get_group_id();
-        $documentPath = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';
+        //$documentPath = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';
+        $documentPath = null;
 
         create_unexisting_directory(
             $courseInfo,
@@ -138,7 +139,9 @@ class MoodleImport
                 );
 
                 if ($data) {
-                    $importedFiles[$fileInfo['filename']] = basename($data['path']);
+                    $path = $data->getResourceNode()->getResourceFile()->getFile()->getFilename();
+                    $importedFiles[$fileInfo['filename']] = $path;
+                    //$importedFiles[$fileInfo['filename']] = basename($data['path']);
                 }
             }
         }
@@ -169,7 +172,7 @@ class MoodleImport
             $moduleName = isset($currentItem['modulename']) ? $currentItem['modulename'] : false;
             switch ($moduleName) {
                 case 'forum':
-                    require_once '../forum/forumfunction.inc.php';
+                    require_once '../../forum/forumfunction.inc.php';
                     $catForumValues = [];
 
                     // Read the current forum module xml.
@@ -352,7 +355,7 @@ class MoodleImport
                     $_POST['category_id'] = 0;
                     $_POST['target'] = '_blank';
 
-                    Link::addlinkcategory("link");
+                    Link::addCategory();
                     break;
             }
         }
@@ -582,7 +585,7 @@ class MoodleImport
             $questionType = '';
             foreach ($question->childNodes as $item) {
                 $currentItem[$item->nodeName] = $item->nodeValue;
-                if ('qtype' == $item->nodeName) {
+                if ('qtype' === $item->nodeName) {
                     $questionType = $item->nodeValue;
                 }
 

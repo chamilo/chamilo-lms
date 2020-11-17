@@ -93,10 +93,8 @@ class Promotion
      * Set description.
      *
      * @param string $description
-     *
-     * @return Promotion
      */
-    public function setDescription($description)
+    public function setDescription($description): self
     {
         $this->description = $description;
 
@@ -115,12 +113,8 @@ class Promotion
 
     /**
      * Set career.
-     *
-     * @param Career $career
-     *
-     * @return Promotion
      */
-    public function setCareer($career)
+    public function setCareer(Career $career): self
     {
         $this->career = $career;
 
@@ -141,10 +135,8 @@ class Promotion
      * Set status.
      *
      * @param int $status
-     *
-     * @return Promotion
      */
-    public function setStatus($status)
+    public function setStatus($status): self
     {
         $this->status = $status;
 

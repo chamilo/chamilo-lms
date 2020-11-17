@@ -189,7 +189,6 @@ class PDF
      * @param string $pdfName        pdf name
      * @param string $courseCode     (if you are using html that are located
      *                               in the document tool you must provide this)
-     * @param bool   $print_title    add title
      * @param bool   $complete_style show header and footer if true
      * @param bool   $addStyle
      * @param string $mainTitle
@@ -260,7 +259,7 @@ class PDF
                 }
                 if ($printTitle) {
                     $this->pdf->WriteHTML(
-                        '<html><body><h3>'.$html_title.'</h3></body></html>'.$page_break
+                        '<html><body><h3>'.$htmlTitle.'</h3></body></html>'.$pageBreak
                     );
                 }
                 continue;

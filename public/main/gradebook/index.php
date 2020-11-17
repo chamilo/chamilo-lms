@@ -1,13 +1,9 @@
 <?php
-/* For licensing terms, see /license.txt */
 
-/**
- * Gradebook controller.
- */
+/* For licensing terms, see /license.txt */
 
 // $cidReset : This is the main difference with gradebook.php, here we say,
 // basically, that we are inside a course, and many things depend from that
-//$cidReset = false;
 $_in_course = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_GRADEBOOK;
@@ -460,7 +456,7 @@ if (isset($_GET['deletelink'])) {
                         thread_qualify_max = 0,
                         thread_weight = 0,
                         thread_title_qualify = ""
-					WHERE c_id = '.$course_id.' AND thread_id = (
+					WHERE c_id = '.$course_id.' AND iid = (
 					    SELECT ref_id FROM '.$tbl_grade_links.'
 					    WHERE id='.$get_delete_link.' AND type = '.LINK_FORUM_THREAD.'
                     )';
@@ -698,7 +694,8 @@ if (isset($_GET['studentoverview'])) {
         foreach ($data_array as $data) {
             $newarray[] = array_slice($data, 1);
         }
-        $pdf = new Cezpdf();
+        // @todo use pdf.lib.php
+        /*$pdf = new Cezpdf();
         $pdf->selectFont(api_get_path(LIBRARY_PATH).'ezpdf/fonts/Courier.afm');
         $pdf->ezSetMargins(30, 30, 50, 30);
         $pdf->ezSetY(810);
@@ -726,7 +723,7 @@ if (isset($_GET['studentoverview'])) {
             ]
         );
         $pdf->ezStream();
-        exit;
+        exit;*/
     }
 } else {
     // Student view
@@ -848,7 +845,6 @@ if (!api_is_allowed_to_edit(null, true)) {
 if (isset($first_time) && 1 == $first_time && api_is_allowed_to_edit(null, true)) {
     echo '<meta http-equiv="refresh" content="0;url='.api_get_self().'?'.api_get_cidreq().'" />';
 } else {
-    // Tool introduction
     Display::display_introduction_section(
         TOOL_GRADEBOOK,
         ['ToolbarSet' => 'AssessmentsIntroduction']

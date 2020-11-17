@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -64,7 +65,6 @@ class DateRangePicker extends HTML_QuickForm_text
         $end = isset($dates[1]) ? $dates[1] : '';
 
         $pattern = 'yyyy-MM-dd HH:mm';
-
         if ('false' === $this->getAttribute('timePicker') &&
             false === strpos($this->getAttribute('format'), 'HH:mm')) {
             $pattern = 'yyyy-MM-dd';
@@ -182,12 +182,17 @@ class DateRangePicker extends HTML_QuickForm_text
             $timePicker = 'false';
         }
 
+        $timeIncrement = 30;
+        if (api_get_configuration_value('timepicker_increment')) {
+            $timeIncrement = api_get_configuration_value('timepicker_increment');
+        }
+
         // timeFormat: 'hh:mm'
         $js .= "<script>
             $(function() {
                 $('#$id').daterangepicker({                    
                     timePicker: $timePicker,
-                    timePickerIncrement: 30,
+                    timePickerIncrement: $timeIncrement,
                     timePicker12Hour: false,
                     $defaultDates
                     $maxDate

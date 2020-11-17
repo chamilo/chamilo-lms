@@ -34,12 +34,13 @@ if (empty($courseList) && empty($sessionList)) {
 $hideExportLink = api_get_setting('hide_certificate_export_link');
 $hideExportLinkStudent = api_get_setting('hide_certificate_export_link_students');
 $allowExport = true;
-if ($hideExportLink === 'true' ||
-    (api_is_student() && $hideExportLinkStudent === 'true')
+if ('true' === $hideExportLink ||
+    (api_is_student() && 'true' === $hideExportLinkStudent)
 ) {
     $allowExport = false;
 }
 
+$template = new Template(get_lang('MyCertificates'));
 $template->assign('course_list', $courseList);
 $template->assign('session_list', $sessionList);
 $template->assign('allow_export', $allowExport);

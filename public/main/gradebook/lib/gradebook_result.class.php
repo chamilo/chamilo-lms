@@ -21,7 +21,7 @@ class GradeBookResult
     /**
      * Exports the complete report as a CSV file.
      *
-     * @param string $dato Document path inside the document tool
+     * @param array $dato Document path inside the document tool
      *
      * @return bool False on error
      */
@@ -32,7 +32,6 @@ class GradeBookResult
         $data = '';
         //build the results
         //titles
-
         foreach ($dato[0] as $header_col) {
             if (!empty($header_col)) {
                 if (is_array($header_col)) {
@@ -82,9 +81,6 @@ class GradeBookResult
      * Exports the complete report as an XLS file.
      *
      * @param array $data
-     *
-     * @throws PHPExcel_Exception
-     * @throws PHPExcel_Writer_Exception
      */
     public function exportCompleteReportXLS($data)
     {

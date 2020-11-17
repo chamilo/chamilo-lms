@@ -41,6 +41,5 @@ switch ($action) {
             header('Content-Type: application/json');
             echo json_encode(['url' => $url, 'link' => $link]);
         }
-
         break;
 }

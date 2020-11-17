@@ -36,13 +36,6 @@ class CToolIntro
     protected $cId;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="string", nullable=false)
-     */
-    protected $id;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="intro_text", type="text", nullable=false)
@@ -78,30 +71,6 @@ class CToolIntro
     public function getIntroText()
     {
         return $this->introText;
-    }
-
-    /**
-     * Set id.
-     *
-     * @param int $id
-     *
-     * @return CToolIntro
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**

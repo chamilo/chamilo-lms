@@ -4,6 +4,7 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
@@ -23,6 +24,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class SkillRelUser
 {
+    use UserTrait;
+
     /**
      * @var int
      *
@@ -119,28 +122,6 @@ class SkillRelUser
     public function __construct()
     {
         $this->comments = new ArrayCollection();
-    }
-
-    /**
-     * Set user.
-     *
-     * @return SkillRelUser
-     */
-    public function setUser(User $user)
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    /**
-     * Get user.
-     *
-     * @return User
-     */
-    public function getUser()
-    {
-        return $this->user;
     }
 
     /**

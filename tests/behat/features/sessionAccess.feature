@@ -14,15 +14,18 @@ Feature: Session access
     Then I select "TEMP_PRIVATE (TEMPPRIVATE)" from "NoSessionCoursesList[]"
     And I press "add_course"
     And I press "next"
+    And wait very long for the page to be loaded
     Then I should see "Update successful"
     Then I should see "Subscribe users to this session"
     Then I follow "Multiple registration"
-    Then I select "Warnier Yannick (ywarnier)" from "nosessionUsersList[]"
+    And wait the page to be loaded when ready
+    Then I select "Apple Maggart Fiona (fapple)" from "nosessionUsersList[]"
     And I press "add_user"
     And I press "next"
+    And wait very long for the page to be loaded
     Then I should see "Session1"
     Then I should see "TEMPPRIVATE"
-    Then I should see "ywarnier"
+    Then I should see "fapple"
 
   @javascript
   Scenario: Create session 2
@@ -36,37 +39,49 @@ Feature: Session access
     Then I select "TEMP_PRIVATE (TEMPPRIVATE)" from "NoSessionCoursesList[]"
     And I press "add_course"
     And I press "next"
+    And wait very long for the page to be loaded
     Then I should see "Update successful"
     Then I should see "Subscribe users to this session"
     Then I follow "Multiple registration"
+    And wait the page to be loaded when ready
     Then I select "Mosquera Guardamino Michela (mmosquera)" from "nosessionUsersList[]"
     And I press "add_user"
     And I press "next"
+    And wait for the page to be loaded
     Then I should see "Session2"
     Then I should see "TEMPPRIVATE"
     Then I should see "mmosquera"
 
   Scenario: ywarnier connects to Session1
+    Given I am not logged
     Given I am logged as "ywarnier"
     Then I am on course "TEMPPRIVATE" homepage in session "Session1"
+    And wait the page to be loaded when ready
     Then I should not see "You are not allowed"
 
   Scenario: ywarnier connect to Session 2
+    Given I am not logged
     Given I am logged as "ywarnier"
     Then I am on course "TEMPPRIVATE" homepage in session "Session2"
-    Then I should see "Unauthorised access to course"
+    And wait the page to be loaded when ready
+    Then I should see "Unauthorised access"
 
-  Scenario: ywarnier connect to session that doesn't exists
+  Scenario: ywarnier connect to course TEMPPRIVATE inside a session that doesn't exists
+    Given I am not logged
     Given I am logged as "ywarnier"
-    And I am on course "TEMPPRIVATE" homepage in session "Session does not exists"
-    Then I should see "You are not allowed"
+    And I am on "/course/2/home?sid=2000&gid=0"
+    And wait the page to be loaded when ready
+    Then I should see "Session not found"
 
   Scenario: mmosquera connect to Session 1
+    Given I am not logged
     Given I am logged as "mmosquera"
     Then I am on course "TEMPPRIVATE" homepage in session "Session1"
-    Then I should see "Unauthorised access to course"
+    And wait the page to be loaded when ready
+    Then I should see "Unauthorised access"
 
   Scenario: mmosquera connect to Session 2
+    Given I am not logged
     Given I am logged as "mmosquera"
     Then I am on course "TEMPPRIVATE" homepage in session "Session2"
     Then I should not see "You are not allowed"
@@ -77,6 +92,7 @@ Feature: Session access
     And wait for the page to be loaded
     And I follow "Delete"
     And I confirm the popup
+    And wait for the page to be loaded
     Then I should see "Deleted"
 
   Scenario: Delete session "Session1"
@@ -85,4 +101,5 @@ Feature: Session access
     And wait for the page to be loaded
     And I follow "Delete"
     And I confirm the popup
+    And wait for the page to be loaded
     Then I should see "Deleted"

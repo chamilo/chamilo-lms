@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Repository\LegalRepository;
@@ -8,7 +9,6 @@ $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_set_more_memory_and_time_limits();
-
 api_block_anonymous_users();
 
 if (api_get_configuration_value('disable_gdpr')) {
@@ -151,7 +151,6 @@ switch ($action) {
             $explanation = $form->getSubmitValue('explanation');
 
             UserManager::createDataPrivacyExtraFields();
-
             UserManager::update_extra_field_value(
                 $userId,
                 'request_for_legal_agreement_consent_removal',

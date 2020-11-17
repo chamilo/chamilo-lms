@@ -4,6 +4,7 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -17,6 +18,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class GradebookCategory
 {
+    use UserTrait;
+
     /**
      * @var int
      *
@@ -277,12 +280,10 @@ class GradebookCategory
      * Set weight.
      *
      * @param float $weight
-     *
-     * @return GradebookCategory
      */
-    public function setWeight($weight)
+    public function setWeight($weight): self
     {
-        $this->weight = $weight;
+        $this->weight = (float) $weight;
 
         return $this;
     }
@@ -521,18 +522,6 @@ class GradebookCategory
     public function setGradeBooksToValidateInDependence(int $value): self
     {
         $this->gradeBooksToValidateInDependence = $value;
-
-        return $this;
-    }
-
-    public function getUser(): User
-    {
-        return $this->user;
-    }
-
-    public function setUser(User $user): self
-    {
-        $this->user = $user;
 
         return $this;
     }

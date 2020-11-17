@@ -122,7 +122,7 @@ switch ($action) {
             $extraField = new \Chamilo\CoreBundle\Entity\ExtraFieldSavedSearch('session');
             if ($extraFieldSavedSearch) {
                 $extraFieldSavedSearch->setValue($values);
-                $em->merge($extraFieldSavedSearch);
+                $em->persist($extraFieldSavedSearch);
                 $em->flush();
             }
         }
@@ -138,14 +138,14 @@ switch ($action) {
                 $(function() {
                     $( "#sortable" ).sortable();
                     $( "#sortable" ).disableSelection();
-                    
+
                     $( "#link_'.$variable.'" ).on("click", function() {
                         var newList = [];
                         $("#sortable").find("li").each(function(){
                             newList.push($(this).text());
                         });
-                                                
-                        var save = JSON.stringify(newList);                      
+
+                        var save = JSON.stringify(newList);
                         $.ajax({
                             url: "'.$url.'",
                             dataType: "json",
@@ -154,13 +154,13 @@ switch ($action) {
                                 console.log(data);
                             }
                         });
-                        
+
                         alert("'.get_lang('Saved.').'");
-                        
+
                         location.reload();
-                        
+
                         return false;
-                        
+
                     });
                 });
             </script>';

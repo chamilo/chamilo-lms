@@ -108,8 +108,8 @@ $attendance = new Attendance();
 $attendance_list = $attendance->get_attendances_list();
 $attendance_select = [];
 $attendance_select[0] = get_lang('Select an attendance');
-foreach ($attendance_list as $attendance_id => $attendance_data) {
-    $attendance_select[$attendance_id] = $attendance_data['name'];
+foreach ($attendance_list as $attendanceEntity) {
+    $attendance_select[$attendanceEntity->getIid()] = $attendanceEntity->getName();
 }
 
 $token = Security::get_token();
@@ -117,11 +117,11 @@ $url_token = '&sec_token='.$token;
 $user_info = api_get_user_info();
 $params = '&'.api_get_cidreq();
 
-if (isset($_POST['action']) && 'thematic_delete_select' == $_POST['action']) {
+if (isset($_POST['action']) && 'thematic_delete_select' === $_POST['action']) {
     $action = 'thematic_delete_select';
 }
 
-if (isset($_GET['isStudentView']) && 'true' == $_GET['isStudentView']) {
+if (isset($_GET['isStudentView']) && 'true' === $_GET['isStudentView']) {
     $action = 'thematic_details';
 }
 
@@ -504,7 +504,7 @@ switch ($action) {
         $thematic_plan_data = $thematicManager->get_thematic_plan_data();
 
         // Third column
-        $thematic_advance_data = $thematicManager->get_thematic_advance_list(null, null, true);
+        $thematic_advance_data = $thematicManager->get_thematic_advance_list(null, true);
 
         if (!empty($message) && !empty($total_average_of_advances)) {
             $tpl->assign('message', $message);
@@ -512,16 +512,16 @@ switch ($action) {
         $tpl->assign('score_progress', $total_average_of_advances);
 
         if (isset($last_id) && $last_id) {
-            $link_to_thematic_plan = '<a href="index.php?'.api_get_cidreq(
-                ).'&action=thematic_plan_list&thematic_id='.$last_id.'">'.
+            $link_to_thematic_plan = '<a
+                href="index.php?'.api_get_cidreq().'&action=thematic_plan_list&thematic_id='.$last_id.'">'.
                 Display::return_icon(
                     'lesson_plan.png',
                     get_lang('Thematic plan'),
                     ['style' => 'vertical-align:middle;float:none;'],
                     ICON_SIZE_SMALL
                 ).'</a>';
-            $link_to_thematic_advance = '<a href="index.php?'.api_get_cidreq(
-                ).'&action=thematic_advance_list&thematic_id='.$last_id.'">'.
+            $link_to_thematic_advance = '<a
+                href="index.php?'.api_get_cidreq().'&action=thematic_advance_list&thematic_id='.$last_id.'">'.
                 Display::return_icon(
                     'lesson_plan_calendar.png',
                     get_lang('Thematic advance'),
@@ -555,16 +555,6 @@ switch ($action) {
             /** @var CThematic $thematic */
             foreach ($thematic_data as $thematic) {
                 $id = $thematic->getIid();
-
-                //$list['id'] = $thematic->getIid();
-                //$list['id_course'] = $thematic['c_id'];
-                //$list['id_session'] = $thematic['session_id'];
-                //$list['title'] = Security::remove_XSS($thematic->getTitle(), STUDENT);
-                //$list['content'] = Security::remove_XSS($thematic->getContent(), STUDENT);
-                //$list['display_orden'] = $thematic->getDisplayOrder();
-                //$list['active'] = $thematic->getActive();
-                //$my_thematic_id = $thematic['id'];
-
                 $session_star = '';
                 if (api_is_allowed_to_edit(null, true)) {
                     if (api_get_session_id() == $thematic->getSessionId()) {
@@ -588,8 +578,9 @@ switch ($action) {
                     );
                     if (0 == api_get_session_id()) {
                         if ($thematic->getDisplayOrder() > 1) {
-                            $toolbarThematic .= ' <a class="btn btn-default" href="'.api_get_self(
-                                ).'?action=moveup&'.api_get_cidreq().'&thematic_id='.$id.$params.$url_token.'">'.
+                            $toolbarThematic .= ' <a
+                                class="btn btn-default"
+                                href="'.api_get_self().'?action=moveup&'.api_get_cidreq().'&thematic_id='.$id.$params.$url_token.'">'.
                                 Display::return_icon('up.png', get_lang('Up'), '', ICON_SIZE_TINY).'</a>';
                         } else {
                             $toolbarThematic .= '<div class="btn btn-default">'.
@@ -597,8 +588,9 @@ switch ($action) {
                         }
                         //$thematic->getDisplayOrder()
                         if ($thematic->getDisplayOrder() < $max_thematic_item) {
-                            $toolbarThematic .= ' <a class="btn btn-default" href="'.api_get_self(
-                                ).'?action=movedown&a'.api_get_cidreq().'&thematic_id='.$id.$params.$url_token.'">'.
+                            $toolbarThematic .= ' <a
+                                class="btn btn-default"
+                                href="'.api_get_self().'?action=movedown&a'.api_get_cidreq().'&thematic_id='.$id.$params.$url_token.'">'.
                                 Display::return_icon('down.png', get_lang('down'), '', ICON_SIZE_TINY).'</a>';
                         } else {
                             $toolbarThematic .= '<div class="btn btn-default">'.
@@ -628,14 +620,15 @@ switch ($action) {
                             ),
                             ['class' => 'btn btn-default']
                         );
-                        $toolbarThematic .= '<a class="btn btn-default" href="index.php?'.api_get_cidreq(
-                            ).'&action=thematic_edit&thematic_id='
-                            .$id.$params.$url_token.'">'
+                        $toolbarThematic .= '<a
+                            class="btn btn-default"
+                            href="index.php?'.api_get_cidreq().'&action=thematic_edit&thematic_id='.$id.$params.$url_token.'">'
                             .Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_TINY).'</a>';
-                        $toolbarThematic .= '<a class="btn btn-default" onclick="javascript:if(!confirm(\''
+                        $toolbarThematic .= '<a
+                            class="btn btn-default"
+                            onclick="javascript:if(!confirm(\''
                             .get_lang('Are you sure you want to delete')
-                            .'\')) return false;" href="index.php?'.api_get_cidreq(
-                            ).'&action=thematic_delete&thematic_id='
+                            .'\')) return false;" href="index.php?'.api_get_cidreq().'&action=thematic_delete&thematic_id='
                             .$id.$params.$url_token.'">'
                             .Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_TINY).'</a>';
                     }
@@ -651,7 +644,6 @@ switch ($action) {
         $content = $tpl->fetch($thematicLayout);
         break;
     case 'thematic_list':
-
         $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Thematic control')];
         $actionLeft = '<a href="index.php?'.api_get_cidreq().'&action=thematic_add'.$url_token.'">'.
             Display::return_icon(

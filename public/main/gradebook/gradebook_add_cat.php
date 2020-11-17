@@ -113,7 +113,7 @@ if (!$_in_course) {
         'name' => get_lang('Assessments'),
     ];
 }
-$interbreadcrumb[] = ['url' => 'index.php?'.api_get_cidreq(), 'name' => get_lang('ToolAssessments')];
+$interbreadcrumb[] = ['url' => 'index.php?'.api_get_cidreq(), 'name' => get_lang('Assessments')];
 Display :: display_header(get_lang('New category'));
 
 $display_form = true;

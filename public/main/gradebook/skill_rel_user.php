@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\SkillRelItem;
@@ -49,7 +50,7 @@ foreach ($skills as $skill) {
         'skillRelItem' => $skill,
     ];
     /** @var SkillRelItemRelUser $skillRelItemRelUser */
-    $skillRelItemRelUser = $em->getRepository('ChamiloCoreBundle:SkillRelItemRelUser')->findOneBy($criteria);
+    $skillRelItemRelUser = $em->getRepository(SkillRelItemRelUser::class)->findOneBy($criteria);
     $itemInfo['status'] = $skillRelItemRelUser ? true : false;
     $itemInfo['url_activity'] = $codePath.$skill->getItemResultList(api_get_cidreq());
     if ($skillRelItemRelUser) {

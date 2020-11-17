@@ -42,6 +42,7 @@ class CForumCategory extends AbstractResource implements ResourceInterface
 
     /**
      * @var string
+     *
      * @Assert\NotBlank()
      *
      * @ORM\Column(name="cat_title", type="string", length=255, nullable=false)
@@ -84,7 +85,7 @@ class CForumCategory extends AbstractResource implements ResourceInterface
     protected $catId;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection|CForumForum[]
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CForumForum", mappedBy="forumCategory")
      */
@@ -94,6 +95,7 @@ class CForumCategory extends AbstractResource implements ResourceInterface
     {
         $this->locked = 0;
         $this->catId = 0;
+        $this->forums = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -300,5 +302,10 @@ class CForumCategory extends AbstractResource implements ResourceInterface
     public function getResourceName(): string
     {
         return $this->getCatTitle();
+    }
+
+    public function setResourceName(string $name): self
+    {
+        return $this->setCatTitle($name);
     }
 }

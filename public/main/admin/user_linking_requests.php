@@ -21,7 +21,7 @@ if (!empty($action) && $hrm && $assignedId) {
     switch ($action) {
         case 'accept':
             /** @var UserRelUser $request */
-            $request = $em->getRepository('ChamiloCoreBundle:UserRelUser')
+            $request = $em->getRepository(UserRelUser::class)
                 ->findOneBy([
                     'userId' => $assignedId,
                     'friendUserId' => $hrm->getId(),
@@ -43,7 +43,7 @@ if (!empty($action) && $hrm && $assignedId) {
             exit;
         case 'reject':
             /** @var UserRelUser $request */
-            $request = $em->getRepository('ChamiloCoreBundle:UserRelUser')
+            $request = $em->getRepository(UserRelUser::class)
                 ->findOneBy([
                     'userId' => $assignedId,
                     'friendUserId' => $hrm->getId(),
@@ -63,7 +63,7 @@ if (!empty($action) && $hrm && $assignedId) {
             exit;
         case 'remove':
             /** @var UserRelUser $request */
-            $request = $em->getRepository('ChamiloCoreBundle:UserRelUser')
+            $request = $em->getRepository(UserRelUser::class)
                 ->findOneBy([
                     'userId' => $assignedId,
                     'friendUserId' => $hrm->getId(),

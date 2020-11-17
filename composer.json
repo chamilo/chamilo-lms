@@ -12,12 +12,11 @@
         "issues": "https://github.com/chamilo/chamilo-lms/issues"
     },
     "replace": {
-        "paragonie/random_compat": "2.*",
         "symfony/polyfill-ctype": "*",
         "symfony/polyfill-iconv": "*",
-        "symfony/polyfill-php56": "*",
-        "symfony/polyfill-php70": "*",
-        "symfony/polyfill-php71": "*"
+        "symfony/polyfill-php72": "*",
+        "symfony/polyfill-php73": "*",
+        "symfony/polyfill-php74": "*"
     },
     "autoload": {
         "psr-4": {
@@ -41,14 +40,8 @@
             "public/main/survey"
         ]
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url":  "https://github.com/jmontoyaa/APYDataGridBundle.git"
-        }
-    ],
     "require": {
-        "php": "^7.2.5",
+        "php": "^7.2.9",
         "ext-bcmath": "*",
         "ext-curl": "*",
         "ext-dom": "*",
@@ -65,9 +58,7 @@
         "ext-zip": "*",
         "ext-zlib": "*",
         "a2lix/translation-form-bundle": "^3.0",
-        "antishov/doctrine-extensions-bundle": "~1.4",
         "api-platform/api-pack": "^1.2",
-        "apy/datagrid-bundle": "dev-master",
         "beberlei/doctrineextensions": "^1.2",
         "brumann/polyfill-unserialize": "^1.0",
         "chamilo/settings-bundle": "dev-master",
@@ -84,6 +75,7 @@
         "essence/essence": "~3.0",
         "ezyang/htmlpurifier": "~4.12",
         "firebase/php-jwt": "^5.0",
+        "friendsofsymfony/ckeditor-bundle": "^2.2",
         "friendsofsymfony/jsrouting-bundle": "~2.0",
         "graphp/algorithms": "~0.8",
         "graphp/graphviz": "~0.2",
@@ -105,7 +97,6 @@
         "laminas/laminas-soap": "~2.8",
         "league/csv": "^9.1",
         "league/glide-symfony": "^1.0",
-        "liip/imagine-bundle": "^2.1",
         "maennchen/zipstream-php": "^2.0",
         "masterminds/html5": "^2.0",
         "michelf/php-markdown": "~1.8",
@@ -120,11 +111,13 @@
         "php-ffmpeg/php-ffmpeg": "~0.14",
         "phpoffice/phpspreadsheet": "~1.9",
         "phpoffice/phpword": "~0.16",
+        "ramsey/uuid-doctrine": "^1.6",
         "robrichards/xmlseclibs": "3.0.*",
         "sabre/vobject": "~4.2",
         "sensio/framework-extra-bundle": "~5.0",
         "sensiolabs/security-checker": "~6.0",
         "sonata-project/exporter": "^2.2",
+        "stof/doctrine-extensions-bundle": "~1.4",
         "sunra/php-simple-html-dom-parser": "~1.5",
         "symfony/apache-pack": "^1.0",
         "symfony/asset": "^5.0",
@@ -148,8 +141,10 @@
         "symfony/webpack-encore-bundle": "^1.7",
         "symfony/yaml": "^5.0",
         "symfonycasts/reset-password-bundle": "^1.1",
+        "szymach/c-pchart": "^3.0",
         "tgalopin/html-sanitizer-bundle": "^1.1",
         "twig/extensions": "^1.5",
+        "twig/intl-extra": "^3.0",
         "vich/uploader-bundle": "^1.13",
         "webit/eval-math": "~1.0"
     },
@@ -162,8 +157,10 @@
         "behat/mink": "dev-master",
         "behat/mink-goutte-driver": "@stable",
         "behat/mink-selenium2-driver": "@stable",
+        "friends-of-behat/mink-extension": "dev-master",
         "php-translation/symfony-bundle": "^0.12",
         "phpstan/phpstan": "^0.12",
+        "psalm/plugin-symfony": "^1.4",
         "symfony/browser-kit": "^4.0|^5.0",
         "symfony/css-selector": "^5.0",
         "symfony/debug-pack": "*",
@@ -171,8 +168,9 @@
         "symfony/phpunit-bridge": "^5.0",
         "symfony/profiler-pack": "*",
         "symfony/test-pack": "*",
-        "symplify/easy-coding-standard": "^7.0",
-        "vimeo/psalm": "^3.10"
+        "symplify/easy-coding-standard": "^8.0",
+        "vimeo/psalm": "^3.14",
+        "weirdan/doctrine-psalm-plugin": "^0.11.3"
     },
     "scripts": {
         "analyse": [
@@ -183,14 +181,8 @@
             "cache:clear": "symfony-cmd",
             "assets:install %PUBLIC_DIR%": "symfony-cmd"
         },
-        "install-ckeditor": {
-            "ckeditor:install %PUBLIC_DIR%/libs/ckeditor --clear=keep --tag=4.13.0 --exclude=samples --exclude=adapters ": "symfony-cmd",
-            "security-checker security:check": "script",
-            "requirements-checker": "script"
-        },
         "post-install-cmd": [
-            "@auto-scripts",
-            "@install-ckeditor"
+            "@auto-scripts"
         ],
         "post-update-cmd": [
             "@auto-scripts"

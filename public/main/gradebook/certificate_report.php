@@ -50,6 +50,8 @@ foreach ($sessionsList as $session) {
     $sessions[$session['id']] = $session['name'];
 }
 
+$selfUrl = api_get_self();
+
 if ($selectedSession > 0) {
     if (!SessionManager::isValidId($selectedSession)) {
         Display::addFlash(Display::return_message(get_lang('The session could not be found')));

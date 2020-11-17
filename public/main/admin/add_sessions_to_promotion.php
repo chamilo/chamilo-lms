@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 // resetting the course id
@@ -235,7 +236,6 @@ if (!empty($errorMsg)) {
         ['style' => 'width:360px', 'multiple' => 'multiple', 'id' => 'session_in_promotion', 'size' => '15px'],
         false
     );
-    unset($sessionUsersList);
 ?>
  </td>
 </tr>

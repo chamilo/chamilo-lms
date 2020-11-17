@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Tool\AbstractTool;
 use Chamilo\CoreBundle\ToolChain;
 use Chamilo\CourseBundle\Controller\ToolBaseController;
 use Chamilo\CourseBundle\Entity\CTool;
+use Chamilo\CourseBundle\Manager\SettingsFormFactory;
 use Chamilo\CourseBundle\Manager\SettingsManager;
 use Chamilo\CourseBundle\Repository\CShortcutRepository;
 use Chamilo\CourseBundle\Repository\CToolRepository;
@@ -21,7 +22,6 @@ use ExtraFieldValue;
 use Fhaculty\Graph\Graph;
 use Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
-use Sylius\Bundle\SettingsBundle\Form\Factory\SettingsFormFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -114,10 +114,7 @@ class CourseHomeController extends ToolBaseController
 
         $qb = $toolRepository->getResourcesByCourse($course, $this->getSession());
         $qb->addSelect('tool');
-        $qb->innerJoin(
-            'resource.tool',
-            'tool'
-        );
+        $qb->innerJoin('resource.tool', 'tool');
         $result = $qb->getQuery()->getResult();
         $tools = [];
         /** @var CTool $item */
@@ -130,7 +127,7 @@ class CourseHomeController extends ToolBaseController
             if ('admin' === $toolModel->getCategory() && !$this->isGranted('ROLE_CURRENT_COURSE_TEACHER')) {
                 continue;
             }
-            $tools[$item->getCategory()][] = $item;
+            $tools[$toolModel->getCategory()][] = $item;
         }
 
         // Get session-career diagram
@@ -209,9 +206,9 @@ class CourseHomeController extends ToolBaseController
      */
     public function redirectTool($toolId, ToolChain $toolChain)
     {
-        $criteria = ['id' => $toolId];
+        $criteria = ['iid' => $toolId];
         /** @var CTool $tool */
-        $tool = $this->getDoctrine()->getRepository('Chamilo\CourseBundle\Entity\CTool')->findOneBy($criteria);
+        $tool = $this->getDoctrine()->getRepository(CTool::class)->findOneBy($criteria);
 
         if (null === $tool) {
             throw new NotFoundHttpException($this->trans('Tool not found'));
@@ -242,8 +239,8 @@ class CourseHomeController extends ToolBaseController
     public function updateAction(Request $request, Course $course, $namespace, SettingsManager $manager, SettingsFormFactory $formFactory)
     {
         $schemaAlias = $manager->convertNameSpaceToService($namespace);
-
         $settings = $manager->load($namespace);
+
         $form = $formFactory->create($schemaAlias);
 
         $form->setData($settings);
@@ -273,6 +270,7 @@ class CourseHomeController extends ToolBaseController
                 return $this->redirect($request->headers->get('referer'));
             }
         }
+
         $schemas = $manager->getSchemas();
 
         return $this->render(
@@ -329,20 +327,20 @@ class CourseHomeController extends ToolBaseController
                     }
                 }
 
-                $sql = "SELECT id FROM $lp_table
+                $sql = "SELECT iid FROM $lp_table
                         WHERE c_id = $course_id AND autolaunch = 1 $condition
                         LIMIT 1";
                 $result = Database::query($sql);
                 if (Database::num_rows($result) > 0) {
                     $lp_data = Database::fetch_array($result, 'ASSOC');
-                    if (!empty($lp_data['id'])) {
+                    if (!empty($lp_data['iid'])) {
                         if ($allowAutoLaunchForCourseAdmins) {
                             $showAutoLaunchLpWarning = true;
                         } else {
                             $session_key = 'lp_autolaunch_'.$session_id.'_'.api_get_course_int_id().'_'.api_get_user_id();
                             if (!isset($_SESSION[$session_key])) {
                                 // Redirecting to the LP
-                                $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$lp_data['id'];
+                                $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$lp_data['iid'];
 
                                 $_SESSION[$session_key] = true;
                                 header("Location: $url");

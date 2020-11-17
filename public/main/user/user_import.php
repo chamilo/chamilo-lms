@@ -32,6 +32,7 @@ $form->addElement('hidden', 'type', $userType);
 $form->addButtonImport(get_lang('Import'));
 
 $course_code = api_get_course_id();
+$courseId = api_get_course_int_id();
 
 if (empty($course_code)) {
     api_not_allowed(true);
@@ -89,11 +90,11 @@ if ($form->validate()) {
                         $user_ids = [];
                         foreach ($current_user_list as $user) {
                             if (COURSEMANAGER == $userType) {
-                                if (CourseManager::is_course_teacher($user['user_id'], $course_code)) {
+                                if (CourseManager::isCourseTeacher($user['user_id'], $courseId)) {
                                     $user_ids[] = $user['user_id'];
                                 }
                             } else {
-                                if (!CourseManager::is_course_teacher($user['user_id'], $course_code)) {
+                                if (!CourseManager::isCourseTeacher($user['user_id'], $courseId)) {
                                     $user_ids[] = $user['user_id'];
                                 }
                             }

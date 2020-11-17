@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
@@ -21,6 +22,8 @@ $this_section = SECTION_COURSES;
 $nameTools = get_lang('Settings');
 api_protect_course_script(true);
 api_block_anonymous_users();
+
+$urlId = api_get_current_access_url_id();
 $_course = api_get_course_info();
 $courseEntity = api_get_course_entity();
 $isAllowToEdit = api_is_course_admin() || api_is_platform_admin();
@@ -47,7 +50,7 @@ if ('true' == api_get_setting('pdf_export_watermark_by_course')) {
     }
 }
 
-$categories = CourseCategory::getCategoriesCanBeAddedInCourse($_course['categoryCode']);
+$categories = $courseCategoryRepo->getCategoriesByCourseIdAndAccessUrlId($courseId, $urlId);
 
 $formOptionsArray = [];
 
@@ -97,13 +100,13 @@ $form->addText('title', get_lang('Title'), true);
 $form->applyFilter('title', 'html_filter');
 $form->applyFilter('title', 'trim');
 
-$form->addElement(
+/*$form->addElement(
     'select',
     'category_id',
     get_lang('Category'),
     $categories,
     ['style' => 'width:350px', 'id' => 'category_id']
-);
+);*/
 $form->addSelectLanguage(
     'course_language',
     [get_lang('Language'), get_lang('This language will be valid for every visitor of your courses portal')]
@@ -910,7 +913,7 @@ $form->addHtml('</div>');
 // Set the default values of the form
 $values = [];
 $values['title'] = $_course['name'];
-$values['category_id'] = $_course['category_id'];
+//$values['category_id'] = $_course['category_id'];
 $values['course_language'] = $_course['language'];
 $values['department_name'] = $_course['extLink']['name'];
 $values['department_url'] = $_course['extLink']['url'];
@@ -961,7 +964,6 @@ if ($form->validate() && $isEditable) {
     }
 
     global $_configuration;
-    $urlId = api_get_current_access_url_id();
     if (isset($_configuration[$urlId]) &&
         isset($_configuration[$urlId]['hosting_limit_active_courses']) &&
         $_configuration[$urlId]['hosting_limit_active_courses'] > 0
@@ -977,7 +979,11 @@ if ($form->validate() && $isEditable) {
                 api_warn_hosting_contact('hosting_limit_active_courses');
 
                 Display::addFlash(
-                    Display::return_message(get_lang('Sorry, this installation has an active courses limit, which has now been reached. You can still create new courses, but only if you hide/disable at least one existing active course. To do this, edit a course from the administration courses list, and change the visibility to \'hidden\', then try creating this course again. To increase the maximum number of active courses allowed on this Chamilo installation, please contact your hosting provider or, if available, upgrade to a superior hosting plan.'))
+                    Display::return_message(
+                        get_lang(
+                            'Sorry, this installation has an active courses limit, which has now been reached. You can still create new courses, but only if you hide/disable at least one existing active course. To do this, edit a course from the administration courses list, and change the visibility to \'hidden\', then try creating this course again. To increase the maximum number of active courses allowed on this Chamilo installation, please contact your hosting provider or, if available, upgrade to a superior hosting plan.'
+                        )
+                    )
                 );
 
                 $url = api_get_path(WEB_CODE_PATH).'course_info/infocours.php?'.api_get_cidreq();
@@ -1002,15 +1008,15 @@ if ($form->validate() && $isEditable) {
 
     $activeLegal = isset($updateValues['activate_legal']) ? $updateValues['activate_legal'] : 0;
 
-    $category = null;
+    /*$category = null;
     if (!empty($updateValues['category_id'])) {
         $category = $courseCategoryRepo->find($updateValues['category_id']);
-    }
+    }*/
 
     $courseEntity
         ->setTitle($updateValues['title'])
         ->setCourseLanguage($updateValues['course_language'])
-        ->setCategory($category)
+        //->setCategory($category)
         ->setDepartmentName($updateValues['department_name'])
         ->setDepartmentUrl($updateValues['department_url'])
         ->setVisibility($updateValues['visibility'])

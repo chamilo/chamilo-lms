@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -129,12 +130,12 @@ class SurveyLink extends AbstractLink
     /**
      * Calculate score for a student (to show in the gradebook).
      *
-     * @param int    $stud_id
-     * @param string $type    Type of result we want (best|average|ranking)
+     * @param int    $studentId
+     * @param string $type      Type of result we want (best|average|ranking)
      *
      * @return array|null
      */
-    public function calc_score($stud_id = null, $type = null)
+    public function calc_score($studentId = null, $type = null)
     {
         // Note: Max score is assumed to be always 1 for surveys,
         // only student's participation is to be taken into account.
@@ -144,7 +145,7 @@ class SurveyLink extends AbstractLink
         $courseId = $this->getCourseId();
         $tbl_survey = Database::get_course_table(TABLE_SURVEY);
         $tbl_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
-        $get_individual_score = !is_null($stud_id);
+        $get_individual_score = !is_null($studentId);
 
         $sql = "SELECT i.answered
                 FROM $tbl_survey AS s
@@ -158,7 +159,7 @@ class SurveyLink extends AbstractLink
                 ";
 
         if ($get_individual_score) {
-            $sql .= ' AND i.user = '.intval($stud_id);
+            $sql .= ' AND i.user = '.intval($studentId);
         }
 
         $sql_result = Database::query($sql);
@@ -237,7 +238,7 @@ class SurveyLink extends AbstractLink
             $courseId = $this->getCourseId();
 
             if ('' != $tbl_name) {
-                $sql = 'SELECT survey_id 
+                $sql = 'SELECT survey_id
                         FROM '.$this->get_survey_table().'
                         WHERE
                             c_id = '.$courseId.' AND
@@ -247,7 +248,7 @@ class SurveyLink extends AbstractLink
                 $row = Database::fetch_array($result, 'ASSOC');
                 $survey_id = $row['survey_id'];
 
-                return api_get_path(WEB_PATH).'main/survey/reporting.php?'.api_get_cidreq_params($this->get_course_code(), $sessionId).'&survey_id='.$survey_id;
+                return api_get_path(WEB_PATH).'main/survey/reporting.php?'.api_get_cidreq_params($this->getCourseId(), $sessionId).'&survey_id='.$survey_id;
             }
         }
 

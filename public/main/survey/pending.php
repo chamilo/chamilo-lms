@@ -1,8 +1,7 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CourseBundle\Entity\CSurvey;
 use Chamilo\CourseBundle\Entity\CSurveyInvitation;
 
@@ -29,10 +28,8 @@ foreach ($pending as $i => $item) {
     $survey = $item;
     /** @var CSurveyInvitation invitation */
     $invitation = $pending[$i + 1];
-    /** @var Course $course */
-    $course = $em->find('ChamiloCoreBundle:Course', $survey->getCId());
-    /** @var Session $session */
-    $session = $em->find('ChamiloCoreBundle:Session', $survey->getSessionId());
+    $course = api_get_course_entity($survey->getCId());
+    $session = api_get_session_entity($survey->getSessionId());
 
     $course = $course ? ['id' => $course->getId(), 'title' => $course->getTitle(), 'code' => $course->getCode()] : null;
     $session = $session ? ['id' => $session->getId(), 'name' => $session->getName()] : null;

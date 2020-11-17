@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -86,6 +87,9 @@ if (isset($_POST['save_audio'])) {
     }
 
     // Uploading the audio files.
+    DocumentManager::createDefaultAudioFolder($_course);
+
+    // Uploading the audio files.
     foreach ($_FILES as $key => $value) {
         if ('mp3file' == substr($key, 0, 7) &&
             !empty($_FILES[$key]['tmp_name'])
@@ -93,15 +97,10 @@ if (isset($_POST['save_audio'])) {
             // The id of the learning path item.
             $lp_item_id = str_ireplace('mp3file', '', $key);
 
-            // Create the audio folder if it does not exist yet.
-            DocumentManager::createDefaultAudioFolder($_course);
-
-            // Check if file already exits into document/audio/
             $file_name = $_FILES[$key]['name'];
             $file_name = stripslashes($file_name);
             // Add extension to files without one (if possible).
             $file_name = add_ext_on_mime($file_name, $_FILES[$key]['type']);
-
             $clean_name = api_replace_dangerous_char($file_name);
             // No "dangerous" files.
             $clean_name = disable_dangerous_file($clean_name);
@@ -121,7 +120,7 @@ if (isset($_POST['save_audio'])) {
             }
 
             // Upload the file in the documents tool.
-            $file_path = handle_uploaded_document(
+            $filePath = handle_uploaded_document(
                 $_course,
                 $_FILES[$key],
                 api_get_path(SYS_COURSE_PATH).$_course['path'].'/document',
@@ -134,18 +133,15 @@ if (isset($_POST['save_audio'])) {
                 false
             );
 
-            // Getting the filename only.
-            $file_components = explode('/', $file_path);
-            $file = $file_components[count($file_components) - 1];
-
             // Store the mp3 file in the lp_item table.
             $sql = "UPDATE $tbl_lp_item
-                    SET audio = '".Database::escape_string($file)."'
+                    SET audio = '".Database::escape_string($filePath)."'
                     WHERE iid = ".(int) $lp_item_id;
             Database::query($sql);
         }
     }
     //echo Display::return_message(get_lang('Item updated'), 'confirm');
+    Display::addFlash(Display::return_message(get_lang('ItemUpdated'), 'confirm'));
     $url = api_get_self().'?action=add_item&type=step&lp_id='.$learnPath->get_id().'&'.api_get_cidreq();
     header('Location: '.$url);
     exit;

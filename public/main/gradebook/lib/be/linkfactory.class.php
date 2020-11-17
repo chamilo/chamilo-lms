@@ -45,7 +45,7 @@ class LinkFactory
     /**
      * Get the link object referring to an evaluation.
      */
-    public function get_evaluation_link($eval_id)
+    public static function get_evaluation_link($eval_id)
     {
         $links = AbstractLink::load(null, null, $eval_id);
         foreach ($links as $link) {
@@ -60,13 +60,13 @@ class LinkFactory
     /**
      * Find links by name.
      *
-     * @param string $name_mask search string
+     * @param string $name search string
      *
      * @return array link objects matching the search criterium
      */
-    public function find_links($name_mask, $selectcat)
+    public static function find_links($name, $selectcat)
     {
-        return AbstractLink::find_links($name_mask, $selectcat);
+        return AbstractLink::find_links($name, $selectcat);
     }
 
     /**

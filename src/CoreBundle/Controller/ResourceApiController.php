@@ -95,7 +95,7 @@ class ResourceApiController extends AbstractController implements CourseControll
             $repository->getEntityManager()->persist($resource);
             $repository->getEntityManager()->flush();
 
-            return View::create($comment, Response::HTTP_CREATED);
+            //return View::create($comment, Response::HTTP_CREATED);
         }
     }
 }

@@ -5,6 +5,7 @@
 namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -26,6 +27,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
  */
 class SessionRelCourseRelUser
 {
+    use UserTrait;
+
     public const STATUS_STUDENT = 0;
     public const STATUS_COURSE_COACH = 2;
 
@@ -94,23 +97,6 @@ class SessionRelCourseRelUser
     public function __construct()
     {
         $this->visibility = 1;
-    }
-
-    public function getUser(): User
-    {
-        return $this->user;
-    }
-
-    /**
-     * @param $user
-     *
-     * @return $this
-     */
-    public function setUser(User $user)
-    {
-        $this->user = $user;
-
-        return $this;
     }
 
     /**

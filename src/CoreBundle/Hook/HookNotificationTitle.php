@@ -28,9 +28,8 @@ class HookNotificationTitle extends HookEvent implements HookNotificationTitleEv
      */
     public function notifyNotificationTitle($type): array
     {
-        /** @var \HookNotificationTitleObserverInterface $observer */
         // Check if exists data title
-        if (isset($this->eventData['title'])) {
+        /*if (isset($this->eventData['title'])) {
             // Save data type
             $this->eventData['type'] = $type;
             // Check for hook all registered observers
@@ -45,7 +44,7 @@ class HookNotificationTitle extends HookEvent implements HookNotificationTitleEv
             }
 
             return $this->eventData;
-        }
+        }*/
 
         return [];
     }

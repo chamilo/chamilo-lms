@@ -12,7 +12,7 @@ use Doctrine\DBAL\Schema\Schema;
  */
 class Version20190110182615 extends AbstractMigrationChamilo
 {
-    public function up(Schema $schema)
+    public function up(Schema $schema): void
     {
         $this->addSql(
             'ALTER TABLE resource_link DROP FOREIGN KEY FK_398C394BFE54D947;');
@@ -30,7 +30,7 @@ class Version20190110182615 extends AbstractMigrationChamilo
         );
     }
 
-    public function down(Schema $schema)
+    public function down(Schema $schema): void
     {
     }
 }

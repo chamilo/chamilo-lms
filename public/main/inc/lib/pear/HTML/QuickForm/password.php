@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
  * HTML class for a password type field
@@ -34,19 +33,19 @@
  */
 class HTML_QuickForm_password extends HTML_QuickForm_text
 {
-    // {{{ constructor
-
     /**
      * Class constructor
-     * @param     string    $elementName    (optional)Input field name attribute
-     * @param     string    $elementLabel   (optional)Input field label
-     * @param     mixed     $attributes     (optional)Either a typical HTML attribute string
+     *
+     * @param string $elementName           (optional)Input field name attribute
+     * @param string $elementLabel          (optional)Input field label
+     * @param mixed  $attributes            (optional)Either a typical HTML attribute string
      *                                      or an associative array
+     *
+     * @throws
      * @since     1.0
      * @access    public
-     * @throws
      */
-    public function __construct($elementName=null, $elementLabel=null, $attributes=null)
+    public function __construct($elementName = null, $elementLabel = null, $attributes = null)
     {
         $attributes['class'] = isset($attributes['class']) ? $attributes['class'] : 'form-control';
         parent::__construct($elementName, $elementLabel, $attributes);
@@ -56,41 +55,44 @@ class HTML_QuickForm_password extends HTML_QuickForm_text
     /**
      * Sets size of password element
      *
-     * @param     string    $size  Size of password field
+     * @param string $size Size of password field
+     *
+     * @return    void
      * @since     1.0
      * @access    public
-     * @return    void
      */
     public function setSize($size)
     {
-        $this->updateAttributes(array('size'=>$size));
+        $this->updateAttributes(array('size' => $size));
     }
 
     /**
      * Sets maxlength of password element
      *
-     * @param     string    $maxlength  Maximum length of password field
+     * @param string $maxlength Maximum length of password field
+     *
+     * @return    void
      * @since     1.0
      * @access    public
-     * @return    void
      */
     public function setMaxlength($maxlength)
     {
-        $this->updateAttributes(array('maxlength'=>$maxlength));
+        $this->updateAttributes(array('maxlength' => $maxlength));
     }
 
     /**
      * Returns the value of field without HTML tags (in this case, value is changed to a mask)
      *
-     * @since     1.0
-     * @access    public
      * @return    string
      * @throws
+     * @since     1.0
+     * @access    public
      */
     public function getFrozenHtml()
     {
         $value = $this->getValue();
-        return ('' != $value? '**********': '&nbsp;') .
-               $this->_getPersistantData();
+
+        return ('' != $value ? '**********' : '&nbsp;').
+            $this->_getPersistantData();
     }
 }

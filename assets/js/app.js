@@ -7,15 +7,29 @@ import $ from 'jquery';
 
 window.jQuery = $;
 window.$ = $;
+global.jQuery = $;
 
 Routing.setRoutingData(routes);
 
 const locale = document.querySelector('html').lang;
-
+const moment = require('moment');
+global.moment = moment;
+require('select2/dist/js/select2.full.min');
+require('flatpickr');
+//import('bootstrap-vue');
+import('bootstrap');
+require('bootstrap-daterangepicker');
+import('webpack-jquery-ui');
+import('webpack-jquery-ui/css');
 require('./vendor');
-require('./main');
+import('./main');
+
 require('webpack-jquery-ui');
 require('webpack-jquery-ui/css');
+require('blueimp-file-upload');
+require('blueimp-load-image');
+import('mediaelement');
+require('multiselect-two-sides');
 
 import Swal from 'sweetalert2';
 window.Swal = Swal;
@@ -82,6 +96,33 @@ $(function () {
       });
     });
   }
+
+  // MODAL DELETE CONFIRM
+  $('.delete-swal').click(function (e) {
+    e.preventDefault(); // Prevent the href from redirecting directly
+    var url = $(this).attr("href");
+    var title = $(this).attr("title");
+
+    Swal.fire({
+      title: title,
+      text: '',
+      icon: 'warning',
+      showCancelButton: true,
+      cancelButtonText: 'Cancel',
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes',
+    }).then((result) => {
+      if (result.value) {
+        /*Swal.fire(
+            'Deleted!',
+            'Your file has been deleted.',
+            'success'
+        )*/
+        window.location.href = url;
+      }
+    });
+  });
 
   // Start modals
   // class='ajax' loads a page in a modal
@@ -221,10 +262,8 @@ $(function () {
     });
   });
 
-  $('.scrollbar-inner').scrollbar();
-
   // Date time settings.
-  moment.locale(locale);
+  //moment.locale(locale);
   $.datepicker.setDefaults($.datepicker.regional[locale]);
   $.datepicker.regional["local"] = $.datepicker.regional[locale];
 
@@ -243,13 +282,13 @@ $(function () {
   });
 
   // Chosen select
-  $(".chzn-select").chosen({
-    disable_search_threshold: 10,
-    /*no_results_text: '{{ 'SearchNoResultsFound' | get_lang | escape('js') }}',
-        placeholder_text_multiple: '{{ 'SelectSomeOptions' | get_lang | escape('js') }}',
-        placeholder_text_single: '{{ 'SelectAnOption' | get_lang | escape('js') }}',*/
-    width: "100%"
-  });
+  // $(".chzn-select").chosen({
+  //   disable_search_threshold: 10,
+  //   /*no_results_text: '{{ 'SearchNoResultsFound' | get_lang | escape('js') }}',
+  //       placeholder_text_multiple: '{{ 'SelectSomeOptions' | get_lang | escape('js') }}',
+  //       placeholder_text_single: '{{ 'SelectAnOption' | get_lang | escape('js') }}',*/
+  //   width: "100%"
+  // });
 
   // Bootstrap tabs.
   $('.tab_wrapper .nav a').on('click', function (e) {

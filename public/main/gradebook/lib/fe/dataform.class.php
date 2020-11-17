@@ -51,9 +51,9 @@ class DataForm extends FormValidator
         parent::display();
     }
 
-    public function setDefaults($defaults = [], $filter = null)
+    public function setDefaults($defaultValues = [], $filter = null)
     {
-        parent::setDefaults($defaults, $filter);
+        parent::setDefaults($defaultValues, $filter);
     }
 
     protected function build_pdf_export_form()

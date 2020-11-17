@@ -70,7 +70,8 @@ foreach ($courseList as $course) {
     if (!empty($exerciseList)) {
         // Exercises
         foreach ($exerciseList as $exerciseInfo) {
-            $exerciseId = $exerciseInfo['id'];
+            // @todo check visibility
+            /*$exerciseId = $exerciseInfo['id'];
             $visibility = api_get_item_visibility(
                 $course,
                 TOOL_QUIZ,
@@ -79,7 +80,7 @@ foreach ($courseList as $course) {
             );
             if (0 == $visibility) {
                 continue;
-            }
+            }*/
             $exerciseListNew[] = $exerciseInfo;
         }
     }
@@ -189,7 +190,7 @@ if (false == api_is_coach_of_course_in_session($session_id)) {
 }
 
 $entityManager = Database::getManager();
-$session = $entityManager->find('ChamiloCoreBundle:Session', $session_id);
+$session = api_get_session_entity($session_id);
 $sessionTitleLink = api_get_configuration_value('courses_list_session_title_link');
 
 if (2 == $sessionTitleLink && 1 === $session->getNbrCourses()) {
@@ -263,8 +264,10 @@ if (!empty($courseList)) {
                     $start_date = $exerciseInfo['start_time'];
                 }
 
+                $exerciseId = $exerciseInfo['id'];
+
                 $best_score_data = ExerciseLib::get_best_attempt_in_course(
-                    $exerciseInfo['id'],
+                    $exerciseId,
                     $courseInfo['real_id'],
                     $session_id
                 );
@@ -663,7 +666,6 @@ $tabs = [
 $tabToHide = api_get_setting('session.hide_tab_list');
 
 if (!empty($tabToHide)) {
-    $tabToHide = explode(',', $tabToHide);
     foreach ($tabToHide as $columnId) {
         unset($headers[$columnId]);
         unset($tabs[$columnId]);

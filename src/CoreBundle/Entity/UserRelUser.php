@@ -4,6 +4,7 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -18,6 +19,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class UserRelUser
 {
+    use UserTrait;
+
     /**
      * @var int
      *
@@ -28,11 +31,12 @@ class UserRelUser
     protected $id;
 
     /**
-     * @var int
+     * @var User
      *
-     * @ORM\Column(name="user_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="userRelUsers")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $userId;
+    protected $user;
 
     /**
      * @var int
@@ -54,30 +58,6 @@ class UserRelUser
      * @ORM\Column(name="last_edit", type="datetime", nullable=true)
      */
     protected $lastEdit;
-
-    /**
-     * Set userId.
-     *
-     * @param int $userId
-     *
-     * @return UserRelUser
-     */
-    public function setUserId($userId)
-    {
-        $this->userId = $userId;
-
-        return $this;
-    }
-
-    /**
-     * Get userId.
-     *
-     * @return int
-     */
-    public function getUserId()
-    {
-        return $this->userId;
-    }
 
     /**
      * Set friendUserId.

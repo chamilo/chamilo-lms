@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Level;
+use Chamilo\CoreBundle\Entity\Profile;
 
 /**
  * Add a skill Level.
@@ -13,8 +14,8 @@ require_once __DIR__.'/../inc/global.inc.php';
 api_protect_admin_script();
 
 $em = Database::getManager();
-$profiles = $em->getRepository('ChamiloCoreBundle:Profile')->findAll();
-$list = $em->getRepository('ChamiloCoreBundle:Level')->findAll();
+$profiles = $em->getRepository(Profile::class)->findAll();
+$list = $em->getRepository(Level::class)->findAll();
 
 $listAction = api_get_self();
 
@@ -28,7 +29,7 @@ $id = isset($_GET['id']) ? $_GET['id'] : '';
 $item = null;
 if (!empty($id)) {
     /** @var Level $item */
-    $item = $em->getRepository('ChamiloCoreBundle:Level')->find($id);
+    $item = $em->getRepository(Level::class)->find($id);
     if (!$item) {
         api_not_allowed();
     }
@@ -62,7 +63,7 @@ switch ($action) {
         if ($form->validate()) {
             $values = $form->exportValues();
             if (isset($values['profile_id']) && !empty($values['profile_id'])) {
-                $profile = $em->getRepository('ChamiloCoreBundle:Profile')->find($values['profile_id']);
+                $profile = $em->getRepository(Profile::class)->find($values['profile_id']);
                 if ($profile) {
                     $item = new Level();
                     $item->setName($values['name']);
@@ -109,7 +110,7 @@ switch ($action) {
 
             $item->setName($values['name']);
             $item->setShortName($values['short_name']);
-            $profile = $em->getRepository('ChamiloCoreBundle:Profile')->find($values['profile_id']);
+            $profile = $em->getRepository(Profile::class)->find($values['profile_id']);
             if ($profile) {
                 $item->setProfile($profile);
             }

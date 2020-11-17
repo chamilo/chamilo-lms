@@ -1,45 +1,45 @@
 <template>
   <div class="course-list">
-      {{ status }}
-      <CourseCard :courses="courses"></CourseCard>
+    {{ status }}
+    <CourseCardList
+        :courses="courses"
+    />
   </div>
 </template>
 
 <script>
-import CourseCard from './CourseCard';
+import CourseCardList from './CourseCardList';
 import ListMixin from '../../../mixins/ListMixin';
-import { ENTRYPOINT } from '../../../config/entrypoint';
+import {ENTRYPOINT} from '../../../config/entrypoint';
 import axios from "axios";
 
 export default {
   name: 'CourseList',
   servicePrefix: 'Course',
-  mixins: [ListMixin],
   components: {
-    CourseCard
+    CourseCardList
   },
+  mixins: [ListMixin],
   data() {
     return {
       status: null,
-      courses:null
+      courses: []
     };
   },
   created: function () {
     this.load();
   },
   methods: {
-    load: function() {
+    load: function () {
       this.status = 'Loading';
       let user = this.$store.getters['security/getUser'];
-
-      axios.get(ENTRYPOINT + 'users/'+ user.id +'/courses.json').then(response => {
+      axios.get(ENTRYPOINT + 'users/' + user.id + '/courses.json').then(response => {
         this.status = '';
         this.courses = response.data;
-      }).catch(function(error) {
-        this.status = error;
+      }).catch(function (error) {
+        console.log(error);
       });
     }
-
   }
 };
 </script>

@@ -35,18 +35,18 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     protected $iid;
 
     /**
+     * @var string
+     * @Assert\NotBlank()
+     * @ORM\Column(name="title", type="string", length=255, nullable=true)
+     */
+    protected $title;
+
+    /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
     protected $cId;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=true)
-     */
-    protected $id;
 
     /**
      * @var string
@@ -61,13 +61,6 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
      * @ORM\Column(name="url_correction", type="string", length=500, nullable=true)
      */
     protected $urlCorrection;
-
-    /**
-     * @var string
-     * @Assert\NotBlank()
-     * @ORM\Column(name="title", type="string", length=255, nullable=true)
-     */
-    protected $title;
 
     /**
      * @var string
@@ -710,38 +703,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
         return $this->containsFile;
     }
 
-    /**
-     * Set id.
-     *
-     * @param int $id
-     *
-     * @return CStudentPublication
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set cId.
-     *
-     * @param int $cId
-     *
-     * @return CStudentPublication
-     */
-    public function setCId($cId)
+    public function setCId(int $cId)
     {
         $this->cId = $cId;
 
@@ -772,6 +734,8 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     public function setUrlCorrection($urlCorrection)
     {
         $this->urlCorrection = $urlCorrection;
+
+        return $this;
     }
 
     /**
@@ -788,6 +752,8 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     public function setTitleCorrection($titleCorrection)
     {
         $this->titleCorrection = $titleCorrection;
+
+        return $this;
     }
 
     /**
@@ -804,6 +770,8 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     public function setDocumentId($documentId)
     {
         $this->documentId = $documentId;
+
+        return $this;
     }
 
     /**
@@ -839,5 +807,10 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     public function getResourceName(): string
     {
         return $this->getTitle();
+    }
+
+    public function setResourceName(string $name): self
+    {
+        return $this->setTitle($name);
     }
 }

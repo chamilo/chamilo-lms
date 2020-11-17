@@ -4,6 +4,7 @@
 
 namespace Chamilo\CoreBundle\Twig\Extension;
 
+use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Repository\IllustrationRepository;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
@@ -35,6 +36,7 @@ class ChamiloExtension extends AbstractExtension
             new TwigFilter('format_file_size', 'format_file_size'),
             new TwigFilter('date_to_time_ago', 'Display::dateToStringAgoAndLongDate'),
             new TwigFilter('api_get_configuration_value', 'api_get_configuration_value'),
+            new TwigFilter('remove_xss', 'Security::remove_XSS'),
             new TwigFilter('format_user_full_name', 'UserManager::formatUserFullName'),
             new TwigFilter('illustration', [$this, 'getIllustration']),
             new TwigFilter('user_illustration', [$this, 'getUserIllustration']),
@@ -46,12 +48,12 @@ class ChamiloExtension extends AbstractExtension
         return [];
     }
 
-    public function getIllustration($node): string
+    public function getIllustration(ResourceNode $node): string
     {
         return $this->illustrationRepository->getIllustrationUrlFromNode($node);
     }
 
-    public function getUserIllustration($node): string
+    public function getUserIllustration(ResourceNode $node): string
     {
         $url = $this->getIllustration($node);
 

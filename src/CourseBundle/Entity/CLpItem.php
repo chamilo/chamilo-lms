@@ -39,21 +39,26 @@ class CLpItem
     protected $cId;
 
     /**
-     * @var int
+     * @var CLp
      *
-     * @ORM\Column(name="id", type="integer", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CLp", inversedBy="items")
+     * @ORM\JoinColumn(name="lp_id", referencedColumnName="iid")
      */
-    protected $id;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="lp_id", type="integer", nullable=false)
-     */
-    protected $lpId;
+    protected $lp;
 
     /**
      * @var string
+     *
+     * @Assert\NotBlank()
+     *
+     * @ORM\Column(name="title", type="string", length=511, nullable=false)
+     */
+    protected $title;
+
+    /**
+     * @var string
+     *
+     * @Assert\NotBlank()
      *
      * @ORM\Column(name="item_type", type="string", length=32, nullable=false)
      */
@@ -65,13 +70,6 @@ class CLpItem
      * @ORM\Column(name="ref", type="text", nullable=false)
      */
     protected $ref;
-
-    /**
-     * @var string
-     * @Assert\NotBlank()
-     * @ORM\Column(name="title", type="string", length=511, nullable=false)
-     */
-    protected $title;
 
     /**
      * @var string
@@ -204,37 +202,24 @@ class CLpItem
      */
     public function __construct()
     {
-        $this->iid = 0;
         $this->maxScore = 100.0;
     }
 
-    public function getIid(): int
+    public function getIid()
     {
         return $this->iid;
     }
 
-    /**
-     * Set lpId.
-     *
-     * @param int $lpId
-     *
-     * @return CLpItem
-     */
-    public function setLpId($lpId)
+    public function setLp(CLp $lp): self
     {
-        $this->lpId = $lpId;
+        $this->lp = $lp;
 
         return $this;
     }
 
-    /**
-     * Get lpId.
-     *
-     * @return int
-     */
-    public function getLpId()
+    public function getLp(): CLp
     {
-        return $this->lpId;
+        return $this->lp;
     }
 
     /**
@@ -739,30 +724,6 @@ class CLpItem
     public function getPrerequisiteMaxScore()
     {
         return $this->prerequisiteMaxScore;
-    }
-
-    /**
-     * Set id.
-     *
-     * @param int $id
-     *
-     * @return CLpItem
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**

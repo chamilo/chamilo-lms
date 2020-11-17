@@ -5,6 +5,7 @@
 namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Notification.
@@ -23,6 +24,15 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Notification
 {
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="bigint")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $id;
+
     /**
      * @var int
      *
@@ -61,6 +71,7 @@ class Notification
     /**
      * @var \DateTime
      *
+     * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="created_at", type="datetime", nullable=false)
      */
     protected $createdAt;
@@ -71,15 +82,6 @@ class Notification
      * @ORM\Column(name="sent_at", type="datetime", nullable=true)
      */
     protected $sentAt;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="bigint")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
 
     /**
      * Set destUserId.

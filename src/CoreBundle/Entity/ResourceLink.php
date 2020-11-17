@@ -5,16 +5,13 @@
 namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use Chamilo\CourseBundle\Entity\CGroupInfo;
+use Chamilo\CourseBundle\Entity\CGroup;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource(
- *     shortName="ResourceLink",
- *     normalizationContext={"groups"={"resource_link:read", "course:read"}}
- * )
+ * @ApiResource()
  * @ORM\Entity
  * @ORM\Table(name="resource_link")
  */
@@ -57,7 +54,7 @@ class ResourceLink
     protected $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CGroupInfo")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CGroup")
      * @ORM\JoinColumn(name="group_id", referencedColumnName="iid", nullable=true, onDelete="CASCADE")
      */
     protected $group;
@@ -77,20 +74,20 @@ class ResourceLink
     protected $resourceRight;
 
     /**
-     * @var int
-     *
-     * @Groups({"resource_link:read", "resource_node:read", "course:read"})
-     *
      * @ORM\Column(name="visibility", type="integer", nullable=false)
      */
     protected $visibility;
 
     /**
+     * @Groups({"resource_node:read", "resource_node:write", "document:write", "document:read"})
+     *
      * @ORM\Column(name="start_visibility_at", type="datetime", nullable=true)
      */
     protected $startVisibilityAt;
 
     /**
+     * @Groups({"resource_node:read", "resource_node:write", "document:write", "document:read"})
+     *
      * @ORM\Column(name="end_visibility_at", type="datetime", nullable=true)
      */
     protected $endVisibilityAt;
@@ -101,12 +98,10 @@ class ResourceLink
     public function __construct()
     {
         $this->resourceRight = new ArrayCollection();
+        $this->visibility = self::VISIBILITY_DRAFT;
     }
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString(): string
     {
         return (string) $this->getId();
     }
@@ -116,10 +111,7 @@ class ResourceLink
         return $this->startVisibilityAt;
     }
 
-    /**
-     * @return ResourceLink
-     */
-    public function setStartVisibilityAt($startVisibilityAt)
+    public function setStartVisibilityAt($startVisibilityAt): self
     {
         $this->startVisibilityAt = $startVisibilityAt;
 
@@ -131,10 +123,7 @@ class ResourceLink
         return $this->endVisibilityAt;
     }
 
-    /**
-     * @return ResourceLink
-     */
-    public function setEndVisibilityAt($endVisibilityAt)
+    public function setEndVisibilityAt($endVisibilityAt): self
     {
         $this->endVisibilityAt = $endVisibilityAt;
 
@@ -143,10 +132,8 @@ class ResourceLink
 
     /**
      * @param ArrayCollection $rights
-     *
-     * @return $this
      */
-    public function setResourceRight($rights)
+    public function setResourceRight($rights): self
     {
         $this->resourceRight = $rights;
 
@@ -157,10 +144,7 @@ class ResourceLink
         return $this;
     }
 
-    /**
-     * @return $this
-     */
-    public function addResourceRight(ResourceRight $right)
+    public function addResourceRight(ResourceRight $right): self
     {
         $right->setResourceLink($this);
         $this->resourceRight[] = $right;
@@ -184,76 +168,50 @@ class ResourceLink
         return $this->id;
     }
 
-    /**
-     * @param User $user
-     *
-     * @return $this
-     */
-    public function setUser(User $user = null)
+    public function setUser(User $user = null): self
     {
         $this->user = $user;
 
         return $this;
     }
 
-    /**
-     * @param Course $course
-     *
-     * @return $this
-     */
-    public function setCourse(Course $course = null)
+    public function setCourse(Course $course = null): self
     {
         $this->course = $course;
 
         return $this;
     }
 
-    /**
-     * @param Session $session
-     *
-     * @return $this
-     */
-    public function setSession(Session $session = null)
+    public function setSession(Session $session = null): self
     {
         $this->session = $session;
 
         return $this;
     }
 
-    /**
-     * @return CGroupInfo
-     */
-    public function getGroup()
+    public function hasGroup(): bool
+    {
+        return null !== $this->group;
+    }
+
+    public function getGroup(): ?CGroup
     {
         return $this->group;
     }
 
-    /**
-     * @param CGroupInfo $group
-     *
-     * @return $this
-     */
-    public function setGroup(CGroupInfo $group = null)
+    public function setGroup(CGroup $group = null): self
     {
         $this->group = $group;
 
         return $this;
     }
 
-    /**
-     * @return Usergroup
-     */
-    public function getUserGroup()
+    public function getUserGroup(): ?Usergroup
     {
         return $this->userGroup;
     }
 
-    /**
-     * @param Usergroup $group
-     *
-     * @return $this
-     */
-    public function setUserGroup(Usergroup $group = null)
+    public function setUserGroup(Usergroup $group = null): self
     {
         $this->userGroup = $group;
 
@@ -262,48 +220,41 @@ class ResourceLink
 
     /**
      * Get user.
-     *
-     * @return User
      */
-    public function getUser()
+    public function getUser(): ?User
     {
         return $this->user;
     }
 
+    public function hasUser(): bool
+    {
+        return null !== $this->user;
+    }
+
     /**
      * Get course.
-     *
-     * @return Course
      */
-    public function getCourse()
+    public function getCourse(): ?Course
     {
         return $this->course;
     }
 
     /**
      * Get session.
-     *
-     * @return Session
      */
-    public function getSession()
+    public function getSession(): ?Session
     {
         return $this->session;
     }
 
-    /**
-     * @return $this
-     */
-    public function setResourceNode(ResourceNode $resourceNode)
+    public function setResourceNode(ResourceNode $resourceNode): self
     {
         $this->resourceNode = $resourceNode;
 
         return $this;
     }
 
-    /**
-     * @return ResourceNode
-     */
-    public function getResourceNode()
+    public function getResourceNode(): ResourceNode
     {
         return $this->resourceNode;
     }
@@ -315,7 +266,7 @@ class ResourceLink
 
     public function setVisibility(int $visibility): self
     {
-        if (!in_array($visibility, self::getVisibilityList())) {
+        if (!in_array($visibility, self::getVisibilityList(), true)) {
             throw new \LogicException('The visibility is not valid');
         }
 
@@ -324,26 +275,17 @@ class ResourceLink
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function isPublished()
+    public function isPublished(): bool
     {
         return self::VISIBILITY_PUBLISHED === $this->getVisibility();
     }
 
-    /**
-     * @return bool
-     */
-    public function isPending()
+    public function isPending(): bool
     {
         return self::VISIBILITY_PENDING === $this->getVisibility();
     }
 
-    /**
-     * @return bool
-     */
-    public function isDraft()
+    public function isDraft(): bool
     {
         return self::VISIBILITY_DRAFT === $this->getVisibility();
     }
@@ -358,10 +300,7 @@ class ResourceLink
         ];
     }
 
-    /**
-     * @return string
-     */
-    public function getVisibilityName()
+    public function getVisibilityName(): string
     {
         return array_flip($this->getVisibilityList())[$this->getVisibility()];
     }

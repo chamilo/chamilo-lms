@@ -44,9 +44,8 @@ $form->addElement('text', 'name', get_lang('Group name'));
 if ('true' == api_get_setting('allow_group_categories')) {
     $groupCategories = GroupManager::get_categories();
     $categoryList = [];
-    //$categoryList[] = null;
     foreach ($groupCategories as $category) {
-        $categoryList[$category['id']] = $category['title'];
+        $categoryList[$category['iid']] = $category['title'];
     }
     $form->addElement('select', 'category_id', get_lang('Category'), $categoryList);
 } else {
@@ -56,7 +55,6 @@ $form->addElement('html', '</div>');
 
 $form->addElement('html', '<div class="col-md-6">');
 $form->addElement('textarea', 'description', get_lang('Description'));
-
 $form->addElement('html', '</div>');
 
 $form->addElement('html', '<div class="col-md-12">');

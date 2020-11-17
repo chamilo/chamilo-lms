@@ -79,7 +79,6 @@ try {
                 : [];
 
             $messagesId = array_filter($messagesId);
-
             if (empty($messagesId)) {
                 throw new Exception(get_lang('NoData'));
             }
@@ -170,6 +169,17 @@ try {
             $data = $restApi->addUser($_POST);
             $restResponse->setData($data);
             break;
+        case Rest::SAVE_USER_JSON:
+            if (!array_key_exists('json', $_POST)) {
+                throw new Exception(get_lang('NoData'));
+            }
+            $json = json_decode($_POST['json'], true);
+            if (is_null($json)) {
+                throw new Exception(get_lang('NoData'));
+            }
+            $data = $restApi->addUser($json);
+            $restResponse->setData($data);
+            break;
         case Rest::SUBSCRIBE_USER_TO_COURSE:
             $data = $restApi->subscribeUserToCourse($_POST);
             $restResponse->setData($data);
@@ -256,9 +266,7 @@ try {
             $restResponse->setData($data);
             break;
         case Rest::SAVE_FORUM_THREAD:
-            if (
-                empty($_POST['title']) || empty($_POST['text']) || empty($_POST['forum'])
-            ) {
+            if (empty($_POST['title']) || empty($_POST['text']) || empty($_POST['forum'])) {
                 throw new Exception(get_lang('NoData'));
             }
 
@@ -325,6 +333,29 @@ try {
             break;
         case Rest::USERNAME_EXIST:
             $data = $restApi->usernameExist($_POST['loginname']);
+            $restResponse->setData([$data]);
+            break;
+        case Rest::GET_COURSE_QUIZ_MDL_COMPAT:
+            $data = $restApi->getCourseQuizMdlCompat();
+
+            echo json_encode($data, JSON_PRETTY_PRINT);
+            exit;
+            break;
+        case Rest::UPDATE_USER_PAUSE_TRAINING:
+            $allow = 'true' === api_get_plugin_setting('pausetraining', 'tool_enable');
+
+            if (false === $allow) {
+                throw new Exception(get_lang('Plugin configured'));
+            }
+
+            if (empty($_POST['user_id'])) {
+                throw new Exception('user_id is required');
+            }
+            if (null === $restApi) {
+                throw new Exception('Check that the username and api_key are field in the request');
+            }
+            $plugin = PauseTraining::create();
+            $data = $plugin->updateUserPauseTraining($_POST['user_id'], $_POST);
             $restResponse->setData([$data]);
             break;
         default:

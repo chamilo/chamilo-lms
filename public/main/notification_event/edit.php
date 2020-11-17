@@ -10,7 +10,7 @@ $tool = 'notification_event';
 $id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
 
 if (empty($id)) {
-    api_not_allowed();
+    api_not_allowed(true);
 }
 
 $manager = new NotificationEvent();

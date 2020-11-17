@@ -275,7 +275,7 @@ services:
             - '@chamilo_course.settings.group'
             -
                 groups:
-                    repository: Chamilo\CourseBundle\Repository\CGroupInfoRepository
+                    repository: Chamilo\CourseBundle\Repository\CGroupRepository
                 group_categories:
                     repository: Chamilo\CourseBundle\Repository\CGroupCategoryRepository
                 gradebook_evaluations:

@@ -9,7 +9,6 @@
 // Resetting the course id.
 $cidReset = true;
 
-// Including the global initialization file.
 require_once __DIR__.'/../inc/global.inc.php';
 
 // Setting the section (for the tabs).
@@ -85,13 +84,12 @@ function showCareer() {
 
 // Displaying the header.
 Display::display_header($tool_name);
-if ('add' != $action && 'edit' != $action) {
+if ('add' !== $action && 'edit' !== $action) {
     echo '<div class="actions">';
     echo '<a href="?action=add">'.Display::return_icon('add.png', get_lang('Add an announcement'), [], 32).'</a>';
     echo '</div>';
 }
 
-/* MAIN CODE */
 $show_announcement_list = true;
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 
@@ -105,7 +103,7 @@ switch ($action) {
     case 'make_visible':
     case 'make_invisible':
         $status = false;
-        if ('make_visible' == $action) {
+        if ('make_visible' === $action) {
             $status = true;
         }
 
@@ -267,14 +265,13 @@ if ($action_todo) {
         if (file_exists($store_path.'/announcement_'.$announcement->id.'.png')) {
             $announcementsPath = api_get_path(WEB_UPLOAD_PATH).'announcements'; // announcement web path
             $announcementsImage = $announcementsPath.'/announcement_'.$announcement->id.'_100x100.png?'.rand(1, 1000); // redimensioned image 85x85
-            $image = '<div class="row"><label class="col-md-2 control-label">'.get_lang('Image').'</label> 
+            $image = '<div class="row"><label class="col-md-2 control-label">'.get_lang('Image').'</label>
                     <div class="col-md-8"><img class="img-thumbnail" src="'.$announcementsImage.'" /></div></div>';
 
             $form->addHtml($image);
             $form->addElement('checkbox', 'delete_picture', null, get_lang('Delete picture'));
         }
     } catch (Exception $e) {
-    } catch (HTML_QuickForm_Error $e) {
         error_log($e);
     }
 
@@ -338,7 +335,7 @@ if ($action_todo) {
             $visibilityResult[$key] = (int) $values[$key];
         }
 
-        if ('all' == $values['lang']) {
+        if ('all' === $values['lang']) {
             $values['lang'] = null;
         }
 
@@ -374,15 +371,15 @@ if ($action_todo) {
                             $announcement_id,
                             [$values['group']]
                         );
-                        echo Display::return_message(
-                            get_lang('Announcement has been added'),
-                            'confirmation'
-                        );
                     }
-                } else {
-                    $show_announcement_list = false;
-                    $form->display();
+                    Display::addFlash(Display::return_message(
+                        get_lang('Announcement has been added'),
+                        'confirmation'
+                    ));
                 }
+
+                api_location(api_get_self());
+
                 break;
             case 'edit':
                 $sendMailTest = isset($values['send_email_test']) ? $values['send_email_test'] : null;
@@ -418,15 +415,17 @@ if ($action_todo) {
                             $values['id'],
                             [$values['group']]
                         );
-                        echo Display::return_message(
+                    }
+                    Display::addFlash(
+                        Display::return_message(
                             get_lang('AnnouncementUpdate successful'),
                             'confirmation'
-                        );
-                    }
-                } else {
-                    $show_announcement_list = false;
-                    $form->display();
+                        )
+                    );
                 }
+
+                api_location(api_get_self());
+
                 break;
             default:
                 break;

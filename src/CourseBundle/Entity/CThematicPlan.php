@@ -7,6 +7,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * CThematicPlan.
@@ -32,18 +33,20 @@ class CThematicPlan extends AbstractResource implements ResourceInterface
     protected $iid;
 
     /**
+     * @var string
+     *
+     * @Assert\NotBlank()
+     *
+     * @ORM\Column(name="title", type="string", length=255, nullable=false)
+     */
+    protected $title;
+
+    /**
      * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
     protected $cId;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=true)
-     */
-    protected $id;
 
     /**
      * @var CThematic
@@ -52,13 +55,6 @@ class CThematicPlan extends AbstractResource implements ResourceInterface
      * @ORM\JoinColumn(name="thematic_id", referencedColumnName="iid")
      */
     protected $thematic;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="title", type="string", length=255, nullable=false)
-     */
-    protected $title;
 
     /**
      * @var string
@@ -176,30 +172,6 @@ class CThematicPlan extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Set id.
-     *
-     * @param int $id
-     *
-     * @return CThematicPlan
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
      * Set cId.
      *
      * @param int $cId
@@ -251,5 +223,10 @@ class CThematicPlan extends AbstractResource implements ResourceInterface
     public function getResourceName(): string
     {
         return $this->getTitle();
+    }
+
+    public function setResourceName(string $name): self
+    {
+        return $this->setTitle($name);
     }
 }

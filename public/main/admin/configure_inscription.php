@@ -182,7 +182,7 @@ if ($display_all_form) {
     if ('true' == api_get_setting('registration', 'email')) {
         $form->addRule('email', get_lang('Required field'), 'required');
     }
-    $form->addRule('email', get_lang('e-mailWrong'), 'email');
+    $form->addEmailRule('email');
 
     //	USERNAME
     $form->addElement('text', 'username', get_lang('Username'), ['size' => USERNAME_MAX_LENGTH, 'disabled' => 'disabled']);
@@ -346,14 +346,13 @@ $url = api_get_path(WEB_PUBLIC_PATH).'internal_page/edit/inscription';
 //Form of language
 //$content .= api_display_language_form();
 $content .= '&nbsp;&nbsp;<a href="'.api_get_self().'?action=edit_top">'.
-    Display::return_icon('edit.gif', get_lang('Edit')).'</a> 
+    Display::return_icon('edit.gif', get_lang('Edit')).'</a>
     <a href="'.$url.'">'.get_lang('Edit notice').'</a>';
 
 $content .= $form->returnForm();
 
-$page = Container::getPage('inscription');
-
-$tpl->assign('page', $page);
+//$page = Container::getPage('inscription');
+//$tpl->assign('page', $page);
 $tpl->assign('form', $content);
 
 $templateName = $tpl->get_template('auth/inscription_edit.html.twig');

@@ -6,12 +6,12 @@ export default {
   methods: {
     formatDateTime,
     onCreated(item) {
-      this.showMessage(`${item['@id']} created`);
+      this.showMessage(this.$i18n.t('{resource} created', {'resource': item['resourceNode'].title}));
       let folderParams = this.$route.query;
 
       this.$router.push({
-        name: `${this.$options.servicePrefix}Update`,
-        params: { id: item['@id'] },
+        name: `${this.$options.servicePrefix}List`,
+        params: {id: item['@id']},
         query: folderParams
       });
     },

@@ -127,7 +127,6 @@ class SurveyUtil
             $option_id = $option_id.'@:@'.$otherOption;
         }
 
-
         $answer = new CSurveyAnswer();
         $answer
             ->setCId($survey_data['c_id'])
@@ -148,8 +147,8 @@ class SurveyUtil
                 WHERE iid = $insertId";
             Database::query($sql);
 
-            return true;        
-        }        
+            return true;
+        }
 
         return false;
     }
@@ -246,7 +245,7 @@ class SurveyUtil
 
         $counter = 0;
         foreach ($questions as $key => $value) {
-            if ($value['type'] !== 'pagebreak') {
+            if ('pagebreak' !== $value['type']) {
                 $counter++;
             }
         }
@@ -456,9 +455,7 @@ class SurveyUtil
                         }
                         break;
                     case 'multipleresponse':
-                        $finalAnswer = isset($answers[$question['question_id']])
-                            ? $answers[$question['question_id']]
-                            : '';
+                        $finalAnswer = isset($answers[$question['question_id']]) ? $answers[$question['question_id']] : '';
                         break;
                     default:
                         $finalAnswer = '';
@@ -629,7 +626,7 @@ class SurveyUtil
             $sql = "SELECT * FROM $table_survey_question
 			        WHERE
 			            c_id = $course_id AND
-                        survey_id='".$surveyId."' AND
+                        survey_id = $surveyId AND
                         survey_question NOT LIKE '%{{%' AND
                         type <>'pagebreak'
                     ORDER BY sort ASC
@@ -1280,7 +1277,8 @@ class SurveyUtil
 
                 $content .= '<th>
                     <a href="'.$url.'&action=userreport&user='.$user.'">'
-                    .$user_displayed.'</a>
+                        .$user_displayed.'
+                    </a>
                     </th>'; // the user column
             } else {
                 $content .= '<th>'.$user.'</th>'; // the user column
@@ -1313,7 +1311,7 @@ class SurveyUtil
                     $content .= '</td>';
                 } else {
                     foreach ($possible_option as $option_id => $value) {
-                        if ($questions[$question_id]['type'] === 'multiplechoiceother') {
+                        if ('multiplechoiceother' === $questions[$question_id]['type']) {
                             foreach ($answers_of_user[$question_id] as $key => $newValue) {
                                 $parts = ch_multiplechoiceother::decodeOptionValue($key);
                                 if (isset($parts[0])) {
@@ -1324,7 +1322,7 @@ class SurveyUtil
                                 }
                             }
                         }
-                        if ($questions[$question_id]['type'] === 'percentage') {
+                        if ('percentage' === $questions[$question_id]['type']) {
                             if (!empty($answers_of_user[$question_id][$option_id])) {
                                 $content .= "<td align='center'>";
                                 $content .= $answers_of_user[$question_id][$option_id]['value'];
@@ -1354,7 +1352,13 @@ class SurveyUtil
      * Quite similar to display_complete_report(), returns an HTML string
      * that can be used in a csv file.
      *
+     * @param array $survey_data The basic survey data as initially obtained by SurveyManager::get_survey()
+     * @param int   $user_id     The ID of the user asking for the report
+     * @param bool  $compact     Whether to present the long (v marks with multiple columns per question) or compact (one column per question) answers format
+     *
      * @todo consider merging this function with display_complete_report
+     *
+     * @throws Exception
      *
      * @return string The contents of a csv file
      *
@@ -1378,7 +1382,7 @@ class SurveyUtil
         $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
 
         $translate = false;
-        if (api_get_configuration_value('translate_html') == true) {
+        if (true == api_get_configuration_value('translate_html')) {
             $translate = true;
         }
 
@@ -1429,7 +1433,7 @@ class SurveyUtil
                     is_array($_POST['questions_filter']) &&
                     in_array($row['question_id'], $_POST['questions_filter']))
             ) {
-                if ($row['number_of_options'] == 0 or $compact) {
+                if (0 == $row['number_of_options'] || $compact) {
                     $return .= str_replace(
                         "\r\n",
                         '  ',
@@ -1525,8 +1529,8 @@ class SurveyUtil
 		          c_id = $course_id AND
 		          survey_id = $surveyId
 		          ";
-        if ($user_id != 0) {
-            $user_id = intval($user_id);
+        if (0 != $user_id) {
+            $user_id = (int) $user_id;
             $sql .= " AND user = $user_id ";
         }
         $sql .= ' ORDER BY user ASC ';
@@ -1550,8 +1554,8 @@ class SurveyUtil
                 $answers_of_user = [];
             }
 
-            if ('open' == $possible_answers_type[$row['question_id']] ||
-                'comment' == $possible_answers_type[$row['question_id']]
+            if ('open' === $possible_answers_type[$row['question_id']] ||
+                'comment' === $possible_answers_type[$row['question_id']]
             ) {
                 $temp_id = 'open'.$open_question_iterator;
                 $answers_of_user[$row['question_id']][$temp_id] = $row;
@@ -1578,10 +1582,12 @@ class SurveyUtil
     /**
      * Add a line to the csv file.
      *
-     * @param array Possible answers
-     * @param array User's answers
-     * @param mixed User ID or user details as string - Used as a string in the result string
-     * @param bool Whether to display user fields or not
+     * @param array $survey_data               Basic survey data (we're mostly interested in the 'anonymous' index)
+     * @param array $possible_options          Possible answers
+     * @param array $answers_of_user           User's answers
+     * @param mixed $user                      User ID or user details as string - Used as a string in the result string
+     * @param bool  $display_extra_user_fields Whether to display user fields or not
+     * @param bool  $compact                   Whether to show answers as different column values (true) or one column per option (false, default)
      *
      * @return string One line of the csv file
      *
@@ -1628,15 +1634,14 @@ class SurveyUtil
             }
         }
 
-
         if (is_array($possible_options)) {
             foreach ($possible_options as $question_id => $possible_option) {
                 if (is_array($possible_option) && count($possible_option) > 0) {
                     foreach ($possible_option as $option_id => &$value) {
                         // For each option of this question, look if it matches the user's answer
-                        $my_answer_of_user = !isset($answers_of_user[$question_id]) || isset($answers_of_user[$question_id]) && $answers_of_user[$question_id] == null ? [] : $answers_of_user[$question_id];
+                        $my_answer_of_user = !isset($answers_of_user[$question_id]) || isset($answers_of_user[$question_id]) && null == $answers_of_user[$question_id] ? [] : $answers_of_user[$question_id];
                         $key = array_keys($my_answer_of_user);
-                        if (isset($key[0]) && substr($key[0], 0, 4) == 'open') {
+                        if (isset($key[0]) && 'open' == substr($key[0], 0, 4)) {
                             // If this is an open type question (type starts by 'open'), take whatever answer is given
                             $return .= '"'.
                                 str_replace(
@@ -1655,9 +1660,9 @@ class SurveyUtil
                             if ($compact) {
                                 // If we asked for a compact view, show only one column for the question
                                 // and fill it with the text of the selected option (i.e. "Yes") instead of an ID
-                                if ($answers_of_user[$question_id][$option_id]['value'] != 0) {
+                                if (0 != $answers_of_user[$question_id][$option_id]['value']) {
                                     $return .= $answers_of_user[$question_id][$option_id]['value'].";";
-                            } else {
+                                } else {
                                     $return .= '"'.
                                         str_replace(
                                             '"',
@@ -1670,19 +1675,19 @@ class SurveyUtil
                                             )
                                         ).
                                         '";';
-                            }
+                                }
                             } else {
                                 // If we don't want a compact view, show one column per possible option and mark a 'v'
                                 // or the defined value in the corresponding column if the user selected it
-                                if ($answers_of_user[$question_id][$option_id]['value'] != 0) {
+                                if (0 != $answers_of_user[$question_id][$option_id]['value']) {
                                     $return .= $answers_of_user[$question_id][$option_id]['value'].";";
                                 } else {
                                     $return .= 'v;';
-                        }
+                                }
                             }
                         } else {
                             if (!$compact) {
-                        $return .= ';';
+                                $return .= ';';
                             }
                         }
                     }
@@ -2350,15 +2355,16 @@ class SurveyUtil
      * and additional users in the database
      * and sends the invitations by email.
      *
-     * @param $users_array Users $array array can be both a list of course uids AND a list of additional emailaddresses
-     * @param $invitation_title Title $string of the invitation, used as the title of the mail
-     * @param $invitation_text Text $string of the invitation, used as the text of the mail.
-     *                         The text has to contain a **link** string or this will automatically be added to the end
-     * @param int  $reminder
-     * @param bool $sendmail
-     * @param int  $remindUnAnswered
-     * @param bool $isAdditionalEmail
-     * @param bool $hideLink
+     * @param int    $surveyId
+     * @param array  $users_array       Users array can be both a list of course uids AND a list of additional email addresses
+     * @param string $invitation_title  title of the mail
+     * @param string $invitation_text   text of the mail has to contain a **link** string or
+     *                                  this will automatically be added to the end
+     * @param int    $reminder
+     * @param bool   $sendmail
+     * @param int    $remindUnAnswered
+     * @param bool   $isAdditionalEmail
+     * @param bool   $hideLink
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @author Julio Montoya - Adding auto-generated link support
@@ -2366,6 +2372,7 @@ class SurveyUtil
      * @version January 2007
      */
     public static function saveInvitations(
+        $surveyId,
         $users_array,
         $invitation_title,
         $invitation_text,
@@ -2375,12 +2382,13 @@ class SurveyUtil
         $isAdditionalEmail = false,
         $hideLink = false
     ) {
+        $surveyId = (int) $surveyId;
         if (!is_array($users_array)) {
             return 0;
         }
 
         // Getting the survey information
-        $survey_data = SurveyManager::get_survey($_GET['survey_id']);
+        $survey_data = SurveyManager::get_survey($surveyId);
         $survey_invitations = self::get_invitations($survey_data['survey_code']);
         $already_invited = self::get_invited_users($survey_data['code']);
 
@@ -2389,7 +2397,7 @@ class SurveyUtil
         if (1 == $remindUnAnswered) {
             // Remind only unanswered users
             $reminder = 1;
-            $exclude_users = SurveyManager::get_people_who_filled_survey($_GET['survey_id']);
+            $exclude_users = SurveyManager::get_people_who_filled_survey($surveyId);
         }
 
         $counter = 0; // Nr of invitations "sent" (if sendmail option)
@@ -2891,8 +2899,6 @@ class SurveyUtil
         $table->set_header(2, get_lang('SurveyCourse code'));
         $table->set_header(3, get_lang('Questions'));
         $table->set_header(4, get_lang('Author'));
-        //$table->set_header(5, get_lang('Language'));
-        //$table->set_header(6, get_lang('Shared'));
         $table->set_header(5, get_lang('Available from'));
         $table->set_header(6, get_lang('Until'));
         $table->set_header(7, get_lang('Invite'));
@@ -2909,7 +2915,13 @@ class SurveyUtil
         }
 
         $table->set_column_filter(8, 'anonymous_filter');
-        $table->set_form_actions(['delete' => get_lang('Delete survey')]);
+        $actions = [
+            'export_all' => get_lang('ExportResults'),
+            'send_to_tutors' => get_lang('SendToGroupTutors'),
+            'multiplicate' => get_lang('MultiplicateQuestions'),
+            'delete' => get_lang('DeleteSurvey'),
+        ];
+        $table->set_form_actions($actions);
         $table->display();
     }
 
@@ -2990,13 +3002,9 @@ class SurveyUtil
      * @param int  $survey_id the id of the survey
      * @param bool $drh
      *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
+     * @return string html code that are the actions that can be performed on any survey
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-     *
-     * @return string html code that are the actions that can be performed on any survey
      *
      * @version January 2007
      */
@@ -3033,19 +3041,23 @@ class SurveyUtil
         $type = $survey->getSurveyType();
 
         // Coach can see that only if the survey is in his session
-        if (api_is_allowed_to_edit() ||
-            api_is_element_in_the_session(TOOL_SURVEY, $survey_id)
-        ) {
-            $editUrl = $codePath.'survey/create_new_survey.php?'.
+        if (api_is_allowed_to_edit() || api_is_element_in_the_session(TOOL_SURVEY, $survey_id)) {
+            $configUrl = $codePath.'survey/create_new_survey.php?'.
                 http_build_query($params + ['action' => 'edit', 'survey_id' => $survey_id]);
+            $editUrl = $codePath.'survey/survey.php?'.
+                http_build_query($params + ['survey_id' => $survey_id]);
             if (3 == $survey->getSurveyType()) {
-                $editUrl = $codePath.'survey/edit_meeting.php?'.
+                $configUrl = $codePath.'survey/edit_meeting.php?'.
                     http_build_query($params + ['action' => 'edit', 'survey_id' => $survey_id]);
             }
 
             $actions[] = Display::url(
                 Display::return_icon('edit.png', get_lang('Edit')),
                 $editUrl
+            );
+            $actions[] = Display::url(
+                Display::return_icon('settings.png', get_lang('Configure')),
+                $configUrl
             );
 
             if (SurveyManager::survey_generation_hash_available()) {
@@ -3349,7 +3361,7 @@ class SurveyUtil
             LEFT JOIN $table_survey_question survey_question
             ON (survey.survey_id = survey_question.survey_id AND survey_question.c_id = $course_id)
             LEFT JOIN $table_user user
-            ON (survey.author = user.user_id)
+            ON (survey.author = user.id)
             WHERE survey.c_id = $course_id
             $search_restriction
             $condition_session
@@ -3499,7 +3511,7 @@ class SurveyUtil
             LEFT JOIN $table_survey_question survey_question
             ON (survey.survey_id = survey_question.survey_id AND survey.c_id = survey_question.c_id),
             $table_user user
-            WHERE survey.author = user.user_id AND survey.c_id = $course_id $list_condition
+            WHERE survey.author = user.id AND survey.c_id = $course_id $list_condition
         ";
         $sql .= ' GROUP BY survey.survey_id';
         $sql .= " ORDER BY col$column $direction ";
@@ -3606,15 +3618,16 @@ class SurveyUtil
             echo '<tr>';
             if (0 == $row['answered']) {
                 echo '<td>';
-                echo Display::return_icon(
-                    'statistics.png',
-                    get_lang('Create survey'),
-                    [],
+                $url = self::generateFillSurveyLink($row['invitation_code'], $_course, $row['session_id']);
+                $icon = Display::return_icon(
+                    'survey.png',
+                    get_lang('ClickHereToAnswerTheSurvey'),
+                    ['style' => 'margin-top: -4px'],
                     ICON_SIZE_TINY
                 );
-                $url = self::generateFillSurveyLink($row['invitation_code'], $_course, $row['session_id']);
                 echo '<a href="'.$url.'">
-                    '.$row['title']
+                    '.$icon
+                    .$row['title']
                     .'</a></td>';
             } else {
                 $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
@@ -3622,8 +3635,8 @@ class SurveyUtil
                     $_course
                 );
                 $icon = Display::return_icon(
-                    'statistics_na.png',
-                    get_lang('Survey'),
+                    'survey_na.png',
+                    get_lang('SurveysDone'),
                     [],
                     ICON_SIZE_TINY
                 );

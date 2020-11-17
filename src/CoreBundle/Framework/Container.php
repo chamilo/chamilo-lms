@@ -5,12 +5,14 @@
 namespace Chamilo\CoreBundle\Framework;
 
 use Chamilo\CoreBundle\Component\Editor\Editor;
-use Chamilo\CoreBundle\Hook\Interfaces\HookEventInterface;
 use Chamilo\CoreBundle\Manager\SettingsManager;
 use Chamilo\CoreBundle\Repository\AccessUrlRepository;
 use Chamilo\CoreBundle\Repository\CourseCategoryRepository;
 use Chamilo\CoreBundle\Repository\CourseRepository;
 use Chamilo\CoreBundle\Repository\IllustrationRepository;
+use Chamilo\CoreBundle\Repository\SequenceRepository;
+use Chamilo\CoreBundle\Repository\SequenceResourceRepository;
+use Chamilo\CoreBundle\Repository\SessionRepository;
 use Chamilo\CoreBundle\Repository\UserRepository;
 use Chamilo\CoreBundle\ToolChain;
 use Chamilo\CourseBundle\Repository\CAnnouncementAttachmentRepository;
@@ -25,11 +27,13 @@ use Chamilo\CourseBundle\Repository\CForumCategoryRepository;
 use Chamilo\CourseBundle\Repository\CForumForumRepository;
 use Chamilo\CourseBundle\Repository\CForumPostRepository;
 use Chamilo\CourseBundle\Repository\CForumThreadRepository;
-use Chamilo\CourseBundle\Repository\CGroupInfoRepository;
+use Chamilo\CourseBundle\Repository\CGroupCategoryRepository;
+use Chamilo\CourseBundle\Repository\CGroupRepository;
 use Chamilo\CourseBundle\Repository\CLinkCategoryRepository;
 use Chamilo\CourseBundle\Repository\CLinkRepository;
 use Chamilo\CourseBundle\Repository\CLpCategoryRepository;
 use Chamilo\CourseBundle\Repository\CLpRepository;
+use Chamilo\CourseBundle\Repository\CNotebookRepository;
 use Chamilo\CourseBundle\Repository\CQuizQuestionCategoryRepository;
 use Chamilo\CourseBundle\Repository\CQuizQuestionRepository;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
@@ -37,10 +41,13 @@ use Chamilo\CourseBundle\Repository\CShortcutRepository;
 use Chamilo\CourseBundle\Repository\CStudentPublicationAssignmentRepository;
 use Chamilo\CourseBundle\Repository\CStudentPublicationCommentRepository;
 use Chamilo\CourseBundle\Repository\CStudentPublicationRepository;
-use Chamilo\PageBundle\Entity\Page;
+use Chamilo\CourseBundle\Repository\CThematicAdvanceRepository;
+use Chamilo\CourseBundle\Repository\CThematicPlanRepository;
+use Chamilo\CourseBundle\Repository\CThematicRepository;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Routing\Router;
 use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
 use Symfony\Component\Security\Core\Role\RoleHierarchy;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -251,23 +258,12 @@ class Container
         return self::$container->get('Symfony\Component\Mailer\Mailer');
     }
 
-    /**
-     * @return SettingsManager
-     */
-    public static function getSettingsManager()
+    public static function getSettingsManager(): SettingsManager
     {
         return self::$container->get('chamilo.settings.manager');
     }
 
-    /*public static function setSettingsManager($manager)
-    {
-        self::$settingsManager = $manager;
-    }*/
-
-    /**
-     * @return \Chamilo\CourseBundle\Manager\SettingsManager
-     */
-    public static function getCourseSettingsManager()
+    public static function getCourseSettingsManager(): \Chamilo\CourseBundle\Manager\SettingsManager
     {
         return self::$container->get('Chamilo\CourseBundle\Manager\SettingsManager');
     }
@@ -282,286 +278,192 @@ class Container
 
     public static function getUserManager()
     {
-        return self::$container->get('Chamilo\CoreBundle\Repository\UserRepository');
+        return self::$container->get(UserRepository::class);
     }
 
-    /**
-     * @return CAttendanceRepository
-     */
-    public static function getAttendanceRepository()
+    public static function getAttendanceRepository(): CAttendanceRepository
     {
-        return self::$container->get('Chamilo\CourseBundle\Repository\CAttendanceRepository');
+        return self::$container->get(CAttendanceRepository::class);
     }
 
-    /**
-     * @return CAnnouncementRepository
-     */
-    public static function getAnnouncementRepository()
+    public static function getAnnouncementRepository(): CAnnouncementRepository
     {
-        return self::$container->get('Chamilo\CourseBundle\Repository\CAnnouncementRepository');
+        return self::$container->get(CAnnouncementRepository::class);
     }
 
-    /**
-     * @return AccessUrlRepository
-     */
-    public static function getAccessUrlRepository()
+    public static function getAccessUrlRepository(): AccessUrlRepository
     {
-        return self::$container->get('Chamilo\CoreBundle\Repository\AccessUrlRepository');
+        return self::$container->get(AccessUrlRepository::class);
     }
 
-    /**
-     * @return CAnnouncementAttachmentRepository
-     */
-    public static function getAnnouncementAttachmentRepository()
+    public static function getAnnouncementAttachmentRepository(): CAnnouncementAttachmentRepository
     {
-        return self::$container->get('Chamilo\CourseBundle\Repository\CAnnouncementAttachmentRepository');
+        return self::$container->get(CAnnouncementAttachmentRepository::class);
     }
 
-    /**
-     * @return CourseRepository
-     */
-    public static function getCourseRepository()
+    public static function getCourseRepository(): CourseRepository
     {
         return self::$container->get(CourseRepository::class);
     }
 
-    /**
-     * @return CourseCategoryRepository|object|null
-     */
-    public static function getCourseCategoryRepository()
+    public static function getSessionRepository(): SessionRepository
     {
-        return self::$container->get('Chamilo\CoreBundle\Repository\CourseCategoryRepository');
+        return self::$container->get(SessionRepository::class);
     }
 
-    /**
-     * @return CCalendarEventRepository
-     */
-    public static function getCalendarEventRepository()
+    public static function getCourseCategoryRepository(): CourseCategoryRepository
     {
-        return self::$container->get('Chamilo\CourseBundle\Repository\CCalendarEventRepository');
+        return self::$container->get(CourseCategoryRepository::class);
     }
 
-    /**
-     * @return CCalendarEventAttachmentRepository
-     */
-    public static function getCalendarEventAttachmentRepository()
+    public static function getCalendarEventRepository(): CCalendarEventRepository
     {
-        return self::$container->get('Chamilo\CourseBundle\Repository\CCalendarEventAttachmentRepository');
+        return self::$container->get(CCalendarEventRepository::class);
     }
 
-    /**
-     * @return CDocumentRepository
-     */
-    public static function getDocumentRepository()
+    public static function getCalendarEventAttachmentRepository(): CCalendarEventAttachmentRepository
     {
-        return self::$container->get('Chamilo\CourseBundle\Repository\CDocumentRepository');
+        return self::$container->get(CCalendarEventAttachmentRepository::class);
     }
 
-    /**
-     * @return CQuizRepository
-     */
-    public static function getExerciseRepository()
+    public static function getDocumentRepository(): CDocumentRepository
     {
-        return self::$container->get('Chamilo\CourseBundle\Repository\CQuizRepository');
+        return self::$container->get(CDocumentRepository::class);
     }
 
-    /**
-     * @return CExerciseCategoryRepository
-     */
-    public static function getExerciseCategoryRepository()
+    public static function getQuizRepository(): CQuizRepository
     {
-        return self::$container->get('Chamilo\CourseBundle\Repository\CExerciseCategoryRepository');
+        return self::$container->get(CQuizRepository::class);
     }
 
-    /**
-     * @return CForumForumRepository
-     */
-    public static function getForumRepository()
+    public static function getExerciseCategoryRepository(): CExerciseCategoryRepository
     {
-        return self::$container->get('Chamilo\CourseBundle\Repository\CForumForumRepository');
+        return self::$container->get(CExerciseCategoryRepository::class);
     }
 
-    /**
-     * @return CForumCategoryRepository
-     */
-    public static function getForumCategoryRepository()
+    public static function getForumRepository(): CForumForumRepository
     {
-        return self::$container->get('Chamilo\CourseBundle\Repository\CForumCategoryRepository');
+        return self::$container->get(CForumForumRepository::class);
     }
 
-    /**
-     * @return CForumPostRepository
-     */
-    public static function getForumPostRepository()
+    public static function getForumCategoryRepository(): CForumCategoryRepository
     {
-        return self::$container->get('Chamilo\CourseBundle\Repository\CForumPostRepository');
+        return self::$container->get(CForumCategoryRepository::class);
     }
 
-    /**
-     * @return CForumAttachmentRepository
-     */
-    public static function getForumAttachmentRepository()
+    public static function getForumPostRepository(): CForumPostRepository
     {
-        return self::$container->get('Chamilo\CourseBundle\Repository\CForumAttachmentRepository');
+        return self::$container->get(CForumPostRepository::class);
     }
 
-    /**
-     * @return CForumThreadRepository
-     */
-    public static function getForumThreadRepository()
+    public static function getForumAttachmentRepository(): CForumAttachmentRepository
     {
-        return self::$container->get('Chamilo\CourseBundle\Repository\CForumThreadRepository');
+        return self::$container->get(CForumAttachmentRepository::class);
     }
 
-    /**
-     * @return CGroupInfoRepository
-     */
-    public static function getGroupInfoRepository()
+    public static function getForumThreadRepository(): CForumThreadRepository
     {
-        return self::$container->get('Chamilo\CourseBundle\Repository\CGroupInfoRepository');
+        return self::$container->get(CForumThreadRepository::class);
     }
 
-    /**
-     * @return CQuizQuestionRepository
-     */
-    public static function getQuestionRepository()
+    public static function getGroupRepository(): CGroupRepository
     {
-        return self::$container->get('Chamilo\CourseBundle\Repository\CQuizQuestionRepository');
+        return self::$container->get(CGroupRepository::class);
     }
 
-    /**
-     * @return CQuizQuestionCategoryRepository
-     */
-    public static function getQuestionCategoryRepository()
+    public static function getGroupCategoryRepository(): CGroupCategoryRepository
     {
-        return self::$container->get('Chamilo\CourseBundle\Repository\CQuizQuestionCategoryRepository');
+        return self::$container->get(CGroupCategoryRepository::class);
     }
 
-    /**
-     * @return CLinkRepository
-     */
-    public static function getLinkRepository()
+    public static function getQuestionRepository(): CQuizQuestionRepository
     {
-        return self::$container->get('Chamilo\CourseBundle\Repository\CLinkRepository');
+        return self::$container->get(CQuizQuestionRepository::class);
     }
 
-    /**
-     * @return CLinkCategoryRepository
-     */
-    public static function getLinkCategoryRepository()
+    public static function getQuestionCategoryRepository(): CQuizQuestionCategoryRepository
     {
-        return self::$container->get('Chamilo\CourseBundle\Repository\CLinkCategoryRepository');
+        return self::$container->get(CQuizQuestionCategoryRepository::class);
     }
 
-    /**
-     * @return CLpRepository
-     */
-    public static function getLpRepository()
+    public static function getLinkRepository(): CLinkRepository
     {
-        return self::$container->get('Chamilo\CourseBundle\Repository\CLpRepository');
+        return self::$container->get(CLinkRepository::class);
     }
 
-    /**
-     * @return CLpCategoryRepository
-     */
-    public static function getLpCategoryRepository()
+    public static function getLinkCategoryRepository(): CLinkCategoryRepository
     {
-        return self::$container->get('Chamilo\CourseBundle\Repository\CLpCategoryRepository');
+        return self::$container->get(CLinkCategoryRepository::class);
     }
 
-    /**
-     * @return UserRepository
-     */
-    public static function getUserRepository()
+    public static function getLpRepository(): CLpRepository
     {
-        return self::$container->get('Chamilo\CoreBundle\Repository\UserRepository');
+        return self::$container->get(CLpRepository::class);
     }
 
-    /**
-     * @return IllustrationRepository
-     */
-    public static function getIllustrationRepository()
+    public static function getLpCategoryRepository(): CLpCategoryRepository
     {
-        return self::$container->get('Chamilo\CoreBundle\Repository\IllustrationRepository');
+        return self::$container->get(CLpCategoryRepository::class);
     }
 
-    /**
-     * @return CShortcutRepository
-     */
-    public static function getShortcutRepository()
+    public static function getNotebookRepository(): CNotebookRepository
     {
-        return self::$container->get('Chamilo\CourseBundle\Repository\CShortcutRepository');
+        return self::$container->get(CNotebookRepository::class);
     }
 
-    /**
-     * @return CStudentPublicationRepository
-     */
-    public static function getStudentPublicationRepository()
+    public static function getUserRepository(): UserRepository
     {
-        return self::$container->get('Chamilo\CourseBundle\Repository\CStudentPublicationRepository');
+        return self::$container->get(UserRepository::class);
     }
 
-    /**
-     * @return CStudentPublicationAssignmentRepository
-     */
-    public static function getStudentPublicationAssignmentRepository()
+    public static function getIllustrationRepository(): IllustrationRepository
     {
-        return self::$container->get('Chamilo\CourseBundle\Repository\CStudentPublicationAssignmentRepository');
+        return self::$container->get(IllustrationRepository::class);
     }
 
-    /**
-     * @return CStudentPublicationCommentRepository
-     */
-    public static function getStudentPublicationCommentRepository()
+    public static function getShortcutRepository(): CShortcutRepository
     {
-        return self::$container->get('Chamilo\CourseBundle\Repository\CStudentPublicationCommentRepository');
+        return self::$container->get(CShortcutRepository::class);
     }
 
-    public static function getThematicRepository()
+    public static function getStudentPublicationRepository(): CStudentPublicationRepository
     {
-        return self::$container->get('Chamilo\CourseBundle\Repository\CThematicRepository');
+        return self::$container->get(CStudentPublicationRepository::class);
     }
 
-    public static function getThematicPlanRepository()
+    public static function getStudentPublicationAssignmentRepository(): CStudentPublicationAssignmentRepository
     {
-        return self::$container->get('Chamilo\CourseBundle\Repository\CThematicPlanRepository');
+        return self::$container->get(CStudentPublicationAssignmentRepository::class);
     }
 
-    public static function getThematicAdvanceRepository()
+    public static function getStudentPublicationCommentRepository(): CStudentPublicationCommentRepository
     {
-        return self::$container->get('Chamilo\CourseBundle\Repository\CThematicAdvanceRepository');
+        return self::$container->get(CStudentPublicationCommentRepository::class);
     }
 
-    /**
-     * @param UserManager $manager
-     */
-    public static function setUserManager($manager)
+    public static function getSequenceResourceRepository(): SequenceResourceRepository
     {
-        self::$userManager = $manager;
+        return self::$container->get(SequenceResourceRepository::class);
     }
 
-    /**
-     * @param UserManager $manager
-     */
-    public static function setSiteManager($manager)
+    public static function getSequenceRepository(): SequenceRepository
     {
-        self::$siteManager = $manager;
+        return self::$container->get(SequenceRepository::class);
     }
 
-    /**
-     * @return \Sonata\UserBundle\Entity\GroupManager
-     */
-    public static function getGroupManager()
+    public static function getThematicRepository(): CThematicRepository
     {
-        return self::$container->get('fos_user.group_manager');
+        return self::$container->get(CThematicRepository::class);
     }
 
-    /**
-     * @return \Symfony\Component\HttpKernel\Debug\TraceableEventDispatcher
-     */
-    public static function getEventDispatcher()
+    public static function getThematicPlanRepository(): CThematicPlanRepository
     {
-        return self::$container->get('event_dispatcher');
+        return self::$container->get(CThematicPlanRepository::class);
+    }
+
+    public static function getThematicAdvanceRepository(): CThematicAdvanceRepository
+    {
+        return self::$container->get(CThematicAdvanceRepository::class);
     }
 
     /**
@@ -583,7 +485,7 @@ class Container
     }
 
     /**
-     * @return object|\Symfony\Cmf\Component\Routing\ChainRouter
+     * @return Router
      */
     public static function getRouter()
     {
@@ -610,51 +512,11 @@ class Container
         \CourseManager::setEntityManager($em);
         //self::setSettingsManager($container->get('chamilo.settings.manager'));
         //self::setUserManager($container->get('fos_user.user_manager'));
-        //self::setSiteManager($container->get('sonata.page.manager.site'));
         \CourseManager::setCourseSettingsManager($container->get('Chamilo\CourseBundle\Manager\SettingsManager'));
         // Setting course tool chain (in order to create tools to a course)
         \CourseManager::setToolList($container->get(ToolChain::class));
         if ($setSession) {
             self::$session = $container->get('session');
         }
-    }
-
-    /**
-     * Gets a sonata page.
-     *
-     * @param string $slug
-     */
-    public static function getPage($slug)
-    {
-        $container = self::$container;
-        /*$siteSelector = $container->get('sonata.page.site.selector');
-        $site = $siteSelector->retrieve();*/
-        $siteManager = $container->get('sonata.page.manager.site');
-        $request = self::getRequest();
-        $page = null;
-        if ($request) {
-            $host = $request->getHost();
-            $criteria = [
-                'locale' => $request->getLocale(),
-                'host' => $host,
-            ];
-            $site = $siteManager->findOneBy($criteria);
-
-            $pageManager = $container->get('sonata.page.manager.page');
-            // Parents only of homepage
-            $criteria = ['site' => $site, 'enabled' => true, 'slug' => $slug];
-            /** @var Page $page */
-            return $pageManager->findOneBy($criteria);
-        }
-
-        return $page;
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public static function instantiateHook(string $class): HookEventInterface
-    {
-        return self::$container->get('chamilo_core.hook_factory')->build($class);
     }
 }

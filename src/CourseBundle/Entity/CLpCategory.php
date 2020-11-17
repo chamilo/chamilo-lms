@@ -18,9 +18,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Table(
  *  name="c_lp_category",
- *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"})
- *  }
  * )
  * @ORM\Entity(repositoryClass="Gedmo\Sortable\Entity\Repository\SortableRepository")
  */
@@ -60,16 +57,29 @@ class CLpCategory extends AbstractResource implements ResourceInterface
     protected $users;
 
     /**
+     * @var ArrayCollection|CLp[]
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CLp", mappedBy="category", cascade={"detach"})
+     */
+    protected $lps;
+
+    /**
      * CLpCategory constructor.
      */
     public function __construct()
     {
         $this->users = new ArrayCollection();
+        $this->lps = new ArrayCollection();
     }
 
     public function __toString(): string
     {
         return $this->getName();
+    }
+
+    public function getIid()
+    {
+        return $this->iid;
     }
 
     /**
@@ -94,30 +104,6 @@ class CLpCategory extends AbstractResource implements ResourceInterface
     public function getCId()
     {
         return $this->cId;
-    }
-
-    /**
-     * Set id.
-     *
-     * @param int $id
-     *
-     * @return CLpCategory
-     */
-    public function setId($id)
-    {
-        $this->iid = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->iid;
     }
 
     /**
@@ -160,6 +146,14 @@ class CLpCategory extends AbstractResource implements ResourceInterface
     public function getPosition()
     {
         return $this->position;
+    }
+
+    /**
+     * @return CLp[]|ArrayCollection
+     */
+    public function getLps()
+    {
+        return $this->lps;
     }
 
     /**
@@ -244,11 +238,16 @@ class CLpCategory extends AbstractResource implements ResourceInterface
      */
     public function getResourceIdentifier(): int
     {
-        return $this->getId();
+        return $this->getIid();
     }
 
     public function getResourceName(): string
     {
         return $this->getName();
+    }
+
+    public function setResourceName(string $name): self
+    {
+        return $this->setName($name);
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -46,28 +47,32 @@ class AttendanceLink extends AbstractLink
         if (empty($this->course_code)) {
             return [];
         }
-        $tbl_attendance = $this->get_attendance_table();
         $sessionId = $this->get_session_id();
+        $repo = \Chamilo\CoreBundle\Framework\Container::getStudentPublicationRepository();
+        $qb = $repo->getResourcesByCourse(api_get_course_entity($this->course_id), api_get_session_entity($sessionId));
+        $qb->andWhere('resource.active = 1');
+        $links = $qb->getQuery()->getResult();
 
-        $sql = 'SELECT att.id, att.name, att.attendance_qualify_title
+        /*$tbl_attendance = $this->get_attendance_table();
+        $sql = 'SELECT att.iid, att.name, att.attendance_qualify_title
                 FROM '.$tbl_attendance.' att
                 WHERE
                     att.c_id = '.$this->course_id.' AND
                     att.active = 1 AND
                     att.session_id = '.$sessionId;
+        $result = Database::query($sql);*/
 
-        $result = Database::query($sql);
-
-        while ($data = Database::fetch_array($result)) {
-            if (isset($data['attendance_qualify_title']) && '' != $data['attendance_qualify_title']) {
-                $cats[] = [$data['id'], $data['attendance_qualify_title']];
+        /** @var \Chamilo\CourseBundle\Entity\CAttendance $link */
+        foreach ($links as $link) {
+            $title = $link->getAttendanceQualifyTitle();
+            if (!empty($title)) {
+                $cats[] = [$link->getIid(), $title];
             } else {
-                $cats[] = [$data['id'], $data['name']];
+                $cats[] = [$link->getIid(), $link->getName()];
             }
         }
-        $my_cats = isset($cats) ? $cats : [];
 
-        return $my_cats;
+        return isset($cats) ? $cats : [];
     }
 
     /**
@@ -90,11 +95,11 @@ class AttendanceLink extends AbstractLink
     }
 
     /**
-     * @param int $stud_id
+     * @param int $studentId
      *
      * @return array|null
      */
-    public function calc_score($stud_id = null, $type = null)
+    public function calc_score($studentId = null, $type = null)
     {
         $tbl_attendance_result = Database::get_course_table(TABLE_ATTENDANCE_RESULT);
         $sessionId = $this->get_session_id();
@@ -104,7 +109,7 @@ class AttendanceLink extends AbstractLink
                 FROM '.$this->get_attendance_table().' att
                 WHERE
                     att.c_id = '.$this->course_id.' AND
-                    att.id = '.$this->get_ref_id().' AND
+                    att.iid = '.$this->get_ref_id().' AND
                     att.session_id = '.$sessionId;
         $query = Database::query($sql);
         $attendance = Database::fetch_array($query, 'ASSOC');
@@ -113,12 +118,12 @@ class AttendanceLink extends AbstractLink
         $sql = 'SELECT *
                 FROM '.$tbl_attendance_result.'
                 WHERE c_id = '.$this->course_id.' AND attendance_id = '.$this->get_ref_id();
-        if (isset($stud_id)) {
-            $sql .= ' AND user_id = '.intval($stud_id);
+        if (isset($studentId)) {
+            $sql .= ' AND user_id = '.intval($studentId);
         }
         $scores = Database::query($sql);
         // for 1 student
-        if (isset($stud_id)) {
+        if (isset($studentId)) {
             if ($data = Database::fetch_array($scores, 'ASSOC')) {
                 return [
                     $data['score'],
@@ -136,7 +141,6 @@ class AttendanceLink extends AbstractLink
             $sum = 0;
             $sumResult = 0;
             $bestResult = 0;
-
             while ($data = Database::fetch_array($scores)) {
                 if (!(array_key_exists($data['user_id'], $students))) {
                     if (0 != $attendance['attendance_qualify_max']) {
@@ -163,7 +167,7 @@ class AttendanceLink extends AbstractLink
                         return [$sumResult / $rescount, $weight];
                         break;
                     case 'ranking':
-                        return AbstractLink::getCurrentUserRanking($stud_id, $students);
+                        return AbstractLink::getCurrentUserRanking($studentId, $students);
                         break;
                     default:
                         return [$sum, $rescount];
@@ -216,8 +220,8 @@ class AttendanceLink extends AbstractLink
      */
     public function is_valid_link()
     {
-        $sql = 'SELECT count(att.id) FROM '.$this->get_attendance_table().' att
-                 WHERE att.c_id = '.$this->course_id.' AND att.id = '.$this->get_ref_id();
+        $sql = 'SELECT count(att.iid) FROM '.$this->get_attendance_table().' att
+                 WHERE att.c_id = '.$this->course_id.' AND att.iid = '.$this->get_ref_id();
         $result = Database::query($sql);
         $number = Database::fetch_row($result);
 
@@ -229,11 +233,11 @@ class AttendanceLink extends AbstractLink
         // it was extracts the attendance id
         $sessionId = $this->get_session_id();
         $sql = 'SELECT * FROM '.$this->get_attendance_table().' att
-                WHERE att.c_id = '.$this->course_id.' AND att.id = '.$this->get_ref_id();
+                WHERE att.c_id = '.$this->course_id.' AND att.iid = '.$this->get_ref_id();
         $result = Database::query($sql);
         $row = Database::fetch_array($result, 'ASSOC');
         $attendance_id = $row['id'];
-        $url = api_get_path(WEB_PATH).'main/attendance/index.php?action=attendance_sheet_list&gradebook=view&attendance_id='.$attendance_id.'&'.api_get_cidreq_params($this->get_course_code(), $sessionId);
+        $url = api_get_path(WEB_PATH).'main/attendance/index.php?action=attendance_sheet_list&gradebook=view&attendance_id='.$attendance_id.'&'.api_get_cidreq_params($this->getCourseId(), $sessionId);
 
         return $url;
     }
@@ -266,7 +270,7 @@ class AttendanceLink extends AbstractLink
             return false;
         } elseif (!isset($this->attendance_data)) {
             $sql = 'SELECT * FROM '.$this->get_attendance_table().' att
-                    WHERE att.c_id = '.$this->course_id.' AND att.id = '.$this->get_ref_id();
+                    WHERE att.c_id = '.$this->course_id.' AND att.iid = '.$this->get_ref_id();
             $query = Database::query($sql);
             $this->attendance_data = Database::fetch_array($query);
         }

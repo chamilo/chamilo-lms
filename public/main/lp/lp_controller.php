@@ -114,29 +114,23 @@ $htmlHeadXtra[] = '
                         var parentClass = $(jItems[index - 1]).parent().parent().attr("class");
                         var parentId = $(jItems[index]).parent().parent().attr("id");
                         var myParentId = $(jItems[index - 1]).parent().parent().attr("id");
-                        //console.log(parentId + " - " + myParentId);
 
                         // We are brothers!
                         if (parentId == myParentId) {
                             if (subItems.length > 0) {
                                 var lastItem = $(jItems[index - 1]).find("li.sub_item");
                                 parentIndex = jItems.index(lastItem);
-                                console.log(parentIndex);
                                 jItem.detach().insertAfter(lastItem);
-                                //console.log("not classic");
                             } else {
-                                //console.log("classic");
                                 jItem.detach().insertBefore(jItems[index - 1]);
                             }
                             break;
                         }
 
-                        //console.log(parentClass);
                         if (parentClass == "record li_container") {
                             // previous is a chapter
                             var lastItem = $(jItems[index - 1]).parent().parent().find("li.li_container").last();
                             parentIndex = jItems.index(lastItem);
-                            //console.log(parentIndex);
                             jItem.detach().insertAfter(jItems[parentIndex]);
                         } else {
                             jItem.detach().insertBefore(jItems[index - 1]);
@@ -150,22 +144,16 @@ $htmlHeadXtra[] = '
                         var subItems = jItem.find("li.li_container");
                         if (subItems.length > 0) {
                             index = subItems.length + index;
-                            //console.log("element is a chapter with items");
-                            //console.log("new index = " + index);
                         }
 
                         var subItems = $(jItems[index + 1]).find("li.sub_item");
-                        //console.log("next subItems.length: "+subItems.length);
                         // This is an element entering in a chapter
                         if (subItems.length > 0) {
                             // Check if im a child
                             var parentClass = jItem.parent().parent().attr("class");
-                            //console.log(parentClass);
                             if (parentClass == "record li_container") {
                                 // Parent position
                                 var parentIndex = jItems.index(jItem.parent().parent());
-                                //console.log(jItem.parent().parent().attr("id"));
-                                //console.log(parentIndex);
                                 jItem.detach().insertAfter(jItems[parentIndex]);
                             } else {
                                 jItem.detach().insertAfter(subItems);
@@ -174,17 +162,12 @@ $htmlHeadXtra[] = '
                         }
 
                         var currentSubItems = $(jItems[index]).parent().find("li.sub_item");
-                        //console.log("currentSubItems"+currentSubItems.length);
-
                         var parentId = $(jItems[originIndex]).parent().parent().attr("id");
                         var myParentId = $(jItems[index + 1]).parent().parent().attr("id");
-                        //console.log("parent ids: "+ parentId + " - " + myParentId);
 
                         // We are brothers!
                         if (parentId == myParentId) {
                             if ((index + 1) < total) {
-                                //console.log(index + 1);
-                                //console.log("We are brothers");
                                 jItem.detach().insertAfter(jItems[index + 1]);
                             }
                             break;
@@ -192,9 +175,6 @@ $htmlHeadXtra[] = '
 
                         if (currentSubItems.length > 0) {
                             var parentIndex = jItems.index(jItem.parent().parent());
-                            //console.log("has currentSubItems");
-                            //console.log("id " + jItem.parent().parent().attr("id"));
-                            //console.log("parentIndex: " + parentIndex);
                             if (parentIndex >= 0) {
                                 jItem.detach().insertAfter(jItems[parentIndex]);
                                 break;
@@ -208,17 +188,13 @@ $htmlHeadXtra[] = '
                         }
 
                         if ((index + 1) < total) {
-                            //console.log(index + 1);
-                            //console.log("changed");
                             jItem.detach().insertAfter(jItems[index + 1]);
                         }
                      }
                      break;
             }
 
-            //console.log("rebuild");
             buildLPtree($("#lp_item_list"), 0);
-
             var order = "new_order="+ newOrderData + "&a=update_lp_item_order";
             $.post(
                 "'.$ajax_url.'",
@@ -250,18 +226,14 @@ $htmlHeadXtra[] = '
                 );
             },
             receive: function(event, ui) {
-                var id = $(ui.item).attr("data_id");
+                /*var id = $(ui.item).attr("data_id");
                 var type = $(ui.item).attr("data_type");
-                var title = $(ui.item).attr("title");
+                var title = $(ui.item).attr("title");*/
+                var id = $(ui.item).find(".link_with_id").attr("data_id");
+                var type = $(ui.item).find(".link_with_id").attr("data_type");
+                var title = $(ui.item).find(".link_with_id").html();
+
                 processReceive = true;
-
-                // Fix to use resource nodes.
-                var itemWithId = $(ui.item).find(".link_with_id")
-                if (itemWithId.length > 0) {
-                    id = $(itemWithId).attr("data_id");
-                    type = "document";
-                }
-
                 if (ui.item.parent()[0]) {
                     var parent_id = $(ui.item.parent()[0]).attr("id");
                     var previous_id = $(ui.item.prev()).attr("id");
@@ -277,13 +249,10 @@ $htmlHeadXtra[] = '
                             "title" : title
                         };
 
-                        console.log(params);
-
                         $.ajax({
                             type: "GET",
                             url: "'.$ajax_url.'",
                             data: params,
-                            async: false,
                             success: function(data) {
                                 $("#lp_item_list").html(data);
                             }
@@ -297,6 +266,7 @@ $htmlHeadXtra[] = '
 </script>';
 
 $session_id = api_get_session_id();
+
 $lpfound = false;
 $myrefresh = 0;
 $myrefresh_id = 0;
@@ -345,12 +315,6 @@ if (!empty($lpObject)) {
 }
 
 $course_id = api_get_course_int_id();
-$lpItemId = $_REQUEST['id'] ?? 0;
-$lpItem = null;
-if (!empty($lpItemId)) {
-    $lpItemRepo = Database::getManager()->getRepository('ChamiloCourseBundle:CLpItem');
-    $lpItem = $lpItemRepo->find($lpItemId);
-}
 
 if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $_REQUEST['lp_id'])) {
     if ($debug > 0) {
@@ -369,16 +333,12 @@ if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $
 
         $lp_table = Database::get_course_table(TABLE_LP_MAIN);
         if (!empty($lp_id)) {
-            $sel = "SELECT iid, lp_type FROM $lp_table WHERE c_id = $course_id AND id = $lp_id";
+            $sel = "SELECT iid, lp_type FROM $lp_table WHERE iid = $lp_id";
             $res = Database::query($sel);
             if (Database::num_rows($res)) {
                 $row = Database::fetch_array($res);
                 $lpIid = $row['iid'];
                 $type = $row['lp_type'];
-                if ($debug > 0) {
-                    error_log('Found row type '.$type);
-                    error_log('Calling constructor: '.api_get_course_id().' - '.$lp_id.' - '.api_get_user_id());
-                }
                 $logInfo = [
                     'tool' => TOOL_LEARNPATH,
                     'action' => 'lp_load',
@@ -412,16 +372,9 @@ if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $
                         break;
                 }
             }
-        } else {
-            if ($debug > 0) {
-                error_log(' Request[lp_id] is not numeric');
-            }
-        }
-    } else {
-        if ($debug > 0) {
-            error_log(' Request[lp_id] and refresh_id were empty');
         }
     }
+
     if ($lp_found) {
         Session::write('oLP', $oLP);
     }
@@ -525,14 +478,11 @@ switch ($action) {
             $layoutContent = $tplContent->get_template('mail/content_ending_learnpath.tpl');
             $emailBody = $tplContent->fetch($layoutContent);
 
-            api_mail_html(
-                $recipientName,
-                $email,
-                sprintf(get_lang('Student %s has completed his/her learning paths.'), $studentInfo['complete_name']),
+            MessageManager::send_message_simple(
+                $coachInfo['user_id'],
+                sprintf(get_lang('StudentXFinishedLp'), $studentInfo['complete_name']),
                 $emailBody,
-                $studentInfo['complete_name'],
-                $studentInfo['email'],
-                true
+                $studentInfo['user_id']
             );
         }
         Display::addFlash(Display::return_message(get_lang('Message Sent')));
@@ -665,7 +615,8 @@ switch ($action) {
 
                 // Remove audio
                 if (isset($_GET['delete_file']) && 1 == $_GET['delete_file']) {
-                    $lp_item_obj->remove_audio();
+                    $lp_item_obj->removeAudio();
+                    Display::addFlash(Display::return_message(get_lang('FileDeleted')));
 
                     $url = api_get_self().'?action=add_audio&lp_id='.intval($_SESSION['oLP']->lp_id).'&id='.$lp_item_obj->get_id().'&'.api_get_cidreq();
                     header('Location: '.$url);
@@ -676,16 +627,21 @@ switch ($action) {
                 if (isset($_FILES['file']) && !empty($_FILES['file'])) {
                     // Updating the lp.modified_on
                     $_SESSION['oLP']->set_modified_on();
-                    $lp_item_obj->add_audio();
+                    $lp_item_obj->addAudio();
+                    Display::addFlash(Display::return_message(get_lang('UplUploadSucceeded')));
                 }
 
                 //Add audio file from documents
                 if (isset($_REQUEST['document_id']) && !empty($_REQUEST['document_id'])) {
                     $_SESSION['oLP']->set_modified_on();
                     $lp_item_obj->add_audio_from_documents($_REQUEST['document_id']);
+                    Display::addFlash(Display::return_message(get_lang('Updated')));
                 }
+
+                require 'lp_add_audio.php';
+            } else {
+                require 'lp_add_audio.php';
             }
-            require 'lp_add_audio.php';
         }
         break;
     case 'add_lp_category':
@@ -780,6 +736,9 @@ switch ($action) {
                         api_get_user_id()
                     );
 
+                    $subscribeUsers = isset($_REQUEST['subscribe_users']) ? 1 : 0;
+                    $_SESSION['oLP']->setSubscribeUsers($subscribeUsers);
+
                     $accumulateScormTime = isset($_REQUEST['accumulate_scorm_time']) ? $_REQUEST['accumulate_scorm_time'] : 'true';
                     $_SESSION['oLP']->setAccumulateScormTime($accumulateScormTime);
 
@@ -816,6 +775,19 @@ switch ($action) {
                 require 'lp_list.php';
                 exit;
             }
+        }
+        break;
+    case 'build':
+        if (!$is_allowed_to_edit) {
+            api_not_allowed(true);
+        }
+        if (!$lp_found) {
+            require 'lp_list.php';
+        } else {
+            Session::write('refresh', 1);
+            $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id).'&'.api_get_cidreq();
+            header('Location: '.$url);
+            exit;
         }
         break;
     case 'edit_item':
@@ -856,7 +828,12 @@ switch ($action) {
                 if (isset($_POST['content_lp'])) {
                     $_SESSION['oLP']->edit_document($_course);
                 }
-                Display::addFlash(Display::return_message(get_lang('Update successful')));
+                $is_success = true;
+
+                $extraFieldValues = new ExtraFieldValue('lp_item');
+                $extraFieldValues->saveFieldValues($_POST);
+
+                Display::addFlash(Display::return_message(get_lang('Updated')));
                 $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id).'&'.api_get_cidreq();
                 header('Location: '.$url);
                 exit;
@@ -1137,19 +1114,7 @@ switch ($action) {
             Session::write('refresh', 1);
             $_SESSION['oLP']->set_name($_REQUEST['lp_name']);
             $author = $_REQUEST['lp_author'];
-            // Fixing the author name (no body or html tags).
-            $auth_init = stripos($author, '<p>');
-            if (false === $auth_init) {
-                $auth_init = stripos($author, '<body>');
-                $auth_end = $auth_init + stripos(substr($author, $auth_init + 6), '</body>') + 7;
-                $len = $auth_end - $auth_init + 6;
-            } else {
-                $auth_end = strripos($author, '</p>');
-                $len = $auth_end - $auth_init + 4;
-            }
-
-            $author_fixed = substr($author, $auth_init, $len);
-            $_SESSION['oLP']->set_author($author_fixed);
+            $_SESSION['oLP']->set_author($author);
             // TODO (as of Chamilo 1.8.8): Check in the future whether this field is needed.
             $_SESSION['oLP']->set_encoding($_REQUEST['lp_encoding']);
 
@@ -1454,9 +1419,6 @@ switch ($action) {
         if (!$lp_found) {
             require 'lp_list.php';
         } else {
-            if ($debug > 0) {
-                error_log('Trying to impress this LP item to '.$_REQUEST['item_id'], 0);
-            }
             if (!empty($_REQUEST['item_id'])) {
                 $_SESSION['oLP']->set_current_item($_REQUEST['item_id']);
             }

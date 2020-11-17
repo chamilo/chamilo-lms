@@ -1,5 +1,4 @@
 <?php
-
 /* For license terms, see /license.txt */
 /**
  * This script is included by main/admin/settings.lib.php and generally

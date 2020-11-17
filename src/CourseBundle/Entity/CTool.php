@@ -4,7 +4,6 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
-use APY\DataGridBundle\Grid\Mapping as GRID;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
@@ -27,7 +26,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  *  }
  * )
  * @ORM\Entity
- * @GRID\Source(columns="iid, name, resourceNode.createdAt", filterable=false, groups={"resource"})
  */
 class CTool extends AbstractResource implements ResourceInterface
 {
@@ -39,13 +37,6 @@ class CTool extends AbstractResource implements ResourceInterface
      * @ORM\GeneratedValue
      */
     protected $iid;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=true)
-     */
-    protected $id;
 
     /**
      * @Assert\NotBlank
@@ -60,13 +51,6 @@ class CTool extends AbstractResource implements ResourceInterface
      * @ORM\Column(name="visibility", type="boolean", nullable=true)
      */
     protected $visibility;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="category", type="string", length=20, nullable=false, options={"default" = "authoring"})
-     */
-    protected $category;
 
     /**
      * @var Course
@@ -103,18 +87,16 @@ class CTool extends AbstractResource implements ResourceInterface
      */
     public function __construct()
     {
-        // Default values
-        $this->id = 0;
     }
 
     public function __toString(): string
     {
-        return (string) $this->getName();
+        return $this->getName();
     }
 
     public function getName(): string
     {
-        return $this->name;
+        return (string) $this->name;
     }
 
     public function setName(string $name): self
@@ -201,54 +183,6 @@ class CTool extends AbstractResource implements ResourceInterface
         return $this->visibility;
     }
 
-    /**
-     * Set category.
-     *
-     * @param string $category
-     *
-     * @return CTool
-     */
-    public function setCategory($category)
-    {
-        $this->category = $category;
-
-        return $this;
-    }
-
-    /**
-     * Get category.
-     *
-     * @return string
-     */
-    public function getCategory()
-    {
-        return $this->category;
-    }
-
-    /**
-     * Set id.
-     *
-     * @param int $id
-     *
-     * @return CTool
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
     public function getTool(): Tool
     {
         return $this->tool;
@@ -267,10 +201,9 @@ class CTool extends AbstractResource implements ResourceInterface
     public function postPersist(LifecycleEventArgs $args)
     {
         // Update id with iid value
-        $em = $args->getEntityManager();
-        $this->setId($this->iid);
+        /*$em = $args->getEntityManager();
         $em->persist($this);
-        $em->flush($this);
+        $em->flush();*/
     }
 
     public function getPosition()
@@ -299,5 +232,10 @@ class CTool extends AbstractResource implements ResourceInterface
     public function getResourceName(): string
     {
         return $this->getName();
+    }
+
+    public function setResourceName(string $name): self
+    {
+        return $this->setName($name);
     }
 }

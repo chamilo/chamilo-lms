@@ -36,7 +36,9 @@ switch ($action) {
         $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
         $sessionId = api_get_session_id();
 
-        if (!$is_allowed_to_edit && $sessionId && $_REQUEST['curdirpath'] == "/basic-course-documents__{$sessionId}__0") {
+        if (!$is_allowed_to_edit && $sessionId &&
+            $_REQUEST['curdirpath'] == "/basic-course-documents__{$sessionId}__0"
+        ) {
             $session = SessionManager::fetch($sessionId);
 
             if (!empty($session) && $session['session_admin_id'] == api_get_user_id()) {
@@ -121,11 +123,15 @@ switch ($action) {
                 if (!empty($document)) {
                     $json['name'] = Display::url(
                         api_htmlentities($document->getTitle()),
-                        $repo->getDocumentUrl($document),
+                        $repo->getDocumentUrl($document, api_get_course_int_id(), $sessionId),
                         ['target' => '_blank']
                     );
                     $json['url'] = '#';
-                    $json['size'] = format_file_size($document->getSize());
+                    $json['size'] = 0;
+                    if ($document->getResourceNode()->hasResourceFile()) {
+                        $json['size'] = format_file_size($document->getResourceNode()->getResourceFile()->getSize());
+                    }
+
                     $json['type'] = '';
                     $json['result'] = Display::return_icon(
                         'accept.png',

@@ -36,11 +36,6 @@ $item_id = isset($_REQUEST['item_id']) ? (int) $_REQUEST['item_id'] : null;
 $origin = api_get_origin();
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : 'list';
 
-// Download folder
-if ('downloadfolder' === $action) {
-    require 'downloadfolder.inc.php';
-}
-
 $display_upload_form = false;
 if ('upload_form' === $action) {
     $display_upload_form = true;

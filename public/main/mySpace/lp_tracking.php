@@ -40,7 +40,7 @@ if (!$isBoss &&
     !api_is_platform_admin(true) &&
     !api_is_drh() &&
     !api_is_course_tutor() &&
-    !CourseManager::is_course_teacher(api_get_user_id(), $courseCode) &&
+    !CourseManager::isCourseTeacher(api_get_user_id(), $courseInfo['real_id']) &&
     !Tracking::is_allowed_to_coach_student(api_get_user_id(), $user_id)
 ) {
     api_not_allowed('learnpath' !== api_get_origin());

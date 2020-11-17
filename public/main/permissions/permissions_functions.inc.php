@@ -169,9 +169,6 @@ function get_permissions($content, $id)
  * the array that contains the current permission a user, group or role has will now be changed depending on
  * the Dokeos Config Setting for the permissions (limited [add, edit, delete] or full [view, add, edit, delete, move, visibility].
  *
- * @param $content are we retrieving the rights of a user, a group or a role (the database depends on it)
- * @param $id the id of the user, group or role
- *
  * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University
  *
  * @version 1.0

@@ -10,6 +10,9 @@
  *
  * @todo fix excel export
  */
+
+use Chamilo\CoreBundle\Entity\TrackEAttemptRecording;
+
 require_once __DIR__.'/../inc/global.inc.php';
 
 $htmlHeadXtra[] = api_get_jqgrid_js();
@@ -159,13 +162,14 @@ if (isset($_REQUEST['comments']) &&
     if (empty($track_exercise_info)) {
         api_not_allowed();
     }
+
     $student_id = $track_exercise_info['exe_user_id'];
     $session_id = $track_exercise_info['session_id'];
     $lp_id = $track_exercise_info['orig_lp_id'];
     $lpItemId = $track_exercise_info['orig_lp_item_id'];
     $lp_item_view_id = (int) $track_exercise_info['orig_lp_item_view_id'];
     $exerciseId = $track_exercise_info['exe_exo_id'];
-    $exeWeighting = $track_exercise_info['exe_weighting'];
+    $exeWeighting = $track_exercise_info['max_score'];
     $post_content_id = [];
     $comments_exist = false;
 
@@ -186,7 +190,7 @@ if (isset($_REQUEST['comments']) &&
     }
 
     for ($i = 0; $i < $loop_in_track; $i++) {
-        $my_marks = isset($_POST['marks_'.$array_content_id_exe[$i]]) ? $_POST['marks_'.$array_content_id_exe[$i]] : '';
+        $my_marks = isset($_POST['marks_'.$array_content_id_exe[$i]]) ? $_POST['marks_'.$array_content_id_exe[$i]] : 0;
         $my_comments = '';
         if (isset($_POST['comments_'.$array_content_id_exe[$i]])) {
             $my_comments = $_POST['comments_'.$array_content_id_exe[$i]];
@@ -203,15 +207,29 @@ if (isset($_REQUEST['comments']) &&
             ['question_id = ? AND exe_id = ?' => [$my_questionid, $id]]
         );
 
-        $params = [
-            'exe_id' => $id,
-            'question_id' => $my_questionid,
+        $recording = new TrackEAttemptRecording();
+        $recording
+            ->setExeId($id)
+            ->setQuestionId($my_questionid)
+            ->setAuthor(api_get_user_id())
+            ->setTeacherComment($my_comments)
+            ->setExeId($id)
+            ->setMarks($my_marks)
+            ->setSessionId(api_get_session_id())
+        ;
+
+        $em = Database::getManager();
+        $em->persist($recording);
+        $em->flush();
+
+        /*$params = [
             'marks' => $my_marks,
-            'insert_date' => api_get_utc_datetime(),
+            //'insert_date' => api_get_utc_datetime(),
             'author' => api_get_user_id(),
             'teacher_comment' => $my_comments,
+            'session_id' => api_get_session_id(),
         ];
-        Database::insert($TBL_TRACK_ATTEMPT_RECORDING, $params);
+        Database::insert($TBL_TRACK_ATTEMPT_RECORDING, $params);*/
     }
 
     $useEvaluationPlugin = false;
@@ -323,7 +341,11 @@ if ($is_allowedToEdit && 'learnpath' != $origin) {
             Display::return_icon('statistics.png', get_lang('Report by question'), '', ICON_SIZE_MEDIUM).'</a>';
         $actions .= '<a id="export_opener" href="'.api_get_self().'?export_report=1&exerciseId='.$exercise_id.'" >'.
         Display::return_icon('save.png', get_lang('Export'), '', ICON_SIZE_MEDIUM).'</a>';
-        // clean result before a selected date icon
+        $actions .= Display::url(
+            Display::return_icon('reload.png', get_lang('RecalculateResults'), [], ICON_SIZE_MEDIUM),
+            api_get_path(WEB_CODE_PATH).'exercise/recalculate_all.php?'.api_get_cidreq()."&exercise=$exercise_id"
+        );
+
         // clean result before a selected date icon
         if ($allowClean) {
             $actions .= Display::url(

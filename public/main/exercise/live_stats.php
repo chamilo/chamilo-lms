@@ -24,7 +24,7 @@ $interbreadcrumb[] = [
     'name' => get_lang('Tests'),
 ];
 $interbreadcrumb[] = [
-    'url' => "admin.php?exerciseId=$exercise_id&".api_get_cidreq(),
+    'url' => "admin.php?id=$exercise_id&".api_get_cidreq(),
     'name' => $objExercise->selectTitle(true),
 ];
 

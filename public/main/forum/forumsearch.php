@@ -2,6 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CForumForum;
+
 /**
  * These files are a complete rework of the forum. The database structure is
  * based on phpBB but all the code is rewritten. A lot of new functionalities
@@ -30,6 +33,11 @@ api_protect_course_script(true);
 // Including additional library scripts.
 include 'forumfunction.inc.php';
 
+$forumId = isset($_GET['forum']) ? (int) ($_GET['forum']) : 0;
+$repo = Container::getForumRepository();
+/** @var CForumForum $forumEntity */
+$forumEntity = $repo->find($forumId);
+
 // Are we in a lp ?
 $origin = api_get_origin();
 
@@ -45,7 +53,7 @@ if (api_is_in_gradebook()) {
 
 $groupId = api_get_group_id();
 
-if ('group' == $origin) {
+if ('group' === $origin) {
     $group_properties = GroupManager:: get_group_properties($groupId);
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
@@ -56,8 +64,8 @@ if ('group' == $origin) {
         'name' => get_lang('Group area').' ('.$group_properties['name'].')',
     ];
     $interbreadcrumb[] = [
-        'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?origin='.$origin.'&forum='.(int) ($_GET['forum']).'&'.api_get_cidreq(),
-        'name' => prepare4display($current_forum['forum_title']),
+        'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?origin='.$origin.'&forum='.$forumId.'&'.api_get_cidreq(),
+        'name' => prepare4display($forumEntity->getForumTitle()),
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/forumsearch.php?'.api_get_cidreq(),
@@ -72,7 +80,7 @@ if ('group' == $origin) {
 }
 
 // Display the header.
-if ('learnpath' == $origin) {
+if ('learnpath' === $origin) {
     Display::display_reduced_header();
 } else {
     Display::display_header($nameTools);
@@ -88,6 +96,6 @@ Event::event_access_tool(TOOL_FORUM);
 forum_search();
 
 // Footer
-if ('learnpath' != $origin) {
+if ('learnpath' !== $origin) {
     Display :: display_footer();
 }

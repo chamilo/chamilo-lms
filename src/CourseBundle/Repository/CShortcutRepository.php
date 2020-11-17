@@ -10,7 +10,7 @@ use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
-use Chamilo\CourseBundle\Entity\CGroupInfo;
+use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CShortcut;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Form\FormInterface;
@@ -28,7 +28,34 @@ final class CShortcutRepository extends ResourceRepository
         return $repo->findOneBy($criteria);
     }
 
-    public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroupInfo $group = null): QueryBuilder
+    public function addShortCut(AbstractResource $resource, $parent, Course $course, Session $session = null)
+    {
+        $em = $this->getRepository()->getEntityManager();
+        $shortcut = $this->getShortcutFromResource($resource);
+
+        if (null === $shortcut) {
+            $shortcut = new CShortcut();
+            $shortcut
+                ->setName($resource->getResourceName())
+                ->setShortCutNode($resource->getResourceNode())
+                ->setParent($parent)
+                ->addCourseLink($course, $session);
+            $em->persist($shortcut);
+            $em->flush();
+        }
+    }
+
+    public function removeShortCut(AbstractResource $resource)
+    {
+        $em = $this->getRepository()->getEntityManager();
+        $shortcut = $this->getShortcutFromResource($resource);
+        if (null !== $shortcut) {
+            $em->remove($shortcut);
+            $em->flush();
+        }
+    }
+
+    public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroup $group = null): QueryBuilder
     {
         $repo = $this->getRepository();
         $className = $repo->getClassName();
@@ -40,7 +67,7 @@ final class CShortcutRepository extends ResourceRepository
                 'resource.resourceNode',
                 'node'
             )
-            ->innerJoin('node.resourceFile', 'file')
+            ->leftJoin('node.resourceFile', 'file')
             //->innerJoin('node.resourceLinks', 'links')
             //->where('node.resourceType = :type')
             //->setParameter('type',$type)

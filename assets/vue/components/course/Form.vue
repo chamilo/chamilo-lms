@@ -49,7 +49,6 @@
           />
         </v-col>
       </v-row>
-
     </v-container>
   </v-form>
 </template>
@@ -151,7 +150,7 @@
     },
     methods: {
       ...mapActions({
-        categoryGetSelectItems: 'coursecategory/fetchSelectItems'
+        categoryGetSelectItems: 'coursecategory/load'
       }),
     },
     validations: {

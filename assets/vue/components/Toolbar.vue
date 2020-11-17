@@ -1,85 +1,118 @@
 <template>
-  <v-toolbar class="my-md-auto" elevation="0">
-    <slot name="left"></slot>
-    <v-spacer />
-    <div>
-      <v-btn
-              v-if="handleList"
-              :loading="isLoading"
-              color="primary"
-              @click="listItem"
-      >
-        {{ $t('List') }}
-      </v-btn>
-      <v-btn
-        v-if="handleEdit"
-        :loading="isLoading"
-        color="primary"
-        @click="editItem"
-      >
-        {{ $t('Edit') }}
-      </v-btn>
-      <v-btn
-        v-if="handleSubmit"
-        :loading="isLoading"
-        color="primary"
-        @click="submitItem"
-      >
-        <v-icon left>mdi-content-save</v-icon>
-        {{ $t('Submit') }}
-      </v-btn>
-      <v-btn
-        v-if="handleReset"
-        color="primary"
-        class="ml-sm-2"
-        @click="resetItem"
-      >
-        {{ $t('Reset') }}
-      </v-btn>
-      <v-btn
-        v-if="handleDelete"
-        color="error"
-        class="ml-sm-2"
-        @click="confirmDelete = true"
-      >
-        {{ $t('Delete') }}
-      </v-btn>
+  <div class="">
+    <slot name="left" />
 
-      <v-btn v-if="handleAdd"
-             color="primary"
-             rounded
-             @click="addItem">
-        <v-icon left>mdi-folder-plus-outline</v-icon> New folder
-      </v-btn>
+    <b-button
+      v-if="handleList"
+      :loading="isLoading"
+      variant="primary"
+      @click="listItem"
+    >
+      {{ $t('List') }}
+    </b-button>
+    <b-button
+      v-if="handleEdit"
+      :loading="isLoading"
+      variant="primary"
+      @click="editItem"
+    >
+      {{ $t('Edit') }}
+    </b-button>
 
-      <v-btn v-if="handleAddDocument" color="primary" rounded @click="addDocument">
-        <v-icon left>mdi-cloud-upload</v-icon>File upload
-      </v-btn>
+    <b-button
+      v-if="handleSubmit"
+      :loading="isLoading"
+      variant="primary"
+      @click="submitItem"
+    >
+      <font-awesome-icon icon="save" />
+      {{ $t('Submit') }}
+    </b-button>
+    <!--      <v-btn-->
+    <!--        v-if="handleReset"-->
+    <!--        color="primary"-->
+    <!--        class="ml-sm-2"-->
+    <!--        @click="resetItem"-->
+    <!--      >-->
+    <!--        {{ $t('Reset') }}-->
+    <!--      </v-btn>-->
+    <b-button
+      v-if="handleDelete"
+      variant="danger"
+      class="ml-sm-2"
+      @click="confirmDelete = true"
+    >
+      {{ $t('Delete') }}
+    </b-button>
 
-    </div>
+    <b-button
+      v-if="handleAdd"
+      variant="primary"
+      rounded
+      @click="addItem"
+    >
+      <font-awesome-icon icon="folder-plus" /> New folder
+    </b-button>
+
+    <b-button
+      v-if="handleAddDocument"
+      variant="primary"
+      rounded
+      @click="addDocument"
+    >
+      <font-awesome-icon icon="file-alt" /> New document
+    </b-button>
+
+    <b-button
+      v-if="handleUploadDocument"
+      variant="primary"
+      rounded
+      @click="uploadDocument"
+    >
+      <font-awesome-icon icon="cloud-upload-alt" /> File upload
+    </b-button>
+
+    <DataFilter
+      v-if="filters"
+      :handle-filter="onSendFilter"
+      :handle-reset="resetFilter"
+    >
+      <DocumentsFilterForm
+        ref="filterForm"
+        slot="filter"
+        :values="filters"
+      />
+    </DataFilter>
+
     <ConfirmDelete
       v-if="handleDelete"
       :visible="confirmDelete"
       :handle-delete="handleDelete"
       @close="confirmDelete = false"
     />
-  </v-toolbar>
+  </div>
 </template>
 
 <script>
 import ConfirmDelete from './ConfirmDelete';
+import DocumentsFilterForm from './documents/Filter';
+import DataFilter from './DataFilter';
 
 export default {
   name: 'Toolbar',
   components: {
-    ConfirmDelete
-  },
-  data() {
-    return {
-      confirmDelete: false
-    };
+    ConfirmDelete,
+    DocumentsFilterForm,
+    DataFilter
   },
   props: {
+    filters: {
+      type: Object,
+    },
+    handleFilter: {
+      type: Function,
+      required: false
+    },
     handleList: {
       type: Function,
       required: false
@@ -108,7 +141,18 @@ export default {
       type: Function,
       required: false
     },
-
+    onSendFilter: {
+      type: Function,
+      required: false
+    },
+    resetFilter: {
+      type: Function,
+      required: false
+    },
+    handleUploadDocument: {
+      type: Function,
+      required: false
+    },
     title: {
       type: String,
       required: false
@@ -118,6 +162,11 @@ export default {
       required: false,
       default: () => false
     }
+  },
+  data() {
+    return {
+      confirmDelete: false
+    };
   },
   methods: {
     listItem() {
@@ -135,7 +184,11 @@ export default {
         this.handleAddDocument();
       }
     },
-
+    uploadDocument() {
+      if (this.uploadDocument) {
+        this.handleUploadDocument();
+      }
+    },
     editItem() {
       if (this.handleEdit) {
         this.handleEdit();

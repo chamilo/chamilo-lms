@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\EventListener;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Manager\SettingsManager;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -18,19 +18,20 @@ use Symfony\Component\HttpKernel\KernelEvents;
  */
 class LocaleListener implements EventSubscriberInterface
 {
-    /** @var ContainerInterface */
-    protected $container;
-    private $defaultLocale;
+    protected $settingsManager;
+    protected $defaultLocale;
+    protected $paremeterBag;
 
     /**
      * LocaleListener constructor.
      *
      * @param string $defaultLocale
      */
-    public function __construct($defaultLocale, ContainerInterface $container)
+    public function __construct($defaultLocale, SettingsManager $settingsManager, ParameterBagInterface $paremeterBag)
     {
         $this->defaultLocale = $defaultLocale;
-        $this->container = $container;
+        $this->settingsManager = $settingsManager;
+        $this->paremeterBag = $paremeterBag;
     }
 
     public function onKernelRequest(RequestEvent $event)
@@ -39,9 +40,7 @@ class LocaleListener implements EventSubscriberInterface
         if (!$request->hasPreviousSession()) {
             return;
         }
-
-        $container = $this->container;
-        $installed = $container->get('kernel')->isInstalled();
+        $installed = 1 == $this->paremeterBag->get('installed');
 
         if (!$installed) {
             return;
@@ -65,9 +64,7 @@ class LocaleListener implements EventSubscriberInterface
             $localeList = [];
 
             // 1. Check platform locale
-            /** @var SettingsManager $settings */
-            $settings = $this->container->get('chamilo.settings.manager');
-            $platformLocale = $settings->getSetting('language.platform_language');
+            $platformLocale = $this->settingsManager->getSetting('language.platform_language');
 
             if (!empty($platformLocale)) {
                 $localeList['platform_lang'] = $platformLocale;
@@ -112,7 +109,7 @@ class LocaleListener implements EventSubscriberInterface
 
             $locale = '';
             foreach ($priorityList as $setting) {
-                $priority = $settings->getSetting("language.$setting");
+                $priority = $this->settingsManager->getSetting("language.$setting");
                 if (!empty($priority) && isset($localeList[$priority])) {
                     $locale = $localeList[$priority];
 

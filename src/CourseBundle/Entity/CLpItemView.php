@@ -16,7 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
  *      @ORM\Index(name="lp_item_id", columns={"lp_item_id"}),
  *      @ORM\Index(name="lp_view_id", columns={"lp_view_id"}),
  *      @ORM\Index(name="idx_c_lp_item_view_cid_lp_view_id_lp_item_id", columns={"c_id", "lp_view_id", "lp_item_id"}),
- *      @ORM\Index(name="idx_c_lp_item_view_cid_id_view_count", columns={"c_id", "id", "view_count"})
+ *      @ORM\Index(name="idx_c_lp_item_view_cid_id_view_count", columns={"c_id", "iid", "view_count"})
  *
  *  }
  * )
@@ -39,13 +39,6 @@ class CLpItemView
      * @ORM\Column(name="c_id", type="integer")
      */
     protected $cId;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=true)
-     */
-    protected $id;
 
     /**
      * @var int
@@ -395,30 +388,6 @@ class CLpItemView
     public function getMaxScore()
     {
         return $this->maxScore;
-    }
-
-    /**
-     * Set id.
-     *
-     * @param int $id
-     *
-     * @return CLpItemView
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -11,8 +12,6 @@ class DisplayGradebook
      *
      * @param Evaluation $evalobj
      * @param $selectcat
-     * @param $shownavbar 1=show navigation bar
-     * @param $forpdf only output for pdf file
      */
     public static function display_header_result($evalobj, $selectcat, $page)
     {
@@ -245,19 +244,19 @@ class DisplayGradebook
     /**
      * Displays the header for the gradebook containing the navigation tree and links.
      *
-     * @param Category $catobj
-     * @param int      $showtree '1' will show the browse tree and naviation buttons
-     * @param $selectcat
-     * @param bool  $is_course_admin
-     * @param bool  $is_platform_admin
-     * @param bool  $simple_search_form
-     * @param bool  $show_add_qualification Whether to show or not the link to add a new qualification
-     *                                      (we hide it in case of the course-embedded tool where we have only one
-     *                                      per course or session)
-     * @param bool  $show_add_link          Whether to show or not the link to add a new item inside
-     *                                      the qualification (we hide it in case of the course-embedded tool
-     *                                      where we have only one qualification per course or session)
-     * @param array $certificateLinkInfo
+     * @param Category      $catobj
+     * @param int           $showtree               '1' will show the browse tree and naviation buttons
+     * @param               $selectcat
+     * @param bool          $is_course_admin
+     * @param bool          $is_platform_admin
+     * @param FormValidator $simple_search_form
+     * @param bool          $show_add_qualification Whether to show or not the link to add a new qualification
+     *                                              (we hide it in case of the course-embedded tool where we have
+     *                                              only one per course or session)
+     * @param bool          $show_add_link          Whether to show or not the link to add a new item inside
+     *                                              the qualification (we hide it in case of the course-embedded tool
+     *                                              where we have only one qualification per course or session)
+     * @param array         $certificateLinkInfo
      */
     public static function header(
         $catobj,
@@ -674,8 +673,10 @@ class DisplayGradebook
         for ($count = 0; $count < count($evals_links); $count++) {
             $item = $evals_links[$count];
             $score = $item->calc_score($userId);
-            $my_score_denom = (0 == $score[1]) ? 1 : $score[1];
-            $item_value += $score[0] / $my_score_denom * $item->get_weight();
+            if ($score) {
+                $my_score_denom = (0 == $score[1]) ? 1 : $score[1];
+                $item_value += $score[0] / $my_score_denom * $item->get_weight();
+            }
             $item_total += $item->get_weight();
         }
         $item_value = api_number_format($item_value, 2);

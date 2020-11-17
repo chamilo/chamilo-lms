@@ -6,18 +6,16 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * CLp.
  *
  * @ORM\Table(
- *  name="c_lp",
- *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"}),
- *     @ORM\Index(name="session", columns={"session_id"})
- *  }
+ *  name="c_lp"
  * )
  * @ORM\Entity
  */
@@ -38,13 +36,6 @@ class CLp extends AbstractResource implements ResourceInterface
      * @ORM\Column(name="c_id", type="integer")
      */
     protected $cId;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=true)
-     */
-    protected $id;
 
     /**
      * @var int
@@ -215,11 +206,12 @@ class CLp extends AbstractResource implements ResourceInterface
     protected $autolaunch;
 
     /**
-     * @var int
+     * @var CLpCategory|null
      *
-     * @ORM\Column(name="category_id", type="integer", nullable=false, unique=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CLpCategory", inversedBy="lps")
+     * @ORM\JoinColumn(name="category_id", referencedColumnName="iid")
      */
-    protected $categoryId;
+    protected $category;
 
     /**
      * @var int
@@ -238,12 +230,16 @@ class CLp extends AbstractResource implements ResourceInterface
     /**
      * @var \DateTime
      *
+     * @Gedmo\Timestampable(on="create")
+     *
      * @ORM\Column(name="created_on", type="datetime", nullable=false)
      */
     protected $createdOn;
 
     /**
      * @var \DateTime
+     *
+     * @Gedmo\Timestampable(on="update")
      *
      * @ORM\Column(name="modified_on", type="datetime", nullable=false)
      */
@@ -278,6 +274,13 @@ class CLp extends AbstractResource implements ResourceInterface
     protected $accumulateWorkTime;
 
     /**
+     * @var CLpItem[]
+     *
+     * @ORM\OneToMany(targetEntity="CLpItem", mappedBy="lp", cascade={"persist", "remove"}, orphanRemoval=true)
+     */
+    protected $items;
+
+    /**
      * Constructor.
      */
     public function __construct()
@@ -309,6 +312,7 @@ class CLp extends AbstractResource implements ResourceInterface
         $this->subscribeUsers = 0;
         $this->useMaxScore = 1;
         $this->theme = '';
+        $this->items = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -989,30 +993,6 @@ class CLp extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Set id.
-     *
-     * @param int $id
-     *
-     * @return CLp
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
      * Set cId.
      *
      * @param int $cId
@@ -1036,22 +1016,14 @@ class CLp extends AbstractResource implements ResourceInterface
         return $this->cId;
     }
 
-    /**
-     * @return int
-     */
-    public function getCategoryId()
+    public function getCategory()
     {
-        return $this->categoryId;
+        return $this->category;
     }
 
-    /**
-     * @param int $categoryId
-     *
-     * @return CLp
-     */
-    public function setCategoryId($categoryId)
+    public function setCategory($category)
     {
-        $this->categoryId = $categoryId;
+        $this->category = $category;
 
         return $this;
     }
@@ -1119,5 +1091,10 @@ class CLp extends AbstractResource implements ResourceInterface
     public function getResourceName(): string
     {
         return $this->getName();
+    }
+
+    public function setResourceName(string $name): self
+    {
+        return $this->setName($name);
     }
 }

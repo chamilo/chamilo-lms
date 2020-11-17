@@ -86,7 +86,18 @@
     background-color: #e8f2f8;
     border-color: #bce8f1;
 }
-
+tr.sale-row {
+    font-size: 12px;
+}
+tr.sale-columns {
+    font-size: 10px;
+    text-transform: uppercase;
+    background-color: #e6e6e6;
+}
+tr.sale-columns th{
+    vertical-align: middle !important;
+    text-align: center;
+}
 @-moz-keyframes wobblebar-loader {
     0% {
         left: 4px;

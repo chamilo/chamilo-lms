@@ -7121,7 +7121,7 @@ Pozrite II. nižšie aktiváciu overovania LDAP</li>
 $ShibbolethMainActivateTitle = "<h3>Shibboleth overovanie</h3>";
 $ShibbolethMainActivateComment = "<p>Po prvé, budete musieť nakonfigurovať Shibboleth pre váš webový server.</p>Ak ho chcete nakonfigurovať pre Chamilo<h5>upravte súbor main/auth/shibboleth/config/aai.class.php</h5><p>Upravte hodnoty &#36;result objektu s názvom vašej Shibboleth atribútov</p><ul><li>&#36;result-&gt;unique_id = 'mail';</li><li>&#36;result-&gt;firstname = 'cn';</li><li>&#36;result-&gt;lastname = 'uid';</li><li>&#36;result-&gt;email = 'mail';</li><li>&#36;result-&gt;language = '-';</li><li>&#36;result-&gt;gender = '-';</li><li>&#36;result-&gt;address = '-';</li><li>&#36;result-&gt;staff_category = '-';</li><li>&#36;result-&gt;home_organization_type = '-'; </li><li>&#36;result-&gt;home_organization = '-';</li><li>&#36;result-&gt;affiliation = '-';</li><li>&#36;result-&gt;persistent_id = '-';</li><li>...</li></ul><br/>Ísť na <a href='settings.php?category=Shibboleth'>Zásuvný modul</a> pridať konfigurovateľný 'Shibboleth Prihlásenie' tlačidlo pre vašu Chamilo školu.";
 $LdapDescriptionTitle = "<h3>LDAP overovanie</h3>";
-$FacebookMainActivateTitle = "<h3>Facebook overovanie</h3>";
+$FacebookMainActivateTitle = "Facebook overovanie";
 $FacebookMainActivateComment = "<p>Po prvé, budete musieť vytvoriť Facebook aplikáciu (pozrite <a href='https://developers.facebook.com/apps'>https://developers.facebook.com/apps</a>) s vašim Facebook kontom. V Facebook Apps parameters, hodnota URL stránky by mala mať GET parameter 'action=fbconnect' (napr. http://mychamilo.com/?action=fbconnect).</p>Potom, <h5>upravte súbor main/auth/external_login/facebook.conf.php</h5>a zadajte 'appId' a 'secret' hodnoty pre &#36;facebook_config.<br/>Ísť na <a href='settings.php?category=Facebook'>Zásuvný modul</a> pridať a konfigurovať 'Facebook Prihlásenie' tlačidlo pre vašu Chamilo školu.<br />";
 $AnnouncementForGroup = "Oznámenie pre skupinu";
 $AllGroups = "Všetky skupiny";
@@ -7322,7 +7322,7 @@ $BadgesManagement = "Správa odznakov";
 $CurrentBadges = "Aktuálne odznaky";
 $SaveBadge = "Uložiť odznak";
 $BadgeMeasuresXPixelsInPNG = "Rozmery odznaku 200x200 bodov v PNG";
-$SetTutor = "Nastaviť ako tréner";
+$ConvertToCourseAssistant = "Nastaviť ako tréner";
 $UniqueAnswerImage = "Jedinečná obrázková odpoveď";
 $TimeSpentByStudentsInCoursesGroupedByCode = "Čas študentov strávený v kurzoch, zoskupené podľa kódu";
 $TestResultsByStudentsGroupesByCode = "Výsledky testov podľa študentských skupiny, podľa kódu";
@@ -7461,7 +7461,7 @@ $DocumentsDefaultVisibilityDefinedInCourseComment = "Predvolená viditeľnosť d
 $HtmlPurifierWikiTitle = "HTML Čistič vo Wiki";
 $HtmlPurifierWikiComment = "Povoliť HTML čistič v Wiki nástroji (zvýši bezpečnosť, ale znížiť vlastnosti štýlu)";
 $ClickOrDropFilesHere = "Kliknúť alebo pustiť súbory";
-$RemoveTutorStatus = "Odstrániť stav lektora";
+$RemoveCourseAssistantStatus = "Odstrániť stav lektora";
 $InstitutionAddressTitle = "Adresa inštitúcie";
 $InstitutionAddressComment = "Adresa";
 $LatestLoginInCourse = "Posledný prístup do kurzu";

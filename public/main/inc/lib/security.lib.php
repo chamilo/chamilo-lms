@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\HTMLPurifier\Filter\AllowIframes;
@@ -141,7 +142,7 @@ class Security
      *
      * @return bool True if it's the right token, false otherwise
      */
-    public static function check_token($request_type = 'post')
+    public static function check_token($request_type = 'post', FormValidator $form = null)
     {
         $sessionToken = Session::read('sec_token');
         switch ($request_type) {
@@ -159,6 +160,14 @@ class Security
                 return false;
             case 'post':
                 if (!empty($sessionToken) && isset($_POST['sec_token']) && $sessionToken === $_POST['sec_token']) {
+                    return true;
+                }
+
+                return false;
+            case 'form':
+                $token = $form->getSubmitValue('protect_token');
+
+                if (!empty($sessionToken) && !empty($token) && $sessionToken === $token) {
                     return true;
                 }
 
@@ -475,8 +484,6 @@ class Security
      * Image paths are supposed to be given by programmers - people who know what they do, anyway,
      * this method encourages a safe practice for generating icon paths, without using heavy solutions
      * based on HTMLPurifier for example.
-     *
-     * @param string $img_path the input path of the image, it could be relative or absolute URL
      *
      * @return string returns sanitized image path or an empty string when the image path is not secure
      *

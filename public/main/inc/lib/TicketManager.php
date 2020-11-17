@@ -1987,7 +1987,7 @@ class TicketManager
         $project->setLastEditDateTime(new DateTime($params['sys_lastedit_datetime']));
         $project->setLastEditUserId($params['sys_lastedit_user_id']);
 
-        Database::getManager()->merge($project);
+        Database::getManager()->persist($project);
         Database::getManager()->flush();
     }
 
@@ -2109,7 +2109,7 @@ class TicketManager
         $item->setName($params['name']);
         $item->setDescription($params['description']);
 
-        Database::getManager()->merge($item);
+        Database::getManager()->persist($item);
         Database::getManager()->flush();
     }
 
@@ -2236,7 +2236,7 @@ class TicketManager
         $item->setName($params['name']);
         $item->setDescription($params['description']);
 
-        Database::getManager()->merge($item);
+        Database::getManager()->persist($item);
         Database::getManager()->flush();
     }
 

@@ -6,6 +6,7 @@ namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField;
+use Chamilo\CoreBundle\Entity\ExtraFieldRelTag;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
@@ -52,14 +53,13 @@ class CourseController extends AbstractController
     {
         $courseId = $course->getId();
         $userId = $this->getUser()->getId();
-
         $em = $this->getDoctrine()->getManager();
 
-        $fieldsRepo = $em->getRepository('ChamiloCoreBundle:ExtraField');
-        $fieldTagsRepo = $em->getRepository('ChamiloCoreBundle:ExtraFieldRelTag');
+        $fieldsRepo = $em->getRepository(ExtraField::class);
+        $fieldTagsRepo = $em->getRepository(ExtraFieldRelTag::class);
 
         /** @var CCourseDescription $courseDescription */
-        $courseDescriptionTools = $em->getRepository('ChamiloCourseBundle:CCourseDescription')
+        $courseDescriptionTools = $em->getRepository(CCourseDescription::class)
             ->findBy(
                 [
                     'cId' => $course->getId(),

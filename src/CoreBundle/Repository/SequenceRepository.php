@@ -4,11 +4,13 @@
 
 namespace Chamilo\CoreBundle\Repository;
 
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Sequence;
 use Chamilo\CoreBundle\Entity\SequenceResource;
+use Chamilo\CoreBundle\Entity\Session;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * Class SequenceRepository
@@ -63,11 +65,11 @@ class SequenceRepository extends ServiceEntityRepository
         $resource = null;
         switch ($type) {
             case SequenceResource::COURSE_TYPE:
-                $repo = $this->getEntityManager()->getRepository('ChamiloCoreBundle:Course');
+                $repo = $this->getEntityManager()->getRepository(Course::class);
 
                 break;
             case SequenceResource::SESSION_TYPE:
-                $repo = $this->getEntityManager()->getRepository('ChamiloCoreBundle:Session');
+                $repo = $this->getEntityManager()->getRepository(Session::class);
 
                 break;
         }

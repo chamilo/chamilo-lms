@@ -24,11 +24,11 @@ $origin = api_get_origin();
 if ('learnpath' === $origin) {
     $em = Database::getManager();
     /** @var CStudentPublication $work */
-    $work = $em->getRepository('ChamiloCourseBundle:CStudentPublication')->findOneBy(
+    $work = $em->getRepository(CStudentPublication::class)->findOneBy(
         ['iid' => $workId, 'cId' => $courseInfo['real_id']]
     );
     if ($work) {
-        $workId = $work->getId();
+        $workId = $work->getIid();
     }
 }
 
@@ -122,8 +122,8 @@ if (!empty($extraFieldWorkData)) {
                         e.preventDefault();
                     }
                 });
-                
-                $('.download_extra_field').on('click', function(e){      
+
+                $('.download_extra_field').on('click', function(e){
                     clicked = 1;
                 });
             });
@@ -280,7 +280,7 @@ if (!api_is_invitee()) {
     $content .= '
         <script>
             $(function() {
-                '.Display::grid_js('results', $url, $columns, $columnModel, $extraParams).'            
+                '.Display::grid_js('results', $url, $columns, $columnModel, $extraParams).'
             });
         </script>
     ';

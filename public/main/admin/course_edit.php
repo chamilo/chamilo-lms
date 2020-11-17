@@ -2,10 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\CourseCategory;
-use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Repository\CourseCategoryRepository;
-use Chamilo\CoreBundle\Repository\CourseRepository;
+use Chamilo\CoreBundle\Framework\Container;
 
 $cidReset = true;
 
@@ -16,11 +13,8 @@ api_protect_admin_script();
 
 $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
 $em = Database::getManager();
-/** @var CourseRepository $courseRepo */
-$courseRepo = $em->getRepository('ChamiloCoreBundle:CourseCategory');
-/** @var CourseCategoryRepository $courseCategoriesRepo */
-$courseCategoriesRepo = $em->getRepository('ChamiloCoreBundle:CourseCategory');
-// Get all possible teachers.
+$courseCategoriesRepo = Container::getCourseCategoryRepository();
+
 $urlId = api_get_current_access_url_id();
 
 $courseId = isset($_GET['id']) ? $_GET['id'] : null;
@@ -47,11 +41,13 @@ $courseId = $courseInfo['real_id'];
 // Get course teachers
 $table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';
-$sql = "SELECT user.user_id,lastname,firstname
-        FROM $table_user as user,$table_course_user as course_user
+$sql = "SELECT user.id as user_id,lastname,firstname
+        FROM
+            $table_user as user,
+            $table_course_user as course_user
         WHERE
             course_user.status='1' AND
-            course_user.user_id=user.user_id AND
+            course_user.user_id=user.id AND
             course_user.c_id ='".$courseId."'".
         $order_clause;
 $res = Database::query($sql);
@@ -63,15 +59,15 @@ while ($obj = Database::fetch_object($res)) {
 // Get all possible teachers without the course teachers
 if (api_is_multiple_url_enabled()) {
     $access_url_rel_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-    $sql = "SELECT u.user_id,lastname,firstname
+    $sql = "SELECT u.id as user_id,lastname,firstname
             FROM $table_user as u
             INNER JOIN $access_url_rel_user_table url_rel_user
-            ON (u.user_id=url_rel_user.user_id)
+            ON (u.id=url_rel_user.user_id)
             WHERE
                 url_rel_user.access_url_id = $urlId AND
                 status = 1".$order_clause;
 } else {
-    $sql = "SELECT user_id, lastname, firstname
+    $sql = "SELECT id as user_id, lastname, firstname
             FROM $table_user WHERE status='1'".$order_clause;
 }
 $courseInfo['tutor_name'] = null;
@@ -144,50 +140,35 @@ $form->addText(
 $form->applyFilter('visual_code', 'strtoupper');
 $form->applyFilter('visual_code', 'html_filter');
 
-$countCategories = $courseCategoriesRepo->countAllInAccessUrl(
+$categories = $courseCategoriesRepo->getCategoriesByCourseIdAndAccessUrlId(
     $urlId,
+    $courseId,
     api_get_configuration_value('allow_base_course_category')
 );
-if ($countCategories >= 100) {
-    // Category code
-    $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_category';
 
-    $categorySelect = $form->addElement(
-        'select_ajax',
-        'category_id',
-        get_lang('Category'),
-        null,
-        ['url' => $url]
-    );
+$courseCategoryNames = [];
+$courseCategoryIds = [];
 
-    if (!empty($courseInfo['categoryCode'])) {
-        $data = \CourseCategory::getCategory($courseInfo['categoryCode']);
-        $categorySelect->addOption($data['name'], $data['code']);
-    }
-} else {
-    $categories = $courseCategoriesRepo->findAllInAccessUrl(
-        $urlId,
-        api_get_configuration_value('allow_base_course_category')
-    );
-    $categoriesOptions = [0 => get_lang('None')];
-
-    /** @var CourseCategory $category */
-    foreach ($categories as $category) {
-        $categoriesOptions[$category->getId()] = (string) $category;
-    }
-
-    $form->addSelect(
-        'category_id',
-        get_lang('Category'),
-        $categoriesOptions
-    );
+foreach ($categories as $category) {
+    $courseCategoryNames[$category->getId()] = $category->getName();
+    $courseCategoryIds[] = $category->getId();
 }
+
+$form->addSelectAjax(
+    'course_categories',
+    get_lang('Categories'),
+    $courseCategoryNames,
+    [
+        'url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_category',
+        'multiple' => 'multiple',
+    ]
+);
+$courseInfo['course_categories'] = $courseCategoryIds;
 
 $courseTeacherNames = [];
 
 foreach ($course_teachers as $courseTeacherId) {
-    /** @var User $courseTeacher */
-    $courseTeacher = UserManager::getRepository()->find($courseTeacherId);
+    $courseTeacher = api_get_user_entity($courseTeacherId);
     $courseTeacherNames[$courseTeacher->getId()] = UserManager::formatUserFullName($courseTeacher, true);
 }
 
@@ -311,7 +292,8 @@ if ($form->validate()) {
     $course = $form->getSubmitValues();
     $visibility = $course['visibility'];
 
-    global $_configuration;
+    // @todo should be check in the CourseListener
+    /*global $_configuration;
 
     if (isset($_configuration[$urlId]) &&
         isset($_configuration[$urlId]['hosting_limit_active_courses']) &&
@@ -326,14 +308,18 @@ if ($form->validate()) {
                 api_warn_hosting_contact('hosting_limit_active_courses');
 
                 Display::addFlash(
-                    Display::return_message(get_lang('Sorry, this installation has an active courses limit, which has now been reached. You can still create new courses, but only if you hide/disable at least one existing active course. To do this, edit a course from the administration courses list, and change the visibility to \'hidden\', then try creating this course again. To increase the maximum number of active courses allowed on this Chamilo installation, please contact your hosting provider or, if available, upgrade to a superior hosting plan.'))
+                    Display::return_message(
+                        get_lang(
+                            'Sorry, this installation has an active courses limit, which has now been reached. You can still create new courses, but only if you hide/disable at least one existing active course. To do this, edit a course from the administration courses list, and change the visibility to \'hidden\', then try creating this course again. To increase the maximum number of active courses allowed on this Chamilo installation, please contact your hosting provider or, if available, upgrade to a superior hosting plan.'
+                        )
+                    )
                 );
 
                 header('Location: course_list.php');
                 exit;
             }
         }
-    }
+    }*/
 
     $visual_code = $course['visual_code'];
     $visual_code = CourseManager::generate_course_code($visual_code);
@@ -354,16 +340,10 @@ if ($form->validate()) {
     }
 
     $teachers = isset($course['course_teachers']) ? $course['course_teachers'] : '';
-    $categoryId = isset($course['category_id']) && !empty($course['category_id']) ? (int) $course['category_id'] : null;
     $department_url = $course['department_url'];
 
     if (!stristr($department_url, 'http://')) {
         $department_url = 'http://'.$department_url;
-    }
-
-    $category = null;
-    if (!empty($categoryId)) {
-        $category = $courseCategoriesRepo->find($categoryId);
     }
 
     /** @var \Chamilo\CoreBundle\Entity\Course $courseEntity */
@@ -378,11 +358,13 @@ if ($form->validate()) {
         ->setSubscribe($course['subscribe'])
         ->setUnsubscribe($course['unsubscribe'])
         ->setVisibility($visibility)
-        ->setCategory($category)
     ;
 
     $em->persist($courseEntity);
     $em->flush();
+
+    // Updating course categories
+    $courseCategoriesRepo->updateCourseRelCategoryByCourse($courseEntity, $course);
 
     // update the extra fields
     $courseFieldValue = new ExtraFieldValue('course');

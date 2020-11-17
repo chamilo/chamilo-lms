@@ -1,10 +1,10 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CSurvey;
 use Chamilo\CourseBundle\Entity\CSurveyInvitation;
 use Chamilo\CourseBundle\Entity\CSurveyQuestion;
-use Chamilo\CourseBundle\Entity\CSurveyQuestionOption;
 
 /**
  * Class SurveyManager.
@@ -682,6 +682,8 @@ class SurveyManager
     }
 
     /**
+     * Copy given survey to a new (optional) given survey ID.
+     *
      * @param int $survey_id
      * @param int $new_survey_id
      * @param int $targetCourseId
@@ -742,7 +744,7 @@ class SurveyManager
         }
 
         $sql = "SELECT * FROM $table_survey_question_group
-                WHERE c_id = $course_id AND survey_id='".$survey_id."'";
+                WHERE c_id = $course_id AND survey_id = $survey_id";
         $res = Database::query($sql);
         while ($row = Database::fetch_array($res, 'ASSOC')) {
             $params = [
@@ -762,7 +764,7 @@ class SurveyManager
 
         // Get questions
         $sql = "SELECT * FROM $table_survey_question
-                WHERE c_id = $course_id AND survey_id='".$survey_id."'";
+                WHERE c_id = $course_id AND survey_id = $survey_id";
         $res = Database::query($sql);
         while ($row = Database::fetch_array($res, 'ASSOC')) {
             $params = [
@@ -1100,8 +1102,8 @@ class SurveyManager
             $questions[$questionId]['sort'] = $row['sort'];
             $questions[$questionId]['survey_question_comment'] = $row['survey_question_comment'];
 
-        // Getting the information of the question options
-        $sql = "SELECT * FROM $table_survey_question_option
+            // Getting the information of the question options
+            $sql = "SELECT * FROM $table_survey_question_option
 		             WHERE c_id = $courseId AND survey_id= $surveyId  AND question_id = $questionId";
             $resultOptions = Database::query($sql);
             while ($rowOption = Database::fetch_array($resultOptions, 'ASSOC')) {
@@ -1131,19 +1133,19 @@ class SurveyManager
         if (strlen($form_content['question']) > 1) {
             // Checks length of the question
             $empty_answer = false;
-            if ($survey_data['survey_type'] == 1) {
+            if (1 == $survey_data['survey_type']) {
                 if (empty($form_content['choose'])) {
                     return 'PleaseChooseACondition';
                 }
 
-                if (($form_content['choose'] == 2) &&
+                if ((2 == $form_content['choose']) &&
                     ($form_content['assigned1'] == $form_content['assigned2'])
                 ) {
                     return 'ChooseDifferentCategories';
                 }
             }
 
-            if ($form_content['type'] !== 'percentage') {
+            if ('percentage' !== $form_content['type']) {
                 if (isset($form_content['answers'])) {
                     for ($i = 0; $i < count($form_content['answers']); $i++) {
                         if (strlen($form_content['answers'][$i]) < 1) {
@@ -1171,7 +1173,7 @@ class SurveyManager
                 $survey_data = self::get_survey($surveyId);
 
                 // Storing the question in the shared database
-                if (is_numeric($survey_data['survey_share']) && $survey_data['survey_share'] != 0) {
+                if (is_numeric($survey_data['survey_share']) && 0 != $survey_data['survey_share']) {
                     $shared_question_id = self::save_shared_question($form_content, $survey_data);
                     $form_content['shared_question_id'] = $shared_question_id;
                 }
@@ -1495,6 +1497,8 @@ class SurveyManager
      * @param int  $question_id the id of the question
      * @param bool $shared
      *
+     * @return mixed False on error, true if the question could be deleted
+     *
      * @todo also delete the answers to this question
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
@@ -1517,12 +1521,16 @@ class SurveyManager
         $sql = "DELETE FROM $table
 		        WHERE
 		            c_id = $course_id AND
-		            survey_id='".$survey_id."' AND
-		            question_id='".$question_id."'";
-        Database::query($sql);
+		            survey_id = $survey_id AND
+		            question_id = $question_id";
+        $result = Database::query($sql);
+        if (false == $result) {
+            return false;
+        }
 
-        // Deleting the options of the question of the survey
         self::delete_survey_question_option($survey_id, $question_id, $shared);
+        // Deleting the options of the question of the survey
+        return true;
     }
 
     /**
@@ -1571,8 +1579,9 @@ class SurveyManager
     {
         $course_id = api_get_course_int_id();
         $type = $form_content['type'];
+
         // A percentage question type has options 1 -> 100
-        if ('percentage' === $form_content['type']) {
+        if ('percentage' === $type) {
             for ($i = 1; $i < 101; $i++) {
                 $form_content['answers'][] = $i;
             }
@@ -1608,7 +1617,7 @@ class SurveyManager
 			                c_id = $course_id AND
                             question_id = '".intval($form_content['question_id'])."'
                             ";
-            Database::query($sql);
+                Database::query($sql);
             }
         }
 
@@ -1650,7 +1659,6 @@ class SurveyManager
         }
 
         if ('multiplechoiceother' === $type) {
-
             if (empty($dataFromDatabase['answer_data'])) {
                 $params = [
                     'c_id' => $course_id,
@@ -1894,9 +1902,9 @@ class SurveyManager
 			            answered_user.user as invited_user,
 			            user.firstname,
 			            user.lastname,
-			            user.user_id
+			            user.id as user_id
                     FROM $table_survey_answer answered_user
-                    LEFT JOIN $table_user as user ON answered_user.user = user.user_id
+                    LEFT JOIN $table_user as user ON answered_user.user = user.id
                     WHERE
                         answered_user.c_id = $course_id AND
                         survey_id= '".$survey_id."' ".
@@ -2114,7 +2122,7 @@ class SurveyManager
     }
 
     /**
-     * This function copy survey specifying course id and session id where will be copied.
+     * Copy survey specifying course ID and session ID where will be copied.
      *
      * @param int $surveyId
      * @param int $targetCourseId  target course id
@@ -2159,7 +2167,7 @@ class SurveyManager
             Database::query($sql);
 
             $sql = "SELECT * FROM $surveyQuestionGroupTable
-                    WHERE survey_id = $surveyId AND c_id = $originalCourseId ";
+                    WHERE c_id = $originalCourseId AND survey_id = $surveyId";
             $res = Database::query($sql);
             while ($row = Database::fetch_array($res, 'ASSOC')) {
                 $params = [
@@ -2178,7 +2186,7 @@ class SurveyManager
 
             // Get questions
             $sql = "SELECT * FROM $surveyQuestionTable
-                    WHERE survey_id = $surveyId AND c_id = $originalCourseId";
+                    WHERE c_id = $originalCourseId AND survey_id = $surveyId";
             $res = Database::query($sql);
             while ($row = Database::fetch_array($res, 'ASSOC')) {
                 $params = [
@@ -2241,6 +2249,88 @@ class SurveyManager
     }
 
     /**
+     * Copy/duplicate one question (into the same survey).
+     * Note: Relies on the question iid to find all necessary info.
+     *
+     * @param int $questionId
+     *
+     * @return int The new question's iid, or 0 on error
+     */
+    public static function copyQuestion($questionId)
+    {
+        if (empty($questionId)) {
+            return 0;
+        }
+        $questionId = (int) $questionId;
+        $questionTable = Database::get_course_table(TABLE_SURVEY_QUESTION);
+        $optionsTable = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
+
+        // Get questions
+        $sql = "SELECT * FROM $questionTable WHERE iid = $questionId";
+        $res = Database::query($sql);
+        if (false == $res) {
+            // Could not find this question
+            return 0;
+        }
+        $row = Database::fetch_array($res, 'ASSOC');
+        $params = [
+            'c_id' => $row['c_id'],
+            'survey_id' => $row['survey_id'],
+            'survey_question' => trim($row['survey_question'])."'",
+            'survey_question_comment' => $row['survey_question_comment'],
+            'type' => $row['type'],
+            'display' => $row['display'],
+            'shared_question_id' => $row['shared_question_id'],
+            'max_value' => $row['max_value'],
+            'survey_group_pri' => $row['survey_group_pri'],
+            'survey_group_sec1' => $row['survey_group_sec1'],
+            'survey_group_sec2' => $row['survey_group_sec2'],
+        ];
+        if (api_get_configuration_value('allow_required_survey_questions')) {
+            if (isset($row['is_required'])) {
+                $params['is_required'] = $row['is_required'];
+            }
+        }
+        // Get question position
+        $sqlSort = "SELECT max(sort) as sort FROM $questionTable
+                    WHERE survey_id = ".$row['survey_id'];
+        $resSort = Database::query($sqlSort);
+        $rowSort = Database::fetch_assoc($resSort);
+        $params['sort'] = $rowSort['sort'] + 1;
+        // Insert the new question
+        $insertId = Database::insert($questionTable, $params);
+        if (false == $insertId) {
+            return 0;
+        }
+        // Normalize question_id with iid
+        $sql = "UPDATE $questionTable
+                SET question_id = iid
+                WHERE iid = $insertId";
+        Database::query($sql);
+
+        // Get questions options
+        $sql = "SELECT * FROM $optionsTable WHERE question_id = $questionId";
+        $res = Database::query($sql);
+        while ($row = Database::fetch_assoc($res)) {
+            $params = [
+                'c_id' => $row['c_id'],
+                'question_id' => $insertId,
+                'survey_id' => $row['survey_id'],
+                'option_text' => $row['option_text'],
+                'sort' => $row['sort'],
+                'value' => $row['value'],
+            ];
+            $optionId = Database::insert($optionsTable, $params);
+            if ($optionId) {
+                $sql = "UPDATE $optionsTable SET question_option_id = $optionId WHERE iid = $optionId";
+                Database::query($sql);
+            }
+        }
+
+        return $insertId;
+    }
+
+    /**
      * @param array $surveyData
      *
      * @return bool
@@ -2295,15 +2385,15 @@ class SurveyManager
 
         $classToParse = [];
         foreach ($classList as $class) {
-                $users = $obj->get_users_by_usergroup($class['id']);
-                if (empty($users)) {
-                    continue;
+            $users = $obj->get_users_by_usergroup($class['id']);
+            if (empty($users)) {
+                continue;
             }
             $classToParse[] = [
                 'name' => $class['name'],
                 'users' => $users,
             ];
-                }
+        }
 
         self::parseMultiplicateUserList($classToParse, $questions, $courseId, $surveyData);
 
@@ -2420,6 +2510,42 @@ class SurveyManager
         return true;
     }
 
+    public static function hasDependency($survey)
+    {
+        if (false === api_get_configuration_value('survey_question_dependency')) {
+            return false;
+        }
+
+        if (empty($survey)) {
+            return false;
+        }
+
+        if (!isset($survey['survey_id'])) {
+            return false;
+        }
+
+        $courseId = (int) $survey['c_id'];
+        $surveyId = (int) $survey['survey_id'];
+
+        $table = Database::get_course_table(TABLE_SURVEY_QUESTION);
+
+        $sql = "SELECT COUNT(iid) count FROM $table
+                WHERE
+                    c_id = $courseId AND
+                    survey_id = $surveyId AND
+                    parent_option_id <> 0
+                LIMIT 1
+                ";
+        $result = Database::query($sql);
+        $row = Database::fetch_array($result);
+
+        if ($row) {
+            return $row['count'] > 0;
+        }
+
+        return false;
+    }
+
     /**
      * @param array $survey
      *
@@ -2431,8 +2557,8 @@ class SurveyManager
             return 0;
         }
 
-        $courseId = $survey['c_id'];
-        $surveyId = $survey['survey_id'];
+        $courseId = (int) $survey['c_id'];
+        $surveyId = (int) $survey['survey_id'];
 
         $table = Database::get_course_table(TABLE_SURVEY_QUESTION);
 
@@ -2530,7 +2656,8 @@ class SurveyManager
         $groupId = 0
     ) {
         $invitationRepo = Database::getManager()->getRepository('ChamiloCourseBundle:CSurveyInvitation');
-        $invitations = $invitationRepo->findBy(
+
+        return $invitationRepo->findBy(
             [
                 'user' => $userId,
                 'cId' => $courseId,
@@ -2540,8 +2667,6 @@ class SurveyManager
             ],
             ['invitationDate' => 'DESC']
         );
-
-        return $invitations;
     }
 
     /**
@@ -2699,6 +2824,7 @@ class SurveyManager
                         );
 
                         SurveyUtil::saveInvitations(
+                            $surveyId,
                             ['users' => $tutor['user_id']],
                             $subject,
                             $content,

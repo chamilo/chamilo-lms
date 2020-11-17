@@ -53,7 +53,7 @@ class LegacyListener
         $userObject = null;
         if (null !== $token) {
             /** @var User $userObject */
-            $userObject = $container->get('security.token_storage')->getToken()->getUser();
+            $userObject = $token->getUser();
         }
 
         $userInfo = [];

@@ -1,7 +1,6 @@
 <?php
-/* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session;
+/* For licensing terms, see /license.txt */
 
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -29,10 +28,10 @@ $action = isset($_GET['action']) ? $_GET['action'] : null;
 $check = Security::check_token('request');
 $token = Security::get_token();
 
-if ('add' == $action) {
+if ('add' === $action) {
     $interbreadcrumb[] = ['url' => 'careers.php', 'name' => get_lang('Careers')];
     $tool_name = get_lang('Add');
-} elseif ('edit' == $action) {
+} elseif ('edit' === $action) {
     $interbreadcrumb[] = ['url' => 'careers.php', 'name' => get_lang('Careers')];
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Edit')];
     $tool_name = get_lang('Edit');
@@ -97,7 +96,6 @@ if (api_is_platform_admin()) {
 
 $career = new Career();
 $content = '';
-
 $listUrl = api_get_self();
 
 // Action handling: Add
@@ -110,7 +108,6 @@ switch ($action) {
         ) {
             api_not_allowed();
         }
-        Session::write('notebook_view', 'creation_date');
 
         $url = api_get_self().'?action='.Security::remove_XSS($_GET['action']);
         $form = $career->return_form($url, 'add');

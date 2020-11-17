@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
 use ChamiloSession as Session;
@@ -54,19 +55,20 @@ class SocialManager extends UserManager
     /**
      * Get the kind of relation between contacts.
      *
-     * @param int user id
-     * @param int user friend id
-     * @param string
+     * @param int  $user_id     user id
+     * @param int  $user_friend user friend id
+     * @param bool $includeRH   include the RH relationship
      *
      * @return int
      *
      * @author isaac flores paz
      */
-    public static function get_relation_between_contacts($user_id, $user_friend)
+    public static function get_relation_between_contacts($user_id, $user_friend, $includeRH = false)
     {
         $table = Database::get_main_table(TABLE_MAIN_USER_FRIEND_RELATION_TYPE);
         $userRelUserTable = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
-        $sql = 'SELECT rt.id as id
+        if (false == $includeRH) {
+            $sql = 'SELECT rt.id as id
                 FROM '.$table.' rt
                 WHERE rt.id = (
                     SELECT uf.relation_type
@@ -77,13 +79,48 @@ class SocialManager extends UserManager
                         uf.relation_type <> '.USER_RELATION_TYPE_RRHH.'
                     LIMIT 1
                 )';
+        } else {
+            $sql = 'SELECT rt.id as id
+                FROM '.$table.' rt
+                WHERE rt.id = (
+                    SELECT uf.relation_type
+                    FROM '.$userRelUserTable.' uf
+                    WHERE
+                        user_id='.((int) $user_id).' AND
+                        friend_user_id='.((int) $user_friend).'
+                    LIMIT 1
+                )';
+        }
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
             $row = Database::fetch_array($res, 'ASSOC');
 
-            return $row['id'];
+            return (int) $row['id'];
         } else {
-            return USER_UNKNOWN;
+            if (api_get_configuration_value('social_make_teachers_friend_all')) {
+                $adminsList = UserManager::get_all_administrators();
+                foreach ($adminsList as $admin) {
+                    if (api_get_user_id() == $admin['user_id']) {
+                        return USER_RELATION_TYPE_GOODFRIEND;
+                    }
+                }
+                $targetUserCoursesList = CourseManager::get_courses_list_by_user_id(
+                    $user_id,
+                    true,
+                    false
+                );
+                $currentUserId = api_get_user_id();
+                foreach ($targetUserCoursesList as $course) {
+                    $teachersList = CourseManager::get_teacher_list_from_course_code($course['code']);
+                    foreach ($teachersList as $teacher) {
+                        if ($currentUserId == $teacher['user_id']) {
+                            return USER_RELATION_TYPE_GOODFRIEND;
+                        }
+                    }
+                }
+            } else {
+                return USER_UNKNOWN;
+            }
         }
     }
 
@@ -194,6 +231,8 @@ class SocialManager extends UserManager
      */
     public static function get_list_web_path_user_invitation_by_user_id($user_id)
     {
+        return [];
+        // @todo
         $list_ids = self::get_list_invitation_of_friends_by_user_id($user_id);
         $list = [];
         foreach ($list_ids as $values_ids) {
@@ -751,9 +790,7 @@ class SocialManager extends UserManager
             );
         }
 
-        $skillBlock = $template->get_template('social/avatar_block.tpl');
-
-        return $template->fetch($skillBlock);
+        return $template->fetch($template->get_template('social/avatar_block.tpl'));
     }
 
     /**
@@ -904,7 +941,7 @@ class SocialManager extends UserManager
             // My files
             $active = 'myfiles' === $show ? 'active' : null;
 
-            $myFiles = '
+            /*$myFiles = '
                 <li class="myfiles-icon '.$active.'">
                     <a href="'.api_get_path(WEB_CODE_PATH).'social/myfiles.php">
                         '.$filesIcon.' '.get_lang('My files').'
@@ -914,7 +951,7 @@ class SocialManager extends UserManager
             if ('false' === api_get_setting('allow_my_files')) {
                 $myFiles = '';
             }
-            $links .= $myFiles;
+            $links .= $myFiles;*/
             if (api_get_configuration_value('allow_portfolio_tool')) {
                 $links .= '
                     <li class="portoflio-icon '.('portfolio' === $show ? 'active' : '').'">
@@ -1120,15 +1157,19 @@ class SocialManager extends UserManager
 
                 if (!empty($announcementsByCourse)) {
                     foreach ($announcementsByCourse as $announcement) {
-                        $courseInfo = api_get_course_info_by_id($announcement->getCId());
-                        $url = Display::url(
-                            Display::return_icon(
-                                'announcement.png',
-                                get_lang('Announcements')
-                            ).$courseInfo['name'],
-                            api_get_path(WEB_CODE_PATH).'announcements/announcements.php?cid='.$courseInfo['real_id']
-                        );
-                        $announcements[] = Display::tag('li', $url);
+                        $resourceLink = $announcement->getFirstResourceLink();
+                        $course = $resourceLink->getCourse();
+                        //$courseInfo = api_get_course_info_by_id($announcement->getCId());
+                        if ($course) {
+                            $url = Display::url(
+                                Display::return_icon(
+                                    'announcement.png',
+                                    get_lang('Announcements')
+                                ).$course->getName(),
+                                api_get_path(WEB_CODE_PATH).'announcements/announcements.php?cid='.$course->getId()
+                            );
+                            $announcements[] = Display::tag('li', $url);
+                        }
                     }
                 }
 
@@ -1314,6 +1355,8 @@ class SocialManager extends UserManager
      */
     public static function display_productions($user_id)
     {
+        return;
+
         $webdir_array = UserManager::get_user_picture_path_by_id($user_id, 'web');
         $sysdir = UserManager::getUserPathById($user_id, 'system');
         $webdir = UserManager::getUserPathById($user_id, 'web');
@@ -1629,8 +1672,8 @@ class SocialManager extends UserManager
             $res = Database::query($oneQuery);
             $em = Database::getManager();
             if (Database::num_rows($res) > 0) {
-                $repo = $em->getRepository('ChamiloCourseBundle:CForumPost');
-                $repoThread = $em->getRepository('ChamiloCourseBundle:CForumThread');
+                $repo = $em->getRepository(CForumPost::class);
+                $repoThread = $em->getRepository(CForumThread::class);
                 $groups = [];
                 $userGroup = new UserGroup();
                 $urlGroup = api_get_path(WEB_CODE_PATH).'social/group_view.php?id=';
@@ -1658,12 +1701,12 @@ class SocialManager extends UserManager
                         $thread = $repoThread->find($row['thread_id']);
                         if ($post && $thread) {
                             $courseInfo = api_get_course_info_by_id($post->getCId());
-                            $row['post_title'] = $post->getForumId();
+                            $row['post_title'] = $post->getForum()->getForumTitle();
                             $row['forum_title'] = $thread->getThreadTitle();
                             $row['thread_url'] = api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.http_build_query([
                                     'cid' => $courseInfo['real_id'],
-                                    'forum' => $post->getForumId(),
-                                    'thread' => $post->getThreadId(),
+                                    'forum' => $post->getForum()->getIid(),
+                                    'thread' => $post->getThread()->getIid(),
                                     'post_id' => $post->getIid(),
                                 ]).'#post_id_'.$post->getIid();
                         }
@@ -2000,7 +2043,7 @@ class SocialManager extends UserManager
         $groupId = 0,
         $show_full_profile = true
     ) {
-        if ('true' != api_get_setting('allow_social_tool')) {
+        if ('true' !== api_get_setting('allow_social_tool')) {
             return '';
         }
 
@@ -2052,7 +2095,6 @@ class SocialManager extends UserManager
         }
 
         $userInfo['is_admin'] = UserManager::is_admin($userId);
-
         $languageId = api_get_language_from_iso($userInfo['language']);
         $languageInfo = api_get_language_info($languageId);
         if ($languageInfo) {
@@ -2908,13 +2950,13 @@ class SocialManager extends UserManager
             if (isset($notification['thread']) && !empty($notification['thread'])) {
                 $threadList = array_filter(array_unique($notification['thread']));
                 $em = Database::getManager();
-                $repo = $em->getRepository('ChamiloCourseBundle:CForumThread');
+                $repo = Container::getForumThreadRepository();
                 foreach ($threadList as $threadId) {
-                    /** @var \Chamilo\CourseBundle\Entity\CForumThread $thread */
+                    /** @var CForumThread $thread */
                     $thread = $repo->find($threadId);
                     if ($thread) {
                         $threadUrl = $threadUrlBase.http_build_query([
-                            'forum' => $thread->getForumId(),
+                            'forum' => $thread->getForum()->getIid(),
                             'thread' => $thread->getIid(),
                         ]);
                         $threads[] = [
@@ -3074,6 +3116,55 @@ class SocialManager extends UserManager
         }
 
         return $social_group_block;
+    }
+
+    /**
+     * @param string $selected
+     *
+     * @return string
+     */
+    public static function getHomeProfileTabs($selected = 'home')
+    {
+        $headers = [
+            [
+                'url' => api_get_path(WEB_CODE_PATH).'auth/profile.php',
+                'content' => get_lang('Profile'),
+            ],
+        ];
+        $allowJustification = 'true' === api_get_plugin_setting('justification', 'tool_enable');
+        if ($allowJustification) {
+            $plugin = Justification::create();
+            $headers[] = [
+                'url' => api_get_path(WEB_CODE_PATH).'auth/justification.php',
+                'content' => $plugin->get_lang('Justification'),
+            ];
+        }
+
+        $allowPauseTraining = 'true' === api_get_plugin_setting('pausetraining', 'tool_enable');
+        $allowEdit = 'true' === api_get_plugin_setting('pausetraining', 'allow_users_to_edit_pause_formation');
+        if ($allowPauseTraining && $allowEdit) {
+            $plugin = PauseTraining::create();
+            $headers[] = [
+                'url' => api_get_path(WEB_CODE_PATH).'auth/pausetraining.php',
+                'content' => $plugin->get_lang('PauseTraining'),
+            ];
+        }
+
+        $selectedItem = 1;
+        foreach ($headers as $header) {
+            $info = pathinfo($header['url']);
+            if ($selected === $info['filename']) {
+                break;
+            }
+            $selectedItem++;
+        }
+
+        $tabs = '';
+        if (count($headers) > 1) {
+            $tabs = Display::tabsOnlyLink($headers, $selectedItem);
+        }
+
+        return $tabs;
     }
 
     /**

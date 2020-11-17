@@ -4,7 +4,6 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
-use APY\DataGridBundle\Grid\Mapping as GRID;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Doctrine\ORM\Mapping as ORM;
@@ -12,8 +11,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * CCourseDescription.
- *
- * @GRID\Source(columns="iid, title, content", filterable=false, groups={"resource"})
  *
  * @ORM\Table(name="c_course_description", indexes={@ORM\Index(name="session_id", columns={"session_id"})})
  * @ORM\Entity
@@ -37,13 +34,6 @@ class CCourseDescription extends AbstractResource implements ResourceInterface
      * @ORM\GeneratedValue
      */
     protected $iid;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=true)
-     */
-    protected $id;
 
     /**
      * @var int
@@ -224,30 +214,6 @@ class CCourseDescription extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Set id.
-     *
-     * @param int $id
-     *
-     * @return CCourseDescription
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
      * Set cId.
      *
      * @param int $cId
@@ -290,5 +256,10 @@ class CCourseDescription extends AbstractResource implements ResourceInterface
     public function getResourceName(): string
     {
         return $this->getTitle();
+    }
+
+    public function setResourceName(string $name): self
+    {
+        return $this->setTitle($name);
     }
 }

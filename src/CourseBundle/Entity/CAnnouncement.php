@@ -6,18 +6,14 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * CAnnouncement.
  *
- * @ORM\Table(
- *  name="c_announcement",
- *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"}),
- *      @ORM\Index(name="session_id", columns={"session_id"})
- *  }
- * )
+ * @ORM\Table(name="c_announcement")
  * @ORM\Entity
  */
 class CAnnouncement extends AbstractResource implements ResourceInterface
@@ -32,21 +28,9 @@ class CAnnouncement extends AbstractResource implements ResourceInterface
     protected $iid;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=true)
-     */
-    protected $id;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="c_id", type="integer")
-     */
-    protected $cId;
-
-    /**
      * @var string
+     *
+     * @Assert\NotBlank()
      *
      * @ORM\Column(name="title", type="text", nullable=true)
      */
@@ -81,27 +65,25 @@ class CAnnouncement extends AbstractResource implements ResourceInterface
     protected $emailSent;
 
     /**
-     * @var int
+     * @var ArrayCollection|CAnnouncementAttachment[]
      *
-     * @ORM\Column(name="session_id", type="integer", nullable=true)
-     */
-    protected $sessionId;
-
-    /**
-     * @var CAnnouncementAttachment[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CAnnouncementAttachment", mappedBy="announcement", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\OneToMany(
+     *     targetEntity="CAnnouncementAttachment",
+     *     mappedBy="announcement", cascade={"persist", "remove"}, orphanRemoval=true
+     * )
      */
     protected $attachments;
+
+    public function __construct()
+    {
+        $this->attachments = new ArrayCollection();
+    }
 
     public function __toString(): string
     {
         return $this->getTitle();
     }
 
-    /**
-     * @return CAnnouncementAttachment[]
-     */
     public function getAttachments()
     {
         return $this->attachments;
@@ -121,10 +103,8 @@ class CAnnouncement extends AbstractResource implements ResourceInterface
      * Set title.
      *
      * @param string $title
-     *
-     * @return CAnnouncement
      */
-    public function setTitle($title)
+    public function setTitle($title): self
     {
         $this->title = $title;
 
@@ -145,10 +125,8 @@ class CAnnouncement extends AbstractResource implements ResourceInterface
      * Set content.
      *
      * @param string $content
-     *
-     * @return CAnnouncement
      */
-    public function setContent($content)
+    public function setContent($content): self
     {
         $this->content = $content;
 
@@ -169,10 +147,8 @@ class CAnnouncement extends AbstractResource implements ResourceInterface
      * Set endDate.
      *
      * @param \DateTime $endDate
-     *
-     * @return CAnnouncement
      */
-    public function setEndDate($endDate)
+    public function setEndDate($endDate): self
     {
         $this->endDate = $endDate;
 
@@ -193,10 +169,8 @@ class CAnnouncement extends AbstractResource implements ResourceInterface
      * Set displayOrder.
      *
      * @param int $displayOrder
-     *
-     * @return CAnnouncement
      */
-    public function setDisplayOrder($displayOrder)
+    public function setDisplayOrder($displayOrder): self
     {
         $this->displayOrder = $displayOrder;
 
@@ -217,10 +191,8 @@ class CAnnouncement extends AbstractResource implements ResourceInterface
      * Set emailSent.
      *
      * @param bool $emailSent
-     *
-     * @return CAnnouncement
      */
-    public function setEmailSent($emailSent)
+    public function setEmailSent($emailSent): self
     {
         $this->emailSent = $emailSent;
 
@@ -235,78 +207,6 @@ class CAnnouncement extends AbstractResource implements ResourceInterface
     public function getEmailSent()
     {
         return $this->emailSent;
-    }
-
-    /**
-     * Set sessionId.
-     *
-     * @param int $sessionId
-     *
-     * @return CAnnouncement
-     */
-    public function setSessionId($sessionId)
-    {
-        $this->sessionId = $sessionId;
-
-        return $this;
-    }
-
-    /**
-     * Get sessionId.
-     *
-     * @return int
-     */
-    public function getSessionId()
-    {
-        return $this->sessionId;
-    }
-
-    /**
-     * Set id.
-     *
-     * @param int $id
-     *
-     * @return CAnnouncement
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set cId.
-     *
-     * @param int $cId
-     *
-     * @return CAnnouncement
-     */
-    public function setCId($cId)
-    {
-        $this->cId = $cId;
-
-        return $this;
-    }
-
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
-    {
-        return $this->cId;
     }
 
     public function getIid(): int
@@ -325,5 +225,10 @@ class CAnnouncement extends AbstractResource implements ResourceInterface
     public function getResourceName(): string
     {
         return $this->getTitle();
+    }
+
+    public function setResourceName(string $name): self
+    {
+        return $this->setTitle($name);
     }
 }

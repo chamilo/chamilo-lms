@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -48,6 +49,7 @@ header('Content-type: text/javascript');
 
 ?>var scorm_logs=<?php echo (empty($oLP->scorm_debug) or (!api_is_course_admin() && !api_is_platform_admin())) ? '0' : '3'; ?>; //debug log level for SCORM. 0 = none, 1=light, 2=a lot, 3=all - displays logs in log frame
 var lms_logs = 0; //debug log level for LMS actions. 0=none, 1=light, 2=a lot, 3=all
+var score_as_progress = <?php echo empty($oLP->getUseScoreAsProgress()) ? 'false' : 'true'; ?>;
 
 // API Object initialization (eases access later on)
 function APIobject() {
@@ -180,7 +182,7 @@ olms.switch_finished = 0;
 //olms.lms_progress_bar_mode = '<?php echo $oLP->progress_bar_mode; ?>';
 //if(lms_progress_bar_mode == ''){lms_progress_bar_mode='%';}
 
-olms.lms_view_id = '<?php echo $oLP->get_view(); ?>';
+olms.lms_view_id = '<?php echo $oLP->get_view(null, $userId); ?>';
 if(olms.lms_view_id == ''){ olms.lms_view_id = 1;}
 olms.lms_user_id = '<?php echo $userId; ?>';
 olms.lms_next_item = '<?php echo $oLP->get_next_item_id(); ?>';
@@ -648,6 +650,9 @@ function LMSSetValue(param, val) {
     if (param == "cmi.core.score.raw") {
         olms.score= val;
         olms.updatable_vars_list['cmi.core.score.raw']=true;
+        if (score_as_progress) {
+            update_progress_bar(val, olms.max, '%');
+        }
         return_value='true';
     } else if ( param == "cmi.core.score.max") {
         olms.max = val;
@@ -884,10 +889,6 @@ function savedata(item_id) {
         item_to_save = old_item_id;
     }
 
-    //Original behaviour
-    // xajax_save_item_scorm(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, old_item_id);
-
-    // Modified version
     xajax_save_item_scorm(
         olms.lms_lp_id,
         olms.lms_user_id,
@@ -1021,7 +1022,7 @@ function GetErrorString(errCode){
  */
 function LMSGetDiagnostic(errCode){
     logit_scorm('LMSGetDiagnostic()',1);
-    return(API.LMSGetLastError());
+    return API.LMSGetLastError();
 }
 
 /**
@@ -1088,6 +1089,23 @@ function addEvent(elm, evType, fn, useCapture){
     }
 }
 
+function lastCall() {
+    console.log('lastCall');
+    savedata(olms.lms_item_id);
+    xajax_save_item_scorm(
+        olms.lms_lp_id,
+        olms.lms_user_id,
+        olms.lms_view_id,
+        olms.lms_item_id,
+        olms.lms_session_id,
+        olms.lms_course_id,
+        olms.finishSignalReceived,
+        1,
+        olms.statusSignalReceived,
+        1
+    );
+}
+
 /**
  * Add listeners to the page objects. This has to be defined for
  * the current context as it acts on objects that should exist
@@ -1111,8 +1129,41 @@ function addListeners(){
         logit_lms('Chamilo LP or asset');
         //if this path is a Chamilo learnpath, then start manual save
         //when something is loaded in there
-        addEvent(window, 'unload', lms_save_asset,false);
+        //addEvent(window, 'unload', lms_save_asset,false);
+        $(window).on('unload', function(e){
+            lms_save_asset();
+            logit_lms('Unload call', 3);
+        });
         logit_lms('Added event listener lms_save_asset() on window unload', 3);
+    }
+
+    if (olms.lms_item_type=='sco') {
+        //window.addEventListener('beforeunload', lastCall);
+        window.addEventListener('beforeunload', function (e) {
+            var preventsBeforeUnload = <?php echo (int) api_get_configuration_value('lp_prevents_beforeunload'); ?>;
+
+            if (preventsBeforeUnload) {
+                e.preventDefault();
+            }
+
+            console.log('beforeunload');
+            lastCall();
+            logit_lms('beforeunload called', 3);
+
+            if (preventsBeforeUnload) {
+                e.returnValue = 'true';
+            } else {
+                delete e['returnValue'];
+            }
+        });
+
+        $(window).on('unload', function(e) {
+            console.log('unload');
+            savedata(olms.lms_item_id);
+            logit_lms('unload called', 3);
+            lastCall();
+        });
+        logit_lms('Added unload savedata() on window unload', 3);
     }
     logit_lms('Quitting addListeners()');
 }
@@ -1214,8 +1265,8 @@ function logit_scorm(message, priority) {
     return false;
 }
 
-function log_in_log(message, priority) {
-
+function log_in_log(message, priority)
+{
     // Colorize a little
     var color = "color: black";
     switch (priority) {
@@ -1496,7 +1547,8 @@ function switch_item(current_item, next_item)
         } else {
             logit_lms('Case 2 - current != sco but next == sco');
         }
-        xajax_save_item(
+
+        var saveAjax = xajax_save_item(
             olms.lms_lp_id,
             olms.lms_user_id,
             olms.lms_view_id,
@@ -1517,13 +1569,18 @@ function switch_item(current_item, next_item)
             1,
             olms.statusSignalReceived
         );
-        xajax_switch_item_details(
-            olms.lms_lp_id,
-            olms.lms_user_id,
-            olms.lms_view_id,
-            olms.lms_item_id,
-            next_item
-        );
+
+        if (saveAjax) {
+            $.when(saveAjax).done(function(results) {
+                xajax_switch_item_details(
+                    olms.lms_lp_id,
+                    olms.lms_user_id,
+                    olms.lms_view_id,
+                    olms.lms_item_id,
+                    next_item
+                );
+            });
+        }
     } else {
         if (next_item_type != 'sco') {
             logit_lms('Case 3 - current == sco but next != sco');
@@ -1531,7 +1588,8 @@ function switch_item(current_item, next_item)
             logit_lms('Case 4 - current == sco and next == sco');
         }
         // Setting userNavigatesAway = 1
-        xajax_save_item_scorm(
+        // Setting userNavigatesAway = 1
+        var saveAjax = xajax_save_item_scorm(
             olms.lms_lp_id,
             olms.lms_user_id,
             olms.lms_view_id,
@@ -1543,24 +1601,27 @@ function switch_item(current_item, next_item)
             olms.statusSignalReceived
         );
 
-        reinit_updatable_vars_list();
-
-        xajax_switch_item_toc(
-            olms.lms_lp_id,
-            olms.lms_user_id,
-            olms.lms_view_id,
-            olms.lms_item_id,
-            next_item
-        );
-
-        if (olms.item_objectives.length>0) {
-            xajax_save_objectives(
+        if (saveAjax) {
+            $.when(saveAjax).done(function(result) {
+            reinit_updatable_vars_list();
+            xajax_switch_item_toc(
                 olms.lms_lp_id,
                 olms.lms_user_id,
                 olms.lms_view_id,
                 olms.lms_item_id,
-                olms.item_objectives
+                next_item
             );
+
+            if (olms.item_objectives.length>0) {
+                    xajax_save_objectives(
+                        olms.lms_lp_id,
+                        olms.lms_user_id,
+                        olms.lms_view_id,
+                        olms.lms_item_id,
+                        olms.item_objectives
+                    );
+                }
+            });
         }
     }
 
@@ -1580,41 +1641,6 @@ function switch_item(current_item, next_item)
      * status has already been set to "completed" by the hand-made
      * savedata() (and then the status cannot be "incompleted"
      * anymore)
-     */
-
-    /*
-    if (olms.lms_item_type=='sco' &&
-        olms.lesson_status != 'completed' &&
-        olms.lesson_status != 'passed' &&
-        olms.lesson_status != 'browsed' &&
-        olms.lesson_status != 'incomplete' &&
-        olms.lesson_status != 'failed'
-    ) {
-        // savedata() with olms.finishSignalReceived == 1 treats the special
-        // condition and saves the new status to the database, so
-        // switch_item_details() enjoys the new status
-        savedata(olms.lms_item_id);
-    }
-    xajax_save_item(
-        olms.lms_lp_id,
-        olms.lms_user_id,
-        olms.lms_view_id,
-        olms.lms_item_id,
-        olms.score, olms.max,
-        olms.min,
-        olms.lesson_status,
-        olms.session_time,
-        olms.suspend_data,
-        olms.lesson_location,
-        olms.interactions,
-        olms.lms_item_core_exit,
-        orig_item_type,
-        olms.session_id,
-        olms.course_id,
-        olms.finishSignalReceived,
-        1,
-        olms.statusSignalReceived
-    );
     */
 
     olms.execute_stats = false;
@@ -1866,7 +1892,7 @@ function xajax_save_item(
 
     if (olms.lms_lp_type == 1 || item_type == 'document' || item_type == 'asset') {
         logit_lms('xajax_save_item with params:' + params, 3);
-        $.ajax({
+        return $.ajax({
             type:"POST",
             data: params,
             url: "lp_ajax_save_item.php" + courseUrl,
@@ -1874,6 +1900,8 @@ function xajax_save_item(
             async: false
         });
     }
+
+    return false;
 }
 
 /**
@@ -1898,7 +1926,8 @@ function xajax_save_item_scorm(
     course_id,
     finishSignalReceived,
     userNavigatesAway,
-    statusSignalReceived
+    statusSignalReceived,
+    useSendBeacon
 ) {
     if (typeof(finishSignalReceived) == 'undefined') {
         finishSignalReceived = 0;
@@ -1968,7 +1997,6 @@ function xajax_save_item_scorm(
                 interact_temp +=temp+',';
             }
             interact_temp = interact_temp.substr(0,(interact_temp.length-2)) + ']';
-            //  interact_string += encodeURIComponent(interact_temp);
 
             interact_string += interact_temp;
         }
@@ -1978,16 +2006,42 @@ function xajax_save_item_scorm(
     }
 
     logit_lms('xajax_save_item_scorm with params:' + params, 3);
+    var codePathUrl = '<?php echo api_get_path(WEB_CODE_PATH).'lp/'; ?>';
+    var saveUrl = codePathUrl + "lp_ajax_save_item.php" + courseUrl;
 
-    $.ajax({
+    if (useSendBeacon == 1 && navigator.sendBeacon) {
+        console.log('useSendBeacon');
+        var formData = new FormData();
+        var paramsToArray = params.split('&');
+        for (var i = 0; i < paramsToArray.length; i++) {
+            if (!paramsToArray[i])
+                continue;
+            var pair = paramsToArray[i].split('=');
+            formData.append(pair[0], decodeURIComponent(pair[1]));
+        }
+
+        result = navigator.sendBeacon(saveUrl, formData);
+        console.log(result);
+
+        params = '';
+        my_scorm_values = null;
+
+        return false;
+    } else {
+        logit_lms('Ajax call');
+        var ajax = $.ajax({
         type:"POST",
         data: params,
-        url: "lp_ajax_save_item.php" + courseUrl,
+            url: saveUrl,
         dataType: "script",
-        async: false
+            async: true
     });
+
     params = '';
     my_scorm_values = null;
+
+        return ajax;
+    }
 }
 
 /**
@@ -2070,12 +2124,12 @@ function xajax_switch_item_details(lms_lp_id,lms_user_id,lms_view_id,lms_item_id
 
     logit_lms('xajax_switch_item_details with params:' + params, 3);
 
-    $.ajax({
+    return $.ajax({
         type: "POST",
         data: params,
         url: "lp_ajax_switch_item.php" + courseUrl,
         dataType: "script",
-        async: false
+        async: true
     });
 }
 
@@ -2107,7 +2161,6 @@ function xajax_switch_item_toc(lms_lp_id, lms_user_id, lms_view_id, lms_item_id,
         async: false
     });
 }
-
 
 /**
  * Allow attach the glossary terms into html document of scorm. This has
@@ -2408,9 +2461,9 @@ function attach_glossary_into_scorm(type) {
  */
 function update_time_bar(nbr_complete, nbr_total, mode)
 {
-    logit_lms('update_progress_bar('+nbr_complete+', '+nbr_total+', '+mode+')',3);
+    logit_lms('update_time_bar('+nbr_complete+', '+nbr_total+', '+mode+')',3);
     logit_lms(
-        'update_progress_bar with params: lms_lp_id= ' + olms.lms_lp_id +
+        'update_time_bar with params: lms_lp_id= ' + olms.lms_lp_id +
         ', lms_view_id= '+ olms.lms_view_id + ' lms_user_id= '+ olms.lms_user_id,
         3
     );

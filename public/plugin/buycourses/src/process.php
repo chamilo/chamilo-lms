@@ -1,5 +1,4 @@
 <?php
-
 /* For license terms, see /license.txt */
 
 use ChamiloSession as Session;
@@ -28,9 +27,9 @@ if (!isset($_REQUEST['t'], $_REQUEST['i'])) {
     api_not_allowed(true);
 }
 
-$buyingCourse = BuyCoursesPlugin::PRODUCT_TYPE_COURSE === (int) ($_REQUEST['t']);
-$buyingSession = BuyCoursesPlugin::PRODUCT_TYPE_SESSION === (int) ($_REQUEST['t']);
-$queryString = 'i='.(int) ($_REQUEST['i']).'&t='.(int) ($_REQUEST['t']);
+$buyingCourse = BuyCoursesPlugin::PRODUCT_TYPE_COURSE === intval($_REQUEST['t']);
+$buyingSession = BuyCoursesPlugin::PRODUCT_TYPE_SESSION === intval($_REQUEST['t']);
+$queryString = 'i='.intval($_REQUEST['i']).'&t='.intval($_REQUEST['t']);
 
 if (empty($currentUserId)) {
     Session::write('buy_course_redirect', api_get_self().'?'.$queryString);
@@ -105,8 +104,8 @@ if (0 === $count) {
     $form->addRadio('payment_type', null, $paymentTypesOptions);
 }
 
-$form->addHidden('t', (int) ($_GET['t']));
-$form->addHidden('i', (int) ($_GET['i']));
+$form->addHidden('t', intval($_GET['t']));
+$form->addHidden('i', intval($_GET['i']));
 $form->addButton('submit', $plugin->get_lang('ConfirmOrder'), 'check', 'success', 'btn-lg pull-right');
 
 // View

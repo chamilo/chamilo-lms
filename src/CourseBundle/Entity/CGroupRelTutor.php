@@ -37,13 +37,6 @@ class CGroupRelTutor
     protected $cId;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=true)
-     */
-    protected $id;
-
-    /**
      * @var User
      *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="courseGroupsAsTutor")
@@ -52,9 +45,9 @@ class CGroupRelTutor
     protected $user;
 
     /**
-     * @var CGroupInfo
+     * @var CGroup
      *
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CGroupInfo", inversedBy="tutors")
+     * @ORM\ManyToOne(targetEntity="CGroup", inversedBy="tutors")
      * @ORM\JoinColumn(name="group_id", referencedColumnName="iid", nullable=false)
      */
     protected $group;
@@ -86,7 +79,7 @@ class CGroupRelTutor
      *
      * @return CGroupRelTutor
      */
-    public function setGroup(CGroupInfo $group)
+    public function setGroup(CGroup $group)
     {
         $this->group = $group;
 
@@ -96,35 +89,11 @@ class CGroupRelTutor
     /**
      * Get group.
      *
-     * @return CGroupInfo
+     * @return CGroup
      */
     public function getGroup()
     {
         return $this->group;
-    }
-
-    /**
-     * Set id.
-     *
-     * @param int $id
-     *
-     * @return CGroupRelTutor
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**

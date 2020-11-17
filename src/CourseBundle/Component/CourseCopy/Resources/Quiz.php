@@ -12,15 +12,6 @@ namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
  */
 class Quiz extends Resource
 {
-    /**
-     * Create a new Quiz.
-     *
-     * @param string $obj
-     * @param string $description
-     * @param int    $random
-     * @param int    $type
-     * @param int    $active
-     */
     public $obj; //question
 
     /**

@@ -5,6 +5,7 @@
 namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\CoreBundle\Traits\CourseTrait;
+use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -20,6 +21,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 class GradebookEvaluation
 {
     use CourseTrait;
+    use UserTrait;
 
     /**
      * @var int
@@ -45,11 +47,12 @@ class GradebookEvaluation
     protected $description;
 
     /**
-     * @var int
+     * @var User
      *
-     * @ORM\Column(name="user_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="gradeBookEvaluations")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $userId;
+    protected $user;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="gradebookEvaluations")
@@ -68,7 +71,6 @@ class GradebookEvaluation
      * @var \DateTime
      *
      * @Gedmo\Timestampable(on="create")
-     *
      * @ORM\Column(name="created_at", type="datetime", nullable=false)
      */
     protected $createdAt;
@@ -107,6 +109,34 @@ class GradebookEvaluation
      * @ORM\Column(name="locked", type="integer", nullable=false)
      */
     protected $locked;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="best_score", type="float", precision=6, scale=2, nullable=true)
+     */
+    protected $bestScore;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="average_score", type="float", precision=6, scale=2, nullable=true)
+     */
+    protected $averageScore;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="score_weight", type="float", precision=6, scale=2, nullable=true)
+     */
+    protected $scoreWeight;
+
+    /**
+     * @var array
+     *
+     * @ORM\Column(name="user_score_list", type="array", nullable=true)
+     */
+    protected $userScoreList;
 
     /**
      * GradebookEvaluation constructor.
@@ -162,30 +192,6 @@ class GradebookEvaluation
     public function getDescription()
     {
         return $this->description;
-    }
-
-    /**
-     * Set userId.
-     *
-     * @param int $userId
-     *
-     * @return GradebookEvaluation
-     */
-    public function setUserId($userId)
-    {
-        $this->userId = $userId;
-
-        return $this;
-    }
-
-    /**
-     * Get userId.
-     *
-     * @return int
-     */
-    public function getUserId()
-    {
-        return $this->userId;
     }
 
     /**
@@ -364,5 +370,89 @@ class GradebookEvaluation
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return float
+     */
+    public function getBestScore()
+    {
+        return $this->bestScore;
+    }
+
+    /**
+     * @param float $bestScore
+     *
+     * @return GradebookEvaluation
+     */
+    public function setBestScore($bestScore)
+    {
+        $this->bestScore = $bestScore;
+
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getAverageScore()
+    {
+        return $this->averageScore;
+    }
+
+    /**
+     * @param float $averageScore
+     *
+     * @return GradebookEvaluation
+     */
+    public function setAverageScore($averageScore)
+    {
+        $this->averageScore = $averageScore;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getUserScoreList()
+    {
+        if (empty($this->userScoreList)) {
+            return [];
+        }
+
+        return $this->userScoreList;
+    }
+
+    /**
+     * @param array $userScoreList
+     *
+     * @return GradebookEvaluation
+     */
+    public function setUserScoreList($userScoreList)
+    {
+        $this->userScoreList = $userScoreList;
+
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getScoreWeight()
+    {
+        return $this->scoreWeight;
+    }
+
+    /**
+     * @param float $scoreWeight
+     *
+     * @return GradebookEvaluation
+     */
+    public function setScoreWeight($scoreWeight)
+    {
+        $this->scoreWeight = $scoreWeight;
+
+        return $this;
     }
 }

@@ -4,16 +4,15 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
-use APY\DataGridBundle\Grid\Mapping as GRID;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CoreBundle\Entity\ResourceNode;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table(name="c_shortcut")
  * @ORM\Entity
- * @GRID\Source(columns="id, name, resourceNode.createdAt", filterable=false, groups={"resource"})
  */
 class CShortcut extends AbstractResource implements ResourceInterface
 {
@@ -58,17 +57,9 @@ class CShortcut extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Resource identifier.
-     */
     public function getResourceIdentifier(): int
     {
         return $this->id;
-    }
-
-    public function getResourceName(): string
-    {
-        return $this->getName();
     }
 
     public function getShortCutNode()
@@ -76,13 +67,20 @@ class CShortcut extends AbstractResource implements ResourceInterface
         return $this->shortCutNode;
     }
 
-    /**
-     * @return CShortcut
-     */
-    public function setShortCutNode($shortCutNode)
+    public function setShortCutNode(ResourceNode $shortCutNode): self
     {
         $this->shortCutNode = $shortCutNode;
 
         return $this;
+    }
+
+    public function getResourceName(): string
+    {
+        return $this->getName();
+    }
+
+    public function setResourceName(string $name): self
+    {
+        return $this->setName($name);
     }
 }

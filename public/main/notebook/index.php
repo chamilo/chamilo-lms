@@ -106,7 +106,7 @@ if ('addnote' === $action) {
         $check = Security::check_token('post');
         if ($check) {
             $values = $form->exportValues();
-            $res = NotebookManager::save_note($values);
+            $res = NotebookManager::saveNote($values);
             if ($res) {
                 echo Display::return_message(get_lang('Note added'), 'confirmation');
             }
@@ -169,7 +169,7 @@ if ('addnote' === $action) {
         $check = Security::check_token('post');
         if ($check) {
             $values = $form->exportValues();
-            $res = NotebookManager::update_note($values);
+            $res = NotebookManager::updateNote($values);
             if ($res) {
                 echo Display::return_message(get_lang('Note updated'), 'confirmation');
             }

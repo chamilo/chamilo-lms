@@ -29,7 +29,7 @@ if (!api_is_allowed_to_create_course() &&
     // Francois Belisle Kezber...
     // If user is NOT a teacher -> student, but IS the teacher of the course... Won't have the global teacher status
     // and won't be tutor... So have to check is_course_teacher
-    if ((1 != $user_course_status) && !(CourseManager::is_course_teacher(api_get_user_id(), $course_code))) {
+    if ((1 != $user_course_status) && !(CourseManager::isCourseTeacher(api_get_user_id(), api_get_course_int_id()))) {
         api_not_allowed(true);
     }
 }
@@ -737,7 +737,7 @@ if (!empty($studentId)) {
                                     '<a title="'.get_lang('Go to attendances').'" href="'.api_get_path(
                                         WEB_CODE_PATH
                                     ).'attendance/index.php?cidReq='.$courseCodeItem.'&id_session='.$sId.'&student_id='.$studentId.'">'.
-                                    $results_faults_avg['faults'].'/'.$results_faults_avg['total'].' ('.$results_faults_avg['porcent'].'%)</a>';
+                                    $results_faults_avg['faults'].'/'.$results_faults_avg['total'].' ('.$results_faults_avg['percent'].'%)</a>';
                             } else {
                                 $attendances_faults_avg =
                                     $results_faults_avg['faults'].'/'.
@@ -1878,11 +1878,13 @@ if (empty($_GET['details'])) {
                     );
                     if (!empty($results_faults_avg['total'])) {
                         if (api_is_drh()) {
-                            $attendances_faults_avg = '<a title="'.get_lang('Go to attendances').'" href="'.api_get_path(
-                                    WEB_CODE_PATH
-                                ).'attendance/index.php?cidReq='.$course_code.'&id_session='.$session_id.'&student_id='.$studentId.'">'.$results_faults_avg['faults'].'/'.$results_faults_avg['total'].' ('.$results_faults_avg['porcent'].'%)</a>';
+                            $attendances_faults_avg =
+                                '<a title="'.get_lang('Go to attendances').'" href="'.api_get_path(WEB_CODE_PATH).
+                                'attendance/index.php?cidReq='.$course_code.'&id_session='.$session_id.'&student_id='.$studentId.'">'.
+                                $results_faults_avg['faults'].'/'.$results_faults_avg['total'].' ('.$results_faults_avg['porcent'].'%)</a>';
                         } else {
-                            $attendances_faults_avg = $results_faults_avg['faults'].'/'.$results_faults_avg['total'].' ('.$results_faults_avg['porcent'].'%)';
+                            $attendances_faults_avg = $results_faults_avg['faults'].'/'.$results_faults_avg['total'].
+                                ' ('.$results_faults_avg['percent'].'%)';
                         }
                     } else {
                         $attendances_faults_avg = '0/0 (0%)';

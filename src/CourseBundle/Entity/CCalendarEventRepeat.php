@@ -12,7 +12,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(
  *  name="c_calendar_event_repeat",
  *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"})
  *  }
  * )
  * @ORM\Entity
@@ -29,18 +28,12 @@ class CCalendarEventRepeat
     protected $iid;
 
     /**
-     * @var int
+     * @var CCalendarEvent
      *
-     * @ORM\Column(name="cal_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CCalendarEvent", inversedBy="repeatEvents")
+     * @ORM\JoinColumn(name="cal_id", referencedColumnName="iid")
      */
-    protected $calId;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="c_id", type="integer")
-     */
-    protected $cId;
+    protected $event;
 
     /**
      * @var string
@@ -164,53 +157,5 @@ class CCalendarEventRepeat
     public function getCalDays()
     {
         return $this->calDays;
-    }
-
-    /**
-     * Set cId.
-     *
-     * @param int $cId
-     *
-     * @return CCalendarEventRepeat
-     */
-    public function setCId($cId)
-    {
-        $this->cId = $cId;
-
-        return $this;
-    }
-
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
-    {
-        return $this->cId;
-    }
-
-    /**
-     * Set calId.
-     *
-     * @param int $calId
-     *
-     * @return CCalendarEventRepeat
-     */
-    public function setCalId($calId)
-    {
-        $this->calId = $calId;
-
-        return $this;
-    }
-
-    /**
-     * Get calId.
-     *
-     * @return int
-     */
-    public function getCalId()
-    {
-        return $this->calId;
     }
 }

@@ -15,6 +15,15 @@ use Doctrine\ORM\Mapping as ORM;
 class GradebookScoreDisplay
 {
     /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $id;
+
+    /**
      * @var float
      *
      * @ORM\Column(name="score", type="float", precision=10, scale=0, nullable=false)
@@ -41,15 +50,6 @@ class GradebookScoreDisplay
      * @ORM\Column(name="score_color_percent", type="float", precision=10, scale=0, nullable=false)
      */
     protected $scoreColorPercent;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
 
     /**
      * Set score.

@@ -44,13 +44,15 @@ export const ACTIONS = {
   RESET_UPDATE: 'RESET_UPDATE',
   SET_CREATED: 'SET_CREATED',
   SET_DELETED: 'SET_DELETED',
+  SET_DELETED_MULTIPLE: 'SET_DELETED_MULTIPLE',
   SET_ERROR: 'SET_ERROR',
   SET_SELECT_ITEMS: 'SET_SELECT_ITEMS',
   SET_TOTAL_ITEMS: 'SET_TOTAL_ITEMS',
   SET_UPDATED: 'SET_UPDATED',
   SET_VIEW: 'SET_VIEW',
   SET_VIOLATIONS: 'SET_VIOLATIONS',
-  TOGGLE_LOADING: 'TOGGLE_LOADING'
+  TOGGLE_LOADING: 'TOGGLE_LOADING',
+  ADD_RESOURCE_NODE: 'ADD_RESOURCE_NODE'
 };
 
 export default function makeCrudModule({
@@ -85,6 +87,24 @@ export default function makeCrudModule({
           })
           .catch(e => handleError(commit, e));
       },
+      delMultiple: ({ commit }, items) => {
+        commit(ACTIONS.TOGGLE_LOADING);
+        const promises = items.map(async item => {
+          const result = await service.del(item).then(() => {
+            //commit(ACTIONS.TOGGLE_LOADING);
+            commit(ACTIONS.SET_DELETED_MULTIPLE, item);
+          });
+
+          return result;
+        });
+
+        const result = Promise.all(promises);
+
+        if (result) {
+          commit(ACTIONS.TOGGLE_LOADING);
+        }
+      },
+
       fetchAll: ({ commit, state }, params) => {
         if (!service) throw new Error('No service specified!');
 
@@ -131,18 +151,33 @@ export default function makeCrudModule({
           })
           .catch(e => handleError(commit, e));
       },
-      load: ({ commit }, id) => {
+
+      load: ({ commit }, id, options = {}) => {
         if (!service) throw new Error('No service specified!');
 
         commit(ACTIONS.TOGGLE_LOADING);
         service
-          .find(id)
+          .find(id, options)
           .then(response => response.json())
           .then(item => {
             commit(ACTIONS.TOGGLE_LOADING);
             commit(ACTIONS.ADD, normalizeRelations(item));
           })
           .catch(e => handleError(commit, e));
+      },
+      findResourceNode: ({ commit }, id) => {
+        if (!service) throw new Error('No service specified!');
+
+        service
+            .find(id)
+            .then(response => response.json())
+            .then(item => {
+              commit(ACTIONS.TOGGLE_LOADING);
+              commit(ACTIONS.ADD_RESOURCE_NODE, normalizeRelations(item));
+
+              return item;
+            })
+            .catch(e => handleError(commit, e));
       },
       resetCreate: ({ commit }) => {
         commit(ACTIONS.RESET_CREATE);
@@ -177,10 +212,17 @@ export default function makeCrudModule({
       getField,
       list: (state, getters) => {
         return state.allIds.map(id => getters.find(id));
-      }
+      },
+      getResourceNode: (state) => {
+        return state.resourceNode;
+      },
     },
     mutations: {
       updateField,
+      [ACTIONS.ADD_RESOURCE_NODE]: (state, item) => {
+        Vue.set(state, 'resourceNode', item);
+        Vue.set(state, 'isLoading', false);
+      },
       [ACTIONS.ADD]: (state, item) => {
         Vue.set(state.byId, item['@id'], item);
         Vue.set(state, 'isLoading', false);
@@ -229,7 +271,20 @@ export default function makeCrudModule({
         Object.assign(state, { created });
       },
       [ACTIONS.SET_DELETED]: (state, deleted) => {
-        if (!state.allIds.includes(deleted['@id'])) return;
+        if (!state.allIds.includes(deleted['@id'])) {
+          return;
+        }
+        Object.assign(state, {
+          allIds: remove(state.allIds, item => item['@id'] === deleted['@id']),
+          byId: remove(state.byId, id => id === deleted['@id']),
+          deleted
+        });
+      },
+      [ACTIONS.SET_DELETED_MULTIPLE]: (state, deleted) => {
+        //console.log(deleted['@id']);
+        /*if (!state.allIds.includes(deleted['@id'])) {
+          return;
+        }*/
         Object.assign(state, {
           allIds: remove(state.allIds, item => item['@id'] === deleted['@id']),
           byId: remove(state.byId, id => id === deleted['@id']),

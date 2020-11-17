@@ -22,7 +22,6 @@ class FeatureContext extends MinkContext
     public function iAmAPlatformAdministrator()
     {
         $this->iAmLoggedAs('admin');
-        $this->getSession()->back();
     }
 
     /**
@@ -90,7 +89,9 @@ class FeatureContext extends MinkContext
      */
     public function iAmOnCourseXHomepage($courseCode)
     {
-        $this->visit('/courses/'.$courseCode.'/index.php');
+        $this->visit('/main/course_home/redirect.php?cidReq='.$courseCode);
+        $this->waitForThePageToBeLoaded();
+        //$this->visit('/courses/'.$courseCode.'/index.php');
         $this->assertElementNotOnPage('.alert-danger');
     }
 
@@ -100,6 +101,8 @@ class FeatureContext extends MinkContext
     public function iAmOnCourseXHomepageInSessionY($courseCode, $sessionName)
     {
         $this->visit('/main/course_home/redirect.php?cidReq='.$courseCode.'&session_name='.$sessionName);
+        $this->waitForThePageToBeLoaded();
+        $this->assertElementNotOnPage('.alert-danger');
     }
 
     /**
@@ -116,11 +119,25 @@ class FeatureContext extends MinkContext
      */
     public function iAmLoggedAs($username)
     {
-        $this->visit('/logout');
+        //$this->visit('/logout');
         $this->visit('/login');
-        $this->fillField('login__username', $username);
-        $this->fillField('login__password', $username);
-        $this->pressButton('_submit');
+        $this->fillField('login', $username);
+        $this->fillField('password', $username);
+        $this->pressButton('Login');
+        $this->waitForThePageToBeLoaded();
+        $this->waitForThePageToBeLoaded();
+    }
+
+    /**
+     * Checks, that element with specified CSS doesn't exist on page
+     *
+     * @Then /^(?:|I )should not see an error$/
+     */
+    public function iShouldNotSeeAnError()
+    {
+        $this->assertSession()->pageTextNotContains('Internal server error');
+        $this->assertSession()->pageTextNotContains('error');
+        $this->assertSession()->elementNotExists('css', '.alert-danger');
     }
 
     /**
@@ -184,8 +201,7 @@ class FeatureContext extends MinkContext
      */
     public function iAmNotLogged()
     {
-        $this->visit('/index.php?logout=logout');
-        $this->visit('I am on homepage');
+        $this->visit('/logout');
     }
 
     /**
@@ -397,7 +413,7 @@ class FeatureContext extends MinkContext
     }
 
     /**
-     * @When /^wait for the page to be loaded$/
+     * @When /^(?:|I )wait for the page to be loaded$/
      */
     public function waitForThePageToBeLoaded()
     {
@@ -482,6 +498,20 @@ class FeatureContext extends MinkContext
     }
 
     /**
+     * @Given /^I check the "([^"]*)" radio button selector$/
+     */
+    public function iCheckTheRadioButtonBasedInSelector($element)
+    {
+        $this->getSession()->executeScript("
+            $(function() {
+                $('$element').prop('checked', true);
+            });
+        ");
+
+        return true;
+    }
+
+    /**
      * @Then /^I should see an icon with title "([^"]*)"$/
      */
     public function iShouldSeeAnIconWithTitle($value)
@@ -511,7 +541,6 @@ class FeatureContext extends MinkContext
      */
     public function saveUrlWithName($name)
     {
-
         $url = $this->getSession()->getCurrentUrl();
         $this->getSession()->setCookie($name, $url);
     }

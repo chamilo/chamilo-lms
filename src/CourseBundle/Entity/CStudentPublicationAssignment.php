@@ -38,13 +38,6 @@ class CStudentPublicationAssignment extends AbstractResource implements Resource
     protected $cId;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=true)
-     */
-    protected $id;
-
-    /**
      * @var \DateTime
      *
      * @ORM\Column(name="expires_on", type="datetime", nullable=true)
@@ -210,30 +203,6 @@ class CStudentPublicationAssignment extends AbstractResource implements Resource
     }
 
     /**
-     * Set id.
-     *
-     * @param int $id
-     *
-     * @return CStudentPublicationAssignment
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
      * Set cId.
      *
      * @param int $cId
@@ -268,5 +237,10 @@ class CStudentPublicationAssignment extends AbstractResource implements Resource
     public function getResourceName(): string
     {
         return (string) $this->getIid();
+    }
+
+    public function setResourceName(string $name): self
+    {
+        //return $this->setTitle($name);
     }
 }

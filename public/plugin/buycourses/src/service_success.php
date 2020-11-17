@@ -1,5 +1,4 @@
 <?php
-
 /* For license terms, see /license.txt */
 
 /**
@@ -29,7 +28,7 @@ $paypalUsername = $paypalParams['username'];
 $paypalPassword = $paypalParams['password'];
 $paypalSignature = $paypalParams['signature'];
 
-require_once 'paypalfunctions.php';
+require_once "paypalfunctions.php";
 
 $buyerInformation = GetShippingDetails(urlencode($_SESSION['TOKEN']));
 
@@ -67,7 +66,7 @@ if ($form->validate()) {
     $confirmPayments = ConfirmPayment($itemPrice);
     if ('Success' !== $confirmPayments['ACK']) {
         $erroMessage = vsprintf(
-            $plugin->get_lang('An error occurred.'),
+            $plugin->get_lang('ErrorOccurred'),
             [$expressCheckout['L_ERRORCODE0'], $confirmPayments['L_LONGMESSAGE0']]
         );
         Display::addFlash(
@@ -78,7 +77,7 @@ if ($form->validate()) {
         exit;
     }
 
-    switch ($confirmPayments['PAYMENTINFO_0_PAYMENTSTATUS']) {
+    switch ($confirmPayments["PAYMENTINFO_0_PAYMENTSTATUS"]) {
         case 'Completed':
             $serviceSaleIsCompleted = $plugin->completeServiceSale($serviceSale['id']);
 
@@ -94,60 +93,47 @@ if ($form->validate()) {
             }
 
             Display::addFlash(
-                Display::return_message($plugin->get_lang('There happened an unknown error. Please contact the platform administrator.'), 'error')
+                Display::return_message($plugin->get_lang('ErrorContactPlatformAdmin'), 'error')
             );
-
             break;
         case 'Pending':
-            switch ($confirmPayments['PAYMENTINFO_0_PENDINGREASON']) {
+            switch ($confirmPayments["PAYMENTINFO_0_PENDINGREASON"]) {
                 case 'address':
                     $purchaseStatus = $plugin->get_lang('PendingReasonByAddress');
-
                     break;
                 case 'authorization':
                     $purchaseStatus = $plugin->get_lang('PendingReasonByAuthorization');
-
                     break;
                 case 'echeck':
                     $purchaseStatus = $plugin->get_lang('PendingReasonByEcheck');
-
                     break;
                 case 'intl':
                     $purchaseStatus = $plugin->get_lang('PendingReasonByIntl');
-
                     break;
                 case 'multicurrency':
                     $purchaseStatus = $plugin->get_lang('PendingReasonByMulticurrency');
-
                     break;
                 case 'order':
                     $purchaseStatus = $plugin->get_lang('PendingReasonByOrder');
-
                     break;
                 case 'paymentreview':
                     $purchaseStatus = $plugin->get_lang('PendingReasonByPaymentReview');
-
                     break;
                 case 'regulatoryreview':
                     $purchaseStatus = $plugin->get_lang('PendingReasonByRegulatoryReview');
-
                     break;
                 case 'unilateral':
                     $purchaseStatus = $plugin->get_lang('PendingReasonByUnilateral');
-
                     break;
                 case 'upgrade':
                     $purchaseStatus = $plugin->get_lang('PendingReasonByUpgrade');
-
                     break;
                 case 'verify':
                     $purchaseStatus = $plugin->get_lang('PendingReasonByVerify');
-
                     break;
                 case 'other':
                 default:
                     $purchaseStatus = $plugin->get_lang('PendingReasonByOther');
-
                     break;
             }
 
@@ -158,15 +144,13 @@ if ($form->validate()) {
                     false
                 )
             );
-
             break;
         default:
-            $plugin->cancelServiceSale((int) ($serviceSale['id']));
+            $plugin->cancelServiceSale(intval($serviceSale['id']));
 
             Display::addFlash(
-                Display::return_message($plugin->get_lang('There happened an unknown error. Please contact the platform administrator.'), 'error')
+                Display::return_message($plugin->get_lang('ErrorContactPlatformAdmin'), 'error')
             );
-
             break;
     }
 
@@ -181,8 +165,8 @@ if (empty($token)) {
 }
 
 $interbreadcrumb[] = [
-    'url' => 'service_catalog.php',
-    'name' => $plugin->get_lang('ListOfServicesOnSale'),
+    "url" => "service_catalog.php",
+    "name" => $plugin->get_lang('ListOfServicesOnSale'),
 ];
 
 $templateName = $plugin->get_lang('PaymentMethods');

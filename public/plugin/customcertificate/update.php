@@ -1,5 +1,4 @@
 <?php
-
 /* For licensing terms, see /license.txt */
 /**
  * This script is meant to update previous version the plugin.

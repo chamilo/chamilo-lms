@@ -2,7 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\Hook\HookAdminBlock;
 
 /**
  * Index page of the admin tools.
@@ -42,20 +41,6 @@ if (api_is_platform_admin()) {
 }
 $blocks = [];
 
-// Instantiate Hook Event for Admin Block
-$hook = Container::instantiateHook(HookAdminBlock::class);
-
-if (!empty($hook)) {
-    // If not empty, then notify Pre process to Hook Observers for Admin Block
-    $hook->setEventData(['blocks' => $blocks]);
-    $data = $hook->notifyAdminBlock(HOOK_EVENT_TYPE_PRE);
-    // Check if blocks data is not null
-    if (isset($data['blocks'])) {
-        // Get modified blocks
-        $blocks = $data['blocks'];
-    }
-}
-
 /* Users */
 $blocks['users']['icon'] = Display::return_icon(
     'members.png',
@@ -85,9 +70,9 @@ if (api_is_platform_admin()) {
     $items = [
         ['url' => 'user_list.php', 'label' => get_lang('User list')],
         ['url' => 'user_add.php', 'label' => get_lang('Add a user')],
-        ['url' => 'user_export.php', 'label' => get_lang('ExportUser listXMLCSV')],
-        ['url' => 'user_import.php', 'label' => get_lang('ImportUser listXMLCSV')],
-        ['url' => 'user_update_import.php', 'label' => get_lang('EditUser listCSV')],
+        ['url' => 'user_export.php', 'label' => get_lang('Export users list')],
+        ['url' => 'user_import.php', 'label' => get_lang('Import users list')],
+        ['url' => 'user_update_import.php', 'label' => get_lang('Edit users list')],
     ];
 
     if (isset($extAuthSource) && isset($extAuthSource['extldap']) && count($extAuthSource['extldap']) > 0) {
@@ -105,7 +90,7 @@ if (api_is_platform_admin()) {
     $items = [
         ['url' => 'user_list.php', 'label' => get_lang('User list')],
         ['url' => 'user_add.php', 'label' => get_lang('Add a user')],
-        ['url' => 'user_import.php', 'label' => get_lang('ImportUser listXMLCSV')],
+        ['url' => 'user_import.php', 'label' => get_lang('Import users list')],
         ['url' => 'usergroups.php', 'label' => get_lang('Classes')],
     ];
 
@@ -449,7 +434,7 @@ if (api_is_platform_admin()) {
         'label' => get_lang('Tickets'),
     ];
 
-    if (true == api_get_configuration_value('db_manager_enabled') &&
+    /*if (true == api_get_configuration_value('db_manager_enabled') &&
         api_is_global_platform_admin()
     ) {
         $host = $_configuration['db_host'];
@@ -460,7 +445,7 @@ if (api_is_platform_admin()) {
             'url' => "db.php?username=$username&db=$databaseName&server=$host",
             'label' => get_lang('Database manager'),
         ];
-    }
+    }*/
 
     $blocks['settings']['items'] = $items;
     $blocks['settings']['extra'] = null;
@@ -555,42 +540,6 @@ if (api_is_platform_admin()) {
     $blocks['version_check']['search_form'] = null;
     $blocks['version_check']['items'] = '<div class="block-admin-version_check"></div>';
     $blocks['version_check']['class'] = '';
-
-    // Check Hook Event for Admin Block Object
-    if (!empty($hook)) {
-        // If not empty, then notify Post process to Hook Observers for Admin Block
-        $hook->setEventData(['blocks' => $blocks]);
-        $data = $hook->notifyAdminBlock(HOOK_EVENT_TYPE_POST);
-        // Check if blocks data is not null
-        if (isset($data['blocks'])) {
-            // Get modified blocks
-            $blocks = $data['blocks'];
-        }
-    }
-
-    //Hack for fix migration on session_rel_user
-    $tableColumns = Database::getManager()
-        ->getConnection()
-        ->getSchemaManager()
-        ->listTableColumns(
-            Database::get_main_table(TABLE_MAIN_SESSION_USER)
-        );
-
-    if (!array_key_exists('duration', $tableColumns)) {
-        try {
-            $dbSchema = Database::getManager()->getConnection()->getSchemaManager();
-            $durationColumn = new \Doctrine\DBAL\Schema\Column(
-                'duration',
-                Doctrine\DBAL\Types\Type::getType(\Doctrine\DBAL\Types\Type::INTEGER),
-                ['notnull' => false]
-            );
-            $tableDiff = new \Doctrine\DBAL\Schema\TableDiff('session_rel_user', [$durationColumn]);
-            $dbSchema->alterTable($tableDiff);
-        } catch (Exception $e) {
-            error_log($e->getMessage());
-        }
-    }
-    //end hack
 }
 $admin_ajax_url = api_get_path(WEB_AJAX_PATH).'admin.ajax.php';
 

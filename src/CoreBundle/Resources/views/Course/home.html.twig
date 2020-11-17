@@ -71,13 +71,13 @@
         });
     </script>
 
-    <div class="grid-tools">
+    <div class="grid-tools row">
         {% for category, items in tools %}
             {% for item in items %}
-                <div class="items-tools">
+                <div class="items-tools col">
                     <div class="tools mt-3 mb-3">
                         <div class="big_icon">
-                            <a href=" {{ url('chamilo_core_course_redirect_tool', { 'toolId': item.id, 'cid': course.id })|raw }}" >
+                            <a href=" {{ url('chamilo_core_course_redirect_tool', { 'toolId': item.iid, 'cid': course.id })|raw }}" >
                                 <img src="{{ asset('img/tools/' ~ item.name ~ '.png')  }}" />
                             </a>
                         </div>
@@ -96,10 +96,10 @@
                 <div class="tools mt-3 mb-3">
                     {% set url %}
                     {{-
-                        url('chamilo_core_resource_view_file', {
+                        url('chamilo_core_resource_view', {
                             'id': shortcut.shortCutNode.id,
                             'cid': course.id,
-                            'sid': session.id,
+                            'sid': session ? session.id : 0,
                             'type' : shortcut.shortCutNode.resourceType,
                             'tool' : shortcut.shortCutNode.resourceType.tool,
                         })

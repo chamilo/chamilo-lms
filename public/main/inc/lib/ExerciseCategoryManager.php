@@ -5,7 +5,6 @@ use APY\DataGridBundle\Grid\Action\MassAction;
 use APY\DataGridBundle\Grid\Action\RowAction;
 use APY\DataGridBundle\Grid\Row;
 use APY\DataGridBundle\Grid\Source\Entity;
-use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CourseBundle\Entity\CExerciseCategory;
@@ -29,9 +28,6 @@ class ExerciseCategoryManager extends Model
 
     /**
      * Formats the necessary elements for the given datatype.
-     *
-     * @param string $type The type of data to which this extra field
-     *                     applies (user, course, session, ...)
      *
      * @assert (-1) === false
      */
@@ -156,6 +152,8 @@ class ExerciseCategoryManager extends Model
             ->setName($params['name'])
             ->setCourse($course)
             ->setDescription($params['description'])
+            ->setParent($course)
+            ->addCourseLink($course, api_get_session_entity())
         ;
 
         /*
@@ -174,16 +172,6 @@ class ExerciseCategoryManager extends Model
             $category->setPosition($position);
 */
         $em->persist($category);
-
-        $repo->addResourceToCourse(
-            $category,
-            ResourceLink::VISIBILITY_PUBLISHED,
-            api_get_user_entity(api_get_user_id()),
-            $course,
-            api_get_session_entity(),
-            api_get_group_entity()
-        );
-
         $em->flush();
 
         return $category;

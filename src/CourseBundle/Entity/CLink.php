@@ -4,7 +4,6 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
-use APY\DataGridBundle\Grid\Mapping as GRID;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Doctrine\ORM\Mapping as ORM;
@@ -13,15 +12,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * CLink.
  *
- * @ORM\Table(
- *  name="c_link",
- *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"}),
- *      @ORM\Index(name="session_id", columns={"session_id"})
- *  }
- * )
+ * @ORM\Table(name="c_link")
  * @ORM\Entity
- * @GRID\Source(columns="iid, title, resourceNode.createdAt", filterable=false, groups={"resource"})
  */
 class CLink extends AbstractResource implements ResourceInterface
 {
@@ -35,20 +27,6 @@ class CLink extends AbstractResource implements ResourceInterface
     protected $iid;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="c_id", type="integer")
-     */
-    protected $cId;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=true)
-     */
-    protected $id;
-
-    /**
      * @var string
      * @Assert\NotBlank()
      * @ORM\Column(name="url", type="text", nullable=false)
@@ -57,6 +35,7 @@ class CLink extends AbstractResource implements ResourceInterface
 
     /**
      * @var string
+     * @Assert\NotBlank()
      * @ORM\Column(name="title", type="string", length=150, nullable=true)
      */
     protected $title;
@@ -96,13 +75,6 @@ class CLink extends AbstractResource implements ResourceInterface
      * @ORM\Column(name="target", type="string", length=10, nullable=true)
      */
     protected $target;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="session_id", type="integer", nullable=true)
-     */
-    protected $sessionId;
 
     public function __construct()
     {
@@ -258,88 +230,9 @@ class CLink extends AbstractResource implements ResourceInterface
         return $this->target;
     }
 
-    /**
-     * Set sessionId.
-     *
-     * @param int $sessionId
-     *
-     * @return CLink
-     */
-    public function setSessionId($sessionId)
-    {
-        $this->sessionId = $sessionId;
-
-        return $this;
-    }
-
-    /**
-     * Get sessionId.
-     *
-     * @return int
-     */
-    public function getSessionId()
-    {
-        return $this->sessionId;
-    }
-
-    /**
-     * Set id.
-     *
-     * @param int $id
-     *
-     * @return CLink
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
     public function getIid(): int
     {
         return $this->iid;
-    }
-
-    public function setIid(int $iid): self
-    {
-        $this->iid = $iid;
-
-        return $this;
-    }
-
-    /**
-     * Set cId.
-     *
-     * @param int $cId
-     *
-     * @return CLink
-     */
-    public function setCId($cId)
-    {
-        $this->cId = $cId;
-
-        return $this;
-    }
-
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
-    {
-        return $this->cId;
     }
 
     public function getCategory(): ?CLinkCategory
@@ -365,5 +258,10 @@ class CLink extends AbstractResource implements ResourceInterface
     public function getResourceName(): string
     {
         return $this->getTitle();
+    }
+
+    public function setResourceName($name): self
+    {
+        return $this->setTitle($name);
     }
 }

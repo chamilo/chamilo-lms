@@ -4,8 +4,6 @@
 
 namespace Chamilo\CoreBundle\Repository;
 
-use APY\DataGridBundle\Grid\Column\Column;
-use APY\DataGridBundle\Grid\Grid;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Illustration;
@@ -14,7 +12,7 @@ use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Form\Resource\IllustrationType;
-use Chamilo\CourseBundle\Entity\CGroupInfo;
+use Chamilo\CourseBundle\Entity\CGroup;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -24,7 +22,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  */
 final class IllustrationRepository extends ResourceRepository implements GridInterface, UploadInterface
 {
-    public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroupInfo $group = null): QueryBuilder
+    public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroup $group = null): QueryBuilder
     {
         $repo = $this->getRepository();
         $className = $repo->getClassName();
@@ -98,13 +96,12 @@ final class IllustrationRepository extends ResourceRepository implements GridInt
 
         if (null === $illustrationNode) {
             $illustration = new Illustration();
+            $illustration->setParentResourceNode($user->getResourceNode()->getId());
             $em->persist($illustration);
-            $this->createNodeForResource($illustration, $user, $user->getResourceNode());
         } else {
             $illustration = $this->repository->findOneBy(['resourceNode' => $illustrationNode]);
         }
 
-        //$this->addResourceToEveryone($illustrationNode);
         $file = $this->addFile($illustration, $uploadFile);
         $em->flush();
 
@@ -116,17 +113,18 @@ final class IllustrationRepository extends ResourceRepository implements GridInt
         $nodeRepo = $this->getResourceNodeRepository();
         $name = $this->getResourceTypeName();
 
-        $qb = $nodeRepo->getEntityManager()->createQueryBuilder()
+        $qb = $nodeRepo->createQueryBuilder('n')
             ->select('node')
             ->from(ResourceNode::class, 'node')
             ->innerJoin('node.resourceType', 'type')
             ->innerJoin('node.resourceFile', 'file')
             ->where('node.parent = :parent')
             ->andWhere('type.name = :name')
-            ->setParameters(['parent' => $resourceNode, 'name' => $name])
+            ->setParameters(['parent' => $resourceNode->getId(), 'name' => $name])
+            ->setMaxResults(1)
         ;
 
-        return $qb->getQuery()->getFirstResult();
+        return $qb->getQuery()->getOneOrNullResult();
     }
 
     public function deleteIllustration(AbstractResource $resource)
@@ -147,9 +145,9 @@ final class IllustrationRepository extends ResourceRepository implements GridInt
         return $this->getIllustrationUrlFromNode($resource->getResourceNode(), $filter);
     }
 
-    public function getIllustrationUrlFromNode(ResourceNode $resourceNode, string $filter = ''): string
+    public function getIllustrationUrlFromNode(ResourceNode $node, string $filter = ''): string
     {
-        $node = $this->getIllustrationNodeFromParent($resourceNode);
+        $node = $this->getIllustrationNodeFromParent($node);
 
         if (null !== $node) {
             $params = [
@@ -157,22 +155,18 @@ final class IllustrationRepository extends ResourceRepository implements GridInt
                 'tool' => $node->getResourceType()->getTool(),
                 'type' => $node->getResourceType()->getName(),
             ];
+
             if (!empty($filter)) {
                 $params['filter'] = $filter;
             }
 
             return $this->getRouter()->generate(
-                'chamilo_core_resource_view_file',
+                'chamilo_core_resource_view',
                 $params
             );
         }
 
         return '';
-    }
-
-    public function getTitleColumn(Grid $grid): Column
-    {
-        return $grid->getColumn('name');
     }
 
     public function getResourceFormType(): string

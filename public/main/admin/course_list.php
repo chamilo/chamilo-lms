@@ -21,64 +21,7 @@ $sessionId = isset($_GET['session_id']) ? $_GET['session_id'] : null;
  */
 function get_number_of_courses()
 {
-    $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-    $tblCourseCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
-    $sql = "SELECT COUNT(c.id) AS total_number_of_items FROM $course_table c";
-
-    if ((api_is_platform_admin() || api_is_session_admin()) &&
-        api_is_multiple_url_enabled() && -1 != api_get_current_access_url_id()
-    ) {
-        $access_url_rel_course_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-        $sql .= " INNER JOIN $access_url_rel_course_table url_rel_course
-                 ON (c.id = url_rel_course.c_id)";
-    }
-
-    $sql .= " LEFT JOIN $tblCourseCategory ON c.category_id = course_category.id ";
-
-    if (isset($_GET['keyword'])) {
-        $keyword = Database::escape_string('%'.$_GET['keyword'].'%');
-        $sql .= " WHERE (
-                        c.title LIKE '".$keyword."' OR
-                        c.code LIKE '".$keyword."' OR
-                        c.visual_code LIKE '".$keyword."'
-                )
-        ";
-    } elseif (isset($_GET['keyword_code'])) {
-        $keyword_code = Database::escape_string('%'.$_GET['keyword_code'].'%');
-        $keyword_title = Database::escape_string('%'.$_GET['keyword_title'].'%');
-        $keyword_category = isset($_GET['keyword_category'])
-            ? Database::escape_string('%'.$_GET['keyword_category'].'%')
-            : null;
-        $keyword_language = Database::escape_string('%'.$_GET['keyword_language'].'%');
-        $keyword_visibility = Database::escape_string('%'.$_GET['keyword_visibility'].'%');
-        $keyword_subscribe = Database::escape_string($_GET['keyword_subscribe']);
-        $keyword_unsubscribe = Database::escape_string($_GET['keyword_unsubscribe']);
-
-        $sql .= " WHERE
-                    (c.code LIKE '".$keyword_code."' OR c.visual_code LIKE '".$keyword_code."') AND
-                    c.title LIKE '".$keyword_title."' AND
-                    c.course_language LIKE '".$keyword_language."' AND
-                    c.visibility LIKE '".$keyword_visibility."' AND
-                    c.subscribe LIKE '".$keyword_subscribe."' AND
-                    c.unsubscribe LIKE '".$keyword_unsubscribe."'
-        ";
-
-        if (!empty($keyword_category)) {
-            $sql .= " AND course_category.code LIKE '".$keyword_category."' ";
-        }
-    }
-
-    // adding the filter to see the user's only of the current access_url
-    if ((api_is_platform_admin() || api_is_session_admin()) &&
-        api_is_multiple_url_enabled() && -1 != api_get_current_access_url_id()
-    ) {
-        $sql .= ' AND url_rel_course.access_url_id = '.api_get_current_access_url_id();
-    }
-
-    $res = Database::query($sql);
-    $obj = Database::fetch_object($res);
-
-    return $obj->total_number_of_items;
+    return get_course_data(0, 0, 0, 0, null, true);
 }
 
 /**
@@ -93,17 +36,17 @@ function get_number_of_courses()
  *
  * @return array
  */
-function get_course_data($from, $number_of_items, $column, $direction)
+function get_course_data($from, $number_of_items, $column, $direction, $dataFunctions = [], $getCount = false)
 {
     $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
     $tblCourseCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
+    $tblCourseRelCategory = Database::get_main_table(TABLE_MAIN_COURSE_REL_CATEGORY);
 
-    $sql = "SELECT
+    $select = "SELECT
                 course.code AS col0,
                 title AS col1,
                 course.code AS col2,
                 course_language AS col3,
-                category.code AS col4,
                 subscribe AS col5,
                 unsubscribe AS col6,
                 course.code AS col7,
@@ -111,9 +54,18 @@ function get_course_data($from, $number_of_items, $column, $direction)
                 directory as col9,
                 visual_code,
                 directory,
-                course.id
-    		FROM $course_table course
-    		LEFT JOIN $tblCourseCategory category ON course.category_id = category.id ";
+                course.id";
+
+    if ($getCount) {
+        $select = 'SELECT COUNT(DISTINCT(course.id)) as count ';
+    }
+
+    $sql = "$select FROM $course_table course ";
+
+    if (isset($_GET['keyword_category']) && !empty($_GET['keyword_category'])) {
+        $sql .= "INNER JOIN $tblCourseRelCategory course_rel_category ON course.id = course_rel_category.course_id
+            INNER JOIN $tblCourseCategory category ON course_rel_category.course_category_id = category.id ";
+    }
 
     if ((api_is_platform_admin() || api_is_session_admin()) &&
         api_is_multiple_url_enabled() && -1 != api_get_current_access_url_id()
@@ -135,7 +87,7 @@ function get_course_data($from, $number_of_items, $column, $direction)
         $keyword_code = Database::escape_string('%'.$_GET['keyword_code'].'%');
         $keyword_title = Database::escape_string('%'.$_GET['keyword_title'].'%');
         $keyword_category = isset($_GET['keyword_category'])
-            ? Database::escape_string('%'.$_GET['keyword_category'].'%')
+            ? Database::escape_string($_GET['keyword_category'])
             : null;
         $keyword_language = Database::escape_string('%'.$_GET['keyword_language'].'%');
         $keyword_visibility = Database::escape_string('%'.$_GET['keyword_visibility'].'%');
@@ -151,7 +103,7 @@ function get_course_data($from, $number_of_items, $column, $direction)
                 unsubscribe LIKE '".$keyword_unsubscribe."'";
 
         if (!empty($keyword_category)) {
-            $sql .= " AND category.code LIKE '".$keyword_category."' ";
+            $sql .= " AND category.id = ".$keyword_category." ";
         }
     }
 
@@ -162,6 +114,18 @@ function get_course_data($from, $number_of_items, $column, $direction)
         $sql .= ' AND url_rel_course.access_url_id='.api_get_current_access_url_id();
     }
 
+    if ($getCount) {
+        $sql .= "GROUP BY course.code";
+        $res = Database::query($sql);
+        $row = Database::fetch_array($res);
+        if ($row) {
+            return (int) $row['count'];
+        }
+
+        return 0;
+    }
+
+    $sql .= "GROUP BY course.code";
     $sql .= " ORDER BY col$column $direction ";
     $sql .= " LIMIT $from, $number_of_items";
 
@@ -174,9 +138,20 @@ function get_course_data($from, $number_of_items, $column, $direction)
     while ($course = Database::fetch_array($res)) {
         $courseInfo = api_get_course_info_by_id($course['id']);
 
+        // get categories
+        $sqlCategoriesByCourseId = "SELECT category.name FROM $tblCourseCategory category
+            INNER JOIN $tblCourseRelCategory course_rel_category ON category.id = course_rel_category.course_category_id
+            WHERE course_rel_category.course_id = ".$course['id'];
+        $resultCategories = Database::query($sqlCategoriesByCourseId);
+        $categories = [];
+
+        while ($category = Database::fetch_array($resultCategories)) {
+            $categories[] = $category['name'];
+        }
+
         // Place colour icons in front of courses.
         $show_visual_code = $course['visual_code'] != $course[2] ? Display::label($course['visual_code'], 'info') : null;
-        $course[1] = get_course_visibility_icon($course[8]).PHP_EOL
+        $course[1] = get_course_visibility_icon($courseInfo['visibility']).PHP_EOL
             .Display::url(Security::remove_XSS($course[1]), $courseInfo['course_public_url']).PHP_EOL
             .$show_visual_code;
         $course[5] = SUBSCRIBE_ALLOWED == $course[5] ? get_lang('Yes') : get_lang('No');
@@ -197,7 +172,7 @@ function get_course_data($from, $number_of_items, $column, $direction)
         );
         $actions[] = Display::url(
             Display::return_icon('statistics.png', get_lang('Reporting')),
-            $path.'tracking/courseLog.php?'.api_get_cidreq_params($courseCode)
+            $path.'tracking/courseLog.php?'.api_get_cidreq_params($courseId)
         );
         $actions[] = Display::url(
             Display::return_icon('edit.png', get_lang('Edit')),
@@ -205,7 +180,7 @@ function get_course_data($from, $number_of_items, $column, $direction)
         );
         $actions[] = Display::url(
             Display::return_icon('backup.png', get_lang('Create a backup')),
-            $path.'coursecopy/create_backup.php?'.api_get_cidreq_params($courseCode)
+            $path.'coursecopy/create_backup.php?'.api_get_cidreq_params($courseId)
         );
         $actions[] = Display::url(
             Display::return_icon('delete.png', get_lang('Delete')),
@@ -221,7 +196,7 @@ function get_course_data($from, $number_of_items, $column, $direction)
             $course[1],
             $course[2],
             $language,
-            $course[4],
+            implode(", ", $categories),
             $course[5],
             $course[6],
             implode(PHP_EOL, $actions),
@@ -285,7 +260,7 @@ function get_course_data_by_session($from, $number_of_items, $column, $direction
     while ($course = Database::fetch_array($res)) {
         // Place colour icons in front of courses.
         $showVisualCode = $course['visual_code'] != $course[2] ? Display::label($course['visual_code'], 'info') : null;
-        $course[1] = get_course_visibility_icon($course[8]).
+        $course[1] = get_course_visibility_icon($course['col8']).
             '<a href="'.$courseUrl.$course[9].'/index.php">'.
             $course[1].
             '</a> '.
@@ -311,12 +286,14 @@ function get_course_data_by_session($from, $number_of_items, $column, $direction
 /**
  * Return an icon representing the visibility of the course.
  *
- * @param string $visibility
+ * @param int $visibility
  *
  * @return string
  */
 function get_course_visibility_icon($visibility)
 {
+    $visibility = (int) $visibility;
+
     $style = 'margin-bottom:0;margin-right:5px;';
     switch ($visibility) {
         case 0:
@@ -378,6 +355,7 @@ if (isset($_POST['action'])) {
 
                 Display::addFlash(Display::return_message(get_lang('Deleted')));
             }
+            api_location(api_get_self());
 
             break;
     }
@@ -447,6 +425,8 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
         if ($result) {
             Display::addFlash(Display::return_message(get_lang('Deleted')));
         }
+
+        api_location(api_get_self());
     }
     // Create a search-box
     $form = new FormValidator(
@@ -478,10 +458,9 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
         FormValidator::LAYOUT_INLINE
     );
     $url = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=search_session';
-    $sessionSelect = $sessionFilter->addElement(
-        'select_ajax',
+    $sessionSelect = $sessionFilter->addSelectAjax(
         'session_name',
-        get_lang('Search coursesBySession'),
+        get_lang('Search course by session'),
         null,
         ['id' => 'session_name', 'url' => $url]
     );
@@ -529,7 +508,6 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
                 if (!sessionId) {
                     return;
                 }
-
                 window.location = "'.$courseListUrl.'?session_id="+sessionId;
             });
         });
@@ -583,7 +561,7 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
     $table->set_header(1, get_lang('Title'), true, null, ['class' => 'title']);
     $table->set_header(2, get_lang('Course code'));
     $table->set_header(3, get_lang('Language'), false, 'width="70px"');
-    $table->set_header(4, get_lang('Category'));
+    $table->set_header(4, get_lang('Categories'));
     $table->set_header(5, get_lang('Registr. allowed'), true, 'width="60px"');
     $table->set_header(6, get_lang('UnsubscribeAllowed'), false, 'width="50px"');
     $table->set_header(
@@ -597,7 +575,10 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
         ['delete_courses' => get_lang('Delete selected course(s)')],
         'course'
     );
-    $content .= $table->return_table();
+
+    $tab = CourseManager::getCourseListTabs('simple');
+
+    $content .= $tab.$table->return_table();
 }
 
 $tpl = new Template($tool_name);

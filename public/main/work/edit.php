@@ -41,12 +41,11 @@ if (empty($parent_data)) {
     api_not_allowed(true);
 }
 
-$is_course_member = CourseManager::is_user_subscribed_in_real_or_linked_course(
-    $user_id,
-    $course_id,
-    $session_id
-);
-
+if (empty($session_id)) {
+    $is_course_member = CourseManager::is_user_subscribed_in_course($user_id, $course_code);
+} else {
+    $is_course_member = CourseManager::is_user_subscribed_in_course($user_id, $course_code, true, $session_id);
+}
 $is_course_member = $is_course_member || api_is_platform_admin();
 
 if (false == $is_course_member) {

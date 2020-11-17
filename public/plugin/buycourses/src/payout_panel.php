@@ -24,7 +24,7 @@ foreach ($payouts as $payout) {
         'sale_id' => $payout['sale_id'],
         'reference' => $payout['sale_reference'],
         'date' => api_format_date($payout['date'], DATE_TIME_FORMAT_LONG_24H),
-        'payout_date' => '0000-00-00 00:00:00' === $payout['payout_date']
+        'payout_date' => ('0000-00-00 00:00:00' === $payout['payout_date'])
             ? '-'
             : api_format_date($payout['payout_date'], DATE_TIME_FORMAT_LONG_24H),
         'currency' => $payout['iso_code'],
@@ -43,7 +43,7 @@ $toolbar = Display::toolbarButton(
     ['title' => $plugin->get_lang('CourseListOnSale')]
 );
 
-$templateName = get_lang('Dashboard');
+$templateName = get_lang('TabsDashboard');
 $tpl = new Template($templateName);
 $tpl->assign('showing_courses', true);
 $tpl->assign('sessions_are_included', $includeSessions);

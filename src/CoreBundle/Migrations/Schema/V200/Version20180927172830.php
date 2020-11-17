@@ -14,7 +14,7 @@ use Doctrine\DBAL\Schema\Schema;
  */
 class Version20180927172830 extends AbstractMigrationChamilo
 {
-    public function up(Schema $schema)
+    public function up(Schema $schema): void
     {
         $this->addSql('UPDATE c_forum_post SET thread_id = NULL WHERE thread_id NOT IN (SELECT iid FROM c_forum_thread)');
         $this->addSql('UPDATE c_forum_thread SET forum_id = NULL WHERE forum_id NOT IN (SELECT iid FROM c_forum_forum)');
@@ -26,7 +26,7 @@ class Version20180927172830 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE c_forum_thread ADD CONSTRAINT FK_5DA7884C29CCBAD0 FOREIGN KEY (forum_id) REFERENCES c_forum_forum (iid)');
     }
 
-    public function down(Schema $schema)
+    public function down(Schema $schema): void
     {
     }
 }

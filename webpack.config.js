@@ -1,8 +1,5 @@
 var Encore = require('@symfony/webpack-encore');
-
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-const FileManagerPlugin = require('filemanager-webpack-plugin');
-var dotenv = require('dotenv');
+const CopyPlugin = require('copy-webpack-plugin');
 
 Encore
     .setOutputPath('public/build/')
@@ -13,12 +10,13 @@ Encore
     .enableBuildNotifications()
 
     .addEntry('app', './assets/js/app.js')
-    .addEntry('vue', './assets/vue/main.js')
     .addEntry('bootstrap', './assets/js/bootstrap.js')
     .addEntry('exercise', './assets/js/exercise.js')
     .addEntry('free-jqgrid', './assets/js/free-jqgrid.js')
-    .addStyleEntry('css/app', './assets/css/app.scss')
+    .addEntry('vue', './assets/vue/main.js')
 
+    .addStyleEntry('css/app', './assets/css/app.scss')
+    .addStyleEntry('css/bootstrap', './assets/css/bootstrap.scss')
     .addStyleEntry('css/chat', './assets/css/chat.css')
     .addStyleEntry('css/document', './assets/css/document.css')
     .addStyleEntry('css/editor', './assets/css/editor.css')
@@ -44,18 +42,24 @@ Encore
     })
 
     .enableSassLoader()
-    .enableVueLoader(function(options) {
-        options.pluginOptions = {
-            quasar: {
-                importStrategy: 'manual',
-                rtlSupport: false
-            }
-        }
-
-        options.transpileDependencies = ['quasar'];
-    })
+    .enableVueLoader(function (options) {}, {runtimeCompilerBuild: false})
     .autoProvidejQuery()
+    /*.enablePostCssLoader(function (options) {
+        options.config = {
+            path: 'postcss.config.js'
+        }
+    })*/
     .copyFiles([
+        {
+            from: './node_modules/fullcalendar/',
+            pattern: /(main.js)$/,
+            to: 'libs/fullcalendar/main.js'
+        },
+        {
+            from: './node_modules/fullcalendar/',
+            pattern: /(main.css)$/,
+            to: 'libs/fullcalendar/main.css'
+        },
         {
             from: './node_modules/multiselect-two-sides/dist/js',
             pattern: /(multiselect.js)$/,
@@ -76,19 +80,24 @@ Encore
             pattern: /(js.cookie.js)$/,
             to: 'libs/js-cookie/src/js.cookie.js'
         },
+        {from: './node_modules/ckeditor/', to: 'libs/ckeditor/[path][name].[ext]', pattern: /\.(js|css)$/, includeSubdirectories: false},
+        {from: './node_modules/ckeditor/adapters', to: 'libs/ckeditor/adapters/[path][name].[ext]'},
+        {from: './node_modules/ckeditor/lang', to: 'libs/ckeditor/lang/[path][name].[ext]'},
+        {from: './node_modules/ckeditor/plugins', to: 'libs/ckeditor/plugins/[path][name].[ext]'},
+        {from: './node_modules/ckeditor/skins', to: 'libs/ckeditor/skins/[path][name].[ext]'},
+        /*,
         {
             from: './node_modules/mathjax/',
             pattern: /(MathJax.js)$/,
             to: 'libs/mathjax/MathJax.js'
-        },
+        },*/
     ])
     // define the environment variables
     .configureDefinePlugin(options => {
-        const env = dotenv.config({ path: '.env.local' });
-        if (env.error) {
-            throw env.error;
-        }
-        options['process.env'].APP_API_PLATFORM_URL = JSON.stringify(env.parsed.APP_API_PLATFORM_URL);
+        /*const env = dotEnv.config({ path: '.env.local' });
+        if (env.parsed) {
+            options['process.env'].APP_API_PLATFORM_URL = JSON.stringify(env.parsed.APP_API_PLATFORM_URL);
+        }*/
     })
     // enable ESLint
     // .addLoader({
@@ -105,22 +114,35 @@ Encore
     // })
 ;
 
-Encore.addPlugin(new CopyWebpackPlugin([
-    {
-        from: './node_modules/mediaelement/build',
-        to: 'libs/mediaelement'
-    },
-    {
-        from: './node_modules/mediaelement-plugins/dist',
-        to: 'libs/mediaelement/plugins'
-    },
-    {
-        from: './node_modules/mathjax/config',
-        to: 'libs/mathjax/config'
-    },
-]));
+Encore.addPlugin(new CopyPlugin({
+        patterns: [
+            {
+                from: './node_modules/mediaelement/build',
+                to: 'libs/mediaelement'
+            },
+            {
+                from: './node_modules/mediaelement-plugins/dist',
+                to: 'libs/mediaelement/plugins'
+            },
+            {
+                from: './node_modules/mathjax/config',
+                to: 'libs/mathjax/config'
+            },
+            {
+                from: './node_modules/tinymce/skins',
+                to: 'libs/tinymce/skins'
+            },
+            {
+                context: 'node_modules/moment/locale',
+                from: '**/*',
+                to: 'libs/locale/'
+            },
+        ]
+    }
+));
 
-// Encore.addPlugin(new copyWebpackPlugin([{
+
+// Encore.addPlugin(new CopyPlugin([{
 //     from: 'assets/css/themes/' + theme + '/images',
 //     to: 'css/themes/' + theme + '/images'
 // };
@@ -134,11 +156,13 @@ themes.forEach(function (theme) {
     Encore.addStyleEntry('css/themes/' + theme + '/default', './assets/css/themes/' + theme + '/default.css');
 
     // Copy images from themes into public/build
-    Encore.addPlugin(new CopyWebpackPlugin([{
-        from: 'assets/css/themes/' + theme + '/images',
-        to: 'css/themes/' + theme + '/images'
+    Encore.addPlugin(new CopyPlugin({
+        patterns: [{
+            from: 'assets/css/themes/' + theme + '/images',
+            to: 'css/themes/' + theme + '/images'
+        }]
     },
-    ]));
+    ));
 });
 
 // Fix free-jqgrid languages files
@@ -156,4 +180,15 @@ themes.forEach(function (theme) {
 //     }
 // }));
 
-module.exports = Encore.getWebpackConfig();
+//module.exports = Encore.getWebpackConfig();
+
+const config = Encore.getWebpackConfig();
+
+config.resolve.alias =  {
+    // If using the runtime only build
+    vue$: 'vue/dist/vue.runtime.esm.js' // 'vue/dist/vue.runtime.common.js' for webpack 1
+    // Or if using full build of Vue (runtime + compiler)
+    // vue$: 'vue/dist/vue.esm.js'      // 'vue/dist/vue.common.js' for webpack 1
+};
+
+module.exports = config;

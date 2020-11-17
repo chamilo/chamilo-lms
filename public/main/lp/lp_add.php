@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -152,8 +153,17 @@ $form->addElement('html', '<div id="end_date_div" style="display:none;">');
 $form->addDatePicker('expired_on', get_lang('Expiration date'));
 $form->addElement('html', '</div>');
 
-$extraField = new ExtraField('lp');
+$subscriptionSettings = learnpath::getSubscriptionSettings();
+if ($subscriptionSettings['allow_add_users_to_lp']) {
+    $form->addElement(
+        'checkbox',
+        'subscribe_users',
+        null,
+        get_lang('SubscribeUsersToLp')
+    );
+}
 
+$extraField = new ExtraField('lp');
 $extra = $extraField->addElements($form, 0, ['lp_icon']);
 
 Skill::addSkillsToForm($form, ITEM_TYPE_LEARNPATH, 0);
@@ -167,8 +177,8 @@ if ('true' == api_get_setting('scorm_cumulative_session_time')) {
     $defaults['accumulate_scorm_time'] = 1;
 }
 
-$defaults['publicated_on'] = date('Y-m-d 08:00:00');
-$defaults['expired_on'] = date('Y-m-d 08:00:00', time() + 86400);
+$defaults['publicated_on'] = api_get_local_time();
+$defaults['expired_on'] = api_get_local_time(time() + 86400);
 
 $form->setDefaults($defaults);
 $form->addButtonCreate(get_lang('Continue'));

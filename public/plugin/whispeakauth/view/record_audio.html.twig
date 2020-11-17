@@ -1,12 +1,11 @@
 <div id="record-audio-recordrtc" class="row">
-    <div class="col-sm-6">
+    <div class="col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-0">
         {% block intro %}
             <p class="text-center">{{ 'RepeatThisPhrase'|get_plugin_lang('WhispeakAuthPlugin') }}</p>
             <div class="well well-sm">
                 <div class="row">
                     <div class="col-sm-3 text-center">
                         <span class="fa fa-microphone fa-5x fa-fw" aria-hidden="true"></span>
-                        <span class="sr-only">{{ 'RecordAudio'|get_lang }}</span>
                     </div>
                     <div class="col-sm-9 text-center">
                         <p class="lead">{{ sample_text }}</p>
@@ -15,51 +14,43 @@
             </div>
         {% endblock %}
 
-        <ul class="list-inline text-center">
-            <li>
+        <div class="text-center">
+            <p>
                 <button class="btn btn-primary" type="button" id="btn-start-record">
                     <span class="fa fa-circle fa-fw" aria-hidden="true"></span> {{ 'StartRecordingAudio'|get_lang }}
                 </button>
-            </li>
-            <li class="hidden">
-                <button class="btn btn-danger" type="button" id="btn-stop-record" disabled>
+            </p>
+            <p class="hidden">
+                <button class="btn btn-danger" type="button" id="btn-stop-record" disabled
+                        data-loadingtext="{{ 'Uploading'|get_lang }}">
                     <span class="fa fa-square fa-fw" aria-hidden="true"></span> {{ 'StopRecordingAudio'|get_lang }}
                 </button>
-            </li>
-            <li class="hidden">
-                <button class="btn btn-success" type="button" id="btn-save-record"
-                        data-loadingtext="{{ 'Uploading'|get_lang }}" disabled>
-                    <span class="fa fa-send fa-fw" aria-hidden="true"></span> {{ 'SaveRecordedAudio'|get_lang }}
-                </button>
-            </li>
-        </ul>
-        <p class="hidden" id="audio-wrapper">
-            <audio class="center-block" controls id="record-preview"></audio>
-        </p>
+            </p>
+        </div>
     </div>
-    <div class="col-sm-5 col-sm-offset-1" id="messages-deck">
-        {% if is_authenticated %}
-            <div class="alert alert-info">
-                <span class="fa fa-info-circle" aria-hidden="true"></span>
-                <strong>{{ 'SpeechAuthAlreadyEnrolled'|get_plugin_lang('WhispeakAuthPlugin') }}</strong>
-            </div>
-        {% endif %}
+    <div class="col-sm-8 col-sm-offset-2 col-md-5 col-md-offset-1">
+        <hr class="visible-sm">
+        <div id="messages-deck"></div>
+        <div class="hidden" id="audio-wrapper">
+            <p>
+                <audio class="center-block" controls id="record-preview"></audio>
+            </p>
+        </div>
     </div>
 </div>
 
 <script>
     $(function () {
         {% block config_data %}
+            var data = {action: 'enrollment', license: 0 };
+
             RecordAudio.init(
                 {
                     blockId: '#record-audio-recordrtc',
                     btnStartId: '#btn-start-record',
                     btnStopId: '#btn-stop-record',
-                    btnSaveId: '#btn-save-record',
                     plyrPreviewId: '#record-preview',
-                    data: {
-                        action: 'enrollment'
-                    }
+                    data: data
                 }
             );
         {% endblock %}

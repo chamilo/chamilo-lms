@@ -186,9 +186,15 @@ class UniqueAnswerNoOption extends Question
             $answer_number = $form->addElement('text', 'counter['.$i.']', null, 'value="'.$i.'"');
             $answer_number->freeze();
 
-            $form->addElement('radio', 'correct', null, null, $i, 'class="checkbox" style="margin-left: 0em;"');
+            $form->addElement(
+                'radio',
+                'correct',
+                null,
+                null,
+                $i,
+                ['class' => 'checkbox', 'style' => 'margin-left: 0em;']
+            );
             $form->addElement('html_editor', 'answer['.$i.']', null, [], $editor_config);
-
             $form->addElement('html_editor', 'comment['.$i.']', null, [], $editor_config);
             $form->addElement('text', 'weighting['.$i.']', null, ['style' => 'width: 60px;', 'value' => '0']);
             $form->addElement('html', '</tr>');
@@ -289,6 +295,7 @@ class UniqueAnswerNoOption extends Question
         }
 
         for ($i = 1; $i <= $nb_answers - $minus; $i++) {
+            $position = trim($form->getSubmitValue('position['.$i.']'));
             $answer = trim($form->getSubmitValue('answer['.$i.']'));
             $comment = trim($form->getSubmitValue('comment['.$i.']'));
             $weighting = trim($form->getSubmitValue('weighting['.$i.']'));
@@ -320,7 +327,7 @@ class UniqueAnswerNoOption extends Question
             $goodAnswer = $correct == $i ? true : false;
 
             if ($goodAnswer) {
-                //$nbrGoodAnswers++;
+                $nbrGoodAnswers++;
                 $weighting = abs($weighting);
                 if ($weighting > 0) {
                     $questionWeighting += $weighting;

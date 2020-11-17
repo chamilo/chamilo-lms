@@ -18,12 +18,12 @@ class ResetPasswordRequest implements ResetPasswordRequestInterface
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
      */
-    private $user;
+    protected $user;
 
     public function __construct(object $user, \DateTimeInterface $expiresAt, string $selector, string $hashedToken)
     {
@@ -31,23 +31,13 @@ class ResetPasswordRequest implements ResetPasswordRequestInterface
         $this->initialize($expiresAt, $selector, $hashedToken);
     }
 
-    public function getUser(): object
-    {
-        return $this->user;
-    }
-
     public function getId()
     {
         return $this->id;
     }
 
-    /**
-     * @return ResetPasswordRequest
-     */
-    public function setId($id)
+    public function getUser(): object
     {
-        $this->id = $id;
-
-        return $this;
+        return $this->user;
     }
 }

@@ -1,5 +1,4 @@
 <?php
-
 /* For license terms, see /license.txt */
 
 /**
@@ -220,11 +219,11 @@ $beneficiariesSelect = $form->addSelect(
 
 if ($editingCourse) {
     $teachersOptions = api_unique_multidim_array($teachersOptions, 'value');
-    $beneficiariesSelect->addOptGroup($teachersOptions, get_lang('Trainers'));
+    $beneficiariesSelect->addOptGroup($teachersOptions, get_lang('Teachers'));
 } elseif ($editingSession) {
     $courseCoachesOptions = api_unique_multidim_array($courseCoachesOptions, 'value');
-    $beneficiariesSelect->addOptGroup([$generalCoachOption], get_lang('Session general coach'));
-    $beneficiariesSelect->addOptGroup($courseCoachesOptions, get_lang('Session course coach'));
+    $beneficiariesSelect->addOptGroup([$generalCoachOption], get_lang('SessionGeneralCoach'));
+    $beneficiariesSelect->addOptGroup($courseCoachesOptions, get_lang('SessionCourseCoach'));
 }
 
 if ('true' === $commissionsEnable) {
@@ -269,7 +268,7 @@ if ($form->validate()) {
         if (!empty($productItem)) {
             $plugin->updateItem(
                 [
-                    'price' => (float) ($formValues['price']),
+                    'price' => floatval($formValues['price']),
                     'tax_perc' => $taxPerc,
                 ],
                 $id,
@@ -280,7 +279,7 @@ if ($form->validate()) {
                 'currency_id' => (int) $currency['id'],
                 'product_type' => $type,
                 'product_id' => $id,
-                'price' => (float) ($_POST['price']),
+                'price' => floatval($_POST['price']),
                 'tax_perc' => $taxPerc,
             ]);
             $productItem['id'] = $itemId;
@@ -292,7 +291,7 @@ if ($form->validate()) {
             if ('true' === $commissionsEnable) {
                 $usersId = $formValues['beneficiaries'];
                 $commissions = explode(',', $formValues['commissions']);
-                $commissions = count($usersId) != count($commissions)
+                $commissions = (count($usersId) != count($commissions))
                     ? array_fill(0, count($usersId), 0)
                     : $commissions;
                 $beneficiaries = array_combine($usersId, $commissions);

@@ -12,11 +12,10 @@ parameters:
                 - 'GeneratorBundle::fields.html.twig'
     course_info_is_not_editable: false
 
-#    sonata_media.cdn.host: '/var/upload/media/'
-#    sonata_page.varnish.command: 'if [ ! -r "/etc/varnish/secret" ]; then echo "VALID ERROR :/"; else varnishadm -S /etc/varnish/secret -T 127.0.0.1:6082 {{ COMMAND }} "{{ EXPRESSION }}"; fi;'
 #    router.request_context.base_url: '%env(APP_URL_APPEND)%'
 #    asset.request_context.base_path: '%env(APP_URL_APPEND)%'
 
+    # See https://glide.thephpleague.com/1.0/api/quick-reference/
     glide_media_filters:
         editor_thumbnail:
             w: 64
@@ -59,7 +58,6 @@ services:
     Chamilo\CoreBundle\Controller\ResourceController:
         arguments:
             - '@Chamilo\CoreBundle\Repository\ResourceFactory'
-#            - '@Chamilo\CoreBundle\Block\BreadcrumbBlockService'
 
     Symfony\Component\Mailer\Mailer:
         public: true
@@ -73,55 +71,19 @@ services:
         class: Chamilo\LtiBundle\Util\Utils
         arguments: ['@chamilo.settings.manager']
 
-    apy_grid.factory:
-        class: APY\DataGridBundle\Grid\GridFactory
-        arguments: ['@service_container', '@apy_grid.registry']
-        public: true
-
-    apy_grid.registry:
-        class: APY\DataGridBundle\Grid\GridRegistry
-        public: true
-
     League\Flysystem\MountManager: '@oneup_flysystem.mount_manager'
 
-    # Voters
-    # Group voter, checks if a user has permissions to do actions
-    chamilo_course.security.authorization.voter.group_voter:
-        class: Chamilo\CoreBundle\Security\Authorization\Voter\GroupVoter
-        arguments:
-            - '@doctrine.orm.entity_manager'
-            - '@Chamilo\CoreBundle\Repository\CourseRepository'
-            - '@Chamilo\CourseBundle\Repository\CGroupInfoRepository'
-            - '@security.authorization_checker'
-            - '@service_container'
-        public: false
+    Chamilo\CoreBundle\EventListener\HTTPExceptionListener:
         tags:
-            - {name: security.voter}
+            - {name: kernel.event_listener, event: kernel.exception}
+
+    Chamilo\CoreBundle\EventListener\ExceptionListener:
+        arguments: ['@twig']
+        tags:
+            - {name: kernel.event_listener, event: kernel.exception}
 
 sylius_settings:
     driver: doctrine/orm
-
-# Doctrine audit
-#sonata_doctrine_orm_admin:
-#    audit:
-#        force: false # Audits are set in the admin.yml files with audit:true
-
-# Grid default template
-apy_data_grid:
-    theme: '@ChamiloCore/Resource/grid_theme.html.twig'
-    limits: [20, 50, 100]
-    persistence: false
-#    no_data_message: "No data"
-#    no_result_message: "No result"
-#    actions_columns_size: -1
-#    actions_columns_title: "Actions"
-#    actions_columns_separator: "<br />"
-    pagerfanta:
-        enable: true
-        view_class: 'Pagerfanta\View\TwitterBootstrap4View'
-        options:
-            prev_message: "«"
-            next_message: "»"
 
 # Course settings
 chamilo_course:

@@ -30,7 +30,7 @@ $interbreadcrumb[] = [
 
 $folderData = get_work_data_by_id($work['parent_id']);
 $courseInfo = api_get_course_info();
-
+$courseEntity = api_get_course_entity();
 $isCourseManager = api_is_platform_admin() || api_is_coach() || api_is_allowed_to_edit(false, false, true);
 
 $allowEdition = false;
@@ -50,7 +50,9 @@ $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
     $courseInfo
 );
 
-if ((user_is_author($id) || $isDrhOfCourse || $allowEdition) ||
+$isDrhOfSession = !empty(SessionManager::getSessionFollowedByDrh(api_get_user_id(), $work['session_id']));
+
+if ((user_is_author($id) || $isDrhOfCourse || $allowEdition || $isDrhOfSession) ||
     (
         0 == $courseInfo['show_score'] &&
         1 == $work['active'] &&
@@ -73,9 +75,9 @@ if ((user_is_author($id) || $isDrhOfCourse || $allowEdition) ||
         1 == $work['active'] &&
         1 == $work['accepted']
         ) ||
-        $isCourseManager || user_is_author($id) || $isDrhOfCourse
+        $isCourseManager || user_is_author($id) || $isDrhOfCourse || $isDrhOfSession
     ) {
-        if ($page === 'edit') {
+        if ('edit' === $page) {
             $url = api_get_path(WEB_CODE_PATH).'work/edit.php?id='.$folderData['id'].'&item_id='.$work['id'].'&'.api_get_cidreq();
         } else {
             $url = api_get_path(WEB_CODE_PATH).'work/view.php?id='.$work['id'].'&'.api_get_cidreq();
@@ -102,19 +104,19 @@ if ((user_is_author($id) || $isDrhOfCourse || $allowEdition) ||
                 );
 
                 if ($allowEdition) {
-                        $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-                        $sql = "UPDATE $work_table
+                    $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+                    $sql = "UPDATE $work_table
                                 SET
                                     qualificator_id = '".api_get_user_id()."',
                                     qualification = '".api_float_val($_POST['qualification'])."',
                                     date_of_qualification = '".api_get_utc_datetime()."'
                                 WHERE c_id = ".$courseInfo['real_id']." AND id = $id";
-                        Database::query($sql);
+                    Database::query($sql);
                     Display::addFlash(Display::return_message(get_lang('Updated')));
 
                     $resultUpload = uploadWork(
                         $folderData,
-                        $courseInfo,
+                        $courseEntity,
                         true,
                         $work
                     );
@@ -153,7 +155,7 @@ if ((user_is_author($id) || $isDrhOfCourse || $allowEdition) ||
                 break;
             case 'delete_correction':
                 if ($allowEdition && isset($work['url_correction']) && !empty($work['url_correction'])) {
-                        deleteCorrection($courseInfo, $work);
+                    deleteCorrection($courseInfo, $work);
                     Display::addFlash(Display::return_message(get_lang('Deleted')));
                 }
 

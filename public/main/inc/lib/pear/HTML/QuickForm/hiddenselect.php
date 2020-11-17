@@ -1,6 +1,5 @@
 <?php
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Hidden select pseudo-element
  *
@@ -38,8 +37,6 @@
  */
 class HTML_QuickForm_hiddenselect extends HTML_QuickForm_select
 {
-    // {{{ constructor
-
     /**
      * Class constructor
      *
@@ -60,9 +57,6 @@ class HTML_QuickForm_hiddenselect extends HTML_QuickForm_select
             $this->load($options);
         }
     } //end constructor
-
-    // }}}
-    // {{{ toHtml()
 
     /**
      * Returns the SELECT in HTML
@@ -100,7 +94,7 @@ class HTML_QuickForm_hiddenselect extends HTML_QuickForm_select
    /**
     * This is essentially a hidden element and should be rendered as one
     */
-    function accept(&$renderer)
+    public function accept(&$renderer)
     {
         $renderer->renderHidden($this);
     }

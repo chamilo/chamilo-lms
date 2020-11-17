@@ -958,8 +958,6 @@ function api_to_system_encoding($string, $from_encoding = null, $check_utf8_vali
  *
  * @param string $string      the input string
  * @param int    $quote_style (optional)    The quote style - ENT_COMPAT (default), ENT_QUOTES, ENT_NOQUOTES
- * @param string $encoding    (optional)    The encoding (of the input string) used in conversion.
- *                            If it is omitted, the platform character set is assumed.
  *
  * @return string Returns the converted string.
  *                This function is aimed at replacing the function htmlentities() for human-language strings.
@@ -2132,9 +2130,8 @@ function getLegacyToIso()
 /**
  * Returns returns person name convention for a given language.
  *
- * @param string $language the input language
- * @param string $type     The type of the requested convention.
- *                         It may be 'format' for name order convention or 'sort_by' for name sorting convention.
+ * @param string $type The type of the requested convention.
+ *                     It may be 'format' for name order convention or 'sort_by' for name sorting convention.
  *
  * @return mixed Depending of the requested type,
  *               the returned result may be string or boolean; null is returned on error;

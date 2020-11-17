@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Repository;
 
 use Chamilo\CourseBundle\Entity\CCourseSetting;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * Class CCourseSettingRepository.

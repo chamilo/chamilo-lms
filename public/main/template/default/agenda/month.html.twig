@@ -50,14 +50,16 @@
             }
         });
 
-        var calendar = $('#calendar').fullCalendar({
-            themeSystem: 'bootstrap4',
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            editable: true,
+            themeSystem: 'bootstrap',
             contentHeight: 650,
             handleWindowResize: true,
-            header: {
+            headerToolbar: {
                 left: 'prev,next today',
                 center: 'title',
-                right: 'month,agendaWeek,agendaDay,listMonth'
+                right: 'dayGridMonth,listWeek,dayGridWeek,listMonth'
             },
             views: {
                 /*listDay: { buttonText: 'list day' },
@@ -74,27 +76,37 @@
                 }
             ],
             {% endif %}
-            defaultView: defaultView,
-            defaultDate: defaultStartDate,
-            firstHour: 8,
+            initialView: defaultView,
+            initialDate: defaultStartDate,
+            scrollTime: 8,
             firstDay: 1,
             selectable	: true,
-            selectHelper: true,
-            viewRender: function(view, element) {
+            selectMirror: true,
+            eventSourceSuccess: function() {
+                var date = this.getDate();
+                var view = calendar.view;
                 var data = {
-                    'view': view.name,
-                    'start': view.intervalStart.format("YYYY-MM-DD")
+                    'view': view.type,
+                    'start': date
                 };
-                Cookies.set('agenda_cookies', data, 1); // Expires 1 day
+                Cookies.set('agenda_cookies', data, 1); // Expires 1 day*/
+            },
+            viewDidMount: function(dateInfo) {
+                var view = dateInfo.view;
+                var data = {
+                    'view': view.type,
+                    //'start': view.intervalStart.format("YYYY-MM-DD")
+                    'start': dateInfo.currentStart
+                };
+                Cookies.set('agenda_cookies', data, 1); // Expires 1 day*/
             },
             // Add event
-            select: function(start, end, jsEvent, view) {
+            select: function(info) {
+                var start = moment(info.start);
+                var end = moment(info.end);
                 var diffDays = moment(end).diff(start, 'days');
-
-                var allDay = true;
-                if (end.hasTime()) {
-                    allDay = false;
-                }
+                var allDay = info.allDay;
+                var view = info.view;
 
                 $('#visible_to_input').show();
                 $('#add_as_announcement_div').show();
@@ -189,34 +201,39 @@
                                     }*/
                                 }
 
-                                calendar.fullCalendar('refetchEvents');
-                                calendar.fullCalendar('rerenderEvents');
-
+                                calendar.refetchEvents();
                                 $('#modalDialogForm').modal('toggle');
                             }
                         });
                     });
 
-                    calendar.fullCalendar('unselect');
-                    //Reload events
-                    calendar.fullCalendar("refetchEvents");
-                    calendar.fullCalendar("rerenderEvents");
+                    // Reload events
+                    calendar.refetchEvents();
+                    calendar.unselect();
                 }
             },
-            eventClick: function(calEvent, jsEvent, view) {
-                var start = calEvent.start;
-                var end = calEvent.end;
+            eventClick: function(info) {
+                var event = info.event;
+                var view = info.view;
+                var start = event.start;
+                var end = event.end;
+
+                var momentStart = moment(start);
+                var momentEnd = moment(end);
+
                 var diffDays = moment(end).diff(start, 'days');
                 var endDateMinusOne = '';
 
                 if (end) {
-                    var clone = end.clone();
-                    endDateMinusOne = clone.subtract(1, 'days').format('{{ js_format_date }}');
+                    //var clone = end.clone();
+                    var endValue = moment(end);
+                    endDateMinusOne = endValue.subtract(1, 'days').format('{{ js_format_date }}');
                 }
-                var startDateToString = start.format("{{ js_format_date }}");
-
+                var startDateToString = moment(start).format("{{ js_format_date }}");
+                var calEvent = info.event.extendedProps;
+                var editable = calEvent.resourceEditable;
                 // Edit event.
-                if (calEvent.editable) {
+                if (editable) {
                     $('#visible_to_input').hide();
                     $('#add_as_announcement_div').hide();
                     {% if type != 'admin' %}
@@ -231,16 +248,16 @@
                     if (diffDays > 1) {
                         $('#simple_end_date').html(' - ' + endDateMinusOne);
                     } else if (diffDays == 0) {
-                        var start_date_value = start.format('ll');
-                        var startTime = start.format('LT');
-                        var endTime = end.format('LT');
+                        var start_date_value = momentStart.format('ll');
+                        var startTime = momentStart.format('LT');
+                        var endTime = momentEnd.format('LT');
                         $('#simple_start_date').html('');
                         $('#simple_end_date').html(start_date_value + " (" + startTime + " - " + endTime+") ");
                     } else {
                         $('#simple_end_date').html('');
                     }
 
-                    $("#simple_title").html(calEvent.title);
+                    $("#simple_title").html(event.title);
                     $("#simple_content").html(calEvent.description);
                     $("#simple_comment").html(calEvent.comment);
                     $("#simple_attachment").html(calEvent.attachment);
@@ -270,16 +287,16 @@
 
                     allFields.removeClass( "ui-state-error" );
 
-                    $('#calendarModal #modalTitle').html(calEvent.title);
+                    $('#calendarModal #modalTitle').html(event.title);
                     $('#calendarModal').modal();
 
-                    var url = '{{ web_agenda_ajax_url }}&a=edit_event&id='+calEvent.id+'&view='+view.name;
-                    var delete_url = '{{ web_agenda_ajax_url }}&a=delete_event&id='+calEvent.id;
+                    var url = '{{ web_agenda_ajax_url }}&a=edit_event&id='+event.id+'&view='+view.name;
+                    var delete_url = '{{ web_agenda_ajax_url }}&a=delete_event&id='+event.id;
 
-                    var urlOne = "{{ url('web.main') }}calendar/ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=confidential";
-                    var urlTwo = "{{ url('web.main') }}calendar/ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=private";
-                    var urlThree = "{{ url('web.main') }}calendar/ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=public";
-                    var urlEdit = "{{ url('web.main') }}calendar/agenda.php?action=edit&type=fromjs&id="+calEvent.id+'&course_id='+calEvent.course_id+"";
+                    var urlOne = "{{ url('web_main') }}calendar/ical_export.php?id=" + event.id+'&course_id='+calEvent.course_id+"&class=confidential";
+                    var urlTwo = "{{ url('web_main') }}calendar/ical_export.php?id=" + event.id+'&course_id='+calEvent.course_id+"&class=private";
+                    var urlThree = "{{ url('web_main') }}calendar/ical_export.php?id=" + event.id+'&course_id='+calEvent.course_id+"&class=public";
+                    var urlEdit = "{{ url('web_main') }}calendar/agenda.php?action=edit&type=fromjs&id="+event.id+'&course_id='+calEvent.course_id+"";
 
                     var exportCalConfidential = '<a href="'+urlOne+'" class="btn btn-light">{{"Export in iCal format as confidential event"|trans}}</a>';
                     var exportCalPrivate = '<a href="'+urlTwo+'" class="btn btn-light">{{"Export in iCal format as private event"|trans}}</a>';
@@ -292,7 +309,7 @@
                     {% if type == 'not_available' %}
                     $('#btnEdit').click(function() {
                         var bValid = true;
-                        bValid = bValid && checkLength( title, "title", 1, 255 );
+                        bValid = bValid && checkLength(title, "title", 1, 255);
 
                         var params = $("#add_event_form").serialize();
                         $.ajax({
@@ -431,7 +448,6 @@
 
                 }
             },
-            editable: true,
             events: "{{web_agenda_ajax_url}}&a=get_events",
             eventDrop: function(event, delta, revert_func) {
                 var allDay = 0;
@@ -458,13 +474,20 @@
                     }
                 });
             },
-            axisFormat: 'H(:mm)', // pm-am format -> h(:mm)a
-            timeFormat: 'H:mm',   // pm-am format -> h:mm
+            slotLabelFormat: 'H(:mm)', // pm-am format -> h(:mm)a
+            ///timeFormat: 'H:mm',   // pm-am format -> h:mm
+            eventTimeFormat:{
+                hour: 'numeric',
+                minute: '2-digit',
+                meridiem: false
+            },
             loading: function(bool) {
                 if (bool) $('#loading').show();
                 else $('#loading').hide();
             }
         });
+
+        calendar.render();
     });
 </script>
 

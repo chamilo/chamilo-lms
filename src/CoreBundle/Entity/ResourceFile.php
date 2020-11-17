@@ -5,7 +5,6 @@
 namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiFilter;
-use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
@@ -70,14 +69,7 @@ class ResourceFile
     use TimestampableEntity;
 
     /**
-     * @var string|null
-     *
-     * @ApiProperty(iri="http://schema.org/contentUrl")
-     * @Groups({"resource_file:read", "resource_node:read", "document:read", "media_object_read"})
-     */
-    public $contentUrl;
-
-    /**
+     * @Groups({"resource_file:read", "resource_node:read", "document:read"})
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue
@@ -85,10 +77,10 @@ class ResourceFile
     protected $id;
 
     /**
+     * @var string
+     *
      * @Assert\NotBlank()
      * @Groups({"resource_file:read", "resource_node:read", "document:read"})
-     *
-     * @var string
      *
      * @ORM\Column(type="string", length=255)
      */
@@ -105,6 +97,7 @@ class ResourceFile
     /**
      * @var string
      *
+     * @Groups({"resource_file:read", "resource_node:read", "document:read"})
      * @ORM\Column(type="text", nullable=true)
      */
     protected $originalName;
@@ -119,6 +112,7 @@ class ResourceFile
 
     /**
      * @var int
+     *
      * @Groups({"resource_file:read", "resource_node:read", "document:read"})
      *
      * @ORM\Column(type="integer", nullable=true)
@@ -128,7 +122,7 @@ class ResourceFile
     /**
      * @var File
      *
-     * @Assert\NotNull(groups={"media_object_create", "document:write"})
+     * @Assert\NotNull()
      * @Vich\UploadableField(
      *     mapping="resources",
      *     fileNameProperty="name",
@@ -162,30 +156,59 @@ class ResourceFile
     protected $metadata;
 
     /**
+     * @var bool
+     *
+     * @Groups({"resource_file:read", "resource_node:read", "document:read"})
+     */
+    protected $image;
+
+    /**
+     * @var bool
+     *
+     * @Groups({"resource_file:read", "resource_node:read", "document:read"})
+     */
+    protected $video;
+
+    /**
      * Constructor.
      */
     public function __construct()
     {
         $this->metadata = [];
+        $this->dimensions = [];
     }
 
     public function __toString(): string
     {
-        return (string) $this->getOriginalName();
+        return $this->getOriginalName();
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
+    public function isImage(): bool
+    {
+        $mimeType = $this->getMimeType();
+        if (false !== strpos($mimeType, 'image')) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function isVideo(): bool
+    {
+        $mimeType = $this->getMimeType();
+        if (false !== strpos($mimeType, 'video')) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @return ResourceFile
-     */
-    public function setName($name)
+    public function setName($name): self
     {
         $this->name = $name;
 
@@ -205,7 +228,7 @@ class ResourceFile
      *
      * @return $this
      */
-    public function setCrop($crop)
+    public function setCrop($crop): self
     {
         $this->crop = $crop;
 
@@ -226,35 +249,6 @@ class ResourceFile
 
         return $this;
     }
-
-    /*public function getCopyright(): string
-    {
-        return (string) $this->copyright;
-    }*/
-
-    /*public function getContentType(): string
-    {
-        return (string) $this->contentType;
-    }
-
-    public function setContentType(string $contentType): self
-    {
-        $this->contentType = $contentType;
-
-        return $this;
-    }*/
-
-    /*public function getExtension(): string
-    {
-        return $this->extension;
-    }
-
-    public function setExtension(string $extension): self
-    {
-        $this->extension = $extension;
-
-        return $this;
-    }*/
 
     public function getResourceNode(): ResourceNode
     {
@@ -288,16 +282,6 @@ class ResourceFile
         return $this->id;
     }
 
-    /**
-     * @return ResourceFile
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
     /*public function getDescription(): string
     {
         return $this->description;
@@ -327,7 +311,7 @@ class ResourceFile
 
     public function getOriginalName(): string
     {
-        return $this->originalName;
+        return (string) $this->originalName;
     }
 
     /**
@@ -392,9 +376,6 @@ class ResourceFile
         return $this;
     }
 
-    /**
-     * @return File
-     */
     public function getFile(): ?File
     {
         return $this->file;

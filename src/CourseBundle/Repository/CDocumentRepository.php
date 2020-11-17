@@ -4,8 +4,6 @@
 
 namespace Chamilo\CourseBundle\Repository;
 
-use APY\DataGridBundle\Grid\Column\Column;
-use APY\DataGridBundle\Grid\Grid;
 use Chamilo\CoreBundle\Component\Resource\Settings;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
@@ -17,7 +15,7 @@ use Chamilo\CoreBundle\Repository\GridInterface;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CoreBundle\Repository\UploadInterface;
 use Chamilo\CourseBundle\Entity\CDocument;
-use Chamilo\CourseBundle\Entity\CGroupInfo;
+use Chamilo\CourseBundle\Entity\CGroup;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -27,7 +25,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  */
 final class CDocumentRepository extends ResourceRepository implements GridInterface, UploadInterface
 {
-    public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroupInfo $group = null): QueryBuilder
+    public function getResources(User $user, ResourceNode $parentNode, Course $course = null, Session $session = null, CGroup $group = null): QueryBuilder
     {
         return $this->getResourcesByCourse($course, $session, $group, $parentNode);
     }
@@ -53,7 +51,7 @@ final class CDocumentRepository extends ResourceRepository implements GridInterf
         $resource = new CDocument();
         $resource
             ->setFiletype('file')
-            ->setSize($file->getSize())
+            //->setSize($file->getSize())
             ->setTitle($file->getClientOriginalName())
         ;
 
@@ -64,8 +62,8 @@ final class CDocumentRepository extends ResourceRepository implements GridInterf
     {
         $newResource = $form->getData();
         $newResource
-            ->setCourse($course)
-            ->setSession($session)
+            //->setCourse($course)
+            //->setSession($session)
             ->setFiletype($fileType)
             //->setTitle($title) // already added in $form->getData()
             ->setReadonly(false)
@@ -77,12 +75,13 @@ final class CDocumentRepository extends ResourceRepository implements GridInterf
     /**
      * @return string
      */
-    public function getDocumentUrl(CDocument $document)
+    public function getDocumentUrl(CDocument $document, $courseId, $sessionId)
     {
         // There are no URL for folders.
         if ('folder' === $document->getFiletype()) {
             return '';
         }
+
         $file = $document->getResourceNode()->getResourceFile();
 
         if (null === $file) {
@@ -90,16 +89,14 @@ final class CDocumentRepository extends ResourceRepository implements GridInterf
         }
 
         $params = [
-            'course' => $document->getCourse()->getCode(),
-            'id' => ltrim($document->getPath(), '/'),
+            'cid' => $courseId,
+            'sid' => $sessionId,
+            'id' => $document->getResourceNode()->getId(),
             'tool' => 'document',
             'type' => $document->getResourceNode()->getResourceType()->getName(),
         ];
 
-        return $this->getRouter()->generate(
-            'chamilo_core_resource_view_file',
-            $params
-        );
+        return $this->getRouter()->generate('chamilo_core_resource_view', $params);
     }
 
     /**
@@ -121,71 +118,9 @@ final class CDocumentRepository extends ResourceRepository implements GridInterf
         return null;
     }
 
-    /**
-     * @param int    $courseId
-     * @param string $path
-     *
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     */
-    public function getFolderSize($courseId, $path)
+    public function getFolderSize(ResourceNode $resourceNode, Course $course, Session $session = null): int
     {
-        $path = str_replace('_', '\_', $path);
-        $addedSlash = '/' === $path ? '' : '/';
-
-        $repo = $this->getRepository();
-        $qb = $repo->createQueryBuilder('d');
-        $query = $qb
-            ->select('SUM(d.size)')
-            ->innerJoin('d.resourceNode', 'r')
-            ->innerJoin('r.resourceLinks', 'l')
-            ->where('d.path LIKE :path')
-            ->andWhere('d.path NOT LIKE :deleted')
-            ->andWhere('d.path NOT LIKE :extra_path ')
-            ->andWhere('l.visibility <> :visibility')
-            ->andWhere('d.course = :course')
-            ->setParameters([
-                'path' => $path.$addedSlash.'%',
-                'extra_path' => $path.$addedSlash.'%/%',
-                'course' => $courseId,
-                'deleted' => '%_DELETED_%',
-                'visibility' => ResourceLink::VISIBILITY_DELETED,
-            ])
-            ->getQuery();
-
-        return $query->getSingleScalarResult();
-    }
-
-    /**
-     * @param int $courseId
-     * @param int $groupId
-     * @param int $sessionId
-     *
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     */
-    public function getTotalSpace($courseId, $groupId = null, $sessionId = null)
-    {
-        $repo = $this->getRepository();
-        $groupId = empty($groupId) ? null : $groupId;
-        $sessionId = empty($sessionId) ? null : $sessionId;
-
-        $qb = $repo->createQueryBuilder('d');
-        $query = $qb
-            ->select('SUM(d.size)')
-            ->innerJoin('d.resourceNode', 'r')
-            ->innerJoin('r.resourceLinks', 'l')
-            ->where('l.course = :course')
-            ->andWhere('l.group = :group')
-            ->andWhere('l.session = :session')
-            ->andWhere('l.visibility <> :visibility')
-            ->setParameters([
-                'course' => $courseId,
-                'group' => $groupId,
-                'session' => $sessionId,
-                'visibility' => ResourceLink::VISIBILITY_DELETED,
-            ])
-            ->getQuery();
-
-        return $query->getSingleScalarResult();
+        return $this->getResourceNodeRepository()->getSize($resourceNode, $this->getResourceType(), $course, $session);
     }
 
     /**
@@ -210,11 +145,6 @@ final class CDocumentRepository extends ResourceRepository implements GridInterf
             ->getQuery();
 
         return $query->getResult();
-    }
-
-    public function getTitleColumn(Grid $grid): Column
-    {
-        return $grid->getColumn('title');
     }
 
     public function getResourceFormType(): string

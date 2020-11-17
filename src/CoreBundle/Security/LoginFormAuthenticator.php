@@ -5,11 +5,8 @@
 namespace Chamilo\CoreBundle\Security;
 
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Hook\CheckLoginCredentialsHook;
 use Chamilo\CoreBundle\Hook\HookFactory;
 use Chamilo\CoreBundle\Repository\UserRepository;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -40,32 +37,33 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
     use TargetPathTrait;
 
     private const LOGIN_ROUTE = 'login_json';
+    //private $entityManager;
+    public $serializer;
+    public $router;
 
     //private $router;
     private $passwordEncoder;
     //private $formFactory;
-    private $hookFactory;
+//    private $hookFactory;
     private $userRepository;
     //private $csrfTokenManager;
     private $urlGenerator;
-    //private $entityManager;
-    public $serializer;
 
     public function __construct(
         //EntityManagerInterface $entityManager,
         UrlGeneratorInterface $urlGenerator,
-        //RouterInterface $router,
+        RouterInterface $router,
         UserPasswordEncoderInterface $passwordEncoder,
         //FormFactoryInterface $formFactory,
-        HookFactory $hookFactory,
+        //HookFactory $hookFactory,
         UserRepository $userRepository,
         CsrfTokenManagerInterface $csrfTokenManager,
         SerializerInterface $serializer
     ) {
-        //$this->router = $router;
+        $this->router = $router;
         $this->passwordEncoder = $passwordEncoder;
         //$this->formFactory = $formFactory;
-        $this->hookFactory = $hookFactory;
+        //$this->hookFactory = $hookFactory;
         $this->userRepository = $userRepository;
         //$this->csrfTokenManager = $csrfTokenManager;
         //$this->entityManager = $entityManager;
@@ -139,7 +137,9 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
             return true;
         }
 
-        $hook = $this->hookFactory->build(CheckLoginCredentialsHook::class);
+        return false;
+
+        /*$hook = $this->hookFactory->build(CheckLoginCredentialsHook::class);
 
         if (empty($hook)) {
             return false;
@@ -147,7 +147,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
 
         $hook->setEventData(['user' => $user, 'credentials' => $credentials]);
 
-        return $hook->notifyLoginCredentials();
+        return $hook->notifyLoginCredentials();*/
     }
 
     /**
@@ -177,6 +177,13 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
 
     public function start(Request $request, AuthenticationException $authException = null)
     {
+        /*$session = $request->getSession();
+
+        // I am choosing to set a FlashBag message with my own custom message.
+        // Alternatively, you could use AuthenticationException's generic message
+        // by calling $authException->getMessage()
+        $session->getFlashBag()->add('warning', 'You must be logged in to access that page');*/
+
         $data = [
             // you might translate this message
             'message' => 'Authentication Required',

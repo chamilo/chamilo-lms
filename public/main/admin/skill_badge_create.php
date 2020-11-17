@@ -44,7 +44,7 @@ if ('POST' === $_SERVER['REQUEST_METHOD']) {
         $existsBadgesDirectory = is_dir($badgePath);
 
         if (!$existsBadgesDirectory) {
-            $existsBadgesDirectory = api_create_protected_dir('badges', api_get_path(SYS_UPLOAD_PATH));
+            //$existsBadgesDirectory = api_create_protected_dir('badges', api_get_path(SYS_UPLOAD_PATH));
         }
 
         if ($existsBadgesDirectory) {
@@ -77,7 +77,12 @@ if ('POST' === $_SERVER['REQUEST_METHOD']) {
 
             $params['icon'] = sprintf("%s.png", $fileName);
         } else {
-            Display::addFlash(Display::return_message(get_lang('The uploaded file could not be saved (perhaps a permission problem?)')), 'warning');
+            Display::addFlash(
+                Display::return_message(
+                    get_lang('The uploaded file could not be saved (perhaps a permission problem?)')
+                ),
+                'warning'
+            );
         }
     }
 

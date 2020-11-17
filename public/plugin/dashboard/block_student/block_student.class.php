@@ -166,7 +166,10 @@ class BlockStudent extends Block
                 // get average of faults in attendances by student
                 $results_faults_avg = $attendance->get_faults_average_inside_courses($student_id);
                 if (!empty($results_faults_avg)) {
-                    $attendances_faults_avg = '<a title="'.get_lang('Go to learner details').'" href="'.api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$student_id.'">'.$results_faults_avg['faults'].'/'.$results_faults_avg['total'].' ('.$results_faults_avg['porcent'].'%)</a>';
+                    $attendances_faults_avg = '<a
+                        title="'.get_lang('Go to learner details').'"
+                        href="'.api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$student_id.'">'.
+                        $results_faults_avg['faults'].'/'.$results_faults_avg['total'].' ('.$results_faults_avg['percent'].'%)</a>';
                 } else {
                     $attendances_faults_avg = '0%';
                 }

@@ -192,6 +192,10 @@ if ($form->validate()) {
 
     // Returning to the group area (note: this is inconsistent with the rest of chamilo)
     $cat = GroupManager::get_category_from_group($current_group['iid']);
+    $categoryId = 0;
+    if ($cat) {
+        $categoryId = $cat['iid'];
+    }
     $max_member = $current_group['max_student'];
 
     if (isset($_POST['group_members']) &&
@@ -202,7 +206,7 @@ if ($form->validate()) {
         header('Location: group.php?'.api_get_cidreq(true, false));
     } else {
         Display::addFlash(Display::return_message(get_lang('Group settings modified'), 'success'));
-        header('Location: group.php?'.api_get_cidreq(true, false).'&category='.$cat['id']);
+        header('Location: group.php?'.api_get_cidreq(true, false).'&category='.$categoryId);
     }
     exit;
 }

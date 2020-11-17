@@ -78,7 +78,7 @@ $form = new FormValidator(
 );
 $form->addElement('text', 'from', get_lang('From'));
 $form->addElement('text', 'to', get_lang('Until'));
-$form->addElement('hidden', 'user_id', $userId);
+$form->addHidden('user_id', $userId);
 $form->addRule('from', get_lang('Required field'), 'required');
 $form->addRule('from', get_lang('Required field').' dd/mm/yyyy', 'callback', 'validateDate');
 $form->addRule('to', get_lang('Required field'), 'required');
@@ -101,17 +101,8 @@ function validateDate($value)
     return true;
 }
 
-if ($form->validate()) {
-    $values = $form->getSubmitValues();
-    $from = $values['from'];
-    $to = $values['to'];
-
-    $from = DateTime::createFromFormat('d/m/Y', $from);
-    $to = DateTime::createFromFormat('d/m/Y', $to);
-
-    $from = api_get_utc_datetime($from->format('Y-m-d'));
-    $to = api_get_utc_datetime($to->format('Y-m-d'));
-
+function getReport($userId, $from, $to, $addTime = false)
+{
     $sessionCategories = UserManager::get_sessions_by_category($userId, false);
     $report = [];
     $minLogin = 0;
@@ -315,25 +306,25 @@ if ($form->validate()) {
     }
     $totalCourseSessionTable = '';
     if ($courseSessionTableData) {
-    $table = new HTML_Table(['class' => 'data_table']);
-    $headers = [
+        $table = new HTML_Table(['class' => 'data_table']);
+        $headers = [
         get_lang('Course'),
             get_lang('TotalDuration'),
     ];
-    $row = 0;
-    $column = 0;
-    foreach ($headers as $header) {
-        $table->setHeaderContents($row, $column, $header);
-        $column++;
-    }
-    $row++;
-    foreach ($courseSessionTableData as $name => $duration) {
+        $row = 0;
         $column = 0;
-        $table->setCellContents($row, $column++, $name);
-        $table->setCellContents($row, $column++, $duration);
+        foreach ($headers as $header) {
+            $table->setHeaderContents($row, $column, $header);
+            $column++;
+        }
         $row++;
-    }
-    $totalCourseSessionTable = $table->toHtml();
+        foreach ($courseSessionTableData as $name => $duration) {
+            $column = 0;
+            $table->setCellContents($row, $column++, $name);
+            $table->setCellContents($row, $column++, $duration);
+            $row++;
+        }
+        $totalCourseSessionTable = $table->toHtml();
     }
 
     $result = [];
@@ -454,7 +445,7 @@ if ($formByDay->validate()) {
             foreach ($period as $value) {
                 $dateToCheck = api_get_utc_datetime($value->format('Y-m-d').' 00:00:01');
                 $end = api_get_utc_datetime($value->format('Y-m-d').' 23:59:59');
-                if ($counter === 1) {
+                if (1 === $counter) {
                     $dateToCheck = $item['login_date'];
                 }
                 $itemKey = substr($value->format('Y-m-d'), 0, 10);
@@ -597,12 +588,14 @@ if ($formByDay->validate()) {
 $formByDay->setDefaults(['from' => $startDate, 'to' => $endDate]);
 
 Display::display_header('');
-$userInfo = api_get_user_info($userId);
 echo Display::page_header(get_lang('Learner details in course'));
 echo Display::page_subheader(
     get_lang('User').': '.$userInfo['complete_name']
 );
 
-$form->setDefaults(['from' => $startDate, 'to' => $endDate]);
-$form->display();
+echo Display::tabs(
+    [get_lang('CertificateOfAchievement'), get_lang('CertificateOfAchievementByDay')],
+    [$form->returnForm(), $formByDay->returnForm()]
+);
+
 Display::display_footer();

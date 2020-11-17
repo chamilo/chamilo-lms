@@ -41,14 +41,8 @@ class CForumForum extends AbstractResource implements ResourceInterface
     protected $cId;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="forum_id", type="integer")
-     */
-    protected $forumId;
-
-    /**
      * @var string
+     *
      * @Assert\NotBlank
      *
      * @ORM\Column(name="forum_title", type="string", length=255, nullable=false)
@@ -207,14 +201,14 @@ class CForumForum extends AbstractResource implements ResourceInterface
     protected $moderated;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection|CForumThread[]
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CForumThread", mappedBy="forum")
      */
     protected $threads;
 
     /**
-     * @var CForumPost[]
+     * @var ArrayCollection|CForumPost[]
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CForumPost", mappedBy="forum")
      */
@@ -225,7 +219,8 @@ class CForumForum extends AbstractResource implements ResourceInterface
      */
     public function __construct()
     {
-        $this->forumId = 0;
+        $this->threads = new ArrayCollection();
+        $this->posts = new ArrayCollection();
         $this->locked = 0;
         $this->forumImage = '';
         $this->forumOfGroup = 0;
@@ -266,10 +261,8 @@ class CForumForum extends AbstractResource implements ResourceInterface
      * Set forumComment.
      *
      * @param string $forumComment
-     *
-     * @return CForumForum
      */
-    public function setForumComment($forumComment)
+    public function setForumComment($forumComment): self
     {
         $this->forumComment = $forumComment;
 
@@ -290,10 +283,8 @@ class CForumForum extends AbstractResource implements ResourceInterface
      * Set forumThreads.
      *
      * @param int $forumThreads
-     *
-     * @return CForumForum
      */
-    public function setForumThreads($forumThreads)
+    public function setForumThreads($forumThreads): self
     {
         $this->forumThreads = $forumThreads;
 
@@ -308,6 +299,11 @@ class CForumForum extends AbstractResource implements ResourceInterface
     public function getForumThreads()
     {
         return $this->forumThreads;
+    }
+
+    public function hasThread($thread)
+    {
+        return $this->threads->contains($thread);
     }
 
     /**
@@ -708,30 +704,6 @@ class CForumForum extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Set forumId.
-     *
-     * @param int $forumId
-     *
-     * @return CForumForum
-     */
-    public function setForumId($forumId)
-    {
-        $this->forumId = $forumId;
-
-        return $this;
-    }
-
-    /**
-     * Get forumId.
-     *
-     * @return int
-     */
-    public function getForumId()
-    {
-        return $this->forumId;
-    }
-
-    /**
      * Set cId.
      *
      * @param int $cId
@@ -830,5 +802,10 @@ class CForumForum extends AbstractResource implements ResourceInterface
     public function getResourceName(): string
     {
         return $this->getForumTitle();
+    }
+
+    public function setResourceName(string $name): self
+    {
+        return $this->setForumTitle($name);
     }
 }

@@ -67,7 +67,7 @@ $calendarEntity = null;
 if (isset($_GET['calendar_id'])) {
     $calendarId = (int) ($_GET['calendar_id']);
     /** @var CAttendanceCalendar $calendarEntity */
-    $calendarEntity = Database::getManager()->getRepository('ChamiloCourseBundle:CAttendanceCalendar')->find($calendarId);
+    $calendarEntity = Database::getManager()->getRepository(CAttendanceCalendar::class)->find($calendarId);
 }
 
 $token = Security::get_token();
@@ -175,7 +175,6 @@ $(function() {
 $tpl = new Template(get_lang('Attendance'));
 $student_param = '';
 $student_id = null;
-
 if (api_is_drh() && isset($_GET['student_id'])) {
     $student_id = (int) ($_GET['student_id']);
     $student_param = '&student_id='.$student_id;
@@ -200,7 +199,7 @@ if ($attendanceEntity) {
     $interbreadcrumb[] = ['url' => '#', 'name' => $attendanceEntity->getName()];
 }
 
-if ('calendar_list' == $action || 'calendar_edit' == $action) {
+if ('calendar_list' === $action || 'calendar_edit' === $action) {
     $interbreadcrumb[] = [
         'url' => 'index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendanceId,
         'name' => $attendanceEntity->getName(),
@@ -211,7 +210,6 @@ if ('calendar_list' == $action || 'calendar_edit' == $action) {
 $allowToEdit = api_is_allowed_to_edit(null, true);
 $currentUrl = api_get_path(WEB_CODE_PATH).'attendance/index.php?'.api_get_cidreq();
 $content = '';
-
 switch ($action) {
     case 'attendance_list':
         if ($allowToEdit) {
@@ -237,7 +235,7 @@ switch ($action) {
         $table = new SortableTable(
             'attendance_list',
             ['Attendance', 'getNumberOfAttendances'],
-            ['Attendance', 'get_attendance_data'],
+            ['Attendance', 'getAttendanceData'],
             $default_column
         );
         $table->set_additional_parameters($parameters);
@@ -580,7 +578,6 @@ switch ($action) {
             );
 
             $defaults['repeat'] = isset($repeat) ? $repeat : null;
-
             if ($defaults['repeat']) {
                 $form->addElement('html', '<div id="repeat-date-attendance" style="display:block">');
             } else {
@@ -594,11 +591,9 @@ switch ($action) {
             ];
             $form->addElement('select', 'repeat_type', get_lang('Repeat type'), $a_repeat_type);
 
-            $form->addElement(
-                'date_picker',
+            $form->addDatePicker(
                 'end_date_time',
-                get_lang('Repeat end date'),
-                ['form_name' => 'attendance_calendar_add']
+                get_lang('Repeat end date')
             );
             $defaults['end_date_time'] = date('Y-m-d');
             $form->addElement('html', '</div>');
@@ -685,7 +680,7 @@ switch ($action) {
 
         if (!$is_locked_attendance || api_is_platform_admin()) {
             $content .= '<div class="actions">';
-            if ('calendar_add' == $action) {
+            if ('calendar_add' === $action) {
                 $content .= '<a href="index.php?'.api_get_cidreq().'&action=calendar_list&attendance_id='.$attendanceId.'">'.
                     Display::return_icon('back.png', get_lang('Attendance calendar'), '', ICON_SIZE_MEDIUM).'</a>';
             } else {
@@ -752,9 +747,9 @@ switch ($action) {
                 if (!$is_locked_attendance || api_is_platform_admin()) {
                     if (api_is_allowed_to_edit()) {
                         $content .= '<div class="pull-right">';
-                        $content .= '<a href="index.php?'.api_get_cidreq().'&action=calendar_edit&calendar_id='.(int) ($calendar['id']).'&attendance_id='.$attendanceId.'">'.
+                        $content .= '<a href="index.php?'.api_get_cidreq().'&action=calendar_edit&calendar_id='.(int) ($calendar['iid']).'&attendance_id='.$attendanceId.'">'.
                             Display::return_icon('edit.png', get_lang('Edit'), ['style' => 'vertical-align:middle'], ICON_SIZE_SMALL).'</a>&nbsp;';
-                        $content .= '<a onclick="javascript:if(!confirm(\''.get_lang('Are you sure you want to delete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=calendar_delete&calendar_id='.(int) ($calendar['id']).'&attendance_id='.$attendanceId.'">'.
+                        $content .= '<a onclick="javascript:if(!confirm(\''.get_lang('Are you sure you want to delete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=calendar_delete&calendar_id='.(int) ($calendar['iid']).'&attendance_id='.$attendanceId.'">'.
                             Display::return_icon('delete.png', get_lang('Delete'), ['style' => 'vertical-align:middle'], ICON_SIZE_SMALL).'</a>';
                         $content .= '</div>';
                     }

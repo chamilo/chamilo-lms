@@ -2,7 +2,7 @@
 
 echo "* Start setup-apache.sh ...";
 
-sudo a2enmod rewrite actions fastcgi alias
+sudo a2enmod rewrite actions alias
 
 # Use default config
 sudo cp -f tests/travis/travis-apache /etc/apache2/sites-available/000-default.conf

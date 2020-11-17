@@ -531,7 +531,7 @@ class Tracking
 
                         $lesson_status = $row['mystatus'];
                         $score = $row['myscore'];
-                        $time_for_total = $row['mytime'];
+                        $time_for_total += $row['mytime'];
                         $attemptTime = $row['mytime'];
 
                         if ($minimumAvailable) {
@@ -901,12 +901,9 @@ class Tracking
                         $title = Security::remove_XSS($title);
                         $output .= '<tr class="'.$oddclass.'">
                                 <td>'.$extend_link.'</td>
-                                <td colspan="4">
+                                <td colspan="10">
                                 <h4>'.$title.'</h4>
                                 </td>
-                                <td colspan="2">'.learnpathitem::humanize_status($lesson_status).'</td>
-                                <td colspan="2"></td>
-                                <td colspan="2"></td>
                                 '.$action.'
                             </tr>';
                     } else {
@@ -2113,6 +2110,34 @@ class Tracking
     }
 
     /**
+     * Get last course access by course/session.
+     */
+    public static function getLastConnectionDateByCourse($courseId, $sessionId = 0)
+    {
+        $courseId = (int) $courseId;
+        $sessionId = (int) $sessionId;
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+
+        $sql = "SELECT logout_course_date
+                FROM $table
+                WHERE
+                        c_id = $courseId AND
+                        session_id = $sessionId
+                ORDER BY logout_course_date DESC
+                LIMIT 0,1";
+
+        $result = Database::query($sql);
+        if (Database::num_rows($result)) {
+            $row = Database::fetch_array($result);
+            if ($row) {
+                return $row['logout_course_date'];
+            }
+        }
+
+        return '';
+    }
+
+    /**
      * Get count of the connections to the course during a specified period.
      *
      * @param int $courseId
@@ -2252,16 +2277,16 @@ class Tracking
             $tbl_stats_exercise = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 
             // Compose a filter based on optional exercise given
-            $condition_quiz = "";
+            $condition_quiz = '';
             if (!empty($exercise_id)) {
-                $exercise_id = intval($exercise_id);
+                $exercise_id = (int) $exercise_id;
                 $condition_quiz = " AND id = $exercise_id ";
             }
 
             // Compose a filter based on optional session id given
             $condition_session = '';
             if (isset($session_id)) {
-                $session_id = intval($session_id);
+                $session_id = (int) $session_id;
                 $condition_session = " AND session_id = $session_id ";
             }
             if (1 == $active_filter) {
@@ -2283,6 +2308,7 @@ class Tracking
     		        FROM $tbl_course_quiz
     				WHERE c_id = {$course_info['real_id']} $condition_active $condition_quiz ";
             $count_quiz = 0;
+
             $countQuizResult = Database::query($sql);
             if (!empty($countQuizResult)) {
                 $count_quiz = Database::fetch_row($countQuizResult);
@@ -2293,7 +2319,7 @@ class Tracking
                     $student_id = array_map('intval', $student_id);
                     $condition_user = " AND exe_user_id IN (".implode(',', $student_id).") ";
                 } else {
-                    $student_id = intval($student_id);
+                    $student_id = (int) $student_id;
                     $condition_user = " AND exe_user_id = '$student_id' ";
                 }
 
@@ -2361,9 +2387,9 @@ class Tracking
                         $lp_name = $row_lp[0];
 
                         return [$quiz_avg_score, $lp_name];
-                    } else {
-                        return [$quiz_avg_score, null];
                     }
+
+                    return [$quiz_avg_score, null];
                 }
             }
         }
@@ -2534,7 +2560,7 @@ class Tracking
      *                                   [sum_of_progresses, number] if it is set to true
      * @param bool      $onlySeriousGame Optional. Limit average to lp on seriousgame mode
      *
-     * @return float Average progress of the user in this course
+     * @return float Average progress of the user in this course from 0 to 100
      */
     public static function get_avg_student_progress(
         $studentId,
@@ -2580,7 +2606,7 @@ class Tracking
         }
 
         $resultLP = Database::select(
-            'id',
+            'iid',
             $lPTable,
             ['where' => $lpConditions]
         );
@@ -2748,13 +2774,13 @@ class Tracking
         // Check the real number of LPs corresponding to the filter in the
         // database (and if no list was given, get them all)
         if (empty($session_id)) {
-            $sql = "SELECT DISTINCT(id), use_max_score
+            $sql = "SELECT DISTINCT(iid), use_max_score
                     FROM $lp_table
                     WHERE
                         c_id = $course_id AND
                         (session_id = 0 OR session_id IS NULL) $condition_lp ";
         } else {
-            $sql = "SELECT DISTINCT(id), use_max_score
+            $sql = "SELECT DISTINCT(iid), use_max_score
                     FROM $lp_table
                     WHERE c_id = $course_id $condition_lp ";
         }
@@ -4452,9 +4478,24 @@ class Tracking
         }
 
         $rs = Database::query($sql);
+
+        $allow = 'true' === api_get_plugin_setting('pausetraining', 'tool_enable');
+        $allowPauseFormation = 'true' === api_get_plugin_setting('pausetraining', 'allow_users_to_edit_pause_formation');
+
+        $extraFieldValue = new ExtraFieldValue('user');
         $users = [];
         while ($user = Database::fetch_array($rs)) {
-            $users[] = $user['user_id'];
+            $userId = $user['user_id'];
+
+            if ($allow && $allowPauseFormation) {
+                $pause = $extraFieldValue->get_values_by_handler_and_field_variable($userId, 'pause_formation');
+                if (!empty($pause) && isset($pause['value']) && 1 == $pause['value']) {
+                    // Skip user because he paused his formation.
+                    continue;
+                }
+            }
+
+            $users[] = $userId;
         }
 
         return $users;
@@ -6232,7 +6273,6 @@ class Tracking
      */
     public static function setUserSearchForm($form)
     {
-        global $_configuration;
         $form->addElement('text', 'keyword', get_lang('Keyword'));
         $form->addElement(
             'select',
@@ -6244,7 +6284,7 @@ class Tracking
         $form->addElement(
             'select',
             'sleeping_days',
-            get_lang('inactiveDays'),
+            get_lang('Inactive days'),
             [
                 '',
                 1 => 1,
@@ -6459,9 +6499,9 @@ class Tracking
             }
 
             // Now fill users data
-            $sqlUsers = "SELECT user_id, username, lastname, firstname
+            $sqlUsers = "SELECT id as user_id, username, lastname, firstname
                          FROM $tuser
-                         WHERE user_id IN (".implode(',', $userIds).")";
+                         WHERE id IN (".implode(',', $userIds).")";
             $resUsers = Database::query($sqlUsers);
             while ($rowUser = Database::fetch_assoc($resUsers)) {
                 $users[$rowUser['user_id']] = $rowUser;
@@ -6821,11 +6861,7 @@ class Tracking
             );
         }
 
-        $courseWorkInformationArray = getWorkCreatedByUser(
-            $userId,
-            $courseInfo['real_id'],
-            $sessionId
-        );
+        $courseWorkInformationArray = getWorkCreatedByUser($userId, $courseInfo['real_id'], $sessionId);
 
         if (!empty($courseWorkInformationArray)) {
             $csvContent[] = null;
@@ -7605,7 +7641,8 @@ class TrackingCourseLog
                     user.official_code  as col0,
                     user.lastname       as col1,
                     user.firstname      as col2,
-                    user.username       as col3';
+                    user.username       as col3,
+                    user.email          as col4';
         if ($getCount) {
             $select = ' SELECT COUNT(distinct(user.id)) as count ';
         }
@@ -7857,6 +7894,10 @@ class TrackingCourseLog
                         $user_row[$extraFieldInfo[$fieldId]['variable']] = '';
                     }
                 }
+            }
+
+            if ('true' === api_get_setting('show_email_addresses')) {
+                $user_row['email'] = $user['col4'];
             }
 
             $user_row['link'] = $user['link'];

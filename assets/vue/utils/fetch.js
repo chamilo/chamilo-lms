@@ -21,8 +21,6 @@ export default function(id, options = {}) {
     )
       options.headers.set('Content-Type', MIME_TYPE);*/
 
-    console.log(options.params);
-
     if (options.params) {
         const params = normalize(options.params);
         let queryString = Object.keys(params)
@@ -37,21 +35,24 @@ export default function(id, options = {}) {
 
     const entryPoint = ENTRYPOINT + (ENTRYPOINT.endsWith('/') ? '' : '/');
 
-    let formData = new FormData();
-    console.log(options.body);
-    if (options.body) {
-        Object.keys(options.body).forEach(function (key) {
-            // key: the name of the object key
-            // index: the ordinal position of the key within the object
-            formData.append(key, options.body[key]);
-        });
-
-        options.body = formData;
+    if ('POST' === options.method) {
+        if (options.body) {
+            let formData = new FormData();
+            Object.keys(options.body).forEach(function (key) {
+                // key: the name of the object key
+                // index: the ordinal position of the key within the object
+                formData.append(key, options.body[key]);
+            });
+            options.body = formData;
+        }
     }
 
-    /*const payload = options.body && JSON.parse(options.body);
-    if (isObject(payload) && payload['@id'])
-        options.body = JSON.stringify(normalize(payload));*/
+    if ('PUT' === options.method) {
+        const payload = options.body && JSON.parse(options.body);
+        if (isObject(payload) && payload['@id']) {
+            options.body = JSON.stringify(normalize(payload));
+        }
+    }
 
   return global.fetch(new URL(id, entryPoint), options).then(response => {
     if (response.ok) return response;

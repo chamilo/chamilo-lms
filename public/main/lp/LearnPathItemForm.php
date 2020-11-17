@@ -176,7 +176,7 @@ class LearnPathItemForm
             $form->addElement('html', '</div>');
 
             if ($document) {
-                if ($document->getResourceNode()->hasEditableContent()) {
+                if ($document->getResourceNode()->hasEditableTextContent()) {
                     $form->addHidden('document_id', $document->getIid());
                     $content = $lp->display_document(
                         $document,

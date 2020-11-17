@@ -1,5 +1,4 @@
 <?php
-
 /* For license terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;

@@ -4,6 +4,7 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -23,6 +24,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class TrackECourseAccess
 {
+    use UserTrait;
+
     /**
      * @var int
      *
@@ -40,11 +43,12 @@ class TrackECourseAccess
     protected $cId;
 
     /**
-     * @var int
+     * @var User
      *
-     * @ORM\Column(name="user_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="trackECourseAccess")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $userId;
+    protected $user;
 
     /**
      * @var \DateTime
@@ -103,30 +107,6 @@ class TrackECourseAccess
     public function getCId()
     {
         return $this->cId;
-    }
-
-    /**
-     * Set userId.
-     *
-     * @param int $userId
-     *
-     * @return TrackECourseAccess
-     */
-    public function setUserId($userId)
-    {
-        $this->userId = $userId;
-
-        return $this;
-    }
-
-    /**
-     * Get userId.
-     *
-     * @return int
-     */
-    public function getUserId()
-    {
-        return $this->userId;
     }
 
     /**

@@ -1,10 +1,9 @@
 <?php
-
 /* For license terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
-use Chamilo\CoreBundle\Entity\User;
+use Chamilo\UserBundle\Entity\User;
 
 /**
  * Process payments for the Buy Courses plugin.
@@ -83,7 +82,7 @@ if ($typeUser || $typeCourse || $typeSession || $typeFinalLp) {
 }
 
 $selectOptions = [
-    0 => get_lang('none'),
+    0 => get_lang('None'),
 ];
 
 if ($typeUser) {
@@ -91,13 +90,13 @@ if ($typeUser) {
     $selectOptions[$userInfo['user_id']] = api_get_person_name(
         $userInfo['firstname'],
         $userInfo['lastname']
-    ).' ('.get_lang('myself').')';
+    ).' ('.get_lang('Myself').')';
 
     if (!empty($users)) {
         /** @var User $user */
         foreach ($users as $user) {
-            if ((int) ($userInfo['user_id']) !== (int) ($user->getId())) {
-                $selectOptions[$user->getId()] = UserManager::formatUserFullName($user, true);
+            if (intval($userInfo['user_id']) !== intval($user->getId())) {
+                $selectOptions[$user->getId()] = $user->getCompleteNameWithUsername();
             }
         }
     }
@@ -198,16 +197,16 @@ if ($typeUser) {
     if (!$checker) {
         $form->addHtml(
             Display::return_message(
-                $plugin->get_lang('YourCoursesNeedAtLeastOneLearning paths'),
+                $plugin->get_lang('YourCoursesNeedAtLeastOneLearningPath'),
                 'error'
             )
         );
     }
-    $form->addSelect('info_select', get_lang('Learning paths'), $selectOptions);
+    $form->addSelect('info_select', get_lang('LearningPath'), $selectOptions);
 }
 
-$form->addHidden('t', (int) ($_GET['t']));
-$form->addHidden('i', (int) ($_GET['i']));
+$form->addHidden('t', intval($_GET['t']));
+$form->addHidden('i', intval($_GET['i']));
 $form->addButton('submit', $plugin->get_lang('ConfirmOrder'), 'check', 'success');
 
 if ($form->validate()) {

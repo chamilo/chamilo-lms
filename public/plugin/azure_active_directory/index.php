@@ -1,5 +1,4 @@
 <?php
-
 /* For licensing terms, see /license.txt */
 /**
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>

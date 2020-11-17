@@ -42,7 +42,9 @@ if (empty($sessionId)) {
     );
 }
 $count_students = count($students);
-$question_list = $objExercise->get_validated_question_list();
+//$question_list = $objExercise->get_validated_question_list();
+$totalQuestions = $objExercise->getQuestionCount(); //Get total of questions
+$question_list = $objExercise->getQuestionForTeacher(0, $totalQuestions); // get questions from 0 to total
 
 $data = [];
 // Question title 	# of students who tool it 	Lowest score 	Average 	Highest score 	Maximum score
@@ -64,7 +66,8 @@ if (!empty($question_list)) {
             $question_id,
             $exerciseId,
             $courseCode,
-            $sessionId
+            $sessionId,
+            true
         );
 
         $count_users = ExerciseLib::get_number_students_question_with_answer_count(
@@ -307,7 +310,7 @@ $interbreadcrumb[] = [
     'name' => get_lang('Tests'),
 ];
 $interbreadcrumb[] = [
-    'url' => "admin.php?exerciseId=$exerciseId&".api_get_cidreq(),
+    'url' => "admin.php?id=$exerciseId&".api_get_cidreq(),
     'name' => $objExercise->selectTitle(true),
 ];
 

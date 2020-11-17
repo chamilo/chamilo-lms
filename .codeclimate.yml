@@ -45,6 +45,10 @@ plugins:
         enabled: false
       Squiz Strings ConcatenationSpacing PaddingFound:
         enabled: false
+      Symfony2 Commenting FunctionComment MissingReturn:
+        enabled: false
+      Symfony2 Commenting FunctionComment MissingParamTag:
+        enabled: false
 
   phpmd:
     enabled: true

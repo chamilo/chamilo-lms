@@ -5,7 +5,6 @@
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CExerciseCategory;
 use Chamilo\CourseBundle\Entity\CQuiz;
-use Chamilo\CourseBundle\Entity\CShortcut;
 
 /**
  * Exercise list: This script shows the list of exercises for administrators and students.
@@ -63,7 +62,7 @@ $categoryId = isset($_REQUEST['category_id']) ? (int) $_REQUEST['category_id'] :
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
 $keyword = isset($_REQUEST['keyword']) ? Security::remove_XSS($_REQUEST['keyword']) : '';
 
-$exerciseRepo = Container::getExerciseRepository();
+$exerciseRepo = Container::getQuizRepository();
 $exerciseEntity = null;
 if (!empty($exerciseId)) {
     /** @var CQuiz $exerciseEntity */
@@ -95,24 +94,15 @@ if ($is_allowedToEdit && !empty($action)) {
     switch ($action) {
         case 'add_shortcut':
             $repo = Container::getShortcutRepository();
-            $shortcut = new CShortcut();
-            $shortcut->setName($objExerciseTmp->get_formated_title());
-            $shortcut->setShortCutNode($exerciseEntity->getResourceNode());
-
             $courseEntity = api_get_course_entity(api_get_course_int_id());
-            $repo->addResourceNode($shortcut, api_get_user_entity(api_get_user_id()), $courseEntity);
-            $repo->getEntityManager()->flush();
+            $repo->addShortCut($exerciseEntity, $courseEntity, $courseEntity, api_get_session_entity());
 
             Display::addFlash(Display::return_message(get_lang('Updated')));
 
             break;
         case 'remove_shortcut':
             $repo = Container::getShortcutRepository();
-            $shortcut = $repo->getShortcutFromResource($exerciseEntity);
-            if (null !== $shortcut) {
-                $repo->getEntityManager()->remove($shortcut);
-                $repo->getEntityManager()->flush();
-            }
+            $repo->removeShortCut($exerciseEntity);
 
             Display::addFlash(Display::return_message(get_lang('Deleted')));
 
@@ -270,7 +260,7 @@ if ($is_allowedToEdit && !empty($action)) {
         case 'down_category':
             $categoryIdFromGet = isset($_REQUEST['category_id_edit']) ? $_REQUEST['category_id_edit'] : 0;
             $em = Database::getManager();
-            $repo = $em->getRepository('ChamiloCourseBundle:CExerciseCategory');
+            $repo = Container::getExerciseCategoryRepository();
             $category = $repo->find($categoryIdFromGet);
             $currentPosition = $category->getPosition();
 

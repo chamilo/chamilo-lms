@@ -136,6 +136,7 @@ function export_pdf_with_html($headers_table, $data_table, $headers_pdf, $footer
     }
     $items_per_page = 30;
     $count_pages = ceil(count($data_table) / $items_per_page);
+    $content_table = '';
     for ($x = 0; $x < $count_pages; $x++) {
         $content_table .= '<table width="100%" border="1" style="border-collapse:collapse">';
         // header table

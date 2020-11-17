@@ -2,7 +2,7 @@
 Feature: Install portal
 
   Scenario: See the company reports link on the admin page
-    Given I am on "/main/install"
+    Given I am on "/main/install/index.php"
     Then I should see "Step1 – Installation Language"
     Then I press "Next"
     Then I should see "Step2 – Requirements"
@@ -13,10 +13,10 @@ Feature: Install portal
     Then I should see "Step4 – Database settings"
     Then I fill in the following:
       | dbUsernameForm | root |
-      | dbPassForm | |
+#      | dbPassForm | |
       | dbNameForm | master |
     Then I press "step3"
-    Then I should see "Database driver: pdo_mysql"
+    Then I should see "Database host: localhost"
     Then I press "step4"
     Then I should see "Step5 – ConfigurationSettings"
     Then I fill in the following:
@@ -27,4 +27,7 @@ Feature: Install portal
     Then I press "button_step6"
     Then wait the page to be loaded when ready
     Then wait the page to be loaded when ready
+    Then wait the page to be loaded when ready
     Then I should see "Step7"
+    Then I should see "Go to your newly created portal"
+

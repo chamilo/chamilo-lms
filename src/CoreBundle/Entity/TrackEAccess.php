@@ -13,12 +13,21 @@ use Doctrine\ORM\Mapping as ORM;
  *     @ORM\Index(name="access_user_id", columns={"access_user_id"}),
  *     @ORM\Index(name="access_c_id", columns={"c_id"}),
  *     @ORM\Index(name="access_session_id", columns={"access_session_id"}),
- *     @ORM\Index(name="user_course_session_date", columns={"access_user_id", "c_id", "access_session_id", "access_date"})
+ *     @ORM\Index(name="user_course_session_date", columns={"access_user_id","c_id","access_session_id", "access_date"})
  * })
  * @ORM\Entity
  */
 class TrackEAccess
 {
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="access_id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $accessId;
+
     /**
      * @var int
      *
@@ -60,15 +69,6 @@ class TrackEAccess
      * @ORM\Column(name="user_ip", type="string", length=39, nullable=false)
      */
     protected $userIp;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="access_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $accessId;
 
     /**
      * Set accessUserId.

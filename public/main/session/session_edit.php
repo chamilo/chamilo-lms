@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -61,7 +62,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 $order_clause = 'ORDER BY ';
 $order_clause .= api_sort_by_first_name() ? 'firstname, lastname, username' : 'lastname, firstname, username';
 
-$sql = "SELECT user_id,lastname,firstname,username
+$sql = "SELECT id as user_id,lastname,firstname,username
         FROM $tbl_user
         WHERE status='1'".$order_clause;
 
@@ -69,16 +70,18 @@ if (api_is_multiple_url_enabled()) {
     $table_access_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
     $access_url_id = api_get_current_access_url_id();
     if (-1 != $access_url_id) {
-        $sql = "SELECT DISTINCT u.user_id,lastname,firstname,username
+        $sql = "SELECT DISTINCT u.id as user_id,lastname,firstname,username
                 FROM $tbl_user u
                 INNER JOIN $table_access_url_rel_user url_rel_user
-                ON (url_rel_user.user_id = u.user_id)
+                ON (url_rel_user.user_id = u.id)
                 WHERE status='1' AND access_url_id = '$access_url_id' $order_clause";
     }
 }
 
 $result = Database::query($sql);
 $coaches = Database::store_result($result);
+$thisYear = date('Y');
+
 $coachesOption = [
     '' => '----- '.get_lang('none').' -----',
 ];
@@ -167,6 +170,8 @@ if ($form->validate()) {
         $extraFields['extra_image']['crop_parameters'] = $params['picture_crop_result'];
     }
 
+    $status = isset($params['status']) ? $params['status'] : 0;
+
     $return = SessionManager::edit_session(
         $id,
         $name,
@@ -184,7 +189,8 @@ if ($form->validate()) {
         $duration,
         $extraFields,
         null,
-        $sendSubscriptionNotification
+        $sendSubscriptionNotification,
+        $status
     );
 
     if ($return) {

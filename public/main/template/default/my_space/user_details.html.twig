@@ -1,7 +1,7 @@
 {% import '@ChamiloCore/Macros/box.html.twig' as display %}
 
 {% autoescape false %}
-{% if title %}
+{% if title is defined %}
     <h2 class="details-title"><img src="{{ 'course.png'|icon(32) }}"> {{ title }}</h2>
 {% endif %}
 

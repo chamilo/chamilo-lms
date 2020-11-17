@@ -52,7 +52,6 @@ class CreateSessionFromModelTest extends V2TestCase
         );
         //var_dump($newSessionId);exit;
 
-        // assert the session was created and given the returned session id
         $entityManager = Database::getManager();
         $repository = $entityManager->getRepository('ChamiloCoreBundle:Session');
         $newSession = $repository->find($newSessionId);
@@ -70,7 +69,6 @@ class CreateSessionFromModelTest extends V2TestCase
         // clean up
         SessionManager::delete($modelSessionId);
         SessionManager::delete($newSessionId);
-        //var_dump($modelSessionId);exit;
     }
 
     /**

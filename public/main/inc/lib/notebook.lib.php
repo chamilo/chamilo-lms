@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CNotebook;
 use ChamiloSession as Session;
 
 /**
@@ -40,64 +42,31 @@ class NotebookManager
 				</script>";
     }
 
-    /**
-     * This functions stores the note in the database.
-     *
-     * @param array $values
-     * @param int   $userId    Optional. The user ID
-     * @param int   $courseId  Optional. The course ID
-     * @param int   $sessionId Optional. The session ID
-     *
-     * @return bool
-     *
-     * @author Christian Fasanando <christian.fasanando@dokeos.com>
-     * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University, Belgium
-     *
-     * @version januari 2009, dokeos 1.8.6
-     */
-    public static function save_note($values, $userId = 0, $courseId = 0, $sessionId = 0)
+    public static function saveNote(array $values, $userId = 0, $courseId = 0, $sessionId = 0)
     {
         if (!is_array($values) || empty($values['note_title'])) {
             return false;
         }
 
-        // Database table definition
-        $table = Database::get_course_table(TABLE_NOTEBOOK);
         $userId = $userId ?: api_get_user_id();
         $courseId = $courseId ?: api_get_course_int_id();
-        $courseInfo = api_get_course_info_by_id($courseId);
-        $courseCode = $courseInfo['code'];
+        $course = api_get_course_entity($courseId);
         $sessionId = $sessionId ?: api_get_session_id();
-        $now = api_get_utc_datetime();
-        $params = [
-            'notebook_id' => 0,
-            'c_id' => $courseId,
-            'user_id' => $userId,
-            'course' => $courseCode,
-            'session_id' => $sessionId,
-            'title' => $values['note_title'],
-            'description' => $values['note_comment'],
-            'creation_date' => $now,
-            'update_date' => $now,
-            'status' => 0,
-        ];
-        $id = Database::insert($table, $params);
+        $session = api_get_session_entity($sessionId);
 
-        if ($id > 0) {
-            $sql = "UPDATE $table SET notebook_id = $id WHERE iid = $id";
-            Database::query($sql);
+        $notebook = new CNotebook();
+        $notebook
+            ->setTitle($values['note_title'])
+            ->setDescription($values['note_comment'])
+            ->setUserId($userId)
+            ->addCourseLink($course, $session)
+        ;
 
-            //insert into item_property
-            api_item_property_update(
-                $courseInfo,
-                TOOL_NOTEBOOK,
-                $id,
-                'NotebookAdded',
-                $userId
-            );
+        $repo = Container::getNotebookRepository();
+        $repo->getEntityManager()->persist($notebook);
+        $repo->getEntityManager()->flush();
 
-            return $id;
-        }
+        return $notebook->getIid();
     }
 
     /**
@@ -117,12 +86,12 @@ class NotebookManager
         $notebook_id = (int) $notebook_id;
 
         $sql = "SELECT
-                notebook_id 		AS notebook_id,
+                iid 		AS notebook_id,
                 title				AS note_title,
                 description 		AS note_comment,
                 session_id			AS session_id
                 FROM $table
-                WHERE c_id = $course_id AND notebook_id = '".$notebook_id."' ";
+                WHERE iid = '".$notebook_id."' ";
         $result = Database::query($sql);
         if (1 != Database::num_rows($result)) {
             return [];
@@ -132,57 +101,28 @@ class NotebookManager
     }
 
     /**
-     * This functions updates the note in the database.
-     *
      * @param array $values
-     *
-     * @author Christian Fasanando <christian.fasanando@dokeos.com>
-     * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University, Belgium
-     *
-     * @return bool
-     *
-     * @version januari 2009, dokeos 1.8.6
      */
-    public static function update_note($values)
+    public static function updateNote($values)
     {
         if (!is_array($values) || empty($values['note_title'])) {
             return false;
         }
 
-        // Database table definition
-        $table = Database::get_course_table(TABLE_NOTEBOOK);
+        $repo = Container::getNotebookRepository();
+        $notebook = $repo->find($values['notebook_id']);
 
-        $course_id = api_get_course_int_id();
-        $sessionId = api_get_session_id();
+        if (!$notebook) {
+            return false;
+        }
 
-        $params = [
-            'user_id' => api_get_user_id(),
-            'course' => api_get_course_id(),
-            'session_id' => $sessionId,
-            'title' => $values['note_title'],
-            'description' => $values['note_comment'],
-            'update_date' => api_get_utc_datetime(),
-        ];
+        $notebook
+            ->setTitle($values['note_title'])
+            ->setDescription($values['note_comment'])
+        ;
 
-        Database::update(
-            $table,
-            $params,
-            [
-                'c_id = ? AND notebook_id = ?' => [
-                    $course_id,
-                    $values['notebook_id'],
-                ],
-            ]
-        );
-
-        // update item_property (update)
-        api_item_property_update(
-            api_get_course_info(),
-            TOOL_NOTEBOOK,
-            $values['notebook_id'],
-            'NotebookUpdated',
-            api_get_user_id()
-        );
+        $repo->getEntityManager()->persist($notebook);
+        $repo->getEntityManager()->flush();
 
         return true;
     }
@@ -206,8 +146,7 @@ class NotebookManager
 
         $sql = "DELETE FROM $table
                 WHERE
-                    c_id = $course_id AND
-                    notebook_id='".$notebook_id."' AND
+                    iid='".$notebook_id."' AND
                     user_id = '".api_get_user_id()."'";
         $result = Database::query($sql);
         $affected_rows = Database::affected_rows($result);
@@ -217,13 +156,13 @@ class NotebookManager
         }
 
         // Update item_property (delete)
-        api_item_property_update(
+        /*api_item_property_update(
             api_get_course_info(),
             TOOL_NOTEBOOK,
             $notebook_id,
             'delete',
             api_get_user_id()
-        );
+        );*/
 
         return true;
     }
@@ -251,14 +190,19 @@ class NotebookManager
         if (!api_is_anonymous()) {
             if (0 == $sessionId || api_is_allowed_to_session_edit(false, true)) {
                 echo '<a href="index.php?'.api_get_cidreq().'&action=addnote">'.
-                    Display::return_icon('new_note.png', get_lang('Add new note in my personal notebook'), '', '32').'</a>';
+                    Display::return_icon('new_note.png', get_lang('Add new note in my personal notebook'), '', '32').
+                    '</a>';
             }
         }
 
-        echo '<a href="index.php?'.api_get_cidreq().'&action=changeview&view=creation_date&direction='.$link_sort_direction.'">'.
-            Display::return_icon('notes_order_by_date_new.png', get_lang('Sort by date created'), '', '32').'</a>';
-        echo '<a href="index.php?'.api_get_cidreq().'&action=changeview&view=update_date&direction='.$link_sort_direction.'">'.
-            Display::return_icon('notes_order_by_date_mod.png', get_lang('Sort by date last modified'), '', '32').'</a>';
+        echo '<a
+            href="index.php?'.api_get_cidreq().'&action=changeview&view=creation_date&direction='.$link_sort_direction.'">'.
+            Display::return_icon('notes_order_by_date_new.png', get_lang('Sort by date created'), '', '32').
+            '</a>';
+        echo '<a
+            href="index.php?'.api_get_cidreq().'&action=changeview&view=update_date&direction='.$link_sort_direction.'">'.
+            Display::return_icon('notes_order_by_date_mod.png', get_lang('Sort by date last modified'), '', '32').
+            '</a>';
         echo '<a href="index.php?'.api_get_cidreq().'&action=changeview&view=title&direction='.$link_sort_direction.'">'.
             Display::return_icon('notes_order_by_title.png', get_lang('Sort by title'), '', '32').'</a>';
         echo '</div>';
@@ -279,7 +223,7 @@ class NotebookManager
         // Condition for the session
         $condition_session = api_get_session_condition($sessionId);
 
-        $cond_extra = 'update_date' == $notebookView ? " AND update_date <> ''" : ' ';
+        $cond_extra = 'update_date' === $notebookView ? " AND update_date <> ''" : ' ';
         $course_id = api_get_course_int_id();
 
         $sql = "SELECT * FROM $table
@@ -300,7 +244,9 @@ class NotebookManager
 
             $actions = '<a href="'.api_get_self().'?action=editnote&notebook_id='.$row['notebook_id'].'">'.
                 Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>';
-            $actions .= '<a href="'.api_get_self().'?action=deletenote&notebook_id='.$row['notebook_id'].'" onclick="return confirmation(\''.$row['title'].'\');">'.
+            $actions .= '<a
+                href="'.api_get_self().'?action=deletenote&notebook_id='.$row['notebook_id'].'"
+                onclick="return confirmation(\''.$row['title'].'\');">'.
                 Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>';
 
             echo Display::panel(

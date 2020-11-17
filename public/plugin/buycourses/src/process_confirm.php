@@ -1,5 +1,4 @@
 <?php
-
 /* For license terms, see /license.txt */
 
 /**
@@ -35,12 +34,12 @@ switch ($sale['payment_type']) {
         $paypalPassword = $paypalParams['password'];
         $paypalSignature = $paypalParams['signature'];
 
-        require_once 'paypalfunctions.php';
+        require_once "paypalfunctions.php";
 
         $i = 0;
         $extra = "&L_PAYMENTREQUEST_0_NAME0={$sale['product_name']}";
         $extra .= "&L_PAYMENTREQUEST_0_AMT0={$sale['price']}";
-        $extra .= '&L_PAYMENTREQUEST_0_QTY0=1';
+        $extra .= "&L_PAYMENTREQUEST_0_QTY0=1";
 
         $expressCheckout = CallShortcutExpressCheckout(
             $sale['price'],
@@ -51,9 +50,9 @@ switch ($sale['payment_type']) {
             $extra
         );
 
-        if ('Success' !== $expressCheckout['ACK']) {
+        if ('Success' !== $expressCheckout["ACK"]) {
             $erroMessage = vsprintf(
-                $plugin->get_lang('An error occurred.'),
+                $plugin->get_lang('ErrorOccurred'),
                 [$expressCheckout['L_ERRORCODE0'], $expressCheckout['L_LONGMESSAGE0']]
             );
             Display::addFlash(
@@ -85,8 +84,7 @@ switch ($sale['payment_type']) {
             );
         }
 
-        RedirectToPayPal($expressCheckout['TOKEN']);
-
+        RedirectToPayPal($expressCheckout["TOKEN"]);
         break;
     case BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER:
         $buyingCourse = false;
@@ -96,12 +94,10 @@ switch ($sale['payment_type']) {
             case BuyCoursesPlugin::PRODUCT_TYPE_COURSE:
                 $buyingCourse = true;
                 $course = $plugin->getCourseInfo($sale['product_id']);
-
                 break;
             case BuyCoursesPlugin::PRODUCT_TYPE_SESSION:
                 $buyingSession = true;
                 $session = $plugin->getSessionInfo($sale['product_id']);
-
                 break;
         }
 
@@ -142,9 +138,8 @@ switch ($sale['payment_type']) {
             );
             $messageTemplate->assign('transfer_accounts', $transferAccounts);
 
-            api_mail_html(
-                $userInfo['complete_name'],
-                $userInfo['email'],
+            MessageManager::send_message_simple(
+                $userInfo['user_id'],
                 $plugin->get_lang('bc_subject'),
                 $messageTemplate->fetch('buycourses/view/message_transfer.tpl')
             );
@@ -221,7 +216,6 @@ switch ($sale['payment_type']) {
 
         $template->assign('content', $content);
         $template->display_one_col_template();
-
         break;
     case BuyCoursesPlugin::PAYMENT_TYPE_CULQI:
         // We need to include the main online script, acording to the Culqi documentation the JS needs to be loeaded
@@ -235,12 +229,10 @@ switch ($sale['payment_type']) {
             case BuyCoursesPlugin::PRODUCT_TYPE_COURSE:
                 $buyingCourse = true;
                 $course = $plugin->getCourseInfo($sale['product_id']);
-
                 break;
             case BuyCoursesPlugin::PRODUCT_TYPE_SESSION:
                 $buyingSession = true;
                 $session = $plugin->getSessionInfo($sale['product_id']);
-
                 break;
         }
 
@@ -304,7 +296,7 @@ switch ($sale['payment_type']) {
         $template->assign('buying_session', $buyingSession);
         $template->assign('terms', $globalParameters['terms_and_conditions']);
         $template->assign('title', $sale['product_name']);
-        $template->assign('price', (float) ($sale['price']));
+        $template->assign('price', floatval($sale['price']));
         $template->assign('currency', $plugin->getSelectedCurrency());
         $template->assign('user', $userInfo);
         $template->assign('sale', $sale);

@@ -13,7 +13,6 @@ if ('personal' == $type || 'admin' == $type) {
     $cidReset = true; // fixes #5162
 }
 require_once __DIR__.'/../inc/global.inc.php';
-// see BT#17891
 apiBlockInactiveUser();
 
 $current_course_tool = TOOL_CALENDAR_EVENT;

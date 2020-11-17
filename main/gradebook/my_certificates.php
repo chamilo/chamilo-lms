@@ -10,7 +10,6 @@
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
-// see BT#17891
 apiBlockInactiveUser();
 
 $logInfo = [

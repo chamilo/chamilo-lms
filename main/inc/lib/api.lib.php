@@ -1249,7 +1249,6 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
 
         return false;
     }
-    // see BT#17891
     apiBlockInactiveUser();
 
     return true;
@@ -1278,30 +1277,27 @@ function api_protect_admin_script($allow_sessions_admins = false, $allow_drh = f
         return false;
     }
 
-    // see BT#17891
     apiBlockInactiveUser();
 
     return true;
 }
 
 /**
- * Function used to protect an inactive user.
+ * Blocks inactive users with a currently active session from accessing more 
+ * pages "live".
  *
- * Function to determine an inactive user by the database
- *
- * @param int $user_id
- *
- * @return bool
+ * @return bool Returns true if the feature is disabled or the user account is still enabled. Returns false (and shows a message) if the feature is enabled *and* the user is disabled.
  */
 function apiBlockInactiveUser()
 {
     $data = true;
+    if (api_get_configuration_value('security_block_inactive_users_immediately') != 1) {
+        return $data;
+    }
+
     $userId = api_get_user_id();
     $homeUrl = api_get_path(WEB_PATH);
     if (($userId) == 0) {
-        return $data;
-    }
-    if (api_get_configuration_value('security_block_inactive_users_immediately') != 1) {
         return $data;
     }
 
@@ -1327,13 +1323,7 @@ function apiBlockInactiveUser()
         );
 
         $msg .= '<p class="text-center">
-                 <a class="btn btn-default" href="'.$homeUrl.'">'.get_lang('BackHome').'</a>
-                 </p>';
-        /*
-        if (!empty($message)) {
-            $msg = $message;
-        }
-        */
+                 <a class="btn btn-default" href="'.$homeUrl.'">'.get_lang('BackHome').'</a></p>';
 
         if (api_is_anonymous()) {
             $form = api_get_not_allowed_login_form();
@@ -1386,7 +1376,6 @@ function api_block_anonymous_users($printHeaders = true)
 
         return false;
     }
-    // see BT#17891
     apiBlockInactiveUser();
 
     return true;

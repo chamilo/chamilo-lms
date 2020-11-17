@@ -331,7 +331,7 @@ if (!empty($users)) {
                 }
             }
         }
-        $trackingUrl = api_get_path(WEB_CODE_PATH).'main/mySpace/myStudents.php?details=true'.
+        $trackingUrl = api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?details=true'.
         api_get_cidreq().'&course='.$courseCode.'&origin=tracking_course&student='.$userId;
 
         /*$userList[] = [

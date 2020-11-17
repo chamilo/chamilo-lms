@@ -1,8 +1,11 @@
 <?php
+
 /* For licensing terms, see /license.txt */
+
 /**
  * This script generates four session categories.
  */
+exit;
 require_once '../../main/inc/global.inc.php';
 api_protect_admin_script();
 

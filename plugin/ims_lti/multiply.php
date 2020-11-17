@@ -55,12 +55,14 @@ try {
         ['url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course', 'multiple' => true]
     );
     $form->addCheckBox('all_courses', '', $plugin->get_lang('AddInAllCourses'));
+    $form->addCheckBox('tool_visible', get_lang('SetVisible'), get_lang('ToolIsNowVisible'));
     $form->addButtonExport(get_lang('Save'));
 
     if ($form->validate()) {
         $em = Database::getManager();
         $formValues = $form->exportValues();
         $formValues['courses'] = empty($formValues['courses']) ? [] : $formValues['courses'];
+        $formValues['tool_visible'] = !empty($formValues['tool_visible']);
 
         if (!empty($formValues['all_courses'])) {
             $courseList  = Database::select('id', Database::get_main_table(TABLE_MAIN_COURSE));
@@ -108,7 +110,8 @@ try {
 
                 $plugin->addCourseTool(
                     api_get_course_entity($newSelectedCourseId),
-                    $newTool
+                    $newTool,
+                    $formValues['tool_visible']
                 );
             }
         }
@@ -124,6 +127,7 @@ try {
     $form->setDefaults(
         [
             'courses' => $selectedCoursesIds,
+            'tool_visible' => true,
         ]
     );
     $form->protect();

@@ -610,6 +610,7 @@ class CourseHome
         // if the course homepage is loaded many times, so the list of hidden
         // tools might benefit from a shared memory storage later on
         $list = api_get_settings('Tools', 'list', api_get_current_access_url_id());
+
         $hide_list = [];
         $check = false;
         foreach ($list as $line) {
@@ -834,7 +835,6 @@ class CourseHome
         $courseId = api_get_course_int_id();
         $is_platform_admin = api_is_platform_admin();
         $courseInfo = api_get_course_info();
-
         $allowEditionInSession = api_get_configuration_value('allow_edit_tool_visibility_in_session');
 
         if ($session_id == 0) {
@@ -847,12 +847,21 @@ class CourseHome
             }
         }
 
+        $disableUsers = 3 === (int) $courseInfo['visibility'] &&
+            api_get_configuration_value('disable_change_user_visibility_for_public_courses');
+
         $items = [];
         $app_plugin = new AppPlugin();
-
         if (isset($all_tools_list)) {
             $lnk = '';
             foreach ($all_tools_list as &$tool) {
+                $allowChangeVisibility = true;
+                $showIcon = true;
+                if ('user/user.php' === $tool['link'] && $disableUsers) {
+                    $allowChangeVisibility = false;
+                    $tool['visibility'] = 0;
+                    $showIcon = $is_allowed_to_edit;
+                }
                 $item = [];
                 $studentview = false;
                 $tool['original_link'] = $tool['link'];
@@ -878,6 +887,10 @@ class CourseHome
                     continue;
                 }
 
+                if (false === $showIcon) {
+                    continue;
+                }
+
                 // This part displays the links to hide or remove a tool.
                 // These links are only visible by the course manager.
                 unset($lnk);
@@ -885,7 +898,7 @@ class CourseHome
                 $item['extra'] = null;
                 $toolAdmin = isset($tool['admin']) ? $tool['admin'] : '';
 
-                if ($is_allowed_to_edit) {
+                if ($is_allowed_to_edit && $allowChangeVisibility) {
                     if (empty($session_id)) {
                         if (isset($tool['id'])) {
                             if ($tool['visibility'] == '1' && $toolAdmin != '1') {

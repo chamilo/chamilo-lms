@@ -54,6 +54,9 @@ class RecordingMeeting
     /** @var string undocumented */
     public $share_url;
 
+    /** @var string */
+    public $password;
+
     /** @var RecordingFile[] List of recording file. */
     public $recording_files;
 

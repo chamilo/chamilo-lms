@@ -1610,6 +1610,17 @@ class DocumentManager
         // note the extra / at the end of doc_path to match every path in
         // the document table that is part of the document path
         $session_id = (int) $session_id;
+
+        $drhAccessContent = api_drh_can_access_all_session_content() &&
+            $session_id &&
+            SessionManager::isSessionFollowedByDrh($session_id, $userId);
+
+        $hasAccess = api_is_allowed_in_course() || api_is_platform_admin() || $drhAccessContent;
+
+        if (false === $hasAccess) {
+            return false;
+        }
+
         $condition = "AND d.session_id IN  ('$session_id', '0') ";
         // The " d.filetype='file' " let the user see a file even if the folder is hidden see #2198
 
@@ -1642,7 +1653,7 @@ class DocumentManager
         }
         $doc_path = Database::escape_string($doc_path).'/';
 
-        $sql = "SELECT visibility
+        $sql = "SELECT visibility, ip.session_id
                 FROM $docTable d
                 INNER JOIN $propTable ip
                 ON (d.id = ip.ref AND d.c_id = ip.c_id)
@@ -1655,15 +1666,38 @@ class DocumentManager
                 ";
 
         $result = Database::query($sql);
-        $is_visible = false;
-        if (Database::num_rows($result) > 0) {
-            $row = Database::fetch_array($result, 'ASSOC');
-            if ($row['visibility'] == 1) {
-                $drhAccessContent = api_drh_can_access_all_session_content()
-                    && $session_id
-                    && SessionManager::isSessionFollowedByDrh($session_id, $userId);
+        $isVisible = false;
+        $numRows = (int) Database::num_rows($result);
 
-                $is_visible = api_is_allowed_in_course() || api_is_platform_admin() || $drhAccessContent;
+        if ($numRows) {
+            if (1 === $numRows) {
+                $row = Database::fetch_array($result, 'ASSOC');
+                if ($row['visibility'] == 1) {
+                    $isVisible = true;
+                }
+            } else {
+                $sessionVisibility = null;
+                $courseVisibility = null;
+                while ($row = Database::fetch_array($result, 'ASSOC')) {
+                    $checkSessionId = (int) $row['session_id'];
+                    if (empty($checkSessionId)) {
+                        $courseVisibility = 1 === (int) $row['visibility'];
+                    } else {
+                        if ($session_id === $checkSessionId) {
+                            $sessionVisibility = 1 === (int) $row['visibility'];
+                        }
+                    }
+                }
+
+                if (empty($session_id) || (!empty($session_id) && null === $sessionVisibility)) {
+                    if ($courseVisibility) {
+                        $isVisible = true;
+                    }
+                } else {
+                    if ($sessionVisibility) {
+                        $isVisible = true;
+                    }
+                }
             }
         }
 
@@ -1676,7 +1710,7 @@ class DocumentManager
             the document is only accessible to the course admin and
             teaching assistants.*/
         //return $_SESSION ['is_allowed_in_course'] || api_is_platform_admin();
-        return $is_visible;
+        return $isVisible;
     }
 
     /**
@@ -1893,7 +1927,8 @@ class DocumentManager
         $sessionId,
         $is_preview = false
     ) {
-        $user_id = intval($user_id);
+        $user_id = (int) $user_id;
+        $sessionId = (int) $sessionId;
         $course_info = api_get_course_info($course_code);
         $tbl_document = Database::get_course_table(TABLE_DOCUMENT);
         $course_id = $course_info['real_id'];
@@ -1919,6 +1954,7 @@ class DocumentManager
                 $all_user_info = self::get_all_info_to_certificate(
                     $user_id,
                     $course_code,
+                    $sessionId,
                     $is_preview
                 );
 
@@ -1949,11 +1985,12 @@ class DocumentManager
      *
      * @return array
      */
-    public static function get_all_info_to_certificate($user_id, $courseCode, $is_preview = false)
+    public static function get_all_info_to_certificate($user_id, $courseCode, $sessionId, $is_preview = false)
     {
         $info_list = [];
         $user_id = (int) $user_id;
         $course_info = api_get_course_info($courseCode);
+        $sessionId = (int) $sessionId;
 
         // Portal info
         $organization_name = api_get_setting('Institution');
@@ -1986,8 +2023,7 @@ class DocumentManager
         $teacher_last_name = $teacher_info['lastname'];
 
         // info gradebook certificate
-        $info_grade_certificate = UserManager::get_info_gradebook_certificate($courseCode, $user_id);
-
+        $info_grade_certificate = UserManager::get_info_gradebook_certificate($courseCode, $sessionId, $user_id);
         $date_long_certificate = '';
         $date_certificate = '';
         $url = '';
@@ -2011,8 +2047,6 @@ class DocumentManager
         if (is_file($externalStyleFile)) {
             $externalStyle = file_get_contents($externalStyleFile);
         }
-
-        $sessionId = api_get_session_id();
         $timeInCourse = Tracking::get_time_spent_on_the_course($user_id, $course_info['real_id'], $sessionId);
         $timeInCourse = api_time_to_hms($timeInCourse, ':', false, true);
 
@@ -2794,7 +2828,7 @@ class DocumentManager
                     if ($type_url == 'abs' || $type_url == 'rel') {
                         $document_file = strstr($real_orig_path, 'document');
 
-                        if (strpos($real_orig_path, $document_file) !== false) {
+                        if ($document_file && strpos($real_orig_path, $document_file) !== false) {
                             $origin_filepath = $orig_course_path.$document_file;
                             $destination_filepath = $dest_course_path.$document_file;
 
@@ -5639,6 +5673,38 @@ class DocumentManager
                 api_get_self()."?$courseParams&action=export_to_pdf&id=$id&curdirpath=$curdirpath"
             );
         }
+        if ($type == 'file') {
+            $randomUploadName = md5(uniqid(mt_rand(), true));
+            $modify_icons[] = Display::url(
+                Display::return_icon('upload_file.png', get_lang('ReplaceFile')),
+                "#!",
+                [
+                    'data-id' => $randomUploadName,
+                    'class' => 'removeHiddenFile',
+                ]
+            );
+            $form = new FormValidator(
+                'upload',
+                'POST',
+                api_get_self().'?'.api_get_cidreq(),
+                '',
+                ['enctype' => 'multipart/form-data']
+            );
+            $form->addElement('html', "<div class='replaceIndividualFile upload_element_".$randomUploadName." hidden'>");
+            $form->addElement('hidden', 'id_'.$randomUploadName, $randomUploadName);
+            $form->addElement('hidden', 'currentFile', $randomUploadName);
+            $form->addElement('hidden', 'currentUrl', api_get_self().'?'.api_get_cidreq().'&id='.$document_id);
+            $form->addElement('hidden', 'id_'.$randomUploadName, $document_id);
+            $label = '';
+            $form->addElement('file', 'file_'.$randomUploadName, [get_lang('File'), $label], 'style="width: 250px" id="user_upload"');
+            $form->addButtonSend(get_lang('SendDocument'), 'submitDocument');
+            $form->addProgress('DocumentUpload', 'file');
+            $form->addElement('html', '</div>');
+
+            $html = $form->returnForm();
+
+            $modify_icons[] = $html;
+        }
 
         return implode(PHP_EOL, $modify_icons);
     }
@@ -6612,6 +6678,187 @@ class DocumentManager
         }
 
         return $list;
+    }
+
+    /**
+     * Writes the content of a sent file to an existing one in the system, backing up the previous one.
+     *
+     * @param array  $_course
+     * @param string $path          Path stored in the database
+     * @param string $base_work_dir Path to the documents folder (if not defined, $documentId must be used)
+     * @param int    $sessionId     The ID of the session, if any
+     * @param int    $documentId    The document id, if available
+     * @param int    $groupId       iid
+     * @param file   $file          $_FILES content
+     *
+     * @return bool true/false
+     */
+    public static function writeContentIntoDocument(
+        $_course,
+        $path = null,
+        $base_work_dir = null,
+        $sessionId = null,
+        $documentId = null,
+        $groupId = 0,
+        $file
+    ) {
+        $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
+
+        $documentId = (int) $documentId;
+        $groupId = (int) $groupId;
+        if (empty($groupId)) {
+            $groupId = api_get_group_id();
+        }
+
+        $sessionId = (int) $sessionId;
+        if (empty($sessionId)) {
+            $sessionId = api_get_session_id();
+        }
+
+        $course_id = $_course['real_id'];
+
+        if (empty($course_id)) {
+            Display::addFlash(Display::return_message(get_lang('NoCourse'), 'error'));
+
+            return false;
+        }
+
+        if (empty($base_work_dir)) {
+            Display::addFlash(get_lang('Path'));
+
+            return false;
+        }
+
+        if (isset($file) && $file['error'] == 4) {
+            //no file
+            Display::addFlash(Display::return_message(get_lang('NoArchive'), 'error'));
+
+            return false;
+        }
+
+        if (empty($documentId)) {
+            $documentId = self::get_document_id($_course, $path, $sessionId);
+            $docInfo = self::get_document_data_by_id(
+                $documentId,
+                $_course['code'],
+                false,
+                $sessionId
+            );
+            $path = $docInfo['path'];
+        } else {
+            $docInfo = self::get_document_data_by_id(
+                $documentId,
+                $_course['code'],
+                false,
+                $sessionId
+            );
+            if (empty($docInfo)) {
+                Display::addFlash(Display::return_message(get_lang('ArchiveName'), 'error'));
+
+                return false;
+            }
+            $path = $docInfo['path'];
+        }
+
+        if (empty($path) || empty($docInfo) || empty($documentId)) {
+            $str = '';
+            $str .= "<br>".get_lang('Path');
+            $str .= "<br>".get_lang('ArchiveName');
+            $str .= "<br>".get_lang('NoFileSpecified');
+            Display::addFlash(Display::return_message($str, 'error'));
+
+            return false;
+        }
+
+        $itemInfo = api_get_item_property_info(
+            $_course['real_id'],
+            TOOL_DOCUMENT,
+            $documentId,
+            $sessionId,
+            $groupId
+        );
+
+        if (empty($itemInfo)) {
+            Display::addFlash(Display::return_message(get_lang('NoFileSpecified'), 'error'));
+
+            return false;
+        }
+
+        // Filtering by group.
+        if ($itemInfo['to_group_id'] != $groupId) {
+            Display::addFlash(Display::return_message(get_lang("NoGroupsAvailable"), 'error'));
+
+            return false;
+        }
+        $now = new DateTime();
+        $now = $now->format('Y_m_d__H_i_s_');
+
+        $document_exists_in_disk = file_exists($base_work_dir.$path);
+        $new_path = $path.'_REPLACED_DATE_'.$now.'_ID_'.$documentId;
+
+        $fileMoved = false;
+        $file_renamed_from_disk = false;
+
+        $originalMime = self::file_get_mime_type($base_work_dir.$path);
+        $newMime = finfo_file(finfo_open(FILEINFO_MIME_TYPE), $file['tmp_name']);
+        if ($originalMime != $newMime) {
+            Display::addFlash(Display::return_message(get_lang('FileError'), 'error'));
+
+            return false;
+        }
+
+        if ($document_exists_in_disk) {
+            // Move old file to xxx_REPLACED_DATE_#date_ID_#id (soft delete)
+            if (is_file($base_work_dir.$path) || is_dir($base_work_dir.$path)) {
+                if (rename($base_work_dir.$path, $base_work_dir.$new_path)) {
+                    $file_renamed_from_disk = true;
+                } else {
+                    // Couldn't rename - file permissions problem?
+                    Display::addFlash(Display::return_message(get_lang('ErrorImportingFile'), 'error'));
+                    error_log(
+                        __FILE__.' '.__LINE__.': Error renaming '.$base_work_dir.$path.' to '
+                        .$base_work_dir.$new_path.'. This is probably due to file permissions',
+                        0
+                    );
+                }
+            }
+
+            if (move_uploaded_file($file['tmp_name'], $base_work_dir.$path)) {
+                //update file size into db
+                $size = filesize($base_work_dir.$path);
+                $sql = "UPDATE $TABLE_DOCUMENT
+                                SET size = '".$size."'
+                                WHERE
+                                    c_id = $course_id AND
+                                    session_id = $sessionId AND
+                                    id = ".$documentId;
+                Database::query($sql);
+                $fileMoved = true;
+            }
+        }
+        // Checking inconsistency
+        if ($fileMoved &&
+            $file_renamed_from_disk
+        ) {
+            return true;
+        } else {
+            Display::addFlash(Display::return_message(get_lang('ErrorImportingFile'), 'warning'));
+            //Something went wrong
+            //The file or directory isn't there anymore (on the filesystem)
+            // This means it has been removed externally. To prevent a
+            // blocking error from happening, we drop the related items from the
+            // item_property and the document table.
+            error_log(
+                __FILE__.' '.__LINE__.': System inconsistency detected. '.
+                'The file or directory '.$base_work_dir.$path.
+                ' seems to have been removed from the filesystem independently from '.
+                'the web platform. To restore consistency, the elements using the same '.
+                'path will be removed from the database',
+                0
+            );
+
+            return false;
+        }
     }
 
     /**

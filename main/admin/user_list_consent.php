@@ -60,7 +60,7 @@ function prepare_user_sql_query($getCount)
     // adding the filter to see the user's only of the current access_url
     if ((api_is_platform_admin() || api_is_session_admin()) && api_get_multiple_access_url()) {
         $access_url_rel_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-        $sql .= " INNER JOIN $access_url_rel_user_table url_rel_user 
+        $sql .= " INNER JOIN $access_url_rel_user_table url_rel_user
                   ON (u.id=url_rel_user.user_id)";
     }
 
@@ -71,7 +71,7 @@ function prepare_user_sql_query($getCount)
     $extraFieldValue = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
     $sql .= " INNER JOIN $extraFieldValue v
               ON (
-                    u.id = v.item_id AND 
+                    u.id = v.item_id AND
                     (field_id = $extraFieldId OR field_id = $extraFieldIdDeleteAccount) AND
                     v.value = 1
               ) ";
@@ -218,9 +218,9 @@ function get_user_data($from, $number_of_items, $column, $direction)
             $user[0],
             USER_IMAGE_SIZE_SMALL
         );
-        $photo = '<img 
-            src="'.$userPicture.'" width="22" height="22" 
-            alt="'.api_get_person_name($user[2], $user[3]).'" 
+        $photo = '<img
+            src="'.$userPicture.'" width="22" height="22"
+            alt="'.api_get_person_name($user[2], $user[3]).'"
             title="'.api_get_person_name($user[2], $user[3]).'" />';
 
         if (1 == $user[7] && !empty($user[10])) {
@@ -268,7 +268,7 @@ function email_filter($email)
 /**
  * Returns a mailto-link.
  *
- * @param string $email  An email-address
+ * @param string $name   An email-address
  * @param array  $params Deprecated
  * @param array  $row
  *
@@ -610,11 +610,11 @@ if (api_is_western_name_order()) {
 $table->set_header(5, get_lang('LoginName'));
 $table->set_header(6, get_lang('Email'));
 $table->set_header(7, get_lang('Profile'));
-$table->set_header(8, get_lang('Active'), true, 'width="15px"');
-$table->set_header(9, get_lang('RegistrationDate'), true, 'width="90px"');
-$table->set_header(10, get_lang('RequestType'), true, 'width="15px"');
-$table->set_header(11, get_lang('RequestDate'), true, 'width="15px"');
-$table->set_header(12, get_lang('Action'), false, 'width="220px"');
+$table->set_header(8, get_lang('Active'));
+$table->set_header(9, get_lang('RegistrationDate'));
+$table->set_header(10, get_lang('RequestType'));
+$table->set_header(11, get_lang('RequestDate'));
+$table->set_header(12, get_lang('Action'), false);
 
 $table->set_column_filter(3, 'user_filter');
 $table->set_column_filter(4, 'user_filter');

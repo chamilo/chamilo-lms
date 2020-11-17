@@ -411,7 +411,7 @@ class AnnouncementManager
     /**
      * Displays one specific announcement.
      *
-     * @param int $id, the id of the announcement you want to display
+     * @param int $id the id of the announcement you want to display
      *
      * @return string
      */
@@ -449,7 +449,7 @@ class AnnouncementManager
         $title = $announcement->getTitle();
         $content = $announcement->getContent();
 
-        $html .= "<table height=\"100\" width=\"100%\" cellpadding=\"5\" cellspacing=\"0\" class=\"data_table\">";
+        $html .= "<table height=\"100\" width=\"100%\" cellpadding=\"5\" cellspacing=\"0\" class=\"table table-hover table-striped data_table\">";
         $html .= "<tr><td><h2>".$title."</h2></td></tr>";
 
         if (api_is_allowed_to_edit(false, true) ||

@@ -136,7 +136,7 @@ if (isset($zoomOptions['options']) && !in_array($origin, ['embeddable', 'noheade
     $options = $zoomOptions['options'];
     $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'jquery.elevatezoom.js"></script>';
     $htmlHeadXtra[] = '<script>
-        $(document).ready(function() {
+        $(function() {
             $("img").each(function() {
                 var attr = $(this).attr("data-zoom-image");
                 // For some browsers, `attr` is undefined; for others,
@@ -449,9 +449,13 @@ switch ($returnLink) {
         $buttonHomeUrl .= '&redirectTo=lp_list';
         $buttonHomeText = get_lang('LearningPathList');
         break;
-    case 2: // user portal
+    case 2: // Course home
         $buttonHomeUrl .= '&redirectTo=my_courses';
         $buttonHomeText = get_lang('MyCourses');
+        break;
+    case 3: // Portal home
+        $buttonHomeUrl .= '&redirectTo=portal_home';
+        $buttonHomeText = get_lang('Home');
         break;
 }
 

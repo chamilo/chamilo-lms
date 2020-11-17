@@ -102,7 +102,7 @@ class BlockTeacher extends Block
 
         $teachers_table = null;
         if (count($teachers) > 0) {
-            $teachers_table .= '<table class="data_table" width:"95%">';
+            $teachers_table .= '<table class="table table-hover table-striped data_table" width:"95%">';
             $teachers_table .= '
                                 <tr>
                                     <th>'.get_lang('User').'</th>
@@ -158,7 +158,7 @@ class BlockTeacher extends Block
             $a_last_week = get_last_week();
             $last_week = date('Y-m-d', $a_last_week[0]).' '.get_lang('To').' '.date('Y-m-d', $a_last_week[6]);
 
-            $teachers_table .= '<table class="data_table" width:"95%">';
+            $teachers_table .= '<table class="table table-hover table-striped data_table" width:"95%">';
             $teachers_table .= '
                                 <tr>
                                     <th>'.get_lang('User').'</th>

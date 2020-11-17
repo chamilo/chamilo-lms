@@ -163,8 +163,9 @@ class EvalForm extends FormValidator
         $renderer = &$this->defaultRenderer();
         // set new form template
         $form_template = '<form{attributes}>
-                    <table class="data_table" border="0" cellpadding="5" cellspacing="5">{content}
-                    </table>
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped data_table" border="0" cellpadding="5" cellspacing="5">{content}</table>
+                </div>
                 </form>';
         $renderer->setFormTemplate($form_template);
 
@@ -224,7 +225,7 @@ class EvalForm extends FormValidator
 		      <td align="left" >'.$user['official_code'].'</td>
 		      <td align="left" >'.$user['username'].'</td>
 		      '.$user_info.'
-		       <td align="left">{element} / '.$this->evaluation_object->get_max().'
+		      <td align="left">{element} / '.$this->evaluation_object->get_max().'
 		         <!-- BEGIN error --><br /><span style="color: #ff0000;font-size:10px">{error}</span><!-- END error -->
 		      </td>
 		   </tr>';
@@ -309,10 +310,12 @@ class EvalForm extends FormValidator
         $renderer = &$this->defaultRenderer();
         $renderer->setFormTemplate(
             '<form{attributes}>
-		      <table class="data_table">
-              {content}
-		      </table>
-		   </form>'
+            <div class="table-responsive">
+                <table class="table table-hover table-striped data_table">
+                {content}
+                </table>
+            </div>
+		    </form>'
         );
 
         $users = GradebookUtils::get_users_in_course($this->evaluation_object->get_course_code());
@@ -330,7 +333,7 @@ class EvalForm extends FormValidator
                   <th>'.get_lang('FirstName').'</th>
                   <th>'.get_lang('LastName').'</th>
                   <th>'.get_lang('Qualify').'</th>
-               </tr>'
+                </tr>'
             );
         } else {
             $renderer->setHeaderTemplate(
@@ -340,7 +343,7 @@ class EvalForm extends FormValidator
                   <th>'.get_lang('LastName').'</th>
                   <th>'.get_lang('FirstName').'</th>
                   <th>'.get_lang('Qualify').'</th>
-               </tr>'
+                </tr>'
             );
         }
 

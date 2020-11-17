@@ -156,6 +156,9 @@ class ExtraField extends Model
             case 'forum_post':
                 $this->extraFieldType = EntityExtraField::FORUM_POST_TYPE;
                 break;
+            case 'track_exercise':
+                $this->extraFieldType = EntityExtraField::TRACK_EXERCISE_FIELD_TYPE;
+                break;
         }
 
         $this->pageUrl = 'extra_fields.php?type='.$this->type;
@@ -185,6 +188,7 @@ class ExtraField extends Model
             'forum_category',
             'forum_post',
             'exercise',
+            'track_exercise',
         ];
 
         if (api_get_configuration_value('allow_scheduled_announcements')) {
@@ -1174,8 +1178,22 @@ class ExtraField extends Model
                         if (empty($defaultValueId)) {
                             $options[''] = get_lang('SelectAnOption');
                         }
-                        foreach ($field_details['options'] as $optionDetails) {
-                            $options[$optionDetails['option_value']] = $optionDetails['display_text'];
+                        // When a variable is 'authors', this will be a
+                        // select element of teachers (see BT#17648)
+                        $variable = $field_details['variable'];
+                        if ($variable != 'authors') {
+                            foreach ($field_details['options'] as $optionDetails) {
+                                $options[$optionDetails['option_value']] = $optionDetails['display_text'];
+                            }
+                        } else {
+                            $conditions = [
+                                'enabled' => 1,
+                                'status' => COURSEMANAGER,
+                            ];
+                            $teachers = UserManager::get_user_list($conditions);
+                            foreach ($teachers as $teacher) {
+                                $options[$teacher['id']] = $teacher['complete_name'];
+                            }
                         }
                         $form->addElement(
                             'select',
@@ -3111,6 +3129,30 @@ JAVASCRIPT;
     }
 
     /**
+     *  Gets the display name of an extra field.
+     *
+     * @param string $variableName
+     */
+    public static function getDisplayNameByVariable($variableName = null)
+    {
+        if ($variableName == null) {
+            return null;
+        }
+        $variableName = Database::escape_string($variableName);
+        $tblExtraField = Database::get_main_table(TABLE_EXTRA_FIELD);
+        $query = "SELECT display_text
+            FROM $tblExtraField
+            WHERE variable = '$variableName'";
+        $companyField = Database::fetch_assoc(Database::query($query));
+
+        if ($companyField == false or !isset($companyField['display_text'])) {
+            return null;
+        }
+
+        return $companyField['display_text'];
+    }
+
+    /**
      * @param \FormValidator $form
      * @param int            $defaultValueId
      * @param bool           $freezeElement
@@ -3334,7 +3376,7 @@ JAVASCRIPT;
         if (!empty($options)) {
             foreach ($options as $option) {
                 foreach ($option as $sub_option) {
-                    if ('0' != $sub_option['option_value']) {
+                    if ('0' == $sub_option['option_value']) {
                         continue;
                     }
 

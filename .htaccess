@@ -47,13 +47,13 @@ RewriteRule ^courses/([^/]+)/course-pic.png$ main/inc/ajax/course.ajax.php?a=get
 RewriteRule ^courses/([^/]+)/(.*)$ app/courses/$1/$2 [QSA,L]
 
 # About session
-RewriteRule ^session/(\d{1,})/about/?$ main/session/about.php?session_id=$1 [L]
+RewriteRule ^session/(\d{1,})/about/?$ main/session/about.php?session_id=$1 [QSA,L]
 
 # About course
-RewriteRule ^course/(\d{1,})/about/?$ main/course_info/about.php?course_id=$1 [L]
+RewriteRule ^course/(\d{1,})/about/?$ main/course_info/about.php?course_id=$1 [QSA,L]
 
 # Issued individual badge friendly URL
-RewriteRule ^badge/(\d{1,})/?$ main/badge/issued.php?issue=$1 [L]
+RewriteRule ^badge/(\d{1,})/?$ main/badge/issued.php?issue=$1 [QSA,L]
 
 # Issued badges friendly URL
 RewriteRule ^skill/(\d{1,})/user/(\d{1,})/?$ main/badge/issued_all.php?skill=$1&user=$2 [L]
@@ -88,3 +88,4 @@ AddType application/font-woff .woff .woff2
   ExpiresActive On
   ExpiresByType application/font-woff "access plus 1 month"
 </IfModule>
+

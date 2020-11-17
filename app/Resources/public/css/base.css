@@ -517,6 +517,14 @@ input[type=checkbox], input[type=radio] {
     margin: 3px 0 0;
 }
 
+thead input[type=checkbox], thead input[type=radio] {
+    margin: 0px 0 0;
+}
+
+.ui-jqgrid-btable input[type=checkbox] {
+    margin-top: 4px;
+}
+
 .prerequisites input[type=radio] {
     height: 12px;
 }
@@ -598,7 +606,7 @@ input[type=checkbox], input[type=radio] {
 .impress-content {
     position: relative;
     width: 100%;
-    height: 600px;
+    height: 618px;
 }
 
 .impress-title {
@@ -607,6 +615,11 @@ input[type=checkbox], input[type=radio] {
     left: 0;
     text-align: center;
     width: 100%;
+}
+
+.impress-content iframe {
+    width: 100%;
+    height: 582px;
 }
 
 .impress-title h1 {
@@ -1333,15 +1346,6 @@ a.personal_agenda:hover, a.personal_agenda:hover {
 #sn-extra-information .list-group-item {
     padding: 5px 10px;
     border: none;
-}
-
-/** BUTTONS **/
-.left {
-    float: left !important;
-}
-
-.right {
-    text-align: right;
 }
 
 /* Breadcrumb */
@@ -2423,7 +2427,8 @@ div.admin_section h4 {
 }
 
 .ui-search-table .ui-search-input input {
-    height: 25px;
+    border: 1px solid #CCC;
+    margin: 2px auto;
 }
 
 .exercise_overview_options {
@@ -2653,12 +2658,12 @@ div.admin_section h4 {
 
 .ribbon .rib-gray {
     background: #cccccc;
-    background-image: -ms-linear-gradient(top, #bbbbbb, #cccccc);
+    background-image: -ms-linear-gradient(to top, #bbbbbb, #cccccc);
     background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#bbbbbb), to(#cccccc));
-    background-image: -webkit-linear-gradient(top, #bbbbbb, #cccccc);
-    background-image: -o-linear-gradient(top, #bbbbbb, #cccccc);
-    background-image: -moz-linear-gradient(top, #bbbbbb, #cccccc);
-    background-image: linear-gradient(top, #bbbbbb, #cccccc);
+    background-image: -webkit-linear-gradient(to top, #bbbbbb, #cccccc);
+    background-image: -o-linear-gradient(to top, #bbbbbb, #cccccc);
+    background-image: -moz-linear-gradient(to top, #bbbbbb, #cccccc);
+    background-image: linear-gradient(to top, #bbbbbb, #cccccc);
     border-top: 1px solid #bbbbbb;
     border-bottom: 1px solid #bbbbbb;
     float: left;
@@ -3698,11 +3703,11 @@ input.liteoption {
     border-color: #478ced #1f6fe2 #1f6fe2;
     background-color: #FFFFCC;
     background-image: -webkit-gradient(linear, left top, left bottom, from(#FFFFCC), to(#FFFFCC));
-    background-image: -webkit-linear-gradient(top, #FFFFCC, #FFFFCC);
-    background-image: -moz-linear-gradient(top, #FFFFCC, #FFFFCC);
-    background-image: -ms-linear-gradient(top, #FFFFCC, #FFFFCC);
-    background-image: -o-linear-gradient(top, #FFFFCC, #FFFFCC);
-    background-image: linear-gradient(top, #FFFFCC, #FFFFCC);
+    background-image: -webkit-linear-gradient(to top, #FFFFCC, #FFFFCC);
+    background-image: -moz-linear-gradient(to top, #FFFFCC, #FFFFCC);
+    background-image: -ms-linear-gradient(to top, #FFFFCC, #FFFFCC);
+    background-image: -o-linear-gradient(to top, #FFFFCC, #FFFFCC);
+    background-image: linear-gradient(to top, #FFFFCC, #FFFFCC);
     box-shadow: 0 1px 0 transparent;
 }
 
@@ -6663,6 +6668,10 @@ div#chat-remote-video video {
     text-overflow: ellipsis;
 }
 
+.grid-courses .items .category a {
+    color: #fff;
+}
+
 .grid-courses .items .cribbon {
     width: 0;
     height: 0;
@@ -6675,7 +6684,6 @@ div#chat-remote-video video {
 
 .grid-courses .items .description {
     padding: 5px 10px 5px;
-    min-height: 125px;
 }
 
 .grid-courses .items .description .text {
@@ -9533,7 +9541,7 @@ ul.dropdown-menu.inner > li > a {
 }
 
 /* Landscape phones and down */
-@media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
+@media only screen and (min-width: 320px) and (max-width: 480px) {
     #notification-menu{
         width: 250px !important;
         min-width : 250px !important;
@@ -10469,4 +10477,16 @@ ul.dropdown-menu.inner > li > a {
     .clear-rows-6-4-3 .col-sm-6:nth-child(4n+1) {
         clear: left;
     }
+}
+
+/* Only adjust class radio to student or profesor into /main/auth/inscription.php*/
+#registration > fieldset > #status-group .radio {
+    min-height: 145px;
+    min-width: 145px;
+}
+#registration input.register-profile[value='5']:after,
+#registration input.register-profile[value='1']:after
+{
+    top:-5px;
+    left: -2px;
 }

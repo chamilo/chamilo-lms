@@ -670,6 +670,11 @@ switch ($action) {
         }
 
         $startDate = Database::escape_string($_REQUEST['start_date']);
+
+        if (!empty($whereCondition)) {
+            $whereCondition = " AND $whereCondition";
+        }
+
         $whereCondition .= " AND exe_date > '$startDate' AND te.status = '' ";
         $count = ExerciseLib::get_count_exam_results(
             $exerciseId,
@@ -863,7 +868,7 @@ switch ($action) {
     case 'get_usergroups':
         $obj = new UserGroup();
         $obj->protectScript();
-        $count = $obj->get_count();
+        $count = $obj->get_count($whereCondition);
         break;
     case 'get_usergroups_teacher':
         $obj = new UserGroup();
@@ -1707,6 +1712,19 @@ switch ($action) {
 
                 $detailButtons = [];
                 $detailButtons[] = Display::url(
+                    Display::return_icon('pdf.png', get_lang('CertificateOfAchievement'), [], ICON_SIZE_SMALL),
+                    api_get_path(WEB_CODE_PATH).'mySpace/session.php?'
+                    .http_build_query(
+                        [
+                            'action' => 'export_to_pdf',
+                            'type' => 'achievement',
+                            'session_to_export' => $session['id'],
+                            'all_students' => 1,
+                        ]
+                    ),
+                    ['target' => '_blank']
+                );
+                $detailButtons[] = Display::url(
                     Display::return_icon('works.png', get_lang('WorksReport')),
                     api_get_path(WEB_CODE_PATH).'mySpace/works_in_session_report.php?session='.$session['id']
                 );
@@ -2177,7 +2195,7 @@ switch ($action) {
     case 'get_usergroups':
         $obj->protectScript();
         $columns = ['name', 'users', 'courses', 'sessions', 'group_type', 'actions'];
-        $result = $obj->getUsergroupsPagination($sidx, $sord, $start, $limit);
+        $result = $obj->getUsergroupsPagination($sidx, $sord, $start, $limit, $whereCondition);
         break;
     case 'get_extra_fields':
         $obj = new ExtraField($type);

@@ -109,6 +109,9 @@ if ($is_allowedToEdit) {
         if ($objQuestionTmp) {
             // deletes the question from all exercises
             $objQuestionTmp->delete();
+
+            // solving the error that when deleting a question from the question pool it is not displaying all questions
+            $exerciseId = null;
         }
         // destruction of the Question object
         unset($objQuestionTmp);
@@ -1051,7 +1054,7 @@ echo '<input type="hidden" name="selected_course" value="'.$selected_course.'">'
 echo '<input type="hidden" name="course_id" value="'.$selected_course.'">';
 echo '<input type="hidden" name="action">';
 
-$table = new HTML_Table(['class' => 'table table-bordered data_table'], false);
+$table = new HTML_Table(['class' => 'table table-hover table-striped table-bordered data_table'], false);
 $row = 0;
 $column = 0;
 foreach ($headers as $header) {

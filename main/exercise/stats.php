@@ -68,7 +68,8 @@ if (!empty($question_list)) {
             $question_id,
             $exerciseId,
             $courseCode,
-            $sessionId
+            $sessionId,
+            true
         );
 
         $count_users = ExerciseLib::get_number_students_question_with_answer_count(
@@ -99,7 +100,7 @@ if (!empty($question_list)) {
 }
 
 // Format A table
-$table = new HTML_Table(['class' => 'data_table']);
+$table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
 $row = 0;
 $column = 0;
 foreach ($headers as $header) {
@@ -137,7 +138,8 @@ if (!empty($question_list)) {
             $question_id,
             $exerciseId,
             $courseCode,
-            $sessionId
+            $sessionId,
+            true
         );
 
         $answer = new Answer($question_id);
@@ -283,7 +285,7 @@ if (!empty($question_list)) {
 }
 
 // Format A table
-$table = new HTML_Table(['class' => 'data_table']);
+$table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
 $row = 0;
 $column = 0;
 foreach ($headers as $header) {

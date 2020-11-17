@@ -676,6 +676,13 @@ if ($allowLPReturnLink === 'true') {
             get_lang('MyCourses'),
             2
         ),
+        $form->createElement(
+            'radio',
+            'lp_return_link',
+            null,
+            get_lang('RedirectToPortalHome'),
+            3
+        ),
     ];
     $form->addGroup($group, '', [get_lang('LpReturnLink')]);
 }
@@ -1052,7 +1059,7 @@ if ($form->validate() && is_settings_editable()) {
 
     // update the extra fields
     $courseFieldValue = new ExtraFieldValue('course');
-    $courseFieldValue->saveFieldValues($updateValues);
+    $courseFieldValue->saveFieldValues($updateValues, true);
 
     $appPlugin->saveCourseSettingsHook($updateValues);
     $courseParams = api_get_cidreq();

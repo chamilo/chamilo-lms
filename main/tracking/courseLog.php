@@ -356,7 +356,6 @@ if ($nbStudents > 0) {
     $groupIdList = [];
     foreach ($groupList as $group) {
         $groupIdList[] = ['text' => $group['name'], 'value' => 'group_'.$group['id']];
-        //$groupIdList['group_'.$group['id']] = $group['name'];
     }
     $select->addOptGroup($groupIdList, get_lang('Group'));
     $formClass->addButtonSearch(get_lang('Search'));
@@ -751,7 +750,7 @@ if ($nbStudents > 0) {
 $groupContent = '';
 echo Display::panel($html, $titleSession);
 
-$groupTable = new HTML_Table(['class' => 'table table-bordered data_table']);
+$groupTable = new HTML_Table(['class' => 'table table-hover table-striped table-bordered data_table']);
 $column = 0;
 $groupTable->setHeaderContents(0, $column++, get_lang('Name'));
 $groupTable->setHeaderContents(0, $column++, get_lang('TrainingTime'));
@@ -908,7 +907,11 @@ if (!empty($groupList)) {
         $totalLpProgress += $lpProgress;
     }
 
-    $lpProgress = round($totalLpProgress / $nbStudents, 2).' %';
+    if (empty($nbStudents)) {
+        $lpProgress = '0 %';
+    } else {
+        $lpProgress = round($totalLpProgress / $nbStudents, 2).' %';
+    }
     $totalBestScoreAverageNotInLP = 0;
     $bestScoreAverageNotInLP = 0;
     if (!empty($exerciseList)) {

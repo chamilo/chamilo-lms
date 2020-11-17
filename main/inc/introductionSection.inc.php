@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CToolIntro;
@@ -26,8 +27,6 @@ use Chamilo\CourseBundle\Entity\CToolIntro;
  *
  * This script is also used since Chamilo 1.9 to show course progress (from the
  * course_progress module)
- *
- * @package chamilo.include
  */
 $em = Database::getManager();
 $intro_editAllowed = $is_allowed_to_edit = api_is_allowed_to_edit();
@@ -76,7 +75,6 @@ if ($intro_editAllowed) {
         if ($form->validate()) {
             $form_values = $form->exportValues();
             $intro_content = $form_values['intro_content'];
-
             if (!empty($intro_content)) {
                 if (!$toolIntro) {
                     $toolIntro = new CToolIntro();
@@ -219,11 +217,12 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
         $thematic_info = $thematic->get_thematic_list($thematic_advance_info['thematic_id']);
         $thematic_info['title'] = isset($thematic_info['title']) ? $thematic_info['title'] : '';
 
-        /*
-        $thematic_advance_info['start_date'] = api_get_local_time(
-            $thematic_advance_info['start_date']
-        );
-        */
+        if (!empty($thematic_advance_info['start_date'])) {
+            $thematic_advance_info['start_date'] = api_get_local_time(
+                $thematic_advance_info['start_date']
+            );
+        }
+
         $thematic_advance_info['start_date'] = api_format_date(
             $thematic_advance_info['start_date'],
             DATE_TIME_FORMAT_LONG
@@ -356,8 +355,12 @@ if ($intro_dispCommand) {
 }
 
 $nameSection = get_lang('AddCustomCourseIntro');
-if ($moduleId != 'course_homepage') {
+if ($moduleId !== 'course_homepage') {
     $nameSection = get_lang('AddCustomToolsIntro');
+}
+
+if (!api_is_anonymous()) {
+    $intro_content = AnnouncementManager::parseContent(api_get_user_id(), $intro_content, api_get_course_id());
 }
 
 $introduction_section .= '<div class="col-md-12">';

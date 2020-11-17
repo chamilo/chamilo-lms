@@ -310,7 +310,7 @@ if (isset($_REQUEST['comments']) &&
 }
 
 $actions = null;
-if ($is_allowedToEdit && $origin != 'learnpath') {
+if ($is_allowedToEdit && $origin !== 'learnpath') {
     // the form
     if (api_is_platform_admin() || api_is_course_admin() ||
         api_is_course_tutor() || api_is_session_general_coach()
@@ -361,6 +361,9 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
                 ['style' => 'display:none', 'id' => 'datepicker_span']
             );
         }
+
+        $actions .= '<a class="btn btn-default" href="question_stats.php?'.api_get_cidreq().'&id='.$exercise_id.'">'.
+            get_lang('QuestionStats').'</a>';
     }
 } else {
     $actions .= '<a href="exercise.php">'.

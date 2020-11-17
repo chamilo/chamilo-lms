@@ -799,7 +799,7 @@ class Template
         }
 
         foreach ($bowerJsFiles as $file) {
-            $js_file_to_string .= '<script type="text/javascript" src="'.api_get_cdn_path(api_get_path(WEB_PUBLIC_PATH).'assets/'.$file).'"></script>'."\n";
+            $js_file_to_string .= '<script src="'.api_get_cdn_path(api_get_path(WEB_PUBLIC_PATH).'assets/'.$file).'"></script>'."\n";
         }
 
         foreach ($js_files as $file) {
@@ -869,8 +869,8 @@ class Template
             //Do not include the global chat in LP
             if ($this->show_learnpath == false && $this->show_footer == true && $this->hide_global_chat == false) {
                 $js_files[] = 'chat/js/chat.js';
-                $bower .= '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH).'assets/linkifyjs/linkify.js"></script>';
-                $bower .= '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH).'assets/linkifyjs/linkify-jquery.js"></script>';
+                $bower .= '<script src="'.api_get_path(WEB_PUBLIC_PATH).'assets/linkifyjs/linkify.js"></script>';
+                $bower .= '<script src="'.api_get_path(WEB_PUBLIC_PATH).'assets/linkifyjs/linkify-jquery.js"></script>';
             }
         }
         $js_file_to_string = '';
@@ -1333,9 +1333,6 @@ class Template
         $this->responseCode = $code;
     }
 
-    /**
-     * @param string $code
-     */
     public function getResponseCode()
     {
         return $this->responseCode;
@@ -1857,7 +1854,7 @@ class Template
                 $clean_url = str_replace('/', '-', $clean_url);
                 $clean_url .= '/';
                 $homep = api_get_path(WEB_HOME_PATH).$clean_url; //homep for Home Path
-                $icon_real_homep = api_get_path(SYS_APP_PATH).'home/'.$clean_url;
+                $icon_real_homep = api_get_path(SYS_HOME_PATH).$clean_url;
                 //we create the new dir for the new sites
                 if (is_file($icon_real_homep.'favicon.ico')) {
                     $favico = '<link rel="shortcut icon" href="'.$homep.'favicon.ico" type="image/x-icon" />';

@@ -91,7 +91,7 @@ if ((!isset($_GET['course']) || !isset($_GET['invitationcode'])) && !isset($_GET
 $invitationcode = $_GET['invitationcode'];
 
 // Start auto-invitation feature FS#3403 (all-users-can-do-the-survey-URL handling)
-if ('auto' == $invitationcode && isset($_GET['scode'])) {
+if ('auto' === $invitationcode && isset($_GET['scode'])) {
     $userid = api_get_user_id();
     // Survey_code of the survey
     $surveyCode = $_GET['scode'];
@@ -225,7 +225,7 @@ if (empty($survey_data)) {
 SurveyManager::checkTimeAvailability($survey_data);
 $survey_data['survey_id'] = $survey_invitation['survey_id'];
 
-if ($survey_data['survey_type'] == '3') {
+if ($survey_data['survey_type'] === '3') {
     header('Location: '.
         api_get_path(WEB_CODE_PATH).
         'survey/meeting.php?cidReq='.$courseInfo['code'].'&id_session='.$sessionId.'&invitationcode='.Security::remove_XSS($invitationcode)
@@ -316,7 +316,7 @@ if (count($_POST) > 0) {
                     } else {
                         $option_value = 0;
                         if (isset($types[$survey_question_id]) &&
-                            'open' == $types[$survey_question_id]
+                            'open' === $types[$survey_question_id]
                         ) {
                             $option_value = $value;
                         }
@@ -557,14 +557,12 @@ $htmlHeadXtra[] = ch_selectivedisplay::getJs();
 $htmlHeadXtra[] = survey_question::getJs();
 
 Display::display_header(get_lang('ToolSurvey'));
-
-// Displaying the survey title and subtitle (appears on every page)
 echo '<div class="survey-block">';
 echo '<div class="page-header">';
 echo '<h2>';
-echo strip_tags($survey_data['survey_title'], '<span>').'</h2></div>';
+echo Security::remove_XSS($survey_data['survey_title']).'</h2></div>';
 if (!empty($survey_data['survey_subtitle'])) {
-    echo '<div class="survey_subtitle"><p>'.strip_tags($survey_data['survey_subtitle']).'</p></div>';
+    echo '<div class="survey_subtitle"><p>'.Security::remove_XSS($survey_data['survey_subtitle']).'</p></div>';
 }
 
 // Displaying the survey introduction
@@ -576,7 +574,7 @@ if (
     Session::erase('page_questions_sec');
     $paged_questions_sec = [];
     if (!empty($survey_data['survey_introduction'])) {
-        echo '<div class="survey_content">'.$survey_data['survey_introduction'].'</div>';
+        echo '<div class="survey_content">'.Security::remove_XSS($survey_data['survey_introduction']).'</div>';
     }
     $limit = 0;
 }
@@ -643,7 +641,7 @@ if ($survey_data['form_fields'] &&
 // Displaying the survey thanks message
 if (isset($_POST['finish_survey'])) {
     echo Display::return_message(get_lang('SurveyFinished'), 'confirm');
-    echo $survey_data['survey_thanks'];
+    echo Security::remove_XSS($survey_data['survey_thanks']);
 
     SurveyManager::update_survey_answered(
         $survey_data,
@@ -657,6 +655,7 @@ if (isset($_POST['finish_survey'])) {
     );
 
     if ($courseInfo && !api_is_anonymous()) {
+        echo '<br /><br />';
         echo Display::toolbarButton(
             get_lang('ReturnToCourseHomepage'),
             api_get_course_url($courseInfo['code']),
@@ -676,6 +675,7 @@ if (1 == $survey_data['shuffle']) {
     $shuffle = ' BY RAND() ';
 }
 
+$pageBreakText = [];
 if ((isset($_GET['show']) && $_GET['show'] != '') ||
     isset($_POST['personality'])
 ) {
@@ -711,6 +711,7 @@ if ((isset($_GET['show']) && $_GET['show'] != '') ||
                 } else {
                     if ($row['type'] === 'pagebreak') {
                         $counter++;
+                        $pageBreakText[$counter] = $row['survey_question'];
                     } else {
                         $paged_questions[$counter][] = $row['question_id'];
                     }
@@ -1030,6 +1031,7 @@ if ((isset($_GET['show']) && $_GET['show'] != '') ||
                                 $counter++;
                             } elseif ($row['type'] == 'pagebreak') {
                                 $counter++;
+                                $pageBreakText[$counter] = $row['survey_question'];
                             } else {
                                 // ids from question of the current survey
                                 $paged_questions_sec[$counter][] = $row['question_id'];
@@ -1134,6 +1136,7 @@ if ((isset($_GET['show']) && $_GET['show'] != '') ||
                     } else {
                         if ($row['type'] == 'pagebreak') {
                             $counter++;
+                            $pageBreakText[$counter] = $row['survey_question'];
                         } else {
                             // ids from question of the current survey
                             $paged_questions[$counter][] = $row['question_id'];
@@ -1288,6 +1291,18 @@ if (isset($questions) && is_array($questions)) {
 
     $form->addHtml('<div class="start-survey">');
     $js = '';
+
+    if (isset($pageBreakText[$originalShow]) && !empty(strip_tags($pageBreakText[$originalShow]))) {
+        // Only show page-break texts if there is something there, apart from
+        // HTML tags
+        $form->addHtml(
+            '<div>'.
+            Security::remove_XSS($pageBreakText[$originalShow]).
+            '</div>'
+        );
+        $form->addHtml('<br />');
+    }
+
     foreach ($questions as $key => &$question) {
         $ch_type = 'ch_'.$question['type'];
         $questionNumber = $questionCounter;
@@ -1312,7 +1327,7 @@ if (isset($questions) && is_array($questions)) {
         if ($showNumber) {
             $form->addHtml('<div style="float:left; font-weight: bold; margin-right: 5px;"> '.$questionNumber.'. </div>');
         }
-        $form->addHtml('<div>'.Security::remove_XSS($question['survey_question']).'</div> ');
+        $form->addHtml('<div>'.Security::remove_XSS($question['survey_question']).'</div>');
 
         $userAnswerData = SurveyUtil::get_answers_of_question_by_user($question['survey_id'], $question['question_id']);
         $finalAnswer = null;

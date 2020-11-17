@@ -130,15 +130,15 @@ foreach ($userList as $userInfo) {
         $htmlText .= '<div class="caraA" style="page-break-before:always; margin:0px; padding:0px;">';
     } else {
         $urlBackground = $path.$infoCertificate['background'];
-        $htmlText .= ' <div 
+        $htmlText .= ' <div
         class="caraA"
-        style="background-image:url('.$urlBackground.') no-repeat; 
+        style="background-image:url('.$urlBackground.') no-repeat;
         background-image-resize:6; margin:0px; padding:0px;">';
     }
 
     if (!empty($infoCertificate['logo_left'])) {
         $logoLeft = '
-            <img 
+            <img
                 style="max-height: 150px; max-width: '.(2 * $widthCell).'mm;"
                 src="'.$path.$infoCertificate['logo_left'].'" />';
     } else {
@@ -148,7 +148,7 @@ foreach ($userList as $userInfo) {
     $logoCenter = '';
     if (!empty($infoCertificate['logo_center'])) {
         $logoCenter = '
-            <img 
+            <img
                 style="max-height: 150px; max-width: '.intval($workSpace - (2 * $widthCell)).'mm;"
                 src="'.$path.$infoCertificate['logo_center'].'" />';
     }
@@ -161,7 +161,7 @@ foreach ($userList as $userInfo) {
                 src="'.$path.$infoCertificate['logo_right'].'" />';
     }
 
-    $htmlText .= '<table 
+    $htmlText .= '<table
         width="'.$workSpace.'mm"
         style="
             margin-left:'.$infoCertificate['margin_left'].'mm;
@@ -180,6 +180,7 @@ foreach ($userList as $userInfo) {
     $allUserInfo = DocumentManager::get_all_info_to_certificate(
         $studentId,
         $courseCode,
+        $sessionId,
         false
     );
 

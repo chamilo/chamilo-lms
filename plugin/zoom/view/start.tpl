@@ -1,8 +1,12 @@
-{% if createInstantMeetingForm %}
-    {{ createInstantMeetingForm }}
+{% if instant_meeting_form %}
+    {{ instant_meeting_form }}
 {% endif %}
 
-{% if scheduledMeetings.count %}
+{% if group_form %}
+    {{ group_form }}
+{% endif %}
+
+{% if meetings.count %}
     <div class="page-header">
         <h2>{{ 'ScheduledMeetings'|get_lang }}</h2>
     </div>
@@ -14,7 +18,7 @@
             <th>{{ 'Duration'|get_lang }}</th>
             <th>{{ 'Actions'|get_lang }}</th>
         </tr>
-        {% for meeting in scheduledMeetings %}
+        {% for meeting in meetings %}
         <tr>
             <td>
                 {{ meeting.meetingInfoGet.topic }}
@@ -25,28 +29,28 @@
             <td>{{ meeting.formattedStartTime }}</td>
             <td>{{ meeting.formattedDuration }}</td>
             <td>
-                <a class="btn btn-primary" href="{{ meeting.meetingInfoGet.join_url }}">
+                <a class="btn btn-primary" href="join_meeting.php?meetingId={{ meeting.meetingId }}&{{ _p.web_cid_query }}">
                     {{ 'Join'|get_plugin_lang('ZoomPlugin') }}
                 </a>
 
-                <a class="btn btn-default" href="meeting.php?meetingId={{ meeting.meetingId }}">
-                    {{ 'Edit'|get_lang }}
-                </a>
+                {% if is_manager %}
+                    <a class="btn btn-default" href="meeting.php?meetingId={{ meeting.meetingId }}&{{ _p.web_cid_query }}">
+                        {{ 'Details'|get_plugin_lang('ZoomPlugin') }}
+                    </a>
 
-                <a class="btn btn-danger"
-                   href="start.php?action=delete&meetingId={{ meeting.meetingId }}"
-                   onclick="javascript:if(!confirm('{{ 'AreYouSureToDelete' | get_lang }}')) return false;"
-                >
-                    {{ 'Delete'|get_lang }}
-                </a>
+                    <a class="btn btn-danger"
+                       href="start.php?action=delete&meetingId={{ meeting.meetingId }}&{{ _p.web_cid_query }}"
+                       onclick="javascript:if(!confirm('{{ 'AreYouSureToDelete' | get_lang }}')) return false;"
+                    >
+                        {{ 'Delete'|get_lang }}
+                    </a>
+                {% endif %}
             </td>
         </tr>
         {% endfor %}
     </table>
-{% else %}
-<!-- p>No scheduled meeting currently</p -->
 {% endif %}
 
-{% if scheduleMeetingForm %}
-    {{ scheduleMeetingForm }}
+{% if schedule_meeting_form %}
+    {{ schedule_meeting_form }}
 {% endif %}

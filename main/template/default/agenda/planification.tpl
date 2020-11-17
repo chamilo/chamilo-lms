@@ -24,7 +24,7 @@
     </nav>
     {% if sessions|length > 0 %}
         <div class="table-responsive" id="calendar-session-planification">
-            <table class="table table-bordered table-condensed">
+            <table class="table table-hover table-bordered table-striped table-condensed">
                 <thead>
                 <tr>
                     <th class="col-session">{{ 'Session'|get_lang }}</th>

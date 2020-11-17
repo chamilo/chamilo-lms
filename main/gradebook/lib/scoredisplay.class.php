@@ -265,31 +265,66 @@ class ScoreDisplay
      * @param bool   $ignoreDecimals
      * @param string $decimalSeparator
      * @param string $thousandSeparator
+     * @param bool   $removeEmptyDecimals Converts 100.00 to 100, 53.00 to 53
      *
      * @return float the score formatted
      */
-    public function format_score($score, $ignoreDecimals = false, $decimalSeparator = '.', $thousandSeparator = ',')
-    {
+    public function format_score(
+        $score,
+        $ignoreDecimals = false,
+        $decimalSeparator = '.',
+        $thousandSeparator = ',',
+        $removeEmptyDecimals = false
+    ) {
         $decimals = $this->get_number_decimals();
         if ($ignoreDecimals) {
             $decimals = 0;
         }
 
+        if ($removeEmptyDecimals) {
+            if ($score && self::hasEmptyDecimals($score)) {
+                $score = round($score);
+                $decimals = 0;
+            }
+        }
+
         return api_number_format($score, $decimals, $decimalSeparator, $thousandSeparator);
+    }
+
+    public static function hasEmptyDecimals($score)
+    {
+        $hasEmptyDecimals = false;
+        if (is_float($score)) {
+            $check = fmod($score, 1);
+            if (0 === bccomp(0, $check)) {
+                $score = round($score);
+                $hasEmptyDecimals = true;
+            }
+        }
+        if (is_int($score) || is_string($score)) {
+            $score = (float) $score;
+            $check = fmod($score, 1);
+            if (0 === bccomp(0, $check)) {
+                $hasEmptyDecimals = true;
+            }
+        }
+
+        return $hasEmptyDecimals;
     }
 
     /**
      * Display a score according to the current settings.
      *
-     * @param array $score          data structure, as returned by the calc_score functions
-     * @param int   $type           one of the following constants:
-     *                              SCORE_DIV, SCORE_PERCENT, SCORE_DIV_PERCENT, SCORE_AVERAGE
-     *                              (ignored for student's view if custom score display is enabled)
-     * @param int   $what           one of the following constants:
-     *                              SCORE_BOTH, SCORE_ONLY_DEFAULT, SCORE_ONLY_CUSTOM (default: SCORE_BOTH)
-     *                              (only taken into account if custom score display is enabled and for course/platform admin)
+     * @param array $score               data structure, as returned by the calc_score functions
+     * @param int   $type                one of the following constants:
+     *                                   SCORE_DIV, SCORE_PERCENT, SCORE_DIV_PERCENT, SCORE_AVERAGE
+     *                                   (ignored for student's view if custom score display is enabled)
+     * @param int   $what                one of the following constants:
+     *                                   SCORE_BOTH, SCORE_ONLY_DEFAULT, SCORE_ONLY_CUSTOM (default: SCORE_BOTH)
+     *                                   (only taken into account if custom score display is enabled and for course/platform admin)
      * @param bool  $disableColor
      * @param bool  $ignoreDecimals
+     * @param bool  $removeEmptyDecimals Replaces 100.00 to 100
      *
      * @return string
      */
@@ -298,10 +333,10 @@ class ScoreDisplay
         $type = SCORE_DIV_PERCENT,
         $what = SCORE_BOTH,
         $disableColor = false,
-        $ignoreDecimals = false
+        $ignoreDecimals = false,
+        $removeEmptyDecimals = false
     ) {
         $my_score = $score == 0 ? [] : $score;
-
         switch ($type) {
             case SCORE_BAR:
                 $percentage = $my_score[0] / $my_score[1] * 100;
@@ -309,26 +344,29 @@ class ScoreDisplay
                 return Display::bar_progress($percentage);
                 break;
             case SCORE_NUMERIC:
-
                 $percentage = $my_score[0] / $my_score[1] * 100;
 
                 return round($percentage);
                 break;
             case SCORE_SIMPLE:
+                if (!isset($my_score[0])) {
+                    $my_score[0] = 0;
+                }
+
                 return $this->format_score($my_score[0], $ignoreDecimals);
                 break;
         }
 
         if ($this->custom_enabled && isset($this->custom_display_conv)) {
-            $display = $this->display_default($my_score, $type, $ignoreDecimals);
+            $display = $this->displayDefault($my_score, $type, $ignoreDecimals, $removeEmptyDecimals);
         } else {
             // if no custom display set, use default display
-            $display = $this->display_default($my_score, $type, $ignoreDecimals);
+            $display = $this->displayDefault($my_score, $type, $ignoreDecimals, $removeEmptyDecimals);
         }
         if ($this->coloring_enabled && $disableColor == false) {
-            $my_score_denom = isset($score[1]) && !empty($score[1]) && $score[1] > 0 ? $score[1] : 1;
+            $denom = isset($score[1]) && !empty($score[1]) && $score[1] > 0 ? $score[1] : 1;
             $scoreCleaned = isset($score[0]) ? $score[0] : 0;
-            if (($scoreCleaned / $my_score_denom) < ($this->color_split_value / 100)) {
+            if (($scoreCleaned / $denom) < ($this->color_split_value / 100)) {
                 $display = Display::tag(
                     'font',
                     $display,
@@ -338,6 +376,39 @@ class ScoreDisplay
         }
 
         return $display;
+    }
+
+    /**
+     * Depends on the teacher's configuration of thresholds. i.e. [0 50] "Bad", [50:100] "Good".
+     *
+     * @param array $score
+     *
+     * @return string
+     */
+    public function display_custom($score)
+    {
+        if (empty($score)) {
+            return null;
+        }
+
+        $denom = $score[1] == 0 ? 1 : $score[1];
+        $scaledscore = $score[0] / $denom;
+
+        if ($this->upperlimit_included) {
+            foreach ($this->custom_display_conv as $displayitem) {
+                if ($scaledscore <= $displayitem['score']) {
+                    return $displayitem['display'];
+                }
+            }
+        } else {
+            if (!empty($this->custom_display_conv)) {
+                foreach ($this->custom_display_conv as $displayitem) {
+                    if ($scaledscore < $displayitem['score'] || $displayitem['score'] == 1) {
+                        return $displayitem['display'];
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -365,21 +436,24 @@ class ScoreDisplay
     }
 
     /**
-     * @param $score
-     * @param int  $type
-     * @param bool $ignoreDecimals
+     * @param array $score
+     * @param int   $type
+     * @param bool  $ignoreDecimals
+     * @param bool  $removeEmptyDecimals
      *
      * @return string
      */
-    private function display_default($score, $type, $ignoreDecimals = false)
+    private function displayDefault($score, $type, $ignoreDecimals = false, $removeEmptyDecimals = false)
     {
         switch ($type) {
             case SCORE_DIV:                            // X / Y
-                return $this->display_as_div($score, $ignoreDecimals);
+                return $this->display_as_div($score, $ignoreDecimals, $removeEmptyDecimals);
             case SCORE_PERCENT:                        // XX %
                 return $this->display_as_percent($score);
             case SCORE_DIV_PERCENT:                    // X / Y (XX %)
-                return $this->display_as_div($score).' ('.$this->display_as_percent($score).')';
+                //return $this->display_as_div($score).' ('.$this->display_as_percent($score).')';
+                // 2020-10 Changed to XX % (X / Y)
+                return $this->display_as_percent($score).' ('.$this->display_as_div($score).')';
             case SCORE_AVERAGE:                        // XX %
                 return $this->display_as_percent($score);
             case SCORE_DECIMAL:                        // 0.50  (X/Y)
@@ -389,8 +463,13 @@ class ScoreDisplay
                 if (!empty($custom)) {
                     $custom = ' - '.$custom;
                 }
-
-                return $this->display_as_div($score).' ('.$this->display_as_percent($score).')'.$custom;
+                $div = $this->display_as_div($score, false, $removeEmptyDecimals);
+                /*return
+                    $div.
+                    ' ('.$this->display_as_percent($score).')'.$custom;*/
+                return
+                    $this->display_as_percent($score).
+                    ' ('.$div.')'.$custom;
             case SCORE_DIV_SIMPLE_WITH_CUSTOM:         // X - Good!
                 $custom = $this->display_custom($score);
 
@@ -438,7 +517,7 @@ class ScoreDisplay
     }
 
     /**
-     * Returns "1" for array("100", "100");.
+     * Returns "1" for array("100", "100").
      *
      * @param array $score
      *
@@ -446,33 +525,34 @@ class ScoreDisplay
      */
     private function display_as_decimal($score)
     {
-        $score_denom = ($score[1] == 0) ? 1 : $score[1];
+        $score_denom = $score[1] == 0 ? 1 : $score[1];
 
         return $this->format_score($score[0] / $score_denom);
     }
 
     /**
-     * Returns "100 %" for array("100", "100");.
+     * Returns "100 %" for array("100", "100").
      */
     private function display_as_percent($score)
     {
         if (empty($score)) {
             return null;
         }
-        $score_denom = ($score[1] == 0) ? 1 : $score[1];
+        $scoreDenom = $score[1] == 0 ? 1 : $score[1];
 
-        return $this->format_score($score[0] / $score_denom * 100).' %';
+        return $this->format_score($score[0] / $scoreDenom * 100).' %';
     }
 
     /**
-     * Returns 10.00 / 10.00 for array("100", "100");.
+     * Returns 10.00 / 10.00 for array("100", "100").
      *
      * @param array $score
      * @param bool  $ignoreDecimals
+     * @param bool  $removeEmptyDecimals
      *
      * @return string
      */
-    private function display_as_div($score, $ignoreDecimals = false)
+    private function display_as_div($score, $ignoreDecimals = false, $removeEmptyDecimals = false)
     {
         if ($score == 1) {
             return '0 / 0';
@@ -483,42 +563,15 @@ class ScoreDisplay
         }
 
         $score[0] = isset($score[0]) ? $this->format_score($score[0], $ignoreDecimals) : 0;
-        $score[1] = isset($score[1]) ? $this->format_score($score[1], $ignoreDecimals) : 0;
+        $score[1] = isset($score[1]) ? $this->format_score(
+            $score[1],
+            $ignoreDecimals,
+            '.',
+            ',',
+            $removeEmptyDecimals
+        ) : 0;
 
         return $score[0].' / '.$score[1];
-    }
-
-    /**
-     * Depends on the teacher's configuration of thresholds. i.e. [0 50] "Bad", [50:100] "Good".
-     *
-     * @param array $score
-     *
-     * @return string
-     */
-    private function display_custom($score)
-    {
-        if (empty($score)) {
-            return null;
-        }
-
-        $my_score_denom = $score[1] == 0 ? 1 : $score[1];
-        $scaledscore = $score[0] / $my_score_denom;
-
-        if ($this->upperlimit_included) {
-            foreach ($this->custom_display_conv as $displayitem) {
-                if ($scaledscore <= $displayitem['score']) {
-                    return $displayitem['display'];
-                }
-            }
-        } else {
-            if (!empty($this->custom_display_conv)) {
-                foreach ($this->custom_display_conv as $displayitem) {
-                    if ($scaledscore < $displayitem['score'] || $displayitem['score'] == 1) {
-                        return $displayitem['display'];
-                    }
-                }
-            }
-        }
     }
 
     /**
@@ -607,9 +660,9 @@ class ScoreDisplay
             }
 
             return $converted2;
-        } else {
-            return null;
         }
+
+        return null;
     }
 
     /**

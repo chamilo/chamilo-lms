@@ -71,7 +71,9 @@ if ($time_control) {
     $htmlHeadXtra[] = $objExercise->showTimeControlJS($time_left);
 }
 
-if (!in_array($origin, ['learnpath', 'embeddable'])) {
+if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
+    SessionManager::addFlashSessionReadOnly();
+
     Display::display_header();
 } else {
     $htmlHeadXtra[] = "
@@ -80,6 +82,13 @@ if (!in_array($origin, ['learnpath', 'embeddable'])) {
     </style>
     ";
     Display::display_reduced_header();
+}
+
+if ($origin == 'mobileapp') {
+    echo '<div class="actions">';
+    echo '<a href="javascript:window.history.go(-1);">'.
+        Display::return_icon('back.png', get_lang('GoBackToQuestionList'), [], 32).'</a>';
+    echo '</div>';
 }
 
 $html = '';
@@ -183,6 +192,10 @@ if ($visible_return['value'] == false) {
         $message = $visible_return['message'];
         $exercise_url_button = null;
     }
+}
+
+if (!api_is_allowed_to_session_edit()) {
+    $exercise_url_button = null;
 }
 
 $attempts = Event::getExerciseResultsByUser(

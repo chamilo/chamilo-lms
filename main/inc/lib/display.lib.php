@@ -64,7 +64,11 @@ class Display
     ) {
         $origin = api_get_origin();
         $showHeader = true;
-        if (isset($origin) && $origin == 'learnpath') {
+        if (isset($origin) && ($origin == 'learnpath' || $origin == 'mobileapp')) {
+            $showHeader = false;
+        }
+
+        if (Session::read('origin') == 'mobileapp') {
             $showHeader = false;
         }
 
@@ -317,7 +321,7 @@ class Display
      *                              'page_nr' = The page to display
      *                              'hide_navigation' =  true to hide the navigation
      * @param array $query_vars     Additional variables to add in the query-string
-     * @param array $form           actions Additional variables to add in the query-string
+     * @param array $form_actions   actions Additional variables to add in the query-string
      * @param mixed An array with bool values to know which columns show.
      * i.e: $visibility_options= array(true, false) we will only show the first column
      *                Can be also only a bool value. TRUE: show all columns, FALSE: show nothing
@@ -359,7 +363,6 @@ class Display
      *                              'page_nr' = The page to display
      *                              'hide_navigation' =  true to hide the navigation
      * @param array $query_vars     Additional variables to add in the query-string
-     * @param array $form           actions Additional variables to add in the query-string
      * @param mixed An array with bool values to know which columns show. i.e:
      *  $visibility_options= array(true, false) we will only show the first column
      *    Can be also only a bool value. TRUE: show all columns, FALSE: show nothing
@@ -652,8 +655,6 @@ class Display
 
     /**
      * Prints an <option>-list with all letters (A-Z).
-     *
-     * @param string $selected_letter The letter that should be selected
      *
      * @todo This is English language specific implementation.
      * It should be adapted for the other languages.
@@ -1481,7 +1482,7 @@ class Display
     public static function table($headers, $rows, $attributes = [])
     {
         if (empty($attributes)) {
-            $attributes['class'] = 'data_table';
+            $attributes['class'] = 'table table-hover table-striped data_table';
         }
         $table = new HTML_Table($attributes);
         $row = 0;
@@ -1718,8 +1719,8 @@ class Display
         if (!$nosession) {
             $session_info = api_get_session_info($session_id);
             $coachInfo = [];
-            if (!empty($session['id_coach'])) {
-                $coachInfo = api_get_user_info($session['id_coach']);
+            if (!empty($session_info['id_coach'])) {
+                $coachInfo = api_get_user_info($session_info['id_coach']);
             }
 
             $session = [];
@@ -2193,7 +2194,7 @@ class Display
         switch ($fileInfo['extension']) {
             case 'mp3':
             case 'webm':
-                $html = '<audio id="'.$id.'" '.$class.' controls '.$autoplay.' '.$width.' src="'.$params['url'].'" >';
+                $html = '<audio id="'.$id.'" '.$class.' controls '.$autoplay.' '.$width.' src="'.$params['url'].'">';
                 $html .= '<object width="'.$width.'" height="50" type="application/x-shockwave-flash" data="'.api_get_path(WEB_LIBRARY_PATH).'javascript/mediaelement/flashmediaelement.swf">
                             <param name="movie" value="'.api_get_path(WEB_LIBRARY_PATH).'javascript/mediaelement/flashmediaelement.swf" />
                             <param name="flashvars" value="controls=true&file='.$params['url'].'" />
@@ -2204,7 +2205,7 @@ class Display
                 break;
             case 'wav':
             case 'ogg':
-                $html = '<audio width="300px" controls id="'.$id.'" '.$autoplay.' src="'.$params['url'].'" >';
+                $html = '<audio width="300px" controls id="'.$id.'" '.$autoplay.' src="'.$params['url'].'"></audio>';
 
                 return $html;
                 break;
@@ -2635,7 +2636,8 @@ class Display
      * @param string     $name            The icon name. Example: "mail-reply"
      * @param int|string $size            Optional. The size for the icon. (Example: lg, 2, 3, 4, 5)
      * @param bool       $fixWidth        Optional. Whether add the fw class
-     * @param string     $additionalClass Optional. Additional class
+     * @param string     $additionalClass
+     * @param string     $title
      *
      * @return string
      */
@@ -2643,7 +2645,8 @@ class Display
         $name,
         $size = '',
         $fixWidth = false,
-        $additionalClass = ''
+        $additionalClass = '',
+        $title = ''
     ) {
         $className = "fa fa-$name";
 
@@ -2667,7 +2670,7 @@ class Display
             $className .= " $additionalClass";
         }
 
-        $icon = self::tag('em', null, ['class' => $className]);
+        $icon = self::tag('em', null, ['class' => $className, 'title' => $title]);
 
         return "$icon ";
     }

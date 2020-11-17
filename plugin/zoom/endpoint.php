@@ -3,22 +3,23 @@
 /* For license terms, see /license.txt */
 
 use Chamilo\PluginBundle\Zoom\API\RecordingMeeting;
-use Chamilo\PluginBundle\Zoom\MeetingEntity;
-use Chamilo\PluginBundle\Zoom\RecordingEntity;
-use Chamilo\PluginBundle\Zoom\RegistrantEntity;
+use Chamilo\PluginBundle\Zoom\Meeting;
+use Chamilo\PluginBundle\Zoom\MeetingActivity;
+use Chamilo\PluginBundle\Zoom\Recording;
 use Symfony\Component\HttpFoundation\Response;
 
+require_once __DIR__.'/config.php';
+
 if ('POST' !== $_SERVER['REQUEST_METHOD']) {
-    http_response_code(Response::HTTP_NOT_FOUND); // Not found
+    http_response_code(Response::HTTP_NOT_FOUND);
     exit;
 }
 
 // @todo handle non-apache installations
 $authorizationHeaderValue = apache_request_headers()['Authorization'];
 
-require_once __DIR__.'/config.php';
-
 if (api_get_plugin_setting('zoom', 'verificationToken') !== $authorizationHeaderValue) {
+    error_log('verificationToken not valid, please check your zoom configuration');
     http_response_code(Response::HTTP_UNAUTHORIZED);
     exit;
 }
@@ -36,56 +37,54 @@ list($objectType, $action) = explode('.', $decoded->event);
 
 $em = Database::getManager();
 
-$meetingRepository = $em->getRepository(MeetingEntity::class);
-$meetingEntity = null;
+$meetingRepository = $em->getRepository(Meeting::class);
+$meeting = null;
 if ($object->id) {
-    /** @var MeetingEntity $meetingEntity */
-    $meetingEntity = $meetingRepository->findOneBy(['meetingId' => $object->id]);
+    /** @var Meeting $meeting */
+    $meeting = $meetingRepository->findOneBy(['meetingId' => $object->id]);
 }
+
+if (null === $meeting) {
+    error_log("Meeting not found");
+    error_log(sprintf('Event "%s" on %s was unhandled: %s', $action, $objectType, $body));
+    http_response_code(Response::HTTP_NOT_FOUND);
+    exit;
+}
+
+$activity = new MeetingActivity();
+$activity->setName($action);
+$activity->setType($objectType);
+$activity->setEvent(json_encode($object));
 
 switch ($objectType) {
     case 'meeting':
-        $registrantRepository = $em->getRepository(RegistrantEntity::class);
-
-        if (null === $meetingEntity) {
-            exit;
-        }
-
-        error_log('Meeting '.$action.' - '.$meetingEntity->getId());
+        error_log('Meeting '.$action.' - '.$meeting->getId());
         error_log(print_r($object, 1));
 
         switch ($action) {
             case 'deleted':
-                $em->remove($meetingEntity);
-                $em->flush();
+                $em->remove($meeting);
                 break;
             case 'ended':
             case 'started':
-                $meetingEntity->setStatus($action);
-                $em->persist($meetingEntity);
-                $em->flush();
-                break;
-            case 'participant_joined':
-            case 'participant_left':
-                error_log('Participant: #'.$object->participant->id);
-                error_log(print_r($object->participant, 1));
-                /*$registrant = $registrantRepository->findOneBy(['meeting' => $meetingEntity, '' => $object->participant->id]);
-                if (null === $registrant) {
-                    exit;
-                }*/
+                $meeting->setStatus($action);
+                $meeting->addActivity($activity);
+                $em->persist($meeting);
                 break;
             default:
-                error_log(sprintf('Event "%s" on %s was unhandled: %s', $action, $objectType, $body));
-
-                http_response_code(Response::HTTP_NOT_IMPLEMENTED); // Not Implemented
+                $meeting->addActivity($activity);
+                $em->persist($meeting);
+                break;
         }
+        $em->flush();
         break;
     case 'recording':
-        $recordingRepository = $em->getRepository(RecordingEntity::class);
+        $recordingRepository = $em->getRepository(Recording::class);
 
         $recordingEntity = null;
         if ($object->uuid) {
-            $recordingEntity = $recordingRepository->findBy(['uuid' => $object->uuid, 'meeting' => $meetingEntity]);
+            /** @var Recording $recordingEntity */
+            $recordingEntity = $recordingRepository->findOneBy(['uuid' => $object->uuid, 'meeting' => $meeting]);
         }
 
         error_log("Recording: $action");
@@ -93,33 +92,59 @@ switch ($objectType) {
 
         switch ($action) {
             case 'completed':
-                $recording = new RecordingEntity();
+                $recording = new Recording();
                 $recording->setRecordingMeeting(RecordingMeeting::fromObject($object));
-                $recording->setMeeting($meetingEntity);
+                $recording->setMeeting($meeting);
+                $meeting->addActivity($activity);
+                $em->persist($meeting);
                 $em->persist($recording);
                 $em->flush();
                 break;
             case 'recovered':
-                if (null === $recordingEntity) {
+                /*if (null === $recordingEntity) {
                     $em->persist(
-                        (new RecordingEntity())->setRecordingMeeting(RecordingMeeting::fromObject($object))
+                        (new Recording())->setRecordingMeeting(RecordingMeeting::fromObject($object))
                     );
                     $em->flush();
-                }
+                }*/
                 break;
             case 'trashed':
             case 'deleted':
+                $meeting->addActivity($activity);
                 if (null !== $recordingEntity) {
-                    $em->remove($recordingEntity);
-                    $em->flush();
+                    $recordMeeting = $recordingEntity->getRecordingMeeting();
+                    $recordingToDelete = RecordingMeeting::fromObject($object);
+                    $files = [];
+                    if ($recordingToDelete->recording_files) {
+                        foreach ($recordingToDelete->recording_files as $fileToDelete) {
+                            foreach ($recordMeeting->recording_files as $file) {
+                                if ($fileToDelete->id != $file->id) {
+                                    $files[] = $file;
+                                }
+                            }
+                        }
+                    }
+
+                    if (empty($files)) {
+                        $em->remove($recordingEntity);
+                    } else {
+                        $recordMeeting->recording_files = $files;
+                        $recordingEntity->setRecordingMeeting($recordMeeting);
+                        $em->persist($recordingEntity);
+                    }
                 }
+                $em->persist($meeting);
+                $em->flush();
                 break;
             default:
-                error_log(sprintf('Event "%s" on %s was unhandled: %s', $action, $objectType, $body));
-                http_response_code(501); // Not Implemented
+                $meeting->addActivity($activity);
+                $em->persist($meeting);
+                $em->flush();
+                break;
         }
         break;
     default:
         error_log(sprintf('Event "%s" on %s was unhandled: %s', $action, $objectType, $body));
         http_response_code(501); // Not Implemented
+        break;
 }

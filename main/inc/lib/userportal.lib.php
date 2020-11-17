@@ -353,6 +353,10 @@ class IndexManager
 
     public static function studentPublicationBlock()
     {
+        if (api_is_anonymous()) {
+            return [];
+        }
+
         $allow = api_get_configuration_value('allow_my_student_publication_page');
         $items = [];
 
@@ -891,7 +895,7 @@ class IndexManager
                 'title' => get_lang('Compose'),
             ];
 
-            if (api_get_setting('allow_social_tool') == 'true') {
+            if (api_get_setting('allow_social_tool') === 'true') {
                 $total_invitations = Display::badge($total_invitations);
                 $items[] = [
                     'class' => 'invitations-social',
@@ -935,6 +939,14 @@ class IndexManager
                 'icon' => Display::return_icon('new_group.png', $label),
                 'link' => api_get_path(WEB_CODE_PATH).'social/require_user_linking.php',
                 'title' => $label,
+            ];
+        }
+
+        if (api_get_configuration_value('show_my_lps_page')) {
+            $items[] = [
+                'icon' => Display::return_icon('learnpath.png', get_lang('MyLps')),
+                'link' => api_get_path(WEB_CODE_PATH).'lp/my_list.php',
+                'title' => get_lang('MyLps'),
             ];
         }
 
@@ -1113,6 +1125,11 @@ class IndexManager
                 'icon' => Display::return_icon('clock.png', get_lang('LastVisitedCourse')),
                 'link' => api_get_path(WEB_CODE_PATH).'course_home/last_course.php',
                 'title' => get_lang('LastVisitedCourse'),
+            ];
+            $items[] = [
+                'icon' => Display::return_icon('learnpath.png', get_lang('LastVisitedLp')),
+                'link' => api_get_path(WEB_CODE_PATH).'course_home/last_lp.php',
+                'title' => get_lang('LastVisitedLp'),
             ];
         }
 

@@ -289,13 +289,17 @@ echo Display::return_message(sprintf(get_lang('TotalWeightMustBeX'), $original_t
 
 ?>
 <form method="post" action="<?php echo $currentUrl; ?>">
-    <table class="data_table">
-        <tr class="row_odd">
-            <th style="width: 35px;"><?php echo get_lang('Type'); ?></th>
+    <table class="table table-hover table-striped data_table">
+        <thead>
+        <tr>
+            <th><?php echo get_lang('Type'); ?></th>
             <th><?php echo get_lang('Resource'); ?></th>
             <th><?php echo get_lang('Weight'); ?></th>
         </tr>
+        </thead>
+        <tbody>
         <?php echo $output; ?>
+        </tbody>
     </table>
     <input type="hidden" name="submitted" value="1"/>
     <br/>

@@ -75,7 +75,7 @@ if ((user_is_author($id) || $isDrhOfCourse || $allowEdition || $isDrhOfSession) 
         1 == $work['active'] &&
         1 == $work['accepted']
         ) ||
-        $isCourseManager || user_is_author($id) || $isDrhOfCourse || $idDrhOfSession
+        $isCourseManager || user_is_author($id) || $isDrhOfCourse || $isDrhOfSession
     ) {
         if ($page === 'edit') {
             $url = api_get_path(WEB_CODE_PATH).'work/edit.php?id='.$folderData['id'].'&item_id='.$work['id'].'&'.api_get_cidreq();

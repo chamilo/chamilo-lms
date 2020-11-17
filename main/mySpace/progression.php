@@ -39,7 +39,7 @@ if (Database::num_rows($result_course) > 0) {
         $export_result = export_csv($header, $data, 'test.csv'); // TODO: There is no data for exporting yet.
         echo Display::return_message($export_result, 'error');
     }
-    echo '<table class="data_table"><tr><th>'.get_lang('Course').'</th><th>'.get_lang('TempsFrequentation').'</th><th>'.get_lang('Progression').'</th><th>'.get_lang('MoyenneTest').'</th></tr>';
+    echo '<table class="table table-hover table-striped data_table"><tr><th>'.get_lang('Course').'</th><th>'.get_lang('TempsFrequentation').'</th><th>'.get_lang('Progression').'</th><th>'.get_lang('MoyenneTest').'</th></tr>';
     $header = [get_lang('Course', ''), get_lang('TempsFrequentation', ''), get_lang('Progression', ''), get_lang('MoyenneTest', '')];
     while ($a_course = Database::fetch_array($result_course)) {
         // TODO: This query is to be checked, there are no HotPotatoes tests results.

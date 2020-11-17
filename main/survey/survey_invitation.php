@@ -110,7 +110,7 @@ echo '</a></li>';
 echo '</ul>';
 
 // Table header
-echo '<table class="data_table" style="margin-top: 5px;">';
+echo '<table class="table table-hover table-striped data_table" style="margin-top: 5px;">';
 echo '	<tr>';
 echo '		<th>'.get_lang('User').'</th>';
 echo '		<th>'.get_lang('InvitationDate').'</th>';

@@ -40,13 +40,10 @@ if (!api_is_student_boss()) {
     }
 }
 
-$interbreadcrumb[] = ["url" => 'index.php', 'name' => get_lang('PlatformAdmin')];
-$interbreadcrumb[] = ["url" => 'user_list.php', 'name' => get_lang('UserList')];
-
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => 'user_list.php', 'name' => get_lang('UserList')];
 $userId = $user['user_id'];
-
 $currentUrl = api_get_self().'?user_id='.$userId;
-
 $tool_name = UserManager::formatUserFullName($userEntity);
 $table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -131,7 +128,7 @@ $userInfo = null;
 $studentBossList = UserManager::getStudentBossList($userId);
 $studentBossListToString = '';
 if (!empty($studentBossList)) {
-    $table = new HTML_Table(['class' => 'data_table']);
+    $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
     $table->setHeaderContents(0, 0, get_lang('User'));
     $csvContent[] = [get_lang('StudentBoss')];
 
@@ -147,7 +144,7 @@ if (!empty($studentBossList)) {
 
 $registrationDate = $user['registration_date'];
 
-$table = new HTML_Table(['class' => 'data_table']);
+$table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
 $table->setHeaderContents(0, 0, get_lang('Information'));
 
 $csvContent[] = [get_lang('Information')];
@@ -192,7 +189,7 @@ foreach ($data as $label => $item) {
     $row++;
 }
 
-$table = new HTML_Table(['class' => 'data_table']);
+$table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
 $table->setHeaderContents(0, 0, get_lang('Tracking'));
 $csvContent[] = [get_lang('Tracking')];
 $userInfo['first_connection'] = Tracking::get_first_connection_date($userId);
@@ -387,13 +384,24 @@ if (count($sessions) > 0) {
         $dates = array_filter(
             [$session_item['access_start_date'], $session_item['access_end_date']]
         );
-
+        $certificateLink = Display::url(
+            Display::return_icon('pdf.png', get_lang('CertificateOfAchievement'), [], ICON_SIZE_SMALL),
+            api_get_path(WEB_CODE_PATH).'mySpace/session.php?'
+            .http_build_query(
+                [
+                    'action' => 'export_to_pdf',
+                    'type' => 'achievement',
+                    'session_to_export' => $id_session,
+                    'student' => $userId,
+                ]
+            ),
+            ['target' => '_blank']
+        );
         $sessionInformation .= Display::page_subheader(
             '<a href="'.api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$id_session.'">'.
             $session_item['session_name'].'</a>',
-            ' '.implode(' - ', $dates)
+            $certificateLink.' '.implode(' - ', $dates)
         );
-
         $sessionInformation .= Display::return_sortable_table(
             $header,
             $data,
@@ -702,7 +710,7 @@ if (api_get_configuration_value('allow_career_users')) {
     $careers = UserManager::getUserCareers($userId);
     if (!empty($careers)) {
         echo Display::page_subheader(get_lang('Careers'), null, 'h3', ['class' => 'section-title']);
-        $table = new HTML_Table(['class' => 'data_table']);
+        $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
         $table->setHeaderContents(0, 0, get_lang('Career'));
         $row = 1;
         foreach ($careers as $carerData) {

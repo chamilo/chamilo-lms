@@ -150,7 +150,7 @@ $url = Display::url(
 );
 $courseListToShow = Display::page_subheader(get_lang('CourseList').$url);
 
-$courseListToShow .= '<table id="session-list-course" class="table table-hover data_table">
+$courseListToShow .= '<table id="session-list-course" class="table table-hover table-striped data_table">
 <tr>
   <th width="35%">'.get_lang('CourseTitle').'</th>
   <th width="30%">'.get_lang('CourseCoach').'</th>
@@ -209,6 +209,7 @@ if ($session->getNbrCourses() === 0) {
         }
 
         $courseUrl = api_get_course_url($course->getCode(), $sessionId);
+        $courseBaseUrl = api_get_course_url($course->getCode());
 
         // hide_course_breadcrumb the parameter has been added to hide the name
         // of the course, that appeared in the default $interbreadcrumb
@@ -222,7 +223,13 @@ if ($session->getNbrCourses() === 0) {
         $courseItem .= '<td>'.($namesOfCoaches ? implode('<br>', $namesOfCoaches) : get_lang('None')).'</td>';
         $courseItem .= '<td>'.$numberOfUsers.'</td>';
         $courseItem .= '<td>';
-        $courseItem .= Display::url(Display::return_icon('course_home.gif', get_lang('Course')), $courseUrl);
+        $courseItem .= Display::url(Display::return_icon('course_home.gif', get_lang('CourseInSession')), $courseUrl);
+
+        $courseItem .= Display::url(
+            Display::return_icon('settings.png', get_lang('Course')),
+            $courseBaseUrl,
+            ['target' => '_blank']
+        );
 
         if ($allowSkills) {
             $courseItem .= Display::url(
@@ -298,7 +305,7 @@ $userList = SessionManager::get_users_by_session($sessionId);
 
 if (!empty($userList)) {
     $table = new HTML_Table(
-        ['class' => 'table table-hover data_table', 'id' => 'session-user-list']
+        ['class' => 'table table-hover table-striped data_table', 'id' => 'session-user-list']
     );
     $table->setHeaderContents(0, 0, get_lang('User'));
     $table->setHeaderContents(0, 1, get_lang('Status'));

@@ -10,6 +10,8 @@
  */
 class ExerciseLink extends AbstractLink
 {
+    // This variable is used in the WSGetGradebookUserItemScore service, to check base course tests.
+    public $checkBaseExercises = false;
     private $course_info;
     private $exercise_table;
     private $exercise_data = [];
@@ -197,7 +199,6 @@ class ExerciseLink extends AbstractLink
     public function calc_score($stud_id = null, $type = null)
     {
         $allowStats = api_get_configuration_value('allow_gradebook_stats');
-
         if ($allowStats) {
             $link = $this->entity;
             if (!empty($link)) {
@@ -206,21 +207,19 @@ class ExerciseLink extends AbstractLink
                 switch ($type) {
                     case 'best':
                         $bestResult = $link->getBestScore();
-                        $result = [$bestResult, $weight];
 
-                        return $result;
+                        return [$bestResult, $weight];
+
                         break;
                     case 'average':
                         $count = count($this->getStudentList());
                         if (empty($count)) {
-                            $result = [0, $weight];
-
-                            return $result;
+                            return [0, $weight];
                         }
                         $sumResult = array_sum($link->getUserScoreList());
-                        $result = [$sumResult / $count, $weight];
 
-                        return $result;
+                        return [$sumResult / $count, $weight];
+
                         break;
                     case 'ranking':
                         return [null, null];
@@ -296,11 +295,27 @@ class ExerciseLink extends AbstractLink
                     //$lpId = $exercise->getLpBySession($sessionId);
                     $lpList = [];
                     foreach ($exercise->lpList as $lpData) {
-                        if ((int) $lpData['session_id'] == $sessionId) {
-                            $lpList[] = $lpData['lp_id'];
+                        if ($this->checkBaseExercises) {
+                            if ((int) $lpData['session_id'] == 0) {
+                                $lpList[] = $lpData['lp_id'];
+                            }
+                        } else {
+                            if ((int) $lpData['session_id'] == $sessionId) {
+                                $lpList[] = $lpData['lp_id'];
+                            }
                         }
                     }
-                    $lpCondition = ' orig_lp_id = 0 OR (orig_lp_id IN ("'.implode('", "', $lpList).'")) AND ';
+
+                    if (empty($lpList) && !empty($sessionId)) {
+                        // Check also if an LP was added in the base course.
+                        foreach ($exercise->lpList as $lpData) {
+                            if ((int) $lpData['session_id'] == 0) {
+                                $lpList[] = $lpData['lp_id'];
+                            }
+                        }
+                    }
+
+                    $lpCondition = ' (orig_lp_id = 0 OR (orig_lp_id IN ("'.implode('", "', $lpList).'"))) AND ';
                 }
 
                 $sql = "SELECT *

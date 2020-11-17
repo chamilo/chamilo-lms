@@ -1845,6 +1845,13 @@ class SessionManager
         Database::query("DELETE FROM $trackCourseAccess WHERE session_id IN($id_checked)");
         Database::query("DELETE FROM $trackAccess WHERE access_session_id IN($id_checked)");
 
+        if (api_get_configuration_value('allow_lp_subscription_to_usergroups')) {
+            $tableGroup = Database::get_course_table(TABLE_LP_REL_USERGROUP);
+            Database::query("DELETE FROM $tableGroup WHERE session_id IN($id_checked)");
+            $tableGroup = Database::get_course_table(TABLE_LP_CATEGORY_REL_USERGROUP);
+            Database::query("DELETE FROM $tableGroup WHERE session_id IN($id_checked)");
+        }
+
         $sql = "UPDATE $ticket SET session_id = NULL WHERE session_id IN ($id_checked)";
         Database::query($sql);
 
@@ -2552,6 +2559,7 @@ class SessionManager
      *                                              existing courses and users (true, default) or not (false)
      * @param bool  $copyEvaluation                 from base course to session course
      * @param bool  $copyCourseTeachersAsCoach
+     * @param bool  $importAssignments
      *
      * @throws Exception
      *
@@ -2562,7 +2570,8 @@ class SessionManager
         $courseList,
         $removeExistingCoursesWithUsers = true,
         $copyEvaluation = false,
-        $copyCourseTeachersAsCoach = false
+        $copyCourseTeachersAsCoach = false,
+        $importAssignments = false
     ) {
         $sessionId = (int) $sessionId;
 
@@ -2570,10 +2579,11 @@ class SessionManager
             return false;
         }
 
-        $em = Database::getManager();
+        if ($importAssignments) {
+            require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
+        }
 
-        /** @var Session $session */
-        $session = $em->find('ChamiloCoreBundle:Session', $sessionId);
+        $session = api_get_session_entity($sessionId);
 
         if (!$session) {
             return false;
@@ -2749,6 +2759,35 @@ class SessionManager
                         DocumentManager::generateDefaultCertificate(
                             $courseInfo,
                             true,
+                            $sessionId
+                        );
+                    }
+                }
+
+                if ($importAssignments) {
+                    $workTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+                    $sql = " SELECT * FROM $workTable
+                             WHERE active = 1 AND
+                                   c_id = $courseId AND
+                                   parent_id = 0 AND
+                                   (session_id IS NULL OR session_id = 0)";
+                    $result = Database::query($sql);
+                    $workList = Database::store_result($result, 'ASSOC');
+
+                    foreach ($workList as $work) {
+                        $values = [
+                            'work_title' => $work['title'],
+                            'new_dir' => $work['url'].'_session_'.$sessionId,
+                            'description' => $work['description'],
+                            'qualification' => $work['qualification'],
+                            'allow_text_assignment' => $work['allow_text_assignment'],
+                        ];
+
+                        addDir(
+                            $values,
+                            api_get_user_id(),
+                            $courseInfo,
+                            0,
                             $sessionId
                         );
                     }
@@ -3284,9 +3323,8 @@ class SessionManager
             foreach ($conditions as $field => $options) {
                 $operator = strtolower($options['operator']);
                 $value = Database::escape_string($options['value']);
-                $sql_query .= ' AND ';
                 if (in_array($field, $availableFields) && in_array($operator, $availableOperator)) {
-                    $sql_query .= $field." $operator '".$value."'";
+                    $sql_query .= ' AND '.$field." $operator '".$value."'";
                 }
             }
         }
@@ -4477,6 +4515,7 @@ class SessionManager
      * @param bool $copyTeachersAndDrh
      * @param bool $create_new_courses         New courses will be created
      * @param bool $set_exercises_lp_invisible Set exercises and LPs in the new session to invisible by default
+     * @param bool $copyWithSessionContent     Copy course session content into the courses
      *
      * @return int The new session ID on success, 0 otherwise
      *
@@ -4489,7 +4528,8 @@ class SessionManager
         $copy_courses = true,
         $copyTeachersAndDrh = true,
         $create_new_courses = false,
-        $set_exercises_lp_invisible = false
+        $set_exercises_lp_invisible = false,
+        $copyWithSessionContent = false
     ) {
         $id = (int) $id;
         $s = self::fetch($id);
@@ -4540,7 +4580,6 @@ class SessionManager
         $extraFieldsValuesToCopy = [];
         if (!empty($extraFieldsValues)) {
             foreach ($extraFieldsValues as $extraFieldValue) {
-                //$extraFieldsValuesToCopy['extra_'.$extraFieldValue['variable']] = $extraFieldValue['value'];
                 $extraFieldsValuesToCopy['extra_'.$extraFieldValue['variable']]['extra_'.$extraFieldValue['variable']] = $extraFieldValue['value'];
             }
         }
@@ -4594,9 +4633,7 @@ class SessionManager
 
                     foreach ($short_courses as $course_data) {
                         $course_info = CourseManager::copy_course_simple(
-                            $course_data['title'].' '.get_lang(
-                                'CopyLabelSuffix'
-                            ),
+                            $course_data['title'].' '.get_lang('CopyLabelSuffix'),
                             $course_data['course_code'],
                             $id,
                             $sid,
@@ -4642,6 +4679,19 @@ class SessionManager
 
                 $short_courses = $new_short_courses;
                 self::add_courses_to_session($sid, $short_courses, true);
+
+                if ($copyWithSessionContent) {
+                    foreach ($courses as $course) {
+                        CourseManager::copy_course(
+                            $course['code'],
+                            $id,
+                            $course['code'],
+                            $sid,
+                            [],
+                            false
+                        );
+                    }
+                }
 
                 if ($create_new_courses === false && $copyTeachersAndDrh) {
                     foreach ($short_courses as $courseItemId) {
@@ -9535,6 +9585,18 @@ class SessionManager
         $result = Database::query($sql);
 
         return Database::num_rows($result) > 0;
+    }
+
+    /**
+     * Add a warning message when session is read-only mode.
+     */
+    public static function addFlashSessionReadOnly()
+    {
+        if (api_get_session_id() && !api_is_allowed_to_session_edit()) {
+            Display::addFlash(
+                Display::return_message(get_lang('SessionIsReadOnly'), 'warning')
+            );
+        }
     }
 
     /**

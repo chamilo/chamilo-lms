@@ -1,5 +1,7 @@
 <?php
+
 /* For licensing terms, see /license.txt */
+
 /**
  * This script is a specific script to finetune a complex migration from a
  * Moodle environment, where the usernames and session names need to come

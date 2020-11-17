@@ -10,7 +10,7 @@ api_block_anonymous_users();
 
 $auth = new Auth();
 $user_course_categories = CourseManager::get_user_course_categories(api_get_user_id());
-$courses_in_category = $auth->getCoursesInCategory();
+$courses_in_category = $auth->getCoursesInCategory(false);
 
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
 $currentUrl = api_get_self();
@@ -292,7 +292,7 @@ if (!empty($user_course_categories)) {
         $counter++;
         echo '<br /><br />';
         // Show the courses inside this category
-        echo '<table class="data_table">';
+        echo '<table class="table table-hover table-striped data_table">';
         $number_of_courses = isset($courses_in_category[$row['id']]) ? count($courses_in_category[$row['id']]) : 0;
         $key = 0;
         if (!empty($courses_in_category[$row['id']])) {
@@ -371,7 +371,7 @@ if (!empty($user_course_categories)) {
 }
 
 echo Display::page_subheader(get_lang('NoCourseCategory'));
-echo '<table class="data_table">';
+echo '<table class="table table-hover table-striped data_table">';
 // COURSES WITHOUT CATEGORY
 if (!empty($courses_without_category)) {
     $number_of_courses = count($courses_without_category);
@@ -390,8 +390,8 @@ if (!empty($courses_without_category)) {
         if (api_get_setting('display_teacher_in_courselist') === 'true') {
             echo $course['tutor'];
         }
-        echo '</td><td valign="top">'; ?>
-            <div style="float:left; width:110px">
+        echo '</td><td class="text-right">'; ?>
+            <div>
             <?php
             if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
                 $icon_title = get_lang('CourseDetails').' - '.$course['title']; ?>
@@ -429,7 +429,7 @@ if (!empty($courses_without_category)) {
             echo Display::return_icon('down_na.png', get_lang('Down'), '', 22);
         } ?>
                 </div>
-                 <div style="float:left; margin-right:10px;">
+                 <div style="margin-right:10px;">
             <?php
                 if ($course['status'] != 1) {
                     if ($course['unsubscr'] == 1) {

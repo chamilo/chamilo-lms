@@ -465,7 +465,9 @@ if (api_get_setting('allow_terms_conditions') === 'true') {
                 $termExtraFields = new ExtraFieldValue('terms_and_condition');
                 $values = $termExtraFields->getAllValuesByItem($term_preview['id']);
                 foreach ($values as $value) {
-                    echo '<h3>'.$value['display_text'].'</h3><br />'.$value['value'].'<br />';
+                    if (!empty($value['value'])) {
+                        echo '<h3>'.get_lang($value['display_text']).'</h3><br />'.$value['value'].'<br />';
+                    }
                 }
             } else {
                 echo get_lang('ComingSoon');
@@ -480,7 +482,7 @@ if (api_get_setting('allow_terms_conditions') === 'true' && $user_already_regist
     $tool_name = get_lang('TermsAndConditions');
 }
 
-$home = api_get_path(SYS_APP_PATH).'home/';
+$home = api_get_path(SYS_HOME_PATH);
 if (api_is_multiple_url_enabled()) {
     $access_url_id = api_get_current_access_url_id();
     if ($access_url_id != -1) {
@@ -489,8 +491,8 @@ if (api_is_multiple_url_enabled()) {
         $clean_url = api_replace_dangerous_char($url);
         $clean_url = str_replace('/', '-', $clean_url);
         $clean_url .= '/';
-        $home_old = api_get_path(SYS_APP_PATH).'home/';
-        $home = api_get_path(SYS_APP_PATH).'home/'.$clean_url;
+        $home_old = api_get_path(SYS_HOME_PATH);
+        $home = api_get_path(SYS_HOME_PATH).$clean_url;
     }
 }
 

@@ -22,17 +22,18 @@ class Auth
     /**
      * This function get all the courses in the particular user category.
      *
+     * @param bool $hidePrivate
+     *
      * @return array
      */
-    public function getCoursesInCategory()
+    public function getCoursesInCategory($hidePrivate = true)
     {
         $user_id = api_get_user_id();
 
-        // table definitions
         $TABLECOURS = Database::get_main_table(TABLE_MAIN_COURSE);
         $TABLECOURSUSER = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $avoidCoursesCondition = CoursesAndSessionsCatalog::getAvoidCourseCondition();
-        $visibilityCondition = CourseManager::getCourseVisibilitySQLCondition('course', true);
+        $visibilityCondition = CourseManager::getCourseVisibilitySQLCondition('course', true, $hidePrivate);
 
         $sql = "SELECT
                     course.id as real_id,
@@ -102,7 +103,6 @@ class Auth
      */
     public function move_course($direction, $course2move, $category)
     {
-        // definition of tables
         $table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
         $current_user_id = api_get_user_id();

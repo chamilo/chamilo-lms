@@ -179,15 +179,13 @@ class ReadingComprehension extends UniqueAnswer
      */
     public static function get_default_levels()
     {
-        $select_level = [
+        return [
             1 => sprintf(get_lang('ReadingComprehensionLevelX'), self::$speeds[1]),
             2 => sprintf(get_lang('ReadingComprehensionLevelX'), self::$speeds[2]),
             3 => sprintf(get_lang('ReadingComprehensionLevelX'), self::$speeds[3]),
             4 => sprintf(get_lang('ReadingComprehensionLevelX'), self::$speeds[4]),
             5 => sprintf(get_lang('ReadingComprehensionLevelX'), self::$speeds[5]),
         ];
-
-        return $select_level;
     }
 
     /**

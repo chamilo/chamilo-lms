@@ -20,9 +20,9 @@ $tbl_stats_access = Database:: get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
 Display::display_header($nameTools);
 
 $result = Database::query(
-    "SELECT DISTINCT session.id as id, name, access_start_date date_start, access_end_date date_end 
-    FROM session_rel_course_rel_user,session 
-    WHERE session_id=session.id AND user_id=".$_user['user_id']." 
+    "SELECT DISTINCT session.id as id, name, access_start_date date_start, access_end_date date_end
+    FROM session_rel_course_rel_user,session
+    WHERE session_id=session.id AND user_id=".$_user['user_id']."
     ORDER BY date_start, date_end, name");
 
 $Sessions = Database::store_result($result);
@@ -96,10 +96,10 @@ while ($a_courses = Database::fetch_array($result2)) {
             $lp_item_id = $resulta['id'];
             $Req3 = " SELECT Max(id)
                       FROM  c_lp_item_view
-                      WHERE  
-                        lp_item_id =  '$lp_item_id' AND 
-                        lp_view_id =  '$lp_id_view' AND 
-                        c_id = '$c_id_view' AND 
+                      WHERE
+                        lp_item_id =  '$lp_item_id' AND
+                        lp_view_id =  '$lp_id_view' AND
+                        c_id = '$c_id_view' AND
                         status =  'completed'
                       ";
             $res3 = Database::query($Req3);
@@ -107,9 +107,9 @@ while ($a_courses = Database::fetch_array($result2)) {
                 $max = $resul['0'];
                 $Req4 = "SELECT COUNT( id )
                           FROM  c_lp_item_view
-                          WHERE  
-                            id = '$max' AND 
-                            c_id = '$c_id_view'    
+                          WHERE
+                            id = '$max' AND
+                            c_id = '$c_id_view'
                                 ";
                 $res4 = Database::query($Req4);
                 while ($resultat = Database::fetch_array($res4)) {
@@ -133,7 +133,7 @@ $sqljtot = "SELECT COUNT( * ) AS TOT
              FROM $tbl_personal_agenda
              WHERE user = '".$_user['user_id']."'
              And title like 'm%'
-            
+
              ";
 $resultjt = Database::query($sqljtot);
 $jour_realise = 0;
@@ -150,8 +150,8 @@ while ($jour_agenda == '') {
     $tour++;
     $date = date("Y-m-d", mktime(0, 0, 0, date("m"), date("d") - $tour, date("Y")));
     $sql4 = "SELECT title  FROM $tbl_personal_agenda
-             WHERE user = '".$_user['user_id']."' AND  
-             text='Pour le calendrier, ne pas effacer' AND 
+             WHERE user = '".$_user['user_id']."' AND
+             text='Pour le calendrier, ne pas effacer' AND
              date like '".$date." %:%' ";
     $result4 = Database::query($sql4);
     $res4 = Database::fetch_array($result4);
@@ -168,7 +168,7 @@ if ($diff > 0) {
 }
 $diff = abs($diff);
 ?>
-<table class="data_table">
+<table class="table table-hover table-striped data_table">
     <th rowspan="5">
         <?php
         //on récupere les points de controle de l'élève
@@ -245,7 +245,7 @@ $diff = abs($diff);
         </tr>
     </table>
     <hr>
-    <table class='data_table'>
+    <table class='table table-hover table-striped data_table'>
         <tr>
             <th><?php echo get_lang('level'); ?> </th>
             <th>
@@ -272,7 +272,7 @@ $diff = abs($diff);
             echo "
                 <tr>
                     <td> ".$a_inter['level']."</td>
-                    <td> $inter_date </td>                
+                    <td> $inter_date </td>
                     <td>$inter_coment</td>";
             $exe_id = $a_inter['exe_id'];
         }
@@ -289,7 +289,7 @@ $diff = abs($diff);
 $user_info = api_get_user_info();
 $user_id = api_get_user_id();
 //On cherche le calendrier pour ce user et le c_id de ce calendrier
-$sql = "SELECT * 
+$sql = "SELECT *
         FROM user
         WHERE user_id = '$user_id'
         ";
@@ -300,13 +300,13 @@ $c_id_horaire = strstr($nom_hor, '.');
 $c_id_horaire = str_replace(".", "", "$c_id_horaire");
 // Courses
 echo '<h3>'.get_lang('Course').'</h3>';
-echo '<table class="data_table">';
+echo '<table class="table table-hover table-striped data_table">';
 echo '<tr>
         <th>'.get_lang('Course').'</th>
         <th>'.get_lang('Time').'</th>
         <th>'.get_lang('FirstConnexion').'</th>
         <th>'.get_lang('Progress').'</th>
-        <th>'.get_lang('fin_mod_prevue').'</th>            
+        <th>'.get_lang('fin_mod_prevue').'</th>
     </tr>';
 //on recherche les cours où sont inscrit les user
 $user_c_id = $_user['user_id'];
@@ -332,11 +332,11 @@ while ($a_courses = Database::fetch_array($result2)) {
     $time_spent_on_course = api_time_to_hms(Tracking:: get_time_spent_on_the_course($user_id, $c_id, $session_id));
     //  firts connection date
     $sql2 = "SELECT STR_TO_DATE(access_date,'%Y-%m-%d')
-            FROM $tbl_stats_access 
-            WHERE 
-             access_user_id = '$user_id' AND 
+            FROM $tbl_stats_access
+            WHERE
+             access_user_id = '$user_id' AND
              c_id = '$c_id'
-             ORDER BY access_id ASC 
+             ORDER BY access_id ASC
             LIMIT 0,1";
 
     //Francois Belisle Kezber
@@ -375,12 +375,12 @@ while ($a_courses = Database::fetch_array($result2)) {
     $nombre_jours_module = (int) $nombre_jours_module;
     //on trouve la date de fin de chaque module AND date = date_format('$first_connection_date_to_module','%Y-%m-%d')
     $sql = "SELECT * FROM c_cal_dates
-              WHERE 
-              horaire_name = '$nom_hor' AND 
-              c_id = '$c_id_horaire' AND 
+              WHERE
+              horaire_name = '$nom_hor' AND
+              c_id = '$c_id_horaire' AND
               STR_TO_DATE(date,'%Y-%m-%d') >= STR_TO_DATE('$first_connection_date_to_module','%Y-%m-%d')
               ORDER BY STR_TO_DATE(date, '%Y-%m-%d') asc
-              LIMIT $nombre_jours_module, 18446744073709551615          
+              LIMIT $nombre_jours_module, 18446744073709551615
           ";
     $res = Database::query($sql);
     //Database::data_seek($res,$nombre_jours_module);
@@ -457,7 +457,7 @@ while ($a_courses = Database::fetch_array($result2)) {
 echo '</table>';
 ?>   </table>
     <br/><br/>
-    <table class='data_table'>
+    <table class='table table-hover table-striped data_table'>
         <tr>
             <th colspan="6">
                 <?php

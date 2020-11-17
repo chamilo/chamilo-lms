@@ -90,7 +90,7 @@ class PauseTraining extends Plugin
         return (int) $userId;
     }
 
-    public function runCron()
+    public function runCron($date = '', $isTest = false)
     {
         $enable = $this->get('tool_enable');
         $senderId = $this->get('sender_id');
@@ -111,7 +111,7 @@ class PauseTraining extends Plugin
         $senderInfo = api_get_user_info($senderId);
 
         if (empty($senderInfo)) {
-            echo "Sender #$senderId not found";
+            echo "Sender #$senderId not found in Chamilo";
 
             return false;
         }
@@ -122,23 +122,90 @@ class PauseTraining extends Plugin
         $track = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         $login = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
-        $now = api_get_utc_datetime();
         $usersNotificationPerDay = [];
+        $now = api_get_utc_datetime();
+        if (!empty($date)) {
+            $now = $date;
+        }
+
+        if ($isTest) {
+            echo "-------------------------------------------".PHP_EOL;
+            echo "----- Testing date $now ----".PHP_EOL;
+            echo "-------------------------------------------".PHP_EOL;
+        }
+
+        $extraFieldValue = new ExtraFieldValue('user');
+        $sql = "SELECT u.id
+                FROM $userTable u
+                WHERE u.status <> ".ANONYMOUS." AND u.active = 1";
+        $rs = Database::query($sql);
+
         $users = [];
+        while ($user = Database::fetch_array($rs)) {
+            $userId = $user['id'];
+
+            $sql = "SELECT
+                        MAX(t.logout_course_date) max_course_date,
+                        MAX(l.logout_date) max_login_date
+                    FROM $userTable u
+                    LEFT JOIN $track t
+                    ON (u.id = t.user_id)
+                    LEFT JOIN $login l
+                    ON (u.id = l.login_user_id)
+                    WHERE
+                        u.id = $userId
+                    LIMIT 1
+                    ";
+            $result = Database::query($sql);
+            $data = Database::fetch_array($result);
+            $maxCourseDate = '';
+            $maxLoginDate = '';
+
+            // Take max date value.
+            if ($data) {
+                $maxCourseDate = $data['max_course_date'];
+                $maxLoginDate = $data['max_login_date'];
+            }
+
+            $maxEndPause = null;
+            $pause = $extraFieldValue->get_values_by_handler_and_field_variable($userId, 'pause_formation');
+            if (!empty($pause) && isset($pause['value']) && 1 == $pause['value']) {
+                $endDate = $extraFieldValue->get_values_by_handler_and_field_variable(
+                    $userId,
+                    'end_pause_date'
+                );
+                if (!empty($endDate) && isset($endDate['value']) && !empty($endDate['value'])) {
+                    $maxEndPause = $endDate['value'];
+                }
+            }
+
+            $maxDate = $maxCourseDate;
+            if ($maxLoginDate > $maxCourseDate) {
+                $maxDate = $maxLoginDate;
+            }
+
+            if ($maxEndPause > $maxDate) {
+                $maxDate = $maxEndPause;
+            }
+
+            if (empty($maxDate)) {
+                // Nothing found for that user, skip.
+                continue;
+            }
+            $users[$userId] = $maxDate;
+        }
 
         $extraFieldValue = new ExtraFieldValue('user');
         foreach ($enableDaysList as $day) {
             $day = (int) $day;
 
-            echo "Processing day $day".PHP_EOL.PHP_EOL;
-
             if (0 === $day) {
                 echo 'Day = 0 avoided '.PHP_EOL;
                 continue;
             }
-
-            $hourStart = $day * 24;
-            $hourEnd = ($day - 1) * 24;
+            $dayToCheck = $day + 1;
+            $hourStart = $dayToCheck * 24;
+            $hourEnd = ($dayToCheck - 1) * 24;
 
             $date = new DateTime($now);
             $date->sub(new DateInterval('PT'.$hourStart.'H'));
@@ -148,37 +215,12 @@ class PauseTraining extends Plugin
             $date->sub(new DateInterval('PT'.$hourEnd.'H'));
             $hourEnd = $date->format('Y-m-d H:i:s');
 
-            $sql = "SELECT
-                    t.user_id,
-                    MAX(t.logout_course_date) max_course_date,
-                    MAX(l.logout_date) max_login_date
-                    FROM $track t
-                    INNER JOIN $userTable u
-                    ON (u.id = t.user_id)
-                    INNER JOIN $login l
-                    ON (u.id = l.login_user_id)
-                    WHERE
-                        u.status <> ".ANONYMOUS." AND
-                        u.active = 1
-                    GROUP BY t.user_id
-                    HAVING
-                        (max_course_date BETWEEN '$hourStart' AND '$hourEnd') AND
-                        (max_login_date BETWEEN '$hourStart' AND '$hourEnd')
-                    ";
+            echo "Processing day $day: $hourStart - $hourEnd ".PHP_EOL.PHP_EOL;
 
-            $rs = Database::query($sql);
-            while ($user = Database::fetch_array($rs)) {
-                $userId = $user['user_id'];
-                if (in_array($userId, $users)) {
+            foreach ($users as $userId => $maxDate) {
+                if (!($maxDate > $hourStart && $maxDate < $hourEnd)) {
+                    //echo "Message skipped for user #$userId because max date found: $maxDate not in range $hourStart - $hourEnd ".PHP_EOL;
                     continue;
-                }
-
-                // Take max date value.
-                $maxCourseDate = $user['max_course_date'];
-                $maxLoginDate = $user['max_login_date'];
-                $maxDate = $maxCourseDate;
-                if ($maxLoginDate > $maxCourseDate) {
-                    $maxDate = $maxLoginDate;
                 }
 
                 // Check if user has selected to pause formation.
@@ -200,23 +242,26 @@ class PauseTraining extends Plugin
                         $startDate = $startDate['value'];
                         $endDate = $endDate['value'];
 
-                        // Ignore date if is between the pause formation.
-                        if ($maxDate > $startDate && $maxDate < $endDate) {
-                            echo "Message skipped for user #$userId because latest login is $maxDate and pause formation between $startDate - $endDate ".PHP_EOL;
+                        if ($startDate > $hourStart && $startDate < $hourStart) {
+                            //echo "Message skipped for user #$userId because process date $hourStart is in start pause in $startDate - $endDate ".PHP_EOL;
+                            continue;
+                        }
+
+                        if ($endDate > $hourEnd && $endDate < $hourEnd) {
+                            //echo "Message skipped for user #$userId because process date $hourEnd is in start pause in $startDate - $endDate ".PHP_EOL;
                             continue;
                         }
                     }
                 }
 
                 echo "User #$userId added to message queue because latest login is $maxDate between $hourStart AND $hourEnd".PHP_EOL;
-
                 $users[] = $userId;
                 $usersNotificationPerDay[$day][] = $userId;
             }
         }
 
         if (!empty($usersNotificationPerDay)) {
-            echo 'Now processing messages ...'.PHP_EOL;
+            echo PHP_EOL.'Now processing messages ...'.PHP_EOL;
 
             ksort($usersNotificationPerDay);
             foreach ($usersNotificationPerDay as $day => $userList) {
@@ -237,11 +282,35 @@ class PauseTraining extends Plugin
                     $template->assign('user', $userInfo);
                     $content = $template->fetch('pausetraining/view/notification_content.tpl');
                     echo 'Ready to send a message "'.$title.'" to user #'.$userId.' '.$userInfo['complete_name'].PHP_EOL;
-                    MessageManager::send_message_simple($userId, $title, $content, $senderId);
+                    if (false === $isTest) {
+                        MessageManager::send_message_simple($userId, $title, $content, $senderId);
+                    } else {
+                        echo 'Message not send because is in test mode.'.PHP_EOL;
+                    }
                 }
             }
         }
-        exit;
+    }
+
+    public function runCronTest()
+    {
+        $now = api_get_utc_datetime();
+        $days = 15;
+        $before = new DateTime($now);
+        $before->sub(new DateInterval('P'.$days.'D'));
+
+        $after = new DateTime($now);
+        $after->add(new DateInterval('P'.$days.'D'));
+
+        $period = new DatePeriod(
+            $before,
+            new DateInterval('P1D'),
+            $after
+        );
+
+        foreach ($period as $key => $value) {
+            self::runCron($value->format('Y-m-d H:i:s'), true);
+        }
     }
 
     public function install()

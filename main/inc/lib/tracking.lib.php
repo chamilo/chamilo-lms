@@ -2494,6 +2494,7 @@ class Tracking
                     ex.c_id = $courseId AND
                     ex.session_id  = $session_id AND
                     ex.exe_user_id = $user_id AND
+                    ex.status = '' AND
                     ex.exe_exo_id IN ('$exercise_list_imploded') ";
 
         $rs = Database::query($sql);
@@ -2557,7 +2558,7 @@ class Tracking
      *                                   [sum_of_progresses, number] if it is set to true
      * @param bool      $onlySeriousGame Optional. Limit average to lp on seriousgame mode
      *
-     * @return float Average progress of the user in this course
+     * @return float Average progress of the user in this course from 0 to 100
      */
     public static function get_avg_student_progress(
         $studentId,
@@ -3343,7 +3344,7 @@ class Tracking
      * @param int       $lp_id       Learning path id
      * @param int       $session_id
      *
-     * @return int Total time
+     * @return int last connection timestamp
      */
     public static function get_last_connection_time_in_lp(
         $student_id,
@@ -3352,13 +3353,47 @@ class Tracking
         $session_id = 0
     ) {
         $course = api_get_course_info($course_code);
+
+        if (empty($course)) {
+            return 0;
+        }
+
+        $course_id = $course['real_id'];
         $student_id = (int) $student_id;
         $lp_id = (int) $lp_id;
         $session_id = (int) $session_id;
         $lastTime = 0;
 
+        // Use new system
+        if (self::minimumTimeAvailable($session_id, $course_id)) {
+            $sql = "SELECT MAX(date_reg) max
+                    FROM track_e_access_complete
+                    WHERE
+                        user_id = $student_id AND
+                        c_id = $course_id AND
+                        session_id = $session_id AND
+                        tool = 'learnpath' AND
+                        tool_id = $lp_id AND
+                        action = 'view' AND
+                        login_as = 0
+                    ORDER BY date_reg ASC
+                    LIMIT 1";
+            $rs = Database::query($sql);
+
+            $lastConnection = 0;
+            if (Database::num_rows($rs) > 0) {
+                $value = Database::fetch_array($rs);
+                if (isset($value['max']) && !empty($value['max'])) {
+                    $lastConnection = api_strtotime($value['max'], 'UTC');
+                }
+            }
+
+            if (!empty($lastConnection)) {
+                return $lastConnection;
+            }
+        }
+
         if (!empty($course)) {
-            $course_id = $course['real_id'];
             $lp_table = Database::get_course_table(TABLE_LP_MAIN);
             $t_lpv = Database::get_course_table(TABLE_LP_VIEW);
             $t_lpiv = Database::get_course_table(TABLE_LP_ITEM_VIEW);
@@ -7614,7 +7649,7 @@ class TrackingCourseLog
         $getCount = isset($conditions['get_count']) ? $conditions['get_count'] : false;
 
         $csv_content = [];
-        $course_code = Database::escape_string($course_code);
+        $course_code = $course_code ? Database::escape_string($course_code) : api_get_course_id();
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
         $tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $access_url_id = api_get_current_access_url_id();

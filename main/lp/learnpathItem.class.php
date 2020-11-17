@@ -1556,6 +1556,12 @@ class learnpathItem
     ) {
         $time = null;
         $courseId = $this->courseId;
+        if (empty($courseId)) {
+            $courseId = api_get_course_int_id();
+        }
+
+        $courseId = (int) $courseId;
+
         if (!isset($given_time)) {
             if (self::DEBUG > 2) {
                 error_log(

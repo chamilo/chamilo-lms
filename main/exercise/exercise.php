@@ -506,7 +506,7 @@ if ($is_allowedToEdit) {
     }
 }
 
-if ($origin !== 'learnpath') {
+if (!in_array($origin, ['learnpath', 'mobileapp'])) {
     //so we are not in learnpath tool
     Display::display_header($nameTools, get_lang('Exercise'));
     if (isset($_GET['message']) && in_array($_GET['message'], ['ExerciseEdited'])) {

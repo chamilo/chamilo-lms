@@ -4,9 +4,10 @@
 
 $course_plugin = 'zoom'; // needed in order to load the plugin lang variables
 
+$cidReset = true;
 require_once __DIR__.'/config.php';
 
-if (!ZoomPlugin::currentUserCanCreateUserMeeting()) {
+if (!ZoomPlugin::currentUserCanJoinGlobalMeeting()) {
     api_not_allowed(true);
 }
 
@@ -19,9 +20,9 @@ $endDate = new DateTime($form->getElement('end')->getValue());
 $scheduleForm = $plugin->getScheduleMeetingForm($user);
 $tpl = new Template();
 $tpl->assign('meetings', $plugin->getMeetingRepository()->periodUserMeetings($startDate, $endDate, $user));
-$tpl->assign('allow_recording', 'true' === $plugin->get('enableCloudRecording'));
+$tpl->assign('allow_recording', $plugin->hasRecordingAvailable());
 $tpl->assign('actions', $plugin->getToolbar());
 $tpl->assign('search_form', $form->returnForm());
 $tpl->assign('schedule_form', $scheduleForm->returnForm());
-$tpl->assign('content', $tpl->fetch('zoom/view/list.tpl'));
+$tpl->assign('content', $tpl->fetch('zoom/view/meetings.tpl'));
 $tpl->display_one_col_template();

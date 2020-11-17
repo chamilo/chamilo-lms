@@ -1049,7 +1049,7 @@ class GradebookUtils
         $columns = count($printable_data[0]);
         $has_data = is_array($printable_data[1]) && count($printable_data[1]) > 0;
 
-        $table = new HTML_Table(['class' => 'data_table']);
+        $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
         $row = 0;
         $column = 0;
         $table->setHeaderContents($row, $column, get_lang('NumberAbbreviation'));
@@ -1631,12 +1631,18 @@ class GradebookUtils
         $pdf->params['student_info'] = $userInfo;
         $file = api_get_path(SYS_ARCHIVE_PATH).uniqid().'.html';
 
-        $content =
-            $table.
-            $graph.
-            '<br />'.get_lang('Feedback').'<br />
-            <textarea class="form-control" rows="5" cols="100">&nbsp;</textarea>';
+        $settings = api_get_configuration_value('gradebook_pdf_export_settings');
+        $showFeedBack = true;
+        if (isset($settings['hide_feedback_textarea']) && $settings['hide_feedback_textarea']) {
+            $showFeedBack = false;
+        }
 
+        $feedback = '';
+        if ($showFeedBack) {
+            $feedback = '<br />'.get_lang('Feedback').'<br />
+            <textarea class="form-control" rows="5" cols="100">&nbsp;</textarea>';
+        }
+        $content = $table.$graph.$feedback;
         $result = $pdf->html_to_pdf_with_template(
             $content,
             $saveToFile,

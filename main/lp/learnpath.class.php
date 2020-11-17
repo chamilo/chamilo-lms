@@ -1109,6 +1109,15 @@ class learnpath
                 WHERE c_id = $course_id AND (link LIKE '$link%' AND image='scormbuilder.gif')";
         Database::query($sql);
 
+        if (api_get_configuration_value('allow_lp_subscription_to_usergroups')) {
+            $table = Database::get_course_table(TABLE_LP_REL_USERGROUP);
+            $sql = "DELETE FROM $table
+                    WHERE
+                        lp_id = {$this->lp_id} AND
+                        c_id = $course_id ";
+            Database::query($sql);
+        }
+
         $sql = "DELETE FROM $lp
                 WHERE iid = ".$this->lp_id;
         Database::query($sql);
@@ -3572,7 +3581,8 @@ class learnpath
                         $course_id,
                         $this->get_id(),
                         $item_id,
-                        $this->get_view_id()
+                        $this->get_view_id(),
+                        $this->get_lp_session_id()
                     );
                     switch ($lp_item_type) {
                         case 'document':
@@ -4877,7 +4887,7 @@ class learnpath
     /**
      * Saves the last item seen's ID only in case.
      */
-    public function save_last()
+    public function save_last($score = null)
     {
         $course_id = api_get_course_int_id();
         $debug = $this->debug;
@@ -4918,6 +4928,12 @@ class learnpath
         if (!api_is_invitee()) {
             // Save progress.
             list($progress) = $this->get_progress_bar_text('%');
+            $scoreAsProgressSetting = api_get_configuration_value('lp_score_as_progress_enable');
+            $scoreAsProgress = $this->getUseScoreAsProgress();
+            if ($scoreAsProgress && $scoreAsProgressSetting && (null === $score || empty($score) || -1 == $score)) {
+                return false;
+            }
+
             if ($progress >= 0 && $progress <= 100) {
                 $progress = (int) $progress;
                 $sql = "UPDATE $table SET
@@ -5956,7 +5972,7 @@ class learnpath
         if (count($this->items) == 0) {
             $return .= Display::return_message(get_lang('YouShouldAddItemsBeforeAttachAudio'), 'normal');
         } else {
-            $return_audio = '<table class="data_table">';
+            $return_audio = '<table class="table table-hover table-striped data_table">';
             $return_audio .= '<tr>';
             $return_audio .= '<th width="40%">'.get_lang('Title').'</th>';
             $return_audio .= '<th>'.get_lang('Audio').'</th>';
@@ -12240,15 +12256,12 @@ EOD;
     /**
      * @param int $id
      *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
-     *
-     * @return mixed
+     * @return bool
      */
     public static function deleteCategory($id)
     {
         $em = Database::getManager();
+        $id = (int) $id;
         $item = self::getCategory($id);
         if ($item) {
             $courseId = $item->getCId();
@@ -12262,6 +12275,15 @@ EOD;
                 foreach ($lps as $lpItem) {
                     $lpItem->setCategoryId(0);
                 }
+            }
+
+            if (api_get_configuration_value('allow_lp_subscription_to_usergroups')) {
+                $table = Database::get_course_table(TABLE_LP_CATEGORY_REL_USERGROUP);
+                $sql = "DELETE FROM $table
+                        WHERE
+                            lp_category_id = $id AND
+                            c_id = $courseId ";
+                Database::query($sql);
             }
 
             // Removing category.
@@ -12995,6 +13017,7 @@ EOD;
      * @param int $learningPathId The learning path ID (in lp table)
      * @param int $id_in_path     the unique index in the items table
      * @param int $lpViewId
+     * @param int $lpSessionId
      *
      * @return string
      */
@@ -13002,7 +13025,8 @@ EOD;
         $course_id,
         $learningPathId,
         $id_in_path,
-        $lpViewId
+        $lpViewId,
+        $lpSessionId = 0
     ) {
         $session_id = api_get_session_id();
         $course_info = api_get_course_info_by_id($course_id);
@@ -13169,7 +13193,29 @@ EOD;
                 return $main_dir_path.'user/user.php?'.$extraParams;
             case TOOL_STUDENTPUBLICATION:
                 if (!empty($rowItem->getPath())) {
-                    return $main_dir_path.'work/work_list.php?id='.$rowItem->getPath().'&'.$extraParams;
+                    $workId = $rowItem->getPath();
+                    if (empty($lpSessionId) && !empty($session_id)) {
+                        // Check if a student publication with the same name exists in this session see BT#17700
+                        $title = Database::escape_string($rowItem->getTitle());
+                        $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+                        $sql = "SELECT * FROM $table
+                                WHERE
+                                    active = 1 AND
+                                    parent_id = 0 AND
+                                    c_id = $course_id AND
+                                    session_id = $session_id AND
+                                    title = '$title'
+                                LIMIT 1";
+                        $result = Database::query($sql);
+                        if (Database::num_rows($result)) {
+                            $work = Database::fetch_array($result, 'ASSOC');
+                            if ($work) {
+                                $workId = $work['iid'];
+                            }
+                        }
+                    }
+
+                    return $main_dir_path.'work/work_list.php?id='.$workId.'&'.$extraParams;
                 }
 
                 return $main_dir_path.'work/work.php?'.api_get_cidreq().'&id='.$rowItem->getPath().'&'.$extraParams;

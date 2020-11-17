@@ -13,6 +13,7 @@ if (!api_is_platform_admin() && api_get_setting('ticket_allow_student_add') !== 
 
 api_block_anonymous_users();
 $courseId = api_get_course_int_id();
+$sessionId = api_get_session_id();
 $exerciseId = (isset($_GET['exerciseId']) && !empty($_GET['exerciseId'])) ? (int) $_GET['exerciseId'] : 0;
 $lpId = (isset($_GET['lpId']) && !empty($_GET['lpId'])) ? (int) $_GET['lpId'] : 0;
 
@@ -73,12 +74,13 @@ function updateExerciseList(courseId, sessionId) {
     }, "json");
 }
 
-function updateLpList(courseId) {
+function updateLpList(courseId, sessionId) {
     var $selectLp = $("select#lp_id");
     $selectLp.empty();
 
     $.get("'.api_get_path(WEB_AJAX_PATH).'lp.ajax.php", {
         a: "get_lp_list_by_course",
+        session_id: sessionId,
         course_id: courseId
     }, function (lpList) {
         $("<option>", {
@@ -121,12 +123,12 @@ $(document).ready(function() {
         updateLpList(courseId);
     });
 
-    var sessionId = $selectSession.val();
+    var sessionId = $selectSession.val() ? $selectSession.val() : '.$sessionId.';
     var courseId = $selectCourse.val() ? $selectCourse.val() : '.$courseId.';
 
     updateCourseList(sessionId);
     updateExerciseList(courseId, sessionId);
-    updateLpList(courseId);
+    updateLpList(courseId, sessionId);
 });
 
 var counter_image = 1;

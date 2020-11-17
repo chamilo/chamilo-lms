@@ -12179,17 +12179,22 @@ EOD;
         }
     }
 
-    public static function getLpList($courseId, $onlyActiveLp = true)
+    public static function getLpList($courseId, $sessionId, $onlyActiveLp = true)
     {
         $TABLE_LP = Database::get_course_table(TABLE_LP_MAIN);
         $TABLE_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $courseId = (int) $courseId;
+        $sessionId = (int) $sessionId;
 
         $sql = "SELECT lp.id, lp.name
                 FROM $TABLE_LP lp
                 INNER JOIN $TABLE_ITEM_PROPERTY ip
                 ON lp.id = ip.ref
                 WHERE lp.c_id = $courseId ";
+
+        if (!empty($sessionId)) {
+            $sql .= "AND ip.session_id = $sessionId ";
+        }
 
         if ($onlyActiveLp) {
             $sql .= "AND ip.tool = 'learnpath' ";

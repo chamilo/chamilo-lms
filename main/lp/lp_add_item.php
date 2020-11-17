@@ -195,9 +195,9 @@ $(document).on('shown.bs.tab', 'a[data-toggle="tab"]', function (e) {
 <?php
 $extraField = [];
 $field = new ExtraField('user');
-$authorLpField = $field->get_handler_field_info_by_field_variable('AuthorLP');
+$authorLpField = $field->get_handler_field_info_by_field_variable('authorlp');
 if ($authorLpField != null) {
-    $extraField['AuthorLP'] = $authorLpField;
+    $extraField['authorlp'] = $authorLpField;
 }
 
 echo $learnPath->build_action_menu(false,

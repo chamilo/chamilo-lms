@@ -123,7 +123,7 @@ $extraField = [];
 $field = new ExtraField('lp_item');
 $authorLpField = $field->get_handler_field_info_by_field_variable('authorlpitem');
 if ($authorLpField != null) {
-    $extraField['AuthorLP'] = $authorLpField;
+    $extraField['authorlp'] = $authorLpField;
 }
 echo $learnPath->build_action_menu(false,
     true,

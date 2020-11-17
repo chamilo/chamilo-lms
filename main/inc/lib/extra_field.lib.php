@@ -1202,7 +1202,7 @@ class ExtraField extends Model
                                 /* Authors*/
                                 $options = [];
                                 $field = new ExtraField('user');
-                                $authorLp = $field->get_handler_field_info_by_field_variable('AuthorLP');
+                                $authorLp = $field->get_handler_field_info_by_field_variable('authorlp');
 
                                 $idExtraField = (int) (isset($authorLp['id']) ? $authorLp['id'] : 0);
                                 if ($idExtraField != 0) {

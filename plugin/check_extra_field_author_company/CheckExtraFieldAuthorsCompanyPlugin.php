@@ -222,7 +222,7 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
         $data['changeable'] = 1;
         $data['filter'] = 0;
         $data['variable'] = 'authorlpitem';
-        $data['display_text'] = 'AuthorLPItem';
+        $data['display_text'] = 'LearningPathItemByAuthor';
         $data['field_type'] = ExtraField::FIELD_TYPE_SELECT_MULTIPLE;
 
         $this->authorsField['id'] = $schedule->save($data);

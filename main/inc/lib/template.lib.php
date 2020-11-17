@@ -1341,7 +1341,19 @@ class Template
             if (!empty($courseInfo)) {
                 $courseParams = api_get_cidreq();
             }
-            $url = api_get_path(WEB_CODE_PATH).'ticket/tickets.php?project_id='.$defaultProjectId.'&'.$courseParams;
+
+            $extraParams = '';
+
+            if (api_get_configuration_value('ticket_add_quiz_and_lp')) {
+                if (isset($_GET['exerciseId']) && !empty($_GET['exerciseId'])) {
+                    $extraParams = '&exerciseId=' . $_GET['exerciseId'];
+                }
+
+                if (isset($_GET['lp_id']) && !empty($_GET['lp_id'])) {
+                    $extraParams .= '&lpId=' . $_GET['lp_id'];
+                }
+            }
+            $url = api_get_path(WEB_CODE_PATH).'ticket/tickets.php?project_id='.$defaultProjectId.'&'.$courseParams.$extraParams;
 
             $allow = TicketManager::userIsAllowInProject(api_get_user_info(), $defaultProjectId);
 

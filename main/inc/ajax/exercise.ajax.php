@@ -23,6 +23,26 @@ $session_id = isset($_REQUEST['session_id']) ? (int) $_REQUEST['session_id'] : a
 $course_code = isset($_REQUEST['cidReq']) ? $_REQUEST['cidReq'] : api_get_course_id();
 
 switch ($action) {
+    case 'get_exercise_by_course':
+        $course_id = (isset($_GET['course_id']) && !empty($_GET['course_id'])) ? (int) $_GET['course_id'] : 0;
+        $session_id = (!empty($_GET['session_id'])) ? (int) $_GET['session_id'] : 0;
+        $data = [];
+        $onlyActiveExercises = !(api_is_platform_admin(true) || api_is_course_admin());
+        $results = ExerciseLib::get_all_exercises_for_course_id(
+            null,
+            $session_id,
+            $course_id,
+            $onlyActiveExercises
+        );
+
+        if (!empty($results)) {
+            foreach ($results as $exercise) {
+                $data[] = ['id' => $exercise['id'], 'text' => html_entity_decode($exercise['title'])];
+            }
+        }
+
+        echo json_encode($data);
+        break;
     case 'update_duration':
         $exeId = isset($_REQUEST['exe_id']) ? $_REQUEST['exe_id'] : 0;
 

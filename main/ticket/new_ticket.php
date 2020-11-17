@@ -454,7 +454,7 @@ if (api_is_platform_admin() || !empty($sessionList)) {
 
 $form->addSelect('course_id', get_lang('Course'), [], ['id' => 'course_id']);
 
-if (api_get_configuration_value('ticket_add_quiz_and_lp')) {
+if (api_get_configuration_value('ticket_lp_quiz_info_add')) {
     $form->addSelect('exercise_id', get_lang('Exercise'), [], ['id' => 'exercise_id']);
 
     $form->addSelect('lp_id', get_lang('LearningPath'), [], ['id' => 'lp_id']);
@@ -474,7 +474,7 @@ if (!empty($courseInfo)) {
         $params['session_id'] = $sessionInfo['id'];
     }
 
-    if (api_get_configuration_value('ticket_add_quiz_and_lp')) {
+    if (api_get_configuration_value('ticket_lp_quiz_info_add')) {
         if ($exerciseId !== '') {
             $params['exercise_id'] = $exerciseId;
         }

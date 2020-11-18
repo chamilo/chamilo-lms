@@ -804,7 +804,7 @@ class UrlManager
         $count = self::relation_url_course_exist($courseId, $urlId);
         if (empty($count)) {
             $sql = "INSERT INTO $table
-                    SET c_id = '".intval($courseId)."', access_url_id = ".intval($urlId);
+                    SET c_id = ".intval($courseId).", access_url_id = ".intval($urlId);
             Database::query($sql);
         }
 

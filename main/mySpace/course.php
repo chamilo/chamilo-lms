@@ -111,7 +111,7 @@ if (api_is_platform_admin(true, true)) {
         );
 
         $menu_items[] = Display::url(
-            get_lang('QuestionStatsDetail'),
+            get_lang('QuestionStatsDetailedReport'),
             api_get_path(WEB_CODE_PATH).'mySpace/question_stats_global_detail.php'
         );
 

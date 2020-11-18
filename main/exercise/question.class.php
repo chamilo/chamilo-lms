@@ -1675,12 +1675,10 @@ abstract class Question
                 });
 
                 $("input[name=\'imageZoom\']").on("click", function(){
-                    console.log("click en campo");
                     var elf = $("#elfinder").elfinder({
                         url : "'.api_get_path(WEB_LIBRARY_PATH).'elfinder/connectorAction.php?'.api_get_cidreq().'",
                         getFileCallback: function(file) {
                             var filePath = file; //file contains the relative url.
-                            console.log(filePath);
                             var imgPath = "<img src = \'"+filePath+"\'/>";
                             $("input[name=\'imageZoom\']").val(filePath.url);
                             $("#elfinder").remove(); //close the window after image is selected

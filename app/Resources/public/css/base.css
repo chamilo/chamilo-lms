@@ -1343,6 +1343,10 @@ a.personal_agenda:hover, a.personal_agenda:hover {
     padding-bottom: 3px;
 }
 
+.production-no-padding > .files-production > ul {
+    padding-left: 0px;
+}
+
 #sn-extra-information .list-group-item {
     padding: 5px 10px;
     border: none;
@@ -3000,19 +3004,19 @@ table.certaintyTable td.globalChart {
     padding: 5px;
     text-align: center;
     margin-bottom: 10px;
-    background: url(../../main/img/clock-exercise.png) no-repeat center center #FFF;
+    background: no-repeat center center #FFF;
     border: 1px solid #DDD;
     border-radius: 5px;
 }
 
 .time_warning_two {
-    background: url(../../main/img/clock-exercise.png) no-repeat center center #FFD700;
+    background: no-repeat center center #FFD700;
     border: 1px solid #FFCC00;
     color: #C00;
 }
 
 .time_warning_one {
-    background: url(../../main/img/clock-exercise.png) no-repeat center center #FB3A35;
+    background: no-repeat center center #FB3A35;
     border: 1px solid #FB3A35;
     color: #FFF;
 }
@@ -8951,6 +8955,9 @@ ul.dropdown-menu.inner > li > a {
 /* start document mp3 preview */
 .preview .mejs__container {
     background: #aaa;
+    border-radius: 50%;
+    width: 22px;
+    height: 22px;
 }
 
 .preview .mejs__controls {
@@ -10490,3 +10497,14 @@ ul.dropdown-menu.inner > li > a {
     top:-5px;
     left: -2px;
 }
+
+.bootstrap-select {
+    width: 220px;
+    /*IE9 and below*/
+    vertical-align: middle;
+}
+.form-inline .bootstrap-select,
+.form-inline .bootstrap-select.form-control:not([class*="col-"]) {
+    width: 100%;
+}
+

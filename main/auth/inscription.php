@@ -258,6 +258,20 @@ if ($user_already_registered_show_terms === false &&
     }
 
     // EXTENDED FIELDS
+
+    //    MY PERSONAL OPEN AREA
+    if (api_get_setting('extended_profile') == 'true' &&
+        api_get_setting('extendedprofile_registration', 'mypersonalopenarea') == 'true'
+    ) {
+        $form->addHtmlEditor(
+            'openarea',
+            get_lang('MyPersonalOpenArea'),
+            false,
+            false,
+            ['ToolbarSet' => 'register', 'Width' => '100%', 'Height' => '130']
+        );
+    }
+    //    MY COMPETENCES
     if (api_get_setting('extended_profile') == 'true' &&
         api_get_setting('extendedprofile_registration', 'mycomptetences') == 'true'
     ) {
@@ -269,7 +283,7 @@ if ($user_already_registered_show_terms === false &&
             ['ToolbarSet' => 'register', 'Width' => '100%', 'Height' => '130']
         );
     }
-
+    //    MY DIPLOMAS
     if (api_get_setting('extended_profile') == 'true' &&
         api_get_setting('extendedprofile_registration', 'mydiplomas') == 'true'
     ) {
@@ -281,7 +295,7 @@ if ($user_already_registered_show_terms === false &&
             ['ToolbarSet' => 'register', 'Width' => '100%', 'Height' => '130']
         );
     }
-
+    // WHAT I AM ABLE TO TEACH
     if (api_get_setting('extended_profile') == 'true' &&
         api_get_setting('extendedprofile_registration', 'myteach') == 'true'
     ) {
@@ -294,38 +308,31 @@ if ($user_already_registered_show_terms === false &&
         );
     }
 
-    if (api_get_setting('extended_profile') == 'true' &&
-        api_get_setting('extendedprofile_registration', 'mypersonalopenarea') == 'true'
-    ) {
-        $form->addHtmlEditor(
-            'openarea',
-            get_lang('MyPersonalOpenArea'),
-            false,
-            false,
-            ['ToolbarSet' => 'register', 'Width' => '100%', 'Height' => '130']
-        );
-    }
 
     if (api_get_setting('extended_profile') === 'true') {
+        //    MY PERSONAL OPEN AREA
+        if (api_get_setting('extendedprofile_registration', 'mypersonalopenarea') === 'true' &&
+            api_get_setting('extendedprofile_registrationrequired', 'mypersonalopenarea') === 'true'
+        ) {
+            $form->addRule('openarea', get_lang('ThisFieldIsRequired'), 'required');
+        }
+        //    MY COMPETENCES
         if (api_get_setting('extendedprofile_registration', 'mycomptetences') === 'true' &&
             api_get_setting('extendedprofile_registrationrequired', 'mycomptetences') === 'true'
         ) {
             $form->addRule('competences', get_lang('ThisFieldIsRequired'), 'required');
         }
+        //    MY DIPLOMAS
         if (api_get_setting('extendedprofile_registration', 'mydiplomas') === 'true' &&
             api_get_setting('extendedprofile_registrationrequired', 'mydiplomas') === 'true'
         ) {
             $form->addRule('diplomas', get_lang('ThisFieldIsRequired'), 'required');
         }
+        // WHAT I AM ABLE TO TEACH
         if (api_get_setting('extendedprofile_registration', 'myteach') === 'true' &&
             api_get_setting('extendedprofile_registrationrequired', 'myteach') === 'true'
         ) {
             $form->addRule('teach', get_lang('ThisFieldIsRequired'), 'required');
-        }
-        if (api_get_setting('extendedprofile_registration', 'mypersonalopenarea') === 'true' &&
-            api_get_setting('extendedprofile_registrationrequired', 'mypersonalopenarea') === 'true'
-        ) {
-            $form->addRule('openarea', get_lang('ThisFieldIsRequired'), 'required');
         }
     }
 

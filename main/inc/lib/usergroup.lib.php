@@ -478,7 +478,7 @@ class UserGroup extends Model
      * </code>
      *
      * @param array $options
-     * @param int   $type
+     * @param int   $type    0 = classes / 1 = social groups
      * @param bool  $withClasses Return with clases
      *
      * @return array
@@ -1863,11 +1863,12 @@ class UserGroup extends Model
     /**
      * Get user list by usergroup.
      *
-     * @param int $id
+     * @param int    $id
+     * @param string $orderBy
      *
      * @return array
      */
-    public function getUserListByUserGroup($id)
+    public function getUserListByUserGroup($id, $orderBy = '')
     {
         $id = (int) $id;
         $sql = "SELECT u.* FROM $this->table_user u
@@ -1875,6 +1876,11 @@ class UserGroup extends Model
                 ON c.user_id = u.id
                 WHERE c.usergroup_id = $id"
                 ;
+
+        if (!empty($orderBy)) {
+            $orderBy = Database::escape_string($orderBy);
+            $sql .= " ORDER BY $orderBy ";
+        }
         $result = Database::query($sql);
 
         return Database::store_result($result);

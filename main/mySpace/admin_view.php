@@ -34,6 +34,17 @@ function showHideStudent(el){
         $("#"+el+"_").find(".icon_remove").addClass("hidden");
     }
 }
+function ShowMoreAuthor(el){
+    if($(".author_"+el).hasClass("hidden")){
+        $(".author_"+el).removeClass("hidden");
+        $(".icon_remove_author_"+el).removeClass("hidden");
+        $(".icon_add_author_"+el).addClass("hidden");
+    }else{
+        $(".author_"+el).addClass("hidden")
+        $(".icon_remove_author_"+el).addClass("hidden");
+        $(".icon_add_author_"+el).removeClass("hidden");
+    }
+}
 </script>';
 
 // the section (for the tabs)
@@ -63,6 +74,9 @@ if ($exportCSV) {
     } elseif ('learningPath' === $display) {
         MySpace::displayResumeLP($startDate, $endDate, true);
         exit;
+    } elseif ('learningPathByItem' === $display) {
+        MySpace::displayResumeLpByItem($startDate, $endDate, true);
+        exit;
     }
 }
 
@@ -90,6 +104,9 @@ switch ($display) {
         break;
     case 'learningPath':
         MySpace::displayResumeLP($startDate, $endDate);
+        break;
+    case 'learningPathByItem':
+        MySpace::displayResumeLpByItem($startDate, $endDate);
         break;
     case 'accessoverview':
         $courseId = isset($_GET['course_id']) ? (int) $_GET['course_id'] : 0;

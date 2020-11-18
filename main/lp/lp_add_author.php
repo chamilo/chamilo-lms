@@ -359,7 +359,7 @@ if ($form->validate()) {
             }
             $saveAuthor = array_unique($saveAuthor);
             $messages .= implode(' / ', $saveAuthor);
-            $currentUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http")."://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+            $currentUrl = api_request_uri();
             if (!empty($messages)) {
                 if ($removeExist) {
                     Session::write('messageError', get_lang('DeletedAuthors'));

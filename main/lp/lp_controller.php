@@ -503,6 +503,40 @@ if ($debug > 0) {
 }
 
 switch ($action) {
+    case 'author_view':
+        /* Authors*/
+        $teachers = [];
+        $field = new ExtraField('user');
+        $authorLp = $field->get_handler_field_info_by_field_variable('authorlp');
+
+        $idExtraField = (int) (isset($authorLp['id']) ? $authorLp['id'] : 0);
+        if ($idExtraField != 0) {
+            $extraFieldValueUser = new ExtraFieldValue('user');
+            $arrayExtraFieldValueUser = $extraFieldValueUser->get_item_id_from_field_variable_and_field_value(
+                $authorLp['variable'],
+                1,
+                true,
+                false,
+                true);
+
+            foreach ($arrayExtraFieldValueUser as $item) {
+                $teacher = api_get_user_info($item['item_id']);
+                $teachers[] = $teacher;
+            }
+        }
+        /* Authors*/
+        $_SESSION['oLP']->authorsAvaible = $teachers;
+        Session::write('oLP', $_SESSION['oLP']);
+        if (!$is_allowed_to_edit) {
+            api_not_allowed(true);
+        }
+        if (!$lp_found) {
+            // Check if the learnpath ID was defined, otherwise send back to list
+            require 'lp_list.php';
+        } else {
+            require 'lp_add_author.php';
+        }
+        break;
     case 'send_notify_teacher':
         // Send notification to the teacher
         $studentInfo = api_get_user_info();

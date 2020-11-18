@@ -63,17 +63,25 @@ foreach ($sessionsToMove as $sessionId) {
 
     $courses = SessionManager::getCoursesInSession($sessionId);
     foreach ($courses as $courseId) {
-        /*$sql = "DELETE FROM access_url_rel_course
-                WHERE c_id = $courseId AND access_url_id = $urlSourceId";
-        Database::query($sql);*/
         if ($test) {
             echo "Add course: $courseId to URL: $urlDestinationId".PHP_EOL;
         } else {
             UrlManager::add_course_to_url($courseId, $urlDestinationId);
         }
+
+        $coaches = SessionManager::getCoachesByCourseSession($sessionId, $courseId);
+        echo PHP_EOL.'Coaches: '.PHP_EOL;
+        foreach ($coaches as $coachId) {
+            if ($test) {
+                echo "Add coach: $coachId to URL: $urlDestinationId".PHP_EOL;
+            } else {
+                UrlManager::add_user_to_url($coachId, $urlDestinationId);
+            }
+        }
     }
 
-    $users = SessionManager::get_users_by_session($sessionId, null, false,$urlSourceId);
+    $users = SessionManager::get_users_by_session($sessionId, null, false, $urlSourceId);
+    echo PHP_EOL.'Students: '.PHP_EOL;
     foreach ($users as $user) {
         $userId = $user['user_id'];
         //UrlManager::delete_url_rel_user($userId, $sourceId);

@@ -517,7 +517,8 @@ switch ($action) {
                 1,
                 true,
                 false,
-                true);
+                true
+            );
 
             foreach ($arrayExtraFieldValueUser as $item) {
                 $teacher = api_get_user_info($item['item_id']);

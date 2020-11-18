@@ -15,8 +15,8 @@
  * Plugin details (must be present).
  */
 $plugin_info['title'] = 'Reports: "Distribution by entity" and "Distribution by author"';
-$plugin_info['comment'] = 'To enable report, You must activate the user subscription to the learning path through the '.
+$plugin_info['comment'] = 'To enable this report, you must activate user subscription to a learning path through the '.
     '"Course settings" -> "Subscribe users to learning path" <br>'.
-    'Then you can go to /main/mySpace/ to see the reports.';
+    'You can then go to /main/mySpace/ to see the new reports.';
 $plugin_info['version'] = '1.1'; // o la versión que corresponda
 $plugin_info['author'] = 'Carlos Alvarado';

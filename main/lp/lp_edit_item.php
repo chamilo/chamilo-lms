@@ -130,7 +130,8 @@ echo $learnPath->build_action_menu(false,
     false,
     true,
     '',
-    $extraField);
+    $extraField
+);
 
 echo '<div class="row">';
 echo '<div id="lp_sidebar" class="col-md-4">';

@@ -41,10 +41,8 @@ function ShowMoreAuthor(el){
         $(".icon_add_author_"+el).addClass("hidden");
     }else{
         $(".author_"+el).addClass("hidden")
-
         $(".icon_remove_author_"+el).addClass("hidden");
         $(".icon_add_author_"+el).removeClass("hidden");
-
     }
 }
 </script>';

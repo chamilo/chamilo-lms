@@ -288,7 +288,8 @@ if ($idExtraField != 0) {
         1,
         true,
         false,
-        true);
+        true
+    );
 
     foreach ($arrayExtraFieldValueUser as $item) {
         $teacher = api_get_user_info($item['item_id']);
@@ -359,7 +360,7 @@ if ($form->validate()) {
             }
             $saveAuthor = array_unique($saveAuthor);
             $messages .= implode(' / ', $saveAuthor);
-            $currentUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http")."://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+            $currentUrl = api_get_self();
             if (!empty($messages)) {
                 if ($removeExist) {
                     Session::write('messageError', get_lang('DeletedAuthors'));

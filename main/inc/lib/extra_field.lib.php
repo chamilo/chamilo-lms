@@ -1192,8 +1192,6 @@ class ExtraField extends Model
                                     'enabled' => 1,
                                     'status' => COURSEMANAGER,
                                 ];
-                                echo __FILE__."::".__LINE__."<pre>".var_export($conditions, true)."</pre><br>";
-
                                 $teachers = UserManager::get_user_list($conditions);
                                 foreach ($teachers as $teacher) {
                                     $options[$teacher['id']] = $teacher['complete_name'];

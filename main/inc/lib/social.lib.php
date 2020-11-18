@@ -2469,12 +2469,12 @@ class SocialManager extends UserManager
      */
     public static function getWallFormPortfolio($urlForm)
     {
-        $userId = (int) isset($_GET['u']) ? $_GET['u'] : '';
+        $userId = isset($_GET['u']) ? (int) $_GET['u'] : '';
         $userId = ($userId!=0) ? $userId : api_get_user_id();
         $user_info = api_get_user_info($userId);
         $portfolioName = ' '.$userId;
         $friend = true;
-        if($userId != api_get_user_id()){
+        if ($userId != api_get_user_id()){
             $portfolioName = $user_info['complete_name'];
             $friend = self::get_relation_between_contacts(api_get_user_id(), $userId);
         }

@@ -20,7 +20,7 @@ if (api_get_setting('allow_social_tool') !== 'true') {
     header('Location: '.$url);
     exit;
 }
-$portfolioRequest = (isset($_GET['p']))?true:false;
+$portfolioRequest = isset($_GET['p']) ? true : false;
 $productionString = '';
 $bossId = isset($_REQUEST['sup']) ? (int) $_REQUEST['sup'] : 0;
 $user_id = api_get_user_id();
@@ -289,10 +289,10 @@ SocialManager::setSocialUserBlock(
 
 $tpl->assign('social_friend_block', $friend_html);
 $tpl->assign('social_menu_block', $menu);
-if($portfolioRequest == true && api_get_setting('extended_profile') == true){
+if ($portfolioRequest == true && api_get_setting('extended_profile') == true) {
     $tpl->assign('add_post_form', $addPostFormPortfolio);
     $socialRightInformation = null;
-}else{
+} else {
     $tpl->assign('add_post_form', $addPostForm);
 }
 $tpl->assign('posts', $posts);

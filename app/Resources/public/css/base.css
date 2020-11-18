@@ -1343,6 +1343,10 @@ a.personal_agenda:hover, a.personal_agenda:hover {
     padding-bottom: 3px;
 }
 
+.production-no-padding > .files-production > ul {
+    padding-left: 0px;
+}
+
 #sn-extra-information .list-group-item {
     padding: 5px 10px;
     border: none;
@@ -10503,3 +10507,4 @@ ul.dropdown-menu.inner > li > a {
 .form-inline .bootstrap-select.form-control:not([class*="col-"]) {
     width: 100%;
 }
+

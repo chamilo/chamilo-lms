@@ -916,11 +916,17 @@ class SocialManager extends UserManager
     ) {
         $user_id = (int) $user_id;
         $group_id = (int) $group_id;
+        $settingExtendedProfileEnabled = api_get_setting('extended_profile');
 
         if (empty($user_id)) {
             $user_id = api_get_user_id();
         }
 
+        $myExtendedProfileEdit = '';
+        if( $user_id == api_get_user_id()){
+            $myExtendedProfileEdit .= '<a href="/main/auth/profile.php?type=extended#openarea" style="display:initial">'.
+                Display::return_icon('edit.png', get_lang('EditExtendProfile'), '', 16).'</a>';
+        }
         $usergroup = new UserGroup();
         $show_groups = [
             'groups',
@@ -960,6 +966,7 @@ class SocialManager extends UserManager
         $portfolioIcon = Display::return_icon('wiki_task.png', get_lang('Portfolio'));
         $personalDataIcon = Display::return_icon('database.png', get_lang('PersonalDataReport'));
         $messageSocialIcon = Display::return_icon('promoted_message.png', get_lang('PromotedMessages'));
+        $portfolio  = Display::return_icon('vcard.png', get_lang('Portfolio '));
 
         $forumCourseId = api_get_configuration_value('global_forums_course_id');
         $groupUrl = api_get_path(WEB_CODE_PATH).'social/groups.php';
@@ -991,6 +998,18 @@ class SocialManager extends UserManager
                         '.$messagesIcon.' '.get_lang('Messages').$count_unread_message.'
                     </a>
                 </li>';
+            if ($settingExtendedProfileEnabled == true) {
+
+                $active = $show === 'portfolio' ? 'active' : null;
+                $links .= '
+                <li class="portfolio-icon '.$active.'">
+                      <a href="'.api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user_id.'&p=1"
+                      style="display:initial">
+                        '.$portfolio.' '.get_lang('Portfolio').'
+                    </a>
+                    '.$myExtendedProfileEdit.'
+                </li>';
+            }
 
             // Invitations
             $active = $show === 'invitations' ? 'active' : null;
@@ -1112,6 +1131,17 @@ class SocialManager extends UserManager
                             '.$messagesIcon.' '.get_lang('Messages').$count_unread_message.'
                         </a>
                     </li>';
+                if ($settingExtendedProfileEnabled == true) {
+                    $active = $show === 'portfolio' ? 'active' : null;
+                    $links .= '
+                <li class="portfolio-icon '.$active.'">
+                      <a href="'.api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user_id.'&p=1"
+                       style="display:initial">
+                        '.$portfolio.' '.get_lang('Portfolio').'
+                    </a>
+                    '.$myExtendedProfileEdit.'
+                </li>';
+                }
                 $active = $show === 'invitations' ? 'active' : null;
                 $links .= '
                     <li class="invitations-icon'.$active.'">
@@ -1204,7 +1234,17 @@ class SocialManager extends UserManager
                         'data-title' => $sendMessageText,
                     ]
                 );
-                $links .= '</li>';
+                if($settingExtendedProfileEnabled == true) {
+                    $active = $show === 'portfolio' ? 'active' : null;
+                    $links .= '
+                <li class="portfolio-icon '.$active.'">
+                      <a href="'.api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user_id.'&p=1"
+                       style="display:initial">
+                        '.$portfolio.' '.get_lang('Portfolio').'
+                    </a>
+                    '.$myExtendedProfileEdit.'
+                </li>';
+                }
 
                 if (api_get_configuration_value('allow_portfolio_tool')) {
                     $links .= '
@@ -1410,24 +1450,29 @@ class SocialManager extends UserManager
             if (api_get_setting('show_email_addresses') == 'true') {
                 $html .= Display::encrypted_mailto_link($user_object->email, $user_object->email).'<br />';
             }
-
-            if ($user_object->competences) {
-                $html .= Display::page_subheader(get_lang('MyCompetences'));
-                $html .= '<p>'.$user_object->competences.'</p>';
-            }
-            if ($user_object->diplomas) {
-                $html .= Display::page_subheader(get_lang('MyDiplomas'));
-                $html .= '<p>'.$user_object->diplomas.'</p>';
-            }
-            if ($user_object->teach) {
-                $html .= Display::page_subheader(get_lang('MyTeach'));
-                $html .= '<p>'.$user_object->teach.'</p>';
-            }
-            self::display_productions($user_object->user_id);
+            //    MY PERSONAL OPEN AREA
             if ($user_object->openarea) {
                 $html .= Display::page_subheader(get_lang('MyPersonalOpenArea'));
                 $html .= '<p>'.$user_object->openarea.'</p>';
             }
+            //    MY COMPETENCES
+            if ($user_object->competences) {
+                $html .= Display::page_subheader(get_lang('MyCompetences'));
+                $html .= '<p>'.$user_object->competences.'</p>';
+            }
+            //    MY DIPLOMAS
+            if ($user_object->diplomas) {
+                $html .= Display::page_subheader(get_lang('MyDiplomas'));
+                $html .= '<p>'.$user_object->diplomas.'</p>';
+            }
+            // WHAT I AM ABLE TO TEACH
+            if ($user_object->teach) {
+                $html .= Display::page_subheader(get_lang('MyTeach'));
+                $html .= '<p>'.$user_object->teach.'</p>';
+            }
+            //    MY PRODUCTIONS
+            self::display_productions($user_object->user_id);
+
         } else {
             $html .= '<div class="actions-title">';
             $html .= get_lang('UsersOnLineList');
@@ -2412,6 +2457,114 @@ class SocialManager extends UserManager
         $html = Display::panel($form->returnForm(), get_lang('SocialWall'));
 
         return $html;
+    }
+
+    /**
+     * Show middle section for Portfolio extended.
+     * Must be active on main/admin/settings.php?category=User into extended_profile
+     *
+     * @param string $urlForm
+     *
+     * @return string
+     */
+    public static function getWallFormPortfolio($urlForm)
+    {
+        $userId = (int) isset($_GET['u']) ? $_GET['u'] : '';
+        $userId = ($userId!=0) ? $userId : api_get_user_id();
+        $user_info = api_get_user_info($userId);
+        $portfolioName = ' '.$userId;
+        $friend = true;
+        if($userId != api_get_user_id()){
+            $portfolioName = $user_info['complete_name'];
+            $friend = self::get_relation_between_contacts(api_get_user_id(), $userId);
+        }
+        if ($friend == 0) {
+            /* if has not relation, get current user */
+            $userId = api_get_user_id();
+            $user_info = api_get_user_info($userId);
+        }
+        // Images uploaded by course
+        $more_info = '';
+
+        // Productions
+        $production_list = UserManager::build_production_list($userId);
+
+        $form = new FormValidator(
+            'social_wall_main',
+            'post',
+            $urlForm.$userId,
+            null,
+            ['enctype' => 'multipart/form-data'],
+            FormValidator::LAYOUT_HORIZONTAL
+        );
+
+        $socialWallPlaceholder = isset($_GET['u']) ? get_lang('SocialWallWriteNewPostToFriend') : get_lang(
+            'SocialWallWhatAreYouThinkingAbout'
+        );
+
+        if (!empty($user_info['competences']) || !empty($user_info['diplomas'])
+            || !empty($user_info['openarea']) || !empty($user_info['teach'])) {
+            // $more_info .= '<div><h3>'.get_lang('MoreInformation').'</h3></div>';
+            //    MY PERSONAL OPEN AREA
+            if (!empty($user_info['openarea'])) {
+                $more_info .= '<div class="social-actions-message"><strong>'.get_lang('MyPersonalOpenArea').'</strong></div>';
+                $more_info .= '<div class="social-profile-extended">'.$user_info['openarea'].'</div>';
+                $more_info .= '<br />';
+            }
+            //    MY COMPETENCES
+            if (!empty($user_info['competences'])) {
+                $more_info .= '<div class="social-actions-message"><strong>'.get_lang('MyCompetences').'</strong></div>';
+                $more_info .= '<div class="social-profile-extended">'.$user_info['competences'].'</div>';
+                $more_info .= '<br />';
+            }
+            //    MY DIPLOMAS
+            if (!empty($user_info['diplomas'])) {
+                $more_info .= '<div class="social-actions-message"><strong>'.get_lang('MyDiplomas').'</strong></div>';
+                $more_info .= '<div class="social-profile-extended">'.$user_info['diplomas'].'</div>';
+                $more_info .= '<br />';
+            }
+            //    MY PRODUCTIONS
+            if (!empty($production_list)) {
+                $more_info .= '<div class="social-actions-message"><strong>'.get_lang('MyProductions').'</strong></div>';
+                $more_info .= '<div class="social-profile-extended">'.$production_list.'</div>';
+                $more_info .= '<br />';
+            }
+            // WHAT I AM ABLE TO TEACH
+            if (!empty($user_info['teach'])) {
+                $more_info .= '<div class="social-actions-message"><strong>'.get_lang('MyTeach').'</strong></div>';
+                $more_info .= '<div class="social-profile-extended">'.$user_info['teach'].'</div>';
+                $more_info .= '<br />';
+            }
+            //$socialRightInformation .= SocialManager::social_wrapper_div($more_info, 4);
+        }
+
+        $form->addTextarea(
+            'social_wall_new_msg_main',
+            null,
+            [
+                'placeholder' => $socialWallPlaceholder,
+                'cols-size' => [1, 12, 1],
+                'aria-label' => $socialWallPlaceholder,
+            ]
+        );
+        $form->addHtml('<div class="form-group">');
+        $form->addHtml('<div class="col-sm-6">');
+        $form->addFile('picture', get_lang('UploadFile'), ['custom' => true]);
+        $form->addHtml('</div>');
+        $form->addHtml('<div class="col-sm-6 "><div class="pull-right">');
+        $form->addButtonSend(
+            get_lang('Post'),
+            'wall_post_button',
+            false,
+            [
+                'cols-size' => [1, 10, 1],
+                'custom' => true,
+            ]
+        );
+        $form->addHtml('</div></div>');
+        $form->addHtml('</div>');
+        $form->addHidden('url_content', '');
+        return Display::panel($more_info, get_lang('Portfolio'));
     }
 
     /**

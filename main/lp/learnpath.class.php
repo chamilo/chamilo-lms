@@ -6596,6 +6596,7 @@ class learnpath
      * @param bool   $isConfigPage           Optional. If is the config page, show the edit button
      * @param bool   $allowExpand            Optional. Allow show the expand/contract button
      * @param string $action
+     * @param array  $extraField
      *
      * @return string
      */
@@ -6604,19 +6605,32 @@ class learnpath
         $showRequirementButtons = true,
         $isConfigPage = false,
         $allowExpand = true,
-        $action = ''
+        $action = '',
+        $extraField = []
     ) {
         $actionsRight = '';
         $lpId = $this->lp_id;
-        $back = Display::url(
-            Display::return_icon(
-                'back.png',
-                get_lang('ReturnToLearningPaths'),
-                '',
-                ICON_SIZE_MEDIUM
-            ),
-            'lp_controller.php?'.api_get_cidreq()
-        );
+        if (!isset($extraField['backTo']) && empty($extraField['backTo'])) {
+            $back = Display::url(
+                Display::return_icon(
+                    'back.png',
+                    get_lang('ReturnToLearningPaths'),
+                    '',
+                    ICON_SIZE_MEDIUM
+                ),
+                'lp_controller.php?'.api_get_cidreq()
+            );
+        } else {
+            $back = Display::url(
+                Display::return_icon(
+                    'back.png',
+                    get_lang('Back'),
+                    '',
+                    ICON_SIZE_MEDIUM
+                ),
+                $extraField['backTo']
+            );
+        }
 
         /*if ($backToBuild) {
             $back = Display::url(
@@ -6742,15 +6756,30 @@ class learnpath
                 [
                     'title' => get_lang('ClearAllPrerequisites'),
                     'href' => 'lp_controller.php?'.api_get_cidreq().'&'.http_build_query([
-                        'action' => 'clear_prerequisites',
-                        'lp_id' => $lpId,
-                    ]),
+                            'action' => 'clear_prerequisites',
+                            'lp_id' => $lpId,
+                        ]),
                 ],
             ];
             $actionsRight = Display::groupButtonWithDropDown(
                 get_lang('PrerequisitesOptions'),
                 $buttons,
                 true
+            );
+        }
+
+        if (isset($extraField['authorlp'])) {
+            $actionsLeft .= Display::url(
+                Display::return_icon(
+                    'add-groups.png',
+                    get_lang('Author'),
+                    '',
+                    ICON_SIZE_MEDIUM
+                ),
+                'lp_controller.php?'.api_get_cidreq().'&'.http_build_query([
+                    'action' => 'author_view',
+                    'lp_id' => $lpId,
+                ])
             );
         }
 

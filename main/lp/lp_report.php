@@ -237,6 +237,7 @@ if ($reset) {
             }
             break;
         case 'all':
+            $result = [];
             foreach ($users as $user) {
                 $userId = $user['user_id'];
                 $studentInfo = api_get_user_info($userId);
@@ -247,14 +248,19 @@ if ($reset) {
                         $courseInfo,
                         $sessionId
                     );
-                    Display::addFlash(
-                        Display::return_message(
-                            get_lang('LPWasReset').': '.$studentInfo['complete_name_with_username'],
-                            'success'
-                        )
-                    );
+                    $result[] = $studentInfo['complete_name_with_username'];
                 }
             }
+
+            if (!empty($result)) {
+                Display::addFlash(
+                    Display::return_message(
+                        get_lang('LPWasReset').': '.implode(', ', $result),
+                        'success'
+                    )
+                );
+            }
+
             break;
     }
     api_location($url);
@@ -333,20 +339,6 @@ if (!empty($users)) {
         }
         $trackingUrl = api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?details=true'.
         api_get_cidreq().'&course='.$courseCode.'&origin=tracking_course&student='.$userId;
-
-        /*$userList[] = [
-            'id' => $userId,
-            'username' => $userInfo['username'],
-            'first_name' => $userInfo['firstname'],
-            'last_name' => $userInfo['lastname'],
-            'email' => 'true' === $showEmail ? $userInfo['email'] : '',
-            'groups' => $userGroupList,
-            'classes' => $classesToString,
-            'lp_time' => api_time_to_hms($lpTime),
-            'lp_score' => is_numeric($lpScore) ? "$lpScore%" : $lpScore,
-            'lp_progress' => "$lpProgress %",
-            'lp_last_connection' => $lpLastConnection,
-        ];*/
         $row = [];
         $row[] = Display::url($userInfo['firstname'], $trackingUrl);
         $row[] = Display::url($userInfo['lastname'], $trackingUrl);
@@ -358,18 +350,6 @@ if (!empty($users)) {
         $row[] = "$lpProgress %";
         $row[] = is_numeric($lpScore) ? "$lpScore%" : $lpScore;
         $row[] = $lpLastConnection;
-        /*
-                      <a href="javascript:void(0);" class="details" data-id="{{ user.id }}">
-                        <img alt="{{ 'Details' | get_lang }}" src="{{ '2rightarrow.png'|icon(22) }}" />
-                    </a>&nbsp;
-                    <a
-                        href = "{{ url }}&student_id={{ user.id }}&reset=student"
-                        onclick = "javascript:if(!confirm('{{ 'AreYouSureToDeleteJS' | get_lang | e('js') }}')) return false;"
-                    >
-                        <img alt="{{ 'Reset' | get_lang }}" src="{{ 'clean.png'|icon(22) }}" />
-                    </a>
-        */
-
         $actions = Display::url(Display::return_icon('statistics.png', get_lang('Reporting')), $trackingUrl).'&nbsp;';
 
         $actions .= Display::url(
@@ -385,6 +365,7 @@ if (!empty($users)) {
         );
 
         $row[] = $actions;
+        $row['username'] = $userInfo['username'];
         $userList[] = $row;
         $added[] = $userId;
     }

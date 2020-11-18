@@ -1,8 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\PluginBundle\XApi\Importer\TinCanImporter;
-use Chamilo\PluginBundle\XApi\Parser\TinCanParser;
+use Chamilo\PluginBundle\XApi\Importer\Cmi5Importer;
+use Chamilo\PluginBundle\XApi\Parser\Cmi5Parser;
 
 require_once __DIR__.'/../../../main/inc/global.inc.php';
 
@@ -13,12 +13,11 @@ $course = api_get_course_entity();
 $session = api_get_session_entity();
 
 $plugin = XApiPlugin::create();
-$langAddActivity = $plugin->get_lang('AddActivity');
+$langFormTitle = $plugin->get_lang('ImportCmi5Package');
 
-$frmActivity = new FormValidator('frm_activity', 'post', api_get_self().'?'.api_get_cidreq());
-$frmActivity->addHeader($langAddActivity);
-$frmActivity->addFile('file', $plugin->get_lang('TinCanPackage'));
-$frmActivity->addCheckBox('allow_multiple_attempts', '', get_lang('AllowMultipleAttempts'));
+$frmActivity = new FormValidator('frm_cmi5', 'post', api_get_self().'?'.api_get_cidreq());
+$frmActivity->addHeader($langFormTitle);
+$frmActivity->addFile('file', $plugin->get_lang('Cmi5Package'));
 $frmActivity->addButtonAdvancedSettings('advanced_params');
 $frmActivity->addHtml('<div id="advanced_params_options" style="display:none">');
 $frmActivity->addText('title', get_lang('Title'), false);
@@ -69,9 +68,9 @@ if ($frmActivity->validate()) {
     $zipFileInfo = $_FILES['file'];
 
     try {
-        $tinCanFile = TinCanImporter::create($zipFileInfo, $course)->import('tincan.xml');
+        $packageFile = Cmi5Importer::create($zipFileInfo, $course)->import('cmi5.xml');
 
-        $toolLaunch = TinCanParser::create($tinCanFile, $course, $session)->parse();
+        $toolLaunch = Cmi5Parser::create($packageFile, $course, $session)->parse();
     } catch (Exception $e) {
         Display::addFlash(
             Display::return_message($e->getMessage(), 'error')
@@ -80,33 +79,29 @@ if ($frmActivity->validate()) {
         exit;
     }
 
-    $toolLaunch->setAllowMultipleAttempts(
-        isset($values['allow_multiple_attempts'])
-    );
-
-    if (!empty($values['title'])) {
-        $toolLaunch->setTitle($values['title']);
-    }
-
-    if (!empty($values['description'])) {
-        $toolLaunch->setDescription($values['description']);
-    }
-
-    if (!empty($values['lrs_url'])
-        && !empty($values['lrs_auth_username'])
-        && !empty($values['lrs_auth_password'])
-    ) {
-        $toolLaunch
-            ->setLrsUrl($values['lrs_url'])
-            ->setLrsAuthUsername($values['lrs_auth_username'])
-            ->setLrsAuthUsername($values['lrs_auth_password']);
-    }
-
-    $em = Database::getManager();
-    $em->persist($toolLaunch);
-    $em->flush();
-
-    $plugin->createLaunchCourseTool($toolLaunch);
+//    if (!empty($values['title'])) {
+//        $toolLaunch->setTitle($values['title']);
+//    }
+//
+//    if (!empty($values['description'])) {
+//        $toolLaunch->setDescription($values['description']);
+//    }
+//
+//    if (!empty($values['lrs_url'])
+//        && !empty($values['lrs_auth_username'])
+//        && !empty($values['lrs_auth_password'])
+//    ) {
+//        $toolLaunch
+//            ->setLrsUrl($values['lrs_url'])
+//            ->setLrsAuthUsername($values['lrs_auth_username'])
+//            ->setLrsAuthUsername($values['lrs_auth_password']);
+//    }
+//
+//    $em = Database::getManager();
+//    $em->persist($toolLaunch);
+//    $em->flush();
+//
+//    $plugin->createLaunchCourseTool($toolLaunch);
 
     Display::addFlash(
         Display::return_message($plugin->get_lang('ActivityImported'), 'success')
@@ -123,7 +118,7 @@ $pageContent = $frmActivity->returnForm();
 
 $interbreadcrumb[] = ['url' => 'list.php', 'name' => $pageTitle];
 
-$view = new Template($langAddActivity);
+$view = new Template($langFormTitle);
 $view->assign('header', $pageTitle);
 $view->assign('content', $pageContent);
 $view->display_one_col_template();

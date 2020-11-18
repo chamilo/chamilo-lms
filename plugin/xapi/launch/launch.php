@@ -11,7 +11,6 @@ use Xabbuh\XApi\Model\InverseFunctionalIdentifier;
 use Xabbuh\XApi\Model\IRI;
 use Xabbuh\XApi\Model\State;
 use Xabbuh\XApi\Model\StateDocument;
-use Xabbuh\XApi\Serializer\Symfony\Serializer;
 
 require_once __DIR__.'/../../../main/inc/global.inc.php';
 
@@ -121,18 +120,15 @@ $lrsUrl = $toolLaunch->getLrsUrl() ?: $plugin->get(XApiPlugin::SETTING_LRS_URL);
 $lrsAuthUsername = $toolLaunch->getLrsAuthUsername() ?: $plugin->get(XApiPlugin::SETTING_LRS_AUTH_USERNAME);
 $lrsAuthPassword = $toolLaunch->getLrsAuthPassword() ?: $plugin->get(XApiPlugin::SETTING_LRS_AUTH_PASSWORD);
 
-$activityLaunchUrl = $toolLaunch->getLaunchUrl().'?'
-    .http_build_query(
-        [
-            'endpoint' => trim($lrsUrl, "/ \t\n\r\0\x0B"),
-            'auth' => 'Basic '.base64_encode(trim($lrsAuthUsername).':'.trim($lrsAuthPassword)),
-            'actor' => Serializer::createSerializer()->serialize($actor, 'json'),
-            'registration' => $attemptId,
-            'activity_id' => $toolLaunch->getActivityId(),
-        ],
-        null,
-        '&',
-        PHP_QUERY_RFC3986
-    );
+$activityLaunchUrl = $plugin->generateLaunchUrl(
+    'tincan',
+    $toolLaunch->getLaunchUrl(),
+    $toolLaunch->getActivityId(),
+    $actor,
+    $attemptId,
+    $toolLaunch->getLrsUrl(),
+    $toolLaunch->getLrsAuthUsername(),
+    $toolLaunch->getLrsAuthPassword()
+);
 
 header("Location: $activityLaunchUrl");

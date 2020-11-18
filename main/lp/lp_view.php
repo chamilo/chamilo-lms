@@ -319,6 +319,21 @@ if (!isset($src)) {
             break;
         case 4:
             break;
+        case 5: // cmi5
+            $lp->stop_previous_item();
+            $preReqCheck = $lp->prerequisites_match($lp_item_id);
+
+            if (true === $preReqCheck) {
+                $src = $lp->get_link(
+                    'http',
+                    $lp_item_id,
+                    $get_toc_list
+                );
+                $lp->start_current_item();
+            } else {
+                $src = 'blank.php';
+            }
+            break;
     }
 }
 

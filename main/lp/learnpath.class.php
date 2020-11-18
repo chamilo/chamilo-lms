@@ -14,11 +14,16 @@ use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CLpItemView;
 use Chamilo\CourseBundle\Entity\CTool;
+use Chamilo\PluginBundle\Entity\XApi\Cmi5Item;
 use Chamilo\UserBundle\Entity\User;
 use ChamiloSession as Session;
 use Gedmo\Sortable\Entity\Repository\SortableRepository;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
+use Xabbuh\XApi\Model\Agent;
+use Xabbuh\XApi\Model\InverseFunctionalIdentifier;
+use Xabbuh\XApi\Model\IRI;
+use Xabbuh\XApi\Model\Uuid;
 
 /**
  * Class learnpath
@@ -804,6 +809,8 @@ class learnpath
                 break;
             case 'aicc':
                 break;
+            case 'cmi5':
+                $type = 5;
         }
 
         switch ($origin) {
@@ -3810,6 +3817,37 @@ class learnpath
                     }
                     break;
                 case 4:
+                    break;
+                case 5: //cmi5
+                    $em = Database::getManager();
+
+                    $cmi5Item = $em->find(Cmi5Item::class, $lp_item_path);
+
+                    if (null == $cmi5Item) {
+                        $file = 'blank.php';
+                    } else {
+                        $user = api_get_user_entity(api_get_user_id());
+
+                        $actor = new Agent(
+                            InverseFunctionalIdentifier::withAccount(
+                                new \Xabbuh\XApi\Model\Account(
+                                    $user->getCompleteName(),
+                                    \Xabbuh\XApi\Model\IRL::fromString(api_get_path(WEB_PATH))
+                                )
+                            )
+                        );
+                        $attemptId = Uuid::uuid4();
+
+                        $xApiPlugin = XApiPlugin::create();
+                        $file = $xApiPlugin->generateLaunchUrl(
+                            'cmi5',
+                            $cmi5Item->getUrl(),
+                            $cmi5Item->getActivityId(),
+                            $actor,
+                            (string) $attemptId
+                        );
+                    }
+
                     break;
                 default:
                     break;

@@ -66,9 +66,13 @@ abstract class AbstractImporter
     abstract public static function create(array $fileInfo, Course $course);
 
     /**
+     * @param string $packageFileName
+     *
      * @throws \Exception
+     *
+     * @return string
      */
-    public function import()
+    public function import($packageFileName)
     {
         $this->validPackage();
 
@@ -84,7 +88,7 @@ abstract class AbstractImporter
 
         $this->zipFile->extract($this->packageDirectoryPath);
 
-        return "{$this->packageDirectoryPath}/tincan.xml";
+        return "{$this->packageDirectoryPath}/$packageFileName";
     }
 
     /**

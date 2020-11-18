@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CTool;
+use Chamilo\PluginBundle\Entity\XApi\Cmi5Item;
 use Chamilo\PluginBundle\Entity\XApi\SharedStatement;
 use Chamilo\PluginBundle\Entity\XApi\ToolLaunch;
 use Doctrine\ORM\Tools\SchemaTool;
@@ -10,8 +11,9 @@ use Http\Adapter\Guzzle6\Client;
 use Http\Message\MessageFactory\GuzzleMessageFactory;
 use Ramsey\Uuid\Uuid;
 use Xabbuh\XApi\Client\XApiClientBuilder;
-use Xabbuh\XApi\Client\XApiClientBuilderInterface;
+use Xabbuh\XApi\Model\Agent;
 use Xabbuh\XApi\Model\IRI;
+use Xabbuh\XApi\Serializer\Symfony\Serializer;
 
 /**
  * Class XApiPlugin.
@@ -126,6 +128,7 @@ class XApiPlugin extends Plugin implements HookPluginInterface
             [
                 $em->getClassMetadata(SharedStatement::class),
                 $em->getClassMetadata(ToolLaunch::class),
+                $em->getClassMetadata(Cmi5Item::class),
             ]
         );
     }
@@ -194,6 +197,7 @@ class XApiPlugin extends Plugin implements HookPluginInterface
             [
                 $em->getClassMetadata(SharedStatement::class),
                 $em->getClassMetadata(ToolLaunch::class),
+                $em->getClassMetadata(Cmi5Item::class),
             ]
         );
     }
@@ -218,13 +222,6 @@ class XApiPlugin extends Plugin implements HookPluginInterface
     public function getXApiStatementClient()
     {
         return $this->createXApiClient()->getStatementsApiClient();
-    }
-
-    public function getXApi($lrsUrl = null, $lrsAuthUsername = null, $lrsAuthPassword = null)
-    {
-        $this
-            ->createXApiClient($lrsUrl, $lrsAuthUsername, $lrsAuthPassword)
-            ->getStateApiClient()->getDocument();
     }
 
     /**
@@ -427,18 +424,10 @@ class XApiPlugin extends Plugin implements HookPluginInterface
      */
     public static function extractVerbInLanguage(\Xabbuh\XApi\Model\LanguageMap $languageMap, $language)
     {
-        if (isset($languageMap[$language])) {
-            return $languageMap[$language];
-        }
+        $iso = self::findLanguageIso($languageMap->languageTags(), $language);
 
-        $parts = explode('-', $language, 2);
-
-        if (count($parts) > 0) {
-            foreach ($languageMap->languageTags() as $languageTag) {
-                if (false !== strpos($languageTag, $parts[0])) {
-                    return $languageMap[$languageTag];
-                }
-            }
+        if (isset($languageMap[$iso])) {
+            return $languageMap[$iso];
         }
 
         if (isset($languageMap['und'])) {
@@ -446,5 +435,60 @@ class XApiPlugin extends Plugin implements HookPluginInterface
         }
 
         return array_pop($languageMap);
+    }
+
+    /**
+     * @param array  $haystack
+     * @param string $needle
+     *
+     * @return string
+     */
+    public static function findLanguageIso(array $haystack, $needle)
+    {
+        $haystack = array_map('strtolower', $haystack);
+        $needle = strtolower($needle);
+
+        if (in_array($needle, $haystack)) {
+            return $haystack[$needle];
+        }
+
+        foreach ($haystack as $language) {
+            if (strpos($language, $needle) != 0) {
+                return $language;
+            }
+        }
+
+        return 'en';
+    }
+
+    public function generateLaunchUrl(
+        $type,
+        $launchUrl,
+        $activityId,
+        Agent $actor,
+        $attemptId,
+        $customLrsUrl = null,
+        $customLrsUsername = null,
+        $customLrsPassword = null
+    ) {
+        $lrsUrl = $customLrsUrl ?: $this->get(self::SETTING_LRS_URL);
+        $lrsAuthUsername = $customLrsUsername ?: $this->get(self::SETTING_LRS_AUTH_USERNAME);
+        $lrsAuthPassword = $customLrsPassword ?: $this->get(self::SETTING_LRS_AUTH_PASSWORD);
+
+        $queryData = [
+            'endpoint' => trim($lrsUrl, "/ \t\n\r\0\x0B"),
+            'actor' => Serializer::createSerializer()->serialize($actor, 'json'),
+            'registration' => $attemptId,
+        ];
+
+        if ('tincan' === $type) {
+            $queryData['auth'] = 'Basic '.base64_encode(trim($lrsAuthUsername).':'.trim($lrsAuthPassword));
+            $queryData['activity_id'] = $activityId;
+        } elseif ('cmi5' === $type) {
+            $queryData['fetch'] = api_get_path(WEB_PLUGIN_PATH).'xapi/cmi5/token.php';
+            $queryData['activityId'] = $activityId;
+        }
+
+        return $launchUrl.'?'.http_build_query($queryData, null, '&', PHP_QUERY_RFC3986);
     }
 }

@@ -966,7 +966,7 @@ class SocialManager extends UserManager
         $portfolioIcon = Display::return_icon('wiki_task.png', get_lang('Portfolio'));
         $personalDataIcon = Display::return_icon('database.png', get_lang('PersonalDataReport'));
         $messageSocialIcon = Display::return_icon('promoted_message.png', get_lang('PromotedMessages'));
-        $portfolio  = Display::return_icon('vcard.png', get_lang('Portfolio '));
+        $portfolio  = Display::return_icon('portfolio.png', get_lang('Portfolio '));
 
         $forumCourseId = api_get_configuration_value('global_forums_course_id');
         $groupUrl = api_get_path(WEB_CODE_PATH).'social/groups.php';
@@ -1003,11 +1003,9 @@ class SocialManager extends UserManager
                 $active = $show === 'portfolio' ? 'active' : null;
                 $links .= '
                 <li class="portfolio-icon '.$active.'">
-                      <a href="'.api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user_id.'&p=1"
-                      style="display:initial">
+                      <a href="'.api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user_id.'&p=1">
                         '.$portfolio.' '.get_lang('Portfolio').'
                     </a>
-                    '.$myExtendedProfileEdit.'
                 </li>';
             }
 
@@ -1135,11 +1133,9 @@ class SocialManager extends UserManager
                     $active = $show === 'portfolio' ? 'active' : null;
                     $links .= '
                 <li class="portfolio-icon '.$active.'">
-                      <a href="'.api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user_id.'&p=1"
-                       style="display:initial">
-                        '.$portfolio.' '.get_lang('Portfolio').'
+                      <a href="'.api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user_id.'&p=1">
+                      '.$portfolio.' '.get_lang('Portfolio').'
                     </a>
-                    '.$myExtendedProfileEdit.'
                 </li>';
                 }
                 $active = $show === 'invitations' ? 'active' : null;
@@ -1238,11 +1234,9 @@ class SocialManager extends UserManager
                     $active = $show === 'portfolio' ? 'active' : null;
                     $links .= '
                 <li class="portfolio-icon '.$active.'">
-                      <a href="'.api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user_id.'&p=1"
-                       style="display:initial">
+                      <a href="'.api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user_id.'&p=1">
                         '.$portfolio.' '.get_lang('Portfolio').'
                     </a>
-                    '.$myExtendedProfileEdit.'
                 </li>';
                 }
 

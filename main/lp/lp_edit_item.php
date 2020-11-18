@@ -120,10 +120,14 @@ $(function() {
 <?php
 
 $extraField = [];
-$field = new ExtraField('lp_item');
-$authorLpField = $field->get_handler_field_info_by_field_variable('authorlpitem');
-if ($authorLpField != null) {
-    $extraField['authorlp'] = $authorLpField;
+$field = new ExtraField('user');
+$authorLp = $field->get_handler_field_info_by_field_variable('authorlp');
+
+$idExtraField = (int) (isset($authorLp['id']) ? $authorLp['id'] : 0);
+$idExtraFieldChangeable = (int) (isset($authorLp['changeable']) ? $authorLp['changeable'] : 0);
+
+if ($idExtraField != 0 && $idExtraFieldChangeable == 1) {
+    $extraField['authorlp'] = $authorLp;
 }
 echo $learnPath->build_action_menu(false,
     true,

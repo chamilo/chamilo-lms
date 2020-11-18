@@ -196,7 +196,9 @@ $(document).on('shown.bs.tab', 'a[data-toggle="tab"]', function (e) {
 $extraField = [];
 $field = new ExtraField('user');
 $authorLpField = $field->get_handler_field_info_by_field_variable('authorlp');
-if ($authorLpField != null) {
+$idExtraField = (int) (isset($authorLpField['id']) ? $authorLpField['id'] : 0);
+$idExtraFieldChangeable = (int) (isset($authorLpField['changeable']) ? $authorLpField['changeable'] : 0);
+if ($idExtraField != 0 && $idExtraFieldChangeable == 1) {
     $extraField['authorlp'] = $authorLpField;
 }
 

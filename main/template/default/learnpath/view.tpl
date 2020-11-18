@@ -211,13 +211,6 @@
 </div>
 
 <script>
-    // document.querySelector('.menu-button').onclick = function(e) {
-    //     e.preventDefault();
-    //     document.querySelector('.circle').classList.toggle('open', function() {
-    //         console.log('topo');
-    //     });
-    //     $('.menu-button').css('background', '#00829C');
-    // }
     var LPViewUtils = {
         setHeightLPToc: function () {
             var scormInfoHeight = $('#scorm-info').outerHeight(true);

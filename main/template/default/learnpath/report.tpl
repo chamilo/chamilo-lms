@@ -2,8 +2,75 @@
 
 {{ table }}
 
+<div id="dialog-form" style="display:none;">
+    <div class="dialog-form-content">
+        {{ 'AreYouSureToDeleteResults' | get_lang | e('html') }}: <span id="user_title"></span>
+        <div class="form-group">
+            <div class="checkbox">
+                <label>
+                    <input id="delete_exercise_attempts" type="checkbox"> {{ 'DeleteExerciseAttempts' | get_lang }}
+                </label>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
 $(function() {
+    $("#dialog-form").dialog({
+        autoOpen : false,
+        modal : false,
+        width : 300,
+        height : 250,
+        zIndex : 20000
+    });
+
+    $('.delete_attempt').on('click', function() {
+        var userId = $(this).data('id');
+        var username = $(this).data('username');
+        $('#user_title').html(username);
+        $("#dialog-form").dialog({
+            buttons: {
+                '{{ "Delete" | get_lang }}' : function() {
+                    var deleteExercises = $('#delete_exercise_attempts').prop('checked');
+                    var urlDelete = '&delete_exercise_attempts=0';
+                    if (deleteExercises) {
+                        urlDelete = '&delete_exercise_attempts=1'
+                    }
+                    window.location.href = "{{ url }}"+urlDelete+"&reset=student&student_id=" + userId;
+                }
+            },
+            close: function() {
+                $('#user_title').html('');
+                $('#delete_exercise_attempt').prop('checked', false);
+            }
+        });
+        $("#dialog-form").dialog("open");
+    });
+
+    $('.delete_all').on('click', function() {
+        var users = $(this).data('users');
+        $('#user_title').html(users);
+        $("#dialog-form").dialog({
+            buttons: {
+                '{{ "Delete" | get_lang }}' : function() {
+                    var deleteExercises = $('#delete_exercise_attempts').prop('checked');
+                    var urlDelete = '&delete_exercise_attempts=0';
+                    if (deleteExercises) {
+                        urlDelete = '&delete_exercise_attempts=1'
+                    }
+                    window.location.href = "{{ url }}"+urlDelete+"&reset=all&student_id=0";
+                }
+            },
+            close: function() {
+                $('#user_title').html('');
+                $('#delete_exercise_attempt').prop('checked', false);
+            }
+        });
+        $("#dialog-form").dialog("open");
+    });
+
+
     $('#group_filter').on('change', function() {
         var groupId  = $(this).val();
         window.location.href = "{{ url_base }}&group_filter=" + groupId;

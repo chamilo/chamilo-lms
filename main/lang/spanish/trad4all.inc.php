@@ -8729,4 +8729,5 @@ $ContentList = "Lista de contenidos";
 $Tariff = "Tarifa";
 $ToInvoice = "Por facturar";
 $LearningPathItemByAuthor = "Item de lección, por autor";
+$DeleteExerciseAttempts = "También eliminar el resultado de los ejercicios, de lo contrario los resultados seguirán existiendo desconectados de la lección.";
 ?>

@@ -8633,4 +8633,5 @@ $ContentList = "Liste de contenus";
 $Tariff = "Tarification";
 $ToInvoice = "À facturer";
 $LearningPathItemByAuthor = "Éléménts de parcours par auteur";
+$DeleteExerciseAttempts = "Supprimer également les tentatives des exercices concernés";
 ?>

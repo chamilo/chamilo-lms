@@ -25,6 +25,7 @@ $courseCode = api_get_course_id();
 $lpId = isset($_REQUEST['lp_id']) ? (int) $_REQUEST['lp_id'] : 0;
 $studentId = isset($_REQUEST['student_id']) ? (int) $_REQUEST['student_id'] : 0;
 $groupFilter = isset($_REQUEST['group_filter']) ? Security::remove_XSS($_REQUEST['group_filter']) : '';
+$deleteExercisesAttempts = isset($_REQUEST['delete_exercise_attempts']) && 1 === (int) $_REQUEST['delete_exercise_attempts'] ? true : false;
 
 $groupFilterType = '';
 $groupFilterId = 0;
@@ -225,7 +226,8 @@ if ($reset) {
                         $studentId,
                         $lpId,
                         $courseInfo,
-                        $sessionId
+                        $sessionId,
+                        false === $deleteExercisesAttempts
                     );
                     Display::addFlash(
                         Display::return_message(
@@ -246,7 +248,8 @@ if ($reset) {
                         $userId,
                         $lpId,
                         $courseInfo,
-                        $sessionId
+                        $sessionId,
+                        false === $deleteExercisesAttempts
                     );
                     $result[] = $studentInfo['complete_name_with_username'];
                 }
@@ -360,8 +363,8 @@ if (!empty($users)) {
 
         $actions .= Display::url(
             Display::return_icon('clean.png', get_lang('Reset')),
-            $url.'&student_id='.$userId.'&reset=student',
-            ['onclick' => "javascript:if(!confirm('".get_lang('AreYouSureToDeleteJS')."')) return false;"]
+            'javascript:void(0);',
+            ['data-id' => $userId, 'data-username' => $userInfo['username'], 'class' => 'delete_attempt']
         );
 
         $row[] = $actions;
@@ -432,10 +435,8 @@ if (!empty($users)) {
             [],
             ICON_SIZE_MEDIUM
         ),
-        $url.'&reset=all',
-        [
-            'onclick' => 'javascript: if(!confirm(\''.addslashes(get_lang('AreYouSureToDeleteResults').': '.$userListToString).'\')) return false;',
-        ]
+        'javascript:void(0);',
+        ['data-users' => $userListToString, 'class' => 'delete_all']
     );
 }
 

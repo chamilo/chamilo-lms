@@ -8701,4 +8701,5 @@ $ContentList = "List of contents";
 $Tariff = "Tariff";
 $ToInvoice = "To invoice";
 $LearningPathItemByAuthor = "LP item by author";
+$DeleteExerciseAttempts = "Delete also the exercise attempts. If not check then the exercise results will still be available in the exercise tool.";
 ?>

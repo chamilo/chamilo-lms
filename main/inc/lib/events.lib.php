@@ -1226,6 +1226,7 @@ class Event
      * @param int   $lp_id
      * @param array $course
      * @param int   $session_id
+     * @param bool  $disconnectExerciseResultsFromLp (Replace orig_lp_* variables to null)
      *
      * @return bool
      */
@@ -1233,7 +1234,8 @@ class Event
         $user_id,
         $lp_id,
         $course,
-        $session_id
+        $session_id,
+        $disconnectExerciseResultsFromLp = false
     ) {
         $lp_view_table = Database::get_course_table(TABLE_LP_VIEW);
         $lp_item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
@@ -1302,24 +1304,33 @@ class Event
                     c_id = $course_id AND
                     orig_lp_id = $lp_id";
         $result = Database::query($sql);
-        $exe_list = [];
+        $exeList = [];
         while ($row = Database::fetch_array($result, 'ASSOC')) {
-            $exe_list[] = $row['exe_id'];
+            $exeList[] = $row['exe_id'];
         }
 
-        if (!empty($exe_list) && count($exe_list) > 0) {
-            $exeListString = implode(',', $exe_list);
-            $sql = "DELETE FROM $track_e_exercises
-                    WHERE exe_id IN ($exeListString)";
-            Database::query($sql);
+        if (!empty($exeList) && count($exeList) > 0) {
+            $exeListString = implode(',', $exeList);
+            if ($disconnectExerciseResultsFromLp) {
+                $sql = "UPDATE $track_e_exercises
+                        SET orig_lp_id = null,
+                            orig_lp_item_id = null,
+                            orig_lp_item_view_id = null
+                        WHERE exe_id IN ($exeListString)";
+                Database::query($sql);
+            } else {
+                $sql = "DELETE FROM $track_e_exercises
+                        WHERE exe_id IN ($exeListString)";
+                Database::query($sql);
 
-            $sql = "DELETE FROM $track_attempts
-                    WHERE exe_id IN ($exeListString)";
-            Database::query($sql);
+                $sql = "DELETE FROM $track_attempts
+                        WHERE exe_id IN ($exeListString)";
+                Database::query($sql);
 
-            $sql = "DELETE FROM $recording_table
-                    WHERE exe_id IN ($exeListString)";
-            Database::query($sql);
+                $sql = "DELETE FROM $recording_table
+                        WHERE exe_id IN ($exeListString)";
+                Database::query($sql);
+            }
         }
 
         $sql = "DELETE FROM $lp_view_table

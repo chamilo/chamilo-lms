@@ -4,7 +4,7 @@
 
 <div id="dialog-form" style="display:none;">
     <div class="dialog-form-content">
-        {{ 'AreYouSureToDeleteResults' | get_lang | e('html') }}: <span id="user_title"></span>
+        {{ 'AreYouSureToDeleteResults' | get_lang | e('html') }} <span id="user_title"></span>
         <div class="form-group">
             <div class="checkbox">
                 <label>

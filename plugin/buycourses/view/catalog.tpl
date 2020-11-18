@@ -3,12 +3,16 @@
 <div id="buy-courses-tabs">
     {% if sessions_are_included %}
         <ul class="nav nav-tabs buy-courses-tabs" role="tablist">
+            {% if coursesExist %}
             <li id="buy-courses-tab" class="{{ showing_courses ? 'active' : '' }}" role="presentation">
                 <a href="course_catalog.php" aria-controls="buy-courses" role="tab">{{ 'Courses'|get_lang }}</a>
             </li>
+            {% endif %}
+            {% if sessionExist %}
             <li id="buy-sessions-tab" class="{{ showing_sessions ? 'active' : '' }}" role="presentation">
                 <a href="session_catalog.php" aria-controls="buy-sessions" role="tab">{{ 'Sessions'|get_lang }}</a>
             </li>
+            {% endif %}
             {% if services_are_included %}
                 <li id="buy-services-tab" class="{{ showing_services ? 'active' : '' }}" role="presentation">
                     <a href="service_catalog.php" aria-controls="buy-services"
@@ -96,6 +100,7 @@
                                                     {{ session.item.total_price_formatted }}
                                                 </span>
                                             </p>
+                                            <!--
                                             <ul class="list-unstyled">
                                                 {% for course in session.courses %}
                                                     <li>
@@ -110,6 +115,7 @@
                                                     </li>
                                                 {% endfor %}
                                             </ul>
+                                            -->
                                             {% if session.enrolled == "YES" %}
                                                 <div class="alert alert-success">
                                                     <em class="fa fa-check-square-o fa-fw"></em> {{ 'TheUserIsAlreadyRegisteredInTheSession'|get_plugin_lang('BuyCoursesPlugin') }}

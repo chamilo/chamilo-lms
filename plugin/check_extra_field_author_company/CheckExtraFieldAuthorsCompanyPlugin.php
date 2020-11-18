@@ -197,17 +197,22 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
      */
     public function SavePrice()
     {
-        $data = $this->authorsField;
         $schedule = new ExtraField('lp_item');
+        $data = [];
+        $data['variable'] = 'price';
+        $data = $schedule->get_handler_field_info_by_tags($data['variable']);
         $data['visible_to_self'] = 1;
         $data['visible_to_others'] = 1;
         $data['changeable'] = 1;
         $data['filter'] = 0;
-        $data['variable'] = 'price';
         $data['display_text'] = 'SalePrice';
         $data['field_type'] = ExtraField::FIELD_TYPE_INTEGER;
 
-        $schedule->save($data);
+        if(isset($data['id']) || (int) $data['id'] != 0) {
+            $schedule->update($data);
+        }else{
+            $schedule->save($data);
+        }
     }
 
     /**
@@ -217,15 +222,19 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
     {
         $data = $this->authorsField;
         $schedule = new ExtraField('lp_item');
-        $data['visible_to_self'] = 0;
-        $data['visible_to_others'] = 0;
+        $data['variable'] = 'authorlpitem';
+        $data = $schedule->get_handler_field_info_by_tags($data['variable']);
+        $data['visible_to_self'] = 1;
+        $data['visible_to_others'] = 1;
         $data['changeable'] = 1;
         $data['filter'] = 0;
-        $data['variable'] = 'authorlpitem';
         $data['display_text'] = 'LearningPathItemByAuthor';
         $data['field_type'] = ExtraField::FIELD_TYPE_SELECT_MULTIPLE;
-
-        $this->authorsField['id'] = $schedule->save($data);
+        if(isset($data['id']) and $data['id'] != 0){
+            $this->authorsField = $schedule->update($data);
+        }else{
+            $this->authorsField['id'] = $schedule->save($data);
+        }
     }
 
     /**
@@ -235,20 +244,18 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
     {
         $schedule = new ExtraField('user');
         $data = $schedule->get_handler_field_info_by_field_variable('authorlp');
-        if (empty($data)) {
-            $data = $this->authorsField;
-        }
+        $data['variable'] = 'authorlp';
+        $data['display_text'] = 'authors';
+        $data['changeable'] = 1;
+        $data['visible_to_self'] = 0;
+        $data['visible_to_others'] = 1;
+        $data['filter'] = 0;
+        $data['field_type'] = ExtraField::FIELD_TYPE_RADIO;
+
         if (!isset($data['id']) || (int) $data['id'] == 0) {
-            $data['variable'] = 'authorlp';
-            $data['display_text'] = 'authors';
-            $data['changeable'] = 1;
-            $data['visible_to_self'] = 1;
-            $data['visible_to_others'] = 0;
-            $data['filter'] = 0;
-            $data['field_type'] = ExtraField::FIELD_TYPE_RADIO;
             $id = $schedule->save($data);
         } else {
-            $this->authorsField = $data;
+            $schedule->update($data);
             $id = $data['id'];
         }
 
@@ -260,7 +267,13 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
      */
     public function SaveAuthorsField()
     {
-        $data = $this->authorsField;
+        $schedule = new ExtraField('lp');
+        $data = $schedule->get_handler_field_info_by_field_variable('authorlp');
+        if (empty($data)) {
+            $data = $this->authorsField;
+        } else {
+            $this->authorsField = $data;
+        }
         $data['field_type'] = (int) $data['field_type'];
         $data['field_order'] = (int) $data['field_order'];
         $data['visible_to_self'] = (int) $data['visible_to_self'];
@@ -271,8 +284,11 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
         $data['variable'] = 'authors';
         $data['visible'] = 1;
         $data['display_text'] = strtolower($data['display_text']);
-        $schedule = new ExtraField('lp');
-        $schedule->save($data);
+        if (!isset($data['id']) || (int) $data['id'] == 0) {
+            $schedule->save($data);
+        } else {
+            $schedule->update($data);
+        }
     }
 
     /**
@@ -313,36 +329,53 @@ class CheckExtraFieldAuthorsCompanyPlugin extends Plugin
     }
 
     /**
-     * Remove the extra fields set by the plugin.
+     * Hide elements when deactivating the plugin
      */
     public function uninstall()
     {
-        $companyExist = $this->CompanyFieldExist();
-        if ($companyExist == true) {
-            // $this->removeCompanyField();
-        }
-        $authorsExist = $this->AuthorsFieldExist();
-        if ($authorsExist == true) {
-            // $this->removeAuthorsField();
-        }
-    }
+        //hide authors
+        $schedule = new ExtraField('lp');
+        $data = [];
+        $data['variable'] = 'authors';
+        $data = $schedule->get_handler_field_info_by_tags($data['variable']);
+        $data['visible_to_self'] = 0;
+        $data['visible_to_others'] = 0;
+        $data['changeable'] = 0;
+        $data['filter'] = 0;
+        $data['visible'] = 0;
+        $schedule->update($data);
+        //hide company
+        $schedule = new ExtraField('user');
+        $data = [];
+        $data['variable'] = 'company';
+        $data = $schedule->get_handler_field_info_by_tags($data['variable']);
+        $data['visible_to_self'] = 0;
+        $data['visible_to_others'] = 0;
+        $data['changeable'] = 0;
+        $data['filter'] = 0;
+        $data['visible'] = 0;
+        $schedule->update($data);
+        //hide price
+        $schedule = new ExtraField('lp_item');
+        $data = [];
+        $data['variable'] = 'price';
+        $data = $schedule->get_handler_field_info_by_tags($data['variable']);
+        $data['visible_to_self'] = 0;
+        $data['visible_to_others'] = 0;
+        $data['changeable'] = 0;
+        $data['filter'] = 0;
+        $schedule->update($data);
+        //hide authorlpitem
+        $schedule = new ExtraField('lp_item');
+        $data = [];
+        $data['variable'] = 'authorlpitem';
+        $data = $schedule->get_handler_field_info_by_tags($data['variable']);
+        $data['visible_to_self'] = 0;
+        $data['visible_to_others'] = 0;
+        $data['changeable'] = 0;
+        $data['filter'] = 0;
+        $schedule->update($data);
 
-    /**
-     * Remove the extra fields "company".
-     */
-    public function removeCompanyField()
-    {
-        $data = $this->getCompanyField();
-        // $this->deleteQuery($data);
-    }
-
-    /**
-     * Remove the extra fields "authors".
-     */
-    public function removeAuthorsField()
-    {
-        $data = $this->getAuthorsField();
-        // $this->deleteQuery($data);
     }
 
     /**

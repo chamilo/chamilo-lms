@@ -10493,3 +10493,13 @@ ul.dropdown-menu.inner > li > a {
     top:-5px;
     left: -2px;
 }
+
+.bootstrap-select {
+    width: 220px;
+    /*IE9 and below*/
+    vertical-align: middle;
+}
+.form-inline .bootstrap-select,
+.form-inline .bootstrap-select.form-control:not([class*="col-"]) {
+    width: 100%;
+}

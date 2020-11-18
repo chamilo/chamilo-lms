@@ -18,6 +18,26 @@ $currentUserId = api_get_user_id();
 $exeId = isset($_REQUEST['exe_id']) ? $_REQUEST['exe_id'] : 0;
 
 switch ($action) {
+    case 'get_exercise_by_course':
+        $course_id = (isset($_GET['course_id']) && !empty($_GET['course_id'])) ? (int) $_GET['course_id'] : 0;
+        $session_id = (!empty($_GET['session_id'])) ? (int) $_GET['session_id'] : 0;
+        $data = [];
+        $onlyActiveExercises = !(api_is_platform_admin(true) || api_is_course_admin());
+        $results = ExerciseLib::get_all_exercises_for_course_id(
+            null,
+            $session_id,
+            $course_id,
+            $onlyActiveExercises
+        );
+
+        if (!empty($results)) {
+            foreach ($results as $exercise) {
+                $data[] = ['id' => $exercise['id'], 'text' => html_entity_decode($exercise['title'])];
+            }
+        }
+
+        echo json_encode($data);
+        break;
     case 'update_duration':
 
         if (Session::read('login_as')) {
@@ -351,27 +371,29 @@ switch ($action) {
         if (empty($objExercise) || empty($exeId)) {
             echo 0;
             exit;
-        } else {
-            $option = isset($_GET['option']) ? $_GET['option'] : '';
-            switch ($option) {
-                case 'add_all':
-                    $questionListInSession = Session::read('questionList');
-                    $objExercise->addAllQuestionToRemind($exeId, $questionListInSession);
-                    break;
-                case 'remove_all':
-                    $objExercise->removeAllQuestionToRemind($exeId);
-                    break;
-                default:
-                    $objExercise->editQuestionToRemind(
-                        $exeId,
-                        $_REQUEST['question_id'],
-                        $_REQUEST['action']
-                    );
-                    break;
-            }
-            echo 1;
-            exit;
         }
+
+        $option = isset($_GET['option']) ? $_GET['option'] : '';
+        switch ($option) {
+            case 'add_all':
+                $questionListInSession = Session::read('questionList');
+                $objExercise->addAllQuestionToRemind($exeId, $questionListInSession);
+                break;
+            case 'remove_all':
+                $objExercise->removeAllQuestionToRemind($exeId);
+                break;
+            default:
+                $objExercise->editQuestionToRemind(
+                    $exeId,
+                    $_REQUEST['question_id'],
+                    $_REQUEST['action']
+                );
+                break;
+        }
+
+        echo 1;
+        exit;
+
         break;
     case 'save_exercise_by_now':
         $course_info = api_get_course_info_by_id($course_id);

@@ -3294,7 +3294,6 @@ class Exercise
             ];
 
             if ($this->getFeedbackType() === EXERCISE_FEEDBACK_TYPE_POPUP) {
-                //$params['data-block-div-after-closing'] = "question_div_$question_id";
                 $params['data-block-closing'] = 'true';
                 $params['class'] .= ' no-header ';
             }
@@ -3309,7 +3308,7 @@ class Exercise
             return '';
         }
 
-        $isReviewingAnswers = isset($_REQUEST['reminder']) && 2 == $_REQUEST['reminder'];
+        $isReviewingAnswers = isset($_REQUEST['reminder']) && 2 === (int) $_REQUEST['reminder'];
 
         // User
         $endReminderValue = false;
@@ -4426,8 +4425,11 @@ class Exercise
                                     question_id= ".$questionId;
                         $result = Database::query($sql);
                         $data = Database::fetch_array($result);
+                        $choice = '';
+                        if ($data) {
+                            $choice = $data['answer'];
+                        }
 
-                        $choice = $data['answer'];
                         $choice = str_replace('\r\n', '', $choice);
                         $choice = stripslashes($choice);
                         $questionScore = $data['marks'];
@@ -7077,31 +7079,32 @@ class Exercise
     }
 
     /**
-     * @param int    $exe_id
-     * @param int    $question_id
+     * @param int    $exeId
+     * @param int    $questionId
      * @param string $action
      */
-    public function editQuestionToRemind($exe_id, $question_id, $action = 'add')
+    public function editQuestionToRemind($exeId, $questionId, $action = 'add')
     {
-        $exercise_info = self::get_stat_track_exercise_info_by_exe_id($exe_id);
-        $question_id = (int) $question_id;
-        $exe_id = (int) $exe_id;
-        $track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $exercise_info = self::get_stat_track_exercise_info_by_exe_id($exeId);
+        $questionId = (int) $questionId;
+        $exeId = (int) $exeId;
+
         if ($exercise_info) {
+            $track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
             if (empty($exercise_info['questions_to_check'])) {
-                if ($action == 'add') {
+                if ($action === 'add') {
                     $sql = "UPDATE $track_exercises
-                            SET questions_to_check = '$question_id'
-                            WHERE exe_id = $exe_id ";
+                            SET questions_to_check = '$questionId'
+                            WHERE exe_id = $exeId ";
                     Database::query($sql);
                 }
             } else {
                 $remind_list = explode(',', $exercise_info['questions_to_check']);
                 $remind_list_string = '';
-                if ($action == 'add') {
-                    if (!in_array($question_id, $remind_list)) {
+                if ($action === 'add') {
+                    if (!in_array($questionId, $remind_list)) {
                         $newRemindList = [];
-                        $remind_list[] = $question_id;
+                        $remind_list[] = $questionId;
                         $questionListInSession = Session::read('questionList');
                         if (!empty($questionListInSession)) {
                             foreach ($questionListInSession as $originalQuestionId) {
@@ -7112,11 +7115,11 @@ class Exercise
                         }
                         $remind_list_string = implode(',', $newRemindList);
                     }
-                } elseif ($action == 'delete') {
+                } elseif ($action === 'delete') {
                     if (!empty($remind_list)) {
-                        if (in_array($question_id, $remind_list)) {
+                        if (in_array($questionId, $remind_list)) {
                             $remind_list = array_flip($remind_list);
-                            unset($remind_list[$question_id]);
+                            unset($remind_list[$questionId]);
                             $remind_list = array_flip($remind_list);
 
                             if (!empty($remind_list)) {
@@ -7130,7 +7133,7 @@ class Exercise
                 $value = Database::escape_string($remind_list_string);
                 $sql = "UPDATE $track_exercises
                         SET questions_to_check = '$value'
-                        WHERE exe_id = $exe_id ";
+                        WHERE exe_id = $exeId ";
                 Database::query($sql);
             }
         }
@@ -7191,7 +7194,12 @@ class Exercise
             '<span id="counter_to_redirect" class="red_alert"></span>'
         );
         $html .= '</div>';
-        $html .= '<div id="exercise_clock_warning" class="count_down"></div>';
+
+        $icon = Display::returnFontAwesomeIcon('clock-o');
+        $html .= '<div class="count_down">
+                    '.get_lang('RemainingTimeToFinishExercise').'
+                    '.$icon.'<span id="exercise_clock_warning"></span>
+                </div>';
 
         return $html;
     }
@@ -10240,8 +10248,12 @@ class Exercise
         $learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? (int) $_REQUEST['learnpath_item_id'] : 0;
         $learnpath_item_view_id = isset($_REQUEST['learnpath_item_view_id']) ? (int) $_REQUEST['learnpath_item_view_id'] : 0;
 
-        $remind_list = $exercise_stat_info['questions_to_check'];
-        $remind_list = explode(',', $remind_list);
+        if (empty($exercise_stat_info)) {
+            return '';
+        }
+
+        $remindList = $exercise_stat_info['questions_to_check'];
+        $remindList = explode(',', $remindList);
 
         $exeId = $exercise_stat_info['exe_id'];
         $exerciseId = $exercise_stat_info['exe_exo_id'];
@@ -10253,14 +10265,10 @@ class Exercise
         $counter = 0;
         // Loop over all question to show results for each of them, one by one
         foreach ($questionList as $questionId) {
-            // destruction of the Question object
-            unset($objQuestionTmp);
-            // creates a temporary Question object
-            $objQuestionTmp = Question:: read($questionId);
+            $objQuestionTmp = Question::read($questionId);
             $check_id = 'remind_list['.$questionId.']';
-
             $attributes = ['id' => $check_id, 'onclick' => "save_remind_item(this, '$questionId');"];
-            if (in_array($questionId, $remind_list)) {
+            if (in_array($questionId, $remindList)) {
                 $attributes['checked'] = 1;
             }
 
@@ -10276,7 +10284,7 @@ class Exercise
                     </div>';
             $counter++;
             $questionTitle = $counter.'. '.strip_tags($objQuestionTmp->selectTitle());
-            // Check if the question doesn't have an answer
+            // Check if the question doesn't have an answer.
             if (!in_array($questionId, $exercise_result)) {
                 $questionTitle = Display::label($questionTitle, 'danger');
             }
@@ -10286,6 +10294,7 @@ class Exercise
             $questionTitle = Display::tag('label', $checkbox.$questionTitle, $label_attributes);
             $table .= Display::div($questionTitle, ['class' => 'exercise_reminder_item ']);
         }
+
         $content .= Display::div('', ['id' => 'message']).
                     Display::div($table, ['class' => 'question-check-test']);
 
@@ -10297,7 +10306,7 @@ class Exercise
         });
 
         function final_submit() {
-            // Normal inputs
+            // Normal inputs.
             window.location = "'.api_get_path(WEB_CODE_PATH).'exercise/exercise_result.php?'.api_get_cidreq().'&exe_id='.$exeId.'&" + lp_data;
         }
 

@@ -145,15 +145,18 @@ async function exportToPdf() {
     window.jsPDF = window.jspdf.jsPDF;
     var doc = document.getElementById("question_results");
     var pdf = new jsPDF("", "pt", "a4");
+    //var a4Height = 841.89;
 
     // Adding title
     pdf.setFontSize(16);
     pdf.text(40, 40, "'.get_lang('Reporting').'");
 
     const table = document.getElementById("pdf_table");
+    var headerY = 0;
     await html2canvas(table).then(function(canvas) {
         var pageData = canvas.toDataURL("image/jpeg", 1);
-        pdf.addImage(pageData, "JPEG", 40, 60, 530, 530.28/canvas.width * canvas.height);
+        headerY = 530.28/canvas.width * canvas.height;
+        pdf.addImage(pageData, "JPEG", 40, 60, 530, headerY);
     });
 
     var divs = doc.getElementsByClassName("question-item");
@@ -166,11 +169,17 @@ async function exportToPdf() {
         if (!pages[page]) {
             pages[page] = 0;
         }
-        pages[page] += 1;
 
         var positionY = 180;
+        /*var positionY = headerY + 180;
+        if (positionY > 800) {
+             pdf.addPage();
+             page++;
+        }*/
+        pages[page] += 1;
         var diff = 250;
         if (page > 1) {
+            headerY = 0;
             positionY = 60;
             diff = 220;
         }
@@ -189,14 +198,23 @@ async function exportToPdf() {
         });
 
         const tables = divs[i].getElementsByClassName("table");
+        var config= {
+            ignoreElements: function (element) {
+                if (element.nodeName == "IMG" || element.nodeName =="VIDEO"|| element.nodeName =="AUDIO") {
+                    return true;
+                }
+
+                return false;
+            }
+        };
+
         for (var j = 0; j < tables.length; j += 1) {
-            await html2canvas(tables[j]).then(function(canvas) {
+            await html2canvas(tables[j], config).then(function(canvas) {
                 var pageData = canvas.toDataURL("image/jpeg", 0.8);
                 pdf.addImage(pageData, "JPEG", 40, positionY + 210, 520, 530.28/canvas.width * canvas.height);
             });
         }
 
-        //pdf.addImage(pageData, "JPEG", 40, positionY, 530, 530.28/canvas.width * canvas.height);
         if (i > 0 && (i -1) % 2 === 0 && (i+1 != divs.length)) {
              pdf.addPage();
              page++;

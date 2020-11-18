@@ -444,7 +444,7 @@ if (empty($exercise_stat_info)) {
         }
     }
 }
-
+Session::write('exe_id', $exe_id);
 $saveDurationUrl = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?a=update_duration&exe_id='.$exe_id.'&'.api_get_cidreq();
 $questionListInSession = Session::read('questionList');
 $selectionType = $objExercise->getQuestionSelectionType();
@@ -641,6 +641,12 @@ if (api_get_configuration_value('block_category_questions') &&
         $count++;
     }
 
+    // Use reminder list to get the current question.
+    if (2 === $reminder && !empty($myRemindList)) {
+        $remindQuestionId = current($myRemindList);
+        $questionCheck = Question::read($remindQuestionId);
+    }
+
     $categoryId = 0;
     if (null !== $questionCheck) {
         $categoryId = $questionCheck->category;
@@ -648,7 +654,6 @@ if (api_get_configuration_value('block_category_questions') &&
 
     if (!empty($categoryId)) {
         $categoryInfo = $categoryList[$categoryId];
-
         $count = 1;
         $total = count($categoryList[$categoryId]);
         foreach ($categoryList[$categoryId] as $checkQuestionId) {
@@ -673,9 +678,9 @@ if (api_get_configuration_value('block_category_questions') &&
         }
     }
 
-    // Blocked if category was already answered
+    // Blocked if category was already answered.
     if ($categoryId && in_array($categoryId, $blockedCategories)) {
-        // Redirect to category intro
+        // Redirect to category intro.
         $url = api_get_path(WEB_CODE_PATH).'exercise/exercise_question_reminder.php?'.
             $params.'&num='.$current_question.'&category_id='.$isLastQuestionInCategory;
         api_location($url);
@@ -741,7 +746,7 @@ if ($formSent && isset($_POST)) {
                 // stores the user answer into the array
                 $exerciseResult[$key] = $choice[$key];
                 // Saving each question.
-                if (!in_array($objExercise->getFeedbackType(), [EXERCISE_FEEDBACK_TYPE_DIRECT, EXERCISE_FEEDBACK_TYPE_POPUP])) {
+                if (!in_array($objExercise->getFeedbackType(), [EXERCISE_FEEDBACK_TYPE_DIRECT])) {
                     $nro_question = $current_question; // - 1;
                     $questionId = $key;
                     // gets the student choice for this question
@@ -841,9 +846,7 @@ if (is_null($current_question)) {
 }
 
 if ($question_count != 0) {
-    if ($objExercise->type == ALL_ON_ONE_PAGE ||
-        $current_question > $question_count
-    ) {
+    if ($objExercise->type == ALL_ON_ONE_PAGE || $current_question > $question_count) {
         if (api_is_allowed_to_session_edit()) {
             // goes to the script that will show the result of the exercise
             if ($objExercise->type == ALL_ON_ONE_PAGE) {
@@ -928,6 +931,7 @@ $interbreadcrumb[] = ['url' => '#', 'name' => $objExercise->selectTitle(true)];
 
 // Time per question.
 $questionTimeCondition = '';
+$showQuestionClock = false;
 if ($allowTimePerQuestion && $objExercise->type == ONE_PER_PAGE) {
     $objQuestionTmp = null;
     $previousQuestion = null;
@@ -944,74 +948,32 @@ if ($allowTimePerQuestion && $objExercise->type == ONE_PER_PAGE) {
         }
     }
 
-    if (api_get_configuration_value('allow_time_per_question')) {
-        $extraFieldValue = new ExtraFieldValue('question');
-        $value = $extraFieldValue->get_values_by_handler_and_field_variable($objQuestionTmp->iid, 'time');
-        if (!empty($value) && isset($value['value']) && !empty($value['value'])) {
-            $seconds = (int) $value['value'];
-            $now = time();
-            /*$loadedQuestions = array_keys(Session::read('question_start', []));
-            if (!empty($loadedQuestions)) {
-                if (!in_array($objQuestionTmp->iid, $loadedQuestions)) {
-                    api_not_allowed(true);
-                }
-            }*/
-
-            $timeSpent = Event::getAttemptQuestionDuration($exe_id, $objQuestionTmp->iid);
-            /*$loadedQuestions = array_keys(Session::read('question_start'));
-            // Block if another question is loaded at the same time.
-            if (!in_array($objQuestionTmp->iid, $loadedQuestions)) {
-                api_not_allowed(true);
-            }*/
-            /*$timePerQuestion = Session::read('time_per_question', []);
-            if (!empty($timePerQuestion) && isset($timePerQuestion[$objQuestionTmp->iid])) {
-                $time = $timePerQuestion[$objQuestionTmp->iid];
-            } else {
-                $time = $timePerQuestion[$objQuestionTmp->iid] = $now;
-                Session::write('time_per_question', $timePerQuestion);
-            }
-            $timeSpent = $now - $time;*/
-
-            /*if (!empty($questionAttempt) && isset($questionAttempt['tms'])) {
-                var_dump('from DB');
-                var_dump($questionAttempt['tms']);
-                $time = api_strtotime($questionAttempt['tms'], 'UTC');
-                $timeSpent = $now - $time;
-            } else {
-                var_dump('from session');
-                $timePerQuestion = Session::read('time_per_question', []);
-                if (!empty($timePerQuestion) && isset($timePerQuestion[$objQuestionTmp->iid])) {
-                    $time = $timePerQuestion[$objQuestionTmp->iid];
-                } else {
-                    $time = $timePerQuestion[$objQuestionTmp->iid] = $now;
-                    Session::write('time_per_question', $timePerQuestion);
-                }
-                var_dump($timePerQuestion);
-                $timeSpent = $now - $time;
-            }*/
-            //var_dump($timeSpent);
-            //var_dump(api_get_utc_datetime($now).' - '.api_get_utc_datetime($time));
-            // Redirect to next question.
-            if ($timeSpent > $seconds) {
-                $nextQuestion = (int) $currentQuestionFromUrl + 1;
-                $nextQuestionUrl = api_get_path(WEB_CODE_PATH).
-                    "exercise/exercise_submit.php?$params&num=$nextQuestion&remind_question_id=$remind_question_id";
-                api_location($nextQuestionUrl);
-            }
-
-            $seconds = $seconds - $timeSpent;
-            //var_dump($seconds);
-            $questionTimeCondition = "
-                    var timer = new easytimer.Timer();
-                    timer.start({countdown: true, startValues: {seconds: $seconds}});
-                    timer.addEventListener('secondsUpdated', function (e) {
-                        $('#question_timer').html(timer.getTimeValues().toString());
-                    });
-                    timer.addEventListener('targetAchieved', function (e) {
-                        $('.question-validate-btn').click();
-                    });
-                ";
+    $extraFieldValue = new ExtraFieldValue('question');
+    $value = $extraFieldValue->get_values_by_handler_and_field_variable($objQuestionTmp->iid, 'time');
+    if (!empty($value) && isset($value['value']) && !empty($value['value'])) {
+        $showQuestionClock = true;
+        $seconds = (int) $value['value'];
+        $now = time();
+        $timeSpent = Event::getAttemptQuestionDuration($exe_id, $objQuestionTmp->iid);
+        // Redirect to next question.
+        if ($timeSpent > $seconds) {
+            $nextQuestion = (int) $currentQuestionFromUrl + 1;
+            $nextQuestionUrl = api_get_path(WEB_CODE_PATH).
+                "exercise/exercise_submit.php?$params&num=$nextQuestion&remind_question_id=$remind_question_id";
+            api_location($nextQuestionUrl);
         }
+
+        $seconds = $seconds - $timeSpent;
+        $questionTimeCondition = "
+                var timer = new easytimer.Timer();
+                timer.start({countdown: true, startValues: {seconds: $seconds}});
+                timer.addEventListener('secondsUpdated', function (e) {
+                    $('#question_timer').html(timer.getTimeValues().toString());
+                });
+                timer.addEventListener('targetAchieved', function (e) {
+                    $('.question-validate-btn').click();
+                });
+            ";
     }
 }
 
@@ -1138,8 +1100,10 @@ if ($time_control) {
         get_lang('ExerciseExpiredTimeMessage').'</div>';
 }
 
-if ($allowTimePerQuestion) {
+if ($showQuestionClock) {
+    $icon = Display::returnFontAwesomeIcon('clock-o');
     echo '<div class="well" style="text-align: center">
+            '.get_lang('RemainingTimeToFinishQuestion').'
             <div id="question_timer" class="label label-warning"></div>
           </div>';
 }
@@ -1147,11 +1111,11 @@ if ($allowTimePerQuestion) {
 if (!in_array($origin, ['learnpath', 'embeddable'])) {
     echo '<div id="highlight-plugin" class="glossary-content">';
 }
-
 if ($reminder == 2) {
     $data_tracking = $exercise_stat_info['data_tracking'];
     $data_tracking = explode(',', $data_tracking);
     $current_question = 1; //set by default the 1st question
+
     if (!empty($myRemindList)) {
         // Checking which questions we are going to call from the remind list
         for ($i = 0; $i < count($data_tracking); $i++) {

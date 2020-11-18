@@ -101,6 +101,17 @@ echo Display::page_header(get_lang('QuestionsToReview'));
 if ($time_control) {
     echo $objExercise->returnTimeLeftDiv();
 }
+
+$selectionType = $objExercise->getQuestionSelectionType();
+if (api_get_configuration_value('block_category_questions') &&
+    ONE_PER_PAGE == $objExercise->type &&
+    EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_RANDOM == $selectionType
+) {
+    // get last category question list
+    $categoryList = Session::read('categoryList');
+    $question_list = end($categoryList);
+}
+
 echo $objExercise->getReminderTable($question_list, $exercise_stat_info);
 
 $exerciseActions = Display::url(

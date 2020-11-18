@@ -1099,7 +1099,7 @@ class Event
         $lp_item_id,
         $lp_item_view_id
     ) {
-        $stat_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $user_id = (int) $user_id;
         $exerciseId = (int) $exerciseId;
         $lp_id = (int) $lp_id;
@@ -1109,7 +1109,7 @@ class Event
         $sessionId = api_get_session_id();
 
         $sql = "SELECT count(*) as count
-                FROM $stat_table
+                FROM $table
                 WHERE
                     exe_exo_id = $exerciseId AND
                     exe_user_id = $user_id AND
@@ -1120,11 +1120,58 @@ class Event
                     c_id = $courseId AND
                     session_id = $sessionId";
 
-        $query = Database::query($sql);
-        if (Database::num_rows($query) > 0) {
-            $attempt = Database::fetch_array($query, 'ASSOC');
+        $result = Database::query($sql);
+        if (Database::num_rows($result) > 0) {
+            $attempt = Database::fetch_array($result, 'ASSOC');
 
             return (int) $attempt['count'];
+        }
+
+        return 0;
+    }
+
+    public static function getAttemptPosition(
+        $exeId,
+        $user_id,
+        $exerciseId,
+        $lp_id,
+        $lp_item_id,
+        $lp_item_view_id
+    ) {
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $user_id = (int) $user_id;
+        $exerciseId = (int) $exerciseId;
+        $lp_id = (int) $lp_id;
+        $lp_item_id = (int) $lp_item_id;
+        $lp_item_view_id = (int) $lp_item_view_id;
+        $courseId = api_get_course_int_id();
+        $sessionId = api_get_session_id();
+
+        $sql = "SELECT exe_id
+                FROM $table
+                WHERE
+                    exe_exo_id = $exerciseId AND
+                    exe_user_id = $user_id AND
+                    status = '' AND
+                    orig_lp_id = $lp_id AND
+                    orig_lp_item_id = $lp_item_id AND
+                    orig_lp_item_view_id = $lp_item_view_id AND
+                    c_id = $courseId AND
+                    session_id = $sessionId
+                ORDER by exe_id
+                ";
+
+        $result = Database::query($sql);
+        if (Database::num_rows($result) > 0) {
+            $position = 1;
+            while ($row = Database::fetch_array($result, 'ASSOC')) {
+                if ($row['exe_id'] === $exeId) {
+                    break;
+                }
+                $position++;
+            }
+
+            return $position;
         }
 
         return 0;
@@ -1179,6 +1226,7 @@ class Event
      * @param int   $lp_id
      * @param array $course
      * @param int   $session_id
+     * @param bool  $disconnectExerciseResultsFromLp (Replace orig_lp_* variables to null)
      *
      * @return bool
      */
@@ -1186,7 +1234,8 @@ class Event
         $user_id,
         $lp_id,
         $course,
-        $session_id
+        $session_id,
+        $disconnectExerciseResultsFromLp = false
     ) {
         $lp_view_table = Database::get_course_table(TABLE_LP_VIEW);
         $lp_item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
@@ -1248,6 +1297,42 @@ class Event
             Database::query($sql);
         }
 
+        $sql = "SELECT exe_id FROM $track_e_exercises
+                WHERE
+                    exe_user_id = $user_id AND
+                    session_id = $session_id AND
+                    c_id = $course_id AND
+                    orig_lp_id = $lp_id";
+        $result = Database::query($sql);
+        $exeList = [];
+        while ($row = Database::fetch_array($result, 'ASSOC')) {
+            $exeList[] = $row['exe_id'];
+        }
+
+        if (!empty($exeList) && count($exeList) > 0) {
+            $exeListString = implode(',', $exeList);
+            if ($disconnectExerciseResultsFromLp) {
+                $sql = "UPDATE $track_e_exercises
+                        SET orig_lp_id = null,
+                            orig_lp_item_id = null,
+                            orig_lp_item_view_id = null
+                        WHERE exe_id IN ($exeListString)";
+                Database::query($sql);
+            } else {
+                $sql = "DELETE FROM $track_e_exercises
+                        WHERE exe_id IN ($exeListString)";
+                Database::query($sql);
+
+                $sql = "DELETE FROM $track_attempts
+                        WHERE exe_id IN ($exeListString)";
+                Database::query($sql);
+
+                $sql = "DELETE FROM $recording_table
+                        WHERE exe_id IN ($exeListString)";
+                Database::query($sql);
+            }
+        }
+
         $sql = "DELETE FROM $lp_view_table
                 WHERE
                     c_id = $course_id AND
@@ -1256,33 +1341,6 @@ class Event
                     session_id = $session_id
             ";
         Database::query($sql);
-
-        $sql = "SELECT exe_id FROM $track_e_exercises
-                WHERE
-                    exe_user_id = $user_id AND
-                    session_id = $session_id AND
-                    c_id = $course_id AND
-                    orig_lp_id = $lp_id";
-        $result = Database::query($sql);
-        $exe_list = [];
-        while ($row = Database::fetch_array($result, 'ASSOC')) {
-            $exe_list[] = $row['exe_id'];
-        }
-
-        if (!empty($exe_list) && is_array($exe_list) && count($exe_list) > 0) {
-            $exeListString = implode(',', $exe_list);
-            $sql = "DELETE FROM $track_e_exercises
-                    WHERE exe_id IN ($exeListString)";
-            Database::query($sql);
-
-            $sql = "DELETE FROM $track_attempts
-                    WHERE exe_id IN ($exeListString)";
-            Database::query($sql);
-
-            $sql = "DELETE FROM $recording_table
-                    WHERE exe_id IN ($exeListString)";
-            Database::query($sql);
-        }
 
         self::addEvent(
             LOG_LP_ATTEMPT_DELETE,

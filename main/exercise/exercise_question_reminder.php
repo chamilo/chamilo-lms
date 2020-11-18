@@ -84,6 +84,10 @@ if ($validateCategory) {
             SET blocked_categories = '$value'
             WHERE exe_id = $exeId";
     Database::query($sql);
+
+    // Cleaning old remind list.
+    $objExercise->removeAllQuestionToRemind($exeId);
+
     api_location($url.'&num='.$currentQuestion);
 }
 

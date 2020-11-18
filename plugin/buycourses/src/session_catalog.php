@@ -21,7 +21,7 @@ if (!$includeSessions) {
 $nameFilter = null;
 $minFilter = 0;
 $maxFilter = 0;
-$sessionCategory = (int) isset($_GET['session_category']) ? $_GET['session_category'] : 0;
+$sessionCategory = isset($_GET['session_category']) ? (int) $_GET['session_category'] : 0;
 $form = new FormValidator(
     'search_filter_form',
     'get',

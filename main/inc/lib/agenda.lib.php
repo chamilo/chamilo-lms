@@ -528,7 +528,6 @@ class Agenda
 
             // @todo remove comment code
             $startDateInLocal = new DateTime($newStartDate, new DateTimeZone($timeZone));
-            //$originalOffset = $startDate->getOffset();
             if ($startDateInLocal->format('I') == 0) {
                 // Is saving time? Then fix UTC time to add time
                 $seconds = $startDateInLocal->getOffset();
@@ -536,14 +535,7 @@ class Agenda
                 $startDateFixed = $startDate->format('Y-m-d H:i:s');
                 $startDateInLocalFixed = new DateTime($startDateFixed, new DateTimeZone($timeZone));
                 $newStartDate = $startDateInLocalFixed->format('Y-m-d H:i:s');
-            } else {
-                /*$seconds = $startDateInLocal->getOffset();
-                $startDate->add(new DateInterval("PT".$seconds."S"));
-                $startDateFixed = $startDate->format('Y-m-d H:i:s');
-                $startDateInLocalFixed = new DateTime($startDateFixed, new DateTimeZone($timeZone));
-                $newStartDate = $startDateInLocalFixed->format('Y-m-d H:i:s');*/
             }
-            //var_dump($newStartDate.' - '.$startDateInLocal->format('I'));
             $endDateInLocal = new DateTime($newEndDate, new DateTimeZone($timeZone));
 
             if ($endDateInLocal->format('I') == 0) {

@@ -112,12 +112,12 @@ class LearnpathList
 
             $sql2 = "SELECT visibility FROM $tbl_tool
                      WHERE
-                        c_id = $course_id AND 
+                        c_id = $course_id AND
                         name = '$name' AND
                         image = 'scormbuilder.gif' AND
                         (
                             link LIKE '$link%' OR
-                            link LIKE '$oldLink%'                                
+                            link LIKE '$oldLink%'
                         )
                       ";
             $res2 = Database::query($sql2);

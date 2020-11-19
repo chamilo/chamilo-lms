@@ -56,7 +56,7 @@ class BuyCoursesPlugin extends Plugin
     const TAX_APPLIES_TO_ONLY_COURSE = 2;
     const TAX_APPLIES_TO_ONLY_SESSION = 3;
     const TAX_APPLIES_TO_ONLY_SERVICES = 4;
-    const PAGINATION_PAGE_SIZE = 5;
+    const PAGINATION_PAGE_SIZE = 6;
 
     public $isAdminPlugin = true;
 

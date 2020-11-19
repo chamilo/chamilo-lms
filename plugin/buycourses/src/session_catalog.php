@@ -43,17 +43,15 @@ if ($form->validate()) {
 
 $form->addHeader($plugin->get_lang('SearchFilter'));
 
+$categoriesOptions = [
+    '0' => get_lang('None'),
+];
 $categoriesList = SessionManager::get_all_session_category();
-
 if ($categoriesList != false) {
     foreach ($categoriesList as $categoryItem) {
         $categoriesOptions[$categoryItem['id']] = $categoryItem['name'];
     }
 }
-$categoriesOptions = [
-    '0' => get_lang('None'),
-];
-
 $form->addSelect(
     'session_category',
     get_lang('SessionCategory'),
@@ -62,6 +60,7 @@ $form->addSelect(
         'id' => 'session_category',
     ]
 );
+
 $form->addText('name', get_lang('SessionName'), false);
 
 $form->addElement(

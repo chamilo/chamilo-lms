@@ -75,10 +75,12 @@ $table->setHeaderContents(0, 3, $plugin->get_lang('ActivityId'));
 
 $i = 1;
 
+$languageIso = api_get_language_isocode(api_get_interface_language());
+
 foreach ($statements as $statement) {
     $timestampStored = $statement->getCreated() ? api_convert_and_format_date($statement->getCreated()) : '-';
     $actor = $statement->getActor()->getName();
-    $verb = XApiPlugin::extractVerbInLanguage($statement->getVerb()->getDisplay(), 'es');
+    $verb = XApiPlugin::extractVerbInLanguage($statement->getVerb()->getDisplay(), $languageIso);
     $activity = '';
 
     $statementObject = $statement->getObject();
@@ -88,8 +90,7 @@ foreach ($statements as $statement) {
             $definition = $statementObject->getDefinition();
 
             if (null !== $definition->getName()) {
-                $activity = XApiPlugin::extractVerbInLanguage($definition->getName(), 'es')
-                    .'<br>';
+                $activity = XApiPlugin::extractVerbInLanguage($definition->getName(), $languageIso).'<br>';
             }
         }
 

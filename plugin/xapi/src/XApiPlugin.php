@@ -445,15 +445,12 @@ class XApiPlugin extends Plugin implements HookPluginInterface
      */
     public static function findLanguageIso(array $haystack, $needle)
     {
-        $haystack = array_map('strtolower', $haystack);
-        $needle = strtolower($needle);
-
         if (in_array($needle, $haystack)) {
-            return $haystack[$needle];
+            return $needle;
         }
 
         foreach ($haystack as $language) {
-            if (strpos($language, $needle) != 0) {
+            if (strpos($language, $needle) === 0) {
                 return $language;
             }
         }

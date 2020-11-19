@@ -94,7 +94,11 @@ foreach ($statements as $statement) {
             }
         }
 
-        $activity .= "<small>{$statementObject->getId()->getValue()}</small>";
+        $activity .= Display::tag(
+            'small',
+            $statementObject->getId()->getValue(),
+            ['class' => 'text-muted']
+        );
     }
 
     $table->setCellContents($i, 0, $timestampStored);

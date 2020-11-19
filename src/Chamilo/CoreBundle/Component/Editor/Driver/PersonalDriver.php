@@ -78,7 +78,7 @@ class PersonalDriver extends Driver implements DriverInterface
                     ],
                 ];
 
-                if(api_get_setting('social_myfiles_office_files_upload_allowed')){
+                if (api_get_setting('social_myfiles_office_files_upload_allowed')) {
                     //Allow all office suite documents to be uploaded in the "My files" section of the social network
                     $driver['uploadOrder'] = ['deny', 'allow'];
                     $driver['uploadAllow'] = [

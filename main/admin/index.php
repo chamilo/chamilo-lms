@@ -769,6 +769,21 @@ if (api_is_platform_admin()) {
         'url' => 'https://chamilo.org/',
         'label' => get_lang('ChamiloHomepage'),
     ];
+    // Custom linking to user guides in the existing languages
+    $guideLinks = [
+        'french' => 'v/1.11.x-fr/',
+        'spanish' => 'v/1.11.x-es/',
+        'dutch' => 'v/1.11.x-nl/',
+        'galician' => 'v/1.11.x-ga/',
+    ];
+    $guideLink = 'https://docs.chamilo.org/';
+    if (!empty($guideLinks[$language_interface])) {
+        $guideLink .= $guideLinks[$language_interface];
+    }
+    $items[] = [
+        'url' => $guideLink,
+        'label' => get_lang('UserGuides'),
+    ];
     $items[] = [
         'url' => 'https://forum.chamilo.org/',
         'label' => get_lang('ChamiloForum'),

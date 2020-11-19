@@ -10,6 +10,7 @@
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
+apiBlockInactiveUser();
 
 $logInfo = [
     'tool' => 'MyCertificates',
@@ -19,7 +20,6 @@ Event::registerLog($logInfo);
 if (api_is_anonymous()) {
     api_not_allowed(true);
 }
-
 $userId = api_get_user_id();
 
 $courseList = GradebookUtils::getUserCertificatesInCourses($userId);

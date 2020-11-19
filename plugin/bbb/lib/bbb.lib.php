@@ -1221,7 +1221,7 @@ class bbb
 
         // Update users with in_at y ou_at field equal
         $roomTable = Database::get_main_table('plugin_bbb_room');
-        $conditions['where'] = ['meeting_id=? AND in_at=out_at' => [$id]];
+        $conditions['where'] = ['meeting_id=? AND in_at=out_at AND close=?' => [$id, BBBPlugin::ROOM_OPEN]];
         $roomList = Database::select(
             '*',
             $roomTable,
@@ -1230,11 +1230,13 @@ class bbb
 
         foreach ($roomList as $roomDB) {
             $roomId = $roomDB['id'];
-            Database::update(
-                $roomTable,
-                ['out_at' => api_get_utc_datetime(), 'close' => BBBPlugin::ROOM_CLOSE],
-                ['id = ? ' => $roomId]
-            );
+            if (!empty($roomId)) {
+                Database::update(
+                    $roomTable,
+                    ['out_at' => api_get_utc_datetime(), 'close' => BBBPlugin::ROOM_CLOSE],
+                    ['id = ? ' => $roomId]
+                );
+            }
         }
 
         // Close all meeting rooms with meeting ID

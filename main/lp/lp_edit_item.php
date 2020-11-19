@@ -119,7 +119,19 @@ $(function() {
 </script>
 <?php
 
-echo $learnPath->build_action_menu();
+$extraField = [];
+$field = new ExtraField('lp_item');
+$authorLpField = $field->get_handler_field_info_by_field_variable('authorlpitem');
+if ($authorLpField != null) {
+    $extraField['authorlp'] = $authorLpField;
+}
+echo $learnPath->build_action_menu(false,
+    true,
+    false,
+    true,
+    '',
+    $extraField
+);
 
 echo '<div class="row">';
 echo '<div id="lp_sidebar" class="col-md-4">';

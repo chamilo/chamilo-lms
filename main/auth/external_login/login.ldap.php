@@ -5,7 +5,7 @@
 use ChamiloSession as Session;
 
 /**
- * This file is included in main/inc/local.inc.php at user login if the user have 'external_ldap' in
+ * This file is included in main/inc/local.inc.php at user login if the user have 'extldap' in
  * his auth_source field instead of platform.
  *
  * Variables that can be used :
@@ -57,7 +57,7 @@ if ($ldap_user !== false) {
         error_log("chamilo_user found user_id: {$uData['user_id']}");
     }
 
-    //U pdate user info
+    //Update user info
     if (isset($extldap_config['update_userinfo']) && $extldap_config['update_userinfo']) {
         external_update_user($chamilo_user);
         if ($debug) {

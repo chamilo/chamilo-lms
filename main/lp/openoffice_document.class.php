@@ -79,7 +79,6 @@ abstract class OpenofficeDocument extends learnpath
 
         if ($ppt2lp_host == 'localhost') {
             move_uploaded_file($file['tmp_name'], $this->base_work_dir.'/'.$this->file_path);
-            //var_dump( $this->base_work_dir.$this->created_dir.$this->file_path);
             $perm = api_get_setting('permissions_for_new_files');
 
             if (IS_WINDOWS_OS) { // IS_WINDOWS_OS has been defined in main_api.lib.php

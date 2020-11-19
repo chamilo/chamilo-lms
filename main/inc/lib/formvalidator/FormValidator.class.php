@@ -19,13 +19,13 @@ class FormValidator extends HTML_QuickForm
     /**
      * Constructor.
      *
-     * @param string $name Name of the form
-     * @param string $method (optional) Method ('post' (default) or 'get')
-     * @param string $action (optional) Action (default is $PHP_SELF)
-     * @param string $target (optional) Form's target defaults to '_self'
-     * @param mixed $attributes (optional) Extra attributes for <form> tag
+     * @param string $name        Name of the form
+     * @param string $method      (optional) Method ('post' (default) or 'get')
+     * @param string $action      (optional) Action (default is $PHP_SELF)
+     * @param string $target      (optional) Form's target defaults to '_self'
+     * @param mixed  $attributes  (optional) Extra attributes for <form> tag
      * @param string $layout
-     * @param bool $trackSubmit (optional) Whether to track if the form was
+     * @param bool   $trackSubmit (optional) Whether to track if the form was
      *                            submitted by adding a special hidden field (default = true)
      */
     public function __construct(
@@ -36,8 +36,7 @@ class FormValidator extends HTML_QuickForm
         $attributes = [],
         $layout = self::LAYOUT_HORIZONTAL,
         $trackSubmit = true
-    )
-    {
+    ) {
         // Default form class.
         if (is_array($attributes) && !isset($attributes['class']) || empty($attributes)) {
             $attributes['class'] = 'form-horizontal';
@@ -103,7 +102,7 @@ class FormValidator extends HTML_QuickForm
 
         //Set required field template
         $this->setRequiredNote(
-            '<span class="form_required">*</span> <small>' . get_lang('ThisFieldIsRequired') . '</small>'
+            '<span class="form_required">*</span> <small>'.get_lang('ThisFieldIsRequired').'</small>'
         );
 
         $noteTemplate = <<<EOT
@@ -145,9 +144,9 @@ EOT;
     }
 
     /**
-     * @return string
      * @todo this function should be added in the element class
      *
+     * @return string
      */
     public function getDefaultElementTemplate()
     {
@@ -196,10 +195,10 @@ EOT;
      * Adds a text field to the form.
      * A trim-filter is attached to the field.
      *
-     * @param string|array $label The label for the form-element
-     * @param string $name The element name
-     * @param bool $required (optional)    Is the form-element required (default=true)
-     * @param array $attributes (optional)    List of attributes for the form-element
+     * @param string|array $label      The label for the form-element
+     * @param string       $name       The element name
+     * @param bool         $required   (optional)    Is the form-element required (default=true)
+     * @param array        $attributes (optional)    List of attributes for the form-element
      *
      * @return HTML_QuickForm_text
      */
@@ -237,14 +236,14 @@ EOT;
      *
      * @param string $name
      * @param string $label
-     * @param bool $required
-     * @param array $attributes
+     * @param bool   $required
+     * @param array  $attributes
      */
     public function addDateRangePicker($name, $label, $required = true, $attributes = [])
     {
         $this->addElement('date_range_picker', $name, $label, $attributes);
-        $this->addElement('hidden', $name . '_start');
-        $this->addElement('hidden', $name . '_end');
+        $this->addElement('hidden', $name.'_start');
+        $this->addElement('hidden', $name.'_end');
 
         if ($required) {
             $this->addRule($name, get_lang('ThisFieldIsRequired'), 'required');
@@ -254,7 +253,7 @@ EOT;
     /**
      * @param string $name
      * @param string $label
-     * @param array $attributes
+     * @param array  $attributes
      *
      * @return DatePicker
      */
@@ -266,7 +265,7 @@ EOT;
     /**
      * @param string $name
      * @param string $label
-     * @param array $attributes
+     * @param array  $attributes
      *
      * @return mixed
      */
@@ -278,12 +277,12 @@ EOT;
     /**
      * @param string $name
      * @param string $label
-     * @param array $options
-     * @param array $attributes
+     * @param array  $options
+     * @param array  $attributes
      *
-     * @return HTML_QuickForm_element
      * @throws Exception
      *
+     * @return HTML_QuickForm_element
      */
     public function addSelectAjax($name, $label, $options = [], $attributes = [])
     {
@@ -301,9 +300,9 @@ EOT;
     }
 
     /**
-     * @param string $name
+     * @param string       $name
      * @param string|array $label
-     * @param array $attributes
+     * @param array        $attributes
      *
      * @return DateTimePicker
      */
@@ -313,9 +312,9 @@ EOT;
     }
 
     /**
-     * @param string $name
+     * @param string       $name
      * @param string|array $label
-     * @param array $attributes
+     * @param array        $attributes
      *
      * @return DateTimeRangePicker
      */
@@ -327,7 +326,7 @@ EOT;
     /**
      * @param string $name
      * @param string $value
-     * @param array $attributes
+     * @param array  $attributes
      */
     public function addHidden($name, $value, $attributes = [])
     {
@@ -335,10 +334,10 @@ EOT;
     }
 
     /**
-     * @param string $name
+     * @param string       $name
      * @param string|array $label
-     * @param array $attributes
-     * @param bool $required
+     * @param array        $attributes
+     * @param bool         $required
      *
      * @return HTML_QuickForm_textarea
      */
@@ -356,12 +355,12 @@ EOT;
     /**
      * @param string $name
      * @param string $label
-     * @param string $icon font-awesome
-     * @param string $style default|primary|success|info|warning|danger|link
-     * @param string $size large|default|small|extra-small
-     * @param string $class Example plus is transformed to icon fa fa-plus
-     * @param array $attributes
-     * @param bool $createElement
+     * @param string $icon          font-awesome
+     * @param string $style         default|primary|success|info|warning|danger|link
+     * @param string $size          large|default|small|extra-small
+     * @param string $class         Example plus is transformed to icon fa fa-plus
+     * @param array  $attributes
+     * @param bool   $createElement
      *
      * @return HTML_QuickForm_button
      */
@@ -374,8 +373,7 @@ EOT;
         $class = null,
         $attributes = [],
         $createElement = false
-    )
-    {
+    ) {
         if ($createElement) {
             return $this->createElement(
                 'button',
@@ -404,9 +402,9 @@ EOT;
     /**
      * Returns a button with the primary color and a check mark.
      *
-     * @param string $label Text appearing on the button
-     * @param string $name Element name (for form treatment purposes)
-     * @param bool $createElement Whether to use the create or add method
+     * @param string $label         Text appearing on the button
+     * @param string $name          Element name (for form treatment purposes)
+     * @param bool   $createElement Whether to use the create or add method
      *
      * @return HTML_QuickForm_button
      */
@@ -427,9 +425,9 @@ EOT;
     /**
      * Returns a cancel button.
      *
-     * @param string $label Text appearing on the button
-     * @param string $name Element name (for form treatment purposes)
-     * @param bool $createElement Whether to use the create or add method
+     * @param string $label         Text appearing on the button
+     * @param string $name          Element name (for form treatment purposes)
+     * @param bool   $createElement Whether to use the create or add method
      *
      * @return HTML_QuickForm_button
      */
@@ -450,10 +448,10 @@ EOT;
     /**
      * Returns a button with the primary color and a "plus" icon.
      *
-     * @param string $label Text appearing on the button
-     * @param string $name Element name (for form treatment purposes)
-     * @param bool $createElement Whether to use the create or add method
-     * @param array $attributes Additional attributes
+     * @param string $label         Text appearing on the button
+     * @param string $name          Element name (for form treatment purposes)
+     * @param bool   $createElement Whether to use the create or add method
+     * @param array  $attributes    Additional attributes
      *
      * @return HTML_QuickForm_button
      */
@@ -474,9 +472,9 @@ EOT;
     /**
      * Returns a button with the primary color and a pencil icon.
      *
-     * @param string $label Text appearing on the button
-     * @param string $name Element name (for form treatment purposes)
-     * @param bool $createElement Whether to use the create or add method
+     * @param string $label         Text appearing on the button
+     * @param string $name          Element name (for form treatment purposes)
+     * @param bool   $createElement Whether to use the create or add method
      *
      * @return HTML_QuickForm_button
      */
@@ -497,9 +495,9 @@ EOT;
     /**
      * Returns a button with the danger color and a trash icon.
      *
-     * @param string $label Text appearing on the button
-     * @param string $name Element name (for form treatment purposes)
-     * @param bool $createElement Whether to use the create or add method
+     * @param string $label         Text appearing on the button
+     * @param string $name          Element name (for form treatment purposes)
+     * @param bool   $createElement Whether to use the create or add method
      *
      * @return HTML_QuickForm_button
      */
@@ -520,9 +518,9 @@ EOT;
     /**
      * Returns a move style button.
      *
-     * @param string $label Text appearing on the button
-     * @param string $name Element name (for form treatment purposes)
-     * @param bool $createElement Whether to use the create or add method
+     * @param string $label         Text appearing on the button
+     * @param string $name          Element name (for form treatment purposes)
+     * @param bool   $createElement Whether to use the create or add method
      *
      * @return HTML_QuickForm_button
      */
@@ -543,12 +541,13 @@ EOT;
     /**
      * Returns a button with the primary color and a paper-plane icon.
      *
-     * @param string $label Text appearing on the button
-     * @param string $name Element name (for form treatment purposes)
-     * @param bool $createElement Whether to use the create or add method
-     * @param array $attributes
-     * @param $size
-     * @param $class
+     * @param string $label         Text appearing on the button
+     * @param string $name          Element name (for form treatment purposes)
+     * @param bool   $createElement Whether to use the create or add method
+     * @param array  $attributes
+     * @param int    $size
+     * @param string $class
+     *
      * @return HTML_QuickForm_button
      */
     public function addButtonSend($label, $name = 'submit', $createElement = false, $attributes = [], $size, $class)
@@ -569,7 +568,7 @@ EOT;
      * Returns a button with the default (grey?) color and a magnifier icon.
      *
      * @param string $label Text appearing on the button
-     * @param string $name Element name (for form treatment purposes)
+     * @param string $name  Element name (for form treatment purposes)
      *
      * @return HTML_QuickForm_button
      */
@@ -585,9 +584,9 @@ EOT;
     /**
      * Returns a button with the primary color and a right-pointing arrow icon.
      *
-     * @param string $label Text appearing on the button
-     * @param string $name Element name (for form treatment purposes)
-     * @param array $attributes Additional attributes
+     * @param string $label      Text appearing on the button
+     * @param string $name       Element name (for form treatment purposes)
+     * @param array  $attributes Additional attributes
      *
      * @return HTML_QuickForm_button
      */
@@ -607,9 +606,9 @@ EOT;
     /**
      * Returns a button with the primary color and a check mark icon.
      *
-     * @param string $label Text appearing on the button
-     * @param string $name Element name (for form treatment purposes)
-     * @param bool $createElement Whether to use the create or add method
+     * @param string $label         Text appearing on the button
+     * @param string $name          Element name (for form treatment purposes)
+     * @param bool   $createElement Whether to use the create or add method
      *
      * @return HTML_QuickForm_button
      */
@@ -630,9 +629,9 @@ EOT;
     /**
      * Returns a button with the primary color and a check-mark icon.
      *
-     * @param string $label Text appearing on the button
-     * @param string $name Element name (for form treatment purposes)
-     * @param bool $createElement Whether to use the create or add method
+     * @param string $label         Text appearing on the button
+     * @param string $name          Element name (for form treatment purposes)
+     * @param bool   $createElement Whether to use the create or add method
      *
      * @return HTML_QuickForm_button
      */
@@ -653,9 +652,9 @@ EOT;
     /**
      * Shortcut to filter button.
      *
-     * @param string $label Text appearing on the button
-     * @param string $name Element name (for form treatment purposes)
-     * @param bool $createElement Whether to use the create or add method
+     * @param string $label         Text appearing on the button
+     * @param string $name          Element name (for form treatment purposes)
+     * @param bool   $createElement Whether to use the create or add method
      *
      * @return HTML_QuickForm_button
      */
@@ -676,9 +675,9 @@ EOT;
     /**
      * Shortcut to reset button.
      *
-     * @param string $label Text appearing on the button
-     * @param string $name Element name (for form treatment purposes)
-     * @param bool $createElement Whether to use the create or add method
+     * @param string $label         Text appearing on the button
+     * @param string $name          Element name (for form treatment purposes)
+     * @param bool   $createElement Whether to use the create or add method
      *
      * @return HTML_QuickForm_button
      */
@@ -718,9 +717,9 @@ EOT;
     /**
      * Returns a button with the primary color and an upload icon.
      *
-     * @param string $label Text appearing on the button
-     * @param string $name Element name (for form treatment purposes)
-     * @param bool $createElement Whether to use the create or add method
+     * @param string $label         Text appearing on the button
+     * @param string $name          Element name (for form treatment purposes)
+     * @param bool   $createElement Whether to use the create or add method
      *
      * @return HTML_QuickForm_button
      */
@@ -741,9 +740,9 @@ EOT;
     /**
      * Returns a button with the primary color and a download icon.
      *
-     * @param string $label Text appearing on the button
-     * @param string $name Element name (for form treatment purposes)
-     * @param bool $createElement Whether to use the create or add method
+     * @param string $label         Text appearing on the button
+     * @param string $name          Element name (for form treatment purposes)
+     * @param bool   $createElement Whether to use the create or add method
      *
      * @return HTML_QuickForm_button
      */
@@ -764,9 +763,9 @@ EOT;
     /**
      * Returns a button with the primary color and a magnifier icon.
      *
-     * @param string $label Text appearing on the button
-     * @param string $name Element name (for form treatment purposes)
-     * @param bool $createElement Whether to use the create or add method
+     * @param string $label         Text appearing on the button
+     * @param string $name          Element name (for form treatment purposes)
+     * @param bool   $createElement Whether to use the create or add method
      *
      * @return HTML_QuickForm_button
      */
@@ -787,9 +786,9 @@ EOT;
     /**
      * Returns a button with the primary color and a copy (double sheet) icon.
      *
-     * @param string $label Text appearing on the button
-     * @param string $name Element name (for form treatment purposes)
-     * @param bool $createElement Whether to use the create or add method
+     * @param string $label         Text appearing on the button
+     * @param string $name          Element name (for form treatment purposes)
+     * @param bool   $createElement Whether to use the create or add method
      *
      * @return HTML_QuickForm_button
      */
@@ -811,7 +810,7 @@ EOT;
      * @param string $name
      * @param string $label
      * @param string $text
-     * @param array $attributes
+     * @param array  $attributes
      *
      * @return HTML_QuickForm_checkbox
      */
@@ -823,8 +822,8 @@ EOT;
     /**
      * @param string $name
      * @param string $label
-     * @param array $options
-     * @param array $attributes
+     * @param array  $options
+     * @param array  $attributes
      *
      * @return HTML_QuickForm_group
      */
@@ -848,8 +847,8 @@ EOT;
     /**
      * @param string $name
      * @param string $label
-     * @param array $options
-     * @param array $attributes
+     * @param array  $options
+     * @param array  $attributes
      *
      * @return HTML_QuickForm_group
      */
@@ -868,9 +867,9 @@ EOT;
 
     /**
      * @param string $name
-     * @param mixed $label String, or array if form element with a comment
-     * @param array $options
-     * @param array $attributes
+     * @param mixed  $label      String, or array if form element with a comment
+     * @param array  $options
+     * @param array  $attributes
      *
      * @return HTML_QuickForm_select
      */
@@ -883,9 +882,9 @@ EOT;
      * @param $name
      * @param $label
      * @param $collection
-     * @param array $attributes
-     * @param bool $addNoneOption
-     * @param string $textCallable set a function getStringValue() by default __toString()
+     * @param array  $attributes
+     * @param bool   $addNoneOption
+     * @param string $textCallable  set a function getStringValue() by default __toString()
      *
      * @return HTML_QuickForm_element
      */
@@ -896,8 +895,7 @@ EOT;
         $attributes = [],
         $addNoneOption = false,
         $textCallable = ''
-    )
-    {
+    ) {
         $options = [];
 
         if ($addNoneOption) {
@@ -920,7 +918,7 @@ EOT;
     /**
      * @param string $label
      * @param string $text
-     * @param bool $createElement
+     * @param bool   $createElement
      *
      * @return HTML_QuickForm_Element
      */
@@ -950,11 +948,11 @@ EOT;
     /**
      * @param string $name
      * @param string $label
-     * @param array $attributes
+     * @param array  $attributes
      *
-     * @return HTML_QuickForm_file
      * @throws Exception if the file doesn't have an id
      *
+     * @return HTML_QuickForm_file
      */
     public function addFile($name, $label, $attributes = [])
     {
@@ -966,19 +964,19 @@ EOT;
             }
             $this->addHtml(
                 '
-                <div class="form-group" id="' . $id . '-form-group" style="display: none;">
+                <div class="form-group" id="'.$id.'-form-group" style="display: none;">
                     <div class="col-sm-offset-2 col-sm-8">
-                        <div id="' . $id . '_crop_image" class="cropCanvas thumbnail">
-                            <img id="' . $id . '_preview_image">
+                        <div id="'.$id.'_crop_image" class="cropCanvas thumbnail">
+                            <img id="'.$id.'_preview_image">
                         </div>
-                        <button class="btn btn-primary" type="button" name="cropButton" id="' . $id . '_crop_button">
-                            <em class="fa fa-crop"></em> ' . get_lang('CropYourPicture') . '
+                        <button class="btn btn-primary" type="button" name="cropButton" id="'.$id.'_crop_button">
+                            <em class="fa fa-crop"></em> '.get_lang('CropYourPicture').'
                         </button>
                     </div>
                 </div>'
             );
-            $this->addHidden($id . '_crop_result', '');
-            $this->addHidden($id . '_crop_image_base_64', '');
+            $this->addHidden($id.'_crop_result', '');
+            $this->addHidden($id.'_crop_image_base_64', '');
         }
 
         return $element;
@@ -1000,25 +998,25 @@ EOT;
     /**
      * Draws a panel of options see the course_info/infocours.php page.
      *
-     * @param string $name internal name
-     * @param string $title visible title
-     * @param array $groupList list of group or elements
+     * @param string $name      internal name
+     * @param string $title     visible title
+     * @param array  $groupList list of group or elements
      */
     public function addPanelOption($name, $title, $groupList)
     {
         $this->addHtml('<div class="panel panel-default">');
         $this->addHtml(
             '
-            <div class="panel-heading" role="tab" id="heading-' . $name . '-settings">
+            <div class="panel-heading" role="tab" id="heading-'.$name.'-settings">
                 <h4 class="panel-title">
                     <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion"
-                       href="#collapse-' . $name . '-settings" aria-expanded="false" aria-controls="collapse-' . $name . '-settings">
+                       href="#collapse-'.$name.'-settings" aria-expanded="false" aria-controls="collapse-'.$name.'-settings">
         '
         );
         $this->addHtml($title);
         $this->addHtml('</a></h4></div>');
-        $this->addHtml('<div id="collapse-' . $name . '-settings" class="panel-collapse collapse" role="tabpanel"
-             aria-labelledby="heading-' . $name . '-settings">
+        $this->addHtml('<div id="collapse-'.$name.'-settings" class="panel-collapse collapse" role="tabpanel"
+             aria-labelledby="heading-'.$name.'-settings">
             <div class="panel-body">
         ');
 
@@ -1040,11 +1038,11 @@ EOT;
     /**
      * Adds a HTML-editor to the form.
      *
-     * @param string $name
-     * @param string|array $label The label for the form-element
-     * @param bool $required (optional) Is the form-element required (default=true)
-     * @param bool $fullPage (optional) When it is true, the editor loads completed html code for a full page
-     * @param array $config (optional) Configuration settings for the online editor
+     * @param string       $name
+     * @param string|array $label    The label for the form-element
+     * @param bool         $required (optional) Is the form-element required (default=true)
+     * @param bool         $fullPage (optional) When it is true, the editor loads completed html code for a full page
+     * @param array        $config   (optional) Configuration settings for the online editor
      */
     public function addHtmlEditor(
         $name,
@@ -1052,8 +1050,7 @@ EOT;
         $required = true,
         $fullPage = false,
         $config = []
-    )
-    {
+    ) {
         $attributes = [];
         $attributes['rows'] = isset($config['rows']) ? $config['rows'] : 15;
         $attributes['cols'] = isset($config['cols']) ? $config['cols'] : 80;
@@ -1099,8 +1096,8 @@ EOT;
 
         if ($geolocalization && $gMapsPlugin->javascriptIncluded === false) {
             $gmapsApiKey = $gMapsPlugin->get('api_key');
-            $url = '//maps.googleapis.com/maps/api/js?key=' . $gmapsApiKey;
-            $this->addHtml('<script type="text/javascript" src="' . $url . '" ></script>');
+            $url = '//maps.googleapis.com/maps/api/js?key='.$gmapsApiKey;
+            $this->addHtml('<script type="text/javascript" src="'.$url.'" ></script>');
             $gMapsPlugin->javascriptIncluded = true;
         }
 
@@ -1112,9 +1109,9 @@ EOT;
         );
 
         $this->addHidden(
-            $name . '_coordinates',
+            $name.'_coordinates',
             '',
-            ['id' => $name . '_coordinates']
+            ['id' => $name.'_coordinates']
         );
 
         $this->applyFilter($name, 'stripslashes');
@@ -1159,16 +1156,16 @@ EOT;
         $this->with_progress_bar = true;
         $id = $this->getAttribute('id');
 
-        $this->updateAttributes("onsubmit=\"javascript: addProgress('" . $id . "')\"");
-        $this->addHtml('<script language="javascript" src="' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/upload.js" type="text/javascript"></script>');
+        $this->updateAttributes("onsubmit=\"javascript: addProgress('".$id."')\"");
+        $this->addHtml('<script language="javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/upload.js" type="text/javascript"></script>');
     }
 
     /**
      * This function has been created for avoiding changes directly within QuickForm class.
      * When we use it, the element is threated as 'required' to be dealt during validation.
      *
-     * @param array $elements The array of elements
-     * @param string $message The message displayed
+     * @param array  $elements The array of elements
+     * @param string $message  The message displayed
      */
     public function add_multiple_required_rule($elements, $message)
     {
@@ -1200,7 +1197,7 @@ EOT;
             $element->setLayout($this->getLayout());
             $elementError = parent::getElementError($element->getName());
             if (!is_null($elementError)) {
-                $returnValue .= Display::return_message($elementError, 'warning') . '<br />';
+                $returnValue .= Display::return_message($elementError, 'warning').'<br />';
                 break;
             }
         }
@@ -1211,7 +1208,7 @@ EOT;
         if (isset($this->with_progress_bar) && $this->with_progress_bar) {
             // @todo improve UI
             $returnValue .= '<br />
-            <div id="loading_div_' . $id . '" class="loading_div" style="display:none;margin-left:40%; margin-top:10px; height:50px;">
+            <div id="loading_div_'.$id.'" class="loading_div" style="display:none;margin-left:40%; margin-top:10px; height:50px;">
                 <div class="wobblebar-loader"></div>
             </div>
             ';
@@ -1250,10 +1247,10 @@ EOT;
     /**
      * Adds a input of type url to the form.
      *
-     * @param string $name The label for the form-element
-     * @param string $label The element name
-     * @param bool $required Optional. Is the form-element required (default=true)
-     * @param array $attributes Optional. List of attributes for the form-element
+     * @param string $name       The label for the form-element
+     * @param string $label      The element name
+     * @param bool   $required   Optional. Is the form-element required (default=true)
+     * @param array  $attributes Optional. List of attributes for the form-element
      */
     public function addUrl($name, $label, $required = true, $attributes = [])
     {
@@ -1270,18 +1267,17 @@ EOT;
      * Adds a text field for letters to the form.
      * A trim-filter is attached to the field.
      *
-     * @param string $name The element name
-     * @param string $label The label for the form-element
-     * @param bool $required Optional. Is the form-element required (default=true)
-     * @param array $attributes Optional. List of attributes for the form-element
+     * @param string $name       The element name
+     * @param string $label      The label for the form-element
+     * @param bool   $required   Optional. Is the form-element required (default=true)
+     * @param array  $attributes Optional. List of attributes for the form-element
      */
     public function addTextLettersOnly(
         $name,
         $label,
         $required = false,
         $attributes = []
-    )
-    {
+    ) {
         $attributes = array_merge(
             $attributes,
             [
@@ -1317,8 +1313,8 @@ EOT;
     /**
      * @param string $name
      * @param string $label
-     * @param array $attributes
-     * @param bool $required
+     * @param array  $attributes
+     * @param bool   $required
      *
      * @return HTML_QuickForm_element
      */
@@ -1337,18 +1333,17 @@ EOT;
      * Adds a text field for alphanumeric characters to the form.
      * A trim-filter is attached to the field.
      *
-     * @param string $name The element name
-     * @param string $label The label for the form-element
-     * @param bool $required Optional. Is the form-element required (default=true)
-     * @param array $attributes Optional. List of attributes for the form-element
+     * @param string $name       The element name
+     * @param string $label      The label for the form-element
+     * @param bool   $required   Optional. Is the form-element required (default=true)
+     * @param array  $attributes Optional. List of attributes for the form-element
      */
     public function addTextAlphanumeric(
         $name,
         $label,
         $required = false,
         $attributes = []
-    )
-    {
+    ) {
         $attributes = array_merge(
             $attributes,
             [
@@ -1384,11 +1379,11 @@ EOT;
     /**
      * @param string $name
      * @param $label
-     * @param bool $required
+     * @param bool  $required
      * @param array $attributes
-     * @param bool $allowNegative
-     * @param int $minValue
-     * @param null $maxValue
+     * @param bool  $allowNegative
+     * @param int   $minValue
+     * @param null  $maxValue
      */
     public function addFloat(
         $name,
@@ -1398,8 +1393,7 @@ EOT;
         $allowNegative = false,
         $minValue = null,
         $maxValue = null
-    )
-    {
+    ) {
         $this->addElement(
             'FloatNumber',
             $name,
@@ -1465,18 +1459,17 @@ EOT;
      * Adds a text field for letters and spaces to the form.
      * A trim-filter is attached to the field.
      *
-     * @param string $name The element name
-     * @param string $label The label for the form-element
-     * @param bool $required Optional. Is the form-element required (default=true)
-     * @param array $attributes Optional. List of attributes for the form-element
+     * @param string $name       The element name
+     * @param string $label      The label for the form-element
+     * @param bool   $required   Optional. Is the form-element required (default=true)
+     * @param array  $attributes Optional. List of attributes for the form-element
      */
     public function addTextLettersAndSpaces(
         $name,
         $label,
         $required = false,
         $attributes = []
-    )
-    {
+    ) {
         $attributes = array_merge(
             $attributes,
             [
@@ -1513,18 +1506,17 @@ EOT;
      * Adds a text field for alphanumeric and spaces characters to the form.
      * A trim-filter is attached to the field.
      *
-     * @param string $name The element name
-     * @param string $label The label for the form-element
-     * @param bool $required Optional. Is the form-element required (default=true)
-     * @param array $attributes Optional. List of attributes for the form-element
+     * @param string $name       The element name
+     * @param string $label      The label for the form-element
+     * @param bool   $required   Optional. Is the form-element required (default=true)
+     * @param array  $attributes Optional. List of attributes for the form-element
      */
     public function addTextAlphanumericAndSpaces(
         $name,
         $label,
         $required = false,
         $attributes = []
-    )
-    {
+    ) {
         $attributes = array_merge(
             $attributes,
             [
@@ -1568,17 +1560,17 @@ EOT;
 
         $this->addHtml('
             <div class="description-upload">
-            ' . get_lang('ClickToSelectOrDragAndDropMultipleFilesOnTheUploadField') . '
+            '.get_lang('ClickToSelectOrDragAndDropMultipleFilesOnTheUploadField').'
             </div>
             <span class="btn btn-success fileinput-button">
                 <i class="glyphicon glyphicon-plus"></i>
-                <span>' . get_lang('AddFiles') . '</span>
+                <span>'.get_lang('AddFiles').'</span>
                 <!-- The file input field used as target for the file upload widget -->
-                <input id="' . $inputName . '" type="file" name="files[]" multiple>
+                <input id="'.$inputName.'" type="file" name="files[]" multiple>
             </span>
             <div id="dropzone">
                 <div class="button-load">
-                ' . get_lang('UploadFiles') . '
+                '.get_lang('UploadFiles').'
                 </div>
             </div>
             <br />
@@ -1592,7 +1584,7 @@ EOT;
 
     /**
      * @param string $elementName
-     * @param string $groupName if element is inside a group
+     * @param string $groupName   if element is inside a group
      *
      * @throws Exception
      */
@@ -1600,7 +1592,7 @@ EOT;
     {
         // Constant defined in old config/profile.conf.php
         if (CHECK_PASS_EASY_TO_FIND === true) {
-            $message = get_lang('PassTooEasy') . ': ' . api_generate_password();
+            $message = get_lang('PassTooEasy').': '.api_generate_password();
 
             if (!empty($groupName)) {
                 $groupObj = $this->getElement($groupName);
@@ -1636,14 +1628,14 @@ EOT;
      * Add an element with user ID and avatar to the form.
      * It needs a Chamilo\UserBundle\Entity\User as value. The exported value is the Chamilo\UserBundle\Entity\User ID.
      *
+     * @see \UserAvatar
+     *
      * @param string $name
      * @param string $label
      * @param string $imageSize Optional. Small, medium or large image
-     * @param string $subtitle Optional. The subtitle for the field
+     * @param string $subtitle  Optional. The subtitle for the field
      *
      * @return \UserAvatar
-     * @see \UserAvatar
-     *
      */
     public function addUserAvatar($name, $label, $imageSize = 'small', $subtitle = '')
     {
@@ -1672,18 +1664,18 @@ EOT;
                 }
             }
 
-            $url = api_get_path(WEB_AJAX_PATH) . 'mail.ajax.php?a=select_option';
-            $typeNoDots = 'email_template_option_' . str_replace('.tpl', '', $type);
+            $url = api_get_path(WEB_AJAX_PATH).'mail.ajax.php?a=select_option';
+            $typeNoDots = 'email_template_option_'.str_replace('.tpl', '', $type);
             $this->addSelect(
-                'email_template_option[' . $type . ']',
+                'email_template_option['.$type.']',
                 $name,
                 $options,
                 ['id' => $typeNoDots]
             );
 
-            $templateNoDots = 'email_template_' . str_replace('.tpl', '', $type);
-            $templateNoDotsBlock = 'email_template_block_' . str_replace('.tpl', '', $type);
-            $this->addHtml('<div id="' . $templateNoDotsBlock . '" style="display:none">');
+            $templateNoDots = 'email_template_'.str_replace('.tpl', '', $type);
+            $templateNoDotsBlock = 'email_template_block_'.str_replace('.tpl', '', $type);
+            $this->addHtml('<div id="'.$templateNoDotsBlock.'" style="display:none">');
             $this->addTextarea(
                 $templateNoDots,
                 get_lang('Preview'),
@@ -1725,7 +1717,7 @@ EOT;
     }
 
     /**
-     * @param string $url page that will handle the upload
+     * @param string $url           page that will handle the upload
      * @param string $inputName
      * @param string $urlToRedirect
      */
@@ -1740,25 +1732,25 @@ EOT;
         <script>
         $(function () {
             'use strict';
-            $('#" . $this->getAttribute('id') . "').submit(function() {
+            $('#".$this->getAttribute('id')."').submit(function() {
                 return false;
             });
 
             $('#dropzone').on('click', function() {
-                $('#" . $inputName . "').click();
+                $('#".$inputName."').click();
             });
 
-            var url = '" . $url . "';
+            var url = '".$url."';
             var uploadButton = $('<button/>')
                 .addClass('btn btn-primary')
                 .prop('disabled', true)
-                .text('" . addslashes(get_lang('Loading')) . "')
+                .text('".addslashes(get_lang('Loading'))."')
                 .on('click', function () {
                     var \$this = $(this),
                     data = \$this.data();
                     \$this
                         .off('click')
-                        .text('" . addslashes(get_lang('Cancel')) . "')
+                        .text('".addslashes(get_lang('Cancel'))."')
                         .on('click', function () {
                             \$this.remove();
                             data.abort();
@@ -1768,7 +1760,7 @@ EOT;
                     });
                 });
 
-            $('#" . $inputName . "').fileupload({
+            $('#".$inputName."').fileupload({
                 url: url,
                 dataType: 'json',
                 // Enable image resizing, except for Android and Opera,
@@ -1792,7 +1784,7 @@ EOT;
                 if (file.preview) {
                     data.context.prepend($('<div class=\"col-sm-4\">').html(file.preview));
                 } else {
-                    data.context.prepend($('<div class=\"col-sm-4\">').html('" . $icon . "'));
+                    data.context.prepend($('<div class=\"col-sm-4\">').html('".$icon."'));
                 }
                 if (index + 1 === data.files.length) {
                     data.context.find('button')
@@ -1829,15 +1821,15 @@ EOT;
                     // Update file name with new one from Chamilo
                     $(data.context.children()[index]).parent().find('.file_name').html(file.name);
                     var message = $('<div class=\"col-sm-3\">').html(
-                        $('<span class=\"message-image-success\"/>').text('" . addslashes(get_lang('UplUploadSucceeded')) . "')
+                        $('<span class=\"message-image-success\"/>').text('".addslashes(get_lang('UplUploadSucceeded'))."')
                     );
                     $(data.context.children()[index]).parent().append(message);
                 });
                 $('#dropzone').removeClass('hover');
-                " . $redirectCondition . "
+                ".$redirectCondition."
             }).on('fileuploadfail', function (e, data) {
                 $.each(data.files, function (index) {
-                    var failedMessage = '" . addslashes(get_lang('UplUploadFailed')) . "';
+                    var failedMessage = '".addslashes(get_lang('UplUploadFailed'))."';
                     var error = $('<div class=\"col-sm-3\">').html(
                         $('<span class=\"alert alert-danger\"/>').text(failedMessage)
                     );
@@ -1864,7 +1856,7 @@ EOT;
  * Cleans HTML text filter.
  *
  * @param string $html HTML to clean
- * @param int $mode (optional)
+ * @param int    $mode (optional)
  *
  * @return string The cleaned HTML
  */

@@ -312,6 +312,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                             $userEntity = api_get_user_entity($_user['id']);
                             $attributes = phpCAS::getAttributes();
                             if (isset($rules['fields'])) {
+                                $isAdmin = false;
                                 foreach ($rules['fields'] as $field => $attributeName) {
                                     if (!isset($attributes[$attributeName])) {
                                         continue;
@@ -336,12 +337,20 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                             $userEntity->setActive(!('false' === $value));
                                             break;
                                         case 'status':
+                                            if (PLATFORM_ADMIN === (int) $value) {
+                                                $value = COURSEMANAGER;
+                                                $isAdmin = true;
+                                            }
                                             $userEntity->setStatus($value);
                                             break;
                                     }
 
                                     Database::getManager()->persist($userEntity);
                                     Database::getManager()->flush();
+
+                                    if ($isAdmin) {
+                                        UserManager::addUserAsAdmin($userEntity);
+                                    }
                                 }
                             }
                             if (isset($rules['extra'])) {

@@ -378,6 +378,8 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                         // no automatic user creation is configured, just complain about it
                         throw new Exception(get_lang('NoUserMatched'));
                 }
+            } else {
+                $_user = api_get_user_info_from_username($login);
             }
 
             // $login is set and the user exists in the database
